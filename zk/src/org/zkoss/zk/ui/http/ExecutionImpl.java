@@ -382,21 +382,29 @@ public class ExecutionImpl extends AbstractExecution {
 			dt, _request, PageDefinitions.getLocator(getDesktop().getWebApp(), uri));
 	}
 
+	/** @deprecated As of release 3.6.3, replaced with
+	 * {@link org.zkoss.zk.ui.Execution#setResponseHeader}.
+	 */
 	public void setHeader(String name, String value) {
-		if (_response instanceof HttpServletResponse)
-			((HttpServletResponse)_response).setHeader(name, value);
+		_response.setHeader(name, value);
 	}
+	/** @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
+	 * instead.
+	 */
 	public void setDateHeader(String name, long value) {
-		if (_response instanceof HttpServletResponse)
-			((HttpServletResponse)_response).setDateHeader(name, value);
+		_response.setDateHeader(name, value);
 	}
+	/** @deprecated As of release 3.6.3, replaced with
+	 * {@link org.zkoss.zk.ui.Execution#addResponseHeader}.
+	 */
 	public void addHeader(String name, String value) {
-		if (_response instanceof HttpServletResponse)
-			((HttpServletResponse)_response).addHeader(name, value);
+		_response.addHeader(name, value);
 	}
+	/** @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
+	 * instead.
+	 */
 	public void addDateHeader(String name, long value) {
-		if (_response instanceof HttpServletResponse)
-			((HttpServletResponse)_response).addDateHeader(name, value);
+		_response.addDateHeader(name, value);
 	}
 
 	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.

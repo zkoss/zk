@@ -725,6 +725,15 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		else
 			bIncluded |= asyncUpdate;
 
+		//a temporary solution before IE8 really mature
+		if (!asyncUpdate)
+			try {
+				if (exec.isBrowser("ie8")
+				&& !exec.containsResponseHeader("X-UA-Compatible"))
+					exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+			} catch (Throwable ex) { //ignore (it might not be allowed)
+			}
+
 		final Map attrs = new HashMap(8);
 		attrs.put("page", this);
 		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
@@ -747,27 +756,20 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
 				//Bug 1520444
-				execCtrl.setHeader("Pragma", "no-cache");
-				execCtrl.addHeader("Cache-Control", "no-cache");
-				execCtrl.addHeader("Cache-Control", "no-store");
-				//execCtrl.addHeader("Cache-Control", "private");
-				//execCtrl.addHeader("Cache-Control", "max-age=0");
-				//execCtrl.addHeader("Cache-Control", "s-maxage=0");
-				//execCtrl.addHeader("Cache-Control", "must-revalidate");
-				//execCtrl.addHeader("Cache-Control", "proxy-revalidate");
-				//execCtrl.addHeader("Cache-Control", "post-check=0");
-				//execCtrl.addHeader("Cache-Control", "pre-check=0");
-				execCtrl.setHeader("Expires", "-1");
+				exec.setResponseHeader("Pragma", "no-cache");
+				exec.addResponseHeader("Cache-Control", "no-cache");
+				exec.addResponseHeader("Cache-Control", "no-store");
+				//exec.addResponseHeader("Cache-Control", "private");
+				//exec.addResponseHeader("Cache-Control", "max-age=0");
+				//exec.addResponseHeader("Cache-Control", "s-maxage=0");
+				//exec.addResponseHeader("Cache-Control", "must-revalidate");
+				//exec.addResponseHeader("Cache-Control", "proxy-revalidate");
+				//exec.addResponseHeader("Cache-Control", "post-check=0");
+				//exec.addResponseHeader("Cache-Control", "pre-check=0");
+				exec.setResponseHeader("Expires", "-1");
 
 				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
 				//so ZkFns.outLangJavaScripts generates zk.keepDesktop correctly
-			}
-
-			//a temporary solution before IE8 really mature
-			try {
-				if (exec.isBrowser("ie8"))
-					execCtrl.setHeader("X-UA-Compatible", "IE=EmulateIE7");
-			} catch (Throwable ex) { //ignore (it might not be allowed)
 			}
 
 			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
