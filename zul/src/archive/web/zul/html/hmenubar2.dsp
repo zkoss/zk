@@ -18,6 +18,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zul.menu2.Menubar2"${self.outerAttrs}${self.innerAttrs}>
+<c:if test="${self.scrollable}">
+<div id="${self.uuid}!left" class="${self.zclass}-left"></div>
+<div id="${self.uuid}!right" class="${self.zclass}-right"></div>
+<div id="${self.uuid}!body" class="${self.zclass}-body">
+<div id="${self.uuid}!cnt" class="${self.zclass}-cnt">
+</c:if>
 <table cellpadding="0" cellspacing="0" border="0">
 <tr valign="bottom" id="${self.uuid}!cave">
 	<c:forEach var="child" items="${self.children}">
@@ -25,4 +31,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</c:forEach>
 </tr>
 </table>
+<c:if test="${self.scrollable}">
+</div>
+</div>
+</c:if>
 </div>

@@ -22,6 +22,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -81,6 +82,8 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 		if (_popup != null)
 			HTMLs.appendAttribute(sb, "z.mpop", _popup.getUuid());
 		if (isTopmost()) {
+			appendAsapAttr(sb, Events.ON_CLICK);
+			
 			sb.append(" z.top=\"true\"");
 			final Component parent = getParent();
 			if (parent instanceof Menubar

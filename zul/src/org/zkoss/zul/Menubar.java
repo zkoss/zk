@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
@@ -41,6 +42,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	private boolean _autodrop;
 	private String _orient = "horizontal";
+	private boolean _scrollable = false;
 
 	public Menubar() {
 	}
@@ -70,6 +72,42 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 			invalidate();
 		}
 	}
+	
+	/**
+	 * Returns whether it is a horizontal .
+	 * @since 3.6.3
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+
+	/**
+	 * Returns whether it is a vertical .
+	 * @since 3.6.3
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
+	
+	/**
+	 * Returns whether the menubar scrolling is enabled. 
+	 * <p>Default: false.
+	 * @since 3.6.3
+	 */
+	public boolean isScrollable(){
+		return _scrollable;
+	}
+	
+	/**
+	 * Sets whether to enable the menubar scrolling
+	 * @since 3.6.3
+	 */
+	public void setScrollable(boolean scrollable){
+		if (isHorizontal() && _scrollable != scrollable) {
+			_scrollable = scrollable;
+			invalidate();
+		}
+	}
 
 	/** Returns whether to automatically drop down menus if user moves mouse
 	 * over it.
@@ -94,9 +132,28 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
 	}
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		return _autodrop ?  attrs + " z.autodrop=\"true\"": attrs;
+		final StringBuffer sb = new StringBuffer(64).append(super
+				.getOuterAttrs());
+		if (_autodrop)
+			HTMLs.appendAttribute(sb, "z.autodrop", _autodrop);
+		if (isHorizontal() && _scrollable)
+			HTMLs.appendAttribute(sb, "z.scrollable", _scrollable);
+		
+		return sb.toString();
 	}
+	
+	public void onChildAdded(Component child) {
+		if (isHorizontal() && _scrollable)
+			smartUpdate("z.chchg", true);
+		super.onChildAdded(child);
+	}
+	
+	public void onChildRemoved(Component child) {
+		if (isHorizontal() && _scrollable)
+			smartUpdate("z.chchg", true);
+		super.onChildRemoved(child);
+	}
+	
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))
 			throw new UiException("Unsupported child for menubar: "+child);

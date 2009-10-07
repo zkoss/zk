@@ -265,7 +265,27 @@ zkMenu2 = { // menu
 			zk.addClass($e(cmp.id + "!a"), getZKAttr(cmp, "zcls") + "-body-seld");
 
 		if ("Menu2" == $type(cmp)) { //note: Menuit also go thru this method
-			zkMenu2.open(cmp, zkMenu2.isTop(cmp));
+
+			if (zkau.asap(cmp, "lfclk")) {
+				var arrorWidth = 12, //note : /img/menu/btn-arrow.gif : width = 12
+					clk = zk.firstChild(cmp, 'TABLE'),
+					clkDim = zk.getDimension(clk),
+					clickArea =  clkDim[0] - arrorWidth,
+					ofs = zk.revisedOffset(clk),
+					clickOffsetX = evt.clientX - ofs[0];
+
+				if (clickOffsetX > clickArea) {
+					zkMenu2.open(cmp, zkMenu2.isTop(cmp));
+					Event.stop(evt);
+				} else {
+					zkau.onclick(evt);
+					if (zkMenu2.isTop(cmp)) {
+						zk.rmClass($e(cmp, "a"), getZKAttr(cmp, "zcls") + "-body-seld");
+					}
+				}
+			} else {
+				zkMenu2.open(cmp, zkMenu2.isTop(cmp));
+			}
 		}
 	},
 	/** Opens a menupopup belong to the specified menu.
@@ -426,8 +446,8 @@ zkMenuit2 = { //menuitem
 			if (zk.ie && zkMenu2.isTop(cmp) && cmp.id != anc.id) zk.go(anc.href, overwrite, t);
 				// Bug #1886352 and #2154611
 			//Note: we cannot eat onclick. or, <a> won't work
-			
-			if (zk.gecko3 && zkMenu2.isTop(cmp) && cmp.id != anc.id) {				
+
+			if (zk.gecko3 && zkMenu2.isTop(cmp) && cmp.id != anc.id) {
 				zk.go(anc.href, overwrite, t);
 				Event.stop(evt);
 				// Bug #2154611 we shall eat the onclick event, if it is FF3.
@@ -512,7 +532,7 @@ zkMpop2 = { //menupopup
 		if (x < scX) x = scX;
 		if (y + hgh > scMaxY) y = scMaxY - hgh;
 		if (y < scY) y = scY;
-		
+
 		var ofs = zk.toStyleOffset(el, x, y);
 		el.style.left = ofs[0] + "px";
 		el.style.top = ofs[1] + "px";
@@ -541,5 +561,204 @@ zkMpop2 = { //menupopup
 			ctx._shadow.cleanup();
 			ctx._shadow = null;
 		}
+	}
+};
+
+zkMenubar2 = { //menubar
+	init: function (cmp) {
+		zkMenubar2.onVisi = zkMenubar2.onSize;
+		if (!getZKAttr(cmp, "scrollable")) return;
+
+		if (zk.ie6Only && !cmp.style.width) {
+			cmp._fixWidth = "100%";
+		}
+
+		var left = $e(cmp, "left"),
+			right = $e(cmp, "right");
+		zk.listen(left, "click", zkMenubar2._doScroll);
+		zk.listen(left, "mouseover", zkMenubar2.onover);
+		zk.listen(left, "mouseout", zkMenubar2.onout);
+
+		zk.listen(right, "click", zkMenubar2._doScroll);
+		zk.listen(right, "mouseover", zkMenubar2.onover);
+		zk.listen(right, "mouseout", zkMenubar2.onout);
+	},
+	onSize: function (cmp) {
+		if (!getZKAttr(cmp, "scrollable") || !zk.isRealVisible(cmp)) return;
+	
+		zkMenubar2._checkScrolling(cmp);
+	},
+	_fixWidth: function (cmp) {
+		if (cmp._fixWidth) {
+			zkMenubar2._forceStyle(cmp, cmp._fixWidth);
+			zkMenubar2._forceStyle(cmp, zk.revisedSize(cmp, cmp.offsetWidth) + "px");
+		} else {
+			zkMenubar2._forceStyle(cmp, zk.revisedSize(cmp, cmp.offsetWidth) + "px");
+		}
+	},
+	_forceStyle: function (cmp, value) {
+		if ($int(value) < 0)
+			return;
+		cmp.style.width = zk.ie6Only ? "0px" : "";
+		cmp.style.width = value;
+	},
+	childchg: function (cmp) {
+		if (!getZKAttr(cmp, "scrollable")) return;
+
+		zkMenubar2._checkScrolling(cmp);
+	},
+	onover: function (evt) {
+		if (!evt) evt = window.event;
+		var evtCmp = Event.element(evt),
+		 	cmp = $outer(evtCmp),
+			left = $e(cmp, "left"),
+			right = $e(cmp, "right"),
+			zcls = getZKAttr(cmp, "zcls");
+
+		if (!getZKAttr(cmp, "scrollable")) return;
+
+		if (left == evtCmp) {
+			zk.addClass(left, zcls + "-left-scroll-over");
+		} else if (right == evtCmp) {
+			zk.addClass(right, zcls + "-right-scroll-over");
+		}
+	},
+	onout: function (evt) {
+		if (!evt) evt = window.event;
+		var evtCmp = Event.element(evt),
+			cmp = $outer(evtCmp),
+			left = $e(cmp, "left"),
+			right = $e(cmp, "right"),
+			zcls = getZKAttr(cmp, "zcls");
+
+		if (!getZKAttr(cmp, "scrollable")) return;
+
+	    if (left == evtCmp) {
+			zk.rmClass(left, zcls + "-left-scroll-over");
+		} else if (right == evtCmp) {
+			zk.rmClass(right, zcls + "-right-scroll-over");
+		}
+	},
+	_checkScrolling: function (cmp) {
+		zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-scroll");
+		if (zk.ie6Only) zkMenubar2._fixWidth(cmp);
+		
+		var cmpWidth = zk.offsetWidth(cmp),
+			body = $e(cmp, "body"),
+			childs = zk.childNodes($e(cmp, "cave")),
+			totalWidth = 0;
+
+		for (var i = childs.length; i-- ;) {
+			totalWidth += zk.offsetWidth(childs[i]);
+		}
+		var fixedSize = cmpWidth -
+						zk.offsetWidth($e(cmp, "left")) -
+						zk.offsetWidth($e(cmp, "right"));
+		if (cmp._scrolling) {
+			if (totalWidth <= cmpWidth) {
+				cmp._scrolling = false;
+				body.scrollLeft = 0;
+				zkMenubar2._fixButtonPos(cmp);
+			} else {
+				body.style.width = zk.px(fixedSize);
+				zkMenubar2._fixScrollPos(cmp);
+			}
+		} else {
+			if (totalWidth > cmpWidth) {
+				cmp._scrolling = true;
+				zkMenubar2._fixButtonPos(cmp);
+				body.style.width = zk.px(fixedSize);
+			}
+		}
+	},
+	_fixScrollPos: function (cmp) {
+		var body = $e(cmp, "body"),
+			childs = zk.childNodes($e(cmp, "cave"));
+		if (childs[childs.length - 1].offsetLeft < body.scrollLeft) {
+			var movePos = childs[childs.length - 1].offsetLeft;
+			body.scrollLeft = movePos;
+		}
+	},
+	_fixButtonPos: function (cmp) {
+		var zcls = getZKAttr(cmp, "zcls"),
+			body = $e(cmp, "body"),
+			left = $e(cmp, "left"),
+			right = $e(cmp, "right"),
+			css = cmp._scrolling ? "addClass" : "rmClass";
+
+		zk[css](cmp, zcls + "-scroll");
+		zk[css](body, zcls + "-body-scroll");
+		zk[css](left, zcls + "-left-scroll");
+		zk[css](right, zcls + "-right-scroll");
+	},
+	_doScroll: function (evt) {
+		if (!evt) evt = window.event;
+		var target = Event.element(evt),
+			cmp = $outer(target);
+		zkMenubar2._scroll(cmp, target.id.endsWith("left") ? "left" : "right");
+	},
+	_scroll: function (cmp, direction) {
+
+		var body = $e(cmp, "body"),
+			currScrollLeft = body.scrollLeft,
+			childs = zk.childNodes($e(cmp, "cave")),
+			childLen = childs.length,
+			movePos = 0;
+
+		if (!getZKAttr(cmp, "scrollable") || cmp._runId || !childLen) return;
+
+		switch (direction) {
+		case "left":
+			for (var i=0; i < childLen; i++) {
+				if (childs[i].offsetLeft >= currScrollLeft) {
+					var preChild = zk.previousSibling(childs[i], 'TD');
+					if (!preChild)	return;
+					movePos = currScrollLeft - (currScrollLeft - preChild.offsetLeft);
+					if (isNaN(movePos)) return;
+					cmp._runId = setInterval(function () {
+						if(!zkMenubar2._moveTo(body, movePos)){
+							clearInterval(cmp._runId);
+							cmp._runId = null;
+						}
+					}, 10);
+					return;
+				}
+			}
+			break;
+		case "right":
+			for (var i=0; i < childLen; i++) {
+				var currChildRight =  childs[i].offsetLeft + childs[i].offsetWidth,
+					currRight = currScrollLeft + body.offsetWidth;
+
+				if (currChildRight > currScrollLeft + body.offsetWidth) {
+					movePos = currScrollLeft + (currChildRight - currRight);
+					if (isNaN(movePos)) return;
+					cmp._runId = setInterval(function () {
+						if (!zkMenubar2._moveTo(body, movePos)) {
+							clearInterval(cmp._runId);
+							cmp._runId = null;
+						}
+					}, 10);
+					return;
+				}
+			}
+			break;
+		}
+	},
+	_moveTo: function (body, moveDest) {
+		var currPos = body.scrollLeft,
+			step = 5;
+		if (currPos == moveDest) return false;
+
+		if (currPos > moveDest) {
+			var setTo = currPos - step;
+			body.scrollLeft = setTo < moveDest ?  moveDest : setTo;
+			return true;
+		} else {
+			var setTo = currPos + step;
+			body.scrollLeft = setTo > moveDest ? moveDest : setTo;
+			return true;
+		}
+		return false;
 	}
 };

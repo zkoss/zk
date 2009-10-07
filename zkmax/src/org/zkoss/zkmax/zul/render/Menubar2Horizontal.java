@@ -42,11 +42,22 @@ public class Menubar2Horizontal implements ComponentRenderer {
 			return; 
 		}
 		final String uuid = self.getUuid();
+		final String zcls = self.getZclass();
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menubar2\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write('>');
+		if (self.isScrollable()) {
+			wh.write("<div id=\"").write(uuid).write("!left\" class=\"").write(zcls).write("-left\"></div>");
+			wh.write("<div id=\"").write(uuid).write("!right\" class=\"").write(zcls).write("-right\"></div>");
+			wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls).write("-body\">");
+			wh.write("<div id=\"").write(uuid).write("!cnt\" class=\"").write(zcls).write("-cnt\">");
+		}
 		wh.writeln("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">");
 		wh.write("<tr valign=\"bottom\" id=\"").write(uuid).writeln("!cave\">");
 		wh.writeChildren(self);
-		wh.write("</tr>\n</table></div>");
+		wh.write("</tr>\n</table>");
+		if (self.isScrollable()) {
+			wh.write("</div></div>");
+		}
+		wh.write("</div>");
 	}
 }
