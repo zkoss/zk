@@ -32,6 +32,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
@@ -259,6 +260,17 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
+		}
+	}
+	
+	public void didActivate(Namespace ns) {
+		//wire variables to reference fields (include implicit objects) ASAP
+		final Component comp = getAppliedComponent(ns);
+		if (comp != null) { 
+			super.didActivate(ns);
+			if (self == null) { //Bug #2873310. didActivate only once
+				Components.wireVariables(comp, this, _separator);
+			}
 		}
 	}
 }

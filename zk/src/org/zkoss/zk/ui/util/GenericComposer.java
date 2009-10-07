@@ -74,8 +74,6 @@ implements Composer, ComposerExt, NamespaceActivationListener,
 java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	private String _applied; //uuid of the applied component (for serialization back)
-	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
-	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
 	
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
@@ -115,45 +113,37 @@ java.io.Serializable {
 
 	//NamespaceActivationListener//
 	/** Called when a namespace is going to passivate this object.
-	 * Default: (since 3.6.3) unregister onXxx listeners of the applied component.
+	 * Default: do nothing.
 	 */
 	public void willPassivate(Namespace ns) {
-		//Bug #2873327. Unregister listener when session passivate
+		//do nothing
+	}
+	
+	/** Called when a namespace has activated this object back.
+	 * Default: (since 3.6.3) do nothing
+	 * @since 3.6.2
+	 */
+	public void didActivate(Namespace ns) {
+		//Bug #2873905 shall not call doAfterCompose in didActivate
+		//Bug #2873329 GeneircForwardComposer add extra forwards
+		//do nothing
+	}
+	
+	/**
+	 * Returns the associated applied component of this Composer for {@link #didActivate} and {@link #willPassivate}.
+	 *  
+	 * @param ns namesapce for activate/passivate this composer
+	 * @return the associated applied component if proper.
+	 * @since 3.6.3
+	 */
+	protected Component getAppliedComponent(Namespace ns) {
 		final Component owner = ns.getOwner();
 		if (owner != null) {
 			final Desktop dt = owner.getDesktop();
 			if (dt != null) {
-				final Component comp = (Component) dt.getComponentByUuidIfAny(_applied);
-				if (comp != null) {
-					if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
-					_everWillPassivate = true;
-
-					unbindComponent(comp);
-				}
+				return (Component) dt.getComponentByUuidIfAny(_applied);
 			}
 		}
-	}
-	/** Called when a namespace has activated this object back.
-	 * Default: invokes {@link #doAfterCompose}.
-	 * @since 3.6.2
-	 */
-	public void didActivate(Namespace ns) {
-		try {
-			final Component owner = ns.getOwner();
-			if (owner != null) {
-				final Desktop dt = owner.getDesktop();
-				if (dt != null) {
-					final Component comp = (Component) dt.getComponentByUuidIfAny(_applied);
-					if (comp != null) {
-						if (_everDidActivate) return; //Bug #2873310. didActivate only once
-						_everDidActivate = true;
-						
-						doAfterCompose(comp);
-					}
-				}
-			}
-		} catch (Throwable ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		return null;
 	}
 }
