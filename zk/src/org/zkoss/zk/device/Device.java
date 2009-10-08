@@ -97,13 +97,13 @@ public interface Device {
 	 */
 	public String setTimeoutURI(String timeoutURI);
 
-	/** Returns whether to automatical redirect to the timeout URI.
+	/** Returns whether to automatically redirect to the timeout URI.
 	 * @see #setAutomaticTimeout
 	 * @see #getTimeoutURI
 	 * @since 3.6.3
 	 */
 	public boolean isAutomaticTimeout();
-	/** Sets whether to automatical redirect to the timeout URI.
+	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: false. It means this page is redirected to the timeout URI
 	 * when the use takes some action after timeout. In other words,

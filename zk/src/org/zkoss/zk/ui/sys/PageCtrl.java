@@ -166,13 +166,13 @@ public interface PageCtrl {
 	 */
 	public void setCacheable(Boolean cacheable);
 
-	/** Returns whether to automatical redirect to the timeout URI.
+	/** Returns whether to automatically redirect to the timeout URI.
 	 *
 	 * @see #setAutomaticTimeout
 	 * @since 3.6.3
 	 */
 	public Boolean getAutomaticTimeout();
-	/** Sets whether to automatical redirect to the timeout URI.
+	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: null (use the device default).
 	 * <p>If it is set to false, it means this page is redirected to the timeout URI

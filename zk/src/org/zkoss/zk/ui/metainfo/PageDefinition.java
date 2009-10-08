@@ -573,7 +573,7 @@ public class PageDefinition extends NodeInfo {
 		_cacheable = cacheable;
 	}
 
-	/** Returns whether to automatical redirect to the timeout URI.
+	/** Returns whether to automatically redirect to the timeout URI.
 	 *
 	 * @see #setAutomaticTimeout
 	 * @since 3.6.3
@@ -581,7 +581,7 @@ public class PageDefinition extends NodeInfo {
 	public Boolean getAutomaticTimeout() {
 		return _autoTimeout;
 	}
-	/** Sets whether to automatical redirect to the timeout URI.
+	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: null (use the device default).
 	 * Refer to {@link org.zkoss.zk.device.Device#setAutomaticTimeout}

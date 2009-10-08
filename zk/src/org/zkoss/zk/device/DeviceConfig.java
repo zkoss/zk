@@ -37,7 +37,7 @@ public interface DeviceConfig {
 	 * @since 3.0.0
 	 */
 	public String getTimeoutURI();
-	/** Returns whether to automatical redirect to the timeout URI.
+	/** Returns whether to automatically redirect to the timeout URI.
 	 * @see #getTimeoutURI
 	 * @see Device#setAutomaticTimeout
 	 * @since 3.6.3
