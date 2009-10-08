@@ -170,7 +170,9 @@ public class Devices {
 				_devs.put(deviceType,
 					new DeviceInfo(cls,
 						device.getUnavailableMessage(),
-						device.getTimeoutURI(), device.getServerPushClass()));
+						device.getTimeoutURI(),
+						device.isAutomaticTimeout(),
+						device.getServerPushClass()));
 				return device.getClass().getName();
 			} else {
 				_devs.put(deviceType, new DeviceInfo(cls));
@@ -250,6 +252,7 @@ public class Devices {
 	 * the same page. If null, an error message is shown instead of
 	 * redirecting to another page.
 	 * @return the previous timeout URI if any.
+	 * @see Device#setTimeoutURI
 	 */
 	public static final String setTimeoutURI(String deviceType, String timeoutURI) {
 		if (deviceType == null || deviceType.length() == 0)
@@ -266,6 +269,50 @@ public class Devices {
 				_devs.put(deviceType, info);
 				info.setTimeoutURI(timeoutURI);
 				return null;
+			}
+		}
+	}
+
+	/** Returns whether to automatical redirect to the timeout URI.
+	 * @see #setAutomaticTimeout
+	 * @see #getTimeoutURI
+	 * @since 3.6.3
+	 */
+	public static final boolean isAutomaticTimeout(String deviceType) {
+		final Object o;
+		synchronized (_devs) {
+			o = _devs.get(deviceType);
+		}
+		return (o instanceof Device && ((Device)o).isAutomaticTimeout())
+			|| (o instanceof DeviceInfo && ((DeviceInfo)o).isAutomaticTimeout());
+	}
+	/** Sets whether to automatical redirect to the timeout URI.
+	 *
+	 * <p>Default: false. It means this page is redirected to the timeout URI
+	 * when the use takes some action after timeout. In other words,
+	 * nothing happens if the user does nothing.
+	 * If it is set to true, it is redirected as soon as timeout,
+	 * no matter the user takes any action.
+	 *
+	 * @see #setTimeoutURI
+	 * @see Device#setAutomaticTimeout
+	 * @since 3.6.3
+	 */
+	public static final boolean setAutomaticTimeout(String deviceType, boolean auto) {
+		if (deviceType == null || deviceType.length() == 0)
+			throw new IllegalArgumentException();
+
+		synchronized (_devs) {
+			final Object o = _devs.get(deviceType);
+			if (o instanceof Device) {
+				return ((Device)o).setAutomaticTimeout(auto);
+			} else if (o instanceof DeviceInfo) {
+				return ((DeviceInfo)o).setAutomaticTimeout(auto);
+			} else {
+				final DeviceInfo info = new DeviceInfo();
+				_devs.put(deviceType, info);
+				info.setAutomaticTimeout(auto);
+				return false;
 			}
 		}
 	}
@@ -387,6 +434,7 @@ public class Devices {
   &lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
   &lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
   &lt;timeout-uri&gt;/WEB-INF/timeout.zul&lt;/timeout-uri&gt;
+  &lt;automatic/&gt;
   &lt;server-push-class&gt;my.MyServerPush&lt;/server-push-class&gt;
 &lt;/device-config&gt;
 	 * </code></pre>
@@ -410,6 +458,10 @@ public class Devices {
 		if (s != null)
 			setTimeoutURI(deviceType, s);
 
+		s = config.getElementValue("automatic", true);
+		if (s != null)
+			setAutomaticTimeout(deviceType, !"false".equals(s));
+
 		s = config.getElementValue("server-push-class", true);
 		if (s != null)
 			setServerPushClass(deviceType, s);
@@ -431,6 +483,7 @@ public class Devices {
 		 */
 		private Object _spushcls;
 		private String _embed;
+		private boolean _autoTimeout;
 
 		private DeviceInfo() {
 		}
@@ -438,10 +491,11 @@ public class Devices {
 			_dvcls = deviceClass;
 		}
 		private DeviceInfo(Object deviceClass, String unavailable,
-		String timeoutURI, Class spushcls) {
+		String timeoutURI, boolean autoTimeout, Class spushcls) {
 			_dvcls = deviceClass;
 			_uamsg = unavailable;
 			_tmoutURI = timeoutURI;
+			_autoTimeout = autoTimeout;
 			_spushcls = spushcls;
 		}
 		/** Returns whether this device is valid, i.e., defined with a device class.
@@ -470,6 +524,14 @@ public class Devices {
 		public String setTimeoutURI(String timeoutURI) {
 			final String old = _tmoutURI;
 			_tmoutURI = timeoutURI;
+			return old;
+		}
+		public boolean isAutomaticTimeout() {
+			return _autoTimeout;
+		}
+		public boolean setAutomaticTimeout(boolean auto) {
+			final boolean old = _autoTimeout;
+			_autoTimeout = auto;
 			return old;
 		}
 		/**

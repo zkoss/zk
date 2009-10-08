@@ -4,6 +4,7 @@ October, 2009
 * Features
   2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
+  2874457: A way to auto timeout at client without user's activity
   2811973: Log the event thread that takes too long to execute
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled

@@ -156,8 +156,9 @@ public class ZkFns extends DspFns {
 			return ""; //nothing to generate
 		WebManager.setRequestLocal(request, ATTR_LANG_JS_GENED, Boolean.TRUE);
 
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
-		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
+		final Desktop desktop = exec.getDesktop();
+		if (wapp == null) wapp = desktop.getWebApp();
+		if (deviceType == null) deviceType = desktop.getDeviceType();
 		final Configuration config = wapp.getConfiguration();
 
 		final StringBuffer sb = new StringBuffer(1536);
@@ -181,6 +182,19 @@ public class ZkFns extends DspFns {
 			.append(";\nzk_clkflto=")
 				.append(config.getClickFilterDelay())
 			.append(";\n");
+
+		Boolean autoTimeout = getAutomaticTimeout(desktop);
+		final Device device = Devices.getDevice(deviceType);
+		if (autoTimeout != null ?
+		autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+			int tmout = desktop.getSession().getMaxInactiveInterval();
+			if (tmout > 0) { //unit: seconds
+				int extra = tmout / 8;
+				tmout += extra > 180 ? 180: extra;
+					//Add extra seconds to ensure it is really timeout
+				sb.append("zk_tmout=").append(tmout).append(";\n");
+			}
+		}
 
 		if (config.isDebugJS())
 			sb.append("zk.debugJS=true;\n");
@@ -226,12 +240,18 @@ public class ZkFns extends DspFns {
 
 		sb.append("\n</script>\n");
 
-		final Device device = Devices.getDevice(deviceType);
 		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
 
 		return sb.toString();
+	}
+	private static Boolean getAutomaticTimeout(Desktop desktop) {
+		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+			Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+			if (b != null) return b;
+		}
+		return null;
 	}
 	/** Generates the unavailable message in HTML tags, if any.
 	 * @since 3.5.2
@@ -354,8 +374,9 @@ public class ZkFns extends DspFns {
 	}
 	private static final
 	List getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
-		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
+		final Desktop desktop = exec.getDesktop();
+		if (wapp == null) wapp = desktop.getWebApp();
+		if (deviceType == null) deviceType = desktop.getDeviceType();
 
 		final Configuration config = wapp.getConfiguration();
 		final Set disabled = config.getDisabledThemeURIs();

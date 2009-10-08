@@ -360,6 +360,9 @@ public class Parser {
 			} else if ("cacheable".equals(nm)) {
 				noELnorEmpty("cacheable", val, pi);
 				pgdef.setCacheable(Boolean.valueOf("true".equals(val)));
+			} else if ("automaticTimeout".equals(nm)) {
+				noELnorEmpty("automaticTimeout", val, pi);
+				pgdef.setAutomaticTimeout(Boolean.valueOf("true".equals(val)));
 			} else if ("contentType".equals(nm)) {
 				noEmpty("contentType", val, pi);
 				pgdef.setContentType(val);

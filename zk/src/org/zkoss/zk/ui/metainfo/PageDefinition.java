@@ -95,6 +95,7 @@ public class PageDefinition extends NodeInfo {
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
+	private Boolean _autoTimeout;
 	private boolean _complete;
 
 	/** Constructor.
@@ -554,6 +555,7 @@ public class PageDefinition extends NodeInfo {
 		_firstLine = firstLine != null && firstLine.length() > 0 ?
 			new ExValue(firstLine, String.class): null;
 	}
+
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
@@ -569,6 +571,25 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public void setCacheable(Boolean cacheable) {
 		_cacheable = cacheable;
+	}
+
+	/** Returns whether to automatical redirect to the timeout URI.
+	 *
+	 * @see #setAutomaticTimeout
+	 * @since 3.6.3
+	 */
+	public Boolean getAutomaticTimeout() {
+		return _autoTimeout;
+	}
+	/** Sets whether to automatical redirect to the timeout URI.
+	 *
+	 * <p>Default: null (use the device default).
+	 * Refer to {@link org.zkoss.zk.device.Device#setAutomaticTimeout}
+	 * for details.
+	 * @since 3.6.3
+	 */
+	public void setAutomaticTimeout(Boolean autoTimeout) {
+		_autoTimeout = autoTimeout;
 	}
 
 	/** Returns if the page is a complete page.
@@ -835,6 +856,7 @@ public class PageDefinition extends NodeInfo {
 		if (s != null) pageCtrl.setFirstLine(s);
 
 		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
+		if (_autoTimeout != null) pageCtrl.setAutomaticTimeout(_autoTimeout);
 		if (_expfcls != null) page.setExpressionFactoryClass(_expfcls);
 		page.setComplete(_complete);
 	}

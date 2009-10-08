@@ -31,6 +31,7 @@ abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;
 	private Class _spushcls;
 	private String _embed;
+	private boolean _autoTimeout;
 
 	//Device//
 	public boolean isSupported(int func) {
@@ -58,6 +59,7 @@ abstract public class GenericDevice implements Device {
 		_uamsg = msg != null && msg.length() > 0 ? msg: null;
 		return old;
 	}
+
 	public String getTimeoutURI() {
 		return _tmoutURI;
 	}
@@ -66,6 +68,16 @@ abstract public class GenericDevice implements Device {
 		_tmoutURI = timeoutURI;
 		return old;
 	}
+
+	public boolean isAutomaticTimeout() {
+		return _autoTimeout;
+	}
+	public boolean setAutomaticTimeout(boolean auto) {
+		final boolean old = _autoTimeout;
+		_autoTimeout = auto;
+		return old;
+	}
+
 	public Class setServerPushClass(Class cls) {
 		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("ServerPush not implemented: "+cls);
@@ -95,6 +107,7 @@ abstract public class GenericDevice implements Device {
 		_type = type;
 		_uamsg = config.getUnavailableMessage();
 		_tmoutURI = config.getTimeoutURI();
+		_autoTimeout = config.isAutomaticTimeout();
 		_spushcls = config.getServerPushClass();
 		_embed = config.getEmbedded();
 	}

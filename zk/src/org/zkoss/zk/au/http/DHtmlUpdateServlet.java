@@ -519,7 +519,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			&& !Events.ON_MOVE.equals(cmdId)
 			&& !Events.ON_SIZE.equals(cmdId)
 			&& !Events.ON_Z_INDEX.equals(cmdId)
-			&& !"dummy".equals(cmdId)) {//possible in FF due to cache
+			&& !("dummy".equals(cmdId)
+				&& !isDummyTimeout(request.getParameterValues("data."+j)))) {
 				String uri = Devices.getTimeoutURI(getDeviceType(request));
 				final AuResponse resp;
 				if (uri != null) {
@@ -537,6 +538,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		out.close(request, response);
 	}
+	/** Tests if the dummy command is used to trigger the timeout. */
+	private static boolean isDummyTimeout(String[] data) {
+		return data != null && data.length > 0 && "timeout".equals(data[0]);
+	}
+
 	private static String getDeviceType(HttpServletRequest request) {
 		final String agt = request.getHeader("user-agent");
 		if (agt != null && agt.length() > 0) {

@@ -37,6 +37,12 @@ public interface DeviceConfig {
 	 * @since 3.0.0
 	 */
 	public String getTimeoutURI();
+	/** Returns whether to automatical redirect to the timeout URI.
+	 * @see #getTimeoutURI
+	 * @see Device#setAutomaticTimeout
+	 * @since 3.6.3
+	 */
+	public boolean isAutomaticTimeout();
 	/** Returns the class that implements the server-push feature
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}) for this device, or null if the default is used.
 	 * @since 3.0.0

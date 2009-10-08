@@ -564,6 +564,8 @@ zkau.sendNow = function (dtid) {
 		return true; //wait
 	}
 
+	zk.resetTimeout();
+
 	//callback (fckez uses it to ensure its value is sent back correctly
 	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
 		try {
@@ -1837,6 +1839,13 @@ zkau.sendRedraw = function () {
 	zk.errorDismiss();
 	for (var ds = zkau._dtids, j = ds.length; --j >= 0;)
 		zkau.send({dtid: ds[j], cmd: "redraw"});
+};
+/** Sends the dummy request to all desktops.
+ * @since 3.6.3
+ */
+zkau.sendDummy = function (data) {
+	for (var ds = zkau._dtids, j = ds.length; --j >= 0;)
+		zkau.send({dtid: ds[j], cmd: "dummy", data: data, ignorable: true});
 };
 
 /** Test if any float is opened.

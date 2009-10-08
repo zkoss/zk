@@ -1501,6 +1501,19 @@ zk.https = function () {
 	var p = location.protocol;
 	return p && "https:" == p.toLowerCase();
 };
+/** Resets the timeout counter if any
+ * @since 3.6.3
+ */
+zk.resetTimeout = function () {
+	if (zk._idTmout) {
+		clearTimeout(zk._idTmout);
+		zk._idTmout = null;
+	}
+	if (window.zk_tmout > 0)
+		zk._idTmout = setTimeout(
+			function () {zkau.sendDummy(["timeout"])}, zk_tmout * 1000);
+};
+
 //-- bootstrapping --//
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
@@ -1547,6 +1560,7 @@ zk.bootDone = function () {
 	zk.booting = false;
 	zk.booted = true;
 	zkau.onURLChange();
+	zk.resetTimeout();
 };
 zk._onload = function () {
 	//It is possible to move javascript defined in zul's language.xml
