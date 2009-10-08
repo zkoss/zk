@@ -197,6 +197,7 @@ public class HtmlPageRenders {
 		if (deviceType == null)
 			deviceType = desktop != null ? desktop.getDeviceType(): "ajax";
 
+		final Device device = Devices.getDevice(deviceType);
 		final StringBuffer sb = new StringBuffer(1536);
 
 		final Set jses = new LinkedHashSet(32);
@@ -214,15 +215,44 @@ public class HtmlPageRenders {
 		sb.append(' ').append(wapp.getBuild())
 			.append(" -->\n");
 
-		if (exec.getAttribute(Attributes.NO_CACHE) == null)
-			sb.append("<script>zkopt({kd:1});</script>");
+		final Boolean autoTimeout = getAutomaticTimeout(desktop);
+		int tmout = 0;
+		if (autoTimeout != null ?
+		autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+			tmout = desktop.getSession().getMaxInactiveInterval();
+			if (tmout > 0) { //unit: seconds
+				int extra = tmout / 8;
+				tmout += extra > 180 ? 180: extra;
+					//Add extra seconds to ensure it is really timeout
+			}
+		}
+		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null;
+		if (tmout > 0 || keepDesktop) {
+			sb.append("<script>zkopt({");
 
-		final Device device = Devices.getDevice(deviceType);
+			if (keepDesktop)
+				sb.append("kd:1,");
+			if (tmout > 0)
+				sb.append("to:").append(tmout);
+
+			if (sb.charAt(sb.length() - 1) == ',')
+				sb.setLength(sb.length() - 1);
+			sb.append("});</script>");
+		}		
+
 		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
 
 		return sb.toString();
+	}
+	private static Boolean getAutomaticTimeout(Desktop desktop) {
+		if (desktop != null)
+			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+				Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+				if (b != null) return b;
+			}
+		return null;
 	}
 	/** Returns HTML tags to include all style sheets that are
 	 * defined in all languages of the specified device (never null).

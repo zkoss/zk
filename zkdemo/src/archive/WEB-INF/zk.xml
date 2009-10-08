@@ -167,7 +167,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<device-config>
 		<device-type>ajax</device-type>
 		<timeout-uri>/timeout.zul</timeout-uri>
-		<!-- An empty URL can cause the browser to reload the same URL -->
+			<!-- An empty URL can cause the browser to reload the same URL -->
+
+		<!-- Comment the following if you prefer not to automatically redirect
+			to the timeout page.
+		-->
+		<automatic-timeout/>
 	</device-config>
 
 	<!-- Uncomment if you want to embed JavaScript codes and any other

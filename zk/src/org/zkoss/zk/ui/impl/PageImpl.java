@@ -106,7 +106,7 @@ import org.zkoss.zk.scripting.*;
  */
 public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
-    private static final long serialVersionUID = 20081026L;
+    private static final long serialVersionUID = 20091008L;
 
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
@@ -135,6 +135,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private String _rootAttrs = "";
 	private String _contentType, _docType, _firstLine;
 	private Boolean _cacheable;
+	private Boolean _autoTimeout;
 	/** The expression factory (ExpressionFactory).*/
 	private Class _expfcls;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
@@ -727,6 +728,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public void setCacheable(Boolean cacheable) {
 		_cacheable = cacheable;
+	}
+	public Boolean getAutomaticTimeout() {
+		return _autoTimeout;
+	}
+	public void setAutomaticTimeout(Boolean autoTimeout) {
+		_autoTimeout = autoTimeout;
 	}
 
 	public final Desktop getDesktop() {

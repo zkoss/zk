@@ -74,6 +74,10 @@ function zkopt(opts) {
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
 		case "cd": zk.clickFilterDelay = val; break;
+		case "to":
+			zk.timeout = val;
+			zAu._resetTimeout();
+			break;
 		case "ed":
 			switch (val) {
 			case 'e':

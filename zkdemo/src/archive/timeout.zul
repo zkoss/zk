@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?page title="Session Timeout" ?>
+<?page title="Session Timeout" automaticTimeout="false" ?>
 <!--
 timeout.zul
 
@@ -18,11 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window width="80%" title="Session Timeout" border="normal">
-	<vbox>
-The page or component you request is no longer available.
-This is normally caused by timeout, opening too many Web pages, or rebooting
-the server.
-	<div style="margin-top: 10px">Continue cruising <a href="userguide" label="ZK Demo"/>
-	or <a href="http://www.zkoss.org" label="ZK Home"/>.</div>
-	</vbox>
+You didn't access the demo for a long time. Would you like to
+continue cruising <a href="userguide" label="ZK Demo"/>
+or to visit <a href="http://www.zkoss.org" label="ZK Home"/>?
 </window>

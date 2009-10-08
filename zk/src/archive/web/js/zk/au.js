@@ -19,6 +19,7 @@ zAu = (function () {
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
 		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 		doCmdFns = [],
+		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0; //performance meter index
 
 	/** Checks whether to turn off the progress prompt. */
@@ -348,18 +349,29 @@ zAu = (function () {
 		}
 	}
 
+	//misc//
+	function fireClientInfo() {
+		zAu.cmd0.clientInfo();
+	}
+	function sendTimeout() {
+		zAu.send(new zk.Event(null, "dummy", {timeout: true}, {ignorable: true}));
+	}
+
   return {
-	_onClientInfo: (function () { //Called by mount.js when onReSize
-		function fireClientInfo() {
-			zAu.cmd0.clientInfo();
+	_resetTimeout: function () {
+		if (idTimeout) {
+			clearTimeout(idTimeout);
+			idTimeout = null;
 		}
-		return function () {
-			if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
+		if (zk.timeout > 0)
+			idTimeout = setTimeout(sendTimeout, zk.timeout * 1000);
+  	},
+	_onClientInfo: function () { //Called by mount.js when onReSize
+		if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
 			//we cannot pass zAu.cmd0.clientInfo directly
 			//otherwise, FF will pass 1 as the firt argument,
 			//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
-		}
-	})(),
+	},
 
 	//Error Handling//
 	confirmRetry: function (msgCode, msg2) {
@@ -498,6 +510,8 @@ zAu = (function () {
 			sendPending = true;
 			return true;
 		}
+
+		zAu._resetTimeout();
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {

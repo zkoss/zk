@@ -149,6 +149,7 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType);
+
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
@@ -161,6 +162,27 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void setCacheable(Boolean cacheable);
+
+	/** Returns whether to automatically redirect to the timeout URI.
+	 *
+	 * @see #setAutomaticTimeout
+	 * @since 3.6.3
+	 */
+	public Boolean getAutomaticTimeout();
+	/** Sets whether to automatically redirect to the timeout URI.
+	 *
+	 * <p>Default: null (use the device default).
+	 * <p>If it is set to false, it means this page is redirected to the timeout URI
+	 * when the use takes some action after timeout. In other words,
+	 * nothing happens if the user does nothing.
+	 * If it is set to true, it is redirected as soon as timeout,
+	 * no matter the user takes any action.
+	 *
+	 * <p>Refer to {@link org.zkoss.zk.device.Device#setAutomaticTimeout}
+	 * for how to configure the device default (default: false).
+	 * @since 3.6.3
+	 */
+	public void setAutomaticTimeout(Boolean autoTimeout);
 
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.
