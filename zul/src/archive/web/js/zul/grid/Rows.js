@@ -57,6 +57,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		var scOdd = this.getGrid().getOddRowSclass();
 		if (!scOdd) return;
 		var n = this.$n();
+		if (!n) return; //Bug #2873478. Rows might not bounded yet
 		for (var j = 0, w = this.firstChild, even = true; w; w = w.nextSibling, ++j) {
 			if (w.isVisible() && w.isStripeable_()) {
 				// check whether is a legal Row or not for zkex.grid.Detail

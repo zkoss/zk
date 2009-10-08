@@ -50,6 +50,7 @@ November, 2009
   2871135: Unclosed progress mask on opening popup
   2871627: zscript failed to load a zscript file if w/ absolute path
   2873290: DOCTYPE not generated for zhtml pages
+  2873478: Always "Processing" Status when Row's Visible is False
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
