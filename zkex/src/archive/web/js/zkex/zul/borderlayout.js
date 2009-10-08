@@ -370,6 +370,16 @@ zkLayoutRegion2 = {
 			zk.Layout2.getOwnerLayout(cmp).render();
 		}
 	},
+	//Bug #2874039, Outer the center region will clear height/width so sizing of its child components are not correct
+	onSize: function (cmp) { 
+		cmp = $real(cmp);
+		if (zk.isVisible(cmp)) {
+			var pos = getZKAttr(cmp, "pos");
+			if (pos == 'center') {
+				zk.Layout2.getOwnerLayout(cmp).render(true);
+			}
+		}
+	},
 	// invokes border layout's renderer before the component slides out
 	onBeforeSlideOut: function (cmp) {
 		var colled = $e($uuid(cmp), "colpsd"),
