@@ -58,7 +58,8 @@ October, 2009
   2873365: Failed to serialize if the forward target has no ID assigned
   2873905: GenericComposer shall not call doAfterCompose in didActivate
   2823591: ZK 3.6.2 selectedItem throws Exception  
-
+  2874039: Child sizing incorrect if invalidate center region
+  
 	--------
 ZK 3.6.2
 June 23, 2009
