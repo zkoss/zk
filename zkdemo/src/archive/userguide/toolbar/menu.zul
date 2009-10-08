@@ -72,10 +72,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</menupopup>
 		</menu>
 	</menubar>
-	<checkbox label="Vertical orient">
+	<checkbox label="Vertical orient" id="vo">
 		<attribute name="onCheck">
 			menubar.orient= self.checked ? "vertical" : "horizontal";
+			sm.visible = !self.checked;
 			menubar.width = self.checked ? "100px" : "200px";
+		</attribute>
+	</checkbox>
+	<checkbox label="Scrollable Menubar" id="sm">
+		<attribute name="onCheck">
+			menubar.scrollable = self.checked;
+			menubar.width = self.checked || vo.checked ? "150px" : "200px";  
 		</attribute>
 	</checkbox>
 </zk>
