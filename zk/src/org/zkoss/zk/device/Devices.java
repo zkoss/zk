@@ -434,7 +434,7 @@ public class Devices {
   &lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
   &lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
   &lt;timeout-uri&gt;/WEB-INF/timeout.zul&lt;/timeout-uri&gt;
-  &lt;automatic/&gt;
+  &lt;automatic-timeout/&gt;
   &lt;server-push-class&gt;my.MyServerPush&lt;/server-push-class&gt;
 &lt;/device-config&gt;
 	 * </code></pre>
@@ -458,7 +458,7 @@ public class Devices {
 		if (s != null)
 			setTimeoutURI(deviceType, s);
 
-		s = config.getElementValue("automatic", true);
+		s = config.getElementValue("automatic-timeout", true);
 		if (s != null)
 			setAutomaticTimeout(deviceType, !"false".equals(s));
 
