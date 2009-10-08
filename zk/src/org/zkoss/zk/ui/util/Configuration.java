@@ -1253,6 +1253,9 @@ public class Configuration {
 	/** Returns the time, in seconds, between client requests
 	 * before ZK will invalidate the desktop.
 	 *
+	 * <p>Notice that this timeout is used only if JVM starts
+	 * GC when the memory is running low.
+	 *
 	 * <p>A negative value indicates the desktop should never timeout.
 	 */
 	public int getDesktopMaxInactiveInterval() {
