@@ -31,6 +31,8 @@ import org.zkoss.zul.event.ChartDataEvent;
  *
  */
 public class DialModel extends AbstractChartModel {
+	private static final long serialVersionUID = 20091008183229L;
+
 	private List _series = new ArrayList(4);
 	
 	//DialFrame background

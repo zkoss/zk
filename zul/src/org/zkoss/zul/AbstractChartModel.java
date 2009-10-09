@@ -35,7 +35,8 @@ import org.zkoss.zul.event.ChartDataListener;
  * @author henrichen
  */
 abstract public class AbstractChartModel implements ChartModel, java.io.Serializable {
-	private transient List _listeners = new LinkedList();
+	private static final long serialVersionUID = 20091007120455L;
+	private List _listeners = new LinkedList();
 
 	/** Fires a {@link ChartDataEvent} for all registered listener
 	 * (thru {@link #addChartDataListener}.

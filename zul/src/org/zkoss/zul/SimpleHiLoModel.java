@@ -18,17 +18,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collection;
+
+import org.zkoss.zul.event.ChartDataEvent;
 
 /**
  * A HiLo data model implementation of {@link HiLoModel}.
@@ -40,6 +34,7 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
+	private static final long serialVersionUID = 20091008182747L;
 	private Comparable _series; //the only series
 	private List _hlTuples = new ArrayList(31);
 	
@@ -96,7 +91,8 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 	}
 	
 	//-- internal class --//
-	private static class HiLoTuple {
+	private static class HiLoTuple implements java.io.Serializable {
+		private static final long serialVersionUID = 20091008182814L;
 		private Date _date;
 		private Number _open;
 		private Number _high;

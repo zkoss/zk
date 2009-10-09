@@ -59,6 +59,7 @@ October, 2009
   2873905: GenericComposer shall not call doAfterCompose in didActivate
   2823591: ZK 3.6.2 selectedItem throws Exception  
   2874039: Child sizing incorrect if invalidate center region
+  2874568: NPE when serialize/deserialize Chart
   
 	--------
 ZK 3.6.2

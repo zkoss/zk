@@ -38,6 +38,7 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimplePieModel extends AbstractChartModel implements PieModel {
+	private static final long serialVersionUID = 20091008183556L;
 	private List _categoryList = new ArrayList(13);
 	private Map _categoryMap = new HashMap(13);
 	
