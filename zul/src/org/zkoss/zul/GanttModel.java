@@ -37,6 +37,7 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @since 3.5.0
  */
 public class GanttModel extends AbstractChartModel {
+	private static final long serialVersionUID = 20091008183023L;
 	private Map _taskMap = new LinkedHashMap(13); //(series, task list)
 	
 	public void addValue(Comparable series, GanttTask task) {
@@ -84,7 +85,8 @@ public class GanttModel extends AbstractChartModel {
 	 * @since 3.5.0
 	 * @see GanttModel
 	 */
-	public static class GanttTask {
+	public static class GanttTask implements java.io.Serializable {
+		private static final long serialVersionUID = 20091008183314L;
 		private Comparable _series;
 		private Date _start;
 		private Date _end;

@@ -37,6 +37,8 @@ import java.util.Collection;
  * @since 3.5.0
  */
 public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
+	private static final long serialVersionUID = 20091008183739L;
+
 	//-- XYModel --//
 	/** Not supported since we need not only x, y, but also z information.
 	 */
@@ -67,6 +69,7 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 
 	//-- internal class --//
 	private static class XYZTuple extends XYPair {
+		private static final long serialVersionUID = 20091008183759L;
 		private Number _z;
 		
 		private XYZTuple(Number x, Number y, Number z) {

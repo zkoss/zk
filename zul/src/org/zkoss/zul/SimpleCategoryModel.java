@@ -39,6 +39,7 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleCategoryModel extends AbstractChartModel implements CategoryModel {
+	private static final long serialVersionUID = 20091008183445L;
 	private Map _seriesMap = new HashMap(13); // (series, usecount)
 	private List _seriesList = new ArrayList(13);
 

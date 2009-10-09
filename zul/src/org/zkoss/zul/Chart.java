@@ -30,6 +30,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 
 import java.awt.Font;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,7 @@ import java.util.TimeZone;
  * @author henrichen
  */
 public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
+	private static final long serialVersionUID = 20091008183601L;
 	//chart type
 	public static final String PIE = "pie";
 	public static final String RING = "ring";
@@ -132,8 +134,8 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
-	private transient ChartDataListener _dataListener;
-	private transient EventListener _smartDrawChartListener; //the smartDrawListner
+	private EventListener _smartDrawChartListener; //the smartDrawListner
+	private ChartDataListener _dataListener;
 
 	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)
 	private boolean _threeD; //whether a 3D chart
@@ -176,7 +178,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	private Font _xAxisFont; //chart's x axis font
 	private Font _yAxisTickFont; //chart's y axis tick number font
 	private Font _yAxisFont; //chart's y axis font
-
+	
 	public Chart() {
 		init();
 		setWidth("500px");
@@ -201,33 +203,40 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	
 	private void init() {
 		if (_smartDrawChartListener == null) {
-			_smartDrawChartListener = new EventListener() {
-				public void onEvent(Event event) {
-					if (Strings.isBlank(getType()))
-						throw new UiException("chart must specify type (pie, bar, line, ...)");
-
-					if (_model == null) {
-						_model = createDefaultModel();
-					}
-
-					if (Strings.isBlank(getWidth()))
-						throw new UiException("chart must specify width");
-						
-					if (Strings.isBlank(getHeight()))
-						throw new UiException("chart must specify height");
-						
-					try {
-						final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
-						setContent(image);
-					} catch(java.io.IOException ex) {
-						throw UiException.Aide.wrap(ex);
-					} finally {
-						_smartDrawChart = false;
-					}
-				}
-			};
+			_smartDrawChartListener = new SmartDrawListener();
+			addEventListener("onSmartDrawChart", _smartDrawChartListener);
 		}
-		addEventListener("onSmartDrawChart", _smartDrawChartListener);
+	}
+	
+	private class SmartDrawListener implements EventListener, Serializable {
+		private static final long serialVersionUID = 20091008183610L;
+		public void onEvent(Event event) throws Exception {
+			doSmartDraw();
+		}
+	}
+	
+	private void doSmartDraw() {
+		if (Strings.isBlank(getType()))
+			throw new UiException("chart must specify type (pie, bar, line, ...)");
+
+		if (_model == null) {
+			_model = createDefaultModel();
+		}
+
+		if (Strings.isBlank(getWidth()))
+			throw new UiException("chart must specify width");
+			
+		if (Strings.isBlank(getHeight()))
+			throw new UiException("chart must specify height");
+			
+		try {
+			final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
+			setContent(image);
+		} catch(java.io.IOException ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			_smartDrawChart = false;
+		}
 	}
 	
 	/**
@@ -879,13 +888,17 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 				
 	private void initDataListener() {
 		if (_dataListener == null) {
-			_dataListener = new ChartDataListener() {
-				public void onChange(ChartDataEvent event) {
-					smartDrawChart();
-				}
-			};
+			_dataListener = new MyChartDataListener();
+			_model.addChartDataListener(_dataListener);
 		}
-		_model.addChartDataListener(_dataListener);
+	}
+	
+	private class MyChartDataListener implements ChartDataListener, Serializable {
+		private static final long serialVersionUID = 20091008183622L;
+
+		public void onChange(ChartDataEvent event) {
+			smartDrawChart();
+		}
 	}
 
 	/** Returns the renderer to render each area, or null if the default
@@ -980,26 +993,12 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		clone._smartDrawChartListener = null;
 		clone._smartDrawChart = false;
 		clone.init();
-		clone.smartDrawChart();
+		clone.doSmartDraw();
 		if (clone._model != null) {
 			clone._dataListener = null;
 			clone.initDataListener();
 		}
 		
 		return clone;
-	}
-	//-- Serializable --//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		// Due to the not unique ID of the area component creating in JFreeChartEngine, we have to clear
-		// all its children first.
-		getChildren().clear();
-		init();
-		smartDrawChart();
-		if (_model != null) {
-			initDataListener();
-		}
 	}
 }

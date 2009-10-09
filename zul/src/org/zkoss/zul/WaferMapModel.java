@@ -16,17 +16,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-
-import java.util.Map;
-import java.util.List;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Map;
+
+import org.zkoss.zul.event.ChartDataEvent;
 
 /**
  * A semiconductor wafer map data model to be used with wafermap chart.
@@ -37,6 +32,7 @@ import java.util.Collection;
  * @since 3.5.0
  */
 public class WaferMapModel extends AbstractChartModel {
+	private static final long serialVersionUID = 20091008182524L;
 	private int _xsize = 100;
 	private int _ysize = 100;
 	private double _space = 1d;
@@ -172,7 +168,8 @@ public class WaferMapModel extends AbstractChartModel {
 	}
 
 	//-- internal class --//
-	public static class IntPair {
+	public static class IntPair implements java.io.Serializable {
+		private static final long serialVersionUID = 20091008182635L;
 		private int _x;
 		private int _y;
 		

@@ -380,24 +380,7 @@ dateFormat="yyyy/MM/dd" />
 	scale.newRange(60, 80, "#FFC426", 0.83, 0.89);
 	scale.setValue(val);
 
-	doOK() {
-		val = dbx.getValue();
-		if (val > 100) {
-			val = 100;
-		} else if (val < 0) {
-			val = 0;
-		}
-		dbx.value = val;
-		slx.curpos = val;
-		scale.setValue(val);
-		if (val > 80) {
-			scale.setNeedleColor(scale.getRange(0).getRangeColor());
-		} else if (val > 60) {
-			scale.setNeedleColor(scale.getRange(1).getRangeColor());
-		} else {
-			scale.setNeedleColor(dialmodel.getFrameFgColor());
-		}
-    }
+
 ]]>
 </zscript>
 <chart id="dial" title="Dial Plot" width="300" height="300" type="dial" threeD="false" fgAlpha="128"/>
@@ -405,8 +388,26 @@ dateFormat="yyyy/MM/dd" />
   dial.setModel(dialmodel);
 </zscript>
 	<hbox>
-		<slider id="slx" curpos="${val}" onScroll="dbx.value=self.curpos; doOK()"/>
-		<intbox id="dbx" value="${val}" onChange="doOK()"/>
+		<slider id="slx" curpos="${val}">
+			<attribute name="onScroll"><![CDATA[
+				val = slx.getCurpos();
+				if (val > 100) {
+					val = 100;
+				} else if (val < 0) {
+					val = 0;
+				}
+				dbx.setValue(""+val);
+				scale.setValue(val);
+				if (val > 80) {
+					scale.setNeedleColor(scale.getRange(0).getRangeColor());
+				} else if (val > 60) {
+					scale.setNeedleColor(scale.getRange(1).getRangeColor());
+				} else {
+					scale.setNeedleColor(dialmodel.getFrameFgColor());
+				}
+			]]></attribute>
+		</slider>
+		<label id="dbx"/>
 	</hbox>
 </window>
 

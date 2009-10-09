@@ -16,16 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.zkoss.zul.event.ChartDataEvent;
 
 /**
  * A XY data model implementation of {@link XYModel}.
@@ -36,6 +33,7 @@ import java.util.Collection;
  * @see Chart
  */
 public class SimpleXYModel extends AbstractChartModel implements XYModel {
+	private static final long serialVersionUID = 20091008182904L;
 	protected Map _seriesMap = new HashMap(13); //(series, XYPair)
 	protected List _seriesList = new ArrayList(13);
 	private boolean _autoSort = true;
@@ -114,7 +112,8 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	}
 	
 	//-- internal class --//
-	protected static class XYPair {
+	protected static class XYPair implements java.io.Serializable {
+		private static final long serialVersionUID = 20091008182941L;
 		private Number _x;
 		private Number _y;
 		
