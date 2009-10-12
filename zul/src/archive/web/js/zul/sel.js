@@ -118,6 +118,7 @@ zk.Selectable.prototype = {
 
 		var focusEl = $e(this.id, "a");
 		zk.listen(focusEl, "keydown", this.onKeydown);
+		zk.listen(focusEl, "keyup", zkLibox.onkeyup);
 		zk.listen(focusEl, "blur", this.onBlur);
 		var meta = this; //the nested function only see local var
 		if (!this._inited) {
@@ -208,10 +209,20 @@ zk.Selectable.prototype = {
 		}
 	},
 	onKeydown: function (evt) {
-		var meta = zkau.getMeta($uuid(Event.element(evt)));
-		if (meta)
+		var target = Event.element(evt),
+			tag = $tag(target),
+			meta = zkau.getMeta($uuid(target));
+		
+		
+		if (meta) {
+			
+			// Bug 2487562
+			if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA")) {
+				zk.disableSelection(meta.element);
+			}
 			meta.dokeydown(evt, $e(meta._focusItem) || $e(getZKAttr(meta.element, "selId")));
-				// sometimes the _focusItem is out of date;
+			// sometimes the _focusItem is out of date;
+		}
 	},
 	cleanup: function ()  {
 		if (this.fnSubmit)
