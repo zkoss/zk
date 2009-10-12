@@ -48,7 +48,7 @@ zkTabbox2 = {
 	childchg: function(cmp) {
 		var uuid = getZKAttr(cmp, "tabs");
 		if (uuid) {
-			setTimeout("zkTabs2._fixWidth('" + uuid + "')", 0);
+			setTimeout("zkTabs2.onSize($e('" + uuid + "'))", 0);
 		}
 	},
 	/** Returns whether the tabbox is accordion.
