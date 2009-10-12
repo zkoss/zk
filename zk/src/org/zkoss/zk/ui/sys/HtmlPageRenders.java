@@ -215,15 +215,17 @@ public class HtmlPageRenders {
 		sb.append(' ').append(wapp.getBuild())
 			.append(" -->\n");
 
-		final Boolean autoTimeout = getAutomaticTimeout(desktop);
 		int tmout = 0;
-		if (autoTimeout != null ?
-		autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
-			tmout = desktop.getSession().getMaxInactiveInterval();
-			if (tmout > 0) { //unit: seconds
-				int extra = tmout / 8;
-				tmout += extra > 180 ? 180: extra;
-					//Add extra seconds to ensure it is really timeout
+		if (desktop != null) {
+			final Boolean autoTimeout = getAutomaticTimeout(desktop);
+			if (autoTimeout != null ?
+			autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+				tmout = desktop.getSession().getMaxInactiveInterval();
+				if (tmout > 0) { //unit: seconds
+					int extra = tmout / 8;
+					tmout += extra > 180 ? 180: extra;
+						//Add extra seconds to ensure it is really timeout
+				}
 			}
 		}
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null;
@@ -247,11 +249,10 @@ public class HtmlPageRenders {
 		return sb.toString();
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
-		if (desktop != null)
-			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-				Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
-				if (b != null) return b;
-			}
+		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+			Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+			if (b != null) return b;
+		}
 		return null;
 	}
 	/** Returns HTML tags to include all style sheets that are

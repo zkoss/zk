@@ -63,7 +63,12 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 	public Desktop getDesktopIfAny(String desktopId) {
 		synchronized (_desktops) {
-			return (Desktop)_desktops.get(desktopId);
+			final boolean old = _desktops.disableExpunge(true);
+			try {
+				return (Desktop)_desktops.get(desktopId);
+			} finally {
+				_desktops.disableExpunge(old);
+			}
 		}
 	}
 	public Desktop getDesktop(String desktopId) {
@@ -121,8 +126,13 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	 */
 	public void sessionWillPassivate(Session sess) {
 		synchronized (_desktops) {
-			for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-				((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+			final boolean old = _desktops.disableExpunge(true);
+			try {
+				for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+					((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+			} finally {
+				_desktops.disableExpunge(old);
+			}
 		}
 	}
 	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
@@ -130,24 +140,35 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	 */
 	public void sessionDidActivate(Session sess) {
 		synchronized (_desktops) {
-			for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-				((DesktopCtrl)it.next()).sessionDidActivate(sess);
+			final boolean old = _desktops.disableExpunge(true);
+			try {
+				for (Iterator it = _desktops.values().iterator(); it.hasNext();)
+					((DesktopCtrl)it.next()).sessionDidActivate(sess);
+			} finally {
+				_desktops.disableExpunge(old);
+			}
 		}
 	}
 
 	public void stop() {
 		synchronized (_desktops) {
 			if (log.debugable()) log.debug("Invalidated and remove: "+_desktops);
-			for (Iterator it = new ArrayList(_desktops.values()).iterator();
-			it.hasNext();) {
-				desktopDestroyed((Desktop)it.next());
+			final boolean old = _desktops.disableExpunge(true);
+			try {
+				for (Iterator it = new ArrayList(_desktops.values()).iterator();
+				it.hasNext();) {
+					desktopDestroyed((Desktop)it.next());
+				}
+				_desktops.clear();
+			} finally {
+				_desktops.disableExpunge(old);
 			}
-			_desktops.clear();
 		}
 	}
 
 	/** Holds desktops. */
 	private static class Cache extends CacheMap { //serializable
+		private boolean _expungeDisabled;
 		private Cache(Configuration config) {
 			super(16);
 
@@ -157,10 +178,17 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			v = config.getDesktopMaxInactiveInterval();
 			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 4);
 		}
+		private boolean disableExpunge(boolean disable) {
+			boolean old = _expungeDisabled;
+			_expungeDisabled = disable;
+			return old;
+		}
 		protected boolean shallExpunge() {
-			return super.shallExpunge()
-				|| sizeWithoutExpunge() > (getMaxSize() << 2);
-				//to minimize memory use, expunge even if no GC
+			return !_expungeDisabled
+				&& (super.shallExpunge()
+					|| sizeWithoutExpunge() > (getMaxSize() << 2));
+				//1) disable expunge if serialization/activation
+				//2) to minimize memory use, expunge even if no GC
 		}
 		protected int canExpunge(Value v) {
 			if (((Desktop)v.getValue()).getExecution() != null)
@@ -172,6 +200,25 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 			desktopDestroyed((Desktop)v.getValue());
 			if (log.debugable()) log.debug("Expunge desktop: "+v.getValue());
+		}
+
+		private synchronized void readObject(java.io.ObjectInputStream s)
+		throws java.io.IOException, ClassNotFoundException {
+			final boolean old = disableExpunge(true);
+			try {
+				s.defaultReadObject();
+			} finally {
+				disableExpunge(old);
+			}
+		}
+		private synchronized void writeObject(java.io.ObjectOutputStream s)
+		throws java.io.IOException {
+			final boolean old = disableExpunge(true);
+			try {
+				s.defaultWriteObject();
+			} finally {
+				disableExpunge(old);
+			}
 		}
 	}
 }

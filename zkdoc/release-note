@@ -189,7 +189,8 @@ October, 2009
   2823591: ZK 3.6.2 selectedItem throws Exception  
   2874039: Child sizing incorrect if invalidate center region
   2874568: NPE when serialize/deserialize Chart
-
+  2876830: NPE while desktopDestroyed
+  
 	--------
 ZK 3.6.2
 June 23, 2009

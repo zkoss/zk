@@ -24,7 +24,7 @@ import org.zkoss.lang.Objects;
  *
  * @author tomyeh
  */
-public class Pair {
+public class Pair implements java.io.Serializable {
 	/** The first key. */
 	public final Object x;
 	/** The second key. */
@@ -33,6 +33,9 @@ public class Pair {
 	public Pair(Object x, Object y) {
 		this.x = x;
 		this.y = y;
+	}
+	protected Pair() {
+		this(null, null);
 	}
 
 	/** Returns the first value of the pair.
