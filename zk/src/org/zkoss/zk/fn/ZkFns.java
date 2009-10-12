@@ -183,16 +183,18 @@ public class ZkFns extends DspFns {
 				.append(config.getClickFilterDelay())
 			.append(";\n");
 
-		Boolean autoTimeout = getAutomaticTimeout(desktop);
 		final Device device = Devices.getDevice(deviceType);
-		if (autoTimeout != null ?
-		autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
-			int tmout = desktop.getSession().getMaxInactiveInterval();
-			if (tmout > 0) { //unit: seconds
-				int extra = tmout / 8;
-				tmout += extra > 180 ? 180: extra;
-					//Add extra seconds to ensure it is really timeout
-				sb.append("zk_tmout=").append(tmout).append(";\n");
+		if (desktop != null) { //null if called by JSP:zkhead
+			Boolean autoTimeout = getAutomaticTimeout(desktop);
+			if (autoTimeout != null ?
+			autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+				int tmout = desktop.getSession().getMaxInactiveInterval();
+				if (tmout > 0) { //unit: seconds
+					int extra = tmout / 8;
+					tmout += extra > 180 ? 180: extra;
+						//Add extra seconds to ensure it is really timeout
+					sb.append("zk_tmout=").append(tmout).append(";\n");
+				}
 			}
 		}
 
