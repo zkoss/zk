@@ -198,6 +198,8 @@ public class ZkFns extends DspFns {
 			}
 		}
 
+		if (config.isTimerKeepAlive())
+			sb.append("zk.timerAlive=true;\n");
 		if (config.isDebugJS())
 			sb.append("zk.debugJS=true;\n");
 		if (config.isDisableBehindModalEnabled())

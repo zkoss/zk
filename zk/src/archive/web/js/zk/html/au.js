@@ -564,8 +564,6 @@ zkau.sendNow = function (dtid) {
 		return true; //wait
 	}
 
-	zk.resetTimeout();
-
 	//callback (fckez uses it to ensure its value is sent back correctly
 	for (var j = 0, ol = zkau._onsends.length; j < ol; ++j) {
 		try {
@@ -578,9 +576,10 @@ zkau.sendNow = function (dtid) {
 	//bug 1721809: we cannot filter out ctl even if zkau.processing
 
 	//decide implicit and ignorable
-	var implicit = true, ignorable = true, ctli, ctlc;
+	var implicit = true, ignorable = true, ctli, ctlc, alive;
 	for (var j = es.length; --j >= 0;) {
-		var evt = es[j];
+		var evt = es[j],
+			cmd = evt.cmd;
 		if (implicit && !evt.ignorable) { //ignorable implies implicit
 			ignorable = false;
 			if (!evt.implicit)
@@ -588,10 +587,15 @@ zkau.sendNow = function (dtid) {
 		}
 		if (evt.ctl && !ctli) {
 			ctli = evt.uuid;
-			ctlc = evt.cmd;
+			ctlc = cmd;
 		}
+		if (!alive && (zk.timerAlive || cmd != "onTimer") && cmd != "dummy")
+			alive = true;
 	}
 	zkau._ignorable = ignorable;
+
+	if (alive)
+		zk.resetTimeout();
 
 	//Consider XML (Pros: ?, Cons: larger packet)
 	var content = "";
