@@ -310,9 +310,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	
 	if [ "$target" == "daily" ] ; then
 		cp zkdoc/COPYING /tmp/zk/$binnm/doc
+		chmod 644 /tmp/zk/$binnm/doc/COPYING
 	fi
 	
-	chmod 644 /tmp/zk/$binnm/dist/xsd/*.xsd /tmp/zk/$binnm/doc/release-note /tmp/zk/$binnm/doc/COPYING
+	chmod 644 /tmp/zk/$binnm/dist/xsd/*.xsd /tmp/zk/$binnm/doc/release-note
 
 	if [ "$target" == "official" ] ; then
 		cp cmldoc/LICENSE /tmp/zk/$binnm/doc
@@ -453,6 +454,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		zip -qr9 ${stdnm}.zip $stdnm
 		
 		rm -rf $stdnm
+		
+		#Prepare the doc
+		cd $maindir
+		$maindir/bin/javadoc "$javadocdir/ZK"
+		
 	fi
 
 	rm -rf $binnm
