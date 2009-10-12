@@ -74,6 +74,7 @@ function zkopt(opts) {
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
 		case "cd": zk.clickFilterDelay = val; break;
+		case "ta": zk.timerAlive = val; break;
 		case "to":
 			zk.timeout = val;
 			zAu._resetTimeout();

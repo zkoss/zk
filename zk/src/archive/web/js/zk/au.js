@@ -511,8 +511,6 @@ zAu = (function () {
 			return true;
 		}
 
-		zAu._resetTimeout();
-
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
 			zWatch.fire('onSend', implicit);
@@ -523,9 +521,11 @@ zAu = (function () {
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
 
 		//decide implicit and ignorable
-		var implicit = true, ignorable = true, ctli, ctlc, uri;
+		var implicit = true, ignorable = true, ctli, ctlc, uri, alive;
 		for (var j = 0, el = es.length; j < el; ++j) {
-			var aureq = es[j], opts = aureq.opts = aureq.opts||{};
+			var aureq = es[j],
+				evtnm = aureq.name,
+				opts = aureq.opts = aureq.opts||{};
 			if (opts.uri != uri) {
 				if (j) break;
 				uri = opts.uri;
@@ -537,9 +537,14 @@ zAu = (function () {
 			}
 			if (opts.ctl && !ctli) {
 				ctli = aureq.target.uuid;
-				ctlc = aureq.name;
+				ctlc = evtnm;
 			}
+			if (!alive && (zk.timerAlive || evtnm != "onTimer") && evtnm != "dummy")
+				alive = true;
 		}
+
+		if (alive)
+			zAu._resetTimeout();
 
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "";

@@ -399,6 +399,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (v >= 0) sb.append("rd:").append(v).append(',');
 		v = config.getClickFilterDelay();
 		if (v >= 0) sb.append("cd:").append(v).append(',');
+		if (config.isTimerKeepAlive())
+			sb.append("ta:1,");
 		if (config.isDebugJS()) sb.append("dj:1,");
 		if (config.isKeepDesktopAcrossVisits())
 			sb.append("kd:1,");
