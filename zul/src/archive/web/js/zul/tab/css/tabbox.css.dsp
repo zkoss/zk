@@ -597,11 +597,15 @@
 	border-color: #7EAAC6;
 	border-width: 1px;
 	border-style: solid;
+	border-left-width: 0px;
 }
 .z-tabpanel,
 .z-tabbox-ver .z-tabpanel-ver {
 	padding: 5px;
 	zoom: 1;
+}
+.z-tabpanels-ver {
+	float: left; zoom: 1; overflow: hidden; position: relative;
 }
 
 <c:if test="${c:browser('ie6-')}">
