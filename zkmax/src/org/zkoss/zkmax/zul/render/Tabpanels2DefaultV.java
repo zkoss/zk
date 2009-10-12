@@ -40,7 +40,7 @@ public class Tabpanels2DefaultV implements ComponentRenderer {
 		final Tabpanels self = (Tabpanels) comp;
 
 		wh.write("<div id=\"").write(self.getUuid()).write("\"")
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(" z.type=\"Vtabpanels\">")
 			.writeChildren(self)
 			.writeln("</div>");
 		

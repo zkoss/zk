@@ -751,3 +751,43 @@ zkTabpanel2 = {
 	}
 }
 zkTabpanel2.onSize = zkTabpanel2.onVisi;
+
+zkVtabpanels = {
+	init: function (cmp) {
+		if (cmp.style.width)
+			cmp._width = cmp.style.width;
+	},
+	beforeSize: function (cmp) {
+		cmp.style.width = cmp._width ? cmp._width : '';
+	},
+	onSize: _zkf = function (cmp) {
+		if (!zk.isRealVisible(cmp.parentNode) || cmp._width)
+			return;
+			
+		var width = cmp.parentNode.offsetWidth;
+		
+		width -= zk.firstChild(cmp.parentNode, 'DIV').offsetWidth
+				+ zk.previousSibling(cmp, 'DIV').offsetWidth;
+		
+		cmp.style.width = zk.revisedSize(cmp, width) + 'px';
+	},
+	onVisi: _zkf,
+	setAttr: function (cmp, nm, val) {
+		switch (nm) {
+		case "style.width":
+		case "style":
+			if (!cmp._width)
+				cmp.style.width = "";
+			
+			zkau.setAttr(cmp, nm, val);
+			
+			if (cmp.style.width)
+				cmp._width = cmp.style.width;
+				
+			zk.beforeSizeAt(cmp);
+			zk.onSizeAt(cmp);
+			return true;
+		}
+		return false;
+	}
+};

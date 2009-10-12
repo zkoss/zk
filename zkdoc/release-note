@@ -62,6 +62,7 @@ October, 2009
   2874568: NPE when serialize/deserialize Chart
   2876830: NPE while desktopDestroyed
   2824105: Panel with border="normal"
+  2825231: Vbox inside vertical tabs
   
 	--------
 ZK 3.6.2
