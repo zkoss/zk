@@ -61,6 +61,7 @@ October, 2009
   2874039: Child sizing incorrect if invalidate center region
   2874568: NPE when serialize/deserialize Chart
   2876830: NPE while desktopDestroyed
+  2824105: Panel with border="normal"
   
 	--------
 ZK 3.6.2
