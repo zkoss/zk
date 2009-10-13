@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.http.WebManager;
@@ -213,18 +214,9 @@ public class ZkFns extends DspFns {
 			sb.append("zk.pfmeter=true;\n");
 
 		sb.append("zk.eru={");
-		final int[] cers = config.getClientErrorReloadCodes();
-		boolean first = true;
-		for (int j = 0; j < cers.length; ++j) {
-			final String uri = config.getClientErrorReload(cers[j]);
-			if (uri != null) {
-				if (first) first = false;
-				else sb.append(',');
-
-				sb.append("e").append(cers[j]).append(":'")
-					.append(Strings.escape(uri, "'\\")).append('\'');
-			}
-		}
+		outErrReloads(config, sb, deviceType, null);
+		sb.append("};zk.erusp={");
+		outErrReloads(config, sb, deviceType, "server-push");
 		sb.append("};\n");
 
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
@@ -249,6 +241,23 @@ public class ZkFns extends DspFns {
 			sb.append(s).append('\n');
 
 		return sb.toString();
+	}
+	private static void outErrReloads(Configuration config, StringBuffer sb,
+	String deviceType, String connType) {
+		final Object[][] infs = config.getClientErrorReloads(deviceType, connType);
+		for (int j = 0; j < infs.length; ++j) {
+			if (j > 0) sb.append(',');
+			sb.append('\'').append(infs[j][0]).append("':'");
+
+			String uri = ((URIInfo)infs[j][1]).uri;
+			if (uri.length() > 0)
+				try {
+					uri = ServletFns.encodeURL(uri);
+				} catch (javax.servlet.ServletException ex) {
+					throw new UiException("Unable to encode "+uri, ex);
+				}
+			sb.append(Strings.escape(uri, "'\\")).append('\'');
+		}
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
 		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {

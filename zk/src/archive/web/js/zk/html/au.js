@@ -288,7 +288,7 @@ zkau._onRespReady = function () {
 				}
 			} else if (!sid || sid == zkau._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 				zkau._errcode = req.status;
-				var eru = zk.eru['e' + req.status];
+				var eru = zk.eru[''+req.status];
 				if (typeof eru == "string") {
 					zk.go(eru);
 				} else {

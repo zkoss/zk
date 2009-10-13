@@ -207,8 +207,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		page when ZK Client receives an error code.
 	<client-config>
 		<error-reload>
+			<device-type>ajax</device-type>
 			<error-code>301</error-code>
 			<reload-uri>/login.zul</reload-uri>
+		</error-reload>
+		<error-reload>
+			<device-type>ajax</device-type>
+			<error-code>410</error-code>
+			<reload-uri>/timeout.zul</reload-uri>
+			<connection-type>server-push</connection-type>
 		</error-reload>
 	</client-config>
 	-->

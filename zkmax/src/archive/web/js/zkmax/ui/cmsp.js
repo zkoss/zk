@@ -19,6 +19,7 @@ zkCmsp._reqs = {};
 zkCmsp._start = {};
 zkCmsp._nStart = 0;
 zkCmsp._sid = ($now() % 999) + 1; //1-999 (random init: bug 2691017)
+zkCmsp._nfailed = 0;
 
 zk.override(zkau, "ignoreESC", zkCmsp,
 	function () {
@@ -83,11 +84,15 @@ zkCmsp._onRespReady = function () {
 					if ((v=req.getResponseHeader("ZK-Error")) == "404"/*SC_NOT_FOUND: server restart*/
 					|| v == "410"/*SC_GONE: session timeout*/
 					|| req.getResponseHeader("ZK-Comet-Error") == "Disabled") {
+						v = zk.erusp['410'];
+						if (typeof v == "string")
+							zk.go(v);
 						zkCmsp.stop(dtid);
 						return;
 					}
 
 					if (req.status == 200) {
+						zkCmsp._nfailed = 0;
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
 							if (zkau.pushXmlResp(dtid, req)) {
@@ -98,13 +103,23 @@ zkCmsp._onRespReady = function () {
 							zkau.doCmds();
 						}
 					}
-					zkCmsp._asend(dtid, timeout);
+					zkCmsp._retry(dtid, timeout);
 				}
 			} catch (e) {
-				zkCmsp._asend(dtid, 2000); //2 sec
+				zkCmsp._retry(dtid, 2000, e); //2 sec
 			}
 		}
 	} catch (e) {
 		//FF: complain zkCmsp not found if ESC. reason: unknown
 	}
+};
+zkCmsp._retry = function (dtid, timeout, e) {
+	var msg = e ? e.message: "";
+	if (++zkCmsp._nfailed < 5)
+		zkCmsp._asend(dtid, timeout);
+	else if (confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
+		zkCmsp._nfailed = 0;
+		zkCmsp._asend(dtid, 10);
+	} else
+		zkCmsp.stop(dtid);
 };

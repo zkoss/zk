@@ -13,6 +13,7 @@ October, 2009
   2870478: Chart shall support setting Font
   2873957: menubar in horizontal support scrollable functionality
   2873954: menu support onClick
+  2857412: Feedback on server push error
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -61,9 +62,14 @@ October, 2009
   2874039: Child sizing incorrect if invalidate center region
   2874568: NPE when serialize/deserialize Chart
   2876830: NPE while desktopDestroyed
+  2877549: error-uri doesn't encode (HttpServletResponse.encodeURL)
   2824105: Panel with border="normal"
   2825231: Vbox inside vertical tabs
   
+* Upgrade Notes:
+  + error-uri will encode the URI, so don't need prefix it with the servlet
+    context (refer to Bug 2877549)
+
 	--------
 ZK 3.6.2
 June 23, 2009

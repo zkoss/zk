@@ -446,9 +446,9 @@ public class ConfigParser {
 					IDOMs.getRequiredElementValue(el, "exception-type");
 				final String loc =
 					IDOMs.getRequiredElementValue(el, "location");
-				String devType = el.getElementValue("device-type", true);
-				if (devType == null) devType = "ajax";
-				else if (devType.length() == 0)
+				String deviceType = el.getElementValue("device-type", true);
+				if (deviceType == null) deviceType = "ajax";
+				else if (deviceType.length() == 0)
 					throw new UiException("device-type not specified at "+el.getLocator());
 
 				final Class cls;
@@ -458,7 +458,7 @@ public class ConfigParser {
 					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
 				}
 
-				config.addErrorPage(devType, cls, loc);
+				config.addErrorPage(deviceType, cls, loc);
 			} else if ("preference".equals(elnm)) {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
@@ -555,13 +555,15 @@ public class ConfigParser {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 
+			String deviceType = el.getElementValue("device-type", true);
+			String connType = el.getElementValue("connection-type", true);
 			v = parseInteger(el, "error-code", true);
 			if (v == null)
 				throw new UiException("error-code is required, "+el.getLocator());
 			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
 			if ("false".equals(uri)) uri = null;
 
-			config.addClientErrorReload(v.intValue(), uri);
+			config.setClientErrorReload(deviceType, v.intValue(), uri, connType);
 		}
 	}
 
