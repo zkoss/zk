@@ -1085,7 +1085,7 @@ zk._loadAndInit = function (inf) {
 						if (n.type == "checkbox" || n.type == "radio") {
 							if (n.checked != n.defaultChecked)
 								n.checked = n.defaultChecked;
-							if (zk.opera) {	// Bug 2383106						
+							if (zk.opera && zk.isVisible(n, true)) { // Bug 2383106						
 								zk.setVParent(n);
 								zk.unsetVParent(n);
 							}

@@ -65,6 +65,7 @@ October, 2009
   2877549: error-uri doesn't encode (HttpServletResponse.encodeURL)
   2824105: Panel with border="normal"
   2825231: Vbox inside vertical tabs
+  2814460: Listgroup occur an error when setCheckable(false) in opera
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
