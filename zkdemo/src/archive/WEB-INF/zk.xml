@@ -93,10 +93,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		-->
 	</session-config>
 	<session-config>
-		<!-- By default, the configuration under session-config is applied to
-		 all devices.
-		 Uncomment it and set it to ajax or mil, if you want to configure 
-		 a particular device.
+		<!-- 
+		 Uncomment it and set it to mil, if you want to configure for
+		 a mobile device.
+		 If omitted, ajax is assumed.
 		 Currently, only timeout-uri and automatic-timeout support per-device
 		 configuration.
 		<device-type>ajax</device-type>
