@@ -1460,7 +1460,7 @@ public class Configuration {
 	public String removeClientErrorReload(int errCode) {
 		return removeClientErrorReload("ajax", errCode, null);
 	}
-	/** @deprecated As of release 3.6.3, replaced with {@link #getClientErrorReload(String,init,String)}.
+	/** @deprecated As of release 3.6.3, replaced with {@link #getClientErrorReload(String,int,String)}.
 	 * It is equivalent to getClientErrorReload("ajax", errCode, null).
 	 */
 	public String getClientErrorReload(int errCode) {
