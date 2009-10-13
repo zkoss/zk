@@ -69,6 +69,7 @@ October, 2009
   2844707: Datebox not setting the date correctly with "d-MMM-yyyy"
   2812498: Horizontal & vertical scrollbars appear at Chrom 3 
   2811990: Changing curpos of slider should change its titile as well
+  2859331: zk.formatDate traduction error french
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

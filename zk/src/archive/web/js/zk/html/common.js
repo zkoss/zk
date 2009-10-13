@@ -2237,8 +2237,8 @@ zk.formatDate = function (val, fmt) {
 				txt += zk.formatFixed(zk.dayInMonth(val), len);
 				break;
 			case 'E':
-				if (len <= 3) txt += zk.SDOW[val.getDay()];
-				else txt += zk.FDOW[val.getDay()];
+				if (len <= 3) txt += zk.SDOW[(val.getDay() - zk.DOW_1ST) % 7];
+				else txt += zk.FDOW[(val.getDay() - zk.DOW_1ST) % 7];
 				break;
 			case 'D':
 				txt += zk.dayInYear(val);
