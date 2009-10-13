@@ -101,12 +101,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		 configuration.
 		<device-type>ajax</device-type>
 		-->
-		<!-- Turn on the following if you want to reset the session-timeout
-		counter when receiving onTimer, like any other request
-		In other words, the session is never timeoout if the desktop has
-		a timer.
-		<timer-keep-alive>true</timer-keep-alive>
-		-->
 		<timeout-uri>/timeout.zul</timeout-uri>
 			<!-- An empty URL can cause the browser to reload the same URL -->
 
