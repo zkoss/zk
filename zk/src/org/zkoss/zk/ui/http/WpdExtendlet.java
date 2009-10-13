@@ -47,7 +47,6 @@ import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
-import org.zkoss.web.fn.ServletFns;
 
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
@@ -427,7 +426,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		sb.append("})");
 		write(out, sb.toString());
 	}
-	private static void outErrReloads(Configuration config, StringBuffer sb,
+	private void outErrReloads(Configuration config, StringBuffer sb,
 	Object[][] infs) {
 		for (int j = 0; j < infs.length; ++j) {
 			if (j > 0) sb.append(',');
@@ -436,7 +435,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 			String uri = ((URIInfo)infs[j][1]).uri;
 			if (uri.length() > 0)
 				try {
-					uri = ServletFns.encodeURL(uri);
+					final Provider provider = getProvider();
+					uri = Encodes.encodeURL(getServletContext(),
+						provider.request, provider.response, uri);
 				} catch (javax.servlet.ServletException ex) {
 					throw new UiException("Unable to encode "+uri, ex);
 				}

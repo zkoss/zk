@@ -87,7 +87,8 @@ function zkopt(opts) {
 				zk.feature.professional = true;
 			}
 			break;
-		case 'eu': zAu.setErrorURI(val);
+		case 'eu': zAu.setErrorURI(val); break;
+		case 'eup': zAu.setPushErrorURI(val);
 		}
 	}
 }

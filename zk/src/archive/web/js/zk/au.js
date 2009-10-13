@@ -13,7 +13,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zAu = (function () {
-	var errURIs = {}, errCode,
+	var _errURIs = {}, errCode,
+		_perrURIs = {}, //server-push error URI
 		cmdsQue = [], //response commands in XML
 		ajaxReq, ajaxReqInf, pendingReqInf, ajaxReqTries,
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
@@ -146,7 +147,7 @@ zAu = (function () {
 					}
 				} else if (!sid || sid == seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 					errCode = req.status;
-					var eru = errURIs['e' + req.status];
+					var eru = _errURIs['' + req.status];
 					if (typeof eru == "string") {
 						zUtl.go(eru);
 					} else {
@@ -383,7 +384,7 @@ zAu = (function () {
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
 	},
 	getErrorURI: function (code) {
-		return errURIs['e' + code];
+		return _errURIs['' + code];
 	},
 	setErrorURI: function (code, uri) {
 		if (arguments.length == 1) {
@@ -391,7 +392,18 @@ zAu = (function () {
 				zAu.setErrorURI(c, code[c]);
 			return;
 		}
-		errURIs['e' + code] = uri;
+		_errURIs['' + code] = uri;
+	},
+	getPushErrorURI: function (code) {
+		return _perrURIs['' + code];
+	},
+	setPushErrorURI: function (code, uri) {
+		if (arguments.length == 1) {
+			for (var c in code)
+				zAu.setPushErrorURI(c, code[c]);
+			return;
+		}
+		_perrURIs['' + code] = uri;
 	},
 
 	////Ajax Send////
