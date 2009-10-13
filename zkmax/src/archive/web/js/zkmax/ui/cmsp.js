@@ -19,7 +19,7 @@ zkCmsp._reqs = {};
 zkCmsp._start = {};
 zkCmsp._nStart = 0;
 zkCmsp._sid = ($now() % 999) + 1; //1-999 (random init: bug 2691017)
-zkCmsp._nfailed = 0;
+zkCmsp._nfail = 0;
 
 zk.override(zkau, "ignoreESC", zkCmsp,
 	function () {
@@ -92,7 +92,7 @@ zkCmsp._onRespReady = function () {
 					}
 
 					if (req.status == 200) {
-						zkCmsp._nfailed = 0;
+						zkCmsp._nfail = -2; //few more tries
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
 							if (zkau.pushXmlResp(dtid, req)) {
@@ -102,6 +102,7 @@ zkCmsp._onRespReady = function () {
 							}
 							zkau.doCmds();
 						}
+					//ok, to fall through and call _retry instead of _asend
 					}
 					zkCmsp._retry(dtid, timeout);
 				}
@@ -115,10 +116,10 @@ zkCmsp._onRespReady = function () {
 };
 zkCmsp._retry = function (dtid, timeout, e) {
 	var msg = e ? e.message: "";
-	if (++zkCmsp._nfailed < 5)
+	if (++zkCmsp._nfail < 5)
 		zkCmsp._asend(dtid, timeout);
 	else if (confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
-		zkCmsp._nfailed = 0;
+		zkCmsp._nfail = 2; //try less
 		zkCmsp._asend(dtid, 10);
 	} else
 		zkCmsp.stop(dtid);
