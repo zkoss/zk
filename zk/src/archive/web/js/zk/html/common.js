@@ -2094,9 +2094,11 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
 			case 'M':
-				var mon = txt.substring(j);
+				var mon = txt.substring(j).toLowerCase(),
+					mToken = token ? token.toLowerCase() : '';
 				for (var index = zk.SMON.length; --index >= 0;) {
-					if (mon.toLowerCase().startsWith(zk.SMON[index].toLowerCase())) {
+					var smon = zk.SMON[index].toLowerCase();
+					if (mon.startsWith(smon) || (mToken && mToken.startsWith(smon))) {
 						token = zk.SMON[index];
 						m = index;
 						break;
