@@ -18,7 +18,8 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 
 		if (!jq('#zk_hfr_')[0])
 			jq.newFrame('zk_hfr_', null,
-				zk.safari ? 'width:0;height:0;display:inline': null/*invisible*/);
+				zk.safari ? 'position:absolute;top:-1000px;left:-1000px;width:0;height:0;display:inline'
+					: null/*invisible*/);
 			//creates a hidden frame. However, in safari, we cannot use invisible frame
 			//otherwise, safari will open a new window
 	},
