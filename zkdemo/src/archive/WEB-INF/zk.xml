@@ -106,6 +106,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<timer-keep-alive>true</timer-keep-alive>
 		-->
 	</session-config>
+	<session-config>
+		<!-- 
+		 Uncomment it and set it to mil, if you want to configure for
+		 a mobile device.
+		 If omitted, ajax is assumed.
+		 Currently, only timeout-uri and automatic-timeout support per-device
+		 configuration.
+		<device-type>ajax</device-type>
+		-->
+		<timeout-uri>/timeout.zul</timeout-uri>
+			<!-- An empty URL can cause the browser to reload the same URL -->
+
+		<!-- Uncomment the following if you want to automatically redirect
+			to the timeout page. By default, it is triggered by the user
+			after timeout (such as clicking).
+		-->
+		<automatic-timeout/>
+	</session-config>
 
 	<!-- We turn on the event processing thread in zkdemo to demostrate
 	features that are available only if the eventprocessing thread is turned on.
@@ -162,18 +180,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<richlet-name>Test</richlet-name>
 		<url-pattern>/test/*</url-pattern>
 	</richlet-mapping>
-
-	<!-- Optional -->
-	<device-config>
-		<device-type>ajax</device-type>
-		<timeout-uri>/timeout.zul</timeout-uri>
-			<!-- An empty URL can cause the browser to reload the same URL -->
-
-		<!-- Comment the following if you prefer not to automatically redirect
-			to the timeout page.
-		-->
-		<automatic-timeout/>
-	</device-config>
 
 	<!-- Uncomment if you want to embed JavaScript codes and any other
 	tags to be generated inside HTML HEAD.
@@ -236,8 +242,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		page when ZK Client receives an error code.
 	<client-config>
 		<error-reload>
+			<device-type>ajax</device-type>
 			<error-code>301</error-code>
 			<reload-uri>/login.zul</reload-uri>
+		</error-reload>
+		<error-reload>
+			<device-type>ajax</device-type>
+			<error-code>410</error-code>
+			<reload-uri>/timeout.zul</reload-uri>
+			<connection-type>server-push</connection-type>
 		</error-reload>
 	</client-config>
 	-->

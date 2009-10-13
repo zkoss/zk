@@ -582,7 +582,7 @@ public class PageDefinition extends NodeInfo {
 	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: null (use the device default).
-	 * Refer to {@link org.zkoss.zk.device.Device#setAutomaticTimeout}
+	 * Refer to {@link org.zkoss.zk.ui.util.Configuration#setAutomaticTimeout}
 	 * for details.
 	 * @since 3.6.3
 	 */

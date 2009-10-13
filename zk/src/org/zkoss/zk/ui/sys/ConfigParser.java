@@ -41,6 +41,7 @@ import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
@@ -326,7 +327,8 @@ public class ConfigParser {
 			//  max-requests-per-session
 			//	max-pushes-per-session
 			//  timer-keep-alive
-			//	timeout-uri (deprecated)
+			//	timeout-uri
+			//  automatic-timeout
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
@@ -342,9 +344,7 @@ public class ConfigParser {
 				String s = el.getElementValue("timer-keep-alive", true);
 				if (s != null) config.setTimerKeepAlive("true".equals(s));
 
-				//deprecated since 2.4.0, but backward compatible
-				s = el.getElementValue("timeout-uri", true);
-				if (s != null) Devices.setTimeoutURI("ajax", s);
+				parseTimeoutURI(config, el);
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri
@@ -460,6 +460,8 @@ public class ConfigParser {
 			//device-config
 				Devices.add(el);
 					//Note: device-config is applied to the whole system, not just langdef
+				parseTimeoutURI(config, el);
+					//deprecated since 3.6.3, but to be backward-compatible
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)
@@ -470,12 +472,12 @@ public class ConfigParser {
 					parseClass(el, "exception-type", Throwable.class, true);
 				final String loc =
 					IDOMs.getRequiredElementValue(el, "location");
-				String devType = el.getElementValue("device-type", true);
-				if (devType == null) devType = "ajax";
-				else if (devType.length() == 0)
+				String deviceType = el.getElementValue("device-type", true);
+				if (deviceType == null) deviceType = "ajax";
+				else if (deviceType.length() == 0)
 					log.error("device-type not specified at "+el.getLocator());
 
-				config.addErrorPage(devType, cls, loc);
+				config.addErrorPage(deviceType, cls, loc);
 			} else if ("preference".equals(elnm)) {
 				final String nm = IDOMs.getRequiredElementValue(el, "name");
 				final String val = IDOMs.getRequiredElementValue(el, "value");
@@ -499,6 +501,19 @@ public class ConfigParser {
 				log.error("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
+	}
+
+	/** Parses timeout-uri an other info. */
+	private static void parseTimeoutURI(Configuration config, Element conf)
+	throws Exception {
+		String deviceType = conf.getElementValue("device-type", true);
+		String s = conf.getElementValue("timeout-uri", true);
+		if (s != null)
+			config.setTimeoutURI(deviceType, s, URIInfo.SEND_REDIRECT);
+
+		s = conf.getElementValue("automatic-timeout", true);
+		if (s != null)
+			config.setAutomaticTimeout(deviceType, !"false".equals(s));
 	}
 
 	/** Parses desktop-config. */
@@ -582,13 +597,15 @@ public class ConfigParser {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 
+			String deviceType = el.getElementValue("device-type", true);
+			String connType = el.getElementValue("connection-type", true);
 			v = parseInteger(el, "error-code", true);
 			if (v == null)
 				throw new UiException("error-code is required, "+el.getLocator());
 			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
 			if ("false".equals(uri)) uri = null;
 
-			config.addClientErrorReload(v.intValue(), uri);
+			config.setClientErrorReload(deviceType, v.intValue(), uri, connType);
 		}
 	}
 

@@ -664,6 +664,9 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public boolean isListenerAvailable(String evtnm, boolean asap);
 	/** Returns an iterator for iterating listener for the specified event.
+	 *
+	 * <p>Since 3.6.3, the listener can be removed directly by invoking
+	 * Iterator.remove().
 	 */
 	public Iterator getListenerIterator(String evtnm);
 

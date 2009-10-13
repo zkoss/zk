@@ -23,7 +23,7 @@ import java.util.Iterator;
  * Used to iterate the event listener.
  *
  * <p>It resolves a bug of LinkedList:
- * LinkedList's hasNext() and hasPrevious() doesn't check
+ * LinkedList's hasNext() and hasPrevious() don't check
  * concurrent-modification.
  * Thus, if the 2nd last listener is removed, hasNext() simply return
  * false (and the last listener is ignored) rather than throwing
@@ -33,7 +33,7 @@ import java.util.Iterator;
  */
 public class ListenerIterator implements Iterator {
 	private final List _org;
-	private final int _orgsz;
+	private int _orgsz;
 	private final Iterator _it;
 
 	public ListenerIterator(List list) {
@@ -49,7 +49,10 @@ public class ListenerIterator implements Iterator {
 	public Object next() {
 		return _it.next();
 	}
+	/** Removes the listener been interated (available since 3.6.3)
+	 */
 	public void remove() {
-		throw new UnsupportedOperationException();
+		_it.remove();
+		_orgsz--;
 	}
 }

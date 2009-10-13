@@ -29,18 +29,8 @@ public interface DeviceConfig {
 	 * @return the unavailable message, or null if no such message
 	 */
 	public String getUnavailableMessage();
-	/** Returns the timeout URI for this device.
-	 * It is used to show the error message if the desktop being requested
-	 * is not found. It is usually caused by session timeout.
-	 * @since 3.0.0
-	 */
+	/** @deprecated */
 	public String getTimeoutURI();
-	/** Returns whether to automatically redirect to the timeout URI.
-	 * @see #getTimeoutURI
-	 * @see Device#setAutomaticTimeout
-	 * @since 3.6.3
-	 */
-	public boolean isAutomaticTimeout();
 	/** Returns the class that implements the server-push feature
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}) for this device, or null if the default is used.
 	 * @since 3.0.0

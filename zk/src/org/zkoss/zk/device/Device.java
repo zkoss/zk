@@ -74,45 +74,14 @@ public interface Device {
 	 */
 	public String setUnavailableMessage(String unavailmsg);
 
-	/** Returns the timeout URI for this device.
-	 * It is used to show the error message if the desktop being requested
-	 * is not found. It is usually caused by session timeout.
-	 *
-	 * <p>Default: null (to shown an error message).
-	 *
-	 * @since 3.0.0
+	/** @deprecated As of release 3.6.3, use {@link org.zkoss.zk.ui.util.Configuration#getTimeoutURI}
+	 * instead.
 	 */
 	public String getTimeoutURI();
-	/** Sets the timeout URI.
-	 * It is used to show the error message if the desktop being requested
-	 * is not found. It is usually caused by session timeout.
-	 *
-	 * @param timeoutURI the timeout URI. If empty, it means to reload
-	 * the same page. If null, an error message is shown instead of
-	 * redirecting to another page.
-	 * @return the previous timeout URI, or null if not available.
-	 * @since 3.0.0
+	/** @deprecated As of release 3.6.3, use {@link org.zkoss.zk.ui.util.Configuration#setTimeoutURI}
+	 * instead.
 	 */
 	public String setTimeoutURI(String timeoutURI);
-
-	/** Returns whether to automatically redirect to the timeout URI.
-	 * @see #setAutomaticTimeout
-	 * @see #getTimeoutURI
-	 * @since 3.6.3
-	 */
-	public boolean isAutomaticTimeout();
-	/** Sets whether to automatically redirect to the timeout URI.
-	 *
-	 * <p>Default: false. It means this page is redirected to the timeout URI
-	 * when the use takes some action after timeout. In other words,
-	 * nothing happens if the user does nothing.
-	 * If it is set to true, it is redirected as soon as timeout,
-	 * no matter the user takes any action.
-	 *
-	 * @see #setTimeoutURI
-	 * @since 3.6.3
-	 */
-	public boolean setAutomaticTimeout(boolean auto);
 
 	/** Returns whether this device supports the specified client.
 	 *

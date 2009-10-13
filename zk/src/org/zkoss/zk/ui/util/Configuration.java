@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.lang.reflect.Method;
@@ -101,14 +102,17 @@ public class Configuration {
 	private final FastReadArray
 		_uriIntcps = new FastReadArray(URIInterceptor.class),
 		_reqIntcps = new FastReadArray(RequestInterceptor.class);
-	private final Map _prefs  = Collections.synchronizedMap(new HashMap()),
-		_errURIs  = Collections.synchronizedMap(new HashMap());
+	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
 	/** Map(String path, [String name, boolean wildcard]). */
 	private final Map _richletmaps = new HashMap();
 	/** Map(String deviceType, List(ErrorPage)). */
 	private final Map _errpgs = new HashMap(3);
+	/** Map(String deviceType+connType, Map(errorCode, uri)) */
+	private final Map _errURIs = new HashMap();
+	/** Map(String deviceType, TimeoutInfo ti) */
+	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
@@ -1334,6 +1338,7 @@ public class Configuration {
 	public int getResendDelay() {
 		return _resendDelay;
 	}
+
 	/** Returns whether this Web application can be crawled by search engies.
 	 * Notice that there is some performance loss for huge web pages.
 	 * <p>Default: false.
@@ -1351,57 +1356,217 @@ public class Configuration {
 		_crawlable = crawlable;
 	}
 
-	/** Adds the URI to redirect to, when ZK Client Engine receives
+	/** Returns the timeout URI for this device.
+	 * It is used to show the error message if the desktop being requested
+	 * is not found. It is usually caused by session timeout.
+	 *
+	 * <p>Default: null (to shown an error message).
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @since 3.6.3
+	 */
+	public URIInfo getTimeoutURI(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null && inf.uri != null ? inf: null;
+	}
+	/** Sets the timeout URI.
+	 * It is used to show the error message if the desktop being requested
+	 * is not found. It is usually caused by session timeout.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @param timeoutURI the timeout URI. If empty, it means to reload
+	 * the same page. If null, an error message is shown instead of
+	 * redirecting to another page.
+	 * @param type how to handle the timeout URI. It is one of
+	 * {@link URIInfo#SEND_REDIRECT} or {@link URIInfo#POPUP}.
+	 * However, it supports only {@link URIInfo#SEND_REDIRECT} currently.
+	 * @return the previous timeout URI, or null if not available.
+	 * @since 3.6.3
+	 */
+	public URIInfo setTimeoutURI(String deviceType, String timeoutURI, int type) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo newi = new TimeoutURIInfo(timeoutURI, type);
+		TimeoutURIInfo oldi = (TimeoutURIInfo)_timeoutURIs.put(deviceType, newi);
+		if (oldi != null) newi.auto = oldi.auto;
+		return oldi != null && oldi.uri != null ? oldi: null;
+	}
+
+	/** Returns whether to automatically trigger the timeout at the client.
+	 * Refer to {@link #setAutomaticTimeout} for details.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @see #setAutomaticTimeout
+	 * @see #getTimeoutURI
+	 * @since 3.6.3
+	 */
+	public boolean isAutomaticTimeout(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null && inf.auto;
+	}
+	/** Sets whether to automatically trigger the timeout at the client.
+	 *
+	 * <p>Default: false. It means this page is redirected to the timeout URI
+	 * when the use takes some action after timeout. In other words,
+	 * nothing happens if the user does nothing.
+	 * If it is set to true, it is redirected as soon as the timeout URI,
+	 * no matter the user takes any action.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @see #setTimeoutURI
+	 * @since 3.6.3
+	 */
+	public boolean setAutomaticTimeout(String deviceType, boolean auto) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		if (inf != null) {
+			boolean old = inf.auto;
+			inf.auto = auto;
+			return old;
+		}
+
+		inf = new TimeoutURIInfo();
+		inf.auto = auto;
+		_timeoutURIs.put(deviceType, inf);
+		return false;
+	}
+
+	/** Sets the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
-	 * <p>If not specified, it shows up an error message at client.
-	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param errCode the error code.
 	 * @param uri the URI to redirect to. It cannot be null.
 	 * If empty, the client will reload the same page again.
 	 * If null, it is the same as {@link #removeClientErrorReload}
+	 * @param connType the connection type: au or server-push.
+	 * If null, "au" is assumed.
 	 * @return the previous URI associated with the specified error code
-	 * @since 3.0.0
+	 * @since 3.6.3
 	 */
-	public String addClientErrorReload(int errCode, String uri) {
+	public String setClientErrorReload(String deviceType, int errCode, String uri,
+	String connType) {
 		if (uri == null)
-			return removeClientErrorReload(errCode);
-		return (String)_errURIs.put(new Integer(errCode), uri);
+			return removeClientErrorReload(deviceType, errCode, connType);
+
+		final String index = deviceConn2Str(deviceType, connType);
+		synchronized (_errURIs) {
+			Map map = (Map)_errURIs.get(index);
+			if (map == null)
+				_errURIs.put(index, map = new LinkedHashMap());
+			return (String)map.put(new Integer(errCode), uri);
+		}
 	}
 	/** Removes the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param errCode the error code.
+	 * @param connType the connection type: au or server-push.
+	 * If null, "au" is assumed.
 	 * @return the previous URI associated with the specified error code
-	 * @since 3.0.0
+	 * @since 3.6.3
 	 */
-	public String removeClientErrorReload(int errCode) {
-		return (String)_errURIs.remove(new Integer(errCode));
+	public String removeClientErrorReload(String deviceType, int errCode,
+	String connType) {
+		final String index = deviceConn2Str(deviceType, connType);
+		synchronized (_errURIs) {
+			Map map = (Map)_errURIs.get(index);
+			return map != null ?
+				(String)map.remove(new Integer(errCode)): null;
+		}
 	}
 	/** Returns the URI that is associated with the specified error code,
 	 * or null if no URI is associated.
-	 * @since 3.0.0
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @param errCode the error code.
+	 * @param connType the connection type: au or server-push.
+	 * If null, "au" is assumed.
+	 * @since 3.6.3
+	 */
+	public String getClientErrorReload(String deviceType, int errCode,
+	String connType) {
+		final String index = deviceConn2Str(deviceType, connType);
+		synchronized (_errURIs) {
+			Map map = (Map)_errURIs.get(index);
+			return map != null ?
+				(String)map.get(new Integer(errCode)): null;
+		}
+	}
+	/** Returns an array of pairs of the error code and URI info of
+	 * the specified device and connection (never null).
+	 *
+	 * <p>Default: none (none since 3.6.0, while
+	 * older version: 302, 401 and 403 are associated with an empty URI).
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @param connType the connection type: au or server-push.
+	 * If null, "au" is assumed.
+	 * @return an array of pairs (two-element arrays) of the error code and URI info.
+	 * In other words, each element of the returned array is a pair of
+	 * Integer and {@link URIInfo}.
+	 * For example, [[410, new URIInfo("/login.zul")], [310, new URIInfo("/login2.zul")]].
+	 * @since 3.6.3
+	 */
+	public Object[][] getClientErrorReloads(String deviceType, String connType) {
+		final String index = deviceConn2Str(deviceType, connType);
+		synchronized (_errURIs) {
+			final Map map = (Map)_errURIs.get(index);
+			if (map != null) {
+				Object[][] infs = new Object[map.size()][2];
+				int j = 0;
+				for (Iterator it = map.entrySet().iterator(); it.hasNext(); ++j) {
+					final Map.Entry me = (Map.Entry)it.next();
+					infs[j][0] = me.getKey();
+					infs[j][1] = new URIInfo((String)me.getValue());
+				}
+				return infs;
+			}
+		}
+		return new Object[0][0];
+	}
+	private static final String deviceConn2Str(String deviceType, String connType) {
+		if (deviceType == null) deviceType = "ajax";
+		return connType != null && "server-push".equals(connType) ?
+			"s:" + deviceType: deviceType;
+	}
+	
+	/** @deprecated As of release 3.6.3, replaced with {@link #setClientErrorReload}.
+	 * It is equivalent to setClientErrorReload("ajax", errCode, uri, null).
+	 */
+	public String addClientErrorReload(int errCode, String uri) {
+		return setClientErrorReload("ajax", errCode, uri, null);
+	}
+	/** @deprecated As of release 3.6.3, replaced with {@link #removeClientErrorReload(String,int,String)}.
+	 * It is equivalent to removeClientErrorReload("ajax", errCode, null).
+	 */
+	public String removeClientErrorReload(int errCode) {
+		return removeClientErrorReload("ajax", errCode, null);
+	}
+	/** @deprecated As of release 3.6.3, replaced with {@link #getClientErrorReload(String,int,String)}.
+	 * It is equivalent to getClientErrorReload("ajax", errCode, null).
 	 */
 	public String getClientErrorReload(int errCode) {
-		return (String)_errURIs.get(new Integer(errCode));
+		return getClientErrorReload("ajax", errCode, null);
 	}
-	/** Returns a readonly array of all error codes that are associated
-	 * with URI to redirect to.
-	 *
-	 * <p>If not specified, it shows up an error message at client.
-	 *
-	 * <p>Default: none (since 3.6.0;
-	 * older version: 302, 401 and 403 are associated with an empty URI).
-	 * @since 3.0.0
+	/** @deprecated As of release 3.6.3, replaced with {@link #getClientErrorReloads}.
 	 */
 	public int[] getClientErrorReloadCodes() {
-		final Set ks = _errURIs.keySet();
-		final int[] cers = new int[ks.size()];
-		int j = 0;
-		for (Iterator it = ks.iterator(); j < cers.length && it.hasNext();) {
-			cers[j++] = ((Integer)it.next()).intValue();
-		}
-		return cers;
+		throw new UnsupportedOperationException("use getClientErrorReloads(\"ajax\",null) instead");
 	}
 
 	/**  Specifies the time, in seconds, between client requests
@@ -2167,6 +2332,15 @@ public class Configuration {
 		}
 		public int compareTo(Object o) {
 			return o.getClass().equals(_klass) ? 0: 1;
+		}
+	}
+	private static class TimeoutURIInfo extends URIInfo {
+		private boolean auto;
+		private TimeoutURIInfo() {
+			super(null);
+		}
+		private TimeoutURIInfo(String uri, int type) {
+			super(uri, type);
 		}
 	}
 }

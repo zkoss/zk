@@ -26,10 +26,9 @@ import org.zkoss.zk.ui.sys.ServerPush;
  * @since 3.0.0
  */
 abstract public class GenericDevice implements Device {
-	private String _type, _uamsg, _tmoutURI;
+	private String _type, _uamsg;
 	private Class _spushcls;
 	private String _embed;
-	private boolean _autoTimeout;
 
 	//Device//
 	public boolean isSupported(int func) {
@@ -58,22 +57,13 @@ abstract public class GenericDevice implements Device {
 		return old;
 	}
 
+	/** @deprecated */
 	public String getTimeoutURI() {
-		return _tmoutURI;
+		return null;
 	}
+	/** @deprecated */
 	public String setTimeoutURI(String timeoutURI) {
-		final String old = _tmoutURI;
-		_tmoutURI = timeoutURI;
-		return old;
-	}
-
-	public boolean isAutomaticTimeout() {
-		return _autoTimeout;
-	}
-	public boolean setAutomaticTimeout(boolean auto) {
-		final boolean old = _autoTimeout;
-		_autoTimeout = auto;
-		return old;
+		throw new UnsupportedOperationException("Use Configuration.setTimeoutURI() instead");
 	}
 
 	public Class setServerPushClass(Class cls) {
@@ -115,8 +105,6 @@ abstract public class GenericDevice implements Device {
 	public void init(String type, DeviceConfig config) {
 		_type = type;
 		_uamsg = config.getUnavailableMessage();
-		_tmoutURI = config.getTimeoutURI();
-		_autoTimeout = config.isAutomaticTimeout();
 		_spushcls = config.getServerPushClass();
 		_embed = config.getEmbedded();
 	}
