@@ -99,6 +99,7 @@ zk.Slider.prototype = {
 			ofs = this._snap(ofs[0] + x, 0);
 			this.button.style.left = ofs[0] + "px";
 		}
+		this.button.title = this._curpos();
 	},
 	_startDrag: function () {
 		this.button.title = ""; //to avoid annoying effect
@@ -135,7 +136,6 @@ zk.Slider.prototype = {
 				zkau.send({uuid: this.id, cmd: "onScroll", data: [pos]});
 		}
 		this._fixPos();
-		this.button.title = pos;
 		zk.remove(this.slidetip);
 		this.slidetip = null;
 	},
