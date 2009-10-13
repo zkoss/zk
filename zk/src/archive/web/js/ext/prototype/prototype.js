@@ -895,8 +895,9 @@ Element.Methods = {
 
 		gc.appendChild(el);
 		gc.innerHTML = '';
-	} else
-	    el.parentNode.removeChild(el);
+	} else if (el.parentNode) {
+		el.parentNode.removeChild(el);
+	}
     return el;
   },
 
