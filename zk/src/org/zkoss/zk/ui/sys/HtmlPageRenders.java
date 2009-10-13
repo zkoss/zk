@@ -197,7 +197,6 @@ public class HtmlPageRenders {
 		if (deviceType == null)
 			deviceType = desktop != null ? desktop.getDeviceType(): "ajax";
 
-		final Device device = Devices.getDevice(deviceType);
 		final StringBuffer sb = new StringBuffer(1536);
 
 		final Set jses = new LinkedHashSet(32);
@@ -219,7 +218,8 @@ public class HtmlPageRenders {
 		if (desktop != null) {
 			final Boolean autoTimeout = getAutomaticTimeout(desktop);
 			if (autoTimeout != null ?
-			autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+			autoTimeout.booleanValue():
+			wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
 				tmout = desktop.getSession().getMaxInactiveInterval();
 				if (tmout > 0) { //unit: seconds
 					int extra = tmout / 8;
@@ -242,6 +242,7 @@ public class HtmlPageRenders {
 			sb.append("});</script>");
 		}		
 
+		final Device device = Devices.getDevice(deviceType);
 		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');

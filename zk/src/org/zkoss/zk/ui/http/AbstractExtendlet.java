@@ -213,7 +213,7 @@ import org.zkoss.zk.ui.WebApp;
 		}
 		URL getResource(String path) throws IOException {
 			path = getRealPath(path);
-			return new File(_parent, path).toURL();
+			return new File(_parent, path).toURI().toURL();
 		}
 		private String getRealPath(String path) {
 			if (isDebugJS()) {

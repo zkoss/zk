@@ -47,6 +47,7 @@ import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
+import org.zkoss.web.fn.ServletFns;
 
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
@@ -54,6 +55,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.URIInfo;
 
 /**
  * The extendlet to handle WPD (Widget Package Descriptor).
@@ -407,18 +409,16 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (config.getPerformanceMeter() != null)
 			sb.append("pf:1,");
 
-		final int[] cers = config.getClientErrorReloadCodes();
-		if (cers.length > 0) {
+		Object[][] infs = config.getClientErrorReloads("ajax", null);
+		if (infs != null) {
 			sb.append("eu:{");
-			for (int j = 0; j < cers.length; ++j) {
-				final String uri = config.getClientErrorReload(cers[j]);
-				if (uri != null) {
-					sb.append(cers[j]).append(":'")
-						.append(Strings.escape(uri, Strings.ESCAPE_JAVASCRIPT))
-						.append("',");
-				}
-			}
-			removeLast(sb, ',');
+			outErrReloads(config, sb, infs);
+			sb.append("},");
+		}
+		infs = config.getClientErrorReloads("ajax", "server-push");
+		if (infs != null) {
+			sb.append("eup:{");
+			outErrReloads(config, sb, infs);
 			sb.append("},");
 		}
 
@@ -426,6 +426,22 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 		sb.append("})");
 		write(out, sb.toString());
+	}
+	private static void outErrReloads(Configuration config, StringBuffer sb,
+	Object[][] infs) {
+		for (int j = 0; j < infs.length; ++j) {
+			if (j > 0) sb.append(',');
+			sb.append('\'').append(infs[j][0]).append("':'");
+
+			String uri = ((URIInfo)infs[j][1]).uri;
+			if (uri.length() > 0)
+				try {
+					uri = ServletFns.encodeURL(uri);
+				} catch (javax.servlet.ServletException ex) {
+					throw new UiException("Unable to encode "+uri, ex);
+				}
+			sb.append(Strings.escape(uri, "'\\")).append('\'');
+		}
 	}
 	private static void removeLast(StringBuffer sb, char cc) {
 		if (sb.charAt(sb.length() - 1) == cc)
