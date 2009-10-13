@@ -165,7 +165,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.fire("onScroll", pos);
 		
 		widget._fixPos();
-		widget.btn.title = pos;
 		widget.inp.value = pos;
 		jq(widget.slidetip).remove();
 		widget.slidetip = null;
@@ -206,6 +205,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			ofs = this._snap(ofs[0] + x, 0);
 			this.btn.style.left = ofs[0] + "px";
 		}
+		this.btn.title = this._curpos;
 	},
 	onSize: _zkf,
 	onShow: _zkf,
