@@ -67,6 +67,7 @@ October, 2009
   2825231: Vbox inside vertical tabs
   2814460: Listgroup occur an error when setCheckable(false) in opera
   2844707: Datebox not setting the date correctly with "d-MMM-yyyy"
+  2812498: Horizontal & vertical scrollbars appear at Chrom 3 
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
