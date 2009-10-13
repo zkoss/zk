@@ -114,7 +114,7 @@ public class Configuration {
 	/** Map(String deviceType+connType, Map(errorCode, uri)) */
 	private final Map _errURIs = new HashMap();
 	/** Map(String deviceType, TimeoutInfo ti) */
-	private final Map _timeoutURIs = new HashMap();
+	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
@@ -1347,10 +1347,96 @@ public class Configuration {
 	public int getResendDelay() {
 		return _resendDelay;
 	}
+
+	/** Returns the timeout URI for this device.
+	 * It is used to show the error message if the desktop being requested
+	 * is not found. It is usually caused by session timeout.
+	 *
+	 * <p>Default: null (to shown an error message).
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @since 3.6.3
+	 */
+	public URIInfo getTimeoutURI(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null && inf.uri != null ? inf: null;
+	}
+	/** Sets the timeout URI.
+	 * It is used to show the error message if the desktop being requested
+	 * is not found. It is usually caused by session timeout.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @param timeoutURI the timeout URI. If empty, it means to reload
+	 * the same page. If null, an error message is shown instead of
+	 * redirecting to another page.
+	 * @param type how to handle the timeout URI. It is one of
+	 * {@link URIInfo#SEND_REDIRECT} or {@link URIInfo#POPUP}.
+	 * However, it supports only {@link URIInfo#SEND_REDIRECT} currently.
+	 * @return the previous timeout URI, or null if not available.
+	 * @since 3.6.3
+	 */
+	public URIInfo setTimeoutURI(String deviceType, String timeoutURI, int type) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo newi = new TimeoutURIInfo(timeoutURI, type);
+		TimeoutURIInfo oldi = (TimeoutURIInfo)_timeoutURIs.put(deviceType, newi);
+		if (oldi != null) newi.auto = oldi.auto;
+		return oldi != null && oldi.uri != null ? oldi: null;
+	}
+
+	/** Returns whether to automatically trigger the timeout at the client.
+	 * Refer to {@link #setAutomaticTimeout} for details.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @see #setAutomaticTimeout
+	 * @see #getTimeoutURI
+	 * @since 3.6.3
+	 */
+	public boolean isAutomaticTimeout(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null && inf.auto;
+	}
+	/** Sets whether to automatically trigger the timeout at the client.
+	 *
+	 * <p>Default: false. It means this page is redirected to the timeout URI
+	 * when the use takes some action after timeout. In other words,
+	 * nothing happens if the user does nothing.
+	 * If it is set to true, it is redirected as soon as the timeout URI,
+	 * no matter the user takes any action.
+	 *
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
+	 * @see #setTimeoutURI
+	 * @since 3.6.3
+	 */
+	public boolean setAutomaticTimeout(String deviceType, boolean auto) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		if (inf != null) {
+			boolean old = inf.auto;
+			inf.auto = auto;
+			return old;
+		}
+
+		inf = new TimeoutURIInfo();
+		inf.auto = auto;
+		_timeoutURIs.put(deviceType, inf);
+		return false;
+	}
+
 	/** Sets the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
-	 * @param deviceType the device type: ajax or mil
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param errCode the error code.
 	 * @param uri the URI to redirect to. It cannot be null.
 	 * If empty, the client will reload the same page again.
@@ -1376,7 +1462,8 @@ public class Configuration {
 	/** Removes the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
-	 * @param deviceType the device type: ajax or mil
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param errCode the error code.
 	 * @param connType the connection type: au or server-push.
 	 * If null, "au" is assumed.
@@ -1395,7 +1482,8 @@ public class Configuration {
 	/** Returns the URI that is associated with the specified error code,
 	 * or null if no URI is associated.
 	 *
-	 * @param deviceType the device type: ajax or mil
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param errCode the error code.
 	 * @param connType the connection type: au or server-push.
 	 * If null, "au" is assumed.
@@ -1416,7 +1504,8 @@ public class Configuration {
 	 * <p>Default: none (none since 3.6.0, while
 	 * older version: 302, 401 and 403 are associated with an empty URI).
 	 *
-	 * @param deviceType the device type: ajax or mil
+	 * @param deviceType the device type: ajax or mil.
+	 * If null, ajax is assumed.
 	 * @param connType the connection type: au or server-push.
 	 * If null, "au" is assumed.
 	 * @return an array of pairs (two-element arrays) of the error code and URI info.
@@ -2210,6 +2299,15 @@ public class Configuration {
 		}
 		public int compareTo(Object o) {
 			return o.getClass().equals(_klass) ? 0: 1;
+		}
+	}
+	private static class TimeoutURIInfo extends URIInfo {
+		private boolean auto;
+		private TimeoutURIInfo() {
+			super(null);
+		}
+		private TimeoutURIInfo(String uri, int type) {
+			super(uri, type);
 		}
 	}
 }

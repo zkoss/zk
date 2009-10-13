@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -361,7 +362,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
 				if (dtid != null)
-					sessionTimeout(request, response, dtid);
+					sessionTimeout(request, response,
+						WebManager.getWebManager(_ctx).getWebApp().getConfiguration(),
+						dtid);
 			}
 			return;
 		}
@@ -420,6 +423,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final Configuration config = wapp.getConfiguration();
 		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
 		if (desktop == null) {
 			final String cmdId = request.getParameter("cmd.0");
@@ -427,7 +431,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				sessionTimeout(request, response, dtid);
+				sessionTimeout(request, response, config, dtid);
 				return;
 			}
 		}
@@ -440,7 +444,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//parse commands
 		final List aureqs = new LinkedList();
-		final Configuration config = wapp.getConfiguration();
 		final boolean timerKeepAlive = config.isTimerKeepAlive();
 		boolean keepAlive = false;
 		try {
@@ -499,7 +502,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.close(request, response);
 	}
 	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, String dtid)
+	HttpServletResponse response, Configuration config, String dtid)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null)
@@ -521,7 +524,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			&& !Events.ON_Z_INDEX.equals(cmdId)
 			&& !("dummy".equals(cmdId)
 				&& !isDummyTimeout(request.getParameterValues("data."+j)))) {
-				String uri = Devices.getTimeoutURI(getDeviceType(request));
+				URIInfo ui = (URIInfo)config.getTimeoutURI(getDeviceType(request));
+				String uri = ui != null ? ui.uri: null;
 				final AuResponse resp;
 				if (uri != null) {
 					if (uri.length() != 0)

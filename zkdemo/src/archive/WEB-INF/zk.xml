@@ -92,6 +92,30 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<timer-keep-alive>true</timer-keep-alive>
 		-->
 	</session-config>
+	<session-config>
+		<!-- By default, the configuration under session-config is applied to
+		 all devices.
+		 Uncomment it and set it to ajax or mil, if you want to configure 
+		 a particular device.
+		 Currently, only timeout-uri and automatic-timeout support per-device
+		 configuration.
+		<device-type>ajax</device-type>
+		-->
+		<!-- Turn on the following if you want to reset the session-timeout
+		counter when receiving onTimer, like any other request
+		In other words, the session is never timeoout if the desktop has
+		a timer.
+		<timer-keep-alive>true</timer-keep-alive>
+		-->
+		<timeout-uri>/timeout.zul</timeout-uri>
+			<!-- An empty URL can cause the browser to reload the same URL -->
+
+		<!-- Uncomment the following if you want to automatically redirect
+			to the timeout page. By default, it is triggered by the user
+			after timeout (such as clicking).
+		-->
+		<automatic-timeout/>
+	</session-config>
 
 	<!-- Turn on if you prefer to use the native (Servlet) thread
 	to process the events, instead of forking the event processing thread
@@ -133,18 +157,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<richlet-name>Test</richlet-name>
 		<url-pattern>/test/*</url-pattern>
 	</richlet-mapping>
-
-	<!-- Optional -->
-	<device-config>
-		<device-type>ajax</device-type>
-		<timeout-uri>/timeout.zul</timeout-uri>
-			<!-- An empty URL can cause the browser to reload the same URL -->
-		<!-- Uncomment the following if you want to automatically redirect
-			to the timeout page. By default, it is triggered by the user
-			after timeout (such as clicking).
-		<automatic-timeout/>
-		-->
-	</device-config>
 
 	<!-- Uncomment if you want to embed JavaScript codes and any other
 	tags to be generated inside HTML HEAD.

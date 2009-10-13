@@ -181,7 +181,7 @@ public interface PageCtrl {
 	 * If it is set to true, it is redirected as soon as timeout,
 	 * no matter the user takes any action.
 	 *
-	 * <p>Refer to {@link org.zkoss.zk.device.Device#setAutomaticTimeout}
+	 * <p>Refer to {@link org.zkoss.zk.ui.util.Configuration#setAutomaticTimeout}
 	 * for how to configure the device default (default: false).
 	 * @since 3.6.3
 	 */

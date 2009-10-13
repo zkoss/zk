@@ -184,11 +184,10 @@ public class ZkFns extends DspFns {
 				.append(config.getClickFilterDelay())
 			.append(";\n");
 
-		final Device device = Devices.getDevice(deviceType);
 		if (desktop != null) { //null if called by JSP:zkhead
 			Boolean autoTimeout = getAutomaticTimeout(desktop);
 			if (autoTimeout != null ?
-			autoTimeout.booleanValue(): device.isAutomaticTimeout()) {
+			autoTimeout.booleanValue(): config.isAutomaticTimeout(deviceType)) {
 				int tmout = desktop.getSession().getMaxInactiveInterval();
 				if (tmout > 0) { //unit: seconds
 					int extra = tmout / 8;
@@ -236,6 +235,7 @@ public class ZkFns extends DspFns {
 
 		sb.append("\n</script>\n");
 
+		final Device device = Devices.getDevice(deviceType);
 		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');

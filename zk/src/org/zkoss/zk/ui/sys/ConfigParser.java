@@ -42,6 +42,7 @@ import org.zkoss.zk.Version;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
@@ -304,7 +305,8 @@ public class ConfigParser {
 			//  max-requests-per-session
 			//	max-pushes-per-session
 			//  timer-keep-alive
-			//	timeout-uri (deprecated)
+			//	timeout-uri
+			//  automatic-timeout
 				Integer v = parseInteger(el, "session-timeout", false);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
@@ -320,9 +322,7 @@ public class ConfigParser {
 				String s = el.getElementValue("timer-keep-alive", true);
 				if (s != null) config.setTimerKeepAlive("true".equals(s));
 
-				//deprecated since 2.4.0, but backward compatible
-				s = el.getElementValue("timeout-uri", true);
-				if (s != null) Devices.setTimeoutURI("ajax", s);
+				parseTimeoutURI(config, el);
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri
@@ -436,6 +436,8 @@ public class ConfigParser {
 			//device-config
 				Devices.add(el);
 					//Note: device-config is applied to the whole system, not just langdef
+				parseTimeoutURI(config, el);
+					//deprecated since 3.6.3, but to be backward-compatible
 			} else if ("log".equals(elnm)) {
 				final String base = el.getElementValue("log-base", true);
 				if (base != null)
@@ -475,6 +477,19 @@ public class ConfigParser {
 				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
+	}
+
+	/** Parses timeout-uri an other info. */
+	private static void parseTimeoutURI(Configuration config, Element conf)
+	throws Exception {
+		String deviceType = conf.getElementValue("device-type", true);
+		String s = conf.getElementValue("timeout-uri", true);
+		if (s != null)
+			config.setTimeoutURI(deviceType, s, URIInfo.SEND_REDIRECT);
+
+		s = conf.getElementValue("automatic-timeout", true);
+		if (s != null)
+			config.setAutomaticTimeout(deviceType, !"false".equals(s));
 	}
 
 	/** Parses desktop-config. */
