@@ -24,6 +24,7 @@ import java.net.URL;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
+import org.zkoss.net.URLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
@@ -167,7 +168,7 @@ public class Filedownload {
 			final StringBuffer sb = new StringBuffer(32);
 			if (flnm != null && flnm.length() != 0) {
 				sb.append('/');
-				sb.append(flnm);
+				sb.append(URLs.encode(flnm));
 				if (flnm.lastIndexOf('.') < 0) {
 					final String format = media.getFormat();
 					if (format != null)

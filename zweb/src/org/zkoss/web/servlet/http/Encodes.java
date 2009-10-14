@@ -33,6 +33,9 @@ import javax.servlet.ServletContext;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
@@ -50,9 +53,6 @@ public class Encodes {
 	private static final Log log = Log.lookup(Encodes.class);
 
 	protected Encodes() {} //prevent from instantiation
-
-	/** The URL encoder. */
-	private static URLEncoder _urlEncoder;
 
 	/** Encodes a string to HTTP URI compliant by use of
 	 * {@link Charsets#getURICharset}.
@@ -385,12 +385,11 @@ public class Encodes {
 	 * <a href="http://en.wikipedia.org/wiki/Reverse_proxy">Reverse Proxy</a>,
 	 * the encoded URL might have to be prefixed with some special prefix.
 	 * To do that, you can implement {@link URLEncoder}, and then
-	 * specify it with {@link #setURLEncoder}.
-	 * When {@link #encodeURL} encodes an URL, it will check
-	 * any URL encoder is defined (by {@link #setURLEncoder}.
-	 * If any, it will invoke {@link URLEncoder#encodeURL} with
-	 * the encoded URL to give it the last chance to post-process it, such
-	 * as inserting a special prefix.
+	 * specify the class with the library property called
+	 * <code>org.zkoss.web.servlet.http.URLEncoder</code>.
+	 * When {@link #encodeURL} encodes an URL, it will invoke 
+	 * {@link URLEncoder#encodeURL} such you can do customized encoding,
+	 * such as insert a special prefix.
 	 *
 	 * @param request the request; never null
 	 * @param response the response; never null
@@ -405,15 +404,36 @@ public class Encodes {
 	ServletRequest request, ServletResponse response, String uri)
 	throws ServletException {
 		try {
-			final String url = encodeURL0(ctx, request, response, uri);
-			return _urlEncoder != null ?
-				_urlEncoder.encodeURL(ctx, request, response, url):
-				url;
+			return urlEncoder().encodeURL(ctx, request, response, uri, _urlenc0);
 		} catch (Exception ex) {
 			log.realCauseBriefly(ex);
 			throw new ServletException("Unable to encode "+uri, ex);
 		}
 	}
+	private static URLEncoder urlEncoder() {
+		if (_urlenc == null) {
+			final String cls = Library.getProperty("org.zkoss.web.servlet.http.URLEncoder");
+			if (cls != null && cls.length() > 0) {
+				try {
+					_urlenc = (URLEncoder)Classes.newInstanceByThread(cls);
+				} catch (Throwable ex) {
+					throw SystemException.Aide.wrap(ex, "Unable to instantiate "+cls);
+				}
+			} else {
+				_urlenc = _urlenc0;
+			}
+		}
+		return _urlenc;
+	}
+	private static URLEncoder _urlenc;
+	private static final URLEncoder _urlenc0 = new URLEncoder() {
+		public String encodeURL(ServletContext ctx,
+		ServletRequest request, ServletResponse response, String uri,
+		URLEncoder defaultEncoder)
+		throws Exception {
+			return encodeURL0(ctx, request, response, uri);
+		}
+	};
 
 	private static final String encodeURL0(ServletContext ctx,
 	ServletRequest request, ServletResponse response, String uri)
@@ -499,50 +519,41 @@ public class Encodes {
 		return uri;
 	}
 
-	/** Sets the URI encoder.
+	/** The URL encoder used to encode URL by including the session ID,
+	 * and servlet context path.
+	 * It is a plugin that {@link Encodes#encodeURL} will call
+	 * to encode the URL.
 	 *
-	 * <p>Default: null
-	 *
-	 * <p>The URI encoder is used to post process the encoded URL
-	 * returned by {@link #encodeURL}.
-	 *
-	 * <p>When {@link #encodeURL} encodes an URL, it will check
-	 * any URL encoder is defined (by {@link #setURLEncoder}.
-	 * If any, it will invoke {@link URLEncoder#encodeURL} with
-	 * the encoded URL to give it the last chance to 'manipulate' it.
-	 *
-	 * @since 3.0.1
-	 * @see #encodeURL
-	 */
-	public static void setURLEncoder(URLEncoder encoder) {
-		_urlEncoder = encoder;
-	}
-	/** Returns the URI encoder, or null if no uri encoder.
-	 * @since 3.0.1
-	 * @see #setURLEncoder
-	 * @see #encodeURL
-	 */
-	public static URLEncoder getURLEncoder() {
-		return _urlEncoder;
-	}
-	/** The URL encoder used to post-process the encoded URL of
-	 * {@link Encodes#encodeURL} before returning.
-	 *
-	 * <p>When {@link Encodes#encodeURL} encodes an URL, it will check
-	 * any URL encoder is defined (by {@link #setURLEncoder}.
-	 * If any, it will invoke {@link #encodeURL} with
-	 * the encoded URL to give it the last chance to 'manipulate' it.
+	 * <p>In a sophisticated environment, e.g.,
+	 * <a href="http://en.wikipedia.org/wiki/Reverse_proxy">Reverse Proxy</a>,
+	 * the encoded URL might have to be prefixed with some special prefix.
+	 * To do that, you can implement {@link URLEncoder}, and then
+	 * specify the class with the library property called
+	 * <code>org.zkoss.web.servlet.http.URLEncoder</code>.
+	 * When {@link #encodeURL} encodes an URL, it will invoke 
+	 * {@link URLEncoder#encodeURL} such you can do customized encoding,
+	 * such as insert a special prefix.
 	 *
 	 * @since 3.0.1
-	 * @see #setURLEncoder
 	 * @see Encodes#encodeURL
 	 */
 	public static interface URLEncoder {
-		/** Returns the encoded URL.
-		 * @param url it must be null, empty, starts with "/", or
-		 * starts with "xxx:" (e.g., "http://", "javascript:"
+		/** Encodes the specified URL by including the session ID and
+		 * the servlet context path, if necessary.
+		 *
+		 * <p>Notice that url might contain "~" and other special
+		 * characters that the Web server won't support.
+		 * The implemetation might invoke back the defult encoding
+		 * by use of the defaultEcoder parameter.
+		 *
+		 * @param url the URL to encode. It shall not include
+		 * the servlet context path.
+		 * @param defaultEncoder the default encoder (never null).
+		 * @since 5.0.0
 		 */
 		public String encodeURL(ServletContext ctx,
-		ServletRequest request, ServletResponse response, String url);
+		ServletRequest request, ServletResponse response, String url,
+		URLEncoder defaultEncoder)
+		throws Exception;
 	}
 }

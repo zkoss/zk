@@ -126,6 +126,9 @@ November, 2009
 	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
   + When the value specified in custom-attributes starts with "@{" and ends with "}",
     it is considered as an annotation.
+  + Encodes.URLEncoder is changed to allow the developer to encode in his
+    own way. Furthermore, the configuration is by use of the library
+    property called org.zkoss.web.servlet.http.URLEncoder.
   
 	--------
 ZK 3.6.3
@@ -143,6 +146,7 @@ October, 2009
   2873957: menubar in horizontal support scrollable functionality
   2873954: menu support onClick
   2857412: Feedback on server push error
+  2878584: A plugin to customize the encoding of filename
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo

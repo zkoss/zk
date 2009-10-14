@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.net.URLEncoder;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -45,6 +44,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
+import org.zkoss.net.URLs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -425,7 +425,7 @@ public class Https extends Servlets {
 				String value = "attachment";
 				final String flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=\"" + URLEncoder.encode(flnm, "UTF-8") +'"';
+					value += ";filename=\"" + URLs.encode(flnm) +'"';
 				response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
 			}

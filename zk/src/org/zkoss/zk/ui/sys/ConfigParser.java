@@ -440,10 +440,6 @@ public class ConfigParser {
 				if (cls != null)
 					ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
 
-				cls = parseClass(el, "url-encoder-class", Encodes.URLEncoder.class);
-				if (cls != null)
-					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
-
 				cls = parseClass(el, "au-writer-class", AuWriter.class);
 				if (cls != null)
 					AuWriters.setImplementationClass(cls);
