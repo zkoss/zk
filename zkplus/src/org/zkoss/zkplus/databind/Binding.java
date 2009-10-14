@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
@@ -372,12 +373,16 @@ public class Binding implements java.io.Serializable {
 			//use setRowValue() method directly
 			if ((comp instanceof InputElement) && "value".equals(_attr)) {
 				Object value = bean;
+				Object oldv = null;
 				try { //Bug 1879389
 					final Method m = comp.getClass().getMethod("getValue", null);
+					oldv = ((InputElement)comp).getRawValue();
 					value = Classes.coerce(m.getReturnType(), bean);
 				} catch (NoSuchMethodException ex) { //ignore it
 				}
-				Fields.set(comp, "rawValue", value, _converter == null);
+				if (!Objects.equals(oldv, value)) { //Bug 2874098 (avoid LoadOnSave to close errorbox in setRawValue())
+					Fields.set(comp, "rawValue", value, _converter == null);
+				}
 			} else {
 				Fields.set(comp, _attr, bean, _converter == null);
 			}
