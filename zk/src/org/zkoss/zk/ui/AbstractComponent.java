@@ -205,8 +205,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_def = ComponentsCtrl.DUMMY;
 		}
 
-		init();
-
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(): null;
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
@@ -256,16 +254,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return null;
 	}
-	/** Initialize for contructor and serialization.
-	 * @param cloning whether this method is called by clone()
-	 */
-	private void init() {
-		initChildren();
-		_attrs = new SimpleScope(this);
-	}
-	private void initChildren() {
-		_apiChildren = newChildren(); 
-	}
+
 	/**
 	 * Creates and returns the instance for storing child components.
 	 * <p>Default: it instantiates {@link AbstractComponent.Children}.
@@ -806,11 +795,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		switch (scope) {
 		case SPACE_SCOPE:
 			if (this instanceof IdSpace)
-				return _attrs.getAttributes();
+				return getAttributes();
 			final IdSpace idspace = getSpaceOwner();
-			return idspace instanceof Page ? ((Page)idspace).getAttributes():
-				idspace == null ? Collections.EMPTY_MAP:
-					((Component)idspace).getAttributes(SPACE_SCOPE);
+			return idspace != null ? idspace.getAttributes(): Collections.EMPTY_MAP;
 		case PAGE_SCOPE:
 			return _page != null ?
 				_page.getAttributes(): Collections.EMPTY_MAP;
@@ -824,7 +811,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return _page != null ?
 				_page.getDesktop().getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case COMPONENT_SCOPE:
-			return _attrs.getAttributes();
+			return getAttributes();
 		case REQUEST_SCOPE:
 			final Execution exec = getExecution();
 			if (exec != null) return exec.getAttributes();
@@ -832,6 +819,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		default:
 			return Collections.EMPTY_MAP;
 		}
+	}
+	private SimpleScope attrs() {
+		if (_attrs == null)
+			_attrs = new SimpleScope(this);
+		return _attrs;
 	}
 	private final Execution getExecution() {
 		return _page != null ? _page.getDesktop().getExecution():
@@ -862,19 +854,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public final Map getAttributes() {
-		return _attrs.getAttributes();
+		return attrs().getAttributes();
 	}
 	public final Object getAttribute(String name) {
-		return _attrs.getAttribute(name);
+		return _attrs != null ? _attrs.getAttribute(name): null;
 	}
 	public boolean hasAttribute(String name) {
-		return _attrs.hasAttribute(name);
+		return _attrs != null && _attrs.hasAttribute(name);
 	}
 	public final Object setAttribute(String name, Object value) {
-		return _attrs.setAttribute(name, value);
+		return value != null ? attrs().setAttribute(name, value): removeAttribute(name);
 	}
 	public final Object removeAttribute(String name) {
-		return _attrs.removeAttribute(name);
+		return _attrs != null ? _attrs.removeAttribute(name): null;
 	}
 	
 	public Object getAttribute(String name, boolean recurse) {
@@ -960,10 +952,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
-		return _attrs.addScopeListener(listener);
+		return attrs().addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		return _attrs.removeScopeListener(listener);
+		return attrs().removeScopeListener(listener);
 	}
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}. */
@@ -1038,7 +1030,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
-		_attrs.notifyParentChanged(_parent != null ? _parent: (Scope)_page);
+		if (_attrs != null)
+			_attrs.notifyParentChanged(_parent != null ? _parent: (Scope)_page);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -1258,6 +1251,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return true;
 	}
 	public List getChildren() {
+		if (_apiChildren == null)
+			_apiChildren = newChildren();
 		return _apiChildren;
 	}
 	/** Returns the root of the specified component.
@@ -2158,22 +2153,24 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public void sessionWillPassivate(Page page) {
-		willPassivate(_attrs.getAttributes().values());
-		willPassivate(_attrs.getListeners());
+		if (_attrs != null) {
+			willPassivate(_attrs.getAttributes().values());
+			willPassivate(_attrs.getListeners());
+
+			if (this instanceof IdSpace) {
+			//backward compatible (we store variables in attributes)
+				for (Iterator it = _attrs.getAttributes().values().iterator();
+				it.hasNext();) {
+					final Object val = it.next();
+					if (val instanceof NamespaceActivationListener) //backward compatible
+						((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
+				}
+			}
+		}
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				willPassivate((Collection)it.next());
-
-		if (this instanceof IdSpace) {
-		//backward compatible (we store variables in attributes)
-			for (Iterator it = _attrs.getAttributes().values().iterator();
-			it.hasNext();) {
-				final Object val = it.next();
-				if (val instanceof NamespaceActivationListener) //backward compatible
-					((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
-			}
-		}
 
 		for (AbstractComponent p = _first; p != null; p = p._next)
 			p.sessionWillPassivate(page); //recursive
@@ -2182,24 +2179,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void sessionDidActivate(Page page) {
 		_page = page;
 
-		didActivate(_attrs.getAttributes().values());
-		didActivate(_attrs.getListeners());
-		if (_parent == null)
-			_attrs.notifyParentChanged(_page);
+		if (_attrs != null) {
+			didActivate(_attrs.getAttributes().values());
+			didActivate(_attrs.getListeners());
+			if (_parent == null)
+				_attrs.notifyParentChanged(_page);
+
+			if (this instanceof IdSpace) {
+			//backward compatible (we store variables in attributes)
+				for (Iterator it = _attrs.getAttributes().values().iterator();
+				it.hasNext();) {
+					final Object val = it.next();
+					if (val instanceof NamespaceActivationListener) //backward compatible
+						((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
+				}
+			}
+		}
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				didActivate((Collection)it.next());
-
-		if (this instanceof IdSpace) {
-		//backward compatible (we store variables in attributes)
-			for (Iterator it = _attrs.getAttributes().values().iterator();
-			it.hasNext();) {
-				final Object val = it.next();
-				if (val instanceof NamespaceActivationListener) //backward compatible
-					((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
-			}
-		}
 
 		for (AbstractComponent p = _first; p != null; p = p._next)
 			p.sessionDidActivate(page); //recursive
@@ -2372,7 +2371,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return AbstractComponent.this._page;
 		}
 		public Set getVariableNames() {
-			return _attrs.getAttributes().keySet();
+			return AbstractComponent.this.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
 			return hasAttributeOrFellow(name, !local);
@@ -2516,7 +2515,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//1a. clone attributes
-		clone._attrs = _attrs.clone(clone);
+		if (_attrs != null)
+			clone._attrs = _attrs.clone(clone);
 
 		//1b. clone listeners
 		if (_listeners != null) {
@@ -2550,7 +2550,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
-		clone.initChildren();
+		clone._apiChildren = null;
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
@@ -2610,7 +2610,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			q = child;
 
 			child._parent = comp; //correct it
-			child._attrs.notifyParentChanged(comp);
+			if (child._attrs != null)
+				child._attrs.notifyParentChanged(comp);
 		}
 		comp._last = q;
 	}
@@ -2644,12 +2645,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.writeObject(null);
 
 		//write attrs
-		final Map attrs = _attrs.getAttributes();
-		willSerialize(attrs.values());
-		Serializables.smartWrite(s, attrs);
-		final List lns = _attrs.getListeners();
-		willSerialize(lns);
-		Serializables.smartWrite(s, lns);
+		if (_attrs != null) {
+			final Map attrs = _attrs.getAttributes();
+			willSerialize(attrs.values());
+			final List lns = _attrs.getListeners();
+			willSerialize(lns);
+
+			Serializables.smartWrite(s, attrs);
+			Serializables.smartWrite(s, lns);
+		} else {
+			Serializables.smartWrite(s, (Map)null);
+			Serializables.smartWrite(s, (List)null);
+		}
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
@@ -2678,8 +2685,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-
-		init();
 
 		//read definition
 		Object def = s.readObject();
@@ -2718,13 +2723,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//read attrs
+		attrs();
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
 		didDeserialize(attrs.values());
 		final List lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
 		didDeserialize(lns);
-		if (_parent != null)
+		if (attrs.isEmpty() && lns.isEmpty())
+			_attrs = null;
+		else if (_parent != null)
 			_attrs.notifyParentChanged(_parent);
 
 		for (;;) {
