@@ -1995,6 +1995,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
+		clone._apiChildren = null;
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
