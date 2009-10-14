@@ -14,6 +14,7 @@ October, 2009
   2873957: menubar in horizontal support scrollable functionality
   2873954: menu support onClick
   2857412: Feedback on server push error
+  2878584: A plugin to customize the encoding of filename
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
