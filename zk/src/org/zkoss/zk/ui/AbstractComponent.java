@@ -192,8 +192,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_def = ComponentsCtrl.DUMMY;
 		}
 
-		init(false);
-
 		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(this): null;
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
@@ -232,15 +230,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 		return null;
-	}
-	/** Initialize for contructor and serialization.
-	 * @param cloning whether this method is called by clone()
-	 */
-	private void init(boolean cloning) {
-		_apiChildren = newChildren(); 
-
-		if (!cloning)
-			_attrs = new HashMap(4);
 	}
 	/**
 	 * Creates and returns the instance for storing child components.
@@ -746,7 +735,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return _page != null ?
 				_page.getDesktop().getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case COMPONENT_SCOPE:
-			return _attrs;
+			return attrs();
 		case REQUEST_SCOPE:
 			final Execution exec = getExecution();
 			if (exec != null) return exec.getAttributes();
@@ -754,6 +743,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		default:
 			return Collections.EMPTY_MAP;
 		}
+	}
+	private Map attrs() {
+		if (_attrs == null)
+			_attrs = new HashMap(4);
+		return _attrs;
 	}
 	private final Execution getExecution() {
 		return _page != null ? _page.getDesktop().getExecution():
@@ -781,16 +775,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public final Map getAttributes() {
-		return _attrs;
+		return attrs();
 	}
 	public final Object getAttribute(String name) {
-		return _attrs.get(name);
+		return _attrs != null ? _attrs.get(name): null;
 	}
 	public final Object setAttribute(String name, Object value) {
-		return value != null ? _attrs.put(name, value): _attrs.remove(name);
+		return value != null ? attrs().put(name, value): removeAttribute(name);
 	}
 	public final Object removeAttribute(String name) {
-		return _attrs.remove(name);
+		return _attrs != null ? _attrs.remove(name): null;
 	}
 
 	public void setVariable(String name, Object val, boolean local) {
@@ -1086,6 +1080,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return true;
 	}
 	public List getChildren() {
+		if (_apiChildren == null)
+			_apiChildren = newChildren();
 		return _apiChildren;
 	}
 	/** Returns the root of the specified component.
@@ -1673,7 +1669,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public void sessionWillPassivate(Page page) {
-		willPassivate(_attrs.values());
+		if (_attrs != null)
+			willPassivate(_attrs.values());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -1701,7 +1698,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void sessDidActivate(Page page, boolean pageLevelIdSpace) {
 		_page = page;
 
-		didActivate(_attrs.values());
+		if (_attrs != null)
+			didActivate(_attrs.values());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -1956,15 +1954,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//1a. clone attributes
-		clone._attrs = new HashMap(4);
-		for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			Object val = me.getValue();
-			if (val instanceof ComponentCloneListener) {
-				val = ((ComponentCloneListener)val).clone(clone);
-				if (val == null) continue; //don't use it in clone
+		if (_attrs != null) {
+			clone._attrs = new HashMap((_attrs.size()*4)/3+2);
+			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				Object val = me.getValue();
+				if (val instanceof ComponentCloneListener) {
+					val = ((ComponentCloneListener)val).clone(clone);
+					if (val == null) continue; //don't use it in clone
+				}
+				clone._attrs.put(me.getKey(), val);
 			}
-			clone._attrs.put(me.getKey(), val);
 		}
 
 		//1b. clone listeners
@@ -1995,7 +1995,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
-		clone.init(true);
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
@@ -2085,7 +2084,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.writeObject(null);
 
 		//write attrs
-		willSerialize(_attrs.values());
+		if (_attrs != null)
+			willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
 
 		if (_listeners != null)
@@ -2134,8 +2134,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init(false);
-
 		//read definition
 		Object def = s.readObject();
 		if (def instanceof String) {
@@ -2173,8 +2171,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//read attrs
-		Serializables.smartRead(s, _attrs);
-		didDeserialize(_attrs.values());
+		_attrs = Serializables.smartRead(s, _attrs);
+		if (_attrs != null)
+			didDeserialize(_attrs.values());
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
