@@ -70,6 +70,7 @@ October, 2009
   2812498: Horizontal & vertical scrollbars appear at Chrom 3 
   2811990: Changing curpos of slider should change its titile as well
   2859331: zk.formatDate traduction error french
+  2874098: Databinder accidently clear the error box in loadOnSave
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
