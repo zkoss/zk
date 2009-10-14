@@ -51,6 +51,7 @@ November, 2009
   2871627: zscript failed to load a zscript file if w/ absolute path
   2873290: DOCTYPE not generated for zhtml pages
   2873478: Always "Processing" Status when Row's Visible is False
+  2874709: tree doesn't work properly during redraw
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

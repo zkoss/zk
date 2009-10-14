@@ -58,5 +58,13 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 			return false;
 		var child = this.parent.parent;
 		return child && child.isVisible();
+	},
+	removeChild: function (child) {
+		for (var w = child.firstChild; w;) {
+			var n = w.nextSibling; //remember, since remove will null the link
+			child.removeChild(w); //deep first
+			w = n;
+		}
+		this.$supers('removeChild', arguments);
 	}
 });

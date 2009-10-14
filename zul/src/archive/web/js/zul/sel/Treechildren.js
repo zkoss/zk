@@ -34,14 +34,15 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		if (before) {
 			bfn = before._getBeforeNode();
 			if (!bfn) before = null;
-		} else {
+		} else if (!this.parent.$instanceof(zul.sel.Tree))
 			ben = this.getCaveNode() || this.parent.getCaveNode();
-		}
 
 		if (bfn)
 			jq(bfn).before(child._redrawHTML());
-		else
+		else if (ben)
 			jq(ben).after(child._redrawHTML());
+		else
+			jq(this).append(child._redrawHTML());
 		child.bind(desktop);
 	},
 	getCaveNode: function () {
@@ -89,5 +90,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
 		}
+	},
+	removeChild: function (child) {
+		for (var w = child.firstChild; w;) {
+			var n = w.nextSibling; //remember, since remove will null the link
+			child.removeChild(w); //deep first
+			w = n;
+		}
+		this.$supers('removeChild', arguments);
 	}
 });

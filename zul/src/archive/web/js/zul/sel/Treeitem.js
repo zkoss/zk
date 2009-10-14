@@ -164,5 +164,13 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this.setOpen(!this._open);
 			evt.stop();
 		} else this.$supers('doClick_', arguments);
+	},
+	removeChild: function (child) {
+		for (var w = child.firstChild; w;) {
+			var n = w.nextSibling; //remember, since remove will null the link
+			child.removeChild(w); //deep first
+			w = n;
+		}
+		this.$supers('removeChild', arguments);
 	}
 });
