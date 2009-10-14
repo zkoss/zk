@@ -72,7 +72,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers('unbind_', arguments);
 		if (this.getTabbox().isVertical()) {
 			zWatch.unlisten({
 				onSize: this,
