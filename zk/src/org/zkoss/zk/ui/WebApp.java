@@ -99,10 +99,20 @@ public interface WebApp extends Scope, Locator {
 	public WebApp getWebApp(String uripath);
 
 	/** Returns a URL to the resource that is mapped to a specified path.
+	 *
+	 * <p>Notice that, since 3.6.3, this method can retreive the resource
+	 * starting with "~./". If the path contains the wildcard ('*'),
+	 * you can use {@link Execution#locate} to convert it to a proper
+	 * string first.
 	 */
 	public URL getResource(String path);
 	/** Returns the resource located at the named path as
 	 * an InputStream object.
+	 *
+	 * <p>Notice that, since 3.6.3, this method can retreive the resource
+	 * starting with "~./". If the path contains the wildcard ('*'),
+	 * you can use {@link Execution#locate} to convert it to a proper
+	 * string first.
 	 */
 	public InputStream getResourceAsStream(String path);
 	/** Returns a String containing the real path for a given virtual path.

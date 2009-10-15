@@ -590,10 +590,7 @@ public class ClassWebResource {
 				data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely
 
-			try {
-				is.close(); //just in case
-			} catch (Throwable ex) { //ignore
-			}
+			Files.close(is);
 		}
 
 		int len = data.length;

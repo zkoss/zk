@@ -121,8 +121,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<!-- Uncomment the following if you want to automatically redirect
 			to the timeout page. By default, it is triggered by the user
 			after timeout (such as clicking).
-		-->
 		<automatic-timeout/>
+		-->
 	</session-config>
 
 	<!-- We turn on the event processing thread in zkdemo to demostrate

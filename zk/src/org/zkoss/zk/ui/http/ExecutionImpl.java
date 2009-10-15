@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.Locators;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
@@ -291,6 +293,20 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isForwarded() {
 		return Servlets.isForwarded(_request);
+	}
+
+	public String locate(String path) {
+		try {
+			if (path.startsWith("~./")) {
+				path = Servlets.locate(_ctx, _request,
+					ClassWebResource.PATH_PREFIX + path.substring(2),
+					Locators.getDefault());
+				return "~." + path.substring(ClassWebResource.PATH_PREFIX.length());
+			}
+			return Servlets.locate(_ctx, _request, path, null);
+		} catch (ServletException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	public boolean isVoided() {

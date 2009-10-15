@@ -103,6 +103,7 @@ public class Files {
 	/** Returns all bytes in the input stream, never null
 	 * (but its length might zero).
 	 * <p>Notice: this method is memory hungry.
+	 * <p>Notice: it doesn't close <code>in</code>
 	 */
 	public static final byte[] readAll(InputStream in)
 	throws IOException {
@@ -126,6 +127,7 @@ public class Files {
 	}
 
 	/** Copies a reader into a writer.
+	 * <p>Notice: it doesn't close <code>reader</code> or <code>writer</code>
 	 * @param writer the destination
 	 * @param reader the source
 	 */
@@ -138,6 +140,7 @@ public class Files {
 		}
 	}
 	/** Copies an input stream to a output stream.
+	 * <p>Notice: it doesn't close <code>in</code> or <code>out</code>
 	 * @param out the destination
 	 * @param in the source
 	 */
@@ -305,7 +308,7 @@ public class Files {
 			try {
 				strm.close();
 			} catch (IOException ex) { //ignore it
-				System.out.println("Unable to close an input stream");
+//				System.out.println("Unable to close an input stream");
 			}
 		}
 	}
@@ -316,7 +319,7 @@ public class Files {
 			try {
 				reader.close();
 			} catch (IOException ex) { //ignore it
-				System.out.println("Unable to close a reader");
+//				System.out.println("Unable to close a reader");
 			}
 		}
 	}

@@ -24,11 +24,10 @@ import org.zkoss.zk.au.AuResponse;
  *
  * <p>data[0]: the client script codes (i.e., JavaScript codes)
  *
- * <p>It is usually not a good idea to use {@link AuScript} send codes
- * to the client,
- * since it makes it difficult to customize the visual representation
- * of a component.
- * Rather, it is better to use {@link AuInvoke} instead.
+ * <p>It is generally not a good idea to use {@link AuScript} send
+ * JavaScript codes to the client, unless it doesn't depend on widgets.
+ * On the other hand, it is better to use {@link AuInvoke} since
+ * it invokes thru the widget such that it is easy to customize.
  *
  * @author tomyeh
  * @see AuInvoke

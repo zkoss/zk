@@ -67,6 +67,9 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public boolean isForwarded() {
 		return false;
 	}
+	public String locate(String path) {
+		throw new UnsupportedOperationException();
+	}
 
 	public boolean isVoided() {
 		return _voided;

@@ -241,6 +241,41 @@ public interface Execution extends Scope {
 	 */
 	public void forward(String page)
 	throws IOException;
+
+	/** Locates a page based on the current Locale. It never returns null.
+	 *
+	 * <p>If an URI contains "*", it will be replaced with a proper Locale.
+	 * For example, if the current Locale is zh_TW and the resource is
+	 * named "ab*.cd", then it searches "ab_zh_TW.cd", "ab_zh.cd" and
+	 * then "ab.cd", until any of them is found.
+	 *
+	 * <blockquote>Note: "*" must be right before ".", or the last character.
+	 * For example, "ab*.cd" and "ab*" are both correct, while
+	 * "ab*cd" and "ab*\/cd" are ignored.</blockquote>
+	 *
+	 * <p>If an URI contains two "*", the first "*" will be replaced with
+	 * a browser code and the second with a proper locale.
+	 * The browser code depends on what browser
+	 * the user are used to visit the web site.
+	 * Currently, the code for Internet Explorer is "ie", Safari is "saf",
+	 * Opera is "opr" and all others are "moz".
+	 * Thus, in the above example, if the resource is named "ab**.cd"
+	 * and Firefox is used, then it searches "abmoz_zh_TW.cd", "abmoz_zh.cd"
+	 * and then "abmoz.cd", until any of them is found.
+	 *
+	 * <p>Note: it assumes the path as name_lang_cn_var.ext where
+	 * ".ext" is optional. Example, my_zh_tw.html.jsp.
+	 *
+	 * <p>If an URI starting with "~./", it assumes the resource is from
+	 * the class path.
+	 *
+	 * @param path the page path excluding servlet name. It is OK to have
+	 * the query string. It might contain "*" for current browser code and Locale.
+	 * @return the path that matches the wildcard; <code>path</code>, otherwise
+	 * @since 3.6.3
+	 */
+	public String locate(String path);
+
 	/** Returns whether the execution is voided.
 	 * By void we mean the request is taken charged by other servlet.
 	 * The execution shall not do anything more. In other words,
