@@ -36,24 +36,26 @@ public class URLs {
 	 * in the library property called <code>org.zkoss.net.URLEncoder</code>.
 	 */
 	public static String encode(String s) {
-		final String cls = Library.getProperty("org.zkoss.net.URLEncoder");
-		if (cls != null && cls.length() > 0) {
-			if (_enc == null || !_enc.getClass().getName().equals(cls)) {
+		if (_enc == null) { //no need to sync
+			final String cls = Library.getProperty("org.zkoss.net.URLEncoder");
+			if (cls != null && cls.length() > 0) {
 				try {
 					_enc = (URLEncoder)Classes.newInstanceByThread(cls);
 				} catch (Throwable ex) {
 					throw SystemException.Aide.wrap(ex, "Unable to instantiate "+cls);
 				}
+			} else {
+				_enc = new URLEncoder() {
+					public String encode(String s) {
+						try {
+							return java.net.URLEncoder.encode(s, "UTF-8");
+						} catch (java.io.UnsupportedEncodingException ex) {
+							throw new SystemException(ex);
+						}
+					}
+				};
 			}
-
-			return _enc.encode(s);
 		}
-
-		_enc = null;
-		try {
-			return java.net.URLEncoder.encode(s, "UTF-8");
-		} catch (java.io.UnsupportedEncodingException ex) {
-			throw new SystemException(ex);
-		}
+		return _enc.encode(s);
 	}
 }

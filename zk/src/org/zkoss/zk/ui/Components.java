@@ -1263,6 +1263,10 @@ public class Components {
 			exec().include(page);
 		}
 
+		public String locate(String path) {
+			return exec().locate(path);
+		}
+
 		public boolean isAsyncUpdate(Page page) {
 			return exec().isAsyncUpdate(page);
 		}

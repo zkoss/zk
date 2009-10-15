@@ -86,9 +86,12 @@ public class SimpleWebApp extends AbstractWebApp {
 	}
 
 	public String getUpdateURI() {
-		final String uri = WebManager.getWebManager(this).getUpdateURI();
+		final String uri = getWebManager().getUpdateURI();
 		final Execution exec = Executions.getCurrent();
 		return exec != null ? exec.encodeURL(uri): uri;
+	}
+	private WebManager getWebManager() {
+		return WebManager.getWebManager(this);
 	}
 
 	public WebApp getWebApp(String uripath) {
@@ -104,6 +107,9 @@ public class SimpleWebApp extends AbstractWebApp {
 		return null;
 	}
 	public URL getResource(String path) {
+		if (path.startsWith("~./"))
+			return getWebManager()
+				.getClassWebResource().getResource(path.substring(2));
 		try {
 			return _ctx.getResource(path);
 		} catch (MalformedURLException ex) {
@@ -111,6 +117,9 @@ public class SimpleWebApp extends AbstractWebApp {
 		}
 	}
 	public InputStream getResourceAsStream(String path) {
+		if (path.startsWith("~./"))
+			return getWebManager()
+				.getClassWebResource().getResourceAsStream(path.substring(2));
 		return _ctx.getResourceAsStream(path);
 	}
 

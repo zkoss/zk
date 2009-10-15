@@ -116,6 +116,9 @@ public class Servlets {
 	//-- resource locator --//
 	/** Locates a page based on the specified Locale. It never returns null.
 	 *
+	 * <p>Notice that it cannot resolve a path starting with '~', and containing
+	 * '*', because it cannot access the content of the other servlet context.
+	 *
 	 * <p>If an URI contains "*", it will be replaced with a proper Locale.
 	 * For example, if the current Locale is zh_TW and the resource is
 	 * named "ab*.cd", then it searches "ab_zh_TW.cd", "ab_zh.cd" and
@@ -138,15 +141,12 @@ public class Servlets {
 	 * <p>Note: it assumes the path as name_lang_cn_var.ext where
 	 * ".ext" is optional. Example, my_zh_tw.html.jsp.
 	 *
-	 * <p>Note: unlike {@link Encodes#encodeURL(ServletContext, ServletRequest, ServletResponse, String)},
-	 * it always locates the Locale, without handling "*".
-	 *
 	 * @param ctx the servlet context to locate pages
 	 * @param pgpath the page path excluding servlet name. It is OK to have
 	 * the query string. It might contain "*" for current browser code and Locale.
 	 * @param locator the locator used to locate resource. If null, ctx
 	 * is assumed.
-	 * @return pgpath if the original one matches; others if locale matches;
+	 * @return the path that matches the wildcard; <code>pgpath</code>, otherwise
 	 * never null
 	 */
 	public static final String locate(ServletContext ctx,

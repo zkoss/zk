@@ -23,6 +23,7 @@ import java.io.InputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Loader;
 
@@ -93,10 +94,7 @@ abstract public class ExtendletLoader implements Loader {
 				+"\n"+Exceptions.getBriefStackTrace(ex));
 			return null; //as non-existent
 		} finally {
-			try {
-				is.close();
-			} catch (Throwable ex) { //ignore
-			}
+			Files.close(is);
 		}
 	}
 	//Derive to override//

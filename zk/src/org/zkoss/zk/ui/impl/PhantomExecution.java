@@ -66,6 +66,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isForwarded() {
 		return false;
 	}
+	public String locate(String path) {
+		throw new UnsupportedOperationException();
+	}
 
 	public boolean isVoided() {
 		return _voided;
