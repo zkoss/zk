@@ -36,8 +36,13 @@ import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
  * The extendlet to handle WCS (widget CSS).
@@ -65,26 +70,66 @@ public class WcsExtendlet extends AbstractExtendlet {
 		}
 
 		final StringWriter sw = new StringWriter();
-		for (int j = 0; j < wi.items.length; ++j) {
-			final Object o = wi.items[j];
-			if (o instanceof String) {
+		final Execution exec = new ExecutionImpl(
+				getServletContext(), request, response, null, null),
+			olde = Executions.getCurrent();
+		ExecutionsCtrl.setCurrent(exec);
+ 		((ExecutionCtrl)exec).onActivate();
+		try {
+			final ThemeProvider tp = getWebApp().getConfiguration().getThemeProvider();
+			if (tp != null) {
 				try {
-					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), (String)o, null);
-				} catch (Throwable ex) {
-					log.realCauseBriefly("Unable to load "+wi.items[j], ex);
+					if (tp.beforeWCS(exec, "~." + path) == null) {
+						response.setContentType("text/css;charset=UTF-8");
+						return; //skip the whole file
+					}
+				} catch (AbstractMethodError ex) { //ignore it (backward compatible)
 				}
-			} else { //static method
-				sw.write(invoke((MethodInfo)o));
 			}
-			sw.write('\n');
-		}
-		for (Iterator it = wi.langdef.getCSSURIs().iterator(); it.hasNext();) {
-			final String uri = (String)it.next();
-			try {
-				_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
-			} catch (Throwable ex) {
-				log.realCauseBriefly("Unable to load "+uri, ex);
+
+			for (int j = 0; j < wi.items.length; ++j) {
+				final Object o = wi.items[j];
+				if (o instanceof String) {
+					String uri = (String)o;
+					if (tp != null) {
+						try {
+							uri = tp.beforeWidgetCSS(exec, uri);
+							if (uri == null)
+								continue; //skip it
+						} catch (AbstractMethodError ex) { //ignore it (backward compatible)
+						}
+					}
+
+					try {
+						_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
+					} catch (Throwable ex) {
+						log.realCauseBriefly("Unable to load "+wi.items[j], ex);
+					}
+				} else { //static method
+					sw.write(invoke((MethodInfo)o));
+				}
+				sw.write('\n');
 			}
+
+			for (Iterator it = wi.langdef.getCSSURIs().iterator(); it.hasNext();) {
+				String uri = (String)it.next();
+				if (tp != null) {
+					try {
+						uri = tp.beforeWidgetCSS(exec, uri);
+						if (uri == null)
+							continue; //skip it
+					} catch (AbstractMethodError ex) { //ignore it (backward compatible)
+					}
+				}
+				try {
+					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
+				} catch (Throwable ex) {
+					log.realCauseBriefly("Unable to load "+uri, ex);
+				}
+			}
+		} finally {
+			((ExecutionCtrl)exec).onDeactivate();
+			ExecutionsCtrl.setCurrent(olde);
 		}
 
 		response.setContentType("text/css;charset=UTF-8");
@@ -97,7 +142,6 @@ public class WcsExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-
 	/*package*/ Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");

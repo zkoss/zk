@@ -38,6 +38,7 @@ November, 2009
   2860482: A way to specify language for component definition (<?component?>)
   2861283: hbox/vbox pack attribute supports stretch option
   2855116: add data binding support for custom attribute tag
+  2879519: More control of ThemeProvider against widget's CSS
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
@@ -127,6 +128,8 @@ November, 2009
 	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
   + When the value specified in custom-attributes starts with "@{" and ends with "}",
     it is considered as an annotation.
+  + Two extra methods are added to ThemeProvider for better control of
+    the theme customization.
   + The JavaScript method called confirmRetry is renamed to zAu.confirmRetry
   + Encodes.URLEncoder is changed to allow the developer to encode in his
     own way. Furthermore, the configuration is by use of the library

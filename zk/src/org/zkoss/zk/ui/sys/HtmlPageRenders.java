@@ -327,8 +327,9 @@ public class HtmlPageRenders {
 		if (themeProvider != null) {
 			final List org = new LinkedList();
 			for (Iterator it =  sses.iterator(); it.hasNext();) {
-				final StyleSheet ss = (StyleSheet)it.next();
-				org.add(ss.getHref()); //we don't support getContent
+				final String href = ((StyleSheet)it.next()).getHref();
+				if (href != null && href.length() > 0)
+					org.add(href); //we don't support getContent
 			}
 
 			final String[] hrefs = config.getThemeURIs();

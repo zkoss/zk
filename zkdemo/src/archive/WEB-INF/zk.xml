@@ -207,27 +207,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</error-page>
 	-->
 
-	<!-- Configure ZUL to use smaller fonts for all locales, and
-		smaller fonts for the rest Locales
-	<desktop-config>
-		<disable-theme-uri>~./zul/css/norm*.css.dsp*</disable-theme-uri>
-		<theme-uri>~./zul/css/normsm*.css.dsp*</theme-uri>
-	</desktop-config>
-	-->
-	<!-- Configure ZUL to use larger fonts for all locales, and
-		smaller fonts for the rest Locales
-	<desktop-config>
-		<disable-theme-uri>~./zul/css/norm*.css.dsp*</disable-theme-uri>
-		<theme-uri>~./zul/css/normlg*.css.dsp*</theme-uri>
-	</desktop-config>
-	-->
-	<!-- Configure ZUL to use larger fonts for Chinese characters, and
-		nomal fonts for the rest Locales
-	<desktop-config>
-		<disable-theme-uri>~./zul/css/norm*.css.dsp*</disable-theme-uri>
-		<theme-uri>~./zul/css/norm**.css.dsp</theme-uri>
-	</desktop-config>
-	-->
 	<!-- Configure additional theme URIs
 	<desktop-config>
 		<theme-uri>/a.css</theme-uri>
@@ -283,14 +262,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</preference>
 	-->
 	
-	<!-- Configure the default font size in ZUL CSS file (norm*.css)
+	<!-- Configure the default font size in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: 12px.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontSizeM</name>
 		<value>12px</value>
 	</library-property>
 	-->
-	<!-- Configure the font size for menus in ZUL CSS file (norm*.css)
+	<!-- Configure the font size for menus in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: 11px.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontSizeMS</name>
@@ -298,7 +277,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	<!-- Configure the font size for smaller fonts, such as toolbar,
-		 in ZUL CSS file (norm*.css)
+		 in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: 11px.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontSizeS</name>
@@ -306,21 +285,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	<!-- Configure the font size for extremely small fonts,
-		 in ZUL CSS file (norm*.css)
+		 in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: 10px.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontSizeXS</name>
 		<value>10px</value>
 	</library-property>
 	-->
-	<!-- Configure the font family for titles in ZUL CSS file (norm*.css)
+	<!-- Configure the font family for titles in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: Verdana, Tahoma, Arial, Helvetica, sans-serif.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontFamilyT</name>
 		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
 	-->
-	<!-- Configure the font family for content in ZUL CSS file (norm*.css)
+	<!-- Configure the font family for content in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: Verdana, Tahoma, Arial, serif.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontFamilyC</name>

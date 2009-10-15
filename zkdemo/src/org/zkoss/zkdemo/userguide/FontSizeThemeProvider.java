@@ -40,17 +40,6 @@ public class FontSizeThemeProvider implements ThemeProvider{
 	private static String _skinCookieName = "zkdemoskin";
 	
 	public Collection getThemeURIs(Execution exe, List uris) {
-		int size = uris.size();
-		for(int i=0;i<size;i++){
-			String uri = (String)uris.get(i);
-			if(uri.startsWith(_cssPrefix)){
-				String fsc = getFontSizeCookie(exe);
-				if (!"".equals(fsc)) {
-					uri = _cssSrcPrefix+getFontSizeCookie(exe)+ ".css.dsp";
-					uris.set(i,uri);
-				}
-			}
-		}
 		if ("silvergray".equals(getSkinCookie(exe))) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
@@ -58,12 +47,32 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		return uris;
 	}
 
+	public String beforeWCS(Execution exe, String uri) {
+		final String fsc = getFontSizeCookie(exe);
+		if ("lg".equals(fsc)) {
+			exe.setAttribute("fontSizeM", "15px");
+			exe.setAttribute("fontSizeMS", "13px");
+			exe.setAttribute("fontSizeS", "13px");
+			exe.setAttribute("fontSizeXS", "12px");
+		} else if ("sm".equals(fsc)) {
+			exe.setAttribute("fontSizeM", "10px");
+			exe.setAttribute("fontSizeMS", "9px");
+			exe.setAttribute("fontSizeS", "9px");
+			exe.setAttribute("fontSizeXS", "8px");
+		}
+		return uri;
+	}
+
+	public String beforeWidgetCSS(Execution exe, String uri) {
+		return uri;
+	}
+
 	/**
-	 * get font size value from cookie
+	 * Returns the font size specified in cookies
 	 * @param exe Execution
 	 * @return "lg" for larger font, "sm" for smaller font or "" for normal font.
 	 */
-	public static  String getFontSizeCookie(Execution exe) {
+	public static String getFontSizeCookie(Execution exe) {
 		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
 		if(cookies!=null){
 			for(int i=0;i<cookies.length;i++){
@@ -81,7 +90,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 	}
 	
 	/**
-	 * set font size value to cookie
+	 * Sets the font size to cookie
 	 * @param exe Execution
 	 * @param fontSize "lg" for larger font, "sm" for smaller font or other string for normal font.
 	 */
@@ -100,7 +109,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 	}
 
 	/**
-	 * get skin value from cookie
+	 * Returns the skin value specified in cookie
 	 */
 	public static String getSkinCookie(Execution exe) {
 		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
@@ -117,7 +126,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 	}
 
 	/**
-	 * set skin value to cookie
+	 * Sets the skin value to cookie
 	 */
 	public static void setSkinCookie(Execution exe,String skin){
 		Cookie cookie = new Cookie(_skinCookieName, skin);
