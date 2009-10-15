@@ -152,12 +152,14 @@ public class Servlets {
 	public static final String locate(ServletContext ctx,
 	ServletRequest request, String pgpath, Locator locator)
 	throws ServletException {
-		if (isUniversalURL(pgpath))
+		if (pgpath == null)
 			return pgpath;
-
-		final int jquest = pgpath.indexOf('?');
 		final int f = pgpath.indexOf('*');
-		if (f < 0 || (jquest >= 0 && f > jquest)) return pgpath;
+		if (f < 0 || isUniversalURL(pgpath))
+			return pgpath;
+		final int jquest = pgpath.indexOf('?');
+		if (jquest >= 0 && f > jquest)
+			return pgpath;
 			//optimize the case that no "*" at all
 
 		final String qstr;
@@ -607,6 +609,8 @@ public class Servlets {
 	 * context path of the foreign context (without leading '/').
 	 * If it could be any context path recognized by the Web container or
 	 * any name registered with {@link #addExtendletContext}.
+	 * <br/>Notice that, since 3.6.3, <code>uri</code> could contain
+	 * '*' (to denote locale and browser). Refer to {@link #locate}.
 	 * @param params the parameter map; null to ignore
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
@@ -623,6 +627,8 @@ public class Servlets {
 			include(ctx, request, response, uri, params, mode);
 			return;
 		}
+
+		uri = locate(ctx, request, uri, null);
 
 		final RequestDispatcher disp =
 			getRequestDispatcher(ctx, request, uri, params, mode);
@@ -675,6 +681,8 @@ public class Servlets {
 	 * '/'). If starts with "/", the context path of request is assumed.
 	 * To reference to foreign context, use "~ctx/" where ctx is the
 	 * context path of the foreign context (without leading '/').
+	 * <br/>Notice that, since 3.6.3, <code>uri</code> could contain
+	 * '*' (to denote locale and browser). Refer to {@link #locate}.
 	 * @param params the parameter map; null to ignore
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
@@ -695,6 +703,8 @@ public class Servlets {
 		//Otherwise, if including a page crossing context might not return
 		//the same session
 		request.setAttribute("org.mortbay.jetty.servlet.Dispatcher.shared_session", Boolean.TRUE);
+
+		uri = locate(ctx, request, uri, null);
 
 		final RequestDispatcher disp =
 			getRequestDispatcher(ctx, request, uri, params, mode);

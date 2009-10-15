@@ -318,6 +318,8 @@ public class Https extends Servlets {
 	 * If starts with "/", the context path of request is assumed.
 	 * To reference to foreign context, use "~ctx/" where ctx is the
 	 * context path of the foreign context (without leading '/').
+	 * <br/>Notice that, since 3.6.3, <code>uri</code> could contain
+	 * '*' (to denote locale and browser). Refer to {@link #locate}.
 	 * @param params the attributes that will be set when the redirection
 	 * is back; null to ignore; format: (String, Object)
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},
@@ -328,6 +330,7 @@ public class Https extends Servlets {
 	HttpServletRequest request, HttpServletResponse response,
 	String uri, Map params, int mode)
 	throws IOException, ServletException {
+		uri = locate(ctx, request, uri, null);
 		final String encodedUrl =
 			encodeRedirectURL(ctx, request, response, uri, params, mode);
 		if (D.ON && log.debugable()) log.debug("redirect to " + encodedUrl);
