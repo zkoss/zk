@@ -89,8 +89,6 @@ public abstract class GenericFilter implements Filter {
 	protected void sendRedirect(HttpServletRequest request,
 	HttpServletResponse response, String page, Map params, int mode)
 	throws ServletException, java.io.IOException {
-		if (page != null)
-			page = Servlets.locate(getServletContext(), request, page, null);
 		Https.sendRedirect(getServletContext(),
 			request, response, page, params, mode);
 	}
@@ -100,11 +98,12 @@ public abstract class GenericFilter implements Filter {
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
+	 * @since 3.6.3
 	 */
-	protected final void forward(ServletContext ctx,
+	protected final void forward(
 	ServletRequest request, ServletResponse response, String uri)
 	throws ServletException, java.io.IOException {
-		forward(ctx, request, response, uri, null, 0);
+		forward(getServletContext(), request, response, uri, null, 0);
 	}
 	/** Forward to the specified page with parameters.
 	 *
@@ -112,13 +111,12 @@ public abstract class GenericFilter implements Filter {
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
+	 * @since 3.6.3
 	 */
-	protected final void forward(ServletContext ctx, ServletRequest request,
+	protected final void forward(ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws ServletException, java.io.IOException {
-		if (uri != null)
-			uri = Servlets.locate(getServletContext(), request, uri, null);
-		Https.forward(ctx, request, response, uri, params, mode);
+		Https.forward(getServletContext(), request, response, uri, params, mode);
 	}
 	/** Includes the specified page.
 	 *
@@ -126,11 +124,12 @@ public abstract class GenericFilter implements Filter {
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
+	 * @since 3.6.3
 	 */
-	protected final void include(ServletContext ctx, ServletRequest request,
+	protected final void include(ServletRequest request,
 	ServletResponse response, String uri)
 	throws ServletException, java.io.IOException {
-		include(ctx, request, response, uri, null, 0);
+		include(getServletContext(), request, response, uri, null, 0);
 	}
 	/** Includes the specified page with parameters.
 	 *
@@ -138,12 +137,43 @@ public abstract class GenericFilter implements Filter {
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
+	 * @since 3.6.3
+	 */
+	protected final void include(ServletRequest request,
+	ServletResponse response, String uri, Map params, int mode)
+	throws ServletException, java.io.IOException {
+		Https.include(getServletContext(), request, response, uri, params, mode);
+	}
+	/** @deprecated As of release 3.6.3, use {@link #forward(ServletRequest, ServletResponse, String)}
+	 * instead.
+	 */
+	protected final void forward(ServletContext ctx,
+	ServletRequest request, ServletResponse response, String uri)
+	throws ServletException, java.io.IOException {
+		forward(ctx, request, response, uri, null, 0);
+	}
+	/** @deprecated As of release 3.6.3, use {@link #forward(ServletRequest, ServletResponse, String, Map, int)}
+	 * instead.
+	 */
+	protected final void forward(ServletContext ctx, ServletRequest request,
+	ServletResponse response, String uri, Map params, int mode)
+	throws ServletException, java.io.IOException {
+		Https.forward(ctx, request, response, uri, params, mode);
+	}
+	/** @deprecated As of release 3.6.3, use {@link #include(ServletRequest, ServletResponse, String)}
+	 * instead.
+	 */
+	protected final void include(ServletContext ctx, ServletRequest request,
+	ServletResponse response, String uri)
+	throws ServletException, java.io.IOException {
+		include(ctx, request, response, uri, null, 0);
+	}
+	/** @deprecated As of release 3.6.3, use {@link #include(ServletRequest, ServletResponse, String, Map, int)}
+	 * instead.
 	 */
 	protected final void include(ServletContext ctx, ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws ServletException, java.io.IOException {
-		if (uri != null)
-			uri = Servlets.locate(getServletContext(), request, uri, null);
 		Https.include(ctx, request, response, uri, params, mode);
 	}
 
