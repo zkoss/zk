@@ -589,6 +589,8 @@
 	border-color: #7EAAC6;
 	border-width: 1px;
 	border-style: solid;
+}
+.z-tabbox-ver .z-tabpanels-ver {
 	border-left-width: 0px;
 }
 .z-tabpanel,
