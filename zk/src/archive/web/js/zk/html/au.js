@@ -2537,9 +2537,7 @@ zkau.cmd1 = {
 
 		if (zkau.valid) zkau.valid.fixerrboxes();
 
-		if (cf && !zkau.currentFocus)
-			if (cfid) zk.focus($e(cfid));
-			// else zk.focusDown($e(uuid)); fails in grid with paging
+		
 
 		if (fns) {
 			var ls = zk.find(cmp);
@@ -2551,6 +2549,11 @@ zkau.cmd1 = {
 			ls["onOuter"] = fns;
 		}
 		zk.fire(cmp, "onOuter");
+		
+		// Bug 2841185, we shall invoke zk.focus() after firing onOuter
+		if (cf && !zkau.currentFocus)
+			if (cfid) zk.focus($e(cfid));
+			// else zk.focusDown($e(uuid)); fails in grid with paging
 	},
 	addAft: function (uuid, cmp, html, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore

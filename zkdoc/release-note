@@ -79,6 +79,7 @@ October, 2009
   2851102: Closing error message box closes popup Window as well
   2825976: German Mapping of MCommon.FILE_OPENING incorrect 
   2838782: when paging is on treerow lose focus when use arrow to open
+  2841185: Firefox: Grid disapears in borderlayout
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
