@@ -38,7 +38,7 @@ ${z:outDeviceStyleSheets('ajax')}
 </body>
 <script type="text/javascript">
 <!--
-	parent.zkau.endUpload();
+	if (parent.zkau) parent.zkau.endUpload();
 
 <%-- NOTE: we cannot execute zkau.sendUpdateResult in this frame with Firefox,
 	because this frame will be removed and it will cause the following error

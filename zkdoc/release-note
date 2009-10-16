@@ -74,6 +74,7 @@ October, 2009
   2859331: zk.formatDate traduction error french
   2874098: Databinder accidently clear the error box in loadOnSave
   2873219: Locale Dependent URI Problem
+  2868670: cancel upload causes js error in IE6/IE7 
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
