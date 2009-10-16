@@ -19,14 +19,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul;
 
-import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -39,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * <p>
  * Non XUL extension.
- * 
+ * <p>Note: {@link setVisible(boolean)} with false cannot work in IE. (Browser's limitation) 
  * @author Davidchen
  * @author Tomyeh
  * @since 3.6.0
@@ -151,6 +146,11 @@ org.zkoss.zul.api.Applet {
 	 */
 	public void setField(String field, String value) {
 		response(null, new AuInvoke(this, "field", field, value));
+	}
+	
+	protected String getRealStyle() {
+		// bug #2815049
+		return super.getRealStyle() + "visibility: visible;";
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
