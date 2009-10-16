@@ -76,6 +76,7 @@ October, 2009
   2873219: Locale Dependent URI Problem
   2868670: cancel upload causes js error in IE6/IE7 
   2815049: Stop at loading if popup window embeds an applet (IE6)
+  2851102: Closing error message box closes popup Window as well
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

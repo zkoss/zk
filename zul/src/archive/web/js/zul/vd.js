@@ -278,6 +278,10 @@ zkVld._errbox = function () {
 	zul.initMovable(box, {
 		zindex: box.style.zIndex, starteffect: zk.voidf,
 		endeffect: zkVld._fiximg, change: zkVld._change});
+	
+	// bug 2851102
+	if (box)
+		zk._vpts[box.id] = cmp;
 };
 zkVld._change = function (dg, pointer, evt) {
 	var el = dg.element;
@@ -312,6 +316,11 @@ zkVld.closeErrbox = function (box, remainError, coerce) {
 		zk.unlisten(cmp, "focus", cmp._focusFn);
 		cmp._focusFn = null;
 	}
+	
+	// Bug #2851102
+	if (boxid)
+		delete zk._vpts[boxid];
+		
 	if (box) {
 		zul.cleanMovable(box.id);
 		if (zk.ie6Only) {
