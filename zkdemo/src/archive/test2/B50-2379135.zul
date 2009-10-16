@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2379135.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 14:42:35     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<html><![CDATA[
+<ol>
+<li>Right click the second item, and then it shall be selected</li>
+<li>Right click the third item, and then it shall be selected</li>
+<li>Right click the button, and the fourth item shall NOT be selected</li>
+</ol>
+]]></html>
+<listbox>
+	<listitem label="First"/>
+	<listitem label="Second (right-click)" onRightClick='i.value += "click"'/>
+	<listitem label="Third (context)" context="editPopup"/>
+	<listitem>
+		<listcell><button label="context but no select" context="editPopup"/></listcell>
+	</listitem>
+</listbox>
+<label id="i"/>
+<menupopup id="editPopup">
+    <menuitem label="Undo"/>
+    <menuitem label="Redo"/>
+    <menu label="Sort">
+		<menupopup>
+	        <menuitem label="Sort by Name" autocheck="true"/>
+	        <menuitem label="Sort by Date" autocheck="true"/>
+		</menupopup>
+    </menu>
+</menupopup>
+</window>

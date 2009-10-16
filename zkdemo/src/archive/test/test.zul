@@ -117,6 +117,70 @@ import org.zkoss.lang.Objects;
 	<separator/>
 	Another date (no onChange): <datebox/>
 
+	<separator bar="true"/>
+	combobox:
+	<combobox id="combo" onChange="comboOut.value = self.value">
+		<comboitem label="Simple and Rich"/>
+		<comboitem label="Cool!"/>
+		<comboitem label="Thumbs Up!"/>
+	</combobox>
+	<checkbox onCheck="combo.autodrop = self.checked" label="autodrop"/>
+	<combobox id="combo2" cols="10" onChange="comboOut.value = self.value">
+		<comboitem label="Another Commbo that is longer than input box"/>
+		<comboitem label="For testing auto-close"/>
+	</combobox>
+	<separator/>
+	combobox3:
+	<combobox id="combo3" cols="10" onChange="comboOut.value = self.value">
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 3"/>
+		<comboitem label="Item 4"/>
+		<comboitem label="Item 5"/>
+		<comboitem label="Item 6"/>
+		<comboitem label="Item 7"/>
+		<comboitem label="Item 8"/>
+		<comboitem label="Item 9"/>
+		<comboitem label="Item 10"/>
+		<comboitem label="Item 11"/>
+		<comboitem label="Item 12"/>
+		<comboitem label="Item 13"/>
+		<comboitem label="Item 14"/>
+		<comboitem label="Item 15"/>
+		<comboitem label="Item 16"/>
+		<comboitem label="Item 17"/>
+		<comboitem label="Item 18"/>
+		<comboitem label="Item 19"/>
+		<comboitem label="Item 20"/>
+		<comboitem label="Item 21"/>
+		<comboitem label="Item 22"/>
+		<comboitem label="Item 23"/>
+		<comboitem label="Item 24"/>
+		<comboitem label="Item 25"/>
+		<comboitem label="Item 26"/>
+		<comboitem label="Item 27"/>
+		<comboitem label="Last"/>
+	</combobox>
+	<checkbox onCheck="combo3.autodrop = self.checked" label="autodrop"/>
+	<separator bar="true"/>
+	Output of combo: <label id="comboOut"/>
+	<separator bar="true"/>
+	Dynamic Combo (0 item at 1st, 1 at 2nd, 3 at 3rd, 6 at 4th, 10 at 5th...)
+	<combobox id="dcombo" onOpen="onComboOpen()"/>
+	<zscript>
+		int opens = 0;
+		void onComboOpen() {
+			for (int j = opens++; --j >= 0;)
+				new Comboitem("New " + dcombo.getItemCount()).setParent(dcombo);
+		}
+	</zscript>
+	<separator/>
+	With description
+	<combobox>
+		<comboitem label="Simple and Rich" description="The simplest way to make Web applications rich"/>
+		<comboitem label="Cool!" description="The coolest technology"/>
+		<comboitem label="Thumbs Up!" description="Must try!"/>
+	</combobox>
 	<window>
 	<separator bar="true"/>
 	Integer: <intbox id="ibox"/>
@@ -218,7 +282,7 @@ import org.zkoss.lang.Objects;
 	</radiogroup>
 	<radiogroup name="W">
 		<radio label="W4"/>
-	</radiogroup>
+		</radiogroup>
 	<button label="Change orient" onClick="changeRadioOrient()"/>
 	<button label="Add label" onClick="addLabelToHbox()"/>
 	<button label="Remove label" onClick="removeLabelFromHbox()"/>

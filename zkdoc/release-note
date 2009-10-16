@@ -58,6 +58,7 @@ November, 2009
   1999145: Combobox with Width of 100% Overruns
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
   2863287: Unable to access param in zscript
+  2379135: Context menu with Listbox when event is added
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute of

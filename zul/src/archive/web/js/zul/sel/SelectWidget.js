@@ -418,9 +418,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var target = evt.domTarget,
 			tn = target.tagName,
 			tw = zk.Widget.$(target);
-		if ((tn != "TR" && target.onclick)
-				|| tn == "A" ||(tw != row &&
-					(tw.isListen('onDoubleClick') || tw.isListen('onClick'))))
+		if (tn == "A" || (!zul.sel.ItemWidget.isInstance(tw) && //Bug 2379135
+		(tw.isListen('onDoubleClick') || tw.isListen('onClick')
+		|| tw.getContext() || target.onclick)))
 			return;
 
 		var	row = evt.target,
