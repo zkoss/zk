@@ -596,11 +596,16 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 					addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
 				}
 			}
+			final Tree tree = getTree();
 			if (_open) {
-				final Tree tree = getTree();
+				
 				if (tree != null && tree.getModel() != null)
 					tree.renderItem(Treeitem.this);
 			}
+
+			// Bug #2838782
+			if (tree != null && tree.inPagingMold())
+				tree.focus();
 		}
 	}
 }

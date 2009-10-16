@@ -78,6 +78,7 @@ October, 2009
   2815049: Stop at loading if popup window embeds an applet (IE6)
   2851102: Closing error message box closes popup Window as well
   2825976: German Mapping of MCommon.FILE_OPENING incorrect 
+  2838782: when paging is on treerow lose focus when use arrow to open
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
