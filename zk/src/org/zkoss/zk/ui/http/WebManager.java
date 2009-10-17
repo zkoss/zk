@@ -174,6 +174,7 @@ public class WebManager {
 		}
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
+		_cwr.setEncodeURLPrefix(getURLPrefix());
 		_cwr.setDebugJS(config.isDebugJS());
 
 		//Register resource processors for each extension
@@ -204,6 +205,12 @@ public class WebManager {
 				}
 			}
 		}
+	}
+	/** Returns the prefix of URL to represent this build. */
+	private String getURLPrefix() {
+		final String build = _wapp.getBuild();
+		return _wapp.getSubversion(0) + 
+			(build.length() > 3 ? build.substring(build.length() - 3): build);
 	}
 
 	public void destroy() {

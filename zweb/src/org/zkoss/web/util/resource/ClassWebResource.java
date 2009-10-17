@@ -78,6 +78,7 @@ public class ClassWebResource {
 	private static final Log log = Log.lookup(ClassWebResource.class);
 
 	private final ServletContext _ctx;
+	/** maping URI including PATH_PREFIX. */
 	private final String _mappingURI;
 	private final CWC _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
@@ -88,11 +89,15 @@ public class ClassWebResource {
 	private final Map _reqfilters = new HashMap(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
 	private final Map _incfilters = new HashMap(2);
+	/** The prefix used to encode URL. */
+	private String _encURLPrefix;
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
+	/** The prefix of ZK version used to prevent browser cache. */
+	private static final String ZVER = "/_zv";
 
 	/** Indicates that the filter is applicable if the request comes
 	 * directly from the client.
@@ -149,7 +154,7 @@ public class ClassWebResource {
 			throw new IllegalArgumentException("null ctx");
 
 		_ctx = ctx;
-		_mappingURI = mappingURI;
+		_mappingURI = mappingURI + PATH_PREFIX;
 		_cwc = new CWC();
 
 		addExtendlet("dsp", new DspExtendlet());
@@ -443,11 +448,14 @@ public class ClassWebResource {
 		//How it work: client engine prefix URI with /_zv123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
-		final String ZVER = "/_zv";
 		if (pi.startsWith(ZVER)) {
 			final int j = pi.indexOf('/', ZVER.length());
 			if (j >= 0) pi = pi.substring(j);
 			else log.warning("Unknown path info: "+pi);
+		} else if (_encURLPrefix != null && pi.startsWith(_encURLPrefix)) {
+			final int len1 = pi.length(), len2 = _encURLPrefix.length();
+			if (len1 > len2 && pi.charAt(len2) == '/')
+				pi = pi.substring(len2);
 		}
 
 		//Notify the browser by calling back the code specified with /_zcb
@@ -611,6 +619,34 @@ public class ClassWebResource {
 			&& !Servlets.isIncluded(request);
 	}
 
+	/** Sets the prefix used to encoding the URL.
+	 * The prefix will be encoded when {@link ExtendletContext#encodeURL}
+	 * is called. The prefix is usually the build number, such that browser
+	 * won't use the wrong cached version
+	 *
+	 * <p>Default: null (no special encoding).
+	 *
+	 * @param prefix the prefix used to encode URL for the extendlet.
+	 * If prefix is not empty and doesn't start with '/', it will
+	 * be prefixed with '/'.
+	 * @since 3.6.3
+	 */
+	public void setEncodeURLPrefix(String prefix) {
+		if (prefix == null || prefix.length() == 0)
+			prefix = null;
+		else if (prefix.charAt(0) != '/')
+			prefix = '/' + prefix;
+		_encURLPrefix = prefix;
+	}
+	/** Returns the prefix used to encoding the URL, or null if no prefix.
+	 * If an non-null prefix is returned, it must start with '/'.
+	 * @see ExtendletContext#encodeURL
+	 * @since 3.6.3
+	 */
+	public String getEncodeURLPrefix() {
+		return _encURLPrefix;
+	}
+
 	/**
 	 * An implementation of ExtendletContext to load resources from
 	 * the class path rooted at /web.
@@ -648,7 +684,8 @@ public class ClassWebResource {
 		ServletResponse response, String uri)
 		throws ServletException, UnsupportedEncodingException {
 			uri = Servlets.locate(_ctx, request, uri, getLocator()); //resolves "*"
-			uri = _mappingURI + PATH_PREFIX + uri; //prefix with mapping
+			uri = (_encURLPrefix != null ? _mappingURI + _encURLPrefix: _mappingURI)
+				+ uri; //prefix with mapping
 
 			//prefix context path
 			if (request instanceof HttpServletRequest) {
@@ -679,11 +716,11 @@ public class ClassWebResource {
 		public String encodeRedirectURL(HttpServletRequest request,
 		HttpServletResponse response, String uri, Map params, int mode) {
 			return Https.encodeRedirectURL(_ctx, request, response,
-				_mappingURI + PATH_PREFIX + uri, params, mode);
+				_mappingURI + uri, params, mode);
 		}
 		public RequestDispatcher getRequestDispatcher(String uri) {
 //			if (D.ON && log.debugable()) log.debug("getRequestDispatcher: "+uri);
-			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
+			return _ctx.getRequestDispatcher(_mappingURI + uri);
 		}
 		public void include(HttpServletRequest request,
 		HttpServletResponse response, String uri, Map params)
