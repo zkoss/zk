@@ -106,6 +106,10 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				+ ' code="' + (this._code || '') + '"'
 				+ ' codebase="' + (this._codebase || '') + '"';
 	},
+	domStyle_: function (no) {
+		return this.$supers('domStyle_', arguments)
+			+ "visibility:visible;"; //bug 2815049
+	},
 
 	_outParamHtml: function (out) {
 		var params = this._params;

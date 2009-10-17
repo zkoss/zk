@@ -30,6 +30,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
+import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Document;
 
@@ -86,21 +87,27 @@ public class SAXBuilder {
 		SAXParserFactory fty = SAXParserFactory.newInstance();
 
 		// SAX2 namespace-prefixes should be true for either builder
-        fty.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-        
+		setSafeFeature(fty, "http://xml.org/sax/features/namespace-prefixes", true);
+
 		// Set SAX2 namespaces feature appropriately
-        fty.setFeature("http://xml.org/sax/features/namespaces", nsaware);
+		setSafeFeature(fty, "http://xml.org/sax/features/namespaces", nsaware);
 		fty.setNamespaceAware(nsaware);
 
-		fty.setFeature("http://xml.org/sax/features/validation", validate);
-		try {
-			fty.setFeature("http://apache.org/xml/features/validation/schema", validate);
-		} catch (org.xml.sax.SAXNotRecognizedException ex) {
-			//IGNORE IT (crisom doesn't support it)
-		}
+		setSafeFeature(fty, "http://xml.org/sax/features/validation", validate);
+		setSafeFeature(fty, "http://apache.org/xml/features/validation/schema", validate);
 		fty.setValidating(validate);
 
 		_parser = fty.newSAXParser();
+	}
+	private static
+	void setSafeFeature(SAXParserFactory fty, String feature, boolean value) {
+		try {
+			fty.setFeature(feature, value);
+		} catch (Throwable ex) {
+			//IGNORE IT (crimson doesn't support ...validation/schema)
+			if (feature.startsWith("http://xml.org"))
+				log.warning("Ignored: "+fty+" doesn't support "+feature+". Cause: "+Exceptions.getMessage(ex));
+		}
 	}
 	/**
 	 * Constructor that creates the parser on-the-fly, that accepts
@@ -352,27 +359,36 @@ public class SAXBuilder {
 		handler.setEntityResolver(_resolver);
 
 		//configure parser
-        try { //The standard property
-			_parser.setProperty(
-				"http://xml.org/sax/properties/lexical-handler", handler);
-        }catch(Exception ex) {
-			try { //some use this property
-	            _parser.setProperty(
-	            	"http://xml.org/sax/handlers/LexicalHandler", handler);
-			}catch(Exception ex2) {
-				log.warning("lexical-handler not supported");
-			}
-		}
+		setSafeProperty(
+			"http://xml.org/sax/properties/lexical-handler",
+			"http://xml.org/sax/handlers/LexicalHandler",
+			handler);
 
 		if (!isExpandEntityReferences()) { //not expanding?
-			try { //then, we need DeclHandler
-				_parser.setProperty(
-					"http://xml.org/sax/properties/declaration-handler", handler);
-			}catch(Exception ex) {
-				log.warning("declaration-handler not supported");
+			//then, we need declaration-handler
+			setSafeProperty(
+				"http://xml.org/sax/properties/declaration-handler", null,
+				handler);
+		}
+		return handler;
+	}
+	private void setSafeProperty(String name, String auxnm, Object value) {
+		Throwable ex;
+		try {
+			_parser.setProperty(name, value);
+			return;
+		} catch (Throwable t) {
+			ex = t;
+		}
+		if (auxnm != null) {
+			try {
+				_parser.setProperty(auxnm, value);
+				return;
+			} catch (Throwable t) {
 			}
 		}
 
-		return handler;
+		if (name.startsWith("http://xml.org"))
+			log.warning("Ignored: "+_parser+" doesn't support "+name+". Cause: "+Exceptions.getMessage(ex));
 	}
 }

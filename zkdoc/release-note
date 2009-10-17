@@ -154,6 +154,7 @@ October, 2009
   2857412: Feedback on server push error
   2878584: A plugin to customize the encoding of filename
   2879604: A way to reload client-side messages with different locale
+  2880351: Encode ZK version to JS/CSS/image to prevent browser cache
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -212,6 +213,12 @@ October, 2009
   2859331: zk.formatDate traduction error french
   2874098: Databinder accidently clear the error box in loadOnSave
   2873219: Locale Dependent URI Problem
+  2868670: cancel upload causes js error in IE6/IE7 
+  2815049: Stop at loading if popup window embeds an applet (IE6)
+  2851102: Closing error message box closes popup Window as well
+  2825976: German Mapping of MCommon.FILE_OPENING incorrect 
+  2838782: when paging is on treerow lose focus when use arrow to open
+  2841185: Firefox: Grid disapears in borderlayout
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
