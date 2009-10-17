@@ -598,7 +598,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 			}
 			final Tree tree = getTree();
 			if (_open) {
-				
 				if (tree != null && tree.getModel() != null)
 					tree.renderItem(Treeitem.this);
 			}
