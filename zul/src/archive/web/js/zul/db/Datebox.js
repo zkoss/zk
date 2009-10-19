@@ -378,7 +378,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('unbind_', arguments);
 	},
 	_setView: function (val) {
-		this.parent._tm.setVisible(val == 'day');
+		if (this.parent.getTimeFormat())
+			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
 	},
 	_choiceData: function (evt) {
