@@ -290,8 +290,8 @@ zkCmbox.onkey = function (evt) {
 		return true;
 	}
 
-	if (keycode == 18 || keycode == 27 || keycode == 13
-	|| (keycode >= 112 && keycode <= 123)) //ALT, ESC, Enter, Fn
+	if (keycode == 18 || keycode == 27 || keycode == 13 || keycode == 36
+	|| keycode == 37 || (evt.shiftKey && keycode == 39)|| (keycode >= 112 && keycode <= 123)) //ALT, ESC, Enter, Fn
 		return true; //ignore it (doc will handle it)
 
 	var bCombobox = $type(cb) == "Cmbox";
@@ -346,10 +346,30 @@ zkCmbox._setsel = function (item, sel) {
 
 /** Returns the text contained in the specified item. */
 zkCmbox.getLabel = function (item) {
-	return item && item.cells && item.cells.length > 1 && item.cells[1].firstChild
-		&& item.cells[1].firstChild.data ? item.cells[1].firstChild.data : "";
+	return item ? zkCmbox.decodeXML(getZKAttr(item, 'label')) : '';
 };
+zkCmbox._decs = {lt: '<', gt: '>', amp: '&', "#034": '"', "#039": '\''};
+zkCmbox.decodeXML = function (txt) {
+	var out = "";
+	if (!txt) return out;
 
+	var k = 0, tl = txt.length;
+	for (var j = 0; j < tl; ++j) {
+		var cc = txt.charAt(j);
+		if (cc == '&') {
+			var l = txt.indexOf(';', j + 1);
+			if (l >= 0) {
+				var dec = zkCmbox._decs[txt.substring(j + 1, l)];
+				if (dec) {
+					out += txt.substring(k, j) + dec;
+					k = (j = l) + 1;
+				}
+			}
+		}
+	}
+	return !k ? txt:
+		k < tl ? out + txt.substring(k): out;
+};
 zkCmbox.open = function (pp, hilite) {
 	pp = $e(pp);
 	var uuid = $uuid(pp.id);
@@ -606,21 +626,24 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		inp.setAttribute("zk_typeAhead", inp.value);
 		if (found) {
 			var c = zkCmbox.getLabel(found);
-			var start = inp.value.length, end = c.length, strict = getZKAttr($e(uuid), "valid") || "";
-			inp.value = strict.toLowerCase().indexOf("strict") > -1 ? c :
-				inp.value + (start < end ? c.substring(start) : "") ;
-			if (inp.setSelectionRange) {
-				inp.setSelectionRange(start, end);
-				inp.focus();
-			} else if (inp.createTextRange) {
-				var range = inp.createTextRange();
-				if(start != end){
-					range.moveEnd('character', end - range.text.length);
-					range.moveStart('character', start);
-				}else{
-					range.move('character', start);
+			var start = inp.value.length, end = c.length, strict = getZKAttr($e(uuid), "valid") || "",
+				ahead = strict.toLowerCase().indexOf("strict") > -1 ? c :
+						inp.value + (start < end ? c.substring(start) : "") ;
+			if (inp.value != ahead) {
+				inp.value = ahead;
+				if (inp.setSelectionRange) {
+					inp.setSelectionRange(start, end);
+					inp.focus();
+				} else if (inp.createTextRange) {
+					var range = inp.createTextRange();
+					if (start != end) {
+						range.moveEnd('character', end - range.text.length);
+						range.moveStart('character', start);
+					} else {
+						range.move('character', start);
+					}
+					range.select();
 				}
-				range.select();
 			}
 		}
 	} else if (keycode && (keycode == 8 || keycode == 46))

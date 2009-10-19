@@ -48,7 +48,9 @@ public class ComboitemDefault implements ComponentRenderer {
 			.write("<td class=\"").write(zcls).write("-img\">").write(self.getImgTag())
 			.write("</td>\n<td class=\"").write(zcls).write("-text\">");
 
-		new Out(self.getLabel()).render(out);
+		Out o = new Out(self.getLabel());
+		o.setPre(true);
+		o.render(out);
 
 		String s = self.getDescription();
 		if (!Strings.isBlank(s)) {

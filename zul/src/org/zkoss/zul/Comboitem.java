@@ -18,11 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
-
 import org.zkoss.lang.Objects;
 
 import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -213,12 +212,11 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 	
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (isDisabled()) {
-			final StringBuffer sb = new StringBuffer(60).append(attrs);
+		final StringBuffer sb = new StringBuffer(60).append(super.getOuterAttrs());
+		HTMLs.appendAttribute(sb, "z.label", XMLs.escapeXML(getLabel()));
+			
+		if (isDisabled())
 			HTMLs.appendAttribute(sb, "z.disd", true);
-			return sb.toString();
-		}
-		return attrs;
+		return sb.toString();
 	}
 }

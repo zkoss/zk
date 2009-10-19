@@ -40,6 +40,7 @@ public class Out {
 	private int _maxlength;
 	private boolean _escapeXML = true;
 	private boolean _nbsp;
+	private boolean _pre;
 
 	public Out(String value) {
 		_value = value;
@@ -103,6 +104,24 @@ public class Out {
 		return this;
 	}
 
+	/**
+	 * Sets whether to preserve the white spaces, such as space.
+	 * @since 3.6.3.
+	 */
+	public void setPre(boolean pre) {
+		_pre = pre;
+	}
+
+	/**
+	 * Returns whether to preserve the white spaces, such as space.
+	 * <p> Default: false;
+	 * 
+	 * @since 3.6.3.
+	 */
+	public boolean isPre() {
+		return _pre;
+	}
+	
 	/** Generates the output to the specified writer.
 	 */
 	public void render(Writer out) throws IOException {
@@ -126,8 +145,13 @@ public class Out {
 			len = value.length();
 			for (int j = 0; j < len; ++j) {
 				final char cc = value.charAt(j);
-				final String replace = _escapeXML ? XMLs.escapeXML(cc)
-						: null;
+				final String replace;
+				
+				if (_pre && cc == ' ')
+					replace = "&nbsp;";
+				else
+					replace = XMLs.escapeXML(cc);
+
 
 				if (replace != null) {
 					if (sb == null) {

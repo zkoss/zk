@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2848692.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 11:13:52     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1.Please select the first item from the combobox, and then click the OK button.
+<separator/>
+2.You should see the result is "CMB selected = 0"
+<combobox id="cmb">
+<comboitem label="Valor1  "/>
+</combobox>
+<button id="ok" label="OK" onClick='alert("CMB selected = "
++ cmb.getSelectedIndex())'/>
+</zk>
