@@ -22,6 +22,8 @@
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-textbox-focus, .z-textbox-focus input,
 .z-decimalbox-focus, .z-decimalbox-focus input,
@@ -54,7 +56,7 @@
 .z-longbox-inplace,
 .z-doublebox-inplace {
 	border: 0;
-	padding: 2px 1px;
+	padding: 3px 1px;
 	background: none;
 }
 <c:if test="${c:isOpera()}">
@@ -63,7 +65,7 @@
 .z-intbox-inplace,
 .z-longbox-inplace,
 .z-doublebox-inplace {
-	padding: 2px;
+	padding: 3px 2px;
 }
 </c:if>
 <c:if test="${c:isExplorer()}">
@@ -72,7 +74,7 @@
 .z-intbox-inplace,
 .z-longbox-inplace,
 .z-doublebox-inplace {
-	padding: 2px;
+	padding: 3px 2px;
 }
 </c:if>
 <%-- error box --%>

@@ -12,6 +12,8 @@
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-combobox-focus .z-combobox-inp {
 	border: 1px solid #90BCE6;
@@ -87,6 +89,8 @@
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-bandbox-focus .z-bandbox-inp {
 	border: 1px solid #90BCE6;
@@ -139,6 +143,8 @@
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-datebox-focus .z-datebox-inp {
 	border: 1px solid #90BCE6;
@@ -230,6 +236,8 @@
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-timebox-focus .z-timebox-inp {
 	border: 1px solid #90BCE6;
@@ -272,6 +280,8 @@
 	border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 .z-spinner-focus .z-spinner-inp {
 	border: 1px solid #90BCE6;
@@ -379,7 +389,7 @@
 	background: none;
 	padding-top: 1px;
 	padding-bottom: 1px;
-} 
+}
 .z-combobox-inplace .z-combobox-inp,
 .z-bandbox-inplace .z-bandbox-inp,
 .z-datebox-inplace .z-datebox-inp,
@@ -387,6 +397,8 @@
 .z-spinner-inplace .z-spinner-inp {
 	padding-left: 1px;
 	padding-right: 1px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	border: 0;
 	background: none;
 }
@@ -396,12 +408,10 @@
 .z-datebox-inplace .z-datebox-inp,
 .z-timebox-inplace .z-timebox-inp,
 .z-spinner-inplace .z-spinner-inp {
-	padding: 0;
-	padding-left: 2px;
-	padding-right: 2px;
+	padding: 2px;
 }
 
-<c:if test="${c:isExplorer7()}">
+<c:if test="${c:browser('ie8')}">
 .z-combobox-inplace .z-combobox-inp,
 .z-bandbox-inplace .z-bandbox-inp,
 .z-datebox-inplace .z-datebox-inp,
@@ -420,9 +430,7 @@
 .z-datebox-inplace .z-datebox-inp,
 .z-timebox-inplace .z-timebox-inp,
 .z-spinner-inplace .z-spinner-inp {
-	padding: 1px;
-	padding-left: 2px;
-	padding-right: 2px;
+	padding: 2px;
 }
 </c:if>
 .z-combobox-inplace .z-combobox-btn,

@@ -109,7 +109,7 @@
 	font-size: ${fontSizeM};
 }
 .z-calendar-calday td {
-	padding: 3px;
+	padding: 3px 0;
 }
 .z-calendar-calyear .z-calendar-over,
 .z-calendar-calmon .z-calendar-over,
