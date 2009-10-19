@@ -273,9 +273,12 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 
 		render(renderer, "disabled", _disabled);
 		render(renderer, "autodisable", _autodisable);
-		render(renderer, "href", getEncodedHref());
+		final String href;
+		render(renderer, "href", href = getEncodedHref());
 		render(renderer, "target", _target);
 		render(renderer, "upload", _upload);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
 	public String getZclass() {
 		return _zclass != null ? _zclass:

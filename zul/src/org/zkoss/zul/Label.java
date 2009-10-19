@@ -18,12 +18,10 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
@@ -148,23 +146,9 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		render(renderer, "multiline", _multiline);
 		render(renderer, "pre", _pre);
+		render(renderer, "value", _value); //no need to encode
 
-		if (_value.length() > 0) {
-			boolean outed = false;
-			final HtmlPageRenders.RenderContext rc =
-				HtmlPageRenders.getRenderContext(null);
-			if (rc != null && rc.crawlable) {
-				rc.extra.write("<div id=\"");
-				rc.extra.write(getUuid());
-				rc.extra.write("\">");
-				rc.extra.write(XMLs.encodeText(_value));
-					//encode required since it might not be valid HTML
-				rc.extra.write("</div>\n");
-				outed = true;
-			}
-			if (outed) renderer.render("z_ea", "$value"); //decode required
-			else render(renderer, "value", _value); //no need to encode
-		}
+		org.zkoss.zul.impl.Utils.renderCrawlableText(_value);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-label" : _zclass;

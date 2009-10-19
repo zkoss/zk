@@ -156,8 +156,11 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 		if (!"normal".equals(_dir)) render(renderer, "dir", _dir);
 
 		render(renderer, "disabled", _disabled);
-		render(renderer, "href", getEncodedHref());
+		final String href;
+		render(renderer, "href", href = getEncodedHref());
 		render(renderer, "target", _target);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
 	
 	//Component//
@@ -175,5 +178,4 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 			return getEncodedHref();
 		}
 	}
-
 }

@@ -272,10 +272,13 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		if (_disabled) render(renderer, "disabled", _disabled);
 		if (_checked) render(renderer, "checked", _checked);
 		if (_autocheck) render(renderer, "autocheck", _autocheck);
-		if (_href != null) render(renderer, "href", getEncodedHref()); //Bug #2871082
+		String href = null;
+		if (_href != null) render(renderer, "href", href = getEncodedHref()); //Bug #2871082
 		if (_target != null) render(renderer, "target", _target);
 		render(renderer, "upload", _upload);
 		render(renderer, "value", _value);
+
+		Utils.renderCrawlableA(href, getLabel());
 	}
 
 	//-- ComponentCtrl --//

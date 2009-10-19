@@ -19,13 +19,17 @@ package org.zkoss.zul.impl;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.io.Writer;
+import java.io.IOException;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zul.mesg.MZul;
 
@@ -237,5 +241,48 @@ public class Utils {
 		sb.append('\n').append(name).append(":'");
 		Strings.escape(sb, Messages.get(mesgCode), Strings.ESCAPE_JAVASCRIPT);
 		sb.append("',");
+	}
+
+	/** Render the crawlable HTML A tag.
+	 * If crawlable is not enabled or href is empty, nothing is generated.
+	 *
+	 * @param href the hyper link. If null or empty, nothing is generated.
+	 * @param label the label to show. Empty is assumed if null.
+	 * @since 5.0.0
+	 */
+	public static void renderCrawlableA(String href, String label)
+	throws IOException {
+		if (href != null && href.length() > 0) {
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null && rc.crawlable) {
+				final Writer out = rc.extra;
+				out.write("<a href=\"");
+				out.write(href);
+				out.write("\">");
+				out.write(label != null ? label: "");
+				out.write("</a>\n");
+			}
+		}
+	}
+	/** Render the crawlable text.
+	 * If crawlable is not enabled or the text is empty, nothing is generated.
+	 * @param text the text that is crawlable.
+	 * If null or empty, nothing is generated.
+	 * @since 5.0.0
+	 */
+	public static void renderCrawlableText(String text)
+	throws IOException {
+		if (text != null && text.length() > 0) {
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null && rc.crawlable) {
+				final Writer out = rc.extra;
+				out.write("<div>");
+				out.write(XMLs.encodeText(text));
+					//encode required since it might not be valid HTML
+				out.write("</div>\n");
+			}
+		}
 	}
 }
