@@ -151,6 +151,35 @@ zk.encodeXML = function (txt, multiline) {
 		}
 	return out
 };
+zk._decs = {lt: '<', gt: '>', amp: '&'};
+zk.decodeXML = function (txt) {
+	var out = "";
+	if (!txt) return out;
+
+	var k = 0, tl = txt.length;
+	for (var j = 0; j < tl; ++j) {
+		var cc = txt.charAt(j);
+		if (cc == '&') {
+			var l = txt.indexOf(';', j + 1);
+			if (l >= 0) {
+				try {
+					var dec = txt.charAt(j + 1) == '#' ?
+						String.fromCharCode(
+							parseInt(txt.substring(
+								txt.charAt(j + 2) == '0' ? j + 3: j + 2, l))):
+						zk._decs[txt.substring(j + 1, l)];
+					if (dec) {
+						out += txt.substring(k, j) + dec;
+						k = (j = l) + 1;
+					}
+				} catch (ex) { //ignore
+				}
+			}
+		}
+	}
+	return !k ? txt:
+		k < tl ? out + txt.substring(k): out;
+};
 
 //-- debug --//
 /** Generates a message for debugging. */

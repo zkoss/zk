@@ -346,29 +346,7 @@ zkCmbox._setsel = function (item, sel) {
 
 /** Returns the text contained in the specified item. */
 zkCmbox.getLabel = function (item) {
-	return item ? zkCmbox.decodeXML(getZKAttr(item, 'label')) : '';
-};
-zkCmbox._decs = {lt: '<', gt: '>', amp: '&', "#034": '"', "#039": '\''};
-zkCmbox.decodeXML = function (txt) {
-	var out = "";
-	if (!txt) return out;
-
-	var k = 0, tl = txt.length;
-	for (var j = 0; j < tl; ++j) {
-		var cc = txt.charAt(j);
-		if (cc == '&') {
-			var l = txt.indexOf(';', j + 1);
-			if (l >= 0) {
-				var dec = zkCmbox._decs[txt.substring(j + 1, l)];
-				if (dec) {
-					out += txt.substring(k, j) + dec;
-					k = (j = l) + 1;
-				}
-			}
-		}
-	}
-	return !k ? txt:
-		k < tl ? out + txt.substring(k): out;
+	return item ? zk.decodeXML(getZKAttr(item, 'label')) : '';
 };
 zkCmbox.open = function (pp, hilite) {
 	pp = $e(pp);
