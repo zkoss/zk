@@ -85,14 +85,14 @@ public class SimpleListModelSharer implements ListModelSharer{
 		
 		_srcListener = new ListDataListener(){
 			public void onChange(ListDataEvent event) {
-				onListDataChnage(event);
+				onListDataChange(event);
 			}
 		};
 		
 		_srcModel.addListDataListener(_srcListener);
 	}
 	
-	private void onListDataChnage(ListDataEvent event){
+	private void onListDataChange(ListDataEvent event){
 		
 		int type = event.getType();
 		ListModel model = event.getModel();
@@ -102,35 +102,41 @@ public class SimpleListModelSharer implements ListModelSharer{
 		
 		int min = (index0>index1)?index1:index0;
 		int max = (index0>index1)?index0:index1;
-		int start,end;
+		int start,end, size = _srcModel.getSize();
 		switch(type){
 		case ListDataEvent.CONTENTS_CHANGED:
 			start=(min<0)?0:min;
-			end=(max<0)?_srcModel.getSize():max;
+			end=(max<0)?size:max;
 			//TODO a smart way for special range
-			for(int i=start;i<=end;i++){
-				Object obj = _srcModel.getElementAt(i);
-				_innerData.set(i,obj);
-				putToQueue(OP_SET,new Object[]{new Integer(i),obj});
+			if (end < size) {
+				for(int i=start;i<=end;i++){
+					Object obj = _srcModel.getElementAt(i);
+					_innerData.set(i,obj);
+					putToQueue(OP_SET,new Object[]{new Integer(i),obj});
+				}
 			}
 			break;
 		case ListDataEvent.INTERVAL_ADDED:
 			start=(min<0)?0:min;
-			end=(max<0)?_srcModel.getSize():max;
-			//TODO a smart way for special range,e.g., 0 to n 
-			for(int i=start;i<=end;i++){
-				Object obj = _srcModel.getElementAt(i);
-				_innerData.add(i,obj);
-				putToQueue(OP_ADD,new Object[]{new Integer(i),obj});
+			end=(max<0)?size:max;
+			//TODO a smart way for special range,e.g., 0 to n
+			if (end < size) {
+				for(int i=start;i<=end;i++){
+					Object obj = _srcModel.getElementAt(i);
+					_innerData.add(i,obj);
+					putToQueue(OP_ADD,new Object[]{new Integer(i),obj});
+				}
 			}
 			break;
 		case ListDataEvent.INTERVAL_REMOVED:
 			start=(min<0)?0:min;
-			end=(max<0)?_srcModel.getSize():max;
+			end=(max<0)?size:max;
 			//TODO a smart way for special range,e.g., 0 to size
-			for(int i=end;i>=start;i--){
-				_innerData.remove(i);
-				putToQueue(OP_REMOVE,new Object[]{new Integer(i)});
+			if (end < size) {
+				for(int i=end;i>=start;i--){
+					_innerData.remove(i);
+					putToQueue(OP_REMOVE,new Object[]{new Integer(i)});
+				}
 			}
 			break;
 		default :
