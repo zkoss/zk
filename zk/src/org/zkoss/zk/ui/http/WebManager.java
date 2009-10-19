@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
@@ -182,7 +181,7 @@ public class WebManager {
 		}
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
-		_cwr.setEncodeURLPrefix(getURLPrefix());
+		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
 		_cwr.setDebugJS(config.isDebugJS());
 		_cwr.addExtendlet("wpd", new WpdExtendlet());
 		_cwr.addExtendlet("wcs", new WcsExtendlet());
@@ -217,10 +216,16 @@ public class WebManager {
 		}
 	}
 	/** Returns the prefix of URL to represent this build. */
-	private String getURLPrefix() {
-		final String build = _wapp.getBuild();
-		return _wapp.getSubversion(0) + 
-			(build.length() > 3 ? build.substring(build.length() - 3): build);
+	private String getCWRURLPrefix() {
+		int val = (_wapp.getSubversion(0) << 12)
+			  + (_wapp.getSubversion(1) << 6)
+			  + _wapp.getSubversion(2);
+		try {
+			val ^= Integer.parseInt(_wapp.getBuild());
+		} catch (Throwable ex) { //ignore it
+		}
+		if (val < 0) val = -val;
+		return Integer.toString(val % 1000);
 	}
 
 	public void destroy() {
@@ -367,7 +372,7 @@ public class WebManager {
 	ServletResponse response, String path, boolean autocreate) {
 		Desktop desktop = (Desktop)request.getAttribute(ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
-			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
+			if (log.debugable()) log.debug("Create desktop for "+path);
 			request.setAttribute(ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, response, path));
 		}
@@ -401,10 +406,6 @@ public class WebManager {
 	 */
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
-		/*if (D.ON) {
-			final Desktop dt = (Desktop)request.getAttribute(ATTR_DESKTOP);
-			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
-		}*/
 		request.setAttribute(ATTR_DESKTOP, desktop);
 	}
 	/** Creates a page.
