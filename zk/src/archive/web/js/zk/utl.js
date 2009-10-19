@@ -133,7 +133,11 @@ zUtl = { //static methods
 			if (cc == '&') {
 				var l = txt.indexOf(';', j + 1);
 				if (l >= 0) {
-					var dec = _decs[txt.substring(j + 1, l)];
+					var dec = txt.charAt(j + 1) == '#' ?
+						String.fromCharCode(
+							parseInt(txt.substring(
+								txt.charAt(j + 2) == '0' ? j + 3: j + 2, l))):
+						_decs[txt.substring(j + 1, l)];
 					if (dec) {
 						out += txt.substring(k, j) + dec;
 						k = (j = l) + 1;
