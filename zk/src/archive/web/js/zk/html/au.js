@@ -290,7 +290,7 @@ zkau._onRespReady = function () {
 				zkau._errcode = req.status;
 				var eru = zk.eru[''+req.status];
 				if (typeof eru == "string") {
-					zk.go(eru);
+					zk.go(eru, false, null, true); //reload
 				} else {
 				//handle MSIE's buggy HTTP status codes
 				//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
