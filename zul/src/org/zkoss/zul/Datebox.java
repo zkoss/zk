@@ -18,27 +18,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.GregorianCalendar;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TimeZone;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.xml.HTMLs;
-
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.out.AuInvoke;
-
-import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.client.Updatable;
+import org.zkoss.zul.au.in.TimeZoneCommand;
 import org.zkoss.zul.impl.FormatInputElement;
-import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding a date.
@@ -52,8 +50,12 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Datebox {
+	static {
+		new TimeZoneCommand("onTimeZoneChange", Command.IGNORE_OLD_EQUIV);
+	}
 	private TimeZone _tzone;
-	private boolean _compact, _btnVisible = true, _lenient = true;
+	private List _dtzones;
+	private boolean _compact, _btnVisible = true, _lenient = true, _dtzonesReadOnly = false;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
@@ -251,7 +253,80 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
+		if (_tzone != tzone) {
+			if (_dtzones != null) {
+				_tzone = _dtzones.contains(tzone) ? tzone : (TimeZone) _dtzones.get(0);
+			} else {
+				_tzone = tzone;
+			}
+			invalidate();
+		}
+	}
+	/** Sets the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 */
+	public void setTimeZone(String id) {
+		TimeZone tzone = TimeZone.getTimeZone(id);
+		setTimeZone(tzone);
+	}
+	
+	/**
+	 * Returns the displayed TimeZone list
+	 * <p>Default: null
+	 * @since 3.6.3
+	 */
+	public List getDisplayedTimeZones() {
+		return _dtzones;
+	}
+	
+	/**
+	 * Sets the displayed TimeZone list
+	 * @since 3.6.3
+	 */
+	public void setDisplayedTimeZones(List dtzones) {
+		if (_dtzones != dtzones) {
+			_dtzones = dtzones;
+			if (_tzone == null && _dtzones != null && _dtzones.get(0) != null)
+				_tzone = (TimeZone)_dtzones.get(0);
+			invalidate();
+		}
+	}
+	/**
+	 * Sets the displayed TimeZone list
+	 * @since 3.6.3
+	 */
+	public void setDisplayedTimeZones(String dtzones) {
+		if (dtzones == null || dtzones.length() == 0) {
+			setDisplayedTimeZones((List)null);
+			return;
+		}
+		
+		LinkedList list = new LinkedList();
+		String[] ids = dtzones.split(",");
+		for (int i = 0; i < ids.length; i++) {
+			TimeZone tzone = TimeZone.getTimeZone(ids[i].trim());
+			if (tzone != null)
+				list.add(tzone);
+		}
+		setDisplayedTimeZones(list);
+	}
+	/**
+	 * Returns whether the displayed TimeZone list is read only
+	 * @since 3.6.3
+	 */
+	public boolean isTimeZonesReadOnly() {
+		return _dtzonesReadOnly;
+	}
+	/**
+	 * Sets whether to enable displayed TimeZone list read only
+	 * @since 3.6.3
+	 */
+	public void setTimeZonesReadOnly(boolean readonly) {
+		if (readonly != _dtzonesReadOnly) {
+			_dtzonesReadOnly = readonly;
+			smartUpdate("z.dtzonesReadOnly", _dtzonesReadOnly);
+		}
 	}
 
 	/** Drops down or closes the calendar to select a date.
@@ -326,6 +401,9 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
+
+		if (getDisplayedTimeZones() != null) 
+			HTMLs.appendAttribute(sb, "z.onTimeZoneChange", true);
 		if (getConstraint() instanceof SimpleDateConstraint) {
 			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
 			Date d = st.getBeginDate();
@@ -337,6 +415,20 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		}
 		if (!_lenient) sb.append(" z.lenient=\"false\"");
 		if (_compact) sb.append(" z.compact=\"true\"");
+		if (_dtzones != null) {
+			sb.append(" z.dtzones=\"");
+			for (int i = 0; i < _dtzones.size(); i++) {
+				if(i != 0) sb.append(",");
+				TimeZone tz = (TimeZone)_dtzones.get(i);
+				sb.append(tz.getID());
+			}
+			sb.append("\"");
+		}
+		if (getTimeZone() != null) {
+			HTMLs.appendAttribute(sb, "z.dtimezone", getTimeZone().getID());
+		}
+		HTMLs.appendAttribute(sb, "z.dtzonesReadOnly", _dtzonesReadOnly);
+	
 		return sb.toString();
 	}
 	public String getInnerAttrs() {
@@ -364,5 +456,23 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	 */
 	protected boolean shallServerFormat() {
 		return false;
+	}
+	
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends InputElement.ExtraCtrl
+	implements Updatable{
+
+		public void setResult(Object result) {
+			String id = (String)result;
+			
+			TimeZone tzone = TimeZone.getTimeZone(id);
+			setTimeZone(tzone);
+		}
 	}
 }

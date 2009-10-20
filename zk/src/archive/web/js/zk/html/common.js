@@ -2062,7 +2062,14 @@ zk.parseDate = function (txt, fmt, strict) {
 		m = val.getMonth(),
 		d = val.getDate(),
 		hr = val.getHours(),
-		min = val.getMinutes();
+		min = val.getMinutes(),
+		sec = val.getSeconds(),
+		aa = fmt.indexOf('a'),
+		hh = fmt.indexOf('h'),
+		KK = fmt.indexOf('K'),
+		hasAM = aa > -1,
+		hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
+		isAM;
 
 	var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
 	for (var i = 0, j = txt.length; i < j; i++) {
@@ -2163,9 +2170,8 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (isNaN(d)) return null; //failed
 				break;
 			case 'H':
-			case 'h':
-			case 'K':
-			case 'k':
+				if (hasHour1)
+					break;
 				if (nosep) {
 					if (len < 2) len = 2;
 					if (token.length > len) {
@@ -2175,7 +2181,51 @@ zk.parseDate = function (txt, fmt, strict) {
 				}
 				hr = $int(token);
 				if (isNaN(hr)) return null; //failed
+				break;				
+			case 'h':
+				if (!hasHour1)
+					break;
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token.length > len) {
+						ts[--i] = token.substring(len);
+						token = token.substring(0, len);
+					}
+				}
+				hr = $int(token);
+				if (hr == 12)
+					hr = 0;
+				if (isNaN(hr)) return null; //failed
 				break;
+			case 'K':
+				if (!hasHour1)
+					break;
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token.length > len) {
+						ts[--i] = token.substring(len);
+						token = token.substring(0, len);
+					}
+				}
+				hr = $int(token);
+				if (isNaN(hr)) return null; //failed
+				hr %= 12;
+				break;				
+			case 'k':
+				if (hasHour1)
+					break;
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token.length > len) {
+						ts[--i] = token.substring(len);
+						token = token.substring(0, len);
+					}
+				}
+				hr = $int(token);
+				if (hr == 24)
+					hr = 0;
+				if (isNaN(hr)) return null; //failed
+				break;	
 			case 'm':
 				if (nosep) {
 					if (len < 2) len = 2;
@@ -2187,19 +2237,33 @@ zk.parseDate = function (txt, fmt, strict) {
 				min = $int(token);
 				if (isNaN(min)) return null; //failed
 				break;
-			case 'a':
-				var apm = txt.substring(j);
-				if(apm.startsWith(zk.APM[1])){
-					hr+=12;
+			case 's':
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token && token.length > len) {
+						ts[i] = token.substring(len);
+						token = token.substring(0, len);
+					}					
 				}
-				break
+				sec = $int(token);
+				if (isNaN(sec)) return null; //failed
+				break;
+			case 'a':
+				if (!hasHour1)
+					break;
+				if (token)
+					isAM = token.startsWith(zk.APM[0]);
+				break;
 			//default: ignored
 			}
 			j = k - 1;
 		}
 	}
-
-	var dt = new Date(y, m, d, hr, min);
+	
+	if (hasHour1 && isAM === false) {
+		hr += 12;
+	}
+	var dt = new Date(y, m, d, hr, min, sec);
 	if (strict) {
 		if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
 			dt.getHours() != hr || dt.getMinutes() != min)
@@ -2291,11 +2355,14 @@ zk.formatDate = function (val, fmt) {
 			case 'm':
 				if (len <= 2) txt += zk.formatFixed(val.getMinutes(), len);
 				break;
+			case 's':
+				if (len <= 2) txt += zk.formatFixed(val.getSeconds(), len);
+				break;
 			case 'Z':
 				txt += -(val.getTimezoneOffset()/60);
 				break;
 			case 'a':
-				txt += val.getHours() > 11 ? "PM" : "AM";
+				txt += val.getHours() > 11 ? zk.APM[1] : zk.APM[0];
 				break;
 			default:
 				txt += '1';

@@ -209,7 +209,38 @@
 .z-datebox-time-down.z-datebox-time-over {
 	border-color: #BFBFBF white white;
 }
-
+.z-datebox-timebox {
+	display:-moz-inline-box;
+	display:inline-block;
+}
+.z-datebox-timebox .z-datebox-timebox-img {
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
+	border-bottom: 1px solid #86A4BE;
+	overflow: hidden;
+	display:-moz-inline-box; display:inline-block;
+}
+.z-datebox-timebox-inp {
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
+	border: 1px solid #86A4BE;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+}
+.z-datebox-timebox-btn-over .z-datebox-timebox-img {
+	background-position: -17px 0;
+}
+.z-datebox-timebox-focus .z-datebox-timebox-img {
+	background-position: -51px 0;
+	border-bottom: 1px solid #80B9E9;
+}
+.z-datebox-timebox-focus .z-datebox-timebox-btn-over .z-datebox-timebox-img {
+	background-position: -68px 0;
+}
+.z-datebox-timebox-focus .z-datebox-timebox-btn-clk .z-datebox-timebox-img, .z-datebox-timebox-btn-clk .z-datebox-timebox-img {
+	background-position: -34px 0;
+}
 <%-- Timebox --%>
 .z-timebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;

@@ -21,6 +21,7 @@ October, 2009
   2882099: A way to set the preferred timezone for whole application
   2882090: Cache all of ZK static resources in Browser
   2882221: Long word in Messagebox can be broken correctly
+  2882272: Datebox support set timezone list
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
