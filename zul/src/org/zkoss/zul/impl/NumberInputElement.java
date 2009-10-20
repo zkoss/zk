@@ -90,6 +90,15 @@ abstract public class NumberInputElement extends FormatInputElement {
 		return _rounding;
 	}
 	
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_rounding != BigDecimal.ROUND_HALF_EVEN)
+			renderer.render("_rounding", _rounding);
+	}
+	
 	//utilities//
 	/** Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.

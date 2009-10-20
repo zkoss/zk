@@ -142,18 +142,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	to be complaint with Java Servlet specification. It is recommended to
 	disable if you intend to integrate Spring web flow and other sophisticated
 	frameworks.
-	-->
 	<system-config>
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
+	-->
 	
 	<!-- Turn on the following if you want to use ZK with a clustering server
 		or cloud environment (such as Google App Engine)
+	-->
 	<system-config>
 		<disable-event-thread/>
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
-	-->
+	
 	<!-- Disable the serialization of BeanShell methods
 		Default: enable
 		Disable it if Google App Engine is used since it cannot serialize

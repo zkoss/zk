@@ -25,7 +25,8 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format;
-		return value != null ? fmt ? zNumFormat.format(fmt, value.$toString()) : value.$toLocaleString() : '';
+		return value != null ? typeof value == 'string' ? value : 
+			fmt ? zNumFormat.format(fmt, value.$toString(), this._rounding) : value.$toLocaleString() : '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

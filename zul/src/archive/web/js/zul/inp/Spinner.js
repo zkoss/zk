@@ -62,7 +62,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format;
-		return fmt ? zNumFormat.format(fmt, value): value != null ? ''+value: '';
+		return fmt ? zNumFormat.format(fmt, value, this._rounding): value != null ? ''+value: '';
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();

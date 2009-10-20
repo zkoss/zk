@@ -32,7 +32,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (value) {
 		var fmt = this._format;
-		return fmt ? zNumFormat.format(fmt, value): value != null  ? ''+value: '';
+		return fmt ? zNumFormat.format(fmt, value, this._rounding): value != null  ? ''+value: '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
