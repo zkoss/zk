@@ -19,6 +19,7 @@ October, 2009
   2880351: Encode ZK version to JS/CSS/image to prevent browser cache
   2882081: A way to set the preferred locale for the whole application
   2882099: A way to set the preferred timezone for whole application
+  2882090: Cache all of ZK static resources in Browser
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
