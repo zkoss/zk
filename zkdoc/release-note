@@ -85,6 +85,7 @@ October, 2009
   2841185: Firefox: Grid disapears in borderlayout
   2848692: combobox getSelectedIndex bad return value with IExplorer
   2856762: SimpleListModelSharer sorting fails
+  2882149: Execution.sendRedirect to the same URL doesn't reload
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

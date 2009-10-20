@@ -1805,15 +1805,12 @@ zk.scrollIntoView = function (outer, inner, info) {
  * @param target the target frame (ignored if overwrite is true
  */
 zk.go = function (url, overwrite, target) {
-	if (!url) {
-		location.reload();
-	} else if (overwrite) {
-		location.replace(url);
-	} else if (target) {
+	if (target) {
 		//we have to process query string because browser won't do it
 		//even if we use insertHTMLBeforeEnd("<form...")
 		var frm = document.createElement("FORM");
 		document.body.appendChild(frm);
+		if (!url) url = location.href;
 		var j = url.indexOf('?');
 		if (j > 0) {
 			var qs = url.substring(j + 1);
@@ -1827,10 +1824,32 @@ zk.go = function (url, overwrite, target) {
 		if (url && !zk.isNewWindow(url, target))
 			zk.progress();
 		frm.submit();
-	} else {
-		location.href = url;
+	} else if (overwrite) {
+		location.replace(url ? url: location.href);
+	} else  {
+		if (url) {
+			location.href = url;
+
+			var j = url.indexOf('#'),
+				un = j >= 0 ? url.substring(0, j): url,
+				pn = zk.pathname(location.href);
+			j = pn.indexOf('#');
+			if (j >= 0) pn = pn.substring(0, j);
+			if (pn != un)
+				return;
+			//fall thru (bug 2882149)
+		}
+		location.reload();
 	}
 };
+zk.pathname = function (url) {
+	var j = url.indexOf("//");
+	if (j > 0) {
+		j = url.indexOf("/", j + 2);
+		if (j > 0) return url.substring(j);
+	}
+};
+
 /** Tests whether a new window will be opened.
  * More precisely, whether the current document won't be changed.
  */

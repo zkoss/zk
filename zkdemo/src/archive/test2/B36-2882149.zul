@@ -1,0 +1,14 @@
+<window title="test" border="normal">
+Each time you click the sendRedirect button, the number below shall be increased
+by one
+<button label="sendRedirect" onClick='execution.sendRedirect("/test2/B36-2882149.zul#abc")'/>
+<separator/>
+<label id="i"/>
+<zscript>
+Integer v = session.getAttribute("srcnt");
+if (v == null)
+	v = new Integer(0);
+i.value = "cnt: " + v.intValue();
+session.setAttribute("srcnt", new Integer(v.intValue() + 1));
+</zscript>
+</window>
