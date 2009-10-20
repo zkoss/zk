@@ -190,19 +190,22 @@ public class Charsets {
 			if (v != null) {
 				if (v instanceof Locale)
 					return (Locale)v;
-				log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
+				logLocaleError(v);
 			}
 
 			v = sess.getServletContext().getAttribute(Attributes.PREFERRED_LOCALE);
 			if (v != null) {
 				if (v instanceof Locale)
 					return (Locale)v;
-				log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
+				logLocaleError(v);
 			}
 		}
 
 		final Locale l = request.getLocale();
 		return l != null ? l: Locale.getDefault();
+	}
+	private static void logLocaleError(Object v) {
+		log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
 	}
 	/** Returns the preferred locale of the specified request.
 	 * It is the same as getPreferredLocale(request.getSession(false), request).
