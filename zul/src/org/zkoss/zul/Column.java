@@ -514,6 +514,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	
 	/** Returns the value.

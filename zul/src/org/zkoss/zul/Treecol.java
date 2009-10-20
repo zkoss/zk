@@ -52,8 +52,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	 * @since 3.0.4
 	 */
 	public Treecol(String label, String src, String width) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 		setWidth(width);
 	}
 
@@ -98,6 +97,13 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-treecol" : _zclass;
+	}
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 
 	//-- Component --//

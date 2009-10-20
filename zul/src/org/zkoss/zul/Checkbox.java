@@ -157,6 +157,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 		render(renderer, "name", _name);
 		if (_checked)
 			render(renderer, "checked", _checked);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.

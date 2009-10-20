@@ -258,5 +258,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			render(renderer, "selected", _selected);
 		if (_closable)
 			render(renderer, "closable", _closable);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 }

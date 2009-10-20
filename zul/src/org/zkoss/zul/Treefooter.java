@@ -116,6 +116,8 @@ public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.T
 		
 		if (_span > 1)
 			renderer.render("colspan", _span);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	
 	public String getZclass() {

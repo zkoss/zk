@@ -116,6 +116,8 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 		
 		if (_span > 1)
 			renderer.render("colspan", _span);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-listfooter" : _zclass;

@@ -469,6 +469,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	
 	//Cloneable//

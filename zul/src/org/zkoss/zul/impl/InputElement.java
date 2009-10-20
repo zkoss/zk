@@ -702,8 +702,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		render(renderer, "value", coerceToString(_value));
+
+		final String txt;		
+		render(renderer, "value", txt = coerceToString(_value));
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);
@@ -738,5 +739,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		}
 		if (!constrDone && _constr != null)
 			renderer.render("constraint", "[s");
+
+		Utils.renderCrawlableText(txt);
 	}
 }
