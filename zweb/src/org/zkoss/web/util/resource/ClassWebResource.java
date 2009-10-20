@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Date;
+import java.util.Calendar;
 import java.net.URL;
 import java.io.OutputStream;
 import java.io.InputStream;
@@ -37,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
@@ -166,6 +169,28 @@ public class ClassWebResource {
 		if (j >= 0) uri = uri.substring(0, j);
 		return uri;
 	}
+
+	/** Sets the required headers (e.g., Cache-Control) to notify the
+	 * the client is allowed to cache the content as long as possible.
+	 *
+	 * <p>This method does nothing if a library property called
+	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
+	 *
+	 * @since 3.6.3
+	 */
+	public static void setClientCacheForever(HttpServletResponse response) {
+		if (!"false".equals(Library.getProperty("org.zkoss.web.classWebResource.cache"))) {
+			response.setHeader("Cache-Control", "public, max-age=31536000"); //a year (unit: seconds)
+			response.setDateHeader("Expires", _expires);
+		}
+	}
+	private static final long _expires;
+	static {
+		final Calendar cal = Calendar.getInstance();
+		cal.add(cal.DAY_OF_YEAR, 365);
+		_expires = cal.getTime().getTime();
+	}
+
 	/** Returns the instance (singlton in the whole app) for
 	 * handling resources located in class path.
 	 */
@@ -560,6 +585,7 @@ public class ClassWebResource {
 			}
 
 			response.setContentType(ctype);
+			setClientCacheForever(response);
 		}
 
 		InputStream is = null;

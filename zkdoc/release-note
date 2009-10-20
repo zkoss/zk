@@ -155,6 +155,8 @@ October, 2009
   2878584: A plugin to customize the encoding of filename
   2879604: A way to reload client-side messages with different locale
   2880351: Encode ZK version to JS/CSS/image to prevent browser cache
+  2882081: A way to set the preferred locale for the whole application
+  2882099: A way to set the preferred timezone for whole application
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -219,6 +221,8 @@ October, 2009
   2825976: German Mapping of MCommon.FILE_OPENING incorrect 
   2838782: when paging is on treerow lose focus when use arrow to open
   2841185: Firefox: Grid disapears in borderlayout
+  2848692: combobox getSelectedIndex bad return value with IExplorer
+  2856762: SimpleListModelSharer sorting fails
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

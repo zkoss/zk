@@ -32,7 +32,8 @@ public class Out extends AbstractAction {
 	private int _maxlength;
 	private boolean _escapeXML = true;
 	private boolean _nbsp;
-
+	private boolean _pre;
+	
 	/** Returns whether to escape XML.
 	 * Default: true.
 	 */
@@ -79,6 +80,24 @@ public class Out extends AbstractAction {
 		_maxlength = maxlength;
 	}
 
+	/**
+	 * Sets whether to preserve the white spaces, such as space.
+	 * @since 3.6.3.
+	 */
+	public void setPre(boolean pre) {
+		_pre = pre;
+	}
+
+	/**
+	 * Returns whether to preserve the white spaces, such as space.
+	 * <p> Default: false;
+	 * 
+	 * @since 3.6.3.
+	 */
+	public boolean isPre() {
+		return _pre;
+	}
+	
 	//-- Action --//
 	public void render(ActionContext ac, boolean nested)
 	throws DspException, IOException {
@@ -108,7 +127,12 @@ public class Out extends AbstractAction {
 			len = value.length();
 			for (int j = 0; j < len; ++j) {
 				final char cc = value.charAt(j);
-				final String replace = _escapeXML ? XMLs.escapeXML(cc): null;
+				final String replace;
+				
+				if (_pre && cc == ' ')
+					replace = "&nbsp;";
+				else
+					replace = XMLs.escapeXML(cc);
 
 				if (replace != null) {
 					if (sb == null) {

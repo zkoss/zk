@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
@@ -68,6 +68,19 @@ public class I18Ns {
 	 * <p>This method is used only for requests that don't
 	 * count on {@link Session}.
 	 *
+	 * <ol>
+	 * <li>This method first checks if any session attribute called
+	 * {@link Attributes#PREFERRED_LOCALE} and
+	 * {@link Attributes#PREFERRED_TIME_ZONE} are set with the preferred
+	 * locale and timezone. If so, use it as the default.</li>
+	 * <li>Then, it checks if any servlet context attribute called
+	 * {@link Attributes#PREFERRED_LOCALE} and
+	 * {@link Attributes#PREFERRED_TIME_ZONE} are set with the preferred
+	 * locale and timezone. If so, use it as the default.</li>
+	 * <li>Otherwise, it depends the setting and location of the browser
+	 * (by checking the request's header).</li>
+	 * </ol>
+	 *
 	 * @param sess the HTTP session. It cannot be null.
 	 * @param charset the response's charset. If null or empty,
 	 * response.setCharacterEncoding won't be called, i.e., the container's
@@ -99,12 +112,13 @@ public class I18Ns {
 			final Object ol = Charsets.setup(hsess, request, response, charset);
 				//Charsets will handle PREFERRED_LOCALE
 
-			Object tz = hsess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
-			if (tz != null && !(tz instanceof TimeZone)) {
-				log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone is required, not "+tz.getClass());
-				tz = null;
-			}
-			final Object otz = TimeZones.setThreadLocal((TimeZone)tz);
+			TimeZone tz = checkTimeZone(
+				hsess.getAttribute(Attributes.PREFERRED_TIME_ZONE));
+			if (tz == null)
+				tz = checkTimeZone(
+					hsess.getServletContext().getAttribute(Attributes.PREFERRED_TIME_ZONE));
+
+			final Object otz = TimeZones.setThreadLocal(tz);
 
 			request.setAttribute(ATTR_SETUP, Boolean.TRUE); //mark as setup
 			old = new Object[] {ol, otz};
@@ -113,6 +127,13 @@ public class I18Ns {
 		if (sess instanceof Session)
 			SessionsCtrl.setCurrent((Session)sess);
 		return old;
+	}
+	private static TimeZone checkTimeZone(Object tz) {
+		if (tz != null && !(tz instanceof TimeZone)) {
+			log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone is required, not "+tz.getClass());
+			return null;
+		}
+		return (TimeZone)tz;
 	}
 	/* Cleans up the inernationalization attributes.
 	 *
@@ -128,5 +149,34 @@ public class I18Ns {
 			TimeZones.setThreadLocal((TimeZone)op[1]);
 			Charsets.cleanup(request, op[0]);
 		}
+	}
+
+	/** Sets the preferred timezone for the specified session.
+	 * It is the default timezone for the whole Web session.
+	 * <p>Default: null (no preferred timezone -- depending on browser's location).
+	 * @param timezone the preferred time zone. If null, it means no preferred timezone
+	 * @see #setup
+	 * @since 3.6.3
+	 */
+	public static final
+	void setPreferredTimeZone(HttpSession hsess, TimeZone timezone) {
+		if (timezone != null)
+			hsess.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
+		else
+			hsess.removeAttribute(Attributes.PREFERRED_TIME_ZONE);
+	}
+	/** Sets the preferred timezone for the specified servlet context.
+	 * It is the default timezone for the whole Web application.
+	 * <p>Default: null (no preferred timezone -- depending on browser's location).
+	 * @param timezone the preferred time zone. If null, it means no preferred timezone
+	 * @see #setup
+	 * @since 3.6.3
+	 */
+	public static final
+	void setPreferredTimeZone(ServletContext ctx, TimeZone timezone) {
+		if (timezone != null)
+			ctx.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
+		else
+			ctx.removeAttribute(Attributes.PREFERRED_TIME_ZONE);
 	}
 }

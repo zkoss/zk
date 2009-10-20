@@ -18,6 +18,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
+	<!-- Turn on if you turn off the caching of resources loaded from
+		the class path (aka., class web resources). By default, class web
+		resources are cached by the browser until you upgraded ZK
+		to a newer version.
+		However, it is better to turn the cache off when you are developing
+		a theme or a component.
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache</name>
+		<value>false</value>
+	</library-property>
+	-->
 	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified
 		here. It is designed for testing purpose.
 		Notice ${page will be replaced with page's UUID. If you don't want it,
