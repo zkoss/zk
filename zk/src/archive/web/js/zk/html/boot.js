@@ -939,7 +939,7 @@ zk._load = function (nm, modver, dtid, ckfn) {
 	e.type = "text/javascript" ;
 
 	if (ckfn) zk._ckfns.push(ckfn);
-	else prefix += "/_zcbzk.ald-" + zk._jscnt++;
+	else prefix += "/_zcb";
 
 	if (uri.indexOf("://") > 0) {
 		if (!ckfn && zk.debugJS)
@@ -990,12 +990,12 @@ zk._bld = function () {
 	}
 };
 /** after load. */
-zk.ald = function (jscnt) {
-	if (zk._jsmap[jscnt])
-		return; // invoked twice (possible since timeplot or other might use the same prefix _zcb... to load their modules)
+zk.ald = function (jsnm) {
+	if (zk._jsmap[jsnm])
+		return; // invoked twice (possible since timeplot or other might use the same prefix path)
 
 	if (--zk.loading) {
-		zk._jsmap[jscnt] = true;
+		zk._jsmap[jsnm] = true;
 		try {
 			zk._updCnt();
 		} catch (ex) {

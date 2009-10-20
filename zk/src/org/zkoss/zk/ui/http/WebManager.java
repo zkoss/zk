@@ -215,7 +215,7 @@ public class WebManager {
 		} catch (Throwable ex) { //ignore it
 		}
 		if (val < 0) val = -val;
-		return Integer.toString(val % 1000);
+		return Integer.toString(val % 10000);
 	}
 
 	public void destroy() {

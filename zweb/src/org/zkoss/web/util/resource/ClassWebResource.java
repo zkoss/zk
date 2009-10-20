@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Date;
+import java.util.Calendar;
 import java.net.URL;
 import java.io.OutputStream;
 import java.io.InputStream;
@@ -39,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
@@ -131,6 +134,28 @@ public class ClassWebResource {
 		if (j >= 0) uri = uri.substring(0, j);
 		return uri;
 	}
+
+	/** Sets the required headers (e.g., Cache-Control) to notify the
+	 * the client is allowed to cache the content as long as possible.
+	 *
+	 * <p>This method does nothing if a library property called
+	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
+	 *
+	 * @since 3.6.3
+	 */
+	public static void setClientCacheForever(HttpServletResponse response) {
+		if (!"false".equals(Library.getProperty("org.zkoss.web.classWebResource.cache"))) {
+			response.setHeader("Cache-Control", "public, max-age=31536000"); //a year (unit: seconds)
+			response.setDateHeader("Expires", _expires);
+		}
+	}
+	private static final long _expires;
+	static {
+		final Calendar cal = Calendar.getInstance();
+		cal.add(cal.DAY_OF_YEAR, 365);
+		_expires = cal.getTime().getTime();
+	}
+
 	/** Returns the instance (singlton in the whole app) for
 	 * handling resources located in class path.
 	 */
@@ -458,38 +483,11 @@ public class ClassWebResource {
 				pi = pi.substring(len2);
 		}
 
-		//Notify the browser by calling back the code specified with /_zcb
+		//Notify the browser by calling back zk.ald(nm) if _zcb
 		String jsextra = null;
-		final String ZCB = "/_zcb"; //denote callback is required
-		if (pi.startsWith(ZCB)) {
-			final int j = pi.indexOf('/', ZCB.length());
-			if (j >= 0) {
-				jsextra = pi.substring(ZCB.length(), j);
-				pi = pi.substring(j);
-			} else {
-				jsextra = pi.substring(ZCB.length());
-				log.warning("Unknown path info: "+pi);
-			}
-
-			int len = jsextra.length();
-			if (len == 0) jsextra = null;
-			else {
-				final StringBuffer jesb = new StringBuffer(jsextra);
-				int begin = jsextra.indexOf("-");
-				if (begin > -1) {
-					jesb.replace(begin, begin+1, "(").append(")");
-				}
-				char cc = jesb.charAt(jesb.length() - 1);
-				if (cc != ';') {
-					if (cc != ')') jesb.append("()");
-					jesb.append(';');
-				}
-
-				if (jsextra.charAt(0) != ';') jesb.insert(0, "\n;");
-				else jesb.insert(0, '\n');
-
-				jsextra = jesb.toString();
-			}
+		if (pi.startsWith("/_zcb/")) {
+			pi = pi.substring(5);
+			jsextra = "\nzk.ald('" + (pi.startsWith("/js")?pi.substring(3):pi) + "');";
 		}
 
 		final String ext = Servlets.getExtension(pi, false); //complete ext
@@ -534,6 +532,7 @@ public class ClassWebResource {
 			}
 
 			response.setContentType(ctype);
+			setClientCacheForever(response);
 		}
 
 		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
