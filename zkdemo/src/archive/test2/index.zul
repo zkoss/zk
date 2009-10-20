@@ -2,7 +2,7 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 <script>
 function newWindow(url){
-	zUtl.go(url, 0, "_zktest2");
+	zUtl.go(url, {target:"_zktest2"});
 }
 </script>
 <h:form id="newform" target="_blank" method="post"/>

@@ -217,7 +217,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (!evt.stopped) {
 				var href = this._href;
 				if (href)
-					zUtl.go(href, false, this._target || (evt.data.ctrlKey ? '_blank' : ''));
+					zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 				this.$super('doClick_', evt, true);
 			}
 		}

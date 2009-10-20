@@ -257,12 +257,9 @@ zUtl = { //static methods
 	},
 
 	//HTTP//
-	go: function (url, overwrite, target) {
-		if (!url) {
-			location.reload();
-		} else if (overwrite) {
-			location.replace(url);
-		} else if (target) {
+	go: function (url, opts) {
+		opts = opts || {};
+		if (opts.target) {
 			//we have to process query string because browser won't do it
 			//even if we use jq().append("<form...")
 			try {
@@ -277,12 +274,29 @@ zUtl = { //static methods
 				frm.name = "go";
 				frm.action = url;
 				frm.method = "GET";
-				frm.target = target;
+				frm.target = opts.target;
 				frm.submit();
 			} catch (e) { //happens if popup block
 			}
+		} else if (opts.overwrite) {
+			location.replace(url ? url: location.href);
 		} else {
-			location.href = url;
+			if (url) {
+				location.href = url;
+
+				if (!opts.reload)
+					return;
+
+				var j = url.indexOf('#'),
+					un = j >= 0 ? url.substring(0, j): url,
+					pn = zk.pathname(location.href);
+				j = pn.indexOf('#');
+				if (j >= 0) pn = pn.substring(0, j);
+				if (pn != un)
+					return;
+				//fall thru (bug 2882149)
+			}
+			location.reload();
 		}
 	},
 

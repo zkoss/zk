@@ -149,7 +149,7 @@ zAu = (function () {
 					errCode = req.status;
 					var eru = _errURIs['' + req.status];
 					if (typeof eru == "string") {
-						zUtl.go(eru);
+						zUtl.go(eru, {reload: true});
 					} else {
 					//handle MSIE's buggy HTTP status codes
 					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
@@ -640,7 +640,7 @@ zAu.cmd0 = { //no uuid at all
 	},
 	redirect: function (url, target) {
 		try {
-			zUtl.go(url, false, target);
+			zUtl.go(url, {target: target, reload: true});
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}
