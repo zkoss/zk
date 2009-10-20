@@ -26,7 +26,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
@@ -137,24 +136,6 @@ public class ServletFns {
 	/** Returns the current servlet response, or null if not available. */
 	public static ServletResponse getCurrentResponse() {
 		return getCurrentContext().getResponse();
-	}
-
-	/** Sets the required headers (e.g., Cache-Control) to notify the
-	 * the client is allowed to cache the content as long as possible.
-	 *
-	 * <p>This method does nothing if a library property called
-	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
-	 * In other words, this method is used for loading the so-called
-	 * Class Web Resources.
-	 *
-	 * @see org.zkoss.web.util.resource.ClassWebResource#setClientCacheForever
-	 * @since 3.6.3
-	 */
-	public static void setCWRClientCacheForever() {
-		final ServletResponse response = getCurrentContext().getResponse();
-		if (response instanceof HttpServletResponse)
-			org.zkoss.web.util.resource.ClassWebResource.
-				setClientCacheForever((HttpServletResponse)response);
 	}
 		
 	/** Renders the DSP fragment from EL.

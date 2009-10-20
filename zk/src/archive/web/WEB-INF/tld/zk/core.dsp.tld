@@ -192,7 +192,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 
-	<!-- DSP only -->
 	<function>
 		<name>outLocaleJavaScript</name>
 		<function-class>org.zkoss.zk.fn.DspFns</function-class>
@@ -213,6 +212,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns HTML tags to include all style sheets used by the specified device.
 	Note: unlike outLangStyleSheets, it can be called without current execution.
 	@param deviceType the device type. If null, "ajax" is assumed.
+		</description>
+	</function>
+
+	<function>
+		<name>setCWRClientCacheForever</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	void setCWRClientCacheForever()
+		</function-signature>
+		<description>
+	Sets the required headers (e.g., Cache-Control) for Class Web resources
+	to notify the client is allowed to cache the content as long as possible.
 		</description>
 	</function>
 </taglib>

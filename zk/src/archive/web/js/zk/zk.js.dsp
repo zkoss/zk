@@ -17,7 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-${c:setCWRClientCacheForever()}
+<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+${z:setCWRClientCacheForever()}
 <c:include page="~./js/ext/prototype/prototype.js"/>
 <c:include page="~./js/ext/aculo/effects.js"/>
 <c:include page="~./js/ext/aculo/dragdrop.js"/>

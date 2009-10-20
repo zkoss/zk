@@ -239,4 +239,21 @@ public class DspFns {
 		_datejs = new CacheMap(8);
 		_datejs.setLifetime(24*60*60*1000);
 	}
+
+	/** Sets the required headers (e.g., Cache-Control) for Class Web
+	 * resources to notify the client is allowed to cache the content
+	 * as long as possible.
+	 *
+	 * <p>This method does nothing if a library property called
+	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
+	 * In other words, this method is used for loading the so-called
+	 * Class Web Resources.
+	 *
+	 * @see org.zkoss.web.util.resource.ClassWebResource#setClientCacheForever
+	 * @since 3.6.3
+	 */
+	public static void setCWRClientCacheForever() {
+		org.zkoss.web.util.resource.ClassWebResource.
+			setClientCacheForever((HttpServletResponse)ServletFns.getCurrentResponse());
+	}
 }

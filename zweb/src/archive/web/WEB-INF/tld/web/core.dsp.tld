@@ -460,16 +460,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		If empty, it means no country code at all.
 		</description>
 	</function>
-
-	<function>
-		<name>setCWRClientCacheForever</name>
-		<function-class>org.zkoss.web.fn.ServletFns</function-class>
-		<function-signature>
-	void setCWRClientCacheForever()
-		</function-signature>
-		<description>
-	Sets the required headers (e.g., Cache-Control) to notify the
-	the client is allowed to cache the content as long as possible.
-		</description>
-	</function>
 </taglib>
