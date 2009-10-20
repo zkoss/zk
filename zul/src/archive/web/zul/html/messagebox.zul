@@ -23,8 +23,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
 		<div sclass="${arg.icon}"/>
-		<div sclass="z-messagebox" width="210pt">
-			<label value="${arg.message}" multiline="true"/>
+		<div sclass="z-messagebox">
+			<label value="${arg.message}" multiline="true" use="org.zkoss.zul.impl.MessageboxDlg$Label"/>
 		</div>
 	</hbox>
 	<separator bar="true"/>

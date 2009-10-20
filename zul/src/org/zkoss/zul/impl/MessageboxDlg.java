@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.UiException;
@@ -103,7 +104,14 @@ public class MessageboxDlg extends Window {
 	public int getResult() {
 		return _result;
 	}
-
+	
+	public static class Label extends org.zkoss.zul.Label {
+		public String getOuterAttrs() {
+			final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
+			HTMLs.appendAttribute(sb, "z.type", "zul.wnd2.MsgboxLabel");
+			return sb.toString();
+		}
+	}
 	/**
 	 * Represents a button on the message box.
 	 * @since 3.0.0

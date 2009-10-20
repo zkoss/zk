@@ -1169,3 +1169,20 @@ zkWnd2._onWndMove = function (cmp, evt) {
 	zkWnd2.syncShadow(cmp);
 	zkau.sendOnMove(cmp, keys);
 };
+
+/** since 3.6.3 */
+zkMsgboxLabel = {
+	onSize: function (cmp) {
+		var tr = cmp.parentNode.parentNode.parentNode,
+			width = cmp.offsetWidth + tr.cells[0].offsetWidth,
+			cave = $parentByTag(tr, 'DIV'),
+			outer = $outer(cave);
+		width += zk.getPadBorderWidth(cave)
+			+ zk.getPadBorderWidth((cave = cave.parentNode))
+			+ zk.getPadBorderWidth((cave = cave.parentNode))
+			+ zk.getPadBorderWidth((cave = cave.parentNode));
+		outer.style.width = zk.px(Math.min(Math.max(width, 330), zk.innerWidth() - 20));
+		zkWnd2._doModal(outer);
+		zkWnd2.onSize(outer);
+	}
+};

@@ -385,10 +385,7 @@ span.z-progressmeter-img {
 	line-height: 0;
 	font-size: 0;
 }
-.z-messagebox {
-	word-break: break-all;
-	overflow:auto;
-}
+
 .z-messagebox-btn {
 	min-width: 45pt;
 	width: 100%;
