@@ -2348,7 +2348,7 @@ zkau.cmd0 = { //no uuid at all
 	},
 	redirect: function (url, target) {
 		try {
-			zk.go(url, false, target);
+			zk.go(url, false, target, true);
 		} catch (ex) {
 			if (!zkau.confirmClose) throw ex;
 		}

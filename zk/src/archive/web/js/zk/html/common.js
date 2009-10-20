@@ -1804,7 +1804,7 @@ zk.scrollIntoView = function (outer, inner, info) {
  * @param overwrite whether to overwrite the history
  * @param target the target frame (ignored if overwrite is true
  */
-zk.go = function (url, overwrite, target) {
+zk.go = function (url, overwrite, target, reload) {
 	if (target) {
 		//we have to process query string because browser won't do it
 		//even if we use insertHTMLBeforeEnd("<form...")
@@ -1830,14 +1830,16 @@ zk.go = function (url, overwrite, target) {
 		if (url) {
 			location.href = url;
 
-			var j = url.indexOf('#'),
-				un = j >= 0 ? url.substring(0, j): url,
-				pn = zk.pathname(location.href);
-			j = pn.indexOf('#');
-			if (j >= 0) pn = pn.substring(0, j);
-			if (pn != un)
-				return;
-			//fall thru (bug 2882149)
+			if (reload) {
+				var j = url.indexOf('#'),
+					un = j >= 0 ? url.substring(0, j): url,
+					pn = zk.pathname(location.href);
+				j = pn.indexOf('#');
+				if (j >= 0) pn = pn.substring(0, j);
+				if (pn != un)
+					return;
+				//fall thru (bug 2882149)
+			}
 		}
 		location.reload();
 	}
