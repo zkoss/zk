@@ -17,6 +17,7 @@ October, 2009
   2878584: A plugin to customize the encoding of filename
   2879604: A way to reload client-side messages with different locale
   2880351: Encode ZK version to JS/CSS/image to prevent browser cache
+  2882081: A way to set the preferred locale for the whole application
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo

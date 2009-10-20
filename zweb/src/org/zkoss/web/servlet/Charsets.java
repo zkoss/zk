@@ -20,6 +20,7 @@ package org.zkoss.web.servlet;
 
 import java.util.Locale;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -175,6 +176,8 @@ public class Charsets {
 	 * <ol>
 	 * <li>It checks whether any attribute stored in HttpSession called
 	 * {@link Attributes#PREFERRED_LOCALE}. If so, return it.</li>
+	 * <li>If not found, it checks if the servlet context has the
+	 * attribute called {@link Attributes#PREFERRED_LOCALE}. If so, return it.</li>
 	 * <li>Otherwise, use ServletRequest.getLocale().</li>
 	 * </ol>
 	 *
@@ -183,7 +186,14 @@ public class Charsets {
 	public static final
 	Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
 		if (sess != null) {
-			final Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
+			Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
+			if (v != null) {
+				if (v instanceof Locale)
+					return (Locale)v;
+				log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
+			}
+
+			v = sess.getServletContext().getAttribute(Attributes.PREFERRED_LOCALE);
 			if (v != null) {
 				if (v instanceof Locale)
 					return (Locale)v;
@@ -200,21 +210,43 @@ public class Charsets {
 	public static final Locale getPreferredLocale(ServletRequest request) {
 		return getPreferredLocale(getSession(request), request);
 	}
-	/** Sets the preferred locale for the current session of the specified
-	 * request.
-	 * @param locale the preferred Locale. If null, it means no preferred
-	 * locale (and then {@link #getPreferredLocale(HttpSession,ServletRequest)} use request.getLocale
-	 * instead).
+
+	/** Sets the preferred locale for the specified session.
+	 * It is the default locale for the whole Web session.
+	 * <p>Default: null (no preferred locale -- depending on browser's setting).
+	 * @param locale the preferred Locale. If null, it means no preferred locale
+	 * @see #getPreferredLocale(HttpSession,ServletRequest)
+	 * @since 3.6.3
+	 */
+	public static final
+	void setPreferredLocale(HttpSession hsess, Locale locale) {
+		if (locale != null)
+			hsess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
+		else
+			hsess.removeAttribute(Attributes.PREFERRED_LOCALE);
+	}
+	/** Sets the preferred locale for the specified servlet context.
+	 * It is the default locale for the whole Web application.
+	 * <p>Default: null (no preferred locale -- depending on browser's setting).
+	 * @param locale the preferred Locale. If null, it means no preferred locale
+	 * @see #getPreferredLocale(HttpSession,ServletRequest)
+	 * @since 3.6.3
+	 */
+	public static final
+	void setPreferredLocale(ServletContext ctx, Locale locale) {
+		if (locale != null)
+			ctx.setAttribute(Attributes.PREFERRED_LOCALE, locale);
+		else
+			ctx.removeAttribute(Attributes.PREFERRED_LOCALE);
+	}
+	/** @deprecated As of release 3.6.3, replaced with
+	 * {@link #setPreferredLocale(HttpSession, Locale)}
 	 */
 	public static final
 	void setPreferredLocale(ServletRequest request, Locale locale) {
-		if (request instanceof HttpServletRequest) {
-			final HttpSession sess =
-				((HttpServletRequest)request).getSession(); //auto-create
-			if (locale != null)
-				sess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
-			else
-				sess.removeAttribute(Attributes.PREFERRED_LOCALE);
-		}
+		if (request instanceof HttpServletRequest)
+			setPreferredLocale(
+				((HttpServletRequest)request).getSession(), //auto-create
+				locale);
 	}
 }
