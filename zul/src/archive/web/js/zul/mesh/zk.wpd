@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.mesh" language="xul/html" cacheable="false" depends="zul">
+<package name="zul.mesh" language="xul/html" depends="zul">
 	<script src="MeshWidget.js"/>
 	<script src="HeadWidget.js"/>
 	<script src="HeaderWidget.js"/>

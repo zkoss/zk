@@ -47,6 +47,7 @@ import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
+import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
@@ -100,8 +101,18 @@ public class WpdExtendlet extends AbstractExtendlet {
 				return;
 			}
 
-			data = rawdata instanceof byte[] ? (byte[])rawdata:
-				((WpdContent)rawdata).toByteArray(request);
+			final boolean cacheable;
+			if (rawdata instanceof ByteContent) {
+				final ByteContent bc = (ByteContent)rawdata;
+				data = bc.content;
+				cacheable = bc.cacheable;
+			} else {
+				final WpdContent wc = (WpdContent)rawdata;
+				data = wc.toByteArray(request);
+				cacheable = wc.cacheable;
+			}
+			if (cacheable)
+				ClassWebResource.setClientCacheForever(response);
 		} finally {
 			setProvider(null);
 		}
@@ -127,9 +138,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final LanguageDefinition langdef = //optional
 			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
+		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
 		final WpdContent wc =
-			zk || aaas || "false".equals(root.getAttributeValue("cacheable")) ?
-				new WpdContent(dir): null;
+			zk || aaas || !cacheable ? new WpdContent(dir, cacheable): null;
 
 		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
@@ -285,7 +296,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			move(wc, out);
 			return wc;
 		}
-		return out.toByteArray();
+		return new ByteContent(out.toByteArray(), cacheable);
 	}
 	private void writeHost(WpdContent wc, ByteArrayOutputStream out, WebApp wapp) {
 		if (wapp != null) {
@@ -505,11 +516,24 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return path.substring(0, j).replace('.', '/') + "/zk" + path.substring(j);
 		}
 	}
+	/*private*/ class ByteContent {
+		private final byte[] content;
+		private final boolean cacheable;
+
+		private ByteContent(byte[] cnt, boolean cacheable) {
+			this.content = cnt;
+			this.cacheable = cacheable;
+		}
+	}
+			
 	/*package*/ class WpdContent {
 		private final String _dir;
 		private final List _cnt = new LinkedList();
-		private WpdContent(String dir) {
+		private final boolean cacheable;
+
+		private WpdContent(String dir, boolean cacheable) {
 			_dir = dir;
+			this.cacheable = cacheable;
 		}
 		private void add(byte[] bs) {
 			_cnt.add(bs);

@@ -585,7 +585,8 @@ public class ClassWebResource {
 			}
 
 			response.setContentType(ctype);
-			setClientCacheForever(response);
+			if (pi.indexOf('*') < 0) //not locale dependent
+				setClientCacheForever(response);
 		}
 
 		InputStream is = null;

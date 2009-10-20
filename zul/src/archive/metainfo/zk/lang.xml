@@ -31,9 +31,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		what language is used.
 	-->
 	<javascript src="~./js/zk.wpd" charset="UTF-8"/>
+	<javascript src="~./js/zk.lang.wpd" charset="UTF-8"/>
 	<javascript src="~./js/zul.wpd" charset="UTF-8"/>
+	<javascript src="~./js/zul.lang.wpd" charset="UTF-8"/>
 
 	<stylesheet href="~./zul/css/zk.wcs" type="text/css"/>
+	<javascript src="~./js/zk/lang.js.dsp" charset="UTF-8"/>
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">

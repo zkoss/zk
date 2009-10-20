@@ -158,6 +158,7 @@ October, 2009
   2880351: Encode ZK version to JS/CSS/image to prevent browser cache
   2882081: A way to set the preferred locale for the whole application
   2882099: A way to set the preferred timezone for whole application
+  2882090: Cache all of ZK static resources in Browser
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -224,6 +225,7 @@ October, 2009
   2841185: Firefox: Grid disapears in borderlayout
   2848692: combobox getSelectedIndex bad return value with IExplorer
   2856762: SimpleListModelSharer sorting fails
+  2882149: Execution.sendRedirect to the same URL doesn't reload
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
