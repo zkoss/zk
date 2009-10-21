@@ -206,7 +206,7 @@ implements DynamicTag, Native {
 				if (j >= 0) {
 					rc.zktagGened = true;
 					final String zktags =
-						HtmlPageRenders.outZkTags(exec, getDesktop());
+						HtmlPageRenders.outHeaderZkTags(exec, getPage());
 					if (zktags != null)
 						sb.insert(j, zktags);
 				}

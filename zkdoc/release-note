@@ -160,6 +160,7 @@ October, 2009
   2882099: A way to set the preferred timezone for whole application
   2882090: Cache all of ZK static resources in Browser
   2882221: Long word in Messagebox can be broken correctly
+  2882272: Datebox support set timezone list
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -227,6 +228,7 @@ October, 2009
   2848692: combobox getSelectedIndex bad return value with IExplorer
   2856762: SimpleListModelSharer sorting fails
   2882149: Execution.sendRedirect to the same URL doesn't reload
+  2882922: The link, meta and script directive ignored in complete page
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

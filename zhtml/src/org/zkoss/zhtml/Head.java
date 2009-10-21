@@ -22,7 +22,7 @@ import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
@@ -57,17 +57,17 @@ public class Head extends AbstractTag {
 
 		final Execution exec = Executions.getCurrent();
 		if (exec != null)
-			addZkHtmlTags(exec, getDesktop(), buf, "head");
+			addHeaderZkTags(exec, getPage(), buf, "head");
 
 		out.write(buf.toString());
 		out.write('\n');
 	}
-	/** Adds HtmlPageRenders.outZkTags if necessary.
+	/** Adds HtmlPageRenders.outHeaderZkTags if necessary.
 	 * @param tag the tag name, such as "head" and "body"
 	 */
 	/*package*/ static void
-	addZkHtmlTags(Execution exec, Desktop desktop, StringBuffer buf, String tag) {
-		final String zktags = HtmlPageRenders.outZkTags(exec, desktop);
+	addHeaderZkTags(Execution exec, Page page, StringBuffer buf, String tag) {
+		final String zktags = HtmlPageRenders.outHeaderZkTags(exec, page);
 		if (zktags != null && zktags.length() > 0) {
 			int j = buf.indexOf("<" + tag);
 			if (j >= 0) {

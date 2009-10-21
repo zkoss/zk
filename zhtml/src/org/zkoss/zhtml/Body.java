@@ -51,7 +51,7 @@ public class Body extends AbstractTag {
 		final StringBuffer buf = bufout.getBuffer();
 
 		if (exec != null) {
-			Head.addZkHtmlTags(exec, getDesktop(), buf, "body");
+			Head.addHeaderZkTags(exec, getPage(), buf, "body");
 
 			final String msg = HtmlPageRenders.outUnavailable(exec);
 			if (msg != null && msg.length() > 0) {

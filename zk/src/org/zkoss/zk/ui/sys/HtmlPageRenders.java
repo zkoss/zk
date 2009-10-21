@@ -180,7 +180,7 @@ public class HtmlPageRenders {
 	 * @param wapp the Web application.
 	 * If null, exec.getDesktop().getWebApp() is used.
 	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
+	 * with desktop (a fake execution, such as JSP/DSP).
 	 * @param deviceType the device type, such as ajax.
 	 * If null, exec.getDesktop().getDeviceType() is used.
 	 * So you have to specify it if the execution is not associated
@@ -271,7 +271,7 @@ public class HtmlPageRenders {
 	 * @param wapp the Web application.
 	 * If null, exec.getDesktop().getWebApp() is used.
 	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
+	 * with desktop (a fake execution, such as JSP/DSP).
 	 * @param deviceType the device type, such as ajax.
 	 * If null, exec.getDesktop().getDeviceType() is used.
 	 * So you have to specify it if the execution is not associated
@@ -298,7 +298,7 @@ public class HtmlPageRenders {
 	 * @param wapp the Web application.
 	 * If null, exec.getDesktop().getWebApp() is used.
 	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
+	 * with desktop (a fake execution, such as JSP/DSP).
 	 * @param deviceType the device type, such as ajax.
 	 * If null, exec.getDesktop().getDeviceType() is used.
 	 * So you have to specify it if the execution is not associated
@@ -529,6 +529,59 @@ public class HtmlPageRenders {
 		out.write('"');
 	}
 
+	/** Returns the content of the specified condition
+	 * that will be placed inside the header element of the specified page,
+	 * or null if it was generated before.
+	 * For HTML, the header element is the HEAD element.
+	 *
+	 * <p>Notice that this method ignores the following invocations
+	 * against the same page in the same execution. In other words,
+	 * it is safe to invoke this method multiple times.
+	 *
+	 * @param before whether to return the headers that shall be shown
+	 * before ZK's CSS/JS headers.
+	 * If true, only the headers that shall be shown before (such as meta)
+	 * are returned.
+	 * If true, only the headers that shall be shown after (such as link)
+	 * are returned.
+	 */
+	public static final
+	String outHeaders(Execution exec, Page page, boolean before) {
+		if (page == null)
+			return "";
+
+		String attr = "zkHeaderGened" + page.getUuid();
+		if (before) attr += "Bf";
+		if (exec.getAttribute(attr) != null)
+			return null;
+
+		exec.setAttribute(attr, Boolean.TRUE); //generated only once
+		return ((PageCtrl)page).getHeaders(before);
+	}
+	/** Generates and returns the ZK specific HTML tags including
+	 * the headers defined in the specified page, or null if it was
+	 * generated before.
+	 *
+	 * <p>It is shortcut of<br/>
+	 *<code>outZkHeader(exec, page, true)+outZkTags(exec, null, null)+outZkHeader(exec, page, false)</code>
+	 *
+	 * <p>Unlike {@link #outZkTags}, this method cannot be called
+	 * in JSP/DSP (since desktop is not available).
+	 *
+	 * @see #outZkTags
+	 */
+	public static String outHeaderZkTags(Execution exec, Page page) {
+		String s1 = outHeaders(exec, page, true),
+			s2 = outZkTags(exec, null, null),
+			s3 = outHeaders(exec, page, false);
+		return s1 != null ?
+			s2 != null ?
+				s3 != null ? s1 + s2 + s3: s1 + s2:
+				s3 != null ? s1 + s3: s1: //s2 null
+			s2 != null ?
+				s3 != null ? s2 + s3: s2:
+				s3 != null ? s3: null; //s2 null
+	}
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
 	 * and JavaScript.
 	 *
@@ -544,12 +597,13 @@ public class HtmlPageRenders {
 	 * @param wapp the Web application.
 	 * If null, exec.getDesktop().getWebApp() is used.
 	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
+	 * with desktop (a fake execution, such as JSP/DSP).
 	 * @param deviceType the device type, such as ajax.
 	 * If null, exec.getDesktop().getDeviceType() is used.
 	 * So you have to specify it if the execution is not associated
 	 * with desktop (a fake execution).
 	 * @see #outZkTags(Execution,Desktop)
+	 * @see #outHeaderZkTags
 	 */
 	public static
 	String outZkTags(Execution exec, WebApp wapp, String deviceType) {

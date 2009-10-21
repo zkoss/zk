@@ -139,7 +139,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			}
 		}
 
-		write(out, HtmlPageRenders.outZkTags(exec, page.getDesktop()));
+		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 
 		exec.setAttribute(ATTR_RENDER_CONTEXT, null);

@@ -74,10 +74,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			+"<title>");
 		write(out, page.getTitle());
 		out.write("</title>\n");
-		out.write(pageCtrl.getHeaders(true));
+		out.write(HtmlPageRenders.outHeaders(exec, page, true));
 		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
-		out.write(pageCtrl.getHeaders(false));
+		out.write(HtmlPageRenders.outHeaders(exec, page, false));
 		out.write("</head>\n");
 
 		out.write("<body>\n");
@@ -121,7 +121,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		write(out, HtmlPageRenders.outZkTags(exec, page.getDesktop()));
+		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
 }
