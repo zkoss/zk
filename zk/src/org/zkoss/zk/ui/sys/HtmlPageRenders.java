@@ -602,7 +602,6 @@ public class HtmlPageRenders {
 	 * If null, exec.getDesktop().getDeviceType() is used.
 	 * So you have to specify it if the execution is not associated
 	 * with desktop (a fake execution).
-	 * @see #outZkTags(Execution,Desktop)
 	 * @see #outHeaderZkTags
 	 */
 	public static
@@ -634,18 +633,6 @@ public class HtmlPageRenders {
 			return j >= 0 ? s.substring(0, j) + s.substring(j + 1): s;
 		}
 		return "";
-	}
-
-	/** Generates and returns the ZK specific HTML tags such as stylesheet
-	 * and JavaScript for a desktop.
-	 *
-	 * @param exec the execution (never null)
-	 * @param desktop the desktop. Ignored if null.
-	 * @see #outZkTags(Execution,WebApp,String)
-	 */
-	public static String outZkTags(Execution exec, Desktop desktop) {
-		return outZkTags(exec, desktop != null ? desktop.getWebApp(): null,
-			desktop != null ? desktop.getDeviceType(): null);
 	}
 
 	/** The render context.

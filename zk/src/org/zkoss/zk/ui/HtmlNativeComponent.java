@@ -235,7 +235,7 @@ implements DynamicTag, Native {
 				if (j >= 0) {
 					if (!rc.zktagGened) {
 						final String zktags =
-							HtmlPageRenders.outZkTags(exec, getDesktop());
+							HtmlPageRenders.outHeaderZkTags(exec, getPage());
 						if (zktags != null)
 							sb.insert(j, zktags);
 					}
@@ -257,7 +257,7 @@ implements DynamicTag, Native {
 
 				if (!rc.zktagGened) {
 					rc.zktagGened = true;
-					final String zktags = HtmlPageRenders.outZkTags(exec, getDesktop());
+					final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
 					if (zktags != null) {
 						sb.replace(j, j + 9, zktags);
 						return;
