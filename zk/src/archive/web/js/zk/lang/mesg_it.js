@@ -1,4 +1,4 @@
-/* mesg_it.js "charset=utf-8"
+﻿/* mesg_it.js "charset=utf-8"
 
 	Purpose:
 		Locale dependent message
@@ -15,20 +15,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 mesg = {};
 mesg.NOT_FOUND = "Non trovato: ";
 mesg.UNSUPPORTED = "Non ancora supportato: ";
-mesg.FAILED_TO_SEND = "Invio della richiesta al server fallito.";
-mesg.FAILED_TO_RESPONSE = "Il server ha fallito nel elaborare la tua richiesta.";
+mesg.FAILED_TO_SEND = "Invio della richiesta al server non riuscito.";
+mesg.FAILED_TO_RESPONSE = "Il server non è riuscito ad elaborare la richiesta.";
 mesg.TRY_AGAIN = "Riprovare?";
 mesg.UNSUPPORTED_BROWSER = "Browser non supportato: ";
-mesg.ILLEGAL_RESPONSE = "Risposta sconosciuta inviata dal server. Per favore ricarica la pagina e riprova.\n";
+mesg.ILLEGAL_RESPONSE = "Risposta sconosciuta inviata dal server. Ricaricare la pagina e riprovare.\n";
 mesg.FAILED_TO_PROCESS = "Errore nell'elaborazione di ";
 mesg.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
-mesg.PLEASE_WAIT = "Attendere...";
+mesg.PLEASE_WAIT = "Elaborazione in corso...";
+
 
 mesg.FILE_SIZE = "Dimensione file: ";
 mesg.KBYTES = "KB";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
+mesg.FAILED_TO_LOAD="Impossibile caricare";
+mesg.FAILED_TO_LOAD_DETAIL="Ciò può essere dovuto a traffico errato. Ricaricare la pagina e riprovare.";
+
 mesg.CAUSE="Cause: ";
 
 mesg.LOADING = "Attendere...";
