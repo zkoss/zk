@@ -377,7 +377,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				if (idx.type) break;// in a legal area
 				var end = i;
 				while(this._fmthdler[++end]) {
-					if (this._fmthdler[end].type) {
+					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+						pos = this._fmthdler[end].index[1] + 1;
+						break;
+					} else if (this._fmthdler[end].type) {
 						pos = this._fmthdler[end].index[0] + 1;
 						break;
 					}
@@ -464,9 +467,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				var end = i;
 				pos--;
 				while (this._fmthdler[++end]) {
-					if (this._fmthdler[end].type) {
-						pos = this._fmthdler[end].index[0] + 1;
+					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+						pos = this._fmthdler[end].index[1] + 1;
 						break;
+					} else if (this._fmthdler[end].type) {
+						pos = this._fmthdler[end].index[0] + 1;
+						break;	
 					}
 				}
 				break;
