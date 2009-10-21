@@ -2020,8 +2020,12 @@ Object.extend(Event, {
     } else {
       event.returnValue = false;
       event.cancelBubble = true;
-	  if (!event.shiftKey && !event.ctrlKey)
-	  	event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
+	  
+	  // Resizing with B30-1823839.zul in IE7 will casue an error. 
+	  try {
+	  	if (!event.shiftKey && !event.ctrlKey) 
+	  		event.keyCode = 0; //Jumper Chen, Potix: Bug #1834891
+		}catch(e) {}
     }
   },
 /* Tom M. Yeh, Potix: remove unused codes
