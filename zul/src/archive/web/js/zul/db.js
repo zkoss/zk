@@ -1169,6 +1169,11 @@ zkTimebox.prototype = {
 	getInputNode: function(){
 		return $e(this.uuid, "timebox-real");
 	},
+	doClick_: function (evt) {
+		var target = Event.element(evt),
+			inp = this.getInputNode();
+		if (target == inp) this._doCheckPos(this._getPos());
+	},
 	doKeyDown_: function(evt){
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
@@ -1312,7 +1317,10 @@ zkTimebox.prototype = {
 				if (idx.type) break;// in a legal area
 				var end = i;
 				while(this._fmthdler[++end]) {
-					if (this._fmthdler[end].type) {
+					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+						pos = this._fmthdler[end].index[1] + 1;
+						break;
+					} else if (this._fmthdler[end].type) {
 						pos = this._fmthdler[end].index[0] + 1;
 						break;
 					}
@@ -1393,16 +1401,22 @@ zkTimebox.prototype = {
 		this.lastPos = pos;
 	},
 	_doRight: function() {
-		var inp = this.getInputNode(), pos = this.lastPos + 1, hdler = this.getTimeHandler();
+		var inp = this.getInputNode(), 
+			pos = this.lastPos + 1, 
+			hdler = this.getTimeHandler();
+		
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
 			var idx = this._fmthdler[i];
 			if (idx.index[1] + 2 == pos) {
 				var end = i;
 				pos--;
 				while (this._fmthdler[++end]) {
-					if (this._fmthdler[end].type) {
-						pos = this._fmthdler[end].index[0] + 1;
+					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+						pos = this._fmthdler[end].index[1] + 1;
 						break;
+					} else if (this._fmthdler[end].type) {
+						pos = this._fmthdler[end].index[0] + 1;
+						break;	
 					}
 				}
 				break;
@@ -1483,6 +1497,7 @@ zkTimebox.prototype = {
 			zk.listen(btn, "mouseout", zkTimebox.btnOut);
 			zk.listen(btn, "mouseover", zkTimebox.btnOver);
 			zk.listen(inp, "keydown", zkTimebox.keyDown);
+			zk.listen(inp, "click", zkTimebox.doClick);
 		}
 	},
 	unbind_: function () {
@@ -1498,6 +1513,7 @@ zkTimebox.prototype = {
 			zk.unlisten(btn, "mouseout", zkTimebox.btnOut);
 			zk.unlisten(btn, "mouseover", zkTimebox.btnOver);
 			zk.unlisten(inp, "keydown", zkTimebox.keyDown);
+			zk.unlisten(inp, "click", zkTimebox.doClick);
 		}
 	},
 	onChanging: function () {
@@ -1555,6 +1571,12 @@ zkTimebox.keyDown = function (evt) {
 		meta = zkau.getMeta($uuid(el));
 	if (meta) meta._tm.doKeyDown_(evt);
 	Event.stop(evt);
+};
+zkTimebox.doClick = function (evt) {
+	if (!evt) evt = window.event;
+	var el = Event.element(evt),
+		meta = zkau.getMeta($uuid(el));
+	if (meta) meta._tm.doClick_(evt);
 };
 function TimeHandler (index, type) {
 	this.index = index;
