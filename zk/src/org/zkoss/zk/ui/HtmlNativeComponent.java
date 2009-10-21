@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
@@ -56,7 +57,6 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
 	private static final Helper _helper = new HtmlHelper();
-	private static final String ATTR_TOP_NATIVE = "org.zkoss.zk.native.top";
 	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
 	private String _tag;
@@ -144,24 +144,25 @@ implements DynamicTag, Native {
 		final boolean root = getParent() == null && (getPage().isComplete()
 		|| (exec != null && "complete".equals(exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL))));
 		if (exec == null || exec.isAsyncUpdate(null)
-		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null)) {
+		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
 			super.redraw(out); //renderProperties (assume in zscript)
 			return;
 		}
 
-		final RenderContext rc = getRenderContext(exec);
+		final NativeRenderContext rc = getNativeRenderContext(exec);
 		out.write(getPrologHalf(rc));
 
 		//children
-		if (root) exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
+		if (root) HtmlPageRenders.setDirectContent(exec, true);
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
-			if (child instanceof Native) {
+			if (child instanceof Native
+			|| ((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
 				((ComponentCtrl)child).redraw(out);
 			} else {
-				exec.removeAttribute(ATTR_TOP_NATIVE);
+				HtmlPageRenders.setDirectContent(exec, false);
 				HtmlPageRenders.outStandalone(exec, child, out);
-				exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
+				HtmlPageRenders.setDirectContent(exec, true);
 			}
 			child = next;
 		}
@@ -172,19 +173,19 @@ implements DynamicTag, Native {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		final RenderContext rc = getRenderContext(Executions.getCurrent());
+		final NativeRenderContext rc = getNativeRenderContext(Executions.getCurrent());
 		render(renderer, "prolog", getPrologHalf(rc));
 		render(renderer, "epilog", getEpilogHalf(rc));
 	}
-	private RenderContext getRenderContext(Execution exec) {
+	private NativeRenderContext getNativeRenderContext(Execution exec) {
 		if (exec == null)
-			return new RenderContext();
-		RenderContext rc = (RenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT);
+			return new NativeRenderContext();
+		NativeRenderContext rc = (NativeRenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT);
 		if (rc == null)
-			exec.setAttribute(ATTR_RENDER_CONTEXT, rc = new RenderContext());
+			exec.setAttribute(ATTR_RENDER_CONTEXT, rc = new NativeRenderContext());
 		return rc;
 	}
-	private String getPrologHalf(RenderContext rc) {
+	private String getPrologHalf(NativeRenderContext rc) {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 			//don't use _helper directly, since the derive might override it
@@ -215,7 +216,7 @@ implements DynamicTag, Native {
 
 		return sb.toString();
 	}
-	private String getEpilogHalf(RenderContext rc) {
+	private String getEpilogHalf(NativeRenderContext rc) {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 
@@ -248,7 +249,7 @@ implements DynamicTag, Native {
 		return sb.toString();
 	}
 	private void
-	replaceZkhead(Execution exec, StringBuffer sb, RenderContext rc) {
+	replaceZkhead(Execution exec, StringBuffer sb, NativeRenderContext rc) {
 		if (!rc.zkheadFound) {
 			final int j = sb.indexOf("<zkhead/>");
 			if (j >= 0) {
@@ -389,8 +390,14 @@ implements DynamicTag, Native {
 		for (int j = begNoLFs.length; --j >= 0;)
 			_begNoLFs.add(begNoLFs[j]);
 	}
-	private static class RenderContext {
+	private static class NativeRenderContext {
 		boolean zktagGened;
 		boolean zkheadFound;
 	};
+
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements DirectContent {
+	}
 }

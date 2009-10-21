@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -31,9 +32,10 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zhtml.impl.PageRenderer;
-import org.zkoss.zhtml.impl.RenderContext;
+import org.zkoss.zhtml.impl.TagRenderContext;
 
 /**
  * Represents a piece of text (of DOM).
@@ -104,7 +106,7 @@ public class Text extends AbstractComponent implements RawId {
 	}
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
-		if (!PageRenderer.isDirectContent(exec)) {
+		if (!HtmlPageRenders.isDirectContent(exec)) {
 			super.redraw(out);
 			return;
 		}
@@ -121,7 +123,7 @@ public class Text extends AbstractComponent implements RawId {
 		if (idRequired)
 			out.write("</span>");
 
-		final RenderContext rc = PageRenderer.getRenderContext(exec);
+		final TagRenderContext rc = PageRenderer.getTagRenderContext(exec);
 		if (rc != null) {
 			rc.renderBegin(this, getClientEvents(), false);
 			rc.renderEnd(this);
@@ -135,5 +137,11 @@ public class Text extends AbstractComponent implements RawId {
 	}
 	protected boolean isChildable() {
 		return false;
+	}
+
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
 	}
 }

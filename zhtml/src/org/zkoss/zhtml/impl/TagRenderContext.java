@@ -1,4 +1,4 @@
-/* RenderContext.java
+/* TagRenderContext.java
 
 	Purpose:
 		
@@ -17,8 +17,10 @@ package org.zkoss.zhtml.impl;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 
 /**
@@ -28,21 +30,14 @@ import org.zkoss.zk.ui.event.Events;
  * @author tomyeh
  * @since 5.0.0
  */
-public class RenderContext {
+public class TagRenderContext {
 	/** The writer to output JavaScript codes.
 	 */
 	private final StringBuffer _jsout = new StringBuffer();
 
-	/** Whether to generate HTML tags directly.
-	 *
-	 * <p>If true, the HTML tag shall be generated directly to the writer
-	 * provided by {@link ComponentCtrl#redraw},
-	 * and generates JavaScript code snippet in {@link #renderBegin}.
-	 *
-	 * <p>If false, ZHTML components shall generate properties by use of
-	 * {@link org.zkoss.zk.ui.sys.ContentRenderer}.
-	 */
-	public boolean directContent = true;
+	public TagRenderContext() {
+		HtmlPageRenders.setDirectContent(Executions.getCurrent(), true); //default: true
+	}
 
 	/** Completes the rendering by returning what are generated
 	 * by {@link #renderBegin} and {@link #renderEnd} (never null).

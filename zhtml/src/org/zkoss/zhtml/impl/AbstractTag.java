@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml.impl;
 
+import java.lang.Object;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.render.DirectContent;
 
 import org.zkoss.zhtml.Text;
 import org.zkoss.zhtml.Zkhead;
@@ -241,12 +243,18 @@ implements DynamicPropertied, RawId {
 			throw new UiException("The tag name is not initialized yet");
 
 		final Execution exec = Executions.getCurrent();
-		final RenderContext rc;
 		if (exec == null || exec.isAsyncUpdate(null)
-		|| (rc = PageRenderer.getRenderContext(exec)) == null
-		|| !rc.directContent) {
-			super.redraw(out);
+		|| !HtmlPageRenders.isDirectContent(exec)) {
+			super.redraw(out); //generate JavaScript
 			return;
+		}
+
+		TagRenderContext rc = PageRenderer.getTagRenderContext(exec);
+		final boolean rcRequired = rc == null;
+		Object ret = null;
+		if (rcRequired) {
+			ret = PageRenderer.beforeRenderTag(exec);
+			rc = PageRenderer.getTagRenderContext(exec);
 		}
 
 		out.write(getPrologHalf());
@@ -254,21 +262,25 @@ implements DynamicPropertied, RawId {
 
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
-			if ((child instanceof AbstractTag) || (child instanceof Text)
-			|| (child instanceof Zkhead)) {
+			if (((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
 				((ComponentCtrl)child).redraw(out);
 			} else {
-				rc.directContent = false;
+				HtmlPageRenders.setDirectContent(exec, false);
 				rc.renderBegin(child, null, true);
 				HtmlPageRenders.outStandalone(exec, child, out);
 				rc.renderEnd(child);
-				rc.directContent = true;
+				HtmlPageRenders.setDirectContent(exec, true);
 			}
 			child = next;
 		}
 
 		out.write(getEpilogHalf());
 		rc.renderEnd(this);
+
+		if (rcRequired) {
+			out.write(rc.complete());
+			PageRenderer.afterRenderTag(exec, ret);
+		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -316,5 +328,11 @@ implements DynamicPropertied, RawId {
 	//Object//
 	public String toString() {
 		return "["+_tagnm+' '+super.toString()+']';
+	}
+
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements DirectContent {
 	}
 }

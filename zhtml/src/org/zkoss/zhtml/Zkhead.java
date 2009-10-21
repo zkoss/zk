@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -45,11 +46,17 @@ public class Zkhead extends AbstractComponent {
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
-			if (!PageRenderer.isDirectContent(exec))
-			throw new UnsupportedOperationException("The parent of zkhead must be head");
+			if (!HtmlPageRenders.isDirectContent(exec))
+				throw new UnsupportedOperationException("The parent of zkhead must be head");
 
 			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
 			if (zktags != null) out.write(zktags);
 		}
+	}
+
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
 	}
 }

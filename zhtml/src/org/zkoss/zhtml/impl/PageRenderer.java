@@ -40,28 +40,15 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	private static final String ATTR_RENDER_CONTEXT
 		= "org.zkoss.zhtml.renderContext";
 
-	/** Tests if it is rendering the complete page and the content shall
-	 * be generated directly.
-	 * @param exec the execution. If null, Executions.getCurrent() is assumed.
-	 * If no execution, false is returned.
-	 */
-	public static boolean isDirectContent(Execution exec) {
-		if (exec == null) {
-			exec = Executions.getCurrent();
-			if (exec == null) return false;
-		}
-		final RenderContext rc = getRenderContext(exec);
-		return rc != null && rc.directContent;
-	}
 	/** Returns the render context, or null if not available.
 	 * The render context is available only if the ZHTML page is rendered
 	 * directly (rather than via inclusion).
 	 * @param exec the execution. If null, Executions.getCurrent() is assumed.
 	 */
-	public static RenderContext getRenderContext(Execution exec) {
+	public static TagRenderContext getTagRenderContext(Execution exec) {
 		if (exec == null) exec = Executions.getCurrent();
 		return exec != null ?
-			(RenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT): null;
+			(TagRenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT): null;
 	}
 
 	//PageRenderer//
@@ -135,12 +122,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	public static
 	Object beforeRenderHtml(Execution exec, Page page, Writer out)
 	throws IOException {
-		RenderContext rc = getRenderContext(exec);
-		if (rc != null)
+		final TagRenderContext rc = (TagRenderContext)beforeRenderTag(exec);
+		if (rc == null)
 			return null; //already been called
 
-		rc = new RenderContext();
-		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 		HtmlPageRenders.setContentType(exec, page);
 
 		write(out, HtmlPageRenders.outFirstLine(page)); //might null
@@ -150,6 +135,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	/** Ends and cleans up the rendering of a complete ZHTML page.
 	 *
 	 * @param param the value returned by {@link #beforeRenderHtml}.
+	 * @see #beforeRenderHtml
 	 */
 	public static
 	void afterRenderHtml(Execution exec, Page page, Writer out, Object param)
@@ -157,7 +143,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		if (param == null)
 			return; //nothing to do
 
-		final RenderContext rc = (RenderContext)param;
+		final TagRenderContext rc = (TagRenderContext)param;
 		final String rcs = rc.complete();
 		if (rcs.length() > 0) {
 			if (out instanceof StringWriter) {
@@ -173,6 +159,30 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 
-		exec.setAttribute(ATTR_RENDER_CONTEXT, null);
+		afterRenderTag(exec, param);
+	}
+
+	/** Prepares for rendering a ZHTML tag.
+	 * After rendering, the caller shall also invoke {@link #afterRenderTag}.
+	 * Furthermore, the return value of this method shall be passed as
+	 * the <code>param</code> argument of {@link #afterRenderTag}.
+	 *
+	 * @see #afterRenderTag
+	 */
+	public static Object beforeRenderTag(Execution exec) {
+		TagRenderContext rc = getTagRenderContext(exec);
+		if (rc != null)
+			return null; //already been called
+
+		rc = new TagRenderContext();
+		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
+		return rc;
+	}
+	/** Ends and cleans up the rendering of a ZHTML tag.
+	 * @param param the value returned by {@link #beforeRenderHtml}.
+	 */
+	public static void afterRenderTag(Execution exec, Object param) {
+		if (param != null)
+			exec.setAttribute(ATTR_RENDER_CONTEXT, null);
 	}
 }

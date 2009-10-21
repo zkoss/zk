@@ -82,6 +82,9 @@ public class HtmlPageRenders {
 	/** The render context. */
 	private static final String ATTR_RENDER_CONTEXT
 		= "org.zkoss.zk.ui.renderContext";
+	/** Whether is allowed to generate content directly. */
+	private static final String ATTR_DIRECT_CONTENT
+		= "org.zkoss.zk.ui.directContent";
 
 	/** Sets the content type to the specified execution for the given page.
 	 * @param exec the execution (never null)
@@ -633,6 +636,27 @@ public class HtmlPageRenders {
 			return j >= 0 ? s.substring(0, j) + s.substring(j + 1): s;
 		}
 		return "";
+	}
+
+	/** Sets whether a component can directly generate HTML tags
+	 * to the output.
+	 * @see #isDirectContent
+	 */
+	public static boolean setDirectContent(Execution exec, boolean direct) {
+		return (direct ?
+			exec.setAttribute(ATTR_DIRECT_CONTENT, Boolean.TRUE):
+			exec.removeAttribute(ATTR_DIRECT_CONTENT)) != null;
+	}
+	/** Returns whether a component can directly generate HTML tags
+	 * to the output.
+	 * This flag is used by components that can generate the content
+	 * directly, such as {@link org.zkoss.zk.ui.HtmlNativeComponent}
+	 * @see #setDirectContent
+	 */
+	public static boolean isDirectContent(Execution exec) {
+		if (exec == null)
+			exec = Executions.getCurrent();
+		return exec != null && exec.getAttribute(ATTR_DIRECT_CONTENT) != null;
 	}
 
 	/** The render context.
