@@ -54,6 +54,7 @@ November, 2009
   2873478: Always "Processing" Status when Row's Visible is False
   2874709: tree doesn't work properly during redraw
   2880236: Decimalbox generates JavaScript error
+  2882293: Failed to render a ZUL Page containing ZHTML's HTML
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
