@@ -630,8 +630,13 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			final Listitem item = getItemAtIndex(_jsel);
 			item.setSelectedDirectly(true);
 			_selItems.add(item);
-			if (inSelectMold()) smartUpdate("selectedIndex", _jsel);
-			else smartUpdate("selectedItem", item.getUuid());
+			if (inSelectMold()) {
+				int i = 0, j = 0;
+				for(Iterator it = getItems().iterator(); i < _jsel; i++)
+					if (!((Component)it.next()).isVisible())
+						j++;
+				smartUpdate("selectedIndex", _jsel - j);
+			} else smartUpdate("selectedItem", item.getUuid());
 				//Bug 1734950: don't count on index (since it may change)
 				//On the other hand, it is OK with select-mold since
 				//it invalidates if items are added or removed
