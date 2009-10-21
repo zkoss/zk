@@ -61,7 +61,7 @@ public class Body extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		Head.addZkHtmlTags(buf, "body");
+		Head.addZkHeadHtmlTags(buf, getPage(), "body");
 		final String msg = ZkFns.outHtmlUnavailable(getPage());
 		if (msg != null && msg.length() > 0) {
 			final int j = buf.lastIndexOf("</body>");

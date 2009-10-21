@@ -476,9 +476,14 @@ public class ZkFns extends DspFns {
 	}
 
 	/** Returns the content of the specified condition
-	 *  that will be placed inside the header element
-	 * of the specified page.
+	 *  that will be placed inside the header element of the specified page,
+	 * or null if it was generated before.
 	 * For HTML, the header element is the HEAD element.
+	 *
+	 * <p>Notice that this method ignores the following invocations
+	 * against the same page in the same execution. In other words,
+	 * it is safe to invoke this method multiple times.
+	 *
 	 * @param before whether to return the headers that shall be shown
 	 * before ZK's CSS/JS headers.
 	 * If true, only the headers that shall be shown before (such as meta)
@@ -488,6 +493,16 @@ public class ZkFns extends DspFns {
 	 * @since 3.6.1
 	 */
 	public static final String outHeaders(Page page, boolean before) {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null || page == null)
+			return "";
+
+		String attr = "zkHeaderGened" + page.getUuid();
+		if (before) attr += "Bf";
+		if (exec.getAttribute(attr) != null)
+			return null;
+
+		exec.setAttribute(attr, Boolean.TRUE); //generated only once
 		return ((PageCtrl)page).getHeaders(before);
 	}
 	/** @deprecated As of release 3.6.1, replaced with {@link #outHeaders(Page,boolean)}.
@@ -625,8 +640,33 @@ public class ZkFns extends DspFns {
 			+"\");\n</script>\n";
 	}
 
+	/** Generates and returns the ZK specific HTML tags including
+	 * the headers defined in the specified page, or null if it was
+	 * generated before.
+	 * <p>It is shortcut of<br/>
+	 *<code>outZkHeader(page, true)+outZkHtmlTags()+outZkHeader(page, false)</code>
+	 *
+	 * @see #outZkHtmlTags
+	 * @since 3.6.3
+	 */
+	public static String outZkHeadHtmlTags(Page page) {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			String s1 = outHeaders(page, true),
+				s2 = outZkHtmlTags(),
+				s3 = outHeaders(page, false);
+			return s1 != null ?
+				s2 != null ?
+					s3 != null ? s1 + s2 + s3: s1 + s2:
+					s3 != null ? s1 + s3: s1: //s2 null
+				s2 != null ?
+					s3 != null ? s2 + s3: s2:
+					s3 != null ? s3: null; //s2 null
+		}
+		return "";
+	}
 	/** Generates and returns the ZK specific HTML tags for
-	 * a desktop (never null).
+	 * a desktop, or null if it was generated before.
 	 *
 	 * <p>For each desktop, we have to generate a set of HTML tags
 	 * to load ZK Client engine, style sheets and so on.
@@ -636,6 +676,7 @@ public class ZkFns extends DspFns {
 	 * the result HTML page is legal.
 	 *
 	 * @return the string holding the HTML tags, or an empty string if already generated.
+	 * @see #outZkHeadHtmlTags
 	 * @since 3.5.0
 	 */
 	public static String outZkHtmlTags() {

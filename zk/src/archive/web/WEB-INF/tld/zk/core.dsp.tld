@@ -166,8 +166,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	java.lang.String outZkHtmlTags()
 		</function-signature>
 		<description>
-	Returns the desktop info to render a desktop.
-	It is required only if outPageAttrs might not be called
+	Returns the ZK specific HTML tags, if not generated yet.
+		</description>
+	</function>
+	<function>
+		<name>outZkHeadHtmlTags</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outZkHeadHtmlTags(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Returns the ZK specific HTML tags including the headers defined in the page,
+	if not generated yet
 		</description>
 	</function>
 

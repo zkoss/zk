@@ -149,7 +149,7 @@ implements DynamicTag, Native {
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
 				zktagGened = true;
-				final String zktags = ZkFns.outZkHtmlTags();
+				final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
@@ -169,14 +169,14 @@ implements DynamicTag, Native {
 		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
 			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
-				final String zktags = ZkFns.outZkHtmlTags();
+				final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
 		}
 		out.write(sb.toString());
 	}
-	private static boolean replaceZkhead(StringBuffer sb, boolean zktagGened) {
+	private boolean replaceZkhead(StringBuffer sb, boolean zktagGened) {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null || exec.getAttribute(ATTR_ZKHEAD_FOUND) == null) {
 			final int j = sb.indexOf("<zkhead/>");
@@ -186,7 +186,7 @@ implements DynamicTag, Native {
 					//Note: we allow only one zkhead (for better performance)
 
 				if (!zktagGened) {
-					final String zktags = ZkFns.outZkHtmlTags();
+					final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
 					if (zktags != null) {
 						sb.replace(j, j + 9, zktags);
 						return true;

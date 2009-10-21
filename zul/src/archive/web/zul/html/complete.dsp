@@ -26,7 +26,7 @@ ${z:outDocType(page)}
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 
 <c:if test="${!arg.embed}">
-${z:outZkHtmlTags()}
+${z:outZkHeadHtmlTags(page)}
 ${z:outHtmlUnavailable(page)}
 </c:if>
 ${z:outResponseJavaScripts(zk_argResponses)}

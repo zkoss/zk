@@ -1,3 +1,4 @@
+<?link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"?>
 <html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
 <head>
 <title>ZHTML Demo</title>

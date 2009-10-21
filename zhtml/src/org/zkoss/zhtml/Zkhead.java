@@ -40,7 +40,7 @@ public class Zkhead extends AbstractComponent {
 
 	//Component//
 	public void redraw(Writer out) throws IOException {
-		final String zktags = ZkFns.outZkHtmlTags();
+		final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
 		if (zktags != null) out.write(zktags);
 	}
 }

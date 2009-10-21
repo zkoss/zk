@@ -21,6 +21,8 @@ package org.zkoss.zhtml;
 import java.io.StringWriter;
 
 import org.zkoss.lang.Strings;
+
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zhtml.impl.AbstractTag;
@@ -48,16 +50,17 @@ public class Head extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		addZkHtmlTags(buf, "head");
+		addZkHeadHtmlTags(buf, getPage(), "head");
 
 		out.write(buf.toString());
 		out.write('\n');
 	}
-	/** Adds ZkFns.outZkHtmlTags if necessary.
+	/** Adds ZkFns.outZkHeadHtmlTags if necessary.
 	 * @param tag the tag name, such as "head" and "body"
 	 */
-	/*package*/ static void addZkHtmlTags(StringBuffer buf, String tag) {
-		final String zktags = ZkFns.outZkHtmlTags();
+	/*package*/ static
+	void addZkHeadHtmlTags(StringBuffer buf, Page page, String tag) {
+		final String zktags = ZkFns.outZkHeadHtmlTags(page);
 		if (zktags != null && zktags.length() > 0) {
 			int j = buf.indexOf("<" + tag);
 			if (j >= 0) {
