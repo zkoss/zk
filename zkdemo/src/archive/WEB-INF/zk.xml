@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
-	<!-- Turn on if you turn off the caching of resources loaded from
+	<!-- Uncomment if you turn off the caching of resources loaded from
 		the class path (aka., class web resources). By default, class web
 		resources are cached by the browser until you upgraded ZK
 		to a newer version.
