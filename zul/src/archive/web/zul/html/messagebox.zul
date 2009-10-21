@@ -18,11 +18,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="${arg.title}" border="normal" width="250pt" closable="true"
-use="org.zkoss.zul.impl.MessageboxDlg">
+use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<hbox>
 		<div sclass="${arg.icon}"/>
-		<div sclass="z-messagebox" width="210pt">
-			<label value="${arg.message}" multiline="true"/>
+		<div sclass="z-messagebox">
+			<label value="${arg.message}" multiline="true" >
+				<attribute w:name="onBind">
+					var node = this.$n(),
+						tr = node.parentNode.parentNode.parentNode,
+						width = node.offsetWidth + tr.cells[0].offsetWidth,
+						win = this.$o(),
+						cave = win.$n('cave');
+					width += zk(cave).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth();
+					win.$n().style.width = jq.px(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
+					win._doModal();
+					win.onSize();
+				</attribute>
+			</label>
 		</div>
 	</hbox>
 	<separator bar="true"/>

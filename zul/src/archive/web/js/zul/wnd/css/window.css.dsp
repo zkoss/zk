@@ -349,10 +349,6 @@
 	background-position: -16px -48px;
 }
 
-.z-messagebox {
-	word-break: break-all;
-	overflow:auto;
-}
 .z-messagebox-btn {
 	min-width: 45pt;
 	width: 100%;
