@@ -16,7 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object;
+
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The HTML tag.
@@ -29,9 +38,22 @@ public class Html extends AbstractTag {
 	}
 
 	//-- super --//
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		final Execution exec = Executions.getCurrent();
+		final Page page = getPage();
+		final Object ret = PageRenderer.beforeRenderHtml(exec, page, out);
+		super.redraw(out);
+		PageRenderer.afterRenderHtml(exec, page, out, ret);
+	}
 	/** Don't generate the id attribute.
 	 */
 	protected boolean shallHideId() {
 		return true;
+	}
+
+	public void beforeParentChanged(Component parent) {
+		if (parent != null)
+			throw new UiException("Html must be the root component, not "+parent);
+		super.beforeParentChanged(parent);
 	}
 }

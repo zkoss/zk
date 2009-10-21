@@ -23,7 +23,8 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zhtml.impl.AbstractTag;
@@ -48,9 +49,6 @@ public class Head extends AbstractTag {
 
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!PageRenderer.isDirectContent(null))
-			throw new UnsupportedOperationException("The parent of head must be html");
-
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
@@ -81,5 +79,11 @@ public class Head extends AbstractTag {
 			}
 			buf.append(zktags);
 		}
+	}
+
+	public void beforeParentChanged(Component parent) {
+		if (parent != null && !(parent instanceof Html))
+			throw new UiException("Head's parent must be Html, not "+parent);
+		super.beforeParentChanged(parent);
 	}
 }

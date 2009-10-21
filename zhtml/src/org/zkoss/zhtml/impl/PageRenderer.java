@@ -117,16 +117,47 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderComplete(Execution exec, Page page, Writer out)
 	throws IOException {
-		final RenderContext rc = new RenderContext();
+		final Object ret = beforeRenderHtml(exec, page, out);
+
+		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
+			((ComponentCtrl)it.next()).redraw(out);
+
+		afterRenderHtml(exec, page, out, ret);
+	}
+
+	/** Prepares for rendering a complete ZHTML page.
+	 * After rendering, the caller shall also invoke {@link #afterRenderHtml}.
+	 * Furthermore, the return value of this method shall be passed as
+	 * the <code>param</code> argument of {@link #afterRenderHtml}.
+	 *
+	 * @see #afterRenderHtml
+	 */
+	public static
+	Object beforeRenderHtml(Execution exec, Page page, Writer out)
+	throws IOException {
+		RenderContext rc = getRenderContext(exec);
+		if (rc != null)
+			return null; //already been called
+
+		rc = new RenderContext();
 		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 		HtmlPageRenders.setContentType(exec, page);
 
 		write(out, HtmlPageRenders.outFirstLine(page)); //might null
 		write(out, HtmlPageRenders.outDocType(page)); //might null
+		return rc;
+	}
+	/** Ends and cleans up the rendering of a complete ZHTML page.
+	 *
+	 * @param param the value returned by {@link #beforeRenderHtml}.
+	 */
+	public static
+	void afterRenderHtml(Execution exec, Page page, Writer out, Object param)
+	throws IOException {
+		if (param == null)
+			return; //nothing to do
 
-		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).redraw(out);
-
+		final RenderContext rc = (RenderContext)param;
 		final String rcs = rc.complete();
 		if (rcs.length() > 0) {
 			if (out instanceof StringWriter) {

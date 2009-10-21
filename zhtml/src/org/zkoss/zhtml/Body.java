@@ -22,9 +22,7 @@ import java.io.StringWriter;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zhtml.impl.AbstractTag;
@@ -42,14 +40,11 @@ public class Body extends AbstractTag {
 
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		final Execution exec = Executions.getCurrent();
-		if (!PageRenderer.isDirectContent(exec))
-			throw new UnsupportedOperationException("The parent of body must be html");
-
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
+		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
 			Head.addHeaderZkTags(exec, getPage(), buf, "body");
 
@@ -63,5 +58,11 @@ public class Body extends AbstractTag {
 
 		out.write(buf.toString());
 		out.write('\n');
+	}
+
+	public void beforeParentChanged(Component parent) {
+		if (parent != null && !(parent instanceof Html))
+			throw new UiException("Body's parent must be Html, not "+parent);
+		super.beforeParentChanged(parent);
 	}
 }
