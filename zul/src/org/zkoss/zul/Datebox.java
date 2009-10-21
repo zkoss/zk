@@ -281,8 +281,8 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	}
 	
 	/**
-	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, the first timezone
-	 * in the list is assumed.
+	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, 
+	 * the first timezone in the list is assumed.
 	 * @since 3.6.3
 	 */
 	public void setDisplayedTimeZones(List dtzones) {
@@ -294,8 +294,8 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		}
 	}
 	/**
-	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, the first timezone
-	 * in the list is assumed.
+	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, 
+	 * the first timezone in the list is assumed.
 	 * @since 3.6.3
 	 */
 	public void setDisplayedTimeZones(String dtzones) {
