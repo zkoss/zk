@@ -1173,16 +1173,23 @@ zkWnd2._onWndMove = function (cmp, evt) {
 /** since 3.6.3 */
 zkMsgboxLabel = {
 	onSize: function (cmp) {
-		var tr = cmp.parentNode.parentNode.parentNode,
-			width = cmp.offsetWidth + tr.cells[0].offsetWidth,
-			cave = $parentByTag(tr, 'DIV'),
-			outer = $outer(cave);
-		width += zk.getPadBorderWidth(cave)
-			+ zk.getPadBorderWidth((cave = cave.parentNode))
-			+ zk.getPadBorderWidth((cave = cave.parentNode))
-			+ zk.getPadBorderWidth((cave = cave.parentNode));
-		outer.style.width = zk.px(Math.min(Math.max(width, 330), zk.innerWidth() - 20));
-		zkWnd2._doModal(outer);
-		zkWnd2.onSize(outer);
+		if (!cmp._hasFixed) {
+			cmp._hasFixed = true;
+			var tr = cmp.parentNode.parentNode.parentNode,
+				width = cmp.offsetWidth + tr.cells[0].offsetWidth,
+				cave = $parentByTag(tr, 'DIV'),
+				outer = $outer(cave);
+				
+			width += zk.getPadBorderWidth(cave) +
+			zk.getPadBorderWidth((cave = cave.parentNode)) +
+			zk.getPadBorderWidth((cave = cave.parentNode)) +
+			zk.getPadBorderWidth((cave = cave.parentNode));
+			outer.style.width = zk.px(Math.min(Math.max(width, 330), zk.innerWidth() - 20));
+			
+			var zi = $int(outer.style.zIndex);
+			zkWnd2._center(outer, zi);
+			outer.style.top = "100px";
+			zkWnd2.onSize(outer);
+		}
 	}
 };
