@@ -614,6 +614,10 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 					tree.renderItem(Treeitem.this);
 			}
 
+			// Bug #2838782
+			if (tree != null && tree.inPagingMold())
+				tree.focus();
+			
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
