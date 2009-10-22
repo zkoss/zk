@@ -769,7 +769,11 @@ zkLayoutRegionSplit2 = {
 			if (evt.altKey) keys += 'a';
 			if (evt.ctrlKey) keys += 'c';
 			if (evt.shiftKey) keys += 's';
-		}	
+		}
+		
+		// Bug #1939859
+		split.style.zIndex = '';
+		
 		zkau.send({uuid: $uuid(real), cmd: "onSize",
 			data: [real.style.width, real.style.height, keys]},
 			zkau.asapTimeout(real, "onSize"));
