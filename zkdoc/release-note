@@ -55,6 +55,7 @@ November, 2009
   2874709: tree doesn't work properly during redraw
   2880236: Decimalbox generates JavaScript error
   2882293: Failed to render a ZUL Page containing ZHTML's HTML
+  2883117: Modal dialog grayout disappear after window resize
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

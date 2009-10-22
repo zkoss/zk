@@ -12,6 +12,28 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _syncMaximized(wgt) {
+		if (!wgt._lastSize) return;
+		var node = wgt.$n(),
+			floated = wgt._mode != 'embedded',
+			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+			s = node.style;
+
+		// Sometimes, the clientWidth/Height in IE6 is wrong.
+		var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
+			sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+		if (!floated) {
+			sw -= $op.zk.paddingWidth();
+			sw = $op.zk.revisedWidth(sw);
+			sh -= $op.zk.paddingHeight();
+			sh = $op.zk.revisedHeight(sh);
+		}
+
+		s.width = jq.px(sw);
+		s.height = jq.px(sh);
+	}
+
 zul.wnd.Window = zk.$extends(zul.Widget, {
 	_mode: 'embedded',
 	_border: 'none',
@@ -57,7 +79,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				var l, t, w, h, s = node.style, cls = this.getZclass();
 				if (maximized) {
 					jq(this.$n('max')).addClass(cls + '-maxd');
-					this._hideShadow();
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
@@ -108,7 +129,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
-					this._syncMask();
 					this.fire('onMaximize', {
 						left: l,
 						top: t,
@@ -141,8 +161,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer) {
 					this._visible = false;
-					this._syncShadow();
-					this._syncMask();
+					this._syncShadow(true);
 					this.fire('onMinimize', {
 						left: s.left,
 						top: s.top,
@@ -270,7 +289,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left), true);
 		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top), true);
 	},
-	_syncShadow: _zkf = function () {
+	_syncShadow: _zkf = function (bMask) {
 		if (this._mode == 'embedded') {
 			if (this._shadowWgt) {
 				this._shadowWgt.destroy();
@@ -285,11 +304,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else
 				this._shadowWgt.sync();
 		}
+		if (bMask && this._mask && this._shadowWgt)
+			this._mask.sync(this._shadowWgt.getBottomElement());			
 	},
 	zsync: _zkf, //used with zsync
-	_syncMask: function () {
-		if (this._mask && this._shadowWgt) this._mask.sync(this._shadowWgt.getBottomElement());
-	},
 	_hideShadow: function () {
 		var shadow = this._shadowWgt;
 		if (shadow) shadow.hide();
@@ -388,8 +406,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}, zk.ie6_ ? 800: 0);
 	},
 	onZIndex: function (evt) {
-		this._syncShadow();
-		this._syncMask();
+		this._syncShadow(true);
 	},
 	//watch//
 	onShow: function (ctl) {
@@ -413,42 +430,20 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._syncShadow();
 		}
 	},
-	onSize: (function() {
-		function syncMaximized (wgt) {
-			if (!wgt._lastSize) return;
-			var node = wgt.$n(),
-				floated = wgt._mode != 'embedded',
-				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
-				s = node.style;
-
-			// Sometimes, the clientWidth/Height in IE6 is wrong.
-			var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-				sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
-			if (!floated) {
-				sw -= $op.zk.paddingWidth();
-				sw = $op.zk.revisedWidth(sw);
-				sh -= $op.zk.paddingHeight();
-				sh = $op.zk.revisedHeight(sh);
-			}
-
-			s.width = jq.px(sw);
-			s.height = jq.px(sh);
+	onSize: function() {
+		this._hideShadow();
+		if (this.isMaximized()) {
+			if (!this.__maximized)
+				_syncMaximized(this);
+			this.__maximized = false; // avoid deadloop
 		}
-		return function() {
-			this._hideShadow();
-			if (this.isMaximized()) {
-				if (!this.__maximized)
-					syncMaximized(this);
-				this.__maximized = false; // avoid deadloop
-			}
-			this._fixHgh();
-			this._fixWdh();
-			if (this._mode != 'embedded') {
-				this._updateDomPos();
-				this._syncShadow();
-			}
-		};
-	})(),
+		this._fixHgh();
+		this._fixWdh();
+		if (this._mode != 'embedded') {
+			this._updateDomPos();
+			this._syncShadow(true);
+		}
+	},
 	onFloatUp: function (ctl) {
 		if (!this.isVisible() || this._mode == 'embedded')
 			return; //just in case
@@ -598,13 +593,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
-		this._syncShadow();
-		this._syncMask();
+		this._syncShadow(true);
 	},
 	setZIndex: _zkf = function () {
 		this.$supers('setZIndex', arguments);
-		this._syncShadow();
-		this._syncMask();
+		this._syncShadow(true);
 	},
 	setZindex: _zkf,
 	focus: function (timeout) {
@@ -976,3 +969,4 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 		}
 	}
 });
+})();
