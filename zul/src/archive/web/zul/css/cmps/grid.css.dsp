@@ -85,6 +85,7 @@ tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
 	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
+	font-size: ${fontSizeM} !important;
 } <%-- these above css cannot be overrided--%>
 td.z-row-inner, td.z-group-foot-inner {
 	padding: 2px; overflow: hidden;

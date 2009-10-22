@@ -90,6 +90,7 @@ October, 2009
   2856762: SimpleListModelSharer sorting fails
   2882149: Execution.sendRedirect to the same URL doesn't reload
   2882922: The link, meta and script directive ignored in complete page
+  2883181: listheader with "em" size causes fixedLayout problem in FF
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
