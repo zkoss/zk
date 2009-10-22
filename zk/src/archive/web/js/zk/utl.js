@@ -18,6 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	for (var v in _decs)
 		_encs[_decs[v]] = v;
 
+	function _pathname(url) {
+		var j = url.indexOf("//");
+		if (j > 0) {
+			j = url.indexOf("/", j + 2);
+			if (j > 0) return url.substring(j);
+		}
+	}
+
 zUtl = { //static methods
 	//Character
 	isChar: function (cc, opts) {
@@ -289,7 +297,7 @@ zUtl = { //static methods
 
 				var j = url.indexOf('#'),
 					un = j >= 0 ? url.substring(0, j): url,
-					pn = zk.pathname(location.href);
+					pn = _pathname(location.href);
 				j = pn.indexOf('#');
 				if (j >= 0) pn = pn.substring(0, j);
 				if (pn != un)
