@@ -21,9 +21,10 @@
 ////
 // tabbox //
 zkTabbox2 = {
-	onSize: function(cmp) {
+	onSize: _zk = function(cmp) {
 		zk.cleanVisibility(cmp);
 	},
+	onVisi: _zk,
 	setAttr: function(cmp, name, value) {
 		switch (name) {
 			case "z.sel":
