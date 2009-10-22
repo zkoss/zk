@@ -31,7 +31,14 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		},
 		selectedIndex: function (selectedIndex) {
 			var n = this.$n();
-			if (n) n.selectedIndex = selectedIndex;
+			if (n) {
+				var i = 0, j = 0;
+				for (var w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++)
+					if (!w.isVisible())
+						j++;
+
+				n.selectedIndex = selectedIndex - j;
+			}
 		},
 		tabindex: function (tabindex) {
 			var n = this.$n();
