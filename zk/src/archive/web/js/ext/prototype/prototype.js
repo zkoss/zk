@@ -881,7 +881,7 @@ Element.Methods = {
 
   remove: function(el) {
     el = z$(el);
-    //Tom Yeh, Potix: fix memory leak
+    //Tom Yeh, Potix: fix memory leak (notice it also fixed Bug 2881586)
     zk.cleanAll(el, true);
     if (zk.ie) {
 		var gcid = '_z_lkgc',

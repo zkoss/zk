@@ -42,7 +42,7 @@ public class FlashDefault implements ComponentRenderer {
 		final String encsrc = self.getEncodedSrc(), bgcolor = self.getBgcolor();
 		wh.write("<div id=\"").write(uuid).write("\" ");
 		wh.write(self.getOuterAttrs()).write(" z.type=\"zul.flash.Flash\">");
-		wh.write("<object id=\"").write(uuid).write("!obj\"  width=\"");
+		wh.write("<object id=\"").write(uuid).write("!obj\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"");
 		wh.write(self.getWidth()).write("\" height=\"").write(self.getHeight()).write("\">");
 		wh.write("<param name=\"movie\" value=\"").write(encsrc).write("\"></param>");
 		wh.write("<param name=\"wmode\" value=\"").write(self.getWmode()).write("\"></param>");

@@ -91,6 +91,7 @@ October, 2009
   2882149: Execution.sendRedirect to the same URL doesn't reload
   2882922: The link, meta and script directive ignored in complete page
   2883181: listheader with "em" size causes fixedLayout problem in FF
+  2879948: bug with flash in IE6
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

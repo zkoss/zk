@@ -20,7 +20,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="encsrc" value="${self.encodedSrc}"/>
 <div id="${self.uuid}" ${self.outerAttrs} z.type="zul.flash.Flash">
-<object id="${self.uuid}!obj" width="${self.width}" height="${self.height}">
+<object id="${self.uuid}!obj" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="${self.width}" height="${self.height}">
 <param name="movie" value="${encsrc}"></param>
 <param name="wmode" value="${self.wmode}"></param>
 <param name="autoplay" value="${self.autoPlay}"></param>
