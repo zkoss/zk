@@ -28,6 +28,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</rows>
 	</grid>
 	<button label="Click me first"
-		onClick='Messagebox.show("Press TAB to see if you can change focus to the first window", "Ready", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION)'/>
+		onClick='Messagebox.show("Press TAB to see if you can change focus to the first window, that is a bug.", "Ready", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION)'/>
 	</vbox>
 </window>

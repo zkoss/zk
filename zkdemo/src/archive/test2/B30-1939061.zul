@@ -26,6 +26,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <body>
 	<p>Click the browser's View Source to make sure there is only one &lt;html&gt;
 	tag is generated.</p>
-	<z:button label="Say Hi" onClick='alert("Hi")'/>
+	<z:button label="Say Hi" mold="os" onClick='alert("Hi")'/>
 </body>
 </html>

@@ -54,7 +54,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 		<h:p>		
 		Check + uncheck items above to change href values of items below.
-		Item labels are NOT modified, but items shift by 1 space.
+		The following item labels are NOT modified and these items cannot shift by 1 space.
 		</h:p>
 
 		<toolbar>
