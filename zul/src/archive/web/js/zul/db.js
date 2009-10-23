@@ -112,20 +112,22 @@ zk.Cal.prototype = {
 		}
 		html += '</table></td></tr></table>';
 
-		html += '<span id="' + uuid + '!timebox" class="' + zcls + '-timebox">'+
-		'<input id="' + uuid + '!timebox-real" class="' + zcls + '-timebox-inp" type="text" value="" autocomplete="off"/>'+
-		'<span id="' + uuid + '!timebox-btn" class="' + zcls + '-timebox-btn" onclick="zkCal.block(event)">'+
-		'<span class="' + zcls + '-timebox-img">'+
-		'</span></span></span>';
-
-		html += '<div><select id="' + uuid + '!dtzones" onchange="zkCal.ondtzoneschg(event)" onclick="zkCal.block(event)">';
-		if (dtzones) {
-			var dtzonenames = dtzones.split(",");
-			for (var i = 0, len = dtzonenames.length; i < len; i++) {
-				html += '<option value="' + dtzonenames[i] + '">' + dtzonenames[i] + '</option>';
+		if (this.popup) {
+			html += '<span id="' + uuid + '!timebox" class="' + zcls + '-timebox">'+
+			'<input id="' + uuid + '!timebox-real" class="' + zcls + '-timebox-inp" type="text" value="" autocomplete="off"/>'+
+			'<span id="' + uuid + '!timebox-btn" class="' + zcls + '-timebox-btn" onclick="zkCal.block(event)">'+
+			'<span class="' + zcls + '-timebox-img">'+
+			'</span></span></span>';
+	
+			html += '<div><select id="' + uuid + '!dtzones" onchange="zkCal.ondtzoneschg(event)" onclick="zkCal.block(event)">';
+			if (dtzones) {
+				var dtzonenames = dtzones.split(",");
+				for (var i = 0, len = dtzonenames.length; i < len; i++) {
+					html += '<option value="' + dtzonenames[i] + '">' + dtzonenames[i] + '</option>';
+				}
 			}
+			html += '</select></div>';		
 		}
-		html += '</select></div>';
 
 		zk.setInnerHTML(this.popup || this.element, html);
 		if (this.popup) {
@@ -145,20 +147,22 @@ zk.Cal.prototype = {
 	setDtzones: function () {
 		var selectCmp = $e(this.element, "dtzones"),
 			dtimezone = getZKAttr(this.element, "dtimezone"),
-			optionChilds = zk.childNodes(selectCmp),
 			isDisplayTimezones = false;
-
-		if (dtimezone && optionChilds) {
-			for (var i = optionChilds.length; i--;) {
-				if (dtimezone == optionChilds[i].text) {
-					selectCmp.selectedIndex = i;
-					isDisplayTimezones = true;
-					break;
+			
+		if (selectCmp) {
+			var	optionChilds = zk.childNodes(selectCmp);
+			if (dtimezone && optionChilds) {
+				for (var i = optionChilds.length; i--;) {
+					if (dtimezone == optionChilds[i].text) {
+						selectCmp.selectedIndex = i;
+						isDisplayTimezones = true;
+						break;
+					}
 				}
-			}
-			action[isDisplayTimezones ? "show" : "hide"](selectCmp);
-		} else {
-			action.hide(selectCmp);
+				action[isDisplayTimezones ? "show" : "hide"](selectCmp);
+			} else {
+				action.hide(selectCmp);
+			}	
 		}
 	},
 	init: function () {
@@ -222,9 +226,13 @@ zk.Cal.prototype = {
 			zmin = getZKAttr(cmp, "min") == "true",
 			za = getZKAttr(cmp, "ampm") == "true",
 			selectCmp = $e(this.element, "dtzones"),
+			timeCmp = $e(this.element, "timebox"),
 			dTimezonesReadOnly = getZKAttr(this.element, "dtzonesReadOnly") == "true";
-
-		selectCmp.disabled = dTimezonesReadOnly ? "disabled" : "";
+		
+		if (selectCmp)
+			selectCmp.disabled = dTimezonesReadOnly ? "disabled" : "";
+		if (timeCmp)
+			this._tm.setVisible(zhr || zmin || za ? true : false);
 	},
 	_output: function () {
 		//year
