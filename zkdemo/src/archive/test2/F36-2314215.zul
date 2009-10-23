@@ -14,7 +14,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<popup id="pp">
+<popup id="pp" width="200px">
 		Here is popup
 	</popup>
 	The following buttons should work as the same as the image.

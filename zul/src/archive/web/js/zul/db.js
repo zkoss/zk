@@ -219,8 +219,7 @@ zk.Cal.prototype = {
 		return val ? zk.formatDate(val, this.getFormat()) : '';
 	},
 	today: function () {
-		var	d = new Date();
-		return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
+		return new Date();
 	},
 	_updateCal: function(cmp) {
 		var zhr = getZKAttr(cmp, "hr") == "true",

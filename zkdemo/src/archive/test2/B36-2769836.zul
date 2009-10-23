@@ -14,4 +14,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <?link rel="shortcut icon" type="image/x-icon" href="http://zkoss.org/img/favicon.ico"?>
-<label value="You should see the ZK icon in the address bar(Safari Only)"/>
+<label value="Test this case, please open a new browser, and then you should see the ZK icon in the address bar(Safari Only)"/>
