@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2884058.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 23 14:30:13 TST 2009, Created by sam
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+Eroro in calendar component in Internet explorer 8 and Opera.
+Datebox and Calendar use the same component, it shall looks the same
+<hbox>
+<datebox/>
+<separator orient="vertical" width="50px"/>
+<calendar/>
+</hbox>
+</window>
