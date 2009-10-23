@@ -173,7 +173,7 @@ zk.Cal.prototype = {
 			bd = getZKAttr(this.element, "bd"),
 			ed = getZKAttr(this.element, "ed");
 			
-		if (this.pp) this.setDtzones();
+		if (this.popup) this.setDtzones();
 		if (val) val = zk.parseDate(val, this.getFormat());
 		this.date = val ? val: this.today();
 		if (bd) this.begin = new Date($int(bd) * 1000);
