@@ -6,7 +6,7 @@
 		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
 	-->
 <window title="Menu Demo" border="normal">	
-	<label value='button "stone" should not be freezed after clicked'/>
+	<label value='button "stone" should not be freezed after clicked and move the mouse away (it means the mouseover style should be removed)'/>
 	<menubar>		
 		<menu label="stone" id="stone" />
 	</menubar>	
