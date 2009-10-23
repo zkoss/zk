@@ -16,29 +16,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.GregorianCalendar;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.xml.HTMLs;
-
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.out.AuInvoke;
-
-import org.zkoss.zul.mesg.MZul;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zul.impl.FormatInputElement;
-import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding a date.
@@ -57,11 +52,13 @@ import org.zkoss.zul.impl.Utils;
 public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
-	private boolean _btnVisible = true,_lenient = true,_open = false;
+	private List _dtzones;
+	private boolean _btnVisible = true, _lenient = true, _open = false, _dtzonesReadOnly = false;
 	static {
 		addClientEvent(Datebox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Datebox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Datebox.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT|CE_DUPLICATE_IGNORE);
 	}
 
 	public Datebox() {
@@ -256,7 +253,87 @@ public class Datebox extends FormatInputElement implements
 	 * The default time zone is determined by {@link TimeZones#getCurrent}.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
+		if (_tzone != tzone) {
+			if (_dtzones != null) {
+				_tzone = _dtzones.contains(tzone) ? tzone : (TimeZone) _dtzones.get(0);
+			} else {
+				_tzone = tzone;
+			}
+			invalidate();
+		}
+	}
+	/** Sets the time zone that this date box belongs to, or null if
+	 * the default time zone is used.
+	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 * @since 3.6.3
+	 */
+	public void setTimeZone(String id) {
+		TimeZone tzone = TimeZone.getTimeZone(id);
+		setTimeZone(tzone);
+	}
+	/**
+	 * Returns the displayed TimeZone list
+	 * <p>Default: null
+	 * @since 3.6.3
+	 */
+	public List getDisplayedTimeZones() {
+		return _dtzones;
+	}
+	/**
+	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, 
+	 * the first timezone in the list is assumed.
+	 * @since 3.6.3
+	 */
+	public void setDisplayedTimeZones(List dtzones) {
+		if (_dtzones != dtzones) {
+			_dtzones = dtzones;
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < _dtzones.size(); i++) {
+				if(i != 0) sb.append(",");
+				TimeZone tz = (TimeZone)_dtzones.get(i);
+				sb.append(tz.getID());
+			}
+			smartUpdate("displayedTimeZones", sb.toString());
+			if (_tzone == null && _dtzones != null && _dtzones.get(0) != null)
+				_tzone = (TimeZone)_dtzones.get(0);
+		}
+	}
+	/**
+	 * Sets the displayed TimeZone list, if the {@link getTimeZone()} is null, 
+	 * the first timezone in the list is assumed.
+	 * @since 3.6.3
+	 */
+	public void setDisplayedTimeZones(String dtzones) {
+		if (dtzones == null || dtzones.length() == 0) {
+			setDisplayedTimeZones((List)null);
+			return;
+		}
+		
+		LinkedList list = new LinkedList();
+		String[] ids = dtzones.split(",");
+		for (int i = 0; i < ids.length; i++) {
+			TimeZone tzone = TimeZone.getTimeZone(ids[i].trim());
+			if (tzone != null)
+				list.add(tzone);
+		}
+		setDisplayedTimeZones(list);
+	}
+	/**
+	 * Returns whether the displayed TimeZone list is read only
+	 * @since 3.6.3
+	 */
+	public boolean isTimeZonesReadOnly() {
+		return _dtzonesReadOnly;
+	}
+	/**
+	 * Sets whether to enable displayed TimeZone list read only
+	 * @since 3.6.3
+	 */
+	public void setTimeZonesReadOnly(boolean readonly) {
+		if (readonly != _dtzonesReadOnly) {
+			_dtzonesReadOnly = readonly;
+			smartUpdate("timeZonesReadOnly", _dtzonesReadOnly);
+		}
 	}
 
 	/**
@@ -291,6 +368,22 @@ public class Datebox extends FormatInputElement implements
 		smartUpdate("open", false);
 	}
 
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onTimeZoneChange, onChange, onChanging and onError.
+	 * @since 5.0.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals("onTimeZoneChange")) {
+			final Map data = request.getData();
+			String timezone = (String)data.get("timezone");
+			setTimeZone(timezone);
+		} else 
+			super.service(request, everError);
+	}
+	
 	// -- super --//
 	public void setConstraint(String constr) {
 		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
@@ -346,5 +439,18 @@ public class Datebox extends FormatInputElement implements
 			renderer.render("buttonVisible", false);
 		if (!_lenient)
 			renderer.render("lenient", false);
+		if (_dtzonesReadOnly)
+			renderer.render("timeZonesReadOnly", true);
+		if (_dtzones != null) {
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < _dtzones.size(); i++) {
+				if(i != 0) sb.append(",");
+				TimeZone tz = (TimeZone)_dtzones.get(i);
+				sb.append(tz.getID());
+			}
+			renderer.render("displayedTimeZones", sb.toString());
+		}
+		if (_tzone != null)
+			renderer.render("timeZone", _tzone.getID());
 	}
 }

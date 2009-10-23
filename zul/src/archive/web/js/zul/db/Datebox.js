@@ -59,6 +59,18 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this._pop.rerender();
 			}
 		},
+		timeZone: function (timezone) {
+			this._timezone = timezone;
+			this._setTimeZonesIndex();
+		},
+		timeZonesReadOnly: function (readonly) {
+			this._tzonesReadOnly = readonly;
+			var select = this.$n('dtzones');
+			if (select) select.disabled = readonly ? "disabled" : "";
+		},
+		displayedTimeZones: function (dtzones) {
+			this._dtzones = dtzones.split(",");
+		},
 		lenient: null
 	},
 	setValue: function (val) {
@@ -72,6 +84,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		} else
 			args = arguments;
 		this.$supers('setValue', args);
+	},
+	_setTimeZonesIndex: function () {
+		var select = this.$n('dtzones');
+		if (select && this._timezone) {
+			var opts = jq(select).children('option');
+			for (var i = opts.length; i--;) {
+				if (opts[i].text == this._timezone) select.selectedIndex = i;
+			}
+		}		
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -101,8 +122,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			hasHour1 = hasAM ? hh > -1 || KK > -1 : false;
 
 		if (hasHour1) {
-			var f = hh < KK ? 'a KK' : 'a hh';
-			return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
+			if ((hh != -1 && aa < hh) || (kk != -1 && aa < kk)) {
+				var f = hh < KK ? 'a KK' : 'a hh';
+				return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
+			} else {
+				var f = hh < KK ? 'KK' : 'hh';
+				f = f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
+				return f + ' a';
+			}
 		} else {
 			var f = HH < kk ? 'kk' : HH > -1 ? 'HH' : '';
 			return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
@@ -193,7 +220,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	bind_: function (){
 		this.$supers('bind_', arguments);
 		var btn = this.$n('btn'),
-			inp = this.getInputNode();
+			inp = this.getInputNode(),
+			pp = this.$n('pp');
 			
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
@@ -203,18 +231,39 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		
+		if (pp && this._dtzones) {
+			var html = ['<div><select id="', this.uuid, '-dtzones">'];
+			if (pp && this._dtzones) {
+				for (var i = 0, len = this._dtzones.length; i < len; i++)
+					html.push('<option value="', this._dtzones[i], '">', this._dtzones[i], '</option>');
+			}
+			html.push('</select><div>');
+			jq(pp).append(html.join(''));
+			var select = this.$n('dtzones');
+			if (select) {
+				select.disabled = this._tzonesReadOnly ? "disable" : "";
+				this.domListen_(select, 'onChange', '_doTimeZoneChange');
+	 			this._setTimeZonesIndex();
+			}			
+		}
+
+			
 		this.syncWidth();
 		
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
-		var btn = this.$n('btn');
+		var btn = this.$n('btn'),
+			select = this.$n('dtzones');
 		if (btn) {
 			this._auxb.cleanup();
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
+		if (select)
+			this.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
+			
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	},
@@ -222,6 +271,16 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!this._disabled)
 			this.setOpen();
 		evt.stop();
+	},
+	_doTimeZoneChange: function (evt) {
+		var select = this.$n('dtzones'),
+			timezone = select.value;
+		if (!this.getValue()) {
+			this.setValue(this._tm.getValue());
+		}
+		this.updateChange_();
+		this.fire("onTimeZoneChange", {timezone: timezone}, {toServer:true}, 150);
+		if (this._pop) this._pop.close();
 	},
 	onChange: function (evt) {
 		if (this._pop)
@@ -317,13 +376,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			}, 150);
 			//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 			//in Chinese language might not be correct here.
-
-			var fmt = wgt.getTimeFormat();
+			var fmt = wgt.getTimeFormat(),
+				value = wgt.getValue() ? wgt.getValue() : new Date();
 			if (fmt) {
 				var tm = wgt._tm;
 				tm.setVisible(true);
 				tm.setFormat(fmt);
-				tm.setValue(wgt.getValue());
+				tm.setValue(value);
 				tm.onShow();
 			} else {
 				wgt._tm.setVisible(false);
