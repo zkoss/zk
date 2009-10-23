@@ -34,7 +34,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * 
  * <p>
  * Non XUL extension.
- * <p>Note: {@link setVisible(boolean)} with false cannot work in IE. (Browser's limitation) 
+ * <p>Note: {@link #setVisible(boolean)} with false cannot work in IE. (Browser's limitation) 
  * @author Davidchen
  * @author Tomyeh
  * @since 3.6.0
