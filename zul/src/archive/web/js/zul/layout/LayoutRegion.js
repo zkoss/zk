@@ -660,9 +660,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			wgt.setHeight(dg._point[1] + 'px');
 		else
 			wgt.setWidth(dg._point[0] + 'px');
+
+		// Bug #1939859
+		wgt.$n().style.zIndex = '';
 			
 		dg._rootoffs = dg._point = null;
-		
+
 		wgt.parent.resize();
 		wgt.fire('onSize', zk.copy({
 			width: wgt.$n('real').style.width,

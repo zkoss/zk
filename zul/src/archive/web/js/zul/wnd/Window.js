@@ -501,11 +501,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
+			if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/**bug #1944729*/)
+				cave.style.height = "0";
+
 			if (hgh && hgh != "auto") {
-				if (zk.ie6_) cave.style.height = "0px";
 				zk(cave).setOffsetHeight(this._offsetHeight(n));
 			} else if (cvh && cvh != "auto") {
-				if (zk.ie6_) cave.style.height = "0px";
+				if (zk.ie6_) cave.style.height = "0";
 				cave.style.height = "";
 			}
 		}
