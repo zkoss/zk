@@ -14,8 +14,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <window>
-Eroro in calendar component in Internet explorer 8 and Opera.
-Datebox and Calendar use the same component, it shall looks the same
+<vbox>
+<label>Error in calendar component in IE and Opera.</label>
+<label>1.Click on datebox's icon, it will popop a Calendar</label>
+<label>2.Compare these 2 Calendar, look the same is correct</label>
+</vbox>
 <hbox>
 <datebox/>
 <separator orient="vertical" width="50px"/>
