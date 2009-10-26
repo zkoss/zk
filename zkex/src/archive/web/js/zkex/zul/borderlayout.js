@@ -432,7 +432,11 @@ zkLayoutRegion2 = {
 		$e($uuid(cmp), "btn").style.display = "";
 		zk.unlisten(document, "click", cmp._slideIn);
 		cmp._isSlideUp = cmp._isSlide = false;
-		
+		var real = $real(cmp);
+		if (real._stackup) {
+			zk.remove(real._stackup);
+			real._stackup = null;
+		}		
 	},
 	onColledClick: function (evt) {
 		var colled = zkau.evtel(evt), real = $real(colled);
@@ -451,6 +455,12 @@ zkLayoutRegion2 = {
 		$e($uuid(real), "btn").style.display = "none"; 
 		
 		real.style.visibilty = "";
+		
+		if (!real._stackup && (zk.useStackup === undefined ? zk.ie6Only : zk.useStackup)) {
+			real._stackup = zk.makeStackup(real, real.id + '!rgnstk', real);
+			real._stackup.style.zIndex = 100;
+		}
+		
 		real.style.display = "none";
 		anima.slideDown(real, zkLayoutRegionSplit2.sanchors[real.split.pos]);
 	},

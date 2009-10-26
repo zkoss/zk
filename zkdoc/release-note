@@ -92,6 +92,7 @@ October, 2009
   2882922: The link, meta and script directive ignored in complete page
   2883181: listheader with "em" size causes fixedLayout problem in FF
   2879948: bug with flash in IE6
+  2886261: In IE6, problem with collapsible West and Listbox(select).
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
