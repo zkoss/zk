@@ -26,5 +26,5 @@ Please test the popup of menu should cover the PDF file
 </menupopup>
 </menu>
 </menubar>
-<iframe src="/test2/B1896797.pdf"/>
+<iframe style="background-color:transparent" src="/test2/B1896797.pdf"/>
 </zk>

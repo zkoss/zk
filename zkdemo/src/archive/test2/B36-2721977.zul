@@ -23,11 +23,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
         public void save() {
             ArrayList al = new ArrayList();
 			try{
-	            if(txb1.getValue() == null || txb1.getValue().isEmpty()) {
+	            if(txb1.getValue() == null || txb1.getValue().length() == 0) {
 	                 al.add(new WrongValueException(txb1, "fill textbox 1"));
 	                 txb1.focus();
 	            }
-	            if(txb2.getValue() == null || txb2.getValue().isEmpty())
+	            if(txb2.getValue() == null || txb1.getValue().length() == 0)
 	                 al.add(new WrongValueException(txb2, "fill textbox 2"));
         	}catch(Exception e) {
         		if(al.isEmpty())

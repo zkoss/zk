@@ -217,15 +217,16 @@ public class WebManager {
 	}
 	/** Returns the prefix of URL to represent this build. */
 	private String getCWRURLPrefix() {
-		int val = (_wapp.getSubversion(0) << 12)
-			  + (_wapp.getSubversion(1) << 6)
+		int val = (_wapp.getSubversion(0) << 16)
+			  + (_wapp.getSubversion(1) << 8)
 			  + _wapp.getSubversion(2);
 		try {
 			val ^= Integer.parseInt(_wapp.getBuild());
 		} catch (Throwable ex) { //ignore it
 		}
 		if (val < 0) val = -val;
-		return Integer.toString(val % 10000);
+		return Integer.toString(val % 100000000);
+			//FF 8-char boundary: http://code.google.com/intl/de/speed/page-speed/docs/caching.html
 	}
 
 	public void destroy() {

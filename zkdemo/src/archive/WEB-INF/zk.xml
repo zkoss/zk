@@ -19,14 +19,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</client-config>
 	-->
 	<!-- Uncomment if you turn off the caching of resources loaded from
-		the class path (aka., class web resources). By default, class web
-		resources are cached by the browser until you upgraded ZK
-		to a newer version.
+		the class path (aka., class Web resources).
+		By default, class Web resources are cached by the browser until
+		you upgraded ZK to a newer version.
 		However, it is better to turn the cache off when you are developing
 		a theme or a component.
 	<library-property>
 		<name>org.zkoss.web.classWebResource.cache</name>
 		<value>false</value>
+	</library-property>
+	-->
+	<!-- Uncomment if you want to control the number of hours that
+		the CSS files of class Web resources won't be changed.
+		By default, it is 8760 (the same as other class Web resouces).
+		A non-positive value turns off the cache of the CSS files of
+		class Web resources.
+		This property is meaningless if org.zkoss.web.classWebResource.cache
+		is disabled.
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache.CSS.days</name>
+		<value>8760</value>
 	</library-property>
 	-->
 	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified

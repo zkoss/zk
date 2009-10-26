@@ -37,5 +37,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 </rows>
 </grid>
 <button label="After click me, Groupfoot should be replaced" onClick='if (gf != rs.getLastChild()) rs.insertBefore(gf, null); else rs.insertBefore(gf, g2);'/>
-<button label="After click me, Group and Groupfoot should be removed" onClick='g.detach(); g2.detach();'/>
+<button label="After click me, Group and Groupfoot should be removed" onClick='g.detach(); g2.detach(); gf.detach();'/>
 </zk>

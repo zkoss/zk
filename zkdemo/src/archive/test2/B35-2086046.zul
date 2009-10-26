@@ -18,7 +18,7 @@ bug.</label>
 <groupbox id="gb3" width="100%">
 <caption image="/test2/img/inet.png" label="Testing Group Box"/>
 <vbox>
-<hbox>
+<hbox spacing="10px">
 Testing Complicated Groupbox
 <groupbox id="gb" mold="3d" width="100%">
 <caption image="/test2/img/inet.png" label="fruits"/>

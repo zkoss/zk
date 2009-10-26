@@ -47,7 +47,6 @@ import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
-import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
@@ -112,7 +111,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 				cacheable = wc.cacheable;
 			}
 			if (cacheable)
-				ClassWebResource.setClientCacheForever(response);
+				org.zkoss.zk.fn.JspFns.setCWRCacheControl(response);
 		} finally {
 			setProvider(null);
 		}

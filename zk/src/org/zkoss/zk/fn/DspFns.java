@@ -104,20 +104,44 @@ public class DspFns {
 			deviceType);
 	}
 
-	/** Sets the required headers (e.g., Cache-Control) for Class Web
-	 * resources to notify the client is allowed to cache the content
-	 * as long as possible.
+	/** Sets the Cache-Control and Expires headers for the response.
 	 *
-	 * <p>This method does nothing if a library property called
-	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
-	 * In other words, this method is used for loading the so-called
-	 * Class Web Resources.
-	 *
-	 * @see org.zkoss.web.util.resource.ClassWebResource#setClientCacheForever
+	 * @param prop the name of the propery to check if the headers
+	 * shall be generated. If null, it is always generated.
+	 * If "false" is specified with this property, this method won't
+	 * generate anything. In other words, "false" means to disable the cache.
+	 * If It is used for debugging/developing purpose.
+	 * @param hours the number of hours the client is allowed to cache the
+	 * resource
 	 * @since 3.6.3
 	 */
-	public static void setCWRClientCacheForever() {
-		org.zkoss.web.util.resource.ClassWebResource.
-			setClientCacheForever((HttpServletResponse)ServletFns.getCurrentResponse());
+	public static void setCacheControl(String prop, int hours) {
+		JspFns.setCacheControl((HttpServletResponse)ServletFns.getCurrentResponse(),
+			prop, hours);
+	}
+	/** Sets the Cache-Control and Expires headers for the CSS files
+	 * of class Web resources.
+	 *
+	 * <p>It first check if <tt>org.zkoss.web.classWebResource.cache</tt>
+	 * is turned off, and then check how many hours specified in
+	 * <tt>org.zkoss.web.classWebResource.cache.CSS.hours</tt>.
+	 * If it is turned off or the value of hours is non-postive, nothing is generated
+	 * Otherwise, it generates the header with the specified hours
+	 * (default: 8760).
+	 * @see #setCWRCacheControl
+	 * @since 3.6.3
+	 */
+	public static void setCSSCacheControl() {
+		JspFns.setCSSCacheControl((HttpServletResponse)ServletFns.getCurrentResponse());
+	}
+	/** Sets the Cache-Control and Expires headers for class Web resources.
+	 * It checks if <tt>org.zkoss.web.classWebResource.cache</tt>
+	 * is turned off. If not, it generates the headers.
+	 * <p>Notice that, for the CSS files, please use {@link #setCSSCacheControl}
+	 * instead.
+	 * @since 3.6.3
+	 */
+	public static void setCWRCacheControl() {
+		JspFns.setCWRCacheControl((HttpServletResponse)ServletFns.getCurrentResponse());
 	}
 }

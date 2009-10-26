@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->	
 <window id="win1">
-	if you dont see any popup or alert , this bug fixed
+	After the page loaded, if you don't see any popup or alert , this bug fixed
 <hbox spacing="0" width="150px">
 <tabbox id="Tab1" onSelect="refresh()" width="780px">
 <tabs>

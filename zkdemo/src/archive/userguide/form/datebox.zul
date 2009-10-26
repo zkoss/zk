@@ -38,7 +38,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			<tabpanel>
 				<panel>
 					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
+						<textbox id="codeView" class="code" rows="22" width="95%">
 			<attribute name="value"><![CDATA[
 <zk>
 Calendar:<calendar/>

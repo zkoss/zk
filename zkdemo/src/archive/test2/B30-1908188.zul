@@ -6,7 +6,7 @@
 	<li>Click "Test" and then "Show popup below component..."<br/>
 	You will see popup shown right below "Test"</li>
 	<li>Click "Test" and then "Show popup at x,y position..."<br/>
-	You will see popup shown at (50px, 50px)</li>
+	You will see popup shown at (x=50px, y=50px) according to browser's top-left corner.</li>
 ]]></html>
 	<zscript>
 		public class PopupOpenEventListener implements EventListener {
