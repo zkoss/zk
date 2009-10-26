@@ -137,13 +137,8 @@ public class ClassWebResource {
 
 	/** Sets the required headers (e.g., Cache-Control) to notify the
 	 * the client is allowed to cache the content as long as possible.
-	 *
-	 * <p>This method does nothing if a library property called
-	 * <code>org.zkoss.web.classWebResource.cache</code> is set to false.
-	 *
-	 * @since 3.6.3
 	 */
-	public static void setClientCacheForever(HttpServletResponse response) {
+	private static void setClientCacheForever(HttpServletResponse response) {
 		if (!"false".equals(Library.getProperty("org.zkoss.web.classWebResource.cache"))) {
 			response.setHeader("Cache-Control", "public, max-age=31536000"); //a year (unit: seconds)
 			response.setDateHeader("Expires", _expires);

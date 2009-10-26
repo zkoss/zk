@@ -39,7 +39,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 	<function>
 		<name>outDeviceStyleSheets</name>
-		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-class>org.zkoss.zk.fn.JspFns</function-class>
 		<function-signature>
 	java.lang.String outDeviceStyleSheets(ServletContext,
  	HttpServletRequest, HttpServletResponse, String)
@@ -51,14 +51,35 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
-		<name>setCWRClientCacheForever</name>
+		<name>setCacheControl</name>
 		<function-class>org.zkoss.zk.fn.JspFns</function-class>
 		<function-signature>
-	void setCWRClientCacheForever(HttpServletResponse)
+	void setCacheControl(HttpServletResponse, java.lang.String, int)
 		</function-signature>
 		<description>
-	Sets the required headers (e.g., Cache-Control) for Class Web resources
-	to notify the client is allowed to cache the content as long as possible.
+	Sets the Cache-Control and Expires headers for the current request.
+		</description>
+	</function>
+	<function>
+		<name>setCSSCacheControl</name>
+		<function-class>org.zkoss.zk.fn.JspFns</function-class>
+		<function-signature>
+	void setCSSCacheControl(HttpServletResponse)
+		</function-signature>
+		<description>
+	Sets the Cache-Control and Expires headers for the CSS file
+	from class Web resource for the current request.
+		</description>
+	</function>
+	<function>
+		<name>setCWRCacheControl</name>
+		<function-class>org.zkoss.zk.fn.JspFns</function-class>
+		<function-signature>
+	void setCWRCacheControl(HttpServletResponse)
+		</function-signature>
+		<description>
+	Sets the Cache-Control and Expires headers for
+	class Web resource for the current request.
 		</description>
 	</function>
 </taglib>
