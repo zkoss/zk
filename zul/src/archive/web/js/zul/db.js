@@ -119,11 +119,13 @@ zk.Cal.prototype = {
 			'<span class="' + zcls + '-timebox-img">'+
 			'</span></span></span>';
 	
-			html += '<div><select id="' + uuid + '!dtzones" onchange="zkCal.ondtzoneschg(event)" onclick="zkCal.block(event)">';
+			html += '<div class="' + zcls + '-timezone">';
+			html += zkDtbox.getTimeZoneLabel();
+			html += '<select id="' + uuid + '!dtzones" class="' + zcls + '-timezone-body" onchange="zkCal.ondtzoneschg(event)" onclick="zkCal.block(event)">'
 			if (dtzones) {
 				var dtzonenames = dtzones.split(",");
 				for (var i = 0, len = dtzonenames.length; i < len; i++) {
-					html += '<option value="' + dtzonenames[i] + '">' + dtzonenames[i] + '</option>';
+					html += '<option value="' + dtzonenames[i] + '" class="' + zcls + '-timezone-item">' + dtzonenames[i] + '</option>';
 				}
 			}
 			html += '</select></div>';		
@@ -966,6 +968,9 @@ zkDtbox.closepp = function (evt) {
 		}
 	}
 };
+zkDtbox.getTimeZoneLabel = function () {
+	return "";
+};
 zk.FloatDatebox = zClass.create();
 Object.extend(Object.extend(zk.FloatDatebox.prototype, zk.Float.prototype), {
 	_close: function (el) {
@@ -1470,6 +1475,7 @@ zkTimebox.prototype = {
 	},
 	_doType: function (val) {
 		this.getTimeHandler().addTime(this, val);
+		this.onChanging();
 	},
 	getTimeHandler: function () {
 		var pos = this._getPos(),
