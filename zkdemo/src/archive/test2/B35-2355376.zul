@@ -31,7 +31,7 @@ After this page display, if there is not Javascript error, that is correct.(IE o
 		<button label="center" onClick="win.position = &quot;center&quot;;"/>
 	</window>
 	<button label="Overlap" focus="true" onClick="win.doOverlapped();"/>
-	<button label="Highligh" onClick="win.doHighlighed();"/>
+	<button label="Highligh" onClick="win.doHighlighted();"/>
 	<button label="Modal" onClick="win.doModal();"/>
 	<button label="Popup" onClick="win.doPopup();"/>
 	<button label="Embed" onClick="win.doEmbedded();"/>
