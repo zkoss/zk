@@ -135,4 +135,18 @@ public class Attributes {
 	 * @since 3.6.1
 	 */
 	public static final String ID_TO_UUID_PREFIX = "org.zkoss.zk.ui.id2uuidPrefix";
+
+	//URI//
+	/** A special prefix that is used if you want to inject a special
+	 * fragment into the URI of a clss Web resource (CWR).
+	 * The fragment is ignored with retrieving the file, so it can be anything
+	 * to make the browser consider it as a different URI.
+	 *
+	 * <p>For example, {@link org.zkoss.zk.ui.util.ThemeProvider.Aide}
+	 * is based on this prefix.
+	 *
+	 * <p>Notice that this prefix is currently supported only by the WCS files
+	 * ({@link org.zkoss.zk.ui.http.WcsExtendlet}).
+	 */
+	public static final String INJECT_URI_PREFIX = "_zkiju-";
 }

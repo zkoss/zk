@@ -1,71 +1,33 @@
-/* FontSizeThemeProvider.java
+/* Themes.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Nov 1, 2007 7:06:57 PM     2007, Created by Dennis.Chen
-}}IS_NOTE
+		Tue Oct 27 09:48:02     2009, Created by tomyeh
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+This program is distributed under GPL Version 3.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zkdemo.userguide;
-
-import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
- * @author Dennis.Chen / Jumper Chen
+ * Utilities to manipulate the cooke for theme preferences.
  *
+ * @author Dennis Chen / Jumper Chen / Tom Yeh
  */
-public class FontSizeThemeProvider implements ThemeProvider{
-
-	private static String _cssPrefix = "~./zul/css/zk.wcs";
-	private static String _cssSrcPrefix = "/css/zk";
-	private static String _fsCookieName = "zkdemotfs";
-	private static String _skinCookieName = "zkdemoskin";
-	
-	public Collection getThemeURIs(Execution exe, List uris) {
-		if ("silvergray".equals(getSkinCookie(exe))) {
-			uris.add("~./silvergray/color.css.dsp");
-			uris.add("~./silvergray/img.css.dsp");
-		}
-		return uris;
-	}
-
-	public String beforeWCS(Execution exe, String uri) {
-		final String fsc = getFontSizeCookie(exe);
-		if ("lg".equals(fsc)) {
-			exe.setAttribute("fontSizeM", "15px");
-			exe.setAttribute("fontSizeMS", "13px");
-			exe.setAttribute("fontSizeS", "13px");
-			exe.setAttribute("fontSizeXS", "12px");
-		} else if ("sm".equals(fsc)) {
-			exe.setAttribute("fontSizeM", "10px");
-			exe.setAttribute("fontSizeMS", "9px");
-			exe.setAttribute("fontSizeS", "9px");
-			exe.setAttribute("fontSizeXS", "8px");
-		}
-		return uri;
-	}
-
-	public String beforeWidgetCSS(Execution exe, String uri) {
-		return uri;
-	}
+public class Themes {
+	private static String COOKIE_FONT_SIZE = "zkdemotfs";
+	private static String COOKIE_SKIN = "zkdemoskin";
 
 	/**
 	 * Returns the font size specified in cookies
@@ -76,7 +38,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
 		if(cookies!=null){
 			for(int i=0;i<cookies.length;i++){
-				if(_fsCookieName.equals(cookies[i].getName())){
+				if(COOKIE_FONT_SIZE.equals(cookies[i].getName())){
 					String fs = cookies[i].getValue();
 					if("lg".equals(fs)){
 						return "lg";
@@ -101,7 +63,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		}else if("sm".equals(fontSize)){
 			fs = "sm";
 		}
-		Cookie cookie = new Cookie(_fsCookieName,fs);
+		Cookie cookie = new Cookie(COOKIE_FONT_SIZE,fs);
 		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
 		cookie.setPath(cp);
@@ -115,7 +77,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
 		if(cookies!=null){
 			for(int i=0;i<cookies.length;i++){
-				if(_skinCookieName.equals(cookies[i].getName())){
+				if(COOKIE_SKIN.equals(cookies[i].getName())){
 					String fs = cookies[i].getValue();
 					if (fs != null)
 						return fs;
@@ -129,7 +91,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 	 * Sets the skin value to cookie
 	 */
 	public static void setSkinCookie(Execution exe,String skin){
-		Cookie cookie = new Cookie(_skinCookieName, skin);
+		Cookie cookie = new Cookie(COOKIE_SKIN, skin);
 		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
 		cookie.setPath(cp);

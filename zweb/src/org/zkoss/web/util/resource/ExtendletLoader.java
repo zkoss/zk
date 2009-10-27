@@ -47,9 +47,16 @@ abstract public class ExtendletLoader implements Loader {
 	}
 
 	/** Returns the real path for the specified path.
+	 *
 	 * <p>Default: return path, i.e., the path specified in URL is
 	 * the real path.
+	 *
+	 * <p>Notice that {@link #parse} will receive the original path
+	 * (rather than the returned path).
+	 *
 	 * @param path the path specified in URL.
+	 * Notice that it does NOT start with "~./". Rather it starts with
+	 * "/". For example, "/zul/css/zk.wcs".
 	 * @since 5.0.0
 	 */
 	protected String getRealPath(String path) {
@@ -95,9 +102,9 @@ abstract public class ExtendletLoader implements Loader {
 		}
 
 		try {
-			return parse(is, path);
+			return parse(is, path, (String)src);
 		} catch (Throwable ex) {
-			log.realCauseBriefly("Failed to parse "+path, ex);
+			log.realCauseBriefly("Failed to parse "+src, ex);
 			return null; //as non-existent
 		} finally {
 			Files.close(is);
@@ -112,9 +119,16 @@ abstract public class ExtendletLoader implements Loader {
 	 * to have more control on {@link org.zkoss.util.resource.ResourceCache}.
 	 *
 	 * @param is the content of the resource
-	 * @param path the path of the resource
+	 * @param path the path of the resource.
+	 * It is the value returned by {@link #getRealPath}, so called
+	 * the real path
+	 * @param orgpath the original path.
+	 * It is the path passed to the <code>path</code> argument
+	 * of {@link #getRealPath}. It is useful if you want to retrieve
+	 * the additional information encoded into the URI.
+	 * @since 5.0.0
 	 */
-	abstract protected Object parse(InputStream is, String path)
+	abstract protected Object parse(InputStream is, String path, String orgpath)
 	throws Exception;
 	/** Returns the extendlet context.
 	 */

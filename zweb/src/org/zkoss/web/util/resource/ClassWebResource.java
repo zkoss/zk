@@ -556,7 +556,7 @@ public class ClassWebResource {
 			//Invoke the resource processor (Extendlet)
 			final Extendlet extlet = getExtendlet(ext);
 			if (extlet != null) {
-				extlet.service(request, response, pi, null);
+				extlet.service(request, response, pi);
 				return;
 			}
 		}

@@ -60,6 +60,13 @@ public interface Datebox extends org.zkoss.zul.impl.api.FormatInputElement {
 	 */
 	public void setLenient(boolean lenient);
 
+	/** @deprecated As of release 5.0.0, it is no longer supported.
+	 */
+	public boolean isCompact();
+	/** @deprecated As of release 5.0.0, it is no longer supported.
+	 */
+	public void setCompact(boolean compact);
+
 	/**
 	 * Returns whether the button (on the right of the textbox) is visible.
 	 * <p>

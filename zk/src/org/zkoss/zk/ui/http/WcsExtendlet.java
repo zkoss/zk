@@ -43,6 +43,8 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.fn.JspFns;
 
 /**
  * The extendlet to handle WCS (widget CSS).
@@ -58,7 +60,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 		config.addCompressExtension("wcs");
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, java.io.IOException {
 		final WcsInfo wi = (WcsInfo)_cache.get(path);
 		if (wi == null) {
@@ -76,16 +78,22 @@ public class WcsExtendlet extends AbstractExtendlet {
 		ExecutionsCtrl.setCurrent(exec);
  		((ExecutionCtrl)exec).onActivate();
 		try {
+			int hours = 8760;
 			final ThemeProvider tp = getWebApp().getConfiguration().getThemeProvider();
 			if (tp != null) {
 				try {
-					if (tp.beforeWCS(exec, "~." + path) == null) {
+					final String p = "~." + path;
+					if (tp.beforeWCS(exec, p) == null) {
 						response.setContentType("text/css;charset=UTF-8");
 						return; //skip the whole file
 					}
+					hours = tp.getWCSCacheControl(exec, p);
 				} catch (AbstractMethodError ex) { //ignore it (backward compatible)
 				}
 			}
+			if (hours > 0)
+				JspFns.setCacheControl(response,
+					"org.zkoss.web.classWebResource.cache", hours);
 
 			for (int j = 0; j < wi.items.length; ++j) {
 				final Object o = wi.items[j];
@@ -142,7 +150,8 @@ public class WcsExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/*package*/ Object parse(InputStream is, String path) throws Exception {
+	/*package*/ Object parse(InputStream is, String path)
+	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		if (lang.length() == 0)
@@ -172,11 +181,21 @@ public class WcsExtendlet extends AbstractExtendlet {
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			return WcsExtendlet.this.parse(is, path);
 		}
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
+		}
+		protected String getRealPath(String path) {
+			if (path.length() > 1
+			&& path.substring(1).startsWith(Attributes.INJECT_URI_PREFIX)) {
+				final int j = path.indexOf('/', Attributes.INJECT_URI_PREFIX.length() + 1);
+				if (j > 0)
+					return path.substring(j);
+			}
+			return path;
 		}
 	}
 	/*package*/ static class WcsInfo {

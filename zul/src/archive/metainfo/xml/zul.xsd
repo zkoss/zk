@@ -914,6 +914,9 @@
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attribute name="format" type="xs:string" use="optional" />
+		<xs:attribute name="displayedTimeZones" type="xs:string" use="optional" />
+		<xs:attribute name="timeZonesReadOnly" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- decimalbox -->

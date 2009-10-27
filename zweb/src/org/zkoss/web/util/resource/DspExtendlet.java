@@ -71,7 +71,7 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 		return feature == ALLOW_DIRECT_INCLUDE;
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		final Interpretation cnt = (Interpretation)_cache.get(path);
 		if (cnt == null) {
@@ -131,7 +131,8 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 

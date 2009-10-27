@@ -30,7 +30,7 @@ public class ThemeImage extends Image {
 	
 	public void onCreate(){
 		final String src = getSrc();
-		String fs = FontSizeThemeProvider.getFontSizeCookie(
+		String fs = Themes.getFontSizeCookie(
 			Executions.getCurrent());
 		if("lg".equals(fs)){
 			updateSrc("large");
@@ -50,7 +50,7 @@ public class ThemeImage extends Image {
 	public void onClick() {
 		String src = getSrc();
 		Execution exec = Executions.getCurrent();
-		FontSizeThemeProvider.setFondSizeCookie(exec,
+		Themes.setFondSizeCookie(exec,
 			src.indexOf("large") >= 0 ? "lg":
 			src.indexOf("small") >= 0 ? "sm": "");
 		exec.sendRedirect("");

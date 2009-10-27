@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * Used to replace the theme defined in the language definitions
@@ -35,6 +36,13 @@ import org.zkoss.zk.ui.Execution;
  * <p>When a WCS file is about to load the CSS file of a widget,
  * {@link #beforeWidgetCSS} will be called to allow developer to rename
  * or remove the CSS file associated with a widget.
+ *
+ * <p>To allow the client to cache the WCS file, you can inject a special
+ * fragment into the URI of the WCS file such that a different URI represents
+ * a different theme. To inject, you can use @{link Aide#injectURI} when
+ * preprocessing URIs in {@link #getThemeURIs}.
+ * Therefore, we can rertrieve the injected fragment in {@link #beforeWCS}
+ * by use of {@link Aide#decodeURI}.
  * 
  * @author tomyeh
  * @since 3.0.0
@@ -60,6 +68,18 @@ public interface ThemeProvider {
 	 */
 	public Collection getThemeURIs(Execution exec, List uris);
 
+	/** Returns the number of hours that the specified WCS
+	 * (Widget CSS descriptor) file won't be changed.
+	 * In other words, the client is allowed to cache the file until
+	 * the returned hours expires.
+	 *
+	 * @param uri the URI of the WCS file, e.g., ~./zul/css/zk.wcs
+	 * @return number of hours that the WCS file is allowed to cache.
+	 * If it is never changed until next ZK upgrade, you could return 8760
+	 * (the default if ThemeProvider is not specified).
+	 * If you don't want the client to cache, return a nonpostive number.
+	 */
+	public int getWCSCacheControl(Execution exec, String uri);
 	/** Called when a WCS (Widget CSS descriptor) file is about to be loaded.
 	 * This method then returns the real URI of the WCS file to load.
 	 * If no need to change, just return the <code>uri</code> parameter.
@@ -121,4 +141,45 @@ public interface ThemeProvider {
 	 * @since 5.0.0
 	 */
 	public String beforeWidgetCSS(Execution exec, String uri);
+
+	/** Utilties to help the implementation of {@link ThemeProvider}
+	 * to manipulate the URI such that it is able to use a different URI
+	 * for a different theme.
+	 */
+	public static class Aide {
+		/** Injects a fragment into the specified URI, and returns
+		 * the injected URI.
+		 * @param uri the URI to be modified
+		 * @param fragment the fragment that will be injected <code>uri</code>.
+		 */
+		public static String injectURI(String uri, String fragment) {
+			if (uri.startsWith("~./")) {
+				//rename / to -
+				for (int j = 0, k; (k = fragment.indexOf("/", j)) >= 0;) {
+					fragment = fragment.substring(0, k) + '-' + fragment.substring(k + 1);
+					j = k + 1;
+				}
+				return "~./" + Attributes.INJECT_URI_PREFIX
+					+ fragment + uri.substring(2);
+			}
+			return uri;
+		}
+		/** Decodes the injected URI and returns a two-element array.
+		 * The first element is the original URI, while the second
+		 * element is the fragment.
+		 * <p>Notice that it returns null if no injection is found.
+		 */
+		public static String[] decodeURI(String uri) {
+			if (uri.startsWith("~./")
+			&& uri.substring(3).startsWith(Attributes.INJECT_URI_PREFIX)) {
+				final int j = 3 + Attributes.INJECT_URI_PREFIX.length(),
+					k = uri.indexOf('/', j);
+				if (k > 0)
+					return new String[] {
+						"~./" + uri.substring(k + 1), uri.substring(j, k)
+					};
+			}
+			return null;
+		}
+	}
 }

@@ -90,7 +90,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		return false; //not support ALLOW_DIRECT_INCLUDE
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
@@ -199,7 +199,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 		//-- super --//
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			return PageDefinitions.getPageDefinitionDirectly(
 				getWebApp(), _webctx.getLocator(),
 				new java.io.InputStreamReader(is, "UTF-8"),

@@ -17,5 +17,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 You can click the icon to choose a date, and change its timezone from the bottom of the popup diagram.
 <separator/>
 For example, "10/01/09 06:00:00 PM" in GMT+8, and in GMT+12 it should be "10/01/09 10:00:00 PM"
-<datebox id="datebox1" format="M/d/yy KK:mm:ss a" width="150px" displayedTimeZones="GMT+12,GMT+8" timeZone="GMT+8" timeZonesReadOnly="false"/>
+<datebox id="datebox1" format="M/d/yy KK:mm:ss a" width="150px" displayedTimeZones="GMT+12,GMT+8" timeZone="GMT+8" timeZonesReadonly="false"/>
 </zk>

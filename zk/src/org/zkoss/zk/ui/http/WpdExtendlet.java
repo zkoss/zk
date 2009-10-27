@@ -86,7 +86,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 	}
 
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		byte[] data;
 		setProvider(new Provider(request, response));
@@ -125,8 +125,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/*package*/
-	Object parse(InputStream is, String path) throws Exception {
+	/*package*/ Object parse(InputStream is, String path)
+	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
@@ -504,7 +504,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			return WpdExtendlet.this.parse(is, path);
 		}
 		protected ExtendletContext getExtendletContext() {

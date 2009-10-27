@@ -52,7 +52,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		Executions.createComponents("/userguide/bar.zul", inc, null);
 		inc.setStyle("float:right");
 		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
-			String cookie = FontSizeThemeProvider.getSkinCookie(Executions.getCurrent());
+			String cookie = Themes.getSkinCookie(Executions.getCurrent());
 			boolean isDefault = !"silvergray".equals(cookie);
 			String img = isDefault ? "/img/Centigrade-Widget-Icons/ButtonGray.png" : "/img/Centigrade-Widget-Icons/ButtonBlue.png";
 			Image skin = new Image(img);
@@ -64,7 +64,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 					Image skin = (Image)event.getTarget();
 					Execution exec = Executions.getCurrent();
 					boolean isDefault = skin.getSrc().indexOf("ButtonGray") < 0;
-					FontSizeThemeProvider.setSkinCookie(exec, isDefault ? "" : "silvergray");
+					Themes.setSkinCookie(exec, isDefault ? "" : "silvergray");
 					exec.sendRedirect("");
 				}
 				
