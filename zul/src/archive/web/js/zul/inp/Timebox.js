@@ -228,7 +228,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
-	doClick_: function(evt){
+	doClick_: function(evt) {
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos(this._getPos());
 		this.$supers('doClick_', arguments);
@@ -240,7 +240,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyPress_', arguments);
 	},
-	doKeyDown_: function(evt){
+	doKeyDown_: function(evt) {
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
@@ -535,6 +535,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var self = this,
 			fn = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function() {
+			if (zk.ie && self._lastPos)
+				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);
 	},

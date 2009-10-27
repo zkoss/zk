@@ -58,6 +58,7 @@ November, 2009
   2883117: Modal dialog grayout disappear after window resize
   2869942: combobox with style error
   2885313: Datebox with hour format select wrong time if null
+  2884635: Datebox click on time's btn, cursor will change position(IE)
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
