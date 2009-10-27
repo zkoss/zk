@@ -58,6 +58,58 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	doKeyDown_: function (evt) {
+		var keyCode = evt.keyCode,
+			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
+		if (ofs) {
+			this._shift(ofs);
+		} else 
+			this.$supers('doKeyDown_', arguments);
+	},
+	_shift: function (ofs) {
+		var oldTime = this.getTime();	
+		
+		switch(this._view) {
+		case 'month':
+		case 'year':
+			if (ofs == 7)
+				ofs = 4;
+			else if (ofs == -7)
+				ofs = -4;
+			break;
+		case 'decade':
+			if (ofs == 7)
+				ofs = 4;
+			else if (ofs == -7)
+				ofs = -4;
+			ofs *= 10;
+			
+			var y = oldTime.getFullYear();
+			if (y + ofs < 1900 || y + ofs > 2100)
+				return;// out of range
+			break;
+		}		
+		this._shiftDate(this._view, ofs);
+		var newTime = this.getTime();
+		switch(this._view) {
+		case 'day':
+			if (oldTime.getYear() == newTime.getYear() &&
+				oldTime.getMonth() == newTime.getMonth()) {
+				this._markCal();
+			} else 
+				this.rerender();
+			break;
+		case 'month':
+			if (oldTime.getYear() == newTime.getYear())
+				this._markCal();
+			else
+				this.rerender();
+			break;
+		default:			
+			this.rerender();
+			break;
+		}
+	},
 	getFormat: function () {
 		return this._fmt || "yyyy/MM/dd";
 	},
@@ -81,7 +133,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			    $(this).toggleClass(zcls + "-title-over");
 			}
 		);
-		this._markCal();
+		if (this._view != 'decade') 
+			this._markCal();
+		else {
+			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
+			if (anc)
+				jq(anc.firstChild).focus();
+		}
+			
 		this.domListen_(title, "onClick", '_changeView')
 			.domListen_(mid, "onClick", '_choiceData')
 			.domListen_(ly, "onClick", '_doclickArrow')
@@ -109,16 +168,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return;
 		switch(this._view) {
 			case "day" :
-				this._shiftDate("m", ofs);
+				this._shiftDate("month", ofs);
 				break;
 			case "month" :
-				this._shiftDate("y", ofs);
+				this._shiftDate("year", ofs);
 				break;
 			case "year" :
-				this._shiftDate("y", ofs*10);
+				this._shiftDate("year", ofs*10);
 				break;
 			case "decade" :
-				this._shiftDate("y", ofs*100);
+				this._shiftDate("year", ofs*100);
 				break;
 		}
 		this.rerender();
@@ -190,16 +249,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			month = dateobj.getMonth(),
 			day = dateobj.getDate();
 		switch(opt) {
-			case "d" :
+			case "day" :
 				day = day + ofs;
 				break;
-			case "m" :
+			case "month" :
 				month = month + ofs;
 				break;
-			case "y" :
+			case "year" :
 				year = year + ofs;
 				break;
-			case "d" :
+			case "decade" :
 				year = year + ofs;
 				break;
 		}
@@ -263,6 +322,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (m == j) {
 					jq(mon).addClass(zcls+"-seld");
 					jq(mon).removeClass(zcls+"-over");
+					jq(mon.firstChild).focus();
 				} else
 					jq(mon).removeClass(zcls+"-seld");
 			}
@@ -270,6 +330,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (yy == j) {
 					jq(year).addClass(zcls+"-seld");
 				    jq(year).removeClass(zcls+"-over");
+					jq(year.firstChild).focus();
 				} else
 					jq(year).removeClass(zcls+"-seld");
 			}
@@ -304,6 +365,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).removeClass(zcls+"-disd");
 							 
 						jq(cell).html('<a href="javascript:;">' + v + '</a>').attr('_dt', v);
+						if (sel)
+							jq(cell.firstChild).focus();
 					}
 				}
 			}

@@ -91,6 +91,9 @@
 	text-align: center;
 	cursor: pointer;
 }
+.z-calendar-calday {
+	table-layout: fixed;
+}
 .z-calendar-caldayrow td,
 .z-calendar td a,
 .z-calendar td a:visited {

@@ -211,6 +211,56 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			n.style.width = this.getWidth() || '';
 		}
 	},
+	doKeyDown_: function (evt) {
+		this._doKeyDown(evt);
+		if (!evt.stopped)
+			this.$supers('doKeyDown_', arguments);
+	},
+	_doKeyDown: function (evt) {
+		var keyCode = evt.keyCode,
+			bOpen = this._pop.isOpen();
+		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
+			if (bOpen) this._pop.close();
+			return;
+		}
+
+		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
+			if (bOpen) this._pop.close();
+			else this._pop.open();
+
+			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
+			var opts = {propagation:true};
+			if (zk.ie) opts.dom = true;
+			evt.stop(opts);
+			return;
+		}
+
+		//Request 1537962: better responsive
+		if (bOpen && (keyCode == 13 || keyCode == 27)) { //ENTER or ESC
+			if (keyCode == 13) this.enterPressed_(evt);
+			else this.escPressed_(evt);
+			return;
+		}
+
+		if (keyCode == 18 || keyCode == 27 || keyCode == 13
+		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
+			return; //ignore it (doc will handle it)
+		
+		if (this._pop.isOpen()) {
+			var ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
+			if (ofs)
+				this._pop._shift(ofs);
+		}
+	},
+	enterPressed_: function (evt) {
+		this._pop.close();
+		this.updateChange_();
+		evt.stop();
+	},
+	escPressed_: function (evt) {
+		this._pop.close();
+		evt.stop();
+	},
 	afterKeyDown_: function (evt) {
 		if (this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
@@ -300,6 +350,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 				this._value = zDateFormat.formatDate(zDateFormat.parseDate(this.getValue(), old), fmt);
 		}
 	},
+	rerender: function () {
+		this.$supers('rerender', arguments);
+		this.syncShadow();
+	},
 	close: function (silent) {
 		var db = this.parent,
 			pp = db.$n("pp");
@@ -319,6 +373,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (!silent)
 			jq(db.getInputNode()).focus();
+	},
+	isOpen: function () {
+		return zk(this.parent.$n("pp")).isVisible();
 	},
 	open: (function() {
 		function reposition(wgt) {
@@ -470,7 +527,6 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 			this.close();
 			this.parent._inplaceout = true;
 		}
-		this.parent.focus();
 		evt.stop();
 	}
 });

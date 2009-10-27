@@ -24,7 +24,7 @@ function (out) {
 		y = val.getFullYear(),
 		yofs = y - (y % 10 + 1),
 		ydec = zk.parseInt(y/100);
-	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table width="100%"', zUtl.cellps0, '>',
+	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
 			'<tr><td class="', zcls, '-tdl"><div  class="', zcls, '-left"><div id="', uuid, '-ly" class="', zcls, '-left-icon');
 
 	if (view == 'decade' && ydec*100 == 1900)
