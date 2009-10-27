@@ -120,7 +120,7 @@ zk.Cal.prototype = {
 			'</span></span></span>';
 	
 			html += '<div class="' + zcls + '-timezone">';
-			html += zkDtbox.getTimeZoneLabel();
+			if (dtzones) html += zkDtbox.getTimeZoneLabel();
 			html += '<select id="' + uuid + '!dtzones" class="' + zcls + '-timezone-body" onchange="zkCal.ondtzoneschg(event)" onclick="zkCal.block(event)">'
 			if (dtzones) {
 				var dtzonenames = dtzones.split(",");
