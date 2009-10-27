@@ -340,7 +340,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
 				
 				// resync
-				tblwd = this.body.clientWidth;
+				tblwd = this.ebody.clientWidth;
 			}
 		}
 		if (this.ehead) {
