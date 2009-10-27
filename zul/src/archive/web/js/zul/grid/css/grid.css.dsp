@@ -206,9 +206,16 @@ div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt {
 div.z-grid-body {
 	position: relative; <%-- Bug 1766244 --%>
 }
+<c:if test="${!c:browser('ie8')}">
 tr.z-grid-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
+</c:if>
+<c:if test="${c:browser('ie8')}">
+.z-column {
+	text-align: left;
+}
+</c:if>
 
 <c:if test="${c:browser('ie6-')}">
 div.z-grid {

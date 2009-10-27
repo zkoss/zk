@@ -178,10 +178,16 @@ div.z-listcell-cnt {
 div.z-listbox-body {
 	position: relative; <%-- Bug 1766244 --%>
 }
+<c:if test="${!c:browser('ie8')}">
 tr.z-listbox-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
-
+</c:if>
+<c:if test="${c:browser('ie8')}">
+.z-listheader {
+	text-align: left;
+}
+</c:if>
 <c:if test="${c:browser('ie6-')}">
 div.z-listbox {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>

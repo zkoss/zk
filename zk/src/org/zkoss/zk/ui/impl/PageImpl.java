@@ -774,14 +774,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 
-		//a temporary solution before IE8 really mature
-		if (!au)
-			try {
-				if (exec.isBrowser("ie8") && !exec.containsResponseHeader("X-UA-Compatible"))
-					exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
-			} catch (Throwable ex) { //ignore (it might not be allowed)
-			}
-
 		final PageRenderer renderer = (PageRenderer)
 			exec.getAttribute(Attributes.ATTR_PAGE_RENDERER);
 		(renderer != null ? renderer: _langdef.getPageRenderer())

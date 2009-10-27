@@ -336,10 +336,17 @@ div.z-tree-body, div.z-dottree-body,
 div.z-filetree-body, div.z-vfiletree-body {
 	position: relative; <%-- Bug 1766244  --%>
 }
+<c:if test="${!c:browser('ie8')}">
 tr.z-tree-faker, tr.z-dottree-faker,
 tr.z-filetree-faker, tr.z-vfiletree-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
+</c:if>
+<c:if test="${c:browser('ie8')}">
+.z-treecol {
+	text-align: left;
+}
+</c:if>
 span.z-tree-root-open, span.z-tree-root-close,
 span.z-tree-tee-open, span.z-tree-tee-close,
 span.z-tree-last-open, span.z-tree-last-close,
