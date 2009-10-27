@@ -133,8 +133,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		
-		var s = this.domStyle_({width: true, height: true});
+		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + s + '"';
+		
 		return html;
 	},
 	_areaText: function () {

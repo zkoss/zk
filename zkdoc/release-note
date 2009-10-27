@@ -56,6 +56,7 @@ November, 2009
   2880236: Decimalbox generates JavaScript error
   2882293: Failed to render a ZUL Page containing ZHTML's HTML
   2883117: Modal dialog grayout disappear after window resize
+  2869942: combobox with style error
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
