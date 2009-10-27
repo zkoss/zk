@@ -177,7 +177,7 @@ zk.Cal.prototype = {
 			
 		if (this.popup) this.setDtzones();
 		if (val) val = zk.parseDate(val, this.getFormat());
-		this.date = val ? val: this.today();
+		this.date = val ? val: new Date();
 		if (bd) this.begin = new Date($int(bd) * 1000);
 		if (ed) this.end = new Date($int(ed) * 1000);
 		this._updateCal(this.element);
@@ -188,7 +188,6 @@ zk.Cal.prototype = {
 		return fmt ? fmt: "yyyy/MM/dd";
 	},
 	getTimeFormat: function () {
-
 		var fmt = this.getFormat(),
 			aa = fmt.indexOf('a'),
 			hh = fmt.indexOf('h'),
@@ -222,8 +221,7 @@ zk.Cal.prototype = {
 	},
 	today: function () {
 		var d = new Date();
-		d.setMilliseconds(0);
-		return d;
+		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 	},
 	_updateCal: function(cmp) {
 		var zhr = getZKAttr(cmp, "hr") == "true",
@@ -231,10 +229,10 @@ zk.Cal.prototype = {
 			za = getZKAttr(cmp, "ampm") == "true",
 			selectCmp = $e(this.element, "dtzones"),
 			timeCmp = $e(this.element, "timebox"),
-			dTimezonesReadOnly = getZKAttr(this.element, "dtzonesReadOnly") == "true";
+			dTimezonesReadonly = getZKAttr(this.element, "dtzonesReadonly") == "true";
 		
 		if (selectCmp)
-			selectCmp.disabled = dTimezonesReadOnly ? "disabled" : "";
+			selectCmp.disabled = dTimezonesReadonly ? "disabled" : "";
 		if (timeCmp)
 			this._tm.setVisible(zhr || zmin || za ? true : false);
 	},

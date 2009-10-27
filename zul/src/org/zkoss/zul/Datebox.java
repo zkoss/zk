@@ -55,7 +55,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	}
 	private TimeZone _tzone;
 	private List _dtzones;
-	private boolean _compact, _btnVisible = true, _lenient = true, _dtzonesReadOnly = false;
+	private boolean _compact, _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
@@ -250,7 +250,13 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	}
 	/** Sets the time zone that this date box belongs to, or null if
 	 * the default time zone is used.
+	 
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 *
+	 * <p>Notice that if {@link #getDisplayedTimeZones} was called with
+	 * a non-empty list, the time zone must be one of it.
+	 * Otherwise (including <code>tzone</tt> is null),
+	 * the first timezone is selected.
 	 */
 	public void setTimeZone(TimeZone tzone) {
 		if (_tzone != tzone) {
@@ -265,6 +271,8 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	/** Sets the time zone that this date box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	 * @param id the time zone's ID, such as GMT+12.
+	 * The time zone will be retrieved by calling TimeZone.getTimeZone(id).
 	 */
 	public void setTimeZone(String id) {
 		TimeZone tzone = TimeZone.getTimeZone(id);
@@ -272,7 +280,8 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	}
 	
 	/**
-	 * Returns the displayed TimeZone list
+	 * Returns a list of the time zones that will be displayed at the
+	 * client and allow user to select.
 	 * <p>Default: null
 	 * @since 3.6.3
 	 */
@@ -281,11 +290,17 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	}
 	
 	/**
-	 * Sets the displayed TimeZone list, if the {@link #getTimeZone()} is null, 
-	 * the first timezone in the list is assumed.
+	 * Sets a list of the time zones that will be displayed at the
+	 * client and allow user to select.
+	 * <p>If the {@link #getTimeZone()} is null, 
+	 * the first time zone in the list is assumed.
+	 * @param dtzones a list of the time zones to display.
+	 * If empty, it assumed to be null.
 	 * @since 3.6.3
 	 */
 	public void setDisplayedTimeZones(List dtzones) {
+		if (dtzones != null && dtzones.isEmpty())
+			dtzones = null;
 		if (_dtzones != dtzones) {
 			_dtzones = dtzones;
 			if (_tzone == null && _dtzones != null && _dtzones.get(0) != null)
@@ -294,8 +309,12 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		}
 	}
 	/**
-	 * Sets the displayed TimeZone list, if the {@link #getTimeZone()} is null, 
-	 * the first timezone in the list is assumed.
+	 * Sets a catenation of a list of the time zones' ID, separated by comma,
+	 * that will be displayed at the client and allow user to select.
+	 * <p>The time zone is retrieved by calling TimeZone.getTimeZone().
+	 * @param dtzones a catenation of a list of the timezones' ID, such as
+	 * <code>"GMT+12,GMT+8"</code>
+	 * @see #setDisplayedTimeZones(List)
 	 * @since 3.6.3
 	 */
 	public void setDisplayedTimeZones(String dtzones) {
@@ -314,20 +333,22 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		setDisplayedTimeZones(list);
 	}
 	/**
-	 * Returns whether the displayed TimeZone list is read only
+	 * Returns whether the list of the time zones to display is readonly.
+	 * If readonly, the user cannot change the time zone at the client.
 	 * @since 3.6.3
 	 */
-	public boolean isTimeZonesReadOnly() {
-		return _dtzonesReadOnly;
+	public boolean isTimeZonesReadonly() {
+		return _dtzonesReadonly;
 	}
 	/**
-	 * Sets whether to enable displayed TimeZone list read only
+	 * Returns whether the list of the time zones to display is readonly.
+	 * If readonly, the user cannot change the time zone at the client.
 	 * @since 3.6.3
 	 */
-	public void setTimeZonesReadOnly(boolean readonly) {
-		if (readonly != _dtzonesReadOnly) {
-			_dtzonesReadOnly = readonly;
-			smartUpdate("z.dtzonesReadOnly", _dtzonesReadOnly);
+	public void setTimeZonesReadonly(boolean readonly) {
+		if (readonly != _dtzonesReadonly) {
+			_dtzonesReadonly = readonly;
+			smartUpdate("z.dtzonesReadonly", _dtzonesReadonly);
 		}
 	}
 
@@ -429,7 +450,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		if (getTimeZone() != null) {
 			HTMLs.appendAttribute(sb, "z.dtimezone", getTimeZone().getID());
 		}
-		HTMLs.appendAttribute(sb, "z.dtzonesReadOnly", _dtzonesReadOnly);
+		HTMLs.appendAttribute(sb, "z.dtzonesReadonly", _dtzonesReadonly);
 	
 		return sb.toString();
 	}
