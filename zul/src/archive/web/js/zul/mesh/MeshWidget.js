@@ -347,6 +347,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
 			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
 				this.$class._adjHeadWd(this);
+			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
