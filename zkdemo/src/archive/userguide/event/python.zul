@@ -43,14 +43,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window id="win" title="Script in Python" width="100%" border="normal">
 <zscript language="Python">
-from org.zkforge.fckez import FCKeditor
+from org.zkforge.ckez import CKeditor
 def sayHello():
 	return "Hello Python"
 	
-fck = FCKeditor()
-fck.customConfigurationsPath = "/userguide/macros/fckconfig.js"
-fck.value = sayHello()
-fck.parent = win
+ck = CKeditor()
+ck.value = sayHello()
+ck.parent = win
 </zscript>
 </window>
 			]]></attribute>

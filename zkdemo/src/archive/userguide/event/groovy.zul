@@ -43,14 +43,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window id="win" title="Script in Groovy" width="100%" border="normal">
 	<zscript language="Groovy">
-		import org.zkforge.fckez.FCKeditor;
+		import org.zkforge.ckez.CKeditor;
 		
 		def hello = "Hello Groovy";
 				
-		def fck = new FCKeditor();
-		fck.setCustomConfigurationsPath("/userguide/macros/fckconfig.js");
-		fck.setValue(hello);
-		fck.setParent(win);
+		def ck = new CKeditor();
+		ck.setValue(hello);
+		ck.setParent(win);
 	</zscript>
 </window>
 			]]></attribute>

@@ -44,16 +44,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="win" title="Script in Ruby" width="100%" border="normal">
 	<zscript language="Ruby">
 		require 'java'
-		include_class 'org.zkforge.fckez.FCKeditor'
+		include_class 'org.zkforge.ckez.CKeditor'
 		
 		def sayHello ()
 			return "Hello Ruby"
 		end
 		
-		fck = FCKeditor.new()
-		fck.setCustomConfigurationsPath("/userguide/macros/fckconfig.js")
-		fck.setValue(sayHello())
-		fck.parent = $win
+		ck = CKeditor.new()
+		ck.setValue(sayHello())
+		ck.parent = $win
 	</zscript>
 </window>
 			]]></attribute>

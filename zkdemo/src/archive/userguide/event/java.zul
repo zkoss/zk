@@ -43,11 +43,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window id="win" title="Script in Java" width="100%" border="normal">
 	<zscript language="java">
-	FCKeditor fck = new FCKeditor();
-	fck.setCustomConfigurationsPath("/userguide/macros/fckconfig.js");
-	fck.setValue("Hello Java");
-	fck.setParent(win);
-	fck.addEventListener(Events.ON_CHANGE, new EventListener() {
+	CKeditor ck = new CKeditor();
+	ck.setValue("Hello Java");
+	ck.setParent(win);
+	ck.addEventListener(Events.ON_CHANGE, new EventListener() {
 		public void onEvent(Event event) throws Exception{
 			alert(((InputEvent)event).getValue());
 		}

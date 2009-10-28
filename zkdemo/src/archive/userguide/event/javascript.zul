@@ -43,10 +43,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <window id="win" title="Script in JavaScript" width="100%" border="normal">
 	<zscript language="javascript">
-	var fck = new org.zkforge.fckez.FCKeditor();
-	fck.setCustomConfigurationsPath("/userguide/macros/fckconfig.js");
-	fck.setParent(win);
-	fck.setValue(sayHello());
+	var ck = new org.zkforge.ckez.CKeditor();
+	ck.setParent(win);
+	ck.setValue(sayHello());
 	
 	function sayHello() {
 		return 'Hello JavaScript';
