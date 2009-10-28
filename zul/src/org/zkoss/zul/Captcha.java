@@ -53,24 +53,24 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	private static final int CHAR_END = 'z'; //character end
 	private static final int CHAR_COUNT = CHAR_END - CHAR_START + 1; //charcater count
 	private static final Font[] DEFAULT_FONTS = new Font[] {
-		new Font("Arial", Font.BOLD, 35),
-		new Font("Courier", Font.BOLD, 35)			
+		new Font("Arial", Font.BOLD, 30),
+		new Font("Courier", Font.BOLD, 30)			
 	};
 	
 	private int _intWidth = 200; //integer width in px
 	private int _intHeight = 50; //integer height in px
 	
-	private String _fontColor = "#404040"; //font color that used to draw text
-	private int _fontRGB = 0x404040; //font color in 0xRRGGBB
+	private String _fontColor = "#508093"; //font color that used to draw text
+	private int _fontRGB = 0x508093; //font color in 0xRRGGBB
 	
-	private String _bgColor = "#74979B"; //background color in #RRGGBB form
-	private int _bgRGB = 0x74979B; //background color in 0xRRGGBB
+	private String _bgColor = "#FFFFFF"; //background color in #RRGGBB form
+	private int _bgRGB = 0xFFFFFF; //background color in 0xRRGGBB
 	
 	private List _fonts = new ArrayList(9); //fonts that can be used to draw text
 	private int _len = 5; //text length, default 5
 	private String _exclude = null;
 	private String _value; //captcha text value 
-	private boolean _noise = true; //whether generate noise
+	private boolean _noise, _border; //whether generate noise
 	private CaptchaEngine _engine; //the captcha engine that generate the distortion image.
 
 	public Captcha() {
@@ -274,16 +274,32 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 		return _exclude;
 	}
 	
-	/** Wheather generate noise; default to true.
+	/** Sets whether generate noise; default to false. (@since 5.0.0)
 	 */
 	public void setNoise(boolean b) {
 		_noise = b;
 	}
 	
-	/** Whether generate noise; default to true.
+	/** Returns whether generate noise; default to false. (@since 5.0.0)
 	 */
 	public boolean isNoise() {
 		return _noise;
+	}
+	
+	/** Sets whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.0
+	 */
+	public void setBorder(boolean b) {
+		_border = b;
+	}
+	
+	/** Returns whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.0
+	 */
+	public boolean isBorder() {
+		return _border;
 	}
 	
 	/**
