@@ -870,8 +870,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (origin) {
 			dg.z_szofs = {
 				top: el.offsetTop + 'px', left: el.offsetLeft + 'px',
-				height: zk(el).revisedHeight(el.offsetHeight) + 'px',
-				width: zk(el).revisedWidth(el.offsetWidth) + 'px'
+				height: jq.px(zk(el).revisedHeight(el.offsetHeight)),
+				width: jq.px(zk(el).revisedWidth(el.offsetWidth))
 			};
 		}
 	},

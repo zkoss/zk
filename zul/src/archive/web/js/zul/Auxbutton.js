@@ -43,24 +43,25 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	},
 	fixpos: function () {
 		var btn = this._btn;
-		if (zk(btn).isRealVisible() && btn.style.position != 'relative') {
+		if (!this._fixed && zk(btn).isRealVisible()) {
 			var ref = this._ref, img = this._img,
-				refh = ref.offsetHeight,
-				imgh = img.offsetHeight;
-			if (!refh || !imgh) {
+				refh = ref.offsetHeight;
+			if (!refh) {
 				setTimeout(this.proxy(this.fixpos), 66);
 				return;
 			}
 
-			//Bug 1738241: don't use align="xxx"
-			var v = refh - imgh;
-			if (v)
-				img.style.height = jq.px(zk.parseInt(jq(img).css('height')) + v);
+			this._fixed = true;
 
-			v = ref.offsetTop - img.offsetTop;
-			btn.style.position = "relative";
-			btn.style.top = v + "px"; //might be negative
-			if (zk.safari) btn.style.left = "-2px";
+			//Bug 1738241: don't use align="xxx"
+			img.style.height = jq.px(zk(img).revisedHeight(refh));
+
+			var v = ref.offsetTop - img.offsetTop;
+			if (v || zk.safari) {
+				btn.style.position = "relative";
+				btn.style.top = v + "px"; //might be negative
+				if (zk.safari) btn.style.left = "-2px";
+			}
 		}
 	},
 	_domOver: function () {
