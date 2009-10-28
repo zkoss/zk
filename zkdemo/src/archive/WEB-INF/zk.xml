@@ -84,10 +84,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- Turn on if you want to use language addons. -->
+	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
+	 -->
 
 	<!-- Turn on if you want to ignore the consecutive click events,
 	if it happens too close to the previous one, or the server is still
