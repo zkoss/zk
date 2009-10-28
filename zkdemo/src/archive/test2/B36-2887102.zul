@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2887102.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 11:28:52     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please see the bottom-right in the window, it should space a padding according to the scrollbar's width.
+<separator/>
+And the footer's alignment should be the same as the content's alignment.
+<window title="grid exploring" border="normal">
+<grid id="griddemo" fixedLayout="true" vflex="false"
+height="108px">
+<columns sizable="false">
+<column align="left" width="25%" label="col1" />
+<column align="center" width="8%" label="col2" />
+<column align="center" width="8%" label="col3" />
+<column align="center" width="5%" label="col4" />
+<column align="center" width="5%" label="col5" />
+<column align="center" width="5%" label="col6" />
+<column align="center" width="7%" label="col7" />
+<column align="center" width="7%" label="col8" />
+<column align="center" width="7%" label="col9" />
+<column align="center" width="7%" label="col10" />
+<column align="center" width="7%" label="col11" />
+<column align="center" width="9%" label="col12" />
+</columns>
+<rows>
+<row>
+<label value="Item 1" />
+<label value="ABCD0001" />
+<label value="ABCD0001" />
+<label value="999" />
+<label value="999" />
+<label value="999" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="999999.99" />
+</row>
+<row>
+<label value="Item 2" />
+<label value="ABCD0001" />
+<label value="ABCD0001" />
+<label value="999" />
+<label value="999" />
+<label value="999" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="999999.99" />
+</row>
+<row>
+<label value="LG Mobile" />
+<label value="ABCD0001" />
+<label value="ABCD0001" />
+<label value="999" />
+<label value="999" />
+<label value="999" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="999999.99" />
+</row>
+<row>
+<label value="LG Mobile" />
+<label value="ABCD0001" />
+<label value="ABCD0001" />
+<label value="999" />
+<label value="999" />
+<label value="999" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="999999.99" />
+</row>
+<row>
+<label value="LG Mobile" />
+<label value="ABCD0001" />
+<label value="ABCD0001" />
+<label value="999" />
+<label value="999" />
+<label value="999" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="9999.99" />
+<label value="999999.99" />
+</row>
+</rows>
+<zscript><![CDATA[
+]]></zscript>
+<foot>
+<footer>
+<textbox value="Totals" />
+</footer>
+<footer>
+<textbox />
+</footer>
+<footer>
+<textbox />
+</footer>
+<footer>
+<textbox value="999" />
+</footer>
+<footer>
+<textbox value="999" />
+</footer>
+<footer>
+<textbox value="999" />
+</footer>
+<footer>
+<textbox />
+</footer>
+<footer>
+<textbox value="9999.99" />
+</footer>
+<footer>
+<textbox value="9999.99" />
+</footer>
+<footer>
+<textbox value="9999.99" />
+</footer>
+<footer>
+<textbox value="9999.99" />
+</footer>
+<footer width="90px">
+<textbox value="999999.99" />
+</footer>
+</foot>
+</grid>
+</window>
+</zk>

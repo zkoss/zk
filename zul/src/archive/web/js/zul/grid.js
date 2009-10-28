@@ -207,6 +207,7 @@ zk.Grid.prototype = {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (getZKAttr(this.element, "fixed") != "true")
 				zul.adjustHeadWidth(this.hdfaker, this.bdfaker, this.ftfaker, this.bodyrows);
+			else if (tblwd && this.foot) this.foot.style.width = tblwd + 'px';
 		} else if (this.foottbl) {
 			if (tblwd) this.foot.style.width = tblwd + 'px';
 			if (this.foottbl.rows.length)

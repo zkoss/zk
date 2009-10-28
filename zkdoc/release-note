@@ -94,6 +94,7 @@ October, 2009
   2879948: bug with flash in IE6
   2886261: In IE6, problem with collapsible West and Listbox(select).
   2824517: Command and arrow keys don't work in combo box (Mac only)
+  2887102: Grid footer does not align properly, while setting overflow
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
