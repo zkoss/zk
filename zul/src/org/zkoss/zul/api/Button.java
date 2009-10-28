@@ -10,7 +10,8 @@ import org.zkoss.zk.ui.WrongValueException;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Button extends org.zkoss.zul.impl.api.LabelImageElement {
+public interface Button extends org.zkoss.zul.impl.api.LabelImageElement,
+org.zkoss.zk.ui.ext.Disable {
 	/**
 	 * Returns whether it is disabled.
 	 * <p>

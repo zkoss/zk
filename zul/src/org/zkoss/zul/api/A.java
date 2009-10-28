@@ -24,7 +24,8 @@ import org.zkoss.zul.impl.api.LabelImageElement;
  * @author jumperchen
  * @since 5.0.0
  */
-public interface A extends LabelImageElement {
+public interface A extends LabelImageElement,
+org.zkoss.zk.ui.ext.Disable {
 
 	/**
 	 * Returns whether it is disabled.

@@ -31,7 +31,8 @@ package org.zkoss.zul.api;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Treeitem extends org.zkoss.zul.impl.api.XulElement {
+public interface Treeitem extends org.zkoss.zul.impl.api.XulElement,
+org.zkoss.zk.ui.ext.Disable {
 
 	/**
 	 * Returns whether it is checkable.

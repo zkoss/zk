@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-2887668.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 12:38:01     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript>
+Object svc = new org.zkoss.zk.au.InaccessibleWidgetBlockService();
+desktop.addListener(svc);
+</zscript>
+
+<html><![CDATA[
+<ol>
+<li>Turn on firebug and make the button visible inside the red box below (remove display:none)</li>
+<li>You see nothing happen</li>
+</ol>
+]]></html>
+<div style="border:1px solid red;height:30px">
+Hidden button: <button label="test" mold="os" onClick='new Label("Clicked").setParent(self.parent)' visible="false"/>
+<timer id="tm" running="false" delay="1000" repeats="true"
+	onTimer='new Label("tick.").setParent(self.parent)'/>
+</div>
+<groupbox open="false" mold="3d">
+	<caption label="More Test"/>
+	<button label="start timer" onClick="tm.start()"/>
+	<button label="stop timer" onClick="tm.stop()"/>
+	<button label="not block" onClick="desktop.removeListener(svc);"/>
+	<button label="block" onClick="desktop.addListener(svc);"/>
+</groupbox>
+</zk>

@@ -97,6 +97,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</client-config>
 	-->
 
+	<!-- Turn on if you want to block the requests sent from inaccessible
+		widgets (such as invisible or disabled).
+		It is used to protect your application from the attack that
+		goes through the invisible widgets.
+		Once turned on, the request from an invisible widget is blocked.
+		See also org.zkoss.zk.au.IWBS.events
+	<listener>
+		<listener-class>org.zkoss.zk.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
+	</listener>
+	-->
+	<!-- Turn on if you use InaccessibleWidgetBlockService (IWBS) and
+		want to block only particular events.
+		Default: all
+	<library-property>
+		<name>org.zkoss.zk.au.IWBS.events</name>
+		<value>onClick,onChange,onSelect</value>
+	</library-property>
+	-->
+
 	<!-- Optional -->
 	<!-- Map extensions to the xml language.
 		 By default, xml is mapped to xml -->

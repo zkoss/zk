@@ -39,6 +39,7 @@ November, 2009
   2861283: hbox/vbox pack attribute supports stretch option
   2855116: add data binding support for custom attribute tag
   2879519: More control of ThemeProvider against widget's CSS
+  2887668: Ignore client command if component is invisible/disabled
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

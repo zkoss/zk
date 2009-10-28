@@ -29,7 +29,8 @@ package org.zkoss.zul.api;
  * @see Combobox
  * @since 3.5.2
  */
-public interface Comboitem extends org.zkoss.zul.impl.api.LabelImageElement {
+public interface Comboitem extends org.zkoss.zul.impl.api.LabelImageElement,
+org.zkoss.zk.ui.ext.Disable {
 
 	/**
 	 * Sets whether it is disabled.
