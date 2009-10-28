@@ -184,7 +184,7 @@ tr.z-listbox-faker {
 }
 </c:if>
 <c:if test="${c:browser('ie8')}">
-.z-listheader {
+.z-listheader, .z-auxheader {
 	text-align: left;
 }
 </c:if>

@@ -343,7 +343,7 @@ tr.z-filetree-faker, tr.z-vfiletree-faker {
 }
 </c:if>
 <c:if test="${c:browser('ie8')}">
-.z-treecol {
+.z-treecol, .z-auxheader {
 	text-align: left;
 }
 </c:if>

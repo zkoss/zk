@@ -212,7 +212,7 @@ tr.z-grid-faker {
 }
 </c:if>
 <c:if test="${c:browser('ie8')}">
-.z-column {
+.z-column, .z-auxheader {
 	text-align: left;
 }
 </c:if>

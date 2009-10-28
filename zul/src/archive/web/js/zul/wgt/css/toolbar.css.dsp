@@ -110,7 +110,7 @@
 	font-weight: normal;
 }
 
-<c:if test="${c:isExplorer()}">
+<c:if test="${c:isExplorer() and not c:browser('ie8')}">
 .z-toolbarbutton {
 	display: inline;
 }

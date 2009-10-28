@@ -28,13 +28,16 @@ use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 						tr = node.parentNode.parentNode.parentNode,
 						width = node.offsetWidth + tr.cells[0].offsetWidth,
 						win = this.$o(),
-						cave = win.$n('cave');
+						cave = win.$n('cave'),
+						outer = win.$n();
 					width += zk(cave).padBorderWidth()
 						+ zk((cave = cave.parentNode)).padBorderWidth()
 						+ zk((cave = cave.parentNode)).padBorderWidth()
 						+ zk((cave = cave.parentNode)).padBorderWidth();
-					win.$n().style.width = jq.px(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
-					win._doModal();
+						
+					outer.style.width = jq.px(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
+					zk(outer).center();
+					outer.style.top = "100px";
 					win.onSize();
 				</attribute>
 			</label>
