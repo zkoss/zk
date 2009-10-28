@@ -15,11 +15,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <zscript>
-Object svc = new org.zkoss.zk.au.InaccessibleWidgetBlockService();
+Object svc = new org.zkoss.zkmax.au.InaccessibleWidgetBlockService();
 desktop.addListener(svc);
 </zscript>
 
 <html><![CDATA[
+Notice: ZK Enterprise Edition is require to test this feature.
 <ol>
 <li>Turn on firebug and make the button visible inside the red box below (remove display:none)</li>
 <li>You see nothing happen</li>
