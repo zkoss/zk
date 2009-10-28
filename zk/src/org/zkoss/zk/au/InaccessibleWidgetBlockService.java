@@ -23,6 +23,7 @@ import org.zkoss.util.CollectionsX;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.ext.Disable;
 
 /**
@@ -66,7 +67,8 @@ public class InaccessibleWidgetBlockService implements AuService, java.io.Serial
 	//super//
 	public boolean service(AuRequest request, boolean everError) {
 		final Component comp = request.getComponent();
-		return comp != null && shallBlock(request) && (!comp.isVisible()
+		return comp != null && shallBlock(request)
+		&& (!Components.isRealVisible(comp)
 			|| (comp instanceof Disable && ((Disable)comp).isDisabled()));
 			//block if invisible or disabled
 	}
