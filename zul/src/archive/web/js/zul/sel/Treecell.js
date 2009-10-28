@@ -86,20 +86,20 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j)
 				this._appendIcon(sb, iconScls,
-					j == 0 || pitems[j] == this.parent.lastChild ? zul.sel.Treecell.SPACER: zul.sel.Treecell.VBAR, false);
+					j == 0 || this._isLastVisibleChild(pitems[j]) ? zul.sel.Treecell.SPACER: zul.sel.Treecell.VBAR, false);
 
 			if (item.isContainer()) {
 				this._appendIcon(sb, iconScls,
 					item.isOpen() ?
 						pitems.length == 0 ? zul.sel.Treecell.ROOT_OPEN:
-							 item == this.parent.lastChild ? zul.sel.Treecell.LAST_OPEN: zul.sel.Treecell.TEE_OPEN:
+							 this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST_OPEN: zul.sel.Treecell.TEE_OPEN:
 						pitems.length == 0 ? zul.sel.Treecell.ROOT_CLOSE:
-							item == this.parent.lastChild ? zul.sel.Treecell.LAST_CLOSE: zul.sel.Treecell.TEE_CLOSE,
+							this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST_CLOSE: zul.sel.Treecell.TEE_CLOSE,
 						true);
 			} else {
 				this._appendIcon(sb, iconScls,
 					pitems.length == 0 ? zul.sel.Treecell.FIRSTSPACER:
-						item == this.parent.lastChild ? zul.sel.Treecell.LAST: zul.sel.Treecell.TEE, false);
+						this._isLastVisibleChild(item) ? zul.sel.Treecell.LAST: zul.sel.Treecell.TEE, false);
 			}
 			return sb.join('');
 		} else {
@@ -107,6 +107,12 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			//for empty cell. Otherwise, IE will make the height too small
 			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? "&nbsp;": null;
 		}
+	},
+	_isLastVisibleChild: function (item) {
+		var parent = item.parent;
+		for (var w = parent.lastChild; w; w = w.previousSibling)
+			if (w.isVisible()) return w == item;
+		return false;
 	},
 	_getTreeitems: function (item, tree) {
 		var pitems = [];

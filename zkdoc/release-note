@@ -60,6 +60,7 @@ November, 2009
   2885313: Datebox with hour format select wrong time if null
   2884635: Datebox click on time's btn, cursor will change position(IE)
   2783590: Correct the display of grid headers in IE8
+  2887722: dottree style in ZK5 RC is wrong
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
