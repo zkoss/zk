@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	private String _spacing;
-	private String _align = "start", _pack = "stretch";
+	private String _align = "start", _pack = "start";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 
@@ -182,7 +182,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	/** Returns the pack alignment of cells of this box
 	 * (start, center, end) plus an indication <i>stretch</i> option.
 	 *
-	 * <p>Default: stretch, start.
+	 * <p>Default: start.
 	 *
 	 * <p>The pack attribute specifies where child elements of the box are placed
 	 * when the box is larger that the size of the children. For boxes with
@@ -316,7 +316,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		render(renderer, "_sizes", _sizes);
 
 		if (!"start".equals(_align)) render(renderer, "align", _align);
-		if (!"stretch".equals(_pack)) render(renderer, "pack", _pack);
+		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
 	}
 	public String getZclass() {
 		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;

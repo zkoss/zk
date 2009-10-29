@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
-	_pack: 'stretch',
+	_pack: 'start',
 
 	$define: {
 		align: [
