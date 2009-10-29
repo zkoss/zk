@@ -589,8 +589,14 @@ zk.unsetVParent = function (n) {
 		if (sib) {
 			p.insertBefore(n, sib);
 			zk.remove(sib);
-		} else
-			p.appendChild(n);
+		} else {
+			try {
+				p.appendChild(n);
+			} catch(e) {
+				// Bug 2888453: the exception in IE should be eaten according to
+				// the bug 2851102 fixed in vd.js
+			}
+		}
 	}
 };
 /** unsetVParent if it is a child of the specified node, n.
