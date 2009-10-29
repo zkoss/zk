@@ -270,7 +270,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					syncMaximized(this);
 				this.__maximized = false; // avoid deadloop
 			}
-			this._fixWdh();
+			
 			if (this.tbar)
 				ctl.fireDown(this.tbar);
 			if (this.bbar)
@@ -285,44 +285,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	onHide: function () {
 		this._hideShadow();
 	},
-	_fixWdh: zk.ie7 ? function () {
-		if (!this.isFramable() || !this.panelchildren) return;
-
-		var $n = jq(this.$n()),
-			wdh = $n[0].style.width,
-			tl = $n.find('> :first-child')[0],
-			hl = this.$n("cap") ? jq(tl).next()[0] : null,
-			bl = $n.find("> :last-child")[0],
-			bb = this.$n("bb"),
-			fl = this.$n("fb") ? jq(bl).prev()[0]: null,
-			body = this.panelchildren.$n(),
-			cm = body.parentNode;
-
-		if (!wdh || wdh == "auto") {
-			var diff = zk(cm.parentNode).padBorderWidth() + zk(cm.parentNode.parentNode).padBorderWidth();
-			if (tl) {
-				tl.firstChild.style.width = jq.px(cm.offsetWidth + diff);
-			}
-			if (hl) {
-				hl.firstChild.firstChild.style.width = jq.px(cm.offsetWidth - (zk(hl).padBorderWidth()
-					+ zk(hl.firstChild).padBorderWidth() - diff));
-			}
-			if (bb) bb.style.width = zk(bb).revisedWidth(body.offsetWidth);
-			if (fl) {
-				fl.firstChild.firstChild.style.width = jq.px(cm.offsetWidth - (zk(fl).padBorderWidth()
-					+  zk(fl.firstChild).padBorderWidth() - diff));
-			}
-			if (bl) {
-				bl.firstChild.style.width = jq.px(cm.offsetWidth + diff);
-			}
-		} else {
-			if (tl) tl.firstChild.style.width = "";
-			if (hl) hl.firstChild.style.width = "";
-			if (bb) bb.style.width = "";
-			if (fl) fl.firstChild.style.width = "";
-			if (bl) bl.firstChild.style.width = "";
-		}
-	} : zk.$void,
 	_fixHgh: function () {
 		if (!this.panelchildren || !this.isRealVisible()) return;
 		var n = this.$n(),
