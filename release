@@ -438,6 +438,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cd zkforge
 		rm timelinez.jar
 		rm timeplotz.jar
+		rm ckez.jar
 
 		cd /tmp/zk
 		
