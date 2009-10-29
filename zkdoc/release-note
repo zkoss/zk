@@ -70,9 +70,10 @@ November, 2009
   2379135: Context menu with Listbox when event is added
 
 * Upgrade Notes
-  + Recompile your application since the return type of setAttribute of
-    Execution, Session, and WebApp is changed (to be the same as
-    Component and Page and then implement the same interface, Scope)
+  + Recompile your application since the return type of setAttribute 
+    and removeAttribute of Execution, Session, and WebApp is changed 
+	(to be the same as Component and Page and then implement the same 
+	interface, Scope)
   + The attributes of the ID space of a space owner are the same
     the component attributes.
   + The namespace (org.zkoss.zk.scripting.Namespace) is deprecated.
