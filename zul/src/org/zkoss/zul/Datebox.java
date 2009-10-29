@@ -279,7 +279,7 @@ public class Datebox extends FormatInputElement implements
 	/** Sets the time zone that this date box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
-	 * @param id the time zone's ID, such as GMT+12.
+	 * @param id the time zone's ID, such as "America/Los_Angeles".
 	 * The time zone will be retrieved by calling TimeZone.getTimeZone(id).
 	 */
 	public void setTimeZone(String id) {
@@ -325,7 +325,7 @@ public class Datebox extends FormatInputElement implements
 	 * that will be displayed at the client and allow user to select.
 	 * <p>The time zone is retrieved by calling TimeZone.getTimeZone().
 	 * @param dtzones a catenation of a list of the timezones' ID, such as
-	 * <code>"GMT+12,GMT+8"</code>
+	 * <code>"America/Los_Angeles,GMT+8"</code>
 	 * @see #setDisplayedTimeZones(List)
 	 * @since 3.6.3
 	 */

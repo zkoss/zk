@@ -386,8 +386,8 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 </c:if>
 </c:if>
 
-<%-- Gecko --%>
-<c:if test="${c:isGecko()}">
+<%-- Gecko (3.5 supports word-break )--%>
+<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
 .z-word-wrap div.z-treecell-cnt,
 .z-word-wrap div.z-treefooter-cnt, 
 .z-word-wrap div.z-treecol-cnt {

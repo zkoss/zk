@@ -198,8 +198,8 @@ tr.z-listitem td.z-listitem-focus {
 </c:if>
 </c:if>
 
-<%-- Gecko --%>
-<c:if test="${c:isGecko()}">
+<%-- Gecko (3.5 supports word-break )--%>
+<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
 .z-word-wrap div.z-listcell-cnt,
 .z-word-wrap div.z-listfooter-cnt,
 .z-word-wrap div.z-listheader-cnt {

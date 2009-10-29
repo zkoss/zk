@@ -269,7 +269,7 @@ public class Servlets {
 	 *
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-", "gecko3-",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
 	 * "hil",.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
@@ -284,7 +284,7 @@ public class Servlets {
 	 *
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
 	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
@@ -308,6 +308,7 @@ public class Servlets {
 		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
 		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
 		if ("gecko3".equals(type)) return isGecko3(userAgent);
+		if ("gecko3.5".equals(type)) return getGeckoVer(userAgent, true) >= 35;
 		if ("gecko3-".equals(type)) return getGeckoVer(userAgent) == 3;
 
 		if ("safari".equals(type)) return isSafari(userAgent);
@@ -400,16 +401,20 @@ public class Servlets {
 		int j = userAgent.indexOf("msie ");
 		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
 
+		return parseVer(userAgent, j + 5)[0];
+	}
+	private static final int[] parseVer(String ua, int j) {
 		int ver = 0;
-		for (int k = j += 5, len = userAgent.length(); k < len;  ++k) {
-			final char cc = userAgent.charAt(k);
+		for (int len = ua.length(); j < len;  ++j) {
+			final char cc = ua.charAt(j);
 			if (cc >= '0' && cc <= '9')
 				ver = ver * 10 + cc - '0';
 			else
 				break;
 		}
-		return ver;
+		return new int[] {ver, j};
 	}
+
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
 	 * If true, it also implies {@link #isGecko3} is true.
 	 */
@@ -448,6 +453,14 @@ public class Servlets {
 		return getGeckoVer(userAgent) >= 3;
 	}
 	private static final int getGeckoVer(String userAgent) {
+		return getGeckoVer(userAgent, false);
+	}
+	/**
+	 * @param subversion whether to include the subversion.
+	 * If true, it returns 30 instead of 3. It is useful to detect FF 3.5
+	 * (which will return 35 if subversion is true).
+	 */
+	private static final int getGeckoVer(String userAgent, boolean subversion) {
 		if (userAgent == null) return -1;
 		/* 
 		Firefox 3.0.8
@@ -467,14 +480,10 @@ public class Servlets {
 		int j = userAgent.indexOf("firefox/");
 		if (j < 0) return -1;
 
-		int ver = 0;
-		for (int k = j += 8, len = userAgent.length(); k < len;  ++k) {
-			final char cc = userAgent.charAt(k);
-			if (cc >= '0' && cc <= '9')
-				ver = ver * 10 + cc - '0';
-			else
-				break;
-		}
+		int[] vi = parseVer(userAgent, j + 8);
+		int ver = vi[0];
+		if (subversion)
+			ver = ver * 10 + parseVer(userAgent, vi[1] + 1)[0];
 		return ver;
 	}
 

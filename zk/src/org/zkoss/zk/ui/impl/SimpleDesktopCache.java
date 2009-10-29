@@ -95,13 +95,19 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		//if (log.debugable()) log.debug("After added, desktops: "+_desktops);
 	}
 	public void removeDesktop(Desktop desktop) {
-		final Object old;
-		synchronized (_desktops) {
-			old = _desktops.remove(desktop.getId());
+		final boolean oldexp = _desktops.disableExpunge(true);
+		try {
+			final Object old;
+			synchronized (_desktops) {
+				old = _desktops.remove(desktop.getId());
+			}
+			if (old == null)
+				log.warning("Removing non-existent desktop: "+desktop);
+			else
+				desktopDestroyed(desktop);
+		} finally {
+			_desktops.disableExpunge(oldexp);
 		}
-		if (old == null)
-			log.warning("Removing non-existent desktop: "+desktop);
-		desktopDestroyed(desktop);
 	}
 	private static void desktopDestroyed(Desktop desktop) {
 		final WebApp wapp = desktop.getWebApp();
@@ -178,7 +184,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			v = config.getDesktopMaxInactiveInterval();
 			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 4);
 		}
-		private boolean disableExpunge(boolean disable) {
+		synchronized private boolean disableExpunge(boolean disable) {
 			boolean old = _expungeDisabled;
 			_expungeDisabled = disable;
 			return old;

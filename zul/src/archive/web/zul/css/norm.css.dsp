@@ -457,8 +457,13 @@ span.z-drop-disallow {
 </c:if><%-- IE6 --%>
 </c:if><%--IE --%>
 
-<%-- Gecko --%>
-<c:if test="${c:isGecko()}">
+<%-- Gecko (3.5 supports word-break )--%>
+<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
+.z-word-wrap,
+.z-word-wrap .z-auxheader-cnt {
+	overflow: hidden;
+	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
+}
 span.z-word-wrap {<%-- label use only --%>
 	display: block;
 }

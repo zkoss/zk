@@ -233,8 +233,8 @@ div.z-grid {
 </c:if>
 </c:if>
 
-<%-- Gecko --%>
-<c:if test="${c:isGecko()}">
+<%-- Gecko (3.5 supports word-break )--%>
+<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
 .z-word-wrap div.z-row-cnt, 
 .z-word-wrap div.z-group-cnt,
 .z-word-wrap div.z-groupfoot-cnt,
