@@ -9,7 +9,10 @@ span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 	span.z-spinner-btn {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
 }
+<c:if test="${!c:browser('gecko3.5')}"><%-- 3.5 supports word-break --%>
 <%-- tree.css.dsp, grid.css.dsp, and listbox.css.dsp --%>
+.z-word-wrap,
+.z-word-wrap .z-auxheader-cnt,
 .z-word-wrap div.z-tree-cell-cnt, .z-word-wrap div.z-tree-footer-cnt, 
 .z-word-wrap div.z-tree-col-cnt,
 .z-word-wrap div.z-row-cnt, 
@@ -24,6 +27,8 @@ span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 span.z-word-wrap {<%-- label use only --%>
 	display: block;
 }
+</c:if>
+
 <%-- box.css.dsp --%>
 div.z-splitter-hor, div.z-splitter-ver, div.z-splitter-os-hor, div.z-splitter-os-ver {
 	-moz-user-select: none;

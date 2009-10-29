@@ -1,31 +1,22 @@
 <?xml version="1.0"?>
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml">
+<!-- http://blog.stchur.com/2007/03/01/word-wrap-for-mozilla-take-2/ -->
 	<binding id="wordwrap" applyauthorstyles="false">
 		<implementation>
 			<constructor>
-				//<![CDATA[		
+			//<![CDATA[		
 	var elem = this;
 	elem.addEventListener('overflow',
 		function() {
 			try {
-				for(var exp = /<&#8203;\/*[&#8203;_\s="'\w]+>/g,
-				div = document.createElement("DIV"),
-				cns = elem.childNodes,
-				i = cns.length; --i >=0;) {
-					if(cns[i].nodeType != Node.TEXT_NODE || 
-						!cns[i].nodeValue.trim().length)
-						continue;
-					var txt = cns[i].nodeValue.split('').join('&#8203;') + '&#8203;';
-					div.innerHTML = txt.replace(exp, reconstructTag);
-					cns[i].nodeValue = div.textContent;;
-				}
+	var walker = document.createTreeWalker(elem, NodeFilter.SHOW_TEXT, null, false); 
+	while (walker.nextNode()) { 
+		var node = walker.currentNode; 
+		node.nodeValue = node.nodeValue.split('').join(String.fromCharCode('8203')); 
+	} 
 			} catch(e){}
 		},false);
-		
-		function reconstructTag(tag)	{
-			return tag.replace(/&#8203;/g, '');
-		}
-				//]]>
+			//]]>
 			</constructor>
 		</implementation>
 	</binding>
