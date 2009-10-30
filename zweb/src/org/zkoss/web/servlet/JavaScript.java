@@ -72,7 +72,7 @@ public class JavaScript {
 		return "[src: "+_src+" charset="+_charset+']';
 	}
 	public int hashCode() {
-		return _src.hashCode() + _charset.hashCode();
+		return Objects.hashCode(_src) + Objects.hashCode(_charset);
 	}
 	public boolean equals(Object o) {
 		if (!(o instanceof JavaScript))
