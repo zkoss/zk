@@ -20,9 +20,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <vbox>
 <zscript>
   import java.awt.Font;
-  Font tfont = new Font("新細明體", Font.BOLD, 16); //for title
-  Font lfont = new Font("新細明體", Font.PLAIN, 10); //for legend
-  Font lbfont = new Font("新細明體", Font.PLAIN, 12); //for label
+  String fontname = "Dialog";
+  Font tfont = new Font(fontname, Font.BOLD, 16); //for title
+  Font lfont = new Font(fontname, Font.PLAIN, 10); //for legend
+  Font lbfont = new Font(fontname, Font.PLAIN, 12); //for label
   
   public Date date(int year, int month, int day) {
 	final java.util.Calendar calendar = java.util.Calendar.getInstance();
@@ -68,7 +69,7 @@ titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" onClick="drilld
 </zscript>
 
 <label value="ring"/>
-<chart id="ringchart" title = "甜甜圈圖 Ring Chart" width="500" height="250" type="ring" threeD="false" fgAlpha="128" 
+<chart id="ringchart" title = "圓環圖 Ring Chart" width="500" height="250" type="ring" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   ringchart.setModel(piemodel);
@@ -101,42 +102,42 @@ titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="
 </zscript>
 
 <label value="stacked_bar"/>
-<chart id="sbarchart" title="累積長條圖 Stacked Bar" width="500" height="250" type="stacked_bar" threeD="false" fgAlpha="128" 
+<chart id="sbarchart" title="堆積長條圖 Stacked Bar" width="500" height="250" type="stacked_bar" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   sbarchart.setModel(catmodel);
 </zscript>
 
 <label value="stacked_bar+3d"/>
-<chart id="sbarchart3d" title="立體累積長條圖 Stacked Bar 3D" width="500" height="250" type="stacked_bar" threeD="true" fgAlpha="128" 
+<chart id="sbarchart3d" title="立體堆積長條圖 Stacked Bar 3D" width="500" height="250" type="stacked_bar" threeD="true" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   sbarchart3d.setModel(catmodel);
 </zscript>
 
 <label value="line"/>
-<chart id="linechart" title="線型圖 Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" 
+<chart id="linechart" title="線形圖 Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   linechart.setModel(catmodel);
 </zscript>
 
 <label value="line+3d"/>
-<chart id="linechart3d" title="立體線型圖 Line Chart 3D" width="500" height="250" type="line" threeD="true" fgAlpha="128" 
+<chart id="linechart3d" title="立體線形圖 Line Chart 3D" width="500" height="250" type="line" threeD="true" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   linechart3d.setModel(catmodel);
 </zscript>
 
 <label value="area"/>
-<chart id="areachart" title="區域圖 Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" 
+<chart id="areachart" title="面積圖 Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   areachart.setModel(catmodel);
 </zscript>
 
 <label value="stacked_area"/>
-<chart id="sareachart" title="累積區域圖 Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" 
+<chart id="sareachart" title="堆積面積圖 Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" xAxisFont="${lbfont}" xAxisTickFont="${lbfont}" onClick="drilldown()"/>
 <zscript>
   sareachart.setModel(catmodel);
@@ -164,42 +165,42 @@ xymodel.addValue("2002 年", new Integer(90), new Integer(160));
 
 
 <label value="polar"/>
-<chart id="polar" title="角規圖 Polar Chart" width="500" height="250" type="polar" threeD="false" fgAlpha="128" 
+<chart id="polar" title="極座標圖 Polar Chart" width="500" height="250" type="polar" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   polar.setModel(xymodel);
 </zscript>
 
 <label value="scatter"/>
-<chart id="scatter" title="分布圖 Scatter Chart" width="500" height="250" type="scatter" threeD="false" fgAlpha="128" 
+<chart id="scatter" title="散佈圖 Scatter Chart" width="500" height="250" type="scatter" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   scatter.setModel(xymodel);
 </zscript>
 
 <label value="time_series"/>
-<chart id="timeseries" title="時間圖 Time Series Chart" width="500" height="250" type="time_series" threeD="false" fgAlpha="128" 
+<chart id="timeseries" title="時序圖 Time Series Chart" width="500" height="250" type="time_series" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   timeseries.setModel(xymodel);
 </zscript>
 
 <label value="area"/>
-<chart id="xyarea" title="XY 區域圖 XY Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" 
+<chart id="xyarea" title="XY 面積圖 XY Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   xyarea.setModel(xymodel);
 </zscript>
 
 <label value="line"/>
-<chart id="xyline" title="XY 線型圖 XY Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" 
+<chart id="xyline" title="XY 線形圖 XY Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   xyline.setModel(xymodel);
 </zscript>
 
 <label value="step_area"/>
-<chart id="steparea" title="步進區域圖 Step Area Chart" width="500" height="250" type="step_area" threeD="false" fgAlpha="128" 
+<chart id="steparea" title="步進面積圖 Step Area Chart" width="500" height="250" type="step_area" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   steparea.setModel(xymodel);
@@ -226,7 +227,7 @@ titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 </zscript>
 
 <label value="stacked_area"/>
-<chart id="xystackedarea" title="XY累積區域圖 XY Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" 
+<chart id="xystackedarea" title="XY堆積面積圖 XY Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   xystackedarea.setModel(xymodel);
@@ -240,7 +241,7 @@ titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 </zscript>
 
 <label value="histogram"/>
-<chart id="histogram" title="長棒圖 Histogram Chart" width="500" height="250" type="histogram" threeD="false" fgAlpha="128" 
+<chart id="histogram" title="柱形圖 Histogram Chart" width="500" height="250" type="histogram" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   histogram.setModel(xymodel);
@@ -271,7 +272,7 @@ hilomodel.addValue(new Date(d+18000),  new Double(63.5),  new Double(72.2),  new
 </zscript>
 
 <label value="candlestick"/>
-<chart id="candlestick" title="燭臺圖 Candlestick Chart" width="500" height="250" type="candlestick" threeD="false" fgAlpha="128" 
+<chart id="candlestick" title="燭柱圖 Candlestick Chart" width="500" height="250" type="candlestick" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" onClick="drilldown()"/>
 <zscript>
   candlestick.setModel(hilomodel);
@@ -299,14 +300,14 @@ xyzmodel.addValue("2002 年", new Integer(90), new Integer(160), new Integer(6))
 </zscript>
 
 <label value="bubble"/>
-<chart id="bubble" title="泡泡圖 Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" 
+<chart id="bubble" title="氣泡圖 Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" 
 titleFont="${tfont}" legendFont="${lfont}" onClick="drilldown()"/>
 <zscript>
   bubble.setModel(xyzmodel);
 </zscript>
 
 <label value="bubble horizontal"/>
-<chart id="hbubble" title="水平泡泡圖 Horizontal Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"  
+<chart id="hbubble" title="水平氣泡圖 Horizontal Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"  
 titleFont="${tfont}" legendFont="${lfont}" orient="horizontal"/>
 <zscript>
   hbubble.setModel(xyzmodel);
@@ -409,7 +410,7 @@ dateFormat="yyyy/MM/dd" />
 
 	DialModel dialmodel = new DialModel();
 	DialModelScale scale = dialmodel.newScale(0.0, 100.0, -120.0, -300.0, 10.0, 4);//scale's configuration data
-	scale.setText("Temperature 溫度");
+	scale.setText("Temp. 溫度");
 	scale.newRange(80, 100, "#FF0000", 0.83, 0.89);
 	scale.newRange(60, 80, "#FFC426", 0.83, 0.89);
 	scale.setValue(val);
