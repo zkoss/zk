@@ -97,6 +97,7 @@ October, 2009
   2824517: Command and arrow keys don't work in combo box (Mac only)
   2887102: Grid footer does not align properly, while setting overflow
   2888775: can't overwrite paging button css style in IE
+  2889323: Unable to show messagebox if the root is native
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet

@@ -16,13 +16,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 /** override for zkDetail */
 var _zkexdetail = {};
-zk.override(zkau.cmd1, "addAft",  _zkexdetail, function (uuid, cmp, html) {
+zk.override(zkau.cmd1, "addAft",  _zkexdetail, function (uuid, cmp, html, pgid) {
 	var detail = zkDetail.getDetailByRow(cmp), isOpen;
 	if (detail && getZKAttr(detail, "open") == "true") {
 		isOpen = true;
 		zkDetail.open(detail, false, true);
 	}
-	_zkexdetail.addAft(uuid, cmp, html);
+	_zkexdetail.addAft(uuid, cmp, html, pgid);
 	if (isOpen)
 		zkDetail.open(detail, true, true);
 });

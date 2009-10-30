@@ -349,12 +349,12 @@ zk.override(zkau.cmd1, "outer", _zktrx.au, function (uuid, cmp, html) {
 		_zktrx.au.outer(uuid, cmp, html);
 });
 
-zk.override(zkau.cmd1, "addAft", _zktrx.au, function (uuid, cmp, html) {
+zk.override(zkau.cmd1, "addAft", _zktrx.au, function (uuid, cmp, html, pgid) {
 	if (!cmp) {
 		cmp = $e(_zktrx.sib[uuid]);
 		if (cmp) cmp = zkTrow._lastKid(cmp);
 	}
-	_zktrx.au.addAft(uuid, cmp, html);
+	_zktrx.au.addAft(uuid, cmp, html, pgid);
 });
 
 zk.override(zkau.cmd1, "addBfr", _zktrx.au, function (uuid, cmp, html) {

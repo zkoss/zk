@@ -36,9 +36,9 @@ if (!window.Selectable_effect) { //define it only if not customized
 	};
 }
 var _zkselx = {};
-zk.override(zkau.cmd1, "addAft",  _zkselx, function (uuid, cmp, html) {
+zk.override(zkau.cmd1, "addAft",  _zkselx, function (uuid, cmp, html, pgid) {
 	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
-		_zkselx.addAft(uuid, cmp, html);
+		_zkselx.addAft(uuid, cmp, html, pgid);
 });
 zk.override(zkau.cmd1, "addBfr",  _zkselx, function (uuid, cmp, html) {
 	if (!cmp || !_zkselx._addChd(uuid, cmp, html))
