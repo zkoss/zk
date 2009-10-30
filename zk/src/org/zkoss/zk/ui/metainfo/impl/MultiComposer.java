@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
+import org.zkoss.zk.ui.util.FullComposer;
 
 /**
  * To proxy a collection of composer
@@ -52,24 +53,35 @@ public class MultiComposer implements Composer {
 			return toComposer(page, ary[0]);
 
 		final Composer[] cs;
-		boolean ext = false;
+		boolean ext = false, full = false;
 		if (ary instanceof Composer[]) {
 			cs = (Composer[])ary;
-			for (int j = cs.length; --j >= 0;)
+			for (int j = cs.length; --j >= 0;) {
 				if (cs[j] instanceof ComposerExt) {
 					ext = true;
-					break;
+					if (full) break;
 				}
+				if (cs[j] instanceof FullComposer) {
+					full = true;
+					if (ext) break;
+				}
+			}
 		} else {
 			cs = new Composer[ary.length];
 			for (int j = ary.length; --j >=0;) {
 				cs[j] = toComposer(page, ary[j]);
 				ext = ext || (cs[j] instanceof ComposerExt);
+				full = full || (cs[j] instanceof FullComposer);
 			}
 		}
 
-		if (ext) return new MultiComposerExt(cs);
-		return new MultiComposer(cs);
+		if (full) {
+			if (ext) return new MultiFullComposerExt(cs);
+			return new MultiFullComposer(cs);
+		} else {
+			if (ext) return new MultiComposerExt(cs);
+			return new MultiComposer(cs);
+		}
 	}
 	private static Composer toComposer(Page page, Object o)
 	throws Exception {
@@ -127,6 +139,16 @@ public class MultiComposer implements Composer {
 }
 /*package*/ class MultiComposerExt extends MultiComposer implements ComposerExt {
 	/*package*/ MultiComposerExt(Composer[] cs) throws Exception {
+		super(cs);
+	}
+}
+/*package*/ class MultiFullComposer extends MultiComposer implements FullComposer {
+	/*package*/ MultiFullComposer(Composer[] cs) throws Exception {
+		super(cs);
+	}
+}
+/*package*/ class MultiFullComposerExt extends MultiFullComposer implements ComposerExt {
+	/*package*/ MultiFullComposerExt(Composer[] cs) throws Exception {
 		super(cs);
 	}
 }
