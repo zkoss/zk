@@ -7,6 +7,7 @@
  
 	History:
 		Fri Jun 10 15:56:48     2005, Created by tomyeh
+		Thank Deok-su Lee for his contribution.
 }}IS_NOTE
  
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.

@@ -2,6 +2,7 @@
 ZK 3.6.3
 October, 2009
 * Features
+  2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
   2874457: A way to automatic timeout at client without user's activity
