@@ -909,7 +909,9 @@ zk.load = function (nm, initfn, ckfn, modver, dtid) {
 		zk._modules[nm] = true;
 		if (initfn) zk.addBeforeInit(initfn);
 		zk._load(nm, modver, dtid, ckfn);
-	}
+	} else if (initfn)
+		if (zk.loading) zk.addBeforeInit(initfn);
+		else initfn();
 };
 zk._loadByType = function (nm, n) {
 	if (!zk._modules[nm]) {
