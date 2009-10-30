@@ -346,14 +346,15 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	if [ "$target" == "official" ] ; then
 		#Prepare maven repository
 		function mvnrepo {
+			local vertamp=`echo $ver | sed 's/-/./'`
 			mkdir -p $1
 			if [ $2 ] ; then
-				cp /tmp/zk/$entsrcnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+				cp /tmp/zk/$entsrcnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
 			fi
 			
-			sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
-			cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
-			jar cfM $1-$ver-bundle.jar -C $1 .
+			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
+			jar cfM $1-$vertamp-bundle.jar -C $1 .
 		}
 		mkdir -p maven
 		mkdir -p /tmp/maven
