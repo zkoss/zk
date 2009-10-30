@@ -281,11 +281,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		
+
 		if (pp && this._dtzones) {
-			var html = ['<div><select id="', this.uuid, '-dtzones">'];
+			var html = ['<div class="', this.getZclass(), '-timezone>"'];
+			if (this._dtzones) html.push(this.getTimeZoneLabel());
+			html.push('<select id="', this.uuid, '-dtzones" class="', this.getZclass(), '-timezone-body">'); 
 			if (pp && this._dtzones) {
 				for (var i = 0, len = this._dtzones.length; i < len; i++)
-					html.push('<option value="', this._dtzones[i], '">', this._dtzones[i], '</option>');
+					html.push('<option value="', this._dtzones[i], '" class="', this.getZclass(), '-timezone-item">', this._dtzones[i], '</option>');
 			}
 			html.push('</select><div>');
 			jq(pp).append(html.join(''));
@@ -296,7 +299,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 			this._setTimeZonesIndex();
 			}			
 		}
-
 			
 		this.syncWidth();
 		
@@ -335,6 +337,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onChange: function (evt) {
 		if (this._pop)
 			this._pop._value = evt.data.value;
+	},
+	getTimeZoneLabel: function () {
+		return "";
 	}
 });
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
