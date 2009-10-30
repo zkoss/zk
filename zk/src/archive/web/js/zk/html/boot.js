@@ -894,6 +894,8 @@ zk.addOnLoad = function (nm, script) {
  * @param nm the module name if no / is specified, or filename if / is
  * specified, or URL if :// is specified.
  * @param initfn the function that will be added to zk.addBeforeInit
+ * Note: if specified, it is always executed even if the module has been
+ * loaded.
  * @param ckfn used if URL (i.e., xxx://) is used as nm
  * and the file being loaded doesn't invoke zk.ald(), or
  * we have to check more condition than calling back zk.ald().
