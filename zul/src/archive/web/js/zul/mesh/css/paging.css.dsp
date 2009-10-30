@@ -191,6 +191,6 @@
 .z-paging-btn .z-paging-prev,
 .z-paging-btn .z-paging-last,
 .z-paging-btn .z-paging-first {	
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')});
 }
 </c:if>
