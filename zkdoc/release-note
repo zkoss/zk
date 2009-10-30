@@ -152,6 +152,7 @@ November, 2009
 ZK 3.6.3
 October, 2009
 * Features
+  2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
   2874457: A way to automatic timeout at client without user's activity
@@ -245,6 +246,9 @@ October, 2009
   2886261: In IE6, problem with collapsible West and Listbox(select).
   2824517: Command and arrow keys don't work in combo box (Mac only)
   2887102: Grid footer does not align properly, while setting overflow
+  2888775: can't overwrite paging button css style in IE
+  2813966: FullComposer breaks when there are several composers
+  2889323: Unable to show messagebox if the root is native and with listbox
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
