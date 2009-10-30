@@ -2,7 +2,7 @@
 ZK 5.0.0
 November, 2009
 * Features
-  2889241: Message translated to Korean.
+  2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2825713: EventQueue support application-level publish (by sever-push)
   2822404: Fileupload shall be a feature attachable to button, menuitem
   2822395: Adds component for HTML A, rather than overuse toolbarbutton
