@@ -18,6 +18,7 @@ package org.zkoss.zkplus.databind;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
@@ -46,18 +47,24 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	  			int index = model.indexOf(val);
 	  			if (index >= 0) {
 	    			final Listitem item = (Listitem) lbx.getItemAtIndex(index);
-	    			
-	    			final int selIndex = lbx.getSelectedIndex();
-	    			
-					//We need this to support load-when:onSelect when first load 
-					//the page in (so it is called only once).
-	  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
-	    				Set items = new HashSet();
-	    				items.add(item);
-	    				//bug #2140491
-	    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid(), Boolean.TRUE);
-	    				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
-	    			}    			
+	    			//Bug #2728704: Listbox with databinding generates onSelect w/o user action
+	    			//Shall not fire event by spec. For backward compatibility(still want to
+	    			//fire onSelect event as usual), user can specifies 
+	    			//selectedItem="@{...,fireOnSelectEvent=true}", then data binder 
+	    			//will still fire the onSelect event as usual.
+	    			if (SelectedItemConverter.isFireOnSelectEvent(comp)) {
+		    			final int selIndex = lbx.getSelectedIndex();
+		    			
+						//We need this to support load-when:onSelect when first load 
+						//the page in (so it is called only once).
+		  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
+		    				Set items = new HashSet();
+		    				items.add(item);
+		    				//bug #2140491
+		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid(), Boolean.TRUE);
+		    				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
+		    			}
+	    			}
 	  				return item;
 	  			}
 	  		} else if (xmodel == null) { //no model case, assume Listitem.value to be used with selectedItem
@@ -74,7 +81,18 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	  	}
 	  	return null;
 	}
-  
+	/*package*/ static boolean isFireOnSelectEvent(Component comp) {
+		Map args = (Map) comp.getAttribute(DataBinder.ARGS);
+		boolean fireevent = false;
+		if (args != null) {
+			final String fireeventstr = (String) args.get("fireOnSelectEvent");
+			if (fireeventstr != null) {
+				fireevent = Boolean.valueOf(fireeventstr).booleanValue();
+			}
+		}
+		return fireevent;
+
+	}
 	public Object coerceToBean(Object val, Component comp) { //save
 	  	final Listbox lbx = (Listbox) comp;
 		if (Executions.getCurrent().getAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid()) != null) {
