@@ -64,6 +64,7 @@ November, 2009
   2783590: Correct the display of grid headers in IE8
   2887722: dottree style in ZK5 RC is wrong
   2887987: Framable panel on IE7 with ZK 5RC
+  2890514: Row's align/valign property doesn't work
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

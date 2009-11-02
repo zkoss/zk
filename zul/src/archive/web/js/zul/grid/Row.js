@@ -14,9 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.grid.Row = zk.$extends(zul.Widget, {
 	$define: {
-		getAlign: function () {
-			return this._align;
-		},
 		align: function (v) {
 			var n = this.$n();
 			if (n)
@@ -205,5 +202,15 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			if (n) n.firstChild.style.MozUserSelect = "none";
 		}
 		this.$supers('doMouseOut_', arguments);
+	},
+	domAttrs_: function (no) {
+		var attr = this.$supers('domAttrs_', arguments);
+		if (this._align)
+			attr += ' align="' + this._align + '"';
+		if (this._valign)
+			attr += ' valign="' + this._valign + '"';
+		if (this._nowrap)
+			attr += ' nowrap="nowrap"';
+		return attr;
 	}
 });
