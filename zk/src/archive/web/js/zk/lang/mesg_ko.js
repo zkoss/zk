@@ -1,4 +1,4 @@
-/* mesg.js "charset=utf-8"
+﻿/* mesg.js "charset=utf-8"
  
 {{IS_NOTE
 	Purpose:
@@ -26,20 +26,11 @@ mesg.TRY_AGAIN = "재시도를 원하시나요?";
 mesg.UNSUPPORTED_BROWSER = "지원되지 않는 브라우저입니다: ";
 mesg.ILLEGAL_RESPONSE = "이해할 수 없는 응답이 수신되었습니다. 새로고침하시고 재시도하세요..\n";
 mesg.FAILED_TO_PROCESS = "처리실패하였습니다.";
-mesg.UUID_REQUIRED = "UUID가 필요합니다.";
-mesg.INVALID_STRUCTURE = "타당치 않은(Invalid) 구조입니다.: ";
-mesg.COMP_OR_UUID_REQUIRED = "컴퍼넌트 또는 그 컴퍼넌트의 UUID가 필요합니다.";
-mesg.NUMBER_REQUIRED = "번호를 기입하세요";
-mesg.INTEGER_REQUIRED = "정수를 기입하세요";
-mesg.EMPTY_NOT_ALLOWED = "공백은 피하세요.\n필수 사항입니다. 기입해주세요.";
 mesg.GOTO_ERROR_FIELD = "에러필드로 이동합니다.";
 mesg.PLEASE_WAIT = "처리중...";
-mesg.VALUE_NOT_MATCHED = "콤보박스에서 적어도 하나의 값을 선택하셔야 합니다.";
- 
+
 mesg.FILE_SIZE = "파일 크기: ";
 mesg.KBYTES = "KB";
- 
-mesg.CANCEL="취소";
  
 mesg.FAILED_TO_LOAD = "로드에 실패하였습니다 ";
 mesg.FAILED_TO_LOAD_DETAIL = "트래픽에 의한 문제일 수 있습니다. 페이지를 새로고침하시고 재시도하세요.";

@@ -11,7 +11,6 @@ mesg.TRY_AGAIN ="هل تحب ان تحاول مرة أخرى";
 mesg.UNSUPPORTED_BROWSER="المتصفح غير مدعوم";
 mesg.ILLEGAL_RESPONSE="أستجابة خاطئة.\n";
 mesg.FAILED_TO_PROCESS="فشل فى القيام بالعملية";
-mesg.EMPTY_NOT_ALLOWED="غير مسموح بفراغ";
 mesg.GOTO_ERROR_FIELD="اذهب الى مكان الخطأ";
 mesg.PLEASE_WAIT="من فضلك الأنتظار ...";
 

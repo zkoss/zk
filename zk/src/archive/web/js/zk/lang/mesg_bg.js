@@ -27,7 +27,6 @@ mesg.INVALID_STRUCTURE = "Грешна структура: ";
 mesg.COMP_OR_UUID_REQUIRED = "Компонента или неговия UUID са задължителни";
 mesg.NUMBER_REQUIRED = "Числото трябва да е по-голямо от ";
 mesg.INTEGER_REQUIRED = "Изберете по-голямо целочислено число от";
-mesg.EMPTY_NOT_ALLOWED = "Не може да е празно или само интервали.";
 mesg.GOTO_ERROR_FIELD = "Ползване на грешно поле";
 mesg.PLEASE_WAIT = "Зарежда се...";
 mesg.VALUE_NOT_MATCHED = "Трябва да посочите една от стойностите в падащия списък.";
