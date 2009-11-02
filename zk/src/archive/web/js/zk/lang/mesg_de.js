@@ -31,5 +31,5 @@ FAILED_TO_LOAD: "Fehler beim Laden ",
 FAILED_TO_LOAD_DETAIL: "Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.",
 CAUSE: "Ursache: ",
 
-LOADING: "Lade..."
+LOADING: "Lade"
 };

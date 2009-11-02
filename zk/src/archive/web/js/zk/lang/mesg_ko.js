@@ -1,21 +1,16 @@
 ﻿/* mesg.js "charset=utf-8"
  
-{{IS_NOTE
 	Purpose:
 		Locale dependent message
 	Description:
  
 	History:
-		Fri Jun 10 15:56:48     2005, Created by tomyeh
 		Thank Deok-su Lee for his contribution.
-}}IS_NOTE
- 
+
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  
-{{IS_RIGHT
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "존재하지 않습니다.: ";
@@ -36,4 +31,4 @@ mesg.FAILED_TO_LOAD = "로드에 실패하였습니다 ";
 mesg.FAILED_TO_LOAD_DETAIL = "트래픽에 의한 문제일 수 있습니다. 페이지를 새로고침하시고 재시도하세요.";
 mesg.CAUSE = "원인: ";
  
-mesg.LOADING = "로딩중...";
+mesg.LOADING = "로딩중";

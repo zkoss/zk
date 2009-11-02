@@ -33,4 +33,4 @@ mesg.FAILED_TO_LOAD_DETAIL="Ciò può essere dovuto a traffico errato. Ricaricar
 
 mesg.CAUSE="Cause: ";
 
-mesg.LOADING = "Attendere...";
+mesg.LOADING = "Attendere";

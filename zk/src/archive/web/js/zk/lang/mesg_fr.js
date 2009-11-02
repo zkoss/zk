@@ -32,5 +32,5 @@ FAILED_TO_LOAD: "Erreur de chargement ",
 FAILED_TO_LOAD_DETAIL: "Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.",
 CAUSE: "Cause: ",
 
-LOADING: "Chargement..."
+LOADING: "Chargement"
 };

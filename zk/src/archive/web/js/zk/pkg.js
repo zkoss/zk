@@ -104,7 +104,8 @@ zk.copy(zk, (function() {
 						//don't use jq() since it will be queued after others
 
 				zUtl.progressbox("zk_loadprog",
-					'Loading <span id="zk_loadcnt">'+loadmsg()+'</span>',
+					(window.mesg?mesg.LOADING:"Loading")
+					+' <span id="zk_loadcnt">'+loadmsg()+'</span>',
 					true);
 			}
 		}	
