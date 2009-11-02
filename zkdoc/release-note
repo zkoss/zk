@@ -100,6 +100,7 @@ October, 2009
   2813966: FullComposer breaks when there are several composers
   2889323: Unable to show messagebox if the root is native and with listbox
   2728704: Listbox with databinding generates onSelect w/o user action
+  2889423: No empty textbox constraint English error unclear
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
