@@ -44,4 +44,4 @@ mesg.FAILED_TO_LOAD="Betöltés nem sikerült ";
 mesg.FAILED_TO_LOAD_DETAIL="Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.";
 mesg.CAUSE="Hibát okozta: ";
 
-mesg.LOADING = "Feldolgozás...";
+mesg.LOADING = "Feldolgozás";

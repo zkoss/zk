@@ -339,7 +339,7 @@ zk.applyMask = function (rel, message) {
 	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
 	var progbox = $e(rel.id + "!progbox");
 	if (progbox) return progbox;
-	if (!message) message = window.mesg ? mesg.LOADING: 'Loading...';
+	if (!message) message = (window.mesg ? mesg.LOADING: 'Loading') + '...';
 	var n = document.createElement("DIV");
 	document.body.appendChild(n);
 	var xy = zk.revisedOffset(rel),

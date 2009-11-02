@@ -45,4 +45,4 @@ mesg.FAILED_TO_LOAD="Erreur de chargement ";
 mesg.FAILED_TO_LOAD_DETAIL="Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.";
 mesg.CAUSE="Cause: ";
 
-mesg.LOADING = "Chargement...";
+mesg.LOADING = "Chargement";

@@ -44,4 +44,4 @@ mesg.FAILED_TO_LOAD="Falhou ao carregar ";
 mesg.FAILED_TO_LOAD_DETAIL="Isto pode ser causado por um mau tráfego. Você pode recarregar esta página e tentar novamente.";
 mesg.CAUSE="Causa: ";
 
-mesg.LOADING = "Processando...";
+mesg.LOADING = "Processando";

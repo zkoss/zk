@@ -993,7 +993,8 @@ zk._bld = function () {
 				var n = $e("zk_loadprog");
 				if (!n)
 					Boot_progressbox("zk_loadprog",
-						'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
+						(window.mesg ? mesg.LOADING: 'Loading')
+						+' (<span id="zk_loadcnt">'+zk.loading+'</span>)',
 						0, 0, true, true);
 			}
 		}, 350);

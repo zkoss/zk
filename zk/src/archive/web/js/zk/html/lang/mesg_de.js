@@ -44,4 +44,4 @@ mesg.FAILED_TO_LOAD="Fehler beim Laden ";
 mesg.FAILED_TO_LOAD_DETAIL="Mögliche Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.";
 mesg.CAUSE="Ursache: ";
 
-mesg.LOADING = "Lade...";
+mesg.LOADING = "Lade";

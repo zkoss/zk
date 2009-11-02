@@ -45,4 +45,4 @@ mesg.FAILED_TO_LOAD = "로드에 실패하였습니다 ";
 mesg.FAILED_TO_LOAD_DETAIL = "트래픽에 의한 문제일 수 있습니다. 페이지를 새로고침하시고 재시도하세요.";
 mesg.CAUSE = "원인: ";
  
-mesg.LOADING = "로딩중...";
+mesg.LOADING = "로딩중";

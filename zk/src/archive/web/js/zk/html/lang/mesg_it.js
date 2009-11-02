@@ -44,4 +44,4 @@ mesg.FAILED_TO_LOAD="Impossibile caricare";
 mesg.FAILED_TO_LOAD_DETAIL="Ciò può essere dovuto a traffico errato. Ricaricare la pagina e riprovare.";
 mesg.CAUSE="Cause: ";
  
-mesg.LOADING = "Attendere...";
+mesg.LOADING = "Attendere";
