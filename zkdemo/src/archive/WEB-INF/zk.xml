@@ -405,24 +405,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			org.zkoss.zkplus.hibernate.HibernateSessionContextListener
 		</listener-class>
 	</listener>
-	 -->	
-
-	<!-- Before version 3.6.2(included), when use data binding with selectedItem 
-		attribute of Listbox and/or Combobox, data binder will fire "onSelect" 
-		event automatically when the page is first loaded or model is changed. 
-		This is not consistent with ZK specification: only user action shall trigger 
-		component event. So since version 3.6.3, no longer the "onSelect" event 
-		will be fired(refer to Bug 2728704). However, some already implemented 
-		application	might count on such "side effects". You can uncomment 
-		following to make it backward compatible (i.e. still fire the "onSelect"
-		event when page is first loaded or model is changed)
-		
-	<library-property>
-		<name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
-		<value>true</value>
-	</library-property>
 	 -->
-	
+	 	
 	<!-- ZK Demo properties loader -->
 	<listener>
 		<description>ZK Demo properties loader</description>

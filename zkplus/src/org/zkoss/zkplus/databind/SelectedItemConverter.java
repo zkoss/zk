@@ -34,7 +34,24 @@ import org.zkoss.zul.Listitem;
 /**
  * Convert selected item to bean and vice versa.
  *
- * @author Henri
+ * <p>Before ZK version 3.6.2(included), when use data binding with selectedItem 
+ * attribute of Listbox and/or Combobox, data binder will fire "onSelect" 
+ * event automatically when the page is first loaded or model is changed. 
+ * This is not consistent with ZK specification: only user action shall trigger 
+ * component event. So since version 3.6.3, no longer the "onSelect" event 
+ * will be fired(refer to Bug 2728704). However, some already implemented 
+ * application might count on such "side effects". User can specify in 
+ * application's WEB-INF/zk.xml following library-property to true to make it 
+ * backward compatible (i.e. still fire the "onSelect" event when page is first 
+ * loaded or model is changed)</p>
+ * 
+ * <code><pre>	
+ *	<library-property>
+ *		<name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </pre></code>
+ * @author Henri Chen
  */
 public class SelectedItemConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191439L;
