@@ -357,7 +357,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
-		this.syncShadow();
+		if (this.desktop) this.syncShadow();
 	},
 	close: function (silent) {
 		var db = this.parent,

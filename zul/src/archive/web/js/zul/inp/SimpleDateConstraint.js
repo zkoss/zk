@@ -26,21 +26,40 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				this._beg = this._end;
 				this._end = d;
 			}
+				
+			this._beg.setHours(0);
+			this._beg.setMinutes(0);
+			this._beg.setSeconds(0);
+			this._beg.setMilliseconds(0);
+			
+			this._end.setHours(0);
+			this._end.setMinutes(0);
+			this._end.setSeconds(0);
+			this._end.setMilliseconds(0);
 			return;
 		} else if (constraint.startsWith("before")) {
 			this._end = zDateFormat.parseDate(constraint.substring(6), this.format);
+			this._end.setHours(0);
+			this._end.setMinutes(0);
+			this._end.setSeconds(0);
+			this._end.setMilliseconds(0);
 			return;
 		} else if (constraint.startsWith("after")) {
 			this._beg = zDateFormat.parseDate(constraint.substring(5), this.format);
+			this._beg.setHours(0);
+			this._beg.setMinutes(0);
+			this._beg.setSeconds(0);
+			this._beg.setMilliseconds(0);
 			return;
 		}
 		return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
 		if (typeof val.getTime == 'function') {
-			if (this._beg != null && this._beg.getTime() > val.getTime())
+			var v = new Date(val.getFullYear(), val.getMonth(), val.getDate());
+			if (this._beg != null && this._beg.getTime() > v.getTime())
 				return this.outOfRangeValue();
-			if (this._end != null && this._end.getTime() < val.getTime())
+			if (this._end != null && this._end.getTime() < v.getTime())
 				return this.outOfRangeValue();
 		}
 		return this.$supers('validate', arguments);
