@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -49,10 +50,13 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	    			final Listitem item = (Listitem) lbx.getItemAtIndex(index);
 	    			//Bug #2728704: Listbox with databinding generates onSelect w/o user action
 	    			//Shall not fire event by spec. For backward compatibility(still want to
-	    			//fire onSelect event as usual), user can specifies 
-	    			//selectedItem="@{...,fireOnSelectEvent=true}", then data binder 
-	    			//will still fire the onSelect event as usual.
-	    			if (SelectedItemConverter.isFireOnSelectEvent(comp)) {
+	    			//fire onSelect event as usual), user can specifies in zk.xml
+	    			//<library-property>
+	    			//  <name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
+	    			//  <value>true</value>
+	    			//</library-property>
+	    			//then data binder will still fire the onSelect event as usual.
+	    			if (SelectedItemConverter.isOnSelectWhenLoad()) {
 		    			final int selIndex = lbx.getSelectedIndex();
 		    			
 						//We need this to support load-when:onSelect when first load 
@@ -81,17 +85,13 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 	  	}
 	  	return null;
 	}
-	/*package*/ static boolean isFireOnSelectEvent(Component comp) {
-		Map args = (Map) comp.getAttribute(DataBinder.ARGS);
-		boolean fireevent = false;
-		if (args != null) {
-			final String fireeventstr = (String) args.get("fireOnSelectEvent");
-			if (fireeventstr != null) {
-				fireevent = Boolean.valueOf(fireeventstr).booleanValue();
-			}
+	private static Boolean _onSelectWhenLoad;
+	/*package*/ static boolean isOnSelectWhenLoad() {
+		if (_onSelectWhenLoad == null) {
+			final String str = Library.getProperty("org.zkoss.zkplus.databind.onSelectWhenLoad", "false");
+			_onSelectWhenLoad = Boolean.valueOf("true".equals(str));
 		}
-		return fireevent;
-
+		return _onSelectWhenLoad.booleanValue();
 	}
 	public Object coerceToBean(Object val, Component comp) { //save
 	  	final Listbox lbx = (Listbox) comp;

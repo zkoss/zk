@@ -85,10 +85,13 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	    			final Comboitem item = (Comboitem) cbbox.getItemAtIndex(index);
 	    			//Bug #2728704: Listbox with databinding generates onSelect w/o user action
 	    			//Shall not fire event by spec. For backward compatibility(still want to
-	    			//fire onSelect event as usual), user can specifies 
-	    			//selectedItem="@{...,fireOnSelectEvent=true}", then data binder 
-	    			//will still fire the onSelect event as usual.
-	    			if (SelectedItemConverter.isFireOnSelectEvent(comp)) {
+	    			//fire onSelect event as usual), user can specifies in zk.xml
+	    			//<library-property>
+	    			//  <name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
+	    			//  <value>true</value>
+	    			//</library-property>
+	    			//then data binder will still fire the onSelect event as usual.
+	    			if (SelectedItemConverter.isOnSelectWhenLoad()) {
 		    			final int selIndex = cbbox.getSelectedIndex();
 		    			
 		    			//We need this to support load-when:onSelect
