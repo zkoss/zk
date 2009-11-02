@@ -110,7 +110,7 @@ October, 2009
     data binder will fire "onSelect" event automatically when the page is first
 	loaded or model is changed. This is not consistent with ZK spec. that only 
 	user action shall trigger component event. So since this vesion, no longer 
-	the "onSelect" event will be fired(refer to Bg 2728704). However, some 
+	the "onSelect" event will be fired(refer to Bug 2728704). However, some 
 	implmented application might count on such "side effects". Users can still 
 	specify selectedItem="@{..., fireOnSelectEvent='true'}" to make it backward 
 	compatible.
