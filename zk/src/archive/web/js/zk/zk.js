@@ -416,7 +416,7 @@ if (!Array.prototype.indexOf)
 			zk.ie8All = j >= 8; //ie8 or later (including compatible)
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 			zk.ie6_ = !zk.ie7;
-
+			zk.ie7_ = zk.ie7 && !zk.ie8;
 			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
 			bodycls = 'safari';

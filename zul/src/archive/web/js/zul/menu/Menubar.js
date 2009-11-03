@@ -101,7 +101,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth <= nodeWidth) {
 				this._scrolling = false;
 				body.scrollLeft = 0;
-				if (zk.ie7)
+				if (zk.ie7_)
 					zk(body).redoCSS();
 			} else {
 				body.style.width = jq.px(fixedSize);
