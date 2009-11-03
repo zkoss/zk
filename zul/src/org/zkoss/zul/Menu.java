@@ -18,10 +18,14 @@ package org.zkoss.zul;
 
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MouseEvent;
 
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * An element, much like a button, that is placed on a menu bar.
@@ -34,7 +38,11 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	private Menupopup _popup;
-
+	
+	static {
+		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+	}
+	
 	public Menu() {
 	}
 	public Menu(String label) {
@@ -119,4 +127,20 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 
 		if (!getChildren().isEmpty()) afterUnmarshal();
 	}
+
+	//--ComponentCtrl--//
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#service},
+	 * it also handles onClick.
+	 * @since 5.0.0
+	 */
+	public void service(AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CLICK)) {
+			Events.postEvent(MouseEvent.getMouseEvent(request));
+		} else
+			super.service(request, everError);
+	}
+	
 }

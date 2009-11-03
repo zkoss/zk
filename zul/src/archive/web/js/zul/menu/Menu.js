@@ -94,20 +94,40 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		if (this.isTopmost() && !jq.isAncestor(this.$n('a'), evt.domTarget)) return;
-
+		
+		var node = this.$n();
 		if (this.menupopup) {
 			jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
 			this.menupopup._shallClose = false;
 			if (this.isTopmost())
 				this.getMenubar()._lastTarget = this;
-			if (!this.menupopup.isOpen()) 
-				this.menupopup.open();
-			else {
-				var anc = this.menupopup.$n('a');
-				if (anc) anc.focus(); // force to get a focus 
+			if (this.isListen('onClick')) {
+				var arrorWidth = 12, //note : /img/menu/btn-arrow.gif : width = 12
+					clk = jq(node).find('TABLE'),
+					offsetWidth = zk(clk).offsetWidth(),
+					clickArea = offsetWidth - arrorWidth,
+					ofs = zk(clk).revisedOffset(),
+					clickOffsetX = evt.domEvent.clientX - ofs[0];
+
+				if (clickOffsetX > clickArea) {
+					this._openPopup();
+					Event.stop(evt);
+				} else {
+					jq(this.$n('a')).removeClass(this.getZclass() + '-body-seld');
+					this.fireX(evt);
+				}		
+			} else {
+				this._openPopup();	
 			}
 		}
-		this.fireX(evt);
+	},
+	_openPopup: function () {
+		if (!this.menupopup.isOpen()) 
+			this.menupopup.open();
+		else {
+			var anc = this.menupopup.$n('a');
+			if (anc) anc.focus(); // force to get a focus 
+		}			
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;

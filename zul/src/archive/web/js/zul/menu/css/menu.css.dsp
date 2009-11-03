@@ -151,6 +151,15 @@
 	color:#233D6D;
 }
 
+.z-menubar-hor .z-menu-body-over .z-menu-inner-m  div {
+	background: transparent no-repeat right 0;
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
+}
+
+.z-menubar-ver .z-menu-body-over .z-menu-inner-m  div {
+	background: transparent no-repeat right 0;
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-ver-over.gif')});
+}
 <%--define disabled menuitem effect--%>
 .z-menubar-hor .z-menu-item-disd *, .z-menubar-ver .z-menu-item-disd *{
 	color:gray !important;
@@ -305,4 +314,59 @@
 	margin:2px 3px;
 	overflow:hidden;
 	width:auto;
+}
+<%--define menubar hor scroll--%>
+.z-menubar-hor-scroll {
+	overflow: hidden;
+}
+
+.z-menubar-hor-body {
+	margin: 0;
+	width: 100%;
+}
+
+.z-menubar-hor-body-scroll {
+	position: relative;
+	overflow: hidden;
+	margin-left: 20px;
+	margin-right : 20px;
+}
+
+.z-menubar-hor-cnt {
+	width: 5000px;
+}
+
+.z-menubar-hor-left, .z-menubar-hor-right {
+	width: 18px;
+	position:absolute;
+}
+
+.z-menubar-hor-left-scroll, .z-menubar-hor-right-scroll{
+	top: 0;
+	width: 18px;
+	height: 64px;
+	border-bottom: 1px solid #8DB2E3;
+	cursor: pointer;
+	position: absolute;
+	z-index: 25;
+}
+
+.z-menubar-hor-left-scroll{
+	left: 0;
+	background: transparent no-repeat scroll 0 -1px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-l.png')});
+}
+
+.z-menubar-hor-left-scroll-over {
+	background-position: -18px 0;
+}
+
+.z-menubar-hor-right-scroll {
+	right: 0;
+	background: transparent no-repeat scroll -18px -1px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-r.png')});
+}
+
+.z-menubar-hor-right-scroll-over {
+	background-position: 0 0;
 }

@@ -21,10 +21,20 @@ function (out) {
 			this.encloseChildHTML_({out: out, child: w, vertical: true});
 		out.push('</table></div>');
 	} else {
-		out.push('<div', this.domAttrs_(), '><table', zUtl.cellps0, '>',
-				'<tr valign="bottom" id="', uuid, '-cave">')
+		out.push('<div', this.domAttrs_(), '>')
+		if (this.scrollable) {
+			out.push('<div id="', this.uuid, '-left" class="', this.getZclass(), '-left"></div>');
+			out.push('<div id="', this.uuid, '-right" class="', this.getZclass(), '-right"></div>');
+			out.push('<div id="', this.uuid, '-body" class="', this.getZclass(), '-body">');
+			out.push('<div id="', this.uuid, '-cnt" class="', this.getZclass(), '-cnt">');
+		}
+		out.push('<table', zUtl.cellps0, '>', '<tr valign="bottom" id="', uuid, '-cave">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</tr></table></div>');
+		out.push('</tr></table>');
+		if (this.scrollable) {
+			out.push('</div></div>');
+		}
+		out.push('</div>');
 	}
 }
