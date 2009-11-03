@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.6.2</subtitle>
+<subtitle>Version 3.6.3</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -17,9 +17,9 @@
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>February 2009</para>
+<para>June 2009</para>
 <para>Potix Corporation</para>
-<para>Revision 225</para>
+<para>Revision 228</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -1101,12 +1101,14 @@
 <programlisting>&lt;?button name="button" extends="button" style="border:1px solid blue"?&gt;&#13;&lt;button/&gt; &lt;!-- with blue border --&gt;&#13;</programlisting>
 <para>For more information, refer to the Developer's Reference.</para></sect3></sect2><sect2><title>The init Directive</title>
 <para>&lt;?init class="..." [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
-<para>&lt;?init zscript="..." [arg0="..."] [arg1="..."] [arg2="..."] [arg3="..."]?&gt;</para>
+<para>&lt;?init zscript="..."?&gt;</para>
 <para>There are two formats. The first format is to specify a class that is used to do the application-specific initialization. The second format is to specify a zscript file to do the application-specific initialization.</para>
+<para>Since 3.6.2, you can use any (readable) name instead of arg0 and so on. For example,</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./abc"?&gt;&#13;</programlisting>
 <para>The initialization takes place before the page is evaluated and attached to a desktop. Thus, the getDesktop, getId and getTitle method will return null, when initializing. To retrieve the current desktop, you could use the org.zkoss.zk.ui.Execution interface.</para>
 <para>You could specify any number of the init directive. If you choose the first format, the specified class must implement the org.zkoss.zk.ui.util.Initator interface. Once specified, an instance of the class is constructed and its doInit method is called, before the page is evaluated.</para>
 <para>In addition, the doFinally method is called, after the page has been evaluated. The doCatch method is called if an exception occurs. Thus, this directive is not limited to initialization. You could use it for cleanup and error handling.</para>
-<para>If you choose the second format, the zscript file is evaluated and the arguments (arg0, arg1,...) will be passed as a variable called args whose type is Object[].</para>
+<para>If you choose the second format, the zscript file is evaluated.</para>
 <para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The variable-resolver Directive</title>
 <para>&lt;?variable-resolver class="..."?&gt;</para>
 <para>Specifies the variable resolver that will be used by the zscript interpreter to resolve unknown variables. The specified class must implement the org.zkoss.xel.VariableResolver interface.</para>
@@ -1127,12 +1129,14 @@
 <para>Then, other ZUML pages can share the same set of component definitions as follows.</para>
 <programlisting>&lt;?import uri="special.zul"?&gt;&#13;...&#13;&lt;special/&gt;&lt;!-- you can use the component defined in special.zul --&gt;&#13;</programlisting>
 <para>Unlike other directives, the import directives must be at the topmost level, i.e., at the the same level as the root element.</para>
-<para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The link and meta Directives</title>
-<para>&lt;?link [href="uri"] [name0="value0"] [name1="value1"] [name2="value2"]?&gt;&lt;?meta [name0="value0"] [name1="value1"] [name2="value2"]?&gt;</para>
-<para>These are so-called header elements in HTML. Currently only HTML-based clients (so-called browsers) support them.</para>
-<para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
-<para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or servlets. Also, they are ignored if the page is a zhtml file.</para>
-<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>ZK Attributes</title>
+<para>For more information, refer to the Developer's Reference.</para></sect2><sect2><title>The link, meta and script Directives</title>
+<para>&lt;?link [href="uri"] [name0="value0"] [name1="value1"] [name2="value2"]?&gt;&lt;?meta [name0="value0"] [name1="value1"] [name2="value2"]?&gt;&lt;?script type="text/javascript" [src="uri"] [charset="encoding"] [content="javascript"]?&gt;</para>
+<para>These are so-called header elements in HTML. They are generated inside the HEAD element. The meta tags are generated before ZK default JavaScript and CSS files, while the other tags are generated after ZK default JavaScript and CSS files. Currently only HTML-based clients (so-called browsers) support them.</para>
+<para>Developers can specify whatever attributes with these header directives. ZK only encodes the URI of the href and src attribute (by use of the encodeURL method of the Executions class). ZK generates all other attributes directly to the client.</para>
+<para>Notice that these header directives are effective only for the main ZUL page. In other words, they are ignored if a page is included by another pages or Servlets. Also, they are ignored if the page is a zhtml file.</para>
+<programlisting>&lt;?link rel="alternate" type="application/rss+xml" title="RSS feed"&#13;href="/rssfeed.php"?&gt;&lt;?link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"?&gt;&#13;&lt;?link rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?&gt;&#13;&lt;?script type="text/javascript" src="/js/foo.js"?&gt;&#13;&lt;?script type="text/javascript" content="var foo = true;&#13;</programlisting>
+<para>if (zk.ie) foo = false;"?&gt;</para>
+<programlisting>&#13;&lt;window title="My App"&gt;&#13;    My content    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title>ZK Attributes</title>
 <para>ZK attributes are used to control the associated element, other than initializing the data member.</para><sect2><title>The apply Attribute</title>
 <para>apply="a-class-name"apply="class1, class2,..."apply="${EL_returns_a_class_or_a_collection_of_classes}"apply="${EL_returns_an_instance_or_a_collection_of_Composer_instances}"</para>
 <para>It specifies a class, a collection of classes that are used to initialize the component. The class must implement the org.zkoss.zk.util.Composer interface. And then, you can do the initialization in the doAfterCompose method, since it is called after the component and all its children are instantiated.</para>
@@ -4136,7 +4140,8 @@
 <para>For better control of data-binding manager, you can set the access mode of the attribute-name of the component-name to be <code>both</code>(load/save), <code>load</code>(load Only), <code>save</code>(save Only), or <code>none</code>(neither) .</para>
 <para>
 <code/>
-<code>&lt;component-name attribute-name="@{bean-name.attribute-name,</code>
+<code>&lt;component-name attribute-name="@{bean-name.attribute-</code>
+<code>name,</code>
 <code>access='type-name'</code>
 <code>}"/&gt;</code>
 </para>
@@ -4987,7 +4992,6 @@
 <para>Developers could separate Locale-dependent data from the ZUML pages (and JSP pages) by storing them in i3-label_lang_CNTY.properties under the WEB-INF directory, where lang is the language such as en and fr, and CNTY is the country, such as US and FR.</para>
 <para>To get a Locale-dependent property, you could use org.zkoss.util.resource.Labels in Java, or ${c:l('key')} in EL expression. To use it in EL, you have to specify the TLD file with the taglib directive in your page as follows.</para>
 <programlisting>&lt;?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?&gt;&#13;&#13;&lt;window title="${c:l('app.title')}"&gt;&#13;...&#13;&lt;/window&gt;&#13;</programlisting>
-<para>File Location: core.dsp.tld is distributed under the dist/WEB-INF directory. You do not need to copy it to your Web application.</para>
 <para>When a Locale-dependent label is about to retrieved, one of i3-label_lang_CNTY.properties will be loaded. For example, if the Locale is de_DE, then WEB-INF/i3-label_de_DE.properties will be loaded. If no such file, ZK will try to load WEB-INF/i3-label_de.properties and WEB-INF/i3-label.properties in turn.</para>
 <para>To access labels in Java codes (including zscript), use the getLabel method of the org.zkoss.util.resource.Labels class.</para>
 <para>In addition, you could extend the label loader to load labels from other locations, say database, by registering a locator, which must implement the org.zkoss.util.resource.LabelLocator interface. Then, invoke the register method of the org.zkoss.util.resource.Labels class.</para></sect1><sect1><title>Locale-Dependent Files</title><sect2><title>Browser and Locale-Dependent URI</title>
