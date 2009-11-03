@@ -6,4 +6,4 @@ debug=true
 optimize=true
 #jboss.deploy=default/deploy
 #start.service=Apache Tomcat
-version=5.0.0-RC
+version=5.0.0-FL

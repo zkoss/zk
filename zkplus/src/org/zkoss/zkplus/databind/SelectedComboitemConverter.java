@@ -83,16 +83,26 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	  			int index = model.indexOf(val);
 	  			if (index >= 0 && cbbox.getItemCount() > index) {
 	    			final Comboitem item = (Comboitem) cbbox.getItemAtIndex(index);
-	    			final int selIndex = cbbox.getSelectedIndex();
-	    			
-	    			//We need this to support load-when:onSelect
-	  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
-	    				Set items = new HashSet();
-	    				items.add(item);
-	    				//bug #2140491
-	    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid(), Boolean.TRUE);
-	    				Events.postEvent(new SelectEvent("onSelect", cbbox, items, item));
-	    			}		
+	    			//Bug #2728704: Listbox with databinding generates onSelect w/o user action
+	    			//Shall not fire event by spec. For backward compatibility(still want to
+	    			//fire onSelect event as usual), user can specifies in zk.xml
+	    			//<library-property>
+	    			//  <name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
+	    			//  <value>true</value>
+	    			//</library-property>
+	    			//then data binder will still fire the onSelect event as usual.
+	    			if (SelectedItemConverter.isOnSelectWhenLoad()) {
+		    			final int selIndex = cbbox.getSelectedIndex();
+		    			
+		    			//We need this to support load-when:onSelect
+		  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
+		    				Set items = new HashSet();
+		    				items.add(item);
+		    				//bug #2140491
+		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid(), Boolean.TRUE);
+		    				Events.postEvent(new SelectEvent("onSelect", cbbox, items, item));
+		    			}
+	    			}
 	  				return item;
 	  			}
 	  		} else if (xmodel == null) { //no model case, assume Comboitem.value to be used with selectedItem

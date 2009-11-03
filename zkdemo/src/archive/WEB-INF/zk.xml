@@ -446,7 +446,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			org.zkoss.zkplus.hibernate.HibernateSessionContextListener
 		</listener-class>
 	</listener>
-	 -->	
+	 -->
+	 	
 	<!-- ZK Demo properties loader -->
 	<listener>
 		<description>ZK Demo properties loader</description>

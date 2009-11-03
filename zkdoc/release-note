@@ -251,11 +251,25 @@ October, 2009
   2888775: can't overwrite paging button css style in IE
   2813966: FullComposer breaks when there are several composers
   2889323: Unable to show messagebox if the root is native and with listbox
+  2728704: Listbox with databinding generates onSelect w/o user action
+  2889423: No empty textbox constraint English error unclear
   
 * Upgrade Notes:
   + error-uri will encode the URI, so don't need prefix it with the servlet
     context (refer to Bug 2877549)
   + Device.getTimeoutURI is deprecated. Use Configuration.getTimeoutURI instead.
+  + When use data binding with selectedItem attribute of Listbox and/or Combobox, 
+    data binder will fire "onSelect" event automatically when the page is first
+	loaded or model is changed. This is not consistent with ZK specification: only 
+	user action shall trigger component event. So since this version, no longer 
+	the "onSelect" event will be fired(refer to Bug 2728704). However, some already
+	implemented applications might count on such "side effects". Users can still 
+	specify in zk.xml following libaray property to make it backward compatible.
+	<library-property>
+		<name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
+		<value>true</value>
+	</library-property>
+	
 
 	--------
 ZK 3.6.2
