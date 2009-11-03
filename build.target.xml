@@ -272,23 +272,25 @@ if="deploy.jboss.required">
 <!-- MISCELLANEOUS -->
 <!-- ============= -->
 <target name="javadoc" depends="config.build">
-	<javadoc packagenames="org.zkoss.*"
+	<javadoc 
 	 destdir="${working.javadoc.dir}"
 	 author="true" protected="true" version="true" use="true"
-	 windowtitle="${project.name} ${project.version} API"
-	 doctitle="${project.name} ${project.version} API"
+	 windowtitle="${project.title} ${project.version} API"
+	 doctitle="${project.title} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}">
-	 <bottom><![CDATA[Copyright &amp;copy; 2005-2009 Potix Corporation. All Rights Reserved.
+	 <bottom><![CDATA[Copyright &copy; 2005-2009 Potix Corporation. All Rights Reserved.
 	 	<!--{{JAVASCRIPT_OUTPUT}}-->
 	 ]]></bottom>
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
 		<packageset dir="${src.dir}">
-			<include name="org/zkoss/**"/>
+			<include name="**"/>
+			<exclude name="archive/**"/>
 		</packageset>
 		<fileset dir="${codegen.dir}">
-			<include name="org/zkoss/**"/>
+			<include name="**"/>
+			<exclude name="archive/**"/>
 			<exclude name="**/*$$*"/>
 		</fileset>
 	</javadoc>

@@ -281,9 +281,9 @@ function invoke_ant
 	cd $2
 	
 	if [ $3 ] ; then
-		pronm=$3
+		prjnm=$3
 	else
-		pronm=$2
+		prjnm=$2
 	fi
 	
 	#handle class.test.local
@@ -426,6 +426,12 @@ function invoke_ant
 		this_oflag=off
 	fi
 
+	prjtitle=$(grep '^project=' version)
+	prjtitle=${prjtitle#project=}
+	if [ "$prjtitle" = "" ] ; then
+		prjtitle=$prjnm
+	fi
+
 	format="$(head -1 format)"
 	if [ "$format" = "cpp" ] ; then
 		if [ ! -d $outdir ] ; then
@@ -450,7 +456,7 @@ function invoke_ant
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" \
-		-Dproject.name="$pronm" -Dproject.version="$prjver" \
+		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
 		-Ddeprecation="$deprecation" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \

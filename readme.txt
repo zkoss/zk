@@ -16,22 +16,10 @@ zul
 	XUL: XML user interface markup language
 
 ---
-zkex
-	The extension of the ZK, such as the extenstion to XUL component set,
-	and server-push features.
-	It includes the jFreechart-based engine.
-
----
 zhtml
 	The XHTML component set, http://www.w3c.org/1999/xhtml
 	It includes ZK components implementing XHTML tags
 
 ---
-zml
-	The XML component set, http://www.zkoss.org/2007/xml
-	It includes ZK components for generating XML ouput
-
----
-zkmax
-	The Ruby, Groovy, Rhino, MVEL and other plugins.
-	Also, the performance enhancement version of zul.
+jsdoc
+	The document of JavaScript libraries (ZK Client Engine)
