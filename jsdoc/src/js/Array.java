@@ -25,7 +25,8 @@ package js;
 public class Array {
 	/** A read-only field to indicate whether an object is an array. For example,
 <pre><code>
-[0].$array //is true
+if ([0].$array) //is true
+	always_do();
 </code></pre>
 	 */
 	public boolean $array;
