@@ -1524,22 +1524,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
 	}
 
-	/** Returns the mold used to render this component.
-	 * <p>Default: "default"
-	 * <p>Since 5.0, the default can be overriden by specify a library property.
-	 * For example, if the component's class name is org.zkoss.zul.Button,
-	 * then you can override the default mold by specifying the property
-	 * called "org.zkoss.zul.Button.mold" with the mold you want
-	 * in zk.xml. For example,
-<pre><code>&lt;library-property>
-  &lt;name>org.zkoss.zul.Button.mold&lt;/name>
-  &lt;value>trendy&lt;/value>
-&lt;/library-property></code></pre>
-	 * <p>Notice that it doesn't affect the deriving classes. If you want
-	 * to change the deriving class's default mold, you have to specify
-	 * them explicity in zk.xml, too.
-	 *
-	 */
 	public String getMold() {
 		return _mold;
 	}
@@ -2851,6 +2835,30 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	private static String getDefaultMold(Class klass) {
-		return Library.getProperty(klass.getName() + ".mold", "default");
+		return (String)getDefaultInfo(klass);
 	}
+	private static Object getDefaultInfo(Class klass) { //use Object for future extension
+		Object inf = _infs.get(klass);
+		if (inf == null) {
+			synchronized (_sinfs) {
+				inf = _sinfs.get(klass);
+				if (inf == null) {
+					String mold = Library.getProperty(klass.getName() + ".mold");
+					inf = mold != null && mold.length() > 0 ? mold: "default";
+					_sinfs.put(klass, inf);
+				}
+				if (++_infcnt > 100 || _sinfs.size() > 20) {
+					_infcnt = 0;
+					Map infs = new HashMap(_infs);
+					infs.putAll(_sinfs);
+					_infs = infs;
+					_sinfs.clear();
+				}
+			}
+		}
+		return inf;
+	}
+	private static transient Map _infs = new HashMap(), //readonly
+		_sinfs = new HashMap(); //synchronized
+	private static int _infcnt;
 }

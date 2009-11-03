@@ -620,8 +620,20 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public void detach();
 
-	/** Returns the mold to render this component.
+	/** Returns the mold used to render this component.
 	 * <p>Default: "default"
+	 * <p>Since 5.0, the default can be overriden by specify a library property.
+	 * For example, if the component's class name is org.zkoss.zul.Button,
+	 * then you can override the default mold by specifying the property
+	 * called "org.zkoss.zul.Button.mold" with the mold you want
+	 * in zk.xml. For example,
+<pre><code>&lt;library-property>
+  &lt;name>org.zkoss.zul.Button.mold&lt;/name>
+  &lt;value>trendy&lt;/value>
+&lt;/library-property></code></pre>
+	 * <p>Notice that it doesn't affect the deriving classes. If you want
+	 * to change the deriving class's default mold, you have to specify
+	 * them explicity, too.
 	 *
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
