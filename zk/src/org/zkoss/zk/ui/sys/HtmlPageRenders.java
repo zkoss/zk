@@ -467,10 +467,10 @@ public class HtmlPageRenders {
 				desktop.getWebApp().getConfiguration().isCrawlable());
 			setRenderContext(exec, rc);
 
-			out.write("\n<script>zkblbg();try{");
+			out.write("\n<script>zkmb();try{");
 		}
 	
-		out.write("zkpgbg('");
+		out.write("zkpb('");
 		out.write(page.getUuid());
 		out.write('\'');
 		if (style != null || owner == null) {
@@ -495,12 +495,12 @@ public class HtmlPageRenders {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		out.write("\nzkpge();");
+		out.write("\nzkpe();");
 
 		if (standalone) {
 			setRenderContext(exec, null);
 
-			out.write("}finally{zkble();}</script>\n");
+			out.write("}finally{zkme();}</script>\n");
 
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
@@ -517,11 +517,11 @@ public class HtmlPageRenders {
 	Component comp, Writer out) throws java.io.IOException {
 		out.write("<div id=\"");
 		out.write(comp.getUuid());
-		out.write("\"></div><script>\nzkblbg();try{\n");
+		out.write("\"></div><script>\nzkmb();try{\n");
 
 		((ComponentCtrl)comp).redraw(out);
 
-		out.write("\n}finally{zkble();}\n</script>\n");
+		out.write("\n}finally{zkme();}\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
@@ -619,7 +619,7 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null) {
-			sb.append("<script>zkdtbg('")
+			sb.append("<script>zkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))

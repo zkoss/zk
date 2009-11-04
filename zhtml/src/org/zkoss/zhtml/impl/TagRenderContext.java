@@ -45,8 +45,8 @@ public class TagRenderContext {
 	 */
 	public String complete() {
 		if (_jsout.length() > 0) {
-			_jsout.insert(0, "<script>\nzkblbg(true);try{");
-			_jsout.append("\n}finally{zkble();}</script>");
+			_jsout.insert(0, "<script>\nzkmb(true);try{");
+			_jsout.append("\n}finally{zkme();}</script>");
 			final String txt = _jsout.toString();
 			_jsout.setLength(0); //reset
 			return txt;

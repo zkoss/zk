@@ -1575,7 +1575,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void redraw(final Writer out) throws IOException {
 		final JsContentRenderer renderer = new JsContentRenderer();
 		renderProperties(renderer);
-		out.write("\nzkbg('");
+		out.write("\nzkb('");
 
 		final String wgtcls = getWidgetClass();
 		if (wgtcls == null)

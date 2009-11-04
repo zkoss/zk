@@ -17,27 +17,27 @@ zk.mnt = {
 };
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
-function zkblbg(binding) {
+function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
 	var t = 390 - (zUtl.now() - zk.mnt.t);
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
-function zkpgbg(pguid, style, dtid, contained, contextURI, updateURI) {
+function zkpb(pguid, style, dtid, contained, contextURI, updateURI) {
 	var props = {};
 	if (style) props.style = style;
-	if (dtid) zkdtbg(dtid, contextURI, updateURI)._pguid = pguid;
+	if (dtid) zkdt(dtid, contextURI, updateURI)._pguid = pguid;
 	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
 	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
-function zkbg(type, uuid, mold, props) {
+function zkb(type, uuid, mold, props) {
 	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 function zkb2(uuid, type, props) { //zhtml
 	zk.mnt.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
-function zkdtbg(dtid, contextURI, updateURI) {
+function zkdt(dtid, contextURI, updateURI) {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
 		dt = new zk.Desktop(dtid, contextURI, updateURI);
@@ -189,7 +189,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		}
 
 		setTimeout(mtBL1, 0);
-			//use timeout since there might be multiple zkblbg
+			//use timeout since there might be multiple zkmb
 	}
 	function mtBL1() {
 		if (_createInf0.length || _createInf1.length)
@@ -607,5 +607,5 @@ jq(function() {
 	};
 }); //jq()
 
-zkble = zk.mnt.end;
-zke = zkpge = zk.mnt.pop;
+zkme = zk.mnt.end;
+zke = zkpe = zk.mnt.pop;
