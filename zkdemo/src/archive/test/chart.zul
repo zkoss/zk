@@ -379,7 +379,7 @@ dateFormat="yyyy/MM/dd" />
 	scale.newRange(80, 100, "#FF0000", 0.83, 0.89);
 	scale.newRange(60, 80, "#FFC426", 0.83, 0.89);
 	scale.setValue(val);
-
+	String bg2 = dialmodel.getFrameBgColor2();
 
 ]]>
 </zscript>
@@ -400,10 +400,13 @@ dateFormat="yyyy/MM/dd" />
 				scale.setValue(val);
 				if (val > 80) {
 					scale.setNeedleColor(scale.getRange(0).getRangeColor());
+					dialmodel.setFrameBgColor2(scale.getRange(0).getRangeColor());
 				} else if (val > 60) {
 					scale.setNeedleColor(scale.getRange(1).getRangeColor());
+					dialmodel.setFrameBgColor2(scale.getRange(1).getRangeColor());
 				} else {
 					scale.setNeedleColor(dialmodel.getFrameFgColor());
+					dialmodel.setFrameBgColor2(bg2);
 				}
 			]]></attribute>
 		</slider>

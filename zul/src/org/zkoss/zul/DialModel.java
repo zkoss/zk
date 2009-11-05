@@ -36,11 +36,13 @@ public class DialModel extends AbstractChartModel {
 	private List _series = new ArrayList(4);
 	
 	//DialFrame background
-	private String _bgColor;
+	private String _bgColor = "#FFFFFF";
 	private int[] _bgRGB = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
-	private String _bgColor2;
-	private int[] _bgRGB2 = new int[] {0xAA,0xAA,0xDC}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private String _bgColor1 = "#FFFFFF";
+	private int[] _bgRGB1 = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background starting color
+	private String _bgColor2 = "#AAAADC";
+	private int[] _bgRGB2 = new int[] {0xAA,0xAA,0xDC}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background ending color
 	
 	//DialFrame forgournd
 	private String _fgColor;
@@ -232,6 +234,40 @@ public class DialModel extends AbstractChartModel {
 		return _fgRGB;
 	}
 	
+	/**
+	 * Set the 1st background color of the dial frame (for gradient starting color).
+	 * @param color in #RRGGBB format (hexdecimal).
+	 */
+	public void setFrameBgColor1(String color) {
+		if (Objects.equals(color, _bgColor1)) {
+			return;
+		}
+		_bgColor1 = color;
+		if (_bgColor1 == null) {
+			_bgRGB1 = null;
+		} else {
+			_bgRGB1 = new int[3];
+			Chart.decode(_bgColor1, _bgRGB1);
+		}
+		fireEvent(ChartDataEvent.CHANGED, null, null);
+	}
+	
+	/**
+	 * Get the 1st background color of the dial frame (in string as #RRGGBB) for gradient starting color.
+	 * null means use default.
+	 */
+	public String getFrameBgColor1() {
+		return _bgColor1;
+	}
+	
+	/**
+	 * Get the 1st background color of the dial frame in int array (0: red, 1: green, 2:blue) for gradient starting color.
+	 * null means use default.
+	 */
+	public int[] getFrameBgRGB1() {
+		return _bgRGB1;
+	}
+
 	/**
 	 * Set the 2nd background color of the dial frame (for gradient ending color).
 	 * @param color in #RRGGBB format (hexdecimal).

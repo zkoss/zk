@@ -1871,10 +1871,11 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			plot.setDialFrame(dialFrame);
 			
 			//prepare DialBackground
+			final int[] bgRGB1 = model.getFrameBgRGB1();
 			final int[] bgRGB2 = model.getFrameBgRGB2();
-			if (bgRGB2 != null) {
+			if (bgRGB1 != null && bgRGB2 != null) {
 				final GradientPaint gp = new GradientPaint(
-					new Point(), new Color(bgRGB[0], bgRGB[1], bgRGB[2]), 
+					new Point(), new Color(bgRGB1[0], bgRGB1[1], bgRGB1[2]), 
 					new Point(), new Color(bgRGB2[0], bgRGB2[1], bgRGB2[2]));
 				final DialBackground db = new DialBackground(gp);
 				final String direction = model.getGradientDirection();
