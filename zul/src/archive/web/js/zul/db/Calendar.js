@@ -15,7 +15,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.db.Calendar = zk.$extends(zul.Widget, {
-	_view : "day", //"day", "month", "year", "decade"
+	_view : "day", //"day", "month", "year", "decade",
+	
+	$init: function () {
+		this.$supers('$init', arguments);
+		this.listen({onChange: this}, -1000);
+	},
 	$define: {
 		value: _zkf = function() {
 			this.rerender();
@@ -56,7 +61,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this._beg.setSeconds(0);
 				this._beg.setMilliseconds(0);
 			}
+		},
+		name: function () {
+			if (this.efield)
+				this.efield.name = this._name;
 		}
+	},
+	onChange: function (evt) {
+		this.updateFormData(evt.data.value);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode,
@@ -117,9 +129,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-calendar";
 	},
+	updateFormData: function (val) {
+		if (this._name) {
+			val = val || '';
+			if (!this.efield)
+				this.efield = jq.newHidden(this._name, val, this.$n());
+			else
+				this.efield.value = val;
+		}
+	},
 	bind_: function (){
 		this.$supers('bind_', arguments);
-		this._value ? zDateFormat.parseDate(this._value, this.getFormat()) : new Date();
 		var title = this.$n("title"),
 			mid = this.$n("mid"),
 			ly = this.$n("ly"),
@@ -147,6 +167,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(ry, "onClick", '_doclickArrow')
 			.domListen_(mid, "onMouseOver", '_doMouseEffect')
 			.domListen_(mid, "onMouseOut", '_doMouseEffect');
+		this.updateFormData(this._value || zDateFormat.formatDate(this.getTime(), this.getFormat()));
 	},
 	unbind_: function () {
 		var title = this.$n("title"),
@@ -160,6 +181,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
 			.$supers('unbind_', arguments);
+		this.efield = null;
 	},
 	_doclickArrow: function (evt) {
 		var node = evt.domTarget,

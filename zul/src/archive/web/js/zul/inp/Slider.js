@@ -18,10 +18,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_maxpos: 100,
 	_pageIncrement: 10,
 	_slidingtext: "{0}",
-
+	
 	$define: {
 		orient: function() {
-			if ("vertical" == this._orient) {
+			if (this.isVertical()) {
 				this.setWidth("");
 				this.setHeight("207px");
 			} else {
@@ -30,231 +30,215 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 			this.rerender();
 		},
-		curpos: _zkf = function(){
-			if(this.desktop){
+		curpos: _zkf = function() {
+			if (this.desktop)
 				this._fixPos();
-				this.inp.value = this._curpos;
-			}
 		},
-		maxpos: function(){
-			if(this._curpos > this._maxpos){
-				this.inp.value = this._curpos = this._maxpos;
-				if(this.desktop)
+		maxpos: function() {
+			if (this._curpos > this._maxpos) {
+				this._curpos = this._maxpos;
+				if (this.desktop) 
 					this._fixPos();
 			}
 		},
-		slidingtext: _zkf = function(){
-		},
-		pageIncrement: _zkf,
-		name: function(){
-			if(this.desktop)
-				this.inp.name = this._name;
+		slidingtext: null,
+		pageIncrement: null,
+		name: function() {
+			if (this.efield) 
+				this.efield.name = this._name;
 		}
-		
 	},
-	getZclass: function () {
-		var name = "z-slider";
-		if(this._zclass != null){
-			return "z-slider";
-		}else{
-			if (this.inScaleMold())
+	getZclass: function() {
+		if (this._zclass != null) {
+			return this._zclass;
+		} else {
+			var name = "z-slider";
+			if (this.inScaleMold()) 
 				return name + "-scale";
-			else if (this.inSphereMold())
+			else if (this.inSphereMold()) 
 				return name + ("horizontal" == this._orient ? "-sphere-hor" : "-sphere-ver");
-			else
+			else 
 				return name + ("horizontal" == this._orient ? "-hor" : "-ver");
 		}
 	},
-	$init: function (){
-			this.$supers('$init', arguments);
-			this.inner = this.$n("inner");
-			this.button = this.$n("btn");
-	},
-	doMouseOver_: function (evt) {
+	doMouseOver_: function(evt) {
+		jq(this.$n("btn")).addClass(this.getZclass() + "-btn-over");
 		this.$supers('doMouseOver_', arguments);
-		jq(this.btn).addClass(this.getZclass() + "-btn-over");
 	},
-	doMouseOut_: function (evt) {
+	doMouseOut_: function(evt) {
+		jq(this.$n("btn")).removeClass(this.getZclass() + "-btn-over");
 		this.$supers('doMouseOut_', arguments);
-		jq(this.btn).removeClass(this.getZclass() + "-btn-over");
 	},
-	onup_: function(evt){
+	onup_: function(evt) {
 		var btn = zul.inp.Slider.down_btn;
-		if (btn){
-			var uuid = btn.id.split("-")[0];
-			var widget = zk.Widget.$(uuid);
-			var zcls = widget.getZclass();
-			jq(btn).removeClass(zcls + "-btn-drag")
-				.removeClass(zcls + "-btn-over");
+		if (btn) {
+			var widget = zk.Widget.$(btn),
+				zcls = widget.getZclass();
+			jq(btn).removeClass(zcls + "-btn-drag").removeClass(zcls + "-btn-over");
 		}
-
-		zul.inp.Slider.down_btn=null;
+		
+		zul.inp.Slider.down_btn = null;
 		jq(document.body).unbind("mouseup", widget.onup_);
 		
 	},
 	doMouseDown_: function(evt) {
-		this.$supers('doMouseDown_', arguments);
-		jq(this.btn).addClass(this.getZclass() + "-btn-drag");
+		var btn = this.$n("btn");
+		jq(btn).addClass(this.getZclass() + "-btn-drag");
 		jq(document.body).mouseup(this.onup_);
-		zul.inp.Slider.down_btn = this.btn;
+		zul.inp.Slider.down_btn = btn;
+		this.$supers('doMouseDown_', arguments);
 	},
-	_makeDraggable: function(){
-		this._drag = new zk.Draggable(this, this.btn, {
-			constraint: this._orient == "vertical" ? "vertical": "horizontal", 
-			starteffect: this._startDrag, 
+	_makeDraggable: function() {
+		this._drag = new zk.Draggable(this, this.$n("btn"), {
+			constraint: this._orient == "vertical" ? "vertical" : "horizontal",
+			starteffect: this._startDrag,
 			change: this._dragging,
-			endeffect: this._endDrag});
+			endeffect: this._endDrag
+		});
 	},
-	_snap: function (dg, x, y) {
-		if((typeof dg ) == "number"){
-			var	widget = this,
-			y=x,
-			x=dg;
-		}else{
-			var	widget = dg.control;
+	_snap: function(dg, x, y) {
+		if ((typeof dg) == "number") {
+			var widget = this, y = x, x = dg;
+		} else {
+			var widget = dg.control;
 		}
-		var btn = widget.$n("btn");
-		var ofs = zk(widget.$n()).cmOffset();
+		var btn = widget.$n("btn"), ofs = zk(widget.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
 			var max = ofs[0] + widget._getWidth();
-			if (x > max) x = max;
+			if (x > max) 
+				x = max;
 		}
 		if (y <= ofs[1]) {
 			y = ofs[1];
 		} else {
 			var max = ofs[1] + widget._getHeight();
-			if (y > max) y = max;
+			if (y > max) 
+				y = max;
 		}
 		return [x, y];
 	},
-	_startDrag: function (dg) {
-		var	widget=dg.control;
-		widget.btn.title = ""; //to avoid annoying effect
+	_startDrag: function(dg) {
+		var widget = dg.control;
+		widget.$n('btn').title = ""; //to avoid annoying effect
 		widget.slidepos = widget._curpos;
-
-		jq(document.body).append(
-			'<div id="zul_slidetip" class="z-slider-pp" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
-			+ widget.slidepos+'</div>');
-
-		widget.slidetip =  jq("#zul_slidetip")[0];
+		
+		jq(document.body)
+			.append('<div id="zul_slidetip" class="z-slider-pp"'
+			+ 'style="position:absolute;display:none;z-index:60000;'
+			+ 'background-color:white;border: 1px outset">' + widget.slidepos +
+			'</div>');
+		
+		widget.slidetip = jq("#zul_slidetip")[0];
 		if (widget.slidetip) {
 			widget.slidetip.style.display = "block";
-			zk(widget.slidetip).position(widget.$n(), widget.isVertical()? "end_before" : "after_start");
+			zk(widget.slidetip).position(widget.$n(), widget.isVertical() ? "end_before" : "after_start");
 		}
 	},
-	_dragging: function (dg) {
-		var	widget=dg.control;
+	_dragging: function(dg) {
+		var widget = dg.control;
 		var pos = widget._realpos();
 		if (pos != widget.slidepos) {
-			if(pos > widget._maxpos)
+			if (pos > widget._maxpos) 
 				pos = widget._maxpos;
 			widget.slidepos = pos;
-			if (widget.slidetip)
+			if (widget.slidetip) 
 				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, pos);
 			widget.fire("onScrolling", pos);
 		}
 		widget._fixPos();
 	},
-	_endDrag: function (dg) {
-		var	widget = dg.control;
-		var pos = widget._realpos();
+	_endDrag: function(dg) {
+		var widget = dg.control, pos = widget._realpos();
 		
 		widget.fire("onScroll", pos);
 		
 		widget._fixPos();
-		widget.inp.value = pos;
 		jq(widget.slidetip).remove();
 		widget.slidetip = null;
 	},
-	_realpos: function (dg) {
-		var	btnofs = zk(this.btn).cmOffset(),
-			refofs = zk(this.node).cmOffset(),
-			maxpos = this._maxpos,
-			pos;
+	_realpos: function(dg) {
+		var btnofs = zk(this.$n("btn")).cmOffset(), refofs = zk(this.getRealNode()).cmOffset(), maxpos = this._maxpos, pos;
 		if (this.isVertical()) {
 			var ht = this._getHeight();
-			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht): 0;
+			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht) : 0;
 		} else {
 			var wd = this._getWidth();
-			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;
+			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd) : 0;
 		}
-		return this._curpos = (pos >= 0 ? pos: 0);
+		return this._curpos = (pos >= 0 ? pos : 0);
 	},
-	_getWidth: function(){
-		return this.node.clientWidth - this.btn.offsetWidth+7;
+	_getWidth: function() {
+		return this.getRealNode().clientWidth - this.$n("btn").offsetWidth + 7;
 	},
-	_getHeight: function(){
-		return this.node.clientHeight - this.btn.offsetHeight+7;
+	_getHeight: function() {
+		return this.getRealNode().clientHeight - this.$n("btn").offsetHeight + 7;
 	},
-	_fixPos: _zkf = function () {
+	_fixPos: _zkf = function() {
+		var btn = this.$n("btn");
 		if (this.isVertical()) {
-			var ht = this._getHeight(),
-				x = ht > 0 ? Math.round((this._curpos * ht)/this._maxpos): 0,
-				ofs = zk(this.node).cmOffset();
-			ofs = zk(this.btn).toStyleOffset(ofs[0], ofs[1]);
+			var ht = this._getHeight(), x = ht > 0 ? Math.round((this._curpos * ht) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
+			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(0, ofs[1] + x);
-			this.btn.style.top = ofs[1] + "px";
+			btn.style.top = ofs[1] + "px";
 		} else {
-			var wd = this._getWidth(),
-				x = wd > 0 ? Math.round((this._curpos * wd)/this._maxpos): 0,
-				ofs = zk(this.node).cmOffset();
-			ofs = zk(this.btn).toStyleOffset(ofs[0], ofs[1]);
+			var wd = this._getWidth(), x = wd > 0 ? Math.round((this._curpos * wd) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
+			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(ofs[0] + x, 0);
-			this.btn.style.left = ofs[0] + "px";
+			btn.style.left = ofs[0] + "px";
 		}
-		this.btn.title = this._curpos;
+		btn.title = this._curpos;
+		this.updateFormData(this._curpos);
 	},
 	onSize: _zkf,
 	onShow: _zkf,
-	inScaleMold: function () {
-		if(this.getMold() == "scale")
-			return true;
-		return false;
+	inScaleMold: function() {
+		return this.getMold() == "scale";
 	},
-	inSphereMold: function(){
-		if(this.getMold() == "sphere")
-			return true;
-		return false;
+	inSphereMold: function() {
+		return this.getMold() == "sphere";
 	},
-	isVertical: function(){
+	isVertical: function() {
 		return "vertical" == this._orient;
 	},
-	bind_: function () {
-		this.$supers('bind_', arguments); 
-		this.inner = this.$n("inner");
-		this.btn = this.$n("btn");
-		this.inp = this.$n("inp");
-		if(this._name)
-			this.inp.name = this._name;
-		if(this.inScaleMold()){
-			this.node = this.$n("real");
-		}else
-			this.node = this.$n();
+	updateFormData: function(val) {
+		if (this._name) {
+			val = val || 0;
+			if (!this.efield) 
+				this.efield = jq.newHidden(this._name, val, this.$n());
+			else 
+				this.efield.value = val;
+		}
+	},
+	getRealNode: function () {
+		return this.inScaleMold() ? this.$n("real") : this.$n();
+	},
+	bind_: function() {
+		this.$supers('bind_', arguments);
+		var inner = this.$n("inner");
 		
-		if (this._orient == "vertical") {
-			this.btn.style.top="0px";
-			var het = this.node.clientHeight;
-			if(het>0)
-				this.inner.style.height = (het + 7) + "px";
-			else
-				this.inner.style.height = "214px";
+		if (this.isVertical()) {
+			this.$n("btn").style.top = "0px";
+			var het = this.getRealNode().clientHeight;
+			if (het > 0) 
+				inner.style.height = (het + 7) + "px";
+			else 
+				inner.style.height = "214px";
 		}
 		this._makeDraggable();
 		
 		zWatch.listen({onSize: this, onShow: this});
-		
+		this.updateFormData(this._curpos);
 	},
-	unbind_: function (){
-		this.inp = this.inner = this.btn = this.node  = null;
+	unbind_: function() {
+		this.efield = null;
 		if (this._drag) {
 			this._drag.destroy();
 			this._drag = null;
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
-		this.$supers('unbind_', arguments); 
-	}
-
+		this.$supers('unbind_', arguments);
+	}	
 });

@@ -14,24 +14,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 function (out) {
-	var zcls = this.getZclass();
-	var isScaleMold = this.inScaleMold();
-	
+	var zcls = this.getZclass(),
+		isScaleMold = this.inScaleMold(),
+		uuid = this.uuid;
+		
 	if(isScaleMold){
-		var tmp=this.uuid;
-		out.push('<div id="'+this.uuid+'" class="'+zcls+'-tick">');
-		this.uuid = this.uuid+"-real"; //this is for calling domAttrs
+		out.push('<div id="', uuid, '" class="', zcls, '-tick">');
+		this.uuid += '-real'; //this is for calling domAttrs
 	}
 	
 	out.push('<div', this.domAttrs_(), '>');
 	
 	if(isScaleMold)
-		this.uuid = tmp;
+		this.uuid = uuid;
 	
-		out.push('<div id="',this.uuid,'-inner" class="',zcls,'-center">');
-			out.push('<div id="',this.uuid,'-btn" class="',zcls,'-btn">');
-				out.push('<input id="',this.uuid,'-inp" class="',zcls,'-inp" style="display:none;position:relative"/>');
-	out.push('</div></div></div>');
+		out.push('<div id="', uuid, '-inner" class="', zcls, '-center">');
+		out.push('<div id="', uuid, '-btn" class="', zcls, '-btn">');
+		out.push('</div></div></div>');
 	
 	if(isScaleMold)
 		out.push('</div>');
