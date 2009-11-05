@@ -407,7 +407,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		v = config.getTooltipDelay();
 		if (v != 800) sb.append("td:").append(v).append(',');
 		v = config.getResendDelay();
-		if (v >= 0) sb.append("rd:").append(v).append(',');
+		if (v > 0) sb.append("rd:").append(v).append(',');
 		v = config.getClickFilterDelay();
 		if (v >= 0) sb.append("cd:").append(v).append(',');
 		if (config.isTimerKeepAlive())

@@ -532,11 +532,18 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.setCompress(_compress);
 		out.open(request, response,
 			desktop.getDevice().isSupported(Device.RESEND) ?
-				config.getResendDelay() / 2 - 500: 0);
+				getProcessTimeout(config.getResendDelay()): 0);
 				//Note: getResendDelay() might return nonpositive
 		wappc.getUiEngine().execUpdate(exec, aureqs, out);
 
 		out.close(request, response);
+	}
+	private static int getProcessTimeout(int resendDelay) {
+		if (resendDelay > 0) {
+			resendDelay = (resendDelay * 3) >> 2;
+			if (resendDelay <= 0) resendDelay = 1;
+		}
+		return resendDelay;
 	}
 	private void sessionTimeout(HttpServletRequest request,
 	HttpServletResponse response, Configuration config, String dtid)
