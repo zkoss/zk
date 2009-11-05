@@ -40,7 +40,7 @@ zk = function (sel) {
 		//1. don't use jq() since it will be queued after others
 		//2. zk.mnt.pgbg: pgbg() is called with a non-contained page; see mount.js
 		if (jq.isReady||zk.mnt.pgbg||zk.Page.contained.length)
-			showproc(true, 'z-initing');
+			showproc(true, zk.pi ? 'z-initing': null);
 		else
 			setTimeout(showprocinit, 10);
 	}

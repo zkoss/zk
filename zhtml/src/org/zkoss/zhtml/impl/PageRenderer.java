@@ -55,7 +55,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		final String ctl =
-			(String)exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL);
+			(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL);
 		boolean au = exec.isAsyncUpdate(null);
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);
@@ -70,7 +70,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		if (pageOnly)
 			renderPage(exec, page, out, au);
 		else {
-			exec.setAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL, "complete");
+			exec.setAttribute(Attributes.PAGE_REDRAW_CONTROL, "complete");
 			renderComplete(exec, page, out);
 		}
 	}

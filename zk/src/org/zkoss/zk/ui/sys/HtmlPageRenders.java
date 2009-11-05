@@ -41,6 +41,8 @@ import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -475,6 +477,7 @@ public class HtmlPageRenders {
 
 			out = new StringWriter();
 			out.write("\n<script>zkmb();try{");
+			out.write(outZkIconJS());
 		}
 
 		out.write("zkpb('");
@@ -526,6 +529,14 @@ public class HtmlPageRenders {
 			Files.write(out, sw); //js
 			out.write("}finally{zkme();}</script>\n");
 		}
+	}
+	private static final String outZkIconJS() {
+		final Session sess = Sessions.getCurrent();
+		if (sess != null && sess.getAttribute("_zk.npi") == null) {
+			sess.setAttribute("_zk.npi", Boolean.TRUE);
+			return "zk.pi=1;";
+		}
+		return "";
 	}
 	private static final boolean isClientROD(Page page) {
 		Object o = page.getAttribute(Attributes.CLIENT_ROD);
@@ -652,7 +663,8 @@ public class HtmlPageRenders {
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
-				.append("');</script>\n");
+				.append("');").append(outZkIconJS())
+				.append("</script>\n");
 		}
 
 		sb.append(outResponseJavaScripts(exec));
