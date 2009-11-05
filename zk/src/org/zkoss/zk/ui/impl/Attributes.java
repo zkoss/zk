@@ -34,6 +34,15 @@ public class Attributes {
 	 */
 	public static final String UPLOAD_SIZE = "org.zkoss.zk.upload.size";
 
+	//Component/Page//
+	/** A component or page attribute to indicate if the client ROD
+	 * (render-on-demand) shall be applied.
+	 * <p>Default: true.
+	 * <p>Applicable: Enterprise edition
+	 * @since 5.0.0
+	 */
+	public static final String CLIENT_ROD = "org.zkoss.zk.client.rod";
+
 	//Execution/request//
 	/** The execution attribute used to control how to {@link org.zkoss.zk.ui.sys.PageCtrl#redraw}
 	 * a page. There are three different values: <code>destkop</code>,
@@ -65,18 +74,18 @@ public class Attributes {
 	 * <code>page</code> for a included ZK page.
 	 *
 	 * <p>Note: if {@link org.zkoss.zk.ui.Page#isComplete} is true, it has the same effect
-	 * of setting {@link #ATTR_PAGE_REDRAW_CONTROL} to <code>complete</code>.
+	 * of setting {@link #PAGE_REDRAW_CONTROL} to <code>complete</code>.
 	 * 
 	 * @since 5.0.0
 	 */
-	public static final String ATTR_PAGE_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";
+	public static final String PAGE_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";
 	/** The execution attribute used to control how to render a page.
 	 * The value must be an instance of {@link org.zkoss.zk.ui.sys.PageRenderer}.
 	 * <p>Default: null (means auto). It is decided by
 	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getPageRenderer}.
 	 * @since 5.0.0
 	 */
-	public static final String ATTR_PAGE_RENDERER = "org.zkoss.zk.ui.page.renderer";
+	public static final String PAGE_RENDERER = "org.zkoss.zk.ui.page.renderer";
 
 	/** A request attribute to indicate whether "no-cache" header is
 	 * generated for the current desktop.

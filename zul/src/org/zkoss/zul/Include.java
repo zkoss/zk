@@ -444,17 +444,18 @@ implements org.zkoss.zul.api.Include, Includer {
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
 					if (rc != null && rc.crawlable) {
-						rc.extra.write("<div id=\"");
-						rc.extra.write(getUuid());
-						rc.extra.write("\">");
+						final Writer cwout = rc.temp;
+						cwout.write("<div id=\"");
+						cwout.write(getUuid());
+						cwout.write("\">");
 						if (_comment)
-							rc.extra.write("\n<!--\n");
-						Files.write(rc.extra, sw.getBuffer());
+							cwout.write("\n<!--\n");
+						Files.write(cwout, sw.getBuffer());
 						if (_comment)
-							rc.extra.write("\n-->\n");
-						rc.extra.write("</div>");
+							cwout.write("\n-->\n");
+						cwout.write("</div>");
 
-						out.write("zk.mnt.top().props.z_ea='content';");
+						out.write("zk.mnt.top().props.z$ea='content';");
 						done = true;
 					}
 					if (!done) {

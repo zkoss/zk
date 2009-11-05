@@ -16,7 +16,6 @@ zk.mnt = {
 	t: zUtl.now() //when JS loaded
 };
 zkreg = zk.Widget.register; //a shortcut for WPD loader
-
 function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
@@ -24,10 +23,12 @@ function zkmb(binding) {
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
-function zkpb(pguid, style, dtid, contained, contextURI, updateURI) {
-	var props = {};
-	if (style) props.style = style;
-	if (dtid) zkdt(dtid, contextURI, updateURI)._pguid = pguid;
+function zkpb(pguid, dtid, contextURI, updateURI, contained, props) {
+	if (dtid)
+		if (typeof dtid == 'string')
+			zkdt(dtid, contextURI, updateURI)._pguid = pguid;
+		else
+			props = dtid;
 	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
 	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
@@ -150,7 +151,9 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			mtAU(stub);
 		} else { //browser loading
 			zk.bootstrapping = true;
-			jq(mtBL);
+			mtBL();
+			//note: jq(mtBL) is a bit slow (too late to execute)
+			//note: <div/> must be generated before <script/>
 		}
 	}
 	/** mount for browser loading */
@@ -172,24 +175,23 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		mtBL0();
 	}
 	function mtBL0() {
-		if (_createInf0.length)
-			return; //another page started
+		for (;;) {
+			if (_createInf0.length)
+				return; //another page started
+			if (zk.loading) {
+				zk.afterLoad(mtBL0);
+				return;
+			}
 
-		if (zk.loading) {
-			zk.afterLoad(mtBL0);
-			return;
-		}
+			var inf = _createInf1.shift();
+			if (!inf) break;
 
-		var inf = _createInf1.shift();
-		if (inf) {
 			var wgt = inf[1];
 			if (inf[2]) wgt.bind(inf[0]); //binding
 			else wgt.replaceHTML('#' + wgt.uuid, inf[0]);
-			return run(mtBL0); //loop back to check if loading
 		}
 
-		setTimeout(mtBL1, 0);
-			//use timeout since there might be multiple zkmb
+		mtBL1();
 	}
 	function mtBL1() {
 		if (_createInf0.length || _createInf1.length)
@@ -259,10 +261,10 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
-			//z_ea: value embedded as element's text
-			v = props.z_ea;
+			//z$ea: value embedded as element's text
+			v = props.z$ea;
 			if (v) {
-				delete props.z_ea;
+				delete props.z$ea;
 				var embed = jq(uuid);
 				if (embed.length) {
 					var val = embed[0].innerHTML;
@@ -274,10 +276,10 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 				}
 			}
 
-			//z_al: afterLoad
-			v = props.z_al;
+			//z$al: afterLoad
+			v = props.z$al;
 			if (v) {
-				delete props.z_al;
+				delete props.z$al;
 				zk.afterLoad(function () {
 					for (var p in v)
 						props[p] = v[p](); //must be func
@@ -300,10 +302,10 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		if (i >= 0)
 			zk.load(type.substring(0, i), zk.mnt.curdt);
 
-		//z_pk: pkgs to load
-		var pkgs = w.z_pk;
+		//z$pk: pkgs to load
+		var pkgs = w.z$pk;
 		if (pkgs) {
-			delete w.z_pk;
+			delete w.z$pk;
 			zk.load(pkgs);
 		}
 
@@ -314,10 +316,10 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	/** run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
 		var t = zUtl.now(), dt = t - zk.mnt.t;
-		if (dt > 300) { //huge page
+		if (dt > 2500) { //huge page
 			zk.mnt.t = t;
-			dt >>= 4;
-			setTimeout(fn, dt < 35 ? dt: 35); //breathe
+			dt >>= 6;
+			setTimeout(fn, dt < 10 ? dt: 10); //breathe
 				//IE optimize the display if delay is too short
 		} else
 			fn();

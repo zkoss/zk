@@ -227,17 +227,17 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 		if (_src != null) {
 			final HtmlPageRenders.RenderContext rc =
 				_defer ? null: HtmlPageRenders.getRenderContext(null);
-			if (rc != null) {
-				final Writer out = rc.extra;
-				out.write("\n<script type=\"text/javascript\" src=\"");
-				out.write(getEncodedSrcURL());
-				out.write('"');
+			if (rc != null && rc.crawlable) {
+				final Writer cwout = rc.temp;
+				cwout.write("\n<script type=\"text/javascript\" src=\"");
+				cwout.write(getEncodedSrcURL());
+				cwout.write('"');
 				if (_charset != null) {
-					out.write(" charset=\"");
-					out.write(_charset);
-					out.write('"');
+					cwout.write(" charset=\"");
+					cwout.write(_charset);
+					cwout.write('"');
 				}
-				out.write(">\n</script>\n");
+				cwout.write(">\n</script>\n");
 			} else
 				render(renderer, "src", getEncodedSrcURL());
 		}

@@ -1663,6 +1663,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		renderer.renderWidgetListeners(_wgtlsns);
 		renderer.renderWidgetOverrides(_wgtovds);
+
+		Object o = getAttribute(Attributes.CLIENT_ROD);
+		if (o != null)
+			renderer.render("z$rod",
+				(o instanceof Boolean && ((Boolean)o).booleanValue())
+				|| !"false".equals(o));
 	}
 	/** Adds this widget class to indicate that its important events
 	 * are generated

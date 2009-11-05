@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
@@ -464,31 +465,48 @@ public class HtmlPageRenders {
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
-				desktop.getWebApp().getConfiguration().isCrawlable());
+				out, desktop.getWebApp().getConfiguration().isCrawlable());
 			setRenderContext(exec, rc);
 
+			//generate div first
+			out.write("<div");
+			writeAttr(out, "id", page.getUuid());
+			out.write(">");
+
+			out = new StringWriter();
 			out.write("\n<script>zkmb();try{");
 		}
-	
+
 		out.write("zkpb('");
 		out.write(page.getUuid());
 		out.write('\'');
-		if (style != null || owner == null) {
-			out.write(",'");
-			if (style != null) out.write(style);
-			out.write('\'');
 
-			if (owner == null) {
-				out.write(",'");
-				out.write(desktop.getId());
-				out.write("',");
+		StringBuffer pgprops = null;
+		if (style != null)
+			pgprops = new StringBuffer("style:'").append(style).append('\'');
+		if (!isClientROD(page)) {
+			if (pgprops == null) pgprops = new StringBuffer();
+			else pgprops.append(',');
+			pgprops.append("z$rod:false");
+		}
+
+		if (owner == null) {
+			out.write(",'");
+			out.write(desktop.getId());
+			out.write("','");
+			out.write(getContextURI(exec));
+			out.write("','");
+			out.write(desktop.getUpdateURI(null));
+			out.write('\'');
+			if (pgprops != null) {
+				out.write(',');
 				out.write(contained ? '1': '0');
-				out.write(",'");
-				out.write(getContextURI(exec));
-				out.write("','");
-				out.write(desktop.getUpdateURI(null));
-				out.write('\'');
 			}
+		}
+		if (pgprops != null) {
+			out.write(",{");
+			out.write(pgprops.toString());
+			out.write('}');
 		}
 		out.write(");");
 
@@ -500,16 +518,27 @@ public class HtmlPageRenders {
 		if (standalone) {
 			setRenderContext(exec, null);
 
-			out.write("}finally{zkme();}</script>\n");
+			StringBuffer sw = ((StringWriter)out).getBuffer();
+			out = rc.temp;
+			out.write("</div>"); //close div
+			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
-			out.write("<div");
-			writeAttr(out, "id", page.getUuid());
-			out.write(">");
-			Files.write(out, ((StringWriter)rc.extra).getBuffer());
-			out.write("</div>");
-			Files.write(out, ((StringWriter)rc.perm).getBuffer());
+			Files.write(out, sw); //js
+			out.write("}finally{zkme();}</script>\n");
 		}
 	}
+	private static final boolean isClientROD(Page page) {
+		Object o = page.getAttribute(Attributes.CLIENT_ROD);
+		if (o != null)
+			return (o instanceof Boolean && ((Boolean)o).booleanValue())
+				|| !"false".equals(o);
+		if (_crod == null) {
+			final String s = Library.getProperty(Attributes.CLIENT_ROD);
+			_crod = Boolean.valueOf(s == null || !"false".equals(s));
+		}
+		return _crod.booleanValue();
+	}
+	private static Boolean _crod;
 	/** Generates the content of a standalone componnent that
 	 * the peer widget is not a child of the page widget at the client.
 	 */
@@ -663,20 +692,24 @@ public class HtmlPageRenders {
 	 * @see HtmlPageRenders#getRenderContext
 	 */
 	public static class RenderContext {
-		/** The extra writer used to generate crawlable content.
-		 * It is never null.
+		/** The writer used to generate the content that will
+		 * be replaced after the widgets have been rendered.
+		 * It is mainly used to put the crawlable content, which
+		 * is used only for Search Engine.
+		 * <p>It is never null.
 		 */
-		public final Writer extra;
-		/** The extra writer used to generate the content that exists
-		 * after the other being replaced with ZK widgets (never null).
+		public final Writer temp;
+		/** The writer used to generate the content that exists
+		 * even after the widgets have been rendered.
 		 * It is currenlty used only to generate CSS style.
+		 * <p>It is never null.
 		 */
 		public final Writer perm;
 		/** Indicates whether to generate crawlable content.
 		 */
 		public final boolean crawlable;
-		private RenderContext(boolean crawlable) {
-			this.extra = new StringWriter();
+		private RenderContext(Writer temp, boolean crawlable) {
+			this.temp = temp;
 			this.perm = new StringWriter();
 			this.crawlable = crawlable;
 		}

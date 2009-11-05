@@ -256,12 +256,12 @@ public class Utils {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.crawlable) {
-				final Writer out = rc.extra;
-				out.write("<a href=\"");
-				out.write(href);
-				out.write("\">");
-				out.write(label != null ? label: "");
-				out.write("</a>\n");
+				final Writer cwout = rc.temp;
+				cwout.write("<a href=\"");
+				cwout.write(href);
+				cwout.write("\">");
+				cwout.write(label != null ? label: "");
+				cwout.write("</a>\n");
 			}
 		}
 	}
@@ -277,11 +277,11 @@ public class Utils {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.crawlable) {
-				final Writer out = rc.extra;
-				out.write("<div>");
-				out.write(XMLs.encodeText(text));
+				final Writer cwout = rc.temp;
+				cwout.write("<div>");
+				cwout.write(XMLs.encodeText(text));
 					//encode required since it might not be valid HTML
-				out.write("</div>\n");
+				cwout.write("</div>\n");
 			}
 		}
 	}

@@ -451,13 +451,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 				try {
 					final String cpkg = cc.getClientPackages();
 					if (cpkg != null)
-						smartUpdate("z_pk", cpkg);
+						smartUpdate("z$pk", cpkg);
 
 					final String js = cc.getClientConstraint();
 					if (js != null) {
 						final char c = js.length() > 0 ? js.charAt(0): (char)0;
 						if (c != '\'' && c != '"') {
-							smartUpdate("z_al",
+							smartUpdate("z$al",
 								"{constraint:function(){\nreturn "+js+";}}");
 						} else {
 							smartUpdate("constraint", js.substring(1, js.length() - 1));
@@ -720,13 +720,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		} else if (_constr instanceof ClientConstraint) {
 			final ClientConstraint cc = (ClientConstraint)_constr;
 			try {
-				render(renderer, "z_pk", cc.getClientPackages());
+				render(renderer, "z$pk", cc.getClientPackages());
 
 				final String js = cc.getClientConstraint();
 				if (js != null) {
 					final char c = js.length() > 0 ? js.charAt(0): (char)0;
 					if (c != '\'' && c != '"') {
-						renderer.renderDirectly("z_al",
+						renderer.renderDirectly("z$al",
 							"{constraint:function(){\nreturn "+js+";}}");
 					} else {
 						renderer.renderDirectly("constraint", js);

@@ -142,7 +142,7 @@ implements DynamicTag, Native {
 		//Note: _tag == null can NOT be handled specially
 		final Execution exec = Executions.getCurrent();
 		final boolean root = getParent() == null && (getPage().isComplete()
-		|| (exec != null && "complete".equals(exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL))));
+		|| (exec != null && "complete".equals(exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL))));
 		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
 			super.redraw(out); //renderProperties (assume in zscript)

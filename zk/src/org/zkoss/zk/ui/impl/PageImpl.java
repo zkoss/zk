@@ -746,7 +746,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final Execution exec = getExecution();
 		final boolean au = exec.isAsyncUpdate(null);
 		if (!au && !exec.isIncluded()
-		&& ((ctl=(String)exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL)) == null
+		&& ((ctl=(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL)) == null
 			|| "desktop".equals(ctl))) {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content
@@ -775,7 +775,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 
 		final PageRenderer renderer = (PageRenderer)
-			exec.getAttribute(Attributes.ATTR_PAGE_RENDERER);
+			exec.getAttribute(Attributes.PAGE_RENDERER);
 		(renderer != null ? renderer: _langdef.getPageRenderer())
 			.render(this, out);
 	}
