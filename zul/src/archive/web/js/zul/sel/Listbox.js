@@ -56,6 +56,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onResponse: this});
+		this._shallStripe = true;
 		zk.afterMount(this.proxy(this.onResponse));
 	},
 	unbind_: function () {
