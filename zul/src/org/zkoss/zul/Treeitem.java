@@ -588,6 +588,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		if (!isOpen()) renderer.render("open", false);
 		if (!isCheckable()) renderer.render("checkable", false);
 		render(renderer, "_loaded", isLoaded());
+		render(renderer, "value", getValue());
 	}
 	/** Processes an AU request.
 	 *

@@ -60,7 +60,29 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 				this._changeSelect(w, sels[w.uuid] == true);
 		},
-		selectedIndex: null
+		selectedIndex: null,
+		name: function () {
+			if (this.destkop) this.updateFormData();	
+		}
+	},
+	updateFormData: function () {
+		if (this._name) {
+			if (!this.efield) 
+				this.efield = jq(this.$n()).append('<div style="display:none;"></div>').find('> div:last-child')[0];
+			
+			jq(this.efield).children().remove();
+			
+			// don't use jq.newHidden() in this case, because the performance is not good.
+			var data = [];
+				tmp = '<input type="hidden" name="' + this._name + '" value="';
+			for (var i = 0, j = this._selItems.length; i < j; i++) {
+				data.push(tmp, this._selItems[i].getValue(), '"/>');
+			}
+			jq(this.efield).append(data.join(''));
+		} else if (this.efield) {
+			jq(this.efield).remove();
+			this.efield = null;
+		}
 	},
 	setSelectedItem: function (item) {
 		item = zk.Widget.$(item);
@@ -328,6 +350,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	toggleItemSelection: function (item) {
 		if (item.isSelected()) this._removeItemFromSelection(item);
 		else this._addItemToSelection(item);
+		this.updateFormData();
 	},
 	selectItem: function (item) {
 		if (!item)
@@ -390,6 +413,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.domListen_(btn, 'onFocus', 'doFocus_')
 				.domListen_(btn, 'onKeyDown')
 				.domListen_(btn, 'onBlur', 'doBlur_');
+		this.updateFormData();
 	},
 	unbind_: function () {
 		var btn = this.$n('a');
@@ -397,6 +421,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
 				.domUnlisten_(btn, 'onKeyDown')
 				.domUnlisten_(btn, 'onBlur', 'doBlur_');
+		this.efield = null;
 		this.$supers('unbind_', arguments);
 	},
 	doBlur_: function (evt) {
