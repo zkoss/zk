@@ -764,7 +764,7 @@ zAu.cmd1 = {
 	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
 		//Format: comp-uuid:pg-uuid (if native root)
-		if ((!wgt || !wgt.$n()) && pgid) {
+		if ((!wgt || (!wgt.z_rod && !wgt.$n())) && pgid) {
 			wgt = zk.Widget.$(pgid);
 			if (wgt) zAu.cmd1.addChd(pgid, wgt, code);
 			else {
@@ -780,8 +780,10 @@ zAu.cmd1 = {
 			p.insertBefore(child, wgt.nextSibling);
 			if (p.$instanceof(zk.Desktop))
 				zAu.cmd1._asBodyChild(child);
-			zWatch.fireDown('beforeSize', child);
-			zWatch.fireDown('onSize', child);
+			if (!child.z_rod) {
+				zWatch.fireDown('beforeSize', child);
+				zWatch.fireDown('onSize', child);
+			}
 		};
 		zk.mounting = true;
 		$eval(code);
@@ -789,8 +791,10 @@ zAu.cmd1 = {
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
-			zWatch.fireDown('beforeSize', child);
-			zWatch.fireDown('onSize', child);
+			if (!child.z_rod) {
+				zWatch.fireDown('beforeSize', child);
+				zWatch.fireDown('onSize', child);
+			}
 		};
 		zk.mounting = true;
 		$eval(code);
@@ -798,8 +802,10 @@ zAu.cmd1 = {
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.appendChild(child);
-			zWatch.fireDown('beforeSize', child);
-			zWatch.fireDown('onSize', child);
+			if (!child.z_rod) {
+				zWatch.fireDown('beforeSize', child);
+				zWatch.fireDown('onSize', child);
+			}
 		};
 		zk.mounting = true;
 		$eval(code);

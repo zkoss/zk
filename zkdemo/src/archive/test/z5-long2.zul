@@ -33,7 +33,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			<tabpanels>
 				<tabpanel forEach="${data}">
 			Inner tabpanel ${forEachStatus.previous.index}.${forEachStatus.index}
-			<button label="a button"/>
+			<button label="a button" onClick='new Label(" clicked").setParent(self.parent)'/>
 			<separator/>
 			More info
 				</tabpanel>

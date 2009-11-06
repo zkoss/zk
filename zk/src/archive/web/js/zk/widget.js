@@ -105,6 +105,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		};
 	}
 
+	function _bind0(wgt) {
+		_binds[wgt.uuid] = wgt;
+	}
+	function _unbind0(wgt) {
+		delete _binds[wgt.uuid];
+		wgt._node = wgt.desktop = null;
+		wgt._subnodes = {};
+		wgt._nodeSolved = false;
+	}
+	function _bindrod(wgt) {
+		_bind0(wgt);
+		wgt.z_rod = true;
+
+		for (var child = wgt.firstChild; child; child = child.nextSibling)
+			_bindrod(child);
+	}
+	function _unbindrod(wgt) {
+		_unbind0(wgt);
+		delete wgt.z_rod;
+
+		for (var child = wgt.firstChild; child; child = child.nextSibling)
+			_unbindrod(child);
+	}
+
 	function _fixBindLevel(wgt, v) {
 		wgt.bindLevel = v++;
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
@@ -700,10 +724,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			oldpt.removeChild(child);
 
 		child.parent = this;
-		var p = this.lastChild;
-		if (p) {
-			p.nextSibling = child;
-			child.previousSibling = p;
+		var ref = this.lastChild;
+		if (ref) {
+			ref.nextSibling = child;
+			child.previousSibling = ref;
 			this.lastChild = child;
 		} else {
 			this.firstChild = this.lastChild = child;
@@ -712,8 +736,12 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		var dt = this.desktop;
-		if (dt) this.insertChildHTML_(child, null, dt);
+		if (this.z_rod || child.z_rod)
+			_bindrod(child);
+		else {
+			var dt = this.desktop;
+			if (dt) this.insertChildHTML_(child, null, dt);
+		}
 
 		this.onChildAdded_(child);
 		return true;
@@ -732,10 +760,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			child.parent.removeChild(child);
 
 		child.parent = this;
-		var p = sibling.previousSibling;
-		if (p) {
-			child.previousSibling = p;
-			p.nextSibling = child;
+		var ref = sibling.previousSibling;
+		if (ref) {
+			child.previousSibling = ref;
+			ref.nextSibling = child;
 		} else this.firstChild = child;
 
 		sibling.previousSibling = child;
@@ -745,8 +773,12 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		var dt = this.desktop;
-		if (dt) this.insertChildHTML_(child, sibling, dt);
+		if (this.z_rod || child.z_rod)
+			_bindrod(child);
+		else {
+			var dt = this.desktop;
+			if (dt) this.insertChildHTML_(child, sibling, dt);
+		}
 
 		this.onChildAdded_(child);
 		return true;
@@ -770,7 +802,9 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_rmIdSpaceDown(child);
 
-		if (child.desktop)
+		if (child.z_rod)
+			_unbindrod(child);
+		else if (child.desktop)
 			this.removeChildHTML_(child, p);
 		this.onChildRemoved_(child);
 		return true;
@@ -806,7 +840,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
-		if (this.desktop) {
+		if (this.z_rod) {
+			_unbindrod(this);
+			_bindrod(newwgt);
+		} else if (this.desktop) {
 			if (!newwgt.desktop) newwgt.desktop = this.desktop;
 			if (node) newwgt.replaceHTML(node, newwgt.desktop);
 			else {
@@ -1313,7 +1350,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	bind_: function (desktop, skipper, after) {
-		_binds[this.uuid] = this;
+		if (this.z_rod) {
+			_bindrod(this);
+			return;
+		}
+
+		_bind0(this);
 
 		if (!desktop) desktop = zk.Desktop.$(this.uuid);
 		this.desktop = desktop;
@@ -1334,14 +1376,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	unbind_: function (skipper, after) {
-		delete _binds[this.uuid];
+		if (this.z_rod) {
+			_unbindrod(this);
+			return;
+		}
+
+		_unbind0(this);
 		_fixBindMem();
-
-		this._node = this.desktop = null;
-		this._subnodes = {};
-		this._nodeSolved = false;
-		this.bindLevel = -1;
-
 		_unlistenFlex(this);
 
 		for (var child = this.firstChild; child; child = child.nextSibling)

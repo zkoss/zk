@@ -316,7 +316,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	/** run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
 		var t = zUtl.now(), dt = t - zk.mnt.t;
-		if (dt > 2500) { //huge page
+		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			zk.mnt.t = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
