@@ -2622,7 +2622,7 @@ zkau.cmd1 = {
 
 			zk.cleanupAt(cmp);
 			cmp = $childExterior(cmp);
-			zk.remove(cmp);
+			zk.remove(cmp, true);
 			zkau.hideCovered(); // Bug #1858838
 		}
 		if (zkau.valid) zkau.valid.fixerrboxes();

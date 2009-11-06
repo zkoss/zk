@@ -2658,8 +2658,8 @@ zk.History.prototype = {
 };
 
 /** Removes a node. */
-zk.remove = function (n) {
-	if (n) Element.remove(n);
+zk.remove = function (n, noClean) {
+	if (n) Element.remove(n, noClean);
 };
 
 /** An event listener that does nothing but stop event propogation.

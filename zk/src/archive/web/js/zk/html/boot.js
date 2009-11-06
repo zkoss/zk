@@ -283,10 +283,10 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 		if (!ls) _ltns[id] = ls = [];
 		ls.push([el, evtnm, fn]);
 	};
-	function _ltid(el) {
+	function _ltid(el, unlisten) {
 		return el.id || (el == document ? '_doc_': el == window ? '_win_':
 			el == document.body ? '_bdy_':
-			el.nodeType == 1 ? (el.id = _ltid2(el)): '');
+			!unlisten ? (el.nodeType == 1 ? (el.id = _ltid2(el)): '') : false);
 	}
 	function _ltid2(el) {
 		var id = $uuid(el);
@@ -320,8 +320,9 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	 */
 	zk._unlistenAll = function (el) {
 		if (el) {
-			var id = _ltid(el),
-				ls = _ltns[id];
+			var id = _ltid(el, true);
+			if (!id) return;
+			var ls = _ltns[id];
 			if (ls) {
 				delete _ltns[id];
 				_unlistenNow(ls);
@@ -354,7 +355,7 @@ zk.cleanAll = function (el, recurse) {
 		return;
 	}
 	zk._unlistenAll(el);
-	zk._unAll(el);
+	if (el.id) zk._unAll(el);
 };
 
 /** disable ESC to prevent user from pressing ESC to stop loading */
@@ -1328,13 +1329,17 @@ zk._cleanupAt = function (n) {
 
 	var type = $type(n);
 	if (type) {
-		zk.eval(n, "cleanup", type);
+		var o = window['zk' + type];
+		if (o && o.cleanup)
+			o.cleanup(n);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
-		zk._visicmps.remove(n);
-		zk._hidecmps.remove(n);
-		zk._szcmps.remove(n);
-		zk._bfszcmps.remove(n);
-		zk._scrlcmps.remove(n);
+		if (o) {
+			if (o.onVisi) zk._visicmps.remove(n);
+			if (o.onHide) zk._hidecmps.remove(n);
+			if (o.onSize) zk._szcmps.remove(n);
+			if (o.beforeSize) zk._bfszcmps.remove(n);
+			if (o.onScroll) zk._scrlcmps.remove(n);
+		}
 	}
 	zk.cleanAll(n); //Bug 1741959: memory leaks; bug #2313106
 	

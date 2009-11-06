@@ -155,6 +155,7 @@ zk.Layout2.prototype = {
 			center.w -= mars.left + mars.right;
 			center.h -= mars.top + mars.bottom;
 			this._resize(cnt, center, true);
+			cnt._sized = true;
 		}
 		zk.cleanVisibility(this.el);
 		if (zk.ie) zk.redoCSS(this.el);
@@ -376,7 +377,10 @@ zkLayoutRegion2 = {
 		if (zk.isVisible(cmp)) {
 			var pos = getZKAttr(cmp, "pos");
 			if (pos == 'center') {
-				zk.Layout2.getOwnerLayout(cmp).render(true);
+				var layout = zk.Layout2.getOwnerLayout(cmp);
+				if (!cmp._sized && layout.getRegion('center'))
+					layout.render(true);
+				cmp._sized = false;
 			}
 		}
 	},

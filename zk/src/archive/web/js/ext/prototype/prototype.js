@@ -879,10 +879,10 @@ Element.Methods = {
     return element;
   },
 
-  remove: function(el) {
+  remove: function(el, noClean) {
     el = z$(el);
     //Tom Yeh, Potix: fix memory leak (notice it also fixed Bug 2881586)
-    zk.cleanAll(el, true);
+    if (!noClean) zk.cleanAll(el, true);
     if (zk.ie) {
 		var gcid = '_z_lkgc',
 			gc = document.getElementById(gcid);
