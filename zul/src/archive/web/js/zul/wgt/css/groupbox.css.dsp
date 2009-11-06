@@ -10,7 +10,7 @@
 	padding-bottom: 0 !important; border-width: 2px 0 0 0 !important;
 }
 .z-fieldset-colpsd .z-fieldset-cnt {
-	visibility: hidden; position: absolute; left: -1000px; top: -1000px;
+	position: absolute; left: -1000px; top: -1000px;
 }
 
 <%-- 3D --%>

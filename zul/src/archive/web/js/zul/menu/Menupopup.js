@@ -157,10 +157,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._syncShadow();
 		var anc = this.$n('a');
 		if (anc) {
-
-			// just in case
-			if (zk.ie)
-				zk(this.$n()).cleanVisibility();
 			if(zk(anc).isRealVisible())
 				anc.focus();
 		}

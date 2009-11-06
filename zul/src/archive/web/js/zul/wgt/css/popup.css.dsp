@@ -4,7 +4,6 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	visibility: hidden;
 	border: 0 none;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};

@@ -57,11 +57,15 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				hgh = zk(n.parentNode).vflexHeight();
 				zk(n).setOffsetHeight(hgh);
 			}
-			//let real div 100% height
-			jq(this.$n("real")).addClass(this.getZclass() + "-cnt");
 			if (zk.ie && pos)
 				n.style.position = pos;
 		}
+	},
+	domClass_: function () {
+		var cls = this.$supers('domClass_', arguments);
+		if (this.getTabbox().inAccordionMold())
+			cls += ' ' + this.getZclass() + '-cnt';
+		return cls;
 	},
 	onSize: _zkf = function() {
 		this._fixPanelHgh();		//Bug 2104974

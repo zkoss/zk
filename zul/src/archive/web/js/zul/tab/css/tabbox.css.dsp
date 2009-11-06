@@ -3,7 +3,6 @@
 <%-- ZK Tabbox --%>
 .z-tabbox {
 	overflow: hidden;
-	visibility: hidden;
 }
 .z-tabs-cnt .z-tab-hl,
 .z-tabs-cnt .z-tab-hr,
@@ -329,7 +328,6 @@
 <%-- Tabbox vertical --%>
 .z-tabbox-ver {
 	overflow: hidden;
-	visibility: hidden;
 }
 .z-tabs-ver {
 	overflow: hidden;
@@ -629,7 +627,6 @@
 <%-- Tabbox accordion --%>
 .z-tabbox-accordion {
 	overflow: hidden;
-	visibility: hidden;
 }
 .z-tab-accordion-header {
 	cursor: pointer;
@@ -741,7 +738,6 @@
 <%-- ZK Tabbox accordion-lite --%>
 .z-tabbox-accordion-lite {
 	overflow: hidden;
-	visibility: hidden;
 }
 .z-tabpanels-accordion-lite {
 	border-top: 1px solid #99BBE8;

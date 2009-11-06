@@ -6,7 +6,6 @@
 	background-color:#CDE6F5;
 	border: 0;
 	position: relative;
-	visibility: hidden;
 }
 
 .z-north,

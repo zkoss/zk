@@ -55,7 +55,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
-		zk(node).cleanVisibility();
 	},
 	position: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position);

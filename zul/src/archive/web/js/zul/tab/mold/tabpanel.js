@@ -32,7 +32,7 @@ function (out) {
 	} else {//Default Mold
 		out.push('<div id="', uuid, '"' , this.domAttrs_(), '>');
 		if (tabbox.isHorizontal())
-			out.push('<div id="', uuid, '-real">');
+			out.push('<div id="', uuid, '-real" class="', zcls, '-cnt">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		if (tabbox.isHorizontal())

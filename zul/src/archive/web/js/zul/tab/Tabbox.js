@@ -89,16 +89,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
             }
         }
 	},
-	onSize: _zkf = function() {
-		zk(this.$n()).cleanVisibility();
-	},
-	onShow: _zkf,
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		this.tabs = this.getTabs();
 		this.tabpanels = this.getTabpanels();
 		this._scrolling = false;
-		zWatch.listen({onSize: this, onShow: this});
 		zk.afterMount(
 			this.proxy(function () {
 				var wgt = zk(this._selTab).jq[0],
@@ -109,7 +104,6 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		);
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	},
 	//super//

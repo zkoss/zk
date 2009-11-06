@@ -129,7 +129,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			center.h -= mars.top + mars.bottom;
 			this._resizeWgt(this.center, center); //might recursive back
 		}
-		zk(el).cleanVisibility();
 		this._isOnSize = false; // reset
 	},
 	_resizeWgt: function (wgt, ambit, ignoreSplit) {

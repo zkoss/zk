@@ -358,10 +358,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		this._syncShadow();
 
-		if (this.isRealVisible()) {
-			zk(n).cleanVisibility();
+		if (this.isRealVisible())
 			this.setTopmost();
-		}
 	},
 	_initMove: function (cmp) {
 		var handle = this.$n('cap');

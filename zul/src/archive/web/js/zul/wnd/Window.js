@@ -222,10 +222,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		$n.makeVParent();
 		this._syncShadow();
 		this._updateDomPos();
-
-		if (this.isRealVisible())
-			$n.cleanVisibility();
-
 		this.setTopmost();
 		this._makeFloat();
 	},
@@ -250,9 +246,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		//Note: modal must be visible
 		var realVisible = this.isRealVisible();
-		if (realVisible)
-			$n.cleanVisibility();
-
 		this.setTopmost();
 		
 		if (!this._mask) {
@@ -632,7 +625,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if ((!no || !no.visible) && this.isMinimized())
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
-			style = "position:absolute;visibility:hidden;"+style;
+			style = "position:absolute;"+style;
 		return style;
 	},
 
