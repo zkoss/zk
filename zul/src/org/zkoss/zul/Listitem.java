@@ -321,8 +321,8 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "_loaded", _loaded);
 		
-		if (getValue() != null)
-			render(renderer, "value", getValue().toString());
+		if (_value instanceof String && getListbox().getName() != null)
+			render(renderer, "value", _value);
 		
 		if (!isCheckable())
 			renderer.render("checkable", false);
