@@ -154,7 +154,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 				HtmlPageRenders.getRenderContext(null);
 			if (rc != null) {
 				final Writer out = rc.perm;
-					//don't use rc.extra which will be replaced with widgets later
+					//don't use rc.temp which will be replaced with widgets later
 				out.write("\n<style id=\"");
 				out.write(getUuid());
 				out.write("$css\" type=\"text/css\">\n");

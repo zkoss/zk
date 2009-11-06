@@ -473,7 +473,7 @@ public class HtmlPageRenders {
 			//generate div first
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
-			out.write(">");
+			out.write(" class=\"z-temp\">");
 
 			out = new StringWriter();
 			out.write("\n<script>zkmb();try{");
@@ -530,14 +530,35 @@ public class HtmlPageRenders {
 			out.write("}finally{zkme();}</script>\n");
 		}
 	}
+
 	private static final String outZkIconJS() {
 		final Session sess = Sessions.getCurrent();
-		if (sess != null && sess.getAttribute("_zk.npi") == null) {
-			sess.setAttribute("_zk.npi", Boolean.TRUE);
-			return "zk.pi=1;";
+		if (sess != null) {
+			final PI pi = (PI)sess.getAttribute("_zk.pi");
+			boolean show = pi == null;
+			if (show) sess.setAttribute("_zk.pi", new PI());
+			else show = pi.show();
+
+			if (show)
+				return "zk.pi=1;";
 		}
 		return "";
 	}
+	private static class PI { //not need to serialize
+		long _t;
+		private PI() {
+			_t = System.currentTimeMillis();
+		}
+		private boolean show() {
+			long now = System.currentTimeMillis();
+			if (now - _t > 1200000) {
+				_t = now;
+				return true;
+			}
+			return false;
+		}
+	}
+
 	private static final boolean isClientROD(Page page) {
 		Object o = page.getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)

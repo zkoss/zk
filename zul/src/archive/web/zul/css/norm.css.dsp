@@ -222,6 +222,10 @@ div.z-log button {
 	background-image: url(${c:encodeURL('~./img/spacer.gif')});
 }
 
+.z-temp * { <%-- temporary --%>
+	color: white; background-color: white; font-size: 5px;
+}
+
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both;
