@@ -64,6 +64,12 @@ public interface SessionCtrl {
 	 * <p>It is actually a workaround to solve the issue that some Web
 	 * contrainer fails to call
 	 * HttpSessionActivationListener.sessionDidActivate() unpon failover.
+	 *
+	 * <p>It can be used to solve the issue that the mapping between
+	 * the native session and the ZK session is changed.
+	 * For example, you might manually invalidate the http session
+	 * and recreate one. Then, you have to call this method to associate
+	 * the ZK session with the new created session.
 	 */
 	public void recover(Object nativeSession);
 
