@@ -1,6 +1,14 @@
 	--------
+ZK 3.6.4
+* Features
+
+* Bugs
+
+* Upgrade Notes:
+
+--------
 ZK 3.6.3
-October, 2009
+November 3, 2009
 * Features
   2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2821761: Tabbox support extra tabs to display other cmps on the bar

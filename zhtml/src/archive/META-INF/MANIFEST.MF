@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK XHTML Components
-Specification-Version: 3.6.3
+Specification-Version: 3.6.4
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zhtml
 Implementation-URL: http://www.zkoss.org/zhtml
-Implementation-Version: 3.6.3
+Implementation-Version: 3.6.4
 Implementation-Vendor: Potix Corporation

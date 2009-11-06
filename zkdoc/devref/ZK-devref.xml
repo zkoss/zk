@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.6.3</subtitle>
+<subtitle>Version 3.6.4</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -18628,7 +18628,8 @@
 <row>
 <entry>
 <para>
-<code>addMoved(org.zkoss.zk.ui.Component oldparent, org.zkoss.zk.ui.Page oldpg, org.zkoss.zk.ui.Page newpg) </code>
+<code>addMoved(org.zkoss.zk.ui.Component oldparent, org.zkoss.zk.ui.Page oldpg, </code>
+<code>org.zkoss.zk.ui.Page newpg) </code>
 </para>
 </entry>
 <entry>
@@ -21021,11 +21022,13 @@
 <row>
 <entry>
 <para>
-<code>coerceToString(java.lang.Object value)</code>
+<code>coerceToString(java</code>
+<code>.lang.Object value)</code>
 </para>
 </entry>
 <entry>
-<para>Coerces the value passed to <code>InputElement.setText(java.lang.String)</code>. </para>
+<para>Coerces the value passed to <code>InputElement.setText(java.lang.Stri</code>
+<code>ng)</code>. </para>
 </entry>
 <entry>
 <para>
@@ -21722,7 +21725,8 @@
 <row>
 <entry>
 <para>
-<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+<code>insertBefore(org.zkoss.zk.ui.Co</code>
+<code>mponent child, org.zkoss.zk.ui.Component insertBefore)</code>
 </para>
 </entry>
 <entry>
