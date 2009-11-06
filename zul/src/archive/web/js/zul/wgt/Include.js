@@ -28,6 +28,17 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	domStyle_: function (no) {
+		var style = this.$supers('domStyle_', arguments);
+		if (!this.previousSibling && !this.nextSibling) {
+		//if it is only child, the default is 100%
+			if ((!no || !no.width) && !this.getWidth())
+				style += 'width:100%;';
+			if ((!no || !no.height) && !this.getHeight())
+				style += 'height:100%;';
+		}
+		return style;
+	},
 	redraw: function (out) {
 		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)

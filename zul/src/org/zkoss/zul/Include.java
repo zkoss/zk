@@ -54,6 +54,9 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Non-XUL extension.
  *
+ * <p>If this component is the only child of its parent, the default width
+ * and height will become 100%.
+ *
  * <p>Since 3.6.2, there are three modes: auto (default), instant and defer.
  * The behavior prior to 3.6.2 is the same as the defer mode.
  * The default mode is <code>auto</code> since 5.0.
