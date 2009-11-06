@@ -24,6 +24,7 @@ import java.util.Date;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.json.JSONAware;
 
 /**
  * An implementation of {@link ContentRenderer} that renders
@@ -215,7 +216,10 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append(']');
 			return;
 		}
-		throw new UnsupportedOperationException("Unknown "+value.getClass());
+		if (value instanceof JSONAware)
+			renderValue(((JSONAware)value).toJSONString());
+		else
+			renderValue(value.toString());
 	}
 
 	/** Renders an integer property.

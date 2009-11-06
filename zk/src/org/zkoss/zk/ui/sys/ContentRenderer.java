@@ -37,6 +37,11 @@ public interface ContentRenderer {
 	 * However, the following types are always supported:
 	 * null, String, Date, the wrapper of primitives,
 	 * an array of the above types, and a map of the above types.
+	 * <p>If the object is an instance of {@link org.zkoss.json.JSONAware},
+	 * {@link org.zkoss.json.JSONAware#toJSONString} will be called
+	 * to convert the value to a string.
+	 * Otherwise, Object.toString() will be called.
+	 * It the client's job to convert the string back to the correct object.
 	 */
 	public void render(String name, Object value) throws IOException;
 	/** Renders an integer property. */
