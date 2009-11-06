@@ -42,6 +42,7 @@ November, 2009
   2879519: More control of ThemeProvider against widget's CSS
   2887668: Ignore client command if component is invisible/disabled
   2893117: The include comp's default width/height 100% if only child
+  2867437: Borderlayout shows a collapse button on splitter
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

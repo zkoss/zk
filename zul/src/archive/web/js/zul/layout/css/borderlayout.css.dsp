@@ -41,8 +41,8 @@
 .z-north-splt,
 .z-south-splt {
 	position: absolute;
-	height: 6px;
-	width: 6px;
+	height: 8px;
+	width: 8px;
 	background: #C4DCFB left;
 	background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
 	cursor: e-resize;
@@ -184,3 +184,46 @@
 	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.gif')});
 }
 </c:if>
+
+<%-- Splitter button --%>
+.z-east-splt-btn,
+.z-west-splt-btn,
+.z-north-splt-btn,
+.z-south-splt-btn {
+	filter: alpha(opacity=50);  <%-- IE --%>
+	opacity: 0.5;  <%-- Moz + FF --%>
+	background-repeat: no-repeat;
+	display: -moz-inline-box;
+	vertical-align: top;
+	display: inline-block;	
+    line-height: 1px;
+    font-size: 1px;
+    cursor: pointer;
+}
+.z-east-splt-btn-over,
+.z-west-splt-btn-over,
+.z-north-splt-btn-over,
+.z-south-splt-btn-over {
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+.z-west-splt-btn,
+.z-east-splt-btn {
+	width: 6px; min-height: 50px; height: 50px;
+}
+.z-west-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.png')});
+}
+.z-east-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.png')});
+}
+.z-north-splt-btn,
+.z-south-splt-btn {
+	width: 50px; min-height: 5px; height: 6px;
+}
+.z-north-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.png')});
+}
+.z-south-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
+}

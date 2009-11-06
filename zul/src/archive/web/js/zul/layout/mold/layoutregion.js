@@ -39,16 +39,19 @@ function (out) {
 	out.push('</div></div>');
 	
 	if (noCenter) {
-		out.push('<div id="', uuid, '-split" class="', zcls, '-splt"></div>');
-		if (this._title) {
-			out.push('<div id="', uuid, '-colled" class="', zcls,
-					'-colpsd" style="display:none"><div id="',
-					uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
-			if (!this._collapsible)
-				out.push(' style="display:none;"');
+		out.push('<div id="', uuid, '-split" class="', zcls, '-splt"><span id="'
+			, uuid, '-splitbtn" class="', zcls, '-splt-btn"');
+		if (!this._collapsible)
+			out.push(' style="display:none;"');
+		out.push('></span></div>');
 				
-			out.push('></div></div>');
-		}
+		out.push('<div id="', uuid, '-colled" class="', zcls,
+				'-colpsd" style="display:none"><div id="',
+				uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
+		if (!this._collapsible)
+			out.push(' style="display:none;"');
+				
+		out.push('></div></div>');
 	}
 	out.push('</div>');
 }

@@ -304,75 +304,77 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
-		if (this.$n('btn')) {
-			switch (evt.domTarget) {
-			case this.$n('btn'):
-				jq(this.$n('btn')).addClass(this.getZclass() + '-colps-over');
-				break;
-			case this.$n('btned'):
-				jq(this.$n('btned')).addClass(this.getZclass() + '-exp-over');
-				// don't break
-			case this.$n('colled'):
-				jq(this.$n('colled')).addClass(this.getZclass() + '-colpsd-over');
-				break;
-			}
+		switch (evt.domTarget) {
+		case this.$n('btn'):
+			jq(this.$n('btn')).addClass(this.getZclass() + '-colps-over');
+			break;
+		case this.$n('btned'):
+			jq(this.$n('btned')).addClass(this.getZclass() + '-exp-over');
+			// don't break
+		case this.$n('colled'):
+			jq(this.$n('colled')).addClass(this.getZclass() + '-colpsd-over');
+			break;
+		case this.$n('splitbtn'):
+			jq(this.$n('splitbtn')).addClass(this.getZclass() + '-splt-btn-over');
+			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		if (this.$n('btn')) {
-			switch (evt.domTarget) {
-			case this.$n('btn'):
-				jq(this.$n('btn')).removeClass(this.getZclass() + '-colps-over');
-				break;
-			case this.$n('btned'):
-				jq(this.$n('btned')).removeClass(this.getZclass() + '-exp-over');
-				// don't break
-			case this.$n('colled'):
-				jq(this.$n('colled')).removeClass(this.getZclass() + '-colpsd-over');
-				break;
-			}
+		switch (evt.domTarget) {
+		case this.$n('btn'):
+			jq(this.$n('btn')).removeClass(this.getZclass() + '-colps-over');
+			break;
+		case this.$n('btned'):
+			jq(this.$n('btned')).removeClass(this.getZclass() + '-exp-over');
+			// don't break
+		case this.$n('colled'):
+			jq(this.$n('colled')).removeClass(this.getZclass() + '-colpsd-over');
+			break;
+		case this.$n('splitbtn'):
+			jq(this.$n('splitbtn')).removeClass(this.getZclass() + '-splt-btn-over');
+			break;
 		}
 		this.$supers('doMouseOut_', arguments);		
 	},
 	doClick_: function (evt) {
-		if (this.$n('btn')) {
-			var target = evt.domTarget;
-			switch (target) {
-			case this.$n('btn'):
-			case this.$n('btned'):
-				if (this._isSlide || zk.animating()) return;
-				if (this.$n('btned') == target) {
-					var s = this.$n('real').style;
-					s.visibility = "hidden";
-					s.display = "";
-					this._syncSize(true);
-					s.visibility = "";
-					s.display = "none";
-				}
-				this.setOpen(!this._open);
-				break;
-			case this.$n('colled'):					
-				if (this._isSlide) return;
-				this._isSlide = true;
-				var real = this.$n('real'),
-					s = real.style;
+		var target = evt.domTarget;
+		switch (target) {
+		case this.$n('btn'):
+		case this.$n('btned'):
+		case this.$n('splitbtn'):
+			if (this._isSlide || zk.animating()) return;
+			if (this.$n('btned') == target) {
+				var s = this.$n('real').style;
 				s.visibility = "hidden";
 				s.display = "";
-				this._syncSize();
-				this._original = [s.left, s.top];
-				this._alignTo();
-				s.zIndex = 100;
-
-				this.$n('btn').style.display = "none"; 
+				this._syncSize(true);
 				s.visibility = "";
 				s.display = "none";
-				zk(real).slideDown(this, {
-					anchor: this.sanchor,
-					afterAnima: this.$class.afterSlideDown
-				});
-				break;
 			}
+			this.setOpen(!this._open);
+			break;
+		case this.$n('colled'):					
+			if (this._isSlide) return;
+			this._isSlide = true;
+			var real = this.$n('real'),
+				s = real.style;
+			s.visibility = "hidden";
+			s.display = "";
+			this._syncSize();
+			this._original = [s.left, s.top];
+			this._alignTo();
+			s.zIndex = 100;
+
+			if (this.$n('btn'))
+				this.$n('btn').style.display = "none"; 
+			s.visibility = "";
+			s.display = "none";
+			zk(real).slideDown(this, {
+				anchor: this.sanchor,
+				afterAnima: this.$class.afterSlideDown
+			});
+			break;
 		}
 		this.$supers('doClick_', arguments);		
 	},
@@ -531,10 +533,19 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 	_reszSplt: function (ambit) {
 		var split = this.$n('split'),
-			LR = zul.layout.LayoutRegion;
-		if (zk(split).isVisible())
-			zk.copy(split.style,
-				this._reszSp2(ambit, {w: split.offsetWidth, h: split.offsetHeight}));
+			sbtn = this.$n('splitbtn');
+		if (zk(split).isVisible()) {
+			if (zk(sbtn).isVisible()) {
+				if (this._isVertical()) 
+					sbtn.style.marginLeft = jq.px(((ambit.w - sbtn.offsetWidth) / 2));
+				else
+					sbtn.style.marginTop = jq.px(((ambit.h - sbtn.offsetHeight) / 2));
+			}
+			zk.copy(split.style, this._reszSp2(ambit, {
+				w: split.offsetWidth,
+				h: split.offsetHeight
+			}));
+		}
 		return ambit;
 	},
 	_reszSp2: zk.$void
@@ -584,7 +595,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.top = this._original[1];
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = "";
-		this.$n('btn').style.display = "";
+		if (this.$n('btn'))
+			this.$n('btn').style.display = "";
 		jq(document).unbind("click", this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
 	},
