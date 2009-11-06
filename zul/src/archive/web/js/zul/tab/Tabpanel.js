@@ -40,6 +40,22 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tab = this.getLinkedTab();
 		return tab != null && tab.isSelected();
 	},
+	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
+		var accd = this.getTabbox().inAccordionMold();
+		if (accd && animation) {
+			var p = this.getCaveNode();
+			zk(p)[toSel ? "slideDown" : "slideUp"](this);
+		} else {
+			var pl = accd ? this.getCaveNode() : this.$n(); //Can't use $n coz
+			if (toSel) {
+				jq(pl).show();
+				zWatch.fireDown('onShow', this);
+			} else {
+				zWatch.fireDown('onHide', this);
+				jq(pl).hide();
+			}
+		}
+	},
 	_fixPanelHgh: function() {
 		var tabbox = this.getTabbox();
 		if (!tabbox.inAccordionMold()) {
