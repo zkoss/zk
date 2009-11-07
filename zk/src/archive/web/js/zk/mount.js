@@ -265,7 +265,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			v = props.z$ea;
 			if (v) {
 				delete props.z$ea;
-				var embed = jq(uuid);
+				var embed = jq(uuid, zk);
 				if (embed.length) {
 					var val = embed[0].innerHTML;
 					if (v.charAt(0) == '$') { //decode
