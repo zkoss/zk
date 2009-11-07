@@ -223,7 +223,7 @@ div.z-log button {
 }
 
 .z-temp * { <%-- temporary --%>
-	color: white; background-color: white; font-size: 5px;
+	color: white; background-color: white; font-size: 5px; text-decoration: none;
 }
 
 <%-- Fix float issue for CSS --%>
