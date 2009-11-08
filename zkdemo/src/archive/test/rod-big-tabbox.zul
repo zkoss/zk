@@ -13,7 +13,7 @@ zk-long2.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window title="Test of a tabbox with many tabs" border="normal">
+<window title="Test of ROD for many-in-many tabbox" border="normal">
 	<zscript>
 		data = new byte[20];
 	</zscript>
