@@ -328,11 +328,6 @@ def alert(m):
 			<mold-uri>mold/calendar.js</mold-uri>
 			<css-uri>css/calendar.css.dsp</css-uri>
 		</mold>
-		<mold>
-			<mold-name>popup</mold-name>
-			<mold-uri>mold/calendarpop.js</mold-uri>
-			<css-uri>css/calendar.css.dsp</css-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>captcha</component-name>
