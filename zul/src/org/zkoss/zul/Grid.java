@@ -16,36 +16,40 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collection;
 import java.util.AbstractCollection;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
-import org.zkoss.lang.D;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.au.AuRequests;
-
-import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.impl.DataLoader;
+import org.zkoss.zul.impl.GridDataLoader;
+import org.zkoss.zul.impl.GroupsListModel;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -98,6 +102,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Grid.onInitLaterPosted";
 
+	private transient DataLoader _dataLoader;
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
@@ -114,17 +119,23 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener;
+	private transient EventListener _pgListener, _pgImpListener, _dataloaderInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
 	private boolean _sizedByContent, _vflex;
+	private int _scrollTop = 0; //since 5.0.0 scroll position
+	private int _scrollLeft = 0;
+	private int _topPad = 0; //since 5.0.0
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
+		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
+		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
 	}
 	
 	public Grid() {
@@ -144,6 +155,17 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				return new Iter();
 			}
 		};
+		//prepare a right moment to init DataLoader...
+		this.addEventListener("onInitDataLoader", _dataloaderInitListener = new EventListener() {
+			public void onEvent(Event event) throws Exception {
+				if (_dataloaderInitListener != null) {
+					Grid.this.removeEventListener("onInitDataLoader", _dataloaderInitListener);
+					_dataloaderInitListener = null; 
+				}
+				getDataLoader();
+			}
+		});
+		Events.postEvent(new Event("onInitDataLoader", this));
 	}
 
 	/** Returns whether to grow and shrink vertical to fit their given space,
@@ -475,7 +497,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 	/** Returns whether this grid is in the paging mold.
 	 */
-	/*package*/ boolean inPagingMold() {
+	public boolean inPagingMold() {
 		return "paging".equals(getMold());
 	}
 	
@@ -539,7 +561,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			}
 
 			//Always syncModel because it is easier for user to enfore reload
-			syncModel(-1, -1); //create rows if necessary
+			getDataLoader().syncModel(-1, -1); //create rows if necessary
 			postOnInitRender();
 			//Since user might setModel and setRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
@@ -553,6 +575,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("model", false);
 		}
+		updateModelInfo();
+	}
+	/** Internal Use Only. */
+	public void updateModelInfo() {
+		smartUpdate("_offset", getDataLoader().getOffset()); //update the new offset
+		smartUpdate("totalSize_", getDataLoader().getTotalSize()); //update the new total size
 	}
 	/** Sets the groups model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -607,7 +635,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				|| (_renderer instanceof RowRendererExt)) {
 					//bug# 2388345, a new renderer that might new own Row, shall clean all Row first
 					getRows().getChildren().clear();
-					syncModel(-1, -1); //we have to recreate all
+					getDataLoader().syncModel(-1, -1); //we have to recreate all
 				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 					unloadAll();
 				}
@@ -691,85 +719,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		return _innerWidth;
 	}
 	
-	/** Synchronizes the grid to be consistent with the specified model.
-	 *
-	 * @param min the lower index that a range of invalidated rows
-	 * @param max the higher index that a range of invalidated rows
-	 */
-	private void syncModel(int min, int max) {
-		final int newsz = _model.getSize();
-		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
-
-		int newcnt = newsz - oldsz;
-		int atg = _pgi != null ? getActivePage(): 0;
-		RowRenderer renderer = null;
-		Component next = null;		
-		if (oldsz > 0) {
-			if (min < 0) min = 0;
-			else if (min > oldsz - 1) min = oldsz - 1;
-			if (max < 0) max = oldsz - 1;
-			else if (max > oldsz - 1) max = oldsz - 1;
-			if (min > max) {
-				int t = min; min = max; max = t;
-			}
-
-			int cnt = max - min + 1; //# of affected
-			if (_model instanceof GroupsListModel) {
-			//detach all from end to front since groupfoot
-			//must be detached before group
-				newcnt += cnt; //add affected later
-				if (newcnt > 50 && !inPagingMold())
-					invalidate(); //performance is better
-
-				Component comp = (Component)_rows.getChildren().get(max);
-				next = comp.getNextSibling();
-				while (--cnt >= 0) {
-					Component p = comp.getPreviousSibling();
-					comp.detach();
-					comp = p;
-				}
-			} else { //ListModel
-				int addcnt = 0;
-				Component row = (Component)_rows.getChildren().get(min);
-				while (--cnt >= 0) {
-					next = row.getNextSibling();
-
-					if (cnt < -newcnt) { //if shrink, -newcnt > 0
-						row.detach(); //remove extra
-					} else if (((Row)row).isLoaded()) {
-						if (renderer == null)
-							renderer = getRealRenderer();
-						row.detach(); //always detach
-						_rows.insertBefore(newUnloadedRow(renderer, min++), next);
-						++addcnt;
-					}
-
-					row = next;
-				}
-
-				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
-					invalidate(); //performance is better
-			}
-		} else {
-			min = 0;
-
-			//auto create but it means <grid model="xx"><rows/>... will fail
-			if (_rows == null)
-				new Rows().setParent(this);
-		}
-
-		for (; --newcnt >= 0; ++min) {
-			if (renderer == null)
-				renderer = getRealRenderer();
-			_rows.insertBefore(newUnloadedRow(renderer, min), next);
-		}
-
-		if (_pgi != null) {
-			if (atg >= _pgi.getPageCount())
-				atg = _pgi.getPageCount() - 1;
-			_pgi.setActivePage(atg);
-		}
-	}
 	/** Unloads rows.
 	 * It unloads all loaded rows by recreating them.
 	 * Note: it assumes the model and renderer remains the same,
@@ -790,85 +739,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					renderer = getRealRenderer();
 				Component next = comp.getNextSibling();
 				comp.detach(); //always detach
-				_rows.insertBefore(newUnloadedRow(renderer, cnt), next);
+				_rows.insertBefore((Row)getDataLoader().newComponentItem(renderer, cnt), next);
 			}
 			comp = prev;
 		}
-	}
-
-	/** Creates an new and unloaded row. */
-	private final Row newUnloadedRow(RowRenderer renderer, int index) {
-		Row row = null;
-		if (_model instanceof GroupsListModel) {
-			final GroupsListModel model = (GroupsListModel) _model;
-			final GroupDataInfo info = model.getDataInfo(index);
-			switch(info.type){
-			case GroupDataInfo.GROUP:
-				row = newGroup(renderer);
-				break;
-			case GroupDataInfo.GROUPFOOT:
-				row = newGroupfoot(renderer);
-				break;
-			default:
-				row = newRow(renderer);
-			}		
-		}else{
-			row = newRow(renderer);
-		}
-		row.setLoaded(false);
-
-		newUnloadedCell(renderer, row);
-		return row;
-	}
-	private Row newRow(RowRenderer renderer) {
-		Row row = null;
-		if (renderer instanceof RowRendererExt)
-			row = ((RowRendererExt)renderer).newRow(this);
-		if (row == null) {
-			row = new Row();
-			row.applyProperties();
-		}
-		return row;
-	}
-	private Group newGroup(RowRenderer renderer) {
-		Group group = null;
-		if (renderer instanceof GroupRendererExt)
-			group = ((GroupRendererExt)renderer).newGroup(this);
-		if (group == null) {
-			group = new Group();
-			group.applyProperties();
-		}
-		return group;
-	}
-	private Groupfoot newGroupfoot(RowRenderer renderer) {
-		Groupfoot groupfoot = null;
-		if (renderer instanceof GroupRendererExt)
-			groupfoot = ((GroupRendererExt)renderer).newGroupfoot(this);
-		if (groupfoot == null) {
-			groupfoot = new Groupfoot();
-			groupfoot.applyProperties();
-		}
-		return groupfoot;
-	}
-	private Component newUnloadedCell(RowRenderer renderer, Row row) {
-		Component cell = null;
-		if (renderer instanceof RowRendererExt)
-			cell = ((RowRendererExt)renderer).newCell(row);
-
-		if (cell == null) {
-			cell = newRenderLabel(null);
-			cell.applyProperties();
-		}
-		cell.setParent(row);
-		return cell;
-	}
-	/** Returns the label for the cell generated by the default renderer.
-	 */
-	private static Label newRenderLabel(String value) {
-		final Label label =
-			new Label(value != null && value.length() > 0 ? value: " ");
-		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
-		return label;
 	}
 
 	/** Handles a private event, onInitRender. It is used only for
@@ -883,16 +757,16 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			if (inPagingMold()) {
 				pgsz = _pgi.getPageSize();
 				ofs = _pgi.getActivePage() * pgsz;
-				final int cnt = _rows.getChildren().size();
-				if (ofs >= cnt) { //not possible; just in case
-					ofs = cnt - pgsz;
-					if (ofs < 0) ofs = 0;
-				}
 			} else {
-				pgsz = 20;
-				ofs = 0;
+				pgsz = getDataLoader().getLimit();
+				ofs = getDataLoader().getOffset();
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough
+			}
+			final int cnt = _rows.getChildren().size();
+			if (ofs >= cnt) { //not possible; just in case
+				ofs = cnt - pgsz;
+				if (ofs < 0) ofs = 0;
 			}
 
 			int j = 0;
@@ -916,57 +790,11 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
-		//when this is called _model is never null
-		final int newsz = _model.getSize(), oldsz = _rows.getChildren().size();
-		int min = event.getIndex0(), max = event.getIndex1(), cnt;
-
-		switch (event.getType()) {
-		case ListDataEvent.INTERVAL_ADDED:
-			cnt = newsz - oldsz;
-			if (cnt <= 0)
-				throw new UiException("Adding causes a smaller list?");
-			if (cnt > 50 && !inPagingMold())
-				invalidate(); //performance is better
-			if (min < 0)
-				if (max < 0) min = 0;
-				else min = max - cnt + 1;
-			if (min > oldsz) min = oldsz;
-
-			RowRenderer renderer = null;
-			final Component next =
-				min < oldsz ? (Component)_rows.getChildren().get(min): null;
-			while (--cnt >= 0) {
-				if (renderer == null)
-					renderer = getRealRenderer();
-				_rows.insertBefore(newUnloadedRow(renderer, min++), next);
-			}
-			break;
-
-		case ListDataEvent.INTERVAL_REMOVED:
-			cnt = oldsz - newsz;
-			if (cnt <= 0)
-				throw new UiException("Removal causes a larger list?");
-			if (min >= 0) max = min + cnt - 1;
-			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
-			if (max > oldsz - 1) max = oldsz - 1;
-
-			//detach from end (due to groopfoot issue)
-			Component comp = (Component)_rows.getChildren().get(max);
-			while (--cnt >= 0) {
-				Component p = comp.getPreviousSibling();
-				comp.detach();
-				comp = p;
-			}
-			break;
-
-		default: //CONTENTS_CHANGED
-			syncModel(min, max);
-		}
-
+		getDataLoader().doListDataChange(event);
 		postOnInitRender(); //to improve performance
 	}
 
-	private static final RowRenderer getDefaultRowRenderer() {
+	public static final RowRenderer getDefaultRowRenderer() {
 		return _defRend;
 	}
 	private static final RowRenderer _defRend = new RowRenderer() {
@@ -977,6 +805,15 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			row.setValue(data);
 		}
 	};
+	/** Returns the label for the cell generated by the default renderer.
+	 */
+	private static Label newRenderLabel(String value) {
+		final Label label =
+			new Label(value != null && value.length() > 0 ? value: " ");
+		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
+		return label;
+	}
+
 	/** Returns the renderer used to render rows.
 	 */
 	private RowRenderer getRealRenderer() {
@@ -1008,7 +845,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			}
 
 			try {
-				_renderer.render(row, _model.getElementAt(row.getIndex()));
+				_renderer.render(row, getDataLoader().getModelElementAt(row.getIndex()));
 			} catch (Throwable ex) {
 				try {
 					final Label label = newRenderLabel(Exceptions.getMessage(ex));
@@ -1243,6 +1080,20 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 		return true;
 	}
+	/*package*/ DataLoader getDataLoader() {
+		if (_dataLoader == null) {
+			final String loadercls = (String) getAttribute("grid-dataloader");
+			try {
+				_dataLoader = loadercls != null ? 
+						(DataLoader) Classes.forNameByThread(loadercls).newInstance() :
+						new GridDataLoader();
+			} catch (Exception e) {
+				throw UiException.Aide.wrap(e);
+			}
+			_dataLoader.init(this);
+		}
+		return _dataLoader;
+	}
 
 	//Cloneable//
 	public Object clone() {
@@ -1314,7 +1165,18 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
 		if (!"100%".equals(_innerWidth))
-			render(renderer, "innerWidth", _innerWidth);		
+			render(renderer, "innerWidth", _innerWidth);
+		if (_scrollTop != 0) {
+			render(renderer, "_scrollTop", new Integer(_scrollTop));
+		}
+		if (_scrollLeft != 0) {
+			render(renderer, "_scrollLeft", new Integer(_scrollLeft));
+		}
+		if (_topPad != 0) {
+			render(renderer, "_topPad", new Integer(_topPad));
+		}
+		render(renderer, "totalSize_", new Integer(getDataLoader().getTotalSize()));
+		render(renderer, "_offset", new Integer(getDataLoader().getOffset()));
 	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
@@ -1325,7 +1187,15 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.equals("onInnerWidth")) {
+		if (cmd.equals("onDataLoading")) {
+			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, _preloadsz > 0 ? _preloadsz : 0));
+		} else if (cmd.equals("onScrollPos")) {
+			final Map data = request.getData();
+			_scrollTop = AuRequests.getInt(data, "top", 0);
+			_scrollLeft = AuRequests.getInt(data, "left", 0);
+		} else if (cmd.equals("onTopPad")) {
+			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
+		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else if (cmd.equals(Events.ON_RENDER)) {

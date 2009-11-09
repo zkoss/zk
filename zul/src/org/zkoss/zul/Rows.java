@@ -17,20 +17,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.AbstractList;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
-
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Defines the rows of a grid.
@@ -110,12 +108,19 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		if (count != 0) {
 			_visibleItemCount += count;
 			final Grid grid = getGrid();
-			if (grid != null && grid.inPagingMold()) {
-				final Paginal pgi = grid.getPaginal();
-				pgi.setTotalSize(_visibleItemCount);
-				if (grid.getModel() != null)
-					grid.invalidate();
-				else invalidate(); // the set of visible items might change
+			if (grid != null) {
+				if (grid.inPagingMold()) {
+					final Paginal pgi = grid.getPaginal();
+					pgi.setTotalSize(_visibleItemCount);
+					if (grid.getModel() != null)
+						grid.invalidate();
+					else invalidate(); // the set of visible items might change
+				} else if (((Cropper)grid.getDataLoader()).isCropper()){
+					invalidate();
+					grid.updateModelInfo();
+				} else {
+					smartUpdate("visibleItemCount", _visibleItemCount);
+				}
 			}
 		}
 	}
@@ -501,6 +506,17 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	        }
 	    }
 	};
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		final Grid grid = getGrid();
+		renderer.render("_offset", grid == null ? 0 : grid.getDataLoader().getOffset()); //go with each cropping
+		renderer.render("visibleItemCount", _visibleItemCount); //go with each cropping
+	}
+	
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -512,46 +528,14 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		//--Cropper--//
 		public boolean isCropper() {
 			final Grid grid = getGrid();
-			return grid != null &&
-				(grid.inPagingMold()
-				&& grid.getPageSize() <= getChildren().size());
-				//Single page is considered as not a cropper.
-				//isCropper is called after a component is removed, so
-				//we have to test >= rather than >
+			return grid != null && ((Cropper)grid.getDataLoader()).isCropper();
 		}
 		public Component getCropOwner() {
 			return getGrid();
 		}
 		public Set getAvailableAtClient() {
-			if (!isCropper())
-				return null;
-
 			final Grid grid = getGrid();
-			final Set avail = new LinkedHashSet(32);
-			final Paginal pgi = grid.getPaginal();
-			int pgsz = pgi.getPageSize();
-			int ofs = pgi.getActivePage() * pgsz;
-			
-			Row row = (Row) getFirstChild();
-			while(row != null) {
-				if (pgsz == 0) break;
-				if (row.isVisible()) {
-					if (--ofs < 0) {
-						--pgsz;
-						avail.add(row);
-					}
-				}
-				if (row instanceof Group) {
-					final Group g = (Group) row;
-					if (!g.isOpen()) {
-						for (int j = 0, len = g.getItemCount(); j < len; j++)
-							row = (Row) row.getNextSibling();
-					}
-				}
-				if (row != null)
-					row = (Row) row.getNextSibling();
-			}
-			return avail;
+			return grid != null ? ((Cropper)grid.getDataLoader()).getAvailableAtClient() : null;
 		}
 	}
 	/**

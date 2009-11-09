@@ -48,7 +48,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	private transient List _items;
 	
 	static {
-		addClientEvent(Group.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Group.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 	}
 	
 	public Group() {

@@ -21,6 +21,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	_innerWidth: "100%",
+	_scrollTop: 0,
+	_scrollLeft: 0,
 
 	$define: {
 		pagingPosition: _zkf = function () {
@@ -58,7 +60,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			if (zk.ie6_ && this.ebody) 
+			if (zk.ie6_ && this.ebody)
 				this.ebody.style.height = height;
 			// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this._setHgh(height);
@@ -164,9 +166,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (this.ebody) {
 			var bds = this.ebodytbl.tBodies;
-			if (!bds || !bds.length || (this.ehead && bds.length < 2))
+			if (!bds || bds.length <= 2 || (this.ehead && bds.length < 4))
 				this.ebodytbl.appendChild(document.createElement("TBODY"));
-			this.ebodyrows = this.ebodytbl.tBodies[this.ehead ? 1 : 0].rows;
+			this.ebodyrows = this.ebodytbl.tBodies[this.ehead ? 2 : 1].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
 		}
 		if (this.ehead) {
@@ -189,7 +191,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efoot) 
 				this.efoot.scrollLeft = this.ebody.scrollLeft;		
 		}
-		if (!this.paging) 
+		
+		this._scrollTop = this.ebody.scrollTop;
+		this._scrollLeft = this.ebody.scrollLeft;
+		this.fire('onScrollPos', {top: this._scrollTop, left: this._scrollLeft});
+		
+		if (!this.paging)
 			this.fireOnRender(zk.gecko ? 200 : 60);
 	},
 	_onRender: function () {
@@ -246,6 +253,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
+			this.ebody.scrollTop = this._scrollTop;
+			this.ebody.scrollLeft = this._scrollLeft;
 			this._shallSize = false;
 		}
 	},
@@ -279,7 +288,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (h < 0) h = 0;
 
 			this.ebody.style.height = h + "px";
-			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
 			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
@@ -334,7 +342,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			// bug #2799258 and #1599788
 			var hgh = this.getHeight();
-			if (!hgh || hgh == "auto") {
+			if (!this.isVflex() && (!hgh || hgh == "auto")) {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (this.ebody.clientWidth && hgh > 11) 
 					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
@@ -363,6 +371,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
 		out.push('</tr></tbody>');
+	},
+	domPad_: function (out, padId) { //used by mold
+		out.push('<tbody style="visibility:hidden">','<tr id="',
+				this.uuid, padId, '"></tr></tbody>');
 	},
 
 	//super//

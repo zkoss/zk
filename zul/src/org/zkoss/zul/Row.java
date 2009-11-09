@@ -173,10 +173,10 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	}
 
 
-	/** Sets whether the content of this row is loaded; used if
+	/** Internal Use only. Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	/*package*/ final void setLoaded(boolean loaded) {
+	public final void setLoaded(boolean loaded) {
 		if (loaded != _loaded) {
 			_loaded = loaded;
 
@@ -185,10 +185,10 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 				smartUpdate("_loaded", _loaded);
 		}
 	}
-	/** Returns whether the content of this row is loaded; used if
+	/** Internal Use Only. Returns whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	/*package*/ final boolean isLoaded() {
+	public final boolean isLoaded() {
 		return _loaded;
 	}
 	/** Returns the index of the specified row.

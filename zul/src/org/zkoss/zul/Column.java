@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scopes;
 
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.mesg.MZul;
 

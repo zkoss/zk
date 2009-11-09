@@ -47,7 +47,9 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
 
 /**
  * A listbox.
