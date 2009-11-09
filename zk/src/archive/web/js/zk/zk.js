@@ -101,6 +101,17 @@ zk = function (sel) {
 		}
 	}
 
+	/* Overrides all subclasses. */
+	function _overrideSub(dstpt, nm, oldfn, newfn) {
+		for (var sub = dstpt._$sub, j = sub ? sub.length: 0; --j >= 0;) {
+			var subpt = sub[j];
+			if (subpt[nm] === oldfn) {
+				subpt[nm] = newfn;
+				_overrideSub(subpt, nm, oldfn, newfn); //recursive
+			}
+		}
+	}
+
   return {
 	procDelay: 900,
 	tipDelay: 800,
@@ -175,6 +186,9 @@ zk = function (sel) {
 
 		thispt.$class = jclass;
 		thispt._$super = superpt;
+		thispt._$sub = [];
+		superpt._$sub.push(thispt);
+			//maintain a list of subclasses (used zk.override)
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
 
@@ -192,10 +206,9 @@ zk = function (sel) {
 	},
 
 	override: function (dst, backup, src) {
-		for (var nm in src) {
-			backup[nm] = dst[nm];
-			dst[nm] = src[nm];
-		}
+		for (var nm in src)
+			_overrideSub(dst, nm,
+				backup[nm] = dst[nm], dst[nm] = src[nm])
 	},
 
 	define: function (klass, props) {
@@ -493,6 +506,7 @@ zk.Object.prototype = (function () {
 			supers[mtdnm] = old; //restore
 		}
 	},
+	_$sub: [],
 
 	proxy: function (f) {
 		var fps = this._$proxies, fp;

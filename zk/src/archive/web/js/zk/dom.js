@@ -264,9 +264,11 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 		if (!zk.Desktop._ndt) zk.stateless();
 
 		var ret = jq$super[nm].call(this, w._redrawHTML());
-		w.bind(desktop);
-		zWatch.fireDown('beforeSize', w);
-		zWatch.fireDown('onSize', w);
+		if (!w.z_rod) {
+			w.bind(desktop);
+			zWatch.fireDown('beforeSize', w);
+			zWatch.fireDown('onSize', w);
+		}
 		return ret;
 	};
 });

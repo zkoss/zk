@@ -45,7 +45,11 @@ public class AuRequests {
 		if (uuids != null)
 			for (Iterator it = uuids.iterator(); it.hasNext();) {
 				final String uuid = (String)it.next();
-				items.add(desktop.getComponentByUuid(uuid.trim()));
+				final Component item = desktop.getComponentByUuidIfAny(uuid.trim());
+				if (item != null)
+					items.add(item);
+				//notice that it might be null (since the items might be
+				//removed by the last request)
 			}
 		return items;
 	}

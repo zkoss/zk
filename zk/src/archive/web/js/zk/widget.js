@@ -1187,6 +1187,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
+			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this._redrawHTML(skipper, true));
 			this.bind(desktop, skipper);
 		}
@@ -1234,6 +1235,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
+		else if (child.z_rod) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		jq(n).replaceWith(child._redrawHTML(skipper, true));
 		child.bind(desktop, skipper);
 	},
