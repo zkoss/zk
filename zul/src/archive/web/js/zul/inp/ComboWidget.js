@@ -205,6 +205,30 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		return ['auto', 'auto'];
 	},
 
+	/** Utility to implement {@link #redraw}. */
+	redraw_: function (out) {
+		var uuid = this.uuid,
+			zcls = this.getZclass();
+		out.push('<span', this.domAttrs_({text:true}), '><input id="',
+			uuid, '-real" class="', zcls, '-inp" autocomplete="off"',
+			this.textAttrs_(), '/><span id="', uuid, '-btn" class="',
+			zcls, '-btn"');
+
+		if (!this._buttonVisible)
+			out.push(' style="display:none"');
+
+		out.push('><span class="', zcls, '-img"></span></span>');
+
+		this.redrawpp_(out);
+
+		out.push('</span>');
+	},
+	/** Called by {@link #redraw_} to redraw popup.
+	 * <p>Default: does nothing
+	 */
+	redrawpp_: function (out) {
+	},
+
 	//super
 	getInputNode: function () {
 		return this.$n('real');

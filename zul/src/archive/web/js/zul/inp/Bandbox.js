@@ -26,5 +26,15 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-bandbox";
+	},
+
+	redrawpp_: function (out) {
+		out.push('<div id="', this.uuid, '-pp" class="', this.getZclass(),
+		'-pp" style="display:none" tabindex="-1">');
+
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+	
+		out.push('</div>');
 	}
 });

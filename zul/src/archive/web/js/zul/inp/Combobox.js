@@ -256,5 +256,17 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-combobox";
+	},
+
+	redrawpp_: function (out) {
+		var uuid = this.uuid;
+		out.push('<div id="', uuid, '-pp" class="', this.getZclass(),
+		'-pp" style="display:none" tabindex="-1"><table id="',
+		uuid, '-cave"', zUtl.cellps0, '>');
+
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+
+		out.push('</table></div>');
 	}
 });

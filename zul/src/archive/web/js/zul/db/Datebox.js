@@ -14,22 +14,35 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+(function () {
+	function _initPopup () {
+		this._pop = new zul.db.CalendarPop();
+		this._tm = new zul.db.CalendarTime();
+		this.appendChild(this._pop);
+		this.appendChild(this._tm);
+	}
+	function _reposition(wgt) {
+		var db = wgt.$n();
+		if (!db) return;
+		var pp = wgt.$n("pp"),
+			inp = wgt.getInputNode();
+
+		if(pp) {
+			zk(pp).position(inp, "after_start");
+			wgt._pop.syncShadow();
+			zk(inp).focus();
+		}
+	}
+
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
-	$init: (function() {
-		function initPopup () {
-			this._pop = new zul.db.CalendarPop();
-			this._tm = new zul.db.CalendarTime();
-			this.appendChild(this._pop);
-			this.appendChild(this._tm);
-		}
-		return function() {
-			this.$supers('$init', arguments);
-			this.$afterInit(initPopup);
-			this.listen({onChange: this}, -1000);
-		}
-	})(),
+	$init: function() {
+		this.$supers('$init', arguments);
+		this.$afterInit(_initPopup);
+		this.listen({onChange: this}, -1000);
+	},
+
 	$define: {
 		buttonVisible: function (v) {
 			var n = this.$n('btn');
@@ -340,8 +353,17 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getTimeZoneLabel: function () {
 		return "";
+	},
+
+	redrawpp_: function (out) {
+		out.push('<div id="', this.uuid, '-pp" class="', this.getZclass(),
+			'-pp" style="display:none" tabindex="-1">');
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		out.push('</div>');
 	}
 });
+
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -382,76 +404,60 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	isOpen: function () {
 		return zk(this.parent.$n("pp")).isVisible();
 	},
-	open: (function() {
-		function reposition(wgt) {
-			var db = wgt.$n();
-			if (!db) return;
-			var pp = wgt.$n("pp"),
-				inp = wgt.getInputNode();
-
-			if(pp) {
-				zk(pp).position(inp, "after_start");
-				wgt._pop.syncShadow();
-				zk(inp).focus();
-			}
+	open: function() {
+		var wgt = this.parent,
+			db = wgt.$n(), pp = wgt.$n("pp");
+		if (!db || !pp)
 			return;
+		var zcls = wgt.getZclass();
+
+		pp.className = db.className + " " + pp.className;
+		jq(pp).removeClass(zcls);
+
+		pp.style.width = pp.style.height = "auto";
+		pp.style.position = "absolute"; //just in case
+		pp.style.overflow = "auto"; //just in case
+		pp.style.display = "block";
+		pp.style.zIndex = "88000";
+
+		//FF: Bug 1486840
+		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
+		jq(pp).zk.makeVParent();
+
+		if (pp.offsetHeight > 200) {
+			//pp.style.height = "200px"; commented by the bug #2796461
+			pp.style.width = "auto"; //recalc
+		} else if (pp.offsetHeight < 10) {
+			pp.style.height = "10px"; //minimal
 		}
-		return function() {
-			var wgt = this.parent,
-				db = wgt.$n(), pp = wgt.$n("pp");
-			if (!db || !pp)
-				return;
-			var zcls = wgt.getZclass();
-
-			pp.className = db.className + " " + pp.className;
-			jq(pp).removeClass(zcls);
-
-			pp.style.width = pp.style.height = "auto";
-			pp.style.position = "absolute"; //just in case
-			pp.style.overflow = "auto"; //just in case
-			pp.style.display = "block";
-			pp.style.zIndex = "88000";
-
-			//FF: Bug 1486840
-			//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-			jq(pp).zk.makeVParent();
-
-
-			if (pp.offsetHeight > 200) {
-				//pp.style.height = "200px"; commented by the bug #2796461
-				pp.style.width = "auto"; //recalc
-			} else if (pp.offsetHeight < 10) {
-				pp.style.height = "10px"; //minimal
-			}
-			if (pp.offsetWidth < db.offsetWidth) {
-				pp.style.width = db.offsetWidth + "px";
-			} else {
-				var wd = jq.innerWidth() - 20;
-				if (wd < db.offsetWidth)
-					wd = db.offsetWidth;
-				if (pp.offsetWidth > wd)
-					pp.style.width = wd;
-			}
-			zk(pp).position(wgt.getInputNode(), "after_start");
-			setTimeout(function() {
-				reposition(wgt);
-			}, 150);
-			//IE, Opera, and Safari issue: we have to re-position again because some dimensions
-			//in Chinese language might not be correct here.
-			var fmt = wgt.getTimeFormat(),
-				value = wgt.getValue() || new Date();
-			if (fmt) {
-				var tm = wgt._tm;
-				tm.setVisible(true);
-				tm.setFormat(fmt);
-				tm.setValue(value);
-				tm.onShow();
-			} else {
-				wgt._tm.setVisible(false);
-			}
-
+		if (pp.offsetWidth < db.offsetWidth) {
+			pp.style.width = db.offsetWidth + "px";
+		} else {
+			var wd = jq.innerWidth() - 20;
+			if (wd < db.offsetWidth)
+				wd = db.offsetWidth;
+			if (pp.offsetWidth > wd)
+				pp.style.width = wd;
 		}
-	})(),
+		zk(pp).position(wgt.getInputNode(), "after_start");
+		setTimeout(function() {
+			_reposition(wgt);
+		}, 150);
+		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
+		//in Chinese language might not be correct here.
+		var fmt = wgt.getTimeFormat(),
+			value = wgt.getValue() || new Date();
+		if (fmt) {
+			var tm = wgt._tm;
+			tm.setVisible(true);
+			tm.setFormat(fmt);
+			tm.setValue(value);
+			tm.onShow();
+		} else {
+			wgt._tm.setVisible(false);
+		}
+
+	},
 	syncShadow: function () {
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(this.parent.$n('pp'), {
@@ -535,3 +541,5 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		evt.stop();
 	}
 });
+
+})();
