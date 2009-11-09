@@ -103,7 +103,7 @@ zk = function (sel) {
 
 	/* Overrides all subclasses. */
 	function _overrideSub(dstpt, nm, oldfn, newfn) {
-		for (var sub = dstpt._$sub, j = sub ? sub.length: 0; --j >= 0;) {
+		for (var sub = dstpt._$subs, j = sub ? sub.length: 0; --j >= 0;) {
 			var subpt = sub[j];
 			if (subpt[nm] === oldfn) {
 				subpt[nm] = newfn;
@@ -186,8 +186,8 @@ zk = function (sel) {
 
 		thispt.$class = jclass;
 		thispt._$super = superpt;
-		thispt._$sub = [];
-		superpt._$sub.push(thispt);
+		thispt._$subs = [];
+		superpt._$subs.push(thispt);
 			//maintain a list of subclasses (used zk.override)
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
@@ -506,7 +506,7 @@ zk.Object.prototype = (function () {
 			supers[mtdnm] = old; //restore
 		}
 	},
-	_$sub: [],
+	_$subs: [],
 
 	proxy: function (f) {
 		var fps = this._$proxies, fp;
