@@ -227,6 +227,8 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			break;
 		}
 		if (item != null) {
+			if (!item.isLoaded())
+				itemList.renderItem(item);
 			setSelectedCategory(item);
 			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 			item.focus();
