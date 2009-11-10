@@ -22,9 +22,10 @@ zk = function (sel) {
 		dst[p] = src[p];
 	return dst;
 })(zk, (function () {
-	var $oid = 0,
-		statelesscnt = 0,
-		logmsg;
+	var _oid = 0,
+		_statelesscnt = 0,
+		_logmsg,
+		_stamps = [], _stamp = new Date().getTime(); //zUtl not ready yet
 
 	function def(nm, before, after) {
 		return function (v, opts) {
@@ -85,7 +86,7 @@ zk = function (sel) {
 		return msg.join('');
 	}
 	function doLog() {
-		if (logmsg) {
+		if (_logmsg) {
 			var console = jq("#zk_log");
 			if (!console.length) {
 				jq(document.body).append(
@@ -95,10 +96,17 @@ zk = function (sel) {
 				console = jq("#zk_log");
 			}
 			console = console[0];
-			console.value += logmsg;
+			console.value += _logmsg;
 			console.scrollTop = console.scrollHeight;
-			logmsg = null;
+			_logmsg = null;
 		}
+	}
+
+	function _stampout() {
+		if (zk.mounting)
+			return zk.afterMount(_stampout);
+		zk.stamp('ending');
+		zk.stamp();
 	}
 
 	/* Overrides all subclasses. */
@@ -160,7 +168,7 @@ zk = function (sel) {
 			throw 'unknown superclass';
 
 		var jclass = function() {
-			this.$oid = ++$oid;
+			this.$oid = ++_oid;
 			this.$init.apply(this, arguments);
 
 			var ais = this._$ais;
@@ -286,8 +294,22 @@ zk = function (sel) {
 				})(arguments)
 			, (detailed === zk)
 		);
-		logmsg = (logmsg ? logmsg + msg: msg) + '\n';
+		_logmsg = (_logmsg ? _logmsg + msg: msg) + '\n';
 		setTimeout(function(){jq(doLog);}, 300);
+	},
+	stamp: function (nm) {
+		if (arguments.length) {
+			if (!_stamps.length)
+				setTimeout(_stampout, 0);
+			_stamps.push({n: nm, t: zUtl.now()});
+		} else if (_stamps.length) {
+			var t0 = _stamp;
+			for (var inf; (inf = _stamps.shift());) {
+				zk.log(inf.n + ': ' + (inf.t - _stamp));
+				_stamp = inf.t;
+			}
+			zk.log("total: " + (_stamp - t0));
+		}
 	},
 
 	ajaxURI: function (uri, opts) {
@@ -321,7 +343,7 @@ zk = function (sel) {
 	},
 	stateless: function (dtid, contextURI, updateURI) {
 		var Desktop = zk.Desktop, dt;
-		dtid = dtid || ('z_auto' + statelesscnt++);
+		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw "Desktop conflict";
 		zk.updateURI = zk.updateURI || updateURI;
