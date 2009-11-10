@@ -55,11 +55,13 @@ function (out) {
 	if (this.columns)
 		this.domFaker_(out, '-bdfaker', zcls);
 
-	this.domPad_(out, '-tpad');
-
-	if (this.rows) this.rows.redraw(out);
-
-	this.domPad_(out, '-bpad');
+	if (this.rows) {
+		if (this.domPad_ && !this.inPagingMold())
+			this.domPad_(out, '-tpad');
+		this.rows.redraw(out);
+		if (this.domPad_ && !this.inPagingMold())
+			this.domPad_(out, '-bpad');
+	}
 	
 	out.push('</table></div>');
 	

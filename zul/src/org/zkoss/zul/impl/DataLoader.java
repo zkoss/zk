@@ -17,9 +17,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.event.ListDataEvent;
 
@@ -55,7 +52,7 @@ public interface DataLoader {
 	public int getLimit();
 	
 	/**
-	 * Handle event when ListDataEvent is fired frow owner component.
+	 * Handle event when ListDataEvent is fired from owner component.
 	 */
 	public void doListDataChange(ListDataEvent event);
 	
@@ -83,7 +80,14 @@ public interface DataLoader {
 	/** Synchronizes the owner component to be consistent with the specified model.
 	 * 
 	 * @param offset the lower index of the range to do data synchronize.
-	 * @param limit the size of the range to do data synchronize. -1 means ALL.
+	 * @param limit the size of the range to do data synchronize. -1 means the current range.
 	 */
 	public void syncModel(int offset, int limit);
+	
+	/** Render the items of the specified range.
+	 * 
+	 * @param offset the lower index of the range to do item rendering.
+	 * @param limit the size of the range to do item rendering. -1 means the current range.
+	 */
+	public void renderItems(int offset, int limit);
 }

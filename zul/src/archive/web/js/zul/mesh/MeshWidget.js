@@ -166,9 +166,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (this.ebody) {
 			var bds = this.ebodytbl.tBodies;
-			if (!bds || bds.length <= 2 || (this.ehead && bds.length < 4))
-				this.ebodytbl.appendChild(document.createElement("TBODY"));
-			this.ebodyrows = this.ebodytbl.tBodies[this.ehead ? 2 : 1].rows;
+			if (!bds || !bds.length || (this.ehead && bds.length < 2)) {
+				var out = [];
+				if (this.domPad_ && !this.inPagingMold()) this.domPad_(out, '-tpad');
+				out.push('<tbody/>');
+				if (this.domPad_ && !this.inPagingMold()) this.domPad_(out, '-bpad');
+				jq(this.ebodytbl ).append(out.join(''));
+			}
+			this.ebodyrows = this.ebodytbl.tBodies[bds.length > 2 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
 		}
 		if (this.ehead) {
@@ -371,10 +376,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
 		out.push('</tr></tbody>');
-	},
-	domPad_: function (out, padId) { //used by mold
-		out.push('<tbody style="visibility:hidden">','<tr id="',
-				this.uuid, padId, '"></tr></tbody>');
 	},
 
 	//super//

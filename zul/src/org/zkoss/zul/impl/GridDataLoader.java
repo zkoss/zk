@@ -17,6 +17,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -118,7 +119,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			break;
 
 		default: //CONTENTS_CHANGED
-			syncModel(min, max - min + 1);
+			syncModel(min, max < 0 ? -1 : (max - min + 1));
 		}
 	}
 	
@@ -289,6 +290,26 @@ public class GridDataLoader implements DataLoader, Cropper {
 		}
 	}
 	
+	public void renderItems(int offset, int limit) {
+		final Grid grid = (Grid) getOwner();
+		final Rows rows = grid.getRows();
+		if (rows != null) {
+			final Set items = new LinkedHashSet();
+			if (offset >= getTotalSize()) {
+				return; //out of range, ignore!
+			}
+			int pgsz= limit;
+			for (final Iterator it = rows.getChildren().listIterator(offset);
+			pgsz > 0 && it.hasNext();) {
+				final Row row = (Row)it.next();
+				if (row.isVisible()) {
+					--pgsz;
+				}
+				items.add(row);
+			}
+			grid.renderItems(items);
+		}
+	}
 	//--Cropper--//
 	public boolean isCropper() {
 		return _grid != null &&

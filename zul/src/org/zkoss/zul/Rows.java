@@ -111,7 +111,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			if (grid != null) {
 				if (grid.inPagingMold()) {
 					final Paginal pgi = grid.getPaginal();
-					pgi.setTotalSize(_visibleItemCount);
+					pgi.setTotalSize(grid.getDataLoader().getTotalSize());
 					if (grid.getModel() != null)
 						grid.invalidate();
 					else invalidate(); // the set of visible items might change
@@ -389,7 +389,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 		final Grid grid = getGrid();
 		if (grid != null && grid.inPagingMold())
-			grid.getPaginal().setTotalSize(getVisibleItemCount());
+			grid.getPaginal().setTotalSize(grid.getDataLoader().getTotalSize());
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.

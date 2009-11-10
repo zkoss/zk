@@ -119,7 +119,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener, _dataloaderInitListener;
+	private transient EventListener _pgListener, _pgImpListener, _gridInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -155,17 +155,21 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				return new Iter();
 			}
 		};
-		//prepare a right moment to init DataLoader...
-		this.addEventListener("onInitDataLoader", _dataloaderInitListener = new EventListener() {
+		//prepare a right moment to init Grid
+		this.addEventListener("onInitGrid", _gridInitListener = new EventListener() {
 			public void onEvent(Event event) throws Exception {
-				if (_dataloaderInitListener != null) {
-					Grid.this.removeEventListener("onInitDataLoader", _dataloaderInitListener);
-					_dataloaderInitListener = null; 
+				if (_gridInitListener != null) {
+					Grid.this.removeEventListener("onInitGrid", _gridInitListener);
+					_gridInitListener = null; 
 				}
-				getDataLoader();
+				//initialize data loader
+				final DataLoader loader = getDataLoader();
+				//initialize paginal if any
+				Paginal pgi = getPaginal();
+				if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
 			}
 		});
-		Events.postEvent(new Event("onInitDataLoader", this));
+		Events.postEvent(new Event("onInitGrid", this));
 	}
 
 	/** Returns whether to grow and shrink vertical to fit their given space,
@@ -375,7 +379,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				} else { //_pgi != null
 					if (_pgi != _paging) {
 						if (_paging != null) _paging.detach();
-						_pgi.setTotalSize(_rows != null ? _rows.getVisibleItemCount(): 0);
+						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 						addPagingListener(_pgi);
 					}
 				}
@@ -391,7 +395,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
-		paging.setTotalSize(_rows != null ? _rows.getVisibleItemCount(): 0);
+		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 		paging.setParent(this);
 		addPagingListener(_pgi);
 	}
@@ -414,19 +418,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (_rows != null && _model != null && inPagingMold()) {
 		//theorectically, _rows shall not be null if _model is not null when
 		//this method is called. But, just in case -- if sent manually
-			final Renderer renderer = new Renderer();
-			try {
-				final Paginal pgi = getPaginal();
-				int pgsz = pgi.getPageSize();
-				final int ofs = pgi.getActivePage() * pgsz;
-				for (final Iterator it = _rows.getChildren().listIterator(ofs);
-				--pgsz >= 0 && it.hasNext();)
-					renderer.render((Row)it.next());
-			} catch (Throwable ex) {
-				renderer.doCatch(ex);
-			} finally {
-				renderer.doFinally();
-			}
+			final Paginal pgi = getPaginal();
+			int pgsz = pgi.getPageSize();
+			final int ofs = pgi.getActivePage() * pgsz;
+			getDataLoader().renderItems(ofs, pgsz);
 		}
 		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
 		else if (_rows != null) _rows.invalidate();
