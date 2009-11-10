@@ -206,9 +206,12 @@ zk = function (sel) {
 	},
 
 	override: function (dst, backup, src) {
-		for (var nm in src)
-			_overrideSub(dst, nm,
-				backup[nm] = dst[nm], dst[nm] = src[nm])
+		for (var nm in src) {
+			var oldfn;
+			if (!(oldfn = backup[nm] = dst[nm]))
+				throw "Override not found: "+nm;
+			_overrideSub(dst, nm, oldfn, dst[nm] = src[nm]);
+		}
 	},
 
 	define: function (klass, props) {

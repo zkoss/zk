@@ -47,12 +47,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		return 'z-tab' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
 	},
 	getLinkedPanel: function() {
-		var tabbox = this.getTabbox(), tabpanels;
-		if (tabbox) {
-			if ((tabpanels = tabbox.getTabpanels()))
-				return tabpanels.getChildAt(this.getIndex());
-		}
-		return null;
+		var w;
+		return (w = this.getTabbox()) && (w = w.getTabpanels()) ?
+			w.getChildAt(this.getIndex()): null;
 	},
 	_doCloseClick : function(evt) {
 		if (!this._disabled) {

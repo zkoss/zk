@@ -108,11 +108,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
 	}
-	function _unbind0(wgt) {
-		delete _binds[wgt.uuid];
-		wgt._node = wgt.desktop = null;
+	function _clearCache(wgt) {
+		wgt._node = null;
 		wgt._subnodes = {};
 		wgt._nodeSolved = false;
+	}
+	function _unbind0(wgt) {
+		delete _binds[wgt.uuid];
+		wgt.desktop = null;
+		_clearCache(wgt);
 	}
 	function _bindrod(wgt) {
 		_bind0(wgt);
@@ -697,7 +701,6 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
 					return w;
-		return null;
 	},
 	getChildIndex: function () {
 		var w = this.parent, j = 0;
@@ -1325,6 +1328,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._nodeSolved = true;
 		}
 		return n;
+	},
+	/** Clears the cached nodes (by {@link #$n}). */
+	clearCache: function () {
+		_clearCache(this);
 	},
 	getNode: _zkf,
 	getPage: function () {
