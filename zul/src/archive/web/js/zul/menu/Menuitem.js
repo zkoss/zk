@@ -113,7 +113,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_initUpld: function () {
-		zWatch.listen(zk.ie7 ? {onShow: this, onSize: this} : {onShow: this});
+		zWatch.listen(zk.ie7_ ? {onShow: this, onSize: this} : {onShow: this});
 		var v;
 		if (v = this._upload)
 			this._uplder = new zul.Upload(this, this.isTopmost() ? this.$n() : this.$n('a'), v);
@@ -121,7 +121,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_cleanUpld: function () {
 		var v;
 		if (v = this._uplder) {
-			zWatch.unlisten(zk.ie7 ? {onShow: this, onSize: this} : {onShow: this});
+			zWatch.unlisten(zk.ie7_ ? {onShow: this, onSize: this} : {onShow: this});
 			this._uplder = null;
 			v.destroy();
 		}
@@ -130,7 +130,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (this._uplder)
 			this._uplder.sync();
 	},
-	onSize: zk.ie7 ? _zkf : zk.$void, 
+	onSize: zk.ie7_ ? _zkf : zk.$void, 
 	doClick_: function (evt) {
 		if (this._disabled)
 			evt.stop();

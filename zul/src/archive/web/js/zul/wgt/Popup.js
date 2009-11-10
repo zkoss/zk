@@ -19,12 +19,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		return this.isVisible();
 	},
 	open: function (ref, offset, position, opts) {
-		var posInfo = this._posInfo(ref, offset, position);
-
-		var node = this.$n();
-		jq(node).css({position: "absolute"}).zk.makeVParent();
+		var posInfo = this._posInfo(ref, offset, position),
+			node = this.$n(),
+			$n = jq(node);
+		$n.css({position: "absolute"}).zk.makeVParent();
 		if (posInfo)
-			zk(node).position(posInfo.dim, posInfo.pos, opts);
+			$n.zk.position(posInfo.dim, posInfo.pos, opts);
 		
 		this.setVisible(true);
 		this.setFloating_(true);
@@ -100,9 +100,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		return zcls != null ? zcls: "z-popup";
 	},
 	onFloatUp: function(ctl){
-		var wgt = ctl.origin;
 		if (!this.isVisible()) 
 			return;
+		var wgt = ctl.origin;
+		
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound) 
@@ -155,7 +156,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		else 
 			c.style.height = "auto";
 	},
-	_fixWdh: zk.ie7 ? function () {
+	_fixWdh: zk.ie7_ ? function () {
 		var node = this.$n(),
 			wdh = node.style.width,
 			cn = jq(node).children('div'),

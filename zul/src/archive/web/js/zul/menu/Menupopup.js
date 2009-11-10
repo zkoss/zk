@@ -144,7 +144,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.close({sendOnOpen:true});
 	},
 	onShow: function () {
-		if (zk.ie7) {
+		if (zk.ie7_) {
 			var pp = this.$n();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 				var ul = this.$n('cave');

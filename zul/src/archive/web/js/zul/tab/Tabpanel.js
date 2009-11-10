@@ -82,7 +82,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function() {
 		this._fixPanelHgh();		//Bug 2104974
-		if (zk.ie) zk(this.getTabbox().$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
+		if (zk.ie && !zk.ie8) zk(this.getTabbox().$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
 	},
 	onShow: _zkf,
 	bind_: function() {

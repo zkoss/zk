@@ -462,7 +462,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					return;
 			}
 	},
-	_fixWdh: zk.ie7 ? function () {
+	_fixWdh: zk.ie7_ ? function () {
 		if (this._mode != 'embedded' && this._mode != 'popup' && this.isRealVisible()) {
 			var n = this.$n(),
 				cave = this.$n('cave').parentNode,
