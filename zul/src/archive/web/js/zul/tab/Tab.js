@@ -37,7 +37,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		return this.getChildIndex();
 	},
 	getZclass: function() {
-		if (this._zclass)
+		if (this._zclass != null)
 			return this._zclass;
 
 		var tabbox = this.getTabbox();

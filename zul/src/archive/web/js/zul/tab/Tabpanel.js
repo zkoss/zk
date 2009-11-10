@@ -22,7 +22,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		return this.$supers('isVisible', arguments) && this.isSelected();
 	},
 	getZclass: function() {
-		if (this._zclass)
+		if (this._zclass != null)
 			return this._zclass;
 			
 		var tabbox = this.getTabbox();

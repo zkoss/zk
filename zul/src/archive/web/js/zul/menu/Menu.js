@@ -50,14 +50,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
-	/** Removes the extra space (IE only) */
-	_fixBtn: function () {
-		var btn = this.$n('b');
-		if (btn) {
-			var txt = btn.innerHTML, $btn = zk(btn);
-			btn.style.width = ($btn.textSize(txt)[0] + $btn.padBorderWidth()) + "px";
-		}
-	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
@@ -69,8 +61,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				.domListen_(n, "onMouseOver")
 				.domListen_(n, "onMouseOut");
 		} else {
-			if (zk.ie) this._fixBtn();
-
 			var anc = this.$n('a');
 			this.domListen_(anc, "onMouseOver")
 				.domListen_(anc, "onMouseOut");

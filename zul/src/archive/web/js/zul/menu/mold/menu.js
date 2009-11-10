@@ -14,7 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var uuid = this.uuid,
-		zcls = this.getZclass();
+		zcls = this.getZclass(),
+		btn = zk.ie && !zk.ie8 ? 'input' : 'button';
 
 	if (this.isTopmost()) {
 		out.push('<td align="left"', this.domAttrs_(), '><table id="', uuid,
@@ -30,12 +31,12 @@ function (out) {
 
 		out.push('" style="width: auto;"><tbody><tr><td class="', zcls,
 				'-inner-l"><span class="', zcls, '-space"></span></td><td class="', zcls,
-				'-inner-m"><div><button id="', uuid,
+				'-inner-m"><div><', btn, ' id="', uuid,
 				'-b" type="button" class="', zcls, '-btn"');
 		if (this.getImage())
 			out.push(' style="background-image:url(', this.getImage(), ')"');
 
-		out.push('>', zUtl.encodeXML(this.getLabel()), '&nbsp;</button>');
+		out.push('>', zUtl.encodeXML(this.getLabel()), '&nbsp;</', btn, '>');
 
 		if (this.menupopup) this.menupopup.redraw(out);
 

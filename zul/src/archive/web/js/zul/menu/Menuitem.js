@@ -88,14 +88,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
-	/** Removes the extra space (IE only) */
-	_fixBtn: function () {
-		var btn = this.$n('b');
-		if (btn) {
-			var txt = btn.innerHTML, $btn = zk(btn);
-			btn.style.width = ($btn.textSize(txt)[0] + $btn.padBorderWidth()) + "px";
-		}
-	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
@@ -107,7 +99,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			}
 			if (this._upload) this._initUpld();
 		}
-		if (zk.ie && this.isTopmost()) this._fixBtn();
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
@@ -202,7 +193,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					y = evt.pageY,
 					diff = this.isTopmost() ? 1 : 0;
 				deact = x - diff <= xy[0] || x > xy[0] + n.offsetWidth
-					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight;
+					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie6_ ? -1 : 0);
 			}
 			if (deact)
 				this.$class._rmActive(this);

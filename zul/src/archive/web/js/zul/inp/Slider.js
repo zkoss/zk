@@ -30,7 +30,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 			this.rerender();
 		},
-		curpos: _zkf = function() {
+		curpos: function() {
 			if (this.desktop)
 				this._fixPos();
 		},
@@ -49,17 +49,16 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	getZclass: function() {
-		if (this._zclass != null) {
+		if (this._zclass != null)
 			return this._zclass;
-		} else {
-			var name = "z-slider";
-			if (this.inScaleMold()) 
-				return name + "-scale";
-			else if (this.inSphereMold()) 
-				return name + ("horizontal" == this._orient ? "-sphere-hor" : "-sphere-ver");
-			else 
-				return name + ("horizontal" == this._orient ? "-hor" : "-ver");
-		}
+		
+		var name = "z-slider";
+		if (this.inScaleMold()) 
+			return name + "-scale";
+		else if (this.inSphereMold()) 
+			return name + ("horizontal" == this._orient ? "-sphere-hor" : "-sphere-ver");
+		else 
+			return name + ("horizontal" == this._orient ? "-hor" : "-ver");
 	},
 	doMouseOver_: function(evt) {
 		jq(this.$n("btn")).addClass(this.getZclass() + "-btn-over");
@@ -79,7 +78,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		zul.inp.Slider.down_btn = null;
 		jq(document.body).unbind("mouseup", widget.onup_);
-		
 	},
 	doMouseDown_: function(evt) {
 		var btn = this.$n("btn");
@@ -90,31 +88,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_makeDraggable: function() {
 		this._drag = new zk.Draggable(this, this.$n("btn"), {
-			constraint: this._orient == "vertical" ? "vertical" : "horizontal",
+			constraint: this._orient || "horizontal",
 			starteffect: this._startDrag,
 			change: this._dragging,
 			endeffect: this._endDrag
 		});
 	},
-	_snap: function(dg, x, y) {
-		if ((typeof dg) == "number") {
-			var widget = this, y = x, x = dg;
-		} else {
-			var widget = dg.control;
-		}
-		var btn = widget.$n("btn"), ofs = zk(widget.$n()).cmOffset();
+	_snap: function(x, y) {
+		var btn = this.$n("btn"), ofs = zk(this.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
-			var max = ofs[0] + widget._getWidth();
+			var max = ofs[0] + this._getWidth();
 			if (x > max) 
 				x = max;
 		}
 		if (y <= ofs[1]) {
 			y = ofs[1];
 		} else {
-			var max = ofs[1] + widget._getHeight();
+			var max = ofs[1] + this._getHeight();
 			if (y > max) 
 				y = max;
 		}
@@ -138,8 +131,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	_dragging: function(dg) {
-		var widget = dg.control;
-		var pos = widget._realpos();
+		var widget = dg.control,
+			pos = widget._realpos();
 		if (pos != widget.slidepos) {
 			if (pos > widget._maxpos) 
 				pos = widget._maxpos;

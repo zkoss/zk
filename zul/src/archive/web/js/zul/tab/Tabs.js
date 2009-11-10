@@ -19,7 +19,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return this.parent;
 	},
 	getZclass: function() {
-		if (this._zclass)
+		if (this._zclass != null)
 			return this._zclass;
 			
 		var tabbox = this.getTabbox();
