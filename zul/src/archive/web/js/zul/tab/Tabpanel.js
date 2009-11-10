@@ -48,10 +48,10 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
 		var accd = this.getTabbox().inAccordionMold();
 		if (accd && animation) {
-			var p = this.getCaveNode();
+			var p = this.$n("real"); //accordion uses 'real'
 			zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var pl = accd ? this.getCaveNode() : this.$n(); //Can't use $n coz
+			var pl = accd ? this.$n("real") : this.$n();
 			if (toSel) {
 				jq(pl).show();
 				zWatch.fireDown('onShow', this);
