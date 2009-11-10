@@ -356,4 +356,6 @@ zUtl = { //static methods
 		return out.join('');
 	}
 };
+
+zk._t = zUtl.now(); //used by zk.js and mount.js
 })();

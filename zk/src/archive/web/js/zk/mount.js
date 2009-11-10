@@ -12,14 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.mnt = {
-	t: zUtl.now() //when JS loaded
-};
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
-	var t = 390 - (zUtl.now() - zk.mnt.t);
+	var t = 390 - (zUtl.now() - zk._t); //zk._t defined in util.js
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
@@ -315,9 +312,9 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 
 	/** run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
-		var t = zUtl.now(), dt = t - zk.mnt.t;
+		var t = zUtl.now(), dt = t - zk._t;
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
-			zk.mnt.t = t;
+			zk._t = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
 				//IE optimize the display if delay is too short
@@ -325,7 +322,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			fn();
 	}
 
-zk.copy(zk.mnt, { //Use internally
+zk.mnt = { //Use internally
 	push: function(w) {
 		w.children = [];
 		if (_wgts.length)
@@ -349,7 +346,7 @@ zk.copy(zk.mnt, { //Use internally
 		zk.mnt.curdt = null;
 		zk.mnt.binding = false;
 	}
-});
+};
 })(); //zk.mnt
 
 //Event Handler//

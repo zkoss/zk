@@ -25,7 +25,7 @@ zk = function (sel) {
 	var _oid = 0,
 		_statelesscnt = 0,
 		_logmsg,
-		_stamps = [], _stamp = new Date().getTime(); //zUtl not ready yet
+		_stamps = [];
 
 	function def(nm, before, after) {
 		return function (v, opts) {
@@ -303,12 +303,12 @@ zk = function (sel) {
 				setTimeout(_stampout, 0);
 			_stamps.push({n: nm, t: zUtl.now()});
 		} else if (_stamps.length) {
-			var t0 = _stamp;
+			var t0 = zk._t;
 			for (var inf; (inf = _stamps.shift());) {
-				zk.log(inf.n + ': ' + (inf.t - _stamp));
-				_stamp = inf.t;
+				zk.log(inf.n + ': ' + (inf.t - zk._t));
+				zk._t = inf.t;
 			}
-			zk.log("total: " + (_stamp - t0));
+			zk.log("total: " + (zk._t - t0));
 		}
 	},
 
