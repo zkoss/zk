@@ -68,6 +68,7 @@ div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
+	white-space: nowrap;
 }
 div.z-treefooter-cnt, div.z-treecol-cnt{
 	overflow: hidden;
