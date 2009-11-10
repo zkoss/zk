@@ -17,20 +17,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		tab = this.getLinkedTab(),
 		tabbox = this.getTabbox();
 	if (tabbox.inAccordionMold()) {//Accordion
+		var tab = this.getLinkedTab();
+		
 		out.push('<div class="', zcls, '-outer" id="', uuid, '">');
 		if (tab)
 			tab.redraw(out);
-		out.push('<div id="', uuid, '-cave"', this.domAttrs_(), '>',
+		out.push('<div id="', uuid, '-real"', this.domAttrs_({id:1}), '>',
 				'<div id="', uuid, '-cave">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></div></div>');
 
 	} else {//Default Mold
-		out.push('<div id="', uuid, '"' , this.domAttrs_(), '>');
+		out.push('<div', this.domAttrs_(), '>');
 		if (tabbox.isHorizontal())
 			out.push('<div id="', uuid, '-cave" class="', zcls, '-cnt">');
 		for (var w = this.firstChild; w; w = w.nextSibling)

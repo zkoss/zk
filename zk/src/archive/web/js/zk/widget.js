@@ -693,10 +693,11 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this;
 	},
 	getChildAt: function (j) {
-		if (j >= 0)
+		if (j >= 0 && j < this.nChildren)
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
 					return w;
+		return null;
 	},
 	getChildIndex: function () {
 		var w = this.parent, j = 0;

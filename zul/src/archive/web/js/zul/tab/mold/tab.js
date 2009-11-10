@@ -31,7 +31,7 @@ function (out) {
 					'<span class="', zcls, '-text">', this.domContent_(),
 					'</span></span></div></div></div></div>');
 		} else {
-			if (tbx.getPanelSpacing() != null && this.getIndex() != 0) {
+			if (tbx.getPanelSpacing() && this.getIndex()) {
 				out.push('<div style="margin:0;display:list-item;width:100%;height:', tbx.getpanelSpacing(), ';"></div>');
 			}
 			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',

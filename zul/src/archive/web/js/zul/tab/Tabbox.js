@@ -23,13 +23,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		orient: _zkf,
-		panelSpacing: function(v) {
-			if (v != null && v.length == 0)
-				this._panelSpacing = v = null;
-			this.rerender();
-		}
+		panelSpacing: _zkf
 	},
-
 	getTabs: function () {
 		return this.tabs;
 	},
@@ -53,58 +48,46 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		return this.getMold().indexOf("accordion") != -1;
 	},
 	getSelectedIndex: function() {
-		var tabnode = zk(this._selTab).jq[0],
-		    tab = zk.Widget.$(tabnode);
-		return tab != null ? tab.getIndex() : -1 ;
+		return this._selTab ? this._selTab.getIndex() : -1 ;
 	},
 	setSelectedIndex: function(index) {
-		var tabs = this.getTabs();
-		if (!tabs) return;
-		this.setSelectedTab(tabs.getChildAt(index));
+		if (this.tabs)
+			this.setSelectedTab(this.tabs.getChildAt(index));
 	},
 	getSelectedPanel: function() {
-		var tabnode = zk(this._selTab).jq[0],
-		    tab = zk.Widget.$(tabnode);
-		return tab != null ? tab.getLinkedPanel() : null;
+		return this._selTab ? this._selTab.getLinkedPanel() : null;
 	},
 	setSelectedPanel: function(panel) {
-		if (panel != null && panel.getTabbox() != this)
+		if (panel && panel.getTabbox() != this)
 			return
 		var tab = panel.getLinkedTab();
-		if (!tab) return
-		this.setSelectedTab(tab);
+		if (tab)
+			this.setSelectedTab(tab);
 	},
 	getSelectedTab: function() {
-		var tabnode = zk(this._selTab).jq[0];
-		return zk.Widget.$(tabnode);
+		return this._selTab;
 	},
 	setSelectedTab: function(tab) {
-        if (zul.tab.Tab.isInstance(tab))
-            tab = tab.uuid;
+		if (typeof tab == 'string')
+			tab = zk.Widget.$(tab);
         if (this._selTab != tab) {
             this._selTab = tab;
-            var wgt = zk.Widget.$(tab);
-            if (wgt) {
-                wgt.setSelected(true);
-            }
+			if (tab)
+				tab.setSelected(true);
         }
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		this.tabs = this.getTabs();
-		this.tabpanels = this.getTabpanels();
+		
+		// used in Tabs.js
 		this._scrolling = false;
-		zk.afterMount(
-			this.proxy(function () {
-				var wgt = zk(this._selTab).jq[0],
-					tab = zk.Widget.$(wgt);
-				if (tab)
-					tab.setSelected(true);
-			})
-		);
-	},
-	unbind_: function () {
-		this.$supers('unbind_', arguments);
+		var tab = this._selTab;
+		
+		if (tab) {
+			zk.afterMount(function() {
+				tab.setSelected(true);
+			});
+		}
 	},
 	//super//
 	removeChildHTML_: function (child, prevsib) {
