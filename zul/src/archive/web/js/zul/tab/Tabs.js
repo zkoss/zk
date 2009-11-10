@@ -27,6 +27,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return "z-tabs" + (tabbox.getMold() == "default" && tabbox.isVertical() ? '-ver' : '');
 	},
 	onSize: _zkf = function () {
+		this._scrollcheck("init");
 		this._fixWidth();
 	},
 	onShow: _zkf,
@@ -68,14 +69,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var self = this;
 		zk.afterMount(
 			function () {
-				function t() {
-					self._scrollcheck("init");
-					self._fixWidth();
-					self._inited = true;
-				}
-				if (this.parent.toolbar && zk.safari || zk.opera)
-					setTimeout(t, 50);
-				else t();
+				self._inited = true;
 			}
 		);
 	},
@@ -124,12 +118,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._doScroll(d >= 0 ? "down" : "up", d >= 0 ? d : Math.abs(d));
 					break;
 				case "init":
-					if (nodeOffsetTop < headerScrollTop) {
-						this._doScroll("up", headerScrollTop - nodeOffsetTop);
-					} else if (nodeOffsetTop + nodeOffsetHeight > headerScrollTop + headerOffsetHeight) {
-						this._doScroll("down", nodeOffsetTop + nodeOffsetHeight - headerScrollTop - headerOffsetHeight);
-					}
-					break;
 				case "vsel":
 					if (nodeOffsetTop < headerScrollTop) {
 						this._doScroll("up", headerScrollTop - nodeOffsetTop);
@@ -199,12 +187,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._doScroll(d >= 0 ? "right" : "left", d >= 0 ? d : Math.abs(d));
 					break;
 				case "init":
-					if (nodeOffsetLeft < headerScrollLeft) {
-						this._doScroll("left", headerScrollLeft - nodeOffsetLeft);
-					} else if (nodeOffsetLeft + nodeOffsetWidth > headerScrollLeft + headerOffsetWidth) {
-						this._doScroll("right", nodeOffsetLeft + nodeOffsetWidth - headerScrollLeft - headerOffsetWidth);
-					}
-					break;
 				case "sel":
 					if (nodeOffsetLeft < headerScrollLeft) {
 						this._doScroll("left", headerScrollLeft - nodeOffsetLeft);
