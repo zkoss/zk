@@ -3,7 +3,6 @@ ZK 3.6.4
 * Features
 
 * Bugs
-  2895686 - A deterministic way to gen ID of a message property file
 
 * Upgrade Notes:
 

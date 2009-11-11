@@ -71,19 +71,15 @@ public interface MessageConst {
 				throw new IllegalArgumentException("Neither path nor extension is allowed: "+filename);
 
 			//The algorithm is to make id as determinstic as possible
+			//though not really necessary
 			final BundleInfo bi = new BundleInfo(klass, "/metainfo/mesg/" + filename);
 			String sID = klass.getName();
 			int id = getId(sID);
 			synchronized (Aide.class) {
 				Integer iID;
 				final Map bis = new HashMap(_bis);
-				while (bis.containsKey(iID = new Integer(id))) {
-					if (sID.length() > 1)
-						id = getId(sID = sID.substring(1));
-							//not really deterministic but having good chance
-					else
-						++id; //no other choice (not determinstic)
-				}
+				while (bis.containsKey(iID = new Integer(id)))
+					++id; //not determinstic
 				bis.put(iID, bi);
 				_bis = bis; //_bis itself is readonly (so no sync required)
 			}
