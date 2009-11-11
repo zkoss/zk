@@ -18,8 +18,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
 	},
-	setVisibleItemCount: function(v) {
-		this._visibleItemCount = v;
+	$define: {
+		visibleItemCount: null
 	},
 	getGrid: function () {
 		return this.parent;
@@ -62,14 +62,13 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (!scOdd) return;
 		var n = this.$n();
 		if (!n) return; //Bug #2873478. Rows might not bounded yet
-		var odd = this._offset & 1; 
-		for (var j = 0, w = this.firstChild, even = !odd; w; w = w.nextSibling, ++j) {
+
+		for (var j = 0, w = this.firstChild, even = !(this._offset & 1); w; w = w.nextSibling, ++j) {
 			if (w.isVisible() && w.isStripeable_()) {
 				// check whether is a legal Row or not for zkex.grid.Detail
-				for (;n.rows[j] ;++j) {
-					if (n.rows[j].id == w.uuid)
-						break;
-				}
+				for (;n.rows[j] && n.rows[j].id != w.uuid;++j)
+					break;
+
 				jq(n.rows[j])[even ? 'removeClass' : 'addClass'](scOdd);
 				w.fire("onStripe");
 				even = !even;

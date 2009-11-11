@@ -41,6 +41,8 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Row extends XulElement implements org.zkoss.zul.api.Row {
+	private static final long serialVersionUID = 20091111L;
+
 	private Object _value;
 	private String _align, _valign;
 	private String _spans;

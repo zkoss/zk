@@ -98,6 +98,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Grid {
 	private static final Log log = Log.lookup(Grid.class);
+	private static final long serialVersionUID = 20091111L;
 
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Grid.onInitLaterPosted";
