@@ -19,11 +19,6 @@
 	background-image: url(${c:encodeURL('~./img/dot.gif')});
 	background-position: top center; background-repeat: repeat-y;
 }
-<c:if test="${c:isExplorer()}">
-.z-separator-ver-bar {
-	background-position: top left; <%-- Bug 2088712 --%>
-}
-</c:if>
 	</c:when>
 	<c:otherwise>
 	<%-- backward compatible with 3.0.3 and earlier --%>

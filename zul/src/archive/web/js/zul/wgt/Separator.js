@@ -30,6 +30,14 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	bind_: function () {
+		this.$supers('bind_', arguments);
+
+		var n;
+		if (zk.ie && (n = this.$n()).offsetWidth <= 2)
+			n.style.backgroundPosition = "left top"; //2088712
+	},
+
 	getZclass: function () {
 		var zcls = this.zclass,
 			bar = this.isBar();
