@@ -357,5 +357,5 @@ zUtl = { //static methods
 	}
 };
 
-zk._t = zUtl.now(); //used by zk.js and mount.js
+zk._t0 = zk._t1 = zUtl.now(); //_t0 used by zk.js and _t1 by mount.js
 })();

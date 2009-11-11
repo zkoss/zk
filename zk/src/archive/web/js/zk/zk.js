@@ -303,12 +303,12 @@ zk = function (sel) {
 				setTimeout(_stampout, 0);
 			_stamps.push({n: nm, t: zUtl.now()});
 		} else if (_stamps.length) {
-			var t0 = zk._t;
+			var t0 = zk._t0;
 			for (var inf; (inf = _stamps.shift());) {
-				zk.log(inf.n + ': ' + (inf.t - zk._t));
-				zk._t = inf.t;
+				zk.log(inf.n + ': ' + (inf.t - zk._t0));
+				zk._t0 = inf.t;
 			}
-			zk.log("total: " + (zk._t - t0));
+			zk.log("total: " + (zk._t0 - t0));
 		}
 	},
 

@@ -16,7 +16,7 @@ zkreg = zk.Widget.register; //a shortcut for WPD loader
 function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
-	var t = 390 - (zUtl.now() - zk._t); //zk._t defined in util.js
+	var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
@@ -312,9 +312,9 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 
 	/** run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
-		var t = zUtl.now(), dt = t - zk._t;
+		var t = zUtl.now(), dt = t - zk._t1;
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
-			zk._t = t;
+			zk._t1 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
 				//IE optimize the display if delay is too short
