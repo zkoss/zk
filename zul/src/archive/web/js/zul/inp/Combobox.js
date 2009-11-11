@@ -143,8 +143,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			} else
 				sel = this._next(null, bUp); 
 		} else
-			sel = this._next(null, bUp);
-
+			sel = this._next(null, true);
+		
+		if (sel)
+			zk(sel).scrollIntoView(this.$n('pp'));
+			
 		this._select(sel, {sendOnSelect:true});
 		evt.stop();
 	},
