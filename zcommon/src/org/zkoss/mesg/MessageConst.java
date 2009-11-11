@@ -16,14 +16,14 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.mesg;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 
 /**
- * Defines the constants of message types.
+ * Defines the constants of message codes.
  *
  * @author tomyeh
  * @see Messages
@@ -44,7 +44,7 @@ public interface MessageConst {
 			this.filename = filename;
 		}
 		public String toString() {
-			return "[" + this.klass + ", " + this.filename + ']';
+			return "[" + this.klass.getName() + ", " + this.filename + ']';
 		}
 	}
 
@@ -54,7 +54,7 @@ public interface MessageConst {
 	 * the identifier such that the client will have the same code as the server.
 	 */
 	public static class Aide {
-		private static BundleInfo[] _bis = new BundleInfo[0];
+		private static Map _bis = new HashMap(2);
 
 		/** Registers a message filename, and returns an identifier to
 		 * represent it.
@@ -67,36 +67,36 @@ public interface MessageConst {
 		public static final int register(Class klass, String filename) {
 			if (filename.indexOf('/') >= 0 || filename.indexOf('.') >= 0)
 				throw new IllegalArgumentException("Neither path nor extension is allowed: "+filename);
-			if (klass == null)
-				throw new IllegalArgumentException("null class");
 
-			filename = "/metainfo/mesg/" + filename;
-			final BundleInfo bi = new BundleInfo(klass, filename);
+			//The algorithm is to make id as determinstic as possible
+			//though not really necessary
+			final BundleInfo bi = new BundleInfo(klass, "/metainfo/mesg/" + filename);
+			String sID = klass.getName();
+			int id = getId(sID);
 			synchronized (Aide.class) {
-				final int sz = _bis.length + 1;
-				final List bis = new ArrayList(sz);
-				for (int j = 0; j < _bis.length; ++j) {
-					if (_bis[j].filename.equals(filename)
-					|| _bis[j].klass.equals(klass))
-						throw new IllegalStateException("Replicate message: "+bi
-							+"\nRegistered message files: "+Objects.toString(bis));
-					bis.add(_bis[j]);
-				}
-				bis.add(bi);
-				_bis = (BundleInfo[])bis.toArray(new BundleInfo[sz]);
-				return (sz << 16); //as the high word; starting from (1<<16)
+				Integer iID;
+				final Map bis = new HashMap(_bis);
+				while (bis.containsKey(iID = new Integer(id)))
+					++id; //not determinstic
+				bis.put(iID, bi);
+				_bis = bis; //_bis itself is readonly (so no sync required)
 			}
+			return id << 16; //as the high word
+		}
+		private static final int getId(String sID) {
+			final int id = sID.hashCode();
+			return (id >= 0 ? id: -id) & 0x3fff;
 		}
 		/** Returns the filename with path, but without extension, of the
 		 * specified message code.
 		 */
 		public static final BundleInfo getBundleInfo(int code) {
-			final BundleInfo[] bis = _bis; //so no sync is required
-			final int j = (code >>> 16) - 1; //starting from 1
-			if (j < 0 || j >= bis.length)
-				throw new IllegalArgumentException("Wrong message code: "+code
-					+"\nRegistered messages: "+Objects.toString(bis));
-			return bis[j];
+			final int id = code >>> 16;
+			final BundleInfo bi = (BundleInfo)_bis.get(new Integer(id));
+			if (bi == null)
+				throw new IllegalArgumentException("Wrong message ID: "+id
+					+" ("+code+")\nRegistered: "+_bis);
+			return bi;
 		}
 	}
 }
