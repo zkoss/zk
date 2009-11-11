@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
@@ -187,8 +188,7 @@ public class PropertyBundle {
 		}catch(RuntimeException ex) {
 			throw ex;
 		}catch(Exception ex) {
-			throw (IllegalArgumentException)
-				(new IllegalArgumentException().initCause(ex));
+			throw SystemException.Aide.wrap(ex, "Unable to load " + baseName + ".properties");
 		}
 	}
 
