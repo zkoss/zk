@@ -4,6 +4,7 @@ ZK 3.6.4
 
 * Bugs
   2895706 - Encoding of italian message is wrong
+  2895193 - Vertical separator not center aligned in IE
 
 * Upgrade Notes:
 
