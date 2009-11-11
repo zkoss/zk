@@ -21,12 +21,13 @@ function (out) {
 			this.encloseChildHTML_({out: out, child: w, vertical: true});
 		out.push('</table></div>');
 	} else {
+		var zcls = this.getZclass();
 		out.push('<div', this.domAttrs_(), '>')
 		if (this.scrollable) {
-			out.push('<div id="', this.uuid, '-left" class="', this.getZclass(), '-left"></div>');
-			out.push('<div id="', this.uuid, '-right" class="', this.getZclass(), '-right"></div>');
-			out.push('<div id="', this.uuid, '-body" class="', this.getZclass(), '-body">');
-			out.push('<div id="', this.uuid, '-cnt" class="', this.getZclass(), '-cnt">');
+			out.push('<div id="', uuid, '-left" class="', zcls, '-left"></div>',
+					'<div id="', uuid, '-right" class="', zcls, '-right"></div>',
+					'<div id="', uuid, '-body" class="', zcls, '-body">',
+					'<div id="', uuid, '-cnt" class="', zcls, '-cnt">');
 		}
 		out.push('<table', zUtl.cellps0, '>', '<tr valign="bottom" id="', uuid, '-cave">');
 		for (var w = this.firstChild; w; w = w.nextSibling)

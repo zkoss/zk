@@ -13,11 +13,13 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var zcls = this.getZclass();
+	var zcls = this.getZclass(),
+		uuid = this.uuid;
 	
-	out.push('<span', this.domAttrs_({text:true}), '>');
-	out.push('<input id="', this.uuid,'-real"', 'class="', this.getZclass(),'-inp"',this.textAttrs_(),'/>');
-	out.push('<span id="', this.uuid,'-btn"', 'class="', this.getZclass(),'-btn" ');
+	out.push('<span', this.domAttrs_({text:true}), '>',
+			'<input id="', uuid,'-real"', 'class="', zcls,'-inp"',
+			this.textAttrs_(),'/>', '<span id="', uuid,'-btn"',
+			'class="', zcls,'-btn" ');
 	
 	if(!this.isButtonVisible())
 		out.push('" style="display:none"');

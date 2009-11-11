@@ -43,9 +43,7 @@ function (out) {
 			, uuid, '-splitbtn" class="', zcls, '-splt-btn"');
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
-		out.push('></span></div>');
-				
-		out.push('<div id="', uuid, '-colled" class="', zcls,
+		out.push('></span></div>', '<div id="', uuid, '-colled" class="', zcls,
 				'-colpsd" style="display:none"><div id="',
 				uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
 		if (!this._collapsible)

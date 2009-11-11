@@ -28,9 +28,9 @@ function (out) {
 	if(isScaleMold)
 		this.uuid = uuid;
 	
-		out.push('<div id="', uuid, '-inner" class="', zcls, '-center">');
-		out.push('<div id="', uuid, '-btn" class="', zcls, '-btn">');
-		out.push('</div></div></div>');
+		out.push('<div id="', uuid, '-inner" class="', zcls, '-center">',
+				'<div id="', uuid, '-btn" class="', zcls, '-btn">',
+				'</div></div></div>');
 	
 	if(isScaleMold)
 		out.push('</div>');

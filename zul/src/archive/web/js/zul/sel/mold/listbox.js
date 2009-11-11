@@ -63,8 +63,7 @@ function (out) {
 
 	out.push('</table><', tag, ' id="', uuid,
 		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
-		tag, '>');
-	out.push("</div>");
+		tag, '>', "</div>");
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
