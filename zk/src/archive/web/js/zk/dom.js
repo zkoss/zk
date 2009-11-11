@@ -23,6 +23,7 @@ zjq = function (jq) { //ZK extension
 			'letter-spacing', 'line-height', 'text-align', 'text-decoration',
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
+		_txtStylesx,
 		_txtStyles2 = ["color", "background-color", "background"],
 		_zsyncs = [],
 		_pendzsync = 0,
@@ -690,10 +691,13 @@ zjq.prototype = { //ZK extension
 			tsd = zk._txtSizDiv = document.createElement("DIV");
 			tsd.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
 			document.body.appendChild(tsd);
+			_txtStylesx = [];
+			for (var ss = _txtStyles, j = ss.length; j--;)
+				_txtStylesx[j] = ss[j].$camel();
 		}
 
-		for (var ss = _txtStyles, j = ss.length; j--;) {
-			var nm = ss[j].$camel();
+		for (var ss = _txtStylesx, j = ss.length; j--;) {
+			var nm = ss[j];
 			tsd.style[nm] = jq(el).css(nm);
 		}
 
