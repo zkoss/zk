@@ -21,8 +21,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	_innerWidth: "100%",
-	_scrollTop: 0,
-	_scrollLeft: 0,
+	_currentTop: 0,
+	_currentLeft: 0,
 
 	$define: {
 		pagingPosition: _zkf = function () {
@@ -197,9 +197,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.efoot.scrollLeft = this.ebody.scrollLeft;		
 		}
 		
-		this._scrollTop = this.ebody.scrollTop;
-		this._scrollLeft = this.ebody.scrollLeft;
-		this.fire('onScrollPos', {top: this._scrollTop, left: this._scrollLeft});
+		this._currentTop = this.ebody.scrollTop;
+		this._currentLeft = this.ebody.scrollLeft;
+		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
 		
 		if (!this.paging)
 			this.fireOnRender(zk.gecko ? 200 : 60);
@@ -258,8 +258,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
-			this.ebody.scrollTop = this._scrollTop;
-			this.ebody.scrollLeft = this._scrollLeft;
+			this.ebody.scrollTop = this._currentTop;
+			this.ebody.scrollLeft = this._currentLeft;
 			this._shallSize = false;
 		}
 	},

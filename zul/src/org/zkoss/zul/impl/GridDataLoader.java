@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.UiException;
@@ -82,9 +84,12 @@ public class GridDataLoader implements DataLoader, Cropper {
 		switch (event.getType()) {
 		case ListDataEvent.INTERVAL_ADDED:
 			cnt = newsz - oldsz;
-			if (cnt <= 0)
-				throw new UiException("Adding causes a smaller list?");
-			if (cnt > 50 && !_grid.inPagingMold())
+			if (cnt <= 0) {
+				syncModel(-1, -1); //out of sync, force sync
+				return;
+				//throw new UiException("Adding causes a smaller list?");
+			}
+			if (cnt > 50 && !inPagingMold())
 				_grid.invalidate(); //performance is better
 			if (min < 0)
 				if (max < 0) min = 0;
@@ -96,15 +101,18 @@ public class GridDataLoader implements DataLoader, Cropper {
 				min < oldsz ? (Component)rows.getChildren().get(min): null;
 			while (--cnt >= 0) {
 				if (renderer == null)
-					renderer = getRealRenderer();
+					renderer = (RowRenderer) getRealRenderer();
 				rows.insertBefore((Row)newComponentItem(renderer, min++), next);
 			}
 			break;
 
 		case ListDataEvent.INTERVAL_REMOVED:
 			cnt = oldsz - newsz;
-			if (cnt <= 0)
-				throw new UiException("Removal causes a larger list?");
+			if (cnt <= 0) {
+				syncModel(-1, -1); //out of sync, force sync
+				return;
+				//throw new UiException("Removal causes a larger list?");
+			}
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;
@@ -124,7 +132,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 	
 	/** Creates a new and unloaded row. */
-	public Object newComponentItem(Object renderer, int index) {
+	protected Object newComponentItem(Object renderer, int index) {
 		final RowRenderer renderer0 = (RowRenderer) renderer;
 		final ListModel model = ((Grid)getOwner()).getModel();
 		Row row = null;
@@ -144,7 +152,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		}else{
 			row = newRow(renderer0);
 		}
-		row.setLoaded(false);
+		((LoadStatus)(((AbstractComponent)row).getExtraCtrl())).setLoaded(false);
 
 		newUnloadedCell(renderer0, row);
 		return row;
@@ -201,11 +209,24 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return label;
 	}
 	
-	protected RowRenderer getRealRenderer() {
+	public Object getRealRenderer() {
 		final RowRenderer renderer = _grid.getRowRenderer();
-		return renderer  != null ? renderer : _grid.getDefaultRowRenderer(); 
+		return renderer != null ? renderer : _defRend; 
 	}
 
+	private static final RowRenderer getDefaultRowRenderer() {
+		return _defRend;
+	}
+	
+	private static final RowRenderer _defRend = new RowRenderer() {
+		public void render(Row row, Object data) {
+			final Label label = newRenderLabel(Objects.toString(data));
+			label.applyProperties();
+			label.setParent(row);
+			row.setValue(data);
+		}
+	};
+	
 	public void syncModel(int offset, int limit) {
 		int min = offset;
 		int max = offset + limit - 1;
@@ -215,7 +236,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		final int newsz = _model.getSize();
 		final int oldsz = rows != null ? rows.getChildren().size(): 0;
 		final Paginal pgi = _grid.getPaginal();
-		final boolean inPaging = _grid.inPagingMold();
+		final boolean inPaging = inPagingMold();
 
 		int newcnt = newsz - oldsz;
 		int atg = pgi != null ? _grid.getActivePage(): 0;
@@ -253,9 +274,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
 						row.detach(); //remove extra
-					} else if (((Row)row).isLoaded()) {
+					} else if (((LoadStatus)((AbstractComponent)row).getExtraCtrl()).isLoaded()) {
 						if (renderer == null)
-							renderer = getRealRenderer();
+							renderer = (RowRenderer)getRealRenderer();
 						row.detach(); //always detach
 						rows.insertBefore((Row) newComponentItem(renderer, min++), next);
 						++addcnt;
@@ -279,7 +300,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
-				renderer = getRealRenderer();
+				renderer = (RowRenderer) getRealRenderer();
 			rows.insertBefore((Row)newComponentItem(renderer, min), next);
 		}
 		
@@ -290,30 +311,17 @@ public class GridDataLoader implements DataLoader, Cropper {
 		}
 	}
 	
-	public void renderItems(int offset, int limit) {
-		final Grid grid = (Grid) getOwner();
-		final Rows rows = grid.getRows();
-		if (rows != null) {
-			final Set items = new LinkedHashSet();
-			if (offset >= getTotalSize()) {
-				return; //out of range, ignore!
-			}
-			int pgsz= limit;
-			for (final Iterator it = rows.getChildren().listIterator(offset);
-			pgsz > 0 && it.hasNext();) {
-				final Row row = (Row)it.next();
-				if (row.isVisible()) {
-					--pgsz;
-				}
-				items.add(row);
-			}
-			grid.renderItems(items);
-		}
+	protected boolean inPagingMold() {
+		return "paging".equals(_grid.getMold());
+	}
+	
+	public void updateModelInfo() {
+		// do nothing
 	}
 	//--Cropper--//
 	public boolean isCropper() {
 		return _grid != null &&
-				_grid.inPagingMold()
+				inPagingMold()
 				&& _grid.getPageSize() <= getTotalSize();
 				//Single page is considered as not a cropper.
 				//isCropper is called after a component is removed, so

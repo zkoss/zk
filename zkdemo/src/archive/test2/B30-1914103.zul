@@ -24,7 +24,7 @@ If you drag the size of borderlayout, or the column size of grid in center
 panel, the column will resize to a wrong width .</h:p>
 <borderlayout>
 <west size="33%" splittable="true">
-<listbox width="400px">
+<listbox width="400px" sizedByContent="true">
 <auxhead>
 <auxheader colspan="2">
 <label id="span">ss</label>
@@ -96,7 +96,7 @@ onClick="alert(self.label)" />
 </listbox>
 </west>
 <center>
-<grid>
+<grid sizedByContent="true">
 <columns sizable="true">
 <column width="250px" label="Type">
 <menubar>
@@ -163,7 +163,7 @@ onClick="alert(self.label)" />
 
 </center>
 <east size="30%" splittable="true">
-<tree id="tree" width="90%" rows="5">
+<tree id="tree" width="90%" rows="5" sizedByContent="true">
 <treecols sizable="true">
 <treecol label="Name">
 <menubar>

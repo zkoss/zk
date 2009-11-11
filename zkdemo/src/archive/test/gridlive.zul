@@ -61,7 +61,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</foot>
 	</grid>
 	<zscript>
-		gp.paging.detailed = false;
+		gp.paginal.detailed = false;
 	</zscript>
 
 	<separator/>

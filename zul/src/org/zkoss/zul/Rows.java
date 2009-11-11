@@ -117,7 +117,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					else invalidate(); // the set of visible items might change
 				} else if (((Cropper)grid.getDataLoader()).isCropper()){
 					invalidate();
-					grid.updateModelInfo();
+					grid.getDataLoader().updateModelInfo();
 				} else {
 					smartUpdate("visibleItemCount", _visibleItemCount);
 				}

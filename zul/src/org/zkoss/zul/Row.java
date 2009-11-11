@@ -16,19 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
-import java.io.IOException;
 
-import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A single row in a {@link Rows} element.
@@ -178,7 +173,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	/** Internal Use only. Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	public final void setLoaded(boolean loaded) {
+	/*package*/ final void setLoaded(boolean loaded) {
 		if (loaded != _loaded) {
 			_loaded = loaded;
 
@@ -190,7 +185,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	/** Internal Use Only. Returns whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	public final boolean isLoaded() {
+	/*package*/ final boolean isLoaded() {
 		return _loaded;
 	}
 	/** Returns the index of the specified row.
@@ -309,4 +304,24 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}
+	
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements LoadStatus {
+		//-- LoadStatus --//
+		public boolean isLoaded() {
+			return Row.this.isLoaded();
+		}
+
+		public void setLoaded(boolean loaded) {
+			Row.this.setLoaded(loaded);
+		}
+	}
+
 }

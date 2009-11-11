@@ -69,14 +69,6 @@ public interface DataLoader {
 	 */
 	public Object getModelElementAt(int index);
 	
-	/**
-	 * New a component item.
-	 * @param renderer the associated renderer for the item.
-	 * @param index the index of the item
-	 * @return the component
-	 */
-	public Object newComponentItem(Object renderer, int index);
-	
 	/** Synchronizes the owner component to be consistent with the specified model.
 	 * 
 	 * @param offset the lower index of the range to do data synchronize.
@@ -84,10 +76,12 @@ public interface DataLoader {
 	 */
 	public void syncModel(int offset, int limit);
 	
-	/** Render the items of the specified range.
-	 * 
-	 * @param offset the lower index of the range to do item rendering.
-	 * @param limit the size of the range to do item rendering. -1 means the current range.
+	/** Used to update some extra control information to the client.
 	 */
-	public void renderItems(int offset, int limit);
+	public void updateModelInfo();
+	
+	/** Return the renderer to do rendering.
+	 * 
+	 */
+	public Object getRealRenderer();
 }
