@@ -35,7 +35,7 @@ public interface MessageConst {
 	/** The info of each message bundle.
 	 * <p>Each bundle is associated with a class and a set of files.
 	 */
-	public static class BundleInfo {
+	/*package*/ static class BundleInfo {
 		public final Class klass;
 		public final String filename;
 
@@ -90,7 +90,7 @@ public interface MessageConst {
 		/** Returns the filename with path, but without extension, of the
 		 * specified message code.
 		 */
-		public static final BundleInfo getBundleInfo(int code) {
+		/*package*/ static final BundleInfo getBundleInfo(int code) {
 			final int id = code >>> 16;
 			final BundleInfo bi = (BundleInfo)_bis.get(new Integer(id));
 			if (bi == null)
