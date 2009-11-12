@@ -23,7 +23,7 @@ zjq = function (jq) { //ZK extension
 			'letter-spacing', 'line-height', 'text-align', 'text-decoration',
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
-		_txtStylesx,
+		_txtStylesCamel, _txtSizDiv, //inited in textSize
 		_txtStyles2 = ["color", "background-color", "background"],
 		_zsyncs = [],
 		_pendzsync = 0,
@@ -685,24 +685,24 @@ zjq.prototype = { //ZK extension
 		return [l, t];
 	},
 	textSize: function (txt) {
-		var el = this.jq[0],
-			tsd = zk._txtSizDiv;
-		if (!tsd) {
-			tsd = zk._txtSizDiv = document.createElement("DIV");
-			tsd.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
-			document.body.appendChild(tsd);
-			_txtStylesx = [];
+		if (!_txtSizDiv) {
+			_txtSizDiv = document.createElement("DIV");
+			_txtSizDiv.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
+			document.body.appendChild(_txtSizDiv);
+
+			_txtStylesCamel = [];
 			for (var ss = _txtStyles, j = ss.length; j--;)
-				_txtStylesx[j] = ss[j].$camel();
+				_txtStylesCamel[j] = ss[j].$camel();
 		}
 
-		for (var ss = _txtStylesx, j = ss.length; j--;) {
+		var jq = this.jq;
+		for (var ss = _txtStylesCamel, j = ss.length; j--;) {
 			var nm = ss[j];
-			tsd.style[nm] = jq(el).css(nm);
+			_txtSizDiv.style[nm] = jq.css(nm);
 		}
 
-		tsd.innerHTML = txt;
-		return [tsd.offsetWidth, tsd.offsetHeight];
+		_txtSizDiv.innerHTML = txt;
+		return [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
 	},
 
 	dimension: function (revised) {
