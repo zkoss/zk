@@ -26,20 +26,20 @@
 .z-caption .z-toolbar a:hover {
 	text-decoration: underline;
 }
-
 <%-- toolbar horizontal alignment --%>
-.z-toolbar-start {
+.z-toolbar-start,
+.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt {
 	float: left; clear: none;
 }
-.z-toolbar-center {
+.z-toolbar-center,
+.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt {
 	text-align: center;
 	margin: 0 auto;
 }
-.z-toolbar-end {
+.z-toolbar-end,
+.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt {
 	float: right; clear: none;
 }
-
-
 <%-- Toolbar Panel Mold--%>
 .z-toolbar-panel {
 	padding: 5px;
@@ -57,22 +57,10 @@
 	padding: 1px;
 }
 
-.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt{
-	clear: none;
-	float: left;
-}
-
 .z-toolbar-panel .z-toolbar-panel-center{
 	text-align: center;
 }
-.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt{
-	margin: 0 auto;
-}
 
-.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt{
-	clear: none;
-	float: right;
-}
 <%-- Toolbarbutton --%>
 .z-toolbarbutton {
 	display:-moz-inline-box;

@@ -20,17 +20,17 @@ div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
 }
 div.z-listbox-header th.z-listheader-sort div.z-listheader-cnt {
 	cursor: pointer; padding-right: 9px;
-	background: transparent no-repeat scroll 99% center;
+	background: transparent no-repeat 99% center;
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 }
 div.z-listbox-header th.z-listheader-sort-asc div.z-listheader-cnt {
 	cursor: pointer; padding-right: 9px;
-	background: transparent no-repeat scroll 99% center;
+	background: transparent no-repeat 99% center;
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 }
 div.z-listbox-header th.z-listheader-sort-dsc div.z-listheader-cnt {
 	cursor: pointer; padding-right: 9px;
-	background: transparent no-repeat scroll 99% center;
+	background: transparent no-repeat 99% center;
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 div.z-listbox-body {

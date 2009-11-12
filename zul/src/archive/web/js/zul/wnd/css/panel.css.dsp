@@ -5,8 +5,10 @@
 	-webkit-border-radius: 4px;
 	-webkit-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 }
-<%-- Top Left --%>
-.z-panel-tl {
+.z-panel-tl,
+.z-panel-tr,
+.z-panel-bl,
+.z-panel-br {
 	background: transparent no-repeat 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	margin-right: 5px;
@@ -15,27 +17,34 @@
 	line-height: 0;
 	zoom: 1;
 }
-<%-- Top Right --%>
+.z-panel-bl {
+	background: transparent no-repeat 0 -5px;
+}
+.z-panel-br,
 .z-panel-tr {
 	background: transparent no-repeat right -10px;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	position: relative;
-	height: 5px;
 	margin-right: -5px;
-	font-size: 0;
-	line-height:0;
-	zoom: 1;
+}
+.z-panel-br {
+	background: transparent no-repeat right bottom;
 }
 <%-- Header --%>
-.z-panel-hm .z-panel-header {
+.z-panel-hm .z-panel-header,
+.z-panel-header {
 	color: #0F3B82;
-	padding: 0;
-	padding-bottom: 4px;
+	padding: 0 0 4px 0;
 	background: transparent;
-	border: 0 none;
+	border: 0;
 	font-weight:bold;
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
+}
+.z-panel-header {
+	background: transparent repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
+	border: 1px solid #B1CBD5;
+	padding: 5px 3px 4px 5px;
 }
 <%-- Header Left --%>
 .z-panel-hl {
@@ -87,25 +96,6 @@
 	background: #CDF0FF;
 	overflow: hidden;
 }
-<%-- Bottom Left --%>
-.z-panel-bl {
-	background: transparent no-repeat 0 -5px;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
-	height: 5px;
-	margin-right: 5px;
-	zoom: 1;
-}
-<%-- Bottom Right --%>
-.z-panel-br {
-	background: transparent no-repeat right bottom;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
-	position: relative;
-	height: 5px;
-	margin-right: -5px;
-	font-size: 0;
-	line-height:0;
-	zoom: 1;
-}
 .z-panel-move-ghost {
 	position: absolute;
 	background: #D7E6F7;
@@ -130,18 +120,6 @@
 .z-panel,
 .z-panel-header {
 	overflow: hidden;
-}
-.z-panel-header {
-	background:transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
-	border: 1px solid #B1CBD5;
-	color: #0F3B82;
-	padding: 5px;
-	padding-bottom: 4px;
-	padding-right: 3px;	
-	font-weight: bold;
-	font-size: ${fontSizeM};
-	font-family: ${fontFamilyT};
 }
 .z-panel-hl .z-panel-header {
 	background-color: transparent;
@@ -183,9 +161,6 @@
 .z-panel-noborder .z-panel-children-noborder {
 	border-width: 0;
 }
-.z-panel-children-noheader {
-	border-top: 1px solid #B1CBD5;
-}
 .z-panel-fl.z-panel-nobtm2 {
 	display: none;
 }
@@ -222,10 +197,8 @@
 	overflow: hidden; 
 	float: right;
 	margin-left: 2px;
-	background-color : transparent;
+	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/wnd/btn.gif')});
-	background-position : 0 0;
-	background-repeat : no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;

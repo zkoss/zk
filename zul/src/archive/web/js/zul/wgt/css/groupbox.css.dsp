@@ -20,7 +20,8 @@
 	padding:0;
 }
 
-.z-groupbox-tl {
+.z-groupbox-tl,
+.z-groupbox-tr {
 	background:transparent no-repeat scroll 0 top;
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.png')});
 	font-size:0;
@@ -29,15 +30,10 @@
 	margin-right:5px;
 	zoom:1;
 }
-.z-groupbox-tr{
+.z-groupbox-tr {
 	background:transparent no-repeat scroll right -5px;
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.png')});
-	font-size:0;
-	height:5px;
-	line-height:0;
 	margin-right:-5px;
 	position:relative;
-	zoom:1;
 }
 
 .z-groupbox-hl {

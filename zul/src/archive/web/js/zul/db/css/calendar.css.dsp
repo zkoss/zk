@@ -10,7 +10,7 @@
 	padding: 2px;
 }
 .z-datebox-pp .z-calendar {
-	border: 0 none;
+	border: 0;
 }
 .z-calendat-title-over {
 	color: #8FADFF;
@@ -21,37 +21,33 @@
 .z-calendar-tdr {
 	position: relative;
 	width : 10px;
-	padding-bottom:10px;
+	padding-bottom: 10px;
 	width: 16px;
 }
-.z-calendar-left, .z-calendar-right {
-	position:relative;
+.z-calendar-left,
+.z-calendar-right {
+	position: relative;
 }
-.z-calendar-left-icon {
-	border-right: 6px solid #656565;
+.z-calendar-left-icon,
+.z-calendar-right-icon {
 	border-top: 6px solid white;
 	border-bottom: 6px solid white;
-	border-left: 0;
 	height: 0;
 	width: 0;
+	line-height: 0;
 	position: absolute;
 	cursor: pointer;
 	font-size: 0;
-	line-height: 0;
+}
+.z-calendar-left-icon {
+	border-right: 6px solid #656565;
+	border-left: 0;
 	right: 0;
 }
 .z-calendar-right-icon {
 	border-left: 6px solid #656565;
-	border-top: 6px solid white;
-	border-bottom: 6px solid white;
 	border-right: 0;
-	height: 0;
-	width: 0;
-	position: absolute;
-	cursor: pointer;
-	font-size: 0;
 	left: 0;
-	line-height: 0;
 }
 .z-calendar-right-icon-disd {
 	border-left: 6px solid #D9DADA;
@@ -59,19 +55,19 @@
 .z-calendar-left-icon-disd {
 	border-right: 6px solid #D9DADA;
 }
-
 .z-calendar-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
-.z-calendar-disd, .z-calendar-disd * {
+.z-calendar-disd,
+.z-calendar-disd * {
 	cursor: default !important;
 	color: #AAA !important;
 }
 /*.z-calendar-calyear*/ 
 .z-datebox-calyear {
-	background: #e9f1f3; border: 1px solid;
+	background: #e9f1f3;
+	border: 1px solid;
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
 .z-datebox-calday {

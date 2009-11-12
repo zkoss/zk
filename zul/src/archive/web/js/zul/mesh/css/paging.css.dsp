@@ -35,8 +35,6 @@
 .z-paging input,
 .z-paging div,
 .z-paging button{
-	font-style:normal;
-	font-variant:normal;
 	font-weight:normal;
 	white-space:nowrap;
 	font-family: ${fontFamilyT};
