@@ -67,6 +67,9 @@ span.z-button {
 .z-button .z-button-tr {
 	height: 3px;
 }
+.z-button .z-button-tl {
+	background-position: 0 0;
+}
 .z-button .z-button-cl {
 	background-position: 0 0; text-align: right;
 }
@@ -103,18 +106,14 @@ span.z-button {
 
 <%-- Mouseover --%>
 .z-button-over .z-button-tl,
-.z-button-over .z-button-cl,
-.z-button-clk .z-button-tl,
-.z-button-clk .z-button-cl {
+.z-button-over .z-button-cl {
 	background-position:-6px 0;
 }
 .z-button-over .z-button-tm {
 	background-position:0 -6px;
 }
 .z-button-over .z-button-tr,
-.z-button-over .z-button-cr,
-.z-button-clk .z-button-tr,
-.z-button-clk .z-button-cr {
+.z-button-over .z-button-cr {
 	background-position:-9px 0;
 }
 .z-button-over .z-button-cm {
@@ -153,6 +152,14 @@ span.z-button {
 	background-position:-15px -3px;
 }
 <%-- click --%>
+.z-button-clk .z-button-tl,
+.z-button-clk .z-button-cl {
+	background-position:-6px 0;
+}
+.z-button-clk .z-button-tr,
+.z-button-clk .z-button-cr {
+	background-position:-9px 0;
+}
 .z-button-clk .z-button-tm{
 	background-position:0 -18px;
 }
