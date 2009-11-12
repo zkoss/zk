@@ -31,7 +31,7 @@
 	zoom:1;
 }
 .z-groupbox-tr {
-	background:transparent no-repeat scroll right -5px;
+	background-position: right -5px;
 	margin-right:-5px;
 	position:relative;
 }

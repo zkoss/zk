@@ -16,7 +16,7 @@
 .z-popup .z-popup-tr,
 .z-popup .z-popup-bl,
 .z-popup .z-popup-br {
-	background:transparent no-repeat scroll 0 top;
+	background:transparent no-repeat 0 top;
 	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corner.png')});
 	font-size:0;
 	height:5px;
@@ -25,7 +25,7 @@
 	zoom:1;
 }
 .z-popup .z-popup-tr {
-	background:transparent no-repeat scroll right -10px;
+	background-position: right -10px;
 	margin-right:-5px;
 	position:relative;
 }
@@ -47,14 +47,14 @@
 	padding-left: 6px;
 }
 .z-popup .z-popup-cr {
-	background: transparent  repeat-y right;
+	background-position: right 0;
 	padding-right: 6px;
 }
 .z-popup .z-popup-bl {
-	background:transparent no-repeat scroll 0 -5px;
+	background-position: 0 -5px;
 }
 .z-popup .z-popup-br {
-	background:transparent no-repeat scroll right -15px;
+	background-position: right -15px;
 	margin-right:-5px;
 	position:relative;
 }

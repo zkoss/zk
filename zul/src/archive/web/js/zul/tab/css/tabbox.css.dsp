@@ -220,6 +220,7 @@
 	z-index: 25;
 }
 .z-tabs-scroll .z-tabs-left-scroll {
+	left: 0;
 	background: transparent no-repeat 0 -1px;
 	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-l.png')});
 }
@@ -609,7 +610,7 @@
 }
 .z-tab-accordion-tr {
 	position: relative;
-	background: transparent no-repeat right -5px;
+	background-position: right -5px;
 	margin-right: -5px;
 }
 .z-tab-accordion-hl {
