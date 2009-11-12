@@ -1116,15 +1116,13 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			render(renderer, "pagingPosition", _pagingPosition);
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);
-		if (_currentTop != 0) {
-			render(renderer, "_currentTop", new Integer(_currentTop));
-		}
-		if (_currentLeft != 0) {
-			render(renderer, "_currentLeft", new Integer(_currentLeft));
-		}
-		if (_topPad != 0) {
-			render(renderer, "_topPad", new Integer(_topPad));
-		}
+		if (_currentTop != 0)
+			renderer.render("_currentTop", _currentTop);
+		if (_currentLeft != 0)
+			renderer.render("_currentLeft", _currentLeft);
+		if (_topPad != 0)
+			renderer.render("_topPad", _topPad);
+
 		render(renderer, "totalSize", new Integer(getDataLoader().getTotalSize()));
 		render(renderer, "_offset", new Integer(getDataLoader().getOffset()));
 	}
