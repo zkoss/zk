@@ -18,16 +18,16 @@
 	zoom: 1;
 }
 .z-panel-bl {
-	background: transparent no-repeat 0 -5px;
+	background-position: 0 -5px;
 }
 .z-panel-br,
 .z-panel-tr {
-	background: transparent no-repeat right -10px;
+	background-position: right -10px;
 	position: relative;
 	margin-right: -5px;
 }
 .z-panel-br {
-	background: transparent no-repeat right bottom;
+	background-position: right bottom;
 }
 <%-- Header --%>
 .z-panel-hm .z-panel-header,
