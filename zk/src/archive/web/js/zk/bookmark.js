@@ -51,8 +51,8 @@ zk.bmk = (function () {
 	}
 
 	zk.afterMount(function () { // Bug 1847708
-		setTimeout(checkBookmark, 0);
-			//Speed up the first check
+		checkBookmark();
+			//Speed up the first check (rather than when 1st interval timeout)
 		setInterval(checkBookmark, 250);
 			//Though IE use bookmark.html, timer is still required 
 			//because user might specify URL directly
@@ -61,6 +61,9 @@ zk.bmk = (function () {
   return {
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm) {
+		if (zk.bootstrapping && getBookmark())
+			return; //ignore it! (feature 2896996)
+
 		if (_curbk != nm) {
 			_curbk = nm; //to avoid loop back the server
 			var encnm = encodeURIComponent(nm);

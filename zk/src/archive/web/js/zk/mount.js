@@ -194,7 +194,8 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		if (_createInf0.length || _createInf1.length)
 			return; //another page started
 
-		zk.mounting = zk.bootstrapping = false;
+		zk.mounting = false;
+		zk.afterMount(function () {zk.bootstrapping = false;});
 		doAfterMount(mtBL1);
 		zk.endProcessing();
 

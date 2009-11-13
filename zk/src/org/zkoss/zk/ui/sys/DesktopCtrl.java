@@ -82,11 +82,6 @@ public interface DesktopCtrl {
 	 */
 	public void removePage(Page page);
 
-	/** Sets the bookmark when receiving the onBookmarkChange command
-	 * from the client.
-	 */
-	public void setBookmarkByClient(String name);
-
 	/** Sets the desktop identifier.
 	 *
 	 * <p>It is callable only if it is the recovering phase, i.e.,

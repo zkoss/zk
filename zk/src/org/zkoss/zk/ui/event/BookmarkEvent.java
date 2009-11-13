@@ -21,7 +21,6 @@ import java.util.Map;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 
@@ -48,7 +47,6 @@ public class BookmarkEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		final String nm = (String)data.get("");
-		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
 		return new BookmarkEvent(request.getCommand(), nm);
 	}
 

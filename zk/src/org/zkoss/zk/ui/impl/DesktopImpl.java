@@ -395,6 +395,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public String getBookmark() {
 		return _bookmark;
+		//Notice: since the bookmark (#xx) not sent from the HTTP request,
+		//we can only assume "" when the page is loading
 	}
 	public void setBookmark(String name) {
 		if (_exec == null)
@@ -547,6 +549,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final String cmd = request.getCommand();
 		if (Events.ON_BOOKMARK_CHANGE.equals(cmd)) {
 			BookmarkEvent evt = BookmarkEvent.getBookmarkEvent(request);
+			_bookmark = evt.getBookmark();
 			Events.postEvent(evt);
 			Events.postEvent(new BookmarkEvent("onBookmarkChanged", evt.getBookmark()));
 				//backward compatible
@@ -618,10 +621,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp);
 		}
-	}
-
-	public void setBookmarkByClient(String name) {
-		_bookmark = name != null ? name: "";
 	}
 
 	public void setId(String id) {
