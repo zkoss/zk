@@ -49,27 +49,32 @@ zk.bmk = (function () {
 		if (j >= 0) url = url.substring(0, j);
 		return url;
 	}
+	function _startCheck() {
+		if (zk.bootstrapping)
+			setTimeout(_startCheck, 5);
+		else { //Bug 1847708
+			checkBookmark();
+				//Speed up the first check (rather than when 1st interval timeout)
+			setInterval(checkBookmark, 250);
+				//Though IE use bookmark.html, timer is still required 
+				//because user might specify URL directly
+		}
+	}
 
-	zk.afterMount(function () { // Bug 1847708
-		checkBookmark();
-			//Speed up the first check (rather than when 1st interval timeout)
-		setInterval(checkBookmark, 250);
-			//Though IE use bookmark.html, timer is still required 
-			//because user might specify URL directly
-	});
+	zk.afterMount(_startCheck);
 
   return {
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm) {
-		if (zk.bootstrapping && getBookmark())
-			return; //ignore it! (feature 2896996)
-
 		if (_curbk != nm) {
 			_curbk = nm; //to avoid loop back the server
-			var encnm = encodeURIComponent(nm);
-			location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
-			_bkIframe(nm);
-			zk.bmk.onURLChange();
+
+			if (!zk.bootstrapping) { //feature 2896996: don't handle if booting
+				var encnm = encodeURIComponent(nm);
+				location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
+				_bkIframe(nm);
+				zk.bmk.onURLChange();
+			}
 		}
 	},
 	/** called when bookmark.html is loaded*/

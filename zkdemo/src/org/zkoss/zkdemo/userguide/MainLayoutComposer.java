@@ -135,7 +135,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 	public void onBookmarkChange$main(BookmarkEvent event) {
 		String id = event.getBookmark();
-		if (id != null) {
+		if (id.length() > 0) {
 			final DemoItem[] items = getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].getId().equals(id)) {
@@ -152,7 +152,6 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 				}
 			}
 		}
-		
 	}
 	public void onSelect$itemList(SelectEvent event) {
 		Listitem item = itemList.getSelectedItem();
