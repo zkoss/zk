@@ -1383,7 +1383,6 @@
 		<xs:attribute name="pageSize" type="intType" use="optional" />
 		<xs:attribute name="paginal" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
-		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="multiple" type="booleanType" use="optional" />
 		<xs:attribute name="vflex" type="booleanType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
