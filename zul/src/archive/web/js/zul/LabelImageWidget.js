@@ -31,7 +31,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	},
 	domImage_: function () {
 		var img = this._image;
-		return img ? '<img src="' + img + '" align="absmiddle" />': '';
+		return img ? '<img src="' + img + '" onmousedown="return false;" align="absmiddle" />': '';
 	},
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel());
