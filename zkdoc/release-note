@@ -41,7 +41,7 @@ November, 2009
   2855116: add data binding support for custom attribute tag
   2879519: More control of ThemeProvider against widget's CSS
   2887668: Ignore client command if component is invisible/disabled
-  2893117: The include comp's default width/height 100% if only child
+  2893117: The include comp's default width/height 100% if the only child
   2867437: Borderlayout shows a collapse button on splitter
   
 * RC Bugs

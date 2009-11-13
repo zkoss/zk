@@ -132,6 +132,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (var child = wgt.firstChild; child; child = child.nextSibling)
 			_unbindrod(child);
 	}
+	function _isrod(wgt) { //in client rod
+		var p;
+		return wgt.z_rod || ((p=wgt.parent) && (p.z_rod || p.z_childrod));
+			//z_rod: widget is in client rod
+			//z_childrod: widget is not, but all descendants are (e.g. combobox)
+	}
 
 	function _fixBindLevel(wgt, v) {
 		wgt.bindLevel = v++;
@@ -740,7 +746,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		if (this.z_rod || child.z_rod)
+		if (_isrod(child))
 			_bindrod(child);
 		else {
 			var dt = this.desktop;
@@ -777,7 +783,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		if (this.z_rod || child.z_rod)
+		if (_isrod(child))
 			_bindrod(child);
 		else {
 			var dt = this.desktop;
@@ -806,7 +812,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_rmIdSpaceDown(child);
 
-		if (child.z_rod)
+		if (_isrod(child))
 			_unbindrod(child);
 		else if (child.desktop)
 			this.removeChildHTML_(child, p);
@@ -844,7 +850,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
-		if (this.z_rod) {
+		if (_isrod(this)) {
 			_unbindrod(this);
 			_bindrod(newwgt);
 		} else if (this.desktop) {
@@ -1191,7 +1197,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
+			else if (_isrod(this)) _unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this._redrawHTML(skipper, true));
 			this.bind(desktop, skipper);
 		}
@@ -1239,7 +1245,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		else if (child.z_rod) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		else if (_isrod(child)) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		jq(n).replaceWith(child._redrawHTML(skipper, true));
 		child.bind(desktop, skipper);
 	},
