@@ -119,15 +119,13 @@ span.z-button {
 .z-button-over .z-button-cm {
   background-position:0 -500px;
 }
-.z-button-over .z-button-bl,
-.z-button-clk .z-button-bl {
+.z-button-over .z-button-bl {
 	background-position:-6px -3px;
 }
 .z-button-over .z-button-bm {
 	background-position:0 -9px;
 }
-.z-button-over .z-button-br,
-.z-button-clk .z-button-br {
+.z-button-over .z-button-br {
 	background-position:-9px -3px;
 }
 <%-- focus --%>
@@ -168,6 +166,12 @@ span.z-button {
 }
 .z-button-clk .z-button-cm {
 	background-position:0 -1000px;
+}
+.z-button-clk .z-button-br {
+	background-position:-9px -3px;
+}
+.z-button-clk .z-button-bl {
+	background-position:-6px -3px;
 }
 <%-- os mold --%>
 .z-button-os {

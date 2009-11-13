@@ -22,7 +22,7 @@
 
 .z-groupbox-tl,
 .z-groupbox-tr {
-	background:transparent no-repeat scroll 0 top;
+	background:transparent no-repeat 0 top;
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.png')});
 	font-size:0;
 	height:5px;
@@ -37,20 +37,20 @@
 }
 
 .z-groupbox-hl {
-	background:transparent repeat-y scroll 0 0;
+	background:transparent repeat-y 0 0;
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.png')});
 	border-bottom:1px solid #B2CCD9;
 	padding-left:6px;
 	zoom: 1;
 }
 .z-groupbox-hr {
-	background:transparent repeat-y scroll right 0;
+	background:transparent repeat-y right 0;
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.png')});
 	padding-right:6px;
 	zoom: 1;
 }
 .z-groupbox-hm {
-	background:transparent repeat-x scroll 0 0;
+	background:transparent repeat-x 0 0;
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.png')});
 	overflow:hidden;
 	zoom: 1;

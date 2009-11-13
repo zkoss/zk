@@ -249,7 +249,7 @@ div.z-log button {
 	height:100%;
 }
 .z-shadow .z-shadow-cl{
-	background: transparent  repeat-y 0 0;
+	background: transparent repeat-y 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cl.png')});
 	padding-left: 6px;
 	overflow: hidden;
@@ -257,7 +257,7 @@ div.z-log button {
 	zoom: 1;
 }
 .z-shadow .z-shadow-cr{
-	background: transparent  repeat-y right;
+	background: transparent repeat-y right;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cr.png')});
 	padding-right: 6px;
 	overflow: hidden;
@@ -272,39 +272,22 @@ div.z-log button {
 	zoom: 1;
 }
 
-.z-shadow .z-shadow-tl {
-	background:transparent no-repeat scroll 0 top;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:6px;
-	zoom:1;
-}
-.z-shadow .z-shadow-tr {
-	background:transparent no-repeat scroll right -6px;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:-6px;
-	position:relative;
-	zoom:1;
-}
-.z-shadow .z-shadow-bl {
-	background:transparent no-repeat scroll 0 top;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:6px;
-	zoom:1;
-}
+.z-shadow .z-shadow-tl,
+.z-shadow .z-shadow-tr,
+.z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br {
-	background:transparent no-repeat scroll right -6px;
+	background:transparent no-repeat 0 top;
 	font-size:0;
 	height:6px;
 	line-height:0;
+	margin-right:6px;
+	zoom:1;
+}
+.z-shadow .z-shadow-tr,
+.z-shadow .z-shadow-br {
+	background-position: right -6px;
 	margin-right:-6px;
 	position:relative;
-	zoom:1;
 }
 .z-shadow .z-shadow-tl,
 .z-shadow .z-shadow-tr{

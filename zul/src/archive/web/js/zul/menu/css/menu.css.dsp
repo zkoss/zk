@@ -71,7 +71,7 @@
 }
 .z-menu-inner-m .z-menu-btn,
 .z-menu-item-inner-m .z-menu-item-btn{
-	background:transparent none no-repeat scroll 0 2px;
+	background:transparent none no-repeat 0 2px;
 	border:0 none;
 	cursor:pointer;
 	margin:0;
@@ -161,7 +161,7 @@
 	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 .z-menu-popup {
-	background:#CCE6FB repeat-y scroll 0 0;
+	background:#CCE6FB repeat-y 0 0;
 	border:1px solid #86A4BE;
 	padding:2px;
 	z-index:88000;
@@ -183,7 +183,7 @@
 	text-decoration:none !important;
 }
 .z-menu-popup .z-menu-popup-cnt{
-	background:transparent none repeat scroll 0 0;
+	background:transparent none repeat 0 0;
 	border:0 none;
 	padding:0;
 	margin:0 !important;
@@ -227,16 +227,16 @@
 	width:16px;
 }
 .z-menu-popup-cnt .z-menu .z-menu-cnt-img {
-	background:transparent no-repeat scroll right center;
+	background:transparent no-repeat right center;
 	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 }
 <%--define checked menuitem effect in menupopup --%>
 .z-menu-popup-cnt .z-menu-item-cnt-ck .z-menu-item-img {
-	background:transparent no-repeat scroll center center;
+	background:transparent no-repeat center center;
 	background-image:url(${c:encodeURL('~./zul/img/menu/checked.gif')});
 }
 .z-menu-popup-cnt .z-menu-item-cnt-unck .z-menu-item-img {
-	background:transparent no-repeat scroll center center;
+	background:transparent no-repeat center center;
 	background-image:url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
 }
 <%--define disabled menuitem effect in menupopup--%>

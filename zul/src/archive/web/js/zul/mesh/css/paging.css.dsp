@@ -48,7 +48,7 @@
 	display:block;
 	padding:2px;
 	position:relative;
-	background:#DAF3FF repeat-x scroll 0 center;
+	background:#DAF3FF repeat-x 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 
@@ -66,7 +66,7 @@
 }
 
 .z-paging .z-paging-btn {
-	background:transparent none repeat scroll 0 0;
+	background:transparent none repeat 0 0;
 	cursor:pointer;
 	text-align:center;
 	vertical-align:middle;
@@ -87,8 +87,8 @@
 
 <%--define icon of button--%>
 .z-paging-btn button {
-	background:transparent none repeat scroll 0 0;
-	border:0 none;
+	background:transparent none repeat 0 0;
+	border:0;
 	cursor:pointer;
 	margin:0;
 	min-height:13px;

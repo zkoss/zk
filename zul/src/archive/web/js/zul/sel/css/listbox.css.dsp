@@ -9,7 +9,7 @@ div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 }
 
 div.z-listbox-header tr.z-listhead, div.z-listbox-header tr.z-auxhead {
-	background: #C7E5F1 repeat-x scroll 0 0;
+	background: #C7E5F1 repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
