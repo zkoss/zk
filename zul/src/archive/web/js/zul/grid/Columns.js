@@ -201,9 +201,5 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 				this.appendChild(item);
 			}
 		}
-	},
-	unbind_: function () {
-		this._asc = this._desc = this._group = null;
-		this.$supers('unbind_', arguments);
 	}
 });
