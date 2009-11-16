@@ -402,6 +402,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow(true);
 	},
 	//watch//
+	onResponse: function () {
+		if (this._shadow)
+			this._syncShadow();
+	},
 	onShow: function (ctl) {
 		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded'
@@ -633,7 +637,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		var mode = this._mode;
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this, onShow: this, onResponse: this});
 		if (mode != 'embedded') {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);
@@ -683,7 +687,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 
 		zk(node).undoVParent();
-		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this, onHide: this});
+		zWatch.unlisten({
+			onFloatUp: this,
+			onSize: this,
+			onShow: this,
+			onHide: this,
+			onResponse: this
+		});
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {
