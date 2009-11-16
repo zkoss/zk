@@ -211,8 +211,8 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		render(renderer, "src", getEncodedSrc());
 		render(renderer, "align", _align);
 		render(renderer, "border", _border);
-		if (_autostart) renderer.render("autostart", _autostart);
-		if (_loop) renderer.render("loop", _loop);
+		render(renderer, "autostart", _autostart);
+		render(renderer, "loop", _loop);
 	}
 
 	//-- Component --//

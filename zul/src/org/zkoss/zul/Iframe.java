@@ -215,7 +215,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 			render(renderer, "scrolling", _scrolling);
 		render(renderer, "align", _align);
 		render(renderer, "name", _name);
-		if (_autohide) renderer.render("autohide", _autohide);
+		render(renderer, "autohide", _autohide);
 	}
 
 	/** Processes an AU request.

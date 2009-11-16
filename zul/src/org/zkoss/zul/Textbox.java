@@ -162,9 +162,9 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_multiline) renderer.render("multiline", _multiline);
+		render(renderer, "multiline", _multiline);
 		if (_rows > 1) renderer.render("rows", _rows);
-		if (_tabbable) renderer.render("tabbable", _tabbable);
+		render(renderer, "tabbable", _tabbable);
 		if (!"text".equals(_type)) renderer.render("type", _type);
 	}
 	public String getZclass() {

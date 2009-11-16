@@ -139,7 +139,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_autodrop) render(renderer, "autodrop", _autodrop);
+		render(renderer, "autodrop", _autodrop);
 		if ("vertical".equals(getOrient())) render(renderer, "orient", _orient);
 		if (isHorizontal() && _scrollable) render(renderer, "scrollable", _scrollable);
 		

@@ -553,6 +553,6 @@ implements org.zkoss.zul.api.Include, Includer {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_comment) renderer.render("comment", true);
+		render(renderer, "comment", _comment);
 	}
 }

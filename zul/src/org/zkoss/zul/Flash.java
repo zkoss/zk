@@ -250,7 +250,6 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	}
 
 	//super//
-	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -262,8 +261,8 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 			render(renderer, "quality", _quality);
 		if (!"6,0,0,0".equals(_version))
 			render(renderer, "version", _version);
-		if (_loop) renderer.render("loop", _loop);
-		if (!_autoplay) renderer.render("autoplay", _autoplay);
+		render(renderer, "loop", _loop);
+		if (!_autoplay) renderer.render("autoplay", false);
 		render(renderer, "bgcolor", _bgcolor);
 	}
 }

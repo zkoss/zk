@@ -581,17 +581,17 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		
 		if (_title.length() > 0) render(renderer, "title", _title);
 		
-		if (_closable) render(renderer, "closable", _closable);
-		if (_floatable) render(renderer, "floatable", _floatable);
-		if (_collapsible) render(renderer, "collapsible", _collapsible);
-		if (_framable) render(renderer, "framable", _framable);
-		if (_movable) render(renderer, "movable", _movable);
-		if (_maximizable) render(renderer, "maximizable", _maximizable);
-		if (_minimizable) render(renderer, "minimizable", _minimizable);
-		if (_maximized) render(renderer, "maximized", _maximized);
-		if (_minimized) render(renderer, "minimized", _minimized);
-		if (!_open) render(renderer, "open", _open);
-		
+		render(renderer, "closable", _closable);
+		render(renderer, "floatable", _floatable);
+		render(renderer, "collapsible", _collapsible);
+		render(renderer, "framable", _framable);
+		render(renderer, "movable", _movable);
+		render(renderer, "maximizable", _maximizable);
+		render(renderer, "minimizable", _minimizable);
+		render(renderer, "maximized", _maximized);
+		render(renderer, "minimized", _minimized);
+		if (!_open) renderer.render("open", false);
+
 		if (!"none".equals(_border)) renderer.render("border", _border);
 	}
 	
