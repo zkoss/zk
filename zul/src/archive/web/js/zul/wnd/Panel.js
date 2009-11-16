@@ -316,9 +316,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this._hideShadow();
 	},
 	_fixHgh: function () {
-		if (!this.panelchildren || !this.isRealVisible()) return;
+		var pc;
+		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
 		var n = this.$n(),
-			body = this.panelchildren.$n(),
+			body = pc.$n(),
 			hgh = n.style.height;
 		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0";
 		if (hgh && hgh != "auto")
