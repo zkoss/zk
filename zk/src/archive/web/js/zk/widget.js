@@ -1351,26 +1351,29 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 	bind: function (desktop, skipper) {
-		var after = [];
-		this.bind_(desktop, skipper, after);
-		for (var j = 0, len = after.length; j < len;)
-			after[j++]();
+		if (this.z_rod) 
+			_bindrod(this);
+		else {
+			var after = [];
+			this.bind_(desktop, skipper, after);
+			for (var j = 0, len = after.length; j < len;)
+				after[j++]();
+		}
 		return this;
 	},
 	unbind: function (skipper) {
-		var after = [];
-		this.unbind_(skipper, after);
-		for (var j = 0, len = after.length; j < len;)
-			after[j++]();
+		if (this.z_rod)
+			_unbindrod(this);
+		else {
+			var after = [];
+			this.unbind_(skipper, after);
+			for (var j = 0, len = after.length; j < len;)
+				after[j++]();
+		}
 		return this;
 	},
 
 	bind_: function (desktop, skipper, after) {
-		if (this.z_rod) {
-			_bindrod(this);
-			return;
-		}
-
 		_bind0(this);
 
 		if (!desktop) desktop = zk.Desktop.$(this.uuid);
@@ -1386,24 +1389,21 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
-				child.bind_(desktop, null, after); //don't pass skipper
+				if (child.z_rod) _bindrod(child);
+				else child.bind_(desktop, null, after); //don't pass skipper
 
 		_onBind(this);
 	},
 
 	unbind_: function (skipper, after) {
-		if (this.z_rod) {
-			_unbindrod(this);
-			return;
-		}
-
 		_unbind0(this);
 		_fixBindMem();
 		_unlistenFlex(this);
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
-				child.unbind_(null, after); //don't pass skipper
+				if (child.z_rod) _unbindrod(child);
+				else child.unbind_(null, after); //don't pass skipper
 
 		if (this._draggable) this.cleanDrag_();
 
