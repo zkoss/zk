@@ -20,13 +20,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
-				var panel = this.$n('panel');
-				if (panel) { //!legend
-					if (open) zk(panel).slideDown(this);
-					else zk(panel).slideUp(this);
-				} else {
+				if (this.isLegend()) { //legend
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onShow': 'onHide', this);
+				} else {
+					zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
 				}
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -51,7 +49,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		html += this.getZclass() + '-cnt"';
 
 		s = this._contentStyle;
-		if (!this.isLegend() && this.caption) s = 'border-top:0;' + (s ? s: '');
+		if (!this.isLegend()) {
+			if (this.caption) s = 'border-top:0;' + (s||'');
+			if (!this._open) s = 'display:none;' + (s||'');
+		}
 		if (s) html += ' style="' + s + '"';
 		return html;
 	},
@@ -65,10 +66,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				if (zk.ie6_) n.style.height = "";
 				var fix = function() {
 					n.style.height =
-						zk(n).revisedHeight(zk(n.parentNode).vflexHeight(), true)
+						zk(n).revisedHeight(zk(n).vflexHeight(), true)
 						+ "px";
-						//we use n.parentNode(=this.$n('panel')) to calc vflex,
-						//so we have to subtract margin, too
 				};
 				fix();
 				if (zk.gecko) setTimeout(fix, 0);
@@ -77,7 +76,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (this._mold == "3d")
+		if (!this.isLegend())
 			setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
 	},

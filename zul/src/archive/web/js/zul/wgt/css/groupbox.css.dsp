@@ -72,6 +72,9 @@
 .z-groupbox-cnt {<%-- content of 3d groupbox-new2 --%>
 	border: 1px solid #B2CCD9;
 	padding: 5px;
+<c:if test="${c:isExplorer7()}">
+	zoom: 1;
+</c:if>
 }
 
 .z-groupbox-bl {
@@ -94,12 +97,6 @@
 	line-height: 0;
 	zoom: 1;
 }
-
-<c:if test="${c:isExplorer7()}">
-.z-groupbox-body {
-	zoom: 1;
-}
-</c:if>
 
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">

@@ -28,15 +28,14 @@ function (out, skipper) {
 		out.push('</div></div></div></div>');
 	}
 	
-	out.push('<div id="', uuid, '-panel" class="', zcls, '-body"');
-	if (!this.isOpen()) out.push(' style="display:none"');
-	out.push('><div id="', uuid, '-cave"', this._contentAttrs(), '>');
+	out.push('<div id="', uuid, '-cave"', this._contentAttrs(), '>');
 
 	if (!skipper)
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != cap)
 				w.redraw(out);
-	out.push('</div></div>',
+
+	out.push('</div>',
 		//shadow
 		'<div id="', uuid, '-sdw" class="', zcls, '-bl"><div class="', zcls,
 			'-br"><div class="', zcls, '-bm"></div></div></div></div>');
