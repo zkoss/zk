@@ -17,7 +17,7 @@ mesg.NOT_FOUND = "Ej hittat: ";
 mesg.UNSUPPORTED = "Stödjes inte än: ";
 mesg.FAILED_TO_SEND = "Kunde inte sända begäran till servern.";
 mesg.FAILED_TO_RESPONSE = "Servern kunde inte hantera din begäran.";
-mesg.TRY_AGAIN = "Try again?";
+mesg.TRY_AGAIN = "Försök igen?";
 mesg.UNSUPPORTED_BROWSER = "Icke-supportad webbläsare: ";
 mesg.ILLEGAL_RESPONSE = "Okänt svar från server. Var god uppdatera sidan och försök igen..\n";
 mesg.FAILED_TO_PROCESS = "Kunde inte hantera ";
@@ -31,4 +31,4 @@ mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";
 mesg.FAILED_TO_LOAD_DETAIL = "Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";
 mesg.CAUSE = "Orsak: ";
 
-mesg.LOADING = "Arbetar";
+mesg.LOADING = "Arbetar...";
