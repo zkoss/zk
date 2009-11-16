@@ -76,6 +76,7 @@ November, 2009
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
   2863287: Unable to access param in zscript
   2379135: Context menu with Listbox when event is added
+  2898352: Groupbox (default mold)'s caption cannot have toolbarbutton
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 

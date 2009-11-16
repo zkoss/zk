@@ -15,10 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var parent = this.parent;
 	if (parent.isLegend && parent.isLegend()) {
-		out.push('<legend', this.domAttrs_(), '>', this.domContent_());
+		out.push('<legend', this.domAttrs_(), '><span>', this.domContent_());
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</legend>');
+		out.push('</span></legend>');
 		return;
 	}
 
