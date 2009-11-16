@@ -51,13 +51,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			var p = this.$n("real"); //accordion uses 'real'
 			zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var pl = accd ? this.$n("real") : this.$n();
+			var $pl = jq(accd ? this.$n("real") : this.$n()),
+				vis = $pl.zk.isVisible();
 			if (toSel) {
-				jq(pl).show();
-				zWatch.fireDown('onShow', this);
-			} else {
+				if (!vis) {
+					$pl.show();
+					zWatch.fireDown('onShow', this);
+				}
+			} else if (vis) {
 				zWatch.fireDown('onHide', this);
-				jq(pl).hide();
+				$pl.hide();
 			}
 		}
 	},

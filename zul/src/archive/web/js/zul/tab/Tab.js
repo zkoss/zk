@@ -62,12 +62,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_sel: function(notify, init) {
 		var tabbox = this.getTabbox();
-
 		if (!tabbox) return;
 
 		var	tabs = this.parent,
 			oldtb;
-
 		if (!oldtb) {
 			if (tabbox.inAccordionMold()) {
 				oldtb = tabbox.getSelectedTab();
@@ -89,16 +87,16 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			else if (!tabbox.inAccordionMold())
 				tabs._scrollcheck("sel", this);
 
-			if (oldtb)
-				this._setSel(oldtb, false, false, notify);
-			this._setSel(this, true, notify, notify);
+			if (oldtb != this)
+				this._setSel(oldtb, false, false, init);
+			this._setSel(this, true, notify, init);
 		}
 	},
-	_setSel: function(tab, toSel, notify, animation) {
+	_setSel: function(tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass(),
 			panel = tab.getLinkedPanel();
-		if (tab.isSelected() == toSel && notify) //notify if init tab is selected
+		if (tab.isSelected() == toSel && !init)
 			return;
 
 		if (toSel)
@@ -110,7 +108,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			jq(tab).removeClass(zcls + "-seld");
 
 		if (panel)
-			panel._sel(toSel, animation);
+			panel._sel(toSel, !init);
 
 		if (!tabbox.inAccordionMold()) {
 			var tabs = this.parent;
