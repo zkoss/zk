@@ -18,11 +18,7 @@ function (out, skipper) {
 	var cap = this.caption;
 	if (cap) cap.redraw(out);
 
-	out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
-	
-	if (!skipper)
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != cap)
-				w.redraw(out);
-	out.push('</div></fieldset>');
+	this._redrawCave(out, skipper);
+
+	out.push('</fieldset>');
 }

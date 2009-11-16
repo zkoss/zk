@@ -17,16 +17,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window width="300px">
+<window width="100%">
 	<caption id="wndcap" label="Groupbox Test">
 		<toolbarbutton label="Click"/>
 	</caption>
-	<groupbox width="200px" mold="3d">
-		<caption label="Groupbox">
+	<groupbox width="500px" mold="3d" id="gb">
+		<caption label="Groupbox" id="gbcap">
 			<button label="Press" onClick="alert(&quot;Press&quot;)"/>
 			<toolbarbutton label="Hello" onClick="alert(&quot;Hello&quot;)"/>
 		</caption>
 		This is a group box
 	</groupbox>
-	<button label="Add button" onClick="wndcap.appendChild(new Button())"/>
+	<button label="Add button to caption" onClick='gbcap.appendChild(new Button("btn"))'/>
+	<button label="set height" onClick='gb.height = "200px"'/>
 </window>

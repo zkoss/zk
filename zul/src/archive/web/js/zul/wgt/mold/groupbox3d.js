@@ -28,15 +28,9 @@ function (out, skipper) {
 		out.push('</div></div></div></div>');
 	}
 	
-	out.push('<div id="', uuid, '-cave"', this._contentAttrs(), '>');
+	this._redrawCave(out, skipper);
 
-	if (!skipper)
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != cap)
-				w.redraw(out);
-
-	out.push('</div>',
-		//shadow
-		'<div id="', uuid, '-sdw" class="', zcls, '-bl"><div class="', zcls,
-			'-br"><div class="', zcls, '-bm"></div></div></div></div>');
+	//shadow
+	out.push('<div id="', uuid, '-sdw" class="', zcls, '-bl"><div class="',
+		zcls, '-br"><div class="', zcls, '-bm"></div></div></div></div>');
 }

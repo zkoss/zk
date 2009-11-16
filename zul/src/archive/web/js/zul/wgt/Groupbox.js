@@ -56,9 +56,22 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (s) html += ' style="' + s + '"';
 		return html;
 	},
+	_redrawCave: function (out, skipper) { //reserve for customizing
+		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
+	
+		if (!skipper)
+			for (var w = this.firstChild, cap = this.caption; w; w = w.nextSibling)
+				if (w != cap)
+					w.redraw(out);
 
-	//watch//
-	onSize: _zkf = function () {
+		out.push('</div>');
+	},
+
+	setHeight: function () {
+		this.$supers('setHeight', arguments);
+		if (this.desktop) this._fixHgh();
+	},
+	_fixHgh: function () {
 		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
 			var n = this.$n('cave');
@@ -75,7 +88,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
 		}
+	},
 
+	//watch//
+	onSize: _zkf = function () {
+		this._fixHgh();
 		if (!this.isLegend())
 			setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
