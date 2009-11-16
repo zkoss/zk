@@ -21,7 +21,7 @@ mesg.NOT_FOUND = "Ej hittat: ";
 mesg.UNSUPPORTED = "Stödjes inte än: ";
 mesg.FAILED_TO_SEND = "Kunde inte sända begäran till servern.";
 mesg.FAILED_TO_RESPONSE = "Servern kunde inte hantera din begäran.";
-mesg.TRY_AGAIN = "Try again?";
+mesg.TRY_AGAIN = "Försök igen?";
 mesg.UNSUPPORTED_BROWSER = "Icke-supportad webbläsare: ";
 mesg.ILLEGAL_RESPONSE = "Okänt svar från server. Var god uppdatera sidan och försök igen..\n";
 mesg.FAILED_TO_PROCESS = "Kunde inte hantera ";
@@ -30,10 +30,10 @@ mesg.INVALID_STRUCTURE = "Ogiltig struktur: ";
 mesg.COMP_OR_UUID_REQUIRED = "Komponent eller dess UUID krävs";
 mesg.NUMBER_REQUIRED = "Du måste ange en siffra, istället för ";
 mesg.INTEGER_REQUIRED = "Du måste ange ett heltal, istället för ";
-mesg.EMPTY_NOT_ALLOWED = "Blank inte tillåtet.\nDu kan inte ange annat än blanksteg";
+mesg.EMPTY_NOT_ALLOWED = "Blank inte tillåtet.";
 mesg.GOTO_ERROR_FIELD = "Gå till felaktigt fält";
 mesg.PLEASE_WAIT = "Arbetar...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Du måste välja ett av värdena i rull-listan.";
 
 mesg.FILE_SIZE = "Filstorlek: ";
 mesg.KBYTES = "KB";
@@ -44,4 +44,4 @@ mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";
 mesg.FAILED_TO_LOAD_DETAIL = "Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";
 mesg.CAUSE = "Orsak: ";
 
-mesg.LOADING = "Arbetar";
+mesg.LOADING = "Arbetar...";
