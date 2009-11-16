@@ -73,7 +73,26 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						var body = this.$n('body');
 						if (body) body.style.display = "";
 					}
-	
+					
+					if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
+						var layout = this.parent.parent;
+						if (layout.getMaximizedMode() == 'whole') {
+							this._inWholeMode = true;
+							var p = layout.$n();
+							node._scrollTop = p.parentNode.scrollTop; 
+							p.parentNode.scrollTop = 0;
+							$n.makeVParent();
+							
+							node._pos = node.style.position;
+							node._ppos = p.style.position;
+							node._zindex = node.style.zIndex;
+							node.style.position = 'absolute';
+							node.style.zIndex = 90000;
+							
+							p.appendChild(node);
+							p.style.position = 'relative';
+						}
+					}
 					var floated = this.isFloatable(),
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
 					l = s.left;
@@ -124,6 +143,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					var body = this.panelchildren ? this.panelchildren.$n() : null;
 					if (body)
 						body.style.width = body.style.height = "";
+						
+					if (this._inWholeMode) {
+						$n.undoVParent();
+						node.style.position = node._pos;
+						node.style.zIndex = node._zindex;
+						var p = this.parent.parent.$n();
+						p.style.position = node._ppos;
+						p.parentNode.scrollTop = node._scrollTop;
+						node._scrollTop = node._ppos = node._zindex = node._pos = null;
+						this._inWholeMode = false;
+					}
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
@@ -419,6 +449,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
+		if (this._inWholeMode) {
+			var node = this.$n();
+			zk(node).undoVParent();
+			var p = this.parent.parent.$n();
+			p.style.position = node._ppos;
+			p.parentNode.scrollTop = node._scrollTop;
+			node._scrollTop = node._ppos = node._zindex = node._pos = null;
+			this._inWholeMode = false;
+		}
 		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
 		this.setFloating_(false);
 

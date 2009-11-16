@@ -43,6 +43,7 @@ November, 2009
   2887668: Ignore client command if component is invisible/disabled
   2893117: The include comp's default width/height 100% if the only child
   2867437: Borderlayout shows a collapse button on splitter
+  2898291: a way to maximize the panel  according to portal layout
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
