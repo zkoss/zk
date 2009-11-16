@@ -133,7 +133,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.fire('onOpen', {open:true, value: inp.value});
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", this);
 		if (this._shadow) this._shadow.sync();
 	},
 	close: function (opts) {

@@ -43,14 +43,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
 						jq(node).removeClass(zcls + '-colpsd');
-						$body.zk.slideDown(this, {afterAnima: this._afterSlideDown});
+						$body.zk.slideDown(this);
 					} else {
 						jq(node).addClass(zcls + '-colpsd');
 						this._hideShadow();
 						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
 						if (zk.ie6_ && !node.style.width)
 							node.runtimeStyle.width = "100%";
-						$body.zk.slideUp(this, {beforeAnima: this._beforeSlideUp});
+						$body.zk.slideUp(this);
 					}
 					if (!fromServer) this.fire('onOpen', {open:open});
 				}
@@ -337,12 +337,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		return this._zclass == null ?  "z-panel" : this._zclass;
-	},
-	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", this);
-	},
-	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", this);
 	},
 	_initFloat: function () {
 		var n = this.$n();

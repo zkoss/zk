@@ -71,15 +71,16 @@ zk.copy(zjq.prototype, {
 	},
 	_defAnimaOpts: function (wgt, opts, prop, mode) {
 		var self = this;
-		if (jq.isFunction(opts.beforeAnima))
-			jq.timers.push(function() {
+		jq.timers.push(function() {
+			if (mode == 'hide')
+				zWatch.fireDown('onHide', wgt);
+			if (opts.beforeAnima)
 				opts.beforeAnima.call(wgt, self);
-			});
+		});
 
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
 			if (mode == 'hide') {
-				zWatch.fireDown('onHide', wgt);
 				self.jq.hide();
 			} else {
 				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE

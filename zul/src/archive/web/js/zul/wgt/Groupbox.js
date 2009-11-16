@@ -22,8 +22,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (node && this._closable) {
 				var panel = this.$n('panel');
 				if (panel) { //!legend
-					if (open) zk(panel).slideDown(this, {afterAnima: this._afterSlideDown});
-					else zk(panel).slideUp(this, {beforeAnima: this._beforeSlideUp});
+					if (open) zk(panel).slideDown(this);
+					else zk(panel).slideUp(this);
 				} else {
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onShow': 'onHide', this);
@@ -76,17 +76,12 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
 		}
-		setTimeout(this.proxy(this._fixShadow), 500);
+
+		if (this._mold == "3d")
+			setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
-			//($n('sdw') a bit slow due to document.getElementById)
 	},
 	onShow: _zkf,
-	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", this);
-	},
-	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", this);
-	},
 	_fixShadow: function () {
 		var sdw = this.$n('sdw');
 		if (sdw)
