@@ -551,7 +551,7 @@ public class HtmlPageRenders {
 		}
 		private boolean show() {
 			long now = System.currentTimeMillis();
-			if (now - _t > 1200000) {
+			if (now - _t > 600000) { //every 10 minutes
 				_t = now;
 				return true;
 			}
