@@ -59,7 +59,8 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	private String _border = "none";
 	private String _title = "";
 	private boolean _closable, _collapsible, _floatable, _framable, _movable, 
-		_maximizable, _minimizable, _maximized, _minimized;
+		_maximizable, _minimizable, _maximized, _minimized, _sizable;
+	private int _minheight = 100, _minwidth = 200; 
 	private boolean  _open = true;
 	
 
@@ -301,6 +302,67 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			smartUpdate("closable", _closable);
 		}
 	}
+
+	/**
+	 * Sets the minimum height in pixels allowed for this panel. If negative, 100 is assumed.
+	 * <p>Default: 100. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinheight(int minheight) {
+		if (minheight < 0) minheight = 100;
+		if (_minheight != minheight) {
+			_minheight = minheight;
+			smartUpdate("minheight", _minheight);
+		}
+	}
+	/**
+	 * Returns the minimum height.
+	 * <p>Default: 100.
+	 * @since 5.0.0
+	 */
+	public int getMinheight() {
+		return _minheight;
+	}
+	/**
+	 * Sets the minimum width in pixels allowed for this panel. If negative, 200 is assumed.
+	 * <p>Default: 200. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinwidth(int minwidth) {
+		if (minwidth < 0) minwidth = 200;
+		if (_minwidth != minwidth) {
+			_minwidth = minwidth;
+			smartUpdate("minwidth", _minwidth);
+		}
+	}
+	/**
+	 * Returns the minimum width.
+	 * <p>Default: 200.
+	 * @since 5.0.0
+	 */
+	public int getMinwidth() {
+		return _minwidth;
+	}
+	/** Returns whether the panel is sizable.
+	 * @since 5.0.0
+	 */
+	public boolean isSizable() {
+		return _sizable;
+	}
+	/** Sets whether the panel is sizable.
+	 * If true, an user can drag the border to change the panel width.
+	 * <p>Default: false.
+	 * @since 5.0.0
+	 */
+	public void setSizable(boolean sizable) {
+		if (_sizable != sizable) {
+			_sizable = sizable;
+			smartUpdate("sizable", sizable);
+		}
+	}
+	
 	/** Returns the caption of this panel.
 	 */
 	public Caption getCaption() {
@@ -590,6 +652,11 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		render(renderer, "minimizable", _minimizable);
 		render(renderer, "maximized", _maximized);
 		render(renderer, "minimized", _minimized);
+		render(renderer, "sizable", _sizable);
+
+		if (_minheight != 100) renderer.render("minheight", _minheight);
+		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
+		
 		if (!_open) renderer.render("open", false);
 
 		if (!"none".equals(_border)) renderer.render("border", _border);

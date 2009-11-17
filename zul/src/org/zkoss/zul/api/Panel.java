@@ -266,7 +266,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 * Returns the title. Besides this attribute, you could use {@link Caption}
 	 * to define a more sophiscated caption (aka., title).
 	 * <p>
-	 * If a window has a caption whose label ({@link Caption#getLabel}) is not
+	 * If a panel has a caption whose label ({@link Caption#getLabel}) is not
 	 * empty, then this attribute is ignored.
 	 * <p>
 	 * Default: empty.
@@ -278,6 +278,60 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setTitle(String title);
 
+
+	/**
+	 * Sets the minimum height in pixels allowed for this panel. If negative,
+	 * 100 is assumed.
+	 * <p>
+	 * Default: 100.
+	 * <p>
+	 * Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinheight(int minheight);
+
+	/**
+	 * Returns the minimum height.
+	 * <p>
+	 * Default: 100.
+	 * @since 5.0.0
+	 */
+	public int getMinheight();
+
+	/**
+	 * Sets the minimum width in pixels allowed for this panel. If negative,
+	 * 200 is assumed.
+	 * <p>
+	 * Default: 200.
+	 * <p>
+	 * Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinwidth(int minwidth);
+
+	/**
+	 * Returns the minimum width.
+	 * <p>
+	 * Default: 200.
+	 * @since 5.0.0
+	 */
+	public int getMinwidth();
+
+	/**
+	 * Returns whether the panel is sizable.
+	 * @since 5.0.0
+	 */
+	public boolean isSizable();
+
+	/**
+	 * Sets whether the panel is sizable. If true, an user can drag the border
+	 * to change the panel width.
+	 * <p>
+	 * Default: false.
+	 * @since 5.0.0
+	 */
+	public void setSizable(boolean sizable);
+	
 	/**
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
 	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,

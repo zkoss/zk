@@ -16,13 +16,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
 	_open: true,
+	_minheight: 100,
+	_minwidth: 200,
 
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen({onClose: this, onMove: this}, -1000);
+		this.listen({onClose: this, onMove: this, onSize: this.onSizeEvent}, -1000);
 	},
 
 	$define: {
+		minheight: null, //TODO
+		minwidth: null, //TODO
+		sizable: function (sizable) {
+			if (this.desktop) {
+				if (sizable)
+					this._makeSizer();
+				else if (this._sizer) {
+					this._sizer.destroy();
+					this._sizer = null;
+				}
+			}
+		},
 		framable: _zkf = function () {
 			this.rerender(); //TODO: like Window, use _updateDomOuter
 		},
@@ -268,6 +282,37 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this._left = evt.left;
 		this._top = evt.top;
 	},
+	onSizeEvent: function (evt) {
+		var data = evt.data,
+			node = this.$n(),
+			s = node.style;
+			
+		this._hideShadow();
+		if (data.width != s.width) {
+			s.width = data.width;
+		}
+		if (data.height != s.height) {
+			s.height = data.height;
+			this._fixHgh();
+		}
+				
+		if (data.left != s.left || data.top != s.top) {
+			s.left = data.left;
+			s.top = data.top;
+			
+			this.fire('onMove', zk.copy({
+				left: node.style.left,
+				top: node.style.top
+			}, evt.data), {ignorable: true});
+		}
+		
+		this._syncShadow();
+		var self = this;
+		setTimeout(function() {
+			zWatch.fireDown('beforeSize', self);
+			zWatch.fireDown('onSize', self);
+		}, zk.ie6_ ? 800: 0);
+	},
 	//watch//
 	onSize: _zkf = (function() {
 		function syncMaximized (wgt) {
@@ -369,6 +414,18 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ?  "z-panel" : this._zclass;
 	},
+	_makeSizer: function () {
+		if (!this._sizer) {
+			var Panel = this.$class;
+			this._sizer = new zk.Draggable(this, null, {
+				stackup: true, draw: Panel._drawsizing,
+				starteffect: Panel._startsizing,
+				ghosting: Panel._ghostsizing,
+				endghosting: Panel._endghostsizing,
+				ignoredrag: Panel._ignoresizing,
+				endeffect: Panel._aftersizing});
+		}
+	},
 	_initFloat: function () {
 		var n = this.$n();
 		if (!n.style.top && !n.style.left) {
@@ -435,6 +492,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var uuid = this.uuid,
 			$Panel = this.$class;
 
+		if (this._sizable)
+			this._makeSizer();
+		
+		this.domListen_(this.$n(), 'onMouseOver');
+			
 		if (this.isFloatable()) {
 			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
@@ -470,7 +532,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
+		this.domUnlisten_(this.$n(), 'onMouseOver');
 		this.$supers('unbind_', arguments);
+	},
+	_doMouseOver: function (evt) {
+		if (this._sizer) {
+			var n = this.$n(),
+				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
+				handle = this.isMovable() ? this.$n('cap') : false;
+			if (!this.isMaximized() && this.isOpen() && c) {
+				if (this._backupCursor == undefined)
+					this._backupCursor = n.style.cursor;
+				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
+					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
+					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
+					c == 7 ? 'w-resize': 'nw-resize';
+				if (handle) handle.style.cursor = "";
+			} else {
+				n.style.cursor = this._backupCursor;
+				if (handle) handle.style.cursor = "move";
+			}
+		}
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {
@@ -610,5 +692,32 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			left: node.style.left,
 			top: node.style.top
 		}, evt.data), {ignorable: true});
-	}
+	},
+	// drag sizing
+	_startsizing: zul.wnd.Window._startsizing,
+	_ghostsizing: zul.wnd.Window._ghostsizing,
+	_endghostsizing: zul.wnd.Window._endghostsizing,
+	_insizer: zul.wnd.Window._insizer,
+	_ignoresizing: function (dg, pointer, evt) {
+		var el = dg.node,
+			wgt = dg.control;
+		if (wgt.isMaximized() || !wgt.isOpen()) return true;
+
+		var offs = zk(el).revisedOffset(),
+			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);
+		if (v) {
+			wgt._hideShadow();
+			dg.z_dir = v;
+			dg.z_box = {
+				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
+				minWidth: zk.parseInt(wgt.getMinwidth())
+			};
+			dg.z_orgzi = el.style.zIndex;
+			return false;
+		}
+		return true;
+	},
+	_aftersizing: zul.wnd.Window._aftersizing,
+	_drawsizing: zul.wnd.Window._drawsizing
 });

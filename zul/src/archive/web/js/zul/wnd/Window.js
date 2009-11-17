@@ -702,17 +702,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._prevfocus = this._prevmodal = null;
 		}
 
-		var Window = this.$class;
-		for (var nms = ['close', 'max', 'min'], j = 3; j--;) {
-			var nm = nms[j],
-				n = this['e' + nm ];
-			if (n) {
-				this['e' + nm ] = null;
-				jq(n).unbind('click', Window[nm + 'click'])
-					.unbind('mouseover', Window[nm + 'over'])
-					.unbind('mouseout', Window[nm + 'out']);
-			}
-		}
+		this.domUnlisten_(this.$n(), 'onMouseOver');
 		this.$supers('unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {

@@ -5,6 +5,17 @@
 	-webkit-border-radius: 4px;
 	-webkit-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 }
+.z-panel-resize-faker {
+	position: absolute;
+	border: 1px dashed #1854C2;
+	overflow: hidden;
+	z-index: 60000;
+	left: 0;
+	top: 0;
+	background-color: #D7E6F7;
+	filter: alpha(opacity=50); <%-- IE --%>
+	opacity: .5;
+}
 .z-panel-tl,
 .z-panel-tr,
 .z-panel-bl,
