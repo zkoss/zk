@@ -186,7 +186,7 @@ zWatch = (function () {
 
   return {
 	listen: function (infs) {
-		for (name in infs) {
+		for (var name in infs) {
 			var wts = _watches[name],
 				inf = infs[name];
 			if (wts) {
@@ -210,7 +210,7 @@ zWatch = (function () {
 		return this;
 	},
 	unlisten: function (infs) {
-		for (name in infs) {
+		for (var name in infs) {
 			var wts = _watches[name];
 			wts && wts.$remove(infs[name]); //$remove handles $array
 		}
