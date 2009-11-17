@@ -1,4 +1,4 @@
-/* mesg.js "charset=utf-8"
+/* msgzul.js "charset=utf-8"
  * created by Denis Yarkovoy (dyarkovoy@aruna.com.ua) 30 January 2008
  * Copyright (C) 2005,2008 Potix Corporation
  */

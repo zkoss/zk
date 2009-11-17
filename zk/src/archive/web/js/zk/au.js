@@ -58,7 +58,7 @@ zAu = (function () {
 				data = r[1];
 
 			if (!cmd) {
-				zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
+				zk.error(msgzk.ILLEGAL_RESPONSE+"Command required");
 				continue;
 			}
 
@@ -376,11 +376,11 @@ zAu = (function () {
 
 	//Error Handling//
 	confirmRetry: function (msgCode, msg2) {
-		var msg = mesg[msgCode];
-		return jq.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
+		var msg = msgzk[msgCode];
+		return jq.confirm((msg?msg:msgCode)+'\n'+msgzk.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
 	showError: function (msgCode, msg2, cmd, ex) {
-		var msg = mesg[msgCode];
+		var msg = msgzk[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
 	},
 	getErrorURI: function (code) {
@@ -702,7 +702,7 @@ zAu.cmd0 = { //no uuid at all
 
 		if (open) {
 			zUtl.destroyProgressbox("zk_loadprog");
-			zUtl.progressbox("zk_showBusy", msg || mesg.PLEASE_WAIT, true);
+			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
 		}
 	},
 	closeErrbox: function () {

@@ -1,4 +1,4 @@
-/* mesg_fr.js "charset=utf-8"
+/* msgzk_fr.js "charset=utf-8"
 
 	Purpose:
 		Locale dependent message
@@ -13,7 +13,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-mesg = {
+msgzk = {
 NOT_FOUND: "Pas trouvé: ",
 UNSUPPORTED: "Pas encore supporté: ",
 FAILED_TO_SEND: "Echec lors de l'envoi d'une requête vers le serveur.",

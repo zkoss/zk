@@ -96,7 +96,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		var id = this.uuid;
 		out.push('<div id="', id);
 		out.push('-a" class="z-errbox-left z-arrow" title="')
-		out.push(zUtl.encodeXML(mesg.GOTO_ERROR_FIELD));
+		out.push(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD));
 		out.push('"><div id="', id, '-c" class="z-errbox-right z-errbox-close"><div class="z-errbox-center">');
 		out.push(zUtl.encodeXML(this.msg, {multiline:true})); //Bug 1463668: security
 		out.push('</div></div></div>');

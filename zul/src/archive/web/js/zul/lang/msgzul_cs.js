@@ -1,4 +1,4 @@
-/* mesg.js "charset=utf-8"
+/* msgzul.js "charset=utf-8"
  * Translated by Pavel Mica (aka Crempa - crempa@gmail.com), 02 February 2008
  * Copyright (C) 2005-2008 Potix Corporation
  */

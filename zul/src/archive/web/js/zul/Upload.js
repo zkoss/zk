@@ -242,7 +242,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 						var wgt = self.getWidget();
 						if (wgt) {
 							self.cancel();
-							zul.Upload.error(mesg.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
+							zul.Upload.error(msgzk.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
 						}
 						return;
 					}
@@ -386,7 +386,7 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 		if (flman) {
 			if (!flman.isOpen())
 					flman.open(this._uplder.getWidget());
-			flman.updateFile(this._uplder, sent, mesg.FILE_SIZE+Math.round(total/1024)+mesg.KBYTES);
+			flman.updateFile(this._uplder, sent, msgzk.FILE_SIZE+Math.round(total/1024)+msgzk.KBYTES);
 		}
 	},
 	destroy: function () {

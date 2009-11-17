@@ -1,4 +1,4 @@
-/* mesg.js "charset=utf-8"
+/* msgzk.js "charset=utf-8"
 
 	Purpose:
 		
@@ -13,7 +13,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-mesg = {
+msgzk = {
 NOT_FOUND: "見つかりません: ",
 UNSUPPORTED: "今後サポートする予定です: ",
 FAILED_TO_SEND: "リクエストの送信に失敗しました。",
