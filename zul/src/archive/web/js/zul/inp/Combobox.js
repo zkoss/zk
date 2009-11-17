@@ -194,6 +194,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		case 39://Right
 			this._updnSel(evt, keyCode == 37 || keyCode == 35);
 			break;
+		case 8://Backspace
+			evt.stop();
+			break;
 		default:
 			var v = String.fromCharCode(keyCode);
 			var sel = this._findItem0(v, true, true, !!this._sel);
