@@ -44,6 +44,7 @@ November, 2009
   2893117: The include comp's default width/height 100% if the only child
   2867437: Borderlayout shows a collapse button on splitter
   2898291: a way to maximize the panel  according to portal layout
+  2037509: Auto fit column width when double clicking on header
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

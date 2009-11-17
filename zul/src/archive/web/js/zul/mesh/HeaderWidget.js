@@ -153,9 +153,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return t;
 	},
 	doClick_: function (evt) {
-		var wgt = zk.Widget.$(evt.domTarget);
+		var wgt = zk.Widget.$(evt.domTarget),
+			n = this.$n(),
+			ofs = this._drag ? zk(n).revisedOffset() : false;
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-				evt.domTarget.tagName != "INPUT") {
+				evt.domTarget.tagName != "INPUT" && (!this._drag || !this._insizer(evt.pageX - ofs[0]))) {
 			this.fire('onSort');
 			evt.stop();
 		} else {
@@ -163,6 +165,29 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
 		}
+	},
+	doDoubleClick_: function (evt) {
+		if (this._drag) {
+			var n = this.$n(),
+				$n = zk(n),
+				ofs = $n.revisedOffset();
+			if (this._insizer(evt.pageX - ofs[0])) {
+				var mesh = this.getMeshWidget(),
+					max = zk(this.$n('cave')).textSize()[0],
+					cIndex = $n.cellIndex();
+				for (var rows = mesh.ebodyrows, len = rows.length; len--;) {
+					var cell = rows[len].cells[cIndex], $c;
+					if (cell && ($c = zk(cell)).isVisible()) {
+						var size = $c.jq.find('div:first-child').zk.textSize();
+						if (max < size[0])
+							max = size[0];
+					}
+				}
+				max += $n.padBorderWidth();
+				this.$class._aftersizing({control: this, _zszofs: max + (this.isSortable_() ? 20 : 0)}, evt);
+			}
+		} else
+			this.$supers('doDoubleClick_', arguments);
 	},
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;

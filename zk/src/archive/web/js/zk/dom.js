@@ -694,14 +694,15 @@ zjq.prototype = { //ZK extension
 			for (var ss = _txtStyles, j = ss.length; j--;)
 				_txtStylesCamel[j] = ss[j].$camel();
 		}
-
+		_txtSizDiv.style.display = 'none';
 		var jq = this.jq;
 		for (var ss = _txtStylesCamel, j = ss.length; j--;) {
 			var nm = ss[j];
 			_txtSizDiv.style[nm] = jq.css(nm);
 		}
 
-		_txtSizDiv.innerHTML = txt;
+		_txtSizDiv.innerHTML = txt || jq[0].innerHTML;
+		_txtSizDiv.style.display = '';
 		return [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
 	},
 
