@@ -52,7 +52,8 @@ zDateFormat = {
 			hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
 			isAM;
 
-		var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
+		var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [],
+			isNumber = !isNaN(txt);
 		for (var i = 0, j = txt.length; i < j; i++) {
 			var c = txt.charAt(i);
 			if (c.match(/\d/)) {
@@ -75,7 +76,7 @@ zDateFormat = {
 			}
 		}
 		if (ary.length) ts.push(ary.join(""));
-		for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
+		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
 				var len = 1;
@@ -88,7 +89,7 @@ zDateFormat = {
 					var c2 = fmt.charAt(k);
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
-				var token = ts[i++] ;
+				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
 					if (nosep) {
@@ -202,7 +203,7 @@ zDateFormat = {
 				//default: ignored
 				}
 				j = k - 1;
-			}
+			} else offs++;
 		}
 
 		if (hasHour1 && isAM === false)
