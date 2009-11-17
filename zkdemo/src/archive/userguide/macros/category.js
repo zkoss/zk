@@ -129,8 +129,3 @@ userguide.Category = zk.$extends(zul.wgt.Button, {
 	}
 });
 });
-
-function onSelect(wgt, deselect) {
-	wgt = zk.Widget.$(wgt);
-	//port onSelect in zk 3
-}

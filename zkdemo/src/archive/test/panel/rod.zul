@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+rod.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 16 18:04:36     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<panel height="200px" title="ROD" border="normal" collapsible="true" open="false">
+	<panelchildren>
+	<grid>
+		<columns>
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A+B" colspan="2"/>
+			<auxheader label="C"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+	</panelchildren>
+</panel>

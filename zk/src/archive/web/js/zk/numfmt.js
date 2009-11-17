@@ -99,7 +99,7 @@ zNumFormat = {
 			}
 		}
 		var indFmt = fmt.indexOf(zk.DECIMAL),
-			pre = suf = '';
+			pre = '', suf = '';
 		
 		//pre part
 		indVal = valStr.indexOf('.');

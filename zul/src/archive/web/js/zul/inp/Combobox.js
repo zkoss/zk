@@ -176,33 +176,32 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	otherPressed_: function (evt) {
 		var wgt = this,
-			bDel = evt.keyCode;
-		this._bDel = bDel = bDel == zk.Event.BS || bDel == zk.Event.DEL;
+			keyCode = evt.keyCode,
+			bDel;
+		this._bDel = bDel = keyCode == zk.Event.BS || keyCode == zk.Event.DEL;
 		if (this._readonly)
-			this._matchKey(evt, evt.keyCode);
+			switch (keyCode) {
+			case 35://End
+			case 36://Home
+				this._hilite2();
+				this.getInputNode().value = '';
+				//fall thru
+			case 37://Left
+			case 39://Right
+				this._updnSel(evt, keyCode == 37 || keyCode == 35);
+				break;
+			case 8://Backspace
+				evt.stop();
+				break;
+			default:
+				var v = String.fromCharCode(keyCode);
+				var sel = this._findItem0(v, true, true, !!this._sel);
+				if (sel) 
+					this._select(sel, {sendOnSelect: true});
+			}
 		else
 			setTimeout(function () {wgt._typeahead(bDel);}, 0);
 			//use timeout, since, when key down, value not ready yet
-	},
-	_matchKey: function (evt, keyCode) {
-		switch (keyCode) {
-		case 35://End
-		case 36://Home
-			this._hilite2();
-			this.getInputNode().value = '';
-		case 37://Left
-		case 39://Right
-			this._updnSel(evt, keyCode == 37 || keyCode == 35);
-			break;
-		case 8://Backspace
-			evt.stop();
-			break;
-		default:
-			var v = String.fromCharCode(keyCode);
-			var sel = this._findItem0(v, true, true, !!this._sel);
-			if (sel) 
-				this._select(sel, {sendOnSelect: true});
-		}
 	},
 	_typeahead: function (bDel) {
 		if (zk.currentFocus != this) return;

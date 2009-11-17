@@ -48,7 +48,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		}
 	},
 	_getHead: function () {
-		return head = document.getElementsByTagName("HEAD")[0];
+		return document.getElementsByTagName("HEAD")[0];
 	},
 	_getLink: function (head) {
 		head = head || this._getHead();
