@@ -403,8 +403,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	//watch//
 	onResponse: function () {
-		if (this._shadow)
-			this._syncShadow();
+		this._syncShadow();
 	},
 	onShow: function (ctl) {
 		var w = ctl.origin;
