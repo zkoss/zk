@@ -37,15 +37,18 @@ zk = function (sel) {
 			return this;
 		};
 	}
-	function showprocinit() {
+	function showprgbInit() {
 		//1. don't use jq() since it will be queued after others
 		//2. zk.mnt.pgbg: pgbg() is called with a non-contained page; see mount.js
 		if (jq.isReady||zk.mnt.pgbg||zk.Page.contained.length)
-			showproc(true, zk.pi ? 'z-initing': null);
+			_showprgb(true, zk.pi ? 'z-initing': null);
 		else
-			setTimeout(showprocinit, 10);
+			setTimeout(showprgbInit, 10);
 	}
-	function showproc(mask, icon) {
+	function showprgb() { //When passed to FF's setTimeout, 1st argument is not null
+		_showprgb();
+	}
+	function _showprgb(mask, icon) {
 		if (zk.processing
 		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
 			zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
@@ -261,7 +264,7 @@ zk = function (sel) {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		setTimeout(jq.isReady ? showproc: showprocinit, timeout > 0 ? timeout: 0);
+		setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
 	},
 	endProcessing: function() {
 		zk.processing = false;

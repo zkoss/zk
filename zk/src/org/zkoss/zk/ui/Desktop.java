@@ -288,7 +288,8 @@ public interface Desktop extends Scope {
 	 * {@link org.zkoss.zk.ui.util.UiLifeCycle},
 	 * {@link EventInterceptor}
 	 * and/or {@link org.zkoss.zk.au.AuService}.<br/>
-	 * Note: {@link org.zkoss.zk.ui.event.EventThreadInit},
+	 * Note: {@link org.zkoss.zk.ui.util.DesktopInit},
+	 * {@link org.zkoss.zk.ui.event.EventThreadInit},
 	 * {@link org.zkoss.zk.ui.event.EventThreadCleanup},
 	 * {@link org.zkoss.zk.ui.event.EventThreadSuspend} and
 	 * {@link org.zkoss.zk.ui.event.EventThreadResume} are not supported.
