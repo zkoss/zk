@@ -87,7 +87,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			else if (!tabbox.inAccordionMold())
 				tabs._scrollcheck("sel", this);
 
-			if (oldtb != this)
+			if (oldtb && oldtb != this)
 				this._setSel(oldtb, false, false, init);
 			this._setSel(this, true, notify, init);
 		}
