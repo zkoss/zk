@@ -479,7 +479,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var ncols = dst.cells.length,
 			src, maxnc = 0;
 		for (var j = 0, it = wgt.getBodyWidgetIterator(), w; (w = it.next());) {
-			if (!w.isVisible() || !w._loaded) continue;
+			if (!w.isVisible() || (wgt._modal && !w._loaded)) continue;
 
 			var row = srcrows[j++], $row = zk(row),
 				cells = row.cells, nc = $row.ncols(),
