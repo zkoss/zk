@@ -59,7 +59,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	_syncShadow: function () {
 		if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this.$n(), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
+			this._shadow = new zk.eff.Shadow(this.$n());
 		this._shadow.sync();
 	},
 	_hideShadow: function () {

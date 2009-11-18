@@ -466,11 +466,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (body && zk(body).isRealVisible()) {
 				if (!this._shadow) 
 					this._shadow = new zk.eff.Shadow(this.$n(), {
-						left: -4,
-						right: 4,
-						top: -2,
-						bottom: 3,
-						stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup)
+						left: -4, right: 4, top: -2, bottom: 3
 					});
 					
 				if (this.isMaximized() || this.isMinimized())

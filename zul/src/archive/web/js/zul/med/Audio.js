@@ -88,7 +88,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments)
-				+ ' src="' + (this._src || '') + '" z_autohide="true"',
+				+ ' src="' + (this._src || '') + '"',
 			v;
 		if (v = this._align) 
 			attr += ' align="' + v + '"';

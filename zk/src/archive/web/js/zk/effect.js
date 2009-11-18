@@ -15,8 +15,17 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.eff = {};
+(function() {
+
+zk.eff = {
+	shallStackup: function () { //use function since zk.useStackup might be defined later
+		return zk.useStackup != null ? zk.useStackup: zk.ie6_;
+	}
+};
+
 if (zk.ie || zk.gecko2_ || zk.opera) {
+	var _defShadowOpts = {left: 4, right: 4, top: 3, bottom: 3};
+
 	zk.eff.Shadow = zk.$extends(zk.Object, {
 		_HTML: zk.ie6_ ? '" class="z-shadow"></div>':
 			'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
@@ -24,9 +33,9 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 			+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
 	
 		$init: function (element, opts) {
-			opts = this.opts = zk.$default(opts, {
-				left: 4, right: 4, top: 3, bottom: 3
-			});
+			opts = this.opts =
+				zk.$default(zk.$default(opts, _defShadowOpts),
+					{stackup: zk.eff.shallStackup()});
 			if (zk.ie6_) {
 				opts.left -= 1;
 				opts.right -= 8;
@@ -103,10 +112,9 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	});
 } else {
 	zk.eff.Shadow = zk.$extends(zk.Object, {
-	
 		$init: function (element, opts) {
 			this.wgt = zk.Widget.$(element.id);
-			this.opts = opts || {};
+			this.opts = zk.$default(opts, {stackup: zk.eff.shallStackup()});
 			this.node = element;
 		},
 		destroy: function () {
@@ -159,7 +167,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	$init: function (opts) {
-		opts = opts || {};
+		opts = zk.$default(opts, {stackup: zk.eff.shallStackup()});
 		var mask = this.mask = jq(opts.mask||[], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
@@ -370,9 +378,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 });
 zk.eff.tooltip = new zk.eff.Tooltip();
 
-(function() {
-	var _errs = [],
-		_errcnt = 0;
+var _errs = [], _errcnt = 0;
 
 zk.eff.Error = zk.$extends(zk.Object, {
 	$init: function (msg) {
@@ -428,4 +434,5 @@ zk.eff.Error = zk.$extends(zk.Object, {
 		_errs = [];
 	}
 });
+
 })();

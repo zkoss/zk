@@ -127,7 +127,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(pp,
-				{left: -4, right: 4, top: -2, bottom: 3, stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
+				{left: -4, right: 4, top: -2, bottom: 3});
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value});

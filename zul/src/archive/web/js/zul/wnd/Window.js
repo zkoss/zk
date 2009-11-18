@@ -254,7 +254,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : this.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: this._zIndex,
-				stackup: (zk.useStackup === undefined ? zk.ie6_ : zk.useStackup),
 				visible: realVisible
 			});
 		}
@@ -291,7 +290,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		} else if (this._shadow) {
 			if (!this._shadowWgt)
 				this._shadowWgt = new zk.eff.Shadow(this.$n(),
-					{left: -4, right: 4, top: -2, bottom: 3, stackup: true});
+					{left: -4, right: 4, top: -2, bottom: 3});
 			if (this.isMaximized() || this.isMinimized())
 				this._hideShadow();
 			else

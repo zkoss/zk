@@ -47,8 +47,6 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
 	private byte _medver;
-	/** Whether to hide when a popup or dropdown is placed on top of it. */
-	private boolean _autohide;
 
 	static {
 		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, CE_DUPLICATE_IGNORE);
@@ -113,28 +111,25 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 		}
 	}
 
-	/** Returns whether to automatically hide this component if
-	 * a popup or dropdown is overlapped with it.
+	/** @deprecated As of release 5.0.0, a technique called stackup
+	 * is applied, so there is no need to use this method.
 	 *
-	 * <p>Default: false.
+	 * <p>However, the stackup will cause Firefox some problem if
+	 * there is an overlapped window containing an PDF iframe.
+	 * In this case, you can turn off the shadow of the window
+	 * {@link Window#setShadow}.
 	 *
-	 * <p>If an iframe contains PDF or other embeds, it will be placed
-	 * on top of other components. It may then make popups and dropdowns
-	 * obscure. In this case, you have to specify autohide="true" to
-	 * ask ZK to hide the iframe when popups or dropdowns is overlapped
-	 * with the iframe.
+	 * <p>Or, you can turn off the use of stackup for the whole
+	 * page with the following statement:
+	 * <code>&lt;?script content="zk.useStackup=!zk.gecko"?&gt;</code>
 	 */
 	public boolean isAutohide() {
-		return _autohide;
+		return false;
 	}
-	/** Sets whether to automatically hide this component if
-	 * a popup or dropdown is overlapped with it.
+	/** @deprecated As of release 5.0.0, a technique called stackup
+	 * is applied, so there is no need to use this method.
 	 */
 	public void setAutohide(boolean autohide) {
-		if (_autohide != autohide) {
-			_autohide = autohide;
-			smartUpdate("autohide", _autohide);
-		}
 	}
 
 	/** Returns the src.
@@ -215,7 +210,6 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 			render(renderer, "scrolling", _scrolling);
 		render(renderer, "align", _align);
 		render(renderer, "name", _name);
-		render(renderer, "autohide", _autohide);
 	}
 
 	/** Processes an AU request.

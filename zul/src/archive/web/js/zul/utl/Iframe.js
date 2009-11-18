@@ -36,10 +36,6 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		},
 		name: function (v) {
 			if (n) n.name = v || '';
-		},
-		autohide: function (v) {
-			var n = this.$n();
-			if (n) jq(n).attr('z_autohide', v);
 		}
 	},
 	//super//
@@ -53,8 +49,6 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 			attr += ' align="' + v + '"';
 		if (v = this._name) 
 			attr += ' name="' + v + '"';
-		if (v = this._autohide) 
-			attr += ' z_autohide="' + v + '"';
 		return attr;
 	}
 });

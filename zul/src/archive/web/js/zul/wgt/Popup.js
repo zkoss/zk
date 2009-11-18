@@ -44,7 +44,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// the response from server.
 			zWatch.listen({onResponse: this});		
 		}
-		if ((zk.useStackup === undefined ? zk.ie6_: zk.useStackup)) {
+		if (zk.eff.shallStackup()) {
 			if (!this._stackup)
 				this._stackup = jq.newStackup(node, node.id);
 			else {
