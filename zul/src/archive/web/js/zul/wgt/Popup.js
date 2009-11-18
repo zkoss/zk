@@ -44,9 +44,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// the response from server.
 			zWatch.listen({onResponse: this});		
 		}
-		if (zk.eff.shallStackup()) {
+		if (this.shallStackup_()) {
 			if (!this._stackup)
-				this._stackup = jq.newStackup(node, node.id);
+				this._stackup = jq.newStackup(node, node.id + "-stk");
 			else {
 				this._stackup.style.top = node.style.top;
 				this._stackup.style.left = node.style.left;
@@ -56,6 +56,15 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 	},
+	/** Returns whether to instantiate a stackup when {@link #open}
+	 * is called.
+	 * <p>If the derive class created its own stackup (such as creating
+	 * a shadow), it shall override this method to return false.
+	 */
+	shallStackup_: function () {
+		return zk.eff.shallStackup();
+	},
+
 	position: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)

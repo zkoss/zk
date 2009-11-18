@@ -90,17 +90,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			}
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
-		var sdw = this._shadow,
-			n = this.$n(),
-			st = n.style;
-		if (sdw) {
-			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
-			if (jq.innerX() + jq.innerWidth() - n.offsetWidth == l)
-				st.left = (l - opts.right) + "px";
-			else if (jq.innerY() + jq.innerHeight() - n.offsetHeight == t)
-				st.top = (t - opts.bottom) + "px";
-		}
-		this._syncShadow();
+			//open will fire onShow which invoke this._syncShadow()
+	},
+	shallStackup_: function () {
+		return false;
 	},
 	onFloatUp: function(ctl) {
 		var wgt = ctl.origin;

@@ -72,7 +72,6 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 					break;
 				}
 			}
-			shadow.style.zIndex = zk.parseInt($node.css("zIndex"));
 	
 			var opts = this.opts,
 				l = node.offsetLeft, t = node.offsetTop,
@@ -83,6 +82,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 			st.left = jq.px(l + opts.left, true);
 			st.top = jq.px(t + opts.top, true);
 			st.width = jq.px(wd);
+			st.zIndex = zk.parseInt($node.css("zIndex"));
 			st.display = "block";
 			if (zk.ie6_) st.height = jq.px(hgh);
 			else {
@@ -91,7 +91,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 			}
 	
 			var stackup = this.stackup;
-			if(opts.stackup && node) {
+			if(opts.stackup) {
 				if(!stackup)
 					stackup = this.stackup =
 						jq.newStackup(node, node.id + '-sdwstk', shadow);
@@ -101,7 +101,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 				st.top = jq.px(t, true);
 				st.width = jq.px(w);
 				st.height = jq.px(h);
-				st.zIndex = zk.parseInt($node.css("zIndex"));
+				st.zIndex = shadow.style.zIndex;
 				st.display = "block";
 			}
 			return true;
@@ -137,14 +137,14 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 				return false;
 			}
 			
-			jq(node).addClass(this.wgt.getZclass() + '-shadow');
+			$node.addClass(this.wgt.getZclass() + '-shadow');
 			
 			var opts = this.opts,
 				l = node.offsetLeft, t = node.offsetTop,
 				w = node.offsetWidth, h = node.offsetHeight,
 				stackup = this.stackup;
 				
-			if(opts.stackup && node) {
+			if(opts.stackup) {
 				if(!stackup)
 					stackup = this.stackup =
 						jq.newStackup(node, node.id + '-sdwstk', node);
