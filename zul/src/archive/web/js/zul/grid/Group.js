@@ -135,7 +135,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		if (img)
 			this.domListen_(img, 'onClick', '_doImgClick');
 		var table = n.parentNode.parentNode;
-		if (table.tBodies.length > 1) {
+		if (!this._spans && table.tBodies.length > 1) {
 			var span = 0;
 			for (var row = table.rows[0], i = row.cells.length; i--;)
 				if(zk(row.cells[i]).isVisible()) span++;
