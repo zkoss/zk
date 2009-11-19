@@ -96,7 +96,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass(),
 			panel = tab.getLinkedPanel();
-		if (tab.isSelected() == toSel && !init)
+		if (tab.isSelected() == toSel && notify)
 			return;
 
 		if (toSel)
