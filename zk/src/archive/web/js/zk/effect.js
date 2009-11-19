@@ -17,10 +17,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function() {
 
-zk.eff = {
-	shallStackup: function () { //use function since zk.useStackup might be defined later
-		return zk.useStackup != null ? zk.useStackup: zk.ie6_;
+	var _defSKUOpts, _useSKU;
+	function _getSKUOpts() {
+		return _defSKUOpts
+			|| (_defSKUOpts = {stackup: zk.eff.shallStackup()});
 	}
+
+zk.eff = {
+	shallStackup: function () {
+		return _useSKU;
+	},
+	autohide: zk.$void //overriden later if necessary
 };
 
 if (zk.ie || zk.gecko2_ || zk.opera) {
@@ -34,8 +41,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	
 		$init: function (element, opts) {
 			opts = this.opts =
-				zk.$default(zk.$default(opts, _defShadowOpts),
-					{stackup: zk.eff.shallStackup()});
+				zk.$default(zk.$default(opts, _defShadowOpts), _getSKUOpts());
 			if (zk.ie6_) {
 				opts.left -= 1;
 				opts.right -= 8;
@@ -114,7 +120,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	zk.eff.Shadow = zk.$extends(zk.Object, {
 		$init: function (element, opts) {
 			this.wgt = zk.Widget.$(element.id);
-			this.opts = zk.$default(opts, {stackup: zk.eff.shallStackup()});
+			this.opts = zk.$default(opts, _getSKUOpts());
 			this.node = element;
 		},
 		destroy: function () {
@@ -167,7 +173,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	$init: function (opts) {
-		opts = zk.$default(opts, {stackup: zk.eff.shallStackup()});
+		opts = zk.$default(opts, _getSKUOpts());
 		var mask = this.mask = jq(opts.mask||[], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
@@ -434,5 +440,52 @@ zk.eff.Error = zk.$extends(zk.Object, {
 		_errs = [];
 	}
 });
+
+
+jq(function() {
+	var _lastFloat, _autohideCnt = 0;
+
+	function _onFloatUp(ctl) {
+		var wgt = ctl.origin;
+		++_autohideCnt;
+		setTimeout(function () {
+			if (!--_autohideCnt) {
+				if (wgt) wgt = wgt.getTopWidget();
+				if (wgt != _lastFloat) {
+					_lastFloat = wgt
+					zk.Widget._autohide();
+				}
+			}
+		}, 120); //filter
+	}
+	function _autohide() {
+		_lastFloat = false; //enforce to run if onFloatUp also fired
+		++_autohideCnt;
+		setTimeout(function () {
+			if (!--_autohideCnt)
+				zk.Widget._autohide();
+		}, 100); //filter
+	}
+
+	_useSKU = zk.useStackup;
+	var autohide;
+	if (_useSKU == "auto" || (autohide = _useSKU == "auto/gecko")) {
+		if (zk.gecko && autohide)
+			_useSKU = false;
+		else {
+			autohide = zk.safari || zk.opera;
+			_useSKU = !autohide || zk.ie6_;
+		}
+	} else if (_useSKU) {
+		if (autohide = zk.safari || zk.opera)
+			_useSKU = false; //meaningless if autohide
+	} else if (_useSKU == null)
+		_useSKU = zk.ie6_;
+
+	if (autohide) {
+		zk.eff.autohide = _autohide;
+		zWatch.listen({onFloatUp: {onFloatUp: _onFloatUp}});
+	}
+}); //jq
 
 })();

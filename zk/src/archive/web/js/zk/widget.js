@@ -516,12 +516,60 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return drag.control.ingoreDrag_(pt);
 	}
 
+	//autohide
+	var _hidden = [];
+	function _autohide() {
+		if (!_floatings.length) {
+			for (var n; n = _hidden.shift();)
+				n.style.visibility = n.getAttribute('z_ahvis')||'';
+			return;
+		}
+		for (var tns = ['IFRAME', 'APPLET'], i = 2; i--;)
+			l_nxtel:
+			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
+				var n = ns[j], $n = zk(n), visi;
+				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
+				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
+					continue; //ignore
+
+				for (var tc = _topnode(n), k = _floatings.length; k--;) {
+					var f = _floatings[k].node,
+						tf = _topnode(f);
+					if (tf == tc || _topZIndex(tf) < _topZIndex(tc)
+					|| !$n.isOverlapped(f))
+						continue;
+
+					if (visi) {
+						_hidden.push(n);
+						try {
+							n.setAttribute('z_ahvis', n.style.visibility);
+						} catch (e) {
+						}
+						n.style.visibility = 'hidden';
+					}
+					continue l_nxtel;
+				}
+
+				if (_hidden.$remove(n))
+					n.style.visibility = n.getAttribute('z_ahvis')||'';
+			}
+	}
+	function _topnode(n) {
+		for (var v; n && n != document.body; n = n.parentNode) //no need to check vparentNode
+			if ((v=n.style) && ((v=v.position) == 'absolute' || v == 'relative'))
+				return n;
+	}
+	function _topZIndex(n) {
+		return n ? zk.parseInt(n.style.zIndex): 0;
+	}
+
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
 	bindLevel: -1,
 	_mold: 'default',
 	className: 'zk.Widget',
+	_floating: false,
 
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
@@ -1009,6 +1057,15 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return zi;
 	},
+	/** Returns the top widget, which is the first floating ancestor,
+	 * or null if no floating ancestor.
+	 * @see #isFloating_
+	 */
+	getTopWidget: function () {
+		for (var wgt = this; wgt; wgt = wgt.parent)
+			if (wgt._floating)
+				return wgt;
+	},
 	isFloating_: function () {
 		return this._floating;
 	},
@@ -1035,6 +1092,7 @@ zk.Widget = zk.$extends(zk.Object, {
 						_floatings.splice(j, 1);
 				this._floating = false;
 			}
+			zk.eff.autohide(); //go thru effect.js
 		}
 		return this;
 	},
@@ -1875,7 +1933,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls(opts);
-	}
+	},
+
+	_autohide: _autohide //called by effect.js
 });
 
 zk.RefWidget = zk.$extends(zk.Widget, {
@@ -2021,6 +2081,8 @@ zk.Skipper = zk.$extends(zk.Object, {
 			for (var el; el = skip.firstChild;) {
 				skip.removeChild(el);
 				loc.appendChild(el);
+
+				if (zk.ie) zjq._fixIframe(el); //Bug 2900274
 			}
 		}
 	}

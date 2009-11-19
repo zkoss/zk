@@ -47,6 +47,8 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	private Media _media; 
 	/** Count the version of {@link #_media}. */
 	private byte _medver;
+	/** Whether to hide when a popup or dropdown is placed on top of it. */
+	private boolean _autohide;
 
 	static {
 		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, CE_DUPLICATE_IGNORE);
@@ -111,25 +113,30 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 		}
 	}
 
-	/** @deprecated As of release 5.0.0, a technique called stackup
-	 * is applied, so there is no need to use this method.
+	/** Returns whether to automatically hide this component if
+	 * a popup or dropdown is overlapped with it.
 	 *
-	 * <p>However, the stackup will cause Firefox some problem if
-	 * there is an overlapped window containing an PDF iframe.
-	 * In this case, you can turn off the shadow of the window
-	 * {@link Window#setShadow}.
+	 * <p>Default: false.
 	 *
-	 * <p>Or, you can turn off the use of stackup for the whole
-	 * page with the following statement:
-	 * <code>&lt;?script content="zk.useStackup=!zk.gecko"?&gt;</code>
+	 * <p>If an iframe contains PDF or other non-HTML resource,
+	 * it is possible that it obscues the popup that shall be shown
+	 * above it. To resolve this, you have to specify autohide="true"
+	 * to this component, and specify the following in the page:
+	 * <pre><code>&lt;script content="zk.useStack='auto';"?>
+	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/JavaScript_Customization">JavaScript Customization</a>
+	 * for more information.
 	 */
 	public boolean isAutohide() {
-		return false;
+		return _autohide;
 	}
-	/** @deprecated As of release 5.0.0, a technique called stackup
-	 * is applied, so there is no need to use this method.
+	/** Sets whether to automatically hide this component if
+	 * a popup or dropdown is overlapped with it.
 	 */
 	public void setAutohide(boolean autohide) {
+		if (_autohide != autohide) {
+			_autohide = autohide;
+			smartUpdate("autohide", _autohide);
+		}
 	}
 
 	/** Returns the src.
@@ -210,6 +217,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 			render(renderer, "scrolling", _scrolling);
 		render(renderer, "align", _align);
 		render(renderer, "name", _name);
+		render(renderer, "autohide", _autohide);
 	}
 
 	/** Processes an AU request.

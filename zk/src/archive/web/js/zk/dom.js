@@ -202,6 +202,27 @@ zjq = function (jq) { //ZK extension
 		return dim;
 	}
 
+	//redoCSS
+	var _rdcss = [];
+	zjq._fixCSS = function (el) { //overriden in domie.js
+		el.className += ' ';
+		if (el.offsetHeight)
+			;
+		el.className.trim();
+	};
+	function _redoCSS0() {
+		if (_rdcss.length) {
+			for (var el; el = _rdcss.pop();)
+				try {
+					zjq._fixCSS(el);
+				} catch (e) {
+				}
+		
+			// just in case
+			setTimeout(_redoCSS0);
+		}
+	}
+
 zk.override(jq.fn, jq$super, {
 	init: function (sel, ctx) {
 		var cc;
@@ -312,6 +333,14 @@ zjq.prototype = { //ZK extension
 				c = _scrlIntoView(p, n, c);
 		}
 		return this;
+	},
+
+	isOverlapped: function (el) {
+		var n = this.jq[0];
+		if (n)
+			return jq.isOverlapped(
+				this.cmOffset(), [n.offsetWidth, n.offsetHeight],
+				zk(el).cmOffset(), [el.offsetWidth, el.offsetHeight]);
 	},
 
 	sumStyles: function (areas, styles) {
@@ -731,44 +760,19 @@ zjq.prototype = { //ZK extension
 		}
 	},
 
-	redoCSS: (function () {
-		var rdcss = [], _fixCSS,
-			fixCSS = function (el) {
-				el.className += ' ';
-				if (el.offsetHeight)
-					;
-				el.className.trim();
-			};
-		if (zk.ie) {
-			_fixCSS = fixCSS;
-			fixCSS = function (el) {
-				var zoom = el.style.zoom;
-				el.style.zoom = 1;
-				_fixCSS(el);
-				setTimeout(function() {
-					try {el.style.zoom = zoom;} catch (e) {}
-				});
-			};
-		}
-		function redoCSS0() {
-			if (rdcss.length) {
-				for (var el; el = rdcss.pop();)
-					try {
-						fixCSS(el);
-					} catch (e) {
-					}
-			
-				// just in case
-				setTimeout(redoCSS0);
-			}
-		}
-
-	  return function (timeout) {
-		rdcss.push(this.jq[0]);
-		setTimeout(redoCSS0, timeout >= 0 ? timeout : 100);
+	redoCSS: function (timeout) {
+		_rdcss.push(this.jq[0]);
+		setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
 		return this;
-	  };
-	})(),
+	},
+	redoSrc: function () {
+		for (var j = this.jq.length; j--;) {
+			var el = this.jq[j],
+				src = el.src;
+			el.src = "javascript:false;";
+			el.src = src;
+		}
+	},
 
 	vparentNode: function () {
 		var el = this.jq[0];
@@ -1119,11 +1123,9 @@ zk.copy(jq, { //ZK extension to jq
 	}
 });
 
-zk.copy(zjq, { //private
-	_cleanVisi: function (n) { //override later
-		n.style.visibility = "inherit";
-	}
-});
+zjq._cleanVisi = function (n) { //override later (by domopera.js
+	n.style.visibility = "inherit";
+};
 
 zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 	stop: function () {

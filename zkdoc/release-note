@@ -74,6 +74,7 @@ November, 2009
   2890514: Row's align/valign property doesn't work
   2890515: datebox constraint with "before" fails
   2893132: ZK 5 RC: Tabpanel's new children is added to wrong position
+  2900274: Window with PDF not shown if doOverlapped (IE)
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

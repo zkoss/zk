@@ -112,6 +112,30 @@ zk.override(jq.fn, $fns, {
 		return ret;
 	}
 });
+
+var _zjq = {};
+zk.override(zjq, _zjq, {
+	_fixIframe: function (el) { //used in widget.js
+		try {
+			if (el.tagName == 'IFRAME')
+				zk(el).redoSrc();
+			else
+				for (var ns = el.getElementsByTagName("IFRAME"), j = ns.length; j--;)
+					zk(ns[j]).redoSrc();
+		} catch (e) {
+		}
+	},
+
+	_fixCSS: function (el) {
+		var zoom = el.style.zoom;
+		el.style.zoom = 1;
+		_zjq._fixCSS(el);
+		setTimeout(function() {
+			try {el.style.zoom = zoom;} catch (e) {}
+		});
+	}
+});
+
 })();
 
 zjq._alphafix = zk.$void; //overriden if ie6_

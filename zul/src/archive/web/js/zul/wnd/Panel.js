@@ -688,6 +688,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			left: node.style.left,
 			top: node.style.top
 		}, evt.data), {ignorable: true});
+
+		zWatch.fireDown('onMove', wgt);
 	},
 	// drag sizing
 	_startsizing: zul.wnd.Window._startsizing,

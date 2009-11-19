@@ -61,6 +61,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<button label="Change Height" onClick='w21.height = w21.height == null ? "100px": null'/>
 		</window>
 		<button label="Visible 1st of 2nd" onClick="w21.visible = !w21.visible"/>
+		<button label="Overlapped" focus="true" onClick="w2.doOverlapped();"/>
+		<button label="Embedded" onClick="w2.doEmbedded();"/>
 	</window>
 	<button label="Visible 2nd" onClick="w2.visible = !w2.visible"/>
 </window>

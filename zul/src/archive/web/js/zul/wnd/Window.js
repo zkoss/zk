@@ -548,6 +548,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			left: x + 'px',
 			top: y + 'px'
 		}, keys), {ignorable: true});
+
+		zWatch.fireDown('onMove', this);
 	},
 	//super//
 	setVisible: function (visible) {

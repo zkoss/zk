@@ -133,13 +133,13 @@ org.zkoss.zul.api.Applet {
 	public void setField(String field, String value) {
 		response(null, new AuInvoke(this, "setField", field, value));
 	}
+
+	//super//
 	/** No child is allowed.
 	 */
 	public boolean isChildable() {
 		return false;
 	}
-
-	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
