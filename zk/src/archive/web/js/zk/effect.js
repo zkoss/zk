@@ -476,9 +476,6 @@ jq(function() {
 			autohide = zk.safari || zk.opera;
 			_useSKU = !autohide || zk.ie6_;
 		}
-	} else if (_useSKU) {
-		if (autohide = zk.safari || zk.opera)
-			_useSKU = false; //meaningless if autohide
 	} else if (_useSKU == null)
 		_useSKU = zk.ie6_;
 
