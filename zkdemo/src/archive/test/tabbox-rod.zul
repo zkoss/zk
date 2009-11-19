@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window width="100%" height="100%">
 	<!-- Turn it on if you want to disable the client ROD
-	<custom-attributes org.zkoss.zk.client.rod="false"/>
+	<custom-attributes org.zkoss.zul.client.rod="false"/>
 	-->
 	<tabbox id="tb" width="100%" vflex="true">
 		<tabs>

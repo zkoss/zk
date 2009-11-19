@@ -41,7 +41,7 @@ public class Attributes {
 	 * <p>Applicable: Enterprise edition
 	 * @since 5.0.0
 	 */
-	public static final String CLIENT_ROD = "org.zkoss.zk.client.rod";
+	public static final String CLIENT_ROD = "org.zkoss.zul.client.rod";
 
 	//Execution/request//
 	/** The execution attribute used to control how to {@link org.zkoss.zk.ui.sys.PageCtrl#redraw}
