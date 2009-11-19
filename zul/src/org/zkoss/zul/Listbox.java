@@ -154,6 +154,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 
 	public Listbox() {
