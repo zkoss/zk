@@ -95,11 +95,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	shallStackup_: function () {
 		return false;
 	},
-	setTopmost: zk.ie || zk.gecko2_ || zk.opera ? function () {
+	setTopmost: function () {
 		this.$supers('setTopmost', arguments);
 		this._syncShadow();
-	} : function () {
-		this.$supers('setTopmost', arguments);
 	},
 	onFloatUp: function(ctl) {
 		var wgt = ctl.origin;
