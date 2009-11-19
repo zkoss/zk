@@ -249,9 +249,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.setTopmost();
 		
 		if (!this._mask) {
+			var anchor = this._shadowWgt ? this._shadowWgt.getBottomElement(): null;
 			this._mask = new zk.eff.FullMask({
 				id: this.uuid + "-mask",
-				anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : this.$n(),
+				anchor: anchor ? anchor: this.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: this._zIndex,
 				visible: realVisible
@@ -296,8 +297,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else
 				this._shadowWgt.sync();
 		}
-		if (bMask && this._mask && this._shadowWgt)
-			this._mask.sync(this._shadowWgt.getBottomElement());			
+		if (bMask && this._mask && this._shadowWgt) {
+			var n = this._shadowWgt.getBottomElement(); //null if ff3.5 (no shadow/stackup)
+			if (n) this._mask.sync(n);
+		}
 	},
 	zsync: _zkf, //used with zsync
 	_hideShadow: function () {
