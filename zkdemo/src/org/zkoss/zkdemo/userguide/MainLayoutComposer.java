@@ -125,8 +125,6 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Executions.getCurrent().sendRedirect(href);
 		} else {
 			itemList.setModel(getSelectedModel());
-			if (Executions.getCurrent().isBrowser("ie6_"))
-				Clients.evalJavaScript("fixImage4IE6();");
 			if (item != null) {
 				itemList.renderAll();
 				((Listitem)itemList.getFellow(item.getId())).setSelected(true);
@@ -203,11 +201,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		_selected = (Button) main.getFellow(di.getCateId());
 		String deselect = _selected != null ? "jq('#"+ _selected.getUuid() + 
 		"').addClass('demo-seld').siblings().removeClass('demo-seld');" : "";
-		if (Executions.getCurrent().isBrowser("ie6_")) {
-			Clients.evalJavaScript(deselect + "fixImage4IE6();");
-		} else {
-			Clients.evalJavaScript(deselect);
-		}
+		Clients.evalJavaScript(deselect);
 		item.getDesktop().setBookmark(item.getId());
 	}
 	public void onCtrlKey$searchBox(KeyEvent event) {
@@ -246,13 +240,6 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			}
 			itemList.setModel(new ListModelList(item));
 		} else itemList.setModel(new ListModelList(items));
-		String deselect = _selected != null ? "onSelect('"+ _selected.getUuid() + "', true);" : "";
-		if (Executions.getCurrent().isBrowser("ie_")) {
-			itemList.renderAll();
-			Clients.evalJavaScript(deselect + "fixImage4IE6();");
-		} else {
-			Clients.evalJavaScript(deselect);
-		}
 		_selected = null;
 	}
 
