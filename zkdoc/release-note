@@ -47,6 +47,7 @@ November, 2009
   2037509: Auto fit column width when double clicking on header
   2187771: Panel re-sizeable
   1594070: Listbox should raise onBlur/onFocus event
+  1481860: add onBlur/onFocus event to Tree
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

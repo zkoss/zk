@@ -39,7 +39,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequests;
 
 import org.zkoss.zul.event.PagingEvent;
@@ -102,6 +101,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Tree() {
