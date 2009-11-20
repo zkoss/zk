@@ -34,10 +34,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<z:button label="Overlap" onClick="win.doOverlapped()"/>
 		<z:button label="Embed" onClick="win.doEmbedded()"/>
 	</z:window>
+
 	<jsp:include page="jspTags-inc.jsp"/>
+
 		<p>4. Content in z:page after z:window</p>
 </z:page>
 
 	<p>5. Content after z:page</p>
+
+	<h3>Now we make the same included page as a sibling</h3>
+	<jsp:include page="jspTags-inc.jsp"/>
 	</body>
 </html>
