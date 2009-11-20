@@ -37,7 +37,6 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -49,6 +48,7 @@ import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
+import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -129,13 +129,15 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private boolean _sizedByContent, _vflex;
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
-	private int _topPad = 0; //since 5.0.0
+	private int _topPad; //since 5.0.0 top padding
+	
+	private transient boolean _rod;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
-		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
+		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
 	}
 	
@@ -164,6 +166,19 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					_gridInitListener = null; 
 				}
 				//initialize data loader
+				//Tricky! might has been initialized when apply properties
+				if (_dataLoader != null) { 
+					final boolean rod = evalRod();
+					if (_rod != rod) {
+						if (_model != null) { //so has to recreate rows and items
+							getRows().getChildren().clear();
+							_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
+							setModel(_model);
+						} else {
+							_dataLoader = null; //enforce recreate dataloader
+						}
+					}
+				}
 				final DataLoader loader = getDataLoader();
 				//initialize paginal if any
 				Paginal pgi = getPaginal();
@@ -737,9 +752,20 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			}
 
 			int j = 0;
-			for (Iterator it = _rows.getChildren().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render((Row)it.next());
+			int realOfs = ofs - getDataLoader().getOffset();
+			if (realOfs < 0) realOfs = 0;
+			boolean open = true;
+			for (Iterator it = _rows.getChildren().listIterator(realOfs);
+			j < pgsz && it.hasNext();) {
+				final Row row = (Row) (Row)it.next();		
+				if (row.isVisible() && (open || row instanceof Groupfoot || row instanceof Group)) {
+					renderer.render(row); 
+					++j;
+				}
+				if (row instanceof Group)
+					open = ((Group) row).isOpen();
+			}
+
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -942,10 +968,19 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				} else if (_pgi != null) {
 					removePagingListener(_pgi);
 				}
+				if (getModel() != null) {
+					getDataLoader().syncModel(0, 40); //change offset back to 0
+					postOnInitRender();
+				}
 				invalidate(); //paging mold -> non-paging mold
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+				_topPad = 0;
+				_currentTop = 0;
+				_currentLeft = 0;
+				//enforce a page loading
+				Events.postEvent(new PagingEvent("onPagingImpl", (Component)_pgi, _pgi.getActivePage()));
 				invalidate(); //non-paging mold -> paging mold
 			}
 		}
@@ -1030,11 +1065,22 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 		return true;
 	}
+	
+	private boolean evalRod() {
+		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "true");
+		String rod2 = (String) getAttribute("org.zkoss.zul.grid.rod");
+		if (rod2 == null) {
+			rod2 = rod1;
+		}
+		return !"false".equals(rod2);
+	}
+	
 	/*package*/ DataLoader getDataLoader() {
 		if (_dataLoader == null) {
+			_rod = evalRod();
 			final String loadercls = (String) getAttribute("grid-dataloader");
 			try {
-				_dataLoader = loadercls != null ? 
+				_dataLoader = _rod && loadercls != null ? 
 						(DataLoader) Classes.forNameByThread(loadercls).newInstance() :
 						new GridDataLoader();
 			} catch (Exception e) {
@@ -1120,13 +1166,35 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			renderer.render("_currentTop", _currentTop);
 		if (_currentLeft != 0)
 			renderer.render("_currentLeft", _currentLeft);
-		if (_topPad != 0)
-			renderer.render("_topPad", _topPad);
 
-		render(renderer, "totalSize", new Integer(getDataLoader().getTotalSize()));
-		render(renderer, "_offset", new Integer(getDataLoader().getOffset()));
+		renderer.render("_topPad", _topPad);
+		renderer.render("_totalSize", getDataLoader().getTotalSize());
+		renderer.render("_offset", getDataLoader().getOffset());
+		
+		if (_rod) {
+			renderer.render("_grid$rod", true);
+		}
 	}
 	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Padding {
+		//-- Padding --//
+		public int getHeight() {
+			// TODO Auto-generated method stub
+			return _topPad;
+		}
+
+		public void setHeight(int height) {
+			_topPad = height;
+		}
+	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -1136,7 +1204,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
-			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, _preloadsz > 0 ? _preloadsz : 0));
+			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, getPreloadSize()));
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);

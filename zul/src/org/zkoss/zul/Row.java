@@ -48,6 +48,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	private boolean _loaded;
 	
 	private transient Detail _detail;
+	private transient int _index = -1;
 
 	/**
 	 * Returns the child detail component.
@@ -193,10 +194,17 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	 */
 	/*package*/ int getIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j) {
-			if (it.next() == this)
-				break;
+		if (_index < 0) {
+			for (Iterator it = getParent().getChildren().iterator();
+			it.hasNext(); ++j) {
+				if (it.next() == this)
+					break;
+			}
+			final Grid grid = getGrid();
+			final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0; 
+			j += (offset < 0 ? 0 : offset);
+		} else {
+			j = _index;
 		}
 		return j;
 	}
@@ -244,6 +252,8 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		render(renderer, "nowrap", _nowrap);
 		render(renderer, "spans", _spans);
 		render(renderer, "_loaded", _loaded);
+		if (_index >= 0)
+			renderer.render("_index", _index);
 	}
 	
 	//-- Component --//
@@ -321,6 +331,10 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 
 		public void setLoaded(boolean loaded) {
 			Row.this.setLoaded(loaded);
+		}
+		
+		public void setIndex(int index) {
+			_index = index;
 		}
 	}
 

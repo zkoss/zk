@@ -17,7 +17,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,7 +24,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.GroupRendererExt;
@@ -142,6 +140,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			switch(info.type){
 			case GroupDataInfo.GROUP:
 				row = newGroup(renderer0);
+				((Group)row).setOpen(!info.close);
 				break;
 			case GroupDataInfo.GROUPFOOT:
 				row = newGroupfoot(renderer0);
@@ -153,6 +152,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			row = newRow(renderer0);
 		}
 		((LoadStatus)(((AbstractComponent)row).getExtraCtrl())).setLoaded(false);
+		((LoadStatus)(((AbstractComponent)row).getExtraCtrl())).setIndex(index);
 
 		newUnloadedCell(renderer0, row);
 		return row;
@@ -212,10 +212,6 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public Object getRealRenderer() {
 		final RowRenderer renderer = _grid.getRowRenderer();
 		return renderer != null ? renderer : _defRend; 
-	}
-
-	private static final RowRenderer getDefaultRowRenderer() {
-		return _defRend;
 	}
 	
 	private static final RowRenderer _defRend = new RowRenderer() {
@@ -318,6 +314,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public void updateModelInfo() {
 		// do nothing
 	}
+	
 	//--Cropper--//
 	public boolean isCropper() {
 		return _grid != null &&
@@ -353,7 +350,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			if (row instanceof Group) {
 				final Group g = (Group) row;
 				if (!g.isOpen()) {
-					for (int j = 0, len = g.getItemCount(); j < len; j++)
+					for (int j = 0, len = g.getItemCount(); j < len && row != null; j++)
 						row = (Row) row.getNextSibling();
 				}
 			}

@@ -18,6 +18,8 @@ package org.zkoss.zul.impl;
 
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.AbstractListModel;
@@ -28,7 +30,8 @@ import org.zkoss.zul.event.GroupsDataListener;
 
 /**
  * Encapulates {@link GroupsModel} as an instance of {@link ListModel}
- * such that it is easier to handle by {@link Listbox} and {@link Group}.
+ * such that it is easier to handle by {@link org.zkoss.zul.Listbox} and 
+ * {@link org.zkoss.zul.Group}.
  *
  * @author tomyeh
  * @since 3.5.0
@@ -45,7 +48,11 @@ public class GroupsListModel extends AbstractListModel {
 	private transient int[] _gpofs;
 	/** Whether a group has a foot. */
 	private transient boolean[] _gpfts;
+	/** Whether a group is closed. */
+	private transient boolean[] _gpcloses;
 	private transient GroupsDataListener _listener;
+	/** groupInfo list used in {@link Rows} */
+	private transient List _gpinfo;
 
 	public GroupsListModel(GroupsModel model) {
 		_model = model;
@@ -55,10 +62,12 @@ public class GroupsListModel extends AbstractListModel {
 		final int groupCount = _model.getGroupCount();
 		_gpofs = new int[groupCount];
 		_gpfts = new boolean[groupCount];
+		_gpcloses = new boolean[groupCount];
 		_size = 0;
 		for (int j = 0; j < groupCount; ++j) {
 			_gpofs[j] = _size;
-			_size += 1 + _model.getChildCount(j);
+			_gpcloses[j] = _model.isClose(j);
+			_size += 1 + (_gpcloses[j] ? 0 : _model.getChildCount(j)); //closed group deemed as zero child in ListModel
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;
 		}
@@ -68,7 +77,28 @@ public class GroupsListModel extends AbstractListModel {
 		}
 		
 	}
-
+	
+	public List getGroupsInfo() {
+		_gpinfo = new LinkedList();
+		for(int j=0; j < _gpofs.length; ++j) {
+			final int offset1 = _gpofs[j];
+			final int offset2 = getNextOffset(j);
+			_gpinfo.add(new int[] {offset1, offset2 - offset1, hasGroupfoot(j) ? offset2 - 1 : -1});
+		}
+		return _gpinfo;
+	}
+	
+	/**
+	 * Returns the offset from 0 that a group in this ListModel.
+	 * <p>For example, _gpofs[2] is the offset of group 2 (the third group)
+	 * in this ListModel.
+	 * @param groupIndex the group index
+	 * @return the offset from 0 that a group in this ListModel.
+	 */
+	public int getGroupOffset(int groupIndex) {
+		return _gpofs[groupIndex];
+	}
+	
 	public GroupsModel getGroupsModel() {
 		return _model;
 	}
@@ -91,7 +121,7 @@ public class GroupsListModel extends AbstractListModel {
 	}
 	/**
 	 * Groups and sorts the data by the specified column and comparator.
-	 * It only called when {@link Listbox} or {@link Grid} has the sort function.
+	 * It only called when {@link org.zkoss.zul.Listbox} or {@link org.zkoss.zul.Grid} has the sort function.
 	 * @param colIndex the index of the column
 	 */
 	public void group(Comparator cmpr, boolean ascending, int colIndex) {
@@ -122,17 +152,19 @@ public class GroupsListModel extends AbstractListModel {
 
 		int gi = Arrays.binarySearch(_gpofs, index);
 		if (gi >= 0)
-			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0);
+			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, _gpcloses[gi]);
 
 		gi = - gi - 2; //0 ~ _gpofs.length - 2
 		int ofs = index - _gpofs[gi] - 1;
 		if (_gpfts[gi]
 		&& ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
-			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0);
+			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, _gpcloses[gi]);
 
-		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs);
+		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, _gpcloses[gi]);
 	}
-	//ListModel//
+	//ListModel
+	//ListModel assume each item in the ListModel is visible; thus items inside closed
+	//Group is deemed not in the ListModel
 	public Object getElementAt(int index) {
 		final GroupDataInfo info = getDataInfo(index);
 		if (info.type == GroupDataInfo.GROUP)
@@ -141,6 +173,8 @@ public class GroupsListModel extends AbstractListModel {
 			return _model.getGroupfoot(info.groupIndex);
 		return _model.getChild(info.groupIndex, info.offset);
 	}
+	//ListModel assume each item in the ListModel is visible; thus items inside closed
+	//Group is not count into size
 	public int getSize() {
 		return _size;
 	}
@@ -227,11 +261,16 @@ public class GroupsListModel extends AbstractListModel {
 		 * It is one of {@link #GROUP}, {@link #GROUPFOOT} and {@link #ELEMENT}.
 		 */
 		public byte type;
+		/** Whether the group is closed.
+		 * It is meaningful only if {@link #type} is {@link #GROUP}.
+		 */
+		public boolean close;
 
-		private GroupDataInfo(byte type, int groupIndex, int offset) {
+		private GroupDataInfo(byte type, int groupIndex, int offset, boolean close) {
 			this.type = type;
 			this.groupIndex = groupIndex;
 			this.offset = offset;
+			this.close = close;
 		}
 	}
 }

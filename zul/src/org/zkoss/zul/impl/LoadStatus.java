@@ -33,4 +33,10 @@ public interface LoadStatus {
 	 * @return loaded true to set the item as loaded.
 	 */
 	public boolean isLoaded();
+	
+	/**
+	 * Sets the index of the loaded item (so client known row's index).
+	 * @param index the loaded item
+	 */
+	public void setIndex(int index);
 }

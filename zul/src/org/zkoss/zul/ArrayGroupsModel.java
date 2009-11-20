@@ -60,6 +60,10 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	 */
 	protected Object[] _foots;
 	
+	/**
+	 * member field to store group close status
+	 */
+	protected boolean[] _closes;
 	
 	/**
 	 * Constructor
@@ -141,9 +145,23 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 		if (cmprx != cmpr)
 			sortAllGroupData(cmpr, ascending,col);//sort by original comparator
 
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.GROUPS_RESET,-1,-1,-1);
+	}
+	
+	public boolean isClose(int groupIndex) {
+		return _closes == null ? false : _closes[groupIndex];
 	}
 
+	public void setClose(int groupIndex, boolean close) {
+		if (_closes == null) {
+			_closes = new boolean[getGroupCount()];
+		}
+		if (_closes[groupIndex] != close) {
+			_closes[groupIndex] = close;
+			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex,-1,-1);
+		}
+	}
+	
 	/**
 	 * Sorts data in each group, the group order will not change. invoke this method doesn't fire event.
 	 */
@@ -181,6 +199,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 	 * Notice that the comparator is never an instance of {@link GroupComparator}.
 	 * The implementation just uses {@link Comparator#compare} to sort
 	 * the data.
+	 * @param col column index
 	 */
 	protected void organizeGroup(Comparator cmpr, int col) {
 		List group = new ArrayList();
@@ -209,6 +228,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 		_data = new Object[gd.length][];
 		_foots = new Object[_data.length];
 		_heads = new Object[_data.length];
+		_closes = new boolean[_data.length];
 		
 		for(int i=0;i<gd.length;i++){
 			gdata = (List)gd[i];
@@ -216,6 +236,7 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 			gdata.toArray(_data[i]);
 			_heads[i] = createGroupHead(_data[i],i,col);
 			_foots[i] = createGroupFoot(_data[i],i,col);
+			_closes[i] = createGroupClose(_data[i],i,col);
 		}
 	}
 
@@ -260,9 +281,15 @@ public class ArrayGroupsModel extends AbstractGroupsModel implements GroupsModel
 		Arrays.sort(_nativedata,cmpr);
 	}
 
-
-
-	
-	
-
+	/**
+	 * create group close status, default implementation return false, which means open the group.
+	 * you can override this method to return your group close status.
+	 * @param groupdata data the already in a group.
+	 * @param index group index
+	 * @param col column to group
+	 * @since 5.0.0
+	 */
+	protected boolean createGroupClose(Object[] groupdata,int index,int col) {
+		return false;
+	}
 }

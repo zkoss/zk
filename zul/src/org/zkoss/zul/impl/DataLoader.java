@@ -40,14 +40,14 @@ public interface DataLoader {
 	public Component getOwner();
 	
 	/**
-	 * Returns current offset of the data chunk.
-	 * @return current offset of the data chunk.
+	 * Returns the requested <b>visible</b> offset of the current loaded data chunk.
+	 * @return the requested <b>viaible</b> offset of the current loaded data chunk.
 	 */
 	public int getOffset();
-	
+
 	/**
-	 * Returns current limit size of the data chunk to be shown on the screen.
-	 * @returns current limit size of the data chunk to be shown on the screen.
+	 * Returns the required <b>visible</b> limit size of the current loaded data chunk to be shown on the screen.
+	 * @return the required <b>visible</b> limit size of the current loaded data chunk to be shown on the screen.
 	 */
 	public int getLimit();
 	

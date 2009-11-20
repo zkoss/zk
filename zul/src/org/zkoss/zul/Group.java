@@ -25,6 +25,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -117,7 +118,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 		int count = getItemCount();
 		int visibleCount = 0;
 		Row row = (Row) getNextSibling();
-		while (count-- > 0) {
+		while (count-- > 0 && row != null) {
 			if(row.isVisible())
 				visibleCount++;
 			row = (Row) row.getNextSibling();
@@ -238,8 +239,16 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
 			final Rows rows = (Rows) getParent();
-			if (rows != null)
+			if (rows != null) {
 				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
+				final Grid grid = getGrid();
+				if (grid != null) {
+					final ListModel model = grid.getModel(); 
+					if (model instanceof GroupsListModel) {
+						((GroupsListModel)model).getGroupsModel().setClose(rows.getGroupIndex(getIndex()), !_open);
+					}
+				}
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

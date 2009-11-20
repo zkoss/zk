@@ -66,6 +66,11 @@ public class GroupsDataEvent {
      */
 	public static final int GROUPS_REMOVED = 6;
 
+	/** Identifies the Group is reset.
+	 *  @since 5.0.0
+	 */
+	public static final int GROUPS_RESET = 7;
+	
 	private final GroupsModel _model;
 	private final int _type, _groupIndex, _index0, _index1;
 
