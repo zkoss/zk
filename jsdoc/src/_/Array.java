@@ -17,7 +17,7 @@ package _;
 /**
  * An array is a special variable, whcih can hold more than one value.
  *
- * <p>In additions to <a href="http://www.w3schools.com/jsref/jsref_obj_array.asp">Complete Reference</a>
+ * <p>In additions to <a href="http://www.w3schools.com/jsref/jsref_obj_array.asp">JavaScript Reference</a>
  * that JavaScript provide, ZK extends with the following methods.
  * @see Map
  * @see String

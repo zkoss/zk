@@ -13,8 +13,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 <package name="zk">
 	<script src="ext/jquery.js"/>
-	<script src="zk.js"/>
-	<script src="dom.js"/>
+	<script src="zk.js" jsdoc="true"/>
+	<script src="dom.js" jsdoc="true"/>
 	<script src="domie.js" browser="ie"/>
 	<script src="domie6.js" browser="ie6-"/>
 	<script src="domopera.js" browser="opera"/>

@@ -25,6 +25,8 @@ package _;
  *
  * <p>Other extension can be found as follows
  * <ul>
+ * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
+ * <li>{@link $zk} - ZK extension to {@link $jq}.</li>
  * <li>{@link _.jq.Event} - the event object passed to the event listener</li>
  * <li>{@link _.jq.event} - a collection of functions used to manipulate events.</li>
  * </ul>

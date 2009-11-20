@@ -15,7 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package _;
 
 /**
- * 
+ * A string.
+ * Notice that, in JavaScript, there is no character.
+ * <p>Refer to <a href="http://www.w3schools.com/jsref/jsref_obj_string.asp">JavaScript Reference</a>.
  */
 public class String {
 }

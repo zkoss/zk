@@ -578,7 +578,7 @@ public class HtmlPageRenders {
 	Component comp, Writer out) throws java.io.IOException {
 		out.write("<div id=\"");
 		out.write(comp.getUuid());
-		out.write("\"></div><script>\nzkmb();try{\n");
+		out.write("\"></div><script>zkmb();try{\n");
 
 		((ComponentCtrl)comp).redraw(out);
 

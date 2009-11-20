@@ -123,7 +123,12 @@ zk = function (sel) {
 		}
 	}
 
+  /** @class _.zk
+   */
   return {
+	/** The processing delay.
+	 * @type Integer
+	 */
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,

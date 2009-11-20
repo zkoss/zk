@@ -295,7 +295,12 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 	};
 });
 
-zjq.prototype = { //ZK extension
+/** @class _.$zk
+ */
+zjq.prototype = {
+	/** Returns an array of widgets for each DOM element (selected by this object).
+	 * @return Array an array of widget
+	 */
 	widget: function () {
 		var ws = [];
 		for (var j = this.jq.length; j--;) {
@@ -907,11 +912,30 @@ zjq.prototype = { //ZK extension
 	}
 };
 
+/** @class _.jq
+ * DOM utilities in addition to {@link $jq} and {@link $zk}.
+ * For example, <code>jq.px(node);</code>.
+ */
 zk.copy(jq, { //ZK extension to jq
+	/** Converting an integer to a string ending with "px".
+	 * @param Integer v the number of pixels
+	 * @param Boolean negativeAllowed [Optional|false] whether a negative
+	 * number is allowed. If not allowed, "0px" is returned if negative.
+	 * @return String the integer with string.
+	 */
 	px: function (v, negativeAllowed) {
-		return (negativeAllowed?v||0:Math.max(v, 0)) + "px";
+		return (negativeAllowed ? v||0:Math.max(v, 0)) + "px";
 	},
 
+	/** Returns an array of {@link DOMElement} that matches.
+	 * It invokes <code>document.getElementsByName</code> to retrieve
+	 * the DOM elements.
+	 * @return Array an array of {@link DOMElement} that matches
+	 * the specified condition
+	 * @param String id the identifier
+	 * @param String subId [Optional] the identifier of the sub-element.
+	 * Example, <code>jq.$$('_u_12', 'cave');</code>.
+	 */
 	$$: function (id, subId) {
 		return typeof id == 'string' ?
 			id ? document.getElementsByName(id + (subId ? '-' + subId : '')): null: id;
@@ -1127,7 +1151,12 @@ zjq._cleanVisi = function (n) { //override later (by domopera.js
 	n.style.visibility = "inherit";
 };
 
-zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
+/** @class _.jq.Event
+ * A DOM element.
+ */
+zk.copy(jq.Event.prototype, {
+	/** Stops the event propagation.
+	 */
 	stop: function () {
 		this.preventDefault();
 		this.stopPropagation();
@@ -1153,6 +1182,7 @@ zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 	}
 });
 
+//No jsdoc since Windows cannot have event.java and Event.java in the same directory
 zk.copy(jq.event, {
 	fire: document.createEvent ? function (el, evtnm) {
 		var evt = document.createEvent('HTMLEvents');

@@ -16,7 +16,7 @@ package _;
 
 /**
  * The Date object is used to work with dates and times.
- * <p><a href="http://www.w3schools.com/jsref/jsref_obj_date.asp">Complete reference</a>.
+ * <p><a href="http://www.w3schools.com/jsref/jsref_obj_date.asp">JavaScript reference</a>.
  * @see Map
  * @see Array
  * @see String
