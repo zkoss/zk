@@ -34,6 +34,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<z:button label="Overlap" onClick="win.doOverlapped()"/>
 		<z:button label="Embed" onClick="win.doEmbedded()"/>
 	</z:window>
+	<jsp:include page="jspTags-inc.jsp"/>
 		<p>4. Content in z:page after z:window</p>
 </z:page>
 
