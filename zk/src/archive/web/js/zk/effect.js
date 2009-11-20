@@ -440,8 +440,8 @@ zk.eff.Error = zk.$extends(zk.Object, {
 	}
 });
 
-
 jq(function() {
+	//Handle zk.useStackup
 	var _lastFloat, _autohideCnt = 0, _callback;
 
 	function _onFloatUp(ctl) {
