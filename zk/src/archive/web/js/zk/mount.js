@@ -20,6 +20,7 @@ function zkmb(binding) {
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
+//don't change API since ZK JSP also depends on it
 function zkpb(pguid, dtid, contextURI, updateURI, contained, props) {
 	if (dtid)
 		if (typeof dtid == 'string')

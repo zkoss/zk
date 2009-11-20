@@ -224,10 +224,6 @@ zWatch = (function () {
 	},
 	fireDown: function (name, org, opts) {
 		_fire(name, org, zk.copy(opts,{down:true}), arguments);
-
-		if (name == 'onSize' || name == 'onMove'
-		|| name == 'onShow' || name == 'onHide')
-			zk.eff.autohide();
 	},
 	onBindLevelMove: function () {
 		_dirty = true;

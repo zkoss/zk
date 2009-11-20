@@ -1092,7 +1092,6 @@ zk.Widget = zk.$extends(zk.Object, {
 						_floatings.splice(j, 1);
 				this._floating = false;
 			}
-			zk.eff.autohide(); //go thru effect.js
 		}
 		return this;
 	},

@@ -21,6 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <html>
 	<head>
 		<title>Test of ZUL on JSP</title>
+		<z:zkhead/>
 	</head>
 	<body>
 
@@ -28,9 +29,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <z:page>
 	<h2>2. Header in z:page</h2>
 
-	<z:window id="win" title="Test" border="normal">
+	<z:window id="win" title="Test" border="normal" width="300px">
 		<p>3. Content in z:window</p>
 		<z:button label="Overlap" onClick="win.doOverlapped()"/>
+		<z:button label="Embed" onClick="win.doEmbedded()"/>
 	</z:window>
 		<p>4. Content in z:page after z:window</p>
 </z:page>

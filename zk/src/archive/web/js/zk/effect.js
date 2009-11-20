@@ -26,8 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.eff = {
 	shallStackup: function () {
 		return _useSKU;
-	},
-	autohide: zk.$void //overriden later if necessary
+	}
 };
 
 if (zk.ie || zk.gecko2_ || zk.opera) {
@@ -443,7 +442,7 @@ zk.eff.Error = zk.$extends(zk.Object, {
 
 
 jq(function() {
-	var _lastFloat, _autohideCnt = 0;
+	var _lastFloat, _autohideCnt = 0, _callback;
 
 	function _onFloatUp(ctl) {
 		var wgt = ctl.origin;
@@ -468,19 +467,33 @@ jq(function() {
 	}
 
 	_useSKU = zk.useStackup;
-	var autohide;
-	if (_useSKU == "auto" || (autohide = _useSKU == "auto/gecko")) {
-		if (zk.gecko && autohide)
+	if (_useSKU == "auto" || (_callack = _useSKU == "auto/gecko")) {
+		if (zk.gecko && _callack)
 			_useSKU = false;
 		else {
-			autohide = zk.safari || zk.opera;
-			_useSKU = !autohide || zk.ie6_;
+			_callack = zk.safari || zk.opera;
+			_useSKU = !_callack || zk.ie6_;
 		}
 	} else if (_useSKU == null)
 		_useSKU = zk.ie6_;
 
-	if (autohide) {
-		zk.eff.autohide = _autohide;
+	if (_callack) {
+		var w2hide = function (name) {
+			if (name == 'onSize' || name == 'onMove'
+			|| name == 'onShow' || name == 'onHide'
+			|| name == 'onResponse')
+				_autohide();
+		};
+		zk.override(zWatch, _callback = {}, {
+			fire: function (name) {
+				_callback.fire.apply(this, arguments);
+				w2hide(name);
+			},
+			fireDown: function (name) {
+				_callback.fireDown.apply(this, arguments);
+				w2hide(name);
+			}
+		});
 		zWatch.listen({onFloatUp: {onFloatUp: _onFloatUp}});
 	}
 }); //jq
