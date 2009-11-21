@@ -7,7 +7,6 @@ if (args == null || args.length != 2) {
 import java.io.*;
 
 InputStream is = new FileInputStream(args[0]);
-OutputStream os = new FileOutputStream(args[1]);
 Reader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 StringWriter sw = new StringWriter();
 
@@ -34,7 +33,6 @@ for (int j = 0, lineno = 1; j < len; j++) {
 			j++;
 		else if (sb.charAt(j) == '\n') {
 			System.err.println("Unterminated string at line "+lineno);
-			os.close();
 			exit(-1);
 		}
 	} else if (sb.charAt(j) == '/' && j + 1 < len
@@ -65,11 +63,13 @@ for (int j = 0, lineno = 1; j < len; j++) {
 		for (int k = j; --k >= 0;) {
 			char ck = sb.charAt(k);
 			if (!Character.isWhitespace(ck)) {
-				if (ck == '(' || ck == ',' || ck == '=' || ck == ':' || ck == ';') { //regex
+				if (ck == '(' || ck == ',' || ck == '=' || ck == ':'
+				|| ck == '?' || ck == '{' || ck == '[' || ck == ';'
+				|| (ck == 'n' && k > 4 && "return".equals(sb.substring(k-5, k+1)))
+				|| (ck == 'e' && k > 2 && "case".equals(sb.substring(k-3, k+1)))) { //regex
 					while (++j < len && sb.charAt(j) != '/')
 						if (sb.charAt(j) == '\n') {
 							System.err.println("Unterminated regex at line "+lineno);
-							os.close();
 							exit(-1);
 						}
 				}
@@ -79,6 +79,7 @@ for (int j = 0, lineno = 1; j < len; j++) {
 	}
 }
 
+OutputStream os = new FileOutputStream(args[1]);
 Writer out = new OutputStreamWriter(os, "UTF-8");
 out.write(sb.toString());
 out.close();
