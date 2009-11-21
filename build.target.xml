@@ -143,7 +143,7 @@ if="deploy.jboss.required">
 		<arg value="${bin.dir}/zipjs"/>
 		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
 		<arg value="${dist.lib.ext.dir}/bsh.jar"/>
-		<arg value="${bin.dir}/rm1stcomment.java"/>
+		<arg value="${bin.dir}/rmcomment.java"/>
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>
