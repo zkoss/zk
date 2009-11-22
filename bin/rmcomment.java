@@ -68,7 +68,9 @@ for (int j = 0, lineno = 1; j < len; j++) {
 				|| (ck == 'n' && k > 4 && "return".equals(sb.substring(k-5, k+1)))
 				|| (ck == 'e' && k > 2 && "case".equals(sb.substring(k-3, k+1)))) { //regex
 					while (++j < len && sb.charAt(j) != '/')
-						if (sb.charAt(j) == '\n') {
+						if (sb.charAt(j) == '\\')
+							j++;
+						else if (sb.charAt(j) == '\n') {
 							System.err.println("Unterminated regex at line "+lineno);
 							exit(-1);
 						}
