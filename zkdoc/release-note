@@ -82,6 +82,7 @@ November, 2009
   2863287: Unable to access param in zscript
   2379135: Context menu with Listbox when event is added
   2898352: Groupbox (default mold)'s caption cannot have toolbarbutton
+  2900962: OnCreate events of components not propagated properly
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 

@@ -328,21 +328,6 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 
 	// -- Component --//
-	/**
-	 * Auto-creates {@link Tabpanel} and select one of tabs if necessary.
-	 */
-	public void onCreate() {
-		if (_tabs != null) {
-			final int sz = _tabs.getChildren().size();
-			if (_tabpanels == null)
-				insertBefore(new Tabpanels(), null);
-			for (int n = _tabpanels.getChildren().size(); n < sz; ++n)
-				_tabpanels.insertBefore(new Tabpanel(), null);
-			if (sz > 0 && _seltab == null)
-				setSelectedTab((Tab) _tabs.getFirstChild());
-		}
-	}
-
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Toolbar) {
 			if (_toolbar != null && _toolbar != child)
