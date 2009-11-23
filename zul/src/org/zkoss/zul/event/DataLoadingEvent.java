@@ -55,6 +55,7 @@ public class DataLoadingEvent extends Event {
 	}
 
 	/** Returns the offset of the data chunk to be loaded.
+	 * @return the  offset of the data chunk to be loaded.
 	 */
 	public int getOffset() {
 		return _offset;
@@ -62,7 +63,7 @@ public class DataLoadingEvent extends Event {
 	
 	/**
 	 * Returns the limit of the data chunk to be loaded.
-	 * @return
+	 * @return the limit of the data chunk to be loaded.
 	 */
 	public int getLimit() {
 		return _limit;

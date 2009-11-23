@@ -29,7 +29,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 
 /**
- * Encapulates {@link GroupsModel} as an instance of {@link ListModel}
+ * Encapulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
  * such that it is easier to handle by {@link org.zkoss.zul.Listbox} and 
  * {@link org.zkoss.zul.Group}.
  *
