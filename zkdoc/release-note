@@ -75,6 +75,7 @@ November, 2009
   2890515: datebox constraint with "before" fails
   2893132: ZK 5 RC: Tabpanel's new children is added to wrong position
   2900274: Window with PDF not shown if doOverlapped (IE)
+  2900377: Panel collapsible not open in closed status
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
