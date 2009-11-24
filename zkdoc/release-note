@@ -9,6 +9,7 @@ ZK 3.6.4
   2902877: Include's invalidate doesn't reload the page in instant mode
   2902291: zkdemo cannot run in cluster
   2900977: this.element.clientWidth is null in Slider in Grid
+  2896474: small browser window cuts vertical scrollbar off
 
 * Upgrade Notes:
 

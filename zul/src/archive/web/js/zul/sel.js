@@ -920,10 +920,6 @@ zk.Selectable.prototype = {
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
 				nRows = Math.round((hgh - diff)/ rowhgh);
-				if (nRows < 3) { //minimal 3 rows if auto-size
-					nRows = 3;
-					hgh = rowhgh * 3 + diff;
-				}
 			}
 			this.realsize(nRows);
 		}
