@@ -21,7 +21,7 @@ package org.zkoss.zkdemo.userguide;
 /**
  * @author jumperchen
  */
-public class DemoItem {
+public class DemoItem implements java.io.Serializable {
 	private String _id;
 	private String _cateId;
 	private String _icon;

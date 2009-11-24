@@ -61,17 +61,17 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	MainLayoutAPI, ComposerExt {
 	private static final Log log = Log.lookup(MainLayoutComposer.class);
 
-	Textbox searchBox;
+	transient Textbox searchBox;
 
-	Listbox itemList;
+	transient Listbox itemList;
 
-	Borderlayout main;
+	transient Borderlayout main;
 	
-	Include xcontents;
+	transient Include xcontents;
 	
-	Div header;
+	transient Div header;
 
-	Button _selected;
+	transient Button _selected;
 
 	public MainLayoutComposer() {
 		initKey();
@@ -261,7 +261,9 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		return _defRend;
 	}
 
-	private static final ListitemRenderer _defRend = new ListitemRenderer() {
+	private static final ListitemRenderer _defRend = new ItemRender();
+		
+	private static class ItemRender implements ListitemRenderer, java.io.Serializable {
 		public void render(Listitem item, Object data) {
 			DemoItem di = (DemoItem) data;
 			Listcell lc = new Listcell();
@@ -308,5 +310,21 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 
 	public void doFinally() throws Exception {
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		initKey();
+	}
+	
+	public Object clone() {
+		MainLayoutComposer clone;
+		try {
+			clone = (MainLayoutComposer)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone.initKey();
+		return clone;
 	}
 }
