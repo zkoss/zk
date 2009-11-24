@@ -2193,21 +2193,43 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		for (AbstractComponent p = _first; p != null; p = p._next)
 			p.sessionDidActivate(page); //recursive
 	}
-	private void willPassivate(Collection c) {
+	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
+	 * for each object in the collection.
+	 * @param c a collection of objects. Ignored if null.
+	 * @since 3.6.4
+	 */
+	protected void willPassivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willPassivate(it.next());
 	}
-	private void willPassivate(Object o) {
+	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
+	 * for the specified object.
+	 * @param o the object to invoke. Ignore if 
+	 * ComponentActivationListener not implemented or null.
+	 * @since 3.6.4
+	 */
+	protected void willPassivate(Object o) {
 		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).willPassivate(this);
 	}
-	private void didActivate(Collection c) {
+	/** Utility to invoke {@link ComponentActivationListener#didActivate}
+	 * for each object in the collection.
+	 * @param c a collection of objects. Ignored if null.
+	 * @since 3.6.4
+	 */
+	protected void didActivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didActivate(it.next());
 	}
-	private void didActivate(Object o) {
+	/** Utility to invoke {@link ComponentActivationListener#didActivate}
+	 * for the specified object.
+	 * @param o the object to invoke. Ignore if 
+	 * ComponentActivationListener not implemented or null.
+	 * @since 3.6.4
+	 */
+	protected void didActivate(Object o) {
 		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).didActivate(this);
 	}
@@ -2663,12 +2685,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		s.writeObject(_ausvc == null || (_ausvc instanceof java.io.Serializable)
 		|| (_ausvc instanceof java.io.Externalizable) ? _ausvc: null);
 	}
-	private void willSerialize(Collection c) {
+	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
+	 * for each object in the collection.
+	 * @param c a collection of objects. Ignored if null.
+	 * @since 3.6.4
+	 */
+	protected void willSerialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willSerialize(it.next());
 	}
-	private void willSerialize(Object o) {
+	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
+	 * for the specified object.
+	 * @param o the object to invoke. Ignore if 
+	 * ComponentSerializationListener not implemented or null.
+	 * @since 3.6.4
+	 */
+	protected void willSerialize(Object o) {
 		if (o instanceof ComponentSerializationListener)
 			((ComponentSerializationListener)o).willSerialize(this);
 	}
@@ -2748,12 +2781,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		didDeserialize(_ausvc = (AuService)s.readObject());
 	}
-	private void didDeserialize(Collection c) {
+	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
+	 * for each object in the collection.
+	 * @param c a collection of objects. Ignored if null.
+	 * @since 3.6.4
+	 */
+	protected void didDeserialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didDeserialize(it.next());
 	}
-	private void didDeserialize(Object o) {
+	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
+	 * for the specified object.
+	 * @param o the object to invoke. Ignore if 
+	 * ComponentSerializationListener not implemented or null.
+	 * @since 3.6.4
+	 */
+	protected void didDeserialize(Object o) {
 		if (o instanceof ComponentSerializationListener)
 			((ComponentSerializationListener)o).didDeserialize(this);
 	}

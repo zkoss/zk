@@ -32,6 +32,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -91,6 +92,13 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
+ *
+ * <h3>Clustering and Serialization</h3>
+ *
+ * <p>When used in a clustering environment, you have to make {@link RowRenderer}
+ * ({@link #setRowRenderer}) and {@link ListModel} ({@link #setModel}) either
+ * serializable or re-assign them when {@link #sessionDidActivate} is called.
+ *
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -110,8 +118,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private transient Frozen _frozen;
 	private transient Collection _heads;
 	private String _pagingPosition = "bottom";
-	private ListModel _model;
-	private RowRenderer _renderer;
+	private transient ListModel _model;
+	private transient RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
@@ -1132,9 +1140,25 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 
 	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		willSerialize(_model);
+		s.writeObject(_model instanceof java.io.Serializable || _model instanceof java.io.Externalizable ? _model: null);
+		willSerialize(_renderer);
+		s.writeObject(_renderer instanceof java.io.Serializable || _renderer instanceof java.io.Externalizable ? _renderer: null);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
+
+		_model = (ListModel)s.readObject();
+		didDeserialize(_model);
+		_renderer = (RowRenderer)s.readObject();
+		didDeserialize(_renderer);
+
 		init();
 		afterUnmarshal(-1);
 		//TODO: how to marshal _pgi if _pgi != _paging
@@ -1175,6 +1199,17 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			renderer.render("_grid$rod", true);
 		}
 	}
+	public void sessionWillPassivate(Page page) {
+		super.sessionWillPassivate(page);
+		willPassivate(_model);
+		willPassivate(_renderer);
+	}
+	public void sessionDidActivate(Page page) {
+		super.sessionDidActivate(page);
+		didActivate(_model);
+		didActivate(_renderer);
+	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

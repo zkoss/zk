@@ -76,7 +76,8 @@ November, 2009
   2893132: ZK 5 RC: Tabpanel's new children is added to wrong position
   2900274: Window with PDF not shown if doOverlapped (IE)
   2900377: Panel collapsible not open in closed status
-  
+  2902880: Renderer and Model in Listbox/Grid shall be transient
+
 * Bugs
   1999145: Combobox with Width of 100% Overruns
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
@@ -84,6 +85,11 @@ November, 2009
   2379135: Context menu with Listbox when event is added
   2898352: Groupbox (default mold)'s caption cannot have toolbarbutton
   2900962: OnCreate events of components not propagated properly
+  2895706: Encoding of italian message is wrong
+  2895193: Vertical separator not center aligned in IE
+  2902877: Include's invalidate doesn't reload the page in instant mode
+  2902291: zkdemo cannot run in cluster
+  2900977: this.element.clientWidth is null in Slider in Grid
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
@@ -161,7 +167,7 @@ November, 2009
   + Encodes.URLEncoder is changed to allow the developer to encode in his
     own way. Furthermore, the configuration is by use of the library
     property called org.zkoss.web.servlet.http.URLEncoder.
-  
+
 	--------
 ZK 3.6.3
 October, 2009
