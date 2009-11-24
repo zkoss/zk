@@ -9,6 +9,11 @@
 	width: 215px;
 	padding: 2px;
 }
+.z-calendar,
+.z-calendat-title-over {
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
 .z-datebox-pp .z-calendar {
 	border: 0;
 }
@@ -114,17 +119,23 @@
 .z-calendar-calmon .z-calendar-over,
 .z-calendar-caldayrow .z-calendar-over {
 	background: #F1F9FC;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 
 .z-calendar-calyear td.z-calendar-seld,
 .z-calendar-calmon td.z-calendar-seld,
 .z-calendar-calday td.z-calendar-seld {
 	background: #CCE0FB; 
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .z-calendar td.z-calendar-over-seld,
 .z-datebox-calmon td.z-datebox-over-seld,
 .z-datebox-calday td.z-datebox-over-seld {
 	background: #5FA4FF;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 .z-calendar td.z-calendar-over-seld a {
 	color: white;
