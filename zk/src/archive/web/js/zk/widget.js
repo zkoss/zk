@@ -198,6 +198,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wgt.fire('onUnbind');
 			});
 	}
+
 	//set minimum flex size and return it
 	function _setMinFlexSize(wgt, n, o) {
 		//find the max size of all children
@@ -770,7 +771,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				this.appendChild(children[j++]);
 		return this;
 	},
-	appendChild: function (child) {
+	appendChild: function (child, _ignoreBind_) {
 		if (child == this.lastChild)
 			return false;
 
@@ -794,19 +795,20 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		if (_isrod(child))
-			_bindrod(child);
-		else {
-			var dt = this.desktop;
-			if (dt) this.insertChildHTML_(child, null, dt);
-		}
+		if (!_ignoreBind_)
+			if (_isrod(child))
+				_bindrod(child);
+			else {
+				var dt = this.desktop;
+				if (dt) this.insertChildHTML_(child, null, dt);
+			}
 
 		this.onChildAdded_(child);
 		return true;
 	},
-	insertBefore: function (child, sibling) {
+	insertBefore: function (child, sibling, _ignoreBind_) {
 		if (!sibling || sibling.parent != this)
-			return this.appendChild(child);
+			return this.appendChild(child, _ignoreBind_);
 
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
@@ -831,17 +833,21 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		_addIdSpaceDown(child);
 
-		if (_isrod(child))
-			_bindrod(child);
-		else {
-			var dt = this.desktop;
-			if (dt) this.insertChildHTML_(child, sibling, dt);
-		}
+		if (!_ignoreBind_)
+			if (_isrod(child))
+				_bindrod(child);
+			else {
+				var dt = this.desktop;
+				if (dt) this.insertChildHTML_(child, sibling, dt);
+			}
 
 		this.onChildAdded_(child);
 		return true;
 	},
-	removeChild: function (child) {
+	/** Removes a child.
+	 * @param zk.Widget child the child to remove.
+	 */
+	removeChild: function (child, _ignoreDom_) {
 		if (!child.parent)
 			return false;
 		if (this != child.parent)
@@ -863,7 +869,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (_isrod(child))
 			_unbindrod(child);
 		else if (child.desktop)
-			this.removeChildHTML_(child, p);
+			this.removeChildHTML_(child, p, _ignoreDom_);
 		this.onChildRemoved_(child);
 		return true;
 	},
@@ -922,6 +928,50 @@ zk.Widget = zk.$extends(zk.Object, {
 			= this._node = this._nodeSolved = null;
 		this._subnodes = {};
 	},
+	/** Replaced the child widgets with the specified.
+	 * It is usefull if you want to replace a part of children whose
+	 * DOM element is a child element of <code>subId</code> (so called
+	 * cave).
+	 * @param _.String subId the ID of the cave that contains the child widgets
+	 * to replace with.
+	 * @param _.String tagBeg the beginning of HTML tag, such as <tbody id="uuid-cave">
+	 * @param _.String tagEnd the ending of HTML tag, such as </tbody>
+	 * @param _.Array wgts an arrray of widgets that will become children of this widget
+	 * @see _.zAu.createWidgets
+	 */
+	replaceCaveChildren_: function (subId, tagBeg, tagEnd, wgts) {
+		//1. remove (but don't update DOM)
+		var cave = this.$(subId), fc;
+		for (var w = this.firstChild; w;) {
+			var sib = w.nextSibling;
+			if (jq.isAncestor(cave, w.$n())) {
+				if (!fc || fc == w) fc = sib;
+				this.removeChild(w, true);
+			}
+			w = sib;
+		}
+
+		//2. insert (but don't update DOM)
+		for (var j = 0, len = wgts.length; j < len; ++j)
+			this.insertBefore(wgts[j], fc, true);
+
+		if (fc = this.desktop) {
+			//3. generate HTML
+			var out = [];
+			if (tagBeg) out.push(tagBeg);
+			for (var j = 0, len = wgts.length; j < len; ++j)
+				wgts[j].redraw(out);
+			if (tagEnd) out.push(tagEnd);
+
+			//4. update DOM
+			jq(cave).replaceWith(out.join(''));
+
+			//5. bind
+			for (var j = 0, len = wgts.length; j < len; ++j)
+				wgts[j].bind(fc, out);
+		}
+	},
+
 	beforeParentChanged_: function () {
 	},
 
@@ -1354,7 +1404,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (n) return n;
 		}
 	},
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child, prevsib, _ignoreDom_) {
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(child, cf))
 			zk.currentFocus = null;
@@ -1369,7 +1419,8 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		child.unbind();
 
-		jq(n).remove();
+		if (!_ignoreDom_)
+			jq(n).remove();
 	},
 	_prepareRemove: function (ary) {
 		for (var w = this.firstChild; w; w = w.nextSibling) {

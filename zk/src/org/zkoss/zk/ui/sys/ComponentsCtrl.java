@@ -18,12 +18,15 @@ package org.zkoss.zk.ui.sys;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Date;
+import java.io.StringWriter;
 import java.net.URL;
 
 import org.zkoss.lang.Strings;
@@ -330,6 +333,27 @@ public class ComponentsCtrl {
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static Cache _evtmtds = new ThreadLocalCache();
+
+	/** An utilities to create an array of JavaScript codes that can be used
+	 * to mount the specified widget at the clients.
+	 *
+	 * @since 5.0.0
+	 */
+	public static final Collection redraw(Collection comps) {
+		try {
+			final StringWriter out = new StringWriter(1024*8);
+			final List js = new LinkedList();
+			for (Iterator it = comps.iterator(); it.hasNext();) {
+				((ComponentCtrl)it.next()).redraw(out);
+				final StringBuffer sb = out.getBuffer();
+				js.add(sb.toString());
+				sb.setLength(0);
+			}
+			return js;
+		} catch (java.io.IOException ex) {
+			throw new InternalError();
+		}
+	}
 
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
