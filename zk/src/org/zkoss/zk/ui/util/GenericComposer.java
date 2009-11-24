@@ -56,16 +56,13 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * composed of the component id and a String "composer" would be also available for use. 
  * Per the above example, you can also reference this composer with the name "xwin$composer"</p>
  *
- * <p>Since 3.6.2, this composer becomes serializable, so it is better to
- * declare members to be wired as transient, since it will re-write automatically
- * after the session has been activated.
+ * <p>Notice that, since 3.6.2, this composer becomes serializable.
  * 
  * @author robbiecheng
  * @since 3.0.1
  */
 abstract public class GenericComposer extends GenericEventListener
-implements Composer, ComposerExt, ComponentActivationListener,
-java.io.Serializable {
+implements Composer, ComposerExt, java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	protected String _applied; //uuid of the applied component (for serialization back)
 	
@@ -113,13 +110,12 @@ java.io.Serializable {
 		//do nothing
 	}
 	
-	/** Called when the component has activated this object back.
-	 * Default: (since 3.6.3) do nothing.
-	 * @since 3.6.2
+	/** @deprecated As of release 5.0.0, it is meaningless for
+	 * GenericComposer to implement ComponentActivationListener.
+	 *
+	 * <p>Implementation Note: GenericComposer itself is serializable,
+	 * so it is preserved after serialization.
 	 */
 	public void didActivate(Component comp) {
-		//Bug #2873905 shall not call doAfterCompose in didActivate
-		//Bug #2873329 GeneircForwardComposer add extra forwards
-		//do nothing
 	}
 }

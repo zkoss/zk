@@ -94,7 +94,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
 abstract public class GenericAutowireComposer extends GenericComposer
-implements ComponentCloneListener {
+implements ComponentCloneListener, ComponentActivationListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
@@ -264,8 +264,10 @@ implements ComponentCloneListener {
 	
 	public void didActivate(Component comp) {
 		//wire variables to reference fields (include implicit objects)
+
+		//Note: we have to check _applied because application might store
+		//the composer somewhere other than the original component
 		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
-			super.didActivate(comp);
 			if (self == null) { //Bug #2873310. didActivate only once
 				Components.wireVariables(comp, this, _separator);
 			}
