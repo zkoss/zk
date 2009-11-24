@@ -66,7 +66,7 @@ import java.util.Set;
  * @author RyanWu
  * @since 3.5.2
  * */
-public class FusionInvoker implements InvocationHandler {
+public class FusionInvoker implements InvocationHandler, java.io.Serializable {
 	private Object[] _targets;
 
 	/** Use {@link #newInstance(Object[])} instead. */
