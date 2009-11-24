@@ -145,6 +145,8 @@ public class AuResponse {
 			Object d = _data[j];
 			if (d instanceof DeferredValue)
 				d = ((DeferredValue)d).getValue();
+			if (d instanceof Component)
+				d = ((Component)d).getUuid();
 			encdata.add(d);
 		}
 		return encdata;
