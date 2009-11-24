@@ -192,7 +192,7 @@ zkSld = {
 		var meta = zkau.getMeta(cmp),
 			vert = getZKAttr(cmp, "vert");
 
-		if (meta) meta.init();
+		if (meta) meta.init(cmp);
 		else new zk.Slider(cmp);
 
 		var uuid = $uuid(cmp),

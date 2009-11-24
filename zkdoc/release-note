@@ -8,6 +8,7 @@ ZK 3.6.4
   2895193: Vertical separator not center aligned in IE
   2902877: Include's invalidate doesn't reload the page in instant mode
   2902291: zkdemo cannot run in cluster
+  2900977: this.element.clientWidth is null in Slider in Grid
 
 * Upgrade Notes:
 
