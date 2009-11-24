@@ -3,8 +3,9 @@ ZK 3.6.4
 * Features
 
 * Bugs
-  2895706 - Encoding of italian message is wrong
-  2895193 - Vertical separator not center aligned in IE
+  2895706: Encoding of italian message is wrong
+  2895193: Vertical separator not center aligned in IE
+  2902291: zkdemo cannot run in cluster
 
 * Upgrade Notes:
 
