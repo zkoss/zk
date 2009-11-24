@@ -39,6 +39,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -103,6 +104,12 @@ import org.zkoss.zul.impl.XulElement;
  * <p>To have a list box without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
  *
+ * <h3>Clustering and Serialization</h3>
+ *
+ * <p>When used in a clustering environment, you have to make {@link ListitemRenderer}
+ * ({@link #setItemRenderer}) and {@link ListModel} ({@link #setModel}) either
+ * serializable or re-assign them when {@link #sessionDidActivate} is called.
+ *
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -123,8 +130,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private int _rows, _jsel = -1;
 	private transient Listhead _listhead;
 	private transient Listfoot _listfoot;
-	private ListModel _model;
-	private ListitemRenderer _renderer;
+	private transient ListModel _model;
+	private transient ListitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	private transient Collection _heads;
 	private int _hdcnt;
@@ -2605,17 +2612,42 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 
 	//-- Serializable --//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		willSerialize(_model);
+		s.writeObject(_model instanceof java.io.Serializable || _model instanceof java.io.Externalizable ? _model: null);
+		willSerialize(_renderer);
+		s.writeObject(_renderer instanceof java.io.Serializable || _renderer instanceof java.io.Externalizable ? _renderer: null);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init();
+		_model = (ListModel)s.readObject();
+		didDeserialize(_model);
+		_renderer = (ListitemRenderer)s.readObject();
+		didDeserialize(_renderer);
 
+		init();
 		afterUnmarshal();
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 
 		if (_model != null) initDataListener();
+	}
+
+	public void sessionWillPassivate(Page page) {
+		super.sessionWillPassivate(page);
+		willPassivate(_model);
+		willPassivate(_renderer);
+	}
+	public void sessionDidActivate(Page page) {
+		super.sessionDidActivate(page);
+		didActivate(_model);
+		didActivate(_renderer);
 	}
 
 	//-- ComponentCtrl --//
@@ -2811,5 +2843,4 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			throw new UnsupportedOperationException();
 		}
 	}
-
 }

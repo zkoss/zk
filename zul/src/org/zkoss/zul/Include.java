@@ -353,8 +353,16 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	}
 
 	//-- Component --//
+	/** Invalidates this component.
+	 * Notice that all children will be detached and the page will be
+	 * reloaded (and new children will be created).
+	 */
 	public void invalidate() {
-		super.invalidate();
+		if (_instantMode && _afterComposed) {
+			getChildren().clear();
+			afterCompose();
+		} else
+			super.invalidate();
 
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();
