@@ -48,7 +48,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<tab label="Tab 4" closable="true"/>
 			<tab label="Tab 5" closable="true"/>
 		</tabs>
-		<toolbar>
+		<toolbar width="90px">
 			<toolbarbutton image="/img/live.gif" onClick='alert("Live")' />
 			<toolbarbutton image="/img/defender.gif"
 				onClick='alert("Defender")' />

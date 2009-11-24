@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 ${z:setCSSCacheControl()}
-
+html {overflow:hidden;}
 img { -ms-interpolation-mode:bicubic }
 body {
 	padding: 0 !important;
