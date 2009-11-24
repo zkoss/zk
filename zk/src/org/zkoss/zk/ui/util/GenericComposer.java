@@ -62,9 +62,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * composed of the component id and a String "composer" would be also available for use. 
  * Per the above example, you can also reference this composer with the name "xwin$composer"</p>
  *
- * <p>Since 3.6.2, this composer becomes serializable, so it is better to
- * declare members to be wired as transient, since it will re-write automatically
- * after the session has been activated.
+ * <p>Notice that, since 3.6.2, this composer becomes serializable.
  * 
  * @author robbiecheng
  * @since 3.0.1
@@ -120,7 +118,9 @@ java.io.Serializable {
 	}
 	
 	/** Called when a namespace has activated this object back.
-	 * Default: (since 3.6.3) do nothing
+	 * <p>Default: do nothing (since 3.6.3)
+	 * <p>This method is rarely used unless you want to re-create
+	 * or re-assign objects after the session is activated.
 	 * @since 3.6.2
 	 */
 	public void didActivate(Namespace ns) {
