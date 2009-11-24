@@ -23,8 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.reflect.FusionInvoker;
+import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -69,6 +72,8 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 	transient Div _selected;
 
+	private String _applied;
+	
 	public MainLayoutComposer() {
 		initKey();
 	}
@@ -311,6 +316,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		Object obj = FusionInvoker.newInstance(new Object[] { comp, this });
 		comp.setVariable("main", obj, true);
 		main = (Borderlayout) comp;
+		_applied = main.getUuid();
 	}
 
 	public boolean doCatch(Throwable ex) throws Exception {
@@ -319,21 +325,22 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 
 	public void doFinally() throws Exception {
-	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-		initKey();
-	}
-	
-	public Object clone() {
-		MainLayoutComposer clone;
-		try {
-			clone = (MainLayoutComposer)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError();
+	}	
+	protected Component getAppliedComponent(Namespace ns) {
+		final Component owner = ns.getOwner();
+		Desktop dt = null;
+		Page page;
+		if (owner != null)
+			dt = owner.getDesktop();
+		else {
+			page = ns.getOwnerPage();
+			if (page != null)
+				dt = page.getDesktop();
 		}
-		clone.initKey();
-		return clone;
+		
+		if (dt != null) {
+			return (Component) dt.getComponentByUuidIfAny(_applied);
+		}
+		return null;
 	}
 }

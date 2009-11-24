@@ -138,11 +138,18 @@ java.io.Serializable {
 	 */
 	protected Component getAppliedComponent(Namespace ns) {
 		final Component owner = ns.getOwner();
-		if (owner != null) {
-			final Desktop dt = owner.getDesktop();
-			if (dt != null) {
-				return (Component) dt.getComponentByUuidIfAny(_applied);
-			}
+		Desktop dt = null;
+		Page page;
+		if (owner != null)
+			dt = owner.getDesktop();
+		else {
+			page = ns.getOwnerPage();
+			if (page != null)
+				dt = page.getDesktop();
+		}
+		
+		if (dt != null) {
+			return (Component) dt.getComponentByUuidIfAny(_applied);
 		}
 		return null;
 	}
