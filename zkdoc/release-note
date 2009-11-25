@@ -46,6 +46,7 @@ November, 2009
   2898291: a way to maximize the panel  according to portal layout
   2037509: Auto fit column width when double clicking on header
   2187771: Panel re-sizeable
+  2903592: A way to wire component in a nested ID space
   1594070: Listbox should raise onBlur/onFocus event
   1481860: add onBlur/onFocus event to Tree
   

@@ -21,6 +21,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.Principal;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -795,7 +796,6 @@ public class Components {
 	/**
 	 * Utility class for wiring variables
 	 * @author henrichen
-	 * @since 3.0.8
 	 */
 	private static class Wire {
 		private final Object _controller;
@@ -803,10 +803,10 @@ public class Components {
 		private final Map _fldMaps;
 		private final char _separator;
 		
-		public Wire(Object controller) {
+		private Wire(Object controller) {
 			this(controller, '$');
 		}
-		public Wire(Object controller, char separator) {
+		private Wire(Object controller, char separator) {
 			_controller = controller;
 			_separator = separator;
 			_injected = new HashSet();
@@ -825,18 +825,9 @@ public class Components {
 			} while (cls != null && !Object.class.equals(cls));
 		}
 		/**
-		 * Inject controller as variable of the specified component. You can
-		 * then access the controller with the name pattern of 
-		 * id + separator + "composer" 
-		 * or id + separator + controller's class name.
-		 * e.g. if the given id is "xwin" and the controller class name is "org.zkoss.MyController"
-		 * then you can access the controller with the name of "xwin$MyController" or "xwin$composer".
-		 *   
-		 * @param comp component to be assigned the variable
-		 * @param id the id used in controller name pattern
-		 * @since 3.6.1
+		 * Inject controller as variable of the specified component.
 		 */
-		public void wireController(Component comp, String id) {
+		private void wireController(Component comp, String id) {
 			//feature #2778513, support {id}$composer name
 			final String composerid =  id + _separator + "composer";
 			if (!comp.hasAttributeOrFellow(composerid, false)) {
@@ -845,7 +836,10 @@ public class Components {
 			comp.setAttribute(varname(id, _controller.getClass()), _controller);
 		}
 		
-		public void wireController(Page page, String id) {
+		/**
+		 * Inject controller as variable of the specified page.
+		 */
+		private void wireController(Page page, String id) {
 			final String composerid =  id + _separator + "composer";
 			if (!page.hasAttributeOrFellow(composerid, false)) {
 				page.setAttribute(composerid, _controller);
@@ -853,7 +847,7 @@ public class Components {
 			page.setAttribute(varname(id, _controller.getClass()), _controller);
 		}
 		
-		public void wireFellows(IdSpace idspace) {
+		private void wireFellows(IdSpace idspace) {
 			//inject fellows
 			final Collection fellows = idspace.getFellows();
 			for(final Iterator it = fellows.iterator(); it.hasNext();) {
@@ -879,11 +873,11 @@ public class Components {
 				injectFellow((Page) idspace);
 			}
 		}
-		public void wireVariables(Page page) {
+		private void wireVariables(Page page) {
 			wireController(page, page.getId());
 			myWireVariables(page);
 		}
-		public void wireVariables(Component comp) {
+		private void wireVariables(Component comp) {
 			wireController(comp, comp.getId());
 			myWireVariables(comp);
 		}
@@ -909,7 +903,8 @@ public class Components {
 			for (int j = 0; j < mtds.length; ++j) {
 				final Method md = mtds[j];
 				final String mdname = md.getName();
-				if (mdname.length() > 3 && mdname.startsWith("set") 
+				if ((md.getModifiers() & Modifier.STATIC) == 0
+				&& mdname.length() > 3 && mdname.startsWith("set") 
 				&& Character.isUpperCase(mdname.charAt(3))) {
 					final String fdname = Classes.toAttributeName(mdname);
 					if (!_injected.contains(fdname)) { //if not injected yet
@@ -919,6 +914,11 @@ public class Components {
 								final Object arg = getVariable(x, fdname);
 								final Class argcls = arg == null ? null : arg.getClass();
 								injectByMethod(md, parmcls[0], argcls, arg, fdname);
+							} else if ((x instanceof Component || x instanceof Page) &&
+							fdname.indexOf(_separator) >= 0) {
+								final Object arg = getFellowByPath(x, fdname);
+								if (arg != null)
+									injectByMethod(md, parmcls[0], arg.getClass(), arg, fdname);
 							}
 						}
 					}
@@ -929,15 +929,28 @@ public class Components {
 			for (final Iterator it=_fldMaps.entrySet().iterator();it.hasNext();) {
 				final Entry entry = (Entry) it.next();
 				final String fdname = (String) entry.getKey();
-				if (!_injected.contains(fdname)) { //if not injected by setXxx yet
+				final Field fd = (Field) entry.getValue();
+				if ((fd.getModifiers() & Modifier.STATIC) == 0
+				&& !_injected.contains(fdname)) { //if not injected by setXxx yet
 					if (containsVariable(x, fdname)) {
 						final Object arg = getVariable(x, fdname);
 						final Class argcls = arg == null ? null : arg.getClass();
-						final Field fd = (Field) entry.getValue();
 						injectField(arg, argcls, fd);
+					} else if ((x instanceof Component || x instanceof Page) &&
+					fdname.indexOf(_separator) >= 0) {
+						final Object arg = getFellowByPath(x, fdname);
+						if (arg != null)
+							injectField(arg, arg.getClass(), fd);
 					}
 				}
 			}
+		}
+
+		/** @param x either a page or component. It cannot be null.*/
+		private Object getFellowByPath(Object x, String name) {
+			return Path.getComponent(
+				x instanceof Page ? (Page)x: ((Component)x).getSpaceOwner(),
+					name.replace(_separator, '/'));
 		}
 
 		private boolean containsVariable(Object x, String fdname) {

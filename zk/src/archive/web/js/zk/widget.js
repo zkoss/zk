@@ -930,8 +930,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Replaced the child widgets with the specified.
 	 * It is usefull if you want to replace a part of children whose
-	 * DOM element is a child element of <code>subId</code> (so called
-	 * cave).
+	 * DOM element is a child element of <code>subId</code> (this.$n(subId)).
 	 * @param _.String subId the ID of the cave that contains the child widgets
 	 * to replace with.
 	 * @param _.Array wgts an arrray of widgets that will become children of this widget
@@ -943,7 +942,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)
-		var cave = this.$(subId), fc;
+		var cave = this.$n(subId), fc;
 		for (var w = this.firstChild; w;) {
 			var sib = w.nextSibling;
 			if (jq.isAncestor(cave, w.$n())) {
@@ -970,7 +969,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			//5. bind
 			for (var j = 0, len = wgts.length; j < len; ++j)
-				wgts[j].bind(fc, out);
+				wgts[j].bind(fc);
 		}
 	},
 
