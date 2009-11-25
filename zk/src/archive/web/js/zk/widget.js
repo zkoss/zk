@@ -934,12 +934,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * cave).
 	 * @param _.String subId the ID of the cave that contains the child widgets
 	 * to replace with.
-	 * @param _.String tagBeg the beginning of HTML tag, such as <tbody id="uuid-cave">
-	 * @param _.String tagEnd the ending of HTML tag, such as </tbody>
 	 * @param _.Array wgts an arrray of widgets that will become children of this widget
+	 * @param _.String tagBeg the beginning of HTML tag, such as <tbody>.
+	 * Ignored if null.
+	 * @param _.String tagEnd the ending of HTML tag, such as </tbody>
+	 * Ignored if null.
 	 * @see _.zAu.createWidgets
 	 */
-	replaceCaveChildren_: function (subId, tagBeg, tagEnd, wgts) {
+	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)
 		var cave = this.$(subId), fc;
 		for (var w = this.firstChild; w;) {
@@ -964,7 +966,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (tagEnd) out.push(tagEnd);
 
 			//4. update DOM
-			jq(cave).replaceWith(out.join(''));
+			jq(cave).html(out.join(''));
 
 			//5. bind
 			for (var j = 0, len = wgts.length; j < len; ++j)
