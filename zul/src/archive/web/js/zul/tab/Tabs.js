@@ -460,5 +460,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			node.style.width = value;
 			break;
 		}
+	},
+
+	onChildRemoved_: function (child) {
+		var p = this.parent;
+		if (p && child == p._selTab)
+			p._selTab = null;
 	}
 });

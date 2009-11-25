@@ -65,30 +65,15 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!tabbox) return;
 
 		var	tabs = this.parent,
-			oldtb;
-		if (!oldtb) {
-			if (tabbox.inAccordionMold()) {
-				oldtb = tabbox.getSelectedTab();
-			} else {
-				for (var w = this.parent.firstChild; w; w = w.nextSibling) {
-					if (w.isSelected() && w != this) {
-						oldtb = w;
-						break;
-					}
-				}
-				if (!oldtb && this.isSelected())
-					 oldtb = this;
-			}
-		}
-
-		if (oldtb != this || init) {
+			oldtab = tabbox._selTab;
+		if (oldtab != this || init) {
 			if (tabbox.isVertical())
 				tabs._scrollcheck("vsel", this);
 			else if (!tabbox.inAccordionMold())
 				tabs._scrollcheck("sel", this);
 
-			if (oldtb && oldtb != this)
-				this._setSel(oldtb, false, false, init);
+			if (oldtab && oldtab != this)
+				this._setSel(oldtab, false, false, init);
 			this._setSel(this, true, notify, init);
 		}
 	},
@@ -100,7 +85,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			return;
 
 		if (toSel)
-			tabbox.setSelectedTab(tab);
+			tabbox._selTab = tab; //avoid loopback
 		tab._selected = toSel;
 		if (toSel)
 			jq(tab).addClass(zcls + "-seld");
