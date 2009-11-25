@@ -1,4 +1,4 @@
-<%@ page contentType="application/x-javascript;charset=UTF-8" %><%--
+<%@ page contentType="text/javascript;charset=UTF-8" %><%--
 zk.js.dsp
 
 {{IS_NOTE
