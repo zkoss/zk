@@ -544,7 +544,7 @@ public class HtmlPageRenders {
 		}
 		return "";
 	}
-	private static class PI { //not need to serialize
+	private static class PI implements java.io.Serializable {
 		long _t;
 		private PI() {
 			_t = System.currentTimeMillis();

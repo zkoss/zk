@@ -23,13 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.lang.reflect.FusionInvoker;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.BookmarkEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -37,11 +34,8 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Include;
@@ -58,20 +52,18 @@ import org.zkoss.zul.Textbox;
  * 
  */
 public class MainLayoutComposer extends GenericForwardComposer implements
-	MainLayoutAPI, ComposerExt {
+	MainLayoutAPI {
 	private static final Log log = Log.lookup(MainLayoutComposer.class);
 
-	transient Textbox searchBox;
+	Textbox searchBox;
 
-	transient Listbox itemList;
-
-	transient Borderlayout main;
+	Listbox itemList;
 	
-	transient Include xcontents;
+	Include xcontents;
 	
-	transient Div header;
+	Div header;
 
-	transient Button _selected;
+	Button _selected;
 
 	public MainLayoutComposer() {
 		initKey();
@@ -137,7 +129,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			final DemoItem[] items = getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].getId().equals(id)) {
-					_selected = (Button)main.getFellow(items[i].getCateId());
+					_selected = (Button)self.getFellow(items[i].getCateId());
 					itemList.setModel(getSelectedModel());
 					itemList.renderAll();
 					Listitem item = ((Listitem)itemList.getFellow(id));
@@ -181,7 +173,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 				if (!list.isEmpty()) {
 					itemList.setModel(new ListModelList(list));
 					itemList.renderAll();
-					item = (Listitem) main.getFellow(id);
+					item = (Listitem) self.getFellow(id);
 					setSelectedCategory(item);
 				}
 			} catch (ComponentNotFoundException ex) { // ignore
@@ -189,7 +181,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		}
 
 		if (item == null) {
-			item = (Listitem) main.getFellow("f1");
+			item = (Listitem) self.getFellow("f1");
 			setSelectedCategory(item);
 		}
 		xcontents.setSrc(((DemoItem) item.getValue()).getFile());
@@ -198,7 +190,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 	private void setSelectedCategory(Listitem item) {
 		DemoItem di = (DemoItem) item.getValue();
-		_selected = (Button) main.getFellow(di.getCateId());
+		_selected = (Button) self.getFellow(di.getCateId());
 		String deselect = _selected != null ? "jq('#"+ _selected.getUuid() + 
 		"').addClass('demo-seld').siblings().removeClass('demo-seld');" : "";
 		Clients.evalJavaScript(deselect);
@@ -290,41 +282,5 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		Events.postEvent("onMainCreate", comp, null);
-	}
-
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-			ComponentInfo compInfo) {
-		return compInfo;
-	}
-
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-		bindComponent(comp);
-		Object obj = FusionInvoker.newInstance(new Object[] { comp, this });
-		comp.setAttribute("main", obj);
-		main = (Borderlayout) comp;
-	}
-
-	public boolean doCatch(Throwable ex) throws Exception {
-		log.error("Failed to compose "+this, ex);
-		return false;
-	}
-
-	public void doFinally() throws Exception {
-	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-		initKey();
-	}
-	
-	public Object clone() {
-		MainLayoutComposer clone;
-		try {
-			clone = (MainLayoutComposer)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError();
-		}
-		clone.initKey();
-		return clone;
 	}
 }
