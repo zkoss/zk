@@ -396,3 +396,48 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
 </c:if>
+
+.z-treerow-img {
+	background:transparent no-repeat scroll center center;
+	border:0;
+	height: 13px;
+	overflow: hidden;
+	display:-moz-inline-box;
+	vertical-align: top;
+	display: inline-block;
+	min-height: 13px;
+	padding:0;
+	vertical-align:top;
+	width: 13px;
+	margin: 2px;
+}
+.z-treerow-img-checkbox, .z-treerow-img-radio {
+	background-image:url(${c:encodeURL('~./zul/img/common/check-sprite.gif')});
+	background-position: 0 0;
+}
+.z-treerow-img-radio {
+	background-position: 0 -13px;
+}
+.z-treerow-over .z-treerow-img-radio {
+	background-position: -13px -13px;
+}
+.z-treerow-seld .z-treerow-img-radio {
+	background-position: -26px -13px;
+}
+.z-treerow-over-seld .z-treerow-img-radio {
+	background-position: -39px -13px;
+}
+.z-treerow-over .z-treerow-img-checkbox {
+	background-position: -13px 0;
+}
+.z-treerow-seld .z-treerow-img-checkbox {
+	background-position: -26px 0;
+}
+.z-treerow-over-seld .z-treerow-img-checkbox {
+	background-position: -39px 0;
+}
+.z-treerow-img-disd {
+	opacity: .6;
+	-moz-opacity: .6;
+	filter: alpha(opacity=60);
+}

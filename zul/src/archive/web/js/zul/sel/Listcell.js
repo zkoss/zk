@@ -77,28 +77,30 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	_colHtmlPre: function () {
 		var s = '',
-			box = this.getListbox();
+			box = this.getListbox(),
+			zcls = this.parent.getZclass();
 		if (box != null && this.parent.firstChild == this) {
 			if (this.parent.$instanceof(zul.sel.Listgroup)) {
-				var zcls = this.parent.getZclass();
 				s = '<span id="' + this.parent.uuid + '-img" class="' + zcls + '-img ' + zcls
 					+ '-img-' + (this.parent._open ? 'open' : 'close') + '"></span>';
 			}
 				
 			if (box.isCheckmark()) {
 				var item = this.parent,
-					chkable = item.isCheckable();
-				s += '<input type="' + (box.isMultiple() ? 'checkbox': 'radio')
-					+ '" id="' + item.uuid + '-cm"';
+					chkable = item.isCheckable(),
+					multi = box.isMultiple(),
+					img = zcls + '-img';
+				s += '<span id="' + item.uuid + '-cm" class="' + img + ' ' + img
+					+ (multi ? '-checkbox' : '-radio');
+				
 				if (!chkable || item.isDisabled())
-					s += ' disabled="disabled"';
-				if (item.isSelected())
-					s += ' checked="checked"';
-				if (!box.isMultiple()) 
-					s += ' name="' + box.uuid + '"';
+					s += ' ' + img + '-disd';
+				
+				s += '"';
 				if (!chkable)
 					s += ' style="visibility:hidden"';
-				s += '/>';
+					
+				s += '></span>';
 			}
 			if (s) return s;
 		}

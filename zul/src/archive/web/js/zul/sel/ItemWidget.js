@@ -38,11 +38,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
-			var cm = this.$n('cm');
-			if (cm) {
-				cm.checked = selected;
-				this._checkClick();
-			}				
+			if (this.$n('cm'))
+				this._checkClick();				
 		}
 		this._selected = selected;
 	},
@@ -94,30 +91,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	focus: function (timeout) {
-		this.getMeshWidget()._focusItem = this;
-		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			var cm = this.$n('cm');
-			if (cm) {
-				zk(cm).focus(timeout);
-				return true;
-			} else 
-				this._doFocusIn();
+		var mesh = this.getMeshWidget();
+			mesh._focusItem = this;
+		if (this.isVisible() && this.canActivate({checkOnly: true})) {
+			this._doFocusIn();
+			if (zk.currentFocus != mesh.$n('a'))
+				zk(mesh.$n('a')).focus(timeout);
 		}
 		return false;
-	},
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		var cm = this.$n('cm');
-		if (cm)
-			this.domListen_(cm, 'onFocus')
-				.domListen_(cm, 'onBlur', '_doFocusOut');
-	},
-	unbind_: function () {
-		var cm = this.$n('cm');
-		if (cm)
-			this.domUnlisten_(cm, 'onFocus')
-				.domUnlisten_(cm, 'onBlur', '_doFocusOut');
-		this.$supers('unbind_', arguments);
 	},
 	_doFocusIn: function () {
 		var n = this.$n();
@@ -132,36 +113,33 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			jq(n.cells).removeClass(zcls + "-focus");
 		}
 	},
-	_doFocus: function (evt) {
-		if (this.canActivate({checkOnly:true})) {
-			this.doFocus_(evt);
-			this._doFocusIn();
-		}
-	},
 	_checkAll: function () {
 		var box = this.getMeshWidget();		
 		if (!box || !box._headercm) return;
 		var cm = this.$n('cm');
-		if (cm && !cm.checked) {
-			box._headercm.checked = false;
+		if (cm && !this.isSelected()) {
+			var header = zk.Widget.$(box._headercm),
+				zcls = header.getZclass();
+			jq(box._headercm).removeClass(zcls + '-img-seld');
 			return;
 		}
 		var checked;
-		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());)
-			if (!w.isDisabled())
-				if (!(checked = (w.$n('cm') || {}).checked)) break;
+		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
+			if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
+				checked = false;
+				break;
+			} else
+				checked = true;
 		
-		if (checked) box._headercm.checked = true;
+		if (checked) {
+			var header = zk.Widget.$(box._headercm),
+				zcls = header.getZclass();
+			jq(box._headercm).addClass(zcls + '-img-seld');
+		}
 	},
 	_checkClick: function (evt) {
-		if (this.getMeshWidget().isMultiple()) {
+		if (this.getMeshWidget().isMultiple())
 			this._checkAll();
-		} else {
-			var r = this.$n('cm');
-			for (var nms = jq.$$(r.name), i = nms.length; i--;)
-				nms[i].defaultChecked = false;
-			r.defaultChecked = r.checked;
-		}
 	},
 	// event
 	doClick_: function(evt) {

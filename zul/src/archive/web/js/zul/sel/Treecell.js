@@ -66,20 +66,21 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				sb = [];
 			if (tree) {
 				if (tree.isCheckmark()) {
-					var isCheckable = item.isCheckable();
-					sb.push('<input type="', tree.isMultiple() ? 'checkbox': 'radio',
-							'"');
-					if (!isCheckable || item.isDisabled())
-						sb.push(' disabled="disabled"');
-					if (item.isSelected())
-						sb.push(' checked="checked"');
-					if (!tree.isMultiple())
-						sb.push(' name="', tree.uuid, '"');
-					if (!isCheckable)
-						sb.push(' style="visibility:hidden;"/>');
-					else 
-						//NOTE: use Treerow's uuid! NOT Treeitem's!
-						sb.push(' id="', this.parent.uuid, '-cm"/>');
+					var chkable = item.isCheckable(),
+						multi = tree.isMultiple(),
+						zcls = item.getZclass(),
+						img = zcls + '-img';
+					sb.push('<span id="', this.parent.uuid, '-cm" class="', img,
+						' ', img, (multi ? '-checkbox' : '-radio'));
+					
+					if (!chkable || item.isDisabled())
+						sb.push(' ', img, '-disd');
+					
+					sb.push('"');
+					if (!chkable)
+						sb.push(' style="visibility:hidden"');
+						
+					sb.push('></span>');
 				}
 			}
 			var iconScls = tree ? tree.getZclass() : "",
