@@ -59,8 +59,6 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	Textbox searchBox;
 
 	Listbox itemList;
-
-	Borderlayout self;
 	
 	Include xcontents;
 	
