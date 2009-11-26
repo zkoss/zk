@@ -22,11 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.lang.reflect.FusionInvoker;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -38,9 +36,7 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zkex.zul.Borderlayout;
 import org.zkoss.zul.Div;
@@ -58,19 +54,19 @@ import org.zkoss.zul.Textbox;
  * 
  */
 public class MainLayoutComposer extends GenericForwardComposer implements
-	MainLayoutAPI, ComposerExt {
+	MainLayoutAPI {
 
-	transient Textbox searchBox;
+	Textbox searchBox;
 
-	transient Listbox itemList;
+	Listbox itemList;
 
-	transient Borderlayout main;
+	Borderlayout self;
 	
-	transient Include xcontents;
+	Include xcontents;
 	
-	transient Div header;
+	Div header;
 
-	transient Div _selected;
+	Div _selected;
 
 	private String _applied;
 	
@@ -140,7 +136,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			final DemoItem[] items = getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].getId().equals(id)) {
-					_selected = (Div)main.getFellow(items[i].getCateId());
+					_selected = (Div)self.getFellow(items[i].getCateId());
 					itemList.setModel(getSelectedModel());
 					itemList.renderAll();
 					Listitem item = ((Listitem)itemList.getFellow(id));
@@ -185,7 +181,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 				if (!list.isEmpty()) {
 					itemList.setModel(new ListModelList(list));
 					itemList.renderAll();
-					item = (Listitem) main.getFellow(id);
+					item = (Listitem) self.getFellow(id);
 					setSelectedCategory(item);
 				}
 			} catch (ComponentNotFoundException ex) { // ignore
@@ -193,7 +189,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		}
 
 		if (item == null) {
-			item = (Listitem) main.getFellow("f1");
+			item = (Listitem) self.getFellow("f1");
 			setSelectedCategory(item);
 		}		
 		xcontents.setSrc(((DemoItem) item.getValue()).getFile());
@@ -202,7 +198,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 	private void setSelectedCategory(Listitem item) {
 		DemoItem di = (DemoItem) item.getValue();
-		_selected = (Div) main.getFellow(di.getCateId());
+		_selected = (Div) self.getFellow(di.getCateId());
 		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'));" : "";
 		if (Executions.getCurrent().isBrowser("ie6-")) {
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");
@@ -303,29 +299,10 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	// Composer Implementation
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
+		_applied = comp.getUuid();
 		Events.postEvent("onMainCreate", comp, null);
 	}
 
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-			ComponentInfo compInfo) {
-		return compInfo;
-	}
-
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-		bindComponent(comp);
-		Object obj = FusionInvoker.newInstance(new Object[] { comp, this });
-		comp.setVariable("main", obj, true);
-		main = (Borderlayout) comp;
-		_applied = main.getUuid();
-	}
-
-	public boolean doCatch(Throwable ex) throws Exception {
-		ex.printStackTrace();
-		return false;
-	}
-
-	public void doFinally() throws Exception {
-	}	
 	protected Component getAppliedComponent(Namespace ns) {
 		final Component owner = ns.getOwner();
 		Desktop dt = null;
@@ -339,7 +316,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		}
 		
 		if (dt != null) {
-			return (Component) dt.getComponentByUuidIfAny(_applied);
+			return dt.getComponentByUuidIfAny(_applied);
 		}
 		return null;
 	}
