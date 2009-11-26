@@ -2270,7 +2270,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static boolean isVariableSerializable(String name, Object value) {
 		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)
-			&& !(value instanceof Component);
+			/*Removed in 3.6.4: && !(value instanceof Component)*/;
 	}
 
 	/** Used to forward events (for the forward conditions).
