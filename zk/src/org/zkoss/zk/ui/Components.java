@@ -912,8 +912,11 @@ public class Components {
 						if (parmcls.length == 1) {
 							if (containsVariable(x, fdname)) {
 								final Object arg = getVariable(x, fdname);
-								final Class argcls = arg == null ? null : arg.getClass();
-								injectByMethod(md, parmcls[0], argcls, arg, fdname);
+								if (!injectByMethod(md, parmcls[0], arg == null ? null : arg.getClass(), arg, fdname)) {
+									final Object arg2 = getFellow(x, fdname);
+									if (arg2 != arg && arg2 != null)
+										injectByMethod(md, parmcls[0], arg2.getClass(), arg2, fdname);
+								}
 							} else if ((x instanceof Component || x instanceof Page) &&
 							fdname.indexOf(_separator) >= 0) {
 								final Object arg = getFellowByPath(x, fdname);
@@ -934,8 +937,11 @@ public class Components {
 				&& !_injected.contains(fdname)) { //if not injected by setXxx yet
 					if (containsVariable(x, fdname)) {
 						final Object arg = getVariable(x, fdname);
-						final Class argcls = arg == null ? null : arg.getClass();
-						injectField(arg, argcls, fd);
+						if (!injectField(arg, arg == null ? null : arg.getClass(), fd)) {
+							final Object arg2 = getFellow(x, fdname);
+							if (arg2 != arg && arg2 != null)
+								injectField(arg2, arg2.getClass(), fd);
+						}
 					} else if ((x instanceof Component || x instanceof Page) &&
 					fdname.indexOf(_separator) >= 0) {
 						final Object arg = getFellowByPath(x, fdname);
@@ -986,6 +992,10 @@ public class Components {
 				return arg;
 			}
 		}
+		private Object getFellow(Object x, String fdname) {
+			return x instanceof Page ? ((Page)x).getFellowIfAny(fdname, true):
+				x instanceof Component ? ((Component)x).getFellowIfAny(fdname, true): null;
+		}
 		
 		private void injectFellow(Object arg) {
 			//try setXxx
@@ -1016,7 +1026,6 @@ public class Components {
 				}
 			}
 		}
-		
 		private void injectFieldByName(Object arg, Class tgtcls, Class parmcls, String fdname) {
 			try {
 				final Field fd = Classes.getAnyField(tgtcls, fdname);
@@ -1028,10 +1037,13 @@ public class Components {
 			}
 		}
 		
+		/** Returns false if there is such field but the target class doesn't match.
+		 * In other words, false means the caller can try another object (arg).
+		 */
 		private boolean injectByMethod(Method md, Class parmcls, Class argcls, Object arg, String fdname) {
 			if (argcls == null || parmcls.isAssignableFrom(argcls)) {
 				final Field fd = (Field) _fldMaps.get(fdname);
-				if (fd != null) {
+				if (fd != null && fd.getType().equals(parmcls)) {
 					final boolean old = fd.isAccessible();
 					try {
 						//check field value
@@ -1039,11 +1051,11 @@ public class Components {
 						final Object value = fd.get(_controller);
 						if (value == null) {
 							md.invoke(_controller, new Object[] {arg});
-							if (fd.get(_controller) != null) { //field is set
+							if (fd.get(_controller) == arg) { //field is set
 								_injected.add(fdname); //mark as injected
-								return true;
 							}
 						}
+						return true;
 					} catch (Exception ex) {
 						throw UiException.Aide.wrap(ex);
 					} finally {
@@ -1059,9 +1071,12 @@ public class Components {
 					}
 				}
 			}
-			return false;
+			return false; //mismatch try again
 		}
-		
+
+		/** Returns false if there is such field but the target class doesn't match.
+		 * In other words, false means the caller can try another object (arg).
+		 */
 		private boolean injectField(Object arg, Class argcls, Field fd) {
 			final boolean old = fd.isAccessible();
 			try {
@@ -1072,15 +1087,15 @@ public class Components {
 					if (value == null) {
 						fd.set(_controller, arg);
 						_injected.add(fd.getName());
-						return true;
 					}
+					return true;
 				}
+				return false; //mismatch (and try other)
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			} finally {
 				fd.setAccessible(old);
 			}
-			return false;
 		}
 		
 		private Object myGetImplicit(Object x, String fdname) {
