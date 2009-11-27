@@ -160,14 +160,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (val) {
-			var d = zDateFormat.parseDate(val, this.getFormat(), !this._lenient);
-			if (!d) return {error: zMsgFormat.format(msgzul.DATE_REQUIRED + this._format)};
+			var d = zk.fmt.Date.parseDate(val, this.getFormat(), !this._lenient);
+			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
 			return d;
 		} else
 			return val;
 	},
 	coerceToString_: function (val) {
-		return val ? zDateFormat.formatDate(val, this.getFormat()) : '';
+		return val ? zk.fmt.Date.formatDate(val, this.getFormat()) : '';
 	},
 	getInputNode: function () {
 		return this.$n('real');
@@ -374,7 +374,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var old = this._fmt;
 			this._fmt = fmt;
 			if (this.getValue())
-				this._value = zDateFormat.formatDate(zDateFormat.parseDate(this.getValue(), old), fmt);
+				this._value = zk.fmt.Date.formatDate(zk.fmt.Date.parseDate(this.getValue(), old), fmt);
 		}
 	},
 	rerender: function () {

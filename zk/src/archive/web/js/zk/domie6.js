@@ -22,6 +22,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_inPrint,
 		jq$super = {};
 
+	function _regexFormat(s) {
+		var args = arguments;
+		var regex = new RegExp("%([1-" + arguments.length + "])", "g");
+		return String(s).replace(regex, function (match, index) {
+			return index < args.length ? args[index] : match;
+		});
+	}
+	function _regexEscape(s) {
+		return String(s).replace(/([\/()[\]{}|*+-.,^$?\\])/g, "\\$1");
+	}
+
 	function _onpropchange() {
 	 	if (!_inPrint && event.propertyName == "src"
 	 	&& this.src.indexOf('spacer.gif') < 0)
@@ -44,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			filter.src = img.src;
 			filter.enabled = true;
 		} else {
-			img.runtimeStyle.filter = zUtl.format(_FILTER, img.src);
+			img.runtimeStyle.filter = _regexFormat(_FILTER, img.src);
 			_imgFiltered.push(img);
 		}
 		img.src = zk.SPACER_URI; //remove the real image
@@ -62,7 +73,7 @@ zk.copy(zjq, {
 
 		if (typeof regex == 'string')
 			regex = jq.IE6_ALPHAFIX
-				= new RegExp(zUtl.regexEscape(regex) + "$", "i");
+				= new RegExp(_regexEscape(regex) + "$", "i");
 		if (!zk.SPACER_URI)
 			zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', {au:true});
 		var imgs = n.getElementsByTagName("img");

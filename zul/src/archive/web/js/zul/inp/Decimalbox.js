@@ -16,17 +16,17 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zNumFormat.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			val = new zk.BigDecimal(info.raw);
 		if (info.raw != val.$toString() && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
-			return {error: zMsgFormat.format(msgzul.NUMBER_REQUIRED, value)};
+			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
 		return val;
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value : 
-			fmt ? zNumFormat.format(fmt, value.$toString(), this._rounding) : value.$toLocaleString() : '';
+			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding) : value.$toLocaleString() : '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

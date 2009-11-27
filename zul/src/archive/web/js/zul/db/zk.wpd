@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.db" language="xul/html" depends="zul.inp">
+<package name="zul.db" language="xul/html" depends="zk.fmt,zul.inp">
 	<widget name="Calendar"/>
 	<widget name="Datebox"/>
 </package>

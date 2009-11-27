@@ -85,7 +85,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		if (error)
-			return zMsgFormat.format(msgzul.DATE_REQUIRED + out.join(''));
+			return zk.fmt.Text.format(msgzul.DATE_REQUIRED + out.join(''));
 	},
 	_parseFormat: function (fmt) {
 		var index = [];

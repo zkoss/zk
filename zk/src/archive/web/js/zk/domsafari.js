@@ -12,6 +12,23 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _dissel() {
+		this.style.KhtmlUserSelect = "none";
+	}
+	function _ensel() {
+		this.style.KhtmlUserSelect = "";
+	}
+
+zk.copy(zjq.prototype, {
+	disableSelection: function () {
+		return this.jq.each(_dissel);
+	},
+	enableSelection: function () {
+		return this.jq.each(_ensel);
+	},
+});
+
 zjq._sfKeys = {
 	25: 9, 	   // SHIFT-TAB
 	63232: 38, // up
@@ -32,3 +49,5 @@ zk.override(jq.event, zjq._evt = {}, {
 		return evt;
 	}
 });
+
+})();

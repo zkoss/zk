@@ -52,17 +52,17 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {//copy from intbox
 		if (!value) return null;
 
-		var info = zNumFormat.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			val = parseInt(info.raw);
 		if (info.raw != ''+val)
-			return {error: zMsgFormat.format(msgzul.INTEGER_REQUIRED, value)};
+			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format;
-		return fmt ? zNumFormat.format(fmt, value, this._rounding): value != null ? ''+value: '';
+		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding): value != null ? ''+value: '';
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();

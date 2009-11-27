@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var fxNodes = [], //what to fix
 		$fns = {}; //super's fn
+
 	//fix DOM
 	function fixDom(n, nxt) { //exclude nxt (if null, means to the end)
 		for (; n && n != nxt; n = n.nextSibling)
@@ -115,6 +116,19 @@ zk.override(jq.fn, $fns, {
 
 var _zjq = {};
 zk.override(zjq, _zjq, {
+	_fixCSS: function (el) {
+		var zoom = el.style.zoom;
+		el.style.zoom = 1;
+		_zjq._fixCSS(el);
+		setTimeout(function() {
+			try {el.style.zoom = zoom;} catch (e) {}
+		});
+	}
+});
+zk.copy(zjq, {
+	_src0: "javascript:false;",
+		//IE: prevent secure/nonsecure warning with HTTPS
+
 	_fixIframe: function (el) { //used in widget.js
 		try {
 			if (el.tagName == 'IFRAME')
@@ -126,13 +140,47 @@ zk.override(zjq, _zjq, {
 		}
 	},
 
-	_fixCSS: function (el) {
-		var zoom = el.style.zoom;
-		el.style.zoom = 1;
-		_zjq._fixCSS(el);
-		setTimeout(function() {
-			try {el.style.zoom = zoom;} catch (e) {}
-		});
+	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
+	_fix1stJS: function (out, s) { //used in widget.js
+		var j;
+		if (this.previousSibling || s.indexOf('<script') < 0
+		|| (j = out.length) > 20)
+			return;
+		for (var cnt = 0; j--;)
+			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
+				return; //more than one
+	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
+	}
+});
+
+	function _dissel() {
+		this.onselectstart = _dissel0;
+	}
+	function _dissel0(evt) {
+		evt = evt || window.event;
+		var n = evt.srcElement, tag = n ? n.tagName: '';
+		return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
+	}
+	function _ensel() {
+		this.onselectstart = null;
+	}
+zk.copy(zjq.prototype, {
+	disableSelection: function () {
+		return this.jq.each(_dissel);
+	},
+	enableSelection: function () {
+		return this.jq.each(_ensel);
+	},
+
+	cellIndex: function () {
+		var cell = this.jq[0];
+		if (cell) {
+			var cells = cell.parentNode.cells;
+			for(var j = 0, cl = cells.length; j < cl; j++)
+				if (cells[j] == cell)
+					return j;
+		}
+		return 0;
 	}
 });
 

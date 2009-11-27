@@ -81,25 +81,12 @@ zjq = function (jq) { //ZK extension
 		} //IE throws exception when select() in some cases
 	}
 
-	var _disbSel, _enbSel;
-	_disbSel = zk.gecko ?
-			[function (el) {el.style.MozUserSelect = "none";},
-			 function (el) {el.style.MozUserSelect = "";}]:
-		zk.safari ?
-			[function (el) {el.style.KhtmlUserSelect = "none";},
-			 function (el) {el.style.KhtmlUserSelect = "";}]:
-		zk.ie ?
-			[function (el) {
-				el.onselectstart = function (evt) {
-					evt = evt || window.event;
-					var n = evt.srcElement, tag = n ? n.tagName: '';
-					return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
-				};
-			 },
-			 function (el) {el.onselectstart = null;}]:
-			[zk.$void, zk.$void];
-	_enbSel = _disbSel[1];
-	_disbSel = _disbSel[0];
+	function _dissel() {
+		this.style.MozUserSelect = "none";
+	}
+	function _ensel() {
+		this.style.MozUserSelect = "";
+	}
 
 	function _scrlIntoView(outer, inner, info) {
 		if (outer && inner) {
@@ -204,12 +191,6 @@ zjq = function (jq) { //ZK extension
 
 	//redoCSS
 	var _rdcss = [];
-	zjq._fixCSS = function (el) { //overriden in domie.js
-		el.className += ' ';
-		if (el.offsetHeight)
-			;
-		el.className.trim();
-	};
 	function _redoCSS0() {
 		if (_rdcss.length) {
 			for (var el; el = _rdcss.pop();)
@@ -222,6 +203,19 @@ zjq = function (jq) { //ZK extension
 			setTimeout(_redoCSS0);
 		}
 	}
+
+zk.copy(zjq, {
+	_fixCSS: function (el) { //overriden in domie.js
+		el.className += ' ';
+		if (el.offsetHeight)
+			;
+		el.className.trim();
+	},
+	_cleanVisi: function (n) { //overriden in domopera.js
+		n.style.visibility = "inherit";
+	},
+	_src0: "" //an empty src; overriden in domie.js
+});
 
 zk.override(jq.fn, jq$super, {
 	init: function (sel, ctx) {
@@ -437,18 +431,8 @@ zjq.prototype = {
 		return hgh;
 	},
 	cellIndex: function () {
-		var cell = this.jq[0],
-			i = 0;
-		if (zk.ie) {
-			var cells = cell.parentNode.cells;
-			for(var j = 0, cl = cells.length; j < cl; j++) {
-				if (cells[j] == cell) {
-					i = j;
-					break;
-				}
-			}
-		} else i = cell.cellIndex;
-		return i;
+		var cell = this.jq[0];
+		return cell ? cell.cellIndex: 0;
 	},
 	ncols: function (visibleOnly) {
 		var row = this.jq[0],
@@ -774,7 +758,7 @@ zjq.prototype = {
 		for (var j = this.jq.length; j--;) {
 			var el = this.jq[j],
 				src = el.src;
-			el.src = "javascript:false;";
+			el.src = zjq._src0;
 			el.src = src;
 		}
 	},
@@ -899,10 +883,10 @@ zjq.prototype = {
 
 	//selection//
 	disableSelection: function () {
-		return this.jq.each(function () {_disbSel(this);});
+		return this.jq.each(_dissel);
 	},
 	enableSelection: function () {
-		return this.jq.each(function () {_enbSel(this);});
+		return this.jq.each(_ensel);
 	},
 
 	setStyles: function (styles) {
@@ -1060,7 +1044,7 @@ zk.copy(jq, { //ZK extension to jq
 		return this;
 	},
 	newFrame: function (id, src, style) {
-		if (!src) src = zk.ie ? "javascript:false;": "";
+		if (!src) src = zjq._src0;
 			//IE: prevent secure/nonsecure warning with HTTPS
 
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
@@ -1076,8 +1060,7 @@ zk.copy(jq, { //ZK extension to jq
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
-		ifr.src = zk.ie ? "javascript:false;": "";
-			//IE: prevent secure/nonsecure warning with HTTPS
+		ifr.src = zjq._src0;
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";
@@ -1146,10 +1129,6 @@ zk.copy(jq, { //ZK extension to jq
 		}
 	}
 });
-
-zjq._cleanVisi = function (n) { //override later (by domopera.js
-	n.style.visibility = "inherit";
-};
 
 /** @class _.jq.Event
  * A DOM element.

@@ -37,23 +37,6 @@ zUtl = { //static methods
 	},
 
 	//HTML/XML
-	loadXML: function (url, callback) {
-		var doc = document.implementation;
-		if (doc && doc.createDocument) {
-			doc = doc.createDocument('', '', null); //FF, Safari, Opera
-			if (callback)
-				doc.onload = function () {callback(doc);};
-		} else {
-			doc = new ActiveXObject("Microsoft.XMLDOM");
-			if (callback)
-				doc.onreadystatechange = function() {
-					if (doc.readyState == 4) callback(doc);
-				};
-		}
-		if (!callback) doc.async = false;
-		doc.load(url);
-		return doc;
-	},
 	parseMap: function (text, separator, quote) {
 		var map = {};
 		if (text) {
@@ -81,17 +64,10 @@ zUtl = { //static methods
 		}
 		return map;
 	},
-	parseXML: function (text) {
-		if (typeof DOMParser != "undefined")
-			return (new DOMParser()).parseFromString(text, "text/xml");
-			//FF, Safar, Opera
-	
-		doc = new ActiveXObject("Microsoft.XMLDOM"); //IE
-		doc.async = false;
-		doc.loadXML(text);
-		return doc;
-	},
 
+	/** Encodes the string to a valid XML string.
+	 * @see zk.fmt.XML
+	 */
 	encodeXML: function (txt, opts) {
 		var out = "";
 		txt = txt != null ? String(txt):'';
@@ -306,17 +282,6 @@ zUtl = { //static methods
 			}
 			location.reload();
 		}
-	},
-
-	format: function (s) {
-		var args = arguments;
-		var regex = new RegExp("%([1-" + arguments.length + "])", "g");
-		return String(s).replace(regex, function (match, index) {
-			return index < args.length ? args[index] : match;
-		});
-	},
-	regexEscape: function (s) {
-		return String(s).replace(/([\/()[\]{}|*+-.,^$?\\])/g, "\\$1");
 	},
 
 	intsToString: function (ary) {

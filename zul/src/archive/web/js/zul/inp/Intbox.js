@@ -19,20 +19,20 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zNumFormat.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			val = parseInt(info.raw);
 		
 		if (info.raw != ''+val && info.raw != '+'+val)
-			return {error: zMsgFormat.format(msgzul.INTEGER_REQUIRED, value)};
+			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
-			return {error: zMsgFormat.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};
+			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
 	},
 	coerceToString_: function (value) {
 		var fmt = this._format;
-		return fmt ? zNumFormat.format(fmt, value, this._rounding): value != null  ? ''+value: '';
+		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding): value != null  ? ''+value: '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

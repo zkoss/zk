@@ -31,8 +31,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				var j = constraint.indexOf("and", 7);
 				if (j < 0 && zk.debugJS) 
 					zk.error('Unknown constraint: ' + constraint);
-				this._beg = zDateFormat.parseDate(constraint.substring(7, j), 'yyyyMMdd');
-				this._end = zDateFormat.parseDate(constraint.substring(j + 3), 'yyyyMMdd');
+				this._beg = zk.fmt.Date.parseDate(constraint.substring(7, j), 'yyyyMMdd');
+				this._end = zk.fmt.Date.parseDate(constraint.substring(j + 3), 'yyyyMMdd');
 				if (this._beg.getTime() > this._end.getTime()) {
 					var d = this._beg;
 					this._beg = this._end;
@@ -49,13 +49,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this._end.setSeconds(0);
 				this._end.setMilliseconds(0);
 			} else if (constraint.startsWith("before")) {
-				this._end = zDateFormat.parseDate(constraint.substring(6), 'yyyyMMdd');
+				this._end = zk.fmt.Date.parseDate(constraint.substring(6), 'yyyyMMdd');
 				this._end.setHours(0);
 				this._end.setMinutes(0);
 				this._end.setSeconds(0);
 				this._end.setMilliseconds(0);
 			} else if (constraint.startsWith("after")) {
-				this._beg = zDateFormat.parseDate(constraint.substring(5), 'yyyyMMdd');
+				this._beg = zk.fmt.Date.parseDate(constraint.substring(5), 'yyyyMMdd');
 				this._beg.setHours(0);
 				this._beg.setMinutes(0);
 				this._beg.setSeconds(0);
@@ -167,7 +167,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(ry, "onClick", '_doclickArrow')
 			.domListen_(mid, "onMouseOver", '_doMouseEffect')
 			.domListen_(mid, "onMouseOut", '_doMouseEffect');
-		this.updateFormData(this._value || zDateFormat.formatDate(this.getTime(), this.getFormat()));
+		this.updateFormData(this._value || zk.fmt.Date.formatDate(this.getTime(), this.getFormat()));
 	},
 	unbind_: function () {
 		var title = this.$n("title"),
@@ -219,14 +219,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	getTime : function () {
-		return this._value ? zDateFormat.parseDate(this._value, this.getFormat()) : new Date();
+		return this._value ? zk.fmt.Date.parseDate(this._value, this.getFormat()) : new Date();
 	},
 	_setTime : function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
-		this._value = zDateFormat.formatDate(new Date(year, month, day), this.getFormat());
+		this._value = zk.fmt.Date.formatDate(new Date(year, month, day), this.getFormat());
 		this.fire('onChange', {value: this._value});
 	},
 	_choiceData: function (evt) {
@@ -284,7 +284,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				year = year + ofs;
 				break;
 		}
-		this._value = zDateFormat.formatDate(new Date(year, month, day), this.getFormat());
+		this._value = zk.fmt.Date.formatDate(new Date(year, month, day), this.getFormat());
 		this.fire('onChange', {value: this._value, shallClose: false});
 	},
 	_changeView : function (evt) {

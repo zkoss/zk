@@ -203,7 +203,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _setMinFlexSize(wgt, n, o) {
 		//find the max size of all children
 		if (o == 'height') {
-			if (wgt._vflexsize === undefined) { //cached?
+			if (wgt._vflexsz === undefined) { //cached?
 				wgt.setFlexSize_({height:'auto'});
 				var zkn = zk(n),
 					ntop = n.offsetTop,
@@ -212,7 +212,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					max = 0;
 				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
 					var c = cwgt.$n(),
-						sz = cwgt._vflex == 'min' && cwgt._vflexsize === undefined ? //recursive 
+						sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
 							_setMinFlexSize(cwgt, c, o) : 
 							(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
 					if (sz > max)
@@ -221,12 +221,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var margin = zkn.sumStyles("tb", jq.margins),
 					sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
-					wgt._vflexsize = sz.height + margin;
+					wgt._vflexsz = sz.height + margin;
 			}
-			return wgt._vflexsize;
+			return wgt._vflexsz;
 			
 		} else if (o == 'width') {
-			if (wgt._hflexsize === undefined) { //cached?
+			if (wgt._hflexsz === undefined) { //cached?
 				wgt.setFlexSize_({width:'auto'});
 				var zkn = zk(n),
 					nleft = n.offsetLeft,
@@ -235,7 +235,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					max = 0;
 				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
 					var c = cwgt.$n(),
-						sz = cwgt._hflex == 'min' && cwgt._hflexsize === undefined ? //recursive
+						sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
 							_setMinFlexSize(cwgt, c, o) : 
 							(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
 					if (sz > max)
@@ -244,9 +244,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var margin = zkn.sumStyles("lr", jq.margins);
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
 				if (sz && sz.width >= 0)
-					wgt._hflexsize = sz.width + margin;
+					wgt._hflexsz = sz.width + margin;
 			}
-			return wgt._hflexsize;
+			return wgt._hflexsz;
 		} else
 			return 0;
 	}
@@ -394,14 +394,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({height:vsz});
-			cwgt._vflexsize = vsz;
+			cwgt._vflexsz = vsz;
 			lastsz -= vsz;
 		}
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift();
 			cwgt.setFlexSize_({height:lastsz});
-			cwgt._vflexsize = lastsz;
+			cwgt._vflexsz = lastsz;
 		}
 		
 		//setup the width for the hflex child
@@ -411,14 +411,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
-			cwgt._hflexsize = hsz;
+			cwgt._hflexsz = hsz;
 			lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift();
 			cwgt.setFlexSize_({width:lastsz});
-			cwgt._hflexsize = lastsz;
+			cwgt._hflexsz = lastsz;
 		}
 		
 		//notify parent widget that all of its children with vflex is done.
@@ -666,7 +666,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (_binds[this.uuid] === this) { //if already bind
 				if (!this._nvflex) {
 					this.setFlexSize_({height: ''}); //clear the height
-					delete this._vflexsize;
+					delete this._vflexsz;
 					if (!this._nhflex)
 						_unlistenFlex(this);
 				} else
@@ -681,7 +681,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (_binds[this.uuid] === this) { //if already bind
 				if (!this._nhflex) {
 					this.setFlexSize_({width: ''}); //clear the width
-					delete this._hflexsize;
+					delete this._hflexsz;
 					if (!this._nvflex)
 						_unlistenFlex(this);
 				} else
@@ -2133,7 +2133,7 @@ zk.Skipper = zk.$extends(zk.Object, {
 				skip.removeChild(el);
 				loc.appendChild(el);
 
-				if (zk.ie) zjq._fixIframe(el); //Bug 2900274
+				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
 			}
 		}
 	}
@@ -2146,7 +2146,7 @@ zk.Native = zk.$extends(zk.Widget, {
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) {
-			if (zk.ie) this._patchScript(out, s);
+			if (zk.ie) zjq._fix1stJS(out, s); //in domie.js
 			out.push(s);
 		}
 
@@ -2157,19 +2157,6 @@ zk.Native = zk.$extends(zk.Widget, {
 		if (s) out.push(s);
 	}
 });
-
-//pacth IE7 bug: script ignored if it is the first child (script2.zul)
-if (zk.ie)
-	zk.Native.prototype._patchScript = function (out, s) {
-		var j;
-		if (this.previousSibling || s.indexOf('<script') < 0
-		|| (j = out.length) > 20)
-			return;
-		for (var cnt = 0; j--;)
-			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
-				return; //more than one
-	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
-	};
 
 zk.Macro = zk.$extends(zk.Widget, {
 	className: 'zk.Macro',
