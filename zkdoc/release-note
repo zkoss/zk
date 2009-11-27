@@ -12,6 +12,7 @@ ZK 3.6.4
   2896474: small browser window cuts vertical scrollbar off
   2902981: GenericAutowireComposer can't deserialize correctly
   2904793: onChanging stop to fire after onOK
+  2904688: SimpleTreeNode is not serializable
 
 * Upgrade Notes:
 
