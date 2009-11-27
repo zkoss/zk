@@ -156,9 +156,12 @@
 	filter: alpha(opacity=50);
 }
 <%-- define menupopup effect --%>
-.z-menu-popup-shadow {
+.z-menu-popup-shadow, .z-menu-palette-pp, .z-menu-picker-pp, .z-menu-cnt-pp {
 	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.z-menu-cnt-body {
+	background-color:#FFFFFF;
 }
 .z-menu-popup {
 	background:#CCE6FB repeat-y 0 0;

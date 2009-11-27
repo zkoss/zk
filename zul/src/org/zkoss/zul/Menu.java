@@ -16,16 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.xml.HTMLs;
+import java.io.IOException;
+import java.util.Map;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.MouseEvent;
-
+import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.XulElement;
 
 /**
  * An element, much like a button, that is placed on a menu bar.
@@ -38,9 +41,12 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	private Menupopup _popup;
+	private String _content = "";
+	private boolean _noSmartUpdate = false;
 	
 	static {
 		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+		addClientEvent(Menu.class, Events.ON_CHANGE, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
 	}
 	
 	public Menu() {
@@ -70,12 +76,49 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	public org.zkoss.zul.api.Menupopup getMenupopupApi() {
 		return getMenupopup();		
 	}
-
+	
+	/** Returns the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * <p>Default: empty ("").
+	 *
+	 * @since 5.0.0
+	 */
+	public String getContent() {
+		return _content;
+	}
+	
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 * 
+	 * <p>There is a way to create Colorbox automatically by using
+	 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
+	 *
+	 * @since 5.0.0
+	 */
+	public void setContent(String content) {
+		if (content == null) content = "";
+		if (!Objects.equals(_content, content)) {
+			_content = content;
+			if (!_noSmartUpdate)
+				smartUpdate("content", content);
+		}
+	}
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-menu" : _zclass;
 	}
 
+	protected void renderProperties(ContentRenderer renderer)
+			throws IOException {
+		super.renderProperties(renderer);
+		render(renderer, "content", _content);
+	}
+	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Menubar)
 		&& !(parent instanceof Menupopup))
@@ -139,8 +182,15 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CLICK)) {
 			Events.postEvent(MouseEvent.getMouseEvent(request));
+		} else if (cmd.equals(Events.ON_CHANGE)) {
+			final Map data = request.getData();
+			if (getContent().indexOf("#color") == 0) {
+				_noSmartUpdate = true;
+				setContent("#color=" + (String)data.get("color"));
+				_noSmartUpdate = false;
+				Events.postEvent(InputEvent.getInputEvent(request));
+			}
 		} else
 			super.service(request, everError);
 	}
-	
 }
