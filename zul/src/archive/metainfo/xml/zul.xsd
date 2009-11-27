@@ -492,6 +492,8 @@
 			<xs:element ref="doublebox" />
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
+			<xs:element ref="flash" />
+			<xs:element ref="flashchart" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -555,6 +557,8 @@
 				<xs:element ref="doublebox" />
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
+				<xs:element ref="flash" />
+				<xs:element ref="flashchart" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -1036,6 +1040,21 @@
 		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
+	</xs:complexType>
+	
+	<!-- flashchart -->
+	<xs:element name="flashchart" type="flashchartType" />
+	<xs:complexType name="flashchartType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="bgcolor" type="xs:string" use="optional" />
+		<xs:attribute name="loop" type="booleanType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
+		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="allowScriptAccess" type="xs:string" use="optional" />
+		<xs:attribute name="flashvars" type="xs:string" use="optional" />
 	</xs:complexType>
 
     <!-- foot -->

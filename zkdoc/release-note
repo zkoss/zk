@@ -50,6 +50,7 @@ November, 2009
   1594070: Listbox should raise onBlur/onFocus event
   1481860: add onBlur/onFocus event to Tree
   1831148: Support of ColorChooser
+  2904894: Add new Flash Chart component
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
