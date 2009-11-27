@@ -69,7 +69,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	private List _fonts = new ArrayList(9); //fonts that can be used to draw text
 	private int _len = 5; //text length, default 5
 	private String _exclude = null;
-	private String _value; //captcha text value 
+	private String _value = ""; //captcha text value 
 	private boolean _noise, _border; //whether generate noise
 	private CaptchaEngine _engine; //the captcha engine that generate the distortion image.
 
@@ -217,20 +217,23 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	}
 	
 	/**
-	 * Get the text value of this captcha.
+	 * Returns the text value of this captcha.
+	 * <p>Default: an empty string.
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 */
 	public String getValue() {
 		return _value;
 	}
 	
 	/**
-	 * Set the text value to be shown as the distortion captcha.
+	 * Sets the text value to be shown as the distortion captcha.
 	 * @param text the captcha text value
 	 */
 	public void setValue(String text) throws WrongValueException {
+		if (Strings.isBlank(text))
+			throw new WrongValueException("empty not allowed");
 		if (!Objects.equals(text, _value)) {
-			if (Strings.isBlank(text))
-				throw new WrongValueException("empty not allowed");
 			_value = text;
 			smartDrawCaptcha();
 		}

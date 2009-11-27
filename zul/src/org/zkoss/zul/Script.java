@@ -167,6 +167,8 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	 *
 	 * <p>Default: null.
 	 *
+	 * <p>Deriving class can override this method to return whatever
+	 * it prefers (ingored if null).
 	 * @since 3.0.0
 	 */
 	public String getContent() {
@@ -184,7 +186,8 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			smartUpdate("content", _content);
+			smartUpdate("content", getContent());
+				//allow deriving to override getContent()
 		}
 	}
 
@@ -214,16 +217,25 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 	//super//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!_defer && _content != null)
-			out.write(_content);
+		if (!_defer) {
+			final String cnt = getContent();
+				//allow deriving to override getContent()
+			if (cnt != null)
+				out.write(cnt);
+		}
 		super.redraw(out);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_defer && _content != null)
-			renderer.renderDirectly("content", "function(){\n" + _content + "\n}");
+		if (_defer) {
+			final String cnt = getContent();
+				//allow deriving to override getContent()
+			if (cnt != null)
+				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
+		}
+
 		if (_src != null) {
 			final HtmlPageRenders.RenderContext rc =
 				_defer ? null: HtmlPageRenders.getRenderContext(null);

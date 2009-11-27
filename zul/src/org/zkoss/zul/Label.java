@@ -47,6 +47,8 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 
 	/** Returns the value.
 	 * <p>Default: "".
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 */
 	public String getValue() {
 		return _value;
@@ -57,7 +59,8 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (value == null) value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			smartUpdate("value", _value);
+			smartUpdate("value", getValue());
+				//allow deriving to override getValue()
 		}
 	}
 
@@ -146,9 +149,11 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		render(renderer, "multiline", _multiline);
 		render(renderer, "pre", _pre);
-		render(renderer, "value", _value); //no need to encode
 
-		org.zkoss.zul.impl.Utils.renderCrawlableText(_value);
+		final String val = getValue();
+			//allow deriving to override getValue()
+		render(renderer, "value", val); //no need to encode
+		org.zkoss.zul.impl.Utils.renderCrawlableText(val);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-label" : _zclass;

@@ -116,6 +116,8 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	 *
 	 * <p>Default: null.
 	 *
+	 * <p>Deriving class can override this method to return whatever
+	 * it prefers (ignored if null).
 	 * @since 3.0.0
 	 */
 	public String getContent() {
@@ -149,7 +151,9 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		super.renderProperties(renderer);
 
 		boolean gened = false;
-		if (_content != null) {
+		final String cnt = getContent();
+			//allow derive to override getContent()
+		if (cnt != null) {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
 			if (rc != null) {
@@ -158,7 +162,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 				out.write("\n<style id=\"");
 				out.write(getUuid());
 				out.write("$css\" type=\"text/css\">\n");
-				out.write(_content);
+				out.write(cnt);
 				out.write("\n</style>\n");
 				gened = true;
 			}
@@ -187,14 +191,14 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	protected class ExtraCtrl implements DynamicMedia {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
-			return new AMedia("css", "css", "text/css;charset=UTF-8", _content);
+			return new AMedia("css", "css", "text/css;charset=UTF-8", getContent());
 		}
 	}
 
 	/** Returns the encoded URL of the image (never null).
 	 */
 	private String getEncodedURL() {
-		if (_content != null)
+		if (getContent() != null) //allow derived to override getContent()
 			return Utils.getDynamicMediaURI(this, _cntver, "css", "css");
 
 		if (_src != null) {

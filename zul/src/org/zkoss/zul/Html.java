@@ -86,6 +86,8 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 
 	/** Returns the embedded content (i.e., HTML tags).
 	 * <p>Default: empty ("").
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 */
 	public String getContent() {
 		return _content;
@@ -96,7 +98,8 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			smartUpdate("content", _content);
+			smartUpdate("content", getContent());
+			//allow deriving to override getContent()
 		}
 	}
 
@@ -105,7 +108,8 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		String cnt = _content;
+		String cnt = getContent();
+			//allow deriving to override getContent()
 		if (cnt.length() > 0) {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
