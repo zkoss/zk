@@ -95,10 +95,12 @@ public class FusionInvoker implements InvocationHandler, java.io.Serializable {
 				targetClasses.add(allClass[j]);
 			}
 		}
-		return Proxy.newProxyInstance(Thread.currentThread()
-				.getContextClassLoader(), (Class[]) targetClasses
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		return Proxy.newProxyInstance(
+			cl != null ? cl: FusionInvoker.class.getClassLoader(),
+			(Class[]) targetClasses
 				.toArray(new Class[targetClasses.size()]), new FusionInvoker(
-				targets));
+			targets));
 	}
 
 	// -- InvocationHandler --//

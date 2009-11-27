@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2896474.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 11:22:27     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<tree id="explorerTree" fixedLayout="true" vflex="true"
+style="overflow-x:auto">
+<treecols sizable="false">
+<treecol label="Please resize window's height to very small but at least one row exist. Then you should be able to see the down-scroller-button."/>
+</treecols>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell
+label="TEXTtextTEXTtextTEXTtextTEXTtextTEXTtext"/>
+</treerow>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell
+label="TEXTtextTEXTtextTEXTtextTEXTtextTEXTtext"/>
+</treerow>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell
+label="TEXTtextTEXTtextTEXTtextTEXTtextTEXTtext"/>
+</treerow>
+</treeitem>
+<treeitem>
+<treerow>
+<treecell
+label="TEXTtextTEXTtextTEXTtextTEXTtextTEXTtext"/>
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</tree>
+</zk>

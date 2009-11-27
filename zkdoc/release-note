@@ -92,6 +92,8 @@ November, 2009
   2902877: Include's invalidate doesn't reload the page in instant mode
   2902291: zkdemo cannot run in cluster
   2900977: this.element.clientWidth is null in Slider in Grid
+  2896474: small browser window cuts vertical scrollbar off
+  2902981: GenericAutowireComposer can't deserialize correctly
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 

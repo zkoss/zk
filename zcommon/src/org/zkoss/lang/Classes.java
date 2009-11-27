@@ -183,6 +183,8 @@ public class Classes {
 	/**
 	 * Returns the Class object of the specified class name, using
 	 * the current thread's context class loader.
+	 * <p>It first tries Thread.currentThread().getContextClassLoader(),
+	 * and then {@link Classes}'s class loader if not found.
 	 *
 	 * <p>In additions, it handles the primitive types, such as int and double.
 	 *
@@ -194,8 +196,16 @@ public class Classes {
 	throws ClassNotFoundException {
 		clsName = toInternalForm(clsName);
 		final Class cls = Primitives.toClass(clsName);
-		return cls != null ? cls:
-			Class.forName(clsName, true, Thread.currentThread().getContextClassLoader());
+		if (cls != null)
+			return cls;
+
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		if (cl != null)
+			try {
+				return Class.forName(clsName, true, cl);
+			} catch (ClassNotFoundException ex) { //ignore and try the other
+			}
+		return Classes.class.forName(clsName);
 	}
 
 	/** Returns whether the specified class exists for the current thread's
