@@ -16,7 +16,7 @@ zjq = function (jq) { //ZK extension
 	this.jq = jq;
 };
 (function () {
-	var jq$super = {},
+	var _jq = {}, //original jQuery
 		//refer to http://www.w3schools.com/css/css_text.asp
 		_txtStyles = [
 			'font-family', 'font-size', 'font-weight', 'font-style',
@@ -217,7 +217,7 @@ zk.copy(zjq, {
 	_src0: "" //an empty src; overriden in domie.js
 });
 
-zk.override(jq.fn, jq$super, {
+zk.override(jq.fn, _jq, {
 	init: function (sel, ctx) {
 		var cc;
 		if (typeof sel == 'string') {
@@ -246,40 +246,40 @@ zk.override(jq.fn, jq$super, {
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
-		var ret = jq$super.init.call(this, sel, ctx);
+		var ret = _jq.init.call(this, sel, ctx);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
 	replaceWith: function (w, desktop, skipper) {
 		if (!zk.Widget.isInstance(w))
-			return jq$super.replaceWith.apply(this, arguments);
+			return _jq.replaceWith.apply(this, arguments);
 
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
 	remove: function () {
-		return _isNone(this) ? this: jq$super.remove.apply(this, arguments);
+		return _isNone(this) ? this: _jq.remove.apply(this, arguments);
 	},
 	show: function () {
-		return _isNone(this) ? this: jq$super.show.apply(this, arguments);
+		return _isNone(this) ? this: _jq.show.apply(this, arguments);
 	},
 	hide: function () {
-		return _isNone(this) ? this: jq$super.hide.apply(this, arguments);
+		return _isNone(this) ? this: _jq.hide.apply(this, arguments);
 	}
 });
 jq.fn.init.prototype = jq.fn;
 
 jq.each(['before','after','append','prepend'], function (i, nm) {
-	jq$super[nm] = jq.fn[nm];
+	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function (w, desktop) {
 		if (!zk.Widget.isInstance(w))
-			return jq$super[nm].apply(this, arguments);
+			return _jq[nm].apply(this, arguments);
 
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();
 
-		var ret = jq$super[nm].call(this, w._redrawHTML());
+		var ret = _jq[nm].call(this, w._redrawHTML());
 		if (!w.z_rod) {
 			w.bind(desktop);
 			zWatch.fireDown('beforeSize', w);
