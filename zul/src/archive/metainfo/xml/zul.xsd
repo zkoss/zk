@@ -483,6 +483,7 @@
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
+			<xs:element ref="colorbox" />
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
 			<xs:element ref="datebox" />
@@ -545,6 +546,7 @@
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="checkbox" />
+				<xs:element ref="colorbox" />
 				<xs:element ref="columnlayout" />
 				<xs:element ref="combobox" />
 				<xs:element ref="datebox" />
@@ -825,7 +827,14 @@
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
-    <!-- column -->
+    <!-- colorbox -->
+	<xs:element name="colorbox" type="colorboxType" />
+	<xs:complexType name="colorboxType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="color" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- column -->
 	<xs:element name="column" type="columnType" />
 	<xs:complexType name="columnType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
@@ -1551,6 +1560,7 @@
 			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- menubar -->
 	<xs:element name="menubar" type="menubarType" />
