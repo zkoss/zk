@@ -2096,7 +2096,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			return dts[dtid];
 	},
 	all: {},
-	_ndt: 0,
+	_ndt: 0, //used in au.js/dom.js
 	sync: function () {
 		var Desktop = zk.Desktop, dts = Desktop.all;
 		if (Desktop._dt && !Desktop._dt._exists()) //removed
