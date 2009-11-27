@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zAu = (function () {
+(function () {
 	var _errURIs = {}, errCode,
 		_perrURIs = {}, //server-push error URI
 		cmdsQue = [], //response commands in XML
@@ -358,8 +358,8 @@ zAu = (function () {
 		zAu.send(new zk.Event(null, "dummy", {timeout: true}, {ignorable: true}));
 	}
 
-  return {
-	_resetTimeout: function () {
+zAu = {
+	_resetTimeout: function () { //called by mount.js
 		if (idTimeout) {
 			clearTimeout(idTimeout);
 			idTimeout = null;
@@ -642,7 +642,7 @@ zAu = (function () {
 			$eval(codes[j]);
 		}
 	}
- };
+};
 })();
 
 //Commands//

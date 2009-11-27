@@ -30,14 +30,13 @@ zk.eff = {
 };
 
 if (zk.ie || zk.gecko2_ || zk.opera) {
-	var _defShadowOpts = {left: 4, right: 4, top: 3, bottom: 3};
+	var _defShadowOpts = {left: 4, right: 4, top: 3, bottom: 3},
+		_shadowEnding = zk.ie6_ ? '" class="z-shadow"></div>':
+		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
+		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
+		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>';
 
 	zk.eff.Shadow = zk.$extends(zk.Object, {
-		_HTML: zk.ie6_ ? '" class="z-shadow"></div>':
-			'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
-			+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
-			+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
-	
 		$init: function (element, opts) {
 			opts = this.opts =
 				zk.$default(zk.$default(opts, _defShadowOpts), _getSKUOpts());
@@ -50,7 +49,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	
 			this.node = element;
 			var sdwid = element.id + "-sdw";
-			jq(element).before('<div id="'+sdwid+this._HTML);
+			jq(element).before('<div id="' + sdwid + _shadowEnding);
 			this.shadow = jq(sdwid, zk)[0];
 		},
 		destroy: function () {
@@ -170,6 +169,28 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	});
 }
 
+	//Position a mask to cover the whole browser window.
+	//it must be called as _syncPos.call(this)
+	function _syncPos() {
+		var n = this.mask,
+			ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY()),
+			st = n.style;
+		st.left = jq.px(ofs[0], true);
+		st.top = jq.px(ofs[1], true);
+		st.width = jq.px(jq.innerWidth());
+		st.height = jq.px(jq.innerHeight());
+		st.display = "block";
+
+		n = this.stackup;
+		if (n) {
+			n = n.style;
+			n.left = st.left;
+			n.top = st.top;
+			n.width = st.width;
+			n.height = st.height;
+		}
+	}
+
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	$init: function (opts) {
 		opts = zk.$default(opts, _getSKUOpts());
@@ -200,12 +221,12 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		if (opts.stackup)
 			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
 
-		this._syncPos();
+		_syncPos.call(this);
 
 		var f;
 		jq(mask).mousemove(f = jq.event.stop)
 			.click(f);
-		jq(window).resize(f = this.proxy(this._syncPos))
+		jq(window).resize(f = this.proxy(_syncPos))
 			.scroll(f);
 	},
 	destroy: function () {
@@ -213,7 +234,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		jq(mask).unbind("mousemove", f = jq.event.stop)
 			.unbind("click", f)
 			.remove()
-		jq(window).unbind("resize", f = this.proxy(this._syncPos))
+		jq(window).unbind("resize", f = this.proxy(_syncPos))
 			.unbind("scroll", f);
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
@@ -242,26 +263,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			st = this.stackup.style;
 			st.display = 'block';
 			st.zIndex = el.style.zIndex;
-		}
-	},
-	/** Position a mask to cover the whole browser window. */
-	_syncPos: function () {
-		var n = this.mask,
-			ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY()),
-			st = n.style;
-		st.left = jq.px(ofs[0], true);
-		st.top = jq.px(ofs[1], true);
-		st.width = jq.px(jq.innerWidth());
-		st.height = jq.px(jq.innerHeight());
-		st.display = "block";
-
-		n = this.stackup;
-		if (n) {
-			n = n.style;
-			n.left = st.left;
-			n.top = st.top;
-			n.width = st.width;
-			n.height = st.height;
 		}
 	}
 });
@@ -312,16 +313,31 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	}
 });
 
+	function _clearOpening(self) {
+		var inf = self._inf;
+		if (inf) {
+			self._inf = null;
+			clearTimeout(inf.timer);
+		}
+	}
+	function _clearClosing(self) {
+		var tmClosing = self._tmClosing;
+		if (tmClosing) {
+			self._tmClosing = null;
+			clearTimeout(tmClosing);
+		}
+	}
+
 zk.eff.Tooltip = zk.$extends(zk.Object, {
 	beforeBegin: function (ref) {
 		if (this._tip && !this._tip.isOpen()) { //closed by other (such as clicking on menuitem)
-			this._clearOpening();
-			this._clearClosing();
+			_clearOpening(this);
+			_clearClosing(this);
 			this._tip = this._ref = null;
 		}
 
 		var overTip = this._tip && zUtl.isAncestor(this._tip, ref);
-		if (overTip) this._clearClosing(); //not close tip if over tip
+		if (overTip) _clearClosing(this); //not close tip if over tip
 		return !overTip;//disable tip in tip
 	},
 	begin: function (tip, ref, params) {
@@ -334,7 +350,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 				timer: setTimeout(this.proxy(this.open_), params.delay !== undefined ? params.delay : zk.tipDelay)
 			};
 		} else if (this._ref == ref)
-			this._clearClosing();
+			_clearClosing(this);
 	},
 	end: function (ref) {
 		if (this._ref == ref || this._tip == ref)
@@ -342,7 +358,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 				setTimeout(this.proxy(this.close_), 100);
 			//don't cloes immediate since user might move from ref to toolip
 		else
-			this._clearOpening();
+			_clearOpening(this);
 	},
 	open_: function () {
 		var inf = this._inf;
@@ -357,27 +373,13 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 		}
 	},
 	close_: function () {
-		this._clearOpening();
-		this._clearClosing();
+		_clearOpening(this);
+		_clearClosing(this);
 
 		var tip = this._tip;
 		if (tip) {
 			this._tip = this._ref = null;
 			tip.close({sendOnOpen:true});
-		}
-	},
-	_clearOpening: function () {
-		var inf = this._inf;
-		if (inf) {
-			this._inf = null;
-			clearTimeout(inf.timer);
-		}
-	},
-	_clearClosing: function () {
-		var tmClosing = this._tmClosing;
-		if (tmClosing) {
-			this._tmClosing = null;
-			clearTimeout(tmClosing);
 		}
 	}
 });
@@ -467,17 +469,17 @@ jq(function() {
 	}
 
 	_useSKU = zk.useStackup;
-	if (_useSKU == "auto" || (_callack = _useSKU == "auto/gecko")) {
-		if (zk.gecko && _callack)
+	if (_useSKU == "auto" || (_callback = _useSKU == "auto/gecko")) {
+		if (zk.gecko && _callback)
 			_useSKU = false;
 		else {
-			_callack = zk.safari || zk.opera;
-			_useSKU = !_callack || zk.ie6_;
+			_callback = zk.safari || zk.opera;
+			_useSKU = !_callback || zk.ie6_;
 		}
 	} else if (_useSKU == null)
 		_useSKU = zk.ie6_;
 
-	if (_callack) {
+	if (_callback) {
 		var w2hide = function (name) {
 			if (name == 'onSize' || name == 'onMove'
 			|| name == 'onShow' || name == 'onHide'
