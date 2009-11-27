@@ -669,7 +669,7 @@ zkTxbox.onkeydown = function (evt) {
 
 	if ((keyCode == 13 && zkau.asap(cmp, "onOK"))
 	|| (keyCode == 27 && zkau.asap(cmp, "onCancel"))) {
-		zkTxbox._scanStop(inp);
+		//Bug 2904793: zkTxbox._scanStop(inp);
 		zkTxbox.updateChange(inp, false);
 		//Bug 1858869: no need to send onOK here since zkau._onDocKeydown will do
 	}
