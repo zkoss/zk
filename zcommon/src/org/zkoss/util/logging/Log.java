@@ -71,15 +71,6 @@ import org.zkoss.mesg.Messages;
  * @author tomyeh
  */
 public class Log {
-	/* Don't interfere what a developer might configure its system
-	static {
-		if (D.ON) {
-			Log.class.getClassLoader().setDefaultAssertionStatus(true);
-			Thread.currentThread().getContextClassLoader()
-				.setDefaultAssertionStatus(true);
-		}
-	}*/
-
 	/** All levels. */
 	public static final Level ALL     = Level.ALL;
 	/** The ERROR level. */

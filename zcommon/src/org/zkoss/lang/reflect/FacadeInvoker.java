@@ -70,8 +70,9 @@ public class FacadeInvoker implements InvocationHandler {
 	 * target, interfaces, Thread.currentThread().getContextClassLoader()).
 	 */
 	public static final Object newInstance(Object target, Class[] interfaces) {
-		return newInstance(
-			target, interfaces, Thread.currentThread().getContextClassLoader());
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		return newInstance(target, interfaces,
+			cl != null ? cl: FacadeInvoker.class.getClassLoader());
 	}
 
 	protected FacadeInvoker(Object target) {
