@@ -1315,7 +1315,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			zWatch.fireDown('onSize', this);
 		}
 
-		if (cf && !zk.currentFocus) cf.focus();
+		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
 		return this;
 	},
 	_redrawHTML: function (skipper, noprolog) {

@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
@@ -70,6 +71,22 @@ public class Taglibs {
 	 */
 	public static final
 	FunctionMapper getFunctionMapper(List taglibs, Map imports, Locator loc) {
+		return getFunctionMapper((Collection)taglibs, imports, null, loc);
+	}
+	/** Retursn the function mapper representing a collection of {@link Taglib}
+	 * and imports, or null if nothing is loaded.
+	 *
+	 * <p>The returned mapper is serializable.
+	 *
+	 * @param taglibs a collection of {@link Taglib}.
+	 * @param imports a map of imported classes, Map&lt;String nm, Class cls&gt;
+	 * Note: imports has the higher priority than import classes defined
+	 * in taglibs.
+	 * @param loc the locator used to load taglib
+	 * @since 5.0.0
+	 */
+	public static final
+	FunctionMapper getFunctionMapper(Collection taglibs, Map imports, Locator loc) {
 		return getFunctionMapper(taglibs, imports, null, loc);
 	}
 	/** Retursn the function mapper representing a list of {@link Taglib},
@@ -90,6 +107,26 @@ public class Taglibs {
 	 */
 	public static final FunctionMapper getFunctionMapper(List taglibs,
 	Map imports, List funcs, Locator loc) {
+		return getFunctionMapper((Collection)taglibs, imports, funcs, loc);
+	}
+	/** Retursn the function mapper representing a collection of {@link Taglib},
+	 * imports and functions, or null if nothing is loaded.
+	 *
+	 * <p>The returned mapper is serializable.
+	 *
+	 * @param taglibs a collection of {@link Taglib}.
+	 * @param imports a map of imported classes, Map&lt;String nm, Class cls&gt;.
+	 * Ignored if null.
+	 * Note: imports has the higher priority than import classes defined
+	 * in taglibs.
+	 * @param funcs a collection of three-element arrays,
+	 * Map&lt;String prefix, String name, Function func]&gt;.
+	 * Ignored if null.
+	 * @param loc the locator used to load taglib
+	 * @since 5.0.0
+	 */
+	public static final FunctionMapper getFunctionMapper(Collection taglibs,
+	Map imports, Collection funcs, Locator loc) {
 		TaglibMapper mapper = null;
 		if (taglibs != null && !taglibs.isEmpty()) {
 			mapper = new TaglibMapper();
@@ -129,6 +166,19 @@ public class Taglibs {
 	 */
 	public static final
 	FunctionMapper getFunctionMapper(List taglibs, Locator loc) {
+		return getFunctionMapper((Collection)taglibs, null, loc);
+	}
+	/** Retursn the function mapper representing a collection of {@link Taglib},
+	 * or null if nothin is loaded.
+	 *
+	 * <p>The returned mapper is serializable.
+	 *
+	 * @param taglibs a collection of {@link Taglib}.
+	 * @param loc the locator used to load taglib
+	 * @since 5.0.0
+	 */
+	public static final
+	FunctionMapper getFunctionMapper(Collection taglibs, Locator loc) {
 		return getFunctionMapper(taglibs, null, loc);
 	}
 

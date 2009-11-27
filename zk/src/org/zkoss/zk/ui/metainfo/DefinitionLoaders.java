@@ -261,10 +261,25 @@ public class DefinitionLoaders {
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			final String src = el.getAttributeValue("src");
+			String src = el.getAttributeValue("src"),
+				pkg = el.getAttributeValue("package"),
+				defer = el.getAttributeValue("defer");
+			if (pkg != null) {
+				if (src != null)
+					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
+				if (!"true".equals(defer)) {
+					src = "~./js/" + pkg + ".wpd";
+					pkg = null;
+				}
+			} else if ("true".equals(defer))
+				log.warning("The defer attribute omgpred since it can be used with package only, "+el.getLocator());
+
 			final String ctn = el.getText(true);
 			final JavaScript js;
-			if (src != null && src.length() > 0) {
+			if (pkg != null && pkg.length() > 0) {
+				langdef.addDeferJavaScriptPackage(pkg);
+				continue; //TODO
+			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
 					throw new UiException("You cannot specify the content if the src attribute is specified, "+el.getLocator());
 				final String charset = el.getAttributeValue("charset");
@@ -272,7 +287,8 @@ public class DefinitionLoaders {
 			} else if (ctn != null && ctn.length() > 0) {
 				js = new JavaScript(ctn);
 			} else {
-				throw new UiException("You must specify either the src attribute or the content, "+el.getLocator());
+				log.warning("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
+				continue;
 			}
 			langdef.addJavaScript(js);
 		}
@@ -283,7 +299,6 @@ public class DefinitionLoaders {
 				IDOMs.getRequiredAttributeValue(el, "name"),
 				IDOMs.getRequiredAttributeValue(el, "version"));
 		}
-
 
 		for (Iterator it = root.getElements("stylesheet").iterator();
 		it.hasNext();) {

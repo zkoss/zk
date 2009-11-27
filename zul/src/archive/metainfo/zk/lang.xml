@@ -29,9 +29,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<!-- Note: JavaScript/CSS that are listed here will be loaded no matter
 		what language is used.
+
+		<javascript package="xxx"/> is equivalent to
+		<javascript src="~./js/xx.wpd"/>
 	-->
-	<javascript src="~./js/zk.wpd" charset="UTF-8"/>
-	<javascript src="~./js/zul.lang.wpd" charset="UTF-8"/>
+	<javascript package="zk"/>
+	<javascript package="zul.lang"/>
 
 	<stylesheet href="~./zul/css/zk.wcs" type="text/css"/>
 

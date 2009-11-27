@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.zkoss.util.FastReadArray;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.taglib.Taglibs;
@@ -122,15 +124,15 @@ public class LanguageDefinition {
 	/** Map(String lang, String script). */
 	private final Map _eachscripts = new HashMap();
 	/** A list of Taglib. */
-	private final List _taglibs = new LinkedList();
+	private final FastReadArray _taglibs = new FastReadArray(Taglib.class);
 	/** A list of JavaScript. */
-	private final List _js = new LinkedList(),
-		_rojs = Collections.unmodifiableList(_js);
+	private final FastReadArray _js = new FastReadArray(JavaScript.class);
+	/** A list of deferrable JavaScript package. */
+	private final FastReadArray _pkgs = new FastReadArray(String.class);
 	private final Map _jsmods = new HashMap(5),
 		_rojsmods = Collections.unmodifiableMap(_jsmods);
 	/** A list of StyleSheet. */
-	private final List _ss = new LinkedList(),
-		_ross = Collections.unmodifiableList(_ss);
+	private final FastReadArray _ss = new FastReadArray(StyleSheet.class);
 	private final Locator _locator;
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
@@ -571,16 +573,31 @@ public class LanguageDefinition {
 	 */
 	public void addJavaScript(JavaScript js) {
 		if (js == null)
-			throw new IllegalArgumentException("null js");
-		synchronized (_js) {
-			_js.add(js);
-		}
+			throw new IllegalArgumentException();
+		_js.add(js);
 	}
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
-	public List getJavaScripts() {
-		return _rojs;
+	public Collection getJavaScripts() {
+		return new CollectionsX.ArrayCollection(_js.toArray());
+	}
+
+	/** Adds a deferrable JavaScript package required by this langauge.
+	 * @param pkg the package name, such as "foo.fly"
+	 * @since 5.0.0
+	 */
+	public void addDeferJavaScriptPackage(String pkg) {
+		if (pkg == null || pkg.length() == 0)
+			throw new IllegalArgumentException();
+		_pkgs.add(pkg);
+	}
+	/** Returns a list of deferrable JavaScript package (String)
+	 * required by this language.
+	 * @since 5.0.0
+	 */
+	public Collection getDeferJavaScriptPackages() {
+		return new CollectionsX.ArrayCollection(_pkgs.toArray());
 	}
 
 	/** Adds the definition of a JavaScript module to this language.
@@ -606,15 +623,13 @@ public class LanguageDefinition {
 	public void addStyleSheet(StyleSheet ss) {
 		if (ss == null)
 			throw new IllegalArgumentException();
-		synchronized (_ss) {
-			_ss.add(ss);
-		}
+		_ss.add(ss);
 	}
 	/** Returns a readonly list of all {@link StyleSheet} required
 	 * by this language.
 	 */
-	public List getStyleSheets() {
-		return _ross;
+	public Collection getStyleSheets() {
+		return new CollectionsX.ArrayCollection(_ss.toArray());
 	}
 
 	/** Returns whether the component names are case-insensitive.
@@ -752,10 +767,8 @@ public class LanguageDefinition {
 
 	/** Adds a tag lib. */
 	public void addTaglib(Taglib taglib) {
-		synchronized (_taglibs) {
-			_taglibs.add(taglib);
-			_eval = null; //ask for re-gen
-		}
+		_taglibs.add(taglib);
+		_eval = null; //ask for re-gen
 	}
 
 	/** Returns the evaluator based on this language definition (never null).
@@ -768,7 +781,8 @@ public class LanguageDefinition {
 	}
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(
-			Taglibs.getFunctionMapper(_taglibs, _locator), null);
+			Taglibs.getFunctionMapper(
+				new CollectionsX.ArrayCollection(_taglibs.toArray()), _locator), null);
 	}
 	/** Returns the evaluator reference (never null).
 	 * <p>This method is used only for implementation only.

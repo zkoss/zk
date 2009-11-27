@@ -35,6 +35,24 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
  * @since 5.0.0
  */
 public class Wpds {
+	/** Generates the deferred JavaScript packages in JavaScript syntax.
+	 */
+	public static String outDeferJavaScriptPackages(String deviceType) {
+		final StringBuffer sb = new StringBuffer(128)
+			.append("zk.load('");
+		boolean first = true;
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			for (Iterator it2 = ((LanguageDefinition)it.next())
+			.getDeferJavaScriptPackages().iterator(); it2.hasNext();) {
+				if (first) first = false;
+				else sb.append(',');
+				sb.append(it2.next());
+			}
+		}
+		return first ? "": sb.append("');").toString();
+	}
+
 	/** Generates all widgets in the specified language.
 	 * @param lang the language to look at
 	 */
@@ -43,8 +61,8 @@ public class Wpds {
 			.append("zk.wgt.WidgetInfo.register([");
 
 		boolean first = true;
-		for (Iterator it = LanguageDefinition.lookup(lang).getComponentDefinitions().iterator();
-		it.hasNext();) {
+		for (Iterator it = LanguageDefinition.lookup(lang)
+		.getComponentDefinitions().iterator(); it.hasNext();) {
 			final ComponentDefinition compdef = (ComponentDefinition)it.next();
 			for (Iterator e = compdef.getMoldNames().iterator(); e.hasNext();) {
 				final String mold = (String)e.next();
