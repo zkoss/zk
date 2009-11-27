@@ -7,7 +7,6 @@
 	</javascript>
 	<javascript>
 		<destination>lib/js/lang.js</destination>
-		<source>../zk/codegen/archive/web/js/zk/lang/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/lang/zk.wpd</source>
 		<locale></locale>
 		<locale>ar</locale>

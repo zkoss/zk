@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.lang" cacheable="false">
+	<!-- To minimize # of JS files, we copy the content of zk.lang.wpd here -->
+	<script src="../../zk/lang/msgzk*.js"/>
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outLocaleJavaScript()"/>
+
 	<script src="msgzul*.js"/>
 	<function class="org.zkoss.zul.impl.Utils"
 		signature="java.lang.String outLocaleJavaScript()"/>
