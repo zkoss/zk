@@ -37,5 +37,5 @@ zk.fmt.XML = {
 		doc.async = false;
 		doc.loadXML(text);
 		return doc;
-	},
+	}
 };
