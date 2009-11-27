@@ -79,6 +79,7 @@ November, 2009
   2900377: Panel collapsible not open in closed status
   2902880: Renderer and Model in Listbox/Grid shall be transient
   2903271: Unable to select a tab from the server
+  2904577: Dynamic tree doesn't draw
 
 * Bugs
   1999145: Combobox with Width of 100% Overruns
