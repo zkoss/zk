@@ -12,13 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul" language="xul/html">
-	<script>if(!zul.Widget){</script><!-- may be loaded multiple times because specified in lang.xml -->
 	<script src="dom.js"/>
 	<script src="Widget.js"/>
 	<script src="LabelImageWidget.js"/>
 
 	<script src="Auxbutton.js"/>
 	<script src="Upload.js"/>
-
-	<script>}</script>
 </package>

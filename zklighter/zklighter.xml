@@ -3,7 +3,7 @@
 		<destination>lib/js/zk.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/zklt.wpd</source>
 		<!--source>../zk/codegen/archive/web/js/zk/wgt/zk.wpd</source-->
-		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/zk.wpd</source>
 	</javascript>
 	<javascript>
 		<destination>lib/js/lang.js</destination>
@@ -96,7 +96,7 @@
 		<source>../zk/codegen/archive/web/js/zk/zklt.wpd</source>
 		<!--source>../zk/codegen/archive/web/js/zk/wgt/zk.wpd</source-->
 		<source>../zk/codegen/archive/web/js/zk/fmt/zk.wpd</source>
-		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
