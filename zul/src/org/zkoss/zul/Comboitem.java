@@ -72,6 +72,8 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
 	 * <p>Default: "".
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 */
 	public String getDescription() {
 		return _desc;
@@ -82,7 +84,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
-			smartUpdate("description", desc);
+			smartUpdate("description", getDescription()); //alow overriding
 		}
 	}
 
@@ -93,6 +95,8 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 *
 	 * <p>Default: empty ("").
 	 *
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 * @see #getDescription
 	 * @since 3.0.0
 	 */
@@ -111,7 +115,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			smartUpdate("content", content);
+			smartUpdate("content", getContent()); //allow overriding getContent()
 		}
 	}
 
@@ -168,8 +172,8 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		super.renderProperties(renderer);
 
 		render(renderer, "disabled", _disabled);
-		render(renderer, "description", _desc);
-		render(renderer, "content", _content);
+		render(renderer, "description", getDescription()); //allow overriding getDescription()
+		render(renderer, "content", getContent()); //allow overriding getContent()
 	}
 
 	public void beforeParentChanged(Component parent) {
