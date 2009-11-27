@@ -682,6 +682,14 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 		}
 		zkau.sendOnSize(cmp, keys);
 	}
+
+	// Bug 2904376
+	if (cmp.offsetParent != document.body) {
+		var parent = cmp.offsetParent,
+			ofset = zk.revisedOffset(parent);
+		l -= ofset[0];
+		t -= ofset[1];		
+	}
 	if (l != cmp.offsetLeft || t != cmp.offsetTop) {
 		if (l != null) cmp.style.left = zk.px(l, true);
 		if (t != null) cmp.style.top = zk.px(t, true);
