@@ -8,13 +8,13 @@ Won't show in IE due to table structure
 </style>
 
 Each 25%
-<hbox width="100%" >
- <vbox sclass="blue" width="50%"> Left </vbox>
- <vbox sclass="green" width="50%"> Right </vbox>
+<hbox pack="stretch" width="100%" >
+ <vbox pack="stretch" sclass="blue" width="50%"> Left </vbox>
+ <vbox pack="stretch" sclass="green" width="50%"> Right </vbox>
 </hbox>
 Each 50%
-<hbox width="100%" >
- <vbox sclass="blue" width="100%"> Left </vbox>
- <vbox sclass="green" width="100%"> Right </vbox>
+<hbox pack="stretch" width="100%" >
+ <vbox pack="stretch" sclass="blue" width="100%"> Left </vbox>
+ <vbox pack="stretch" sclass="green" width="100%"> Right </vbox>
 </hbox>
 </window>
