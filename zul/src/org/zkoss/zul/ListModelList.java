@@ -115,7 +115,8 @@ implements ListModelExt, List, java.io.Serializable {
 		}
 		int index = fromIndex;
 		for (final Iterator it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
-			it.next();
+			final Object obj = it.next();
+			removeSelection(obj);
 			it.remove();
 		}
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, fromIndex, index - 1);
@@ -178,6 +179,7 @@ implements ListModelExt, List, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
+		clearSelection();
 		_list.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -226,6 +228,7 @@ implements ListModelExt, List, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
+				removeSelection(_current);
 				final int index = indexOf(_current);
 				_it.remove();
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
@@ -255,6 +258,7 @@ implements ListModelExt, List, java.io.Serializable {
 			public void remove() {
 				final int index = _list.indexOf(_current);
 				if (index >= 0) {
+					removeSelection(_current);
 					_it.remove();
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				}
@@ -288,6 +292,7 @@ implements ListModelExt, List, java.io.Serializable {
 	}
 	
 	public Object remove(int index) {
+		removeSelection(_list.get(index));
 		Object ret = _list.remove(index);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 		return ret;
@@ -303,6 +308,7 @@ implements ListModelExt, List, java.io.Serializable {
 	
 	public boolean removeAll(Collection c) {
 		if (_list == c || this == c) { //special case
+			clearSelection();
 			clear();
 			return true;
 		}
@@ -327,6 +333,7 @@ implements ListModelExt, List, java.io.Serializable {
 					begin = index;
 				}
 				removed = true;
+				removeSelection(item);
 				it.remove();
 			} else {
 				if (begin >= 0) {

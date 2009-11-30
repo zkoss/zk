@@ -37,17 +37,12 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zul.Grid.ExtraCtrl;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -57,12 +52,10 @@ import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
-import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
 
 /**
  * A listbox.
@@ -90,7 +83,7 @@ import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
  * use this renderer to render the data returned by
  * {@link ListModel#getElementAt}. If not assigned, the default renderer, which
  * assumes a label per list item, is used. In other words, the default renderer
- * adds a label to a row by calling toString against the object returned by
+ * adds a label to a Listitem by calling toString against the object returned by
  * {@link ListModel#getElementAt}
  * 
  * <p>
@@ -102,7 +95,7 @@ import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
  * 
  * <p>
  * If paging is used, the page controller is either created automatically or
- * assigned explicity by {@link #setPaginal}. The paging controller specified
+ * assigned explicitly by {@link #setPaginal}. The paging controller specified
  * explicitly by {@link #setPaginal} is called the external page controller. It
  * is useful if you want to put the paging controller at different location
  * (other than as a child component), or you want to use the same controller to
@@ -122,6 +115,78 @@ import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
  * {@link ListitemRenderer} ({@link #setItemRenderer}) and {@link ListModel} (
  * {@link #setModel}) either serializable or re-assign them when
  * {@link #sessionDidActivate} is called.
+ * 
+ * <h3>Render on Demand (rod)</h3>
+ * [Enterprise Edition]
+ * [Since 5.0.0]
+ * 
+ * <p>For huge data, you can turn on Listbox's ROD to request ZK engine to load from 
+ * {@link ListModel} only the required data chunk and create only the required
+ * {@link Listitem}s in memory and render only the required DOM elements in 
+ * browser. So it saves both the memory and the processing time in both server 
+ * and browser for huge data. If you don't use the {@link ListModel} with the 
+ * Listbox, turn on the ROD will still have ZK engine to render only a chunk of 
+ * DOM elements in browser so it at least saves the memory and processing time 
+ * in browser. Note that ROD works only if the Listbox is configured to has a 
+ * limited "view port" height. That is, either the Listbox is in the "paging" 
+ * mold or you have to {@link #setHeight(String)},{@link #setVflex(String)}, 
+ * or {@link #setRows(int)} of the Listbox to make ROD works.</p>
+ * 
+ * <p>You can turn on/off ROD for all Listboxes in the application or only 
+ * for a specific Listbox. To turn on ROD for all Listboxes in the application, 
+ * you have to specify the Library Property "org.zkoss.zul.listbox.rod" to 
+ * "true" in WEB-INF/zk.xml. If you did not specify the Library Property, 
+ * default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zul.listbox.rod</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
+ * <p>To turn on ROD for a specific Listbox, you have to specify the Listbox's 
+ * attribute map with key "org.zkoss.zul.listbox.rod" to true. That is, for 
+ * example, if in a zul file, you shall specify &lt;custom-attributes> of the 
+ * Listbox like this:</p>
+ * 
+ * <pre><code>
+ *	<listbox ...>
+ *    <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+ *  </listbox>
+ * </code></pre>
+ * 
+ * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
+ * The &lt;custom-attributes> way always takes higher priority. So you
+ * can turn OFF ROD in general and turn ON only some specific Listbox component. 
+ * Or you can turn ON ROD in general and turn OFF only some specific Listbox 
+ * component.</P>
+ * 
+ * <p>Since only partial {@link Listitem}s are created and rendered in the 
+ * Listbox if you turn the ROD on, there will be some limitations on accessing 
+ * {@link Listitem}s. For example, if you call
+ * <pre><code>
+ * Listitem itemAt100 = (Listitem) getItemAtIndex(100);
+ * </code></pre>
+ * <p>The {@link Listitem} in index 100 is not necessary created yet if it is 
+ * not in the current "view port" and you will get "null" instead.</p>
+ * 
+ * <p>And it is generally a bad idea to "cache" the created {@link Listitem} 
+ * in your application if you turn the ROD on because Listitems might be removed 
+ * later. Basically, you shall operate on the item of the {@link ListModel} 
+ * rather than on the {@link Listitem} of the {@link Listbox} if you use the 
+ * {@link ListModel} and ROD.</p>
+ * 
+ * <p>To retrieve what are selected in ROD Listbox, you shall use 
+ * {@link Selected#getSelection} to get what is currently selected object in
+ * {@link ListModel} rather than using {@link Listbox#getSelectedItems}. That is, 
+ * you shall operate on the item of the {@link ListModel} rather than on the 
+ * {@link Listitem} of the {@link Listbox} if you use the {@link ListModel} and
+ * ROD.</p>
+ * 
+ * <pre><code>
+ * Set selection = ((Selectable)getModel()).getSelection();
+ * </code></pre>  
  * 
  * @author tomyeh
  * @see ListModel
@@ -307,7 +372,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout)
 	 *             instead
 	 * @param fixedLayout
-	 *            true to outline this grid by browser
+	 *            true to outline this listbox by browser
 	 */
 	public void setFixedLayout(boolean fixedLayout) {
 		setSizedByContent(!fixedLayout);
@@ -322,9 +387,9 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets whether sizing listbox column width by its content. Default is
-	 * false, i.e. the outline of grid is dependent on browser. It means, we
+	 * false, i.e. the outline of listbox is dependent on browser. It means, we
 	 * don't calculate the width of each cell. if set to true, the outline will
-	 * count on the content of body. In other words, the outline of grid will be
+	 * count on the content of body. In other words, the outline of listbox will be
 	 * like ZK version 2.4.1 that the header's width is only for reference.
 	 * 
 	 * <p>
@@ -1996,10 +2061,6 @@ public class Listbox extends XulElement implements Paginated,
 
 			// Maintain selected
 			if (item.isSelected()) {
-				if (_model instanceof Selectable && !isLoadingModel()) {
-					((Selectable) _model).removeSelection(_model
-							.getElementAt(index));
-				}
 				_selItems.remove(item);
 				if (_jsel == index) {
 					fixSelectedIndex(index);

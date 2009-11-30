@@ -1,6 +1,8 @@
 package org.zkoss.zul.ext;
 
 import java.util.Set;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Listbox;
 
 /* Selectable.java
 {{IS_NOTE
@@ -21,9 +23,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  */
 
 /**
- * Indicate a selectable collection or component.
+ * Indicate a selectable collection or component. Generally used with {@link ListModel}
+ * and {@link Listbox}.
  * @author henrichen
- *
+ * @see ListModel
+ * @see Listbox
  */
 public interface Selectable {
 	/**

@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -77,6 +78,14 @@ implements ListModel, Selectable, java.io.Serializable {
 	
 	public void clearSelection() {
 		_selection.clear();
+	}
+	
+	protected void removeAllSelection(Collection c) {
+		_selection.removeAll(c);
+	}
+	
+	protected void retainAllSelection(Collection c) {
+		_selection.retainAll(c);
 	}
 	
 	//Serializable//

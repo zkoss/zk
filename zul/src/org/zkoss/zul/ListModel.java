@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * This interface defines the methods that components like {@link Listbox}
@@ -30,6 +31,7 @@ import org.zkoss.zul.event.ListDataListener;
  * @see Listbox
  * @see ListitemRenderer
  * @see ListModelExt
+ * @see Selectable
  */
 public interface ListModel {
 	/** Returns the value at the specified index.

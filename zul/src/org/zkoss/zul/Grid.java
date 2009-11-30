@@ -99,6 +99,63 @@ import org.zkoss.zul.impl.XulElement;
  * ({@link #setRowRenderer}) and {@link ListModel} ({@link #setModel}) either
  * serializable or re-assign them when {@link #sessionDidActivate} is called.
  *
+ * <h3>Render on Demand (rod)</h3>
+ * [Enterprise Edition]
+ * [Since 5.0.0]
+ * 
+ * <p>For huge data, you can turn on Grid's ROD to request ZK engine to load from 
+ * {@link ListModel} only the required data chunk and create only the required
+ * {@link Row}s in memory and render only the required DOM elements in browser. 
+ * So it saves both the memory and the processing time in both server and browser 
+ * for huge data. If you don't use the {@link ListModel} with the Grid, turn on 
+ * the ROD will still have ZK engine to render only a chunk of DOM elements in 
+ * browser so it at least saves the memory and processing time in browser. Note 
+ * that ROD works only if the Grid is configured to has a limited "view port" 
+ * height. That is, either the Grid is in the "paging" mold or you have to 
+ * {@link #setHeight(String)} or {@link #setVflex(String)} of the Grid to 
+ * make ROD works.</p>
+ * 
+ * <p>You can turn on/off ROD for all Grids in the application or only 
+ * for a specific Grid. To turn on ROD for all Grids in the application, you 
+ * have to specify the Library Property "org.zkoss.zul.grid.rod" to "true" in 
+ * WEB-INF/zk.xml. If you did not specify the Library Property, 
+ * default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zul.grid.rod</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
+ * <p>To turn on ROD for a specific Grid, you have to specify the Grid's attribute
+ * map with key "org.zkoss.zul.grid.rod" to true. That is, for example, if in 
+ * a zul file, you shall specify &lt;custom-attributes> of the Grid like this:</p>
+ * <pre><code>
+ *	<grid ...>
+ *    <custom-attributes org.zkoss.zul.grid.rod="true"/>
+ *  </grid>
+ * </code></pre>
+ * 
+ * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
+ * The &lt;custom-attributes> way always takes higher priority. So you
+ * can turn OFF ROD in general and turn ON only some specific Grid component. Or 
+ * you can turn ON ROD in general and turn OFF only some specific Grid component.</P>
+ * 
+ * <p>Since only partial {@link Row}s are created and rendered in the Grid if 
+ * you turn the ROD on, there will be some limitations on accessing {@link Row}s.
+ * For example, if you call
+ * <pre><code>
+ * Row rowAt100 = (Row) getRows().getChildren().get(100);
+ * </code></pre>
+ * <p>The {@link Row} in index 100 is not necessary created yet if it is not in the
+ * current "view port" and you will get "null" instead.</p>
+ * 
+ * <p>And it is generally a bad idea to "cache" the created {@link Row} in your
+ * application if you turn the ROD on because rows might be removed later. 
+ * Basically, you shall operate on the item of the ListModel rather than on the 
+ * {@link Row} if you use the ListModel and ROD.</p>
+ * 
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
