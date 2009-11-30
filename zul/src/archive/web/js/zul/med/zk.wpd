@@ -15,6 +15,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<widget name="Applet"/>
 	<widget name="Audio"/>
 	<widget name="Flash"/>
-	<widget name="FlashChart"/>
-	<script src="swfobject.js"/>
 </package>

@@ -1,4 +1,4 @@
-/* FlashChart.js
+/* Flashchart.js
 
     Purpose:
 
@@ -13,22 +13,19 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 
 */
-zul.med.FlashChart = zk.$extends(zul.med.Flash, {
+zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 
 	/* Default values */
 	_version: "9.0.0",
 	_width: "400",
 	_height: "200",
-	_src: zk.ajaxURI('/web/js/zul/med/charts.swf', {desktop: this.desktop, au: true}),
+	_src: zk.ajaxURI('/web/js/zul/fchart/charts.swf', {desktop: this.desktop, au: true}),
 	_allowScriptAccess: "always",
 
 	$define: {
-		version: null,
 		width: null,
 		height: null,
-		src: null,
 		jsonModel: null,
-		allowScriptAccess: null,
 		type: null
 	},
 	
@@ -53,15 +50,15 @@ zul.med.FlashChart = zk.$extends(zul.med.Flash, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 		var _swfId = this.uuid + "-chart",
-			_flashvars = "allowedDomain=localhost&elementID=" + _swfId + "&eventHandler=zul.med.FlashChart.onEvent",
+			_flashvars = "allowedDomain=localhost&elementID=" + _swfId + "&eventHandler=zul.fchart.Flashchart.onEvent",
 			_params = {
 				flashvars: _flashvars,
 				allowScriptAccess: this._allowScriptAccess
 			},
 			_attributes = {id: _swfId},
-			_expressInstall = zk.ajaxURI('/web/js/zul/med/expressinstall.swf', {desktop: this.desktop, au: true});
+			_expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {desktop: this.desktop, au: true});
 
-		zul.med.swfobject.embedSWF(this._src, _swfId, this._width, this._height, this._version, _expressInstall, false, _params, _attributes);
+		zul.fchart.swfobject.embedSWF(this._src, _swfId, this._width, this._height, this._version, _expressInstall, false, _params, _attributes);
 	}
 }, {// static
 	onEvent: function (id, event) {

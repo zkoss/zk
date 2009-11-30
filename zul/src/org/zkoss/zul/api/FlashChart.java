@@ -1,4 +1,4 @@
-/* FlashChart.java
+/* Flashchart.java
 
 	Purpose:
 		
@@ -16,8 +16,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.api;
 
-import java.util.List;
-
 import org.zkoss.zul.ChartModel;
 
 /**
@@ -27,7 +25,7 @@ import org.zkoss.zul.ChartModel;
  * @date Created at Nov 25, 2009 4:28:49 PM
  * @since 5.0.0
  */
-public interface FlashChart extends Flash {
+public interface Flashchart extends Flash {
 	/**
 	 * Sets the type of chart
 	 * <p>Default: "pie"
@@ -38,16 +36,6 @@ public interface FlashChart extends Flash {
 	 * Returns the type of chart
 	 */
 	public String getType();
-	/**
-	 * Sets allowScriptAccess as a param of flash object
-	 * <p>Default: always 
-	 * @param allowScriptAccess
-	 */
-	public void setAllowScriptAccess(String allowScriptAccess);
-	/**
-	 * Returns a string of allowScriptAccess value
-	 */
-	public String getAllowScriptAccess();
 	/**
 	 * Sets the model of chart.
 	 * <p>Only implement models which matched the allowed types
@@ -60,12 +48,12 @@ public interface FlashChart extends Flash {
 	 */
 	public ChartModel getModel();
 	/**
-	 * Sets a list to JSONModel, needs to transfer the data type to JSON. 
-	 * @param list
+	 * Returns a string which prepares to use in javascript as a chart style
 	 */
-	public void setJSONModel(List list);
+	public String getStyles();
 	/**
-	 * Returns a string which prepares to use in javascript as a chart data array
+	 * Sets the style of chart
+	 * @param styles
 	 */
-	public String getJSONModel();
+	public void setStyles(String styles);
 }

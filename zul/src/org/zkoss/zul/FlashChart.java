@@ -1,4 +1,4 @@
-/* FlashChart.java
+/* Flashchart.java
 
 	Purpose:
 
@@ -46,23 +46,20 @@ import org.zkoss.zul.event.ChartDataListener;
  * @date Created at Nov 20, 2009 4:37:26 PM
  * @since 5.0.0
  */
-public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
+public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 
 	private static final long serialVersionUID = 20091126115842L;
 	/**
 	 * Declares attributes.
 	 */
-	private String _version = "9.0.0";
-	private String _src = "/web/js/zul/med/charts.swf";
-	private String _allowScriptAccess = "always";
 	private String _type = "pie";
+	private String _styles;
 	private ChartModel _model;
-	private String _JSONModel;
 	private ChartDataListener _dataListener;
 	/**
 	 * Sets default values.
 	 */
-	public FlashChart() {
+	public Flashchart() {
 		setWidth("400px");
 		setHeight("200px");
 	}
@@ -76,7 +73,7 @@ public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
 	 * Refresh data when the chart data changed.
 	 */
 	protected void smartDrawChart() {
-		setJSONModel(transferToJSONObject(_model));
+		smartUpdate("jsonModel", getJSONResponse(transferToJSONObject(getModel())));
 		invalidate();
 	}
 	/**
@@ -84,17 +81,9 @@ public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
 	 */
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		if(!"/web/js/zul/med/charts.swf".equals(_src))
-			render(renderer, "src", _src);
-
-		if(!"always".equals(_allowScriptAccess))
-			render(renderer, "allowScriptAccess", _allowScriptAccess);
-
-		if(!"9.0.0".equals(_version))
-			render(renderer, "version", _version);
-
 		render(renderer, "type", _type);
-		render(renderer, "jsonModel", _JSONModel);
+		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
+//		render(renderer, "jsonStyle", getJSONResponse(transferToJSONObject(getStyles())));
 	}
 	/**
 	 * Sets the type of chart.
@@ -114,23 +103,6 @@ public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
 		return _type;
 	}
 	/**
-	 * Sets allowScriptAccess as a param of flash object.
-	 * <p>Default: always
-	 * @param allowScriptAccess
-	 */
-	public void setAllowScriptAccess(String allowScriptAccess) {
-		if (!Objects.equals(_allowScriptAccess, allowScriptAccess)) {
-			_allowScriptAccess = allowScriptAccess;
-			smartUpdate("allowScriptAccess", _allowScriptAccess);
-		}
-	}
-	/**
-	 * Returns a string of allowScriptAccess value.
-	 */
-	public String getAllowScriptAccess() {
-		return _allowScriptAccess;
-	}
-	/**
 	 * Sets the model of chart.
 	 * <p>Only implement models which matched the allowed types
 	 * @param model
@@ -147,34 +119,39 @@ public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
 				_dataListener = new MyChartDataListener();
 				_model.addChartDataListener(_dataListener);
 			}
-			setJSONModel(transferToJSONObject(model));		//SetJSONModel after formated to JSON
+			
 		}
-		invalidate();		//Refresh the data
+		smartDrawChart();		//Refresh the data
 	}
 	/**
 	 * Returns the model of chart.
 	 */
 	public ChartModel getModel() {
 		return _model;
+	}		
+	/**
+	 * Sets the style of chart
+	 * @param styles
+	 */
+	public void setStyles(String styles) {
+		if (!Objects.equals(_styles, styles)) {
+			_styles = styles;
+			smartUpdate("styles", _styles);
+		}		
 	}
 	/**
-	 * Sets a list to JSONModel, needs to transfer the data type to JSON.
+	 * Returns a string which prepares to use in javascript as a chart style
 	 */
-	public void setJSONModel(List list) {
-		_JSONModel = getJSONResponse(list);		//Call getJSONResponse() then it can be send to javascript.
-		smartUpdate("jsonModel", _JSONModel);
+	public String getStyles() {
+		return _styles;
 	}
-	/**
-	 * Returns a string which prepares to use in javascript as a chart data array
-	 */
-	public String getJSONModel() {
-		return _JSONModel;
+	
+	private List transferToJSONObject(String styles){
+		LinkedList list = new LinkedList();
+		//TODO:
+		return null;		
 	}
-	/**
-	 * Puts chartmodel and transfers to JSONObjects.
-	 * Returns a list fill of JSONObjects.
-	 * @param model
-	 */
+	
 	private List transferToJSONObject(ChartModel model){
 		LinkedList list = new LinkedList();
 
@@ -207,11 +184,6 @@ public class FlashChart extends Flash implements org.zkoss.zul.api.FlashChart {
 		};
 		return list;
 	}
-	/**
-	 * Connect every JSONObject with each other.
-	 * Returns a string which will be sent to javascript.
-	 * @param list
-	 */
 	private String getJSONResponse(List list) {
 	    final StringBuffer sb = new StringBuffer().append('[');
 	    for (Iterator it = list.iterator(); it.hasNext();) {

@@ -2,7 +2,7 @@
 	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
 
-zul.med.swfobject = function() {
+zul.fchart.swfobject = function() {
 	
 	var UNDEF = "undefined",
 		OBJECT = "object",
