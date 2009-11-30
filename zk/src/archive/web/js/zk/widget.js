@@ -437,7 +437,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			delete wgt._flexListened;
 		}
 	}
-	
+
 	//Drag && Drop
 	zk.DnD = { //for easy overriding
 		getDrop: function (drag, pt, evt) {
@@ -562,6 +562,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _topZIndex(n) {
 		return n ? zk.parseInt(n.style.zIndex): 0;
+	}
+
+	function _getFirstNodeDown(wgt) {
+		var n = wgt.$n();
+		if (n) return n;
+		for (var w = wgt.firstChild; w; w = w.nextSibling) {
+			n = w._getFirstNodeDown();
+			if (n) return n;
+		}
 	}
 
 zk.Widget = zk.$extends(zk.Object, {
@@ -1358,21 +1367,17 @@ zk.Widget = zk.$extends(zk.Object, {
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var bfn, ben;
-		if (before) {
-			bfn = before._getBeforeNode();
-			if (!bfn) before = null;
-		}
+		var ben;
+		if (before)
+			before = before.getFirstNode_();
 		if (!before)
 			for (var w = this;;) {
 				ben = w.getCaveNode();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
-				if (w2) {
-					bfn = w2._getBeforeNode();
-					if (bfn) break;
-				}
+				if (w2 && (before = w2.getFirstNode_()))
+					break;
 
 				if (!(w = w.parent)) {
 					ben = document.body;
@@ -1380,10 +1385,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-		if (bfn) {
-			var sib = bfn.previousSibling;
-			if (_isProlog(sib)) bfn = sib;
-			jq(bfn).before(child._redrawHTML());
+		if (before) {
+			var sib = before.previousSibling;
+			if (_isProlog(sib)) before = sib;
+			jq(before).before(child._redrawHTML());
 		} else
 			jq(ben).append(child._redrawHTML());
 		child.bind(desktop);
@@ -1391,17 +1396,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	getCaveNode: function () {
 		return this.$n('cave') || this.$n();
 	},
-	_getBeforeNode: function () {
+	/** Returns the first DOM element of this widget.
+	 * If this widget has no corresponding DOM element, this method will look
+	 * for its siblings.
+	 * <p>This method is designed to be used with {@link #insertChildHTML_}
+	 * for retrieving the DOM element of the <code>before</code> widget.
+	 */
+	getFirstNode_: function () {
 		for (var w = this; w; w = w.nextSibling) {
-			var n = w._getFirstNodeDown();
-			if (n) return n;
-		}
-	},
-	_getFirstNodeDown: function () {
-		var n = this.$n();
-		if (n) return n;
-		for (var w = this.firstChild; w; w = w.nextSibling) {
-			n = w._getFirstNodeDown();
+			var n = _getFirstNodeDown(w);
 			if (n) return n;
 		}
 	},

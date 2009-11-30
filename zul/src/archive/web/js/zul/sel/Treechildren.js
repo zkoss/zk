@@ -30,15 +30,14 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return this;
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var bfn, ben;
-		if (before) {
-			bfn = before._getBeforeNode();
-			if (!bfn) before = null;
-		} else if (!this.parent.$instanceof(zul.sel.Tree))
+		var ben;
+		if (before)
+			before = before.getFirstNode_();
+		if (!before && !this.parent.$instanceof(zul.sel.Tree))
 			ben = this.getCaveNode() || this.parent.getCaveNode();
 
-		if (bfn)
-			jq(bfn).before(child._redrawHTML());
+		if (before)
+			jq(before).before(child._redrawHTML());
 		else if (ben)
 			jq(ben).after(child._redrawHTML());
 		else

@@ -174,32 +174,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('removeChild', arguments);
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var bfn, ben;
-		if (before) {
-			bfn = before._getBeforeNode();
-			if (!bfn) before = null;
-		}
-		if (!before)
-			for (var w = this;;) {
-				ben = w.getCaveNode();
-				if (ben) break;
-
-				var w2 = w.nextSibling;
-				if (w2) {
-					bfn = w2._getBeforeNode();
-					if (bfn) break;
-				}
-
-				if (!(w = w.parent)) {
-					ben = document.body;
-					break;
-				}
-			}
-
-		if (bfn)
-			jq(bfn).before(child._redrawHTML());
+		if (before = before ? before.getFirstNode_(): null)
+			jq(before).before(child._redrawHTML());
 		else
-			jq(ben).after(child._redrawHTML());
+			jq(this.getCaveNode()).after(child._redrawHTML());
+				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
 	}
 });

@@ -105,36 +105,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this.$n('rows') || this.$n('cave');
 	},	
 	insertChildHTML_: function (child, before, desktop) {
-		var bfn, ben;
-		if (before) {
-			if (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) {
-				bfn = before._getBeforeNode();
-				if (!bfn) 
-					before = null;
-			} else
-				before = null;
-		}
-		if (!before)
-			for (var w = this;;) {
-				ben = w.getCaveNode();
-				if (ben) break;
-
-				var w2 = w.nextSibling;
-				if (w2) {
-					bfn = w2._getBeforeNode();
-					if (bfn) break;
-				}
-
-				if (!(w = w.parent)) {
-					ben = document.body;
-					break;
-				}
-			}
-
-		if (bfn)
-			jq(bfn).before(child._redrawHTML());
+		if (before = before && (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) ? before.getFirstNode_(): null)
+			jq(before).before(child._redrawHTML());
 		else
-			jq(ben).append(child._redrawHTML());
+			jq(this.getCaveNode()).append(child._redrawHTML());
 		child.bind(desktop);
 	},
 	getZclass: function () {
