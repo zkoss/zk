@@ -120,7 +120,12 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (grid.inPagingMold()) {
 					final Paginal pgi = grid.getPaginal();
 					pgi.setTotalSize(grid.getDataLoader().getTotalSize());
-					grid.invalidate();
+					if (grid.getModel() != null)
+						grid.invalidate();
+					else {
+						invalidate();
+						grid.getDataLoader().updateModelInfo();
+					}
 				} else if (((Cropper)grid.getDataLoader()).isCropper()){
 					invalidate();
 					grid.getDataLoader().updateModelInfo();
@@ -230,8 +235,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		return grid != null && grid.getModel() instanceof GroupsListModel;
 	}
 	public boolean insertBefore(Component child, Component refChild) {
-		if (hasGroupsModel()) {
-			final Grid grid = getGrid();
+		final Grid grid = getGrid();
+		if (grid.isRod() && hasGroupsModel()) {
 			if (_groupsInfo.isEmpty())
 				_groupsInfo = ((GroupsListModel)grid.getModel()).getGroupsInfo();
 			if (super.insertBefore(child, refChild)) {

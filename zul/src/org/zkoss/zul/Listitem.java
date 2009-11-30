@@ -20,8 +20,10 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 
+import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -320,12 +322,19 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "_loaded", _loaded);
+		renderer.render("_index", _index);
 		
 		if (_value instanceof String && getListbox().getName() != null)
 			render(renderer, "value", _value);
 		
 		if (!isCheckable())
 			renderer.render("checkable", false);
+	}
+	
+	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
+		if (oldparent == null || !((Listbox)oldparent).isLoadingModel()) {
+			super.addMoved(oldparent, oldpg, newpg);
+		}
 	}
 	
 	//-- Component --//
@@ -348,4 +357,28 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 			//that a parent-less listitem's index is -1
 		return clone;
 	}
+	
+	//-- ComponentCtrl --//
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements LoadStatus {
+		//-- LoadStatus --//
+		public boolean isLoaded() {
+			return Listitem.this.isLoaded();
+		}
+
+		public void setLoaded(boolean loaded) {
+			Listitem.this.setLoaded(loaded);
+		}
+		
+		public void setIndex(int index) {
+			Listitem.this.setIndex(index);
+		}
+	}
+
 }

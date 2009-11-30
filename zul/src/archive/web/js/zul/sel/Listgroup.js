@@ -68,7 +68,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 			pgmode = listbox ? listbox.inPagingMold() : false; 
 		if (!pgmode) this._openItemNow(open);
 		if (!silent)
-			this.fire('onOpen', {open: open}, {toServer: pgmode});
+			this.fire('onOpen', {open: open}, {toServer: pgmode || listbox._listbox$rod});
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {

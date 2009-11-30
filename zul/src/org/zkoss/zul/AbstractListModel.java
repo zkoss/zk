@@ -16,9 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.zkoss.io.Serializables;
 
@@ -26,6 +29,7 @@ import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A skeletal implementation for {@link ListModel}.
@@ -33,9 +37,10 @@ import org.zkoss.zul.event.ListDataListener;
  * @author tomyeh
  */
 abstract public class AbstractListModel
-implements ListModel, java.io.Serializable {
+implements ListModel, Selectable, java.io.Serializable {
 	private transient List _listeners = new LinkedList();
-
+	private Set _selection = new HashSet();
+	
 	/** Fires a {@link ListDataEvent} for all registered listener
 	 * (thru {@link #addListDataListener}.
 	 *
@@ -57,6 +62,23 @@ implements ListModel, java.io.Serializable {
 		_listeners.remove(l);
 	}
 
+	//Selectable
+	public Set getSelection() {
+		return Collections.unmodifiableSet(_selection);
+	}
+	
+	public void addSelection(Object obj) {
+		_selection.add(obj);
+	}
+	
+	public void removeSelection(Object obj) {
+		_selection.remove(obj);
+	}
+	
+	public void clearSelection() {
+		_selection.clear();
+	}
+	
 	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {

@@ -168,9 +168,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var bds = this.ebodytbl.tBodies;
 			if (!bds || !bds.length || (this.ehead && bds.length < 2)) {
 				var out = [];
-				if (this.domPad_ && !this.inPagingMold()) this.domPad_(out, '-tpad');
-				out.push('<tbody/>');
-				if (this.domPad_ && !this.inPagingMold()) this.domPad_(out, '-bpad');
+				if (this.domPad_ && !this.inPagingMold() && this._mold != 'select') this.domPad_(out, '-tpad');
+				out.push('<tbody id="',this.uuid,'-rows"/>');
+				if (this.domPad_ && !this.inPagingMold() && this._mold != 'select') this.domPad_(out, '-bpad');
 				jq(this.ebodytbl ).append(out.join(''));
 			}
 			this.ebodyrows = this.ebodytbl.tBodies[bds.length > 2 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;

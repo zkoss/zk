@@ -14,21 +14,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <zk>
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
+	-->
 	<client-config>
 		<debug-js>true</debug-js>
 	</client-config>
-	-->
 	<!-- Uncomment if you turn off the caching of resources loaded from
 		the class path (aka., class Web resources).
 		By default, class Web resources are cached by the browser until
 		you upgraded ZK to a newer version.
 		However, it is better to turn the cache off when you are developing
 		a theme or a component.
+	-->
 	<library-property>
 		<name>org.zkoss.web.classWebResource.cache</name>
 		<value>false</value>
 	</library-property>
-	-->
+	
 	<!-- Uncomment if you want to control the number of hours that
 		the CSS files of class Web resources won't be changed.
 		By default, it is 8760 (the same as other class Web resouces).
@@ -182,10 +183,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	to be complaint with Java Servlet specification. It is recommended to
 	disable if you intend to integrate Spring web flow and other sophisticated
 	frameworks.
-	-->
 	<system-config>
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
+	-->
 	
 	<!-- Turn on the following if you want to use ZK with a clustering server
 		or cloud environment (such as Google App Engine)
@@ -475,4 +476,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
+	
+<!-- 	
+	<library-property>
+		<name>org.zkoss.zul.grid.rod</name>
+		<value>false</value>
+	</library-property>
+ -->	
 </zk>

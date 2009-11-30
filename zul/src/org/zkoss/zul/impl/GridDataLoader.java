@@ -47,7 +47,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	private transient Grid _grid;
 
 	//--DataLoader--//
-	public void init(Component owner) {
+	public void init(Component owner, int offset, int limit) {
 		_grid = (Grid) owner;
 	}
 	
@@ -67,10 +67,6 @@ public class GridDataLoader implements DataLoader, Cropper {
 		final Rows rows = _grid.getRows();
 		final ListModel model = _grid.getModel();
 		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 40;
-	}
-	
-	public Object getModelElementAt(int index) {
-		return _grid.getModel().getElementAt(index);
 	}
 	
 	public void doListDataChange(ListDataEvent event) {
@@ -100,7 +96,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = (RowRenderer) getRealRenderer();
-				rows.insertBefore((Row)newComponentItem(renderer, min++), next);
+				rows.insertBefore((Row)newUnloadedItem(renderer, min++), next);
 			}
 			break;
 
@@ -130,7 +126,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 	
 	/** Creates a new and unloaded row. */
-	protected Object newComponentItem(Object renderer, int index) {
+	protected Component newUnloadedItem(Object renderer, int index) {
 		final RowRenderer renderer0 = (RowRenderer) renderer;
 		final ListModel model = ((Grid)getOwner()).getModel();
 		Row row = null;
@@ -227,9 +223,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 		int min = offset;
 		int max = offset + limit - 1;
 		
-		final ListModel _model = _grid.getModel();
+		final ListModel model = _grid.getModel();
 		Rows rows = _grid.getRows(); 
-		final int newsz = _model.getSize();
+		final int newsz = model.getSize();
 		final int oldsz = rows != null ? rows.getChildren().size(): 0;
 		final Paginal pgi = _grid.getPaginal();
 		final boolean inPaging = inPagingMold();
@@ -248,7 +244,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 
 			int cnt = max - min + 1; //# of affected
-			if (_model instanceof GroupsListModel) {
+			if (model instanceof GroupsListModel) {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
@@ -274,7 +270,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 						if (renderer == null)
 							renderer = (RowRenderer)getRealRenderer();
 						row.detach(); //always detach
-						rows.insertBefore((Row) newComponentItem(renderer, min++), next);
+						rows.insertBefore((Row) newUnloadedItem(renderer, min++), next);
 						++addcnt;
 					}
 
@@ -297,7 +293,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
 				renderer = (RowRenderer) getRealRenderer();
-			rows.insertBefore((Row)newComponentItem(renderer, min), next);
+			rows.insertBefore((Row)newUnloadedItem(renderer, min), next);
 		}
 		
 		if (pgi != null) {

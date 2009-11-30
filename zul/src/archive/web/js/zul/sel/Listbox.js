@@ -13,6 +13,7 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
+	_nrows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
@@ -53,6 +54,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 		return this;
 	},
+	inSelectMold: function () {
+		return "select" == this.getMold();
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onResponse: this});
@@ -78,7 +82,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	stripe: function () {
 		var scOdd = this.getOddRowSclass();
 		if (!scOdd) return;
-		for (var j = 0, even = true, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
+		var odd = this._offset & 1;
+		for (var j = 0, even = !odd, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
 				jq(w.$n())[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
@@ -92,10 +97,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._syncStripe();		
 		return this;
 	},
+	setItemsInvalid_: function(wgts) {
+		this.replaceCavedChildren_('rows', zAu.createWidgets(wgts));
+	},	
 	//-- super --//
 	getCaveNode: function () {
-		var cave = this.$n('cave');
-		return cave.lastChild || cave;
+		return this.$n('rows') || this.$n('cave');
 	},	
 	insertChildHTML_: function (child, before, desktop) {
 		var bfn, ben;
@@ -141,7 +148,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (!this.firstItem || !this.previousItem(child))
 				this.firstItem = child;
 			if (!this.lastItem || !this.nextItem(child))
-				this.lastItem = child;	
+				this.lastItem = child;
+			++this._nrows;
 			
 			if (child.isSelected() && !this._selItems.$contains(child))
 				this._selItems.push(child);
@@ -181,6 +189,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			}
 			if (child.$instanceof(zul.sel.Listgroup))
 				this._groupsInfo.$remove(child);
+			--this._nrows;
 			
 			if (child.isSelected())
 				this._selItems.$remove(child);

@@ -57,10 +57,18 @@ function (out) {
 	if(this.listhead)
 		this.domFaker_(out, '-bdfaker', zcls);
 
-
-	for (var item = this.firstItem; item; item = this.nextItem(item))
-		item.redraw(out);
-
+	if (this.firstItem) {
+		var inSelect = this.inSelectMold();
+		if (this.domPad_ && !inPaging && !inSelect)
+			this.domPad_(out, '-tpad');
+		out.push('<tbody id="',uuid,'-rows">')
+		for (var item = this.firstItem; item; item = this.nextItem(item))
+			item.redraw(out);
+		out.push('</tbody>')
+		if (this.domPad_ && !inPaging && !inSelect)
+			this.domPad_(out, '-bpad');
+	}
+	
 	out.push('</table><', tag, ' id="', uuid,
 		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tag, '>', "</div>");

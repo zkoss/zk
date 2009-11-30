@@ -641,6 +641,7 @@ zAu = {
 			zk.mounting = true;
 			$eval(codes[j]);
 		}
+		return wgts;
 	}
 };
 })();

@@ -111,19 +111,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
-	onSize: function () {
-		if (this.isRealVisible()) {// sometimes the caller is not zWatch
-			var n = this.$n();
-			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
-				this.fireOnRender(155);
-				return; // unchanged
-			}
-				
-			this._calcSize();// Bug #1813722
-			this.fireOnRender(155);
-			this._shallSize = false;
-		}
-	},
 	/** Calculates the size. */
 	_calcSize: function () {
 		this._calcHgh();
@@ -254,13 +241,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (nRows) {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
-				else if (nRows <= nVisiRows) {
-					var $midVisiRow = zk(midVisiRow);
-					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
-				} else {
-					var $lastVisiRow = zk(lastVisiRow);
-					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
-					hgh = Math.ceil((nRows * hgh) / nVisiRows);
+				else {
+					var tpad = this.$n('tpad'),
+						tpadhgh = (tpad ? tpad.offsetHeight : 0);
+					if (nRows <= nVisiRows) {
+						var $midVisiRow = zk(midVisiRow);
+						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
+					} else {
+						var $lastVisiRow = zk(lastVisiRow);
+						hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight() - tpadhgh;
+						hgh = Math.ceil((nRows * hgh) / nVisiRows);
+					}
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}

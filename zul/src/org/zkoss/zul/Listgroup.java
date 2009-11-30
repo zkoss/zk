@@ -23,6 +23,7 @@ import java.util.List;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -42,7 +43,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	private transient List _items;
 
 	static {
-		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 	}
 	
 	public Listgroup() {
@@ -103,7 +104,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		int visibleCount = 0;
 		if (getNextSibling() instanceof Listitem) {
 			Listitem item = (Listitem) getNextSibling();
-			while (count-- > 0) {
+			while (count-- > 0 && item != null) {
 				if (item.isVisible())
 					visibleCount++;
 				if (!(item.getNextSibling() instanceof Listitem)) break;
@@ -151,7 +152,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 			final Listbox listbox = getListbox();
 			if (listbox != null)
 				listbox.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
@@ -193,8 +194,13 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
 			final Listbox listbox = getListbox();
-			if (listbox != null)
+			if (listbox != null) {
 				listbox.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
+				final ListModel model = listbox.getModel();
+				if (model instanceof GroupsListModel) {
+					((GroupsListModel)model).getGroupsModel().setClose(listbox.getGroupIndex(getIndex()), !_open);
+				}
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

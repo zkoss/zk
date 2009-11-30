@@ -32,7 +32,7 @@ public interface DataLoader {
 	 * Callback from the owner component and give a chance to initialize things. 
 	 * @param owner the owner component of this DataLoader.
 	 */
-	public void init(Component owner);
+	public void init(Component owner, int offset, int limit);
 	
 	/**
 	 * Returns the associated owner component of this DataLoader. 
@@ -61,13 +61,6 @@ public interface DataLoader {
 	 * @return the total size of the data.
 	 */
 	public int getTotalSize();
-	
-	/**
-	 * Given index and get element from the data model.
-	 * @param index
-	 * @return the item of the specified index
-	 */
-	public Object getModelElementAt(int index);
 	
 	/** Synchronizes the owner component to be consistent with the specified model.
 	 * 

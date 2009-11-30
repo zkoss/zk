@@ -166,34 +166,41 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				return new Iter();
 			}
 		};
-		//prepare a right moment to init Grid
-		this.addEventListener("onInitGrid", _gridInitListener = new EventListener() {
-			public void onEvent(Event event) throws Exception {
-				if (_gridInitListener != null) {
-					Grid.this.removeEventListener("onInitGrid", _gridInitListener);
-					_gridInitListener = null; 
-				}
-				//initialize data loader
-				//Tricky! might has been initialized when apply properties
-				if (_dataLoader != null) { 
-					final boolean rod = evalRod();
-					if (_rod != rod) {
-						if (_model != null) { //so has to recreate rows and items
-							getRows().getChildren().clear();
-							_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
-							setModel(_model);
-						} else {
-							_dataLoader = null; //enforce recreate dataloader
+	}
+	
+	public void onPageAttached(Page newpage, Page oldpage) {
+		super.onPageAttached(newpage, oldpage);
+		if (oldpage == null) {
+			//prepare a right moment to init Grid
+			this.addEventListener("onInitGrid", _gridInitListener = new EventListener() {
+				public void onEvent(Event event) throws Exception {
+					if (_gridInitListener != null) {
+						Grid.this.removeEventListener("onInitGrid", _gridInitListener);
+						_gridInitListener = null; 
+					}
+					//initialize data loader
+					//Tricky! might has been initialized when apply properties
+					if (_dataLoader != null) { 
+						final boolean rod = evalRod();
+						if (_rod != rod) {
+							if (_model != null) { //so has to recreate rows and items
+								getRows().getChildren().clear();
+								_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
+								setModel(_model);
+							} else {
+								_dataLoader = null; //enforce recreate dataloader
+							}
 						}
 					}
+					final DataLoader loader = getDataLoader();
+					
+					//initialize paginal if any
+					Paginal pgi = getPaginal();
+					if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
 				}
-				final DataLoader loader = getDataLoader();
-				//initialize paginal if any
-				Paginal pgi = getPaginal();
-				if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
-			}
-		});
-		Events.postEvent(new Event("onInitGrid", this));
+			});
+			Events.postEvent(-50000, new Event("onInitGrid", this));
+		}
 	}
 
 	/** Returns whether to grow and shrink vertical to fit their given space,
@@ -753,7 +760,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough
 			}
-			final int cnt = _rows.getChildren().size();
+			final int cnt = _rows.getChildren().size() + getDataLoader().getOffset();
 			if (ofs >= cnt) { //not possible; just in case
 				ofs = cnt - pgsz;
 				if (ofs < 0) ofs = 0;
@@ -829,7 +836,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			}
 
 			try {
-				_renderer.render(row, getDataLoader().getModelElementAt(row.getIndex()));
+				_renderer.render(row, _model.getElementAt(row.getIndex()));
 			} catch (Throwable ex) {
 				try {
 					final Label label = newRenderLabel(Exceptions.getMessage(ex));
@@ -1075,12 +1082,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 	
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "true");
+		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "false");
 		String rod2 = (String) getAttribute("org.zkoss.zul.grid.rod");
 		if (rod2 == null) {
 			rod2 = rod1;
 		}
-		return !"false".equals(rod2);
+		return "true".equals(rod2);
 	}
 	
 	/*package*/ DataLoader getDataLoader() {
@@ -1094,7 +1101,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this);
+			_dataLoader.init(this, 0, 40);
 		}
 		return _dataLoader;
 	}
@@ -1104,6 +1111,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		final Grid clone = (Grid)super.clone();
 		clone.init();
 
+		//recreate the DataLoader 
+		final int offset = clone.getDataLoader().getOffset(); 
+		final int limit = clone.getDataLoader().getLimit();
+		clone._dataLoader = null;
+		clone.getDataLoader().init(clone, offset, limit);
+		
 		int cnt = 0;
 		if (clone._rows != null) ++cnt;
 		if (clone._cols != null) ++cnt;
@@ -1198,6 +1211,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (_rod) {
 			renderer.render("_grid$rod", true);
 		}
+	}
+	/*package*/ boolean isRod() {
+		return _rod;
 	}
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
