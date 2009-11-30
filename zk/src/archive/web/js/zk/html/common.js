@@ -2270,12 +2270,12 @@ zk.parseDate = function (txt, fmt, strict) {
 			return null; //failed
 
 		txt = txt.trim();
+		txt = zk._ckDate(zk.FDOW, txt);
 		txt = zk._ckDate(zk.SDOW, txt);
 		txt = zk._ckDate(zk.S2DOW, txt);
-		txt = zk._ckDate(zk.FDOW, txt);
+		txt = zk._ckDate(zk.FMON, txt);
 		txt = zk._ckDate(zk.SMON, txt);
 		txt = zk._ckDate(zk.S2MON, txt);
-		txt = zk._ckDate(zk.FMON, txt);
 		txt = zk._ckDate(zk.APM, txt);
 		for (var j = txt.length; --j >= 0;) {
 			var cc = txt.charAt(j);
