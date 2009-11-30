@@ -215,12 +215,12 @@ zk.fmt.Date = {
 				return null; //failed
 
 			txt = txt.trim();
+			txt = this.checkDate(zk.FDOW, txt);
 			txt = this.checkDate(zk.SDOW, txt);
 			txt = this.checkDate(zk.S2DOW, txt);
-			txt = this.checkDate(zk.FDOW, txt);
+			txt = this.checkDate(zk.FMON, txt);
 			txt = this.checkDate(zk.SMON, txt);
 			txt = this.checkDate(zk.S2MON, txt);
-			txt = this.checkDate(zk.FMON, txt);
 			txt = this.checkDate(zk.APM, txt);
 			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
