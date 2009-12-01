@@ -113,6 +113,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/** Calculates the size. */
 	_calcSize: function () {
+		
+		//Bug in B30-1926094-1.zul 
+		if (zk.ie)
+			this._syncFocus(this._focusItem);
+			
 		this._calcHgh();
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -609,9 +614,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/** maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
 		var focusEl = this.$n('a'),
-			n = row.$n(),
-			offs = zk(n).revisedOffset();
-		offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
+			offs;
+		if (row) {
+			var n = row.$n(), offs = zk(n).revisedOffset();
+			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
+		} else
+			offs = [0, 0];
 		focusEl.style.top = offs[1] + "px";
 		focusEl.style.left = offs[0] + "px";
 	},

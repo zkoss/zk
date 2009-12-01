@@ -507,7 +507,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	_choiceData: function (evt) {
 		var target = evt.domTarget;
 		target = target.tagName == "TD" ? target : target.parentNode;
-		if (target && jq(target).hasClass(this.getZclass() + '-disd')) {
+		if (target && (jq(target).hasClass(this.getZclass() + '-disd') || jq(target).attr('_dt') == undefined)) {
 			this.close();
 		} else
 			this.$supers('_choiceData', arguments);
