@@ -15,155 +15,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	$define: {
 		content: function (content) {
-			this._setContent();
-		}
-	},
-	_getContentType: function (content) {
-		if (!content) return;
-		
-		if (content.indexOf('#color') == 0 && zk.feature.professional) {
-			if (!zk.isLoaded('zkex.inp')) {
-				zk.load('zkex.inp');
-				if (zk.loading) {
-					zk.afterLoad(this.proxy(this._setContent));
-					return;
+			if (!content || content.length == 0) return;
+			
+			if (!this._contentHandler) {
+				if (zk.feature.professional) {
+					if (!zk.isLoaded('zkex.inp')) {
+						zk.load('zkex.inp');
+						if (zk.loading) {
+							zk.afterLoad(this.proxy(this._setContent));
+							return;
+						}
+					}
+					this._contentHandler = new zkex.inp.ContentHandler(this, content);
 				} else
-					return 'color';
-			} else
-				return 'color';
-		}
-		return 'content';
-	},
-	_setContent: function () {
-		var content = this._content;
-		if (!content || this.menupopup)
-			return;
-				
-		var oldType = this._contentType,
-			type = this._getContentType(content);
-		
-		if (oldType != type)
-			this._destoryContent();
-
-		this._contentType = type;
-		switch (type) {
-		case 'color':
-			var hex = content.substr(content.indexOf('#color') + '#color'.length + 1);
-			
-			if (!this._color)
-				this._color = new zkex.inp.Color(hex);
+					this._contentHandler = new zul.menu.ContentHandler(this, content);
+			}
 			else
-				this._color.setHex(hex);
-			
-			if (!this._picker && !this._palette) {
-				this._picker = new zkex.inp.PickerPop();
-				this.appendChild(this._picker);
-				this._palette = new zkex.inp.PalettePop();
-				this.appendChild(this._palette);
-				this.rerender();		
-			}
-			break;
-		case 'content':
-			this.rerender();
-			break;
-		}
-	},
-	_destoryContent: function () {
-		var type = this._contentType;
-		if (!type) return;
-		
-		switch (type) {
-		case 'color':
-			var picker = this._picker,
-				palette = this._palette;
-			if (this._color) {
-				this._color = null;
-			}
-			if (picker && palette) {
-				this.removeChild(picker);
-				this.removeChild(palette);
-				this._picker = this._palette = this._contentType = null;
-				this.rerender();
-			}
-			break;
-		case 'content':
-			this.rerender();
-			break;
-		}
-	},
-	_openMenuContent: function () {
-		var pp = this.$n("cnt-pp");
-		if (!pp) return;
-			
-		pp.style.width = pp.style.height = "auto";
-		pp.style.position = "absolute";
-		pp.style.overflow = "auto";
-		pp.style.display = "block";
-		pp.style.zIndex = "88000";
-			
-		jq(pp).zk.makeVParent();
-		zk(pp).position(this.$n(), this.getPosition());
-		this.syncShadow('cnt-pp');
-	},
-	_closeMenuContent: function () {
-		var pp = this.$n("cnt-pp");
-		if (!pp || !zk(pp).isVisible()) return;
-
-		pp.style.display = "none";
-		jq(pp).zk.undoVParent();
-		this.hideShadow('cnt-pp');
-	},
-	_openContent: function (evt) {
-		var type = this._contentType;
-		if (!type) return;
-		
-		switch (type) {
-		case 'color':
-			this.openPalette();
-			break;
-		case 'content':
-			this._openMenuContent();
-			break;
-		}
-	},
-	openPalette: function () {
-		if (this._palette)
-			this._palette.open(this.getPosition());
-	},
-	openPicker: function () {
-		if (this._picker)
-			this._picker.open(this.getPosition());
-	},
-	syncShadow: function (target) {		
-		switch (target) {
-		case 'palette-pp':
-			if (!this._paletteShadow)
-				this._paletteShadow = new zk.eff.Shadow(this.$n("palette-pp"), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
-			this._paletteShadow.sync();
-			break;
-		case 'picker-pp':
-			if (!this._pickerShadow)
-				this._pickerShadow = new zk.eff.Shadow(this.$n("picker-pp"), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
-			this._pickerShadow.sync();
-			break;
-		case 'cnt-pp':
-			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.$n("cnt-pp"), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
-			this._shadow.sync();
-			break;
-		}
-	},
-	hideShadow: function (target) {
-		switch (target) {
-		case 'palette-pp':
-			this._paletteShadow.hide();
-			break;
-		case 'picker-pp':
-			this._pickerShadow.hide();
-			break;
-		case 'cnt-pp':
-			this._shadow.hide();
-			break;
+				this._contentHandler.setContent(content);
 		}
 	},
 	domContent_: function () {
@@ -191,15 +59,18 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.menu.Menupopup)) {
 			this.menupopup = child;
-			
-			this._destoryContent();
+
+			if (this._contentHandler)
+				this._contentHandler.destroy();
 		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.menupopup) {
 			this.menupopup = null;
-			this._setContent();
+
+			if (this._contentHandler)
+				this._contentHandler.setContent(this._content);
 		}
 	},
 	getMenubar: function () {
@@ -208,24 +79,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
-	getPicker: function () {
-		return this._picker;
-	},
-	getPalette: function () {
-		return this._palette;
-	},
-	getPosition: function () {
-		if (this.isTopmost()) {
-			var bar = this.getMenubar();
-			if (bar)
-				return 'vertical' == bar.getOrient() ? 'end_before' : 'after_start';
-		}
-		return 'end_before';
-	},
-	getCurrColor: function () {
-		return this._color;
-	},
-	_closeParentPopup: function () {
+	closeParentPopup: function () {
 		if (!this.isTopmost()) {
 			for (var p = this.parent; p; p = p.parent) {
 				if (p.$instanceof(zul.menu.Menupopup)) {
@@ -235,21 +89,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	onColorChanged: function (hex) {
-		var img = this.$n('img');
-		if (img)
-			img.style.backgroundColor = hex;
-		this._color.setHex(hex);
-		this.fire("onChange", {color: hex, value: hex}, {toServer:true}, 150);
-		this._closeParentPopup();
-	},
-	onColorCanceled: function () {
-		this._closeParentPopup();
+	onShow: function () {
+		if (this._contentHandler)
+			this._contentHandler.onShow();
 	},
 	onFloatUp: function (ctl) {
-		var type = this._contentType;
-		if (type == 'content' && !zUtl.isAncestor(this.parent, ctl.origin))
-			this._closeMenuContent();
+		if (this._contentHandler)
+			this._contentHandler.onFloatUp(ctl);
+	},
+	onHide: function () {
+		if (this._contentHandler)
+			this._contentHandler.onHide();
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -266,25 +116,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this.domListen_(anc, "onMouseOver")
 				.domListen_(anc, "onMouseOut");
 		}
-		
-		if (!this.menupopup && type) {
-			this.domListen_(this.$n(), 'onClick', '_openContent');
-			
-			switch (type) {
-			case 'color':
-				var img = this.$n('img');
-				if (img)
-					img.style.backgroundColor = this._color.getHex();
-				break;
-			case 'content':
-				zWatch.listen({onFloatUp: this, onHide: this});
-				break;
-			}
-		}
-	},
-	onHide: function () {
-		if (this._contentType == 'content')
-			this._closeMenuContent();
+
+		if (this._contentHandler)
+			this._contentHandler.bind();
 	},
 	unbind_: function () {
 		if (!this.isTopmost()) {
@@ -299,31 +133,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this.domUnlisten_(anc, "onMouseOver")
 				.domUnlisten_(anc, "onMouseOut");
 		}
-		
-		var type = this._contentType;
-		if (!this.menupopup && type) {
-			this.domUnlisten_(this.$n(), 'onClick', '_openContent');
-			
-			switch (type) {
-			case 'color':
-				if (this._paletteShadow) {
-					this._paletteShadow.destroy();
-					this._paletteShadow = null;
-				}
-				if (this._pickerShadow) {
-					this._pickerShadow.destroy();
-					this._pickerShadow = null;
-				}
-				break;
-			case 'content':
-				if (this._shadow) {
-					this._shadow.destroy();
-					this._shadow = null;
-				}
-				zWatch.unlisten({onFloatUp: this, onHide: this});
-				break;
-			}
-		}
+
+		if (this._contentHandler)
+			this._contentHandler.unbind();
+
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
@@ -429,4 +242,86 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		jq(n).removeClass(cls);
 	}
+});
+
+zul.menu.ContentHandler = zk.$extends(zk.Object, {
+	 $init: function(wgt, content) {
+	 	this.$supers('$init', arguments);
+		this._wgt = wgt;
+		this._content = content;
+	 },
+	 setContent: function (content) {
+	 	this._content = content;
+		this._wgt.rerender();
+	 },
+	 redraw: function (out) {
+	 	var wgt = this._wgt,
+			zcls = wgt.getZclass();
+
+	 	out.push('<div id="', wgt.uuid, '-cnt-pp" class="', zcls,
+		'-cnt-pp" style="display:none"><div class="', zcls,'-cnt-body">', this._content, '</div></div>');
+	 },
+	 bind: function () {
+				
+	 	var wgt = this._wgt;
+	 	if (!wgt.menupopup) {
+			wgt.domListen_(wgt.$n(), 'onClick', 'onShow');
+			zWatch.listen({onFloatUp: wgt, onHide: wgt});
+		}
+		
+		this._pp = jq('#' + wgt.uuid + '-' + 'cnt-pp')[0];
+	 },
+	 unbind: function () {
+	 	var wgt = this._wgt;
+	 	if (!wgt.menupopup) {
+			if (this._shadow) {
+				this._shadow.destroy();
+				this._shadow = null;
+			}
+			wgt.domUnlisten_(wgt.$n(), 'onClick', 'onShow');
+			zWatch.unlisten({onFloatUp: wgt, onHide: wgt});
+		}
+
+		this._pp = null;
+	 },
+	 onShow: function () {
+	 	var wgt = this._wgt,
+			pp = this._pp;
+		if (!pp) return;
+			
+		pp.style.width = pp.style.height = "auto";
+		pp.style.position = "absolute";
+		pp.style.overflow = "auto";
+		pp.style.display = "block";
+		pp.style.zIndex = "88000";
+			
+		jq(pp).zk.makeVParent();
+		zk(pp).position(wgt.$n(), wgt.getContentPosition());
+		this.syncShadow();
+	 },
+	 onHide: function () {
+		var pp = this._pp;
+		if (!pp || !zk(pp).isVisible()) return;
+
+		pp.style.display = "none";
+		jq(pp).zk.undoVParent();
+		this.hideShadow();	
+	 },
+	 onFloatUp: function (ctl) {
+		if (!zUtl.isAncestor(this._wgt, ctl.origin))
+			this.onHide();
+	 },
+	 syncShadow: function () {
+	 	if (!this._shadow)
+			this._shadow = new zk.eff.Shadow(this._wgt.$n("cnt-pp"), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
+		this._shadow.sync();
+	 },
+	 hideShadow: function () {
+	 	this._shadow.hide();
+	 },
+	 destroy: function () {
+	 	this._wgt.rerender();
+	 },
+	 getPosition: function () {
+}
 });

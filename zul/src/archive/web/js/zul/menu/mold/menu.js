@@ -16,9 +16,7 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		btn = zk.ie && !zk.ie8 ? 'input' : 'button',
-		contentType = this._contentType,
-		picker = this.getPicker(),
-		palette = this.getPalette();
+		contentHandler = this._contentHandler;
 
 	if (this.isTopmost()) {
 		out.push('<td align="left"', this.domAttrs_(), '><table id="', uuid,
@@ -43,24 +41,9 @@ function (out) {
 
 		if (this.menupopup)
 			this.menupopup.redraw(out);
-		else if (contentType) {
-			switch (contentType) {
-			case 'color':
-				if (picker) {
-					out.push('<div id="', uuid, '-picker-pp" class="', zcls, '-picker-pp" style="display:none">');
-					picker.redraw(out);
-					out.push('</div>');
-				}
-				if (palette) {
-					out.push('<div id="', uuid, '-palette-pp" class="', zcls, '-palette-pp" style="display:none">');
-					palette.redraw(out);
-					out.push('</div>');
-				}
-				break;
-			case 'content':
-				out.push('<div id="', uuid, '-cnt-pp" class="', zcls, '-cnt-pp" style="display:none"><div class="', zcls,'-cnt-body">', this._content, '</div></div>');
-			}
-		}
+		else if (contentHandler)
+			contentHandler.redraw(out);
+
 		out.push('</div></td><td class="', zcls, '-inner-r"><span class="', zcls, '-space"></span></td></tr></tbody></table></td>');
 
 	} else {
@@ -69,24 +52,9 @@ function (out) {
 
 		if (this.menupopup)
 			this.menupopup.redraw(out);
-		else if (contentType) {
-			switch (contentType) {
-			case 'color':
-				if (picker) {
-					out.push('<div id="', uuid, '-picker-pp" class="', zcls, '-picker-pp" style="display:none">');
-					picker.redraw(out);
-					out.push('</div>');
-				}
-				if (palette) {
-					out.push('<div id="', uuid, '-palette-pp" class="', zcls, '-palette-pp" style="display:none">');
-					palette.redraw(out);
-					out.push('</div>');
-				}
-				break;
-			case 'content':
-				out.push('<div id="', uuid, '-cnt-pp" class="', zcls, '-cnt-pp" style="display:none"><div class="', zcls,'-cnt-body">', this._content, '</div></div>');
-			}
-		}
+		else if (contentHandler)
+			contentHandler.redraw(out);
+
 		out.push('</li>');
 	}
 }
