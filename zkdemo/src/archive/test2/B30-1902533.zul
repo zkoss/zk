@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>BorderLayout should not splittable when click on split btn.</n:p>
+	<n:p>BorderLayout should not be splittable when click on split btn.</n:p>
 	<borderlayout height="500px">
 	<north maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
 		<borderlayout>

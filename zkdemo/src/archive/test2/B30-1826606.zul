@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-	<listbox>
+	<listbox id="listbox">
 		<listhead sizable="true">
 			<listheader id="hd" label="1" visible="false" />
 			<listheader label="2" />
@@ -40,6 +40,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			hd.visible = !hd.visible; 
 			r1.visible = !r1.visible;
 			r2.visible = !r2.visible;
+			if (Executions.getCurrent().isBrowser("ie8-")) {
+				listbox.invalidate();
+			}
 		</attribute>
 	</button>
 </zk>
