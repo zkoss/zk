@@ -82,7 +82,8 @@ November, 2009
   2902880: Renderer and Model in Listbox/Grid shall be transient
   2903271: Unable to select a tab from the server
   2904577: Dynamic tree doesn't draw
-
+  2906453: doublebox complains wrong format for number end with 0
+  
 * Bugs
   1999145: Combobox with Width of 100% Overruns
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  

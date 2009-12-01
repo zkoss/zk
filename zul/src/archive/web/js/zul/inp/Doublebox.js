@@ -17,14 +17,49 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value),
-			val = parseFloat(info.raw),
-			len = info.raw.length;
-			rawcc = info.raw.substring(len-1, len);
-		if (info.raw != ''+val+(rawcc == '.' ? rawcc : '') && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
+			raw = info.raw,
+			val = parseFloat(raw),
+			valstr = ''+val,
+			valind = valstr.indexOf('.'),
+			rawind = raw.indexOf('.');
+		
+		if (rawind == 0) {
+			raw = '0' + raw;
+			++rawind;
+		}
+		
+		if (rawind >= 0 && raw.substring(raw.substring(rawind+1)) && valind < 0) { 
+			valind = valstr.length;
+			valstr += '.';
+		}
+		
+		var len = raw.length,	
+			vallen = valstr.length;
+		
+		//pre zeros
+		if (valind >=0 && valind < rawind) {
+			vallen -= valind;
+			len -= rawind;
+			for(var zerolen = rawind - valind; zerolen-- > 0;)
+				valstr = '0' + valstr;
+		}
+		
+		//post zeros
+		if (vallen < len) {
+			for(var zerolen = len - vallen; zerolen-- > 0;)
+				valstr += '0';
+		}
+		
+		if (raw != valstr && raw != '+'+valstr && raw.indexOf('e') < 0) //unable to handle 1e2
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 		return val;
+	},
+	_allzero: function(val) {
+		for(var len= val.length; len-- > 0; )
+			if (val.charAt(len) != '0') return false;
+		return true;
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format;

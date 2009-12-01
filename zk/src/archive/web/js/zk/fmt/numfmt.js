@@ -43,7 +43,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 zk.fmt.Number = {
 	format: function (fmt, val, rounding) {
-		if (!val) return '';
+		if (val == null) return '';
 		if (!fmt) return '' + val;
 		
 		//calculate number of fixed decimals
@@ -112,6 +112,8 @@ zk.fmt.Number = {
 		
 		for (var len = indVal - ind; --len >= 0; indFmt++)
 			fmt = '#' + fmt;
+		for (var len = ind - indVal; --len >= 0; indVal++)
+			valStr = '0' + valStr;
 		
 		var groupDigit = indFmt - fmt.substring(0, indFmt).lastIndexOf(zk.GROUPING);
 			
@@ -120,8 +122,10 @@ zk.fmt.Number = {
 				pre = zk.GROUPING + pre;
 				g++;
 			}
-			if (fmt.charAt(i) == '#') {
-				pre = valStr.charAt(j) + pre;
+			var fmtcc = fmt.charAt(i); 
+			if (fmtcc == '#' || fmtcc == '0') {
+				var cc = valStr.charAt(j);
+				pre = (cc == '0' ? fmtcc : cc) + pre;
 				i--;
 				j--;
 				g++;
@@ -139,7 +143,8 @@ zk.fmt.Number = {
 		
 		//sufpart
 		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl && j < vl; i++) {
-			if (fmt.charAt(i) == '#') {
+			var fmtcc = fmt.charAt(i); 
+			if (fmtcc == '#' || fmtcc == '0') {
 				suf += valStr.charAt(j);
 				j++;
 			} else
@@ -157,9 +162,24 @@ zk.fmt.Number = {
 		suf = suf.substring(0, m);
 		
 		//combine
-		if (!pre) 
-			pre = "0";
+		if (pre)
+			pre = this._removePrefixSharps(pre);
+		if (!pre && fmt.charAt(indFmt+1) == '#')
+			pre = '0';
 		return (val < 0 ? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
+	},
+	_removePrefixSharps: function (val) {
+		var ret = '',
+			sharp = true;
+		for(var len = val.length, j=0; j < len; ++j) {
+			var cc = val.charAt(j);
+			if (sharp) {
+				if (cc == '#' || cc == zk.GROUPING) continue;
+				else sharp = false;
+			}
+			ret = ret + (cc == '#' ? '0' : cc);
+		}
+		return ret;
 	},
 	unformat: function (fmt, val) {
 		if (!val) return {raw: val, divscale: 0};
