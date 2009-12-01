@@ -2291,7 +2291,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		_ausvc = ausvc;
 	}
 
-	/** Handles an AU request.
+	/** Handles an AU request. It is invoked internally.
 	 *
 	 * <p>Default: it handles echo and setAttr, and it convests other request
 	 * to an event (by {@link Event#getEvent}) and then posts the event
