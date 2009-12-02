@@ -60,7 +60,25 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 				this._changeSelect(w, sels[w.uuid] == true);
 		},
-		selectedIndex: null,
+		selectedIndex: [
+			function (v) {
+				return v < -1 || (!v && v !== 0) ? -1 : v;
+			},
+			function() {
+				var selected = this._selectedIndex;
+				this.clearSelection();
+				this._selectedIndex = selected;
+				if (selected > -1) {
+					var w;
+					for (var it = this.getBodyWidgetIterator(); selected-- >=0;)
+						w = it.next();
+					if (w) {
+						this._selectOne(w, false);
+						zk(w).scrollIntoView(this.ebody);
+					}						
+				}
+			}
+		],
 		name: function () {
 			if (this.destkop) this.updateFormData();	
 		}
@@ -86,12 +104,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	setSelectedItem: function (item) {
 		item = zk.Widget.$(item);
-		if (this._selectedItem != item) {
-			this._selectedItem = item;
-			if (item) {
-				this._selectOne(item, false);
-				zk(item).scrollIntoView(this.ebody);
-			}
+		if (item) {
+			this._selectOne(item, false);
+			zk(item).scrollIntoView(this.ebody);
 		}
 	},
 	getSelectedItem: function () {
@@ -359,7 +374,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (index < this._selectedIndex || this._selectedIndex < 0) {
 					this._selectedIndex = index;
 				}
-				item._selected = true;
+				item._setSelectedDirectly(true);
 			}
 			this._selItems.push(item);
 		}
@@ -369,7 +384,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!this._multiple) {
 				this.clearSelection();
 			} else {
-				item._selected = false;
+				item._setSelectedDirectly(false);
 				this._selItems.$remove(item);				
 			}
 		}
@@ -377,7 +392,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	clearSelection: function () {
 		if (this._selItems.length) {
 			for(var item;(item = this._selItems.pop());)
-				item._selected = false;
+				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 		}
 	},
