@@ -387,9 +387,9 @@ jq(function() {
 	}
 	
 	function _simFocus(wgt) {
-		if (wgt != zk.currentFocus) {
+		if (wgt && wgt != zk.currentFocus) {
 			window.blur();
-			if (wgt) wgt.focus();
+			wgt.focus();
 		}
 	}
 	function _evtProxy(evt) { //handle proxy
