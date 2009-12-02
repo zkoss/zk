@@ -94,6 +94,19 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 			xyzTuples.add(new XYZTuple(x, y, z));
 	}
 
+	public void removeValue(Comparable series, int index) {
+		removeValue0(series, index);
+		fireEvent(ChartDataEvent.REMOVED, series, null);
+	}
+	
+	private void removeValue0(Comparable series, int index) {
+		List xyzTuples = (List) _seriesMap.get(series);
+		if (xyzTuples == null) {
+			return;
+		}
+		xyzTuples.remove(index);
+	}
+	
 	//-- internal class --//
 	private static class XYZTuple extends XYPair {
 		private static final long serialVersionUID = 20091008183759L;

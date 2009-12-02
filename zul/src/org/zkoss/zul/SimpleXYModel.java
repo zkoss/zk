@@ -118,7 +118,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
-	protected void removeValue0(Comparable series, int index) {
+	private void removeValue0(Comparable series, int index) {
 		List xyPairs = (List) _seriesMap.get(series);
 		if (xyPairs == null) {
 			return;
