@@ -67,7 +67,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		setHeight("200px");
 	}
 	private class MyChartDataListener implements ChartDataListener, Serializable {
-		private static final long serialVersionUID = 20091008183622L;
+		private static final long serialVersionUID = 20091125153002L;
 
 		public void onChange(ChartDataEvent event) {
 			refresh();

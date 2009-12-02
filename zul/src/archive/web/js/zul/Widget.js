@@ -219,7 +219,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = target.tagName;
 			if (tn == "TEXTAREA" || (tn == "BUTTON"
-			&& (zk.ie || zk.gecko || !target.id || !target.id.endsWith('-a')))
+			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup) 
+			&& (!target.id || !target.id.endsWith('-a')))
 			|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 				return; //don't change button's behavior (Bug 1556836)
 			okcancel = evtnm = "onOK";
