@@ -19,16 +19,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			
 			if (!this._contentHandler) {
 				if (zk.feature.professional) {
-					if (!zk.isLoaded('zkex.inp')) {
-						zk.load('zkex.inp');
-						if (zk.loading) {
-							zk.afterLoad(this.proxy(this._setContent));
-							return;
-						}
-					}
-					this._contentHandler = new zkex.inp.ContentHandler(this, content);
-				} else
-					this._contentHandler = new zul.menu.ContentHandler(this, content);
+					var self = this;
+					zk.load('zkex.inp', null, function () { 
+						self._contentHandler = new zkex.inp.ContentHandler(self, content);
+					});
+					return;
+				}
+				this._contentHandler = new zul.menu.ContentHandler(this, content);
 			}
 			else
 				this._contentHandler.setContent(content);
@@ -78,16 +75,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (p.$instanceof(zul.menu.Menubar))
 				return p;
 		return null;
-	},
-	closeParentPopup: function () {
-		if (!this.isTopmost()) {
-			for (var p = this.parent; p; p = p.parent) {
-				if (p.$instanceof(zul.menu.Menupopup)) {
-					p.close();
-					break;
-				}
-			}
-		}
 	},
 	onShow: function () {
 		if (this._contentHandler)
@@ -251,8 +238,10 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		this._content = content;
 	 },
 	 setContent: function (content) {
-	 	this._content = content;
-		this._wgt.rerender();
+	 	if (this._content != content) {
+			this._content = content;
+			this._wgt.rerender();	
+		}
 	 },
 	 redraw: function (out) {
 	 	var wgt = this._wgt,
@@ -296,7 +285,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		pp.style.zIndex = "88000";
 			
 		jq(pp).zk.makeVParent();
-		zk(pp).position(wgt.$n(), wgt.getContentPosition());
+		zk(pp).position(wgt.$n(), this.getPosition());
 		this.syncShadow();
 	 },
 	 onHide: function () {
@@ -323,5 +312,12 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	 	this._wgt.rerender();
 	 },
 	 getPosition: function () {
-}
+	 	var wgt = this._wgt;
+		if (wgt.isTopmost()) {
+			var bar = wgt.getMenubar();
+			if (bar)
+				return 'vertical' == bar.getOrient() ? 'end_before' : 'after_start';
+		}
+		return 'end_before';
+	}
 });
