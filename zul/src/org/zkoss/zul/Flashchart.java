@@ -53,7 +53,6 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * Declares attributes.
 	 */
 	private String _type = "pie";
-	private String _styles;
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
 	/**
@@ -72,8 +71,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	/**
 	 * Refresh data when the chart data changed.
 	 */
-	protected void smartDrawChart() {
-		smartUpdate("jsonModel", getJSONResponse(transferToJSONObject(getModel())));
+	private void smartDrawChart() {
 		invalidate();
 	}
 	/**
@@ -83,7 +81,6 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		super.renderProperties(renderer);
 		render(renderer, "type", _type);
 		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
-//		render(renderer, "jsonStyle", getJSONResponse(transferToJSONObject(getStyles())));
 	}
 	/**
 	 * Sets the type of chart.
@@ -128,28 +125,6 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 */
 	public ChartModel getModel() {
 		return _model;
-	}		
-	/**
-	 * Sets the style of chart
-	 * @param styles
-	 */
-	public void setStyles(String styles) {
-		if (!Objects.equals(_styles, styles)) {
-			_styles = styles;
-			smartUpdate("styles", _styles);
-		}		
-	}
-	/**
-	 * Returns a string which prepares to use in javascript as a chart style
-	 */
-	public String getStyles() {
-		return _styles;
-	}
-	
-	private List transferToJSONObject(String styles){
-		LinkedList list = new LinkedList();
-		//TODO:
-		return null;		
 	}
 	
 	private List transferToJSONObject(ChartModel model){

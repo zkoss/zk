@@ -47,13 +47,4 @@ public interface Flashchart extends Flash {
 	 * Returns the model of chart
 	 */
 	public ChartModel getModel();
-	/**
-	 * Returns a string which prepares to use in javascript as a chart style
-	 */
-	public String getStyles();
-	/**
-	 * Sets the style of chart
-	 * @param styles
-	 */
-	public void setStyles(String styles);
 }
