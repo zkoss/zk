@@ -64,7 +64,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 	},
 	checkScrollable: function () {
-		return this._scrollable && "horizontal" == this.getOrient();
+		return this._scrollable && ("horizontal" == this.getOrient());
 	},
 	onSize: _zkf = function () {
 		this._checkScrolling();
@@ -82,6 +82,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		if (!this.checkScrollable()) return;
 		
 		var node = this.$n();
+		if (!node) return;
 		jq(node).addClass(this.getZclass() + "-scroll");
 		if (zk.ie6_) this._doFixWidth(node);
 		

@@ -23,7 +23,7 @@ function (out) {
 	} else {
 		var zcls = this.getZclass();
 		out.push('<div', this.domAttrs_(), '>')
-		if (this.scrollable) {
+		if (this.checkScrollable()) {
 			out.push('<div id="', uuid, '-left" class="', zcls, '-left"></div>',
 					'<div id="', uuid, '-right" class="', zcls, '-right"></div>',
 					'<div id="', uuid, '-body" class="', zcls, '-body">',
