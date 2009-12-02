@@ -37,6 +37,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -196,6 +197,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Listbox extends XulElement implements Paginated,
 		org.zkoss.zul.api.Listbox {
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
+	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
 	private static final Log log = Log.lookup(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
@@ -853,7 +855,7 @@ public class Listbox extends XulElement implements Paginated,
 			jsel = -1;
 		if (jsel < 0) { // unselect all
 			clearSelection();
-		} else if (jsel != _jsel || (_multiple && _selItems.size() > 1)) {
+		} else if (jsel != _jsel || (_multiple && _selItems.size() > 1) || !_selItems.contains(getItemAtIndex(_jsel))) {
 			for (Iterator it = _selItems.iterator(); it.hasNext();) {
 				final Listitem item = (Listitem) it.next();
 				item.setSelectedDirectly(false);
@@ -868,19 +870,12 @@ public class Listbox extends XulElement implements Paginated,
 					final int limit = getPageSize();
 					getDataLoader().syncModel(offset, limit); // force reloading
 				} else {
-					final int offset = _jsel - 10;
-					final int limit = getDataLoader().getLimit();
-					getDataLoader().syncModel(offset < 0 ? 0 : offset, limit); // force
-																				// reloading
-					_topPad = -1;
-					_currentTop = 0;
-					_currentLeft = 0;
-					invalidate();
+					smartUpdate("jumpTo_", _jsel);
 				}
-				item = getItemAtIndex(_jsel);
+			} else {
+				item.setSelectedDirectly(true);
+				_selItems.add(item);
 			}
-			item.setSelectedDirectly(true);
-			_selItems.add(item);
 
 			if (_model instanceof Selectable) {
 				if (!isLoadingModel()) {
@@ -891,7 +886,7 @@ public class Listbox extends XulElement implements Paginated,
 
 			if (inSelectMold()) {
 				smartUpdate("selectedIndex", _jsel);
-			} else
+			} else if (item != null)
 				smartUpdate("selectedItem", item.getUuid());
 			// Bug 1734950: don't count on index (since it may change)
 			// On the other hand, it is OK with select-mold since
@@ -2135,7 +2130,11 @@ public class Listbox extends XulElement implements Paginated,
 
 		return true;
 	}
-
+	
+	private boolean isSyncingModel() {
+		return getAttribute(SYNCING_MODEL) != null;
+	}
+	
 	/**
 	 * Callback if a list item has been inserted.
 	 * <p>
@@ -2149,7 +2148,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
-		if (comp instanceof Listitem && _model instanceof Selectable) {
+		if (comp instanceof Listitem && _model instanceof Selectable && (isLoadingModel() || isSyncingModel())) {
 			final Listitem item = (Listitem) comp;
 			if (((Selectable) _model).getSelection().contains(
 					_model.getElementAt(item.getIndex()))) {
@@ -3132,6 +3131,8 @@ public class Listbox extends XulElement implements Paginated,
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
+			if (_rod)
+				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
 		} else if (cmd.equals("onScrollPos")) {
@@ -3141,6 +3142,8 @@ public class Listbox extends XulElement implements Paginated,
 		} else if (cmd.equals("onTopPad")) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {
+			if (_rod && Executions.getCurrent().getAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
+				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;

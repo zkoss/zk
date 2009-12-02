@@ -208,6 +208,14 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 	 * @param max the higher index that a range of invalidated items
 	 */
 	public void syncModel(int offset, int limit) {
+		_listbox.setAttribute(Listbox.SYNCING_MODEL, Boolean.TRUE);
+		try {
+			syncModel0(offset, limit);
+		} finally {
+			_listbox.setAttribute(Listbox.SYNCING_MODEL, null);
+		}
+	}
+	private void syncModel0(int offset, int limit) {
 		int min = offset;
 		int max = offset + limit - 1;
 		
