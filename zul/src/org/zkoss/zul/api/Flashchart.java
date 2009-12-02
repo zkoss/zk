@@ -46,5 +46,23 @@ public interface Flashchart extends Flash {
 	/**
 	 * Returns the model of chart
 	 */
-	public ChartModel getModel();
+	public ChartModel getModel();	
+	/**
+	 * Sets X-Axis name of chart
+	 * <p>Only used for StackColumnChart
+	 */
+	public void setXAxis(String xAxis);
+	/**
+	 * Returns the name of X-Axis
+	 */
+	public String getXAxis();
+	/**
+	 * Sets Y-Axis name of chart
+	 * <p>Only used for StackColumnChart
+	 */
+	public void setYAxis(String yAxis);
+	/**
+	 * Returns the name of Y-Axis
+	 */
+	public String getYAxis();
 }

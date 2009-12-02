@@ -37,6 +37,8 @@ import org.zkoss.zul.event.ChartDataListener;
  *   <tr><td>bar</td><td>{@link CategoryModel}</td></tr>
  *   <tr><td>line</td><td>{@link CategoryModel}</td></tr>
  *   <tr><td>column</td><td>{@link CategoryModel}</td></tr>
+ *   <tr><td>stackbar</td><td>{@link CategoryModel}</td></tr>
+ *   <tr><td>stackcolumn</td><td>{@link XYModel}</td></tr>
  * </table>
  *
  * <p>Default {@link #getWidth}: 400px
@@ -55,6 +57,9 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	private String _type = "pie";
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
+	private LinkedList _seriesList;
+	private String _xAxis;
+	private String _yAxis;
 	/**
 	 * Sets default values.
 	 */
@@ -64,33 +69,33 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	}
 	private class MyChartDataListener implements ChartDataListener, Serializable {
 		private static final long serialVersionUID = 20091125153002L;
+
 		public void onChange(ChartDataEvent event) {
-			smartDrawChart();
+			refresh();
 		}
-	}
-	/**
-	 * Refresh data when the chart data changed.
-	 */
-	private void smartDrawChart() {
-		invalidate();
+	}	
+	private final void refresh(){
+		smartUpdate("refresh", getJSONResponse(transferToJSONObject(getModel())));
 	}
 	/**
 	 * RenderProperties method will bind the attributes with FlashChart.js.
 	 */
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		render(renderer, "type", _type);
+		render(renderer, "type", _type.split(":")[0]);
 		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
+		if("stackbar".equals(_type) || "stackcolumn".equals(_type.split(":")[0]))
+			render(renderer, "jsonSeries", getJSONResponse(_seriesList));
 	}
 	/**
 	 * Sets the type of chart.
 	 * <p>Default: "pie"
-	 * <p>Types: pie, line, bar, column
+	 * <p>Allowed Types: pie, line, bar, column, stackbar, stackcolumn
 	 */
 	public void setType(String type) {
 		if (!Objects.equals(_type, type)) {
 			_type = type;
-			smartUpdate("type", _type);
+			smartUpdate("type", _type.split(":")[0]);
 		}
 	}
 	/**
@@ -100,7 +105,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		return _type;
 	}
 	/**
-	 * Sets the model of chart.
+	 * Sets the model of chart. The chart will be redrawed if setting an different model.
 	 * <p>Only implement models which matched the allowed types
 	 * @param model
 	 * @see #setType(String)
@@ -116,9 +121,8 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 				_dataListener = new MyChartDataListener();
 				_model.addChartDataListener(_dataListener);
 			}
-			
-		}
-		smartDrawChart();		//Refresh the data
+			invalidate();		//always redraw
+		}		
 	}
 	/**
 	 * Returns the model of chart.
@@ -126,7 +130,32 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	public ChartModel getModel() {
 		return _model;
 	}
-	
+	/**
+	 * Sets X-Axis name of chart
+	 * <p>Only used for StackColumnChart
+	 */
+	public void setXAxis(String xAxis) {
+		this._xAxis = xAxis;
+	}
+	/**
+	 * Returns the name of X-Axis
+	 */
+	public String getXAxis() {
+		return _xAxis;
+	}
+	/**
+	 * Sets Y-Axis name of chart
+	 * <p>Only used for StackColumnChart
+	 */
+	public void setYAxis(String yAxis) {
+		this._yAxis = yAxis;
+	}
+	/**
+	 * Returns the name of Y-Axis
+	 */
+	public String getYAxis() {
+		return _yAxis;
+	}
 	private List transferToJSONObject(ChartModel model){
 		LinkedList list = new LinkedList();
 
@@ -147,25 +176,77 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					Comparable series = tempModel.getSeries(i);
 					JSONObject json = new JSONObject();
 					if("line".equals(_type) || "column".equals(_type)){		//Draw LineChart & ColumnChart
-						json.put("horizontalField", series);
+						json.put("horizontalField", category);
 						json.put("verticalField", tempModel.getValue(series, category));
 					} else {		//Draw BarChart
 						json.put("horizontalField", tempModel.getValue(series, category));
-						json.put("verticalField", series);
+						json.put("verticalField", category);
 					}
 					list.add(json);
+				}
+			} else if("stackbar".equals(_type)){
+				_seriesList = new LinkedList();
+				CategoryModel tempModel = (CategoryModel)model;
+				for(int i = 0; i < tempModel.getCategories().size(); i++){
+					Comparable series = tempModel.getSeries(i);	
+					JSONObject json = new JSONObject();			
+					json.put("xField", series);
+					json.put("displayName", series);
+					_seriesList.add(json);
+				}
+				for(int i = 0; i < tempModel.getCategories().size(); i++){
+					Comparable category = tempModel.getCategory(i);					
+					JSONObject jData = new JSONObject();
+					jData.put("verticalField", category);
+					for(int j = 0; j < _seriesList.size(); j++){
+						Comparable series = tempModel.getSeries(j);	
+						JSONObject temp = (JSONObject) _seriesList.get(j);						
+						jData.put(temp.get("xField"), tempModel.getValue(series, category));
+					}
+					list.add(jData);					
+				}
+			} else if("stackcolumn".equals(_type.split(":")[0])){
+				_seriesList = new LinkedList();
+				XYModel tempModel = (XYModel)model;
+				for(int i = 0; i < tempModel.getSeries().size(); i++){
+					Comparable series = tempModel.getSeries(i);					
+					JSONObject jData = new JSONObject();
+					jData.put("horizontalField", series);
+					jData.put(_xAxis, tempModel.getX(series, 0));
+					jData.put(_yAxis, tempModel.getY(series, 0));
+					list.add(jData);
+				}
+				for(int j = 0; j < 2; j++){
+					JSONObject json = new JSONObject();
+					String tempType = _type.split(":")[1];
+					if(j == 0){
+						json.put("type", tempType.split(",")[0]);
+						json.put("displayName", _yAxis);
+						json.put("yField", _yAxis);
+					} else {
+						json.put("type", tempType.split(",")[1]);
+						json.put("displayName", _xAxis);
+						json.put("yField", _xAxis);
+					}
+					_seriesList.add(json);
 				}
 			}
 		};
 		return list;
 	}
+		
 	private String getJSONResponse(List list) {
 	    final StringBuffer sb = new StringBuffer().append('[');
 	    for (Iterator it = list.iterator(); it.hasNext();) {
-            sb.append(it.next()).append(',');
+	    	String s = String.valueOf(it.next());
+	    	
+	    	if("stackbar".equals(_type))
+		    	s.replace("\\", "");
+	    	
+            sb.append(s).append(',');
 	    }
 	    sb.deleteCharAt(sb.length() - 1);
 	    sb.append(']');
-	    return sb.toString();
+	    return sb.toString().replace("\\", "");
 	}
 }

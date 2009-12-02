@@ -485,8 +485,8 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>flashchart</component-name>
-		<component-class>org.zkoss.zul.FlashChart</component-class>
-		<widget-class>zul.med.FlashChart</widget-class>
+		<component-class>org.zkoss.zul.Flashchart</component-class>
+		<widget-class>zul.fchart.Flashchart</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/flashchart.js</mold-uri>
