@@ -73,7 +73,18 @@ for f in $*; do
 done
 
 if [ "$jar_found" = "true" ] ; then
-	net stop "Apache Tomcat"
+	setting=build.setting.local
+	if [ ! -f $setting ] ; then
+		setting=build.setting
+	fi
+	if [ -f $setting ] ; then
+		service=$(grep '^start.service' $setting)
+		service=${service#start.service=}
+	fi
+
+	if [ "$service" != "" ] ; then
+		net stop "$service"
+	fi
 
 	for f in $*; do
 		f=${f%/}
@@ -84,5 +95,7 @@ if [ "$jar_found" = "true" ] ; then
 		fi
 	done
 
-	net start "Apache Tomcat"
+	if [ "$service" != "" ] ; then
+		net start "$service"
+	fi
 fi
