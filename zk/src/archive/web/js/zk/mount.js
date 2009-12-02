@@ -389,7 +389,7 @@ jq(function() {
 	function _simFocus(wgt) {
 		if (wgt != zk.currentFocus) {
 			window.blur();
-			wgt.focus();
+			if (wgt) wgt.focus();
 		}
 	}
 	function _evtProxy(evt) { //handle proxy

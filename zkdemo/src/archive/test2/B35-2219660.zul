@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?script content="zk.useStackup = true;"?>
+<?script content="zk.useStackup = 'auto';"?>
 
 <!--
 B35-2219660.zul
@@ -26,5 +26,5 @@ Please test the popup of menu should cover the PDF file
 </menupopup>
 </menu>
 </menubar>
-<iframe style="background-color:transparent" src="/test2/B1896797.pdf"/>
+<iframe autohide="true" style="background-color:transparent" src="/test2/B1896797.pdf"/>
 </zk>

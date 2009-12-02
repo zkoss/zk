@@ -83,6 +83,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (checked != this._checked) //changed
 			this.setChecked(checked) //so Radio has a chance to override it
 				.fire('onCheck', checked);
+		if (zk.safari) jq(real).focus();
 		return this.$supers('doClick_', arguments);
 	},
 	getTextNode: function () {

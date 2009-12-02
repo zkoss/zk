@@ -14,7 +14,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+<script>
+zk.load('zk.fmt');
+</script>
 Please set the browser's language with French, and 
-<button label="Click Me" onClick='Clients.evalJavaScript("alert(zk.formatDate(new Date(2009, 9, 13), \"EEEE d MMMM yyyy\"));")' />
+<button label="Click Me" onClick='Clients.evalJavaScript("alert(zk.fmt.Date.formatDate(new Date(2009, 9, 13), \"EEEE d MMMM yyyy\"));")' />
 You should see  <label value='"mardi 13 octobre 2009"' style="font-weight:bold"/>
 </zk>
