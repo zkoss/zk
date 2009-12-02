@@ -218,7 +218,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 		switch (keyCode) {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = target.tagName;
-			if (tn == "TEXTAREA" || tn == "BUTTON"
+			if (tn == "TEXTAREA" || (tn == "BUTTON"
+			&& (zk.ie || zk.gecko || !target.id || !target.id.endsWith('-a')))
 			|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 				return; //don't change button's behavior (Bug 1556836)
 			okcancel = evtnm = "onOK";
