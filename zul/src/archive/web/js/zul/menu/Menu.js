@@ -26,8 +26,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 					return;
 				}
 				this._contentHandler = new zul.menu.ContentHandler(this, content);
-			}
-			else
+			} else
 				this._contentHandler.setContent(content);
 		}
 	},
