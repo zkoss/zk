@@ -37,6 +37,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			return false; //invalid
 		}
 
+		var cmds = [],
+			rs = rt.rs,
+			rid = rt.rid;
+
 		if (zk.pfmeter) {
 			cmds.dt = dt;
 			cmds.pfIds = pfGetIds(req);
@@ -44,9 +48,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 		rt = jq.evalJSON(rt);
 
-		var cmds = [],
-			rs = rt.rs,
-			rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
