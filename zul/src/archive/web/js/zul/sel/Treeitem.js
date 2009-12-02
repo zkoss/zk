@@ -40,13 +40,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return this;
 	},
 	_showKids: function (open) {
-		if (this.treechildren) {
+		if (this.treechildren)
 			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
 				w.$n().style.display = open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
-		}
 	},
 	isStripeable_: function () {
 		return false;
