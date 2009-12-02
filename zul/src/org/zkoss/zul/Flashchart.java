@@ -45,7 +45,6 @@ import org.zkoss.zul.event.ChartDataListener;
  * <p>Default {@link #getHeight}: 200px
  *
  * @author Joy Lo
- * @date Created at Nov 20, 2009 4:37:26 PM
  * @since 5.0.0
  */
 public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
@@ -68,7 +67,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		setHeight("200px");
 	}
 	private class MyChartDataListener implements ChartDataListener, Serializable {
-		private static final long serialVersionUID = 20091125153002L;
+		private static final long serialVersionUID = 20091008183622L;
 
 		public void onChange(ChartDataEvent event) {
 			refresh();
@@ -84,7 +83,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		super.renderProperties(renderer);
 		render(renderer, "type", _type.split(":")[0]);
 		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
-		if("stackbar".equals(_type) || "stackcolumn".equals(_type.split(":")[0]))
+		if("stackbar".equals(_type) || _type.startsWith("stackcolumn"))
 			render(renderer, "jsonSeries", getJSONResponse(_seriesList));
 	}
 	/**
@@ -121,7 +120,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 				_dataListener = new MyChartDataListener();
 				_model.addChartDataListener(_dataListener);
 			}
-			invalidate();		//always redraw
+			invalidate();		//Always redraw
 		}		
 	}
 	/**
@@ -184,7 +183,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					}
 					list.add(json);
 				}
-			} else if("stackbar".equals(_type)){
+			} else if("stackbar".equals(_type)){		//Draw StackedBarChart
 				_seriesList = new LinkedList();
 				CategoryModel tempModel = (CategoryModel)model;
 				for(int i = 0; i < tempModel.getCategories().size(); i++){
@@ -205,7 +204,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					}
 					list.add(jData);					
 				}
-			} else if("stackcolumn".equals(_type.split(":")[0])){
+			} else if(_type.startsWith("stackcolumn")){		//Draw StackedColumnChart 
 				_seriesList = new LinkedList();
 				XYModel tempModel = (XYModel)model;
 				for(int i = 0; i < tempModel.getSeries().size(); i++){
@@ -239,10 +238,9 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	    final StringBuffer sb = new StringBuffer().append('[');
 	    for (Iterator it = list.iterator(); it.hasNext();) {
 	    	String s = String.valueOf(it.next());
-	    	
-	    	if("stackbar".equals(_type))
+	    	if("stackbar".equals(_type)){
 		    	s.replace("\\", "");
-	    	
+	    	}
             sb.append(s).append(',');
 	    }
 	    sb.deleteCharAt(sb.length() - 1);

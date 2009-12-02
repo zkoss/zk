@@ -22,7 +22,6 @@ import org.zkoss.zul.ChartModel;
  * A generic flashchart component.
  * 
  * @author Joy Lo
- * @date Created at Nov 25, 2009 4:28:49 PM
  * @since 5.0.0
  */
 public interface Flashchart extends Flash {
