@@ -57,6 +57,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		var n = this.$n('real');
+		
+		// Bug 2383106
+		if (n.checked != n.defaultChecked)
+			n.checked = n.defaultChecked;
 
 		if (zk.gecko2_)
 			jq(n).click(zul.wgt.Checkbox._domClick);

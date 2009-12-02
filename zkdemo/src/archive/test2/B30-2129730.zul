@@ -40,7 +40,7 @@ class Person {
 	person.setLastName("Gates");
 </zscript>
 
-<listbox>
+<listbox sizedByContent="true">
 	<listhead>
       <listheader label="First Name" width="100px"/>
       <listheader label="Last Name" width="100px"/>

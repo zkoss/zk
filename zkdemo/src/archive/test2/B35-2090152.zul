@@ -30,7 +30,6 @@ button text label, that is correct. (IE6~7 only).
 				<label value="File:" />
 				<button label="ClickMe"
 					onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif" />
-				<textbox width="99%" />
 			</row>
 			<row>
 				<label value="Type:" />

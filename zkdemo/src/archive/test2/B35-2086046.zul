@@ -35,7 +35,7 @@ onCheck='gb.mold=self.checked? "3d": "default"'/>
 </hbox>
 </vbox>
 <vbox>
-<grid>
+<grid fixedLayout="false">
 <columns sizable="true">
 <column label="Type"/>
 <column label="Content"/>

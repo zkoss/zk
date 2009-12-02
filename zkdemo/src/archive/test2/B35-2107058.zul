@@ -19,13 +19,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<window id="login_window" title="Login" border="normal" width="320px"
+<window id="login_window" title="Login" border="normal" width="420px"
 sizable="false" mode="overlapped" position="center"
 onOK='alert("Window.onOK triggered, password=" + password.getValue())'
 xmlns:h="http://www.w3.org/1999/xhtml">
 <timer id="timer" running="true" delay="30000" repeats="true"
 onTimer=""/>
-<grid>
+<grid fixedLayout="false">
 <rows>
 <row>
 ACC
