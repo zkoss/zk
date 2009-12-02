@@ -179,7 +179,7 @@ import org.zkoss.zul.impl.XulElement;
  * {@link ListModel} and ROD.</p>
  * 
  * <p>To retrieve what are selected in ROD Listbox, you shall use 
- * {@link Selected#getSelection} to get what is currently selected object in
+ * {@link Selectable#getSelection} to get what is currently selected object in
  * {@link ListModel} rather than using {@link Listbox#getSelectedItems}. That is, 
  * you shall operate on the item of the {@link ListModel} rather than on the 
  * {@link Listitem} of the {@link Listbox} if you use the {@link ListModel} and

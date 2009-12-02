@@ -203,10 +203,6 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		}
 	};
 	
-	/** Synchronizes the listbox to be consistent with the specified model.
-	 * @param min the lower index that a range of invalidated items
-	 * @param max the higher index that a range of invalidated items
-	 */
 	public void syncModel(int offset, int limit) {
 		_listbox.setAttribute(Listbox.SYNCING_MODEL, Boolean.TRUE);
 		try {

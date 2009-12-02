@@ -64,7 +64,7 @@ public interface DataLoader {
 	
 	/** Synchronizes the owner component to be consistent with the specified model.
 	 * 
-	 * @param offset the lower index of the range to do data synchronize.
+	 * @param offset the starting index of the range to do data synchronize.
 	 * @param limit the size of the range to do data synchronize. -1 means the current range.
 	 */
 	public void syncModel(int offset, int limit);
