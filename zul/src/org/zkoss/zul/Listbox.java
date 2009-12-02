@@ -1770,8 +1770,9 @@ public class Listbox extends XulElement implements Paginated,
 					}
 					final int[] g = (int[]) _groupsInfo
 							.get(getGroupCount() - 1);
+					
 					g[2] = ((Listitem) getItems().get(
-							getItems().size() - (isReorder ? 2 : 1)))
+							getItems().size() - 1))
 							.getIndex();
 				} else if (refChild instanceof Listitem) {
 					final int idx = ((Listitem) refChild).getIndex();
