@@ -223,7 +223,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		}
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (isDynamic()) {
+		if (isDynamic() && _content != null) {
 			super.redraw(out);
 			return;	
 		}

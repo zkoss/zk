@@ -15,6 +15,7 @@ ZK 3.6.4
   2904688: SimpleTreeNode is not serializable
   2904376: window in a pop window cannot be resized correctly
   2905901: Problem with datebox format
+  2907228: Exception in server console while style has no content
 
 * Upgrade Notes:
 
