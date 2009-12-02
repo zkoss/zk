@@ -80,7 +80,7 @@ public interface HiLoModel extends ChartModel {
 	public Number getVolume(int index);
 
 	/**
-	 * Add an (date, open, high, low, close, volumn) tuple.
+	 * Append an (date, open, high, low, close, volumn) tuple.
 	 * @param date the date
 	 * @param open the open value in the date.
 	 * @param high the high value in the date.
@@ -91,6 +91,32 @@ public interface HiLoModel extends ChartModel {
 	 */	
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volumn);
 
+	/**
+	 * Add an (date, open, high, low, close, volumn) tuple at specified index.
+	 * @param date the date
+	 * @param open the open value in the date.
+	 * @param high the high value in the date.
+	 * @param low the low value in the date.
+	 * @param close the close value in the date.
+	 * @param volumn the trading volumn in the date.
+	 * @param index the data index
+	 * @since 5.0.0
+	 */	
+	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volumn, int index);
+	
+	/**
+	 * Replace an (date, open, high, low, close, volumn) tuple at specified index.
+	 * @param date the date
+	 * @param open the open value in the date.
+	 * @param high the high value in the date.
+	 * @param low the low value in the date.
+	 * @param close the close value in the date.
+	 * @param volumn the trading volumn in the date.
+	 * @param index the data index
+	 * @since 5.0.0 
+	 */	
+	public void setValue(Date date, Number open, Number high, Number low, Number close, Number volumn, int index);
+	
 	/**
 	 * Remove (date, open, high, low, close, volumn) tuple of a data index.
 	 * @param index the data index.

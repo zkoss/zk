@@ -58,13 +58,33 @@ public interface XYModel extends ChartModel {
 	public Number getY(Comparable series, int index);
 
 	/**
-	 * Add an (x,y) into a series.
+	 * Replace the value of the new (x,y) into a series at specified index.
+	 * @param series the series
+	 * @param x the x value
+	 * @param y the y value
+	 * @param index the data index
+	 * @since 5.0.0
+	 */
+	public void setValue(Comparable series, Number x, Number y, int index);
+	
+	/**
+	 * Append an (x,y) into a series.
 	 * @param series the series.
 	 * @param x the x value.
 	 * @param y the y value.
 	 */	
 	public void addValue(Comparable series, Number x, Number y);
 
+	/**
+	 * Add an (x,y) into a series at specified index.
+	 * @param series the series.
+	 * @param x the x value.
+	 * @param y the y value.
+	 * @param index the data index.
+	 * @since 5.0.0
+	 */	
+	public void addValue(Comparable series, Number x, Number y, int index);
+	
 	/**
 	 * Set model to autosort on x value for each series.
 	 */

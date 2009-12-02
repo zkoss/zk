@@ -175,6 +175,12 @@ November, 2009
   + Encodes.URLEncoder is changed to allow the developer to encode in his
     own way. Furthermore, the configuration is by use of the library
     property called org.zkoss.web.servlet.http.URLEncoder.
+  + Two extra methods are added to org.zkoss.zul.XYModel for better control (insert and replace value
+    at a specified index) of the series value.
+  + Two extra methods are added to org.zkoss.zul.XYZModel for better control (insert and replace value
+    at a specified index) of the series value.
+  + Two extra methods are added to org.zkoss.zul.HiLoModel for better control (insert and replace value
+    at a specified index).
 
 	--------
 ZK 3.6.3

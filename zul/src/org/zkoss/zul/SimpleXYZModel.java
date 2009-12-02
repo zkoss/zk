@@ -45,7 +45,17 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	public void addValue(Comparable series, Number x, Number y) {
 		throw new UnsupportedOperationException("Use addValue(series, x, y, z) instead!");
 	}
-
+	/** Not supported since we need not only x, y, but also z information.
+	 */
+	public void addValue(Comparable series, Number x, Number y, int index) {
+		throw new UnsupportedOperationException("Use addValue(series, x, y, z, index) instead!");
+	}
+	/** Not supported since we need not only x, y, but also z information.
+	 */
+	public void setValue(Comparable series, Number x, Number y, int index) {
+		throw new UnsupportedOperationException("Use setValue(series, x, y, z, index) instead!");
+	}
+	
 	//-- XYZModel --//
 	public Number getZ(Comparable series, int index) {
 		final List xyzTuples = (List) _seriesMap.get(series);
@@ -57,14 +67,31 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	}
 
 	public void addValue(Comparable series, Number x, Number y, Number z) {
+		addValue(series, x, y, z, -1);
+	}
+	
+	public void setValue(Comparable series, Number x, Number y, Number z, int index) {
+		removeValue0(series, index);
+		addValue0(series, x, y, z, index);
+		fireEvent(ChartDataEvent.CHANGED, series, null);
+	}
+	
+	public void addValue(Comparable series, Number x, Number y, Number z, int index) {
+		addValue(series, x, y, z, index);
+		fireEvent(ChartDataEvent.CHANGED, series, null);
+	}
+	
+	private void addValue0(Comparable series, Number x, Number y, Number z, int index) {
 		List xyzTuples = (List) _seriesMap.get(series);
 		if (xyzTuples == null) {
 			xyzTuples = new ArrayList(13);
 			_seriesMap.put(series, xyzTuples);
 			_seriesList.add(series);
 		}
-		xyzTuples.add(new XYZTuple(x, y, z));
-		fireEvent(ChartDataEvent.CHANGED, series, null);
+		if (index >= 0)
+			xyzTuples.add(index, new XYZTuple(x, y, z));
+		else
+			xyzTuples.add(new XYZTuple(x, y, z));
 	}
 
 	//-- internal class --//

@@ -70,15 +70,32 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		return null;
 	}
 	
+	public void setValue(Comparable series, Number x, Number y, int index) {
+		removeValue0(series, index);
+		addValue0(series, x, y, index);
+		fireEvent(ChartDataEvent.CHANGED, series, null);
+	}
+	
 	public void addValue(Comparable series, Number x, Number y) {
+		addValue(series, x, y, -1);
+	}
+	
+	public void addValue(Comparable series, Number x, Number y, int index) {
+		addValue0(series, x, y, index);
+		fireEvent(ChartDataEvent.CHANGED, series, null);
+	}
+	
+	private void addValue0(Comparable series, Number x, Number y, int index) {
 		List xyPairs = (List) _seriesMap.get(series);
 		if (xyPairs == null) {
 			xyPairs = new ArrayList(13);
 			_seriesMap.put(series, xyPairs);
 			_seriesList.add(series);
 		}
-		xyPairs.add(new XYPair(x, y));
-		fireEvent(ChartDataEvent.CHANGED, series, null);
+		if (index >= 0)
+			xyPairs.add(index, new XYPair(x, y));
+		else
+			xyPairs.add(new XYPair(x, y));
 	}
 
 	public void setAutoSort(boolean auto) {
@@ -97,12 +114,16 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	}
 	
 	public void removeValue(Comparable series, int index) {
+		removeValue0(series, index);
+		fireEvent(ChartDataEvent.REMOVED, series, null);
+	}
+	
+	protected void removeValue0(Comparable series, int index) {
 		List xyPairs = (List) _seriesMap.get(series);
 		if (xyPairs == null) {
 			return;
 		}
 		xyPairs.remove(index);
-		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
 	public void clear() {
