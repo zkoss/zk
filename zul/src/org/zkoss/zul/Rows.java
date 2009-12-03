@@ -236,7 +236,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	}
 	public boolean insertBefore(Component child, Component refChild) {
 		final Grid grid = getGrid();
-		if (grid.isRod() && hasGroupsModel()) {
+		if (grid != null && grid.isRod() && hasGroupsModel()) {
 			if (_groupsInfo.isEmpty())
 				_groupsInfo = ((GroupsListModel)grid.getModel()).getGroupsInfo();
 			if (super.insertBefore(child, refChild)) {
