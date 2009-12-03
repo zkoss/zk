@@ -17,6 +17,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 <hbox>
 	<vbox>
+		<label value="Pie Chart" style="font-weight:bold"/>
 		<grid width="400px">
 			<columns>
 				<column label="category" width="150px" />
@@ -46,13 +47,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			</rows>
 		</grid>
 		<flashchart id="chart" width="400" height="300" type="pie">
-			<attribute name="onClick">
-				  String areaid = event.getArea();
-				  if (areaid != null) {
-				    Area area = self.getFellow(areaid);
-				    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
-				  }
-			</attribute>
 			<zscript>
 				void update(int rowIndex) {
 					Label lb = (Label) self.getFellow("c"+rowIndex);
@@ -68,9 +62,18 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		</flashchart>
 	</vbox>
 	<vbox>
-		<flashchart id="chart2" type="bar" />
-		<flashchart id="chart3" type="line" />
-		<flashchart id="chart4" type="column" />
+		<vbox>
+			<label value="Bar Chart" style="font-weight:bold"/>
+			<flashchart id="chart2" type="bar" />
+		</vbox>
+		<vbox>
+			<label value="Line Chart" style="font-weight:bold"/>
+			<flashchart id="chart3" type="line" />
+		</vbox>
+		<vbox>
+			<label value="Column Chart" style="font-weight:bold"/>
+			<flashchart id="chart4" type="column" />
+		</vbox>
 	</vbox>
 </hbox>
 <button label="change pie chart" onClick="updatePie()" />

@@ -33,7 +33,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_type = wgt._type,
 			_data = jq.evalJSON(wgt._jsonModel),
 			_dataProvider = [];
-		zk.log(_type);
 		_swf.setType(_type);
 		if (_type == "pie") {
 			_dataProvider = [{type: _type, dataProvider: _data}];
