@@ -115,12 +115,7 @@ zWatch = (function () {
 				o = _target(inf),
 				diff = bindLevel > o.bindLevel;
 			if (diff) break;//nor ancestor, nor this (&sibling)
-			if (p == o && _visible(name, o)) {
-				if (remove) infs.splice(j, 1);
-				found.unshift(inf);
-				break; //found this (and no descendant ahead)
-			}
-			if (_visibleChild(name, p, o)) {
+			if ((p == o && _visible(name, o)) || _visibleChild(name, p, o)) {
 				if (remove) infs.splice(j, 1);
 				found.unshift(inf); //parent first
 			}
