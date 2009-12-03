@@ -24,11 +24,11 @@ function (out) {
 	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
 	
 	if (!this._isStretchPack() && this._pack2) out.push(' valign="', zul.box.Box._toValign(this._pack2), '"');
-	out.push('><td style="width:100%');
-	//IE need to set height, or the table height will shrink to as high as inner table
+	out.push('><td id="', this.uuid, '-frame" style="width:100%');
+	//IE and Safari need to set height, or the table height will shrink to as high as inner table
 	//FF2 should not set this, or the td will stretch the parent table height.
 	//FF3 is OK to set or not set
-	if (zk.ie) out.push(';height:100%');
+	if (zk.ie || zk.safari) out.push(';height:100%');
 	out.push('"');
 	
 	var v = this.getAlign();

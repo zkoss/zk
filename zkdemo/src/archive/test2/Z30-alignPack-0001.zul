@@ -8,7 +8,7 @@
 			border: solid red 1px; }
 	</style>
 	<hbox sclass="hbox" id="hb" height="90px"
-		width="90px">
+		width="90px" pack="stretch">
 		<textbox height="30px" width="30px" />
 	</hbox>
 	<vbox>
@@ -44,7 +44,7 @@
 	<separator bar="true"/>
 	
 	<hbox sclass="hbox" id="hb2" height="90px"
-		width="270px">
+		width="270px" pack="stretch">
 		<textbox height="30px" width="30px" />
 		<textbox height="30px" width="30px" />
 		<textbox height="30px" width="30px" />

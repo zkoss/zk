@@ -18,18 +18,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_pack: 'start',
 
 	$define: {
-		align: [
-		    function(v) {
-		    	if (v == 'stretch')
-		    		this._bindAlign();
-		    	else
-		    		this._unbindAlign();
-		    	return v;
-		    },
+		align: 
 		    _zkf = function () {
 		    	this.rerender(); //TODO: a better algoithm
-		    }
-		],
+		    },
 		pack: _zkf,
 		spacing: _zkf
 	},
@@ -367,6 +359,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//implies pack='stretch'
 		return this._splitterKid || this._stretchPack;
 	},
+	_isStretchAlign: function() {
+		return this._align == 'stretch';
+	},
 	//called by Splitter
 	_bindWatch: function () {
 		if (!this._watchBound) {
@@ -374,17 +369,24 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zWatch.listen({onSize: this, onShow: this, onHide: this});
 		}
 	},
+	_unbindWatch: function() {
+		if (this._watchBound) {
+			zWatch.unlisten({onSize: this, onShow: this, onHide: this});
+			delete this._watchBound;
+		}
+	},
 	bind_: function() {
 		this.$supers('bind_', arguments);
-		if (this._align == 'stretch')
+		this._bindFixTd();
+		if (this._isStretchAlign())
 			this._bindAlign();
+		if (this._splitterKid)
+			this._bindWatch();
 	},
 	unbind_: function () {
-		if (this._watchBound) {
-			this._watchBound = false;
-			zWatch.unlisten({onSize: this, onShow: this, onHide: this});
-		}
+		this._unbindWatch();
 		this._unbindAlign();
+		this._unbindFixTd();
 		this.$supers('unbind_', arguments);
 	},
 	_bindAlign: function() {
@@ -394,28 +396,62 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 	},
 	_unbindAlign: function() {
-		if (!this._watchAlign) {
+		if (this._watchAlign) {
 			zWatch.unlisten({onSize: [this, this._fixAlign], onShow: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 			delete this._watchAlign;
 		}
 	},
 	_fixAlign: function () {
-		if (this._align == 'stretch') {
+		if (this._isStretchAlign()) {
 			var vert = this.isVertical(),
-				tdsz = 0;
+				td = this.$n('frame'),
+				zktd = zk(td),
+				tdsz = vert ? zktd.revisedWidth(td.offsetWidth) : zktd.revisedHeight(td.offsetHeight);
+			
 			for(var child = this.firstChild; child; child = child.nextSibling) {
 				if (child.isVisible()) {
 					var c = child.$n();
-					if (!tdsz) {
-						var td = c.parentNode;
-						tdsz = vert ? zk(td).revisedWidth(td.offsetWidth) : zk(td).revisedHeight(td.offsetHeight);
-					}
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, true) + 'px';
 					else
 						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), true) + 'px';
 				}
 			}
+		}
+	},
+	_bindFixTd: function() {
+		if (!this._watchTd) {
+			this._watchTd = true;
+			zWatch.listen({onSize: [this, this._fixTd], onShow: [this, this._fixTd], onHide: [this, this._fixTd]});
+		}
+	},
+	_unbindFixTd: function() {
+		if (this._watchTd) {
+			zWatch.unlisten({onSize: [this, this._fixTd], onShow: [this, this._fixTd], onHide: [this, this._fixTd]});
+			delete this._watchTd;
+		}
+	},
+	_fixTd: function() {
+		//when align is stretched must release the children, then must "shrink td" manually
+		var vert = this.isVertical();
+		if (this._isStretchAlign()) {
+			for(var child = this.firstChild; child; child = child.nextSibling) {
+				if (child.isVisible()) {
+					var c = child.$n();
+					if (vert)
+						c.style.width= ''; //release the height of children so td can shrink
+					else
+						c.style.height= ''; //release the height of children so td can shrink
+				}
+			}
+		}
+		//Safari/chrome will not extend the height of td to tr (B30-2088496.zul)
+		if (zk.safari && !vert) {
+			var td = this.$n('frame');
+			td.style.height = '';
+			
+			var	hgh = td.offsetHeight;
+			td.style.height = hgh+'px';
 		}
 	},
 	_configPack: function() {
@@ -436,7 +472,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function () {
 		if (!this._splitterKid) return; //only when there are splitter kids
-
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 		
@@ -458,7 +493,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 */
-		//Note: we have to assign width/height fisrt
+		//Note: we have to assign width/height first
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")
 

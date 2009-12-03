@@ -27,7 +27,7 @@ function (out) {
 	if (v && v != 'stretch') out.push(' valign="', zul.box.Box._toValign(v), '"');
 	//IE && FF2 need to set height, or the table height will shrink to as high as inner table.
 	//FF3 is OK to set or not set
-	out.push('><td style="width:100%;height:100%"');
+	out.push('><td id="', this.uuid, '-frame" style="width:100%;height:100%"');
 	
 	if (!this._isStretchPack() && this._pack2) out.push(' align="', zul.box.Box._toHalign(this._pack2), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');

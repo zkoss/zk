@@ -123,7 +123,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		var box = this.parent;
-		if (box) box._bindWatch();
+		if (box && !box._splitterKid) box._bindWatch();
 
 		zWatch.listen({onSize: this, beforeSize: this, onShow: this});
 
