@@ -77,7 +77,7 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	}
 	
 	public void addValue(Comparable series, Number x, Number y, Number z, int index) {
-		addValue(series, x, y, z, index);
+		addValue0(series, x, y, z, index);
 		fireEvent(ChartDataEvent.CHANGED, series, null);
 	}
 	
