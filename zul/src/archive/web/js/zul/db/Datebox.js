@@ -296,7 +296,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		
 
 		if (pp && this._dtzones) {
-			var html = ['<div class="', this.getZclass(), '-timezone>"'];
+			var html = ['<div class="', this.getZclass(), '-timezone">'];
 			if (this._dtzones) html.push(this.getTimeZoneLabel());
 			html.push('<select id="', this.uuid, '-dtzones" class="', this.getZclass(), '-timezone-body">'); 
 			if (pp && this._dtzones) {
