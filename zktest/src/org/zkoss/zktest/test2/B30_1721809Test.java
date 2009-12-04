@@ -16,11 +16,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
-
-import java.util.List;
-
-import org.junit.Before;
 import org.junit.Test;
+import org.zkoss.zktest.ZKClientTestCase;
 
 import com.thoughtworks.selenium.Selenium;
 
@@ -28,19 +25,10 @@ import com.thoughtworks.selenium.Selenium;
  * @author jumperchen
  *
  */
-public class B30_1721809Test extends ZKTestCase {
-
-	private String _target = "B30-1721809.zul";
-	private List<Selenium> _browsers;
-	private String _url;
+public class B30_1721809Test extends ZKClientTestCase {
 	
-	/**
-	 */
-	@Override
-	@Before
-	public void setUp() {
-		_browsers = getBrowsers(_target);
-		_url = getUrl(_target);
+	public B30_1721809Test() {
+		target = "B30-1721809.zul";
 	}
 	
 	@Test(expected = AssertionError.class)
@@ -48,28 +36,20 @@ public class B30_1721809Test extends ZKTestCase {
 
 		String comp1 = uuid(4);
 		String comp2 = uuid(6);
-		try {
-			for (Selenium browser : _browsers) {
-				try {
-//					new ZSelenium(browser).open()
-					browser.start();
-					browser.open(_url);
-					Thread.sleep(2000);
-
-					browser.click(comp1);
-					Thread.sleep(1000);
-					
-					assertEquals(browser.getText(comp2), "click");
-					browser.click(comp1);
-					Thread.sleep(1000);
-					assertEquals(browser.getText(comp2), "click click");
-				} finally {
-					browser.stop();
-				}
+		
+		for (Selenium browser : browsers) {
+			try {
+				start(browser);
+				
+				click(comp1);
+				assertEquals(getText(comp2), "click");
+				
+				click(comp1);
+				assertEquals(getText(comp2), "click click");
+				
+			} finally {
+				stop();
 			}
-		} catch (Exception e) {
-			fail(e.getMessage());
 		}
-
 	}
 }

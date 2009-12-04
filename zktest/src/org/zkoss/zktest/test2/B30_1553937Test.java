@@ -15,61 +15,41 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
-*/
+ */
 package org.zkoss.zktest.test2;
 
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.zkoss.zktest.ZKClientTestCase;
 
 import com.thoughtworks.selenium.Selenium;
 
 /**
  * @author sam
- *
+ * 
  */
-public class B30_1553937Test extends ZKTestCase{
-	
-	private String _target = "B30-1553937.zul";
-	private List<Selenium> _browsers;
-	private String _url;
-	
-	@Override
-	@Before
-	public void setUp(){
-		
-		_browsers = getBrowsers(_target);
-		_url = getUrl(_target);
-	}			
-	
-	@Test(expected=AssertionError.class)
-	public void test1(){
-		
+public class B30_1553937Test extends ZKClientTestCase {
+
+	public B30_1553937Test() {
+		target = "B30-1553937.zul";
+	}
+
+	@Test(expected = AssertionError.class)
+	public void test1() {
+
 		String comp1 = uuid(4);
 		String comp2 = uuid(7);
-		for(Selenium browser : _browsers){	
-			try{
-				browser.start();
-				browser.open(_url);
-				int comp1Top = browser.getElementPositionTop(comp1).intValue();
-				int comp2Top = browser.getElementPositionTop(comp2).intValue();
-				//	comp2 should beside comp1
-				assertTrue( Math.abs(comp1Top - comp2Top) < 10 );
-						
-				browser.close();
-				
-			}finally{
-				browser.stop();
-			}	
+		for (Selenium browser : browsers) {
+			try {
+				start(browser);
+
+				int comp1Top = getElementPositionTop(comp1).intValue();
+				int comp2Top = getElementPositionTop(comp2).intValue();
+				// comp2 should beside comp1
+				assertTrue(Math.abs(comp1Top - comp2Top) < 10);
+
+			} finally {
+				stop();
+			}
 		}
 	}
-	
-	@Override
-	@After
-	public void tearDown(){
-
-	}
-	
 }

@@ -11,54 +11,41 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
-*/
+ */
 package org.zkoss.zktest.test2;
 
-import java.util.List;
-
-import org.junit.Before;
 import org.junit.Test;
+import org.zkoss.zktest.ZKClientTestCase;
 
 import com.thoughtworks.selenium.Selenium;
+
 /**
  * 
  * @author sam
- *
+ * 
  */
-public class B30_1455584Test extends ZKTestCase{
+public class B30_1455584Test extends ZKClientTestCase {
 
-	private String _target="B30-1455584.zul";
-	private List<Selenium> _browsers;
-	private String _url;
-	
-	
-	@Override
-	@Before
-	public void setUp(){
-		_browsers = getBrowsers(_target);
-		_url = getUrl(_target);
+	public B30_1455584Test() {
+		target = "B30-1455584.zul";
 	}
 
-	@Test(expected=AssertionError.class)
-	public void test1(){
-		String testComp= uuid(4);
-		for(Selenium browser : _browsers){
-				browser.start();
-				try{	
-					browser.open(_url);
-					String strClickBefor = browser.getText(testComp);
-						
-					browser.focus(testComp);
-					browser.click(testComp);
-						
-					String strClickAfter = browser.getText(testComp);
-					assertNotEquals(strClickBefor, strClickAfter);
-						
-					browser.close();
-				}finally{
-					browser.stop();
-				}
+	@Test(expected = AssertionError.class)
+	public void test1() {
+		String testComp = uuid(4);
+		for (Selenium browser : browsers) {
+			try {
+				start(browser);
+				
+				String strClickBefor = getText(testComp);
+				focus(testComp);
+				click(testComp);
+
+				assertNotEquals(strClickBefor, getText(testComp));				
+			} finally {
+				stop();
+			}
 		}
 	}
-	
+
 }
