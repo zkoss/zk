@@ -67,4 +67,21 @@ public class ZKClientTestCase extends ZKTestCase {
 	protected Jquery jq(String uuid, boolean sharp) {
 		return new Jquery((sharp ? "#" : "") + uuid);
 	}
+	
+	/**
+	 * Returns the ZK object of the ZKClientObject.
+	 * @param el the ZKClientObject
+	 */
+	protected ZK zk(ClientWidget el) {
+		return new ZK(el);
+	}
+	
+	/**
+	 * Returns the ZK object of the UUID
+	 * @param uuid the UUID of the element
+	 */
+	protected ZK zk(String uuid) {
+		return new ZK(uuid);
+	}
+	
 }

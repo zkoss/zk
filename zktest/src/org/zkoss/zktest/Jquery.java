@@ -44,4 +44,7 @@ public class Jquery extends ClientWidget {
 	public boolean hasClass(String className) {
 		return Boolean.valueOf((ZKTestCase.getCurrent().getEval(_out.toString() + ".hasClass('" + className + "')")));
 	}
+	public ZK zk() {
+		return new ZK(_out, ".zk");
+	}
 }

@@ -42,6 +42,12 @@ public class Widget extends ClientWidget {
 		_out = new StringBuffer(out).append(script);
 	}
 	
+	public void set(String name, boolean value) {
+		ZKTestCase.getCurrent().getEval(_out.toString() + toUpperCase(".set", name) + "(" + value + ")");
+	}
+	public void set(String name, int value) {
+		ZKTestCase.getCurrent().getEval(_out.toString() + toUpperCase(".set", name) + "(" + value + ")");
+	}
 	public void set(String name, String value) {
 		ZKTestCase.getCurrent().getEval(_out.toString() + toUpperCase(".set", name) + "('" + value + "')");
 	}
@@ -66,6 +72,12 @@ public class Widget extends ClientWidget {
 	}
 	public Widget firstChild() {
 		return new Widget(_out, ".firstChild");
+	}
+	public Widget nextSibling() {
+		return new Widget(_out, ".nextSibling");
+	}
+	public Widget previousSibling() {
+		return new Widget(_out, ".previousSibling");
 	}
 	public Element $n() {
 		return new Element(_out + ".$n()");
