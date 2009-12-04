@@ -185,7 +185,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 				max += $n.padBorderWidth();
 				this.$class._aftersizing({control: this, _zszofs: max + (this.isSortable_() ? 20 : 0)}, evt);
-			}
+			} else
+				this.$supers('doDoubleClick_', arguments);
 		} else
 			this.$supers('doDoubleClick_', arguments);
 	},

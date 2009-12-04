@@ -49,10 +49,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		style="border: 1px solid gray" />
 	<separator bar="true" />
 	<hbox>
-	<fileupload id = "fupload"/>
-	<button label="show data in iframe">
-		<attribute name="onClick">{
-		Object media = fupload.getMedia().iterator().next();
+	<button upload="true" label="show data in iframe">
+		<attribute name="onUpload">{
+		Object media =  event.getMedia();
 		if (media != null)
 			iframe.setContent(media);
 		}</attribute>

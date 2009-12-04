@@ -43,14 +43,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	
 	<audio id="audio" height="40" />
 	<separator />
-	<fileupload id="fileupload" label="Upload"/>
+	<fileupload id="fileupload" label="Upload">
+		<attribute name="onUpload">
+			Object media = event.getMedia();
+		</attribute>
+	</fileupload>
 	<separator />
 	<button label="Play">
 	<attribute name="onClick">{
 		import org.zkoss.util.media.Media;
 		try{
-			List list = fileupload.getMedia();
-			Object media = list.get(list.size()-1);
 			if (media instanceof org.zkoss.sound.Audio)
 				audio.setContent(media);
 			else if (media != null)
