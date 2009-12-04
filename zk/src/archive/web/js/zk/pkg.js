@@ -26,21 +26,24 @@ zk.copy(zk, (function() {
 	if (!zk.ie) _loaded['zk.canvas'] = true;
 	var _loading = zk.copy({}, _loaded); //loading (include loaded)
 
-	function doLoad(pkg, dt) {
-		if (!pkg || _loading[pkg])
-			return !zk.loading && !_loadedsemis.length;
-			//since pkg might be loading (-> return false)
-
+	//We don't use e.onload since Safari doesn't support t
+	//See also Bug 1815074
+	function markLoading(nm) {
+		//loading
 		_loading[pkg] = true;
-
-		//We don't use e.onload since Safari doesn't support t
-		//See also Bug 1815074
 
 		_xloadings.push(pkg);
 		if (updCnt() == 1) {
 			zk.disableESC();
 			setTimeout(prgbox, 380);
 		}
+	}
+	function doLoad(pkg, dt) {
+		if (!pkg || _loading[pkg])
+			return !zk.loading && !_loadedsemis.length;
+			//since pkg might be loading (-> return false)
+
+		markLoading(pkg);
 
 		var modver = pkg.indexOf('.');
 		if (modver) modver = zk.getVersion(pkg.substring(0, modver));
@@ -74,6 +77,7 @@ zk.copy(zk, (function() {
 			fn();
 		}
 	}
+
 	function loadmsg() {
 		var msg = '';
 		for (var j = _xloadings.length, k = 0; --j >=0;) {
@@ -112,7 +116,7 @@ zk.copy(zk, (function() {
 	}
 
   return { //internal utility
-	setLoaded: function (pkg, wait) {
+	setLoaded: _zkf = function (pkg, wait) {
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
@@ -146,6 +150,12 @@ zk.copy(zk, (function() {
 			doEnd(_afterLoads, 1);
 		}
 	},
+	/** Notify ZK that the name of the JavaScript file is loaded.
+	 * @param _.String name the name of the JavaScript file.
+	 * It must be the same as the one passed to {@link #loadScript}.
+	 */
+	setScriptLoaded: _zkf,
+
 	isLoaded: function (pkg, loading) {
 		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
@@ -166,6 +176,28 @@ zk.copy(zk, (function() {
 				loading = true;
 		}
 		return !loading;
+	},
+
+	/** Loads a JavaScript file.
+	 * @param _.String src the URL of the JavaScript file.
+	 * @param _.String name the name to shown up in the progressing dialog.
+	 * Specify a non-empty string if you want ZK not to create widgets until
+	 * this file is loaded. Ignored if not specified or null.
+	 * If you specify a name here, you have to call {@link #setScriptLoaded}
+	 * when the script is loaded. Otherwise, @{link _.zk#loading} won't be zero
+	 * and ZK Client Engine is halted.
+	 * @param _.String charset the charset. UTF-8 is assumed if null.
+	 */
+	loadScript: function (src, name, charset) {
+		if (name)
+			markLoading(name);
+
+		var e = document.createElement("SCRIPT");
+		e.type = "text/javascript";
+		e.charset = charset || "UTF-8";
+		e.src = src;
+		document.getElementsByTagName("HEAD")[0].appendChild(e);
+		return this;
 	},
 
 	getVersion: function (pkg) {

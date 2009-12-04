@@ -1035,14 +1035,6 @@ zk.copy(jq, { //ZK extension to jq
 		return map;
 	},
 
-	appendScript: function (src, charset) {
-		var e = document.createElement("SCRIPT");
-		e.type = "text/javascript";
-		e.charset = charset || "UTF-8";
-		e.src = src;
-		document.getElementsByTagName("HEAD")[0].appendChild(e);
-		return this;
-	},
 	newFrame: function (id, src, style) {
 		if (!src) src = zjq._src0;
 			//IE: prevent secure/nonsecure warning with HTTPS

@@ -52,7 +52,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		}
 		if (this._src && !this._srcrun) {
 			this._srcrun = true; //run only once
-			jq.appendScript(this._src, this._charset);
+			zk.loadScript(this._src, null, this._charset);
 		}
 	},
 
