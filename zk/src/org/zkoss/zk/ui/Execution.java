@@ -55,10 +55,14 @@ import org.zkoss.zk.au.AuResponse;
  * @see Page
  */
 public interface Execution extends Scope {
-	/** Returns the desktop for this execution.
+	/** Returns the desktop associated with this execution.
 	 * Each execution is against exactly one desktop.
 	 */
 	public Desktop getDesktop();
+	/** Returns the session this execution belongs to.
+	 * @since 5.0.0
+	 */
+	public Session getSession();
 
 	/** Returns whether this execution is asynchronous updating the
 	 * specified page (thru ZK Update Engine).

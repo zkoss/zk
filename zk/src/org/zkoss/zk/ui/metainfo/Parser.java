@@ -277,7 +277,11 @@ public class Parser {
 			parseXelMethod(pgdef, pi, params);
 		} else if ("link".equals(target) || "meta".equals(target)
 		|| "script".equals(target)) { //declare a header element
-			pgdef.addHeaderInfo(new HeaderInfo(target, params));
+			final String ifc = (String)params.remove("if");
+			final String unless = (String)params.remove("unless");
+			pgdef.addHeaderInfo(new HeaderInfo(
+				pgdef.getEvaluatorRef(), target, params,
+				ConditionImpl.getInstance(ifc, unless)));
 		} else if ("root-attributes".equals(target)) {
 			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();

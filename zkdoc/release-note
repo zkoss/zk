@@ -51,6 +51,7 @@ November, 2009
   1481860: add onBlur/onFocus event to Tree
   1831148: Support of ColorChooser
   2904894: Add new Flash Chart component
+  2908598: The script directive supports the if/unless attribute
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

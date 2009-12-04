@@ -29,6 +29,8 @@ import java.io.IOException;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -93,6 +95,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public Desktop getDesktop() {
 		return _desktop;
+	}
+	public Session getSession() {
+		return _desktop != null ? _desktop.getSession(): Sessions.getCurrent();
 	}
 
 	public void postEvent(Event evt) {

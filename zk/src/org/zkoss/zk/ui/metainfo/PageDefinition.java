@@ -449,8 +449,11 @@ public class PageDefinition extends NodeInfo {
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator it = defs.iterator(); it.hasNext();)
-			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
+		for (Iterator it = defs.iterator(); it.hasNext();) {
+			final HeaderInfo hi = (HeaderInfo)it.next();
+			if (hi.isEffective(page))
+				sb.append(hi.toHTML(page)).append('\n');
+		}
 		return sb.toString();
 	}
 	/** Converts all header definitions (added by {@link #addHeaderInfo}) to

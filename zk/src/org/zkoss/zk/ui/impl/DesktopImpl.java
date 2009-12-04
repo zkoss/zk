@@ -686,7 +686,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//-- Object --//
 	public String toString() {
-		return "[Desktop "+_id+']';
+		return "[Desktop "+_id+':'+_path+']';
 	}
 
 	public void sessionWillPassivate(Session sess) {

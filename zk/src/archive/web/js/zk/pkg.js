@@ -30,9 +30,9 @@ zk.copy(zk, (function() {
 	//See also Bug 1815074
 	function markLoading(nm) {
 		//loading
-		_loading[pkg] = true;
+		_loading[nm] = true;
 
-		_xloadings.push(pkg);
+		_xloadings.push(nm);
 		if (updCnt() == 1) {
 			zk.disableESC();
 			setTimeout(prgbox, 380);
