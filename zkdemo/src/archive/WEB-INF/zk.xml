@@ -464,6 +464,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</listener-class>
 	</listener>
 
+	<!-- [Enterprise Edition]
+		Turn on if you want to enable the render-on-demand feature for grid.
+		It improves the performance for huge grid.
+	<library-property>
+		<name>org.zkoss.zul.grid.rod</name>
+		<value>true</value>
+	</library-property>
+	-->
+	<!-- [Enterprise Edition]
+		Turn on if you want to enable the render-on-demand feature for listbox.
+		It improves the performance for huge listbox.
+	<library-property>
+		<name>org.zkoss.zul.listbox.rod</name>
+		<value>true</value>
+	</library-property>
+	-->
+
 	<!-- Turn on if you want to debug by copying JavaScript files directly
 		to classpath
 	<desktop-config>
@@ -476,11 +493,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
-	
-	<!-- 
-	<library-property>
-		<name>org.zkoss.zul.grid.rod</name>
-		<value>true</value>
-	</library-property>
-	 -->
 </zk>
