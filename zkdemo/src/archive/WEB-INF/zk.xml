@@ -100,6 +100,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- [Enterprise Edition]
+		Turn on if you want to enable the render-on-demand feature for grid.
+		It improves the performance for huge grid.
+	<library-property>
+		<name>org.zkoss.zul.grid.rod</name>
+		<value>true</value>
+	</library-property>
+	-->
+	<!-- [Enterprise Edition]
+		Turn on if you want to enable the render-on-demand feature for listbox.
+		It improves the performance for huge listbox.
+	<library-property>
+		<name>org.zkoss.zul.listbox.rod</name>
+		<value>true</value>
+	</library-property>
+	-->
+
+	<!-- [Enterprise Edition]
 		Turn on if you want to block the requests sent from inaccessible
 		widgets (such as invisible or disabled).
 		It is used to protect your application from the attack that
@@ -119,6 +136,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>onClick,onChange,onSelect</value>
 	</library-property>
 	-->
+
 	<!-- [Enterprise Edition]
 		Turn on if you want to make your Web application crawlable (indexed)
 		by search engines.
@@ -463,23 +481,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			org.zkoss.zkdemo.userguide.DemoWebAppInit
 		</listener-class>
 	</listener>
-
-	<!-- [Enterprise Edition]
-		Turn on if you want to enable the render-on-demand feature for grid.
-		It improves the performance for huge grid.
-	<library-property>
-		<name>org.zkoss.zul.grid.rod</name>
-		<value>true</value>
-	</library-property>
-	-->
-	<!-- [Enterprise Edition]
-		Turn on if you want to enable the render-on-demand feature for listbox.
-		It improves the performance for huge listbox.
-	<library-property>
-		<name>org.zkoss.zul.listbox.rod</name>
-		<value>true</value>
-	</library-property>
-	-->
 
 	<!-- Turn on if you want to debug by copying JavaScript files directly
 		to classpath
