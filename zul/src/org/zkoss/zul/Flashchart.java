@@ -54,6 +54,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * Declares attributes.
 	 */
 	private String _type = "pie";
+	private String _chartStyle;
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
 	private LinkedList _seriesList;
@@ -82,8 +83,10 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		render(renderer, "type", _type.split(":")[0]);
+		if(_chartStyle != null)
+			render(renderer, "chartStyle", _chartStyle);
 		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
-		if("stackbar".equals(_type) || _type.startsWith("stackcolumn"))
+		if(_type.startsWith("stackbar") || _type.startsWith("stackcolumn"))
 			render(renderer, "jsonSeries", getJSONResponse(_seriesList));
 	}
 	/**
@@ -134,7 +137,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Only used for StackColumnChart
 	 */
 	public void setXAxis(String xAxis) {
-		this._xAxis = xAxis;
+		_xAxis = xAxis;
 	}
 	/**
 	 * Returns the name of X-Axis
@@ -147,7 +150,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Only used for StackColumnChart
 	 */
 	public void setYAxis(String yAxis) {
-		this._yAxis = yAxis;
+		_yAxis = yAxis;
 	}
 	/**
 	 * Returns the name of Y-Axis
@@ -155,6 +158,22 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	public String getYAxis() {
 		return _yAxis;
 	}
+	/**
+	 * Sets the style of swf
+	 * <p>Default format: "Category-Attribute=Value", ex."legend-display=right"
+	 */
+	public void setChartStyle(String chartStyle) {
+		if (!Objects.equals(_chartStyle, chartStyle)) {
+			_chartStyle = chartStyle;
+			smartUpdate("chartStyle", _chartStyle);
+		}
+	}
+	/**
+	 * Returns the swf style
+	 */
+	public String getChartStyle() {
+		return _chartStyle;
+	}	
 	private List transferToJSONObject(ChartModel model){
 		LinkedList list = new LinkedList();
 
@@ -183,7 +202,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					}
 					list.add(json);
 				}
-			} else if("stackbar".equals(_type)){		//Draw StackedBarChart
+			} else if(_type.startsWith("stackbar")){		//Draw StackedBarChart
 				_seriesList = new LinkedList();
 				CategoryModel tempModel = (CategoryModel)model;
 				for(int i = 0; i < tempModel.getCategories().size(); i++){
@@ -238,9 +257,6 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	    final StringBuffer sb = new StringBuffer().append('[');
 	    for (Iterator it = list.iterator(); it.hasNext();) {
 	    	String s = String.valueOf(it.next());
-	    	if("stackbar".equals(_type)){
-		    	s.replace("\\", "");
-	    	}
             sb.append(s).append(',');
 	    }
 	    sb.deleteCharAt(sb.length() - 1);

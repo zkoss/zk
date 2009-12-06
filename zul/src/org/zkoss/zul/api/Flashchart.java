@@ -16,6 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.api;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.ChartModel;
 
 /**
@@ -64,4 +65,12 @@ public interface Flashchart extends Flash {
 	 * Returns the name of Y-Axis
 	 */
 	public String getYAxis();
+	/**
+	 * Sets the style of swf
+	 */
+	public void setChartStyle(String chartStyle);
+	/**
+	 * Returns the swf style
+	 */
+	public String getChartStyle();
 }
