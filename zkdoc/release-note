@@ -52,6 +52,7 @@ November, 2009
   1831148: Support of ColorChooser
   2904894: Add new Flash Chart component
   2908598: The script directive supports the if/unless attribute
+  2909551: ZK Client engine support Google AJAX API loader
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
