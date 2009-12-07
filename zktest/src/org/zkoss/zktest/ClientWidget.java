@@ -41,8 +41,22 @@ public abstract class ClientWidget {
 		return key + new String(buf);
 	}
 	
-	public String eval(String name) {
-		return ZKTestCase.getCurrent().getEval(_out.toString() + "." + name);
+	/**
+	 * Returns the result of the evaluation, if any.
+	 * @param script the JavaScript code
+	 * @see #eval(String, boolean)
+	 */
+	public String eval(String script) {
+		return eval(script, true);
+	}
+	
+	/**
+	 * Returns the result of the evaluation, if any.
+	 * @param script The JavaScript code
+	 * @param withDot if true, the dot '.' is added before the script.
+	 */
+	public String eval(String script, boolean withDot) {
+		return ZKTestCase.getCurrent().getEval(_out.toString() + (withDot ? "." : "") + script);
 	}
 	
 	public String toString() {
