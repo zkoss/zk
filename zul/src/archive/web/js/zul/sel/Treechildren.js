@@ -46,8 +46,16 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	getCaveNode: function () {
 		for (var cn, w = this.lastChild; w; w = w.previousSibling)
-			if ((cn = w.getCaveNode()))
-				return cn;
+			if ((cn = w.getCaveNode())) {
+				
+				// Bug 2909820
+				if (w.treechildren) {
+					var _cn  = w.treechildren.getCaveNode();
+					if (_cn)
+						cn = _cn;
+				}
+				return cn;	
+			}
 	},
 	isVisible: function () {
 		if (!this.$supers('isVisible', arguments))
