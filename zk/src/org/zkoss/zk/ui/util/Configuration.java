@@ -95,8 +95,8 @@ public class Configuration {
 		_dtInits = new FastReadArray(Class.class),
 		_dtCleans = new FastReadArray(Class.class),
 		_execInits = new FastReadArray(Class.class),
-		_execCleans = new FastReadArray(Class.class);
-	private FastReadArray _uiCycles = new FastReadArray(UiLifeCycle.class);
+		_execCleans = new FastReadArray(Class.class),
+		_uiCycles = new FastReadArray(UiLifeCycle.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final FastReadArray
@@ -115,6 +115,7 @@ public class Configuration {
 	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
+	private DesktopRecycle _dtRcycle;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
@@ -170,6 +171,10 @@ public class Configuration {
 
 	/** Adds a listener class.
 	 *
+	 * <p>Notice that there is only one listener allowed for the following classes:
+	 * {@link Monitor}, {@link PerformanceMeter}, and {@link DesktopRecycle}.
+	 * On the other hand, any number listeners are allowed for other classes.
+	 *
 	 * @param klass the listener class must implement at least one of
 	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
 	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
@@ -177,7 +182,8 @@ public class Configuration {
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
-	 * {@link UiLifeCycle}, and/or {@link EventInterceptor} interfaces.
+	 * {@link UiLifeCycle}, {@link DesktopRecycle},
+	 * and/or {@link EventInterceptor} interfaces.
 	 * @see Desktop#addListener
 	 */
 	public void addListener(Class klass) throws Exception {
@@ -194,6 +200,12 @@ public class Configuration {
 			if (_pfmeter != null)
 				throw new UiException("PerformanceMeter listener can be assigned only once");
 			_pfmeter = (PerformanceMeter)(listener = getInstance(klass, listener));
+			added = true;
+		}
+		if (DesktopRecycle.class.isAssignableFrom(klass)) {
+			if (_dtRcycle != null)
+				throw new UiException("PerformanceMeter listener can be assigned only once");
+			_dtRcycle = (DesktopRecycle)(listener = getInstance(klass, listener));
 			added = true;
 		}
 
@@ -299,6 +311,8 @@ public class Configuration {
 			_monitor = null;
 		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
 			_pfmeter = null;
+		if (_dtRcycle != null && _dtRcycle.getClass().equals(klass))
+			_dtRcycle = null;
 
 		_evtInits.remove(klass);
 		_evtCleans.remove(klass);
@@ -1776,6 +1790,33 @@ public class Configuration {
 	public PerformanceMeter setPerformanceMeter(PerformanceMeter meter) {
 		final PerformanceMeter old = _pfmeter;
 		_pfmeter = meter;
+		return old;
+	}
+
+	/** Returns the desktop recycle for this application, or null if not set.
+	 * @since 5.0.0
+	 */
+	public DesktopRecycle getDesktopRecycle() {
+		return _dtRcycle;
+	}
+	/** Sets the desktop recycler for this application, or null to disable it.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>There is at most one desktop recycle for each Web application.
+	 * The previous instance will be replaced when this method is called.
+	 *
+	 * <p>In addition to call this method, you could specify
+	 * a desktop recycle in zk.xml
+	 *
+	 * @param dtRecycle the desktop recycle. If null, the recycle function
+	 * is disabled.
+	 * @return the previous desktop recycle, or null if not available.
+	 * @since 5.0.0
+	 */
+	public DesktopRecycle setDesktopRecycle(DesktopRecycle dtRcycle) {
+		final DesktopRecycle old = _dtRcycle;
+		_dtRcycle = dtRcycle;
 		return old;
 	}
 

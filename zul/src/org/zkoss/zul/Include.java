@@ -76,6 +76,11 @@ import org.zkoss.zul.mesg.MZul;
  * <li>The instant mode supports only ZUML pages.</li>
  * <li>The isntance mode doesn't support {@link #setProgressing} nor
  * {@link #setLocalized}</li>
+ * <li>The directives of the included page won't be included.
+ * It means &lt;?style?&gt; won't be evaluated.
+ * Thus, if you want to embed JavaScript files or codes in a page
+ * that might be included, it is better to use the script component
+ * ({@link Script}).</li>
  * </ul>
  *
  * <h3>The defer mode</h3>

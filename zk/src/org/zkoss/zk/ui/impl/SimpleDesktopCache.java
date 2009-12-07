@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -110,9 +111,11 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		}
 	}
 	private static void desktopDestroyed(Desktop desktop) {
+		final Session sess = desktop.getSession();
 		final WebApp wapp = desktop.getWebApp();
 		((DesktopCtrl)desktop).invokeDesktopCleanups();
-		wapp.getConfiguration().invokeDesktopCleanups(desktop);
+		final Configuration config = wapp.getConfiguration();
+		config.invokeDesktopCleanups(desktop);
 			//Feature 1767347: call DesktopCleanup before desktopDestroyed
 			//such that app dev has a chance to manipulate the desktop
 		((WebAppCtrl)wapp).getUiEngine().desktopDestroyed(desktop);
@@ -121,6 +124,15 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		if (monitor != null) {
 			try {
 				monitor.desktopDestroyed(desktop);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+
+		final DesktopRecycle dtrc = config.getDesktopRecycle();
+		if (dtrc != null) {
+			try {
+				dtrc.afterRemove(sess, desktop);
 			} catch (Throwable ex) {
 				log.error(ex);
 			}

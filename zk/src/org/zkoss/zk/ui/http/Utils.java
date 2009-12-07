@@ -16,6 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
@@ -27,16 +28,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.ext.Includer;
 
 /**
@@ -46,6 +56,8 @@ import org.zkoss.zk.ui.ext.Includer;
  * @since 2.4.1
  */
 /*package*/ class Utils {
+	private static Log log = Log.lookup(Utils.class);
+
 	/** Handles exception being thrown when rendering a page.
 	 * @param ex the exception being throw. If null, it means the page
 	 * is not found.
@@ -89,5 +101,48 @@ import org.zkoss.zk.ui.ext.Includer;
 			if (comp instanceof Includer)
 				((Includer)comp).setChildPage(null);
 		}
+	}
+
+	/*package*/ static Desktop beforeService(
+	DesktopRecycle dtrc, ServletContext ctx, Session sess,
+	HttpServletRequest request, HttpServletResponse response, String path) {
+		if (dtrc != null) {
+			final Execution olde = Executions.getCurrent();
+			final Session olds = Sessions.getCurrent();
+			final Execution exec = new TemporaryExecution(ctx, request, response, null);
+			SessionsCtrl.setCurrent(sess);
+			ExecutionsCtrl.setCurrent(exec);
+			try {
+				return dtrc.beforeService(exec, path);
+			} catch (Throwable ex) {
+				log.error(ex);
+			} finally {
+				ExecutionsCtrl.setCurrent(olde);
+				SessionsCtrl.setCurrent(olds);
+			}
+		}
+		return null;
+	}
+
+	/*package*/ static void afterService(DesktopRecycle dtrc, Desktop desktop) {
+		if (dtrc != null) {
+			try {
+				dtrc.afterService(desktop);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+	}
+
+	/** Returns the main page of the desktop.
+	 * It assumes there is at most one main page (that is, a page without owner)
+	 */
+	/*package*/ static Page getMainPage(Desktop desktop) {
+		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+			final Page page = (Page)it.next();
+			if (((PageCtrl)page).getOwner() == null)
+				return page;
+		}
+		return null;
 	}
 }

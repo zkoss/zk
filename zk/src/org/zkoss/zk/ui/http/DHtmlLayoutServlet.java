@@ -50,6 +50,8 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -177,42 +179,56 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final Configuration config = wapp.getConfiguration();
 
-		final Desktop desktop =
-			_webman.getDesktop(sess, request, response, path, true);
-		if (desktop == null) //forward or redirect
-			return true;
+		final boolean bInclude = Servlets.isIncluded(request);
+		final boolean compress = _compress && !bInclude;
+		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
+		final DesktopRecycle dtrc = bInclude ? null: config.getDesktopRecycle();
+		Desktop desktop = dtrc != null ?
+			Utils.beforeService(dtrc, _ctx, sess, request, response, path): null;
 
-		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(wapp, path));
-		sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
-		((SessionCtrl)sess).notifyClientRequest(true);
+		if (desktop != null) { //recycle
+			final Page page = Utils.getMainPage(desktop);
+			if (page != null) {
+				final Execution exec = new ExecutionImpl(
+					_ctx, request, response, desktop, page);
+				wappc.getUiEngine().recycleDesktop(exec, page, out);
+			} else
+				desktop = null; //something wrong (not possible; just in case)
+		}
+		if (desktop == null) {
+			desktop = _webman.getDesktop(sess, request, response, path, true);
+			if (desktop == null) //forward or redirect
+				return true;
 
-		final boolean compress = _compress && !Servlets.isIncluded(request);
-		final Writer out;
-		final UiFactory uf = wappc.getUiFactory();
-		if (uf.isRichlet(ri, bRichlet)) {
-			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet == null)
-				return false; //not found
+			final RequestInfo ri = new RequestInfoImpl(
+				wapp, sess, desktop, request,
+				PageDefinitions.getLocator(wapp, path));
+			sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
+			((SessionCtrl)sess).notifyClientRequest(true);
 
-			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
-			final Execution exec = new ExecutionImpl(
-				_ctx, request, response, desktop, page);
-			out = compress ? (Writer)new StringWriter(): response.getWriter();
-			wappc.getUiEngine().execNewPage(exec, richlet, page, out);
-				//no need to set device type here, since UiEngine will do it later
-		} else {
-			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef == null)
-				return false; //not found
+			final UiFactory uf = wappc.getUiFactory();
+			if (uf.isRichlet(ri, bRichlet)) {
+				final Richlet richlet = uf.getRichlet(ri, path);
+				if (richlet == null)
+					return false; //not found
 
-			final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
-			final Execution exec = new ExecutionImpl(
-				_ctx, request, response, desktop, page);
-			out = compress ? (Writer)new StringWriter(): response.getWriter();
-			wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+				final Page page = WebManager.newPage(uf, ri, richlet, response, path);
+				final Execution exec = new ExecutionImpl(
+					_ctx, request, response, desktop, page);
+				wappc.getUiEngine().execNewPage(exec, richlet, page, out);
+					//no need to set device type here, since UiEngine will do it later
+			} else {
+				final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+				if (pagedef == null)
+					return false; //not found
+
+				final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
+				final Execution exec = new ExecutionImpl(
+					_ctx, request, response, desktop, page);
+				wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+			}
 		}
 
 		if (compress) {
@@ -222,7 +238,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				final OutputStream os = response.getOutputStream();
 					//Call it first to ensure getWrite() is not called yet
 
-				byte[] data = result.getBytes(wapp.getConfiguration().getResponseCharset());
+				byte[] data = result.getBytes(config.getResponseCharset());
 				if (data.length > 200) {
 					byte[] bs = Https.gzip(request, response, null, data);
 					if (bs != null) data = bs; //yes, browser support compress
@@ -235,8 +251,11 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				response.getWriter().write(result);
 			}
 		}
+
+		if (dtrc != null) Utils.afterService(dtrc, desktop);
 		return true; //success
 	}
+
 	/** Handles exception being thrown when rendering a page.
 	 * @param err the exception being throw. If null, it means the page
 	 * is not found.

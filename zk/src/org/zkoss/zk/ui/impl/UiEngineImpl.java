@@ -456,6 +456,23 @@ public class UiEngineImpl implements UiEngine {
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
+	public void recycleDesktop(Execution exec, Page page, Writer out)
+	throws IOException {
+		PerformanceMeter pfmeter = page.getDesktop().getWebApp().getConfiguration().getPerformanceMeter();
+		final long startTime = pfmeter != null ? System.currentTimeMillis(): 0;
+		final String pfReqId =
+			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
+
+		final UiVisualizer uv = doActivate(exec, false, false);
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		try {
+			((PageCtrl)page).redraw(out);
+		} finally {
+			doDeactivate(exec);
+			if (pfmeter != null)
+				meterLoadServerComplete(pfmeter, pfReqId, exec);
+		}
+	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();

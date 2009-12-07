@@ -154,6 +154,12 @@ public interface UiEngine {
 	public void execNewPage(Execution exec, Richlet richlet, Page page,
 	Writer out) throws IOException;
 
+	/** Reuse the desktop and generate the outout.
+	 * @since 5.0.0
+	 */
+	public void recycleDesktop(Execution exec, Page page, Writer out)
+	throws IOException;
+
 	/** Executs an asynchronous update to a component (or page).
 	 * It is the same as execUpdate(exec, requests, null, out).
 	 *

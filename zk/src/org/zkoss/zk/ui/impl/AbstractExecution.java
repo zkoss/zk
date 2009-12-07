@@ -77,7 +77,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	 */
 	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
-		_creating = creating;
+		_curpage = _creating = creating;
 
 		if (desktop != null) {
 			final Iterator it = desktop.getPages().iterator();

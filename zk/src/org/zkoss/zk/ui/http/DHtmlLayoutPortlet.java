@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -178,50 +179,62 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
-		final Desktop desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
-		if (desktop == null) //forward or redirect
-			return true;
+		final ServletContext svlctx = (ServletContext)wapp.getNativeContext();
 
-		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
-		((SessionCtrl)sess).notifyClientRequest(true);
+		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
+		Desktop desktop = dtrc != null ? Utils.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
 
-		final UiFactory uf = wappc.getUiFactory();
-		if (uf.isRichlet(ri, bRichlet)) {
-			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet == null)
-				return false; //not found
-
-			final Page page = WebManager.newPage(uf, ri, richlet, httpres, path);
-			final Execution exec =
-				new ExecutionImpl(
-					(ServletContext)wapp.getNativeContext(),
-					httpreq, httpres, desktop, page);
-
-			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-			if (response.getContentType() == null)
-				response.setContentType("text/html;charset=UTF-8");
-
-			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
-		} else if (path != null) {
-			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef == null)
-				return false; //not found
-
-			final Page page = WebManager.newPage(uf, ri, pagedef, httpres, path);
-			final Execution exec =
-				new ExecutionImpl(
-					(ServletContext)wapp.getNativeContext(),
-					httpreq, httpres, desktop, page);
-
-			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-			if (response.getContentType() == null)
-				response.setContentType("text/html;charset=UTF-8");
-
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
+		if (desktop != null) { //recycle
+			final Page page = Utils.getMainPage(desktop);
+			if (page != null) {
+				final Execution exec = new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+				fixContentType(response);
+				wappc.getUiEngine().recycleDesktop(exec, page, response.getWriter());
+			} else
+				desktop = null; //something wrong (not possible; just in case)
 		}
+
+		if (desktop == null) {
+			desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
+			if (desktop == null) //forward or redirect
+				return true;
+
+			final RequestInfo ri = new RequestInfoImpl(
+				wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
+			((SessionCtrl)sess).notifyClientRequest(true);
+
+			final UiFactory uf = wappc.getUiFactory();
+			if (uf.isRichlet(ri, bRichlet)) {
+				final Richlet richlet = uf.getRichlet(ri, path);
+				if (richlet == null)
+					return false; //not found
+
+				final Page page = WebManager.newPage(uf, ri, richlet, httpres, path);
+				final Execution exec =
+					new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+				fixContentType(response);
+				wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
+			} else if (path != null) {
+				final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+				if (pagedef == null)
+					return false; //not found
+
+				final Page page = WebManager.newPage(uf, ri, pagedef, httpres, path);
+				final Execution exec =
+					new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+				fixContentType(response);
+				wappc.getUiEngine()
+					.execNewPage(exec, pagedef, page, response.getWriter());
+			}
+		}
+
+		if (dtrc != null) Utils.afterService(dtrc, desktop);
 		return true; //success
+	}
+	private static void fixContentType(RenderResponse response) {
+		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+		if (response.getContentType() == null)
+			response.setContentType("text/html;charset=UTF-8");
 	}
 
 	/** Returns the layout servlet.

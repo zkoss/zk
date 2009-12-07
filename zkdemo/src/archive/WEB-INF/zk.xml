@@ -140,6 +140,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- [Enterprise Edition]
+		Turn on if you want to recycle the desktop if an user navigates
+		back to the same URL
+	<listener>
+		<listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle</listener-class>
+	</listener>
+	--> 
+
+	<!-- [Enterprise Edition]
 		Turn on if you want to make your Web application crawlable (indexed)
 		by search engines.
 	<system-config>
