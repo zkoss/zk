@@ -285,6 +285,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			- (this.efrozen ? this.efrozen.offsetHeight : 0)
 			- pgHgh; // Bug #1815882 and Bug #1835369
 	},
+	setFlexSize_: function(sz) {
+		var n = this.$n(),
+			head = this.$n('head');
+		if (sz.height !== undefined) {
+			if (sz.height == 'auto') {
+				n.style.height = '';
+				if (head) head.style.height = '';
+			} else
+				return this.$supers('setFlexSize_', arguments);
+		}
+		if (sz.width !== undefined) {
+			if (sz.width == 'auto') {
+				n.style.width = '';
+				if (head) head.style.width = '';
+			} else
+				return this.$supers('setFlexSize_', arguments);
+		}
+		return {height: n.offsetHeight, width: n.offsetWidth};
+	},
 	/* set the height. */
 	_setHgh: function (hgh) {
 		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {

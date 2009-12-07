@@ -434,14 +434,29 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_fixTd: function() {
 		//when align is stretched must release the children, then must "shrink td" manually
 		var vert = this.isVertical();
-		if (this._isStretchAlign()) {
+		if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
 			for(var child = this.firstChild; child; child = child.nextSibling) {
 				if (child.isVisible()) {
 					var c = child.$n();
-					if (vert)
-						c.style.width= ''; //release the height of children so td can shrink
-					else
-						c.style.height= ''; //release the height of children so td can shrink
+					if (vert) {
+						if (child._nhflex)
+							child.setFlexSize_({width:'auto'});
+						else
+							c.style.width= ''; //release the height of children so td can shrink
+						if (!child.$instanceof(zul.wgt.Cell)) {
+							var chdex = child.$n('chdex');
+							chdex.style.width = '';
+						}
+					} else {
+						if (child._nvflex)
+							child.setFlexSize_({height:'auto'});
+						else
+							c.style.height= ''; //release the height of children so td can shrink
+						if (!child.$instanceof(zul.wgt.Cell)) {
+							var chdex = child.$n('chdex');
+							chdex.style.height = '';
+						}
+					}
 				}
 			}
 		}
