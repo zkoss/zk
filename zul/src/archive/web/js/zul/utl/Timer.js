@@ -57,6 +57,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 		}
 	},
 	_tmfn: function () {
+		if (!this._repeats) this._running = false;
 		this.fire('onTimer', null, {ignorable: true});
 	},
 
