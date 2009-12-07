@@ -95,10 +95,12 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Allowed Types: pie, line, bar, column, stackbar, stackcolumn
 	 */
 	public void setType(String type) {
+		if(type == null)
+			type = "";		
 		if (!Objects.equals(_type, type)) {
 			_type = type;
-			smartUpdate("type", _type.split(":")[0]);
-		}
+			invalidate();		//Always redraw
+		}		
 	}
 	/**
 	 * Returns the type of chart
@@ -133,11 +135,14 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		return _model;
 	}
 	/**
-	 * Sets X-Axis name of chart
-	 * <p>Only used for StackColumnChart
+	 * Sets X-Axis name of chart.
+	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
 	public void setXAxis(String xAxis) {
-		_xAxis = xAxis;
+		if(xAxis == null)
+			xAxis = "";
+		if (!Objects.equals(_xAxis, xAxis))
+			_xAxis = xAxis;
 	}
 	/**
 	 * Returns the name of X-Axis
@@ -146,30 +151,33 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		return _xAxis;
 	}
 	/**
-	 * Sets Y-Axis name of chart
-	 * <p>Only used for StackColumnChart
+	 * Sets Y-Axis name of chart.
+	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
 	public void setYAxis(String yAxis) {
-		_yAxis = yAxis;
+		if(yAxis == null)
+			yAxis = "";
+		if (!Objects.equals(_yAxis, yAxis))
+			_yAxis = yAxis;
 	}
 	/**
-	 * Returns the name of Y-Axis
+	 * Returns the name of Y-Axis.
 	 */
 	public String getYAxis() {
 		return _yAxis;
 	}
 	/**
-	 * Sets the style of swf
+	 * Sets the content style of flashchart.
 	 * <p>Default format: "Category-Attribute=Value", ex."legend-display=right"
 	 */
 	public void setChartStyle(String chartStyle) {
 		if (!Objects.equals(_chartStyle, chartStyle)) {
 			_chartStyle = chartStyle;
-			smartUpdate("chartStyle", _chartStyle);
+			invalidate();		//Always redraw
 		}
 	}
 	/**
-	 * Returns the swf style
+	 * Returns the content style.
 	 */
 	public String getChartStyle() {
 		return _chartStyle;

@@ -15,23 +15,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _src = zk.ajaxURI('/web/js/zul/fchart/charts.swf', {au: true}),
-	    _expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true});
-	    _Axis = {
+	    _expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true}),
+	    _axis = {
 			stackingEnabled: true,
-	    	type: "numeric",
-	    	alwaysShowZero: true,
-	    	hideOverlappinLabels: true,
+			type: "numeric",
+			alwaysShowZero: true,
+			hideOverlappinLabels: true,
 	    	orientation: "horizontal",
 	    	reverse: false,
 	    	scale: "linear",
 	    	snapToUnits: true
 	    };
-	
-    function getDefaultStyle(){
-    	return "legend-display=right,legend-padding=10,legend-spacing=5,legend-font-family=Arial,legend-font-size=13";    
-    }
-    
-    function JSONEncode(x){
+	    
+    function JSONEncode(x) {
 		switch (typeof x) {
 			case "number":
 				return String(x);
@@ -48,120 +44,132 @@ it will be useful, but WITHOUT ANY WARRANTY.
      * example:
      * 		'legend-display=right,legend-padding=10' will be transfer to '{"legend":{"display":"right","padding":"10"}}' 
      */
-    function formatToJSON(str){
-    	var list = str.split(','), categorys = [], result = ['{'];		
-    	for (var key in list) {
-    		var temp = list[key].toString().split('-'),
-    			category = typeof temp[2] == 'undefined' ? temp[0] : temp[1],
-    			alreadyHaveCategory = false;
-    		
-			if (typeof temp[1] == 'undefined') {
+    function formatToJSON(str) {
+    	var list = str.split(','), 
+    		len = list.length, 
+    		categorys = [], 
+    		result = ['{'], 
+    		cl;
+    	
+    	for (var j = 0; j < len; j++) {
+    		var temp = list[j].split('-'),
+    			category = !temp[2] ? temp[0] : temp[1],
+    			alreadyHaveCategory = false,
+    			attr, val;
+			if (!temp[1]) {
     			result.push("}");
     			break;
     		}
-    		if (typeof temp[2] == 'undefined') {
-	    		var attr = temp[1].split('=')[0],
-	    		    val = temp[1].split('=')[1];
+    		if (!temp[2]) {
+	    		attr = temp[1].split('=')[0],
+	    		val = temp[1].split('=')[1];
     		} else {
-    			var attr = temp[2].split('=')[0],
-    		    	val = temp[2].split('=')[1];
-    		}
-    		if(categorys.length > 0){
-	    		for(var i = 0; i < categorys.length; i++){
-	    			if(categorys[i].match(category)){
+    			attr = temp[2].split('=')[0],
+    		    val = temp[2].split('=')[1];
+    		}    		
+    		cl = categorys.length;
+    		if (cl > 0) {
+	    		for (var i = 0; i < cl; i++) {
+	    			if (categorys[i].match(category)) {
 	    				alreadyHaveCategory = true;
 	        			break;
 	    			}
 	    		}
     		}
-    		if (alreadyHaveCategory == false) {
+    		if (!alreadyHaveCategory) {
     			categorys.push(JSONEncode(category));	    			
-    			if (typeof temp[2] == 'undefined')  				
-	    			result.push(JSONEncode(category), ":");		    			
-    			else
+    			if (!temp[2]) {
+	    			result.push(JSONEncode(category), ":");
+    			} else {
     				result.push(",", JSONEncode(category), ":");
-    			
+    			}
     			result.push("{", JSONEncode(attr), ":", JSONEncode(val));
     		} else {
     			result.push(",", JSONEncode(attr), ":", JSONEncode(val));
     		} 
     	}
-		for (var i = 0; i < categorys.length; i++) {
+    	cl = categorys.length;
+		for (var j = 0; j < cl; j++) {
 			result.push('}');
 		}
+		result.push('}');
     	return result.join("");    	
 	}
     
 	/* If e.type == swfReady, then init chart data. */
 	function onFlashEvent(wgt, event) {
-		var _swf = wgt.$n('chart'),
-			_type = wgt._type,
-			_chartStyle = wgt._chartStyle,
-			_data = jq.evalJSON(wgt._jsonModel),
-			_dataProvider = [];
+		var swf = wgt.$n('chart'),
+			type = wgt._type,
+			chartStyle = wgt._chartStyle,
+			data = jq.evalJSON(wgt._jsonModel),
+			dataProvider = [];
 		
-		_swf.setType(_type);
-		if (typeof _chartStyle == 'undefined') {	
-			if(_type != "bar" && _type != "line" && _type != "column") {
-				_swf.setStyles(formatToJSON(getDefaultStyle()));
+		swf.setType(type);
+		if (!chartStyle) {	
+			if (type != "bar" && type != "line" && type != "column") {
+				swf.setStyles(formatToJSON(wgt._defaultStyle));
 			}
 		} else {
-			_swf.setStyles(formatToJSON(_chartStyle));
+			swf.setStyles(formatToJSON(chartStyle));
 		}	
-		if (_type == "pie") {
-			_dataProvider = [{type: _type, dataProvider: _data}];			
-			_swf.setCategoryField("categoryField");
-			_swf.setDataField("dataField");			
-		} else if (_type == "stackbar") {
-			var _series = jq.evalJSON(wgt._jsonSeries),
-				_dataProvider = _seriesProvider(_series, _type, _data, _dataProvider);
-			_swf.setHorizontalAxis(_Axis);
-			_swf.setVerticalField("verticalField");
-		} else if (_type == "stackcolumn") {
-			var _series = jq.evalJSON(wgt._jsonSeries),
-				_dataProvider = _seriesProvider(_series, _type, _data, _dataProvider);
-			_swf.setHorizontalField("horizontalField");
-		    _swf.setVerticalAxis(_Axis);
+		if (type == "pie") {
+			dataProvider = [{type: type, dataProvider: data}];			
+			swf.setCategoryField("categoryField");
+			swf.setDataField("dataField");			
+		} else if (type == "stackbar") {
+			var series = jq.evalJSON(wgt._jsonSeries),
+				dataProvider = seriesProvider(series, type, data, dataProvider);
+			swf.setHorizontalAxis(_axis);
+			swf.setVerticalField("verticalField");
+		} else if (type == "stackcolumn") {
+			var series = jq.evalJSON(wgt._jsonSeries),
+				dataProvider = seriesProvider(series, type, data, dataProvider);
+			swf.setHorizontalField("horizontalField");
+		    swf.setVerticalAxis(_axis);
 		} else {
-			_dataProvider = [{type: _type, dataProvider: _data}];
-			_swf.setHorizontalField("horizontalField");
-			_swf.setVerticalField("verticalField");
+			dataProvider = [{type: type, dataProvider: data}];
+			swf.setHorizontalField("horizontalField");
+			swf.setVerticalField("verticalField");
 		}
-		_swf.setDataProvider(_dataProvider);
+		swf.setDataProvider(dataProvider);
 	}
 
 	/* Refresh the data of chart */
-	function _refresh(wgt, dataModel) {
-		var _swf = wgt.$n('chart'),
-			_type = wgt._type,
-			_data = jq.evalJSON(dataModel),
-			_series = jq.evalJSON(wgt._jsonSeries),
-			_dataProvider = [];
+	function refresh(wgt, dataModel) {
+		var swf = wgt.$n('chart'),
+			type = wgt._type,
+			data = jq.evalJSON(dataModel),
+			series = jq.evalJSON(wgt._jsonSeries),
+			dataProvider = [];
 
-		if(_type == "stackbar" || _type == "stackcolumn")
-			_dataProvider = _seriesProvider(_series, _type, _data, _dataProvider);
+		if (type == "stackbar" || type == "stackcolumn")
+			dataProvider = seriesProvider(series, type, data, dataProvider);
 		else
-			_dataProvider = [{type: _type, dataProvider: _data}];
+			dataProvider = seriesProvider(false, type, data, dataProvider);
 		
-		_swf.setDataProvider(_dataProvider);
-	};
+		swf.setDataProvider(dataProvider);
+	}
 
-	function _seriesProvider(series, type, data, dataProvider){
-		var _seriesLength = series.length,
-			_current = null;
+	function seriesProvider(series, type, data, dataProvider) {
+		var seriesLength = series.length,
+			current = null;
 
-		if(series){
-			for(var i = 0; i < _seriesLength; i++){
-				_current = series[i];
-		  		var _clone = {};
-		  		for(var key in _current){
-		  			_clone[key] = _current[key];
+		if (series) {
+			for (var i = 0; i < seriesLength; i++) {
+				current = series[i];
+		  		var clone = {};
+		  		for (var key in current) {
+		  			if (key == "style" && current.style !== null) {
+		  				clone.style = formatToJSON(current.style);
+		  			} else {
+		  				clone[key] = current[key];
+		  			}
 		  		}
-		  		dataProvider.push(_clone);
-		  		_current = _clone;
-			    if(!_current.type)
-			    	_current.type = type;
-			    _current.dataProvider = data;
+		  		dataProvider.push(clone);
+		  		current = clone;
+			    if (!current.type)
+			    	current.type = type;
+			    current.dataProvider = data;
 		  	}
 		} else {
 	  		dataProvider.push({type: type, dataProvider: data});
@@ -173,7 +181,8 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 
 	/* Default values */
 	_width: "400px",
-	_height: "200px",	
+	_height: "200px",
+	_defaultStyle: "legend-display=right,legend-padding=10,legend-spacing=5,legend-font-family=Arial,legend-font-size=13",
 
 	$define: {
 		chartStyle: null,
@@ -185,27 +194,32 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 	},
 
 	setRefresh: function (mod) {
-		_refresh(this, mod);
+		refresh(this, mod);
 	},
 
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 		var _swfId = this.uuid + "-chart",
 			_flashvars = "allowedDomain=localhost&elementID=" + _swfId + "&eventHandler=zul.fchart.Flashchart.onEvent",
-			_params = {
+			_params = {				
 				flashvars: _flashvars,
-				allowScriptAccess: "always"
+				allowScriptAccess: "always",
+				bgcolor: "#ffffff",
+				wmode: "opaque"
 			},
-			_attributes = {id: _swfId};
+			_attributes = {id: _swfId, classid: "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"};
 
+		if (zk.ie || zk.opera)		//Add a cache buster at the end of src url for IE and Opera
+			_src = _src + (_src.indexOf('?') === -1 ? '?' : '&') + "_cache=" + new Date().getTime();
 		zul.fchart.swfobject.embedSWF(_src, _swfId, this._width, this._height, "9.0.0", _expressInstall, false, _params, _attributes);
+		
 	}
 }, {// static
 	onEvent: function (id, event) {
 		var eventType = event.type;
 		if (eventType == "swfReady") {
 			var comp = zk.Widget.$(id);
-			if(comp)
+			if (comp)
 				onFlashEvent(comp, event);
 		}
 	}
