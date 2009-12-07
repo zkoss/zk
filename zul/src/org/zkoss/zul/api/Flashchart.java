@@ -66,11 +66,12 @@ public interface Flashchart extends Flash {
 	 */
 	public String getYAxis();
 	/**
-	 * Sets the style of swf
+	 * Sets the content style of flashchart.
+	 * <p>Default format: "Category-Attribute=Value", ex."legend-display=right"
 	 */
 	public void setChartStyle(String chartStyle);
 	/**
-	 * Returns the swf style
+	 * Returns the content style.
 	 */
 	public String getChartStyle();
 }
