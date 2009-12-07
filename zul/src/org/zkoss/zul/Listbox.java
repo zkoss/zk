@@ -2115,6 +2115,7 @@ public class Listbox extends XulElement implements Paginated,
 				// reset _groupsInfo
 				_groupsInfo = new LinkedList();
 			}
+			getDataLoader().updateModelInfo(); //itemsInvalidate after really removed
 			return true;
 		} else if (_paging == child) {
 			_paging = null;
