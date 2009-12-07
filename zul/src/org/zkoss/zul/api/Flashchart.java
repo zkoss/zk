@@ -16,7 +16,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.api;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zul.ChartModel;
 
 /**
@@ -48,8 +47,9 @@ public interface Flashchart extends Flash {
 	 */
 	public ChartModel getModel();	
 	/**
-	 * Sets X-Axis name of chart
-	 * <p>Only used for StackColumnChart
+	 * Sets X-Axis name of chart. If doesn't set this attribute, then default will shows XAxis.
+	 * <p>Default: XAxis
+	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
 	public void setXAxis(String xAxis);
 	/**
@@ -57,8 +57,9 @@ public interface Flashchart extends Flash {
 	 */
 	public String getXAxis();
 	/**
-	 * Sets Y-Axis name of chart
-	 * <p>Only used for StackColumnChart
+	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows YAxis.
+	 * <p>Default: YAxis
+	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
 	public void setYAxis(String yAxis);
 	/**
