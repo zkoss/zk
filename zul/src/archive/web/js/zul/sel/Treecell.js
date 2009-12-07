@@ -14,12 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	setWidth: zk.$void, // readonly
-	_span: 1,
+	_colspan: 1,
 	$define: {
-		span: function (v) {
-			var n = this.$n();
-			if (n) n.colSpan = v;
-		}
+		colspan: [
+			function (colspan) {
+				return colspan > 1 ? colspan: 1;
+			},
+			function () {
+				var n = this.$n();
+				if (n) n.colSpan = this._colspan;
+			}]
 	},
 	getTree: function () {
 		return this.parent ? this.parent.getTree() : null;
@@ -149,6 +153,15 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	getWidth: function() {
 		var col = this.getTreecol();
 		return col ? col.getWidth() : null;
+	},
+	domAttrs_: function () {
+		var head = this.getTreecol(),
+			added;
+		if (head)
+			added = head.getColAttrs();
+		return this.$supers('domAttrs_', arguments)
+			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '')
+			+ (added ? ' ' + added : '');
 	}
 }, {
 	ROOT_OPEN: "root-open",

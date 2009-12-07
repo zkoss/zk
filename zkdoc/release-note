@@ -85,6 +85,7 @@ November, 2009
   2903271: Unable to select a tab from the server
   2904577: Dynamic tree doesn't draw
   2906453: doublebox complains wrong format for number end with 0
+  2909817: Treecol setAlign() with right fails
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
