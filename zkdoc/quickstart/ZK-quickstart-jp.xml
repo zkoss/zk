@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>クイックスタートガイド</title>
-<subtitle>Version 3.6.4</subtitle>
+<subtitle>Version 5.0.0 RC2</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -17,7 +17,7 @@
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
 <para/>
-<para>April 2009</para>
+<para>December 2009</para>
 <para>Potix Corporation</para>
 <para/>
 <para/>
@@ -129,19 +129,17 @@
 <row>
 <entry>
 <para>
-<code>zk-bin-</code>
-<code>std</code>
-<code>-3.6.4</code>
-<code>.tar.gz　</code>
+<code>zk-bin-5.0.0-RC2</code>
+<code>.tar.gz</code>
 <code>zk-</code>
-<code>bin-std-</code>
-<code>3.6.4</code>
+<code>bin-</code>
+<code>5.0.0-RC2</code>
 <code>.zip</code>
 </para>
 </entry>
 <entry>
 <para>Zkを使用するのに、必要なバイナリファイルと最低必要なライブラリーです。</para>
-<para>スタンダード版です。</para>
+<para>コミュニティ版です。</para>
 </entry>
 </row>
 <row>
@@ -149,25 +147,25 @@
 <para>
 <code>zk-bin-</code>
 <code>prof</code>
-<code>-3.6.4</code>
+<code>-5.0.0-RC2</code>
 <code>.tar.gz　</code>
 <code>zk-</code>
 <code>bin-prof-</code>
-<code>3.6.4</code>
+<code>5.0.0-RC2</code>
 <code>.zip</code>
 </para>
 </entry>
 <entry>
-<para>ZKのバイナリパッケージです。ZKスタンダード版にあるすべてのファイルと、JFreeChart・GoogleMaps・Jasper Reports・レイアウトコンポーネンツが含まれています。</para>
+<para>ZKのバイナリパッケージです。ZKコミュニティ版にあるすべてのファイルと、JFreeChart・GoogleMaps・Jasper Reports・レイアウトコンポーネンツが含まれています。</para>
 <para>Pro版です。</para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>zk-bin-3.6.4</code>
+<code>zk-bin-ent-5.0.0-RC2</code>
 <code>.tar.gz</code>
-<code>zk-bin-3.6.4</code>
+<code>zk-bin-ent-5.0.0-RC2</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -180,7 +178,7 @@
 <entry>
 <para>
 <code>Zk-demo-</code>
-<code>3.6.4</code>
+<code>5.0.0-RC2</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -193,7 +191,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>javadoc-3.6.4.</code>
+<code>javadoc-5.0.0-RC2.</code>
 <code>zip</code>
 </para>
 </entry>
@@ -205,7 +203,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>src-3.6.4.</code>
+<code>src-5.0.0-RC2.</code>
 <code>tar.gz</code>
 </para>
 </entry>
@@ -231,7 +229,7 @@
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">orge.net</ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309"> から次のファイルをダウンロードします： </ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">
-<code>zk-demo-3.6.4.zip</code>
+<code>zk-demo-5.0.0-RC2.zip</code>
 </ulink>
 </para>
 </listitem>
@@ -268,8 +266,8 @@
 <para>
 <code>zk-</code>
 <code>bin-</code>
-<code>3.6.4</code>
-<code>.zip</code> または<code> zk-bin-3.6.4</code>
+<code>5.0.0-RC2</code>
+<code>.zip</code> または<code> zk-bin-5.0.0-RC2</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -286,8 +284,8 @@
 <orderedlist>
 <listitem>
 <para>
-<code>zk-bin-3.6.4</code>
-<code>.zip</code> か <code>zk-bin-3.6.4</code>
+<code>zk-bin-5.0.0-RC2</code>
+<code>.zip</code> か <code>zk-bin-5.0.0-RC2</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -312,8 +310,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.6.4</code>
-<code>.zip </code>もしくは <code>zk-bin-3.6.4</code>
+<code>zk-bin-5.0.0-RC2</code>
+<code>.zip </code>もしくは <code>zk-bin-5.0.0-RC2</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -354,8 +352,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.6.4</code>
-<code>.zip</code> もしくは <code>zk-bin-3.6.4</code>
+<code>zk-bin-5.0.0-RC2</code>
+<code>.zip</code> もしくは <code>zk-bin-5.0.0-RC2</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -385,7 +383,7 @@
 <code>$TOMCAT_DIR/common/lib</code>に置かなければなりません。</para></sect1></chapter>
 <chapter>
 <title>4. ZKパッケージ</title>
-<para>この章は<code>zk-bin-3.6.4</code>
+<para>この章は<code>zk-bin-5.0.0-RC2</code>
 <code>.zip</code>について説明します。</para><sect1><title>/doc</title>
 <para>コピーライト・リリースノート等ドキュメントはこのフォルダに入っています。</para></sect1><sect1><title>/dist/lib</title>
 <para>ZKを実行するのに必要なライブラリーはこのフォルダにあります。</para></sect1><sect1><title>/dist/lib/zkforge</title>
@@ -410,7 +408,19 @@
 </entry>
 <entry>
 <para>ZK FCKeditorコンポーネントを使う場合に必要</para>
-<para>Version: 2.6.1_2</para>
+<para>Version: 2.6.4.1_50</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>ckez.jar</code>
+</para>
+</entry>
+<entry>
+<para>ZK CKeditorコンポーネントを使う場合に必要</para>
+<para>Version: 3.0_50</para>
+<para>[コミュニティ版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -421,7 +431,8 @@
 </entry>
 <entry>
 <para>ZK Google Mapsコンポーネントを使う場合に必要</para>
-<para>Version: 2.0_8</para>
+<para>Version: 2.0_50</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -432,7 +443,32 @@
 </entry>
 <entry>
 <para>ZK Timelineコンポーネントを使う場合に必要</para>
-<para>Version: 1.2_1</para>
+<para>Version: 2.3.0_50</para>
+<para>[コミュニティ版には入っておりません]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>timeplotz.jar</code>
+</para>
+</entry>
+<entry>
+<para>ZK Timeplotコンポーネントを使う場合に必要</para>
+<para>Version: 1.0_50</para>
+<para>[コミュニティ版には入っておりません]]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<code>zuljsp.jar</code>
+</para>
+</entry>
+<entry>
+<para>ZK JSP Tagsコンポーネントを使う場合に必要</para>
+<para>Version: 1.4.0-RC</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/lib/ext</title>
@@ -471,7 +507,7 @@
 <entry>
 <para>ZULのチャートコンポーネントを使用する場合に使う.</para>
 <para>Version: <ulink url="http://www.jfree.org/jfreechart/">JFreeChart</ulink> 1.0.13 and <ulink url="http://www.jfree.org/jcommon">JCommon</ulink> 1.0.16</para>
-<para>[スタンダード版には入っておりません]</para>
+<para>[コミュニティ版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -482,7 +518,7 @@
 <para>jasperreport コンポーネントを使用する場合に使う</para>
 <para>Version: Jasper Reports 3.0.0(itext: 2.1.3, commons-collections: 2.1, commons-logging: 1.0.2, jxl: 2.6.8, poi: 3.0.1)</para>
 <para>補足：poi.jar は Apache POI からエクセルに変換する際に使います。また、jxl.jar は JExcelApi からエクセルに変換する際に必要になります。</para>
-<para>[スタンダード版には入っておりません]</para>
+<para>[コミュニティ版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -504,8 +540,7 @@
 </entry>
 <entry>
 <para>JavaScript (<ulink url="http://www.mozilla.org/rhino/">Rhino</ulink>)でスクリプトを作成する場合に使う</para>
-<para>Version: Rhino 1.7R1</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>Version: Rhino 1.7R2 (for Java 5.0)</para>
 </entry>
 </row>
 <row>
@@ -519,8 +554,7 @@
 <ulink url="http://groovy.codehaus.org/">Groovy</ulink>
 <ulink url="http://groovy.codehaus.org/">でスクリプトを作成する場合に使う</ulink>
 </para>
-<para>Version: <ulink url="http://groovy.codehaus.org/">Groovy</ulink> 1.5.6 (groovy-all)</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>Version: <ulink url="http://groovy.codehaus.org/">Groovy</ulink> 1.6.4 (groovy-all)</para>
 </entry>
 </row>
 <row>
@@ -532,7 +566,7 @@
 <entry>
 <para>Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>) でスクリプトを作成する場合に使う</para>
 <para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.2 (jruby-complete)</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -544,7 +578,7 @@
 <entry>
 <para>Python (<ulink url="http://www.jython.org/">Jython</ulink>) でスクリプトを作成する場合に使う</para>
 <para>Version: <ulink url="http://www.jython.org/">Jython</ulink> 2.5.0</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -557,7 +591,7 @@
 <para>
 <code>captcha</code> コンポーネントを使用する場合に使う</para>
 <para>Version: JH Labs Java Image Filters</para>
-<para>[スタンダード版には入っておりません]</para>
+<para>[コミュニティ版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -570,7 +604,7 @@
 <entry>
 <para>MVELを使用する場合に使う</para>
 <para>Version: MVEL 1.2.21 (Java1.4用)</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row>
 <row>
@@ -582,17 +616,17 @@
 <entry>
 <para>OGNLを使用する場合に使う</para>
 <para>Version: OGNL 2.6.9</para>
-<para>[スタンダード版・Pro版には入っておりません]</para>
+<para>[コミュニティ版・Pro版には入っておりません]</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-3.6.4</code>
+<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-5.0.0-RC2</code>
 <code>.tar.gz</code>をダウンロードし、解凍してください。</para></sect1><sect1><title>/dist/xsd</title>
 <para>ZKアプリケーションを開発する際便利なXSDファイルはこちらです。</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>ZKアプリケーションを開発する際便利なTLDファイルはこのフォルダに入っています。</para></sect1></chapter>
 <chapter>
 <title>5. デモパッケージ</title>
-<para>この章はzk-demo-3.6.4.zipについて説明します。</para><sect1><title>/</title>
+<para>この章はzk-demo-5.0.0-RC2.zipについて説明します。</para><sect1><title>/</title>
 <para>
 <code>zkdemo.war</code>
 <code>、</code>

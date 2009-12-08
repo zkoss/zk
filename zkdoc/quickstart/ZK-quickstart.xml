@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Quick Start Guide</title>
-<subtitle>Version 3.6.4</subtitle>
+<subtitle>Version 5.0.0 RC2</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -18,7 +18,7 @@
 <para>ZKTM</para>
 <para/>
 <para/>
-<para>April 2009</para>
+<para>December 2009</para>
 <para>Potix Corporation</para>
 <para/>
 <para/>
@@ -365,11 +365,11 @@
 <para>Notice: Make sure you have installed Java JDK, and application server on your computer or you have to refer to the previous chapter.</para>
 <orderedlist>
 <listitem>
-<para>Download zk-demo-3.6.4.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
-<para>http://downloads.sourceforge.net/zk1/zk-demo-3.6.4.zip</para>
+<para>Download zk-demo-5.0.0-RC2.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
+<para>http://downloads.sourceforge.net/zk1/zk-demo-5.0.0-RC2.zip</para>
 </listitem>
 <listitem>
-<para>Unzip zk-demo-3.6.4.zip, and Copy zkdemo.war to the $TOMCAT_HOME\webapps directory</para>
+<para>Unzip zk-demo-5.0.0-RC.zip, and Copy zkdemo.war to the $TOMCAT_HOME\webapps directory</para>
 </listitem>
 <listitem>
 <para>Execute $TOMCAT_HOME\bin\tomcat5w.exe, and clicks Start button to activate your Web Server.</para>
@@ -381,7 +381,7 @@
 </orderedlist></sect1></chapter>
 <chapter>
 <title>Appendix A. The Content of Binary Distribution</title>
-<para>This chapter describes the content of zk-bin-3.6.4.zip.</para><sect1><title>/doc</title>
+<para>This chapter describes the content of zk-bin-5.0.0-RC2.zip.</para><sect1><title>/doc</title>
 <para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
 <para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor. It is optional depending on whether you need them.</para>
@@ -403,7 +403,17 @@
 </entry>
 <entry>
 <para>Required if you want to use ZK FCKeditor components.</para>
-<para>Version: 2.6.1_2</para>
+<para>Version: 2.6.4.1_50</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>ckez.jar</para>
+</entry>
+<entry>
+<para>Required if you want to use ZK CKeditor components.</para>
+<para>Version: 3.0_50</para>
+<para>[not available in the community edition]</para>
 </entry>
 </row>
 <row>
@@ -412,7 +422,8 @@
 </entry>
 <entry>
 <para>Required if you want to use ZK Google Maps components.</para>
-<para>Version: 2.0_8</para>
+<para>Version: 2.0_50</para>
+<para>[not available in the community and professional edition]</para>
 </entry>
 </row>
 <row>
@@ -421,7 +432,28 @@
 </entry>
 <entry>
 <para>Required if you want to use ZK Timeline components.</para>
-<para>Version: 1.2_1</para>
+<para>Version: 2.3.0_50</para>
+<para>[not available in the community edition]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>timeplotz.jar</para>
+</entry>
+<entry>
+<para>Required if you want to use ZK Timeplot components.</para>
+<para>Version: 1.0_50</para>
+<para>[not available in the community edition]</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>zuljsp.jar</para>
+</entry>
+<entry>
+<para>Required if you want to use ZK JSP Tags</para>
+<para>Version: 1.4.0-RC</para>
+<para>[not available in the community and professional edition]</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/lib/ext</title>
@@ -455,7 +487,7 @@
 <entry>
 <para>Required if you want to use ZUL's chart component.</para>
 <para>Version: <ulink url="http://www.jfree.org/jfreechart/">JFreeChart</ulink> 1.0.13 and <ulink url="http://www.jfree.org/jcommon">JCommon</ulink> 1.0.16</para>
-<para>[not available in the standard edition]</para>
+<para>[not available in the community edition]</para>
 </entry>
 </row>
 <row>
@@ -466,7 +498,7 @@
 <para>Required if you want to use the jasperreport component.</para>
 <para>Version: Jasper Reports 3.0.0(itext: 2.1.3, commons-collections: 2.1, commons-logging: 1.0.2, jxl: 2.6.8, poi: 3.0.1)</para>
 <para>Note: poi.jar is required if you want to use Apache POI to generate Microsoft Excel format. And, jxl.jar is required only if you want to use JExcelApi to generate the Microsoft Excel format.</para>
-<para>[not available in the standard edition]</para>
+<para>[not available in the community edition]</para>
 </entry>
 </row>
 <row>
@@ -484,8 +516,7 @@
 </entry>
 <entry>
 <para>Required if you want scripting in JavaScript (<ulink url="http://www.mozilla.org/rhino/">Rhino</ulink>).</para>
-<para>Version: Rhino 1.7R1</para>
-<para>[not available in the standard and professional edition]</para>
+<para>Version: Rhino 1.7R2 (for Java 5 or later)</para>
 </entry>
 </row>
 <row>
@@ -494,8 +525,7 @@
 </entry>
 <entry>
 <para>Required if you want scripting in <ulink url="http://groovy.codehaus.org/">Groovy</ulink>.</para>
-<para>Version: <ulink url="http://groovy.codehaus.org/">Groovy</ulink> 1.5.6 (groovy-all)</para>
-<para>[not available in the standard and professional edition]</para>
+<para>Version: <ulink url="http://groovy.codehaus.org/">Groovy</ulink> 1.6.4 (groovy-all)</para>
 </entry>
 </row>
 <row>
@@ -505,7 +535,6 @@
 <entry>
 <para>Required if you want scripting in Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>).</para>
 <para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.2 (jruby-complete)</para>
-<para>[not available in the standard and professional edition]</para>
 </entry>
 </row>
 <row>
@@ -516,7 +545,6 @@
 <para>Required if you want scripting in Python (J<ulink url="http://www.jython.org/">ython</ulink>).</para>
 <para>Version: <ulink url="http://jruby.codehaus.org/">J</ulink>
 <ulink url="http://www.jython.org/">ython</ulink> 2.5.0</para>
-<para>[not available in the standard and professional edition]</para>
 </entry>
 </row>
 <row>
@@ -526,7 +554,7 @@
 <entry>
 <para>Required if you want to use the captcha component.</para>
 <para>Version: JH Labs Java Image Filters</para>
-<para>[not available in the standard edition]</para>
+<para>[not available in the community edition]</para>
 </entry>
 </row>
 <row>
@@ -536,7 +564,7 @@
 <entry>
 <para>Required if you want to use MVEL to evaluate the expressions.</para>
 <para>Version: MVEL 1.2.21 (for Java 1.4 or above)</para>
-<para>[not available in the standard and professional edition]</para>
+<para>[not available in the community and professional edition]</para>
 </entry>
 </row>
 <row>
@@ -546,16 +574,16 @@
 <entry>
 <para>Required if you want to use OGNL to evaluate the expressions.</para>
 <para>Version: OGNL 2.6.9</para>
-<para>[not available in the standard and professional edition]</para>
+<para>[not available in the community and professional edition]</para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.6.4.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
+<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-5.0.0-RC2.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
 <para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
 <chapter>
 <title>Appendix B. The Content of Demo Distribution</title>
-<para>This chapter describes the content of zk-demo-3.6.4.zip.</para><sect1><title>/</title>
+<para>This chapter describes the content of zk-demo-5.0.0-RC2.zip.</para><sect1><title>/</title>
 <para>This directory holds the executable: zkdemo.war, zkdemo-min.war, zkdemos.ear and zkdemos-min.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
 <para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
 <para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>
