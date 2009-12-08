@@ -1,6 +1,6 @@
 /* Flashchart.js
 
-    Purpose:
+	Purpose:
 
 	Description:
 
@@ -15,19 +15,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _src = zk.ajaxURI('/web/js/zul/fchart/charts.swf', {au: true}),
-	    _expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true}),
-	    _axis = {
+		_expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true}),
+		_axis = {
 			stackingEnabled: true,
 			type: "numeric",
 			alwaysShowZero: true,
 			hideOverlappinLabels: true,
-	    	orientation: "horizontal",
-	    	reverse: false,
-	    	scale: "linear",
-	    	snapToUnits: true
-	    };
-	    
-    function JSONEncode(x) {
+			orientation: "horizontal",
+			reverse: false,
+			scale: "linear",
+			snapToUnits: true
+		};
+		
+	function JSONEncode(x) {
 		switch (typeof x) {
 			case "number":
 				return String(x);
@@ -38,64 +38,64 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			default:
 				return "null";
 		}
-    }
-    
-    /* A method use to format String to JSON
-     * example:
-     * 		'legend-display=right,legend-padding=10' will be transfer to '{"legend":{"display":"right","padding":"10"}}' 
-     */
-    function formatToJSON(str) {
-    	var list = str.split(','), 
-    		len = list.length, 
-    		categorys = [], 
-    		result = ['{'], 
-    		cl;
-    	
-    	for (var j = 0; j < len; j++) {
-    		var temp = list[j].split('-'),
-    			category = !temp[2] ? temp[0] : temp[1],
-    			alreadyHaveCategory = false,
-    			attr, val;
+	}
+	
+	/* A method use to format String to JSON
+	 * example:
+	 * 		'legend-display=right,legend-padding=10' will be transfer to '{"legend":{"display":"right","padding":"10"}}' 
+	 */
+	function formatToJSON(str) {
+		var list = str.split(','), 
+			len = list.length, 
+			categorys = [], 
+			result = ['{'], 
+			cl;
+		
+		for (var j = 0; j < len; j++) {
+			var temp = list[j].split('-'),
+				category = !temp[2] ? temp[0] : temp[1],
+				alreadyHaveCategory = false,
+				attr, val;
 			if (!temp[1]) {
-    			result.push("}");
-    			break;
-    		}
-    		if (!temp[2]) {
-	    		attr = temp[1].split('=')[0],
-	    		val = temp[1].split('=')[1];
-    		} else {
-    			attr = temp[2].split('=')[0],
-    		    val = temp[2].split('=')[1];
-    		}    		
-    		cl = categorys.length;
-    		if (cl > 0) {
-	    		for (var i = 0; i < cl; i++) {
-	    			if (categorys[i].match(category)) {
-	    				alreadyHaveCategory = true;
-	        			break;
-	    			}
-	    		}
-    		}
-    		if (!alreadyHaveCategory) {
-    			categorys.push(JSONEncode(category));	    			
-    			if (!temp[2]) {
-	    			result.push(JSONEncode(category), ":");
-    			} else {
-    				result.push(",", JSONEncode(category), ":");
-    			}
-    			result.push("{", JSONEncode(attr), ":", JSONEncode(val));
-    		} else {
-    			result.push(",", JSONEncode(attr), ":", JSONEncode(val));
-    		} 
-    	}
-    	cl = categorys.length;
+				result.push("}");
+				break;
+			}
+			if (!temp[2]) {
+				attr = temp[1].split('=')[0],
+				val = temp[1].split('=')[1];
+			} else {
+				attr = temp[2].split('=')[0],
+				val = temp[2].split('=')[1];
+			}			
+			cl = categorys.length;
+			if (cl > 0) {
+				for (var i = 0; i < cl; i++) {
+					if (categorys[i].match(category)) {
+						alreadyHaveCategory = true;
+						break;
+					}
+				}
+			}
+			if (!alreadyHaveCategory) {
+				categorys.push(JSONEncode(category));					
+				if (!temp[2]) {
+					result.push(JSONEncode(category), ":");
+				} else {
+					result.push(",", JSONEncode(category), ":");
+				}
+				result.push("{", JSONEncode(attr), ":", JSONEncode(val));
+			} else {
+				result.push(",", JSONEncode(attr), ":", JSONEncode(val));
+			} 
+		}
+		cl = categorys.length;
 		for (var j = 0; j < cl; j++) {
 			result.push('}');
 		}
 		result.push('}');
-    	return result.join("");    	
+		return result.join("");		
 	}
-    
+	
 	/* If e.type == swfReady, then init chart data. */
 	function onFlashEvent(wgt, event) {
 		var swf = wgt.$n('chart'),
@@ -125,7 +125,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var series = jq.evalJSON(wgt._jsonSeries),
 				dataProvider = seriesProvider(series, type, data, dataProvider);
 			swf.setHorizontalField("horizontalField");
-		    swf.setVerticalAxis(_axis);
+			swf.setVerticalAxis(_axis);
 		} else {
 			dataProvider = [{type: type, dataProvider: data}];
 			swf.setHorizontalField("horizontalField");
@@ -167,9 +167,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		  		}
 		  		dataProvider.push(clone);
 		  		current = clone;
-			    if (!current.type)
-			    	current.type = type;
-			    current.dataProvider = data;
+				if (!current.type)
+					current.type = type;
+				current.dataProvider = data;
 		  	}
 		} else {
 	  		dataProvider.push({type: type, dataProvider: data});
