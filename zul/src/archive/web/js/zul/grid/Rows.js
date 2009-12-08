@@ -66,10 +66,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		for (var j = 0, w = this.firstChild, even = !(this._offset & 1); w; w = w.nextSibling, ++j) {
 			if (w.isVisible() && w.isStripeable_()) {
 				// check whether is a legal Row or not for zkex.grid.Detail
-				for (; n.rows[j]; ++j) {
-					if (n.rows[j].id == w.uuid) 
-						break;
-				}
+				for (;n.rows[j] && n.rows[j].id != w.uuid;++j);
 
 				jq(n.rows[j])[even ? 'removeClass' : 'addClass'](scOdd);
 				w.fire("onStripe");
