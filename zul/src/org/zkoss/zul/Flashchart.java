@@ -58,8 +58,8 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
 	private LinkedList _seriesList;
-	private String _xAxis = "Xaxis";
-	private String _yAxis = "Yaxis";
+	private String _yAxis = "Series 1";
+	private String _xAxis = "Series 2";
 	/**
 	 * Sets default values.
 	 */
@@ -135,7 +135,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		return _model;
 	}
 	/**
-	 * Sets X-Axis name of chart. If doesn't set this attribute, then default will shows XAxis.
+	 * Sets X-Axis name of chart. If doesn't set this attribute, then default will shows Series 2.
 	 * <p>Default: XAxis
 	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
@@ -152,7 +152,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		return _xAxis;
 	}
 	/**
-	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows YAxis.
+	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows Series 1.
 	 * <p>Default: YAxis
 	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
