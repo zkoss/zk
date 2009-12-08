@@ -48,7 +48,7 @@ public interface Flashchart extends Flash {
 	public ChartModel getModel();	
 	/**
 	 * Sets X-Axis name of chart. If doesn't set this attribute, then default will shows Series 2.
-	 * <p>Default: XAxis
+	 * <p>Default: Series 2
 	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
 	public void setXaxis(String xAxis);
@@ -58,7 +58,7 @@ public interface Flashchart extends Flash {
 	public String getXaxis();
 	/**
 	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows Series 1.
-	 * <p>Default: YAxis
+	 * <p>Default: Series 1
 	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
 	public void setYaxis(String yAxis);
