@@ -137,7 +137,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	/**
 	 * Sets X-Axis name of chart. If doesn't set this attribute, then default will shows XAxis.
 	 * <p>Default: XAxis
-	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
+	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
 	public void setXaxis(String xAxis) {
 		if(xAxis != null){
@@ -154,7 +154,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	/**
 	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows YAxis.
 	 * <p>Default: YAxis
-	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
+	 * <p>Only used for StackColumnChart and it only works when the chart initial.
 	 */
 	public void setYaxis(String yAxis) {
 		if(yAxis != null){
