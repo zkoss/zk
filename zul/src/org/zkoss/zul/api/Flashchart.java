@@ -51,21 +51,21 @@ public interface Flashchart extends Flash {
 	 * <p>Default: XAxis
 	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
-	public void setXAxis(String xAxis);
+	public void setXaxis(String xAxis);
 	/**
 	 * Returns the name of X-Axis
 	 */
-	public String getXAxis();
+	public String getXaxis();
 	/**
 	 * Sets Y-Axis name of chart. If doesn't set this attribute, then default will shows YAxis.
 	 * <p>Default: YAxis
 	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
-	public void setYAxis(String yAxis);
+	public void setYaxis(String yAxis);
 	/**
 	 * Returns the name of Y-Axis
 	 */
-	public String getYAxis();
+	public String getYaxis();
 	/**
 	 * Sets the content style of flashchart.
 	 * <p>Default format: "Category-Attribute=Value", ex."legend-display=right"

@@ -58,8 +58,8 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
 	private LinkedList _seriesList;
-	private String _xAxis = "XAxis";
-	private String _yAxis = "YAxis";
+	private String _xAxis = "Xaxis";
+	private String _yAxis = "Yaxis";
 	/**
 	 * Sets default values.
 	 */
@@ -139,15 +139,16 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Default: XAxis
 	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
-	public void setXAxis(String xAxis) {
+	public void setXaxis(String xAxis) {
 		if(xAxis != null){
 			_xAxis = xAxis;
+			invalidate();		//Always redraw
 		}
 	}
 	/**
 	 * Returns the name of X-Axis
 	 */
-	public String getXAxis() {
+	public String getXaxis() {
 		return _xAxis;
 	}
 	/**
@@ -155,15 +156,16 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Default: YAxis
 	 * <p>Only used for StackColumnChart AND it only works when the chart initial.
 	 */
-	public void setYAxis(String yAxis) {
+	public void setYaxis(String yAxis) {
 		if(yAxis != null){
 			_yAxis = yAxis;
+			invalidate();		//Always redraw
 		}
 	}
 	/**
 	 * Returns the name of Y-Axis.
 	 */
-	public String getYAxis() {
+	public String getYaxis() {
 		return _yAxis;
 	}
 	/**
