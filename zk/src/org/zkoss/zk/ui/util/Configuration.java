@@ -115,7 +115,7 @@ public class Configuration {
 	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
-	private DesktopRecycle _dtRcycle;
+	private DesktopRecycle _dtRecycle;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
@@ -203,9 +203,9 @@ public class Configuration {
 			added = true;
 		}
 		if (DesktopRecycle.class.isAssignableFrom(klass)) {
-			if (_dtRcycle != null)
+			if (_dtRecycle != null)
 				throw new UiException("PerformanceMeter listener can be assigned only once");
-			_dtRcycle = (DesktopRecycle)(listener = getInstance(klass, listener));
+			_dtRecycle = (DesktopRecycle)(listener = getInstance(klass, listener));
 			added = true;
 		}
 
@@ -311,8 +311,8 @@ public class Configuration {
 			_monitor = null;
 		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
 			_pfmeter = null;
-		if (_dtRcycle != null && _dtRcycle.getClass().equals(klass))
-			_dtRcycle = null;
+		if (_dtRecycle != null && _dtRecycle.getClass().equals(klass))
+			_dtRecycle = null;
 
 		_evtInits.remove(klass);
 		_evtCleans.remove(klass);
@@ -1797,7 +1797,7 @@ public class Configuration {
 	 * @since 5.0.0
 	 */
 	public DesktopRecycle getDesktopRecycle() {
-		return _dtRcycle;
+		return _dtRecycle;
 	}
 	/** Sets the desktop recycler for this application, or null to disable it.
 	 *
@@ -1814,9 +1814,9 @@ public class Configuration {
 	 * @return the previous desktop recycle, or null if not available.
 	 * @since 5.0.0
 	 */
-	public DesktopRecycle setDesktopRecycle(DesktopRecycle dtRcycle) {
-		final DesktopRecycle old = _dtRcycle;
-		_dtRcycle = dtRcycle;
+	public DesktopRecycle setDesktopRecycle(DesktopRecycle dtRecycle) {
+		final DesktopRecycle old = _dtRecycle;
+		_dtRecycle = dtRecycle;
 		return old;
 	}
 
