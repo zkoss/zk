@@ -124,14 +124,30 @@ zk = function (sel) {
 	}
 
   /** @class _.zk
+   * A collection of ZK core utilities.
+   * The utilities are mostly related to the language enhancement we added to JavaScript,
+   * such as {@link #$extends} and {@link #@package}.
+   * <p>Refer to {@link _.jq} for DOM related utilities.
    */
   return {
-	/** The processing delay.
-	 * @type Integer
+	/** The delay before showing the processing prompt (unit: milliseconds). 
+	 * <p>Default: 900 (depending on the server's configuration)
+	 * @type _.Integer
 	 */
 	procDelay: 900,
+	/** The delay before showing a tooltip (unit: milliseconds).
+     * Default: 800 (depending on the server's configuration) 
+	 * @type _.Integer
+	 */
 	tipDelay: 800,
+	/** The delay before resending the AU request, i.e., assuming the last AU request fails (unit: milliseconds). A negative value means not to resend at all.
+     * Default: -1 (depending on the server's configuration). 	
+	 * @type _.Integer
+	 */
 	resendDelay: -1,
+	/** The last position that the mouse was clicked (including left and right clicks).
+	 * @type _.Offset
+	 */
 	lastPointer: [0, 0],
 	currentPointer: [0, 0],
 	loading: 0,
