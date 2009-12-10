@@ -274,7 +274,7 @@ mv -f temp/* codegen/src
 for target in $jsdocsrc ; do
 	echo "jsdoc $target"
 	mkdir -p codegen/$target
-	java -jar zk_jsdoc.jar "$maindir/$target/src" "./temp" "./codegen/$target/"
+	java -jar $maindir/dist/lib/ext/zk_jsdoc.jar "$maindir/$target/src" "./temp" "./codegen/$target/"
 	
 	mv -f codegen/$target/* codegen/src
 	rm -rf codegen/$target
