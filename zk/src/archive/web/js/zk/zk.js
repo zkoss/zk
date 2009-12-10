@@ -13,15 +13,16 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 jq = jQuery;
-zk = function (sel) {
+(zk = function (sel) {
 	return jq(sel, zk).zk;
-};
-(zk.copy = function (dst, src) {
+}).copy = function (dst, src) {
 	dst = dst || {};
 	for (var p in src)
 		dst[p] = src[p];
 	return dst;
-})(zk, (function () {
+};
+
+(function () {
 	var _oid = 0,
 		_statelesscnt = 0,
 		_logmsg,
@@ -123,35 +124,102 @@ zk = function (sel) {
 		}
 	}
 
-  /** @class _.zk
-   * A collection of ZK core utilities.
-   * The utilities are mostly related to the language enhancement we added to JavaScript,
-   * such as {@link #$extends} and {@link #@package}.
-   * <p>Refer to {@link _.jq} for DOM related utilities.
-   */
-  return {
+/** @class _.zk
+ * A collection of ZK core utilities.
+ * The utilities are mostly related to the language enhancement we added to JavaScript,
+ * such as {@link #$extends} and {@link #@package}.
+ * <p>Refer to {@link _.jq} for DOM related utilities.
+ */
+zk.copy(zk, {
 	/** The delay before showing the processing prompt (unit: milliseconds). 
 	 * <p>Default: 900 (depending on the server's configuration)
-	 * @type _.Integer
+	 * @type int
 	 */
 	procDelay: 900,
 	/** The delay before showing a tooltip (unit: milliseconds).
-     * Default: 800 (depending on the server's configuration) 
-	 * @type _.Integer
+	 * Default: 800 (depending on the server's configuration) 
+	 * @type int
 	 */
 	tipDelay: 800,
 	/** The delay before resending the AU request, i.e., assuming the last AU request fails (unit: milliseconds). A negative value means not to resend at all.
-     * Default: -1 (depending on the server's configuration). 	
-	 * @type _.Integer
+	 * Default: -1 (depending on the server's configuration). 	
+	 * @type int
 	 */
 	resendDelay: -1,
 	/** The last position that the mouse was clicked (including left and right clicks).
 	 * @type _.Offset
 	 */
-	lastPointer: [0, 0],
+	clickPointer: [0, 0],
+	/** The position of the mouse (including mouse move and click).
+	 * @type _.Offset
+	 */
 	currentPointer: [0, 0],
+	/** The number of widget packages (i.e., JavaScript files) being loaded
+	 * (and not yet complete).
+	 * <p>When the JavaScript files of widgets are loading, you shall not create
+	 * any widget. Rather, you can use {@link #afterLoad} to execute the creation
+	 * and other tasks after all required JavaScript files are loaded. 
+	 * @see #load
+	 * @see #afterLoad
+	 * @see #processing
+	 * @see #mounting
+	 * @type int
+	 */
 	loading: 0,
+	/** Whether ZK Client Engine has been mounting the peer widgets.
+	 * By mounting we mean the creation of the peer widgets under the
+	 * control of the server. To run after the mounting of the peer widgets,
+	 * use {@link #afterMount}
+	 * @see #afterMount
+	 * @see #processing
+	 * @see #loading
+	 * @type boolean
+	 */
+	//mounting: false,
+	/** Whether Client Engine is processing something, such as processing
+	 * an AU response. This flag is set when {@link #startProcessing}
+	 * is called, and cleaned when {@link #endProcessing} is called. 
+	 * @see #startProcessing
+	 * @see #loading
+	 * @see #mounting
+	 * @type boolean
+	 */
+	//processing: false,
 
+	/** The user agent of the browser.
+	 * @type _.String
+	 */
+	//agent: 'defined later',
+	/** Whether it is Internet Explorer.
+	 * @type boolean
+	 */
+	//ie: false,
+
+	/** Copies a map of properties (or options) from one map to another.
+     * <p>Example: We can extend Array.prototype as follows.
+	 * <pre><code>zk.copy(Array.prototoype, {
+	 * $add: function (o) {
+ 	 *  this.push(o);
+	 * }
+	 *});</code></pre>
+	 *
+	 * @param _.Map dest the destination object to copy properties to.
+	 * @param _.Map src the properties to copy from 
+	 * @return _.Map the destination object
+	 */
+	//copy: zk.$void, //define above
+
+	/** Defines a package. It creates the package if not defined yet.
+	 * It is similar to Java's package statement except it returns the package
+	 * object.
+	 *
+	 * <p>Example:
+	 * <pre><code>var foo = zk.$package('com.foo');
+	 *foo.Cool = zk.#$extends(zk.Object);</code></pre> 
+	 *
+	 * @param _.String naem the name of the package.
+	 * @return zk.Package
+	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
@@ -374,82 +442,9 @@ zk = function (sel) {
 		zk.contextURI = zk.contextURI || contextURI;
 		return dt || new Desktop(dtid, contextURI, updateURI, true);
 	}
-  };
-})());
-
-zk.copy(String.prototype, {
-	startsWith: function (prefix) {
-		return this.substring(0,prefix.length) == prefix;
-	},
-	endsWith: function (suffix) {
-		return this.substring(this.length-suffix.length) == suffix;
-	},
-	trim: function () {
-		var j = 0, tl = this.length, k = tl - 1;
-		while (j < tl && this.charAt(j) <= ' ')
-			++j;
-		while (k >= j && this.charAt(k) <= ' ')
-			--k;
-		return j > k ? "": this.substring(j, k + 1);
-	},
-	$camel: function() {
-		var parts = this.split('-'), len = parts.length;
-		if (len == 1) return parts[0];
-
-		var camelized = this.charAt(0) == '-' ?
-			parts[0].charAt(0).toUpperCase() + parts[0].substring(1): parts[0];
-
-		for (var i = 1; i < len; i++)
-			camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
-		return camelized;
-	},
-	$inc: function (diff) {
-		return String.fromCharCode(this.charCodeAt(0) + diff)
-	},
-	$sub: function (cc) {
-		return this.charCodeAt(0) - cc.charCodeAt(0);
-	}
 });
 
-zk.copy(Array.prototype, {
-	$array: true, //indicate it is an array
-	$contains: function (o) {
-		for (var j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j])
-				return true;
-		}
-		return false;
-	},
-	$equals: function (o) {
-		if (o && o.$array && o.length == this.length) {
-			for (var j = this.length; j--;) {
-				var e = this[j];
-				if (e != o[j] && (!e || !e.$array || !e.$equals(o[j])))
-					return false;
-			}
-			return true;
-		}
-	},
-	$remove: function (o) {
-		for (var ary = o != null && o.$array, j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j] || (ary && o.$equals(this[j]))) {
-				this.splice(j, 1);
-				return true;
-			}
-		}
-		return false;
-	},
-	$clone: function() {
-		return [].concat(this);
-	}
-});
-if (!Array.prototype.indexOf)
-	Array.prototype.indexOf = function (o) {
-		for (var i = 0, len = this.length; i < len; i++)
-			if (this[i] == o) return i;
-		return -1;
-	};
-
+//zk.agent//
 (function () {
 	zk.agent = navigator.userAgent.toLowerCase();
 	zk.safari = zk.agent.indexOf("safari") >= 0;
@@ -491,19 +486,24 @@ if (!Array.prototype.indexOf)
 		});
 })();
 
-zk.Object = function () {};
-zk.Object.prototype = (function () {
+//zk.Object//
 	function getProxy(o, f) { //used by zk.Object
 		return function () {
 				return f.apply(o, arguments);
 			};
 	}
-
-  return {
+zk.Object = function () {};
+/** @class zk.Object
+ * The root of the class hierarchy.
+ */
+zk.Object.prototype = {
 	$init: zk.$void,
 	$afterInit: function (f) {
 		(this._$ais = this._$ais || []).unshift(f); //reverse
 	},
+	/** The class that this object belongs to.
+	 * @type zk.Class
+	 */
 	$class: zk.Object,
 	$instanceof: function (cls) {
 		if (cls) {
@@ -559,12 +559,16 @@ zk.Object.prototype = (function () {
 		else if (fp = fps[f]) return fp;
 		return fps[f] = getProxy(this, f);
 	}
-  };
-})();
+};
 
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
+/** @partial zk.Class, zk.Object
+ */
 _zkf = {
+	/** The class that this object belongs to.
+	 * @type zk.Class
+	 */
 	$class: zk.Class,
 	isInstance: function (o) {
 		return o && o.$instanceof && o.$instanceof(this);
@@ -579,3 +583,5 @@ _zkf = {
 };
 zk.copy(zk.Class, _zkf);
 zk.copy(zk.Object, _zkf);
+
+})();

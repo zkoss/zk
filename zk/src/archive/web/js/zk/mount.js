@@ -374,8 +374,8 @@ jq(function() {
 	}
 	
 	function _docMouseDown(evt, wgt, noFocusChange) {
-		zk.lastPointer[0] = evt.pageX;
-		zk.lastPointer[1] = evt.pageY;
+		zk.clickPointer[0] = evt.pageX;
+		zk.clickPointer[1] = evt.pageY;
 
 		if (!wgt) wgt = evt.target;
 
@@ -522,8 +522,8 @@ jq(function() {
 		if (zk.processing) return;
 
 		_evtProxy(evt);
-		zk.lastPointer[0] = evt.pageX;
-		zk.lastPointer[1] = evt.pageY;
+		zk.clickPointer[0] = evt.pageX;
+		zk.clickPointer[1] = evt.pageY;
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
