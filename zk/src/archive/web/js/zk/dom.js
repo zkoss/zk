@@ -327,8 +327,7 @@ zk.copy(zjq, {
  *
  * @author tomyeh
  */
-//prototype =
-zk.override(jq.fn, _jq, {
+zk.override(jq.fn, _jq, /*prototype*/ {
 	/** The associated instance of {@link $zk} that
 	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
 	 * @type $zk
