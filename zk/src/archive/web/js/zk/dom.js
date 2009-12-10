@@ -217,7 +217,7 @@ zk.copy(zjq, {
 	_src0: "" //an empty src; overriden in domie.js
 });
 
-/** @class _.$jq
+/** @class _.jq
  * Represents the object returned by the <code>jq</code> function.
  * For example, <code>jq('#id');</code>
  *
@@ -225,7 +225,7 @@ zk.copy(zjq, {
  * It inherits all functionality provided by jQuery. Refer to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery documentation</a>
  * for complete reference. However, we use the global function called <code>jq</code>
  * to represent jQuery. Furthermore, for documentation purpose,
- * we use @{link $jq} to represent the object returned by the <code>jq</code> function.</p>
+ * we use @{link jq} to represent the object returned by the <code>jq</code> function.</p>
 
  * <p>Notice that there is no package called <code>_</code>.
 	Rather, it represents the global namespace of JavaScript.
@@ -233,7 +233,7 @@ zk.copy(zjq, {
 	in a browser.
  *
  * <h2>Diffirence and Enhancement to jQuery</h2>
- * <p><code>{@link $jq} jq(Object selector, Object context);</code>
+ * <p><code>{@link jq} jq(Object selector, Object context);</code>
  *
  * <blockquote>
  * <h3>Refer jQuery as <code>jq</code></h3>
@@ -243,12 +243,12 @@ zk.copy(zjq, {
  * <h3>Dual Objects</h3>
  * <p>To extend jQuery's functionally,  each time <code>jq(...)</code>
  * or <code>zk(...)</code> is called, an instance of {@link @jq}
- * and an instance of {@link $zk} are created. The former one provides the
+ * and an instance of {@link jqzk} are created. The former one provides the
  * standard jQuery API plus some minimal enhancement as described below.
  * The later is ZK's addions APIs.
  *
  * <p>You can retrieve one of the other with
- * {@link $jq#zk} and {@link $zk#jq}.
+ * {@link jq#zk} and {@link jqzk#jq}.
  *
  * <pre><code>jq('#abc').zk; //the same as zk('#abc')
  *zk('#abc').jq; //the same as jq('#abc');</code></pre>
@@ -309,28 +309,28 @@ zk.copy(zjq, {
  * <h3>Extra Global Functions</h3>
  * <blockquote>
  * <h4>The <code>zk</code> function</h4>
- * <pre><code>{@link $jq} zk(Object selector);</code></pre>
+ * <pre><code>{@link jq} zk(Object selector);</code></pre>
  *
  * <p>It is the same as <code>jq(selector, zk).zk</code>. In other words,
- * it assumes the zk context and returns an instance of {@link $zk}
- * rather than an instance of {@link $jq}. 
+ * it assumes the zk context and returns an instance of {@link jqzk}
+ * rather than an instance of {@link jq}. 
  * </blockquote>
  *
  * <h3>Other Extension</h3>
  * <ul>
  * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
- * <li>{@link $zk} - additional utilities to {@link $jq}.</li>
- * <li>{@link _.jq.Event} - the event object passed to the event listener</li>
- * <li>{@link _.jq.event} - a collection of functions used to manipulate events.</li>
+ * <li>{@link jqzk} - additional utilities to {@link jq}.</li>
+ * <li>{@link jq.Event} - the event object passed to the event listener</li>
+ * <li>{@link jq.event} - a collection of functions used to manipulate events.</li>
  * </ul>
  * </blockquote>
  *
  * @author tomyeh
  */
 zk.override(jq.fn, _jq, /*prototype*/ {
-	/** The associated instance of {@link $zk} that
+	/** The associated instance of {@link jqzk} that
 	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
-	 * @type $zk
+	 * @type jqzk
 	 */
 	//jq: null,
 
@@ -372,7 +372,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 * @param zk.Widget widget a widget
 	 * @param zk.Desktop desktop the desktop. It is optional.
 	 * @param zk.Skipper skipper the skipper. It is optional.
-	 * @return $jq the jq object matching the DOM element after replaced
+	 * @return jq the jq object matching the DOM element after replaced
 	 */
 	replaceWith: function (w, desktop, skipper) {
 		if (!zk.Widget.isInstance(w))
@@ -385,7 +385,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
 	 * it does nothing if nothing is matched.
-	 * @return $jq this object
+	 * @return jq this object
 	 */
 	remove: function () {
 		return _isNone(this) ? this: _jq.remove.apply(this, arguments);
@@ -393,7 +393,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	/** Shows all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
 	 * it does nothing if nothing is matched.
-	 * @return $jq this object
+	 * @return jq this object
 	 */
 	show: function () {
 		return _isNone(this) ? this: _jq.show.apply(this, arguments);
@@ -401,7 +401,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	/** Hides all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/hide">jQuery</a>,
 	 * it does nothing if nothing is matched.
-	 * @return $jq this object
+	 * @return jq this object
 	 */
 	hide: function () {
 		return _isNone(this) ? this: _jq.hide.apply(this, arguments);
@@ -428,24 +428,24 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 	};
 });
 
-/** @class _.$zk
+/** @class _.jqzk
  * Represents the object returned by the <code>zk</code> function, or by
- * {@link _.$jq#zk}.
+ * {@link jq#zk}.
  * For example, <code>zk('#id');</code>
  *
  * <p>Refer to {@link @jq} for more information.
  *
  * <h3>Other Extension</h3>
  * <ul>
- * <li>{@link $jq} - the object returned by <code>jq(...)</code>. The original jQuery API.</li>
+ * <li>{@link jq} - the object returned by <code>jq(...)</code>. The original jQuery API.</li>
  * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
- * <li>{@link _.jq.Event} - the event object passed to the event listener</li>
- * <li>{@link _.jq.event} - a collection of functions used to manipulate events.</li>
+ * <li>{@link jq.Event} - the event object passed to the event listener</li>
+ * <li>{@link jq.event} - a collection of functions used to manipulate events.</li>
  * </ul>
  */
 zjq.prototype = {
-	/** The associated instance of {@link $jq}, the object returned by <code>jq(...)</code>.
-	 * @type $jq
+	/** The associated instance of {@link jq}, the object returned by <code>jq(...)</code>.
+	 * @type jq
 	 */
 	//jq: null, //assigned at run time
 
@@ -1053,11 +1053,9 @@ zjq.prototype = {
 	}
 };
 
-/** @class _.jq
- * DOM utilities in addition to {@link $jq} and {@link $zk}.
- * For example, <code>jq.px(node);</code>.
+/** @partial _.jq
  */
-zk.copy(jq, { //ZK extension to jq
+zk.copy(jq, {
 	/** Converting an integer to a string ending with "px".
 	 * @param Integer v the number of pixels
 	 * @param Boolean negativeAllowed [Optional|false] whether a negative
@@ -1279,8 +1277,8 @@ zk.copy(jq, { //ZK extension to jq
 	}
 });
 
-/** @class _.jq.Event
- * A DOM element.
+/** @class jq.Event
+ * A DOM event.
  */
 zk.copy(jq.Event.prototype, {
 	/** Stops the event propagation.
