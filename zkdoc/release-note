@@ -54,7 +54,10 @@ November, 2009
   2908598: The script directive supports the if/unless attribute
   2909551: ZK Client engine support Google AJAX API loader
   2905982: A way to reuse the desktop across the requests
-
+  
+* RC2 Bugs  
+  2911743: listbox rod + databind save-when not working
+  
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
   2870620: No menupopup onOpen reference when right click gmaps

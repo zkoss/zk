@@ -1269,7 +1269,7 @@ public class DataBinder implements java.io.Serializable {
 
 	//given a clone and a template, return the associated clone of that template.
 	/*package*/ static Component lookupClone(Component srcClone, Component srcTemplate) {
-		if (isTemplate(srcTemplate)) {
+		if (isTemplate(srcTemplate) && srcClone != null) {
 			Map templatemap = (Map) srcClone.getAttribute(TEMPLATEMAP);
 			return myLookupClone(srcTemplate, templatemap);
 		}
