@@ -11,9 +11,9 @@
 #Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 #
 stamp=$(date +%Y-%m-%d)
+cd ..
 maindir="$(pwd)"
 target=$1
-
 setting=build.setting.local
 if [ ! -f $setting ] ; then
 	setting=build.setting
@@ -33,21 +33,21 @@ if [ $# != 0 ] ; then
 			exit 1
 		fi
 	done
-else
-	deploy=
-	if [ -f deploy ] ; then
-		deploy=$(head -1 deploy)
-		jsdocsrc=$(grep '^jsdoc=' deploy)
-		jsdocsrc=${jsdocsrc#jsdoc=}
-		if [ "$jsdocsrc" = "" ] ; then
-			echo jsdoc must be specified in $deploy
-			exit 1
-		fi
-	else
-		echo $deploy must be specified
-		exit 1
-	fi
-	jsdocsrc="$(echo $jsdocsrc | tr ',' ' ')"
+#else
+#	deploy=
+#	if [ -f deploy ] ; then
+#		deploy=$(head -1 deploy)
+#		jsdocsrc=$(grep '^jsdoc=' deploy)
+#		jsdocsrc=${jsdocsrc#jsdoc=}
+#		if [ "$jsdocsrc" = "" ] ; then
+#			echo jsdoc must be specified in $deploy
+#			exit 1
+#		fi
+#	else
+#		echo $deploy must be specified
+#		exit 1
+#	fi
+#	jsdocsrc="$(echo $jsdocsrc | tr ',' ' ')"
 fi
 
 for target in $jsdocsrc ; do

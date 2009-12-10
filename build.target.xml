@@ -310,3 +310,11 @@ if="deploy.jboss.required">
 		 excludes="**/package.html" />
 	</copy>
 </target>
+
+<target name="jsdoc">
+	<!-- generate JavaScript Doc -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/jsdoc"/>
+		<arg value="${project.name}"/>
+	</exec>
+</target>
