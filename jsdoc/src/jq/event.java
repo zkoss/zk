@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package _.jq;
+package jq;
 
 /**
  * Event utilities used to handle the Event object ({@link Event}).

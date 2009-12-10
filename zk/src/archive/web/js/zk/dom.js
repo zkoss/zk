@@ -217,7 +217,124 @@ zk.copy(zjq, {
 	_src0: "" //an empty src; overriden in domie.js
 });
 
+/** @class _.$jq
+ * Represents the object returned by the <code>jq</code> function.
+ * For example, <code>jq('#id');</code>
+ *
+ * <p>ZK 5 Client Engine is based on <a href="http://jquery.com/" target="jq">jQuery</a>.
+ * It inherits all functionality provided by jQuery. Refer to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery documentation</a>
+ * for complete reference. However, we use the global function called <code>jq</code>
+ * to represent jQuery. Furthermore, for documentation purpose,
+ * we use @{link $jq} to represent the object returned by the <code>jq</code> function.</p>
+
+ * <p>Notice that there is no package called <code>_</code>.
+	Rather, it represents the global namespace of JavaScript.
+	In other words, it is the namespace of the <code>window</code> object
+	in a browser.
+ *
+ * <h2>Diffirence and Enhancement to jQuery</h2>
+ * <p><code>{@link $jq} jq(Object selector, Object context);</code>
+ *
+ * <blockquote>
+ * <h3>Refer jQuery as <code>jq</code></h3>
+ * <p>First of all, the jQuery class is referenced as #jq, and it is suggested to use jq instead of $ or jQuery when developing a widget, since it might be renamed later by an application (say, overridden by other client framework). Here is an example uses jq:
+ * <pre><code>jq(document.body).append("<div></div>");</code></pre>
+ *
+ * <h3>Dual Objects</h3>
+ * <p>To extend jQuery's functionally,  each time <code>jq(...)</code>
+ * or <code>zk(...)</code> is called, an instance of {@link @jq}
+ * and an instance of {@link $zk} are created. The former one provides the
+ * standard jQuery API plus some minimal enhancement as described below.
+ * The later is ZK's addions APIs.
+ *
+ * <p>You can retrieve one of the other with
+ * {@link $jq#zk} and {@link $zk#jq}.
+ *
+ * <pre><code>jq('#abc').zk; //the same as zk('#abc')
+ *zk('#abc').jq; //the same as jq('#abc');</code></pre>
+ *
+ * <h3>Extra Selectors</h3>
+ * <blockquote>
+ *
+ * <h4>@id</h4>
+ * <p><code>jq</code> is extended to support the selection by use of DOM's ID
+ * and then widget's ID (@{link zk.Widget#id}). For example,
+ * <pre><code>jq('@xx');</code></pre>
+ *
+ *<p>Notice that it looks for the DOM tree first to see if any DOM element
+ * whose ID is xx. If not found, it looks for any bound widget whose ID is xx and select the DOM element associated with the widget.
+ * If you want to search the widget first, use <code>"$id"</code>.
+ *
+ * <p>If you want to search the widget in the inner ID space, you can specify
+ * the path after @. For example, the following searches the space owner named x,
+ * then y, and finally z
+ * <pre><code>jq('@x/y/z');</code></pre>
+ *
+ * <h4>$id</h4>
+ * <p><code>jq</code> is extended to support the selection by use of widget's
+ * ID ({@link zk.Widget#id}), and then DOM element's ID. For example,
+ * <pre><code>jq('$xx');</code></pre>
+ *
+ * <p>Notice that it looks for any bound widget first whose ID is xx, and
+ * select the associated DOM element if found. If not found, it search
+ * the DOM tree to see if any DOM element whose ID is xx.
+ *
+ * <p>If you want to search the widget in the inner ID space, you can specify the path after $. For example, the following searches the space owner named x, then y, and finally z
+ * <pre><code>jq('$x/y/z');</code></pre>
+ *
+ * <h4>A widget</h4>
+ * <p><code>jq</code> is extended to support {@link zk.Widget}.
+ * If the selector is a widget, <code>jq</code> will select the associated DOM element
+ * of the widget.
+ *
+ * <pre><code>jq(widget).after('<div></div>'); //assume widget is an instance of {@link zk.Widget}</code></pre>
+ *
+ * <p>In other words, it is the same as
+ *
+ * <pre><code>jq(widget.$n()).after('<div></div>');</code></pre>
+ * </blockquote>
+ *
+ * <h3>Extra Contexts</h3>
+ * <blockquote>
+ * <h4>The <code>zk</code> context</h4>
+ * <pre><code>jq('foo', zk);</code></pre>
+ * <p>With the zk context, the selector without any prefix is assumed to be
+ * the identifier of ID. In other words, you don't need to prefix it with '#'.
+ * Thus, the above example is the same as
+ * <pre><code>jq('#foo')</code></pre>
+ *
+ * <p>Of course, if the selector is not a string or prefix with a non-alphnumeric letter, the zk context is ignored. 
+ * </blockquote>
+ *
+ * <h3>Extra Global Functions</h3>
+ * <blockquote>
+ * <h4>The <code>zk</code> function</h4>
+ * <pre><code>{@link $jq} zk(Object selector);</code></pre>
+ *
+ * <p>It is the same as <code>jq(selector, zk).zk</code>. In other words,
+ * it assumes the zk context and returns an instance of {@link $zk}
+ * rather than an instance of {@link $jq}. 
+ * </blockquote>
+ *
+ * <h3>Other Extension</h3>
+ * <ul>
+ * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
+ * <li>{@link $zk} - additional utilities to {@link $jq}.</li>
+ * <li>{@link _.jq.Event} - the event object passed to the event listener</li>
+ * <li>{@link _.jq.event} - a collection of functions used to manipulate events.</li>
+ * </ul>
+ * </blockquote>
+ *
+ * @author tomyeh
+ */
+//prototype =
 zk.override(jq.fn, _jq, {
+	/** The associated instance of {@link $zk} that
+	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
+	 * @type $zk
+	 */
+	//jq: null,
+
 	init: function (sel, ctx) {
 		var cc;
 		if (typeof sel == 'string') {
@@ -250,6 +367,14 @@ zk.override(jq.fn, _jq, {
 		ret.zk = new zjq(ret);
 		return ret;
 	},
+	/** Replaces the match elements with the specified HTML, DOM or {@link zk.Widget}.
+	 * We extends <a href="http://docs.jquery.com/Manipulation/replaceWith">jQuery's replaceWith</a>
+	 * to allow replacing with an instance of {@link zk.Widget}.
+	 * @param zk.Widget widget a widget
+	 * @param zk.Desktop desktop the desktop. It is optional.
+	 * @param zk.Skipper skipper the skipper. It is optional.
+	 * @return $jq the jq object matching the DOM element after replaced
+	 */
 	replaceWith: function (w, desktop, skipper) {
 		if (!zk.Widget.isInstance(w))
 			return _jq.replaceWith.apply(this, arguments);
@@ -258,12 +383,27 @@ zk.override(jq.fn, _jq, {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
+	/** Removes all matched elements from the DOM.
+	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
+	 * it does nothing if nothing is matched.
+	 * @return $jq this object
+	 */
 	remove: function () {
 		return _isNone(this) ? this: _jq.remove.apply(this, arguments);
 	},
+	/** Shows all matched elements from the DOM.
+	 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
+	 * it does nothing if nothing is matched.
+	 * @return $jq this object
+	 */
 	show: function () {
 		return _isNone(this) ? this: _jq.show.apply(this, arguments);
 	},
+	/** Hides all matched elements from the DOM.
+	 * <p>Unlike <a href="http://docs.jquery.com/hide">jQuery</a>,
+	 * it does nothing if nothing is matched.
+	 * @return $jq this object
+	 */
 	hide: function () {
 		return _isNone(this) ? this: _jq.hide.apply(this, arguments);
 	}
@@ -290,10 +430,28 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 });
 
 /** @class _.$zk
+ * Represents the object returned by the <code>zk</code> function, or by
+ * {@link _.$jq#zk}.
+ * For example, <code>zk('#id');</code>
+ *
+ * <p>Refer to {@link @jq} for more information.
+ *
+ * <h3>Other Extension</h3>
+ * <ul>
+ * <li>{@link $jq} - the object returned by <code>jq(...)</code>. The original jQuery API.</li>
+ * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
+ * <li>{@link _.jq.Event} - the event object passed to the event listener</li>
+ * <li>{@link _.jq.event} - a collection of functions used to manipulate events.</li>
+ * </ul>
  */
 zjq.prototype = {
+	/** The associated instance of {@link $jq}, the object returned by <code>jq(...)</code>.
+	 * @type $jq
+	 */
+	//jq: null, //assigned at run time
+
 	/** Returns an array of widgets for each DOM element (selected by this object).
-	 * @return Array an array of widget
+	 * @return _.Array an array of widget ({@link zk.Widget})
 	 */
 	widget: function () {
 		var ws = [];
