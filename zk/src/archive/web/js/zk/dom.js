@@ -450,7 +450,7 @@ zjq.prototype = {
 	//jq: null, //assigned at run time
 
 	/** Returns an array of widgets for each DOM element (selected by this object).
-	 * @return _.Array an array of widget ({@link zk.Widget})
+	 * @return Array an array of widget ({@link zk.Widget})
 	 */
 	widget: function () {
 		var ws = [];

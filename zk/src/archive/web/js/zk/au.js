@@ -628,7 +628,7 @@ zAu = {
 	 * Component.redraw() at the server.
 	 * <p>This method is usually used with Java's ComponentsCtrl.redraw, and
 	 * {@link zk.Widget#replaceCaveChildren_}.
-	 * @param _.Array codes an array of JavaScript codes generated at the server.
+	 * @param Array codes an array of JavaScript codes generated at the server.
 	 * For example, <code>smartUpdate("foo", ComponentsCtrl.redraw(getChildren());</code>
 	 */
 	createWidgets: function (codes) {

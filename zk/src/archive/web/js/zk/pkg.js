@@ -151,7 +151,7 @@ zk.copy(zk, (function() {
 		}
 	},
 	/** Notify ZK that the name of the JavaScript file is loaded.
-	 * @param _.String name the name of the JavaScript file.
+	 * @param String name the name of the JavaScript file.
 	 * It must be the same as the one passed to {@link #loadScript}.
 	 */
 	setScriptLoaded: _zkf,
@@ -179,14 +179,14 @@ zk.copy(zk, (function() {
 	},
 
 	/** Loads a JavaScript file.
-	 * @param _.String src the URL of the JavaScript file.
-	 * @param _.String name the name to shown up in the progressing dialog.
+	 * @param String src the URL of the JavaScript file.
+	 * @param String name the name to shown up in the progressing dialog.
 	 * Specify a non-empty string if you want ZK not to create widgets until
 	 * this file is loaded. Ignored if not specified or null.
 	 * If you specify a name here, you have to call {@link #setScriptLoaded}
-	 * when the script is loaded. Otherwise, @{link _.zk#loading} won't be zero
+	 * when the script is loaded. Otherwise, @{link zk#loading} won't be zero
 	 * and ZK Client Engine is halted.
-	 * @param _.String charset the charset. UTF-8 is assumed if null.
+	 * @param String charset the charset. UTF-8 is assumed if null.
 	 */
 	loadScript: function (src, name, charset) {
 		if (name)

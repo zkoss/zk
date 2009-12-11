@@ -128,7 +128,7 @@ jq = jQuery;
  * A collection of ZK core utilities.
  * The utilities are mostly related to the language enhancement we added to JavaScript,
  * such as {@link #$extends} and {@link #@package}.
- * <p>Refer to {@link _.jq} for DOM related utilities.
+ * <p>Refer to {@link jq} for DOM related utilities.
  */
 zk.copy(zk, {
 	/** The delay before showing the processing prompt (unit: milliseconds). 
@@ -147,11 +147,11 @@ zk.copy(zk, {
 	 */
 	resendDelay: -1,
 	/** The last position that the mouse was clicked (including left and right clicks).
-	 * @type _.Offset
+	 * @type Offset
 	 */
 	clickPointer: [0, 0],
 	/** The position of the mouse (including mouse move and click).
-	 * @type _.Offset
+	 * @type Offset
 	 */
 	currentPointer: [0, 0],
 	/** The number of widget packages (i.e., JavaScript files) being loaded
@@ -187,7 +187,7 @@ zk.copy(zk, {
 	//processing: false,
 
 	/** The user agent of the browser.
-	 * @type _.String
+	 * @type String
 	 */
 	//agent: 'defined later',
 	/** Whether it is Internet Explorer.
@@ -203,9 +203,9 @@ zk.copy(zk, {
 	 * }
 	 *});</code></pre>
 	 *
-	 * @param _.Map dest the destination object to copy properties to.
-	 * @param _.Map src the properties to copy from 
-	 * @return _.Map the destination object
+	 * @param Map dest the destination object to copy properties to.
+	 * @param Map src the properties to copy from 
+	 * @return Map the destination object
 	 */
 	//copy: zk.$void, //define above
 
@@ -217,7 +217,7 @@ zk.copy(zk, {
 	 * <pre><code>var foo = zk.$package('com.foo');
 	 *foo.Cool = zk.#$extends(zk.Object);</code></pre> 
 	 *
-	 * @param _.String naem the name of the package.
+	 * @param String name the name of the package.
 	 * @return zk.Package
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet

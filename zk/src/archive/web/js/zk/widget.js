@@ -940,14 +940,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Replaced the child widgets with the specified.
 	 * It is usefull if you want to replace a part of children whose
 	 * DOM element is a child element of <code>subId</code> (this.$n(subId)).
-	 * @param _.String subId the ID of the cave that contains the child widgets
+	 * @param String subId the ID of the cave that contains the child widgets
 	 * to replace with.
-	 * @param _.Array wgts an arrray of widgets that will become children of this widget
-	 * @param _.String tagBeg the beginning of HTML tag, such as <tbody>.
+	 * @param Array wgts an arrray of widgets that will become children of this widget
+	 * @param String tagBeg the beginning of HTML tag, such as <tbody>.
 	 * Ignored if null.
-	 * @param _.String tagEnd the ending of HTML tag, such as </tbody>
+	 * @param String tagEnd the ending of HTML tag, such as </tbody>
 	 * Ignored if null.
-	 * @see _.zAu.createWidgets
+	 * @see zAu.createWidgets
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)
