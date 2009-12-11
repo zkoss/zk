@@ -611,10 +611,17 @@ public class Binding implements java.io.Serializable {
 				final BindingInfo bi = (BindingInfo) it.next();
 				final Component dt = bi.getComponent();
 				final Binding binding = bi.getBinding();
+				final DataBinder binder = binding.getBinder();
 				final Component dataTarget = DataBinder.isTemplate(dt) ? 
 					DataBinder.lookupClone(event.getTarget(), dt) : dt;
 				if (dataTarget != null) {
 					binding.loadAttribute(dataTarget);
+				} else { //#bug 2897202
+					final List clones = scanClones(binder, dt);
+					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
+						final Component dataTarget1 = (Component)itc.next();
+						binding.loadAttribute(dataTarget1);
+					}
 				}
 			}
 		}
@@ -751,40 +758,38 @@ public class Binding implements java.io.Serializable {
 			}
 			
 		}
-
-		//scan up the component hierarchy until the real owner is found and collect all cloned components.
-		private List scanClones(DataBinder binder, Component comp) {
-			if (DataBinder.isTemplate(comp)) {
-				final List owners = scanClones(binder, binder.getCollectionOwner(comp)); //recursive
-				final List kidowners = new ArrayList(1024);
-				for (final Iterator it = owners.iterator(); it.hasNext();) {
-					final Component owner = (Component) it.next();
-					final CollectionItem decor = binder.getCollectionItemByOwner(owner);
-					//backward compatible, CollectionItemEx.getItems() is faster
-					if (decor instanceof CollectionItemExt) {
-						final CollectionItemExt decorex = (CollectionItemExt) decor;
-						for (final Iterator iti = decorex.getItems(owner).iterator(); iti.hasNext();) {
-							final Component item = (Component) iti.next();
+	}
+	//scan up the component hierarchy until the real owner is found and collect all cloned components.
+	private static List scanClones(DataBinder binder, Component comp) {
+		if (DataBinder.isTemplate(comp)) {
+			final List owners = scanClones(binder, binder.getCollectionOwner(comp)); //recursive
+			final List kidowners = new ArrayList(1024);
+			for (final Iterator it = owners.iterator(); it.hasNext();) {
+				final Component owner = (Component) it.next();
+				final CollectionItem decor = binder.getCollectionItemByOwner(owner);
+				//backward compatible, CollectionItemEx.getItems() is faster
+				if (decor instanceof CollectionItemExt) {
+					final CollectionItemExt decorex = (CollectionItemExt) decor;
+					for (final Iterator iti = decorex.getItems(owner).iterator(); iti.hasNext();) {
+						final Component item = (Component) iti.next();
+						kidowners.add(DataBinder.lookupClone(item, comp));
+					}
+				} else {
+					try {
+						for (int j = 0; true; ++j) { //iterate until out of bound
+							final Component item = decor.getComponentAtIndexByOwner(owner, j);
 							kidowners.add(DataBinder.lookupClone(item, comp));
 						}
-					} else {
-						try {
-							for (int j = 0; true; ++j) { //iterate until out of bound
-								final Component item = decor.getComponentAtIndexByOwner(owner, j);
-								kidowners.add(DataBinder.lookupClone(item, comp));
-							}
-						} catch (IndexOutOfBoundsException ex) {
-							//ignore, iterate until out of bound
-						}
+					} catch (IndexOutOfBoundsException ex) {
+						//ignore, iterate until out of bound
 					}
 				}
-				return kidowners;
-			} else {
-				final List owners = new ArrayList(1);
-				owners.add(comp);
-				return owners;
 			}
+			return kidowners;
+		} else {
+			final List owners = new ArrayList(1);
+			owners.add(comp);
+			return owners;
 		}
 	}
-
 }
