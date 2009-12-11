@@ -224,6 +224,7 @@ public class WebManager {
 			val ^= Integer.parseInt(_wapp.getBuild());
 		} catch (Throwable ex) { //ignore it
 		}
+		val += WebApps.getEdition().hashCode();
 		if (val < 0) val = -val;
 		return Integer.toString(val % 100000000);
 			//FF 8-char boundary: http://code.google.com/intl/de/speed/page-speed/docs/caching.html
