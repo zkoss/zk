@@ -124,7 +124,7 @@ jq = jQuery;
 		}
 	}
 
-/** @class _.zk
+/** @class zk
  * A collection of ZK core utilities.
  * The utilities are mostly related to the language enhancement we added to JavaScript,
  * such as {@link #$extends} and {@link #@package}.

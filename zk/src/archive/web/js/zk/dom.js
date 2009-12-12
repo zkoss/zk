@@ -217,7 +217,7 @@ zk.copy(zjq, {
 	_src0: "" //an empty src; overriden in domie.js
 });
 
-/** @class _.jq
+/** @class jq
  * Represents the object returned by the <code>jq</code> function.
  * For example, <code>jq('#id');</code>
  *
@@ -428,7 +428,7 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 	};
 });
 
-/** @class _.jqzk
+/** @class jqzk
  * Represents the object returned by the <code>zk</code> function, or by
  * {@link jq#zk}.
  * For example, <code>zk('#id');</code>
@@ -1053,7 +1053,7 @@ zjq.prototype = {
 	}
 };
 
-/** @partial _.jq
+/** @partial jq
  */
 zk.copy(jq, {
 	/** Converting an integer to a string ending with "px".
