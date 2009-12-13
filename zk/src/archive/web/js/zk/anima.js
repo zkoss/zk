@@ -12,33 +12,15 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.copy(zk, {
-	animating: function () {
-		return !!jq.timers.length;
-	},
-	_anique: {}
-});
-zk.copy(zjq.prototype, {
-	_unit: 'px',
-	_saveProp: function (set) {
-		var ele = this.jq;
-		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.data("zk.cache."+set[i], ele[0].style[set[i]]);
-		return this;
-	},
-	_restoreProp: function (set) {
-		var ele = this.jq;
-		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.css(set[i], ele.data("zk.cache."+set[i]));
-		return this;
-	},
-	_addAnique: function(id, data) {
+(function () {
+
+	function _addAnique(id, data) {
 		var ary = zk._anique[id];
 		if (!ary)
 			ary = zk._anique[id] = [];
 		ary.push(data);
-	},
-	_doAnique: function (id) {
+	}
+	function _doAnique(id) {
 		var ary = zk._anique[id];
 		if (ary) {
 			var al = ary.length;
@@ -55,10 +37,30 @@ zk.copy(zjq.prototype, {
 			if (!al)
 				delete zk._anique[id];
 		}
+	}
+
+zk.copy(zk, {
+	animating: function () {
+		return !!jq.timers.length;
+	},
+	_anique: {}
+});
+zk.copy(zjq.prototype, {
+	_saveProp: function (set) {
+		var ele = this.jq;
+		for(var i = set.length; i--;)
+			if(set[i] !== null) ele.data("zk.cache."+set[i], ele[0].style[set[i]]);
+		return this;
+	},
+	_restoreProp: function (set) {
+		var ele = this.jq;
+		for(var i = set.length; i--;)
+			if(set[i] !== null) ele.css(set[i], ele.data("zk.cache."+set[i]));
+		return this;
 	},
 	_checkAnimated: function (wgt, opts, anima) {
 		if (this.jq.is(':animated')) {
-			this._addAnique(wgt.uuid, {el: this.jq[0], wgt: wgt, opts: opts, anima: anima});
+			_addAnique(wgt.uuid, {el: this.jq[0], wgt: wgt, opts: opts, anima: anima});
 			return true;
 		}
 		return false;
@@ -89,7 +91,7 @@ zk.copy(zjq.prototype, {
 			if (prop) self._restoreProp(prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);
 			setTimeout(function () {
-				self._doAnique(wgt.uuid);
+				_doAnique(wgt.uuid);
 			});
 		};
 		return this;
@@ -110,23 +112,23 @@ zk.copy(zjq.prototype, {
 		switch (anchor) {
 		case 't':
 			css.height = '0px';
-			anima.height = dims.height + this._unit;
+			anima.height = jq.px0(dims.height);
 			break;
 		case 'b':
 			css.height = '0px';
-			css.top = dims.top + dims.height + this._unit;
-			anima.height = dims.height + this._unit;
-			anima.top = dims.top + this._unit;
+			css.top = jq.px(dims.top + dims.height);
+			anima.height = jq.px0(dims.height);
+			anima.top = jq.px(dims.top);
 			break;
 		case 'l':
 			css.width = '0px';
-			anima.width = dims.width + this._unit;
+			anima.width = jq.px0(dims.width);
 			break;
 		case 'r':
 			css.width = '0px';
-			css.left = dims.left + dims.width + this._unit;
-			anima.width = dims.width + this._unit;
-			anima.left = dims.left + this._unit;
+			css.left = jq.px(dims.left + dims.width);
+			anima.width = jq.px0(dims.width);
+			anima.left = jq.px(dims.left);
 			break;
 		}
 
@@ -152,17 +154,17 @@ zk.copy(zjq.prototype, {
 			anima.height = 'hide';
 			break;
 		case 'b':
-			css.height = dims.height + this._unit;
+			css.height = jq.px0(dims.height);
 			anima.height = 'hide';
-			anima.top = dims.top + dims.height + this._unit;
+			anima.top = jq.px(dims.top + dims.height);
 			break;
 		case 'l':
 			anima.width = 'hide';
 			break;
 		case 'r':
-			css.width = dims.width + this._unit;
+			css.width = jq.px0(dims.width);
 			anima.width = 'hide';
-			anima.left = dims.left + dims.width + this._unit;
+			anima.left = jq.px(dims.left + dims.width);
 			break;
 		}
 
@@ -185,16 +187,16 @@ zk.copy(zjq.prototype, {
 
 		switch (anchor) {
 		case 't':
-			anima.top = dims.top - dims.height + this._unit;
+			anima.top = jq.px(dims.top - dims.height);
 			break;
 		case 'b':
-			anima.top = dims.top + dims.height + this._unit;
+			anima.top = jq.px(dims.top + dims.height);
 			break;
 		case 'l':
-			anima.left = dims.left - dims.width + this._unit;
+			anima.left = jq.px(dims.left - dims.width);
 			break;
 		case 'r':
-			anima.left = dims.left + dims.width + this._unit;
+			anima.left = jq.px(dims.left + dims.width);
 			break;
 		}
 
@@ -217,20 +219,20 @@ zk.copy(zjq.prototype, {
 
 		switch (anchor) {
 		case 't':
-			css.top = dims.top - dims.height + this._unit;
-			anima.top = dims.top + this._unit;
+			css.top = jq.px(dims.top - dims.height);
+			anima.top = jq.px(dims.top);
 			break;
 		case 'b':
-			css.top = dims.top + dims.height + this._unit;
-			anima.top = dims.top + this._unit;
+			css.top = jq.px(dims.top + dims.height);
+			anima.top = jq.px(dims.top);
 			break;
 		case 'l':
-			css.left = dims.left - dims.width + this._unit;
-			anima.left = dims.left + this._unit;
+			css.left = jq.px(dims.left - dims.width);
+			anima.left = jq.px(dims.left);
 			break;
 		case 'r':
-			css.left = dims.left + dims.width + this._unit;
-			anima.left = dims.left + this._unit;
+			css.left = jq.px(dims.left + dims.width);
+			anima.left = jq.px(dims.left);
 			break;
 		}
 
@@ -240,3 +242,4 @@ zk.copy(zjq.prototype, {
 		});
 	}
 });
+})();

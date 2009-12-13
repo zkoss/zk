@@ -104,7 +104,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				if (zk.ie7_)
 					zk(body).redoCSS();
 			} else {
-				body.style.width = jq.px(fixedSize);
+				body.style.width = jq.px0(fixedSize);
 				this._fixScrollPos(node);
 			}
 			this._fixButtonPos(node);
@@ -112,7 +112,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			if (totalWidth > nodeWidth) {
 				this._scrolling = true;
 				this._fixButtonPos(node);
-				body.style.width = jq.px(fixedSize);
+				body.style.width = jq.px0(fixedSize);
 			}
 		}
 	},

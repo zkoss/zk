@@ -180,8 +180,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 			stackup.className = "z-dd-stackup";
 			zk(stackup).disableSelection();
 			var st = (this.stackup = stackup).style;
-			st.width = jq.px(jq.pageWidth());
-			st.height = jq.px(jq.pageHeight());
+			st.width = jq.px0(jq.pageWidth());
+			st.height = jq.px0(jq.pageHeight());
 		}
 		zk.dragging = this.dragging = true;
 
@@ -437,13 +437,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		} else if (typeof this.opts.constraint == 'function') {
 			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
-			style.left = jq.px(p[0], true);
-			style.top  = jq.px(p[1], true);
+			style.left = jq.px(p[0]);
+			style.top  = jq.px(p[1]);
 		} else {
 			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
-				style.left = jq.px(p[0], true);
+				style.left = jq.px(p[0]);
 			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
-				style.top  = jq.px(p[1], true);
+				style.top  = jq.px(p[1]);
 		}
 
 		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering

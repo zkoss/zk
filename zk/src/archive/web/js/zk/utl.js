@@ -220,8 +220,8 @@ zUtl = { //static methods
 		if (mask && $txt.length) { //center
 			var txt = $txt[0],
 				st = txt.style;
-			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x, true);
-			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y, true);
+			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
+			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
 		}
 
 		$n.zk.cleanVisibility();

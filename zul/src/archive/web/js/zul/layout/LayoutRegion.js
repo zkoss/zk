@@ -183,7 +183,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var cave = this.$n('cave'),
 					hgh = cave ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
 				if (zk.ie) n.style.height = '';
-				n.style.height = jq.px(hgh);
+				n.style.height = jq.px0(hgh);
 			}
 		}
 		if (sz.width !== undefined) {
@@ -194,7 +194,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			else {
 				var wdh = zk(n).revisedWidth(sz.width, true);
 				if (zk.ie) n.style.width = '';
-				n.style.width = jq.px(wdh);
+				n.style.width = jq.px0(wdh);
 			}
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
@@ -464,20 +464,20 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
 		case BL.NORTH:
-			to.style.top = jq.px(from.offsetTop + from.offsetHeight, true);
-			to.style.left = jq.px(from.offsetLeft, true);
+			to.style.top = jq.px(from.offsetTop + from.offsetHeight);
+			to.style.left = jq.px(from.offsetLeft);
 			break;
 		case BL.SOUTH:
-			to.style.top = jq.px(from.offsetTop - to.offsetHeight, true);
-			to.style.left = jq.px(from.offsetLeft, true);
+			to.style.top = jq.px(from.offsetTop - to.offsetHeight);
+			to.style.left = jq.px(from.offsetLeft);
 			break;
 		case BL.WEST:
-			to.style.left = jq.px(from.offsetLeft + from.offsetWidth, true);
-			to.style.top = jq.px(from.offsetTop, true);
+			to.style.left = jq.px(from.offsetLeft + from.offsetWidth);
+			to.style.top = jq.px(from.offsetTop);
 			break;
 		case BL.EAST:
-			to.style.left = jq.px(from.offsetLeft - to.offsetWidth, true);
-			to.style.top = jq.px(from.offsetTop, true);
+			to.style.left = jq.px(from.offsetLeft - to.offsetWidth);
+			to.style.top = jq.px(from.offsetTop);
 			break;
 		}
 	},
@@ -537,9 +537,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (zk(split).isVisible()) {
 			if (zk(sbtn).isVisible()) {
 				if (this._isVertical()) 
-					sbtn.style.marginLeft = jq.px(((ambit.w - sbtn.offsetWidth) / 2));
+					sbtn.style.marginLeft = jq.px0(((ambit.w - sbtn.offsetWidth) / 2));
 				else
-					sbtn.style.marginTop = jq.px(((ambit.h - sbtn.offsetHeight) / 2));
+					sbtn.style.marginTop = jq.px0(((ambit.h - sbtn.offsetHeight) / 2));
 			}
 			zk.copy(split.style, this._reszSp2(ambit, {
 				w: split.offsetWidth,

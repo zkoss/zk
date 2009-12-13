@@ -83,15 +83,15 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 				wd = Math.max(0, w - opts.left + opts.right),
 				hgh = Math.max(0, h - opts.top + opts.bottom),
 				st = shadow.style;
-			st.left = jq.px(l + opts.left, true);
-			st.top = jq.px(t + opts.top, true);
-			st.width = jq.px(wd);
+			st.left = jq.px(l + opts.left);
+			st.top = jq.px(t + opts.top);
+			st.width = jq.px0(wd);
 			st.zIndex = zk.parseInt($node.css("zIndex"));
 			st.display = "block";
-			if (zk.ie6_) st.height = jq.px(hgh);
+			if (zk.ie6_) st.height = jq.px0(hgh);
 			else {
 				var cns = shadow.childNodes;
-				cns[1].style.height = jq.px(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
+				cns[1].style.height = jq.px0(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
 			}
 	
 			var stackup = this.stackup;
@@ -101,10 +101,10 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 						jq.newStackup(node, node.id + '-sdwstk', shadow);
 	
 				st = stackup.style;
-				st.left = jq.px(l, true);
-				st.top = jq.px(t, true);
-				st.width = jq.px(w);
-				st.height = jq.px(h);
+				st.left = jq.px(l);
+				st.top = jq.px(t);
+				st.width = jq.px0(w);
+				st.height = jq.px0(h);
 				st.zIndex = shadow.style.zIndex;
 				st.display = "block";
 			}
@@ -154,10 +154,10 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 						jq.newStackup(node, node.id + '-sdwstk', node);
 	
 				var st = stackup.style;
-				st.left = jq.px(l, true);
-				st.top = jq.px(t, true);
-				st.width = jq.px(w);
-				st.height = jq.px(h);
+				st.left = jq.px(l);
+				st.top = jq.px(t);
+				st.width = jq.px0(w);
+				st.height = jq.px0(h);
 				st.zIndex = zk.parseInt($node.css("zIndex"));
 				st.display = "block";
 			}
@@ -175,10 +175,10 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 		var n = this.mask,
 			ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY()),
 			st = n.style;
-		st.left = jq.px(ofs[0], true);
-		st.top = jq.px(ofs[1], true);
-		st.width = jq.px(jq.innerWidth());
-		st.height = jq.px(jq.innerHeight());
+		st.left = jq.px(ofs[0]);
+		st.top = jq.px(ofs[1]);
+		st.width = jq.px0(jq.innerWidth());
+		st.height = jq.px0(jq.innerHeight());
 		st.display = "block";
 
 		n = this.stackup;
@@ -298,11 +298,11 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (loading) {
 			if (loading.offsetHeight > h) 
-				loading.style.height = jq.px(zk(loading).revisedHeight(h));
+				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
 			if (loading.offsetWidth > w)
-				loading.style.width = jq.px(zk(loading).revisedWidth(w));
-			loading.style.top = jq.px(xy[1] + ((h - loading.offsetHeight) /2));
-			loading.style.left = jq.px(xy[0] + ((w - loading.offsetWidth) /2));
+				loading.style.width = jq.px0(zk(loading).revisedWidth(w));
+			loading.style.top = jq.px0(xy[1] + ((h - loading.offsetHeight) /2)); //non-negative only
+			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) /2));
 		}
 		
 		mask.style.visibility = "";

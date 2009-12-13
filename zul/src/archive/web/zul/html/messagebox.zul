@@ -34,8 +34,8 @@ use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 						+ zk((cave = cave.parentNode)).padBorderWidth()
 						+ zk((cave = cave.parentNode)).padBorderWidth()
 						+ zk((cave = cave.parentNode)).padBorderWidth();
-						
-					outer.style.width = jq.px(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
+				
+					outer.style.width = jq.px0(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
 					zk(outer).center();
 					outer.style.top = "100px";
 					win.onSize();

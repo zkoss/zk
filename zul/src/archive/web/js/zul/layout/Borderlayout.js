@@ -150,8 +150,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				zk.copy(colled.style, {
 					left: jq.px(ambit.x),
 					top: jq.px(ambit.y),
-					width: jq.px($colled.revisedWidth(ambit.w)),
-					height: jq.px($colled.revisedHeight(ambit.h))
+					width: jq.px0($colled.revisedWidth(ambit.w)),
+					height: jq.px0($colled.revisedHeight(ambit.h))
 				});
 			}
 		}
@@ -164,16 +164,16 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 						wgt.firstChild.$n() : wgt.$n('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			ambit.w = zk(el).revisedWidth(ambit.w);
-			el.style.width = jq.px(ambit.w);
+			el.style.width = jq.px0(ambit.w);
 			ambit.w = zk(bodyEl).revisedWidth(ambit.w);
-			bodyEl.style.width = jq.px(ambit.w);
+			bodyEl.style.width = jq.px0(ambit.w);
 
 			ambit.h = zk(el).revisedHeight(ambit.h);
-			el.style.height = jq.px(ambit.h);
+			el.style.height = jq.px0(ambit.h);
 			ambit.h = zk(bodyEl).revisedHeight(ambit.h);
 			if (wgt.$n('cap'))
 				ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
-			bodyEl.style.height = jq.px(ambit.h);
+			bodyEl.style.height = jq.px0(ambit.h);
 			if (wgt.isAutoscroll()) { 
 				bodyEl.style.overflow = "auto";
 				bodyEl.style.position = "relative";

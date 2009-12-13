@@ -513,7 +513,7 @@ zjq.prototype = {
 		hgh -= this.padBorderHeight()
 			+ zk.parseInt($jq.css("margin-top"))
 			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = jq.px(hgh);
+		$jq[0].style.height = jq.px0(hgh);
 		return this;
 	},
 
@@ -667,8 +667,8 @@ zjq.prototype = {
 
 		var ofs = this.toStyleOffset(x, y);
 
-		if (!skipx) el.style.left = jq.px(ofs[0], true);
-		if (!skipy) el.style.top =  jq.px(ofs[1], true);
+		if (!skipx) el.style.left = jq.px(ofs[0]);
+		if (!skipy) el.style.top =  jq.px(ofs[1]);
 		return this;
 	},
 	position: function (dim, where, opts) {
@@ -746,8 +746,8 @@ zjq.prototype = {
 
 		var el = this.jq[0],
 			ofs = this.toStyleOffset(x, y);
-		el.style.left = jq.px(ofs[0], true);
-		el.style.top = jq.px(ofs[1], true);
+		el.style.left = jq.px(ofs[0]);
+		el.style.top = jq.px(ofs[1]);
 		return this;
 	},
 
@@ -788,8 +788,8 @@ zjq.prototype = {
 		el._$orgLeft = left - parseFloat(st.left  || 0);
 		el._$orgTop = top  - parseFloat(st.top || 0);
 		st.position = 'absolute';
-		st.top = jq.px(top, true);
-		st.left = jq.px(left, true);
+		st.top = jq.px(top);
+		st.left = jq.px(left);
 		return this;
 	},
 	relativize: function() {
@@ -801,8 +801,8 @@ zjq.prototype = {
 		var top  = parseFloat(st.top  || 0) - (el._$orgTop || 0),
 			left = parseFloat(st.left || 0) - (el._$orgLeft || 0);
 
-		st.top = jq.px(top, true);
-		st.left = jq.px(left, true);
+		st.top = jq.px(top);
+		st.left = jq.px(left);
 		return this;
 	},
 
@@ -1057,13 +1057,23 @@ zjq.prototype = {
  */
 zk.copy(jq, {
 	/** Converting an integer to a string ending with "px".
+	 * <p>It is usually used for generating left or top.
 	 * @param Integer v the number of pixels
-	 * @param Boolean negativeAllowed [Optional|false] whether a negative
-	 * number is allowed. If not allowed, "0px" is returned if negative.
 	 * @return String the integer with string.
+	 * @see #px0
 	 */
-	px: function (v, negativeAllowed) {
-		return (negativeAllowed ? v||0:Math.max(v, 0)) + "px";
+	px: function (v) {
+		return (v||0) + "px";
+	},
+	/** Converting an integer a string ending with "px".
+	 * <p>Unlike {@link #px}, this method assumes 0 if v is negative.
+	 * <p>It is usually used for generating width or height.
+	 * @param Integer v the number of pixels. 0 is assumed if negative.
+	 * @return String the integer with string.
+	 * @see @px
+	 */
+	px0: function (v) {
+		return Math.max(v||0, 0) + "px";
 	},
 
 	/** Returns an array of {@link DOMElement} that matches.

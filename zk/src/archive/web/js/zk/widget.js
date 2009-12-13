@@ -1531,7 +1531,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '')
-				n.style.height = jq.px(zk(n).revisedHeight(sz.height, true));
+				n.style.height = jq.px0(zk(n).revisedHeight(sz.height, true));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
@@ -1539,7 +1539,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (sz.width == 'auto')
 				n.style.width = '';
 			else if (sz.width != '')
-				n.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
+				n.style.width = jq.px0(zk(n).revisedWidth(sz.width, true));
 			else
 				n.style.width = this._width ? this._width : '';
 		}

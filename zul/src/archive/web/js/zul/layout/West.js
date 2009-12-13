@@ -35,9 +35,9 @@ zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_reszSp2: function (ambit, split) {
 		ambit.w -= split.w;
 		return {
-			left: jq.px(ambit.x + ambit.w),
-			top: jq.px(ambit.y),
-			height: jq.px(ambit.h)
+			left: jq.px0(ambit.x + ambit.w),
+			top: jq.px0(ambit.y),
+			height: jq.px0(ambit.h)
 		};
 	}
 });

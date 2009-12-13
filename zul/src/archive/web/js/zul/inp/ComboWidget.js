@@ -47,7 +47,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				
 				if (jq(n).hasClass(inplace)) return;
 				
-				n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+				n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 				jq(this.getInputNode()).addClass(inplace);
 				jq(n).addClass(inplace);
 				this.onSize();
@@ -243,9 +243,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					inc = this.getInplaceCSS();
 				$n.removeClass(inc);
 				if (zk.opera)
-					node.style.width = jq.px(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
+					node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
 				else
-					node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
+					node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
 				$n.addClass(inc);
 			}
 		} 
@@ -253,12 +253,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn'),
 			inp = this.getInputNode();
-		inp.style.width = jq.px(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
 	},
 	doFocus_: function (evt) {
 		var n = this.$n();
 		if (this._inplace)
-			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 			
 		this.$supers('doFocus_', arguments);
 
@@ -275,7 +275,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	doBlur_: function (evt) {
 		var n = this.$n();
 		if (this._inplace && this._inplaceout) {
-			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 		}
 		this.$supers('doBlur_', arguments);
 		if (this._inplace && this._inplaceout) {

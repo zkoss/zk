@@ -49,13 +49,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			for (var i = this._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
 				leftWidth += n.offsetWidth;
 
-			this.$n('cave').style.width = jq.px(leftWidth);
+			this.$n('cave').style.width = jq.px0(leftWidth);
 			var scroll = this.$n('scrollX'),
 				width = this.parent.$n('body').offsetWidth;
 				width -= leftWidth;
-			scroll.style.width = jq.px(width);
+			scroll.style.width = jq.px0(width);
 			var scrollScale = bdfaker.childNodes.length - this._columns - 1;
-			scroll.firstChild.style.width = jq.px(width + 100 * scrollScale);
+			scroll.firstChild.style.width = jq.px0(width + 100 * scrollScale);
 			this.syncScorll();
 		}
 	},
@@ -73,7 +73,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			gbody = this.parent.$n('body');
 
 		this.$n().style.height = this.$n('cave').style.height = scroll.style.height
-			 = scroll.firstChild.style.height = jq.px(jq.scrollbarWidth());
+			 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
 
 		this.parent.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 		this.domListen_(scroll, 'onScroll');
@@ -113,7 +113,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			for (var faker, w = mesh.head.firstChild.$n('hdfaker'); w;
 					w = w.nextSibling) {
 				if (w.style.width.indexOf('px') == -1) {
-					var sw = w.style.width = jq.px(w.offsetWidth),
+					var sw = w.style.width = jq.px0(w.offsetWidth),
 						wgt = zk.Widget.$(w);
 					if ((faker = wgt.$n('bdfaker')))
 						faker.style.width = sw;
@@ -151,7 +151,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			// set fixed size
 			for (var index = this._columns, c = rows[0].firstChild; c; c = c.nextSibling) {
 				if (c.style.width.indexOf('px') == -1)
-					c.style.width = jq.px(zk(c).revisedWidth(c.offsetWidth));
+					c.style.width = jq.px0(zk(c).revisedWidth(c.offsetWidth));
 			}
 
 			for (var first = rows[0], invisible, index = this._columns,
@@ -165,7 +165,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				width += zk.parseInt(c.style.width);
 		}
 
-		width = jq.px(width);
+		width = jq.px0(width);
 		if (mesh.eheadtbl)
 			mesh.eheadtbl.style.width = width;
 		if (mesh.ebodytbl)

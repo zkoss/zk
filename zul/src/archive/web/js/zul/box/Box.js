@@ -243,7 +243,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			cwgt._vflexsize = vsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
-				chdex.style.height = jq.px(zk(chdex).revisedHeight(vsz, true));
+				chdex.style.height = jq.px0(zk(chdex).revisedHeight(vsz, true));
 			}
 			if (vert) lastsz -= vsz;
 		}
@@ -256,7 +256,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			cwgt._vflexsize = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
-				chdex.style.height = jq.px(zk(chdex).revisedHeight(lastsz, true));
+				chdex.style.height = jq.px0(zk(chdex).revisedHeight(lastsz, true));
 			}
 		}
 		
@@ -270,7 +270,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			cwgt._hflexsize = hsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
-				chdex.style.width = jq.px(zk(chdex).revisedWidth(hsz, true));
+				chdex.style.width = jq.px0(zk(chdex).revisedWidth(hsz, true));
 			}
 			if (!vert) lastsz -= hsz;
 		}
@@ -281,7 +281,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			cwgt._hflexsize = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
-				chdex.style.width = jq.px(zk(chdex).revisedWidth(lastsz, true));
+				chdex.style.width = jq.px0(zk(chdex).revisedWidth(lastsz, true));
 			}
 		}
 		

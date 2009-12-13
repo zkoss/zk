@@ -160,7 +160,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (box.style.height && box.offsetHeight) {
 			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
 			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
-				box.rows[1].style.height = jq.px(box.offsetHeight -
+				box.rows[1].style.height = jq.px0(box.offsetHeight -
 				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
 			}
 		}
@@ -263,7 +263,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (sz.height == 'auto')
 				box.style.height = '';
 			else if (sz.height != '')
-				box.style.height = jq.px(this._mold == 'trendy' ? zk(n).revisedHeight(sz.height, true) : sz.height);
+				box.style.height = jq.px0(this._mold == 'trendy' ? zk(n).revisedHeight(sz.height, true) : sz.height);
 			else
 				box.style.height = this._height ? this._height : '';
 		}
@@ -271,7 +271,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (sz.width == 'auto')
 				box.style.width = '';
 			else if (sz.width != '')
-				box.style.width = jq.px(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
+				box.style.width = jq.px0(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
 			else
 				box.style.width = this._width ? this._width : '';
 		}

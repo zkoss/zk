@@ -55,11 +55,11 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 
 			//Bug 1738241: don't use align="xxx"
 			var h, v;
-			img.style.height = jq.px(h = zk(img).revisedHeight(refh));
+			img.style.height = jq.px0(h = zk(img).revisedHeight(refh));
 
 			//FF2 bug: there is 1px short (even if h is correct)
 			if (zk.gecko2_ && (v = refh - img.offsetHeight))
-				img.style.height = jq.px(h + v);
+				img.style.height = jq.px0(h + v);
 
 			if ((v = ref.offsetTop - img.offsetTop) || zk.safari) {
 				btn.style.position = "relative";

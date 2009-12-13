@@ -109,7 +109,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childHeight <= headerOffsetHeight + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false)
-					header.style.height = jq.px(tbx.offsetHeight-2);
+					header.style.height = jq.px0(tbx.offsetHeight-2);
 					header.scrollTop = 0;
 				}
 				switch (way) {
@@ -170,14 +170,14 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					}
 					this.$n('right').style.right = toolbar.offsetWidth + 'px';
 					if (zk.gecko2_)
-						outer.style.height = jq.px(zk(outer).revisedHeight(hgh));
+						outer.style.height = jq.px0(zk(outer).revisedHeight(hgh));
 				}
 				
 				if (tbsdiv.offsetWidth < btnsize) return;
 				if (childWidth <= headerOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = jq.px(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
+					header.style.width = jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -385,28 +385,28 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						toolbar = toolbar.$n();
 					if (!tbx.style.width) {
 						this._forceStyle(tbx, "w", "100%");
-						this._forceStyle(tabs, "w", jq.px(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
+						this._forceStyle(tabs, "w", jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
 						if (tabbox._scrolling) 
-							this._forceStyle(head, "w", jq.px(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+							this._forceStyle(head, "w", jq.px0(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
 						else 
-							this._forceStyle(head, "w", jq.px(jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))));
+							this._forceStyle(head, "w", jq.px0(jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))));
 					} else {
-						this._forceStyle(tabs, "w", jq.px(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
+						this._forceStyle(tabs, "w", jq.px0(jq(tabs).zk.revisedWidth(tbx.offsetWidth)));
 						this._forceStyle(head, "w", tabs.style.width);
 						if (tabbox._scrolling) 
-							this._forceStyle(head, "w", jq.px(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
+							this._forceStyle(head, "w", jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize));
 						else 
-							this._forceStyle(head, "w", jq.px(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
+							this._forceStyle(head, "w", jq.px0(head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)));
 					}
 					if (toolbar && tabbox._scrolling) 
 						this.$n('right').style.right = toolbar.offsetWidth + 'px';
 				} else {
 					if (!tbx.style.width) {
-						var ofw = jq.px(tbx.offsetWidth);
+						var ofw = jq.px0(tbx.offsetWidth);
 						this._forceStyle(tbx, "w", ofw);
 						this._forceStyle(tabs, "w", ofw);
 					} else {
-						this._forceStyle(tabs, "w", jq.px(tbx.offsetWidth));
+						this._forceStyle(tabs, "w", jq.px0(tbx.offsetWidth));
 					}
 				}
 			}
@@ -426,21 +426,21 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			var child = jq(tbx).children('div');
 			allTab = jq(cave).children();
 			if (tbx.style.height) {
-				this._forceStyle(tabs, "h", jq.px(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
+				this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			} else {
-				this._forceStyle(tbx, "h", jq.px(allTab.length * 35));//give it default height
-				this._forceStyle(tabs, "h", jq.px(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
+				this._forceStyle(tbx, "h", jq.px0(allTab.length * 35));//give it default height
+				this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			}
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
-				this._forceStyle(head, "h", jq.px(tabs.offsetHeight - btnsize));
+				this._forceStyle(head, "h", jq.px0(tabs.offsetHeight - btnsize));
 			} else {
-				this._forceStyle(head, "h", jq.px(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
+				this._forceStyle(head, "h", jq.px0(jq(head).zk.revisedHeight(tabs.offsetHeight, true)));
 			}
 			//separator(+border)
-			this._forceStyle(child[1], "h", jq.px(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
+			this._forceStyle(child[1], "h", jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
 			//tabpanels(+border)
-			this._forceStyle(child[2], "h", jq.px(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
+			this._forceStyle(child[2], "h", jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
 		} else {
 			if (head) //accordion have no head
 				head.style.height = "";

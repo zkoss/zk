@@ -57,7 +57,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (sz.width !== undefined && sz.width != 'auto' && sz.width != '') {
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			this._hflexWidth = jq.px(sz.width);
+			this._hflexWidth = jq.px0(sz.width);
 			return {width: sz.width};
 		} else
 			return this.$supers('setFlexSize_', arguments);

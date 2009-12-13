@@ -127,8 +127,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						sh -= $op.zk.paddingHeight();
 						sh = $n.revisedHeight(sh);
 					}
-					s.width = jq.px(sw);
-					s.height = jq.px(sh);
+					s.width = jq.px0(sw);
+					s.height = jq.px0(sh);
 					this._lastSize = {l:l, t:t, w:w, h:h};
 	
 					// restore.
@@ -328,14 +328,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				sw -= $op.zk.paddingWidth();
 				sw = $op.zk.revisedWidth(sw);
 			}
-			s.width = jq.px(sw);
+			s.width = jq.px0(sw);
 			if (wgt.isOpen()) {
 				var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 				if (!floated) {
 					sh -= $op.zk.paddingHeight();
 					sh = $op.zk.revisedHeight(sh);
 				}
-				s.height = jq.px(sh);
+				s.height = jq.px0(sh);
 			}
 		}
 		return function(ctl) {
@@ -430,8 +430,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (!n.style.top && !n.style.left) {
 			var xy = zk(n).revisedOffset();
-			n.style.left = jq.px(xy[0], true);
-			n.style.top = jq.px(xy[1], true);
+			n.style.left = jq.px(xy[0]);
+			n.style.top = jq.px(xy[1]);
 		}
 
 		n.style.position = "absolute";

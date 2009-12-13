@@ -30,9 +30,9 @@ zul.layout.North = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_reszSp2: function (ambit, split) {
 		ambit.h -= split.h;
 		return {
-		  	left: jq.px(ambit.x),
-			top: jq.px(ambit.y + ambit.h),
-			width: jq.px(ambit.w)
+		  	left: jq.px0(ambit.x),
+			top: jq.px0(ambit.y + ambit.h),
+			width: jq.px0(ambit.w)
 		};
 	}
 });

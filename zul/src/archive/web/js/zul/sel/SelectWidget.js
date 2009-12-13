@@ -296,7 +296,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						w = ow - cw;
 					if (cw && w > 11) {
 						if (ow == this.ebodytbl.offsetWidth)
-							this.ebodytbl.style.width = jq.px(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
+							this.ebodytbl.style.width = jq.px0(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
 					}
 				}
 				
