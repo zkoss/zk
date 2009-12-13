@@ -2101,12 +2101,11 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	all: {},
 	_ndt: 0, //used in au.js/dom.js
 	sync: function () {
-		var Desktop = zk.Desktop, dts = Desktop.all;
-		if (Desktop._dt && !Desktop._dt._exists()) //removed
+		var Desktop = zk.Desktop, dts = Desktop.all, dt;
+		if ((dt = Desktop._dt) && !dt._exists()) //removed
 			Desktop._dt = null;
 		for (var dtid in dts) {
-			var dt = dts[dtid];
-			if (!dt._exists()) { //removed
+			if (!(dt = dts[dtid])._exists()) { //removed
 				delete dts[dtid];
 				--Desktop._ndt;
 			} else if (!Desktop._dt)
