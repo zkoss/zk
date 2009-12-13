@@ -418,7 +418,7 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();
 
-		var ret = _jq[nm].call(this, w._redrawHTML());
+		var ret = _jq[nm].call(this, w.redrawHTML_());
 		if (!w.z_rod) {
 			w.bind(desktop);
 			zWatch.fireDown('beforeSize', w);

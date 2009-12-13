@@ -69,16 +69,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function doProcess(cmd, data) { //decoded
 		//1. process commands that data[0] is not UUID
-		var fn = zAu.cmd0[cmd], wgt;
+		var fn = zAu.cmd0[cmd];
 		if (fn)
 			return fn.apply(zAu, data);
 
 		//2. process commands that require uuid
-		if (!(fn = zAu.cmd1[cmd]) || !data.length || !(wgt = zk.Widget.$(data[0])))
+		if (!(fn = zAu.cmd1[cmd]) || !data.length)
 			return zAu.showError("ILLEGAL_RESPONSE",
 				fn ? (data.length ? data[0]+" not found":"uuid required")+" for ": "Unknown ", cmd);
 
-		data[0] = wgt;
+		data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
 		fn.apply(zAu, data);
 	}
 
@@ -708,20 +708,21 @@ zAu = {
 	}
 
 	/** The AU command handler that handles commands not related to widgets.
-	 * @type zAu.Cmd0
+	 * @type zk.AuCmd0
 	 */
 	//cmd0: null, //jsdoc
 	/** The AU command handler that handles commands releated to widgets.
-	 * @type zAu.Cmd1
+	 * @type zk.AuCmd1
 	 */
 	//cmd1: null, //jsdoc
 };
 })();
 
 //Commands//
-/** @class zAu.Cmd0
+/** @class zk.AuCmd0
  * The AU command handler for processes commands not related to widgets,
  * sent from the server.
+ * @see zAu#cmd0
  */
 zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Sets a bookmark
@@ -841,9 +842,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		else zk(id).scrollIntoView();
 	}
 };
-/** @class zAu.Cmd1
+/** @class zk.AuCmd1
  * The AU command handler for processes commands related to widgets,
  * sent from the server.
+ * @see zAu#cmd1
  */
 zAu.cmd1 = /*prototype*/ {
 	/** Sets the attribute of a widget.

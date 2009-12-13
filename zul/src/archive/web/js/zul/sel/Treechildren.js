@@ -37,11 +37,11 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			ben = this.getCaveNode() || this.parent.getCaveNode();
 
 		if (before)
-			jq(before).before(child._redrawHTML());
+			jq(before).before(child.redrawHTML_());
 		else if (ben)
-			jq(ben).after(child._redrawHTML());
+			jq(ben).after(child.redrawHTML_());
 		else
-			jq(this).append(child._redrawHTML());
+			jq(this).append(child.redrawHTML_());
 		child.bind(desktop);
 	},
 	getCaveNode: function () {

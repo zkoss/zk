@@ -106,9 +106,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},	
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before && (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) ? before.getFirstNode_(): null)
-			jq(before).before(child._redrawHTML());
+			jq(before).before(child.redrawHTML_());
 		else
-			jq(this.getCaveNode()).append(child._redrawHTML());
+			jq(this.getCaveNode()).append(child.redrawHTML_());
 		child.bind(desktop);
 	},
 	getZclass: function () {

@@ -89,13 +89,36 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return self;
 	}
 
+/** @partial zk
+ */
 zk.copy(zk, {
+	/** Whether there is some animation taking place.
+	 * @type boolean
+	 */
 	animating: function () {
 		return !!jq.timers.length;
 	},
 	_anique: {}
 });
+/** @partial jqzk
+ */
 zk.copy(zjq.prototype, {
+	/** Slides down (show) of the matched DOM element(s).
+	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Map opts the options. Ignored if not specified.
+	 * Allowed options:
+	 * <dl>
+	 * <dt>anchor</dt>
+	 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
+	 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+	 * <dt>easing</dt>
+	 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
+	 * <dt>duration</dt>
+	 * <dd>The duration of animation (unit: milliseconds). Default: 400</dd>
+	 * <dt>afterAnima</dt>
+	 * <dd>The function to invoke after the animation.</dd>
+	 * </dl>
+	 */
 	slideDown: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
@@ -137,6 +160,22 @@ zk.copy(zjq.prototype, {
 			complete: opts.afterAnima
 		});
 	},
+	/** Slides up (hide) of the matched DOM element(s).
+	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Map opts the options. Ignored if not specified.
+	 * Allowed options:
+	 * <dl>
+	 * <dt>anchor</dt>
+	 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
+	 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+	 * <dt>easing</dt>
+	 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
+	 * <dt>duration</dt>
+	 * <dd>The duration of animation (unit: milliseconds). Default: 400</dd>
+	 * <dt>afterAnima</dt>
+	 * <dd>The function to invoke after the animation.</dd>
+	 * </dl>
+	 */
 	slideUp: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
@@ -173,6 +212,22 @@ zk.copy(zjq.prototype, {
 			complete: opts.afterAnima
 		});
 	},
+	/** Slides out (hide) of the matched DOM element(s).
+	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Map opts the options. Ignored if not specified.
+	 * Allowed options:
+	 * <dl>
+	 * <dt>anchor</dt>
+	 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
+	 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+	 * <dt>easing</dt>
+	 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
+	 * <dt>duration</dt>
+	 * <dd>The duration of animation (unit: milliseconds). Default: 400</dd>
+	 * <dt>afterAnima</dt>
+	 * <dd>The function to invoke after the animation.</dd>
+	 * </dl>
+	 */
 	slideOut: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
@@ -205,6 +260,22 @@ zk.copy(zjq.prototype, {
 			complete: opts.afterAnima
 		});
 	},
+	/** Slides in (show) of the matched DOM element(s).
+	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Map opts the options. Ignored if not specified.
+	 * Allowed options:
+	 * <dl>
+	 * <dt>anchor</dt>
+	 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
+	 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+	 * <dt>easing</dt>
+	 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
+	 * <dt>duration</dt>
+	 * <dd>The duration of animation (unit: milliseconds). Default: 400</dd>
+	 * <dt>afterAnima</dt>
+	 * <dd>The function to invoke after the animation.</dd>
+	 * </dl>
+	 */
 	slideIn: function (wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;

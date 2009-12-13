@@ -174,9 +174,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
-			jq(before).before(child._redrawHTML());
+			jq(before).before(child.redrawHTML_());
 		else
-			jq(this.getCaveNode()).after(child._redrawHTML());
+			jq(this.getCaveNode()).after(child.redrawHTML_());
 				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
 	}

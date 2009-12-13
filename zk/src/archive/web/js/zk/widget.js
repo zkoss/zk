@@ -21,16 +21,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_globals = {}, //global ID space {id, wgt}
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
-		_wgtcls = {}; //{clsnm, cls}
-
-	//such as child of hbox/vbox or border-layout
-	function hiddenByParent(w) {
-		var p = w.parent;
-		if (p && p.isVisible() && (p=p.$n()) && (w=w.$n()))
-			while ((w=zk(w).vparentNode()||w.parentNode) && p != w)
-				if ((w.style||{}).display == 'none')
-					return true;
-	}
+		_wgtcls = {}, //{clsnm, cls}
+		_hidden = []; //_autohide
 
 	//IE doesn't free _binds (when delete _binds[x]); so clean it up
 	if (zk.ie)
@@ -108,15 +100,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
 	}
-	function _clearCache(wgt) {
-		wgt._node = null;
-		wgt._subnodes = {};
-		wgt._nodeSolved = false;
-	}
 	function _unbind0(wgt) {
 		delete _binds[wgt.uuid];
 		wgt.desktop = null;
-		_clearCache(wgt);
+		wgt.clearCache();
 	}
 	function _bindrod(wgt) {
 		_bind0(wgt);
@@ -182,21 +169,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.id) delete owner._fellows[wgt.id];
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_rmIdSpaceDown0(wgt, owner);
-	}
-
-	function _onBind(wgt) {
-		if (wgt.isListen('onBind'))
-			zk.afterMount(function () {
-				if (wgt.desktop) //might be unbound
-					wgt.fire('onBind');
-			});
-	}
-	function _onUnbind(wgt) {
-		if (wgt.isListen('onUnbind'))
-			zk.afterMount(function () {
-				if (!wgt.desktop) //might be bound
-					wgt.fire('onUnbind');
-			});
 	}
 
 	//set minimum flex size and return it
@@ -438,12 +410,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	//Drag && Drop
+	/** @class zk.DnD
+	 * Drag-and-drop utility.
+	 * It is the low-level utility reserved for overriding for advanced customization.
+	 */
 	zk.DnD = { //for easy overriding
+		/** Returns the widget to drop to.
+		 * @param zk.Draggable drag the draggable controller
+		 * @param Position pt the mouse pointer's position.
+		 * @param jq.Event evt the DOM event
+		 * @return zk.Widget
+		 */
 		getDrop: function (drag, pt, evt) {
 			var wgt = evt.target;
 			return wgt ? wgt.getDrop_(drag.control): null;
 		},
+		/** Ghost the DOM element being dragging
+		 * @param zk.Draggable drag the draggable controller
+		 * @param Position ofs the offset of the returned element (left/top)
+		 * @param String msg the message to show inside the returned element
+		 * @return DOMElement the element representing what is being dragged
+		 */
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
 				jq(document.body).append(
@@ -517,50 +504,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return drag.control.ingoreDrag_(pt);
 	}
 
-	//autohide
-	var _hidden = [];
-	function _autohide() {
-		if (!_floatings.length) {
-			for (var n; n = _hidden.shift();)
-				n.style.visibility = n.getAttribute('z_ahvis')||'';
-			return;
-		}
-		for (var tns = ['IFRAME', 'APPLET'], i = 2; i--;)
-			l_nxtel:
-			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
-				var n = ns[j], $n = zk(n), visi;
-				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
-				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
-					continue; //ignore
-
-				for (var tc = _topnode(n), k = _floatings.length; k--;) {
-					var f = _floatings[k].node,
-						tf = _topnode(f);
-					if (tf == tc || _topZIndex(tf) < _topZIndex(tc)
-					|| !$n.isOverlapped(f))
-						continue;
-
-					if (visi) {
-						_hidden.push(n);
-						try {
-							n.setAttribute('z_ahvis', n.style.visibility);
-						} catch (e) {
-						}
-						n.style.visibility = 'hidden';
-					}
-					continue l_nxtel;
-				}
-
-				if (_hidden.$remove(n))
-					n.style.visibility = n.getAttribute('z_ahvis')||'';
-			}
-	}
 	function _topnode(n) {
 		for (var v; n && n != document.body; n = n.parentNode) //no need to check vparentNode
 			if ((v=n.style) && ((v=v.position) == 'absolute' || v == 'relative'))
 				return n;
 	}
-	function _topZIndex(n) {
+	function _zIndex(n) {
 		return n ? zk.parseInt(n.style.zIndex): 0;
 	}
 
@@ -572,7 +521,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (n) return n;
 		}
 	}
+	//Returns if the specified widget's visibility depends the self widget.
+	function _floatVisibleDependent(self, wgt) {
+		for (; wgt; wgt = wgt.parent)
+			if (wgt == self) return true;
+			else if (!wgt.isVisible()) break;
+		return false;
+	}
 
+	/** Returns the topmost z-index for this widget.*/
+	function _topZIndex(wgt) {
+		var zi = 1800; // we have to start from 1800 depended on all the css files.
+		for (var j = _floatings.length; j--;) {
+			var w = _floatings[j].widget;
+			if (w._zIndex >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
+				zi = w._zIndex + 1;
+		}
+		return zi;
+	}
+
+	function _prepareRemove(wgt, ary) {
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling) {
+			var n = wgt.$n();
+			if (n) ary.push(n);
+			else _prepareRemove(wgt, ary);
+		}
+	}
+
+/** A widget, i.e., an UI object.
+ */
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
@@ -753,7 +730,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._asaps[name.substring(1)] = value;
 		else if (name.length > 2 && name.startsWith('on')
 		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
-			this._setListener(name, value);
+			this.setListener(name, value);
 		else if (arguments.length >= 3)
 			zk.set(this, name, value, extra);
 		else
@@ -993,8 +970,14 @@ zk.Widget = zk.$extends(zk.Object, {
 					return false;
 			} else if (!wgt.isVisible())
 				return false;
-			if (hiddenByParent(wgt))
-				return false;
+
+			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
+			var p = wgt.parent, n;
+			if (p && p.isVisible() && (p=p.$n()) && (n=wgt.$n()))
+				while ((n=zk(n).vparentNode()||n.parentNode) && p != n)
+					if ((n.style||{}).display == 'none')
+						return false; //hidden by parent
+
 			if (opts && opts.until == wgt)
 				break;
 		}
@@ -1013,68 +996,59 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var p = this.parent;
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
-			if (this.desktop) this._setVisible(visible);
+			if (this.desktop) {
+				var parentVisible = !p || p.isRealVisible(),
+					node = this.$n(),
+					floating = this._floating;
+
+				if (!parentVisible) {
+					if (!floating) this.setDomVisible_(node, visible);
+					return;
+				}
+
+				if (visible) {
+					var zi;
+					if (floating)
+						this.setZIndex(zi = _topZIndex(this), {fire:true});
+
+					this.setDomVisible_(node, true);
+
+					//from parent to child
+					for (var j = 0, fl = _floatings.length; j < fl; ++j) {
+						var w = _floatings[j].widget,
+							n = _floatings[j].node;
+						if (this == w)
+							w.setDomVisible_(n, true, {visibility:1});
+						else if (_floatVisibleDependent(this, w)) {
+							zi = zi >= 0 ? ++zi: _topZIndex(w);
+							if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
+							else w.setZIndex(zi, {fire:true});
+		
+							w.setDomVisible_(n, true, {visibility:1});
+						}
+					}
+
+					zWatch.fireDown('onShow', this);
+				} else {
+					zWatch.fireDown('onHide', this);
+
+					for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
+						var w = _floatings[j].widget;
+						if (bindLevel >= w.bindLevel)
+							break; //skip non-descendant (and this)
+						if (_floatVisibleDependent(this, w))
+							w.setDomVisible_(_floatings[j].node, false, {visibility:1});
+					}
+
+					this.setDomVisible_(node, false);
+				}
+			}
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
 		return this;
 	},
 	show: function () {this.setVisible(true);},
 	hide: function () {this.setVisible(false);},
-	_setVisible: function (visible) {
-		var parent = this.parent,
-			parentVisible = !parent || parent.isRealVisible(),
-			node = this.$n(),
-			floating = this._floating;
-
-		if (!parentVisible) {
-			if (!floating) this.setDomVisible_(node, visible);
-			return;
-		}
-
-		if (visible) {
-			var zi;
-			if (floating)
-				this._setZIndex(zi = this._topZIndex(), true);
-
-			this.setDomVisible_(node, true);
-
-			//from parent to child
-			for (var j = 0, fl = _floatings.length; j < fl; ++j) {
-				var w = _floatings[j].widget,
-					n = _floatings[j].node;
-				if (this == w)
-					w.setDomVisible_(n, true, {visibility:1});
-				else if (this._floatVisibleDependent(w)) {
-					zi = zi >= 0 ? ++zi: w._topZIndex();
-					if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
-					else w._setZIndex(zi, true);
-
-					w.setDomVisible_(n, true, {visibility:1});
-				}
-			}
-
-			zWatch.fireDown('onShow', this);
-		} else {
-			zWatch.fireDown('onHide', this);
-
-			for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
-				var w = _floatings[j].widget;
-				if (bindLevel >= w.bindLevel)
-					break; //skip non-descendant (and this)
-				if (this._floatVisibleDependent(w))
-					w.setDomVisible_(_floatings[j].node, false, {visibility:1});
-			}
-
-			this.setDomVisible_(node, false);
-		}
-	},
-	/** Returns if the specified widget's visibility depends this widget. */
-	_floatVisibleDependent: function (wgt) {
-		for (; wgt; wgt = wgt.parent)
-			if (wgt == this) return true;
-			else if (!wgt.isVisible()) break;
-		return false;
-	},
 	setDomVisible_: function (n, visible, opts) {
 		if (!opts || opts.display)
 			n.style.display = visible ? '': 'none';
@@ -1092,33 +1066,24 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
-				var zi = wgt._topZIndex();
-				wgt._setZIndex(zi, true);
+				var zi = _topZIndex(wgt);
+				wgt.setZIndex(zi, {fire:true});
 
 				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
 					var w = _floatings[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
 						var n = _floatings[j].node;
 						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
-						else w._setZIndex(++zi, true);
+						else w.setZIndex(++zi, {fire:true});
 					}
 				}
 				return zi;
 			}
 		return -1;
 	},
-	/** Returns the topmost z-index for this widget.*/
-	_topZIndex: function () {
-		var zi = 1800; // we have to start from 1800 depended on all the css files.
-		for (var j = _floatings.length; j--;) {
-			var w = _floatings[j].widget;
-			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())
-				zi = w._zIndex + 1;
-		}
-		return zi;
-	},
 	/** Returns the top widget, which is the first floating ancestor,
 	 * or null if no floating ancestor.
+	 * @return zk.Widget
 	 * @see #isFloating_
 	 */
 	getTopWidget: function () {
@@ -1160,21 +1125,18 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this._zIndex;
 	},
 	getZindex: _zkf,
-	setZIndex: _zkf = function (zIndex) {
-		return this._setZIndex(zIndex);
-	},
-	setZindex: _zkf,
-	_setZIndex: function (zIndex, fire) {
+	setZIndex: _zkf = function (zIndex, opts) {
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.$n();
 			if (n) {
 				n.style.zIndex = zIndex = zIndex >= 0 ? zIndex: '';
-				if (fire) this.fire('onZIndex', zIndex, {ignorable: true});
+				if (opts && opts.fire) this.fire('onZIndex', zIndex, {ignorable: true});
 			}
 		}
 		return this;
 	},
+	setZindex: _zkf,
 
 	getScrollTop: function () {
 		var n = this.$n();
@@ -1315,7 +1277,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (_isrod(this)) _unbindrod(this); //possible (if replace directly)
-			jq(n).replaceWith(this._redrawHTML(skipper, true));
+			jq(n).replaceWith(this.redrawHTML_(skipper, true));
 			this.bind(desktop, skipper);
 		}
 
@@ -1327,7 +1289,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
 		return this;
 	},
-	_redrawHTML: function (skipper, noprolog) {
+	/** Returns the HTML fragment of this widget.
+	 * @param zk.Skipper skipper the skipper. Ignored if null
+	 * @param boolean noprolog whether <i>not</i> to generate the prolog
+	 * @return String the HTML fragment
+	 */
+	redrawHTML_: function (skipper, noprolog) {
 		var out = [];
 		this.redraw(out, skipper);
 		if (noprolog && this.prolog && out[0] == this.prolog)
@@ -1363,7 +1330,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (_isrod(child)) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
-		jq(n).replaceWith(child._redrawHTML(skipper, true));
+		jq(n).replaceWith(child.redrawHTML_(skipper, true));
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -1388,9 +1355,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (before) {
 			var sib = before.previousSibling;
 			if (_isProlog(sib)) before = sib;
-			jq(before).before(child._redrawHTML());
+			jq(before).before(child.redrawHTML_());
 		} else
-			jq(ben).append(child._redrawHTML());
+			jq(ben).append(child.redrawHTML_());
 		child.bind(desktop);
 	},
 	getCaveNode: function () {
@@ -1419,19 +1386,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (child.prolog && _isProlog(sib))
 				jq(sib).remove();
 		} else
-			child._prepareRemove(n = []);
+			_prepareRemove(child, n = []);
 
 		child.unbind();
 
 		if (!_ignoreDom_)
 			jq(n).remove();
-	},
-	_prepareRemove: function (ary) {
-		for (var w = this.firstChild; w; w = w.nextSibling) {
-			var n = w.$n();
-			if (n) ary.push(n);
-			else w._prepareRemove(ary);
-		}
 	},
 	$n: _zkf = function (name) {
 		if (name) {
@@ -1449,7 +1409,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Clears the cached nodes (by {@link #$n}). */
 	clearCache: function () {
-		_clearCache(this);
+		this._node = null;
+		this._subnodes = {};
+		this._nodeSolved = false;
 	},
 	getNode: _zkf,
 	getPage: function () {
@@ -1504,7 +1466,13 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (child.z_rod) _bindrod(child);
 				else child.bind_(desktop, null, after); //don't pass skipper
 
-		_onBind(this);
+		if (this.isListen('onBind')) {
+			var self = this;
+			zk.afterMount(function () {
+				if (self.desktop) //might be unbound
+					self.fire('onBind');
+			});
+		}
 	},
 
 	unbind_: function (skipper, after) {
@@ -1519,7 +1487,13 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this._draggable) this.cleanDrag_();
 
-		_onUnbind(this);
+		if (this.isListen('onUnbind')) {
+			var self = this;
+			zk.afterMount(function () {
+				if (!self.desktop) //might be bound
+					self.fire('onUnbind');
+			});
+		}
 	},
 	extraBind_: function (id, add) {
 		if (add == false) delete _binds[id];
@@ -1763,12 +1737,22 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setListeners: function (infs) {
 		for (var evt in infs)
-			this._setListener(evt, infs[evt]);
+			this.setListener(evt, infs[evt]);
 	},
-	setListener: function (inf) { //used by server
-		this._setListener(inf[0], inf[1]);
-	},
-	_setListener: function (evt, fn) {
+	/** Sets a listener
+	 * @param Array inf a two-element array. The first element is the event name,
+	 * while the second is the listenr function
+	 */
+	/** Sets a listener
+	 * @param String evt the event name
+	 * @param Function fn the listener function.
+	 */
+	setListener: function (evt, fn) { //used by server
+		if (arguments.length == 1) {
+			fn = evt[1];
+			evt = evt[0]
+		}
+
 		var bklsns = this._bklsns,
 			oldfn = bklsns[evt],
 			inf = {};
@@ -1989,7 +1973,41 @@ zk.Widget = zk.$extends(zk.Object, {
 		return new cls(opts);
 	},
 
-	_autohide: _autohide //called by effect.js
+	_autohide: function () { //called by effect.js
+		if (!_floatings.length) {
+			for (var n; n = _hidden.shift();)
+				n.style.visibility = n.getAttribute('z_ahvis')||'';
+			return;
+		}
+		for (var tns = ['IFRAME', 'APPLET'], i = 2; i--;)
+			l_nxtel:
+			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
+				var n = ns[j], $n = zk(n), visi;
+				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
+				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
+					continue; //ignore
+
+				for (var tc = _topnode(n), k = _floatings.length; k--;) {
+					var f = _floatings[k].node,
+						tf = _topnode(f);
+					if (tf == tc || _zIndex(tf) < _zIndex(tc) || !$n.isOverlapped(f))
+						continue;
+
+					if (visi) {
+						_hidden.push(n);
+						try {
+							n.setAttribute('z_ahvis', n.style.visibility);
+						} catch (e) {
+						}
+						n.style.visibility = 'hidden';
+					}
+					continue l_nxtel;
+				}
+
+				if (_hidden.$remove(n))
+					n.style.visibility = n.getAttribute('z_ahvis')||'';
+			}
+	}
 });
 
 zk.RefWidget = zk.$extends(zk.Widget, {
@@ -2022,28 +2040,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 });
 })();
 
-zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
-	_style: "width:100%;height:100%",
-	className: 'zk.Page',
-
-	$init: function (props, contained) {
-		this._fellows = {};
-
-		this.$super('$init', props);
-
-		if (contained) zk.Page.contained.push(this);
-	},
-	redraw: function (out) {
-		out.push('<div', this.domAttrs_(), '>');
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out);
-		out.push('</div>');
-	}
-},{
-	contained: []
-});
-zk.Widget.register('zk.Page', true);
-
+//desktop//
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
 	className: 'zk.Desktop',
@@ -2115,32 +2112,27 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	}
 });
 
-zk.Skipper = zk.$extends(zk.Object, {
-	skipped: function (wgt, child) {
-		return wgt.caption != child;
-	},
-	skip: function (wgt, skipId) {
-		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
-		if (skip && skip.firstChild) {
-			skip.parentNode.removeChild(skip);
-				//don't use jq to remove, since it unlisten events
-			return skip;
-		}
-		return null;
-	},
-	restore: function (wgt, skip) {
-		if (skip) {
-			var loc = jq(skip.id, zk)[0];
-			for (var el; el = skip.firstChild;) {
-				skip.removeChild(el);
-				loc.appendChild(el);
+zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
+	_style: "width:100%;height:100%",
+	className: 'zk.Page',
 
-				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
-			}
-		}
+	$init: function (props, contained) {
+		this._fellows = {};
+
+		this.$super('$init', props);
+
+		if (contained) zk.Page.contained.push(this);
+	},
+	redraw: function (out) {
+		out.push('<div', this.domAttrs_(), '>');
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		out.push('</div>');
 	}
+},{
+	contained: []
 });
-zk.Skipper.nonCaptionSkipper = new zk.Skipper();
+zk.Widget.register('zk.Page', true);
 
 zk.Native = zk.$extends(zk.Widget, {
 	className: 'zk.Native',
@@ -2170,3 +2162,30 @@ zk.Macro = zk.$extends(zk.Widget, {
 		out.push('</span>');
 	}
 });
+
+zk.Skipper = zk.$extends(zk.Object, {
+	skipped: function (wgt, child) {
+		return wgt.caption != child;
+	},
+	skip: function (wgt, skipId) {
+		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
+		if (skip && skip.firstChild) {
+			skip.parentNode.removeChild(skip);
+				//don't use jq to remove, since it unlisten events
+			return skip;
+		}
+		return null;
+	},
+	restore: function (wgt, skip) {
+		if (skip) {
+			var loc = jq(skip.id, zk)[0];
+			for (var el; el = skip.firstChild;) {
+				skip.removeChild(el);
+				loc.appendChild(el);
+
+				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
+			}
+		}
+	}
+});
+zk.Skipper.nonCaptionSkipper = new zk.Skipper();
