@@ -39,40 +39,32 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-zk.copy(zk, {
-	animating: function () {
-		return !!jq.timers.length;
-	},
-	_anique: {}
-});
-zk.copy(zjq.prototype, {
-	_saveProp: function (set) {
-		var ele = this.jq;
+	function _saveProp(self, set) {
+		var ele = self.jq;
 		for(var i = set.length; i--;)
 			if(set[i] !== null) ele.data("zk.cache."+set[i], ele[0].style[set[i]]);
-		return this;
-	},
-	_restoreProp: function (set) {
-		var ele = this.jq;
+		return self;
+	}
+	function _restoreProp(self, set) {
+		var ele = self.jq;
 		for(var i = set.length; i--;)
 			if(set[i] !== null) ele.css(set[i], ele.data("zk.cache."+set[i]));
-		return this;
-	},
-	_checkAnimated: function (wgt, opts, anima) {
-		if (this.jq.is(':animated')) {
-			_addAnique(wgt.uuid, {el: this.jq[0], wgt: wgt, opts: opts, anima: anima});
+		return self;
+	}
+	function _checkAnimated(self, wgt, opts, anima) {
+		if (self.jq.is(':animated')) {
+			_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
 			return true;
 		}
 		return false;
-	},
-	_checkPosition: function (css) {
-		var pos = this.jq.css('position');
+	}
+	function _checkPosition(self, css) {
+		var pos = self.jq.css('position');
 		if (!pos || pos == 'static')
 			css.position = 'relative';
-		return this;
-	},
-	_defAnimaOpts: function (wgt, opts, prop, mode) {
-		var self = this;
+		return self;
+	}
+	function _defAnimaOpts(self, wgt, opts, prop, mode) {
 		jq.timers.push(function() {
 			if (mode == 'hide')
 				zWatch.fireDown('onHide', wgt);
@@ -88,16 +80,24 @@ zk.copy(zjq.prototype, {
 				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
 				zWatch.fireDown('onShow', wgt);
 			}
-			if (prop) self._restoreProp(prop);
+			if (prop) _restoreProp(self, prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);
 			setTimeout(function () {
 				_doAnique(wgt.uuid);
 			});
 		};
-		return this;
+		return self;
+	}
+
+zk.copy(zk, {
+	animating: function () {
+		return !!jq.timers.length;
 	},
+	_anique: {}
+});
+zk.copy(zjq.prototype, {
 	slideDown: function (wgt, opts) {
-		if (this._checkAnimated(wgt, opts, 'slideDown'))
+		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
 
 		var anchor = opts ? opts.anchor || 't': 't',
@@ -107,7 +107,7 @@ zk.copy(zjq.prototype, {
 			dims = this.dimension();
 
 		opts = opts || {};
-		this._saveProp(prop)._checkPosition(css);
+		_checkPosition(_saveProp(this, prop), css);
 
 		switch (anchor) {
 		case 't':
@@ -132,13 +132,13 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this._defAnimaOpts(wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
 	},
 	slideUp: function (wgt, opts) {
-		if (this._checkAnimated(wgt, opts, 'slideUp'))
+		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
@@ -147,7 +147,7 @@ zk.copy(zjq.prototype, {
 			dims = this.dimension();
 
 		opts = opts || {};
-		this._saveProp(prop)._checkPosition(css);
+		_checkPosition(_saveProp(this, prop), css);
 
 		switch (anchor) {
 		case 't':
@@ -168,13 +168,13 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this._defAnimaOpts(wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
 	},
 	slideOut: function (wgt, opts) {
-		if (this._checkAnimated(wgt, opts, 'slideOut'))
+		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'position'],
@@ -183,7 +183,7 @@ zk.copy(zjq.prototype, {
 			dims = this.dimension();
 
 		opts = opts || {};
-		this._saveProp(prop)._checkPosition(css);
+		_checkPosition(_saveProp(this, prop), css);
 
 		switch (anchor) {
 		case 't':
@@ -200,13 +200,13 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this._defAnimaOpts(wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
 	},
 	slideIn: function (wgt, opts) {
-		if (this._checkAnimated(wgt, opts, 'slideIn'))
+		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left', 'position'],
@@ -215,7 +215,7 @@ zk.copy(zjq.prototype, {
 			dims = this.dimension();
 
 		opts = opts || {};
-		this._saveProp(prop)._checkPosition(css);
+		_checkPosition(_saveProp(this, prop), css);
 
 		switch (anchor) {
 		case 't':
@@ -236,7 +236,7 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this._defAnimaOpts(wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
