@@ -68,7 +68,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var args = [], evt;
 			for (var j = arguments.length; --j > 0;)
 				args.unshift(arguments[j]);
-			args.unshift(evt = jq.event.toEvent(devt, wgt));
+			args.unshift(evt = jq.Event.zk(devt, wgt));
 
 			switch (devt.type){
 			case 'focus':

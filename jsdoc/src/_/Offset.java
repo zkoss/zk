@@ -20,6 +20,7 @@ package _;
 zk.debug("x,y = " + ofs[0] + "," + ofs[1]);</code></pre>
  *
  * @author tomyeh
+ * @see Array
  */
-public class Offset {
+public class Offset extends Array {
 }

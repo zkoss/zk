@@ -830,7 +830,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			else {
 				n = zk(id).jq[0];
 				if (n && n.submit) {
-					jq.event.fire(n, 'submit');
+					jq.Event.fire(n, 'submit');
 					n.submit();
 				}
 			}

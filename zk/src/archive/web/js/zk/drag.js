@@ -28,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
-		_initEvt = jq.event.toEvent(devt, dg.control);
+		_initEvt = jq.Event.zk(devt, dg.control);
 	}
 	function _deactivate() {
 		_activedg = null;
@@ -38,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _docmousemove(devt) {
 		if(!_activedg || _activedg.dead) return;
 
-		var evt = jq.event.toEvent(devt),
+		var evt = jq.Event.zk(devt),
 			pt = [evt.pageX, evt.pageY];
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
@@ -61,7 +61,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		_lastPt = null;
 		var evt;
-		_activedg._endDrag(evt = jq.event.toEvent(devt));
+		_activedg._endDrag(evt = jq.Event.zk(devt));
 		_activedg = null;
 		if (evt.domStopped) devt.stop();
 	}
@@ -357,7 +357,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	_mousedown: function (devt) {
 		var node = this.node,
-			evt = jq.event.toEvent(devt);
+			evt = jq.Event.zk(devt);
 		if(_dragging[node] || evt.which != 1)
 			return;
 
@@ -379,7 +379,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	},
 	_keypress: function (devt) {
 		if(devt.keyCode == 27) {
-			this._finishDrag(jq.event.toEvent(devt), false);
+			this._finishDrag(jq.Event.zk(devt), false);
 			devt.stop();
 		}
 	},
@@ -494,7 +494,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if(this.opts.change) {
 			var devt = window.event ? jq.event.fix(window.event): null,
-				evt = devt ? jq.event.toEvent(devt): null;
+				evt = devt ? jq.Event.zk(devt): null;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY]: _lastPt, evt);
 		}

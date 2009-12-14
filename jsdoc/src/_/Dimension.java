@@ -15,8 +15,9 @@ package _;
 /**
  * A dimension.
  * @author tomyeh
+ * @see Map
  */
-public class Dimension {
+public class Dimension extends Map {
 	/** The left coordinate.
 	 */
 	public int left;

@@ -321,7 +321,6 @@ zk.copy(zjq, {
  * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
  * <li>{@link jqzk} - additional utilities to {@link jq}.</li>
  * <li>{@link jq.Event} - the event object passed to the event listener</li>
- * <li>{@link jq.event} - a collection of functions used to manipulate events.</li>
  * </ul>
  * </blockquote>
  *
@@ -440,7 +439,6 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
  * <li>{@link jq} - the object returned by <code>jq(...)</code>. The original jQuery API.</li>
  * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
  * <li>{@link jq.Event} - the event object passed to the event listener</li>
- * <li>{@link jq.event} - a collection of functions used to manipulate events.</li>
  * </ul>
  */
 zjq.prototype = {
@@ -1318,8 +1316,9 @@ zk.copy(jq.Event.prototype, {
 	}
 });
 
-//No jsdoc since Windows cannot have event.java and Event.java in the same directory
-zk.copy(jq.event, {
+/** @partial jq.Event
+ */
+zk.copy(jq.Event, {
 	fire: document.createEvent ? function (el, evtnm) {
 		var evt = document.createEvent('HTMLEvents');
 		evt.initEvent(evtnm, false, false);
@@ -1327,6 +1326,11 @@ zk.copy(jq.event, {
 	}: function (el, evtnm) {
 		el.fireEvent('on' + evtnm);
 	},
+	/** Stops the event propagation of the specified event.
+	 * It is usually used as the event listener, such as
+	 * <pre><code>jq(el).mousemove(jq.Event.stop)</code></pre>
+	 * @param jq.Event evt the event.
+	 */
 	stop: function (evt) {
 		evt.stop();
 	},
@@ -1338,7 +1342,13 @@ zk.copy(jq.event, {
 		inf.which = data.which || 0;
 		return inf;
 	},
-	toEvent: function (evt, wgt) {
+	/** Converts a DOM event ({@link jq.Event}) to a ZK event ({@link zk.Event}).
+	 * @param jq.Event evt the DOM event
+	 * @param jq.Widget wgt the target widget. It is used if the widget
+	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
+	 * @return zk.Event the ZK event
+	 */
+	zk: function (evt, wgt) {
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
 			data, opts;

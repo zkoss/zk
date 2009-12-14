@@ -14,6 +14,8 @@ package _;
 
 /**
  * Represents a DOM element.
+ * <p>Refer to <a href="http://www.w3schools.com/dom/dom_element.asp">JavaScript Reference</a>
+ * for details.
  *
  * @author tomyeh
  */

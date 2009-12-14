@@ -224,14 +224,14 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		_syncPos.call(this);
 
 		var f;
-		jq(mask).mousemove(f = jq.event.stop)
+		jq(mask).mousemove(f = jq.Event.stop)
 			.click(f);
 		jq(window).resize(f = this.proxy(_syncPos))
 			.scroll(f);
 	},
 	destroy: function () {
 		var mask = this.mask, f;
-		jq(mask).unbind("mousemove", f = jq.event.stop)
+		jq(mask).unbind("mousemove", f = jq.Event.stop)
 			.unbind("click", f)
 			.remove()
 		jq(window).unbind("resize", f = this.proxy(_syncPos))
