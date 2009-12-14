@@ -417,7 +417,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	zk.DnD = { //for easy overriding
 		/** Returns the widget to drop to.
 		 * @param zk.Draggable drag the draggable controller
-		 * @param Position pt the mouse pointer's position.
+		 * @param Offset pt the mouse pointer's position.
 		 * @param jq.Event evt the DOM event
 		 * @return zk.Widget
 		 */
@@ -427,7 +427,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		},
 		/** Ghost the DOM element being dragging
 		 * @param zk.Draggable drag the draggable controller
-		 * @param Position ofs the offset of the returned element (left/top)
+		 * @param Offset ofs the offset of the returned element (left/top)
 		 * @param String msg the message to show inside the returned element
 		 * @return DOMElement the element representing what is being dragged
 		 */

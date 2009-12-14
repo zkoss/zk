@@ -26,6 +26,33 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+	/** Creates HIDDEN elements based on the specified query string
+	 * @param DOMElement parent the parent node (required).
+	 * @param String qs the query string
+	 */
+	function _queryToHiddens(parent, qs) {
+		for(var j = 0;;) {
+			var k = qs.indexOf('=', j);
+			var l = qs.indexOf('&', j);
+	
+			var nm, val;
+			if (k < 0 || (k > l && l >= 0)) { //no value part
+				nm = l >= 0 ? qs.substring(j, l): qs.substring(j);
+				val = "";
+			} else {
+				nm = qs.substring(j, k);
+				val = l >= 0 ? qs.substring(k + 1, l): qs.substring(k + 1);
+			}
+			jq.newHidden(nm, val, parent);
+	
+			if (l < 0) return; //done
+			j = l + 1;
+		}
+	}
+
+/** @class zUtl
+ * Utilties
+ */
 zUtl = { //static methods
 	//Character
 	isChar: function (cc, opts) {
@@ -254,7 +281,7 @@ zUtl = { //static methods
 				if (j > 0) {
 					var qs = url.substring(j + 1);
 					url = url.substring(0, j);
-					jq.queryToHiddens(frm, qs);
+					_queryToHiddens(frm, qs);
 				}
 				frm.name = "go";
 				frm.action = url;

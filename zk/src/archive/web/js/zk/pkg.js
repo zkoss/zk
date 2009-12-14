@@ -115,6 +115,8 @@ zk.copy(zk, (function() {
 		}	
 	}
 
+/** @partial zk
+ */
   return { //internal utility
 	setLoaded: _zkf = function (pkg, wait) {
 		_xloadings.$remove(pkg);
@@ -151,6 +153,8 @@ zk.copy(zk, (function() {
 		}
 	},
 	/** Notify ZK that the name of the JavaScript file is loaded.
+	 * This method is designed to be used with {@link #loadScript}, such
+	 * that ZK Client knows if a JavaScript file is loaded.
 	 * @param String name the name of the JavaScript file.
 	 * It must be the same as the one passed to {@link #loadScript}.
 	 */
