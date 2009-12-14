@@ -37,6 +37,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -2442,7 +2443,8 @@ public class Listbox extends XulElement implements Paginated,
 				initDataListener();
 			}
 
-			final boolean defer = Executions.getCurrent().getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
+			final Execution exec = Executions.getCurrent(); 
+			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
 			final boolean rod = evalRod();
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
@@ -2941,8 +2943,9 @@ public class Listbox extends XulElement implements Paginated,
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) { // mark as a new attached Listbox
-			Executions.getCurrent().setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
-			Executions.getCurrent().setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
+			final Execution exec = Executions.getCurrent(); 
+			exec.setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
+			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
 			// prepare a right moment to init Listbox (must be as late as
 			// possible)
 			this.addEventListener("onInitListbox",

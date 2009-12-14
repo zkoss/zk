@@ -32,6 +32,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -648,7 +649,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				initDataListener();
 			}
 
-			final boolean defer = Executions.getCurrent().getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
+			final Execution exec = Executions.getCurrent();
+			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
 			final boolean rod = evalRod();
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
