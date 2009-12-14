@@ -26,7 +26,7 @@ import java.util.List;
  * @author Jeff
  * @since ZK 3.0.0
  */
-public class SimpleTreeNode {
+public class SimpleTreeNode implements java.io.Serializable {
 
 	private Object _data;
 	
