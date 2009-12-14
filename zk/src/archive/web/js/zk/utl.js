@@ -162,6 +162,7 @@ zUtl = { //static methods
 
  	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
  	img0: '<img style="height:0;width:0"/>',
+ 	i0: '<i style="height:0;width:0"/>',
  
 	now: function () {
 		return new Date().getTime();
