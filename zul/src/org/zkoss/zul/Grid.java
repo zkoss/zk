@@ -32,6 +32,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -228,6 +229,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) {
+			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Grid
 			this.addEventListener("onInitGrid", _gridInitListener = new EventListener() {
 				public void onEvent(Event event) throws Exception {
@@ -239,10 +241,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					//Tricky! might has been initialized when apply properties
 					if (_dataLoader != null) { 
 						final boolean rod = evalRod();
-						if (_rod != rod) {
+						if (_rod != rod || getRows() == null || getRows().getChildren().isEmpty()) {
 							if (_model != null) { //so has to recreate rows and items
-								getRows().getChildren().clear();
+								if (getRows() != null)
+									getRows().getChildren().clear();
 								_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
+								Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
 								setModel(_model);
 							} else {
 								_dataLoader = null; //enforce recreate dataloader
@@ -644,9 +648,13 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				initDataListener();
 			}
 
+			final boolean defer = Executions.getCurrent().getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
+			final boolean rod = evalRod();
 			//Always syncModel because it is easier for user to enfore reload
-			getDataLoader().syncModel(-1, -1); //create rows if necessary
-			postOnInitRender();
+			if (!defer || !rod) { //if attached and rod, defer the model sync
+				getDataLoader().syncModel(-1, -1); //create rows if necessary
+				postOnInitRender();
+			}
 			//Since user might setModel and setRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
 			//such that we won't render the same set of data twice
@@ -1140,7 +1148,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	
 	private boolean evalRod() {
 		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "false");
-		String rod2 = (String) getAttribute("org.zkoss.zul.grid.rod");
+		String rod2 = (String) getAttribute("org.zkoss.zul.grid.rod", true);
 		if (rod2 == null) {
 			rod2 = rod1;
 		}

@@ -2442,9 +2442,13 @@ public class Listbox extends XulElement implements Paginated,
 				initDataListener();
 			}
 
-			// Always syncModel because it is easier for user to enfore reload
-			getDataLoader().syncModel(-1, -1);
-			postOnInitRender();
+			final boolean defer = Executions.getCurrent().getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
+			final boolean rod = evalRod();
+			//Always syncModel because it is easier for user to enfore reload
+			if (!defer || !rod) { //if attached and rod, defer the model sync
+				getDataLoader().syncModel(-1, -1);
+				postOnInitRender();
+			}
 			// Since user might setModel and setItemRender separately or
 			// repeatedly,
 			// we don't handle it right now until the event processing phase
@@ -2937,7 +2941,8 @@ public class Listbox extends XulElement implements Paginated,
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) { // mark as a new attached Listbox
-			setAttribute("zkoss.Listbox.attached", Boolean.TRUE);
+			Executions.getCurrent().setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
+			Executions.getCurrent().setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
 			// prepare a right moment to init Listbox (must be as late as
 			// possible)
 			this.addEventListener("onInitListbox",
@@ -2953,14 +2958,12 @@ public class Listbox extends XulElement implements Paginated,
 							// properties
 							if (_dataLoader != null) {
 								final boolean rod = evalRod();
-								if (_rod != rod) {
+								if (_rod != rod || getItems().isEmpty()) {
 									if (_model != null) { // so has to recreate
 										// list items
 										getItems().clear();
 										_dataLoader = null; // enforce recreate
-										// dataloader, must
-										// after
-										// getItems().clear()
+										Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
 										setModel(_model);
 									} else {
 										_dataLoader = null; // enforce recreate
