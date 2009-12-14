@@ -63,7 +63,7 @@ jq = jQuery;
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
-			if (ar && (ar.$array || ar.zk)) //ar.zk: jq(xx)
+			if (ar && (jq.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
 			else if (zk.Widget.isInstance(ar))
 				msg.push(wgt2s(ar));
@@ -316,7 +316,7 @@ zk.copy(zk, {
 				nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
 				pt = klass.prototype,
 				after = props[nm], before = null;
-			if (after && after.$array) {
+			if (jq.isArray(after)) {
 				before = after.length ? after[0]: null;
 				after = after.length > 1 ? after[1]: null;
 			}

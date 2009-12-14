@@ -1685,7 +1685,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		priority = priority ? priority: 0;
 		for (var evt in infs) {
 			var inf = infs[evt];
-			if (inf.$array) inf = [inf[0]||this, inf[1]];
+			if (jq.isArray(inf)) inf = [inf[0]||this, inf[1]];
 			else if (typeof inf == 'function') inf = [this, inf];
 			else inf = [inf||this, null];
 			inf.priority = priority;
@@ -1708,7 +1708,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				lsns = this._lsns[evt], lsn;
 			for (var j = lsns ? lsns.length: 0; j--;) {
 				lsn = lsns[j];
-				if (inf.$array) inf = [inf[0]||this, inf[1]];
+				if (jq.isArray(inf)) inf = [inf[0]||this, inf[1]];
 				else if (typeof inf == 'function') inf = [this, inf];
 				else inf = [inf||this, null];
 				if (lsn[0] == inf[0] && lsn[1] == inf[1]) {

@@ -636,7 +636,7 @@ zAu = {
 
 			var data = aureq.data, dtype = typeof data;
 			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
-			|| (data && data.$array))
+			|| jq.isArray(data))
 				data = {'':data};
 			if (data)
 				content += "&data_"+j+"="+encodeURIComponent(toJSON(target, data));

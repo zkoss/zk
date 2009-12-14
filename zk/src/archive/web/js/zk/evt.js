@@ -17,7 +17,7 @@ zk.Event = zk.$extends(zk.Object, {
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
-		if (data && typeof data == 'object' && !data.$array)
+		if (data && typeof data == 'object' && !jq.isArray(data))
 			zk.$default(this, data);
 
 		this.opts = opts||{};
@@ -131,10 +131,10 @@ zWatch = (function () {
 		return infs;
 	}
 	function _target(inf) {
-		return inf.$array ? inf[0]: inf;
+		return jq.isArray(inf) ? inf[0]: inf;
 	}
 	function _fn(inf, o, name) {
-		var fn = inf.$array ? inf[1]: o[name];
+		var fn = jq.isArray(inf) ? inf[1]: o[name];
 		if (!fn)
 			throw name + ' not defined in '+(o.className || o);
 		return fn;
@@ -207,7 +207,7 @@ zWatch = (function () {
 	unlisten: function (infs) {
 		for (var name in infs) {
 			var wts = _watches[name];
-			wts && wts.$remove(infs[name]); //$remove handles $array
+			wts && wts.$remove(infs[name]);
 		}
 		return this;
 	},

@@ -18,12 +18,7 @@ zk.copy(String.prototype, {
 		return this.substring(this.length-suffix.length) == suffix;
 	},
 	trim: function () {
-		var j = 0, tl = this.length, k = tl - 1;
-		while (j < tl && this.charAt(j) <= ' ')
-			++j;
-		while (k >= j && this.charAt(k) <= ' ')
-			--k;
-		return j > k ? "": this.substring(j, k + 1);
+		return jq.trim(this);
 	},
 	$camel: function() {
 		var parts = this.split('-'), len = parts.length;
@@ -45,26 +40,24 @@ zk.copy(String.prototype, {
 });
 
 zk.copy(Array.prototype, {
-	$array: true, //indicate it is an array
+	$indexOf: function (o) {
+		return jq.inArray(o, this);
+	},
 	$contains: function (o) {
-		for (var j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j])
-				return true;
-		}
-		return false;
+		return this.$indexOf(o) >= 0;
 	},
 	$equals: function (o) {
-		if (o && o.$array && o.length == this.length) {
+		if (jq.isArray(o) && o.length == this.length) {
 			for (var j = this.length; j--;) {
 				var e = this[j];
-				if (e != o[j] && (!e || !e.$array || !e.$equals(o[j])))
+				if (e != o[j] && (!jq.isArray(e) || !e.$equals(o[j])))
 					return false;
 			}
 			return true;
 		}
 	},
 	$remove: function (o) {
-		for (var ary = o != null && o.$array, j = 0, tl = this.length; j < tl; ++j) {
+		for (var ary = jq.isArray(o), j = 0, tl = this.length; j < tl; ++j) {
 			if (o == this[j] || (ary && o.$equals(this[j]))) {
 				this.splice(j, 1);
 				return true;

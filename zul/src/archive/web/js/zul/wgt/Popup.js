@@ -82,7 +82,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				pos = position;
 				dim = zk(refn).dimension(true);
 			}
-		} else if (offset && offset.$array) {
+		} else if (jq.isArray(offset)) {
 			dim = {
 				left: zk.parseInt(offset[0]), top: zk.parseInt(offset[1]),
 				width: 0, height: 0
