@@ -12,7 +12,137 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The class representing a widget event (aka., a ZK event).
+ * A widget event is the widget-level event that a widget can fire and the client application can listen.
+ *
+ * <p>On the other hand, a DOM event ({@link jq.Event}) is the low-level event
+ * related to DOM elements. It is usually listened by the implementation of a widget, rather than the client application.
+ *
+ * <p> In additions, {@link zWatch} is an utility to manage the system-level events, 
+ * and both the client application and the widget implementation might listen.
+ *
+ * <p>To fire a widget event, use {@link zk.Widget#fire}.
+ * To listen a widget event, use {@link zk.Widget#listen}. 
+ *
+ * <p>See Also
+ * <ul>
+ * <li><a href="http://docs.zkoss.org/wiki/AU_Request">AU Request</a> - a full list of built-in AU requests (aka., widget events)</li>
+ * <li><a href="http://docs.zkoss.org/wiki/AU_Response">AU Response</a> - a full list of built-in AU responses.</li>
+ * <li><a href="http://docs.zkoss.org/wiki/Client_Watches">Watches</a> - a full list of watches.</li>
+ * <li><a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events#Listen_By_Overriding">Widget and DOM Events</a></li>
+ * <li><a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">How to Process Request with JSON</a></li>
+ * <li><a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a></li>
+ * </ul>
+ * <p>Common Key Codes:
+ * <ul>
+ * <li>BACKSSPACE: 8</li>
+ * <li>TAB: 9</li>
+ * <li>ENTER: 13</li>
+ * <li>SHIFT: 16</li>
+ * <li>CTRL: 17</li>
+ * <li>ALT: 18</li>
+ * <li>ESC: 27</li>
+ * <li>PGUP: 33</li>
+ * <li>PGDN: 34</li>
+ * <li>END: 35</li>
+ * <li>HOME: 36</li>
+ * <li>LEFT: 37</li>
+ * <li>UP: 38</li>
+ * <li>RIGHT: 39</li>
+ * <li>DOWN: 40</li>
+ * <li>INS: 45</li>
+ * <li>DEL: 46</li>
+ * <li>F1: 112</li>
+ * </ul>
+*/
 zk.Event = zk.$extends(zk.Object, {
+	/** The target widget (readonly).
+	 * @type zk.Widget 
+	 * @see #currentTarget
+	 */
+	//target: null,
+	/** Indicates the target which is handling this event.
+	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
+ 	 * @type zk.Widget
+ 	 * @see #target
+ 	 */
+ 	//currentTarget: null,
+ 	/** The event name, such as 'onChange'.
+ 	 * The data which depends on the event. Here is the list of Event Data.
+	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
+<pre><code>
+onClick: function (evt) {
+  if (evt.altKey) { //it is the same as evt.data.altKey
+  }
+}
+</code></pre>
+ 	 * @type String
+ 	 */
+ 	//name: null,
+ 	/** The data which depends on the event. Here is the list of Event Data.
+	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
+<pre><code>
+onClick: function (evt) {
+  if (evt.altKey) { //it is the same as evt.data.altKey
+  }
+}
+</code></pre>
+	 * <p>Refer to How to <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">How to Process Request with JSON</a>
+	 * and <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a> for more information.
+	 * @type Object
+ 	 */
+ 	//data: null,
+ 	/** The options.
+	 * <p>Allowed properties:
+	 * <ul>
+	 * <li>implicit: whether this event is an implicit event, i.e., whether it is implicit to users (so no progressing bar).</li>
+	 * <li>ignorable: whether this event is ignorable, i.e., whether to ignore any error of sending this event back the server.
+		<ul><li>An ignorable event is also an imiplicit event.</li></ul></li>
+	 * <li>ctl: whether it is a control, such as onClick, rather than a notification for status change.</li>
+	 * <li>toServer: whether to send this event to the server. If specified, it is always sent no matter the widget is created at the server or not.</li>
+	 * <li>uri: the URI to send the Ajax request to. If not specified, zAu#comURI is used (i.e., the desktop's update URI is used). If specified, the URI specified in this option is used -- notice that there is no encoding at all, so make sure it is correct. </li>
+	 * </ul>
+     * @type Map
+     */
+ 	//opts: null,
+ 	/** The DOM event that causes this widget event, or null if not available.
+ 	 * @type jq.Event
+ 	 */
+ 	//domEvent: null,
+ 	/** The DOM element that the event is targeting, or null if not available.
+ 	 * @type DOMElement
+ 	 */
+ 	//domTarget: null,
+ 	/** Indicates whether the event propagation is stopped. 
+ 	 * @type boolean
+ 	 * @see #stop
+ 	 * @see #auStopped
+ 	 * @see #domStopped
+ 	 */
+ 	//stopped: false,
+ 	/** Indicates whether to stop the sending of the AU request to the server.
+ 	 * @type boolean
+ 	 * @see #stop
+ 	 * @see #stopped
+ 	 * @see #domStopped
+ 	 */
+ 	//auStopped: false,
+ 	/** Indicates whether to stop the native DOM event.
+ 	 * @type boolean
+ 	 * @see #stop
+ 	 * @see #stopped
+ 	 * @see #auStopped
+ 	 */
+ 	//domStopped: false,
+
+	/** Constructor.
+	 * @param zk.Widget target the target widget.
+	 * @param String name the event name, such as onClick
+	 * @param Object data [optional] the data depending on the event.
+	 * Here is a list of <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
+	 * @param Map opts [optional] the options. Refer to {@link #opts}
+	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
+	 */
 	$init: function (target, name, data, opts, domEvent) {
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -24,34 +154,42 @@ zk.Event = zk.$extends(zk.Object, {
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target;
 	},
+	/** Adds the additions options to {@link #opts}.
+	 * @param Map opts a map of options to append to #opts 
+	 */
 	addOptions: function (opts) {
 		this.opts = zk.copy(this.opts, opts);
 	},
+	/** Stop the event propagation.
+<pre><code>
+evt.stop();
+evt.stop({propagation:true}); //stop only the event propagation (see below)
+evt.stop({au:true}); //stop only the sending of the AU request
+</code></pre>
+	 *<p>If you want to revoke the stop of the event propagation, you can specify {revoke:true} to the opts argument.
+<pre><code>
+evt.stop({progagation:true,revoke:true}); //revoke the event propagation
+</code></pre>
+    * <p>Notice that the event won't be sent to the server if stop() was called. 
+	*
+	* @param Map opts [optional] control what to stop.
+	* If omitted, the event propagation ({@link #stopped}) and the native DOM event ({@link #domStopped}) are both stopped (but not {@link #serverStop}).
+	* For fine control, you can use a combination of the following values:
+	<ul>
+	<li>revoke - revoke the stop, i.e., undo the last invocation of {@link #stop}<li>
+	<li>propagation - stop (or revoke) the event propagation ({@link #stopped}).<li>
+	<li>dom - stop (or revoke) the native DOM event ({@link #domStopped}).</li>
+	<li>au - stop (or revoke) the sending of the AU request to the server ({@link #auStopped}).
+	Notice that, unlike the propagation and dom options, the sending of AU requests won't be stopped if opts is omitted.
+	In other words, to stop it, you have to specify the au option explicitly. </li>
+	</ul>
+	*/
 	stop: function (opts) {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
 		if (opts && opts.au) this.auStopped = b;
 	}
-},{
-	BS:		8,
-	TAB:	9,
-	ENTER:	13,
-	SHIFT:	16,
-	CTRL:	17,
-	ALT:	18,
-	ESC:	27,
-	PGUP:	33,
-	PGDN:	34,
-	END:	35,
-	HOME:	36,
-	LFT:	37,
-	UP:		38,
-	RGH:	39,
-	DN:		40,
-	INS:	45,
-	DEL:	46,
-	F1:		112
 });
 
 zWatch = (function () {

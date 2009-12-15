@@ -178,7 +178,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var wgt = this,
 			keyCode = evt.keyCode,
 			bDel;
-		this._bDel = bDel = keyCode == zk.Event.BS || keyCode == zk.Event.DEL;
+		this._bDel = bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/;
 		if (this._readonly)
 			switch (keyCode) {
 			case 35://End
