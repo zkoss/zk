@@ -36,7 +36,22 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
 		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>';
 
+	/** The shadow effect.
+	 */
 	zk.eff.Shadow = zk.$extends(zk.Object, {
+		/** Constructor of the Shadow object.
+		 * <p>Notice that you have to invoke {@link #destroy},
+		 * if the shadow is no longer used. 
+		 * @param DOMElement element the element to associate the shadow
+		 * @param Map opts [optional] the options. Alowed options:
+		 * <ul>
+		 * <li>left: The margin at left. Default: 4.</li>
+		 * <li>right: The margin at right. Default: 4.</li>
+		 * <li>top: the margin at top. Default: 3.</li>
+		 * <li>bottom: the margin at bottom. Default: 3.</li>
+		 * <li>stackup: whether to create a stackup (see jqzk#makeStackup)</li> 
+		 * </ul>
+		 */
 		$init: function (element, opts) {
 			opts = this.opts =
 				zk.$default(zk.$default(opts, _defShadowOpts), _getSKUOpts());
@@ -52,15 +67,22 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 			jq(element).before('<div id="' + sdwid + _shadowEnding);
 			this.shadow = jq(sdwid, zk)[0];
 		},
+		/** Destroys the shadow. You cannot use this object any more. 
+		 */
 		destroy: function () {
 			jq(this.shadow).remove();
 			jq(this.stackup).remove();
 			this.node = this.shadow = this.stackup = null;
 		},
+		/** Hides the shadow, no matter the associated element is visible or not.
+		 * <p>Notice this method is rarely used. Rather, {@link #sync} is more convenient to use. 
+		 */
 		hide: function(){
 			jq(this.shadow).hide();
 			jq(this.stackup).hide();
 		},
+		/** Synchronizes the visual states of the element with shadow. The visual states include the visibility, location, dimensions and z-index. When the associated element is changed, you have to invoke this method to synchronize the visual states. 
+		 */
 		sync: function () {
 			var node = this.node, $node = jq(node),
 				shadow = this.shadow;
@@ -110,6 +132,10 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 			}
 			return true;
 		},
+		/** Returns the lowest level of elements of this shadow. By lowest level, we mean the element is displayed at the botton in the z order.
+		 * The bottom element is the stackup element if #$init is called with the stackup option. Otherwise, it is the shadow element. 
+		 * @return DOMElement
+		 */
 		getBottomElement: function () {
 			return this.stackup || this.shadow;
 		}
@@ -191,7 +217,20 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 		}
 	}
 
+/** A mask covers the browser window fully.
+ */
 zk.eff.FullMask = zk.$extends(zk.Object, {
+	/** The constructor of the full mask object.
+	 * <p>To remove the full mask, invoke {@link #destroy}.
+	 * @param Map opts [optional] the options. Allowed options:
+	 * <ul>
+	 * <li>{@link DOMElement} mask: the mask element if the mask was created somewhere else. Default: create a new one.</li>
+	 * <li>{@link DOMElement} anchor: whether to insert the mask before.</li>
+	 * <li>String id: the mask ID. Default: z_mask.</li>
+	 * <li>int zIndex: z-index to assign. Default: defined in the CSS called z-modal-mask.</code>
+	 * <li>boolean visible: whether it is visible</li> 
+	 * </ul>
+	 */
 	$init: function (opts) {
 		opts = zk.$default(opts, _getSKUOpts());
 		var mask = this.mask = jq(opts.mask||[], zk)[0];
@@ -229,6 +268,8 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		jq(window).resize(f = this.proxy(_syncPos))
 			.scroll(f);
 	},
+	/** Removes the full mask. You can not access this object any more.
+	 */
 	destroy: function () {
 		var mask = this.mask, f;
 		jq(mask).unbind("mousemove", f = jq.Event.stop)
@@ -239,10 +280,16 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
 	},
+	/** Hide the full mask. Application developers rarely need to invoke this method.
+	 * Rather, use {@link #sync} to synchronized the visual states.
+	 */
 	hide: function () {
 		this.mask.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
+	/** Synchronizes the visual states of the full mask with the specified element and the browser window.
+	 * The visual states include the visibility and Z Index. 
+	 */
 	sync: function (el) {
 		if (!zk(el).isVisible(true)) {
 			this.hide();
@@ -267,7 +314,18 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	}
 });
 
+/** Applies the mask over the specified element to indicate it is busy.
+ */ 
 zk.eff.Mask = zk.$extends(zk.Object, {
+	/** The constructor.
+	 * <p>To remove the mask, invoke {@link #destroy}.
+	 * @param Map opts [optional] the options:
+	 * <ul>
+	 * <li>String id - the id of the applied mask, if any.</li>
+	 * <li>String/{@link DOMElement} anchor - the anchor of the applied mask, it can be an instance of {@link String} or {@link DOMElement}.</li>
+	 * <li>String msg - the message of the indicator, if any. null, Loading... is assumed.</li>
+	 * </ul>
+	 */
 	$init: function(opts) {
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
@@ -307,138 +365,11 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		mask.style.visibility = "";
 	},
+	/** Removes the mask.
+	 */
 	destroy: function () {
 		jq(this.mask).remove();
 		this.mask = null;
-	}
-});
-
-	function _clearOpening(self) {
-		var inf = self._inf;
-		if (inf) {
-			self._inf = null;
-			clearTimeout(inf.timer);
-		}
-	}
-	function _clearClosing(self) {
-		var tmClosing = self._tmClosing;
-		if (tmClosing) {
-			self._tmClosing = null;
-			clearTimeout(tmClosing);
-		}
-	}
-
-zk.eff.Tooltip = zk.$extends(zk.Object, {
-	beforeBegin: function (ref) {
-		if (this._tip && !this._tip.isOpen()) { //closed by other (such as clicking on menuitem)
-			_clearOpening(this);
-			_clearClosing(this);
-			this._tip = this._ref = null;
-		}
-
-		var overTip = this._tip && zUtl.isAncestor(this._tip, ref);
-		if (overTip) _clearClosing(this); //not close tip if over tip
-		return !overTip;//disable tip in tip
-	},
-	begin: function (tip, ref, params) {
-		this._params = params;
-		if (this._tip != tip) {
-			this.close_();
-
-			this._inf = {
-				tip: tip, ref: ref,
-				timer: setTimeout(this.proxy(this.open_), params.delay !== undefined ? params.delay : zk.tipDelay)
-			};
-		} else if (this._ref == ref)
-			_clearClosing(this);
-	},
-	end: function (ref) {
-		if (this._ref == ref || this._tip == ref)
-			this._tmClosing =
-				setTimeout(this.proxy(this.close_), 100);
-			//don't cloes immediate since user might move from ref to toolip
-		else
-			_clearOpening(this);
-	},
-	open_: function () {
-		var inf = this._inf;
-		if (inf) {
-			var tip = this._tip = inf.tip,
-				ref = this._ref = inf.ref;
-			this._inf = null;
-			var params = this._params,
-				xy = params.x !== undefined ? [params.x, params.y]
-							: zk.currentPointer;
-			tip.open(ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
-		}
-	},
-	close_: function () {
-		_clearOpening(this);
-		_clearClosing(this);
-
-		var tip = this._tip;
-		if (tip) {
-			this._tip = this._ref = null;
-			tip.close({sendOnOpen:true});
-		}
-	}
-});
-zk.eff.tooltip = new zk.eff.Tooltip();
-
-var _errs = [], _errcnt = 0;
-
-zk.eff.Error = zk.$extends(zk.Object, {
-	$init: function (msg) {
-		var id = "zk_err" + _errcnt++,
-			$id = '#' + id;
-			x = (_errcnt * 5) % 50, y = (_errcnt * 5) % 50,
-			html =
-	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
-	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
-	+'<td align="right"><div id="'+id+'-p">';
-	if (!zk.light)
-		html += '<span class="btn" onclick="zk.eff.Error._redraw()">redraw</span>&nbsp;';
-	html += '<span class="btn" onclick="zk.eff.Error._close(\''+id+'\')">close</span></div></td></tr>'
-	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
-	+'</td></tr></table></div>';
-		jq(document.body).append(html);
-
-		this.id = id;
-		_errs.push(this);
-
-		try {
-			var n;
-			this.dg = new zk.Draggable(null, n = jq($id)[0], {
-				handle: jq($id + '-p')[0], zIndex: n.style.zIndex,
-				starteffect: zk.$void, starteffect: zk.$void,
-				endeffect: zk.$void});
-		} catch (e) {
-		}
-	},
-	destroy: function () {
-		_errs.$remove(this);
-		if (this.dg) this.dg.destroy();
-		jq('#' + this.id).remove();
-	}
-},{
-	_redraw: function () {
-		zk.errorDismiss();
-		zAu.send(new zk.Event(null, 'redraw'));
-	},
-	_close: function (id) {
-		for (var j = _errs.length; j--;) {
-			var e = _errs[j];
-			if (e.id == id) {
-				_errs.splice(j, 1);
-				e.destroy();
-				return;
-			}
-		}
-	},
-	closeAll: function () {
-		for (var j = _errs.length; j--;)
-			_errs[j].destroy();
-		_errs = [];
 	}
 });
 

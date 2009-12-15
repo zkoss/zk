@@ -12,6 +12,77 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	//Tooltip
+	var _tt_inf, _tt_tmClosing, _tt_tip, _tt_ref, _tt_params;
+	function _tt_beforeBegin(ref) {
+		if (_tt_tip && !_tt_tip.isOpen()) { //closed by other (such as clicking on menuitem)
+			_tt_clearOpening_();
+			_tt_clearClosing_();
+			_tt_tip = _tt_ref = null;
+		}
+
+		var overTip = _tt_tip && zUtl.isAncestor(_tt_tip, ref);
+		if (overTip) _tt_clearClosing_(); //not close tip if over tip
+		return !overTip;//disable tip in tip
+	}
+	function _tt_begin(tip, ref, params) {
+		_tt_params = params;
+		if (_tt_tip != tip) {
+			_tt_close_();
+
+			_tt_inf = {
+				tip: tip, ref: ref,
+				timer: setTimeout(_tt_open_, params.delay !== undefined ? params.delay : zk.tipDelay)
+			};
+		} else if (_tt_ref == ref)
+			_tt_clearClosing_();
+	}
+	function _tt_end(ref) {
+		if (_tt_ref == ref || _tt_tip == ref)
+			_tt_tmClosing =
+				setTimeout(_tt_close_, 100);
+			//don't cloes immediate since user might move from ref to toolip
+		else
+			_tt_clearOpening_();
+	}
+	function _tt_clearOpening_() {
+		var inf = _tt_inf;
+		if (inf) {
+			_tt_inf = null;
+			clearTimeout(inf.timer);
+		}
+	}
+	function _tt_clearClosing_() {
+		var tmClosing = _tt_tmClosing;
+		if (tmClosing) {
+			_tt_tmClosing = null;
+			clearTimeout(tmClosing);
+		}
+	}
+	function _tt_open_() {
+		var inf = _tt_inf;
+		if (inf) {
+			_tt_tip = inf.tip,
+			_tt_ref = inf.ref;
+			_tt_inf = null;
+			var params = _tt_params,
+				xy = params.x !== undefined ? [params.x, params.y]
+							: zk.currentPointer;
+			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
+		}
+	}
+	function _tt_close_() {
+		_tt_clearOpening_();
+		_tt_clearClosing_();
+
+		var tip = _tt_tip;
+		if (tip) {
+			_tt_tip = _tt_ref = null;
+			tip.close({sendOnOpen:true});
+		}
+	}
+
 /** The base class for XUL widget (org.zkoss.zul.impl.XulElement).
  */
 zul.Widget = zk.$extends(zk.Widget, {
@@ -187,17 +258,17 @@ zul.Widget = zk.$extends(zk.Widget, {
 		this.$supers('doRightClick_', arguments);
 	},
 	doTooltipOver_: function (evt) {
-		if (!evt._tiped && zk.eff.tooltip.beforeBegin(this)) {
+		if (!evt._tiped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
 				tip = this._smartFellow(params.id);
 			if (tip) {
 				evt._tiped = true;
-				zk.eff.tooltip.begin(tip, this, params);
+				_tt_begin(tip, this, params);
 			}
 		}
 	},
 	doTooltipOut_: function (evt) {
-		zk.eff.tooltip.end(this);
+		_tt_end(this);
 	},
 	doMouseOver_: function (evt) {
 		this.doTooltipOver_(evt);
@@ -279,3 +350,5 @@ zul.Widget = zk.$extends(zk.Widget, {
 	beforeCtrlKeys_: function (evt) {
 	}
 });
+
+})();

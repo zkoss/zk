@@ -116,8 +116,162 @@ zk.Draggable = zk.$extends(zk.Object, {
 	 */
 	//node: null,
 	/** The options of this draggable.
-	 * <p>Refer <a href="http://docs.zkoss.org/wiki/Options_of_zk.Draggable">here</a>
-	 * for all possible options.
+	 * <h3>Allowed options</h3>
+	 * <blockquote>
+	 * <h4>handle</h4>
+	 * <pre><code>{@link DOMElement} handle</code></pre>
+	 * <p>A child DOM element that the user can drag the whole element. 
+	 * Specify one if not the whole element (the node argument) can be dragged.
+	 * It becomes the value of {@link #handle} if specified.</p>
+	 * <p>Default: null (i.e., {@link #node} is used.
+	 *
+	 * <h4>snap</h4>
+	 *<pre><code>{@link Offset} snap;
+int snap;
+Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
+</code></pre>
+	 * <p>Specifies how many pixels to snap the dragging. For example, if the snap is 10, then the dragging has no effect if the offset is only 4, and the dragging offset is considered as 10 if it was 5.
+	 * <p>The first format specifies the snaps for the x and y coordinate, such as [5, 3]. The second format specifies the snap for both x and y coordinate. The third format is used to calculate the snap dynamically based on the current position.
+	 * <p>Default: null 
+	 * <ul>
+	 * <li>dg - the draggable object</li>
+	 * <li>pos - the position of the element being dragged </li>
+	 * </ul>
+
+	 * <h4>starteffect</h4>
+	 * <pre><code>void starteffect({@link zk.Draggable} dg);</code></pre>
+	 * <p>Specifies the effect to execute when the dragging is started. It usually generates an animation effect.</p>
+	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
+	 *
+	 * <h4>endeffect</h4>
+	 * <pre><code>void endeffect({@link zk.Draggable} dg, {@link jq.Event} evt);</code></pre>
+	 * <p>Specifies the effect to execute when the dragging is finished. It usually generates an animation effect.</p>
+	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
+	 * <ul>
+	 * <li>evt - the DOM event. It is null if cauased by scrolling.
+	 * It is not null if caused by dragging. </li>
+	 * </ul>
+	 *
+	 * <h4>reverteffect</h4>
+	 * <pre><code>void reverteffect({@link zk.Draggable} dg, int dx, int dy);</code></pre>
+	 * <p>The function to do the revert effect.
+	 * Notice that it is ignored if the revert option is false (or returns false). </p>
+	 * <p>Default: null.
+	 * <ul>
+	 * <li>dx - the number of pixels that the element has been dragged in the X coordinate</li>
+	 * <li>dy - the number of pixels that the element has been dragged in the Y coordinate</li>
+	 * </ul>
+	 *
+	 * <h4>revert</h4>
+	 * <pre><code>boolean revert;
+boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event} evt);
+	 * <p>The revert option could be a boolean, or a function that returns a boolean value. The boolean value decides whether to revert the dragging after dragged. If true, the element is reverted to its original location.
+	 * <p>Default: false 
+	 * <p>To have a custom revert effect, you can specify a function as the #reverteffect option. It is usually an animation effect; see zEffect;
+	 * <ul>
+	 * <li>pointer - the offset of the mouse pointer</li>
+	 * <li>evt - the DOM event. It is null if cauased by scrolling.
+	 * It is a mouse event if caused by dragging. </li>
+	 * </ul>
+	 *
+	 * <h4>constraint</h4>
+	 * <pre><code>String constraint;
+{@link Offset} constraint({@link zk.Draggable} dg, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+	 * <p>Specifies the constraint. The first format specifies either 'vertical' or 'horizontal' to indicate that it can be dragged only in the vertical or horizontal direction.
+	 * <p>The second format specified a function that can modify the position dynamically. For example, you can limit the drag at the diagonal direction. 
+	 * <ul>
+	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link #node}'s left and top. </li>
+	 * <li>evt - the mouse event.</li>
+	 * </ul>
+	 * <p>Returns real position, or null if the pos argument is correct
+	 *
+	 * <h4>ghosting</h4>
+	 * <pre><code>boolean ghosting;
+{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+	 * <p>Specified whether to make a copy of the element and then drag the copy instead of the element itself.
+	 * <p>If true is specified (the first format), {@link #node} is cloned and the cloned element will be dragged.
+	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, #endghosting, if specified, will be called to clean up.
+	 * <p>Default: null (the element, {@link #node}, will be dragged directly. 
+	 * <ul>
+	 * <li>pos - the position of the new created element, i.e., the left-top corner. </li>
+	 * </ul>
+	 * <p>Example:
+<pre><code>
+var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
+...
+</code></pre>
+	 * <p>Returns the ghost element. This element will become {@link #node}, and
+	 * the original node will be restored after the dragging is finished (also after function specified in endghosting is called). 
+	 *
+	 * <h4>endghosting</h4>
+	 * <pre><code>void endghosting({@link zk.Draggable} dg, {@link DOMElement} origin);</code></pre>
+	 * <p>Called after the dragging is finished to clean up what have been done by the function
+	 * specified in <code>ghosting</code>.
+	 * <p>It is optional since {@link zk.Draggable} will remove the DOM element
+	 * created by the function specified in <code>ghosting</code>.
+	 * <p>Notice that it is ignored if the <code>ghosting</code> option is not
+	 * specified with a function.
+	 * <p>Default: null 
+	 * <ul>
+	 * <li>origin - the original element ({@link #node}) before the function
+	 * specified in <code>ghosting</code>. Notice {@link #node} is switched to
+	 * the ghost element during dragging, and restored after {@link #endghosting} was called. </li>
+	 * </ul>
+	 * 
+	 * <h4>overlay</h4>
+	 * <pre><code>boolean overlay;</code></pre>
+	 * <p>Specifies whether to create a DIV to cover the whole browser window when dragging. The DIV is helpful if the browser window contains iframe and other objects that will 'eat' the mousemove effect (and cause the dragging stopped abruptly).
+	 * <p>Default: false
+	 *
+	 * <h4>stackup</h4>
+	 * <pre><code>boolean stackup;</code></pre>
+	 * <p>Specifies whether to create a stackup (actually an iframe) that makes sure the element being dragging is on top of others.
+	 * <p>Default: false 
+	 *
+	 * <h4>zIndex</h4>
+	 * <pre><code>int zIndex;</code></pre>
+	 * <p>The z-index that will be assigned when dragging the element.
+	 * Default: <i>not assign any value to z-index</i>
+	 *
+	 * <h4>change</h4>
+	 * <pre><code>void change({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event} evt);</code></pre>
+	 * <p>Called after the dragging has changed the position of the element
+	 * ({@link #node}). It is called after the function specified
+	 * in the snap and draw or constraint option.
+	 * It is also called it has been scrolled. 
+	 * <ul>
+	 * <li>pointer - the offset of the mouse pointer</li>
+	 * <li>evt - the DOM event. It is null if cauased by scrolling.
+	 * It is a mouse event if caused by dragging. </li>
+	 * </ul>
+	 *
+	 * <h4>draw</h4>
+	 * <pre><code>void draw({@link zk.Draggable} dg, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+	 * <p>Used to override the default change of the element's position. If not specified, the constraint option is,
+	 * if any, called and then {@link #node}'s position (left and top) are changed. You can provide your own way to change the position.
+	 * <p>Default: null 
+	 * <ul>
+	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link #node}'s left and top.</li>
+	 * <li>evt - the mouse event</li>
+	 * </ul>
+	 *
+	 * <h4>scroll</h4>
+	 * <pre><code>{@link DOMElement} scroll;
+String scroll; //DOM Element's ID</code></pre>
+	 * <p>Specify which DOM element to consider its scrollLeft and scrollTop. In other words, it is the element with scrollbar that affects the location of the draggable element (zk.Draggable#node).
+	 * <p>Default: null 
+	 * <p>Notice that scroll could be DOM element, including window, or its ID.
+	 *
+	 * <h4>scrollSensitivity</h4>
+	 * <pre><code>int scrollSensitivity;</code></pre>
+	 * <p>The scroll sensitivity.
+	 * <p>Default: 20 
+	 *
+	 * <h4>scrollSpeed</h4>
+	 * <pre><code>int scrollSpeed;</code></pre>
+	 * <p>The scroll speed.
+	 * <p>Default: 15 
+	 * </blockquote>
 	 * @type Map
 	 */
 	//opts: null,
@@ -126,7 +280,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	 * I can be anything, but it is usually a widget ({@link zk.Widget}).
 	 * @param DOMElement node [optional] the DOM element that is made to be draggable.
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
-	 * @param Map opts [optional] options. Refer to <a href="http://docs.zkoss.org/wiki/Options_of_zk.Draggable">here</a> for allowed options.
+	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
 	 */
 	$init: function (control, node, opts) {
 		if (!_stackup) {
