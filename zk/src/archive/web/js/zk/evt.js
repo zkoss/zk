@@ -34,26 +34,31 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <li><a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a></li>
  * </ul>
  * <p>Common Key Codes:
- * <ul>
- * <li>BACKSSPACE: 8</li>
- * <li>TAB: 9</li>
- * <li>ENTER: 13</li>
- * <li>SHIFT: 16</li>
- * <li>CTRL: 17</li>
- * <li>ALT: 18</li>
- * <li>ESC: 27</li>
- * <li>PGUP: 33</li>
- * <li>PGDN: 34</li>
- * <li>END: 35</li>
- * <li>HOME: 36</li>
- * <li>LEFT: 37</li>
- * <li>UP: 38</li>
- * <li>RIGHT: 39</li>
- * <li>DOWN: 40</li>
- * <li>INS: 45</li>
- * <li>DEL: 46</li>
- * <li>F1: 112</li>
- * </ul>
+ * <table>
+ * <tr>
+ * <td>BACKSSPACE</td><td>8</td>
+ * <td>TAB</td><td>9</td>
+ * <td>ENTER</td><td>13</td>
+ * <td>SHIFT</td><td>16</td>
+ * <td>CTRL</td><td>17</td>
+ * </tr><tr>
+ * <td>ALT</td><td>18</td>
+ * <td>ESC</td><td>27</td>
+ * <td>PGUP</td><td>33</td>
+ * <td>PGDN</td><td>34</td>
+ * <td>END</td><td>35</td>
+ * </tr><tr>
+ * <td>HOME</td><td>36</td>
+ * <td>LEFT</td><td>37</td>
+ * <td>UP</td><td>38</td>
+ * <td>RIGHT</td><td>39</td>
+ * <td>DOWN</td><td>40</td>
+ * </tr><tr>
+ * <td>INS</td><td>45</td>
+ * <td>DEL</td><td>46</td>
+ * <td>F1</td><td>112</td>
+ * </tr>
+ * </table>
 */
 zk.Event = zk.$extends(zk.Object, {
 	/** The target widget (readonly).
@@ -317,7 +322,44 @@ zWatch = (function () {
 		}
 	}
 
+/** @class zWatch
+ * <p>An utility to manage watches.
+ *
+ * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
+ *
+ * <p>Here is a full list of <a href="http://docs.zkoss.org/wiki/Client_Watches">watches</li>. 
+
+<h3>Add a Watch</h3>
+
+<p>To add a listener to a watch, use #listen. The listener must implement a method with the same as the action name. For example,
+<pre><code>
+MyListener = zk.$extends(zk.Object, {
+  onSend: function() {
+  }
+});
+var ml = new MyListener();
+zWatch.listen({onSend: ml})
+</code></pre>
+
+<p>Then, ml.onSend will be called when sending an AU request.
+<h3>Invocation Sequence</h3>
+<h4>Sequence of #fireDown</h4>
+
+<p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is zk.Widget). Thus, the parent will be called before its children, if they are all registered to the same action. 
+ */
   return {
+  	/** Registers watch listener(s). For example,
+<pre><code>
+zWatch({
+  onSize: this,
+  onShow: this,
+  onHide: [this, this._onHide]
+});
+</code></pre>
+	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as #fire/#fireDown.
+	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation (#fire) is from the parent to the child if both are registered.
+	* @param Map infs a map of the watch listeners. Each key of the map is the the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target. 
+	*/
 	listen: function (infs) {
 		for (var name in infs) {
 			var wts = _watches[name],
@@ -340,25 +382,93 @@ zWatch = (function () {
 			} else
 				wts = _watches[name] = [inf];
 		}
-		return this;
 	},
+	/** Removes watch listener(s).
+	 * @param Map infs a map of watch listeners. Each key is the watch name, and each value is the target or or a two-element array, where the first element is the target and the second the listener function.
+	 */
 	unlisten: function (infs) {
 		for (var name in infs) {
 			var wts = _watches[name];
 			wts && wts.$remove(infs[name]);
 		}
-		return this;
 	},
+	/** Removes all listener of the specified watch. 
+	 * @param String name the watch name, such as onShow
+	 */
 	unlistenAll: function (name) {
 		delete _watches[name];
 	},
+	/** Fires an watch that invokes all listeners of the watch.
+	 * <p>For example, zWatch.fire('onX', null, null, 'a', 123) will cause ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX.
+	 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listener can use for further control. For example, the invocation sequence is, by default, evaluated in the order of fist-listen-first-call, and you can use the controller to force the listeners of a certain target to be called first as follows.
+<pre><code>
+onX: function (ctl) {
+   ctl.fire(specialTarget); //enforce the listeners of specialTarget to execute first
+   ....
+}
+</code></pre>
+
+	 * <p>If you want the listeners of descendants to execute too, use fireDown instead as follows:
+<pre><code>
+onX: function (ctl) {
+   ctl.fireDown(specialTarget); //enforce the listeners of specialTarget and descendants to execute first
+   ....
+}
+</code></pre>
+	* @param String name the watch name, such as onFloatUp.
+	* @param Object origin [optional] the origin (optional).
+	* It could be anything and it will become the origin member of the special controller (the first argument of the listener)
+	* @param Map opts [optional] options:
+	* <ul>
+	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
+	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called. 
+	*/
 	fire: function (name, org, opts) {
 		_fire(name, org, opts, arguments);
 	},
+	/** Fires an watch but invokes only the listeners that are a descendant of the specified origin.
+	 * <p>By descendant we mean the watch listener is the same or an descendant of the specified origin. In other words, if the specified origin is not the ancestor of a watch listener, the listener won't be called.
+	 *
+	 * <p>Notice that it assumes:
+	 * <ol>
+	 * <li>The watch listener's parent can be retrieved by either a method called getParent, or a property called parent.</li>
+	 * <li>It has a data member called bindLevel indicating which level the object in the parent-child tree.</li>
+	 * </ol>
+	 * <p>{@link zk.Widget} is a typical example ({@link zk.Widget#parent} and {@link zk.Widget#bindLevel}).
+	 *
+	 * <p>For example, zWatch.fireDown('onX', wgt, null, 'a', 123) will cause ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX and zUtl.isAncestor(wgt, ml) is true (zUtl#isAncestor).
+	 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listen can use to do further control. For example, origin (of fire()) can be retrieved by accessing the member of the controller called origin.
+<pre><code>
+onSize: function (ctl) {
+  if (ctl.origin) //retrieve the origin
+...
+</code></pre>
+	 * <p>The invocation sequence is, by default, evaluated in the order of parent-first, and you can use the controller to change it. For example, the following will cause the listener of specialTarget, if any, to execute first.
+<pre><code>
+onX: function (ctl) {
+   ctl.fire(specialTarget); //enfore the listeners of specialTarget to execute first
+   ....
+}
+</code></pre>
+
+	* <p>If you want the listeners of descendants to execute too, use fireDown instead as follows:
+<pre><code>
+onX: function (ctl) {
+   ctl.fireDown(specialTarget); //enfore the listeners of specialTarget and descendants to execute first
+   ....
+}
+</code></pre>
+	* <p>It is useful if a listener depends some of its children's listeners to complete (notice that the parent's listener is, by default, called first). For example, when onSize of a widget is called, it might want some of its children's onSiz to be called first (so he can have their updated size).
+	* @param String name the watch name, such as onShow.
+	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike #fire, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
+	* @param Map opts [optional] options:
+	* <ul><li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
+	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called. 
+	*/
 	fireDown: function (name, org, opts) {
 		_fire(name, org, zk.copy(opts,{down:true}), arguments);
 	},
-	onBindLevelMove: function () {
+	onBindLevelMove: function () { //internal
 		_dirty = true;
 	}
   };
