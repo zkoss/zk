@@ -98,7 +98,36 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+/** A draggable object used to make a DOM element draggable. 
+ */
 zk.Draggable = zk.$extends(zk.Object, {
+	/** The control object for this draggable.
+	 * @type Object
+	 */
+	//control: null,
+	/** The DOM element that represents the handle that the user can
+	 * drag the whole element ({@link #node}.
+	 * It is either {@link #node} or a child element of it.
+	 * @type DOMElement
+	 */
+	//handle: null,
+	/** The DOM element that is draggable (the whole element).
+	 * @type DOMElement
+	 */
+	//node: null,
+	/** The options of this draggable.
+	 * <p>Refer <a href="http://docs.zkoss.org/wiki/Options_of_zk.Draggable">here</a>
+	 * for all possible options.
+	 * @type Map
+	 */
+	//opts: null,
+	/** Constructor.
+	 * @param Object control the control object for this draggable.
+	 * I can be anything, but it is usually a widget ({@link zk.Widget}).
+	 * @param DOMElement node [optional] the DOM element that is made to be draggable.
+	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
+	 * @param Map opts [optional] options. Refer to <a href="http://docs.zkoss.org/wiki/Options_of_zk.Draggable">here</a> for allowed options.
+	 */
 	$init: function (control, node, opts) {
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
@@ -107,7 +136,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		this.control = control;
-		this.node = node = node ? jq(node, zk)[0]: control.node || control.$n();
+		this.node = node = node ? jq(node, zk)[0]: control.$n || control.$n();
 		if (!node)
 			throw "Handle required for "+control;
 
@@ -148,6 +177,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 				.keypress(_dockeypress);
 		_drags.push(this);
 	},
+	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
+	 */
 	destroy: function () {
 		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
 
