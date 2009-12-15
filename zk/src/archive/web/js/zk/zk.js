@@ -1162,9 +1162,6 @@ zk.copy(zk.Object, _zkf);
 var _errs = [], _errcnt = 0;
 
 _zErr = zk.$extends(zk.Object, {
-	/** Constructor
-	 * @param String msg the error message to show
-	 */
 	$init: function (msg) {
 		var id = "zk_err" + _errcnt++,
 			$id = '#' + id;
@@ -1192,8 +1189,6 @@ _zErr = zk.$extends(zk.Object, {
 		} catch (e) {
 		}
 	},
-	/** Removes the error box.
-	 */
 	destroy: function () {
 		_errs.$remove(this);
 		if (this.dg) this.dg.destroy();
@@ -1214,8 +1209,6 @@ _zErr = zk.$extends(zk.Object, {
 			}
 		}
 	},
-	/** Removes all error boxes.
-	 */
 	closeAll: function () {
 		for (var j = _errs.length; j--;)
 			_errs[j].destroy();
