@@ -103,5 +103,5 @@ if (klass.isInstance(obj)) {
 	 * @param obj the object to be checked
 	 * @see #isAssignableFrom
 	 */
-	public boolean isInstance(Object o);
+	public boolean isInstance(Object obj);
 }
