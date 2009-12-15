@@ -118,7 +118,7 @@ zk.copy(zk, (function() {
 /** @partial zk
  */
   return { //internal utility
-	setLoaded: _zkf = function (pkg, wait) {
+	setLoaded: _zkf = function (pkg, wait) { //internal
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
@@ -160,9 +160,35 @@ zk.copy(zk, (function() {
 	 */
 	setScriptLoaded: _zkf,
 
+	/** Tests if a package is loaded (or being loaded). 
+	 * @param String pkg the package name
+	 * @param boolean loading [Optional; default: false]
+	 * If true is specified, this method returns true if the package is loaded or being loaded. If false or omitted, it returns true only if the package is loaded. 
+	 * @return boolean true if loaded
+	 * @see #load
+	 */
 	isLoaded: function (pkg, loading) {
 		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
+	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
+	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute. 
+<pre><code>
+zk.load('zul.utl', function () {
+  new zul.utl.Timer();
+});
+</code></pre>
+	 * @param String pkg the package name
+	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here. 
+	 * @return boolean true if all required packages are loaded
+	 */
+	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
+	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute. 
+	 * @param String pkg the package name
+	 * @param zk.Desktop dt [optional] the desktop used to get URI of the JavaScript file ({@link #ajaxURI}). If null, the first desktop is assumed. 
+	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here. 
+	 * @return boolean true if all required packages are loaded
+	 * @see #load(String, Function)
+	 */
 	load: function (pkg, dt, func) {
 		if (typeof dt == 'function')
 			if (func) throw 'At most one function allowed';
@@ -204,12 +230,27 @@ zk.copy(zk, (function() {
 		return this;
 	},
 
+	/** Returns the version of the specified package.
+	 * @param String pkg the package name
+	 * @return String the version
+	 */
 	getVersion: function (pkg) {
 		return _pkgver[pkg];
 	},
+	/** Sets the version of the specified package.
+	 * @param String pkg the package name
+	 * @param String ver the version
+	 */
 	setVersion: function (pkg, ver) {
 		_pkgver[pkg] = ver;
 	},
+	/** Declare a package that must be loaded when loading another package.
+	 * <p>Notice that it doesn't guarantee the loading order of the two packages. Thus, it is better to do in #afterLoad if a code snippet depends on both packages. 
+	 * @param String a the name of the package that depends another package. In other words, calling #loading against this package will cause dependedPkgnn being loaded. 
+	 * @param String b the name of the package that shall be loaded if another package is being loaded.
+	 * In other words, it reads "a depends on b".
+	 * @see #afterLoad
+	 */
 	depends: function (a, b) {
 		if (a && b) //a depends on b
 			if (_loaded[a]) zk.load(b);
@@ -219,6 +260,32 @@ zk.copy(zk, (function() {
 			}
 	},
 
+	/** Declares a function that shall be executed after all requested packages are loaded (i.e., {@link #loading} is 0).
+	 * If all packages has been loaded, the function is executed immediately
+	 * and this method returns true. 
+	 * @param Function func the function to execute
+	 * @return boolean whether func has been executed
+	 * @see #afterLoad(String, Function)
+	 * @see #depends
+	 * @see #load
+	 */
+	/** Declares a function that shall be executed only if the specified
+	 * package(s) are loaded (and {@link #loading} is 0). Notice that it won't cause the package(s) to execute. Rather, it defers the execution of the specified function until someone else loads the package (by use of {@link #load}).
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Customize_JavaScript_Codes">Customize JavaScript Codes</a>
+	 * <p>To know whether all requested packages are loaded (i.e., ZK is not loading any package), you can check {@link #loading} if it is 0.
+	 * <p>Notice that functions specified in the second format execute before those specified in the first format.
+	 * <p>Example
+<pre><code>
+zk.afterLoad('foo', function() {new foo.Foo();}); 
+zk.afterLoad('foo1,foo2', function() {new foo1.Foo(foo2.Foo);}); 
+zk.afterLoad(function() {});
+</code></pre>
+	 * @param String pkgs the package(s) that the specified function depends on. In other words, the function is evaluated only if the package(s) are loaded. If you want to specify multiple packages, separate them with comma.
+	 * @param Function func the function to execute
+	 * @see #afterLoad(Function)
+	 * @see #depends
+	 * @see #load
+	 */
 	afterLoad: function (a, b, front) {
 		if (typeof a == 'string') {
 			if (!b) return true;
@@ -256,12 +323,28 @@ zk.copy(zk, (function() {
 			return true;
 		}
 	},
+	/** Returns the URI of the server (so called host) for the specified package.
+	 * <p>ZK Client Engine loads the packages from the same server that returns the HTML page.
+	 * If a package might be loaded from a different server, you can invoke #setHost to specify it and then #getHost will return the correct URL for the specified package. 
+	 * @param String pkg the package name
+	 * @param boolean js whether the returned URL is used to load the JavaScript file.
+	 * {@link #load} will pass true to this argument to indicate the URI is used to load the JavaScript file. However, if you just want the URL to send the request back (such as json-p with jQuery's json), don't pass anything (or pass false) to this argument. 
+	 * @return String the URI
+	 * @see #setHost
+	 */
 	getHost: function (pkg, js) {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
 				return _pkghosts[p][js ? 1: 0];
 		return _defhost[js ? 1: 0];
 	},
+	/** Defines the URL of the host for serving the specified packages. 
+	 * @param String host the host, such as http://www.zkoss.org.
+	 * @param String updURI the update URI, such as /zkdemo/zkau,
+	 * that is used to load the JavaScript files
+	 * @param Array pkgs an array of pckage names (String)
+	 * @see #getHost
+	 */
 	setHost: function (host, updURI, pkgs) {
 		var hostUpd = host + updURI;
 		if (!_defhost.length)

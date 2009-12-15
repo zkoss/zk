@@ -154,6 +154,15 @@ zk.copy(zk, {
 	 * @type Offset
 	 */
 	currentPointer: [0, 0],
+	/** The widget that gains the focus now, or null if no one gains focus now. 
+	 * @type zk.Widget
+	 */
+	//currentFocus: null,
+	/** The topmost modal window, or null if no modal window at all. 
+	 * @type zul.wnd.Window
+	 */
+	//currentModal: null,
+
 	/** The number of widget packages (i.e., JavaScript files) being loaded
 	 * (and not yet complete).
 	 * <p>When the JavaScript files of widgets are loading, you shall not create
@@ -173,6 +182,7 @@ zk.copy(zk, {
 	 * @see #afterMount
 	 * @see #processing
 	 * @see #loading
+	 * @see #bootstrapping
 	 * @type boolean
 	 */
 	//mounting: false,
@@ -185,29 +195,147 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//processing: false,
+	/** Indicates whether ZK Client Engine is just initialized and creating the initial widgets. In other words, it is not caused by asynchronous update. 
+	 * @see #mounting
+	 * @see #unloading
+	 * @type boolean
+	 */
+	//bootstrapping: false,
+	/** Indicates whether the browser is unloading this document.
+	 * Note: when the function registered with {@link #beforeUnload} is called, this flag is not set yet. 
+	 * @see #loading
+	 * @see #bootstrapping
+	 * @type boolean
+	 */
+	//unloading: false,
+
+	/** The version of ZK, such as '5.0.0'
+	 * @type version
+	 */
+	//version: '',
+	/** The build of ZK, such as '08113021'
+	 * @type String
+	 */
+	//build: '',
 
 	/** The user agent of the browser.
 	 * @type String
 	 */
-	//agent: 'defined later',
+	//agent: '',
 	/** Whether it is Internet Explorer.
 	 * @type boolean
 	 */
 	//ie: false,
+	/** Whether it is Internet Exploer 6 (excluding 7 or others).
+	 * @type boolean
+	 */
+	//ie6_: false,
+	/** Whether it is Internet Exploer 7 or later.
+	 * @type boolean
+	 */
+	//ie7: false,
+	/** Whether it is Internet Exploer 7 (excluding 8 or others).
+	 * @type boolean
+	 */
+	//ie7_: false,
+	/** Whether it is Internet Exploer 8 or later.
+	 * @type boolean
+	 */
+	//ie8: false,
+	/** Whether it is Internet Exploer 8 or later, and running in
+	 * Internet Explorer 7 compatible mode.
+	 * @type boolean
+	 */
+	//ie8c: false,
+	/** Whether it is Gecko-based browsers, such as Firefox.
+	 * @type boolean
+	 */
+	//gecko: false,
+	/** Whether it is Gecko-based browsers, such as Firefox, and it
+	 * is version 2 (excluding 3 or others).
+	 * @type boolean
+	 */
+	//gecko2_: false,
+	/** Whether it is Gecko-based browsers, such as Firefox, and it
+	 * is version 3 and later.
+	 * @type boolean
+	 */
+	//gecko3: false,
+	/** Whether it is Safari.
+	 * @type boolean
+	 */
+	//safari: false,
+	/** Whether it is Opera.
+	 * @type boolean
+	 */
+	//opera: false,
+	/** Whether it is Adobe AIR.
+	 * @type boolean
+	 */
+	//air: false,
+
+	/** The character used for decimal sign.
+	 * @type char
+	 */
+	//DECIMAL: '',
+	/** The character used for thousands separator.
+	 * @type char
+	 */
+	//GROUPING: '',
+	/** The character used to represent minus sign.
+	 * @type char
+	 */
+	//MINUS: '',
+	/** The character used for mille percent sign.
+	 * @type char
+	 */
+	//PER_MILL: '',
+	/** The character used for percent sign.
+	 * @type char
+	 */
+	//PERCENT: '',
+
+	/** The widget that captures the keystrokes.
+	 * Used to specify a widget that shall receive the following the onKeyPress and onKeyUp events, no matter what widget the event occurs on.
+<pre><code>
+doKeyDown_: function () {
+ zk.keyCapture = this;
+ this.$supers('doKeyDown_', arguments);
+}
+</code></pre>
+	 * <p>Notice that the key capture is reset automatically after processing onKeyUp_. 
+	 * @see #mouseCapture
+	 * @type zk.Widget
+	 */
+	//keyCapture: null,
+	/** The widget that captures the mouse events.
+	 * Used to specify a widget that shall receive the following the onMouseMove and onMouseUp events, no matter what widget the event occurs on.
+<pre><code>
+doMouseDown_: function () {
+ zk.mouseCapture = this;
+ this.$supers('doMouseDown_', arguments);
+}
+</code></pre>
+	 * <p>Notice that the mouse capture is reset automatically after processing onMouseUp_. 
+	 * @see #keyCapture
+	 * @type zk.Widget
+	 */
+	//mouseCapture: null,
 
 	/** Copies a map of properties (or options) from one map to another.
-     * <p>Example: We can extend Array.prototype as follows.
-	 * <pre><code>zk.copy(Array.prototoype, {
-	 * $add: function (o) {
- 	 *  this.push(o);
-	 * }
-	 *});</code></pre>
-	 *
-	 * @param Map dest the destination object to copy properties to.
-	 * @param Map src the properties to copy from 
-	 * @return Map the destination object
+	 * Example: extending Array 
+<pre><code>
+zk.copy(Array.prototoype, {
+ $add: function (o) {
+  this.push(o);
+ }
+});
+</code></pre>
+	 * @param Object dst the destination object to copy properties to
+	 * @param Object src the source object to copy properties from
+	 * @return Object the destination object
 	 */
-	//copy: zk.$void, //define above
+	//copy: function () {},
 
 	/** Defines a package. It creates the package if not defined yet.
 	 * It is similar to Java's package statement except it returns the package
@@ -215,10 +343,12 @@ zk.copy(zk, {
 	 *
 	 * <p>Example:
 	 * <pre><code>var foo = zk.$package('com.foo');
-	 *foo.Cool = zk.#$extends(zk.Object);</code></pre> 
+	 *foo.Cool = zk.$extends(zk.Object);</code></pre> 
 	 *
 	 * @param String name the name of the package.
 	 * @return zk.Package
+	 * @see #import
+	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
@@ -237,6 +367,24 @@ zk.copy(zk, {
 			j = k + 1;
 		}
 	},
+	/** Imports a package or a class. It returns null if the package or class is not defined yet.
+	 * <p>Example: 
+<pre><code>
+var foo = zk.$import('com.foo');
+var cool = new foo.Cool();
+var Cool = zk.$import('com.foo.Cooler');
+var cooler = new Cooler();
+</code></pre>
+	 * <p>If you specify an additional function, then it assumes name is a class and it will load the package of the class first, if not found. Then, invoke the function after the class is loaded. For example, the following creates a Listbox widget after loading the package.
+<pre><code>
+zk.$import('zul.sel.Listbox', function (cls) {new cls();});
+</code></pre>
+	 * @param String name The name of the package or the class. 
+	 * @param Function fn The function to call after the class is loaded. If specified, it assumes name is a class, and it will load the package of the class automatically. 
+	 * @return zk.Package
+	 * @see #$package
+	 * @see #load
+	 */
 	$import: function (name, fn) {
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
@@ -255,6 +403,93 @@ zk.copy(zk, {
 		}
 	},
 
+	/** Defines a class. It returns the class being defined.
+	 * <p>Example: 
+<pre><code>
+zul.Label = zk.$extends(zk.Widget, {
+ _value: '',
+ getValue() {
+  return this._value;
+ },
+ setValue(value) {
+  this._value = value;
+ }
+});
+</code></pre>
+	 * <p>In additions, you can declare a class that depends a class that might not be loaded yet. It will cause the superclass to be loaded. However, you cannot access it until the superclass has been loaded.
+<pre><code>
+foo.Mine = zk.$extends('zul.inp.Textbox', {
+});
+ 
+new foo.Mine(); //wrong! since zul.inp.Textbox might not be loaded yet
+afterLoad(function () { new foo.Mine();}); //correct!
+ 
+if (foo.Mine.superclass) { //test if it has been defined correctly (true if zul.inp.Textbox is loaded)
+}
+if (zk.$import('zul.inp')) { //another way to know
+}
+if (zk.isLoaded('zul.inp')) { //another way to know
+}
+</code></pre>
+	 * <h3>$define</h3>
+	 * To simplify the declaration of the getters and setters, <code>$define</code>
+	 * is introduced. It is shortcut to invoke define. For example,
+<pre><code>
+foo.Widget = zk.$extends(zk.Widget, {
+  _value: '',
+  $define: {
+    name: null,
+    value: null
+  },
+  bind_: function () {
+    //
+  }
+});
+</code></pre>
+	 * <p>is equivalent to
+<pre><code>
+foo.Widget = zk.$extends(zk.Widget, {
+  _value: '',
+  bind_: function () {
+    //
+  }
+});
+zk.define(foo.Widget, {
+    name: null,
+    value: null
+});
+</code></pre>
+
+<p>is equivalent to
+<pre><code>
+foo.Widget = zk.$extends(zk.Widget, {
+  _value: '',
+  getName: function () {
+    return this._name;
+  },
+  setName: function (v) {
+    this._name = v;
+    return this;
+  },
+  getValue: function () {
+    return this._value;
+  },
+  setValue: function (v) {
+    this._value = v;
+    return this;
+  },
+  bind_: function () {
+    //
+  }
+});
+</code></pre>
+	 * @param zk.Class sueprclass the super class to extend from
+	 * @param Map members a map of non-static members
+	 * @param Map staticMembers a map of static members. Ignored if omitted.
+	 * @return zk.Class the class being defined
+	 * @see #define
+	 * @see #override
+	 */
 	$extends: function (superclass, members, staticMembers) {
 		if (!superclass)
 			throw 'unknown superclass';
@@ -296,7 +531,24 @@ zk.copy(zk, {
 
 		return jclass;
 	},
-	_$oid: 0,
+
+	/** Provides the default values for the specified options.
+	 * <p>Example: 
+<pre><code>
+process: function (opts, defaultOptions) {
+ opts = zk.$default(opts, defaultOptions);
+}
+</code></pre>
+<pre><code>
+opts = zk.$default(opts, {timeout: 100, max: true});
+ //timeout and max are assigned to opts only if no such property found in opts
+</code></pre>
+	 * @param Map opts a map of options to which default options will be added
+	 * If null, an empty map is created automatically.
+	 * @param Map defaults a map of default options
+	 * @return Map the merged options
+	 * @see #copy
+	 */
 	$default: function (opts, defaults) {
 		opts = opts || {};
 		for (var p in defaults)
@@ -305,11 +557,122 @@ zk.copy(zk, {
 		return opts;
 	},
 
+	/** Overrides the properties of a map.
+	 * It is similar to {@link #copy}, except
+	 * <ol>
+	 * <li>It preserves the original member (method or data) in the backup
+	 * argument.</li>
+	 * <li>It handles the class extensions ({@link #$extends}) well.
+	 * For example, the members of all deriving classes will be overriden too,
+	 * if necessary.</li>
+	 * </ol>
+	 * <p>Example,
+<pre><code>
+var _xCombobox = {}
+zk.override(zul.inp.Combobox.prototype, _xCombobox, {
+	redrawpp_: function (out) {
+		if (!_redrawpp(this, out))
+			_xCombobox.redrawpp_.apply(this, arguments); //call the original method
+	},
+	open: function () {
+		_renderpp(this);
+		_xCombobox.open.apply(this, arguments); //call the original method
+	}
+});
+</code></pre>
+	 * @param Object dst the destination object to override
+	 * @param Map backup the map used to store the original members (or properties)
+	 * @param Map src the source map providing the new members
+	 * @return Map the destination map
+	 */
 	override: function (dst, backup, src) {
 		for (var nm in src)
 			_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
+		return dst;
 	},
 
+	/** Defines the setter and getter methods.
+	 * <p>Notice that you rarely need to invoke this method directly. Rather, you can specify them in a property named $define, when calling #$extends.
+	 * <p>For example, the following code snippet
+<pre><code>
+zk.define(zul.wgt.Button, {
+  disabled: null
+});
+</code></pre>
+
+is equivalent to define three methods, isDisabled, getDisabled and setDisabled, as follows:
+
+<pre><code>
+zul.wgt.Button = zk.$extends(zk.Widget, {
+  isDisabled: _zkf = function () {
+    return this._disabled;
+  },
+  isDisabled: _zkf,
+  setDisabled: function (v) {
+    this._disabled = v;
+    return this;
+  }
+});
+</code></pre>
+
+If you want to do something when the value is changed in the setter, you can specify a function as the value in the props argument. For example,
+
+<pre><code>
+zk.define(zul.wgt.Button, {
+  disabled: function () {
+    if (this.desktop) this.rerender();
+  }
+});
+</code></pre>
+
+will cause the setter to be equivalent to
+
+<pre><code>
+setDisabled: function (v, opts) {
+  this._disabled = v;
+  if (this._disabled !== v || (opts && opts.force))
+    if (this.desktop) this.rerender();
+  return this;
+}
+</code></pre>
+
+If you want to pre-process the value, you can specify a two-element array. The first element is the function to pre-process the value, while the second is to post-process if the value is changed, as described above. For example,
+
+<pre><code>
+zk.define(zul.wgt.Button, {
+  disabled: [
+  	function (v) {
+  		return v != null && v != false;
+  	},
+  	function () {
+	    if (this.desktop) this.rerender();
+  	}
+  ]
+});
+</code></pre>
+
+will cause the setter to equivalent to
+
+<pre><code>
+setDisabled: function (v) {
+  v = v != null && v != false;
+  this._disabled = v;
+  if (this._disabled !== v || (opts && opts.force))
+    if (this.desktop) this.rerender();
+  return this;
+}
+</code></pre>
+
+Notice that when the function (specified in props) is called, the arguments are the same as the arguments passed to the setter (including additional arguments. For example, if button.setDisabled(true, false) is called, then the specified function is called with two arguments, true and false. In additions, as shown above, you can enforce the invocation of the function by passing a map with force as true.
+
+<pre><code>
+wgt.setSomething(somevalue, {force:true});
+</code></pre>
+	 * @param zk.Class klass the class to define the members
+	 * @param Map props the map of members (aka., properties)
+	 * @see #$extends
+	 * @return zk.Class the class being defined
+	 */
 	define: function (klass, props) {
 		for (var nm in props) {
 			var nm1 = '_' + nm,
@@ -324,15 +687,41 @@ zk.copy(zk, {
 			pt['get' + nm2] = pt['is' + nm2] =
 				new Function('return this.' + nm1 + ';');
 		}
+		return klass;
 	},
 
+	/** A does-nothing function.
+	 */ 
 	$void: function () {},
 
+	/** Parses a string to an integer.
+	 * <p>It is the same as the built-in parseInt method except it never return
+	 * NaN (rather, it returns 0). 
+	 * @param String v the text to parse
+	 * @param int b represent the base of the number in the string. 10 is assumed if omitted. 
+	 * @return int the integer
+	 */
 	parseInt: function (v, b) {
 		v = v ? parseInt(v, b || 10): 0;
 		return isNaN(v) ? 0: v;
 	},
 
+	/** Assigns a value to the specified property.
+	 * <p>For example, <code>zk.set(obj, "x", 123)</code>:<br/>
+	 * If setX is defined in obj, obj.setX(123) is called.
+	 * If not defined, obj.x = 123 is called.
+	 * <p>Anotehr example: 
+<pre><code>
+zk.set(o, 'value', true); //set a single property
+</code></pre>
+	 * @param Object o the object to assign values to
+	 * @param String name the property's name
+	 * @param Object value the property's value
+	 * @param Object extra an extra argument to pass to the setX method
+	 * as the extra argument (the second argument).
+	 * For example, <code>zk.set(obj, 'x', 123, true)</code> invokes <code>obj.setX(123, true)</code>.
+	 * @see #get
+	 */
 	set: function (o, name, value, extra) {
 		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
 		if (!m) o[name] = value;
@@ -341,6 +730,18 @@ zk.copy(zk, {
 		else
 			m.call(o, value);
 	},
+	/** Retrieves a value from the specified property.
+	 * <p>For example, <code>zk.get(obj, "x")</code>:<br/>
+	 * If getX or isX is defined in obj, obj.isX() or obj.getX() is returned.
+	 * If not defined, obj.x is returned.
+	 * <p>Another example: 
+<pre><code>
+zk.get(o, 'value');
+</code></pre>
+	 * @param Object o the object to retreive value from
+	 * @param String name the name
+	 * @return Object the value of the property
+	 */
 	get: function (o, name) {
 		var nm = name.charAt(0).toUpperCase() + name.substring(1);
 			m = o['get' + nm];
@@ -351,30 +752,80 @@ zk.copy(zk, {
 	},
 
 	//Processing//
+	/** Set a flag, {@link #processing}, to indicate that it starts a processing. It also shows a message to indicate "processing" after the specified timeout.
+	 * <p>Example: 
+<pre></code>
+zk.startProcessing(1000);
+//do the lengthy operation
+zk.endProcessing();
+</code></pre>
+	 * @param int timeout the delay before showing a message to indicate "processing". 
+	 * @see #processing
+	 * @see #endProcessing
+	 */
 	startProcessing: function (timeout) {
 		zk.processing = true;
 		setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
 	},
+	/** Clears a flag, {@link #processing}, to indicate that it the processing has done. It also removes a message, if any, that indicates "processing".
+	 * <p>Example: 
+<pre><code>
+zk.startProcessing(1000);
+//do the lengthy operation
+zk.endProcessing();
+</code></pre>
+	 * @see #startProcessing
+	 */
 	endProcessing: function() {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},
 
+	/** Disable the default behavior of ESC. In other words, after called, the user cannot abort the loading from the server. 
+	 * <p>To enable ESC, you have to invoke {@link #enableESC} and the number
+	 * of invocations shall be the same.
+	 * @see #enableESC
+	 */
 	disableESC: function () {
 		++zk._noESC;
 	},
+	/** Enables the default behavior of ESC (i.e., stop loading from the server). 
+	 * @see #disableESC
+	 */
 	enableESC: function () {
 		--zk._noESC;
 	},
 	_noESC: 0, //# of disableESC being called (also used by mount.js)
 
 	//DEBUG//
+	/** Display an error message to indicate an error. 
+	 *  Example: 
+<pre><code>zk.error('Oops! Something wrong:(');</code></pre>
+	 * @param String msg the error message
+	 * @see #errorDismiss
+	 * @see #log
+	 * @see #stamp
+	 */
 	error: function (msg) {
 		new zk.eff.Error(msg);
 	},
+	/** Closes all error messages shown by {@link #error}.
+   	 * Example: 
+<pre><code>zk.errorDismiss();</code></pre>
+	 * @see #error
+	 */
 	errorDismiss: function () {
 		zk.eff.Error.closeAll();
 	},
+	/** Logs an message for debugging purpose.
+	 * Example: 
+<pre><code>
+zk.log('reach here');
+zk.log('value is", value);
+</code></pre>
+	 * @param Object... detailed varient number of arguments to log
+	 * @see #stamp
+	 */
 	log: function (detailed) {		
 		var msg = toLogMsg(
 			(detailed !== zk) ? arguments :
@@ -389,6 +840,13 @@ zk.copy(zk, {
 		_logmsg = (_logmsg ? _logmsg + msg: msg) + '\n';
 		setTimeout(function(){jq(doLog);}, 300);
 	},
+	/** Make a time stamp for this momemt; used for performance tuning.
+	 * A time stamp is represented by a name. It is an easy way to measure
+	 * the performance. At the end of executions, the time spent between
+	 * any two stamps (including beginning and ending) will be logged
+	 * (with {@link #log}).
+	 * @param String name the unique name to represent a time stamp
+	 */
 	stamp: function (nm) {
 		if (arguments.length) {
 			if (!_stamps.length)
@@ -404,6 +862,18 @@ zk.copy(zk, {
 		}
 	},
 
+	/** Encodes and returns the URI to communicate with the server.
+	 * Example:
+<pre><code>document.createElement("script").src = zk.ajaxURI('/web/js/com/foo/mine.js',{au:true});</code></pre>
+	 * @param String uri - the URI related to the AU engine. If null, the base URI is returned. 
+	 * @param Map opts [optinal] the options. Allowed values:<br/>
+	 * <ul>
+	 * <li>au - whether to generate an URI for accessing the ZK update engine. If not specified, it is used to generate an URL to access any servlet</li>
+	 * <li>desktop - the desktop or its ID. If null, the first desktop is used.</li>
+	 * <li>ignoreSession - whether to handle the session ID in the base URI.</li>
+	 * </ul>
+	 * @return String the encoded URI
+	 */
 	ajaxURI: function (uri, opts) {
 		var ctx = zk.Desktop.$(opts?opts.desktop:null),
 			au = opts && opts.au;
@@ -433,6 +903,13 @@ zk.copy(zk, {
 			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
 			prefix + uri + suffix;
 	},
+	/** Declares the desktop is used for the stateless context.
+	 * By stateless we mean the server doesn't maintain any widget at all.
+	 * @param String dtid the ID of the desktop to create
+	 * @param String contextURI the context URI, such as /zkdemo
+	 * @param String updateURI the update URI, such as /zkdemo/zkau
+	 * @return zk.Desktop the stateless desktop being created
+	 */
 	stateless: function (dtid, contextURI, updateURI) {
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + _statelesscnt++);
@@ -495,9 +972,28 @@ zk.copy(zk, {
 zk.Object = function () {};
 /** @class zk.Object
  * The root of the class hierarchy.
+ * @see zk.Class
  */
 zk.Object.prototype = {
+	/** The constructor.
+	 * <p>Default: it does nothing so the subclass needs not to copy back
+	 * (also harmless to call back).
+	 * @see #afterInit
+	 */
 	$init: zk.$void,
+	/** Specifies a function that shall be called after the object is initialized,
+	 * i.e., after {@link #$init} is called. This method can be called only during the execution of {@link #$init}.
+	 * <p>It is an advance feature that is used to allow a base class to do something that needs to wait for all deriving classes have been initialized.
+	 *
+	 * <p>Invocation Sequence:
+	<ul>
+	<li>The most derived class's $init (subclass)</li>
+	<li>The based class's $init (if the derived class's $init invokes this.$supers('$init', arguments))</li>
+	<li>The first function, if any, be added with $afterInit, then the second (in the same order that $afterInit was called)... </li>
+	</ul>
+	 * @param Function func the function to register for execution later
+	 * @see #$init
+	 */
 	$afterInit: function (f) {
 		(this._$ais = this._$ais || []).unshift(f); //reverse
 	},
@@ -505,6 +1001,22 @@ zk.Object.prototype = {
 	 * @type zk.Class
 	 */
 	$class: zk.Object,
+	/** The object ID. Each object has its own unique $oid.
+	 * It is mainly used for debugging purpose.
+	 * <p>Trick: you can test if a JavaScript object is a ZK object by examining this property, such as
+	 * <code>if (o.$oid) alert('o is a ZK object');</code>
+	 * @type int
+	 */
+	//$oid: 0,
+	/** Determines if this object is an instance of the class represented by the specified Class parameter.
+	 * Example: 
+<pre><code>
+if (obj.$instanceof(zul.wgt.Label)) {
+}
+</code></pre>
+	 * @param klass the Class object to be checked. 
+	 * @return boolean true if this object is an instance of the class
+	 */
 	$instanceof: function (cls) {
 		if (cls) {
 			var c = this.$class;
@@ -516,12 +1028,37 @@ zk.Object.prototype = {
 		}
 		return false;
 	},
+	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
+	 * Example: 
+<pre><code>
+multiply: function (n) {
+ return this.$super('multiply', n + 2);
+}
+</code></pre>
+	 * @param String mtd the method name to invoke
+	 * @param Object... vararg any number of arguments
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$supers
+	 */
 	$super: function (mtdnm) {
 		var args = [];
 		for (var j = arguments.length; --j > 0;)
 			args.unshift(arguments[j]);
 		return this.$supers(mtdnm, args);
 	},
+	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
+	 * Example: 
+<pre><code>
+multiply: function () {
+ return this.$super('multiply', arguments);
+}
+</code></pre>
+	 * @param String mtd the method name to invoke
+	 * @param Array args an array of arguments. In most case, you just pass
+	 * <code>arguments</code> (the built-in variable).
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$super
+	 */
 	$supers: function (mtdnm, args) {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
@@ -553,6 +1090,22 @@ zk.Object.prototype = {
 	},
 	_$subs: [],
 
+	/** Proxies a member function such that it can be called with this object in a context that this object is not available.
+	 * It sounds a bit strange at beginning but useful when passing a member
+	 * of an object that will be executed as a global function.
+	 *
+	 * <p>Example: Let us say if you want a member function to be called periodically, you can do as follows. 
+<pre><code>
+setInterval(wgt.proxy(wgt.doIt), 1000); //assume doIt is a member function of wgt
+</code></pre>
+	* <p>With proxy, when doIt is called, this references to wgt. On the other hand, the following won't work since this doesn't reference to wgt, when doIt is called.
+<pre><code>
+setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
+</code></pre>
+	* @param Function func a method member of this object
+	* @return Function a function that can be called as a global function
+	* (that actually have <code>this</code> referencing to this object).
+	*/
 	proxy: function (f) {
 		var fps = this._$proxies, fp;
 		if (!fps) this._$proxies = fps = {};
@@ -563,16 +1116,37 @@ zk.Object.prototype = {
 
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
-/** @partial zk.Class, zk.Object
+zk.Class.prototype.$class = zk.Class;
+/** @partial zk.Object
  */
 _zkf = {
-	/** The class that this object belongs to.
+	/** The class of a class.
+	 * It is always {@link zk.Class}.
 	 * @type zk.Class
 	 */
 	$class: zk.Class,
+	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
+	 * Example: 
+<pre><code>
+if (klass.isInstance(obj)) {
+}
+</code></pre>
+	 * @param Object o the object to check
+	 * @return boolean true if the object is an instance
+	 */
 	isInstance: function (o) {
 		return o && o.$instanceof && o.$instanceof(this);
 	},
+	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
+	 * Example: 
+<pre><code>
+if (klass1.isAssignableFrom(klass2)) {
+}
+</code></pre>
+	 * @param zk.Class cls the Class object to be checked, such
+	 * as zk.Widget.
+	 * @return boolean true if assignable
+	 */
 	isAssignableFrom: function (cls) {
 		for (; cls; cls = cls.superclass)
 			if (this == cls)

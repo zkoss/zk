@@ -357,7 +357,21 @@ jq(function() {
 		_reszInf = {},
 		_oldBfUnload;
 
+	/** @partial zk
+	 */
 	zk.copy(zk, {
+		/** Adds a function that will be executed when the browser is about to unload the document. In other words, it is called when window.onbeforeunload is called.
+		 *
+		 * <p>To remove the function, invoke this method by specifying remove to the opts argument.
+<pre><code>zk.beforeUnload(fn, {remove: true});</code></pre>
+		 *
+		 * @param Function fn the function to execute.
+		 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation. 
+		 * @param Map opts [optional] a map of options. Allowed vlaues:<br/>
+		 * <ul>
+		 * <li>remove: whether to remove instead of add.</li>
+		 * </ul>
+		 */
 		beforeUnload: function (fn, opts) { //part of zk
 			if (opts && opts.remove) _bfUploads.$remove(fn);
 			else _bfUploads.push(fn);
