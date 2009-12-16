@@ -20,4 +20,5 @@ package zk;
  * @author tomyeh
  */
 public class Package {
+	private Package() {}
 }
