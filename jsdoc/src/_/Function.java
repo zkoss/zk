@@ -19,4 +19,5 @@ package _;
  * @author tomyeh
  */
 public class Function {
+	private Function() {}
 }

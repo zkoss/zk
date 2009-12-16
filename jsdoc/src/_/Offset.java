@@ -23,4 +23,5 @@ zk.debug("x,y = " + ofs[0] + "," + ofs[1]);</code></pre>
  * @see Array
  */
 public class Offset extends Array {
+	private Offset() {}
 }

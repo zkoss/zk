@@ -25,4 +25,5 @@ package _;
  * @see Array
  */
 public class Map {
+	private Map() {}
 }

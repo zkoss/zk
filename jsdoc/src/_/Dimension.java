@@ -30,4 +30,6 @@ public class Dimension extends Map {
 	/** The height.
 	 */
 	public int height;
+
+	private Dimension() {}
 }

@@ -22,4 +22,5 @@ package _;
  * @see String
  */
 public class Date {
+	private Date() {}
 }

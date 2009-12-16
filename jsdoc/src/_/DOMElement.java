@@ -20,4 +20,5 @@ package _;
  * @author tomyeh
  */
 public class DOMElement {
+	private DOMElement() {}
 }

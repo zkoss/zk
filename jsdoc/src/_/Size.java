@@ -24,4 +24,5 @@ zk.log("w,h = " + sz[0] + "," + sz[1]);
  * @author tomyeh
  */
 public class Size extends Array {
+	private Size() {}
 }

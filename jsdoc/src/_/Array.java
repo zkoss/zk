@@ -54,4 +54,6 @@ public class Array {
 	 * <p>Notice that == returns false in the above case. 
 	 */
 	public boolean $equals(Object o);
+
+	private Array() {}
 }

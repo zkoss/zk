@@ -85,6 +85,8 @@ MyDerive.static0(); //OK
  * @author tomyeh
  */
 public class Class extends zk.Object {
+	private Class() {}
+
 	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
 	 * Example: 
 <pre><code>

@@ -20,6 +20,7 @@ package _;
  * <p>Refer to <a href="http://www.w3schools.com/jsref/jsref_obj_string.asp">JavaScript Reference</a>.
  */
 public class String {
+	private String() {}
 	/** Returns a copy of this string by converting dashes into a camel-case equivalent.
 	 *
 	 * <p>Example: 
