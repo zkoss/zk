@@ -326,6 +326,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var Window = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
+				fireOnMove: false,
 				starteffect: Window._startmove,
 				ghosting: Window._ghostmove,
 				endghosting: Window._endghostmove,
@@ -549,7 +550,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			top: y + 'px'
 		}, keys), {ignorable: true});
 
-		zWatch.fireDown('onMove', this);
 	},
 	//super//
 	setVisible: function (visible) {

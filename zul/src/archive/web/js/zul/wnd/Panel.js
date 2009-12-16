@@ -683,15 +683,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return false;
 	},
 	_aftermove: function (dg, evt) {
-		var wgt = dg.control;
-		wgt._syncShadow();
-		var node = wgt.$n();
-		wgt.fire('onMove', zk.copy({
-			left: node.style.left,
-			top: node.style.top
-		}, evt.data), {ignorable: true});
-
-		zWatch.fireDown('onMove', wgt);
+		dg.control._syncShadow();
 	},
 	// drag sizing
 	_startsizing: zul.wnd.Window._startsizing,

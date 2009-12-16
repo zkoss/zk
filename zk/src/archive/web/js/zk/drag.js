@@ -290,7 +290,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		this.control = control;
-		this.node = node = node ? jq(node, zk)[0]: control.$n || control.$n();
+		this.node = node = node ? jq(node, zk)[0]: control.node || (control.$n ? control.$n() : null);
 		if (!node)
 			throw "Handle required for "+control;
 
@@ -299,7 +299,8 @@ String scroll; //DOM Element's ID</code></pre>
 			scrollSensitivity: 20,
 			scrollSpeed: 15,
 			initSensitivity: 3,
-			delay: 0
+			delay: 0,
+			fireOnMove: true
 		});
 
 		if (opts.reverteffect == null)
@@ -521,7 +522,8 @@ String scroll; //DOM Element's ID</code></pre>
 		if(revert && typeof revert == 'function')
 			revert = revert(this, pt, evt);
 
-		var d = this._currentDelta();
+		var d = this._currentDelta(),
+			d2 = this.delta;
 		if(revert && this.opts.reverteffect) {
 			this.opts.reverteffect(this,
 				[d[0]-this.delta[0], d[1]-this.delta[1]]);
@@ -535,6 +537,15 @@ String scroll; //DOM Element's ID</code></pre>
 		if(this.opts.endeffect) 
 			this.opts.endeffect(this, evt);
 
+		var wgt = this.control;
+		if (this.opts.fireOnMove && zk.Widget.isInstance(wgt)) {
+			if (d[0] != d2[0] || d[1] != d2[1]) {
+				wgt.fire('onMove', zk.copy({
+					left: node.style.left,
+					top: node.style.top
+				}, evt.data), {ignorable: true});
+			}
+		}
 		_deactivate(this);
 		setTimeout(function(){zk.dragging=false;}, 0);
 			//we have to reset it later since event is fired later (after onmouseup)
