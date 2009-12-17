@@ -209,7 +209,9 @@ tr.z-listitem td.z-listitem-focus {
 </c:if>
 
 .z-listitem-img,
-.z-listheader-img {
+.z-listheader-img,
+.z-listgroup-img-checkbox,
+.z-listgroupfoot-img {
 	background:transparent no-repeat scroll center center;
 	border:0;
 	height: 13px;
@@ -225,7 +227,9 @@ tr.z-listitem td.z-listitem-focus {
 }
 .z-listheader-img,
 .z-listitem-img-checkbox,
-.z-listitem-img-radio {
+.z-listitem-img-radio,
+.z-listgroup-img-checkbox,
+.z-listgroupfoot-img {
 	background-image:url(${c:encodeURL('~./zul/img/common/check-sprite.gif')});
 	background-position: 0 0;
 }
@@ -242,15 +246,15 @@ tr.z-listitem td.z-listitem-focus {
 	background-position: -39px -13px;
 }
 .z-listheader-img-over,
-.z-listitem-over .z-listitem-img-checkbox {
+.z-listitem-over .z-listitem-img-checkbox, .z-listgroup-over .z-listgroup-img-checkbox, .z-listgroupfoot-over .z-listgroupfoot-img-checkbox {
 	background-position: -13px 0;
 }
 .z-listheader-img-seld,
-.z-listitem-seld .z-listitem-img-checkbox {
+.z-listitem-seld .z-listitem-img-checkbox, .z-listgroup-seld .z-listgroup-img-checkbox, .z-listgroupfoot-seld .z-listgroupfoot-img-checkbox {
 	background-position: -26px 0;
 }
 .z-listheader-img-over-seld,
-.z-listitem-over-seld .z-listitem-img-checkbox {
+.z-listitem-over-seld .z-listitem-img-checkbox, .z-listgroup-over-seld .z-listgroup-img-checkbox, .z-listgroupfoot-over-seld .z-listgroupfoot-img-checkbox {
 	background-position: -39px 0;
 }
 .z-listitem-img-disd {

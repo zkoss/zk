@@ -60,6 +60,7 @@ November, 2009
   2897202: load-when and load-after not triggered when binded to template
   2913931: First loading of listbox/grid rod is not optimized
   2914048: Box renders child at wrong place when add dynamically
+  2916077: Checkmark disappears in listgroup
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
