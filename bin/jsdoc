@@ -53,5 +53,5 @@ fi
 for target in $jsdocsrc ; do
 	echo "jsdoc $target"
 	mkdir -p codegen/$target
-	java -jar $maindir/dist/lib/ext/zk_jsdoc.jar -t "$maindir/$target/src" -g "./codegen/" -v "INFO"
+	java -jar $maindir/dist/lib/ext/zk_jsdoc.jar -t "$maindir/$target/src" -g "./codegen/"
 done
