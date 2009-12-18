@@ -122,6 +122,7 @@
 }
 .z-errbox-close {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/close.gif')});
+	zoom: 1; <%--Bug 2916148 --%>
 }
 .z-errbox-close-over {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/close-over.gif')});
