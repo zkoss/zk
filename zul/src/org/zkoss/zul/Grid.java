@@ -187,7 +187,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener, _gridInitListener;
+	private transient EventListener _pgListener, _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -197,6 +197,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
+	private boolean _renderAll; //since 5.0.0
 	
 	private transient boolean _rod;
 	
@@ -232,36 +233,44 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (oldpage == null) {
 			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Grid
-			this.addEventListener("onInitGrid", _gridInitListener = new EventListener() {
-				public void onEvent(Event event) throws Exception {
-					if (_gridInitListener != null) {
-						Grid.this.removeEventListener("onInitGrid", _gridInitListener);
-						_gridInitListener = null; 
+			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
+			Events.postEvent(20000, new Event("onInitModel", this));
+		}
+	}
+	
+	private class ModelInitListener implements EventListener {
+		public void onEvent(Event event) throws Exception {
+			if (_modelInitListener != null) {
+				Grid.this.removeEventListener("onInitModel", _modelInitListener);
+				_modelInitListener = null; 
+			}
+			//initialize data loader
+			//Tricky! might has been initialized when apply properties
+			if (_dataLoader != null) { 
+				final boolean rod = evalRod();
+				if (_rod != rod || getRows() == null || getRows().getChildren().isEmpty()) {
+					if (_model != null) { //so has to recreate rows and items
+						if (getRows() != null)
+							getRows().getChildren().clear();
+						_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
+						initModel();
+					} else {
+						_dataLoader = null; //enforce recreate dataloader
 					}
-					//initialize data loader
-					//Tricky! might has been initialized when apply properties
-					if (_dataLoader != null) { 
-						final boolean rod = evalRod();
-						if (_rod != rod || getRows() == null || getRows().getChildren().isEmpty()) {
-							if (_model != null) { //so has to recreate rows and items
-								if (getRows() != null)
-									getRows().getChildren().clear();
-								_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
-								Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
-								setModel(_model);
-							} else {
-								_dataLoader = null; //enforce recreate dataloader
-							}
-						}
-					}
-					final DataLoader loader = getDataLoader();
-					
-					//initialize paginal if any
-					Paginal pgi = getPaginal();
-					if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
 				}
-			});
-			Events.postEvent(-50000, new Event("onInitGrid", this));
+			} else if (_model != null){ //rows not created yet
+				initModel();
+			}
+			final DataLoader loader = getDataLoader();
+			
+			//initialize paginal if any
+			Paginal pgi = getPaginal();
+			if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
+		}
+		//reinit the model
+		private void initModel() {
+			Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
+			setModel(_model);
 		}
 	}
 
@@ -655,8 +664,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1); //create rows if necessary
-				postOnInitRender();
 			}
+			postOnInitRender();
 			//Since user might setModel and setRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
 			//such that we won't render the same set of data twice
@@ -975,6 +984,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void renderAll() {
 		if (_model == null) return;
 
+		_renderAll = true;
+		getDataLoader().setLoadAll(_renderAll);
+
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = _rows.getChildren().iterator(); it.hasNext();)
@@ -1000,7 +1012,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 		if (rows.isEmpty())
 			return; //nothing to do
-
+		
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = rows.iterator(); it.hasNext();)
@@ -1192,6 +1204,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
 
+		if (clone._model != null) {
+			clone.getDataLoader().setLoadAll(_renderAll);
+		}
+		
 		return clone;
 	}
 	/** @param cnt # of children that need special handling (used for optimization).
@@ -1244,7 +1260,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 
-		if (_model != null) initDataListener();
+		if (_model != null) {
+			initDataListener();
+			getDataLoader().setLoadAll(_renderAll);
+		}
 	}
 
 	// super

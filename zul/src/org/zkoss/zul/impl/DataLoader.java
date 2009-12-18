@@ -77,4 +77,9 @@ public interface DataLoader {
 	 * 
 	 */
 	public Object getRealRenderer();
+	
+	/**
+	 * Sets whether to always load all items from ListModel. 
+	 */
+	public void setLoadAll(boolean b);
 }

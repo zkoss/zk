@@ -311,6 +311,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 		// do nothing
 	}
 	
+	public void setLoadAll(boolean b) {
+		//do nothing
+	}
+	
 	//--Cropper--//
 	public boolean isCropper() {
 		return _grid != null &&

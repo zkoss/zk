@@ -233,7 +233,7 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener,
-			_listboxInitListener;
+			_modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	private int _tabindex = -1;
@@ -249,7 +249,8 @@ public class Listbox extends XulElement implements Paginated,
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
-	private int _topPad; // since 5.0..0 top padding
+	private int _topPad; // since 5.0.0 top padding
+	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
 
@@ -2449,8 +2450,8 @@ public class Listbox extends XulElement implements Paginated,
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1);
-				postOnInitRender();
 			}
+			postOnInitRender();
 			// Since user might setModel and setItemRender separately or
 			// repeatedly,
 			// we don't handle it right now until the event processing phase
@@ -2772,6 +2773,9 @@ public class Listbox extends XulElement implements Paginated,
 		if (_model == null)
 			return;
 
+		_renderAll = true;
+		getDataLoader().setLoadAll(_renderAll);
+		
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = getItems().iterator(); it.hasNext();)
@@ -2948,41 +2952,47 @@ public class Listbox extends XulElement implements Paginated,
 			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
 			// prepare a right moment to init Listbox (must be as late as
 			// possible)
-			this.addEventListener("onInitListbox",
-					_listboxInitListener = new EventListener() {
-						public void onEvent(Event event) throws Exception {
-							if (_listboxInitListener != null) {
-								Listbox.this.removeEventListener(
-										"onInitListbox", _listboxInitListener);
-								_listboxInitListener = null;
-							}
-							// initialize data loader
-							// Tricky! might has been initialized when apply
-							// properties
-							if (_dataLoader != null) {
-								final boolean rod = evalRod();
-								if (_rod != rod || getItems().isEmpty()) {
-									if (_model != null) { // so has to recreate
-										// list items
-										getItems().clear();
-										_dataLoader = null; // enforce recreate
-										Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
-										setModel(_model);
-									} else {
-										_dataLoader = null; // enforce recreate
-										// dataloader
-									}
-								}
-							}
-							final DataLoader loader = getDataLoader();
+			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
+			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
+		}
+	}
+	
+	private class ModelInitListener implements EventListener {
+		public void onEvent(Event event) throws Exception {
+			if (_modelInitListener != null) {
+				Listbox.this.removeEventListener(
+						"onInitModel", _modelInitListener);
+				_modelInitListener = null;
+			}
+			// initialize data loader
+			// Tricky! might has been initialized when apply
+			// properties
+			if (_dataLoader != null) {
+				final boolean rod = evalRod();
+				if (_rod != rod || getItems().isEmpty()) {
+					if (_model != null) { // so has to recreate
+						// list items
+						getItems().clear();
+						_dataLoader = null; // enforce recreate the dataloader
+						initModel(); //init the model
+					} else {
+						_dataLoader = null; // enforce recreate the dataloader
+						// dataloader
+					}
+				}
+			} else if (_model != null){ //items in model not init yet
+				initModel(); //init the model
+			}
+			final DataLoader loader = getDataLoader();
 
-							// initialize paginal if any
-							Paginal pgi = getPaginal();
-							if (pgi != null)
-								pgi.setTotalSize(loader.getTotalSize());
-						}
-					});
-			Events.postEvent(-50000, new Event("onInitListbox", this));
+			// initialize paginal if any
+			Paginal pgi = getPaginal();
+			if (pgi != null)
+				pgi.setTotalSize(loader.getTotalSize());
+		}
+		private void initModel() {
+			Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
+			setModel(_model); //init the model
 		}
 	}
 
@@ -2995,6 +3005,7 @@ public class Listbox extends XulElement implements Paginated,
 			// we use the same data model but we have to create a new listener
 			clone._dataListener = null;
 			clone.initDataListener();
+			clone.getDataLoader().setLoadAll(_renderAll);
 		}
 		return clone;
 	}
@@ -3061,8 +3072,10 @@ public class Listbox extends XulElement implements Paginated,
 		// TODO: how to marshal _pgi if _pgi != _paging
 		// TODO: re-register event listener for onPaging
 
-		if (_model != null)
+		if (_model != null) {
 			initDataListener();
+			getDataLoader().setLoadAll(_renderAll);
+		}
 	}
 
 	public void sessionWillPassivate(Page page) {
