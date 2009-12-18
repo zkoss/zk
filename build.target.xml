@@ -274,6 +274,7 @@ if="deploy.jboss.required">
 <target name="javadoc" depends="config.build">
 	<javadoc 
 	 destdir="${working.javadoc.dir}"
+	 sourcepath="${src.dir}:${codegen.dir}"
 	 author="true" protected="true" version="true" use="true"
 	 windowtitle="${project.title} ${project.version} API"
 	 doctitle="${project.title} ${project.version} API"
@@ -284,15 +285,6 @@ if="deploy.jboss.required">
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
-		<packageset dir="${src.dir}">
-			<include name="**"/>
-			<exclude name="archive/**"/>
-		</packageset>
-		<fileset dir="${codegen.dir}">
-			<include name="**"/>
-			<exclude name="archive/**"/>
-			<exclude name="**/*$$*"/>
-		</fileset>
 	</javadoc>
 
 	<delete quiet="true" dir="${dist.javadoc.dir}"/>
