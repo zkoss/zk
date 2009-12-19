@@ -331,7 +331,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
 	 * @type jqzk
 	 */
-	//jq: null,
+	//zk: null,
 
 	init: function (sel, ctx) {
 		var cc;
@@ -967,7 +967,7 @@ jq(el).zk.center(); //same as 'center'
 		return this;
 	},
 	/** Makes the position of the element as relative. In addition to changing the style's position to relative, it tries to restore the location before calling {@link #absolutize}. 
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 * @see #absolutize
 	 */
 	relativize: function() {
@@ -1156,7 +1156,7 @@ jq(el).zk.center(); //same as 'center'
 	 * <h3>When to Use</h3>
 	 * <p>When you implement a widget that appears above others, such as an overlapped window, a menu popup and a dropdown list, you can invoke this method when {@link zk.Widget#bind_} is called. And then, restore it
 	 * by calling {@link #undoVParent} when {@link zk.Widget#unbind_} is called. 
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	makeVParent: function () {
 		var el = this.jq[0],
@@ -1177,7 +1177,7 @@ jq(el).zk.center(); //same as 'center'
 	},
 	/** Undoes the creation of a virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information. 
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	undoVParent: function () {
 		var el = this.jq[0];
@@ -1267,7 +1267,7 @@ jq(el).zk.center(); //same as 'center'
 	/** Sets the selection range of the specified input-type element.
 	 * @param int start the starting index of the selection range
 	 * @param int end the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected. 
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	setSelectionRange: function (start, end) {
 		var inp = this.jq[0],
@@ -1297,7 +1297,7 @@ jq(el).zk.center(); //same as 'center'
 	/** Disallows the user to select a portion of its content. You usually invoke this method to disable the selection for button-like widgets. By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
 	 * <p>If you disable the selection in {@link zk.Widget#bind_}, you shall enable it back in {@link zk.Widget#unbind_}
 	 * since this method will register a DOM-level listener for certain browsers. 
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	disableSelection: function () {
 		this.jq.each(_dissel);
@@ -1305,7 +1305,7 @@ jq(el).zk.center(); //same as 'center'
 	},
 	/** Allows the user to select a portion of its content. You usually invoke this method to undo {@link #disableSelection}.
 	 * By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	enableSelection: function () {
 		this.jq.each(_ensel);
@@ -1318,7 +1318,7 @@ zk(el).setStyles({width:'100px', paddingTop: "1px", "border-left": "2px"});
 zk(el).setStyles(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 </code></pre>
 	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link #parseStyle}.
-	 * @return zkjq this object
+	 * @return jqzk this object
 	 */
 	setStyles: function (styles) {
 		var $ = this.jq;
@@ -1345,7 +1345,7 @@ zk.copy(jq, {
 	 * <p>It is usually used for generating width or height.
 	 * @param Integer v the number of pixels. 0 is assumed if negative.
 	 * @return String the integer with string.
-	 * @see @px
+	 * @see #px
 	 */
 	px0: function (v) {
 		return Math.max(v||0, 0) + "px";
@@ -1734,7 +1734,7 @@ jq.alert('With listener', {
 		}
 	},
 	/** To invoke the <code>zsync</code> method of the registered objects.
-	 * To register, use {@link #zsync(Object). To unregister, use {@link #zsync(Object, boolean)}.
+	 * To register, use {@link #zsync(Object)}. To unregister, use {@link #zsync(Object, boolean)}.
 	 * <p><code>zsync</code> is called automatically when {@link zWatch}
 	 * fires onSize, onShow or onHide.
 	 * It is useful if you have a DOM element whose position is absolute.
@@ -1895,7 +1895,7 @@ zk.copy(jq.Event, {
 	},
 	/** Converts a DOM event ({@link jq.Event}) to a ZK event ({@link zk.Event}).
 	 * @param jq.Event evt the DOM event
-	 * @param jq.Widget wgt the target widget. It is used if the widget
+	 * @param zk.Widget wgt the target widget. It is used if the widget
 	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
 	 * @return zk.Event the ZK event
 	 */

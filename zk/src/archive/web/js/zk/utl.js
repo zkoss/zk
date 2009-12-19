@@ -26,7 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	/** Creates HIDDEN elements based on the specified query string
+	/* Creates HIDDEN elements based on the specified query string
 	 * @param DOMElement parent the parent node (required).
 	 * @param String qs the query string
 	 */

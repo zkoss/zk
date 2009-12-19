@@ -529,7 +529,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return false;
 	}
 
-	/** Returns the topmost z-index for this widget.*/
+	//Returns the topmost z-index for this widget
 	function _topZIndex(wgt) {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
 		for (var j = _floatings.length; j--;) {
@@ -2010,6 +2010,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	}
 });
 
+/** A reference widget.
+ */
 zk.RefWidget = zk.$extends(zk.Widget, {
 	bind_: function () {
 		var w = zk.Widget.$(this.uuid);

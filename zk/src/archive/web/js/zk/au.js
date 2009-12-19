@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0; //performance meter index
 
-	/** Checks whether to turn off the progress prompt. */
+	// Checks whether to turn off the progress prompt
 	function checkProcessng() {
 		if (!zAu.processing()) {
 			zk.endProcessing();
@@ -112,7 +112,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				ajaxSendNow(reqInf);
 		}
 	}
-	/** Called when the response is received from ajaxReq. */
+	// Called when the response is received from ajaxReq.
 	function onResponseReady() {
 		var req = ajaxReq, reqInf = ajaxReqInf;
 		try {
@@ -328,7 +328,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	//Perfomance Meter//
-	/** Returns request IDs sent from the server separated by space. */
+	// Returns request IDs sent from the server separated by space.
 	function pfGetIds(req) {
 		return req.getResponseHeader("ZK-Client-Complete");
 	}
@@ -401,7 +401,7 @@ zAu = {
 	 * @param uri the URI
 	 */
 	/** Sets the URI for the errors specified in a map.
-	 * @param Map errors. A map of errors where the key is the error code (int),
+	 * @param Map errors A map of errors where the key is the error code (int),
 	 * while the value is the URI (String).
 	 */
 	setErrorURI: function (code, uri) {
@@ -423,7 +423,7 @@ zAu = {
 	 * @param uri the URI
 	 */
 	/** Sets the URI for the server-push related errors specified in a map.
-	 * @param Map errors. A map of errors where the key is the error code (int),
+	 * @param Map errors A map of errors where the key is the error code (int),
 	 * while the value is the URI (String).
 	 */
 	setPushErrorURI: function (code, uri) {
@@ -731,12 +731,25 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	bookmark: function (bk) {
 		zk.bmk.bookmark(bk);
 	},
-	obsolete: function (dt0, dt1) { //desktop timeout
-		zk.error(dt1);
+	/** Shows an error to indicate the desktop is timeout.
+	 * @param String dtid the desktop UUID
+	 * @param String msg the error message
+	 */
+	obsolete: function (dtid, msg) {
+		zk.error(msg);
 	},
+	/** Shows an alert to indicate some error occurs.
+	 * For widget's error message, use {@link #showWgtErr} instead.
+	 * @param String msg the error message
+	 */
 	alert: function (msg) {
 		jq.alert(msg, {icon:'ERROR'});
 	},
+	/** Redirects to the specified URL.
+	 * @param String url the URL to redirect to
+	 * @param String target [optional] the window name to show the content
+	 * of the URL. If omitted, it will replace the current content.
+	 */
 	redirect: function (url, target) {
 		try {
 			zUtl.go(url, {target: target, reload: true});
@@ -744,15 +757,31 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			if (!zk.confirmClose) throw ex;
 		}
 	},
-	title: function (dt0) {
-		document.title = dt0;
+	/** Changes the brower window's titile.
+	 * @param String title the new title
+	 */
+	title: function (title) {
+		document.title = title;
 	},
-	script: function (dt0) {
-		$eval(dt0);
+	/* Executes the JavaScript.
+	 * @param String script the JavaScript code snippet to execute
+	 */
+	script: function (script) {
+		$eval(script);
 	},
+	/** Asks the client to echo back an AU request, such that
+	 * the server can return other commands.
+	 * It is used to give the end user a quick response before doing
+	 * a long operation.
+	 * @param String dtid the desktop ID ({@link zk.Desktop}).
+	 */
 	echo: function (dtid) {
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
 	},
+	/** Asks the client information.
+	 * The client will reply the information in the <code>onClientInfo</code> response.
+	 * @param String dtid the desktop ID ({@link zk.Desktop}).
+	 */
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
@@ -760,6 +789,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			screen.width, screen.height, screen.colorDepth,
 			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()]));
 	},
+	/** Asks the client to download the resource at the specified URL.
+	 * @param String url the URL to download from
+	 */
 	download: function (url) {
 		if (url) {
 			var ifr = jq('#zk_download')[0];
@@ -772,51 +804,104 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			}
 		}
 	},
+	/** Prints the content of the browser window.
+	 */
 	print: function () {
 		window.print();
 	},
+	/** Scrolls the content of the browser window.
+	 * @param int x the offset (difference) in the X coordinate (horizontally) (pixels)
+	 * @param int y the offset in the Y coordinate (vertically) (pixels)
+	 */
 	scrollBy: function (x, y) {
 		window.scrollBy(x, y);
 	},
+	/** Scrolls the contents of the browser window to the specified location.
+	 * @param int x the X coordinate to scroll to (pixels)
+	 * @param int y the Y coordinate to scroll to (pixels)
+	 */
 	scrollTo: function (x, y) {
 		window.scrollTo(x, y);
 	},
+	/** Resizes the browser window.
+	 * @param int x the number of pixels to increase/decrease (pixels)
+	 * @param int y the number of pixels to increase/decrease (pixels)
+	 */
 	resizeBy: function (x, y) {
 		window.resizeBy(x, y);
 	},
+	/** Resizes the browser window to the specified size.
+	 * @param int x the required width (pixels)
+	 * @param int y the required height (pixels)
+	 */
 	resizeTo: function (x, y) {
 		window.resizeTo(x, y);
 	},
+	/** Moves the browser window.
+	 * @param int x the number of pixels to move in the X coordinate
+	 * @param int y the number of pixels to move in the Y coordinate
+	 */
 	moveBy: function (x, y) {
 		window.moveBy(x, y);
 	},
+	/** Moves the browser window to the specified location
+	 * @param int x the left (pixels)
+	 * @param int y the top (pixels)
+	 */
 	moveTo: function (x, y) {
 		window.moveTo(x, y);
 	},
+	/** Sets the message used to confirm the user when he is closing
+	 * the browser window.
+	 * @param String msg the message to show in the confirm dialog
+	 */
 	cfmClose: function (msg) {
 		zk.confirmClose = msg;
 	},
+	/** Shows or removes the busy message.
+	 * A mask will be shown to cover the browser window such that the
+	 * user won't be able to take other actions.
+	 * @param String msg the message. Ingored if open is false.
+	 * @param boolean open whether to show. If omitted, true is assumed.
+	 * If false, the message is removed.
+	 */
 	showBusy: function (msg, open) {
 		jq("#zk_showBusy").remove(); //since user might want to show diff msg
 
-		if (open) {
+		if (open || arguments.length == 1) {
 			zUtl.destroyProgressbox("zk_loadprog");
 			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
 		}
 	},
-	closeErrbox: function () {
+	/** Closes the all error messages related to the specified widgets.
+	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
+	 * (such as {@link zul.inp.InputWidget#clearErrorMessage}).
+	 * If no such method, nothing happens.
+	 * @param String... any number of UUID of widgets.
+	 * @see #showWgtErr
+	 */
+	closeWgtErr: function () {
 		for (var i = arguments.length; i--;) {
 			var wgt = zk.Widget.$(arguments[i]);
 			if (wgt && wgt.clearErrorMessage)
 				wgt.clearErrorMessage();
 		}
 	},
-	wrongValue: function () {
+	/** Shows the error messages for the specified widgets.
+	 * It assumes {@link zk.Widget} has a method called <code>setErrorMessage</code>
+	 * (such as {@link zul.inp.InputWidget#setErrorMessage}).
+	 * If no such method, {@link jq#alert} is used instead.
+	 * @param Object... the widgets and messages. The first argument
+	 * is the widget's UUID, and the second is the error message.
+	 * The third is UUID, then the fourth the error message, and so on.
+	 * @see #closeWgtErr
+	 */
+	showWgtErr: function () {
 		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
 			var uuid = arguments[i], msg = arguments[i + 1],
 				wgt = zk.Widget.$(uuid);
 			if (wgt) {
-				if (wgt.wrongValue_) wgt.wrongValue_(msg);
+				if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
 				else jq.alert(msg);
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 				jq.alert(msg);
@@ -945,13 +1030,7 @@ zAu.cmd1 = /*prototype*/ {
 	}
 };
 
-/* Callback when iframe's URL/bookmark been changed.
- * Notice the containing page might not be ZK. It could be any technology
- * and it can got the notification by implementing this method.
- * @param uuid the component UUID
- * @param url the new URL
- */
-function onIframeURLChange(uuid, url) {
+function onIframeURLChange(uuid, url) { //doc in jsdoc
 	if (!zk.unloading) {
 		var wgt = zk.Widget.$(uuid);
 		if (wgt) wgt.fire("onURIChange", url);

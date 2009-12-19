@@ -96,7 +96,7 @@ public class Clients {
 	 * the specified component, if any.
 	 */
 	public static final void closeErrorBox(Component owner) {
-		response(new AuCloseErrorBox(owner));
+		response(new AuCloseWidgetError(owner));
 	}
 	
 	/** Closes all the error boxes at the browser belonging to
@@ -104,14 +104,14 @@ public class Clients {
 	 * @since 3.6.0
 	 */
 	public static final void closeErrorBox(List comps) {
-		response(new AuCloseErrorBox(comps));
+		response(new AuCloseWidgetError(comps));
 	}
 	/** Closes all the error boxes at the browser belonging to
 	 * the specified array of components, if any.
 	 * @since 3.6.1
 	 */
 	public static final void closeErrorBox(Component[] comps) {
-		response(new AuCloseErrorBox(comps));
+		response(new AuCloseWidgetError(comps));
 	}
 	
 	/** Submits the form with the specified ID.

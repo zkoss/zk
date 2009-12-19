@@ -154,7 +154,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			//note: <div/> must be generated before <script/>
 		}
 	}
-	/** mount for browser loading */
+	/* mount for browser loading */
 	function mtBL() {
 		if (zk.loading) {
 			zk.afterLoad(mtBL);
@@ -208,7 +208,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		}
 	}
 
-	/** mount for AU */
+	/* mount for AU */
 	function mtAU(stub) {
 		if (zk.loading) {
 			zk.afterLoad(function () {mtAU(stub);});
@@ -241,7 +241,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		}
 	}
 
-	/** create the widget tree. */
+	/* create the widget tree. */
 	function create(parent, wginf) {
 		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
@@ -295,7 +295,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		return wgt;
 	}
 
-	/** Loads package of a widget tree. */
+	/* Loads package of a widget tree. */
 	function pkgLoad(w) {
 		var type = w.type, i = type.lastIndexOf('.');
 		if (i >= 0)
@@ -312,7 +312,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			pkgLoad(children[j]);
 	}
 
-	/** run and delay if too busy, so progressbox has a chance to show. */
+	/* run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
 		var t = zUtl.now(), dt = t - zk._t1;
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)

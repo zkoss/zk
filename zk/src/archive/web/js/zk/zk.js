@@ -807,7 +807,7 @@ zk.endProcessing();
 	 * @see #stamp
 	 */
 	error: function (msg) {
-		new _zErr(msg);
+		new _zErb(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example: 
@@ -815,7 +815,7 @@ zk.endProcessing();
 	 * @see #error
 	 */
 	errorDismiss: function () {
-		_zErr.closeAll();
+		_zErb.closeAll();
 	},
 	/** Logs an message for debugging purpose.
 	 * Example: 
@@ -1161,7 +1161,7 @@ zk.copy(zk.Object, _zkf);
 //error box//
 var _errs = [], _errcnt = 0;
 
-_zErr = zk.$extends(zk.Object, {
+_zErb = zk.$extends(zk.Object, {
 	$init: function (msg) {
 		var id = "zk_err" + _errcnt++,
 			$id = '#' + id;
@@ -1171,8 +1171,8 @@ _zErr = zk.$extends(zk.Object, {
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id+'-p">';
 	if (!zk.light)
-		html += '<span class="btn" onclick="_zErr._redraw()">redraw</span>&nbsp;';
-	html += '<span class="btn" onclick="_zErr._close(\''+id+'\')">close</span></div></td></tr>'
+		html += '<span class="btn" onclick="_zErb._redraw()">redraw</span>&nbsp;';
+	html += '<span class="btn" onclick="_zErb._close(\''+id+'\')">close</span></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
 	+'</td></tr></table></div>';
 		jq(document.body).append(html);
