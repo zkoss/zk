@@ -79,10 +79,9 @@ for f in $fls; do
 				cd "$dstdir/$dstfn"
 				
 				#convert srcfl to window format
-#No need to convert in Cygwin 1.7
-#				if [ "$TERM" = "cygwin" ] ; then
-#					srcfl=$(cygpath -wa $srcfl)
-#				fi
+				if [ "$TERM" = "cygwin" ] ; then
+					srcfl=$(cygpath -wa $srcfl)
+				fi
 				jar xf "$srcfl"
 			)
 		else
