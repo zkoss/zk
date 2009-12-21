@@ -295,6 +295,14 @@ zk.copy(zk, {
 	 */
 	//PERCENT: '',
 
+	/** Indicates whether {@link zk.Widget#id} is always the same
+	 * as {@link zk.Widget#uuid}.
+	 * By default, it is false. It is true if <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>
+	 * is used
+	 * @type boolean
+	 */
+	//spaceless: null,
+
 	/** The widget that captures the keystrokes.
 	 * Used to specify a widget that shall receive the following the onKeyPress and onKeyUp events, no matter what widget the event occurs on.
 <pre><code>

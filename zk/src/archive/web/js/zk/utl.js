@@ -186,17 +186,42 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			k < tl ? out + txt.substring(k): out;
 	},
 
+	/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
+	 * @type String
+	 */
  	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
+ 	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
+ 	 * @type String
+ 	 */
  	img0: '<img style="height:0;width:0"/>',
+ 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
+ 	 * @type String
+ 	 */
  	i0: '<i style="height:0;width:0"/>',
  
+ 	/** Returns a long value representing the current time (unit: miliseconds).
+ 	 * @return long
+ 	 */
 	now: function () {
 		return new Date().getTime();
 	},
+	/** Returns today (at 0:0AM).
+	 * @return Date
+	 */
 	today: function () {
 		var d = new Date();
 		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 	},
+
+	/** Returns if one is ancestor of the other.
+	 * It assumes the object has either a method called <code>getParent</code>
+	 * or a field called <code>parent</code>.
+	 * A typical example is used to test the widgets ({@link zk.Widget}).
+	 * @param Object p the parent. This method return true if p is null
+	 or p is the same as c
+	 * @param Object c the child
+	 * @return boolean
+	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent(): c.parent)
@@ -204,11 +229,17 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				return true;
 		return false;
 	},
-	isDescendant: function (c, p) {
-		return zUtl.isAncestor(p, c);
-	},
 
 	//progress//
+	/** Creates a message box to indicate something is being processed
+	 * @param String id the ID of the DOM element being created
+	 * @param String msg the message to shown
+	 * @param boolean mask whether to show sem-transparent mask to prevent
+	 * the user from accessing it.
+	 * @param String icon the CSS class used to shown an icon in the box.
+	 * Ignored if not specified.
+	 * @see #destroyProgressbox
+	 */
 	progressbox: function (id, msg, mask, icon) {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
@@ -253,6 +284,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 		$n.zk.cleanVisibility();
 	},
+	/** Removes the message box created by {@link #progressBox}.
+	 * @param String id the ID of the DOM element of the message box
+	 */
 	destroyProgressbox: function (id) {
 		var $n = jq(id, zk), n;
 		if ($n.length) {
@@ -268,6 +302,21 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	},
 
 	//HTTP//
+	/** Navigates to the specified URL.
+	 * @param String url the URL to go to
+	 * @param Map opts [optional] the options. Allowed values:
+	 * <ul>
+	 * <li>target - the name of the target browser window. The same browswer
+	 * window is assumed if omitted. You can use any value allowed in
+	 * the target attribute of the HTML FORM tag, such as _self, _blank,
+	 * _parent and _top.</li>
+	 * <li>overwrite - whether load a new page in the current browser window.
+	 * If true, the new page replaces the previous page's position in the history list.</li>
+	 * <li>reload - whether to enforce the reload.
+	 * It is used if the new URL is the same as the current one except
+	 * the bookmark (<code>#xxx</code>).</li>
+	 * </ul>
+	 */
 	go: function (url, opts) {
 		opts = opts || {};
 		if (opts.target) {
@@ -311,6 +360,12 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 	},
 
+	/** Converts an integer array to a string (separated by comma).
+	 * @param int[] ary the integer array to convert.
+	 * If null, an empty string is returned.
+	 * @return String
+	 * @see #stringToInts
+	 */
 	intsToString: function (ary) {
 		if (!ary) return "";
 
@@ -319,14 +374,22 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			sb.push(ary[j]);
 		return sb.join();
 	},
-	stringToInts: function (numbers, defaultValue) {
-		if (numbers == null)
+	/* Converts a string separated by comma to an array of integers.
+	 * @see #intsToString
+	 * @param String text the string to convert.
+	 * If null, null is returned.
+	 * @param int defaultValue the default value used if the value
+	 * is not specified. For example, zUtl.stringToInts("1,,3", 2) returns [1, 2, 3].
+	 * @return int[]
+	 */
+	stringToInts: function (text, defaultValue) {
+		if (text == null)
 			return null;
 
 		var list = [];
 		for (var j = 0;;) {
-			var k = numbers.indexOf(',', j),
-				s = (k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
+			var k = text.indexOf(',', j),
+				s = (k >= 0 ? text.substring(j, k): text.substring(j)).trim();
 			if (s.length == 0) {
 				if (k < 0) break;
 				list.push(defaultValue);
@@ -338,12 +401,19 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 		return list;
 	},
-	mapToString: function (map, assigner, separator) {
-		assigner = assigner || '=';
+	/** Converts a map to a string
+	 * @see #intsToString
+	 * @param Map map the map to convert
+	 * @param String assign the symbol for assignment. If omitted, '=' is assumed.
+	 * @param String separator the symbol for separator. If omitted, ',' is assumed.
+	 * @return String
+	 */
+	mapToString: function (map, assign, separator) {
+		assign = assign || '=';
 		separator = separator || ' ';
 		var out = [];
 		for (var v in map)
-			out.push(separator, v, assigner, map[v]);
+			out.push(separator, v, assign, map[v]);
 		out[0] = '';
 		return out.join('');
 	}

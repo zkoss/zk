@@ -549,15 +549,101 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 /** A widget, i.e., an UI object.
+ * Each component running at the server is associated with a widget
+ * running at the client.
+ * Refer to <a href="http://docs.zkoss.org/wiki/ZK5:_Component_Development_Guide">Component Development Guide</a>
+ * for more information.
+ * <p>Notice that, unlike the component at the server, {@link zk.Desktop}
+ * and {@link zk.Page} are derived from zk.Widget. It means desktops, pages and widgets are in a widget tree. 
  */
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
+	/** The number of children (readonly).
+	 * @type int
+	 */
 	nChildren: 0,
+	/** The bind level (readonly)
+	 * The level in the widget tree after this widget is bound to a DOM tree ({@link #bind_}).
+	 * For example, a widget's bind level is one plus the parent widget's
+	 * <p>It starts at 0 if it is the root of the widget tree (a desktop, zk.Desktop), then 1 if a child of the root widget, and son on. Notice that it is -1 if not bound.
+	 * <p>It is mainly useful if you want to maintain a list that parent widgets is in front of (or after) child widgets. 
+	 * bind level.
+	 * @type int
+	 */
 	bindLevel: -1,
 	_mold: 'default',
+	/** The class name of the widget.
+	 * For example, zk.Widget's class name is "zk.Widget", while
+	 * zul.wnd.Window's "zul.wnd.Window".
+	 * <p>Notice that it is available if a widget class is loaded by WPD loader (i.e., specified in zk.wpd). If you create a widget class dynamically, you have to invoke #register to make this member available. 
+	 * @type String
+	 */
 	className: 'zk.Widget',
 	_floating: false,
 
+	/** The first child, or null if no child at all (readonly).
+	 * @see #getChildAt
+	 * @type zk.Widget
+	 */
+	//firstChild: null,
+	/** The last child, or null if no child at all (readonly).
+	 * @see #getChildAt
+	 * @type zk.Widget
+	 */
+	//firstChild: null,
+	/** The parent, or null if this widget has no parent (readonly).
+	 * @type zk.Widget
+	 */
+	//parent: null,
+	/** The next sibling, or null if this widget is the last child (readonly).
+	 * @type zk.Widget
+	 */
+	//nextSibling: null,
+	/** The previous sibling, or null if this widget is the first child (readonly).
+	 * @type zk.Widget
+	 */
+	//previousSibling: null,
+	/** The desktop that this widget belongs to (readonly).
+	 * It is set when it is bound to the DOM tree.
+	 * <p>Notice it is always non-null if bound to the DOM tree, while
+	 * {@link #$n} is always non-null if bound. For example, {@link zul.utl.Timer}.
+	 * <p>It is readonly, and set automcatically when {@link #bind_} is called. 
+	 * @type zk.Desktop
+	 */
+	//desktop: null,
+	/** The identifier of this widget, or null if not assigned (readonly).
+	 * It is the same as {@link #getId}.
+	 * <p>To change the value, use {@link #setId}.
+	 * @type String the ID
+	 */
+	//id: null,
+	/** Whether this widget has a peer component (readonly).
+	 * It is set if a widget is created automatically to represent a component
+	 ( at the server. On the other hand, it is false if a widget is created
+	 * by the client application (by calling, say, <code>new zul.inp.Textox()</code>). 
+	 * @type boolean
+	 */
+	//inServer: false,
+	/** The UUID. Don't change it if it is bound to the DOM tree, or {@link #inServer} is true.
+	 * Developers rarely need to modify it since it is generated automatically. 
+	 * <h3>Note of ZK Light</h3>
+	 * It is the same as {@link #id} if {@link zk#spaceless} is true,
+	 * such as ZK Light.
+	 * @type String
+	 */
+	//uuid: null,
+
+	/** The constructor.
+	 * For example,
+<pre><code>
+new zul.wnd.Window{
+  border: 'normal',
+  title: 'Hello World',
+  closable: true
+});
+</code></pre>
+	 * @param Map props the properties to be assigned to this widget.
+	 */
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
@@ -695,6 +781,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		return f;
 	},
 	getFellow: _zkf,
+	/** Returns the identifier of this widget, or null if not assigned.
+	 * It is the same as {@link #id}.
+	 * @return String the ID
+	 */
 	getId: function () {
 		return this.id;
 	},
@@ -720,6 +810,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this;
 	},
 
+	/** Sets a property.
+	 * @param String name the name of property.
+	 * If the name starts with <code>on</code>, it is assumed to be
+	 * an event listener and {@link #setListener} will be called.
+	 * @param Object value the value
+	 * @param Object extra the extra argument. It could be anything.
+	 */
 	set: function (name, value, extra) {
 		var cc;
 		if (name.length > 4 && name.startsWith('$$on')) {
@@ -737,12 +834,29 @@ zk.Widget = zk.$extends(zk.Object, {
 			zk.set(this, name, value);
 		return this;
 	},
+	/** Return the child widget at the specified index.
+	 * <p>Notice this method is not good if there are a lot of children
+	 * since it iterates all children one by one.
+	 * @param j the index of the child widget to return. 0 means the first
+	 * child, 1 for the second and so on.
+	 * @return zk.Widget the widget or null if no such index
+	 * @see #getChildIndex
+	 */
 	getChildAt: function (j) {
 		if (j >= 0 && j < this.nChildren)
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
 					return w;
 	},
+	/** Returns the child index of this widget.
+	 * By child index we mean the order of the child list of the parent. For example, if this widget is the parent's first child, then 0 is returned. 
+	 * <p>Notice that {@link #getChildAt} is called against the parent, while
+	 * this method called against the child. In other words,
+	 * <code>w.parent.getChildAt(w.getChildIndex())</code> returns <code>w</code>.
+	 * <p>Notice this method is not good if there are a lot of children
+	 * since it iterates all children one by one.
+	 * @return int the child index
+	 */
 	getChildIndex: function () {
 		var w = this.parent, j = 0;
 		if (w)
@@ -751,6 +865,11 @@ zk.Widget = zk.$extends(zk.Object, {
 					return j;
 		return 0;
 	},
+	/** Appends an array of children.
+	 * Notice this method does NOT remove any existent child widget.
+	 * @param Array<zk.Widget> children an array of children to add
+	 * @return zk.Widget this widget
+	 */
 	setChildren: function (children) {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
