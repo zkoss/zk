@@ -92,8 +92,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** @partial zk
  */
 zk.copy(zk, {
-	/** Whether there is some animation taking place.
-	 * @type boolean
+	/** Returns whether there is some animation taking place.
+	 * @return boolean
 	 */
 	animating: function () {
 		return !!jq.timers.length;
