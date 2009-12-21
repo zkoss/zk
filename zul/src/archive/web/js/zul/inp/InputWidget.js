@@ -219,13 +219,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._errmsg;
 	},
 	/** Marks this widget's value is wrong and show the error message.
-	 * It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
+	 * <p>It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
 	 * @param String msg the error message
 	 */
 	setErrorMessage: function (msg) {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
 	},
+	/** Clears the error message and the error status.
+	 * <p>It is also called by {@link zk.AuCmd0#clearWrongValue} (from the server).
+	 * @param boolean revalidate whether to re-validate the value next time
+	 * onblur occurs
+	 * @param boolean remainError whether the input widget remains in the
+	 * error status, if any, after the invocation.
+	 */
 	clearErrorMessage: function (revalidate, remainError) {
 		var w = this._errbox;
 		if (w) {

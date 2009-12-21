@@ -15,5 +15,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<script src="numfmt.js"/>
 	<script src="datefmt.js"/>
 	<script src="msgfmt.js"/>
-	<script src="xml.js"/>
 </package>

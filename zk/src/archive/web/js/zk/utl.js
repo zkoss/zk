@@ -51,7 +51,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 /** @class zUtl
- * Utilties
+ * The basic utilties.
+ * <p>For more utilities, refer to {@link zk.xml.Utl}.
  */
 zUtl = { //static methods
 	//Character
@@ -64,6 +65,18 @@ zUtl = { //static methods
 	},
 
 	//HTML/XML
+	/** Parses the specifie text into a map.
+	 * For example
+	 *<pre><code>
+zUtl.parseMap("a=b,c=d");
+zUtl.parseMap("a='b c',c=de", ',', "'\"");
+</code></pre>
+	 * @param String text the text to parse
+	 * @param String separator the separator. If omitted, <code>','</code>
+	 * is assumed
+	 * @param String quote the quote to handle. Ignored if omitted.
+	 * @return Map the map
+	 */
 	parseMap: function (text, separator, quote) {
 		var map = {};
 		if (text) {
@@ -93,7 +106,15 @@ zUtl = { //static methods
 	},
 
 	/** Encodes the string to a valid XML string.
-	 * @see zk.fmt.XML
+	 * Refer to {@link zk.xml.Utl} for more XML utilities.
+	 * @param String txt the text to encode
+	 * @param Map opts [optional] the options. Allowd value:
+	 * <ul>
+	 * <li>pre - whether to replace whitespace with &amp;nbsp;</li>
+	 * <li>multiline - whether to replace linefeed with &lt;br/&gt;</li>
+	 * <li>maxlength - the maximal allowed length of the text</li>
+	 * </ul>
+	 * @return String the encoded text.
 	 */
 	encodeXML: function (txt, opts) {
 		var out = "";
@@ -134,6 +155,11 @@ zUtl = { //static methods
 		return !k ? txt:
 			k < tl ? out + txt.substring(k): out;
 	},
+	/** Decodes the XML string into a normal string.
+	 * For example, &amp;lt; is convert to &lt;
+	 * @param String txt the text to decode
+	 * @return String the decoded string
+	 */
 	decodeXML: function (txt) {
 		var out = "";
 		if (!txt) return out;
@@ -158,33 +184,6 @@ zUtl = { //static methods
 		}
 		return !k ? txt:
 			k < tl ? out + txt.substring(k): out;
-	},
-
-	renType: function (url, type) {
-		var j = url.lastIndexOf(';');
-		var suffix;
-		if (j >= 0) {
-			suffix = url.substring(j);
-			url = url.substring(0, j);
-		} else
-			suffix = "";
-
-		j = url.lastIndexOf('.');
-		if (j < 0) j = url.length; //no extension at all
-		var	k = url.lastIndexOf('-'),
-			m = url.lastIndexOf('/'),
-			ext = j <= m ? "": url.substring(j),
-			pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
-		if (type) type = "-" + type;
-		else type = "";
-		return pref + type + ext + suffix;
-	},
-
-	getElementValue: function (el) {
-		var txt = "";
-		for (el = el.firstChild; el; el = el.nextSibling)
-			if (el.data) txt += el.data;
-		return txt;
 	},
 
  	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
