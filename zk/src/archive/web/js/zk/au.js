@@ -739,7 +739,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zk.error(msg);
 	},
 	/** Shows an alert to indicate some error occurs.
-	 * For widget's error message, use {@link #showWgtErr} instead.
+	 * For widget's error message, use {@link #wrongValue} instead.
 	 * @param String msg the error message
 	 */
 	alert: function (msg) {
@@ -878,9 +878,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * (such as {@link zul.inp.InputWidget#clearErrorMessage}).
 	 * If no such method, nothing happens.
 	 * @param String... any number of UUID of widgets.
-	 * @see #showWgtErr
+	 * @see #wrongValue
 	 */
-	closeWgtErr: function () {
+	clearWrongValue: function () {
 		for (var i = arguments.length; i--;) {
 			var wgt = zk.Widget.$(arguments[i]);
 			if (wgt && wgt.clearErrorMessage)
@@ -894,9 +894,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param Object... the widgets and messages. The first argument
 	 * is the widget's UUID, and the second is the error message.
 	 * The third is UUID, then the fourth the error message, and so on.
-	 * @see #closeWgtErr
+	 * @see #clearWrongValue
 	 */
-	showWgtErr: function () {
+	wrongValue: function () {
 		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
 			var uuid = arguments[i], msg = arguments[i + 1],
 				wgt = zk.Widget.$(uuid);

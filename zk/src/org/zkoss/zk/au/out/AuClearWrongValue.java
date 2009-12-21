@@ -1,4 +1,4 @@
-/* AuCloseWidgetError.java
+/* AuClearWrongValue.java
 
 	Purpose:
 		
@@ -33,18 +33,18 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  * @since 5.0.0
  */
-public class AuCloseWidgetError extends AuResponse {
+public class AuClearWrongValue extends AuResponse {
 	/**
 	 * @param comps a list of components
 	 */
-	public AuCloseWidgetError(List comps) {
-		super("closeWgtErr", toData(comps)); //component-independent
+	public AuClearWrongValue(List comps) {
+		super("clearWrongValue", toData(comps)); //component-independent
 	}
 	/**
 	 * @param comps a list of components
 	 */
-	public AuCloseWidgetError(Component[] comps) {
-		super("closeWgtErr", toData(comps)); //component-independent
+	public AuClearWrongValue(Component[] comps) {
+		super("clearWrongValue", toData(comps)); //component-independent
 	}
 	private static String[] toData(List comps) {
 		final String[] uuids = new String[comps.size()];
@@ -62,7 +62,7 @@ public class AuCloseWidgetError extends AuResponse {
 	/**
 	 * @param comp the component whose error box, if any, shall be closed.
 	 */
-	public AuCloseWidgetError(Component comp) {
-		super("closeWgtErr", comp.getUuid()); //component-independent
+	public AuClearWrongValue(Component comp) {
+		super("clearWrongValue", comp.getUuid()); //component-independent
 	}
 }

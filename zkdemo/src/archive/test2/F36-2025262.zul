@@ -33,7 +33,7 @@ Please click the "Clear All" button, and then all the error boxes should disappe
 		l.add(t3);
 		l.add(t4);
 		l.add(t5);
-		Clients.closeErrorBox(l);
+		Clients.clearWrongValue(l);
 	</attribute>
 </button>
 </vbox>

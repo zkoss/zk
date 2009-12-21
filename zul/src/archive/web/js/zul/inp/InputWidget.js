@@ -218,7 +218,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getErrorMesssage: function () {
 		return this._errmsg;
 	},
-	wrongValue_: function (msg) {
+	/** Marks this widget's value is wrong and show the error message.
+	 * It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
+	 * @param String msg the error message
+	 */
+	setErrorMessage: function (msg) {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
 	},

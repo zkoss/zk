@@ -92,26 +92,42 @@ public class Clients {
 		response(new AuConfirmClose(mesg));
 	}
 
-	/** Closes the error box at the browser belonging to
-	 * the specified component, if any.
+	/** Closes the error message of the specified component, if any,
+	 * at the browser.
+	 * @since 5.0.0
 	 */
-	public static final void closeErrorBox(Component owner) {
-		response(new AuCloseWidgetError(owner));
+	public static final void clearWrongValue(Component comp) {
+		response(new AuClearWrongValue(comp));
 	}
 	
-	/** Closes all the error boxes at the browser belonging to
-	 * the specified list of components, if any.
-	 * @since 3.6.0
+	/** Closes the error message of the specified components, if any,
+	 * at the browser.
+	 * @since 5.0.0
+	 */
+	public static final void clearWrongValue(List comps) {
+		response(new AuClearWrongValue(comps));
+	}
+	/** Closes the error message of the specified components, if any,
+	 * at the browser.
+	 * @since 5.0.0
+	 */
+	public static final void clearWrongValue(Component[] comps) {
+		response(new AuClearWrongValue(comps));
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component)}.
+	 */
+	public static final void closeErrorBox(Component comp) {
+		clearWrongValue(comp);
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(List)}.
 	 */
 	public static final void closeErrorBox(List comps) {
-		response(new AuCloseWidgetError(comps));
+		clearWrongValue(comps);
 	}
-	/** Closes all the error boxes at the browser belonging to
-	 * the specified array of components, if any.
-	 * @since 3.6.1
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component[])}.
 	 */
 	public static final void closeErrorBox(Component[] comps) {
-		response(new AuCloseWidgetError(comps));
+		clearWrongValue(comps);
 	}
 	
 	/** Submits the form with the specified ID.

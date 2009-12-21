@@ -206,7 +206,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void clearErrorMessage(boolean revalidateRequired) {
 		if (_errmsg != null) {
 			_errmsg = null;
-			Clients.closeErrorBox(this);
+			Clients.clearWrongValue(this);
 		}
 		_valided = !revalidateRequired;
 	}
