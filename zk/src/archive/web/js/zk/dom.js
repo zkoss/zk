@@ -242,7 +242,7 @@ zk.copy(zjq, {
  *
  * <h3>Dual Objects</h3>
  * <p>To extend jQuery's functionally,  each time <code>jq(...)</code>
- * or <code>zk(...)</code> is called, an instance of {@link @jq}
+ * or <code>zk(...)</code> is called, an instance of {@link jq}
  * and an instance of {@link jqzk} are created. The former one provides the
  * standard jQuery API plus some minimal enhancement as described below.
  * The later is ZK's addions APIs.
@@ -432,7 +432,7 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
  * {@link jq#zk}.
  * For example, <code>zk('#id');</code>
  *
- * <p>Refer to {@link @jq} for more information.
+ * <p>Refer to {@link jq} for more information.
  *
  * <h3>Other Extension</h3>
  * <ul>
