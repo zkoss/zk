@@ -2162,8 +2162,14 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 })();
 
 //desktop//
+/** A desktop.
+ * Unlike the component at the server, a desktop is a widget.
+ */
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
+	/** The class name (<code>zk.Desktop</code>).
+	 * @type String
+	 */
 	className: 'zk.Desktop',
 
 	$init: function (dtid, contextURI, updateURI, stateless) {
@@ -2233,8 +2239,14 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	}
 });
 
-zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
+/** A page
+ * Unlike the component at the server, a page is a widget.
+ */
+zk.Page = zk.$extends(zk.Widget, {
 	_style: "width:100%;height:100%",
+	/** The class name (<code>zk.Page</code>).
+	 * @type String
+	 */
 	className: 'zk.Page',
 
 	$init: function (props, contained) {
@@ -2255,7 +2267,13 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 });
 zk.Widget.register('zk.Page', true);
 
+/** A native widget.
+ * It is used mainly to represent the native componet created at the server.
+ */
 zk.Native = zk.$extends(zk.Widget, {
+	/** The class name (<code>zk.Native</code>)
+	 * @type String
+	 */
 	className: 'zk.Native',
 
 	redraw: function (out) {
@@ -2273,7 +2291,13 @@ zk.Native = zk.$extends(zk.Widget, {
 	}
 });
 
+/** A macro widget.
+ * It is used mainly to represent the macro componet created at the server.
+ */
 zk.Macro = zk.$extends(zk.Widget, {
+	/** The class name (<code>zk.Macro</code>).
+	 * @type String
+	 */
 	className: 'zk.Macro',
 
 	redraw: function (out) {
@@ -2284,6 +2308,41 @@ zk.Macro = zk.$extends(zk.Widget, {
 	}
 });
 
+/** A skipper is an object working with {@link zk.Widget#rerender}
+ * to rerender portion(s) of a widget (rather than the whole widget).
+ * It can improve the performance a lot if it can skip a lot of portions, such as a lot of child widgets. 
+ * <p>The skipper decides what to skip (i.e., not to rerender), detach the skipped portion(s), and attach them back after rerendering. Thus, the skipped portion won't be rerendered, nor unbound/bound.
+ * <p>The skipper has to implement three methods, {@link #skipped},
+ * {@link #skip} and {@link #restore}. {@link #skipped} is used to test whether a child widget shall be skipped.
+ * {@link #skip} and {@link #restore} works together to detach and attach the skipped portions from the DOM tree. Here is how
+ * {@link zk.Widget#rereder} uses these two methods:
+<pre><code>
+rerender: function (skipper) {
+  var skipInfo;
+  if (skipper) skipInfo = skipper.skip(this);
+ 
+  this.replaceHTML(this.node, null, skipper);
+ 
+  if (skipInfo) skipper.restore(this, skipInfo);
+}
+</code></pre>
+ * <p>Since {@link zk.Widget#rerender} will pass the returned value of {@link #skip} to {@link #restore}, the skipper doesn't need to store what are skipped. That means, it is possible to have one skipper to serve many widgets. {@link #nonCaptionSkipper} is a typical example.
+ * <p>In additions to passing a skipper to {@link zk.Widget#rerender}, the widget has to implement the mold method to handle the skipper:
+<pre><code>
+function (skipper) {
+ var html = '<fieldset' + this.domAttrs_() + '>',
+ cap = this.caption;
+ if (cap) html += cap.redraw();
+ 
+ html += '<div id="' + this.uuid + '$cave"' + this._contentAttrs() + '>';
+ if (!skipper)
+  for (var w = this.firstChild; w; w = w.nextSibling)
+   if (w != cap) html += w.redraw();
+ return html + '</div></fieldset>';
+}
+</pre></code>
+	* <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ */
 zk.Skipper = zk.$extends(zk.Object, {
 	skipped: function (wgt, child) {
 		return wgt.caption != child;
@@ -2309,4 +2368,26 @@ zk.Skipper = zk.$extends(zk.Object, {
 		}
 	}
 });
+/** @partial zk.Skipper
+ */
+//docNoncaptionSkipper = {
+	/** An instance of {@link zk.Skipper} that can be used to skip the rerendering of child widgets except the caption.
+	 * <p>It assumes
+	 * <ol>
+	 * <li>The child widget not to skip can be found by the caption data member.</li>
+	 * <li>The DOM elements to skip are child elements of the DOM element whose ID is widgetUUID$cave, where widgetUUID is the UUID of the widget being rerendered. </li>
+	 * </ol>
+	 * <p>In other words, it detaches (i.e., skipped) all DOM elements under zDom.$(widget.uuid + '$cave').
+<pre><code>
+setClosable: function (closable) {
+ if (this._closable != closable) {
+  this._closable = closable;
+  if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
+ }
+}
+</pre></code>
+	 * @type zk.Skipper
+	 */
+	//nonCaptionSkipper: null
+//};
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();

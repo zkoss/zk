@@ -219,6 +219,10 @@ zk.copy(zjq, {
 
 /** @class jq
  * @import jq.Event
+ * @import zk.Widget
+ * @import zk.Desktop
+ * @import zk.Skipper
+ * @import zk.eff.Shadow
  * Represents the object returned by the <code>jq</code> function.
  * For example, <code>jq('#id');</code>
  *
@@ -259,7 +263,7 @@ zk.copy(zjq, {
  *
  * <h4>@id</h4>
  * <p><code>jq</code> is extended to support the selection by use of DOM's ID
- * and then widget's ID (@{link zk.Widget#id}). For example,
+ * and then widget's ID (@{link Widget#id}). For example,
  * <pre><code>jq('@xx');</code></pre>
  *
  *<p>Notice that it looks for the DOM tree first to see if any DOM element
@@ -273,7 +277,7 @@ zk.copy(zjq, {
  *
  * <h4>$id</h4>
  * <p><code>jq</code> is extended to support the selection by use of widget's
- * ID ({@link zk.Widget#id}), and then DOM element's ID. For example,
+ * ID ({@link Widget#id}), and then DOM element's ID. For example,
  * <pre><code>jq('$xx');</code></pre>
  *
  * <p>Notice that it looks for any bound widget first whose ID is xx, and
@@ -284,11 +288,11 @@ zk.copy(zjq, {
  * <pre><code>jq('$x/y/z');</code></pre>
  *
  * <h4>A widget</h4>
- * <p><code>jq</code> is extended to support {@link zk.Widget}.
+ * <p><code>jq</code> is extended to support {@link Widget}.
  * If the selector is a widget, <code>jq</code> will select the associated DOM element
  * of the widget.
  *
- * <pre><code>jq(widget).after('<div></div>'); //assume widget is an instance of {@link zk.Widget}</code></pre>
+ * <pre><code>jq(widget).after('<div></div>'); //assume widget is an instance of {@link Widget}</code></pre>
  *
  * <p>In other words, it is the same as
  *
@@ -366,12 +370,12 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		ret.zk = new zjq(ret);
 		return ret;
 	},
-	/** Replaces the match elements with the specified HTML, DOM or {@link zk.Widget}.
+	/** Replaces the match elements with the specified HTML, DOM or {@link Widget}.
 	 * We extends <a href="http://docs.jquery.com/Manipulation/replaceWith">jQuery's replaceWith</a>
-	 * to allow replacing with an instance of {@link zk.Widget}.
-	 * @param zk.Widget widget a widget
-	 * @param zk.Desktop desktop the desktop. It is optional.
-	 * @param zk.Skipper skipper the skipper. It is optional.
+	 * to allow replacing with an instance of {@link Widget}.
+	 * @param Widget widget a widget
+	 * @param Desktop desktop the desktop. It is optional.
+	 * @param Skipper skipper the skipper. It is optional.
 	 * @return jq the jq object matching the DOM element after replaced
 	 */
 	replaceWith: function (w, desktop, skipper) {
@@ -429,6 +433,7 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 });
 
 /** @class jqzk
+ * @import zk.Widget
  * Represents the object returned by the <code>zk</code> function, or by
  * {@link jq#zk}.
  * For example, <code>zk('#id');</code>
@@ -449,7 +454,7 @@ zjq.prototype = {
 	//jq: null, //assigned at run time
 
 	/** Returns an array of widgets for each DOM element (selected by this object).
-	 * @return Array an array of widget ({@link zk.Widget})
+	 * @return Array an array of widget ({@link Widget})
 	 */
 	widget: function () {
 		var ws = [];
@@ -1155,8 +1160,8 @@ jq(el).zk.center(); //same as 'center'
 	 * <h3>What Really Happens</h3>
 	 * <p>This method actually moves the element to the topmost level in the DOM tree (i.e., as the child of document.body), and then the original parent (the parent before calling this method) becomes the virtual parent, which can be retrieved by {@link #vparentNode}.
 	 * <h3>When to Use</h3>
-	 * <p>When you implement a widget that appears above others, such as an overlapped window, a menu popup and a dropdown list, you can invoke this method when {@link zk.Widget#bind_} is called. And then, restore it
-	 * by calling {@link #undoVParent} when {@link zk.Widget#unbind_} is called. 
+	 * <p>When you implement a widget that appears above others, such as an overlapped window, a menu popup and a dropdown list, you can invoke this method when {@link Widget#bind_} is called. And then, restore it
+	 * by calling {@link #undoVParent} when {@link Widget#unbind_} is called. 
 	 * @return jqzk this object
 	 */
 	makeVParent: function () {
@@ -1296,7 +1301,7 @@ jq(el).zk.center(); //same as 'center'
 
 	//selection//
 	/** Disallows the user to select a portion of its content. You usually invoke this method to disable the selection for button-like widgets. By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
-	 * <p>If you disable the selection in {@link zk.Widget#bind_}, you shall enable it back in {@link zk.Widget#unbind_}
+	 * <p>If you disable the selection in {@link Widget#bind_}, you shall enable it back in {@link Widget#unbind_}
 	 * since this method will register a DOM-level listener for certain browsers. 
 	 * @return jqzk this object
 	 */
@@ -1581,7 +1586,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 *
 	 * <p>Notice that you usually have to call {@link #makeVParent} before calling this, since DIV with relative or absolute position will crop the child element. In other words, you have to make the element as the top-level element before creating a stackup for it.
 	 * <p>To remove the stackup, call {@link #remove}.
-	 * <p>If you want to create a shadow, you don't need to access this method since {@link zk.eff.Shadow} has an option to create and maintain the stackup automatically. 
+	 * <p>If you want to create a shadow, you don't need to access this method since {@link Shadow} has an option to create and maintain the stackup automatically. 
 	 * @param DOMElement el the element to retrieve the dimensions. If omitted, the stackup is not appended to the DOM tree.
 	 * @param String id ID of the stackup (iframe). If omitted and el is specified, it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk' is assumed.
 	 * @param DOMElement anchor where to insert the DOM element before
@@ -1679,7 +1684,7 @@ jq.alert('With listener', {
 </td></tr>
 <tr>
 <td> desktop
-</td><td> a desktop (<a href="/wiki/Zk.Desktop" title="Zk.Desktop">zk.Desktop</a>) or null
+</td><td> a desktop ({@link Desktop}) or null
 </td><td> The current desktop
 </td><td> Specifies which desktop this message box belongs to. You rarely need to specify it.
 </td></tr>
@@ -1742,7 +1747,7 @@ jq.alert('With listener', {
 	 * Then, if you register the widget, the widget's zsync method will be called when some widget becomes visible, is added and so on.
 	 *
 	 * <p>For example, {@link zul.wnd.Window} uses DIV to simulate the shadow in IE,
-	 * then it can register itself in {@link zk.Widget#bind_} and then
+	 * then it can register itself in {@link Widget#bind_} and then
 	 * synchronize the position and size of shadow (DIV) in zsync as follows.
 	 * <pre><code>
 bind_: function () {

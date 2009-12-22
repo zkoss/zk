@@ -400,7 +400,7 @@ zAu = {
 	},
 	/** Sets the URI for the specified error.
 	 * @param int code the error code
-	 * @param uri the URI
+	 * @param String uri the URI
 	 */
 	/** Sets the URI for the errors specified in a map.
 	 * @param Map errors A map of errors where the key is the error code (int),
