@@ -119,6 +119,7 @@ November, 2009
   2905901: Problem with datebox format
   2907228: Exception in server console while style has no content
   2897202: load-when and load-after not triggered when binded to template
+  2919037: No way to unselect combobox if constraint="no empty"
   
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
