@@ -425,6 +425,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
+		if (this._readonly && keyCode == 8) {
+			evt.stop(); // Bug #2916146
+			return;
+		}
+			
 		if (!this._inplaceout)
 			this._inplaceout = keyCode == 9;
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
