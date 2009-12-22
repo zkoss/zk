@@ -597,9 +597,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('setDomVisible_', arguments);
 		this._syncShadow(true);
 	},
-	setZIndex: _zkf = function () {
+	setZIndex: _zkf = function (zIndex) {
+		var old = this._zIndex;
 		this.$supers('setZIndex', arguments);
-		this._syncShadow(true);
+		if (old != zIndex) 
+			this._syncShadow(true);
 	},
 	setZindex: _zkf,
 	focus: function (timeout) {
