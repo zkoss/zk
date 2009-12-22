@@ -218,6 +218,7 @@ zk.copy(zjq, {
 });
 
 /** @class jq
+ * @import jq.Event
  * Represents the object returned by the <code>jq</code> function.
  * For example, <code>jq('#id');</code>
  *
@@ -320,7 +321,7 @@ zk.copy(zjq, {
  * <ul>
  * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
  * <li>{@link jqzk} - additional utilities to {@link jq}.</li>
- * <li>{@link jq.Event} - the event object passed to the event listener</li>
+ * <li>{@link Event} - the event object passed to the event listener</li>
  * </ul>
  * </blockquote>
  *

@@ -125,6 +125,10 @@ jq = jQuery;
 	}
 
 /** @class zk
+ * @import zk.Package
+ * @import zk.Class
+ * @import zk.Desktop
+ * @import zk.Widget
  * A collection of ZK core utilities.
  * The utilities are mostly related to the language enhancement we added to JavaScript,
  * such as {@link #$extends} and {@link #@package}.
@@ -155,7 +159,7 @@ zk.copy(zk, {
 	 */
 	currentPointer: [0, 0],
 	/** The widget that gains the focus now, or null if no one gains focus now. 
-	 * @type zk.Widget
+	 * @type Widget
 	 */
 	//currentFocus: null,
 	/** The topmost modal window, or null if no modal window at all. 
@@ -295,8 +299,8 @@ zk.copy(zk, {
 	 */
 	//PERCENT: '',
 
-	/** Indicates whether {@link zk.Widget#id} is always the same
-	 * as {@link zk.Widget#uuid}.
+	/** Indicates whether {@link Widget#id} is always the same
+	 * as {@link Widget#uuid}.
 	 * By default, it is false. It is true if <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>
 	 * is used
 	 * @type boolean
@@ -313,7 +317,7 @@ doKeyDown_: function () {
 </code></pre>
 	 * <p>Notice that the key capture is reset automatically after processing onKeyUp_. 
 	 * @see #mouseCapture
-	 * @type zk.Widget
+	 * @type Widget
 	 */
 	//keyCapture: null,
 	/** The widget that captures the mouse events.
@@ -326,7 +330,7 @@ doMouseDown_: function () {
 </code></pre>
 	 * <p>Notice that the mouse capture is reset automatically after processing onMouseUp_. 
 	 * @see #keyCapture
-	 * @type zk.Widget
+	 * @type Widget
 	 */
 	//mouseCapture: null,
 
@@ -354,8 +358,8 @@ zk.copy(Array.prototoype, {
 	 *foo.Cool = zk.$extends(zk.Object);</code></pre> 
 	 *
 	 * @param String name the name of the package.
-	 * @return zk.Package
-	 * @see #import
+	 * @return Package
+	 * @see #$import
 	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
@@ -389,7 +393,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 </code></pre>
 	 * @param String name The name of the package or the class. 
 	 * @param Function fn The function to call after the class is loaded. If specified, it assumes name is a class, and it will load the package of the class automatically. 
-	 * @return zk.Package
+	 * @return Package
 	 * @see #$package
 	 * @see #load
 	 */
@@ -491,10 +495,10 @@ foo.Widget = zk.$extends(zk.Widget, {
   }
 });
 </code></pre>
-	 * @param zk.Class sueprclass the super class to extend from
+	 * @param Class sueprclass the super class to extend from
 	 * @param Map members a map of non-static members
 	 * @param Map staticMembers a map of static members. Ignored if omitted.
-	 * @return zk.Class the class being defined
+	 * @return Class the class being defined
 	 * @see #define
 	 * @see #override
 	 */
@@ -676,10 +680,10 @@ Notice that when the function (specified in props) is called, the arguments are 
 <pre><code>
 wgt.setSomething(somevalue, {force:true});
 </code></pre>
-	 * @param zk.Class klass the class to define the members
+	 * @param Class klass the class to define the members
 	 * @param Map props the map of members (aka., properties)
 	 * @see #$extends
-	 * @return zk.Class the class being defined
+	 * @return Class the class being defined
 	 */
 	define: function (klass, props) {
 		for (var nm in props) {
@@ -916,7 +920,7 @@ zk.log('value is", value);
 	 * @param String dtid the ID of the desktop to create
 	 * @param String contextURI the context URI, such as /zkdemo
 	 * @param String updateURI the update URI, such as /zkdemo/zkau
-	 * @return zk.Desktop the stateless desktop being created
+	 * @return Desktop the stateless desktop being created
 	 */
 	stateless: function (dtid, contextURI, updateURI) {
 		var Desktop = zk.Desktop, dt;
@@ -1151,8 +1155,7 @@ if (klass.isInstance(obj)) {
 if (klass1.isAssignableFrom(klass2)) {
 }
 </code></pre>
-	 * @param zk.Class cls the Class object to be checked, such
-	 * as zk.Widget.
+	 * @param zk.Class cls the Class object to be checked, such as zk.Widget.
 	 * @return boolean true if assignable
 	 */
 	isAssignableFrom: function (cls) {
