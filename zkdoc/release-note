@@ -62,6 +62,7 @@ November, 2009
   2914048: Box renders child at wrong place when add dynamically
   2916077: Checkmark disappears in listgroup
   2916148: Errorbox cannot be closed in IE6 only
+  2919062: Intbox should allow -0 as its value without error message
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
