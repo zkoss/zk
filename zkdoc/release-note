@@ -64,6 +64,7 @@ November, 2009
   2916148: Errorbox cannot be closed in IE6 only
   2919062: Intbox should allow -0 as its value without error message
   2918388: Javascript error when close a "whole" maximized portallayout
+  2918527: Align property ignored in DIV
   2916146: Input components with readonly should prevent Backspace key
   
 * RC Bugs
