@@ -66,6 +66,7 @@ November, 2009
   2918388: Javascript error when close a "whole" maximized portallayout
   2918527: Align property ignored in DIV
   2916146: Input components with readonly should prevent Backspace key
+  2919175: Unexpected error message in combobox with constraint
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
