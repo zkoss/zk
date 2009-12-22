@@ -119,11 +119,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			Validation
 			<hbox>
 				<vbox>
+					<span sclass="edition-field">
+						Captcha and Colorbox requires
+						<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
+					</span>
 					<textbox value="qwasdf" width="150px" />
 					<captcha id="cpa" length="6" width="150px"
 						height="50px" />
 				</vbox>
 				<vbox>
+					<label value=" " pre="true"/>
 					(Case Insensitive)
 					<button label="Regenerate"
 						onClick="cpa.randomValue(); val.value=cpa.value;" />

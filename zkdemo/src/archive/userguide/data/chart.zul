@@ -19,6 +19,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Chart</h4>
+	]]></html>
+	<span sclass="edition-field">
+		JFreeChart requires
+		<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
+	</span>
+	<html><![CDATA[
 		<p>Displays a set of data graphically. 
 		In this demo, change the value of the grid and the chart 
 		will be redrawn accordingly. Also, the chart can be drill down with a click 

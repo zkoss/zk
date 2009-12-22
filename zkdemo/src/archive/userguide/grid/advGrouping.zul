@@ -20,6 +20,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
      	<h4>Grid Live Grouping</h4>
+     ]]></html>
+	<span sclass="edition-field">
+		The Grouping function requires
+		<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
+	</span>
+    <html><![CDATA[
    		<p>Grid grouping supports "load on demend" feature via a GroupsModel interface. 
    		This feature will not load data into the grid until it is necessary.  <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>
    		<p style="display:none;" id="infos">Scroll the following grid downwards and observe the values loaded dynamically.</p>

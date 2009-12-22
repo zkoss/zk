@@ -17,12 +17,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer"
+	 xmlns:h="http://www.w3.org/1999/xhtml">
 	<html><![CDATA[
 		<h4>Menu</h4>
 	    <p>Menu allows embedded images, vertical/horizontal orientation and nested menupopup/menuitem components.</p>
-	    <p>Menu allows to combine with Colorbox. Please click "Spyglass" -> "Color Picker" </p>
 	]]></html>
+	    <h:p>Menu allows to combine with Colorbox. Please click "Spyglass" -> "Color Picker".</h:p>
+	<span sclass="edition-field">
+		Colorbox requires
+		<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
+	</span>
+	
 	<separator />
 	<tabbox width="100%" tabscroll="false">
 		<tabs>

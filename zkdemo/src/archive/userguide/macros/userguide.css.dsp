@@ -147,3 +147,11 @@ div.demo-items {
 .pointer {
 	cursor:pointer;
 }
+.edition-field, .edition-field:visited {
+	color: #346B93;
+	text-decoration: none;
+	font-style: italic;
+}
+a.edition-field:hover {
+	text-decoration: underline;
+}
