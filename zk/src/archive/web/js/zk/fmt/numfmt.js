@@ -203,22 +203,27 @@ zk.fmt.Number = {
 				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING || cc == ')'
 					|| (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
-				if (!sb) sb = val.substring(0, j);
+				if (sb == null) sb = val.substring(0, j);
 			} else {
 				var c2 = cc == zk.MINUS ? '-':
 					cc == zk.DECIMAL ? '.':  cc;
-				if (cc != c2 && !sb)
+				if (cc != c2 && sb == null)
 					sb = val.substring(0, j);
-				if (sb) sb += c2;
+				if (sb != null) sb += c2;
 			}
 		}
-		if (minus) {
-			if (!sb) sb = val;
-			if (sb.length)
-				if (sb.charAt(0) == '-') sb = sb.substring(1); //-- => +
-				else sb = '-' + sb;
+		if (sb == null) sb = val;
+		if (minus) sb = '-' + sb;
+		for (;;) {
+			cc = sb.charAt(0);
+			if (cc == '+')
+				sb = sb.substring(1);
+			else if (cc == '-' && sb.charAt(1) == '-')
+				sb = sb.substring(2);
+			else
+				break;
 		}
-		return {raw: sb || val, divscale: divscale};
+		return {raw: sb, divscale: divscale};
 	}
 };
 })();

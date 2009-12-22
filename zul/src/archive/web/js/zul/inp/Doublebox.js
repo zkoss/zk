@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING+'e';
+		//supports 1e2
+
 zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
@@ -50,7 +54,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 				valstr += '0';
 		}
 		
-		if (raw != valstr && raw != '+'+valstr && raw.indexOf('e') < 0) //unable to handle 1e2
+		if (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0) //1e2: assumes OK
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
@@ -70,9 +74,9 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 		return zcs != null ? zcs: "z-doublebox";
 	},
 	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.Doublebox._allowKeys))
+		if (!this._shallIgnore(evt, _allowKeys))
 			this.$supers('doKeyPress_', arguments);
 	}
-},{
-	_allowKeys: zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING
 });
+
+})();

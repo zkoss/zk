@@ -12,13 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING;
+
 zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value),
 			val = new zk.BigDecimal(info.raw);
-		if (info.raw != val.$toString() && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
+		if (info.raw != val.$toString() && info.raw != '-'+val) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
 		return val;
@@ -33,7 +36,9 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 		return zcs != null ? zcs: "z-decimalbox";
 	},
 	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.Doublebox._allowKeys))
+		if (!this._shallIgnore(evt, _allowKeys))
 			this.$supers('doKeyPress_', arguments);
 	}
 });
+
+})();
