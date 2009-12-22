@@ -521,9 +521,8 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			jsel = -1;
 		if (jsel < 0) {
 			_selItem = null;
-			//Bug#2919037: No way to unselect combobox if constraint="no empty"
-			setValueDirectly("");
-			smartUpdate("value", (String) getRawValue());
+			//Bug#2919037: SetSelectedIndex(-1) shall unselect even with constraint
+			setRawValue(null);
 		} else {
 			_selItem = getItemAtIndex(jsel);
 			setValue(_selItem.getLabel());
