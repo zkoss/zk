@@ -20,12 +20,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		<li>Type something in the textbox of one browser (and press ENTER),
 		and you shall the output in the other.
 		</li>
+		<li>Notice ZK PE or EE is required.</li>
 	</ol>
-	Notice ZK PE or EE is required.
 	]]></html>
 	<zscript><![CDATA[
 	import org.zkoss.zk.ui.event.*;
-	import org.zkoss.zkmax.ui.eq.*;
 	EventQueue que = EventQueues.lookup("test", EventQueues.APPLICATION, true);
 	que.subscribe(new EventListener() {
 		public void onEvent(Event evt) {

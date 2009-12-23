@@ -208,6 +208,9 @@ November, 2009
     at a specified index) of the series value.
   + Two extra methods are added to org.zkoss.zul.HiLoModel for better control (insert and replace value
     at a specified index).
+  + EventQueue is not part of ZK CE. Use org.zkoss.zk.ui.event.EventQueues
+    and org.zkoss.zk.ui.event.EventQueue instead.
+  + PortalMoveEvent is moved to the org.zkoss.zkmax.ui.event package
 
 	--------
 ZK 3.6.3

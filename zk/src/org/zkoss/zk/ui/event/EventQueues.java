@@ -121,7 +121,7 @@ public class EventQueues {
 					try {
 						final Object o = Classes.newInstanceByThread(
 							clsnm != null ? clsnm:
-							"org.zkoss.zkmax.zk.eq.EventQueueProviderImpl");
+							"org.zkoss.zkmax.ui.event.impl.EventQueueProviderImpl");
 								//try zkmax first
 						if (!(o instanceof EventQueueProvider))
 							throw new UiException(o.getClass().getName()+" must implement "+EventQueueProvider.class.getName());
