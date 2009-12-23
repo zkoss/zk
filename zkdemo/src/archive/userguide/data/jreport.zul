@@ -16,9 +16,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer"
-	 xmlns:h="http://www.w3.org/1999/xhtml">
-	<h:h4>JasperReports</h:h4>
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>JasperReports</h4>
+	]]></html>
 	<span sclass="edition-field">
 		This feature requires
 		<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
