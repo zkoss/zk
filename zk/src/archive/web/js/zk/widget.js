@@ -2004,15 +2004,20 @@ new zul.wnd.Window{
 	}
 
 }, {
+	/** Retrives the widget.
+	 * @param Object n the object to look for. If it is a string,
+	 * it tried to resolve it with {@link _.jq}.
+	 * @return zk.Widget
+	 */
 	$: function (n, opts) {
-		if (typeof n == 'string') {
-			if (n.charAt(0) == '#') n = n.substring(1);
-			var j = n.indexOf('-');
-			return _binds[j >= 0 ? n.substring(0, j): n];
-		}
+		if (typeof n == 'string')
+			n = jq(n);
+		if (n && n.zk && n.zk.jq == n) //jq()
+			n = n[0];
 
 		if (!n || zk.Widget.isInstance(n)) return n;
-		else if (!n.nodeType) { //skip Element
+
+		if (!n.nodeType) { //skip Element
 			var e = n.originalEvent;
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}

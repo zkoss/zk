@@ -31,11 +31,7 @@ zjq = function (jq) { //ZK extension
 		_sbwDiv; //scrollbarWidth
 
 	function _elmOfWgt(id, ctx) {
-		var w, w2;
-		if (ctx && ctx !== zk) {
-			if (ctx.zk) ctx = ctx[0]; //jq(xx)
-			if (ctx) w = zk.Widget.$(ctx);
-		}
+		var w = ctx && ctx !== zk ? zk.Widget.$(ctx): null, w2;
 		return (w2=w||zk.Desktop.sync()) && (w2=w2.$f(id, !w)) ? w2.$n(): null;
 	}
 	function _isNone(jq) {
@@ -453,17 +449,6 @@ zjq.prototype = {
 	 */
 	//jq: null, //assigned at run time
 
-	/** Returns an array of widgets for each DOM element (selected by this object).
-	 * @return Array an array of widget ({@link Widget})
-	 */
-	widget: function () {
-		var ws = [];
-		for (var j = this.jq.length; j--;) {
-			var w = zk.Widget.$(this.jq[j]);
-			if (w) ws.unshift(w);
-		}
-		return ws;
-	},
 	/** Cleans, i.e., reset, the visibility (of the CSS style) for the matched elements. Depending on the browser, the reset visibility is either visible or inherit. 
 	 */
 	cleanVisibility: function () {
