@@ -2005,7 +2005,7 @@ new zul.wnd.Window{
 }, {
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
-	 * it tried to resolve it with {@link _.jq}.<br/>
+	 * it tried to resolve it with jq(n, zk) -- see {@link _.jq}.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called
@@ -2026,7 +2026,7 @@ new zul.wnd.Window{
 	 */
 	$: function (n, opts) {
 		if (typeof n == 'string')
-			n = jq(n);
+			n = jq(n, zk);
 		if (n && n.zk && n.zk.jq == n) //jq()
 			n = n[0];
 
