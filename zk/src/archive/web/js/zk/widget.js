@@ -2003,7 +2003,7 @@ new zul.wnd.Window{
 	}
 
 }, {
-	/** Retrives the widget.
+	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
 	 * it tried to resolve it with {@link _.jq}.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
@@ -2390,7 +2390,7 @@ zk.Skipper = zk.$extends(zk.Object, {
 });
 /** @partial zk.Skipper
  */
-//docNoncaptionSkipper = {
+//@{
 	/** An instance of {@link zk.Skipper} that can be used to skip the rerendering of child widgets except the caption.
 	 * <p>It assumes
 	 * <ol>
@@ -2409,5 +2409,5 @@ setClosable: function (closable) {
 	 * @type zk.Skipper
 	 */
 	//nonCaptionSkipper: null
-//};
+//@};
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();

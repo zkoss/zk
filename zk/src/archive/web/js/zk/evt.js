@@ -323,6 +323,7 @@ zWatch = (function () {
 	}
 
 /** @class zWatch
+ * @import zk.Widget
  * <p>An utility to manage watches.
  *
  * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
@@ -345,7 +346,7 @@ zWatch.listen({onSend: ml})
 <h3>Invocation Sequence</h3>
 <h4>Sequence of #fireDown</h4>
 
-<p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is zk.Widget). Thus, the parent will be called before its children, if they are all registered to the same action. 
+<p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action. 
  */
   return {
   	/** Registers watch listener(s). For example,
@@ -434,7 +435,7 @@ onX: function (ctl) {
 	 * <li>The watch listener's parent can be retrieved by either a method called getParent, or a property called parent.</li>
 	 * <li>It has a data member called bindLevel indicating which level the object in the parent-child tree.</li>
 	 * </ol>
-	 * <p>{@link zk.Widget} is a typical example ({@link zk.Widget#parent} and {@link zk.Widget#bindLevel}).
+	 * <p>{@link Widget} is a typical example ({@link Widget#parent} and {@link Widget#bindLevel}).
 	 *
 	 * <p>For example, zWatch.fireDown('onX', wgt, null, 'a', 123) will cause ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX and zUtl.isAncestor(wgt, ml) is true (zUtl#isAncestor).
 	 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listen can use to do further control. For example, origin (of fire()) can be retrieved by accessing the member of the controller called origin.

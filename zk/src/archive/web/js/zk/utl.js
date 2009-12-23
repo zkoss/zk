@@ -51,8 +51,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 /** @class zUtl
+ * @import zk.Widget
+ * @import zk.xml.Utl
  * The basic utilties.
- * <p>For more utilities, refer to {@link zk.xml.Utl}.
+ * <p>For more utilities, refer to {@link Utl}.
  */
 zUtl = { //static methods
 	//Character
@@ -106,7 +108,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	},
 
 	/** Encodes the string to a valid XML string.
-	 * Refer to {@link zk.xml.Utl} for more XML utilities.
+	 * Refer to {@link Utl} for more XML utilities.
 	 * @param String txt the text to encode
 	 * @param Map opts [optional] the options. Allowd value:
 	 * <ul>
@@ -216,7 +218,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** Returns if one is ancestor of the other.
 	 * It assumes the object has either a method called <code>getParent</code>
 	 * or a field called <code>parent</code>.
-	 * A typical example is used to test the widgets ({@link zk.Widget}).
+	 * A typical example is used to test the widgets ({@link Widget}).
 	 * @param Object p the parent. This method return true if p is null
 	 or p is the same as c
 	 * @param Object c the child
