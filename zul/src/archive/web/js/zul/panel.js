@@ -123,6 +123,9 @@ zkPanel = {
 		if (cmp._lastSize) {
 			cmp._lastSize = null;
 		}
+		if (getZKAttr(cmp, "maximized") == "true") {
+			zk.fire(cmp, "maximize", [cmp, false]);
+		}
 		zkau._overlaps.remove(cmp.id);
 		zkPanel.cleanupShadow(cmp);
 	},
