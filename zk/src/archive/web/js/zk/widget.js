@@ -2006,7 +2006,23 @@ new zul.wnd.Window{
 }, {
 	/** Retrives the widget.
 	 * @param Object n the object to look for. If it is a string,
-	 * it tried to resolve it with {@link _.jq}.
+	 * it tried to resolve it with {@link _.jq}.<br/>
+	 * If it is an DOM element ({@link DOMElement}), it will look up
+	 * which widget it belongs to.<br/>
+	 * If the object is not a DOM element and has a property called
+	 * <code>target</code>, then <code>target</code> is assumed.
+	 * Thus, you can pass an instance of {@link jq.Event} or {@link zk.Event},
+	 * and the target widget will be returned.
+	 * @param Map opts [optional] the options. Allowed values:
+	 * <ul>
+	 * <li>exact - whether not to look up the parent node.
+	 * If omitted, false is assumed (and it will look up parent).</li>
+	 * <li>child - whether to ensure the given element is a child element
+	 * of the widget's main element ({@link #$n}). In most cases, if ID
+	 * of an element is xxx-yyy, the the element must be a child of
+	 * the element whose ID is xxx. However, there is some exception
+	 * such as the shadow of a window.</li>
+	 * </ul>
 	 * @return zk.Widget
 	 */
 	$: function (n, opts) {
