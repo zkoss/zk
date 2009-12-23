@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
     ]]></html>
 	<span sclass="edition-field">
 		The Detail component requires
-		<a href="http://www.zkoss.org/license" sclass="edition-field" label=" ZK PE or EE."/>
+		<a href="http://www.zkoss.org/download/zk.dsp" sclass="edition-field" label=" ZK PE or EE."/>
 	</span>
     <html><![CDATA[
   		<p>A <i>detail</i> section can be placed within a row - as placeholders for particulars.</p>
