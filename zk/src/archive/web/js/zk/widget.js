@@ -1512,7 +1512,7 @@ new zul.wnd.Window{
 		if (!_ignoreDom_)
 			jq(n).remove();
 	},
-	$n: _zkf = function (name) {
+	$n: function (name) {
 		if (name) {
 			var n = this._subnodes[name];
 			if (!n && this.desktop)
@@ -1532,7 +1532,6 @@ new zul.wnd.Window{
 		this._subnodes = {};
 		this._nodeSolved = false;
 	},
-	getNode: _zkf,
 	getPage: function () {
 		if (this.desktop && this.desktop.nChildren == 1)
 			return this.desktop.firstChild;
