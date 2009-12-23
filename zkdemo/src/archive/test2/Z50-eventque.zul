@@ -21,6 +21,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		and you shall the output in the other.
 		</li>
 	</ol>
+	Notice ZK PE or EE is required.
 	]]></html>
 	<zscript><![CDATA[
 	import org.zkoss.zk.ui.event.*;

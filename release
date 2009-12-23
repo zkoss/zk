@@ -417,6 +417,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cd zkforge
 		rm gmapsz.jar
 		rm zuljsp.jar
+		rm timeplotz.jar
 
 		cd /tmp/zk
 
@@ -439,7 +440,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		cd zkforge
 		rm timelinez.jar
-		rm timeplotz.jar
 		rm ckez.jar
 
 		cd /tmp/zk
