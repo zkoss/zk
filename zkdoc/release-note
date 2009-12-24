@@ -211,7 +211,8 @@ November, 2009
   + EventQueue is not part of ZK CE. Use org.zkoss.zk.ui.event.EventQueues
     and org.zkoss.zk.ui.event.EventQueue instead.
   + PortalMoveEvent is moved to the org.zkoss.zkmax.ui.event package
-
+  + Tabpanels and Tabpanel won't be created automatically by default, if the size is inconsistent.
+  
 	--------
 ZK 3.6.3
 October, 2009
