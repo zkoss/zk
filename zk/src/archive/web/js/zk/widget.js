@@ -590,7 +590,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @see #getChildAt
 	 * @type zk.Widget
 	 */
-	//firstChild: null,
+	//lastChild: null,
 	/** The parent, or null if this widget has no parent (readonly).
 	 * @type zk.Widget
 	 */
@@ -650,7 +650,7 @@ new zul.wnd.Window{
 		this._bklsns = {}; //backup for listners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 
-		this.$afterInit(function () {
+		this.afterInit(function () {
 			if (props) {
 				var mold = props.mold;
 				if (mold != null) {
@@ -837,7 +837,7 @@ new zul.wnd.Window{
 	/** Return the child widget at the specified index.
 	 * <p>Notice this method is not good if there are a lot of children
 	 * since it iterates all children one by one.
-	 * @param j the index of the child widget to return. 0 means the first
+	 * @param int j the index of the child widget to return. 0 means the first
 	 * child, 1 for the second and so on.
 	 * @return zk.Widget the widget or null if no such index
 	 * @see #getChildIndex
@@ -867,7 +867,7 @@ new zul.wnd.Window{
 	},
 	/** Appends an array of children.
 	 * Notice this method does NOT remove any existent child widget.
-	 * @param Array<zk.Widget> children an array of children to add
+	 * @param Array children an array of children ({@link zk.Widget}) to add
 	 * @return zk.Widget this widget
 	 */
 	setChildren: function (children) {
@@ -1043,7 +1043,7 @@ new zul.wnd.Window{
 	 * Ignored if null.
 	 * @param String tagEnd the ending of HTML tag, such as </tbody>
 	 * Ignored if null.
-	 * @see zAu.createWidgets
+	 * @see _.zAu.createWidgets
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)

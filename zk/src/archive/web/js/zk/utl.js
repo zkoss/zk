@@ -286,7 +286,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 		$n.zk.cleanVisibility();
 	},
-	/** Removes the message box created by {@link #progressBox}.
+	/** Removes the message box created by {@link #progressbox}.
 	 * @param String id the ID of the DOM element of the message box
 	 */
 	destroyProgressbox: function (id) {
@@ -376,7 +376,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			sb.push(ary[j]);
 		return sb.join();
 	},
-	/* Converts a string separated by comma to an array of integers.
+	/** Converts a string separated by comma to an array of integers.
 	 * @see #intsToString
 	 * @param String text the string to convert.
 	 * If null, null is returned.

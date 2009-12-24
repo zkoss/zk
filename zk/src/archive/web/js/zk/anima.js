@@ -104,7 +104,7 @@ zk.copy(zk, {
  */
 zk.copy(zjq.prototype, {
 	/** Slides down (show) of the matched DOM element(s).
-	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
 	 * Allowed options:
 	 * <dl>
@@ -161,7 +161,7 @@ zk.copy(zjq.prototype, {
 		});
 	},
 	/** Slides up (hide) of the matched DOM element(s).
-	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
 	 * Allowed options:
 	 * <dl>
@@ -213,7 +213,7 @@ zk.copy(zjq.prototype, {
 		});
 	},
 	/** Slides out (hide) of the matched DOM element(s).
-	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
 	 * Allowed options:
 	 * <dl>
@@ -261,7 +261,7 @@ zk.copy(zjq.prototype, {
 		});
 	},
 	/** Slides in (show) of the matched DOM element(s).
-	 * @param zk.Widget wgt the widget that owns the DOM element
+	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
 	 * Allowed options:
 	 * <dl>

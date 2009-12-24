@@ -39,7 +39,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_lenient: true,
 	$init: function() {
 		this.$supers('$init', arguments);
-		this.$afterInit(_initPopup);
+		this.afterInit(_initPopup);
 		this.listen({onChange: this}, -1000);
 	},
 

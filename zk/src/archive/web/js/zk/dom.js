@@ -526,7 +526,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 </code></pre>
 	 *
 	 * @param String areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b". So you can specify to be "lr" or "tb" or more. 
-	 * @param Array styles an array of styles, such as {@link #paddings}, {@link #margins} or {@link #borders}.
+	 * @param Array styles an array of styles, such as {@link jq#paddings}, {@link jq#margins} or {@link jq#borders}.
 	 * @return int the summation
 	 */
 	sumStyles: function (areas, styles) {
@@ -552,10 +552,10 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	},
 
 	/** Returns the revised (calibrated) offset, which subtracted the offset of the scrollbar
-	 * ({@link #scrollOffset} and {@link #innerX}), for the first matched element.
+	 * ({@link #scrollOffset} and {@link jq#innerX}), for the first matched element.
 	 * @param Offset ofs the offset to revise. If not specified, the first matched
 	 * element's bounding rectange is assumed.
-	 * @preturn Offset the revised offset 
+	 * @return Offset the revised offset 
 	 */
 	revisedOffset: function (ofs) {
 		var el = this.jq[0];
@@ -597,7 +597,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 <pre><code>el.style.height = jq(el).zk.revisedHeight(100);</code></pre>
 	 *
 	 * @param int size #  the height to be assigned to the first matched element.
-	 * @param excludeMargin whether to subtract the margins, too.
+	 * @param boolean excludeMargin whether to subtract the margins, too.
 	 * You rarely need this unless the height is specified in term of the parent's perspective. 
 	 * @return int the revised height
 	 */
@@ -1141,7 +1141,8 @@ jq(el).zk.center(); //same as 'center'
 	},
 	/** Creates a virtual parent for the specified element. Creating a virtual parent makes the specified element able to appear above any other element (such as a menu popup). By default, the Z order of an element is decided by its parent and ancestors (if any of them has the relative or absolute position). If you want to resolve this limitation, you can create a virtual parent for it with this method.
 	 * <p>To undo the creation of the virtual parent, use {@link #undoVParent}.
-	 * <p>Notice that, due to browser's limitation, creating a virtual parent is still not enough to make an element appear on top of all others in all conditions. For example, it cannot in IE6 if there is a SELECT element underneath. To really solve this, you have to create a so-called stackup, which is actually an IFRAME element. By position the iframe right under the element, you can really want it appear on top. Refer to {@link #newStackup} for more information. 
+	 * <p>Notice that, due to browser's limitation, creating a virtual parent is still not enough to make an element appear on top of all others in all conditions. For example, it cannot in IE6 if there is a SELECT element underneath. To really solve this, you have to create a so-called stackup, which is actually an IFRAME element. By position the iframe right under the element, you can really want it appear on top.
+	 * Refer to {@link jq#newStackup} for more information. 
 	 * <h3>What Really Happens</h3>
 	 * <p>This method actually moves the element to the topmost level in the DOM tree (i.e., as the child of document.body), and then the original parent (the parent before calling this method) becomes the virtual parent, which can be retrieved by {@link #vparentNode}.
 	 * <h3>When to Use</h3>
@@ -1308,7 +1309,7 @@ jq(el).zk.center(); //same as 'center'
 zk(el).setStyles({width:'100px', paddingTop: "1px", "border-left": "2px"});
 zk(el).setStyles(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 </code></pre>
-	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link #parseStyle}.
+	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link jq#parseStyle}.
 	 * @return jqzk this object
 	 */
 	setStyles: function (styles) {
@@ -1416,7 +1417,7 @@ zk.copy(jq, {
 	},
 
 	/** A map of the margin style names: {l: 'margin-left', t: 'margin-top'...}. 
-	 * It is usually used with {@link #sumStyles} to calculate the numbers specified
+	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
 	 * @see #margins
 	 * @see #paddings
@@ -1424,7 +1425,7 @@ zk.copy(jq, {
 	 */
 	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
 	/** A map of the border style names: {l: 'border-left', t: 'border-top'...}.
-	 * It is usually used with {@link #sumStyles} to calculate the numbers specified
+	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
 	 * @see #margins
 	 * @see #paddings
@@ -1432,7 +1433,7 @@ zk.copy(jq, {
 	 */
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
 	/** A map of the padding style names: {l: 'padding-left', t: 'padding-top'...}. 
-	 * It is usually used with {@link #sumStyles} to calculate the numbers specified
+	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles. 
 	 * @see #margins
 	 * @see #borders
@@ -1467,11 +1468,11 @@ zk.copy(jq, {
 	},
 
 	/** Clears the current selection in the browser window.
-	 * <p>Notice: {@link #setSelectionRange} is used for the input-type
+	 * <p>Notice: {@link jqzk#setSelectionRange} is used for the input-type
 	 * elements, while this method is applied to the whole browser window. 
-	 * @see #setSelectionRange
-	 * @see #enableSelection
-	 * @see #disableSelection
+	 * @see jqzk#setSelectionRange
+	 * @see jqzk#enableSelection
+	 * @see jqzk#disableSelection
 	 * @return boolean whether it is cleared successfully
 	 */
 	clearSelection: function () {
@@ -1527,7 +1528,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	},
 
 	/** Parses a string-type CSS style into a map of names and values of styles.
-	 * It is usually used with {@link #setStyles} to update the CSS style of an element. 
+	 * It is usually used with {@link jqzk#setStyles} to update the CSS style of an element. 
 	 * @param String style the style to parse
 	 * @return Map a map of styles (name, value)
 	 */
@@ -1569,7 +1570,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 * <li>All browser: PDF iframe above any other DOM element. However, this approach works only in FF and IE, and FF doesn't position IFRAME well if two or more of them are with the absolute position. </li>
 	 * </ol>
 	 *
-	 * <p>Notice that you usually have to call {@link #makeVParent} before calling this, since DIV with relative or absolute position will crop the child element. In other words, you have to make the element as the top-level element before creating a stackup for it.
+	 * <p>Notice that you usually have to call {@link jqzk#makeVParent} before calling this, since DIV with relative or absolute position will crop the child element. In other words, you have to make the element as the top-level element before creating a stackup for it.
 	 * <p>To remove the stackup, call {@link #remove}.
 	 * <p>If you want to create a shadow, you don't need to access this method since {@link Shadow} has an option to create and maintain the stackup automatically. 
 	 * @param DOMElement el the element to retrieve the dimensions. If omitted, the stackup is not appended to the DOM tree.
@@ -1612,7 +1613,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 
 	//dialog//
 	/** It is the same as <code>window.confirm</code?, except it will set
-	 * {@link #alerting} so widgets know to ignore <code>onblur</code> (since the focus will be back later).
+	 * {@link zk#alerting} so widgets know to ignore <code>onblur</code> (since the focus will be back later).
 	 * <p>It is strongly suggested to use this method instead of <code>window.confirm</code>. 
 	 * @return boolean whether the Yes button is pressed
 	 */
@@ -1626,7 +1627,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	},
 	/** Shows up a message.
 	 * If opts.mode is os, this method is the same as window.alert, except it will set
-	 * {@link #alerting}, so widgets (particularly input widgets) know to ignore onblur (since the focus will be back later).
+	 * {@link zk#alerting}, so widgets (particularly input widgets) know to ignore onblur (since the focus will be back later).
 	 * <p>It is strongly suggested to use this method instead of window.alert.
 	 * <p>If opts is omitted or opts.mode is not os, it is similar to
 	 * <code>org.zkoss.zul.Messagebox.show()</code> at the server.

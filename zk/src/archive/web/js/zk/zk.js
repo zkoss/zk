@@ -131,7 +131,7 @@ jq = jQuery;
  * @import zk.Widget
  * A collection of ZK core utilities.
  * The utilities are mostly related to the language enhancement we added to JavaScript,
- * such as {@link #$extends} and {@link #@package}.
+ * such as {@link #$extends} and {@link #$package}.
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 zk.copy(zk, {
@@ -214,7 +214,7 @@ zk.copy(zk, {
 	//unloading: false,
 
 	/** The version of ZK, such as '5.0.0'
-	 * @type version
+	 * @type String
 	 */
 	//version: '',
 	/** The build of ZK, such as '08113021'
@@ -299,6 +299,12 @@ zk.copy(zk, {
 	 */
 	//PERCENT: '',
 
+	/** Indicates whether an OS-level modal dialog is opened.
+	 * In this case, onblur will be called so a widget can use it to
+	 * decide whether to validate.
+	 * @type boolean
+	 */
+	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
 	 * By default, it is false. It is true if <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>
@@ -1001,12 +1007,12 @@ zk.Object.prototype = {
 	<ul>
 	<li>The most derived class's $init (subclass)</li>
 	<li>The based class's $init (if the derived class's $init invokes this.$supers('$init', arguments))</li>
-	<li>The first function, if any, be added with $afterInit, then the second (in the same order that $afterInit was called)... </li>
+	<li>The first function, if any, be added with afterInit, then the second (in the same order that afterInit was called)... </li>
 	</ul>
 	 * @param Function func the function to register for execution later
 	 * @see #$init
 	 */
-	$afterInit: function (f) {
+	afterInit: function (f) {
 		(this._$ais = this._$ais || []).unshift(f); //reverse
 	},
 	/** The class that this object belongs to.
@@ -1026,7 +1032,7 @@ zk.Object.prototype = {
 if (obj.$instanceof(zul.wgt.Label)) {
 }
 </code></pre>
-	 * @param klass the Class object to be checked. 
+	 * @param Class klass the Class object to be checked. 
 	 * @return boolean true if this object is an instance of the class
 	 */
 	$instanceof: function (cls) {
@@ -1132,10 +1138,7 @@ zk.Class.prototype.$class = zk.Class;
 /** @partial zk.Object
  */
 _zkf = {
-	/** The class of a class.
-	 * It is always {@link zk.Class}.
-	 * @type zk.Class
-	 */
+	//note we cannot generate javadoc for this because Java cannot have both static and non-static of the same name
 	$class: zk.Class,
 	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
 	 * Example: 

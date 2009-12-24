@@ -141,7 +141,7 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	},
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.$afterInit(this._init);
+		this.afterInit(this._init);
 	},
 	getAscitem: function () {
 		return this._asc;

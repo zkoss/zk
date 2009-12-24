@@ -184,7 +184,7 @@ zk.load('zul.utl', function () {
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
 	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute. 
 	 * @param String pkg the package name
-	 * @param zk.Desktop dt [optional] the desktop used to get URI of the JavaScript file ({@link #ajaxURI}). If null, the first desktop is assumed. 
+	 * @param Desktop dt [optional] the desktop used to get URI of the JavaScript file ({@link #ajaxURI}). If null, the first desktop is assumed. 
 	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here. 
 	 * @return boolean true if all required packages are loaded
 	 * @see #load(String, Function)

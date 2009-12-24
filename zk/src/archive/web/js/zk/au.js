@@ -699,7 +699,7 @@ zAu = {
 	 * {@link Widget#replaceCaveChildren_}.
 	 * @param Array codes an array of JavaScript codes generated at the server.
 	 * For example, <code>smartUpdate("foo", ComponentsCtrl.redraw(getChildren());</code>
-	 * @return Arrray an array of {@link Widget}.
+	 * @return Array an array of {@link Widget}.
 	 */
 	createWidgets: function (codes) {
 		var wgts = [];

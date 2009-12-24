@@ -119,6 +119,19 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		_createInf1 = [], //create info
 		_aftMounts = []; //afterMount funcs
 
+/** @partial zk
+ */
+//@{
+	/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
+	 * <p>By mounting we mean the creation of the peer widgets under the
+	 * control of the server. To run after the mounting of the peer widgets,
+	 * <p>The function is executed with <code>setTimeout(fn, 0)</code> if the mounting has been done. 
+	 * @param Function fn the function to execute after mounted
+	 * @see #mounting
+	 * @see #afterLoad
+	 */
+	//afterMount: function () {}
+//@};
 	zk.afterMount = function (fn) { //part of zk
 		if (fn)  {
 			if (zk.mounting)
