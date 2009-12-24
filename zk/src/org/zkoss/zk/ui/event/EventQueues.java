@@ -49,6 +49,13 @@ public class EventQueues {
 	 * provide your own implementation.
 	 */
 	public static final String APPLICATION = "application";
+	/** Represenets the event queue in the sessionscope.
+	 * In other words, the events published to this kind of queues
+	 * can be passed around to any desktops of the same session.
+	 * <p>Notice that this feature requires ZK PE or EE, or you have to
+	 * provide your own implementation.
+	 */
+	public static final String SESSION = "session";
 
 	/** Returns the event queue with the specified name in the
 	 * specified scope.
@@ -121,8 +128,8 @@ public class EventQueues {
 					try {
 						final Object o = Classes.newInstanceByThread(
 							clsnm != null ? clsnm:
-							"org.zkoss.zkmax.ui.event.impl.EventQueueProviderImpl");
-								//try zkmax first
+							"org.zkoss.zkex.ui.event.impl.EventQueueProviderImpl");
+								//try zkex first
 						if (!(o instanceof EventQueueProvider))
 							throw new UiException(o.getClass().getName()+" must implement "+EventQueueProvider.class.getName());
 						provider = (EventQueueProvider)o;

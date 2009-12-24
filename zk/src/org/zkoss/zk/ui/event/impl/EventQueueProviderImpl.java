@@ -48,8 +48,9 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new DesktopEventQueue());
 			return eq;
-		} else if (EventQueues.APPLICATION.equals(scope)) {
-			throw new UnsupportedOperationException("Application Event Queue requires ZK PE or EE");
+		} else if (EventQueues.APPLICATION.equals(scope)
+		|| EventQueues.SESSION.equals(scope)) {
+			throw new UnsupportedOperationException("The application/session-scoped event queue requires ZK PE or EE");
 		} else
 			throw new UnsupportedOperationException("Unknown scope: "+scope);
 	}
