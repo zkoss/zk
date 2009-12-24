@@ -1311,6 +1311,20 @@ new zul.wnd.Window{
 		return this;
 	},
 
+	/** Generates the HTML fragment for this widget.
+	 * The HTML fragment shall be pushed to out. For example,
+<pre><code>
+out.push('<div', this.domAttrs_(), '>');
+for (var w = this.firstChild; w; w = w.nextSibling)
+	w.redraw(out);
+out.push('</div>');
+</code></pre>
+	 * <p>Default: it retrieves the redraw function associated with
+	 * the mold ({@link #getMold}) and then invoke it.
+	 * The redraw function must have the same signature as this method.
+	 * @param Array out an array of HTML fragments.
+	 * Technically it can be anything that has the method called <code>push></code>
+	 */
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) out.push(s);
@@ -1409,6 +1423,27 @@ new zul.wnd.Window{
 		return s;
 	},
 
+	/** Replaces the specified DOM element with the HTML content generated this widget.
+	 * <p>The DOM element to be replaced can be {@link #$n} or any independent DOM element. For example, you can replace a DIV element (and all its descendants) with this widget (and its descendants).
+	 * <p>This method is usually used to replace a DOM element with a root widget (though, with care, it is OK for non-root widgets). Non-root widgets usually use {@link #appendChild}
+	 *  and {@link #insertBefore} to attach to the DOM tree[1]
+	 * <p>If the DOM element doesn't exist, you can use {@link #insertHTML} instead.
+	 * <p>Notice that, both {@link #replaceHTML} fires the beforeSize and onSize watch events
+	 * (refer to {@link zWatch}).
+	 * <p>If skipper is null. It implies the caller has to fire these two events if it specifies a skipper
+	 * (that is how {@link #rerender} is implemented).
+	 * <h3>Subclass Note</h3>
+	 * This method actually forwards the invocation to its parent by invoking
+	 * parent's {@link #replaceChildHTML_} to really replace the DOM element.
+	 * Thus, override {@link #replaceChildHTML_} if you want to do something special for particular child widgets.
+	 *
+	 * @param Object n the DOM element ({@link DOMElement}) or anything
+	 * {@link #$} allowed.
+	 * @param zk.Desktop desktop [optional] the desktop that this widget shall belong to.
+	 * If omitted, it is retrieve from the current desktop.
+	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
+	 * @param zk.Skipper skipper [optional] it is used only if it is called by {@link #rerender}
+	 */
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) {
 			desktop = this.desktop;
@@ -1454,6 +1489,25 @@ new zul.wnd.Window{
 			//test: <div> <button onClick="self.invalidate()"/></div>
 		return out.join('');
 	},
+	/** Re-renders the DOM element(s) of this widget.
+	 * By re-rendering we mean to generate HTML again ({@link #redraw})
+	 * and then replace the DOM elements with the new generated HTML code snippet.
+	 * <p>It is equivalent to replaceHTML(this.node, null, skipper).
+	 * <p>It is usually used to implement a setter of this widget.
+	 * For example, if a setter (such as <code>setBorder</code>) has to
+	 * modify the visual appearance, it can update the DOM tree directly,
+	 * or it can call this method to re-render all DOM elements associated
+	 * with is widget and its desendants.
+	 * <p>It is coonvenient to synchronize the widget's state with
+	 * the DOM tree with this method. However, it shall be avoided
+	 * if the HTML code snippet is complex (otherwise, the performance won't be good).
+	 * <p>If re-rendering is required, you can improve the performance
+	 * by passing an instance of {@link zk.Skipper} that is used to
+	 * re-render some or all descendant widgets of this widget.
+	 * @param zk.Skipper skipper [optional] skip some portion of this widget
+	 * to speed up the re-rendering.
+	 * @return zk.Widget this widget.
+	 */
 	rerender: function (skipper) {
 		if (this.desktop) {
 			var n = this.$n();
@@ -1593,6 +1647,22 @@ new zul.wnd.Window{
 				
 		return null;
 	},
+	/** Binds this widget.
+	 * It is called to assoicate (aka., attach) the widget with
+	 * the DOM tree.
+	 * <p>Notice that you rarely need to invoke this method, since
+	 * it is called automatically (such as {@link #replaceHTML}
+	 * and {@link #appendChild}).
+	 * <p>Notice that you rarely need to override this method, either.
+	 * Rather, override {@link #bind_} instead.
+	 *
+	 * @see #bind_
+	 * @see #unbind
+	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @return zk.Widget this widget
+	 */
 	bind: function (desktop, skipper) {
 		if (this.z_rod) 
 			_bindrod(this);
@@ -1604,6 +1674,21 @@ new zul.wnd.Window{
 		}
 		return this;
 	},
+	/** Unbinds this widget.
+	 * It is called to remove the assoication (aka., detach) the widget from
+	 * the DOM tree.
+	 * <p>Notice that you rarely need to invoke this method, since
+	 * it is called automatically (such as {@link #replaceHTML}).
+	 * <p>Notice that you rarely need to override this method, either.
+	 * Rather, override {@link #unbind_} instead.
+	 *
+	 * @see #unbind_
+	 * @see #bind
+	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @return zk.Widget this widget
+	 */
 	unbind: function (skipper) {
 		if (this.z_rod)
 			_unbindrod(this);
@@ -1616,6 +1701,33 @@ new zul.wnd.Window{
 		return this;
 	},
 
+	/** Callback when this widget is bound (aka., attached) to the DOM tree.
+	 * It is called after the DOM tree has been modified (with the DOM content of this widget, i.e., {@link #redraw})
+	 * (for example, by {@link #replaceHTML}).
+	 * <p>Note: don't invoke this method directly. Rather, invoke {@link #bind} instead.
+<pre><code>
+wgt.bind();
+</code></pre>
+	 * <h3>Subclass Note</h3>
+	 * <p>Subclass overrides this method to initialize the DOM element(s), such as adding a DOM listener. Refer to Widget and DOM Events and {link #domListen_} for more information. 
+	 *
+	 * @see #bind
+	 * @see #unbind_
+	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example, 
+<pre><code>
+bind_: function (desktop, skipper, after) {
+  this.$super('bind_', arguments);
+  var self = this;
+  after.push(function () {
+    self._doAfterBind(something);
+    ...
+  });
+}
+</code></pre>
+	 */
 	bind_: function (desktop, skipper, after) {
 		_bind0(this);
 
@@ -1644,6 +1756,24 @@ new zul.wnd.Window{
 		}
 	},
 
+	/** Callback when a widget is unbound (aka., detached) from the DOM tree.
+	 * It is called before the DOM element(s) of this widget is going to be removed from the DOM tree (such as {@link #removeChild}.
+	 * <p>Note: don't invoke this method directly. Rather, invoke {@link #unbind} instead. 
+	 * @see #bind_
+	 * @see #unbind
+	 * @param zk.Skipper [optional] skipper used if {@link #rerender} is called with a non-null skipper 
+	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
+<pre><code>
+unbind_: function (skipper, after) {
+  this.$super('unbind_', arguments);
+  var self = this;
+  after.push(function () {
+    self._doAfterUnbind(something);
+    ...
+  }
+}
+</code></pre>
+	 */
 	unbind_: function (skipper, after) {
 		_unbind0(this);
 		_fixBindMem();
@@ -2328,6 +2458,13 @@ zk.Page = zk.$extends(zk.Widget, {
 	 */
 	className: 'zk.Page',
 
+	/** Constructor.
+	 * @param Map props the properties to assign to this page
+	 * @param boolean contained whether this page is contained.
+	 * By contained we mean this page is a top page (i.e., not included
+	 * by the include widget) but it is included by other technologies,
+	 * such as JSP.
+	 */
 	$init: function (props, contained) {
 		this._fellows = {};
 
@@ -2335,6 +2472,11 @@ zk.Page = zk.$extends(zk.Widget, {
 
 		if (contained) zk.Page.contained.push(this);
 	},
+	/** Generates the HTML fragment for this macro component.
+	 * <p>Default: it generate DIV to enclose the HTML fragment
+	 * of all child widgets.
+	 * @param Array out an array of HTML fragments.
+	 */
 	redraw: function (out) {
 		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
@@ -2379,6 +2521,11 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 */
 	className: 'zk.Macro',
 
+	/** Generates the HTML fragment for this macro component.
+	 * <p>Default: it generate SPAN to enclose the HTML fragment
+	 * of all child widgets.
+	 * @param Array out an array of HTML fragments (String).
+	 */
 	redraw: function (out) {
 		out.push('<span', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
@@ -2394,7 +2541,7 @@ zk.Macro = zk.$extends(zk.Widget, {
  * <p>The skipper has to implement three methods, {@link #skipped},
  * {@link #skip} and {@link #restore}. {@link #skipped} is used to test whether a child widget shall be skipped.
  * {@link #skip} and {@link #restore} works together to detach and attach the skipped portions from the DOM tree. Here is how
- * {@link zk.Widget#rereder} uses these two methods:
+ * {@link zk.Widget#rerender} uses these two methods:
 <pre><code>
 rerender: function (skipper) {
   var skipInfo;
@@ -2423,9 +2570,34 @@ function (skipper) {
 	* <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
  */
 zk.Skipper = zk.$extends(zk.Object, {
+	/** Returns whether the specified child wiget will be skipped by {@link #skip}.
+	 * <p>Default: returns if wgt.caption != child. In other words, it skip all children except the caption. 
+	 * @param zk.Widget wgt the widget to re-render
+	 * @param zk.Widget child a child (descendant) of this widget.
+	 * @return boolean
+	 */
 	skipped: function (wgt, child) {
 		return wgt.caption != child;
 	},
+	/** Skips all or subset of the descedant (child) widgets of the specified widget.
+	 * <p>Notice that the <pre>skipId</pre> argument is not used by {@link zk.Widget#rerender}.
+	 * Rather it is used to simplify the overriding of this methid,
+	 * such that the deriving class can call back this class and
+	 * to pass a different ID to skip
+	 *
+	 * <p>If you don't want to pass a different ID (default: uuid + '-cave'),
+	 * you can ignore <code>skipId</code>
+<pre><code>
+Object skip(zk.Widget wgt);
+</code></pre>
+	 * <p>Default: it detaches all DOM elements whose parent element is
+	 * <code>jq(skipId || (wgt.uuid + '-cave'), zk)</code>. 
+	
+	 * @param zk.Widget wgt the widget being rerendered.
+	 * @param String skipId [optional] the ID of the element where all its descendant
+	 * elements shall be detached by this method, and restored later by {@link #restore}. 
+	 * If not specified, <code>uuid + '-cave'</code> is assumed.
+	 */
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
 		if (skip && skip.firstChild) {
@@ -2435,6 +2607,11 @@ zk.Skipper = zk.$extends(zk.Object, {
 		}
 		return null;
 	},
+	/** Restores the DOM elements that are detached (i.e., skipped) by {@link #skip}. 
+	 * @param zk.Widget wgt the widget being re-rendered
+	 * @param Object inf the object being returned by {@link #skip}.
+	 * It depends on how a skipper is implemented. It is usually to carry the information about what are skipped 
+	 */
 	restore: function (wgt, skip) {
 		if (skip) {
 			var loc = jq(skip.id, zk)[0];

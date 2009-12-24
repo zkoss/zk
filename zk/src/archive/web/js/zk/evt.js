@@ -178,7 +178,8 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
     * <p>Notice that the event won't be sent to the server if stop() was called. 
 	*
 	* @param Map opts [optional] control what to stop.
-	* If omitted, the event propagation ({@link #stopped}) and the native DOM event ({@link #domStopped}) are both stopped (but not {@link #serverStop}).
+	* If omitted, the event propagation ({@link #stopped}) and the native DOM event ({@link #domStopped}) are both stopped 
+	* (but not {@link #auStopped}).
 	* For fine control, you can use a combination of the following values:
 	<ul>
 	<li>revoke - revoke the stop, i.e., undo the last invocation of {@link #stop}<li>
