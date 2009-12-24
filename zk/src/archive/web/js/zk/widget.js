@@ -1043,7 +1043,7 @@ new zul.wnd.Window{
 	 * Ignored if null.
 	 * @param String tagEnd the ending of HTML tag, such as </tbody>
 	 * Ignored if null.
-	 * @see _.zAu.createWidgets
+	 * @see zAu.createWidgets
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)
@@ -2025,12 +2025,20 @@ new zul.wnd.Window{
 	 * @return zk.Widget
 	 */
 	$: function (n, opts) {
-		if (typeof n == 'string')
-			n = jq(n, zk);
 		if (n && n.zk && n.zk.jq == n) //jq()
 			n = n[0];
 
 		if (!n || zk.Widget.isInstance(n)) return n;
+
+		if (typeof n == 'string') {
+			var v;
+			n = jq(v = n, zk)[0];
+			if (!n) { //some widget might not have DOM element (e.g., timer)
+				if (v.charAt(0) == '#') v = v.substring(1);
+				n = v.indexOf('-');
+				return _binds[n >= 0 ? v.substring(0, n): v];
+			}
+		}
 
 		if (!n.nodeType) { //skip Element
 			var e = n.originalEvent;
