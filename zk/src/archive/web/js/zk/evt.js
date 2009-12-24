@@ -328,7 +328,7 @@ zWatch = (function () {
  *
  * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
  *
- * <p>Here is a full list of <a href="http://docs.zkoss.org/wiki/Client_Watches">watches</li>. 
+ * <p>Here is a full list of <a href="http://docs.zkoss.org/wiki/Client_Watches">watches</a></li>. 
 
 <h3>Add a Watch</h3>
 

@@ -575,7 +575,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** The class name of the widget.
 	 * For example, zk.Widget's class name is "zk.Widget", while
 	 * zul.wnd.Window's "zul.wnd.Window".
-	 * <p>Notice that it is available if a widget class is loaded by WPD loader (i.e., specified in zk.wpd). If you create a widget class dynamically, you have to invoke #register to make this member available. 
+	 * <p>Notice that it is available if a widget class is loaded by WPD loader (i.e., specified in zk.wpd). If you create a widget class dynamically,
+	 * you have to invoke {@link #register} to make this member available. 
+	 * On the other hand, {@link zk.Object#$class} is available for all objects
+	 * extending from {@link zk.Object}.
+	 * 
 	 * @type String
 	 */
 	className: 'zk.Widget',
@@ -606,7 +610,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** The desktop that this widget belongs to (readonly).
 	 * It is set when it is bound to the DOM tree.
 	 * <p>Notice it is always non-null if bound to the DOM tree, while
-	 * {@link #$n} is always non-null if bound. For example, {@link zul.utl.Timer}.
+	 * {@link #$n()} is always non-null if bound. For example, {@link zul.utl.Timer}.
 	 * <p>It is readonly, and set automcatically when {@link #bind_} is called. 
 	 * @type zk.Desktop
 	 */
@@ -762,12 +766,28 @@ new zul.wnd.Window{
 			}
 		}
 	},
-	$o: _zkf = function () {
+	/** Returns the owner of the ID space that this widget belongs to,
+	 * or null if it doesn't belong to any ID space.
+	 * <p>Notice that, if this widget is an ID space owner, this method
+	 * returns itself.
+	 * @return zk.Widget
+	 */
+	$o: function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
 	},
-	getSpaceOwner: _zkf,
-	$f: _zkf = function (id, global) {
+	/** Returns the fellow of the specified ID of the ID space that this widget belongs to. It returns null if not found. 
+	 * @param String id the widget's ID ({@link #id})
+	 * @return zk.Widget
+	 */
+	/** Returns the fellow of the specified ID of the ID space that this widget belongs to. It returns null if not found. 
+	 * @param String id the widget's ID ({@link #id})
+	 * @param boolean global whether to search all ID spaces of this desktop.
+	 * If true, it first search its own ID space, and then the other Id spaces in this browser window (might have one or multiple desktops). 
+	 * If omitted, it won't search all ID spaces.
+	 * @return zk.Widget
+	 */
+	$f: function (id, global) {
 		var f = this.$o();
 		for (var ids = id.split('/'), j = 0, len = ids.length; j < len; ++j) {
 			id = ids[j];
@@ -780,7 +800,6 @@ new zul.wnd.Window{
 		}
 		return f;
 	},
-	getFellow: _zkf,
 	/** Returns the identifier of this widget, or null if not assigned.
 	 * It is the same as {@link #id}.
 	 * @return String the ID
@@ -788,6 +807,10 @@ new zul.wnd.Window{
 	getId: function () {
 		return this.id;
 	},
+	/** Sets the identifier of this widget.
+	 * @param String id the identifier to assigned to
+	 * @return zk.Widget this widget
+	 */
 	setId: function (id) {
 		if (id != this.id) {
 			if (zk.spaceless && this.desktop)
@@ -815,7 +838,15 @@ new zul.wnd.Window{
 	 * If the name starts with <code>on</code>, it is assumed to be
 	 * an event listener and {@link #setListener} will be called.
 	 * @param Object value the value
+	 * @return zk.Widget this widget
+	 */
+	/** Sets a property.
+	 * @param String name the name of property.
+	 * If the name starts with <code>on</code>, it is assumed to be
+	 * an event listener and {@link #setListener} will be called.
+	 * @param Object value the value
 	 * @param Object extra the extra argument. It could be anything.
+	 * @return zk.Widget this widget
 	 */
 	set: function (name, value, extra) {
 		var cc;
@@ -1512,11 +1543,31 @@ new zul.wnd.Window{
 		if (!_ignoreDom_)
 			jq(n).remove();
 	},
-	$n: function (name) {
-		if (name) {
-			var n = this._subnodes[name];
+	/**
+	 * Returns the DOM element that this widget is bound to.
+	 * It is null if it is not bound to the DOM tree, or it doesn't have the associated DOM node (for example, {@link zul.utl.Timer}).
+	 * <p>Notice that {@link #desktop} is always non-null if it is bound to the DOM tree.
+	 * In additions, this method is much faster than invoking jq() (see {@link _.jq},
+	 * since it caches the result (and clean up at the {@link #unbind_}).
+	 * <pre><code>var n = wgt.$n();</code></pre>
+	 * @return DOMElement
+	 * @see #$n(String)
+	 */
+	/** Returns the child element of the DOM element(s) that this widget is bound to.
+	 * This method assumes the ID of the child element the concatenation of
+	 * {@link #uuid}, -, and subId. For example,
+<pre><code>var cave = wgt.$n('cave'); //the same as jq('#' + wgt.uuid + '-' + 'cave')[0]</code></pre>
+	 * Like {@link #$n()}, this method caches the result so the performance is much better
+	 * than invoking jq() directly.
+	 * @param String subId the sub ID of the child element
+	 * @return DOMElement
+	 * @see #$n()
+	 */
+	$n: function (subId) {
+		if (subId) {
+			var n = this._subnodes[subId];
 			if (!n && this.desktop)
-				n = this._subnodes[name] = jq(this.uuid + '-' + name, zk)[0];
+				n = this._subnodes[subId] = jq(this.uuid + '-' + subId, zk)[0];
 			return n;
 		}
 		var n = this._node;

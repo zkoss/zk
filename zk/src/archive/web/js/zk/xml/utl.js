@@ -10,9 +10,13 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
+/** XML utilities.
+ */
+//zk.$package('zk.xml');
+
 /** @class zk.xml.Utl
  * Utilities for parsing XML and others.
- * <p>Refer to {@link _.zUtl} for basic utilities.
+ * <p>Refer to {@link zUtl} for basic utilities.
  */
 zk.xml.Utl = {
 	loadXML: function (url, callback) {

@@ -23,6 +23,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			|| (_defSKUOpts = {stackup: zk.eff.shallStackup()});
 	}
 
+/** The effects, such as mask and shadow.
+ */
+//zk.$package('zk.eff');
 zk.eff = {
 	shallStackup: function () {
 		return _useSKU;
