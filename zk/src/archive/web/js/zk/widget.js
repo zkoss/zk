@@ -2104,6 +2104,8 @@ unbind_: function (skipper, after) {
 	/** Associates UUID with this widget.
 	 * <p>Notice that {@link #uuid} is automically associated (aka., bound) to this widget.
 	 * Thus, you rarely need to invoke this method unless you want to associate with other identifiers.
+	 * <p>For example, ZK Google Maps uses this method since it has to
+	 * bind the anchors manually.
 	 *
 	 * @param String uuid the UUID to assign to the widgtet
 	 * @param boolean add whether to bind. Specify true if you want to bind;
@@ -2959,7 +2961,8 @@ zk.Widget.getClass('combobox');
 });
 
 /** A reference widget. It is used as a temporary widget that will be
- * replaced later with a real widget.
+ * replaced with a real widget when {@link #bind_} is called.
+ * <p>Developers rarely need it.
  * Currently, it is used only for the server to generate the JavaScript codes
  * for mounting.
  */
@@ -2996,6 +2999,11 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 //desktop//
 /** A desktop.
  * Unlike the component at the server, a desktop is a widget.
+ * <p>However, the desktop are different from normal widgets:
+ * <ol>
+ * <li>The desktop is a conceptual widget. It is never attached with the DOM tree. Its desktop field is always null. In addition, calling zk.Widget#appendChild won't cause the child to be attached to the DOM tree automatically.</li>
+ * <li>The desktop's ID and UUID are the same. </li>
+ * </ol>
  */
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
@@ -3004,6 +3012,13 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 */
 	className: 'zk.Desktop',
 
+	/** Constructor
+	 * @param String dtid the ID of the desktop
+	 * @param String contextURI the context URI, such as <code>/zkdemo</code>
+	 * @param String updateURI the URI of ZK Update Engine, such as <code>/zkdemo/zkau</code>
+	 * @param boolean stateless whether this desktop is used for a stateless page.
+	 * Specify true if you want to use <a href="http://docs.zkoss.org/wiki/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
+	 */
 	$init: function (dtid, contextURI, updateURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
@@ -3032,8 +3047,18 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
+	/** This method is voided (does nothing) since the desktop's ID
+	 * can be changed.
+	 * @param String id the ID
+	 * @return zk.Widget this widget
+	 */
 	setId: zk.$void
 },{
+	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
+	 * <p>Notice that the desktop's ID and UUID are the same.
+	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element 
+	 * @return zk.Desktop
+	 */
 	$: function (dtid) {
 		var Desktop = zk.Desktop, dts = Desktop.all, w;
 		if (Desktop._ndt > 1) {
@@ -3054,8 +3079,16 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		for (dtid in dts)
 			return dts[dtid];
 	},
+	/** A map of all desktops (readonly).
+	 * The key is the desktop ID and the value is the desktop.
+	 * @type Map
+	 */
 	all: {},
 	_ndt: 0, //used in au.js/dom.js
+	/** Checks if any desktop becomes invalid, and removes the invalid desktops.
+	 * This method is called automatically when a new desktop is added. Application developers rarely need to access this method.
+	 * @return zk.Desktop the first desktop, or null if no desktop at all. 
+	 */
 	sync: function () {
 		var Desktop = zk.Desktop, dts = Desktop.all, dt;
 		if ((dt = Desktop._dt) && !dt._exists()) //removed
@@ -3107,6 +3140,11 @@ zk.Page = zk.$extends(zk.Widget, {
 		out.push('</div>');
 	}
 },{
+	/** An array of contained pages (i.e., a standalone ZK page but included by other technology).
+	 * For example, a ZUL age that is included by a JSP page.
+	 * A contained page usually covers a portion of the browser window. 
+	 * @type Array an array of contained pages ({@link zk.Page})
+	 */
 	contained: []
 });
 zk.Widget.register('zk.Page', true);
