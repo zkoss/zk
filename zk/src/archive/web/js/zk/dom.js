@@ -406,6 +406,47 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	hide: function () {
 		return _isNone(this) ? this: _jq.hide.apply(this, arguments);
 	}
+
+	/** Insert content before each of the matched elements.
+	 * <p>Notice that this method is extended to handle {@link Widget}.
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/before>jQuery documentation</a>
+	 * for more information.
+	 * @param Object content If it is a string, it is assumed to be
+	 * a HTML fragment. If it is a widget, the widget will be insert before
+	 * @param Desktop desktop [optional] the desktop. It is used only
+	 * if content is a widget.
+	 */
+	//before: function () {}
+	/** Insert content after each of the matched elements.
+	 * <p>Notice that this method is extended to handle {@link Widget}.
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/after>jQuery documentation</a>
+	 * for more information.
+	 * @param Object content If it is a string, it is assumed to be
+	 * a HTML fragment. If it is a widget, the widget will be insert after
+	 * @param Desktop desktop [optional] the desktop. It is used only
+	 * if content is a widget.
+	 */
+	//after: function () {}
+	/** Append content to inside of every matched element.
+	 * <p>Notice that this method is extended to handle {@link Widget}.
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/append>jQuery documentation</a>
+	 * for more information.
+	 * @param Object content If it is a string, it is assumed to be
+	 * a HTML fragment. If it is a widget, the widget will be appended
+	 * @param Desktop desktop [optional] the desktop. It is used only
+	 * if content is a widget.
+	 */
+	//append: function () {}
+	/** Prepend content to the inside of every matched element.
+	 * <p>Notice that this method is extended to handle {@link Widget}.
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/prepend>jQuery documentation</a>
+	 * for more information.
+	 * @param Object content If it is a string, it is assumed to be
+	 * a HTML fragment. If it is a widget, the widget will be prepended
+	 * @param Desktop desktop [optional] the desktop. It is used only
+	 * if content is a widget.
+	 */
+	//prepend: function () {}
 });
 jq.fn.init.prototype = jq.fn;
 
@@ -456,6 +497,10 @@ zjq.prototype = {
 			zjq._cleanVisi(this);
 		});
 	},
+	/** Returns whether the first matched element is visible.
+	 * Returns false if not exist. Returns true if no style attribute.
+	 * @return boolean whether the first matched element is visible.
+	 */
 	/** Returns whether the first matched element is visible.
 	 * Returns false if not exist. Returns true if no style attribute.
 	 * @param boolean strict whether the visibility property must not be hidden, too. 

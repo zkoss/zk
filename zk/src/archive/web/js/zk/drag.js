@@ -144,7 +144,7 @@ Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
 	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
 	 *
 	 * <h4>endeffect</h4>
-	 * <pre><code>void endeffect({@link zk.Draggable} dg, {@link jq.Event} evt);</code></pre>
+	 * <pre><code>void endeffect({@link zk.Draggable} dg, {@link zk.Event} evt);</code></pre>
 	 * <p>Specifies the effect to execute when the dragging is finished. It usually generates an animation effect.</p>
 	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
 	 * <ul>
@@ -164,7 +164,7 @@ Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
 	 *
 	 * <h4>revert</h4>
 	 * <pre><code>boolean revert;
-boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event} evt);
+boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event} evt);
 	 * <p>The revert option could be a boolean, or a function that returns a boolean value. The boolean value decides whether to revert the dragging after dragged. If true, the element is reverted to its original location.
 	 * <p>Default: false 
 	 * <p>To have a custom revert effect, you can specify a function as the #reverteffect option. It is usually an animation effect; see zEffect;
@@ -176,7 +176,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event}
 	 *
 	 * <h4>constraint</h4>
 	 * <pre><code>String constraint;
-{@link Offset} constraint({@link zk.Draggable} dg, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+{@link Offset} constraint({@link zk.Draggable} dg, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specifies the constraint. The first format specifies either 'vertical' or 'horizontal' to indicate that it can be dragged only in the vertical or horizontal direction.
 	 * <p>The second format specified a function that can modify the position dynamically. For example, you can limit the drag at the diagonal direction. 
 	 * <ul>
@@ -187,10 +187,10 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event}
 	 *
 	 * <h4>ghosting</h4>
 	 * <pre><code>boolean ghosting;
-{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specified whether to make a copy of the element and then drag the copy instead of the element itself.
 	 * <p>If true is specified (the first format), {@link #node} is cloned and the cloned element will be dragged.
-	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, #endghosting, if specified, will be called to clean up.
+	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, <code>endghosting</code>, if specified, will be called to clean up.
 	 * <p>Default: null (the element, {@link #node}, will be dragged directly. 
 	 * <ul>
 	 * <li>pos - the position of the new created element, i.e., the left-top corner. </li>
@@ -201,7 +201,7 @@ var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 ...
 </code></pre>
 	 * <p>Returns the ghost element. This element will become {@link #node}, and
-	 * the original node will be restored after the dragging is finished (also after function specified in endghosting is called). 
+	 * the original node will be restored after the dragging is finished (also after function specified in <code>endghosting</code> is called). 
 	 *
 	 * <h4>endghosting</h4>
 	 * <pre><code>void endghosting({@link zk.Draggable} dg, {@link DOMElement} origin);</code></pre>
@@ -215,7 +215,7 @@ var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 	 * <ul>
 	 * <li>origin - the original element ({@link #node}) before the function
 	 * specified in <code>ghosting</code>. Notice {@link #node} is switched to
-	 * the ghost element during dragging, and restored after {@link #endghosting} was called. </li>
+	 * the ghost element during dragging, and restored after <code>endghosting</code> was called. </li>
 	 * </ul>
 	 * 
 	 * <h4>overlay</h4>
@@ -234,7 +234,7 @@ var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 	 * Default: <i>not assign any value to z-index</i>
 	 *
 	 * <h4>change</h4>
-	 * <pre><code>void change({@link zk.Draggable} dg, {@link Offset} pointer, {@link jq.Event} evt);</code></pre>
+	 * <pre><code>void change({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event} evt);</code></pre>
 	 * <p>Called after the dragging has changed the position of the element
 	 * ({@link #node}). It is called after the function specified
 	 * in the snap and draw or constraint option.
@@ -246,7 +246,7 @@ var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 	 * </ul>
 	 *
 	 * <h4>draw</h4>
-	 * <pre><code>void draw({@link zk.Draggable} dg, {@link Offset} pos, {@link jq.Event} evt);</code></pre>
+	 * <pre><code>void draw({@link zk.Draggable} dg, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Used to override the default change of the element's position. If not specified, the constraint option is,
 	 * if any, called and then {@link #node}'s position (left and top) are changed. You can provide your own way to change the position.
 	 * <p>Default: null 
