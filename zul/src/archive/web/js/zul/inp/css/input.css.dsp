@@ -24,6 +24,8 @@
 	font-weight: normal;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 }
 .z-textbox-focus, .z-textbox-focus input,
 .z-decimalbox-focus, .z-decimalbox-focus input,

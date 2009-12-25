@@ -22,6 +22,8 @@
 	border: 1px solid #86A4BE;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	-moz-border-radius: 2px 0 0 2px;
+	-webkit-border-radius: 2px 0 0 2px;
 }
 .z-combobox-focus .z-combobox-inp,
 .z-bandbox-focus .z-bandbox-inp,
@@ -50,6 +52,8 @@
 	border-bottom: 1px solid #86A4BE;
 	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
+	-moz-border-radius: 0 2px 2px 0;
+	-webkit-border-radius: 0 2px 2px 0;
 }
 .z-combobox-btn-over .z-combobox-img,
 .z-bandbox-btn-over .z-bandbox-img,
