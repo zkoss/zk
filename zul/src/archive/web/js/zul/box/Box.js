@@ -12,6 +12,71 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	// Returns if the spacing is 0.
+	function _spacing0(spacing) {
+		return spacing && spacing.startsWith('0')
+			&& (spacing.length == 1 || zUtl.isChar(spacing.charAt(1),{digit:1}));
+	}
+	function _spacingHTML(box, child) {
+		var oo = [],
+			spacing = box._spacing,
+			spacing0 = _spacing0(spacing),
+			vert = box.isVertical(),
+			spstyle = spacing ? (vert?'height:':'width:') + spacing: 'px';
+
+		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
+			'-chdex2" class="', box.getZclass(), '-sep"');
+
+		var s = spstyle;
+		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
+		if (s) oo.push(' style="', s, '"');
+
+		oo.push('>', vert?'<td>':'', zUtl.i0, vert?'</td></tr>':'</td>');
+		return oo.join('');
+	}
+
+	//notice it is invoked as a member of Box (so no need to pass box as argument
+	function _fixTd() {
+		//when align is stretched must release the children, then must "shrink td" manually
+		var vert = this.isVertical();
+		if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
+			for(var child = this.firstChild; child; child = child.nextSibling) {
+				if (child.isVisible()) {
+					var c = child.$n();
+					if (vert) {
+						if (child._nhflex)
+							child.setFlexSize_({width:'auto'});
+						else
+							c.style.width= ''; //release the height of children so td can shrink
+						if (!child.$instanceof(zul.wgt.Cell)) {
+							var chdex = child.$n('chdex');
+							chdex.style.width = '';
+						}
+					} else {
+						if (child._nvflex)
+							child.setFlexSize_({height:'auto'});
+						else
+							c.style.height= ''; //release the height of children so td can shrink
+						if (!child.$instanceof(zul.wgt.Cell)) {
+							var chdex = child.$n('chdex');
+							chdex.style.height = '';
+						}
+					}
+				}
+			}
+		}
+		//Safari/chrome will not extend the height of td to tr (B30-2088496.zul)
+		if (zk.safari && !vert) {
+			var td = this.$n('frame');
+			td.style.height = '';
+			
+			var	hgh = td.offsetHeight;
+			td.style.height = hgh+'px';
+		}
+	}
+
 zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
@@ -41,19 +106,20 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		return zcs != null ? zcs: this.isVertical() ? "z-vbox" : "z-hbox";
 	},
 
-	onChildVisible_: function (child, visible) {
+	onChildVisible_: function (child) {
 		this.$supers('onChildVisible_', arguments);
-		if (this.desktop) this._fixChildDomVisible(child, visible);
+		if (this.desktop) this._fixChildDomVisible(child);
 	},
 	replaceChildHTML_: function (child) {
 		this.$supers('replaceChildHTML_', arguments);
-		this._fixChildDomVisible(child, child._visible);
+		this._fixChildDomVisible(child);
 	},
-	_fixChildDomVisible: function (child, visible) {
-		var n = this._chdextr(child);
+	_fixChildDomVisible: function (child) {
+		var n = this._chdextr(child),
+			visible = child._visible;
 		if (n) n.style.display = visible ? '': 'none';
 		n = child.$n('chdex2');
-		if (n) n.style.display = visible && n.offsetHeight ? '': 'none';
+		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '': 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
@@ -114,10 +180,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 		
 		if (child.nextSibling)
-			oo.push(this._spacingHTML(child));
+			oo.push(_spacingHTML(this, child));
 		else if (prefixSpace) {
 			var pre = child.previousSibling;
-			if (pre) oo.unshift(this._spacingHTML(pre));
+			if (pre) oo.unshift(_spacingHTML(this, pre));
 		}
 		
 		if (!out) return oo.join('');
@@ -291,24 +357,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		
 		return false; //to skip original _fixFlex
 	},
-	_spacingHTML: function (child) {
-		var oo = [],
-			spacing = this._spacing,
-			spacing0 = spacing && spacing.startsWith('0')
-				&& (spacing.length == 1 || zUtl.isChar(spacing.charAt(1),{digit:1})),
-			vert = this.isVertical(),
-			spstyle = spacing ? (vert?'height:':'width:') + spacing: 'px';
-
-		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
-			'-chdex2" class="', this.getZclass(), '-sep"');
-
-		var s = spstyle;
-		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
-		if (s) oo.push(' style="', s, '"');
-
-		oo.push('>', vert?'<td>':'', zUtl.i0, vert?'</td></tr>':'</td>');
-		return oo.join('');
-	},
 	_childOuterAttrs: function (child) {
 		var html = '';
 		if (child.$instanceof(zul.box.Splitter))
@@ -422,51 +470,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_bindFixTd: function() {
 		if (!this._watchTd) {
 			this._watchTd = true;
-			zWatch.listen({onSize: [this, this._fixTd], onShow: [this, this._fixTd], onHide: [this, this._fixTd]});
+			zWatch.listen({onSize: [this, _fixTd], onShow: [this, _fixTd], onHide: [this, _fixTd]});
 		}
 	},
 	_unbindFixTd: function() {
 		if (this._watchTd) {
-			zWatch.unlisten({onSize: [this, this._fixTd], onShow: [this, this._fixTd], onHide: [this, this._fixTd]});
+			zWatch.unlisten({onSize: [this, _fixTd], onShow: [this, _fixTd], onHide: [this, _fixTd]});
 			delete this._watchTd;
-		}
-	},
-	_fixTd: function() {
-		//when align is stretched must release the children, then must "shrink td" manually
-		var vert = this.isVertical();
-		if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
-			for(var child = this.firstChild; child; child = child.nextSibling) {
-				if (child.isVisible()) {
-					var c = child.$n();
-					if (vert) {
-						if (child._nhflex)
-							child.setFlexSize_({width:'auto'});
-						else
-							c.style.width= ''; //release the height of children so td can shrink
-						if (!child.$instanceof(zul.wgt.Cell)) {
-							var chdex = child.$n('chdex');
-							chdex.style.width = '';
-						}
-					} else {
-						if (child._nvflex)
-							child.setFlexSize_({height:'auto'});
-						else
-							c.style.height= ''; //release the height of children so td can shrink
-						if (!child.$instanceof(zul.wgt.Cell)) {
-							var chdex = child.$n('chdex');
-							chdex.style.height = '';
-						}
-					}
-				}
-			}
-		}
-		//Safari/chrome will not extend the height of td to tr (B30-2088496.zul)
-		if (zk.safari && !vert) {
-			var td = this.$n('frame');
-			td.style.height = '';
-			
-			var	hgh = td.offsetHeight;
-			td.style.height = hgh+'px';
 		}
 	},
 	_configPack: function() {
@@ -551,3 +561,5 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
 	}
 });
+
+})();
