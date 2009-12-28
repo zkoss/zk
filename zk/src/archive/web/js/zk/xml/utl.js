@@ -1,4 +1,4 @@
-/* xml.js
+/* utl.js
 
 	Purpose:
 		
