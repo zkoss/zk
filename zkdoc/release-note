@@ -71,6 +71,7 @@ November, 2009
   2916146: Input components with readonly should prevent Backspace key
   2919175: Unexpected error message in combobox with constraint
   2917947: resize grid's column with draggable
+  2911385: menuitem with popup problems in 5 RC2
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

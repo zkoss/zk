@@ -166,7 +166,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
 						// if close the popup before choosing a file, the file chooser can't be triggered.
-						if (p.isOpen() && !this._uplder && !this._popup)							
+						if (p.isOpen() && !this._uplder /**Bug #2911385 && !this._popup*/)							
 							p.close({sendOnOpen:true});
 						else break;
 										
