@@ -13,4 +13,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk.aaas" language="xul/html">
+	<script src="aaas.js" jsdoc="true"/>
 </package>
