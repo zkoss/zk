@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package _;
+package _global_;
 
 /**
  * A size is a two-element array, where the first element is the width, and the second the height.

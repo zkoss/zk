@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package _;
+package _global_;
 
 /**
  * A function will be executed by an event or by a call to the function.

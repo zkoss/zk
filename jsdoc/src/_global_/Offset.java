@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package _;
+package _global_;
 
 /**
  * An offset is a two-element array, where the first element is the X coordinate, and the second the Y coordinate.

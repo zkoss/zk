@@ -13,9 +13,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 <package name="zul" language="xul/html">
 	<script src="dom.js"/>
-	<script src="Widget.js"/>
-	<script src="LabelImageWidget.js"/>
+	<script src="Widget.js" jsdoc="true"/>
+	<script src="LabelImageWidget.js" jsdoc="true"/>
 
-	<script src="Auxbutton.js"/>
-	<script src="Upload.js"/>
+	<script src="Auxbutton.js" jsdoc="true"/>
+	<script src="Upload.js" jsdoc="true"/>
 </package>

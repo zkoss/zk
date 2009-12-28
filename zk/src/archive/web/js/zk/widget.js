@@ -631,7 +631,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** The UUID. Don't change it if it is bound to the DOM tree, or {@link #inServer} is true.
 	 * Developers rarely need to modify it since it is generated automatically. 
 	 * <h3>Note of ZK Light</h3>
-	 * It is the same as {@link #id} if {@link _.zk#spaceless} is true,
+	 * It is the same as {@link #id} if {@link _global_.zk#spaceless} is true,
 	 * such as ZK Light.
 	 * @type String
 	 */
@@ -1700,7 +1700,7 @@ function () {
 	 * <p>The DOM element to be replaced can be {@link #$n} or any independent DOM element. For example, you can replace a DIV element (and all its descendants) with this widget (and its descendants).
 	 * <p>This method is usually used to replace a DOM element with a root widget (though, with care, it is OK for non-root widgets). Non-root widgets usually use {@link #appendChild}
 	 *  and {@link #insertBefore} to attach to the DOM tree[1]
-	 * <p>If the DOM element doesn't exist, you can use {@link _.jq#before} or {@link _.jq#after} instead.
+	 * <p>If the DOM element doesn't exist, you can use {@link _global_.jq#before} or {@link _global_.jq#after} instead.
 	 * <p>Notice that, both {@link #replaceHTML} fires the beforeSize and onSize watch events
 	 * (refer to {@link zWatch}).
 	 * <p>If skipper is null. It implies the caller has to fire these two events if it specifies a skipper
@@ -1905,7 +1905,7 @@ function () {
 	 * Returns the DOM element that this widget is bound to.
 	 * It is null if it is not bound to the DOM tree, or it doesn't have the associated DOM node (for example, {@link zul.utl.Timer}).
 	 * <p>Notice that {@link #desktop} is always non-null if it is bound to the DOM tree.
-	 * In additions, this method is much faster than invoking jq() (see {@link _.jq},
+	 * In additions, this method is much faster than invoking jq() (see {@link _global_.jq},
 	 * since it caches the result (and clean up at the {@link #unbind_}).
 	 * <pre><code>var n = wgt.$n();</code></pre>
 	 * @return DOMElement
@@ -2288,7 +2288,7 @@ unbind_: function (skipper, after) {
 	 * <p>Default: call child widget's focus until it returns true, or no child at all. 
 	 * <h3>Subclass Note</h3>
 	 * <ul>
-	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _.jqzk#focus}.</li>
+	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _global_.jqzk#focus}.</li>
 	 * </ul>
 <pre><code>
 focus: function (timeout) {
@@ -2315,10 +2315,10 @@ focus: function (timeout) {
 	},
 	/** Checks if this widget can be activated (gaining focus and so on).
 	 * <p>Default: return false if it is not a descendant of 
-	 * {@link _.zk#currentModal}. 
+	 * {@link _global_.zk#currentModal}. 
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>checkOnly: not to change focus back to modal dialog if unable to activate. If not specified, the focus will be changed back to {@link _.zk#currentModal}</li>
+	 * <li>checkOnly: not to change focus back to modal dialog if unable to activate. If not specified, the focus will be changed back to {@link _global_.zk#currentModal}</li>
 	 * </ul>
 	 * @return boolean
 	 */
@@ -2755,7 +2755,7 @@ _doFooSelect: function (evt) {
 }, {
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
-	 * it tried to resolve it with jq(n, zk) -- see {@link _.jq}.<br/>
+	 * it tried to resolve it with jq(n, zk) -- see {@link _global_.jq}.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called

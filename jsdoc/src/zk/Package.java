@@ -14,7 +14,7 @@ package zk;
 
 /**
  * Represents a ZK JavaScript package.
- * @see _.zk#$package
+ * @see _global_.zk#$package
  * @see zk.Object
  * @see zk.Class
  * @author tomyeh

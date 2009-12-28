@@ -1,4 +1,4 @@
-/* _.java
+/* _global_.java
 
 	Purpose:
 		
@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package _;
+package _global_;
 
 /**
  * It is not really a class but a collection of global functions and
@@ -18,7 +18,7 @@ package _;
  *
  * @author tomyeh
  */
-public class _ {
+public class _global_ {
 	private _() {}
 	/** Callback when the URL/bookmark of an iframe has been changed.
 	 * This method is used to allow ZK to work with other technology.

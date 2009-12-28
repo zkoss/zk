@@ -52,6 +52,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_start(n._ctrl, form, n.value);		
 	}
 
+/** Helper class for implementing the fileupload.
+ */
 zul.Upload = zk.$extends(zk.Object, {
 	sid: 0,
 	uploaders: {},

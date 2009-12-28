@@ -83,7 +83,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-/** The base class for XUL widget (org.zkoss.zul.impl.XulElement).
+/** The base class for XUL widget.
+* <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
  */
 zul.Widget = zk.$extends(zk.Widget, {
 	getContext: function () {
