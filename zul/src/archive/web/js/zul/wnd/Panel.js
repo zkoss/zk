@@ -169,7 +169,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						this._inWholeMode = false;
 					}
 				}
-				if (!fromServer || isRealVisible) {
+				if (!fromServer && isRealVisible) {
 					this._visible = true;
 					this.fire('onMaximize', {
 						left: l,
@@ -511,8 +511,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._inWholeMode) {
 			var node = this.$n();
 			zk(node).undoVParent();
-			var p = this.parent.parent.$n();
-			if (p) {
+			var p = this.parent;
+			if (p && (p = p.parent) && (p = p.$n())) {
 				p.style.position = node._ppos;
 				p.parentNode.scrollTop = node._scrollTop;
 			}
