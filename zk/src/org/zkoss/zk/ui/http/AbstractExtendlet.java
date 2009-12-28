@@ -215,7 +215,7 @@ import org.zkoss.zk.ui.WebApp;
 			path = getRealPath(path);
 			return new File(_parent, path).toURI().toURL();
 		}
-		private String getRealPath(String path) {
+		protected String getRealPath(String path) {
 			if (isDebugJS()) {
 				final int j = path.lastIndexOf('.');
 				if (j >= 0)

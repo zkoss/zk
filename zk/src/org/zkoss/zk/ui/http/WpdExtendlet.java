@@ -516,9 +516,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return path.substring(0, j).replace('.', '/') + "/zk" + path.substring(j);
 		}
 	}
-	/*private*/ class ByteContent {
-		private final byte[] content;
-		private final boolean cacheable;
+	/*package*/ static class ByteContent {
+		/*package*/ final byte[] content;
+		/*package*/ final boolean cacheable;
 
 		private ByteContent(byte[] cnt, boolean cacheable) {
 			this.content = cnt;

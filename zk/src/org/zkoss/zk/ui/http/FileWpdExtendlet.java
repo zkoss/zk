@@ -27,13 +27,29 @@ public class FileWpdExtendlet extends WpdExtendlet {
 	/** Parses and return the content of the specified WPD file.
 	 */
 	public byte[] service(File fl) throws Exception {
-		setProvider(new FileProvider(fl, isDebugJS()));
+		setProvider(new WpdFileProvider(fl, isDebugJS()));
 		try {
 			final Object rawdata = parse(new FileInputStream(fl), fl.getPath());
-			return rawdata instanceof byte[] ? (byte[])rawdata:
+			return rawdata instanceof ByteContent ?
+				((ByteContent)rawdata).content:
 				((WpdContent)rawdata).toByteArray(null);
 		} finally {
 			setProvider(null);
+		}
+	}
+	/*package*/ class WpdFileProvider extends FileProvider {
+		/*package*/ WpdFileProvider(File file, boolean debugJS) {
+			super(file, debugJS);
+		}
+		protected String getRealPath(String path) {
+			if (path.indexOf("/msgzk*.js") >= 0) {
+				if ("../../zk/lang/msgzk*.js".equals(path))
+					path = "../../../../../../../zk/codegen/archive/web/js/zk/lang/msgzk*.js";
+						//dirty solution
+				else
+					System.out.println("Warning: assumption changed for "+path);
+			}
+			return super.getRealPath(path);
 		}
 	}
 }

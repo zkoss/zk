@@ -7,7 +7,4 @@ Steps to Crate JavaScript and CSS files for ZK Light
 
 2. zklighter/build
 
-3. Check in zkligher/lib
-
-4. Merge SVN to ZK Light project
-	(https://zk1.svn.sourceforge.net/svnroot/zk1/branches/5.0/zklighter/lib)
+3. Then follow the instructions in zklight/copy/how-to-copy-from-zk.txt
