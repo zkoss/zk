@@ -8,7 +8,6 @@
 <li>Press "save" button</li>
 <li>You shall see errorbox popup "All values are wrong: a" for the first textbox</li>
 <li>If not, it is bug.</li>
-<li>If you press the "save" button again, and the errorbox popup, it is still a bug.</li>
 </ol>
 ]]>
 </html>
