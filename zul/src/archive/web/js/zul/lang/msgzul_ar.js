@@ -1,4 +1,4 @@
-﻿/* msgzul.js "charset=utf-8"
+/* msgzul.js "charset=utf-8"
 
 	Purpose:
 		
