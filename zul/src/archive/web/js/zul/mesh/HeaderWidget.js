@@ -110,17 +110,17 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.fixedFaker_();
 	},
 	unbind_: function () {
-		if (this._drag) {
-			this._drag.destroy();
-			this._drag = null;
+		if (this._dragsz) {
+			this._dragsz.destroy();
+			this._dragsz = null;
 		}
 		this.$supers('unbind_', arguments);
 	},
 	_initsz: function () {
 		var n = this.$n();
-		if (n && !this._drag) {
+		if (n && !this._dragsz) {
 			var $Header = this.$class;
-			this._drag = new zk.Draggable(this, null, {
+			this._dragsz = new zk.Draggable(this, null, {
 				revert: true, constraint: "horizontal",
 				ghosting: $Header._ghostsizing,
 				endghosting: $Header._endghostsizing,
@@ -155,9 +155,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function (evt) {
 		var wgt = zk.Widget.$(evt.domTarget),
 			n = this.$n(),
-			ofs = this._drag ? zk(n).revisedOffset() : false;
+			ofs = this._dragsz ? zk(n).revisedOffset() : false;
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-				evt.domTarget.tagName != "INPUT" && (!this._drag || !this._insizer(evt.pageX - ofs[0]))) {
+				evt.domTarget.tagName != "INPUT" && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
 			this.fire('onSort');
 			evt.stop();
 		} else {
@@ -167,7 +167,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	doDoubleClick_: function (evt) {
-		if (this._drag) {
+		if (this._dragsz) {
 			var n = this.$n(),
 				$n = zk(n),
 				ofs = $n.revisedOffset();
@@ -205,6 +205,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n()
 			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
+	},
+	ignoreDrag_: function (pt) {
+		if (this.parent.isSizable()) {
+			var n = this.$n(),
+				ofs = zk(n).revisedOffset();
+			return this._insizer(pt[0] - ofs[0]);
+		}
+		return false;
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;

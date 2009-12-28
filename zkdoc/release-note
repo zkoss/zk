@@ -70,6 +70,7 @@ November, 2009
   2918527: Align property ignored in DIV
   2916146: Input components with readonly should prevent Backspace key
   2919175: Unexpected error message in combobox with constraint
+  2917947: resize grid's column with draggable
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
