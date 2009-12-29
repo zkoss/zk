@@ -17,9 +17,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.BigDecimal = zk.$extends(zk.Object, {
 	_precision: 0,
 	$define: {
-		/** The precision.
+		/** Returns the precision.
 		 * <p>Default: 0
-		 * @type int
+		 * @return int
+		 */
+		/** Sets the precision
+		 * @param int precision the precision
 		 */
 		precision: null
 	},
