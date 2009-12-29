@@ -60,15 +60,15 @@ public class SimpleEvaluator implements Evaluator {
 	public Expression parseExpression(String expression, Class expectedType)
 	throws XelException {
 		return getExpressionFactory()
-			.parseExpression(getXelContext(null), expression, expectedType);
+			.parseExpression(newXelContext(null), expression, expectedType);
 	}
 	public Object evaluate(Page page, Expression expression)
 	throws XelException {
-		return expression.evaluate(getXelContext(page));
+		return expression.evaluate(newXelContext(page));
 	}
 	public Object evaluate(Component comp, Expression expression)
 	throws XelException {
-		return expression.evaluate(getXelContext(comp));
+		return expression.evaluate(newXelContext(comp));
 	}
 
 	/** Returns the implementation class of the expression factory,
@@ -84,9 +84,11 @@ public class SimpleEvaluator implements Evaluator {
 			_expf = Expressions.newExpressionFactory(_expfcls);
 		return _expf;
 	}
-	/** Returns the XEL context.
+	/** Instantiate a XEL context.
+	 * Don't reuse it since it has attributes (that shall not be kept
+	 * after evaluation).
 	 */
-	private XelContext getXelContext(Object ref) {
+	private XelContext newXelContext(Object ref) {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
 		return new SimpleXelContext(resolver, mapper);
