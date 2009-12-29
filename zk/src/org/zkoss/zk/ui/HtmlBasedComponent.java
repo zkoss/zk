@@ -89,6 +89,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		return _left;
 	}
 	/** Sets the left position.
+	 * <p>If you want to specify <code>right</code>, use {@link #setStyle} instead.
+	 * For example, <code>setStyle("right: 0px");</code>
+	 * @param left the left position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setLeft(String left) {
 		if (!Objects.equals(_left, left)) {
@@ -102,6 +105,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		return _top;
 	}
 	/** Sets the top position.
+	 * <p>If you want to specify <code>bottom</code>, use {@link #setStyle} instead.
+	 * For example, <code>setStyle("bottom: 0px");</code>
+	 * @param top the top position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setTop(String top) {
 		if (_top != top) {
@@ -215,6 +221,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	  * Sets the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
 	  *
+	  * @param zclass the style class used to apply the whote widget.
 	  * @since 3.5.0
 	  * @see #setSclass
 	  * @see #getZclass

@@ -686,6 +686,7 @@ new zul.wnd.Window{
 		 * In other words, a mold represents a visual presentation of a widget. Depending on implementation, a widget can have multiple molds.
 		 * <p>Default: <code>default</code>
 		 * @param String mold the mold
+		 * @return zk.Widget this widget
 		 */
 		/** Returns this widget's mold. A mold is a template to render a widget.
 		 * In other words, a mold represents a visual presentation of a widget. Depending on implementation, a widget can have multiple molds.
@@ -694,40 +695,147 @@ new zul.wnd.Window{
 		mold: function () {
 			this.rerender();
 		},
+		/** Sets the CSS style of this widget.
+		 * <p>Default: null
+		 * @param String style the CSS style
+		 * @return zk.Widget this widget
+		 * @see #getStyle
+		 * @see #setSclass
+		 * @see #setZclass
+		 */
+		/** Returns the CSS style of this widget
+		 * @return String
+		 * @see #setStyle
+		 * @see #getSclass
+		 * @see #getZclass
+		 */
 		style: function () {
 			this.updateDomStyle_();
 		},
+		/** Sets the CSS class of this widget.
+		 *<p>Default: null. 
+		 *<p>The default styles of ZK components doesn't depend on sclass at all. Rather, setSclass is provided to perform small adjustment, e.g., changing only the font size. In other words, the default style is still applied if you change sclass.
+		 *<p>To replace the default style completely, use {@link #setZclass} instead.
+		 *<p>The real CSS class is a concatenation of {@link #getZclass} and {@link #getSclass}.
+		 * @param String sclass the style class
+		 * @return zk.Widget this widget
+		 * @see #getSclass
+		 * @see #setZclass
+		 * @see #setStyle
+		 */
+		/** Returns the CSS class of this widget.
+		 * @return String
+		 * @see #setSclass
+		 * @see #getZclass
+		 * @see #getStyle
+		 */
 		sclass: function () {
 			this.updateDomClass_();
 		},
+		/** Sets the ZK Cascading Style class(es) for this widget. It is the CSS class used to implement a mold of this widget. n implementation It usually depends on the implementation of the mold (@{link #getMold}).
+		 * <p>Default: null but an implementation usually provides a default class, such as z-button.
+		 * <p>Calling setZclass with a different value will completely replace the default style of a widget.
+		 * Once you change it, all default styles are gone.
+		 * If you want to perform small adjustments, use {@link #setClass} instead.
+		 * <p>The real CSS class is a concatenation of {@link #getZclass} and
+		 * {@link #getSclass}. 
+		 * @param String zclass the style class used to apply the whote widget.
+		 * @return zk.Widget this widget
+		 * @see #getZclass
+		 * @see #setSclass
+		 * @see #setStyle
+		 */
+		/** Returns the ZK Cascading Style class(es) for this widget.
+		 * @return String
+		 * @see #setZclass
+		 * @see #getSclass
+		 * @see #getStyle
+		 */
 		zclass: function (){
 			this.rerender();
 		},
+		/** Sets the width of this widget.
+		 * @param String width the width. Remember to specify 'px', 'pt' or '%'. 
+		 * An empty or null value means "auto"
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the width of this widget.
+		 * @return String
+		 * @see #getHeight
+		 */
 		width: function (v) {
 			if (!this._nhflex) {
 				var n = this.$n();
 				if (n) n.style.width = v || '';
 			}
 		},
+		/** Sets the height of this widget.
+		 * @param String height the height. Remember to specify 'px', 'pt' or '%'. 
+		 * An empty or null value means "auto"
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the height of this widget.
+		 * @return String
+		 * @see #getWidth
+		 */
 		height: function (v) {
 			if (!this._nvflex) {
 				var n = this.$n();
 				if (n) n.style.height = v || '';
 			}
 		},
+		/** Sets the left of this widget.
+		 * @param String left the left. Remember to specify 'px', 'pt' or '%'. 
+		 * An empty or null value means "auto"
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the left of this widget.
+		 * @return String
+		 * @see #getTop
+		 */
 		left: function (v) {
 			var n = this.$n();
 			if (n) n.style.left = v || '';
 		},
+		/** Sets the top of this widget.
+		 * If you want to specify <code>bottom</code>, use {@link #setStyle} instead.
+		 * For example, <code>setStyle("bottom: 0px");</code>
+		 * @param String top the top. Remember to specify 'px', 'pt' or '%'. 
+		 * An empty or null value means "auto"
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the top of this widget.
+		 * @return String
+		 * @see #getLeft
+		 */
 		top: function (v) {
 			var n = this.$n();
 			if (n) n.style.top = v || '';
 		},
+		/** Sets the tooltip text of this widget.
+		 * <p>Default implementation of setTooltiptext: update the title attribute of #$n/getNode 
+		 * @param String title the tooltip text
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the tooltip text of this widget.
+		 * @return String
+		 */
 		tooltiptext: function (v) {
 			var n = this.$n();
 			if (n) n.title = v || '';
 		},
 
+		/** Sets the identifier of a draggable type for this widget.
+		 * <p>Default: null
+		 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
+		 * If there are several types of draggable objects, you could assign an identifier for each type of draggable object.
+		 * The identifier could be anything but empty and "false". 
+		 * @param String draggable "false", null or "" to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable. 
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the identifier of a draggable type for this widget, or null if not draggable.
+		 * @return String
+		 */
 		draggable: [
 			_zkf = function (v) {
 				return v && "false" != v ? v: null;
@@ -739,6 +847,17 @@ new zul.wnd.Window{
 					else this.cleanDrag_();
 			}
 		],
+		/** Sets the identifier, or a list of identifiers of a droppable type for this widget.
+		 * <p>Default: null
+		 * <p>The simplest way to make a component droppable is to set this attribute to "true". To disable it, set this to "false" (or null).
+		 * <p>If there are several types of draggable objects and this widget accepts only some of them, you could assign a list of identifiers that this widget accepts, separated by comma.
+		 * <p>For example, if this component accpets dg1 and dg2, then assign "dg1, dg2" to this attribute. 
+		 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
+		 * @return zk.Widget this widget
+		 */
+		/** Returns the identifier, or a list of identifiers of a droppable type for this widget, or null if not droppable.
+		 * @return String
+		 */
 		droppable: [
 			_zkf,
 			function (v) {
@@ -1662,7 +1781,7 @@ function () {
 	 * <ul>
 	 * <li>domClass - exclude {@link #domClass_}</li>
 	 * <li>domStyle - exclude {@link #domStyle_}</li>
-	 * <li>tooltiptext - exclude {@link #getTooltipText}</li>
+	 * <li>tooltiptext - exclude {@link #getTooltiptext}</li>
 	 * </ul>
 	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button" 
 	 */
@@ -2602,66 +2721,213 @@ wgt.setListeners({
 	},
 
 	//ZK event handling//
+	/** Called when the user clicks on a widget or a child widget.
+	 * A widget doesn't need to listen the click DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's doClick_
+	 * if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>If a widget, such as zul.wgt.Button, handles onClick, it is better to override this method and <i>not</i> calling back the superclass.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doDoubleClick_
+	 * @see #doRightClick_
+	 */
 	doClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doClick_(evt);
 		}	
 	},
+	/** Called when the user double-clicks on a widget or a child widget.
+	 * A widget doesn't need to listen the dblclick DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
+	 * doDoubleClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doClick_
+	 * @see #doRightClick_
+	 */
 	doDoubleClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doDoubleClick_(evt);
 		}
 	},
+	/** Called when the user right-clicks on a widget or a child widget.
+	 * A widget doesn't need to listen the contextmenu DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
+	 * doRightClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doClick_
+	 * @see #doDoubleClick_
+	 */
 	doRightClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doRightClick_(evt);
 		}
 	},
+	/** Called when the user moves the mouse pointer on top of a widget (or one of its child widget).
+	 * A widget doesn't need to listen the mouseover DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseOver_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseMove_
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+     */
 	doMouseOver_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOver_(evt);
 		}
 	},
+	/** Called when the user moves the mouse pointer out of a widget (or one of its child widget).
+	 * A widget doesn't need to listen the mouseout DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseOut_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @see #doMouseMove_
+	 * @see #doMouseOver_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 */
 	doMouseOut_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOut_(evt);
 		}
 	},
+	/** Called when the user presses down the mouse button on this widget (or one of its child widget).
+	 * A widget doesn't need to listen the mousedown DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseMove_
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseUp_
+	 * @see #doClick_
+	 */
 	doMouseDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseDown_(evt);
 		}
 	},
+	/** Called when the user presses up the mouse button on this widget (or one of its child widget).
+	 * A widget doesn't need to listen the mouseup DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseMove_
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseDown_
+	 * @see #doClick_
+	 */
 	doMouseUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseUp_(evt);
 		}
 	},
+	/** Called when the user moves the mouse pointer over this widget (or one of its child widget).
+	 * A widget doesn't need to listen the mousemove DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doMouseMove_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doMouseOver_
+	 * @see #doMouseOut_
+	 * @see #doMouseDown_
+	 * @see #doMouseUp_
+	 */
 	doMouseMove_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseMove_(evt);
 		}
 	},
+
+	/** Called when the user presses down a key when this widget has the focus ({@link #focus}).
+	 * <p>Notice that not every widget can have the focus.
+	 * A widget doesn't need to listen the keydown DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doKeyDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doKeyUp_
+	 * @see #doKeyPress_
+	 */
 	doKeyDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyDown_(evt);
 		}
 	},
+	/** Called when the user presses up a key when this widget has the focus ({@link #focus}).
+	 * <p>Notice that not every widget can have the focus.
+	 * A widget doesn't need to listen the keyup DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doKeyUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doKeyDown_
+	 * @see #doKeyPress_
+	 */
 	doKeyUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyUp_(evt);
 		}
 	},
+	/** Called when the user presses a key when this widget has the focus ({@link #focus}).
+	 * <p>Notice that not every widget can have the focus.
+	 * A widget doesn't need to listen the keypress DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doKeyPress_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doKeyDown_
+	 * @see #doKeyUp_
+	 */
 	doKeyPress_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
@@ -2669,12 +2935,50 @@ wgt.setListeners({
 		}
 	},
 
+	/** A utility to simplify the listening of <code>onFocus</code>.
+	 * Unlike other doXxx_ (such as {@link #doClick_}), a widget needs to listen
+	 * the onFocus event explicitly if it might gain and lose the focus.
+	 * <p>For example,
+<pre><code>
+var fn = this.$n('focus');
+this.domListen_(fn, 'onFocus', 'doFocus_');
+this.domListen_(fn, 'onBlur', 'doBlur_');
+</code></pre>
+	 *<p>Of course, you can listen it with jQuery DOM-level utilities, if you pefer to handle it differently.
+	 *
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doFocus_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doBlur_
+	 */
 	doFocus_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doFocus_(evt);
 		}
 	},
+	/** A utility to simplify the listening of <code>onBlur</code>.
+	 * Unlike other doXxx_ (such as {@link #doClick_}), a widget needs to listen
+	 * the onBlur event explicitly if it might gain and lose the focus.
+	 * <p>For example,
+<pre><code>
+var fn = this.$n('focus');
+this.domListen_(fn, 'onFocus', 'doFocus_');
+this.domListen_(fn, 'onBlur', 'doBlur_');
+</code></pre>
+	 *<p>Of course, you can listen it with jQuery DOM-level utilities, if you pefer to handle it differently.
+	 *
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doBlur_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doFocus_
+	 */
 	doBlur_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
