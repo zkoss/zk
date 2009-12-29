@@ -41,9 +41,11 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.util.DualFunctionMapper;
+import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
@@ -501,9 +503,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Object getXelVariable(String name) {
-		final VariableResolver resolv =
-			getExecution().getVariableResolver();
-		return resolv != null ? resolv.resolveVariable(name): null;
+		return Evaluators.resolveVariable(getExecution().getVariableResolver(), name);
 	}
 
 	/** Resolves the variable defined in variable resolvers.
@@ -511,7 +511,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private Object resolveVariable(String name) {
 		if (_resolvers != null) {
 			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-				Object o = ((VariableResolver)it.next()).resolveVariable(name);
+				Object o = Evaluators.resolveVariable((VariableResolver)it.next(), name);
 				if (o != null)
 					return o;
 			}

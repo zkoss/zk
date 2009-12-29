@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
@@ -168,7 +169,7 @@ public class ExecutionResolver implements VariableResolver {
 			}
 		}
 
-		return _parent != null ? _parent.resolveVariable(name): null;
+		return Evaluators.resolveVariable(_parent, name);
 	}
 
 	//Object//

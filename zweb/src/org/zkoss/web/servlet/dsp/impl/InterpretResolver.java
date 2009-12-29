@@ -23,6 +23,7 @@ import java.util.Collections;
 import org.zkoss.lang.D;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.Evaluators;
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 
@@ -67,7 +68,6 @@ class InterpretResolver implements VariableResolver {
 		if ("pageScope".equals(name))
 			return _attrs;
 		final Object o = _attrs.get(name);
-		if (o != null) return o;
-		return _parent != null ? _parent.resolveVariable(name): null;
+		return o != null ? o: Evaluators.resolveVariable(_parent, name);
 	}
 }

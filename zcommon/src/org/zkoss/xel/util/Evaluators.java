@@ -31,6 +31,9 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 
 /**
  * It mapps a name with an evaluator implementation.
@@ -173,5 +176,36 @@ public class Evaluators {
 		it.hasNext();) {
 			add((Element)it.next());
 		}
+	}
+
+	/** Resolves the variable based on the specified context.
+	 * If the variable resolver ({@link XelContext#getVariableResolver}
+	 * is an instance of {@link VariableResolverX}, then
+	 * {@link VariableResolverX#resolveVariable(XelContext,Object,Object)}
+	 * will be invoked.
+	 * @param ctx the context. If null, null will be returned.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(XelContext ctx, String name) {
+		if (ctx != null) {
+			VariableResolver resolver = ctx.getVariableResolver();
+			return resolver instanceof VariableResolverX ?
+				((VariableResolverX)resolver).resolveVariable(ctx, null, name):
+				resolver != null ? resolver.resolveVariable(name): null;
+		}
+		return null;
+	}
+	/** Resolves the variable based on the specified resolver.
+	 * If the resolver is an instance of {@link VariableResolverX}, then
+	 * {@link VariableResolverX#resolveVariable(XelContext,Object,Object)}
+	 * will be invoked.
+	 * <p>Notice that it is always better to invoke {@link #resolveVariable(XelContext,String)}
+	 * if {@link XelContext} is available.
+	 * @param resolver the variable resolver. If null, null will be returned.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(VariableResolver resolver, String name) {
+		return resolver != null ?
+			resolveVariable(new SimpleXelContext(resolver), name): null;
 	}
 }

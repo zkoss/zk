@@ -18,13 +18,16 @@ package org.zkoss.xel;
  * <p>With {@link VariableResolver}, {@link VariableResolver#resolveVariable}
  * is called to resolve a top-level variable (for example, <code>${a.b.c}</code>
  * where <code>a</code> is a top-levelvariable).
- * <p>With {@link VariableResolverX}, {@link #resolveVariable(XelContext, Object, String)}
+ * <p>With {@link VariableResolverX}, {@link #resolveVariable(XelContext, Object, Object)}
  * is called to resolve not only top-level variables but also properties
  * (for example, <code>${a.b.c}</code> where <code>b</code> and <code>c</code>
  * are properties).
  * <p>If {@link VariableResolverX} is implemented, {@link VariableResolver#resolveVariable}
  * is ignored. In other words, EL evaluator always invoke
- * {@link #resolveVariable(XelContext, Object, String)}.
+ * {@link #resolveVariable(XelContext, Object, Object)}.
+ * <p>Notice you have to follow the same rule to invoke the <code>resolveVariable</code> method.
+ * And there is a method called {@link org.zkoss.xel.util.Evaluators#resolveVariable}
+ * that can be used to do the job.
  * @author tomyeh
  * @since 5.0.0
  */
