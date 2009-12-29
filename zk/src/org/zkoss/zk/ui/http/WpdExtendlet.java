@@ -139,7 +139,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
 		final WpdContent wc =
-			zk || aaas || !cacheable ? new WpdContent(dir, cacheable): null;
+			zk || aaas || !cacheable || isWpdContentRequired(root) ?
+				new WpdContent(dir, cacheable): null;
 
 		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
@@ -237,8 +238,6 @@ public class WpdExtendlet extends AbstractExtendlet {
 				}
 			} else if ("script".equals(elnm)) {
 				String browser = el.getAttributeValue("browser");
-				if (browser != null && wc == null)
-					log.error("browser attribute not called in a cachable WPD, "+el.getLocator()+", "+path);
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
 					if (wc != null
@@ -296,6 +295,14 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return wc;
 		}
 		return new ByteContent(out.toByteArray(), cacheable);
+	}
+	private static boolean isWpdContentRequired(Element root) {
+		for (Iterator it = root.getElements("script").iterator(); it.hasNext();) {
+			final Element el = (Element)it.next();
+			if (el.getAttributeValue("browser") != null)
+				return true;
+		}
+		return false;
 	}
 	private void writeHost(WpdContent wc, ByteArrayOutputStream out, WebApp wapp) {
 		if (wapp != null) {
