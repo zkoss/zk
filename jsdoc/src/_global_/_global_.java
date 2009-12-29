@@ -19,7 +19,7 @@ package _global_;
  * @author tomyeh
  */
 public class _global_ {
-	private _() {}
+	private _global_() {}
 	/** Callback when the URL/bookmark of an iframe has been changed.
 	 * This method is used to allow ZK to work with other technology.
 	 * For example, if the iframe's content is not ZK, it can invoke
