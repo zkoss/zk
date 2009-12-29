@@ -72,6 +72,7 @@ November, 2009
   2919175: Unexpected error message in combobox with constraint
   2917947: resize grid's column with draggable
   2911385: menuitem with popup problems in 5 RC2
+  2922661: Enhance VariableResolver to reslove property, not just var
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

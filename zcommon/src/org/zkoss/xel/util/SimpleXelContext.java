@@ -16,6 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.util;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
+
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
@@ -29,6 +32,7 @@ import org.zkoss.xel.FunctionMapper;
 public class SimpleXelContext implements XelContext {
 	private VariableResolver _resolver;
 	private FunctionMapper _mapper;
+	private Map _attrs;
 
 	public SimpleXelContext(VariableResolver resolver, FunctionMapper mapper) {
 		_resolver = resolver;
@@ -57,5 +61,24 @@ public class SimpleXelContext implements XelContext {
 	}
 	public FunctionMapper getFunctionMapper() {
 		return _mapper;
+	}
+
+	private Map attrs() {
+		return _attrs != null ? _attrs: (_attrs = new LinkedHashMap());
+	}
+	public Object getAttribute(String name) {
+		return _attrs != null ? _attrs.get(name):  null;
+	}
+	public Object setAttribute(String name, Object value) {
+		return attrs().put(name, value);
+	}
+	public boolean hasAttribute(String name) {
+		return _attrs != null && _attrs.containsKey(name);
+	}
+	public Object removeAttribute(String name) {
+		return _attrs != null ? _attrs.remove(name): null;
+	}
+	public Map getAttributes() {
+		return attrs();
 	}
 }

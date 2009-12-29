@@ -36,7 +36,7 @@ import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
  */
 public class ELFactory implements ExpressionFactory {
 	/** Used to denote the version of zcommons-el. */
-	private static final boolean _v102;
+	private static final boolean _v102, _v103;
 
 	private final ExpressionEvaluatorImpl _eval;
 
@@ -51,12 +51,15 @@ public class ELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
-		if (_v102)
+		if (_v103)
 			return new ELXelExpression(
+				_eval.parseExpression(expression, expectedType));
+		if (_v102)
+			return new ELXelExpression102(
 				_eval.parseExpression(expression, expectedType));
 
 		FunctionMapper mapper = xelc != null ? xelc.getFunctionMapper(): null;
-		return new OldELXelExpression(
+		return new ELXelExpression100(
 			_eval.parseExpression(expression, expectedType, mapper),
 			expression, mapper, expectedType);
 	}
@@ -69,12 +72,22 @@ public class ELFactory implements ExpressionFactory {
 	}
 
 	static {
-		boolean v102 = false;
+		boolean v103 = false;
 		try {
-			Classes.forNameByThread("org.zkforge.apache.commons.el.ELExpression");
-			v102 = true;
+			Classes.forNameByThread("org.zkforge.apache.commons.el.Resolvers");
+			v103 = true;
 		} catch (Throwable e) {
 		}
-		_v102 = v102;
+		if ((_v103 = v103) == true) {
+			_v102 = true;
+		} else {
+			boolean v102 = false;
+			try {
+				Classes.forNameByThread("org.zkforge.apache.commons.el.ELExpression");
+				v102 = true;
+			} catch (Throwable e) {
+			}
+			_v102 = v102;
+		}
 	}
 }

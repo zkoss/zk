@@ -20,8 +20,12 @@ package org.zkoss.xel;
  * Used to customize the way an {@link Expression} resolves variable
  * references at evaluation time.
  *
+ * <p>Since 5.0.0, you can implement another interface called {@link VariableResolverX}
+ * to have more control about resolving the variables.
+ *
  * @author tomyeh
  * @since 3.0.0
+ * @see VariableResolverX
  */
 public interface VariableResolver {
 	/** Resolves the specified variable.
