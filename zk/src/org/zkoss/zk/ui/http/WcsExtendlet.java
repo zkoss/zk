@@ -155,7 +155,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		if (lang.length() == 0)
-			throw new UiException("The language attribute must be specified, "+root.getLocator());
+			throw new UiException("The language attribute must be specified, "+root.getLocator()+", "+path);
 
 		final List items = new LinkedList();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
@@ -166,12 +166,12 @@ public class WcsExtendlet extends AbstractExtendlet {
 				if (href.length() != 0)
 					items.add(href);
 				else
-					log.warning("Ingored stylesheet: href required, " + el.getLocator());
+					log.warning("Ingored stylesheet: href required, " + el.getLocator()+", "+path);
 			} else if ("function".equals(elnm)) {
 				final MethodInfo mtd = getMethodInfo(el);
 				if (mtd != null) items.add(mtd);
 			} else
-				log.warning("Ignored unknown element, " + el.getLocator());
+				log.warning("Ignored unknown element, " + el.getLocator()+", "+path);
 		}
 		return new WcsInfo(lang, items);
 	}

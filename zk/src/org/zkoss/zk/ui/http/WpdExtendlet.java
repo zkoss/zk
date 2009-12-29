@@ -130,7 +130,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
-			throw new UiException("The name attribute must be specified, "+root.getLocator());
+			throw new UiException("The name attribute must be specified, "+root.getLocator()+", "+path);
 		final boolean zk = "zk".equals(name),
 			aaas = "zk.aaas".equals(name);
 		final String lang = root.getAttributeValue("language");
@@ -177,7 +177,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (!writeResource(out, jspath, dir, false)) {
-					log.error("Widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
+					log.error("Widget "+wgtnm+": "+jspath+" not found, "+el.getLocator()+", "+path);
 					continue;
 				}
 
@@ -238,7 +238,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			} else if ("script".equals(elnm)) {
 				String browser = el.getAttributeValue("browser");
 				if (browser != null && wc == null)
-					log.error("browser attribute not called in a cachable WPD, "+el.getLocator());
+					log.error("browser attribute not called in a cachable WPD, "+el.getLocator()+", "+path);
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
 					if (wc != null
@@ -250,7 +250,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 						&& !Servlets.isBrowser(provider.request, browser))
 							continue;
 						if (!writeResource(out, jspath, dir, true))
-							log.error(jspath+" not found, "+el.getLocator());
+							log.error(jspath+" not found, "+el.getLocator()+", "+path);
 					}
 				}
 
@@ -269,7 +269,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 						write(out, mtd);
 					}
 			} else {
-				log.warning("Unknown element "+elnm+", "+el.getLocator());
+				log.warning("Unknown element "+elnm+", "+el.getLocator()+", "+path);
 			}
 		}
 		if (zk) {
