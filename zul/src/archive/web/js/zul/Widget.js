@@ -83,40 +83,275 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-/** The base class for XUL widget.
+/** The base class for ZUL widget.
 * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
  */
 zul.Widget = zk.$extends(zk.Widget, {
+	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user right-clicks on the element (aka., context menu).
+	 *
+	 * <p>Default: null (no context menu).
+	 * @return String
+	 */
 	getContext: function () {
 		return this._context;
 	},
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user right-clicks on the element (aka., context menu).
+	 * @param String context the ID of the popup widget.
+	 * @see #setContext(zul.wgt.Popup) 
+	 */
+	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user right-clicks on the element (aka., context menu).
+	 *
+	 * <p>An onOpen event is sent to the context menu if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
+	 *
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
+	 *
+	 * <p>If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 *
+	 * <p>Example:<br/>
+	 * <pre><code>
+	 * wgt.setContext('an_id');
+	 * wgt.setContext('uuid(an_uuid)');
+	 * wgt.setContext(a_wgt);
+	 * </code></pre>
+	 * Both reference a component whose ID is "some".
+	 * But, if there are several components with the same ID,
+	 * the first one can reference to any of them.
+	 * And, the second one reference to the component in the same ID space
+	 * (of the label component).
+	 * 
+	 * 
+	 * <p>The context menu can be shown by a position from
+	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
+	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, position=before_start</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * wgt.setContext('an_id', 'start_before');
+	 * </pre>
+	 * @param zul.wgt.Popup context the popup widget.
+	 */
 	setContext: function (context) {
 		if (zk.Widget.isInstance(context))
 			context = 'uuid(' + context.uuid + ')';
 		this._context = context;
 		return this;
 	},
+	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Default: null (no popup).
+	 * @return String the ID of the popup widget
+	 */
 	getPopup: function () {
 		return this._popup;
 	},
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user clicks on the element.
+	 * @param String popup the ID of the popup widget.
+	 * @see #setPopup(zul.wgt.Popup) 
+	 */
+	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>An onOpen event is sent to the popup menu if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
+	 *
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
+	 *
+	 * <p>If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 *
+	 * <p>Example:<br/>
+	 * <pre><code>
+	 * wgt.setPopup('an_id');
+	 * wgt.setPopup('uuid(an_uuid)');
+	 * wgt.setPopup(a_wgt);
+	 * </code></pre>
+	 * Both reference a component whose ID is "some".
+	 * But, if there are several components with the same ID,
+	 * the first one can reference to any of them.
+	 * And, the second one reference to the component in the same ID space
+	 * (of the label component).
+	 * 
+	 * 
+	 * <p>The popup menu can be shown by a position from
+	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
+	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, position=before_start</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * wgt.setPopup('an_id', 'start_before');
+	 * </pre>
+	 * @param zul.wgt.Popup popup the popup widget.
+	 */
 	setPopup: function (popup) {
 		if (zk.Widget.isInstance(popup))
 			popup = 'uuid(' + popup.uuid + ')';
 		this._popup = popup;
 		return this;
 	},
+	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 * The tooltip will automatically disappear when the mouse is moved away.
+	 *
+	 * <p>Default: null (no tooltip).
+	 * @return String the ID of the popup widget
+	 */
 	getTooltip: function () {
 		return this._tooltip;
 	},
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 * @param String tooltip the ID of the popup widget.
+	 * @see #setPopup(zul.wgt.Popup) 
+	 */
+	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
+	 * as a tooltip window when the mouse hovers over the element for a moment.
+	 *
+	 * <p>An onOpen event is sent to the tooltip if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
+	 *
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
+	 *
+	 * <p>If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 *
+	 * <p>Example:<br/>
+	 * <pre><code>
+	 * wgt.setTooltip('an_id');
+	 * wgt.setTooltip('uuid(an_uuid)');
+	 * wgt.setTooltip(a_wgt);
+	 * </code></pre>
+	 * Both reference a component whose ID is "some".
+	 * But, if there are several components with the same ID,
+	 * the first one can reference to any of them.
+	 * And, the second one reference to the component in the same ID space
+	 * (of the label component).
+	 * 
+	 * 
+	 * <p>The tooltip can be shown by a position from
+	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
+	 * or the location of <code>x</code> and <code>y</code>, and can be specified
+	 * with a delay time (in millisecond), you can specify the following format:
+	 * </br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, position=before_start, delay=500</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * wgt.setTooltip('an_id', 'start_before');
+	 * </pre>
+	 * @param zul.wgt.Popup popup the popup widget.
+	 */
 	setTooltip: function (tooltip) {
 		if (zk.Widget.isInstance(tooltip))
 			tooltip = 'uuid(' + tooltip.uuid + ')';
 		this._tooltip = tooltip;
 		return this;
 	},
+	/** Returns what keystrokes to intercept.
+	 * <p>Default: null.
+	 * @return String
+	 */
 	getCtrlKeys: function () {
 		return this._ctrlKeys;
 	},
+	/** Sets what keystrokes to intercept.
+	 *
+	 * <p>The string could be a combination of the following:
+	 * <dl>
+	 * <dt>^k</dt>
+	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n</dd>
+	 * <dt>@k</dt>
+	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n</dd>
+	 * <dt>$n</dt>
+	 * <dd>A shift key, i.e., Shift+n, where n could be #n.
+	 * Note: $a ~ $z are not supported.</dd>
+	 * <dt>#home</dt>
+	 * <dd>Home</dd>
+	 * <dt>#end</dt>
+	 * <dd>End</dd>
+	 * <dt>#ins</dt>
+	 * <dd>Insert</dd>
+	 * <dt>#del</dt>
+	 * <dd>Delete</dd>
+	 * <dt>#left</dt>
+	 * <dd>Left arrow</dd>
+	 * <dt>#right</dt>
+	 * <dd>Right arrow</dd>
+	 * <dt>#up</dt>
+	 * <dd>Up arrow</dd>
+	 * <dt>#down</dt>
+	 * <dd>Down arrow</dd>
+	 * <dt>#pgup</dt>
+	 * <dd>PageUp</dd>
+	 * <dt>#pgdn</dt>
+	 * <dd>PageDn</dd>
+	 * <dt>#f1 #f2 ... #f12</dt>
+	 * <dd>Function keys representing F1, F2, ... F12</dd>
+	 * </dl>
+	 *
+	 * <p>For example,
+	 * <dl>
+	 * <dt>^a^d@c#f10#left#right</dt>
+	 * <dd>It means you want to intercept Ctrl+A, Ctrl+D, Alt+C, F10,
+	 * Left and Right.</dd>
+	 * <dt>^#left</dt>
+	 * <dd>It means Ctrl+Left.</dd>
+	 * <dt>^#f1</dt>
+	 * <dd>It means Ctrl+F1.</dd>
+	 * <dt>@#f3</dt>
+	 * <dd>It means Alt+F3.</dd>
+	 * </dl>
+	 *
+	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
+	 * @param String
+	 */
 	setCtrlKeys: function (keys) {
 		if (this._ctrlKeys == keys) return;
 		if (!keys) {
@@ -284,7 +519,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 			zk.Widget.$(id.substring(5, id.length - 1)):
 			this.$f(id, true): null;
 	},
-
+	/**
+	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
+	 * propagation is not stopped.
+	 * <p>Default: handles the control keys, including onOK and onCancel,
+	 *  by searching up the ancestor chain to see if any one is listening.
+	 *  If found, it calls {@link #beforeCtrlKeys_} for each widget that were
+	 *  searched, and then fire the event.
+	 *  @see #setCtrlKeys
+	 */
 	afterKeyDown_: function (evt) {
 		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
 		switch (keyCode) {
@@ -348,6 +591,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
 		}
 	},
+	/**
+	 * Called before a control key is pressed. A control key includes onOK and
+	 * onCancel; refer to #setCtrlKeys for details.
+	 * <p>Default: does nothing (but return false)
+	 * It is usually overridden by a stateful widget, such as an input box,
+	 * to update its state to the server, such as firing the onChange event.
+	 * @return boolean if true, the widget want to abort the firing of the control
+	 * 		key. In other words, if true is returned, the control key is ignored. 
+	 */
 	beforeCtrlKeys_: function (evt) {
 	}
 });

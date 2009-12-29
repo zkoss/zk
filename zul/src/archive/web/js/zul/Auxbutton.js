@@ -12,7 +12,15 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An auxiliary button is used for {@link zul.inp.ComboWidget} 
+ */
 zul.Auxbutton = zk.$extends(zk.Object, {
+	/** Constructor
+	 * @param zk.Widget wgt the widget that the button belongs to
+	 * @param DOMElement btn the button element
+	 * @param DOMElement ref the input element
+	 */
 	$init: function (wgt, btn, ref) {
 		this._wgt = wgt;
 		this._btn = btn;
@@ -30,6 +38,9 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 				.mouseout(this.proxy(this._domOut))
 				.mousedown(this.proxy(this._domDown));
 	},
+	/**
+	 * Cleans the button setting, and then you cannot use the object any more.
+	 */
 	cleanup: function () {
 		var $btn = jq(this._btn);
 
@@ -41,6 +52,9 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 				.unbind('mouseout', this.proxy(this._domOut))
 				.unbind('mousedown', this.proxy(this._domDown));
 	},
+	/**
+	 * Fixes the position of the button from the input element
+	 */
 	fixpos: function () {
 		var btn = this._btn;
 		if (!this._fixed && zk(btn).isRealVisible()) {

@@ -193,7 +193,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
-	 * <p>Default: null (no poppup).
+	 * <p>Default: null (no popup).
 	 */
 	public String getPopup() {
 		return _popup;
