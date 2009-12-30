@@ -393,8 +393,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			final Set mods = langdef.getJavaScriptModules().entrySet();
-			for (Iterator e = mods.iterator(); e.hasNext();) {
+			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
+			e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				sb.append('\'').append(me.getKey())
 				  .append("':'").append(me.getValue()).append("',");

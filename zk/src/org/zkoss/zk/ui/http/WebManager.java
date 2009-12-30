@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
@@ -217,10 +218,22 @@ public class WebManager {
 	}
 	/** Returns the prefix of URL to represent this build. */
 	private String getCWRURLPrefix() {
-		return Integer.toHexString(
-			_wapp.getVersion().hashCode() 
+		int code = _wapp.getVersion().hashCode() 
 			^ _wapp.getBuild().hashCode()
-			^ WebApps.getEdition().hashCode());
+			^ WebApps.getEdition().hashCode();
+
+		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
+			e.hasNext();) {
+				final Map.Entry me = (Map.Entry)e.next();
+				code ^= Objects.hashCode(me.getKey())
+					+ Objects.hashCode(me.getValue());
+			}
+		}
+
+		return Integer.toHexString(code);
 			//FF 8-char boundary: http://code.google.com/intl/de/speed/page-speed/docs/caching.html
 	}
 
