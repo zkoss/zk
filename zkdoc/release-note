@@ -73,6 +73,7 @@ November, 2009
   2917947: resize grid's column with draggable
   2911385: menuitem with popup problems in 5 RC2
   2922661: Enhance VariableResolver to reslove property, not just var
+  2922762: tabscroll="false" doesn't work
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

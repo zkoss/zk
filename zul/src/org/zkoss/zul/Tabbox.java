@@ -483,7 +483,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			render(renderer, "panelSpacing", _panelSpacing);
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
-		if (_tabscroll)
-			render(renderer, "tabscroll", _tabscroll);
+		if (!_tabscroll)
+			renderer.render("tabscroll", _tabscroll);
 	}
 }
