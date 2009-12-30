@@ -472,6 +472,7 @@ public class Parser {
 		private final ExpressionFactory _xelf;
 		private final SimpleMapper _mapper;
 		private final VariableResolver _resolver;
+		private Map _attrs;
 		private int nLines;
 		/** Whether the page action is defined. */
 		private boolean pageDefined;
@@ -542,6 +543,25 @@ public class Parser {
 			}
 			if (!acts.isEmpty())
 				_actions.put(prefix, acts);
+		}
+
+		private Map attrs() {
+			return _attrs != null ? _attrs: (_attrs = new HashMap());
+		}
+		public Object getAttribute(String name) {
+			return _attrs != null ? _attrs.get(name):  null;
+		}
+		public Object setAttribute(String name, Object value) {
+			return attrs().put(name, value);
+		}
+		public boolean hasAttribute(String name) {
+			return _attrs != null && _attrs.containsKey(name);
+		}
+		public Object removeAttribute(String name) {
+			return _attrs != null ? _attrs.remove(name): null;
+		}
+		public Map getAttributes() {
+			return attrs();
 		}
 	}
 }

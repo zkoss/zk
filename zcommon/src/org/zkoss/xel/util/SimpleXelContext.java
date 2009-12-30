@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel.util;
 
 import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
@@ -64,7 +64,7 @@ public class SimpleXelContext implements XelContext {
 	}
 
 	private Map attrs() {
-		return _attrs != null ? _attrs: (_attrs = new LinkedHashMap());
+		return _attrs != null ? _attrs: (_attrs = new HashMap());
 	}
 	public Object getAttribute(String name) {
 		return _attrs != null ? _attrs.get(name):  null;
