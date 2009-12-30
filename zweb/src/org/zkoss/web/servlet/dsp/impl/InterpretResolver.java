@@ -50,13 +50,13 @@ class InterpretResolver implements VariableResolver {
 		if (_parent != null) {
 			switch (scope) {
 			case ActionContext.REQUEST_SCOPE:
-				attrs = (Map)_parent.resolveVariable("requestScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "requestScope");
 				break;
 			case ActionContext.SESSION_SCOPE:
-				attrs = (Map)_parent.resolveVariable("sessionScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "sessionScope");
 				break;
 			case ActionContext.APPLICATION_SCOPE:
-				attrs = (Map)_parent.resolveVariable("applicationScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "applicationScope");
 				break;
 			}
 		}
