@@ -736,7 +736,7 @@ new zul.wnd.Window{
 		 * <p>Default: null but an implementation usually provides a default class, such as z-button.
 		 * <p>Calling setZclass with a different value will completely replace the default style of a widget.
 		 * Once you change it, all default styles are gone.
-		 * If you want to perform small adjustments, use {@link #setClass} instead.
+		 * If you want to perform small adjustments, use {@link #setSclass} instead.
 		 * <p>The real CSS class is a concatenation of {@link #getZclass} and
 		 * {@link #getSclass}. 
 		 * @param String zclass the style class used to apply the whote widget.
