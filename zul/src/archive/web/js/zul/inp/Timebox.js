@@ -221,8 +221,15 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
-		this.syncWidth();
 
+		var inp = this.getInputNode();
+		if (inp && this._value && (inp.value.length == 0)) {
+			if (!this._fmthdler)
+				this._parseFormat(this._format);
+			inp.value = this.coerceToString_(this._value);
+		}
+
+		this.syncWidth();
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,

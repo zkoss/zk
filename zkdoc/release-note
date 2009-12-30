@@ -74,6 +74,7 @@ November, 2009
   2911385: menuitem with popup problems in 5 RC2
   2922661: Enhance VariableResolver to reslove property, not just var
   2922762: tabscroll="false" doesn't work
+  2923185: Datebox click on timebox result '00:00' when format 'HH:mm'
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

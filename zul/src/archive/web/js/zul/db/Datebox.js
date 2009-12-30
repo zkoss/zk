@@ -446,17 +446,23 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = wgt.getTimeFormat(),
-			value = wgt.getValue() || new Date();
+			value = wgt.getValue();
+
+		if (value) {
+			var calVal = zk.fmt.Date.formatDate(value, this.getFormat());
+			if (calVal)
+				this.setValue(calVal);
+		}
+
 		if (fmt) {
 			var tm = wgt._tm;
 			tm.setVisible(true);
 			tm.setFormat(fmt);
-			tm.setValue(value);
+			tm.setValue(value != null ? value : new Date());
 			tm.onShow();
 		} else {
 			wgt._tm.setVisible(false);
 		}
-
 	},
 	syncShadow: function () {
 		if (!this._shadow)

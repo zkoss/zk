@@ -16,22 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.xml.HTMLs;
-
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-
-import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -168,7 +164,6 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
-		render(renderer, "date", getDateFormat().format(_value));
-
+		render(renderer, "value", getDateFormat().format(_value));
 	}
 }
