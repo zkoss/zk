@@ -12,6 +12,28 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Panel is a container that has specific functionality and structural components
+ * that make it the perfect building block for application-oriented user interfaces.
+ * The Panel contains bottom, top, and foot toolbars, along with separate header,
+ * footer and body sections. It also provides built-in collapsible, closable,
+ * maximizable, and minimizable behavior, along with a variety of pre-built tool 
+ * buttons that can be wired up to provide other customized behavior. Panels can
+ * be easily embedded into any kind of ZUL component that is allowed to have children
+ * or layout component. Panels also provide specific features like float and move.
+ * Unlike {@link zul.wnd.Window}, Panels can only be floated and moved inside its parent
+ * node, which is not using {@link _global_.jqzk#makeVParent} function. In other words,
+ * if Panel's parent node is an relative position, the floated panel is only inside
+ * its parent, not the whole page.
+ * The second difference of {@link zul.wnd.Window} is that Panel is not an independent ID
+ * space, so the ID of each child can be used throughout the panel.
+ * 
+ * <p>Events:<br/>
+ * onMove, onOpen, onZIndex, onMaximize, onMinimize, and onClose.<br/>
+ * 
+ * <p>Default {@link #getZclass}: z-panel.
+ * 
+ */
 zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
@@ -25,8 +47,40 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 
 	$define: {
+		/**
+		 * Sets the minimum height in pixels allowed for this panel.
+		 * If negative, 100 is assumed.
+		 * <p>Default: 100. 
+		 * <p>Note: Only applies when {@link #isSizable()} = true.
+		 * @param int minheight
+		 */
+		/**
+		 * Returns the minimum height.
+		 * <p>Default: 100.
+		 * @return int
+		 */
 		minheight: null, //TODO
+		/**
+		 * Sets the minimum width in pixels allowed for this panel. If negative,
+		 * 200 is assumed.
+		 * <p>Default: 200. 
+		 * <p>Note: Only applies when {@link #isSizable()} = true.
+		 * @param int minwidth
+		 */
+		/**
+		 * Returns the minimum width.
+		 * <p>Default: 200.
+		 * @return int
+		 */
 		minwidth: null, //TODO
+		/** Sets whether the panel is sizable.
+		 * If true, an user can drag the border to change the panel width.
+		 * <p>Default: false.
+		 * @param boolean sizable
+		 */
+		/** Returns whether the panel is sizable.
+		 * @return boolean
+		 */
 		sizable: function (sizable) {
 			if (this.desktop) {
 				if (sizable)
@@ -37,18 +91,150 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 			}
 		},
+		/**
+		 * Sets whether to render the panel with custom rounded borders.
+		 * <p>Default: false.
+		 * @param boolean framable
+		 */
+		/**
+		 * Returns whether to render the panel with custom rounded borders.
+		 * <p>Default: false.
+		 * @param boolean
+		 */
 		framable: _zkf = function () {
 			this.rerender(); //TODO: like Window, use _updateDomOuter
 		},
+		/**
+		 * Sets whether to move the panel to display it inline where it is rendered.
+		 * 
+		 * <p>Default: false;
+		 * <p>Note that this method only applied when {@link #isFloatable()} is true.
+		 * @param boolean movable
+		 */
+		/**
+		 * Returns whether to move the panel to display it inline where it is rendered.
+		 * <p>Default: false.
+		 * @return
+		 */
 		movable: _zkf,
+		/**
+		 * Sets whether to float the panel to display it inline where it is rendered.
+		 * 
+		 * <p>Note that by default, setting floatable to true will cause the
+	     * panel to display at default offsets, which depend on the offsets of 
+	     * the embedded panel from its element to <i>document.body</i> -- because the panel
+	     * is absolute positioned, the position must be set explicitly by {@link #setTop(String)}
+	     * and {@link #setLeft(String)}. Also, when floatable a panel you should always
+	     * assign a fixed width, otherwise it will be auto width and will expand to fill
+	     * to the right edge of the viewport.
+	     * @param boolean floatable
+		 */
+		/**
+		 * Returns whether to float the panel to display it inline where it is rendered.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
 		floatable: _zkf,
+		/**
+	     * Sets whether to display the maximizing button and allow the user to maximize
+	     * the panel, when a panel is maximized, the button will automatically
+	     * change to a restore button with the appropriate behavior already built-in
+	     * that will restore the panel to its previous size.
+	     * <p>Default: false.
+	     * 
+		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
+		 * @param boolean maximizable
+		 */
+		/**
+		 * Returns whether to display the maximizing button and allow the user to maximize
+	     * the panel. 
+	     * <p>Default: false.
+	     * @return boolean
+		 */
 		maximizable: _zkf,
+		/**
+	     * Sets whether to display the minimizing button and allow the user to minimize
+	     * the panel. Note that this button provides no implementation -- the behavior
+	     * of minimizing a panel is implementation-specific, so the MinimizeEvent
+	     * event must be handled and a custom minimize behavior implemented for this
+	     * option to be useful.
+	     * 
+	     * <p>Default: false. 
+		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
+		 * @param boolean 
+		 */
+		/**
+		 * Returns whether to display the minimizing button and allow the user to minimize
+	     * the panel. 
+	     * <p>Default: false.
+	     * @return boolean
+		 */
 		minimizable: _zkf,
+		/**
+		 * Sets whether to show a toggle button on the title bar.
+		 * <p>Default: false.
+		 * <p>Note: the toggle button won't be displayed if no title or caption at all.
+		 * @param boolean collapsible
+		 */
+		/**
+		 * Returns whether to show a toggle button on the title bar.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
 		collapsible: _zkf,
+		/**
+		 * Sets whether to show a close button on the title bar.
+		 * If closable, a button is displayed and the onClose event is sent
+		 * if an user clicks the button.
+		 *
+		 * <p>Default: false.
+		 *
+		 * <p>Note: the close button won't be displayed if no title or caption at all.
+		 * @param boolean closable
+		 */
+		/**
+		 * Returns whether to show a close button on the title bar.
+		 * @return boolean
+		 */
 		closable: _zkf,
+		/** 
+		 * Sets the border (either none or normal).
+		 * @param String border the border. If null or "0", "none" is assumed.
+		 */
+		/** 
+		 * Returns the border.
+		 * The border actually controls via {@link zul.wnd.Panelchildren#getSclass()}. 
+		 * In fact, the name of the border (except "normal") is generate as part of 
+		 * the style class used for the content block.
+		 * Refer to {@link zul.wnd.Panelchildren#getSclass()} for more details.
+		 *
+		 * <p>Default: "none".
+		 * @return String
+		 */
 		border: _zkf,
+		/** 
+		 * Sets the title.
+		 * @param String title
+		 */
+		/** 
+		 * Returns the title.
+		 * Besides this attribute, you could use {@link zul.wgt.Caption} to define
+		 * a more sophisticated caption (aka., title).
+		 * <p>If a panel has a caption whose label ({@link zul.wgt.Caption#getLabel})
+		 * is not empty, then this attribute is ignored.
+		 * <p>Default: empty.
+		 * @return String
+		 */
 		title: _zkf,
-
+		/** 
+		 * Opens or closes this Panel.
+		 * @param boolean open
+		 */
+		/**
+		 * Returns whether this Panel is open.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node) {
@@ -70,6 +256,21 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 			}
 		},
+		/**
+		 * Sets whether the panel is maximized, and then the size of the panel will depend 
+		 * on it to show a appropriate size. In other words, if true, the size of the
+		 * panel will count on the size of its offset parent node whose position is
+		 * absolute (by {@link #isFloatable()}) or its parent node. Otherwise, its size
+		 * will be original size. Note that the maximized effect will run at client's
+		 * sizing phase not initial phase.
+		 * 
+		 * <p>Default: false.
+		 * @param boolean maximized
+		 */
+		/**
+		 * Returns whether the panel is maximized.
+		 * @return boolean
+		 */
 		maximized: function (maximized, fromServer) {
 			var node = this.$n();
 			if (node) {
@@ -187,6 +388,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 			}
 		},
+		/**
+		 * Sets whether the panel is minimized.
+		 * <p>Default: false.
+		 * @param boolean minimized
+		 */
+		/**
+		 * Returns whether the panel is minimized.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
 		minimized: function (minimized, fromServer) {
 			if (this.isMaximized())
 				this.setMaximized(false);
@@ -258,6 +469,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zWatch.fireDown('onSize', this);
 		}
 	},
+	/**
+	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
+	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,
+	 * and "fbar" the name of foot toolbar.
+	 * 
+	 * @param String name "tbar", "bbar", and "fbar".
+	 * @param zul.wgt.Toolbar toolbar
+	 */
 	addToolbar: function (name, toolbar) {
 		switch (name) {
 			case 'tbar':

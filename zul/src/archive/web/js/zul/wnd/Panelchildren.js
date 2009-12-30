@@ -12,8 +12,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Panelchildren is used for {@link zul.wnd.Panel} component to manage each
+ * child who will be shown in the body of Panel.
+ * Note that the size of Panelchildren is automatically calculated by Panel so both
+ * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
+ * 
+ * <p>Default {@link #getZclass}: z-panel-children.
+ */
 zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
+	/**
+	 * This method is unsupported. Please use {@link zul.wnd.Panel#setHeight(String)} instead.
+	 * @param String height
+	 */
 	setHeight: zk.$void,      // readonly
+	/**
+	 * This method is unsupported. Please use {@link zul.wnd.Panel#setWidth(String)} instead.
+	 * @param String width
+	 */
 	setWidth: zk.$void,       // readonly
 
 	// super

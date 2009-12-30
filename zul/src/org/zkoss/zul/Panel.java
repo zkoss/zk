@@ -401,8 +401,8 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	/** 
 	 * Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophiscated caption (aka., title).
-	 * <p>If a window has a caption whose label ({@link Caption#getLabel})
+	 * a more sophisticated caption (aka., title).
+	 * <p>If a panel has a caption whose label ({@link Caption#getLabel})
 	 * is not empty, then this attribute is ignored.
 	 * <p>Default: empty.
 	 */
