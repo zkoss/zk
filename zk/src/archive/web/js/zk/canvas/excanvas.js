@@ -90,7 +90,9 @@ if (!document.createElement('canvas').getContext) {
         // Create a dummy element so that IE will allow canvas elements to be
         // recognized.
         doc.createElement('canvas');
-        doc.attachEvent('onreadystatechange', bind(this.init_, this, doc));
+//Tom Yeh, Potix, 20091230: not working if loaded dynamically
+//        doc.attachEvent('onreadystatechange', bind(this.init_, this, doc));
+		jq(bind(this.init_, this, doc));
       }
     },
 
