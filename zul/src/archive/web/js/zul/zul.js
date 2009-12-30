@@ -54,8 +54,11 @@ zul._fixdbtn2 = function (cmp) {
 		}
 
 		v = inp.offsetTop - img.offsetTop;
-		btn.style.position = "relative";
 		btn.style.top = v + "px";
+		if (zk.ie)
+			btn.style.zoom = 1;
+		btn.style.position = "relative";
+
 		if (zk.safari) btn.style.left = "-2px";
 	}
 };
