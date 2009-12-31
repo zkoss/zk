@@ -429,6 +429,11 @@ public interface Page extends IdSpace, Scope {
 	 * @param name the property to retrieve.
 	 * @param ignoreExec whether to ignore the current execution
 	 * ({@link Execution#getVariableResolver}.
+	 * If true, it invokes only the variable resolvers define in this page
+	 *({@link #addVariableResolver}).
+	 * If false, it will first check the execution, so the implicit objects
+	 * such as <code>page</code> and <code>desktop</code> will be resolved.
+	 * @see #getXelVariable(String)
 	 * @since 5.0.0
 	 */
 	public Object getXelVariable(

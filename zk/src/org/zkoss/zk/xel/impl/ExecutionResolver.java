@@ -72,7 +72,7 @@ public class ExecutionResolver implements VariableResolverX {
 	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
 		if (base != null) {
 			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
-			return page.getXelVariable(ctx, base, onm, true);			
+			return page != null ? page.getXelVariable(ctx, base, onm, true): null;
 		}
 
 		if (onm == null)
