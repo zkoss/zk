@@ -55,11 +55,11 @@ import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractExecution;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -156,13 +156,8 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public Evaluator getEvaluator(Page page, Class expfcls) {
-		if (page == null) {
+		if (page == null)
 			page = getCurrentPage();
-			if (page == null) {
-				final Collection c = getDesktop().getPages();
-				if (!c.isEmpty()) page = (Page)c.iterator().next();
-			}
-		}
 
 		if (page != null && expfcls == null)
 			expfcls = page.getExpressionFactoryClass();

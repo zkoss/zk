@@ -1236,6 +1236,8 @@ public class DataBinder implements java.io.Serializable {
 					try {
 						page.setAttribute("self", comp);
 						bean = comp.getAttributeOrFellow(beanid, true);
+						if (bean == null)
+							bean = page.getXelVariable(null, null, beanid, true);
 					} finally {
 						if (self == null) {
 							page.removeAttribute("self");

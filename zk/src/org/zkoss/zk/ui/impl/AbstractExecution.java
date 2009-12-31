@@ -78,11 +78,16 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
 		_curpage = _creating = creating;
-
+		if (_curpage == null)
+			_curpage = getPage(desktop);
+	}
+	private static Page getPage(Desktop desktop) {
 		if (desktop != null) {
-			final Iterator it = desktop.getPages().iterator();
-			if (it.hasNext()) _curpage = (Page)it.next();
+			final Collection c = desktop.getPages();
+			if (c != null && !c.isEmpty())
+				return (Page)c.iterator().next();
 		}
+		return null;
 	}
 
 	//-- Execution --//
@@ -156,10 +161,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public final Page getCurrentPage() {
-		if (_curpage != null)
-			return _curpage;
-		final Iterator it = _desktop.getPages().iterator();
-		return it.hasNext() ? (Page)it.next(): null;
+		if (_curpage == null)
+			_curpage = getPage(_desktop);
+		return _curpage;
 	}
 	public final void setCurrentPage(Page curpage) {
 		if (_curpage != null && curpage != null && _curpage != curpage) {

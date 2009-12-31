@@ -240,10 +240,21 @@ abstract public class GenericInterpreter implements Interpreter {
 				Object val = comp.getAttributeOrFellow(name, true);
 				if (val != null || comp.hasAttributeOrFellow(name, true))
 					return val;
+
+				Page page = comp.getPage();
+				if (page != null) {
+					val = page.getXelVariable(null, null, name, true);
+					if (val != null)
+						return val;
+				}
 			} else if (scope instanceof Page) {
 				Page page = (Page)scope;
 				Object val = page.getAttributeOrFellow(name, true);
 				if (val != null || page.hasAttributeOrFellow(name, true))
+					return val;
+
+				val = page.getXelVariable(null, null, name, true);
+				if (val != null)
 					return val;
 			} else {
 				Object val = scope.getAttribute(name, true);

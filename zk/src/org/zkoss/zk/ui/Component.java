@@ -456,20 +456,9 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	/** Returns the custom attribute associated with this component,
 	 * or the fellow of this component; or null if not found.
 	 *
-	 * @param recurse whether to look up the parent component for the
-	 * existence of the attribute.<br/>
-	 * Notice that, if recurse is false and this component is not an ID
-	 * space owner, it won't look at the fellow.<br/>
-	 * If recurse is true, it will look up all parents, page, desktop,
-	 * session and application until found. If any of them is a space owner,
-	 * the fellows will be searched.
-	 * Since {@link Page#getAttributeOrFellow} will be called, if necessary,
-	 * so the page's variable resolvers will be searched.
-	 * @since 5.0.0
-	 */
-	public Object getAttributeOrFellow(String name, boolean recurse);
-	/** Returns if a custom attribute is associated with this component,
-	 * or the fellow of this component.
+	 * <p>Notice that it doesn't check any variable defined in
+	 * {@link org.zkoss.xel.VariableResolver}
+	 * (of {@link Page#addVariableResolver}).
 	 *
 	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
@@ -478,8 +467,23 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * If recurse is true, it will look up all parents, page, desktop,
 	 * session and application until found. If any of them is a space owner,
 	 * the fellows will be searched.
-	 * Since {@link Page#getAttributeOrFellow} will be called, if necessary,
-	 * so the page's variable resolvers will be searched.
+	 * @since 5.0.0
+	 */
+	public Object getAttributeOrFellow(String name, boolean recurse);
+	/** Returns if a custom attribute is associated with this component,
+	 * or the fellow of this component.
+	 *
+	 * <p>Notice that it doesn't check any variable defined in
+	 * {@link org.zkoss.xel.VariableResolver}
+	 * (of {@link Page#addVariableResolver}).
+	 *
+	 * @param recurse whether to look up the parent component for the
+	 * existence of the attribute.<br/>
+	 * Notice that, if recurse is false and this component is not an ID
+	 * space owner, it won't look at the fellow.<br/>
+	 * If recurse is true, it will look up all parents, page, desktop,
+	 * session and application until found. If any of them is a space owner,
+	 * the fellows will be searched.
 	 * @since 5.0.0
 	 */
 	public boolean hasAttributeOrFellow(String name, boolean recurse);

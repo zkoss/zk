@@ -40,8 +40,8 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.util.DualFunctionMapper;
@@ -376,16 +376,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (val != null)
 			return val;
 
-		val = resolveVariable(name);
-		if (val != null)
-			return val;
-
 		return recurse && _desktop != null ?
 			_desktop.getAttribute(name, true): null;
 	}
 	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		return hasAttribute(name) || hasFellow(name)
-			|| resolveVariable(name) != null
 			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
 	}
 
@@ -503,21 +498,29 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Object getXelVariable(String name) {
-		return Evaluators.resolveVariable(getExecution().getVariableResolver(), name);
+		return getXelVariable(null, null, name, false);
 	}
-
-	/** Resolves the variable defined in variable resolvers.
-	 */
-	private Object resolveVariable(String name) {
+	public Object getXelVariable(
+	XelContext ctx, Object base, Object name, boolean ignoreExec) {
+		if (!ignoreExec) {
+			final Execution exec = getExecution();
+			if (exec != null)
+				return Evaluators.resolveVariable(
+					ctx, exec.getVariableResolver(), base, name);
+					//note: ExecutionResolver will call back this method
+		}
+		
 		if (_resolvers != null) {
 			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-				Object o = Evaluators.resolveVariable((VariableResolver)it.next(), name);
+				Object o = Evaluators.resolveVariable(
+					ctx, (VariableResolver)it.next(), base, name);
 				if (o != null)
 					return o;
 			}
 		}
 		return null;
 	}
+
 	public boolean addVariableResolver(VariableResolver resolver) {
 		if (resolver == null)
 			throw new IllegalArgumentException("null");
@@ -1138,10 +1141,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _attrs.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return hasAttributeOrFellow(name, !local);
+			return hasAttributeOrFellow(name, !local)
+				|| getXelVariable(null, null, name, true) != null;
 		}
 		public Object getVariable(String name, boolean local) {
-			return getAttributeOrFellow(name, !local);
+			final Object o = getAttributeOrFellow(name, !local);
+			return o != null ? o: getXelVariable(null, null, name, true);
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			setAttribute(name, value);

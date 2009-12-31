@@ -164,17 +164,8 @@ try {
 
 		if (page == null) {
 			final Execution exec = Executions.getCurrent();
-			if (exec != null) {
+			if (exec != null)
 				page = ((ExecutionCtrl)exec).getCurrentPage();
-				if (page == null) {
-					final Desktop dt = exec.getDesktop();
-					if (dt != null) { //just in case
-						final Collection pgs = dt.getPages();
-						if (pgs != null && !pgs.isEmpty())
-							return (Page)pgs.iterator().next();
-					}
-				}
-			}
 		}
 		return page;
 	}

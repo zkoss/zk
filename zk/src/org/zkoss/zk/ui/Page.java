@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.Function;
 
 import org.zkoss.zk.scripting.Interpreter;
@@ -274,9 +275,10 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the custom attribute associated with this page,
 	 * or the fellow of this page; or null if no found.
 	 *
-	 * <p>Notice that if no custom attribute or fellow is found,
-	 * this method will check for any variable defined in
+	 * <p>Notice that this method will NOT check for any variable defined in
 	 * the variable resolver ({@link #addVariableResolver}).
+	 * You have to invoke {@link #getXelVariable(XelContext,Object,Object,boolean)}
+	 * or {@link #getXelVariable(String)} manually.
 	 *
 	 * @param recurse whether to look up the desktop/session for the
 	 * existence of the attribute.
@@ -286,9 +288,10 @@ public interface Page extends IdSpace, Scope {
 	/** Returns if a custom attribute is associated with this page,
 	 * or a fellow of this page.
 	 *
-	 * <p>Notice that if no custom attribute or fellow is found,
-	 * this method will check for any variable defined in
+	 * <p>Notice that this method will NOT check for any variable defined in
 	 * the variable resolver ({@link #addVariableResolver}).
+	 * You have to invoke {@link #getXelVariable(XelContext,Object,Object,boolean)}
+	 * or {@link #getXelVariable(String)} manually.
 	 *
 	 * @param recurse whether to look up the desktop/session for the
 	 * existence of the attribute.
@@ -409,15 +412,27 @@ public interface Page extends IdSpace, Scope {
 	public Object getZScriptVariable(Component comp, String name);
 
 	/** Returns a variable that is visible to XEL expressions.
+	 * It is a shortcut of <code>getXelVariable(null, null, name, false)</code>.
 	 *
 	 * <p>This method is mainly used to access special variable, such as
 	 * request parameters (if this page is requested by HTTP).
-	 *
-	 * <p>Note: components that are specified with an ID are already accessible
-	 * by {@link #getVariable}.
+	 * @see #getXelVariable(XelContext, Object, Object, boolean)
 	 * @since 3.0.0
 	 */
 	public Object getXelVariable(String name);
+	/** Returns a vairable that is visible to XEL expressions.
+	 * <p>Unlike {@link #getXelVariable(String)}, this method
+	 * can utilitize {@link org.zkoss.xel.VariableResolverX} introduced in ZK 5.0.
+	 * @param ctx the XEL context
+	 * @param base the base object. If null, it looks for a top-level variable.
+	 * If not null, it looks for a member of the base object (such as getter).
+	 * @param name the property to retrieve.
+	 * @param ignoreExec whether to ignore the current execution
+	 * ({@link Execution#getVariableResolver}.
+	 * @since 5.0.0
+	 */
+	public Object getXelVariable(
+	XelContext ctx, Object base, Object name, boolean ignoreExec);
  
 	/** Adds a name resolver that will be used to resolve a variable
 	 * by {@link #getVariable}.

@@ -616,7 +616,12 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = xcomp.getAttributeOrFellow(srccompid, true);
+							Object srccomp = xcomp.getAttributeOrFellow(srccompid, true);
+							if (srccomp == null) {
+								Page page = xcomp.getPage();
+								if (page != null)
+									srccomp = page.getXelVariable(null, null, srccompid, true);
+							}
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
@@ -779,18 +784,7 @@ public class Components {
 		if (page != null) return page;
 
 		final Execution exec = Executions.getCurrent();
-		if (exec != null) {
-			page = ((ExecutionCtrl)exec).getCurrentPage();
-			if (page != null) return page;
-
-			final Desktop dt = exec.getDesktop();
-			if (dt != null) { //just in case
-				final Collection pgs = dt.getPages();
-				if (pgs != null && !pgs.isEmpty())
-					return (Page)pgs.iterator().next();
-			}
-		}
-		return null;
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
 	
 	/**
@@ -964,12 +958,14 @@ public class Components {
 			if (x instanceof Page) {
 				final Page pg = (Page) x;
 				return pg.getZScriptVariable(fdname) != null
-					|| pg.hasAttributeOrFellow(fdname, true);
+					|| pg.hasAttributeOrFellow(fdname, true)
+					|| pg.getXelVariable(null, null, fdname, true) != null;
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
 				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
-					|| cmp.hasAttributeOrFellow(fdname, true);
+					|| cmp.hasAttributeOrFellow(fdname, true)
+					|| (page != null && page.getXelVariable(null, null, fdname, true) != null);
 			}
 		}
 		
@@ -980,6 +976,8 @@ public class Components {
 				Object arg = pg.getZScriptVariable(fdname);
 				if (arg == null) {
 					arg = pg.getAttributeOrFellow(fdname, true);
+					if (arg == null)
+						arg = pg.getXelVariable(null, null, fdname, true);
 				}
 				return arg;
 			} else {
@@ -988,6 +986,8 @@ public class Components {
 				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
 					arg = cmp.getAttributeOrFellow(fdname, true);
+					if (arg == null && page != null)
+						arg = page.getXelVariable(null, null, fdname, true);
 				}
 				return arg;
 			}

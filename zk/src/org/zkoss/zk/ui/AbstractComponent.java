@@ -2386,10 +2386,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return AbstractComponent.this.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return hasAttributeOrFellow(name, !local);
+			return hasAttributeOrFellow(name, !local)
+				|| (!local && getXelVariable(name) != null);
 		}
 		public Object getVariable(String name, boolean local) {
-			return getAttributeOrFellow(name, !local);
+			Object o = getAttributeOrFellow(name, !local);
+			return o != null || local ? o: getXelVariable(name);
+		}
+		private Object getXelVariable(String name) {
+			Page page = getOwnerPage();
+			return page != null ? page.getXelVariable(null, null, name, true): null;
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			setAttribute(name, value, !local);

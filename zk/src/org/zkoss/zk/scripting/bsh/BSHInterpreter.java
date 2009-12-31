@@ -450,8 +450,10 @@ implements SerializableAware, HierachicalAware {
 
 			final Page page = getOwner();
 			Object val = page.getAttributeOrFellow(name, true); //page/desktop/session
-			return  val != null || page.hasAttributeOrFellow(name, true) ?
-				val: getImplicit(name); 
+			if (val != null || page.hasAttributeOrFellow(name, true))
+				return val;
+			val = page.getXelVariable(null, null, name, true);
+			return val != null ? val: getImplicit(name); 
 		}
 		public void loadDefaultImports() {
 			BSHInterpreter.this.loadDefaultImports(this);
@@ -500,6 +502,7 @@ implements SerializableAware, HierachicalAware {
 			Object val = comp.getAttributeOrFellow(name, false);
 			return val != null || comp.hasAttributeOrFellow(name, false) ?
 				val: getImplicit(name); 
+				//No need to invoke getXelVariable since it is not 'recurse'
 		}
 	}
 	private static class NSCListener implements ScopeListener {

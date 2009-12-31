@@ -18,7 +18,9 @@ package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
 
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 
@@ -34,7 +36,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * @author tomyeh
  * @since 3.0.0
  */
-public class ExecutionResolver implements VariableResolver {
+public class ExecutionResolver implements VariableResolverX {
 	/** The parent resolver. */
 	private final VariableResolver _parent;
 	private final Execution _exec;
@@ -64,13 +66,26 @@ public class ExecutionResolver implements VariableResolver {
 
 	//-- VariableResolver --//
 	public Object resolveVariable(String name) throws XelException {
+		return resolveVariable(null, null, name);
+	}
+	//-- VariableResolverX --//
+	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
+		if (base != null) {
+			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
+			return page.getXelVariable(ctx, base, onm, true);			
+		}
+
+		if (onm == null)
+			return null;
+
+		final String name = onm.toString();
 		if (name == null || name.length() == 0) //just in case
 			return null;
 
 		//Note: we have to access keyword frist (rather than component's ns)
 		//since 1) BeanShell interpreter will store back variables
 		//and page.getZScriptVariable will return the old value
-		//2) ZK 5, getAttributeOrFellow doesn't look for implicit objects 
+		//2) ZK 5, getAttributeOrFellow doesn't look for variable resolvers and implicit objects 
 		if ("arg".equals(name))
 			return _exec.getArg();
 		if ("componentScope".equals(name)) {
@@ -142,6 +157,12 @@ public class ExecutionResolver implements VariableResolver {
 			o = comp.getAttributeOrFellow(name, true);
 			if (o != null)
 				return o;
+
+			if (page != null) {
+				o = page.getXelVariable(ctx, null, name, true);
+				if (o != null)
+					return o;
+			}
 		} else {
 			Page page;
 			if (_self instanceof Page) {
@@ -160,6 +181,10 @@ public class ExecutionResolver implements VariableResolver {
 					return o;
 
 				o = page.getAttributeOrFellow(name, true);
+				if (o != null)
+					return o;
+
+				o = page.getXelVariable(ctx, null, name, true);
 				if (o != null)
 					return o;
 			} else {

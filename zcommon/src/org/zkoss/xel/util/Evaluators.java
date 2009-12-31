@@ -178,6 +178,20 @@ public class Evaluators {
 		}
 	}
 
+	/** Resolves the variable based on the the specified context and
+	 * variable resolver.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(XelContext ctx,
+	VariableResolver resolver, Object base, Object name) {
+		if (resolver instanceof VariableResolverX) {
+			if (ctx == null)
+				ctx = new SimpleXelContext(resolver);
+			return  ((VariableResolverX)resolver).resolveVariable(ctx, base, name);
+		} else if (resolver != null && base == null && name != null)
+			return resolver.resolveVariable(name.toString());
+		return null;
+	}
 	/** Resolves the variable based on the specified context.
 	 * If the variable resolver ({@link XelContext#getVariableResolver}
 	 * is an instance of {@link VariableResolverX}, then
@@ -186,12 +200,13 @@ public class Evaluators {
 	 * @param ctx the context. If null, null will be returned.
 	 * @since 5.0.0
 	 */
-	public static Object resolveVariable(XelContext ctx, String name) {
+	public static Object resolveVariable(XelContext ctx, Object base, Object name) {
 		if (ctx != null) {
 			VariableResolver resolver = ctx.getVariableResolver();
-			return resolver instanceof VariableResolverX ?
-				((VariableResolverX)resolver).resolveVariable(ctx, null, name):
-				resolver != null ? resolver.resolveVariable(name): null;
+			if (resolver instanceof VariableResolverX)
+				return  ((VariableResolverX)resolver).resolveVariable(ctx, base, name);
+			else if (resolver != null && base == null && name != null)
+				return resolver.resolveVariable(name.toString());
 		}
 		return null;
 	}
@@ -206,6 +221,6 @@ public class Evaluators {
 	 */
 	public static Object resolveVariable(VariableResolver resolver, String name) {
 		return resolver != null ?
-			resolveVariable(new SimpleXelContext(resolver), name): null;
+			resolveVariable(new SimpleXelContext(resolver), null, name): null;
 	}
 }
