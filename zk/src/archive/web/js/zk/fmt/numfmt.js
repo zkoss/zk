@@ -21,21 +21,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (var j = ri; k && --j >= 0;) {
 			var ch = valStr.charAt(j);
 			if (k == 1) {
-				switch(ch) {
-				case '0': val = '1' + val; k = 0; break;
-				case '1': val = '2' + val; k = 0; break;
-				case '2': val = '3' + val; k = 0; break;
-				case '3': val = '4' + val; k = 0; break;
-				case '4': val = '5' + val; k = 0; break;
-				case '5': val = '6' + val; k = 0; break;
-				case '6': val = '7' + val; k = 0; break;
-				case '7': val = '8' + val; k = 0; break;
-				case '8': val = '9' + val; k = 0; break;
-				case '9': val = '0' + val; break;
-				default: val = ch + val;
-				}
-			} else
-				val = ch + val;
+				if (ch >= '0' && ch < '9') {
+					ch = ch.$inc(1);
+					k = 0;
+				} else if (ch == '9')
+					ch = '0';
+			}
+			val = ch + val;
 		}
 		if (j >= 0)
 			val = valStr.substring(0, j) + val;
