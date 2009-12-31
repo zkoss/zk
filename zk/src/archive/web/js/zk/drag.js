@@ -18,7 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _drags = [],
-		_dragging = [],
+		_dragging = {},
+		_msdowning, //processing mousedown
 		_stackup, _activedg, _timeout, _initPt, _initEvt,
 		_lastPt, _lastScrlPt;
 
@@ -82,7 +83,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		new zk.eff.Opacity(node, {duration:0.2, from:0.7,
 			to:toOpacity, queue: {scope:'_draggable', position:'end'},
 			afterFinish: function () { 
-				_dragging[node] = false;
+				delete _dragging[node];
 			}
 		});
 	}
@@ -563,9 +564,14 @@ String scroll; //DOM Element's ID</code></pre>
 			return;
 		}
 
+		if (zk.ie) { //since we don't stop event, we have to handle it ourselves
+			if (_msdowning) return;
+			_msdowning = true;
+			setTimeout(function(){_msdowning = false;},0);
+		}
+
 		var pos = zk(node).cmOffset();
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
-
 		_activate(this, devt, pt);
 		if (!zk.ie) devt.stop();
 			//test/dragdrop.zul
