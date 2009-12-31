@@ -162,12 +162,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 				write(out, "',");
 			} else
 				write(out, '(');
-			write(out, "function(){zk._n='");
+			write(out, "function(){zk._p=zkpi('");
 			write(out, name);
-			write(out, "';try{zk._p=zk.$package(zk._n,false");
+			write(out, '\'');
 			if (provider != null && provider.getResource(dir + "wv/zk.wpd") != null)
 				write(out, ",true");
-			write(out, ");\n");
+			write(out, ");try{");
 		}
 
 		final Map moldInfos = new HashMap();
@@ -211,7 +211,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 						String[] info = (String[])moldInfos.get(uri);
 						if (info != null) { //reuse
-							write(out, "[zk._p.");
+							write(out, "[zk._p.p.");
 							write(out, info[0]);
 							write(out, ",'");
 							write(out, info[1]);
@@ -229,7 +229,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 					}
 					if (!first) {
 						write(out, "zkmld(");
-						write(out, zk ? "zk.": "zk._p.");
+						write(out, zk ? "zk.": "zk._p.p.");
 						write(out, wgtnm);
 						write(out, ",zk._m);");
 					}
@@ -281,7 +281,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		} else if (aaas) {
 			writeHost(wc, out, getWebApp());
 		} else {
-			write(out, "\n}finally{zk.setLoaded(zk._n);}");
+			write(out, "\n}finally{zk.setLoaded(zk._p.n);}");
 			if (depends != null) {
 				write(out, "});zk.setLoaded('");
 				write(out, name);

@@ -13,6 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zkreg = zk.Widget.register; //a shortcut for WPD loader
+//mount begin
 function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
@@ -20,6 +21,12 @@ function zkmb(binding) {
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
+//define a package and returns the package info (used in WpdExtendlet)
+function zkpi(nm, wv) {
+	return {n: nm, p: zk.$package(nm, false, wv)};
+}
+
+//page begin
 //don't change API since ZK JSP also depends on it
 function zkpb(pguid, dtid, contextURI, updateURI, contained, props) {
 	if (dtid)
@@ -30,12 +37,15 @@ function zkpb(pguid, dtid, contextURI, updateURI, contained, props) {
 	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
 	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
+//widget begin
 function zkb(type, uuid, mold, props) {
 	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});
 }
+//zhtml widget begin
 function zkb2(uuid, type, props) { //zhtml
 	zk.mnt.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
+//define a desktop
 function zkdt(dtid, contextURI, updateURI) {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
