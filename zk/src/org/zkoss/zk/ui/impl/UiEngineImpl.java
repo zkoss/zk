@@ -1809,10 +1809,10 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private static class FulfillListener
 	implements EventListener, Express, java.io.Serializable, Cloneable,
-	ComponentSerializationListener, ComponentCloneListener {
-		private transient String[] _evtnms;
-		private transient Component[] _targets;
-		private transient Component _comp;
+		ComponentCloneListener {
+		private String[] _evtnms;
+		private Component[] _targets;
+		private Component _comp;
 		private final ComponentInfo _compInfo;
 		private final String _fulfill;
 		private transient String _uri;
@@ -1889,14 +1889,6 @@ public class UiEngineImpl implements UiEngine {
 			Events.sendEvent(new FulfillEvent(Events.ON_FULFILL, _comp, evt));
 				//Use sendEvent so onFulfill will be processed before
 				//the event triggers the fulfill (i.e., evt)
-		}
-
-		//ComponentSerializationListener//
-		public void willSerialize(Component comp) {
-		}
-		public void didDeserialize(Component comp) {
-			_comp = comp;
-			init();
 		}
 
 		//ComponentCloneListener//
