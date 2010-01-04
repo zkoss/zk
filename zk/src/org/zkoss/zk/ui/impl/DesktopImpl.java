@@ -718,14 +718,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				addAllComponents((Component)e.next());
 
 		Serializables.smartRead(s, _attrs);
-		didDeserialize(_attrs.values());
 		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
-		didDeserialize(_dtCleans);
 		_execInits = (List)Serializables.smartRead(s, _execInits);
-		didDeserialize(_execInits);
 		_execCleans = (List)Serializables.smartRead(s, _execCleans);
-		didDeserialize(_execCleans);
 		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
+
+		didDeserialize(_attrs.values());
+		didDeserialize(_dtCleans);
+		didDeserialize(_execInits);
+		didDeserialize(_execCleans);
 		didDeserialize(_uiCycles);
 
 		if (s.readBoolean())

@@ -2206,8 +2206,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//read attrs
 		_attrs = Serializables.smartRead(s, _attrs);
-		if (_attrs != null)
-			didDeserialize(_attrs.values());
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -2216,10 +2214,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (_listeners == null) _listeners = new HashMap(4);
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
 			_listeners.put(evtnm, ls);
-			didDeserialize(ls);
 		}
 
 		//restore _spaceInfo
+		List vars = null;
 		if (this instanceof IdSpace) {
 			_spaceInfo = new SpaceInfo(this);
 
@@ -2235,18 +2233,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
-			didDeserialize(_spaceInfo.attrs.values());
 
 			//_spaceInfo.ns
+			vars = new LinkedList();
 			for (;;) {
 				final String nm = (String)s.readObject();
 				if (nm == null) break; //no more
 
 				Object val = s.readObject();
 				_spaceInfo.ns.setVariable(nm, val, true);
-				didDeserialize(val);
+				vars.add(val);
 			}
 		}
+
+		//didDeserialize
+		if (_attrs != null)
+			didDeserialize(_attrs.values());
+		if (this instanceof IdSpace) {
+			didDeserialize(_spaceInfo.attrs.values());
+			didDeserialize(vars);
+		}
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didDeserialize((Collection)it.next());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
 	 * for each object in the collection.

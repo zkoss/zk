@@ -1095,7 +1095,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			_defparent = fixDefaultParent(getRoots(), pid);
 
 		Serializables.smartRead(s, _attrs);
-		didDeserialize(_attrs.values());
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -1104,13 +1103,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (_listeners == null) _listeners = new HashMap();
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
 			_listeners.put(evtnm, ls);
-			didDeserialize(ls);
 		}
 
 		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
-		didDeserialize(_resolvers);
 
 		//handle namespace
+		List vars = new LinkedList();
 		initVariables();
 		for (;;) {
 			final String nm = (String)s.readObject();
@@ -1118,7 +1116,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			Object val = s.readObject();
 			_ns.setVariable(nm, val, true);
-			didDeserialize(val);
+			vars.add(val);
 		}
 
 		//Handles interpreters
@@ -1128,6 +1126,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			((SerializableAware)getInterpreter(zslang)).read(s);
 		}
+
+		//didDeserialize
+		didDeserialize(_attrs.values());
+		didDeserialize(_resolvers);
+		didDeserialize(vars);
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didDeserialize((Collection)it.next());
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
