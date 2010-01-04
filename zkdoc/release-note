@@ -18,6 +18,7 @@ ZK 3.6.4
   2907228: Exception in server console while style has no content
   2897202: load-when and load-after not triggered when binded to template
   2910566: IE crashes when changing constraint on non visible spinner
+  2914010: Position of Messagebox is not at the center of scroll view
   2919037: SetSelectedIndex(-1) shall unselect even with constraint
   2918492: Panel disappear when close a "column" maximized portallayout
   2910663: NullPointerException after failover when fulfill onEvent

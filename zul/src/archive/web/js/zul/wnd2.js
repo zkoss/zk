@@ -1196,7 +1196,15 @@ zkMsgboxLabel = {
 			
 			var zi = $int(outer.style.zIndex);
 			zkWnd2._center(outer, zi);
-			outer.style.top = "100px";
+			var top = $int(outer.style.top), y = zk.innerY();
+			if (y) {
+				var y1 = top - y;
+				if (y1 > 100) {
+					outer.style.top = zk.px(top - (y1 - 100), true);
+				}
+			} else if (top > 100){
+				outer.style.top = "100px";
+			}
 			zkWnd2.onSize(outer);
 		}
 	}
