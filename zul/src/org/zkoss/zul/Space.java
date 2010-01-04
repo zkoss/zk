@@ -21,9 +21,9 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
- * Space is a {@link Separator} with the orient default to "horizontal".
+ * Space is a {@link Separator} with the orient default to "vertical".
  *
- * <p>In other words, &lt;space&gt; is equivalent to &lt;separator orient="horizontal"&gt;
+ * <p>In other words, &lt;space&gt; is equivalent to &lt;separator orient="vertical"&gt;
  *
  * @author tomyeh
  */
