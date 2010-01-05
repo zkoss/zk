@@ -37,7 +37,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- //// -->
 	<!-- ZK -->
 	<listener>
-		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
+		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener23</listener-class>
 	</listener>
 	<servlet>
 		<servlet-name>zkLoader</servlet-name>
