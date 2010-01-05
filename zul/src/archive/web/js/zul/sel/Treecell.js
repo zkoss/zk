@@ -12,10 +12,30 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A treecell.
+ *
+ * <p>In XUL, treecell cannot have any child, but ZUL allows it.
+ * Thus, you could place any kind of children in it. They will be placed
+ * right after the image and label.
+ *
+ * <p>Default {@link #getZclass}: z-treecell
+ */
 zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
+	/**
+	 * The width can't be specified in this component.
+	 */
 	setWidth: zk.$void, // readonly
 	_colspan: 1,
 	$define: {
+    	/** Returns number of columns to span this cell.
+    	 * Default: 1.
+    	 * @return int
+    	 */
+    	/** Sets the number of columns to span this cell.
+    	 * <p>It is the same as the colspan attribute of HTML TD tag.
+    	 * @param int colspan
+    	 */
 		colspan: [
 			function (colspan) {
 				return colspan > 1 ? colspan: 1;
@@ -25,6 +45,9 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				if (n) n.colSpan = this._colspan;
 			}]
 	},
+	/** Return the tree that owns this cell.
+	 * @return Tree
+	 */
 	getTree: function () {
 		return this.parent ? this.parent.getTree() : null;
 	},
@@ -34,6 +57,9 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			return this.isVisible() && tc && !tc.isVisible() ? style +
 				"display:none;" : style;
 	},
+	/** Returns the tree col associated with this cell, or null if not available.
+	 * @return Treecol
+	 */
 	getTreecol: function () {
 		var tree = this.getTree();
 		if (tree && tree.treecols) {
@@ -43,9 +69,15 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
+	/** Returns the level this cell is. The root is level 0.
+	 * @return int
+	 */
 	getLevel: function () {
 		return this.parent ? this.parent.getLevel(): 0;
 	},
+	/** Returns the maximal length of each item's label.
+	 * @return int
+	 */
 	getMaxlength: function () {
 		var box = this.getTree();
 		if (!box) return 0;

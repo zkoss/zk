@@ -12,10 +12,28 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A treeitem.
+ *
+ * <p>Event:
+ * <ol>
+ * <li>onOpen is sent when a tree item is opened or closed by user.</li>
+ * <li>onDoubleClick is sent when user double-clicks the treeitem.</li>
+ * <li>onRightClick is sent when user right-clicks the treeitem.</li>
+ * </ol>
+ *
+ */
 zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_open: true,
 	_checkable: true,
 	$define: {
+    	/** Returns whether this container is open.
+    	 * <p>Default: true.
+    	 * @return boolean
+    	 */
+    	/** Sets whether this container is open.
+    	 * @param boolean open
+    	 */
 		open: function (open, fromServer) {
 			var img = this.$n('open');
 			if (!img) return;
@@ -50,11 +68,21 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	isStripeable_: function () {
 		return false;
 	},
+	/**
+	 * Returns the mesh widget. i.e. {@link Tree}
+	 * @return Tree
+	 */
 	getMeshWidget: _zkf = function () {
 		for (var wgt = this.parent; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.sel.Tree)) return wgt;
 		return null;		
 	},
+	/**
+	 * Returns the {@link Tree}.
+	 * @return Tree
+	 * @see #getMeshWidget
+	 */
+	getTree: _zkf,
 	getNode: function () {
 		if (this.treerow) return this.treerow.$n();
 		return null;
@@ -67,13 +95,22 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if (this.treerow) return this.treerow.$n(nm);
 		return null;
 	},
-	getTree: _zkf,
+	/** Returns whether the element is to act as a container
+	 * which can have child elements.
+	 * @return boolean
+	 */
 	isContainer: function () {
 		return this.treechildren != null;
 	},
+	/** Returns whether this element contains no child elements.
+	 * @return boolean
+	 */
 	isEmpty: function () {
 		return !this.treechildren || !this.treechildren.nChildren;
 	},
+	/** Returns the level this cell is. The root is level 0.
+	 * @return int
+	 */
 	getLevel: function () {
 		var level = 0;
 		for (var  item = this;; ++level) {
@@ -86,13 +123,26 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		return level;
 	},
+	/** Returns the label of the {@link Treecell} it contains, or null
+	 * if no such cell.
+	 * @return String
+	 */
 	getLabel: function () {
 		var cell = this.getFirstCell();
 		return cell ? cell.getLabel(): null;
 	},
+	/** Sets the label of the {@link Treecell} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 * @param String label
+	 */
 	setLabel: function (label) {
 		this._autoFirstCell().setLabel(label);
 	},
+	/**
+	 * Returns the first treecell.
+	 * @return Treecell
+	 */
 	getFirstCell: function () {
 		return this.treerow ? this.treerow.firstChild : null;
 	},
@@ -107,14 +157,27 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		return cell;
 	},
+	/** Returns the image of the {@link Treecell} it contains.
+	 * @return String
+	 */
 	getImage: function () {
 		var cell = this.getFirstCell();
 		return cell ? cell.getImage(): null;
 	},
+	/** Sets the image of the {@link Treecell} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 * @param String image
+	 */
 	setImage: function (image) {
 		this._autoFirstCell().setImage(image);
 		return this;
 	},
+	/** Returns the parent tree item,
+	 * or null if this item is already the top level of the tree.
+	 * The parent tree item is actually the grandparent if any.
+	 * @return Treeitem
+	 */
 	getParentItem: function () {
 		var p = this.parent && this.parent.parent ? this.parent.parent : null;
 		return p && p.$instanceof(zul.sel.Treeitem) ? p : null;

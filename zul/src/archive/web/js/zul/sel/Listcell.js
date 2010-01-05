@@ -12,9 +12,22 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A list cell.
+ * 
+ * <p>Default {@link #getZclass}: z-listcell
+ */
 zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	_colspan: 1,
 	$define: {
+    	/** Returns number of columns to span this cell.
+    	 * Default: 1.
+    	 * @return int
+    	 */
+    	/** Sets the number of columns to span this cell.
+    	 * <p>It is the same as the colspan attribute of HTML TD tag.
+    	 * @param int colspan
+    	 */
 		colspan: [
 			function (colspan) {
 				return colspan > 1 ? colspan: 1;
@@ -29,6 +42,9 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (this.desktop && this.parent.$instanceof(zul.sel.Listgroup))
 			this.parent.rerender();
 	},
+	/** Returns the list box that it belongs to.
+	 * @return Listbox
+	 */
 	getListbox: function () {
 		var p = this.parent;
 		return p ? p.parent: null;
@@ -41,6 +57,15 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	getTextNode: function () {
 		return jq(this.$n()).find('>div:first')[0];
 	},
+	/** Returns the maximal length for this cell.
+	 * If listbox's mold is "select", it is the same as
+	 * {@link Listbox#getMaxlength}
+	 * If not, it is the same as the correponding {@link #getListheader}'s 
+	 * {@link Listheader#getMaxlength}.
+	 *
+	 * <p>Note: {@link Listitem#getMaxlength} is the same as {@link Listbox#getMaxlength}.
+	 * @return int
+	 */
 	getMaxlength: function () {
 		var box = this.getListbox();
 		if (!box) return 0;
@@ -49,6 +74,10 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		var lc = this.getListheader();
 		return lc ? lc.getMaxlength() : 0;
 	},
+	/** Returns the list header that is in the same column as
+	 * this cell, or null if not available.
+	 * @return Listheader
+	 */
 	getListheader: function () {
 		var box = this.getListbox();
 		if (box && box.listhead) {

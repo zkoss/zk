@@ -14,7 +14,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A collection of tab panels.
+ *
+ * <p>Default {@link #getZclass}: z-tabpanels.
+ */
 zul.tab.Tabpanels = zk.$extends(zul.Widget, {
+	/** Returns the tabbox owns this component.
+	 * @return Tabbox
+	 */
 	getTabbox: function() {
 		return this.parent;
 	},

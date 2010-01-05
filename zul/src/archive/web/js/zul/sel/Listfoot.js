@@ -12,7 +12,16 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A row of {@link Listfooter}.
+ *
+ * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
+ * <p>Default {@link #getZclass}: z-listfoot
+ */
 zul.sel.Listfoot = zk.$extends(zul.Widget, {
+	/** Returns the list box that it belongs to.
+	 * @return Listbox
+	 */
 	getListbox: function () {
 		return this.parent;
 	},

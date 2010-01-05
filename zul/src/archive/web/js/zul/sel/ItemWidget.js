@@ -12,19 +12,57 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The item widget for {@link Treeitem} and {@link Listitem}
+ */
 zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_checkable: true,
 	$define: {
+    	/** Returns whether it is checkable.
+    	 * <p>Default: true.
+    	 * @return boolean
+    	 */
+    	/** Sets whether it is checkable.
+    	 * <p>Default: true.
+    	 * @param boolean checkable
+    	 */
 		checkable: function () {
 			if (this.desktop)
 				this.rerender();
 		},
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function () {
 			if (this.desktop)
 				this.rerender();
 		},
+		/** Returns the value.
+		 * <p>Default: null.
+		 * <p>Note: the value is application dependent, you can place
+		 * whatever value you want.
+		 * <p>If you are using listitem/treeitem with HTML Form (and with
+		 * the name attribute), it is better to specify a String-typed
+		 * value.
+		 * @return String
+		 */
+		/** Sets the value.
+		 * @param String value the value.
+		 * <p>Note: the value is application dependent, you can place
+		 * whatever value you want.
+		 * <p>If you are using listitem/treeitem with HTML Form (and with
+		 * the name attribute), it is better to specify a String-typed
+		 * value.
+		 */
 		value: null
 	},
+	/** Sets whether it is selected.
+	 * @param boolean selected
+	 */
 	setSelected: function (selected) {
 		if (this._selected != selected) {
 			var mesh = this.getMeshWidget();
@@ -43,15 +81,31 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 		this._selected = selected;
 	},
+	/** Returns the label of the {@link Listcell} or {@link Treecell} it contains, or null
+	 * if no such cell.
+	 */
 	getLabel: function () {
 		return this.firstChild ? this.firstChild.getLabel() : null; 
 	},
+	/** Returns whether it is selected.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
 	isSelected: function () {
 		return this._selected;
 	},
+	/**
+	 * Returns whether is stripeable or not.
+	 * <p>Default: true.
+	 * @return boolean
+	 */
 	isStripeable_: function () {
 		return true;
 	},
+	/**
+	 * Returns the mesh widget.
+	 * @return zul.mesh.MeshWidget
+	 */
 	getMeshWidget: function () {
 		return this.parent;
 	},

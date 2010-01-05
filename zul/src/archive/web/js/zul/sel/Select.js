@@ -12,6 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A HTML select tag.
+ */
 zul.sel.Select = zk.$extends(zul.Widget, {
 	_selectedIndex: -1,
 	_tabindex: -1,
@@ -21,14 +24,43 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this._selItems = [];
 	},
 	$define: {
+		/**
+		 * Returns whether multiple selections are allowed.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether multiple selections are allowed.
+		 * @param boolean multiple
+		 */
 		multiple: function (multiple) {
 			var n = this.$n();
 			if (n) n.multiple = multiple ? 'multiple' : '';
 		},
+		/**
+		 * Returns whether it is disabled.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (disabled) {
 			var n = this.$n();
 			if (n) n.disabled = disabled ? 'disabled' : '';
 		},
+		/**
+		 * Returns the index of the selected item (-1 if no one is selected).
+		 * @return int
+		 */
+		/**
+		 * Deselects all of the currently selected items and selects the item with
+		 * the given index.
+		 * @param int selectedIndex
+		 */
 		selectedIndex: function (selectedIndex) {
 			var n = this.$n();
 			if (n) {
@@ -40,27 +72,96 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				n.selectedIndex = selectedIndex - j;
 			}
 		},
+		/**
+		 * Returns the tab order of this component.
+		 * <p>
+		 * Default: -1 (means the same as browser's default).
+		 * @return int
+		 */
+		/**
+		 * Sets the tab order of this component.
+		 * @param int tabindex
+		 */
 		tabindex: function (tabindex) {
 			var n = this.$n();
 			if (n) n.tabindex = tabindex >= 0 ? tabindex: '';
 		},
+		/**
+		 * Returns the name of this component.
+		 * <p>
+		 * Default: null.
+		 * <p>
+		 * The name is used only to work with "legacy" Web application that handles
+		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+		 * It doesn't work with other kind of clients.
+		 * <p>
+		 * Don't use this method if your application is purely based on ZK's
+		 * event-driven model.
+		 * @return String
+		 */
+		/**
+		 * Sets the name of this component.
+		 * <p>
+		 * The name is used only to work with "legacy" Web application that handles
+		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+		 * It doesn't work with other kind of clients.
+		 * <p>
+		 * Don't use this method if your application is purely based on ZK's
+		 * event-driven model.
+		 * 
+		 * @param String name
+		 *            the name of this component.
+		 */
 		name: function (name) {
 			var n = this.$n();
 			if (n) n.name = name;
 		},
+		/**
+		 * Returns the rows. Zero means no limitation.
+		 * <p>
+		 * Default: 0.
+		 * @return int
+		 */
+		/**
+		 * Sets the rows.
+		 * <p>
+		 * Note: if both {@link #setHeight} is specified with non-empty,
+		 * {@link #setRows} is ignored
+		 * @param int rows
+		 */
 		rows: function (rows) {
 			var n = this.$n();
 			if (n) n.size = rows;
 		},
+		/**
+		 * Returns the maximal length of each item's label.
+		 * @return int
+		 */
+		/**
+		 * Sets the maximal length of each item's label.
+		 * @param int maxlength
+		 */
 		maxlength: function (maxlength) {
 			if (this.desktop)
 				this.rerender();
 		}
 	},
+	/**
+	 * If the specified item is selected, it is deselected. If it is not
+	 * selected, it is selected. Other items in the list box that are selected
+	 * are not affected, and retain their selected state.
+	 * @param Option item
+	 */
 	toggleItemSelection: function (item) {
 		if (item.isSelected()) this._removeItemFromSelection(item);
 		else this._addItemToSelection(item);
 	},
+	/**
+	 * Deselects all of the currently selected items and selects the given item.
+	 * 
+	 * @param Option item
+	 *            the item to select. If null, all items are deselected.
+	 */
 	selectItem: function (item) {
 		if (!item)
 			this.setSelectedIndex(-1);
@@ -91,6 +192,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	/**
+	 * Clears the selection.
+	 */
 	clearSelection: function () {
 		if (this._selItems.length) {
 			var item;

@@ -12,21 +12,57 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Fires one or more timer after a specified delay.
+ *
+ * <p>{@link Timer} is a special component that is invisible.
+ *
+ * <p>Notice that the timer won't fire any event until it is attached
+ * to a page.
+ */
 zul.utl.Timer = zk.$extends(zk.Widget, {
 	_running: true,
 	_delay: 0,
 
 	$define: {
+    	/** Returns whether the timer shall send Event repeatly.
+    	 * <p>Default: false.
+    	 * @return boolean
+    	 */
+    	/** Sets whether the timer shall send Event repeatly.
+    	 * @param boolean repeats
+    	 */
 		repeats: _zkf = function () {
 			if (this.desktop) this._sync();
 		},
+		/** Returns the delay, the number of milliseconds between
+		 * successive action events.
+		 * <p>Default: 0 (immediately).
+		 * @return int
+		 */
+		/** Sets the delay, the number of milliseconds between
+		 * successive action events.
+		 * @param int delay
+		 */
 		delay: _zkf,
+		/** Returns whether this timer is running.
+		 * <p>Default: true.
+		 * @see #play
+		 * @see #stop
+		 * @return boolean
+		 */
+		/** Start or stops the timer.
+		 * @param boolean running
+		 */
 		running: _zkf
 	},
-
+	/** Starts the timer.
+	 */
 	play: function () {
 		this.setRunning(true);
 	},
+	/** Stops the timer.
+	 */
 	stop: function () {
 		this.setRunning(false);
 	},

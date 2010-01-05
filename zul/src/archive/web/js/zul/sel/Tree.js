@@ -12,21 +12,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ *  A container which can be used to hold a tabular
+ * or hierarchical set of rows of elements.
+ *
+ * <p>Event:
+ * <ol>
+ * <li>onSelect event is sent when user changes the selection.</li>
+ * </ol>
+ *
+ * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
+ */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
-	nextItem: function (p) {
-		if (p)
-			while ((p = p.nextSibling)
-			&& !p.$instanceof(zul.sel.Listitem))
-				;
-		return p;
-	},
-	previousItem: function (p) {
-		if (p)
-			while ((p = p.previousSibling)
-			&& !p.$instanceof(zul.sel.Listitem))
-				;
-		return p;
-	},
+	/**
+	 * clears the tree children.
+	 */
 	clear: function () {
 		if (!this._treechildren || !this._treechildren.nChildren)
 			return;
@@ -159,17 +159,42 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}
 		return false;
 	},
+	/**
+	 * Returns the head widget class. i.e. {@link Treecols}
+	 * @return Object
+	 */
 	getHeadWidgetClass: function () {
 		return zul.sel.Treecols;
 	},
+	/**
+	 * Returns the tree item iterator.
+	 * @return Object
+	 */
 	itemIterator: _zkf = function () {
 		return new zul.sel.TreeItemIter(this);
 	},
+	/**
+	 * Returns the tree item iterator.
+	 * @return Object
+	 * @see #itemIterator
+	 */
 	getBodyWidgetIterator: _zkf,
 
+	/** Returns a readonly list of all descending {@link Treeitem}
+	 * (children's children and so on).
+	 *
+	 * <p>Note: the performance of the size method of returned collection
+	 * is no good.
+	 * @return Array
+	 */
 	getItems: function () {
 		return this.treechildren ? this.treechildren.getItems(): [];
 	},
+	/** Returns the number of child {@link Treeitem}.
+	 * The same as {@link #getItems}.size().
+	 * <p>Note: the performance of this method is no good.
+	 * @return int
+	 */
 	getItemCount: function () {
 		return this.treechildren != null ? this.treechildren.getItemCount(): 0;
 	},
@@ -184,7 +209,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}
 	}
 });
+/**
+ * Tree item iterator.
+ */
 zul.sel.TreeItemIter = zk.$extends(zk.Object, {
+	/** Constructor
+	 * @param Tree tree the widget that the iterator belongs to
+	 */
 	$init: function (tree) {
 		this.tree = tree;
 	},
@@ -196,10 +227,19 @@ zul.sel.TreeItemIter = zk.$extends(zk.Object, {
 			this.cur = 0;
 		}
 	},
+	 /**
+     * Returns <tt>true</tt> if the iteration has more elements
+     * @return boolean
+     */
 	hasNext: function () {
 		this._init();
 		return this.cur < this.length;
 	},
+	/**
+     * Returns the next element in the iteration.
+     *
+     * @return Treeitem the next element in the iteration.
+     */
 	next: function () {
 		this._init();
 		return this.items[this.cur++];

@@ -12,18 +12,47 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A treerow.
+ * <p>Default {@link #getZclass}: z-treerow
+ */
 zul.sel.Treerow = zk.$extends(zul.Widget, {
+	/**
+	 * The context can't be specified in this component. Developers shall
+	 * use {@link Treeitem#setContext} instead.
+	 */
 	setContext: zk.$void, // readonly
+	/**
+	 * The popup can't be specified in this component. Developers shall
+	 * use {@link Treeitem#setPopup} instead.
+	 */
 	setPopup: zk.$void, // readonly
+	/**
+	 * The tooltip can't be specified in this component. Developers shall
+	 * use {@link Treeitem#setTooltip} instead.
+	 */
 	setTooltip: zk.$void, // readonly
+	/**
+	 * The tooltiptext can't be specified in this component. Developers shall
+	 * use {@link Treeitem#setTooltiptext} instead.
+	 */
 	setTooltiptext: zk.$void, // readonly
-	
+	/** Returns the {@link Tree} instance containing this element.
+	 * @return Tree
+	 */
 	getTree: function () {
 		return this.parent ? this.parent.getTree() : null;
 	},
+	/** Returns the level this cell is. The root is level 0.
+	 * @return int
+	 */
 	getLevel: function () {
 		return this.parent ? this.parent.getLevel(): 0;
 	},
+	/** Returns the {@link Treechildren} associated with this
+	 * {@link Treerow}.
+	 * @return Treechildren
+	 */
 	getLinkedTreechildren: function () {
 		return this.parent ? this.parent.treechildren : null;
 	},
@@ -39,18 +68,34 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-treerow" : this._zclass;
 	},
+	/** Returns the same as {@link Treeitem#getContext}.
+	 * @return String
+	 */
 	getContext: function () {
 		return this.parent ? this.parent.getContext() : null;
 	},
+	/** Returns the same as {@link Treeitem#getPopup}.
+	 * @return String
+	 */
 	getPopup: function () {
 		return this.parent ? this.parent.getPopup() : null;
 	},
+	/** Returns the same as {@link Treeitem#getTooltip}.
+	 * @return String
+	 */
 	getTooltip: function () {
 		return this.parent ? this.parent.getTooltip() : null;
 	},
+	/** Returns the same as {@link Treeitem#getTooltiptext}.
+	 * @return String
+	 */
 	getTooltiptext: function () {
 		return this.parent ? this.parent.getTooltiptext() : null;
 	},
+	/** Returns whether this is visible.
+	 * whether all its ancestors is open.
+	 * @return boolean
+	 */
 	isVisible: function () {
 		if (!this.parent || !this.$supers('isVisible', arguments))
 			return false;

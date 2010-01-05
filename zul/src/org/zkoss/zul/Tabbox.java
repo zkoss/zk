@@ -168,7 +168,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return _seltab != null ? _seltab.getIndex() : -1;
 	}
 
-	/***
+	/**
 	 * Sets the selected index.
 	 */
 	public void setSelectedIndex(int j) {

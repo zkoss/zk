@@ -16,7 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 
 /**

@@ -14,7 +14,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A collection of tabs ({@link Tab}).
+ *
+ * <p>Default {@link #getZclass}: z-tabs.
+ */
 zul.tab.Tabs = zk.$extends(zul.Widget, {
+	/** Returns the tabbox owns this component.
+	 * @return Tabbox
+	 */
 	getTabbox: function() {
 		return this.parent;
 	},

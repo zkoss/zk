@@ -12,21 +12,54 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A listbox.
+ * 
+ * <p>
+ * Event:
+ * <ol>
+ * <li>onSelect event is sent when user changes the selection.</li>
+ * </ol>
+ * 
+ * <p>
+ * Default {@link #getZclass}: z-listbox.
+ * 
+ * <p>
+ * To have a list box without stripping, you can specify a non-existent style
+ * class to {@link #setOddRowSclass}.
+ */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_nrows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
 	},
+	/**
+	 * Returns the number of listgroup
+	 * @return int
+	 */
 	getGroupCount: function () {
 		return this._groupsInfo.length;
 	},
+	/**
+	 * Returns a list of all {@link Listgroup}.
+	 * @return Array
+	 */
 	getGroups: function () {
 		return this._groupsInfo.$clone();
 	},
+	/**
+	 * Returns whether listgroup exists.
+	 * @return boolean
+	 */
 	hasGroup: function () {
 		return this._groupsInfo.length;
 	},
+	/**
+	 * Returns the next item.
+	 * @return Listitem
+	 * @param zk.Widget item
+	 */
 	nextItem: function (p) {
 		if (p)
 			while ((p = p.nextSibling)
@@ -34,6 +67,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				;
 		return p;
 	},
+	/**
+	 * Returns the previous item.
+	 * @return Listitem
+	 * @param zk.Widget item
+	 */
 	previousItem: function (p) {
 		if (p)
 			while ((p = p.previousSibling)
@@ -41,9 +79,21 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				;
 		return p;
 	},
+	/**
+	 * Returns the style class for the odd rows.
+	 * <p>
+	 * Default: {@link #getZclass()}-odd.
+	 * @return String
+	 */
 	getOddRowSclass: function () {
 		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
 	},
+	/**
+	 * Sets the style class for the odd rows. If the style class doesn't exist,
+	 * the striping effect disappears. You can provide different effects by
+	 * providing the proper style classes.
+	 * @param String oddRowSclass
+	 */
 	setOddRowSclass: function (scls) {
 		if (!scls) scls = null;
 		if (this._scOddRow != scls) {
@@ -54,6 +104,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 		return this;
 	},
+	/**
+	 * Returns whether the HTML's select tag is used.
+	 * @return boolean
+	 */
 	inSelectMold: function () {
 		return "select" == this.getMold();
 	},
@@ -79,6 +133,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (!this.inServer && this.desktop)
 			this.onResponse();
 	},
+	/**
+	 * Stripes the class for each item.
+	 */
 	stripe: function () {
 		var scOdd = this.getOddRowSclass();
 		if (!scOdd) return;
@@ -179,8 +236,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	getBodyWidgetIterator: _zkf
 });
-
+/**
+ * The listitem iterator.
+ */
 zul.sel.ItemIter = zk.$extends(zk.Object, {
+	/** Constructor
+	 * @param Listbox listbox the widget that the iterator belongs to
+	 */
 	$init: function (box) {
 		this.box = box;
 	},
@@ -190,10 +252,19 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 			this.p = this.box.firstItem;
 		}
 	},
+	 /**
+     * Returns <tt>true</tt> if the iteration has more elements
+     * @return boolean
+     */
 	hasNext: function () {
 		this._init();
 		return this.p;
 	},
+	/**
+     * Returns the next element in the iteration.
+     *
+     * @return Listitem the next element in the iteration.
+     */
 	next: function () {
 		this._init();
 		var p = this.p;

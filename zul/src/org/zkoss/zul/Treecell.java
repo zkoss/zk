@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -38,18 +36,6 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Treecell {
-	private static final String ROOT_OPEN = "root-open";
-	private static final String ROOT_CLOSE = "root-close";
-	private static final String LAST_OPEN = "last-open";
-	private static final String LAST_CLOSE = "last-close";
-	private static final String TEE_OPEN = "tee-open";
-	private static final String TEE_CLOSE = "tee-close";
-	private static final String TEE = "tee";
-	private static final String LAST = "last";
-	private static final String VBAR = "vbar";
-	private static final String SPACER = "spacer";
-	private static final String FIRSTSPACER = "firstspacer";
-
 	private int _span = 1;
 
 	public Treecell() {

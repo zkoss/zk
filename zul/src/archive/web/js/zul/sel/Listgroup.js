@@ -12,10 +12,27 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Adds the ability for single level grouping to the Listbox.
+ * 
+ * <p>Event:
+ * <ol>
+ * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
+ * </ol>
+ * 
+ * <p>Default {@link #getZclass}: z-listgroup
+ */
 zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	_open: true,
 
 	$define: {
+    	/** Returns whether this container is open.
+    	 * <p>Default: true.
+    	 * @return boolean
+    	 */
+    	/** Sets whether this container is open.
+    	 * @param boolean open
+    	 */
 		open: function (open) {
 			this._openItem(open, true);
 			if (open)
@@ -23,18 +40,29 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		}
 	},
 
+	/** 
+	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
+	 * @return Array
+	 */
 	getItems: function () {
 		var item = [];
 		for (var w = this.nextSibling; w && !w.$instanceof(zul.sel.Listgroup); w = w.nextSibling)
 			item.push(w);
 		return item;
 	},
+	/** Returns the number of items.
+	 * @return int
+	 */
 	getItemCount: function () {
 		return this.getItems().length;
 	},
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-listgroup";
 	},
+	/** Returns the label of the {@link Listcell} it contains, or null
+	 * if no such cell.
+	 * @return String
+	 */
 	getLabel: function () {
 		return this.firstChild != null ? this.firstChild.getLabel() : null;
 	},
@@ -44,6 +72,11 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 			img = this.domImage_();
 		return label ? img + ' ': img;
 	},
+	/**
+	 * Returns whether is stripeable or not.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
 	isStripeable_: function () {
 		return false;
 	},

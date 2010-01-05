@@ -12,8 +12,30 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The style component used to specify CSS styles for the owner desktop.
+ * <p>
+ * Note: a style component can appear anywhere in a ZUML page, but it affects
+ * all components in the same desktop.
+ * <p>
+ * Note: if the src and content properties are both set, the later one overrides
+ * the previous one.
+ */
 zul.utl.Style = zk.$extends(zk.Widget, {
 	$define: {
+    	/**
+		 * Returns the URI of an external style sheet.
+		 * <p>
+		 * Default: null.
+		 * 
+		 * @return String
+		 */
+		/**
+		 * Sets the URI of an external style sheet.
+		 * 
+		 * @param String
+		 *            src the URI of an external style sheet
+		 */
 		src: function () {
 			if (this.desktop) this._updLink();
 		}

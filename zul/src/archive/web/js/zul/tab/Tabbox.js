@@ -14,23 +14,96 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A tabbox.
+ *
+ * <p>
+ * Event:
+ * <ol>
+ * <li>onSelect is sent when user changes the tab.</li>
+ * </ol>
+ *
+ * <p>
+ * Mold:
+ * <dl>
+ * <dt>default</dt>
+ * <dd>The default tabbox.</dd>
+ * <dt>accordion</dt>
+ * <dd>The accordion tabbox.</dd>
+ * </dl>
+ *
+ * <p>{@link Toolbar} only works in the horizontal default mold and
+ * the {@link #isTabscroll()} to be true.
+ *  
+ * <p>Default {@link #getZclass}: z-tabbox.
+ * @import zul.wgt.Toolbar
+ */
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_tabscroll: true,
 
 	$define: {
+    	/**
+    	 * Returns whether the tab scrolling is enabled.
+    	 * Default: true.
+    	 * @return boolean
+    	 */
+    	/**
+    	 * Sets whether to eable the tab scrolling
+    	 * @param boolean tabscroll
+    	 */
 		tabscroll: _zkf = function () {
 			this.rerender();
 		},
+		/**
+		 * Returns the orient.
+		 *
+		 * <p>
+		 * Default: "horizontal".
+		 *
+		 * <p>
+		 * Note: only the default mold supports it (not supported if accordion).
+		 * @return String
+		 */
+		/**
+		 * Sets the orient.
+		 *
+		 * @param String orient
+		 *            either "horizontal" or "vertical".
+		 */
 		orient: _zkf,
+		/**
+		 * Returns the spacing between {@link Tabpanel}. This is used by certain
+		 * molds, such as accordion.
+		 * <p>
+		 * Default: null (no spacing).
+		 * @return String
+		 */
+		/**
+		 * Sets the spacing between {@link Tabpanel}. This is used by certain molds,
+		 * such as accordion.
+		 * @param String panelSpacing
+		 */
 		panelSpacing: _zkf
 	},
+	/**
+	 * Returns the tabs that this tabbox owns.
+	 * @return Tabs
+	 */
 	getTabs: function () {
 		return this.tabs;
 	},
+	/**
+	 * Returns the tabpanels that this tabbox owns.
+	 * @return Tabpanels
+	 */
 	getTabpanels: function () {
 		return this.tabpanels;
 	},
+	/**
+	 * Returns the auxiliary toolbar that this tabbox owns.
+	 * @return Toolbar
+	 */
 	getToolbar: function () {
 		return this.toolbar;
 	},
@@ -38,25 +111,53 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-tabbox" +
 			( this.inAccordionMold() ? "-" + this.getMold() : this.isVertical() ? "-ver" : "") : this._zclass;
 	},
+	/**
+	 * Returns whether it is a horizontal tabbox.
+	 * @return boolean
+	 */
 	isHorizontal: function() {
 		return "horizontal" == this.getOrient();
 	},
+	/**
+	 * Returns whether it is a vertical tabbox.
+	 * @return boolean
+	 */
 	isVertical: function() {
 		return "vertical" == this.getOrient();
 	},
+	/**
+	 * Returns whether it is in the accordion mold.
+	 * @return boolean
+	 */
 	inAccordionMold: function () {
 		return this.getMold().indexOf("accordion") != -1;
 	},
+	/**
+	 * Returns the selected index.
+	 * @return int
+	 */
 	getSelectedIndex: function() {
 		return this._selTab ? this._selTab.getIndex() : -1 ;
 	},
+	/**
+	 * Sets the selected index.
+	 * @param int index
+	 */
 	setSelectedIndex: function(index) {
 		if (this.tabs)
 			this.setSelectedTab(this.tabs.getChildAt(index));
 	},
+	/**
+	 * Returns the selected tab panel.
+	 * @return Tabpanel
+	 */
 	getSelectedPanel: function() {
 		return this._selTab ? this._selTab.getLinkedPanel() : null;
 	},
+	/**
+	 * Sets the selected tab panel.
+	 * @param Tabpanel panel
+	 */
 	setSelectedPanel: function(panel) {
 		if (panel && panel.getTabbox() != this)
 			return
@@ -64,9 +165,17 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		if (tab)
 			this.setSelectedTab(tab);
 	},
+	/**
+	 * Returns the selected tab.
+	 * @return Tab
+	 */
 	getSelectedTab: function() {
 		return this._selTab;
 	},
+	/**
+	 * Sets the selected tab.
+	 * @param Tab tab
+	 */
 	setSelectedTab: function(tab) {
 		if (typeof tab == 'string')
 			tab = zk.Widget.$(tab);

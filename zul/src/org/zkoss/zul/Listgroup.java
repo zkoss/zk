@@ -20,8 +20,6 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;

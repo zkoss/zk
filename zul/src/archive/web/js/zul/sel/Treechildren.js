@@ -12,12 +12,22 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A treechildren.
+ */
 zul.sel.Treechildren = zk.$extends(zul.Widget, {
+	/** Returns the {@link Tree} instance containing this element.
+	 * @return Tree
+	 */
 	getTree: function () {
 		for (var wgt = this.parent; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.sel.Tree)) return wgt;
 		return null;
 	},
+	/** Returns the {@link Treerow} that is associated with
+	 * this treechildren, or null if no such treerow.
+	 * @return Treerow
+	 */
 	getLinkedTreerow: function () {
 		return this.parent && this.parent.$instanceof(zul.sel.Treeitem) ?
 			this.parent.treerow: null;
@@ -69,6 +79,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return !(this.parent.parent.$instanceof(zul.sel.Treechildren))
 			|| this.parent.parent.isVisible(); //recursive
 	},
+	/** Returns a readonly list of all descending {@link Treeitem}
+	 * (children's children and so on).
+	 *
+	 * <p>Note: the performance of the size method of returned collection
+	 * is no good.
+	 * @return Array
+	 */
 	getItems: function (items) {
 		items = items || [];
 		for (var w = this.firstChild; w; w = w.nextSibling) {
@@ -78,6 +95,11 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		}
 		return items;
 	},
+	/** Returns the number of child {@link Treeitem}
+	 * including all descendants. The same as {@link #getItems}.size().
+	 * <p>Note: the performance is no good.
+	 * @return int
+	 */
 	getItemCount: function () {
 		var sz = 0;
 		for (var w = this.firstChild; w; w = w.nextSibling, ++sz)

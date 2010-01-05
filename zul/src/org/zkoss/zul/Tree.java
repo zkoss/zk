@@ -711,7 +711,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				Treeitem parent = (Treeitem)cmp;
 				if (parent.isVisible()) {
 					parent.setOpen(true);
-					int cnt = getVisibleIndexOfItem0((Treeitem)parent, false);
+					int cnt = getVisibleIndexOfItem0(parent, false);
 					if (cnt == -1) return -1;
 					count += cnt;
 				} else return -1; // invisible item

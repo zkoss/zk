@@ -12,9 +12,22 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A treecol.
+ * <p>Default {@link #getZclass}: z-treecol
+ */
 zul.sel.Treecol = zk.$extends(zul.mesh.HeaderWidget, {
+	/** Returns the tree that it belongs to.
+	 * @return Tree
+	 */
 	getTree: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 	$define: {
+    	/** Returns the maximal length of each item's label.
+    	 * @return int
+    	 */
+    	/** Sets the maximal length of each item's label.
+    	 * @param int maxlength
+    	 */
 		maxlength: [function (v) {
 			return !v || v < 0 ? 0 : v; 
 		}, function () {
@@ -25,7 +38,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.HeaderWidget, {
 	updateCells_: function () {
 		var tree = this.getTree();
 		if (tree)
-			zul.sel.Treecol.updateCell(tree.treechildren, jcol);			
+			zul.sel.Treecol.updateCell(tree.treechildren, this.getChildIndex());			
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-treecol" : this._zclass;

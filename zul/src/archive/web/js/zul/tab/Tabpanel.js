@@ -14,7 +14,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A tab panel.
+ * <p>Default {@link #getZclass}: z-tabpanel.
+ */
 zul.tab.Tabpanel = zk.$extends(zul.Widget, {
+	/** Returns the tabbox owns this component.
+	 * @return Tabbox
+	 */
 	getTabbox: function() {
 		return this.parent ? this.parent.parent : null;
 	},
@@ -31,6 +38,9 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var mold = tabbox.getMold();
 		return 'z-tabpanel' + (mold == "default" ? (tabbox.isVertical() ? '-ver' : '') : '-' + mold);
 	},
+	/** Returns the tab associated with this tab panel.
+	 * @return Tab
+	 */
 	getLinkedTab: function() {
 		var tabbox =  this.getTabbox();
 		if (!tabbox) return null;
@@ -38,9 +48,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tabs = tabbox.getTabs();
 		return tabs ? tabs.getChildAt(this.getIndex()) : null;
 	},
+	/** Returns the index of this panel, or -1 if it doesn't belong to any
+	 * tabpanels.
+	 * @return int
+	 */
 	getIndex:function() {
 		return this.getChildIndex();
 	},
+	/** Returns whether this tab panel is selected.
+	 * @return boolean
+	 */
 	isSelected: function() {
 		var tab = this.getLinkedTab();
 		return tab && tab.isSelected();

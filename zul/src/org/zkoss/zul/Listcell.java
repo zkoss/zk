@@ -19,10 +19,7 @@ package org.zkoss.zul;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.impl.LabelImageElement;

@@ -21,8 +21,6 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
@@ -532,12 +530,12 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 			super.redrawChildren(out);
 		} else if (isVisible() && shallVisitTree(tree, this)) {
 			if (shallRenderTree(tree)) {
-				ComponentCtrl child = (ComponentCtrl) getTreerow();
+				ComponentCtrl child = getTreerow();
 				if (child != null)
 					child.redraw(out);
 			}
 			boolean close = !isOpen();
-			ComponentCtrl child = (ComponentCtrl) getTreechildren();
+			ComponentCtrl child = getTreechildren();
 			if (child != null) {
 				if (close) ((Component)child).setAttribute(Attributes.SHALL_RENDER_ITEM, Boolean.TRUE);
 				child.redraw(out);

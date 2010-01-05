@@ -14,25 +14,72 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A tab.
+ * <p>
+ * Default {@link #getZclass}: z-tab.
+ */
 zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onClose: this}, -1000);
 	},
 	$define: {
+		/**
+		 * Returns whether this tab is closable. If closable, a button is displayed
+		 * and the onClose event is sent if an user clicks the button.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether this tab is closable. If closable, a button is displayed and
+		 * the onClose event is sent if an user clicks the button.
+		 * <p>
+		 * Default: false.
+		 * @param boolean closable
+		 */
 		closable: _zkf = function() {
 			this.rerender();
 		},
 		image: _zkf,
+		/**
+		 * Returns whether this tab is disabled.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether this tab is disabled. If a tab is disabled, then it cann't
+		 * be selected or closed by user, but it still can be controlled by server
+		 * side program.
+		 * @param boolean disabled
+		 */
 		disabled: _zkf,
+		/**
+		 * Returns whether this tab is selected.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether this tab is selected.
+		 * @param boolean selected
+		 */
 		selected: function(selected) {
 			if (this.desktop)
 				this._sel();
 		}
 	},
+	/**
+	 * Returns the tabbox owns this component.
+	 * @return Tabbox
+	 */
 	getTabbox: function() {
 		return this.parent ? this.parent.parent : null;
 	},
+	/**
+	 * Returns the index of this panel, or -1 if it doesn't belong to any tabs.
+	 * @return int
+	 */
 	getIndex: function() {
 		return this.getChildIndex();
 	},
@@ -46,6 +93,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var mold = tabbox.getMold();
 		return 'z-tab' + (mold == 'default' ? (tabbox.isVertical() ? '-ver': '') : '-' + mold);
 	},
+	/**
+	 * Returns the panel associated with this tab.
+	 * @return Tabpanel
+	 */
 	getLinkedPanel: function() {
 		var w;
 		return (w = this.getTabbox()) && (w = w.getTabpanels()) ?
