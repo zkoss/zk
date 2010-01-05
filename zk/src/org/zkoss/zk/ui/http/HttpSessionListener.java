@@ -29,6 +29,9 @@ import org.zkoss.zk.ui.impl.Attributes;
 /**
  * Used to clean up desktops that a session owns.
  *
+ * <p>This listener works only with Servlet 2.4 or later.
+ * For servers that support only Servlet 2.3, please use
+ * {@link HttpSessionListener23} instead.
  * @author tomyeh
  */
 public class HttpSessionListener extends HttpSessionListener23
