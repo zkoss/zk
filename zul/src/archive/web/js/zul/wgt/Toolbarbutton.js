@@ -127,7 +127,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		var zcls = this._zclass;
 		return zcls ? zcls : "z-toolbarbutton";
 	},
-
+	getTextNode: function () {
+		return this.$n().firstChild.firstChild;
+	},
 	bind_: function(){
 		this.$supers('bind_', arguments);
 		if (!this._disabled) {
@@ -181,7 +183,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (v)
 			attr += ' tabIndex="' + v + '"';
 		return attr;
-	},
+	},	
 	doClick_: function(evt){
 		if (!this.isDisabled()) {
 			this.fireX(evt);

@@ -193,7 +193,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(n).setStyles(s);
 
 			n = this.getTextNode();
-			if (n) zk(n).css(jq.filterTextStyle(s));
+			if (n) jq(n).css(jq.filterTextStyle(s));
 		}
 	},
 	setVisible: function (visible) {

@@ -1667,7 +1667,7 @@ out.push('</div>');
 			zk(this.$n()).setStyles(s);
 
 			var n = this.getTextNode();
-			if (n) zk(n).css(jq.filterTextStyle(s));
+			if (n) jq(n).css(jq.filterTextStyle(s));
 		}
 	},
 	/** Returns the DOM element that is used to hold the text, or null
