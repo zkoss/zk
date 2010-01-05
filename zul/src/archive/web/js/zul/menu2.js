@@ -114,6 +114,7 @@ zkMenu2 = { // menu
 		}
 	} : zk.voidf,
 	cleanup: function (menu) {
+		zkMenuit2.cleanup(menu);
 		var pp = $e(getZKAttr(menu, "mpop"));
 		if (pp && pp._shadow) {
 			pp._shadow.cleanup();
@@ -464,7 +465,17 @@ zkMenusp2 = { //menuseparator
 		zk.listen(cmp, "mouseout", zkMenu2.onout);
 	}
 };
-
+//Bug 2925964
+zkMenuit2.cleanup = zkMenusp2.cleanup = function (cmp) {
+	if (!zkMenu2.isTop(cmp)) {
+		var shadow = $outer(cmp.parentNode)._shadow;
+		if (shadow) {
+			zk.addCleanupLater(function () {
+				shadow.sync();
+			}, false, cmp.parentNode.id + "pp");
+		}
+	}
+};
 zkMpop2 = { //menupopup
 	setAttr: zk.ie7 ? function (cmp, nm, val) {
 		if (nm == "z.closemask") { // Bug 2784736
