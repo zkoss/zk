@@ -12,12 +12,56 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A container that is displayed as a popup.
+ * The popup window does not have any special frame.
+ * Popups can be displayed when an element is clicked by assigning
+ * the id of the popup to either the {@link #setPopup},
+ * {@link #setContext} or {@link #setTooltip} attribute of the element.
+ *
+ * <p>Default {@link #getZclass}: z-popup.
+ */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_visible: false,
-
+	/**
+	 * Returns whether the popup is visible.
+	 * @return boolean
+	 */
 	isOpen: function () {
 		return this.isVisible();
 	},
+	/**
+	 * Opens the popup.
+	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
+	 * if any.
+	 * @param zk.Widget ref the referred widget.
+	 * @param Offset offset the offset of x and y
+	 * @param String position
+	 * <p> Possible values for the position attribute are:
+	 * <ul>
+	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned on the left.</li>
+	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned on the right.</li>
+	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned on the left.</li>
+	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned on the right.</li>
+	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned on the top.</li>
+	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned on the bottom.</li>
+	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned on the top.</li>
+	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned on the bottom.</li>
+	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the top-left 
+	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>overlap_end</b><br/> the popup overlaps the anchor, with the top-right 
+	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>overlap_before</b><br/> the popup overlaps the anchor, with the bottom-left 
+	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>overlap_after</b><br/> the popup overlaps the anchor, with the bottom-right 
+	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
+	 *  	the bottom of the anchor, with the topleft corner of the popup at the horizontal position of the mouse pointer.</li>
+	 * </ul></p>
+	 * @param Map opts 
+	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
+	 *  it will show a disable mask.
+	 */
 	open: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
@@ -95,6 +139,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onResponse: this});
 		this.mask = null;
 	},
+	/**
+	 * Closes this popup at the client.
+	 *
+	 * <p>In most cases, the popup is closed automatically when the user
+	 * clicks outside of the popup.
+	 * @param Map opts if opts.sendOnOpen exists, it will fire onOpen event.
+	 */
 	close: function (opts) {
 		if (this._stackup)
 			this._stackup.style.display = "none";

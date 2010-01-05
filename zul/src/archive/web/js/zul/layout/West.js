@@ -12,7 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A west region of a border layout.
+ * <p>Default {@link #getZclass}: z-west.
+ * 
+ * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
+ */
 zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
+	/**
+	 * The height can't be specified in this component because its height is
+	 * determined by other region components ({@link North} or {@link South}).
+	 * @param String height
+	 */
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
 	
@@ -20,11 +31,24 @@ zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 		this.$supers('$init', arguments);
 		this.setCmargins("0,3,3,0");
 	},
-	
+	/**
+	 * Returns {@link Borderlayout#WEST}.
+	 * @return String
+	 */
 	getPosition: function () {
 		return zul.layout.Borderlayout.WEST;
 	},
+	/**
+	 * Returns the size of this region. This method is shortcut for
+	 * {@link #getWidth()}.
+	 * @return String
+	 */
 	getSize: _zkf.prototype.getWidth,
+	/**
+	 * Sets the size of this region. This method is shortcut for
+	 * {@link #setWidth(String)}.
+	 * @param String size
+	 */
 	setSize: _zkf.prototype.setWidth,
 
 	_ambit2: function (ambit, mars, split) {

@@ -47,8 +47,6 @@ import org.zkoss.zul.impl.FileuploadDlg;
  *
  * <p>A non-XUL extension.
  *
- * <p>Default {@link #getZclass}: z-fileupload. (since 5.0.0)
- *
  * @author tomyeh
  * @see Filedownload
  */

@@ -12,23 +12,73 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A checkbox.
+ *
+ * <p>Event:
+ * <ol>
+ * <li>onCheck is sent when a checkbox
+ * is checked or unchecked by user.</li>
+ * </ol>
+ */
 zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_tabindex: -1,
 	_checked: false,
 
 	$define: {
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (v) {
 			var n = this.$n('real');
 			if (n) n.disabled = v;
 		},
+		/** Returns whether it is checked.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is checked.
+		 * @param boolean checked
+		 */
 		checked: function (v) {
 			var n = this.$n('real');
 			if (n) n.checked = v;
 		},
+		/** Returns the name of this component.
+		 * <p>Default: null.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * @return String
+		 */
+		/** Sets the name of this component.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 *
+		 * @param String name the name of this component.
+		 */
 		name: function (v) {
 			var n = this.$n('real');
 			if (n) n.name = v || '';
 		},
+		/** Returns the tab order of this component.
+		 * <p>Default: -1 (means the same as browser's default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
 		tabindex: function (v) {
 			var n = this.$n('real');
 			if (n) n.tabIndex = v >= 0 ? v: '';

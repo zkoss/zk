@@ -12,11 +12,26 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Groups a set of child elements to have a visual effect.
+ * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
+ * "z-groupbox" is assumed.
+ *
+ * <p>Events: onOpen.
+ *
+ */
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
 
 	$define: { //zk.def
+		/** Returns whether this groupbox is open.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Opens or closes this groupbox.
+		 * @param boolean open
+		 */
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
@@ -29,13 +44,48 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		},
+		/** Returns whether user can open or close the group box.
+		 * In other words, if false, users are no longer allowed to
+		 * change the open status (by clicking on the title).
+		 *
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether user can open or close the group box.
+		 * @param boolean closable
+		 */
 		closable: _zkf = function () {
 			this._updateDomOuter();
 		},
+		/** Returns the CSS style for the content block of the groupbox.
+		 * Used only if {@link #getMold} is not default.
+		 * @return String
+		 */
+		/** Sets the CSS style for the content block of the groupbox.
+		 * Used only if {@link #getMold} is not default.
+		 *
+		 * <p>Default: null.
+		 * @param String contentStyle
+		 */
 		contentStyle: _zkf,
+		/** Returns the style class used for the content block of the groupbox.
+		 * Used only if {@link #getMold} is not default.
+		 * @return String
+		 */
+		/** Sets the style class used for the content block.
+		 * @param String contentSclass
+		 */
 		contentSclass: _zkf
 	},
-
+	/** Returns whether this groupbox is in the legend mold.
+	 * By the legend mold we mean this group box is rendered with
+	 * HTML FIELDSET tag.
+	 *
+	 * <p>Default: the legend mold is assumed if {@link #getMold}
+	 * returns "default".
+	 *
+	 * @return boolean
+	 */
 	isLegend: function () {
 		return this._mold == 'default';
 	},

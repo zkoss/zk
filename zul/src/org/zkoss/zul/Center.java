@@ -67,14 +67,14 @@ public class Center extends LayoutRegion implements org.zkoss.zul.api.Center {
 	}
 
 	/**
-	 * Center region can't be enabled the split functionality.
+	 * Center region can't be enabled the maxsize.
 	 */
 	public void setMaxsize(int maxsize) {
 		throw new UnsupportedOperationException("readonly");
 	}
 
 	/**
-	 * Center region can't be enabled the split functionality.
+	 * Center region can't be enabled the minsize.
 	 */
 	public void setMinsize(int minsize) {
 		throw new UnsupportedOperationException("readonly");

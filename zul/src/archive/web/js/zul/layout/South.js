@@ -12,14 +12,36 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A south region of a border layout.
+ * <p>Default {@link #getZclass}: z-south.
+ */
 zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
+	/**
+	 * The width can't be specified in this component because its width is
+	 * determined by other region components ({@link West} or {@link East}).
+	 * @param String width
+	 */
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
-
+	/**
+	 * Returns {@link Borderlayout#SOUTH}.
+	 * @return String
+	 */
 	getPosition: function () {
 		return zul.layout.Borderlayout.SOUTH;
 	},
+	/**
+	 * Returns the size of this region. This method is shortcut for
+	 * {@link #getHeight()}.
+	 * @return String
+	 */
 	getSize: _zkf.prototype.getHeight,
+	/**
+	 * Sets the size of this region. This method is shortcut for
+	 * {@link #setHeight(String)}.
+	 * @param String size
+	 */
 	setSize: _zkf.prototype.setHeight,
 
 	_ambit2: function (ambit, mars, split) {

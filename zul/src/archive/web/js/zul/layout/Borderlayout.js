@@ -12,6 +12,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A border layout is a layout container for arranging and resizing
+ * child components to fit in five regions: north, south, east, west, and center.
+ * Each region may
+ * contain no more than one component, and is identified by a corresponding
+ * constant: <code>NORTH</code>, <code>SOUTH</code>, <code>EAST</code>,
+ * <code>WEST</code>, and <code>CENTER</code>.
+ * 
+ * <p>Default {@link #getZclass}: z-borderlayout.
+ * 
+ */
 zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	setResize: function () {
 		this.resize();
@@ -64,6 +75,9 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (this._isOnSize)
 			this._resize(true);
 	},
+	/**
+	 * Re-sizes this layout component.
+	 */
 	resize: function () {
 		if (this.desktop)
 			this._resize();
@@ -201,9 +215,29 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf
 }, {
+	/**
+	 * The north layout constraint (top of container).
+	 * @type String
+	 */
 	NORTH: "north",
+	/**
+	 * The south layout constraint (bottom of container).
+	 * @type String
+	 */
 	SOUTH: "south",
+	/**
+	 * The east layout constraint (right side of container).
+	 * @type String
+	 */
 	EAST: "east",
+	/**
+	 * The west layout constraint (left side of container).
+	 * @type String
+	 */
 	WEST: "west",
+	/**
+	 * The center layout constraint (middle of container).
+	 * @type String
+	 */
 	CENTER: "center"
 });

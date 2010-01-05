@@ -12,26 +12,72 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The same as HTML A tag.
+ * <p>Default {@link #getZclass}: z-a.
+ */
 zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	_dir: "normal",
 	_tabindex: -1,
 
 	$define: {
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function () {
 			this.rerender(); //bind and unbind
 		},
+		/** Returns the direction.
+		 * <p>Default: "normal".
+		 * @return String
+		 */
+		/** Sets the direction.
+		 * @param String dir either "normal" or "reverse".
+		 */
 		dir: _zkf = function () {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		},
+		/** Returns the href that the browser shall jump to, if an user clicks
+		 * this button.
+		 * <p>Default: null. If null, the button has no function unless you
+		 * specify the onClick event listener.
+		 * <p>If it is not null, the onClick event won't be sent.
+		 * @return String
+		 */
+		/** Sets the href.
+		 * @param String href
+		 */
 		href: function (v) {
 			var n = this.$n();
 			if (n) n.href = v || '';
 		},
+		/** Returns the target frame or window.
+		 *
+		 * <p>Note: it is useful only if href ({@link #setHref}) is specified
+		 * (i.e., use the onClick listener).
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets the target frame or window.
+		 * @param String target the name of the frame or window to hyperlink.
+		 */
 		target: function (v) {
 			var n = this.$n();
 			if (n) n.target = v || '';
 		},
+		/** Returns the tab order of this component.
+		 * <p>Default: -1 (means the same as browser's default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
 		tabindex: function (v) {
 			var n = this.$n();
 			if (n) n.tabIndex = v < 0 ? '' : v;

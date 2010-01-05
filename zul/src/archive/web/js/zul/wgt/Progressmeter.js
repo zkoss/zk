@@ -12,10 +12,22 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A progress meter is a bar that indicates how much of a task has been completed. 
+ *
+ * <p>Default {@link #getZclass}: z-progressmeter.
+ */
 zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	_value: 0,
 
 	$define: {
+		/** Returns the current value of the progress meter.
+		 * @return int
+		 */
+		/** Sets the current value of the progress meter.
+		 * <p>Range: 0~100.
+		 * @param int value
+		 */
 		value: function () {
 			if(this.$n()) 
 				this._fixImgWidth();

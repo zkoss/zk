@@ -12,18 +12,64 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A button.
+ * <p>Default {@link #getZclass}: z-button.
+ */
 zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
 
 	$define: {
+		/** Returns the href that the browser shall jump to, if an user clicks
+		 * this button.
+		 * <p>Default: null. If null, the button has no function unless you
+		 * specify the onClick event listener.
+		 * <p>If it is not null, the onClick event won't be sent.
+		 * @return String
+		 */
+		/** Sets the href.
+		 * @param String href
+		 */
 		href: null,
+		/** Returns the target frame or window.
+		 *
+		 * <p>Note: it is useful only if href ({@link #setHref}) is specified
+		 * (i.e., use the onClick listener).
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets the target frame or window.
+		 * @param String target the name of the frame or window to hyperlink.
+		 */
 		target: null,
+		/** Returns the direction.
+		 * <p>Default: "normal".
+		 * @return String
+		 */
+		/** Sets the direction.
+		 * @param String dir either "normal" or "reverse".
+		 */
 		dir: _zkf = function () {
 			this.updateDomContent_();
 		},
+		/** Returns the orient.
+		 * <p>Default: "horizontal".
+		 * @return String
+		 */
+		/** Sets the orient.
+		 * @param String orient either "horizontal" or "vertical".
+		 */
 		orient: _zkf,
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (v) {
 			if (this.desktop)
 				if (this._mold != 'trendy') this.$n().disabled = v;
@@ -38,11 +84,92 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 					n.src = v || '';
 			}
 		},
+		/** Returns the tab order of this component.
+		 * <p>Default: -1 (means the same as browser's default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
 		tabindex: function (v) {
 			var n = this.$n();
 			if (n) (this.$n('btn') || n).tabIndex = v >= 0 ? v: '';
 		},
+		/** Returns a list of component IDs that shall be disabled when the user
+		 * clicks this button.
+		 *
+		 * <p>To represent the button itself, the developer can specify <code>self</code>.
+		 * For example, 
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('self,cancel');
+		 * </code></pre>
+		 * is the same as
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('ok,cancel');
+		 * </code></pre>
+		 * that will disable
+		 * both the ok and cancel buttons when an user clicks it.
+		 *
+		 * <p>The button being disabled will be enabled automatically
+		 * once the client receives a response from the server.
+		 * In other words, the server doesn't notice if a button is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('+self,+cancel');
+		 * </code></pre>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets whether to disable the button after the user clicks it.
+		 * @param String autodisable
+		 */
 		autodisable: null,
+		/** Returns non-null if this button is used for file upload, or null otherwise.
+		 * Refer to {@link #setUpload} for more details.
+		 * @return String
+		 */
+		/** Sets the JavaScript class at the client to handle the upload if this
+		 * button is used for file upload.
+		 * <p>Default: null.
+		 *
+		 * <p>For example, the following example declares a button for file upload:
+		 * <pre><code>
+		 * button.setLabel('Upload');
+		 * button.setUpload('true');
+		 * </code></pre>
+		 *
+		 * <p>If you want to customize the handling of the file upload at
+		 * the client, you can specify a JavaScript class when calling
+		 * this method:
+		 * <code>button.setUpload('foo.Upload');</code>
+		 *
+		 * <p> Another options for the upload can be specified as follows:
+		 *  <pre><code>button.setUpload('true,maxsize=-1,native');</code></pre>
+		 *  <ul>
+		 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
+		 * a negative value if no limit.</li>
+		 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
+		 * image, audio or text files.</li>
+		 *  </ul>
+		 *  
+		 * @param String upload a JavaScript class to handle the file upload
+		 * at the client, or "true" if the default class is used,
+		 * or null or "false" to disable the file download (and then
+		 * this button behaves like a normal button).
+		 */
 		upload: function (v) {
 			var n = this.$n();
 			if (n && !this._disabled) {

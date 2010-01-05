@@ -12,6 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ *  A header for a {@link Groupbox}.
+ * It may contain either a text label, using {@link #setLabel},
+ * or child elements for a more complex caption.
+ * <p>Default {@link #getZclass}: z-caption.
+ *
+ */
 zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//super//
 	domDependent_: true, //DOM content depends on parent

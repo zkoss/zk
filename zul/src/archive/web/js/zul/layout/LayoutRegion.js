@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A layout region in a border layout.
+ * <p>
+ * Events:<br/> onOpen, onSize.<br/>
+ */
 zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
 	_border: "normal",
@@ -25,9 +30,41 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 
 	$define: {
+		/**
+		 * Sets whether to grow and shrink vertical/horizontal to fit their given
+		 * space, so called flexibility.
+		 * @param boolean flex
+		 */
+		/**
+		 * Returns whether to grow and shrink vertical/horizontal to fit their given
+		 * space, so called flexibility.
+		 * 
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
 		flex: function () {
 			this.rerender();
 		},
+		/**
+		 * Sets the border (either none or normal).
+		 * 
+		 * @param String border the border. If null or "0", "none" is assumed.
+		 */
+		/**
+		 * Returns the border.
+		 * <p>
+		 * The border actually controls what CSS class to use: If border is null, it
+		 * implies "none".
+		 * 
+		 * <p>
+		 * If you also specify the CSS class ({@link #setClass}), it overwrites
+		 * whatever border you specify here.
+		 * 
+		 * <p>
+		 * Default: "normal".
+		 * @return String
+		 */
 		border: function (border) {
 			if (!border || '0' == border)
 				this._border = border = "none";
@@ -37,21 +74,81 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				
 			this.updateDomClass_();
 		},
+		/**
+		 * Sets the title.
+		 * @param String title
+		 */
+		/** 
+		 * Returns the title.
+		 * <p>Default: null.
+		 * @return String
+		 */
 		title: function () {
 			this.rerender();
 		},
+		/**
+		 * Sets whether enable the split functionality.
+		 * @param boolean splittable
+		 */
+		/**
+		 * Returns whether enable the split functionality.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
 		splittable: function (splittable) {
 			if (this.parent && this.desktop)
 				this.parent.resize();
 		},
+		/**
+		 * Sets the maximum size of the resizing element.
+		 * @param int maxsize
+		 */
+		/**
+		 * Returns the maximum size of the resizing element.
+		 * <p>
+		 * Default: 2000.
+		 * @return int
+		 */
 		maxsize: null,
+		/**
+		 * Sets the minimum size of the resizing element.
+		 * @param int minsize
+		 */
+		/**
+		 * Returns the minimum size of the resizing element.
+		 * <p>
+		 * Default: 0.
+		 * @return int
+		 */
 		minsize: null,
-
+		/**
+		 * Sets whether set the initial display to collapse.
+		 * 
+		 * <p>It only applied when {@link #getTitle()} is not null.
+		 * @param boolean collapsible
+		 */
+		/**
+		 * Returns whether set the initial display to collapse.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
 		collapsible: function (collapsible) {
 			var btn = this.$n(this._open ? 'btn' : 'btned');
 			if (btn)
 				btn.style.display = collapsible ? '' : 'none';
 		},
+		/**
+		 * Sets whether enable overflow scrolling.
+		 * @param boolean autoscroll
+		 */
+		/**
+		 * Returns whether enable overflow scrolling.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
 		autoscroll: function (autoscroll) {
 			var cave = this.$n('cave');
 			if (cave) {
@@ -68,6 +165,18 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 		},
+		/**
+		 * Opens or collapses the splitter. Meaningful only if
+		 * {@link #isCollapsible} is not false.
+		 * @param boolean open
+		 */
+		/**
+		 * Returns whether it is open (i.e., not collapsed. Meaningful only if
+		 * {@link #isCollapsible} is not false.
+		 * <p>
+		 * Default: true.
+		 * @return boolean
+		 */
 		open: function (open, fromServer, nonAnima) {
 			if (!this.$n() || !this.isCollapsible())
 				return; //nothing changed
@@ -105,10 +214,21 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (!fromServer) this.fire('onOpen', {open:open});
 		}
 	},
-
+	/**
+	 * Returns the collapsed margins, which is a list of numbers separated by comma.
+	 * 
+	 * <p>
+	 * Default: "5,5,5,5".
+	 * @return String
+	 */
 	getCmargins: function () {
 		return zUtl.intsToString(this._open ? this._margins : this._cmargins);
 	},
+	/**
+	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
+	 * "top,left,right,bottom"
+	 * @param String cmargins
+	 */
 	setCmargins: function (cmargins) {
 		if (this.getCmargins() != cmargins) {
 			this._cmargins = zUtl.stringToInts(cmargins, 0);
@@ -116,13 +236,27 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.parent.resize();
 		}
 	},
-
+	/**
+	 * Returns the current margins.
+	 * @return Dimension
+	 */
 	getCurrentMargins_: function () {
 		return zul.layout.LayoutRegion._aryToObject(this._open ? this._margins : this._cmargins);
 	},
+	/**
+	 * Returns the margins, which is a list of numbers separated by comma.
+	 * <p>
+	 * Default: "0,0,0,0".
+	 * @return String
+	 */
 	getMargins: function () {
 		return zUtl.intsToString(this._margins);
 	},
+	/**
+	 * Sets margins for the element "0,1,2,3" that direction is
+	 * "top,left,right,bottom"
+	 * @param String
+	 */
 	setMargins: function (margins) {
 		if (this.getMargins() != margins) {
 			this._margins = zUtl.stringToInts(margins, 0);

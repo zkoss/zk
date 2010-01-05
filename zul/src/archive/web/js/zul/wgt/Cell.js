@@ -12,6 +12,14 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The generic cell component to be embedded into {@link Row} or {@link Vbox}
+ * or {@link Hbox} for fully control style and layout.
+ * 
+ * <p>Default {@link #getZclass}: z-cell.
+ * @import zul.grid.*
+ * @import zul.box.*
+ */
 zul.wgt.Cell = zk.$extends(zul.Widget, {
 	_colspan: 1,
 	_rowspan: 1,
@@ -19,21 +27,51 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	_boxType: 1,
 	
 	$define: {
+		/** Returns number of columns to span.
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of columns to span.
+		 * <p>It is the same as the colspan attribute of HTML TD tag.
+		 * @param int colspan
+		 */
 		colspan: function (v) {
 			var n = this.$n();
 			if (n)
 				n.colSpan = v;
 		},
+		/** Returns number of rows to span.
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of rows to span.
+		 * <p>It is the same as the rowspan attribute of HTML TD tag.
+		 * @param int rowspan
+		 */
 		rowspan: function (v) {
 			var n = this.$n();
 			if (n)
 				n.rowSpan = v;
 		},
+		/** Returns the horizontal alignment.
+		 * <p>Default: null (system default: left unless CSS specified).
+		 * @return String
+		 */
+		/** Sets the horizontal alignment.
+		 * @param String align
+		 */
 		align: function (v) {
 			var n = this.$n();
 			if (n)
 				n.align = v;
 		},
+		/** Returns the vertical alignment.
+		 * <p>Default: null (system default: top).
+		 * @return String
+		 */
+		/** Sets the vertical alignment of this grid.
+		 * @param String valign
+		 */
 		valign: function (v) {
 			var n = this.$n();
 			if (n)

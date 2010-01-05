@@ -17,9 +17,23 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_align: "start",
 
 	$define: {
+		/** Returns the alignment.
+		 * <p>Default: null (use browser default).
+		 * @return String
+		 */
+		/** Sets the alignment: one of left, center, right, ustify,
+		 * @param String align
+		 */
 		align: _zkf = function () {
 			this.rerender();
 		},
+		/** Returns the orient.
+		 * <p>Default: "horizontal".
+		 * @return String
+		 */
+		/** Sets the orient.
+		 * @param String orient either "horizontal" or "vertical".
+		 */
 		orient: _zkf
 	},
 
@@ -29,11 +43,15 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		return zcls ? zcls : "z-toolbar"
 			+ (this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? "-tabs" : "") 
 			+ (this.inPanelMold() ? "-panel" : "");
-	},
-	// protected 
+	}, 
+	/**
+	 * Returns whether is in panel mold or not.
+	 * @return boolean
+	 */
 	inPanelMold: function(){
 		return this._mold == "panel";
 	},
+	// protected
 	onChildAdded_: function(){
 		this.$supers('onChildAdded_', arguments);
 		if (this.inPanelMold()) 

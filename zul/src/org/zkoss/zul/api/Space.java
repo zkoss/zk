@@ -17,11 +17,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.api;
 
 /**
- * Space is a {@link Separator} with the orient default to "horizontal".
+ * Space is a {@link Separator} with the orient default to "vertical".
  * 
  * <p>
  * In other words, <space> is equivalent to <separator
- * orient="horizontal">
+ * orient="vertical">
  * 
  * @author tomyeh
  * @since 3.5.2
