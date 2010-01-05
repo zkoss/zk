@@ -111,6 +111,7 @@ November, 2009
   2909817: Treecol setAlign() with right fails
   2909820: Dynamically add treeitem, the item is rendered wrong place
   2909957: hflex="1", grid in vbox, can expand but CANNOT shrink 
+  2926070: ZK 5 RC doesn't support Servlet 2.3
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

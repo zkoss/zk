@@ -315,7 +315,7 @@ public class Strings {
 			for (; k < len && specials.indexOf(src.charAt(k)) < 0; ++k)
 				;
 			if (k >= len)
-				return dst.append(src.subSequence(j, src.length()));
+				return dst.append((Object)src.subSequence(j, src.length()));
 
 			char cc = src.charAt(k);
 			switch (cc) {
