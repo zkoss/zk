@@ -332,7 +332,7 @@ public class Strings {
 					continue;
 				}
 			}
-			dst.append(src.subSequence(j, k)).append('\\').append(cc);
+			dst.append((Object)src.subSequence(j, k)).append('\\').append(cc);
 			j2 = j = k + 1;
 		}
 	}
