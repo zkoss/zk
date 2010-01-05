@@ -818,20 +818,21 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
-		didDeserialize(attrs.values());
 		final List lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
-		didDeserialize(lns);
 
 		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
-		didDeserialize(_dtCleans);
 		_execInits = (List)Serializables.smartRead(s, _execInits);
-		didDeserialize(_execInits);
 		_execCleans = (List)Serializables.smartRead(s, _execCleans);
-		didDeserialize(_execCleans);
 		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
-		didDeserialize(_uiCycles);
 		_ausvcs = (List)Serializables.smartRead(s, _ausvcs);
+
+		didDeserialize(attrs.values());
+		didDeserialize(lns);
+		didDeserialize(_dtCleans);
+		didDeserialize(_execInits);
+		didDeserialize(_execCleans);
+		didDeserialize(_uiCycles);
 		didDeserialize(_ausvcs);
 
 		if (s.readBoolean())

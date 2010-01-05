@@ -2755,10 +2755,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		attrs();
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
-		didDeserialize(attrs.values());
 		final List lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
-		didDeserialize(lns);
 		if (attrs.isEmpty() && lns.isEmpty())
 			_attrs = null;
 		else if (_parent != null)
@@ -2771,7 +2769,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (_listeners == null) _listeners = new HashMap(4);
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
 			_listeners.put(evtnm, ls);
-			didDeserialize(ls);
 		}
 
 		//restore _spaceInfo
@@ -2785,6 +2782,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				addToIdSpacesDown(ac, this);
 		}
 
+		//didDeserialize
+		didDeserialize(attrs.values());
+		didDeserialize(lns);
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didDeserialize((Collection)it.next());
 		didDeserialize(_ausvc = (AuService)s.readObject());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}

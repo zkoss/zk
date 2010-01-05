@@ -1087,10 +1087,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
-		didDeserialize(attrs.values());
 		final List lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
-		didDeserialize(lns);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -1099,11 +1097,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (_listeners == null) _listeners = new HashMap();
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
 			_listeners.put(evtnm, ls);
-			didDeserialize(ls);
 		}
 
 		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
-		didDeserialize(_resolvers);
 
 		//Handles interpreters
 		for (;;) {
@@ -1112,6 +1108,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			((SerializableAware)getInterpreter(zslang)).read(s);
 		}
+
+		//didDeserialize
+		didDeserialize(attrs.values());
+		didDeserialize(lns);
+		didDeserialize(_resolvers);
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didDeserialize((Collection)it.next());
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
