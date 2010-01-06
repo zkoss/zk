@@ -2017,7 +2017,8 @@ function () {
 			_prepareRemove(child, n = []);
 
 		child.unbind();
-
+		if (child.z_mask)
+			child.z_mask.destroy();
 		if (!_ignoreDom_)
 			jq(n).remove();
 	},
@@ -2443,6 +2444,10 @@ focus: function (timeout) {
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
+		if (zk.showBusy) {
+			window[zk.ie || zk.opera ? 'focus' : 'blur']();
+			return false;
+		}
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
 			if (!opts || !opts.checkOnly) {
