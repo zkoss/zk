@@ -209,7 +209,7 @@ public class Clients {
 		response(new AuScript(null, javaScript));
 	}
 
-	/** Asks the browser to show the busy message such that
+	/** Shows the busy message at the brower such that
 	 * the user knows the system is busy.
 	 *
 	 * <p>It is usually used with {@link org.zkoss.zk.ui.event.Events#echoEvent}
@@ -222,6 +222,28 @@ public class Clients {
 	 */
 	public static final void showBusy(String msg, boolean open) {
 		response(new AuShowBusy(msg, open));
+	}
+	/** Shows the busy message at the browser that covers only the specified
+	 * component.
+	 * It is used to denote a portion of the desktop is busy, and
+	 * the user still can access the other part.
+	 * In other words, it means there is a long operation taking place.
+	 * <p>To execute a long operation asynchronously, the developer can use
+	 * a working thread,
+	 * or use {@link org.zkoss.zk.ui.event.EventQueue#subscribe(org.zkoss.zk.ui.event.EventListener,boolean)}.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Long_Operations">Long Operations</a>
+	 *
+	 * @param comp the component that the busy message to cover.
+	 * Ignored if null. Notice that if the component is not found,
+	 * the busy message won't be shown. In additions, the busy message
+	 * is removed automatically if the component is detached later.
+	 * @param msg the message to show. If null, the default message (processing)
+	 * is shown. It is ignored if the open argument is false.
+	 * @param open whether to open or to close the busy message.
+	 * @since 5.0.0
+	 */
+	public static final void showBusy(Component comp, String msg, boolean open) {
+		response(new AuShowBusy(comp, msg, open));
 	}
 
 	/** Reloads the client-side messages in the specified locale.

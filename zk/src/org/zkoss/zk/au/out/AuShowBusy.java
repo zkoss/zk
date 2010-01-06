@@ -16,6 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -26,7 +27,23 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.2
  */
 public class AuShowBusy extends AuResponse {
+	/**
+	 * @param mesg the message to show. Ignored if open is false.
+	 * @param open whether to show the busy message, or to close it.
+	 * If open is false, the message is ignored.
+	 */
 	public AuShowBusy(String mesg, boolean open) {
 		super("showBusy", new Object [] {mesg != null ? mesg: "", Boolean.valueOf(open)});
+	}
+	/** Constructs a busy message covering only the specified component.
+	 * @param comp the component that the busy message to cover.
+	 * Ignored if null. Notice that if the component is not found,
+	 * the message won't be shown.
+	 * @param mesg the message to show. Ignored if open is false.
+	 * @param open whether to show the busy message, or to close it.
+	 * @since 5.0.0
+	 */
+	public AuShowBusy(Component comp, String mesg, boolean open) {
+		super("showBusy", new Object [] {mesg != null ? mesg: "", Boolean.valueOf(open), comp.getUuid()});
 	}
 }
