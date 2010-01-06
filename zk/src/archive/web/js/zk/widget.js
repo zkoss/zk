@@ -547,7 +547,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else _prepareRemove(wgt, ary);
 		}
 	}
-
+	var _dragoptions = {
+		starteffect: zk.$void, //see bug #1886342
+		endeffect: DD_enddrag, change: DD_dragging,
+		ghosting: DD_ghosting, endghosting: DD_endghosting,
+		constraint: DD_constraint,
+		ignoredrag: DD_ignoredrag,
+		zIndex: 88800
+	};
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -2337,14 +2344,7 @@ unbind_: function (skipper, after) {
 	 * @see #cleanDrag_
 	 */
 	initDrag_: function () {
-		this._drag = new zk.Draggable(this, this.getDragNode(), zk.copy({
-			starteffect: zk.$void, //see bug #1886342
-			endeffect: DD_enddrag, change: DD_dragging,
-			ghosting: DD_ghosting, endghosting: DD_endghosting,
-			constraint: DD_constraint,
-			ignoredrag: DD_ignoredrag,
-			zIndex: 88800
-		}, this.getDragOptions_()));
+		this._drag = new zk.Draggable(this, this.getDragNode(), this.getDragOptions_(_dragoptions));
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
 	 * is cleaned (or unbound).
@@ -2369,10 +2369,12 @@ unbind_: function (skipper, after) {
 	/** Returns the options used to instantiate {@link zk.Draggable}.
 	 * <p>Default, it returns nothing (undefined).
 	 * <p>Though rarely used, you can override any option passed to
-	 * {@link zk.Draggable}, such as the start effect, ghosting and so on. 
+	 * {@link zk.Draggable}, such as the start effect, ghosting and so on.
+	 * @param Map map the default implementation 
 	 * @return Map
 	 */
-	getDragOptions_: function () {
+	getDragOptions_: function (map) {
+		return map;
 	},
 	/** Returns if the location that an user is trying to drag is allowed.
 	 * <p>Default: it always returns false.
