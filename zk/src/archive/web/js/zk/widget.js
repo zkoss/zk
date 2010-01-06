@@ -871,6 +871,35 @@ new zul.wnd.Window{
 				this._dropTypes = dropTypes;
 			}
 		],
+		/**
+		 * Returns vertical flex hint of this widget.
+		 * @see #setVflex 
+		 * @return String vertical flex hint of this widget.
+		 */
+		/**
+		 * Sets vertical flexibility hint of this widget. 
+		 * <p>The parameter flex is a number in String type indicating how this 
+		 * widget's parent container distributes remaining empty space among 
+		 * its children widget vertically. Flexible 
+		 * widget grow and shrink to fit their given space. Flexible widget with 
+		 * larger flex values will be made larger than widget with lower flex 
+		 * values, at the ratio determined by all flexible widgets. The actual 
+		 * flex value is not relevant unless there are other flexible widget within 
+		 * the same parent container. Once the default sizes of widget in a 
+		 * parent container are calculated, the remaining space in the parent 
+		 * container is divided among the flexible widgets, according to their 
+		 * flex ratios.</p>
+		 * <p>Specify a flex value of negative value, 0, or "false" has the 
+		 * same effect as leaving the flex attribute out entirely. 
+		 * Specify a flex value of "true" has the same effect as a flex value of 1.</p>
+		 * <p>Special flex hint, <b>"min"</b>, indicates that the minimum space shall be
+		 * given to this flexible widget to enclose all of its children widgets.
+		 * That is, the flexible widget grow and shrink to fit its children widgets.</p> 
+		 * 
+		 * @see #setHflex
+		 * @see #getVflex 
+		 * @param String flex the vertical flex hint.
+		 */
 		vflex: function(v) {
 			this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 			if (this._nvflex < 0 && v != 'min')
@@ -886,6 +915,35 @@ new zul.wnd.Window{
 				zWatch.fireDown('onSize', this.parent);
 			}
 		},
+		/**
+		 * Sets horizontal flexibility hint of this widget. 
+		 * <p>The parameter flex is a number in String type indicating how this 
+		 * widget's parent container distributes remaining empty space among 
+		 * its children widget horizontally. Flexible 
+		 * widget grow and shrink to fit their given space. Flexible widget with 
+		 * larger flex values will be made larger than widget with lower flex 
+		 * values, at the ratio determined by all flexible widgets. The actual 
+		 * flex value is not relevant unless there are other flexible widget 
+		 * within the same parent container. Once the default sizes of widget 
+		 * in a parent container are calculated, the remaining space in the parent 
+		 * container is divided among the flexible widgets, according to their 
+		 * flex ratios.</p>
+		 * <p>Specify a flex value of negative value, 0, or "false" has the 
+		 * same effect as leaving this flex attribute out entirely. 
+		 * Specify a flex value of "true" has the same effect as a flex value of 1.</p>
+		 * <p>Special flex hint, <b>"min"</b>, indicates that the minimum space shall be
+		 * given to this flexible widget to enclose all of its children widgets.
+		 * That is, the flexible widget grow and shrink to fit its children widgets.</p> 
+		 * 
+		 * @param String flex the horizontal flex hint.
+		 * @see #setVflex
+		 * @see #getHflex 
+		 */
+		/**
+		 * Return horizontal flex hint of this widget.
+		 * @return String horizontal flex hint of this widget.
+		 * @see #setHflex 
+		 */
 		hflex: function(v) {
 			this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 			if (this._nhflex < 0 && v != 'min')
