@@ -257,7 +257,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 		if (mask)
 			zk.isBusy++;
-		
+
 		var x = jq.innerX(), y = jq.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
 			idtxt = id + '-t',
@@ -297,8 +297,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if ($n.length) {
 			if (n = $n[0].z_mask) n.destroy();
 			$n.remove();
-			zk.isBusy--;
-			if (zk.isBusy < 0)
+			if (--zk.isBusy < 0)
 				zk.isBusy = 0;
 		}
 
