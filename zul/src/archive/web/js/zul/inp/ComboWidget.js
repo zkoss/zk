@@ -322,7 +322,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
-		if (!this._disabled) {		
+		if (!this._disabled && !zk.animating()) {		
 			if (this._open) this.close({focus:true,sendOnOpen:true});
 			else this.open({focus:true,sendOnOpen:true});	
 		}
