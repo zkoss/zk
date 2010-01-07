@@ -882,11 +882,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		}
 		jq("#zk_showBusy").remove(); //since user might want to show diff msg
 		
-		zk.showBusy = false;
 		if (open || arguments.length == 1) {
 			zUtl.destroyProgressbox("zk_loadprog");
 			if (!uuid)
-				zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, (zk.showBusy = !uuid));
+				zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
 			else if (w) {
 				w.z_mask = new zk.eff.Mask( {
 					id: w.uuid + "-zk_showBusy",

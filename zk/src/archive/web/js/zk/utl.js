@@ -255,6 +255,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return;
 		}
 
+		if (mask)
+			zk.isBusy++;
+		
 		var x = jq.innerX(), y = jq.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
 			idtxt = id + '-t',
@@ -294,6 +297,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if ($n.length) {
 			if (n = $n[0].z_mask) n.destroy();
 			$n.remove();
+			zk.isBusy--;
+			if (zk.isBusy < 0)
+				zk.isBusy = 0;
 		}
 
 		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])

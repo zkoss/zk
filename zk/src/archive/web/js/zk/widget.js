@@ -2504,7 +2504,7 @@ focus: function (timeout) {
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
-		if (zk.showBusy) {
+		if (zk.isBusy) {
 			window[zk.ie || zk.opera ? 'focus' : 'blur']();
 			return false;
 		}

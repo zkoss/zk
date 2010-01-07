@@ -211,6 +211,12 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//unloading: false,
+	/** The number of the full mask is applied (and not yet complete). 
+	 * @see zUtl#progressbox
+	 * @see zUtl#destroyProgressbox
+	 * @type int
+	 */
+	isBusy: 0,
 
 	/** The version of ZK, such as '5.0.0'
 	 * @type String
