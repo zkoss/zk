@@ -171,7 +171,6 @@ public class Datebox extends FormatInputElement implements
 	 *                if value is wrong
 	 */
 	public void setValue(Date value) throws WrongValueException {
-		if (value == null) value = Dates.today();
 		validate(value);
 		setRawValue(value);
 	}
