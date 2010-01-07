@@ -14,6 +14,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <window title="test of long operation" border="true">
+	<html><![CDATA[
+	<ul>
+	<li>Click the button it will start a long operation.</li>
+	<li>With this implementation, you can press the button again even if
+	the long operation is still being processed</li>
+	</ul>
+	]]></html>
 	<zscript>
 	void print(String msg) {
 		new Label(msg).setParent(inf);
