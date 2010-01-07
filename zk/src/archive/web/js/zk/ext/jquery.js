@@ -21,7 +21,7 @@ var
 	// Map over the $ in case of overwrite
 	_$ = window.$,
 
-	jQuery = window.jQuery = window.$ = function( selector, context ) {
+	jQuery = /*Potix:window.jQuery = window.$*/ = function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
 		return new jQuery.fn.init( selector, context );
 	},
@@ -31,6 +31,10 @@ var
 	quickExpr = /^[^<]*(<(.|\s)+>)[^>]*$|^#([\w-]+)$/,
 	// Is it a simple selector
 	isSimple = /^.[^:#\[\.,]*$/;
+
+//Potix: don't override if already defined (Liferay)
+	if (!_jQuery)
+		window.jQuery = window.$ = jQuery;
 
 jQuery.fn = jQuery.prototype = {
 	init: function( selector, context ) {
@@ -3093,7 +3097,7 @@ function liveConvert(type, selector){
 }
 
 jQuery.extend({
-	isReady: false,
+	isReady: (_jQuery&&_jQuery.isReady), //Potix
 	readyList: [],
 	// Handle when the DOM is ready
 	ready: function() {
