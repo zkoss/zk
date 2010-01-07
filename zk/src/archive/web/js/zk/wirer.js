@@ -16,7 +16,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * with a real implementation.
  */
 zk.Wirer = {	
-	add: zk.$void,	
-	remove: zk.$void,	
+	add: zk.$void,
+	remove: zk.$void,
+	/** Synchronized the wires of the given controller.
+	 * @param Object controller the controller of the wires. The controller
+	 * is usually a {@link zk.Widget}.
+	 * @param zk.Event evt the event.
+	 */
 	sync: zk.$void
 };
