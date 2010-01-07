@@ -120,7 +120,7 @@ public class CometServerPush implements ServerPush {
 
 	//ServerPush//
 	public boolean isActive() {
-		return _active != null;
+		return _active != null && _active.nActive > 0;
 	}
 	/** Starts the server push.
 	 * <p>The derived class rarely need to override this method.
