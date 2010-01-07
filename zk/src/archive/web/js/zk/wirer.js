@@ -10,6 +10,11 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
+/** @class zk.Wirer
+ * Used to manipulate the wires.
+ * By default, all methods do nothing. It is designed to be overriden
+ * with a real implementation.
+ */
 zk.Wirer = {	
 	add: zk.$void,	
 	remove: zk.$void,	
