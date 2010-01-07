@@ -107,7 +107,29 @@ public class EventQueues {
 	public static EventQueue lookup(String name) {
 		return lookup(name, DESKTOP, true);
 	}
+
+	/** Tests if the specified event queue has been created.
+	 */
+	public static boolean exists(String name, String scope) {
+		return lookup(name, scope, false) != null;
+	}
+	/** Tests if the specified event queue has been created
+	 * in the current desktop.
+	 * It is a shortcut of <code>exists(name, DESKTOP)</code>
+	 */
+	public static boolean exists(String name) {
+		return lookup(name, false) != null;
+	}
+
 	/** Removes the event queue.
+	 * It is the same as <code>remove(name, DESKTOP)</code>.
+	 * @param name the queue name.
+	 * @return true if it is removed successfully
+	 */
+	public static boolean remove(String name) {
+		return remove(name, DESKTOP);
+	}
+	/** Removes the event queue of the specified scope
 	 * @param name the queue name.
 	 * @param scope the scope fo the event queue. Currently,
 	 * it supports {@link #DESKTOP} and {@link #APPLICATION}.

@@ -1066,6 +1066,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			final Integer icnt = (Integer)_sess.getAttribute(ATTR_PUSH_COUNT);
 			int cnt = icnt != null ? icnt.intValue(): 0;
 			if (enable) {
+				if (Executions.getCurrent() == null)
+					throw new IllegalStateException("Server Push cannot be started without execution");
+
 				final int maxcnt = _wapp.getConfiguration().getSessionMaxPushes();
 				if (maxcnt >= 0 && cnt >= maxcnt)
 					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: "+cnt:
@@ -1073,7 +1076,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 				final Class cls = getDevice().getServerPushClass();
 				if (cls == null)
-					throw new UiException("No server push defined. Make sure you are using the professional or enterprise edition, or you configured your own implementation");
+					throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
 				try {
 					_spush = (ServerPush)cls.newInstance();
