@@ -79,6 +79,7 @@ November, 2009
   2924049: Wrong target when dragging a sub div in IE browsers
   2884572: deploy error when upgrade to ZK5 on weblogic 8.x
   2912533: Clients.showBusy the underneatml should lose focus
+  2926939: paging.getActivePage() is not correct in onPaging event
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
