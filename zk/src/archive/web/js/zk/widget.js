@@ -3445,7 +3445,8 @@ zk.Desktop = zk.$extends(zk.Widget, {
 						return w;
 				}
 		}
-		if (w = Desktop._dt) return w;
+		if (w = Desktop._dt)
+			return typeof dtid != 'string' || w.id == dtid ? w: null;
 		for (dtid in dts)
 			return dts[dtid];
 	},
