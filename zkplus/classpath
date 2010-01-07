@@ -11,3 +11,5 @@
 ../dist/lib/ext/jta.jar
 ../dist/lib/ext/acegi-security.jar
 ../dist/lib/ext/s2-framework.jar
+../dist/lib/ext/el-api.jar
+../dist/lib/ext/cdi-api.jar

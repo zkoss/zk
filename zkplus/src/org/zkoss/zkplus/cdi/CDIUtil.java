@@ -18,7 +18,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.cdi;
 
 import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
