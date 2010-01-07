@@ -19,9 +19,10 @@ var
 	// Map over jQuery in case of overwrite
 	_jQuery = window.jQuery,
 	// Map over the $ in case of overwrite
-	_$ = window.$,
+//Potix: no need since we don't override the old copy (see below)
+//	_$ = window.$,
 
-	jQuery = /*Potix:window.jQuery = window.$*/ = function( selector, context ) {
+	jQuery = /*Potix:window.jQuery = window.$ =*/ function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
 		return new jQuery.fn.init( selector, context );
 	},
@@ -621,11 +622,12 @@ var	exclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 
 jQuery.extend({
 	noConflict: function( deep ) {
+/*Potix: no need to restore since we don't override old copy
 		window.$ = _$;
 
 		if ( deep )
 			window.jQuery = _jQuery;
-
+*/
 		return jQuery;
 	},
 
@@ -3097,7 +3099,7 @@ function liveConvert(type, selector){
 }
 
 jQuery.extend({
-	isReady: (_jQuery&&_jQuery.isReady), //Potix
+	isReady: (_jQuery&&_jQuery.isReady), //Potix: inherit older copy since it might be loaded later (Liferay)
 	readyList: [],
 	// Handle when the DOM is ready
 	ready: function() {
