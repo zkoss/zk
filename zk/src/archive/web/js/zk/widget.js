@@ -3430,9 +3430,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @return zk.Desktop
 	 */
 	$: function (dtid) {
-		var Desktop = zk.Desktop, dts = Desktop.all, w;
+		var Desktop = zk.Desktop, dts = Desktop.all, w,
+			bStrId = typeof dtid == 'string';
 		if (Desktop._ndt > 1) {
-			if (typeof dtid == 'string') {
+			if (bStrId) {
 				w = dts[dtid];
 				if (w) return w;
 			}
@@ -3446,9 +3447,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 				}
 		}
 		if (w = Desktop._dt)
-			return typeof dtid != 'string' || w.id == dtid ? w: null;
-		for (dtid in dts)
-			return dts[dtid];
+			return !bStrId || w.id == dtid ? w: null;
+		if (!bStrId)
+			for (dtid in dts)
+				return dts[dtid];
 	},
 	/** A map of all desktops (readonly).
 	 * The key is the desktop ID and the value is the desktop.
