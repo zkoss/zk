@@ -217,4 +217,4 @@
 		return $eval("(" + s + ")"); //return (new Function('return '+s))();
 	};
 //Tom//    }
-}(jQuery));
+}(jq)); //Tom: jQuery might be another copy
