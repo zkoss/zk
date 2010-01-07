@@ -36,6 +36,7 @@ var
 //Potix: don't override if already defined (Liferay)
 	if (!_jQuery)
 		window.jQuery = window.$ = jQuery;
+	window.jq = jQuery;
 
 jQuery.fn = jQuery.prototype = {
 	init: function( selector, context ) {

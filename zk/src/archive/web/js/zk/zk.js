@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-jq = jQuery;
 (zk = function (sel) {
 	return jq(sel, zk).zk;
 }).copy = function (dst, src) {
