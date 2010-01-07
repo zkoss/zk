@@ -133,6 +133,13 @@ zk.fmt.Number = {
 		if (j >= 0) 
 			pre = valStr.substr(0, j + 1) + pre;
 		
+		// Bug #2926718
+		var len = fmt.length - pureFmtStr.length;
+		if (len > 0) {
+			var p = fmt.substring(0, len).replace(new RegExp("[#0" + zk.DECIMAL + "]", 'g'), '');
+			if (p)
+				pre = p + pre;
+		}
 		//sufpart
 		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl && j < vl; i++) {
 			var fmtcc = fmt.charAt(i); 

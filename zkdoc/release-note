@@ -83,6 +83,7 @@ November, 2009
   2922847: font-weight has no effect on zk5 toolbarbutton
   2925493: OnChange Event does not work in Listbox with autodrop
   2925671: Problem clicking twice the combobox triangle
+  2926718: Decimal box format problem
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
