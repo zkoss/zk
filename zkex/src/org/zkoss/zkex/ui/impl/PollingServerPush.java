@@ -131,7 +131,7 @@ public class PollingServerPush implements ServerPush {
 
 	//ServerPush//
 	public boolean isActive() {
-		return _active != null;
+		return _active != null && _active.nActive > 0;
 	}
 	public void start(Desktop desktop) {
 		if (_desktop != null) {
