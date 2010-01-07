@@ -1,0 +1,12 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+1. The Datebox below should has value inside
+<separator/>
+2. Click this <button label="Set Null Value" onClick="db.setValue(null);"/>, the Datebox below should become empty
+<separator/>
+3. Click this <button label="Get Datebox Value" onClick="alert(db.getValue());"/>, it will popup a window, and the text inside should be "null"
+<separator/>
+4. Click this <button label="Set Current Date" onClick="db.setValue(new Date())"/>, the Datebox should set current date. And doesn't popup a Calendar. If a Calendar popup, it's wrong.
+<separator/>
+<datebox id="db" onCreate="db.setValue(new Date());"/>
+</zk>

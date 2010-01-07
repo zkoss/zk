@@ -57,6 +57,7 @@ November, 2009
   2919807: Make EventQueue available to CE
   2920529: Session-scope EventQueue
   2830237: jasperreport support media
+  2926128: Problem setting value to a datebox
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
   2927319: EventQueue supports asynchronous listener
   
