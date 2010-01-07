@@ -270,7 +270,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 				found = newFound;
 			}
 		}
-		if (sb.length() > 0)
+		if (sb.length() > 0 && found != null)
 			found.setText(sb.toString());
 		sb = null; //no longer useful
 

@@ -205,7 +205,8 @@ public class OperationThread extends Thread {
 			log.warning(x);
 			while (_queue.hasElement()) {
 				Operation op = _queue.next();
-				op.failToExecute(_desktop);
+				if (op != null)
+					op.failToExecute(_desktop);
 			}
 		} finally {
 			_running = false;

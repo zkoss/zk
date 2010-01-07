@@ -1056,7 +1056,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		paging.setDetailed(true);
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
-		addPagingListener(_pgi);
+		if (_pgi != null)
+			addPagingListener(_pgi);
 	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
@@ -1659,7 +1660,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				
 				if (child instanceof Listgroupfoot) {
 					final int[] g1 = getGroupsInfoAt(index);
-					g1[2] = -1;
+					if (g1 != null)
+						g1[2] = -1;
 				}
 			} else fixItemIndices(index, -1);
 			return true;

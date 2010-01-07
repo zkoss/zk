@@ -133,7 +133,9 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		if (jsel < 0) jsel = -1;
 		if (_jsel != jsel) {
 			if (jsel < 0) {
-				getSelectedItem().setSelected(false);
+				Radio r = getSelectedItem();
+				if (r != null)
+					r.setSelected(false);
 			} else {
 				getItemAtIndex(jsel).setSelected(true);
 			}

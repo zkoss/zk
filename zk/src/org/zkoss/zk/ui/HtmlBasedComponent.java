@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Dec 31 12:30:18     2005, Created by tomyeh
 }}IS_NOTE
@@ -100,7 +100,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** Sets the top position.
 	 */
 	public void setTop(String top) {
-		if (_top != top) {
+		if (!Objects.equals(_top, top)) {
 			_top = top;
 			smartUpdate("style.top", getTop());
 		}
@@ -210,7 +210,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	  * Once it is changed, the default style won't be applied at all.
 	  * If you want to perform small adjustments, use {@link #setSclass}
 	  * instead.
-	  * 
+	  *
 	  * @since 3.5.1
 	  * @see #getSclass
 	  * @see #getRealSclass
@@ -218,7 +218,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 public String getZclass() {
 		 return _zclass;
 	 }
-	 
+
 	 /**
 	  * Sets the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
@@ -472,7 +472,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	protected String getRealSclass() {
 		final String moldsclass = getZclass();
 		final String sclass = getSclass();
-		return moldsclass == null ? sclass : 
+		return moldsclass == null ? sclass :
 				sclass == null || sclass.length() == 0 ?
 					moldsclass : sclass + " " + moldsclass;
 	}

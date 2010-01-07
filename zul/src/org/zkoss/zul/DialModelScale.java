@@ -426,7 +426,7 @@ public class DialModelScale implements Serializable {
 	 * @param type the needle type of this scale ("pointer" or "pin")
 	 */
 	public void setNeedleType(String type) {
-		if (_needleType != type) {
+		if (!Objects.equals(_needleType, type)) {
 			_needleType = type;
 			fireEvent(ChartDataEvent.CHANGED);
 		}

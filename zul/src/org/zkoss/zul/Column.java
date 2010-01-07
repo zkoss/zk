@@ -293,8 +293,9 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (cmpr == null) return false;
 
 		final Grid grid = getGrid();
+		if (grid == null) return false;
 		final Rows rows = grid.getRows();
-		if (grid == null || rows == null) return false;
+		if (rows == null) return false;
 
 		//comparator might be zscript
 		Namespaces.beforeInterpret(this);

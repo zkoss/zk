@@ -198,7 +198,9 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	 * Sets the selected tab panel.
 	 */
 	public void setSelectedPanel(Tabpanel panel) {
-		if (panel != null && panel.getTabbox() != this)
+		if (panel == null)
+			throw new IllegalArgumentException("null tabpanel");
+		if (panel.getTabbox() != this)
 			throw new UiException("Not a child: " + panel);
 		final Tab tab = panel.getLinkedTab();
 		if (tab != null)

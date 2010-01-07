@@ -289,7 +289,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		paging.setDetailed(true);
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
-		addPagingListener(_pgi);
+		if (_pgi != null)
+			addPagingListener(_pgi);
 	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {

@@ -195,8 +195,8 @@ public class LogService {
 			if (val != null) val = val.trim();
 
 			final Level level = Log.getLevel(val);
-			if (level != null || val.equalsIgnoreCase("NULL")
-			|| val.equalsIgnoreCase("INHERIT")) {
+			if (level != null || (val != null && (val.equalsIgnoreCase("NULL")
+			|| val.equalsIgnoreCase("INHERIT")))) {
 				Logger.getLogger(key).setLevel(level);
 			} else {
 				log.warning("Illegal log level, "+val+", for "+key);
