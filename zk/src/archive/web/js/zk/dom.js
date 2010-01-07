@@ -323,6 +323,13 @@ zk.copy(zjq, {
  * <li>{@link jqzk} - additional utilities to {@link jq}.</li>
  * <li>{@link Event} - the event object passed to the event listener</li>
  * </ul>
+ * <h3>Not override previous copy if any</h3>
+ * <p>Unlike the original jQuery behavior, ZK's jQuery doesn't override
+ * the previous copy, if any, so ZK can be more compatible with other frameworks
+ * that might use jQuery. For example, if you manually include a copy
+ * of jQuery before loading ZK Client Engine, <code>jQuery</code>
+ * will refer to the copy of jQuery you included explicitly. To refer
+ * ZK's copy, always use <code>jq</code>.
  * </blockquote>
  *
  * @author tomyeh
