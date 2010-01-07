@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2922847.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  7 10:05:22 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please cleck the toolbarbutton label to see the font should be bold
+<toolbarbutton label="click me" style="font-weight:bold" 
+		onClick='self.style = self.style != "font-weight:bold;" ? "font-weight:bold;":"font-weight:normal;"'/>
+</zk>
