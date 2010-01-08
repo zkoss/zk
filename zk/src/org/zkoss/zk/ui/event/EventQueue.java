@@ -88,7 +88,7 @@ public interface EventQueue {
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>Here is an example,
 <pre><code>
-&lt;window title="test of long operation" border="true">
+&lt;window title="long operation" border="true">
 	&lt;zscript>
 	void print(String msg) {
 		new Label(msg).setParent(inf);
