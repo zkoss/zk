@@ -84,6 +84,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 	private ServletContext _ctx;
 	private WebManager _webman;
+	private boolean _webmanCreated;
 	private boolean _compress = true;
 
 	/** @deprecated As of release 3.6.0, removed in favor of 
@@ -131,12 +132,17 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					//remove the trailing '\\' if any
 			}
 			_webman = new WebManager(_ctx, updateURI);
+			_webmanCreated = true;
 		}
 
 		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 	}
 	public void destroy() {
-		if (_webman != null) _webman.destroy();
+		if (_webman != null) {
+			if (_webmanCreated)
+				_webman.destroy();
+			_webman = null;
+		}
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
