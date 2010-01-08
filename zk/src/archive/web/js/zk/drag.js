@@ -641,12 +641,12 @@ String scroll; //DOM Element's ID</code></pre>
 			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
 			style.left = jq.px(p[0]);
-			style.top  = jq.px(p[1]);
+			style.top  = jq.px0(p[1]);
 		} else {
 			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
 				style.left = jq.px(p[0]);
 			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
-				style.top  = jq.px(p[1]);
+				style.top  = jq.px0(p[1]);
 		}
 
 		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering

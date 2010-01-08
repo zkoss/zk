@@ -14,7 +14,7 @@
 	
 -->
 <zk>
-	Please cleck the combobox drop down list will be close correct after clicking twice quickly
+	Please check the combobox drop down list will be close correct after clicking twice quickly
 	<combobox>
 		<comboitem label="Simple and Rich" />
 		<comboitem label="Cool!" />

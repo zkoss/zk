@@ -14,6 +14,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please cleck the paging number to see the result that the both number should be the same.
+Please check the paging number to see the result that the both number should be the same.
 <paging mold="os" pageSize="10" totalSize="100" onPaging='alert(event.getActivePage() + " : " + self.getActivePage());'/>
 </zk>
