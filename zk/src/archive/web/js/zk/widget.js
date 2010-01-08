@@ -177,12 +177,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (o == 'height') {
 			if (wgt._vflexsz === undefined) { //cached?
 				wgt.setFlexSize_({height:'auto'});
-				var zkn = zk(n),
+				var cwgt = wgt.firstChild, //bug #2928109
+					cwgtn = cwgt && cwgt.$n(),
+					n = cwgtn ? cwgtn.parentNode : n,
+					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderHeight(),
 					max = 0;
-				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
+				for (; cwgt; cwgt = cwgt.nextSibling) {
 					var c = cwgt.$n(),
 						sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
 							_setMinFlexSize(cwgt, c, o) : 
@@ -200,12 +203,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		} else if (o == 'width') {
 			if (wgt._hflexsz === undefined) { //cached?
 				wgt.setFlexSize_({width:'auto'});
-				var zkn = zk(n),
+				var cwgt = wgt.firstChild, //bug #2928109
+					cwgtn = cwgt && cwgt.$n(),
+					n = cwgtn ? cwgtn.parentNode : n,
+					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderWidth(),
 					max = 0;
-				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
+				for (; cwgt; cwgt = cwgt.nextSibling) {
 					var c = cwgt.$n(),
 						sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
 							_setMinFlexSize(cwgt, c, o) : 
