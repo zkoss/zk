@@ -88,6 +88,7 @@ November, 2009
   2926718: Decimal box format problem
   2928044: maxlength didn't work in input element
   2928109: <window hflex="min"> not correctly handled  
+  2911379: doublebox format="" broken in ZK 5 RC2
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

@@ -38,6 +38,13 @@ zk.fmt.Number = {
 		if (val == null) return '';
 		if (!fmt) return '' + val;
 		
+		var isMINUS;
+		if (fmt.indexOf(';') != -1) {
+			fmt = fmt.split(';');
+			isMINUS = val < 0;
+			fmt = fmt[isMINUS ? 1 : 0];
+		}
+    	
 		//calculate number of fixed decimals
 		var re = new RegExp("[^#0" + zk.DECIMAL + "]", 'g'),
 			pureFmtStr = fmt.replace(re, ''),
@@ -46,7 +53,7 @@ zk.fmt.Number = {
 			valStr = (val + '').replace(/[^0123456789.]/g, ''),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
-
+			
 		//fix value subpart
 		if (valFixed <= fixed) {
 			if (indVal == -1)
@@ -102,8 +109,18 @@ zk.fmt.Number = {
 		if (ind == -1)
 			ind = pureFmtStr.length;
 		
-		for (var len = indVal - ind; --len >= 0; indFmt++)
-			fmt = '#' + fmt;
+		// Bug 2911379
+		var _fmt = '',
+			prefmt = indVal - ind;
+		for (var len = prefmt; --len >= 0; indFmt++)
+			_fmt += '#';
+		
+		// insert extra format into correct place.
+		if (_fmt) {
+    		var beg = fmt.indexOf('#');
+    		prefmt += beg;
+    		fmt = fmt.substring(0, beg) + _fmt + fmt.substring(beg, fmt.length);
+		}
 		for (var len = ind - indVal; --len >= 0; indVal++)
 			valStr = '0' + valStr;
 		
@@ -136,7 +153,7 @@ zk.fmt.Number = {
 		// Bug #2926718
 		var len = fmt.length - pureFmtStr.length;
 		if (len > 0) {
-			var p = fmt.substring(0, len).replace(new RegExp("[#0" + zk.DECIMAL + "]", 'g'), '');
+			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0" + zk.DECIMAL + "]", 'g'), '');
 			if (p)
 				pre = p + pre;
 		}
@@ -152,6 +169,9 @@ zk.fmt.Number = {
 		if (j < valStr.length) 
 			suf = valStr.substr(j, valStr.length);
 		
+		if (j < fmt.length && fmt.charAt(fmt.length - 1) == zk.PERCENT) 
+			suf += zk.PERCENT;
+		
 		//remove optional '0' digit in sufpart
 		for (var m = suf.length, n = fmt.length; m > 0; --m) {
 			if (suf.charAt(m-1) != '0' || fmt.charAt(--n) != '#') {
@@ -165,7 +185,7 @@ zk.fmt.Number = {
 			pre = this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		return (val < 0 ? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
+		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
 	},
 	_removePrefixSharps: function (val) {
 		var ret = '',

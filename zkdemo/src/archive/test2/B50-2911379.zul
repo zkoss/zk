@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2911379.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan  8 18:05:37 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should see each label is the same as that of input element.
+<vbox>
+<hbox>
+<doublebox id="percent" format="0.00%;(0.00%)" /> = 99.00%
+</hbox>
+<hbox>
+<doublebox id="value" format="#,##0;(#,##0)" /> = (200,000) 
+</hbox>
+<hbox>
+<doublebox id="value2" format="#,##0;($#,##0)" /> = ($200,000) 
+</hbox>
+<hbox>
+<decimalbox id="decimal" format="##0.00" /> = 8.00
+</hbox>
+</vbox>
+
+<zscript>
+decimal.value = new java.math.BigDecimal(8.0);
+</zscript>
+<zscript>
+percent.value = 0.99;
+value.value = -200000;
+percent2.value = 0.99;
+value2.value = -200000;
+</zscript>
+
+</zk>
