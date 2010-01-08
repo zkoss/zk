@@ -86,6 +86,49 @@ public interface EventQueue {
 	 * A synchronous listener works the same as a normal event listener,
 	 * while an asynchronous listener is executed asynchrously (in an working thread).
 	 * Refer <a href="#async_sync">here</a> for details.
+	 * <p>Here is an example,
+<pre><code>
+&lt;window title="test of long operation" border="true">
+	&lt;zscript>
+	void print(String msg) {
+		new Label(msg).setParent(inf);
+	}
+	&lt;/zscript>
+	&lt;button label="async long op">
+		&lt;attribute name="onClick">&lt;![CDATA[
+   if (EventQueues.exists("longop")) {
+     print("It is busy. Please wait");
+     return; //busy
+   }
+
+   EventQueue eq = EventQueues.lookup("longop"); //create a queue
+   String result;
+
+   //subscribe async listener to handle long operation
+   eq.subscribe(new EventListener() {
+     public void onEvent(Event evt) { //asynchronous
+       org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
+       result = "done"; //store the result
+     }
+   }, new EventListener() { //callback
+     public void onEvent(Event evt) {
+       print(result); //show the result to the browser
+   	   EventQueues.remove("longop");
+   	 }
+   });
+
+   print("Wait for 3 seconds");
+   eq.publish(new Event("whatever")); //kick off the long operation
+  		]]>&lt;/attribute>
+ 	&lt;/button>
+ 	&lt;vbox id="inf"/>
+&lt;/window>
+</code></pre>
+	 *
+	 * <p>Notice that, though an asynchronous listener cannot access
+	 * the desktop and has no current execution, it can invoke
+	 * {@link #publish} to publish the events. Refer to
+	 * another example in {@link #subscribe(EventListener,boolean)}.
 	 *
 	 * @param listener the asynchronous listener to invoke when an event
 	 * is received
@@ -172,6 +215,10 @@ public interface EventQueue {
 	 * If you want to use the same listener for multiple desktops,
 	 * you have to subscribe them separately when the corresponding
 	 * execution is available.
+	 * @param listener the listener
+	 * @param async whether the listener is asynchronous
+	 * @see #subscribe(EventListener)
+	 * @see #subscribe(EventListener, EventListener)
 	 */
 	public void subscribe(EventListener listner, boolean async);
 	/** Unsubscribes a listener from the queue.

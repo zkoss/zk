@@ -203,8 +203,10 @@ public class DesktopEventQueue implements EventQueue {
 				try {
 					Executions.activate(_desktop);
 					try {
-						for (Iterator it = _pendingEvents.iterator(); it.hasNext();)
-							_que.publish((Event)it.next());
+						if (_pendingEvents != null)
+							for (Iterator it = _pendingEvents.iterator(); it.hasNext();)
+								_que.publish((Event)it.next());
+
 						if (_inf.callback != null)
 							_inf.callback.onEvent(null);
 					} finally {
