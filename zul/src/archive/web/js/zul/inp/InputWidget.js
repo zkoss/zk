@@ -48,7 +48,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (this.isMultiline()) inp.cols = cols;
 				else inp.size = cols;
 		},
-		maxlengths: function (maxlength) {
+		maxlength: function (maxlength) {
 			var inp = this.getInputNode();
 			if (inp && !this.isMultiline())
 				inp.maxLength = maxlength;
