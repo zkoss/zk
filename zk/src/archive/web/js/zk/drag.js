@@ -614,18 +614,19 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		var p = [point[0]-pos[0]-this.offset[0],
-			point[1]-pos[1]-this.offset[1]];
+			point[1]-pos[1]-this.offset[1]],
+			snap = this.opts.snap;
 
-		if(this.opts.snap)
-			if(typeof this.opts.snap == 'function') {
-				p = this.opts.snap(this, p);
+		if(snap)
+			if(typeof snap == 'function') {
+				p = snap(this, p);
 			} else {
-				if(this.opts.snap instanceof Array) {
-					p = [Math.round(p[0]/this.opts.snap[0])*this.opts.snap[0],
-						Math.round(p[1]/this.opts.snap[1])*this.opts.snap[1]];
+				if(snap instanceof Array) {
+					p = [Math.round(p[0]/snap[0])*snap[0],
+						Math.round(p[1]/snap[1])*snap[1]];
 				} else {
-					p = [Math.round(p[0]/this.opts.snap)*this.opts.snap,
-						Math.round(p[1]/this.opts.snap)*this.opts.snap];
+					p = [Math.round(p[0]/snap)*snap,
+						Math.round(p[1]/snap)*snap];
 				}
 			}
 
@@ -636,17 +637,19 @@ String scroll; //DOM Element's ID</code></pre>
 
 		var style = node.style;
 		if (typeof this.opts.draw == 'function') {
-			this.opts.draw(this, p, evt);
+			this.opts.draw(this, this.snap_(p), evt);
 		} else if (typeof this.opts.constraint == 'function') {
 			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
+			p = this.snap_(p);
 			style.left = jq.px(p[0]);
-			style.top  = jq.px0(p[1]);
+			style.top  = jq.px(p[1]);
 		} else {
+			p = this.snap_(p);
 			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
 				style.left = jq.px(p[0]);
 			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
-				style.top  = jq.px0(p[1]);
+				style.top  = jq.px(p[1]);
 		}
 
 		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
@@ -728,6 +731,19 @@ String scroll; //DOM Element's ID</code></pre>
 			H = doc.body.offsetHeight
 		}
 		return {top: T, left: L, width: W, height: H};
+	},
+
+	/** Snaps the dragging position.
+	 * It is the default snapping. For individual snapping, use
+	 * the snap or constraint options of {@link zk.Draggable}.
+	 * Notice this method is always called no matter if the snap or constraint
+	 * options are specified.
+	 * <p>Default: return <code>pos</code> (i.e., not changing at all)
+	 * @param Offset ofs the offset of the dragging position
+	 * @return Offset the offset after snapped
+	 */
+	snap_: function (pos) {
+		return pos;
 	}
 
 },{//static
