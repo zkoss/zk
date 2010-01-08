@@ -105,7 +105,7 @@ public class Datebox extends FormatInputElement implements
 	}
 
 	/**
-	 * Returns whether or not date/time parsing is to be lenient.
+	 * Sets whether or not date/time parsing is to be lenient.
 	 * <p>
 	 * Default: true.
 	 * 
@@ -352,7 +352,7 @@ public class Datebox extends FormatInputElement implements
 		return _dtzonesReadonly;
 	}
 	/**
-	 * Returns whether the list of the time zones to display is readonly.
+	 * Sets whether the list of the time zones to display is readonly.
 	 * If readonly, the user cannot change the time zone at the client.
 	 * @since 3.6.3
 	 */

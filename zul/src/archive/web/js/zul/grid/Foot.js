@@ -12,7 +12,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Defines a set of footers ({@link Footer}) for a grid ({@link Grid}).
+ * <p>Default {@link #getZclass}: z-foot.
+ */
 zul.grid.Foot = zk.$extends(zul.Widget, {
+	/** Returns the grid that contains this column. 
+	 * @return zul.grid.Grid
+	 */
 	getGrid: function () {
 		return this.parent;
 	},

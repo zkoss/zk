@@ -12,7 +12,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A grid is an element that contains both rows and columns elements.
+ * It is used to create a grid of elements.
+ * Both the rows and columns are displayed at once although only one will
+ * typically contain content, while the other may provide size information.
+ *
+ * <p>Default {@link #getZclass}: z-grid.
+ *
+ * <p>To have a grid without stripping, you can specify a non-existent
+ * style class to {@link #setOddRowSclass}.
+ *
+ * 
+ */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
+	/** Returns the specified cell, or null if not available.
+	 * @param int row which row to fetch (starting at 0).
+	 * @param int col which column to fetch (starting at 0).
+	 * @return zk.Widget
+	 */	
 	getCell: function (row, col) {
 		if (!this.rows) return null;
 		if (rows.nChildren <= row) return null;
@@ -20,9 +38,19 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		var row = rows.getChildAt(row);
 		return row.nChildren <= col ? null: row.getChildAt(col);
 	},
+	/** Returns the style class for the odd rows.
+	 * <p>Default: {@link #getZclass()}-odd.
+	 * @return String
+	 */
 	getOddRowSclass: function () {
 		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
 	},
+	/** Sets the style class for the odd rows.
+	 * If the style class doesn't exist, the striping effect disappears.
+	 * You can provide different effects by providing the proper style
+	 * classes.
+	 * @param String
+	 */
 	setOddRowSclass: function (scls) {
 		if (!scls) scls = null;
 		if (this._scOddRow != scls) {

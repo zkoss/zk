@@ -12,17 +12,46 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A single column in a {@link Columns} element.
+ * Each child of the {@link Column} element is placed in each successive
+ * cell of the grid.
+ * The column with the most child elements determines the number of rows
+ * in each column.
+ *
+ * <p>The use of column is mainly to define attributes for each cell
+ * in the grid.
+ * 
+ * <p>Default {@link #getZclass}: z-column.
+ */
 zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
+	/** Returns the grid that contains this column. 
+	 * @return zul.grid.Grid
+	 */
 	getGrid: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onGroup: this}, -1000);
 	},
+	/** Returns the rows of the grid that contains this column.
+	 * @return zul.grid.Rows
+	 */
 	getMeshBody: function () {
 		var grid = this.getGrid();
 		return grid ? grid.rows : null;  
 	},
+	/** Groups and sorts the rows ({@link Row}) based on
+	 * {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param boolean ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @param zk.Event evt the event causes the group
+	 * @return whether the rows are grouped.
+	 */
 	group: function (ascending, evt) {
 		var dir = this.getSortDirection();
 		if (ascending) {
@@ -126,6 +155,9 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 				this.parent._syncColMenu();
 		}
 	},
+	/** It invokes {@link #group} to group list items and maintain
+	 * {@link #getSortDirection}.
+	 */
 	onGroup: function (evt) {
 		var dir = this.getSortDirection();
 		if ("ascending" == dir) this.group(false, evt);

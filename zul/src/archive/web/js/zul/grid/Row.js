@@ -12,28 +12,60 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A single row in a {@link Rows} element.
+ * Each child of the {@link Row} element is placed in each successive cell
+ * of the grid. The row with the most child elements determines the number
+ * of columns in each row.
+ *
+ * <p>Default {@link #getZclass}: z-row.
+ *
+ */
 zul.grid.Row = zk.$extends(zul.Widget, {
 	$define: {
+		/** Returns the horizontal alignment of the whole row.
+		 * <p>Default: null (system default: left unless CSS specified).
+		 * @return String
+		 */
+		/** Sets the horizontal alignment of the whole row.
+		 * @param String align
+		 */
 		align: function (v) {
 			var n = this.$n();
 			if (n)
 				n.align = v;
 		},
+		/** Returns the nowrap.
+		 * <p>Default: null (system default: wrap).
+		 * @return boolean
+		 */
+		/** Sets the nowrap.
+		 * @param boolean nowrap
+		 */
 		nowrap: function (v) {
 			var n = this.$n();
 			if (n)
 				n.noWrap = v;
 		},
+		/** Returns the vertical alignment of the whole row.
+		 * <p>Default: null (system default: top).
+		 * @return String
+		 */
+		/** Sets the vertical alignment of the whole row.
+		 * @param String valign
+		 */
 		valign: function (v) {
 			var n = this.$n();
 			if (n)
 				n.vAlign = v;
 		}
 	},
-
+	/** Returns the grid that contains this row. 
+	 * @return zul.grid.Grid
+	 */
 	getGrid: function () {
 		return this.parent ? this.parent.parent : null;
-	},
+	},	
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
@@ -41,9 +73,20 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				this.parent.stripe();
 		}
 	},
+	/** Returns the spans, which is a list of numbers separated by comma.
+	 * <p>Default: empty.
+	 * @return String
+	 */
 	getSpans: function () {
 		return zUtl.intsToString(this._spans);
 	},
+	/** Sets the spans, which is a list of numbers separated by comma.
+	 *
+	 * <p>For example, "1,2,3" means the second column will span two columns
+	 * and the following column span three columns, while others occupies
+	 * one column.
+	 * @param String spans
+	 */
 	setSpans: function (spans) {
 		if (this.getSpans() != spans) {
 			this._spans = zUtl.stringToInts(spans, 1);
@@ -56,6 +99,9 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-row";
 	},
+	/** Returns the group that this row belongs to, or null.
+	 * @return zul.grid.Group
+	 */
 	getGroup: function () {
 		// TODO: this performance is not good.
 		if (this.parent && this.parent.hasGroup())
@@ -63,7 +109,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				if (w.$instanceof(zul.grid.Group)) return w;
 				
 		return null;
-	},
+	},	
 	setStyle: function (style) {
 		if (this._style != style) {
 			if (!zk._rowTime) zk._rowTime = zUtl.now();

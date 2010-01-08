@@ -77,25 +77,142 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	}
 
+/**
+ * A box.
+ * <p>Default {@link #getZclass}: z-vbox.
+ */
 zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
 	_pack: 'start',
 
 	$define: {
+		/** Sets the alignment of cells of this box in the 'opposite' direction
+	 	 * (<i>start</i>, center, end, stretch).
+	 	 *
+		 * @param String align the alignment in the 'opposite' direction.
+		 * Allowed values: start, center, end, stretch.
+	 	 * If empty or null, the browser's default is used
+	 	 * (IE center and FF left, if vertical).
+		 */
+		/** Returns the alignment of cells of a box in the 'opposite' direction
+	 	 * (<i>null</i>, start, center, end).
+	 	 *
+	 	 * <p>The align attribute specifies how child elements of the box are aligned,
+	  	 * when the size of the box is larger than the total size of the children. For
+	 	 * boxes that have horizontal orientation, it specifies how its children will
+	 	 * be aligned vertically. For boxes that have vertical orientation, it is used
+	 	 * to specify how its children are aligned horizontally. The pack attribute
+	 	 * ({@link #getPack}) is
+	 	 * related to the alignment but is used to specify the position in the
+		 * opposite direction.
+		 *
+		 * <dl>
+		 * <dt>start</dt>
+		 * <dd>Child elements are aligned starting from the left or top edge of
+		 * the box. If the box is larger than the total size of the children, the
+		 * extra space is placed on the right or bottom side.</dd>
+	 	 * <dt>center</dt>
+	 	 * <dd>Extra space is split equally along each side of the child
+	 	 * elements, resulting in the children being placed in the center of the box.</dd>
+		 * <dt>end</dt>
+		 * <dd>Child elements are placed on the right or bottom edge of the box. If
+	 	 * the box is larger than the total size of the children, the extra space is
+		 * placed on the left or top side.</dd>
+	 	 * <dt>stretch</dt>
+		 * <dd>Child elements are stretched to fill the box.</dd>
+		 * </dl>
+		 *
+		 * <p>Default: start</p>
+		 * @return String
+		 */
 		align: 
 		    _zkf = function () {
 		    	this.rerender(); //TODO: a better algoithm
 		    },
+		/** Sets the alignment of cells of this box
+	 	 * (start, center, end) plus an <i>stretch</i> option.
+	 	 *
+	 	 * @param String pack the alignment. Allowed values: (start, center, end) plus an 
+	 	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
+	 	 * @see #getPack()
+	 	 */
+		/** Returns the pack alignment of cells of this box
+	 	 * (start, center, end) plus an indication <i>stretch</i> option.
+	 	 *
+	 	 * <p>The pack attribute specifies where child elements of the box are placed
+	 	 * when the box is larger that the size of the children. For boxes with
+	 	 * horizontal orientation, it is used to indicate the position of children
+	 	 * horizontally. For boxes with vertical orientation, it is used to indicate
+	 	 * the position of children vertically. The align attribute 
+	 	 * ({@link #getAlign})is used to specify
+	 	 * the position in the opposite direction.
+	 	 * 
+	 	 * <dl>
+	 	 * <dt>start</dt>
+	 	 * <dd>Child elements are aligned starting from the left or top edge of
+	 	 * the box. If the box is larger than the total size of the children, the
+	 	 * Extra space is placed on the right or bottom side.</dd>
+	 	 * <dt>center</dt>
+	 	 * <dd>Extra space is split equally along each side of the child
+	 	 * elements, resulting in the children being placed in the center of the box.</dd>
+	 	 * <dt>end</dt>
+	 	 * <dd>Child elements are placed on the right or bottom edge of the box. If
+	 	 * the box is larger than the total size of the children, the extra space is
+	 	 * placed on the left or top side.</dd>
+	 	 * <dt>stretch</dt>
+	 	 * <dd>This is an extra option in addition to the (start, center, end) options.
+	 	 * When add this extra option in the pack attribute, the Extra space is placed
+	 	 * proportionally and evenly along each child elements. If you specify 
+	 	 * "stretch,start", then the Extra proportionally and evenly allocated space 
+	 	 * for each child is placed on the right or bottom side of the child. 
+	 	 * If you specify "stretch,center", then the Extra proportionally and evenly 
+	 	 * allocated space for each child is split equally along each side of the
+	 	 * child. If you specify "stretch,end", then the Extra proportionally and 
+	 	 * evenly allocated space for each child is placed on the left or top side of 
+	 	 * the child. Note that if there are {@link Splitter} child inside this Box, 
+	 	 * then this Box behaves as if the pack attribute has been set the "stretch"
+	 	 * option; no matter you really specify "stretch" in pack attribute or not. 
+	 	 * If given null or simply "stretch" to this pack attribute then it is the 
+	 	 * same as "stretch,start"</dd> 
+	 	 * </dl>
+	 	 *
+	 	 * <p>Default: start.
+	 	 * @return String
+	 	 */
 		pack: _zkf,
+		/** Sets the spacing between adjacent children.
+	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
+	 	 * or null to use the default spacing
+	 	 * @see #getSpacing
+	 	 */
+		/** Returns the spacing between adjacent children, or null if the default
+	 	 * spacing is used.
+	 	 *
+	 	 * <p>The default spacing depends on the definition of the style class
+	 	 * called "xxx-sp", where xxx is
+	 	 *
+	 	 * <ol>
+	 	 *  <li>{@link #getSclass} if it is not null.</li>
+	 	 *  <li>hbox if {@link #getSclass} is null and it is a horizontal box.</li>
+	 	 *  <li>vbox if {@link #getSclass} is null and it is a vertical box.</li>
+	 	 * </ol>
+	 	 *
+	 	 * <p>Default: null (means to use the default spacing).
+	 	 * @return String
+	 	 */
 		spacing: _zkf
 	},
 
-	/** Returns if it is a vertical box. */
+	/** Returns whether it is a vertical box. 
+	 * @return boolean
+	 */
 	isVertical: function () {
 		return 'vertical' == this._mold;
 	},
-	/** Returns the orient. */
+	/** Returns the orient. 
+	 * @return String
+	 */
 	getOrient: function () {
 		return this._mold;
 	},
@@ -151,6 +268,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (prevsib && this.lastChild == prevsib) //child is last
 			jq(prevsib.uuid + '-chdex2', zk).remove();
 	},
+	/** Enclose child with HTML tag such as TR or TD, 
+	 * and return a HTML code or add HTML fragments in out array.
+	 * @param zk.Widget child the child which will be enclosed
+	 * @param boolean prefixSpace if true the previousSibling of the child 
+	 * will put in front of child.
+	 * @param Array out an array of HTML fragments.
+	 * @return String
+	 */
 	encloseChildHTML_: function (child, prefixSpace, out) {
 		var oo = [],
 			isCell = child.$instanceof(zul.wgt.Cell);
@@ -495,6 +620,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
     		delete this._stretchPack;
     	}
 	},
+	//watch//
 	onSize: _zkf = function () {
 		if (!this._splitterKid) return; //only when there are splitter kids
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');

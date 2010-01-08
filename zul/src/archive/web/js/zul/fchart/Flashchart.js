@@ -177,6 +177,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return dataProvider;
 	}
 
+/**
+ * The generic flash chart component. Developers set proper chart type, data model,
+ * and the src attribute to draw proper chart. The model and type must match to each other;
+ * or the result is unpredictable.
+ *
+ * <table>
+ *   <tr><th>type</th></tr>
+ *   <tr><td>pie</td></tr>
+ *   <tr><td>bar</td></tr>
+ *   <tr><td>line</td></tr>
+ *   <tr><td>column</td></tr>
+ *   <tr><td>stackbar</td></tr>
+ *   <tr><td>stackcolumn</td></tr>
+ * </table>
+ *
+ * <p>Default {@link #getWidth}: 400px
+ * <p>Default {@link #getHeight}: 200px
+ *
+ */
 zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 
 	/* Default values */
@@ -185,11 +204,42 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 	_defaultStyle: "legend-display=right,legend-padding=10,legend-spacing=5,legend-font-family=Arial,legend-font-size=13",
 
 	$define: {
+		/** Sets the content style of flashchart.
+		 * <p>Default format: "Category-Attribute=Value", ex."legend-display=right"
+		 * @param String chartStyle
+		 */
+		/** Returns the content style.
+		 * @return String
+		 */
 		chartStyle: null,
-		width: null,
-		height: null,
+		/** Sets a catenation of a list of model of chart, 
+		 * separated by comma.
+		 * <p>Only implement models which matched the allowed types
+		 * @param String jsonModel
+		 */
+		/** Returns a catenation of a list of the model's attribute of chart, 
+		 * separated by comma.
+		 * @return String
+		 */
 		jsonModel: null,
+		/** Sets a catenation of a list of the model's series of chart, 
+		 * separated by comma.
+		 * <p>Only implement models which matched the allowed types
+		 * @param String jsonModel
+		 */
+		/** Returns a catenation of a list of the model's series of chart, 
+		 * separated by comma.
+		 * @return String
+		 */
 		jsonSeries: null,
+		/** Sets the type of chart.
+		 * <p>Default: "pie"
+		 * <p>Allowed Types: pie, line, bar, column, stackbar, stackcolumn
+		 * @param String
+		 */
+		/** Returns the type of chart
+		 * @return String
+		 */
 		type: null
 	},
 

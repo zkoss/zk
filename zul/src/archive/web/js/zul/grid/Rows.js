@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Defines the rows of a grid.
+ * Each child of a rows element should be a {@link Row} element.
+ * <p>Default {@link #getZclass}: z-rows.
+ */
 zul.grid.Rows = zk.$extends(zul.Widget, {
 	_visibleItemCount: 0,
 	$init: function () {
@@ -19,17 +24,32 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this._groupsInfo = [];
 	},
 	$define: {
+		/** Returns the number of visible descendant {@link Row}.
+		 * @return int
+		 */
 		visibleItemCount: null
 	},
+	/** Returns the grid that contains this rows.
+	 * @return zul.grid.Grid
+	 */
 	getGrid: function () {
 		return this.parent;
 	},
+	/** Returns the number of groups.
+	 * @return int
+	 */
 	getGroupCount: function () {
 		return this._groupsInfo.length;
 	},
+	/** Returns a list of all {@link Group}.
+	 * @return zul.grid.Groups
+	 */
 	getGroups: function () {
 		return this._groupsInfo.$clone();
 	},
+	/** Returns whether Group exists.
+	 * @return boolean
+	 */
 	hasGroup: function () {
 		return this._groupsInfo.length;
 	},

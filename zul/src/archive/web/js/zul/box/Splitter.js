@@ -12,11 +12,38 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An element which should appear before or after an element inside a box
+ * ({@link Box}).
+ *
+ * <p>When the splitter is dragged, the sibling elements of the splitter are
+ * resized. If {@link #getCollapse} is true, a grippy in placed
+ * inside the splitter, and one sibling element of the splitter is collapsed
+ * when the grippy is clicked.
+ *
+ *
+ *  <p>Default {@link #getZclass} as follows:
+ *  <ol>
+ *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-splitter-ver" is assumed</li>
+ *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-splitter-hor" is assumed</li>
+ *  </ol>
+ * 
+ */
 zul.box.Splitter = zk.$extends(zul.Widget, {
 	_collapse: "none",
 	_open: true,
 
 	$define: {
+		/** Opens or collapses the splitter.
+		 * Meaningful only if {@link #getCollapse} is not "none".
+		 * @param boolean open
+		 * @param Offset opts
+	 	 */
+		/** Returns whether it is opne (i.e., not collapsed.
+	 	 * Meaningful only if {@link #getCollapse} is not "none".
+	 	 * <p>Default: true.
+	 	 * @return boolean
+	 	 */
 		open: function(open, opts) {
 			var node = this.$n();
 			if (!node) return;
@@ -24,7 +51,6 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (!colps || "none" == colps) return; //nothing to do
 
 			var nd = this.$n('chdex'),
-				vert = this.isVertical(),
 				Splitter = this.$class,
 				before = colps == "before",
 				sib = before ? Splitter._prev(nd): Splitter._next(nd),
@@ -71,23 +97,30 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 	},
 
-	/** Returns if it is a vertical box. */
+	/** Returns if it is a vertical box.
+	 * @return boolean
+	 */
 	isVertical: function () {
 		var p = this.parent;
 		return !p || p.isVertical();
 	},
-	/** Returns the orient. */
+	/** Returns the orient. 
+	 * It is the same as the parent's orientation ({@link Box#getOrient}).
+	 * @return String
+	 */
 	getOrient: function () {
 		var p = this.parent;
 		return p ? p.getOrient(): "vertical";
 	},
 
 	/** Returns the collapse of this button.
+	 * @return String
 	 */
 	getCollapse: function () {
 		return this._collapse;
 	},
 	/** Sets the collapse of this button.
+	 * @param String collapse
 	 */
 	setCollapse: function(collapse) {
 		if (this._collapse != collapse) {
@@ -184,7 +217,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 
-	/** Fixed DOM class for the enclosing TR/TD tag. */
+	/* Fixed DOM class for the enclosing TR/TD tag. */
 	_fixDomClass: function (inner) {
 		var node = this.$n(),
 			p = node.parentNode;
@@ -411,7 +444,7 @@ if (zk.ie) {
 		$(wgt.button).removeClass(wgt.getZclass() + '-btn-visi');
 	};
 }
-/** Use fix table layout */
+/* Use fix table layout */
 if (zk.opera) { //only opera needs it
 	zul.box.Splitter._fixLayout = function (wgt) {
 		var box = wgt.parent.$n();

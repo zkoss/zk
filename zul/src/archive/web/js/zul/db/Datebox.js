@@ -33,7 +33,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zk(inp).focus();
 		}
 	}
-
+/**
+ * An edit box for holding a date. 
+ * <p>Default {@link #getZclass}: z-datebox.
+ */
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
@@ -44,6 +47,16 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 
 	$define: {
+		/**
+		 * Sets whether the button (on the right of the textbox) is visible.
+		 * @param boolean visible
+		 */
+		/**
+		 * Returns whether the button (on the right of the textbox) is visible.
+		 * <p>
+		 * Default: true.
+		 * @return boolean
+		 */
 		buttonVisible: function (v) {
 			var n = this.$n('btn');
 			if (n) {
@@ -51,6 +64,60 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this.onSize();
 			}
 		},
+		/** Sets the date format.
+		 * <p>The following pattern letters are defined:
+		 * <table border=0 cellspacing=3 cellpadding=0>
+		 * <tr bgcolor="#ccccff">
+		 * <th align=left>Letter
+		 * <th align=left>Date or Time Component
+		 * <th align=left>Presentation
+		 * <th align=left>Examples
+		 * <tr><td><code>G</code>
+		 * <td>Era designator
+		 * <td><Text</a>
+		 * <td><code>AD</code>
+		 * <tr bgcolor="#eeeeff">
+		 * <td><code>y</code>
+		 * <td>Year
+		 * <td>Year</a>
+		 * <td><code>1996</code>; <code>96</code>
+		 * <tr><td><code>M</code>
+		 * <td>Month in year
+		 * <td>Month</a>
+		 * <td><code>July</code>; <code>Jul</code>; <code>07</code>
+		 * <tr bgcolor="#eeeeff">
+		 * <td><code>w</code>
+		 * <td>Week in year (starting at 1)
+		 * <td>Number</a>
+		 * <td><code>27</code>
+		 * <tr><td><code>W</code>
+		 * <td>Week in month (starting at 1)
+		 * <td>Number</a>
+		 * <td><code>2</code>
+		 * <tr bgcolor="#eeeeff">
+		 * <td><code>D</code>
+		 * <td>Day in year (starting at 1)
+		 * <td>Number</a>
+		 * <td><code>189</code>
+		 * <tr><td><code>d</code>
+		 * <td>Day in month (starting at 1)
+		 * <td>Number</a>
+		 * <td><code>10</code>
+		 * <tr bgcolor="#eeeeff">
+		 * <td><code>F</code>
+		 * <td>Day of week in month
+		 * <td>Number</a>
+		 * <td><code>2</code>
+		 * <tr><td><code>E</code>
+		 * <td>Day in week
+		 * <td>Text</a>
+		 * <td><code>Tuesday</code>; <code>Tue</code>
+		 * </table>
+		 * @param String format the pattern.
+ 	 	 */
+		/** Returns the full date format of the specified format
+		 * @return String
+		 */
 		format: function () {
 			if (this._pop) {
 				this._pop.setFormat(this._format);
@@ -61,6 +128,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		},
+		/** Sets the constraint.
+	 	 * <p>Default: null (means no constraint all all).
+	 	 * @param String cst
+	 	 */
+		/** Returns the constraint, or null if no constraint at all.
+		 * @return String
+		 */
 		constraint: function (cst) {
 			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 				this._cst = new zul.inp.SimpleDateConstraint(cst);
@@ -72,20 +146,62 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this._pop.rerender();
 			}
 		},
+		/** Sets the time zone that this date box belongs to.
+		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+		 */
+		/** Returns the time zone that this date box belongs to.
+		 * @return String the time zone's ID, such as "America/Los_Angeles".
+		 */
 		timeZone: function (timezone) {
 			this._timezone = timezone;
 			this._setTimeZonesIndex();
 		},
+		/** Sets whether the list of the time zones to display is readonly.
+		 * If readonly, the user cannot change the time zone at the client.
+		 * @param boolean readonly
+	 	 */
+		/** Returns whether the list of the time zones to display is readonly.
+		 * If readonly, the user cannot change the time zone at the client.
+		 * @return boolean
+		 */
 		timeZonesReadOnly: function (readonly) {
 			this._tzonesReadOnly = readonly;
 			var select = this.$n('dtzones');
 			if (select) select.disabled = readonly ? "disabled" : "";
 		},
+		/** Sets a catenation of a list of the time zones' ID, separated by comma,
+		 * that will be displayed at the client and allow user to select.
+		 * @param String dtzones a catenation of a list of the timezones' ID, such as
+		 * <code>"America/Los_Angeles,GMT+8"</code>
+		 */
+		/** Returns a list of the time zones that will be displayed at the
+		 * client and allow user to select.
+		 * <p>Default: null
+		 * @return Array
+		 */
 		displayedTimeZones: function (dtzones) {
 			this._dtzones = dtzones.split(",");
 		},
+		/** Sets whether or not date/time parsing is to be lenient.
+		 * 
+		 * <p>
+		 * With lenient parsing, the parser may use heuristics to interpret inputs
+		 * that do not precisely match this object's format. With strict parsing,
+		 * inputs must match this object's format.
+		 * 
+		 * <p>Default: true.
+		 * @param boolean lenient
+		 */
+		/** Returns whether or not date/time parsing is to be lenient.
+		 * 
+		 * <p>
+		 * With lenient parsing, the parser may use heuristics to interpret inputs
+		 * that do not precisely match this object's format. With strict parsing,
+		 * inputs must match this object's format.
+		 * @return boolean
+		 */
 		lenient: null
-	},
+	},	
 	setValue: function (val) {
 		var args;
 		if (val) {
@@ -119,9 +235,16 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox";
 	},
+	/** Returns the String of the Date that is assigned to this component.
+	 *  <p>returns empty String if value is null
+	 * @return String
+	 */
 	getRawText: function () {
 		return this.coerceToString_(this._value);
 	},
+	/** Returns the Time format of the specified format
+	 * @return String
+	 */
 	getTimeFormat: function () {
 		var fmt = this._format,
 			aa = fmt.indexOf('a'),
@@ -148,9 +271,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
 		}
 	},
+	/** Returns the Date format of the specified format
+	 * @return String
+	 */
 	getDateFormat: function () {
 		return this._format.replace(/[ahKHksm]/g, '');
 	},
+	/** Drops down or closes the calendar to select a date.
+	 */
 	setOpen: function(open) {
 		var pp = this.$n("pp");
 		if (pp) {

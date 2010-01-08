@@ -12,29 +12,54 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Adds the ability for single level grouping to the Grid.
+ * 
+ * <p>Default {@link #getZclass}: z-group.
+ * 
+ * <p>Note: All the child of this component are automatically applied
+ * the group-cell CSS, if you don't want this CSS, you can invoke the {@link zul.wgt.Label#setSclass(String)}
+ * after the child added.
+ */
 zul.grid.Group = zk.$extends(zul.grid.Row, {
 	_open: true,
 
 	$define: {
+		/** Returns whether this container is open.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether this container is open.
+		 * @param boolean open
+		 */
 		open: function (open) {
 			this._openItem(open, true);
 			if (open)
 				this.getGrid().stripe();
 		}
 	},
-
+	/** Returns a Array of all {@link Row} are grouped by this group.
+	 * @return Array
+	 */
 	getItems: function () {
 		var item = [];
 		for (var w = this.nextSibling; w && !w.$instanceof(zul.grid.Group); w = w.nextSibling)
 			item.push(w);
 		return item;
 	},
+	/** Returns the number of items.
+	 * @return int
+	 */
 	getItemCount: function () {
 		return this.getItems().length;
 	},
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-group";
 	},
+	/** Returns the value of the {@link zul.wgt.Label} it contains, or null
+	 * if no such cell.
+	 * @return zul.wgt.Label
+	 */
 	getLabel: function () {
 		return this.firstChild != null && this.firstChild.$instanceof(zul.wgt.Label) ?
 			this.firstChild.getValue() : null;

@@ -14,6 +14,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/**
+ * A calendar.
+ * <p>Default {@link #getZclass}: z-calendar.
+ */
 zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view : "day", //"day", "month", "year", "decade",
 	
@@ -22,9 +26,30 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this.listen({onChange: this}, -1000);
 	},
 	$define: {
+		/** Assigns a value to this component.
+		 * @param Date value the date to assign. If null, today is assumed.
+		 */
+		/** Returns the value that is assigned to this component.
+		 * @return Date
+	 	 */
 		value: _zkf = function() {
 			this.rerender();
 		},
+		/** Set the date limit for this component with yyyyMMdd format,
+		 * such as 20100101 is mean Jan 01 2010 
+		 * 
+		 * <dl>
+		 * <dt>Example:</dt>
+		 * <dd>between 20091201 and 20091231</dd>
+		 * <dd>before 20091201</dd>
+		 * <dd>after 20091231</dd>
+		 * </dl>
+		 * 
+		 * @param String constraint
+		 */
+		/** Returns the constraint of this component.
+		 * @return String
+		 */
 		constraint: function() {
 			var constraint = this._constraint || '';
 			if (constraint.startsWith("between")) {
@@ -62,6 +87,26 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this._beg.setMilliseconds(0);
 			}
 		},
+		/** Sets the name of this component.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 *
+		 * @param String name the name of this component.
+		 */
+		/** Returns the name of this component.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * <p>Default: null.
+		 * @return String
+		 */
 		name: function () {
 			if (this.efield)
 				this.efield.name = this._name;
@@ -122,6 +167,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			break;
 		}
 	},
+	/** Returns the format of this component.
+	 * @return String
+	 */
 	getFormat: function () {
 		return this._fmt || "yyyy/MM/dd";
 	},
@@ -218,6 +266,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			jq(node).toggleClass(zcls + "-over");
 		}
 	},
+	/** Returns the Date that is assigned to this component.
+	 *  <p>returns today if value is null
+	 * @return Date
+	 */
 	getTime : function () {
 		return this._value ? zk.fmt.Date.parseDate(this._value, this.getFormat()) : new Date();
 	},
