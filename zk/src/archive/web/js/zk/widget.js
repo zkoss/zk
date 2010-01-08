@@ -1049,7 +1049,9 @@ new zul.wnd.Window{
 	 */
 	/** Sets a property.
 	 * @param String name the name of property.
-	 * If the name starts with <code>on</code>, it is assumed to be
+	 * If the name starts with <code>$on</code>, the value is assumed to
+	 * be a boolean indicating if the server registers a listener.
+	 * If the name starts with <code>on</code>, the value is assumed to be
 	 * an event listener and {@link #setListener} will be called.
 	 * @param Object value the value
 	 * @param Object extra the extra argument. It could be anything.

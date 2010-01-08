@@ -1819,7 +1819,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			} else if (getClientEvents().containsKey(evtnm)) {
 				final boolean asap = Events.isListened(this, evtnm, true);
 				if (l.size() == 1 || oldasap != asap)
-					smartUpdate(evtnm, asap);
+					smartUpdate("$" + evtnm, asap);
 			}
 		}
 		return true;
@@ -1835,10 +1835,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				for (Iterator it = l.iterator(); it.hasNext();) {
 					final EventListener li = (EventListener)it.next();
 					if (listener.equals(li)) {
-						if (l.size() == 1)
+						it.remove();
+						if (l.isEmpty())
 							_listeners.remove(evtnm);
-						else
-							it.remove();
 
 						final Desktop desktop = getDesktop();
 						if (desktop != null) {
@@ -1846,9 +1845,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 							if (getClientEvents().containsKey(evtnm)) {
 								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
-									smartUpdate(evtnm, (Object)null); //no listener at all
+									smartUpdate("$" + evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
-									smartUpdate(evtnm, !oldasap);
+									smartUpdate("$" + evtnm, !oldasap);
 							}
 						}
 						return true;
