@@ -89,6 +89,7 @@ November, 2009
   2928044: maxlength didn't work in input element
   2928109: <window hflex="min"> not correctly handled  
   2911379: doublebox format="" broken in ZK 5 RC2
+  2928011: provide a customization for zk.Draggable
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup

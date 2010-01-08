@@ -14,6 +14,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+<script defer="true"><![CDATA[
+zk.Draggable.prototype.snap_ = function (p) {
+	p[1] = p[1] < 0 ? 0: p[1];
+	return p
+}
+]]></script>
 Please check the doModal windows will not dragged out the browser top
 <window title="Modal Dialog" border="normal">
 <button label="Hello.doModal">
