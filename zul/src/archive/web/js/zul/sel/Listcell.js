@@ -59,11 +59,11 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	/** Returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
-	 * {@link Listbox#getMaxlength}
+	 * {@link Select#getMaxlength}
 	 * If not, it is the same as the correponding {@link #getListheader}'s 
 	 * {@link Listheader#getMaxlength}.
 	 *
-	 * <p>Note: {@link Listitem#getMaxlength} is the same as {@link Listbox#getMaxlength}.
+	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
 	 * @return int
 	 */
 	getMaxlength: function () {

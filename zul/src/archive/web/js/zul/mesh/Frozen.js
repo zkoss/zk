@@ -12,8 +12,23 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A frozen component to represent a frozen column or row in grid, like MS Excel. 
+ * <p>Default {@link #getZclass}: z-frozen.
+ */
 zul.mesh.Frozen = zk.$extends(zul.Widget, {
+	_start: 0,
+	
 	$define: {
+    	/**
+    	 * Returns the number of columns to freeze.
+    	 * <p>Default: 0
+    	 * @return int
+    	 */
+    	/**
+    	 * Sets the number of columns to freeze.(from left to right)
+    	 * @param int columns positive only
+    	 */
 		columns: [function(v) {
 			return v < 0 ? 0 : v;
 		}, function(v) {
@@ -24,10 +39,23 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			} else this.rerender();
 		}],
+		/**
+		 * Returns the start position of the scrollbar.
+		 * <p>Default: 0
+		 * @return int
+		 */
+		/**
+		 * Sets the start position of the scrollbar.
+		 * <p> Default: 0
+		 * @param int start the column number
+		 */
 		start: function () {
 			this.syncScorll();
 		}
 	},
+	/**
+	 * Synchronizes the scrollbar according to {@link #getStart}.
+	 */
 	syncScorll: function () {
 		var scroll = this.$n('scrollX');
 		if (scroll)

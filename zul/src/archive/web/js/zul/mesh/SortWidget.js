@@ -12,12 +12,29 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for a sortable widget.
+ */
 zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	_sortDirection: "natural",
 	_sortAscending: "none",
 	_sortDescending: "none",
 
 	$define: {
+    	/** Returns the sort direction.
+    	 * <p>Default: "natural".
+    	 * @return String
+    	 */
+    	/** Sets the sort direction. This does not sort the data, it only serves
+    	 * as an indicator as to how the widget is sorted.
+    	 *
+    	 * <p>If you use {@link #sort(String, jq.Event)} to sort rows,
+    	 * the sort direction is maintained automatically.
+    	 * If you want to sort it in customized way, you have to set the
+    	 * sort direction manually.
+    	 *
+    	 * @param String sortDir one of "ascending", "descending" and "natural"
+    	 */
 		sortDirection: function (v) {
 			var n = this.$n();
 			if (n) {
@@ -37,6 +54,13 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				}
 			}
 		},
+		/** Returns the ascending sorter, or null if not available.
+		 * @return String
+		 */
+		/** Sets the ascending sorter with "client", "auto", or null for
+		 * no sorter for the ascending order.
+		 * @param String sortAscending
+		 */
 		sortAscending: function (v) {
 			if (!v) this._sortAscending = v = "none";
 			var n = this.$n(),
@@ -51,6 +75,13 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 					$n.addClass(zcls + "-sort");
 			}
 		},
+		/** Returns the descending sorter, or null if not available.
+		 * @return String
+		 */
+		/** Sets the descending sorter with "client", "auto", or null for
+		 * no sorter for the descending order.
+		 * @param String sortDescending
+		 */
 		sortDescending: function (v) {
 			if (!v) this._sortDescending = v = "none";
 			var n = this.$n(),
@@ -70,6 +101,19 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		this.$supers('$init', arguments);
 		this.listen({onSort: this}, -1000);
 	},
+	/** Sets the type of the sorter.
+	 * You might specify either "auto", "client", or "none".
+	 *
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case.
+	 * @param String type
+	 */
 	setSort: function (type) {
 		if (type && type.startsWith('client')) {
 			this.setSortAscending(type);
@@ -82,6 +126,11 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	isSortable_: function () {
 		return this._sortAscending != "none" || this._sortDescending != "none";
 	},
+	/**
+	 * Sorts the data.
+	 * @param String ascending
+	 * @param jq.Event evt
+	 */
 	sort: function (ascending, evt) {
 		var dir = this.getSortDirection();
 		if (ascending) {
@@ -140,6 +189,12 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		}
 		return true;
 	},
+	/**
+	 * The default implementation to compare the data.
+     * @param Object o1 the first object to be compared.
+     * @param Object o2 the second object to be compared.
+     * @param boolean isNumber
+	 */
 	sorting: function(a, b, isNumber) {
 		var v1, v2;
 		if (typeof a.getLabel == 'function')

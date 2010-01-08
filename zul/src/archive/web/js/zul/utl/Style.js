@@ -33,8 +33,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		/**
 		 * Sets the URI of an external style sheet.
 		 * 
-		 * @param String
-		 *            src the URI of an external style sheet
+		 * @param String src the URI of an external style sheet
 		 */
 		src: function () {
 			if (this.desktop) this._updLink();

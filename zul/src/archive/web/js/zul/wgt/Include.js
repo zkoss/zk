@@ -39,7 +39,6 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		 * the HTML comment.
 		 * <p>Default: false.
 		 *
-		 * <p>Notice that it is ignored in the instance mode ({@link #getMode}).
 		 * @return boolean
 		 */
 		/** Sets  whether to generate the included content inside

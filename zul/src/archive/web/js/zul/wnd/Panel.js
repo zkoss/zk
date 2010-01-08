@@ -99,7 +99,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		/**
 		 * Returns whether to render the panel with custom rounded borders.
 		 * <p>Default: false.
-		 * @param boolean
+		 * @return boolean
 		 */
 		framable: _zkf = function () {
 			this.rerender(); //TODO: like Window, use _updateDomOuter
@@ -114,7 +114,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		/**
 		 * Returns whether to move the panel to display it inline where it is rendered.
 		 * <p>Default: false.
-		 * @return
+		 * @return boolean
 		 */
 		movable: _zkf,
 		/**
@@ -161,7 +161,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	     * 
 	     * <p>Default: false. 
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
-		 * @param boolean 
+		 * @param boolean minimizable
 		 */
 		/**
 		 * Returns whether to display the minimizing button and allow the user to minimize

@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for headers, the parent of
+ * a group of {@link HeaderWidget}.
+ *
+ */
 zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -19,6 +24,16 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 
 	$define: {
+		/** Returns whether the width of the child column is sizable.
+		 * @return boolean
+		 */
+		/** Sets whether the width of the child column is sizable.
+		 * If true, an user can drag the border between two columns (e.g.,
+		 * {@link HeaderWidget})
+		 * to change the widths of adjacent columns.
+		 * <p>Default: false.
+		 * @param boolean sizable
+		 */
 		sizable: function () {
 			this.rerender();
 		}

@@ -12,6 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A toolbar.
+ * 
+ * <p>Mold:
+ * <ol>
+ * <li>default</li>
+ * <li>panel: this mold is used for {@link zul.wnd.Panel} component as its
+ * foot toolbar.</li>
+ * </ol>
+ * <p>Default {@link #getZclass}: z-toolbar, if {@link #getMold()} is panel,
+ * z-toolbar-panel is assumed.
+ */
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_align: "start",

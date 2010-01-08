@@ -12,6 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for a select widget.
+ */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_rows: 0,
 	$init: function () {
@@ -19,6 +22,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._selItems = [];
 	},
 	$define: {
+		/**
+		 * Returns the rows. Zero means no limitation.
+		 * <p>
+		 * Default: 0.
+		 * @return int
+		 */
+		/**
+		 * Sets the rows.
+		 * <p>
+		 * Note: if both {@link #setHeight} is specified with non-empty,
+		 * {@link #setRows} is ignored
+		 * @param int rows
+		 */
 		rows: function (rows) {
 			var n = this.$n();
 			if (n) {
@@ -26,10 +42,33 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this.onSize();
 			}
 		},
+		/**
+		 * Returns whether the check mark shall be displayed in front of each item.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether the check mark shall be displayed in front of each item.
+		 * <p>
+		 * The check mark is a checkbox if {@link #isMultiple} returns true. It is a
+		 * radio button if {@link #isMultiple} returns false.
+		 * @param boolean checkmark
+		 */
 		checkmark: function (checkmark) {
 			if (this.desktop)
 				this.rerender();
 		},
+		/**
+		 * Returns whether multiple selections are allowed.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether multiple selections are allowed.
+		 * @param boolean multiple
+		 */
 		multiple: function (multiple) {
 			if (!this._multiple && this._selItems.length) {
 				var item = this.getSelectedItem();
@@ -60,6 +99,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 				this._changeSelect(w, sels[w.uuid] == true);
 		},
+		/**
+		 * Returns the index of the selected item (-1 if no one is selected).
+		 * @return int
+		 */
+		/**
+		 * Deselects all of the currently selected items and selects the item with
+		 * the given index.
+		 * @param int selectedIndex
+		 */
 		selectedIndex: [
 			function (v) {
 				return v < -1 || (!v && v !== 0) ? -1 : v;
@@ -79,6 +127,32 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 			}
 		],
+		/**
+		 * Returns the name of this component.
+		 * <p>
+		 * Default: null.
+		 * <p>
+		 * The name is used only to work with "legacy" Web application that handles
+		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+		 * It doesn't work with other kind of clients.
+		 * <p>
+		 * Don't use this method if your application is purely based on ZK's
+		 * event-driven model.
+		 * @return String
+		 */
+		/**
+		 * Sets the name of this component.
+		 * <p>
+		 * The name is used only to work with "legacy" Web application that handles
+		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+		 * It doesn't work with other kind of clients.
+		 * <p>
+		 * Don't use this method if your application is purely based on ZK's
+		 * event-driven model.
+		 * 
+		 * @param String name
+		 *            the name of this component.
+		 */
 		name: function () {
 			if (this.destkop) this.updateFormData();	
 		}
@@ -102,6 +176,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.efield = null;
 		}
 	},
+	/**
+	 * Deselects all of the currently selected items and selects the given item.
+	 * <p>
+	 * It is the same as {@link #selectItem}.
+	 * @param ItemWidget item
+	 */
 	setSelectedItem: function (item) {
 		item = zk.Widget.$(item);
 		if (item) {
@@ -109,9 +189,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			zk(item).scrollIntoView(this.ebody);
 		}
 	},
+	/**
+	 * Returns the selected item.
+	 * @return ItemWidget
+	 */
 	getSelectedItem: function () {
 		return this._selItems[0];
 	},
+	/**
+	 * Returns all selected items.
+	 * @return Array
+	 */
 	getSelectedItems: function () {
 		// returns a readonly array
 		return this._selItems.$clone();
@@ -126,7 +214,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
-	/** Calculates the size. */
+	/* Calculates the size. */
 	_calcSize: function () {
 		
 		//Bug in B30-1926094-1.zul 
@@ -329,7 +417,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
-	/** Returns the real # of rows (aka., real size). */
+	/* Returns the real # of rows (aka., real size). */
 	_visibleRows: function (v) {
 		if ("number" == typeof v) {
 			this._visiRows = v;
@@ -359,6 +447,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		else this._addItemToSelection(item);
 		this.updateFormData();
 	},
+	/**
+	 * Deselects all of the currently selected items and selects the given item.
+	 * <p>
+	 * It is the same as {@link #setSelectedItem}.
+	 * 
+	 * @param ItemWidget item
+	 *            the item to select. If null, all items are deselected.
+	 */
 	selectItem: function (item) {
 		if (!item)
 			this.setSelectedIndex(-1);
@@ -389,6 +485,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
+	/**
+	 * Clears the selection.
+	 */
 	clearSelection: function () {
 		if (this._selItems.length) {
 			for(var item;(item = this._selItems.pop());)
@@ -493,7 +592,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//Oppositely, it disabled popup (bug 1578659)
 		}
 	},
-	/** Handles keydown sent to the body. */
+	/* Handles keydown sent to the body. */
 	doKeyDown_: function (evt) {
 		if (!this._shallIgnoreEvent(evt)) {
 
@@ -626,7 +725,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		tn == "OPTION" ||
 		(zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button)))
 	},
-	/** maintain the offset of the focus proxy*/
+	/* maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
 		var focusEl = this.$n('a'),
 			offs;
@@ -643,14 +742,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);;
 		return [x - ofs1[0] + x2, y  - ofs1[1] + y2];
 	},
-	/** Selects an item, notify server and change focus if necessary. */
+	/* Selects an item, notify server and change focus if necessary. */
 	_select: function (row, evt) {
 		if (this._selectOne(row, true)) {
 			//notify server
 			this.fireOnSelect(row, evt);
 		}
 	},
-	/** Selects a range from the last focus up to the specified one.
+	/* Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
 	 */
 	_selectUpto: function (row, evt) {
@@ -684,17 +783,25 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._focus(row);
 		this.fireOnSelect(row, evt);
 	},
+	/**
+	 * Selects all items.
+	 * @param boolean isSelectAll.
+	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 			if (!w.isDisabled())
 				this._changeSelect(w, true);
-		if (notify) this.fireOnSelect(this.getSelectedItem(), evt);
+		if (notify && evt !== true)
+			this.fireOnSelect(this.getSelectedItem(), evt);
 	},
+	/**
+	 * Selects all items.
+	 * @param boolean notify if true, fire onSelect event to server
+	 * @param jq.Event evt
+	 */
 	selectAll: _zkf,
-	/** Selects one and deselect others, and return whehter any changes.
+	/* Selects one and deselect others, and return whehter any changes.
 	 * It won't notify the server.
-	 * @param row the row to select. Unselect all if null
-	 * @param toFocus whether to change focus
 	 */
 	_selectOne: function (row, toFocus) {
 		var selItem = this.getSelectedItem();
@@ -724,7 +831,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return true;
 	},
-	/** Toggle the selection and notifies server. */
+	/* Toggle the selection and notifies server. */
 	_toggleSelect: function (row, toSel, evt) {
 		if (!this.isMultiple()) {
 			var old = this.getSelectedItem();
@@ -750,14 +857,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		this.fire('onSelect', zk.copy({items: data, reference: reference, clearFirst: !keep}, edata));
 	},
-	/** Changes the specified row as focused. */
+	/* Changes the specified row as focused. */
 	_focus: function (row) {
 		if (this.canActivate({checkOnly:true})) {
 			this._unsetFocusExcept(row);
 			this._setFocus(row, true);
 		}
 	},
-	/** Changes the selected status of an item without affecting other items
+	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
 	_changeSelect: function (row, toSel) {
@@ -771,7 +878,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_isFocus: function (row) {
 		return this._focusItem == row;
 	},
-	/** Changes the focus status, and return whether it is changed. */
+	/* Changes the focus status, and return whether it is changed. */
 	_setFocus: function (row, toFocus) {
 		var changed = this._isFocus(row) != toFocus;
 		if (changed) {
@@ -788,7 +895,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			row._doFocusOut();
 		return changed;
 	},
-	/** Cleans selected except the specified one, and returns any selected status
+	/* Cleans selected except the specified one, and returns any selected status
 	 * is changed.
 	 */
 	_unsetSelectAllExcept: function (row) {
@@ -799,7 +906,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return changed;
 	},
-	/** Cleans selected except the specified one, and returns any selected status
+	/* Cleans selected except the specified one, and returns any selected status
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {

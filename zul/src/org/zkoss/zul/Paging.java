@@ -16,12 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.event.PagingEvent;
-import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;

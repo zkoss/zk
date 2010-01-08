@@ -181,7 +181,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	     * 
 	     * <p>Default: false. 
 		 * <p>Note: the maximize button won't be displayed if no title or caption at all.
-		 * @param boolean 
+		 * @param boolean minimizable
 		 */
 		/**
 		 * Returns whether to display the minimizing button and allow the user to minimize
@@ -191,12 +191,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 */
 		minimizable: _zkf,
 		/**
-		 * Sets whether the window is maximized, and then the size of the window will depend 
-		 * on it to show a appropriate size. In other words, if true, the size of the
-		 * window will count on the size of its offset parent node whose position is
-		 * absolute (by {@link #isFloatable()}) or its parent node. Otherwise, its size
-		 * will be original size. Note that the maximized effect will run at client's
-		 * sizing phase not initial phase.
+    	 * Sets whether the window is maximized, and then the size of the window will depend 
+    	 * on it to show a appropriate size. In other words, if true, the size of the
+    	 * window will count on the size of its offset parent node whose position is
+    	 * absolute (by not {@link #doEmbedded()}) or its parent node. Otherwise, its size
+    	 * will be original size. Note that the maximized effect will run at client's
+    	 * sizing phase not initial phase.
 		 * 
 		 * <p>Default: false.
 		 * @param boolean maximized
@@ -740,7 +740,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
-			if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/**bug #1944729*/)
+			if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/*bug #1944729*/)
 				cave.style.height = "0";
 
 			if (hgh && hgh != "auto") {

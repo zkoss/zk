@@ -30,13 +30,24 @@ public class Frozen extends XulElement implements org.zkoss.zul.api.Frozen {
 	private int _columns;
 	private int _start;
 	
+	/**
+	 * Sets the start position of the scrollbar.
+	 * <p> Default: 0
+	 * @param start the column number
+	 */
 	public void setStart(int start) {
+		if (start < 0)
+			throw new WrongValueException("Positive only");
 		if (_start != start) {
 			_start = start;
 			smartUpdate("start", _start);
 		}
 	}
 	
+	/**
+	 * Returns the start position of the scrollbar.
+	 * <p>Default: 0
+	 */
 	public int getStrat() {
 		return _start;
 	}
@@ -89,7 +100,7 @@ public class Frozen extends XulElement implements org.zkoss.zul.api.Frozen {
 		super.renderProperties(renderer);
 		if (_columns > 0)
 			renderer.render("columns", _columns);		
-		if (_columns > 0)
+		if (_columns > 0 && _start > 0)
 			renderer.render("start", _start);		
 	}
 }

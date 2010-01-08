@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * Paging of long content.
+ *
+ * <p>Default {@link #getZclass}: z-paging.
+ */
 zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageSize: 20,
 	_totalSize: 0,
@@ -20,6 +25,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageIncrement: 10,
 
 	$define: { //zk.def
+    	/** Returns the total number of items.
+    	 * @return int
+    	 */
+    	/** Sets the total number of items.
+    	 * @param int totalSize
+    	 */
 		totalSize: function () {
 			this._updatePageNum();
 			if (this._detailed) {
@@ -30,15 +41,61 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				}
 			}
 		},
+		/** Returns the number of page anchors shall appear at the client. 
+		 *
+		 * <p>Default: 10.
+		 * @return int
+		 */
+		/** Sets the number of page anchors shall appear at the client.
+		 * @param int pageIncrement
+		 */
 		pageIncrement: _zkf = function () {
 			this.rerender();
 		},
+		/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
+		 * @return boolean
+		 */
+		/** Sets whether to show the detailed info, such as {@link #getTotalSize}.
+		 * @param boolean detailed
+		 */
 		detailed: _zkf,
+		/** Returns the number of pages.
+		 * Note: there is at least one page even no item at all.
+		 * @return int
+		 */
+		/** Sets the number of pages.
+		 * Note: there is at least one page even no item at all.
+		 * @param int pageCount
+		 */
 		pageCount: _zkf, //TODO: smarter algorithm
+		/** Returns the active page (starting from 0).
+		 * @return int
+		 */
+		/** Sets the active page (starting from 0).
+		 * @param int activePage
+		 */
 		activePage: _zkf,
+		/** Returns the page size, aka., the number rows per page.
+		 * @return int
+		 */
+		/** Sets the page size, aka., the number rows per page.
+		 * @param int pageSize
+		 */
 		pageSize: function () {
 			this._updatePageNum();
 		},
+		/**
+		 * Returns whether to automatically hide this component if there is only one
+		 * page available.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether to automatically hide this component if there is only one
+		 * page available.
+		 * @param boolean autohide
+		 */
 		autohide: function () {
 			if (this._pageCount == 1) this.rerender();
 		}
@@ -84,6 +141,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		else
 			this.$supers('replaceHTML', arguments);
 	},
+	/**
+	 * Returns whether the paging is in both mold. i.e. Top and Bottom
+	 * @return boolean
+	 */
 	isBothPaging: function () {
 		return this.parent && this.parent.getPagingPosition
 					&& "both" == this.parent.getPagingPosition();
@@ -103,6 +164,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	/**
+	 * Returns the information text of the paging, if {@link #isDetailed()} is enabled.
+	 * @return String
+	 */
 	infoText_: function () {
 		var lastItem = (this._activePage+1) * this._pageSize;
 		return "[ " + (this._activePage * this._pageSize + 1) + ("os" != this.getMold() ?
@@ -222,6 +287,11 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	}
 }, { //static
+	/**
+	 * Goes to the active page according to the page number.
+	 * @param DOMElement anc the anchor of the page number
+	 * @param int pagenumber the page number
+	 */
 	go: function (anc, pgno) {
 		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
 		if (wgt && wgt.getActivePage() != pgno)

@@ -12,10 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.mesh" language="xul/html" depends="zul">
-	<script src="MeshWidget.js"/>
-	<script src="HeadWidget.js"/>
-	<script src="HeaderWidget.js"/>
-	<script src="SortWidget.js"/>
+	<script src="MeshWidget.js" jsdoc="true"/>
+	<script src="HeadWidget.js" jsdoc="true"/>
+	<script src="HeaderWidget.js" jsdoc="true"/>
+	<script src="SortWidget.js" jsdoc="true"/>
 
 	<widget name="Paging"/>	
 	<widget name="Auxhead"/>

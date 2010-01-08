@@ -73,7 +73,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	/**
 	 * Returns the encoded label.
 	 * @return String
-	 * @see zUtl.encodeXML
+	 * @see zUtl#encodeXML
 	 */
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel());

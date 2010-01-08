@@ -12,6 +12,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ *  A skeletal implementation for a mesh widget.
+ *  @see zul.grid.Grid
+ *  @see zul.sel.Tree
+ *  @see zul.sel.Listbox
+ */
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
 
@@ -25,34 +31,118 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_currentLeft: 0,
 
 	$define: {
+		/**
+		 * Returns how to position the paging of the widget at the client screen.
+		 * It is meaningless if the mold is not in "paging".
+		 * @return String
+		 */
+		/**
+		 * Sets how to position the paging of the widget at the client screen.
+		 * It is meaningless if the mold is not in "paging".
+		 * @param String pagingPosition how to position. It can only be "bottom" (the default), or
+		 * "top", or "both".
+		 */
 		pagingPosition: _zkf = function () {
 			this.rerender();
 		},
+		/**
+		 * Returns whether sizing the widget column width by its content. Default is false.
+		 * <p>Note: if the "sized-by-content" attribute of component is specified, 
+		 * it's prior to the original value.
+		 * @return boolean
+		 * @see #setSizedByContent
+		 */
+		/**
+		 * Sets whether sizing the widget column width by its content. Default is false, i.e.
+		 * the outline of the widget is dependent on browser. It means, we don't 
+		 * calculate the width of each cell. If set to true, the outline will count on 
+		 * the content of body. In other words, the outline of the widget will be like 
+		 * ZK version 2.4.1 that the header's width is only for reference.
+		 * 
+		 * <p> You can also specify the "sized-by-content" attribute of component in 
+		 * lang-addon.xml directly, it will then take higher priority.
+		 * @param boolean byContent
+		 */
 		sizedByContent: _zkf,
-		
+		/**
+		 * Returns whether the widget is in model mode or not.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether the widget is in model mode.
+		 * @param boolean inModel
+		 */
 		model: null,
+		/**
+		 * Returns the inner width of this component.
+		 * The inner width is the width of the inner table.
+		 * <p>Default: "100%"
+		 * @see #setInnerWidth
+		 * @return String
+		 */
+		/**
+		 * Sets the inner width of this component.
+		 * The inner width is the width of the inner table.
+		 * By default, it is 100%. That is, it is the same as the width
+		 * of this component. However, it is changed when the user
+		 * is sizing the column's width.
+		 *
+		 * <p>Application developers rarely call this method, unless
+		 * they want to preserve the widths of sizable columns
+		 * changed by the user.
+		 * To preserve the widths, the developer have to store the widths of
+		 * all columns and the inner width ({@link #getInnerWidth}),
+		 * and then restore them when re-creating this component.
+		 *
+		 * @param String innerWidth the inner width. If null, "100%" is assumed.
+		 */
 		innerWidth: function (v) {
 			if (v == null) this._innerWidth = v = "100%";
 			if (this.eheadtbl) this.eheadtbl.style.width = v;
 			if (this.ebodytbl) this.ebodytbl.style.width = v;
 			if (this.efoottbl) this.efoottbl.style.width = v;
 		}
-	},	
+	},
+	/** Returns the page size, aka., the number rows per page.
+	 * @return int
+	 * @see Paging#getPageSize
+	 */
 	getPageSize: function () {
 		return this.paging.getPageSize();
 	},
+	/** Sets the page size, aka., the number rows per page.
+	 * @param int pageSize
+	 * @see Paging#setPageSize
+	 */
 	setPageSize: function (pgsz) {
 		this.paging.setPageSize(pgsz);
 	},
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @return int
+	 * @see Paging#getPageCount
+	 */
 	getPageCount: function () {
 		return this.paging.getPageCount();
 	},
+	/** Returns the active page (starting from 0).
+	 * @return int
+	 * @see Paging#getActivePage
+	 */
 	getActivePage: function () {
 		return this.paging.getActivePage();
 	},
+	/** Sets the active page (starting from 0).
+	 * @param int activePage
+	 * @see Paging#setActivePage
+	 */
 	setActivePage: function (pg) {
 		this.paging.setActivePage(pg);
 	},
+	/**
+	 * Returns whether the widget is in paging mold.
+	 * @return boolean
+	 */
 	inPagingMold: function () {
 		return "paging" == this.getMold();
 	},

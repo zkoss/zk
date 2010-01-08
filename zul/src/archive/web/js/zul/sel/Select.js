@@ -249,7 +249,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this.fire('onSelect', {items: data, reference: reference});
 	
 		// To Be Fixed: Bug 1756559: see au.js
-		/**if (zkau.lateReq) {
+		/*if (zkau.lateReq) {
 			zkau.send(zkau.lateReq, 25);
 			delete zkau.lateReq;
 		}*/

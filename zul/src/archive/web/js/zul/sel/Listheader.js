@@ -12,12 +12,36 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The list header which defines the attributes and header of a column
+ * of a list box.
+ * Its parent must be {@link Listhead}.
+ *
+ * <p>Difference from XUL:
+ * <ol>
+ * <li>There is no listcol in ZUL because it is merged into {@link Listheader}.
+ * Reason: easier to write Listbox.</li>
+ * </ol>
+ * <p>Default {@link #getZclass}: z-listheader.
+ */
 zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
+	/** Returns the listbox that this belongs to.
+	 * @return Listbox
+	 */
 	getListbox: zul.mesh.HeaderWidget.prototype.getMeshWidget,
-	
+	/** Returns the mesh body that this belongs to.
+	 * @return Listbox
+	 */
 	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 	
 	$define: {
+    	/** Returns the maximal length of each item's label.
+    	 * Default: 0 (no limit).
+    	 * @return int
+    	 */
+    	/** Sets the maximal length of each item's label.
+    	 * @param int maxlength
+    	 */
 		maxlength: [function (v) {
 			return !v || v < 0 ? 0 : v; 
 		}, function () {
@@ -25,6 +49,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				this.updateCells_();
 		}]
 	},
+	/**
+	 * Updates the cells according to the listheader
+	 */
 	updateCells_: function () {
 		var box = this.getListbox();
 		if (box == null || box.getMold() == 'select')

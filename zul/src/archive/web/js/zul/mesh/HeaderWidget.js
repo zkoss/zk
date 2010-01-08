@@ -12,11 +12,28 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for a header.
+ */
 zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	$define: {
+    	/** Returns the horizontal alignment of this column.
+    	 * <p>Default: null (system default: left unless CSS specified).
+    	 * @return String
+    	 */
+    	/** Sets the horizontal alignment of this column.
+    	 * @param String align
+    	 */
 		align: function (v) {
 			this.updateMesh_('align', v);
 		},
+		/** Returns the vertical alignment of this grid.
+		 * <p>Default: null (system default: top).
+		 * @return String
+		 */
+		/** Sets the vertical alignment of this grid.
+		 * @param String valign
+		 */
 		valign: function (v) {
 			this.updateMesh_('valign', v);
 		},
@@ -25,6 +42,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		},
 		height: _zkf
 	},
+	/**
+	 * Updates the whole mesh widget.
+	 * @param String name
+	 * @param Object value
+	 */
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
@@ -81,12 +103,25 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return style + this.$super('domStyle_', no);
 	},
+	/**
+	 * Returns the mesh widget that this belongs to.
+	 * @return zul.mesh.MeshWidget
+	 */
 	getMeshWidget: function () {
 		return this.parent ? this.parent.parent : null;
 	},
+	/**
+	 * Returns whether the widget is sortable or not.
+	 * <p> Default: false.
+	 * @return boolean
+	 */
 	isSortable_: function () {
 		return false;
 	},
+	/**
+	 * Returns the column attributes. i.e. {@link #getAlign} and {@link #getValign}
+	 * in HTML format. (Like a="b")
+	 */
 	getColAttrs: function () {
 		return (this._align ? ' align="' + this._align + '"' : '')
 			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
@@ -131,6 +166,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			});
 		}
 	},
+	/**
+	 * Fixes the faker DOM element, if any.
+	 */
 	fixedFaker_: function () {
 		var n = this.$n(),
 			index = zk(n).cellIndex(),

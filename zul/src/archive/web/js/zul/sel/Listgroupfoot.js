@@ -17,8 +17,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * 
  * <p>Default {@link #getZclass}: z-listgroupfoot
  * 
- *<p>Note: All the {@link Label} child of this component are automatically applied
- * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
+ *<p>Note: All the {@link zul.wgt.Label} child of this component are automatically applied
+ * the group-cell CSS, if you don't want this CSS, you can invoke the {@link zul.wgt.Label#setSclass(String)}
  * after the child added.
  */
 zul.sel.Listgroupfoot = zk.$extends(zul.sel.Listitem, {

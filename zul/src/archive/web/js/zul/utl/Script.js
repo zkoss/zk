@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A component to generate script codes that will be evaluated at the client.
  * It is similar to HTML SCRIPT tag.
+ * @import zul.wgt.Label
  */
 zul.utl.Script = zk.$extends(zk.Widget, {
 	$define: {

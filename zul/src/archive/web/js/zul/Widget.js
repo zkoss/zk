@@ -350,7 +350,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * </dl>
 	 *
 	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
-	 * @param String
+	 * @param String keys
 	 */
 	setCtrlKeys: function (keys) {
 		if (this._ctrlKeys == keys) return;

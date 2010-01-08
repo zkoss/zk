@@ -58,7 +58,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * implies "none".
 		 * 
 		 * <p>
-		 * If you also specify the CSS class ({@link #setClass}), it overwrites
+		 * If you also specify the CSS class ({@link #setSclass}), it overwrites
 		 * whatever border you specify here.
 		 * 
 		 * <p>
@@ -255,7 +255,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	/**
 	 * Sets margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
-	 * @param String
+	 * @param String margins
 	 */
 	setMargins: function (margins) {
 		if (this.getMargins() != margins) {

@@ -12,6 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A toolbar button.
+ *
+ * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
+ * is not null, the onClick handler is ignored and this element is degenerated
+ * to HTML's A tag.
+ *
+ * <p>Default {@link #getZclass}: z-toolbarbutton.
+ */
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",

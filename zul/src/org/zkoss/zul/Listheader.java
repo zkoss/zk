@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
 
 /**
- * The list header which defines the attributes and header of a columen
+ * The list header which defines the attributes and header of a column
  * of a list box.
  * Its parent must be {@link Listhead}.
  *
