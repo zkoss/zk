@@ -64,14 +64,14 @@ public class DesktopEventQueue implements EventQueue {
 					}
 
 					listenerCalled.add(inf);
-					invoke(inf.listener, evt, inf.async);
+					invoke(inf, evt);
 				}
 
 				//make a copy and iterate again
 				for (Iterator it = new LinkedList(_listeners).iterator(); it.hasNext();) {
 					final ListenerInfo inf = (ListenerInfo)it.next();
 					if (!listenerCalled.remove(inf) && _listeners.contains(inf))
-						invoke(inf.listener, evt, inf.async);
+						invoke(inf, evt);
 				}
 			}
 		});
@@ -81,12 +81,12 @@ public class DesktopEventQueue implements EventQueue {
 	 * listener.
 	 * @param async whether it is an asynchronous event listener.
 	 */
-	private void invoke(EventListener listener, Event event, boolean async)
+	private void invoke(ListenerInfo inf, Event event)
 	throws Exception {
-		if (async) {
-			new AsyncListenerThread(this, listener, event).start();
+		if (inf.async) {
+			new AsyncListenerThread(this, inf, event).start();
 		} else {
-			listener.onEvent(event);
+			inf.listener.onEvent(event);
 		}
 	}
 
@@ -111,16 +111,23 @@ public class DesktopEventQueue implements EventQueue {
 		}
 	}
 	public void subscribe(EventListener listener) {
-		subscribe(listener, false);
+		subscribe(listener, null, false);
+	}
+	public void subscribe(EventListener listener, EventListener callback) {
+		subscribe(listener, callback, true);
 	}
 	public void subscribe(EventListener listener, boolean async) {
+		subscribe(listener, null, async);
+	}
+	private void
+	subscribe(EventListener listener, EventListener callback, boolean async) {
 		if (async && _nAsync++ == 0) {
 			final Execution exec = Executions.getCurrent();
 			if (exec == null)
 				throw new IllegalStateException("Execution required");
 			_serverPushEnabled = !exec.getDesktop().enableServerPush(true);
 		}
-		_listeners.add(new ListenerInfo(listener, async));
+		_listeners.add(new ListenerInfo(listener, callback, async));
 	}
 	public boolean unsubscribe(EventListener listener) {
 		if (listener != null)
@@ -138,7 +145,7 @@ public class DesktopEventQueue implements EventQueue {
 	public boolean isSubscribed(EventListener listener) {
 		if (listener != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				if (listener.equals(((ListenerInfo)it.next())))
+				if (listener.equals(((ListenerInfo)it.next()).listener))
 					return true;
 		return false;
 	}
@@ -157,11 +164,14 @@ public class DesktopEventQueue implements EventQueue {
 /** Info of a listener */
 /*package*/ class ListenerInfo {
 	/*package*/ final EventListener listener;
+	/*package*/ final EventListener callback; //used only if async
 	/*package*/ final boolean async;
-	/*package*/ ListenerInfo(EventListener listener, boolean async) {
+	/*package*/ ListenerInfo(EventListener listener,
+	EventListener callback, boolean async) {
 		if (listener == null)
 			throw new IllegalArgumentException();
 		this.listener = listener;
+		this.callback = callback;
 		this.async = async;
 	}
 }
@@ -170,13 +180,13 @@ public class DesktopEventQueue implements EventQueue {
 
 	/*package*/ final Desktop _desktop;
 	private final EventQueue _que;
-	private final EventListener _listener;
+	private final ListenerInfo _inf;
 	private final Event _event;
 	private List _pendingEvents;
-	/*package*/ AsyncListenerThread(EventQueue que, EventListener listener, Event event) {
+	/*package*/ AsyncListenerThread(EventQueue que, ListenerInfo inf, Event event) {
 		_desktop = Executions.getCurrent().getDesktop();
 		_que = que;
-		_listener = listener;
+		_inf = inf;
 		_event = event;
 		Threads.setDaemon(this, true);
 	}
@@ -187,14 +197,16 @@ public class DesktopEventQueue implements EventQueue {
 	}
 	public void run() {
 		try {
-			_listener.onEvent(_event);
+			_inf.listener.onEvent(_event);
 
-			if (_pendingEvents != null) {
+			if (_inf.callback != null || _pendingEvents != null) {
 				try {
 					Executions.activate(_desktop);
 					try {
 						for (Iterator it = _pendingEvents.iterator(); it.hasNext();)
 							_que.publish((Event)it.next());
+						if (_inf.callback != null)
+							_inf.callback.onEvent(null);
 					} finally {
 						Executions.deactivate(_desktop);
 					}

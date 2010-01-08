@@ -20,8 +20,25 @@ import org.zkoss.zk.ui.event.EventListener;
 /**
  * An event queue.
  * An event queue is a many-to-many 'channel' to publish events and to subscribe
- * listeners.
+ * event listeners ({@link EventListener}).
  *
+ * <h3><a name="async_sync"></a>Asynchronous and Synchronous Event Listeners</h3>
+ *
+ * <p>There are two kinds of event listeners: synchronous and asynchronous.
+ * A synchronous listener works the same as a normal event listener
+ * (listeners registered to a component ({@link org.zkoss.zk.ui.Component#addEventListener}).
+ * It is executed one-by-one (no two even listener will be executed at the same time)
+ * and under an execution (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} never null).
+ * In additions, it is allowed to manipulate the components belonging
+ * to the current execution.
+ * <p>On the other hand, an asynchronous listener is executed asynchronously
+ * (in a working thread).
+ * It can <i>not</i> access the components belonging to any desktop.
+ * There is no current execution ({@link org.zkoss.zk.ui.Executions#getCurrent} is null}.
+ * However, it is useful to make the application more responsive when
+ * executing a long operation. A typical use is to execute the long operation
+ * in an asynchronous listener, and then all other events can be processed
+ * concurrently.
  * @author tomyeh
  * @since 5.0.0
  */
@@ -60,23 +77,42 @@ public interface EventQueue {
 	 * If you want to use the same listener for multiple desktops,
 	 * you have to subscribe them separately when the corresponding
 	 * execution is available.
+	 * @see #subscribe(EventListener,EventListener)
+	 * @see #subscribe(EventListener,boolean)
 	 */
 	public void subscribe(EventListener listener);
+	
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
-	 * A synchronous listener works the same as a normal event listener
-	 * (listeners registered to a component ({@link org.zkoss.zk.ui.Component#addEventListener}).
-	 * It is executed one-by-one (no two even listener will be executed at the same time)
-	 * and under an execution (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} never null).
-	 * In additions, it is allowed to manipulate the components belonging
-	 * to the current execution.
-	 * <p>On the other hand, an asynchronous listener is executed asynchronously.
-	 * It can <i>not</i> access the components belonging to any desktop.
-	 * There is no current execution ({@link org.zkoss.zk.ui.Executions#getCurrent} is null}.
-	 * However, it is useful to make the application more responsive when
-	 * executing a long operation. A typical use is to execute the long operation
-	 * in an asynchronous listener, and then all other events can be processed
-	 * concurrently. For example,
-	 * <pre><code>
+	 * A synchronous listener works the same as a normal event listener,
+	 * while an asynchronous listener is executed asynchrously (in an working thread).
+	 * Refer <a href="#async_sync">here</a> for details.
+	 *
+	 * @param listener the asynchronous listener to invoke when an event
+	 * is received
+	 * @param callback the callback listener, which will be invoked if the asynchronous
+	 * listen has been invoked.
+	 * Unlike the asynchronous listener, the callback listener works
+	 * like a normal listener. You can access the current execution,
+	 * and update the desktop. Notice that the event argument is null
+	 * when the callback listener is called.
+	 * @see #subscribe(EventListener)
+	 * @see #subscribe(EventListener,boolean)
+	 */
+	public void subscribe(EventListener listener, EventListener callback);
+
+	/** Subscribes a synchronous or asynchronous listener to this event queue.
+	 * A synchronous listener works the same as a normal event listener,
+	 * while an asynchronous listener is executed asynchrously (in an working thread).
+	 * Refer <a href="#async_sync">here</a> for details.
+	 * <p>The use of synchronous listeners is straightforward -- they
+	 * are just the same a normal event listener.
+	 * Here is an example of using an asynchronous listener. In this example,
+	 * we use an asynchronous listener to execute a long operation,
+	 * a synchronous listener to update the desktop, and they communicate
+	 * with each other with events.
+	 * <p>There is another way to do the same job, callback, refer
+	 * to {@link #subscribe(EventListener,EventListener)} for example.
+ 	 * <pre><code>
 &lt;window title="long operation" border="true"&gt;
   &lt;zscript&gt;
   void print(String msg) {
