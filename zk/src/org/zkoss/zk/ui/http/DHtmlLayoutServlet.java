@@ -143,6 +143,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				_webman.destroy();
 			_webman = null;
 		}
+		_ctx.removeAttribute(ATTR_LAYOUT_SERVLET);
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
