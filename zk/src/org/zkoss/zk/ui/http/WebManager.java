@@ -238,6 +238,7 @@ public class WebManager {
 	}
 
 	public void destroy() {
+		_ctx.removeAttribute(ATTR_WEB_MANAGER);
 		((WebAppCtrl)_wapp).destroy();
 	}
 

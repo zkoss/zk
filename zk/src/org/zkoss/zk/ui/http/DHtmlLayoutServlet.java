@@ -83,6 +83,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 	private ServletContext _ctx;
 	private WebManager _webman;
+	private boolean _webmanCreated;
 	private boolean _compress = true;
 
 	//Servlet//
@@ -121,10 +122,15 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					//remove the trailing '\\' if any
 			}
 			_webman = new WebManager(_ctx, updateURI);
+			_webmanCreated = true;
 		}
 	}
 	public void destroy() {
-		if (_webman != null) _webman.destroy();
+		if (_webman != null) {
+			if (_webmanCreated)
+				_webman.destroy();
+			_webman = null;
+		}
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
