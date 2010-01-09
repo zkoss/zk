@@ -12,16 +12,61 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A single choice in a {@link Menupopup} element.
+ * It acts much like a button but it is rendered on a menu.
+ * 
+ * <p>Default {@link #getZclass}: z-menu-item.
+ */
 zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
 
 	$define: {
+		/** Returns whether the check mark shall be displayed in front
+		 * of each item.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether the check mark shall be displayed in front
+		 * of each item.
+		 * @param boolean checkmark
+		 */
 		checkmark: _zkf = function () {
 			this.rerender();
 		},
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: _zkf,
+		/** Returns the href.
+		 * <p>Default: null. If null, the button has no function unless you
+		 * specify the onClick handler.
+		 * @return String
+		 */
+		/** Sets the href.
+		 * @param String href
+		 */
 		href: _zkf,
+		/** Returns the value.
+		 * <p>Default: "".
+		 * @return String
+		 */
+		/** Sets the value.
+		 * @param String value
+		 */
 		value: null,
+		/** Returns whether it is checked.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is checked.
+		 * <p> This only applies when {@link #isCheckmark()} = true.
+		 * @param boolean checked
+		 */
 		checked: function (checked) {
 			if (checked)
 				this._checkmark = checked;
@@ -35,7 +80,26 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					$n.addClass(zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
 			}
 		},
+		/** Returns whether the menuitem check mark will update each time
+		 * the menu item is selected.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether the menuitem check mark will update each time
+		 * the menu item is selected.
+		 * <p> This only applies when {@link #isCheckmark()} = true.
+		 * @param boolean autocheck
+		 */
 		autocheck: null,
+		/** Returns the target frame or window.
+		 * <p>Note: it is useful only if href ({@link #setHref}) is specified
+		 * (i.e., use the onClick listener).
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets the target frame or window.
+		 * @param String target the name of the frame or window to hyperlink.
+		 */
 		target: function (target) {
 			var anc = this.$n('a');
 			if (anc) {
@@ -44,6 +108,20 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				anc.target = this._target;
 			}
 		},
+		/** Returns non-null if this button is used for file upload, or null otherwise.
+		 * Refer to {@link #setUpload} for more details.
+		 * @return String
+		 */
+		/** Sets the JavaScript class at the client to handle the upload if this
+		 * button is used for file upload.
+		 * <p>Default: null.
+		 *  
+		 * @param String upload a JavaScript class to handle the file upload
+		 * at the client, or "true" if the default class is used,
+		 * or null or "false" to disable the file download (and then
+		 * this button behaves like a normal button).
+		 * @param String upload
+		 */
 		upload: function (v) {
 			var n = this.$n();
 			if (n) {
@@ -52,7 +130,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-
+	/** Returns whether this is an top-level menu, i.e., not owning
+	 * by another {@link Menupopup}.
+	 * @return boolean
+	 */
 	isTopmost: function () {
 		return this._topmost;
 	},
@@ -82,6 +163,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return this.isTopmost() ?
 			style + 'padding-left:4px;padding-right:4px;': style;
 	},
+	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
+	 * @return zul.menu.Menubar
+	 */
 	getMenubar: function () {
 		for (var p = this.parent; p; p = p.parent)
 			if (p.$instanceof(zul.menu.Menubar))
@@ -166,7 +250,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
 						// if close the popup before choosing a file, the file chooser can't be triggered.
-						if (p.isOpen() && !this._uplder /**Bug #2911385 && !this._popup*/)							
+						if (p.isOpen() && !this._uplder /*Bug #2911385 && !this._popup*/)							
 							p.close({sendOnOpen:true});
 						else break;
 										

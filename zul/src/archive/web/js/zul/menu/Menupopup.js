@@ -12,6 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A container used to display menus. It should be placed inside a
+ * {@link Menu}.
+ *
+ * <p>Default {@link #getZclass}: z-menu-popup.
+ */
 zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_curIndex: -1,
 

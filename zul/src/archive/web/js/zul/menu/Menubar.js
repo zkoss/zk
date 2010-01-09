@@ -12,17 +12,46 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A container that usually contains menu elements.
+ *
+ * <p>Default {@link #getZclass}: z-menubar-hor, if {@link #getOrient()} == vertical,
+ *  z-menubar-ver will be added.
+ */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 
 	$define: {
+		/** Returns the orient.
+		 * <p>Default: "horizontal".
+		 * @return String
+		 */
+		/** Sets the orient.
+		 * @param String orient either horizontal or vertical
+		 */
 		orient: function () {
 			this.rerender();
 		},
+		/** Returns whether the menubar scrolling is enabled. 
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether to enable the menubar scrolling
+		 * @param boolean scrollable
+		 */
 		scrollable: function (scrollable) {
 			if (this.checkScrollable())
 				this.rerender();	
 		},
+		/** Returns whether to automatically drop down menus if user moves mouse
+		 * over it.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether to automatically drop down menus if user moves mouse
+		 * over it.
+		 * @param boolean autodrop
+		 */
 		autodrop: null
 	},
 	getZclass: function () {

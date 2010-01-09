@@ -12,6 +12,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A generic applet component.
+ * 
+ * <p>
+ * Non XUL extension.
+ * <p>Note: {@link #setVisible} with false cannot work in IE. (Browser's limitation) 
+ */
 zul.med.Applet = zk.$extends(zul.Widget, {
 	$init: function() {
 		this._params = {};
@@ -19,12 +26,25 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 
 	$define: {
+		/** Return the code of the applet, i.e., the URI of the Java class.
+		 * @return String
+		 */
+		/** Sets the code of the applet, i.e., the URI of the Java class.
+		 * @param String code
+		 */
 		code: _zkf = function () {
 			this.rerender();
 		},
+		/** Return the codebase of the applet, i.e., the URI of the Java class.
+		 * @return String
+		 */
+		/** Sets the codebase of the applet, i.e., the URI of the Java class.
+		 * @param String codebase
+		 */
 		codebase: _zkf
 	},
-
+	/** Invokes the function of the applet running at the client.
+	 */
 	invoke: zk.ie ? function() {
 		var n = this.$n(),
 			len = arguments.length;
@@ -70,10 +90,18 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	/** Returns the value of the specified filed.
+	 * @param String name
+	 * @return String
+	 */
 	getField: function (name) {
 		var n = this.$n();
 		return n ? n[name]: null;
 	},
+	/** Sets the value of the specified filed.
+	 * @param String name
+	 * @param String value
+	 */
 	setField: function (name, value) {
 		var n = this.$n();
 		if (n)
@@ -90,6 +118,8 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	 * setParam(nm, val)
 	 * and
 	 * setParam([nm, val])
+	 * @param String nm
+	 * @param String val
 	 */
 	setParam: function (nm, val) {
 		if (arguments.length == 1) {

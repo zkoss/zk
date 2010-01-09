@@ -12,8 +12,32 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An element, much like a button, that is placed on a menu bar.
+ * When the user clicks the menu element, the child {@link Menupopup}
+ * of the menu will be displayed.
+ * This element is also used to create submenus (of {@link Menupopup}.
+ * 
+ * <p>Default {@link #getZclass}: z-mean.
+ */
 zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	$define: {
+		/** Returns the embedded content (i.e., HTML tags) that is
+		 * shown as part of the description.
+		 * <p>It is useful to show the description in more versatile way.
+		 * <p>Default: empty ("").
+		 * @return String
+		 */
+		/** Sets the embedded content (i.e., HTML tags) that is
+		 * shown as part of the description.
+		 *
+		 * <p>It is useful to show the description in more versatile way.
+		 * 
+		 * <p>There is a way to create Colorbox automatically by using
+		 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
+		 *
+		 * @param String content
+		 */
 		content: function (content) {
 			if (!content || content.length == 0) return;
 			
@@ -37,6 +61,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		img.push(this._image ? ' style="background-image:url(' + this._image + ')"' : '', '></span>', label ? ' ' + label : '');
 		return img.join('');
 	},
+	/** Returns whether this is an top-level menu, i.e., not owning
+	 * by another {@link Menupopup}.
+	 * @return boolean
+	 */
 	isTopmost: function () {
 		return this._topmost;
 	},
@@ -69,6 +97,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				this._contentHandler.setContent(this._content);
 		}
 	},
+	/** Returns the {@link Menubar} it owns, or null if not available.
+	 * @return zul.menu.Menubar
+	 */
 	getMenubar: function () {
 		for (var p = this.parent; p; p = p.parent)
 			if (p.$instanceof(zul.menu.Menubar))
