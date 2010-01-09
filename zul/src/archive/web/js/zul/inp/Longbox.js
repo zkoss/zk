@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An edit box for holding an integer.
+ * <p>Default {@link #getZclass}: z-longbox.
+ */
 zul.inp.Longbox = zk.$extends(zul.inp.Intbox, {
 	coerceFromString_: function (value) {
 		if (!value) return null;

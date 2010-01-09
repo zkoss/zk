@@ -12,33 +12,66 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-
+/**
+ * An input box for holding a time (a Date Object, but only Hour & Minute are used.
+ *
+ * <p>Default {@link #getZclass}: z-timebox.
+ *
+ * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
+ * 
+ * <p>Like {@link Combobox} and {@link Datebox},
+ * the value of a read-only time box ({@link #isReadonly}) can be changed
+ * by clicking the up or down button (though users cannot type anything
+ * in the input box).
+ *
+ */
 zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	LEGAL_CHARS: 'ahKHksm',
-    /**Useful constant for MINUTE (m) field alignment.*/
+    /**Useful constant for MINUTE (m) field alignment.
+     * @type int
+     */
     MINUTE_FIELD: 1,
-    /**Useful constant for SECOND (s) field alignment.*/
+    /**Useful constant for SECOND (s) field alignment.
+     * @type int
+     * 
     SECOND_FIELD: 2,
-    /**Useful constant for AM_PM (a) field alignment.*/
+    /**Useful constant for AM_PM (a) field alignment.
+     * @type int
+     */
     AM_PM_FIELD: 3,
-    /**Useful constant for HOUR0 (H) field alignment. (Hour in day (0-23))*/
+    /**Useful constant for HOUR0 (H) field alignment. (Hour in day (0-23))
+     * @type int
+     */
     HOUR0_FIELD: 4,
-    /**Useful constant for HOUR1 (k) field alignment. (Hour in day (1-24))*/
+    /**Useful constant for HOUR1 (k) field alignment. (Hour in day (1-24))
+     * @type int
+     */
     HOUR1_FIELD: 5,
-    /**Useful constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))*/
+    /**Useful constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
+     * @type int
+     */
     HOUR2_FIELD: 6,
-    /**Useful constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))*/
+    /**Useful constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
+     * @type int
+     */
     HOUR3_FIELD: 7,
 	_buttonVisible: true,
 	_format: 'HH:mm',
 	$define: {
+		/** Returns whether the button (on the right of the textbox) is visible.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether the button (on the right of the textbox) is visible.
+		 * @param boolean buttonVisible
+		 */
 		buttonVisible: function(v){
 			var n = this.$n('btn');
 			if (n) {
 				v ? jq(n).show() : jq(n).hide();
 				this.onSize();
 			}
-		},
+		},		
 		format: function (fmt, fromServer) {
 			this._parseFormat(fmt);
 			var inp = this.getInputNode();
@@ -690,7 +723,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		else if (text >= max)
 			text = this.minsize;
 
-		if (/** TODO: this.digits == 2 && */text < 10) text = "0" + text;
+		if (/* TODO: this.digits == 2 && */text < 10) text = "0" + text;
 		inp.value = val.substring(0, start) + text + val.substring(end, val.length);
 
 		zk(inp).setSelectionRange(start, end);

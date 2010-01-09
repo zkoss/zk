@@ -12,17 +12,47 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for a input widget.
+ */
 zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
 	_cols: 0,
 	_tabindex: -1,
 	_type: 'text',
 	$define: {
+		/** Returns the name of this component.
+		 * <p>Default: null.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * @return String
+		 */
+		/** Sets the name of this component.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 *
+		 * @param String name the name of this component.
+		 */
 		name: function (name) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.name = name;
 		},
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (disabled) {
 			var inp = this.getInputNode();
 			if (inp) {
@@ -33,6 +63,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				jq(inp)[fnm](zcls + '-text-disd');
 			}
 		},
+		/** Returns whether it is readonly.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is readonly.
+		 * @param boolean readonly
+		 */
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
@@ -41,44 +78,92 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					this.getZclass() + '-readonly');
 			}
 		},
-
+		/** Returns the cols.
+		 * <p>Default: 0 (non-positive means the same as browser's default).
+		 * @return int
+		 */
+		/** Sets the cols.
+		 * @param int cols
+		 */
 		cols: function (cols) {
 			var inp = this.getInputNode();
 			if (inp)
 				if (this.isMultiline()) inp.cols = cols;
 				else inp.size = cols;
 		},
+		/** Returns the maxlength.
+		 * <p>Default: 0 (non-postive means unlimited).
+		 * @return int
+		 */
+		/** Sets the maxlength.
+		 * @param int maxlength
+		 */
 		maxlength: function (maxlength) {
 			var inp = this.getInputNode();
 			if (inp && !this.isMultiline())
 				inp.maxLength = maxlength;
 		},
+		/** Returns the tab order of this component.
+		 * <p>Default: -1 (means the same as browser's default).
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
 		tabindex: function (tabindex) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.tabIndex = tabindex;
 		},
+		/** Returns whether enable the inplace-editing.
+		 * <p>default: false.
+		 * @return boolean
+		 */
+		/** Sets to enable the inplace-editing function that the look and feel is
+		 * like a label.
+		 * @param boolean inplace
+		 */
 		inplace: function (inplace) {
 			this.rerender();
 		}
 	},
+	/** Returns the CSS style of inplace if inplace is not null
+	 * @return String
+	 */
 	getInplaceCSS: function () {
 		return this._inplace ? this.getZclass() + '-inplace' : '';
 	},
+	/** Selects the whole text in this input.
+	 * @param int start the starting index of the selection range
+	 * @param int end the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected. 
+	 */
 	select: function (start, end) {
 		zk(this.getInputNode()).setSelectionRange(start, end);
 	},
-
+	/** Returns the type.
+	 * <p>Default: text.
+	 * @return String
+	 */
 	getType: function () {
 		return this._type;
 	},
+	/** Returns whether it is multiline.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
 	isMultiline: function() {
 		return false;
 	},
-
+	/** Returns the value in the String format.
+	 * @return String
+	 */
 	getValue: function () {
 		return this._value;
 	},
+	/** Sets the value in the String format.
+	 * @param String value the value; If null, it is considered as empty.
+	 * @param boolean fromServer it will clear error message if true
+	 */
 	setValue: function (value, fromServer) {
 		var vi;
 		if (fromServer) this.clearErrorMessage(true);
@@ -99,6 +184,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	/** Returns the input node of this widget
+	 * @return DOMElement
+	 */
 	getInputNode: function () {
 		return this.$n();
 	},
@@ -112,6 +200,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	/** Attributes for the text control.
 	 * Called automatically by [[#domAttrs_]] unless {text:true}
 	 * is specified
+	 * @return String
 	 */
 	textAttrs_: function () {
 		var html = '', v;
@@ -141,7 +230,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_areaText: function () {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	},
-
+	/** Sets the constraint.
+	 * <p>Default: null (means no constraint all all).
+	 * @param String
+	 */
 	setConstraint: function (cst) {
 		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 			this._cst = new zul.inp.SimpleConstraint(cst);
@@ -149,6 +241,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._cst = cst;
 		if (this._cst) delete this._lastRawValVld; //revalidate required
 	},
+	/** Returns the constraint, or null if no constraint at all.
+	 * @return zul.inp.SimpleConstraint
+	 */
 	getConstraint: function () {
 		return this._cst;
 	},
@@ -212,9 +307,24 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				selected: inp.value.substring(b, e)});
 		}
 	},
+	/** Returns shall be update or not
+	 * @param zk.Widget focus
+	 */
 	shallUpdate_: function (focus) {
 		return !focus || !zUtl.isAncestor(this, focus);
 	},
+	/** Returns the error message that is caused when user entered invalid value,
+	 * or null if no error at all.
+	 * 
+	 * <p>
+	 * The error message is set when user has entered a wrong value, or setValue
+	 * is called with a wrong value. It is cleared once a correct value is
+	 * assigned.
+	 * 
+	 * <p>
+	 * If the error message is set, we say this input is in the error mode.
+	 * @return String
+	 */
 	getErrorMesssage: function () {
 		return this._errmsg;
 	},
@@ -246,9 +356,30 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (revalidate)
 			delete this._lastRawValVld; //cause re-valid
 	},
+	/** Coerces the value passed to {@link #setValue}.
+	 *
+	 * <p>Deriving note:<br>
+	 * If you want to store the value in other type, say BigDecimal,
+	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
+	 * to convert between a string and your targeting type.
+	 *
+	 * <p>Moreover, when {@link zul.inp.Textbox} is called, it calls this method
+	 * with value = null. Derives shall handle this case properly.
+	 * @return String
+	 */
 	coerceFromString_: function (value) {
 		return value;
 	},
+	/** Coerces the value passed to {@link #setValue}.
+	 *
+	 * <p>Default: convert null to an empty string.
+	 *
+	 * <p>Deriving note:<br>
+	 * If you want to store the value in other type, say BigDecimal,
+	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
+	 * to convert between a string and your targeting type.
+	 * @return String
+	 */
 	coerceToString_: function (value) {
 		return value || '';
 	},
@@ -270,6 +401,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.fire('onError', {value: val, message: msg});
 		}
 	},
+	/** Make the {@link zul.inp.SimpleConstraint} calls the validate for val,
+	 * if {@link zul.inp.SimpleConstraint} is exist
+	 * @param Object val a String, a number, or a date,the number or name of flag, 
+	 * such as "no positive", 0x0001.
+	 */
 	validate_: function (val) {
 		var cst;
 		if (cst = this._cst) {
@@ -320,12 +456,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return true;
 		}
 	},
+	/** Create a {@link zul.inp.Errorbox} widget, and show the error message
+	 * @param String msg the error message
+	 * @see #show(zul.inp.Errorbox)
+	 */
 	showError_: function (msg) {
 		var eb = new zul.inp.Errorbox();
 		eb.show(this, msg);
 		return eb;
 	},
-	/** Updates the change to server by firing onChange if necessary. */
+	/** Updates the change to server by firing onChange if necessary. 
+	 * @return boolean
+	 */
 	updateChange_: function () {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
 

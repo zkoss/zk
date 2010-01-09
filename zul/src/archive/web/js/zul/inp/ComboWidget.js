@@ -12,10 +12,20 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A skeletal implementation for a combo widget.
+ */
 zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_buttonVisible: true,
 
 	$define: {
+		/** Returns whether the button (on the right of the textbox) is visible.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether the button (on the right of the textbox) is visible.
+		 * @param boolean visible
+	 	*/
 		buttonVisible: function (v) {
 			var n = this.$n('btn');
 			if (n) {
@@ -23,6 +33,15 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this.onSize();
 			}
 		},
+		/** Returns whether to automatically drop the list if users is changing
+		 * this text box.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether to automatically drop the list if users is changing
+		 * this text box.
+		 * @param boolean autodrop
+		 */
 		autodrop: null
 	},
 
@@ -34,6 +53,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,
+	
 	onFloatUp: function (ctl) {
 		if (jq(this.$n('pp')).is(':animated') || (!this._inplace && !this.isOpen()))
 			return;
@@ -55,14 +75,26 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			}
 		}
 	},
-
+	/** Drops down or closes the list of combo items ({@link Comboitem}.
+	 * @param boolean open
+	 * @param Map opts the options.
+	 * @see #open
+	 * @see #close
+	 */
 	setOpen: function (open, opts) {
 		if (open) this.open(opts);
 		else this.close(opts)
 	},
+	/** Returns whether the list of combo items is open
+	 * @return boolean
+	 */
 	isOpen: function () {
 		return this._open;
 	},
+	/** Drops down the list of combo items ({@link Comboitem}.
+	 * It is the same as setOpen(true).
+	 * @param Map opts the options.
+	 */
 	open: function (opts) {
 		if (this._open) return;
 		this._open = true;
@@ -135,6 +167,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_afterSlideDown: function (n) {
 		if (this._shadow) this._shadow.sync();
 	},
+	/** Closes the list of combo items ({@link Comboitem} if it was
+	 * dropped down.
+	 * It is the same as setOpen(false).
+	 * @param Map opts the options.
+	 */
 	close: function (opts) {
 		if (!this._open) return;
 		this._open = false;
@@ -187,11 +224,23 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	dnPressed_: zk.$void, //function (evt) {}
 	upPressed_: zk.$void, //function (evt) {}
 	otherPressed_: zk.$void, //function (evt) {}
+	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
+	 * <p>call the close function
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #close
+	 */
 	enterPressed_: function (evt) {
 		this.close({sendOnOpen:true});
 		this.updateChange_();
 		evt.stop();
 	},
+	/** Called when the user presses escape key when this widget has the focus ({@link #focus}).
+	 * <p>call the close function
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #close
+	 */
 	escPressed_: function (evt) {
 		this.close({sendOnOpen:true});
 		evt.stop();
@@ -199,12 +248,15 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 	/** Returns [width, height] for the popup if specified by user.
 	 * Default: ['auto', 'auto']
+	 * @return Array
 	 */
 	getPopupSize_: function (pp) {
 		return ['auto', 'auto'];
 	},
 
-	/** Utility to implement {@link #redraw}. */
+	/** Utility to implement {@link #redraw}. 
+	 *  @param Array out an array of HTML fragments.
+	 */
 	redraw_: function (out) {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
@@ -224,6 +276,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	/** Called by {@link #redraw_} to redraw popup.
 	 * <p>Default: does nothing
+	 *  @param Array out an array of HTML fragments.
 	 */
 	redrawpp_: function (out) {
 	},

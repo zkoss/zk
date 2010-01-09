@@ -12,6 +12,14 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A slider.
+ *  <p>Default {@link #getZclass} as follows:
+ *  <ol>
+ *  	<li>Case 1: If {@link #getOrient()} is vertical, "z-slider-ver" is assumed</li>
+ *  	<li>Case 2: If {@link #getOrient()} is horizontal, "z-slider-hor" is assumed</li>
+ *  </ol>
+ */
 zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_curpos: 0,
@@ -20,6 +28,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_slidingtext: "{0}",
 	
 	$define: {
+		/** Returns the orient.
+		 * <p>Default: "horizontal".
+		 * @return String
+		 */
+		/** Sets the orient.
+		 * <p>Default : "horizontal" 
+		 * @param String orient either "horizontal" or "vertical".
+		 */
 		orient: function() {
 			if (this.isVertical()) {
 				this.setWidth("");
@@ -30,10 +46,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 			this.rerender();
 		},
+		/** Returns the current position of the slider.
+		 * <p>Default: 0.
+		 * @return int
+		 */
+		/** Sets the current position of the slider.
+		 * If negative, 0 is assumed. If larger than {@link #getMaxpos},
+		 * {@link #getMaxpos} is assumed.
+		 * @param int curpos
+		 */
 		curpos: function() {
 			if (this.desktop)
 				this._fixPos();
 		},
+		/** Returns the maximum position of the slider.
+		 * <p>Default: 100.
+		 * @return int
+		 */
+		/** Sets the maximum position of the slider.
+		 * @param int maxpos
+		 */
 		maxpos: function() {
 			if (this._curpos > this._maxpos) {
 				this._curpos = this._maxpos;
@@ -41,8 +73,45 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 					this._fixPos();
 			}
 		},
+		/** Returns the sliding text.
+		 * <p>Default : "{0}"
+		 * @return String
+		 */
+		/** Sets the sliding text.
+		 * The syntax "{0}" will be replaced with the position at client side.
+		 * @param String slidingtext
+		 */
 		slidingtext: null,
+		/** Returns the amount that the value of {@link #getCurpos}
+		 * changes by when the tray of the scroll bar is clicked. 
+		 * <p>Default: 10.
+		 * @return int
+		 */
+		/** Sets the amount that the value of {@link #getCurpos}
+		 * changes by when the tray of the scroll bar is clicked.
+		 * @param int pginc
+		 */
 		pageIncrement: null,
+		/** Returns the name of this component.
+		 * <p>Default: null.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 * @return String
+		 */
+		/** Sets the name of this component.
+		 * <p>The name is used only to work with "legacy" Web application that
+		 * handles user's request by servlets.
+		 * It works only with HTTP/HTML-based browsers. It doesn't work
+		 * with other kind of clients.
+		 * <p>Don't use this method if your application is purely based
+		 * on ZK's event-driven model.
+		 *
+		 * @param String name the name of this component.
+		 */
 		name: function() {
 			if (this.efield) 
 				this.efield.name = this._name;
@@ -187,12 +256,21 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	onShow: _zkf,
+	/** Return whether this widget in scale mold
+	 * @return boolean
+	 */
 	inScaleMold: function() {
 		return this.getMold() == "scale";
 	},
+	/** Return whether this widget in sphere mold
+	 * @return boolean
+	 */
 	inSphereMold: function() {
 		return this.getMold() == "sphere";
 	},
+	/** Returns whether it is a vertical slider.
+	 * @return boolean
+	 */
 	isVertical: function() {
 		return "vertical" == this._orient;
 	},

@@ -12,11 +12,47 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A combobox.
+ *
+ * <p>Non-XUL extension. It is used to replace XUL menulist. This class
+ * is more flexible than menulist, such as {@link #setAutocomplete}
+ * {@link #setAutodrop}.
+ *
+ * <p>Default {@link #getZclass}: z-combobox.
+ * 
+ * <p>Like {@link Datebox},
+ * the value of a read-only comobobox ({@link #isReadonly}) can be changed
+ * by dropping down the list and selecting an combo item
+ * (though users cannot type anything in the input box).
+ *
+ * @see Comboitem
+ */
 zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_autocomplete: true,
 
 	$define: {
-		autocomplete: null,
+		/** Returns whether to automatically complete this text box
+		 * by matching the nearest item ({@link Comboitem}.
+		 * It is also known as auto-type-ahead.
+		 *
+		 * <p>Default: true
+		 *
+		 * <p>If true, the nearest item will be searched and the text box is
+		 * updated automatically.
+		 * If false, user has to click the item or use the DOWN or UP keys to
+		 * select it back.
+		 *
+		 * <p>Don't confuse it with the auto-completion feature mentioned by
+		 * other framework. Such kind of auto-completion is supported well
+		 * by listening to the onChanging event. 
+		 * @return boolean
+		 */
+		/** Sets whether to automatically complete this text box
+		 * by matching the nearest item ({@link Comboitem}.
+		 * @param boolean autocomplete
+		 */
+		autocomplete: null,		
 		repos: function () {
 			if (this.desktop) {
 				var n = this.getInputNode();
@@ -44,7 +80,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			}
 		}
 	},
-	//called by SimpleConstraint
+	/**called by SimpleConstraint
+	 * @param String val the name of flag, such as "no positive".
+	 */
 	validateStrict: function (val) {
 		return this._findItem(val, true) ? null: msgzul.VALUE_NOT_MATCHED;
 	},

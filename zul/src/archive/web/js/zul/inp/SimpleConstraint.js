@@ -12,7 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * The default constraint supporting no empty, regular expressions and so on.
+ * <p>Depending on the component (such as {@link Intbox} and {@link Datebox}
+ *
+ */
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
+	/** Constructor.
+	 * @param Object a
+	 * I can be String or number, the number or name of flag, 
+	 * such as "no positive", 0x0001.
+	 * @param String b the regular expression
+	 * @param String c the error message
+	 */
 	$init: function (a, b, c) {
 		if (typeof a == 'string') {
 			this._flags = {};
@@ -24,7 +36,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			if (this._flags.SERVER)
 				this.serverValidate = true;
 		}
-	},
+	},	
 	_init: function (cst) {
 		l_out:
 		for (var j = 0, k = 0, len = cst.length; k >= 0; j = k + 1) {
@@ -79,6 +91,12 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	getFlags: function () {
 		return tis._flags;
 	},
+	/** Parses a constraint into an integer value.
+	 * For example, "no positive" is parsed to f.NO_POSITIVE = true
+	 *
+	 * <p>Deriving classes might override this to provide more constraints.
+	 * @param String cst
+	 */
 	parseConstraint_: function (cst) {
 		var f = this._flags;
 		if (cst == "no positive")
@@ -117,6 +135,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			f.STRICT = true;
 		return f;
 	},
+	/** validation for flag, validate date if val is date
+	 * @param zk.Widget wgt
+	 * @param Object val a String, a number, or a date, the number or name of flag, 
+	 * such as "no positive", 0x0001.
+	 */
 	validate: function (wgt, val) {
 		var f = this._flags,
 			msg = this._errmsg;

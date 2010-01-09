@@ -1,6 +1,21 @@
+/**
+ * A simple spinner constraint.
+ */
 zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	$define: {
+		/** Returns the minimum value.
+		 * @return int
+		 */
+		/** Set the minimum value.
+		 * @param int min
+		 */
 		min: _zkf = function(){},
+		/** Returns the maximum value.
+		 * @return int
+		 */
+		/** Set the maximum value.
+		 * @param int max
+		 */
 		max: _zkf
 	},
 	parseConstraint_: function(cst){

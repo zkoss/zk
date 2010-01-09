@@ -12,12 +12,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A error message box that is displayed as a popup.
+ */
 zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.setWidth("260px");
 		this.setSclass('z-errbox');
 	},
+	/** Opens the popup.
+	 * @param zk.Widget owner the owner widget
+	 * @param String msg the error message
+	 * @see #open(zul.wgt.Popup) 
+	 */
 	show: function (owner, msg) {
 		this.parent = owner; //fake
 		this.msg = msg;
@@ -50,6 +58,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		this.$supers('unbind_', arguments);
 		this._drag = null;
 	},
+	/** Reset the position on scroll
+	 * @param zk.Widget wgt
+	 */
 	onScroll: function (wgt) {
 		if (wgt) { //scroll requires only if inside, say, borderlayout
 			this.position(this.parent, null, "end_before", {overflow:true});

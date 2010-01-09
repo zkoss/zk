@@ -15,6 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING;
 
+/**
+ * An edit box for holding BigDecimal.
+ * <p>Default {@link #getZclass}: z-decimalbox.
+ */
 zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;

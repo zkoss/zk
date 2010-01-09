@@ -15,7 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING+'e';
 		//supports 1e2
-
+/**
+ * An edit box for holding an float point value (double).
+ * <p>Default {@link #getZclass}: z-doublebox.
+ */
 zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;

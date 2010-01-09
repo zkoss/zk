@@ -12,19 +12,48 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-
+/**
+ * An edit box for holding a constrained integer.
+ *
+ * <p>Default {@link #getZclass}: z-spinner.
+ */
 zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
 	$define: {
+		/** Return the step of spinner
+		 * @return int
+		 */
+		/** Set the step of spinner
+		 * @param int step
+		 */
 		step: _zkf = function(){},
+		/** Returns whether the button (on the right of the textbox) is visible.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether the button (on the right of the textbox) is visible.
+		 * @param boolean visible
+	 	*/
 		buttonVisible: function(v){
 			this.btn.style.display = v == 'true'? '': 'none';
 			this.onSize();
 			return;
 		},
+		/** Returns the minimum value.
+		 * @return int
+		 */
+		/** Set the minimum value.
+		 * @param int min
+		 */
 		min: _zkf = function(v){this._min = parseInt(v);},
+		/** Returns the maximum value.
+		 * @return int
+		 */
+		/** Set the maximum value.
+		 * @param int max
+		 */
 		max: _zkf
 	},
 	getZclass: function () {
@@ -34,6 +63,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	isButtonVisible: function(){
 		return _buttonVisible;
 	},
+	/** Returns the value in int. If null, zero is returned.
+	 * @return int
+	 */
 	intValue: function (){
 		return this.$supers('getValue', arguments);
 	},

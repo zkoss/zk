@@ -12,6 +12,15 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A band box. A bank box consists of an input box ({@link Textbox} and
+ * a popup window {@link Bandpopup}.
+ * It is similar to {@link Combobox} except the popup window could have
+ * any kind of children. For example, you could place a textbox in
+ * the popup to let user search particular items.
+ *
+ * <p>Default {@link #getZclass}: z-bandbox.
+ */
 zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	//super
 	getPopupSize_: function (pp) {

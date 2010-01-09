@@ -12,7 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An edit box for holding an integer.
+ * <p>Default {@link #getZclass}: z-intbox.
+ *
+ */
 zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
+	/** Returns the value in int. If null, zero is returned.
+	 * @return int
+	 */
 	intValue: function (){
 		return this.$supers('getValue', arguments);
 	},

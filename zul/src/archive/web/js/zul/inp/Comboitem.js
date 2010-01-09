@@ -12,8 +12,24 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * An item of a combo box.
+ *
+ * <p>Non-XUL extension. Refer to {@link Combobox}.
+ * 
+ * <p>Default {@link #getZclass}: z-comboitem.
+ *
+ * @see Combobox
+ */
 zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	$define: {
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (v) {
 			var n = this.$n();
 			if (n) {
@@ -21,9 +37,39 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 				v ? jq(n).addClass(zcls): jq(n).removeClass(zcls);
 			}
 		},
+		/** Returns the description (never null).
+		 * The description is used to provide extra information such that
+		 * users is easy to make a selection.
+		 * <p>Default: "".
+		 * <p>Deriving class can override it to return whatever it wants
+		 * other than null.
+		 * @return String
+		 */
+		/** Sets the description.
+		 * @param String desc
+		 */
 		description: _zkf = function () {
 			this.rerender();
 		},
+		/** Returns the embedded content (i.e., HTML tags) that is
+		 * shown as part of the description.
+		 *
+		 * <p>It is useful to show the description in more versatile way.
+		 *
+		 * <p>Default: empty ("").
+		 *
+		 * <p>Deriving class can override it to return whatever it wants
+		 * other than null.
+		 * @return String
+		 * @see #getDescription
+		 */
+		/** Sets the embedded content (i.e., HTML tags) that is
+		 * shown as part of the description.
+		 *
+		 * <p>It is useful to show the description in more versatile way.
+		 * @param String content
+		 * @see #setDescription
+		 */
 		content: _zkf
 	},
 
