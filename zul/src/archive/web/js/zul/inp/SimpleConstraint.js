@@ -14,8 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * The default constraint supporting no empty, regular expressions and so on.
- * <p>Depending on the component (such as {@link Intbox} and {@link Datebox}
- *
+ * <p>Depending on the component (such as {@link Intbox} and {@link Datebox}).
  */
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.
@@ -88,11 +87,16 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this.parseConstraint_(s.trim().toLowerCase());
 		}
 	},
+	/** Returns the constraint flags Object which has many attribute about constraint,
+	 *  For example, f.NO_POSITIVE = true.
+	 *
+	 * @return Object
+	 */
 	getFlags: function () {
 		return tis._flags;
 	},
-	/** Parses a constraint into an integer value.
-	 * For example, "no positive" is parsed to f.NO_POSITIVE = true
+	/** Parses a constraint into an Object attribute.
+	 * For example, "no positive" is parsed to f.NO_POSITIVE = true.
 	 *
 	 * <p>Deriving classes might override this to provide more constraints.
 	 * @param String cst

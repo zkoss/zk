@@ -12,19 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.inp" language="xul/html" depends="zul.wgt,zk.fmt">
-	<script src="InputWidget.js"/>
+	<script src="InputWidget.js" jsdoc="true"/>
 	<widget name="Errorbox"/>
-	<script src="SimpleConstraint.js"/>
+	<script src="SimpleConstraint.js" jsdoc="true"/>
 	<script src="SimpleSpinnerConstraint.js"/>
 	<script src="SimpleDateConstraint.js"/>
 	
 	<widget name="Textbox"/>
-	<script src="FormatWidget.js"/>
+	<script src="FormatWidget.js" jsdoc="true"/>
 	<widget name="Intbox"/>
 	<widget name="Longbox"/>
 	<widget name="Doublebox"/>
 	<widget name="Decimalbox"/>
-	<script src="ComboWidget.js"/>
+	<script src="ComboWidget.js" jsdoc="true"/>
 	<widget name="Combobox"/>
 	<widget name="Comboitem"/>
 	<widget name="Bandbox"/>
