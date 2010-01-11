@@ -1,0 +1,45 @@
+<window title="Google Maps">
+<html><![CDATA[
+<ol>
+<li>Press "Show Google Map" button and you shall see a "normal" Google maps</li>
+<li>If you saw only part of the maps and some "gray area" occupies the map, it is a bug!</li>
+</ol>
+]]></html>
+<vbox>
+    <button label="Show Google Map" onClick="mymap.setVisible(true);" />
+    <script content="zk.googleAPIkey='ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA'"/>
+	<gmaps id="mymap" width="700px" height="500px" visible="false" showSmallCtrl="true">
+		<attribute name="onMapMove">
+			mylat.setValue(self.getLat());
+			mylng.setValue(self.getLng());
+		</attribute>
+		<attribute name="onMapZoom">
+			myzoom.setValue(self.getZoom());
+		</attribute>
+		<attribute name="onMapClick">
+			Gmarker gmarker = event.getGmarker();
+			if (gmarker != null) {
+				gmarker.setOpen(true);
+			}
+		</attribute>
+
+		<ginfo id="myinfo" open="true">
+			<attribute name="content">
+				Hello, <a href="http://www.zkoss.org">ZK</a>.
+			</attribute>
+		</ginfo>
+		
+		<gmarker id="mymark" lat="37.4410" lng="-122.1490">
+			<attribute name="content">
+				Hello, <a href="http://www.zkoss.org">ZK</a> on top of Gmarker.
+			</attribute>
+		</gmarker>
+	</gmaps>
+	<grid><rows>
+		<row>Latitude: <doublebox id="mylat" value="${mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
+		<row>Longitude: <doublebox id="mylng" value="${mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
+		<row>Zoom Level: <intbox id="myzoom" value="${mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
+	</rows></grid>
+</vbox>
+</window>

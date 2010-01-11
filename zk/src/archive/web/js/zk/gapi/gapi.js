@@ -32,7 +32,7 @@ if (zk.googleAPIsLoadingTimeout == null)
 	zk.googleAPIsLoadingTimeout = 10000; //default to ten seconds
 
 zk.gapi.loadAPIs = function(wgt, callback, msg) {
-	if (!window.google) {
+	if (!window.google || !window.google.load) {
 		initMask(wgt, msg);
 		wgt._gapi_callback = callback;
 		loaded(wgt);

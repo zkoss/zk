@@ -91,7 +91,8 @@ November, 2009
   2928109: <window hflex="min"> not correctly handled  
   2911379: doublebox format="" broken in ZK 5 RC2
   2928125: Dynamically add onClick EventListener not working
-   2928011: provide a customization for zk.Draggable
+  2928011: provide a customization for zk.Draggable
+  2929253: Gmaps partly broken if initially hidden then set visible
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
