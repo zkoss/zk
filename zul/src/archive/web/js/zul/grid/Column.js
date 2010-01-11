@@ -50,7 +50,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * @param zk.Event evt the event causes the group
-	 * @return whether the rows are grouped.
+	 * @return boolean whether the rows are grouped.
 	 */
 	group: function (ascending, evt) {
 		var dir = this.getSortDirection();

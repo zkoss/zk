@@ -24,7 +24,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	/** Opens the popup.
 	 * @param zk.Widget owner the owner widget
 	 * @param String msg the error message
-	 * @see #open(zul.wgt.Popup) 
+	 * @see zul.wgt.Popup#open
 	 */
 	show: function (owner, msg) {
 		this.parent = owner; //fake

@@ -785,7 +785,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/**
 	 * Selects all items.
-	 * @param boolean isSelectAll.
+	 * @param boolean isSelectAll
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)

@@ -42,7 +42,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		return this._groupsInfo.length;
 	},
 	/** Returns a list of all {@link Group}.
-	 * @return zul.grid.Groups
+	 * @return Array
 	 */
 	getGroups: function () {
 		return this._groupsInfo.$clone();

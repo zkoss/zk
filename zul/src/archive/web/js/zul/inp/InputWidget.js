@@ -232,7 +232,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Sets the constraint.
 	 * <p>Default: null (means no constraint all all).
-	 * @param String
+	 * @param String cst
 	 */
 	setConstraint: function (cst) {
 		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
@@ -360,7 +360,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 *
 	 * <p>Deriving note:<br>
 	 * If you want to store the value in other type, say BigDecimal,
-	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
+	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
 	 * to convert between a string and your targeting type.
 	 *
 	 * <p>Moreover, when {@link zul.inp.Textbox} is called, it calls this method
@@ -376,7 +376,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 *
 	 * <p>Deriving note:<br>
 	 * If you want to store the value in other type, say BigDecimal,
-	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
+	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
 	 * to convert between a string and your targeting type.
 	 * @return String
 	 */
@@ -458,7 +458,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Create a {@link zul.inp.Errorbox} widget, and show the error message
 	 * @param String msg the error message
-	 * @see #show(zul.inp.Errorbox)
+	 * @see zul.inp.Errorbox#show
 	 */
 	showError_: function (msg) {
 		var eb = new zul.inp.Errorbox();

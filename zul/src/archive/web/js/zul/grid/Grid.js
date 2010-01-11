@@ -49,7 +49,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * If the style class doesn't exist, the striping effect disappears.
 	 * You can provide different effects by providing the proper style
 	 * classes.
-	 * @param String
+	 * @param String scls
 	 */
 	setOddRowSclass: function (scls) {
 		if (!scls) scls = null;

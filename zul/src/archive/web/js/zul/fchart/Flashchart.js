@@ -235,7 +235,7 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 		/** Sets the type of chart.
 		 * <p>Default: "pie"
 		 * <p>Allowed Types: pie, line, bar, column, stackbar, stackcolumn
-		 * @param String
+		 * @param String type
 		 */
 		/** Returns the type of chart
 		 * @return String

@@ -13,8 +13,8 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
- * The generic cell component to be embedded into {@link Row} or {@link Vbox}
- * or {@link Hbox} for fully control style and layout.
+ * The generic cell component to be embedded into {@link Row} or
+ * {@link zul.box.Box} for fully control style and layout.
  * 
  * <p>Default {@link #getZclass}: z-cell.
  * @import zul.grid.*

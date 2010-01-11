@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-combobox.
  * 
- * <p>Like {@link Datebox},
+ * <p>Like {@link zul.db.Datebox},
  * the value of a read-only comobobox ({@link #isReadonly}) can be changed
  * by dropping down the list and selecting an combo item
  * (though users cannot type anything in the input box).

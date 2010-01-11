@@ -22,7 +22,7 @@ zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 		 * @return String
 		 */
 		/** Sets the format.
-		 * @param String
+		 * @param String format
 		 */
 		format: function () {
 			var inp = this.getInputNode();

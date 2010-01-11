@@ -119,7 +119,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * Refer to {@link #getContentSclass} for more details.
 		 *
 		 * <p>Default: "none".
-		 * @return String
+		 * @return String		 * 
 		 */
 		border: _zkf,
 		/**

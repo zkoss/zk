@@ -64,7 +64,6 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		 * @param String type the type. Acceptable values are "text" and "password".
 		 * Unlike XUL, "timed" is redudant because it is enabled as long as
 		 * onChanging is added.
-		 * @param String type
 		 */
 		type: function (type) {
 			var inp = this.getInputNode();

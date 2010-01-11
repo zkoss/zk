@@ -15,8 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="InputWidget.js" jsdoc="true"/>
 	<widget name="Errorbox"/>
 	<script src="SimpleConstraint.js" jsdoc="true"/>
-	<script src="SimpleSpinnerConstraint.js"/>
-	<script src="SimpleDateConstraint.js"/>
+	<script src="SimpleSpinnerConstraint.js" jsdoc="true"/>
+	<script src="SimpleDateConstraint.js" jsdoc="true"/>
 	
 	<widget name="Textbox"/>
 	<script src="FormatWidget.js" jsdoc="true"/>

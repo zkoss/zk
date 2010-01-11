@@ -120,7 +120,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		 * at the client, or "true" if the default class is used,
 		 * or null or "false" to disable the file download (and then
 		 * this button behaves like a normal button).
-		 * @param String upload
 		 */
 		upload: function (v) {
 			var n = this.$n();
