@@ -752,6 +752,8 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @return Offset the offset after snapped
 	 */
 	snap_: function (pos) {
+		if (pos[1] < 0)
+			pos[1] = 0;
 		return pos;
 	}
 

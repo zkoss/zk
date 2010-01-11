@@ -60,8 +60,7 @@ November, 2009
   2830237: jasperreport support media
   2926128: Problem setting value to a datebox
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
-  2927319: EventQueue supports asynchronous listener
-  2928011: provide a customization for zk.Draggable
+  2927319: EventQueue supports asynchronous listener 
   
 * RC2 Bugs  
   2911743: listbox rod + databind save-when not working
@@ -92,6 +91,7 @@ November, 2009
   2928109: <window hflex="min"> not correctly handled  
   2911379: doublebox format="" broken in ZK 5 RC2
   2928125: Dynamically add onClick EventListener not working
+   2928011: provide a customization for zk.Draggable
   
 * RC Bugs
   2870616: Unclosed progress mask on opening menupopup
