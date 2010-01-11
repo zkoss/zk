@@ -440,7 +440,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 		removeLast(sb, ',');
 
-		sb.append("})");
+		sb.append("});");
 		write(out, sb.toString());
 	}
 	private void outErrReloads(Configuration config, StringBuffer sb,

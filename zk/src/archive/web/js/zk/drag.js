@@ -231,7 +231,10 @@ var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 	 *
 	 * <h4>zIndex</h4>
 	 * <pre><code>int zIndex;</code></pre>
+	 * <pre><code>int zIndex({@link zk.Draggable} dg);</code></pre>
 	 * <p>The z-index that will be assigned when dragging the element.
+	 * If it is a function, it is assumed to be a function returning
+	 * the z-index (or -1 if it prefer not to change z-index)
 	 * Default: <i>not assign any value to z-index</i>
 	 *
 	 * <h4>change</h4>
@@ -372,9 +375,10 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		zk.dragging = this.dragging = true;
 
-		var node = this.node;
-		if(this.opts.ghosting)
-			if (typeof this.opts.ghosting == 'function') {
+		var node = this.node,
+			opt;
+		if(opt = this.opts.ghosting)
+			if (typeof opt == 'function') {
 				this.delta = this._currentDelta();
 				this.orgnode = this.node;
 
@@ -385,7 +389,7 @@ String scroll; //DOM Element's ID</code></pre>
 					//Store scrolling offset since _draw not handle DIV well
 				ofs[0] -= this.z_scrl[0]; ofs[1] -= this.z_scrl[1];
 
-				node = this.node = this.opts.ghosting(this, ofs, evt);
+				node = this.node = opt(this, ofs, evt);
 			} else {
 				this._clone = jq(node).clone()[0];
 				this.z_orgpos = node.style.position; //Bug 1514789
@@ -404,9 +408,14 @@ String scroll; //DOM Element's ID</code></pre>
 			}
 		}
 
-		if(this.opts.zIndex) { //after ghosting
-			this.orgZ = zk.parseInt(jq(node).css('z-index'));
-			node.style.zIndex = this.opts.zIndex;
+		this.orgZ = -1;
+		if(opt = this.opts.zIndex) { //after ghosting
+			if (typeof opt == 'function')
+				opt = opt(this);
+			if (opt >= 0) {
+				this.orgZ = zk.parseInt(jq(node).css('z-index'));
+				node.style.zIndex = opt;
+			}
 		}
 
 		if(this.opts.scroll) {
@@ -533,7 +542,7 @@ String scroll; //DOM Element's ID</code></pre>
 			this.delta = d;
 		}
 
-		if(this.opts.zIndex)
+		if(this.orgZ != -1)
 			node.style.zIndex = this.orgZ;
 
 		if(this.opts.endeffect) 

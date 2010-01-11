@@ -34,6 +34,69 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		s.height = jq.px0(sh);
 	}
 
+	//drag move
+	function _startmove(dg) {
+		//Bug #1568393: we have to change the percetage to the pixel.
+		var el = dg.node;
+		if(el.style.top && el.style.top.indexOf("%") >= 0)
+			 el.style.top = el.offsetTop + "px";
+		if(el.style.left && el.style.left.indexOf("%") >= 0)
+			 el.style.left = el.offsetLeft + "px";
+		zWatch.fire('onFloatUp', dg.control); //notify all
+	}
+	function _ghostmove(dg, ofs, evt) {
+		var wnd = dg.control,
+			el = dg.node;
+		wnd._hideShadow();
+		var $el = jq(el),
+			$top = $el.find('>div:first'),
+			top = $top[0],
+			header = $top.nextAll('div:first')[0],
+			fakeT = jq(top).clone()[0],
+			fakeH = jq(header).clone()[0];
+		jq(document.body).prepend(
+			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
+			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
+		dg._wndoffs = ofs;
+		el.style.visibility = "hidden";
+		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
+		el = jq("#zk_wndghost")[0];
+		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
+		el.insertBefore(fakeT, el.firstChild);
+		el.insertBefore(fakeH, el.lastChild);
+		return el;
+	}
+	function _endghostmove(dg, origin) {
+		var el = dg.node; //ghost
+		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
+		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
+
+		document.body.style.cursor = "";
+	}
+	function _ignoremove(dg, pointer, evt) {
+		var el = dg.node,
+			wgt = dg.control;
+		switch (evt.domTarget) {
+		case wgt.$n('close'):
+		case wgt.$n('max'):
+		case wgt.$n('min'):
+			return true; //ignore special buttons
+		}
+		if (!wgt.isSizable()
+		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
+		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
+			return false; //accept if not sizable or not on border
+		return true;
+	}
+	function _aftermove(dg, evt) {
+		dg.node.style.visibility = "";
+		var wgt = dg.control;
+		wgt._syncShadow();
+		wgt._fireOnMove(evt.data);
+	}
+
 /**
  * A window.
  *
@@ -567,11 +630,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
 				fireOnMove: false,
-				starteffect: Window._startmove,
-				ghosting: Window._ghostmove,
-				endghosting: Window._endghostmove,
-				ignoredrag: Window._ignoremove,
-				endeffect: Window._aftermove});
+				starteffect: _startmove,
+				ghosting: _ghostmove,
+				endghosting: _endghostmove,
+				ignoredrag: _ignoremove,
+				endeffect: _aftermove,
+				zIndex: 99999 //Bug 2929590
+			});
 		}
 	},
 	_updateDomPos: function (force) {
@@ -1023,69 +1088,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	}
 },{ //static
-	//drag move
-	_startmove: function (dg) {
-		//Bug #1568393: we have to change the percetage to the pixel.
-		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf("%") >= 0)
-			 el.style.top = el.offsetTop + "px";
-		if(el.style.left && el.style.left.indexOf("%") >= 0)
-			 el.style.left = el.offsetLeft + "px";
-		zWatch.fire('onFloatUp', dg.control); //notify all
-	},
-	_ghostmove: function (dg, ofs, evt) {
-		var wnd = dg.control,
-			el = dg.node;
-		wnd._hideShadow();
-		var $el = jq(el),
-			$top = $el.find('>div:first'),
-			top = $top[0],
-			header = $top.nextAll('div:first')[0],
-			fakeT = jq(top).clone()[0],
-			fakeH = jq(header).clone()[0];
-		jq(document.body).prepend(
-			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
-			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
-		dg._wndoffs = ofs;
-		el.style.visibility = "hidden";
-		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
-		el = jq("#zk_wndghost")[0];
-		el.firstChild.style.height = jq.px0(zk(el.firstChild).revisedHeight(h));
-		el.insertBefore(fakeT, el.firstChild);
-		el.insertBefore(fakeH, el.lastChild);
-		return el;
-	},
-	_endghostmove: function (dg, origin) {
-		var el = dg.node; //ghost
-		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
-		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
-
-		document.body.style.cursor = "";
-	},
-	_ignoremove: function (dg, pointer, evt) {
-		var el = dg.node,
-			wgt = dg.control;
-		switch (evt.domTarget) {
-		case wgt.$n('close'):
-		case wgt.$n('max'):
-		case wgt.$n('min'):
-			return true; //ignore special buttons
-		}
-		if (!wgt.isSizable()
-		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
-		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
-			return false; //accept if not sizable or not on border
-		return true;
-	},
-	_aftermove: function (dg, evt) {
-		dg.node.style.visibility = "";
-		var wgt = dg.control;
-		wgt._syncShadow();
-		wgt._fireOnMove(evt.data);
-	},
-	// drag sizing
+	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
