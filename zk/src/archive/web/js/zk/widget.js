@@ -1440,7 +1440,7 @@ new zul.wnd.Window{
 		if (this._visible != visible) {
 			this._visible = visible;
 
-			var p = this.parent;
+			var p = this.parent, ocvCalled;
 			if (this.desktop) {
 				var parentVisible = !p || p.isRealVisible(),
 					node = this.$n(),
@@ -1470,6 +1470,9 @@ new zul.wnd.Window{
 						}
 					}
 
+					if (ocvCalled = p) p.onChildVisible_(this);
+						//after setDomVisible_ and before onShow (Box depends on it)
+
 					zWatch.fireDown('onShow', this);
 				} else {
 					zWatch.fireDown('onHide', this);
@@ -1485,7 +1488,8 @@ new zul.wnd.Window{
 					this.setDomVisible_(node, false);
 				}
 			}
-			if (p) p.onChildVisible_(this); //becoming visible
+			if (p && !ocvCalled) p.onChildVisible_(this);
+				//after setDomVisible_ and after onHide
 		}
 		return this;
 	},
@@ -1530,13 +1534,13 @@ new zul.wnd.Window{
 	},
 	/** A callback called after a child's visibility is changed
 	 * (i.e., {@link #setVisible} was called).
-	 * <p>Notice that this method is called after this._visible has been changed,
-	 * so you can retrieve the value to see if it is becoming visible.
-	 * In additions, this method is called before updating the associated DOM
-	 * elements.
+	 * <p>Notice that this method is called after the _visible property
+	 * and the associated DOM element(s) have been changed.
+	 * <p>To know if it is becoming visible, you can check {@link #isVisible}
+	 * (such as this._visible).
 	 * @param zk.Widget child the child whose visiblity is changed
 	 */
-	onChildVisible_: function (/*child*/) {
+	onChildVisible_: function () {
 	},
 	/** Makes this widget as topmost.
 	 * <p>If this widget is not floating, this method will look for its ancestors for the first ancestor who is floating. In other words, this method makes the floating containing this widget as topmost.
