@@ -2411,6 +2411,14 @@ zkau.cmd0 = { //no uuid at all
 				zkau.valid.closeErrbox(arguments[i], false, true);
 	},
 	wrongValue: function () {
+		// Bug 2929688
+		if (anima.count) {
+			var args = arguments;
+			setTimeout(function () {
+				zkau.cmd0.wrongValue.apply(this, args);
+			}, 20);
+			return;
+		}
 		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
 			var uuid = arguments[i], msg = arguments[i + 1],
 				cmp = $e(uuid);
