@@ -445,7 +445,6 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 
 	_updateDrag: function (pt, evt) {
-		zk.Wirer.sync(this.control, evt);
 		if(!this.dragging) {
 			var v = this.opts.initSensitivity;
 			if (v && (pt[0] <= _initPt[0] + v
