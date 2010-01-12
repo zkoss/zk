@@ -601,6 +601,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	onChange: function (evt) {
 		if (this.parent.isReadonly()) {
 			this.close(true);
+			evt.stop();
 			return;
 		}
 
