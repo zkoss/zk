@@ -59,10 +59,12 @@ November, 2009
   2930316: Support client-polling server-push in ZK CE
   2920529: Session-scope EventQueue
   2830237: jasperreport support media
+  2923266: Enhance colorbox : add setDisable() function
   2926128: Problem setting value to a datebox
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
   2927319: EventQueue supports asynchronous listener
   2928011: provide a customization for zk.Draggable
+
   
 * RC/RC2 Bugs  
   2870616: Unclosed progress mask on opening menupopup
