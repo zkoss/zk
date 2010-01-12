@@ -60,41 +60,10 @@ November, 2009
   2830237: jasperreport support media
   2926128: Problem setting value to a datebox
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
-  2927319: EventQueue supports asynchronous listener 
-  
-* RC2 Bugs  
-  2911743: listbox rod + databind save-when not working
-  2897202: load-when and load-after not triggered when binded to template
-  2913931: First loading of listbox/grid rod is not optimized
-  2914048: Box renders child at wrong place when add dynamically
-  2916077: Checkmark disappears in listgroup
-  2916148: Errorbox cannot be closed in IE6 only
-  2919062: Intbox should allow -0 as its value without error message
-  2918388: Javascript error when close a "whole" maximized portallayout
-  2918527: Align property ignored in DIV
-  2916146: Input components with readonly should prevent Backspace key
-  2919175: Unexpected error message in combobox with constraint
-  2917947: resize grid's column with draggable
-  2911385: menuitem with popup problems in 5 RC2
-  2922661: Enhance VariableResolver to reslove property, not just var
-  2922762: tabscroll="false" doesn't work
-  2923185: Datebox click on timebox result '00:00' when format 'HH:mm'
-  2924049: Wrong target when dragging a sub div in IE browsers
-  2884572: deploy error when upgrade to ZK5 on weblogic 8.x
-  2912533: Clients.showBusy the underneatml should lose focus  
-  2926939: paging.getActivePage() is not correct in onPaging event
-  2922847: font-weight has no effect on zk5 toolbarbutton
-  2925493: OnChange Event does not work in Listbox with autodrop
-  2925671: Problem clicking twice the combobox triangle
-  2926718: Decimal box format problem
-  2928044: maxlength didn't work in input element
-  2928109: <window hflex="min"> not correctly handled  
-  2911379: doublebox format="" broken in ZK 5 RC2
-  2928125: Dynamically add onClick EventListener not working
+  2927319: EventQueue supports asynchronous listener
   2928011: provide a customization for zk.Draggable
-  2929253: Gmaps partly broken if initially hidden then set visible
   
-* RC Bugs
+* RC/RC2 Bugs  
   2870616: Unclosed progress mask on opening menupopup
   2870620: No menupopup onOpen reference when right click gmaps
   2870652: Button(mold == trendy) is not resized with hflex/vflex
@@ -128,6 +97,34 @@ November, 2009
   2909817: Treecol setAlign() with right fails
   2909820: Dynamically add treeitem, the item is rendered wrong place
   2909957: hflex="1", grid in vbox, can expand but CANNOT shrink 
+  2911743: listbox rod + databind save-when not working
+  2897202: load-when and load-after not triggered when binded to template
+  2913931: First loading of listbox/grid rod is not optimized
+  2914048: Box renders child at wrong place when add dynamically
+  2916077: Checkmark disappears in listgroup
+  2916148: Errorbox cannot be closed in IE6 only
+  2919062: Intbox should allow -0 as its value without error message
+  2918388: Javascript error when close a "whole" maximized portallayout
+  2918527: Align property ignored in DIV
+  2916146: Input components with readonly should prevent Backspace key
+  2919175: Unexpected error message in combobox with constraint
+  2917947: resize grid's column with draggable
+  2911385: menuitem with popup problems in 5 RC2
+  2922661: Enhance VariableResolver to reslove property, not just var
+  2922762: tabscroll="false" doesn't work
+  2923185: Datebox click on timebox result '00:00' when format 'HH:mm'
+  2924049: Wrong target when dragging a sub div in IE browsers
+  2884572: deploy error when upgrade to ZK5 on weblogic 8.x
+  2912533: Clients.showBusy the underneatml should lose focus  
+  2926939: paging.getActivePage() is not correct in onPaging event
+  2922847: font-weight has no effect on zk5 toolbarbutton
+  2925493: OnChange Event does not work in Listbox with autodrop
+  2925671: Problem clicking twice the combobox triangle
+  2926718: Decimal box format problem
+  2928044: maxlength didn't work in input element
+  2928109: <window hflex="min"> not correctly handled  
+  2911379: doublebox format="" broken in ZK 5 RC2
+  2928125: Dynamically add onClick EventListener not working
   2926070: ZK 5 RC doesn't support Servlet 2.3
   2929590: Window cannot be dragged in modal when put a large div (FF)
   
