@@ -311,17 +311,17 @@ public class Parser {
 			if (isEmpty(zsrc))
 				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
 
-			final ZScript zs;
+			ZScript zs =  null;
 			final String zslang = pgdef.getZScriptLanguage();
-			if (zsrc.indexOf("${") >= 0) {
-				zs = new ZScript(pgdef.getEvaluatorRef(),
-					zslang, zsrc, null, getLocator()); //URL in EL
-			} else {
+			if (zsrc.indexOf("${") < 0) {
 				final URL url = getLocator().getResource(zsrc);
-				if (url == null) throw new UiException("File not found: "+zsrc+", at "+pi.getLocator());
-					//don't throw FileNotFoundException since Tomcat 'eats' it
-				zs = new ZScript(pgdef.getEvaluatorRef(), zslang, url, null);
+				if (url != null) 
+					zs = new ZScript(pgdef.getEvaluatorRef(), zslang, url, null);
+					//Bug 2929887: defer the error message since it might not be required
 			}
+			if (zs == null)
+				zs = new ZScript(pgdef.getEvaluatorRef(),
+					zslang, zsrc, null, getLocator());
 
 			pgdef.addInitiatorInfo(
 				new InitiatorInfo(new ZScriptInitiator(zs), args));
