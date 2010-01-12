@@ -1472,10 +1472,14 @@ new zul.wnd.Window{
 
 					if (ocvCalled = p) p.onChildVisible_(this);
 						//after setDomVisible_ and before onShow (Box depends on it)
-
-					zWatch.fireDown('onShow', this);
+					
+					this.fire('onShow');
+					if (!zk.animating())
+						zWatch.fireDown('onShow', this);
 				} else {
-					zWatch.fireDown('onHide', this);
+					this.fire('onHide');
+					if (!zk.animating())
+						zWatch.fireDown('onHide', this);
 
 					for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
 						var w = _floatings[j].widget;
