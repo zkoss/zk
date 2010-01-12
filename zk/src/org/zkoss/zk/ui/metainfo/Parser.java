@@ -910,16 +910,16 @@ public class Parser {
 
 		final ConditionImpl cond = ConditionImpl.getInstance(ifc, unless);
 		if (!isEmpty(zsrc)) { //ignore empty (not error)
-			final ZScript zs;
-			if (zsrc.indexOf("${") >= 0) {
+			ZScript zs = null;
+			if (zsrc.indexOf("${") < 0) {
+				final URL url = getLocator().getResource(zsrc);
+				if (url != null) 
+					zs = new ZScript(parent.getEvaluatorRef(), zslang, url, cond);
+					//Bug 2929887: defer the error message since it might not be required
+			}
+			if (zs == null)
 				zs = new ZScript(parent.getEvaluatorRef(),
 					zslang, zsrc, cond, getLocator());
-			} else {
-				final URL url = getLocator().getResource(zsrc);
-				if (url == null) throw new UiException("File not found: "+zsrc+", at "+el.getLocator());
-					//don't throw FileNotFoundException since Tomcat 'eats' it
-				zs = new ZScript(parent.getEvaluatorRef(), zslang, url, cond);
-			}
 
 			if (deferred) zs.setDeferred(true);
 			parent.appendChild(zs);

@@ -153,6 +153,7 @@ November, 2009
   2919037: SetSelectedIndex(-1) shall unselect even with constraint
   2918492: Panel disappear when close a "column" maximized portallayout
   2910663: NullPointerException after failover when fulfill onEvent
+  2929887: zscript fails on missing src even if it is not required
   
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
