@@ -220,7 +220,7 @@ public interface EventQueue {
 	 * @see #subscribe(EventListener)
 	 * @see #subscribe(EventListener, EventListener)
 	 */
-	public void subscribe(EventListener listner, boolean async);
+	public void subscribe(EventListener listener, boolean async);
 	/** Unsubscribes a listener from the queue.
 	 *
 	 * <p>Note: this method must be called within an activated exection,
