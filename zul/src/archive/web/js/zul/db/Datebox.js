@@ -599,6 +599,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this._shadow.sync();
 	},
 	onChange: function (evt) {
+		if (this.parent.isReadonly()) {
+			this.close(true);
+			return;
+		}
+
 		var date = this.getTime(),
 			oldDate = this.parent.getValue();
 		if (oldDate) {

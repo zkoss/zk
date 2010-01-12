@@ -1,0 +1,23 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+1.Click this <button label="Show Tabbox">
+<attribute name="onClick">
+mydiv.setVisible(true);
+</attribute>
+</button>
+, after click, it should display a tabbox below, if there is no tabbox, it's wrong
+<separator height="20px"/>
+<div id="mydiv" width="200px" height="200px" visible="false">
+<tabbox tabscroll="false">
+	<tabs>
+		<tab label="tab1" />
+		<tab label="tab2" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>tabpanel1</tabpanel>
+		<tabpanel>tabpanel2</tabpanel>
+	</tabpanels>
+</tabbox>
+</div>
+</zk>

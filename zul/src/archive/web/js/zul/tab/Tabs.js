@@ -410,9 +410,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						this.$n('right').style.right = toolbar.offsetWidth + 'px';
 				} else {
 					if (!tbx.style.width) {
-						var ofw = jq.px0(tbx.offsetWidth);
-						this._forceStyle(tbx, "w", ofw);
-						this._forceStyle(tabs, "w", ofw);
+						if (tbx.offsetWidth != 0) {
+							var ofw = jq.px0(tbx.offsetWidth);
+							this._forceStyle(tbx, "w", ofw);
+							this._forceStyle(tabs, "w", ofw);	
+						}
 					} else {
 						this._forceStyle(tabs, "w", jq.px0(tbx.offsetWidth));
 					}

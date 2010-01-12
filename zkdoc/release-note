@@ -126,7 +126,10 @@ November, 2009
   2911379: doublebox format="" broken in ZK 5 RC2
   2928125: Dynamically add onClick EventListener not working
   2926070: ZK 5 RC doesn't support Servlet 2.3
+  2929189: if tabscroll="false", problems making tabbox visible
+  2929193: Problem with a readonly datebox
   2929590: Window cannot be dragged in modal when put a large div (FF)
+
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
