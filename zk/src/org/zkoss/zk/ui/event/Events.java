@@ -204,16 +204,6 @@ public class Events {
 	 */
 	public static final String ON_FULFILL = "onFulfill";
 
-	/** The onWire event (used with {@link WireEvent})
-	 * @since 5.0.0
-	 */
-	public static final String ON_WIRE = "onWire";
-	
-	/** The onUnwire event (used with {@link UnwireEvent})
-	 * @since 5.0.0
-	 */
-	public static final String ON_UNWIRE = "onUnwire";
-	
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character
