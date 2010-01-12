@@ -33,7 +33,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		 *
 		 * <p>It is useful to show the description in more versatile way.
 		 * 
-		 * <p>There is a way to create Colorbox automatically by using
+		 * <p>There is a way to create {@link zkex.inp.Colorbox} automatically by using
 		 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
 		 *
 		 * @param String content
@@ -97,7 +97,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				this._contentHandler.setContent(this._content);
 		}
 	},
-	/** Returns the {@link Menubar} it owns, or null if not available.
+	/** Returns the {@link Menubar} that contains this menu, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
 	getMenubar: function () {
