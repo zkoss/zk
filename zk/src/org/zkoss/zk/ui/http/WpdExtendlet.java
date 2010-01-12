@@ -403,9 +403,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 
 		sb.append("},{");
-		if (WebApps.getFeature("enterprise"))
+		if (WebApps.getFeature("ee"))
 			sb.append("ed:'e',");
-		else if (WebApps.getFeature("professional"))
+		else if (WebApps.getFeature("pe"))
 			sb.append("ed:'p',");
 
 		final Configuration config = wapp.getConfiguration();

@@ -42,7 +42,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (!content || content.length == 0) return;
 			
 			if (!this._contentHandler) {
-				if (zk.feature.professional) {
+				if (zk.feature.pe) {
 					var self = this;
 					zk.load('zkex.inp', null, function () { 
 						self._contentHandler = new zkex.inp.ContentHandler(self, content);

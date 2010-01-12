@@ -99,7 +99,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</client-config>
 	-->
 
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for grid.
 		It improves the performance for huge grid.
 		Default: false
@@ -108,7 +108,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.grid.rod</name>
 		<value>true</value>
 	</library-property>
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for listbox.
 		It improves the performance for huge listbox.
 		Default: false
@@ -118,7 +118,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you want to block the requests sent from inaccessible
 		widgets (such as invisible or disabled).
 		It is used to protect your application from the attack that
@@ -129,7 +129,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkmax.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
 	</listener>
 	-->
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you use InaccessibleWidgetBlockService (IWBS) and
 		want to block only particular events.
 		Default: all
@@ -139,7 +139,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you want to recycle the desktop if an user navigates
 		back to the same URL
 	<listener>
@@ -147,7 +147,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</listener>
 	--> 
 
-	<!-- [Enterprise Edition]
+	<!-- [ZK EE]
 		Turn on if you want to make your Web application crawlable (indexed)
 		by search engines.
 	<system-config>

@@ -119,7 +119,7 @@ import org.zkoss.zul.impl.XulElement;
  * {@link #sessionDidActivate} is called.
  * 
  * <h3>Render on Demand (rod)</h3>
- * [Enterprise Edition]
+ * [ZK EE]
  * [Since 5.0.0]
  * 
  * <p>For huge data, you can turn on Listbox's ROD to request ZK engine to load from 

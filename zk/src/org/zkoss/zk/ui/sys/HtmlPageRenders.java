@@ -213,10 +213,10 @@ public class HtmlPageRenders {
 			append(sb, (JavaScript)it.next());
 
 		sb.append("\n<!-- ZK ").append(wapp.getVersion());
-		if (WebApps.getFeature("enterprise"))
-			sb.append(" ENT");
-		else if (WebApps.getFeature("professional"))
-			sb.append(" PRO");
+		if (WebApps.getFeature("ee"))
+			sb.append(" EE");
+		else if (WebApps.getFeature("pe"))
+			sb.append(" PE");
 		sb.append(' ').append(wapp.getBuild())
 			.append(" -->\n");
 

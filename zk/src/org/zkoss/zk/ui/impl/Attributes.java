@@ -38,7 +38,7 @@ public class Attributes {
 	/** A component or page attribute to indicate if the client ROD
 	 * (render-on-demand) shall be applied.
 	 * <p>Default: true.
-	 * <p>Applicable: Enterprise edition
+	 * <p>Applicable: ZK EE
 	 * @since 5.0.0
 	 */
 	public static final String CLIENT_ROD = "org.zkoss.zul.client.rod";

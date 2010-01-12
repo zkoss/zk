@@ -102,7 +102,7 @@ import org.zkoss.zul.impl.XulElement;
  * serializable or re-assign them when {@link #sessionDidActivate} is called.
  *
  * <h3>Render on Demand (rod)</h3>
- * [Enterprise Edition]
+ * [ZK EE]
  * [Since 5.0.0]
  * 
  * <p>For huge data, you can turn on Grid's ROD to request ZK engine to load from 

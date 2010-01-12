@@ -243,7 +243,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		var setting = zAu.ajaxSettings,
 			req = setting.xhr(),
 			uri = shallUseQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
-		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
+		zAu.sentTime = zUtl.now(); //used by server-push (cpsp)
 		try {
 			req.onreadystatechange = onResponseReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);

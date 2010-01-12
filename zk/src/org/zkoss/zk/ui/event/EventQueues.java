@@ -142,26 +142,25 @@ public class EventQueues {
 		if (_provider == null)
 			synchronized (EventQueues.class) {
 				if (_provider == null) {
-					EventQueueProvider provider;
+					EventQueueProvider provider = null;
 					String clsnm = Library.getProperty("org.zkoss.zk.ui.event.EventQueueProvider.class");
 					if (clsnm == null)
 						clsnm = Library.getProperty("org.zkoss.zkmax.ui.EventQueueProvider.class");
 							//backward compatible
-					try {
-						final Object o = Classes.newInstanceByThread(
-							clsnm != null ? clsnm:
-							"org.zkoss.zkex.ui.event.impl.EventQueueProviderImpl");
-								//try zkex first
-						if (!(o instanceof EventQueueProvider))
-							throw new UiException(o.getClass().getName()+" must implement "+EventQueueProvider.class.getName());
-						provider = (EventQueueProvider)o;
-					} catch (UiException ex) {
-						throw ex;
-					} catch (Throwable ex) {
-						if (clsnm != null)
+					if (clsnm != null)
+						try {
+							final Object o = Classes.newInstanceByThread(clsnm);
+									//try zkex first
+							if (!(o instanceof EventQueueProvider))
+								throw new UiException(o.getClass().getName()+" must implement "+EventQueueProvider.class.getName());
+							provider = (EventQueueProvider)o;
+						} catch (UiException ex) {
+							throw ex;
+						} catch (Throwable ex) {
 							throw UiException.Aide.wrap(ex, "Unable to load "+clsnm);
+						}
+					if (provider == null)
 						provider = new EventQueueProviderImpl();
-					}
 					_provider = provider;
 				}
 			}

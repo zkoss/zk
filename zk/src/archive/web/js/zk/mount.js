@@ -91,9 +91,9 @@ function zkopt(opts) {
 		case "ed":
 			switch (val) {
 			case 'e':
-				zk.feature.enterprise = true;
+				zk.feature.ee = true;
 			case 'p':
-				zk.feature.professional = true;
+				zk.feature.pe = true;
 			}
 			break;
 		case 'eu': zAu.setErrorURI(val); break;

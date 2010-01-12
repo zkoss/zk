@@ -56,6 +56,7 @@ November, 2009
   2905982: A way to reuse the desktop across the requests
   2914010: Position of Messagebox is not at the center of scroll view
   2919807: Make EventQueue available to CE
+  2930316: Support client-polling server-push in ZK CE
   2920529: Session-scope EventQueue
   2830237: jasperreport support media
   2926128: Problem setting value to a datebox

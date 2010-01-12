@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
-
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.*;
 
 /**
@@ -38,7 +38,25 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 		if (exec == null)
 			throw new IllegalStateException("Not in an execution");
 
-		if (EventQueues.DESKTOP.equals(scope)) {
+		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
+		if (bAppScope || EventQueues.SESSION.equals(scope)) {
+			Map eqs;
+			final Scope ctxscope = bAppScope ?
+				(Scope)exec.getDesktop().getWebApp(): exec.getSession();
+			synchronized (ctxscope) {
+				eqs = (Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES);
+				if (eqs == null)
+					ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap(4));
+			}
+
+			EventQueue eq;
+			synchronized (eqs) {
+				eq = (EventQueue)eqs.get(name);
+				if (autoCreate && eq == null)
+					eqs.put(name, eq = new ServerPushEventQueue());
+			}
+			return eq;
+		} else  if (EventQueues.DESKTOP.equals(scope)) {
 			final Desktop desktop = exec.getDesktop();
 			Map eqs = (Map)desktop.getAttribute(ATTR_EVENT_QUEUES);
 			if (eqs == null)
@@ -48,9 +66,6 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new DesktopEventQueue());
 			return eq;
-		} else if (EventQueues.APPLICATION.equals(scope)
-		|| EventQueues.SESSION.equals(scope)) {
-			throw new UnsupportedOperationException("The application/session-scoped event queue requires ZK PE or EE");
 		} else
 			throw new UnsupportedOperationException("Unknown scope: "+scope);
 	}
@@ -59,7 +74,23 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 		if (exec == null)
 			throw new IllegalStateException("Not in an execution");
 
-		if (EventQueues.DESKTOP.equals(scope)) {
+		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
+		if (bAppScope || EventQueues.SESSION.equals(scope)) {
+			final Scope ctxscope = bAppScope ?
+				(Scope)exec.getDesktop().getWebApp(): exec.getSession();
+			Map eqs = (Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES);
+			if (eqs != null) {
+				EventQueue eq;
+				synchronized (eqs) {
+					eq = (EventQueue)eqs.remove(name);
+				}
+				if (eq != null) {
+					eq.close();
+					return true;
+				}
+			}
+			return false;
+		} else  if (EventQueues.DESKTOP.equals(scope)) {
 			final Desktop desktop = exec.getDesktop();
 			Map eqs = (Map)desktop.getAttribute(ATTR_EVENT_QUEUES);
 			if (eqs != null) {

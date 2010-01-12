@@ -216,7 +216,7 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 
 		this.listen({onOpen: [w, w._onMenuPopup]});
 		
-		if (zk.feature.professional && w.isColumnsgroup()) {
+		if (zk.feature.pe && w.isColumnsgroup()) {
 			var group = new zul.menu.Menuitem({label: msgzul.GRID_GROUP});
 				group.setSclass(zcls + '-menu-grouping');
 				group.listen({onClick: [w, w._onGroup]});

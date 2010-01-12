@@ -47,6 +47,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<device-config>
 		<device-type>ajax</device-type>
+		<server-push-class>org.zkoss.zk.ui.impl.PollingServerPush</server-push-class>
+	</device-config>
+	<device-config>
+		<device-type>ajax</device-type>
 		<device-class>org.zkoss.zk.device.AjaxDevice</device-class>
 		<unavailable-message><![CDATA[
 <div class="noscript"><p>Sorry, JavaScript must be enabled.<br/>Change your browser options, then <a href="">try again</a>.</p></div>

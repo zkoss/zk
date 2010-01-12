@@ -103,13 +103,10 @@ public interface Device {
 	/** Sets the class that implements the server-push feature
 	 * ({@link ServerPush}) for this device, or null to use the default.
 	 *
-	 * <p>Default: null.
+	 * <p>Default: {@link org.zkoss.zk.ui.impl.PollingServerPush}.
 	 *
-	 * <p>If the professional edition (with zkex.jar) is loaded,
-	 * the client-polling-based server push (org.zkoss.zkex.ui.impl.PollingServerPush)
-	 * is the default.
-	 * If the enterprise edition (with zkmax.jar) is loaded,
-	 * the COMET-based server push (org.zkoss.zkmax.ui.comet.CometServerPush)
+	 * <p>If ZK EE (with zkmax.jar) is loaded,
+	 * the COMET-based server push ({@link org.zkoss.zkmax.ui.comet.CometServerPush})
 	 * is the default.
 	 * @return the previous class, or null if not available.
 	 * @since 3.0.0
