@@ -499,7 +499,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		paging.setDetailed(true);
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 		paging.setParent(this);
-		addPagingListener(_pgi);
+		if (_pgi != null)
+			addPagingListener(_pgi);
 	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {

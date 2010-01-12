@@ -181,7 +181,8 @@ public class ArraysX {
 	 * @param array the byte array
 	 */
 	public final static String toOctalString(byte[] array, String prefix) {
-		StringBuffer sb = new StringBuffer(array.length*(3+prefix.length()) + 8);
+		StringBuffer sb = new StringBuffer(array.length*
+				(3 + (prefix == null ? 0 : prefix.length())) + 8);
 		if (prefix == null) {
 			for (int i=0; i< array.length; i++) {
 				appendOctalDigits(sb, array[i]);

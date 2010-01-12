@@ -1,9 +1,9 @@
 /* HtmlBasedComponent.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Dec 31 12:30:18     2005, Created by tomyeh
 
@@ -110,7 +110,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @param top the top position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setTop(String top) {
-		if (_top != top) {
+		if (!Objects.equals(_top, top)) {
 			_top = top;
 			smartUpdate("top", _top);
 		}
@@ -210,7 +210,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	  * Once it is changed, the default style won't be applied at all.
 	  * If you want to perform small adjustments, use {@link #setSclass}
 	  * instead.
-	  * 
+	  *
 	  * @since 3.5.1
 	  * @see #getSclass
 	  */

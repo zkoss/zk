@@ -1362,7 +1362,8 @@ public class Listbox extends XulElement implements Paginated,
 		paging.setDetailed(true);
 		paging.setTotalSize(getDataLoader().getTotalSize());
 		paging.setParent(this);
-		addPagingListener(_pgi);
+		if (_pgi != null)
+			addPagingListener(_pgi);
 	}
 
 	/** Adds the event listener for the onPaging event. */
@@ -2108,7 +2109,8 @@ public class Listbox extends XulElement implements Paginated,
 
 				if (child instanceof Listgroupfoot) {
 					final int[] g1 = getGroupsInfoAt(index);
-					g1[2] = -1;
+					if (g1 != null)
+						g1[2] = -1;
 				}
 			} else
 				fixItemIndices(index, -1);

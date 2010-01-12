@@ -106,10 +106,11 @@ public class ConfigParser {
 
 		final String clsnm = el.getElementValue("version-class", true);
 		if (clsnm == null) {
-			if (clsnm.length() == 0)
-				log.warning("Ignored: empty version-class, "+el.getLocator());
 			return true; //version is optional 3.0.5
 		}
+		
+		if (clsnm.length() == 0)
+			log.warning("Ignored: empty version-class, "+el.getLocator());
 
 		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
 		final Class cls = Classes.forNameByThread(clsnm);
