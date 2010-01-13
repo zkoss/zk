@@ -331,7 +331,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 		//register
 		if(_drags.length == 0)
-			jq(document).mouseup(_docmouseup)
+			jq(document.body).mouseup(_docmouseup)
 				.mousemove(_docmousemove)
 				.keypress(_dockeypress);
 		_drags.push(this);
