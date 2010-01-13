@@ -58,22 +58,32 @@ ver=${ver#version=}
 
 #jar
 if [ "$target" == "official" ] ; then
-	binnm=zk-bin-ent-$ver
-	stdnm=zk-bin-$ver
-	profnm=zk-bin-prof-$ver
+	binnm=zkee-bin-$ver
+	stdnm=zkce-bin-$ver
+	profnm=zkpe-bin-$ver
+	
+	binnmevl=zkee-bin-eval-$ver
+	profnmevl=zkpe-bin-eval-$ver
+	
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
-	srcnm=zk-src-$ver
-	profsrcnm=zk-src-prof-$ver
-	entsrcnm=zk-src-ent-$ver
+	srcnm=zkce-src-$ver
+	profsrcnm=zkpe-src-$ver
+	entsrcnm=zkee-src-$ver
 	echo "Release $binnm..."
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
-	binnm=zk-bin-$ver-$stamp
+	binnm=zkce-bin-$ver-$stamp
+	stdnm=zkce-bin-$ver-$stamp
+	profnm=zkpe-bin-$ver-$stamp
+	
+	binnmevl=zkee-bin-eval-$ver-$stamp
+	profnmevl=zkpe-bin-eval-$ver-$stamp
+	
 	demonm=zk-demo-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
-	srcnm=zk-src-$ver-$stamp
+	srcnm=zkce-src-$ver-$stamp
 	docnm=zk-doc-$ver-$stamp
 	echo "Release $binnm..."
 else
@@ -292,9 +302,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
-	if [ "$target" == "official" ] ; then
-		cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
-	fi
+	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/ckez.jar dist/lib/gmapsz.jar dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
@@ -307,18 +315,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
 	cp zkdoc/release-note /tmp/zk/$binnm/doc
-	
-	if [ "$target" == "daily" ] ; then
-		cp zkdoc/COPYING /tmp/zk/$binnm/doc
-		chmod 644 /tmp/zk/$binnm/doc/COPYING
-	fi
-	
+		
 	chmod 644 /tmp/zk/$binnm/dist/xsd/*.xsd /tmp/zk/$binnm/doc/release-note
 
-	if [ "$target" == "official" ] ; then
-		cp cmldoc/LICENSE /tmp/zk/$binnm/doc
-		chmod 644  /tmp/zk/$binnm/doc/LICENSE
-	fi
+	# License
+	cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
+	chmod 644  /tmp/zk/$binnm/doc/LICENSE
 
 	cd $maindir/zkdoc
 	for f in */ZK-quickstart*.pdf ; do  
@@ -333,14 +335,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
-
-	if [ "$target" == "official" ] ; then
-		echo Output ${binnm}.tar.gz
-		tar zcf ${binnm}.tar.gz $binnm
-	fi
-
-	echo Output ${binnm}.zip
-	zip -qr9 ${binnm}.zip $binnm
 
 
 	if [ "$target" == "official" ] ; then
@@ -402,70 +396,112 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 
 	rm -rf $srcnm
-		
-	if [ "$target" == "official" ] ; then	
-		rm -rf $profsrcnm
-		rm -rf $entsrcnm
 	
-		#Ouput ${profnm}
-		cd $binnm/dist/lib/ext
-		rm -rf mvel.jar ognl.jar
+	mkdir $binnmevl
+	mkdir $profnmevl
+	
+	cp -rp $binnm/* $binnmevl
+	
+	mkdir -p metainfo/zk
+	
+	# EE version
+	cp $maindir/cmldoc/ee $maindir/cmldoc/pe metainfo/zk/
 
-		cd ..
-		rm zkmax.jar
+	jar ufM $binnm/dist/lib/zkmax.jar -C metainfo/ zk/ee
+	jar ufM $binnm/dist/lib/zkex.jar -C metainfo/ zk/pe
+	
+	#Ouput ${binnm}
+	if [ "$target" == "official" ] ; then
+		echo Output ${binnm}.zip
+		zip -qr9 ${binnm}.zip $binnm
+		
+		echo Output ${binnm}.tar.gz
+		tar zcf ${binnm}.tar.gz $binnm
+	fi
+		
+	echo Output ${binnmevl}.zip
+	zip -qr9 ${binnmevl}.zip $binnmevl
+	
+	#Ouput ${profnm}
+	cd $binnm/dist/lib/ext
+	rm -rf mvel.jar ognl.jar
 
-		cd zkforge
-		rm gmapsz.jar
-		rm zuljsp.jar
-		rm timeplotz.jar
+	cd ..
+	rm zkmax.jar
 
-		cd /tmp/zk
+	cd zkforge
+	rm gmapsz.jar
+	rm zuljsp.jar
+	rm timeplotz.jar
 
-		mv $binnm $profnm
+	cd /tmp/zk
+
+	mv $binnm $profnm
+	
+	# PE version
+	cp -rp $profnm/* $profnmevl
+	cp -rp $binnmevl/dist/lib/zkex.jar $profnmevl/dist/lib/
+	
+	if [ "$target" == "official" ] ; then
+		echo Output ${profnm}.zip
+		zip -qr9 ${profnm}.zip $profnm
 		
 		echo Output ${profnm}.tar.gz
 		tar zcf ${profnm}.tar.gz $profnm
-		
-		echo Output ${profnm}.zip
-		zip -qr9 ${profnm}.zip $profnm
+	fi
+	
+	echo Output ${profnmevl}.zip
+	zip -qr9 ${profnmevl}.zip $profnmevl
 
-		#Ouput ${stdnm}
-		cd $profnm/dist/lib/ext
-		rm -rf jcommon.jar jfreechart.jar Filters.jar
-		rm -rf jasperreports.jar itext.jar jxl.jar poi.jar commons-collections.jar commons-logging.jar
+	#Ouput ${stdnm}
+	cd $profnm/dist/lib/ext
+	rm -rf jcommon.jar jfreechart.jar Filters.jar
+	rm -rf jasperreports.jar itext.jar jxl.jar poi.jar commons-collections.jar commons-logging.jar
 
-		cd ..
-		rm zml.jar
-		rm zkex.jar
+	cd ..
+	rm zml.jar
+	rm zkex.jar
 
-		cd zkforge
-		rm timelinez.jar
-		rm ckez.jar
+	cd zkforge
+	rm timelinez.jar
+	rm ckez.jar
 
-		cd /tmp/zk
-		
-		rm $profnm/doc/LICENSE
-		
-		mv $profnm $stdnm
-		
-		cp $maindir/zkdoc/COPYING /tmp/zk/$stdnm/doc
-		
+	cd /tmp/zk
+	
+	rm $profnm/doc/LICENSE
+	
+	mv $profnm $stdnm
+	
+	cp $maindir/zkdoc/COPYING /tmp/zk/$stdnm/doc
+	
+	
+	if [ "$target" == "official" ] ; then
 		echo Output ${stdnm}.tar.gz
 		tar zcf ${stdnm}.tar.gz $stdnm
+	fi
+	
+	echo Output ${stdnm}.zip
+	zip -qr9 ${stdnm}.zip $stdnm
+	
+	rm -rf $stdnm
+	rm -rf metainfo
+	rm -rf $binnmevl
+	rm -rf $profnmevl
 		
-		echo Output ${stdnm}.zip
-		zip -qr9 ${stdnm}.zip $stdnm
+	if [ "$target" == "official" ] ; then
+		rm -rf $profsrcnm
+		rm -rf $entsrcnm
 		
-		rm -rf $stdnm
+		mkdir proprietary
+		mv ${profsrcnm}.zip ${entsrcnm}.zip ${profnm}.zip ${profnm}.tar.gz ${binnm}.zip ${binnm}.tar.gz proprietary
 		
 		#Prepare the doc
 		cd $maindir
 		$maindir/bin/javadoc "$javadocdir/ZK"
-		
 	fi
 
 	rm -rf $binnm
-
+	
 	#Prepare the java doc
 	cd $javadocdir
 
