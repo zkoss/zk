@@ -59,7 +59,7 @@ ver=${ver#version=}
 #jar
 if [ "$target" == "official" ] ; then
 	binnm=zkee-bin-$ver
-	stdnm=zkce-bin-$ver
+	stdnm=zk-bin-$ver
 	profnm=zkpe-bin-$ver
 	
 	binnmevl=zkee-bin-eval-$ver
@@ -67,15 +67,15 @@ if [ "$target" == "official" ] ; then
 	
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
-	srcnm=zkce-src-$ver
+	srcnm=zk-src-$ver
 	profsrcnm=zkpe-src-$ver
 	entsrcnm=zkee-src-$ver
 	echo "Release $binnm..."
 elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	target=daily
 
-	binnm=zkce-bin-$ver-$stamp
-	stdnm=zkce-bin-$ver-$stamp
+	binnm=zk-bin-$ver-$stamp
+	stdnm=zk-bin-$ver-$stamp
 	profnm=zkpe-bin-$ver-$stamp
 	
 	binnmevl=zkee-bin-eval-$ver-$stamp
@@ -83,7 +83,7 @@ elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	
 	demonm=zk-demo-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
-	srcnm=zkce-src-$ver-$stamp
+	srcnm=zk-src-$ver-$stamp
 	docnm=zk-doc-$ver-$stamp
 	echo "Release $binnm..."
 else
