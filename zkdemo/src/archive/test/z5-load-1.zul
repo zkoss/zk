@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+z5-load-1.zul
+
+	Purpose:
+		Being loaded by Z5-load.html
+	Description:
+		
+	History:
+		Wed Jan 13 10:11:02 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="window loaded dynamically" border="normal">
+	<button label="Hi" onClick='alert("Hi")'/>
+</window>

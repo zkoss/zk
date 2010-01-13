@@ -75,6 +75,7 @@ import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -749,7 +750,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final Execution exec = getExecution();
 		final boolean au = exec.isAsyncUpdate(null);
 		if (!au && !exec.isIncluded()
-		&& ((ctl=(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL)) == null
+		&& ((ctl=ExecutionsCtrl.getPageRedrawControl(exec)) == null
 			|| "desktop".equals(ctl))) {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content

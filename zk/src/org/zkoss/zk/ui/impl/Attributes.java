@@ -55,6 +55,18 @@ public class Attributes {
 	 * <p>Application developers rarely need to set this attribute, unless ZK Loader
 	 * cannot decide which control to use correctly.
 	 *
+	 * <p>This control can also be specified as a request parameter called
+	 * <code>zk.redrawCtrl</code>. For example, if you are using
+	 * other technology, say jQuery, and want to load a ZUL page dynamically; as shown below:
+<pre><code>
+  jQuery.ajax({
+    url: "z5-load-1.zul?zk.redrawCtrl=page",
+    success: function (html) {
+      jQuery("#myDiv").append(html);
+    }
+  });
+</code></pre>
+	 *
 	 * <p>If you prefer to draw the desktop with the page, you can set the
 	 * vallue to <code>desktop</code>. By drawing the desktop, it means HTML and BODY
 	 * tags will be generated, too.
@@ -76,6 +88,7 @@ public class Attributes {
 	 * <p>Note: if {@link org.zkoss.zk.ui.Page#isComplete} is true, it has the same effect
 	 * of setting {@link #PAGE_REDRAW_CONTROL} to <code>complete</code>.
 	 * 
+	 * @see org.zkoss.zk.ui.sys.ExecutionsCtrl#getPageRedrawControl
 	 * @since 5.0.0
 	 */
 	public static final String PAGE_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";

@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.impl.Attributes;
 
@@ -54,8 +55,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	//PageRenderer//
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
-		final String ctl =
-			(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL);
+		final String ctl = ExecutionsCtrl.getPageRedrawControl(exec);
 		boolean au = exec.isAsyncUpdate(null);
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);

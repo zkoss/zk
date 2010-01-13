@@ -30,13 +30,13 @@ import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
-import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
@@ -142,7 +142,7 @@ implements DynamicTag, Native {
 		//Note: _tag == null can NOT be handled specially
 		final Execution exec = Executions.getCurrent();
 		final boolean root = getParent() == null && (getPage().isComplete()
-		|| (exec != null && "complete".equals(exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL))));
+		|| (exec != null && "complete".equals(ExecutionsCtrl.getPageRedrawControl(exec))));
 		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
 			super.redraw(out); //renderProperties (assume in zscript)

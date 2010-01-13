@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * Additional utilities for {@link Execution}.
@@ -47,5 +48,18 @@ public class ExecutionsCtrl extends Executions {
 	 */
 	public static final ExecutionCtrl getCurrentCtrl() {
 		return (ExecutionCtrl)getCurrent();
+	}
+
+	/** Returns the page redraw control.
+	 * It first check if a request attribute called
+	 * {@link Attributes#PAGE_REDRAW_CONTROL} is defined.
+	 * If not, it checks a request parameter called <code>zk.redrawCtrl</code>
+	 * is defined. If none of them is defined, null is returned.
+	 * @since 5.0.0
+	 */
+	public static final String getPageRedrawControl(Execution exec) {
+		String ctl =
+			(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL);
+		return ctl != null ? ctl: exec.getParameter("zk.redrawCtrl");
 	}
 }

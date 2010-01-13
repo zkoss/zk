@@ -326,6 +326,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 		return true;
 	}
+	function _asBodyChild(child) {
+		jq(document.body).append(child);
+	}
 
 	//Perfomance Meter//
 	// Returns request IDs sent from the server separated by space.
@@ -1006,7 +1009,7 @@ zAu.cmd1 = /*prototype*/ {
 			wgt = zk.Widget.$(pgid);
 			if (wgt) zAu.cmd1.addChd(pgid, wgt, code);
 			else {
-				zAu.stub = zAu.cmd1._asBodyChild;
+				zAu.stub = _asBodyChild;
 				zk.mounting = true;
 				$eval(code);
 			}
@@ -1015,9 +1018,17 @@ zAu.cmd1 = /*prototype*/ {
 
 		zAu.stub = function (child) {
 			var p = wgt.parent;
-			p.insertBefore(child, wgt.nextSibling);
-			if (p.$instanceof(zk.Desktop))
-				zAu.cmd1._asBodyChild(child);
+			if (p) {
+				p.insertBefore(child, wgt.nextSibling);
+				if (p.$instanceof(zk.Desktop))
+					_asBodyChild(child);
+			} else {
+				var n = wgt.$n();
+				if (n)
+					jq(n).after(child, wgt.desktop);
+				else
+					_asBodyChild(child);
+			}
 			if (!child.z_rod) {
 				zWatch.fireDown('beforeSize', child);
 				zWatch.fireDown('onSize', child);
@@ -1057,9 +1068,6 @@ zAu.cmd1 = /*prototype*/ {
 		};
 		zk.mounting = true;
 		$eval(code);
-	},
-	_asBodyChild: function (child) {
-		jq(document.body).append(child);
 	},
 	/** Removes the widget.
 	 * @param zk.Widget wgt the widget to remove

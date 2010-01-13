@@ -26,8 +26,8 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * The page render for ZUL pages.
@@ -38,8 +38,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
-		final String ctl =
-			(String)exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL);
+		final String ctl = ExecutionsCtrl.getPageRedrawControl(exec);
 		boolean au = exec.isAsyncUpdate(null);
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);
@@ -74,10 +73,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			+"<title>");
 		write(out, page.getTitle());
 		out.write("</title>\n");
-		out.write(HtmlPageRenders.outHeaders(exec, page, true));
-		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
-		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
-		out.write(HtmlPageRenders.outHeaders(exec, page, false));
+		outHeaders(exec, page, out);
 		out.write("</head>\n");
 
 		out.write("<body>\n");
@@ -85,6 +81,13 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 		out.write("\n</body>\n</html>\n");
+	}
+	private static void outHeaders(Execution exec, Page page, Writer out)
+	throws IOException {
+		out.write(HtmlPageRenders.outHeaders(exec, page, true));
+		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+		out.write(HtmlPageRenders.outHeaders(exec, page, false));
 	}
 	private static void write(Writer out, String s) throws IOException {
 		if (s != null) out.write(s);
