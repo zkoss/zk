@@ -25,6 +25,7 @@ ZK 3.6.4
   2929887: zscript fails on missing src even if it is not required
   2925964: Menupopup's shadow don't display correctly
   2929688: constraint on hidden tab panel problem
+  2928837: Cannot remove bindable collection item from the DataBinder
   
 * Upgrade Notes:
 
