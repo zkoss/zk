@@ -214,7 +214,7 @@ public class Evaluators {
 	 * If the resolver is an instance of {@link VariableResolverX}, then
 	 * {@link VariableResolverX#resolveVariable(XelContext,Object,Object)}
 	 * will be invoked.
-	 * <p>Notice that it is always better to invoke {@link #resolveVariable(XelContext,String)}
+	 * <p>Notice that it is always better to invoke {@link #resolveVariable(XelContext,Object,Object)}
 	 * if {@link XelContext} is available.
 	 * @param resolver the variable resolver. If null, null will be returned.
 	 * @since 5.0.0
