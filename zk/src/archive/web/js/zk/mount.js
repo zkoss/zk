@@ -154,6 +154,9 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		}
 	};
 
+	function _curdt() {
+		return zk.mnt.curdt || (zk.mnt.curdt = zk.Desktop.$());
+	}
 	function mount() {
 		//1. load JS
 		for (var j = _createInf0.length; j--;) {
@@ -322,7 +325,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	function pkgLoad(w) {
 		var type = w.type, i = type.lastIndexOf('.');
 		if (i >= 0)
-			zk.load(type.substring(0, i), zk.mnt.curdt);
+			zk.load(type.substring(0, i), _curdt());
 
 		//z$pk: pkgs to load
 		var pkgs = w.z$pk;
@@ -357,7 +360,7 @@ zk.mnt = { //Use internally
 	pop: function() {
 		var w = _wgts.shift();
 		if (!_wgts.length) {
-			_createInf0.push([zk.mnt.curdt, w, zk.mnt.binding]);
+			_createInf0.push([_curdt(), w, zk.mnt.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
 			run(mount);

@@ -2240,8 +2240,7 @@ bind_: function (desktop, skipper, after) {
 	bind_: function (desktop, skipper, after) {
 		_bind0(this);
 
-		if (!desktop) desktop = zk.Desktop.$(this.uuid);
-		this.desktop = desktop;
+		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
 
 		var p = this.parent;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
