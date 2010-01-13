@@ -375,6 +375,10 @@ public class DataBinder implements java.io.Serializable {
 	 * @param attr The attribute of the component to be removed the data binding association.
 	 */
 	public void removeBinding(Component comp, String attr) {
+		//bug #2928837 Cannot remove bindable collection item from the DataBinder
+		if (isClone(comp)) {
+			comp = (Component) comp.getAttribute(TEMPLATE);
+		}
 		Map attrMap = (Map) _compBindingMap.get(comp);
 		if (attrMap != null) {
 			attrMap.remove(attr);

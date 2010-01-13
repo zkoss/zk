@@ -161,6 +161,7 @@ November, 2009
   2910663: NullPointerException after failover when fulfill onEvent
   2929887: zscript fails on missing src even if it is not required
   2925964: Menupopup's shadow don't display correctly
+  2928837: Cannot remove bindable collection item from the DataBinder
   
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
