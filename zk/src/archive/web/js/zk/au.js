@@ -725,7 +725,6 @@ zAu = {
 	 */
 	//cmd1: null, //jsdoc
 };
-})();
 
 //Commands//
 /** @class zk.AuCmd0
@@ -1119,6 +1118,7 @@ zAu.cmd1 = /*prototype*/ {
 			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
 	}
 };
+})();
 
 function onIframeURLChange(uuid, url) { //doc in jsdoc
 	if (!zk.unloading) {
