@@ -599,14 +599,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this._shadow.sync();
 	},
 	onChange: function (evt) {
-		if (this.parent.isReadonly()) {
-			this.close(true);
-			evt.stop();
-			return;
-		}
-
 		var date = this.getTime(),
-			oldDate = this.parent.getValue();
+			oldDate = this.parent.getValue(),
+			readonly = this.parent.isReadonly();
 		if (oldDate) {
 			oldDate.setFullYear(date.getFullYear());
 			oldDate.setMonth(date.getMonth());
@@ -616,10 +611,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
-			this.close();
+			this.close(readonly);
 			this.parent._inplaceout = true;
 		}
-		this.parent.focus();
+		if (!readonly)
+			this.parent.focus();
 		evt.stop();
 	},
 	onFloatUp: function (ctl) {
