@@ -235,7 +235,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				if (this.menupopup.isOpen()) this.menupopup._shallClose = true;
 				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
 			}
-		} else if (this.menupopup && !this.menupopup.isOpen())
+		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);
 	}
 }, {

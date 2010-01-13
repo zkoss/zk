@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-2931091.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Jan  13 10:28:22 TST 2010, Created by jimmyshiau
+	
+	Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	Please check the menu will change style after mouse over and out
+	<menubar>
+		<menu label="test">
+			<menupopup>
+				<menu label="test" />
+				<menu label="test" />
+				<menu label="test" />
+				<menu label="test" />
+				<menu label="test" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
