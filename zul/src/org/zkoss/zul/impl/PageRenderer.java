@@ -119,6 +119,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderComplete(Execution exec, Page page, Writer out)
 	throws IOException {
+		write(out, HtmlPageRenders.outFirstLine(page)); //might null
+		write(out, HtmlPageRenders.outDocType(page)); //might null
 		HtmlPageRenders.setContentType(exec, page);
 
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
