@@ -412,11 +412,19 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	
 	#Ouput ${binnm}
 	if [ "$target" == "official" ] ; then
+		# License
+		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+		mv CML_LICENSE /tmp/zk/$binnm/doc/LICENSE
+		chmod 644  /tmp/zk/$binnm/doc/LICENSE
+		
 		echo Output ${binnm}.zip
 		zip -qr9 ${binnm}.zip $binnm
 		
 		echo Output ${binnm}.tar.gz
 		tar zcf ${binnm}.tar.gz $binnm
+		
+		cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
+		chmod 644  /tmp/zk/$binnm/doc/LICENSE
 	fi
 		
 	echo Output ${binnmevl}.zip
@@ -443,6 +451,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp $binnmevl/dist/lib/zkex.jar $profnmevl/dist/lib/
 	
 	if [ "$target" == "official" ] ; then
+		# License
+		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+		mv CML_LICENSE /tmp/zk/$profnm/doc/LICENSE
+		chmod 644  /tmp/zk/$profnm/doc/LICENSE
+		
 		echo Output ${profnm}.zip
 		zip -qr9 ${profnm}.zip $profnm
 		
