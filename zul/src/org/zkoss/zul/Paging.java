@@ -185,9 +185,6 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	protected boolean isChildable() {
 		return false;
 	}
-	public void onPaging(PagingEvent evt) {
-		this.setActivePage(evt.getActivePage());
-	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -198,6 +195,8 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getCommand();
 		if (name.equals(ZulEvents.ON_PAGING)) {
+			PagingEvent evt = PagingEvent.getPagingEvent(request);
+			setActivePage(evt.getActivePage());
 			Events.postEvent(PagingEvent.getPagingEvent(request));
 		} else
 			super.service(request, everError);
