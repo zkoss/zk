@@ -40,7 +40,7 @@
 			</listitem>
 		</listbox>
 
-		<grid>
+		<grid sizedByContent="true">
 		<rows>
 			<row>
 				First Name: <textbox value="@{selected.firstName}" id="firstName"/>
