@@ -161,7 +161,7 @@
 <para>Deploy ZK library</para>
 </listitem>
 </orderedlist>
-<para>Unzip <ulink url="http://prdownloads.sourceforge.net/zk1/zk-bin-3.5.2.zip?download">zk-bin-3.x.x.zip </ulink>file, and copy the following jar files to the $TOMCAT_HOME\webapps\$PROJECT_NAME\WEB-INF\lib (ex.<link linkend="%7Cregion">C:\Program</link> Files\Apache Software Foundation\Tomcat 6.0\webapps\myZK\WEB-INF\lib) </para>
+<para>Unzip <ulink url="http://prdownloads.sourceforge.net/zk1/zk-bin-3.5.2.zip?download">zk-bin-5.x.x.zip </ulink>file, and copy the following jar files to the $TOMCAT_HOME\webapps\$PROJECT_NAME\WEB-INF\lib (ex.<link linkend="%7Cregion">C:\Program</link> Files\Apache Software Foundation\Tomcat 6.0\webapps\myZK\WEB-INF\lib) </para>
 <orderedlist>
 <listitem>
 <para>Create web.xml</para>
