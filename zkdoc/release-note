@@ -251,6 +251,14 @@ November, 2009
     and org.zkoss.zk.ui.event.EventQueue instead.
   + PortalMoveEvent is moved to the org.zkoss.zkmax.ui.event package
   + Tabpanels and Tabpanel won't be created automatically by default, if the size is inconsistent.
+  + org.zkoss.zkplus.databind.AnnotateDataBinderInit used to store created data binder with name 
+    "binder" in IdSpace scope of the covered root component but now it is stored at the custom 
+	attributes of the covered root component or page. To make it backward compatible and store created 
+	data binder in IdSpace scope as in 3.6.x, specify the following in zk.xml:
+	<library-property>
+		<name>org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible</name>
+		<value>true</value>
+	</library-property>
   
 	--------
 ZK 3.6.3
