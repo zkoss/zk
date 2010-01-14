@@ -34,8 +34,8 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		 */
 		open: function (open) {
 			this._openItem(open, true);
-			if (open)
-				this.getGrid().stripe();
+			if (open && this.parent)
+				this.parent.stripe();
 		}
 	},
 	/** Returns a Array of all {@link Row} are grouped by this group.
