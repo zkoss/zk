@@ -564,7 +564,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (!wgt.isListen(evtnm, {any:true})) continue;
 
 			if (okcancel)
-				break
+				break;
 
 			var parsed = wgt._parsedCtlKeys;
 			if (parsed

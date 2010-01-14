@@ -232,12 +232,12 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
 			zk(mate.$n()).disableSelection();
 		mate._doKeyDown(evt);
-		evt.stop({propagation: true});
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
-		zk(this.getMeshWidget().$n()).enableSelection();
-		evt.stop({propagation: true});
+		var mate = this.getMeshWidget();
+		zk(mate.$n()).enableSelection();
+		mate._doKeyUp(evt);
 		this.$supers('doKeyUp_', arguments);
 	}
 });

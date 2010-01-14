@@ -12,6 +12,31 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function() {
+	function _beforeChildKey(wgt, evt) {
+		if (zAu.processing() || wgt._shallIgnoreEvent(evt))
+			return true;
+
+		var row = wgt._focusItem || wgt.getSelectedItem();
+		if (!row) return true;
+	}
+	function _afterChildKey(evt) {
+		switch (evt.data.keyCode) {
+		case 33: //PgUp
+		case 34: //PgDn
+		case 38: //UP
+		case 40: //DOWN
+		case 37: //LEFT
+		case 39: //RIGHT
+		case 32: //SPACE
+		case 36: //Home
+		case 35: //End
+			evt.stop();
+			return false;
+		}
+		return true;
+	}
+
 /**
  * A skeletal implementation for a select widget.
  */
@@ -621,7 +646,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			zk(this.$n()).disableSelection();
 			
 		// Feature #1978624
-		evt.target = this._focusItem || this.getSelectedItem() || this;
+		if (evt.target == this) //try to give to the focus item
+			evt.target = this._focusItem || this.getSelectedItem() || this;
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
@@ -629,12 +655,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		evt.stop({propagation: true});
 		this.$supers('doKeyUp_', arguments);
 	},
-	_doKeyDown: function (evt) {
-		if (zAu.processing() || this._shallIgnoreEvent(evt))
+	_doKeyDown: function (evt) { //called by listener of this widget and ItemWidget
+		if (_beforeChildKey(this, evt))
 			return true;
 
-		var row = this._focusItem || this.getSelectedItem();
-		if (!row) return true;
 		var data = evt.data,
 			shift = data.shiftKey, ctrl = data.ctrlKey;
 		if (shift && !this.isMultiple())
@@ -698,20 +722,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			zk(lastrow).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
 		}
 
-		switch (data.keyCode) {
-		case 33: //PgUp
-		case 34: //PgDn
-		case 38: //UP
-		case 40: //DOWN
-		case 37: //LEFT
-		case 39: //RIGHT
-		case 32: //SPACE
-		case 36: //Home
-		case 35: //End
-			evt.stop();
-			return false;
-		}
-		return true;
+		return _afterChildKey(evt);
+	},
+	_doKeyUp: function (evt) { //called by ItemWidget only
+		return _beforeChildKey(this, evt) || _afterChildKey(evt);
 	},
 	_doLeft: zk.$void,
 	_doRight: zk.$void,
@@ -916,3 +930,5 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._focusItem = null;
 	}
 });
+
+})();

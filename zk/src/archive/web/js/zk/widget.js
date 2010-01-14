@@ -2598,41 +2598,46 @@ focus: function (timeout) {
 	 * @see #listen
 	 */
 	fireX: function (evt, timeout) {
+		var oldtg = evt.currentTarget;
 		evt.currentTarget = this;
-		var evtnm = evt.name,
-			lsns = this._lsns[evtnm],
-			len = lsns ? lsns.length: 0;
-		if (len) {
-			for (var j = 0; j < len;) {
-				var inf = lsns[j++], o = inf[0];
-				(inf[1] || o[evtnm]).call(o, evt);
-				if (evt.stopped) return evt; //no more processing
-			}
-		}
-
-		if (!evt.auStopped) {
-			var toServer = evt.opts && evt.opts.toServer;
-			if (toServer || (this.inServer && this.desktop)) {
-				if (evt.opts.sendAhead) {
-					zAu.sendAhead(_cloneEvt(evt, this), timeout >= 0 ? timeout : 38);
-					//since evt will be used later, we have to make a copy and use this as target
-				} else {
-					var asap = toServer || this._asaps[evtnm];
-					if (asap == null) {
-						var ime = this.$class._importantEvts;
-						if (ime) {
-							var ime = ime[evtnm];
-							if (ime != null) 
-								asap = ime;
-						}
-					}
-					if (asap != null) //true or false
-						zAu.send(_cloneEvt(evt, this), asap ? timeout >= 0 ? timeout : 38 : -1);
-						//since evt will be used later, we have to make a copy and use this as target
+		try {
+			var evtnm = evt.name,
+				lsns = this._lsns[evtnm],
+				len = lsns ? lsns.length: 0;
+			if (len) {
+				for (var j = 0; j < len;) {
+					var inf = lsns[j++], o = inf[0];
+					(inf[1] || o[evtnm]).call(o, evt);
+					if (evt.stopped) return evt; //no more processing
 				}
 			}
+
+			if (!evt.auStopped) {
+				var toServer = evt.opts && evt.opts.toServer;
+				if (toServer || (this.inServer && this.desktop)) {
+					if (evt.opts.sendAhead) {
+						zAu.sendAhead(_cloneEvt(evt, this), timeout >= 0 ? timeout : 38);
+						//since evt will be used later, we have to make a copy and use this as target
+					} else {
+						var asap = toServer || this._asaps[evtnm];
+						if (asap == null) {
+							var ime = this.$class._importantEvts;
+							if (ime) {
+								var ime = ime[evtnm];
+								if (ime != null) 
+									asap = ime;
+							}
+						}
+						if (asap != null) //true or false
+							zAu.send(_cloneEvt(evt, this), asap ? timeout >= 0 ? timeout : 38 : -1);
+							//since evt will be used later, we have to make a copy and use this as target
+					}
+				}
+			}
+			return evt;
+		} finally {
+			evt.currentTarget = oldtg;
 		}
-		return evt;
 	},
 	/** Fire a widget event. An instance of {@link zk.Event} is created to represent the event.
 	 *
