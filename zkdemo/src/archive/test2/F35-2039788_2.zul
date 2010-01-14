@@ -26,6 +26,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Change bookmark"
 		onClick='desktop.bookmark = "b" + cnt++'/>
 	<button label="Change URL"
-		onClick='execution.sendRedirect("F35-2039788-1.zul")'/>
+		onClick='execution.sendRedirect("F35-2039788_1.zul")'/>
 	</vbox>
 </window>
