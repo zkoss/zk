@@ -878,9 +878,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * If false, the message is removed.
 	 */
 	showBusy: function (msg, open, uuid) {
-		var w = uuid ? zk.Widget.$(uuid) : null;
-		if (w && w.z_mask) {
-			w.z_mask.destroy();
+		var w = uuid ? zk.Widget.$(uuid): null, shby;
+		if (w && (shby = w.effects_.showBusy)) {
+			shby.destroy();
+			delete w.effects_.showBusy;
 		}
 		jq("#zk_showBusy").remove(); //since user might want to show diff msg
 		
@@ -889,8 +890,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			if (!uuid)
 				zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
 			else if (w) {
-				w.z_mask = new zk.eff.Mask( {
-					id: w.uuid + "-zk_showBusy",
+				w.effects_.showBusy = new zk.eff.Mask( {
+					id: w.uuid + "-shby",
 					anchor: w.$n(),
 					message: msg
 				});

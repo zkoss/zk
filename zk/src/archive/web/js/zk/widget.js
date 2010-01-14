@@ -650,6 +650,21 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	//uuid: null,
 
+	/** A map of objects that are associated with this widget, and
+	 * they shall be removed when this widget is unbound ({@link #unbind}).
+	 * <p>The key must be an unique name of the object, while the value
+	 * must be an object that implement the destroy method.
+	 * <p>When {@link #unbind_} is called, <code>destroy()</code> is
+	 * called for each object stored in this map. Furthermore,
+	 * if the visibility of this widget is changed, and the object implements
+	 * the sync method, then <code>sync()</code> will be called.
+	 * Notice that the sync method is optional. It is ignored if not implemented.
+	 * <p>It is useful if you implement an effect, such as shadow, mask
+	 * and error message, that is tightly associated with a widget.
+	 * @type Map
+	 */
+	//effects_: null;
+
 	/** The weave controller that is used by ZK Weaver.
 	 * It is not null if it is created and controlled by ZK Weaver.
 	 * In other words, it is called in the Design Mode if $weave is not null.
@@ -673,6 +688,7 @@ new zul.wnd.Window{
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
+		this.effects_ = {};
 
 		this.afterInit(function () {
 			if (props) {
@@ -1494,6 +1510,11 @@ new zul.wnd.Window{
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
+
+			for (var nm in this.effects_) {
+				var ef = this.effects_[nm];
+				if (ef && ef.sync) ef.sync();
+			}
 		}
 		return this;
 	},
@@ -2098,8 +2119,7 @@ function () {
 			_prepareRemove(child, n = []);
 
 		child.unbind();
-		if (child.z_mask)
-			child.z_mask.destroy();
+
 		if (!_ignoreDom_)
 			jq(n).remove();
 	},
@@ -2207,6 +2227,12 @@ function () {
 			for (var j = 0, len = after.length; j < len;)
 				after[j++]();
 		}
+
+		for (var nm in this.effects_) {
+			var ef = this.effects_[nm];
+			if (ef) ef.destroy();
+		}
+		this.effects_ = {}
 		return this;
 	},
 
