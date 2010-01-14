@@ -51,6 +51,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (!colps || "none" == colps) return; //nothing to do
 
 			var nd = this.$n('chdex'),
+				vert = this.isVertical(),
 				Splitter = this.$class,
 				before = colps == "before",
 				sib = before ? Splitter._prev(nd): Splitter._next(nd),
