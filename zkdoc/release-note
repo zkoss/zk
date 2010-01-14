@@ -134,6 +134,7 @@ November, 2009
   2929590: Window cannot be dragged in modal when put a large div (FF)
   2931091: Menu will not change the style after mouse over and out
   2931212: selected tab is not corrent in onClose event
+  2931348: iframe component error
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

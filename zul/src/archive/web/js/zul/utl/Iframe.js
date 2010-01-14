@@ -67,6 +67,7 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		 * @param String name
 		 */
 		name: function (v) {
+			var n = this.$n();
 			if (n) n.name = v || '';
 		},
 		/** Returns whether to automatically hide this component if
