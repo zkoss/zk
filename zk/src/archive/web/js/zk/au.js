@@ -724,7 +724,7 @@ zAu = {
 	wrongValue_: function(wgt, msg) {
 		if (msg !== false)
 			jq.alert(msg);
-	},
+	}
 
 	/** The AU command handler that handles commands not related to widgets.
 	 * @type AuCmd0
@@ -1021,7 +1021,7 @@ zAu.cmd1 = /*prototype*/ {
 		//Format: comp-uuid:pg-uuid (if native root)
 		if ((!wgt || (!wgt.z_rod && !wgt.$n())) && pgid) {
 			wgt = zk.Widget.$(pgid);
-			if (wgt) zAu.cmd1.addChd(pgid, wgt, code);
+			if (wgt) zAu.cmd1.addChd(wgt, code);
 			else {
 				zAu.stub = _asBodyChild;
 				zk.mounting = true;
@@ -1118,7 +1118,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	invoke: function (wgt, func, vararg) {
 		var args = [];
-		for (var j = arguments.length; --j > 2;)
+		for (var j = arguments.length; --j > 1;)
 			args.unshift(arguments[j]);
 		wgt[func].apply(wgt, args);
 	},
