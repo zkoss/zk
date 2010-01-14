@@ -60,7 +60,7 @@ if (!zk.ModalFileViewer) {
 				+ '<div id="' + id + '-cnt"><a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
 				+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + filenm
 				+ '</div><div style="padding-left: 24px">'
-				+ mesg.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
+				+ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
 				+ '<span id="' + id + '-total">0</span></div></div>';
 			
 			uploaded.setVisible(true);
@@ -79,10 +79,10 @@ if (!zk.ModalFileViewer) {
 			});
 		},
 		update: function (sent, total) {
-			jq('#'+ this._uplder.id + '-sent').html(Math.round((total/1024)*sent/100) + mesg.KBYTES);
+			jq('#'+ this._uplder.id + '-sent').html(Math.round((total/1024)*sent/100) + msgzk.KBYTES);
 			if (!this.updated) {
 				this.updated = true;
-				jq('#'+ this._uplder.id + '-total').html(Math.round(total/1024)+mesg.KBYTES);
+				jq('#'+ this._uplder.id + '-total').html(Math.round(total/1024)+msgzk.KBYTES);
 			}
 		},
 		destroy: function (finish) {
