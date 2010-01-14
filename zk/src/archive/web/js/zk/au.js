@@ -714,7 +714,17 @@ zAu = {
 			$eval(codes[j]);
 		}
 		return wgts;
-	}
+	},
+
+	/* (not jsdoc)
+	 * Shows or clear an error message. It is overriden by zul.wpd.
+	 * <p>wrongValue_(wgt, msg): show an error message
+	 * <p>wrongValue_(wgt, false): clear an error message
+	 */
+	wrongValue_: function(wgt, msg) {
+		if (msg !== false)
+			jq.alert(msg);
+	},
 
 	/** The AU command handler that handles commands not related to widgets.
 	 * @type AuCmd0
@@ -878,10 +888,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * If false, the message is removed.
 	 */
 	showBusy: function (msg, open, uuid) {
-		var w = uuid ? zk.Widget.$(uuid): null, shby;
-		if (w && (shby = w.effects_.showBusy)) {
-			shby.destroy();
-			delete w.effects_.showBusy;
+		var w = uuid ? zk.Widget.$(uuid): null,
+			efs = w ? w.effects_: null;
+		if (efs && efs.showBusy) {
+			efs.showBusy.destroy();
+			delete efs.showBusy;
 		}
 		jq("#zk_showBusy").remove(); //since user might want to show diff msg
 		
@@ -890,7 +901,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			if (!uuid)
 				zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
 			else if (w) {
-				w.effects_.showBusy = new zk.eff.Mask( {
+				efs.showBusy = new zk.eff.Mask( {
 					id: w.uuid + "-shby",
 					anchor: w.$n(),
 					message: msg
@@ -908,8 +919,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	clearWrongValue: function () {
 		for (var i = arguments.length; i--;) {
 			var wgt = zk.Widget.$(arguments[i]);
-			if (wgt && wgt.clearErrorMessage)
-				wgt.clearErrorMessage();
+			if (wgt)
+				if (wgt.clearErrorMessage)
+					wgt.clearErrorMessage();
+				else
+					zAu.wrongValue_(wgt, false);
 		}
 	},
 	/** Shows the error messages for the specified widgets.
@@ -927,7 +941,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 				wgt = zk.Widget.$(uuid);
 			if (wgt) {
 				if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
-				else jq.alert(msg);
+				else zAu.wrongValue_(wgt, msg);
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 				jq.alert(msg);
 		}

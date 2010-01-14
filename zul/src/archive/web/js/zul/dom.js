@@ -46,6 +46,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			btns.push(newButton('OK'));
 		return btns;
 	}
+
 	jq.alert = function (msg, opts) {
 		if (opts && opts.mode == 'os')
 			return $alert(msg);
@@ -91,4 +92,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				jq(document.body).append(wnd);
 		});
   	};
+	zAu.wrongValue_ = function(wgt, msg) {
+		var efs = wgt.effects_;
+		if (msg === false) {
+			if (efs.errMesg) {
+				efs.errMesg.destroy();
+				delete efs.errMesg;
+			}
+		} else {
+			efs.errMesg = {destroy: zk.$void};
+			zk.load("zul.inp", function () {
+				if (efs.errMesg) //not destroyed yet
+					(efs.errMesg = new zul.inp.Errorbox()).show(wgt, msg);
+			});
+		}
+	};
 })();
