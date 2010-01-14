@@ -1510,13 +1510,21 @@ new zul.wnd.Window{
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
-
-			for (var nm in this.effects_) {
-				var ef = this.effects_[nm];
-				if (ef && ef.sync) ef.sync();
-			}
+			
+			this.sync();
 		}
 		return this;
+	},
+	/** Synchronizes a map of objects that are associated with this widget, and
+	 * they shall be resized when the size of this widget is changed.
+	 * <p>It is useful to sync the layout, such as shadow, mask
+	 * and error message, that is tightly associated with a widget.
+	 */
+	sync: function () {
+		for (var nm in this.effects_) {
+			var ef = this.effects_[nm];
+			if (ef && ef.sync) ef.sync();
+		}
 	},
 	/** Makes this widget visible.
 	 * It is a shortcut of <code>setVisible(true)</code>
@@ -1754,6 +1762,7 @@ out.push('</div>');
 		if (this.desktop) {
 			var n = this.$n();
 			if (n) n.className = this.domClass_();
+			this.sync();
 		}
 	},
 	/** Updates the DOM element's style. It is called when the CSS style is changed (e.g., setStyle is called).
@@ -1770,6 +1779,7 @@ out.push('</div>');
 
 			var n = this.getTextNode();
 			if (n) jq(n).css(jq.filterTextStyle(s));
+			this.sync();
 		}
 	},
 	/** Returns the DOM element that is used to hold the text, or null

@@ -586,6 +586,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
 	},
 	_syncShadow: _zkf = function (bMask) {
+		this.sync();
 		if (this._mode == 'embedded') {
 			if (this._shadowWgt) {
 				this._shadowWgt.destroy();

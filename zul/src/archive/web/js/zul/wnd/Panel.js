@@ -675,6 +675,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 	},
 	_syncShadow: function () {
+		this.sync();
 		if (!this.isFloatable()) {
 			if (this._shadow) {
 				this._shadow.destroy();

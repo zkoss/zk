@@ -335,6 +335,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (!$anchor.jq.length || !$anchor.isRealVisible(true)) return; //nothing do to.
 		
+		this._opts = opts;
+		
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 		
@@ -354,9 +356,47 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		+ '<div id="'+maskId+'-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
 		+ '<span class="z-apply-loading-icon"></span> '
 		+ msg+ '</div></div></div>');
-		var loading = jq(maskId+"-z_loading", zk)[0],
-			mask = this.mask = jq(maskId, zk)[0];
 		
+		this.mask = jq(maskId, zk)[0];
+		this.sync();
+	},
+	/** Hide the mask. Application developers rarely need to invoke this method.
+	 * Rather, use {@link #sync} to synchronized the visual states.
+	 */
+	hide: function () {
+		this.mask.style.display = 'none';
+	},
+	/** Synchronizes the visual states of the mask with the specified element and the browser window.
+	 * The visual states include the visibility and Z Index. 
+	 */
+	sync: function () {
+		var $anchor = zk(this._opts.anchor);
+		
+		if (!$anchor.isVisible(true)) {
+			this.hide();
+			return;
+		}
+		
+		var opts = this._opts,
+			st = this.mask.firstChild.style,
+			xy = opts.offset || $anchor.revisedOffset(), 
+			w = opts.width || $anchor.offsetWidth(),
+			h = opts.height || $anchor.offsetHeight();
+
+		st.top = jq.px(xy[1]);
+		st.left = jq.px(xy[0]);
+		st.width = jq.px(w);
+		st.height = jq.px(h);
+		
+		var zi = $anchor.jq.offsetParent().css('z-index');
+		// IE bug
+		if (zk.ie && !zk.ie8)
+			zi = zi == 0 ? 1 : zi;
+			
+		st.zIndex = zi;
+		this.mask.lastChild.style.zIndex = zi;
+		
+		var loading = jq(this.mask.id+"-z_loading", zk)[0];
 		if (loading) {
 			if (loading.offsetHeight > h) 
 				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
@@ -365,8 +405,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			loading.style.top = jq.px0(xy[1] + ((h - loading.offsetHeight) /2)); //non-negative only
 			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) /2));
 		}
-		
-		mask.style.visibility = "";
+		this.mask.style.display = 'block';
+		this.mask.style.visibility = "";
 	},
 	/** Removes the mask.
 	 */
