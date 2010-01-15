@@ -64,7 +64,7 @@ November, 2009
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
   2927319: EventQueue supports asynchronous listener
   2928011: provide a customization for zk.Draggable
-
+  2932595: Simple mold for combobox, datebox, timebox, spinner, bandbox
   
 * RC/RC2 Bugs  
   2870616: Unclosed progress mask on opening menupopup
