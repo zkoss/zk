@@ -140,6 +140,7 @@ November, 2009
   2932559: Dateformt is not correct
   2932360: Problems with http-equiv="refresh" (<h:meta>)
   2932514: listheader.visible=false & footer.span not work well
+  2932107: Strange listbox behaviour with mold="paging"
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
