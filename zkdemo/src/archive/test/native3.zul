@@ -4,7 +4,7 @@
 native2.zul
 
 	Purpose:
-		A complete ZUL page with native
+		A complete ZUL page with ZHTML
 	Description:
 		
 	History:
@@ -13,19 +13,20 @@ native2.zul
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 -->
-<html xmlns="http://www.zkoss.org/2005/zk/native"
+<h:html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:h="http://www.w3.org/1999/xhtml"
 xmlns:u="http://www.zkoss.org/2005/zul"
 xmlns:zk="http://www.zkoss.org/2005/zk">
- <head>
-	<title>Native Complete Page</title>
+ <h:head>
+	<h:title>Complete Page with ZHTML</h:title>
 	<zkhead/>
-	<script>
+	<h:script>
 	var some = "Error";
 	setTimeout(function(){zk.log("You shall see "+some);},0); //test if quote is escaped
-	</script>
- </head>
+	</h:script>
+ </h:head>
  <body>
- 	Test of Native Complete Page
+ 	Test of a complete page with ZHTML
  	<u:script>
  	some = "Correct";
  	</u:script>
@@ -65,4 +66,4 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 		background: #aaa; color: white; width: 50%;
 	</div>
  </body>
-</html>
+</h:html>

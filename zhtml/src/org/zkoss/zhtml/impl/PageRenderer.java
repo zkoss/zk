@@ -128,8 +128,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		HtmlPageRenders.setContentType(exec, page);
 
-		write(out, HtmlPageRenders.outFirstLine(page)); //might null
-		write(out, HtmlPageRenders.outDocType(page)); //might null
+		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
+		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		return rc;
 	}
 	/** Ends and cleans up the rendering of a complete ZHTML page.

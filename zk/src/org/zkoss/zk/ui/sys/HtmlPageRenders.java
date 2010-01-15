@@ -85,6 +85,13 @@ public class HtmlPageRenders {
 	private static final String ATTR_DESKTOP_JS_GENED
 		= "javax.zkoss.zk.dtjs.generated";
 
+	/** Denotes DOCTYPE has been generated. */
+	private static final String DOCTYPE_GENED
+		= "javax.zkoss.zk.doctype.generated";
+	/** Denotes the first line has been generated. */
+	private static final String FIRST_LINE_GENED
+		= "javax.zkoss.zk.firstline.generated";
+
 	/** The render context. */
 	private static final String ATTR_RENDER_CONTEXT
 		= "org.zkoss.zk.ui.renderContext";
@@ -115,10 +122,14 @@ public class HtmlPageRenders {
 	/** Returns the doc type, or null if not available.
 	 * It is null or &lt;!DOCTYPE ...&gt;.
 	 */
-	public static final String outDocType(Page page) {
-		final String docType = ((PageCtrl)page).getDocType();
-		return trimAndLF(docType != null ?
-			docType: page.getDesktop().getDevice().getDocType());
+	public static final String outDocType(Execution exec, Page page) {
+		if (exec.getAttribute(DOCTYPE_GENED) == null) {
+			exec.setAttribute(DOCTYPE_GENED, Boolean.TRUE);
+			final String docType = ((PageCtrl)page).getDocType();
+			return trimAndLF(docType != null ?
+				docType: page.getDesktop().getDevice().getDocType());
+		}
+		return "";
 	}
 	/** Trims and appends a linefeed if necessary.
 	 */
@@ -147,8 +158,12 @@ public class HtmlPageRenders {
 	/** Returns the first line to be generated to the output,
 	 * or null if no special first line.
 	 */
-	public static final String outFirstLine(Page page) {
-		return trimAndLF(((PageCtrl)page).getFirstLine());
+	public static final String outFirstLine(Execution exec, Page page) {
+		if (exec.getAttribute(FIRST_LINE_GENED) == null) {
+			exec.setAttribute(FIRST_LINE_GENED, Boolean.TRUE);
+			return trimAndLF(((PageCtrl)page).getFirstLine());
+		}
+		return "";
 	}
 
 	/** Returns JavaScript for handling the specified response.

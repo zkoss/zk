@@ -63,8 +63,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		HtmlPageRenders.setContentType(exec, page);
 
 		final PageCtrl pageCtrl = (PageCtrl)page;
-		write(out, HtmlPageRenders.outFirstLine(page)); //might null
-		write(out, HtmlPageRenders.outDocType(page)); //might null
+		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
+		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		out.write("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
 		write(out, pageCtrl.getRootAttributes());
 		out.write(">\n<head>\n"
@@ -119,8 +119,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderComplete(Execution exec, Page page, Writer out)
 	throws IOException {
-		write(out, HtmlPageRenders.outFirstLine(page)); //might null
-		write(out, HtmlPageRenders.outDocType(page)); //might null
+		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
+		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		HtmlPageRenders.setContentType(exec, page);
 
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
