@@ -269,7 +269,7 @@ zk.fmt.Date = {
 					txt += this.weekInMonth(val);
 					break;
 				case 'G':
-					txt += "AD";
+					txt += zk.ERA;
 					break;
 				case 'F':
 					txt += this.dayOfWeekInMonth(val);
@@ -324,7 +324,10 @@ zk.fmt.Date = {
 	/** Day in year (starting at 1). */
 	dayInYear : function (d, ref) {
 		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
-		return 1 + this.digitFixed(d - ref);
+		return this.digitFixed(1 + this._dayInYear(d, ref));
+	},
+	_dayInYear: function (d, ref) {
+		return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate())-ref)/864e5);
 	},
 	/** Day in month (starting at 1). */
 	dayInMonth : function (d) {
@@ -335,7 +338,7 @@ zk.fmt.Date = {
 		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
 		var wday = ref.getDay();
 		if (wday == 7) wday = 0;
-		return 1 + Math.floor((this.digitFixed(d - ref) + wday) / 7);
+		return this.digitFixed(1 + Math.floor((this._dayInYear(d, ref) + wday) / 7));
 	},
 	/** Week in month (starting at 1). */
 	weekInMonth : function (d) {
@@ -343,6 +346,6 @@ zk.fmt.Date = {
 	},
 	/** Day of week in month. */
 	dayOfWeekInMonth : function (d) {
-		return 1 + Math.floor(this.digitFixed(d - new Date(d.getFullYear(), d.getMonth(), 1)) / 7);
+		return this.digitFixed(1 + Math.floor(this._dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
 	}
 };

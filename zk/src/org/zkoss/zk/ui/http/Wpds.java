@@ -156,7 +156,9 @@ public class Wpds {
 					sdow[k].substring(0, len - 1): sdow[k];
 			}
 		}
-
+		df = new SimpleDateFormat("G", locale);
+		sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
+		
 		df = new SimpleDateFormat("EEEE", locale);
 		final String[] fdow = new String[7];
 		for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {
