@@ -80,7 +80,9 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 			else if (cc == zk.PER_MILL) divscale += 3;
 			if (divscale) value = value * Math.pow(10, divscale);
 		}
-		return value != null ? fmt ? zk.fmt.Number.format(fmt, value, this._rounding) : '' + value : '';
+		return value == null ? '' : fmt ? 
+			zk.fmt.Number.format(fmt, value, this._rounding) : 
+			zk.DECIMAL == '.' ? (''+value) : (''+value).replace('.', zk.DECIMAL);
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

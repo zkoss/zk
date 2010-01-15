@@ -46,9 +46,9 @@ zk.fmt.Number = {
 		}
     	
 		//calculate number of fixed decimals
-		var re = new RegExp("[^#0" + zk.DECIMAL + "]", 'g'),
+		var re = new RegExp("[^#0.]", 'g'),
 			pureFmtStr = fmt.replace(re, ''),
-			ind = pureFmtStr.indexOf(zk.DECIMAL),
+			ind = pureFmtStr.indexOf('.'),
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
 			valStr = (val + '').replace(/[^0123456789.]/g, ''),
 			indVal = valStr.indexOf('.'),
@@ -97,7 +97,7 @@ zk.fmt.Number = {
 						valStr = r < h ? down(valStr, ri) : up(valStr, ri);
 			}
 		}
-		var indFmt = fmt.indexOf(zk.DECIMAL),
+		var indFmt = fmt.indexOf('.'),
 			pre = '', suf = '';
 		
 		//pre part
@@ -124,10 +124,10 @@ zk.fmt.Number = {
 		for (var len = ind - indVal; --len >= 0; indVal++)
 			valStr = '0' + valStr;
 		
-		var groupDigit = indFmt - fmt.substring(0, indFmt).lastIndexOf(zk.GROUPING);
+		var groupDigit = indFmt - fmt.substring(0, indFmt).lastIndexOf(',');
 			
 		for (var g = 1, i = indFmt - 1, j = indVal - 1; i >= 0 && j >= 0;) {
-			if (g % groupDigit == 0 && pre.charAt(0) != zk.GROUPING) {
+			if (g % groupDigit == 0 && pre.charAt(0) != ',') {
 				pre = zk.GROUPING + pre;
 				g++;
 			}
@@ -140,7 +140,7 @@ zk.fmt.Number = {
 				g++;
 			} else {
 				var c = fmt.charAt(i);
-				if (c != zk.GROUPING) {
+				if (c != ',') {
 					pre = c + pre;
 					g++;
 				}
@@ -153,7 +153,7 @@ zk.fmt.Number = {
 		// Bug #2926718
 		var len = fmt.length - pureFmtStr.length;
 		if (len > 0) {
-			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0" + zk.DECIMAL + "]", 'g'), '');
+			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.]", 'g'), '');
 			if (p)
 				pre = p + pre;
 		}
@@ -169,7 +169,7 @@ zk.fmt.Number = {
 		if (j < valStr.length) 
 			suf = valStr.substr(j, valStr.length);
 		
-		if (j < fmt.length && fmt.charAt(fmt.length - 1) == zk.PERCENT) 
+		if (j < fmt.length && fmt.charAt(fmt.length - 1) == '%') 
 			suf += zk.PERCENT;
 		
 		//remove optional '0' digit in sufpart
@@ -204,7 +204,9 @@ zk.fmt.Number = {
 		if (!val) return {raw: val, divscale: 0};
 
 		var divscale = 0, //the second element
-			minus, sb, cc, ignore;
+			minus, sb, cc, ignore,
+			zkMinus = fmt ? zk.MINUS : '-',
+			zkDecimal = fmt ? zk.DECIMAL : '.'; //bug #2932443, no format and German Locale
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
 			ignore = true;
@@ -218,14 +220,14 @@ zk.fmt.Number = {
 			//We don't add if cc shall be ignored (not alphanum but in fmt)
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
-				&& cc != zk.DECIMAL && cc != zk.MINUS && cc != '+'
+				&& cc != zkDecimal && cc != zkMinus && cc != '+'
 				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING || cc == ')'
 					|| (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);
 			} else {
-				var c2 = cc == zk.MINUS ? '-':
-					cc == zk.DECIMAL ? '.':  cc;
+				var c2 = cc == zkMinus ? '-':
+					cc == zkDecimal ? '.':  cc;
 				if (cc != c2 && sb == null)
 					sb = val.substring(0, j);
 				if (sb != null) sb += c2;
