@@ -160,5 +160,13 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		return this.$supers('domAttrs_', arguments)
 			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '')
 			+ (added ? ' ' + added : '');
+	},
+	//-- super --//
+	domStyle_: function (no) {
+		var style = this.$supers('domStyle_', arguments),
+			head = this.getListheader();
+		if (head && !head.isVisible())
+			style += "display:none;";
+		return style;
 	}
 });

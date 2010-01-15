@@ -57,5 +57,12 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-footer" : this._zclass;
+	},
+	//super
+	domAttrs_: function () {
+		var attr = this.$supers('domAttrs_', arguments);
+		if (this._span > 1)
+			attr += ' colSpan="' + this._span + '"';
+		return attr;
 	}
 });
