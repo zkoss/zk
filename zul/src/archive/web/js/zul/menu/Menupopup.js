@@ -63,7 +63,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._curIndex = -1;
 		return this._nextChild();
 	},
-	_syncShadow: function () {
+	sync: function () {
+		this.$supers('sync', arguments);
+
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(this.$n());
 		this._shadow.sync();
@@ -96,14 +98,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			}
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
-			//open will fire onShow which invoke this._syncShadow()
+			//open will fire onShow which invoke this.sync()
 	},
 	shallStackup_: function () {
 		return false;
 	},
 	setTopmost: function () {
 		this.$supers('setTopmost', arguments);
-		this._syncShadow();
+		this.sync();
 	},
 	onFloatUp: function(ctl) {
 		var wgt = ctl.origin;
@@ -157,7 +159,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 					zWatch.listen({onResponse: this});
 			}
 		}
-		this._syncShadow();
+		this.sync();
 		var anc = this.$n('a');
 		if (anc) {
 			if(zk(anc).isRealVisible())
