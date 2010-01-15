@@ -454,13 +454,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	setTop: function () {
 		this._hideShadow();
 		this.$supers('setTop', arguments);
-		this._syncShadow();
+		this.sync();
 
 	},
 	setLeft: function () {
 		this._hideShadow();
 		this.$supers('setLeft', arguments);
-		this._syncShadow();
+		this.sync();
 	},
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
@@ -525,7 +525,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}, evt.data), {ignorable: true});
 		}
 		
-		this._syncShadow();
+		this.sync();
 		var self = this;
 		setTimeout(function() {
 			zWatch.fireDown('beforeSize', self);
@@ -572,7 +572,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
 			this._fixHgh();
-			this._syncShadow();
+			this.sync();
 		};
 	})(),
 	onShow: _zkf,
@@ -657,7 +657,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this.isMovable())
 			this._initMove();
 
-		this._syncShadow();
+		this.sync();
 
 		if (this.isRealVisible())
 			this.setTopmost();
@@ -674,8 +674,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				endeffect: $Panel._aftermove});
 		}
 	},
-	_syncShadow: function () {
-		this.sync();
+	sync: function () {
+		this.$supers('sync', arguments);
+
 		if (!this.isFloatable()) {
 			if (this._shadow) {
 				this._shadow.destroy();
@@ -903,7 +904,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return false;
 	},
 	_aftermove: function (dg, evt) {
-		dg.control._syncShadow();
+		dg.control.sync();
 	},
 	// drag sizing
 	_startsizing: zul.wnd.Window._startsizing,
