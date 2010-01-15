@@ -65,19 +65,21 @@ public class Head extends AbstractTag {
 	 */
 	/*package*/ static void
 	addHeaderZkTags(Execution exec, Page page, StringBuffer buf, String tag) {
-		final String zktags = HtmlPageRenders.outHeaderZkTags(exec, page);
-		if (zktags != null && zktags.length() > 0) {
-			int j = buf.indexOf("<" + tag);
-			if (j >= 0) {
-				j += tag.length() + 1;
-				for (int len = buf.length(); j < len; ++j) {
-					if (buf.charAt(j) == '>') {
-						buf.insert(j + 1, zktags);
-						return; //done
+		if (HtmlPageRenders.isDirectContent(exec)) {
+			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, page);
+			if (zktags != null && zktags.length() > 0) {
+				int j = buf.indexOf("<" + tag);
+				if (j >= 0) {
+					j += tag.length() + 1;
+					for (int len = buf.length(); j < len; ++j) {
+						if (buf.charAt(j) == '>') {
+							buf.insert(j + 1, zktags);
+							return; //done
+						}
 					}
 				}
+				buf.append(zktags);
 			}
-			buf.append(zktags);
 		}
 	}
 
