@@ -30,8 +30,10 @@ div 3
 draggable="true" droppable="true" onDrop="exchange()">
 div 4
 </div>
-<div style="margin-top: 120px">
-	<button label="swap 1, 4" onClick="exchange(div1, div4)"/>
+<div height="30px">
 </div>
+try to drag "div x" and drop it to any other
+<separator/>
+<button label="swap 1, 4" onClick="exchange(div1, div4)"/>
 </zk>
 
