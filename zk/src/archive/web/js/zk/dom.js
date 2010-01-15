@@ -34,9 +34,6 @@ zjq = function (jq) { //ZK extension
 		var w = ctx && ctx !== zk ? zk.Widget.$(ctx): null, w2;
 		return (w2=w||zk.Desktop.sync()) && (w2=w2.$f(id, !w)) ? w2.$n(): null;
 	}
-	function _isNone(jq) {
-		return !jq.selector && jq[0] === document;
-	}
 	function _ofsParent(el) {
 		if (el.offsetParent) return el.offsetParent;
 		if (el == document.body) return el;
@@ -388,39 +385,32 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
-	},
+	}
+
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
 	 * it does nothing if nothing is matched.
 	 * @return jq this object
 	 */
-	remove: function () {
-		return _isNone(this) ? this: _jq.remove.apply(this, arguments);
-	},
+	//remove: function () {}
 	/** Removes all children of the matched element from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/empty">jQuery</a>,
 	 * it does nothing if nothing is matched.
 	 * @return jq this object
 	 */
-	empty: function () {
-		return _isNone(this) ? this: _jq.empty.apply(this, arguments);
-	},
+	//empty: function () {}
 	/** Shows all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
 	 * it does nothing if nothing is matched.
 	 * @return jq this object
 	 */
-	show: function () {
-		return _isNone(this) ? this: _jq.show.apply(this, arguments);
-	},
+	//show: function () {}
 	/** Hides all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/hide">jQuery</a>,
 	 * it does nothing if nothing is matched.
 	 * @return jq this object
 	 */
-	hide: function () {
-		return _isNone(this) ? this: _jq.hide.apply(this, arguments);
-	}
+	//hide: function () {}
 
 	/** Insert content before each of the matched elements.
 	 * <p>Notice that this method is extended to handle {@link Widget}.
@@ -465,6 +455,12 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 });
 jq.fn.init.prototype = jq.fn;
 
+jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
+	_jq[nm] = jq.fn[nm];
+	jq.fn[nm] = function () {
+		return !this.selector && this[0] === document ? this: _jq[nm].apply(this, arguments);
+	};
+});
 jq.each(['before','after','append','prepend'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function (w, desktop) {
