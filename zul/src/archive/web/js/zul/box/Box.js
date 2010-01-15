@@ -225,15 +225,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 	onChildVisible_: function (child) {
 		this.$supers('onChildVisible_', arguments);
-		if (this.desktop) this._fixChildDomVisible(child);
+		if (this.desktop) this._fixChildDomVisible(child, child._visible);
 	},
 	replaceChildHTML_: function (child) {
 		this.$supers('replaceChildHTML_', arguments);
-		this._fixChildDomVisible(child);
+		this._fixChildDomVisible(child, child._visible);
 	},
-	_fixChildDomVisible: function (child) {
-		var n = this._chdextr(child),
-			visible = child._visible;
+	_fixChildDomVisible: function (child, visible) {
+		var n = this._chdextr(child);
 		if (n) n.style.display = visible ? '': 'none';
 		n = child.$n('chdex2');
 		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '': 'none';
