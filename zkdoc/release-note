@@ -139,6 +139,7 @@ November, 2009
   2932137: ZK Session implementation is not working on GAE
   2932559: Dateformt is not correct
   2932360: Problems with http-equiv="refresh" (<h:meta>)
+  2932514: listheader.visible=false & footer.span not work well
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
