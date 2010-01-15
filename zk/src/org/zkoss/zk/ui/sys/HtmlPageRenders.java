@@ -81,6 +81,9 @@ public class HtmlPageRenders {
 	/** Denotes whether the unavailable message is generated for this request. */
 	private static final String ATTR_UNAVAILABLE_GENED
 		= "javax.zkoss.zk.unavail.generated";
+	/** Denotes whether zkdt has been generated. */
+	private static final String ATTR_DESKTOP_JS_GENED
+		= "javax.zkoss.zk.dtjs.generated";
 
 	/** The render context. */
 	private static final String ATTR_RENDER_CONTEXT
@@ -480,6 +483,7 @@ public class HtmlPageRenders {
 			out.write(outZkIconJS());
 		}
 
+		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		out.write("zkpb('");
 		out.write(page.getUuid());
 		out.write('\'');
@@ -679,7 +683,7 @@ public class HtmlPageRenders {
 			.append(outLangJavaScripts(exec, wapp, deviceType));
 
 		final Desktop desktop = exec.getDesktop();
-		if (desktop != null) {
+		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
 			sb.append("<script>zkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))

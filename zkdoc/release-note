@@ -138,6 +138,7 @@ November, 2009
   2931951: Add rows over page size but fail to see the paginal appear
   2932137: ZK Session implementation is not working on GAE
   2932559: Dateformt is not correct
+  2932360: Problems with http-equiv="refresh" (<h:meta>)
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
