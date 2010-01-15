@@ -44,7 +44,7 @@
 	height: 8px;
 	width: 8px;
 	background: #C4DCFB left;
-	background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
 	cursor: e-resize;
 	cursor: col-resize;
 	line-height: 0;
@@ -53,7 +53,7 @@
 .z-north-splt,
 .z-south-splt {
 	background: #C4DCFB top;
-	background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
 	cursor: s-resize;
 	cursor: row-resize;	
 }

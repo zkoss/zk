@@ -36,8 +36,25 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		/** Sets whether the button (on the right of the textbox) is visible.
 		 * @param boolean visible
 	 	*/
-		buttonVisible: function(v){
-			this.btn.style.display = v == 'true'? '': 'none';
+		buttonVisible: function(v){			
+			var n = this.btn,
+				zcls = this.getZclass();
+			if (!n) return;
+			if (this._mold != 'simple')
+				n.style.display = v == 'true'? '': 'none';
+			else {
+				var fnm = v ? 'removeClass': 'addClass';
+				jq(n)[fnm](zcls + '-btn-right-edge');
+				this._bindDomEvent(n, v);
+				
+				if (zk.ie6_) {
+					jq(n)[fnm](zcls + 
+						(this._readonly ? '-btn-right-edge-readonly': '-btn-right-edge'));
+						
+					if (jq(this.getInputNode()).hasClass(zcls + "-simple-text-invalid"))
+							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
+				}
+			}
 			this.onSize();
 			return;
 		},
@@ -150,8 +167,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(inp.disabled) return;
 
 		this.checkValue();
-
-		btn = zk.opera || zk.safari ? btn : btn.firstChild,
+		if(this._mold != 'simple')
+			btn = zk.opera || zk.safari ? btn : btn.firstChild;
 		ofs = zk(btn).revisedOffset();
 		
 		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
@@ -309,10 +326,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			
 		if(btn){
 			this._auxb = new zul.Auxbutton(this, btn, inp);
-			this.domListen_(btn, "onmousedown", "_btnDown");
-			this.domListen_(btn, "onmouseup", "_btnUp");
-			this.domListen_(btn, "onmouseout", "_btnOut");
-			this.domListen_(btn, "mouseover", "_btnOver");
+			this._bindDomEvent(btn, true);			
+			if (this._mold == 'simple' && !this._buttonVisible)
+				this._bindDomEvent(btn, false);
 		}
 		this.syncWidth();
 	},
@@ -326,12 +342,16 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(btn){
 			this._auxb.cleanup();
 			this._auxb = null;
-			this.domUnlisten_(btn, "onmousedown", "_btnDown");
-			this.domUnlisten_(btn, "onmouseup", "_btnUp");
-			this.domUnlisten_(btn, "onmouseout", "_btnOut");
-			this.domUnlisten_(btn, "mouseover", "_btnOver");
+			this._bindDomEvent(btn, false);
 		}
 		this.$supers('unbind_', arguments);
+	},
+	_bindDomEvent: function (btn, isBind) {
+		var fnm = isBind ? 'domListen_': 'domUnlisten_';
+		this[fnm](btn, "onMousedown", "_btnDown")
+			[fnm](btn, "onMouseup", "_btnUp")
+			[fnm](btn, "onMouseout", "_btnOut")
+			[fnm](btn, "onMouseover", "_btnOver");
 	}
 	
 });

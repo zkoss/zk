@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * The default constraint supporting no empty, regular expressions and so on.
- * <p>Depending on the component (such as {@link Intbox} and {@link Datebox}).
+ * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
  */
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.

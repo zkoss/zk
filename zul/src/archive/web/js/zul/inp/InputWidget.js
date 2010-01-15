@@ -59,8 +59,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
 					fnm = disabled ? 'addClass': 'removeClass';
-				jq(this.$n())[fnm](zcls + '-disd');
-				jq(inp)[fnm](zcls + '-text-disd');
+				if (this._mold != 'simple') {
+					jq(this.$n())[fnm](zcls + '-disd');
+					jq(inp)[fnm](zcls + '-text-disd');
+				} else {
+					jq(this.$n())[fnm](zcls + '-simple-disd');
+					jq(inp)[fnm](zcls + '-text-simple-disd');
+				}	
 			}
 		},
 		/** Returns whether it is readonly.
@@ -73,9 +78,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
+				var zcls = this.getZclass();
+				
 				inp.readOnly = readonly;
-				jq(inp)[readonly ? 'addClass': 'removeClass'](
-					this.getZclass() + '-readonly');
+				if (this._mold != 'simple')
+					jq(inp)[readonly ? 'addClass': 'removeClass'](
+							zcls + '-readonly');
+				else {
+					var btn = this.$n('btn'),
+						fnm = readonly ? 'addClass': 'removeClass';
+					jq(inp)[fnm](zcls + '-inp-simple-readonly');
+					jq(btn)[fnm](zcls + '-btn-simple-readonly');
+					if (!zk.ie6_) return;
+					var css = this._buttonVisible ? '-btn-simple-readonly':
+													'-btn-right-edge-readonly';
+					jq(btn)[fnm](zcls + css);
+				}
 			}
 		},
 		/** Returns the cols.
@@ -349,9 +367,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._errbox = null;
 			w.destroy();
 		}
-		if (!remainError) {
+		if (!remainError) {			
+			var zcls = this.getZclass();
 			this._errmsg = null;
-			jq(this.getInputNode()).removeClass(this.getZclass() + "-text-invalid");
+			jq(this.getInputNode()).removeClass(zcls + (this._mold == 'simple' ? "-simple-text-invalid": "-text-invalid"));
+			if(zk.ie6_ && this._mold == 'simple')
+				jq(this.$n('btn')).removeClass(zcls + "-btn-right-edge-invalid");
+			
 		}
 		if (revalidate)
 			delete this._lastRawValVld; //cause re-valid
@@ -385,9 +407,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
-
+		
+		var zcls = this.getZclass();
 		if (this.desktop) { //err not visible if not attached
-			jq(this.getInputNode()).addClass(this.getZclass() + "-text-invalid");
+			jq(this.getInputNode()).addClass(zcls + (this._mold == 'simple' ? "-simple-text-invalid": "-text-invalid"));
+			if(zk.ie6_ && this._mold == 'simple' && !this._buttonVisible)
+				jq(this.$n('btn')).addClass(zcls + "-btn-right-edge-invalid");
 
 			var cst = this._cst, errbox;
 			if (cst != "[c") {

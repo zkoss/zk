@@ -58,9 +58,26 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return boolean
 		 */
 		buttonVisible: function (v) {
-			var n = this.$n('btn');
+			var n = this.$n('btn'),
+				zcls = this.getZclass();
 			if (n) {
-				v ? jq(n).show() : jq(n).hide();
+				if (this._mold != 'simple')
+					v ? jq(n).show() : jq(n).hide();
+				else {
+					var fnm = v ? ['removeClass', 'domListen_']: 
+								['addClass', 'domUnlisten_'];
+					
+					jq(n)[fnm[0]](zcls + '-btn-right-edge');
+					this[fnm[1]](n, 'onClick', '_doBtnClick');
+					
+					if (zk.ie6_) {
+						jq(n)[fnm[0]](zcls + 
+							(this._readonly ? '-btn-right-edge-readonly': '-btn-right-edge'));
+						
+						if (jq(this.getInputNode()).hasClass(zcls + "-simple-text-invalid"))
+							jq(n)[fnm[0]](zcls + "-btn-right-edge-invalid");
+					}
+				}
 				this.onSize();
 			}
 		},
@@ -201,7 +218,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return boolean
 		 */
 		lenient: null
-	},	
+	},
 	setValue: function (val) {
 		var args;
 		if (val) {
@@ -420,6 +437,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
+			if (this._mold == 'simple' && !this._buttonVisible) 
+				this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 		
 

@@ -31,7 +31,8 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		this._img = $img[0];
 
 		$btn.zk.disableSelection();
-		$img.zk.disableSelection();
+		if(wgt._mold != 'simple')
+			$img.zk.disableSelection();
 
 		if (!wgt.inDesign)
 			$btn.mouseover(this.proxy(this._domOver))
@@ -45,7 +46,8 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		var $btn = jq(this._btn);
 
 		$btn.zk.enableSelection();
-		zk(this._img).enableSelection();
+		if(this._wgt._mold != 'simple')
+			zk(this._img).enableSelection();
 
 		if (!this._wgt.inDesign)
 			$btn.unbind('mouseover', this.proxy(this._domOver))
@@ -56,6 +58,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	 * Fixes the position of the button from the input element
 	 */
 	fixpos: function () {
+		if(this._wgt._mold == 'simple') return;
 		var btn = this._btn;
 		if (!this._fixed && zk(btn).isRealVisible()) {
 			var ref = this._ref, img = this._img,
@@ -83,23 +86,53 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		}
 	},
 	_domOver: function () {
-		var wgt = this._wgt;
-		if (!wgt.isDisabled() && !zk.dragging)
-			jq(this._btn).addClass(wgt.getZclass() + "-btn-over");
+		var wgt = this._wgt,
+			inp = wgt.getInputNode(),
+			zcls = wgt.getZclass();
+		
+		if (!wgt.isDisabled() && !zk.dragging){
+			if(wgt._mold != 'simple')
+				jq(this._btn).addClass(zcls + "-btn-over");
+			else {
+				if (!wgt._buttonVisible) return;
+				jq(this._btn).addClass(zcls + "-btn-simple-over");
+				
+				if (!jq(inp).hasClass(zcls + '-simple-text-invalid'))
+					jq(inp).addClass(zcls + "-inp-simple-over");
+			}
+		}
 	},
 	_domOut: function () {
-		var wgt = this._wgt;
-		if (!wgt.isDisabled() && !zk.dragging)
-			jq(this._btn).removeClass(wgt.getZclass() + "-btn-over");
+		var wgt = this._wgt,
+			zcls = wgt.getZclass();
+		if (!wgt.isDisabled() && !zk.dragging){
+			if(wgt._mold != 'simple')
+				jq(this._btn).removeClass(zcls + "-btn-over");
+			else {
+				jq(this._btn).removeClass(zcls + "-btn-simple-over");
+				jq(wgt.getInputNode()).removeClass(zcls + "-inp-simple-over");
+			}
+		}
 	},
 	_domDown: function () {
-		var wgt = this._wgt;
+		var wgt = this._wgt,
+			inp = wgt.getInputNode(),
+			zcls = wgt.getZclass();
+			
 		if (!wgt.isDisabled() && !zk.dragging) {
 			var $Auxbutton = zul.Auxbutton,
 				curab = $Auxbutton._curab;
 			if (curab) curab._domUp();
 
-			jq(this._btn).addClass(wgt.getZclass() + "-btn-clk");
+			if(wgt._mold != 'simple')
+				jq(this._btn).addClass(zcls + "-btn-clk");
+			else {
+				if (!wgt._buttonVisible) return;
+				jq(this._btn).addClass(zcls + "-btn-simple-clk");
+				if(!wgt._readonly && !jq(inp).hasClass(zcls + '-simple-text-invalid'))
+					jq(inp).addClass(zcls + "-inp-simple-clk");
+			}
+			
 			jq(document.body).mouseup(this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
@@ -110,7 +143,16 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			curab = $Auxbutton._curab;
 		if (curab) {
 			$Auxbutton._curab = null;
-			jq(curab._btn).removeClass(curab._wgt.getZclass() + "-btn-clk");
+			var wgt = curab._wgt,
+				zcls = wgt.getZclass();
+				
+			if(wgt._mold != 'simple')
+				jq(curab._btn).removeClass(zcls + "-btn-clk");
+			else {
+				if (!wgt._buttonVisible) return;
+				jq(curab._btn).removeClass(zcls + "-btn-simple-clk");
+				jq(wgt.getInputNode()).removeClass(zcls + "-inp-simple-clk");
+			}
 			jq(document.body).unbind("mouseup", curab.proxy(this._domUp));
 		}
 	}

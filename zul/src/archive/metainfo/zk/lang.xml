@@ -262,6 +262,11 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/bandbox.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>		
+		<mold>
+			<mold-name>simple</mold-name>
+			<mold-uri>mold/comboboxsimple.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -411,6 +416,11 @@ def alert(m):
 			<mold-uri>mold/combobox.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>simple</mold-name>
+			<mold-uri>mold/comboboxsimple.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>comboitem</component-name>
@@ -429,6 +439,11 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/datebox.js</mold-uri>
+			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
+		</mold>		
+		<mold>
+			<mold-name>simple</mold-name>
+			<mold-uri>mold/dateboxsimple.js</mold-uri>
 			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
 		</mold>
 	</component>
@@ -946,6 +961,11 @@ def alert(m):
 			<mold-uri>mold/spinner.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>simple</mold-name>
+			<mold-uri>mold/spinnersimple.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>splitter</component-name>
@@ -1047,6 +1067,10 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/spinner.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>simple</mold-name>
+			<mold-uri>mold/spinnersimple.js</mold-uri>
 		</mold>
 	</component>
 	<component>
