@@ -191,6 +191,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	close: function (opts) {
 		if (!this._open) return;
 		this._open = false;
+		this._shallClose = true; //Bug: 2925671 :Problem clicking twice the combobox triangle
 		if (opts && opts.focus)
 			this.focus();
 
