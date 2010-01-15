@@ -239,8 +239,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					this._select(sel, {sendOnSelect: true});
 			}
 		else
-			setTimeout(function () {wgt._typeahead(bDel);}, 0);
-			//use timeout, since, when key down, value not ready yet
+			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera ? 10 : 0);
+			//use timeout, since, when key down, value not ready yet, opear need extra time to set value to dom
 	},
 	_typeahead: function (bDel) {
 		if (zk.currentFocus != this) return;
