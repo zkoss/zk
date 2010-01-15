@@ -502,7 +502,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		//Note: in Tomcat, servlet is activated later, so we have to
 		//add listener to WebManager instead of process now
 
-		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
 			_navsess = hsess;
@@ -522,7 +522,7 @@ public class SimpleSession implements Session, SessionCtrl {
 				didActivate(getAttribute(nm));
 			}
 		} finally {
-			SessionsCtrl.setCurrent(old);
+			SessionsCtrl.setRawCurrent(old);
 		}
 	}
 	private void willPassivate(Object o) {

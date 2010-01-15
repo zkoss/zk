@@ -48,6 +48,29 @@ public class SessionsCtrl extends Sessions {
 		return (SessionCtrl)getCurrent();
 	}
 
+	/** Returns the current session or the current session resolver.
+	 * The returned value is either {@link Session} or {@link SessionResolver}.
+	 * @see #setRawCurrent
+	 * @see #setCurrent(Session)
+	 * @see #setCurrent(SessionResolver)
+	 * @since 5.0.0
+	 */
+	public static final Object getRawCurrent() {
+		return _sess.get();
+	}
+	/** Sets the current session or the current session resolver.
+	 * @param rawsess the raw session. It can be null, an instance of
+	 * {@link Session} and {@link SessionResolver}.
+	 * Notice: it is usually the return value of {@link #getRawCurrent}.
+	 * @see #getRawCurrent
+	 * @since 5.0.0
+	 */
+	public static final void setRawCurrent(Object rawsess) {
+		if (rawsess != null && !(rawsess instanceof Session) && !(rawsess instanceof SessionResolver))
+			throw new IllegalArgumentException(rawsess.getClass().getName());
+		_sess.set(rawsess);
+	}
+
 	/** Update the session count.
 	 * <p>Called only internally.
 	 * @since 5.0.0
