@@ -665,6 +665,11 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1); //create rows if necessary
+			} else if (inPagingMold()) { 
+				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
+				//must update paginal totalSize or exception in setActivePage
+				final Paginal pgi = getPaginal();
+				pgi.setTotalSize(getDataLoader().getTotalSize());
 			}
 			postOnInitRender();
 			//Since user might setModel and setRender separately or repeatedly,
