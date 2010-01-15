@@ -2335,7 +2335,7 @@ zk.formatDate = function (val, fmt) {
 				txt += zk.weekInMonth(val);
 				break;
 			case 'G':
-				txt += "AD";
+				txt += zk.ERA;
 				break;
 			case 'F':
 				txt += zk.dayOfWeekInMonth(val);
@@ -2383,7 +2383,7 @@ zk.ms2day = function (t) {
 /** Day in year (starting at 1). */
 zk.dayInYear = function (d, ref) {
 	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
-	return 1 + zk.ms2day(d - ref);
+	return 1 + zk.ms2day(new Date(d.getFullYear(), d.getMonth(), d.getDate()) - ref);
 };
 /** Day in month (starting at 1). */
 zk.dayInMonth = function (d) {
@@ -2394,7 +2394,7 @@ zk.weekInYear = function (d, ref) {
 	if (!ref) ref = new Date(d.getFullYear(), 0, 1);
 	var wday = ref.getDay();
 	if (wday == 7) wday = 0;
-	return 1 + Math.floor((zk.ms2day(d - ref) + wday) / 7);
+	return 1 + Math.floor((zk.ms2day(new Date(d.getFullYear(), d.getMonth(), d.getDate()) - ref) + wday) / 7);
 };
 /** Week in month (starting at 1). */
 zk.weekInMonth = function (d) {
@@ -2402,7 +2402,7 @@ zk.weekInMonth = function (d) {
 };
 /** Day of week in month. */
 zk.dayOfWeekInMonth = function (d) {
-	return 1 + Math.floor(zk.ms2day(d - new Date(d.getFullYear(), d.getMonth(), 1)) / 7);
+	return 1 + Math.floor(zk.ms2day(new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(d.getFullYear(), d.getMonth(), 1)) / 7);
 };
 
 /** Returns an integer of the attribute of the specified element. */
