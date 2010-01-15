@@ -617,6 +617,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var Window = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
 				stackup: true, draw: Window._drawsizing,
+				initSensitivity: 0,
 				starteffect: Window._startsizing,
 				ghosting: Window._ghostsizing,
 				endghosting: Window._endghostsizing,
