@@ -108,7 +108,7 @@ import org.zkoss.zk.ui.ext.Includer;
 	HttpServletRequest request, HttpServletResponse response, String path) {
 		if (dtrc != null) {
 			final Execution olde = Executions.getCurrent();
-			final Session olds = Sessions.getCurrent();
+			final Object olds = SessionsCtrl.getRawCurrent();
 			final Execution exec = new TemporaryExecution(ctx, request, response, null);
 			SessionsCtrl.setCurrent(sess);
 			ExecutionsCtrl.setCurrent(exec);
@@ -118,7 +118,7 @@ import org.zkoss.zk.ui.ext.Includer;
 				log.error(ex);
 			} finally {
 				ExecutionsCtrl.setCurrent(olde);
-				SessionsCtrl.setCurrent(olds);
+				SessionsCtrl.setRawCurrent(olds);
 			}
 		}
 		return null;

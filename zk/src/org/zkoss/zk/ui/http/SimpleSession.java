@@ -480,7 +480,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * the session
 	 */
 	protected void sessionWillPassivate() {
-		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
 			((WebAppCtrl)_wapp).sessionWillPassivate(this);
@@ -490,7 +490,7 @@ public class SimpleSession implements Session, SessionCtrl {
 				willPassivate(getAttribute(nm));
 			}
 		} finally {
-			SessionsCtrl.setCurrent(old);
+			SessionsCtrl.setRawCurrent(old);
 		}
 	}
 	/** Used by the deriving class to post-process a session after
