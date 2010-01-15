@@ -24,12 +24,10 @@ function (out) {
 	if (tabi && (zk.gecko || zk.safari)) btn += tabi;
 	btn += '></button>';
 
-	out.push('<span', this.domAttrs_({domStyle:1,domclass:1}), ' class="', zcls, '"',
+	out.push('<span', this.domAttrs_(), ' class="', zcls, '"',
 			(!this.isVisible() ? ' style="display:none"' : ''),
-			'><table id="', uuid, '-box"', zUtl.cellps0,
+			'><table id="', uuid, '-box" style="width:100%;height:100%"', zUtl.cellps0,
 			(tabi && !zk.gecko && !zk.safari ? tabi : ''),
-			((s = this.domStyle_()) ? ' style="' + s + '"' : ''),
-			((s = this.domClass_()) ? ' class="' + s + '"' : ''),
 			'><tr><td class="', zcls, '-tl">', (!zk.ie ? btn : ''),
 			'</td><td class="', zcls, '-tm"></td>', '<td class="', zcls,
 			'-tr"></td></tr>', '<tr><td class="', zcls, '-cl">',

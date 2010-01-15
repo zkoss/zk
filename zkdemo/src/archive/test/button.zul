@@ -1,0 +1,11 @@
+<window>
+<listbox width="300px">
+<listfoot>
+<listfooter><button id="b" width="100%" height="50px" label="test" /></listfooter>
+</listfoot>
+</listbox>
+<button label="100px" width="100%" height="30px" onClick='b.width = b.height = "100px"'/>
+<button label="50%" width="100%" height="40px" onClick='b.width = "50%"'/>
+<button label="100%" width="100%" height="50px" onClick='b.width = "100%"'/>
+<button label="auto" width="100%" onClick='b.width = b.height = ""'/>
+</window>

@@ -12,6 +12,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	//IE adds extra height to first and last row, so fix it
+	var _fixhgh = zk.ie ? function (btn) {
+		var n = btn.$n(),
+			box = btn.$n('box');
+		if (n.style.height && box.offsetHeight) {
+			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
+			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
+				box.rows[1].style.height = jq.px0(box.offsetHeight -
+					cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
+			}
+		}
+	}: zk.$void;
+
 /**
  * A button.
  * <p>Default {@link #getZclass}: z-button.
@@ -180,22 +194,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	updateDomClass_: function () {
-		if (this.desktop) {
-			var n = this._mold == 'trendy' ? this.$n('box') : this.$n();
-			if (n) n.className = this.domClass_();
-		}
-	},
-	updateDomStyle_: function () {
-		if (this.desktop) {
-			var n = this._mold == 'trendy' ? this.$n('box') : this.$n();
-			var s = jq.parseStyle(this.domStyle_());
-			zk(n).setStyles(s);
-
-			n = this.getTextNode();
-			if (n) jq(n).css(jq.filterTextStyle(s));
-		}
-	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
@@ -282,15 +280,31 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 
+	//@Override
+	setWidth: zk.ie ? function (v) {
+		this.$supers('setWidth', arguments);
+
+		if (this.desktop && this._mold == 'trendy')
+			this.$n('box').style.width = !v || v == "auto" ? "": "100%";
+	}: function () {
+		this.$supers('setWidth', arguments);
+	},
+	//@Override
+	setHeight: zk.ie ? function (v) {
+		var trendy;
+		if (trendy = (this.desktop && this._mold == 'trendy'))
+			this.$n('box').rows[1].style.height = "";
+
+		this.$supers('setHeight', arguments);
+
+		if (trendy)
+			_fixhgh(this);
+	}: function () {
+		this.$supers('setHeight', arguments);
+	},
+
 	onSize: _zkf = zk.ie ? function () {
-		var box = this.$n('box');
-		if (box.style.height && box.offsetHeight) {
-			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
-			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
-				box.rows[1].style.height = jq.px0(box.offsetHeight -
-				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
-			}
-		}
+		_fixhgh(this);
 		if (this._uplder)
 			this._uplder.sync();
 	} : function () {
@@ -384,23 +398,23 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseUp_', arguments);
 	},
 	setFlexSize_: function(sz) { //Bug #2870652
-		var n = this.$n(),
-			box = this.$n('box') || n;
+		var n = this.$n();
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
-				box.style.height = '';
+				n.style.height = '';
 			else if (sz.height != '')
-				box.style.height = jq.px0(this._mold == 'trendy' ? zk(n).revisedHeight(sz.height, true) : sz.height);
+				n.style.height = jq.px0(this._mold == 'trendy' ? zk(n).revisedHeight(sz.height, true) : sz.height);
 			else
-				box.style.height = this._height ? this._height : '';
+				n.style.height = this._height ? this._height : '';
+			_fixhgh(this);
 		}
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto')
-				box.style.width = '';
+				n.style.width = '';
 			else if (sz.width != '')
-				box.style.width = jq.px0(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
+				n.style.width = jq.px0(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
 			else
-				box.style.width = this._width ? this._width : '';
+				n.style.width = this._width ? this._width : '';
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	}
@@ -416,3 +430,5 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		zWatch.unlisten({onResponse: this});
 	}
 });
+
+})();
