@@ -397,6 +397,14 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	remove: function () {
 		return _isNone(this) ? this: _jq.remove.apply(this, arguments);
 	},
+	/** Removes all children of the matched element from the DOM.
+	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/empty">jQuery</a>,
+	 * it does nothing if nothing is matched.
+	 * @return jq this object
+	 */
+	empty: function () {
+		return _isNone(this) ? this: _jq.empty.apply(this, arguments);
+	},
 	/** Shows all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
 	 * it does nothing if nothing is matched.
