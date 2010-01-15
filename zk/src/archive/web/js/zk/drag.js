@@ -361,6 +361,8 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 
 	_startDrag: function (evt) {
+		zWatch.fire('onStartDrag', this, evt);
+
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
 		jq.clearSelection(); // Bug #2721980
@@ -557,7 +559,11 @@ String scroll; //DOM Element's ID</code></pre>
 			}
 		}
 		_deactivate(this);
-		setTimeout(function(){zk.dragging=false;}, 0);
+		var self = this;
+		setTimeout(function(){
+			zk.dragging=false;
+			zWatch.fire("onEndDrag", self, evt);
+		}, 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
