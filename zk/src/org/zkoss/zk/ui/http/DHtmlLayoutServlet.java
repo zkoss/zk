@@ -194,71 +194,73 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		Desktop desktop = dtrc != null ?
 			Utils.beforeService(dtrc, _ctx, sess, request, response, path): null;
 
-		if (desktop != null) { //recycle
-			final Page page = Utils.getMainPage(desktop);
-			if (page != null) {
-				final Execution exec = new ExecutionImpl(
-					_ctx, request, response, desktop, page);
-				wappc.getUiEngine().recycleDesktop(exec, page, out);
-			} else
-				desktop = null; //something wrong (not possible; just in case)
-		}
-		if (desktop == null) {
-			desktop = _webman.getDesktop(sess, request, response, path, true);
-			if (desktop == null) //forward or redirect
-				return true;
-
-			final RequestInfo ri = new RequestInfoImpl(
-				wapp, sess, desktop, request,
-				PageDefinitions.getLocator(wapp, path));
-			sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
-			((SessionCtrl)sess).notifyClientRequest(true);
-
-			final UiFactory uf = wappc.getUiFactory();
-			if (uf.isRichlet(ri, bRichlet)) {
-				final Richlet richlet = uf.getRichlet(ri, path);
-				if (richlet == null)
-					return false; //not found
-
-				final Page page = WebManager.newPage(uf, ri, richlet, response, path);
-				final Execution exec = new ExecutionImpl(
-					_ctx, request, response, desktop, page);
-				wappc.getUiEngine().execNewPage(exec, richlet, page, out);
-					//no need to set device type here, since UiEngine will do it later
-			} else {
-				final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-				if (pagedef == null)
-					return false; //not found
-
-				final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
-				final Execution exec = new ExecutionImpl(
-					_ctx, request, response, desktop, page);
-				wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+		try {
+			if (desktop != null) { //recycle
+				final Page page = Utils.getMainPage(desktop);
+				if (page != null) {
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					wappc.getUiEngine().recycleDesktop(exec, page, out);
+				} else
+					desktop = null; //something wrong (not possible; just in case)
 			}
-		}
+			if (desktop == null) {
+				desktop = _webman.getDesktop(sess, request, response, path, true);
+				if (desktop == null) //forward or redirect
+					return true;
 
-		if (compress) {
-			final String result = ((StringWriter)out).toString();
+				final RequestInfo ri = new RequestInfoImpl(
+					wapp, sess, desktop, request,
+					PageDefinitions.getLocator(wapp, path));
+				sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
+				((SessionCtrl)sess).notifyClientRequest(true);
 
-			try {
-				final OutputStream os = response.getOutputStream();
-					//Call it first to ensure getWrite() is not called yet
+				final UiFactory uf = wappc.getUiFactory();
+				if (uf.isRichlet(ri, bRichlet)) {
+					final Richlet richlet = uf.getRichlet(ri, path);
+					if (richlet == null)
+						return false; //not found
 
-				byte[] data = result.getBytes(config.getResponseCharset());
-				if (data.length > 200) {
-					byte[] bs = Https.gzip(request, response, null, data);
-					if (bs != null) data = bs; //yes, browser support compress
+					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
+						//no need to set device type here, since UiEngine will do it later
+				} else {
+					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+					if (pagedef == null)
+						return false; //not found
+
+					final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 				}
-
-				response.setContentLength(data.length);
-				os.write(data);
-				response.flushBuffer();
-			} catch (IllegalStateException ex) { //getWriter is called
-				response.getWriter().write(result);
 			}
-		}
 
-		if (dtrc != null) Utils.afterService(dtrc, desktop);
+			if (compress) {
+				final String result = ((StringWriter)out).toString();
+
+				try {
+					final OutputStream os = response.getOutputStream();
+						//Call it first to ensure getWrite() is not called yet
+
+					byte[] data = result.getBytes(config.getResponseCharset());
+					if (data.length > 200) {
+						byte[] bs = Https.gzip(request, response, null, data);
+						if (bs != null) data = bs; //yes, browser support compress
+					}
+
+					response.setContentLength(data.length);
+					os.write(data);
+					response.flushBuffer();
+				} catch (IllegalStateException ex) { //getWriter is called
+					response.getWriter().write(result);
+				}
+			}
+		} finally {
+			if (dtrc != null) Utils.afterService(dtrc, desktop);
+		}
 		return true; //success
 	}
 
