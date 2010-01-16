@@ -160,6 +160,11 @@ public class Attributes {
 	 * If the value is "ie", it is applied only to Internet Explorer.
 	 * Refer to {@link org.zkoss.web.servlet.Servlets#isBrowser} for more options.
 	 * If the value is "*", it is applied to all kinds of browsers.
+	 * <p>If you want to specify the number of milliseconds to wait before
+	 * replacing with the correct content, you could append a number
+	 * by separating it with comma. For example, "ie,1000" means to wait
+	 * 1000 miliseconds if the browser is Internet Explorer.
+	 * The default is 500 miliseconds.
 	 * @since 5.0.0
 	 */
 	public static final String PORTLET_JQUERY_PATCH = "org.zkoss.zk.ui.portlet.jQueryPatch";

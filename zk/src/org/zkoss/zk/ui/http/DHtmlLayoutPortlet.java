@@ -18,6 +18,8 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -33,10 +35,13 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
@@ -184,53 +189,104 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
 		Desktop desktop = dtrc != null ? Utils.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
 
-		if (desktop != null) { //recycle
-			final Page page = Utils.getMainPage(desktop);
-			if (page != null) {
-				final Execution exec = new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
-				fixContentType(response);
-				wappc.getUiEngine().recycleDesktop(exec, page, response.getWriter());
-			} else
-				desktop = null; //something wrong (not possible; just in case)
-		}
-
-		if (desktop == null) {
-			desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
-			if (desktop == null) //forward or redirect
-				return true;
-
-			final RequestInfo ri = new RequestInfoImpl(
-				wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
-			((SessionCtrl)sess).notifyClientRequest(true);
-
-			final UiFactory uf = wappc.getUiFactory();
-			if (uf.isRichlet(ri, bRichlet)) {
-				final Richlet richlet = uf.getRichlet(ri, path);
-				if (richlet == null)
-					return false; //not found
-
-				final Page page = WebManager.newPage(uf, ri, richlet, httpres, path);
-				final Execution exec =
-					new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
-				fixContentType(response);
-				wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
-			} else if (path != null) {
-				final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-				if (pagedef == null)
-					return false; //not found
-
-				final Page page = WebManager.newPage(uf, ri, pagedef, httpres, path);
-				final Execution exec =
-					new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
-				fixContentType(response);
-				wappc.getUiEngine()
-					.execNewPage(exec, pagedef, page, response.getWriter());
+		try {
+			if (desktop != null) { //recycle
+				final Page page = Utils.getMainPage(desktop);
+				if (page != null) {
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine()
+						.recycleDesktop(exec, page, response.getWriter());
+				} else
+					desktop = null; //something wrong (not possible; just in case)
 			}
-		}
 
-		if (dtrc != null) Utils.afterService(dtrc, desktop);
+			if (desktop == null) {
+				desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
+				if (desktop == null) //forward or redirect
+					return true;
+
+				final RequestInfo ri = new RequestInfoImpl(
+					wapp, sess, desktop, httpreq,
+					PageDefinitions.getLocator(wapp, path));
+				((SessionCtrl)sess).notifyClientRequest(true);
+
+				final Page page;
+				final StringWriter sw =
+					shallJQueryPatch(httpreq) ? new StringWriter(): null;
+				final UiFactory uf = wappc.getUiFactory();
+				if (uf.isRichlet(ri, bRichlet)) {
+					final Richlet richlet = uf.getRichlet(ri, path);
+					if (richlet == null)
+						return false; //not found
+
+					page = WebManager.newPage(uf, ri, richlet, httpres, path);
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine().execNewPage(exec, richlet, page,
+						sw != null ? (Writer)sw: response.getWriter());
+				} else if (path != null) {
+					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+					if (pagedef == null)
+						return false; //not found
+
+					page = WebManager.newPage(uf, ri, pagedef, httpres, path);
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine().execNewPage(exec, pagedef, page,
+						sw != null ? (Writer)sw: response.getWriter());
+				} else
+					return true; //nothing to do
+
+				//Liferay failed to load zk.wpd with IE, so we delay it
+				if (sw != null) {
+					Writer out = response.getWriter();
+					out.write("<div id=\"");
+					out.write(page.getUuid());
+					out.write("\"></div><script>setTimeout(function(){\njQuery('#");
+					out.write(page.getUuid());
+					out.write("').replaceWith('");
+					out.write(Strings.escape(sw.toString(), Strings.ESCAPE_JAVASCRIPT));
+					out.write("');},");
+					out.write(_jqpatchDelay);
+					out.write(");</script>");
+				}
+			}
+		} finally {
+			if (dtrc != null) Utils.afterService(dtrc, desktop);
+		}
 		return true; //success
 	}
+	private static boolean shallJQueryPatch(HttpServletRequest httpreq) {
+		if (_jqpatchDelay == -1) {
+			_jqpatchDelay = 500;
+			_jqpatch = Library.getProperty(org.zkoss.zk.ui.sys.Attributes.PORTLET_JQUERY_PATCH);
+			if (_jqpatch != null) {
+				final int j = _jqpatch.indexOf(',');
+				if (j >= 0) {
+					final String v = _jqpatch.substring(j + 1);
+					try {
+						_jqpatchDelay = Integer.parseInt(v);
+						if (_jqpatchDelay < 0)
+							_jqpatchDelay = 0;
+					} catch (Throwable ex) {
+						log.warning("Ignored delay time specified in "+org.zkoss.zk.ui.sys.Attributes.PORTLET_JQUERY_PATCH+": "+_jqpatch);
+					}
+					_jqpatch = _jqpatch.substring(0, j);
+				}
+				if (_jqpatch.length() == 0)
+					_jqpatch = null;
+			}
+		}
+		return _jqpatch != null
+			&& ("*".equals(_jqpatch) || Servlets.isBrowser(httpreq, _jqpatch));
+	}
+	private static String _jqpatch;
+	private static int _jqpatchDelay = -1;
+
 	private static void fixContentType(RenderResponse response) {
 		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
 		if (response.getContentType() == null)
