@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;

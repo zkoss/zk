@@ -18,7 +18,7 @@ import javax.servlet.http.*;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * The listener works with Servlet 2.3.

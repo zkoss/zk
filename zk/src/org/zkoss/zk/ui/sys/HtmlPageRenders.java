@@ -56,7 +56,7 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.Device;

@@ -74,6 +74,7 @@ import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;

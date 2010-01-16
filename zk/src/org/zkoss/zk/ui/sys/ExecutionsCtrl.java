@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Additional utilities for {@link Execution}.

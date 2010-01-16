@@ -61,7 +61,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.device.Devices;
 
 /**

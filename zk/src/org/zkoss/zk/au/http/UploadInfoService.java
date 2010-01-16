@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.AuRequest;

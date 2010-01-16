@@ -268,6 +268,8 @@ November, 2009
 		<name>org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible</name>
 		<value>true</value>
 	</library-property>
+  + org.zkoss.zk.ui.impl.Attributes is deprecated and replaced with
+    org.zkoss.zk.ui.sys.Attributes
   
 	--------
 ZK 3.6.3

@@ -47,7 +47,7 @@ import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.SessionSerializationListener;
 import org.zkoss.zk.ui.util.SessionActivationListener;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.

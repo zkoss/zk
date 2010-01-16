@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Used to replace the theme defined in the language definitions

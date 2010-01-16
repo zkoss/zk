@@ -65,7 +65,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.SessionResolverImpl;
 import org.zkoss.zk.ui.http.I18Ns;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;

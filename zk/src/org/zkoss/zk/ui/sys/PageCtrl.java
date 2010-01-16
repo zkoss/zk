@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zk.ui.impl.Attributes#PAGE_REDRAW_CONTROL}.
+	/** @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zk.ui.sys.Attributes#PAGE_REDRAW_CONTROL}.
 	 */
 	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
 
@@ -196,8 +196,8 @@ public interface PageCtrl {
 
 	/** Redraws the whole page into the specified output.
 	 *
-	 * <p>You could use {@link org.zkoss.zk.ui.impl.Attributes#PAGE_REDRAW_CONTROL}
-	 * and/or {@link org.zkoss.zk.ui.impl.Attributes#PAGE_RENDERER}
+	 * <p>You could use {@link org.zkoss.zk.ui.sys.Attributes#PAGE_REDRAW_CONTROL}
+	 * and/or {@link org.zkoss.zk.ui.sys.Attributes#PAGE_RENDERER}
 	 * to control how to render manually.
 	 *
 	 * @since 5.0.0

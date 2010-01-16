@@ -86,7 +86,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
