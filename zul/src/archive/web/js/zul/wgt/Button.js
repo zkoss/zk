@@ -15,13 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	//IE adds extra height to first and last row, so fix it
 	var _fixhgh = zk.ie ? function (btn) {
-		var n = btn.$n(),
-			box = btn.$n('box');
-		if (n.style.height && box.offsetHeight) {
-			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
-			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
-				box.rows[1].style.height = jq.px0(box.offsetHeight -
-					cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
+		if (btn._mold == 'trendy') {
+			var n = btn.$n(),
+				box = btn.$n('box');
+			if (n.style.height && box.offsetHeight) {
+				var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
+				if (cellHgh != box.rows[0].cells[0].offsetHeight) {
+					box.rows[1].style.height = jq.px0(box.offsetHeight -
+						cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
+				}
 			}
 		}
 	}: zk.$void;
@@ -290,14 +292,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('setWidth', arguments);
 	},
 	//@Override
-	setHeight: zk.ie ? function (v) {
-		var trendy;
-		if (trendy = (this.desktop && this._mold == 'trendy'))
+	setHeight: zk.ie ? function () {
+		var b;
+		if (b=(this.desktop && this._mold == 'trendy'))
 			this.$n('box').rows[1].style.height = "";
 
 		this.$supers('setHeight', arguments);
 
-		if (trendy)
+		if (b)
 			_fixhgh(this);
 	}: function () {
 		this.$supers('setHeight', arguments);
