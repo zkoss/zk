@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.http;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
-import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -35,6 +34,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.PageRenderPatch;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
@@ -89,6 +90,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
  * processed by this portlet.</li>
  * </ul>
  *
+ * <p>To patch the rendering result of a ZK portlet, you can implement
+ * {@link PageRenderPatch} (and specified it in {@link org.zkoss.zk.ui.sys.Attributes#PORTLET_RENDER_PATCH_CLASS}).
  * @author tomyeh
  */
 public class DHtmlLayoutPortlet extends GenericPortlet {
@@ -213,8 +216,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				((SessionCtrl)sess).notifyClientRequest(true);
 
 				final Page page;
-				final StringWriter sw =
-					shallJQueryPatch(httpreq) ? new StringWriter(): null;
+				final PageRenderPatch patch = getRenderPatch();
+				final Writer out = patch.beforeRender(ri);
 				final UiFactory uf = wappc.getUiFactory();
 				if (uf.isRichlet(ri, bRichlet)) {
 					final Richlet richlet = uf.getRichlet(ri, path);
@@ -226,7 +229,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
 					wappc.getUiEngine().execNewPage(exec, richlet, page,
-						sw != null ? (Writer)sw: response.getWriter());
+						out != null ? out: response.getWriter());
 				} else if (path != null) {
 					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 					if (pagedef == null)
@@ -237,55 +240,51 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
 					wappc.getUiEngine().execNewPage(exec, pagedef, page,
-						sw != null ? (Writer)sw: response.getWriter());
+						out != null ? out: response.getWriter());
 				} else
 					return true; //nothing to do
 
-				//Liferay failed to load zk.wpd with IE, so we delay it
-				if (sw != null) {
-					Writer out = response.getWriter();
-					out.write("<div id=\"");
-					out.write(page.getUuid());
-					out.write("\"></div><script>setTimeout(function(){\njQuery('#");
-					out.write(page.getUuid());
-					out.write("').replaceWith('");
-					out.write(Strings.escape(sw.toString(), Strings.ESCAPE_JAVASCRIPT));
-					out.write("');},");
-					out.write(_jqpatchDelay);
-					out.write(");</script>");
-				}
+				if (out != null)
+					patch.patchRender(ri, page, out, response.getWriter());
 			}
 		} finally {
 			if (dtrc != null) Utils.afterService(dtrc, desktop);
 		}
 		return true; //success
 	}
-	private static boolean shallJQueryPatch(HttpServletRequest httpreq) {
-		if (_jqpatchDelay == -1) {
-			_jqpatchDelay = 500;
-			_jqpatch = Library.getProperty(org.zkoss.zk.ui.sys.Attributes.PORTLET_JQUERY_PATCH);
-			if (_jqpatch != null) {
-				final int j = _jqpatch.indexOf(',');
-				if (j >= 0) {
-					final String v = _jqpatch.substring(j + 1);
-					try {
-						_jqpatchDelay = Integer.parseInt(v);
-						if (_jqpatchDelay < 0)
-							_jqpatchDelay = 0;
-					} catch (Throwable ex) {
-						log.warning("Ignored delay time specified in "+org.zkoss.zk.ui.sys.Attributes.PORTLET_JQUERY_PATCH+": "+_jqpatch);
+	private static PageRenderPatch getRenderPatch() {
+		if (_prpatch != null)
+			return _prpatch;
+
+		synchronized (DHtmlLayoutPortlet.class) {
+			if (_prpatch != null)
+				return _prpatch;
+
+			final PageRenderPatch patch;
+			final String clsnm = Library.getProperty(
+				org.zkoss.zk.ui.sys.Attributes.PORTLET_RENDER_PATCH_CLASS);
+			if (clsnm == null) {
+				patch = new PageRenderPatch() {
+					public Writer beforeRender(RequestInfo reqInfo) {
+						return null;
 					}
-					_jqpatch = _jqpatch.substring(0, j);
+					public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
+					throws IOException {
+					}
+				};
+			} else {
+				try {
+					patch = (PageRenderPatch)Classes.newInstanceByThread(clsnm);
+				} catch (ClassCastException ex) {
+					throw new UiException(clsnm+" must implement "+PageRenderPatch.class.getName());
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex, "Unable to instantiate");
 				}
-				if (_jqpatch.length() == 0)
-					_jqpatch = null;
 			}
+			return _prpatch = patch;
 		}
-		return _jqpatch != null
-			&& ("*".equals(_jqpatch) || Servlets.isBrowser(httpreq, _jqpatch));
 	}
-	private static String _jqpatch;
-	private static int _jqpatchDelay = -1;
+	private static PageRenderPatch _prpatch;
 
 	private static void fixContentType(RenderResponse response) {
 		//Bug 1548478: content-type is required for some implementation (JBoss Portal)

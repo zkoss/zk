@@ -156,18 +156,17 @@ public class Attributes {
 	 */
 	public static final String ID_TO_UUID_PREFIX = "org.zkoss.zk.ui.id2uuidPrefix";
 
-	/** A library property to indicate whether to apply the so-called jQuery patch.
-	 * If the value is "ie", it is applied only to Internet Explorer.
-	 * Refer to {@link org.zkoss.web.servlet.Servlets#isBrowser} for more options.
-	 * If the value is "*", it is applied to all kinds of browsers.
-	 * <p>If you want to specify the number of milliseconds to wait before
-	 * replacing with the correct content, you could append a number
-	 * by separating it with comma. For example, "ie,1000" means to wait
-	 * 1000 miliseconds if the browser is Internet Explorer.
-	 * The default is 500 miliseconds.
+	/** A library property to specify the class used to patch the rendering
+	 * result of a portlet.
+	 * <p>Default: null (means no need of patch).
+	 * <p>If specified, the class must implement {@link PageRenderPatch}.
+	 * An example implementation is {@link org.zkoss.zkplus.liferay.JQueryRenderPatch}
+	 * that delays the rendering of a ZK portlet to avoid the conflicts when
+	 * using IE.
+	 * @see #PORTLET_JQUERY_PATCH
 	 * @since 5.0.0
 	 */
-	public static final String PORTLET_JQUERY_PATCH = "org.zkoss.zk.ui.portlet.jQueryPatch";
+	public static final String PORTLET_RENDER_PATCH_CLASS = "org.zkoss.zk.portlet.PageRenderPatch.class";
 
 	//URI//
 	/** A special prefix that is used if you want to inject a special
