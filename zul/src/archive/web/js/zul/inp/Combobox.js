@@ -130,7 +130,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				this.getInputNode().value = sel.getLabel();
 			
 			if (opts.sendOnChange)
-				this.$supers('updateChange_');
+				this.$supers('updateChange_', []);
 			this.fire('onSelect', {items: sel?[sel]:[], reference: sel});
 		}
 	},
