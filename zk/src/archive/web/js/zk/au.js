@@ -894,7 +894,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			efs.showBusy.destroy();
 			delete efs.showBusy;
 		}
-		jq("#zk_showBusy").remove(); //since user might want to show diff msg
+		zUtl.destroyProgressbox("zk_showBusy"); //since user might want to show diff msg
 		
 		if (open || arguments.length == 1) {
 			zUtl.destroyProgressbox("zk_loadprog");
