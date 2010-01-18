@@ -60,7 +60,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 */
 		autodrop: null
 	},
-
+	setWidth: function () {
+		this.$supers('setWidth', arguments);
+		if (this.desktop) {
+			this.onSize();
+		}
+	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)

@@ -142,6 +142,7 @@ November, 2009
   2932514: listheader.visible=false & footer.span not work well
   2932107: Strange listbox behaviour with mold="paging"
   2932443: Doublebox and Decimalbox shall handle special Locale
+  2933235: combobox setWidth not work
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
