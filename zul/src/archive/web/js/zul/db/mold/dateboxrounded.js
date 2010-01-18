@@ -18,12 +18,16 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass();
 	out.push('<i', this.domAttrs_({text:true}), '><input id="',
-			uuid, '-real" class="', zcls, '-inp-simple" autocomplete="off"',
+			uuid, '-real" class="', zcls, '-inp" autocomplete="off"',
 			this.textAttrs_(), '/><i id="', uuid, '-btn" class="',
-			zcls, '-btn-simple');
+			zcls, '-btn');
 
 	if (!this._buttonVisible)
 		out.push(' ', zcls, '-btn-right-edge');
+	if (this._readonly)
+		out.push(' ', zcls, '-btn-readonly');	
+	if (zk.ie6_ && !this._buttonVisible && this._readonly)
+		out.push(' ', zcls, '-btn-right-edge-readonly');
 
 	out.push('"></i>');
 

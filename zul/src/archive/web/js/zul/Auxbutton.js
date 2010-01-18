@@ -31,7 +31,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		this._img = $img[0];
 
 		$btn.zk.disableSelection();
-		if(wgt._mold != 'simple')
+		if (!wgt.inRoundedMold())
 			$img.zk.disableSelection();
 
 		if (!wgt.inDesign)
@@ -46,7 +46,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		var $btn = jq(this._btn);
 
 		$btn.zk.enableSelection();
-		if(this._wgt._mold != 'simple')
+		if (this._img)
 			zk(this._img).enableSelection();
 
 		if (!this._wgt.inDesign)
@@ -58,7 +58,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	 * Fixes the position of the button from the input element
 	 */
 	fixpos: function () {
-		if(this._wgt._mold == 'simple') return;
+		if (this._wgt.inRoundedMold()) return;
 		var btn = this._btn;
 		if (!this._fixed && zk(btn).isRealVisible()) {
 			var ref = this._ref, img = this._img,
@@ -88,50 +88,44 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	_domOver: function () {
 		var wgt = this._wgt,
 			inp = wgt.getInputNode(),
-			zcls = wgt.getZclass();
+			zcls = wgt.getZclass(),
+			inRoundedMold = wgt.inRoundedMold();
 		
-		if (!wgt.isDisabled() && !zk.dragging){
-			if(wgt._mold != 'simple')
-				jq(this._btn).addClass(zcls + "-btn-over");
-			else {
-				if (!wgt._buttonVisible) return;
-				jq(this._btn).addClass(zcls + "-btn-simple-over");
-				
-				if (!jq(inp).hasClass(zcls + '-simple-text-invalid'))
-					jq(inp).addClass(zcls + "-inp-simple-over");
-			}
+		if (!wgt.isDisabled() && !zk.dragging) {
+		
+			if (inRoundedMold && !wgt._buttonVisible) return;
+			
+			jq(this._btn).addClass(zcls + "-btn-over");
+			
+			if (inRoundedMold && !jq(inp).hasClass(zcls + '-text-invalid'))
+				jq(inp).addClass(zcls + "-inp-over");
 		}
 	},
 	_domOut: function () {
 		var wgt = this._wgt,
 			zcls = wgt.getZclass();
 		if (!wgt.isDisabled() && !zk.dragging){
-			if(wgt._mold != 'simple')
-				jq(this._btn).removeClass(zcls + "-btn-over");
-			else {
-				jq(this._btn).removeClass(zcls + "-btn-simple-over");
-				jq(wgt.getInputNode()).removeClass(zcls + "-inp-simple-over");
-			}
+			jq(this._btn).removeClass(zcls + "-btn-over");
+			jq(wgt.getInputNode()).removeClass(zcls + "-inp-over");
 		}
 	},
 	_domDown: function () {
 		var wgt = this._wgt,
 			inp = wgt.getInputNode(),
-			zcls = wgt.getZclass();
+			zcls = wgt.getZclass(),
+			inRoundedMold = wgt.inRoundedMold();
 			
 		if (!wgt.isDisabled() && !zk.dragging) {
 			var $Auxbutton = zul.Auxbutton,
 				curab = $Auxbutton._curab;
 			if (curab) curab._domUp();
 
-			if(wgt._mold != 'simple')
-				jq(this._btn).addClass(zcls + "-btn-clk");
-			else {
-				if (!wgt._buttonVisible) return;
-				jq(this._btn).addClass(zcls + "-btn-simple-clk");
-				if(!wgt._readonly && !jq(inp).hasClass(zcls + '-simple-text-invalid'))
-					jq(inp).addClass(zcls + "-inp-simple-clk");
-			}
+			if (inRoundedMold && !wgt._buttonVisible) return;
+
+			jq(this._btn).addClass(zcls + "-btn-clk");
+			
+			if (inRoundedMold && !wgt.isReadonly() && !jq(inp).hasClass(zcls + '-text-invalid'))
+				jq(inp).addClass(zcls + "-inp-clk");			
 			
 			jq(document.body).mouseup(this.proxy(this._domUp));
 
@@ -146,13 +140,11 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			var wgt = curab._wgt,
 				zcls = wgt.getZclass();
 				
-			if(wgt._mold != 'simple')
-				jq(curab._btn).removeClass(zcls + "-btn-clk");
-			else {
-				if (!wgt._buttonVisible) return;
-				jq(curab._btn).removeClass(zcls + "-btn-simple-clk");
-				jq(wgt.getInputNode()).removeClass(zcls + "-inp-simple-clk");
-			}
+			if (wgt.inRoundedMold() && !wgt._buttonVisible) return;
+			
+			jq(curab._btn).removeClass(zcls + "-btn-clk");
+			jq(wgt.getInputNode()).removeClass(zcls + "-inp-clk");
+			
 			jq(document.body).unbind("mouseup", curab.proxy(this._domUp));
 		}
 	}

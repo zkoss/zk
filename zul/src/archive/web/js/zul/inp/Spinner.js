@@ -40,18 +40,17 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			var n = this.btn,
 				zcls = this.getZclass();
 			if (!n) return;
-			if (this._mold != 'simple')
+			if (!this.inRoundedMold())
 				n.style.display = v == 'true'? '': 'none';
 			else {
 				var fnm = v ? 'removeClass': 'addClass';
-				jq(n)[fnm](zcls + '-btn-right-edge');
-				this._bindDomEvent(n, v);
+				jq(n)[fnm](zcls + '-btn-right-edge');				
 				
 				if (zk.ie6_) {
 					jq(n)[fnm](zcls + 
 						(this._readonly ? '-btn-right-edge-readonly': '-btn-right-edge'));
 						
-					if (jq(this.getInputNode()).hasClass(zcls + "-simple-text-invalid"))
+					if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
 							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
 				}
 			}
@@ -75,7 +74,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-spinner";
+		return zcls != null ? zcls: "z-spinner" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	isButtonVisible: function(){
 		return _buttonVisible;
@@ -153,7 +152,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt){
-		
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (this.inp && !this.inp.disabled && !zk.dragging) {
 			if (this._currentbtn)
 				this.ondropbtnup(evt);
@@ -167,7 +166,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(inp.disabled) return;
 
 		this.checkValue();
-		if(this._mold != 'simple')
+		if (!this.inRoundedMold())
 			btn = zk.opera || zk.safari ? btn : btn.firstChild;
 		ofs = zk(btn).revisedOffset();
 		
@@ -196,6 +195,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}
 	},
 	_btnUp: function(evt){
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		var inp = this.inp;
 		if(inp.disabled) return;
 
@@ -209,6 +209,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		inp.focus();
 	},
 	_btnOut: function(evt){
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (this.inp && !this.inp.disabled && !zk.dragging)
 			jq(this.btn).removeClass(this.getZclass()+"-btn-over");
 			
@@ -218,6 +219,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this._stopAutoIncProc();
 	},
 	_btnOver: function(evt){
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (this.inp && !this.inp.disabled && !zk.dragging)
 			jq(this.btn).addClass(this.getZclass()+"-btn-over");
 	},
@@ -326,9 +328,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			
 		if(btn){
 			this._auxb = new zul.Auxbutton(this, btn, inp);
-			this._bindDomEvent(btn, true);			
-			if (this._mold == 'simple' && !this._buttonVisible)
-				this._bindDomEvent(btn, false);
+			this.domListen_(btn, "onmousedown", "_btnDown");
+			this.domListen_(btn, "onmouseup", "_btnUp");
+			this.domListen_(btn, "onmouseout", "_btnOut");
+			this.domListen_(btn, "mouseover", "_btnOver");
 		}
 		this.syncWidth();
 	},
@@ -342,16 +345,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(btn){
 			this._auxb.cleanup();
 			this._auxb = null;
-			this._bindDomEvent(btn, false);
+			this.domUnlisten_(btn, "onmousedown", "_btnDown");
+			this.domUnlisten_(btn, "onmouseup", "_btnUp");
+			this.domUnlisten_(btn, "onmouseout", "_btnOut");
+			this.domUnlisten_(btn, "mouseover", "_btnOver");
 		}
 		this.$supers('unbind_', arguments);
-	},
-	_bindDomEvent: function (btn, isBind) {
-		var fnm = isBind ? 'domListen_': 'domUnlisten_';
-		this[fnm](btn, "onMousedown", "_btnDown")
-			[fnm](btn, "onMouseup", "_btnUp")
-			[fnm](btn, "onMouseout", "_btnOut")
-			[fnm](btn, "onMouseover", "_btnOver");
 	}
 	
 });

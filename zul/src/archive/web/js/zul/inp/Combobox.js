@@ -299,7 +299,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-combobox";
+		return zcs ? zcs: "z-combobox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 
 	redrawpp_: function (out) {

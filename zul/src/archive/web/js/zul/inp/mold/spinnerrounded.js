@@ -17,12 +17,16 @@ function (out) {
 		uuid = this.uuid;
 	
 	out.push('<i', this.domAttrs_({text:true}), '>',
-			'<input id="', uuid,'-real"', 'class="', zcls,'-inp-simple"',
+			'<input id="', uuid,'-real"', 'class="', zcls,'-inp"',
 			this.textAttrs_(),'/>', '<i id="', uuid,'-btn"',
-			'class="', zcls,'-btn-simple');
+			'class="', zcls,'-btn');
 	
 	if (!this._buttonVisible)
 		out.push(' ', zcls, '-btn-right-edge');
+	if (this._readonly)
+		out.push(' ', zcls, '-btn-readonly');	
+	if (zk.ie6_ && !this._buttonVisible && this._readonly)
+		out.push(' ', zcls, '-btn-right-edge-readonly');
 	
 	out.push('"></i></i>');
 	

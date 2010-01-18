@@ -59,13 +59,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
 					fnm = disabled ? 'addClass': 'removeClass';
-				if (this._mold != 'simple') {
-					jq(this.$n())[fnm](zcls + '-disd');
-					jq(inp)[fnm](zcls + '-text-disd');
-				} else {
-					jq(this.$n())[fnm](zcls + '-simple-disd');
-					jq(inp)[fnm](zcls + '-text-simple-disd');
-				}	
+				jq(this.$n())[fnm](zcls + '-disd');
+				jq(inp)[fnm](zcls + '-text-disd');
 			}
 		},
 		/** Returns whether it is readonly.
@@ -78,22 +73,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
-				var zcls = this.getZclass();
+				var zcls = this.getZclass(),
+					fnm = readonly ? 'addClass': 'removeClass';
 				
 				inp.readOnly = readonly;
-				if (this._mold != 'simple')
-					jq(inp)[readonly ? 'addClass': 'removeClass'](
-							zcls + '-readonly');
-				else {
-					var btn = this.$n('btn'),
-						fnm = readonly ? 'addClass': 'removeClass';
-					jq(inp)[fnm](zcls + '-inp-simple-readonly');
-					jq(btn)[fnm](zcls + '-btn-simple-readonly');
-					if (!zk.ie6_) return;
-					var css = this._buttonVisible ? '-btn-simple-readonly':
-													'-btn-right-edge-readonly';
-					jq(btn)[fnm](zcls + css);
-				}
+				jq(inp)[fnm](zcls + '-readonly');
+				
+				if (!this.inRoundedMold()) return;
+				
+				var btn = this.$n('btn');
+				jq(btn)[fnm](zcls + '-btn-readonly');
+				
+				if (zk.ie6_)		
+					jq(btn)[fnm](zcls + (this._buttonVisible ? '-btn-readonly':
+													'-btn-right-edge-readonly'));
 			}
 		},
 		/** Returns the cols.
@@ -171,6 +164,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	isMultiline: function() {
 		return false;
+	},
+	/**
+	 * Returns whether is in rounded mold or not.
+	 * @return boolean
+	 */
+	inRoundedMold: function(){
+		return this._mold == "rounded";
 	},
 	/** Returns the value in the String format.
 	 * @return String
@@ -370,8 +370,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!remainError) {			
 			var zcls = this.getZclass();
 			this._errmsg = null;
-			jq(this.getInputNode()).removeClass(zcls + (this._mold == 'simple' ? "-simple-text-invalid": "-text-invalid"));
-			if(zk.ie6_ && this._mold == 'simple')
+			jq(this.getInputNode()).removeClass(zcls + "-text-invalid");
+			if(zk.ie6_ && this.inRoundedMold())
 				jq(this.$n('btn')).removeClass(zcls + "-btn-right-edge-invalid");
 			
 		}
@@ -410,8 +410,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		
 		var zcls = this.getZclass();
 		if (this.desktop) { //err not visible if not attached
-			jq(this.getInputNode()).addClass(zcls + (this._mold == 'simple' ? "-simple-text-invalid": "-text-invalid"));
-			if(zk.ie6_ && this._mold == 'simple' && !this._buttonVisible)
+			jq(this.getInputNode()).addClass(zcls + "-text-invalid");
+			if(zk.ie6_ && this.inRoundedMold() && !this._buttonVisible)
 				jq(this.$n('btn')).addClass(zcls + "-btn-right-edge-invalid");
 
 			var cst = this._cst, errbox;

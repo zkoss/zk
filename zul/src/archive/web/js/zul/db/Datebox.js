@@ -61,21 +61,18 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			var n = this.$n('btn'),
 				zcls = this.getZclass();
 			if (n) {
-				if (this._mold != 'simple')
+				if (!this.inRoundedMold())
 					v ? jq(n).show() : jq(n).hide();
 				else {
-					var fnm = v ? ['removeClass', 'domListen_']: 
-								['addClass', 'domUnlisten_'];
+					var fnm = v ? 'removeClass': 'addClass';
+					jq(n)[fnm](zcls + '-btn-right-edge');
 					
-					jq(n)[fnm[0]](zcls + '-btn-right-edge');
-					this[fnm[1]](n, 'onClick', '_doBtnClick');
-					
-					if (zk.ie6_) {
-						jq(n)[fnm[0]](zcls + 
-							(this._readonly ? '-btn-right-edge-readonly': '-btn-right-edge'));
+					if (zk.ie6_) {						
+						jq(n)[fnm](zcls + 
+							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
 						
-						if (jq(this.getInputNode()).hasClass(zcls + "-simple-text-invalid"))
-							jq(n)[fnm[0]](zcls + "-btn-right-edge-invalid");
+						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
+							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
 					}
 				}
 				this.onSize();
@@ -250,7 +247,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onShow: _zkf,
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-datebox";
+		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	/** Returns the String of the Date that is assigned to this component.
 	 *  <p>returns empty String if value is null
@@ -437,8 +434,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
-			if (this._mold == 'simple' && !this._buttonVisible) 
-				this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 		
 
@@ -480,6 +475,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled)
 			this.setOpen();
 		evt.stop();

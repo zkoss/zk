@@ -26,7 +26,9 @@
 			<spinner id="sp" step="5" value="&#36;{pm.value}"
 				constraint="min 0 max 100"
 				onChanging="pm.setValue(Integer.parseInt(event.value))"
-				onChange="pm.value = sp.value" cols="2" />
+				onChange="pm.value = sp.value" cols="2" mold="rounded"/>				
 		</hbox>
+		<checkbox label="Use rounded spinner" checked="true"
+			onCheck='sp.mold=self.checked? "rounded": "default"'/>
 	</vbox>
 </groupbox>

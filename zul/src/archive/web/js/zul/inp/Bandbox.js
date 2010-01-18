@@ -34,7 +34,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-bandbox";
+		return zcs != null ? zcs: "z-bandbox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 
 	redrawpp_: function (out) {

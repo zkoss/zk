@@ -10,14 +10,15 @@
 	padding: 2px;
 }
 .z-calendar,
-.z-calendat-title-over {
+.z-calendar-title-over {
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
+.z-datebox-rounded-pp .z-calendar,
 .z-datebox-pp .z-calendar {
 	border: 0;
 }
-.z-calendat-title-over {
+.z-calendar-title-over {
 	color: #8FADFF;
 }
 
@@ -70,11 +71,13 @@
 	color: #AAA !important;
 }
 /*.z-calendar-calyear*/ 
+.z-datebox-rounded-calyear,
 .z-datebox-calyear {
 	background: #e9f1f3;
 	border: 1px solid;
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
+.z-datebox-rounded-calday,
 .z-datebox-calday {
 	border: 1px solid #ddd;
 }
@@ -130,6 +133,8 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
+.z-datebox-rounded-calmon td.z-datebox-rounded-over-seld,
+.z-datebox-rounded-calday td.z-datebox-rounded-over-seld,
 .z-calendar td.z-calendar-over-seld,
 .z-datebox-calmon td.z-datebox-over-seld,
 .z-datebox-calday td.z-datebox-over-seld {
@@ -143,12 +148,14 @@
 .z-calendar-caldow td {
 	text-align: center;
 }
+.z-datebox-rounded-caldow td,
 .z-datebox-caldow td {
 	font-size: ${fontSizeS}; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }
 
 <c:if test="${c:isExplorer()}">
+.z-datebox-rounded-calyear td,
 .z-calendar-calyear td, .z-datebox-calyear td {
 	color: black; <%-- 1735084 --%>
 }

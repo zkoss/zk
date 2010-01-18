@@ -30,20 +30,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			var n = this.$n('btn'),
 				zcls = this.getZclass();
 			if (n) {
-				if(this._mold != 'simple')
+				if (!this.inRoundedMold())
 					v ? jq(n).show() : jq(n).hide();
 				else {
-					var fnm = v ? ['removeClass', 'domListen_']: 
-								['addClass', 'domUnlisten_'];						
-					jq(n)[fnm[0]](zcls + '-btn-right-edge');
-					this[fnm[1]](n, 'onClick', '_doBtnClick');
+					var fnm = v ? 'removeClass': 'addClass';
+					jq(n)[fnm](zcls + '-btn-right-edge');
 					
 					if (zk.ie6_) {						
-						jq(n)[fnm[0]](zcls + 
+						jq(n)[fnm](zcls + 
 							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
 						
-						if (jq(this.getInputNode()).hasClass(zcls + "-simple-text-invalid"))
-							jq(n)[fnm[0]](zcls + "-btn-right-edge-invalid");
+						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
+							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
 					}
 				}
 				this.onSize();
@@ -377,8 +375,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
-			if (this._mold == 'simple' && !this._buttonVisible)
-				this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 		//this.syncWidth();
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this});
@@ -399,6 +395,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
+		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled && !zk.animating()) {		
 			if (this._open) this.close({focus:true,sendOnOpen:true});
 			else this.open({focus:true,sendOnOpen:true});	
