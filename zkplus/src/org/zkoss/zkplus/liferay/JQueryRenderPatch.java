@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.sys.PageRenderPatch;
  * a library property called "org.zkoss.zkplus.liferary.jQueryPatch"
  * (refer to {@link #JQUERY_PATCH} for details).
  *
- * @author tomyeh
+ * @author tomyeh, sam
  * @since 5.0.0
  */
 public class JQueryRenderPatch implements PageRenderPatch {
@@ -118,22 +118,18 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		Matcher m = p.matcher(html);
 		StringBuffer buffer = new StringBuffer();
 		while(m.find()) {
-			if (!isAppendCSS)
-				isAppendCSS = true;
+			isAppendCSS = true;
 			String uri = m.group(1);
 			script.append("_zkCSS('" + uri + "');");
 			m.appendReplacement(buffer, "");
 		}
 		m.appendTail(buffer);
-		
-		String[] ret = new String[2];
+
+		String[] ret = {"", buffer.toString()};
 		if (isAppendCSS) {
 			script.append("</script>");
 			ret[0] = script.toString();
-		} else
-			ret[0] = "";
-		
-		ret[1] = buffer.toString();
+		}
 		return ret;
 	}
 }
