@@ -33,7 +33,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
     MINUTE_FIELD: 1,
     /**Useful constant for SECOND (s) field alignment.
      * @type int
-     * 
+     */
     SECOND_FIELD: 2,
     /**Useful constant for AM_PM (a) field alignment.
      * @type int
