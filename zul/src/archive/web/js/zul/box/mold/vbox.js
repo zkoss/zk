@@ -34,7 +34,7 @@ function (out) {
 	var v = this.getAlign();
 	if (v && v != 'stretch') out.push(' align="', zul.box.Box._toHalign(v), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
-	if (v == 'stretch') out.push(';width:100%');
+	if (v == 'stretch' || (zk.safari && (v == null || v == 'start'))) out.push(';width:100%');
 	if (this._isStretchPack()) out.push(';height:100%');
 	out.push('">');
 
