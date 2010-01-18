@@ -15,7 +15,8 @@ package org.zkoss.zkplus.liferay;
 import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.ServletRequest;
 
 import org.zkoss.lang.Library;
@@ -93,6 +94,11 @@ public class JQueryRenderPatch implements PageRenderPatch {
 	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
 	throws IOException {
 		final String extid = page.getUuid() + "-ext";
+		String html = Strings.escape(((StringWriter)result).toString(), Strings.ESCAPE_JAVASCRIPT);
+		String appendCSS = appendCSSToHeader(html);
+		if (appendCSS != null)
+			out.write(appendCSS);
+		//we have to process CSS and append it to HEAD
 		out.write("<div id=\"");
 		out.write(extid);
 		out.write("\"></div><script>setTimeout(function(){\njQuery('#");
@@ -100,9 +106,40 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		out.write("').append('");
 			//we have to use append() since it is evaluated synchronously
 			//while replaceWith() is not
-		out.write(Strings.escape(((StringWriter)result).toString(), Strings.ESCAPE_JAVASCRIPT));
+		out.write(appendCSS != null ? replaceCSS(html) : html);
 		out.write("');},");
-		out.write(_delay);
+		out.write("" + _delay);
 		out.write(");</script>");
+	}
+	
+
+	private static String appendCSSToHeader(String html) {
+		boolean isAppendCSS = false;
+		StringBuffer script = new StringBuffer("<script>function loadCSSDirect(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
+		Pattern p = Pattern.compile("<link[^>]+rel=[\"']?[stylesheet]+[\"']?[^>]+type=[\"']?[text/css]+[\"']?[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
+		Matcher m = p.matcher(html);
+		while(m.find()) {
+			if (!isAppendCSS)
+				isAppendCSS = true;
+			String uri = m.group(1);
+			script.append("loadCSSDirect('" + uri + "');");
+		}
+
+		if (isAppendCSS) {
+			script.append("</script>");
+			return script.toString();
+		}
+		return null;
+	}
+
+	private static String replaceCSS(String html) {
+		Pattern p = Pattern.compile("<link[^>]+rel=[\"']?[stylesheet]+[\"']?[^>]+type=[\"']?[text/css]+[\"']?[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
+		Matcher m = p.matcher(html);
+		StringBuffer buffer = new StringBuffer();
+		while(m.find())
+			m.appendReplacement(buffer, "");
+		m.appendTail(buffer);
+
+		return buffer.toString();
 	}
 }
