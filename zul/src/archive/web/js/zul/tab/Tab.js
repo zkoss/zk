@@ -208,11 +208,13 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	//event handler//
 	onClose: function () {
 		if (this.isSelected()) {
-			var self = this;
+			var self = this,
+				p = this.parent;
 			
 			// Bug 2931212, send onSelect after onClose
 			setTimeout(function () {
-    			var tabbox = self.getTabbox();
+    			if (!self.parent || self.parent != p)
+    				return; // nothing to do
     			for (var tab = self; tab = tab.nextSibling;)
     				if (!tab.isDisabled()) {
     					tab._sel(true);
