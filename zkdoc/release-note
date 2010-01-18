@@ -54,17 +54,14 @@ November, 2009
   2908598: The script directive supports the if/unless attribute
   2909551: ZK Client engine support Google AJAX API loader
   2905982: A way to reuse the desktop across the requests
-  2914010: Position of Messagebox is not at the center of scroll view
   2919807: Make EventQueue available to CE
   2930316: Support client-polling server-push in ZK CE
   2920529: Session-scope EventQueue
   2830237: jasperreport support media
-  2923266: Enhance colorbox : add setDisable() function
-  2926128: Problem setting value to a datebox
   2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
   2927319: EventQueue supports asynchronous listener
   2928011: provide a customization for zk.Draggable
-  2932595: Simple mold for combobox, datebox, timebox, spinner, bandbox
+  2932595: New mold for combobox, datebox, timebox, spinner, bandbox
   
 * RC/RC2 Bugs  
   2870616: Unclosed progress mask on opening menupopup
@@ -142,6 +139,8 @@ November, 2009
   2932514: listheader.visible=false & footer.span not work well
   2932107: Strange listbox behaviour with mold="paging"
   2932443: Doublebox and Decimalbox shall handle special Locale
+  2926128: Problem setting value to a datebox
+  2914010: Position of Messagebox is not at the center of scroll view
   2933235: combobox setWidth not work
   
 * Bugs
