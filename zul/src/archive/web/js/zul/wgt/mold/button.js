@@ -24,9 +24,15 @@ function (out) {
 	if (tabi && (zk.gecko || zk.safari)) btn += tabi;
 	btn += '></button>';
 
+	var wd = "100%", hgh = "100%";
+	if (zk.ie && !zk.ie8) {
+		//Not to generate 100% in IE6/7 (or the width will be 100%)
+		if (!this._width) wd = "";
+		if (!this._height) hgh = "";
+	}
 	out.push('<span', this.domAttrs_(), ' class="', zcls, '"',
 			(!this.isVisible() ? ' style="display:none"' : ''),
-			'><table id="', uuid, '-box" style="width:100%;height:100%"', zUtl.cellps0,
+			'><table id="', uuid, '-box" style="width:', wd, ';height:', hgh, '"', zUtl.cellps0,
 			(tabi && !zk.gecko && !zk.safari ? tabi : ''),
 			'><tr><td class="', zcls, '-tl">', (!zk.ie ? btn : ''),
 			'</td><td class="', zcls, '-tm"></td>', '<td class="', zcls,
