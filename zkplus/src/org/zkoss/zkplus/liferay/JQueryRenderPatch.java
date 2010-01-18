@@ -94,7 +94,6 @@ public class JQueryRenderPatch implements PageRenderPatch {
 	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
 	throws IOException {
 		final String extid = page.getUuid() + "-ext";
-		//String html = Strings.escape(((StringWriter)result).toString(), Strings.ESCAPE_JAVASCRIPT);
 		String[] html = processHtml(((StringWriter)result).toString());
 		//we have to process CSS and append it to HEAD
 		out.write(html[0]);
@@ -125,10 +124,11 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		}
 		m.appendTail(buffer);
 
-		String[] ret = {"", buffer.toString()};
+		String[] ret = {"", html};
 		if (isAppendCSS) {
 			script.append("</script>");
 			ret[0] = script.toString();
+			ret[1] = buffer.toString();
 		}
 		return ret;
 	}
