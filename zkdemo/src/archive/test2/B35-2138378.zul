@@ -22,6 +22,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<separator/>
 	2. Click the datebox popup to choose April month.
 	<separator/>
-	3. You should see the "xx-Apr-xxxx" in the input element like("01-Apr-2008" not "01-Oct-2008")
+	3. You should see the "xx-abr-xxxx" in the input element like("01-abr-2008" not "01-sep-2008")
 	<datebox id="db" format="dd-MMM-yyyy"/>
 </zk>
