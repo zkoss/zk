@@ -48,8 +48,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					if (vert) {
 						if (child._nhflex)
 							child.setFlexSize_({width:'auto'});
-						else
-							c.style.width= ''; //release the height of children so td can shrink
+						else {//release width of children might cause wider box
+							var oldwidth= c.style.width;
+							if (oldwidth) {
+								var oldoffwidth= c.offsetWidth;
+								c.style.width= ''; //release the width of children so td can shrink
+								if (c.offsetWidth > oldoffwidth)
+									c.style.width= oldwidth;
+							}
+						}
 						if (!child.$instanceof(zul.wgt.Cell)) {
 							var chdex = child.$n('chdex');
 							chdex.style.width = '';
@@ -57,8 +64,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					} else {
 						if (child._nvflex)
 							child.setFlexSize_({height:'auto'});
-						else
-							c.style.height= ''; //release the height of children so td can shrink
+						else {//release height of children might cause higher box
+							var oldheight= c.style.height;
+							if (oldheight) {
+								var oldoffheight= c.offsetHeight;
+								c.style.height= ''; //release the height of children so td can shrink
+								if (c.offsetHeight > oldoffsetheight)
+									c.style.height= oldheight;
+							}
+						}
 						if (!child.$instanceof(zul.wgt.Cell)) {
 							var chdex = child.$n('chdex');
 							chdex.style.height = '';
