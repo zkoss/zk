@@ -455,7 +455,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ebodytbl.style.width = tblwd + "px";
 			}
 			// bug #2799258 and #1599788
-			var hgh = this.getHeight();
+			var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
 			if (!this.isVflex() && (!hgh || hgh == "auto")) {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (this.ebody.clientWidth && hgh > 11) 
