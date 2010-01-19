@@ -27,6 +27,7 @@ ZK 3.6.4
   2929688: constraint on hidden tab panel problem
   2928837: Cannot remove bindable collection item from the DataBinder
   2932559: Dateformt is not correct
+  2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
   
 * Upgrade Notes:
 

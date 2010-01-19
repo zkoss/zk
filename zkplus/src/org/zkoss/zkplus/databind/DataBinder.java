@@ -39,6 +39,7 @@ import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
@@ -1006,7 +1007,13 @@ public class DataBinder implements java.io.Serializable {
 				try {
 					bean = Fields.get(bean, nodeid);
 				} catch (NoSuchMethodException ex) {
-					throw UiException.Aide.wrap(ex);
+					//bug# 2932475
+					//SameNode algorithm not good enough. LoadOnSave might load 
+					//implicit objects with same name(but different instance)
+					//have to ignore the exception
+					
+					//ignore the exception
+					
 				}
 			}
 		}
@@ -1236,19 +1243,23 @@ public class DataBinder implements java.io.Serializable {
 			//variable resolving
 			final Page page = comp.getPage();
 			if (page != null) { //Bug #2823591, try to "load" into a detached(no page) component and NPE
-				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
+				//bug #2932475, NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
+				bean = Components.getImplicit(comp, beanid);
 				if (bean == null) {
-					final Object self = 
-						page.getNamespace().getVariableNames().contains("self") ? 
-						page.getNamespace().getVariable("self", true) : null; 
-					try {
-						page.setVariable("self", comp);
-						bean = comp.getVariable(beanid, false);
-					} finally {
-						if (self == null) {
-							page.unsetVariable("self");
-						} else {
-							page.setVariable("self", self);
+					bean = page.getZScriptVariable(comp.getNamespace(), beanid);
+					if (bean == null) {
+						final Object self = 
+							page.getNamespace().getVariableNames().contains("self") ? 
+							page.getNamespace().getVariable("self", true) : null; 
+						try {
+							page.setVariable("self", comp);
+							bean = comp.getVariable(beanid, false);
+						} finally {
+							if (self == null) {
+								page.unsetVariable("self");
+							} else {
+								page.setVariable("self", self);
+							}
 						}
 					}
 				}
