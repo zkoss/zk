@@ -1,11 +1,21 @@
 <window>
 <listbox width="300px">
+<listitem><listcell><button id="b0" label="button 1"/></listcell></listitem>
 <listfoot>
-<listfooter><button id="b" width="100%" height="50px" label="test" /></listfooter>
+<listfooter><button id="b1" width="100%" height="50px" label="button 2" /></listfooter>
 </listfoot>
 </listbox>
-<button label="100px" width="100%" height="30px" onClick='b.width = b.height = "100px"'/>
-<button label="50%" width="100%" height="40px" onClick='b.width = "50%"'/>
-<button label="100%" width="100%" height="50px" onClick='b.width = "100%"'/>
-<button label="auto" width="100%" onClick='b.width = b.height = ""'/>
+Play with the first button
+<separator/>
+<button label="100px" width="100%" height="30px" onClick='b0.width = b0.height = "100px"'/>
+<button label="50%" width="100%" height="40px" onClick='b0.width = "50%"'/>
+<button label="100%" width="100%" height="50px" onClick='b0.width = "100%"'/>
+<button label="auto" width="100%" onClick='b0.width = b0.height = ""'/>
+<separator bar="true"/>
+Play with the second button
+<separator/>
+<button label="100px" width="100%" height="30px" onClick='b1.width = b1.height = "100px"'/>
+<button label="50%" width="100%" height="40px" onClick='b1.width = "50%"'/>
+<button label="100%" width="100%" height="50px" onClick='b1.width = "100%"'/>
+<button label="auto" width="100%" onClick='b1.width = b1.height = ""'/>
 </window>

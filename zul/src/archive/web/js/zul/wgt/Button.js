@@ -292,10 +292,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('setWidth', arguments);
 	},
 	//@Override
-	setHeight: zk.ie ? function () {
+	setHeight: zk.ie ? function (v) {
 		var b;
-		if (b=(this.desktop && this._mold == 'trendy'))
-			this.$n('box').rows[1].style.height = "";
+		if (this.desktop && this._mold == 'trendy') {
+			(b = this.$n('box')).rows[1].style.height = "";
+			b.style.height = !v || v == "auto" ? "": "100%";
+		}
 
 		this.$supers('setHeight', arguments);
 
