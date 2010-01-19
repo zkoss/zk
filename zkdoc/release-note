@@ -142,6 +142,7 @@ November, 2009
   2926128: Problem setting value to a datebox
   2914010: Position of Messagebox is not at the center of scroll view
   2933235: combobox setWidth not work
+  2934252: datebox display year incorect(Thailand locale)
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
