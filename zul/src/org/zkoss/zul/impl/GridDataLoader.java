@@ -270,10 +270,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 						if (renderer == null)
 							renderer = (RowRenderer)getRealRenderer();
 						row.detach(); //always detach
-						rows.insertBefore((Row) newUnloadedItem(renderer, min++), next);
+						rows.insertBefore((Row) newUnloadedItem(renderer, min), next);
 						++addcnt;
 					}
-
+					++min;
 					row = next;
 				}
 

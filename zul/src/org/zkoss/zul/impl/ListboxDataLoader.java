@@ -261,10 +261,10 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 						if (renderer == null)
 							renderer = (ListitemRenderer) getRealRenderer();
 						item.detach(); //always detach
-						_listbox.insertBefore(newUnloadedItem(renderer, min++), next);
+						_listbox.insertBefore(newUnloadedItem(renderer, min), next);
 						++addcnt;
 					}
-
+					++min;
 					item = next;//B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
