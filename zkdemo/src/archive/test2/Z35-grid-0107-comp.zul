@@ -113,12 +113,12 @@
 				<radio label="Grape"/>
 			</radiogroup>
 		</groupbox>
-	<panel framable="true" width="200px"
+	<panel framable="true" width="250px"
 		title="Panel component"
 		maximizable="true" minimizable="true" border="normal"
 		collapsible="true" closable="true"  if="${!empty arg.panel1}">
 		<panelchildren>
-		<window border="normal" width="250px" sizable="true">
+		<window border="normal" width="200px" sizable="true">
 			<caption image="/test2/img/inet.png" label="Hi there!"/>
 			<checkbox label="Hello, World!"/>
 			<separator bar="true"/>
