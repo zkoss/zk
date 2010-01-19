@@ -118,7 +118,11 @@ td.z-listgroup-inner {
 }
 td.z-listgroup-inner div.z-listcell-cnt {
 	color:#2C559C;
-	padding: 4px 2px; width: auto;
+	padding: 4px 2px;
+	width: auto;
+	<c:if test="${c:browser('ie6-')}">
+	width: 100%;
+	</c:if>
 	font-weight: bold;
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
@@ -171,6 +175,9 @@ div.z-listheader-cnt, .z-auxheader-cnt {
 div.z-listfooter-cnt, div.z-listcell-cnt,
 div.z-listheader-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
+	<c:if test="${c:browser('ie6-')}">
+	width: 100%;
+	</c:if>
 }
 div.z-listcell-cnt {
 	width: 100%;

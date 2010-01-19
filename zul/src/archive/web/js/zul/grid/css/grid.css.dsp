@@ -118,7 +118,8 @@ td.z-group-inner {
 }
 .z-group-inner .z-group-cnt .z-label, .z-group-inner .z-group-cnt {
 	color:#2C559C;
-	padding: 4px 2px; width: auto;
+	padding: 4px 2px;
+	width: auto;
 	font-weight: bold;
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
@@ -199,6 +200,9 @@ div.z-column-cnt, .z-auxheader-cnt {
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt,
 div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
+	<c:if test="${c:browser('ie6-')}">
+	width: 100%;
+	</c:if>
 }
 div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt {
 	width: 100%;
@@ -229,6 +233,9 @@ div.z-grid {
 }
 .z-columns-menu-dsc .z-menu-item-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.gif')});
+}
+.z-group-inner .z-group-cnt {
+	width: 100%;
 }
 </c:if>
 </c:if>

@@ -328,6 +328,9 @@ div.z-filetreefooter-cnt, div.z-filetreecell-cnt, div.z-filetreecol-cnt,
 div.z-vfiletreefooter-cnt, div.z-vfiletreecell-cnt, div.z-vfiletreecol-cnt,
 .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
+	<c:if test="${c:browser('ie6-')}">
+	width: 100%;
+	</c:if>
 }
 div.z-treecell-cnt, div.z-dottreecell-cnt,
 div.z-filetreecell-cnt, div.z-vfiletreecell-cnt {
