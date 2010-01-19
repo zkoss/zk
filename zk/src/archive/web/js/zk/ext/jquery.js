@@ -945,6 +945,7 @@ jQuery.extend({
 				// IE completely kills leading whitespace when innerHTML is used
 				if ( !jQuery.support.leadingWhitespace && /^\s/.test( elem ) )
 					div.insertBefore( context.createTextNode( elem.match(/^\s*/)[0] ), div.firstChild );
+				
 //Tom Yeh, Potix, 20090924: avoid memory leak
 				elem = [];
 				var c;
@@ -1217,7 +1218,6 @@ if (jQuery.browser.msie) {
 		_zrmgc.innerHTML = "";
 	};	
 }
-	
 
 jQuery.each({
 	parent: function(elem){return elem.parentNode;},
@@ -2251,8 +2251,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 		};
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	zrm(div);
-	div = null;
+	div = null; //no parent, so no zrm(div);
 })();
 
 if ( document.querySelectorAll ) (function(){
@@ -2263,13 +2262,11 @@ if ( document.querySelectorAll ) (function(){
 	// in quirks mode.
 	if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		zrm(div);
-		div = null;
+		div = null; //no parent, so no zrm(div);
 		return;
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	zrm(div);
-	div = null;
+	div = null; //no parent, so no zrm(div);
 	
 	Sizzle = function(query, context, extra, seed){
 		context = context || document;
@@ -2298,8 +2295,7 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 	// Opera can't find a second classname (in 9.6)
 	if ( div.getElementsByClassName("e").length === 0 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		zrm(div);
-		div = null;
+		div = null; //no parent, so no zrm(div);
 		return;
 	}
 
@@ -2308,13 +2304,11 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 
 	if ( div.getElementsByClassName("e").length === 1 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		zrm(div);
-		div = null;
+		div = null; //no parent, so no zrm(div);
 		return;
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	zrm(div);
-	div = null;
+	div = null; //no parent, so no zrm(div);
 
 	Expr.order.splice(1, 0, "CLASS");
 	Expr.find.CLASS = function(match, context, isXML) {
@@ -3204,8 +3198,7 @@ jQuery( window ).bind( 'unload', function(){
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		zrm(div);
-		root = all = a = div = script = null;
+		root = all = a = div = script = null; //no parent, so no zrm(div);
 		return;
 	}
 
@@ -3272,15 +3265,10 @@ jQuery( window ).bind( 'unload', function(){
 			jQuery.support.noCloneEvent = false;
 			div.detachEvent("onclick", arguments.callee);
 		});
-//Tom Yeh, Potix, 20090925: avoid memory leak
-		var d;
-		(d = div.cloneNode(true)).fireEvent("onclick");
-		zrm(d);
-		d = null
+		div.cloneNode(true).fireEvent("onclick");
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	zrm(div);
-	root = all = a = div = script = null;
+	root = all = a = div = script = null; //no parent, so no zrm(div);
 })();
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
