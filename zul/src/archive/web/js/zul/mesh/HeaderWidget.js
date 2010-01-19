@@ -101,6 +101,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			if (no) no.width = true;
 			else no = {width:true};
 		}
+		if (zk.ie8 && this._align)
+			style += 'text-align:' + this._align + ';';
+		
 		return style + this.$super('domStyle_', no);
 	},
 	/**
