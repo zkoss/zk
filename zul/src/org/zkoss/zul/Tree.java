@@ -569,7 +569,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			smartUpdate("flex", _vflex);
+			smartUpdate("vflex", _vflex);
 		}
 	}
 
