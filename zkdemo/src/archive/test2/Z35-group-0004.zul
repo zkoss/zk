@@ -38,7 +38,7 @@
         <columns sizable="true">
           <column width="35px" label="open"/>
           <column width="50px" label="Name"/>
-          <column width="200px" label="UI"/>
+          <column label="UI"/>
         </columns>
         <rows id="myrows">
           <group open="false">

@@ -36,7 +36,7 @@
 		<portalchildren width="50%">
 			<panel height="800px" title="Grid">
 				<panelchildren>
-					<div style="overflow:auto;height=200px">
+					<div style="width:99%;overflow:auto;height:200px;position:relative;">
 						<include src="Z35-grid-0101.zul"/>
 					</div>
 				</panelchildren>
