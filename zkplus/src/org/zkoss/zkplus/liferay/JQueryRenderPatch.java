@@ -113,16 +113,33 @@ public class JQueryRenderPatch implements PageRenderPatch {
 	private static String[] processHtml(String html) {
 		boolean isAppendCSS = false;
 		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
-		Pattern p = Pattern.compile("<link[^>]+rel=[\"']?[stylesheet]+[\"']?[^>]+type=[\"']?[text/css]+[\"']?[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
-		Matcher m = p.matcher(html);
+		Pattern p = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
+
 		StringBuffer buffer = new StringBuffer();
-		while(m.find()) {
-			isAppendCSS = true;
-			String uri = m.group(1);
-			script.append("_zkCSS('" + uri + "');");
-			m.appendReplacement(buffer, "");
+		int parseStart = 0, scriptStart = 0, scriptEnd = 0;
+		for (scriptStart = html.indexOf("<script"); scriptStart != -1;) {
+			if (parseStart < scriptStart) {
+				Matcher m = p.matcher(html.substring(parseStart, scriptStart));
+				while(m.find()) {
+					isAppendCSS = true;
+					String uri = m.group(1);
+					script.append("_zkCSS('" + uri + "');");
+					m.appendReplacement(buffer, "");
+				}
+				m.appendTail(buffer);
+			}
+			scriptEnd = html.indexOf("</script>", scriptStart);
+			if (scriptEnd == -1)
+				break;
+			scriptEnd += "</script>".length();
+			buffer.append(html.subSequence(scriptStart, scriptEnd));
+			if ((scriptStart = html.indexOf("<script", scriptEnd)) != -1)
+				parseStart = scriptEnd;
+			else {
+				buffer.append(html.substring(scriptEnd, html.length()));
+				break;
+			}
 		}
-		m.appendTail(buffer);
 
 		String[] ret = {"", html};
 		if (isAppendCSS) {
