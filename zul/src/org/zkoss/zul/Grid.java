@@ -524,7 +524,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			final Paginal pgi = getPaginal();
 			int pgsz = pgi.getPageSize();
 			final int ofs = pgi.getActivePage() * pgsz;
-			getDataLoader().syncModel(ofs, pgsz);
+			if (_rod) {
+				getDataLoader().syncModel(ofs, pgsz);
+			}
 			postOnInitRender();
 		}
 		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.

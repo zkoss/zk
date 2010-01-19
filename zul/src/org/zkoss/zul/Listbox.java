@@ -1386,7 +1386,9 @@ public class Listbox extends XulElement implements Paginated,
 						final Paginal pgi = getPaginal();
 						int pgsz = pgi.getPageSize();
 						final int ofs = pgi.getActivePage() * pgsz;
-						getDataLoader().syncModel(ofs, pgsz);
+						if (_rod) {
+							getDataLoader().syncModel(ofs, pgsz);
+						}
 						postOnInitRender();
 					}
 					invalidate();
