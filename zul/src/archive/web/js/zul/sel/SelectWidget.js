@@ -14,11 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function() {
 	function _beforeChildKey(wgt, evt) {
-		if (zAu.processing() || wgt._shallIgnoreEvent(evt))
-			return true;
-
-		var row = wgt._focusItem || wgt.getSelectedItem();
-		if (!row) return true;
+		return zAu.processing() || wgt._shallIgnoreEvent(evt)
+			|| (!wgt._focusItem && !wgt.getSelectedItem());
 	}
 	function _afterChildKey(evt) {
 		switch (evt.data.keyCode) {
@@ -659,7 +656,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (_beforeChildKey(this, evt))
 			return true;
 
-		var data = evt.data,
+		var row = this._focusItem || this.getSelectedItem(),
+			data = evt.data,
 			shift = data.shiftKey, ctrl = data.ctrlKey;
 		if (shift && !this.isMultiple())
 			shift = false; //OK to
