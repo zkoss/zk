@@ -1198,9 +1198,8 @@ jQuery.browser = {
 var zrm = function (el) {
 		if (el.parentNode)
 			el.parentNode.removeChild(el);
-	}, _zrmgc, _zrm, _zrms;
+	}, _zrmgc, _zrm;
 if (jQuery.browser.msie) {
-	_zrms = [];
 	_zrmgc = zrm;
 	zrm = function (el) {
 		if (document.body) {
@@ -1209,14 +1208,9 @@ if (jQuery.browser.msie) {
 			_zrmgc.style.display = 'none';
 			document.body.appendChild(_zrmgc);
 
-			zrm = _zrm; //replace with high performance one
-			for (var j = _zrms.length; j--;)
-				zrm(_zrms[j]);
-			_zrms = _zrm = null;
-			return zrm(el);
+			return (zrm = _zrm)(el); //replace with high performance one
 		}
 		_zrmgc(el);
-		_zrms.push(el);
 	};
 	_zrm =  function (el) {
 		_zrmgc.appendChild(el);
