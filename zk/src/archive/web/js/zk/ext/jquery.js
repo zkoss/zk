@@ -1204,19 +1204,15 @@ if (jQuery.browser.msie) {
 	_zrmgc = zrm;
 	zrm = function (el) {
 		if (document.body) {
-			var gcid = '_z_iegc';
-			_zrmgc = document.getElementById(gcid);
-			if (!_zrmgc) {
-				_zrmgc = document.createElement('div');
-				_zrmgc.id = gcid;
-				_zrmgc.style.display = 'none';
-				document.body.appendChild(_zrmgc);
-			}
+			_zrmgc = document.createElement('div');
+			_zrmgc.id = '_z_iegc';
+			_zrmgc.style.display = 'none';
+			document.body.appendChild(_zrmgc);
 
-			zrm = _zrm;
+			zrm = _zrm; //replace with high performance one
 			for (var j = _zrms.length; j--;)
 				zrm(_zrms[j]);
-			_zrms = null;
+			_zrms = _zrm = null;
 			return zrm(el);
 		}
 		_zrmgc(el);
