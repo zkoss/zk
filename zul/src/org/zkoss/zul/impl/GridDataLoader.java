@@ -66,7 +66,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public int getTotalSize() {
 		final Rows rows = _grid.getRows();
 		final ListModel model = _grid.getModel();
-		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 40;
+		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 0;
 	}
 	
 	public void doListDataChange(ListDataEvent event) {
