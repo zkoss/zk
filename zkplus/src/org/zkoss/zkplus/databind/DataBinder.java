@@ -37,6 +37,7 @@ import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
@@ -1005,7 +1006,13 @@ public class DataBinder implements java.io.Serializable {
 				try {
 					bean = Fields.get(bean, nodeid);
 				} catch (NoSuchMethodException ex) {
-					throw UiException.Aide.wrap(ex);
+					//bug# 2932475
+					//SameNode algorithm not good enough. LoadOnSave might load 
+					//implicit objects with same name(but different instance)
+					//have to ignore the exception
+					
+					//ignore the exception
+					//throw UiException.Aide.wrap(ex);
 				}
 			}
 		}
@@ -1234,19 +1241,23 @@ public class DataBinder implements java.io.Serializable {
 			//variable resolving
 			final Page page = comp.getPage();
 			if (page != null) { //Bug #2823591, try to "load" into a detached(no page) component and NPE
-				bean = page.getZScriptVariable(comp, beanid);
+				//bug #2932475, NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
+				bean = Components.getImplicit(comp, beanid);
 				if (bean == null) {
-					final Object self = page.getAttribute("self");
-					try {
-						page.setAttribute("self", comp);
-						bean = comp.getAttributeOrFellow(beanid, true);
-						if (bean == null)
-							bean = page.getXelVariable(null, null, beanid, true);
-					} finally {
-						if (self == null) {
-							page.removeAttribute("self");
-						} else {
-							page.setAttribute("self", self);
+					bean = page.getZScriptVariable(comp, beanid);
+					if (bean == null) {
+						final Object self = page.getAttribute("self");
+						try {
+							page.setAttribute("self", comp);
+							bean = comp.getAttributeOrFellow(beanid, true);
+							if (bean == null)
+								bean = page.getXelVariable(null, null, beanid, true);
+						} finally {
+							if (self == null) {
+								page.removeAttribute("self");
+							} else {
+								page.setAttribute("self", self);
+							}
 						}
 					}
 				}

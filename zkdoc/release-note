@@ -175,7 +175,8 @@ November, 2009
   2928837: Cannot remove bindable collection item from the DataBinder
   2919202: Listbox+WrongValueException does not show error box
   2090169: Button's width with "100%" is wrong
-  
+  2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
+
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
     and removeAttribute of Execution, Session, and WebApp is changed 
