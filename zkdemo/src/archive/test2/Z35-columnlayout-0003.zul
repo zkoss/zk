@@ -8,7 +8,7 @@
 	 </label>
 	 </vbox>
 	<columnlayout>
-		<columnchildren>
+		<columnchildren width="50%">
 			<panel>
 				<panelchildren>
 					<window title="this is window" border="normal">
@@ -129,7 +129,7 @@
 		</columnchildren>
 		 
 		 
-		<columnchildren>
+		<columnchildren width="50%">
 			<panel border="normal" title="2.&amp; 4. collapse button" collapsible="true">
 				<panelchildren>
 					<label>1.scroll to max.</label>

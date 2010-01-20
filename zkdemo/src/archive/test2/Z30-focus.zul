@@ -27,10 +27,10 @@ and the focus remains on the first textbox</li>
 </ol>
 ]]></html>
 	<window id="w" title="Window 1" border="normal" width="300px">
-		<textbox value="First"/>
+		<textbox id="t1" value="First"/>
 		<textbox id="t2" value="Second"/>
 		<button label="Restore to embedded" onClick="w.doEmbedded()"/>
-	<button label="Try 1" onClick="w.doModal()"/>
+	<button label="Try 1" onClick="t1.focus();w.doModal()"/>
 	<button label="Try 2" onClick="t2.focus();w.doModal()"/>
 	</window>
 </window>
