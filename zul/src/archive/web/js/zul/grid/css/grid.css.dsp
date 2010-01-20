@@ -200,11 +200,11 @@ div.z-column-cnt, .z-auxheader-cnt {
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt,
 div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
-	<c:if test="${c:browser('ie6-')}">
-	width: 100%;
-	</c:if>
 }
-div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt {
+div.z-footer-cnt,
+div.z-row-cnt,
+div.z-group-cnt,
+div.z-groupfoot-cnt {
 	width: 100%;
 }
 div.z-grid-body {

@@ -175,10 +175,8 @@ div.z-listheader-cnt, .z-auxheader-cnt {
 div.z-listfooter-cnt, div.z-listcell-cnt,
 div.z-listheader-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
-	<c:if test="${c:browser('ie6-')}">
-	width: 100%;
-	</c:if>
 }
+div.z-listfooter-cnt,
 div.z-listcell-cnt {
 	width: 100%;
 }
