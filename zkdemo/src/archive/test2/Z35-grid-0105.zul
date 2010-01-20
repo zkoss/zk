@@ -63,6 +63,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	
 	Grid newGrid(int rowc){
 		Grid grid = new Grid();
+		grid.setSizedByContent(true);
 		Columns cols = new Columns();
 		new Column("c1").setParent(cols);
 		new Column("c2").setParent(cols);
@@ -91,6 +92,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	void addDetail(){
 		Detail detail = new Detail();
 		Hbox box1 = new Hbox();
+		box1.setWidth("100%");
+		box1.setPack("stretch");
 		box1.setParent(detail);
 		newGrid(3).setParent(box1);
 		new Button("detail 1-2").setParent(box1);
