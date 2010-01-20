@@ -37,6 +37,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		this._scrollcheck("init");
 		this._fixWidth();
+		
+		// Bug Z35-tabbox-004.zul, we need to check again.
+		this._scrollcheck("init");
 	},
 	onShow: _zkf,
 	insertChildHTML_: function (child, before, desktop) {
