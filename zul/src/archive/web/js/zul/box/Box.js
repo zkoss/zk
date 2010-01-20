@@ -57,7 +57,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 									c.style.width= oldwidth;
 							}
 						}
-						if (!child.$instanceof(zul.wgt.Cell)) {
+						if (!child.$instanceof(zul.wgt.Cell) && this._nhflex) {
 							var chdex = child.$n('chdex');
 							chdex.style.width = '';
 						}
@@ -73,7 +73,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 									c.style.height= oldheight;
 							}
 						}
-						if (!child.$instanceof(zul.wgt.Cell)) {
+						if (!child.$instanceof(zul.wgt.Cell) && this._nvflex) {
 							var chdex = child.$n('chdex');
 							chdex.style.height = '';
 						}
@@ -597,10 +597,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			for(var child = this.firstChild; child; child = child.nextSibling) {
 				if (child.isVisible()) {
 					var c = child.$n();
+					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
-						c.style.width = zk(c).revisedWidth(tdsz, true) + 'px';
-					else
-						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), true) + 'px';
+						c.style.width = zk(c).revisedWidth(tdsz, !zk.safari) + 'px';
+					else 
+						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.safari) + 'px';
 				}
 			}
 		}
