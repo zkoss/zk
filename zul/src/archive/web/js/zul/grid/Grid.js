@@ -102,7 +102,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.paging = null;
 		else if (child == this.frozen) 
 			this.frozen = null;
-		
+
 		if (!isRows) this._syncSize();
 	},
 	insertChildHTML_: function (child, before, desktop) {

@@ -1095,6 +1095,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		super.onChildAdded(child);
 		if (child instanceof Treechildren)
 			addVisibleItemCount(((Treechildren) child).getVisibleItemCount());
+		invalidate(); //FUTURE: handle at client
 	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Treecols) {
@@ -1111,6 +1112,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			if (_pgi == child) _pgi = null;
 		}
 		super.onChildRemoved(child);
+		invalidate(); //FUTURE: handle at client
 	}
 
 	/** Fixes all info about the selected status. */
