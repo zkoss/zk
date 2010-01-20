@@ -14,7 +14,7 @@ Testing Groupbox basic functionality.
   <window title="Groupbox test" width="100%">
     <groupbox id="gb3">
       <caption image="/test2/img/inet.png" label="Testing Group Box"/>
-      <vbox>
+      <vbox width="100%">
         <listbox rows="1" mold="select">
           <listitem label="option1"/>
           <listitem label="option2"/>

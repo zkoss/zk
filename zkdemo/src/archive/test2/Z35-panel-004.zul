@@ -1,7 +1,7 @@
 <window>
 <panel id="p1" title="Panel Component" border="normal" width="500px" maximizable="true" minimizable="true">
 	<panelchildren>
-		<grid>
+		<grid width="100%">
 			<columns>
 				<column label="Name" />
 				<column label="Description" />
