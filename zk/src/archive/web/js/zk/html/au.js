@@ -2457,8 +2457,9 @@ zkau.cmd0 = { //no uuid at all
 		}
 	},
 	scrollIntoView: function (id) {
-		var n = $e(id);
-		for (var p = n, c; (p = p.parentNode) && n != document.body;n = p)
+		var n = $e(id),
+			parent = document.body.parentNode;
+		for (var p = n, c; (p = p.parentNode) && n != parent;n = p)
 			c = zk.scrollIntoView(p, n, c);
 	}
 };

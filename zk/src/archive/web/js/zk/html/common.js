@@ -1774,8 +1774,10 @@ zk.restoreStyle = function (el, nm) {
 zk.scrollIntoView = function (outer, inner, info) {
 	if (outer && inner) {
 		var ooft = zk.revisedOffset(outer),
-			ioft = info ? info.oft : zk.revisedOffset(inner),		 
-			top = ioft[1] - ooft[1] + outer.scrollTop,
+			ioft = info ? info.oft : zk.revisedOffset(inner),
+			top = ioft[1] - ooft[1] +
+			(outer == (zk.safari ? document.body : document.body.parentNode)
+					? 0 : outer.scrollTop),
 			ih = info ? info.h : inner.offsetHeight,
 			bottom = top + ih,
 			updated;
