@@ -67,9 +67,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						else {//release height of children might cause higher box
 							var oldheight= c.style.height;
 							if (oldheight) {
-								var oldoffheight= c.offsetHeight;
+								var oldoffheight = c.offsetHeight;
 								c.style.height= ''; //release the height of children so td can shrink
-								if (c.offsetHeight > oldoffsetheight)
+								if (c.offsetHeight > oldoffheight)
 									c.style.height= oldheight;
 							}
 						}
