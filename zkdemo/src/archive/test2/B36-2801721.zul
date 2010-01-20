@@ -66,8 +66,8 @@ If you run the case, please use the <toolbarbutton href="http://home.orange.nl/j
 			</timer>
 			<button label="stop" onClick="timer.stop()"/>
 			<button label="start" onClick="timer.start()"/>
-			<vbox spacing="3" align="center" height="100%" width="100%">
-				<grid id="datagrid" />
+			<vbox spacing="3" align="stretch" height="100%" width="100%">
+				<grid id="datagrid"/>
 			</vbox>
 	</window>
 </zk>
