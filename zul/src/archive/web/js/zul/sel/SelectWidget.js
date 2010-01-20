@@ -237,18 +237,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 	},
 	setVflex: function(v) {
-		var n = this.$n();
-		if (n) {
-			this.$supers('setVflex', arguments);
-			this.onSize();
-		}
+		this.$supers('setVflex', arguments);
+		if (this.desktop) this.onSize();
 	},
 	setHflex: function(v) {
-		var n = this.$n();
-		if (n) {
-			this.$supers('setHflex', arguments);
-			this.onSize();
-		}
+		this.$supers('setHflex', arguments);
+		if (this.desktop) this.onSize();
 	},
 	/* Calculates the size. */
 	_calcSize: function () {
