@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test of Grid's Serialization">
 	Please press on the "Clone" and the "Clone by Serialization" button, and then they should not appear any error.
-<vbox id="vb">
+<vbox id="vb" width="100%">
 	<grid id="grid">
 		<columns sizable="true" menupopup="auto">
 			<column label="Type" sort="auto"/>
