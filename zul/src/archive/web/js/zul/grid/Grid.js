@@ -108,12 +108,27 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	insertChildHTML_: function (child, before, desktop) {
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
-			if (this.ebodytbl) {
-				jq(this.ebodytbl).append(child.redrawHTML_());
+			var fakerows = this.$n('rows');
+			if (fakerows) {
+				jq(fakerows).replaceWith(child.redrawHTML_());
 				child.bind(desktop);
+				this.ebodyrows = child.$n().rows;
 				return;
+			} else {
+				var tpad = this.$n('tpad');
+				if (tpad) {
+					jq(tpad).after(child.redrawHTML_());
+					child.bind(desktop);
+					this.ebodyrows = child.$n().rows;
+					return;
+				} else if (this.ebodytbl) {
+					jq(this.ebodytbl).append(child.redrawHTML_());
+					child.bind(desktop);
+					this.ebodyrows = child.$n().rows;
+					return;
+				}
 			}
-		} 
+		}
 
 		this.rerender();
 	},
