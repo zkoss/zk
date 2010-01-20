@@ -85,7 +85,9 @@ zjq = function (jq) { //ZK extension
 		if (outer && inner) {
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
-				top = ioft[1] - ooft[1] + outer.scrollTop,
+				top = ioft[1] - ooft[1] +
+						(outer == (zk.safari ? document.body : document.body.parentNode)
+								? 0 : outer.scrollTop),
 				ih = info ? info.h : inner.offsetHeight,
 				bottom = top + ih,
 				updated;
@@ -554,7 +556,7 @@ zjq.prototype = {
 	scrollIntoView: function (parent) {
 		var n = this.jq[0];
 		if (n) {
-			parent = parent || document.body;
+			parent = parent || document.body.parentNode;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 				c = _scrlIntoView(p, n, c);
 		}
