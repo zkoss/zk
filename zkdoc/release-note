@@ -145,6 +145,7 @@ November, 2009
   2921902: ZK and Liferay 5.2.x : Conflict with JQuery?
   2934252: datebox display year incorect(Thailand locale)
   2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
+  2935509: Javascript error on runtime columns creation
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
