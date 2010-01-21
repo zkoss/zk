@@ -395,10 +395,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		rm -rf maven
 	fi
 
-	rm -rf $srcnm
 	
 	mkdir $binnmevl
 	mkdir $profnmevl
+	mkdir -p /tmp/zk/$binnm/dist/src
+	
+	cp /tmp/zk/$srcnm/dist/src/* /tmp/zk/$binnm/dist/src/
 	
 	cp -rp $binnm/* $binnmevl
 	
@@ -417,6 +419,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mv CML_LICENSE /tmp/zk/$binnm/doc/LICENSE
 		chmod 644  /tmp/zk/$binnm/doc/LICENSE
 		
+		cd /tmp/zk/$entsrcnm/dist/src
+		cp zkmax-sources.jar zkex-sources.jar zml-sources.jar /tmp/zk/$binnm/dist/src/
+		
+		cd /tmp/zk
 		echo Output ${binnm}.zip
 		zip -qr9 ${binnm}.zip $binnm
 		
@@ -425,6 +431,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		
 		cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
 		chmod 644  /tmp/zk/$binnm/doc/LICENSE
+		
+		cd /tmp/zk/$binnm/dist/src/
+		rm -rf zkmax-sources.jar zkex-sources.jar zml-sources.jar
+		cd /tmp/zk
 	fi
 		
 	echo Output ${binnmevl}.zip
@@ -456,11 +466,19 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mv CML_LICENSE /tmp/zk/$profnm/doc/LICENSE
 		chmod 644  /tmp/zk/$profnm/doc/LICENSE
 		
+		cd /tmp/zk/$entsrcnm/dist/src
+		cp zkex-sources.jar zml-sources.jar /tmp/zk/$profnm/dist/src/
+		cd /tmp/zk
+		
 		echo Output ${profnm}.zip
 		zip -qr9 ${profnm}.zip $profnm
 		
 		echo Output ${profnm}.tar.gz
 		tar zcf ${profnm}.tar.gz $profnm
+		
+		cd /tmp/zk/$profnm/dist/src/
+		rm -rf zkex-sources.jar zml-sources.jar
+		cd /tmp/zk
 	fi
 	
 	echo Output ${profnmevl}.zip
@@ -500,7 +518,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	rm -rf metainfo
 	rm -rf $binnmevl
 	rm -rf $profnmevl
-		
+	rm -rf $srcnm
+
 	if [ "$target" == "official" ] ; then
 		rm -rf $profsrcnm
 		rm -rf $entsrcnm
