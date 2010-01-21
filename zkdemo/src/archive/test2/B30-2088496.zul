@@ -29,7 +29,7 @@ located properly.(That is true.)
 <n:p><n:strong>ALIGN: </n:strong>It means vertical position.</n:p>
 <window border="normal" height="500px" width="500px">
 <hbox sclass="b" id="hb" pack="start" align="start"
-height="400px" width="100%">
+height="400px" width="100%" style="border: solid red 1px">
 <textbox height="30px" width="30px" />
 <splitter />
 <textbox height="30px" width="30px" />
