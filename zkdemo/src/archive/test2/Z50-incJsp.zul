@@ -17,6 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
-	<include src="/test/test.jsp"/>
+<window title="Test of include a simple JSP file" border="true">
+	<include src="frag.jsp"/>
 </window>

@@ -481,19 +481,30 @@ public class HtmlPageRenders {
 			}
 		}
 
-		RenderContext rc = null;
+		RenderContext rc = null, old = null;
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
 				out, desktop.getWebApp().getConfiguration().isCrawlable());
 			setRenderContext(exec, rc);
+		} else if (owner != null) {
+			old = getRenderContext(exec); //store
+			setRenderContext(exec, null);
+		}
 
-			//generate div first
+		//generate div first
+		if (!au) {
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
 			out.write(" class=\"z-temp\">");
+		}
 
+		if (standalone) { //switch out
 			out = new StringWriter();
+		}
+
+		//generate JS second
+		if (!au) {
 			out.write("\n<script>zkmb();try{");
 			out.write(outZkIconJS());
 		}
@@ -546,6 +557,11 @@ public class HtmlPageRenders {
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
 			Files.write(out, sw); //js
+		} else if (owner != null) { //restore
+			setRenderContext(exec, old);
+		}
+
+		if (!au) {
 			out.write("}finally{zkme();}</script>\n");
 		}
 	}

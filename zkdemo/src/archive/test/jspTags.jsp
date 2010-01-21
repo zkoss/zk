@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%--
-test.jsp
+jspTags.jsp
 
 {{IS_NOTE
 	Purpose:
@@ -20,7 +20,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <html>
 	<head>
-		<title>Test of ZUL on JSP</title>
+		<title>Test of ZK JSP Tags</title>
 		<z:zkhead/>
 	</head>
 	<body style="height:auto">

@@ -453,10 +453,13 @@ implements org.zkoss.zul.api.Include, Includer {
 			} else if (_src != null && _src.length() > 0) {
 				final StringWriter sw = new StringWriter();
 				include(sw);
-				if (getChildPage() != null) {
-					Files.write(out, sw.getBuffer());
-				} else { //not ZUL page, so it must be HTML fragment
-					boolean done = false;
+
+				//Note: a ZUL might be included indirectly
+				//(ZUL include JSP, and JSP include ZUL), so we cannot
+				//output sw directly even if getChildPage() is not null
+
+				boolean done = false;
+				if (getChildPage() == null) { //only able to handle non-ZUL page
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
 					if (rc != null && rc.crawlable) {
@@ -474,13 +477,13 @@ implements org.zkoss.zul.api.Include, Includer {
 						out.write("zk.mnt.top().props.z$ea='content';");
 						done = true;
 					}
-					if (!done) {
-						out.write("zk.mnt.top().props.content='");
-						final StringBuffer sb = new StringBuffer(1024);
-						Strings.escape(sb, sw.getBuffer(), Strings.ESCAPE_JAVASCRIPT);
-						Files.write(out, sb);
-						out.write("';");
-					}
+				}
+				if (!done) {
+					out.write("zk.mnt.top().props.content='");
+					final StringBuffer sb = new StringBuffer(1024);
+					Strings.escape(sb, sw.getBuffer(), Strings.ESCAPE_JAVASCRIPT);
+					Files.write(out, sb);
+					out.write("';");
 				}
 			}
 		} finally {
