@@ -30,7 +30,8 @@ ZK 3.6.4
   2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
   2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
   2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
-  
+  2936019: Execption when Listbox insertBefore() group + groupfoot
+
 * Upgrade Notes:
 
 --------

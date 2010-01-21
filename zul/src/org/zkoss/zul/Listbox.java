@@ -1410,22 +1410,26 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 							ginfo[2] = -1;
 						}
 					}
-				} else if (refChild.getPreviousSibling() instanceof Listitem) {
-					final int idx = ((Listitem)refChild.getPreviousSibling()).getIndex();				
-					final int[] g = getGroupsInfoAt(idx);
-					if (g == null)
-						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
-					if (g[2] != -1)
-						throw new UiException("Only one Listgroupfoot is allowed per Listgroup");
-					if (idx + 1  != (g[0] + g[1]))
-						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
-					g[2] = idx;
-					if (isReorder) {
-						final int nindex = ((Listgroupfoot) newChild).getIndex();				
-						final int[] ginfo = getGroupsInfoAt(nindex);
-						if (ginfo != null) {
-							ginfo[1]--; 
-							ginfo[2] = -1;
+				} else {
+					final Component preRefChild = refChild.getPreviousSibling();
+					if (preRefChild instanceof Listitem) {
+						final int idx = ((Listitem)preRefChild).getIndex();
+						//bug #2936019: Execption when Listbox insertbefore() group + groupfoot
+						final int[] g = getGroupsInfoAt(idx, preRefChild instanceof Listgroup); 
+						if (g == null)
+							throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
+						if (g[2] != -1)
+							throw new UiException("Only one Listgroupfoot is allowed per Listgroup");
+						if (idx + 1  != (g[0] + g[1]))
+							throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
+						g[2] = idx;
+						if (isReorder) {
+							final int nindex = ((Listgroupfoot) newChild).getIndex();				
+							final int[] ginfo = getGroupsInfoAt(nindex);
+							if (ginfo != null) {
+								ginfo[1]--; 
+								ginfo[2] = -1;
+							}
 						}
 					}
 				}
