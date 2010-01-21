@@ -149,6 +149,7 @@ November, 2009
   2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
   2936064: Remove Group in Grid shall not remove next Group
   2936095: drop list display issue when filled combobox in onOpen
+  2936132: Add treeitem with open="false", append to wrong position
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

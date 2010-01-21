@@ -83,7 +83,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return null;
 	},
 	$n: function (nm) {
-		if (this.treerow) return this.treerow.$n(nm);
+		if (this.treerow)
+			return nm ? this.treerow.$n(nm) : this.treerow.$n() || jq(this.treerow.uuid, zk)[0];
 		return null;
 	},
 	/** Returns whether the element is to act as a container
