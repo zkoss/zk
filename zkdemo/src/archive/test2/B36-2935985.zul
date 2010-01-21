@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2935985.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 21 10:01:20 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Popup window" border="normal" width="350px">
+<menupopup id="menupopup" onOpen='menupopup.getChildren().clear();menupopup.appendChild(new Menuitem("Long caption Long caption Long caption Long caption Long caption"));' >
+<menuitem label="Item 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - short"/>
+</menupopup>
+<label  context="menupopup"  value="Right-click me and the menupopup displays well!"/>
+<separator/>
+<menupopup id="menupopup1" onOpen='menupopup1.getChildren().clear();menupopup1.appendChild(new Menuitem("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));' >
+<menuitem label="Item 1 - shortItem 1"/>
+</menupopup>
+<label  context="menupopup1"  value="Right-click me and the menupopup displays well!"/>
+</window>
+

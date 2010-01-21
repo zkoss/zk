@@ -146,6 +146,7 @@ November, 2009
   2934252: datebox display year incorect(Thailand locale)
   2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
   2935509: Javascript error on runtime columns creation
+  2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

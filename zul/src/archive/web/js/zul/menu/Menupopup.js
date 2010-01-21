@@ -155,8 +155,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				var ul = this.$n('cave');
 				if (ul.childNodes.length)
 					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-				else
-					zWatch.listen({onResponse: this});
 			}
 		}
 		this.sync();
@@ -173,7 +171,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zWatch.listen({onHide: this});
+		zWatch.listen({onHide: this, onResponse: this});
 	},
 	unbind_: function () {
 		if (this.isOpen())
@@ -185,13 +183,19 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		var pp = this.$n();
-		if (!pp.style.width) {// Bug 2105158 and Bug 1911129
-			var ul = this.$n('cave');
-			if (ul.childNodes.length) { // Bug 2784736
-				pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-			}
+		if (zk.ie7_) {
+			var pp = this.$n();
+		
+    		// Bug 2935985
+    		pp.style.width = '';
+    		
+    		// Bug 2105158 and Bug 1911129
+    		var ul = this.$n('cave');
+    		if (ul.childNodes.length) // Bug 2784736
+    			pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 		}
+		this.sync();
+		
 		this.$supers('onResponse', arguments); //Bug #2870616
 	},
 	doKeyDown_: function (evt) {
