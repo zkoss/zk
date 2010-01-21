@@ -879,35 +879,48 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	cfmClose: function (msg) {
 		zk.confirmClose = msg;
 	},
-	/** Shows or removes the busy message.
-	 * A mask will be shown to cover the browser window such that the
-	 * user won't be able to take other actions.
-	 * @param String msg the message. Ingored if open is false.
-	 * @param boolean open whether to show. If omitted, true is assumed.
-	 * @param String uuid the widget is applied the mask.
-	 * If false, the message is removed.
+	/** Shows the busy message covering the specified widget.
+	 * @param uuid the component's UUID
+	 * @param String msg the message.
 	 */
-	showBusy: function (msg, open, uuid) {
+	/** Shows or removes the busy message covering the whole browser window.
+	 * @param String msg the message.
+	 */
+	showBusy: function (uuid, msg) {
+		if (arguments.length == 1) {
+			msg = uuid;
+			uuid = null;
+		}
+
+		zAu.cmd0.clearBusy(uuid);
+
+		var w = uuid ? zk.Widget.$(uuid): null;
+		zUtl.destroyProgressbox("zk_loadprog");
+		if (!uuid)
+			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
+		else if (w) {
+			w.effects_.showBusy = new zk.eff.Mask( {
+				id: w.uuid + "-shby",
+				anchor: w.$n(),
+				message: msg
+			});
+		}
+	},
+	/** Removes the busy message covering the specified widget.
+	 * @param uuid the component's UUID
+	 */
+	/** Removes the busy message covering the whole browser.
+	 */
+	clearBusy: function (uuid) {
 		var w = uuid ? zk.Widget.$(uuid): null,
 			efs = w ? w.effects_: null;
 		if (efs && efs.showBusy) {
 			efs.showBusy.destroy();
 			delete efs.showBusy;
 		}
-		zUtl.destroyProgressbox("zk_showBusy"); //since user might want to show diff msg
-		
-		if (open || arguments.length == 1) {
-			zUtl.destroyProgressbox("zk_loadprog");
-			if (!uuid)
-				zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
-			else if (w) {
-				efs.showBusy = new zk.eff.Mask( {
-					id: w.uuid + "-shby",
-					anchor: w.$n(),
-					message: msg
-				});
-			}
-		}
+
+		if (!uuid)
+			zUtl.destroyProgressbox("zk_showBusy"); //since user might want to show diff msg
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>

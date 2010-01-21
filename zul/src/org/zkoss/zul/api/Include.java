@@ -136,7 +136,7 @@ DynamicPropertied, AfterCompose, IdSpace {
 	 * operation. This implementation will automatically use an echo event like
 	 * {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} to
 	 * suspend the including progress before using the
-	 * {@link Clients#showBusy(String, boolean)} method to show the
+	 * {@link Clients#showBusy(String)} method to show the
 	 * {@link MZul#PLEASE_WAIT} message at client side.
 	 * 
 	 * <p>

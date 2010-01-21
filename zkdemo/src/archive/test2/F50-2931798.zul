@@ -14,11 +14,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test of showBusy" border="normal">
     Click
-    <button label="show busy" onClick='Clients.showBusy(target,"processing",true)'/>
+    <button label="show busy" onClick='Clients.showBusy(target,"processing")'/>
     , then a busy message will cover the following box.
     <separator/>
     Then, click
-    <button label="hide busy" onClick='Clients.showBusy(target,null,false)'/>
+    <button label="hide busy" onClick='Clients.clearBusy(target)'/>
     the message will be gone.
     <separator/>
     Then, click the show busy button again to show the message, and then click

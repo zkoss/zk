@@ -23,7 +23,7 @@ invoked (Please click the "Echo Event" button).</n:p>
 	<window id="w"  width="200px" title="Test echoEvent" border="normal">
 	  <attribute name="onLater">
 	  Thread.sleep(5000);
-	  Clients.showBusy(null, false);
+	  Clients.clearBusy();
 	  new Label("Done.").setParent(w);
 	  </attribute>
 	<vbox>
@@ -34,7 +34,7 @@ invoked (Please click the "Echo Event" button).</n:p>
 			</listbox>	
 	  <button label="Echo Event">
 	  <attribute name="onClick">
-	  Clients.showBusy("Execute... (about 5 sec.)", true);
+	  Clients.showBusy("Execute... (about 5 sec.)");
 	  Events.echoEvent("onLater", w, null);
 	  </attribute>
 	  </button>

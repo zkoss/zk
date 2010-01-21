@@ -163,7 +163,6 @@ public class Attributes {
 	 * An example implementation is {@link org.zkoss.zkplus.liferay.JQueryRenderPatch}
 	 * that delays the rendering of a ZK portlet to avoid the conflicts when
 	 * using IE.
-	 * @see #PORTLET_JQUERY_PATCH
 	 * @since 5.0.0
 	 */
 	public static final String PORTLET_RENDER_PATCH_CLASS = "org.zkoss.zk.portlet.PageRenderPatch.class";

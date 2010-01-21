@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <div height="1000px" width="1500px" id="div">
   <attribute name="onLater">
   Thread.sleep(5000);
-  Clients.showBusy(null, false);
+  Clients.clearBusy();
   </attribute>
 1. Open new browser.
 <separator/>
@@ -30,7 +30,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <button label="Click Me">
 	<attribute name="onClick">
 		Thread.sleep(5000);
-		Clients.showBusy("Execute... (about 5 sec.)", true);
+		Clients.showBusy("Execute... (about 5 sec.)");
 		Events.echoEvent("onLater", div, null);
 	</attribute>
 </button>

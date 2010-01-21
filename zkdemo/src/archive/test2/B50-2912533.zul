@@ -20,12 +20,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <separator/>
 <button label="Click Me" >
 <attribute name="onClick">
-	Clients.showBusy("This loading bar will disappear after 5 sec.", true);
+	Clients.showBusy("This loading bar will disappear after 5 sec.");
 	timer.start();
 </attribute>
 </button>
 <textbox/>
 <timer id="timer" delay="5000" repeats="true" running="false"
-		onTimer='Clients.showBusy(null, false);self.stop();'/>
+		onTimer='Clients.clearBusy();self.stop();'/>
 </zk>
 

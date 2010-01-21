@@ -185,7 +185,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
 	 * This implementation will automatically use an echo event like {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} 
-	 * to suspend the including progress before using the {@link Clients#showBusy(String, boolean)} 
+	 * to suspend the including progress before using the {@link Clients#showBusy(String)} 
 	 * method to show the {@link MZul#PLEASE_WAIT} message at client side. 
 	 * 
 	 * <p>Default: false.
@@ -215,7 +215,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	 *@since 3.0.4
 	 */
 	public void onEchoInclude() {
-		Clients.showBusy(null , false);
+		Clients.clearBusy();
 		super.invalidate();
 	}
 	/** Returns the src.
@@ -426,7 +426,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	private void checkProgressing() {
 		if(_progressing && _progressStatus == 0) {
 			_progressStatus = 1;
-			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT), true);
+			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT));
 			Events.echoEvent("onEchoInclude", this, null);
 		}
 	}

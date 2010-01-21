@@ -24,10 +24,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</n:ol>
 <button label="show" >
 <attribute name="onClick">
-	Clients.showBusy("This loading bar will disappear after 5 sec.", true);
+	Clients.showBusy("This loading bar will disappear after 5 sec.");
 	timer.start();
 </attribute>
 </button>
 <timer id="timer" delay="5000" repeats="true" running="false"
-		onTimer='Clients.showBusy(null, false);self.stop();'/>
+		onTimer='Clients.clearBusy();self.stop();'/>
 </zk>

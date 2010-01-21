@@ -204,7 +204,7 @@ public interface EventQueue {
 	 * is available in ZK PE or EE, or you have to configure your own
 	 * implementation.
 	 * <p>If you want to show a busy message to cover a portion of the desktop,
-	 * use {@link org.zkoss.zk.ui.util.Clients#showBusy(org.zkoss.zk.ui.Component,String,boolean)}
+	 * use {@link org.zkoss.zk.ui.util.Clients#showBusy(org.zkoss.zk.ui.Component,String)}
 	 * <p>Note: this method must be called within an activated exection,
 	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
 	 * <p>An event listener can be subscribed multiple times, and

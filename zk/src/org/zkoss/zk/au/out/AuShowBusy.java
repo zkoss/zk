@@ -25,25 +25,28 @@ import org.zkoss.zk.au.AuResponse;
  * 
  * @author jumperchen
  * @since 3.0.2
+ * @see AuClearBusy
  */
 public class AuShowBusy extends AuResponse {
-	/**
+	/** Constructs a busy message covering the whole browser.
+	 * To close, use {@link AuClearBusy()}.
 	 * @param mesg the message to show. Ignored if open is false.
 	 * @param open whether to show the busy message, or to close it.
 	 * If open is false, the message is ignored.
+	 * @since 5.0.0
 	 */
-	public AuShowBusy(String mesg, boolean open) {
-		super("showBusy", new Object [] {mesg != null ? mesg: "", Boolean.valueOf(open)});
+	public AuShowBusy(String mesg) {
+		super("showBusy", mesg != null ? mesg: "");
 	}
 	/** Constructs a busy message covering only the specified component.
+	 * To close, use {@link AuClearBusy(Component)}.
 	 * @param comp the component that the busy message to cover.
 	 * Ignored if null. Notice that if the component is not found,
 	 * the message won't be shown.
-	 * @param mesg the message to show. Ignored if open is false.
-	 * @param open whether to show the busy message, or to close it.
+	 * @param mesg the message to show.
 	 * @since 5.0.0
 	 */
-	public AuShowBusy(Component comp, String mesg, boolean open) {
-		super("showBusy", new Object [] {mesg != null ? mesg: "", Boolean.valueOf(open), comp.getUuid()});
+	public AuShowBusy(Component comp, String mesg) {
+		super("showBusy", comp, new String[] {comp.getUuid(), mesg != null ? mesg: ""});
 	}
 }

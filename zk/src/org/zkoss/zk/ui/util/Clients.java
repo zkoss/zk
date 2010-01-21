@@ -51,8 +51,8 @@ public class Clients {
 	 * will override the previous one. For example, the first one will be
 	 * ignored since both have the same command.
 	 * <pre><code>
-	 *	response(new AuShowBusy("this will have no effect", true));
-	 *	response(new AuShowBusy(null, false));</code></pre>
+	 *	response(new AuShowBusy("this will have no effect"));
+	 *	response(new AuClearBusy());</code></pre>
 	 *
 	 * <p>If this is an issue, use {@link #response(String, AuResponse)}
 	 * instead.
@@ -223,13 +223,30 @@ public class Clients {
 	 * <p>It is usually used with {@link org.zkoss.zk.ui.event.Events#echoEvent}
 	 * to prevent the user to click another buttons or components.
 	 *
+	 * <p>To cover only a particular component, use {@link #showBusy(Component, String)}.
+	 * To close, use {@link #clearBusy()}.
+	 *
 	 * @param msg the message to show. If null, the default message (processing)
-	 * is shown. It is ignored if the open argument is false.
-	 * @param open whether to open or to close the busy message.
-	 * @since 3.0.2
+	 * is shown.
+	 * @see #clearBusy()
+	 * @since 5.0.0
+	 */
+	public static final void showBusy(String msg) {
+		response(new AuShowBusy(msg));
+	}
+	/** Cleans the busy message at the browser.
+	 * @see #showBusy(String)
+	 * @since 5.0.0
+	 */
+	public static final void clearBusy() {
+		response(new AuClearBusy());
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #showBusy(String)}
+	 * and {@link #clearBusy()}.
 	 */
 	public static final void showBusy(String msg, boolean open) {
-		response(new AuShowBusy(msg, open));
+		if (open) showBusy(msg);
+		else clearBusy();
 	}
 	/** Shows the busy message at the browser that covers only the specified
 	 * component.
@@ -245,13 +262,23 @@ public class Clients {
 	 * Ignored if null. Notice that if the component is not found,
 	 * the busy message won't be shown. In additions, the busy message
 	 * is removed automatically if the component is detached later.
+	 * To manually remove the busy message, use {@link #clearBusy(Component)}
 	 * @param msg the message to show. If null, the default message (processing)
-	 * is shown. It is ignored if the open argument is false.
-	 * @param open whether to open or to close the busy message.
+	 * is shown.
+	 * @see #clearBusy(Component)
 	 * @since 5.0.0
 	 */
-	public static final void showBusy(Component comp, String msg, boolean open) {
-		response(new AuShowBusy(comp, msg, open));
+	public static final void showBusy(Component comp, String msg) {
+		response(new AuShowBusy(comp, msg));
+	}
+	/** Clears the busy message at the browser that covers only the specified
+	 * component.
+	 * @param comp the component that the busy message to cover.
+	 * @see #showBusy(Component, String)
+	 * @since 5.0.0
+	 */
+	public static final void clearBusy(Component comp) {
+		response(new AuClearBusy(comp));
 	}
 
 	/** Reloads the client-side messages in the specified locale.
