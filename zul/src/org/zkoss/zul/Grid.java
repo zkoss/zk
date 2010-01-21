@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -1302,7 +1303,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
 		
-		if (_rod) {
+		if (_rod && ((Cropper)getDataLoader()).isCropper()) {//bug #2936064 
 			renderer.render("_grid$rod", true);
 		}
 	}

@@ -360,7 +360,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
 					if (idx != -1) {
-						final int realIndex = getRealIndex(idx);
+						final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
 						if (realIndex >= 0 && realIndex < getChildren().size())
 							removeChild((Component) getChildren().get(realIndex));
 					}

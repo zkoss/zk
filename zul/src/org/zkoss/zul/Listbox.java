@@ -3141,7 +3141,7 @@ public class Listbox extends XulElement implements Paginated,
 			renderer.render("_totalSize", getDataLoader().getTotalSize());
 			renderer.render("_offset", getDataLoader().getOffset());
 
-			if (_rod) {
+			if (_rod && ((Cropper)getDataLoader()).isCropper()) { //bug #2936064
 				renderer.render("_listbox$rod", true);
 			}
 		}
