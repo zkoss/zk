@@ -474,8 +474,11 @@ jq(function() {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			_doEvt(wevt);
-			if (!wevt.stopped && wgt.afterKeyDown_)
+			if (!wevt.stopped && wgt.afterKeyDown_) {
 				wgt.afterKeyDown_(wevt);
+    			if (wevt.domStopped)
+    				wevt.domEvent.stop();
+			}
 		}
 
 		if (evt.keyCode == 27
