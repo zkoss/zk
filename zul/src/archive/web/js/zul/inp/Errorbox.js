@@ -90,10 +90,13 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 			this.$supers('doMouseOut_', arguments);
 	},
 	doClick_: function (evt) {
-		var el = evt.domTarget;
-		if (el == this.$n('c') && jq(el).hasClass('z-errbox-close-over'))
-			this.parent.clearErrorMessage(true, true);
-		else {
+		var p = evt.domTarget;
+		if (p == this.$n('c')) {
+			if ((p = this.parent) && p.clearErrorMessage)
+				p.clearErrorMessage(true, true);
+			else
+				zAu.wrongValue_(p, false);
+		} else {
 			this.$supers('doClick_', arguments);
 			this.parent.focus(0);
 		}

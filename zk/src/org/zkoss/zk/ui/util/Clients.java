@@ -92,6 +92,14 @@ public class Clients {
 		response(new AuConfirmClose(mesg));
 	}
 
+	/** Shows an error message for the specified component, if any,
+	 * at the browser.
+	 * <p>You have to clear the error message manually with {@link #clearWrongValue}.
+	 * @since 5.0.0
+	 */
+	public static final void wrongValue(Component comp, String msg) {
+		response(new AuWrongValue(comp, msg));
+	}
 	/** Closes the error message of the specified component, if any,
 	 * at the browser.
 	 * @since 5.0.0
@@ -105,14 +113,14 @@ public class Clients {
 	 * @since 5.0.0
 	 */
 	public static final void clearWrongValue(List comps) {
-		response(new AuClearWrongValue(comps));
+		response(null, new AuClearWrongValue(comps)); //append, not overwrite
 	}
 	/** Closes the error message of the specified components, if any,
 	 * at the browser.
 	 * @since 5.0.0
 	 */
 	public static final void clearWrongValue(Component[] comps) {
-		response(new AuClearWrongValue(comps));
+		response(null, new AuClearWrongValue(comps)); //append, not overwrite
 	}
 	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component)}.
 	 */

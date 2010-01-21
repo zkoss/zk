@@ -59,10 +59,11 @@ public class AuClearWrongValue extends AuResponse {
 			uuids[j] = comps[j].getUuid();
 		return uuids;
 	}	
-	/**
+	/** Unlike other constructors, the object instantiated by this method
+	 * depends on the specified comp.
 	 * @param comp the component whose error box, if any, shall be closed.
 	 */
 	public AuClearWrongValue(Component comp) {
-		super("clearWrongValue", comp.getUuid()); //component-independent
+		super("clearWrongValue", comp, comp.getUuid()); //dependent
 	}
 }
