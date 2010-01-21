@@ -179,7 +179,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (this._shadow)
 			this._shadow.destroy();
 		this._shadow = null;
-		zWatch.unlisten({onHide: this});
+		zWatch.unlisten({onHide: this, onResponse: this});
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
