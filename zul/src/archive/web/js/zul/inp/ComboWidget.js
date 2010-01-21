@@ -94,6 +94,20 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			}
 		}
 	},
+	onResponse: function () {
+		if (this.isOpen()) {
+			if (zk.animating()) {
+				var self = this;
+				setTimeout(function() {self.onResponse();}, 50);
+				return;
+			}
+			var pp = this.$n('pp'),
+				pz = this.getPopupSize_(pp);
+			pp.style.height = pz[1];
+			pp.style.width = pz[0];
+			this._fixsz(pz);
+		}
+	},
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
 	 * @param boolean open
 	 * @param Map opts the options.
@@ -376,8 +390,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		//this.syncWidth();
-		zWatch.listen({onSize: this, onShow: this, onFloatUp: this});
+		
+		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 	},
 	unbind_: function () {
 		this.close();
@@ -389,8 +403,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this});
-
+		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 
 		this.$supers('unbind_', arguments);
 	},

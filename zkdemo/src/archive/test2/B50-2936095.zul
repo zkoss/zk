@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2936095.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 21 15:25:29 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    Please click dropdown button, and then the listitem displays well.
+    <combobox id='cb' onOpen='if(self.getItems().size()==0) if
+(event.isOpen()) GetTableNames()'/>
+    <zscript>
+        <![CDATA[
+            public void GetTableNames ()
+{
+for (int i=1; i<=100; i++)
+{
+Comboitem ci = new Comboitem ("TableName" + i);
+cb.appendChild (ci);
+}
+}
+        ]]>
+    </zscript>
+</zk>
+
