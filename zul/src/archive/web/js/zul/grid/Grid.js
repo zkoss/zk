@@ -72,12 +72,16 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return this._zclass == null ? "z-grid" : this._zclass;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
-		this.$super('insertBefore', child, sibling, true);
-		this._fixOnAdd(child, ignoreDom);
+		if (this.$super('insertBefore', child, sibling, true)) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
 	},
 	appendChild: function (child, ignoreDom) {
-		this.$super('appendChild', child, true);
-		this._fixOnAdd(child, ignoreDom);
+		if (this.$super('appendChild', child, true)) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
 	},
 	_fixOnAdd: function (child, ignoreDom) {
 		var isRows;

@@ -32,12 +32,36 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return this.parent && this.parent.$instanceof(zul.sel.Treeitem) ?
 			this.parent.treerow: null;
 	},
-	rerender: function () {
-		if (this.desktop) {
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				w.rerender();
+	//@Override
+	insertBefore: function (child, sibling, ignoreDom) {
+		var oldsib = this._fixBeforeAdd(child);
+
+		if (this.$supers('insertBefore', arguments)) {
+			this._fixOnAdd(oldsib, child, ignoreDom);
+			return true;
 		}
-		return this;
+	},
+	//@Override
+	appendChild: function (child, ignoreDom) {
+		var oldsib = this._fixBeforeAdd(child);
+
+		if (this.$supers('appendChild', arguments)) {
+			this._fixOnAdd(oldsib, child, ignoreDom);
+			return true;
+		}
+	},
+	_fixBeforeAdd: function (child) {
+		var p;
+		if ((p=child.parent) && p.lastChild == child)
+			return child.previousSibling;
+	},
+	_fixOnAdd: function (oldsib, child, ignoreDom) {
+		if (!ignoreDom) {
+			if (oldsib && (oldsib = oldsib.treerow)) oldsib.rerender();
+			var p;
+			if ((p=child.parent) && p.lastChild == child
+			&& (p=child.previousSibling) && (p=p.treerow)) p.rerender();
+		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var ben;

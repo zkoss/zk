@@ -48,15 +48,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 		}
 	},
-	rerender: function () {
-		if (this.desktop) {
-			if (this.treerow)
-				this.treerow.rerender();
-			if (this.treechildren)
-				this.treechildren.rerender();
-		}
-		return this;
-	},
 	_showKids: function (open) {
 		if (this.treechildren)
 			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
@@ -201,13 +192,26 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				tree._onTreeitemAdded(this);
 		}
 	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments)
+	//@Override
+	insertBefore: function (child, sibling, ignoreDom) {
+		if (this.$super('insertBefore', child, sibling, ignoreDom || child.$instanceof(zul.sel.Treechildren))) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
+	},
+	//@Override
+	appendChild: function (child, ignoreDom) {
+		if (this.$super('appendChild', child, ignoreDom || child.$instanceof(zul.sel.Treechildren))) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
+	},
+	_fixOnAdd: function (child, ignoreDom) {
 		if (child.$instanceof(zul.sel.Treerow)) 
 			this.treerow = child;
 		else if (child.$instanceof(zul.sel.Treechildren)) {
 			this.treechildren = child;
-			if (this.treerow) 
+			if (!ignoreDom && this.treerow) 
 				this.rerender();
 		}
 	},
@@ -217,7 +221,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this.treerow = null;
 		else if (child == this.treechildren) {
 			this.treechildren = null;
-			this.rerender();
 		}
 	},
 	doClick_: function(evt) {

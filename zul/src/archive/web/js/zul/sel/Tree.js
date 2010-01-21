@@ -36,8 +36,19 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-tree" : this._zclass;
 	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments)
+	insertBefore: function (child, sibling, ignoreDom) {
+		if (this.$super('insertBefore', child, sibling, true)) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
+	},
+	appendChild: function (child, ignoreDom) {
+		if (this.$super('appendChild', child, true)) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
+		}
+	},
+	_fixOnAdd: function (child, ignoreDom) {
 		if (child.$instanceof(zul.sel.Treecols))
 			this.treecols = child;
 		else if (child.$instanceof(zul.sel.Treefoot))
@@ -47,8 +58,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._fixSelectedSet();
 		} else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
-			
-		this._syncSize();
+		if (!ignoreDom) {
+			this.rerender();			
+			this._syncSize();
+		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
