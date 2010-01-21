@@ -3296,7 +3296,11 @@ _doFooSelect: function (evt) {
 				setTimeout(function(){zk._cfByMD = false;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
-			zWatch.fire('onFloatUp', wgt || zk.Desktop.$()); //notify all
+			if (wgt)
+				zWatch.fire('onFloatUp', wgt); //notify all
+			else
+				for (var dtid in zk.Desktop.all)
+					zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all
 		}
 	},
 
