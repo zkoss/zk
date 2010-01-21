@@ -71,8 +71,15 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-grid" : this._zclass;
 	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
+	insertBefore: function (child, sibling, ignoreDom) {
+		this.$super('insertBefore', child, sibling, true);
+		this._fixOnAdd(child, ignoreDom);
+	},
+	appendChild: function (child, ignoreDom) {
+		this.$super('appendChild', child, true);
+		this._fixOnAdd(child, ignoreDom);
+	},
+	_fixOnAdd: function (child, ignoreDom) {
 		var isRows;
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
@@ -85,8 +92,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.paging = child;
 		else if (child.$instanceof(zul.mesh.Frozen)) 
 			this.frozen = child;
-			
-		if (!isRows) this._syncSize();
+
+		if (!ignoreDom) {
+			this.rerender();
+			if (!isRows) this._syncSize();
+		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);

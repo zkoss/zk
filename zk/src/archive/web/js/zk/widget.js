@@ -1150,9 +1150,19 @@ new zul.wnd.Window{
 	 * </ul>
 	 * @param zk.Widget child the child widget to add
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}).
-	 * @see #insertBefore
+	 * @see #insertBefore(zk.Widget,zk.Widget)
 	 */
-	appendChild: function (child, _ignoreBind_) {
+	/** Append a child widget with more control.
+	 * It is similar to {@link #appendChild(zk.Widget)} except the caller
+	 * could prevent it from generating DOM element.
+	 * It is usually used with {@link #rerender}.
+	 * @param zk.Widget child the child widget to add
+	 * @param boolean ignoreDom whether not to generate DOM elements
+	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}).
+	 * @see #appendChild(zk.Widget)
+	 * @see #insertBefore(zk.Widget,zk.Widget,boolean)
+	 */
+	appendChild: function (child, ignoreDom) {
 		if (child == this.lastChild)
 			return false;
 
@@ -1176,7 +1186,7 @@ new zul.wnd.Window{
 
 		_addIdSpaceDown(child);
 
-		if (!_ignoreBind_)
+		if (!ignoreDom)
 			if (_isrod(child))
 				_bindrod(child);
 			else {
@@ -1202,11 +1212,23 @@ new zul.wnd.Window{
 	 * the new widget will be placed before). If null or omitted, it is
 	 * the same as {@link #appendChild}
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
-	 * @see #appendChild
+	 * @see #appendChild(zk.Widget)
 	 */
-	insertBefore: function (child, sibling, _ignoreBind_) {
+	/** Insert a child widget with more control.
+	 * It is similar to {@link #insertBefore(zk.Widget,zk.Widget)} except the caller
+	 * could prevent it from generating DOM element.
+	 * It is usually used with {@link #rerender}.
+	 * @param zk.Widget child the child widget
+	 * @param zk.Widget sibling the sibling widget (the 'insert' point where
+	 * the new widget will be placed before). If null or omitted, it is
+	 * the same as {@link #appendChild}
+	 * @param boolean ignoreDom whether not to generate DOM elements
+	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
+	 * @see #appendChild(zk.Widget,boolean)
+	 */
+	insertBefore: function (child, sibling, ignoreDom) {
 		if (!sibling || sibling.parent != this)
-			return this.appendChild(child, _ignoreBind_);
+			return this.appendChild(child, ignoreDom);
 
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
@@ -1231,7 +1253,7 @@ new zul.wnd.Window{
 
 		_addIdSpaceDown(child);
 
-		if (!_ignoreBind_)
+		if (!ignoreDom)
 			if (_isrod(child))
 				_bindrod(child);
 			else {
@@ -1248,7 +1270,16 @@ new zul.wnd.Window{
 	 * @see #detach
 	 * @see #clear
 	 */
-	removeChild: function (child, _ignoreDom_) {
+	/** Removes a child with more control.
+	 * It is similar to {@link #remove(zk.Widget)} except the caller
+	 * could prevent it from removing the DOM element.
+	 * @param zk.Widget child the child to remove.
+	 * @param boolean ignoreDom whether to remove the DOM element
+	 * @return boolean whether it is removed successfully.
+	 * @see #detach
+	 * @see #clear
+	 */
+	removeChild: function (child, ignoreDom) {
 		if (!child.parent)
 			return false;
 		if (this != child.parent)
@@ -1270,7 +1301,7 @@ new zul.wnd.Window{
 		if (_isrod(child))
 			_unbindrod(child);
 		else if (child.desktop)
-			this.removeChildHTML_(child, p, _ignoreDom_);
+			this.removeChildHTML_(child, p, ignoreDom);
 		this.onChildRemoved_(child);
 		return true;
 	},
@@ -2114,8 +2145,9 @@ function () {
 	 * <p>Overrides this method if you have to remove DOM elements other than child's node (and the descendants).
 	 * @param zk.Widget child the child widget to remove
 	 * @param zk.Widget prevsib the previous sibling, if any
+	 * @param boolean ignoreDom whether to remove the DOM element
 	 */
-	removeChildHTML_: function (child, prevsib, _ignoreDom_) {
+	removeChildHTML_: function (child, prevsib, ignoreDom) {
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(child, cf))
 			zk.currentFocus = null;
@@ -2130,7 +2162,7 @@ function () {
 
 		child.unbind();
 
-		if (!_ignoreDom_)
+		if (!ignoreDom)
 			jq(n).remove();
 	},
 	/**
