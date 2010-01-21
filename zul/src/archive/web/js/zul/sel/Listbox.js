@@ -171,8 +171,16 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
+	insertBefore: function (child, sibling, ignoreDom) {
+		this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem));
+		this._fixOnAdd(child, ignoreDom);
+	},
+	appendChild: function (child, ignoreDom) {
+		this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem));
+		this._fixOnAdd(child, ignoreDom);
+	},
+	_fixOnAdd: function (child, ignoreDom) {
+		var rerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
 			if (child.$instanceof(zul.sel.Listgroup))
 				this._groupsInfo.push(child);
@@ -184,16 +192,24 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			
 			if (child.isSelected() && !this._selItems.$contains(child))
 				this._selItems.push(child);
-		} else if (child.$instanceof(zul.sel.Listhead))
+		} else if (child.$instanceof(zul.sel.Listhead)) {
+			rerender = true;
 			this.listhead = child;
-		else if (child.$instanceof(zul.mesh.Paging))
+		} else if (child.$instanceof(zul.mesh.Paging)) {
+			rerender = true;
 			this.paging = child;
-		else if (child.$instanceof(zul.sel.Listfoot))
+		} else if (child.$instanceof(zul.sel.Listfoot)) {
+			rerender = true;
 			this.listfoot = child;
-		else if (child.$instanceof(zul.mesh.Frozen))
+		} else if (child.$instanceof(zul.mesh.Frozen)) {
+			rerender = true;
 			this.frozen = child;
-		this._syncStripe();
-		this._syncSize();
+		}
+		if (!ignoreDom) {
+			if (rerender) this.rerender();
+			else this._syncStripe();
+			this._syncSize();
+		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);

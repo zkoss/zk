@@ -1955,7 +1955,6 @@ public class Listbox extends XulElement implements Paginated,
 				_listhead = (Listhead) newChild;
 				if (added)
 					++_hdcnt; // it may be moved, not inserted
-				invalidate(); //FUTURE: handle at client
 				return true;
 			}
 		} else if (newChild instanceof Auxhead) {
@@ -1964,13 +1963,11 @@ public class Listbox extends XulElement implements Paginated,
 			if (super.insertBefore(newChild, refChild)) {
 				if (added)
 					++_hdcnt; // it may be moved, not inserted
-				//not need to invalidate since auxhead visible only with _listhead
 				return true;
 			}
 		} else if (newChild instanceof Frozen) {
 			refChild = _paging; // the last two: listfoot and paging
 			if (super.insertBefore(newChild, refChild)) {
-				invalidate(); //FUTURE: handle at client
 				_frozen = (Frozen) newChild;
 				return true;
 			}
@@ -1981,14 +1978,12 @@ public class Listbox extends XulElement implements Paginated,
 			else
 				refChild = _paging;
 			if (super.insertBefore(newChild, refChild)) {
-				invalidate(); //FUTURE: handle at client
 				_listfoot = (Listfoot) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Paging) {
 			refChild = null; // the last: paging
 			if (super.insertBefore(newChild, refChild)) {
-				invalidate(); //FUTURE: handle at client
 				_pgi = _paging = (Paging) newChild;
 				return true;
 			}
@@ -2136,7 +2131,6 @@ public class Listbox extends XulElement implements Paginated,
 			getDataLoader().updateModelInfo();
 		}
 
-		invalidate(); //FUTURE: handle at client
 		return true;
 	}
 	
