@@ -44,7 +44,11 @@ zkMenu2 = { // menu
 		if (pp)
 			zk.listen(pp, "keydown", zkMenu2.onkeydown);
 		zkMenu2.fixBtn(cmp); // IE only
+		zkMpop2.syncSize(cmp);
 	},
+	cleanup: zk.ie7 ? function (cmp) {
+		zkMpop2.syncSize(cmp, true);
+	} : zk.voidf,
 	/**
 	 * Returns the index within this UL tag of the first occurrence of the
      * specified LI tag. If it does not occur -1 is returned.
@@ -411,6 +415,7 @@ zkMenuit2 = { //menuitem
 			zk.listen($e(cmp.id + "!a"), "click", Event.stop);
 		}
 		zkMenuit2.fixBtn(cmp);
+		zkMpop2.syncSize(cmp);
 	},
 	onover: function (evt) {
 		zkMenu2._shallClose = false;
@@ -474,9 +479,32 @@ zkMenuit2.cleanup = zkMenusp2.cleanup = function (cmp) {
 				shadow.sync();
 			}, false, cmp.parentNode.id + "pp");
 		}
+		zkMpop2.syncSize(cmp, true);
 	}
 };
 zkMpop2 = { //menupopup
+	syncSize: zk.ie7 ? function (cmp, isClean) {
+		if (!zkMenu2.isTop(cmp)) {
+			var p = $outer(cmp.parentNode);
+			if (p && zk.isRealVisible(p)) {
+				if (!p._syncSize)
+					p._syncSize = function () {
+						var ul = $e(p, "cave");
+						if (ul && ul.childNodes.length) {
+							p.style.width = '';
+							p.style.width = ul.offsetWidth
+									+ zk.getPadBorderWidth(p) + "px";
+							if (p._shadow)
+								p._shadow.sync();
+						}
+					};
+				if (isClean)
+					zk.addCleanupLater(p._syncSize, false, p.id + "Mpop2");
+				else
+					zk.addInitLater(p._syncSize, false, p.id + "Mpop2");
+			}
+		}
+	}: zk.voidf,
 	setAttr: zk.ie7 ? function (cmp, nm, val) {
 		if (nm == "z.closemask") { // Bug 2784736
 			if (!cmp.style.width) { // Bug 2105158 and Bug 1911129
@@ -572,6 +600,8 @@ zkMpop2 = { //menupopup
 			ctx._shadow.cleanup();
 			ctx._shadow = null;
 		}
+		if (ctx && ctx._syncSize)
+			ctx._syncSize = null;
 	}
 };
 

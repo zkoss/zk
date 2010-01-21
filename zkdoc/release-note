@@ -29,6 +29,7 @@ ZK 3.6.4
   2932559: Dateformt is not correct
   2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
   2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
+  2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
   
 * Upgrade Notes:
 
