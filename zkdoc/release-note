@@ -151,6 +151,7 @@ November, 2009
   2936095: drop list display issue when filled combobox in onOpen
   2936132: Add treeitem with open="false", append to wrong position
   2936294: Clearing Selection in Lisbox don't work
+  2936568: timebox don't permit blank/null value once focused
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

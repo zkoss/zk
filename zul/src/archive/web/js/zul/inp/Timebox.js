@@ -393,6 +393,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		
 		// cache it for IE
 		this._lastPos = this._getPos();
+		this._changed = true;
 	},
 	_btnUp: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
@@ -560,20 +561,25 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.lastPos = pos;
 	},
 	_doUp: function() {
+		this._changed = true;
 		this.getTimeHandler().increase(this, 1);
 		this._onChanging();
 	},
 	_doDown: function() {
+		this._changed = true;
 		this.getTimeHandler().increase(this, -1);
 		this._onChanging();
 	},
 	_doBack: function () {
+		this._changed = true;
 		this.getTimeHandler().deleteTime(this, true);
 	},
 	_doDel: function () {
+		this._changed = true;
 		this.getTimeHandler().deleteTime(this, false);
 	},
 	_doType: function (val) {
+		this._changed = true;
 		this.getTimeHandler().addTime(this, val);
 	},
 	getTimeHandler: function () {
@@ -661,6 +667,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace && this._inplaceout) {
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 		}
+		
+		// skip onchange, Bug 2936568
+		if (!this.getValue() && !this._changed)
+			this.getInputNode().value = this._lastRawValVld = '';
+		
 		this.$supers('doBlur_', arguments);
 		if (this._inplace && this._inplaceout) {
 			jq(n).addClass(this.getInplaceCSS());
@@ -707,7 +718,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, "onmouseout", "_btnOut");
 			this.domUnlisten_(btn, "mouseover", "_btnOver");
 		}
-		
+		this._changed = false;
 		this.$supers('unbind_', arguments);
 	}
 
