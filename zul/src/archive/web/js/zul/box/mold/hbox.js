@@ -33,8 +33,9 @@ function (out) {
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
 	if (v == 'stretch') out.push(';height:100%');
 	if (this._isStretchPack()) out.push(';width:100%');
-	
-	out.push('"><tr valign="', this._isStretchPack() && v && v != 'stretch'? zul.box.Box._toValign(v) : 'top', '">');
+
+	//follow xul hbox spec.
+	out.push('"><tr valign="', v && v != 'stretch' ? zul.box.Box._toValign(v) : 'top', '">');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		this.encloseChildHTML_(w, false, out);

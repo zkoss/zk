@@ -297,8 +297,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			oo.push('<tr id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child), '>');
 				
-			if (!isCell) 
-				oo.push('<td', this._childInnerAttrs(child), '>');
+			if (!isCell) {
+				oo.push('<td', this._childInnerAttrs(child));
+				//follow xul vbox spec.
+				var v = this.getAlign();
+				if (v && v != 'stretch') oo.push(' align="', zul.box.Box._toHalign(v), '"');
+				oo.push('>');
+			}
 				
 			child.redraw(oo);
 			
