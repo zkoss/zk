@@ -86,11 +86,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (!tabbox.inAccordionMold()) {
 			var tbx = tabbox.$n(),
 				hgh = tbx.style.height;
-			
 			if (hgh && hgh != "auto") {//tabbox has height
 				var n = this.$n();
 				hgh = zk(n.parentNode).vflexHeight();
 				zk(n).setOffsetHeight(hgh);
+				if (zk.ie6_) {
+					var s = this.$n('cave').style,
+						z = s.zoom;
+					s.zoom = 1;
+					s.zoom = z;
+				}
 			}
 		}
 	},
