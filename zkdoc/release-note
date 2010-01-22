@@ -150,6 +150,7 @@ November, 2009
   2936064: Remove Group in Grid shall not remove next Group
   2936095: drop list display issue when filled combobox in onOpen
   2936132: Add treeitem with open="false", append to wrong position
+  2936294: Clearing Selection in Lisbox don't work
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

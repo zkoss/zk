@@ -205,6 +205,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * @param ItemWidget item
 	 */
 	setSelectedItem: function (item) {
+		if (!item)
+			this.clearSelection();
+		
 		item = zk.Widget.$(item);
 		if (item) {
 			this._selectOne(item, false);
