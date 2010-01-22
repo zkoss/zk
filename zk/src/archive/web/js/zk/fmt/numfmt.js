@@ -110,16 +110,16 @@ zk.fmt.Number = {
 			ind = pureFmtStr.length;
 		
 		// Bug 2911379
-		var _fmt = '',
-			prefmt = indVal - ind;
-		for (var len = prefmt; --len >= 0; indFmt++)
-			_fmt += '#';
+		var prefmt = indVal - ind;
+		if (prefmt > 0) {
+			var xfmt = '';
+			for (var len = prefmt; --len >= 0; indFmt++)
+				xfmt += '#';
 		
-		// insert extra format into correct place.
-		if (_fmt) {
-    		var beg = fmt.indexOf('#');
+			// insert extra format into correct place.
+    		var beg = this._extraFmtIndex(fmt);
     		prefmt += beg;
-    		fmt = fmt.substring(0, beg) + _fmt + fmt.substring(beg, fmt.length);
+    		fmt = fmt.substring(0, beg) + xfmt + fmt.substring(beg, fmt.length);
 		}
 		for (var len = ind - indVal; --len >= 0; indVal++)
 			valStr = '0' + valStr;
@@ -187,6 +187,15 @@ zk.fmt.Number = {
 			pre = '0';
 		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
 	},
+	_extraFmtIndex: function (fmt) {
+		var j = 0;
+		for(var len=fmt.length; j < len; ++j) {
+			var c = fmt.charAt(j);
+			if (c == '#' || c == '0' || c == ',')
+				break;
+		}
+		return j;
+	},	
 	_removePrefixSharps: function (val) {
 		var ret = '',
 			sharp = true;

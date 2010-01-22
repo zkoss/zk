@@ -57,4 +57,21 @@ links.add(new Link(123456.789012345));
 </rows>
 </grid>
 
+<grid>
+<columns>
+ 	<column label="decimalbox: € 0.00 == € 39824,00"/> 
+	<column label="doublebox: € 0.00 == € 39824,00"/>
+ 	<column label="decimalbox: € #,##0.00 == € 39.824,00"/> 
+	<column label="doublebox: € #,##0.00 == € 39.824,00"/>
+</columns>
+<rows>
+<row>
+<decimalbox value="39824" format="€ 0.00" hflex="1"/>
+<doublebox value="39824" format="€ 0.00" hflex="1"/>
+<decimalbox value="39824" format="€ #,##0.00" hflex="1"/>
+<doublebox value="39824" format="€ #,##0.00" hflex="1"/>
+</row>
+</rows>
+</grid>
+
 </zk>
