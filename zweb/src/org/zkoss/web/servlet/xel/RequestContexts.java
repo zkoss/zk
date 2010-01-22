@@ -87,6 +87,8 @@ public class RequestContexts {
 	 * @see #push
 	 */
 	public static final void pop() {
-		((List)_elCtxs.get()).remove(0);
+		final List l = (List)_elCtxs.get();
+		if (l.size() == 1) _elCtxs.set(null);
+		else l.remove(0);
 	}
 }
