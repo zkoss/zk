@@ -188,6 +188,7 @@ November, 2009
   2090169: Button's width with "100%" is wrong
   2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
   2936019: Execption when Listbox insertBefore() group + groupfoot
+  2937096: composer.arg shall be statically wired
 
 * Upgrade Notes
   + Recompile your application since the return type of setAttribute 
