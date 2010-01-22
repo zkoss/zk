@@ -368,9 +368,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final ClassWebResource cwr = getClassWebResource();
 			final HttpSession sess =
 				shallSession(cwr, pi) ? request.getSession(false): null;
-			if (sess == null)
+			Object oldsess = null;
+			if (sess == null) {
+				oldsess = SessionsCtrl.getRawCurrent();
 				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
+			}
 
 			final Object old = sess != null?
 				I18Ns.setup(sess, request, response, "UTF-8"):
@@ -380,7 +383,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
 				if (sess != null) I18Ns.cleanup(request, old);
-				else Charsets.cleanup(request, old);
+				else {
+					Charsets.cleanup(request, old);
+					SessionsCtrl.setRawCurrent(oldsess);
+				}
 			}
 			return; //done
 		}
@@ -395,9 +401,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				return;
 			}
 
-			if (sess == null)
+			Object oldsess = null;
+			if (sess == null) {
+				oldsess = SessionsCtrl.getRawCurrent();
 				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
+			}
 
 			final Object old = sess != null?
 				I18Ns.setup(sess, request, response, "UTF-8"):
@@ -406,7 +415,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				aue.service(request, response, pi);
 			} finally {
 				if (sess != null) I18Ns.cleanup(request, old);
-				else Charsets.cleanup(request, old);
+				else {
+					Charsets.cleanup(request, old);
+					SessionsCtrl.setRawCurrent(oldsess);
+				}
 			}
 			return; //done
 		}
