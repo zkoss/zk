@@ -180,21 +180,32 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var cwgt = wgt.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
 					n = cwgtn ? cwgtn.parentNode : n,
+					c = n.firstChild,
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderHeight(),
 					max = 0;
-				for (; cwgt; cwgt = cwgt.nextSibling) {
-					var c = cwgt.$n();
-					if (c) { //node might not exist if rod on
-						var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
-							_setMinFlexSize(cwgt, c, o) : 
-							(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+				if (cwgt){ //try child widgets
+					for (; cwgt; cwgt = cwgt.nextSibling) {
+						c = cwgt.$n();
+						if (c) { //node might not exist if rod on
+							var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
+								_setMinFlexSize(cwgt, c, o) : 
+								(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+							if (sz > max)
+								max = sz;
+						}
+					}
+				} else if (c) { //no child widget, try html element directly
+					for(; c; c = c.nextSibling) {
+						var sz = (c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
 						if (sz > max)
 							max = sz;
 					}
-				}
+				} else //no kids at all, use self
+					max = n.offsetHeight - pb;  
+
 				var margin = zkn.sumStyles("tb", jq.margins),
 					sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
@@ -208,19 +219,32 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var cwgt = wgt.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
 					n = cwgtn ? cwgtn.parentNode : n,
+					c = n.firstChild,
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderWidth(),
 					max = 0;
-				for (; cwgt; cwgt = cwgt.nextSibling) {
-					var c = cwgt.$n(),
-						sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
-							_setMinFlexSize(cwgt, c, o) : 
-							(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
-					if (sz > max)
-						max = sz;
-				}
+				if (cwgt) { //try child widgets
+					for (; cwgt; cwgt = cwgt.nextSibling) {
+						c = cwgt.$n();
+						if (c) { //node might not exist if rod on
+							var sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
+									_setMinFlexSize(cwgt, c, o) : 
+									(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+							if (sz > max)
+								max = sz;
+						}
+					}
+				} else if (c) { //no child widget, try html element directly
+					for(; c; c = c.nextSibling) {
+						var sz = (c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+						if (sz > max)
+							max = sz;
+					}
+				} else //no kids at all, use self
+					max = n.offsetWidth - pb;
+				
 				var margin = zkn.sumStyles("lr", jq.margins);
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
 				if (sz && sz.width >= 0)
