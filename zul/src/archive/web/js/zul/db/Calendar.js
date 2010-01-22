@@ -14,6 +14,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+(function () {
+	// Bug 2936994, fixed unnecessary setting scrollTop
+	var _doFocus = zk.gecko ? function (n, timeout) {
+			if (timeout)
+				setTimeout(function () {
+					jq(n).focus();
+				});
+			else
+				jq(n).focus();
+		} : function (n) {
+			jq(n).focus();
+		};
 /**
  * A calendar.
  * <p>Default {@link #getZclass}: z-calendar.
@@ -202,11 +214,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		);
 		if (this._view != 'decade') 
-			this._markCal();
+			this._markCal({timeout: true});
 		else {
 			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
 			if (anc)
-				jq(anc.firstChild).focus();
+				_doFocus(anc.firstChild, true);
 		}
 			
 		this.domListen_(title, "onClick", '_changeView')
@@ -230,6 +242,18 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
 			.$supers('unbind_', arguments);
 		this.efield = null;
+	},
+	rerender: function () {
+		if (this.desktop) {
+			var s = this.$n().style,
+				w = s.width,
+				h = s.height;
+			var result = this.$supers('rerender', arguments);
+			s = this.$n().style;
+			s.width = w;
+			s.height = h;
+			return result;
+		}
 	},
 	_doclickArrow: function (evt) {
 		var node = evt.domTarget,
@@ -377,7 +401,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return result;
 		}
 	},
-	_markCal : function () {
+	_markCal : function (opts) {
 		var	zcls = this.getZclass(),
 		 	val = this.getTime(),
 		 	m = val.getMonth(),
@@ -396,7 +420,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (m == j) {
 					jq(mon).addClass(zcls+"-seld");
 					jq(mon).removeClass(zcls+"-over");
-					jq(mon.firstChild).focus();
+					_doFocus(mon.firstChild, opts ? opts.timeout : false);
 				} else
 					jq(mon).removeClass(zcls+"-seld");
 			}
@@ -404,7 +428,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (yy == j) {
 					jq(year).addClass(zcls+"-seld");
 				    jq(year).removeClass(zcls+"-over");
-					jq(year.firstChild).focus();
+					_doFocus(year.firstChild, opts ? opts.timeout : false);
 				} else
 					jq(year).removeClass(zcls+"-seld");
 			}
@@ -440,7 +464,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							 
 						jq(cell).html('<a href="javascript:;">' + v + '</a>').attr('_dt', v);
 						if (sel)
-							jq(cell.firstChild).focus();
+							_doFocus(cell.firstChild, opts ? opts.timeout : false);
 					}
 				}
 			}
@@ -448,3 +472,4 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	}
 
 });
+})();

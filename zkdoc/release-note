@@ -153,6 +153,7 @@ November, 2009
   2936294: Clearing Selection in Lisbox don't work
   2936568: timebox don't permit blank/null value once focused
   2923479: Vbox/Hbox align="center" not works as XUL spec.
+  2936994: Calendar is not display correct if inside a borderlayout
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
