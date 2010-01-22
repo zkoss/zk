@@ -749,7 +749,10 @@ public class Components {
 		if ("execution".equals(fdname))
 			return EXECUTION_PROXY;
 		if ("arg".equals(fdname))
-			return EXECUTION_PROXY.getArg();
+			return Executions.getCurrent().getArg();
+			//return ARG_PROXY;
+			//bug 2937096: composer.arg shall be statically wired
+			//arg is a Map prepared by application developer, so can be wired statically 
 		if ("param".equals(fdname))
 			return PARAM_PROXY;
 		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
