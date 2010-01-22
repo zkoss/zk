@@ -186,12 +186,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb = zkn.padBorderHeight(),
 					max = 0;
 				for (; cwgt; cwgt = cwgt.nextSibling) {
-					var c = cwgt.$n(),
-						sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
+					var c = cwgt.$n();
+					if (c) { //node might not exist if rod on
+						var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
 							_setMinFlexSize(cwgt, c, o) : 
 							(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
-					if (sz > max)
-						max = sz;
+						if (sz > max)
+							max = sz;
+					}
 				}
 				var margin = zkn.sumStyles("tb", jq.margins),
 					sz = wgt.setFlexSize_({height:(max + pb + margin)});
