@@ -157,6 +157,7 @@ November, 2009
   2937035: IE6 only: Borderlayout inside tabpanel has no height
   2938061: Combobox background color does not change
   2937374: Readonly Combobox automatically opened in a highlighted win
+  2939118: Tree reset model causes Javascript error
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

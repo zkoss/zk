@@ -74,8 +74,12 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			jq(before).before(child.redrawHTML_());
 		else if (ben)
 			jq(ben).after(child.redrawHTML_());
-		else
-			jq(this).append(child.redrawHTML_());
+		else {
+			if (this.parent.$instanceof(zul.sel.Tree))
+				jq(this.parent.$n('rows')).append(child.redrawHTML_());
+			else
+				jq(this).append(child.redrawHTML_());
+		}
 		child.bind(desktop);
 	},
 	getCaveNode: function () {
