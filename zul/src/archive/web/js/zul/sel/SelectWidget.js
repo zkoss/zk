@@ -207,9 +207,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	setSelectedItem: function (item) {
 		if (!item)
 			this.clearSelection();
-		
-		item = zk.Widget.$(item);
-		if (item) {
+		else if (item = zk.Widget.$(item)) {
 			this._selectOne(item, false);
 			zk(item).scrollIntoView(this.ebody);
 		}
