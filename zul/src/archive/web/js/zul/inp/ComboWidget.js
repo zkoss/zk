@@ -208,7 +208,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	close: function (opts) {
 		if (!this._open) return;
 		this._open = false;
-		this._shallClose = true; //Bug: 2925671 :Problem clicking twice the combobox triangle
 		if (opts && opts.focus)
 			this.focus();
 
@@ -356,9 +355,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this.onSize();
 			}
 		}
-		if (!this._shallClose && this._readonly && !this.isOpen())
-			this.open({focus:true,sendOnOpen:true});
-		this._shallClose = false;
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
@@ -424,6 +420,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	doClick_: function (evt) {
 		if (evt.domTarget == this.$n('pp'))
 			this.close({focus:true, sendOnOpen:true});
+		else if (this._readonly && !this.isOpen())
+			this.open({focus:true,sendOnOpen:true});
 		this.$supers('doClick_', arguments);
 	},
 	_doKeyDown: function (evt) {

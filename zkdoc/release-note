@@ -156,6 +156,7 @@ November, 2009
   2936994: Calendar is not display correct if inside a borderlayout
   2937035: IE6 only: Borderlayout inside tabpanel has no height
   2938061: Combobox background color does not change
+  2937374: Readonly Combobox automatically opened in a highlighted win
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
