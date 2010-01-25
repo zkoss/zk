@@ -94,9 +94,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}else
 			this.$supers('setConstraint', arguments);
 	},
-	getInputNode: function(){
-		return this.$n("real");
+	getInputNode: _zkf = function () {
+		return this.$n('real');
 	},
+	getTextNode: _zkf,
 	coerceFromString_: function (value) {//copy from intbox
 		if (!value) return null;
 

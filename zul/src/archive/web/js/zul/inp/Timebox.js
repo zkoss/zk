@@ -261,9 +261,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-timebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	getInputNode: function(){
-		return this.$n("real");
+	getInputNode: _zkf = function () {
+		return this.$n('real');
 	},
+	getTextNode: _zkf,
 	onSize: _zkf = function () {
 		var width = this.getWidth(),
 			inp = this.getInputNode();

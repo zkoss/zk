@@ -155,6 +155,7 @@ November, 2009
   2923479: Vbox/Hbox align="center" not works as XUL spec.
   2936994: Calendar is not display correct if inside a borderlayout
   2937035: IE6 only: Borderlayout inside tabpanel has no height
+  2938061: Combobox background color does not change
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

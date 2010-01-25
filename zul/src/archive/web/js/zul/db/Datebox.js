@@ -311,9 +311,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (val) {
 		return val ? zk.fmt.Date.formatDate(val, this.getFormat()) : '';
 	},
-	getInputNode: function () {
+	getInputNode: _zkf = function () {
 		return this.$n('real');
 	},
+	getTextNode: _zkf,
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
