@@ -23,21 +23,13 @@ import org.zkoss.zk.au.AuResponse;
  * @since 5.0.0
  */
 public class AuClearBusy extends AuResponse {
-	/**
-	 * @param mesg the message to show. Ignored if open is false.
-	 * @param open whether to show the busy message, or to close it.
-	 * If open is false, the message is ignored.
+	/** Constructs a command to remove a busy message covering the whole browser.
 	 */
 	public AuClearBusy() {
 		super("clearBusy");
 	}
-	/** Constructs a busy message covering only the specified component.
-	 * @param comp the component that the busy message to cover.
-	 * Ignored if null. Notice that if the component is not found,
-	 * the message won't be shown.
-	 * @param mesg the message to show. Ignored if open is false.
-	 * @param open whether to show the busy message, or to close it.
-	 * @since 5.0.0
+	/** Constructs a command to remove a busy message covering only the specified component.
+	 * @param comp the component that the busy message is associated.
 	 */
 	public AuClearBusy(Component comp) {
 		super("clearBusy", comp, comp.getUuid());
