@@ -1605,22 +1605,6 @@ public class Listbox extends XulElement implements Paginated,
 			super.smartUpdate(attr, value);
 	}
 
-	private void fixGroupIndexAfterRemoveChild(int j, int to, boolean infront) {
-		if (_rod && hasGroupsModel()) {
-			final int gindex = getGroupIndex(j);
-			final int count = getGroupCount();
-			for(int k = gindex+1; k < count; ++k) {
-				final int[] g = (int[]) _groupsInfo.get(k);
-				if (g != null) {
-					--g[0];
-					if (g[2] != -1) --g[2];
-				}
-			}
-		} else {
-			fixGroupIndex(j, to, infront);
-		}
-	}
-	
 	/* package */void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
@@ -2108,7 +2092,7 @@ public class Listbox extends XulElement implements Paginated,
 				if (prev != null && remove != null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndexAfterRemoveChild(index, -1, false);
+				fixGroupIndex(index, -1, false);
 				if (remove != null) {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
@@ -2125,9 +2109,9 @@ public class Listbox extends XulElement implements Paginated,
 					g[1]--;
 					if (g[2] != -1)
 						g[2]--;
-					fixGroupIndexAfterRemoveChild(index, -1, false);
+					fixGroupIndex(index, -1, false);
 				} else
-					fixGroupIndexAfterRemoveChild(index, -1, false);
+					fixGroupIndex(index, -1, false);
 
 				if (child instanceof Listgroupfoot) {
 					final int[] g1 = getGroupsInfoAt(index);

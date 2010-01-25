@@ -138,23 +138,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 	}
 	
-	private void fixGroupIndexAfterRemoveChild(int j, int to, boolean infront) {
-		final Grid grid = getGrid();
-		if (grid != null && grid.isRod() && hasGroupsModel()) {
-			final int gindex = getGroupIndex(j);
-			final int count = getGroupCount();
-			for(int k = gindex+1; k < count; ++k) {
-				final int[] g = (int[]) _groupsInfo.get(k);
-				if (g != null) {
-					--g[0];
-					if (g[2] != -1) --g[2];
-				}
-			}
-		} else {
-			fixGroupIndex(j, to, infront);
-		}
-	}
-	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
@@ -379,7 +362,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndexAfterRemoveChild(index, -1, false);
+				fixGroupIndex(index, -1, false);
 				if (remove != null) {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
@@ -394,9 +377,9 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
-					fixGroupIndexAfterRemoveChild(index, -1, false);
+					fixGroupIndex(index, -1, false);
 				}
-				else fixGroupIndexAfterRemoveChild(index, -1, false);
+				else fixGroupIndex(index, -1, false);
 				if (child instanceof Groupfoot){
 					final int[] g1 = getGroupsInfoAt(index);	
 					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
