@@ -70,8 +70,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_reIndex: function () {
 		var value = this.getValue();
 		if (!this._sel || value != this._sel.getLabel()) {
-			this._sel = null;
-			this._lastsel = null;
+			if (this._sel) {
+				var n = this._sel.$n();
+				if (n) jq(n).removeClass(this._sel.getZclass() + '-seld');
+			}	
+			this._sel = this._lastsel = null;
 			for (var w = this.firstChild; w; w = w.nextSibling) {
 				if (value == w.getLabel()) {
 					this._sel = w;
