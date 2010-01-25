@@ -235,8 +235,10 @@ public class HtmlPageRenders {
 			sb.append(" EE");
 		else if (WebApps.getFeature("pe"))
 			sb.append(" PE");
-		sb.append(' ').append(wapp.getBuild())
-			.append(" -->\n");
+		sb.append(' ').append(wapp.getBuild());
+		Object o = wapp.getAttribute("org.zkoss.zk.ui.notice");
+		if (o != null) sb.append(o);
+		sb.append(" -->\n");
 
 		int tmout = 0;
 		if (desktop != null) {
@@ -267,7 +269,7 @@ public class HtmlPageRenders {
 		}		
 
 		final Device device = Devices.getDevice(deviceType);
-		final String s = device.getEmbedded();
+		String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
 
