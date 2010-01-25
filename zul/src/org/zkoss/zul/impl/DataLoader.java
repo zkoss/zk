@@ -35,6 +35,11 @@ public interface DataLoader {
 	public void init(Component owner, int offset, int limit);
 	
 	/**
+	 * Callback from the owner component and give a chance to reset things.
+	 */
+	public void reset();
+	
+	/**
 	 * Returns the associated owner component of this DataLoader. 
 	 */
 	public Component getOwner();

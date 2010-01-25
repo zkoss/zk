@@ -51,6 +51,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 		_grid = (Grid) owner;
 	}
 	
+	public void reset() {
+		//do nothing
+	}
+	
 	final public Component getOwner() {
 		return _grid;
 	}

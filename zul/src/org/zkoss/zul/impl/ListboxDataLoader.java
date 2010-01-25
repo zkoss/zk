@@ -54,7 +54,9 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 	public void init(Component owner, int offset, int limit) {
 		_listbox = (Listbox) owner;
 	}
-	
+	public void reset() {
+		//do nothing
+	}
 	final public Component getOwner() {
 		return _listbox;
 	}

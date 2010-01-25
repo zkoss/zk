@@ -57,14 +57,16 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				return new IterGroups();
 			}
 			public Object get(int index) {
-				return getChildren().get(getRealIndex(((int[])_groupsInfo.get(index))[0]));
+				final int realIndex = getRealIndex(((int[])_groupsInfo.get(index))[0]);
+				return (realIndex >=0 && realIndex < getChildren().size()) ?
+						getChildren().get(realIndex) : null;
 			}
 		};
 	}
 	
 	private int getRealIndex(int index) {
 		final Grid grid = getGrid();
-		final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0; 
+		final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0;
 		return index - (offset < 0 ? 0 : offset); 
 	}
 
@@ -136,19 +138,38 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 	}
 	
+	private void fixGroupIndexAfterRemoveChild(int j, int to, boolean infront) {
+		final Grid grid = getGrid();
+		if (grid != null && grid.isRod() && hasGroupsModel()) {
+			final int gindex = getGroupIndex(j);
+			final int count = getGroupCount();
+			for(int k = gindex+1; k < count; ++k) {
+				final int[] g = (int[]) _groupsInfo.get(k);
+				if (g != null) {
+					--g[0];
+					if (g[2] != -1) --g[2];
+				}
+			}
+		} else {
+			fixGroupIndex(j, to, infront);
+		}
+	}
+	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
-		}
-		for (Iterator it = getChildren().listIterator(realj);
-		it.hasNext() && (to < 0 || j <= to); ++j) {
-			Object o = it.next();
-			if (o instanceof Group) {
-				int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
-				if (g != null) {
-					g[0] = j;
-					if (g[2] != -1) g[2] += (infront ? 1 : -1);
+		} 
+		if (realj < getChildren().size()) {
+			for (Iterator it = getChildren().listIterator(realj);
+			it.hasNext() && (to < 0 || j <= to); ++j) {
+				Object o = it.next();
+				if (o instanceof Group) {
+					int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
+					if (g != null) {
+						g[0] = j;
+						if (g[2] != -1) g[2] += (infront ? 1 : -1);
+					}
 				}
 			}
 		}
@@ -204,12 +225,15 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	 */
 	/*package*/ int getGroupIndex(int index) {
 		int j = 0, gindex = -1;
+		int[] g = null;
 		for (Iterator it = _groupsInfo.iterator(); it.hasNext(); ++j) {
-			int[] g = (int[])it.next();
+			g = (int[])it.next();
 			if (index == g[0]) gindex = j;
 			else if (index < g[0]) break;
 		}
-		return gindex;
+		return gindex != -1 ? gindex : 
+			g != null && index < (g[0]+g[1]) ? (j-1) : 
+			g != null && index == (g[0]+g[1]) && g[2] == -1 ? (j-1) : gindex;
 	}
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
@@ -355,7 +379,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (prev != null && remove !=null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndex(index, -1, false);
+				fixGroupIndexAfterRemoveChild(index, -1, false);
 				if (remove != null) {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
@@ -370,9 +394,9 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (g != null) {
 					g[1]--;
 					if (g[2] != -1) g[2]--;
-					fixGroupIndex(index, -1, false);
+					fixGroupIndexAfterRemoveChild(index, -1, false);
 				}
-				else fixGroupIndex(index, -1, false);
+				else fixGroupIndexAfterRemoveChild(index, -1, false);
 				if (child instanceof Groupfoot){
 					final int[] g1 = getGroupsInfoAt(index);	
 					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
@@ -384,7 +408,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			if (hasGroupsModel() && getChildren().size() <= 0) { //remove to empty, reset _groupsInfo
 				_groupsInfo = new LinkedList();
 			}
-
+			
 			return true;
 		}
 		return false;
@@ -608,9 +632,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			return _j < getGroupCount();
 		}
 		public Object next() {
-			final Object o = getChildren().get(getRealIndex(((int[])_it.next())[0]));
 			++_j;
-			return o;
+			final int realIndex = getRealIndex(((int[])_it.next())[0]);
+			return (realIndex >=0 && realIndex < getChildren().size()) ?
+				getChildren().get(realIndex) : null;
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();

@@ -238,6 +238,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			Events.postEvent(20000, new Event("onInitModel", this));
 		}
 	}
+	private void resetDataLoader() {
+		if (_dataLoader != null) {
+			_dataLoader.reset();
+			_dataLoader = null;
+		}
+	}
 	
 	private class ModelInitListener implements EventListener {
 		public void onEvent(Event event) throws Exception {
@@ -253,10 +259,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					if (_model != null) { //so has to recreate rows and items
 						if (getRows() != null)
 							getRows().getChildren().clear();
-						_dataLoader = null; //enforce recreate dataloader, must after getRows().getChildren().clear()
+						resetDataLoader(); //enforce recreate dataloader, must after getRows().getChildren().clear()
 						initModel();
 					} else {
-						_dataLoader = null; //enforce recreate dataloader
+						resetDataLoader();  //enforce recreate dataloader
 					}
 				}
 			} else if (_model != null){ //rows not created yet
@@ -1202,7 +1208,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		//recreate the DataLoader 
 		final int offset = clone.getDataLoader().getOffset(); 
 		final int limit = clone.getDataLoader().getLimit();
-		clone._dataLoader = null;
+		clone.resetDataLoader();
 		clone.getDataLoader().init(clone, offset, limit);
 		
 		int cnt = 0;

@@ -1605,26 +1605,44 @@ public class Listbox extends XulElement implements Paginated,
 			super.smartUpdate(attr, value);
 	}
 
+	private void fixGroupIndexAfterRemoveChild(int j, int to, boolean infront) {
+		if (_rod && hasGroupsModel()) {
+			final int gindex = getGroupIndex(j);
+			final int count = getGroupCount();
+			for(int k = gindex+1; k < count; ++k) {
+				final int[] g = (int[]) _groupsInfo.get(k);
+				if (g != null) {
+					--g[0];
+					if (g[2] != -1) --g[2];
+				}
+			}
+		} else {
+			fixGroupIndex(j, to, infront);
+		}
+	}
+	
 	/* package */void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
 		}
-		final int beginning = j;
-		for (Iterator it = _items.listIterator(realj); it.hasNext()
-				&& (to < 0 || j <= to); ++j) {
-			Object o = it.next();
-			((Listitem) o).setIndexDirectly(j);
-
-			// if beginning is a group, we don't need to change its groupInfo,
-			// because
-			// it is not reliable when infront is true.
-			if ((!infront || beginning != j) && o instanceof Listgroup) {
-				int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
-				if (g != null) {
-					g[0] = j;
-					if (g[2] != -1)
-						g[2] += (infront ? 1 : -1);
+		if (realj < _items.size()) {
+			final int beginning = j;
+			for (Iterator it = _items.listIterator(realj); it.hasNext()
+					&& (to < 0 || j <= to); ++j) {
+				Object o = it.next();
+				((Listitem) o).setIndexDirectly(j);
+	
+				// if beginning is a group, we don't need to change its groupInfo,
+				// because
+				// it is not reliable when infront is true.
+				if ((!infront || beginning != j) && o instanceof Listgroup) {
+					int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
+					if (g != null) {
+						g[0] = j;
+						if (g[2] != -1)
+							g[2] += (infront ? 1 : -1);
+					}
 				}
 			}
 		}
@@ -1649,14 +1667,17 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	/* package */int getGroupIndex(int index) {
 		int j = 0, gindex = -1;
+		int[] g = null;
 		for (Iterator it = _groupsInfo.iterator(); it.hasNext(); ++j) {
-			int[] g = (int[]) it.next();
+			g = (int[]) it.next();
 			if (index == g[0])
 				gindex = j;
 			else if (index < g[0])
 				break;
 		}
-		return gindex;
+		return gindex != -1 ? gindex : 
+			g != null && index < (g[0]+g[1]) ? (j-1) : 
+			g != null && index == (g[0]+g[1]) && g[2] == -1 ? (j-1) : gindex;
 	}
 
 	/* package */int[] getGroupsInfoAt(int index) {
@@ -2087,7 +2108,7 @@ public class Listbox extends XulElement implements Paginated,
 				if (prev != null && remove != null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndex(index, -1, false);
+				fixGroupIndexAfterRemoveChild(index, -1, false);
 				if (remove != null) {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
@@ -2104,9 +2125,9 @@ public class Listbox extends XulElement implements Paginated,
 					g[1]--;
 					if (g[2] != -1)
 						g[2]--;
-					fixGroupIndex(index, -1, false);
+					fixGroupIndexAfterRemoveChild(index, -1, false);
 				} else
-					fixGroupIndex(index, -1, false);
+					fixGroupIndexAfterRemoveChild(index, -1, false);
 
 				if (child instanceof Listgroupfoot) {
 					final int[] g1 = getGroupsInfoAt(index);
@@ -2348,11 +2369,13 @@ public class Listbox extends XulElement implements Paginated,
 			int realj = getRealIndex(j);
 			if (realj < 0)
 				realj = 0;
-			for (Iterator it = _items.listIterator(realj); it.hasNext(); ++j) {
-				final Listitem item = (Listitem) it.next();
-				if (item.isSelected()) {
-					_jsel = j;
-					return;
+			if (realj < _items.size()) {
+				for (Iterator it = _items.listIterator(realj); it.hasNext(); ++j) {
+					final Listitem item = (Listitem) it.next();
+					if (item.isSelected()) {
+						_jsel = j;
+						return;
+					}
 				}
 			}
 		}
@@ -2371,9 +2394,11 @@ public class Listbox extends XulElement implements Paginated,
 		int realj = getRealIndex(j);
 		if (realj < 0)
 			realj = 0;
-		for (Iterator it = _items.listIterator(realj); it.hasNext()
-				&& (to < 0 || j <= to); ++j)
-			((Listitem) it.next()).setIndexDirectly(j);
+		if (realj < _items.size()) {
+			for (Iterator it = _items.listIterator(realj); it.hasNext()
+					&& (to < 0 || j <= to); ++j)
+				((Listitem) it.next()).setIndexDirectly(j);
+		}
 	}
 
 	// -- ListModel dependent codes --//
@@ -2964,6 +2989,12 @@ public class Listbox extends XulElement implements Paginated,
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
 	}
+	private void resetDataLoader() {
+		if (_dataLoader != null) {
+			_dataLoader.reset();
+			_dataLoader = null;
+		}
+	}
 	
 	private class ModelInitListener implements EventListener {
 		public void onEvent(Event event) throws Exception {
@@ -2981,10 +3012,10 @@ public class Listbox extends XulElement implements Paginated,
 					if (_model != null) { // so has to recreate
 						// list items
 						getItems().clear();
-						_dataLoader = null; // enforce recreate the dataloader
+						resetDataLoader(); // enforce recreate the dataloader
 						initModel(); //init the model
 					} else {
-						_dataLoader = null; // enforce recreate the dataloader
+						resetDataLoader(); // enforce recreate the dataloader
 						// dataloader
 					}
 				}
@@ -3022,7 +3053,7 @@ public class Listbox extends XulElement implements Paginated,
 		//recreate the DataLoader 
 		final int offset = getDataLoader().getOffset(); 
 		final int limit = getDataLoader().getLimit();
-		_dataLoader = null;
+		resetDataLoader(); 
 		getDataLoader().init(this, offset, limit);
 		
 		int index = offset;

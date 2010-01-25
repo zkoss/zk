@@ -732,7 +732,7 @@ public class Components {
 		if ("arg".equals(name))
 			return Executions.getCurrent().getArg();
 			//return ARG_PROXY;
-			//bug 2937096: Lifecycle of composer.arg 
+			//bug 2937096: composer.arg shall be statically wired 
 			//arg is a Map prepared by application developer, so can be wired statically 
 		if ("param".equals(name))
 			return PARAM_PROXY;
