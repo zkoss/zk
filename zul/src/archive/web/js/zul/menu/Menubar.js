@@ -105,7 +105,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		this._checkScrolling();
+		if (!this.childReplacing_)
+			this._checkScrolling();
 	},
 	_checkScrolling: function () {	
 		if (!this.checkScrollable()) return;

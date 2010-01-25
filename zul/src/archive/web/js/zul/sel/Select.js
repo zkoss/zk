@@ -261,8 +261,11 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			this._doChange(evt);
 		} else this.$supers('doKeyUp_', arguments);
 	},
-	onChildAdded_: _zkf = function (/*child*/) {
+	onChildAdded_: function (/*child*/) {
 		this.rerender();
 	},
-	onChildRemoved_: _zkf
+	onChildRemoved_: function (/*child*/) {
+		if (!this.childReplacing_)
+			this.rerender();
+	}
 });

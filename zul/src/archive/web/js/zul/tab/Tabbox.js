@@ -224,7 +224,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			this.tabs = null;
 		else if (child == this.tabpanels)
 			this.tabpanels = null;
-		this.rerender();
+		if (!this.childReplacing_)
+			this.rerender();
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);

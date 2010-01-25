@@ -142,7 +142,8 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		this._syncColMenu();
+		if (!this.childReplacing_)
+			this._syncColMenu();
 	},
 	_initColMenu: function () {
 		if (this._mpop)

@@ -105,6 +105,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child.$instanceof(zul.grid.Group))
 			this._groupsInfo.$remove(child);
-		this._syncStripe();
+		if (!this.childReplacing_)
+			this._syncStripe();
 	}
 });

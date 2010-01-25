@@ -71,7 +71,7 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function(){
 		this.$supers('onChildRemoved_', arguments);
-		if (this.inPanelMold()) 
+		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();
 	}
 	

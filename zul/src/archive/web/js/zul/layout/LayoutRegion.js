@@ -374,7 +374,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
-		if (this.parent && this.desktop)
+		if (this.parent && this.desktop && !this.childReplacing_)
 			this.parent.resize();
 	},
 	rerender: function () {

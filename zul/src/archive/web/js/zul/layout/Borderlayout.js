@@ -55,7 +55,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			this.west = null;
 		else if (child == this.east)
 			this.east = null;
-		this.resize();
+		if (!this.childReplacing_)
+			this.resize();
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-borderlayout" : this._zclass;

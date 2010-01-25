@@ -1633,12 +1633,20 @@ new zul.wnd.Window{
 	 * will be called.
 	 * <p>Default: invoke {@link #onChildRemoved_} and then
 	 * {@link #onChildAdded_}.
+	 * Furthermore, it sets this.childReplacing_ to true before invoking
+	 * {@link #onChildRemoved_} and {@link #onChildAdded_}, so we can optimize
+	 * the code (such as rerender only once) by checking its value.
 	 * @param zk.Widget oldc the old child (being removed)
 	 * @param zk.Widget newc the new child (being added)
 	 */
 	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc);
-		this.onChildAdded_(newc);
+		this.childReplacing_ = true;
+		try {
+			this.onChildRemoved_(oldc);
+			this.onChildAdded_(newc);
+		} finally {
+			this.childReplacing_ = false;
+		}
 	},
 	/** A callback called after a child's visibility is changed
 	 * (i.e., {@link #setVisible} was called).

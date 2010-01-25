@@ -70,7 +70,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
 		if (this.desktop) {
-			if (this.parent._fixHeaders())
+			if (!this.childReplacing_ && this.parent._fixHeaders())
 				this.parent.onSize();
 		}
 	},
