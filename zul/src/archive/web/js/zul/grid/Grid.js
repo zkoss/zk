@@ -102,6 +102,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (!isRows) this._syncSize();
 		}
 	},
+	onChildReplaced_: function (oldc, newc) {
+		this.onChildRemoved_(oldc);
+		this._fixOnAdd(newc);
+	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		var isRows;

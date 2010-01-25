@@ -1384,10 +1384,9 @@ new zul.wnd.Window{
 			zWatch.fire('onBindLevelMove', newwgt);
 		}
 
-		if (p) {
-			p.onChildRemoved_(this);
-			p.onChildAdded_(newwgt);
-		}
+		if (p)
+			p.onChildReplaced_(this, newwgt);
+
 		//avoid memory leak
 		this.parent = this.nextSibling = this.previousSibling
 			= this._node = this._nodeSolved = null;
@@ -1613,14 +1612,33 @@ new zul.wnd.Window{
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
 	/** A callback called after a child has been added to this widget.
+	 * <p>Notice: when overriding this method but not
+	 * {@link #onChildRemoved_}, {@link #onChildReplaced_}
+	 * is usually required to override, too.
 	 * @param zk.Widget child the child being added
 	 */
 	onChildAdded_: function (/*child*/) {
 	},
 	/** A callback called after a child has been removed to this widget.
+	 * <p>Notice: when overriding this method but not
+	 * {@link #onChildAdded_}, {@link #onChildReplaced_}
 	 * @param zk.Widget child the child being removed
 	 */
 	onChildRemoved_: function (/*child*/) {
+	},
+	/** A callback called after a child has been replaced.
+	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this
+	 * method is called only if {@link zk.AuCmd1#outer}.
+	 * And if this method is called, neither {@link #onChildAdded_} nor {@link #onChildRemoved_}
+	 * will be called.
+	 * <p>Default: invoke {@link #onChildRemoved_} and then
+	 * {@link #onChildAdded_}.
+	 * @param zk.Widget oldc the old child (being removed)
+	 * @param zk.Widget newc the new child (being added)
+	 */
+	onChildReplaced_: function (oldc, newc) {
+		this.onChildRemoved_(oldc);
+		this.onChildAdded_(newc);
 	},
 	/** A callback called after a child's visibility is changed
 	 * (i.e., {@link #setVisible} was called).

@@ -216,6 +216,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				this.rerender();
 		}
 	},
+	onChildReplaced_: function (oldc, newc) {
+		this.onChildRemoved_(oldc);
+		this._fixOnAdd(newc);
+	},
 	onChildRemoved_: function(child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) 
