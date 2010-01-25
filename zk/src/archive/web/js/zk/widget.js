@@ -2214,9 +2214,11 @@ function () {
 	$n: function (subId) {
 		if (subId) {
 			var n = this._subnodes[subId];
-			if (!n && this.desktop)
-				n = this._subnodes[subId] = jq(this.uuid + '-' + subId, zk)[0];
-			return n;
+			if (!n && this.desktop) {
+				n = jq(this.uuid + '-' + subId, zk)[0];
+				this._subnodes[subId] = n ? n : 'n/a';
+			}
+			return n == 'n/a' ? null : n;
 		}
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {

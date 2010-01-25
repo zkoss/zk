@@ -315,10 +315,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	//super
-	getInputNode: _zkf = function () {
-		return this.$n('real');
-	},
-	getTextNode: _zkf,
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))

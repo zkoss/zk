@@ -205,10 +205,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */
-	getInputNode: function () {
-		return this.$n();
+	getInputNode: _zkf = function () {
+		return this.$n('real') || this.$n();
 	},
-
+	getTextNode: _zkf,
 	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments);
 		if (!no || !no.text)
