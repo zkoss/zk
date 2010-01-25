@@ -13,7 +13,6 @@ B50-2936095.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?xml version="1.0" encoding="UTF-8"?>
 <zk>
     Please click dropdown button, and then the listitem displays well.
     <combobox id='cb' onOpen='if(self.getItems().size()==0) if
