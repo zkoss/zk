@@ -2582,8 +2582,8 @@ unbind_: function (skipper, after) {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
-		if (typeof msg == 'string' && msg.length > 15)
-			msg = msg.substring(0, 15) + "...";
+		if (typeof msg == 'string' && msg.length > 9)
+			msg = msg.substring(0, 9) + "...";
 
 		var dgelm = zk.DnD.ghost(drag, ofs, msg);
 

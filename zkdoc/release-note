@@ -158,6 +158,7 @@ November, 2009
   2938061: Combobox background color does not change
   2937374: Readonly Combobox automatically opened in a highlighted win
   2939118: Tree reset model causes Javascript error
+  2939268: Ugly view when dragging long Listitems
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
