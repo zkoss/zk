@@ -484,6 +484,7 @@ public class HtmlPageRenders {
 		}
 
 		RenderContext rc = null, old = null;
+		final boolean divRequired = !au || owner != null;
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
@@ -495,7 +496,7 @@ public class HtmlPageRenders {
 		}
 
 		//generate div first
-		if (!au) {
+		if (divRequired) {
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
 			out.write(" class=\"z-temp\">");
@@ -506,7 +507,7 @@ public class HtmlPageRenders {
 		}
 
 		//generate JS second
-		if (!au) {
+		if (divRequired) {
 			out.write("\n<script>zkmb();try{");
 			out.write(outZkIconJS());
 		}
@@ -563,7 +564,7 @@ public class HtmlPageRenders {
 			setRenderContext(exec, old);
 		}
 
-		if (!au) {
+		if (divRequired) {
 			out.write("}finally{zkme();}</script>\n");
 		}
 	}
