@@ -41,7 +41,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 				zcls = this.getZclass();
 			if (!n) return;
 			if (!this.inRoundedMold())
-				n.style.display = v == 'true'? '': 'none';
+				v ? jq(n).show() : jq(n).hide();
 			else {
 				var fnm = v ? 'removeClass': 'addClass';
 				jq(n)[fnm](zcls + '-btn-right-edge');				
