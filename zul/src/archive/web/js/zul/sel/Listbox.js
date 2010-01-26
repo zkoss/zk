@@ -173,17 +173,17 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom, ignoreDom);
+			this._fixOnAdd(child, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom, ignoreDom);
+			this._fixOnAdd(child, ignoreDom);
 			return true;
 		}
 	},
-	_fixOnAdd: function (child, ignoreDom, _noSync) {
+	_fixOnAdd: function (child, ignoreDom, stripe) {
 		var rerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
 			if (child.$instanceof(zul.sel.Listgroup))
@@ -196,6 +196,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			
 			if (child.isSelected() && !this._selItems.$contains(child))
 				this._selItems.push(child);
+			stripe = true;
 		} else if (child.$instanceof(zul.sel.Listhead)) {
 			rerender = true;
 			this.listhead = child;
@@ -211,18 +212,18 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 
 		if (!ignoreDom && rerender)
-			this.rerender();
-		if (!_noSync) {
-			if (!rerender) this._syncStripe();
-			this._syncSize();
-		}
+			return this.rerender();
+		if (stripe)
+			this._syncStripe();
+		this._syncSize();
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true);
+		this._fixOnAdd(newc, true, true); //force stripe
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
+		var stripe;
 		if (child == this.listhead)
 			this.listhead = null;
 		else if (child == this.paging)
@@ -250,10 +251,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			
 			if (child.isSelected())
 				this._selItems.$remove(child);
-		}
+		} else
+			stripe = true;
 
 		if (_noSync) {
-			this._syncStripe();
+			if (stripe) this._syncStripe();
 			this._syncSize();
 		}
 	},
