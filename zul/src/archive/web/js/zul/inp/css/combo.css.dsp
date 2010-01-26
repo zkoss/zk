@@ -45,17 +45,17 @@
 	</c:if>
 }
 .z-combobox-rounded-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')}) repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')}) repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')}) repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-inp,
 .z-spinner-rounded-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')}) repeat-x 0 0;	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 /*******************************************************************************************************/
 .z-combobox-focus .z-combobox-inp,
@@ -86,14 +86,16 @@
 .z-datebox-rounded .z-datebox-rounded-text-invalid + i.z-datebox-rounded-btn-right-edge,
 .z-timebox-rounded .z-timebox-rounded-text-invalid + i.z-timebox-rounded-btn-right-edge,
 .z-spinner-rounded .z-spinner-rounded-text-invalid + i.z-spinner-rounded-btn-right-edge {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) repeat-x 0 -24px;
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-position: 0 -24px;
 }
 i.z-combobox-rounded i.z-combobox-rounded-btn-right-edge-invalid,
 i.z-bandbox-rounded i.z-bandbox-rounded-btn-right-edge-invalid,
 i.z-datebox-rounded i.z-datebox-rounded-btn-right-edge-invalid,
 i.z-timebox-rounded i.z-timebox-rounded-btn-right-edge-invalid,
 i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) repeat-x 0 -24px;
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-position: 0 -24px;
 }
 .z-combobox-rounded .z-combobox-rounded-btn,
 .z-bandbox-rounded .z-bandbox-rounded-btn,
@@ -124,22 +126,23 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	border: 0;
 	width: 24px; 
 	height: 24px;
+	background-position: 0 -120px;
 	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
 		margin-top: 1px;
 	</c:if>
 }
 .z-combobox-rounded .z-combobox-rounded-btn{	
-	background: #FFF url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')}) repeat-x 0 -120px;
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded .z-bandbox-rounded-btn {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')}) repeat-x 0 -120px;
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded .z-datebox-rounded-btn {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')}) repeat-x 0 -120px;
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded .z-timebox-rounded-btn,
 .z-spinner-rounded .z-spinner-rounded-btn {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')}) repeat-x 0 -120px;
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
 }
 .z-combobox-rounded .z-combobox-rounded-btn-right-edge,
 .z-bandbox-rounded .z-bandbox-rounded-btn-right-edge,
@@ -436,18 +439,25 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	padding-right: 1px;
 }
 /********************************************* inp btn readonly **********************************************************/
+.z-combobox-rounded-readonly,
+.z-bandbox-rounded-readonly,
+.z-datebox-rounded-readonly,
+.z-timebox-rounded-readonly,
+.z-spinner-rounded-readonly {
+	background-position: 0 -72px;
+}
 .z-combobox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')}) repeat-x 0 -72px;
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')}) repeat-x 0 -72px;
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')}) repeat-x 0 -72px;
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-readonly,
 .z-spinner-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')}) repeat-x 0 -72px;	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 .z-combobox-rounded .z-combobox-rounded-btn-right-edge.z-combobox-rounded-btn-readonly,
 .z-combobox-rounded i.z-combobox-rounded-btn-right-edge-readonly,
@@ -477,18 +487,25 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	background-image: url(${c:encodeURL('~./zul/img/button/readonly-focus-bg.gif')});
 }
 /************************************************* focus inp btn readonly *******************************************/
+.z-combobox-rounded-focus .z-combobox-rounded-readonly,
+.z-bandbox-rounded-focus .z-bandbox-rounded-readonly,
+.z-datebox-rounded-focus .z-datebox-rounded-readonly,
+.z-timebox-rounded-focus .z-timebox-rounded-readonly,
+.z-spinner-rounded-focus .z-spinner-rounded-readonly {
+	background-position: 0 -96px;
+}
 .z-combobox-rounded-focus .z-combobox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')}) repeat-x 0 -96px;
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-focus .z-bandbox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')}) repeat-x 0 -96px;
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-focus .z-datebox-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')}) repeat-x 0 -96px;
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-focus .z-timebox-rounded-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-readonly {
-	background: #FFF url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')}) repeat-x 0 -96px;	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-right-edge.z-combobox-rounded-btn-readonly,
 .z-combobox-rounded-focus i.z-combobox-rounded-btn-right-edge-readonly,
