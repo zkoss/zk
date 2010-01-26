@@ -52,7 +52,7 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 
 	//AbstractListModel
 	public Object getElementAt(int v) {
-		String value = "V"+(_asc ? v: _size - v - 1);
+		String value = "Option "+(_asc ? v: _size - v - 1);
 //		System.out.println(value);
 		return value;
 	}
