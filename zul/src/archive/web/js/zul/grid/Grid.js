@@ -73,17 +73,17 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, true)) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, true)) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
-	_fixOnAdd: function (child, ignoreDom) {
+	_fixOnAdd: function (child, ignoreDom, _noSync) {
 		var isRows;
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
@@ -99,12 +99,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-		if (!isRows)
+		if (!isRows && !_noSync)
 			this._syncSize();  //sync-size required
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true);
+		this._fixOnAdd(newc, true); //_syncSize required
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
