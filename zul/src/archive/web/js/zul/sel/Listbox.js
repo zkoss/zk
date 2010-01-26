@@ -251,8 +251,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			
 			if (child.isSelected())
 				this._selItems.$remove(child);
-		} else
 			stripe = true;
+		}
 
 		if (_noSync) {
 			if (stripe) this._syncStripe();
