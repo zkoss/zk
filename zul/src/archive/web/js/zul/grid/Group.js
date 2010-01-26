@@ -110,10 +110,11 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 				[open ? "addClass" : "removeClass"](zcls + "-img-open");
 		}
 		var grid = this.getGrid(), 
-			pgmode = grid ? grid.inPagingMold() : false; 
+			pgmode = grid ? grid.inPagingMold() : false, 
+			hasModel = grid ? grid.isModel() : false; 
 		if (!pgmode) this._openItemNow(open); //in page mode, the height might jump
 		if (!silent)
-			this.fire('onOpen', {open: open}, {toServer: pgmode || grid._grid$rod});
+			this.fire('onOpen', {open: open}, {toServer: pgmode || hasModel || grid._grid$rod});
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {

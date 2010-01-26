@@ -98,10 +98,11 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		if (img)
 			jq(img)[open ? "removeClass" : "addClass"](zcls + "-img-close")[open ? "addClass" : "removeClass"](zcls + "-img-open");
 		var listbox = this.getListbox(), 
-			pgmode = listbox ? listbox.inPagingMold() : false; 
+			pgmode = listbox ? listbox.inPagingMold() : false,
+			hasModel = listbox ? listbox.isModel() : false; 
 		if (!pgmode) this._openItemNow(open);
 		if (!silent)
-			this.fire('onOpen', {open: open}, {toServer: pgmode || listbox._listbox$rod});
+			this.fire('onOpen', {open: open}, {toServer: pgmode || hasModel || listbox._listbox$rod});
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {
