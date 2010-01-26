@@ -1950,7 +1950,7 @@ public class Listbox extends XulElement implements Paginated,
 						g[1]++;
 						if (g[2] != -1
 								&& (g[2] >= index || newItem instanceof Listgroupfoot))
-							g[2]++;
+							g[2] = g[0] + g[1] - 1;
 					}
 				}
 				afterInsert(newChild);
