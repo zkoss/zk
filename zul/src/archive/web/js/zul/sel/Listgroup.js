@@ -89,6 +89,8 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 			if (!listbox.paging) listbox.onSize(); 
 				// group in paging will invalidate the whole rows.
 		}
+		
+		zWatch.fireDown(toOpen ? 'onShow' : 'onHide', this.parent);
 		evt.stop();
 	},
 	_openItem: function (open, silent) {

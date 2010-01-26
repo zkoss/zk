@@ -99,6 +99,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 			if (!grid.paging) grid.onSize(); 
 				// group in paging will invalidate the whole rows.
 		}
+		zWatch.fireDown(toOpen ? 'onShow' : 'onHide', this.parent);
 		evt.stop();
 	},
 	_openItem: function (open, silent) {
