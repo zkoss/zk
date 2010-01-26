@@ -22,7 +22,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
-		_hidden = []; //_autohide
+		_hidden = [], //_autohide
+		_noChildCallback; //used by removeChild/appendChild/insertBefore
 
 	//IE doesn't free _binds (when delete _binds[x]); so clean it up
 	if (zk.ie)
@@ -1188,7 +1189,7 @@ new zul.wnd.Window{
 	 * @see #appendChild(zk.Widget)
 	 * @see #insertBefore(zk.Widget,zk.Widget,boolean)
 	 */
-	appendChild: function (child, ignoreDom, _noOnChildAdded) {
+	appendChild: function (child, ignoreDom) {
 		if (child == this.lastChild)
 			return false;
 
@@ -1220,7 +1221,7 @@ new zul.wnd.Window{
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
-		if (!_noOnChildAdded)
+		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
 	},
@@ -1253,9 +1254,9 @@ new zul.wnd.Window{
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
 	 * @see #appendChild(zk.Widget,boolean)
 	 */
-	insertBefore: function (child, sibling, ignoreDom, _noOnChildAdded) {
+	insertBefore: function (child, sibling, ignoreDom) {
 		if (!sibling || sibling.parent != this)
-			return this.appendChild(child, ignoreDom, _noOnChildAdded);
+			return this.appendChild(child, ignoreDom);
 
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
@@ -1288,7 +1289,7 @@ new zul.wnd.Window{
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
-		if (!_noOnChildAdded)
+		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
 	},
@@ -1307,7 +1308,7 @@ new zul.wnd.Window{
 	 * @see #detach
 	 * @see #clear
 	 */
-	removeChild: function (child, ignoreDom, _noOnChildRemoved) {
+	removeChild: function (child, ignoreDom) {
 		if (!child.parent)
 			return false;
 		if (this != child.parent)
@@ -1330,7 +1331,7 @@ new zul.wnd.Window{
 			_unbindrod(child);
 		else if (child.desktop)
 			this.removeChildHTML_(child, p, ignoreDom);
-		if (!_noOnChildRemoved)
+		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
 	},
@@ -1408,21 +1409,26 @@ new zul.wnd.Window{
 	 * @see zAu#createWidgets
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
-		//1. remove (but don't update DOM)
-		var cave = this.$n(subId), fc, oldwgts = [];
-		for (var w = this.firstChild; w;) {
-			var sib = w.nextSibling;
-			if (jq.isAncestor(cave, w.$n())) {
-				if (!fc || fc == w) fc = sib;
-				this.removeChild(w, true, true); //no dom, no callback
-				oldwgts.push(w);
+		_noChildCallback = true; //no callback
+		try {
+			//1. remove (but don't update DOM)
+			var cave = this.$n(subId), fc, oldwgts = [];
+			for (var w = this.firstChild; w;) {
+				var sib = w.nextSibling;
+				if (jq.isAncestor(cave, w.$n())) {
+					if (!fc || fc == w) fc = sib;
+					this.removeChild(w, true); //no dom
+					oldwgts.push(w);
+				}
+				w = sib;
 			}
-			w = sib;
-		}
 
-		//2. insert (but don't update DOM)
-		for (var j = 0, len = wgts.length; j < len; ++j)
-			this.insertBefore(wgts[j], fc, true, true); //no dom, no callback
+			//2. insert (but don't update DOM)
+			for (var j = 0, len = wgts.length; j < len; ++j)
+				this.insertBefore(wgts[j], fc, true); //no dom
+		} finally {
+			_noChildCallback = false;
+		}
 
 		if (fc = this.desktop) {
 			//3. generate HTML
