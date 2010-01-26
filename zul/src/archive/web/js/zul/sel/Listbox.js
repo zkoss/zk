@@ -194,7 +194,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 	},
 	_fixOnAdd: function (child, ignoreDom, stripe) {
-		var rerender;
+		var noRerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
 			if (child.$instanceof(zul.sel.Listgroup))
 				this._groupsInfo.push(child);
@@ -206,29 +206,25 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			
 			if (child.isSelected() && !this._selItems.$contains(child))
 				this._selItems.push(child);
-			stripe = true;
+			noRerender = stripe = true;
 		} else if (child.$instanceof(zul.sel.Listhead)) {
-			rerender = true;
 			this.listhead = child;
 		} else if (child.$instanceof(zul.mesh.Paging)) {
-			rerender = true;
 			this.paging = child;
 		} else if (child.$instanceof(zul.sel.Listfoot)) {
-			rerender = true;
 			this.listfoot = child;
 		} else if (child.$instanceof(zul.mesh.Frozen)) {
-			rerender = true;
 			this.frozen = child;
 		}
 
-		if (!ignoreDom && rerender)
+		if (!ignoreDom && !noRerender)
 			return this.rerender();
 		if (stripe)
 			this._syncStripe();
 		this._syncSize();
 	},
 	removeChild: function (child, ignoreDom) {
-		if (this.$super('removeChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+		if (this.$super('removeChild', child, ignoreDom)) {
 			this._fixOnRemove(child, ignoreDom);
 			return true;
 		}
