@@ -140,7 +140,11 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (this.firstChild == child)
+			this.rerender();
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		if (!this.childReplacing_)
 			this.rerender();
 	},
 	bind_: function () {		
