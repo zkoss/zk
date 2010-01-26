@@ -1648,14 +1648,14 @@ new zul.wnd.Window{
 	 * Furthermore, it sets this.childReplacing_ to true before invoking
 	 * {@link #onChildRemoved_} and {@link #onChildAdded_}, so we can optimize
 	 * the code (such as rerender only once) by checking its value.
-	 * @param zk.Widget oldc the old child (being removed)
-	 * @param zk.Widget newc the new child (being added)
+	 * @param zk.Widget oldc the old child (being removed). Note: it might be null.
+	 * @param zk.Widget newc the new child (being added). Note: it might be null.
 	 */
 	onChildReplaced_: function (oldc, newc) {
 		this.childReplacing_ = true;
 		try {
-			this.onChildRemoved_(oldc);
-			this.onChildAdded_(newc);
+			if (oldc) this.onChildRemoved_(oldc);
+			if (newc) this.onChildAdded_(newc);
 		} finally {
 			this.childReplacing_ = false;
 		}
