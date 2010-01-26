@@ -151,7 +151,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		switch (typeof val) {
 		case 'string':
 			if (f.NO_EMPTY && (!val || !val.trim()))
-				return msgzul.EMPTY_NOT_ALLOWED;
+				return msg || msgzul.EMPTY_NOT_ALLOWED;
 			var regex = this._regex;
 			if (regex && !regex.test(val))
 				return msg || msgzul.ILLEGAL_VALUE;
@@ -196,27 +196,29 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (!val && f.NO_EMPTY) return msg || msgzul.EMPTY_NOT_ALLOWED;
 	},
 	_msgNumDenied: function () {
-		var f = this._flags;
+		var f = this._flags,
+			msg = this._errmsg;
 		if (f.NO_POSITIVE)
-			return f.NO_ZERO ?
-				f.NO_NEGATIVE ? NO_POSITIVE_NEGATIVE_ZERO: msgzul.NO_POSITIVE_ZERO:
-				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE: msgzul.NO_POSITIVE;
+			return msg || (f.NO_ZERO ?
+				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE_ZERO: msgzul.NO_POSITIVE_ZERO:
+				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE: msgzul.NO_POSITIVE);
 		else if (f.NO_NEGATIVE)
-			return f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE;
+			return msg || (f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE);
 		else if (f.NO_ZERO)
-			return msgzul.NO_ZERO;
-		return msgzul.ILLEGAL_VALUE;
+			return msg || msgzul.NO_ZERO;
+		return msg || msgzul.ILLEGAL_VALUE;
 	},
 	_msgDateDenied: function () {
-		var f = this._flags;
+		var f = this._flags,
+			msg = this._errmsg;
 		if (f.NO_FUTURE)
-			return f.NO_TODAY ?
+			return msg || (f.NO_TODAY ?
 				f.NO_PAST ? NO_FUTURE_PAST_TODAY: msgzul.NO_FUTURE_TODAY:
-				f.NO_PAST ? msgzul.NO_FUTURE_PAST: msgzul.NO_FUTURE;
+				f.NO_PAST ? msgzul.NO_FUTURE_PAST: msgzul.NO_FUTURE);
 		else if (f.NO_PAST)
-			return f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST;
+			return msg || (f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST);
 		else if (f.NO_TODAY)
-			return msgzul.NO_TODAY;
-		return msgzul.ILLEGAL_VALUE;
+			return msg || msgzul.NO_TODAY;
+		return msg || msgzul.ILLEGAL_VALUE;
 	}
 });
