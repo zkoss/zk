@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	var _inInsertBefore;
+
 /**
  * A listbox.
  * 
@@ -172,14 +176,20 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
-		if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom);
-			return true;
+		_inInsertBefore = true;
+		try {
+			if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+				this._fixOnAdd(child, ignoreDom);
+				return true;
+			}
+		} finally {
+			_inInsertBefore = false;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom);
+			if (!_inInsertBefore) //not called by insertBefore
+				this._fixOnAdd(child, ignoreDom);
 			return true;
 		}
 	},
@@ -217,12 +227,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._syncStripe();
 		this._syncSize();
 	},
-	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true, true); //force stripe
+	removeChild: function (child, ignoreDom) {
+		if (this.$super('removeChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+			this._fixOnRemove(child, ignoreDom);
+			return true;
+		}
 	},
-	onChildRemoved_: function (child, _noSync) {
-		this.$supers('onChildRemoved_', arguments);
+	_fixOnRemove: function (child, ignoreDom) {
 		var stripe;
 		if (child == this.listhead)
 			this.listhead = null;
@@ -254,10 +265,17 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			stripe = true;
 		}
 
-		if (_noSync) {
+		if (ignoreDom) {
 			if (stripe) this._syncStripe();
 			this._syncSize();
 		}
+	},
+	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
+		if ((oldc != null && oldc.$instanceof(zul.sel.Listitem))
+		|| (newc != null && newc.$instanceof(zul.sel.Listitem)))
+			this._syncStripe();
+		this._syncSize();
 	},
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;
@@ -303,3 +321,5 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 		return p;
 	}
 });
+
+})();
