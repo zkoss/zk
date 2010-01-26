@@ -1188,7 +1188,7 @@ new zul.wnd.Window{
 	 * @see #appendChild(zk.Widget)
 	 * @see #insertBefore(zk.Widget,zk.Widget,boolean)
 	 */
-	appendChild: function (child, ignoreDom) {
+	appendChild: function (child, ignoreDom, _noOnChildAdded) {
 		if (child == this.lastChild)
 			return false;
 
@@ -1220,7 +1220,8 @@ new zul.wnd.Window{
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
-		this.onChildAdded_(child);
+		if (_noOnChildAdded)
+			this.onChildAdded_(child);
 		return true;
 	},
 	/** Inserts a child widget before the reference widget (the <code>sibling</code> argument).
@@ -1252,9 +1253,9 @@ new zul.wnd.Window{
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
 	 * @see #appendChild(zk.Widget,boolean)
 	 */
-	insertBefore: function (child, sibling, ignoreDom) {
+	insertBefore: function (child, sibling, ignoreDom, _noOnChildAdded) {
 		if (!sibling || sibling.parent != this)
-			return this.appendChild(child, ignoreDom);
+			return this.appendChild(child, ignoreDom, _noOnChildAdded);
 
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
@@ -1287,7 +1288,8 @@ new zul.wnd.Window{
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
-		this.onChildAdded_(child);
+		if (!_noOnChildAdded)
+			this.onChildAdded_(child);
 		return true;
 	},
 	/** Removes a child.
@@ -1305,7 +1307,7 @@ new zul.wnd.Window{
 	 * @see #detach
 	 * @see #clear
 	 */
-	removeChild: function (child, ignoreDom) {
+	removeChild: function (child, ignoreDom, _noOnChildRemoved) {
 		if (!child.parent)
 			return false;
 		if (this != child.parent)
@@ -1328,7 +1330,8 @@ new zul.wnd.Window{
 			_unbindrod(child);
 		else if (child.desktop)
 			this.removeChildHTML_(child, p, ignoreDom);
-		this.onChildRemoved_(child);
+		if (!_noOnChildRemoved)
+			this.onChildRemoved_(child);
 		return true;
 	},
 	/** Removes this widget (from its parent).
@@ -1406,19 +1409,20 @@ new zul.wnd.Window{
 	 */
 	replaceCavedChildren_: function (subId, wgts, tagBeg, tagEnd) {
 		//1. remove (but don't update DOM)
-		var cave = this.$n(subId), fc;
+		var cave = this.$n(subId), fc, oldwgts = [];
 		for (var w = this.firstChild; w;) {
 			var sib = w.nextSibling;
 			if (jq.isAncestor(cave, w.$n())) {
 				if (!fc || fc == w) fc = sib;
-				this.removeChild(w, true);
+				this.removeChild(w, true, true); //no dom, no callback
+				oldwgts.push(w);
 			}
 			w = sib;
 		}
 
 		//2. insert (but don't update DOM)
 		for (var j = 0, len = wgts.length; j < len; ++j)
-			this.insertBefore(wgts[j], fc, true);
+			this.insertBefore(wgts[j], fc, true, true); //no dom, no callback
 
 		if (fc = this.desktop) {
 			//3. generate HTML
@@ -1432,8 +1436,10 @@ new zul.wnd.Window{
 			jq(cave).html(out.join(''));
 
 			//5. bind
-			for (var j = 0, len = wgts.length; j < len; ++j)
+			for (var j = 0, len = wgts.length; j < len; ++j) {
 				wgts[j].bind(fc);
+				this.onChildReplaced_(oldwgts[j], wgts[j]);
+			}
 		}
 	},
 
