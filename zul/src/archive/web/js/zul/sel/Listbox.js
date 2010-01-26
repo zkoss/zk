@@ -173,17 +173,17 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
-	_fixOnAdd: function (child, ignoreDom) {
+	_fixOnAdd: function (child, ignoreDom, _noSync) {
 		var rerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
 			if (child.$instanceof(zul.sel.Listgroup))
@@ -209,17 +209,19 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			rerender = true;
 			this.frozen = child;
 		}
-		if (!ignoreDom) {
-			if (rerender) this.rerender();
-			else this._syncStripe();
+
+		if (!ignoreDom && rerender)
+			this.rerender();
+		if (!_noSync) {
+			if (!rerender) this._syncStripe();
 			this._syncSize();
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc);
-		this._fixOnAdd(newc);
+		this.onChildRemoved_(oldc, true);
+		this._fixOnAdd(newc, true);
 	},
-	onChildRemoved_: function (child) {
+	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.listhead)
 			this.listhead = null;
@@ -249,8 +251,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (child.isSelected())
 				this._selItems.$remove(child);
 		}
-		this._syncStripe();
-		this._syncSize();
+
+		if (_noSync) {
+			this._syncStripe();
+			this._syncSize();
+		}
 	},
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;

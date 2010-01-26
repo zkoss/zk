@@ -38,17 +38,17 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, true)) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, true)) {
-			this._fixOnAdd(child, ignoreDom);
+			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
-	_fixOnAdd: function (child, ignoreDom) {
+	_fixOnAdd: function (child, ignoreDom, _noSync) {
 		if (child.$instanceof(zul.sel.Treecols))
 			this.treecols = child;
 		else if (child.$instanceof(zul.sel.Treefoot))
@@ -58,16 +58,16 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._fixSelectedSet();
 		} else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
-		if (!ignoreDom) {
-			this.rerender();			
+		if (!ignoreDom)
+			this.rerender();
+		if (!_noSync)
 			this._syncSize();
-		}
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc);
-		this._fixOnAdd(newc);
+		this.onChildRemoved_(oldc, true);
+		this._fixOnAdd(newc, true);
 	},
-	onChildRemoved_: function (child) {
+	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treecols)
 			this.treecols = null;
@@ -79,8 +79,9 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			_sel = null;
 		} else if (child == this.paging)
 			this.paging = null;
-			
-		this._syncSize();
+
+		if (!_noSync)
+			this._syncSize();
 	},
 	_onTreeitemAdded: function (item) {
 		this._fixNewChild(item);

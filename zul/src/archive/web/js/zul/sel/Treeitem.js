@@ -218,15 +218,14 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.onChildRemoved_(oldc);
-		this._fixOnAdd(newc);
+		this._fixOnAdd(newc, true);
 	},
 	onChildRemoved_: function(child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) 
 			this.treerow = null;
-		else if (child == this.treechildren) {
+		else if (child == this.treechildren)
 			this.treechildren = null;
-		}
 	},
 	doClick_: function(evt) {
 		if (this.isDisabled()) return;
