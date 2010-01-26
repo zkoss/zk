@@ -1220,7 +1220,7 @@ new zul.wnd.Window{
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
-		if (_noOnChildAdded)
+		if (!_noOnChildAdded)
 			this.onChildAdded_(child);
 		return true;
 	},
