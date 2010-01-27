@@ -176,19 +176,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
-		_inInsertBefore = true;
-		try {
-			if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-				this._fixOnAdd(child, ignoreDom);
-				return true;
-			}
-		} finally {
-			_inInsertBefore = false;
+		if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+			this._fixOnAdd(child, ignoreDom);
+			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
-			if (!_inInsertBefore) //not called by insertBefore
+			if (!this.insertingBefore_)
 				this._fixOnAdd(child, ignoreDom);
 			return true;
 		}

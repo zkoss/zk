@@ -203,7 +203,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	//@Override
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, ignoreDom || child.$instanceof(zul.sel.Treechildren))) {
-			this._fixOnAdd(child, ignoreDom);
+			if (!this.insertingBefore_)
+				this._fixOnAdd(child, ignoreDom);
 			return true;
 		}
 	},

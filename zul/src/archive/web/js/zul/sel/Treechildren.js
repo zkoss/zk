@@ -46,7 +46,8 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		var oldsib = this._fixBeforeAdd(child);
 
 		if (this.$supers('appendChild', arguments)) {
-			this._fixOnAdd(oldsib, child, ignoreDom);
+			if (!this.insertingBefore_)
+				this._fixOnAdd(oldsib, child, ignoreDom);
 			return true;
 		}
 	},

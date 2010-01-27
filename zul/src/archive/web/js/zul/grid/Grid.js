@@ -79,7 +79,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	appendChild: function (child, ignoreDom) {
 		if (this.$super('appendChild', child, true)) {
-			this._fixOnAdd(child, ignoreDom, ignoreDom);
+			if (!this.insertingBefore_)
+				this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
