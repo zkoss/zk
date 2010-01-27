@@ -2617,11 +2617,22 @@ zk.History.prototype = {
 			//Though IE use history.html, timer is still required
 			//because user might specify URL directly
 	},
+	/** New version of setting a bookmark, use replace rather than creating a new history */	
+	replaceBookmark: function (nm) {
+		if (this.curbk != nm) {
+			this.curbk = nm; //to avoid loop back the server
+			var encnm = nm;
+			var _hash = zk.safari || !encnm ? encnm: '#' + encnm;
+			location.replace(location.href.replace(/#.*/, "") + _hash);
+			this._bkIframe(nm);
+			zkau.onURLChange();
+		}
+	},
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			var encnm = encodeURIComponent(nm);
+			var encnm = nm;
 			location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
 			this._bkIframe(nm);
 			zkau.onURLChange();

@@ -76,6 +76,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.out.AuBookmark;
+import org.zkoss.zk.au.out.AuReplaceBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
@@ -395,13 +396,28 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _bookmark;
 	}
 	public void setBookmark(String name) {
+		setBookmark(name, false);
+	}
+	
+	/**
+	 * Sets the bookmark.
+	 * @param name the name of the bookmark
+	 * @param replace if true, the bookmark is only replaced
+	 * @since 3.6.4
+	 */
+	public void setBookmark(String name, boolean replace) {
 		if (_exec == null)
-			throw new IllegalStateException("Not the current desktop: "+this);
+			throw new IllegalStateException("Not the current desktop: " + this);
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
 			throw new IllegalArgumentException("Illegal character: # ?");
 		_bookmark = name;
-		((WebAppCtrl)_wapp).getUiEngine()
-			.addResponse("bookmark", new AuBookmark(name));
+		if (replace) {
+			((WebAppCtrl) _wapp).getUiEngine().addResponse("replaceBookmark",
+					new AuReplaceBookmark(name));
+		} else {
+			((WebAppCtrl) _wapp).getUiEngine().addResponse("bookmark",
+					new AuBookmark(name));
+		}
 	}
 
 	public Collection getComponents() {
