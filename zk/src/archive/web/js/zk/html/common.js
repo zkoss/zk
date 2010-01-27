@@ -2073,16 +2073,17 @@ zk.parseDate = function (txt, fmt, strict) {
 		hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
 		isAM;
 
-	var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
+	var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [],
+		mmindex = mindex + 3;
 	for (var i = 0, j = txt.length; i < j; i++) {
 		var c = txt.charAt(i);
 		if (c.match(/\d/)) {
 			ary.push(c);
-		} else if ((mindex > -1 && mindex <= i) || (aindex > -1 && aindex <= i)) {
+		} else if ((mindex > -1 && mindex <= i && mmindex >= i) || (aindex > -1 && aindex <= i)) {
 			if (c.match(/\w/)) {
 				ary.push(c);
 			} else {
-				if (c.charCodeAt() < 128) {
+				if (c.charCodeAt() < 128 && c.charCodeAt() != 46) {
 					if (ary.length) {
 						ts.push(ary.join(""));
 						ary = [];

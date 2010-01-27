@@ -32,6 +32,7 @@ ZK 3.6.4
   2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
   2936019: Execption when Listbox insertBefore() group + groupfoot
   2937096: composer.arg shall be statically wired
+  2939911: datebox display year incorectly(Thai locale)
   
 * Upgrade Notes:
 
