@@ -62,6 +62,7 @@ November, 2009
   2927319: EventQueue supports asynchronous listener
   2928011: provide a customization for zk.Draggable
   2932595: New mold for combobox, datebox, timebox, spinner, bandbox
+  2931798: Clients.showBusy allows to cover only specific widget
   
 * RC/RC2 Bugs  
   2870616: Unclosed progress mask on opening menupopup
