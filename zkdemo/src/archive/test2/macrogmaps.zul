@@ -1,0 +1,13 @@
+<window width="400px" height="300px" closable="true" title="gmaps">
+ <script content="zk.googleAPIkey='ABQIAAAAmGxmYR57XDAbAumS9tV5fxRH_TqzcXpN9L4M_uyKWmd4zG1XhRQmwU2NxJsQBHJoz5uEVgu7ohapUQ'"/>
+ <gmaps width="400px" height="250px" showLargeCtrl="true"
+  showTypeCtrl="true" lat="18.51912660542399" lng="73.85640621185303"
+  zoom="16" style="Draggablecursor: crosshair!important;">
+  
+  <gmarker lat="18.51912660542399"
+   lng="73.85640621185303">
+  </gmarker>
+
+ </gmaps>
+ <button label="modal" onClick="spaceOwner.doModal()"/>
+</window>

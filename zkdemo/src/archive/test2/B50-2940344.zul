@@ -1,0 +1,20 @@
+<?root-attributes xmlns:v="urn:schemas-microsoft-com:vml"?><!-- For IE -->
+<window id="mywin" width="100%" height="100%">
+<html>
+<![CDATA[
+<ol>
+<li>You shall see two Google Maps with one Gmarker(red boloon) in each Gmaps.</li>
+<li>Try to drag the Gmarker and the maps content.</li>
+<li>If you can drag it, it is OK; otherwise, it is Bug.</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+ <groupbox>
+ 	<caption>Groupbox</caption>
+	<hbox>
+		<include src="macrogmaps.zul"/>
+ 		<include src="macrogmaps.zul"/>
+	</hbox>
+ </groupbox>
+</window>
