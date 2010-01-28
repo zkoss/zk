@@ -27,49 +27,47 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function() {
-var timestamp;
-if (zk.googleAPIsLoadingTimeout == null)
-	zk.googleAPIsLoadingTimeout = 10000; //default to ten seconds
-
-zk.gapi.loadAPIs = function(wgt, callback, msg) {
-	if (!window.google || !window.google.load) {
-		initMask(wgt, msg);
-		wgt._gapi_callback = callback;
-		loaded(wgt);
-		zk.loadScript('http://www.google.com/jsapi?key='+zk.googleAPIkey);
-		return;
-	}
-	wgt._gapi_callback = callback;
-	loaded(wgt);
+zk.gapi.GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
+zk.gapi.loadAPIs = function(wgt, callback, msg, timeout) {
+	var opts = {};
+	opts['condition'] = function() {return window.google && window.google.load};
+	opts['callback'] = function() {callback(); delete zk.gapi.LOADING;}
+	opts['message'] = msg;
+	if (!opts.condition()) {
+		zk.gapi.waitUntil(wgt, opts);
+		if (!zk.gapi.LOADING) { //avoid double loading Google Ajax APIs
+			zk.gapi.LOADING = true;
+			if (!opts.condition())
+				zk.loadScript('http://www.google.com/jsapi?key='+zk.googleAPIkey);
+		}
+	} else
+		callback();
 };
-function initMask(wgt, msg) {
-	var opt = {};
-	opt['anchor'] = wgt;
-	if (msg) opt['message'] = msg;
-	wgt._mask = new zk.eff.Mask(opt);
-	timestamp = new Date().getTime();
-}
-function clearMask(wgt) {
-	if (wgt._mask) {
-		wgt._mask.destroy();
-		delete wgt._mask;
-		timestamp = null; 
-	}
-}
-function loaded(wgt) {
-	if (!window.google || !window.google.load) {
+zk.gapi.waitUntil = function(wgt, opts) {
+	opts.inittime = opts.inittime || new Date().getTime();
+	opts.timeout = opts.timeout || zk.gapi.GOOGLE_API_LOADING_TIMEOUT;
+	initMask(wgt, opts);
+	waitUntil(wgt, opts);
+};
+function waitUntil(wgt, opts) {
+	if (!opts.condition()) {
 		var timestamp0 = new Date().getTime();
-		if ((timestamp0 - timestamp) < zk.googleAPIsLoadingTimeout) {
-			var wgt0 = wgt;
-			setTimeout(function() {loaded(wgt0)}, 100);
+		if ((timestamp0 - opts.inittime) < opts.timeout) {
+			setTimeout(function() {waitUntil(wgt, opts);}, 100);
 			return;
 		}
 	}
-	wgt._gapi_callback();
-	clearMask(wgt);
-	if (wgt._gapi_callback)
-		delete wgt._gapi_callback;
-	if (zk.gapi.LOADING)
-		delete zk.gapi.LOADING;
+	opts.callback();
+	clearMask(wgt, opts);
+}
+function initMask(wgt, opts) {
+	var opt = {};
+	opt['anchor'] = wgt;
+	if (opts.message) opt['message'] = opts.message;
+	opts['_mask'] = new zk.eff.Mask(opt);
+}
+function clearMask(wgt, opts) {
+	if (opts._mask)
+		opts._mask.destroy();
 }
 })();
