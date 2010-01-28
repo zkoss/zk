@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2940739.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 28 17:04:03 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<calendar />
+	<zscript><![CDATA[
+	page.getDesktop().getWebApp().setAttribute("px_preferred_locale",
+			new Locale("th","TH"));
+	]]></zscript>
+	<datebox onCreate="self.value = new Date();"/>
+	<datebox  onChange="System.out.println(self.value);" />
+Please click the datebox, the year of the three calendar should be the same in Thai language
+</zk>
+

@@ -2054,12 +2054,18 @@ zk.formatFixed = function (val, digits) {
 };
 
 //Date//
+zk.today = function (full) {
+	var d = new Date();
+	return full ? new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate(),
+			d.getHours(), d.getMinutes(), d.getMilliseconds())
+		: new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate());
+};
 /** Parses a string into a Date object.
  * @param strict whether not to lenient
  */
 zk.parseDate = function (txt, fmt, strict) {
 	if (!fmt) fmt = "yyyy/MM/dd";
-	var val = new Date();
+	var val = zk.today(true);
 	var y = val.getFullYear(),
 		m = val.getMonth(),
 		d = val.getDate(),
