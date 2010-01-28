@@ -5,6 +5,7 @@ February, 2010
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
+  2941387: Listcell.setSpan(int) not work, again!
   
 * Upgrade Notes
 
