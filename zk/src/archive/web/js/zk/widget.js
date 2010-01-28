@@ -874,7 +874,7 @@ new zul.wnd.Window{
 			if (n) n.style.top = v || '';
 		},
 		/** Sets the tooltip text of this widget.
-		 * <p>Default implementation of setTooltiptext: update the title attribute of #$n 
+		 * <p>Default implementation of setTooltiptext: update the title attribute of {@link #$n}
 		 * @param String title the tooltip text
 		 * @return zk.Widget this widget
 		 */
@@ -1372,7 +1372,18 @@ new zul.wnd.Window{
 		while (this.lastChild)
 			this.removeChild(this.lastChild);
 	},
-	replaceWidget: function (newwgt) { //called by au's outer
+	/** Replaces this widget with the specified one.
+	 * The parent and siblings of this widget will become the parent
+	 * and siblings of the specified one.
+	 * <p>Notice that {@link #replaceHTML} is used to replace a DOM element
+	 * that usually doesn't not belong to any widget.
+	 * And, {@link #replaceWidget} is used to replace the widget, and
+	 * it maintains both the widget tree and the DOM tree.
+	 * @param zk.Widget newwgt the new widget that will replace this widget.
+	 * @see #replaceHTML
+	 * @since 5.0.1
+	 */
+	replaceWidget: function (newwgt) {
 		var node = this.$n(),
 			p = newwgt.parent = this.parent,
 			s = newwgt.previousSibling = this.previousSibling;
@@ -2056,6 +2067,7 @@ function () {
 	 * If omitted, it is retrieve from the current desktop.
 	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
 	 * @param zk.Skipper skipper [optional] it is used only if it is called by {@link #rerender}
+	 * @see #replaceWidget
 	 */
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) {
