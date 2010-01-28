@@ -4,7 +4,8 @@ February, 2010
 * Features
 
 * Bugs
-
+  2941343: The combobox's popup widens to the entire width(IE6 only)
+  
 * Upgrade Notes
 
 	--------

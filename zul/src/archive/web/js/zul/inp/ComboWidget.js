@@ -104,7 +104,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			var pp = this.$n('pp'),
 				pz = this.getPopupSize_(pp);
 			pp.style.height = pz[1];
-			pp.style.width = pz[0];
+			
+			// Bug 2941343
+			if (!zk.ie6_)
+				pp.style.width = pz[0];
 			this._fixsz(pz);
 		}
 	},
@@ -116,7 +119,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	setOpen: function (open, opts) {
 		if (open) this.open(opts);
-		else this.close(opts)
+		else this.close(opts);
 	},
 	/** Returns whether the list of combo items is open
 	 * @return boolean
