@@ -2,6 +2,8 @@
 ZK 5.0.1
 February, 2010
 * Features
+  2053421: Jasperreport to work with Hibernate reports
+  2941466: Jasperreport can work with SQL Connection
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
