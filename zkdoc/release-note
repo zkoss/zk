@@ -1,6 +1,15 @@
 	--------
+ZK 5.0.1
+February, 2010
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+	--------
 ZK 5.0.0
-November, 2009
+January, 2010
 * Features
   2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2825713: EventQueue support application-level publish (by sever-push)
