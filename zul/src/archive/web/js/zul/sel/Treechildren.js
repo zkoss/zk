@@ -156,5 +156,19 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			w = n;
 		}
 		this.$supers('removeChild', arguments);
+	},
+	$n: function (nm) {
+		if (this.firstChild)
+			return nm ? this.firstChild.$n(nm) : this.firstChild.$n();
+		return null;
+	},
+	replaceWidget: function (newwgt) {
+		while (this.firstChild != this.lastChild)
+			this.lastChild.detach();
+		
+		if (this.firstChild && this.firstChild.treechildren)
+			this.firstChild.treechildren.detach();
+		
+		this.$supers('replaceWidget', arguments);
 	}
 });

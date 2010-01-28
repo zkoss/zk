@@ -1019,7 +1019,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	outer: function (wgt, code) {
 		zAu.stub = function (newwgt) {
-			wgt._replaceWgt(newwgt);
+			wgt.replaceWidget(newwgt);
 		};
 		zk.mounting = true;
 		$eval(code);

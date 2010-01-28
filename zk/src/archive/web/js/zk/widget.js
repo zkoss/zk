@@ -874,7 +874,7 @@ new zul.wnd.Window{
 			if (n) n.style.top = v || '';
 		},
 		/** Sets the tooltip text of this widget.
-		 * <p>Default implementation of setTooltiptext: update the title attribute of #$n/getNode 
+		 * <p>Default implementation of setTooltiptext: update the title attribute of #$n 
 		 * @param String title the tooltip text
 		 * @return zk.Widget this widget
 		 */
@@ -1372,7 +1372,7 @@ new zul.wnd.Window{
 		while (this.lastChild)
 			this.removeChild(this.lastChild);
 	},
-	_replaceWgt: function (newwgt) { //called by au's outer
+	replaceWidget: function (newwgt) { //called by au's outer
 		var node = this.$n(),
 			p = newwgt.parent = this.parent,
 			s = newwgt.previousSibling = this.previousSibling;
@@ -3225,11 +3225,11 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 <pre><code>
 bind_: function () {
   this.$supers('bind_', arguments);
-  this.domListen_(this.getNode(), "onChange"); //fn is omitted, so _doChange is assumed
+  this.domListen_(this.$n(), "onChange"); //fn is omitted, so _doChange is assumed
   this.domListen_(this.$n("foo"), "onSelect", "_doFooSelect"); //specify a particular listener
 },
 unbind_: function () {
-  this.domUnlisten_(this.getNode(), "onChange"); //unlisten
+  this.domUnlisten_(this.$n(), "onChange"); //unlisten
   this.domUnlisten_(this.$n("foo"), "onSelect", "_doFooSelect");
   this.$supers('unbind_', arguments);
 },

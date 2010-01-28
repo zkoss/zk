@@ -74,10 +74,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 * @see #getMeshWidget
 	 */
 	getTree: _zkf,
-	getNode: function () {
-		if (this.treerow) return this.treerow.$n();
-		return null;
-	},
 	getZclass: function () {
 		if (this.treerow) return this.treerow.getZclass();
 		return null;
@@ -218,15 +214,17 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc);
+		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true);
 	},
-	onChildRemoved_: function(child) {
+	onChildRemoved_: function(child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) 
 			this.treerow = null;
-		else if (child == this.treechildren)
+		else if (child == this.treechildren) {
 			this.treechildren = null;
+			if (!_noSync) this.rerender(); // remove the icon
+		}
 	},
 	doClick_: function(evt) {
 		if (this.isDisabled()) return;
@@ -242,6 +240,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			w = n;
 		}
 		this.$supers('removeChild', arguments);
+	},
+	replaceWidget: function (newwgt) {
+		if (this.treechildren)
+			this.treechildren.detach();
+		this.$supers('replaceWidget', arguments);
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
