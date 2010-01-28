@@ -295,7 +295,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime : function () {
-		return this._value ? zk.fmt.Date.parseDate(this._value, this.getFormat()) : new Date();
+		return this._value ? zk.fmt.Date.parseDate(this._value, this.getFormat()) : zUtl.today(true);
 	},
 	_setTime : function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
@@ -410,7 +410,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
-			today = new Date();
+			today = zUtl.today(true);
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
 			var mon = this.$n("m" + j),

@@ -159,6 +159,11 @@ public class Wpds {
 		df = new SimpleDateFormat("G", locale);
 		sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
 		
+
+		Calendar ec = Calendar.getInstance(Locale.ENGLISH);
+		Calendar lc = Calendar.getInstance(locale);
+		sb.append("zk.YDELTA=").append(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)).append(";\n");
+		
 		df = new SimpleDateFormat("EEEE", locale);
 		final String[] fdow = new String[7];
 		for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {

@@ -38,8 +38,8 @@ zk.fmt.Date = {
 	},
 	parseDate : function (txt, fmt, strict) {
 		if (!fmt) fmt = "yyyy/MM/dd";
-		var val = new Date();
-		var y = val.getFullYear(),
+		var val = zUtl.today(true),
+			y = val.getFullYear(),
 			m = val.getMonth(),
 			d = val.getDate(),
 			hr = val.getHours(),

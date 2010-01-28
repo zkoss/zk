@@ -208,11 +208,15 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return new Date().getTime();
 	},
 	/** Returns today (at 0:0AM).
+	 * @param full if true, returns the full time, else only returns year, month
+	 * 		, and date
 	 * @return Date
 	 */
-	today: function () {
+	today: function (full) {
 		var d = new Date();
-		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+		return full ? new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate(),
+				d.getHours(), d.getMinutes(), d.getMilliseconds())
+			: new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate());
 	},
 
 	/** Returns if one is ancestor of the other.

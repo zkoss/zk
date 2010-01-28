@@ -9,6 +9,7 @@ February, 2010
   2941343: The combobox's popup widens to the entire width(IE6 only)
   2941387: Listcell.setSpan(int) not work, again!
   2940707: Tree item is not removed on the client side
+  2940739: Today value of the Datebox is incorrect when locale is TH
   
 * Upgrade Notes
 
