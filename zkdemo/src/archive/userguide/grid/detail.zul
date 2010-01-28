@@ -273,7 +273,7 @@ Comparator asc = new RowDetailComparator(true),
 					</panelchildren>
 					<toolbar mold="panel">
 						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload" height="18px"/>
+						<button id="reloadBtn" label="Reload"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

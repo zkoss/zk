@@ -56,7 +56,7 @@ Datebox: <datebox id="db" cols="20" format="yyyy/MM/dd a hh:mm:ss"  onCreate="se
 					</panelchildren>
 					<toolbar mold="panel">
 						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload" height="18px"/>
+						<button id="reloadBtn" label="Reload"/>
 					</toolbar>
 				</panel>
 			</tabpanel>
