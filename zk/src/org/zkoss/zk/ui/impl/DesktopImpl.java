@@ -398,14 +398,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void setBookmark(String name) {
 		setBookmark(name, false);
 	}
-	
-	/**
-	 * Sets the bookmark.
-	 * @param name the name of the bookmark
-	 * @param replace if true, the bookmark is only replaced
-	 * @since 3.6.4
-	 */
-	public void setBookmark(String name, boolean replace) {
+		public void setBookmark(String name, boolean replace) {
 		if (_exec == null)
 			throw new IllegalStateException("Not the current desktop: " + this);
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
