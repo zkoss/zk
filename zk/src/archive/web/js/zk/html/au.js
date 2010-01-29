@@ -2336,11 +2336,8 @@ zkau.history = new zk.History();
 
 //Commands//
 zkau.cmd0 = { //no uuid at all
-	replaceBookmark: function (dt0) {
-		zkau.history.replaceBookmark(dt0);
-	},
-	bookmark: function (dt0) {
-		zkau.history.bookmark(dt0);
+	bookmark: function (dt0, dt1) {
+		zkau.history.bookmark(dt0, dt1 == "true");
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
 		zkau._cleanupOnFatal();

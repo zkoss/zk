@@ -76,7 +76,6 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.out.AuBookmark;
-import org.zkoss.zk.au.out.AuReplaceBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
@@ -404,13 +403,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
 			throw new IllegalArgumentException("Illegal character: # ?");
 		_bookmark = name;
-		if (replace) {
-			((WebAppCtrl) _wapp).getUiEngine().addResponse("replaceBookmark",
-					new AuReplaceBookmark(name));
-		} else {
-			((WebAppCtrl) _wapp).getUiEngine().addResponse("bookmark",
-					new AuBookmark(name));
-		}
+		((WebAppCtrl) _wapp).getUiEngine().addResponse("bookmark",
+					new AuBookmark(name, replace));
 	}
 
 	public Collection getComponents() {

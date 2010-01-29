@@ -2623,20 +2623,14 @@ zk.History.prototype = {
 			//Though IE use history.html, timer is still required
 			//because user might specify URL directly
 	},
-	/** New version of setting a bookmark, use replace rather than creating a new history */	
-	replaceBookmark: function (nm) {
-		if (this.curbk != nm) {
-			this.curbk = nm; //to avoid loop back the server
-			location.replace(location.href.replace(/#.*/, "") + this._toHash(nm, true));
-			this._bkIframe(nm);
-			zkau.onURLChange();
-		}
-	},
 	/** Sets a bookmark that user can use forward and back buttons */
-	bookmark: function (nm) {
+	bookmark: function (nm, replace) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			location.hash = this._toHash(nm);
+			if (replace)
+				location.replace(location.href.replace(/#.*/, "") + this._toHash(nm, true));
+			else
+				location.hash = this._toHash(nm);
 			this._bkIframe(nm);
 			zkau.onURLChange();
 		}
