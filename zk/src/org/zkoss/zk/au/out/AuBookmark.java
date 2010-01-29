@@ -31,6 +31,12 @@ public class AuBookmark extends AuResponse {
 	 * @param name the bookmark name.
 	 */
 	public AuBookmark(String name) {
-		super("bookmark", name); //component-independent
+		this(name, false); //component-independent
+	}
+	/**
+	 * @param name the bookmark name.
+	 */
+	public AuBookmark(String name, boolean replace) {
+		super("bookmark", new Object[] {name, Boolean.valueOf(replace)}); //component-independent
 	}
 }

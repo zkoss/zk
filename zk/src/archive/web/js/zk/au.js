@@ -748,8 +748,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Sets a bookmark
 	 * @param String bk the bookmark
 	 */
-	bookmark: function (bk) {
-		zk.bmk.bookmark(bk);
+	bookmark: function (bk, replace) {
+		zk.bmk.bookmark(bk, replace);
 	},
 	/** Shows an error to indicate the desktop is timeout.
 	 * @param String dtid the desktop UUID

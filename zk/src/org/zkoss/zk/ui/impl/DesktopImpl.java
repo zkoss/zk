@@ -399,13 +399,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//we can only assume "" when the page is loading
 	}
 	public void setBookmark(String name) {
+		setBookmark(name, false);
+	}
+		public void setBookmark(String name, boolean replace) {
 		if (_exec == null)
-			throw new IllegalStateException("Not the current desktop: "+this);
+			throw new IllegalStateException("Not the current desktop: " + this);
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
 			throw new IllegalArgumentException("Illegal character: # ?");
 		_bookmark = name;
-		((WebAppCtrl)_wapp).getUiEngine()
-			.addResponse("bookmark", new AuBookmark(name));
+		((WebAppCtrl) _wapp).getUiEngine().addResponse("bookmark",
+					new AuBookmark(name, replace));
 	}
 
 	public Collection getComponents() {

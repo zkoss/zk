@@ -188,8 +188,17 @@ public interface Desktop extends Scope {
 	/** Sets a bookmark to this desktop. Then, when user press BACK, FORWARD
 	 * or specify an URL with this bookmark, the onBookmarkChange event
 	 * is sent to all pages of the desktop.
+	 * <p>It is the same as <code>setBookmark(name, false)</code>
 	 */
 	public void setBookmark(String name);
+	/**
+	 * Sets the bookmark to this desktop. with more control.
+	 * @param name the name of the bookmark
+	 * @param replace if true, the bookmark is replaced (in the history list)
+	 * @since 3.6.4
+	 * @see #setBookmark(String)
+	 */
+	public void setBookmark(String name, boolean replace);
 
 	/** Returns URI for a dynamic generated media associated with a component.
 	 * ZK Update Engine will then invoke invoke

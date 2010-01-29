@@ -65,17 +65,23 @@ zk.bmk = (function () { //used internally
 
   return {
 	/** Sets a bookmark that user can use forward and back buttons */
-	bookmark: function (nm) {
+	bookmark: function (nm, replace) {
 		if (_curbk != nm) {
 			_curbk = nm; //to avoid loop back the server
 
 			if (!zk.bootstrapping) { //feature 2896996: don't handle if booting
-				var encnm = encodeURIComponent(nm);
-				location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
+				if (replace)
+					location.replace(location.href.replace(/#.*/, "") + this._toHash(nm, true));
+				else
+					location.hash = this._toHash(nm);
 				_bkIframe(nm);
 				zk.bmk.onURLChange();
 			}
 		}
+	},
+	_toHash: function (nm, hashRequired) {
+		nm = encodeURIComponent(nm);
+		return (!hashRequired && zk.safari) || !nm ? nm: '#' + nm;
 	},
 	/** called when bookmark.html is loaded*/
 	onIframeLoaded: zk.ie ? function (src) {
