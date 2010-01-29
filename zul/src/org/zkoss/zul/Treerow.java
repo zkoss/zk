@@ -75,24 +75,6 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		return _zclass == null ? "z-treerow" : _zclass;
 	}
 
-	/** Alwasys throws UnsupportedOperationException since developers shall
-	 * use {@link Treeitem#setContext} instead.
-	 */
-	public void setContext(String context) {
-		throw new UnsupportedOperationException("Use treeitem instead");
-	}
-	/** Alwasys throws UnsupportedOperationException since developers shall
-	 * use {@link Treeitem#setPopup} instead.
-	 */
-	public void setPopup(String popup) {
-		throw new UnsupportedOperationException("Use treeitem instead");
-	}
-	/** Alwasys throws UnsupportedOperationException since developers shall
-	 * use {@link Treeitem#setTooltip} instead.
-	 */
-	public void setTooltip(String tooltip) {
-		throw new UnsupportedOperationException("Use treeitem instead");
-	}
 	/** Returns the same as {@link Treeitem#getContext}.
 	 */
 	public String getContext() {

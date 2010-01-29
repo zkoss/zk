@@ -17,26 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-treerow
  */
 zul.sel.Treerow = zk.$extends(zul.Widget, {
-	/**
-	 * The context can't be specified in this component. Developers shall
-	 * use {@link Treeitem#setContext} instead.
-	 */
-	setContext: zk.$void, // readonly
-	/**
-	 * The popup can't be specified in this component. Developers shall
-	 * use {@link Treeitem#setPopup} instead.
-	 */
-	setPopup: zk.$void, // readonly
-	/**
-	 * The tooltip can't be specified in this component. Developers shall
-	 * use {@link Treeitem#setTooltip} instead.
-	 */
-	setTooltip: zk.$void, // readonly
-	/**
-	 * The tooltiptext can't be specified in this component. Developers shall
-	 * use {@link Treeitem#setTooltiptext} instead.
-	 */
-	setTooltiptext: zk.$void, // readonly
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
