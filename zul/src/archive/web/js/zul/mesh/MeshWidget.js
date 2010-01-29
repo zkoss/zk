@@ -216,12 +216,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.head && this.ehead) {
 			var empty = true;
 			var flex = false;
-			for (var w = this.head.firstChild; w; w = w.nextSibling) {
-				if (!flex && w._nhflex) flex = true;
-				if (w.getLabel() || w.getImage() || w.nChildren) {
-					empty = false;
-					break;
+			for (var i = this.heads.length; i-- > 0;) {
+				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
+					if (!flex && w._nhflex)
+						flex = true;
+					if (w.getLabel() || w.getImage()
+							|| w.nChildren) {
+						empty = false;
+						break;
+					}
 				}
+				if (!empty) break;
 			}
 			var old = this.ehead.style.display; 
 			this.ehead.style.display = empty ? 'none' : '';
