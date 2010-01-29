@@ -2627,9 +2627,7 @@ zk.History.prototype = {
 	replaceBookmark: function (nm) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			var encnm = nm;
-			var _hash = zk.safari || !encnm ? encnm: '#' + encnm;
-			location.replace(location.href.replace(/#.*/, "") + _hash);
+			location.replace(location.href.replace(/#.*/, "") + this._toHash(nm, true));
 			this._bkIframe(nm);
 			zkau.onURLChange();
 		}
@@ -2638,11 +2636,14 @@ zk.History.prototype = {
 	bookmark: function (nm) {
 		if (this.curbk != nm) {
 			this.curbk = nm; //to avoid loop back the server
-			var encnm = nm;
-			location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
+			location.hash = this._toHash(nm);
 			this._bkIframe(nm);
 			zkau.onURLChange();
 		}
+	},
+	_toHash: function (nm, hashRequired) {
+		nm = encodeURIComponent(nm);
+		return (!hashRequired && zk.safari) || !nm ? nm: '#' + nm;
 	},
 	/** Checks whether the bookmark is changed. */
 	checkBookmark: function() {
