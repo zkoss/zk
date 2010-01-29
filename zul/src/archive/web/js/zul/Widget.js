@@ -489,8 +489,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 				evt.stop(); //prevent default context menu to appear
 			}
 		}
-		if (this.isListen('onRightClick'))
-			evt.stop();
 		this.$supers('doRightClick_', arguments);
 	},
 	doTooltipOver_: function (evt) {
