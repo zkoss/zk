@@ -453,11 +453,11 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	//super//
 	doClick_: function (evt, popupOnly) {
-		if (!evt._popuped) {
+		if (!evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup) : {},
 				popup = this._smartFellow(params.id);
 			if (popup) {
-				evt._popuped = true;
+				evt.contextSelected = true;
 				
 				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
 				var self = this,
@@ -466,18 +466,18 @@ zul.Widget = zk.$extends(zk.Widget, {
 				setTimeout(function() {
 					popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
 				}, 0);
-				evt.stop();
+				evt.stop({dom:true});
 			}
 		}
 		if (popupOnly !== true)
 			this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (evt) {
-		if (!evt._ctxed) {
+		if (!evt.contextSelected) {
 			var params = this._context ? this._parsePopParams(this._context) : {},
 				ctx = this._smartFellow(params.id);
 			if (ctx) {
-				evt._ctxed = true;
+				evt.contextSelected = true;
 				
 				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
 				var self = this,
@@ -486,7 +486,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				setTimeout(function() {
 					ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
 				}, 0);
-				evt.stop(); //prevent default context menu to appear
+				evt.stop({dom:true}); //prevent default context menu to appear
 			}
 		}
 		this.$supers('doRightClick_', arguments);

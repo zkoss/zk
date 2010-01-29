@@ -11,7 +11,8 @@ February, 2010
   2940707: Tree item is not removed on the client side
   2940739: Today value of the Datebox is incorrect when locale is TH
   2941554: Popups and Contraint Violation messages are not hidden (Tab)
-  
+  2941933: Right-click always select the first tree item
+
 * Upgrade Notes
 
 	--------

@@ -200,15 +200,20 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (this.isDisabled()) return;
 		// make sure the target is the ItemWidget
 		evt.target = this;
-		this.getMeshWidget()._doClick(evt);
-		evt.stop({propagation: true});
+		if (!evt.itemSelected) {
+			this.getMeshWidget()._doClick(evt);
+			evt.itemSelected = true;
+		}
 		this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (evt) {
 		if (this.isDisabled()) return;
 		// make sure the target is the ItemWidget
 		evt.target = this;
-		this.getMeshWidget()._doClick(evt);
+		if (!evt.itemSelected) {
+			this.getMeshWidget()._doClick(evt);
+			evt.itemSelected = true;
+		}
 		this.$supers('doRightClick_', arguments);
 	},
 	doMouseOver_: function(evt) {

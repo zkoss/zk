@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window border="normal">
+	<html><![CDATA[
+	<ui>
+	<li>Click one of "test" label below, and then the item shall be selected
+	and a menupopup shall be shown</li>
+	<li>Click one of "alert" label below, and then a message box shall
+	be shown</li>
+	</ul>
+	]]></html>
+	<tree context="pop" >
+		<treecols sizable="false">
+			<treecol label="test"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="test"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="test"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="test"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="alert" onRightClick='alert(self.label)'/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<menupopup id="pop">
+		<menuitem label="test"/>
+	</menupopup>
+	<label value="test" onRightClick="alert(self.value)"/>
+</window>
