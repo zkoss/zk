@@ -28,15 +28,27 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	 */
 	show: function (owner, msg) {
 		this.parent = owner; //fake
+		this.parent.__ebox = this;
 		this.msg = msg;
 		jq(document.body).append(this);
 		this.open(owner, null, "end_before", {overflow:true});
+		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
 	destroy: function () {
+		if (this.parent) {
+			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
+			delete this.parent.__ebox;
+		}
 		this.close();
 		this.unbind();
 		jq(this).remove();
 		this.parent = null;
+	},
+	onParentHide: function () {
+		if (this.__ebox) {
+			this.__ebox.setFloating_(false);
+			this.__ebox.close();
+		}
 	},
 	//super//
 	bind_: function () {
@@ -54,7 +66,11 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	unbind_: function () {
 		this._drag.destroy();
 		zWatch.unlisten({onScroll: this});
-
+		
+		// just in case
+		if (this.parent)
+			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
+		
 		this.$supers('unbind_', arguments);
 		this._drag = null;
 	},
