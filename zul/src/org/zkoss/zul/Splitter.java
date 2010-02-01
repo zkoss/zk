@@ -124,7 +124,7 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 		}
 	}
 
-	/** Returns whether it is opne (i.e., not collapsed.
+	/** Returns whether it is open (i.e., not collapsed.
 	 * Meaningful only if {@link #getCollapse} is not "none".
 	 */
 	public boolean isOpen() {

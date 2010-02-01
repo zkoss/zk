@@ -39,7 +39,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		 * @param boolean open
 		 * @param Offset opts
 	 	 */
-		/** Returns whether it is opne (i.e., not collapsed.
+		/** Returns whether it is open (i.e., not collapsed.
 	 	 * Meaningful only if {@link #getCollapse} is not "none".
 	 	 * <p>Default: true.
 	 	 * @return boolean
