@@ -353,6 +353,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 /** @class zAu
  * @import zk.Widget
+ * @import zk.Desktop
  * @import zk.Event
  * @import zk.AuCmd0
  * @import zk.AuCmd1
@@ -577,7 +578,7 @@ zAu = {
 	},
 
 	/** Enforces all pending AU requests of the specified desktop to send immediately
-	 * @param zk.Desktop dt
+	 * @param Desktop dt
 	 * @return boolean whether it is sent successfully. If it has to wait
 	 * for other condition, this method returns false.
 	 */
@@ -884,7 +885,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zk.confirmClose = msg;
 	},
 	/** Shows the busy message covering the specified widget.
-	 * @param uuid the component's UUID
+	 * @param String uuid the component's UUID
 	 * @param String msg the message.
 	 */
 	/** Shows or removes the busy message covering the whole browser window.
@@ -911,7 +912,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		}
 	},
 	/** Removes the busy message covering the specified widget.
-	 * @param uuid the component's UUID
+	 * @param String uuid the component's UUID
 	 */
 	/** Removes the busy message covering the whole browser.
 	 */

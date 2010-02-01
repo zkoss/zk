@@ -248,7 +248,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return new Date().getTime();
 	},
 	/** Returns today (at 0:0AM).
-	 * @param full if true, returns the full time, else only returns year, month
+	 * @param boolean full if true, returns the full time, else only returns year, month
 	 * 		, and date
 	 * @return Date
 	 */
