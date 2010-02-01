@@ -180,21 +180,21 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	},
 	/**
 	 * Returns the head widget class. i.e. {@link Treecols}
-	 * @return Object
+	 * @return zul.sel.Treecols
 	 */
 	getHeadWidgetClass: function () {
 		return zul.sel.Treecols;
 	},
 	/**
 	 * Returns the tree item iterator.
-	 * @return Object
+	 * @return zul.sel.TreeItemIter
 	 */
 	itemIterator: _zkf = function () {
 		return new zul.sel.TreeItemIter(this);
 	},
 	/**
 	 * Returns the tree item iterator.
-	 * @return Object
+	 * @return zul.sel.TreeItemIter
 	 * @see #itemIterator
 	 */
 	getBodyWidgetIterator: _zkf,

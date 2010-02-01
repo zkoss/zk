@@ -90,7 +90,10 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 			if (n) n.vspace = v;
 		}
 	},
-
+	/**
+	 * Returns the image node if any.
+	 * @return DOMElement
+	 */
 	getImageNode: function () {
 		return this.$n();
 	},

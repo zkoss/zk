@@ -351,6 +351,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 *
 	 * <p>Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or Shift+Ctrl+Alt.
 	 * @param String keys
+	 * @return zul.Widget
 	 */
 	setCtrlKeys: function (keys) {
 		if (this._ctrlKeys == keys) return;
@@ -524,6 +525,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 *  by searching up the ancestor chain to see if any one is listening.
 	 *  If found, it calls {@link #beforeCtrlKeys_} for each widget that were
 	 *  searched, and then fire the event.
+	 *  @param zk.Event evt the widget event.
 	 *  @see #setCtrlKeys
 	 */
 	afterKeyDown_: function (evt) {
@@ -595,6 +597,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <p>Default: does nothing (but return false)
 	 * It is usually overridden by a stateful widget, such as an input box,
 	 * to update its state to the server, such as firing the onChange event.
+	 * @param zk.Event evt the widget event.
 	 * @return boolean if true, the widget want to abort the firing of the control
 	 * 		key. In other words, if true is returned, the control key is ignored. 
 	 */

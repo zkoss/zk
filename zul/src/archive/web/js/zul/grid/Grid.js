@@ -152,9 +152,17 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		this.rerender();
 	},
+	/**
+	 * Returns the head widget class.
+	 * @return zul.grid.Columns
+	 */
 	getHeadWidgetClass: function () {
 		return zul.grid.Columns;
 	},
+	/**
+	 * Returns the tree item iterator.
+	 * @return zul.grid.RowIter
+	 */
 	getBodyWidgetIterator: function () {
 		return new zul.grid.RowIter(this);
 	}

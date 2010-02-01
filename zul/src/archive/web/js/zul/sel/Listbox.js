@@ -268,12 +268,25 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._syncStripe();
 		this._syncSize();
 	},
+	/**
+	 * Returns the head widget class
+	 * @return zul.sel.Listhead
+	 */
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;
 	},
+	/**
+	 * Returns the tree item iterator.
+	 * @return zul.sel.ItemIter
+	 */
 	itemIterator: _zkf = function () {
 		return new zul.sel.ItemIter(this);
 	},
+	/**
+	 * Returns the tree item iterator.
+	 * @return zul.sel.ItemIter
+	 * @see #itemIterator
+	 */
 	getBodyWidgetIterator: _zkf
 });
 /**
