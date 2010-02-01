@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery JavaScript Library v1.4
  * http://jquery.com/
  *
@@ -25,7 +25,8 @@ var jQuery = function( selector, context ) {
 	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
-	_$ = window.$,
+//Potix: no need since we don't override the old copy (see below)
+//	_$ = window.$,
 
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
@@ -355,17 +356,20 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 jQuery.extend({
 	noConflict: function( deep ) {
+/*Potix: no need to restore since we don't override old copy
 		window.$ = _$;
 
 		if ( deep ) {
 			window.jQuery = _jQuery;
 		}
-
+*/
 		return jQuery;
 	},
 	
 	// Is the DOM ready to be used? Set to true once it occurs.
-	isReady: false,
+//Tom Yeh, Potix, 20100110: inherit older copy since it might be loaded later (Liferay)
+	isReady: (_jQuery&&_jQuery.isReady),
+//	isReady: false,
 	
 	// Handle when the DOM is ready
 	ready: function() {
@@ -822,6 +826,8 @@ function now() {
 
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		root = script = div = all = a = null;
 		return;
 	}
 
@@ -2455,7 +2461,7 @@ if ( window.attachEvent && !window.addEventListener ) {
 		}
 	});
 }
-/*!
+/*
  * Sizzle CSS Selector Engine - v1.0
  *  Copyright 2009, The Dojo Foundation
  *  Released under the MIT, BSD, and GPL Licenses.
@@ -3345,6 +3351,8 @@ if ( document.querySelectorAll ) {
 		// Safari can't handle uppercase or unicode characters when
 		// in quirks mode.
 		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+			div = null;
 			return;
 		}
 	
@@ -3378,6 +3386,8 @@ if ( document.querySelectorAll ) {
 	// Opera can't find a second classname (in 9.6)
 	// Also, make sure that getElementsByClassName actually exists
 	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		div = null;
 		return;
 	}
 
@@ -3385,6 +3395,8 @@ if ( document.querySelectorAll ) {
 	div.lastChild.className = "e";
 
 	if ( div.getElementsByClassName("e").length === 1 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		div = null;
 		return;
 	}
 	
@@ -4257,6 +4269,9 @@ jQuery.extend({
 				}
 
 				elem = jQuery.makeArray( div.childNodes );
+
+//Tom Yeh, Potix, 2010018: avoid memory leak
+				div = null;
 			}
 
 			if ( elem.nodeType ) {
@@ -5994,6 +6009,9 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 
 });
 // Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
+//Potix: don't override if already defined (Liferay)
+if (!_jQuery)
+	window.jQuery = window.$ = jQuery;
 
+	window.jq = jQuery; //used by zk
 })(window);
