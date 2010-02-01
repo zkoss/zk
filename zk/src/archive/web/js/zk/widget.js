@@ -1310,7 +1310,7 @@ new zul.wnd.Window{
 	 * @see #clear
 	 */
 	/** Removes a child with more control.
-	 * It is similar to {@link #remove(zk.Widget)} except the caller
+	 * It is similar to {@link #removeChild(zk.Widget)} except the caller
 	 * could prevent it from removing the DOM element.
 	 * @param zk.Widget child the child to remove.
 	 * @param boolean ignoreDom whether to remove the DOM element
@@ -1781,6 +1781,7 @@ new zul.wnd.Window{
 	getZindex: _zkf,
 	/** Sets the Z index.
 	 * @param int zIndex the Z index to assign to
+	 * @param Map opts if opts.fire is specified, the onZIndex event will be triggered.
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: _zkf = function (zIndex, opts) {
@@ -2011,7 +2012,8 @@ function () {
 	 * <li>domStyle - exclude {@link #domStyle_}</li>
 	 * <li>tooltiptext - exclude {@link #getTooltiptext}</li>
 	 * </ul>
-	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button" 
+	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button"
+	 * @return String 
 	 */
 	domAttrs_: function (no) {
 		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
@@ -2065,6 +2067,7 @@ function () {
 	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
 	 * @param zk.Skipper skipper [optional] it is used only if it is called by {@link #rerender}
 	 * @see #replaceWidget
+	 * @return zk.Widget
 	 */
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) {
@@ -2176,6 +2179,7 @@ function () {
 	 * @param zk.Widget child the child widget to insert
 	 * @param zk.Widget before the child widget as the reference to insert the new child before. If null, the HTML content will be appended as the last child. 
 	 * The implementation can use before.getFirstNode_() ({@link #getFirstNode_}) to retrieve the DOM element
+	 * @param zk.Desktop desktop
 	 * @see #getCaveNode 
 	 */
 	insertChildHTML_: function (child, before, desktop) {
@@ -2220,6 +2224,7 @@ function () {
 	 * for its siblings.
 	 * <p>This method is designed to be used with {@link #insertChildHTML_}
 	 * for retrieving the DOM element of the <code>before</code> widget.
+	 * @return DOMElement
 	 */
 	getFirstNode_: function () {
 		for (var w = this; w; w = w.nextSibling) {
@@ -2551,6 +2556,7 @@ unbind_: function (skipper, after) {
 	 * <p>Default: it always returns false.
 	 * If the location that an user can drag is static, override {@link #getDragNode},
 	 * which is easier to implement.
+	 * @param zk.Draggable pt
 	 * @return boolean whether to ignore
 	 */
 	ignoreDrag_: function (pt) {
@@ -2700,6 +2706,7 @@ focus: function (timeout) {
      * @param Object value the property value
      * @param int timeout the delay before sending out the AU request. It is optional. If omitted, -1 is assumed (i.e., it will be sent with next non-deferrable request). 
 	 * @see zAu#send
+	 * @return zk.Widget
 	 */
 	smartUpdate: function (nm, val, timeout) {
 		zAu.send(new zk.Event(this, 'setAttr', [nm, val]),
@@ -3495,6 +3502,7 @@ zk.Widget.getClass('combobox');
 	 * {@link #$init}.
 	 * @see #getClass
 	 * @see #register
+	 * @return zk.Widget
 	 */
 	newInstance: function (wgtnm, props) {
 		var cls = _wgtcls[wgtnm];
@@ -3841,6 +3849,7 @@ Object skip(zk.Widget wgt);
 	 * @param String skipId [optional] the ID of the element where all its descendant
 	 * elements shall be detached by this method, and restored later by {@link #restore}. 
 	 * If not specified, <code>uuid + '-cave'</code> is assumed.
+	 * @return DOMElement
 	 */
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
