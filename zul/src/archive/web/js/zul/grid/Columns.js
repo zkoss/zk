@@ -150,6 +150,9 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			this._mpop.parent.removeChild(this._mpop);
 		this._mpop = new zul.grid.ColumnMenupopup({columns: this});
 	},
+	/** Synchronizes the menu of this component
+	 * @return zul.grid.Columns
+	 */
 	syncColMenu: function () {
 		this._shallSync = false;
 		if (this._mpop)
@@ -193,21 +196,34 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		this._mref = evt.data.reference; 
 	}
 });
-// Columns' Menu
+/**
+ * The Columns' Menu
+ */
 zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	$define: {
 		columns: null
 	},
+	/** Constructor
+	 */
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.afterInit(this._init);
 	},
+	/** Returns the  menuitem with ascending label
+	 * @return zul.menu.Menuitem
+	 */
 	getAscitem: function () {
 		return this._asc;
 	},
+	/** Returns the  menuitem with descending label
+	 * @return zul.menu.Menuitem
+	 */
 	getDescitem: function () {
 		return this._desc;
 	},
+	/** Returns the  menuitem with group label
+	 * @return zul.menu.Menuitem
+	 */
 	getGroupitem: function () {
 		return this._group;
 	},
@@ -238,6 +254,8 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 		this.syncColMenu();
 		w.getPage().appendChild(this);
 	},
+	/** Synchronizes the menu
+	 */
 	syncColMenu: function () {
 		var w = this._columns;
 		for (var c = this.lastChild, p; c != this._desc;) {

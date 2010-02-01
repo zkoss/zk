@@ -144,6 +144,11 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdextr', zk).remove();
 	},
+	/** Enclose child with HTML tag with TD and DIV, 
+	 * and return a HTML code or add HTML fragments in out array.
+	 * @param Map opts
+	 * @return String
+	 */
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
 			child = opts.child,
@@ -209,6 +214,11 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			attrs += ' colspan="' + span + '"';
 		return attrs + ' style="' + style + '"' + ' class="' + clx + '"';
 	},
+	/**
+	 * Returns whether is stripeable or not.
+	 * <p>Default: true.
+	 * @return boolean
+	 */
 	isStripeable_: function () {
 		return true;
 	},

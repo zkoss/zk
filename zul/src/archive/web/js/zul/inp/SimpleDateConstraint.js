@@ -67,6 +67,9 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		}
 		return this.$supers('validate', arguments);
 	},
+	/** Returns the message about out of range value
+	 * @return String
+	 */
 	outOfRangeValue: function () {
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?
 					zk.fmt.Date.formatDate(this._beg, this.format) + " ~ "

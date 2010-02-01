@@ -175,6 +175,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			this._startAutoIncProc(false);
 		}
 	},
+	/**
+	 * Sets bound value if the value out of range 
+	 */
 	checkValue: function(){
 		var inp = this.inp,
 			min = this._min,
@@ -258,6 +261,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 
 		this.timerId = null;
 	},
+	/** Synchronizes the input element's width of this component
+	 */
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))

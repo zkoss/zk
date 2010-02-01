@@ -64,6 +64,10 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		return this.firstChild != null && this.firstChild.$instanceof(zul.wgt.Label) ?
 			this.firstChild.getValue() : null;
 	},
+	/**
+	 * Returns the HTML span content.
+	 * @return String
+	 */
 	domImage_: function () {
 		var zcls = this.getZclass();
 		return '<span id="' + this.uuid + '-img" class="' + zcls + '-img ' + zcls
@@ -75,6 +79,11 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 			img = this.domImage_();
 		return label ? img + ' ': img;
 	},
+	/**
+	 * Returns whether is stripeable or not.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
 	isStripeable_: function () {
 		return false;
 	},

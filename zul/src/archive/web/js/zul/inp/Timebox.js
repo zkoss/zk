@@ -107,6 +107,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			args = arguments;
 		this.$supers('setValue', args);
 	},
+	/** Returns the String of the time that is assigned to this component.
+	 *  <p>returns empty String if value is null
+	 * @return String
+	 */
 	getRawText: function () {
 		return this.coerceToString_(this._value);
 	},
@@ -607,6 +611,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.currentStep = this.defaultStep;
 		this.timerId = null;
 	},
+	/** Synchronizes the input element's width of this component
+	 */
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))

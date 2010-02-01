@@ -52,7 +52,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 * by matching the nearest item ({@link Comboitem}.
 		 * @param boolean autocomplete
 		 */
-		autocomplete: null,		
+		autocomplete: null,
+		/** Update the value of the input element in this component
+		 */
 		repos: function () {
 			if (this.desktop) {
 				var n = this.getInputNode();

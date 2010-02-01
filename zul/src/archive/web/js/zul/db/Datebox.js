@@ -311,6 +311,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (val) {
 		return val ? zk.fmt.Date.formatDate(val, this.getFormat()) : '';
 	},
+	/** Synchronizes the input element's width of this component
+	 */
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
@@ -406,11 +408,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this._pop._shift(ofs);
 		}
 	},
+	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
+	 * <p>call the close function
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
+	 */
 	enterPressed_: function (evt) {
 		this._pop.close();
 		this.updateChange_();
 		evt.stop();
 	},
+	/** Called when the user presses escape key when this widget has the focus ({@link #focus}).
+	 * <p>call the close function
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
+	 */
 	escPressed_: function (evt) {
 		this._pop.close();
 		evt.stop();
@@ -493,6 +505,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._pop)
 			this._pop._value = evt.data.value;
 	},
+	/** Returns the label of the time zone
+	 * @return String
+	 */
 	getTimeZoneLabel: function () {
 		return "";
 	},

@@ -92,6 +92,9 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			zWatch.listen({onSize: this, onShow: this});
 		}
 	},
+	/** Returns whether the menubar scrolling is enabled in horizontal orient.
+	 * @return boolean
+	 */
 	checkScrollable: function () {
 		return this._scrollable && ("horizontal" == this.getOrient());
 	},

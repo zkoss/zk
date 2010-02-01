@@ -76,6 +76,9 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (!this.inServer && this.desktop)
 			this.onResponse();
 	},
+	/**
+	 * Stripes the class for each row.
+	 */
 	stripe: function () {
 		var grid = this.getGrid(),
 			scOdd = grid.getOddRowSclass();

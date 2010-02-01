@@ -317,7 +317,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	redrawpp_: function (out) {
 	},
 
-	//super
+	/** Synchronizes the input element's width of this component
+	 */
 	syncWidth: function () {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))

@@ -26,6 +26,11 @@ zul.grid.Groupfoot = zk.$extends(zul.grid.Row, {
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-groupfoot";
 	},
+	/**
+	 * Returns whether is stripeable or not.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
 	isStripeable_: function () {
 		return false;
 	}

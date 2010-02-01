@@ -152,7 +152,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		this.rerender();
 	},
-
 	getHeadWidgetClass: function () {
 		return zul.grid.Columns;
 	},
@@ -160,8 +159,13 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return new zul.grid.RowIter(this);
 	}
 });
-
+/**
+ * The row iterator.
+ */
 zul.grid.RowIter = zk.$extends(zk.Object, {
+	/** Constructor
+	 * @param Grid grid the widget that the iterator belongs to
+	 */
 	$init: function (grid) {
 		this.grid = grid;
 	},
@@ -171,11 +175,19 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 			this.p = this.grid.rows ? this.grid.rows.firstChild: null;
 		}
 	},
+	 /**
+     * Returns <tt>true</tt> if the iteration has more elements
+     * @return boolean
+     */
 	hasNext: function () {
 		this._init();
 		return this.p;
 	},
-	
+	/**
+     * Returns the next element in the iteration.
+     *
+     * @return Row the next element in the iteration.
+     */
 	next: function () {
 		this._init();
 		var p = this.p;

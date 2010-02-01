@@ -34,6 +34,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		this.open(owner, null, "end_before", {overflow:true});
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
+	/** 
+	 * Destroys the errorbox
+	 */
 	destroy: function () {
 		if (this.parent) {
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
