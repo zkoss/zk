@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletSession;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -94,21 +93,12 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	private static final String ATTR_PAGE = "zk_page";
 	/** The parameter or attribute to specify the path of the richlet. */
 	private static final String ATTR_RICHLET = "zk_richlet";
-	private PortletContext _ctx;
 	/** The default page. */
 	private String _defpage;
 
 	public void init(PortletConfig conf) throws PortletException {
-		_ctx = conf.getPortletContext();
+		super.init(conf);
 		_defpage = conf.getInitParameter(ATTR_PAGE);
-	}
-
-	public PortletContext getPortletContext() {
-		return _ctx;
-	}
-
-	protected String getTitle(RenderRequest request) {
-		return "ZK";
 	}
 
 	protected void doView(RenderRequest request, RenderResponse response)
@@ -231,7 +221,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	private final WebManager getWebManager()
 	throws PortletException {
 		final WebManager webman =
-			(WebManager)_ctx.getAttribute(WebManager.ATTR_WEB_MANAGER);
+			(WebManager)getPortletContext().getAttribute(WebManager.ATTR_WEB_MANAGER);
 		if (webman == null)
 			throw new PortletException("The Layout Servlet not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
 		return webman;
@@ -277,7 +267,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final Map attrs = new HashMap();
 		attrs.put(Attributes.ALERT_TYPE, "error");
 		attrs.put(Attributes.ALERT, msg);
-		Portlets.include(_ctx, request, response,
+		Portlets.include(getPortletContext(), request, response,
 			"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
 			//Portlets doesn't support PASS_THRU_ATTR yet (because
 			//protlet request will mangle attribute name)

@@ -35,6 +35,7 @@ ZK 3.6.4
   2937096: composer.arg shall be statically wired
   2939911: datebox display year incorectly(Thai locale)
   2940739: Today value of the Datebox is incorrect when locale is TH
+  2942242: DHtmlLayoutPortlet getTitle() hard coded
   
 * Upgrade Notes:
 
