@@ -17,7 +17,8 @@ February, 2010
   2942150: combobox disabled="true" not work
   2943346: Label's maxlength property seems to have no effect
   2942242: DHtmlLayoutPortlet getTitle() hard coded
-
+  2943174: Listbox with hflex and select-mold not aligned in FF
+  
 * Upgrade Notes
 
 	--------

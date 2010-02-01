@@ -2478,22 +2478,43 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	},
 	setFlexSize_: function(sz) {
-		var n = this.$n();
+		var n = this.$n(),
+			zkn = zk(n);
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
-			else if (sz.height != '')
-				n.style.height = jq.px0(zk(n).revisedHeight(sz.height, true));
-			else
-				n.style.height = this._height ? this._height : '';
+			else if (sz.height != '') { //bug #2943174
+				var h = zkn.revisedHeight(sz.height, true),
+					newh = h,
+					margins = zkn.sumStyles("tb", jq.margins);
+				n.style.height = jq.px0(h);
+				var newmargins = zkn.sumStyles("tb", jq.margins);
+				if (h == jq(n).outerHeight(false)) //border-box
+					newh = sz.height - newmargins;
+				else if (zk.safari && newmargins != margins)  //safari/chrome margin changed after set style.height
+					newh = zkn.revisedHeight(sz.height, true);
+				if (newh != h) //h changed, re-assign height
+					h.style.height = jq.px0(newh);
+			} else
+				n.style.height = this._height || '';
 		}
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto')
 				n.style.width = '';
-			else if (sz.width != '')
-				n.style.width = jq.px0(zk(n).revisedWidth(sz.width, true));
-			else
-				n.style.width = this._width ? this._width : '';
+			else if (sz.width != '') { //bug #2943174
+				var w = zkn.revisedWidth(sz.width, true),
+					neww = w,
+					margins = zkn.sumStyles("lr", jq.margins);
+				n.style.width = jq.px0(w);
+				var newmargins = zkn.sumStyles("lr", jq.margins);
+				if (w == jq(n).outerWidth(false)) //border-box
+					neww = sz.width - newmargins;
+				else if (zk.safari && newmargins != margins) //safari/chrome margin changed after set style.width
+					neww = zkn.revisedWidth(sz.width, true);
+				if (neww != w) //w changed, re-assign width
+					n.style.width = jq.px0(neww); 
+			} else
+				n.style.width = this._width || '';
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
