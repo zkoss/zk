@@ -783,7 +783,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	title: function (title) {
 		document.title = title;
 	},
-	/* Executes the JavaScript.
+	/** Executes the JavaScript.
 	 * @param String script the JavaScript code snippet to execute
 	 */
 	script: function (script) {
