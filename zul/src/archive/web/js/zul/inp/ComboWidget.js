@@ -417,11 +417,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.$supers('doKeyDown_', arguments);
 	},
 	doClick_: function (evt) {
-		if (evt.domTarget == this.$n('pp'))
-			this.close({focus:true, sendOnOpen:true});
-		else if (this._readonly && !this.isOpen())
-			this.open({focus:true,sendOnOpen:true});
-		this.$supers('doClick_', arguments);
+		if (!this._disabled) {
+			if (evt.domTarget == this.$n('pp'))
+				this.close({
+					focus: true,
+					sendOnOpen: true
+				});
+			else if (this._readonly && !this.isOpen())
+				this.open({
+					focus: true,
+					sendOnOpen: true
+				});
+			this.$supers('doClick_', arguments);
+		}
 	},
 	_doKeyDown: function (evt) {
 		var keyCode = evt.keyCode,
