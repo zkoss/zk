@@ -1,6 +1,7 @@
 <?root-attributes xmlns:v="urn:schemas-microsoft-com:vml"?><!-- For IE -->
 <window id="mywin" width="100%" height="100%">
-<html>
+<script content="zk.googleAPIkey='ABQIAAAAmGxmYR57XDAbAumS9tV5fxRH_TqzcXpN9L4M_uyKWmd4zG1XhRQmwU2NxJsQBHJoz5uEVgu7ohapUQ'"/>
+ <html>
 <![CDATA[
 <ol>
 <li>You shall see two Google Maps with one Gmarker(red boloon) in each Gmaps.</li>
