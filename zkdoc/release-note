@@ -15,6 +15,7 @@ February, 2010
   2941554: Popups and Contraint Violation messages are not hidden (Tab)
   2941933: Right-click always select the first tree item
   2942150: combobox disabled="true" not work
+  2943346: Label's maxlength property seems to have no effect
 
 * Upgrade Notes
 

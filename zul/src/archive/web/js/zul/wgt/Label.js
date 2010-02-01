@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 zul.wgt.Label = zk.$extends(zul.Widget, {
 	_value: '',
+	_maxlength: 0,
 
 	$define: {
 		/** Returns the value.
@@ -59,7 +60,15 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 		 * tab and new line.
 		 * @param boolean pre
 		 */
-		pre: _zkf
+		pre: _zkf,
+		/** Returns the maximal length of the label.
+		 * <p>Default: 0 (means no limitation)
+		 * @return int
+		 */
+		/** Sets the maximal length of the label.
+		 * @param int maxlength
+		 */
+		maxlength: _zkf
 	},
 	/**
 	 * Returns the encoded text.
@@ -67,7 +76,7 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	getEncodedText: function () {
-		return zUtl.encodeXML(this._value, {multiline:this._multiline,pre:this._pre});
+		return zUtl.encodeXML(this._value, {multiline:this._multiline,pre:this._pre, maxlength: this._maxlength});
 	},
 
 	//super//
