@@ -16,6 +16,7 @@ February, 2010
   2941933: Right-click always select the first tree item
   2942150: combobox disabled="true" not work
   2943346: Label's maxlength property seems to have no effect
+  2942242: DHtmlLayoutPortlet getTitle() hard coded
 
 * Upgrade Notes
 
