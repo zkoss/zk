@@ -503,7 +503,9 @@ zjq.prototype = {
 	 */
 	//jq: null, //assigned at run time
 
-	/** Cleans, i.e., reset, the visibility (of the CSS style) for the matched elements. Depending on the browser, the reset visibility is either visible or inherit. 
+	/** Cleans, i.e., reset, the visibility (of the CSS style) for the matched elements.
+	 * 	Depending on the browser, the reset visibility is either visible or inherit.
+	 * @return jq 
 	 */
 	cleanVisibility: function () {
 		return this.jq.each(function () {
@@ -1103,7 +1105,8 @@ jq(el).zk.center(); //same as 'center'
 		} while (el = el.parentNode);
 		return [l, t];
 	},
-	/** Returns the size of the text if it is placed inside the first matched element. 
+	/** Returns the size of the text if it is placed inside the first matched element.
+	 * @param String text the content text 
 	 * @return Size the size of the text
 	 */
 	textSize: function (txt) {
@@ -1130,7 +1133,8 @@ jq(el).zk.center(); //same as 'center'
 
 	/** Returns the dimension of the specified element.
 	 * <p>If revised not specified (i.e., not to calibrate), the left and top are the offsetLeft and offsetTop of the element.
-	 * If revised is true, {@link #revisedOffset} will be used (i.e., the offset is calibrated). 
+	 * @param boolean revised if revised is true, {@link #revisedOffset} will be
+	 * 		used (i.e., the offset is calibrated). 
 	 * @return Dimension the dimension
 	 */
 	dimension: function (revised) {
@@ -1180,6 +1184,7 @@ jq(el).zk.center(); //same as 'center'
 			el.src = zjq._src0;
 			el.src = src;
 		}
+		return this;
 	},
 
 	/** Returns the parent element, including the virtual parent,

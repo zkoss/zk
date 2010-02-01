@@ -58,6 +58,46 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zUtl = { //static methods
 	//Character
+    /**
+     * Returns whether the character is according to its opts.
+     * @param char cc the character
+     * @param Map opts the options.
+<table border="1" cellspacing="0" width="100%">
+<caption> Allowed Options
+</caption>
+<tr>
+<th> Name
+</th><th> Allowed Values
+</th><th> Description
+</th></tr>
+<tr>
+<td> digit
+</td><td> true, false
+</td><td> Specifies the character is digit only.
+</td></tr>
+<tr>
+<td> upper
+</td><td> true, false
+</td><td> Specifies the character is upper case only.
+</td></tr>
+<tr>
+<td> lower
+</td><td> true, false
+</td><td> Specifies the character is lower case only.
+</td></tr>
+<tr>
+<td> whitespace
+</td><td> true, false
+</td><td> Specifies the character is whitespace only.
+</td></tr>
+<tr>
+<td> opts[cc]
+</td><td> true, false
+</td><td> Specifies the character is allowed only.
+</td></tr>
+</table>
+     * @return boolean
+     */
 	isChar: function (cc, opts) {
 		return (opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')

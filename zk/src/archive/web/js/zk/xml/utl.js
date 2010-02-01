@@ -19,6 +19,14 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * <p>Refer to {@link zUtl} for basic utilities.
  */
 zk.xml.Utl = {
+	/**
+	 * Loads XML from the resource at the specified URL.
+	 * If the callback method is specified, the URL is loaded asynchronously and
+	 * the callback is called with the XML document after the document is loaded and parsed. 
+	 * @param String url
+	 * @param Function callback
+	 * @return DOMElement
+	 */
 	loadXML: function (url, callback) {
 		var doc = document.implementation;
 		if (doc && doc.createDocument) {
@@ -36,6 +44,11 @@ zk.xml.Utl = {
 		doc.load(url);
 		return doc;
 	},
+	/**
+	 * Parses and returns the XML document from the specified text. 
+	 * @param String text
+	 * @return DOMElement
+	 */
 	parseXML: function (text) {
 		if (typeof DOMParser != "undefined")
 			return (new DOMParser()).parseFromString(text, "text/xml");

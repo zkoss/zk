@@ -3,7 +3,7 @@
 	Purpose:
 		The package utilities (part of zk)
 	Description:
-		
+
 	History:
 		Tue Oct  7 16:32:04     2008, Created by tomyeh
 
@@ -112,7 +112,7 @@ zk.copy(zk, (function() {
 					+' <span id="zk_loadcnt">'+loadmsg()+'</span>',
 					true);
 			}
-		}	
+		}
 	}
 
 /** @partial zk
@@ -160,10 +160,10 @@ zk.copy(zk, (function() {
 	 */
 	setScriptLoaded: _zkf,
 
-	/** Tests if a package is loaded (or being loaded). 
+	/** Tests if a package is loaded (or being loaded).
 	 * @param String pkg the package name
 	 * @param boolean loading [Optional; default: false]
-	 * If true is specified, this method returns true if the package is loaded or being loaded. If false or omitted, it returns true only if the package is loaded. 
+	 * If true is specified, this method returns true if the package is loaded or being loaded. If false or omitted, it returns true only if the package is loaded.
 	 * @return boolean true if loaded
 	 * @see #load
 	 */
@@ -171,21 +171,21 @@ zk.copy(zk, (function() {
 		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
-	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute. 
+	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute.
 <pre><code>
 zk.load('zul.utl', function () {
   new zul.utl.Timer();
 });
 </code></pre>
 	 * @param String pkg the package name
-	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here. 
+	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here.
 	 * @return boolean true if all required packages are loaded
 	 */
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
-	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute. 
+	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute.
 	 * @param String pkg the package name
-	 * @param Desktop dt [optional] the desktop used to get URI of the JavaScript file ({@link #ajaxURI}). If null, the first desktop is assumed. 
-	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here. 
+	 * @param Desktop dt [optional] the desktop used to get URI of the JavaScript file ({@link #ajaxURI}). If null, the first desktop is assumed.
+	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here.
 	 * @return boolean true if all required packages are loaded
 	 * @see #load(String, Function)
 	 */
@@ -217,6 +217,7 @@ zk.load('zul.utl', function () {
 	 * when the script is loaded. Otherwise, @{link zk#loading} won't be zero
 	 * and ZK Client Engine is halted.
 	 * @param String charset the charset. UTF-8 is assumed if null.
+	 * @return zk
 	 */
 	loadScript: function (src, name, charset) {
 		if (name)
@@ -245,8 +246,8 @@ zk.load('zul.utl', function () {
 		_pkgver[pkg] = ver;
 	},
 	/** Declare a package that must be loaded when loading another package.
-	 * <p>Notice that it doesn't guarantee the loading order of the two packages. Thus, it is better to do in #afterLoad if a code snippet depends on both packages. 
-	 * @param String a the name of the package that depends another package. In other words, calling #loading against this package will cause dependedPkgnn being loaded. 
+	 * <p>Notice that it doesn't guarantee the loading order of the two packages. Thus, it is better to do in #afterLoad if a code snippet depends on both packages.
+	 * @param String a the name of the package that depends another package. In other words, calling #loading against this package will cause dependedPkgnn being loaded.
 	 * @param String b the name of the package that shall be loaded if another package is being loaded.
 	 * In other words, it reads "a depends on b".
 	 * @see #afterLoad
@@ -262,7 +263,7 @@ zk.load('zul.utl', function () {
 
 	/** Declares a function that shall be executed after all requested packages are loaded (i.e., {@link #loading} is 0).
 	 * If all packages has been loaded, the function is executed immediately
-	 * and this method returns true. 
+	 * and this method returns true.
 	 * @param Function func the function to execute
 	 * @return boolean whether func has been executed
 	 * @see #afterLoad(String, Function)
@@ -276,8 +277,8 @@ zk.load('zul.utl', function () {
 	 * <p>Notice that functions specified in the second format execute before those specified in the first format.
 	 * <p>Example
 <pre><code>
-zk.afterLoad('foo', function() {new foo.Foo();}); 
-zk.afterLoad('foo1,foo2', function() {new foo1.Foo(foo2.Foo);}); 
+zk.afterLoad('foo', function() {new foo.Foo();});
+zk.afterLoad('foo1,foo2', function() {new foo1.Foo(foo2.Foo);});
 zk.afterLoad(function() {});
 </code></pre>
 	 * @param String pkgs the package(s) that the specified function depends on. In other words, the function is evaluated only if the package(s) are loaded. If you want to specify multiple packages, separate them with comma.
@@ -325,10 +326,10 @@ zk.afterLoad(function() {});
 	},
 	/** Returns the URI of the server (so called host) for the specified package.
 	 * <p>ZK Client Engine loads the packages from the same server that returns the HTML page.
-	 * If a package might be loaded from a different server, you can invoke #setHost to specify it and then #getHost will return the correct URL for the specified package. 
+	 * If a package might be loaded from a different server, you can invoke #setHost to specify it and then #getHost will return the correct URL for the specified package.
 	 * @param String pkg the package name
 	 * @param boolean js whether the returned URL is used to load the JavaScript file.
-	 * {@link #load} will pass true to this argument to indicate the URI is used to load the JavaScript file. However, if you just want the URL to send the request back (such as json-p with jQuery's json), don't pass anything (or pass false) to this argument. 
+	 * {@link #load} will pass true to this argument to indicate the URI is used to load the JavaScript file. However, if you just want the URL to send the request back (such as json-p with jQuery's json), don't pass anything (or pass false) to this argument.
 	 * @return String the URI
 	 * @see #setHost
 	 */
@@ -338,7 +339,7 @@ zk.afterLoad(function() {});
 				return _pkghosts[p][js ? 1: 0];
 		return _defhost[js ? 1: 0];
 	},
-	/** Defines the URL of the host for serving the specified packages. 
+	/** Defines the URL of the host for serving the specified packages.
 	 * @param String host the host, such as http://www.zkoss.org.
 	 * @param String updURI the update URI, such as /zkdemo/zkau,
 	 * that is used to load the JavaScript files

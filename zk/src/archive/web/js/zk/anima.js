@@ -106,6 +106,7 @@ zk.copy(zjq.prototype, {
 	/** Slides down (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
+	 * @return jqzk
 	 * Allowed options:
 	 * <dl>
 	 * <dt>anchor</dt>
@@ -163,6 +164,7 @@ zk.copy(zjq.prototype, {
 	/** Slides up (hide) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
+	 * @return jqzk
 	 * Allowed options:
 	 * <dl>
 	 * <dt>anchor</dt>
@@ -215,6 +217,7 @@ zk.copy(zjq.prototype, {
 	/** Slides out (hide) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
+	 * @return jqzk
 	 * Allowed options:
 	 * <dl>
 	 * <dt>anchor</dt>
@@ -263,6 +266,7 @@ zk.copy(zjq.prototype, {
 	/** Slides in (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
+	 * @return jqzk
 	 * Allowed options:
 	 * <dl>
 	 * <dt>anchor</dt>

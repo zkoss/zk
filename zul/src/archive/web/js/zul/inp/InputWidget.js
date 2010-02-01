@@ -146,7 +146,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Selects the whole text in this input.
 	 * @param int start the starting index of the selection range
-	 * @param int end the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected. 
+	 * @param int end the ending index of the selection range (excluding).
+	 * 		In other words, the text between start and (end-1) is selected. 
 	 */
 	select: function (start, end) {
 		zk(this.getInputNode()).setSelectionRange(start, end);

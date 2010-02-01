@@ -42,12 +42,14 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	/** Returns a string for this big decimal.
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
+	 * @return String
 	 */
 	$toString: function() { //toString is reserved keyword for IE
 		var j = this._value.length - this._precision;
 		return this._value.substring(0, j) + (this._dot ? '.' + this._value.substring(j) : '');
 	},
 	/** Returns a Locale-dependent string for this big decimal.
+	 * @return String
 	 */
 	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
 		var j = this._value.length - this._precision;
