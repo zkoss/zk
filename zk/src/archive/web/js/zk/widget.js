@@ -547,7 +547,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var n = wgt.$n();
 		if (n) return n;
 		for (var w = wgt.firstChild; w; w = w.nextSibling) {
-			n = w._getFirstNodeDown();
+			n = w.getFirstNode_();
 			if (n) return n;
 		}
 	}
