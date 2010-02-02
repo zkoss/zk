@@ -210,6 +210,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	close: function (opts) {
 		if (!this._open) return;
+		if (zk.animating()) {
+			var self = this;
+			setTimeout(function() {self.close(opts);}, 50);
+			return;
+		}
 		this._open = false;
 		if (opts && opts.focus)
 			this.focus();

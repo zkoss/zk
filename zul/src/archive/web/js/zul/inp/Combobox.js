@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * {@link #setAutodrop}.
  *
  * <p>Default {@link #getZclass}: z-combobox.
- * 
+ *
  * <p>Like {@link zul.db.Datebox},
  * the value of a read-only comobobox ({@link #isReadonly}) can be changed
  * by dropping down the list and selecting an combo item
@@ -45,7 +45,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 *
 		 * <p>Don't confuse it with the auto-completion feature mentioned by
 		 * other framework. Such kind of auto-completion is supported well
-		 * by listening to the onChanging event. 
+		 * by listening to the onChanging event.
 		 * @return boolean
 		 */
 		/** Sets whether to automatically complete this text box
@@ -57,9 +57,16 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 */
 		repos: function () {
 			if (this.desktop) {
-				var n = this.getInputNode();
+				var n = this.getInputNode(),
+					ofs;
 				n.value = this.valueEnter_ != null ? this.valueEnter_ : this._value || '';
-				this._typeahead(this._bDel);
+				
+				// Fixed bug 2944355
+				if (zk.ie && n.value) {
+					ofs = n.value.length;
+					ofs = [ofs, ofs];
+				}
+				this._typeahead(this._bDel, ofs);
 				this._bDel = null;
 			}
 			this._repos = false;
@@ -75,13 +82,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (this._sel) {
 				var n = this._sel.$n();
 				if (n) jq(n).removeClass(this._sel.getZclass() + '-seld');
-			}	
+			}
 			this._sel = this._lastsel = null;
 			for (var w = this.firstChild; w; w = w.nextSibling) {
 				if (value == w.getLabel()) {
 					this._sel = w;
 					break;
-				}	
+				}
 			}
 		}
 	},
@@ -133,7 +140,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this._lastsel = sel;
 			if (sel) //set back since _findItem ignores cases
 				this.getInputNode().value = sel.getLabel();
-			
+
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 			this.fire('onSelect', {items: sel?[sel]:[], reference: sel});
@@ -174,27 +181,27 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					} else if (!looseSel && label.startsWith(val)) {
 						looseSel = item;
 						break;
-					}						
+					}
 				}
 				if ((item = this._next(item, bUp)) == beg)
 					break;
 			}
-			
+
 			if (!sel)
 				sel = looseSel;
-				
+
 			if (sel) { //exact match
 				var ofs = zk(inp).getSelectionRange();
 				if (ofs[0] == 0 && ofs[1] == val.length) //full selected
 					sel = this._next(sel, bUp); //next
 			} else
-				sel = this._next(null, bUp); 
+				sel = this._next(null, bUp);
 		} else
 			sel = this._next(null, true);
-		
+
 		if (sel)
 			zk(sel).scrollIntoView(this.$n('pp'));
-			
+
 		this._select(sel, {sendOnSelect:true});
 		evt.stop();
 	},
@@ -216,10 +223,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_select: function (sel, opts) {
 		var inp = this.getInputNode(),
 			val = inp.value = sel ? sel.getLabel(): '';
+		this.valueSel_ = val;
+		this._hilite2(sel, opts);
+
+		// Fixed IE/Safari/Chrome
 		if (val)
 			zk(inp).setSelectionRange(0, val.length);
-		this.valueSel_ = val;	
-		this._hilite2(sel, opts);
 	},
 	otherPressed_: function (evt) {
 		var wgt = this,
@@ -243,21 +252,21 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			default:
 				var v = String.fromCharCode(keyCode);
 				var sel = this._findItem0(v, true, true, !!this._sel);
-				if (sel) 
+				if (sel)
 					this._select(sel, {sendOnSelect: true});
 			}
 		else
 			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera ? 10 : 0);
 			//use timeout, since, when key down, value not ready yet, opear need extra time to set value to dom
 	},
-	_typeahead: function (bDel) {
+	_typeahead: function (bDel, ofs) {
 		if (zk.currentFocus != this) return;
 
 		var inp = this.getInputNode(),
 			val = inp.value,
-			ofs = zk(inp).getSelectionRange()
+			ofs = ofs || zk(inp).getSelectionRange(),
 			fchild = this.firstChild;
-		this.valueEnter_ = val;	
+		this.valueEnter_ = val;
 		if (!val || !fchild
 		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
 			return this._hilite({strict:true});

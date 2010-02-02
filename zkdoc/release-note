@@ -19,6 +19,7 @@ February, 2010
   2943346: Label's maxlength property seems to have no effect
   2942242: DHtmlLayoutPortlet getTitle() hard coded
   2943174: Listbox with hflex and select-mold not aligned in FF
+  2944355: ZK5.0 Combobox autodrop and autocomplete problem
   
 * Upgrade Notes
 
