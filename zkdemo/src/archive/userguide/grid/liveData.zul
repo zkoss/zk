@@ -19,10 +19,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
-      	<h4>Live data</h4>
-   		<p>Listbox supports "load on demend" feature via a ListModel interface. 
-   		This feature will not load data into the listbox until it is necessary</p>
-   		<p>Scroll the listbox downwards and observe the values loaded dynamically.</p>
+		<h4>Live data</h4>
+		<p>Listbox supports "load on demend" feature via a ListModel interface. 
+		This feature will not load data into the listbox until it is necessary</p>
+		<p>As shown in this example, there are totally 20,000 items.
+		Scroll down and observe the values loaded dynamically.</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">

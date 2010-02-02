@@ -396,7 +396,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- Configure the client where to display the progress box.
-		The progres box is a message box used to indicate the AU requests
+		The progress box is a message box used to indicate the AU requests
 		have being processed by the server.
 		The allowed values: left, center, right, top, bottom and mouse.
 		If you want to specify two values, separate them with comma, such as
