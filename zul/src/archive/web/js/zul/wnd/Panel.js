@@ -476,6 +476,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	 * 
 	 * @param String name "tbar", "bbar", and "fbar".
 	 * @param zul.wgt.Toolbar toolbar
+	 * @return boolean
 	 */
 	addToolbar: function (name, toolbar) {
 		switch (name) {

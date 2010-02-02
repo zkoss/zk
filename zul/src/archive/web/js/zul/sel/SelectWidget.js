@@ -466,6 +466,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return hgh ? hgh: defVal;
 	},
+	/**
+	 * Returns the index of the ItemWidget
+	 * @param ItemWidget item
+	 * @return int
+	 */
 	indexOfItem: function (item) {
 		if (item.getMeshWidget() == this) {
 			for (var i = 0, it = this.getBodyWidgetIterator(), w; (w = it.next()); i++)
@@ -806,7 +811,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/**
 	 * Selects all items.
-	 * @param boolean isSelectAll
+	 * @param boolean notify if true, fire onSelect event to server
+	 * @param jq.Event evt
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)

@@ -66,7 +66,6 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	getLabel: function () {
 		return this.firstChild != null ? this.firstChild.getLabel() : null;
 	},
-	/** A combination of image ([[#domImage_]]) and label ([[#domLabel_]]). */
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.domImage_();

@@ -58,6 +58,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
+	 * @return Radio
 	 */
 	setChecked: _zkf = function (checked) {
 		if (checked != this._checked) {
@@ -87,6 +88,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * <p>Don't override this. Override {@link #setChecked} instead.
 	 * <p>The same as {@link #setChecked}.
 	 * @param boolean selected
+	 * @return Radio
 	 */
 	setSelected: _zkf,
 	/** Returns whether it is selected.

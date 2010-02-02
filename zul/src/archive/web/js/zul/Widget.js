@@ -148,6 +148,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * wgt.setContext('an_id', 'start_before');
 	 * </pre>
 	 * @param zul.wgt.Popup context the popup widget.
+	 * @return zul.Widget
 	 */
 	setContext: function (context) {
 		if (zk.Widget.isInstance(context))
@@ -216,6 +217,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * wgt.setPopup('an_id', 'start_before');
 	 * </pre>
 	 * @param zul.wgt.Popup popup the popup widget.
+	 * @return zul.Widget
 	 */
 	setPopup: function (popup) {
 		if (zk.Widget.isInstance(popup))
@@ -287,6 +289,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * wgt.setTooltip('an_id', 'start_before');
 	 * </pre>
 	 * @param zul.wgt.Popup popup the popup widget.
+	 * @return zul.Widget
 	 */
 	setTooltip: function (tooltip) {
 		if (zk.Widget.isInstance(tooltip))

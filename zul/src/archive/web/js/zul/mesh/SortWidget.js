@@ -130,6 +130,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	 * Sorts the data.
 	 * @param String ascending
 	 * @param jq.Event evt
+	 * @return boolean
 	 */
 	sort: function (ascending, evt) {
 		var dir = this.getSortDirection();
@@ -194,6 +195,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
      * @param Object o1 the first object to be compared.
      * @param Object o2 the second object to be compared.
      * @param boolean isNumber
+     * @return int
 	 */
 	sorting: function(a, b, isNumber) {
 		var v1, v2;

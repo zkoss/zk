@@ -124,6 +124,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	/**
 	 * Returns the column attributes. i.e. {@link #getAlign} and {@link #getValign}
 	 * in HTML format. (Like a="b")
+	 * @return String
 	 */
 	getColAttrs: function () {
 		return (this._align ? ' align="' + this._align + '"' : '')

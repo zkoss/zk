@@ -97,6 +97,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * the striping effect disappears. You can provide different effects by
 	 * providing the proper style classes.
 	 * @param String oddRowSclass
+	 * @return Listbox
 	 */
 	setOddRowSclass: function (scls) {
 		if (!scls) scls = null;
@@ -139,6 +140,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	/**
 	 * Stripes the class for each item.
+	 * @return Listbox
 	 */
 	stripe: function () {
 		var scOdd = this.getOddRowSclass();

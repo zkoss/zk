@@ -104,6 +104,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * is called.
 	 * <p>If the derive class created its own stackup (such as creating
 	 * a shadow), it shall override this method to return false.
+	 * @return boolean
 	 */
 	shallStackup_: function () {
 		return zk.eff.shallStackup();

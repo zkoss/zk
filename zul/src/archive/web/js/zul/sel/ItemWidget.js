@@ -83,6 +83,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	/** Returns the label of the {@link Listcell} or {@link Treecell} it contains, or null
 	 * if no such cell.
+	 * @return String
 	 */
 	getLabel: function () {
 		return this.firstChild ? this.firstChild.getLabel() : null; 

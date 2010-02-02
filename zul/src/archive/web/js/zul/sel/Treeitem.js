@@ -156,6 +156,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 *
 	 * <p>If it is not created, we automatically create it.
 	 * @param String image
+	 * @return Treeitem
 	 */
 	setImage: function (image) {
 		this._autoFirstCell().setImage(image);

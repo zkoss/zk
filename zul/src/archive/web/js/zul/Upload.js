@@ -352,6 +352,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 	 * Updates the status of the file being uploaded.
 	 * @param int sent how many percentage being sent
 	 * @param int total the size of the file 
+	 * @return boolean
 	 */
 	update: function (sent, total) {
 		var wgt = this.getWidget();

@@ -113,6 +113,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 *
 	 * <p>Note: the performance of the size method of returned collection
 	 * is no good.
+	 * @param Array items
 	 * @return Array
 	 */
 	getItems: function (items) {
