@@ -329,3 +329,9 @@
 .z-menubar-hor-right-scroll-over {
 	background-position: 0 0;
 }
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+a.z-menu-item-cnt:visited,
+a.z-menu-item-cnt {
+	color: black;
+}
+</c:if>

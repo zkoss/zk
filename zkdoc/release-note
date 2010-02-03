@@ -21,6 +21,7 @@ February, 2010
   2943174: Listbox with hflex and select-mold not aligned in FF
   2944355: ZK5.0 Combobox autodrop and autocomplete problem
   2943533: grid menupopup="auto" conflict with Messagebox.show()
+  2945107: different style of menuitems between IE and FF after ZK 5.0.
   
 * Upgrade Notes
 
