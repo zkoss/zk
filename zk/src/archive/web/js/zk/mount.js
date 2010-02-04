@@ -97,6 +97,7 @@ function zkopt(opts) {
 			}
 			break;
 		case 'eu': zAu.setErrorURI(val); break;
+		case 'ppos': zk.progPos = val; break;
 		case 'eup': zAu.setPushErrorURI(val);
 		}
 	}

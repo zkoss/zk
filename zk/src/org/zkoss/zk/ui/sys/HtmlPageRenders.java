@@ -255,18 +255,21 @@ public class HtmlPageRenders {
 			}
 		}
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null;
-		if (tmout > 0 || keepDesktop) {
+		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
+		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0) {
 			sb.append("<script>zkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
 			if (tmout > 0)
-				sb.append("to:").append(tmout);
+				sb.append("to:").append(tmout).append(",");
+			if (progressboxPos.length() > 0)
+				sb.append("ppos:'").append(progressboxPos).append("'");
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);
 			sb.append("});</script>");
-		}		
+		}
 
 		final Device device = Devices.getDevice(deviceType);
 		String s = device.getEmbedded();

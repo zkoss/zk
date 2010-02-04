@@ -315,6 +315,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (icon)
 			html += '<div class="' + icon + '"></div>';
 		jq(document.body).append(html + '</div>');
+
 		var $n = jq(id, zk),
 			n = $n[0],
 			$txt = jq(idtxt, zk);
@@ -325,10 +326,41 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			});
 
 		if (mask && $txt.length) { //center
-			var txt = $txt[0],
-				st = txt.style;
 			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
 			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
+		} else {
+			var pos = zk.progPos;
+			if (pos) {
+				var left,
+					top,
+					txt = $txt[0],
+					st = txt.style,
+					width = jq.innerWidth(),
+					height = jq.innerHeight(),
+					wdgap = width - zk(txt).offsetWidth(),
+					hghgap = height - zk(txt).offsetHeight();
+
+				if (pos.indexOf("mouse") >= 0) {
+					var offset = zk.currentPointer;
+					left = offset[0] + 10;
+					top = offset[1] + 10;
+				} else {
+					if (pos.indexOf("left") >= 0) left = x;
+					else if (pos.indexOf("right") >= 0)	left = x + wdgap -1;
+					else if (pos.indexOf("center") >= 0) left = x + wdgap / 2;
+					else left = 0;
+					
+					if (pos.indexOf("top") >= 0) top = y;
+					else if (pos.indexOf("bottom") >= 0) top = y + hghgap - 1;
+					else if (pos.indexOf("center") >= 0) top = y + hghgap / 2;
+					else top = 0;
+					
+					left = left < x ? x : left;
+					top = top < y ? y : top;
+				}
+				st.left = jq.px(left);
+				st.top = jq.px(top);
+			}
 		}
 
 		$n.zk.cleanVisibility();
