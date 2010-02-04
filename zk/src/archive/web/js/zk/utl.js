@@ -318,7 +318,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 		var $n = jq(id, zk),
 			n = $n[0],
-			$txt = jq(idtxt, zk);
+			$txt = jq(idtxt, zk),
+			txt = $txt[0],
+			st = txt.style;
 		if (mask)
 			n.z_mask = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
@@ -333,8 +335,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (pos) {
 				var left,
 					top,
-					txt = $txt[0],
-					st = txt.style,
 					width = jq.innerWidth(),
 					height = jq.innerHeight(),
 					wdgap = width - zk(txt).offsetWidth(),
