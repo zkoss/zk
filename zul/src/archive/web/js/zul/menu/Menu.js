@@ -183,7 +183,19 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			} else {
 				this._openPopup();	
 			}
+		} else {
+			var content = this._contentHandler;
+			if (content && !content.isOpen())
+				content.onShow();
 		}
+	},
+	doMouseOver_: function () {
+		this.$supers('doMouseOver_', arguments);
+		if (this.isTopmost()) return;
+
+		var content = this._contentHandler;
+		if (content && !content.isOpen())
+			content.onShow();
 	},
 	_openPopup: function () {
 		if (!this.menupopup.isOpen())
@@ -268,7 +280,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		this._content = content;
 	 },
 	 setContent: function (content) {
-	 	if (this._content != content) {
+	 	if (this._content != content || !this._pp) {
 			this._content = content;
 			this._wgt.rerender();	
 		}
@@ -281,7 +293,6 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		'-cnt-pp" style="display:none"><div class="', zcls,'-cnt-body">', this._content, '</div></div>');
 	 },
 	 bind: function () {
-				
 	 	var wgt = this._wgt;
 	 	if (!wgt.menupopup) {
 			wgt.domListen_(wgt.$n(), 'onClick', 'onShow');
@@ -302,6 +313,10 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		}
 
 		this._pp = null;
+	 },
+	 isOpen: function () {
+		 var pp = this._pp;
+		 return (pp && zk(pp).isVisible());
 	 },
 	 onShow: function () {
 	 	var wgt = this._wgt,
