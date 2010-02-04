@@ -24,6 +24,7 @@ February, 2010
   2943533: grid menupopup="auto" conflict with Messagebox.show()
   2945107: different style of menuitems between IE and FF after ZK 5.0.
   2945219: Function Key Handling in ZK 5 is not working
+  2945761: ZK popup should be closed when click outside zk page(zhtml)
   
 * Upgrade Notes
 

@@ -420,10 +420,12 @@ jq(function() {
 
 		if (!wgt) wgt = evt.target;
 
-		var target = evt.domTarget;
-		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
+		var target = evt.domTarget,
+			body = document.body;
+		if ((target != body && target != body.parentNode) ||
+				(evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
-
+			
 		_doEvt(evt);
 	}
 	
