@@ -23,6 +23,7 @@ February, 2010
   2944355: ZK5.0 Combobox autodrop and autocomplete problem
   2943533: grid menupopup="auto" conflict with Messagebox.show()
   2945107: different style of menuitems between IE and FF after ZK 5.0.
+  2945219: Function Key Handling in ZK 5 is not working
   
 * Upgrade Notes
 
