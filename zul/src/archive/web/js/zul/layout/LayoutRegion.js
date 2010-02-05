@@ -282,6 +282,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (real) {
 			real.style.width = width ? width : '';
 			real._lastSize = null;
+			this.parent.resize();
 		}
 		return this;
 	},
@@ -291,6 +292,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (real) {
 			real.style.height = height ? height : '';
 			real._lastSize = null;
+			this.parent.resize();
 		}
 		return this;
 	},
