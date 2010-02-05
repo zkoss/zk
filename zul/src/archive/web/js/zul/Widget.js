@@ -364,7 +364,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}
 
 		var parsed = [{}, {}, {}, {}, {}], //ext(#), ctl, alt, shft
-			which = 0, $Event = zk.Event;
+			which = 0;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
@@ -387,21 +387,21 @@ zul.Widget = zk.$extends(zk.Widget, {
 					throw "Unexpected character "+cc+" in "+keys;
 
 				var s = keys.substring(j+1, k).toLowerCase();
-				if ("pgup" == s) cc = $Event.PGUP;
-				else if ("pgdn" == s) cc = $Event.PGDN;
-				else if ("end" == s) cc = $Event.END;
-				else if ("home" == s) cc = $Event.HOME;
-				else if ("left" == s) cc = $Event.LFT;
-				else if ("up" == s) cc = $Event.UP;
-				else if ("right" == s) cc = $Event.RGH;
-				else if ("down" == s) cc = $Event.DN;
-				else if ("ins" == s) cc = $Event.INS;
-				else if ("del" == s) cc = $Event.DEL;
+				if ("pgup" == s) cc = 33;
+				else if ("pgdn" == s) cc = 34;
+				else if ("end" == s) cc = 35;
+				else if ("home" == s) cc = 36;
+				else if ("left" == s) cc = 37;
+				else if ("up" == s) cc = 38;
+				else if ("right" == s) cc = 39;
+				else if ("down" == s) cc = 40;
+				else if ("ins" == s) cc = 45;
+				else if ("del" == s) cc = 46;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
 						throw "Unsupported function key: #f" + v;
-					cc = $Event.F1 + v - 1;
+					cc = 112 + v - 1;
 				} else
 					throw "Unknown #"+s+" in "+keys;
 

@@ -196,25 +196,6 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 		if (!opts || opts.dom) this.domStopped = b;
 		if (opts && opts.au) this.auStopped = b;
 	}
-}, {
-	BS: 8,
-	TAB: 9,
-	ENTER: 13,
-	SHIFT: 16,
-	CTRL: 17,
-	ALT: 18,
-	ESC: 27,
-	PGUP: 33,
-	PGDN: 34,
-	END: 35,
-	HOME: 36,
-	LFT: 37,
-	UP: 38,
-	RGH: 39,
-	DN: 40,
-	INS: 45,
-	DEL: 46,
-	F1: 112
 });
 
 zWatch = (function () {
