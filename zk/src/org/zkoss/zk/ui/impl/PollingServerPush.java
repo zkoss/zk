@@ -33,8 +33,21 @@ import org.zkoss.zk.au.out.AuScript;
 /**
  * A server-push implementation that is based on client-polling.
  *
+ * <p>Developer can control the frequency of the polling by setting the preferences as follows:
+ * <dl>
+ * <dt><code>PollingServerPush.delay.min</code></dt>
+ * <dd>The minimal delay to send a polling request (unit: milliseconds). Default: 1000.</dd>
+ * <dt><code>PollingServerPush.delay.max</code></dt>
+ * <dd>The maximal delay to send a polling request (unit: milliseconds). Default: 15000.</dd>
+ * <dt><code>PollingServerPush.delay.factor</code></dt>
+ * <dd>the delay factor. The real delay is the processing time multiplies the delay
+ * factor. For example, if the last request
+ * took 1 second to process, then the client polling will be delayed
+ * for <code>1 x factor</code> seconds. Default: 5.
+ * The larger the factor is, the longer delay it tends to be.</dd>
+ *
  * @author tomyeh
- * @since 3.0.0
+ * @since 5.0.0
  */
 public class PollingServerPush implements ServerPush {
 	private static final Log log = Log.lookup(PollingServerPush.class);
@@ -61,7 +74,6 @@ public class PollingServerPush implements ServerPush {
 	 * the script returned by {@link #getStartScript}.
 	 * Devices that don't support scripts could override this method
 	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
-	 * @since 3.6.1
 	 */
 	protected void startClientPush() {
 		Clients.response(new AuScript(null, getStartScript()));
@@ -73,7 +85,6 @@ public class PollingServerPush implements ServerPush {
 	 * the script returned by {@link #getStopScript}.
 	 * Devices that don't support scripts could override this method
 	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
-	 * @since 3.6.1
 	 */
 	protected void stopClientPush() {
 		Clients.response(new AuScript(null, getStopScript()));
@@ -93,10 +104,12 @@ public class PollingServerPush implements ServerPush {
 			.append("zk.load('zk.cpsp');zk.afterLoad(function(){zk.cpsp.start('")
 			.append(dtid).append('\'');
 
-		final int v1 = getIntPref("PollingServerPush.delay.min"),
-			v2 = getIntPref("PollingServerPush.delay.max");
-		if (v1 > 0  && v2 > 0)
-			sb.append(',').append(v1).append(',').append(v2);
+		final int min = getIntPref("PollingServerPush.delay.min"),
+			max = getIntPref("PollingServerPush.delay.max"),
+			factor = getIntPref("PollingServerPush.delay.factor");
+		if (min > 0  || max > 0 || factor > 0)
+			sb.append(',').append(min).append(',').append(max)
+				.append(',').append(factor);
 
 		return sb.append(");},'").append(dtid).append("');").toString();
 	}
@@ -171,17 +184,8 @@ public class PollingServerPush implements ServerPush {
 		}
 	}
 
-	/** Sets the delay between each polling request.
-	 * <p>Default: use the preference called
-	 * <code>PollingServerPush.delay.min</code>
-	 * <code>PollingServerPush.delay.max</code>,
-	 * and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 1000, max is 15000, and factor is 5.
-	 */
+	/** @deprecated */
 	public void setDelay(int min, int max, int factor) {
-		Clients.response(
-			new AuScript(null, "zkau.setSPushInfo('" + _desktop.getId()
-				+ "',{min:" + min + ",max:" + max + ",factor:" + factor + "})"));
 	}
 
 	public void onPiggyback() {

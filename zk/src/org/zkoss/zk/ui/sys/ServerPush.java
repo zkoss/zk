@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.DesktopUnavailableException;
  * That is, the client polls the server for executing any pending
  * server-push threads.
  * The client can adjust the frequency based on the response time
- * (in proportion to the server load).
+ * (in proportion to the server load) (see {@link org.zkoss.zk.ui.impl.PollingServerPush} for details).
  * To poll, the client usually send the dummy command that does nothing
  * but trigger {@link #onPiggyback} to be execute.
  *
@@ -73,28 +73,8 @@ public interface ServerPush {
 	 */
 	public void stop();
 
-	/** Sets the delay between each polling.
-	 * It can be called only this controller is started
-	 * (by use of {@link #start}).
-	 *
-	 * <p>Note: whether to support this method is up to the implementation.
-	 * Currently, only on the client-polling-based controller (the default)
-	 * supports this method.
-	 * If not supported, just return (don't throw exception).
-	 *
-	 * @param min the minimal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param max the maximal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param factor the delay factor. The real delay is the processing
-	 * time multiplies the delay factor. For example, if the last request
-	 * took 1 second to process, then the client polling will be delayed
-	 * for 1 x factor seconds, unless it is value 
-	 * Ignore (aka., the default value is used) if non-positive.
+	/** @deprecated As of release 5.0.0, use the preferences instead.
+	 * Refer to {@link org.zkoss.zk.ui.impl.PollingServerPush}
 	 */
 	public void setDelay(int min, int max, int factor);
 
