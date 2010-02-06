@@ -26,7 +26,7 @@ zk.copy(zjq.prototype, {
 	},
 	enableSelection: function () {
 		return this.jq.each(_ensel);
-	},
+	}
 });
 
 zjq._sfKeys = {
