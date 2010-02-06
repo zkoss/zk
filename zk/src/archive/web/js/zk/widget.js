@@ -2362,12 +2362,6 @@ function () {
 			for (var j = 0, len = after.length; j < len;)
 				after[j++]();
 		}
-
-		for (var nm in this.effects_) {
-			var ef = this.effects_[nm];
-			if (ef) ef.destroy();
-		}
-		this.effects_ = {}
 		return this;
 	},
 
@@ -2462,6 +2456,12 @@ unbind_: function (skipper, after) {
 					self.fire('onUnbind');
 			});
 		}
+
+		for (var nm in this.effects_) {
+			var ef = this.effects_[nm];
+			if (ef) ef.destroy();
+		}
+		this.effects_ = {};
 	},
 	/** Associates UUID with this widget.
 	 * <p>Notice that {@link #uuid} is automically associated (aka., bound) to this widget.

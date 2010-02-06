@@ -27,6 +27,7 @@ February, 2010
   2945761: ZK popup should be closed when click outside zk page(zhtml)
   2946333: The position of the spliter in borderlayout can't be changed
   2946917: Text are sent even not changed server-side validate required
+  2946498: WVE on listbox don't dissapear when parent window is closed
   
 * Upgrade Notes
 
