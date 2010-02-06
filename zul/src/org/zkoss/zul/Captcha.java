@@ -40,6 +40,8 @@ import java.util.ArrayList;
 
 /**
  * The generic captcha component. 
+ * <p>Captcha requires an implementation of an engine ({@link CaptchaEngine}).
+ * The default engine is based on JHLabs and available in ZK PE and ZK EE.
  * @author henrichen
  */
 public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Captcha {

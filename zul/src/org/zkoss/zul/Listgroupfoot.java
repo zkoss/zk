@@ -19,7 +19,8 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 
 /**
- * GroupFooter serves as a summary listitem of listgroup.
+ * Listgroupfoot serves as a summary listitem of listgroup.
+ * <p>Available in ZK PE and EE.
  * 
  * <p>Default {@link #getZclass}: z-listgroupfoot (since 5.0.0).
  *

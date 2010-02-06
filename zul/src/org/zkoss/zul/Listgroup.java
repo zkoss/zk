@@ -26,6 +26,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * Adds the ability for single level grouping to the Listbox.
+ * <p>Available in ZK PE and EE.
  * 
  * <p>Event:
  * <ol>

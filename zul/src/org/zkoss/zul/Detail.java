@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * The detail component is used to display a detailed section where a master row and 
  * multiple detail rows are on the same row.
- * 
+ * <p>Available in ZK PE and ZK EE.
  * <p>Event:
  * <ol>
  * <li>onOpen is sent when this component is opened or closed by user.</li>

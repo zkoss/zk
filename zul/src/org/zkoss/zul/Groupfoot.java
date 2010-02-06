@@ -21,7 +21,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * GroupFoot serves as a summary row of group.
+ * Groupfoot serves as a summary row of group.
+ * <p>Available in ZK PE and EE.
  * 
  * <p>Default {@link #getZclass}: z-groupfoot (since 5.0.0)
  *

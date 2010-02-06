@@ -38,7 +38,12 @@ import java.util.TimeZone;
 
 /**
  * The generic chart component. Developers set proper chart type, data model,
- * and the threeD (3D) attribute to draw proper chart. The model and type must
+ * and the threeD (3D) attribute to draw proper chart.
+ *
+ * <p>Chart requires an implementation of an engine ({@link ChartEngine}).
+ * The default engine is based on JFreeChart and available in ZK PE and ZK EE.
+ *
+ * <p>The model and type must
  * match to each other; or the result is unpredictable. The 3D chart is not supported
  * on all chart type.
  *
