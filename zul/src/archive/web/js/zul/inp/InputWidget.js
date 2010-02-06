@@ -461,8 +461,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			else {
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
-				if (msg === false)
+				if (msg === false) {
+					this._lastRawValVld = value; //raw (don't validate again if no changed and no error)
 					return {value: val, server: true};
+				}
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};

@@ -258,14 +258,18 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength)));
 
 		final Object val = coerceFromString(value);
-		validate(val);
+		final boolean same = Objects.equals(_value, val);
+		boolean errFound = false;
+		if (!same || !_valided || _errmsg != null) { //note: the first time (!_valided) must always validate
+			validate(val); //Bug 2946917: don't validate if not changed
 
-		final boolean errFound = _errmsg != null;
-		clearErrorMessage(); //no error at all
+			errFound = _errmsg != null;
+			clearErrorMessage(); //no error at all
+		}
 
-		if (!Objects.equals(_value, val)) {
+		if (!same) {
 			_value = val;
-			
+
 			final String fmtval = coerceToString(_value);
 			if (_txtByClient == null
 			|| !Objects.equals(_txtByClient, fmtval)) {

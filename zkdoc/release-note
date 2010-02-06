@@ -2,12 +2,12 @@
 ZK 5.0.1
 February, 2010
 * Features
+  2943477: ZK integrae JQuery 1.4
   2053421: Jasperreport to work with Hibernate reports
   2941466: Jasperreport can work with SQL Connection
   2942015: Treerow shall allow context, tooltip and popup
   2927147: Replace bookmark command and bookmark encoding
   2943475: Way to customize progressbox position
-  2943477: ZK should integrae JQuery 1.4
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
@@ -26,6 +26,7 @@ February, 2010
   2945219: Function Key Handling in ZK 5 is not working
   2945761: ZK popup should be closed when click outside zk page(zhtml)
   2946333: The position of the spliter in borderlayout can't be changed
+  2946917: Text are sent even not changed server-side validate required
   
 * Upgrade Notes
 
