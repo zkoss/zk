@@ -12,10 +12,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	function _isPE() {
+		return zk.feature.pe && zk.isLoaded('zkex.grid');
+	}
+
 /**
  * Defines the rows of a grid.
  * Each child of a rows element should be a {@link Row} element.
  * <p>Default {@link #getZclass}: z-rows.
+ * @import zkex.grid.Group
  */
 zul.grid.Rows = zk.$extends(zul.Widget, {
 	_visibleItemCount: 0,
@@ -100,15 +107,16 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.grid.Group))
+		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
 		this._syncStripe();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child.$instanceof(zul.grid.Group))
+		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
 	}
 });
+})();

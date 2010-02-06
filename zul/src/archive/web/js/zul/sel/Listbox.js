@@ -15,7 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 
 	var _inInsertBefore;
-
+	function _isPE() {
+		return zk.feature.pe && zk.isLoaded('zkex.sel');
+	}
 /**
  * A listbox.
  * 
@@ -31,6 +33,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>
  * To have a list box without stripping, you can specify a non-existent style
  * class to {@link #setOddRowSclass}.
+ * @import zkex.sel.Listgroup
  */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_nrows: 0,
@@ -193,7 +196,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_fixOnAdd: function (child, ignoreDom, stripe) {
 		var noRerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
-			if (child.$instanceof(zul.sel.Listgroup))
+			if (_isPE() && child.$instanceof(zkex.sel.Listgroup))
 				this._groupsInfo.push(child);
 			if (!this.firstItem || !this.previousItem(child))
 				this.firstItem = child;
@@ -249,7 +252,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					;
 				this.lastItem = p;
 			}
-			if (child.$instanceof(zul.sel.Listgroup))
+			if (_isPE() && child.$instanceof(zkex.sel.Listgroup))
 				this._groupsInfo.$remove(child);
 			--this._nrows;
 			

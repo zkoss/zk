@@ -12,6 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	function _isPE() {
+		return zk.feature.pe && zk.isLoaded('zkex.sel');
+	}	
 /**
  * A list cell.
  * 
@@ -39,7 +44,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	setLabel: function () {
 		this.$supers('setLabel', arguments);
-		if (this.desktop && this.parent.$instanceof(zul.sel.Listgroup))
+		if (_isPE() && this.desktop && this.parent.$instanceof(zkex.sel.Listgroup))
 			this.parent.rerender();
 	},
 	/** Returns the list box that it belongs to.
@@ -97,8 +102,8 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
-		if ((!no || !no.zclass) && (this.parent.$instanceof(zul.sel.Listgroup)
-			|| this.parent.$instanceof(zul.sel.Listgroupfoot))) {
+		if (_isPE() && (!no || !no.zclass) && (this.parent.$instanceof(zkex.sel.Listgroup)
+			|| this.parent.$instanceof(zkex.sel.Listgroupfoot))) {
 			var zcls = this.parent.getZclass();
 			scls += ' ' + zcls + '-inner';
 		}
@@ -109,7 +114,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			box = this.getListbox(),
 			zcls = this.parent.getZclass();
 		if (box != null && this.parent.firstChild == this) {
-			if (this.parent.$instanceof(zul.sel.Listgroup)) {
+			if (_isPE() && this.parent.$instanceof(zkex.sel.Listgroup)) {
 				s = '<span id="' + this.parent.uuid + '-img" class="' + zcls + '-img ' + zcls
 					+ '-img-' + (this.parent._open ? 'open' : 'close') + '"></span>';
 			}
@@ -170,3 +175,4 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		return style;
 	}
 });
+})();

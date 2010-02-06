@@ -12,6 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	function _isPE() {
+		return zk.feature.pe && zk.isLoaded('zkex.sel');
+	}
 /**
  * A list item.
  *
@@ -24,13 +29,13 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	getListbox: zul.sel.ItemWidget.prototype.getMeshWidget,
 	/**
 	 * Returns the listgroup that this item belongs to, or null.
-	 * @return Listgroup
+	 * @return zkex.sel.Listgroup
 	 */
 	getListgroup: function () {
 		// TODO: this performance is not good.
-		if (this.parent && this.parent.hasGroup())
+		if (_isPE() && this.parent && this.parent.hasGroup())
 			for (var w = this.previousSibling; w; w = w.previousSibling)
-				if (w.$instanceof(zul.sel.Listgroup)) return w;
+				if (w.$instanceof(zkex.sel.Listgroup)) return w;
 				
 		return null;
 	},
@@ -60,7 +65,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		return this._zclass == null ? "z-listitem" : this._zclass;
 	},
 	domStyle_: function (no) {
-		if ((this.$instanceof(zul.sel.Listgroup) || this.$instanceof(zul.sel.Listgroupfoot))
+		if (_isPE() && (this.$instanceof(zkex.sel.Listgroup) || this.$instanceof(zkex.sel.Listgroupfoot))
 				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
 			
@@ -69,3 +74,4 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		return group && !group.isOpen() ? style + "display:none;" : style;
 	}
 });
+})();

@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _isPE() {
+		return zk.feature.pe && zk.isLoaded('zkex.grid');
+	}
 /**
  * A single row in a {@link Rows} element.
  * Each child of the {@link Row} element is placed in each successive cell
@@ -100,13 +104,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return this._zclass != null ? this._zclass : "z-row";
 	},
 	/** Returns the group that this row belongs to, or null.
-	 * @return zul.grid.Group
+	 * @return zkex.grid.Group
 	 */
 	getGroup: function () {
 		// TODO: this performance is not good.
-		if (this.parent && this.parent.hasGroup())
+		if (_isPE() && this.parent && this.parent.hasGroup())
 			for (var w = this.previousSibling; w; w = w.previousSibling)
-				if (w.$instanceof(zul.grid.Group)) return w;
+				if (w.$instanceof(zkex.grid.Group)) return w;
 				
 		return null;
 	},	
@@ -224,7 +228,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	//-- super --//
 	domStyle_: function (no) {
-		if ((this.$instanceof(zul.grid.Group) || this.$instanceof(zul.grid.Groupfoot))
+		if ((_isPE() && (this.$instanceof(zkex.grid.Group) || this.$instanceof(zkex.grid.Groupfoot)))
 				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
 			
@@ -270,3 +274,4 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return attr;
 	}
 });
+})();

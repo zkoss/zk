@@ -69,7 +69,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		}
 		
 		var mesh = this.getMeshWidget();
-		if (!mesh || mesh.isModel()) return false;
+		if (!mesh || mesh.isModel() || !zk.feature.pe || !zk.isLoaded('zkex.grid')) return false;
 			// if in model, the sort should be done by server
 			
 		var	body = this.getMeshBody();
@@ -114,19 +114,19 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 					//new group
 					var group, cell = row.wgt.parent.getChildAt(index);
 					if (cell && cell.$instanceof(zul.wgt.Label)) {
-						group = new zul.grid.Group();
+						group = new zkex.grid.Group();
 						group.appendChild(new zul.wgt.Label({
 							value: cell.getValue()
 						}));
 					} else {
 						var cc = cell.firstChild;
 						if (cc && cc.$instanceof(zul.wgt.Label)) {
-							group = new zul.grid.Group();
+							group = new zkex.grid.Group();
 							group.appendChild(new zul.wgt.Label({
 								value: cc.getValue()
 							}));
 						} else {
-							group = new zul.grid.Group();
+							group = new zkex.grid.Group();
 							group.appendChild(new zul.wgt.Label({
 								value: msgzul.GRID_OTHER
 							}));
