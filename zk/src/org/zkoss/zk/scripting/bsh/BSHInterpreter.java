@@ -313,6 +313,9 @@ implements SerializableAware, HierachicalAware {
 	/** Prepares the namespace for detached components. */
 	private static NameSpace prepareDetachedNS(Scope scope) {
 		scope = getIdSpace(scope);
+		if (scope == null)
+			return null;
+
 		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW);
 		if (nsw != null)
 			return nsw.unwrap(scope);
