@@ -73,6 +73,7 @@ import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -870,8 +871,13 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					final Component parent = (Component)zsInfo[0];
 					if ((parent == null || parent.getPage() == this)
 					&& isEffective(zscript, parent)) {
-						ip.interpret(zscript.getContent(this, parent),
-							parent != null ? (Scope)parent: this);
+						final Scope scope =
+							Scopes.beforeInterpret(parent != null ? (Scope)parent: this);
+						try {
+							ip.interpret(zscript.getContent(this, parent), scope);
+						} finally {
+							Scopes.afterInterpret();
+						}
 					}
 				}
 			}

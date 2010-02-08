@@ -28,6 +28,7 @@ February, 2010
   2946333: The position of the spliter in borderlayout can't be changed
   2946917: Text are sent even not changed server-side validate required
   2946498: WVE on listbox don't dissapear when parent window is closed
+  2947638: deferred zscript not evaluated against the right component
   
 * Upgrade Notes
 
