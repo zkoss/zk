@@ -88,6 +88,7 @@ import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.scripting.NamespaceActivationListener;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
@@ -857,8 +858,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					final Component parent = (Component)zsInfo[0];
 					if ((parent == null || parent.getPage() == this)
 					&& isEffective(zscript, parent)) {
-						ip.interpret(zscript.getContent(this, parent),
-							parent != null ? parent.getNamespace(): _ns);
+						final Namespace ns = parent != null ? 
+							Namespaces.beforeInterpret(parent):
+							Namespaces.beforeInterpret(this);
+						try {
+							ip.interpret(zscript.getContent(this, parent), ns);
+						} finally {
+							Namespaces.afterInterpret();
+						}
 					}
 				}
 			}
