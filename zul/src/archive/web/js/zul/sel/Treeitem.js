@@ -224,7 +224,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this.treerow = null;
 		else if (child == this.treechildren) {
 			this.treechildren = null;
-			if (!_noSync) this.rerender(); // remove the icon
+			if (!_noSync) this._syncIcon(); // remove the icon
 		}
 	},
 	doClick_: function(evt) {
