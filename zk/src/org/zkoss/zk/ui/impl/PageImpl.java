@@ -808,13 +808,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (script != null)
 				ip.interpret(script, _ns);
 
-			//evaluate deferred zscripts, if any
-			try {
-				evalDeferredZScripts(ip, zslang);
-			} catch (IOException ex) {
-				throw new UiException(ex);
-			}
 		}
+
+		//evaluate deferred zscripts, if any
+		evalDeferredZScripts(ip, zslang);
 		return ip;
 	}
 
@@ -842,8 +839,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** Evaluates the deferred zscript.
 	 * It is called when the interpreter is loaded
 	 */
-	private void evalDeferredZScripts(Interpreter ip, String zslang)
-	throws IOException {
+	private void evalDeferredZScripts(Interpreter ip, String zslang) {
 		if (_zsDeferred != null) {
 			for (Iterator it = _zsDeferred.iterator(); it.hasNext();) {
 				final Object[] zsInfo = (Object[])it.next();

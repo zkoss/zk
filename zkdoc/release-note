@@ -37,6 +37,7 @@ ZK 3.6.4
   2940739: Today value of the Datebox is incorrect when locale is TH
   2942242: DHtmlLayoutPortlet getTitle() hard coded
   2947638: deferred zscript not evaluated against the right component
+  2947627: zscript deferred attribute was broken
   
 * Upgrade Notes:
 
