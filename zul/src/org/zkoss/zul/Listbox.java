@@ -3120,9 +3120,10 @@ public class Listbox extends XulElement implements Paginated,
 
 		if (_rows > 0)
 			renderer.render("rows", getRows());
+		
+		render(renderer, "name", _name);
 
 		if (inSelectMold()) {
-			render(renderer, "name", _name);
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
 			if (_tabindex >= 0)
