@@ -72,7 +72,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 		final ListModel model = _grid.getModel();
 		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 0;
 	}
-	
+
+	private static int INVALIDATE_THRESHOLD = 10;	
 	public void doListDataChange(ListDataEvent event) {
 		//when this is called _model is never null
 		final Rows rows = _grid.getRows();
@@ -87,7 +88,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Adding causes a smaller list?");
 			}
-			if (cnt > 50 && !inPagingMold())
+			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold())
 				_grid.invalidate(); //performance is better
 			if (min < 0)
 				if (max < 0) min = 0;
@@ -252,7 +253,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > 50 && !inPaging)
+				if (newcnt > INVALIDATE_THRESHOLD && !inPaging)
 					_grid.invalidate(); //performance is better
 
 				Component comp = (Component)rows.getChildren().get(max);
@@ -281,7 +282,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 					row = next;
 				}
 
-				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPaging)
+				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPaging)
 					_grid.invalidate(); //performance is better
 			}
 		} else {

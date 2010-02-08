@@ -73,7 +73,8 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		final ListModel model = _listbox.getModel();
 		return model != null ? model.getSize() : _listbox.getVisibleItemCount();
 	}
-	
+
+	private static int INVALIDATE_THRESHOLD = 10;
 	public void doListDataChange(ListDataEvent event) {
 		//when this is called _model is never null
 		final ListModel _model = _listbox.getModel();
@@ -85,7 +86,7 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 			cnt = newsz - oldsz;
 			if (cnt <= 0)
 				throw new UiException("Adding causes a smaller list?");
-			if (cnt > 50 && !inPagingMold())
+			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold())
 				_listbox.invalidate(); //performance is better
 			if (min < 0)
 				if (max < 0) min = 0;
@@ -241,7 +242,7 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > 50 && !inPaging)
+				if (newcnt > INVALIDATE_THRESHOLD && !inPaging)
 					_listbox.invalidate(); //performance is better
 
 				Component comp = _listbox.getItemAtIndex(max);
@@ -270,7 +271,7 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 					item = next;//B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
-				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
+				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 					_listbox.invalidate(); //performance is better
 			}
 		} else {
