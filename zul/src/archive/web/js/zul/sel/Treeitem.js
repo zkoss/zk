@@ -254,5 +254,15 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			jq(this.getCaveNode()).after(child.redrawHTML_());
 				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
+	},
+	_syncIcon: function () {
+		if (this.desktop && this.treerow) {
+			var i = this.treerow;
+			if (i = i.firstChild)
+				i._syncIcon();
+			if (i = this.treechildren)
+				for (i = i.firstChild; i; i = i.nextSibling)
+					i._syncIcon();
+		}
 	}
 });

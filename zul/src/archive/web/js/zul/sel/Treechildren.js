@@ -58,10 +58,11 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	_fixOnAdd: function (oldsib, child, ignoreDom) {
 		if (!ignoreDom) {
-			if (oldsib && (oldsib = oldsib.treerow)) oldsib.rerender();
+			if (oldsib) oldsib._syncIcon();
 			var p;
 			if ((p=child.parent) && p.lastChild == child
-			&& (p=child.previousSibling) && (p=p.treerow)) p.rerender();
+        			&& (p=child.previousSibling))
+				p._syncIcon();
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
