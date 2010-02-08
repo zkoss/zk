@@ -1243,6 +1243,11 @@ public class DataBinder implements java.io.Serializable {
 			if (page != null) { //Bug #2823591, try to "load" into a detached(no page) component and NPE
 				//bug #2932475, NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
 				bean = Components.getImplicit(comp, beanid);
+				//bug #2945974
+				//dirty patch
+				if ("param".equals(beanid) && bean != null) {
+					bean = new HashMap((Map) bean); 
+				}
 				if (bean == null) {
 					bean = page.getZScriptVariable(comp, beanid);
 					if (bean == null) {
