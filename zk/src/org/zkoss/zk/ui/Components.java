@@ -672,13 +672,19 @@ public class Components {
 			return REQUEST_SCOPE_PROXY;
 		if ("execution".equals(fdname))
 			return EXECUTION_PROXY;
-		if ("arg".equals(fdname))
-			return Executions.getCurrent().getArg();
-			//return ARG_PROXY;
+		if ("arg".equals(fdname)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ? exec.getArg() : null;
 			//bug 2937096: Lifecycle of composer.arg 
 			//arg is a Map prepared by application developer, so can be wired statically 
-		if ("param".equals(fdname))
-			return PARAM_PROXY;
+		}
+		if ("param".equals(fdname)) {
+			final Execution exec = Executions.getCurrent(); 
+			return exec != null ? exec.getParameterMap() : null;
+			//bug 2945974: composer.param shall be statically wired
+			//Note that request parameter is prepared by servlet container, you shall not
+			//copy the reference to this map; rather, you shall clone the key-value pair one-by-one.
+		}
 		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
@@ -748,13 +754,19 @@ public class Components {
 			return REQUEST_SCOPE_PROXY;
 		if ("execution".equals(fdname))
 			return EXECUTION_PROXY;
-		if ("arg".equals(fdname))
-			return Executions.getCurrent().getArg();
-			//return ARG_PROXY;
+		if ("arg".equals(fdname)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ? exec.getArg() : null;
 			//bug 2937096: composer.arg shall be statically wired
 			//arg is a Map prepared by application developer, so can be wired statically 
-		if ("param".equals(fdname))
-			return PARAM_PROXY;
+		}
+		if ("param".equals(fdname)) {
+			final Execution exec = Executions.getCurrent(); 
+			return exec != null ? exec.getParameterMap() : null;
+			//bug 2945974: composer.param shall be statically wired
+			//Note that request parameter is prepared by servlet container, you shall not
+			//copy the reference to this map; rather, you shall clone the key-value pair one-by-one.
+		}
 		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
@@ -865,7 +877,12 @@ public class Components {
 				if ("event".equals(fdname)) { 
 					continue;
 				}
-				final Object arg = myGetImplicit(x, fdname);
+				Object arg = myGetImplicit(x, fdname);
+				//bug #2945974
+				//dirty patch
+				if ("param".equals(fdname) && arg != null) {
+					arg = new HashMap((Map) arg); 
+				}
 				injectByName(arg, fdname);
 			}
 		}
@@ -1053,9 +1070,6 @@ public class Components {
 	/** Request Scope Proxy */
 	public static final RequestScope REQUEST_SCOPE_PROXY = new RequestScope();
 	
-	/** Param Proxy */
-	public static final Param PARAM_PROXY = new Param();
-
 	//Proxy to read current execution
 	private static class Exec implements Execution {
 		private static final Execution exec() {
@@ -1437,12 +1451,6 @@ public class Components {
 		}
 		public Collection values() {
 			return req().values();
-		}
-	}
-	
-	private static class Param extends RequestScope {
-		protected Map req() {
-			return Executions.getCurrent().getParameterMap();
 		}
 	}
 }
