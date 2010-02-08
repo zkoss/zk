@@ -311,7 +311,7 @@ zWatch = (function () {
 					down ? _visiChildSubset(name, wts, org): _visiSubset(name, wts),
 					args, org);
 			args.push(gun);
-			for (var j = 3, l = vararg.length; j < l;)
+			for (var j = 2, l = vararg.length; j < l;) //skip name and origin
 				args.push(vararg[j++]);
 
 			if (opts && opts.timeout >= 0)
@@ -401,8 +401,16 @@ zWatch({
 		delete _watches[name];
 	},
 	/** Fires an watch that invokes all listeners of the watch.
-	 * <p>For example, zWatch.fire('onX', null, null, 'a', 123) will cause ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX.
-	 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listener can use for further control. For example, the invocation sequence is, by default, evaluated in the order of fist-listen-first-call, and you can use the controller to force the listeners of a certain target to be called first as follows.
+	 * <p>For example, zWatch.fire('onX', null, 'a', 123) will cause
+	 * ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX.
+	 * <p>Notice that the first argument (ctl in the above example) is a special
+	 * controller.
+	 * The first two argument of {@link #fire} become part of the control
+	 * (as the name and origin fields).
+	 * In additions, the control can be used to control the invocation sequence.
+	 * For example, the invocation sequence is, by default, evaluated in the
+	 * order of fist-listen-first-call, and you can use the controller to force
+	 * the listeners of a certain target to be called first as follows.
 <pre><code>
 onX: function (ctl) {
    ctl.fire(specialTarget); //enforce the listeners of specialTarget to execute first

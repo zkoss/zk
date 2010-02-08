@@ -597,9 +597,23 @@ zAu = {
 			return true;
 		}
 
+		var implicit = true, uri;
+		for (var j = 0, el = es.length; j < el; ++j) {
+			var aureq = es[j],
+				opts = aureq.opts = aureq.opts||{};
+			if (opts.uri != uri) {
+				if (j) break;
+				uri = opts.uri;
+			}
+			if (implicit && !opts.ignorable && !opts.implicit) {//ignorable implies implicit
+				implicit = false;
+				break;
+			}
+		}
+
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
-			zWatch.fire('onSend', implicit);
+			zWatch.fire('onSend', null, implicit);
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -607,7 +621,7 @@ zAu = {
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
 
 		//decide implicit and ignorable
-		var implicit = true, ignorable = true, ctli, ctlc, uri, alive;
+		var ignorable = true, ctli, ctlc, alive;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
 				evtnm = aureq.name,
