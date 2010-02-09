@@ -369,7 +369,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 				if (hgh < 25) hgh = 25;
 
-				var rowhgh = zk(firstVisiRow).offsetHeight();
+				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight(): null;
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
 				nRows = Math.round((hgh - diff)/ rowhgh);
