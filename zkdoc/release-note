@@ -33,6 +33,7 @@ February, 2010
   2945998: Has BeanShell attribute, NPE  when change to detached parent
   2947657: Listbox with HTML form doesn't work
   2937096: composer.param shall be clone and static wired
+  2947988: _selItems is not defined when removing last item in a tree
   
 * Upgrade Notes
 

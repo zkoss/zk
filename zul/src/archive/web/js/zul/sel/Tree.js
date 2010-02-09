@@ -76,8 +76,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this.treefoot = null;
 		else if (child == this.treechildren) {
 			this.treechildren = null;
-			_selItems.clear();
-			_sel = null;
+			this._selItems = [];
+			this._sel = null;
 		} else if (child == this.paging)
 			this.paging = null;
 
@@ -146,8 +146,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		this._selItems = [];
 		for (var j = 0, items = this.getItems(), k = items.length; j < k; ++j) {
 			if (items[j].isSelected()) {
-				if (_sel == null) {
-					_sel = items[j];
+				if (this._sel == null) {
+					this._sel = items[j];
 				} else if (!_multiple) {
 					items[j]._selected = false;
 					continue;
