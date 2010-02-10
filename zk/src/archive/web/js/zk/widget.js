@@ -121,12 +121,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_unbindrod(child, true);
 		}
 	}
-	function _isrod(wgt) { //in client rod
-		var p;
-		return wgt.z_rod || ((p=wgt.parent) && (p.z_rod || p.z_childrod));
-			//z_rod: widget is in client rod
-			//z_childrod: widget is not, but all descendants are (e.g. combobox)
-	}
 
 	function _fixBindLevel(wgt, v) {
 		wgt.bindLevel = v++;
@@ -1222,7 +1216,7 @@ new zul.wnd.Window{
 		_addIdSpaceDown(child);
 
 		if (!ignoreDom)
-			if (_isrod(child))
+			if (child.z_rod)
 				_bindrod(child);
 			else {
 				var dt = this.desktop;
@@ -1296,7 +1290,7 @@ new zul.wnd.Window{
 		_addIdSpaceDown(child);
 
 		if (!ignoreDom)
-			if (_isrod(child))
+			if (child.z_rod)
 				_bindrod(child);
 			else {
 				var dt = this.desktop;
@@ -1341,7 +1335,7 @@ new zul.wnd.Window{
 
 		_rmIdSpaceDown(child);
 
-		if (_isrod(child))
+		if (child.z_rod)
 			_unbindrod(child);
 		else if (child.desktop)
 			this.removeChildHTML_(child, p, ignoreDom);
@@ -1398,7 +1392,7 @@ new zul.wnd.Window{
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
-		if (_isrod(this)) {
+		if (this.z_rod) {
 			_unbindrod(this);
 			_bindrod(newwgt);
 		} else if (this.desktop) {
@@ -2100,7 +2094,7 @@ function () {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			else if (_isrod(this)) _unbindrod(this); //possible (if replace directly)
+			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this.redrawHTML_(skipper, true));
 			this.bind(desktop, skipper);
 		}
@@ -2181,7 +2175,7 @@ function () {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		else if (_isrod(child)) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		else if (child.z_rod) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		jq(n).replaceWith(child.redrawHTML_(skipper, true));
 		child.bind(desktop, skipper);
 	},
