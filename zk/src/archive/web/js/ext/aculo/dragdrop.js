@@ -538,13 +538,15 @@ if (this.z_scrl) {
     var style = this.element.style;
 //Tom M. Yeh, Potix: support function constraint
 if (typeof this.options.draw == 'function') {
-	this.options.draw(this, p, event);
+	this.options.draw(this, this.snap_(p), event);
 } else if (typeof this.options.constraint == 'function') {
 	var np = this.options.constraint(this, p, event); //return null or [newx, newy]
 	if (np) p = np;
+	p = this.snap_(p);
 	style.left = p[0] + "px";
 	style.top  = p[1] + "px";
 } else {
+	p = this.snap_(p);
     if((!this.options.constraint) || (this.options.constraint=='horizontal'))
       style.left = p[0] + "px";
     if((!this.options.constraint) || (this.options.constraint=='vertical'))
@@ -626,6 +628,12 @@ if (typeof this.options.draw == 'function') {
       }
     }
     return { top: T, left: L, width: W, height: H };
+  },
+  
+  snap_: function (pos) {
+	 if (pos[1] < 0)
+		 pos[1] = 0;
+	 return pos;
   }
 }
 
