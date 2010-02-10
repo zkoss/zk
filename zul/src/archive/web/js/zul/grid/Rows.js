@@ -63,10 +63,10 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-rows" : this._zclass;
 	},
-	bind_: function () {
+	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onResponse: this});
-		zk.afterMount(this.proxy(this.onResponse));
+		after.push(this.proxy(this.onResponse));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
