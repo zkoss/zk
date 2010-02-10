@@ -105,17 +105,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _bindrod(wgt) {
 		_bind0(wgt);
-		wgt.z_rod = true;
+		if (!wgt.z_rod)
+			wgt.z_rod = 9; //Bug 2948829: don't use true which is used by real ROD, such as combo-rod.js
 
 		for (var child = wgt.firstChild; child; child = child.nextSibling)
 			_bindrod(child);
 	}
-	function _unbindrod(wgt) {
+	function _unbindrod(wgt, nest) {
 		_unbind0(wgt);
-		delete wgt.z_rod;
 
-		for (var child = wgt.firstChild; child; child = child.nextSibling)
-			_unbindrod(child);
+		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
+			delete wgt.z_rod;
+
+			for (var child = wgt.firstChild; child; child = child.nextSibling)
+				_unbindrod(child, true);
+		}
 	}
 	function _isrod(wgt) { //in client rod
 		var p;
