@@ -92,6 +92,7 @@ zkPg = {
 		if (inp.disabled || inp.readOnly)
 			return;
 
+		if ($int(inp.value) == (cmp.actpg + 1)) return;
 		zkPg.checkValue(inp);
 		zkPg.go(cmp, inp.value-1);
 		Event.stop(evt);
