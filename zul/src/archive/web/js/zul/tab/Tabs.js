@@ -78,7 +78,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._inited = false;
 		
 		var self = this;
-		zk.afterMount(
+		after.push(
 			function () {
 				self._inited = true;
 			}

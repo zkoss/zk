@@ -186,18 +186,17 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			this._selTab = tab;
 		}
 	},
-	bind_: function () {
+	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 		
 		// used in Tabs.js
 		this._scrolling = false;
 		var tab = this._selTab;
 		
-		if (tab) {
-			zk.afterMount(function() {
+		if (tab)
+			after.push(function() {
 				tab.setSelected(true);
 			});
-		}
 	},
 	//super//
 	removeChildHTML_: function (child, prevsib) {
