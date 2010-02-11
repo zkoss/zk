@@ -2241,7 +2241,10 @@ function () {
 		}
 	},
 	/** Removes the corresponding DOM content of the specified child. It is called by #removeChild to remove the DOM content.
-	 * <p>Overrides this method if you have to remove DOM elements other than child's node (and the descendants).
+	 * <p>The default implementation of this method will invoke {@link #removeHTML_}
+	 * if the ignoreDom argument is false or not specified.
+	 * <p>Overrides this method or {@link #removeHTML_} if you have to
+	 * remove DOM elements other than child's node (and the descendants).
 	 * @param zk.Widget child the child widget to remove
 	 * @param zk.Widget prevsib the previous sibling, if any
 	 * @param boolean ignoreDom whether to remove the DOM element
@@ -2266,9 +2269,14 @@ function () {
 	},
 	/**
 	 * Removes the HTML DOM content.
-	 * <p>Overrides this method if you have to remove the descendants DOM elements.
+	 * <p>The default implementation simply removes the DOM element passed in.
+	 * <p>Overrides this method if you have to remove the related DOM elements.
 	 * @since 5.0.1
-	 * @param DOMElement n
+	 * @param Array n an array of {@link DOMElement} to remove.
+	 * If this widget is associated with a DOM element ({@link #$n} returns non-null),
+	 * n is a single element array.
+	 * If this widget is not assoicated with any DOM element, an array of
+	 * child widget's DOM elements are returned.
 	 */
 	removeHTML_: function (n) {
 		jq(n).remove();
