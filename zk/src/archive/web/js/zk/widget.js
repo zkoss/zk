@@ -2262,7 +2262,16 @@ function () {
 		child.unbind();
 
 		if (!ignoreDom)
-			jq(n).remove();
+			child.removeHTML_(n);
+	},
+	/**
+	 * Removes the HTML DOM content.
+	 * <p>Overrides this method if you have to remove the descendants DOM elements.
+	 * @since 5.0.1
+	 * @param DOMElement n
+	 */
+	removeHTML_: function (n) {
+		jq(n).remove();
 	},
 	/**
 	 * Returns the DOM element that this widget is bound to.

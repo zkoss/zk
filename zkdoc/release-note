@@ -36,6 +36,7 @@ February, 2010
   2947988: _selItems is not defined when removing last item in a tree
   2948193: The center calls invalidate() has js error
   2948829: Tree can't open in ROD mode
+  2949346: Removing multiple rows from a tree does not work
   
 * Upgrade Notes
 

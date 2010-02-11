@@ -151,13 +151,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			if (tree) tree._onTreechildrenAdded(this);
 		}
 	},
-	removeChild: function (child) {
-		for (var w = child.firstChild; w;) {
-			var n = w.nextSibling; //remember, since remove will null the link
-			child.removeChild(w); //deep first
-			w = n;
+	removeHTML_: function (n) {
+		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
+			cn = w.$n();
+			if (cn)
+				w.removeHTML_(cn);
 		}
-		this.$supers('removeChild', arguments);
+		this.$supers('removeHTML_', arguments);
 	},
 	$n: function (nm) {
 		if (this.firstChild)
