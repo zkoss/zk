@@ -829,7 +829,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/** Note: we have to update all selection at once, since addItemToSelection
 	 * and removeItemFromSelection might be called interchangeably.
 	 */
-	private void smartUpdateSelection() {
+	/**package*/ void smartUpdateSelection() {
 		final StringBuffer sb = new StringBuffer(80);
 		for (Iterator it = _selItems.iterator(); it.hasNext();) {
 			final Treeitem item = (Treeitem)it.next();

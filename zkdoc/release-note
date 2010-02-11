@@ -40,6 +40,7 @@ ZK 3.6.4
   2947627: zscript deferred attribute was broken
   2937096: composer.param shall be clone and static wired
   2948875: The onPaging event will fire again after type new value
+  2948342: last selected item in a tree 
   
 * Upgrade Notes:
 

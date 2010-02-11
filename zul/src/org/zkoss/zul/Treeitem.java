@@ -505,6 +505,15 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		if (child instanceof Treerow) {
 			if (super.insertBefore(child, refChild)) {
 				_treerow = (Treerow)child;
+				if (!isSelected())
+					return true;
+				
+				Tree tree = getTree();
+				if (tree.isMultiple()) {
+					tree.smartUpdateSelection();
+				} else {
+					tree.smartUpdate("select", _treerow.getUuid());
+				}
 				return true;
 			}
 		} else if (child instanceof Treechildren) {
