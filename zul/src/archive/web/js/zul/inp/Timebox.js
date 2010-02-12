@@ -210,7 +210,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 	},
 	coerceToString_: function (date) {
-		if (!this._fmthdler) return '';
+		if (!this._fmthdler || (!this._changed && !date && arguments.length)) return '';
 		var out = [];
 		for (var i = 0, j = this._fmthdler.length; i < j; i++)
 			out.push(this._fmthdler[i].format(date));
