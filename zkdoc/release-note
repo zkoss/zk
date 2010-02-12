@@ -38,6 +38,7 @@ February, 2010
   2948829: Tree can't open in ROD mode
   2949346: Removing multiple rows from a tree does not work
   2949559: Combobox/Datebox Button does not move when scrolling in IE6
+  2950309: Set readonly datebox to disabled  that still open calendar
   
 * Upgrade Notes
 
