@@ -278,7 +278,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		this.syncWidth();
-		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
@@ -374,8 +373,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		jq(btn).addClass(this.getZclass() + "-btn-clk");
 		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
-		if (!this.inRoundedMold())
-			btn = zk.opera || zk.safari ? btn : btn.firstChild;
 
 		if (!this._fmthdler)
 			this._parseFormat(this._format);

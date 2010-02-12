@@ -16,14 +16,21 @@ function (out) {
 	var zcls = this.getZclass(),
 		uuid = this.uuid;
 	
-	out.push('<span', this.domAttrs_({text:true}), '>',
+	out.push('<i', this.domAttrs_({text:true}), '>',
 			'<input id="', uuid,'-real"', 'class="', zcls,'-inp"',
-			this.textAttrs_(),'/>', '<span id="', uuid,'-btn"',
-			'class="', zcls,'-btn" ');
+			this.textAttrs_(),'/>', '<i id="', uuid,'-btn"',
+			'class="', zcls,'-btn ');
 	
-	if(!this.isButtonVisible())
-		out.push('" style="display:none"');
+	if (this.inRoundedMold()) {
+		if (!this._buttonVisible)
+			out.push(' ', zcls, '-btn-right-edge');
+		if (this._readonly)
+			out.push(' ', zcls, '-btn-readonly');	
+		if (zk.ie6_ && !this._buttonVisible && this._readonly)
+			out.push(' ', zcls, '-btn-right-edge-readonly');
+	} else if (!this._buttonVisible)
+		out.push('" style="display:none"');	
 	
-	out.push('><span class="', zcls, '-img"></span></span></span>');
+	out.push('"></i></i>');
 	
 }

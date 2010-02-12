@@ -31,8 +31,13 @@
 	padding-bottom: 2px;
 	-moz-border-radius: 2px 0 0 2px;
 	-webkit-border-radius: 2px 0 0 2px;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
+	<c:if test="${c:isOpera()}">
+		font-style: normal;
+	</c:if>
 }
-/***************************************** inp default **************************************************************/
 .z-combobox-rounded-inp,
 .z-bandbox-rounded-inp,
 .z-datebox-rounded-inp,
@@ -40,9 +45,6 @@
 .z-spinner-rounded-inp {
 	border:0;	
 	padding: 5px 4px;
-	<c:if test="${c:isSafari()}">
-		margin:0;
-	</c:if>
 }
 .z-combobox-rounded-inp {
 	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
@@ -57,7 +59,6 @@
 .z-spinner-rounded-inp {
 	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
-/*******************************************************************************************************/
 .z-combobox-focus .z-combobox-inp,
 .z-bandbox-focus .z-bandbox-inp,
 .z-datebox-focus .z-datebox-inp,
@@ -102,11 +103,11 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded .z-datebox-rounded-btn,
 .z-timebox-rounded .z-timebox-rounded-btn,
 .z-spinner-rounded .z-spinner-rounded-btn,
-.z-combobox .z-combobox-img,
-.z-bandbox .z-bandbox-img,
-.z-datebox .z-datebox-img,
-.z-timebox .z-timebox-img,
-.z-spinner .z-spinner-img {
+.z-combobox .z-combobox-btn,
+.z-bandbox .z-bandbox-btn,
+.z-datebox .z-datebox-btn,
+.z-timebox .z-timebox-btn,
+.z-spinner .z-spinner-btn {
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
@@ -115,9 +116,10 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	display:-moz-inline-box; display:inline-block;
 	-moz-border-radius: 0 2px 2px 0;
 	-webkit-border-radius: 0 2px 2px 0;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
-/********************************************* btn default **********************************************************/
-
 .z-combobox-rounded .z-combobox-rounded-btn,
 .z-bandbox-rounded .z-bandbox-rounded-btn,
 .z-datebox-rounded .z-datebox-rounded-btn,
@@ -126,10 +128,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	border: 0;
 	width: 24px; 
 	height: 24px;
-	background-position: 0 -120px;
-	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
-		margin-top: 1px;
-	</c:if>
+	background-position: 0 -120px;	
 }
 .z-combobox-rounded .z-combobox-rounded-btn{	
 	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
@@ -153,15 +152,13 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	width: 5px;
 	cursor: default;
 }
-/*******************************************************************************************************/
-.z-combobox-btn-over .z-combobox-img,
-.z-bandbox-btn-over .z-bandbox-img,
-.z-datebox-btn-over .z-datebox-img,
-.z-timebox-btn-over .z-timebox-img,
-.z-spinner-btn-over .z-spinner-img {
+.z-combobox .z-combobox-btn-over,
+.z-bandbox .z-bandbox-btn-over,
+.z-datebox .z-datebox-btn-over,
+.z-timebox .z-timebox-btn-over,
+.z-spinner .z-spinner-btn-over {
 	background-position: -17px 0;
 }
-/************************************************ inp btn over *******************************************************/
 .z-combobox-rounded-inp-over,
 .z-bandbox-rounded-inp-over,
 .z-datebox-rounded-inp-over,
@@ -176,16 +173,14 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded .z-spinner-rounded-btn-over  {
 	background-position: 0 -144px;
 }
-/*******************************************************************************************************/
-.z-combobox-focus .z-combobox-img,
-.z-bandbox-focus .z-bandbox-img,
-.z-datebox-focus .z-datebox-img,
-.z-timebox-focus .z-timebox-img,
-.z-spinner-focus .z-spinner-img {
+.z-combobox-focus .z-combobox-btn,
+.z-bandbox-focus .z-bandbox-btn,
+.z-datebox-focus .z-datebox-btn,
+.z-timebox-focus .z-timebox-btn,
+.z-spinner-focus .z-spinner-btn {
 	background-position: -51px 0;
 	border-bottom: 1px solid #80B9E9;
 }
-/*********************************************** btn focus ********************************************************/
 .z-combobox-rounded-focus .z-combobox-rounded-btn,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn,
 .z-datebox-rounded-focus .z-datebox-rounded-btn,
@@ -200,15 +195,13 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded-focus .z-spinner-rounded-btn-right-edge {
 	background-position: -19px -120px;
 }
-/*******************************************************************************************************/
-.z-combobox-focus .z-combobox-btn-over .z-combobox-img,
-.z-bandbox-focus .z-bandbox-btn-over .z-bandbox-img,
-.z-datebox-focus .z-datebox-btn-over .z-datebox-img,
-.z-timebox-focus .z-timebox-btn-over .z-timebox-img,
-.z-spinner-focus .z-spinner-btn-over .z-spinner-img {
+.z-combobox-focus .z-combobox-btn-over,
+.z-bandbox-focus .z-bandbox-btn-over,
+.z-datebox-focus .z-datebox-btn-over,
+.z-timebox-focus .z-timebox-btn-over,
+.z-spinner-focus .z-spinner-btn-over {
 	background-position: -68px 0;
 }
-/*************************************************** btn over focus ****************************************************/
 .z-combobox-rounded-focus .z-combobox-rounded-btn-over,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn-over,
 .z-datebox-rounded-focus .z-datebox-rounded-btn-over,
@@ -216,15 +209,13 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded-focus .z-spinner-rounded-btn-over {
 	background-position: 0 -216px;
 }
-/*******************************************************************************************************/
-.z-combobox-focus .z-combobox-btn-clk .z-combobox-img, .z-combobox-btn-clk .z-combobox-img,
-.z-bandbox-focus .z-bandbox-btn-clk .z-bandbox-img, .z-bandbox-btn-clk .z-bandbox-img,
-.z-datebox-focus .z-datebox-btn-clk .z-datebox-img, .z-datebox-btn-clk .z-datebox-img,
-.z-timebox-focus .z-timebox-btn-clk .z-timebox-img, .z-timebox-btn-clk .z-timebox-img,
-.z-spinner-focus .z-spinner-btn-clk .z-spinner-img, .z-spinner-btn-clk .z-spinner-img {
+.z-combobox-focus .z-combobox-btn-clk, .z-combobox .z-combobox-btn-clk,
+.z-bandbox-focus .z-bandbox-btn-clk, .z-bandbox .z-bandbox-btn-clk,
+.z-datebox-focus .z-datebox-btn-clk, .z-datebox .z-datebox-btn-clk,
+.z-timebox-focus .z-timebox-btn-clk, .z-timebox .z-timebox-btn-clk,
+.z-spinner-focus .z-spinner-btn-clk, .z-spinner .z-spinner-btn-clk {
 	background-position: -34px 0;
 }
-/************************************************ inp btn click *******************************************************/
 .z-combobox-rounded-focus .z-combobox-rounded-inp-clk, .z-combobox-rounded .z-combobox-inp-clk,
 .z-bandbox-rounded-focus .z-bandbox-rounded-inp-clk, .z-bandbox-rounded .z-bandbox-inp-clk,
 .z-datebox-rounded-focus .z-datebox-rounded-inp-clk, .z-datebox-rounded .z-datebox-inp-clk,
@@ -239,7 +230,6 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded-focus .z-spinner-rounded-btn-clk, .z-spinner-rounded .z-spinner-rounded-btn-clk {
 	background-position: 0 -168px !important;
 }
-/*******************************************************************************************************/
 .z-combobox-rounded-pp,
 .z-bandbox-rounded-pp,
 .z-datebox-rounded-pp,
@@ -256,8 +246,8 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	overflow: auto;
 }
 <%-- Comboitem --%>
--combobox-rounded-pp .z-comboitem-text, .z-combobox-rounded-pp .z-comboitem-img,
-.z-combobox-pp .z-comboitem-text, .z-combobox-pp .z-comboitem-img {
+-combobox-rounded-pp .z-comboitem-text, .z-combobox-rounded-pp .z-comboitem-btn,
+.z-combobox-pp .z-comboitem-text, .z-combobox-pp .z-comboitem-btn {
 	white-space: nowrap; font-size: ${fontSizeS}; cursor: pointer;
 }
 .z-combobox-rounded-pp .z-comboitem-inner, .z-combobox-rounded-pp .z-comboitem-cnt,
@@ -287,7 +277,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 }
 
 <%-- Bandbox trendy mold --%>
-.z-bandbox .z-bandbox-img {
+.z-bandbox .z-bandbox-btn {
 	background-image : url(${c:encodeURL('~./zul/img/button/bandbtn.gif')});
 }
 <%-- Datebox --%>
@@ -295,7 +285,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-over{
 	background: #dae7f6;
 }
-.z-datebox .z-datebox-img {
+.z-datebox .z-datebox-btn {
 	background-image : url(${c:encodeURL('~./zul/img/button/datebtn.gif')});
 }
 .z-datebox-rounded-pp,
@@ -367,8 +357,8 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	display:inline-block;
 }
 
-.z-timebox .z-timebox-img,
-.z-spinner .z-spinner-img {
+.z-timebox .z-timebox-btn,
+.z-spinner .z-spinner-btn {
 	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
 }
 <%-- Shadow --%>
@@ -438,7 +428,6 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	border-right-width: 0;
 	padding-right: 1px;
 }
-/********************************************* inp btn readonly **********************************************************/
 .z-combobox-rounded-readonly,
 .z-bandbox-rounded-readonly,
 .z-datebox-rounded-readonly,
@@ -526,7 +515,6 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded-focus .z-spinner-rounded-btn-readonly {
 	background-position: 0 -216px;
 }
-/*************************************************************************************************************/
 <%-- Inplace editing --%>
 .z-combobox-rounded-inplace,
 .z-bandbox-rounded-inplace,
@@ -604,10 +592,10 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 
 <%-- Gecko --%>
 <c:if test="${c:isGecko()}">
-span.z-combobox-rounded-btn, span.z-datebox-rounded-btn, span.z-bandbox-rounded-btn,
-span.z-timebox-rounded-btn, span.z-spinner-rounded-btn,
-span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
-span.z-spinner-btn {<%-- button at the right edge --%>
+i.z-combobox-rounded-btn, i.z-datebox-rounded-btn, i.z-bandbox-rounded-btn,
+i.z-timebox-rounded-btn, i.z-spinner-rounded-btn,
+i.z-combobox-btn, i.z-datebox-btn, i.z-bandbox-btn, i.z-timebox-btn,
+i.z-spinner-btn {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
 }
 </c:if>

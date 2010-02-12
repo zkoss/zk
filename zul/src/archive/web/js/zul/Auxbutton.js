@@ -26,13 +26,8 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		this._btn = btn;
 		this._ref = ref;
 
-		var $btn = jq(btn),
-			$img = $btn.find('>span:first');
-		this._img = $img[0];
-
+		var $btn = jq(btn);
 		$btn.zk.disableSelection();
-		if (!wgt.inRoundedMold())
-			$img.zk.disableSelection();
 
 		if (!wgt.inDesign)
 			$btn.mouseover(this.proxy(this._domOver))
@@ -46,44 +41,11 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		var $btn = jq(this._btn);
 
 		$btn.zk.enableSelection();
-		if (this._img)
-			zk(this._img).enableSelection();
 
 		if (!this._wgt.inDesign)
 			$btn.unbind('mouseover', this.proxy(this._domOver))
 				.unbind('mouseout', this.proxy(this._domOut))
 				.unbind('mousedown', this.proxy(this._domDown));
-	},
-	/**
-	 * Fixes the position of the button from the input element
-	 */
-	fixpos: function () {
-		if (this._wgt.inRoundedMold()) return;
-		var btn = this._btn;
-		if (!this._fixed && zk(btn).isRealVisible()) {
-			var ref = this._ref, img = this._img,
-				refh = ref.offsetHeight;
-			if (!refh) {
-				setTimeout(this.proxy(this.fixpos), 66);
-				return;
-			}
-
-			this._fixed = true;
-
-			//Bug 1738241: don't use align="xxx"
-			var h, v;
-			img.style.height = jq.px0(h = zk(img).revisedHeight(refh));
-
-			//FF2 bug: there is 1px short (even if h is correct)
-			if (zk.gecko2_ && (v = refh - img.offsetHeight))
-				img.style.height = jq.px0(h + v);
-
-			if ((v = ref.offsetTop - img.offsetTop) || zk.safari) {
-				btn.style.position = "relative";
-				btn.style.top = v + "px"; //might be negative
-				if (zk.safari) btn.style.left = "-2px";
-			}
-		}
 	},
 	_domOver: function () {
 		var wgt = this._wgt,

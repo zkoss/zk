@@ -265,7 +265,7 @@ def alert(m):
 		</mold>		
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/comboboxrounded.js</mold-uri>
+			<mold-uri>mold/bandbox.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -418,7 +418,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/comboboxrounded.js</mold-uri>
+			<mold-uri>mold/combobox.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -443,7 +443,7 @@ def alert(m):
 		</mold>		
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/dateboxrounded.js</mold-uri>
+			<mold-uri>mold/datebox.js</mold-uri>
 			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
 		</mold>
 	</component>
@@ -963,7 +963,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/spinnerrounded.js</mold-uri>
+			<mold-uri>mold/spinner.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
@@ -1070,7 +1070,7 @@ def alert(m):
 		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/spinnerrounded.js</mold-uri>
+			<mold-uri>mold/spinner.js</mold-uri>
 		</mold>
 	</component>
 	<component>

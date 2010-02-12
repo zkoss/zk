@@ -69,7 +69,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
-		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	
@@ -301,19 +300,26 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	redraw_: function (out) {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
-		out.push('<span', this.domAttrs_({text:true}), '><input id="',
+		out.push('<i', this.domAttrs_({text:true}), '><input id="',
 			uuid, '-real" class="', zcls, '-inp" autocomplete="off"',
-			this.textAttrs_(), '/><span id="', uuid, '-btn" class="',
-			zcls, '-btn"');
+			this.textAttrs_(), '/><i id="', uuid, '-btn" class="',
+			zcls, '-btn');
 
-		if (!this._buttonVisible)
-			out.push(' style="display:none"');
+		if (this.inRoundedMold()) {
+			if (!this._buttonVisible)
+				out.push(' ', zcls, '-btn-right-edge');
+			if (this._readonly)
+				out.push(' ', zcls, '-btn-readonly');	
+			if (zk.ie6_ && !this._buttonVisible && this._readonly)
+				out.push(' ', zcls, '-btn-right-edge-readonly');
+		} else if (!this._buttonVisible)
+			out.push('" style="display:none');
 
-		out.push('><span class="', zcls, '-img"></span></span>');
+		out.push('"></i>');
 
 		this.redrawpp_(out);
 
-		out.push('</span>');
+		out.push('</i>');
 	},
 	/** Called by {@link #redraw_} to redraw popup.
 	 * <p>Default: does nothing

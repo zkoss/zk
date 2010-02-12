@@ -242,7 +242,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
-		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	getZclass: function () {

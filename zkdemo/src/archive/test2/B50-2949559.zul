@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-2949559.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Feb 12 12:32:51 TST 2010, Created by jimmyshiau
+	
+	Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+	
+-->
+<?page zscriptLanguage="Groovy"?>
+
+<zk>
+
+	<window title="test" border="normal" height="200px"
+		contentStyle="overflow:auto">
+		<combobox />
+		<div height="300px" />
+	</window>
+</zk>

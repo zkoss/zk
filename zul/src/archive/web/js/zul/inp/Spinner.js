@@ -114,8 +114,6 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
-		
-		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
@@ -163,8 +161,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(inp.disabled) return;
 
 		this.checkValue();
-		if (!this.inRoundedMold())
-			btn = zk.opera || zk.safari ? btn : btn.firstChild;
+		
 		ofs = zk(btn).revisedOffset();
 		
 		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
