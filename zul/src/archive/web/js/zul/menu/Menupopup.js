@@ -183,6 +183,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
+		if (!this.isOpen())
+			return; // Bug 2950364
 		if (zk.ie7_) {
 			var pp = this.$n();
 		

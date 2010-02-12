@@ -39,6 +39,7 @@ February, 2010
   2949346: Removing multiple rows from a tree does not work
   2949559: Combobox/Datebox Button does not move when scrolling in IE6
   2950309: Set readonly datebox to disabled  that still open calendar
+  2950364: Menupopup in IE7 display wrong
   
 * Upgrade Notes
 
