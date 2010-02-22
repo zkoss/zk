@@ -84,6 +84,7 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		var child = this.parent.parent;
 		return child && child.isVisible();
 	},
+	//@Override
 	removeChild: function (child) {
 		for (var w = child.firstChild; w;) {
 			var n = w.nextSibling; //remember, since remove will null the link
@@ -91,5 +92,10 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 			w = n;
 		}
 		this.$supers('removeChild', arguments);
+	},
+	//@Override
+	ignoreClick_: function (evt) {
+		var n = evt.domTarget;
+		return n && n.id == this.uuid + '-open';
 	}
 });

@@ -167,6 +167,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_rmIdSpaceDown0(wgt, owner);
 	}
 
+	function _fireClick(wgt, evt) {
+		return !(wgt.ignoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
+	}
+
 	//set minimum flex size and return it
 	function _setMinFlexSize(wgt, n, o) {
 		//find the max size of all children
@@ -2843,6 +2847,24 @@ focus: function (timeout) {
 		if (evt.opts.sendAhead) zAu.sendAhead(evt, timeout);
 		else zAu.send(evt, timeout);
 	},
+	/** Check whether to ignore the click which might be caused by
+	 * {@link #doClick_}
+	 * {@link #doRightClick_}, or {@link #doDoubleClick_}.
+	 * <p>Default: return false.
+	 * <p>Deriving class might override this method to return true if
+	 * it wants to ignore the click on certain DOM elements, such as
+	 * the open icon of a treerow.
+	 * <p>Notice: if true is returned, {@link #doClick_}
+	 * {@link #doRightClick_}, and {@link #doDoubleClick_} won't be called.
+	 * In additions, the popup and context of {@link zul.Widget} won't be
+	 * handled, either.
+	 * @param zk.Event the event that causes the click ({@link #doClick_}
+	 * {@link #doRightClick_}, or {@link #doDoubleClick_}).
+	 * @return whether to ignore it
+	 * @since 5.0.1
+	 */
+	ignoreClick_: function (evt) {
+	},
 
 	/** Fire a widget event. An instance of {@link zk.Event} is created to represent the event.
 	 *
@@ -3054,6 +3076,9 @@ wgt.setListeners({
 	 * if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * <p>If a widget, such as zul.wgt.Button, handles onClick, it is better to override this method and <i>not</i> calling back the superclass.
+	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * called and this method invokes the parent's {@link #onClick_} instead
+	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
@@ -3061,7 +3086,7 @@ wgt.setListeners({
 	 * @see #doRightClick_
 	 */
 	doClick_: function (evt) {
-		if (!this.fireX(evt).stopped) {
+		if (_fireClick(this, evt)) {
 			var p = this.parent;
 			if (p) p.doClick_(evt);
 		}	
@@ -3072,6 +3097,9 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
 	 * doDoubleClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
+	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * called and this method invokes the parent's {@link #onDoubleClick_} instead
+	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
@@ -3079,7 +3107,7 @@ wgt.setListeners({
 	 * @see #doRightClick_
 	 */
 	doDoubleClick_: function (evt) {
-		if (!this.fireX(evt).stopped) {
+		if (_fireClick(this, evt)) {
 			var p = this.parent;
 			if (p) p.doDoubleClick_(evt);
 		}
@@ -3090,6 +3118,9 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
 	 * doRightClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
+	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * called and this method invokes the parent's {@link #onRightClick_} instead
+	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
@@ -3097,7 +3128,7 @@ wgt.setListeners({
 	 * @see #doDoubleClick_
 	 */
 	doRightClick_: function (evt) {
-		if (!this.fireX(evt).stopped) {
+		if (_fireClick(this, evt)) {
 			var p = this.parent;
 			if (p) p.doRightClick_(evt);
 		}

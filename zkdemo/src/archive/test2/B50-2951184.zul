@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2951184.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 22 15:22:44 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<html><![CDATA[
+	<ol>
+		<li>Click the + icon and the tree item shall be opened</li>
+		<li>Click "1" and a dialog shall be shown</li>
+	</ol>
+	]]></html>
+    <tree>
+        <treechildren>
+            <treeitem open="false">
+                <treerow onClick='alert("row clicked")'>
+                    <treecell label="1"/>
+                </treerow>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="a"/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</window>
