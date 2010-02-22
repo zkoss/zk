@@ -48,7 +48,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					if (vert) {
 						if (child._nhflex)
 							child.setFlexSize_({width:'auto'});
-						else {//release width of children might cause wider box
+						else if (c) {//release width of children might cause wider box
+									 //bug 2951825, widget not necessary with HTML dom element(<script>)
 							var oldwidth= c.style.width;
 							if (oldwidth) {
 								var oldoffwidth= c.offsetWidth;
@@ -64,7 +65,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					} else {
 						if (child._nvflex)
 							child.setFlexSize_({height:'auto'});
-						else {//release height of children might cause higher box
+						else if (c) {//release height of children might cause higher box
+									 //bug 2951825, widget not necessary with HTML dom element(<script>)
 							var oldheight= c.style.height;
 							if (oldheight) {
 								var oldoffheight = c.offsetHeight;
