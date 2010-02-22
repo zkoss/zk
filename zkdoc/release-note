@@ -41,6 +41,7 @@ February, 2010
   2950309: Set readonly datebox to disabled  that still open calendar
   2950364: Menupopup in IE7 display wrong
   2950801: Adding vflex to hbox throws javascript error
+  2951825: script inside vbox throws javascript error
   
 * Upgrade Notes
 
