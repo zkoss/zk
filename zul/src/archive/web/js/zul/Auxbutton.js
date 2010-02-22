@@ -66,7 +66,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	_domOut: function () {
 		var wgt = this._wgt,
 			zcls = wgt.getZclass();
-		if (!wgt.isDisabled() && !zk.dragging){
+		if (!wgt.isDisabled() && !zk.dragging) {
 			jq(this._btn).removeClass(zcls + "-btn-over");
 			jq(wgt.getInputNode()).removeClass(zcls + "-inp-over");
 		}
@@ -88,7 +88,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			
 			if (inRoundedMold && !wgt.isReadonly() && !jq(inp).hasClass(zcls + '-text-invalid'))
 				jq(inp).addClass(zcls + "-inp-clk");			
-			
+
 			jq(document.body).mouseup(this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
