@@ -2521,7 +2521,7 @@ unbind_: function (skipper, after) {
 				else if (zk.safari && newmargins != margins)  //safari/chrome margin changed after set style.height
 					newh = zkn.revisedHeight(sz.height, true);
 				if (newh != h) //h changed, re-assign height
-					h.style.height = jq.px0(newh);
+					n.style.height = jq.px0(newh);
 			} else
 				n.style.height = this._height || '';
 		}
