@@ -179,8 +179,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onFloatUp: this, onShow: this});
 		this.setFloating_(true);
+		if (!zk.css3) jq.zsync(this);
 	},
 	unbind_: function () {
+		if (!zk.css3) jq.zsync(this, false);
 		if (this._stackup) {
 			jq(this._stackup).remove();
 			this._stackup = null;

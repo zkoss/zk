@@ -282,6 +282,10 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//air: false,
+	/** Whether it supports CSS3.
+	 * @type boolean
+	 */
+	//css3: false,
 
 	/** The character used for decimal sign.
 	 * @type char
@@ -970,6 +974,7 @@ zk.log('value is", value);
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 			zk.ie6_ = !zk.ie7;
 			zk.ie7_ = zk.ie7 && !zk.ie8;
+			zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera);
 			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
 			bodycls = 'safari';

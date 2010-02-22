@@ -32,7 +32,7 @@ zk.eff = {
 	}
 };
 
-if (zk.ie || zk.gecko2_ || zk.opera) {
+if (!zk.css3) {
 	var _defShadowOpts = {left: 4, right: 4, top: 3, bottom: 3},
 		_shadowEnding = zk.ie6_ ? '" class="z-shadow"></div>':
 		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
@@ -396,6 +396,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		st.zIndex = zi;
 		this.mask.lastChild.style.zIndex = zi;
 		
+		this.mask.style.display = 'block';
+		
 		var loading = jq(this.mask.id+"-z_loading", zk)[0];
 		if (loading) {
 			if (loading.offsetHeight > h) 
@@ -405,7 +407,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			loading.style.top = jq.px0(xy[1] + ((h - loading.offsetHeight) /2)); //non-negative only
 			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) /2));
 		}
-		this.mask.style.display = 'block';
+		
 		this.mask.style.visibility = "";
 	},
 	/** Removes the mask.

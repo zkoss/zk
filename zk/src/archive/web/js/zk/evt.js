@@ -320,7 +320,8 @@ zWatch = (function () {
 				gun.fire();
 				_zsync(name);
 			}
-		}
+		} else
+			_zsync(name);
 	}
 
 /** @class zWatch

@@ -199,6 +199,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value});
 	},
+	zsync: function () {
+		this.$supers('zsync', arguments);
+		if (!zk.css3 && this.isOpen() && this._shadow)
+			this._shadow.sync();
+	},
 	_afterSlideDown: function (n) {
 		if (this._shadow) this._shadow.sync();
 	},
@@ -400,6 +405,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
+		if (!zk.css3) jq.zsync(this);
 	},
 	unbind_: function () {
 		this.close();
@@ -412,7 +418,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
-
+		if (!zk.css3) jq.zsync(this, false);
+		
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {

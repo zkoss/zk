@@ -454,13 +454,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	setTop: function () {
 		this._hideShadow();
 		this.$supers('setTop', arguments);
-		this.sync();
+		this.zsync();
 
 	},
 	setLeft: function () {
 		this._hideShadow();
 		this.$supers('setLeft', arguments);
-		this.sync();
+		this.zsync();
 	},
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
@@ -526,7 +526,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}, evt.data), {ignorable: true});
 		}
 		
-		this.sync();
+		this.zsync();
 		var self = this;
 		setTimeout(function() {
 			zWatch.fireDown('beforeSize', self);
@@ -573,7 +573,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
 			this._fixHgh();
-			this.sync();
+			this.zsync();
 		};
 	})(),
 	onShow: _zkf,
@@ -658,7 +658,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this.isMovable())
 			this._initMove();
 
-		this.sync();
+		this.zsync();
 
 		if (this.isRealVisible())
 			this.setTopmost();
@@ -675,8 +675,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				endeffect: $Panel._aftermove});
 		}
 	},
-	sync: function () {
-		this.$supers('sync', arguments);
+	zsync: function () {
+		this.$supers('zsync', arguments);
 
 		if (!this.isFloatable()) {
 			if (this._shadow) {
@@ -719,6 +719,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
 			this._initFloat();
+			if (!zk.css3)
+				jq.zsync(this); //sync shadow if it is implemented with div
 		}
 		
 		if (this.isMaximizable() && this.isMaximized()) {
@@ -743,6 +745,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
 		this.setFloating_(false);
+		
+		if (!zk.css3) jq.zsync(this, false);
 
 		if (this._shadow) {
 			this._shadow.destroy();
@@ -906,7 +910,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return false;
 	},
 	_aftermove: function (dg, evt) {
-		dg.control.sync();
+		dg.control.zsync();
 	},
 	// drag sizing
 	_startsizing: zul.wnd.Window._startsizing,

@@ -93,7 +93,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _aftermove(dg, evt) {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
-		wgt.sync();
+		wgt.zsync();
 		wgt._fireOnMove(evt.data);
 	}
 
@@ -370,7 +370,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer) {
 					this._visible = false;
-					this.sync();
+					this.zsync();
 					this.fire('onMinimize', {
 						left: s.left,
 						top: s.top,
@@ -474,7 +474,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 */
 		shadow: function () {
 			if (this._shadow) {
-				this.sync();
+				this.zsync();
 			} else if (this._shadowWgt) {
 				this._shadowWgt.destroy();
 				this._shadowWgt = null;
@@ -523,7 +523,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._posByParent();
 
 		$n.makeVParent();
-		this.sync();
+		this.zsync();
 		this._updateDomPos();
 		this.setTopmost();
 		this._makeFloat();
@@ -535,7 +535,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (pos == "parent") this._posByParent();
 
 		$n.makeVParent();
-		this.sync();
+		this.zsync();
 		this._updateDomPos(true);
 
 		if (!pos) { //adjust y (to upper location)
@@ -585,8 +585,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left));
 		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
 	},
-	sync: _zkf = function () {
-		this.$supers('sync', arguments);
+	zsync: function () {
+		this.$supers('zsync', arguments);
 
 		if (this._mode == 'embedded') {
 			if (this._shadowWgt) {
@@ -607,7 +607,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (n) this._mask.sync(n);
 		}
 	},
-	zsync: _zkf, //used with zsync
 	_hideShadow: function () {
 		var shadow = this._shadowWgt;
 		if (shadow) shadow.hide();
@@ -663,7 +662,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
 		}
-		this.sync();
+		this.zsync();
 		if (ol != st.left || ot != st.top)
 			this._fireOnMove();
 	},
@@ -702,7 +701,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._fireOnMove(evt.keys);
 		}
 		
-		this.sync();
+		this.zsync();
 		var self = this;
 		setTimeout(function() {
 			zWatch.fireDown('beforeSize', self);
@@ -710,18 +709,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}, zk.ie6_ ? 800: 0);
 	},
 	onZIndex: function (evt) {
-		this.sync();
+		this.zsync();
 	},
 	//watch//
 	onResponse: function () {
-		this.sync();
+		this.zsync();
 	},
 	onShow: function (ctl) {
 		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded'
 		&& this.isRealVisible({until: w, dom: true})) {
 			zk(this.$n()).cleanVisibility();
-			this.sync();
+			this.zsync();
 		}
 		this.onSize(w);
 	},
@@ -734,7 +733,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		//isVisible returns false (since unselected). Thus, it is better to
 		//count on DOM only
 			this.$n().style.visibility = 'hidden';
-			this.sync();
+			this.zsync();
 		}
 	},
 	onSize: function() {
@@ -748,7 +747,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._fixWdh();
 		if (this._mode != 'embedded') {
 			this._updateDomPos();
-			this.sync();
+			this.zsync();
 		}
 	},
 	onFloatUp: function (ctl) {
@@ -874,7 +873,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
 			this._fixHgh();
-			this.sync();
+			this.zsync();
 
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this); // Note: IE6 is broken, because its offsetHeight doesn't update.
@@ -884,7 +883,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('setWidth', arguments);
 		if (this.desktop) {
 			this._fixWdh();
-			this.sync();
+			this.zsync();
 
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this);
@@ -893,19 +892,19 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setTop: function () {
 		this._hideShadow();
 		this.$supers('setTop', arguments);
-		this.sync();
+		this.zsync();
 
 	},
 	setLeft: function () {
 		this._hideShadow();
 		this.$supers('setLeft', arguments);
-		this.sync();
+		this.zsync();
 	},
 	setZIndex: _zkf = function (zIndex) {
 		var old = this._zIndex;
 		this.$supers('setZIndex', arguments);
 		if (old != zIndex) 
-			this.sync();
+			this.zsync();
 	},
 	setZindex: _zkf,
 	focus: function (timeout) {
@@ -967,14 +966,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			});
 		}
 
-		if (this._mode != 'embedded' && (zk.ie || zk.opera || zk.gecko2_))
+		if (this._mode != 'embedded' && (!zk.css3))
 			jq.zsync(this); //sync shadow if it is implemented with div
 	},
 	unbind_: function () {
 		var node = this.$n();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
-		if (zk.ie || zk.opera || zk.gecko2_) jq.zsync(this, false);
+		if (!zk.css3) jq.zsync(this, false);
 
 		//we don't check this._mode here since it might be already changed
 		if (this._shadowWgt) {
@@ -1207,7 +1206,7 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 		var w = this._w;
 		if (w._mode != 'embedded') {
 			w._updateDomPos(); //skipper's size is wrong in bind_
-			w.sync();
+			w.zsync();
 		}
 	}
 });

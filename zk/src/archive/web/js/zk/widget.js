@@ -1602,9 +1602,7 @@ new zul.wnd.Window{
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
 			
-			// Bug 2951182
-			if (this.desktop)
-				this.sync({cause:'visible'});
+			this.zsync();
 		}
 		return this;
 	},
@@ -1614,20 +1612,12 @@ new zul.wnd.Window{
 	 * and error message, that is tightly associated with a widget.
 	 * @param Map opts the options, or undefined if none of them specified.
 	 * Allowed values:<br/>
-	 * <ul>
-	 * <li>cause: there are two kind of causes: 'css' and 'visible'.
-	 * Widget develoeprs can have their own causes.
-	 * Notice that the default implementation will call the parent's
-	 * sync if the cause is 'visible'.</li>
-	 * </ul>
 	 */
-	sync: function (opts) {
+	zsync: function () {
 		for (var nm in this.effects_) {
 			var ef = this.effects_[nm];
 			if (ef && ef.sync) ef.sync();
 		}
-		if (opts && opts.cause == 'visible' && this.parent)
-			this.parent.sync(opts);
 	},
 	/** Makes this widget visible.
 	 * It is a shortcut of <code>setVisible(true)</code>
@@ -1893,7 +1883,7 @@ out.push('</div>');
 		if (this.desktop) {
 			var n = this.$n();
 			if (n) n.className = this.domClass_();
-			this.sync({cause:'css'});
+			this.zsync();
 		}
 	},
 	/** Updates the DOM element's style. It is called when the CSS style is changed (e.g., setStyle is called).
@@ -1910,7 +1900,7 @@ out.push('</div>');
 
 			var n = this.getTextNode();
 			if (n) jq(n).css(jq.filterTextStyle(s));
-			this.sync({cause:'css'});
+			this.zsync();
 		}
 	},
 	/** Returns the DOM element that is used to hold the text, or null

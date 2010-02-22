@@ -63,8 +63,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._curIndex = -1;
 		return this._nextChild();
 	},
-	sync: function () {
-		this.$supers('sync', arguments);
+	zsync: function () {
+		this.$supers('zsync', arguments);
 
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(this.$n());
@@ -98,14 +98,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			}
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
-			//open will fire onShow which invoke this.sync()
+			//open will fire onShow which invoke this.zsync()
 	},
 	shallStackup_: function () {
 		return false;
 	},
 	setTopmost: function () {
 		this.$supers('setTopmost', arguments);
-		this.sync();
+		this.zsync();
 	},
 	onFloatUp: function(ctl) {
 		var wgt = ctl.origin;
@@ -157,7 +157,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 			}
 		}
-		this.sync();
+		this.zsync();
 		var anc = this.$n('a');
 		if (anc) {
 			if(zk(anc).isRealVisible())
@@ -196,7 +196,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
     		if (ul.childNodes.length) // Bug 2784736
     			pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 		}
-		this.sync();
+		this.zsync();
 		
 		this.$supers('onResponse', arguments); //Bug #2870616
 	},
