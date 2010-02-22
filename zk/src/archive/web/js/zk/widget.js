@@ -1601,8 +1601,6 @@ new zul.wnd.Window{
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
-			
-			this.zsync();
 		}
 		return this;
 	},

@@ -298,9 +298,12 @@ zWatch = (function () {
 	function _cmpLevel(a, b) {
 		return _target(a).bindLevel - _target(b).bindLevel;
 	}
-	function _zsync(name) {
-		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
+	function _zsync(name, org) {
+		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 			jq.zsync();
+			if (org && (typeof org.zsync == 'function')) 
+				setTimeout(function () {org.zsync();}, 50);
+		}
 	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
@@ -317,13 +320,13 @@ zWatch = (function () {
 				args.push(vararg[j++]);
 
 			if (opts && opts.timeout >= 0)
-				setTimeout(function () {gun.fire();_zsync(name);}, opts.timeout);
+				setTimeout(function () {gun.fire();_zsync(name, org);}, opts.timeout);
 			else {
 				gun.fire();
-				_zsync(name);
+				_zsync(name, org);
 			}
 		} else
-			_zsync(name);
+			_zsync(name, org);
 	}
 
 /** @class zWatch
