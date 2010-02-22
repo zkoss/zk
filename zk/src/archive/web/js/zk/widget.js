@@ -1598,7 +1598,9 @@ new zul.wnd.Window{
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
 			
-			this.sync({cause:'visible'});
+			// Bug 2951182
+			if (this.desktop)
+				this.sync({cause:'visible'});
 		}
 		return this;
 	},
