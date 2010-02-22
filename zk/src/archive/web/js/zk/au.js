@@ -20,6 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
 		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 		doCmdFns = [],
+		_tags = {}, //accumulated tags
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0; //performance meter index
 
@@ -30,14 +31,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.doneTime = zUtl.now();
 		}
 	}
-	function pushCmds(dt, req) {
-		var rt = req.responseText;
+	function pushCmds(reqInf, req) {
+		var dt = reqInf.dt,
+			rt = req.responseText;
 		if (!rt) {
 			if (zk.pfmeter) zAu._pfdone(dt, pfGetIds(req));
 			return false; //invalid
 		}
 
 		var cmds = [];
+		cmds.tags = reqInf.tags;
 		if (zk.pfmeter) {
 			cmds.dt = dt;
 			cmds.pfIds = pfGetIds(req);
@@ -129,7 +132,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						return;
 					} //if sid null, always process (usually for error msg)
 
-					if (pushCmds(reqInf.dt, req)) { //valid response
+					if (pushCmds(reqInf, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++seqId > 9999) seqId = 1;
 						ajaxReqTries = 0;
@@ -312,6 +315,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				if (zk.mounting) return false;
 
 				var cmd = cmds.shift();
+				zk.copy(_tags, cmd.tags);
 				try {
 					doProcess(cmd.cmd, cmd.data);
 				} catch (e) {
@@ -321,8 +325,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		} finally {
 		//Bug #2871135, always fire since the client might send back empty
-			if (!cmds || !cmds.length)
-				zWatch.fire('onResponse', null, {timeout:0}); //use setTimeout
+			if (!cmds || !cmds.length) {
+				var tags = _tags;
+				_tags = {};
+				zWatch.fire('onResponse', null, {timeout:0, tags: tags}); //use setTimeout
+			}
 		}
 		return true;
 	}
@@ -647,7 +654,7 @@ zAu = {
 			zAu._resetTimeout();
 
 		//Consider XML (Pros: ?, Cons: larger packet)
-		var content = "";
+		var content = "", tags = {};
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
@@ -656,6 +663,9 @@ zAu = {
 				es.unshift(aureq);
 				break;
 			}
+
+			zk.copy(tags, aureq.opts.tags);
+
 			content += "&cmd_"+j+"="+evtnm;
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid_"+j+"="+target.uuid;
@@ -673,7 +683,7 @@ zAu = {
 				sid: seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
-				ignorable: ignorable, tmout: 0
+				ignorable: ignorable, tmout: 0, tags: tags
 			});
 		return true;
 	},
