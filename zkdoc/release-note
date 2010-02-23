@@ -43,6 +43,7 @@ February, 2010
   2950801: Adding vflex to hbox throws javascript error
   2951825: script inside vbox throws javascript error
   2951184: Click event does not propagate to tree opener
+  2955382: BUG problem with combobox when timer is on the desktop
   
 * Upgrade Notes
 

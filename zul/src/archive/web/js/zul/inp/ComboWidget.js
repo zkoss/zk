@@ -93,8 +93,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			}
 		}
 	},
-	onResponse: function () {
-		if (this.isOpen()) {
+	onResponse: function (ctl, opts) {
+		if (opts.tags.onOpen && this.isOpen()) {
 			if (zk.animating()) {
 				var self = this;
 				setTimeout(function() {self.onResponse();}, 50);
@@ -197,7 +197,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				{left: -4, right: 4, top: -2, bottom: 3});
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:true, value: inp.value});
+			this.fire('onOpen', {open:true, value: inp.value}, {tags: {onOpen: 1}});
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);
@@ -236,7 +236,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (n) jq(n).removeClass(this.getZclass() + '-btn-over');
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false, value: this.getInputNode().value});
+			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {tags: {onOpen: 1}});
 
 		zWatch.fireDown("onHide", this);
 	},
