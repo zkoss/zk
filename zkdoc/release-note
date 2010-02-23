@@ -45,6 +45,7 @@ February, 2010
   2951184: Click event does not propagate to tree opener
   2955382: BUG problem with combobox when timer is on the desktop
   2951277: Textbox with quotes in text is broken
+  2956449: bandbox onCtrlKey event incomplete
   
 * Upgrade Notes
 
