@@ -20,7 +20,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
 		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 		doCmdFns = [],
-		_tags = {}, //accumulated tags
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0; //performance meter index
 
@@ -310,12 +309,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
+		var tags = cmds.tags||{};
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
 
 				var cmd = cmds.shift();
-				zk.copy(_tags, cmd.tags);
 				try {
 					doProcess(cmd.cmd, cmd.data);
 				} catch (e) {
@@ -326,8 +325,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		} finally {
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
-				var tags = _tags;
-				_tags = {};
 				zWatch.fire('onResponse', null, {timeout:0, tags: tags}); //use setTimeout
 			}
 		}
