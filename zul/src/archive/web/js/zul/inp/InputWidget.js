@@ -227,7 +227,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			v = this._cols;
 			if (v > 0) html += ' cols="' + v + '"';
 		} else {
-			html += ' value="' + this.coerceToString_(this.getValue()) + '"';
+			html += ' value="' + this._areaText() + '"';
 			html += ' type="' + this._type + '"';
 			v = this._cols;
 			if (v > 0) html += ' size="' + v + '"';
