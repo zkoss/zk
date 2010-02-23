@@ -405,7 +405,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
-		if (!zk.css3) jq.zsync(this);
+		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
 		this.close();
@@ -418,7 +418,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
-		if (!zk.css3) jq.zsync(this, false);
+		if (!zk.css3) jq.unzsync(this);
 		
 		this.$supers('unbind_', arguments);
 	},

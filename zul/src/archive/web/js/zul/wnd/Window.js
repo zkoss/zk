@@ -708,13 +708,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.fireDown('onSize', self);
 		}, zk.ie6_ ? 800: 0);
 	},
-	onZIndex: function (evt) {
+	onZIndex: _zkf = function (evt) {
 		this.zsync();
 	},
 	//watch//
-	onResponse: function () {
-		this.zsync();
-	},
+	onResponse: _zkf,
 	onShow: function (ctl) {
 		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded'
@@ -945,7 +943,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		var mode = this._mode;
-		zWatch.listen({onSize: this, onShow: this, onResponse: this});
+		zWatch.listen({onSize: this, onShow: this});
 		if (mode != 'embedded') {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);
@@ -966,14 +964,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			});
 		}
 
-		if (this._mode != 'embedded' && (!zk.css3))
-			jq.zsync(this); //sync shadow if it is implemented with div
+		if (this._mode != 'embedded' && (!zk.css3)) {
+			jq.onzsync(this); //sync shadow if it is implemented with div
+			zWatch.listen({onResponse: this});
+		}
 	},
 	unbind_: function () {
 		var node = this.$n();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
-		if (!zk.css3) jq.zsync(this, false);
+		if (!zk.css3) jq.unzsync(this);
 
 		//we don't check this._mode here since it might be already changed
 		if (this._shadowWgt) {

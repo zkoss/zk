@@ -358,6 +358,22 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		+ msg+ '</div></div></div>');
 		
 		this.mask = jq(maskId, zk)[0];
+		this.wgt = zk.Widget.$(opts.anchor);
+		if (this.wgt) {
+			zWatch.listen( {
+				onShow: [
+					this.wgt, this.onShow
+				],
+				onHide: [
+					this.wgt, this.onHide
+				],
+				onSize: [
+					this.wgt, this.onSize
+				]
+			});
+			this.wgt.__mask = this;
+		}
+		
 		this.sync();
 	},
 	/** Hide the mask. Application developers rarely need to invoke this method.
@@ -366,6 +382,9 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	hide: function () {
 		this.mask.style.display = 'none';
 	},
+	onHide: function () {
+		this.__mask.hide();
+	}, 
 	/** Synchronizes the visual states of the mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index. 
 	 */
@@ -410,11 +429,19 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		this.mask.style.visibility = "";
 	},
+	onSize: _zkf = function () {
+		this.__mask.sync();
+	},
+	onShow: _zkf,
 	/** Removes the mask.
 	 */
 	destroy: function () {
 		jq(this.mask).remove();
-		this.mask = null;
+		if (this.wgt) {
+			zWatch.unlisten({onShow: this, onHide: this, onSize: this});
+			delete this.wgt.__mask;
+		}
+		this.mask = this.wgt = null;
 	}
 });
 

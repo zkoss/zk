@@ -44,10 +44,10 @@ zjq = function (jq) { //ZK extension
 
 		return document.body;
 	}
-	function _zsync() {
+	function _zsync(org) {
 		if (--_pendzsync <= 0)
 			for (var j = _zsyncs.length; j--;)
-				_zsyncs[j].zsync();
+				_zsyncs[j].zsync(org);
 	}
 	function _focus(n) {
 		var w = zk.Widget.$(n);
@@ -1788,8 +1788,29 @@ jq.alert('With listener', {
 			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 		}
 	},
+	/** To register one object for the <code>zsync</code> invocation.
+	 * For example,
+	 * <pre><code>jq.onzsync(obj1);</code></pre>
+	 * @param Object obj the object to register
+	 * @see #zsync()
+	 * @see #unzsync()
+	 * @since 5.0.1
+	 */
+	onzsync: function (obj) {
+		_zsyncs.unshift(obj);
+	},
+	/** To unregister one object for the <code>zsync</code> invocation.
+	 * For example,
+	 * <pre><code>jq.unzsync(obj1);</code></pre>
+	 * @param Object obj the object to register
+	 * @see #zsync()
+	 * @see #onzsync()
+	 * @since 5.0.1
+	 */
+	unzsync: function (obj) {
+		_zsyncs.$remove(obj);
+	},
 	/** To invoke the <code>zsync</code> method of the registered objects.
-	 * To register, use {@link #zsync(Object)}. To unregister, use {@link #zsync(Object, boolean)}.
 	 * <p><code>zsync</code> is called automatically when {@link zWatch}
 	 * fires onSize, onShow or onHide.
 	 * It is useful if you have a DOM element whose position is absolute.
@@ -1800,11 +1821,11 @@ jq.alert('With listener', {
 	 * synchronize the position and size of shadow (DIV) in zsync as follows.
 	 * <pre><code>
 bind_: function () {
-  if (zk.ie) jq.zsync(this); //register
+  if (zk.ie) jq.onzsync(this); //register
 ...
 },
 unbind_: function () {
-  if (zk.ie) jq.zsync(this, false); //unregister
+  if (zk.ie) jq.unzsync(this); //unregister
 ...
 },
 zsync: function () {
@@ -1814,32 +1835,9 @@ this._syncShadow(); //synchronize shadow
 	 * <p>Notice that it is better not to use the absolute position for any child element, so the browser will maintain the position for you.
 	 * After all, it runs faster and zsync won't be called if some 3rd-party library is used to create DOM element directly (without ZK).
 	 */
-	/** To register one or multiple objects for the <code>zsync</code> invocation.
-	 * For example,
-	 * <pre><code>jq.zsync(obj1, obj2);</code></pre>
-	 * @param Object obj the object to register
-	 * @see #zsync()
-	 */
-	/** To register one or multiple objects for the <code>zsync</code> invocation.
-	 * For example,
-	 * <pre><code>jq.zsync(obj1, obj2, false);</code></pre>
-	 * @param Object obj the object to unregister,
-	 * @param boolean opt An option. It must be false.
-	 * @see #zsync()
-	 */
-	zsync: function () {
-		var args = arguments, len = args.length, j = 0;
-		if (!len) {
-			++_pendzsync;
-			setTimeout(_zsync, 50);
-		} else {
-			if (args[len - 1] === false) //remove
-				for (--len; j < len; j++)
-					_zsyncs.$remove(args[j]);
-			else
-				for (; j < len; j++)
-					_zsyncs.unshift(args[j]);
-		}
+	zsync: function (org) {
+		++_pendzsync;
+		setTimeout(function () {_zsync(org);}, 50);	
 	}
 
 	/** Decodes a JSON string to a JavaScript object. 

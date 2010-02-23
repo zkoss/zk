@@ -720,7 +720,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.setFloating_(true);
 			this._initFloat();
 			if (!zk.css3)
-				jq.zsync(this); //sync shadow if it is implemented with div
+				jq.onzsync(this); //sync shadow if it is implemented with div
 		}
 		
 		if (this.isMaximizable() && this.isMaximized()) {
@@ -746,7 +746,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
 		this.setFloating_(false);
 		
-		if (!zk.css3) jq.zsync(this, false);
+		if (!zk.css3) jq.unzsync(this);
 
 		if (this._shadow) {
 			this._shadow.destroy();

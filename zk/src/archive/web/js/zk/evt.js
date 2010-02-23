@@ -299,11 +299,8 @@ zWatch = (function () {
 		return _target(a).bindLevel - _target(b).bindLevel;
 	}
 	function _zsync(name, org) {
-		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
-			jq.zsync();
-			if (org && (typeof org.zsync == 'function')) 
-				setTimeout(function () {org.zsync();}, 50);
-		}
+		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
+			jq.zsync(org);
 	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
