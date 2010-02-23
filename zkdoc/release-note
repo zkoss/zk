@@ -46,6 +46,7 @@ February, 2010
   2955382: BUG problem with combobox when timer is on the desktop
   2951277: Textbox with quotes in text is broken
   2956449: bandbox onCtrlKey event incomplete
+  2949947: Timebox usability for keyboard users is broken
   
 * Upgrade Notes
 

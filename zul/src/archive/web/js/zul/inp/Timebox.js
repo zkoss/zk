@@ -581,15 +581,29 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.getTimeHandler().addTime(this, val);
 	},
 	getTimeHandler: function () {
-		var pos = this._getPos(),
-			lastHdler;
+		var pos = zk(this.getInputNode()).getSelectionRange();
+		
+		// if the selection is greater than 2 field(full selection),
+		// the change should be from left to right
+		pos = pos[1] - pos[0] > 2 ? pos[0] : pos[1];
 		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
 			if (!f[i].type) continue;
 			if (f[i].index[0] < pos && f[i].index[1] + 1 >= pos)
 				return f[i];
-			lastHdler = f[i];
 		}
-		return lastHdler;
+		return this._fmthdler[0];
+	},
+	getNextTimeHandler: function (th) {
+		var pos = th.index[1] + 1,
+			lastHandler;
+		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
+			if (!f[i].type) continue;
+			lastHandler = f[i];
+			if (f[i] == th) continue;
+			if (f[i].index[1] + 1 >= pos)
+				return f[i];
+		}
+		return lastHandler;
 	},
 	_startAutoIncProc: function(up) {
 		if (this.timerId)
@@ -789,7 +803,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			text = val.substring(start, end);
 
 		if (sel[1] - sel[0] > 2) {
-			sel[0] = sel[1] - 2;
+			sel[1] = sel[0] + 2;
 		}
 
 		var seld = val.substring(sel[0], sel[1]);
@@ -805,8 +819,15 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 						text1 = ' ' + num;
 					else
 						text1 = text.charAt(1) + num;
-				} else if (text.endsWith(' '))
+				} else if (text.endsWith(' ')) {
 					text1 = text.charAt(0) + num;
+				} else {
+					var NTH = wgt.getNextTimeHandler(this);
+					if (NTH == this) return;
+					zk(inp).setSelectionRange(NTH.index[0], NTH.index[1] + 1);
+					NTH.addTime(wgt, num);
+					return;
+				}
 			} else {
 				if (text.startsWith(' '))
 					text1 = num + text.charAt(1);
@@ -946,6 +967,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		return zk.APM[0] == this.getText(val);
 	},
 	deleteTime: zk.$void,
+	addTime: zk.$void,
 	increase: function (wgt, up) {
 		var inp = wgt.getInputNode(),
 			start = this.index[0],
