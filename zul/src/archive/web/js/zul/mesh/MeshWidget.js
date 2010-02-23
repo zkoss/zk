@@ -457,7 +457,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.eheadtbl.offsetWidth !=
 			this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && this.ebody.offsetWidth == this.ebodytbl.offsetWidth &&
+			if (tblwd && (zk.ie8 || this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
 			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
 					tblwd = 0;
@@ -465,7 +465,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			// bug #2799258 and #1599788
 			var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
-			if (!this.isVflex() && (!hgh || hgh == "auto")) {
+			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (this.ebody.clientWidth && hgh > 11) 
 					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
@@ -485,6 +485,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.$class.cpCellWidth(this);
 		}
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
+		
+		// Bug in B36-2841185.zul
+		if (zk.ie8 && this.isModel() && this.inPagingMold())
+			zk(this).redoCSS();
 	},
 	domFaker_: function (out, fakeId, zcls) { //used by mold
 		var head = this.head;

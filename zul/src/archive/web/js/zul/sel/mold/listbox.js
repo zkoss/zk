@@ -59,11 +59,11 @@ function (out) {
 
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-tpad');
-	out.push('<tbody id="',uuid,'-rows">')
+	out.push('<tbody id="',uuid,'-rows">');
 	for (var item = this.firstItem; item; item = this.nextItem(item))
 		item.redraw(out);
-	out.push('</tbody>')
-	if (this.domPad_ && !inPaging)
+	out.push('</tbody>');
+	if (this.domPad_ && !inPaging);
 		this.domPad_(out, '-bpad');
 	
 	out.push('</table><', tag, ' id="', uuid,

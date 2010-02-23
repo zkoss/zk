@@ -247,6 +247,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Calculates the size. */
 	_calcSize: function () {
+		var anchor, oldCSS;
+		
+		// Bug 279925
+		if (zk.ie8) {
+			anchor = this.$n('a');
+			oldCSS = anchor.style.display;
+			anchor.style.display = "none";
+		}
 		
 		//Bug in B30-1926094-1.zul 
 		if (zk.ie)
@@ -278,7 +286,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.eheadtbl.offsetWidth !=
 			this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && this.ebody.offsetWidth == this.ebodytbl.offsetWidth &&
+			if (tblwd && (zk.ie8 || this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
 			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
 					tblwd = 0;
@@ -296,6 +304,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this.$class.cpCellWidth(this);
 		}
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
+
+		// Bug 279925
+		if (zk.ie8)
+			anchor.style.display = oldCSS;
 	},
 	_calcHgh: function () {
 		var rows = this.ebodyrows,

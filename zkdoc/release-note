@@ -47,6 +47,7 @@ February, 2010
   2951277: Textbox with quotes in text is broken
   2956449: bandbox onCtrlKey event incomplete
   2949947: Timebox usability for keyboard users is broken
+  2957015: grid detail can't auto shrink with bandpopup open
   
 * Upgrade Notes
 

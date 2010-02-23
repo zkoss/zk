@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2957015.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 23 19:25:16 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Hello World!!" border="normal" width="300px"
+	height="200px">
+	<grid>
+		<rows>
+			<row>
+				<detail>
+					<grid>
+						<columns>
+							<column width="15%" />
+							<column width="35%" />
+							<column width="15%" />
+							<column width="35%" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Sender:" />
+								<bandbox id="bd" width="98%">
+									<bandpopup>
+										<listbox width="200px"
+											onSelect="bd.value=self.selectedItem.label; bd.close();">
+											<listitem>
+												<listcell label="John" />
+											</listitem>
+											<listitem>
+												<listcell label="Joe" />
+											</listitem>
+											<listitem>
+												<listcell label="Mary" />
+											</listitem>
+										</listbox>
+									</bandpopup>
+								</bandbox>
+								<label value="Receiver:" />
+								<textbox width="98%" />
+							</row>
+						</rows>
+					</grid>
+				</detail>
+				<label value="Query" />
+			</row>
+		</rows>
+	</grid>
+	1.(IE8 only)Please open the detail via (+/-), and then press the magnifier icon.
+	<separator/>
+	2. The grid's height should not increase.
+</window>
