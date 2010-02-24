@@ -33,7 +33,7 @@ for (int j = 0, lineno = 1; j < len; j++) {
 			j++;
 		else if (sb.charAt(j) == '\n') {
 			System.err.println("Unterminated string at line "+lineno);
-			exit(-1);
+			System.exit(-1);
 		}
 	} else if (sb.charAt(j) == '/' && j + 1 < len
 	&& (sb.charAt(j + 1) == '*' || sb.charAt(j + 1) == '/')) {
@@ -60,22 +60,31 @@ for (int j = 0, lineno = 1; j < len; j++) {
 	} else if (sb.charAt(j) == '\'' || sb.charAt(j) == '"') {
 		quote = sb.charAt(j);
 	} else if (sb.charAt(j) == '/') { //regex
-		for (int k = j; --k >= 0;) {
+		boolean regex = false;
+		for (int k = j;;) {
+			if (--k < 0) {
+				regex = true;
+				break;
+			}
+
 			char ck = sb.charAt(k);
 			if (!Character.isWhitespace(ck)) {
-				if (ck == '(' || ck == ',' || ck == '=' || ck == ':'
-				|| ck == '?' || ck == '{' || ck == '[' || ck == ';'
-				|| (ck == 'n' && k > 4 && "return".equals(sb.substring(k-5, k+1)))
-				|| (ck == 'e' && k > 2 && "case".equals(sb.substring(k-3, k+1)))) { //regex
-					while (++j < len && sb.charAt(j) != '/')
-						if (sb.charAt(j) == '\\')
-							j++;
-						else if (sb.charAt(j) == '\n') {
-							System.err.println("Unterminated regex at line "+lineno);
-							exit(-1);
-						}
-				}
+				regex = ck == '(' || ck == ',' || ck == '=' || ck == ':'
+					|| ck == '?' || ck == '{' || ck == '[' || ck == ';'
+					|| ck == '!' || ck == '&' || ck == '|' || ck == '^'
+					|| (ck == 'n' && k > 4 && "return".equals(sb.substring(k-5, k+1)))
+					|| (ck == 'e' && k > 2 && "case".equals(sb.substring(k-3, k+1)));
 				break;
+			}
+		}
+		if (regex) {
+			while (++j < len && sb.charAt(j) != '/') {
+				if (sb.charAt(j) == '\\')
+					j++;
+				else if (sb.charAt(j) == '\n') {
+					System.err.println("Unterminated regex at line "+lineno);
+					System.exit(-1);
+				}
 			}
 		}
 	}
