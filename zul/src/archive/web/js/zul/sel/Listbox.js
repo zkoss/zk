@@ -217,11 +217,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.frozen = child;
 		}
 
-		if (!ignoreDom && !noRerender)
-			return this.rerender();
-		if (stripe)
-			this._syncStripe();
-		this._syncSize();
+		if (!ignoreDom) {
+			if (!noRerender)
+				return this.rerender();
+			if (stripe)
+				this._syncStripe();
+			this._syncSize();
+		}
 	},
 	removeChild: function (child, ignoreDom) {
 		if (this.$super('removeChild', child, ignoreDom)) {
@@ -261,7 +263,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			stripe = true;
 		}
 
-		if (ignoreDom) {
+		if (!ignoreDom) {
 			if (stripe) this._syncStripe();
 			this._syncSize();
 		}
