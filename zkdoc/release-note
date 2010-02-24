@@ -2,7 +2,7 @@
 ZK 5.0.1
 February, 2010
 * Features
-  2943477: ZK integrae JQuery 1.4
+  2943477: ZK integrae JQuery 1.4.2
   2053421: Jasperreport to work with Hibernate reports
   2941466: Jasperreport can work with SQL Connection
   2942015: Treerow shall allow context, tooltip and popup
