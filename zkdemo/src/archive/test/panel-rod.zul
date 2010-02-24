@@ -13,9 +13,11 @@ rod.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
+<zk>
+<button label="change child" onClick='gd.detach(); pc.appendChild(new Label("new child"))'/>
 <panel height="200px" title="ROD" border="normal" collapsible="true" open="false">
-	<panelchildren>
-	<grid>
+	<panelchildren id="pc">
+	<grid id="gd">
 		<columns>
 			<column label="AA"/>
 			<column label="BB"/>
@@ -45,3 +47,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	</grid>
 	</panelchildren>
 </panel>
+</zk>

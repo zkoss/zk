@@ -6,7 +6,7 @@ Make sure Enterprise Edition is installed.
 		<button label="Press" onClick="alert(&quot;Press&quot;)"/>
 		<toolbarbutton label="Hello" onClick="alert(&quot;Hello&quot;)"/>
 	</caption>
-	<grid>
+	<grid id="gd">
 		<columns>
 			<column label="AA"/>
 			<column label="BB"/>
@@ -35,6 +35,8 @@ Make sure Enterprise Edition is installed.
 		</rows>
 	</grid>
 </groupbox>
+<button label="prepend child" onClick='g1.insertBefore(new Label("new child"), gd)'/>
+<button label="append child" onClick='g1.appendChild(new Label("new child"))'/>
 <button label="toggle" onClick='g1.open = !g1.open'/>
 <groupbox id="g2" width="300px" open="false">
 	<caption label="Groupbox">

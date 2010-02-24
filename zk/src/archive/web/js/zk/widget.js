@@ -1220,7 +1220,7 @@ new zul.wnd.Window{
 		_addIdSpaceDown(child);
 
 		if (!ignoreDom)
-			if (child.z_rod)
+			if (this.shallChildROD_(child))
 				_bindrod(child);
 			else {
 				var dt = this.desktop;
@@ -1230,6 +1230,14 @@ new zul.wnd.Window{
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
+	},
+	/** Returns whether a new child shall be ROD.
+	 * <p>Default: return true if child.z_rod or this.z_rod
+	 * @return boolean whether a new child shall be ROD.
+	 * @since 5.0.1
+	 */
+	shallChildROD_: function (child) {
+		return child.zrod || this.z_rod;
 	},
 	/** Inserts a child widget before the reference widget (the <code>sibling</code> argument).
 	 * <h3>Subclass Note</h3>
@@ -1294,7 +1302,7 @@ new zul.wnd.Window{
 		_addIdSpaceDown(child);
 
 		if (!ignoreDom)
-			if (child.z_rod)
+			if (this.shallChildROD_(child))
 				_bindrod(child);
 			else {
 				var dt = this.desktop;
@@ -2169,7 +2177,8 @@ function () {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		else if (child.z_rod) _unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		else if (this.shallChildROD_(child))
+			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		jq(n).replaceWith(child.redrawHTML_(skipper, true));
 		child.bind(desktop, skipper);
 	},

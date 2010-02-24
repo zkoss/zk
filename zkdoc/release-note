@@ -50,6 +50,7 @@ February, 2010
   2957015: grid detail can't auto shrink with bandpopup open
   2956421: The listitem can't be selected when add onClick on listcell
   2957738: Bandbox with autodrop can't fire onOK event
+  2956457: Comboitem/groupbox miss placed after remove and adding
   
 * Upgrade Notes
 

@@ -22,16 +22,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 (It is a spec change. Prior to ZK 5, it won't be selected.</li>
 </ol>
 ]]></html>
-<listbox>
+<zscript>
+void show() {
+	i.value += "selcted: " + l.selectedItem.label + "\n";
+}
+</zscript>
+<listbox id="l">
 	<listitem label="First"/>
-	<listitem label="Second (right-click)" onRightClick='i.value += "click"'/>
+	<listitem label="Second (right-click)" onRightClick="show()"/>
 	<listitem label="Third (context)" context="editPopup"/>
 	<listitem>
 		<listcell><button label="context but no select" context="editPopup"/></listcell>
 	</listitem>
 </listbox>
-<label id="i"/>
-<menupopup id="editPopup">
+<label id="i" multiline="true"/>
+<menupopup id="editPopup" onOpen="show()">
     <menuitem label="Undo"/>
     <menuitem label="Redo"/>
     <menu label="Sort">
