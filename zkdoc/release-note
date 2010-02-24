@@ -48,6 +48,7 @@ February, 2010
   2956449: bandbox onCtrlKey event incomplete
   2949947: Timebox usability for keyboard users is broken
   2957015: grid detail can't auto shrink with bandpopup open
+  2956421: The listitem can't be selected when add onClick on listcell
   
 * Upgrade Notes
 
