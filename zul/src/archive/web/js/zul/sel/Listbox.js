@@ -217,13 +217,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.frozen = child;
 		}
 
-		if (!ignoreDom) {
-			if (!noRerender)
+		if (!ignoreDom && !noRerender)
 				return this.rerender();
-			if (stripe)
-				this._syncStripe();
+		if (stripe)
+			this._syncStripe();
+		if (!ignoreDom)
 			this._syncSize();
-		}
 	},
 	removeChild: function (child, ignoreDom) {
 		if (this.$super('removeChild', child, ignoreDom)) {
