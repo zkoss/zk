@@ -438,7 +438,9 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	destroy: function () {
 		jq(this.mask).remove();
 		if (this.wgt) {
-			zWatch.unlisten({onShow: this, onHide: this, onSize: this});
+			zWatch.unlisten({onShow: [this.wgt, this.onShow],
+			      			 onHide: [this.wgt, this.onHide],
+			      			onSize: [this.wgt, this.onSize]});
 			delete this.wgt.__mask;
 		}
 		this.mask = this.wgt = null;
