@@ -408,7 +408,14 @@ jq(function() {
 	function _doEvt(wevt) {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
-			wgt['do' + wevt.name.substring(2) + '_'].call(wgt, wevt);
+			var en = wevt.name;
+			if (en == 'onClick' || en == 'onRightClick') {
+				wgt.doSelect_(wevt);
+				if (wevt.stopped)
+					en = null; //denote stop
+			}
+			if (en)
+				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();
 		}

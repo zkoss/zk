@@ -457,7 +457,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	//super//
 	doClick_: function (evt, popupOnly) {
-		if (!this.ignoreClick_(evt) && !evt.contextSelected) {
+		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup) : {},
 				popup = this._smartFellow(params.id);
 			if (popup) {
@@ -477,7 +477,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (evt) {
-		if (!this.ignoreClick_(evt) && !evt.contextSelected) {
+		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._context ? this._parsePopParams(this._context) : {},
 				ctx = this._smartFellow(params.id);
 			if (ctx) {

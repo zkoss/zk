@@ -586,8 +586,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._focusItem = null;
 		this.$supers('doBlur_', arguments);
 	},
-	_doClick: function (evt) {
-
+	/** Returns whether to ignore the selection.
+	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
+	 * <p>Default: always false (don't ignore)
+	 * @param zk.Event evt the event
+	 * @return boolean wether to ignore
+	 */
+	shallIgnoreSelect_: function (evt) {
+		//Since ZK 5, we always select the item
+		//It is hard to detect whether not to select if button is clicked(like ZK 3)
+	},
+	_doSelect: function (evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
@@ -595,16 +604,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (zk.dragging || this._shallIgnoreEvent(evt))
 			return;
 			
-		var target = evt.domTarget,
-			tn = target.tagName,
-			tw = zk.Widget.$(target);
-		if (tn == "A" || (!zul.sel.ItemWidget.isInstance(tw) && //Bug 2379135
-		(tw.isListen('onDoubleClick') || tw.isListen('onClick')
-		|| tw.getContext() || target.onclick)))
+		if (this.shallIgnoreSelect_(evt))
 			return;
 
 		var	row = evt.target,
-			checkmark = target == row.$n('cm');
+			checkmark = evt.domTarget == row.$n('cm');
 			
 		if (checkmark) {
 			if (this.isMultiple()) {

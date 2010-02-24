@@ -168,7 +168,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _fireClick(wgt, evt) {
-		return !(wgt.ignoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
+		return !(wgt.shallIgnoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
 	}
 
 	//set minimum flex size and return it
@@ -2851,7 +2851,7 @@ focus: function (timeout) {
 	 * @return whether to ignore it
 	 * @since 5.0.1
 	 */
-	ignoreClick_: function (evt) {
+	shallIgnoreClick_: function (evt) {
 	},
 
 	/** Fire a widget event. An instance of {@link zk.Event} is created to represent the event.
@@ -3057,6 +3057,27 @@ wgt.setListeners({
 	},
 
 	//ZK event handling//
+	/** Called when the user clicks or right-clicks on widget or a child widget.
+	 * It is called before {@link #doClick_} and {@link #doRightClick_}.
+	 * <p>Default: does nothing but invokes the parent's {@link #doSelect_}.
+	 * <p>Deriving class that supports selection (such as {@link zul.sel.ItemWidget})
+	 * shall override this to handle the selection.
+	 * <p>Technically, the selection can be handled in {@link #doClick_}.
+	 * However, it is better to handle here since this method is invoked first
+	 * such that the widget will be selected before one of its descendant widget
+	 * handles {@link #doClick_}.
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * @see #doClick_
+	 * @see #doRightClick_
+	 * @since 5.0.1
+	 */
+	doSelect_: function(evt) {
+		if (!evt.stopped) {
+			var p = this.parent;
+			if (p) p.doSelect_(evt);
+		}
+	},
 	/** Called when the user clicks on a widget or a child widget.
 	 * A widget doesn't need to listen the click DOM event.
 	 * Rather, it shall override this method if necessary.
@@ -3064,7 +3085,7 @@ wgt.setListeners({
 	 * if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * <p>If a widget, such as zul.wgt.Button, handles onClick, it is better to override this method and <i>not</i> calling back the superclass.
-	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #onClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
@@ -3072,12 +3093,13 @@ wgt.setListeners({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doDoubleClick_
 	 * @see #doRightClick_
+	 * @see #doSelect_
 	 */
 	doClick_: function (evt) {
 		if (_fireClick(this, evt)) {
 			var p = this.parent;
 			if (p) p.doClick_(evt);
-		}	
+		}
 	},
 	/** Called when the user double-clicks on a widget or a child widget.
 	 * A widget doesn't need to listen the dblclick DOM event.
@@ -3085,7 +3107,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
 	 * doDoubleClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #onDoubleClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
@@ -3106,7 +3128,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and call parent's
 	 * doRightClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>Note: if {@link #ignoreClick_} returns true, {@link #fireX} won't be
+	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #onRightClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>

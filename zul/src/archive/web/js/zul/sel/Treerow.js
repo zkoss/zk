@@ -93,9 +93,19 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		}
 		this.$supers('removeChild', arguments);
 	},
+
+	//We change the spec (comparing to ZK 3): the treeitem is selected if the open
+	//icon is clicked. It is the same as Windows.
+	//To implement the old spec, just override doSelect_ as follows
+	//doSelect_: function (evt) { if (!this.shallIgnoreClick_(evt)) this.$supers(...);},
+
 	//@Override
-	ignoreClick_: function (evt) {
-		var n = evt.domTarget;
-		return n && n.id == this.uuid + '-open';
+	doClick_: function(evt) {
+		var ti = this.parent;
+		if (ti.isDisabled()) return;
+		if (evt.domTarget == this.$n('open')) {
+			ti.setOpen(!ti._open);
+			evt.stop();
+		} else this.$supers('doClick_', arguments);
 	}
 });

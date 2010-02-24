@@ -228,13 +228,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!_noSync) this._syncIcon(); // remove the icon
 		}
 	},
-	doClick_: function(evt) {
-		if (this.isDisabled()) return;
-		if (evt.domTarget == this.$n('open')) {
-			this.setOpen(!this._open);
-			evt.stop();
-		} else this.$supers('doClick_', arguments);
-	},
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
 			cn = w.$n();
