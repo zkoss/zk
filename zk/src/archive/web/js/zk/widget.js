@@ -1237,7 +1237,7 @@ new zul.wnd.Window{
 	 * @since 5.0.1
 	 */
 	shallChildROD_: function (child) {
-		return child.zrod || this.z_rod;
+		return child.z_rod || this.z_rod;
 	},
 	/** Inserts a child widget before the reference widget (the <code>sibling</code> argument).
 	 * <h3>Subclass Note</h3>
