@@ -63,7 +63,7 @@ function (out) {
 	for (var item = this.firstItem; item; item = this.nextItem(item))
 		item.redraw(out);
 	out.push('</tbody>');
-	if (this.domPad_ && !inPaging);
+	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 	
 	out.push('</table><', tag, ' id="', uuid,
