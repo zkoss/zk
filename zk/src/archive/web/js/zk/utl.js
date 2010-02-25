@@ -255,7 +255,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	today: function (full) {
 		var d = new Date();
 		return full ? d
-			: new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate());
+			: new Date(d.getFullYear(), d.getMonth(), d.getDate());
 	},
 
 	/** Returns if one is ancestor of the other.
