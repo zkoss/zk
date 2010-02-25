@@ -350,3 +350,58 @@ zk.fmt.Date = {
 		return this.digitFixed(1 + Math.floor(this._dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
 	}
 };
+/**
+ * The <code>calendar</code> object provides a way  
+ * to convert between a specific instant in time for locale-sensitive
+ * like buddhist's time.
+ * <p>By default the year offset is specified from server if any.</p>
+ * @since 5.0.1
+ */
+zk.fmt.Calendar = zk.$extends(zk.Object, {
+	_offset: zk.YDELTA,
+	$init: function (date) {
+		this._date = date;
+	},
+	getTime: function () {
+		return this._date;
+	},
+	setTime: function (date) {
+		this._date = date;
+	},
+	setYearOffset: function (val) {
+		this._offset = val;
+	},
+	getYearOffset: function () {
+		return this._offset;
+	},
+	formatDate: function (val, fmt) {
+		var d;
+		if (this._offset) {
+    		d = new Date(val);
+    		d.setFullYear(d.getFullYear() + this._offset);
+		}
+		return zk.fmt.Date.formatDate(d || val, fmt);
+	},
+	parseDate: function (txt, fmt, strict) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict);
+		if (this._offset && fmt) {
+			var cnt = 0;
+			for (var i = fmt.length; i--;)
+				if (fmt.charAt(i) == 'y')
+					cnt++;
+			if (cnt > 3)
+				d.setFullYear(d.getFullYear() - this._offset);
+			else if (cnt) {
+				var year = d.getFullYear();
+				if (year < 2000)
+					d.setFullYear(year + (Math.ceil(this._offset / 100) * 100 - this._offset));
+				else
+					d.setFullYear(year - (this._offset % 100));
+			}
+		}
+		return d;
+	},
+	getYear: function () {
+		return this._date.getFullYear() + this._offset;
+	}
+});

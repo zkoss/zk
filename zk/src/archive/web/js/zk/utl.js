@@ -254,8 +254,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	today: function (full) {
 		var d = new Date();
-		return full ? new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate(),
-				d.getHours(), d.getMinutes(), d.getMilliseconds())
+		return full ? d
 			: new Date(d.getFullYear() + zk.YDELTA, d.getMonth(), d.getDate());
 	},
 

@@ -22,6 +22,7 @@ function (out) {
 		m = val.getMonth(),
 		d = val.getDate(),
 		y = val.getFullYear(),
+		ydelta = new zk.fmt.Calendar(val).getYear() - y, 
 		yofs = y - (y % 10 + 1),
 		ydec = zk.parseInt(y/100);
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
@@ -35,16 +36,16 @@ function (out) {
 				'<tr><td id="', uuid, '-title">');
 	switch(view) {
 	case "day" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "month" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "year" :
-		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', yofs + 1, '-', yofs + 10, '</span>');
+		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', yofs + ydelta + 1, '-', yofs + ydelta + 10, '</span>');
 		break;
 	case "decade" :
-		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', ydec*100, '-', ydec*100 + 99, '</span>');
+		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', ydec*100 + ydelta, '-', ydec*100 + ydelta+ 99, '</span>');
 		break;
 	}
 	out.push('</td></tr></table></td>',
@@ -88,7 +89,7 @@ function (out) {
 
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '"', (j == 0 || j == 11) ? ' style="color:gray;"' : '', ' ><a href="javascript:;">', yofs, '</a></td>');
+			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '"', (j == 0 || j == 11) ? ' style="color:gray;"' : '', ' ><a href="javascript:;">', yofs + ydelta, '</a></td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
@@ -107,7 +108,7 @@ function (out) {
 			}
 			
 			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
-					' ><a href="javascript:;"', (j == 0 || j == 11) ? 'style="color:gray;"' : '', '>', temp, '-<br />', temp + 9, '</a></td>');
+					' ><a href="javascript:;"', (j == 0 || j == 11) ? 'style="color:gray;"' : '', '>', temp + ydelta, '-<br />', temp + ydelta + 9, '</a></td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tr></table></td></tr>');

@@ -301,14 +301,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (val) {
-			var d = zk.fmt.Date.parseDate(val, this.getFormat(), !this._lenient);
+			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
 			return d;
 		} else
 			return val;
 	},
 	coerceToString_: function (val) {
-		return val ? zk.fmt.Date.formatDate(val, this.getFormat()) : '';
+		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat()) : '';
 	},
 	/** Synchronizes the input element's width of this component
 	 */
@@ -503,7 +503,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	onChange: function (evt) {
 		if (this._pop)
-			this._pop._value = evt.data.value;
+			this._pop.setValue(evt.data.value);
 	},
 	/** Returns the label of the time zone
 	 * @return String
@@ -531,7 +531,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var old = this._fmt;
 			this._fmt = fmt;
 			if (this.getValue())
-				this._value = zk.fmt.Date.formatDate(zk.fmt.Date.parseDate(this.getValue(), old), fmt);
+				this._value = new zk.fmt.Calendar().formatDate(new zk.fmt.Calendar().parseDate(this.getValue(), old), fmt);
 		}
 	},
 	rerender: function () {
@@ -566,6 +566,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db = wgt.$n(), pp = wgt.$n("pp");
 		if (!db || !pp)
 			return;
+		this._setView("day");
 		var zcls = wgt.getZclass();
 
 		pp.className = db.className + " " + pp.className;
@@ -606,7 +607,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			value = wgt.getValue();
 
 		if (value) {
-			var calVal = zk.fmt.Date.formatDate(value, this.getFormat());
+			var calVal = new zk.fmt.Calendar().formatDate(value, this.getFormat());
 			if (calVal)
 				this.setValue(calVal);
 		}

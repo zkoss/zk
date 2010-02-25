@@ -13,6 +13,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 <package name="zk.fmt" language="xul/html">
 	<script src="numfmt.js"/>
-	<script src="datefmt.js"/>
 	<script src="msgfmt.js"/>
 </package>
