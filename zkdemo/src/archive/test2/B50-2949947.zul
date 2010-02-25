@@ -19,6 +19,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <textbox onCreate="self.focus()" />
 <timebox format="HH:mm:ss" width="100px" onCreate="self.value = new Date()" />
 <separator/>
-2. Please press TAB again, and type 11. (you should not see any change)
+2. Please press TAB again, and type 11. (you should see the number of the first number field being changed.)
 <timebox format="a HH:mm:ss" width="150px" onCreate="self.value = new Date()" />
 </zk>

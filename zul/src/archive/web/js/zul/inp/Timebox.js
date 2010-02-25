@@ -597,7 +597,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var pos = th.index[1] + 1,
 			lastHandler;
 		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
-			if (!f[i].type) continue;
+			if (!f[i].type || f[i].$instanceof(zul.inp.AMPMHandler)) continue;
 			lastHandler = f[i];
 			if (f[i] == th) continue;
 			if (f[i].index[1] + 1 >= pos)
@@ -794,6 +794,12 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		zk(inp).setSelectionRange(pos, pos);
 	},
+	_addNextTime: function (wgt, num) {
+		var NTH = wgt.getNextTimeHandler(this);
+		if (NTH == this) return;
+		zk(wgt.getInputNode()).setSelectionRange(NTH.index[0], NTH.index[1] + 1);
+		NTH.addTime(wgt, num);
+	},
 	addTime: function (wgt, num) {
 		var inp = wgt.getInputNode(),
 			sel = zk(inp).getSelectionRange(),
@@ -822,10 +828,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				} else if (text.endsWith(' ')) {
 					text1 = text.charAt(0) + num;
 				} else {
-					var NTH = wgt.getNextTimeHandler(this);
-					if (NTH == this) return;
-					zk(inp).setSelectionRange(NTH.index[0], NTH.index[1] + 1);
-					NTH.addTime(wgt, num);
+					this._addNextTime(wgt, num);
 					return;
 				}
 			} else {
@@ -835,6 +838,11 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			if (text1 && text1 != text) {
 				if (zk.parseInt(text1) <= this.maxsize)
 					inp.value = val.substring(0, start) + text1 + val.substring(end, val.length);
+				else {
+					inp.value = val.substring(0, start) + '0' + text.charAt(1) + val.substring(end, val.length);
+					this._addNextTime(wgt, num);
+					return;
+				}
 			}
 		}
 		zk(inp).setSelectionRange(sel[1], sel[1]);
@@ -967,7 +975,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		return zk.APM[0] == this.getText(val);
 	},
 	deleteTime: zk.$void,
-	addTime: zk.$void,
+	addTime: zul.inp.TimeHandler.prototype._addNextTime,
 	increase: function (wgt, up) {
 		var inp = wgt.getInputNode(),
 			start = this.index[0],
