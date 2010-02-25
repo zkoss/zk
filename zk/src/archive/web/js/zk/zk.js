@@ -974,7 +974,6 @@ zk.log('value is", value);
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 			zk.ie6_ = !zk.ie7;
 			zk.ie7_ = zk.ie7 && !zk.ie8;
-			zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera);
 			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
 			bodycls = 'safari';
@@ -982,6 +981,8 @@ zk.log('value is", value);
 	if (zk.air = zk.agent.indexOf("adobeair") >= 0)
 		bodycls = 'air';
 
+	zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera);
+	
 	if (bodycls)
 		jq(function () {
 			var n = document.body,

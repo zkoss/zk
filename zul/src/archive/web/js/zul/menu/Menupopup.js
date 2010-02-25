@@ -172,12 +172,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onHide: this, onResponse: this});
+		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
 		if (this.isOpen())
 			this.close();
 		if (this._shadow)
 			this._shadow.destroy();
+		if (!zk.css3) jq.unzsync(this);
 		this._shadow = null;
 		zWatch.unlisten({onHide: this, onResponse: this});
 		this.$supers('unbind_', arguments);
