@@ -160,10 +160,6 @@ public class DspFns {
 					sdow[k].substring(0, len - 1): sdow[k];
 			}
 		}
-		
-		Calendar ec = Calendar.getInstance(Locale.ENGLISH);
-		Calendar lc = Calendar.getInstance(locale);
-		sb.append("zk.YDELTA=").append(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)).append(";\n");
 	
 		df = new SimpleDateFormat("G", locale);
 		sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");

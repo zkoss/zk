@@ -177,7 +177,7 @@ zk.Cal.prototype = {
 			
 		if (this.popup) this.setDtzones();
 		if (val) val = zk.parseDate(val, this.getFormat());
-		this.date = val ? val: zk.today(true);
+		this.date = val ? val: new Date();
 		if (bd) this.begin = new Date($int(bd) * 1000);
 		if (ed) this.end = new Date($int(ed) * 1000);
 		this._updateCal(this.element);
@@ -220,7 +220,7 @@ zk.Cal.prototype = {
 		return val ? zk.formatDate(val, this.getFormat()) : '';
 	},
 	today: function () {
-		var d = zk.today(true);
+		var d = new Date();
 		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 	},
 	_updateCal: function(cmp) {
@@ -1139,7 +1139,7 @@ zkTimebox.prototype = {
 		if (!this._fmthdler)
 			this._parseFormat(this._format);
 
-		var date = zk.today(true),
+		var date = new Date(),
 			hasAM, isAM, hasHour1,
 			fmt = [];
 

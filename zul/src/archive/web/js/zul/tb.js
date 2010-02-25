@@ -28,7 +28,7 @@ zkTmbox.init = function (cmp) {
 
 	zkTxbox.init($real(cmp));
 
-	cmp.lastTime = zk.today(true);
+	cmp.lastTime = new Date();
 	cmp.lastTime.setHours(0);
 	cmp.lastTime.setMinutes(0);
 	cmp.lastTimeStr = "";
@@ -318,7 +318,7 @@ zkTmbox._check = function(timestr) {
 zkTmbox._increaseTime = function(cmp, inc_sec) {
 	var t = cmp.lastTime.getTime();
 	t = t + 1000 * inc_sec * cmp.currentStep;
-	var date = zk.today(true);
+	var date = new Date();
 	date.setTime(t);
 	var hour = date.getHours(),
 		min = date.getMinutes(),
