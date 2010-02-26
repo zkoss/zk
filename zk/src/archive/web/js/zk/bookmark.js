@@ -13,7 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.bmk = (function () { //used internally
-	var _curbk = "";
+	var _curbk = "", _initbk = "";
 
 	/** bookmark iframe */
 	var _bkIframe = zk.ie ? function (nm) {
@@ -29,7 +29,8 @@ zk.bmk = (function () { //used internally
 	function getBookmark() {
 		var nm = location.hash,
 			j = nm.indexOf('#');
-		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
+		nm = j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
+		return nm || _initbk;
 	}
 	/** Checks whether the bookmark is changed. */
 	function checkBookmark() {
@@ -49,39 +50,43 @@ zk.bmk = (function () { //used internally
 		if (j >= 0) url = url.substring(0, j);
 		return url;
 	}
-	function _startCheck() {
+	function _toHash(nm, hashRequired) {
+		nm = encodeURIComponent(nm);
+		return (!hashRequired && zk.safari) || !nm ? nm: '#' + nm;
+	}
+	function _bookmark(nm, replace) {
+		if (_curbk != nm) {
+			_curbk = nm; //to avoid loop back the server
+
+			if (replace)
+				location.replace(location.href.replace(/#.*/, "") + _toHash(nm, true));
+			else
+				location.hash = _toHash(nm);
+			_bkIframe(nm);
+			zk.bmk.onURLChange();
+		}
+	}
+
+	var _startCheck = function () {
 		if (zk.bootstrapping)
-			setTimeout(_startCheck, 5);
-		else { //Bug 1847708
+			setTimeout(_startCheck, 0);
+		else if (_startCheck) {
+			_startCheck = null;
 			checkBookmark();
-				//Speed up the first check (rather than when 1st interval timeout)
 			setInterval(checkBookmark, 250);
 				//Though IE use bookmark.html, timer is still required 
 				//because user might specify URL directly
 		}
-	}
-
+	};
 	zk.afterMount(_startCheck);
 
   return {
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm, replace) {
-		if (_curbk != nm) {
-			_curbk = nm; //to avoid loop back the server
-
-			if (!zk.bootstrapping) { //feature 2896996: don't handle if booting
-				if (replace)
-					location.replace(location.href.replace(/#.*/, "") + this._toHash(nm, true));
-				else
-					location.hash = this._toHash(nm);
-				_bkIframe(nm);
-				zk.bmk.onURLChange();
-			}
-		}
-	},
-	_toHash: function (nm, hashRequired) {
-		nm = encodeURIComponent(nm);
-		return (!hashRequired && zk.safari) || !nm ? nm: '#' + nm;
+		if (_startCheck)
+			_curbk = _initbk = nm;
+		else
+			(zk.bmk.bookmark = _bookmark)(nm, replace);
 	},
 	/** called when bookmark.html is loaded*/
 	onIframeLoaded: zk.ie ? function (src) {
