@@ -51,6 +51,7 @@ February, 2010
   2956421: The listitem can't be selected when add onClick on listcell
   2956457: Comboitem/groupbox miss placed after remove and adding
   2957773: Wrong day in datebox (when locale is TH)
+  2959024: Events.echoEvent data is not sent
   
 * Upgrade Notes
 
