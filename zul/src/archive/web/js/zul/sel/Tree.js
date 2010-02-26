@@ -226,6 +226,17 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (!row.isOpen()) {
 			row.setOpen(true);
 		}
+	},
+
+	/** Returns whether to ignore the selection.
+	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
+	 * <p>Default: ignore the selection if it is clicked on the open icon
+	 * @param zk.Event evt the event
+	 * @return boolean whether to ignore the selection
+	 */
+	shallIgnoreSelect_: function (evt) {
+		var n = evt.domTarget;
+		return n && n.id && n.id.endsWith('-open');
 	}
 });
 /**
