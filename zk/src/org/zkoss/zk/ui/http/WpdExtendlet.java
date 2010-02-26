@@ -111,7 +111,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 				cacheable = wc.cacheable;
 			}
 			if (cacheable)
-				org.zkoss.zk.fn.JspFns.setCWRCacheControl(response);
+				org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
+						request, response, "org.zkoss.web.classWebResource.cache", 8760);
 		} finally {
 			setProvider(null);
 		}

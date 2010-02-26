@@ -54,6 +54,7 @@ February, 2010
   2958057: Include and setBoomark
   2959308: el is undefined when invoke popup#close in ROD mode
   2959024: Events.echoEvent data is not sent
+  2898413: FF and DSP caching
   
 * Upgrade Notes
 

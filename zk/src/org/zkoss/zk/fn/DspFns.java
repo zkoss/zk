@@ -116,7 +116,9 @@ public class DspFns {
 	 * @since 3.6.3
 	 */
 	public static void setCacheControl(String prop, int hours) {
-		JspFns.setCacheControl((HttpServletResponse)ServletFns.getCurrentResponse(),
+		JspFns.setCacheControl(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest)ServletFns.getCurrentRequest(),
+				(HttpServletResponse)ServletFns.getCurrentResponse(),
 			prop, hours);
 	}
 	/** Sets the Cache-Control and Expires headers for the CSS files
@@ -132,7 +134,9 @@ public class DspFns {
 	 * @since 3.6.3
 	 */
 	public static void setCSSCacheControl() {
-		JspFns.setCSSCacheControl((HttpServletResponse)ServletFns.getCurrentResponse());
+		JspFns.setCSSCacheControl(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest)ServletFns.getCurrentRequest(),
+				(HttpServletResponse)ServletFns.getCurrentResponse());
 	}
 	/** Sets the Cache-Control and Expires headers for class Web resources.
 	 * It checks if <tt>org.zkoss.web.classWebResource.cache</tt>
@@ -142,6 +146,8 @@ public class DspFns {
 	 * @since 3.6.3
 	 */
 	public static void setCWRCacheControl() {
-		JspFns.setCWRCacheControl((HttpServletResponse)ServletFns.getCurrentResponse());
+		JspFns.setCWRCacheControl(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest)ServletFns.getCurrentRequest(),
+				(HttpServletResponse)ServletFns.getCurrentResponse());
 	}
 }

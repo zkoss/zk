@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  */
 public class JspFns {
 	private static final Log log = Log.lookup(JspFns.class);
+	private static long LAST_MODIFIED = new java.util.Date().getTime();
 
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
 	 * and JavaScript.
@@ -144,9 +145,13 @@ public class JspFns {
 			ExecutionsCtrl.setCurrent(old);
 		}
 	}
-
-	/** Sets the Cache-Control and Expires headers for the response.
-	 *
+	
+	/** Sets the Cache-Control, Expires, and Last-Modified headers for the response.
+	 * <p> Last-Modified is a "weak" caching header in that the browser applies
+	 * a heuristic to determine whether to fetch the item from cache or not. Use
+	 * {@link #setCacheControl(ServletContext, HttpServletRequest, HttpServletResponse, String, int)}
+	 * instead.
+	 * 
 	 * @param response the servlet response (never null)
 	 * @param prop the name of the propery to check if the headers
 	 * shall be generated. If null, it is always generated.
@@ -156,6 +161,7 @@ public class JspFns {
 	 * @param hours the number of hours the client is allowed to cache the
 	 * resource
 	 * @since 3.6.3
+	 * @see #setCacheControl(ServletContext, HttpServletRequest, HttpServletResponse, String, int)
 	 */
 	public static void setCacheControl(HttpServletResponse response,
 	String prop, int hours) {
@@ -166,10 +172,50 @@ public class JspFns {
 			final Calendar cal = Calendar.getInstance();
 			cal.add(cal.HOUR, hours);
 			response.setDateHeader("Expires", cal.getTime().getTime());
+			response.setDateHeader("Last-Modified", LAST_MODIFIED);
 		}
 	}
-	/** Sets the Cache-Control and Expires headers for the CSS files
+
+	
+	/** Sets the Cache-Control, Expires, and Etag headers for the response.
+	 * 
+	 * @param context the servlet context (never null)
+	 * @param request the servlet request (never null)
+	 * @param response the servlet response (never null)
+	 * @param prop the name of the propery to check if the headers
+	 * shall be generated. If null, it is always generated.
+	 * If "false" is specified with this property, this method won't
+	 * generate anything. In other words, "false" means to disable the cache.
+	 * If It is used for debugging/developing purpose.
+	 * @param hours the number of hours the client is allowed to cache the
+	 * resource
+	 * @since 5.0.1
+	 */
+	public static void setCacheControl(ServletContext context, HttpServletRequest request,
+			HttpServletResponse response, String prop, int hours) {
+		if (prop == null || !"false".equals(Library.getProperty(prop))) {	
+			response.setHeader("Cache-Control", "public, max-age="
+				+ hours * 3600); //unit: seconds
+
+			final Calendar cal = Calendar.getInstance();
+			cal.add(cal.HOUR, hours);
+			response.setDateHeader("Expires", cal.getTime().getTime());
+			response.setDateHeader("Last-Modified", LAST_MODIFIED);
+			final String uuid = WebManager.getWebManager(context).getClassWebResource().getEncodeURLPrefix();
+			final String eTag = request.getHeader("If-None-Match");
+			if (eTag != null && eTag.equals(uuid)) {
+				 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                 response.setHeader("ETag", eTag);
+			}
+			 response.setHeader("ETag", uuid);
+		}
+	}
+	/** Sets the Cache-Control, Expires, and Last-Modified headers for the CSS files
 	 * of class Web resources.
+	 * <p> Last-Modified is a "weak" caching header in that the browser applies
+	 * a heuristic to determine whether to fetch the item from cache or not. Use
+	 * {@link JspFns#setCSSCacheControl(ServletContext, HttpServletRequest, HttpServletResponse)}
+	 * instead.
 	 *
 	 * <p>It first check if <tt>org.zkoss.web.classWebResource.cache</tt>
 	 * is turned off, and then check how many hours specified in
@@ -178,9 +224,26 @@ public class JspFns {
 	 * Otherwise, it generates the header with the specified hours
 	 * (default: 8760).
 	 * @see #setCWRCacheControl
+	 * @see #setCSSCacheControl(ServletContext, HttpServletRequest, HttpServletResponse)
 	 * @since 3.6.3
 	 */
 	public static void setCSSCacheControl(HttpServletResponse response) {
+		setCSSCacheControl(null, null, response);
+	}
+	/** Sets the Cache-Control, Expires, and Etag headers for the CSS files
+	 * of class Web resources.
+	 *
+	 * <p>It first check if <tt>org.zkoss.web.classWebResource.cache</tt>
+	 * is turned off, and then check how many hours specified in
+	 * <tt>org.zkoss.web.classWebResource.cache.CSS.hours</tt>.
+	 * If it is turned off or the value of hours is non-postive, nothing is generated
+	 * Otherwise, it generates the header with the specified hours
+	 * (default: 8760).
+	 * @see #setCWRCacheControl(ServletContext, HttpServletRequest, HttpServletResponse)
+	 * @since 5.0.1
+	 */
+	public static void setCSSCacheControl(ServletContext context,
+			HttpServletRequest request, HttpServletResponse response) {
 		int hours = 8760;
 		final String PROP = "org.zkoss.web.classWebResource.cache.CSS.hours";
 		String s = Library.getProperty(PROP);
@@ -191,9 +254,16 @@ public class JspFns {
 			} catch (Throwable ex) {
 				log.warning("Ingored property "+PROP+": an integer is expected");
 			}
-		setCacheControl(response, "org.zkoss.web.classWebResource.cache", hours);
+		if (context != null)
+			setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", hours);
+		else
+			setCacheControl(response, "org.zkoss.web.classWebResource.cache", hours);
 	}
-	/** Sets the Cache-Control and Expires headers for class Web resources.
+	/** Sets the Cache-Control, Expires, and Last-Modified headers for class Web resources.
+	 * <p> Last-Modified is a "weak" caching header in that the browser applies
+	 * a heuristic to determine whether to fetch the item from cache or not. Use
+	 * {@link JspFns#setCWRCacheControl(ServletContext, HttpServletRequest, HttpServletResponse)}
+	 * instead.
 	 * It checks if <tt>org.zkoss.web.classWebResource.cache</tt>
 	 * is turned off. If not, it generates the headers.
 	 * <p>Notice that, for the CSS files, please use {@link #setCSSCacheControl}
@@ -202,5 +272,16 @@ public class JspFns {
 	 */
 	public static void setCWRCacheControl(HttpServletResponse response) {
 		setCacheControl(response, "org.zkoss.web.classWebResource.cache", 8760);
+	}
+	/** Sets the Cache-Control, Expires, and Etag headers for class Web resources.
+	 * It checks if <tt>org.zkoss.web.classWebResource.cache</tt>
+	 * is turned off. If not, it generates the headers.
+	 * <p>Notice that, for the CSS files, please use {@link #setCSSCacheControl}
+	 * instead.
+	 * @since 5.0.1
+	 */
+	public static void setCWRCacheControl(ServletContext context,
+			HttpServletRequest request, HttpServletResponse response) {
+		setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", 8760);
 	}
 }
