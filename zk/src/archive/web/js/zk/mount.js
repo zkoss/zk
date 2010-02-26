@@ -175,7 +175,8 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			_createInf0.stub = null;
 			mtAU(stub);
 		} else { //browser loading
-			zk.bootstrapping = true;
+			if (!zk.mounted) //mount() might be called w/o stub, ex: include
+				zk.bootstrapping = true;
 			mtBL();
 			//note: jq(mtBL) is a bit slow (too late to execute)
 			//note: <div/> must be generated before <script/>
@@ -222,6 +223,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		if (_createInf0.length || _createInf1.length)
 			return; //another page started
 
+		zk.mounted = true;
 		zk.mounting = false;
 		zk.afterMount(function () {zk.bootstrapping = false;});
 		doAfterMount(mtBL1);
