@@ -47,6 +47,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					indemand = tree.inPagingMold() || tree.isModel();
 				this.fire('onOpen', {open: open}, {toServer: indemand});
 			}
+			var tree = this.getTree();
+			if (tree)
+				tree.focus();
 		}
 	},
 	_showKids: function (open) {
