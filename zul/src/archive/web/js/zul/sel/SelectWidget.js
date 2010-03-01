@@ -581,7 +581,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	doFocus_: function (evt) {
 		var row	= this._focusItem || this._lastSelectedItem;
 		if (row) row._doFocusIn();
-		this.$supers('doFocus', arguments);
+		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
 		if (this._focusItem) {
