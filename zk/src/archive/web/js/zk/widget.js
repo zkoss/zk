@@ -2102,6 +2102,7 @@ function () {
 		}
 
 		if (!skipper) {
+			zWatch.fireDown('onRestore', this);
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this);
 		}
@@ -2154,6 +2155,7 @@ function () {
 
 						skipper.restore(this, skipInfo);
 
+						zWatch.fireDown('onRestore', this);
 						zWatch.fireDown('beforeSize', this);
 						zWatch.fireDown('onSize', this);
 						return this; //done
@@ -3972,8 +3974,6 @@ Object skip(zk.Widget wgt);
 
 				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
 			}
-
-			zWatch.fireDown('onRestore', wgt);
 		}
 	}
 });
