@@ -22,6 +22,7 @@ jcommon.jar
 Filters.jar
 jasperreports.jar
 commons-collections.jar
+commons-digester.jar
 commons-logging.jar
 itext.jar
 jxl.jar
