@@ -3972,6 +3972,8 @@ Object skip(zk.Widget wgt);
 
 				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
 			}
+
+			zWatch.fireDown('onRestore', wgt);
 		}
 	}
 });
