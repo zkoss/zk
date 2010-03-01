@@ -13,8 +13,8 @@ B50-2950801.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-Check it will not happen js error
 <zk>
+	Check it will not happen js error
 	<borderlayout>
 		<east>
 			<hbox hflex="1" vflex="1" style="padding-top:20px"/>
