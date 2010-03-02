@@ -521,13 +521,22 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			jsel = -1;
 		if (jsel < 0) {
 			_selItem = null;
-			//Bug#2919037: SetSelectedIndex(-1) shall unselect even with constraint
-			setRawValue(null);
+			//Bug#2919037: setSelectedIndex(-1) shall unselect even with constraint
+			clearValue();
 		} else {
 			_selItem = getItemAtIndex(jsel);
 			setValue(_selItem.getLabel());
 		}
 	}
+	
+	private void clearValue() {
+		//Don't call setRawValue(), or the error message will be cleared
+		if (_value != null && !"".equals(_value)) {
+			_value = "";
+			smartUpdate("value", coerceToString(_value));
+		}
+	}
+	
 	/** Returns the index of the selected item, or -1 if not selected.
 	 * @since 3.0.1
 	 */
