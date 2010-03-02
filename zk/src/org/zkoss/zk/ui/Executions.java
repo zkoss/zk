@@ -168,6 +168,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return the first component being created.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 */
 	public static final Component createComponents(
@@ -213,6 +214,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return the first component being created.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 * @see #createComponents(String, Component, Map)
 	 * @see #createComponentsDirectly(Document, String, Component, Map)
@@ -240,6 +242,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return the first component being created.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 * @see #createComponents(String, Component, Map)
 	 * @see #createComponentsDirectly(String, String, Component, Map)
@@ -272,6 +275,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return the first component being created.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 * @see #createComponents(String, Component, Map)
 	 * @see #createComponentsDirectly(Document, String, Component, Map)
@@ -296,7 +300,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
-	 * @return the first component being created.
+	 * @return all top-level components being created.
 	 * @see #createComponents(WebApp, String, Map)
 	 * @since 3.6.2
 	 */
@@ -325,6 +329,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return all top-level components being created.
 	 * @see #createComponents(WebApp, PageDefinition, Map)
 	 * @see #createComponentsDirectly(WebApp, String, String, Map)
 	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
@@ -363,6 +368,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return all top-level components being created.
 	 * @see #createComponents(WebApp, PageDefinition, Map)
 	 * @see #createComponents(WebApp, String, Map)
 	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
@@ -403,6 +409,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return all top-level components being created.
 	 * @see #createComponents(WebApp, PageDefinition, Map)
 	 * @see #createComponents(WebApp, String, Map)
 	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
@@ -445,6 +452,7 @@ public class Executions {
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
+	 * @return all top-level components being created.
 	 * @see #createComponents(WebApp, PageDefinition, Map)
 	 * @see #createComponents(WebApp, String, Map)
 	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
