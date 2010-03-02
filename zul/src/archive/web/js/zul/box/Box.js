@@ -218,9 +218,18 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	 	 * <p>Default: null (means to use the default spacing).
 	 	 * @return String
 	 	 */
-		spacing: _zkf
+		spacing: _zkf,
+		widths: _zkf = function (val) {
+		    this._sizes = val;
+		    this.rerender();
+		}
 	},
-
+	setHeights: function (val) {
+		this.setWidths(val);
+	},
+	getHeights: function () {
+		return this.getWidths();
+	},
 	/** Returns whether it is a vertical box. 
 	 * @return boolean
 	 */

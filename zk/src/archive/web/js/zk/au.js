@@ -401,7 +401,8 @@ zAu = {
 	 */
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
-		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
+		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")
+				+ (ex?"\n"+(typeof ex == "string" ? ex : ex.message):""));
 	},
 	/** Returns the URI for the specified error.
 	 * @param int code the error code

@@ -294,7 +294,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		final String[] sizes = Utils.stringToArray(widths, null);
 		if (!Objects.equals(sizes, _sizes)) {
 			_sizes = sizes;
-			smartUpdate("_sizes", _sizes);
+			smartUpdate("widths", _sizes);
 		}
 	}
 	/** Sets the widths/heights, which is a list of numbers separated

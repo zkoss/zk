@@ -73,7 +73,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	},
 
 	getZclass: function () {
-		var zcls = this.zclass,
+		var zcls = this._zclass,
 			bar = this.isBar();
 		return zcls ? zcls: "z-separator" +
 			(this.isVertical() ? "-ver" + (bar ? "-bar" : "") :
