@@ -42,7 +42,7 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
 	exit 0
 fi
 
-stamp=$(date +%y%m%d%H)
+stamp=$(date +%Y%m%d%H)
 
 if [ "$1" = "" ] ; then
 	echo $stamp
