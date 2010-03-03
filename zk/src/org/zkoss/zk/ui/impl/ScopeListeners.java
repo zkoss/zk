@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 
@@ -106,5 +107,20 @@ public class ScopeListeners {
 		if (_listeners != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
 				((ScopeListener)it.next()).parentChanged(_owner, newparent);
+	}
+
+	/** Invokes {@link ScopeListener#idSpaceChanged} for registered
+	 * listeners.
+	 *
+	 * @see #addScopeListener
+	 * @since 5.0.1
+	 */
+	public void notifyIdSpaceChanged(IdSpace newIdSpace) {
+		if (_listeners != null)
+			for (Iterator it = _listeners.iterator(); it.hasNext();)
+				try {
+					((ScopeListener)it.next()).idSpaceChanged(_owner, newIdSpace);
+				} catch (AbstractMethodError ex) { //backward compatible to 5.0.0
+				}
 	}
 }

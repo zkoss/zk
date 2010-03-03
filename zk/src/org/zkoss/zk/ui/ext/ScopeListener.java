@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.ext;
 
+import org.zkoss.zk.ui.IdSpace;
+
 /**
  * <p>A listener used to listen whether a scope ({@link Scope}) is changed.
  *
@@ -46,4 +48,12 @@ public interface ScopeListener {
 	 * @param newparent the new parent.
 	 */
 	public void parentChanged(Scope scope, Scope newparent);
+	/** Called when the ID space of this scope has been changed.
+	 * This method is called only if one of its parent implements
+	 * {@link IdSpace}, such as components and pages.
+	 * @param scope the scope whose ID space is changed
+	 * @param newIdSpace the new ID space.
+	 * @since 5.0.1
+	 */
+	public void idSpaceChanged(Scope scope, IdSpace newIdSpace);
 }

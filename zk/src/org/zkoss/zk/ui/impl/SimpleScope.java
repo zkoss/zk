@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.ext.Scope;
@@ -105,6 +106,15 @@ public class SimpleScope implements Scope {
 	 */
 	public void notifyParentChanged(Scope newparent) {
 		_listeners.notifyParentChanged(newparent);
+	}
+	/** Invokes {@link ScopeListener#IdSpaceChanged} for registered
+	 * listeners.
+	 *
+	 * @see #addScopeListener
+	 * @since 5.0.1
+	 */
+	public void notifyIdSpaceChanged(IdSpace newIdSpace) {
+		_listeners.notifyIdSpaceChanged(newIdSpace);
 	}
 	/** Returns a ist of all scope listners (never null).
 	 */

@@ -339,31 +339,42 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		else if (is != null)
 			addToIdSpacesDown(comp, (AbstractPage)is);
 	}
-	/** comp's ID might be auto id. */
+	/** comp's ID might be auto id.
+	 * @param owner it must be an IdSpace
+	 */
 	private static void addToIdSpacesDown(Component comp, Component owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			((AbstractComponent)owner).bindToIdSpace(comp);
+
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
+
+		((AbstractComponent)comp).notifyIdSpaceChanged((IdSpace)owner);
 	}
 	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.addFellow(comp);
+
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
+
+		((AbstractComponent)comp).notifyIdSpaceChanged(owner);
 	}
 	/** Similar to {@link #getId} except it won't generate one if not
 	 * available.
 	 */
 	private static String getIdDirectly(Component comp) {
 		return ((AbstractComponent)comp)._id;
+	}
+	private void notifyIdSpaceChanged(IdSpace newIdSpace) {
+		if (_attrs != null) _attrs.notifyIdSpaceChanged(newIdSpace);
 	}
 
 	/** Adds its descendants to the ID space when parent or page is changed,
@@ -381,19 +392,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(compId))
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
+
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
+
+		((AbstractComponent)comp).notifyIdSpaceChanged(null);
 	}
 	private static void removeFromIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.removeFellow(comp);
+
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
+
+		((AbstractComponent)comp).notifyIdSpaceChanged(null);
 	}
 
 	/** Checks the uniqueness in ID space when changing parent. */

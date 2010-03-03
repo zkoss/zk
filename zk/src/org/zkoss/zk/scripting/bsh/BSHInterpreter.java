@@ -520,11 +520,13 @@ implements SerializableAware, HierachicalAware {
 		public void attributeRemoved(Scope scope, String name) {
 		}
 		public void parentChanged(Scope scope, Scope newparent) {
-			if (newparent != null) {
+		}
+		public void idSpaceChanged(Scope scope, IdSpace newIdSpace) {
+			if (newIdSpace instanceof Scope) { //i.e., != null (but safer)
 				final BSHInterpreter ip = getInterpreter(_bshns._scope);
 				_bshns.setParent(
-					ip != null ? ip.prepareNS(newparent):
-						prepareDetachedNS(newparent));
+					ip != null ? ip.prepareNS((Scope)newIdSpace):
+						prepareDetachedNS((Scope)newIdSpace));
 				return;
 			}
 
