@@ -351,6 +351,12 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			_dynams = new HashMap();
 		_dynams.put(name, value);
 	}
+	/** Removes all dynamic properties.
+	 * @since 3.6.4
+	 */
+	public void clearDynamicProperties() {
+		_dynams = null;
+	}
 
 	//-- Component --//
 	/** Invalidates this component.

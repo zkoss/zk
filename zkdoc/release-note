@@ -3,6 +3,7 @@ ZK 3.6.4
 * Features
   2902880: Renderer and Model in Listbox/Grid shall be transient
   2927147: Replace bookmark command and bookmark encoding
+  2954280: Include component shall have clearDynamicProperties method
 
 * Bugs
   2895706: Encoding of italian message is wrong
