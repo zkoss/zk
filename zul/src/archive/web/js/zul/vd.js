@@ -78,7 +78,7 @@ zkVld.onScrollAt = function (n) {
 zkVld.syncErrBox = function (box, unfocused) {
 	var cmp = $outer(box), ofs = zk.revisedOffset(cmp), wd = cmp.offsetWidth,
 		hgh = cmp.offsetHeight, atTop;
-	if (!unfocused && zkau.currentFocus && zkau.currentFocus != cmp) {
+	if (!unfocused && zkau.currentFocus && zkau.currentFocus.parentElement && zkau.currentFocus != cmp) {
 		var o2 = zk.revisedOffset(zkau.currentFocus);
 		if (o2[0] < ofs[0] + wd
 		&& ofs[0] + wd + 220 < zk.innerX() + zk.innerWidth()) //Bug 1731646 (box's width unknown, so use 220)
