@@ -783,7 +783,13 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String msg the error message
 	 */
 	obsolete: function (dtid, msg) {
-		zk.error(msg);
+		jq.alert(msg, {
+			icon: 'ERROR',
+			button: {
+				Cancel: true,
+				Reload: function () {location.reload();}
+			}
+		});
 	},
 	/** Shows an alert to indicate some error occurs.
 	 * For widget's error message, use {@link #wrongValue} instead.

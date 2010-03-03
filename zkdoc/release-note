@@ -9,6 +9,7 @@ February, 2010
   2927147: Replace bookmark command and bookmark encoding
   2943475: Way to customize progressbox position
   2954280: Include component shall have clearDynamicProperties method
+  2962487: Timeout popup translation and reload page
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)

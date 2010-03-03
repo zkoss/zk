@@ -1738,47 +1738,16 @@ jq.alert('With listener', {
 </td><td> Specifies which desktop this message box belongs to. You rarely need to specify it.
 </td></tr>
 <tr>
-<td> OK
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>OK</code> button. If a function is specified, the function will be called if the button is pressed.
+<td> button
+</td><td> a map ({@link Map}) of buttons. If null or empty, OK is assumed
+</td><td> Specifies what buttons to display. The key is the button name,
+and the value is a function ({@link Function}) to execute when the button
+is clicked.
+The label is assumed to be <code>msgzul[name.toUpperCase()]||name</code>.
+Localized labels include OK, Cancel, Yes, No, Retry, Abort, Ignore, Reload.
+You can add your own labels by puttingit to <code>msgzul</code>.
 </td></tr>
-<tr>
-<td> Cancel
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>Cancel</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr>
-<tr>
-<td> YES
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>Yes</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr>
-<tr>
-<td> NO
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>No</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr>
-<tr>
-<td> RETRY
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>Retry</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr>
-<tr>
-<td> ABORT
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>Abort</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr>
-<tr>
-<td> IGNORE
-</td><td> a function or <code>true</code>
-</td><td> false
-</td><td> Specifies whether to display the <code>Ignore</code> button. If a function is specified, the function will be called if the button is pressed.
-</td></tr></table>
+</table>
 	 */
 	alert: function (msg) {
 		zk.alerting = true;

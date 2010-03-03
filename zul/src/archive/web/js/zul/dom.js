@@ -19,12 +19,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			INFORMATION: "z-msgbox z-msgbox-information",
 			ERROR: "z-msgbox z-msgbox-error",
 			NONE: 'z-msgbox z-msgbox-none'
-		},
-		btnNames = ['OK', 'CANCEL', 'YES', 'NO', 'RETRY', 'ABORT', 'IGNORE'];
+		};
 
 	function newButton(nm, f) {
 		return new zul.wgt.Button({
-			label: msgzul[nm]||nm,
+			label: msgzul[nm.toUpperCase()]||nm,
 			listeners: {
 				onClick: function (evt) {
 					if (typeof f == 'function')
@@ -36,12 +35,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function getButtons(opts) {
 		var btns = [];
-		jq.each(btnNames, function (i, nm) {
-			var f;
-			if (f = opts[nm]) {
-				btns.push(newButton(nm, f));
-			}
-		});
+		for (var nm in opts) {
+			var f = opts[nm];
+			btns.push(newButton(nm, typeof f == 'function' ? f: null));
+		}
 		if (!btns.length)
 			btns.push(newButton('OK'));
 		return btns;
@@ -79,7 +76,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					new zul.box.Box({
 						mold: 'horizontal',
 						style: 'margin-left:auto; margin-right:auto',
-						children: getButtons(opts)
+						children: getButtons(opts.button)
 					})
 				],
 				mode: opts.mode||'modal'

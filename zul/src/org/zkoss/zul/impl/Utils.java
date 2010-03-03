@@ -227,6 +227,7 @@ public class Utils {
 		addLocaleJS(sb, "RETRY", MZul.RETRY);
 		addLocaleJS(sb, "ABORT", MZul.ABORT);
 		addLocaleJS(sb, "IGNORE", MZul.IGNORE);
+		addLocaleJS(sb, "RELOAD", MZul.RELOAD);
 
 		addLocaleJS(sb, "UPLOAD_CANCEL", MZul.UPLOAD_CANCEL);
 		addLocaleJS(sb, "ILLEGAL_VALUE", MZul.ILLEGAL_VALUE);
