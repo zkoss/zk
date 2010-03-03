@@ -35,6 +35,12 @@
 	<xs:simpleType name="dateType">
 		<xs:union memberTypes="xs:dateTime annotationType" />
 	</xs:simpleType>
+	<xs:simpleType name="timezoneType">
+		<xs:union memberTypes="xs:string annotationType" />
+	</xs:simpleType>
+	<xs:simpleType name="mediaType">
+		<xs:union memberTypes="xs:string annotationType" />
+	</xs:simpleType>
 	<xs:simpleType name="layoutBorderAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -405,17 +411,16 @@
 		<xs:attribute name="style" type="xs:string" use="optional" />
 		<xs:attribute name="left" type="xs:string" use="optional" />
 		<xs:attribute name="top" type="xs:string" use="optional" />
-		<xs:attribute name="draggable" type="booleanType" use="optional" />
-		<xs:attribute name="droppable" type="booleanType" use="optional" />
+		<xs:attribute name="draggable" type="xs:string" use="optional" />
+		<xs:attribute name="droppable" type="xs:string" use="optional" />
 		<xs:attribute name="focus" type="booleanType" use="optional" />
 		<xs:attribute name="tooltiptext" type="xs:string" use="optional" />
-		<xs:attribute name="zindex" type="xs:string" use="optional" />
+		<xs:attribute name="zindex" type="intType" use="optional" />
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="xulElementAttrGroup">
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="action" type="xs:string" use="optional" />
 		<xs:attribute name="context" type="xs:string" use="optional" />
 		<xs:attribute name="popup" type="xs:string" use="optional" />
 		<xs:attribute name="tooltip" type="xs:string" use="optional" />
@@ -450,9 +455,9 @@
 	<xs:attributeGroup name="labelImageElementAttrGroup">
 		<xs:attributeGroup ref="labelElementAttrGroup" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
-		<xs:attribute name="imageContent" type="xs:string" use="optional" />
+		<xs:attribute name="imageContent" type="mediaType" use="optional" />
 		<xs:attribute name="hoverImage" type="xs:string" use="optional" />
-		<xs:attribute name="hoverImageContent" type="xs:string" use="optional" />
+		<xs:attribute name="hoverImageContent" type="mediaType" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="headerElementAttrGroup">
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
@@ -714,7 +719,7 @@
 			<xs:element ref="west" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="east" minOccurs="0" maxOccurs="1" />
 		</xs:all>
-		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 	</xs:complexType>
     <!-- box -->
 	<xs:element name="box" type="boxType" />
@@ -743,7 +748,6 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="autodisable" type="xs:string" use="optional" />
-		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -754,8 +758,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
-		<xs:attribute name="compact" type="booleanType" use="optional" />
-		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -812,7 +815,7 @@
 		<xs:attribute name="bgAlpha" type="xs:string" use="optional" />
 		<xs:attribute name="bgColor" type="xs:string" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attribute name="period" type="chartPeriodAttrType" use="optional" />
 		<xs:attribute name="areaListener" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
@@ -826,7 +829,6 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="checked" type="booleanType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -925,7 +927,6 @@
 		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="lenient" type="booleanType" use="optional" />
-		<xs:attribute name="compact" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="displayedTimeZones" type="xs:string" use="optional" />
@@ -1008,7 +1009,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="label" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
-		<xs:attribute name="imageContent" type="xs:string" use="optional" />
+		<xs:attribute name="imageContent" type="mediaType" use="optional" />
 	</xs:complexType>
     
     <!-- fisheyebar -->
@@ -1041,7 +1042,7 @@
 		<xs:attribute name="autoplay" type="booleanType" use="optional" />
 		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
 	</xs:complexType>
 	
 	<!-- flashchart -->
@@ -1054,9 +1055,7 @@
 		<xs:attribute name="autoplay" type="booleanType" use="optional" />
 		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
-		<xs:attribute name="allowScriptAccess" type="xs:string" use="optional" />
-		<xs:attribute name="flashvars" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
 	</xs:complexType>
 
     <!-- foot -->
@@ -1204,7 +1203,7 @@
 		<xs:attribute name="paginal" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="rowRenderer" type="xs:string" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1314,9 +1313,9 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
 		<xs:attribute name="hover" type="xs:string" use="optional" />
-		<xs:attribute name="hoverContent" type="xs:string" use="optional" />
+		<xs:attribute name="hoverContent" type="mediaType" use="optional" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
@@ -1336,7 +1335,7 @@
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="hspace" type="xs:string" use="optional" />
 		<xs:attribute name="vspace" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -1449,11 +1448,11 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
-		<xs:attribute name="selectedIndex" type="xs:string" use="optional" />
+		<xs:attribute name="selectedIndex" type="intType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType" use="optional" />
@@ -1581,7 +1580,7 @@
 			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
 	</xs:complexType>
     <!-- menubar -->
 	<xs:element name="menubar" type="menubarType" />
@@ -1754,7 +1753,6 @@
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="checked" type="booleanType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
@@ -1888,8 +1886,7 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
-		<xs:attribute name="buttonVisible" type="xs:string" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="step" type="xs:integer" use="optional" />
 		<xs:attribute name="value" type="xs:dateTime" use="optional" />
@@ -2018,8 +2015,7 @@
 		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
-		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- toolbar -->
@@ -2179,7 +2175,7 @@
 		<xs:attribute name="checkmark" type="booleanType" use="optional" />
 		<xs:attribute name="multiple" type="booleanType" use="optional" />
 		<xs:attribute name="vflex" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="model" type="xs:string" use="optional" />

@@ -179,7 +179,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return boolean
 		 */
 		timeZonesReadonly: function (readonly) {
-			this._tzonesReadonly = readonly;
 			var select = this.$n('dtzones');
 			if (select) select.disabled = readonly ? "disabled" : "";
 		},
@@ -464,7 +463,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(pp).append(html.join(''));
 			var select = this.$n('dtzones');
 			if (select) {
-				select.disabled = this._tzonesReadonly ? "disable" : "";
+				select.disabled = this._timeZonesReadonly ? "disable" : "";
 				this.domListen_(select, 'onChange', '_doTimeZoneChange');
 	 			this._setTimeZonesIndex();
 			}			
