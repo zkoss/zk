@@ -5,7 +5,9 @@
 	overflow: hidden;
 	background-color:#CDE6F5;
 	border: 0;
-	position: relative;
+	<c:if test="${not c:browser('safari')}"><%-- Bug 2949287--%>
+		position: relative;
+	</c:if>
 }
 
 .z-north,

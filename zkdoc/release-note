@@ -57,6 +57,7 @@ February, 2010
   2898413: FF and DSP caching
   2959487: The button browse is not translated spanish on fileupload
   2948454: zscript not interpreted correctly if IdSpace owner changed
+  2949287: Printing demo page from Webkit browsers prints blank page
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
