@@ -79,6 +79,9 @@ public class Widget extends ClientWidget {
 	public Widget previousSibling() {
 		return new Widget(_out, ".previousSibling");
 	}
+	public Widget $f(String id) {
+		return new Widget(_out, ".$f('" + id + "')");
+	}
 	public Element $n() {
 		return new Element(_out + ".$n()");
 	}
