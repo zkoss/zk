@@ -178,8 +178,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * If readonly, the user cannot change the time zone at the client.
 		 * @return boolean
 		 */
-		timeZonesReadOnly: function (readonly) {
-			this._tzonesReadOnly = readonly;
+		timeZonesReadonly: function (readonly) {
+			this._tzonesReadonly = readonly;
 			var select = this.$n('dtzones');
 			if (select) select.disabled = readonly ? "disabled" : "";
 		},
@@ -293,11 +293,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	/** Drops down or closes the calendar to select a date.
 	 */
 	setOpen: function(open) {
+		this._open = open;
 		var pp = this.$n("pp");
 		if (pp) {
 			if (!jq(pp).zk.isVisible()) this._pop.open();
 			else this._pop.close();
 		}
+	},
+	isOpen: function () {
+		return this._pop && this._pop.isOpen();
 	},
 	coerceFromString_: function (val) {
 		if (val) {
@@ -460,7 +464,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(pp).append(html.join(''));
 			var select = this.$n('dtzones');
 			if (select) {
-				select.disabled = this._tzonesReadOnly ? "disable" : "";
+				select.disabled = this._tzonesReadonly ? "disable" : "";
 				this.domListen_(select, 'onChange', '_doTimeZoneChange');
 	 			this._setTimeZonesIndex();
 			}			
