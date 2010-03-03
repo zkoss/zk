@@ -405,6 +405,12 @@ implements org.zkoss.zul.api.Include, Includer {
 			_dynams = new HashMap();
 		_dynams.put(name, value);
 	}
+	/** Removes all dynamic properties.
+	 * @since 5.0.1
+	 */
+	public void clearDynamicProperties() {
+		_dynams = null;
+	}
 
 	//-- Component --//
 	/** Invalidates this component.
