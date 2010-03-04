@@ -185,8 +185,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_createFaker: function (n, postfix) {
-		var t = document.createElement("TH"), 
-			d = document.createElement("DIV");
+		var t = document.createElement("th"), 
+			d = document.createElement("div");
 		t.id = n.id + "-" + postfix;
 		t.className = n.className;
 		t.style.cssText = n.style.cssText;

@@ -280,7 +280,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		} else {
 			var n = this.$n('real'), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
-				n.appendChild(document.createElement("TBODY"));
+				n.appendChild(document.createElement("tbody"));
 			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
 				this.encloseChildHTML_(child, true));
 		}

@@ -140,9 +140,10 @@ zjq = function (jq) { //ZK extension
 				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
 				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
 				if (zk.opera) {
-					if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
+					var nodenm = jq.nodeName(el);
+					if (operaBug && nodenm == "div" && el.scrollTop != 0)
 						t += el.scrollTop || 0;
-					operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
+					operaBug = nodenm == "span" || nodenm == "input";
 				}
 				t += el.offsetTop || 0;
 				l += el.offsetLeft || 0;
@@ -457,6 +458,20 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 });
 jq.fn.init.prototype = jq.fn;
 
+/** @partial jq
+ */
+zk.override(jq, _jq, {
+	/** Returns the node name of the specified element in the lower case.
+	 * @param DOMElement el the element to test
+	 * @return String the node name.
+	 * @since 5.0.1
+	 */
+	nodeName: function (el) {
+		return arguments.length == 1 ?
+			el.nodeName ? el.nodeName.toLowerCase(): "":
+			_jq.nodeName.apply(this, arguments);
+	}
+});
 jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function () {
@@ -1111,7 +1126,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	textSize: function (txt) {
 		if (!_txtSizDiv) {
-			_txtSizDiv = document.createElement("DIV");
+			_txtSizDiv = document.createElement("div");
 			_txtSizDiv.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
 			document.body.appendChild(_txtSizDiv);
 
@@ -1220,7 +1235,7 @@ jq(el).zk.center(); //same as 'center'
 			return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			agt = document.createElement("SPAN");
+			agt = document.createElement("span");
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
 		if (sib) p.insertBefore(agt, sib);
@@ -1509,7 +1524,7 @@ zk.copy(jq, {
 	 */
 	scrollbarWidth: function () {
 		if (!_sbwDiv) {
-			_sbwDiv = document.createElement("DIV");
+			_sbwDiv = document.createElement("div");
 			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
 			document.body.appendChild(_sbwDiv);
 		}
@@ -1644,7 +1659,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 */
 	newStackup: function (el, id, anchor) {
 		el = jq(el||[], zk)[0];
-		var ifr = document.createElement("IFRAME");
+		var ifr = document.createElement("iframe");
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
@@ -1666,12 +1681,20 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 * @return DOMElement
 	 */
 	newHidden: function (nm, val, parent) {
-		var inp = document.createElement("INPUT");
+		var inp = document.createElement("input");
 		inp.type = "hidden";
 		inp.name = nm;
 		inp.value = val;
 		if (parent) parent.appendChild(inp);
 		return inp;
+	},
+
+	/** Returns the head element of this document.
+	 * @return DOMElement the head element
+	 * @since 5.0.1
+	 */
+	head: function () {
+		return document.getElementsByTagName("head")[0] || document.documentElement;
 	},
 
 	//dialog//

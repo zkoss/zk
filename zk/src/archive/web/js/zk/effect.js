@@ -343,7 +343,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		if (progbox) return this;
 		
 		var msg = opts.message || ((window.msgzk?msgzk.LOADING:"Loading")+'...'),
-			n = document.createElement("DIV");
+			n = document.createElement("div");
 		
 		document.body.appendChild(n);
 		var xy = opts.offset || $anchor.revisedOffset(), 

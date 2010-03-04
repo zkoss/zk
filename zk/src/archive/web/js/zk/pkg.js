@@ -65,7 +65,7 @@ zk.copy(zk, (function() {
 		}
 
 		e.src = uri;
-		document.getElementsByTagName("HEAD")[0].appendChild(e);
+		jq.head().appendChild(e);
 		return false;
 	}
 	function doEnd(afs, wait) {
@@ -223,11 +223,11 @@ zk.load('zul.utl', function () {
 		if (name)
 			markLoading(name);
 
-		var e = document.createElement("SCRIPT");
+		var e = document.createElement("script");
 		e.type = "text/javascript";
 		e.charset = charset || "UTF-8";
 		e.src = src;
-		document.getElementsByTagName("HEAD")[0].appendChild(e);
+		jq.head().appendChild(e);
 		return this;
 	},
 
@@ -349,7 +349,7 @@ zk.afterLoad(function() {});
 	setHost: function (host, updURI, pkgs) {
 		var hostUpd = host + updURI;
 		if (!_defhost.length)
-			for (var scs = document.getElementsByTagName("SCRIPT"), j = 0, len = scs.length;
+			for (var scs = document.getElementsByTagName("script"), j = 0, len = scs.length;
 			j < len; ++j) {
 				var src = scs[j].src;
 				if (src)

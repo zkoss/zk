@@ -53,13 +53,13 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		if (this._src) {
 			jq(this.uuid + '-css', zk).remove();
 
-			var head = this._getHead(),
+			var head = jq.head(),
 				ln = this._getLink(head),
 				n = this.$n();
 			if (n) n.innerHTML = '';
 			if (ln) ln.href = this._src;
 			else {
-				ln = document.createElement("LINK");
+				ln = document.createElement("link");
 				ln.id = this.uuid;
 				ln.rel = "stylesheet";
 				ln.type = "text/css";
@@ -68,11 +68,8 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 			}
 		}
 	},
-	_getHead: function () {
-		return document.getElementsByTagName("HEAD")[0];
-	},
 	_getLink: function (head) {
-		head = head || this._getHead();
+		head = head || jq.head();
 		for (var lns = head.getElementsByTagName("LINK"), j = lns.length,
 		uuid = this.uuid; j--;)
 			if (lns[j].id == uuid)

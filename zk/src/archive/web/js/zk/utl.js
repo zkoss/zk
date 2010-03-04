@@ -405,7 +405,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			//we have to process query string because browser won't do it
 			//even if we use jq().append("<form...")
 			try {
-				var frm = document.createElement("FORM");
+				var frm = document.createElement("form");
 				document.body.appendChild(frm);
 				var j = url.indexOf('?');
 				if (j > 0) {
