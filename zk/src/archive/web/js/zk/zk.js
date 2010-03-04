@@ -68,8 +68,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
 				var w = zk.Widget.$(ar);
-				if (w) msg.push(ar.tagName, ':', wgt2s(w));
-				else msg.push(ar.tagName, '#', ar.id);
+				if (w) msg.push(jq.nodeName(ar), ':', wgt2s(w));
+				else msg.push(jq.nodeName(ar), '#', ar.id);
 			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
 				for (var v in ar) 

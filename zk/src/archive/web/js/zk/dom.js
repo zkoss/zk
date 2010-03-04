@@ -137,8 +137,8 @@ zjq = function (jq) { //ZK extension
 				l += zk.innerX() + el.offsetLeft;
 				break;
 			} else {
-				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
-				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
+				//Fix opera bug. If the parent of "input" or "span" is "div"
+				// and the scrollTop of "div" is more than 0, the offsetTop of "input" or "span" always is wrong.
 				if (zk.opera) {
 					var nodenm = jq.nodeName(el);
 					if (operaBug && nodenm == "div" && el.scrollTop != 0)
@@ -155,7 +155,7 @@ zjq = function (jq) { //ZK extension
 		return [l, t];
 	}
 	function _posOffset(el) {
-		if (zk.safari && el.tagName === "TR" && el.cells.length)
+		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
 			el = el.cells[0];
 
 		var t = 0, l = 0;
@@ -166,7 +166,7 @@ zjq = function (jq) { //ZK extension
 			el = zk.gecko && el != document.body ?
 				_ofsParent(el): el.offsetParent;
 			if (el) {
-				if(el.tagName=='BODY') break;
+				if(jq.nodeName(el, "body")) break;
 				var p = jq(el).css('position');
 				if (p == 'relative' || p == 'absolute') break;
 			}
@@ -996,7 +996,7 @@ jq(el).zk.center(); //same as 'center'
 	cmOffset: function () {
 		//fix safari's bug: TR has no offsetXxx
 		var el = this.jq[0];
-		if (zk.safari && el.tagName === "TR" && el.cells.length)
+		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
 			el = el.cells[0];
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
@@ -1055,7 +1055,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	offsetWidth: function () {
 		var el = this.jq[0];
-		if (!zk.safari || el.tagName != "TR") return el.offsetWidth;
+		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetWidth;
 
 		var wd = 0;
 		for (var cells = el.cells, j = cells.length; j--;)
@@ -1067,7 +1067,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	offsetHeight: function () {
 		var el = this.jq[0];
-		if (!zk.safari || el.tagName != "TR") return el.offsetHeight;
+		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetHeight;
 
 		var hgh = 0;
 		for (var cells = el.cells, j = cells.length; j--;) {
@@ -1081,7 +1081,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	offsetTop: function () {
 		var el = this.jq[0];
-		if (zk.safari && el.tagName === "TR" && el.cells.length)
+		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
 			el = el.cells[0];
 		return el.offsetTop;
 	},
@@ -1090,7 +1090,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	offsetLeft: function () {
 		var el = this.jq[0];
-		if (zk.safari && el.tagName === "TR" && el.cells.length)
+		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
 			el = el.cells[0];
 		return el.offsetLeft;
 	},
@@ -1113,7 +1113,7 @@ jq(el).zk.center(); //same as 'center'
 		} while (p = p.offsetParent);
 
 		do {
-			if (!zk.opera || el.tagName=='BODY') {
+			if (!zk.opera || jq.nodeName(el, 'body')) {
 				t -= el.scrollTop  || 0;
 				l -= el.scrollLeft || 0;
 			}
@@ -1280,9 +1280,9 @@ jq(el).zk.center(); //same as 'center'
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
 
-		var tag = n.tagName;
-		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'TEXTAREA' && tag != 'A'
-		&& tag != 'SELECT' && tag != 'IFRAME')
+		var tag = jq.nodeName(n);
+		if (tag != 'button' && tag != 'input' && tag != 'textarea' && tag != 'a'
+		&& tag != 'select' && tag != 'iframe')
 			return false;
 
 		if (timeout >= 0) setTimeout(function() {_focus(n);}, timeout);

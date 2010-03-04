@@ -286,7 +286,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//ie6 must set parent div to 'relative' or the kid div's offsetTop is not correct
 		var oldPos;
-		if (zk.ie6_ && p.tagName == 'DIV') {
+		if (zk.ie6_ && jq.nodeName(p, 'div')) {
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
@@ -380,7 +380,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 
-		if (zk.ie6_ && p.tagName == 'DIV') { //ie6, restore to orignial position style
+		if (zk.ie6_ && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
 
@@ -2643,8 +2643,8 @@ unbind_: function (skipper, after) {
 	 * @return String the message to indicate the dragging, or null if clone is required
 	 */
 	getDragMessage_: function () {
-		var tn = this.getDragNode().tagName;
-		if ("TR" == tn || "TD" == tn || "TH" == tn) {
+		var tn = jq.nodeName(this.getDragNode());
+		if ("tr" == tn || "td" == tn || "th" == tn) {
 			var n = this.$n('real') || this.getCaveNode();
 			return n ? n.textContent || n.innerText || '': '';
 		}

@@ -94,7 +94,7 @@ zk.override(jq.fn, jq$super, {
 		var clone = jq$super.clone.apply(this, arguments), n, nc;
 		for (var j = 0; j < this.length; ++j) {
 			n = this[j];
-			if (n.tagName == 'IMG' && n._pngSrc) {
+			if (jq.nodeName(n, "img") && n._pngSrc) {
 				(nc = clone[j]).src = n._pngSrc;
 				setTimeout(function() {_fix(nc);}, 0); //we have to wait
 			}

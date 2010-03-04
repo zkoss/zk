@@ -18,11 +18,11 @@ zk.copy(zjq.prototype, {
 		// If tag is "IMG" or "TR", the "DIV" element's scrollTop should be ignored.
 		// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.
 		var el = this.jq[0],
-			normaltag = el.tagName != 'TR' && el.tagName != 'IMG',
+			normaltag = !jq.nodeName(el, "tr") && !jq.nodeName(el, "img"),
 			t = 0, l = 0;
 		do {
-			var tag = el.tagName;
-			if (tag == 'BODY' || (normaltag && tag == 'DIV')) {
+			var tag = jq.nodeName(el);
+			if (tag == 'body' || (normaltag && tag == 'div')) {
 				t += el.scrollTop  || 0;
 				l += el.scrollLeft || 0;
 			}
@@ -34,7 +34,7 @@ zk.copy(zjq.prototype, {
 
 zk.copy(zjq, {
 	_cleanVisi: function (n) {
-		n.style.visibility = n.getElementsByTagName('INPUT').length ? "visible": 'inherit';
+		n.style.visibility = n.getElementsByTagName('input').length ? "visible": 'inherit';
 			// visible will cause elements that shall be cropped become visible, but we need do it if it has INPUT
 	}
 });

@@ -28,8 +28,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var n = fxNodes.shift();
 		if (n) {
 			zjq._alphafix(n);
-			fixBU(n.getElementsByTagName("A")); //Bug 1635685, 1612312
-			fixBU(n.getElementsByTagName("AREA")); //Bug 1896749
+			fixBU(n.getElementsByTagName("a")); //Bug 1635685, 1612312
+			fixBU(n.getElementsByTagName("area")); //Bug 1896749
 
 			if (fxNodes.length) setTimeout(fixDom0, 300);
 		}
@@ -131,10 +131,10 @@ zk.copy(zjq, {
 
 	_fixIframe: function (el) { //used in widget.js
 		try {
-			if (el.tagName == 'IFRAME')
+			if (jq.nodeName(el, 'iframe'))
 				zk(el).redoSrc();
 			else
-				for (var ns = el.getElementsByTagName("IFRAME"), j = ns.length; j--;)
+				for (var ns = el.getElementsByTagName("iframe"), j = ns.length; j--;)
 					zk(ns[j]).redoSrc();
 		} catch (e) {
 		}
@@ -158,8 +158,8 @@ zk.copy(zjq, {
 	}
 	function _dissel0(evt) {
 		evt = evt || window.event;
-		var n = evt.srcElement, tag = n ? n.tagName: '';
-		return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
+		var n = evt.srcElement, tag = n ? jq.nodeName(n): '';
+		return (tag == "textarea" || tag == "input") && (n.type == "text" || n.type == "password");
 	}
 	function _ensel() {
 		this.onselectstart = null;
