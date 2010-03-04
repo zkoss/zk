@@ -61,6 +61,7 @@ February, 2010
   2948454: zscript not interpreted correctly if IdSpace owner changed
   2949287: Printing demo page from Webkit browsers prints blank page
   2961834: Combobox autocomplete fail if add/remove comboitem
+  2849074: Add the autocomplete attribute in XSD for combobox component
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
