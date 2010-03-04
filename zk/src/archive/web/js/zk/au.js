@@ -790,8 +790,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		jq.alert(msg, {
 			icon: 'ERROR',
 			button: {
-				Cancel: true,
-				Reload: function () {location.reload();}
+				Reload: function () {location.reload();},
+				Cancel: true
 			}
 		});
 	},
