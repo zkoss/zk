@@ -453,7 +453,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	//-- ASYNC-UPDATE --//
-	/** Process update requests from the client.
+	/** Process asynchronous update requests from the client.
 	 * @since 3.0.0
 	 */
 	protected void process(Session sess,
@@ -486,6 +486,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
+				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
 				sessionTimeout(request, response, config, dtid);
 				return;
 			}
