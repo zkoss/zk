@@ -602,7 +602,8 @@ zAu = {
 			return true;
 		}
 
-		var implicit = true, uri;
+		//decide implicit (and uri)
+		var implicit, uri;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
 				opts = aureq.opts = aureq.opts||{};
@@ -610,10 +611,8 @@ zAu = {
 				if (j) break;
 				uri = opts.uri;
 			}
-			if (implicit && !opts.ignorable && !opts.implicit) {//ignorable implies implicit
-				implicit = false;
+			if (!(implicit = opts.ignorable || opts.implicit))//ignorable implies implicit
 				break;
-			}
 		}
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
@@ -625,21 +624,17 @@ zAu = {
 
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
 
-		//decide implicit and ignorable
+		//decide ignorable
 		var ignorable = true, ctli, ctlc, alive;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
 				evtnm = aureq.name,
 				opts = aureq.opts = aureq.opts||{};
-			if (opts.uri != uri) {
-				if (j) break;
-				uri = opts.uri;
-			}
-			if (implicit && !opts.ignorable) { //ignorable implies implicit
-				ignorable = false;
-				if (!opts.implicit)
-					implicit = false;
-			}
+			if (opts.uri != uri)
+				break;
+
+			ignorable = ignorable && opts.ignorable; //all ignorable
+
 			if (opts.ctl && !ctli) {
 				ctli = aureq.target.uuid;
 				ctlc = evtnm;
