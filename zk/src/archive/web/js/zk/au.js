@@ -783,6 +783,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String msg the error message
 	 */
 	obsolete: function (dtid, msg) {
+		var v = zk.Desktop.$(dtid);
+		if (v && (v = v.requestPath))
+			msg = msg.replace(dtid, v + ' (' + dtid + ')');
+
 		jq.alert(msg, {
 			icon: 'ERROR',
 			button: {

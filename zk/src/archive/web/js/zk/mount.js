@@ -28,12 +28,14 @@ function zkpi(nm, wv) {
 
 //page begin
 //don't change API since ZK JSP also depends on it
-function zkpb(pguid, dtid, contextURI, updateURI, contained, props) {
+function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
 	if (dtid)
 		if (typeof dtid == 'string')
-			zkdt(dtid, contextURI, updateURI)._pguid = pguid;
+			zkdt(dtid, contextURI, updateURI, reqURI)._pguid = pguid;
 		else
 			props = dtid;
+	var contained = props && props.contained;
+	if (props) delete props.contained;
 	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
 	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
@@ -46,14 +48,15 @@ function zkb2(uuid, type, props) { //zhtml
 	zk.mnt.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
 //define a desktop
-function zkdt(dtid, contextURI, updateURI) {
+function zkdt(dtid, contextURI, updateURI, reqURI) {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
-		dt = new zk.Desktop(dtid, contextURI, updateURI);
+		dt = new zk.Desktop(dtid, contextURI, updateURI, reqURI);
 		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
 	} else {
 		if (updateURI) dt.updateURI = updateURI;
 		if (contextURI) dt.contextURI = contextURI;
+		if (reqURI) dt.requestPath = reqURI;
 	}
 	zk.mnt.curdt = dt;
 	return dt;

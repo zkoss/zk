@@ -520,15 +520,6 @@ public class HtmlPageRenders {
 		out.write(page.getUuid());
 		out.write('\'');
 
-		StringBuffer pgprops = null;
-		if (style != null)
-			pgprops = new StringBuffer("style:'").append(style).append('\'');
-		if (!isClientROD(page)) {
-			if (pgprops == null) pgprops = new StringBuffer();
-			else pgprops.append(',');
-			pgprops.append("z$rod:false");
-		}
-
 		if (owner == null) {
 			out.write(",'");
 			out.write(desktop.getId());
@@ -536,12 +527,18 @@ public class HtmlPageRenders {
 			out.write(getContextURI(exec));
 			out.write("','");
 			out.write(desktop.getUpdateURI(null));
+			out.write("','");
+			out.write(desktop.getRequestPath());
 			out.write('\'');
-			if (pgprops != null) {
-				out.write(',');
-				out.write(contained ? '1': '0');
-			}
 		}
+
+		StringBuffer pgprops = null;
+		if (style != null)
+			pgprops = appendProps(pgprops, "style", style);
+		if (!isClientROD(page))
+			pgprops = appendProps(pgprops, "z$rod", Boolean.FALSE);
+		if (contained)
+			pgprops = appendProps(pgprops, "contained", Boolean.TRUE);
 		if (pgprops != null) {
 			out.write(",{");
 			out.write(pgprops.toString());
@@ -570,6 +567,17 @@ public class HtmlPageRenders {
 		if (divRequired) {
 			out.write("}finally{zkme();}</script>\n");
 		}
+	}
+	private static
+	StringBuffer appendProps(StringBuffer props, String name, Object value) {
+		if (props == null) props = new StringBuffer();
+		else props.append(',');
+		props.append(name).append(':');
+		boolean quote = value instanceof String;
+		if (quote) props.append('\'');
+		props.append(value); //no escape, so use with care
+		if (quote) props.append('\'');
+		return props;
 	}
 
 	private static final String outZkIconJS() {

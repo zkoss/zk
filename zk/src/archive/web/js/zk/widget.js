@@ -3704,10 +3704,11 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @param String dtid the ID of the desktop
 	 * @param String contextURI the context URI, such as <code>/zkdemo</code>
 	 * @param String updateURI the URI of ZK Update Engine, such as <code>/zkdemo/zkau</code>
+	 * @param String reqURI the URI of the request path.
 	 * @param boolean stateless whether this desktop is used for a stateless page.
 	 * Specify true if you want to use <a href="http://docs.zkoss.org/wiki/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
 	 */
-	$init: function (dtid, contextURI, updateURI, stateless) {
+	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		this._aureqs = [];
@@ -3718,6 +3719,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI || zk.updateURI;
 			this.contextURI = contextURI || zk.contextURI;
+			this.requestPath = reqURI || '';
 			this.stateless = stateless;
 			dts[dtid] = this;
 			++Desktop._ndt;
