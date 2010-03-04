@@ -68,11 +68,11 @@ pageTracker._trackPageview();
 </script>
 
 <!-- Google Website Optimizer Conversion Script -->
-<script>
+<script><![CDATA[
 if(typeof(_gat)!='object')document.write('<sc'+'ript src="http'+
 (document.location.protocol=='https:'?'s://ssl':'://www')+
-'.google-analytics.com/ga.js"></sc'+'ript>')
-</script>
+'.google-analytics.com/ga.js"></sc'+'ript>');
+]]></script>
 <script>
 try {
 var gwoTracker=_gat._getTracker("UA-9085743-2");
