@@ -845,6 +845,7 @@
 			<xs:element ref="comboitem" />
 		</xs:choice>
 		<xs:attributeGroup ref="inputElementAttrGroup" />
+		<xs:attribute name="autocomplete" type="booleanType" use="optional" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
