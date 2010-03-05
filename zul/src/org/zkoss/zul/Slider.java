@@ -45,7 +45,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 
 	static {
 		addClientEvent(Slider.class, Events.ON_SCROLL, CE_DUPLICATE_IGNORE);
-		addClientEvent(Slider.class, Events.ON_SCROLLING, CE_BUSY_IGNORE);
+		addClientEvent(Slider.class, Events.ON_SCROLLING, CE_DUPLICATE_IGNORE);
 	}
 
 	

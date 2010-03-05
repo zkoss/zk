@@ -10,6 +10,7 @@ February, 2010
   2943475: Way to customize progressbox position
   2954280: Include component shall have clearDynamicProperties method
   2962487: Timeout popup translation and reload page
+  2780660: Delay the onChanging event for autocomplete comboboxes
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
@@ -65,6 +66,12 @@ February, 2010
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
+  * To simplify the handling of onChanging, at least one onChanging event
+    will be sent before the onChange event, if the user has modified
+    the content and the application registers an onChanging listener.
+    To disable it (and make it behave as 5.0.0), you can put the following
+    in the zul file.
+    <?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingForced=false;})"?>
 
 	--------
 ZK 5.0.0

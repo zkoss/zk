@@ -12,8 +12,51 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _onChangeData(wgt, val, selbk) {
+		var inf = {value: val,
+			start: zk(wgt.getInputNode()).getSelectionRange()[0]}
+		if (selbk) inf.bySelectBack =  true;
+		return inf;
+	}
+	function _startOnChanging(wgt) {
+		_stopOnChanging(wgt);
+		wgt._tidChg = setTimeout(
+			wgt.proxy(_onChanging), zul.inp.InputWidget.onChangingDelay);
+	}
+	function _stopOnChanging(wgt, onBlur) {
+		if (wgt._tidChg) {
+			clearTimeout(wgt._tidChg);
+			wgt._tidChg = null;
+		}
+		if (onBlur) {
+			if (zul.inp.InputWidget.onChangingForced && wgt.isListen("onChanging"))
+				_onChanging.call(wgt, -1); //force
+			wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
+		}
+	}
+	function _onChanging(timeout) {
+		//Note: "this" is available here
+		var inp = this.getInputNode(),
+			val = this.valueEnter_ || inp.value;
+		if (this._lastChg != val) {
+			this._lastChg = val;
+			var valsel = this.valueSel_;
+			this.valueSel_ = null;
+			this.fire('onChanging', _onChangeData(this, val, valsel == val),
+				{ignorable:1}, timeout||5);
+		}
+	}
+
 /**
  * A skeletal implementation for a input widget.
+ *
+ * <p>The delay to send the onChanging event is controlled by
+ * {@link #onChangingDelay}, which is default to 500.
+ * To change it, you can specify the following in a ZUL file.
+ * <pre><code>
+&lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
+</code></pre>
  */
 zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
@@ -280,11 +323,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		if (evt.domTarget.tagName) { //Bug 2111900
 			var inp = this.getInputNode();
-			if (this.isListen('onChanging')) {
-				this._lastChg = inp.value;
-				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
-			}
-			
+			this._lastChg = inp.value;
+
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
@@ -305,7 +345,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	doBlur_: function (evt) {
-		this._stopOnChanging();
+		_stopOnChanging(this, true);
 		
 		jq(this.$n()).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus)) {
@@ -519,34 +559,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				}
 			}
 			if (upd || vi.server)
-				this.fire('onChange', this._onChangeData(value),
+				this.fire('onChange', _onChangeData(this, value),
 					vi.server ? {toServer:true}: null, 150);
 		}
 		return true;
-	},
-	_onChanging: function () {
-		var inp = this.getInputNode(),
-			val = this.valueEnter_ || inp.value;
-		if (this._lastChg != val) {
-			this._lastChg = val;
-			var valsel = this.valueSel_;
-			this.valueSel_ = null;
-			this.fire('onChanging', this._onChangeData(val, valsel == val),
-				{ignorable:1}, 100);
-		}
-	},
-	_onChangeData: function (val, selbk) {
-		var inf = {value: val,
-			start: zk(this.getInputNode()).getSelectionRange()[0]}
-		if (selbk) inf.bySelectBack =  true;
-		return inf;
-	},
-	_stopOnChanging: function () {
-		if (this._tidChg) {
-			clearInterval(this._tidChg);
-			this._tidChg = this._lastChg = this.valueEnter_ =
-			this.valueSel_ = null;
-		}
 	},
 
 	//super//
@@ -618,6 +634,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return;
 		}
 
+		_stopOnChanging(this); //wait for key up
+
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function () {
@@ -630,6 +648,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					inp.value = val.substring(0, maxlen);
 			}
 		}
+
+		if (this.isListen("onChanging"))
+			_startOnChanging(this);
+
 		this.$supers('doKeyUp_', arguments);
 	},
 	afterKeyDown_: function (evt) {
@@ -648,5 +670,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.updateChange_();
 	}
 },{
+	/** The delay for sending the onChanging event (unit: milliseconds).
+	 * The onChanging event will be sent after the specified delay once
+	 * the user pressed a keystroke (and changed the value).
+	 * <p>Default: 500
+	 * @type int
+	 * @since 5.0.1
+	 */
+	onChangingDelay: 500,
+	/** Whether to send at least one the onChanging event if it is listened
+	 * and the content is ever changed.
+	 * <p>Default: true
+	 * @type boolean
+	 * @since 5.0.1
+	 */
+	onChangingForced: true,
 	_allowKeys: "0123456789"+zk.MINUS
 });
+
+})();

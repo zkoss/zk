@@ -51,7 +51,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 	static {
 		addClientEvent(InputElement.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
-		addClientEvent(InputElement.class, Events.ON_CHANGING, CE_BUSY_IGNORE);
+		addClientEvent(InputElement.class, Events.ON_CHANGING, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_SELECTION, 0);
