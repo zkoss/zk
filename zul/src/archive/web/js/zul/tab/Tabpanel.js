@@ -83,20 +83,41 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	_fixPanelHgh: function() {
 		var tabbox = this.getTabbox();
-		if (!tabbox.inAccordionMold()) {
-			var tbx = tabbox.$n(),
-				hgh = tbx.style.height;
-			if (hgh && hgh != "auto") {//tabbox has height
-				var n = this.$n();
-				hgh = zk(n.parentNode).vflexHeight();
-				zk(n).setOffsetHeight(hgh);
-				if (zk.ie6_) {
-					var s = this.$n('cave').style,
-						z = s.zoom;
-					s.zoom = 1;
-					s.zoom = z;
-				}
-			}
+		var tbx = tabbox.$n(),
+		hgh = tbx.style.height;
+		if (hgh && hgh != "auto") {
+    		if (!tabbox.inAccordionMold()) {
+        		var n = this.$n();
+        		hgh = zk(n.parentNode).vflexHeight();
+    			if (zk.ie8)
+    				hgh -= 1; // show the bottom border
+        		zk(n).setOffsetHeight(hgh);
+        		if (zk.ie6_) {
+        			var s = this.$n('cave').style,
+        			z = s.zoom;
+        			s.zoom = 1;
+        			s.zoom = z;
+        		}
+    		} else {
+    			var n = this.$n(),
+    				hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
+    			hgh = zk(n.parentNode).revisedHeight(hgh);
+    			for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
+    				if (e != n) hgh -= e.offsetHeight;
+    			hgh -= n.firstChild.offsetHeight;
+    			hgh = zk(n.lastChild).revisedHeight(hgh);
+    			if (zk.ie8)
+    				hgh -= 1; // show the bottom border
+    			var cave = this.getCaveNode();
+    			cave.style.height = jq.px0(hgh);
+        		if (zk.ie && !zk.ie8) {
+        			var s = cave.style,
+        			z = s.zoom;
+        			s.zoom = 1;
+        			s.zoom = z;
+        			s.overflow = 'hidden';
+        		}
+    		}
 		}
 	},
 	domClass_: function () {

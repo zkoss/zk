@@ -11,6 +11,7 @@ February, 2010
   2954280: Include component shall have clearDynamicProperties method
   2962487: Timeout popup translation and reload page
   2780660: Delay the onChanging event for autocomplete comboboxes
+  2831389: Tab Mold accordion should be able to take all the space
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
