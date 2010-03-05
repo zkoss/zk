@@ -192,7 +192,7 @@ January, 2010
   2923185: Datebox click on timebox result '00:00' when format 'HH:mm'
   2924049: Wrong target when dragging a sub div in IE browsers
   2884572: deploy error when upgrade to ZK5 on weblogic 8.x
-  2912533: Clients.showBusy the underneatml should lose focus  
+  2912533: Clients.showBusy the underneath should lose focus
   2926939: paging.getActivePage() is not correct in onPaging event
   2922847: font-weight has no effect on zk5 toolbarbutton
   2925493: OnChange Event does not work in Listbox with autodrop

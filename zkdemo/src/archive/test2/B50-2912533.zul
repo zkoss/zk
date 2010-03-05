@@ -20,6 +20,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <separator/>
 <button label="Click Me" >
 <attribute name="onClick">
+	new Label("button clicked").setPage(page);
 	Clients.showBusy("This loading bar will disappear after 5 sec.");
 	timer.start();
 </attribute>

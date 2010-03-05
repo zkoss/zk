@@ -2731,10 +2731,11 @@ focus: function (timeout) {
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
-		if (zk.isBusy) {
+		if (zk.isBusy) { //Bug 2912533: none of widget can be activated if busy
 			window[zk.ie || zk.opera ? 'focus' : 'blur']();
 			return false;
 		}
+
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
 			if (!opts || !opts.checkOnly) {

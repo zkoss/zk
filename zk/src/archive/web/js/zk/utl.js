@@ -285,7 +285,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Ignored if not specified.
 	 * @see #destroyProgressbox
 	 */
-	progressbox: function (id, msg, mask, icon) {
+	progressbox: function (id, msg, mask, icon, _opts) {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
@@ -298,8 +298,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return;
 		}
 
-		if (mask)
+		if (_opts && _opts.busy) {
 			zk.isBusy++;
+			window[zk.ie || zk.opera ? 'focus' : 'blur'](); //Bug 2912533
+		}
 
 		var x = jq.innerX(), y = jq.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
@@ -367,13 +369,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** Removes the message box created by {@link #progressbox}.
 	 * @param String id the ID of the DOM element of the message box
 	 */
-	destroyProgressbox: function (id) {
+	destroyProgressbox: function (id, _opts) {
+		if (_opts && _opts.busy && --zk.isBusy < 0)
+			zk.isBusy = 0;
+
 		var $n = jq(id, zk), n;
 		if ($n.length) {
 			if (n = $n[0].z_mask) n.destroy();
 			$n.remove();
-			if (--zk.isBusy < 0)
-				zk.isBusy = 0;
 		}
 
 		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])

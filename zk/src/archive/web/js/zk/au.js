@@ -59,7 +59,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				data = r[1];
 
 			if (!cmd) {
-				zk.error(msgzk.ILLEGAL_RESPONSE+"Command required");
+				zAu.showError("ILLEGAL_RESPONSE", "command required");
 				continue;
 			}
 
@@ -70,17 +70,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		return true;
 	}
 	function doProcess(cmd, data) { //decoded
-		//1. process commands that data[0] is not UUID
-		var fn = zAu.cmd0[cmd];
-		if (fn)
-			return fn.apply(zAu, data);
+		//1. process zAu.cmd1 (cmd1 has higher priority)
+		var fn = zAu.cmd1[cmd];
+		if (fn) {
+			if (!data.length)
+				return zAu.showError("ILLEGAL_RESPONSE", "uuid required", cmd);
 
-		//2. process commands that require uuid
-		if (!(fn = zAu.cmd1[cmd]) || !data.length)
-			return zAu.showError("ILLEGAL_RESPONSE",
-				fn ? (data.length ? data[0]+" not found":"uuid required")+" for ": "Unknown ", cmd);
-
-		data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
+			data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
+		} else {
+			//2. process zAu.cmd0
+			fn = zAu.cmd0[cmd];
+			if (!fn)
+				return zAu.showError("ILLEGAL_RESPONSE", "Unknown", cmd);
+		}
 		fn.apply(zAu, data);
 	}
 
@@ -401,7 +403,7 @@ zAu = {
 	 */
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
-		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")
+		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2+": ":"")+(cmd||"")
 				+ (ex?"\n"+(ex.message || ex):""));
 	},
 	/** Returns the URI for the specified error.
@@ -619,7 +621,7 @@ zAu = {
 		try {
 			zWatch.fire('onSend', null, implicit);
 		} catch (e) {
-			zk.error(e.message);
+			zAu.showError("FAILED_TO_SEND", null, null, e);
 		}
 
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
@@ -929,7 +931,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		var w = uuid ? zk.Widget.$(uuid): null;
 		zUtl.destroyProgressbox("zk_loadprog");
 		if (!uuid)
-			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true);
+			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
 		else if (w) {
 			w.effects_.showBusy = new zk.eff.Mask( {
 				id: w.uuid + "-shby",
@@ -952,7 +954,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		}
 
 		if (!uuid)
-			zUtl.destroyProgressbox("zk_showBusy"); //since user might want to show diff msg
+			zUtl.destroyProgressbox("zk_showBusy", {busy:true}); //since user might want to show diff msg
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
