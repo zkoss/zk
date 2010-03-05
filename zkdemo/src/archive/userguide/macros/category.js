@@ -1,18 +1,31 @@
 /* JS for userguide's category bar */
 // Fix IE6 Graphics
 if (zk.ie6Only) {
-	//a small transparent image used as a placeholder
-	var BLANK_GIF = zk.getUpdateURI('/web/img/spacer.gif');
-	var ALPHA_IMAGE_LOADER = "DXImageTransform.Microsoft.AlphaImageLoader";
-	var PNG_FILTER = "progid:" + ALPHA_IMAGE_LOADER + "(src='%1',sizingMethod='%2')";
-	
-	// these file name should be fixed
-	var FILE_NAME = "24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
-				  + "|normal.png|normal-sel.png|large.png|large-sel.png";
-	
-	//regular expression version of the above
-	var PNG = new RegExp(String(FILE_NAME).replace(/([\/()[\]{}*+-.,^$?\\])/g, "\\$1"), "i");
-	var filtered = [];
+	zk.addBeforeInit(function () {
+    	//a small transparent image used as a placeholder
+		BLANK_GIF = zk.getUpdateURI('/web/img/spacer.gif');
+    	ALPHA_IMAGE_LOADER = "DXImageTransform.Microsoft.AlphaImageLoader";
+    	PNG_FILTER = "progid:" + ALPHA_IMAGE_LOADER + "(src='%1',sizingMethod='%2')";
+    	
+    	// these file name should be fixed
+    	FILE_NAME = "24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
+    				  + "|normal.png|normal-sel.png|large.png|large-sel.png";
+    	
+    	//regular expression version of the above
+    	PNG = new RegExp(String(FILE_NAME).replace(/([\/()[\]{}*+-.,^$?\\])/g, "\\$1"), "i");
+    	filtered = [];
+    
+    	printing = false;
+    	zk.listen(window, "beforeprint", function() {
+    		printing = true;
+    		for (var i = 0; i < filtered.length; i++) removeFilter(filtered[i]);
+    	});
+    	zk.listen(window, "afterprint", function() {
+    		for (var i = 0; i < filtered.length; i++) addFilter(filtered[i]);
+    		printing = false;
+    	});
+    	zk.addInit(function(){fixImage4IE6();});
+	});
 
 	function fixImage(element) {
 		// we have to preserve width and height
@@ -28,15 +41,6 @@ if (zk.ie6Only) {
 		// add the AlphaImageLoader thingy
 		addFilter(element);
 	};
-	var printing = false;
-	zk.listen(window, "beforeprint", function() {
-		printing = true;
-		for (var i = 0; i < filtered.length; i++) removeFilter(filtered[i]);
-	});
-	zk.listen(window, "afterprint", function() {
-		for (var i = 0; i < filtered.length; i++) addFilter(filtered[i]);
-		printing = false;
-	});
 	
 	//apply a filter
 	function addFilter(element, sizingMethod) {
@@ -66,7 +70,6 @@ if (zk.ie6Only) {
 		element.src = element.pngSrc;
 		element.filters[ALPHA_IMAGE_LOADER].enabled = false;
 	};
-	zk.addInit(function(){fixImage4IE6();});
 	function fixImage4IE6() {
 		var images = document.getElementsByTagName("img");
 		for (var len = images.length; --len >= 0; ) {
