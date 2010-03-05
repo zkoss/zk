@@ -2643,8 +2643,7 @@ unbind_: function (skipper, after) {
 	 * @return String the message to indicate the dragging, or null if clone is required
 	 */
 	getDragMessage_: function () {
-		var tn = jq.nodeName(this.getDragNode());
-		if ("tr" == tn || "td" == tn || "th" == tn) {
+		if (jq.nodeName(this.getDragNode(), "tr", "td", "th")) {
 			var n = this.$n('real') || this.getCaveNode();
 			return n ? n.textContent || n.innerText || '': '';
 		}

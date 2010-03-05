@@ -665,7 +665,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//by changing hbox chdex style(TD) to have height:100% and it works!
 /*		if (zk.ie) {
 			var p = node.parentNode;
-			if (p.tagName == "TD") {
+			if (jq.nodeName(p, "td")) {
 				var nm = vert ? "height": "width",
 					sz = vert ? p.clientHeight: p.clientWidth;
 				if ((node.style[nm] == "100%" || this._box100) && sz) {

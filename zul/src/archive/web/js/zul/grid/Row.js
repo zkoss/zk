@@ -247,12 +247,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			this.detail = null;
 	},
 	doMouseOver_: function(evt) {
-		if (zk.gecko && this._draggable) {
-			var tag = evt.domTarget.tagName;
-			if (tag != "INPUT" && tag != "TEXTAREA") {
-				var n = this.$n();
-				if (n) n.firstChild.style.MozUserSelect = "none";
-			}
+		if (zk.gecko && this._draggable
+		&& !jq.nodeName(evt.domTarget, "input", "textarea")) {
+			var n = this.$n();
+			if (n) n.firstChild.style.MozUserSelect = "none";
 		}
 		this.$supers('doMouseOver_', arguments);
 	},

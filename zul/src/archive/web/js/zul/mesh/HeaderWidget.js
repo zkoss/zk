@@ -199,11 +199,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false;
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
-				evt.domTarget.tagName != "INPUT" && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
+		!jq.nodeName(evt.domTarget, "input") && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
 			this.fire('onSort');
 			evt.stop();
 		} else {
-			if (evt.domTarget.tagName == "INPUT")
+			if (jq.nodeName(evt.domTarget, "input"))
 				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
 		}

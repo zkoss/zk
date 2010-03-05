@@ -277,7 +277,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this.rerender();
 	},
 	_doMouseEffect: function (evt) {
-		var node = evt.domTarget.tagName == "TD" ? evt.domTarget : evt.domTarget.parentNode,
+		var node = jq.nodeName(evt.domTarget, "td") ? evt.domTarget : evt.domTarget.parentNode,
 			zcls = this.getZclass();
 			
 		if (jq(node).hasClass(zcls + '-disd'))
@@ -307,7 +307,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_choiceData: function (evt) {
 		var target = evt.domTarget;
-		target = target.tagName == "TD" ? target : target.parentNode;
+		target = jq.nodeName(target, "td") ? target : target.parentNode;
 		
 		var val = jq(target).attr('_dt');
 		if (target && !jq(target).hasClass(this.getZclass() + '-disd') && !isNaN(val)) {

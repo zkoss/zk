@@ -667,16 +667,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			case 32: //SPACE
 			case 36: //Home
 			case 35: //End
-				if (evt.domTarget.tagName != "A")
+				if (!jq.nodeName(evt.domTarget, "a"))
 					this.focus();
 				evt.stop();
 				return false;
 			}
 		}
-		var tag = evt.domTarget.tagName;
-		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
+
+		if (!zk.gecko3 || !jq.nodeName(evt.domTarget, "input", "textarea"))
 			zk(this.$n()).disableSelection();
-			
+
 		// Feature #1978624
 		if (evt.target == this) //try to give to the focus item
 			evt.target = this._focusItem || this.getSelectedItem() || this;
@@ -763,13 +763,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_doLeft: zk.$void,
 	_doRight: zk.$void,
 	_shallIgnoreEvent: function(evt) {
-		var tn = evt.domTarget.tagName;
+		var tn = jq.nodeName(evt.domTarget);
 		return !evt.domTarget || !evt.target.canActivate() ||
-		((tn == "INPUT" && !evt.domTarget.id.endsWith('-cm')) ||
-		tn == "TEXTAREA" ||
-		(tn == "BUTTON" && !evt.domTarget.id.endsWith('-a')) ||
-		tn == "SELECT" ||
-		tn == "OPTION" ||
+		((tn == "input" && !evt.domTarget.id.endsWith('-cm')) ||
+		tn == "textarea" ||
+		(tn == "button" && !evt.domTarget.id.endsWith('-a')) ||
+		tn == "select" ||
+		tn == "option" ||
 		(zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button)))
 	},
 	/* maintain the offset of the focus proxy*/

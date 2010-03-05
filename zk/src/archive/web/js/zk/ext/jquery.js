@@ -546,10 +546,11 @@ jQuery.extend({
 		}
 	},
 
+/* Tom Yeh, Potix, 20100305: we have more powerful version in dom.js
 	nodeName: function( elem, name ) {
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
-
+*/
 	// args is for internal usage only
 	each: function( object, callback, args ) {
 		var name, i = 0,

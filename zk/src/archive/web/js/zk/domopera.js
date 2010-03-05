@@ -15,10 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.copy(zjq.prototype, {
 	scrollOffset: function() {
 		//Fix opera bug (see the page function)
-		// If tag is "IMG" or "TR", the "DIV" element's scrollTop should be ignored.
-		// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.
+		// If tag is "img" or "tr", the "div" element's scrollTop should be ignored.
+		// Because the offsetTop of element "img" or "tr" is excluded its scrollTop.
 		var el = this.jq[0],
-			normaltag = !jq.nodeName(el, "tr") && !jq.nodeName(el, "img"),
+			normaltag = !jq.nodeName(el, "tr", "img"),
 			t = 0, l = 0;
 		do {
 			var tag = jq.nodeName(el);

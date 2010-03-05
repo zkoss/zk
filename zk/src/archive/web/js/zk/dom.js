@@ -458,20 +458,6 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 });
 jq.fn.init.prototype = jq.fn;
 
-/** @partial jq
- */
-zk.override(jq, _jq, {
-	/** Returns the node name of the specified element in the lower case.
-	 * @param DOMElement el the element to test
-	 * @return String the node name.
-	 * @since 5.0.1
-	 */
-	nodeName: function (el) {
-		return arguments.length == 1 ?
-			el.nodeName ? el.nodeName.toLowerCase(): "":
-			_jq.nodeName.apply(this, arguments);
-	}
-});
 jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function () {
@@ -1280,9 +1266,7 @@ jq(el).zk.center(); //same as 'center'
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
 
-		var tag = jq.nodeName(n);
-		if (tag != 'button' && tag != 'input' && tag != 'textarea' && tag != 'a'
-		&& tag != 'select' && tag != 'iframe')
+		if (!jq.nodeName(n, 'button', 'input', 'textarea', 'a', 'select', 'iframe'))
 			return false;
 
 		if (timeout >= 0) setTimeout(function() {_focus(n);}, timeout);
@@ -1401,6 +1385,30 @@ zk(el).setStyles(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')))
 /** @partial jq
  */
 zk.copy(jq, {
+	/** Returns the node name of the specified element in the lower case.
+	 * @param DOMElement el the element to test.
+	 * If el is null, an empty string is returned.
+	 * @return String the node name.
+	 * @since 5.0.1
+	 */
+	/** Returns if the node name of the specified element is the same
+	 * as one of the specified name (case insensitive).
+	 * @param DOMElement el the element to test
+	 * @param String tag1 the name to test. You can have any number
+	 * of names to test, such as <code>jq.nodeName(el, "tr", "td", "span")</code>
+	 * @return if the node name is the same as one of the specified names.
+	 * @since 5.0.1
+	 */
+	nodeName: function (el) {
+		var tag = el && el.nodeName ? el.nodeName.toLowerCase(): "",
+			j = arguments.length;
+		if (j <= 1)
+			return tag;
+		while (--j)
+			if (tag == arguments[j].toLowerCase())
+				return true;
+	},
+
 	/** Converting an integer to a string ending with "px".
 	 * <p>It is usually used for generating left or top.
 	 * @param Integer v the number of pixels

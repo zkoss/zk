@@ -158,8 +158,8 @@ zk.copy(zjq, {
 	}
 	function _dissel0(evt) {
 		evt = evt || window.event;
-		var n = evt.srcElement, tag = n ? jq.nodeName(n): '';
-		return (tag == "textarea" || tag == "input") && (n.type == "text" || n.type == "password");
+		var n = evt.srcElement;
+		return jq.nodeName(n, "textarea", "input") && (n.type == "text" || n.type == "password");
 	}
 	function _ensel() {
 		this.onselectstart = null;

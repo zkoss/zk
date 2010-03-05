@@ -223,9 +223,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		var tag = evt.domTarget.tagName,
-			mate = this.getMeshWidget();
-		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
+		var mate = this.getMeshWidget();
+		if (!zk.gecko3 || !jq.nodeName(evt.domTarget, "input", "textarea"))
 			zk(mate.$n()).disableSelection();
 		mate._doKeyDown(evt);
 		this.$supers('doKeyDown_', arguments);
