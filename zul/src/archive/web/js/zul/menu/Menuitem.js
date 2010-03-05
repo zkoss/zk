@@ -218,7 +218,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (this._disabled)
 			evt.stop();
 		else {
-			if (!this.$class._isActive(this)) return;
+			if (!this._canActivate(evt)) return;
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
@@ -257,10 +257,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			this.$super('doClick_', evt, true);			
 		}
 	},
+	_canActivate: function (evt) {
+		return !this.isDisabled() && (!zk.ie || !this.isTopmost() || this._uplder
+				|| jq.isAncestor(this.$n('a'), evt.domTarget));
+	},
 	doMouseOver_: function (evt) {
-		if (!this.$class._isActive(this) && !this.isDisabled()
-		&& (!zk.ie || !this.isTopmost() || this._uplder
-		|| jq.isAncestor(this.$n('a'), evt.domTarget))) {
+		if (!this.$class._isActive(this) && this._canActivate(evt)) {
 			this.$class._addActive(this);
 			zWatch.fire('onFloatUp', this); //notify all
 		}
@@ -276,7 +278,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					y = evt.pageY,
 					diff = this.isTopmost() ? 1 : 0;
 				deact = x - diff <= xy[0] || x > xy[0] + n.offsetWidth
-					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie6_ ? -1 : 0);
+					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight + (zk.ie ? -1 : 0);
 			}
 			if (deact)
 				this.$class._rmActive(this);
