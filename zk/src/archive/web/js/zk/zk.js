@@ -211,12 +211,15 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//unloading: false,
-	/** The number of the full mask is applied (and not yet complete). 
-	 * @see zUtl#progressbox
-	 * @see zUtl#destroyProgressbox
+	/** Indicates if the application is busy.
+	 * It is actually a number that is increased when {@link zk.AuCmd0#showBusy(String)} is called,
+	 * and decreased when {@link zk.AuCmd0#clearBusy()} is called.
+	 * In other words, it is set by the application, and used to
+	 * indicate the application (rather than ZK) is busy.
 	 * @type int
+	 * @since 5.0.1
 	 */
-	isBusy: 0,
+	busy: 0,
 
 	/** The version of ZK, such as '5.0.0'
 	 * @type String

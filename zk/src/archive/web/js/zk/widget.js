@@ -2726,12 +2726,20 @@ focus: function (timeout) {
 	 * {@link _global_.zk#currentModal}. 
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>checkOnly: not to change focus back to modal dialog if unable to activate. If not specified, the focus will be changed back to {@link _global_.zk#currentModal}</li>
+	 * <li>checkOnly: not to change focus back to modal dialog if unable to
+	 * activate. If not specified, the focus will be changed back to
+	 * {@link _global_.zk#currentModal}.
+	 * In additions, if specified, it will ignore {@link zk#isBusy}, which is set
+	 * if {@link zk.AuCmd0#showBusy} is called.
+	 * This flag is usually set by {@link #focus}, and not set
+	 * if it is caused by user's activity, such as clicking.</li>
 	 * </ul>
+	 * The reason to ignore busy is that we allow application to change focus
+	 * even if busy, while the user cannot.
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
-		if (zk.isBusy) { //Bug 2912533: none of widget can be activated if busy
+		if (zk.busy && (!opts || !opts.checkOnly)) { //Bug 2912533: none of widget can be activated if busy
 			window[zk.ie || zk.opera ? 'focus' : 'blur']();
 			return false;
 		}

@@ -917,7 +917,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String uuid the component's UUID
 	 * @param String msg the message.
 	 */
-	/** Shows or removes the busy message covering the whole browser window.
+	/** Shows the busy message covering the whole browser window.
 	 * @param String msg the message.
 	 */
 	showBusy: function (uuid, msg) {

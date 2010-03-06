@@ -299,7 +299,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		if (_opts && _opts.busy) {
-			zk.isBusy++;
+			zk.busy++;
 			window[zk.ie || zk.opera ? 'focus' : 'blur'](); //Bug 2912533
 		}
 
@@ -370,8 +370,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String id the ID of the DOM element of the message box
 	 */
 	destroyProgressbox: function (id, _opts) {
-		if (_opts && _opts.busy && --zk.isBusy < 0)
-			zk.isBusy = 0;
+		if (_opts && _opts.busy && --zk.busy < 0)
+			zk.busy = 0;
 
 		var $n = jq(id, zk), n;
 		if ($n.length) {
