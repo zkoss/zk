@@ -58,7 +58,8 @@ zul._fixdbtn2 = function (cmp) {
 		if (zk.ie)
 			btn.style.zoom = 1;
 		btn.style.position = "relative";
-
+		if (zk.ie) // reset for ie8 that the icon will display wrong position
+			btn.style.zoom = '';
 		if (zk.safari) btn.style.left = "-2px";
 	}
 };
