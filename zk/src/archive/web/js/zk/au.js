@@ -474,7 +474,7 @@ zAu = {
 	 */
 	send: function (aureq, timeout) {
 		if (timeout < 0)
-			aureq.opts = zk.copy(aureq.opts, {implicit: true});
+			aureq.opts = zk.copy(aureq.opts, {defer: true});
 
 		var t = aureq.target;
 		if (t) {
@@ -614,7 +614,9 @@ zAu = {
 				if (j) break;
 				uri = opts.uri;
 			}
-			if (!(implicit = opts.ignorable || opts.implicit))//ignorable implies implicit
+
+			//ignorable and defer implies implicit
+			if (!(implicit = opts.ignorable || opts.implicit || opts.defer))
 				break;
 		}
 
