@@ -569,18 +569,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			AuWriters.newInstance().open(request, response, 0);
 
 		for (int j = 0;; ++j) {
-			final String cmdId = request.getParameter("cmd_"+j);
-			if (cmdId == null)
+			if (request.getParameter("cmd_"+j) == null)
 				break;
 
-			if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
-			&& !Events.ON_TIMER.equals(cmdId)
-			&& !Events.ON_CLIENT_INFO.equals(cmdId)
-			&& !Events.ON_MOVE.equals(cmdId)
-			&& !Events.ON_SIZE.equals(cmdId)
-			&& !Events.ON_Z_INDEX.equals(cmdId)
-			&& !("dummy".equals(cmdId)
-				&& !isDummyTimeout(request.getParameter("data_"+j)))) {
+			final String opt = request.getParameter("opt_"+j);
+			if (opt == null || opt.indexOf("i") < 0) {
 				final String deviceType = getDeviceType(request);
 				URIInfo ui = (URIInfo)config.getTimeoutURI(getDeviceType(request));
 				String uri = ui != null ? ui.uri: null;
@@ -599,17 +592,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		out.close(request, response);
-	}
-	/** Tests if the dummy command is used to trigger the timeout. */
-	private static boolean isDummyTimeout(String data) {
-		if (data != null && data.length() > 0) {
-			try {
-				return ((Map)JSONValue.parse(data)).containsKey("timeout");
-			} catch (Throwable ex) {
-				log.warning("Illegal dummy command: "+data);
-			}
-		}
-		return false;
 	}
 
 	private static String getDeviceType(HttpServletRequest request) {

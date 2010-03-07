@@ -354,7 +354,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		zAu.cmd0.clientInfo();
 	}
 	function sendTimeout() {
-		zAu.send(new zk.Event(null, "dummy", {timeout: true}, {ignorable: true}));
+		zAu.send(new zk.Event(null, "dummy", null, {ignorable: true, serverAlive: true}));
+			//serverAlive: the server shall not ignore it if session timeout
 	}
 
 /** @class zAu
@@ -608,7 +609,7 @@ zAu = {
 		var implicit, uri;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
-				opts = aureq.opts = aureq.opts||{};
+				opts = aureq.opts||{};
 			if (opts.uri != uri) {
 				if (j) break;
 				uri = opts.uri;
@@ -631,7 +632,7 @@ zAu = {
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
 				evtnm = aureq.name,
-				opts = aureq.opts = aureq.opts||{};
+				opts = aureq.opts||{};
 			if (opts.uri != uri)
 				break;
 
@@ -653,15 +654,19 @@ zAu = {
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
-				target = aureq.target;
-			if (aureq.opts.uri != uri) {
+				target = aureq.target,
+				opts = aureq.opts||{};
+			if (opts.uri != uri) {
 				es.unshift(aureq);
 				break;
 			}
 
-			zk.copy(tags, aureq.opts.tags);
+			zk.copy(tags, opts.tags);
 
 			content += "&cmd_"+j+"="+evtnm;
+			if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
+				content += "&opt_"+j+"=i";
+				//thus, the server will ignore it if session timeout
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid_"+j+"="+target.uuid;
 
@@ -842,7 +847,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()]));
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()],
+			{implicit:true}));
 	},
 	/** Asks the client to download the resource at the specified URL.
 	 * @param String url the URL to download from

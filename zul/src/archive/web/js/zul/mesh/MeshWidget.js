@@ -323,7 +323,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		if (items.length)
-			this.fire('onRender', {items: items});
+			this.fire('onRender', {items: items}, {implicit:true});
 	},
 
 	//derive must override

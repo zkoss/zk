@@ -633,7 +633,7 @@ jq(function() {
 					var dt = dts[dtid];
 					jq.ajax(zk.$default({
 						url: zk.ajaxURI(null, {desktop:dt,au:true}),
-						data: {dtid: dtid, 'cmd_0': bRmDesktop?"rmDesktop":"dummy"},
+						data: {dtid: dtid, cmd_0: bRmDesktop?"rmDesktop":"dummy", opt_0: "i"},
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 						}
