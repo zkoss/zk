@@ -945,8 +945,10 @@ zk.log('value is", value);
 		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw "Desktop conflict";
-		zk.updateURI = zk.updateURI || updateURI;
-		zk.contextURI = zk.contextURI || contextURI;
+		if (zk.updateURI == null)
+			zk.updateURI = updateURI;
+		if (zk.contextURI == null) //it might be ""
+			zk.contextURI = contextURI;
 		return dt || new Desktop(dtid, contextURI, updateURI, true);
 	}
 });
