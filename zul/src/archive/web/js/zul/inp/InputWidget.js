@@ -52,7 +52,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a input widget.
  *
  * <p>The delay to send the onChanging event is controlled by
- * {@link #onChangingDelay}, which is default to 500.
+ * {@link #onChangingDelay}, which is default to 350.
  * To change it, you can specify the following in a ZUL file.
  * <pre><code>
 &lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
@@ -674,11 +674,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	/** The delay for sending the onChanging event (unit: milliseconds).
 	 * The onChanging event will be sent after the specified delay once
 	 * the user pressed a keystroke (and changed the value).
-	 * <p>Default: 500
+	 * <p>Default: 350
 	 * @type int
 	 * @since 5.0.1
 	 */
-	onChangingDelay: 500,
+	onChangingDelay: 350,
 	/** Whether to send at least one the onChanging event if it is listened
 	 * and the content is ever changed.
 	 * <p>Default: true
