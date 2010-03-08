@@ -55,6 +55,8 @@ public class F2859159 {
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
 			}
+			public void idSpaceChanged(Scope scope, IdSpace newIdSpace) {
+			}
 		});
 	}
 	public void init(WebApp app) {
@@ -70,6 +72,8 @@ public class F2859159 {
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
 			}
+			public void idSpaceChanged(Scope scope, IdSpace newIdSpace) {
+			}
 		});
 	}
 	public void init(Execution exec) {
@@ -84,6 +88,8 @@ public class F2859159 {
 				show("req removed: "+name);
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
+			}
+			public void idSpaceChanged(Scope scope, IdSpace newIdSpace) {
 			}
 		});
 	}
