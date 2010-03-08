@@ -1,4 +1,4 @@
-u/* widget.js
+/* widget.js
 
 	Purpose:
 		Widget - the UI object at the client
