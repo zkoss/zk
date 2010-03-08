@@ -54,9 +54,9 @@ function zkdt(dtid, contextURI, updateURI, reqURI) {
 		dt = new zk.Desktop(dtid, contextURI, updateURI, reqURI);
 		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
 	} else {
-		if (updateURI) dt.updateURI = updateURI;
-		if (contextURI) dt.contextURI = contextURI;
-		if (reqURI) dt.requestPath = reqURI;
+		if (updateURI != null) dt.updateURI = updateURI;
+		if (contextURI != null) dt.contextURI = contextURI;
+		if (reqURI != null) dt.requestPath = reqURI;
 	}
 	zk.mnt.curdt = dt;
 	return dt;

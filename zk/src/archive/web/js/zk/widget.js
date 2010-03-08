@@ -1,4 +1,4 @@
-/* widget.js
+u/* widget.js
 
 	Purpose:
 		Widget - the UI object at the client
@@ -3725,16 +3725,16 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		var Desktop = zk.Desktop, dts = Desktop.all, dt = dts[dtid];
 		if (!dt) {
 			this.uuid = this.id = dtid;
-			this.updateURI = updateURI || zk.updateURI;
-			this.contextURI = contextURI || zk.contextURI;
+			this.updateURI = updateURI != null ? updateURI: zk.updateURI;
+			this.contextURI = contextURI != null ? contextURI: zk.contextURI;
 			this.requestPath = reqURI || '';
 			this.stateless = stateless;
 			dts[dtid] = this;
 			++Desktop._ndt;
 			if (!Desktop._dt) Desktop._dt = this; //default desktop
 		} else {
-			if (updateURI) dt.updateURI = updateURI;
-			if (contextURI) dt.contextURI = contextURI;
+			if (updateURI != null) dt.updateURI = updateURI;
+			if (contextURI != null) dt.contextURI = contextURI;
 		}
 
 		Desktop.sync();
