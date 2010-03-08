@@ -289,6 +289,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		
 		return html;
 	},
+	_onChanging: function (timeout) {
+		_onChanging.call(this, timeout);
+	},
 	_areaText: function () {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	},
