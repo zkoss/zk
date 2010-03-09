@@ -19,6 +19,7 @@ package org.zkoss.zkplus.databind;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
@@ -53,8 +54,14 @@ import org.zkoss.zul.ListModel;
 
 	public Component getComponentAtIndexByOwner(Component comp, int index) {
 		if (comp instanceof Combobox) {
-			final Combobox cbbox = (Combobox) comp;
-			return cbbox.getItemAtIndex(index);
+			//bug #2966241, since 5.0, combobox fire onChange then onSelect event(In 3.x it fire onSelect then onChange)
+			//This causes comboitem label to be modified in onChange if binding "selected.value" in 
+			//combobox "value" property and "selected" in "selectedItem" property simultaneously.
+			//We thus kept the trigger component in execution attribute and 
+			//ComboitemCollectionItems#getComponentAtIndexByOwner can decide whether to return
+			//the Comboitem in such case.
+			return !comp.equals(Executions.getCurrent().getAttribute(DataBinder.LOAD_ON_SAVE_TRIGGER_COMPONENT)) ?
+				((Combobox) comp).getItemAtIndex(index) : null;
 		} else {
 			throw new UiException(
 					"Unsupported type for ComboitemCollectionItem: " + comp);

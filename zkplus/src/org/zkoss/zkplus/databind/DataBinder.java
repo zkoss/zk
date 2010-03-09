@@ -38,6 +38,8 @@ import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
@@ -61,6 +63,7 @@ import org.zkoss.zul.Row;
  * @author Henri Chen
  */
 public class DataBinder implements java.io.Serializable {
+	public static final String LOAD_ON_SAVE_TRIGGER_COMPONENT = "zkoss.DataBinder.LOAD_ON_SAVE_TRIGGER_COMPONENT";
 	private static final long serialVersionUID = 200808191508L;
 	public static final String NULLIFY = "none"; //used to nullify default configuration
 	public static final String ARGS = "bindingArgs"; //extra arguments specified in annotation
@@ -791,14 +794,16 @@ public class DataBinder implements java.io.Serializable {
 	    		final List comps = new ArrayList(sz);
 	    		for (int j = 0; j < sz; ++j) {
 	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, indexes[j]), comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 	    		}
 	    		return (Component[]) comps.toArray(new Component[comps.size()]);
 	    	} else 	if (xmodel instanceof BindingListModel) {
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(bean);
 	  			if (index >= 0) {
-	    			return new Component[] {lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp)};
+	  				final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp);
+	  				return xcomp != null ? new Component[] {xcomp} : new Component[0];
 	    		}
 	    	}
 		} else { 
@@ -811,12 +816,14 @@ public class DataBinder implements java.io.Serializable {
 				for (final Iterator it = items.iterator(); it.hasNext(); ) {
 					final Component cloneitem = (Component) it.next();
 	    			final Component xcomp = lookupClone(cloneitem, comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 				}
 			} else {
 				for (int j = 0; j < sz; ++j) {
 	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, j), comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 				}
 			}
     		return (Component[]) comps.toArray(new Component[sz]);
@@ -1411,7 +1418,20 @@ public class DataBinder implements java.io.Serializable {
 			final List nodes = (List) data[5]; //the complete nodes along the path to the node
 			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
 			if (savecomp != null) {
-				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
+				//bug #2966241, since 5.0, combobox fire onChange then onSelect event(In 3.x it fire onSelect then onChange)
+				//This causes comboitem label to be modified in onChange if binding "selected.value" in 
+				//combobox "value" property and "selected" in "selectedItem" property simultaneously.
+				//We thus kept the trigger component in execution attribute and 
+				//ComboitemCollectionItems#getComponentAtIndexByOwner can decide whether to return
+				//the Comboitem in such case.
+				final Execution exec = Executions.getCurrent(); 
+				final Object old = exec.getAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT);
+				exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, savecomp);
+				try {
+					loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
+				} finally {
+					exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, old);
+				}
 			}
 		}
 		
