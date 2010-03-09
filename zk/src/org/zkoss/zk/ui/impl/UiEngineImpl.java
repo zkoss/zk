@@ -391,8 +391,9 @@ public class UiEngineImpl implements UiEngine {
 
 				richlet.service(page);
 
-				for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-					composer.doAfterCompose((Component)it.next());
+				if (composer != null)
+					for (Iterator it = page.getRoots().iterator(); it.hasNext();)
+						composer.doAfterCompose((Component)it.next());
 			}
 			if (exec.isVoided())
 				return; //don't generate any output
