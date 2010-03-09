@@ -133,8 +133,7 @@ new Comboitem("John3").setParent(mycombo);
 <html><![CDATA[
 <ol>
 	<li>Click "test popup" button and then click "what happens" to open a popup</li>
-	<li>Then you will see two menuitems: "Undo", "Sort" and "More".
-	In addition, you shall see "Good" and "Great" inside "Sort"</li>
+	<li>Then you will see only "More and better" in it</li>
 </ol>
 ]]></html>
 <button label="test popup">
