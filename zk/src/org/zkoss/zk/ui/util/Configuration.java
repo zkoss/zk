@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
@@ -61,6 +62,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.device.Devices;
 
@@ -96,7 +98,8 @@ public class Configuration {
 		_dtCleans = new FastReadArray(Class.class),
 		_execInits = new FastReadArray(Class.class),
 		_execCleans = new FastReadArray(Class.class),
-		_uiCycles = new FastReadArray(UiLifeCycle.class);
+		_uiCycles = new FastReadArray(UiLifeCycle.class),
+		_composers = new FastReadArray(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final FastReadArray
@@ -175,12 +178,19 @@ public class Configuration {
 	 * {@link Monitor}, {@link PerformanceMeter}, and {@link DesktopRecycle}.
 	 * On the other hand, any number listeners are allowed for other classes.
 	 *
+	 * <p>Notice that if the listener implements {@link Composer}, it can also
+	 * implement {@link org.zkoss.zk.ui.util.ComposerExt} and/or {@link org.zkoss.zk.ui.util.FullComposer} to have
+	 * more detailed control. However, ComposerExt and FullComposer are meaningless
+	 * to richlets. In additions, an independent
+	 * composer is instantiated for each page so there is synchronization required.
+	 *
 	 * @param klass the listener class must implement at least one of
 	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
 	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
+	 * {@link Composer},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
 	 * and/or {@link EventInterceptor} interfaces.
@@ -261,6 +271,10 @@ public class Configuration {
 			_execCleans.add(klass);
 			added = true;
 		}
+		if (Composer.class.isAssignableFrom(klass)) {
+			_composers.add(klass); //not instance
+			added = true;
+		}
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
@@ -330,6 +344,8 @@ public class Configuration {
 
 		_execInits.remove(klass);
 		_execCleans.remove(klass);
+
+		_composers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
@@ -895,6 +911,16 @@ public class Configuration {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+	}
+
+	/** Returns the system-level composer or null if none is registered.
+	 * To register a system-levelcomposer, use {@link #addListener}
+	 * <p>Notice that any number of composers can be registered,
+	 * and a single composer is returned to represent them all.
+	 * @since 5.0.1
+	 */
+	public Composer getComposer(Page page) throws Exception {
+		return MultiComposer.getComposer(page, (Class[])_composers.toArray());
 	}
 
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}

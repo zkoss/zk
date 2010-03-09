@@ -52,4 +52,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zkdemo.test2.B2143479</listener-class>
 	</listener>
+
+	<!-- Used to test Feature 2965270 -->
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test2.F2965270</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.zkoss.zkdemo.test2.F2965270Full</listener-class>
+	</listener>
 </zk>

@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.metainfo.impl;
+package org.zkoss.zk.ui.impl;
 
 import org.zkoss.lang.Classes;
 
@@ -28,12 +28,13 @@ import org.zkoss.zk.ui.util.FullComposer;
 /**
  * To proxy a collection of composer
  * @author tomyeh
- * @since 3.0.1
+ * @since 5.0.1
  */
 public class MultiComposer implements Composer {
 	private final Composer[] _cs;
+	private boolean _fullOnly;
 
-	/** Returns an instance of composer to represents the specified
+	/** Returns an instance of composer to represent the specified
 	 * array of composers, or null if no composer is specified.
 	 *
 	 * @param page used to resolve the class if ary contains a class name.
@@ -81,6 +82,27 @@ public class MultiComposer implements Composer {
 			return new MultiComposer(cs);
 		}
 	}
+
+	/** Sets whether to invoke only the composer that implements {@link FullComposer}.
+	 * <p>Default: false
+	 * @return the previous value.
+	 * @since 5.0.1
+	 */
+	public boolean setFullComposerOnly(boolean fullOnly) {
+		boolean b = _fullOnly;
+		_fullOnly = fullOnly;
+		return b;
+	}
+	/** Returns whether to invoke only the composer that implements {@link FullComposer}.
+	 * @since 5.0.1
+	 */
+	public boolean isFullComposerOnly() {
+		return _fullOnly;
+	}
+	private boolean shallInvoke(Composer composer) {
+		return !_fullOnly || composer instanceof FullComposer;
+	}
+
 	private static Composer toComposer(Page page, Object o)
 	throws Exception {
 		if (o instanceof String) {
@@ -97,19 +119,20 @@ public class MultiComposer implements Composer {
 	 * This method is designed to be called by {@link #getComposer}.
 	 * Use {@link #getComposer} instead.
 	 *
-	 * @param cs the array of composer instances (cannot be null).
+	 * @param cs the array of composer instances.
 	 */
 	protected MultiComposer(Composer[] cs) throws Exception {
 		_cs = cs;
 	}
 	public void doAfterCompose(Component comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
-			_cs[j].doAfterCompose(comp);
+			if (shallInvoke(_cs[j]))
+				_cs[j].doAfterCompose(comp);
 	}
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
-			if (_cs[j] instanceof ComposerExt) {
+			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j])) {
 				compInfo = ((ComposerExt)_cs[j])
 					.doBeforeCompose(page, parent, compInfo);
 				if (compInfo == null)
@@ -119,19 +142,19 @@ public class MultiComposer implements Composer {
 	}
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
-			if (_cs[j] instanceof ComposerExt)
+			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
 				((ComposerExt)_cs[j]).doBeforeComposeChildren(comp);
 	}
 	public boolean doCatch(Throwable ex) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
-			if (_cs[j] instanceof ComposerExt)
+			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
 				if (((ComposerExt)_cs[j]).doCatch(ex))
 					return true; //caught (eat it)
 		return false;
 	}
 	public void doFinally() throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
-			if (_cs[j] instanceof ComposerExt)
+			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
 				((ComposerExt)_cs[j]).doFinally();
 	}
 }
