@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <script>
-zk.load('zk.fmt');
+zk.load('zul.db');
 </script>
 Please set the browser's language with French, and 
 <button label="Click Me" onClick='Clients.evalJavaScript("alert(zk.fmt.Date.formatDate(new Date(2009, 9, 13), \"EEEE d MMMM yyyy\"));")' />
