@@ -13,7 +13,6 @@ B36-2929688.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<tabbox mold="accordion-lite">
 	<tabs>
