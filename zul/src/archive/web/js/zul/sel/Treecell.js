@@ -88,7 +88,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},
 	getTextNode: function () {
-		return zDom.firstChild(this.$n(), "DIV");
+		return this.getCaveNode();
 	},
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),

@@ -64,6 +64,7 @@ February, 2010
   2949287: Printing demo page from Webkit browsers prints blank page
   2961834: Combobox autocomplete fail if add/remove comboitem
   2849074: Add the autocomplete attribute in XSD for combobox component
+  2965789: zDom is undefined in treecell
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
