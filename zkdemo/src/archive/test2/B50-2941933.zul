@@ -2,9 +2,9 @@
 <window border="normal">
 	<html><![CDATA[
 	<ui>
-	<li>Click one of "test" label below, and then the item shall be selected
+	<li>Right Click one of "test" label below, and then the item shall be selected
 	and a menupopup shall be shown</li>
-	<li>Click one of "alert" label below, and then a message box shall
+	<li>Right Click one of "alert" label below, and then a message box shall
 	be shown</li>
 	</ul>
 	]]></html>
