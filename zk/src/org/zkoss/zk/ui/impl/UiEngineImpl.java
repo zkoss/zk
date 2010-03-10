@@ -388,12 +388,22 @@ public class UiEngineImpl implements UiEngine {
 					public String getHeaders() {return null;}
 				});
 				final Composer composer = config.getComposer(page);
+				try {
+					richlet.service(page);
 
-				richlet.service(page);
-
-				if (composer != null)
-					for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-						composer.doAfterCompose((Component)it.next());
+					if (composer != null)
+						for (Iterator it = page.getRoots().iterator(); it.hasNext();)
+							composer.doAfterCompose((Component)it.next());
+				} catch (Throwable t) {
+					if (composer instanceof ComposerExt)
+						if (((ComposerExt)composer).doCatch(t))
+							t = null; //ignored
+					if (t != null)
+						throw t;
+				} finally {
+					if (composer instanceof ComposerExt)
+						((ComposerExt)composer).doFinally();
+				}
 			}
 			if (exec.isVoided())
 				return; //don't generate any output
