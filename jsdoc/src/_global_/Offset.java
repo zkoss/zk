@@ -14,9 +14,9 @@ package _global_;
 
 /**
  * An offset is a two-element array, where the first element is the X coordinate, and the second the Y coordinate.
- * <p>For example, zDom.cmOffset(el); returns an offset.
+ * <p>For example, zk(el).cmOffset(); returns an offset.
  *
- * <pre><code>var ofs = zDom.cmOffset(el);
+ * <pre><code>var ofs = zk(el).cmOffset();
 zk.debug("x,y = " + ofs[0] + "," + ofs[1]);</code></pre>
  *
  * @author tomyeh
