@@ -35,6 +35,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -310,7 +311,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		_afterComposed = true;
 		fixModeOnly();
 		if (_instantMode) {
-			final Execution exec = getDesktop().getExecution();
+			final Execution exec = getExecution();
 			final Map old = setupDynams(exec);
 			try {
 				final int j = _src.indexOf('?');
@@ -320,6 +321,10 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 				restoreDynams(exec, old);
 			}
 		}
+	}
+	private final Execution getExecution() {
+		final Desktop desktop = getDesktop();
+		return desktop != null ? desktop.getExecution(): Executions.getCurrent();
 	}
 
 	//DynamicPropertied//
@@ -389,7 +394,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		return _instantMode;
 	}
 	public void redraw(Writer out) throws IOException {
-		if (_instantMode) {
+		if (_instantMode && _afterComposed) { //afterCompose might not be called if it is created manually
 			drawTagBegin(out);
 			for (Component c = getFirstChild(); c != null; c = c.getNextSibling())
 				c.redraw(out);
@@ -425,7 +430,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();
-		final Execution exec = desktop.getExecution();
+		final Execution exec = getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
 		final Map old = setupDynams(exec);
 		try {
