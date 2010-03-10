@@ -439,8 +439,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	bind_: function (){
 		this.$supers('bind_', arguments);
 		var btn = this.$n('btn'),
-			inp = this.getInputNode(),
-			pp = this.$n('pp');
+			inp = this.getInputNode();
 			
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
@@ -449,25 +448,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		
-
-		if (pp && this._dtzones) {
-			var html = ['<div class="', this.getZclass(), '-timezone">'];
-			if (this._dtzones) html.push(this.getTimeZoneLabel());
-			html.push('<select id="', this.uuid, '-dtzones" class="', this.getZclass(), '-timezone-body">'); 
-			if (pp && this._dtzones) {
-				for (var i = 0, len = this._dtzones.length; i < len; i++)
-					html.push('<option value="', this._dtzones[i], '" class="', this.getZclass(), '-timezone-item">', this._dtzones[i], '</option>');
-			}
-			html.push('</select><div>');
-			jq(pp).append(html.join(''));
-			var select = this.$n('dtzones');
-			if (select) {
-				select.disabled = this._timeZonesReadonly ? "disable" : "";
-				this.domListen_(select, 'onChange', '_doTimeZoneChange');
-	 			this._setTimeZonesIndex();
-			}			
-		}
 			
 		this.syncWidth();
 		
@@ -475,15 +455,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
-		var btn = this.$n('btn'),
-			select = this.$n('dtzones');
+		var btn = this.$n('btn');
 		if (btn) {
 			this._auxb.cleanup();
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
-		if (select)
-			this.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 			
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
@@ -520,7 +497,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			'-pp" style="display:none" tabindex="-1">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
+
+		this._redrawTimezone(out);
 		out.push('</div>');
+	},
+	_redrawTimezone: function (out) {
+		var timezones = this._dtzones;
+		if (timezones) {
+			var cls = this.getZclass();
+			out.push('<div class="', cls, '-timezone">');
+			out.push(this.getTimeZoneLabel());
+			out.push('<select id="', this.uuid, '-dtzones" class="', cls, '-timezone-body">');
+			for (var i = 0, len = timezones.length; i < len; i++)
+				out.push('<option value="', timezones[i], '" class="', cls, '-timezone-item">', timezones[i], '</option>');
+			out.push('</select><div>');
+		}
 	}
 });
 
@@ -657,16 +648,33 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
+		this._bindTimezoneEvt();
+
 		zWatch.listen({onFloatUp: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onFloatUp: this});
-
+		this._unbindfTimezoneEvt();
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
 		this.$supers('unbind_', arguments);
+	},
+	_bindTimezoneEvt: function () {
+		var wgt = this.parent;
+		var select = wgt.$n('dtzones');
+		if (select) {
+			select.disabled = wgt.isTimeZonesReadonly() ? "disable" : "";
+			wgt.domListen_(select, 'onChange', '_doTimeZoneChange');
+			wgt._setTimeZonesIndex();
+		}
+	},
+	_unbindfTimezoneEvt: function () {
+		var wgt = this.parent,
+			select = wgt.$n('dtzones');
+		if (select)
+			wgt.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	},
 	_setView: function (val) {
 		if (this.parent.getTimeFormat())
