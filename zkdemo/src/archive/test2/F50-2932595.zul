@@ -14,16 +14,16 @@
 	
 -->
 <zk>
-	<combobox id="a1" mold="simple"  buttonVisible="false" constraint="no empty">
+	<combobox id="a1" mold="rounded"  buttonVisible="false" constraint="no empty">
 		<comboitem label="Simple and Rich" />
 		<comboitem label="Cool!" />
 		<comboitem label="Thumbs Up!" />
 	</combobox>	
 	
-	<datebox id="a2" mold="simple" buttonVisible="false" constraint="no empty"/>	
-	<timebox id="a3" mold="simple" buttonVisible="false" constraint="no zero"/>
-	<spinner id="a4" mold="simple" buttonVisible="false" constraint="no zero"/>
-	<bandbox id="a5" mold="simple" buttonVisible="false" constraint="no empty">
+	<datebox id="a2" mold="rounded" buttonVisible="false" constraint="no empty"/>
+	<timebox id="a3" mold="rounded" buttonVisible="false" constraint="no zero"/>
+	<spinner id="a4" mold="rounded" buttonVisible="false" constraint="no zero"/>
+	<bandbox id="a5" mold="rounded" buttonVisible="false" constraint="no empty">
 		<bandpopup>Search</bandpopup>
 	</bandbox>
 	<separator/>

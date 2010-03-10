@@ -1,5 +1,6 @@
 <?page title="ZK Test2 Platform"?>
-<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:w="http://www.zkoss.org/2005/zk/client">
 <script>
 function newWindow(url){
 	zUtl.go(url, {target:"_zktest2"});
@@ -88,6 +89,9 @@ if (lb.getSelectedItem() != null) {
 							<listheader label="Name" width="50%" sort="auto"/>
 							<listheader label="Date" width="50%" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
 						</listhead>
+						<attribute w:name="onSelect">
+							this.$f("ifr", true).setSrc("");
+						</attribute>
 						<attribute name="onSelect">
 							codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();
 							center.title = "ZK TEST2 : File-Name [" + main.getFileName(lb.getSelectedIndex()) + "]";

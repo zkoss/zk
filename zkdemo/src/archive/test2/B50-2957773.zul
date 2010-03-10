@@ -25,5 +25,5 @@ java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
 	<datebox format="dd/MM/yyyy" onCreate='init(self);'/>
 Please click the icon to see the calendar is at Wednesday in Thai language(if not, please reload again)
 <separator/>
-<button label="Click me after you test done" onClick='Sessions.getCurrent().setAttribute("px_preferred_locale", new Locale("en","US"))' />
+<button label="Click me after you test done" onClick='Sessions.getCurrent().removeAttribute("px_preferred_locale")' />
 </zk>
