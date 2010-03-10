@@ -67,6 +67,7 @@ February, 2010
   2849074: Add the autocomplete attribute in XSD for combobox component
   2965789: zDom is undefined in treecell
   2966241: Databinding + combobox errorly change selected comboitem
+  2966200: Include's construct will not set the src
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
