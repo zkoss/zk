@@ -1177,11 +1177,11 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	
 	private boolean evalRod() {
 		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "false");
-		String rod2 = (String) getAttribute("org.zkoss.zul.grid.rod", true);
+		Object rod2 = getAttribute("org.zkoss.zul.grid.rod", true); //might be String or Boolean
 		if (rod2 == null) {
 			rod2 = rod1;
 		}
-		return "true".equals(rod2);
+		return rod2 instanceof Boolean ? ((Boolean)rod2).booleanValue() : "true".equals(rod2);
 	}
 	
 	/*package*/ DataLoader getDataLoader() {
