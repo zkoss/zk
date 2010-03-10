@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <window>
 	<html><![CDATA[
 	<ol>
-		<li>Click the + icon and the tree item shall be opened</li>
+		<li>Click the arrow icon and the tree item shall be opened</li>
 		<li>Click "1" and a dialog shall be shown</li>
 	</ol>
 	]]></html>
