@@ -74,7 +74,10 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Notices:
  * <ul>
- * <li>The instant mode supports only ZUML pages.</li>
+ * <li>The instant mode is supported automatically if the include component
+ * is created by a ZUML page.
+ * If you want to create it programmingly, you have to invoke {@link #afterCompose}
+ * after assigning the source ({@link #setSrc}).</li>
  * <li>The isntance mode doesn't support {@link #setProgressing} nor
  * {@link #setLocalized}</li>
  * <li>The directives of the included page won't be included.
