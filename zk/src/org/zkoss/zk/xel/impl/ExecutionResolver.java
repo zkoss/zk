@@ -24,6 +24,7 @@ import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -109,7 +110,7 @@ public class ExecutionResolver implements VariableResolverX {
 		}
 		if ("page".equals(name)) {
 			if (_self instanceof Component)
-				return ((Component)_self).getPage();
+				return getPage((Component)_self);
 			if (_self instanceof Page)
 				return (Page)_self;
 			return ((ExecutionCtrl)_exec).getCurrentPage();
@@ -142,7 +143,7 @@ public class ExecutionResolver implements VariableResolverX {
 
 			//We have to look getZScriptVariable first and then namespace
 			//so it is in the same order of interpreter
-			final Page page = comp.getPage();
+			final Page page = getPage(comp);
 			if (page != null) {
 				final Object o =
 					page.getZScriptVariable(comp, name);
@@ -195,6 +196,13 @@ public class ExecutionResolver implements VariableResolverX {
 		}
 
 		return Evaluators.resolveVariable(_parent, name);
+	}
+	private static Page getPage(Component comp) {
+		Page page = comp.getPage();
+		if (page != null) return page;
+
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
 
 	//Object//
