@@ -91,7 +91,11 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
 		} else if (sn.indexOf("zkoss.org") >= 0) { // http://www.zkoss.org/
 			gkey = "ABQIAAAAakIm31AXAvNGFHV8i1Tx8RSF4KLGEmvBsS1z1zAsQZvbQceuNRQBsm65qGaXpTWjZsc2bl-hm2Vyfw";
-		} else if (sn.indexOf("localhost") >= 0) { // localhost
+		} else if (sn.indexOf("zktest") >= 0) { //zktest		
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTOLZK1h7IfBeBWqZtjq6JJy913gBRHY1uafo5XzZVSyXXksjv_jHoUsA";
+		} else if (sn.indexOf("zktest2") >= 0) { //zktest2	
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTWO6y1eecluAZvbpmC7meqCt-saxSETUOirx46xfUyu-Z-mqLCi4vo9A";
+		}else if (sn.indexOf("localhost") >= 0) { // localhost
 			if (sp == 80) // http://localhost/
 				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
 			else if (sp == 8080) // http://localhost:8080
