@@ -3996,7 +3996,7 @@ Object skip(zk.Widget wgt);
 	 * <li>The child widget not to skip can be found by the caption data member.</li>
 	 * <li>The DOM elements to skip are child elements of the DOM element whose ID is widgetUUID$cave, where widgetUUID is the UUID of the widget being rerendered. </li>
 	 * </ol>
-	 * <p>In other words, it detaches (i.e., skipped) all DOM elements under zDom.$(widget.uuid + '$cave').
+	 * <p>In other words, it detaches (i.e., skipped) all DOM elements under widget.$n('cave').
 <pre><code>
 setClosable: function (closable) {
  if (this._closable != closable) {
