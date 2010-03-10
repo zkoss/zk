@@ -10,7 +10,7 @@
 
 	<window id="mainwin" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
 	<hbox>
-		<listbox model="@{personList}" selectedItem="@{selected}" width="800px" rows="8">
+		<listbox model="@{personList}" selectedItem="@{selected}" width="600px" rows="8">
 			<listhead>
 				<listheader width="200px"/>
 				<listheader width="200px"/>

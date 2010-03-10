@@ -1,5 +1,6 @@
 <window>
 	<html><![CDATA[
+(opera not support right click event)                 
 	<ol>
 	<li>Right click on "right click me!"</li>
 	<li>You should see a menupopup.</li>

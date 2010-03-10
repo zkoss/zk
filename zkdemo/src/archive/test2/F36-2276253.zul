@@ -1,5 +1,6 @@
 <window title="test of TAB">
 	<vbox>
+		(opera not support tab)
 		<hbox>
 	TAB allowed: <textbox tabbable="true"/> <textbox tabbable="true" rows="5"/>
 		</hbox>

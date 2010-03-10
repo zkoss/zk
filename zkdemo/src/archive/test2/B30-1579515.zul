@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-1. Right click on the blue line
+1. Right click on the blue line(opera not support right click event)
 <separator/>
 2. Show "Save" menu, it is right.
 <window context="menu" border="normal" contentStyle="background-color:blue">

@@ -19,6 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window title="listbox demo" border="normal">
 	When you right-click or left-click the listitem, only that item is selected.
+	<separator/>
+	(opera not support right click event)
 	<listbox width="250px" multiple="true" checkmark="true">
 		<listhead sizable="true">
 			<listheader label="name" sort="auto" />

@@ -17,6 +17,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 Right-click on the 'female' item to show a menu popup and left-click on
 the 'Mary' item, and then all the listbox should be removed, especially
 menupopup's shadow.
+<separator/>
+(opera not support right click event)
 <div id="outer">
 <listbox width="250px" context="popup">
 <listhead sizable="true">

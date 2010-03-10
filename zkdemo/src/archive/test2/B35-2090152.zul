@@ -34,7 +34,7 @@ button text label, that is correct. (IE6~7 only).
 			<row>
 				<label value="Type:" />
 				<hbox>
-					<listbox>
+					<listbox width="150px">
 						<listitem>
 							<listcell>
 								Should See a button here.
