@@ -97,11 +97,23 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	},
 	_syncIcon: function () {
 		if (this.desktop) {
+			
+			var arr = [],
+				child;
+			while(child = this.firstChild) {
+				arr.push(child);
+				child.detach();
+			}
+			
 			var cn = this.getCaveNode();
 			jq(cn, zk).html(this.domContent_());
 			
 			// reset the reference
 			this.parent.clearCache();
+			
+			for (var i = 0, j = arr.length; i < j; ++i) {
+				this.appendChild(arr[i]);
+			}
 		}
 	},
 	_colHtmlPre: function () {
