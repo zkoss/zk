@@ -3487,7 +3487,7 @@ _doFooSelect: function (evt) {
 		}
 
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
-			var id = n.id;
+			var id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 			if (id) {
 				var j = id.indexOf('-');
 				if (j >= 0) {
