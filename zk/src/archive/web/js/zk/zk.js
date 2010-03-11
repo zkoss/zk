@@ -1045,21 +1045,23 @@ zk.Object.prototype = {
 	/** Determines if this object is an instance of the class represented by the specified Class parameter.
 	 * Example: 
 <pre><code>
-if (obj.$instanceof(zul.wgt.Label)) {
+if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 }
 </code></pre>
 	 * @param Class klass the Class object to be checked. 
+	 * Any number of arguments can be specified.
 	 * @return boolean true if this object is an instance of the class
 	 */
-	$instanceof: function (cls) {
-		if (cls) {
-			var c = this.$class;
-			if (c == zk.Class)
-				return this == zk.Object || this == zk.Class; //follow Java
-			for (; c; c = c.superclass)
-				if (c == cls)
-					return true;
-		}
+	$instanceof: function () {
+		for (var j = arguments.length, cls; j--;)
+			if (cls = arguments[j]) {
+				var c = this.$class;
+				if (c == zk.Class)
+					return this == zk.Object || this == zk.Class; //follow Java
+				for (; c; c = c.superclass)
+					if (c == cls)
+						return true;
+			}
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
