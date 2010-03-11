@@ -199,10 +199,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	// event
 	doSelect_: function(evt) {
 		if (this.isDisabled()) return;
-		// make sure the target is the ItemWidget
-		evt.target = this;
 		if (!evt.itemSelected) {
-			this.getMeshWidget()._doSelect(evt);
+			this.getMeshWidget()._doItemSelect(this, evt);
 			evt.itemSelected = true;
 		}
 		this.$supers('doSelect_', arguments);
