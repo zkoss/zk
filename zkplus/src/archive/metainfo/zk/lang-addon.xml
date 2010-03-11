@@ -144,7 +144,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<property-name>selectedItem</property-name>
 			<attribute>
 				<attribute-name>save-when</attribute-name>
-				<attribute-value>self.onSelect</attribute-value>
+				<!-- bug #2966241, since 5.0, combobox changes the sequence to fire onChange 
+				then onSelect event when end user select an item from the drop down list(In 3.x,
+				it used to fire onSelect then onChange). This could cause the currently selected 
+				bean to be modified in onChange event if we still trigger binding of the 
+				selectedItem with onSelect event. Thus we change this to be triggered when "onChange" event
+				 -->
+				<attribute-value>self.onChange</attribute-value>
 			</attribute>
 			<attribute>
 				<attribute-name>load-when</attribute-name>

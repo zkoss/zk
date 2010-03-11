@@ -1031,7 +1031,7 @@ public class DataBinder implements java.io.Serializable {
 	
 
 	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, 
-	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos) {
+	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos, String triggerEventName) {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
@@ -1143,7 +1143,7 @@ public class DataBinder implements java.io.Serializable {
 		}
 
 		Object[] loadOnSaveInfo = 
-			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp};
+			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp, triggerEventName};
 		if (loadOnSaveInfos != null) {
 			loadOnSaveInfos.add(loadOnSaveInfo);
 		} else {
@@ -1417,16 +1417,11 @@ public class DataBinder implements java.io.Serializable {
 			final boolean refChanged = ((Boolean) data[4]).booleanValue(); //whether bean itself changed
 			final List nodes = (List) data[5]; //the complete nodes along the path to the node
 			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
+			final String triggerEventName = (String) data[7]; //event that trigger the save
 			if (savecomp != null) {
-				//bug #2966241, since 5.0, combobox fire onChange then onSelect event(In 3.x it fire onSelect then onChange)
-				//This causes comboitem label to be modified in onChange if binding "selected.value" in 
-				//combobox "value" property and "selected" in "selectedItem" property simultaneously.
-				//We thus kept the trigger component in execution attribute and 
-				//ComboitemCollectionItems#getComponentAtIndexByOwner can decide whether to return
-				//the Comboitem in such case.
 				final Execution exec = Executions.getCurrent(); 
 				final Object old = exec.getAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT);
-				exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, savecomp);
+				exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, new Object[] {savecomp, triggerEventName});
 				try {
 					loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
 				} finally {

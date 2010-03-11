@@ -428,15 +428,15 @@ public class Binding implements java.io.Serializable {
 	public void saveAttribute(Component comp) {
 		final Object[] vals = getAttributeValues(comp);
 		if (vals != null)
-			saveAttributeValue(comp, vals, null);
+			saveAttributeValue(comp, vals, null, null);
 	}
 	
-	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos) {
+	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos, String triggerEventName) {
 		if (vals == null) return;
 		
 		final Object val = vals[0];
 		final Object rawval = vals[1];
-		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval, loadOnSaveInfos);
+		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval, loadOnSaveInfos, triggerEventName);
 	}		
 	
 	/** Get converted value and original value of this Binding.
@@ -695,6 +695,7 @@ public class Binding implements java.io.Serializable {
 		}
 		protected void handleEvent(Event event) {
 			final Component target = event.getTarget();
+			final String triggerEventName = event.getName();
 			final List tmplist = new ArrayList(_dataTargets.size());
 			
 			//fire onSave for each binding
@@ -742,7 +743,7 @@ public class Binding implements java.io.Serializable {
 				dataTarget = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final Object[] vals = bi.getAttributeValues();
-				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos);
+				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos, triggerEventName);
 				if (loadOnSaveProxy == null && dataTarget.isListenerAvailable("onLoadOnSave", true)) {
 					loadOnSaveProxy = dataTarget;
 				}
