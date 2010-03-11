@@ -4,6 +4,6 @@
 	<label id="i"/>
 	${param.what}
 	<zscript>
-	i.value = "" + param.get("what");
+	i.value = "" + param.get("what")[0];
 	</zscript>
 </zk>
