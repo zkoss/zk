@@ -358,7 +358,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
-	_doSelect: function (evt) {
+	_doSelect: function (evt) { //domListen_
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode(),
 				sr = zk(inp).getSelectionRange(),

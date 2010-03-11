@@ -144,6 +144,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 			this.fire('onSelect', {items: sel?[sel]:[], reference: sel});
+				//spec change (diff from zk 3): onSelect fired after onChange
+				//purpose: onSelect can retrieve the value correctly
 		}
 	},
 	_isStrict: function () {
