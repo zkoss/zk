@@ -1,9 +1,21 @@
 <zk>
-	You shall see "yes yes" below, when browse test2/B36-2863287.zul?what=yes
-	<separator bar="true"/>
+<html><![CDATA[
+<ol>
+<li>open this page in another browser's tab</li>
+<li>append "?what=yes" in the url last, like this "..../test2/B36-2863287.zul?what=yes"</li>
+<li>You shall see "yes yes" below</li>
+</ol>
+]]>
+</html>
 	<label id="i"/>
 	${param.what}
-	<zscript>
-	i.value = "" + param.get("what")[0];
-	</zscript>
+	<zscript><![CDATA[	
+		try{
+			Object array =  param.get("what");
+			if (array == null) return;
+			i.value = "" + array[0];
+		} catch(org.zkoss.zk.ui.UiException e){
+			alert("a");
+		}
+	]]></zscript>
 </zk>
