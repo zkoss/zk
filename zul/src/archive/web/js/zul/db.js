@@ -282,7 +282,7 @@ zk.Cal.prototype = {
 		}
 	},
 	getInputNode: function () {
-		return $e(this.id, 'real');
+		return $e(this.id, 'real') || this.element;
 	},
 	getTimeInputNode: function () {
 		return $e(this.id, "timebox-real");

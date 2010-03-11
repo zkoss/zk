@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2967454.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 11 09:27:29 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<calendar id="cal"/>
+    <button label="Click me and no JavaScript error" onClick="cal.value = new Date()"/>
+</zk>

@@ -44,6 +44,7 @@ ZK 3.6.4
   2962483: Show error box has js error on IE
   2849074: Add the autocomplete attribute in XSD for combobox component
   2966200: Include's construct will not set the src
+  2967454: Calendar problem
   
 * Upgrade Notes:
 
