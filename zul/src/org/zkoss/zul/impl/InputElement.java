@@ -698,6 +698,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			final String msg = evt.getMessage();
 			_errmsg = msg != null && msg.length() > 0 ? msg: null;
 			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_SELECTION)) {
+			Events.postEvent(SelectionEvent.getSelectionEvent(request));
 		} else
 			super.service(request, everError);
 	}
