@@ -74,7 +74,14 @@ import org.zkoss.zul.impl.Utils;
 public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	private static final Log log = Log.lookup(Combobox.class);
 	private boolean _autodrop, _autocomplete = true, _btnVisible = true;
+	//Note: _selItem is maintained loosely, i.e., its value might not be correct
+	//unless reIndex is called. So call getSelectedItem/getSelectedIndex if you
+	//want the correct value
 	private transient Comboitem _selItem;
+	/** The last checked value for selected item.
+	 * If null, it means reIndex is required.
+	 */
+	private transient String _lastCkVal;
 	private ListModel _model;
 	private ComboitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -477,6 +484,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
+		reIndex();
 		return _selItem;
 	}
 	/** Returns the selected item.
@@ -494,7 +502,22 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.2
 	 */
 	public void setSelectedItem(Comboitem item) {
-		setSelectedIndex(getItems().indexOf(item));
+		if (item != null && item.getParent() != this)
+			throw new UiException("Not a child: "+item);
+
+		if (item != _selItem) {
+			_selItem = item;
+			if (item != null) {
+				setValue(item.getLabel());
+			} else {
+				//Don't call setRawValue(), or the error message will be cleared
+				if (_value != null && !"".equals(_value)) {
+					_value = "";
+					smartUpdate("value", coerceToString(_value));
+				}
+			}
+			_lastCkVal = getValue();
+		}
 	}
 	/**  Deselects the currently selected items and selects the given item.
 	 * <p>Note: if the label of comboitem has the same more than one, the first 
@@ -519,36 +542,19 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Out of bound: "+jsel+" while size="+getItemCount());
 		if (jsel < -1) 
 			jsel = -1;
-		if (jsel < 0) {
-			_selItem = null;
+		setSelectedItem(jsel >= 0 ? getItemAtIndex(jsel): null);
 			//Bug#2919037: setSelectedIndex(-1) shall unselect even with constraint
-			clearValue();
-		} else {
-			_selItem = getItemAtIndex(jsel);
-			setValue(_selItem.getLabel());
-		}
-	}
-	
-	private void clearValue() {
-		//Don't call setRawValue(), or the error message will be cleared
-		if (_value != null && !"".equals(_value)) {
-			_value = "";
-			smartUpdate("value", coerceToString(_value));
-		}
 	}
 	
 	/** Returns the index of the selected item, or -1 if not selected.
 	 * @since 3.0.1
 	 */
 	public int getSelectedIndex() {
+		reIndex();
 		return _selItem != null ? getItems().indexOf(_selItem) : -1;
 	}
 
 	//-- super --//
-	public void setText(String value) throws WrongValueException {
-		super.setText(value);
-		reIndex();
-	}
 	public void setMultiline(boolean multiline) {
 		if (multiline)
 			throw new UnsupportedOperationException("Combobox doesn't support multiline");
@@ -587,6 +593,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
+			_lastCkVal = getValue(); //onChange is sent before onSelect
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
@@ -608,12 +615,15 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
+		if (child == _selItem)
+			reIndexRequired();
 		smartUpdate("repos", true);
 	}
 	
-	/*package*/ final void reIndex() {
+	private final void reIndex() {
 		final String value = getValue();
-		if (_selItem == null || !Objects.equals(value, _selItem.getLabel())) {
+		if (!Objects.equals(_lastCkVal, value)) {
+			_lastCkVal = value;
 			_selItem = null;
 			for (Iterator it = getItems().iterator(); it.hasNext();) {
 				final Comboitem item = (Comboitem)it.next();
@@ -624,13 +634,19 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			}
 		}
 	}
-	
+	/*package*/ final void reIndexRequired() {
+		_lastCkVal = null;
+	}
+	/*package*/ final Comboitem getSelectedItemDirectly() {
+		return _selItem;
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final int idx = getSelectedIndex();
 		final Combobox clone = (Combobox)super.clone();
-		clone._selItem = idx > -1 && clone.getItemCount() > idx ?
-			clone.getItemAtIndex(idx): null;
+		clone._selItem = null;
+		clone.reIndexRequired();
 		if (clone._model != null) {
 			clone._dataListener = null;
 			clone._eventListener = null;
@@ -640,22 +656,11 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	
 	//	Serializable//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		s.defaultWriteObject();
-
-		s.writeInt(getSelectedIndex());
-	}
-	
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final int idx = s.readInt();
-		if (idx > -1 && getItemCount() > idx)
-			_selItem = getItemAtIndex(idx);
-		
+		reIndexRequired();
 		if (_model != null) initDataListener();
 	}
 }

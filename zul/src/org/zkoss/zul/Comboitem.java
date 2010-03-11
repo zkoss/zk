@@ -152,7 +152,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		final String old = getLabel();
 		if (!Objects.equals(old, label)) {
 			final Combobox cb = (Combobox)getParent();
-			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
+			final boolean reIndex = cb != null && cb.getSelectedItemDirectly() == this;
 
 			super.setLabel(label);
 			
@@ -162,7 +162,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
 					cb.setValue(label);
 				} else {
-					cb.reIndex();
+					cb.reIndexRequired();
 				}
 			}
 		}
@@ -181,25 +181,6 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 			throw new UiException("Comboitem's parent must be Combobox");		
 		super.beforeParentChanged(parent);
 	}
-	public void setParent(Component parent) {
-		final Combobox old = (Combobox)getParent();
-		final boolean reIndex =
-			parent != old && old != null && old.getSelectedItem() == this;
-
-		super.setParent(parent);
-		
-		if (reIndex) postOnReIndex(old);
-	}
-	
-	/** re-index later */
-	private void postOnReIndex(Combobox old) {
-		Events.postEvent("onReIndex", this, old);
-	}
-	
-	public void onReIndex (Event evt) {
-		final Combobox cb = (Combobox) evt.getData();
-		if (cb != null) cb.reIndex();
-	} 
 
 	/** No child is allowed. */
 	protected boolean isChildable() {
