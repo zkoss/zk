@@ -74,34 +74,20 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	private static String[] processHtml(String html) {
 		boolean isAppendCSS = false;
 		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
-		Pattern cssPattern = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
-		Pattern scriptPattern = Pattern.compile("<script[^>]+src=[\"']?([^'\"> ]+/zk.wpd)[\"']?[^>]*(/>|>[\\t\\n\\s]*</script>)");
+		Pattern cssPattern = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*(/>|>\\s*</link>)");
+		Pattern scriptPattern = Pattern.compile("<script[^>]+src=[\"']?([^'\"> ]+/zk.wpd)[\"']?[^>]*(/>|>\\s*</script>)");
 
 		StringBuffer buffer = new StringBuffer();
 		int parseStart = 0, scriptStart = 0, scriptEnd = 0;
 		for (scriptStart = html.indexOf("<script"); scriptStart != -1;) {
-			if (parseStart < scriptStart) {
-				Matcher m = cssPattern.matcher(html.substring(parseStart, scriptStart));
-				while(m.find()) {
-					isAppendCSS = true;
-					String uri = m.group(1);
-					script.append("_zkCSS('" + uri + "');");
-					m.appendReplacement(buffer, "");
-				}
-				m.appendTail(buffer);
-			}
+			isAppendCSS = extractCSS(html, parseStart, scriptStart, cssPattern, script, buffer) ? true : isAppendCSS;
+
 			scriptEnd = html.indexOf("</script>", scriptStart);
 			if (scriptEnd == -1)
 				break;
 			scriptEnd += "</script>".length();
-			
-			String scriptBlock = html.substring(scriptStart, scriptEnd);
-			Matcher m = scriptPattern.matcher(scriptBlock);
-			if (m.find())
-				m.appendReplacement(buffer, "");
-			else
-				buffer.append(scriptBlock);
-	
+
+			removeScript(html, scriptStart, scriptEnd, scriptPattern, script, buffer);
 			if ((scriptStart = html.indexOf("<script", scriptEnd)) != -1)
 				parseStart = scriptEnd;
 			else {
@@ -116,5 +102,30 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 			ret[1] = buffer.toString();
 		}
 		return ret;
+	}
+	
+	private static boolean extractCSS(String html, int start, int end, Pattern cssPattern, StringBuffer scriptBuffer, StringBuffer htmlBuffer) {
+		if (!(start < end))
+			return false;
+
+		boolean isAppendCSS = false;
+		Matcher m = cssPattern.matcher(html.substring(start, end));
+		while (m.find()) {
+			isAppendCSS = true;
+			scriptBuffer.append("_zkCSS('" + m.group(1) + "');");
+			m.appendReplacement(htmlBuffer, "");
+		}
+		m.appendTail(htmlBuffer);
+		return isAppendCSS;
+	}
+	
+	private static void removeScript(String html, int start, int end, Pattern scriptPattern, StringBuffer scriptBuffer, StringBuffer htmlBuffer) {
+		String scriptBlock = html.substring(start, end);
+		Matcher m = scriptPattern.matcher(scriptBlock);
+		if (m.find()) {
+			m.appendReplacement(scriptBuffer, "");
+		}
+		else
+			htmlBuffer.append(scriptBlock);
 	}
 }
