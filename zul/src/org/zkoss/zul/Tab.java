@@ -148,7 +148,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	/**
 	 * Returns whether this tab is selected.
 	 */
-	public final boolean isSelected() {
+	public boolean isSelected() {
 		return _selected;
 	}
 
@@ -175,7 +175,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * 
 	 * @since 3.0.0
 	 */
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return _disabled;
 	}
 

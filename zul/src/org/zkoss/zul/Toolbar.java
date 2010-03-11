@@ -75,7 +75,7 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 			smartUpdate("align", _align);
 		}
 	}
-	/*package*/ final boolean inPanelMold() {
+	/*package*/ boolean inPanelMold() {
 		return "panel".equals(getMold());
 	}
 	

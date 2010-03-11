@@ -92,7 +92,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
+	public static 
 	int show(String message, String title, int buttons, String icon)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, 0, null);
@@ -136,8 +136,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon,
+	public static int show(String message, String title, int buttons, String icon,
 	EventListener listener)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, 0, listener);
@@ -162,8 +161,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon, int focus)
+	public static int show(String message, String title, int buttons, String icon, int focus)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, focus, null);
 	}
@@ -210,8 +208,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon,
+	public static int show(String message, String title, int buttons, String icon,
 	int focus, EventListener listener)
 	throws InterruptedException {
 		final Map params = new HashMap();
@@ -264,7 +261,7 @@ public class Messagebox {
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).
 	 */
-	public static final int show(String message)
+	public static int show(String message)
 	throws InterruptedException {
 		return show(message, null, OK, INFORMATION, 0, null);
 	}
@@ -279,8 +276,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon)
 	throws InterruptedException {
 		return show(messageCode, args, titleCode, buttons, icon, 0, null);
@@ -301,8 +297,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
 		return show(messageCode, args, titleCode, buttons, icon, focus, null);
@@ -346,8 +341,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon, int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, args),
@@ -365,8 +359,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
+	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
 	throws InterruptedException {
 		return show(messageCode, arg, titleCode, buttons, icon, 0, null);
 	}
@@ -386,8 +379,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons,
+	public static int show(int messageCode, Object arg, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
 		return show(messageCode, arg, titleCode, buttons, icon, focus, null);
@@ -431,8 +423,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons,
+	public static int show(int messageCode, Object arg, int titleCode, int buttons,
 	String icon, int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, arg),
@@ -445,8 +436,7 @@ public class Messagebox {
 	 * @param titleCode the message code for the title. If non-positive,
 	 * the default title is used.
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon)
+	public static int show(int messageCode, int titleCode, int buttons, String icon)
 	throws InterruptedException {
 		return show(messageCode, titleCode, buttons, icon, 0);
 	}
@@ -461,8 +451,7 @@ public class Messagebox {
 	 * and {@link #IGNORE}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon,
+	public static int show(int messageCode, int titleCode, int buttons, String icon,
 	int focus)
 	throws InterruptedException {
 		return show(messageCode, titleCode, buttons, icon, focus, null);
@@ -506,8 +495,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon,
+	public static int show(int messageCode, int titleCode, int buttons, String icon,
 	int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode),

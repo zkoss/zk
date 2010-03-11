@@ -287,7 +287,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * <p>Default: false.
 	 * @since 3.5.0
 	 */
-	public final boolean isVflex() {
+	public boolean isVflex() {
 		return _vflex;
 	}
 	/** Sets whether to grow and shrink vertical to fit their given space,

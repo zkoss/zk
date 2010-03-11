@@ -59,10 +59,10 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 		this();
 		setCurpos(curpos);
 	}
-	/*package*/ final boolean inScaleMold() {
+	/*package*/ boolean inScaleMold() {
 		return "scale".equals(getMold());
 	}
-	/*package*/ final boolean inSphereMold() {
+	/*package*/ boolean inSphereMold() {
 		return "sphere".equals(getMold());
 	}
 	
@@ -125,14 +125,14 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 *
 	 * <p>Default: 0.
 	 */
-	public final int getCurpos() {
+	public int getCurpos() {
 		return _curpos;
 	}
 	/** Sets the current position of the slider.
 	 * If negative, 0 is assumed. If larger than {@link #getMaxpos},
 	 * {@link #getMaxpos} is assumed.
 	 */
-	public final void setCurpos(int curpos)
+	public void setCurpos(int curpos)
 	throws WrongValueException {
 		if (curpos < 0) curpos = 0;
 		else if (curpos > _maxpos) curpos = _maxpos;
@@ -147,14 +147,14 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 *
 	 * <p>Default: 100.
 	 */
-	public final int getMaxpos() {
+	public int getMaxpos() {
 		return _maxpos;
 	}
 	/** Sets the maximum position of the slider.
 	 *
 	 * @exception WrongValueException if non-positive maxpos is passed
 	 */
-	public final void setMaxpos(int maxpos)
+	public void setMaxpos(int maxpos)
 	throws WrongValueException {
 		if (maxpos <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+maxpos);
@@ -181,13 +181,13 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 *
 	 * <p>Default: 10.
 	 */
-	public final int getPageIncrement() {
+	public int getPageIncrement() {
 		return _pginc;
 	}
 	/** Sets the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked.
 	 */
-	public final void setPageIncrement(int pginc)
+	public void setPageIncrement(int pginc)
 	throws WrongValueException {
 		if (pginc <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);

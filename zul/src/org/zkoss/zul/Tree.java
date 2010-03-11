@@ -536,7 +536,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * of each item.
 	 * <p>Default: false.
 	 */
-	public final boolean isCheckmark() {
+	public boolean isCheckmark() {
 		return _checkmark;
 	}
 	/** Sets whether the check mark shall be displayed in front
@@ -558,7 +558,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 *
 	 * <p>Default: false.
 	 */
-	public final boolean isVflex() {
+	public boolean isVflex() {
 		return _vflex;
 	}
 	/** Sets whether to grow and shrink vertical to fit their given space,
@@ -1503,7 +1503,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return ti;
 	}
 	
-	private static final TreeitemRenderer getDefaultItemRenderer() {
+	private static TreeitemRenderer getDefaultItemRenderer() {
 		return _defRend;
 	}
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {

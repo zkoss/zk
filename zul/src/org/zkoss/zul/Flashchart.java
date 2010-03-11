@@ -74,7 +74,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 			refresh();
 		}
 	}	
-	private final void refresh(){
+	private void refresh(){
 		smartUpdate("refresh", getJSONResponse(transferToJSONObject(getModel())));
 	}
 	/**

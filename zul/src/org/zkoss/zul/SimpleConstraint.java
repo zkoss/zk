@@ -186,7 +186,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * @param constraint a list of constraints separated by comma.
 	 * Example: no positive, no zero
 	 */
-	public static final SimpleConstraint getInstance(String constraint) {
+	public static SimpleConstraint getInstance(String constraint) {
 		return new SimpleConstraint(constraint);
 	}
 	/** Parses a constraint into an integer value.

@@ -265,7 +265,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * but we provide it for XUL compatibility.
 	 * The same as {@link #setSclass}.
 	 */
-	public final void setClass(String sclass) {
+	public void setClass(String sclass) {
 		setSclass(sclass);
 	}
 
@@ -311,7 +311,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** Returns the identifier of a draggable type of objects, or "false"
 	 * if not draggable (never null nor empty).
 	 */
-	public final String getDraggable() { //Note: it is final
+	public String getDraggable() { //Note: it is final
 		return _draggable != null ? _draggable: "false";
 	}
 	/** Sets "true" or "false" to denote whether a component is droppable,
@@ -346,7 +346,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * of objects, or "false"
 	 * if not droppable (never null nor empty).
 	 */
-	public final String getDroppable() { //Note: it is final
+	public String getDroppable() { //Note: it is final
 		return _droppable != null ? _droppable: "false";
 	}
 

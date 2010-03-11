@@ -488,7 +488,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 	
 	// Returns whether the treeitem should be visited.
-	private static final boolean shallVisitTree(Tree tree, Component child) {
+	private static boolean shallVisitTree(Tree tree, Component child) {
 		final Treeitem item = (Treeitem) child;
 		int count = item.isOpen() && item.getTreechildren() != null ? 
 				item.getTreechildren().getVisibleItemCount(): 0;
@@ -509,7 +509,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 
 	// Returns whether the specified should be rendered.
-	static final boolean shallRenderTree(Tree tree) {
+	static boolean shallRenderTree(Tree tree) {
 		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
 		final Paginal pgi = tree.getPaginal();
 		final int ofs = pgi.getActivePage() * pgi.getPageSize();

@@ -235,7 +235,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	
 	/** Creates an new and unloaded Comboitem. */
-	private final Comboitem newUnloadedItem(ComboitemRenderer renderer) {
+	private Comboitem newUnloadedItem(ComboitemRenderer renderer) {
 		Comboitem item = null;
 		if (renderer instanceof ComboitemRendererExt)
 			item = ((ComboitemRendererExt)renderer).newComboitem(this);
@@ -279,7 +279,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		}
 	}
 
-	private static final ComboitemRenderer getDefaultItemRenderer() {
+	private static ComboitemRenderer getDefaultItemRenderer() {
 		return _defRend;
 	}
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
@@ -620,7 +620,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		smartUpdate("repos", true);
 	}
 	
-	private final void reIndex() {
+	private void reIndex() {
 		final String value = getValue();
 		if (!Objects.equals(_lastCkVal, value)) {
 			_lastCkVal = value;
@@ -634,10 +634,10 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			}
 		}
 	}
-	/*package*/ final void reIndexRequired() {
+	/*package*/ void reIndexRequired() {
 		_lastCkVal = null;
 	}
-	/*package*/ final Comboitem getSelectedItemDirectly() {
+	/*package*/ Comboitem getSelectedItemDirectly() {
 		return _selItem;
 	}
 

@@ -70,7 +70,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 	/** Returns whether the HTML's select tag is used.
 	 */
-	private final boolean inSelectMold() {
+	private boolean inSelectMold() {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
 	}
@@ -159,7 +159,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return _disabled;
 	}
 	/** Sets whether it is disabled.
@@ -242,14 +242,14 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 
 	/** Returns the index of this item (aka., the order in the listbox).
 	 */
-	public final int getIndex() {
+	public int getIndex() {
 		return _index;
 	}
 
 	/** Sets whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
 	 */
-	/*package*/ final void setLoaded(boolean loaded) {
+	/*package*/ void setLoaded(boolean loaded) {
 		if (loaded != _loaded) {
 			_loaded = loaded;
 
@@ -269,14 +269,14 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 
 	//-- Utilities for implementation only (called by Listbox) */
-	/*package*/ final void setIndexDirectly(int index) {
+	/*package*/ void setIndexDirectly(int index) {
 		setIndex(index);
 	}
 	
 	protected void setIndex(int index) {
 		_index = index;	
 	}
-	/*package*/ final void setSelectedDirectly(boolean selected) {
+	/*package*/ void setSelectedDirectly(boolean selected) {
 		_selected = selected;
 	}
 	public boolean setVisible(boolean visible) {

@@ -60,7 +60,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	 * <p>Default: false.
 	 * @since 3.5.0
 	 */
-	public final boolean isCheckmark() {
+	public boolean isCheckmark() {
 		return _checkmark;
 	}
 	/** Sets whether the check mark shall be displayed in front

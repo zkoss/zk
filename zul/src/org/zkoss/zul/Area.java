@@ -43,7 +43,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	/** Returns the shape of this area.
 	 * <p>Default: null (means rectangle).
 	 */
-	public final String getShape() {
+	public String getShape() {
 		return _shape;
 	}
 	/** Sets the shape of this area.
@@ -51,7 +51,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	 * @exception WrongValueException if shape is not one of
 	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
 	 */
-	public final void setShape(String shape) throws WrongValueException {
+	public void setShape(String shape) throws WrongValueException {
 		if (shape != null)
 			if (shape.length() == 0) shape = null;
 			else if (!"rect".equals(shape) && !"rectangle".equals(shape)
@@ -66,7 +66,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 
 	/** Returns the coordination of this area.
 	 */
-	public final String getCoords() {
+	public String getCoords() {
 		return _coords;
 	}
 	/** Sets the coords of this area.
@@ -84,7 +84,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	 *
 	 * <p>Note: (0, 0) is the upper-left corner.
 	 */
-	public final void setCoords(String coords) {
+	public void setCoords(String coords) {
 		if (coords != null && coords.length() == 0) coords = null;
 		if (!Objects.equals(coords, _coords)) {
 			_coords = coords;

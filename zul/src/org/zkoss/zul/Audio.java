@@ -140,12 +140,12 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean isAutostart() {
+	public boolean isAutostart() {
 		return _autostart;
 	}
 	/** Sets whether to auto start playing the audio.
 	 */
-	public final void setAutostart(boolean autostart) {
+	public void setAutostart(boolean autostart) {
 		if (_autostart != autostart) {
 			_autostart = autostart;
 			smartUpdate("autostart", _autostart);
@@ -157,13 +157,13 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 	 * <p>Default: false;
 	 * @since 3.6.1
 	 */
-	public final boolean isLoop() {
+	public boolean isLoop() {
 		return _loop;
 	}
 	/** Sets whether to play the audio repeatedly.
 	 * @since 3.6.1
 	 */
-	public final void setLoop(boolean loop) {
+	public void setLoop(boolean loop) {
 		if (_loop != loop) {
 			_loop = loop;
 			smartUpdate("loop", _loop);

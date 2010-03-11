@@ -86,7 +86,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		}
 	}
 
-	private final DateFormat getDateFormat() {
+	private DateFormat getDateFormat() {
 		final DateFormat df =
 			new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
 		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();

@@ -82,14 +82,14 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	 * <p>Default: false.
 	 * <p>Don't override this. Override {@link #isChecked} instead.
 	 */
-	public final boolean isSelected() {
+	public boolean isSelected() {
 		return isChecked();
 	}
 	/** Sets whether it is selected.
 	 * <p>Don't override this. Override {@link #setChecked} instead.
 	 * <p>The same as {@link #setChecked}.
 	 */
-	public final void setSelected(boolean selected) {
+	public void setSelected(boolean selected) {
 		setChecked(selected);
 	}
 	/** Sets the radio is checked and unchecked the others in the same radio
@@ -144,7 +144,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	 * <p>It is readonly, and it is generated automatically
 	 * to be the same as its parent's name ({@link Radiogroup#getName}).
 	 */
-	public final String getName() {
+	public String getName() {
 		final Radiogroup group = getRadiogroup();
 		return group != null ? group.getName(): getUuid();
 	}

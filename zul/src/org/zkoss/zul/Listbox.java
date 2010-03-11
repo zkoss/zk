@@ -487,7 +487,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns whether the HTML's select tag is used.
 	 */
-	/* package */final boolean inSelectMold() {
+	/* package */ boolean inSelectMold() {
 		return "select".equals(getMold());
 	}
 
@@ -496,7 +496,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Default: false.
 	 */
-	public final boolean isCheckmark() {
+	public boolean isCheckmark() {
 		return _checkmark;
 	}
 
@@ -562,7 +562,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Default: false.
 	 */
-	public final boolean isVflex() {
+	public boolean isVflex() {
 		return _vflex;
 	}
 
@@ -585,7 +585,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Default: false.
 	 */
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return _disabled;
 	}
 

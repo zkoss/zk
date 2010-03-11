@@ -111,7 +111,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	 * over it.
 	 * <p>Default: false.
 	 */
-	public final boolean isAutodrop() {
+	public boolean isAutodrop() {
 		return _autodrop;
 	}
 	/** Sets whether to automatically drop down menus if user moves mouse

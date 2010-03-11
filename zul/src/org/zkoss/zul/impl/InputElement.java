@@ -475,7 +475,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			smartUpdate("constraint", _constr != null ? "[s": null);
 		}
 	}
-	public final Constraint getConstraint() {
+	public Constraint getConstraint() {
 		return _constr;
 	}
 

@@ -94,7 +94,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	 * <p>
 	 * Default: false.
 	 */
-	public final boolean isFlex() {
+	public boolean isFlex() {
 		return _flex;
 	}
 

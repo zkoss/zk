@@ -303,12 +303,12 @@ implements org.zkoss.zul.api.Include, Includer {
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean isLocalized() {
+	public boolean isLocalized() {
 		return _localized;
 	}
 	/** Sets whether the source depends on the current Locale.
 	 */
-	public final void setLocalized(boolean localized) {
+	public void setLocalized(boolean localized) {
 		if (_localized != localized) {
 			if (localized && "instant".equals(_mode))
 				throw new UnsupportedOperationException("localized not supported in instant mode yet");
@@ -379,7 +379,7 @@ implements org.zkoss.zul.api.Include, Includer {
 			}
 		}
 	}
-	private final Execution getExecution() {
+	private Execution getExecution() {
 		final Desktop desktop = getDesktop();
 		return desktop != null ? desktop.getExecution(): Executions.getCurrent();
 	}

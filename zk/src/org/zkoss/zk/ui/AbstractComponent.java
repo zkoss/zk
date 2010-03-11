@@ -212,8 +212,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 */
-	private static final
-	ComponentDefinition getDefinition(Execution exec, Class cls) {
+	private static ComponentDefinition getDefinition(Execution exec, Class cls) {
 		if (exec != null) {
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
@@ -240,7 +239,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return null;
 	}
-	private final ComponentDefinition
+	private ComponentDefinition
 	getDefinitionByDeviceType(String deviceType, String name) {
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
@@ -290,7 +289,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		else if (is != null)
 			((AbstractPage)is).addFellow(comp);
 	}
-	private static final IdSpace getSpaceOwnerOfParent(Component comp) {
+	private static IdSpace getSpaceOwnerOfParent(Component comp) {
 		final Component parent = comp.getParent();
 		if (parent != null) return parent.getSpaceOwner();
 		else return comp.getPage();
@@ -462,23 +461,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the UI engine based on {@link #_page}'s getDesktop().
 	 * Don't call this method when _page is null.
 	 */
-	private final UiEngine getAttachedUiEngine() {
+	private UiEngine getAttachedUiEngine() {
 		return ((WebAppCtrl)_page.getDesktop().getWebApp()).getUiEngine();
 	}
 	/** Returns the UI engine of the current execution, or null
 	 * if no current execution.
 	 */
-	private final UiEngine getCurrentUiEngine() {
+	private UiEngine getCurrentUiEngine() {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ?
 			((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine(): null;
 	}
 
 	//-- Component --//
-	public final Page getPage() {
+	public Page getPage() {
 		return _page;
 	}
-	public final Desktop getDesktop() {
+	public Desktop getDesktop() {
 		return _page != null ? _page.getDesktop(): null;
 	}
 
@@ -671,7 +670,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	public final String getUuid() {
+	public String getUuid() {
 		if (_uuid == null) {
 			final Execution exec = Executions.getCurrent();
 			_uuid = exec == null ?
@@ -682,7 +681,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _uuid;
 	}
 
-	public final IdSpace getSpaceOwner() {
+	public IdSpace getSpaceOwner() {
 		Component p = this;
 		do {
 			if (p instanceof IdSpace)
@@ -842,7 +841,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_attrs = new SimpleScope(this);
 		return _attrs;
 	}
-	private final Execution getExecution() {
+	private Execution getExecution() {
 		return _page != null ? _page.getDesktop().getExecution():
 			Executions.getCurrent();
 	}
@@ -870,19 +869,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return attrs.remove(name);
 	}
 
-	public final Map getAttributes() {
+	public Map getAttributes() {
 		return attrs().getAttributes();
 	}
-	public final Object getAttribute(String name) {
+	public Object getAttribute(String name) {
 		return _attrs != null ? _attrs.getAttribute(name): null;
 	}
 	public boolean hasAttribute(String name) {
 		return _attrs != null && _attrs.hasAttribute(name);
 	}
-	public final Object setAttribute(String name, Object value) {
+	public Object setAttribute(String name, Object value) {
 		return value != null ? attrs().setAttribute(name, value): removeAttribute(name);
 	}
-	public final Object removeAttribute(String name) {
+	public Object removeAttribute(String name) {
 		return _attrs != null ? _attrs.removeAttribute(name): null;
 	}
 	
@@ -1215,8 +1214,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (comp != null) comp._next = next;
 		else _first = next;
 	}
-	private final
-	void setPrev(AbstractComponent comp, AbstractComponent prev) {
+	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
 		else _last = prev;
 	}
@@ -1226,7 +1224,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * Derives cannot override this method, and they shall override
 	 * {@link #insertBefore} instead.
 	 */
-	public final boolean appendChild(Component child) { //Yes, final; see below
+	public boolean appendChild(Component child) { //Yes, final; see below
 		return insertBefore(child, null); //NOTE: we must go thru insertBefore
 			//such that deriving is easy to override
 	}
@@ -2613,7 +2611,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			clone._ausvc = (AuService)clone.willClone((ComponentCloneListener)val);
 		return clone;
 	}
-	private final Object willClone(ComponentCloneListener val) {
+	private Object willClone(ComponentCloneListener val) {
 		try {
 			return val.willClone(this);
 		} catch (AbstractMethodError ex) { //backward compatible prior to 5.0
@@ -2627,14 +2625,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 	}
-	private final void cloneSpaceInfoFrom(SpaceInfo from) {
+	private void cloneSpaceInfoFrom(SpaceInfo from) {
 		//rebuild ID space by binding itself and all children
 		if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
 			this.bindToIdSpace(this);
 		for (AbstractComponent p = _first; p != null; p = p._next)
 			addToIdSpacesDown(p, this);
 	}
-	private static final void cloneChildren(final AbstractComponent comp) {
+	private static void cloneChildren(final AbstractComponent comp) {
 		AbstractComponent q = null;
 		for (AbstractComponent p = comp._first; p != null; p = p._next) {
 			AbstractComponent child = (AbstractComponent)p.clone();
