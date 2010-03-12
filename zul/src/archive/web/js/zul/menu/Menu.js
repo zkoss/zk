@@ -52,6 +52,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				this._contentHandler = new zul.menu.ContentHandler(this, content);
 			} else
 				this._contentHandler.setContent(content);
+		},
+		image: function () {
+			this.rerender();
 		}
 	},
 	domContent_: function () {
@@ -156,9 +159,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers('unbind_', arguments);
 	},
-	doClick_: function (evt) {
-		if (this.isTopmost() && !jq.isAncestor(this.$n('a'), evt.domTarget)) return;
-		
+	doClick_: function (evt) {		
 		var node = this.$n();
 		if (this.menupopup) {
 			jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
