@@ -97,7 +97,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts.tags.onOpen && this.isOpen()) {
 			if (zk.animating()) {
 				var self = this;
-				setTimeout(function() {self.onResponse();}, 50);
+				setTimeout(function() {self.onResponse(ctl, opts);}, 50);
 				return;
 			}
 			var pp = this.$n('pp'),
