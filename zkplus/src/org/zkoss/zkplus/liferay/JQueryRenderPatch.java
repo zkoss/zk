@@ -106,11 +106,15 @@ public class JQueryRenderPatch implements PageRenderPatch {
 			//while replaceWith() is not
 		out.write(Strings.escape(html[1], Strings.ESCAPE_JAVASCRIPT));
 		out.write("');},");
-		out.write("" + _delay);
+		out.write("" + getBrowserDelay());
 		out.write(");</script>");
 	}
+	
+	protected String getBrowserDelay() {
+		return "" + _delay; 
+	}
 
-	private static String[] processHtml(String html) {
+	protected String[] processHtml(String html) {
 		boolean isAppendCSS = false;
 		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
 		Pattern p = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");

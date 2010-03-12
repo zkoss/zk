@@ -39,31 +39,12 @@ import org.zkoss.zk.ui.sys.PageRenderPatch;
  * ("org.zkoss.zkplus.liferay.JQueryRenderCachedPatch").
  *
  * @author tomyeh, sam
- * @since 5.0.0
+ * @since 5.0.1
  */
 public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	private static final Log log = Log.lookup(JQueryRenderCachedPatch.class);
 	
 	//@Override
-	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
-	throws IOException {
-		final String extid = page.getUuid() + "-ext";
-		String[] html = processHtml(((StringWriter)result).toString());
-		//we have to process CSS and append it to HEAD
-		out.write(html[0]);
-		out.write("<div id=\"");
-		out.write(extid);
-		out.write("\"></div><script>setTimeout(function(){\njQuery('#");
-		out.write(extid);
-		out.write("').append('");
-			//we have to use append() since it is evaluated synchronously
-			//while replaceWith() is not
-		out.write(Strings.escape(html[1], Strings.ESCAPE_JAVASCRIPT));
-		out.write("');},");
-		out.write("" + getBrowserDelay());
-		out.write(");</script>");
-	}
-
 	protected String getBrowserDelay() {
 		return "zk.ie6_ || zk.ie7 ? 1300 : 100"; 
 	}
@@ -71,7 +52,7 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	/**
 	 *	Append CSS link to head, and remove zk.wpd script
 	 */
-	private static String[] processHtml(String html) {
+	protected String[] processHtml(String html) {
 		boolean isAppendCSS = false;
 		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
 		Pattern cssPattern = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*(/>|>\\s*</link>)");
@@ -122,9 +103,8 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	private static void removeScript(String html, int start, int end, Pattern scriptPattern, StringBuffer scriptBuffer, StringBuffer htmlBuffer) {
 		String scriptBlock = html.substring(start, end);
 		Matcher m = scriptPattern.matcher(scriptBlock);
-		if (m.find()) {
+		if (m.find())
 			m.appendReplacement(scriptBuffer, "");
-		}
 		else
 			htmlBuffer.append(scriptBlock);
 	}
