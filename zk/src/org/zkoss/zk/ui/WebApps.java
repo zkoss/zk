@@ -46,11 +46,13 @@ public class WebApps {
 		return "pe".equals(f) || "professional".equals(f) ? _pe:
 			"ee".equals(f) || "enterprise".equals(f) ? _ee: false;
 	}
-	/** Returns the edition, such as Enterprise, Professional and Standard.
+	/** Returns the edition, such as EE, PE and CE.
+	 * Notice that prior to 5.0.1, the return value is one of
+	 * Enterprise, Professional and Standard.
 	 * @since 3.6.2
 	 */
 	public static String getEdition() {
-		return _ee ? "Enterprise": _pe ? "Professional": "Standard";
+		return _ee ? "EE": _pe ? "PE": "CE";
 	}
 	/** Features. */
 	private static final boolean

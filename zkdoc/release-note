@@ -79,6 +79,7 @@ February, 2010
     <?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingForced=false;})"?>
   * org.zkoss.zk.ui.metainfo.impl.MultiComposer is replaced with
     org.zkoss.zk.ui.impl.MultiComposer
+  * org.zkoss.zk.ui.WebApps's getEdition method returns EE, PE or CE.
 
 	--------
 ZK 5.0.0
