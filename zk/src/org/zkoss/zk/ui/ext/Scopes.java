@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Collection;
 
+import org.zkoss.util.Cleanups;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -44,6 +45,17 @@ public class Scopes {
 	private static final ThreadLocal _implicits = new ThreadLocal();
 	/** A stack of current scope. */
 	private static final ThreadLocal _scopes = new ThreadLocal();
+
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_implicits.set(null);
+				_scopes.set(null);
+			}
+		});
+	}
 
 	/** Prepares implicit variable before calling {@link Page#interpret}.
 	 *

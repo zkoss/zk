@@ -28,6 +28,7 @@ import java.util.Collections;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
+import org.zkoss.util.Cleanups;
 import org.zkoss.util.CollectionsX;
 
 import org.zkoss.zk.ui.Page;
@@ -1052,6 +1053,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 		((List)_evalRefStack.get()).remove(0);
 	}
 	private static final ThreadLocal _evalRefStack = new ThreadLocal();
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_evalRefStack.set(null);
+			}
+		});
+	}
 
 	private static class DupComponentInfo extends ComponentInfo {
 		private DupComponentInfo(ComponentInfo compInfo) {

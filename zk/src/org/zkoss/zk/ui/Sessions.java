@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import org.zkoss.util.Cleanups;
 import org.zkoss.zk.ui.sys.SessionResolver;
 
 /**
@@ -27,6 +28,16 @@ public class Sessions {
 	/** Used to the store the session for the current thread. */
 	protected static final ThreadLocal _sess = new ThreadLocal();
 	protected static int _cnt;
+
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_sess.set(null);
+			}
+		});
+	}
 
 	protected Sessions() {} //prevent from instantiated
 

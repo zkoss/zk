@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.lang.reflect.Method;
 
 import org.zkoss.util.logging.Log;
+import org.zkoss.util.Cleanups;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
@@ -62,6 +63,16 @@ public class EventProcessor {
 	 * It is used only the event processing thread is disabled.
 	 */
 	private static ThreadLocal _inEvt;
+
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_inEvt = null;
+			}
+		});
+	}
 
 	/** Returns whether the current thread is an event listener.
 	 */

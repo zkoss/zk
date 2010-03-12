@@ -32,6 +32,7 @@ import java.net.URL;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Cleanups;
 import org.zkoss.util.Pair;
 import org.zkoss.util.ThreadLocalCache;
 import org.zkoss.util.Cache;
@@ -69,6 +70,15 @@ public class ComponentsCtrl {
 	public static final String ANONYMOUS_ID = "z__i";
 
 	private static final ThreadLocal _compdef = new ThreadLocal();
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_compdef.set(null);
+			}
+		});
+	}
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */

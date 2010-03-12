@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 
 import org.zkoss.idom.Document;
+import org.zkoss.util.Cleanups;
 
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -43,6 +44,16 @@ import org.zkoss.zk.ui.sys.ServerPush;
 public class Executions {
 	/** Stores the current {@link Execution}. */
 	protected static final ThreadLocal _exec = new ThreadLocal();
+
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_exec.set(null);
+			}
+		});
+	}
 
 	/** Returns the current execution.
 	 */

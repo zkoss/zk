@@ -19,6 +19,8 @@ package org.zkoss.web.servlet.xel;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.util.Cleanups;
+
 /**
  * RequestContexts maintains a stack of {@link RequestContext} to simplify
  * the signatures of the XEL function.
@@ -42,6 +44,16 @@ public class RequestContexts {
 
 	/** A list of RequestContext. */
 	private static final ThreadLocal _elCtxs = new ThreadLocal();
+
+	static {
+		//Technically, they will be cleaned up by called
+		//but, to be safe, add is still used
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_elCtxs.set(null);
+			}
+		});
+	}
 
 	/** Returns the current page context if this thread is evaluating a page,
 	 * or null if not.

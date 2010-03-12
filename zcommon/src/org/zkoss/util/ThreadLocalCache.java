@@ -18,6 +18,8 @@ package org.zkoss.util;
 
 import java.util.Map;
 
+import org.zkoss.util.Cleanups;
+
 /**
  * A cache that resides on the thread local memory.
  * The performance is excellent since no need to synchronize the access.
@@ -36,13 +38,18 @@ public class ThreadLocalCache implements Cache {
 	public ThreadLocalCache(int maxSize, int lifetime) {
 		_maxsize = maxSize;
 		_lifetime = lifetime;
+
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				_cache.set(null);
+			}
+		});
 	}
 	/** Constructs a thread-local cache with the default setting:
 	 * max size=128 and lifetime=30minutes.
 	 */
 	public ThreadLocalCache() {
-		_lifetime = DEFAULT_LIFETIME;
-		_maxsize = 128;
+		this(DEFAULT_LIFETIME, 128);
 	}
 
 	//extra//

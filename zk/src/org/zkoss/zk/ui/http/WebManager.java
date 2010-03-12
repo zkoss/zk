@@ -89,8 +89,6 @@ public class WebManager {
 
 	/** Map(ServletContext, List(WebManagerActivationListener)). */
 	private static final Map _actListeners = new HashMap();
-	/** Used to inter-communicate among portlet. */
-//	private final static ThreadLocal _reqLocal = new ThreadLocal();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
