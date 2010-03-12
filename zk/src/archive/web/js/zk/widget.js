@@ -2729,7 +2729,7 @@ focus: function (timeout) {
 	 * <li>checkOnly: not to change focus back to modal dialog if unable to
 	 * activate. If not specified, the focus will be changed back to
 	 * {@link _global_.zk#currentModal}.
-	 * In additions, if specified, it will ignore {@link zk#isBusy}, which is set
+	 * In additions, if specified, it will ignore {@link zk#busy}, which is set
 	 * if {@link zk.AuCmd0#showBusy} is called.
 	 * This flag is usually set by {@link #focus}, and not set
 	 * if it is caused by user's activity, such as clicking.</li>
@@ -2740,7 +2740,18 @@ focus: function (timeout) {
 	 */
 	canActivate: function (opts) {
 		if (zk.busy && (!opts || !opts.checkOnly)) { //Bug 2912533: none of widget can be activated if busy
-			window[zk.ie || zk.opera ? 'focus' : 'blur']();
+			if (!zk.ie) {// Bug 2968706
+    			var a = jq('#zk_busy_a')[0];
+    			if (!a) {
+    				// for Chrome and Safari, we can't set "display:none;"
+    				jq(document.body).append('<a href="javascript:;" style="position:absolute;'
+    						+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
+    						+ '" id="zk_busy_a"/>');
+    				a = jq('#zk_busy_a')[0];
+    			}
+    			a.focus();
+			} else
+				window.focus(); //Bug 2912533
 			return false;
 		}
 

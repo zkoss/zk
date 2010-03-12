@@ -300,7 +300,18 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 		if (_opts && _opts.busy) {
 			zk.busy++;
-			window[zk.ie || zk.opera ? 'focus' : 'blur'](); //Bug 2912533
+			if (!zk.ie) {// Bug 2968706
+    			var a = jq('#zk_busy_a')[0];
+    			if (!a) {
+    				// for Chrome and Safari, we can't set "display:none;"
+    				jq(document.body).append('<a href="javascript:;" style="position:absolute;'
+    						+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
+    						+ 'px;" id="zk_busy_a"/>');
+    				a = jq('#zk_busy_a')[0];
+    			}
+    			a.focus();
+			} else
+				window.focus(); //Bug 2912533
 		}
 
 		var x = jq.innerX(), y = jq.innerY(),
@@ -372,7 +383,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	destroyProgressbox: function (id, _opts) {
 		if (_opts && _opts.busy && --zk.busy < 0)
 			zk.busy = 0;
-
+		if (!zk.busy) {
+			var $a = jq('#zk_busy_a');
+			if ($a[0])
+				$a.remove();
+		}
 		var $n = jq(id, zk), n;
 		if ($n.length) {
 			if (n = $n[0].z_mask) n.destroy();
