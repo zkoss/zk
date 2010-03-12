@@ -20,6 +20,7 @@ February, 2010
   2940707: Tree item is not removed on the client side
   2940739: Today value of the Datebox is incorrect when locale is TH
   2941554: Popups and Contraint Violation messages are not hidden (Tab)
+  2941611: ZK5.0/Liferay portlet causes freeze in Internet Explorer 6. 
   2941933: Right-click always select the first tree item
   2942150: combobox disabled="true" not work
   2943346: Label's maxlength property seems to have no effect
