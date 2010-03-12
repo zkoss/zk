@@ -224,10 +224,10 @@ zul.sel.TCSkipper = zk.$extends(zk.Skipper, {
 			var loc = jq(skip.id, zk)[0];
 			for (var el; el = skip.firstChild;) {
 				skip.removeChild(el);
-				if (el.id && el.id.indexOf('-') == -1)
+				if (el.id && el.id.indexOf('-') < 0) {
 					loc.appendChild(el);
-
-				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
+					if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
+				}
 			}
 		}
 	}
