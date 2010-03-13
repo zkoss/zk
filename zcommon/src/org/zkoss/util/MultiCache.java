@@ -124,10 +124,8 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	}
 
 	private CacheMap getCache(Object key) {
-		int hc = Objects.hashCode(key);
-        hc = (hc >>> 13) ^ hc;
-		if (hc < 0) hc = -hc;
-		return _caches[hc % _caches.length];
+		final int hc = Objects.hashCode(key);
+		return _caches[(hc >= 0 ? hc: -hc) % _caches.length];
 	}
 
 	public int getLifetime() {

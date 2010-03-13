@@ -361,11 +361,13 @@ public class WebManager {
 	 */
 	/*package*/ static final
 	void sessionDestroyed(HttpSession hsess) {
-		final WebApp wapp =
-			getWebManager(hsess.getServletContext()).getWebApp();
-		final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
-		if (sess != null) {
-			((WebAppCtrl)wapp).sessionDestroyed(sess);
+		//Under JBoss, the servlet might be destroyed before this callback
+		final WebManager webman = getWebManagerIfAny(hsess.getServletContext());
+		if (webman != null) {
+			final WebApp wapp = webman.getWebApp();
+			final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
+			if (sess != null)
+				((WebAppCtrl)wapp).sessionDestroyed(sess);
 		}
 	}
 

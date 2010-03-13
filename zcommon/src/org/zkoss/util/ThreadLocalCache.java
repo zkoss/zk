@@ -24,6 +24,9 @@ import org.zkoss.util.Cleanups;
  * A cache that resides on the thread local memory.
  * The performance is excellent since no need to synchronize the access.
  * However, it takes more memory since each thread has its own map.
+ * In addition, it might cause hot re-deployment failed to free old
+ * classes if the map stores the references of the classes loaded by
+ * the Web Application class loader.
  *
  * @author tomyeh
  * @since 3.0.0

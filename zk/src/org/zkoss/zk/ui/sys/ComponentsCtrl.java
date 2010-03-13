@@ -32,9 +32,9 @@ import java.net.URL;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.Cleanups;
+import org.zkoss.lang.Library;
 import org.zkoss.util.Pair;
-import org.zkoss.util.ThreadLocalCache;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
@@ -70,15 +70,6 @@ public class ComponentsCtrl {
 	public static final String ANONYMOUS_ID = "z__i";
 
 	private static final ThreadLocal _compdef = new ThreadLocal();
-	static {
-		//Technically, they will be cleaned up by called
-		//but, to be safe, add is still used
-		Cleanups.add(new Cleanups.Cleanup() {
-			public void cleanup() {
-				_compdef.set(null);
-			}
-		});
-	}
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
@@ -320,17 +311,11 @@ public class ComponentsCtrl {
 
 	/** Sets the cache that stores the information about event handler methods.
 	 *
-	 * <p>Since the performance of the cache is critical to the
-	 * performance of the overall system. There is several options to
-	 * choose from:
-	 *
-	 * <ol>
-	 * <li>{@link ThreadLocalCache}: the default.
-	 * It is the fastest but consumes more memory since it maintains
-	 * a cache per thread (about 10MB - 16M for over 400 concurrent users).
-	 * <li>{@link org.zkoss.util.MultiCache}. It is the slowest but
-	 * consumes less memory.</li>
-	 * </ol>
+	 * <p>Default: {@link MultiCache}. In additions, the number of caches is default
+	 * to 80 and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.number
+	 * property. The maximal allowed size of each cache is default to 256
+	 * and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.maxSize
+	 * property.
 	 *
 	 * @param cache the cache. It cannot be null. It must be thread safe.
 	 * Once assigned, the caller shall not access it again.
@@ -342,7 +327,10 @@ public class ComponentsCtrl {
 		_evtmtds = cache;
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static Cache _evtmtds = new ThreadLocalCache();
+	private static Cache _evtmtds = new MultiCache(
+		Library.getIntProperty("org.zkoss.zk.ui.eventMethods.cache.number", 80),
+		Library.getIntProperty("org.zkoss.zk.ui.eventMethods.cache.maxSize", 256),
+		4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript codes that can be used
 	 * to mount the specified widget at the clients.

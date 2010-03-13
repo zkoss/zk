@@ -219,8 +219,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine = null;
 		_sesscache = null;
 
-		org.zkoss.util.Cleanups.cleanup();
-
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
 

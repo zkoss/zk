@@ -702,7 +702,10 @@ public class Classes {
 		_closms.put(aoi, m);
 		return m;
 	}
-	private static Cache _closms = new MultiCache(20, 1024, 4*60*60*1000);
+	private static Cache _closms = new MultiCache(
+		Library.getIntProperty("org.zkoss.lang.Classes.closeMethods.cache.number", 80),
+		Library.getIntProperty("org.zkoss.lang.Classes.closeMethods.cache.maxSize", 256),
+		4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
