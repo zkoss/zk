@@ -2867,7 +2867,7 @@ focus: function (timeout) {
 	 * handled, either.
 	 * @param zk.Event the event that causes the click ({@link #doClick_}
 	 * {@link #doRightClick_}, or {@link #doDoubleClick_}).
-	 * @return whether to ignore it
+	 * @return boolean whether to ignore it
 	 * @since 5.0.1
 	 */
 	shallIgnoreClick_: function (evt) {
@@ -3105,7 +3105,7 @@ wgt.setListeners({
 	 * It is the so-called event propagation.
 	 * <p>If a widget, such as zul.wgt.Button, handles onClick, it is better to override this method and <i>not</i> calling back the superclass.
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
-	 * called and this method invokes the parent's {@link #onClick_} instead
+	 * called and this method invokes the parent's {@link #doClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.
@@ -3127,7 +3127,7 @@ wgt.setListeners({
 	 * doDoubleClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
-	 * called and this method invokes the parent's {@link #onDoubleClick_} instead
+	 * called and this method invokes the parent's {@link #doDoubleClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.
@@ -3148,7 +3148,7 @@ wgt.setListeners({
 	 * doRightClick_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
-	 * called and this method invokes the parent's {@link #onRightClick_} instead
+	 * called and this method invokes the parent's {@link #doRightClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
 	 * @param zk.Event evt the widget event.

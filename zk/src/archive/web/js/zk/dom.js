@@ -1396,7 +1396,7 @@ zk.copy(jq, {
 	 * @param DOMElement el the element to test
 	 * @param String tag1 the name to test. You can have any number
 	 * of names to test, such as <code>jq.nodeName(el, "tr", "td", "span")</code>
-	 * @return if the node name is the same as one of the specified names.
+	 * @return boolean if the node name is the same as one of the specified names.
 	 * @since 5.0.1
 	 */
 	nodeName: function (el) {
@@ -1792,8 +1792,8 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	 * For example,
 	 * <pre><code>jq.onzsync(obj1);</code></pre>
 	 * @param Object obj the object to register
-	 * @see #zsync()
-	 * @see #unzsync()
+	 * @see #zsync
+	 * @see #unzsync
 	 * @since 5.0.1
 	 */
 	onzsync: function (obj) {
@@ -1803,8 +1803,8 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	 * For example,
 	 * <pre><code>jq.unzsync(obj1);</code></pre>
 	 * @param Object obj the object to register
-	 * @see #zsync()
-	 * @see #onzsync()
+	 * @see #zsync
+	 * @see #onzsync
 	 * @since 5.0.1
 	 */
 	unzsync: function (obj) {
