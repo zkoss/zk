@@ -12,6 +12,37 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The layout widgets, such as borderlayout.
+ */
+//zk.$package('zul.layout');
+
+(function () {
+
+	var _ambit = {
+		'north': function (ambit, center, width, height) {
+			ambit.w = width - ambit.w;
+			center.y = ambit.ts;
+			center.h -= ambit.ts;
+		},
+		'south': function (ambit, center, width, height) {
+			ambit.w = width - ambit.w;
+			ambit.y = height - ambit.y;
+			center.h -= ambit.ts;
+		},
+		'east': function (ambit, center, width) {
+			ambit.y += center.y;
+			ambit.h = center.h - ambit.h;
+			ambit.x = width - ambit.x;
+			center.w -= ambit.ts;
+		},
+		'west': function (ambit, center) {
+			ambit.y += center.y;
+			ambit.h = center.h - ambit.h;
+			center.x += ambit.ts;
+			center.w -= ambit.ts;
+		}
+	};
+
 /**
  * A border layout is a layout container for arranging and resizing
  * child components to fit in five regions: north, south, east, west, and center.
@@ -114,25 +145,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
-				switch (rs[j]) {
-				case 'north':
-				case 'south':
-					ambit.w = width - ambit.w;
-					if (rs[j] == 'north') 
-						center.y = ambit.ts;
-					else
-						ambit.y = height - ambit.y;
-					center.h -= ambit.ts;
-					break;
-				default:
-					ambit.y += center.y;
-					ambit.h = center.h - ambit.h;
-					if (rs[j] == 'east')
-						ambit.x = width - ambit.x;
-					else center.x += ambit.ts;
-					center.w -= ambit.ts;
-					break;
-				}
+				_ambit[rs[j]](ambit, center, width, height);
 				this._resizeWgt(region, ambit); //might recursive back
 			}
 		}
@@ -242,3 +255,5 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	 */
 	CENTER: "center"
 });
+
+})();
