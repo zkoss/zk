@@ -2520,7 +2520,7 @@ unbind_: function (skipper, after) {
 				n.style.height = jq.px0(h);
 				var newmargins = zkn.sumStyles("tb", jq.margins);
 				if (h == jq(n).outerHeight(false)) //border-box
-					newh = sz.height - newmargins;
+					newh = sz.height - margins;
 				else if (zk.safari && newmargins != margins)  //safari/chrome margin changed after set style.height
 					newh = zkn.revisedHeight(sz.height, true);
 				if (newh != h) //h changed, re-assign height
@@ -2538,7 +2538,7 @@ unbind_: function (skipper, after) {
 				n.style.width = jq.px0(w);
 				var newmargins = zkn.sumStyles("lr", jq.margins);
 				if (w == jq(n).outerWidth(false)) //border-box
-					neww = sz.width - newmargins;
+					neww = sz.width - margins;
 				else if (zk.safari && newmargins != margins) //safari/chrome margin changed after set style.width
 					neww = zkn.revisedWidth(sz.width, true);
 				if (neww != w) //w changed, re-assign width
