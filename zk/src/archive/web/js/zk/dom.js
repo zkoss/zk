@@ -1838,6 +1838,26 @@ this._syncShadow(); //synchronize shadow
 	zsync: function (org) {
 		++_pendzsync;
 		setTimeout(function () {_zsync(org);}, 50);	
+	},
+
+	/** Move the focus out of any element.
+	 * <p>Notice that you cannot simply use <code>jq(window).focus()</code>
+	 * because it has no effect for browsers other than IE.
+	 * @since 5.0.1
+	 */
+	focusOut: zk.ie ? function () {
+		window.focus();
+	}: function () {
+		var a = jq('#z_focusOut')[0];
+		if (!a) {
+			// for Chrome and Safari, we can't set "display:none;"
+			jq(document.body).append('<a href="javascript:;" style="position:absolute;'
+					+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
+					+ 'px;" id="z_focusOut"/>');
+			a = jq('#z_focusOut')[0];
+		}
+		a.focus();
+		setTimeout(function () {jq(a).remove();}, 500);
 	}
 
 	/** Decodes a JSON string to a JavaScript object. 

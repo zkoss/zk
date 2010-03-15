@@ -2740,18 +2740,7 @@ focus: function (timeout) {
 	 */
 	canActivate: function (opts) {
 		if (zk.busy && (!opts || !opts.checkOnly)) { //Bug 2912533: none of widget can be activated if busy
-			if (!zk.ie) {// Bug 2968706
-    			var a = jq('#zk_busy_a')[0];
-    			if (!a) {
-    				// for Chrome and Safari, we can't set "display:none;"
-    				jq(document.body).append('<a href="javascript:;" style="position:absolute;'
-    						+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
-    						+ '" id="zk_busy_a"/>');
-    				a = jq('#zk_busy_a')[0];
-    			}
-    			a.focus();
-			} else
-				window.focus(); //Bug 2912533
+			jq.focusOut(); // Bug 2968706
 			return false;
 		}
 
