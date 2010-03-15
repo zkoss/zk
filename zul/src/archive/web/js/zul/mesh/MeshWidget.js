@@ -12,6 +12,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The two-dimentional mesh related widgets.
+ * A mesh widget is a two-dimentional widgets, such as grid, listbox and tree.
+ * Classes in this package is the skeletal implementation that can be used
+ * to simplify the implementation of grid, listbox and tree.
+ */
+//zk.$package('zul.mesh');
+
 /**
  *  A skeletal implementation for a mesh widget.
  *  @see zul.grid.Grid

@@ -13,6 +13,10 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 
 */
+/** The flashchart widgets.
+ */
+//zk.$package('zul.fchart');
+
 (function () {
 	var _src = zk.ajaxURI('/web/js/zul/fchart/charts.swf', {au: true}),
 		_expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true}),

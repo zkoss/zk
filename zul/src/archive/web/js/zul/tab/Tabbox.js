@@ -14,6 +14,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/** The tabbox related widgets, such as tabbox and tabpanel.
+ */
+//zk.$package('zul.tab');
 /**
  * A tabbox.
  *

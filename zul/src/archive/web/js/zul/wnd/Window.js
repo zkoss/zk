@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The window related widgets, such as window and panel.
+ */
+//zk.$package('zul.wnd');
+
 (function () {
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;

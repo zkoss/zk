@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The box widgets, such as hbox and vbox.
+ */
+//zk.$package('zul.box');
+
 (function () {
 
 	// Returns if the spacing is 0.

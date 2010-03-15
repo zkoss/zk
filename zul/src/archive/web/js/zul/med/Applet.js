@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The multimedia widgets, such as applet and audio.
+ */
+//zk.$package('zul.med');
+
 /**
  * A generic applet component.
  * 

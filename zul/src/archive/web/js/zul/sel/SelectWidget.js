@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The selectable widgets, such as listbox and tree.
+ */
+//zk.$package('zul.sel');
+
 (function() {
 	function _shallIgnore(evt) {
 		return !evt.domTarget || !evt.target.canActivate()

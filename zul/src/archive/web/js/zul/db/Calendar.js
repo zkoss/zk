@@ -14,6 +14,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+/** The date related widgets, such as datebox and calendar.
+ */
+//zk.$package('zul.db');
+
 (function () {
 	// Bug 2936994, fixed unnecessary setting scrollTop
 	var _doFocus = zk.gecko ? function (n, timeout) {

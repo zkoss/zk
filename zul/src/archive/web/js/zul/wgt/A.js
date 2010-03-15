@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The basic widgets, such as button and div.
+ */
+//zk.$package('zul.wgt');
+
 /**
  * The same as HTML A tag.
  * <p>Default {@link #getZclass}: z-a.

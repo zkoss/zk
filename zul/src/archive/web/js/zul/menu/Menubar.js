@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The menu related widgets, such as menubar and menuitem.
+ */
+//zk.$package('zul.menu');
+
 /**
  * A container that usually contains menu elements.
  *

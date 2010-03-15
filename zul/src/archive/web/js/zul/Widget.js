@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The ZUL widgets and utilities
+ */
+//zk.$package('zul');
+
 (function () {
 	//Tooltip
 	var _tt_inf, _tt_tmClosing, _tt_tip, _tt_ref, _tt_params;

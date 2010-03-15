@@ -12,6 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The input related widgets, such as textbox and combobox.
+ */
+//zk.$package('zul.inp');
+
 (function () {
 	function _onChangeData(wgt, val, selbk) {
 		var inf = {value: val,

@@ -12,6 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The utility widgets, such as iframe and script.
+ */
+//zk.$package('zul.utl');
+
 /**
  * Includes an inline frame.
  *
