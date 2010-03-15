@@ -703,8 +703,8 @@ public class Classes {
 		return m;
 	}
 	private static Cache _closms = new MultiCache(
-		Library.getIntProperty("org.zkoss.lang.Classes.closeMethods.cache.number", 80),
-		Library.getIntProperty("org.zkoss.lang.Classes.closeMethods.cache.maxSize", 256),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
 		4*60*60*1000);
 	private static final Method
 	myGetCloseMethod(final Class cls, final String name,
@@ -894,7 +894,10 @@ public class Classes {
 		_acsos.put(aoi, ao);
 		return ao;
 	}
-	private static Cache _acsos = new MultiCache(20, 600, 4*60*60*1000);
+	private static Cache _acsos = new MultiCache(
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
+		4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class cls, String name, Class[] argTypes, int flags)
 	throws NoSuchMethodException {

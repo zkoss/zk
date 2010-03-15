@@ -31,111 +31,106 @@ import org.zkoss.lang.Objects;
  */
 public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	private final CacheMap[] _caches;
-	private int _maxsize;
+	private int _maxsize, _lifetime;
 
-	/** Constructs a multi cache with 16 inital caches.
+	/** Constructs a multi cache with 17 inital caches.
 	 */
 	public MultiCache() {
-		this(16);
+		this(17);
 	}
 	/** Constucts a multi cache with the specified number of internal caches,
 	 * the max size and the lifetime.
 	 *
 	 * @param nCache the postive number of the internal caches.
 	 * The large the number the fast the performance.
+	 * @param maxSize the maximal allowed size of each cache
 	 */
 	public MultiCache(int nCache, int maxSize, int lifetime) {
-		this(nCache);
-		setMaxSize(maxSize);
-		setLifetime(lifetime);
+		if (nCache <= 0)
+			throw new IllegalArgumentException();
+		_caches = new CacheMap[nCache];
+		_maxsize = maxSize;
+		_lifetime = lifetime;
 	}
 	/** Constructs a multi cache with the specified number of internal caches.
+	 *
+	 * <p>The default lifetime is {@link #DEFAULT_LIFETIME}, and
+	 * the default maximal allowed size of each cache is
+	 * ({@link #DEFAULT_MAX_SIZE} / 10).
 	 *
 	 * @param nCache the postive number of the internal caches.
 	 * The large the number the fast the performance.
 	 */
 	public MultiCache(int nCache) {
-		if (nCache <= 0)
-			throw new IllegalArgumentException("Positive only");
-
-		_caches = new CacheMap[nCache];
-		for (int j = 0; j < nCache; ++j) {
-			_caches[j] = new CacheMap(8);
-			_maxsize += _caches[j].getMaxSize();
-		}
+		this(nCache, DEFAULT_LIFETIME, DEFAULT_MAX_SIZE / 10);
 	}
-	/* Used by {@link #clone} only. */
-	private MultiCache(CacheMap[] clone, int maxsize) {
-		_maxsize = maxsize;
-		_caches = new CacheMap[clone.length];
-		for (int j = 0; j < clone.length; ++j)
-			_caches[j] = (CacheMap)clone[j].clone();
-	}
-	/** Constructs a multi cache with the specified number of internal caches
-	 * and the initialize size.
-	 *
-	 * @param nCache the postive number of the internal caches.
-	 * The large the number the fast the performance.
-	 * @param initSize the initialize size
+	/** @deprecated As of release 5.0.0, replaced with {@link #MultiCache(int)}
 	 */
 	public MultiCache(int nCache, int initSize) {
-		if (nCache <= 0 || initSize <= 0)
-			throw new IllegalArgumentException("Positive only");
-
-		initSize = (initSize - 1) / nCache + 1;
-		_caches = new CacheMap[nCache];
-		for (int j = 0; j < nCache; ++j) {
-			_caches[j] = new CacheMap(initSize);
-			_maxsize += _caches[j].getMaxSize();
-		}
+		this(nCache);
 	}
 
 	//Cache//
 	public boolean containsKey(Object key) {
-		final CacheMap map = getCache(key);
-		synchronized (map) {
-			return map.containsKey(key);
+		final CacheMap cache = getCache(key);
+		synchronized (cache) {
+			return cache.containsKey(key);
 		}
 	}
 	public Object get(Object key) {
-		final CacheMap map = getCache(key);
-		synchronized (map) {
-			return map.get(key);
+		final CacheMap cache = getCache(key);
+		synchronized (cache) {
+			return cache.get(key);
 		}
 	}
 	public Object put(Object key, Object value) {
-		final CacheMap map = getCache(key);
-		synchronized (map) {
-			return map.put(key, value);
+		final CacheMap cache = getCache(key);
+		synchronized (cache) {
+			return cache.put(key, value);
 		}
 	}
 	public Object remove(Object key) {
-		final CacheMap map = getCache(key);
-		synchronized (map) {
-			return map.remove(key);
+		final CacheMap cache = getCache(key);
+		synchronized (cache) {
+			return cache.remove(key);
 		}
 	}
 	public void clear() {
-		for (int j = 0; j < _caches.length; ++j) {
-			synchronized (_caches[j]) {
-				_caches[j].clear();
-			}
+		synchronized (this) {
+			for (int j = 0; j < _caches.length; ++j)
+				_caches[j] = null;
 		}
 	}
 
 	private CacheMap getCache(Object key) {
-		final int hc = Objects.hashCode(key);
-		return _caches[(hc >= 0 ? hc: -hc) % _caches.length];
+		int j = Objects.hashCode(key);
+		j = (j >= 0 ? j: -j) % _caches.length;
+
+		CacheMap cache = _caches[j];
+		if (cache == null)
+			synchronized (this) {
+				cache = _caches[j];
+				if (cache == null) {
+					cache = new CacheMap(4);
+					cache.setMaxSize(_maxsize);
+					cache.setLifetime(_lifetime);
+					_caches[j] = cache;
+				}
+			}
+		return cache;
 	}
 
 	public int getLifetime() {
-		return _caches[0].getLifetime();
+		return _lifetime;
 	}
 	public void setLifetime(int lifetime) {
-		synchronized (this) {
-			for (int j = 0; j < _caches.length; ++j)
-				_caches[j].setLifetime(lifetime);
-		}
+		_lifetime = lifetime;
+
+		for (int j = 0; j < _caches.length; ++j)
+			if (_caches[j] != null)
+				synchronized (_caches[j]) {
+					_caches[j].setLifetime(lifetime);
+				}
 	}
 	public int getMaxSize() {
 		return _maxsize;
@@ -143,18 +138,21 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	public void setMaxSize(int maxsize) {
 		_maxsize = maxsize;
 
-		int v = maxsize / _caches.length;
-		if (v == 0)
-			v = maxsize > 0 ? 1: maxsize < 0 ? -1: 0;
-
-		synchronized (this) {
-			for (int j = 0; j < _caches.length; ++j)
-				_caches[j].setMaxSize(v);
-		}
+		for (int j = 0; j < _caches.length; ++j)
+			if (_caches[j] != null)
+				synchronized (_caches[j]) {
+					_caches[j].setMaxSize(maxsize);
+				}
 	}
 
 	//Cloneable//
 	public Object clone() {
-		return new MultiCache(_caches, _maxsize);
+		MultiCache clone = new MultiCache(_caches.length, _maxsize, _lifetime);
+		for (int j = 0; j < _caches.length; ++j)
+			if (_caches[j] != null)
+				synchronized (_caches[j]) {
+					clone._caches[j] = (CacheMap)_caches[j].clone();
+				}
+		return clone;
 	}
 }

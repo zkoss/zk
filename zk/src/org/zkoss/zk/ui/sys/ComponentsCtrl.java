@@ -312,8 +312,8 @@ public class ComponentsCtrl {
 	/** Sets the cache that stores the information about event handler methods.
 	 *
 	 * <p>Default: {@link MultiCache}. In additions, the number of caches is default
-	 * to 80 and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.number
-	 * property. The maximal allowed size of each cache is default to 256
+	 * to 97 and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.number
+	 * property. The maximal allowed size of each cache, if GC, is default to 30
 	 * and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.maxSize
 	 * property.
 	 *
@@ -328,8 +328,8 @@ public class ComponentsCtrl {
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static Cache _evtmtds = new MultiCache(
-		Library.getIntProperty("org.zkoss.zk.ui.eventMethods.cache.number", 80),
-		Library.getIntProperty("org.zkoss.zk.ui.eventMethods.cache.maxSize", 256),
+		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
+		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
 		4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript codes that can be used
