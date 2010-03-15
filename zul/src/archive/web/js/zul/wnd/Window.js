@@ -142,7 +142,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this.$supers('$init', arguments);
 
-		this.listen({onClose: this,	onMove: this, onSize: this.onSizeEvent, onZIndex: this}, -1000);
+		this.listen({onMaximize: this, onClose: this, onMove: this, onSize: this.onSizeEvent, onZIndex: this}, -1000);
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 
@@ -687,6 +687,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	onMove: function (evt) {
 		this._left = evt.left;
 		this._top = evt.top;
+	},
+	onMaximize: function (evt) {
+		var data = evt.data;
+		this._top = data.top;
+		this._left = data.left;
+		this._height = data.height;
+		this._width = data.width;
 	},
 	onSizeEvent: function (evt) {
 		var data = evt.data,
