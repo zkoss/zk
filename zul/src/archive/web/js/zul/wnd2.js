@@ -171,6 +171,10 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			// restore.
 			s.top = "0";
 			s.left = "0";
+			
+			// resync
+			w = s.width;
+			h = s.height;
 		} else {
 			var max = $e(cmp, "maximize");
 			zk.rmClass(max, cls + "-maxd");
