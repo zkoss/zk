@@ -62,7 +62,7 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	 * The large the number the fast the performance.
 	 */
 	public MultiCache(int nCache) {
-		this(nCache, DEFAULT_LIFETIME, DEFAULT_MAX_SIZE / 10);
+		this(nCache, DEFAULT_MAX_SIZE / 10, DEFAULT_LIFETIME);
 	}
 	/** @deprecated As of release 5.0.0, replaced with {@link #MultiCache(int)}
 	 */
