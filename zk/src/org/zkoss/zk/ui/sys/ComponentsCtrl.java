@@ -31,8 +31,9 @@ import java.net.URL;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Library;
 import org.zkoss.util.Pair;
-import org.zkoss.util.ThreadLocalCache;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
@@ -346,17 +347,11 @@ public class ComponentsCtrl {
 
 	/** Sets the cache that stores the information about event handler methods.
 	 *
-	 * <p>Since the performance of the cache is critical to the
-	 * performance of the overall system. There is several options to
-	 * choose from:
-	 *
-	 * <ol>
-	 * <li>{@link ThreadLocalCache}: the default.
-	 * It is the fastest but consumes more memory since it maintains
-	 * a cache per thread (about 10MB - 16M for over 400 concurrent users).
-	 * <li>{@link org.zkoss.util.MultiCache}. It is the slowest but
-	 * consumes less memory.</li>
-	 * </ol>
+	 * <p>Default: {@link MultiCache}. In additions, the number of caches is default
+	 * to 97 and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.number
+	 * property. The maximal allowed size of each cache, if GC, is default to 30
+	 * and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.maxSize
+	 * property.
 	 *
 	 * @param cache the cache. It cannot be null. It must be thread safe.
 	 * Once assigned, the caller shall not access it again.
@@ -368,7 +363,10 @@ public class ComponentsCtrl {
 		_evtmtds = cache;
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static Cache _evtmtds = new ThreadLocalCache();
+	private static Cache _evtmtds = new MultiCache(
+		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
+		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
+		4*60*60*1000);
 	
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
