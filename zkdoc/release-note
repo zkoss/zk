@@ -71,6 +71,7 @@ February, 2010
   2966200: Include's construct will not set the src
   2968752: Not possible to change menu image
   2970460: window onMaximize not modify height
+  2961772: Redeploy memory leaks
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
