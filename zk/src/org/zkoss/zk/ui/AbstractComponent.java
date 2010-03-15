@@ -1209,8 +1209,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return true;
 	}
-	private final
-	void setNext(AbstractComponent comp, AbstractComponent next) {
+	private void setNext(AbstractComponent comp, AbstractComponent next) {
 		if (comp != null) comp._next = next;
 		else _first = next;
 	}
@@ -2377,7 +2376,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return "<"+clsnm.substring(j+1)+' '
 			+(ComponentsCtrl.isAutoId(_id) ? _uuid: _id)+'>';
 	}
-	public final boolean equals(Object o) { //no more override
+	public boolean equals(Object o) { //no more override
 		return this == o;
 	}
 
