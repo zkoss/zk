@@ -335,6 +335,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					// restore.
 					s.top = "0";
 					s.left = "0";
+
+					// resync
+					w = s.width;
+					h = s.height;
 				} else {
 					var max = this.$n('max'),
 						$max = jq(max);
