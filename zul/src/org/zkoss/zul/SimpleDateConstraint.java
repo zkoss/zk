@@ -36,7 +36,7 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.2
  */
 public class SimpleDateConstraint extends SimpleConstraint {
-	private static final SimpleDateFormat _df = new SimpleDateFormat("yyyyMMdd");
+	private final SimpleDateFormat _df = new SimpleDateFormat("yyyyMMdd");
 	private Date _beg, _end;
 
 	public SimpleDateConstraint(int flags) {
@@ -141,7 +141,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 		return super.parseConstraint(constraint);
 	}
-	private static Date parseDate(String val) throws UiException {
+	private Date parseDate(String val) throws UiException {
 		try {
 			return _df.parse(val.trim());
 		} catch (ParseException ex) {
@@ -172,7 +172,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 					"<= " + dateToString(comp, _end);
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
-	private static String dateToString(Component comp, Date d) {
+	private String dateToString(Component comp, Date d) {
 		if (d == null)
 			return "";
 		if (comp instanceof Datebox)

@@ -74,6 +74,7 @@ February, 2010
   2961772: Redeploy memory leaks
   2970902: Whitespace-only comboitem has height 0
   2970695: Constraints on non-input fields spawns several error dialogs
+  2970664: SimpleDateConstraint should not use static SimpleDateFormat
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
