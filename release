@@ -355,6 +355,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	#Prepare the java doc
 	cd $javadocdir
 
+	if [ "$target" == "official" ]; then
+		cd $maindir
+		$maindir/bin/javadoc "$javadocdir/ZK"
+		cd $javadocdir
+	fi
 	echo Output ${javadocnm}.zip
 	zip -qr9 ${javadocnm}.zip ZK
 	mv ${javadocnm}.zip /tmp/zk
@@ -392,7 +397,6 @@ fi
 #Prepare the doc
 if [ "$target" == "official" ]; then
 	cd $maindir
-	$maindir/bin/javadoc "$javadocdir/ZK"
 	mkdir -p /tmp/zk/doc
 
 	cd $maindir/zkdoc
