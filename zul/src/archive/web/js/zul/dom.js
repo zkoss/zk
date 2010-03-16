@@ -97,6 +97,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				delete efs.errMesg;
 			}
 		} else {
+			if (efs.errMesg) {
+				efs.errMesg.destroy();
+				delete efs.errMesg;
+			}
 			efs.errMesg = {destroy: zk.$void};
 			zk.load("zul.inp", function () {
 				if (efs.errMesg) //not destroyed yet
