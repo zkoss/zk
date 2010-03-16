@@ -107,7 +107,7 @@ public class SimpleScope implements Scope {
 	public void notifyParentChanged(Scope newparent) {
 		_listeners.notifyParentChanged(newparent);
 	}
-	/** Invokes {@link ScopeListener#IdSpaceChanged} for registered
+	/** Invokes {@link ScopeListener#idSpaceChanged} for registered
 	 * listeners.
 	 *
 	 * @see #addScopeListener

@@ -166,7 +166,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		# License
 		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
 		mv /tmp/zk/CML_LICENSE /tmp/zk/LICENSE
-		chmod 644 LICENSE
+		chmod 644 /tmp/zk/LICENSE
 		
 		cp /tmp/zk/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$profsrcnm/doc
 		cp /tmp/zk/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$entsrcnm/doc

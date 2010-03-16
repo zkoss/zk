@@ -77,7 +77,16 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Plays the audio at the client.
 	 */
-	play: function () {
+	play: function (delay) {
+		
+		// setSrc will rerender, we need to invoke the function later.
+		if (!delay) {
+			var self = this;
+			setTimeout(function () {
+				self.play(true);
+			}, 100);
+			return;
+		}
 		var n = this.$n();
 		if (n) {
 			try { //Note: we cannot do "if (n.play)" in IE
