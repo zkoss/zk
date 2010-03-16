@@ -343,7 +343,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var wd = zk.ie6_ ? this.getWidth() : this.$n().style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			var n = this.$n();
-			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+			
+			if (!zk.ie6_ && n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
 				return; //do nothing.
 				
 			if (this.ebody) 
