@@ -91,16 +91,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
   	};
 	zAu.wrongValue_ = function(wgt, msg) {
 		var efs = wgt.effects_;
-		if (msg === false) {
-			if (efs.errMesg) {
-				efs.errMesg.destroy();
-				delete efs.errMesg;
-			}
-		} else {
-			if (efs.errMesg) {
-				efs.errMesg.destroy();
-				delete efs.errMesg;
-			}
+		if (efs.errMesg) {
+			efs.errMesg.destroy();
+			delete efs.errMesg;
+		}
+		if (msg !== false) {
 			efs.errMesg = {destroy: zk.$void};
 			zk.load("zul.inp", function () {
 				if (efs.errMesg) //not destroyed yet
