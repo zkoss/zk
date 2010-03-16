@@ -401,7 +401,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void setBookmark(String name) {
 		setBookmark(name, false);
 	}
-		public void setBookmark(String name, boolean replace) {
+	public void setBookmark(String name, boolean replace) {
 		if (_exec == null)
 			throw new IllegalStateException("Not the current desktop: " + this);
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
