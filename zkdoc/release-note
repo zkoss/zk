@@ -72,6 +72,7 @@ February, 2010
   2968752: Not possible to change menu image
   2970460: window onMaximize not modify height
   2961772: Redeploy memory leaks
+  2970902: Whitespace-only comboitem has height 0
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method

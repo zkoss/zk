@@ -74,6 +74,9 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel(), {pre: 1});
+	},
 	doMouseOver_: function () {
 		if (!this._disabled) {
 			var n = this.$n(),
