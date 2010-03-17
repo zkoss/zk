@@ -68,6 +68,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		 */
 		constraint: function() {
 			var constraint = this._constraint || '';
+			if (typeof this._constraint != 'string') return;
 			if (constraint.startsWith("between")) {
 				var j = constraint.indexOf("and", 7);
 				if (j < 0 && zk.debugJS) 
