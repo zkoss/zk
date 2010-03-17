@@ -68,17 +68,16 @@ pageTracker._trackPageview();
 </script>
 
 <!-- Google Website Optimizer Conversion Script -->
-<script><![CDATA[
+<script type="text/javascript"><![CDATA[
 if(typeof(_gat)!='object')document.write('<sc'+'ript src="http'+
 (document.location.protocol=='https:'?'s://ssl':'://www')+
-'.google-analytics.com/ga.js"></sc'+'ript>');
-]]></script>
-<script>
+'.google-analytics.com/ga.js"></sc'+'ript>')]]></script>
+<script type="text/javascript">
 try {
-var gwoTracker=_gat._getTracker("UA-9085743-2");
-gwoTracker._trackPageview("/2475718535/goal");
-}catch(err){}
-</script>
+var gwoTracker=_gat._getTracker("UA-121377-13");
+gwoTracker._trackPageview("/2508809880/goal");
+}catch(err){}</script>
 <!-- End of Google Website Optimizer Conversion Script -->
+
 
 </zk>
