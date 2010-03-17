@@ -12,6 +12,33 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	function _invoke(wgt, fn1, fn2, unbind) {
+		//Note: setSrc will rerender, so we need to delay the invocation of play
+		if (unbind)
+			_invoke2(wgt, fn1, fn2, unbind);
+		else
+			setTimeout(function () {
+				_invoke2(wgt, fn1, fn2/*, unbind*/);
+			}, 200);
+	}
+	function _invoke2(wgt, fn1, fn2, unbind) {
+		var n = wgt.$n();
+		if (n) {
+			try { //Note: we cannot do "if (n.play)" in IE
+				n[fn1]();
+			} catch (e) {
+				try {
+					n[fn2](); //Firefox
+				} catch (e) {
+					if (!unbind)
+						jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
+				}
+			}
+		}
+	}
+
 /**
  * An audio clip.
  *
@@ -77,61 +104,18 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	/** Plays the audio at the client.
 	 */
-	play: function (delay) {
-		
-		// setSrc will rerender, we need to invoke the function later.
-		if (!delay) {
-			var self = this;
-			setTimeout(function () {
-				self.play(true);
-			}, 100);
-			return;
-		}
-		var n = this.$n();
-		if (n) {
-			try { //Note: we cannot do "if (n.play)" in IE
-				n.play();
-			} catch (e) {
-				try {
-					n.Play(); //Firefox
-				} catch (e) {
-					jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
-				}
-			}
-		}
+	play: function () {
+		_invoke(this, 'play', 'Play');
 	},
-	/** Stops the audio at the cient.
+	/** Stops the audio at the client.
 	 */
-	stop: function (silent) {
-		var n = this.$n();
-		if (n) {
-			try { //Note: we cannot do "if (n.stop)" in IE
-				n.stop();
-			} catch (e) {
-				try {
-					n.Stop();
-				} catch (e) {
-					if (!silent)
-						jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
-				}
-			}
-		}
+	stop: function (_unbind_) {
+		_invoke(this, 'stop', 'Stop', _unbind_);
 	},
 	/** Pauses the audio at the cient.
 	 */
 	pause: function () {
-		var n = this.$n();
-		if (n) {
-			try { //Note: we cannot do "if (n.pause)" in IE
-				n.pause();
-			} catch (e) {
-				try {
-					n.Pause();
-				} catch (e) {
-					jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
-				}
-			}
-		}
+		_invoke(this, 'pause', 'Pause');
 	},
 
 	unbind_: function () {
@@ -154,3 +138,5 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		return attr;
 	}
 });
+
+})();
