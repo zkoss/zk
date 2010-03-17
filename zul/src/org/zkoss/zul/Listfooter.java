@@ -103,7 +103,7 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 	public void setSpan(int span) {
 		if (_span != span) {
 			_span = span;
-			smartUpdate("colspan", _span);
+			smartUpdate("span", _span);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 		super.renderProperties(renderer);
 		
 		if (_span > 1)
-			renderer.render("colspan", _span);
+			renderer.render("span", _span);
 
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
