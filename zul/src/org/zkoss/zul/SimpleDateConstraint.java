@@ -178,7 +178,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 					"<= " + dateToString(comp, _end);
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
-	private String dateToString(Component comp, Date d) {
+	private static String dateToString(Component comp, Date d) {
 		if (d == null)
 			return "";
 		if (comp instanceof Datebox)
