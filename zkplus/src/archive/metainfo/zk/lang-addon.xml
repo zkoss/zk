@@ -25,8 +25,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zkplus.Version</version-class>
-		<version-uid>5.0.1</version-uid>
-		<zk-version>5.0.1</zk-version><!-- or later -->
+		<version-uid>5.0.2</version-uid>
+		<zk-version>5.0.2</zk-version><!-- or later -->
 	</version>
 
 	<zscript language="Java">

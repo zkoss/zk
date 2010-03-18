@@ -26,5 +26,5 @@ package org.zkoss.zhtml;
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "5.0.1";
+	public static final String UID = "5.0.2";
 }
