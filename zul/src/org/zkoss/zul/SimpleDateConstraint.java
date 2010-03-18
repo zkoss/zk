@@ -38,7 +38,6 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.2
  */
 public class SimpleDateConstraint extends SimpleConstraint {
-	private final SimpleDateFormat _df = new SimpleDateFormat("yyyyMMdd");
 	private Date _beg, _end;
 
 	public SimpleDateConstraint(int flags) {
@@ -143,13 +142,20 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 		return super.parseConstraint(constraint);
 	}
-	private Date parseDate(String val) throws UiException {
+	private static Date parseDate(String val) throws UiException {
 		try {
-			return _df.parse(val.trim());
+			return getDateFormat().parse(val.trim());
 		} catch (ParseException ex) {
 			throw new UiException("Not a date: "+val+". Format: yyyyMMdd", ex);
 		}
 	}
+	private static SimpleDateFormat getDateFormat() {
+		 SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		 if (df == null)
+		 	_df.set(df = new SimpleDateFormat("yyyyMMdd"));
+		 return df;
+	}
+	private static final ThreadLocal _df = new ThreadLocal();
 
 	public void validate(Component comp, Object value)
 	throws WrongValueException {
@@ -174,11 +180,11 @@ public class SimpleDateConstraint extends SimpleConstraint {
 					"<= " + dateToString(comp, _end);
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
-	private String dateToString(Component comp, Date d) {
+	private static String dateToString(Component comp, Date d) {
 		if (d == null)
 			return "";
 		if (comp instanceof Datebox)
 			return ((Datebox)comp).coerceToString(d);
-		return _df.format(d);
+		return getDateFormat().format(d);
 	}
 }
