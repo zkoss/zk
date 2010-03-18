@@ -2914,6 +2914,8 @@ var Expr = Sizzle.selectors = {
 	match: {
 		ID: /#((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
 		CLASS: /\.((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
+		/* Jumper Chen, Potix, 20100318*/
+		ZK: /\$((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
 		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF-]|\\.)+)['"]*\]/,
 		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/,
 		TAG: /^((?:[\w\u00c0-\uFFFF\*-]|\\.)+)/,
@@ -3270,6 +3272,11 @@ var Expr = Sizzle.selectors = {
 		},
 		TAG: function(elem, match){
 			return (match === "*" && elem.nodeType === 1) || elem.nodeName.toLowerCase() === match;
+		},
+		/* Jumper Chen, Potix, 20100318*/
+		ZK: function(elem, match) {
+			var wgt = zk.Widget.$(elem);
+			return wgt ? wgt.id === match[1] : false;
 		},
 		CLASS: function(elem, match){
 			return (" " + (elem.className || elem.getAttribute("class")) + " ")
