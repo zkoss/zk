@@ -1,11 +1,25 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+@media print {
+    .z-borderlayout {
+		<c:if test="${c:browser('safari')}"><%-- Bug 2949287--%>
+			position: static;
+		</c:if>
+	}
+}
+
+@media screen {
+    .z-borderlayout { 
+		position: relative; 
+	}
+}
+
 .z-borderlayout {
 	width:100%;
 	height:100%;
 	overflow: hidden;
 	background-color:#CDE6F5;
-	border: 0;
-	position: relative;
+	border: 0;	
 }
 
 .z-north,
