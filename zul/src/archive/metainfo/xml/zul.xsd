@@ -488,6 +488,7 @@
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
+			<xs:element ref="ckeditor" />
 			<xs:element ref="colorbox" />
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
@@ -553,6 +554,7 @@
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="checkbox" />
+				<xs:element ref="ckeditor" />
 				<xs:element ref="colorbox" />
 				<xs:element ref="columnlayout" />
 				<xs:element ref="combobox" />
@@ -2499,6 +2501,18 @@
 		</xs:simpleContent>
 	</xs:complexType>
     <!-- zkforge -->
+    <!-- ckeditor -->
+	<xs:element name="ckeditor" type="ckeditorType" />
+	<xs:complexType name="ckeditorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="abstractComponentAttrGroup" />
+		<xs:attribute name="width" type="xs:string" use="optional" />
+		<xs:attribute name="height" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="toolbar" type="xs:string" use="optional" />
+		<xs:attribute name="onSave" type="xs:string" use="optional" />
+		<xs:attribute name="customConfigurationsPath" type="xs:string" use="optional" />
+	</xs:complexType>
     <!-- fckeditor -->
 	<xs:element name="fckeditor" type="fckeditorType" />
 	<xs:complexType name="fckeditorType">
