@@ -189,9 +189,10 @@ public class JspFns {
 	 * If It is used for debugging/developing purpose.
 	 * @param hours the number of hours the client is allowed to cache the
 	 * resource
+	 * @return whether HttpServletResponse.SC_NOT_MODIFIED is set.
 	 * @since 5.0.1
 	 */
-	public static void setCacheControl(ServletContext context, HttpServletRequest request,
+	public static boolean setCacheControl(ServletContext context, HttpServletRequest request,
 			HttpServletResponse response, String prop, int hours) {
 		if (prop == null || !"false".equals(Library.getProperty(prop))) {	
 			response.setHeader("Cache-Control", "public, max-age="
@@ -205,16 +206,19 @@ public class JspFns {
 				final String etag = WebManager.getWebManager(context).getClassWebResource().getEncodeURLPrefix();
 				final String inm = request.getHeader("If-None-Match");
 				if (inm != null && inm.equals(etag)) {
-					 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+					response.setHeader("ETag", etag);
+					return true;
 				}
 				response.setHeader("ETag", etag);
 			}
 		}
+		return false;
 	}
 	private static final boolean shallETag() {
 		if (_shallETag == null) {
 			String s = Library.getProperty("org.zkoss.web.classWebResource.cache.etag");
-			_shallETag = Boolean.valueOf(!"false".equals(s));
+			_shallETag = Boolean.valueOf("true".equals(s));
 		}
 		return _shallETag.booleanValue();
 	}
@@ -249,10 +253,11 @@ public class JspFns {
 	 * If it is turned off or the value of hours is non-postive, nothing is generated
 	 * Otherwise, it generates the header with the specified hours
 	 * (default: 8760).
+	 * @return whether HttpServletResponse.SC_NOT_MODIFIED is set.
 	 * @see #setCWRCacheControl(ServletContext, HttpServletRequest, HttpServletResponse)
 	 * @since 5.0.1
 	 */
-	public static void setCSSCacheControl(ServletContext context,
+	public static boolean setCSSCacheControl(ServletContext context,
 			HttpServletRequest request, HttpServletResponse response) {
 		int hours = 8760;
 		final String PROP = "org.zkoss.web.classWebResource.cache.CSS.hours";
@@ -260,14 +265,15 @@ public class JspFns {
 		if (s != null)
 			try {
 				hours = Integer.parseInt(s);
-				if (hours <= 0) return;
+				if (hours <= 0) return false;
 			} catch (Throwable ex) {
 				log.warning("Ingored property "+PROP+": an integer is expected");
 			}
 		if (context != null)
-			setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", hours);
-		else
-			setCacheControl(response, "org.zkoss.web.classWebResource.cache", hours);
+			return setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", hours);
+
+		setCacheControl(response, "org.zkoss.web.classWebResource.cache", hours);
+		return false;
 	}
 	/** Sets the Cache-Control, Expires, and Last-Modified headers for class Web resources.
 	 * <p> Last-Modified is a "weak" caching header in that the browser applies
@@ -288,10 +294,11 @@ public class JspFns {
 	 * is turned off. If not, it generates the headers.
 	 * <p>Notice that, for the CSS files, please use {@link #setCSSCacheControl}
 	 * instead.
+	 * @return whether HttpServletResponse.SC_NOT_MODIFIED is set.
 	 * @since 5.0.1
 	 */
-	public static void setCWRCacheControl(ServletContext context,
+	public static boolean setCWRCacheControl(ServletContext context,
 			HttpServletRequest request, HttpServletResponse response) {
-		setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", 8760);
+		return setCacheControl(context, request, response, "org.zkoss.web.classWebResource.cache", 8760);
 	}
 }
