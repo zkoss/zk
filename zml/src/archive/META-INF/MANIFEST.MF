@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK XML Component Set
-Specification-Version: 3.6.4
+Specification-Version: 3.6.5
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zml
 Implementation-URL: http://www.zkoss.org/zml
-Implementation-Version: 3.6.4
+Implementation-Version: 3.6.5
 Implementation-Vendor: Potix Corporation

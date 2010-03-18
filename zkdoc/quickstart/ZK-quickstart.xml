@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Quick Start Guide</title>
-<subtitle>Version 3.6.4</subtitle>
+<subtitle>Version 3.6.5</subtitle>
 <bookinfo>
 <copyright>
 <year>2007</year>
@@ -365,11 +365,11 @@
 <para>Notice: Make sure you have installed Java JDK, and application server on your computer or you have to refer to the previous chapter.</para>
 <orderedlist>
 <listitem>
-<para>Download zk-demo-3.6.4.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
-<para>http://downloads.sourceforge.net/zk1/zk-demo-3.6.4.zip</para>
+<para>Download zk-demo-3.6.5.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
+<para>http://downloads.sourceforge.net/zk1/zk-demo-3.6.5.zip</para>
 </listitem>
 <listitem>
-<para>Unzip zk-demo-3.6.4.zip, and Copy zkdemo.war to the $TOMCAT_HOME\webapps directory</para>
+<para>Unzip zk-demo-3.6.5.zip, and Copy zkdemo.war to the $TOMCAT_HOME\webapps directory</para>
 </listitem>
 <listitem>
 <para>Execute $TOMCAT_HOME\bin\tomcat5w.exe, and clicks Start button to activate your Web Server.</para>
@@ -381,7 +381,7 @@
 </orderedlist></sect1></chapter>
 <chapter>
 <title>Appendix A. The Content of Binary Distribution</title>
-<para>This chapter describes the content of zk-bin-3.6.4.zip.</para><sect1><title>/doc</title>
+<para>This chapter describes the content of zk-bin-3.6.5.zip.</para><sect1><title>/doc</title>
 <para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
 <para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor. It is optional depending on whether you need them.</para>
@@ -550,12 +550,12 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.6.4.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
+<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.6.5.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
 <para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
 <chapter>
 <title>Appendix B. The Content of Demo Distribution</title>
-<para>This chapter describes the content of zk-demo-3.6.4.zip.</para><sect1><title>/</title>
+<para>This chapter describes the content of zk-demo-3.6.5.zip.</para><sect1><title>/</title>
 <para>This directory holds the executable: zkdemo.war, zkdemo-min.war, zkdemos.ear and zkdemos-min.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
 <para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
 <para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>
