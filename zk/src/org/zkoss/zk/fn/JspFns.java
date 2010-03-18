@@ -201,15 +201,25 @@ public class JspFns {
 			cal.add(cal.HOUR, hours);
 			response.setDateHeader("Expires", cal.getTime().getTime());
 			response.setDateHeader("Last-Modified", LAST_MODIFIED);
-			final String uuid = WebManager.getWebManager(context).getClassWebResource().getEncodeURLPrefix();
-			final String eTag = request.getHeader("If-None-Match");
-			if (eTag != null && eTag.equals(uuid)) {
-				 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                 response.setHeader("ETag", eTag);
+			if (shallETag()) {
+				final String etag = WebManager.getWebManager(context).getClassWebResource().getEncodeURLPrefix();
+				final String inm = request.getHeader("If-None-Match");
+				if (inm != null && inm.equals(etag)) {
+					 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				}
+				response.setHeader("ETag", etag);
 			}
-			 response.setHeader("ETag", uuid);
 		}
 	}
+	private static final boolean shallETag() {
+		if (_shallETag == null) {
+			String s = Library.getProperty("org.zkoss.web.classWebResource.cache.etag");
+			_shallETag = Boolean.valueOf(!"false".equals(s));
+		}
+		return _shallETag.booleanValue();
+	}
+	private static Boolean _shallETag;
+
 	/** Sets the Cache-Control, Expires, and Last-Modified headers for the CSS files
 	 * of class Web resources.
 	 * <p> Last-Modified is a "weak" caching header in that the browser applies
