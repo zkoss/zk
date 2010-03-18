@@ -208,6 +208,7 @@ public class JspFns {
 				if (inm != null && inm.equals(etag)) {
 					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 					response.setHeader("ETag", etag);
+					request.setAttribute("ETagMatched", Boolean.TRUE);
 					return true;
 				}
 				response.setHeader("ETag", etag);
