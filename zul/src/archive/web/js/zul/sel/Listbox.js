@@ -123,7 +123,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onResponse: this});
 		this._shallStripe = true;
-		after.push(this.proxy(this.onResponse));
+		after.push(this.proxy(zk.bootstrapping ? this.stripe: this.onResponse));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
