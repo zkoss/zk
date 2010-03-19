@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkreg = zk.Widget.register; //a shortcut for WPD loader
 //mount begin
 function zkmb(binding) {
 	zk.mounting = true;
@@ -40,12 +39,12 @@ function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
 	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
 //widget begin
-function zkb(type, uuid, mold, props) {
+function zkb(type, uuid, props, mold) {
 	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 //zhtml widget begin
 function zkb2(uuid, type, props) { //zhtml
-	zk.mnt.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
+	zkb(type||'zhtml.Widget', uuid, props);
 }
 //define a desktop
 function zkdt(dtid, contextURI, updateURI, reqURI) {
@@ -74,36 +73,6 @@ function zkver(ver, build, ctxURI, updURI, modVers, opts) {
 
 	zk.feature = {standard: true};
 	zkopt(opts);
-}
-function zkopt(opts) {
-	for (var nm in opts) {
-		var val = opts[nm];
-		switch (nm) {
-		case "pd": zk.procDelay = val; break;
-		case "td": zk.tipDelay =  val; break;
-		case "rd": zk.resendDelay = val; break;
-		case "dj": zk.debugJS = val; break;
-		case "kd": zk.keepDesktop = val; break;
-		case "pf": zk.pfmeter = val; break;
-		case "cd": zk.clickFilterDelay = val; break;
-		case "ta": zk.timerAlive = val; break;
-		case "to":
-			zk.timeout = val;
-			zAu._resetTimeout();
-			break;
-		case "ed":
-			switch (val) {
-			case 'e':
-				zk.feature.ee = true;
-			case 'p':
-				zk.feature.pe = true;
-			}
-			break;
-		case 'eu': zAu.setErrorURI(val); break;
-		case 'ppos': zk.progPos = val; break;
-		case 'eup': zAu.setPushErrorURI(val);
-		}
-	}
 }
 
 function zkmld(wgtcls, molds) {

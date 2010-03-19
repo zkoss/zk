@@ -4010,3 +4010,37 @@ setClosable: function (closable) {
 	//nonCaptionSkipper: null
 //@};
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();
+
+//Extra//
+
+zkreg = zk.Widget.register; //a shortcut for WPD loader
+function zkopt(opts) {
+	for (var nm in opts) {
+		var val = opts[nm];
+		switch (nm) {
+		case "pd": zk.procDelay = val; break;
+		case "td": zk.tipDelay =  val; break;
+		case "rd": zk.resendDelay = val; break;
+		case "dj": zk.debugJS = val; break;
+		case "kd": zk.keepDesktop = val; break;
+		case "pf": zk.pfmeter = val; break;
+		case "cd": zk.clickFilterDelay = val; break;
+		case "ta": zk.timerAlive = val; break;
+		case "to":
+			zk.timeout = val;
+			zAu._resetTimeout();
+			break;
+		case "ed":
+			switch (val) {
+			case 'e':
+				zk.feature.ee = true;
+			case 'p':
+				zk.feature.pe = true;
+			}
+			break;
+		case 'eu': zAu.setErrorURI(val); break;
+		case 'ppos': zk.progPos = val; break;
+		case 'eup': zAu.setPushErrorURI(val);
+		}
+	}
+}

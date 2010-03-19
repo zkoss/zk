@@ -1601,13 +1601,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		out.write(wgtcls);
 		out.write("','");
 		out.write(getUuid());
-		out.write("','");
-		final String mold = getMold();
-		if (!"default".equals(mold))
-			out.write(mold);
 		out.write("',{\n");
 		out.write(renderer.getBuffer().toString());
-		out.write("});\n");
+		out.write('}');
+		final String mold = getMold();
+		if (!"default".equals(mold)) {
+			out.write(",'");
+			out.write(mold);
+			out.write('\'');
+		}
+		out.write(");\n");
 
 		redrawChildren(out);
 
