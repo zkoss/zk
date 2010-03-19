@@ -36,8 +36,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="evt.js"/>
 	<script src="widget.js"/>
 	<script src="pkg.js"/>
-	<script src="mount.js"/>
 	<!-- No bookmark and au
+	<script src="mount.js"/>
 	<script src="bookmark.js"/>
 	<script src="au.js"/>
 	-->
