@@ -217,7 +217,7 @@ public class JsContentRenderer implements ContentRenderer {
 			return;
 		}
 		if (value instanceof JSONAware)
-			renderValue(((JSONAware)value).toJSONString());
+			_buf.append(((JSONAware)value).toJSONString());
 		else
 			renderValue(value.toString());
 	}
