@@ -3039,7 +3039,7 @@ wgt.setListeners({
 	 * @see #listen
 	 */
 	setListener: function (evt, fn) { //used by server
-		if (arguments.length == 1) {
+		if (jq.isArray(evt)) {
 			fn = evt[1];
 			evt = evt[0]
 		}

@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.out.AuSelect;
 
 import org.zkoss.zul.mesg.MZul;
@@ -462,7 +463,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 						final char c = js.length() > 0 ? js.charAt(0): (char)0;
 						if (c != '\'' && c != '"') {
 							smartUpdate("z$al",
-								"{constraint:function(){\nreturn "+js+";}}");
+								new JavaScriptValue("{constraint:function(){\nreturn "+js+";}}"));
 						} else {
 							smartUpdate("constraint", js.substring(1, js.length() - 1));
 						}

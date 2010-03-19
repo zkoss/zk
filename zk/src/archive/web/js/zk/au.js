@@ -1049,8 +1049,8 @@ zAu.cmd1 = /*prototype*/ {
 		if (nm == 'z$pk') zk.load(val); //load pkgs
 		else if (nm == 'z$al') { //afterLoad
 			zk.afterLoad(function () {
-				for (var p in val)
-					props[p] = v[p](); //must be func
+				for (nm in val)
+					wgt.set(nm, val[nm]()); //must be func
 			});
 		} else
 			wgt.set(nm, val, true); //3rd arg: fromServer

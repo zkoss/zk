@@ -4,6 +4,8 @@ ZK 5.0.2
   2972509: Enhance jQuery selector to handle zk widget's ID
   
 * Bugs
+  2972950: Dynamic adding a SimpleConstraint caues js error
+  2972980: Failed to add widget listener dynamically(addWidgetListener)
 
 * Upgrade Notes
 

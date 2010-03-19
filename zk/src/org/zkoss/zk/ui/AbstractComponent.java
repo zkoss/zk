@@ -1366,8 +1366,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * thread. So, the developers have to use {@link org.zkoss.zk.ui.util.DeferredValue}
 	 * or disable the use of the event processing thread
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
+	 * <p>If you want to generate the JavaScript code directly (i.e.,
+	 * the value is a valid JavaScript snippet), you can use
+	 * {@link org.zkoss.zk.ui.sys.JavaScriptValue}.
 	 * <p>In addition, the value can be any kind of objects that
-	 * the client accepts (marshaled by JSON).
+	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)
 	 * @see #updateByClient
 	 */
