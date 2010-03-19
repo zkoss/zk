@@ -153,7 +153,8 @@ var zDraggables = {
     }
   },
   
-  activate: function(draggable) {
+  activate: function(draggable, pointer) {
+  	zDraggables._initPt = pointer;
     if(zk.opera || draggable.options.delay) { 
       this._timeout = setTimeout(function() { 
         zDraggables._timeout = null; 
@@ -258,6 +259,7 @@ var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
       scroll: false,
       scrollSensitivity: 20,
       scrollSpeed: 15,
+	  initSensitivity: 3,
       snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
       delay: 0,
 	  stackup: false
@@ -338,7 +340,7 @@ if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer, ev
       var pos     = zPos.cumulativeOffset(this.element);
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
       
-      zDraggables.activate(this);
+      zDraggables.activate(this, pointer);
 //Jumper Chen, Potix: Bug #1845026
 //We need to ensure that the onBlur event is fired before the onSelect event for consistent among four browsers. 
 	  if (zkau.currentFocus && Event.element(event) != zkau.currentFocus 
@@ -399,7 +401,16 @@ if (this.z_orgpos != 'absolute')
   },
   
   updateDrag: function(event, pointer) {
-    if(!this.dragging) this.startDrag(event);
+    if (!this.dragging) {
+		var v = this.options.initSensitivity,
+			_initPt = zDraggables._initPt;
+		if (v && (pointer[0] <= _initPt[0] + v
+		&& pointer[0] >= _initPt[0] - v
+		&& pointer[1] <= _initPt[1] + v
+		&& pointer[1] >= _initPt[1] - v))
+			return;		
+		this.startDrag(event);
+	}
     zPos.prepare();
 /* Tom M. Yeh, Potix: remove unused codes
     zDroppables.show(pointer, this.element);
