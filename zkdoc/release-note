@@ -3,6 +3,7 @@ ZK 3.6.5
 * Features
 
 * Bugs
+  2973036: ScalableTimer shall stop when hot redeployed (memory issue)
 
 * Upgrade Notes:
 
