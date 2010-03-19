@@ -6,6 +6,7 @@ ZK 5.0.2
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error
   2972980: Failed to add widget listener dynamically(addWidgetListener)
+  2973036: ScalableTimer shall stop when hot redeployed (memory issue)
 
 * Upgrade Notes
 

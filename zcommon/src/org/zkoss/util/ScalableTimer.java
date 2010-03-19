@@ -19,6 +19,8 @@ package org.zkoss.util;
 import java.util.Date;
 import java.util.Timer;
 
+import org.zkoss.util.logging.Log;
+
 /**
  * A facility for threads to schedule tasks for future execution in
  * a background thread.
@@ -31,6 +33,8 @@ import java.util.Timer;
  * @since 3.0.1
  */
 public class ScalableTimer {
+	private static final Log log = Log.lookup(ScalableTimer.class);
+
 	private final ScalableTimerInfo[] _tis;
 	private int _threshold;
 
@@ -56,6 +60,12 @@ public class ScalableTimer {
 		for (int j = cTimers; --j >= 0;)
 			_tis[j] = new ScalableTimerInfo();
 		_threshold = threshold;
+
+		Cleanups.add(new Cleanups.Cleanup() {
+			public void cleanup() {
+				cancel();
+			}
+		});
 	}
 
 	/** Returns the maximal allowed number of timers ({@link Timer})
@@ -79,7 +89,11 @@ public class ScalableTimer {
 			final ScalableTimerInfo ti = _tis[j];
 			synchronized (ti) {
 				if (ti.timer != null) {
-					ti.timer.cancel();
+					try {
+						ti.timer.cancel();
+					} catch (Throwable ex) {
+						log.warningBriefly("Unable to cancel "+ti.timer, ex);
+					}
 					ti.timer = null;
 				}
 				ti.count = 0;
