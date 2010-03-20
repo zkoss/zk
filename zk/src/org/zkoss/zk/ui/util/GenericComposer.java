@@ -50,7 +50,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * per the naming convention composed of the component id and composer Class name. e.g.
  * If the applied component id is "xwin" and this composer class is 
  * org.zkoss.MyComposer, then the variable name would be "xwin$MyComposer". You can
- * reference this composer with {@link Component#getVariable} or via EL as ${xwin$MyComposer}
+ * reference this composer with {@link Component#getAttributeOrFellow} or via EL as ${xwin$MyComposer}
  * of via annotate data binder as @{xwin$MyComposer}, etc. If this composer is the 
  * first composer applied to the component, a shorter variable name
  * composed of the component id and a String "composer" would be also available for use. 
@@ -103,8 +103,9 @@ implements Composer, ComposerExt, java.io.Serializable {
 	}
 
 	//ScopeActivationListener//
-	/** Called when the component is going to passivate this object.
-	 * Default: do nothing
+	/** @deprecated As of release 5.0.0, it is meaningless for
+	 * GenericComposer to implement ComponentActivationListener.
+	 * <p>Default: do nothing
 	 */
 	public void willPassivate(Component comp) {
 		//do nothing
@@ -112,9 +113,7 @@ implements Composer, ComposerExt, java.io.Serializable {
 	
 	/** @deprecated As of release 5.0.0, it is meaningless for
 	 * GenericComposer to implement ComponentActivationListener.
-	 *
-	 * <p>Implementation Note: GenericComposer itself is serializable,
-	 * so it is preserved after serialization.
+	 * <p>Default: do nothing
 	 */
 	public void didActivate(Component comp) {
 	}

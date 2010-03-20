@@ -440,7 +440,7 @@ public interface Page extends IdSpace, Scope {
 	XelContext ctx, Object base, Object name, boolean ignoreExec);
  
 	/** Adds a name resolver that will be used to resolve a variable
-	 * by {@link #getVariable}.
+	 * by {@link #getXelVariable}.
 	 *
 	 * <p>Note: the variables resolved by the specified resolver are
 	 * accessible to both zscript and EL expressions.

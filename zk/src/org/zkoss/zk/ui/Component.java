@@ -86,8 +86,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 *
 	 * <p>The ID space relevant methods include {@link #getFellow},
 	 * {@link #getAttribute} and {@link #getAttributeOrFellow}.
-	 *
-	 * @see #getNamespace
 	 */
 	public IdSpace getSpaceOwner();
 
@@ -394,9 +392,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public boolean hasAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
-	 *
-	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
-	 * if value is null, while {@link #setVariable} considers null as a legal value.
 	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
 	 * to this component.

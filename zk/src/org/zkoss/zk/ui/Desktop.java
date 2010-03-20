@@ -238,41 +238,7 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
-	/** Sets the delay between each polling.
-	 * It can be called only the server push is enabled for this desktop
-	 * (by use of {@link #enableServerPush}).
-	 *
-	 * <p>Note: not all server-push controllers support this method.
-	 * Currently, only on the client-polling-based controller (the default)
-	 * supports this method.
-	 *
-	 * <p>To make the system more scalable, the implementation usually
-	 * change the delay dynamically based on the loading.
-	 * By specifying the minimal and maximal values, you can control
-	 * the frequence to poll the server depending on the character
-	 * of your Web applications.
-	 *
-	 * <p>Default: It looks up the value defined in the preferences
-	 * ({@link Configuration#getPreference}):
-	 * <code>PollingServerPush.delay.min</code>
-	 * <code>PollingServerPush.delay.max</code>,
-	 and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 1100, max is 10000 and factor is 5.
-	 *
-	 * @param min the minimal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param max the maximal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param factor the delay factor. The real delay is the processing
-	 * time multiplies the delay factor. For example, if the last request
-	 * took 1 second to process, then the client polling will be delayed
-	 * for 1 x factor seconds, unless it is value 
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * @since 3.0.0
+	/** @deprecated As of release 5.0.2
 	 */
 	public void setServerPushDelay(int min, int max, int factor);
 	/** Returns whether the server-push feature is enabled for this
