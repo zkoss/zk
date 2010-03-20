@@ -184,10 +184,6 @@ public class PollingServerPush implements ServerPush {
 		}
 	}
 
-	/** @deprecated */
-	public void setDelay(int min, int max, int factor) {
-	}
-
 	public void onPiggyback() {
 		final Configuration config = _desktop.getWebApp().getConfiguration();
 		long tmexpired = 0;

@@ -1139,11 +1139,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				_spush = null;
 			}
 	}
-	public void setServerPushDelay(int min, int max, int factor) {
-		if (_spush == null)
-			throw new IllegalStateException("Not started");
-		_spush.setDelay(min, max, factor);
-	}
 
 	public void onPiggybackListened(Component comp, boolean listen) {
 		//we don't cache comp to avoid the risk of memory leak (maybe not

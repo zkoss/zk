@@ -86,8 +86,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 *
 	 * <p>The ID space relevant methods include {@link #getFellow},
 	 * {@link #getAttribute} and {@link #getAttributeOrFellow}.
-	 *
-	 * @see #getNamespace
 	 */
 	public IdSpace getSpaceOwner();
 
@@ -396,7 +394,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
-	 * if value is null, while {@link #setVariable} considers null as a legal value.
+	 * if value is null.
 	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
 	 * to this component.
@@ -487,54 +485,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public boolean hasAttributeOrFellow(String name, boolean recurse);
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
-	 * <p>Sets a variable to the namespace.
-	 *
-	 * <p>Once a variable is set thru this method, it is visible to
-	 * both the interpreter and EL.
-	 *
-	 * <p>Note: Exactly one namespace is allocated for each ID space.
-	 * For example, if the space owner of this component is the page, then
-	 * the returned namespace is the same as {@link Page#getNamespace}.
-	 * Otherwise, it is the same as the namspace returned by the component
-	 * owning this ID space.
-	 *
-	 * @param local whether not to search any of the ancestor namespace defines
-	 * the variable. If local is false and an ancesotor has defined a variable
-	 * with the same name, the variable in the ancestor is changed directly.
-	 * Otherwise, a new variable is created in the namespace containing
-	 * this component.
-	 */
-	public void setVariable(String name, Object val, boolean local);
-	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttributeOrFellow}.
-	 * <p>Returns whether the specified variable is defined.
-	 *
-	 * @param local whether not to search its ancestor.
-	 * If false and the current namespace doen't define the variable,
-	 * it searches up its ancestor (via {@link #getParent}) to see
-	 * any of them has defined the specified variable.
-	 */
-	public boolean containsVariable(String name, boolean local);
-	/** @deprecated As of release 5.0.0, replaced with {@link #getAttributeOrFellow}.
-	 * <p>Returns the value of a variable defined in the namespace,
-	 * or null if not defined or the value is null.
-	 *
-	 * @param local whether not to search its ancestor.
-	 * If false and the current namespace doen't define the variable,
-	 * it searches up its ancestor (via {@link #getParent}) to see
-	 * any of them has defined the specified variable.
-	 */
-	public Object getVariable(String name, boolean local);
-	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}.
-	 * <p>Unsets a variable defined in the namespace.
-	 *
-	 * @param local whether not to search its ancestor.
-	 * If false and the current namespace doen't define the variable,
-	 * it searches up its ancestor (via {@link #getParent}) to see
-	 * any of them has defined the specified variable.
-	 */
-	public void unsetVariable(String name, boolean local);
 
 	/** Returns the parent component, or null if this is the root component.
 	 */
@@ -825,19 +775,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * phases. However, it is NOT allowed in the rendering phase.
 	 */
 	public void invalidate();
-
-	/** @deprecated As of release 5.0.0, the concept of namespace
-	 * is replaced with attributes.
-	 * <p>Returns the namespace to store variables and functions belonging
-	 * to the ID space of this component.
-	 *
-	 * <p>Exactly one namespace is allocated for each ID space.
-	 * For example, if the space owner of this component is the page, then
-	 * the returned namespace is the same as {@link Page#getNamespace}.
-	 * Otherwise, it is the same as the namspace returned by the component
-	 * owning this ID space.
-	 */
-	public org.zkoss.zk.scripting.Namespace getNamespace();
 
 	/** Initializes the properties (aka. members) and custom-attributes
 	 * based on what are defined in the component definition.

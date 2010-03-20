@@ -974,23 +974,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return attrs().removeScopeListener(listener);
 	}
 
-	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}. */
-	public void setVariable(String name, Object val, boolean local) {
-		getNamespace().setVariable(name, val, local);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttribute}. */
-	public boolean containsVariable(String name, boolean local) {
-		return getNamespace().containsVariable(name, local);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #getAttribute}. */
-	public Object getVariable(String name, boolean local) {
-		return getNamespace().getVariable(name, local);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}. */
-	public void unsetVariable(String name, boolean local) {
-		getNamespace().unsetVariable(name, local);
-	}
-
 	public Component getParent() {
 		return _parent;
 	}
@@ -1969,17 +1952,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return false;
 	}
-	/** @deprecated As of release 5.0.0, use {@link #getAttribute},
-	 * {@link #setAttribute} instead.
-	 */
-	public Namespace getNamespace() {
-		if (this instanceof IdSpace)
-			return _spaceInfo.ns;
-
-		final IdSpace idspace = getSpaceOwner();
-		return idspace instanceof Page ? ((Page)idspace).getNamespace():
-			idspace == null ? null: ((Component)idspace).getNamespace();
-	}
 
 	public boolean isListenerAvailable(String evtnm, boolean asap) {
 		if (_listeners != null) {
@@ -2165,16 +2137,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_attrs != null) {
 			willPassivate(_attrs.getAttributes().values());
 			willPassivate(_attrs.getListeners());
-
-			if (this instanceof IdSpace) {
-			//backward compatible (we store variables in attributes)
-				for (Iterator it = _attrs.getAttributes().values().iterator();
-				it.hasNext();) {
-					final Object val = it.next();
-					if (val instanceof NamespaceActivationListener) //backward compatible
-						((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
-				}
-			}
 		}
 
 		if (_listeners != null)
@@ -2193,16 +2155,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			didActivate(_attrs.getListeners());
 			if (_parent == null)
 				_attrs.notifyParentChanged(_page);
-
-			if (this instanceof IdSpace) {
-			//backward compatible (we store variables in attributes)
-				for (Iterator it = _attrs.getAttributes().values().iterator();
-				it.hasNext();) {
-					final Object val = it.next();
-					if (val instanceof NamespaceActivationListener) //backward compatible
-						((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
-				}
-			}
 		}
 
 		if (_listeners != null)
@@ -2388,61 +2340,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private class SpaceInfo {
-		private NS ns = new NS();
 		/** A map of ((String id, Component fellow). */
 		private Map fellows = new HashMap(32);
 	}
-	/** @deprecated */
-	private class NS implements Namespace {
-		//Namespace//
-		public Component getOwner() {
-			return AbstractComponent.this;
-		}
-		public Page getOwnerPage() {
-			return AbstractComponent.this._page;
-		}
-		public Set getVariableNames() {
-			return AbstractComponent.this.getAttributes().keySet();
-		}
-		public boolean containsVariable(String name, boolean local) {
-			return hasAttributeOrFellow(name, !local)
-				|| (!local && getXelVariable(name) != null);
-		}
-		public Object getVariable(String name, boolean local) {
-			Object o = getAttributeOrFellow(name, !local);
-			return o != null || local ? o: getXelVariable(name);
-		}
-		private Object getXelVariable(String name) {
-			Page page = getOwnerPage();
-			return page != null ? page.getXelVariable(null, null, name, true): null;
-		}
-		public void setVariable(String name, Object value, boolean local) {
-			setAttribute(name, value, !local);
-		}
-		public void unsetVariable(String name, boolean local) {
-			removeAttribute(name, !local);
-		}
-
-		/** @deprecated */
-		public Namespace getParent() {
-			final IdSpace owner = getSpaceOwnerOfParent(AbstractComponent.this);
-			return owner instanceof Component ? ((Component)owner).getNamespace():
-				owner instanceof Page ? ((Page)owner).getNamespace(): null;
-		}
-		/** @deprecated */
-		public void setParent(Namespace parent) {
-			throw new UnsupportedOperationException();
-		}
-		/** @deprecated */
-		public boolean addChangeListener(NamespaceChangeListener listener) {
-			return false;
-		}
-		/** @deprecated */
-		public boolean removeChangeListener(NamespaceChangeListener listener) {
-			return false;
-		}
-	}
-
 	private class ChildIter implements ListIterator  {
 		private AbstractComponent _p, _lastRet;
 		private int _j;

@@ -54,10 +54,6 @@ public interface Interpreter {
 	 */
 	public Object getNativeInterpreter();
 
-	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope)}
-	 * <p>Evaluates the script against the specified namespace.
-	 */
-	public void interpret(String script, Namespace ns);
 	/** Evaluates the script against the specified scope.
 	 *
 	 * <p>Implementation Note:

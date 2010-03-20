@@ -316,16 +316,6 @@ abstract public class GenericInterpreter implements Interpreter {
 		return _zslang;
 	}
 
-	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope)}
-	 */
-	public void interpret(String script, org.zkoss.zk.scripting.Namespace ns) {
-		Scope scope = null;
-		if (ns != null) {
-			scope = ns.getOwner();
-			if (scope == null) scope = ns.getOwnerPage();
-		}
-		interpret(script, scope);
-	}
 	/** Handles the scope and then invoke {@link #exec}.
 	 * <p>Don't override this method, rather, override {@link #exec}.
 	 * @since 5.0.0

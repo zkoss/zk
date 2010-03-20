@@ -126,8 +126,8 @@ implements Condition, java.io.Serializable {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
 				final Object value = me.getValue();
-				comp.setVariable(
-					name, Utils.evaluateComposite(eval, comp, value), _local);
+				comp.getSpaceOwner().setAttribute(
+					name, Utils.evaluateComposite(eval, comp, value), !_local);
 			}
 		}
 	}
@@ -141,8 +141,8 @@ implements Condition, java.io.Serializable {
 				final Map.Entry me = (Map.Entry)it.next();
 				final String name = (String)me.getKey();
 				final Object value = me.getValue();
-				page.setVariable(
-					name, Utils.evaluateComposite(eval, page, value));
+				page.setAttribute(
+					name, Utils.evaluateComposite(eval, page, value), !_local);
 			}
 		}
 	}

@@ -73,11 +73,6 @@ public interface ServerPush {
 	 */
 	public void stop();
 
-	/** @deprecated As of release 5.0.0, use the preferences instead.
-	 * Refer to {@link org.zkoss.zk.ui.impl.PollingServerPush}
-	 */
-	public void setDelay(int min, int max, int factor);
-
 	/** Activate the current thread (which must be a server-push thread).
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
