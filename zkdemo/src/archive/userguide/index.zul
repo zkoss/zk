@@ -56,11 +56,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</center>
 </borderlayout>
 
-<script if="${execution.serverName == &quot;www.zkoss.org&quot; or execution.serverName == &quot;www.potix.com&quot;}">
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}'>
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
-<script if="${execution.serverName == &quot;www.zkoss.org&quot; or execution.serverName == &quot;www.potix.com&quot;}" defer="true">
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}' defer="true">
 var pageTracker = _gat._getTracker("UA-121377-3");
 pageTracker._setDomainName("zkoss.org");
 pageTracker._initData();
@@ -68,16 +68,17 @@ pageTracker._trackPageview();
 </script>
 
 <!-- Google Website Optimizer Conversion Script -->
-<script type="text/javascript"><![CDATA[
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}'><![CDATA[
 if(typeof(_gat)!='object')document.write('<sc'+'ript src="http'+
 (document.location.protocol=='https:'?'s://ssl':'://www')+
-'.google-analytics.com/ga.js"></sc'+'ript>')]]></script>
-<script type="text/javascript">
+'.google-analytics.com/ga.js"></sc'+'ript>')]]>
+</script>
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}' defer="true">
 try {
 var gwoTracker=_gat._getTracker("UA-121377-13");
 gwoTracker._trackPageview("/2508809880/goal");
-}catch(err){}</script>
+}catch(err){}
+</script>
 <!-- End of Google Website Optimizer Conversion Script -->
-
 
 </zk>
