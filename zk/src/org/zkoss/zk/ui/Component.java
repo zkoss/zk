@@ -30,7 +30,7 @@ import org.zkoss.zk.au.AuService;
 /**
  * An UI component.
  *
- * <p>There are two kind of lifecycles: one is page creations and the other
+ * <p>There are two kind of life-cycles: one is page creations and the other
  * is asynchronous updates.
  *
  * <h3>The Page Creation</h3>
@@ -90,14 +90,14 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public IdSpace getSpaceOwner();
 
 	/** Returns the ID. If it is a root component (i.e., without parent),
-	 * its ID must be unquie among root components of the same page.
+	 * its ID must be unique among root components of the same page.
 	 *
 	 * <p>If a component belongs to an ID space (see {@link IdSpace}),
 	 * the ID must also be unique in the ID space it belongs.
 	 * any its parent and ancestor implements {@link IdSpace}.
 	 *
 	 * <p>A page itself is also an ID space, so you could retrieve
-	 * compnents in a page by use of {@link Page#getFellow}, unless
+	 * components in a page by use of {@link Page#getFellow}, unless
 	 * the component is a descendant of another component that implements
 	 * {@link IdSpace}. In this case, you have to retrieve the parent
 	 * first (by use of {@link Page#getFellow} and then use {@link #getFellow}
@@ -110,7 +110,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @see Page
 	 */
 	public String getId();
-	/** Sets the ID. The scope of uniqunes depends on whether this component
+	/** Sets the ID. The scope of uniqueness depends on whether this component
 	 * is a root component. Refer to {@link #getId} for more details.
 	 *
 	 * <p>When a component is constructed, an ID is generated automatically.
@@ -160,7 +160,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * another component (who belongs to a page).
 	 * 
 	 * <p>For root components, you have to invoke {@link #setPage}
-	 * explicityly.
+	 * Explicitly.
 	 *
 	 * @see #setParent
 	 * @see #setPage
@@ -206,7 +206,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public void setPageBefore(Page page, Component refRoot);
 
-	/** Returns UUID (universal unique ID) which is unquie in the whole
+	/** Returns UUID (universal unique ID) which is unique in the whole
 	 * session. The UUID is generated automatically and immutable, unless
 	 * {@link org.zkoss.zk.ui.ext.RawId} is also implemented.
 	 *
@@ -234,7 +234,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public Component getFellowIfAny(String id);
 	/** Returns all fellows in the same ID space of this component.
-	 * The returned collection is readonly.
+	 * The returned collection is read-only.
 	 * @since 3.0.6
 	 */
 	public Collection getFellows();
@@ -365,7 +365,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktop as this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
@@ -380,10 +380,10 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktop as this one's.
 	 *
 	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is assoicated by examining the return value
+	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
@@ -400,7 +400,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktop as this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
@@ -416,7 +416,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
 	 * by components from the same page as this one's.
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
-	 * by components from the same desktopas this one's.
+	 * by components from the same desktop as this one's.
 	 *
 	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
@@ -434,7 +434,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public Object getAttribute(String name);
 	/** Returns if the custom attribute is associate with this component.
 	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is assoicated by examining the return value
+	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
 	 * @since 5.0.0
 	 */
@@ -496,7 +496,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * owning this ID space.
 	 *
 	 * @param local whether not to search any of the ancestor namespace defines
-	 * the variable. If local is false and an ancesotor has defined a variable
+	 * the variable. If local is false and an ancestor has defined a variable
 	 * with the same name, the variable in the ancestor is changed directly.
 	 * Otherwise, a new variable is created in the namespace containing
 	 * this component.
@@ -621,7 +621,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 
 	/** Returns the mold used to render this component.
 	 * <p>Default: "default"
-	 * <p>Since 5.0, the default can be overriden by specify a library property.
+	 * <p>Since 5.0, the default can be overridden by specify a library property.
 	 * For example, if the component's class name is org.zkoss.zul.Button,
 	 * then you can override the default mold by specifying the property
 	 * called "org.zkoss.zul.Button.mold" with the mold you want
@@ -632,7 +632,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 &lt;/library-property></code></pre>
 	 * <p>Notice that it doesn't affect the deriving classes. If you want
 	 * to change the deriving class's default mold, you have to specify
-	 * them explicity, too.
+	 * them explicitly, too.
 	 *
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
@@ -645,7 +645,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public void setMold(String mold);
 
 	//-- event listener --//
-	/** Adds an event listener to specified event for this component.
+	/** Adds an event listener to specified event name for this component.
 	 * The second registration is ignored and false is returned.
 	 *
 	 * <p>You could register listener to all components in the same page
@@ -687,7 +687,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>Default: no forward condition at all.
 	 *
 	 * <p>Once the condition is added, a event called <code>targetEvent</code>
-	 * is posted to the <code>target</code> compoennt,
+	 * is posted to the <code>target</code> component,
 	 * when this component receives the <code>orginalEvent</code> event.
 	 *
 	 * @param originalEvent the original event that was received
@@ -699,7 +699,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * will receive.
 	 * If null, it is the same as the original event.
 	 * @return whether it is added successfully.
-	 * It returns false if the conditioin was always added before.
+	 * It returns false if the condition was always added before.
 	 * @since 3.0.0
 	 * @see #removeForward(String, Component, String)
 	 * @see #addForward(String, Component, String, Object)
@@ -723,7 +723,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * will receive.
 	 * If null, it is the same as the original event.
 	 * @return whether it is added successfully.
-	 * It returns false if the conditioin was always added before.
+	 * It returns false if the condition was always added before.
 	 * @see #addForward(String, Component, String)
 	 * @see #removeForward(String, String, String)
 	 * @since 3.0.0
@@ -755,7 +755,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * {@link #addForward(String, Component, String)}.
 	 * If no such forward condition exists, nothing happens but return false.
 	 *
-	 * @param originalEvent the oringal event that was received
+	 * @param originalEvent the original event that was received
 	 * by this component.
 	 * It must be the same as the one passed to {@link #addForward(String, Component, String)}.
 	 * @param target the target component to receive the event.
@@ -773,7 +773,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * {@link #addForward(String, String, String)}.
 	 * If no such forward condition exists, nothing happens but return false.
 	 *
-	 * @param originalEvent the oringal event that was received
+	 * @param originalEvent the original event that was received
 	 * by this component.
 	 * It must be the same as the one passed to {@link #addForward(String, Component, String)}.
 	 * @param targetPath the target component's path related to this component.
@@ -798,7 +798,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <li>It always returns true if it doesn't belong to any page
 	 * (since redraw is required if it is attached to a page later).</li>
 	 * <li>It always returns true if the current execution is not an
-	 * asynchroous update (so redrawn is always required).</li>
+	 * asynchronous update (so redrawn is always required).</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
 	 * too, but this method returns false if {@link #invalidate}
 	 * was not called against this component.</li>
@@ -808,7 +808,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public boolean isInvalidated();
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content of this
-	 * component and its decendances later.
+	 * component and its dependences later.
 	 * And, the widget associated with this component and all its
 	 * descendant at the client will be deleted and recreated, too.
 	 *
@@ -838,7 +838,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * based on what are defined in the component definition.
 	 *
 	 * <p>This method is invoked automatically if a component is created
-	 * by evaluating a ZUML page, i.e., if it is specified as an elemnt
+	 * by evaluating a ZUML page, i.e., if it is specified as an element
 	 * of a ZUML page.
 	 *
 	 * <p>On the other hand, if it is created manually (by program),
@@ -865,7 +865,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public String getWidgetListener(String evtnm);
-	/** Returns a readonly collection of event names (String) that
+	/** Returns a read-only collection of event names (String) that
 	 * the listener of the peer widget are assigned, or
 	 * an empty collection if none is registered.
 	 * @since 5.0.0
@@ -915,8 +915,8 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public String getWidgetOverride(String name);
-	/** Returns a readonly collection of the property names (String) that
-	 * shall be overriden, or an empty collection if none is registered.
+	/** Returns a read-only collection of the property names (String) that
+	 * shall be overridden, or an empty collection if none is registered.
 	 * @since 5.0.0
 	 */
 	public Set getWidgetOverrideNames();
