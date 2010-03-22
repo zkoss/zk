@@ -66,9 +66,22 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 			w.redraw(out);
 		if (this._comment)
 			out.push('<!--\n');
-		out.push(this._content);
+		if (!jq.isArray(this._content)) //z$ea
+			out.push(this._content);
 		if (this._comment)
 			out.push('\n-->');
 		out.push('</div>');
+	},
+	bind_: function () {
+		this.$supers("bind_", arguments);
+		if (jq.isArray(this._content)) //z$ea
+			for (var ctn = this._content, n = this.$n(), j = 0; j < ctn.length; ++j)
+				n.appendChild(ctn[j]);
+	},
+	unbind_: function () {
+		if (jq.isArray(this._content)) //z$ea
+			for (var n = this.$n(); n.firstChild;)
+				n.removeChild(n.firstChild);
+		this.$supers("unbind_", arguments);
 	}
 });

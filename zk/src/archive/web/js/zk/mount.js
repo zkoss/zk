@@ -250,28 +250,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
-			//z$ea: value embedded as element's text
-			v = zk.cut(props, "z$ea");
-			if (v) {
-				var embed = jq(uuid, zk);
-				if (embed.length) {
-					var val = embed[0].innerHTML;
-					if (v.charAt(0) == '$') { //decode
-						v = v.substring(1);
-						val = zUtl.decodeXML(val);
-					}
-					props[v] = val;
-				}
-			}
-
-			//z$al: afterLoad
-			v = zk.cut(props, "z$al");
-			if (v) {
-				zk.afterLoad(function () {
-					for (var p in v)
-						props[p] = v[p](); //must be func
-				});
-			}
+			zk.mnt.props(uuid, props);
 		}
 
 		for (var nm in props)
@@ -333,6 +312,32 @@ zk.mnt = { //Use internally
 		_wgts = [];
 		zk.mnt.curdt = null;
 		zk.mnt.binding = false;
+	},
+	// Handles z$ea and z$al. It is used for customization if necessary.
+	// @since 5.0.2
+	props: function (uuid, props) {
+		//z$ea: value embedded as element's child nodes
+		var v = zk.cut(props, "z$ea");
+		if (v) {
+			var embed = jq(uuid, zk)[0];
+			if (embed) {
+				var val = [], n;
+				while (n = embed.firstChild) {
+					val.push(n);
+					embed.removeChild(n);
+				}
+				props[v] = val;
+			}
+		}
+
+		//z$al: afterLoad
+		v = zk.cut(props, "z$al");
+		if (v) {
+			zk.afterLoad(function () {
+				for (var p in v)
+					props[p] = v[p](); //must be func
+			});
+		}
 	}
 };
 })(); //zk.mnt
