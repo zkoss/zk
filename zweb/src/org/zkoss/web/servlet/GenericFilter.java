@@ -103,7 +103,7 @@ public abstract class GenericFilter implements Filter {
 	protected final void forward(
 	ServletRequest request, ServletResponse response, String uri)
 	throws ServletException, java.io.IOException {
-		forward(getServletContext(), request, response, uri, null, 0);
+		Https.forward(getServletContext(), request, response, uri, null, 0);
 	}
 	/** Forward to the specified page with parameters.
 	 *
@@ -129,7 +129,7 @@ public abstract class GenericFilter implements Filter {
 	protected final void include(ServletRequest request,
 	ServletResponse response, String uri)
 	throws ServletException, java.io.IOException {
-		include(getServletContext(), request, response, uri, null, 0);
+		Https.include(getServletContext(), request, response, uri, null, 0);
 	}
 	/** Includes the specified page with parameters.
 	 *
@@ -143,38 +143,6 @@ public abstract class GenericFilter implements Filter {
 	ServletResponse response, String uri, Map params, int mode)
 	throws ServletException, java.io.IOException {
 		Https.include(getServletContext(), request, response, uri, params, mode);
-	}
-	/** @deprecated As of release 3.6.3, use {@link #forward(ServletRequest, ServletResponse, String)}
-	 * instead.
-	 */
-	protected final void forward(ServletContext ctx,
-	ServletRequest request, ServletResponse response, String uri)
-	throws ServletException, java.io.IOException {
-		forward(ctx, request, response, uri, null, 0);
-	}
-	/** @deprecated As of release 3.6.3, use {@link #forward(ServletRequest, ServletResponse, String, Map, int)}
-	 * instead.
-	 */
-	protected final void forward(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws ServletException, java.io.IOException {
-		Https.forward(ctx, request, response, uri, params, mode);
-	}
-	/** @deprecated As of release 3.6.3, use {@link #include(ServletRequest, ServletResponse, String)}
-	 * instead.
-	 */
-	protected final void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri)
-	throws ServletException, java.io.IOException {
-		include(ctx, request, response, uri, null, 0);
-	}
-	/** @deprecated As of release 3.6.3, use {@link #include(ServletRequest, ServletResponse, String, Map, int)}
-	 * instead.
-	 */
-	protected final void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws ServletException, java.io.IOException {
-		Https.include(ctx, request, response, uri, params, mode);
 	}
 
 	//-- Filter --//

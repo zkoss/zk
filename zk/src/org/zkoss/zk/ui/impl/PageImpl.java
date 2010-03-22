@@ -862,14 +862,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((Includer)_owner).setChildPage(this);
 	}
 
-	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
- 	public Component getDefaultParent() {
- 		return null;
- 	}
-	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
- 	public void setDefaultParent(Component comp) {
- 	}
-
 	public void sessionWillPassivate(Desktop desktop) {
 		for (Iterator it = getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionWillPassivate(this);

@@ -391,30 +391,6 @@ public class ExecutionImpl extends AbstractExecution {
 			dt, _request, PageDefinitions.getLocator(getDesktop().getWebApp(), uri));
 	}
 
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.Execution#setResponseHeader}.
-	 */
-	public void setHeader(String name, String value) {
-		_response.setHeader(name, value);
-	}
-	/** @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
-	 * instead.
-	 */
-	public void setDateHeader(String name, long value) {
-		_response.setDateHeader(name, value);
-	}
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.Execution#addResponseHeader}.
-	 */
-	public void addHeader(String name, String value) {
-		_response.addHeader(name, value);
-	}
-	/** @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
-	 * instead.
-	 */
-	public void addDateHeader(String name, long value) {
-		_response.addDateHeader(name, value);
-	}
 	public void setContentType(String contentType) {
 		if (_response instanceof HttpServletResponse)
 			((HttpServletResponse)_response).setContentType(contentType);
@@ -446,11 +422,6 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
-	}
-	/** @deprecated As of release 5.0.0, MIL is no longer supported.
-	 */
-	public boolean isMilDevice() {
-		return Servlets.isMilDevice(_request);
 	}
 	public boolean isHilDevice() {
 		return Servlets.isHilDevice(_request);

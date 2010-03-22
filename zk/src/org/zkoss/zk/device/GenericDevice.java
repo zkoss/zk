@@ -57,15 +57,6 @@ abstract public class GenericDevice implements Device {
 		return old;
 	}
 
-	/** @deprecated */
-	public String getTimeoutURI() {
-		return null;
-	}
-	/** @deprecated */
-	public String setTimeoutURI(String timeoutURI) {
-		throw new UnsupportedOperationException("Use Configuration.setTimeoutURI() instead");
-	}
-
 	public Class setServerPushClass(Class cls) {
 		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("ServerPush not implemented: "+cls);

@@ -289,13 +289,6 @@ public class Strings {
 			return src; //nothing changed
 		return sb.append(src.substring(j)).toString();
 	}
-	/** @deprecated As of release 5.0.0, use {@link #escape(StringBuffer,CharSequence,String)}
-	 * instead.
-	 */
-	public static final StringBuffer
-	appendEscape(StringBuffer sb, String src, String specials) {
-		return escape(sb, (CharSequence)src, specials);
-	}
 	/** Escapes (aka. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
 	 *

@@ -121,24 +121,6 @@ public class MouseEvent extends Event {
 		_x = _y = _pgx = _pgy = 0;
 		_keys = keys;
 	}
-	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link #MouseEvent(String,Component,int,int,int,int)}.
-	 */
-	public MouseEvent(String name, Component target, int x, int y) {
-		this(name, target, x, y, x, y, 0);
-	}
-	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link #MouseEvent(String,Component,int,int,int,int,int)}.
-	 */
-	public MouseEvent(String name, Component target, int x, int y, int keys) {
-		this(name, target, x, y, x, y, keys);
-	}
-	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link #MouseEvent(String,Component,String,int)}.
-	 */
-	public MouseEvent(String name, Component target, String area) {
-		this(name, target, area, 0);
-	}
 
 	/** Returns the logical name of the area that the click occurs, or
 	 * null if not available.

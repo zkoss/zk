@@ -162,23 +162,4 @@ public class Fields {
 			throw ModificationException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
 		}
 	}
-
-	/** @deprecated As of release 3.0.6, replaced with {@link #getByCompound}.
-	 */
-	public static final Object getField(Object obj, String name)
-	throws NoSuchMethodException {
-		return getByCompound(obj, name);
-	}
-	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean)}.
-	 */
-	public static final void setField(Object obj, String name, Object val)
-	throws NoSuchMethodException, ModificationException {
-		setByCompound(obj, name, val);
-	}
-	/** @deprecated As of release 3.0.6, replaced with {@link #setByCompound(Object, String, Object, boolean)}.
-	 */
-	public static final void setField(Object obj, String name, Object val,
-	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
-		setByCompound(obj, name, val, autoCoerce);
-	}
 }

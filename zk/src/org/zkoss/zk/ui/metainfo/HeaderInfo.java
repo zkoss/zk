@@ -140,11 +140,6 @@ implements Condition {
 		}
 		return sb.append("/>").toString();
 	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #toHTML(Page)}.
-	 */
-	public String toHTML(PageDefinition pgdef, Page page) {
-		return toHTML(page);
-	}
 
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);

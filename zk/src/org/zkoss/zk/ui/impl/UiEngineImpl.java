@@ -1949,8 +1949,7 @@ public class UiEngineImpl implements UiEngine {
 				} catch (NumberFormatException ex) {
 					log.warning("Ingored: unable to parse "+ids);
 				} catch (Throwable ex) {
-					//backward compatibile: requestReceiveAtClient added since 3.0.8
-					if (complete || !(ex instanceof AbstractMethodError))
+					if (complete)
 						log.warning("Ingored: failed to invoke "+pfmeter, ex);
 				}
 			}

@@ -184,12 +184,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
-		if (_failover != null) {
-			try {
-				_failover.start(this);
-			} catch (AbstractMethodError ex) { //backward compatible
-			}
-		}
+		if (_failover != null)
+			_failover.start(this);
 		_sesscache.init(this);
 
 		_config.invokeWebAppInits();
@@ -199,18 +195,12 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		_config.detroyRichlets();
 
-		try {
-			_sesscache.destroy(this);
-		} catch (AbstractMethodError ex) { //backward compatible
-		}
+		_sesscache.destroy(this);
 		_factory.stop(this);
 		_provider.stop(this);
 		_engine.stop(this);
 		if (_failover != null) {
-			try {
-				_failover.stop(this);
-			} catch (AbstractMethodError ex) { //backward compatible
-			}
+			_failover.stop(this);
 			_failover = null;
 		}
 		_factory = null;

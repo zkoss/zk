@@ -231,10 +231,6 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 5.0.0 (the 2nd argument is the class name of the peer widget)
 	 */
 	public void addMold(String name, String widgetClass);
-	/** @deprecated As of release 5.0.0, replaced with {@link #addMold(String,String)}
-	 * and {@link WidgetDefinition#addMold}.
-	 */
-	public void addMold(String name, String moldURI, String z2cURI);
 
 	/** Returns the widget class assoicated with specified mold,
 	 * or the default widget class ({@link #getWidgetClass}) if not available.

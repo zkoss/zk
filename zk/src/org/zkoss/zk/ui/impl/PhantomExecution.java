@@ -159,11 +159,6 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public boolean isSafari() {
 		return false;
 	}
-	/** @deprecated As of release 5.0.0, MIL is no longer supported.
-	 */
-	public boolean isMilDevice() {
-		return false;
-	}
 	public boolean isHilDevice() {
 		return false;
 	}
@@ -171,30 +166,6 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 		return "mock";
 	}
 
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link Execution#setResponseHeader}.
-	 */
-	public void setHeader(String name, String value) {
-		throw new UnsupportedOperationException();
-	}
-	/** @deprecated It is suggested to use {@link Execution#getNativeResponse}
-	 * instead.
-	 */
-	public void setDateHeader(String name, long value) {
-		throw new UnsupportedOperationException();
-	}
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link Execution#addResponseHeader}.
-	 */
-	public void addHeader(String name, String value) {
-		throw new UnsupportedOperationException();
-	}
-	/** @deprecated It is suggested to use {@link Execution#getNativeResponse}
-	 * instead.
-	 */
-	public void addDateHeader(String name, long value) {
-		throw new UnsupportedOperationException();
-	}
 	public void setContentType(String contentType) {
 		throw new UnsupportedOperationException();
 	}

@@ -38,12 +38,6 @@ public class Threads {
 			throw SystemException.Aide.wrap(ex);
 		}
 	}
-	/** Put the current thread to sleep for a while.
-	 * @deprecated As of release 3.0.0, replaced by {@link #sleep}
-	 */
-	public static final void pause(int millisecs) {
-		sleep(millisecs);
-	}
 
 	/** Sets the priority without throwing any exception but log warning.
 	 */

@@ -74,15 +74,6 @@ public interface Device {
 	 */
 	public String setUnavailableMessage(String unavailmsg);
 
-	/** @deprecated As of release 3.6.3, use {@link org.zkoss.zk.ui.util.Configuration#getTimeoutURI}
-	 * instead.
-	 */
-	public String getTimeoutURI();
-	/** @deprecated As of release 3.6.3, use {@link org.zkoss.zk.ui.util.Configuration#setTimeoutURI}
-	 * instead.
-	 */
-	public String setTimeoutURI(String timeoutURI);
-
 	/** Returns whether this device supports the specified client.
 	 *
 	 * @param userAgent represents a client.

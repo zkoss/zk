@@ -236,19 +236,6 @@ public class Devices {
 		}
 	}
 
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.util.Configuration#getTimeoutURI}.
-	 */
-	public static final String getTimeoutURI(String deviceType) {
-		return null;
-	}
-	/** @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.util.Configuration#getTimeoutURI}.
-	 */
-	public static final String setTimeoutURI(String deviceType, String timeoutURI) {
-		throw new UnsupportedOperationException("Use Configuration.setTimeoutURI() instead");
-	}
-
 	/** Returns the content that shall be embedded to the output being
 	 * generated to the client, or null if no embedded content.
 	 *
@@ -453,10 +440,6 @@ public class Devices {
 			final String old = _uamsg;
 			_uamsg = msg != null && msg.length() > 0 ? msg: null;
 			return old;
-		}
-		/** @deprecated */
-		public String getTimeoutURI() {
-			return null;
 		}
 		/**
 		 * @param cls the class name or class of the server push.

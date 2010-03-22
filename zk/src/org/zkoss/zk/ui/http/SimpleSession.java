@@ -527,18 +527,12 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	private void willPassivate(Object o) {
 		if (o instanceof SessionActivationListener) {
-			try {
-				((SessionActivationListener)o).willPassivate(this);
-			} catch (AbstractMethodError ex) { //backward compatible
-			}
+			((SessionActivationListener)o).willPassivate(this);
 		}
 	}
 	private void didActivate(Object o) {
 		if (o instanceof SessionActivationListener) {
-			try {
-				((SessionActivationListener)o).didActivate(this);
-			} catch (AbstractMethodError ex) { //backward compatible
-			}
+			((SessionActivationListener)o).didActivate(this);
 		}
 	}
 }

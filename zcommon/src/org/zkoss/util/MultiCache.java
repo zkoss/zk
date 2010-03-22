@@ -64,11 +64,6 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	public MultiCache(int nCache) {
 		this(nCache, DEFAULT_MAX_SIZE / 10, DEFAULT_LIFETIME);
 	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #MultiCache(int)}
-	 */
-	public MultiCache(int nCache, int initSize) {
-		this(nCache);
-	}
 
 	//Cache//
 	public boolean containsKey(Object key) {

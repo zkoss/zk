@@ -280,12 +280,6 @@ public class ComponentsCtrl {
 			comp.addForward(orgEvent, (Component)target, (String)result[1], data);
 	}
 
-	/** @deprecated As of release 5.0.0, use the script component instead.
-	 */
-	public static String parseClientScript(Component comp, String script) {
-		return "";
-	}
-
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */
@@ -403,11 +397,6 @@ public class ComponentsCtrl {
 			throw new UnsupportedOperationException();
 		}
 		public void addMold(String name, String widgetClass) {
-			throw new UnsupportedOperationException();
-		}
-		/** @deprecated
-		 */
-		public void addMold(String name, String moldURI, String z2cURI) {
 			throw new UnsupportedOperationException();
 		}
 		public String getWidgetClass(String moldName) {

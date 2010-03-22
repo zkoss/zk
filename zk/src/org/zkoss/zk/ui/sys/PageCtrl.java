@@ -35,10 +35,6 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zk.ui.sys.Attributes#PAGE_REDRAW_CONTROL}.
-	 */
-	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
-
 	/** Pre-initializes this page.
 	 * It initializes {@link org.zkoss.zk.ui.Page#getDesktop},
 	 * but it doesn't add this page to the desktop yet
@@ -212,12 +208,6 @@ public interface PageCtrl {
 	 * when the interpreter of the same language is being loaded.
 	 */
 	public void addDeferredZScript(Component parent, ZScript zscript);
- 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
- 	 */
- 	public Component getDefaultParent();
- 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
- 	 */
- 	public void setDefaultParent(Component comp);
 
 	/** Notification that the session, which owns this page,
 	 * is about to be passivated (aka., serialized).

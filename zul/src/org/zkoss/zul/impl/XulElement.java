@@ -314,16 +314,6 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 
-	/** @deprecated since 5.0.0, use client-side event listener instead.
-	 */
-	public String getAction() {
-		return null;
-	}
-	/** @deprecated since 5.0.0, use client-side event listener instead.
-	 */
-	public void setAction(String action) {
-	}
-
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

@@ -527,22 +527,6 @@ public class Servlets {
 		return userAgent.indexOf("opera") >= 0;
 	}
 
-	/** @deprecated As of release 5.0.0, MIL is no longer supported.
-	 */
-	public static final boolean isMilDevice(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isMilDevice(((HttpServletRequest)req).getHeader("user-agent"));
-	}
-	/** @deprecated As of release 5.0.0, MIL is no longer supported.
-	 */
-	public static final boolean isMilDevice(String userAgent) {
-		if (userAgent == null)
-			return false;
-
-		//ZK Mobile/1.0 (RMIL)
-		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rmil") >= 0;
-	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 * For example, ZK Mobile for Android.

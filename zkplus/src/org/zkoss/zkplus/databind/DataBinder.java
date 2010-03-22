@@ -679,19 +679,7 @@ public class DataBinder implements java.io.Serializable {
 		addCollectionItem(Comboitem.class, Combobox.class, new ComboitemCollectionItem());
 	}
 	
-	/**
-	 * <p>This method is deprecated. Use 
-	 * {@link #addCollectionItem(Class item, Class owner, CollectionItem)} instead.</p>
-	 * <p>Adds a CollectionItem for this comp.</p>
-	 * @see CollectionItem
-	 * @see #addCollectionItem(Class, Class, CollectionItem)
-	 * @since 3.0.0
-	 * @deprecated
-	 */
-	public void addCollectionItem(String comp, CollectionItem decor){
-		_collectionItemMap.put(comp, decor);
-	}
-	
+
 	/**
 	 * Adds a CollectionItem for the specified item and owner component;
 	 * e.g. Listitem and Listbox, Row and Grid, Comoboitem and Combobox.

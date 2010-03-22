@@ -122,21 +122,6 @@ public class Clients {
 	public static final void clearWrongValue(Component[] comps) {
 		response(null, new AuClearWrongValue(comps)); //append, not overwrite
 	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component)}.
-	 */
-	public static final void closeErrorBox(Component comp) {
-		clearWrongValue(comp);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(List)}.
-	 */
-	public static final void closeErrorBox(List comps) {
-		clearWrongValue(comps);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component[])}.
-	 */
-	public static final void closeErrorBox(Component[] comps) {
-		clearWrongValue(comps);
-	}
 	
 	/** Submits the form with the specified ID.
 	 */
@@ -240,13 +225,6 @@ public class Clients {
 	 */
 	public static final void clearBusy() {
 		response(new AuClearBusy());
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #showBusy(String)}
-	 * and {@link #clearBusy()}.
-	 */
-	public static final void showBusy(String msg, boolean open) {
-		if (open) showBusy(msg);
-		else clearBusy();
 	}
 	/** Shows the busy message at the browser that covers only the specified
 	 * component.

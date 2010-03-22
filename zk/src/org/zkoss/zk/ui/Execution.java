@@ -850,9 +850,6 @@ public interface Execution extends Scope {
 	 * @since 3.5.1
 	 */
 	public boolean isOpera();
-	/** @deprecated As of release 5.0.0, MIL is no longer supported.
-	 */
-	public boolean isMilDevice();
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 *

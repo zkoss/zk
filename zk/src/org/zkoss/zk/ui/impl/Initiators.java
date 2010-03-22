@@ -19,10 +19,8 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
-import java.lang.reflect.Method;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
@@ -93,15 +91,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			final Initiator init = (Initiator)it.next();
 			try {
-				try {
-					if (init.doCatch(t))
-						return true; //ignore and skip all other initiators
-				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
-					final Method m = init.getClass().getMethod(
-							"doCatch", new Class[] {Throwable.class});
-					Fields.setAccessible(m, true);
-					m.invoke(init, new Object[] {t});
-				}
+				if (init.doCatch(t))
+					return true; //ignore and skip all other initiators
 			} catch (Throwable ex) {
 				Initiators.log.error(ex);
 			}

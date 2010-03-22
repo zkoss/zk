@@ -110,35 +110,6 @@ public interface ExecutionCtrl {
 	 */
 	public Visualizer getVisualizer();
 
-	/** Sets a response header with the given name and value.
-	 * @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.Execution#setResponseHeader}.
-	 * @since 3.0.0
-	 */
-	public void setHeader(String name, String value);
-	/** Sets a response header with the given name and date-value.
-	 * The date is specified in terms of milliseconds since the epoch.
-	 * This method allows response headers to have multiple values.
-	 * @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
-	 * instead.
-	 * @since 3.0.0
-	 */
-	public void setDateHeader(String name, long value);
-	/** Adds a responseheader with the given name and value.
-	 * @deprecated As of release 3.6.3, replaced with
-	 * {@link org.zkoss.zk.ui.Execution#addResponseHeader}.
-	 * @since 3.0.0
-	 */
-	public void addHeader(String name, String value);
-	/** Adds a response header with the given name and date-value.
-	 * The date is specified in terms of milliseconds since the epoch.
-	 * This method allows response headers to have multiple values.
-	 * @deprecated It is suggested to use {@link org.zkoss.zk.ui.Execution#getNativeResponse}
-	 * instead
-	 * @since 3.0.0
-	 */
-	public void addDateHeader(String name, long value);
-
 	/** Sets the content type.
 	 * @since 5.0.0
 	 */

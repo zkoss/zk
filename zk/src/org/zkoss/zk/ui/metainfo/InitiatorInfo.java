@@ -16,7 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +24,6 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
@@ -143,14 +141,7 @@ public class InitiatorInfo extends ArgumentInfo {
 	private Initiator doInit(Initiator init, Evaluator eval, Page page)
 	throws Exception {
 		final Map args = resolveArguments(eval, page);
-		try {
-			init.doInit(page, args);
-		} catch (AbstractMethodError ex) { //backward compatible prior to 3.6.2
-			final Method m = init.getClass().getMethod(
-				"doInit", new Class[] {Page.class, Object[].class});
-			Fields.setAccessible(m, true);
-			m.invoke(init, new Object[] {page, toArray(args)});
-		}
+		init.doInit(page, args);
 		return init;
 	}
 }
