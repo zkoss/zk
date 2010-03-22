@@ -23,6 +23,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.PropertyBundle;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.text.MessageFormats;
 
 /**
@@ -77,12 +78,20 @@ public class Messages implements MessageConst {
 	 */
 	private static final String getFromBundle(int code, Locale locale) {
 		final BundleInfo bi = Aide.getBundleInfo(code);
+		final String label = Labels.getLabel(getLabelKey(bi, code));
+		if (label != null)
+			return label;
 		final PropertyBundle rb = //case insensitive
 			PropertyBundle.getBundle(bi.filename, locale, true);
 		if (rb != null)
 			return rb.getProperty(Integer.toHexString(code - getType(code)));
 
 		throw new IllegalStateException("Missing resource: " + bi + " locale=" + locale);
+	}
+	private static final String getLabelKey(BundleInfo bi, int code) {
+		final String nm = bi.klass.getName();
+		final int j = nm.lastIndexOf('.');
+		return (j >= 0 ? nm.substring(j+1): nm) + '.' + Integer.toHexString(code & 0xffff);
 	}
 	private static final String getNotFound(int code, Locale locale) {
 		if (code == NULL_CODE)

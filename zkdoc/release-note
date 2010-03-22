@@ -1,6 +1,7 @@
 	--------
 ZK 5.1.0
 * Features
+  2974464: A way to customize message with i3-label
 
 * Bugs
 

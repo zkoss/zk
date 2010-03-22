@@ -54,7 +54,7 @@ public interface MessageConst {
 	 * the identifier such that the client will have the same code as the server.
 	 */
 	public static class Aide {
-		private static Map _bis = new HashMap(2);
+		private static Map _bis = new HashMap(4);
 
 		/** Registers a message filename, and returns an identifier to
 		 * represent it.
