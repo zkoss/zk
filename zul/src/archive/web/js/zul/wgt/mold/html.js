@@ -13,5 +13,6 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<span', this.domAttrs_(), '>', this._content, '</span>');
+	out.push('<span', this.domAttrs_(), '>',
+		(jq.isArray(this._content) ? ""/*z$ea*/:this._content), '</span>');
 }
