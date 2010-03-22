@@ -71,6 +71,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.Names;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
@@ -1572,8 +1573,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: It uses {@link JsContentRenderer} to render all information
 	 * in JavaScript codes. For devices that don't support JavaScript,
 	 * it must override this method.
-	 *
-	 * To generate all information, it first invokes
+	 * <p>To generate all information, it first invokes
 	 * {@link #renderProperties} to render component's
 	 * properties,
 	 * and  then {@link #redrawChildren} to redraw children (and descendants)
@@ -1590,31 +1590,43 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * of {@link ContentRenderer}.
 	 */
 	public void redraw(final Writer out) throws IOException {
-		final JsContentRenderer renderer = new JsContentRenderer();
-		renderProperties(renderer);
-		out.write("\nzkb('");
+		final int order = ComponentRedraws.beforeRedraw(false);
+		try {
+			if (order < 0)
+				out.write("zkx(");
+			else if (order > 0) //not first child
+				out.write(',');
 
-		final String wgtcls = getWidgetClass();
-		if (wgtcls == null)
-			throw new UiException("Widget class required for "+this+" with the "+getMold()+" mold");
+			final JsContentRenderer renderer = new JsContentRenderer();
+			renderProperties(renderer);
 
-		out.write(wgtcls);
-		out.write("','");
-		out.write(getUuid());
-		out.write("',{\n");
-		out.write(renderer.getBuffer().toString());
-		out.write('}');
-		final String mold = getMold();
-		if (!"default".equals(mold)) {
-			out.write(",'");
-			out.write(mold);
-			out.write('\'');
+			final String wgtcls = getWidgetClass();
+			if (wgtcls == null)
+				throw new UiException("Widget class required for "+this+" with "+getMold());
+			out.write("\n['");
+			out.write(wgtcls);
+			out.write("','");
+			out.write(getUuid());
+			out.write("',{");
+			out.write(renderer.getBuffer().toString());
+			out.write("},[");
+
+			redrawChildren(out);
+
+			out.write(']');
+			final String mold = getMold();
+			if (!"default".equals(mold)) {
+				out.write(",'");
+				out.write(mold);
+				out.write('\'');
+			}
+			out.write(']');
+
+			if (order < 0)
+				out.write(");\n");
+		} finally {
+			out.write(ComponentRedraws.afterRedraw());
 		}
-		out.write(");\n");
-
-		redrawChildren(out);
-
-		out.write("zke();\n");
 	}
 	/** Redraws childrens (and then recursively descandants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.

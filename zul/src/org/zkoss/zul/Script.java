@@ -25,6 +25,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 
 /**
  * A component to generate script codes that will be evaluated at the client.
@@ -216,31 +217,23 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	}
 
 	//super//
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!_defer) {
-			final String cnt = getContent();
-				//allow deriving to override getContent()
-			if (cnt != null)
-				out.write(cnt);
-		}
-		super.redraw(out);
-	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_defer) {
-			final String cnt = getContent();
-				//allow deriving to override getContent()
-			if (cnt != null)
+		final String cnt = getContent();
+			//allow deriving to override getContent()
+		if (cnt != null)
+			if (_defer)
 				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
-		}
+			else
+				ComponentRedraws.getScriptBuffer().append(cnt).append('\n');
 
 		if (_src != null) {
 			final HtmlPageRenders.RenderContext rc =
 				_defer ? null: HtmlPageRenders.getRenderContext(null);
-			if (rc != null && rc.crawlable) {
-				final Writer cwout = rc.temp;
+			if (rc != null) {
+				final Writer cwout = rc.perm;
 				cwout.write("\n<script type=\"text/javascript\" src=\"");
 				cwout.write(getEncodedSrcURL());
 				cwout.write('"');

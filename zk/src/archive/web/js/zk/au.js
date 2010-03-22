@@ -525,8 +525,6 @@ zAu = {
 		return ajaxReq;
 	},
 	_doCmds: function () { //called by mount.js, too
-		zk.mnt.t = zUtl.now(); //used by zk.mnt's run
-
 		for (var fn; fn = doCmdFns.shift();)
 			fn();
 

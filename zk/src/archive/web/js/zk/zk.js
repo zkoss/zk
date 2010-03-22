@@ -38,9 +38,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		};
 	}
 	function showprgbInit() {
-		//1. don't use jq() since it will be queued after others
-		//2. zk.mnt.pgbg: pgbg() is called with a non-contained page; see mount.js
-		if (jq.isReady||zk.mnt.pgbg||zk.Page.contained.length)
+		//don't use jq() since it will be queued after others
+		if (jq.isReady||zk.Page.contained.length)
 			_showprgb(true, zk.pi ? 'z-initing': null);
 		else
 			setTimeout(showprgbInit, 10);
@@ -366,6 +365,21 @@ zk.copy(Array.prototoype, {
 	 * @return Object the destination object
 	 */
 	//copy: function () {},
+
+	/** Retrieves and removes the value of the specified name of the given map.
+	 * @param Map props a map of properties
+	 * @param String nm the name to retrieve the value
+	 * @return Object the value.
+	 * @since 5.0.2
+	 */
+	cut: function (props, nm) {
+		var v;
+		if (props) {
+			v = props[nm];
+			delete props[nm];
+		}
+		return v;
+	},
 
 	/** Defines a package. It creates the package if not defined yet.
 	 * It is similar to Java's package statement except it returns the package
