@@ -123,7 +123,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			var inf = _createInf0[j];
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;
-				pkgLoad(inf[1]);
+				pkgLoad(inf[0], inf[1]);
 				return run(mount);
 			}
 		}
@@ -284,13 +284,15 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	}
 
 	/* Loads package of a widget tree. */
-	function pkgLoad(wi) {
+	function pkgLoad(dt, wi) {
 		var type = wi[0];
-		if (type === 1) //1: zhtml.Widget
-			wi[0] = type = "zhtml.Widget";
-		var i = type.lastIndexOf('.');
-		if (i >= 0)
-			zk.load(type.substring(0, i), _curdt());
+		if (type) { //not page (=0)
+			if (type === 1) //1: zhtml.Widget
+				wi[0] = type = "zhtml.Widget";
+			var i = type.lastIndexOf('.');
+			if (i >= 0)
+				zk.load(type.substring(0, i), dt);
+		}
 
 		//z$pk: pkgs to load
 		var pkgs = zk.cut(wi[2], "z$pk");
@@ -298,7 +300,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			zk.load(pkgs);
 
 		for (var children = wi[3], j = children.length; j--;)
-			pkgLoad(children[j]);
+			pkgLoad(dt, children[j]);
 	}
 
 	/* run and delay if too busy, so progressbox has a chance to show. */
