@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-//mount begin
+//begin of mounting
 function zkmb(binding) {
 	zk.mounting = true;
 	zk.mnt.binding = binding;
@@ -25,27 +25,14 @@ function zkpi(nm, wv) {
 	return {n: nm, p: zk.$package(nm, false, wv)};
 }
 
-//page begin
-//don't change API since ZK JSP also depends on it
+//ZK JSP: page creation (backward compatible)
 function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
-	if (dtid)
-		if (typeof dtid == 'string')
-			zkdt(dtid, contextURI, updateURI, reqURI)._pguid = pguid;
-		else
-			props = dtid;
-	var contained = props && props.contained;
-	if (props) delete props.contained;
-	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
-	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
+	zkx([0, pguid,
+		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, ru: reqURI}),[]]);
 }
-//widget begin
-function zkb(type, uuid, props, mold) {
-	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});
-}
-//zhtml widget begin
-function zkb2(uuid, type, props) { //zhtml
-	zkb(type||'zhtml.Widget', uuid, props);
-}
+//ZK JSP (useless; backward compatible)
+zkpe = zk.$void;
+
 //define a desktop
 function zkdt(dtid, contextURI, updateURI, reqURI) {
 	var dt = zk.Desktop.$(dtid);
@@ -136,7 +123,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			var inf = _createInf0[j];
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;
-				pkgLoad(inf[1]);
+				pkgLoad(inf[0], inf[1]);
 				return run(mount);
 			}
 		}
@@ -243,28 +230,29 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	}
 
 	/* create the widget tree. */
-	function create(parent, wginf) {
-		var wgt, props = wginf.props || {};
-		if (wginf.type == "#p") {
-			wgt = new zk.Page({uuid: wginf.uuid}, wginf.contained);
+	function create(parent, wi) {
+		var wgt,
+			type = wi[0],
+			uuid = wi[1],
+			props = wi[2]||{};
+		if (type === 0) { //page
+			wgt = new zk.Page({uuid: uuid}, zk.cut(props, "ct"));
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 		} else {
-			var cls = zk.$import(wginf.type),
-				uuid = wginf.uuid,
+			var cls = zk.$import(type),
 				initOpts = {uuid: uuid},
-				v = wginf.mold;
+				v = wi[4]; //mold
 			if (!cls)
-				throw 'Unknown widget: ' + wginf.type;
+				throw 'Unknown widget: ' + type;
 			if (v) initOpts.mold = v;
 			var wgt = new cls(initOpts);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
 			//z$ea: value embedded as element's text
-			v = props.z$ea;
+			v = zk.cut(props, "z$ea");
 			if (v) {
-				delete props.z$ea;
 				var embed = jq(uuid, zk);
 				if (embed.length) {
 					var val = embed[0].innerHTML;
@@ -277,9 +265,8 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			}
 
 			//z$al: afterLoad
-			v = props.z$al;
+			v = zk.cut(props, "z$al");
 			if (v) {
-				delete props.z$al;
 				zk.afterLoad(function () {
 					for (var p in v)
 						props[p] = v[p](); //must be func
@@ -290,27 +277,30 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		for (var nm in props)
 			wgt.set(nm, props[nm]);
 
-		for (var j = 0, childs = wginf.children, len = childs.length;
+		for (var j = 0, childs = wi[3], len = childs.length;
 		j < len; ++j)
 			create(wgt, childs[j]);
 		return wgt;
 	}
 
 	/* Loads package of a widget tree. */
-	function pkgLoad(w) {
-		var type = w.type, i = type.lastIndexOf('.');
-		if (i >= 0)
-			zk.load(type.substring(0, i), _curdt());
-
-		//z$pk: pkgs to load
-		var pkgs = w.z$pk;
-		if (pkgs) {
-			delete w.z$pk;
-			zk.load(pkgs);
+	function pkgLoad(dt, wi) {
+		var type = wi[0];
+		if (type) { //not page (=0)
+			if (type === 1) //1: zhtml.Widget
+				wi[0] = type = "zhtml.Widget";
+			var i = type.lastIndexOf('.');
+			if (i >= 0)
+				zk.load(type.substring(0, i), dt);
 		}
 
-		for (var children = w.children, j = children.length; j--;)
-			pkgLoad(children[j]);
+		//z$pk: pkgs to load
+		var pkgs = zk.cut(wi[2], "z$pk");
+		if (pkgs)
+			zk.load(pkgs);
+
+		for (var children = wi[3], j = children.length; j--;)
+			pkgLoad(dt, children[j]);
 	}
 
 	/* run and delay if too busy, so progressbox has a chance to show. */
@@ -326,31 +316,29 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	}
 
 zk.mnt = { //Use internally
-	push: function(w) {
-		w.children = [];
-		if (_wgts.length)
-			_wgts[0].children.push(w); //last child of top
-		_wgts.unshift(w); //become top
-	},
-	pop: function() {
-		var w = _wgts.shift();
-		if (!_wgts.length) {
-			_createInf0.push([_curdt(), w, zk.mnt.binding]);
+	exe: function (wi) {
+		if (wi) {
+			if (wi[0] === 0) { //page
+				var props = wi[2];
+				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
+					._pguid = wi[1];
+			}
+			_createInf0.push([_curdt(), wi, zk.mnt.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
 			run(mount);
 		}
 	},
-	top: function() {
-		return _wgts[0];
-	},
-	end: function() {
+	end: function () {
 		_wgts = [];
 		zk.mnt.curdt = null;
 		zk.mnt.binding = false;
 	}
 };
 })(); //zk.mnt
+
+zkme = zk.mnt.end; //end of mounting
+zkx = zk.mnt.exe; //widget creations
 
 //Event Handler//
 jq(function() {
@@ -634,6 +622,3 @@ jq(function() {
 		//Return nothing
 	};
 }); //jq()
-
-zkme = zk.mnt.end;
-zke = zkpe = zk.mnt.pop;

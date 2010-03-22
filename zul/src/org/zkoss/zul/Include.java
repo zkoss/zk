@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
 
@@ -450,13 +451,15 @@ implements org.zkoss.zul.api.Include, Includer {
 	protected boolean isChildable() {
 		return _instantMode;
 	}
-	protected void redrawChildren(Writer out) throws IOException {
-		setChildPage(null);
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		if (_instantMode && _afterComposed) { //afterCompose might not be called if it is created manually
-			super.redrawChildren(out);
-			return; //done
-		}
+		setChildPage(null);
+		render(renderer, "comment", _comment);
+
+		if (_instantMode &&_afterComposed)
+			return; //instant mode (done by redrawChildren())
 
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
@@ -468,15 +471,15 @@ implements org.zkoss.zul.api.Include, Includer {
 				final StringWriter sw = new StringWriter();
 				include(sw);
 
-				//Note: a ZUL might be included indirectly
-				//(ZUL include JSP, and JSP include ZUL), so we cannot
-				//output sw directly even if getChildPage() is not null
+				//Don't output sw directly if getChildPage() is not null
+				//Otherwise, script of the included zul page will be evaluated
+				//first (since it is part of rc.temp)
 
 				boolean done = false;
 				if (getChildPage() == null) { //only able to handle non-ZUL page
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
-					if (rc != null && rc.crawlable) {
+					if (rc != null) {
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());
@@ -488,17 +491,12 @@ implements org.zkoss.zul.api.Include, Includer {
 							cwout.write("\n-->\n");
 						cwout.write("</div>");
 
-						out.write("zk.mnt.top().props.z$ea='content';");
+						renderer.render("z$ea", "content");
 						done = true;
 					}
 				}
-				if (!done) {
-					out.write("zk.mnt.top().props.content='");
-					final StringBuffer sb = new StringBuffer(1024);
-					Strings.escape(sb, sw.getBuffer(), Strings.ESCAPE_JAVASCRIPT);
-					Files.write(out, sb);
-					out.write("';");
-				}
+				if (!done)
+					renderer.render("content", sw.toString());
 			}
 		} finally {
 			ueng.setOwner(old);
@@ -509,6 +507,7 @@ implements org.zkoss.zul.api.Include, Includer {
 		final Execution exec = getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
 		final Map old = setupDynams(exec);
+		ComponentRedraws.beforeRedraw(true); //starting a new page
 		try {
 			exec.include(out, src, null, 0);
 		} catch (Throwable err) {
@@ -541,6 +540,7 @@ implements org.zkoss.zul.api.Include, Includer {
 			exec.include(out,
 				"~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
 		} finally {
+			ComponentRedraws.afterRedraw();
 			restoreDynams(exec, old);
 		}
 	}
@@ -578,11 +578,4 @@ implements org.zkoss.zul.api.Include, Includer {
 		return _defMode;
 	}
 	private static String _defMode;
-
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
-		super.renderProperties(renderer);
-
-		render(renderer, "comment", _comment);
-	}
 }

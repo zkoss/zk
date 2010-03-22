@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zhtml.impl;
 
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,6 +36,10 @@ public class TagRenderContext {
 	/** The writer to output JavaScript codes.
 	 */
 	private final StringBuffer _jsout = new StringBuffer();
+	/** Used to decide the component, which {@link #renderBegin} is called against,
+	 * is not a first child.
+	 */
+	private final List _2ndChild = new LinkedList();
 
 	public TagRenderContext() {
 		HtmlPageRenders.setDirectContent(Executions.getCurrent(), true); //default: true
@@ -63,17 +69,22 @@ public class TagRenderContext {
 	 */
 	public void
 	renderBegin(Component comp, Map clientEvents, boolean lookup) {
-		_jsout.append("\nzkb2('")
-			.append(comp.getUuid());
+		if (_2ndChild.isEmpty())
+			_jsout.append("zkx(");
+		else if (_2ndChild.get(0) == Boolean.TRUE)
+			_2ndChild.set(0, Boolean.FALSE);
+		else
+			_jsout.append(',');
+		_2ndChild.add(0, Boolean.TRUE);
+		_jsout.append("\n[");
 
 		final String wgtcls = lookup ? "zk.RefWidget": comp.getWidgetClass();
-		boolean wgtclsGened = false;
-		if (!"zhtml.Widget".equals(wgtcls)) {
-			wgtclsGened = true;
-			_jsout.append("','").append(wgtcls);
-		}
+		if (!"zhtml.Widget".equals(wgtcls))
+			_jsout.append('\'').append(wgtcls).append('\'');
+		else
+			_jsout.append(1); //1: zhtml.Widget (see mount.js)
 
-		_jsout.append('\'');
+		_jsout.append(",'").append(comp.getUuid()).append("',{");
 
 		if (!lookup && clientEvents != null) {
 			boolean first = true;
@@ -84,26 +95,24 @@ public class TagRenderContext {
 				final int flags = ((Integer)me.getValue()).intValue();
 				if ((flags & ComponentCtrl.CE_IMPORTANT) != 0
 				|| Events.isListened(comp, evtnm, false)) {
-					_jsout.append(',');
-					if (first) {
-						first = false;
-						if (!wgtclsGened) _jsout.append("null,");
-						_jsout.append('{');
-					}
+					if (first) first = false;
+					else _jsout.append(',');
 					_jsout.append('$').append(evtnm).append(':')
 						.append(Events.isListened(comp, evtnm, true));
 						//$onClick and so on
 				}
 			}
-			if (!first) _jsout.append('}');
 		}
 
-		_jsout.append(");");
+		_jsout.append("},[");
 	}
 	/** Renders the ending JavaScript code snippet for the component.
 	 * It must be called after rendering the children.
 	 */
 	public void renderEnd(Component comp) {
-		_jsout.append("zke();");
+		_2ndChild.remove(0);
+		_jsout.append("]]");
+		if (_2ndChild.isEmpty())
+			_jsout.append(");");
 	}
 }
