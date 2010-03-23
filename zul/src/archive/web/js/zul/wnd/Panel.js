@@ -546,7 +546,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (zk.ie6_ && this.isMaximized())
+		if (this.isMaximized())
 			jq(this.$n()).width(0);
 	},
 	//watch//
