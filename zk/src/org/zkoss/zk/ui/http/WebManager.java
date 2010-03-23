@@ -36,7 +36,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.resource.XMLResourcesLocator;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ServletContextLocator;
@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.Utils;
 
 /**
  * A bridge bewteen Web server and ZK.
@@ -132,7 +133,7 @@ public class WebManager {
 
 		//load metainfo/zk/zk.xml
 		try {
-			final ClassLocator loc = new ClassLocator();
+			final XMLResourcesLocator loc = Utils.getXMLResourcesLocator();
 			for (Enumeration en = loc.getResources("metainfo/zk/zk.xml");
 			en.hasMoreElements();) {
 				final URL cfgUrl = (URL)en.nextElement();

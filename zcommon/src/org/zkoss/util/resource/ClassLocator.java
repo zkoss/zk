@@ -44,26 +44,18 @@ import org.zkoss.idom.input.SAXBuilder;
  * <p>It is important to use this locator if you want to load something
  * in other jar files.
  *
- * <p>Besides {@link Locator}, it also provides additional methods,
- * such as {@link #getResources}.
- *
  * <p>Since this locator is used frequently, {@link Locators#getDefault}
  * is provided to return an instance of this class,
  *
  * @author tomyeh
  */
-public class ClassLocator implements Locator {
+public class ClassLocator implements XMLResourcesLocator {
 	private static final Log log = Log.lookup(ClassLocator.class);
 
 	public ClassLocator() {
 	}
 
-	/** Returns an enumeration of resources.
-	 * Unlike {@link #getDependentXMLResources}, it doesn't resolve the dependence
-	 * among the resouces.
-	 *
-	 * @param name the resouce name, such as "metainfo/i3-com.xml".
-	 */
+	//XMLResourcesLocator//
 	public Enumeration getResources(String name) throws IOException {
 		name = resolveName(name);
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -78,22 +70,6 @@ public class ClassLocator implements Locator {
 		}
 		return ClassLoader.getSystemResources(name);
 	}
-	/** Returns a list of resources ({@link Resource}) after resolving
-	 * the dependence.
-	 * The resource is returned in the format of {@link Resource}
-	 *
-	 * <p>To resolve the dependence, it assumes each resource has two
-	 * element whose name is identified by elName and elDepends.
-	 * The elName element specifies the unique name of each resource.
-	 * The elDepends element specifies a list of names of resources
-	 * that this resource depends on. If not found, it assumes it could
-	 * be loaded first.
-	 *
-	 * @param name the resouce name, such as "metainfo/i3-comp.xml".
-	 * @param elName the element used to specify the name.
-	 * @param elDepends the element used to specify the dependence.
-	 * @return a list of {@link Resource} of the specified name.
-	 */
 	public List getDependentXMLResources(String name, String elName,
 	String elDepends) throws IOException {
 		final Map rcmap = new LinkedHashMap();
@@ -175,22 +151,6 @@ public class ClassLocator implements Locator {
 			return "["+name+": "+url+" depends on "+depends+']';
 		}
 	};
-
-	/** An item of the list returned by {@link ClassLocator#getDependentXMLResources}.
-	 */
-	public static class Resource {
-		/** The URL of the resource. */
-		public final URL url;
-		/** The content of the resource. */
-		public final Document document;
-		private Resource(URL url, Document document) {
-			this.url = url;
-			this.document = document;
-		}
-		public String toString() {
-			return "[res: " + url + ']';
-		}
-	}
 
 	//-- Locator --//
 	/** Always returns null.

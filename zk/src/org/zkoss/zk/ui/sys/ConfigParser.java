@@ -28,7 +28,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
@@ -45,7 +45,6 @@ import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;
@@ -149,11 +148,13 @@ public class ConfigParser {
 			return; //nothing to do
 
 		try {
-			final ClassLocator locator = new ClassLocator();
+			final XMLResourcesLocator locator =
+				org.zkoss.zk.ui.impl.Utils.getXMLResourcesLocator();
 			final List xmls = locator.getDependentXMLResources(
 				"metainfo/zk/config.xml", "config-name", "depends");
 			for (Iterator it = xmls.iterator(); it.hasNext();) {
-				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+				final XMLResourcesLocator.Resource res =
+					(XMLResourcesLocator.Resource)it.next();
 				if (log.debugable()) log.debug("Loading "+res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {

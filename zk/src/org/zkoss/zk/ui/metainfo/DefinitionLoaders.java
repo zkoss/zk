@@ -31,7 +31,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.Attribute;
@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.PageRenderer;
+import org.zkoss.zk.ui.impl.Utils;
 
 /**
  * Utilities to load language definitions.
@@ -129,7 +130,7 @@ public class DefinitionLoaders {
 		}
 	}
 	private static void load0() throws java.io.IOException {
-		final ClassLocator locator = new ClassLocator();
+		final XMLResourcesLocator locator = Utils.getXMLResourcesLocator();
 
 		//1. parse config.xml
 		final ConfigParser parser = new ConfigParser();
@@ -155,7 +156,8 @@ public class DefinitionLoaders {
 		final List xmls = locator.getDependentXMLResources(
 			"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 		for (Iterator it = xmls.iterator(); it.hasNext();) {
-			final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+			final XMLResourcesLocator.Resource res =
+				(XMLResourcesLocator.Resource)it.next();
 			try {
 				if (ConfigParser.checkVersion(res.url, res.document, true))
 					parseLang(res.document, locator, res.url, true);
