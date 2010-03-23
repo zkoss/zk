@@ -25,7 +25,6 @@ import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
 
-import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;
@@ -218,7 +217,7 @@ public class LabelLoader {
 	/** Loads all labels from the specified URL. */
 	private static final void load(Map labels, URL url, String charset)
 	throws IOException {
-		log.info(MCommon.FILE_OPENING, url);
+		log.info("Opening "+url); //don't use MCommon since Messages might call getLabel
 		final Map news = new HashMap();
 		final InputStream is = url.openStream();
 		try {
