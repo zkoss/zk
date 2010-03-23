@@ -1901,11 +1901,13 @@ out.push('</div>');
 	 */
 	updateDomStyle_: function () {
 		if (this.desktop) {
-			var s = jq.parseStyle(this.domStyle_());
-			zk(this.$n()).setStyles(s);
+			var s = jq.parseStyle(this.domStyle_()),
+				n = this.$n();
+			zk(n).clearStyles().jq.css(s);
 
-			var n = this.getTextNode();
-			if (n) jq(n).css(jq.filterTextStyle(s));
+			var t = this.getTextNode();
+			if (t && t != n)
+				zk(t).clearStyles().jq.css(jq.filterTextStyle(s));
 			this.zsync();
 		}
 	},

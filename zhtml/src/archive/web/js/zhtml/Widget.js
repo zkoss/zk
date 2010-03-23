@@ -28,7 +28,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				n.value = n.defaultValue = val;
 				break;
 			case 'style':
-				zk(n).setStyles(jq.parseStyle(val));
+				zk(n).clearStyles().jq.css(jq.parseStyle(val));
 				break;
 			case 'class':
 				n.className = val;

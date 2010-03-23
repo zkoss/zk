@@ -3,11 +3,12 @@ ZK 5.0.2
 * Features
   2972509: Enhance jQuery selector to handle zk widget's ID
   2974340: Generate zul's HTML content with JavaScript array/map
-  
+
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error
   2972980: Failed to add widget listener dynamically(addWidgetListener)
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
+  2974364: bandbox setStyle not work correctly
 
 * Upgrade Notes
 

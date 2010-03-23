@@ -349,7 +349,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			var real = this.$n('real');
 			if (real) {
-				zk(real).setStyles(jq.parseStyle(this.domStyle_()));
+				zk(real).clearStyles().jq.css(jq.parseStyle(this.domStyle_()));
 				if (this.parent) 
 					this.parent.resize();
 			}
