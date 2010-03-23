@@ -10,6 +10,7 @@ ZK 5.0.2
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
   2974364: bandbox setStyle not work correctly
   2973059: getValue() does not reflect last state in Safari/Chrome
+  2974370: The maximizable comp in panel cause size problem with IE6
 
 * Upgrade Notes
 
