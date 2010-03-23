@@ -43,17 +43,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//Event Handling//
 	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
-		if (!fn && !(fn = _domevtfnm[evtnm]))
-			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
+		if (typeof fn != "function") {
+			if (!fn && !(fn = _domevtfnm[evtnm]))
+				_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
 
-		var f = wgt[fn];
-		if (!f)
-			throw 'Listener ' + fn + ' not found in ' + wgt.className;
+			var f = wgt[fn];
+			if (!f)
+				throw 'Listener ' + fn + ' not found in ' + wgt.className;
+			fn = f;
+		}
 
 		var domn = _domevtnm[evtnm];
 		if (!domn)
 			domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
-		return [domn, _domEvtProxy(wgt, f)];
+		return [domn, _domEvtProxy(wgt, fn)];
 	}
 	function _domEvtProxy(wgt, f) {
 		var fps = wgt._$evproxs, fp;
@@ -3406,7 +3409,8 @@ _doFooSelect: function (evt) {
 	 * @param DOMElement node a node of this widget.
 	 * It is usually retrieved by {@link #$n}.
 	 * @param String evtnm the event name to register, such as onClick.
-	 * @param String fn the name of the member method to handle the event.
+	 * @param Object fn the name ({@link String}) of the member method to handle the event,
+	 * or the function ({@link Function}).
 	 * It is optional. If omitted, <i>_doEvtnm</i> is assumed, where <i>evtnm</it>
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
@@ -3426,7 +3430,8 @@ _doFooSelect: function (evt) {
 	 * @param DOMElement node a node of this widget.
 	 * It is usually retrieved by {@link #$n}.
 	 * @param String evtnm the event name to register, such as onClick.
-	 * @param String fn the name of the member method to handle the event.
+	 * @param Object fn the name ({@link String}) of the member method to handle the event,
+	 * or the function ({@link Function}).
 	 * It is optional. If omitted, <i>_doEvtnm</i> is assumed, where <i>evtnm</it>
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
