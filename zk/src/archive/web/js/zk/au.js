@@ -189,7 +189,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
 			if (reqInf && !reqInf.ignorable && !zk.unloading) {
-				var msg = e.message;
+				var msg = _exmsg(e);
 				errCode = "[Receive] " + msg;
 				//if (e.fileName) errCode += ", "+e.fileName;
 				//if (e.lineNumber) errCode += ", "+e.lineNumber;
@@ -209,6 +209,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		zAu._doCmds();
+	}
+	function _exmsg(e) {
+		var msg = e.message, m2 = "";
+		if (e.name) m2 = " " +e.name;
+//		if (e.fileName) m2 += " " +e.fileName;
+//		if (e.lineNumber) m2 += ":" +e.lineNumber;
+//		if (e.stack) m2 += " " +e.stack;
+		return msg + (m2 ? " (" + m2.substring(1) + ")": m2);
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
@@ -277,7 +285,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 
 			if (!reqInf.ignorable && !zk.unloading) {
-				var msg = e.message;
+				var msg = _exmsg(e);
 				errCode = "[Send] " + msg;
 				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
 					ajaxReqResend(reqInf);
@@ -405,7 +413,7 @@ zAu = {
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2+": ":"")+(cmd||"")
-				+ (ex?"\n"+(ex.message || ex):""));
+				+ (ex?"\n"+(_exmsg(ex) || ex):""));
 	},
 	/** Returns the URI for the specified error.
 	 * @param int code the error code

@@ -851,6 +851,7 @@ zk.endProcessing();
 	 * @see #stamp
 	 */
 	error: function (msg) {
+		zAu.send(new zk.Event(null, "error", msg, {ignorable: true}), 800);
 		new _zErb(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
