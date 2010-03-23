@@ -963,7 +963,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		var mode = this._mode;
-		zWatch.listen({onSize: this, onShow: this, beforeSize: this});
+		zWatch.listen({onSize: this, onShow: this});
+
+		// Bug 2974370
+		if (zk.ie6_)
+			zWatch.listen({beforeSize: this});
+
 		if (mode != 'embedded') {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);

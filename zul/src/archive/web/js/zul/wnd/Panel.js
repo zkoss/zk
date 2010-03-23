@@ -721,7 +721,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 
-		zWatch.listen({onSize: this, onShow: this, onHide: this, beforeSize: this});
+		zWatch.listen({onSize: this, onShow: this, onHide: this});
+
+		// Bug 2974370
+		if (zk.ie6_)
+			zWatch.listen({beforeSize: this});
 
 		var uuid = this.uuid,
 			$Panel = this.$class;
