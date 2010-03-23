@@ -749,6 +749,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.zsync();
 		}
 	},
+	beforeSize: function() {
+		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
+		if (this.isMaximized())
+			jq(this.$n()).width(0);
+	},
 	onSize: function() {
 		this._hideShadow();
 		if (this.isMaximized()) {
@@ -959,6 +964,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		var mode = this._mode;
 		zWatch.listen({onSize: this, onShow: this});
+
+		// Bug 2974370
+		if (zk.ie6_)
+			zWatch.listen({beforeSize: this});
+
 		if (mode != 'embedded') {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);

@@ -544,6 +544,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zWatch.fireDown('onSize', self);
 		}, zk.ie6_ ? 800: 0);
 	},
+	beforeSize: function() {
+		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
+		if (this.isMaximized())
+			jq(this.$n()).width(0);
+	},
 	//watch//
 	onSize: _zkf = (function() {
 		function syncMaximized (wgt) {
@@ -717,6 +722,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		zWatch.listen({onSize: this, onShow: this, onHide: this});
+
+		// Bug 2974370
+		if (zk.ie6_)
+			zWatch.listen({beforeSize: this});
 
 		var uuid = this.uuid,
 			$Panel = this.$class;

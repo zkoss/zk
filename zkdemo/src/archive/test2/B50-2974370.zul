@@ -1,0 +1,38 @@
+<!--
+B50-2974370.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 23 16:33:14 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+	<h4>IE6 only</h4>               
+	<ol>
+		<li>Click the restore button on your browser right top</li>
+		<li>Drag the browser right side to increase the browser's width</li>
+		<li>Drag the browser right side to decrease the browser's width</li>
+		<li>Each component's width will be proper</li>
+	</ol>
+	]]></html>
+	<div>
+		<panel title="Panel" width="50%" height="50%" border="normal">
+			<panelchildren>
+				<window title="window" maximizable="true"
+					maximized="true" border="normal" height="300px" />
+			</panelchildren>
+		</panel>
+	</div>
+	<div>
+		<window title="Panel" width="50%" height="50%" border="normal">
+				<window title="window" maximizable="true"
+					maximized="true" border="normal" height="300px" />
+		</window>
+	</div>
+</zk>

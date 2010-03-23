@@ -3,6 +3,7 @@ ZK 5.1.0
 * Features
   2974464: A way to customize message with i3-label
   2971889: Way to notify server of JS error
+  2920934: A plugin to load lang.xml, config.xml.. from custom location
 
 * Bugs
 
@@ -13,11 +14,14 @@ ZK 5.0.2
 * Features
   2972509: Enhance jQuery selector to handle zk widget's ID
   2974340: Generate zul's HTML content with JavaScript array/map
-  
+
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error
   2972980: Failed to add widget listener dynamically(addWidgetListener)
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
+  2974364: bandbox setStyle not work correctly
+  2973059: getValue() does not reflect last state in Safari/Chrome
+  2974370: The maximizable comp in panel cause size problem with IE6
 
 * Upgrade Notes
 

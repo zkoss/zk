@@ -1368,16 +1368,31 @@ jq(el).zk.center(); //same as 'center'
 
 	/** Sets the CSS style with a map of style names and values. For example,
 <pre><code>
-zk(el).setStyles({width:'100px', paddingTop: "1px", "border-left": "2px"});
-zk(el).setStyles(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
+jq(el).css({width:'100px', paddingTop: "1px", "border-left": "2px"});
+jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 </code></pre>
 	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link jq#parseStyle}.
 	 * @return jqzk this object
+	 * @deprecated As of release 5.0.2, use jq.css(map) instead
 	 */
 	setStyles: function (styles) {
-		var $ = this.jq;
-		for (var nm in styles)
-			$.css(nm, styles[nm]);
+		this.jq.css(styles);
+		return this;
+	},
+	/** Clears the CSS styles (excluding the inherited styles).
+	 * @since 5.0.2
+	 * @return jqzk this object
+	 */
+	clearStyles: function () {
+		var st = this.jq[0];
+		if (st && (st=st.style))
+			for (var nm in st)
+				if ((!zk.ie || nm != "accelerator")
+				&& st[nm] && typeof st[nm] == "string")
+					try {
+						st[nm] = "";
+					} catch (e) { //ignore
+					}
 		return this;
 	}
 };
@@ -1588,6 +1603,18 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	 * include, such as <code>['width', 'height']</code>. Ignored if not specified or null.
 	 * @return String the text-related style
 	 */
+	/** Returns the text-relevant style of the specified styles
+	 * (same as HTMLs.getTextRelevantStyle in Java).
+	 * <pre>><code>
+jq.filterTextStyle({width:"100px", fontSize: "10pt"});
+  //return {font-size: "10pt"}
+	 *</code></pre>
+	 *
+	 * @param Map styles the styles to filter
+	 * @param Array plus an array of the names of the additional style to
+	 * include, such as <code>['width', 'height']</code>. Ignored if not specified or null.
+	 * @return Map the text-related styles
+	 */
 	filterTextStyle: function (style, plus) {
 		if (typeof style == 'string') {
 			var ts = "";
@@ -1614,7 +1641,7 @@ jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
 	},
 
 	/** Parses a string-type CSS style into a map of names and values of styles.
-	 * It is usually used with {@link jqzk#setStyles} to update the CSS style of an element. 
+	 * It is usually used with jq.css(map) to update the CSS style of an element. 
 	 * @param String style the style to parse
 	 * @return Map a map of styles (name, value)
 	 */
