@@ -4,6 +4,7 @@ ZK 3.6.5
 
 * Bugs
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
+  2975362: Unable to close Messagebox using ceaseSuspendedThread()
 
 * Upgrade Notes:
 
