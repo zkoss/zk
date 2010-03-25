@@ -751,7 +751,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this.isMaximized())
+		if (this.isMaximized()&& !this.__maximized) 
 			jq(this.$n()).width(0);
 	},
 	onSize: function() {
@@ -1027,6 +1027,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			onHide: this,
 			onResponse: this
 		});
+		if (zk.ie6_)
+			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {
