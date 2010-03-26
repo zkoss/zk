@@ -1,0 +1,51 @@
+<zk>
+<html><![CDATA[
+<ol>
+	<li>If you see TWO grids(3 rows x 2 columns), grid "One" stack on top of grid "Two", then it is OK</li>
+	<li>Otherwise, it is a bug</li>
+</ol>
+]]></html>
+<borderlayout vflex="min" hflex="min">
+    <north vflex="min" hflex="min">
+        <grid innerWidth="" hflex="min">
+            <rows>
+                <row>
+                    <label value="File One:"/>
+                    <textbox/>
+                </row>
+
+                <row>
+                    <label value="Type One:"/>
+                    <textbox/>
+                </row>
+
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3"/>
+                </row>
+            </rows>
+        </grid>
+    </north>
+
+    <south vflex="min" hflex="min">
+        <grid hflex="min">
+            <rows>
+                <row>
+                    <label value="File Two:"/>
+                    <textbox/>
+                </row>
+
+                <row>
+                    <label value="Type Twp:"/>
+                    <textbox/>
+                </row>
+
+                <row>
+                    <label value="Options:"/>
+                    <textbox rows="3"/>
+                </row>
+            </rows>
+        </grid>
+    </south>
+</borderlayout>
+</zk>

@@ -16,8 +16,8 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		innerWidth = this.getInnerWidth(),
-		wdAttr = innerWidth == '100%' ? ' width="100%"' : '',
-		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
+		wdAttr = this.getHflex() == 'min' ? '' : innerWidth == '100%' ? ' width="100%"' : '',
+		wdStyle = innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos;
 
 	out.push('<div', this.domAttrs_(), '>');
