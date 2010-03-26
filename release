@@ -38,6 +38,11 @@ if [ ! -d "$javadocdir" ] ; then
 	echo $javadocdir is not found
 	exit 1
 fi
+javadocdir=${javadocdir/\~/$HOME}
+if [ ! -d "$javadocdir/jsdoc" ] ; then
+	echo $javadocdir/jsdoc is not found
+	exit 1
+fi
 
 if [ "$target" == "official" ] ; then
 	htmldocdir=$(grep '^htmldoc' $setting)
@@ -67,6 +72,7 @@ if [ "$target" == "official" ] ; then
 	
 	demonm=zk-demo-$ver
 	javadocnm=zk-javadoc-$ver
+	jsdocnm=zk-jsdoc-$ver
 	srcnm=zk-src-$ver
 	profsrcnm=zkpe-src-$ver
 	entsrcnm=zkee-src-$ver
@@ -83,6 +89,7 @@ elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
 	
 	demonm=zk-demo-$ver-$stamp
 	javadocnm=zk-javadoc-$ver-$stamp
+	jsdocnm=zk-jsdoc-$ver-$stamp
 	srcnm=zk-src-$ver-$stamp
 	docnm=zk-doc-$ver-$stamp
 	echo "Release $binnm..."
@@ -536,6 +543,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Prepare the doc
 		cd $maindir
 		$maindir/bin/javadoc "$javadocdir/ZK"
+		$maindir/bin/javadoc "$javadocdir/jsdoc"
 	fi
 
 	rm -rf $binnm
@@ -546,6 +554,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${javadocnm}.zip
 	zip -qr9 ${javadocnm}.zip ZK
 	mv ${javadocnm}.zip /tmp/zk
+	
+	#Prepare the JS doc
+	echo Output ${jsdocnm}.zip
+	zip -qr9 ${jsdocnm}.zip jsdoc
+	mv ${jsdocnm}.zip /tmp/zk
 
 	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
 	mkdir -p /tmp/zk/$demonm/zkdemo/src/org

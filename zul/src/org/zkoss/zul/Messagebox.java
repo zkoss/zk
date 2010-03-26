@@ -243,13 +243,13 @@ public class Messagebox {
 			try {
 				dlg.doModal();
 			} catch (Throwable ex) {
-				if (ex instanceof InterruptedException)
-					throw (InterruptedException)ex;
 				try {
 					dlg.detach();
 				} catch (Throwable ex2) {
 					log.warningBriefly("Failed to detach when recovering from an error", ex2);
 				}
+				if (ex instanceof InterruptedException)
+					throw (InterruptedException)ex;
 				throw UiException.Aide.wrap(ex);
 			}
 			return dlg.getResult();
