@@ -342,19 +342,9 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	//zk: null,
 
 	init: function (sel, ctx) {
-		var cc;
-		if (typeof sel == 'string') {
-			cc = sel.charAt(0);
-			if (cc == '@' || cc == '$') {
-				var id = sel.substring(1), wgt;
-				if ((cc == '$' || !(sel=document.getElementById(id)))
-				&& !(sel=_elmOfWgt(id, ctx)))
-					sel = '#' + id;
-			}
-		}
 		if (ctx === zk) {
 			if (typeof sel == 'string'
-			&& zUtl.isChar(cc, {digit:1,upper:1,lower:1,'_':1})) {
+			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
 				var el = document.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);
