@@ -465,7 +465,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.eheadtbl.offsetWidth !=
 			this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && (zk.ie8 || this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
+			if (tblwd && (this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
 			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
 					tblwd = 0;
