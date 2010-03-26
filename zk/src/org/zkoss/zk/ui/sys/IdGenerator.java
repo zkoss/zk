@@ -42,7 +42,7 @@ public interface IdGenerator {
 	 * a portion of the desktop's ID with a number starting from 0.
 	 *
 	 * <p>Notice that UUID cannot be empty and can only have alphanumeric characters or underscore
-	 * (i.e., a-z, A-Z and _).
+	 * (i.e., a-z, A-Z, 0-9, and _).
 	 *
 	 * <p>This method is called when {@link Component#getUuid}
 	 * is called at the first time. It is usually when
@@ -63,7 +63,7 @@ public interface IdGenerator {
 	 * a portion of the desktop's ID with a number starting from 0.
 	 *
 	 * <p>Notice that UUID cannot be empty and can only have alphanumeric characters or underscore
-	 * (i.e., a-z, A-Z and _).
+	 * (i.e., a-z, A-Z, 0-9, and _).
 	 *
 	 * <p>Also notice that we can retrieve the execution by use of
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
@@ -80,7 +80,7 @@ public interface IdGenerator {
 	 * To have a deterministric value, you have to implement this method.
 	 *
 	 * <p>Notice that UUID cannot be empty and can only have alphanumeric characters or underscore
-	 * (i.e., a-z, A-Z and _).
+	 * (i.e., a-z, A-Z, 0-9, and _).
 	 *
 	 * <p>Also notice that we can retrieve the execution by use of
 	 * {@link Desktop#getExecution}, or {@link org.zkoss.zk.ui.Executions#getCurrent}.
