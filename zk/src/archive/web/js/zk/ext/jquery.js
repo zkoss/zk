@@ -2809,7 +2809,7 @@ Sizzle.find = function(expr, context, isXML){
 			if ( left.substr( left.length - 1 ) !== "\\" ) {
 				match[1] = (match[1] || "").replace(/\\/g, "");
 				set = Expr.find[ type ]( match, context, isXML );
-				if ( set != null ) {
+				if ( set != null && set.length /* Jumper Chen, Potix, 20100325*/) {
 					expr = expr.replace( Expr.match[ type ], "" );
 					break;
 				}
@@ -2910,15 +2910,18 @@ Sizzle.error = function( msg ) {
 };
 
 var Expr = Sizzle.selectors = {
-	order: [ "ID", "NAME", "TAG" ],
+	/* Jumper Chen, Potix, 20100326*/
+	order: [ "ID", "ZID", "NAME", "TAG", "ZTAG" ],
 	match: {
 		ID: /#((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
 		CLASS: /\.((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
 		/* Jumper Chen, Potix, 20100318*/
-		ZK: /\$((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
+		ZID: /\$((?:[\w\u00c0-\uFFFF-]|\\.)+)/,
 		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF-]|\\.)+)['"]*\]/,
 		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/,
 		TAG: /^((?:[\w\u00c0-\uFFFF\*-]|\\.)+)/,
+		/* Jumper Chen, Potix, 20100325*/
+		ZTAG: /^((?:[@\w\u00c0-\uFFFF\*-]|\\.)+)/,
 		CHILD: /:(only|nth|last|first)-child(?:\((even|odd|[\dn+-]*)\))?/,
 		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/,
 		PSEUDO: /:((?:[\w\u00c0-\uFFFF-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
@@ -3028,6 +3031,14 @@ var Expr = Sizzle.selectors = {
 		},
 		TAG: function(match, context){
 			return context.getElementsByTagName(match[1]);
+		},
+		/* Jumper Chen, Potix, 20100326*/
+		ZID: function(match, context){
+			return zk.Widget.getElementsById(match[1]);
+		},
+		/* Jumper Chen, Potix, 20100326*/
+		ZTAG: function(match, context){
+			return zk.Widget.getElementsByTagName(match[1].substring(1));
 		}
 	},
 	preFilter: {
@@ -3273,8 +3284,13 @@ var Expr = Sizzle.selectors = {
 		TAG: function(elem, match){
 			return (match === "*" && elem.nodeType === 1) || elem.nodeName.toLowerCase() === match;
 		},
+		/* Jumper Chen, Potix, 20100325*/
+		ZTAG: function(elem, match){
+			var wgt = zk.Widget.$(elem);
+			return wgt && wgt.className.toLowerCase().endsWith(match[1].substring(1));
+		},
 		/* Jumper Chen, Potix, 20100318*/
-		ZK: function(elem, match) {
+		ZID: function(elem, match) {
 			var wgt = zk.Widget.$(elem);
 			return wgt ? wgt.id === match[1] : false;
 		},
@@ -3288,8 +3304,14 @@ var Expr = Sizzle.selectors = {
 					Expr.attrHandle[ name ]( elem ) :
 					elem[ name ] != null ?
 						elem[ name ] :
-						elem.getAttribute( name ),
-				value = result + "",
+						elem.getAttribute( name );
+			/* Jumper Chen, Potix, 20100326*/
+			if (result == null) {
+				var wgt = zk.Widget.$(elem, {exact: 1});
+				if (wgt)
+					result = wgt.get(name);
+			}	
+			var value = result + "",
 				type = match[2],
 				check = match[4];
 
@@ -3617,7 +3639,14 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 		var elem = checkSet[i];
 		if ( elem ) {
-			elem = elem[dir];
+			/* Jumper Chen, Potix, 20100326*/
+			if (cur.indexOf("@") == 0 || cur.indexOf("$")) {
+				var wgt = zk.Widget.$(elem),
+					fn = dir == "parentNode" ? "parent" : dir;
+				if (wgt && (wgt = wgt[fn]))
+					elem = wgt.$n();
+			} else
+				elem = elem[dir];
 			var match = false;
 
 			while ( elem ) {

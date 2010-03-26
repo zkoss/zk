@@ -1050,7 +1050,7 @@ new zul.wnd.Window{
 			id = ids[j];
 			if (id) {
 				if (f) f = f._fellows[id];
-				if (!f && global) f = _globals[id];
+				if (!f && global) f = _globals[id] ? _globals[id][0]: null;
 				if (!f || zk.spaceless) break;
 				global = false;
 			}
@@ -1075,7 +1075,8 @@ new zul.wnd.Window{
 
 			var old = this.id;
 			if (old) {
-				if (!zk.spaceless) delete _globals[id];
+				if (!zk.spaceless && _globals[id])
+					_globals[id].$remove(this);
 				_rmIdSpace(this);
 			}
 
@@ -1083,7 +1084,12 @@ new zul.wnd.Window{
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless) _globals[id] = this;
+				if (!zk.spaceless) {
+					var ids = _globals[id];
+					if (!ids)
+						ids = _globals[id] = [];
+					_globals[id].push(this);
+				}
 				_addIdSpace(this);
 			}
 		}
@@ -1123,6 +1129,14 @@ new zul.wnd.Window{
 		else
 			zk.set(this, name, value);
 		return this;
+	},
+	/** Retrieves a value from the specified property.
+	 * @param String name the name of property.
+	 * @return Object the value of the property
+	 * @since 5.0.2
+	 */
+	get: function (name) {
+		return zk.get(this, name);
 	},
 	/** Return the child widget at the specified index.
 	 * <p>Notice this method is not good if there are a lot of children
@@ -2099,7 +2113,7 @@ function () {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n, {exact:true});
+			var oldwgt = zk.Widget.$(n, {strict:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this.redrawHTML_(skipper, true));
@@ -2182,7 +2196,7 @@ function () {
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n, {exact:true});
+		var oldwgt = zk.Widget.$(n, {strict:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
@@ -3462,7 +3476,8 @@ _doFooSelect: function (evt) {
 	 * and the target widget will be returned.
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>exact - whether not to look up the parent node.
+	 * <li>exact - only check its uuid.(since 5.0.2)</li>
+	 * <li>strict - whether not to look up the parent node.(since 5.0.2)
 	 * If omitted, false is assumed (and it will look up parent).</li>
 	 * <li>child - whether to ensure the given element is a child element
 	 * of the widget's main element ({@link #$n}). In most cases, if ID
@@ -3493,6 +3508,8 @@ _doFooSelect: function (evt) {
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
 
+		if (opts && opts.exact)
+			return _binds[n.id];
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
 			var id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 			if (id) {
@@ -3505,14 +3522,14 @@ _doFooSelect: function (evt) {
 							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n)) return wgt;
 						}
-						if (opts && opts.exact) break;
+						if (opts && opts.strict) break;
 						continue;
 					}
 				}
 				wgt = _binds[id];
 				if (wgt) return wgt;
 			}
-			if (opts && opts.exact) break;
+			if (opts && opts.strict) break;
 		}
 		return null;
 	},
@@ -3543,7 +3560,32 @@ _doFooSelect: function (evt) {
 					zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all
 		}
 	},
-
+	/**
+	 * Returns all elements with the given tag name.
+	 * @param String name the tag name.
+	 * @return Array
+	 * @since 5.0.2
+	 */
+	getElementsByTagName: function (name) {
+		var els = [];
+		for (var wid in _binds) {
+			if (name == '*' || _binds[wid].className.toLowerCase().endsWith(name))
+				els.push(_binds[wid].$n());
+		}
+		return els;
+	},
+	/**
+	 * Returns all elements with the given id.
+	 * @param String id the id of zk widget.
+	 * @return Array
+	 * @since 5.0.2
+	 */
+	getElementsById: function (id) {
+		var els = [];
+		for (var wgts = _globals[id], i = wgts.length; i--;)
+			els.unshift(wgts[i].$n());
+		return els;
+	},
 	//uuid//
 	/** Converts Converts an ID of a DOM element to UUID.
 	 * It actually removes '-*'. For example, zk.Widget.uuid('z_aa-box') returns 'z_aa'. 
