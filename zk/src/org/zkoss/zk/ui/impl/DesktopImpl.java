@@ -214,6 +214,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				_id = idgen.nextDesktopId(this);
 			if (_id == null)
 				_id = nextDesktopId(dc);
+			else if (idgen != null)
+				ComponentsCtrl.checkUuid(_id);
 			updateUuidPrefix();
 
 			config.invokeDesktopInits(this, request); //it might throw exception
