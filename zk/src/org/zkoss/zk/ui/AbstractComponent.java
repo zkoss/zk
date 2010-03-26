@@ -613,6 +613,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			uuid = idgen != null ? idgen.nextComponentUuid(desktop, this): null;
 			if (uuid == null)
 				uuid = ((DesktopCtrl)desktop).getNextUuid();
+			else
+				ComponentsCtrl.checkUuid(uuid);
 		} while (desktop.getComponentByUuidIfAny(uuid) != null);
 		return uuid;
 	}

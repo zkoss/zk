@@ -587,6 +587,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				_uuid = idgen.nextPageUuid(this);
 			if (_uuid == null)
 				_uuid = ((DesktopCtrl)_desktop).getNextUuid();
+			else if (idgen != null)
+				ComponentsCtrl.checkUuid(_uuid);
 
 			if (_id == null) {
 				final String id = config.getId();
