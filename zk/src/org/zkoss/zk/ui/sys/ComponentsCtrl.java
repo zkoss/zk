@@ -87,12 +87,6 @@ public class ComponentsCtrl {
 		return id == null || (id.startsWith(AUTO_ID_PREFIX)
 			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
 	}
-	/** @deprecated As of release 5.0.2, replaced with {@link #isAutoId}.
-	 * If you want to varify UUID, use {@link #checkUuid}.
-	 */
-	public static final boolean isUuid(String id) {
-		return isAutoId(id);
-	}
 	/** Checks if the given UUID is valid.
 	 * UUID cannot be empty and can only have alphanumeric characters or underscore.
 	 * @exception UiException if uuid is not valid.

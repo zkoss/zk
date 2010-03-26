@@ -49,7 +49,7 @@ public class MultiComposer implements Composer {
 			return null;
 
 		if (ary.length == 1)
-			return toComposer(page, ary[0]);
+			return Utils.newComposer(page, ary[0]);
 
 		final Composer[] cs;
 		boolean ext = false, full = false;
@@ -68,7 +68,7 @@ public class MultiComposer implements Composer {
 		} else {
 			cs = new Composer[ary.length];
 			for (int j = ary.length; --j >=0;) {
-				cs[j] = toComposer(page, ary[j]);
+				cs[j] = Utils.newComposer(page, ary[j]);
 				ext = ext || (cs[j] instanceof ComposerExt);
 				full = full || (cs[j] instanceof FullComposer);
 			}
@@ -101,18 +101,6 @@ public class MultiComposer implements Composer {
 	}
 	private boolean shallInvoke(Composer composer) {
 		return !_fullOnly || composer instanceof FullComposer;
-	}
-
-	private static Composer toComposer(Page page, Object o)
-	throws Exception {
-		if (o instanceof String) {
-			final String clsnm = ((String)o).trim();
-			o = page != null ? page.resolveClass(clsnm).newInstance():
-				Classes.newInstanceByThread(clsnm);
-		} else if (o instanceof Class) {
-			o = ((Class)o).newInstance();
-		}
-		return (Composer)o;
 	}
 
 	/** The constructor.

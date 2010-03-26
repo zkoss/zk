@@ -4,10 +4,14 @@ ZK 5.1.0
   2974464: A way to customize message with i3-label
   2971889: Way to notify server of JS error
   2920934: A plugin to load lang.xml, config.xml.. from custom location
+  2947727: The instantiation of Composer & Server Push customizable
 
 * Bugs
 
 * Upgrade Notes
+  + Two new methods are, newComposer and newServerPush, added to
+    org.zkoss.zk.ui.sys.UiFactory to allow developers to customize the instantiation
+    of a composer or a server push implementation.
 
 	--------
 ZK 5.0.2

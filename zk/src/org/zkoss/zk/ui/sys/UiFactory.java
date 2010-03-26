@@ -27,6 +27,8 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
@@ -134,6 +136,19 @@ public interface UiFactory {
 	 */
 	public Component newComponent(Page page, Component parent,
 	ComponentDefinition compdef, String clsnm);
+
+	/** Creates and initializes a composer of the given class and page.
+	 * @param page the page that the composer will be created for.
+	 * @exception UiException if failed to instantiate
+	 * @since 5.1.0
+	 */
+	public Composer newComposer(Class klass, Page page);
+	/** Creates and initializes the server push of the given class and desktop.
+	 * @param desktop the desktop that the server push will be created for.
+	 * @exception UiException if failed to instantiate
+	 * @since 5.1.0
+	 */
+	public ServerPush newServerPush(Class klass, Desktop desktop);
 
 	/** Returns the page definition of the specified path, or null if
 	 * not found.

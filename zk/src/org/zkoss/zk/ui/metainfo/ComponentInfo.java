@@ -371,7 +371,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 
 		if (o instanceof Collection) {
 			for (Iterator it = ((Collection)o).iterator(); it.hasNext();) {
-				final Composer cp = toComposer(page, it.next());
+				final Composer cp = org.zkoss.zk.ui.impl.Utils.newComposer(page, it.next());
 				if (cp != null)
 					composers.add(cp);
 			}
@@ -381,27 +381,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (o instanceof Object[]) {
 			final Object[] ary = (Object[])o;
 			for (int j = 0; j < ary.length; ++j) {
-				final Composer cp = toComposer(page, ary[j]);
+				final Composer cp = org.zkoss.zk.ui.impl.Utils.newComposer(page, ary[j]);
 				if (cp != null)
 					composers.add(cp);
 			}
 			return;
 		}
 
-		final Composer cp = toComposer(page, o);
+		final Composer cp = org.zkoss.zk.ui.impl.Utils.newComposer(page, o);
 		if (cp != null)
 			composers.add(cp);
-	}
-	private static Composer toComposer(Page page, Object o)
-	throws Exception {
-		if (o instanceof String) {
-			final String clsnm = ((String)o).trim();
-			o = page != null ? page.resolveClass(clsnm).newInstance():
-				Classes.newInstanceByThread(clsnm);
-		} else if (o instanceof Class) {
-			o = ((Class)o).newInstance();
-		}
-		return (Composer)o;
 	}
 	/** Returns the apply attribute that is a list of {@link Composer} class
 	 * names or EL expressions returning classes, class names or composer

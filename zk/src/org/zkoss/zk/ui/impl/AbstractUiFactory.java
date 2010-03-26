@@ -26,9 +26,12 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -102,6 +105,33 @@ abstract public class AbstractUiFactory implements UiFactory {
 
 		comp.applyProperties(); //including custom-attributes
 		return comp;
+	}
+
+	/** Instantiates a composer of the given class.
+	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
+	 * @since 5.1.0
+	 */
+	public Composer newComposer(Class klass, Page page) {
+		if (!Composer.class.isAssignableFrom(klass))
+			throw new UiException(klass + " must implement "+Composer.class);
+		try {
+			return (Composer)klass.newInstance();
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex, "Unable to instantiate "+klass);
+		}
+	}
+	/** Instantiates a server push of the given class.
+	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
+	 * @since 5.1.0
+	 */
+	public ServerPush newServerPush(Class klass, Desktop desktop) {
+		if (!ServerPush.class.isAssignableFrom(klass))
+			throw new UiException(klass + " must implement "+ServerPush.class);
+		try {
+			return (ServerPush)klass.newInstance();
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex, "Unable to instantiate "+klass);
+		}
 	}
 
 	/** Returns the page definition of the specified path, or null if not found.

@@ -1085,11 +1085,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				if (cls == null)
 					throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
-				try {
-					_spush = (ServerPush)cls.newInstance();
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
-				}
+				_spush = (ServerPush)((WebAppCtrl)_wapp).getUiFactory().newServerPush(cls, this);
 				_spush.start(this);
 				++cnt;
 			} else if (_spush.isActive()) {
