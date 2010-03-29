@@ -465,7 +465,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				offtop = cwgt.$n().offsetTop,
 				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
 			cwgt.setFlexSize_({height:isz});
-			cwgt._vflexsize = vsz;
+			cwgt._vflexsz = vsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
 				chdex.style.height = jq.px0(zk(chdex).revisedHeight(vsz, true));
@@ -478,7 +478,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				offtop = cwgt.$n().offsetTop,
 				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 			cwgt.setFlexSize_({height:isz});
-			cwgt._vflexsize = lastsz;
+			cwgt._vflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
 				chdex.style.height = jq.px0(zk(chdex).revisedHeight(lastsz, true));
@@ -492,7 +492,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
-			cwgt._hflexsize = hsz;
+			cwgt._hflexsz = hsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
 				chdex.style.width = jq.px0(zk(chdex).revisedWidth(hsz, true));
@@ -503,7 +503,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (hflexs.length) {
 			var cwgt = hflexs.shift();
 			cwgt.setFlexSize_({width:lastsz});
-			cwgt._hflexsize = lastsz;
+			cwgt._hflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				var chdex = cwgt.$n('chdex');
 				chdex.style.width = jq.px0(zk(chdex).revisedWidth(lastsz, true));

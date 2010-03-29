@@ -123,8 +123,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		for (var region, j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()
-				&& ((region._nvflex && region._vflexsize === undefined) 
-						|| (region._nhflex && region._hflexsize === undefined)))
+				&& ((region._nvflex && region._vflexsz === undefined) 
+						|| (region._nhflex && region._hflexsz === undefined)))
 				return;	//region size unknown, border cannot _resize() now, 
 						//return and keep this._isOnSize true
 						//onSize event will be fired to region later, and region will

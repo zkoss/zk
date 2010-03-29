@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-south.
  */
 zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
+	_sumFlexHeight: true, //indicate shall add this flex height for borderlayout. @See _setMinFlexSize in widget.js
 	/**
 	 * The width can't be specified in this component because its width is
 	 * determined by other region components ({@link West} or {@link East}).

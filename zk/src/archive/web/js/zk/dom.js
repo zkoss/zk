@@ -257,31 +257,35 @@ zk.copy(zjq, {
  * <h3>Extra Selectors</h3>
  * <blockquote>
  *
- * <h4>@id</h4>
- * <p><code>jq</code> is extended to support the selection by use of DOM's ID
- * and then widget's ID (@{link Widget#id}). For example,
- * <pre><code>jq('@xx');</code></pre>
+ * <h4>@tagName</h4>
+ * <p><code>jq</code> is extended to support the selection by use of ZK widget's
+ * tagName. For example,
+ * <pre><code>jq('@window');</code></pre>
  *
- *<p>Notice that it looks for the DOM tree first to see if any DOM element
- * whose ID is xx. If not found, it looks for any bound widget whose ID is xx and select the DOM element associated with the widget.
- * If you want to search the widget first, use <code>"$id"</code>.
- *
- * <p>If you want to search the widget in the inner ID space, you can specify
- * the path after @. For example, the following searches the space owner named x,
+ *<p>Notice that it looks for the ZK widget tree to see if any widget whose className
+ * ends with <code>window</code>.
+ * <p>If you want to search the widget in the nested tag, you can specify
+ * the selector after @. For example, the following searches the space owner named x,
  * then y, and finally z
- * <pre><code>jq('@x/y/z');</code></pre>
- *
+ * <pre><code>jq('@x @y @z');</code></pre>
+ * or search the element from the given attribute of the widget, you can specify
+ * the selector as follows. For example,
+ * <pre><code>jq('@window[border="normal"]')</code></pre>
+ * 
  * <h4>$id</h4>
  * <p><code>jq</code> is extended to support the selection by use of widget's
  * ID ({@link Widget#id}), and then DOM element's ID. For example,
  * <pre><code>jq('$xx');</code></pre>
  *
- * <p>Notice that it looks for any bound widget first whose ID is xx, and
- * select the associated DOM element if found. If not found, it search
- * the DOM tree to see if any DOM element whose ID is xx.
+ * <p>Notice that it looks for any bound widget whose ID is xx, and
+ * select the associated DOM element if found.
  *
- * <p>If you want to search the widget in the inner ID space, you can specify the path after $. For example, the following searches the space owner named x, then y, and finally z
- * <pre><code>jq('$x/y/z');</code></pre>
+ * <p>If you want to search the widget in the inner ID space, you can specify
+ * the selector after $. For example, the following searches the space owner
+ * named x, then y, and finally z
+ * <pre><code>jq('$x $y $z');</code></pre>
+ * or advanced search combine with CSS3 and @, you can specify like this.
+ * <pre><code>jq('@window[border="normal"] > $x + div$y > @button:first');</code></pre>
  *
  * <h4>A widget</h4>
  * <p><code>jq</code> is extended to support {@link Widget}.
@@ -342,19 +346,9 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	//zk: null,
 
 	init: function (sel, ctx) {
-		var cc;
-		if (typeof sel == 'string') {
-			cc = sel.charAt(0);
-			if (cc == '@' || cc == '$') {
-				var id = sel.substring(1), wgt;
-				if ((cc == '$' || !(sel=document.getElementById(id)))
-				&& !(sel=_elmOfWgt(id, ctx)))
-					sel = '#' + id;
-			}
-		}
 		if (ctx === zk) {
 			if (typeof sel == 'string'
-			&& zUtl.isChar(cc, {digit:1,upper:1,lower:1,'_':1})) {
+			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
 				var el = document.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);

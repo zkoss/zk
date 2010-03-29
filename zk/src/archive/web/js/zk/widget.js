@@ -175,20 +175,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//set minimum flex size and return it
-	function _setMinFlexSize(wgt, n, o) {
+	function _setMinFlexSize(wgt, wgtn, o) {
 		//find the max size of all children
 		if (o == 'height') {
 			if (wgt._vflexsz === undefined) { //cached?
 				wgt.setFlexSize_({height:'auto'});
 				var cwgt = wgt.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
-					n = cwgtn ? cwgtn.parentNode : n,
+					n = cwgtn ? cwgtn.parentNode : wgtn,
 					c = n.firstChild,
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderHeight(),
-					max = 0;
+					max = 0,
+					totalsz = 0;
 				if (cwgt){ //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
@@ -196,7 +197,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
 								_setMinFlexSize(cwgt, c, o) : 
 								(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
-							if (sz > max)
+							if (cwgt._sumFlexHeight) //@See North/South
+								totalsz += sz;
+							else if (sz > max)
 								max = sz;
 						}
 					}
@@ -209,8 +212,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else //no kids at all, use self
 					max = n.offsetHeight - pb;  
 
-				var margin = zkn.sumStyles("tb", jq.margins),
-					sz = wgt.setFlexSize_({height:(max + pb + margin)});
+				//n might not be widget's element, add up the pad/border/margin in between
+				while (n && n != wgtn) {
+					pb += zkn.sumStyles("tb", jq.margins);
+					n = n.parentNode;
+					zkn = zk(n);
+					pb += zkn.padBorderHeight();
+				}
+					
+				var margin = zk(wgtn).sumStyles("tb", jq.margins),
+					sz = wgt.setFlexSize_({height:(max + totalsz + pb + margin)});
 				if (sz && sz.height >= 0)
 					wgt._vflexsz = sz.height + margin;
 			}
@@ -221,13 +232,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.setFlexSize_({width:'auto'});
 				var cwgt = wgt.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
-					n = cwgtn ? cwgtn.parentNode : n,
+					n = cwgtn ? cwgtn.parentNode : wgtn,
 					c = n.firstChild,
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
 					pb = zkn.padBorderWidth(),
-					max = 0;
+					max = 0,
+					totalsz = 0;
 				if (cwgt) { //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
@@ -235,7 +247,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							var sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
 									_setMinFlexSize(cwgt, c, o) : 
 									(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
-							if (sz > max)
+							if (cwgt._sumFlexWidth) //@See East/West
+								totalsz += sz;
+							else if (sz > max)
 								max = sz;
 						}
 					}
@@ -248,8 +262,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else //no kids at all, use self
 					max = n.offsetWidth - pb;
 				
-				var margin = zkn.sumStyles("lr", jq.margins);
-				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
+				//n might not be widget's element, add up the pad/border/margin in between
+				while (n && n != wgtn) {
+					pb += zkn.sumStyles("lr", jq.margins);
+					n = n.parentNode;
+					zkn = zk(n);
+					pb += zkn.padBorderHeight();
+				}
+					
+				var margin = zk(wgtn).sumStyles("lr", jq.margins);
+				var sz = wgt.setFlexSize_({width:(max + totalsz + pb + margin)});
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
 			}
@@ -318,36 +340,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
 				var cwgt = _binds[c.id];
-				//vertical size
-				if (cwgt && cwgt._nvflex) {
-					if (cwgt !== this)
-						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
-					if (cwgt._vflex == 'min') {
-						_setMinFlexSize(cwgt, c, 'height');
-						//might change height in _setMinFlexSize(), so regain the value
-						offTop = c.offsetTop;
-						offhgh = zkc.offsetHeight();
-						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
-						segBottom = Math.max(segBottom, marginBottom);
-						prevflex = false;
-					} else {
-						if (pretxt) {
-							var txtmarginBottom = offTop - zkc.sumStyles('t', jq.margins);
-							segBottom = Math.max(segBottom, txtmarginBottom);
-						}
-						if (!prevflex && segBottom > segTop) {
-							hgh -= segBottom - segTop;
-						}
-						segTop = segBottom = marginBottom;
-						
-						vflexs.push(cwgt);
-						vflexsz += cwgt._nvflex;
-						prevflex = true;
-					}
-				} else {
-					segBottom = Math.max(segBottom, marginBottom);
-					prevflex = false;
-				}
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -378,6 +370,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else {
 					segRight = Math.max(segRight, marginRight);
 					prehflex = false;
+				}
+				
+				//vertical size
+				if (cwgt && cwgt._nvflex) {
+					if (cwgt !== this)
+						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
+					if (cwgt._vflex == 'min') {
+						_setMinFlexSize(cwgt, c, 'height');
+						//might change height in _setMinFlexSize(), so regain the value
+						offTop = c.offsetTop;
+						offhgh = zkc.offsetHeight();
+						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
+						segBottom = Math.max(segBottom, marginBottom);
+						prevflex = false;
+					} else {
+						if (pretxt) {
+							var txtmarginBottom = offTop - zkc.sumStyles('t', jq.margins);
+							segBottom = Math.max(segBottom, txtmarginBottom);
+						}
+						if (!prevflex && segBottom > segTop) {
+							hgh -= segBottom - segTop;
+						}
+						segTop = segBottom = marginBottom;
+						
+						vflexs.push(cwgt);
+						vflexsz += cwgt._nvflex;
+						prevflex = true;
+					}
+				} else {
+					segBottom = Math.max(segBottom, marginBottom);
+					prevflex = false;
 				}
 				pretxt = false;
 			}
@@ -1050,7 +1073,7 @@ new zul.wnd.Window{
 			id = ids[j];
 			if (id) {
 				if (f) f = f._fellows[id];
-				if (!f && global) f = _globals[id];
+				if (!f && global) f = _globals[id] ? _globals[id][0]: null;
 				if (!f || zk.spaceless) break;
 				global = false;
 			}
@@ -1075,7 +1098,8 @@ new zul.wnd.Window{
 
 			var old = this.id;
 			if (old) {
-				if (!zk.spaceless) delete _globals[id];
+				if (!zk.spaceless && _globals[id])
+					_globals[id].$remove(this);
 				_rmIdSpace(this);
 			}
 
@@ -1083,7 +1107,12 @@ new zul.wnd.Window{
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless) _globals[id] = this;
+				if (!zk.spaceless) {
+					var ids = _globals[id];
+					if (!ids)
+						ids = _globals[id] = [];
+					_globals[id].push(this);
+				}
 				_addIdSpace(this);
 			}
 		}
@@ -1123,6 +1152,14 @@ new zul.wnd.Window{
 		else
 			zk.set(this, name, value);
 		return this;
+	},
+	/** Retrieves a value from the specified property.
+	 * @param String name the name of property.
+	 * @return Object the value of the property
+	 * @since 5.0.2
+	 */
+	get: function (name) {
+		return zk.get(this, name);
 	},
 	/** Return the child widget at the specified index.
 	 * <p>Notice this method is not good if there are a lot of children
@@ -2099,7 +2136,7 @@ function () {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n, {exact:true});
+			var oldwgt = zk.Widget.$(n, {strict:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this.redrawHTML_(skipper, true));
@@ -2182,7 +2219,7 @@ function () {
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n, {exact:true});
+		var oldwgt = zk.Widget.$(n, {strict:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
@@ -3462,7 +3499,8 @@ _doFooSelect: function (evt) {
 	 * and the target widget will be returned.
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>exact - whether not to look up the parent node.
+	 * <li>exact - only check its uuid.(since 5.0.2)</li>
+	 * <li>strict - whether not to look up the parent node.(since 5.0.2)
 	 * If omitted, false is assumed (and it will look up parent).</li>
 	 * <li>child - whether to ensure the given element is a child element
 	 * of the widget's main element ({@link #$n}). In most cases, if ID
@@ -3493,6 +3531,8 @@ _doFooSelect: function (evt) {
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
 
+		if (opts && opts.exact)
+			return _binds[n.id];
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
 			var id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 			if (id) {
@@ -3505,14 +3545,14 @@ _doFooSelect: function (evt) {
 							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n)) return wgt;
 						}
-						if (opts && opts.exact) break;
+						if (opts && opts.strict) break;
 						continue;
 					}
 				}
 				wgt = _binds[id];
 				if (wgt) return wgt;
 			}
-			if (opts && opts.exact) break;
+			if (opts && opts.strict) break;
 		}
 		return null;
 	},
@@ -3543,7 +3583,32 @@ _doFooSelect: function (evt) {
 					zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all
 		}
 	},
-
+	/**
+	 * Returns all elements with the given tag name.
+	 * @param String name the tag name.
+	 * @return Array
+	 * @since 5.0.2
+	 */
+	getElementsByTagName: function (name) {
+		var els = [];
+		for (var wid in _binds) {
+			if (name == '*' || _binds[wid].className.toLowerCase().endsWith(name))
+				els.push(_binds[wid].$n());
+		}
+		return els;
+	},
+	/**
+	 * Returns all elements with the given id.
+	 * @param String id the id of zk widget.
+	 * @return Array
+	 * @since 5.0.2
+	 */
+	getElementsById: function (id) {
+		var els = [];
+		for (var wgts = _globals[id], i = wgts.length; i--;)
+			els.unshift(wgts[i].$n());
+		return els;
+	},
 	//uuid//
 	/** Converts Converts an ID of a DOM element to UUID.
 	 * It actually removes '-*'. For example, zk.Widget.uuid('z_aa-box') returns 'z_aa'. 
