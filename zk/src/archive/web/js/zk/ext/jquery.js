@@ -3306,10 +3306,10 @@ var Expr = Sizzle.selectors = {
 						elem[ name ] :
 						elem.getAttribute( name );
 			/* Jumper Chen, Potix, 20100326*/
-			if (result == null) {
+			if (!result) {
 				var wgt = zk.Widget.$(elem, {exact: 1});
 				if (wgt)
-					result = wgt.get(name);
+					result = wgt.get(name) || result;
 			}	
 			var value = result + "",
 				type = match[2],
