@@ -645,9 +645,22 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * On the other hand, {@link zk.Object#$class} is available for all objects
 	 * extending from {@link zk.Object}.
 	 * 
+	 * @see #widgetName
 	 * @type String
 	 */
 	className: 'zk.Widget',
+	/** The widget name of the widget.
+	 * It is the same as <code>this.className.substring(this.className.lastIndexOf('.') + 1).toLowerCase()</code>.
+	 * For example, if {@link #className} is zul.wnd.Window, then
+	 * {@link #widgetName} is window.
+	 * <p>Notice that {@link #className} is unique while {@link #widgetName}
+	 * is not necessary unique.
+	 * @see #className
+	 * @type String
+	 * @since 5.0.2
+	 */
+	widgetName: "widget",
+
 	_floating: false,
 
 	/** The first child, or null if no child at all (readonly).
@@ -1073,7 +1086,7 @@ new zul.wnd.Window{
 			id = ids[j];
 			if (id) {
 				if (f) f = f._fellows[id];
-				if (!f && global) f = _globals[id] ? _globals[id][0]: null;
+				if (!f && global && (f=_globals[id])) f = f[0];
 				if (!f || zk.spaceless) break;
 				global = false;
 			}
@@ -1098,8 +1111,8 @@ new zul.wnd.Window{
 
 			var old = this.id;
 			if (old) {
-				if (!zk.spaceless && _globals[id])
-					_globals[id].$remove(this);
+				if (!zk.spaceless && (old=_globals[id]))
+					old.$remove(this);
 				_rmIdSpace(this);
 			}
 
@@ -1107,12 +1120,8 @@ new zul.wnd.Window{
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless) {
-					var ids = _globals[id];
-					if (!ids)
-						ids = _globals[id] = [];
-					_globals[id].push(this);
-				}
+				if (!zk.spaceless)
+					(_globals[id] || (_globals[id] = [])).push(this);
 				_addIdSpace(this);
 			}
 		}
@@ -3592,7 +3601,7 @@ _doFooSelect: function (evt) {
 	getElementsByTagName: function (name) {
 		var els = [];
 		for (var wid in _binds) {
-			if (name == '*' || _binds[wid].className.toLowerCase().endsWith(name))
+			if (name == '*' || name == _binds[wid].widgetName)
 				els.push(_binds[wid].$n());
 		}
 		return els;
@@ -3605,7 +3614,7 @@ _doFooSelect: function (evt) {
 	 */
 	getElementsById: function (id) {
 		var els = [];
-		for (var wgts = _globals[id], i = wgts.length; i--;)
+		for (var wgts = _globals[id], i = wgts?wgts.length:0; i--;)
 			els.unshift(wgts[i].$n());
 		return els;
 	},
@@ -3657,7 +3666,7 @@ zk.Widget.getClass('cool'); //widget name
 		cls.prototype.className = clsnm;
 		var j = clsnm.lastIndexOf('.');
 		if (j >= 0) clsnm = clsnm.substring(j + 1);
-		_wgtcls[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
+		_wgtcls[cls.prototype.widgetName = clsnm.toLowerCase()] = cls;
 		if (blankprev) cls.prototype.blankPreserved = true;
 	},
 	/** Returns the class of the specified widget's name. For example,
@@ -3778,7 +3787,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Desktop</code>).
 	 * @type String
 	 */
-	className: 'zk.Desktop',
+	className: "zk.Desktop",
+	/** The widget name (<code>desktop</code>).
+	 * @type String
+	 * @since 5.0.2
+	 */
+	widgetName: "desktop",
 
 	/** Constructor
 	 * @param String dtid the ID of the desktop
@@ -3885,7 +3899,12 @@ zk.Page = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Page</code>).
 	 * @type String
 	 */
-	className: 'zk.Page',
+	className: "zk.Page",
+	/** The widget name (<code>page</code>).
+	 * @type String
+	 * @since 5.0.2
+	 */
+	widgetName: "page",
 
 	/** Constructor.
 	 * @param Map props the properties to assign to this page
@@ -3929,7 +3948,12 @@ zk.Native = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Native</code>)
 	 * @type String
 	 */
-	className: 'zk.Native',
+	className: "zk.Native",
+	/** The widget name (<code>native</code>).
+	 * @type String
+	 * @since 5.0.2
+	 */
+	widgetName: "native",
 
 	redraw: function (out) {
 		var s = this.prolog;
@@ -3953,7 +3977,12 @@ zk.Macro = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Macro</code>).
 	 * @type String
 	 */
-	className: 'zk.Macro',
+	className: "zk.Macro",
+	/** The widget name (<code>macro</code>).
+	 * @type String
+	 * @since 5.0.2
+	 */
+	widgetName: "macro",
 
 	/** Generates the HTML fragment for this macro component.
 	 * <p>Default: it generate SPAN to enclose the HTML fragment
