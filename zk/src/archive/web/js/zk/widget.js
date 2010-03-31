@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_bindcnt = 0,
 		_floatings = [], //[{widget,node}]
 		_nextUuid = 0,
-		_globals = {}, //global ID space {id, wgt}
+		_globals = {}, //global ID space {id, [wgt...]}
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
@@ -165,7 +165,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_rmIdSpaceDown0(wgt, ow);
 	}
 	function _rmIdSpaceDown0(wgt, owner) {
-		if (wgt.id) delete owner._fellows[wgt.id];
+		if (wgt.id) {
+			delete owner._fellows[wgt.id];
+			var g = _globals[wgt.id];
+			if (g)
+				g.$remove(wgt);
+		}
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_rmIdSpaceDown0(wgt, owner);
 	}
