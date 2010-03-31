@@ -487,6 +487,7 @@ public class Messagebox {
 	 *<tr><td>Retry</td><td>onRetry</td></tr>
 	 *<tr><td>Abort</td><td>onAbort</td></tr>
 	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>The close button on the right-top corner (x)<br>since 5.0.2</td><td>onClose</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},

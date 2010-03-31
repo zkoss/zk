@@ -279,7 +279,7 @@ if="deploy.jboss.required">
 	 windowtitle="${project.title} ${project.version} API"
 	 doctitle="${project.title} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}">
-	 <bottom><![CDATA[Copyright &copy; 2005-2009 Potix Corporation. All Rights Reserved.
+	 <bottom><![CDATA[Copyright &copy; 2005-2010 Potix Corporation. All Rights Reserved.
 	 	<!--{{JAVASCRIPT_OUTPUT}}-->
 	 ]]></bottom>
 		<classpath>

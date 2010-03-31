@@ -21,6 +21,7 @@ import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.Window;
@@ -100,6 +101,21 @@ public class MessageboxDlg extends Window {
 	 */
 	public int getResult() {
 		return _result;
+	}
+
+	//Override//
+	public void onClose() {
+		if (_listener != null) {
+			final Event evt = new Event(Events.ON_CLOSE, this, new Integer(-1));
+			try {
+				_listener.onEvent(evt);
+				if (!evt.isPropagatable())
+					return; //no more processing
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		super.onClose();
 	}
 
 	/**
