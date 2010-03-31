@@ -49,6 +49,13 @@ public class AuInvoke extends AuResponse {
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one argument.
 	 *
+	 * <p>Notice that if you want to pass an array-type argument, you have to cast
+	 * it to Object as follows:<br/>
+	 * <code>new AuInvoke(comp, "setOverride", (Object)new Object[] {"a", "b"})</code>.<br/>
+	 * Otherwise, the third argument will be handled by
+	 * {@link #AuInvoke(Component, String, Object[])}, and then considered
+	 * as an array of arguments (rather than an argument with an array-type value.
+	 *
 	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name

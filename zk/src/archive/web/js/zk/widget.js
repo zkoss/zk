@@ -3114,21 +3114,26 @@ wgt.setListeners({
 			this.listen(inf);
 		}
 	},
-	setOverrides: function (infs) { //used by server
-		for (var nm in infs) {
-			var val = infs[nm];
-			if (val) {
-				var oldnm = '$' + nm;
-				if (this[oldnm] == null && this[nm]) //only once
-					this[oldnm] = this[nm];
-				this[nm] = val;
-					//use eval, since complete func decl
-			} else {
-				var oldnm = '$' + nm;
-				this[nm] = this[oldnm]; //restore
-				delete this[oldnm];
-			}
+	setOverride: function (nm, val) { //used by server (5.0.2)
+		if (jq.isArray(nm)) {
+			val = nm[1];
+			nm = nm[0];
 		}
+		if (val) {
+			var oldnm = '$' + nm;
+			if (this[oldnm] == null && this[nm]) //only once
+				this[oldnm] = this[nm];
+			this[nm] = val;
+				//use eval, since complete func decl
+		} else {
+			var oldnm = '$' + nm;
+			this[nm] = this[oldnm]; //restore
+			delete this[oldnm];
+		}
+	},
+	setOverrides: function (infs) { //used by server
+		for (var nm in infs)
+			this.setOverride(nm, infs[nm]);
 	},
 
 	//ZK event handling//

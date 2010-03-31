@@ -74,6 +74,7 @@ import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -94,6 +95,7 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.scripting.*;
 
 /**
@@ -1371,7 +1373,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
 	 * <p>If you want to generate the JavaScript code directly (i.e.,
 	 * the value is a valid JavaScript snippet), you can use
-	 * {@link org.zkoss.zk.ui.sys.JavaScriptValue}.
+	 * {@link JavaScriptValue}.
 	 * <p>In addition, the value can be any kind of objects that
 	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)
@@ -1464,24 +1466,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
 		smartUpdate("listener", new String[] {evtnm, script});
 	}
-	/** A special smart update to update a method of the peer widget.
-	 * By default, it assumes the peer widget has a method called
-	 * <code>setMethod<code> and it will be invoked as follows.
+	/** A special smart update to update a method or a field of the peer widget.
+	 * By default, it invokes the client widget's <code>setOverride</code> as follows.
 	 *
-	 * <pre><code>wgt.setMethod([evtnm, script]);</code></pre>
+	 * <pre><code>wgt.setOverride([name: script]);</code></pre>
 	 *
 	 * <p>Devices that supports it in another way have to override this
 	 * method. Devices that don't support it have to override this method
 	 * to throw UnsupportedOperationException.
 	 *
 	 * @param name the method name, such as setValue
-	 * @param script the script. If null, the previous method override
-	 * will be remove. And, the method defined in original widget will
+	 * @param script the content of the method or field to override.
+	 * Notice that it must be a valid JavaScript snippet.
+	 * If null, the previous method/field override
+	 * will be remove. And, the method/field defined in original widget will
 	 * be restored.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetOverride(String name, String script) {
-		smartUpdate("method", new String[] {name, script});
+		response(null, new AuInvoke(this, "setOverride", name, new JavaScriptValue(script)));
+			//don't use smartUpdate since multiple methods might be overriden in one AU
 	}
 
 	public void detach() {
