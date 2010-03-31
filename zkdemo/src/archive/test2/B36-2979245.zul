@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2979245.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 31 11:12:29 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+	    <h1>IE6 only</h1>           
+		<ol>		
+			<li>check combobox's button is not disappear</li>
+		</ol>
+	]]></html>
+	<combobox/>
+</zk>
