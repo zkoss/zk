@@ -1056,7 +1056,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					c == 7 ? 'w-resize': 'nw-resize';
 				if (handle) handle.style.cursor = "";
 			} else {
-				n.style.cursor = this._backupCursor;
+				n.style.cursor = this._backupCursor || ''; // bug #2977948
 				if (handle) handle.style.cursor = "move";
 			}
 		}
