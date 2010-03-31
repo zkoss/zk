@@ -133,8 +133,8 @@ zjq = function (jq) { //ZK extension
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 			var $el = jq(el);
 			if ($el.css("position") == 'fixed') {
-				t += zk.innerY() + el.offsetTop;
-				l += zk.innerX() + el.offsetLeft;
+				t += jq.innerY() + el.offsetTop;
+				l += jq.innerX() + el.offsetLeft;
 				break;
 			} else {
 				//Fix opera bug. If the parent of "input" or "span" is "div"
