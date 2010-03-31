@@ -334,12 +334,12 @@ zkPop = {
 			y += dim.height - hgh;
 			break;
 		case "at_pointer":
-			var offset = zkau._mspos;
+			var offset = zkau._mspos || [0,0];
 			x = offset[0];
 			y = offset[1];
 			break;
 		case "after_pointer":
-			var offset = zkau._mspos;
+			var offset = zkau._mspos || [0,0];
 			x = offset[0];
 			y = offset[1] + 20;
 			break;
