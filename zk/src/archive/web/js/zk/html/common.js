@@ -1927,9 +1927,11 @@ zk.ncols = function (cells) {
 	var cnt = 0;
 	if (cells) {
 		for (var j = 0, cl = cells.length; j < cl; ++j) {
-			var span = cells[j].colSpan;
-			if (span >= 1) cnt += span;
-			else ++cnt;
+			if (zk.isVisible(cells[j])) {
+    			var span = cells[j].colSpan;
+    			if (span >= 1) cnt += span;
+    			else ++cnt;
+			}
 		}
 	}
 	return cnt;
@@ -1953,21 +1955,6 @@ zk.cellIndex = function (cell) {
 		}
 	} else i = cell.cellIndex;
 	return i;
-};
-
-
-/** Returns the number of columns (considering colSpan)
- */
-zk.ncols = function (cells) {
-	var cnt = 0;
-	if (cells) {
-		for (var j = 0; j < cells.length; ++j) {
-			var span = cells[j].colSpan;
-			if (span >= 1) cnt += span;
-			else ++cnt;
-		}
-	}
-	return cnt;
 };
 
 /** Copies the width of each cell from one row to another.

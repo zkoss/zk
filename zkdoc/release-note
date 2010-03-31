@@ -9,6 +9,7 @@ ZK 3.6.5
   2979245: The combobox's button disappear on IE6
   2978400: Positioned tooltip causes zkPop.context error.
   2976409: No vertical scroll in listbox
+  2973306: Bad detail rendering if the grid has invisible column
 
 * Upgrade Notes:
 
