@@ -1464,7 +1464,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
-		smartUpdate("listener", new String[] {evtnm, script});
+		response(null, new AuInvoke(this, "setListener", evtnm, script));
+		//1. don't use smartUpdate since multiple methods might be overriden in one AU
+		//2. don't use JavaScriptValue since the client will generate it differently
 	}
 	/** A special smart update to update a method or a field of the peer widget.
 	 * By default, it invokes the client widget's <code>setOverride</code> as follows.
