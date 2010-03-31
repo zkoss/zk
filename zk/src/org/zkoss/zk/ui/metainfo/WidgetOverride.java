@@ -34,6 +34,7 @@ public class WidgetOverride extends WidgetListener {
 	/**
 	 * @param name the the method name, such as setValue.
 	 * @param evalr the evaluator reference. It is required if cond is not null.
+	 * @param script the script snippet. EL is allowed.
 	 * @exception IllegalArgumentException if script is null
 	 * or (cond is not null but evalr is null)
 	 */
@@ -43,6 +44,6 @@ public class WidgetOverride extends WidgetListener {
 
 	public void assign(Component comp) {
 		if (isEffective(comp))
-			comp.setWidgetOverride(_name, _script);
+			comp.setWidgetOverride(_name, getScript(comp));
 	}
 }
