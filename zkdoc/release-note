@@ -8,6 +8,7 @@ ZK 3.6.5
   2976519: Messagebox onClose with event thread disabled
   2979245: The combobox's button disappear on IE6
   2978400: Positioned tooltip causes zkPop.context error.
+  2976409: No vertical scroll in listbox
 
 * Upgrade Notes:
 

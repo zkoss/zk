@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2976409.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 31 18:42:06 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<tabbox height="100%" width="100%" id="tabBoxItemViews">
+<tabs>
+<tab label="tab1"></tab>
+</tabs>
+<tabpanels>
+<tabpanel>
+<listbox width="100%" vflex="true">
+<listhead>
+<listheader label="Col1" width="*" />
+<listheader label="Col2" width="100px" />
+</listhead>
+<listitem>
+<listcell style="vertical-align:top;color:red;">
+Please shorten the browser's height less than the first row, and then you should see the scrollbar of the listbox should be shown.
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+Centralt belägen 3:a med radhuskänsla.
+Hörnlägenhet på bottenplan med mycket fin
+uteplats mot söder. Trivsam interiör med ljust
+kök och rymligt badrum/tvättstuga. Lummig och
+fin trädgård runt huset som bör ses sommartid.
+Dubbla förråd varav ett varmförråd.
+Reparationsfond på drygt 13000 kr.
+Klockgjutaregatan 5, Sundsvall, Centralt
+Centralt belägen 3:a med radhuskänsla.
+Hörnlägenhet på bottenplan med mycket fin
+uteplats mot söder. Trivsam interiör med ljust
+kök och rymligt badrum/tvättstuga. Lummig och
+fin trädgård runt huset som bör ses sommartid.
+Dubbla förråd varav ett varmförråd.
+Reparationsfond på drygt 13000 kr.
+Klockgjutaregatan 5, Sundsvall, Centralt
+Centralt belägen 3:a med radhuskänsla.
+Hörnlägenhet på bottenplan med mycket fin
+uteplats mot söder. Trivsam interiör med ljust
+kök och rymligt badrum/tvättstuga. Lummig och
+fin trädgård runt huset som bör ses sommartid.
+Dubbla förråd varav ett varmförråd.
+Reparationsfond på drygt 13000 kr.
+Klockgjutaregatan 5, Sundsvall, Centralt
+Centralt belägen 3:a med radhuskänsla.
+Hörnlägenhet på bottenplan med mycket fin
+uteplats mot söder. Trivsam interiör med ljust
+kök och rymligt badrum/tvättstuga. Lummig och
+fin trädgård runt huset som bör ses sommartid.
+Dubbla förråd varav ett varmförråd.
+Reparationsfond på drygt 13000 kr.
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+<listitem>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+<listcell>
+Klockgjutaregatan 5, Sundsvall, Centralt
+</listcell>
+</listitem>
+</listbox>
+</tabpanel>
+</tabpanels>
+</tabbox>

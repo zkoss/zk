@@ -918,8 +918,12 @@ zk.Selectable.prototype = {
 
 				var rowhgh = zk.offsetHeight(firstVisiRow);
 				if (!rowhgh) rowhgh = this._headHgh(20);
+				
+				rowhgh = (hgh - diff)/ rowhgh;
 
-				nRows = Math.round((hgh - diff)/ rowhgh);
+				// Bug 2976409
+				if (!(nRows = Math.round(rowhgh)) && rowhgh > 0)
+					nRows = 1;
 			}
 			this.realsize(nRows);
 		}
