@@ -54,7 +54,7 @@ public class Filedownload {
 	public static void save(Media media, String flnm) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		((WebAppCtrl)desktop.getWebApp())
-			.getUiEngine().addResponse(null,
+			.getUiEngine().addResponse(
 				new AuDownload(new DownloadURL(media, flnm))); //Bug 2114380
 	}
 	/** Open a download dialog to save the specified content at the client

@@ -34,4 +34,12 @@ public class AuSelect extends AuResponse {
 		super("select", comp,
 			new Object[] {comp.getUuid(), new Integer(beg), new Integer(end)});
 	}
+
+	/** Default: zk.select (i.e., only one response of this class
+	 * for the same component will be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.select";
+	}
 }

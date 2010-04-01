@@ -76,7 +76,7 @@ public class PollingServerPush implements ServerPush {
 	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
 	 */
 	protected void startClientPush() {
-		Clients.response(new AuScript(null, getStartScript()));
+		Clients.response("zk.clientpush", new AuScript(null, getStartScript()));
 	}
 	/** Sends an AU response the client to stop the server push.
 	 * <p>The derived class usually overrides this method to support
@@ -87,7 +87,7 @@ public class PollingServerPush implements ServerPush {
 	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
 	 */
 	protected void stopClientPush() {
-		Clients.response(new AuScript(null, getStopScript()));
+		Clients.response("zk.clientpush", new AuScript(null, getStopScript()));
 	}
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
 	 * It is called by {@link #startClientPush} to prepare the script

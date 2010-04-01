@@ -20,8 +20,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		<attribute name="onClick"><![CDATA[
 			import org.zkoss.zk.au.out.AuWrongValue;                               
 			if (Messagebox.show("error message") ==Messagebox.OK) {
-            	AuWrongValue a = new AuWrongValue(tb, "error message");
-                Clients.response(a);            		
+                Clients.response(new AuWrongValue(tb, "error message"));            		
             }
 		]]></attribute>
 	</button>

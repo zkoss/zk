@@ -45,4 +45,12 @@ public class AuShowBusy extends AuResponse {
 	public AuShowBusy(Component comp, String mesg) {
 		super("showBusy", comp, new String[] {comp.getUuid(), mesg != null ? mesg: ""});
 	}
+
+	/** Default: zk.busy (i.e., only one response of this class and {@link AuClearBusy} will
+	 * be sent to the client in an execution for the same component, if any)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.busy";
+	}
 }

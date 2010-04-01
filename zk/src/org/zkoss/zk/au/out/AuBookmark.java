@@ -39,4 +39,12 @@ public class AuBookmark extends AuResponse {
 	public AuBookmark(String name, boolean replace) {
 		super("bookmark", new Object[] {name, Boolean.valueOf(replace)}); //component-independent
 	}
+
+	/** Default: zk.bookmark (i.e., only one response of this class will
+	 * be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.bookmark";
+	}
 }

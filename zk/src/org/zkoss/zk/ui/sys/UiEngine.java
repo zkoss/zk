@@ -110,6 +110,17 @@ public interface UiEngine {
 	 * @param value the value.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
+	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
+	 * as the override key.
+	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>
+	 *
+	 * <p>If the response is component-dependent, {@link AuResponse#getDepends}
+	 * must return a component. And, if the component is removed, the response
+	 * is removed, too.
+	 * @since 5.0.2
+	 * @see #addResponse(String, AuResponse)
+	 */
+	public void addResponse(AuResponse response);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
 	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#response}.
@@ -122,8 +133,11 @@ public interface UiEngine {
 	 * is removed if the component is removed.
 	 * If it is null, the response is component-independent.
 	 *
-	 * @param key could be anything. The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * @param key could be anything. If null, the response is appended.
+	 * If not null, the second invocation of this method
+	 * in the same execution with the same key and the same depends ({@link AuResponse#getDepends})
+	 * will override the previous one.
+	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response);
 	/** Called to update (redraw) a component, when a component is moved.

@@ -435,7 +435,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	/** Selects the whole text in this input.
 	 */
 	public void select() {
-		response("select", new AuSelect(this));
+		response(new AuSelect(this));
 	}
 
 	//-- Constrainted --//
@@ -631,7 +631,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @param end the end position of the text (excluded)
 	 */
 	public void setSelectionRange(int start, int end) {
-		response("select", new AuSelect(this, start, end));
+		response(new AuSelect(this, start, end));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).

@@ -354,7 +354,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * this method has no effect.
 	 */
 	public void focus() {
-		response("focus", new AuFocus(this));
+		response(new AuFocus(this));
 	}
 	/** Sets focus to this element.
 	 * It is same as {@link #focus}, but used to allow ZUML to set focus

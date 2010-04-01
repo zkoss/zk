@@ -264,7 +264,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				}
 
 				if (exec.isAsyncUpdate(this))
-					getUiEngine().addResponse("setTitle", new AuSetTitle(_title));
+					getUiEngine().addResponse(new AuSetTitle(_title));
 			}
 		}
 	}

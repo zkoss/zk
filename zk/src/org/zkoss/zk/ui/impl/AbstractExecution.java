@@ -318,6 +318,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 				_args.remove(0);
 		}
 	}
+	public void addAuResponse(AuResponse response) {
+		getUiEngine().addResponse(response);
+	}
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
 	}

@@ -30,4 +30,12 @@ public class AuPrint extends AuResponse {
 	public AuPrint() {
 		super("print");
 	}
+
+	/** Default: zk.print (i.e., only one response of this class will
+	 * be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.print";
+	}
 }

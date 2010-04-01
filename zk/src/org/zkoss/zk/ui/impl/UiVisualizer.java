@@ -321,6 +321,17 @@ import org.zkoss.zk.au.out.*;
 		}
 	}
 
+	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
+	 * as the override key.
+	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>
+	 * <p>If the response is component-dependent, {@link AuResponse#getDepends}
+	 * must return a component. And, if the component is removed, the response
+	 * is removed, too.
+	 * @since 5.0.2
+	 */
+	public void addResponse(AuResponse response) {
+		addResponse(response.getOverrideKey(), response);
+	}
 	/** Adds a response directly (which will be returned when
 	 * {@link #getResponses} is called).
 	 *
@@ -328,8 +339,11 @@ import org.zkoss.zk.au.out.*;
 	 * must return a component. And, if the component is removed, the response
 	 * is removed, too.
 	 *
-	 * @param key could be anything. The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * @param key could be anything. If null, the response is appended.
+	 * If not null, the second invocation of this method
+	 * in the same execution with the same key and the same depends ({@link AuResponse#getDepends})
+	 * will override the previous one.
+	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response) {
 		if (response == null)

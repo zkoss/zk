@@ -66,4 +66,12 @@ public class AuClearWrongValue extends AuResponse {
 	public AuClearWrongValue(Component comp) {
 		super("clearWrongValue", comp, comp.getUuid()); //dependent
 	}
+
+	/** Default: "zk.wrongValue" if {@link #getDepends} is not null,
+	 * or null if {@link #getDepends} is null
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return getDepends() != null ? "zk.wrongValue": null /*append*/;
+	}
 }

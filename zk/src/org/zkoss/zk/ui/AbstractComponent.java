@@ -1307,9 +1307,34 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Causes a response to be sent to the client.
+	 * It is the same as <code>response(response.getOverrideKey(), response)</code>
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the returned componet.
+	 * depends on the existence of the componet returned by
+	 * {@link AuResponse#getDepends}.
+	 * In other words, the response is removed if the component is removed.
+	 * If it is null, the response is component-independent and it is
+	 * always sent to the client.
+	 *
+	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
+	 * {@link Component#invalidate()} was called.
+	 * Typical examples include setting the focus, selecting the text and so on.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * @since 5.0.2
+	 * @see #response(String, AuResponse)
+	 */
+	protected void response(AuResponse response) {
+		response(response.getOverrideKey(), response);
+	}
+	/** Causes a response to be sent to the client by overriding the key
+	 * returned by {@link AuResponse#getOverrideKey}).
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the existence of the componet returned by
+	 * {@link AuResponse#getDepends}.
 	 * In other words, the response is removed if the component is removed.
 	 * If it is null, the response is component-independent and it is
 	 * always sent to the client.
@@ -1323,9 +1348,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 *
 	 * @param key could be anything.
 	 * The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * in the same execution with the same key and the same depends
+	 * ({@link AuResponse#getDepends}) will override the previous one.
 	 * However, if key is null, it won't override any other. All responses
-	 * with key == null will be sent.
+	 * with key == null will be sent.<br/>
+	 * Notice that if {@link AuResponse#getDepends} is null, then be careful
+	 * of the key you used since it is shared in the same execution
+	 * (rather than a particular component).
 	 * @since 5.0.0 (become protected)
 	 */
 	protected void response(String key, AuResponse response) {
@@ -1464,7 +1493,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
-		response(null, new AuInvoke(this, "setListener", evtnm, script));
+		response(new AuInvoke(this, "setListener", evtnm, script));
 		//1. don't use smartUpdate since multiple methods might be overriden in one AU
 		//2. don't use JavaScriptValue since the client will generate it differently
 	}
@@ -1486,7 +1515,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetOverride(String name, String script) {
-		response(null, new AuInvoke(this, "setOverride", name, new JavaScriptValue(script)));
+		response(new AuInvoke(this, "setOverride", name, new JavaScriptValue(script)));
 			//don't use smartUpdate since multiple methods might be overriden in one AU
 	}
 
@@ -1853,7 +1882,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Desktop desktop = getDesktop();
 		if (desktop != null) {
 			if (Events.ON_CLIENT_INFO.equals(evtnm)) {
-				response("clientInfo", new AuClientInfo(desktop));
+				response(new AuClientInfo(desktop));
 			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 			} else if (getClientEvents().containsKey(evtnm)) {
@@ -2098,7 +2127,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
-				response("clientInfo", new AuClientInfo(desktop));
+				response(new AuClientInfo(desktop));
 				//We always fire event not a root, since we don't like to
 				//check when setParent or setPage is called
 			if (Events.isListened(this, Events.ON_PIGGYBACK, false))
