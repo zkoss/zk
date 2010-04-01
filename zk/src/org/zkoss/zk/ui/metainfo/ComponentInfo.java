@@ -757,6 +757,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_evthds != null)
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
+		if (_props != null)
+			for (Iterator it = _props.iterator(); it.hasNext();)
+				((Property)it.next()).assign(comp);
+
 		if (_wgtlsns != null)
 			for (Iterator it = _wgtlsns.iterator(); it.hasNext();)
 				((WidgetListener)it.next()).assign(comp);
@@ -764,10 +768,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_wgtovds != null)
 			for (Iterator it = _wgtovds.iterator(); it.hasNext();)
 				((WidgetOverride)it.next()).assign(comp);
-
-		if (_props != null)
-			for (Iterator it = _props.iterator(); it.hasNext();)
-				((Property)it.next()).assign(comp);
 	}
 
 	/** Evaluates and retrieves properties to the specified map from

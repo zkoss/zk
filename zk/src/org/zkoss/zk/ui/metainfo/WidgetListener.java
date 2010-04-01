@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import org.zkoss.zk.xel.ExValue;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Condition;
@@ -35,12 +37,13 @@ implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20081213L;
 
 	protected final String _name;
-	protected final String _script;
+	protected final ExValue _script;
 	protected final ConditionImpl _cond;
 
 	/**
 	 * @param name the event name, such as onClick
 	 * @param evalr the evaluator reference. It is required if cond is not null.
+	 * @param script the script snippet. EL is allowed.
 	 * @exception IllegalArgumentException if script is null
 	 * or (cond is not null but evalr is null)
 	 */
@@ -49,7 +52,7 @@ implements Condition, java.io.Serializable {
 			throw new IllegalArgumentException();
 		_evalr = evalr;
 		_name = name;
-		_script = script;
+		_script = script != null ? new ExValue(script, String.class): null;
 		_cond = cond;
 	}
 
@@ -59,14 +62,29 @@ implements Condition, java.io.Serializable {
 		return _name;
 	}
 	/** Returns the script associated with this event handler.
+	 * @since 5.0.2
+	 */
+	public String getScript(Component comp) {
+		return _script != null ? (String)_script.getValue(_evalr, comp): null;
+	}
+	/** @deprecated As of release 5.0.2, replaced with {@link #getRawScript}.
+	 * @see #getScript(Component)
+	 * Returns the script associated with this event handler.
 	 */
 	public String getScript() {
-		return _script;
+		return getRawScript();
+	}
+	/** Returns the script passed to the constructor.
+	 * In other words, it might contains EL. 
+	 * @since 5.0.2
+	 */
+	public String getRawScript() {
+		return _script != null ? _script.getRawValue(): null;
 	}
 
 	public void assign(Component comp) {
 		if (isEffective(comp))
-			comp.setWidgetListener(_name, _script);
+			comp.setWidgetListener(_name, getScript(comp));
 	}
 
 	/** Returns the evaluator reference, or null if not available.

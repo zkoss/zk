@@ -108,13 +108,13 @@ org.zkoss.zul.api.Applet {
 	/** Invokes the function of the applet running at the client.
 	 */
 	public void invoke(String function) {
-		response(null, new AuInvoke(this, "invoke", function));
+		response(new AuInvoke(this, "invoke", function));
 	}
 	/** Invokes the function of the applet running at the client with
 	 * one argument.
 	 */
 	public void invoke(String function, String argument) {
-		response(null, new AuInvoke(this, "invoke", function, argument));
+		response(new AuInvoke(this, "invoke", function, argument));
 	}
 	/** Invokes the function of the applet running at the client with
 	 * variable number argument.
@@ -125,13 +125,13 @@ org.zkoss.zul.api.Applet {
 		args[0] = function;
 		for (int j = 0; j < len; ++j)
 			args[j + 1] = arguments[j];
-		response(null, new AuInvoke(this, "invoke", args));
+		response(new AuInvoke(this, "invoke", args));
 	}
 
 	/** Sets the value of the specified filed.
 	 */
 	public void setField(String field, String value) {
-		response(null, new AuInvoke(this, "setField", field, value));
+		response(new AuInvoke(this, "setField", field, value));
 	}
 
 	//super//

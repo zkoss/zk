@@ -254,6 +254,9 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
 	}
+	public void addResponse(AuResponse response) {
+		getCurrentVisualizer().addResponse(response);
+	}
 	public void addResponse(String key, AuResponse response) {
 		getCurrentVisualizer().addResponse(key, response);
 	}
@@ -1142,7 +1145,7 @@ public class UiEngineImpl implements UiEngine {
 				if (wve != null) {
 					Component c = wve.getComponent();
 					if (c == null) c = comp;
-					uv.addResponse("wrongValue",
+					uv.addResponse(
 						new AuWrongValue(c, Exceptions.getMessage(wve)));
 				}
 				return;
@@ -1163,7 +1166,7 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			}
-			uv.addResponse("wrongValue",
+			uv.addResponse(
 				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
 			return;
 		}
@@ -1223,7 +1226,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		uv.addResponse(null, new AuAlert(msg)); //default handling
+		uv.addResponse(new AuAlert(msg)); //default handling
 	}
 
 	/** Processing the request and stores result into UiVisualizer.

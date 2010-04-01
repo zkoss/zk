@@ -73,6 +73,7 @@ import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -93,6 +94,7 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.scripting.*;
 
 /**
@@ -1287,9 +1289,34 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Causes a response to be sent to the client.
+	 * It is the same as <code>response(response.getOverrideKey(), response)</code>
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the returned componet.
+	 * depends on the existence of the componet returned by
+	 * {@link AuResponse#getDepends}.
+	 * In other words, the response is removed if the component is removed.
+	 * If it is null, the response is component-independent and it is
+	 * always sent to the client.
+	 *
+	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
+	 * {@link Component#invalidate()} was called.
+	 * Typical examples include setting the focus, selecting the text and so on.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * @since 5.0.2
+	 * @see #response(String, AuResponse)
+	 */
+	protected void response(AuResponse response) {
+		response(response.getOverrideKey(), response);
+	}
+	/** Causes a response to be sent to the client by overriding the key
+	 * returned by {@link AuResponse#getOverrideKey}).
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the existence of the componet returned by
+	 * {@link AuResponse#getDepends}.
 	 * In other words, the response is removed if the component is removed.
 	 * If it is null, the response is component-independent and it is
 	 * always sent to the client.
@@ -1303,9 +1330,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 *
 	 * @param key could be anything.
 	 * The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * in the same execution with the same key and the same depends
+	 * ({@link AuResponse#getDepends}) will override the previous one.
 	 * However, if key is null, it won't override any other. All responses
-	 * with key == null will be sent.
+	 * with key == null will be sent.<br/>
+	 * Notice that if {@link AuResponse#getDepends} is null, then be careful
+	 * of the key you used since it is shared in the same execution
+	 * (rather than a particular component).
 	 * @since 5.0.0 (become protected)
 	 */
 	protected void response(String key, AuResponse response) {
@@ -1353,7 +1384,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
 	 * <p>If you want to generate the JavaScript code directly (i.e.,
 	 * the value is a valid JavaScript snippet), you can use
-	 * {@link org.zkoss.zk.ui.sys.JavaScriptValue}.
+	 * {@link JavaScriptValue}.
 	 * <p>In addition, the value can be any kind of objects that
 	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)
@@ -1444,26 +1475,30 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
-		smartUpdate("listener", new String[] {evtnm, script});
+		response(new AuInvoke(this, "setListener", evtnm, script));
+		//1. don't use smartUpdate since multiple methods might be overriden in one AU
+		//2. don't use JavaScriptValue since the client will generate it differently
 	}
-	/** A special smart update to update a method of the peer widget.
-	 * By default, it assumes the peer widget has a method called
-	 * <code>setMethod<code> and it will be invoked as follows.
+	/** A special smart update to update a method or a field of the peer widget.
+	 * By default, it invokes the client widget's <code>setOverride</code> as follows.
 	 *
-	 * <pre><code>wgt.setMethod([evtnm, script]);</code></pre>
+	 * <pre><code>wgt.setOverride([name: script]);</code></pre>
 	 *
 	 * <p>Devices that supports it in another way have to override this
 	 * method. Devices that don't support it have to override this method
 	 * to throw UnsupportedOperationException.
 	 *
 	 * @param name the method name, such as setValue
-	 * @param script the script. If null, the previous method override
-	 * will be remove. And, the method defined in original widget will
+	 * @param script the content of the method or field to override.
+	 * Notice that it must be a valid JavaScript snippet.
+	 * If null, the previous method/field override
+	 * will be remove. And, the method/field defined in original widget will
 	 * be restored.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetOverride(String name, String script) {
-		smartUpdate("method", new String[] {name, script});
+		response(new AuInvoke(this, "setOverride", name, new JavaScriptValue(script)));
+			//don't use smartUpdate since multiple methods might be overriden in one AU
 	}
 
 	public void detach() {
@@ -1829,7 +1864,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Desktop desktop = getDesktop();
 		if (desktop != null) {
 			if (Events.ON_CLIENT_INFO.equals(evtnm)) {
-				response("clientInfo", new AuClientInfo(desktop));
+				response(new AuClientInfo(desktop));
 			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 			} else if (getClientEvents().containsKey(evtnm)) {
@@ -2063,7 +2098,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
 			if (Events.isListened(this, Events.ON_CLIENT_INFO, false)) //asap+deferrable
-				response("clientInfo", new AuClientInfo(desktop));
+				response(new AuClientInfo(desktop));
 				//We always fire event not a root, since we don't like to
 				//check when setParent or setPage is called
 			if (Events.isListened(this, Events.ON_PIGGYBACK, false))

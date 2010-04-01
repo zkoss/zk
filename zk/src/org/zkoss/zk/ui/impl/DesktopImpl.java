@@ -409,7 +409,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
 			throw new IllegalArgumentException("Illegal character: # ?");
 		_bookmark = name;
-		((WebAppCtrl) _wapp).getUiEngine().addResponse("bookmark",
+		((WebAppCtrl) _wapp).getUiEngine().addResponse(
 					new AuBookmark(name, replace));
 	}
 

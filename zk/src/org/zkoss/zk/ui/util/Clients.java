@@ -43,28 +43,16 @@ import org.zkoss.zk.au.out.*;
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
-	/** Sends an AU response ({@link AuResponse})to the client
-	 * with response's command ({@link AuResponse#getCommand}) as the key.
-	 *
-	 * <p>Since response's command is used as the key, so the second
-	 * invocation of this method with a response that has the same command
-	 * will override the previous one. For example, the first one will be
-	 * ignored since both have the same command.
-	 * <pre><code>
-	 *	response(new AuShowBusy("this will have no effect"));
-	 *	response(new AuClearBusy());</code></pre>
-	 *
-	 * <p>If this is an issue, use {@link #response(String, AuResponse)}
-	 * instead.
+	/** Sends an AU response ({@link AuResponse}) to the client.
+	 * It is the same as <code>response(response.getOverrideKey(), response)</code>.
 	 *
 	 * @since 3.0.0
 	 */
 	public static final void response(AuResponse response) {
-		Executions.getCurrent()
-			.addAuResponse(response.getCommand(), response);
+		Executions.getCurrent().addAuResponse(response);
 	}
 	/** Sends an AU response ({@link AuResponse}) to the client
-	 * with the specified key.
+	 * with the given key (instead of {@link AuResponse#getOverrideKey}).
 	 *
 	 * @param key could be anything. The second invocation of this method
 	 * in the same execution with the same key will override the previous one.
@@ -72,6 +60,7 @@ public class Clients {
 	 * If null is specified, the response is simply appended to the end
 	 * without overriding any previous one.
 	 * @since 3.0.4
+	 * @see #response
 	 */
 	public static final void response(String key, AuResponse response) {
 		Executions.getCurrent().addAuResponse(key, response);
@@ -113,14 +102,14 @@ public class Clients {
 	 * @since 5.0.0
 	 */
 	public static final void clearWrongValue(List comps) {
-		response(null, new AuClearWrongValue(comps)); //append, not overwrite
+		response(new AuClearWrongValue(comps)); //append, not overwrite
 	}
 	/** Closes the error message of the specified components, if any,
 	 * at the browser.
 	 * @since 5.0.0
 	 */
 	public static final void clearWrongValue(Component[] comps) {
-		response(null, new AuClearWrongValue(comps)); //append, not overwrite
+		response(new AuClearWrongValue(comps)); //append, not overwrite
 	}
 	
 	/** Submits the form with the specified ID.
@@ -289,7 +278,7 @@ public class Clients {
 		} finally {
 			Locales.setThreadLocal(oldl);
 		}
-		response(new AuScript(null, sb.toString()));
+		response("zk.reload", new AuScript(null, sb.toString()));
 	}
 	private static String loadJS(Execution exec, String path)
 	throws IOException {

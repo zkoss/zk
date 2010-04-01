@@ -68,4 +68,12 @@ public class AuEcho  extends AuResponse {
 			data != null ? new String[] {comp.getUuid(), evtnm, data}:
 				new String[] {comp.getUuid(), evtnm});
 	}
+
+	/** Default: "zk.echo" if {@link #getDepends} is null (desktop level),
+	* null if {@link #getDepends} is not null (component level).
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return getDepends() != null ? null/*event might diff*/: "zk.echo";
+	}
 }

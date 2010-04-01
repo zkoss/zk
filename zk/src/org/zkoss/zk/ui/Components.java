@@ -1124,6 +1124,9 @@ public class Components {
 			return Executions.getCurrent();
 		}
 		
+		public void addAuResponse(AuResponse response) {
+			exec().addAuResponse(response);
+		}
 		public void addAuResponse(String key, AuResponse response) {
 			exec().addAuResponse(key, response);
 		}

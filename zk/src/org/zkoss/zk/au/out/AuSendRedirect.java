@@ -35,4 +35,12 @@ public class AuSendRedirect extends AuResponse {
 	public AuSendRedirect(String url, String target) {
 		super("redirect", new String[] {url, target != null ? target: ""});
 	}
+
+	/** Default: zk.redirect (i.e., only one response of this class will
+	 * be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.redirect";
+	}
 }

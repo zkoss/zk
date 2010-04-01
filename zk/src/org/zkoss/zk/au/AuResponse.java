@@ -171,6 +171,22 @@ public class AuResponse {
 	public final Object getDepends() {
 		return _depends;
 	}
+	/** Returns the override key. If null, this response will be appended.
+	 * If not null, it overrides the previous response, if any, with
+	 * the same override key and the same depends ({@link #getDepends}).
+	 * <p>Default: return null.
+	 * The derived class shall override this method if it prefers to send
+	 * the last response in the same category.
+	 * <p>Notice that if depends is null and the override key is not null,
+	 * they are sharing a single namespace of an execution.
+	 * <p>Notice that if {@link org.zkoss.zk.ui.AbstractComponent#response(String,AuResponse)}
+	 * is called, this override key is ignored (and the first argument of
+	 * the invocation is used).
+	 * @since 5.0.2
+	 */
+	public String getOverrideKey() {
+		return null;
+	}
 
 	//-- Object --//
 	public final boolean equals(Object o) { //prevent override

@@ -792,14 +792,28 @@ public interface Execution extends Scope {
 
 	/** Adds an asynchronous response ({@link AuResponse}) which will be
 	 * sent to client at the end of the execution.
+	 * It is the same as <code>addAuResponse(response.getOverrideKey(), resposne)</code>
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
 	 * depends on the returned componet. In other words, the response
 	 * is removed if the component is removed.
 	 * If it is null, the response is component-independent.
 	 *
-	 * @param key could be anything. The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * @since 5.0.2
+	 */
+	public void addAuResponse(AuResponse resposne);
+	/** Adds an asynchronous response ({@link AuResponse}) with the given
+	 * key instead of {@link AuResponse#getOverrideKey}.
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the returned componet. In other words, the response
+	 * is removed if the component is removed.
+	 * If it is null, the response is component-independent.
+	 *
+	 * @param key could be anything.
+	 * If not null, the second invocation of this method
+	 * in the same execution with the same key and the same depends
+	 * ({@link AuResponse#getDepends}) will override the previous one.
 	 * In other words, the previous one will be dropped.
 	 * If null is specified, the response is simply appended to the end
 	 * without overriding any previous one.

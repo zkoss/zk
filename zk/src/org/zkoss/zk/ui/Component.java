@@ -814,18 +814,21 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public Set getWidgetListenerNames();
 
-	/*** Sets or removes the script of the method definition to override
-	 * widget's method.
-	 * If there is a method associated with the same name,
+	/*** Sets or removes a method or a field of a widget (at the client).
+	 * If there is a method or a field associated with the same name,
 	 * the previous one will be replaced and returned.
+	 * <p>For example,
+	 * <pre><code>comp.setWidgetOverride("setValue", "function (value) {}"); //override a method
+	 *comp.setWidgetOverride("myfield", "new Date()"); //override a field
+	 *</code></pre>
 	 *
 	 * <p>Notice that, unlike {@link #setWidgetListener}, if the method has been sent
 	 * to the client for update, it cannot be removed by calling this method
-	 * with a null script.
-	 * In other words, invoking this method with a null script only removes
+	 * with a null value.
+	 * In other words, invoking this method with a null value only removes
 	 * the method overrides if it has not YET been to sent to the client.
 	 *
-	 * <p>The previous method can be accessed by this.$xxx. For example
+	 * <p>The previous method/field can be accessed by this.$xxx. For example
 	 *<pre><code>function (value, fromServer) {
 	 *  this.$setValue(value, fromServer);
 	 *  if (this.desktop) {

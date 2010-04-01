@@ -34,4 +34,12 @@ public class AuClearBusy extends AuResponse {
 	public AuClearBusy(Component comp) {
 		super("clearBusy", comp, comp.getUuid());
 	}
+
+	/** Default: zk.busy (i.e., only one response of this class and {@link AuShowBusy} will
+	 * be sent to the client in an execution for the same component, if any)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.busy";
+	}
 }

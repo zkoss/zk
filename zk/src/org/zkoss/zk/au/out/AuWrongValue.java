@@ -40,4 +40,12 @@ public class AuWrongValue extends AuResponse {
 	public AuWrongValue(String[] data) {
 		super("wrongValue", data);
 	}
+
+	/** Default: "zk.wrongValue" if {@link #getDepends} is not null (component-level),
+	 * or null if {@link #getDepends} is null (desktop level)
+	 * @since 5.0.2
+	 */
+	public String getOverrideKey() {
+		return getDepends() != null ? "zk.wrongValue": null;
+	}
 }
