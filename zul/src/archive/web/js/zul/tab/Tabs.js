@@ -226,15 +226,20 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 	},
 	_doScroll: function(to, move) {
-		if (move <= 0)
+		if (!this._doingScroll)
+			this._doingScroll = {};
+		if (move <= 0 || this._doingScroll[to])
 			return;
 		var step,
+			self = this,
 			header = this.$n("header");
-			
+		
+		this._doingScroll[to] = move;
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : (5 * (zk.parseInt(move / 60) + 1));
 		var run = setInterval(function() {
 			if (!move) {
+				delete self._doingScroll[to];
 				clearInterval(run);
 				return;
 			} else {
