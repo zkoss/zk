@@ -27,7 +27,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ======= -->
 <!-- COMPILE -->
 <!-- ======= -->
-<target name="compile" depends="codegen.mesg" if="compile.required">
+<target name="compile0" depends="codegen.mesg">
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>
@@ -36,6 +36,13 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
+</target>
+<target name="compile5" depends="codegen.mesg, compile0" if="src5.dir.exist">
+	<javac srcdir="${src5.dir}:${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
+	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
+	 target="1.5" deprecation="${deprecation}" source="1.5"/>
+</target>
+<target name="compile" depends="compile0,compile5" if="compile.required">
 </target>
 
 <!-- ====== -->
@@ -274,7 +281,7 @@ if="deploy.jboss.required">
 <target name="javadoc" depends="config.build">
 	<javadoc 
 	 destdir="${working.javadoc.dir}"
-	 sourcepath="${src.dir}:${codegen.dir}"
+	 sourcepath="${src.dir}:${src5.dir}:${codegen.dir}"
 	 author="true" protected="true" version="true" use="true"
 	 windowtitle="${project.title} ${project.version} API"
 	 doctitle="${project.title} ${project.version} API"

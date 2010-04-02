@@ -66,10 +66,12 @@ import org.zkoss.zk.ui.sys.ComponentRedraws;
  *&lt;/script&gt;
  * </code></pre>
  *
- * <p>Alternative to Approach 1, you can use the script directive
+ * <p>Alternative to {@link Script}, you can use the script directive
  * as shown below..
  *
- * <pre><code>&lt:?script src="/js/mine.js"?/&gt;</code></pre>
+ * <pre><code>&lt:?script src="/js/mine.js"?/&gt;
+ *&lt:?script content="jq.IE6_ALPHAFIX=/.png/"?/&gt;
+ </code></pre>
  *
  * @author tomyeh
  */

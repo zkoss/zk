@@ -45,6 +45,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<!--tstamp/-->
 
 		<available file="${src.mesg.dir}" property="src.mesg.dir.exist"/>
+		<available file="${src5.dir}" property="src5.dir.exist"/>
 
 		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
 		<available file="${bin.dir}/.svn" property="bin.svn.dir.exist"/>

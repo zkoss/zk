@@ -39,7 +39,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		var cmds = [];
-		cmds.tags = reqInf.tags;
+		cmds.rtags = reqInf.rtags;
 		if (zk.pfmeter) {
 			cmds.dt = dt;
 			cmds.pfIds = pfGetIds(req);
@@ -319,7 +319,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
-		var tags = cmds.tags||{};
+		var rtags = cmds.rtags||{};
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
@@ -335,7 +335,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		} finally {
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
-				zWatch.fire('onResponse', null, {timeout:0, tags: tags}); //use setTimeout
+				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
 			}
 		}
 		return true;
@@ -658,7 +658,7 @@ zAu = {
 			zAu._resetTimeout();
 
 		//Consider XML (Pros: ?, Cons: larger packet)
-		var content = "", tags = {};
+		var content = "", rtags = {};
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
@@ -669,7 +669,7 @@ zAu = {
 				break;
 			}
 
-			zk.copy(tags, opts.tags);
+			zk.copy(rtags, opts.rtags);
 
 			content += "&cmd_"+j+"="+evtnm;
 			if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
@@ -691,7 +691,7 @@ zAu = {
 				sid: seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
-				ignorable: ignorable, tmout: 0, tags: tags
+				ignorable: ignorable, tmout: 0, rtags: rtags
 			});
 		return true;
 	},
