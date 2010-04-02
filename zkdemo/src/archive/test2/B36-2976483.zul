@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2976483.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr  1 16:42:51 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+1. Click the button, you should see the content is shown with an animation(appear)
+<separator/>
+2. Click the button again, you should see the content is hidden with an animation(fade out)
+<div id="t" visible="false"
+action="onshow: anima.appear(#{self},4000); onhide:
+anima.fade(#{self},4000)">
+<div><!-- the 2nd div is optional but sometimes it looks better
+with it -->
+<groupbox>
+<caption label="slide down"/>
+Hi <textbox/>
+</groupbox>
+When? <datebox/>
+</div>
+</div>
+<button label="toggle" onClick="t.visible = !t.visible"/>
+</window>

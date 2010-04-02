@@ -54,7 +54,7 @@ Element.setContentZoom = function(element, percent) {
 */
 
 Element.getOpacity = function(element){
-  return z$(element).getStyle('opacity');
+  return $int(z$(element).getStyle('opacity'));
 }
 
 Element.setOpacity = function(element, value){
