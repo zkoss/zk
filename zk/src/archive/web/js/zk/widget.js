@@ -175,11 +175,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_rmIdSpaceDown0(wgt, owner);
 	}
 	function _rmGlobalsIdSpace(wgt) {
-		if (wgt.id) {
-    		var g = _globals[wgt.id];
-    		if (g)
-    			g.$remove(wgt);
-		}
+		var g = _globals[wgt.id];
+		if (g)
+			g.$remove(wgt);
 	}
 	function _fireClick(wgt, evt) {
 		return !(wgt.shallIgnoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
@@ -2119,6 +2117,7 @@ function () {
 	},
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
+	 * It is the same as <code>jq(n).replaceWith(wgt, desktop, skipper)</code>.
 	 * <p>The DOM element to be replaced can be {@link #$n} or any independent DOM element. For example, you can replace a DIV element (and all its descendants) with this widget (and its descendants).
 	 * <p>This method is usually used to replace a DOM element with a root widget (though, with care, it is OK for non-root widgets). Non-root widgets usually use {@link #appendChild}
 	 *  and {@link #insertBefore} to attach to the DOM tree[1]
@@ -2139,6 +2138,7 @@ function () {
 	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
 	 * @param zk.Skipper skipper [optional] it is used only if it is called by {@link #rerender}
 	 * @see #replaceWidget
+	 * @see _global_.jq#replaceWith
 	 * @return zk.Widget
 	 */
 	replaceHTML: function (n, desktop, skipper) {
