@@ -106,8 +106,8 @@ onClick: function (evt) {
 	 * <li>ctl: whether it is a control, such as onClick, rather than a notification for status change.</li>
 	 * <li>toServer: whether to send this event to the server. If specified, it is always sent no matter the widget is created at the server or not.</li>
 	 * <li>uri: the URI to send the Ajax request to. If not specified, zAu#comURI is used (i.e., the desktop's update URI is used). If specified, the URI specified in this option is used -- notice that there is no encoding at all, so make sure it is correct. </li>
-	 * <li>tags: a map ({@link Map}) that can be anything and will be passed to
-	 * the <code>onResponse</code> watch</li>
+	 * <li>rtags (since 5.0.2): a map ({@link Map}) that can be anything and will be passed to
+	 * the <code>onResponse</code> watch (see also {@link _global_.zWatch}).</li>
 	 * </ul>
      * @type Map
      */
@@ -157,7 +157,7 @@ onClick: function (evt) {
 		if (data && typeof data == 'object' && !jq.isArray(data))
 			zk.$default(this, data);
 
-		this.opts = opts||{tags:{}};
+		this.opts = opts||{rtags:{}};
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target;
 	},
