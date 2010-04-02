@@ -212,7 +212,10 @@ public class MainLayout extends Borderlayout {
 		final String pattern = ((Textbox) getFellow("w1").getFellow("fnf"))
 				.getValue();
 		final boolean reg = ((Checkbox) getFellow("w1").getFellow("reg")).isChecked();
-		fileModel.addAll(Arrays.asList(test2.listFiles(new MyFilenameFilter(pattern, reg))));
+		final File[] files = test2.listFiles(new MyFilenameFilter(pattern, reg));
+		for (int j = 0; j < files.length; j++)
+			if(prop.containsKey(files[j].getName()) || files[j].getName().equalsIgnoreCase(pattern))
+				fileModel.add(files[j]);
 	}
 	public void exportFileName() throws SuspendNotAllowedException, InterruptedException {
 		if(fileModel.isEmpty()) return;
