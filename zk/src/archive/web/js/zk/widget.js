@@ -163,18 +163,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ow = ow ? ow.$o(): null;
 		if (ow)
 			_rmIdSpaceDown0(wgt, ow);
+		else
+			_rmGlobalsIdSpace(wgt);
 	}
 	function _rmIdSpaceDown0(wgt, owner) {
 		if (wgt.id) {
 			delete owner._fellows[wgt.id];
-			var g = _globals[wgt.id];
-			if (g)
-				g.$remove(wgt);
+			_rmGlobalsIdSpace(wgt);
 		}
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_rmIdSpaceDown0(wgt, owner);
 	}
-
+	function _rmGlobalsIdSpace(wgt) {
+		if (wgt.id) {
+    		var g = _globals[wgt.id];
+    		if (g)
+    			g.$remove(wgt);
+		}
+	}
 	function _fireClick(wgt, evt) {
 		return !(wgt.shallIgnoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
 	}
