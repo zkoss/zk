@@ -230,7 +230,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * (start, center, end) plus an <i>stretch</i> option.
 	 *
 	 * @param pack the alignment. Allowed values: (start, center, end) plus an 
-	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
+	 * <i>stretch</i> option. If empty or null, it defaults to "start".
 	 * @since 3.0.0
 	 * @see #getPack()
 	 */
