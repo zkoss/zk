@@ -895,9 +895,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	fireOnSelect: function (reference, evt) {
 		var data = [];
 		
-		for (var it = this.getSelectedItems(), len = it.length; --len >=0;)
-			if (it[len].isSelected())
-				data.push(it[len].uuid);
+		for (var it = this.getSelectedItems(), j = it.length; j--;)
+			if (it[j].isSelected())
+				data.push(it[j]);
 		var edata = evt.data, keep;
 		if (this._multiple)
 			keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
@@ -947,8 +947,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	_unsetSelectAllExcept: function (row) {
 		var changed = false;
-		for (var it = this.getSelectedItems(), len = it.length; --len >= 0;) {
-			if (it[len] != row && this._changeSelect(it[len], false))
+		for (var it = this.getSelectedItems(), j = it.length; j--;) {
+			if (it[j] != row && this._changeSelect(it[j], false))
 				changed = true;
 		}
 		return changed;
