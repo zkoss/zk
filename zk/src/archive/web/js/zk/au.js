@@ -595,6 +595,7 @@ pageTracker._setDomainName("zkoss.org");
 pageTracker._initData();
 pageTracker._trackPageview();
 
+var auBfSend = zAu.beforeSend;
 zAu.beforeSend = function (uri, req) {
  try {
   var target = req.target;
@@ -605,7 +606,7 @@ zAu.beforeSend = function (uri, req) {
   }
  } catch (e) {
  }
- return uri;
+ return auBfSend(uri, req);
 };
 ]]>&lt;/script>
 	 *</code></pre>

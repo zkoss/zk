@@ -60,13 +60,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
-<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}' defer="true">
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}' defer="true"><![CDATA[
 try {
 window.pageTracker = _gat._getTracker("UA-121377-3");
 pageTracker._setDomainName("zkoss.org");
 pageTracker._initData();
 pageTracker._trackPageview();
 
+var auBfSend = zAu.beforeSend;
 zAu.beforeSend = function (uri, req) {
 	try {
 		var target = req.target;
@@ -77,9 +78,9 @@ zAu.beforeSend = function (uri, req) {
 		}
 	} catch (e) {
 	}
-	return uri;
+	return auBfSend(uri, req);
 };
 }catch(e){}
-</script>
+]]></script>
 
 </zk>
