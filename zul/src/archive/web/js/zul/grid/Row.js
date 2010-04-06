@@ -121,6 +121,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
+	rerender: function () {
+		if (this.desktop) {
+			this.$supers('rerender', arguments);
+			if (this.parent)
+				this.parent._syncStripe();
+		}
+	},
 	getSclass: function () {
 		var sclass = this.$supers('getSclass', arguments);
 		if (sclass != null) return sclass;

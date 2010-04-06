@@ -60,9 +60,12 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	},
 	//super
 	domAttrs_: function () {
-		var attr = this.$supers('domAttrs_', arguments);
-		if (this._span > 1)
-			attr += ' colSpan="' + this._span + '"';
-		return attr;
+		var head = this.getColumn(),
+			added;
+		if (head)
+			added = head.getColAttrs();
+		return this.$supers('domAttrs_', arguments)
+			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '')
+			+ (added ? ' ' + added : '');
 	}
 });
