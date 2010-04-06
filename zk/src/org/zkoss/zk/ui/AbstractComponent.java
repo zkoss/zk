@@ -107,7 +107,7 @@ import org.zkoss.zk.scripting.*;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20091007L;
+    private static final long serialVersionUID = 20100402L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map _clientEvents = new HashMap(128);
@@ -168,6 +168,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
 	private Map _forwards;
+	/** The AU tag. */
+	private String _autag;
 	/** Whether _annots is shared with other components. */
 	private transient boolean _annotsShared;
 	/** Whether _evthds is shared with other components. */
@@ -978,6 +980,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return attrs().removeScopeListener(listener);
 	}
 
+	public String getAutag() {
+		return _autag;
+	}
+	public void setAutag(String tag) {
+		if (tag != null && tag.isEmpty()) tag = null;
+		if (!Objects.equals(_autag, tag)) {
+			_autag = tag;
+			smartUpdate("autag", tag);
+		}
+	}
+
 	public Component getParent() {
 		return _parent;
 	}
@@ -1692,6 +1705,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
 		if (!_visible) renderer.render("visible", false);
+		render(renderer, "autag", _autag);
 
 		Boolean shallHandleImportant = null;
 		for (Iterator it = getClientEvents().entrySet().iterator();

@@ -1,0 +1,5 @@
+<window title="Demo of autag" border="normal">
+	<textbox id="t" autag="in"/>
+	<button label="add" onClick='self.parent.appendChild(new Label(t.value+","))'
+		autag="add"/>
+</window>

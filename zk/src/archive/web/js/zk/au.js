@@ -592,7 +592,7 @@ zAu = {
 	},
 
 	/** Called before sending an AU request.
-	 * <p>Default: does nothing but return uri.
+	 * <p>Default: append {@link zk.Widget#autag} to <code>uri</code>.
 	 * <p>It is designed to be overriden by an application to record
 	 * what AU requests have been sent. For example, to work with Google Analytics,
 	 * you can add the following code:
@@ -624,6 +624,20 @@ zAu.beforeSend = function (uri, req) {
 	 * @since 5.0.2
 	 */
 	beforeSend: function (uri, aureq) {
+		var target = aureq.target, tag;
+		if (target && (tag = target.autag)) {
+			tag = '/' + encodeURIComponent(tag);
+			if (uri.indexOf("/_/") < 0) {
+				var v = target.desktop;
+				if ((v = v ? v.requestPath: "") && v.charAt(0) != '/')
+					v = '/' + v; //just in case
+				tag = "/_" + v + tag;
+			}
+
+			var j = uri.lastIndexOf(';');
+			if (j >= 0) uri = uri.substring(0, j) + tag + uri.substring(j);
+			else uri += tag;
+		}
 		return uri;
 	},
 	/** Enforces all pending AU requests of the specified desktop to send immediately

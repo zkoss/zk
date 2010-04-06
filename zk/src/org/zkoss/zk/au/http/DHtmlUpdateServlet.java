@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.URIInfo;
@@ -309,8 +310,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 	private static void checkAuExtension(String prefix, AuExtension extension) {
 		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
-		|| extension == null)
-			throw new IllegalArgumentException();
+		|| "/_".equals(prefix) || extension == null)
+			throw new UiException("Ilegal prefix: "+prefix);
 		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
 			throw new IllegalArgumentException(
 				ClassWebResource.PATH_PREFIX + " is reserved");
@@ -361,7 +362,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String pi = Https.getThisPathInfo(request);
 //		if (log.finerable()) log.finer("Path info: "+pi);
 
-		final boolean withpi = pi != null && pi.length() != 0;
+		final boolean withpi = pi != null && pi.length() != 0
+			&& !(pi.startsWith("/_/") || "/_".equals(pi));
 		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 			//use HttpSession to avoid loading SerializableSession in GAE
 			//and don't retrieve session if possible

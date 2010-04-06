@@ -884,6 +884,25 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public AuService getAuService();
 
+	/** Returns the AU tag for this widget.
+	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
+	 * For instance, if the AU tag is <code>xxx,yyy</code> and the desktop's
+	 * request path ({@link Desktop#getRequestPath}) is <code>/foo.zul</code>, then
+	 * the URL of the AU request will contain <code>/_/foo.zul/xxx,yyy</code>,.
+	 * <p>Default: null (no AU tag for this widget).
+	 * @since 5.1.0
+	 * @see #setAutag
+	 */
+	public String getAutag();
+	/** Sets the AU tag for this widget.
+	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
+	 * @param tag the AU tag. Both an empty string and null are consisered as null,
+	 * i.e., no AU tag for this widget.
+	 * @since 5.1.0
+	 * @see #getAutag
+	 */
+	public void setAutag(String tag);
+
 	/** Clones the component.
 	 * All of its children is cloned.
 	 * Notice that the cloned component doesn't belong to any page, nor

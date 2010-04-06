@@ -669,6 +669,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @since 5.0.2
 	 */
 	widgetName: "widget",
+	/** The AU tag of this widget.
+	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
+	 * For instance, if the AU tag is <code>xxx,yyy</code> and the desktop's
+	 * request path ({@link Desktop#requestPath}) is <code>/foo.zul</code>, then
+	 * the URL of the AU request will contain <code>/_/foo.zul/xxx,yyy</code>,.
+	 * <p>Default: null.
+	 * @type String
+	 * @since 5.1.0
+	 */
+	//autag: null,
 
 	_floating: false,
 
