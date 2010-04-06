@@ -583,6 +583,41 @@ zAu = {
 		if (ex) throw ex;
 	},
 
+	/** Called before sending an AU request.
+	 * <p>Default: does nothing but return uri.
+	 * <p>It is designed to be overriden by an application to record
+	 * what AU requests have been sent. For example, to work with Google Analytics,
+	 * you can add the following code:
+	 * <pre><code>
+&lt;script defer="true">&lt;![CDATA[
+var pageTracker = _gat._getTracker("UA-123456");
+pageTracker._setDomainName("zkoss.org");
+pageTracker._initData();
+pageTracker._trackPageview();
+
+zAu.beforeSend = function (uri, req) {
+ try {
+  var target = req.target;
+  if (target.id) {
+   var data = req.data||{},
+       value = data.items &amp;&amp; data.items[0]?data.items[0].id:data.value;
+   pageTracker._trackPageview((target.desktop?target.desktop.requestPath:"") + "/" + target.id + "/" + req.name + (value?"/"+value:""));
+  }
+ } catch (e) {
+ }
+ return uri;
+};
+]]>&lt;/script>
+	 *</code></pre>
+	 *
+	 * @param String uri the AU's request URI (such as /zkau)
+	 * @param zk.Event aureq the AU request
+	 * @return String the AU's request URI.
+	 * @since 5.0.2
+	 */
+	beforeSend: function (uri, aureq) {
+		return uri;
+	},
 	/** Enforces all pending AU requests of the specified desktop to send immediately
 	 * @param Desktop dt
 	 * @return boolean whether it is sent successfully. If it has to wait
@@ -650,16 +685,20 @@ zAu = {
 			zAu._resetTimeout();
 
 		//Consider XML (Pros: ?, Cons: larger packet)
-		var content = "", rtags = {};
+		var content = "", rtags = {},
+			requri = uri || zk.ajaxURI(null, {desktop:dt,au:true});
 		for (var j = 0, el = es.length; el; ++j, --el) {
-			var aureq = es.shift(),
-				evtnm = aureq.name,
-				target = aureq.target,
-				opts = aureq.opts||{};
-			if (opts.uri != uri) {
+			var aureq = es.shift();
+			if ((aureq.opts||{}).uri != uri) {
 				es.unshift(aureq);
 				break;
 			}
+
+			requri = zAu.beforeSend(requri, aureq);
+
+			var evtnm = aureq.name,
+				target = aureq.target,
+				opts = aureq.opts||{};
 
 			zk.copy(rtags, opts.rtags);
 
@@ -680,7 +719,7 @@ zAu = {
 
 		if (content)
 			ajaxSendNow({
-				sid: seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
+				sid: seqId, uri: requri,
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0, rtags: rtags

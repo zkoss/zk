@@ -4,6 +4,7 @@ ZK 5.0.2
   2972509: Enhance jQuery selector to handle zk widget's ID and tag name
   2974340: Generate zul's HTML content with JavaScript array/map
   2979894: Widget's client script supports EL
+  2982454: A way to make AU work with, say, Google Analytics
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error
