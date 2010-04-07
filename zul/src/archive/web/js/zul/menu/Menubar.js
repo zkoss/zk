@@ -282,7 +282,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before)
-			jq(before.$n('chdextr')).before(
+			jq(before.$n('chdextr') || before.$n()).before(
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 		else
 			jq(this.$n('cave')).append(
