@@ -2885,32 +2885,43 @@ focus: function (timeout) {
 			evt.currentTarget = oldtg;
 		}
 	},
-	/** Sends an AU request to the server.
-	 *
-	 * <p>Override Notice: this method will stop the event propagation
+	/** Callback before sending an AU request.
+	 * It is called by {@link #sendAU_}.
+	 * <p>Default: this method will stop the event propagation
 	 * and prevent the browser's default handling
 	 * (by calling {@link zk.Event#stop}), 
 	 * if the event is onClick, onRightClick or onDoubleClick.
-	 * If you prefer not to stop or handle by yourself, you can override
-	 * this method and specify the opts argument with {noStop:true}.
+	 * <p>Notice that {@link #sendAU_} is called against the widget sending the AU request
+	 * to the server, while {@link #beforeSendAU_} is called against the event's
+	 * target (evt.target).
+	 * @param zk.Widget wgt the widget that causes the AU request to be sent.
+	 * It will be the target widget when the server receives the event.
+	 * @param zk.Event evt the event to be sent back to the server.
+	 * Its content will be cloned to the AU request.
+	 * @see #sendAU_
+	 * @since 5.0.2
+	 */
+	beforeSendAU_: function (wgt, evt) {
+		var en = evt.name;
+		if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick')
+			evt.stop();
+	},
+	/** Sends an AU request to the server.
+	 * It is invoked when {@link #fire} will send an AU request to the server.
+	 *
+	 * <p>Override Notice: {@link #sendAU_} will call evt.target's
+	 * {@link #beforeSendAU_} to give the original target a chance to
+	 * process it.
 	 *
 	 * @param zk.Event the event that will be sent to the server.
 	 * @param int timeout the delay before really sending out the AU request
-	 * @param Map opts [optional] the options. Allowed options:
-	 * <ul>
-	 * <li>noStop - not to stop the event propagation and not to prevent
-	 * the browser's default handling</li>
-	 * </ul>
-	 * ({@link zAu#sendAhead}).
+	 * @see #fire
+	 * @see #beforeSendAU_
+	 * @see zAu#sendAhead
 	 * @since 5.0.1
 	 */
 	sendAU_: function (evt, timeout, opts) {
-		if (!opts || !opts.noStop) {
-			var en = evt.name;
-			if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick')
-				evt.stop();
-		}
-
+		(evt.target||this).beforeSendAU_(this, evt);
 		evt = new zk.Event(this, evt.name, evt.data, evt.opts, evt.domEvent);
 			//since evt will be used later, we have to make a copy and use this as target
 		if (evt.opts.sendAhead) zAu.sendAhead(evt, timeout);

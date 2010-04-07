@@ -97,7 +97,7 @@ onClick: function (evt) {
 	 * @type Object
  	 */
  	//data: null,
- 	/** The options.
+ 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
 	 * <li>implicit: whether this event is an implicit event, i.e., whether it is implicit to users (so no progressing bar).</li>
