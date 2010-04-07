@@ -16,7 +16,7 @@ ZK 5.1.0
     of a composer or a server push implementation.
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
-    selected)
+    selected - Bug 2973303)
 
 	--------
 ZK 5.0.2
