@@ -8,6 +8,7 @@ ZK 5.1.0
   2978342: A way to tag AU request for statistic purpose
 
 * Bugs
+  2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
   + Two new methods are, newComposer and newServerPush, added to

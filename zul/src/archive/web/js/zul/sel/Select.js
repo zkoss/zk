@@ -218,6 +218,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
+		
+		if (this._selectedIndex < 0)
+			n.selectedIndex = -1;
 	},
 	unbind_: function () {
 		var n = this.$n();
