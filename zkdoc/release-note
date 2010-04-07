@@ -5,6 +5,7 @@ ZK 5.0.2
   2974340: Generate zul's HTML content with JavaScript array/map
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
+  2976934: Checkbox cannot be checked in a comp with listener onClick
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error

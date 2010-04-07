@@ -136,6 +136,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (zk.safari) jq(real).focus();
 		return this.$supers('doClick_', arguments);
 	},
+	beforeSendAU_: function (wgt, evt) {
+		var en = evt.name;
+		if (en == 'onRightClick' || en == 'onDoubleClick')
+			evt.stop();
+	},
 	getTextNode: function () {
 		return jq(this.$n()).find('label:first')[0];
 	}
