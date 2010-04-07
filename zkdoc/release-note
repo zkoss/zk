@@ -14,6 +14,9 @@ ZK 5.1.0
   + Two new methods are, newComposer and newServerPush, added to
     org.zkoss.zk.ui.sys.UiFactory to allow developers to customize the instantiation
     of a composer or a server push implementation.
+  + Listbox in the select mold will show up an empty selection if none of listitems
+    are selected (in the prior version, the first item will be shown though it is not
+    selected)
 
 	--------
 ZK 5.0.2
