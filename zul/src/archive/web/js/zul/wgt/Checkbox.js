@@ -137,8 +137,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return this.$supers('doClick_', arguments);
 	},
 	beforeSendAU_: function (wgt, evt) {
-		var en = evt.name;
-		if (en == 'onRightClick' || en == 'onDoubleClick')
+		if (evt.name != 'onClick')
 			evt.stop();
 	},
 	getTextNode: function () {
