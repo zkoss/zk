@@ -355,7 +355,7 @@ function zkmprops(uuid, props) {
 		if (cmds.length)
 			setTimeout(function () {
 				zk.afterMount(function () {doAuCmds(cmds);});
-			}, 100);
+			}, 300);
 			//delay a bit since zkac() might be generated before zkx()
 			//and there might be muliple zkmb/zkme (e.g., test.zhtml)
 	},
