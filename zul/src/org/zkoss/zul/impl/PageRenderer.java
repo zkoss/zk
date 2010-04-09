@@ -79,7 +79,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write("<body>\n");
 		HtmlPageRenders.outPageContent(exec, page, out, false);
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
-		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 		out.write("\n</body>\n</html>\n");
 	}
 	private static void outHeaders(Execution exec, Page page, Writer out)
@@ -112,7 +111,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		HtmlPageRenders.outPageContent(exec, page, out, au);
 		if (!au && ((PageCtrl)page).getOwner() == null)
 			writeln(out, HtmlPageRenders.outUnavailable(exec));
-		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 	}
 	/** Renders the page if {@link Page#isComplete} is true.
 	 * In other words, the page content contains HTML/BODY tags.

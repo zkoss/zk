@@ -20,7 +20,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:ol>
 		<n:li>This is outside of any ZUL component</n:li>
-		<n:li><button label="Hi" onClick='alert("Hi")'/></n:li>
+		<n:li><button label="Hi" focus="true" onClick='alert("Hi")'/></n:li>
 	</n:ol>
 
 <window id="wnd" title="Test of inline html tags">

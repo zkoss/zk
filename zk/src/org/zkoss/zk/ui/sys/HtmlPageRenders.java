@@ -166,33 +166,43 @@ public class HtmlPageRenders {
 		return "";
 	}
 
-	/** Returns JavaScript for handling the specified response.
-	 * @param exec the execution (never null)
+	/** @deprecated As of release 5.0.2, the generation of AU responses
+	 * is done by {@link #outPageContent}
 	 */
 	public static final
 	String outResponseJavaScripts(Execution exec) {
+		return "";
+	}
+	/** Generates the AU commands that are part of a page rendering.
+	 * @param directJS whether to generate JS directly
+	 */
+	private static final String outAuCmds(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Collection responses = execCtrl.getResponses();
 		if (responses == null || responses.isEmpty()) return "";
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script>zk.afterMount(function(){\n");
+			.append(directJS ? "\n,[": "<script>\nzkac(");
+
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
-			sb.append("zAu.process('").append(response.getCommand())
-				.append("'");
-
+			sb.append("'").append(response.getCommand())
+				.append("',");
 			final List encdata = response.getEncodedData();
 			if (encdata != null)
-				sb.append(",'")
+				sb.append('\'')
 					.append(Strings.escape(
 						org.zkoss.json.JSONArray.toJSONString(encdata),
 						Strings.ESCAPE_JAVASCRIPT))
 					.append('\'');
-			sb.append(");\n");
+			else
+				sb.append((String)null);
+			if (it.hasNext())
+				sb.append(",\n");
 		}
-		return sb.append("});\n</script>\n").toString();
+
+		return sb.append(directJS ? "]": ");\n</script>").toString();
 	}
 
 	/** Returns HTML tags to include all JavaScript files and codes that are
@@ -550,9 +560,12 @@ public class HtmlPageRenders {
 		} finally {
 			extra = ComponentRedraws.afterRedraw();
 		}
+
 		if (order < 0) {
-			if (extra.length() > 0)
-				out.write(",1"); //Bug 2983792 (delay until non-defer script evaluated)
+			out.write(",");
+			out.write(extra.length() > 0 ? '1': '0');
+				//Bug 2983792 (delay until non-defer script evaluated)
+			out.write(outAuCmds(exec, true));
 			out.write(");\n");
 			out.write(extra);
 		}
@@ -741,7 +754,7 @@ public class HtmlPageRenders {
 				.append("</script>\n");
 		}
 
-		sb.append(outResponseJavaScripts(exec));
+		sb.append(outAuCmds(exec, false));
 		return sb.toString();
 	}
 	private static String getContextURI(Execution exec) {

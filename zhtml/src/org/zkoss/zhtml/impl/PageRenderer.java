@@ -97,7 +97,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		HtmlPageRenders.outPageContent(exec, page, out, au);
 		if (!au && ((PageCtrl)page).getOwner() == null)
 			writeln(out, HtmlPageRenders.outUnavailable(exec));
-		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 	}
 	/** Renders the page if {@link Page#isComplete} is true.
 	 * In other words, the page content contains HTML/BODY tags.

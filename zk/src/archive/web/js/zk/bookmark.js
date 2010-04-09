@@ -20,10 +20,9 @@ zk.bmk = (function () { //used internally
 		//Bug 2019171: we have to create iframe frist
 		var url = zk.ajaxURI("/web/js/zk/bookmark.html", {au:true,ignoreSession:true}),
 			ifr = jq('#zk_histy')[0];
-		if (!ifr) ifr = jq.newFrame('zk_histy', url);
-
 		if (nm) url += '?' +encodeURIComponent(nm);
-		ifr.src = url;
+		if (ifr) ifr.src = url;
+		else ifr = jq.newFrame('zk_histy', url);
 	}: zk.$void;
 
 	function getBookmark() {
@@ -68,17 +67,13 @@ zk.bmk = (function () { //used internally
 	}
 
 	var _startCheck = function () {
-		if (zk.bootstrapping)
-			setTimeout(_startCheck, 0);
-		else if (_startCheck) {
-			_startCheck = null;
-			checkBookmark();
-			setInterval(checkBookmark, 250);
-				//Though IE use bookmark.html, timer is still required 
-				//because user might specify URL directly
-		}
+		_startCheck = null;
+		checkBookmark();
+		setInterval(checkBookmark, 250);
+			//Though IE use bookmark.html, timer is still required 
+			//because user might specify URL directly
 	};
-	zk.afterMount(_startCheck);
+	zk.afterMount(_startCheck, true/*as last (after zkx() done)*/);
 
   return {
 	/** Sets a bookmark that user can use forward and back buttons */

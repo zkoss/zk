@@ -58,7 +58,7 @@ function zkmld(wgtcls, molds) {
 function zkamn(pkg, fn) {
 	zk.load(pkg, function () {
 		setTimeout(function(){
-			zk.afterMount(fn)
+			zk.afterMount(fn);
 		}, 20);
 	});
 }
@@ -94,7 +94,7 @@ function zkmprops(uuid, props) {
 	var _wgts = [],
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
-		_aftMounts = [], //afterMount funcs
+		_aftMounts = [[],[]], //afterMount (0:last, 1:normal)
 		_ctx = {}; //the context
 
 /** @partial zk
@@ -110,10 +110,12 @@ function zkmprops(uuid, props) {
 	 */
 	//afterMount: function () {}
 //@};
-	zk.afterMount = function (fn) { //part of zk
+	zk.afterMount = function (fn, _ctl_) { //part of zk
 		if (fn)  {
+			if (_ctl_)
+				return _aftMounts[0].push(fn); //last
 			if (zk.mounting)
-				return _aftMounts.push(fn);
+				return _aftMounts[1].push(fn); //normal
 			if (zk.loading)
 				return zk.afterLoad(fn);
 			if (!jq.isReady)
@@ -210,7 +212,7 @@ function zkmprops(uuid, props) {
 
 		zk.mounted = true;
 		zk.mounting = false;
-		zk.afterMount(function () {zk.bootstrapping = false;});
+		zk.afterMount(function () {zk.bootstrapping = false;}, true/*as last*/);
 		doAfterMount(mtBL1);
 		zk.endProcessing();
 
@@ -246,13 +248,19 @@ function zkmprops(uuid, props) {
 		doAfterMount(mtAU0);
 	}
 	function doAfterMount(fnext) {
-		for (var fn; fn = _aftMounts.shift();) {
-			fn();
-			if (zk.loading) {
-				zk.afterLoad(fnext); //fn might load packages
-				return;
+		for (var j = 2; j--;)
+			for (var fn, fns = _aftMounts[j]; fn = fns.shift();) {
+				fn();
+				if (zk.loading) {
+					zk.afterLoad(fnext); //fn might load packages
+					return true; //wait
+				}
 			}
-		}
+	}
+
+	function doAuCmds(cmds) {
+		for (var j = 0; j < cmds.length; j += 2)
+			zAu.process(cmds[j], cmds[j + 1]);
 	}
 
 	/* create the widget tree. */
@@ -317,20 +325,39 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, delay) {
+	zkx: function (wi, delay, aucmds) {
 		if (wi) {
+			zk.mounting = true;
+
+			if (aucmds && aucmds.length)
+				zk.afterMount(function () {doAuCmds(aucmds);});
+				//queue aucmds first so bookmark.js _startCheck won't be execute too early
+				//Test case: FF visit /zkdemo/userguide and #f1 shall not be appended
+
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
 					._pguid = wi[1];
 			}
+
 			_createInf0.push([_curdt(), wi, _ctx.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
+
 			mountpkg();
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
 		}
+	},
+	//Run AU commands (used only with ZHTML)
+	zkac: function () {
+		var cmds = arguments;
+		if (cmds.length)
+			setTimeout(function () {
+				zk.afterMount(function () {doAuCmds(cmds);});
+			}, 100);
+			//delay a bit since zkac() might be generated before zkx()
+			//and there might be muliple zkmb/zkme (e.g., test.zhtml)
 	},
 
 	//begin of mounting
