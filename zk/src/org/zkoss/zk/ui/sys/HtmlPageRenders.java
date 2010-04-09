@@ -166,14 +166,13 @@ public class HtmlPageRenders {
 		return "";
 	}
 
-	/** @deprecated As of release 5.0.2, the generation of AU responses
-	 * is done by {@link #outPageContent}
+	/** Generates the AU responses.
+	 * Notice that {@link #outPageContent} will invoke this method automatically.
 	 */
-	public static final
-	String outResponseJavaScripts(Execution exec) {
-		return "";
+	public static final String outResponseJavaScripts(Execution exec) {
+		return outAuCmds(exec, false);
 	}
-	/** Generates the AU commands that are part of a page rendering.
+	/** Generates the AU responses that are part of a page rendering.
 	 * @param directJS whether to generate JS directly
 	 */
 	private static final String outAuCmds(Execution exec, boolean directJS) {
