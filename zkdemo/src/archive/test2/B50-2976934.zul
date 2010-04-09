@@ -13,9 +13,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <html><![CDATA[
-<ol>
+<ul>
 <li>Check the checkbox can be checked.</li>
-</ol>
+</ul>
 ]]>
 </html>
 <div onClick="">
