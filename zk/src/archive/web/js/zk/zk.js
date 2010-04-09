@@ -184,7 +184,7 @@ zk.copy(zk, {
 	 * @see #afterMount
 	 * @see #processing
 	 * @see #loading
-	 * @see #bootstrapping
+	 * @see #booted
 	 * @type boolean
 	 */
 	//mounting: false,
@@ -197,16 +197,17 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//processing: false,
-	/** Indicates whether ZK Client Engine is just initialized and creating the initial widgets. In other words, it is not caused by asynchronous update. 
+	/** Indicates whether ZK Client Engine has been booted and created the initial widgets.
+	 * It is useful to know if it is caused by an asynchronous update (i.e., zk.booted is true). 
 	 * @see #mounting
 	 * @see #unloading
 	 * @type boolean
 	 */
-	//bootstrapping: false,
+	//booted: false,
 	/** Indicates whether the browser is unloading this document.
 	 * Note: when the function registered with {@link #beforeUnload} is called, this flag is not set yet. 
 	 * @see #loading
-	 * @see #bootstrapping
+	 * @see #booted
 	 * @type boolean
 	 */
 	//unloading: false,

@@ -107,7 +107,7 @@ function zkmprops(uuid, props) {
 	//a timer must be started early and its response depends page's AU
 	_paci.i = setInterval(function () {
 		var stateless;
-		if ((zk.mounted && !zk.mounting) || (stateless = _stateless()))
+		if ((zk.booted && !zk.mounting) || (stateless = _stateless()))
 			if (stateless || _paci.s == _paci.e) { //done
 				clearInterval(_paci.i);
 				var fs = _paci.f0.concat(_paci.f1);
@@ -191,13 +191,10 @@ function zkmprops(uuid, props) {
 		if (stub) { //AU
 			_createInf0.stub = null;
 			mtAU(stub);
-		} else { //browser loading
-			if (!zk.mounted) //mount() might be called w/o stub, ex: include
-				zk.bootstrapping = true;
+		} else //browser loading
 			mtBL();
 			//note: jq(mtBL) is a bit slow (too late to execute)
 			//note: <div/> must be generated before <script/>
-		}
 	}
 	//mount for browser loading
 	function mtBL() {
@@ -240,9 +237,8 @@ function zkmprops(uuid, props) {
 		if (_createInf0.length || _createInf1.length)
 			return; //another page started
 
-		zk.mounted = true;
+		zk.booted = true;
 		zk.mounting = false;
-		zk.afterMount(function () {zk.bootstrapping = false;});
 		doAfterMount(mtBL1);
 		_paci && ++_paci.s;
 		zk.endProcessing();
