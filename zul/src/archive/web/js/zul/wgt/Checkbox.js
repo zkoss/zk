@@ -137,8 +137,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return this.$supers('doClick_', arguments);
 	},
 	beforeSendAU_: function (wgt, evt) {
-		if (evt.name != 'onClick')
-			this.$supers('beforeSendAU_', arguments);
+		if (evt.name != "onClick") //don't stop event if onClick (otherwise, check won't work)
+			this.$supers("beforeSendAU_", arguments);
 	},
 	getTextNode: function () {
 		return jq(this.$n()).find('label:first')[0];
