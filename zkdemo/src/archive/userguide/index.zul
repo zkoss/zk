@@ -62,7 +62,7 @@ document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.
 </script>
 <script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}' defer="true"><![CDATA[
 try {
-window.pageTracker = _gat._getTracker("UA-121377-3");
+var pageTracker = _gat._getTracker("UA-121377-3");
 pageTracker._setDomainName("zkoss.org");
 pageTracker._initData();
 pageTracker._trackPageview();
