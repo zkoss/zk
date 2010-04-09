@@ -12,13 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-//begin of mounting
-function zkmb(binding) {
-	zk.mounting = true;
-	zk.mnt.binding = binding;
-	var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
-	zk.startProcessing(t > 0 ? t: 0);
-}
 
 //define a package and returns the package info (used in WpdExtendlet)
 function zkpi(nm, wv) {
@@ -33,22 +26,7 @@ function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
 //ZK JSP (useless; backward compatible)
 zkpe = zk.$void;
 
-//define a desktop
-function zkdt(dtid, contextURI, updateURI, reqURI) {
-	var dt = zk.Desktop.$(dtid);
-	if (dt == null) {
-		dt = new zk.Desktop(dtid, contextURI, updateURI, reqURI);
-		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
-	} else {
-		if (updateURI != null) dt.updateURI = updateURI;
-		if (contextURI != null) dt.contextURI = contextURI;
-		if (reqURI != null) dt.requestPath = reqURI;
-	}
-	zk.mnt.curdt = dt;
-	return dt;
-}
-
-//Init Only//
+//Initializes with version and options
 function zkver(ver, build, ctxURI, updURI, modVers, opts) {
 	zk.version = ver;
 	zk.build = build;
@@ -62,6 +40,7 @@ function zkver(ver, build, ctxURI, updURI, modVers, opts) {
 	zkopt(opts);
 }
 
+//Define a mold
 function zkmld(wgtcls, molds) {
 	if (!wgtcls.superclass) {
 		zk.afterLoad(function () {zkmld(wgtcls, molds);});
@@ -75,7 +54,8 @@ function zkmld(wgtcls, molds) {
 	}		
 }
 
-function zkamn(pkg, fn) { //for Ajax-as-a-service's main
+//Run Ajax-as-a-service's main
+function zkamn(pkg, fn) {
 	zk.load(pkg, function () {
 		setTimeout(function(){
 			zk.afterMount(fn)
@@ -83,11 +63,39 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	});
 }
 
-(function () { //zk.mnt
+//Handles z$ea and z$al. It is used for customization if necessary.
+//@since 5.0.2
+function zkmprops(uuid, props) {
+	//z$ea: value embedded as element's child nodes
+	var v = zk.cut(props, "z$ea");
+	if (v) {
+		var embed = jq(uuid, zk)[0];
+		if (embed) {
+			var val = [], n;
+			while (n = embed.firstChild) {
+				val.push(n);
+				embed.removeChild(n);
+			}
+			props[v] = val;
+		}
+	}
+
+	//z$al: afterLoad
+	v = zk.cut(props, "z$al");
+	if (v) {
+		zk.afterLoad(function () {
+			for (var p in v)
+				props[p] = v[p](); //must be func
+		});
+	}
+}
+
+(function () {
 	var _wgts = [],
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
-		_aftMounts = []; //afterMount funcs
+		_aftMounts = [], //afterMount funcs
+		_ctx = {}; //the context
 
 /** @partial zk
  */
@@ -115,7 +123,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	};
 
 	function _curdt() {
-		return zk.mnt.curdt || (zk.mnt.curdt = zk.Desktop.$());
+		return _ctx.curdt || (_ctx.curdt = zk.Desktop.$());
 	}
 	function mount() {
 		//1. load JS
@@ -250,7 +258,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
-			zk.mnt.props(uuid, props);
+			zkmprops(uuid, props);
 		}
 
 		for (var nm in props)
@@ -293,57 +301,54 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			fn();
 	}
 
-zk.mnt = { //Use internally
-	exe: function (wi, delay) {
+  zk.copy(window, {
+	//define a desktop
+	zkdt: function (dtid, contextURI, updateURI, reqURI) {
+		var dt = zk.Desktop.$(dtid);
+		if (dt == null) {
+			dt = new zk.Desktop(dtid, contextURI, updateURI, reqURI);
+			if (zk.pfmeter) zAu._pfrecv(dt, dtid);
+		} else {
+			if (updateURI != null) dt.updateURI = updateURI;
+			if (contextURI != null) dt.contextURI = contextURI;
+			if (reqURI != null) dt.requestPath = reqURI;
+		}
+		_ctx.curdt = dt;
+		return dt;
+	},
+
+	//widget creations
+	zkx: function (wi, delay) {
 		if (wi) {
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
 					._pguid = wi[1];
 			}
-			_createInf0.push([_curdt(), wi, zk.mnt.binding]);
+			_createInf0.push([_curdt(), wi, _ctx.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
 		}
 	},
-	end: function () {
-		_wgts = [];
-		zk.mnt.curdt = null;
-		zk.mnt.binding = false;
+
+	//begin of mounting
+	zkmb: function (binding) {
+		zk.mounting = true;
+		_ctx.binding = binding;
+		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
+		zk.startProcessing(t > 0 ? t: 0);
 	},
-	// Handles z$ea and z$al. It is used for customization if necessary.
-	// @since 5.0.2
-	props: function (uuid, props) {
-		//z$ea: value embedded as element's child nodes
-		var v = zk.cut(props, "z$ea");
-		if (v) {
-			var embed = jq(uuid, zk)[0];
-			if (embed) {
-				var val = [], n;
-				while (n = embed.firstChild) {
-					val.push(n);
-					embed.removeChild(n);
-				}
-				props[v] = val;
-			}
-		}
-
-		//z$al: afterLoad
-		v = zk.cut(props, "z$al");
-		if (v) {
-			zk.afterLoad(function () {
-				for (var p in v)
-					props[p] = v[p](); //must be func
-			});
-		}
+	//end of mounting
+	zkme: function () {
+		_wgts = [];
+		_ctx.curdt = null;
+		_ctx.binding = false;
 	}
-};
-})(); //zk.mnt
+  });
 
-zkme = zk.mnt.end; //end of mounting
-zkx = zk.mnt.exe; //widget creations
+})(window);
 
 //Event Handler//
 jq(function() {

@@ -530,7 +530,7 @@ zAu = {
 
 		var ex, j = 0, rid = responseId;
 		for (; j < cmdsQue.length; ++j) {
-			if (zk.mounting) return; //wait zk.mnt's mtAU to call
+			if (zk.mounting) return; //wait mount.js mtAU to call
 
 			var cmds = cmdsQue[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
@@ -555,7 +555,7 @@ zAu = {
 					} else { //not done yet (=zk.mounting)
 						responseId = oldrid; //restore
 						cmdsQue.splice(j, 0, cmds); //put it back
-						return; //wait zk.mnt's mtAU to call
+						return; //wait mount.js mtAU to call
 					}
 				} catch (e) {
 					if (!ex) ex = e;
