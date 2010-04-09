@@ -125,18 +125,36 @@ function zkmprops(uuid, props) {
 	function _curdt() {
 		return _ctx.curdt || (_ctx.curdt = zk.Desktop.$());
 	}
-	function mount() {
-		//1. load JS
+	//Load all required packages
+	function mountpkg() {
 		for (var j = _createInf0.length; j--;) {
 			var inf = _createInf0[j];
-			if (!inf.jsLoad) {
-				inf.jsLoad = true;
+			if (!inf.pked) { //mountpkg might be called multiple times before mount()
+				inf.pked = true;
 				pkgLoad(inf[0], inf[1]);
-				return run(mount);
 			}
 		}
+	}
+	//Loads package of a widget tree. Also handle z$pk
+	function pkgLoad(dt, wi) {
+		//z$pk: packages to load
+		var v = zk.cut(wi[2], "z$pk");
+		if (v) zk.load(v);
 
-		//2. create wgt
+		var type = wi[0];
+		if (type) { //not page (=0)
+			if (type === 1) //1: zhtml.Widget
+				wi[0] = type = "zhtml.Widget";
+			var i = type.lastIndexOf('.');
+			if (i >= 0)
+				zk.load(type.substring(0, i), dt);
+		}
+
+		for (var children = wi[3], j = children.length; j--;)
+			pkgLoad(dt, children[j]);
+	}
+	//create and mount widget
+	function mount() {
 		var stub = _createInf0.stub;
 		if (stub) { //AU
 			_createInf0.stub = null;
@@ -149,7 +167,7 @@ function zkmprops(uuid, props) {
 			//note: <div/> must be generated before <script/>
 		}
 	}
-	/* mount for browser loading */
+	//mount for browser loading
 	function mtBL() {
 		if (zk.loading) {
 			zk.afterLoad(mtBL);
@@ -270,25 +288,6 @@ function zkmprops(uuid, props) {
 		return wgt;
 	}
 
-	/* Loads package of a widget tree. Also handle z$pk */
-	function pkgLoad(dt, wi) {
-		//z$pk: packages to load
-		var v = zk.cut(wi[2], "z$pk");
-		if (v) zk.load(v);
-
-		var type = wi[0];
-		if (type) { //not page (=0)
-			if (type === 1) //1: zhtml.Widget
-				wi[0] = type = "zhtml.Widget";
-			var i = type.lastIndexOf('.');
-			if (i >= 0)
-				zk.load(type.substring(0, i), dt);
-		}
-
-		for (var children = wi[3], j = children.length; j--;)
-			pkgLoad(dt, children[j]);
-	}
-
 	/* run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
 		var t = zUtl.now(), dt = t - zk._t1;
@@ -328,6 +327,7 @@ function zkmprops(uuid, props) {
 			_createInf0.push([_curdt(), wi, _ctx.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
+			mountpkg();
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
 		}
