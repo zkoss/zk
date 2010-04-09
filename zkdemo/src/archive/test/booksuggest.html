@@ -29,8 +29,10 @@
 		-->
 	</div>
 	<script>
-	zk.spaceless = true;
-	zk.zuml.Parser.createAt('#main');
+	zk.afterLoad(function () {
+		zk.spaceless = true;
+		zk.zuml.Parser.createAt('#main');
+	});
 
 	function loadSuggest(item) {
 		 jq.ajax({
