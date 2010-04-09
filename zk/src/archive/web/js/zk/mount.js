@@ -262,8 +262,12 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 		return wgt;
 	}
 
-	/* Loads package of a widget tree. */
+	/* Loads package of a widget tree. Also handle z$pk */
 	function pkgLoad(dt, wi) {
+		//z$pk: packages to load
+		var v = zk.cut(wi[2], "z$pk");
+		if (v) zk.load(v);
+
 		var type = wi[0];
 		if (type) { //not page (=0)
 			if (type === 1) //1: zhtml.Widget
@@ -272,11 +276,6 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			if (i >= 0)
 				zk.load(type.substring(0, i), dt);
 		}
-
-		//z$pk: pkgs to load
-		var pkgs = zk.cut(wi[2], "z$pk");
-		if (pkgs)
-			zk.load(pkgs);
 
 		for (var children = wi[3], j = children.length; j--;)
 			pkgLoad(dt, children[j]);
@@ -295,7 +294,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 	}
 
 zk.mnt = { //Use internally
-	exe: function (wi) {
+	exe: function (wi, delay) {
 		if (wi) {
 			if (wi[0] === 0) { //page
 				var props = wi[2];
@@ -305,7 +304,8 @@ zk.mnt = { //Use internally
 			_createInf0.push([_curdt(), wi, zk.mnt.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
-			run(mount);
+			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+			else run(mount);
 		}
 	},
 	end: function () {
