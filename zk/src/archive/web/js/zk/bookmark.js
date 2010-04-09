@@ -73,7 +73,7 @@ zk.bmk = (function () { //used internally
 			//Though IE use bookmark.html, timer is still required 
 			//because user might specify URL directly
 	};
-	zk.afterMount(_startCheck, true/*as last (after zkx() done)*/);
+	zk._apac(_startCheck); //see mount.js (after page AU cmds)
 
   return {
 	/** Sets a bookmark that user can use forward and back buttons */

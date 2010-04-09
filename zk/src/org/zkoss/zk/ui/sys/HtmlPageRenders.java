@@ -561,7 +561,7 @@ public class HtmlPageRenders {
 		}
 
 		if (order < 0) {
-			out.write(",");
+			out.write(',');
 			out.write(extra.length() > 0 ? '1': '0');
 				//Bug 2983792 (delay until non-defer script evaluated)
 			out.write(outAuCmds(exec, true));

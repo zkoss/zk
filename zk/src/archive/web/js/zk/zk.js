@@ -952,9 +952,10 @@ zk.log('value is", value);
 	 * @param String dtid the ID of the desktop to create
 	 * @param String contextURI the context URI, such as /zkdemo
 	 * @param String updateURI the update URI, such as /zkdemo/zkau
+	 * @param String reqURI the URI of the request path.
 	 * @return Desktop the stateless desktop being created
 	 */
-	stateless: function (dtid, contextURI, updateURI) {
+	stateless: function (dtid, contextURI, updateURI, reqURI) {
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
@@ -963,7 +964,7 @@ zk.log('value is", value);
 			zk.updateURI = updateURI;
 		if (zk.contextURI == null) //it might be ""
 			zk.contextURI = contextURI;
-		return dt || new Desktop(dtid, contextURI, updateURI, true);
+		return dt || new Desktop(dtid, contextURI, updateURI, reqURI, true);
 	}
 });
 

@@ -510,11 +510,12 @@ zAu = {
 	},
 
 	////Ajax////
-	/** Processes the AU response sent from the server
+	/** Processes the AU response sent from the server.
+	 * <p>Don't call it directly at the client.
 	 * @param String cmd the command, such as echo
 	 * @param String data the data in a JSON string.
 	 */
-	process: function (cmd, data) { //by server only (encoded)
+	process: function (cmd, data) {
 		doProcess(cmd, data ? jq.evalJSON(data): []);
 	},
 	/** Returns whether to ignore the ESC keystroke.

@@ -94,8 +94,40 @@ function zkmprops(uuid, props) {
 	var _wgts = [],
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
-		_aftMounts = [[],[]], //afterMount (0:last, 1:normal)
-		_ctx = {}; //the context
+		_aftMounts = [], //afterMount
+		_mntctx = {}, //the context
+		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
+
+	//Issue of handling page's AU responses
+	//1. page's AU must be processed after all zkx(), while they might be added
+	//  before zkx (such as test/test.zhtml), or multiple zkx (such jspTags.jsp)
+	//2. mount.js:_startCheck must be called after processing page's AU
+	//  (otherwise, /zkdemo/userguide will jump to #f1 causing additional step)
+	//Note: it is better to block zAu but the chance to be wrong is low --
+	//a timer must be started early and its response depends page's AU
+	_paci.i = setInterval(function () {
+		var stateless;
+		if ((zk.mounted && !zk.mounting) || (stateless = _stateless()))
+			if (stateless || _paci.s == _paci.e) { //done
+				clearInterval(_paci.i);
+				var fs = _paci.f0.concat(_paci.f1);
+				_paci = null;
+				for (var f; f = fs.shift();)
+					f();
+			} else
+				_paci.e = _paci.s;
+	}, 25);
+	//run after page AU cmds
+	zk._apac = function (fn, bCmd) {
+		if (_paci)
+			return _paci[bCmd ? "f0": "f1"].push(fn);
+		fn();
+	};
+	function _stateless() {
+		var dts = zk.Desktop.all;
+		for (var dtid in dts)
+			if (dts[dtid].stateless) return true;
+	}
 
 /** @partial zk
  */
@@ -110,12 +142,10 @@ function zkmprops(uuid, props) {
 	 */
 	//afterMount: function () {}
 //@};
-	zk.afterMount = function (fn, _ctl_) { //part of zk
+	zk.afterMount = function (fn) { //part of zk
 		if (fn)  {
-			if (_ctl_)
-				return _aftMounts[0].push(fn); //last
 			if (zk.mounting)
-				return _aftMounts[1].push(fn); //normal
+				return _aftMounts.push(fn); //normal
 			if (zk.loading)
 				return zk.afterLoad(fn);
 			if (!jq.isReady)
@@ -125,7 +155,7 @@ function zkmprops(uuid, props) {
 	};
 
 	function _curdt() {
-		return _ctx.curdt || (_ctx.curdt = zk.Desktop.$());
+		return _mntctx.curdt || (_mntctx.curdt = zk.Desktop.$());
 	}
 	//Load all required packages
 	function mountpkg() {
@@ -212,8 +242,9 @@ function zkmprops(uuid, props) {
 
 		zk.mounted = true;
 		zk.mounting = false;
-		zk.afterMount(function () {zk.bootstrapping = false;}, true/*as last*/);
+		zk.afterMount(function () {zk.bootstrapping = false;});
 		doAfterMount(mtBL1);
+		_paci && ++_paci.s;
 		zk.endProcessing();
 
 		zk.bmk.onURLChange();
@@ -248,19 +279,21 @@ function zkmprops(uuid, props) {
 		doAfterMount(mtAU0);
 	}
 	function doAfterMount(fnext) {
-		for (var j = 2; j--;)
-			for (var fn, fns = _aftMounts[j]; fn = fns.shift();) {
-				fn();
-				if (zk.loading) {
-					zk.afterLoad(fnext); //fn might load packages
-					return true; //wait
-				}
+		for (var fn; fn = _aftMounts.shift();) {
+			fn();
+			if (zk.loading) {
+				zk.afterLoad(fnext); //fn might load packages
+				return true; //wait
 			}
+		}
 	}
 
 	function doAuCmds(cmds) {
-		for (var j = 0; j < cmds.length; j += 2)
-			zAu.process(cmds[j], cmds[j + 1]);
+		if (cmds && cmds.length)
+			zk._apac(function () {
+				for (var j = 0; j < cmds.length; j += 2)
+					zAu.process(cmds[j], cmds[j + 1]);
+			}, true);
 	}
 
 	/* create the widget tree. */
@@ -320,7 +353,7 @@ function zkmprops(uuid, props) {
 			if (contextURI != null) dt.contextURI = contextURI;
 			if (reqURI != null) dt.requestPath = reqURI;
 		}
-		_ctx.curdt = dt;
+		_mntctx.curdt = dt;
 		return dt;
 	},
 
@@ -329,10 +362,7 @@ function zkmprops(uuid, props) {
 		if (wi) {
 			zk.mounting = true;
 
-			if (aucmds && aucmds.length)
-				zk.afterMount(function () {doAuCmds(aucmds);});
-				//queue aucmds first so bookmark.js _startCheck won't be execute too early
-				//Test case: FF visit /zkdemo/userguide and #f1 shall not be appended
+			doAuCmds(aucmds);
 
 			if (wi[0] === 0) { //page
 				var props = wi[2];
@@ -340,7 +370,7 @@ function zkmprops(uuid, props) {
 					._pguid = wi[1];
 			}
 
-			_createInf0.push([_curdt(), wi, _ctx.binding]);
+			_createInf0.push([_curdt(), wi, _mntctx.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
 
@@ -351,27 +381,21 @@ function zkmprops(uuid, props) {
 	},
 	//Run AU commands (used only with ZHTML)
 	zkac: function () {
-		var cmds = arguments;
-		if (cmds.length)
-			setTimeout(function () {
-				zk.afterMount(function () {doAuCmds(cmds);});
-			}, 300);
-			//delay a bit since zkac() might be generated before zkx()
-			//and there might be muliple zkmb/zkme (e.g., test.zhtml)
+		doAuCmds(arguments);
 	},
 
 	//begin of mounting
 	zkmb: function (binding) {
 		zk.mounting = true;
-		_ctx.binding = binding;
+		_mntctx.binding = binding;
 		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
 		zk.startProcessing(t > 0 ? t: 0);
 	},
 	//end of mounting
 	zkme: function () {
 		_wgts = [];
-		_ctx.curdt = null;
-		_ctx.binding = false;
+		_mntctx.curdt = null;
+		_mntctx.binding = false;
 	}
   });
 
