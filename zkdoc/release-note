@@ -6,6 +6,7 @@ ZK 5.0.2
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
   2976934: Checkbox cannot be checked in a comp with listener onClick
+  2984382: The dropdown list of the combobox is not align
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error
