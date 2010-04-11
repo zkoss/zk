@@ -31,7 +31,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<z:window id="win" title="Test" border="normal" width="300px">
 		<p>3. Content in z:window</p>
-		<z:button label="Overlap" onClick="win.doOverlapped()"/>
+		<z:button label="Overlap" onClick="win.doOverlapped()" focus="true"/>
 		<z:button label="Embed" onClick="win.doEmbedded()"/>
 	</z:window>
 

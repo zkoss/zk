@@ -26,30 +26,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	/* Creates HIDDEN elements based on the specified query string
-	 * @param DOMElement parent the parent node (required).
-	 * @param String qs the query string
-	 */
-	function _queryToHiddens(parent, qs) {
-		for(var j = 0;;) {
-			var k = qs.indexOf('=', j);
-			var l = qs.indexOf('&', j);
-	
-			var nm, val;
-			if (k < 0 || (k > l && l >= 0)) { //no value part
-				nm = l >= 0 ? qs.substring(j, l): qs.substring(j);
-				val = "";
-			} else {
-				nm = qs.substring(j, k);
-				val = l >= 0 ? qs.substring(k + 1, l): qs.substring(k + 1);
-			}
-			jq.newHidden(nm, val, parent);
-	
-			if (l < 0) return; //done
-			j = l + 1;
-		}
-	}
-
 /** @class zUtl
  * @import zk.Widget
  * @import zk.xml.Utl
@@ -404,24 +380,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	go: function (url, opts) {
 		opts = opts || {};
 		if (opts.target) {
-			//we have to process query string because browser won't do it
-			//even if we use jq().append("<form...")
-			try {
-				var frm = document.createElement("form");
-				document.body.appendChild(frm);
-				var j = url.indexOf('?');
-				if (j > 0) {
-					var qs = url.substring(j + 1);
-					url = url.substring(0, j);
-					_queryToHiddens(frm, qs);
-				}
-				frm.name = "go";
-				frm.action = url;
-				frm.method = "GET";
-				frm.target = opts.target;
-				frm.submit();
-			} catch (e) { //happens if popup block
-			}
+			open(url, opts.target);
 		} else if (opts.overwrite) {
 			location.replace(url ? url: location.href);
 		} else {

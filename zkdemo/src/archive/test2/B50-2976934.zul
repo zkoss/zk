@@ -1,0 +1,24 @@
+<!--
+B50-2976934.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 23 16:33:14 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ul>
+<li>Check the checkbox can be checked.</li>
+</ul>
+]]>
+</html>
+<div onClick="">
+	<checkbox label="click me"/>
+</div>
+</zk>

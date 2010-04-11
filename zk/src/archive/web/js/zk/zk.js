@@ -184,7 +184,7 @@ zk.copy(zk, {
 	 * @see #afterMount
 	 * @see #processing
 	 * @see #loading
-	 * @see #bootstrapping
+	 * @see #booted
 	 * @type boolean
 	 */
 	//mounting: false,
@@ -197,16 +197,17 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//processing: false,
-	/** Indicates whether ZK Client Engine is just initialized and creating the initial widgets. In other words, it is not caused by asynchronous update. 
+	/** Indicates whether ZK Client Engine has been booted and created the initial widgets.
+	 * It is useful to know if it is caused by an asynchronous update (i.e., zk.booted is true). 
 	 * @see #mounting
 	 * @see #unloading
 	 * @type boolean
 	 */
-	//bootstrapping: false,
+	//booted: false,
 	/** Indicates whether the browser is unloading this document.
 	 * Note: when the function registered with {@link #beforeUnload} is called, this flag is not set yet. 
 	 * @see #loading
-	 * @see #bootstrapping
+	 * @see #booted
 	 * @type boolean
 	 */
 	//unloading: false,
@@ -953,9 +954,10 @@ zk.log('value is", value);
 	 * @param String dtid the ID of the desktop to create
 	 * @param String contextURI the context URI, such as /zkdemo
 	 * @param String updateURI the update URI, such as /zkdemo/zkau
+	 * @param String reqURI the URI of the request path.
 	 * @return Desktop the stateless desktop being created
 	 */
-	stateless: function (dtid, contextURI, updateURI) {
+	stateless: function (dtid, contextURI, updateURI, reqURI) {
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
@@ -964,7 +966,7 @@ zk.log('value is", value);
 			zk.updateURI = updateURI;
 		if (zk.contextURI == null) //it might be ""
 			zk.contextURI = contextURI;
-		return dt || new Desktop(dtid, contextURI, updateURI, true);
+		return dt || new Desktop(dtid, contextURI, updateURI, reqURI, true);
 	}
 });
 

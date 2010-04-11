@@ -1623,6 +1623,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	public void redraw(final Writer out) throws IOException {
 		final int order = ComponentRedraws.beforeRedraw(false);
+		final String extra;
 		try {
 			if (order < 0)
 				out.write("zkx(");
@@ -1654,10 +1655,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 			out.write(']');
 
-			if (order < 0)
-				out.write(");\n");
 		} finally {
-			out.write(ComponentRedraws.afterRedraw());
+			extra = ComponentRedraws.afterRedraw();
+		}
+		if (order < 0) {
+			if (extra.length() > 0)
+				out.write(",1"); //Bug 2983792 (delay until non-defer script evaluated)
+			out.write(");\n");
+			out.write(extra);
 		}
 	}
 	/** Redraws childrens (and then recursively descandants).

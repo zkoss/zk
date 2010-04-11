@@ -522,7 +522,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_addItemToSelection: function (item) {
 		if (!item.isSelected()) {
 			if (!this._multiple) {
-				this.selectItem(item);
+				this._selectedIndex = this.indexOfItem(item);
 			} else {
 				var index = this.indexOfItem(item);
 				if (index < this._selectedIndex || this._selectedIndex < 0) {

@@ -72,6 +72,13 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getListgroup();
 		return group && !group.isOpen() ? style + "display:none;" : style;
+	},
+	domClass_: function () {
+		var cls = this.$supers('domClass_', arguments),
+			list = this.getListbox();
+		if (list && jq(this.$n()).hasClass(list = list.getOddRowSclass()))
+			return cls + ' ' + list; 
+		return cls;
 	}
 });
 })();

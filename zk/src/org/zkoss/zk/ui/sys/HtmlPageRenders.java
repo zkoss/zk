@@ -166,33 +166,42 @@ public class HtmlPageRenders {
 		return "";
 	}
 
-	/** Returns JavaScript for handling the specified response.
-	 * @param exec the execution (never null)
+	/** Generates the AU responses.
+	 * Notice that {@link #outPageContent} will invoke this method automatically.
 	 */
-	public static final
-	String outResponseJavaScripts(Execution exec) {
+	public static final String outResponseJavaScripts(Execution exec) {
+		return outAuCmds(exec, false);
+	}
+	/** Generates the AU responses that are part of a page rendering.
+	 * @param directJS whether to generate JS directly
+	 */
+	private static final String outAuCmds(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Collection responses = execCtrl.getResponses();
 		if (responses == null || responses.isEmpty()) return "";
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script>zk.afterMount(function(){\n");
+			.append(directJS ? "\n,[": "<script>\nzkac(");
+
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
-			sb.append("zAu.process('").append(response.getCommand())
-				.append("'");
-
+			sb.append("'").append(response.getCommand())
+				.append("',");
 			final List encdata = response.getEncodedData();
 			if (encdata != null)
-				sb.append(",'")
+				sb.append('\'')
 					.append(Strings.escape(
 						org.zkoss.json.JSONArray.toJSONString(encdata),
 						Strings.ESCAPE_JAVASCRIPT))
 					.append('\'');
-			sb.append(");\n");
+			else
+				sb.append((String)null);
+			if (it.hasNext())
+				sb.append(",\n");
 		}
-		return sb.append("});\n</script>\n").toString();
+
+		return sb.append(directJS ? "]": ");\n</script>").toString();
 	}
 
 	/** Returns HTML tags to include all JavaScript files and codes that are
@@ -517,6 +526,7 @@ public class HtmlPageRenders {
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		final int order = ComponentRedraws.beforeRedraw(false);
+		final String extra;
 		try {
 			if (order < 0)
 				out.write("zkx(");
@@ -546,10 +556,17 @@ public class HtmlPageRenders {
 				((ComponentCtrl)it.next()).redraw(out);
 
 			out.write("]]");
-			if (order < 0)
-				out.write(");\n");
 		} finally {
-			out.write(ComponentRedraws.afterRedraw());
+			extra = ComponentRedraws.afterRedraw();
+		}
+
+		if (order < 0) {
+			out.write(',');
+			out.write(extra.length() > 0 ? '1': '0');
+				//Bug 2983792 (delay until non-defer script evaluated)
+			out.write(outAuCmds(exec, true));
+			out.write(");\n");
+			out.write(extra);
 		}
 
 		if (standalone) {
@@ -736,7 +753,7 @@ public class HtmlPageRenders {
 				.append("</script>\n");
 		}
 
-		sb.append(outResponseJavaScripts(exec));
+		sb.append(outAuCmds(exec, false));
 		return sb.toString();
 	}
 	private static String getContextURI(Execution exec) {

@@ -277,6 +277,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (this._nowrap)
 			attr += ' nowrap="nowrap"';
 		return attr;
+	},
+	domClass_: function () {
+		var cls = this.$supers('domClass_', arguments),
+			grid = this.getGrid();
+		if (grid && jq(this.$n()).hasClass(grid = grid.getOddRowSclass()))
+			return cls + ' ' + grid; 
+		return cls;
 	}
 });
 })();

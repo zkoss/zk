@@ -436,28 +436,27 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		this._setHgh(n.style.height);
 		
-		if (zk.isLoaded('zul.sel') && this.$instanceof(zul.sel.SelectWidget)) {
-			//Bug 1553937: wrong sibling location
-			//Otherwise,
-			//IE: element's width will be extended to fit body
-			//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
-			//note: we don't solve this bug for paging yet
-			var wd = n.style.width;
-			if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-				wd = zk(n).revisedWidth(n.offsetWidth);
-				if (wd < 0) 
-					wd = 0;
-				if (wd) 
-					wd += "px";
-			}
-			if (wd) {
-				this.ebody.style.width = wd;
-				if (this.ehead) 
-					this.ehead.style.width = wd;
-				if (this.efoot) 
-					this.efoot.style.width = wd;
-			}
+		//Bug 1553937: wrong sibling location
+		//Otherwise,
+		//IE: element's width will be extended to fit body
+		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
+		//note: we don't solve this bug for paging yet
+		var wd = n.style.width;
+		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
+			wd = zk(n).revisedWidth(n.offsetWidth);
+			if (wd < 0) 
+				wd = 0;
+			if (wd) 
+				wd += "px";
 		}
+		if (wd) {
+			this.ebody.style.width = wd;
+			if (this.ehead) 
+				this.ehead.style.width = wd;
+			if (this.efoot) 
+				this.efoot.style.width = wd;
+		}
+		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.ebody.clientWidth;
 		if (zk.ie) {//By experimental: see zk-blog.txt

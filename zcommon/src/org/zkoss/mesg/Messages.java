@@ -153,7 +153,7 @@ public class Messages implements MessageConst {
 			}
 			return s;
 		}catch(Exception ex) {
-			log.error(ex);
+			log.realCause(ex);
 			return getNotFound(code, locale);
 		}
 	}

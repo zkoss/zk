@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 import org.zkoss.util.logging.Log;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Utilities to implement {@link ComponentCtrl#redraw}.
@@ -88,7 +89,8 @@ public class ComponentRedraws {
 	 * @return the snippet that shall be written to the HTML output.
 	 * For HTML components, it is actually JavaScript snippet.
 	 * To inject the snippet, just invoke {@link #getScriptBuffer} and
-	 * append the snippet into the returned string buffer.
+	 * append the snippet into the returned string buffer.<br/>
+	 * Notice that it always returns an empty string if it is not the top level.
 	 */
 	public static final String afterRedraw() {
 		try {
@@ -101,7 +103,7 @@ public class ComponentRedraws {
 			}
 		} catch (Throwable ex) {
 			_ctx.set(null); //just in case
-			log.realCauseBriefly(ex);
+			throw UiException.Aide.wrap(ex); //internal error
 		}
 		return "";
 	}

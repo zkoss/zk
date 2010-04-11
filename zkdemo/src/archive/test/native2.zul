@@ -21,7 +21,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 	<zkhead/>
 	<script>
 	var some = "Error";
-	setTimeout(function(){zk.log("You shall see "+some);},0); //test if quote is escaped
+	setTimeout(function(){zk.log(some);},0); //test if quote is escaped
 	</script>
  </head>
  <body>
