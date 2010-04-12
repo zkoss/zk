@@ -44,10 +44,8 @@ public class FileuploadDlg extends Window {
 		else {
 			final Desktop desktop = Executions.getCurrent().getDesktop();
 			final Configuration config = desktop .getWebApp().getConfiguration();
-			if (!config.isEventThreadEnabled()) {
+			if (!config.isEventThreadEnabled())
 				Events.postEvent(new UploadEvent(Events.ON_UPLOAD, (Component)desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
-				desktop.removeAttribute(ATTR_FILEUPLOAD_TARGET);
-			}
 		}
 		detach();
 	}
