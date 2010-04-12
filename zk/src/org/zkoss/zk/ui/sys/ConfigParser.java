@@ -477,8 +477,13 @@ public class ConfigParser {
 					log.error("device-type not specified at "+el.getLocator());
 
 				config.addErrorPage(deviceType, cls, loc);
-			} else if (!parseProperties(el)
-			&& !parsePreferences(config, el)) {
+			} else if ("preference".equals(elnm)) {
+				parsePreference(config, el);
+			} else if ("library-property".equals(elnm)) {
+				parseLibProperty(el);
+			} else if ("system-property".equals(elnm)) {
+				parseSysProperty(el);
+			} else {
 				if (_parsers != null)
 					for (Iterator e = _parsers.iterator(); e.hasNext();) {
 						org.zkoss.zk.ui.util.ConfigParser parser =
@@ -490,29 +495,37 @@ public class ConfigParser {
 			}
 		}
 	}
-	private static boolean parseProperties(Element el) {
-		final String elnm = el.getName();
-		if ("library-property".equals(elnm)) {
-			final String nm = IDOMs.getRequiredElementValue(el, "name");
-			final String val = IDOMs.getRequiredElementValue(el, "value");
-			Library.setProperty(nm, val);
-			return true;
-		} else if ("system-property".equals(elnm)) {
-			final String nm = IDOMs.getRequiredElementValue(el, "name");
-			final String val = IDOMs.getRequiredElementValue(el, "value");
-			System.setProperty(nm, val);
-			return false;
+
+	private static void parseProperties(Element root) {
+		for (Iterator it = root.getElements("library-property").iterator();
+		it.hasNext();) {
+			parseLibProperty((Element)it.next());
 		}
-		return false;
+		for (Iterator it = root.getElements("system-property").iterator();
+		it.hasNext();) {
+			parseSysProperty((Element)it.next());
+		}
 	}
-	private static boolean parsePreferences(Configuration config, Element el) {
-		if ("preference".equals(el.getName())) {
-			final String nm = IDOMs.getRequiredElementValue(el, "name");
-			final String val = IDOMs.getRequiredElementValue(el, "value");
-			config.setPreference(nm, val);
-			return true;
+	private static void parseLibProperty(Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		Library.setProperty(nm, val);
+	}
+	private static void parseSysProperty(Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		System.setProperty(nm, val);
+	}
+	private static void parsePreferences(Configuration config, Element root) {
+		for (Iterator it = root.getElements("preference").iterator();
+		it.hasNext();) {
+			parsePreference(config, (Element)it.next());
 		}
-		return false;
+	}
+	private static void parsePreference(Configuration config, Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		config.setPreference(nm, val);
 	}
 
 	/** Parses timeout-uri an other info. */
