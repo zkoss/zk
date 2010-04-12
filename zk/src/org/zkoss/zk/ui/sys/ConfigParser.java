@@ -163,10 +163,12 @@ public class ConfigParser {
 							parseSubDeviceConfig(el);
 							parseSubSystemConfig(el);
 							parseSubClientConfig(config, el);
+							parseProperties(el);
 						}
 
 						if (config != null) {
 							parseListeners(config, el);
+							parsePreferences(config, el);
 						}
 					}
 				} catch (Exception ex) {
@@ -475,19 +477,8 @@ public class ConfigParser {
 					log.error("device-type not specified at "+el.getLocator());
 
 				config.addErrorPage(deviceType, cls, loc);
-			} else if ("preference".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				config.setPreference(nm, val);
-			} else if ("library-property".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				Library.setProperty(nm, val);
-			} else if ("system-property".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				System.setProperty(nm, val);
-			} else {
+			} else if (!parseProperties(el)
+			&& !parsePreferences(config, el)) {
 				if (_parsers != null)
 					for (Iterator e = _parsers.iterator(); e.hasNext();) {
 						org.zkoss.zk.ui.util.ConfigParser parser =
@@ -498,6 +489,30 @@ public class ConfigParser {
 				log.error("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
+	}
+	private static boolean parseProperties(Element el) {
+		final String elnm = el.getName();
+		if ("library-property".equals(elnm)) {
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			Library.setProperty(nm, val);
+			return true;
+		} else if ("system-property".equals(elnm)) {
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			System.setProperty(nm, val);
+			return false;
+		}
+		return false;
+	}
+	private static boolean parsePreferences(Configuration config, Element el) {
+		if ("preference".equals(el.getName())) {
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			config.setPreference(nm, val);
+			return true;
+		}
+		return false;
 	}
 
 	/** Parses timeout-uri an other info. */
