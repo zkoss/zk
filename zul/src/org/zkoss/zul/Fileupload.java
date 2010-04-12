@@ -40,6 +40,15 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
  *
+ * <p>If the event thread is disabled, this approach is not recommended.
+ * If you prefer to use this approach. You have to
+ * <ul>
+ * <li>Implements a class by extending {@link FileuploadDlg}</li>
+ * <li>Override {@link FileuploadDlg#onClose} to copy the result
+ * {@link FileuploadDlg#getResult}) to your destination.</li>
+ * <li>Specify the class name in the library property called org.zkoss.zul.FileuploadDlg.class.</li>
+ * </ul>
+ *
  * <h3>2. Embed as part of the page:</h3>
  *
  * <p>You can create it as a component and then listen to
