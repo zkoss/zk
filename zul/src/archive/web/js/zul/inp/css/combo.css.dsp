@@ -37,7 +37,7 @@
 	<c:if test="${c:isOpera()}">
 		font-style: normal;
 	</c:if>
-	<c:if test="${c:isUbuntu()&& c:isGecko()}">
+	<c:if test="${c:browser('ubuntu')&& c:isGecko()}">
 		height: 14px;
 	</c:if>
 }
