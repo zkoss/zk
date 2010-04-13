@@ -519,7 +519,7 @@ public class HtmlPageRenders {
 		if (divRequired) {
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
-			out.write(" class=\"z-temp\">");
+			out.write(" class=\"z-temp\"></div>");
 		}
 
 		if (standalone) { //switch out
