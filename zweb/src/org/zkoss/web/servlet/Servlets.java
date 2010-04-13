@@ -285,7 +285,7 @@ public class Servlets {
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
-	 * "opara", "safari", "/regex/"
+	 * "opara", "safari",
 	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
