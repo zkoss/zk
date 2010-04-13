@@ -849,7 +849,7 @@ zk.endProcessing();
 	 * @param String msg the error message
 	 * @see #errorDismiss
 	 * @see #log
-	 * @see #stamp
+	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
 		new _zErb(msg);
@@ -869,7 +869,7 @@ zk.log('reach here');
 zk.log('value is", value);
 </code></pre>
 	 * @param Object... detailed varient number of arguments to log
-	 * @see #stamp
+	 * @see #stamp(String, boolean)
 	 */
 	log: function (detailed) {		
 		var msg = toLogMsg(
@@ -891,10 +891,17 @@ zk.log('value is", value);
 	 * any two stamps (including beginning and ending) will be logged
 	 * (with {@link #log}).
 	 * @param String name the unique name to represent a time stamp
+	 * @param boolean noAutoLog whehter not to auto log the result.
+	 * If omitted or false, {@link #stamp()} will be invoked automatically
+	 * to log the info and clean up all stamps after mounting is completed.
+	 * Turn it off, if you prefer to invoke it manually.
 	 */
-	stamp: function (nm) {
-		if (arguments.length) {
-			if (!_stamps.length)
+	/** Logs the information of all stamps made by {@link #stamp(String, boolean)}.
+	 * After the invocation, all stamps are reset.
+	 */
+	stamp: function (nm, noAutoLog) {
+		if (nm) {
+			if (!noAutoLog && !_stamps.length)
 				setTimeout(_stampout, 0);
 			_stamps.push({n: nm, t: zUtl.now()});
 		} else if (_stamps.length) {
