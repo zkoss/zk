@@ -18,7 +18,6 @@ package org.zkoss.web.fn;
 
 import java.io.Writer;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -113,11 +112,6 @@ public class ServletFns {
 	 */
 	public static boolean isOpera() {
 		return Servlets.isOpera(getCurrentRequest());
-	}
-	/** Returns whether the operation system of the browser is Ubuntu.
-	 */
-	public static boolean isUbuntu() {
-		return Servlets.isUbuntu(getCurrentRequest());
 	}
 
 	/** Returns the current EL context. */

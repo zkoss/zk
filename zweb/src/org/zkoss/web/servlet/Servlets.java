@@ -285,7 +285,7 @@ public class Servlets {
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
-	 * "opara", "safari",
+	 * "opara", "safari", "/regex/"
 	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
@@ -318,26 +318,6 @@ public class Servlets {
 
 		if ("robot".equals(type)) return isRobot(userAgent);
 		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
-	}
-	/** Returns whether the operation system of the browser is Ubuntu.
-	 * 
-	 */
-	public static final boolean isUbuntu(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isUbuntu(((HttpServletRequest)req).getHeader("user-agent"));
-	}
-	/** Returns whether the operation system of the browser is Ubuntu.
-	 *
-	 * @param userAgent represents a client.
-	 * For HTTP clients, It is the user-agent header.
-	 * @since 5.0.2
-	 */
-	public static final boolean isUbuntu(String userAgent) {
-		if (userAgent == null)
-			return false;
-
-		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("ubuntu/") >= 0;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
