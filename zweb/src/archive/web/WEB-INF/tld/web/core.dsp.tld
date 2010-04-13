@@ -423,6 +423,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Whether the current request is coming from Opera.
 		</description>
 	</function>
+	<function>
+		<name>isUbuntu</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+	boolean isUbuntu()
+		</function-signature>
+		<description>
+	Whether the operation system of the browser is Ubuntu.
+		</description>
+	</function>
 
 	<function>
 		<name>render</name>

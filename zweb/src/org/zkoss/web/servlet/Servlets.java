@@ -319,6 +319,26 @@ public class Servlets {
 		if ("robot".equals(type)) return isRobot(userAgent);
 		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
 	}
+	/** Returns whether the operation system of the browser is Ubuntu.
+	 * 
+	 */
+	public static final boolean isUbuntu(ServletRequest req) {
+		return (req instanceof HttpServletRequest)
+			&& isUbuntu(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the operation system of the browser is Ubuntu.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 5.0.2
+	 */
+	public static final boolean isUbuntu(String userAgent) {
+		if (userAgent == null)
+			return false;
+
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("ubuntu/") >= 0;
+	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
