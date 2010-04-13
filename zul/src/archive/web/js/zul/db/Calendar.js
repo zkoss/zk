@@ -344,6 +344,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this._setView("year");
 					break;
 			}
+			evt.stop();
 		}
 	},
 	_shiftDate: function (opt, ofs) {
@@ -378,6 +379,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this._setView("year");
 		else if (evt.domTarget == tyd )
 			this._setView("decade");
+		evt.stop();
 	},
 	_setView : function (view) {
 		if (view != this._view) {
@@ -475,6 +477,5 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		}
 	}
-
 });
 })();
