@@ -37,6 +37,9 @@
 	<c:if test="${c:isOpera()}">
 		font-style: normal;
 	</c:if>
+	<c:if test="${c:isUbuntu()&& c:isGecko()}">
+		height: 14px;
+	</c:if>
 }
 .z-combobox-rounded-inp,
 .z-bandbox-rounded-inp,
