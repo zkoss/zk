@@ -2894,6 +2894,13 @@ focus: function (timeout) {
 	 * <p>Notice that {@link #sendAU_} is called against the widget sending the AU request
 	 * to the server, while {@link #beforeSendAU_} is called against the event's
 	 * target (evt.target).
+	 *
+	 * <p>Notice that since this method will stop the event propagation for onClick,
+	 * onRightClick and onDoubleClick, it means the event propagation is stopped
+	 * if the server registers a listener. However, it doesn't stop if
+	 * only a client listener is registered (and, in this case, {@link zk.Event#stop}
+	 * must be called explicitly if you want to stop).
+	 *
 	 * @param zk.Widget wgt the widget that causes the AU request to be sent.
 	 * It will be the target widget when the server receives the event.
 	 * @param zk.Event evt the event to be sent back to the server.

@@ -638,7 +638,7 @@ jq(function() {
 		//to remove the desktop.
 		//Good news: Opera preserves the most udpated content, when BACK to
 		//a cached page, its content. OTOH, IE/FF/Safari cannot.
-		//Note: Safari won't send rmDesktop when onunload is called
+		//Note: Safari/Chrome won't send rmDesktop when onunload is called
 		var bRmDesktop = !zk.opera && !zk.keepDesktop && !zk.light;
 		if (bRmDesktop || zk.pfmeter) {
 			try {

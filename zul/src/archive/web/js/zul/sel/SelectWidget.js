@@ -604,12 +604,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
 	 * <p>Default: always false (don't ignore)
+	 * Notice that clicking on button/textbox are already ignored, i.e.,
+	 * this method won't be called if the user clicks on, say, a button.
 	 * @param zk.Event evt the event
 	 * @return boolean wether to ignore
 	 */
 	shallIgnoreSelect_: function (evt) {
-		//Since ZK 5, we always select the item
-		//It is hard to detect whether not to select if button is clicked(like ZK 3)
+		//see also _shallIgnore
 	},
 	_doItemSelect: function (row, evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
