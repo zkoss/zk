@@ -113,7 +113,7 @@ import org.zkoss.zk.ui.ext.Includer;
 			SessionsCtrl.setCurrent(sess);
 			ExecutionsCtrl.setCurrent(exec);
 			try {
-				return dtrc.beforeService(exec, path);
+				return dtrc.beforeService(exec, getURI(path, request.getQueryString()));
 			} catch (Throwable ex) {
 				log.error(ex);
 			} finally {
@@ -132,6 +132,14 @@ import org.zkoss.zk.ui.ext.Includer;
 				log.error(ex);
 			}
 		}
+	}
+
+	/** Returns the request URI of the desktop.
+	 * The request URI is a combination of {@link Desktop#getRequestPath}
+	 * and {@link Desktop#getQueryURI}.
+	 */
+	/*package*/ static String getURI(String path, String qs) {
+		return qs != null ? path + '?' + qs: path;
 	}
 
 	/** Returns the main page of the desktop.

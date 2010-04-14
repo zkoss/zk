@@ -35,6 +35,7 @@ ZK 5.0.2
   2986282: The input of combobox is misalign on ubuntu
   2986413: DOM content generated not ending correctly  
   2984412: On 2nd refresh app stucked if DesktopRecycle and defer include
+  2986891: DesktopRecycle shall not reuse cache if query string changed
   2986905: The value of select mold listbox is wrong in Servlet
   
 * Upgrade Notes

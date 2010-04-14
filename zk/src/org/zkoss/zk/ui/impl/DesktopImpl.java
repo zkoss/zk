@@ -112,6 +112,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private String _dir = "";
 	/** The path of the request that causes this desktop to be created. */
 	private final String _path;
+	/** The query string. */
+	private final String _qs;
 	/** The URI to access the update engine. */
 	private final String _updateURI;
 	/** Map(String id, Page page). */
@@ -200,6 +202,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_path = "";
 		}
 		setCurrentDirectory(dir);
+		_qs = getQueryString(request);
+
 		if (deviceType != null && deviceType.length() != 0)
 			setDeviceType(deviceType);
 
@@ -235,6 +239,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} finally {
 			_exec = null;
 		}
+	}
+	private static String getQueryString(Object request) {
+		try {
+			if (request instanceof javax.servlet.http.HttpServletRequest)
+				return ((javax.servlet.http.HttpServletRequest)request).getQueryString();
+		} catch (Throwable ex) { //ignore any error (such as no servlet at all)
+		}
+		return null;
 	}
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
@@ -513,6 +525,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public String getRequestPath() {
 		return _path;
+	}
+	public String getQueryString() {
+		return _qs;
 	}
 	public String getCurrentDirectory() {
 		return _dir;

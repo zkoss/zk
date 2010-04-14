@@ -73,11 +73,14 @@ public interface DesktopRecycle {
 	 *
 	 * @param exec the execution. It doesn't not associated with
 	 * a desktop, and used only for accessing the request and response.
-	 * @param path the request path. It is the same as {@link Desktop#getRequestPath}.
+	 * @param uri the request URI. It is
+	 * a combination of {@link Desktop#getRequestPath} and {@link Desktop#getQueryString}.
+	 * For example, if {@link Desktop#getRequestPath} and {@link Desktop#getQueryString}
+	 * are "/foo.zul" and "abc=1", then this parameter is "/foo.zul?abc=1".
 	 * @return the desktop to re-use. If null is returned, ZK Loader will
 	 * create a desktop as if this interface is not installed.
 	 */
-	public Desktop beforeService(Execution exec, String path);
+	public Desktop beforeService(Execution exec, String uri);
 	/** Called after the request is served.
 	 * <p>The implementation usually does nothing in this method, unless
 	 * it wants to re-use it no matter if the same user might open two or more
