@@ -2101,10 +2101,20 @@ function () {
 			if (s) html += ' class="' + s + '"';
 		}
 		if (!no || !no.tooltiptext) {
-			var s = this._tooltiptext;
+			var s = this.domTooltiptext_();
 			if (s) html += ' title="' + s + '"';
 		}
 		return html;
+	},
+	/** Returns the tooltiptext for generating the title attribute of the DOM element.
+	 * <p>Default: return {@link #getTooltiptext}.
+	 * <p>Deriving class might override this method if the parent widget
+	 * is not associated with any DOM element, such as treerow's parent: treeitem.
+	 * @return String the tooltiptext
+	 * @since 5.0.2
+	 */
+	domTooltiptext_ : function () {
+		return this.getTooltiptext();
 	},
 	/** Returns the style attribute that contains only the text related CSS styles. For example, it returns style="font-size:12pt;font-weight:bold" if #getStyle is border:none;font-size:12pt;font-weight:bold.
 	 * <p>It is usually used with {@link #getTextNode} to
