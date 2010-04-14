@@ -485,6 +485,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final UiVisualizer uv = doActivate(exec, false, false);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.setCurrentPage(page);
 		try {
 			((PageCtrl)page).redraw(out);
 		} finally {
