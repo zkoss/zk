@@ -180,7 +180,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			g.$remove(wgt);
 	}
 	function _fireClick(wgt, evt) {
-		return !(wgt.shallIgnoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
+		if (!wgt.shallIgnoreClick_(evt) && 
+			!wgt.fireX(evt).stopped && evt.shallStop) {
+			evt.stop();
+			return false;	
+		}
+		return !evt.stopped;
 	}
 
 	//set minimum flex size and return it
@@ -2911,7 +2916,7 @@ focus: function (timeout) {
 	beforeSendAU_: function (wgt, evt) {
 		var en = evt.name;
 		if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick')
-			evt.stop();
+			evt.shallStop = true;//Bug: 2975748: popup won't work when component with onClick handler
 	},
 	/** Sends an AU request to the server.
 	 * It is invoked when {@link #fire} will send an AU request to the server.
