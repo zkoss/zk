@@ -95,7 +95,8 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},
 	domAttrs_: function () {
+		var value = this.getValue();
 		return this.$supers('domAttrs_', arguments) + (this.isDisabled() ? ' disabled="disabled"' :'') +
-		(this.isSelected() ? ' selected="selected"' : '');
+		(this.isSelected() ? ' selected="selected"' : '') + (value ? ' value=' + value : '');
 	}
 });
