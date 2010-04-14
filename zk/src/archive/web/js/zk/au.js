@@ -613,7 +613,7 @@ zAu.beforeSend = function (uri, req) {
 	 *</code></pre>
 	 *
 	 * @param String uri the AU's request URI (such as /zkau)
-	 * @param zk.Event aureq the AU request
+	 * @param Event aureq the AU request
 	 * @return String the AU's request URI.
 	 * @since 5.0.2
 	 */

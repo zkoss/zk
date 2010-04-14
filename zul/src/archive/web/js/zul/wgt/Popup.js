@@ -109,7 +109,19 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	shallStackup_: function () {
 		return zk.eff.shallStackup();
 	},
-
+	/**
+	 * Sets the popup position.
+	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
+	 * if any.
+	 * @param zk.Widget ref the referred widget.
+	 * @param Offset offset the offset of x and y
+	 * @param String position
+	 * <p> Possible values for the position attribute
+	 * refer to {@link #open}.
+	 * </p>
+	 * @param Map opts a map of addition options.<br/>
+	 * Allowed values: refer to {@link jqzk#position(Dimension,String,Map)}.
+	 */
 	position: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)
