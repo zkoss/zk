@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2982663.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 15 15:19:29 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[      
+		<ol>		
+			<li>Check the checkbox</li>
+			<li>the background of the textbox will become gray</li>
+		</ol>
+	]]></html>
+	<window title="Textbox Password Disable Bug" border="normal" width="200px">
+		<checkbox label="Toggle password" onCheck="tb.disabled = !tb.disabled" />
+		<textbox id="tb" type="password" />
+	</window>
+</zk>
