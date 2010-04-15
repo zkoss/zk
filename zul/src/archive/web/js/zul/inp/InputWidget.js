@@ -321,7 +321,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function () {
 		this._inplaceout = false;
-		this.$supers('doMouseOut_', arguments);
+		this.$supers('doMouseOver_', arguments);
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
