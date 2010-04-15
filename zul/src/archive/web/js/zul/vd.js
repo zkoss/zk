@@ -486,7 +486,7 @@ _zktbau = {
 zkau.setAttr = function (cmp, nm, val) {
 	if ("disabled" == nm || "readOnly" == nm) {
 		var inp = $real(cmp), type = inp.type ? inp.type.toUpperCase() : "";
-		if (type == "TEXT" || type == "TEXTAREA") {
+		if (type == "TEXT" || type == "TEXTAREA" || type == "PASSWORD") {
 			var outer = $outer(cmp),
 				zcls = getZKAttr(outer, "zcls");
 			if ("disabled" == nm)
