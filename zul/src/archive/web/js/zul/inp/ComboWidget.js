@@ -351,11 +351,13 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
 				$n.addClass(inc);
 			}
-		} 
+		}
+		var inp = this.getInputNode();
+		if (zk.ie6_)			
+			inp.style.width = jq.px(0);
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn'),
-			inp = this.getInputNode();
+			btn = this.$n('btn');
 		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
 	},
 	doFocus_: function (evt) {
