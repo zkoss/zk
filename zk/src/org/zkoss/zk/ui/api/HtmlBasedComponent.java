@@ -238,4 +238,29 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 *            whether to set focus. If false, this method has no effect.
 	 */
 	public void setFocus(boolean focus);
+
+	/** Returns the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 * @since 5.0.2
+	 */
+	public int getRenderdefer();
+	/** Sets the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 *
+	 * <p>This method is useful if you have a sophiscated page that takes
+	 * long to render at a slow client. You can specify a non-negative value
+	 * as the render-defer delay such that the other part of the UI can appear
+	 * earlier. The styling of the render-deferred widget is controlled by
+	 * a CSS class called <code>z-renderdefer</code>.
+	 *
+	 * <p>Notice that it has no effect if the component has been rendered
+	 * at the client.
+	 * @param ms time to wait in milliseconds before rendering.
+	 * Notice: 0 also implies deferring the rendering (just right after
+	 * all others are renderred).
+	 * @since 5.0.2
+	 */
+	public void setRenderdefer(int ms);
 }

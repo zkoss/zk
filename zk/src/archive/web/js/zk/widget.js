@@ -1072,7 +1072,31 @@ new zul.wnd.Window{
 					_listenFlex(this);
 				zWatch.fireDown('onSize', this.parent);
 			}
-		}
+		},
+		/** Returns the number of milliseconds before rendering this component
+		 * at the client.
+		 * <p>Default: -1 (don't wait).
+		 * @return int the number of milliseconds to wait
+		 * @since 5.0.2
+		 */
+		/** Sets the number of milliseconds before rendering this component
+		 * at the client.
+		 * <p>Default: -1 (don't wait).
+		 *
+		 * <p>This method is useful if you have a sophiscated page that takes
+		 * long to render at a slow client. You can specify a non-negative value
+		 * as the render-defer delay such that the other part of the UI can appear
+		 * earlier. The styling of the render-deferred widget is controlled by
+		 * a CSS class called <code>z-render-defer</code>.
+		 *
+		 * <p>Notice that it has no effect if the component has been rendered
+		 * at the client.
+		 * @param int ms time to wait in milliseconds before rendering.
+		 * Notice: 0 also implies deferring the rendering (just right after
+		 * all others are renderred).
+		 * @since 5.0.2
+		 */
+		 renderdefer: null
 	},
 	/** Returns the owner of the ID space that this widget belongs to,
 	 * or null if it doesn't belong to any ID space.
@@ -1932,14 +1956,50 @@ out.push('</div>');
 	 * Technically it can be anything that has the method called <code>push</code>
 	 */
 	redraw: function (out) {
-		var s = this.prolog;
-		if (s) out.push(s);
+		if (!this.deferRedraw_(out)) {
+			var s = this.prolog;
+			if (s) out.push(s);
 
-		for (var p = this, mold = this._mold; p; p = p.superclass) {
-			var f = p.$class.molds[mold];
-			if (f) return f.apply(this, arguments);
+			for (var p = this, mold = this._mold; p; p = p.superclass) {
+				var f = p.$class.molds[mold];
+				if (f) return f.apply(this, arguments);
+			}
+			throw "mold "+mold+" not found in "+this.className;
 		}
-		throw "mold "+mold+" not found in "+this.className;
+	},
+	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
+	 * This method is called automatically by {@link #redraw},
+	 * so you only need to use it if you override {@link #redraw}.
+	 * <p>A typical usage is as follows.
+	 * <pre><code>
+redraw: function (out) {
+  if (!this.deferRedraw_(out)) {
+  	out.push(...); //redraw
+  }
+}
+	 * </code></pre>
+	 * @param Array out an array to output the HTML fragments.
+	 * @since 5.0.2
+	 */
+	deferRedraw_: function (out) {
+		var delay;
+		if ((delay = this._renderdefer) >= 0) {
+			if (!this._norenderdefer) {
+				this.z_rod = true;
+				out.push('<div', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></div>');
+				out = null; //to free memory
+
+				var wgt = this;
+				setTimeout(function () {
+					wgt._norenderdefer = true;
+					wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
+				}, delay);
+				return true;
+			}
+			delete this._norenderdefer;
+			delete this.z_rod;
+		}
+		return false;
 	},
 	/** Updates the DOM element's CSS class. It is called when the CSS class is changed (e.g., setZclass is called).
 	 * <p>Default: it changes the class of {@link #$n}. 

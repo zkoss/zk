@@ -162,13 +162,18 @@ div.z-log button {
 	white-space: nowrap;
 	padding:6px;
 }
+
+.z-apply-loading-icon,
+.z-loading-icon,
+.z-renderdefer {
+	height: 16px; width: 16px;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/progress4.gif')});
+}
+
 .z-apply-loading-icon,
 .z-loading-icon {
-	height: 16px;
-	width: 16px;
 	display:-moz-inline-box; vertical-align:top; display:inline-block;
-	background: transparent no-repeat center;
-	background-image: url(${c:encodeURL('~./zk/img/progress2.gif')});
 }
 
 .z-apply-mask {
