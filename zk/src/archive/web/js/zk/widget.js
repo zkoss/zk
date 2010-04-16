@@ -2180,7 +2180,6 @@ function () {
 		}
 
 		if (!skipper) {
-			zWatch.fireDown('onRestore', this);
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this);
 		}
@@ -2234,6 +2233,7 @@ function () {
 						skipper.restore(this, skipInfo);
 
 						zWatch.fireDown('onRestore', this);
+							//to notify it is restored from rerender with skipper
 						zWatch.fireDown('beforeSize', this);
 						zWatch.fireDown('onSize', this);
 						return this; //done
