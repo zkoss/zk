@@ -574,7 +574,7 @@ public class HtmlPageRenders {
 				out.write(',');
 				out.write(extra.length() > 0 ? '1': '0');
 					//Bug 2983792 (delay until non-defer script evaluated)
-				if (extra.length() > 0) {
+				if (ac.length() > 0) {
 					out.write(",\n[");
 					out.write(ac);
 					out.write(']');
