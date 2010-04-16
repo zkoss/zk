@@ -627,6 +627,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};
+
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -1927,8 +1928,8 @@ out.push('</div>');
 	 * <p>Default: it retrieves the redraw function associated with
 	 * the mold ({@link #getMold}) and then invoke it.
 	 * The redraw function must have the same signature as this method.
-	 * @param Array out an array of HTML fragments.
-	 * Technically it can be anything that has the method called <code>push></code>
+	 * @param Array out an array to output HTML fragments.
+	 * Technically it can be anything that has the method called <code>push</code>
 	 */
 	redraw: function (out) {
 		var s = this.prolog;
@@ -2096,7 +2097,7 @@ function () {
 			var s = this.domStyle_(no);
 			if (s) html += ' style="' + s + '"';
 		}
-		if (!no || !no.domclass) {
+		if (!no || !no.domClass) {
 			var s = this.domClass_();
 			if (s) html += ' class="' + s + '"';
 		}
@@ -3642,12 +3643,12 @@ _doFooSelect: function (evt) {
 		}
 	},
 	/**
-	 * Returns all elements with the given tag name.
-	 * @param String name the tag name.
-	 * @return Array
+	 * Returns all elements with the given widget name.
+	 * @param String name the widget name {@link #widgetName}.
+	 * @return Array an array of {@link DOMElement}
 	 * @since 5.0.2
 	 */
-	getElementsByTagName: function (name) {
+	getElementsByName: function (name) {
 		var els = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName)
@@ -3656,9 +3657,9 @@ _doFooSelect: function (evt) {
 		return els;
 	},
 	/**
-	 * Returns all elements with the given id.
-	 * @param String id the id of zk widget.
-	 * @return Array
+	 * Returns all elements with the given ID.
+	 * @param String id the id of a widget, {@link #id}.
+	 * @return Array an array of {@link DOMElement}
 	 * @since 5.0.2
 	 */
 	getElementsById: function (id) {
@@ -3667,6 +3668,7 @@ _doFooSelect: function (evt) {
 			els.unshift(wgts[i].$n());
 		return els;
 	},
+
 	//uuid//
 	/** Converts Converts an ID of a DOM element to UUID.
 	 * It actually removes '-*'. For example, zk.Widget.uuid('z_aa-box') returns 'z_aa'. 

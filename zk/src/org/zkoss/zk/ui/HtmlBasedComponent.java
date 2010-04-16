@@ -44,7 +44,7 @@ import org.zkoss.zk.fn.ZkFns;
  *
  * @author tomyeh
  */
-abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent{
+abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent {
 	private String _tooltiptext;
 	/** The width. */
 	protected String _width;
@@ -447,7 +447,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public String getHflex() {
 		return _hflex;
 	}
-	
+
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.

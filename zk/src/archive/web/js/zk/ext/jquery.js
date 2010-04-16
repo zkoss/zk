@@ -3038,7 +3038,7 @@ var Expr = Sizzle.selectors = {
 		},
 		/* Jumper Chen, Potix, 20100326*/
 		ZTAG: function(match, context){
-			return zk.Widget.getElementsByTagName(match[1].substring(1));
+			return zk.Widget.getElementsByName(match[1].substring(1));
 		}
 	},
 	preFilter: {
