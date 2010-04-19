@@ -37,8 +37,8 @@ ${z:outDeviceStyleSheets('ajax')}
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	var cmdUpdate = "zul.Upload.sendResult('${arg.uuid}', '${arg.contentId}', '${arg.sid}');";
-	var cmdClose = "zul.Upload.close('${arg.uuid}', '${arg.sid}');";
+	var cmdUpdate = "if (window.zul) {zul.Upload.sendResult('${arg.uuid}', '${arg.contentId}', '${arg.sid}');";
+	var cmdClose = "zul.Upload.close('${arg.uuid}', '${arg.sid}');}";
 
 	<%-- exec at the parent's scope --%>
 	function exec(cmd) {
