@@ -302,8 +302,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							node._ppos = p.style.position;
 							node._zindex = node.style.zIndex;
 							node.style.position = 'absolute';
-							node.style.zIndex = 90000;
-							
+							this.setFloating_(true);
+							this.setTopmost();
 							p.appendChild(node);
 							p.style.position = 'relative';
 						}
@@ -367,6 +367,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						$n.undoVParent();
 						node.style.position = node._pos;
 						node.style.zIndex = node._zindex;
+						this.setFloating_(false);
 						var p = this.parent.parent.$n();
 						p.style.position = node._ppos;
 						p.parentNode.scrollTop = node._scrollTop;
