@@ -7,6 +7,7 @@ ZK 5.0.2
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
   2985686: A simpler way to change the imiplementation of FileuploadDlg
+  2989181: Notify a desktop that it has been recycled- onDesktopRecycle
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error

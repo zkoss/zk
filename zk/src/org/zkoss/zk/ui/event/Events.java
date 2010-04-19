@@ -204,6 +204,16 @@ public class Events {
 	 */
 	public static final String ON_FULFILL = "onFulfill";
 
+	/** The onDesktopRecycle event (used with {@link Event})
+	 * to notify that a desktp has been recycled.
+	 * All top-level components will receive this event when
+	 * recycled.
+	 * <p>Refer to {@link org.zkoss.zk.ui.util.DesktopRecycle} for desktop
+	 * recycling.
+	 * @since 5.0.2
+	 */
+	public static final String ON_DESKTOP_RECYCLE = "onDesktopRecycle";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

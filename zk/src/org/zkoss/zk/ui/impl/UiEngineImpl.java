@@ -487,6 +487,16 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(page);
 		try {
+			Events.postEvent(new Event(Events.ON_DESKTOP_RECYCLE));
+
+			final Desktop desktop = exec.getDesktop();
+			Event event = nextEvent(uv);
+			do {
+				for (; event != null; event = nextEvent(uv))
+					process(desktop, event);
+				resumeAll(desktop, uv, null);
+			} while ((event = nextEvent(uv)) != null);
+
 			((PageCtrl)page).redraw(out);
 		} finally {
 			doDeactivate(exec);
