@@ -60,18 +60,6 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		}
 		return style;
 	},
-	redraw: function (out) {
-		out.push('<div', this.domAttrs_(), '>');
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out);
-		if (this._comment)
-			out.push('<!--\n');
-		if (!jq.isArray(this._content)) //z$ea
-			out.push(this._content);
-		if (this._comment)
-			out.push('\n-->');
-		out.push('</div>');
-	},
 	bind_: function () {
 		this.$supers("bind_", arguments);
 		if (jq.isArray(this._content)) //z$ea
