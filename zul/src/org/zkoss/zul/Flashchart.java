@@ -199,18 +199,22 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 				}
 			} else if("bar".equals(_type) || "line".equals(_type) || "column".equals(_type)) {
 				CategoryModel tempModel = (CategoryModel)model;
-				for(int i = 0; i < tempModel.getCategories().size(); i++){
-					Comparable category = tempModel.getCategory(i);
-					Comparable series = tempModel.getSeries(i);
-					JSONObject json = new JSONObject();
-					if("line".equals(_type) || "column".equals(_type)){		//Draw LineChart & ColumnChart
-						json.put("horizontalField", category);
-						json.put("verticalField", tempModel.getValue(series, category));
-					} else {		//Draw BarChart
-						json.put("horizontalField", tempModel.getValue(series, category));
-						json.put("verticalField", category);
+				for (int j = 0; j < tempModel.getSeries().size(); j++) {
+					Comparable series = tempModel.getSeries(j);
+					for (int i = 0; i < tempModel.getCategories().size(); i++) {
+						Comparable category = tempModel.getCategory(i);
+						JSONObject json = new JSONObject();
+						if ("line".equals(_type) || "column".equals(_type)) { // Draw, LineChart, and ColumnChart
+							json.put("horizontalField", category);
+							json.put("verticalField", tempModel.getValue(
+									series, category));
+						} else { // Draw BarChart
+							json.put("horizontalField", tempModel.getValue(
+									series, category));
+							json.put("verticalField", category);
+						}
+						list.add(json);
 					}
-					list.add(json);
 				}
 			} else if(_type.startsWith("stackbar")){		//Draw StackedBarChart
 				_seriesList = new LinkedList();
