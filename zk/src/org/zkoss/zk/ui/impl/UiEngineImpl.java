@@ -497,6 +497,8 @@ public class UiEngineImpl implements UiEngine {
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
+			execCtrl.setResponses(uv.getResponses());
+
 			((PageCtrl)page).redraw(out);
 		} finally {
 			doDeactivate(exec);

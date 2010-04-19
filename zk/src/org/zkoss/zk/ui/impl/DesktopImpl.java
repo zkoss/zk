@@ -74,8 +74,10 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuBookmark;
+import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
@@ -421,8 +423,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (name.indexOf('#') >= 0 || name.indexOf('?') >= 0)
 			throw new IllegalArgumentException("Illegal character: # ?");
 		_bookmark = name;
-		((WebAppCtrl) _wapp).getUiEngine().addResponse(
-					new AuBookmark(name, replace));
+		addResponse(new AuBookmark(name, replace));
+	}
+	private void addResponse(AuResponse response) {
+		((WebAppCtrl) _wapp).getUiEngine().addResponse(response);
 	}
 
 	public Collection getComponents() {
@@ -973,6 +977,19 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void afterProcessEvent(Event event) {
 		_eis.afterProcessEvent(event);
 		_wapp.getConfiguration().afterProcessEvent(event);
+
+		if (Events.ON_DESKTOP_RECYCLE.equals(event.getName())) {
+			if (_bookmark.length() > 0)
+				addResponse(new AuBookmark(_bookmark));
+
+			l_out:
+			for (Iterator it = _pages.values().iterator(); it.hasNext();)
+				for (Iterator e = ((Page)it.next()).getRoots().iterator(); e.hasNext();)
+					if (Events.isListened((Component)e.next(), Events.ON_CLIENT_INFO, false)) {
+						addResponse(new AuClientInfo(this));
+						break l_out;
+					}
+		}
 	}
 
 	public void invokeDesktopCleanups() {

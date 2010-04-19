@@ -362,7 +362,6 @@ if (c.isEmpty()) {
 	public void deactivateServerPush();
 
 	/** Processes an AU request.
-	 * If {@link AuRequest#getComponent} is not nul
 	 * Notice that not only the requests for a deskop but also the requests
 	 * for any component in the deskop will go thru this method.
 	 *
