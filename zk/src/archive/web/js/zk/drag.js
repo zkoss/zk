@@ -366,7 +366,7 @@ String scroll; //DOM Element's ID</code></pre>
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
 		jq.clearSelection(); // Bug #2721980
-		if (this.opts.stackup) { // Bug #1911280
+		if (this.opts.overlay) { // Bug #1911280 and 2986227
 			var stackup = document.createElement("div");
 			document.body.appendChild(stackup);
 			stackup.className = "z-dd-stackup";
