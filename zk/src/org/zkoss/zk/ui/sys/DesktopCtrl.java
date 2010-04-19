@@ -397,6 +397,9 @@ if (c.isEmpty()) {
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
 	 *
+	 * <p>If you want to intercept events, you can register a listener implementing
+	 * {@link EventInterceptor}, or overriding {@link #afterProcessEvent}.
+	 *
 	 * @param everError if any error ever occured before
 	 * processing this request. In other words, indicates if the previous
 	 * request causes any exception.
