@@ -53,7 +53,10 @@ public interface URIInterceptor {
 	/** Called when the current user requests to load
 	 * the page of the specified URI.
 	 *
-	 * <p>To deny the access, the class shall throw an excetion.
+	 * <p>To deny the access, the class shall throw an exception.
+	 * If you want to redirect to another page, you can configure it
+	 * with  &lt;error-page&gt; by speciying the corresponding page and exception
+	 * in WEB-INF/zk.xml.
 	 */
 	public void request(String uri) throws Exception;
 }
