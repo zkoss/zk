@@ -34,6 +34,10 @@ import org.zkoss.zk.fn.ZkFns;
  * A skeletal implementation for HTML based components.
  * It simplifies to implement methods common to HTML based components.
  *
+ * <p>Events:<br/>
+ *  onClick, onDoubleClick, onRightClick, onMove, onSize, onZIndex, onDrop,
+ * 	onOK, onCacnel and onCtrlKey.<br/>
+ * 
  * <p>It supports
  * <ul>
  * <li>{@link #getSclass} and {@link #getStyle}.</li>
@@ -43,6 +47,9 @@ import org.zkoss.zk.fn.ZkFns;
  * </ul>
  *
  * @author tomyeh
+ * @since 5.0.0 supports onOK event.
+ * @since 5.0.0 supports onCancel event.
+ * @since 5.0.0 supports onCtrlKey event.
  */
 abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent {
 	private String _tooltiptext;

@@ -31,14 +31,8 @@ import org.zkoss.zul.Popup;
 
 /**
  * The fundamental class for XUL elements.
- *
- * <p>Events:<br/>
- * 	onOK, onCacnel and onCtrlKey.<br/>
  * 
  * @author tomyeh
- * @since 3.0.6 supports onOK event.
- * @since 3.0.6 supports onCancel event.
- * @since 3.0.6 supports onCtrlKey event.
  */
 abstract public class XulElement extends HtmlBasedComponent implements org.zkoss.zul.impl.api.XulElement {
 
