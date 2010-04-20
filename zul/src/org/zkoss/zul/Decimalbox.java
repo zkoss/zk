@@ -95,7 +95,7 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 	public int getScale() {
 		return _scale;
 	}
-	/** Returns the scale for the decimal number storing in this component,
+	/** Sets the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).
 	 *
