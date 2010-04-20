@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
-		_noChildCallback; //used by removeChild/appendChild/insertBefore
+		_noChildCallback, //used by removeChild/appendChild/insertBefore
+		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
 
 	//IE doesn't free _binds (when delete _binds[x]); so clean it up
 	if (zk.ie)
@@ -3882,7 +3883,6 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		//no need to call super since it is bound
 	}
 });
-})();
 
 //desktop//
 /** A desktop.
@@ -3916,14 +3916,19 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
-		var Desktop = zk.Desktop;
-		Desktop.sync();
+		var Desktop = zk.Desktop, dts = Desktop.all, dt = zUtl.now();
+		if (dt > _syncdt) { //Liferay+IE: widgets are created later so don't sync at beginning
+			_syncdt = dt + 60000;
+			Desktop.sync();
+		}
 
 		this._aureqs = [];
 		//Sever side effect: this.desktop = this;
 
-		var dts = Desktop.all, dt = dts[dtid];
-		if (!dt) {
+		if (dt = dts[dtid]) {
+			if (updateURI != null) dt.updateURI = updateURI;
+			if (contextURI != null) dt.contextURI = contextURI;
+		} else {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI != null ? updateURI: zk.updateURI;
 			this.contextURI = contextURI != null ? contextURI: zk.contextURI;
@@ -3932,9 +3937,6 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			dts[dtid] = this;
 			++Desktop._ndt;
 			if (!Desktop._dt) Desktop._dt = this; //default desktop
-		} else {
-			if (updateURI != null) dt.updateURI = updateURI;
-			if (contextURI != null) dt.contextURI = contextURI;
 		}
 	},
 	_exists: function () {
@@ -4004,6 +4006,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		return Desktop._dt;
 	}
 });
+})();
 
 /** A page
  * Unlike the component at the server, a page is a widget.
