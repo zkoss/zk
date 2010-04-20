@@ -37,18 +37,14 @@ ${z:outDeviceStyleSheets('ajax')}
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	var cmdUpdate = "if (window.zul) {zul.Upload.sendResult('${arg.uuid}', '${arg.contentId}', '${arg.sid}');";
-	var cmdClose = "zul.Upload.close('${arg.uuid}', '${arg.sid}');}";
 
 	<%-- exec at the parent's scope --%>
 	function exec(cmd) {
 		parent.setTimeout(cmd, 0);
 	}
 	<c:if test="${!empty arg.contentId}">
-		exec(cmdUpdate + cmdClose);
-		<%-- Bug 1920877: do not use two timer to do cmdUpdate and
-			cmdClose separately, since Safari might do cmdClose first!!
-		--%>
+		exec("if(window.zul){zul.Upload.sendResult('${arg.uuid}', '${arg.contentId}', '${arg.sid}'); zul.Upload.close('${arg.uuid}', '${arg.sid}');}");
+		<%-- Bug 1920877 --%>
 	</c:if>
 // -->
 </script>
