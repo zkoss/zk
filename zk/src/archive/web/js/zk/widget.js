@@ -3939,7 +3939,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	},
 	_exists: function () {
 		if (this._pguid) //_pguid not assigned at beginning
-			for (var w = this.firstChild; w; w = w.nextSibling)
+			for (var w = this.firstChild; w; w = w.nextSibling) //under JSP, page.$n is null so test all
 				if (w.$n())
 					return true;
 	},
