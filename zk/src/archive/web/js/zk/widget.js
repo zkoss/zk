@@ -3916,10 +3916,13 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
+		var Desktop = zk.Desktop;
+		Desktop.sync();
+
 		this._aureqs = [];
 		//Sever side effect: this.desktop = this;
 
-		var Desktop = zk.Desktop, dts = Desktop.all, dt = dts[dtid];
+		var dts = Desktop.all, dt = dts[dtid];
 		if (!dt) {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI != null ? updateURI: zk.updateURI;
@@ -3933,12 +3936,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			if (updateURI != null) dt.updateURI = updateURI;
 			if (contextURI != null) dt.contextURI = contextURI;
 		}
-
-		Desktop.sync();
 	},
 	_exists: function () {
-		var id = this._pguid; //_pguid not assigned at beginning
-		return !id || jq(id, zk)[0];
+		if (this._pguid) //_pguid not assigned at beginning
+			for (var w = this.firstChild; w; w = w.nextSibling)
+				if (w.$n())
+					return true;
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
