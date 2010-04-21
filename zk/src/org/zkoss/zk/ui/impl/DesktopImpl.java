@@ -253,7 +253,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
 			return Strings.encode(
-				new StringBuffer(12).append("g"), dc.getNextKey()).toString();
+				new StringBuffer(12).append("zd_"), dc.getNextKey()).toString();
 
 		final int v;
 		synchronized (DesktopImpl.class) {

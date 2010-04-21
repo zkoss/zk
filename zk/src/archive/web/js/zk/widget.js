@@ -3977,6 +3977,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 				if (w.$instanceof(Desktop))
 					return w;
 			}
+			return null;
 		}
 
 		if (w = Desktop._dt)
