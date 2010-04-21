@@ -3956,31 +3956,33 @@ zk.Desktop = zk.$extends(zk.Widget, {
 },{
 	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
 	 * <p>Notice that the desktop's ID and UUID are the same.
-	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element 
+	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element.
+	 * If not specified, the default desktop is assumed.
 	 * @return zk.Desktop
 	 */
 	$: function (dtid) {
-		var Desktop = zk.Desktop, dts = Desktop.all, w,
-			bStrId = typeof dtid == 'string';
-		if (Desktop._ndt > 1) {
-			if (bStrId) {
-				w = dts[dtid];
-				if (w) return w;
-			}
-			w = zk.Widget.$(dtid);
+		var Desktop = zk.Desktop, w;
+		if (dtid) {
+			if (Desktop.isInstance(dtid))
+				return dtid;
+
+			w = Desktop.all[dtid];
 			if (w)
-				for (; w; w = w.parent) {
-					if (w.desktop)
-						return w.desktop;
-					if (w.$instanceof(Desktop))
-						return w;
-				}
+				return w;
+
+			w = zk.Widget.$(dtid);
+			for (; w; w = w.parent) {
+				if (w.desktop)
+					return w.desktop;
+				if (w.$instanceof(Desktop))
+					return w;
+			}
 		}
+
 		if (w = Desktop._dt)
-			return !bStrId || w.id == dtid ? w: null;
-		if (!bStrId)
-			for (dtid in dts)
-				return dts[dtid];
+			return w;
+		for (dtid in Desktop.all)
+			return Desktop.all[dtid];
 	},
 	/** A map of all desktops (readonly).
 	 * The key is the desktop ID and the value is the desktop.
