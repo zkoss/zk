@@ -39,7 +39,7 @@ if (!zk.css3) {
 		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
 		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>';
 
-	/** The shadow effect.
+	/**@disable(zkgwt) The shadow effect.
 	 */
 	zk.eff.Shadow = zk.$extends(zk.Object, {
 		/** Constructor of the Shadow object.
@@ -220,7 +220,7 @@ if (!zk.css3) {
 		}
 	}
 
-/** A mask covers the browser window fully.
+/**@disable(zkgwt) A mask covers the browser window fully.
  */
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	/** The constructor of the full mask object.
@@ -317,7 +317,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	}
 });
 
-/** Applies the mask over the specified element to indicate it is busy.
+/**@disable(zkgwt) Applies the mask over the specified element to indicate it is busy.
  */ 
 zk.eff.Mask = zk.$extends(zk.Object, {
 	/** The constructor.

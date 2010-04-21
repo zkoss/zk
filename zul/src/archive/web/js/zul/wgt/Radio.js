@@ -55,7 +55,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
-	/** Sets the radio is checked and unchecked the others in the same radio
+	/** @disable(zkgwt)Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
 	 * @return Radio

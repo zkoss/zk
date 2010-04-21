@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The class representing a widget event (aka., a ZK event).
+/** @disable(zkgwt) The class representing a widget event (aka., a ZK event).
  * A widget event is the widget-level event that a widget can fire and the client application can listen.
  *
  * <p>On the other hand, a DOM event ({@link jq.Event}) is the low-level event

@@ -628,8 +628,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};
-
-/** A widget, i.e., an UI object.
+/**@disable(zkgwt) A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
  * Refer to <a href="http://docs.zkoss.org/wiki/ZK5:_Component_Development_Guide">Component Development Guide</a>
@@ -3849,7 +3848,7 @@ zk.Widget.getClass('combobox');
 	}
 });
 
-/** A reference widget. It is used as a temporary widget that will be
+/**@disable(zkgwt) A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
  * <p>Developers rarely need it.
  * Currently, it is used only for the server to generate the JavaScript codes
@@ -3885,7 +3884,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 });
 
 //desktop//
-/** A desktop.
+/**@disable(zkgwt) A desktop.
  * Unlike the component at the server, a desktop is a widget.
  * <p>However, the desktop are different from normal widgets:
  * <ol>
@@ -4011,7 +4010,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 });
 })();
 
-/** A page
+/**@disable(zkgwt) A page
  * Unlike the component at the server, a page is a widget.
  */
 zk.Page = zk.$extends(zk.Widget, {
@@ -4061,7 +4060,7 @@ zk.Page = zk.$extends(zk.Widget, {
 });
 zk.Widget.register('zk.Page', true);
 
-/** A native widget.
+/**@disable(zkgwt) A native widget.
  * It is used mainly to represent the native componet created at the server.
  */
 zk.Native = zk.$extends(zk.Widget, {
@@ -4117,7 +4116,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	}
 });
 
-/** A skipper is an object working with {@link zk.Widget#rerender}
+/**@disable(zkgwt) A skipper is an object working with {@link zk.Widget#rerender}
  * to rerender portion(s) of a widget (rather than the whole widget).
  * It can improve the performance a lot if it can skip a lot of portions, such as a lot of child widgets. 
  * <p>The skipper decides what to skip (i.e., not to rerender), detach the skipped portion(s), and attach them back after rerendering. Thus, the skipped portion won't be rerendered, nor unbound/bound.

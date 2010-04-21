@@ -105,7 +105,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * Returns the auxiliary toolbar that this tabbox owns.
-	 * @return Toolbar
+	 * @return zul.wgt.Toolbar
 	 */
 	getToolbar: function () {
 		return this.toolbar;
