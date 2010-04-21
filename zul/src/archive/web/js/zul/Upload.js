@@ -447,7 +447,10 @@ zul.Uploader = zk.$extends(zk.Object, {
 								})]
 							}), new zul.wgt.Label({id: id + '_total'}), new zul.wgt.Separator()]
 						});
-						this.appendChild(prog);
+						// Bug 2987059: IE may cause JS error in the appendChild()
+						try {
+							this.appendChild(prog);
+						} catch (e) {}
 						this._files[id] = prog;
 					}
 					return prog;
