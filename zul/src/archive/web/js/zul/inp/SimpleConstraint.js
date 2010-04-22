@@ -12,9 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/**@disable(zkgwt)
+/**
  * The default constraint supporting no empty, regular expressions and so on.
  * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
+ * @disable(zkgwt)
  */
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.

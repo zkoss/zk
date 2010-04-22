@@ -99,7 +99,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-/**@disable(zkgwt) A draggable object used to make a DOM element draggable. 
+/** A draggable object used to make a DOM element draggable. 
+ * @disable(zkgwt)
  */
 zk.Draggable = zk.$extends(zk.Object, {
 	/** The control object for this draggable.

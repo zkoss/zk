@@ -1,5 +1,6 @@
-/**@disable(zkgwt)
+/**
  * A simple spinner constraint.
+ * @disable(zkgwt)
  */
 zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	$define: {

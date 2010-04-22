@@ -628,13 +628,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};
-/**@disable(zkgwt) A widget, i.e., an UI object.
+/** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
  * Refer to <a href="http://docs.zkoss.org/wiki/ZK5:_Component_Development_Guide">Component Development Guide</a>
  * for more information.
  * <p>Notice that, unlike the component at the server, {@link zk.Desktop}
  * and {@link zk.Page} are derived from zk.Widget. It means desktops, pages and widgets are in a widget tree. 
+ * @disable(zkgwt)
  */
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
@@ -3848,11 +3849,12 @@ zk.Widget.getClass('combobox');
 	}
 });
 
-/**@disable(zkgwt) A reference widget. It is used as a temporary widget that will be
+/** A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
  * <p>Developers rarely need it.
  * Currently, it is used only for the server to generate the JavaScript codes
  * for mounting.
+ * @disable(zkgwt)
  */
 zk.RefWidget = zk.$extends(zk.Widget, {
 	bind_: function () {
@@ -3884,13 +3886,14 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 });
 
 //desktop//
-/**@disable(zkgwt) A desktop.
+/** A desktop.
  * Unlike the component at the server, a desktop is a widget.
  * <p>However, the desktop are different from normal widgets:
  * <ol>
  * <li>The desktop is a conceptual widget. It is never attached with the DOM tree. Its desktop field is always null. In addition, calling zk.Widget#appendChild won't cause the child to be attached to the DOM tree automatically.</li>
  * <li>The desktop's ID and UUID are the same. </li>
  * </ol>
+ * @disable(zkgwt)
  */
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
@@ -4010,9 +4013,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 });
 })();
 
-/**@disable(zkgwt) A page
+/** A page.
  * Unlike the component at the server, a page is a widget.
- */
+ * @disable(zkgwt)
+*/
 zk.Page = zk.$extends(zk.Widget, {
 	_style: "width:100%;height:100%",
 	/** The class name (<code>zk.Page</code>).
@@ -4060,8 +4064,9 @@ zk.Page = zk.$extends(zk.Widget, {
 });
 zk.Widget.register('zk.Page', true);
 
-/**@disable(zkgwt) A native widget.
+/** A native widget.
  * It is used mainly to represent the native componet created at the server.
+ * @disable(zkgwt)
  */
 zk.Native = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Native</code>)
@@ -4116,7 +4121,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	}
 });
 
-/**@disable(zkgwt) A skipper is an object working with {@link zk.Widget#rerender}
+/** A skipper is an object working with {@link zk.Widget#rerender}
  * to rerender portion(s) of a widget (rather than the whole widget).
  * It can improve the performance a lot if it can skip a lot of portions, such as a lot of child widgets. 
  * <p>The skipper decides what to skip (i.e., not to rerender), detach the skipped portion(s), and attach them back after rerendering. Thus, the skipped portion won't be rerendered, nor unbound/bound.
@@ -4149,7 +4154,8 @@ function (skipper) {
  return html + '</div></fieldset>';
 }
 </pre></code>
-	* <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ * <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ * @disable(zkgwt)
  */
 zk.Skipper = zk.$extends(zk.Object, {
 	/** Returns whether the specified child wiget will be skipped by {@link #skip}.

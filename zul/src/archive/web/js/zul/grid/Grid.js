@@ -171,8 +171,9 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return new zul.grid.RowIter(this);
 	}
 });
-/**@disable(zkgwt)
+/**
  * The row iterator.
+ * @disable(zkgwt)
  */
 zul.grid.RowIter = zk.$extends(zk.Object, {
 	/** Constructor

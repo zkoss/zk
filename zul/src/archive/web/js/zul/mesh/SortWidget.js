@@ -126,11 +126,12 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	isSortable_: function () {
 		return this._sortAscending != "none" || this._sortDescending != "none";
 	},
-	/**@disable(zkgwt)
+	/**
 	 * Sorts the data.
 	 * @param String ascending
 	 * @param jq.Event evt
 	 * @return boolean
+	 * @disable(zkgwt)
 	 */
 	sort: function (ascending, evt) {
 		var dir = this.getSortDirection();

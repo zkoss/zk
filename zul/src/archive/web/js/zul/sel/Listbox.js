@@ -281,21 +281,24 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;
 	},
-	/**@disable(zkgwt)
+	/**
 	 * Returns the tree item iterator.
 	 * @return zul.sel.ItemIter
+	 * @disable(zkgwt)
 	 */
 	itemIterator: _zkf = function () {
 		return new zul.sel.ItemIter(this);
 	},
-	/**@disable(zkgwt)Returns the tree item iterator.
+	/**Returns the tree item iterator.
 	 * @return zul.sel.ItemIter
 	 * @see #itemIterator
+	 * @disable(zkgwt)
 	 */
 	getBodyWidgetIterator: _zkf
 });
-/**@disable(zkgwt)
+/**
  * The listitem iterator.
+ * @disable(zkgwt)
  */
 zul.sel.ItemIter = zk.$extends(zk.Object, {
 	/** Constructor

@@ -830,10 +830,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._focus(row);
 		this.fireOnSelect(row, evt);
 	},
-	/**@disable(zkgwt)
+	/**
 	 * Selects all items.
 	 * @param boolean notify if true, fire onSelect event to server
 	 * @param jq.Event evt
+	 * @disable(zkgwt)
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
@@ -842,10 +843,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (notify && evt !== true)
 			this.fireOnSelect(this.getSelectedItem(), evt);
 	},
-	/**@disable(zkgwt)
+	/**
 	 * Selects all items.
 	 * @param boolean notify if true, fire onSelect event to server
 	 * @param jq.Event evt
+	 * @disable(zkgwt)
 	 */
 	selectAll: _zkf,
 	/* Selects one and deselect others, and return whehter any changes.

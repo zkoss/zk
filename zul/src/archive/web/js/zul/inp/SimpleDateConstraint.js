@@ -12,8 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/**@disable(zkgwt)
+/**
  * A simple date constraint.
+ * @disable(zkgwt)
  */
 zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	format: 'yyyyMMdd',

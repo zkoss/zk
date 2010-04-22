@@ -12,7 +12,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/**@disable(zkgwt) A big decimal
+/** A big decimal.
+ * @disable(zkgwt)
  */
 zk.BigDecimal = zk.$extends(zk.Object, {
 	_precision: 0,

@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** @disable(zkgwt) The class representing a widget event (aka., a ZK event).
+/** The class representing a widget event (aka., a ZK event).
  * A widget event is the widget-level event that a widget can fire and the client application can listen.
  *
  * <p>On the other hand, a DOM event ({@link jq.Event}) is the low-level event
@@ -59,7 +59,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <td>F1</td><td>112</td>
  * </tr>
  * </table>
-*/
+ * @disable(zkgwt)
+ */
 zk.Event = zk.$extends(zk.Object, {
 	/** The target widget (readonly).
 	 * @type zk.Widget 
