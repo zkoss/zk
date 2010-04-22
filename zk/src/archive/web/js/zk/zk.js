@@ -1217,11 +1217,6 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
 zk.Class.prototype.$class = zk.Class;
-zk.Class.forName = function (nm) {
-	var c = zk.$import(nm);
-	if (!c) throw nm + " not found";
-	return c;
-};
 /** @partial zk.Object
  */
 _zkf = {
