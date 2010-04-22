@@ -574,7 +574,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 
 		render(renderer, "autodrop", _autodrop);
 		if (!_autocomplete)
-			render(renderer, "autocomplete", false);
+			renderer.render("autocomplete", false);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
 	}
