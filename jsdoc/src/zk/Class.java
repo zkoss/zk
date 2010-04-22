@@ -106,4 +106,13 @@ if (klass.isInstance(obj)) {
 	 * @see #isAssignableFrom
 	 */
 	public boolean isInstance(Object obj);
+
+	/** Returns the class of the given name.
+	 * It is the same as {@link _global_.zk#$import(String)}, except
+	 * it throws an exception if not found.
+	 * @param nm the class name
+	 * @return the class
+	 * @since 5.0.2
+	 */
+	public static Class forName(String nm);
 }

@@ -392,7 +392,7 @@ zk.copy(Array.prototoype, {
 	 *
 	 * @param String name the name of the package.
 	 * @return Package
-	 * @see #$import
+	 * @see #$import(String)
 	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
@@ -412,7 +412,7 @@ zk.copy(Array.prototoype, {
 			j = k + 1;
 		}
 	},
-	/** Imports a package or a class. It returns null if the package or class is not defined yet.
+	/** Imports a class or a package. It returns null if the package or class is not defined yet.
 	 * <p>Example: 
 <pre><code>
 var foo = zk.$import('com.foo');
@@ -420,14 +420,32 @@ var cool = new foo.Cool();
 var Cool = zk.$import('com.foo.Cooler');
 var cooler = new Cooler();
 </code></pre>
-	 * <p>If you specify an additional function, then it assumes name is a class and it will load the package of the class first, if not found. Then, invoke the function after the class is loaded. For example, the following creates a Listbox widget after loading the package.
+	 * @param String name The name of the package or the class. 
+	 * @return Object a package ({@link Package}) or a class ({@link Class})
+	 * @see #$package
+	 * @see #load
+	 * @see #$import(String, Function)
+	 */
+	/** Imports a package or class, and load it if <code>fn</code> is specified.
+	 * It returns null if the package or class is not defined yet and
+	 * <code>fn</code> is null.
+	 * <p>If an additional function, <code>fn</code> is specified, 
+	 * this method assumes <code>name</code>
+	 * is a class and it will load the package of the class first.
+	 * If not found. Then, invoke the function after the class is loaded.
+	 * For example, the following creates a Listbox widget after loading
+	 * the package.
 <pre><code>
 zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 </code></pre>
 	 * @param String name The name of the package or the class. 
-	 * @param Function fn The function to call after the class is loaded. If specified, it assumes name is a class, and it will load the package of the class automatically. 
-	 * @return Package
+	 * @param Function fn The function to call after the class is loaded.
+	 * If specified, it assumes <code>name</code> is a class, and it will
+	 * load the package of the class automatically. 
+	 * In additions, the function is called with the class as the argument.
+	 * @return Object a package ({@link Package}) or a class ({@link Class})
 	 * @see #$package
+	 * @see #$import(String)
 	 * @see #load
 	 */
 	$import: function (name, fn) {
@@ -1199,6 +1217,11 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
 zk.Class.prototype.$class = zk.Class;
+zk.Class.forName = function (nm) {
+	var c = zk.$import(nm);
+	if (!c) throw nm + " not found";
+	return c;
+};
 /** @partial zk.Object
  */
 _zkf = {
