@@ -504,7 +504,7 @@ jq(function() {
 				w2hide(name);
 			}
 		});
-		zWatch.listen({onFloatUp: {onFloatUp: _onFloatUp}});
+		zWatch.listen({onFloatUp: _onFloatUp});
 	}
 }); //jq
 
