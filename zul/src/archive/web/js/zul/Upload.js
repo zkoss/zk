@@ -227,7 +227,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	},
 	files: []
 });
-/**@enable(zkgwt)
+/**
  * Default file uploader for the upload widget.
  * <p> One upload widget can have multi-instance of uploader to upload multiple
  * files at the same time.
