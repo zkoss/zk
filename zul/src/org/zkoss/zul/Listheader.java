@@ -175,12 +175,15 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
 	 */
-	public void setSort(String type) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
+	public void setSort(String type) {
 		if (type == null) return;
 		if (type.startsWith("client")) {
-			setSortAscending(type);
-			setSortDescending(type);
+			try {
+				setSortAscending(type);
+				setSortDescending(type);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex); //not possible to throw ClassNotFoundException...
+			}
 		} else if ("auto".equals(type)) {
 			if (getSortAscending() == null)
 				setSortAscending(new ListitemComparator(this, true, true));
