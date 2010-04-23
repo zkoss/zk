@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2991247.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 23 17:57:29 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<hbox>
+	<button label="Click me, then it should not alert a message." 
+onClick='tab2.selected = true;'/>
+	<tabbox width="250px" onSelect='alert("if you can see this, that is a bug!");'>
+		<tabs>
+			<tab label="Tab 1" closable="true"/>
+			<tab label="Tab 2" id="tab2" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				This is panel 1
+			</tabpanel>
+			<tabpanel>
+				This is panel 2 The second panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</hbox>
+

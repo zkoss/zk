@@ -30,7 +30,7 @@ zkTabbox2 = {
 			case "z.sel":
 				var tab = $e(value);
 				if (!zkTab2._sliding(tab))
-					zkTab2.selTab(tab, true);
+					zkTab2.selTab(tab);
 				break;
 			case "style":
 			case "style.width":
