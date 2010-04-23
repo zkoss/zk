@@ -620,6 +620,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else _prepareRemove(wgt, ary);
 		}
 	}
+
+	//render the render defer
+	function _rdrender(wgt) {
+		if (wgt._z$rd) { //might be redrawn by forcerender
+			delete wgt._z$rd;
+			wgt._norenderdefer = true;
+			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
+		}
+	}
+
 	var _dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
@@ -1109,6 +1119,13 @@ new zul.wnd.Window{
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
 	},
+	/** Returns the map of all fellows of this widget.
+	 * <pre><code>
+wgt.$f().main.setTitle("foo");
+</code></pre>
+	 * @return Map the map of all fellows.
+	 * @since 5.0.2
+	 */
 	/** Returns the fellow of the specified ID of the ID space that this widget belongs to. It returns null if not found. 
 	 * @param String id the widget's ID ({@link #id})
 	 * @return zk.Widget
@@ -1122,6 +1139,8 @@ new zul.wnd.Window{
 	 */
 	$f: function (id, global) {
 		var f = this.$o();
+		if (!arguments.length)
+			return f ? f._fellows: {};
 		for (var ids = id.split('/'), j = 0, len = ids.length; j < len; ++j) {
 			id = ids[j];
 			if (id) {
@@ -1986,21 +2005,35 @@ redraw: function (out) {
 		var delay;
 		if ((delay = this._renderdefer) >= 0) {
 			if (!this._norenderdefer) {
-				this.z_rod = true;
+				this.z_rod = this._z$rd = true;
 				out.push('<div', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></div>');
 				out = null; //to free memory
 
 				var wgt = this;
-				setTimeout(function () {
-					wgt._norenderdefer = true;
-					wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
-				}, delay);
+				setTimeout(function () {_rdrender(wgt);}, delay);
 				return true;
 			}
 			delete this._norenderdefer;
 			delete this.z_rod;
 		}
 		return false;
+	},
+	/** Forces the rendering if it is deferred.
+	 * A typical way to defer the render is to specify {@link #setRenderdefer}
+	 * with a non-negative value. The other example is some widget might be
+	 * optimized for the performance by not rendering some or the whole part
+	 * of the widget. If the rendering is deferred, the corresponding DOM elements
+	 * (@{link #$n}) are not available. If it is important to you, you can
+	 * force it to be rendered.
+	 * <p>Notice that this method only forces this widget to render. It doesn't
+	 * force any of its children. If you want, you have invoke {@link #forcerender}
+	 * one-by-one
+	 * <p>The derived class shall override this method, if it implements
+	 * the render deferring (other than {@link #setRenderdefer}).
+	 * @since 5.0.2
+	 */
+	forcerender: function () {
+		_rdrender(this);
 	},
 	/** Updates the DOM element's CSS class. It is called when the CSS class is changed (e.g., setZclass is called).
 	 * <p>Default: it changes the class of {@link #$n}. 
