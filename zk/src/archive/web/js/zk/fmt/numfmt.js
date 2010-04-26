@@ -45,7 +45,7 @@ zk.fmt.Number = {
 			fmt = fmt[isMINUS ? 1 : 0];
 		}
     	if (fmt.endsWith('%'))
-    		val = (eval(val) * 100) + '';
+    		val = ($eval(val) * 100) + '';
 		//calculate number of fixed decimals
 		var re = new RegExp("[^#0.]", 'g'),
 			pureFmtStr = fmt.replace(re, ''),
