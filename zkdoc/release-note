@@ -49,7 +49,6 @@ ZK 5.0.2
   2988261: Dropdown list of combobox disappear in panel and portallayout
   2989172: DesktopRecycle failed to send onClientInfo after reused
   2987059: Fileupload /include error on any version of Internet Explore
-  2988187: Tooltips not showing up when first triggered
   2976395: Cannot open tree nodes(ZK JSP+Liferay)
   2990657: Combobox autocomplete="false" not work
   2990719: JsContentRenderer.java  renderValue() missed  "Boolean" type

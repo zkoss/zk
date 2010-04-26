@@ -26,7 +26,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		return this.parent ? this.parent.parent : null;
 	},
 	isVisible: function() {
-		return this.isSelected() || this.$supers('isVisible', arguments);
+		return this.$supers('isVisible', arguments) && this.isSelected();
 	},
 	getZclass: function() {
 		if (this._zclass != null)
