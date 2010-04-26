@@ -44,12 +44,14 @@ zk.fmt.Number = {
 			isMINUS = val < 0;
 			fmt = fmt[isMINUS ? 1 : 0];
 		}
-    	
+    	if (fmt.endsWith('%'))
+    		val = (eval(val) * 100) + '';
 		//calculate number of fixed decimals
 		var re = new RegExp("[^#0.]", 'g'),
 			pureFmtStr = fmt.replace(re, ''),
 			ind = pureFmtStr.indexOf('.'),
-			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
+			// only allow '.0' for decimal format, '.#' is disallowed
+			fixed = ind >= 0 && pureFmtStr.substring(ind).startsWith('.0')? pureFmtStr.length - ind - 1 : 0,
 			valStr = (val + '').replace(/[^0123456789.]/g, ''),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
@@ -58,8 +60,9 @@ zk.fmt.Number = {
 		if (valFixed <= fixed) {
 			if (indVal == -1)
 				valStr += '.';
+			var tind = ind + 1 + valFixed;
 			for(var len = fixed - valFixed; len-- > 0;)
-				valStr = valStr + '0'; 
+				if (pureFmtStr.charAt(tind + len) == '0') valStr = valStr + '0'; 
 		} else { //preprocess for rounding
 			var ri = indVal + fixed + 1;
 			switch(rounding) {
@@ -185,7 +188,7 @@ zk.fmt.Number = {
 			pre = this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
+		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + (suf != '%' ? zk.DECIMAL : '') + suf : pre);
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
