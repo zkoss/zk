@@ -240,9 +240,18 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('removeHTML_', arguments);
 	},
 	replaceWidget: function (newwgt) {
+		this._syncSelectedItem(newwgt);
 		if (this.treechildren)
 			this.treechildren.detach();
 		this.$supers('replaceWidget', arguments);
+	},
+	_syncSelectedItem: function (newwgt) {
+		var tree = this.getTree();
+		if (tree && this.isSelected()) {
+			var items = tree._selItems;
+			if (items && items.$remove(this))
+				items.push(newwgt);
+		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
