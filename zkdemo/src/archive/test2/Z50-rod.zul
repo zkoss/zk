@@ -175,4 +175,101 @@ new Comboitem("John3").setParent(mycombo);
 		<tabpanel id="tp2">This is panel 1-2</tabpanel>
 	</tabpanels>
 </tabbox>
+
+<button label="test div">
+	<attribute name="onClick">
+	div.appendChild(new Datebox());
+	</attribute>
+</button>
+<button label="set visible" onClick="div.visible = true"/>
+<button label="force render" w:onClick="this.$f().div.forcerender()"/>
+<div id="div" visible="false">
+	This is a div.
+	<bandbox/>
+</div>
+
+<separator/>
+<button label="test window">
+	<attribute name="onClick">
+	wnd.appendChild(new Datebox());
+	</attribute>
+</button>
+<button label="set visible" onClick="wnd.visible = true"/>
+<button label="make overlapped" onClick="wnd.doOverlapped()"/>
+<button label="set max" onClick="wnd.setMaximized(true)"/>
+<window id="wnd" visible="false" border="normal" title="window" maximizable="true">
+	The content of a window
+	<grid>
+		<columns id="cs">
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A+B" colspan="2"/>
+			<auxheader label="C"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+</window>
+
+<separator/>
+<button label="test panel">
+	<attribute name="onClick">
+	pc.appendChild(new Datebox());
+	</attribute>
+</button>
+<button label="set visible" onClick="panel.visible = true"/>
+<button label="set max" onClick="panel.setMaximized(true)"/>
+<panel id="panel" framable="false" title="Panel component" maximizable="true"
+border="normal" collapsible="true" closable="true" visible="false">
+	<panelchildren id="pc">
+	The content of a panel
+	<grid>
+		<columns id="cs">
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A+B" colspan="2"/>
+			<auxheader label="C"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+	</panelchildren>
+</panel>
+
 </zk>
