@@ -203,7 +203,7 @@ zk.fmt.Number = {
 			var cc = val.charAt(j);
 			if (sharp) {
 				if (cc == '#' || cc == zk.GROUPING) continue;
-				else sharp = false;
+				else if (/[\d]/.test(cc)) sharp = false; // Bug 2990659
 			}
 			ret = ret + (cc == '#' ? '0' : cc);
 		}
