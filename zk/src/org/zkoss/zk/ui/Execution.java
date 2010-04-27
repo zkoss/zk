@@ -18,6 +18,7 @@ package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Date;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
@@ -955,6 +956,10 @@ public interface Execution extends Scope {
 	 * @see #containsResponseHeader
 	 */
 	public void setResponseHeader(String name, String value);
+	/** Sets a response header with the given name and date-value.
+	 * @since 5.0.2
+	 */
+	public void setResponseHeader(String name, Date value);
 	/** Adds a response header with the give name and value.
 	 *  This method allows response headers to have multiple values.
 	 * @param value the additional header value If it contains octet string,
@@ -963,6 +968,10 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public void addResponseHeader(String name, String value);
+	/** Adds a response header with the given name and date-value.
+	 * @since 5.0.2
+	 */
+	public void addResponseHeader(String name, Date value);
 	/** Returns whether the named response header has already been set.
 	 * @since 3.5.0
 	 */

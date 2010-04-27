@@ -38,6 +38,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Date;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
@@ -1454,6 +1455,10 @@ public class Components {
 			exec().addResponseHeader(name, value);
 		}
 
+		public void addResponseHeader(String name, Date value) {
+			exec().addResponseHeader(name, value);
+		}
+
 		public boolean containsResponseHeader(String name) {
 			return exec().containsResponseHeader(name);
 		}
@@ -1471,6 +1476,9 @@ public class Components {
 		}
 
 		public void setResponseHeader(String name, String value) {
+			exec().setResponseHeader(name, value);
+		}
+		public void setResponseHeader(String name, Date value) {
 			exec().setResponseHeader(name, value);
 		}
 

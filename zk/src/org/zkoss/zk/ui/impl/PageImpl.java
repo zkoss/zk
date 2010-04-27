@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -136,6 +137,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private transient LanguageDefinition _langdef;
 	/** The header tags. */
 	private String _hdbfr = "", _hdaft = "";
+	/** The response headers. */
+	private Collection _hdres;
 	/** The root attributes. */
 	private String _rootAttrs = "";
 	private String _contentType, _docType, _firstLine;
@@ -635,11 +638,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 
-		String s = config.getHeaders(true);
-		if (s != null) _hdbfr = s;
-		s = config.getHeaders(false);
-		if (s != null) _hdaft = s;
+		//Note: the evaluation order was changed since 5.0.2
+		((DesktopCtrl)_desktop).addPage(this);
+			//add page before evaluate title and others
 
+		String s;
 		if (_title.length() == 0) {
 			s = config.getTitle();
 			if (s != null) setTitle(s);
@@ -649,7 +652,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (s != null) setStyle(s);
 		}
 
-		((DesktopCtrl)_desktop).addPage(this);	
+		s = config.getHeaders(true);
+		if (s != null) _hdbfr = s;
+		s = config.getHeaders(false);
+		if (s != null) _hdaft = s;
+		_hdres = config.getResponseHeaders();
+		if (_hdres.isEmpty()) _hdres = null;
 	}
 	public void destroy() {
 		super.destroy();
@@ -706,6 +714,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public String getHeaders() {
 		return _hdbfr + _hdaft;
+	}
+	public Collection getResponseHeaders() {
+		return _hdres != null ? _hdres: Collections.EMPTY_LIST;
 	}
 	public String getRootAttributes() {
 		return _rootAttrs;
@@ -780,6 +791,20 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
 				//so HtmlPageRenderers.outLangJavaScripts generates JS's keepDesktop correctly
 			}
+			if (_hdres != null)
+				for (Iterator it = _hdres.iterator(); it.hasNext();) {
+					final Object[] vals = (Object[])it.next();
+					final String nm = (String)vals[0];
+					final Object val = vals[1];
+					final boolean add = ((Boolean)vals[2]).booleanValue();
+					if (val instanceof Date) {
+						if (add) exec.addResponseHeader(nm, (Date)val);
+						else exec.setResponseHeader(nm, (Date)val);
+					} else {
+						if (add) exec.addResponseHeader(nm, (String)val);
+						else exec.setResponseHeader(nm, (String)val);
+					}
+				}
 		}
 
 		final PageRenderer renderer = (PageRenderer)

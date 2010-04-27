@@ -389,6 +389,7 @@ public class UiEngineImpl implements UiEngine {
 					public String getStyle() {return null;}
 					public String getHeaders(boolean before) {return null;}
 					public String getHeaders() {return null;}
+					public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
 				});
 				final Composer composer = config.getComposer(page);
 				try {

@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -84,6 +85,8 @@ public class PageDefinition extends NodeInfo {
 	private List _hdBfrDefs;
 	/** List(HeaderInfo). They are generated after ZK default headers. */
 	private List _hdAftDefs;
+	/** List(ResponseHeaderInfo). */
+	private List _hdResDefs;
 	/** List(ForwardInfo). */
 	private List _forwdefs;
 	/** Map(String name, ExValue value). */
@@ -286,6 +289,12 @@ public class PageDefinition extends NodeInfo {
 			for (Iterator it = pgdef._hdAftDefs.iterator(); it.hasNext();)
 				addHeaderInfo((HeaderInfo)it.next(), false);
 		}
+
+		if (pgdef._hdResDefs != null
+		&& directives != null && contains(directives, "header")) {
+			for (Iterator it = pgdef._hdResDefs.iterator(); it.hasNext();)
+				addResponseHeaderInfo((ResponseHeaderInfo)it.next());
+		}
 	}
 	private static boolean contains(String[] dirs, String dir) {
 		for (int j = dirs.length; --j >= 0;)
@@ -405,6 +414,35 @@ public class PageDefinition extends NodeInfo {
 			}
 	}
 
+	/** Adds a response header.
+	 * @since 5.0.2
+	 */
+	public void addResponseHeaderInfo(ResponseHeaderInfo header) {
+		if (header == null)
+			throw new IllegalArgumentException();
+		if (_hdResDefs == null)
+			_hdResDefs = new LinkedList();
+		_hdResDefs.add(header);
+	}
+	/** Returns a map of response headers (never null).
+	 * The value of each entry is a two-element object array. The
+	 * first element of the array is the value which is an instance of {@link java.util.Date}
+	 * or {@link String} (and never null).
+	 * The second element indicates whether to add (rather than set)
+	 * theader. It is an instance of Boolean (and never null).
+	 */
+	public Collection getResponseHeaders(Page page) {
+		final List headers = new LinkedList();
+		if (_hdResDefs != null)
+			for (Iterator it = _hdResDefs.iterator(); it.hasNext();) {
+				final ResponseHeaderInfo rhi = (ResponseHeaderInfo)it.next();
+				headers.add(new Object[] {
+					rhi.getName(), rhi.getValue(page),
+					Boolean.valueOf(rhi.shallAdd(page))});
+			}
+		return headers;
+	}
+
 	/** Adds a header definition ({@link HeaderInfo}).
 	 * @param before whether to place the header <b>before</b> ZK's
 	 * CSS/JS headers. If false, it is placed after ZK's CSS/JS headers.
@@ -412,7 +450,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public void addHeaderInfo(HeaderInfo header, boolean before) {
 		if (header == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException();
 
 		if (before) {
 			if (_hdBfrDefs == null)
@@ -836,6 +874,11 @@ public class PageDefinition extends NodeInfo {
 				public String getHeaders() {
 					return evalHeaders ?
 						PageDefinition.this.getHeaders(page): "";
+				}
+				public Collection getResponseHeaders() {
+					return evalHeaders ?
+						PageDefinition.this.getResponseHeaders(page):
+							Collections.EMPTY_LIST;
 				}
 			});
 

@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Date;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
@@ -240,7 +241,13 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public void setResponseHeader(String name, String value) {
 		throw new UnsupportedOperationException();
 	}
+	public void setResponseHeader(String name, Date value) {
+		throw new UnsupportedOperationException();
+	}
 	public void addResponseHeader(String name, String value) {
+		throw new UnsupportedOperationException();
+	}
+	public void addResponseHeader(String name, Date value) {
 		throw new UnsupportedOperationException();
 	}
 	public boolean containsResponseHeader(String name) {

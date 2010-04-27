@@ -98,6 +98,16 @@ public interface PageCtrl {
 	 * @see #getHeaders(boolean)
 	 */
 	public String getHeaders();
+	/** Returns a readonly collection of response headers (never null).
+	 * The entry is a three-element object array.
+	 * The first element is the header name.
+	 * The second element of the array is the value which is an instance of
+	 * {@link java.util.Date} or {@link String} (and never null).
+	 * The third element indicates whether to add (rather than set)
+	 * theader. It is an instance of Boolean (and never null).
+	 * @since 5.0.2
+	 */
+	public Collection getResponseHeaders();
 	/** Returns the attributes of the root element declared in this page
 	 * (never null).
 	 * An empty string is returned if no special attribute is declared.
