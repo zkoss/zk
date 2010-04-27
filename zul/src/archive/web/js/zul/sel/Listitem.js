@@ -79,6 +79,24 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		if (list && jq(this.$n()).hasClass(list = list.getOddRowSclass()))
 			return cls + ' ' + list; 
 		return cls;
+	},
+	replaceWidget: function (newwgt) {
+		this._syncListitems(newwgt);
+		this.$supers('replaceWidget', arguments);
+	},
+	_syncListitems: function (newwgt) {
+		var list = this.getListbox();
+		if (list) {
+			if (list.firstItem.uuid == newwgt.uuid)
+				list.firstItem = newwgt;
+			if (list.lastItem.uuid == newwgt.uuid)
+				list.lastItem = newwgt;
+			if (this.isSelected()) {
+				var items = list._selItems;
+				if (items && items.$remove(this))
+					items.push(newwgt);
+			}
+		}
 	}
 });
 })();
