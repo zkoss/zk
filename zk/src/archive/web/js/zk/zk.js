@@ -1207,10 +1207,7 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	* (that actually have <code>this</code> referencing to this object).
 	*/
 	proxy: function (f) {
-		var fps = this._$proxies, fp;
-		if (!fps) this._$proxies = fps = {};
-		else if (fp = fps[f]) return fp;
-		return fps[f] = getProxy(this, f);
+		return getProxy(this, f);
 	}
 };
 
