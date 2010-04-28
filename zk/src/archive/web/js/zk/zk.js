@@ -1202,12 +1202,17 @@ setInterval(wgt.proxy(wgt.doIt), 1000); //assume doIt is a member function of wg
 <pre><code>
 setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 </code></pre>
+	* <p>Notice that this method caches the result so that it will return the same
+	* proxied function, if you pass the same function again.
 	* @param Function func a method member of this object
 	* @return Function a function that can be called as a global function
 	* (that actually have <code>this</code> referencing to this object).
 	*/
 	proxy: function (f) {
-		return getProxy(this, f);
+		var fps = this._$proxies, fp;
+		if (!fps) this._$proxies = fps = {};
+		else if (fp = fps[f]) return fp;
+		return fps[f] = getProxy(this, f);
 	}
 };
 
