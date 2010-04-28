@@ -217,8 +217,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * the child. Note that if there are {@link Splitter} child inside this Box, 
 	 * then this Box behaves as if the pack attribute has been set the "stretch"
 	 * option; no matter you really specify "stretch" in pack attribute or not. 
-	 * If given null or simply "stretch" to this pack attribute then it is the 
-	 * same as "stretch,start"</dd> 
+	 * If you give null to the pack attribute, it is the same as "start". If simply 
+	 * give "stretch" to this pack attribute then it is the same as "stretch,start"</dd> 
 	 * </dl>
 	 *
 	 * @since 3.0.0
