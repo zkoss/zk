@@ -3038,7 +3038,11 @@ var Expr = Sizzle.selectors = {
 		},
 		/* Jumper Chen, Potix, 20100326*/
 		ZTAG: function(match, context){
-			return zk.Widget.getElementsByName(match[1].substring(1));
+			return context == window ?
+					zk.Widget.getElementsByName(match[1].substring(1)) :
+					jq.grep(zk.Widget.getElementsByName(match[1].substring(1)), function (n) {
+						return jq.isAncestor(context, n);
+					});
 		}
 	},
 	preFilter: {
@@ -3643,8 +3647,10 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 			if (cur.indexOf("@") == 0 || cur.indexOf("$")) {
 				var wgt = zk.Widget.$(elem),
 					fn = dir == "parentNode" ? "parent" : dir;
-				if (wgt && (wgt = wgt[fn]))
-					elem = wgt.$n();
+				while (wgt && (wgt = wgt[fn])) {
+					elem = wgt.$n(); // some widget may not have node
+					if (elem) break;
+				}
 			} else
 				elem = elem[dir];
 			var match = false;
