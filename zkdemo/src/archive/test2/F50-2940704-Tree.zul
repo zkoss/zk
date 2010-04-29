@@ -1,0 +1,39 @@
+<zk>
+	Auto Paging shall re-calculate the page size every time the tree height is changed.
+	<html>
+	<![CDATA[
+	<ol>
+	<li>Click browser's maximize button. The page size shall re-calculate and there should be NO vertical scrollbar appear in tree</li>
+	<li>Click browser's restore button. The page size shall re-calculate and there should be NO vertical scrollbar appear in tree</li>
+	<li>Drag to change browser's size, and the page size shall re-calculate and there should be NO vertical scrollbar appear in tree</li>
+	<li>Click "top" radiobox, the tree shall stay as is, only the paging bar is moved to top</li>
+	<li>Click "bottom" radiobox, the tree shall stay as is, only the paging bar is moved back to bottom</li>
+	<li>Click "both" radiobox, the page size shall re-calculate and there should be NO vertical scrollbar appear in tree. Both on top and bottom you can see the paging bar.</li>
+	<li>Done</li>
+	</ol>
+	]]>
+	</html>
+	<radiogroup
+		onCheck="tree.pagingPosition = self.selectedItem.label;">
+		<radio label="top" />
+		<radio label="bottom" checked="true" />
+		<radio label="both" />
+	</radiogroup>
+	<separator/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
+	<zscript>					
+	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(1000)));
+	</zscript>
+	<tree id="tree" autopaging="true" mold="paging" model="&#36;{btm}" vflex="true" width="50%">
+		<attribute name="onCreate">
+		tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
+		tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+		</attribute>
+	</tree>
+</zk>

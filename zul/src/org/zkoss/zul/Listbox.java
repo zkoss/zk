@@ -226,6 +226,8 @@ public class Listbox extends XulElement implements Paginated,
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
+	private boolean _autopaging;
+	
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
 	 * assign a controller via {@link #setPaginal}. If exists, it is the last
@@ -268,6 +270,7 @@ public class Listbox extends XulElement implements Paginated,
 		// 5.0.0
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
+		addClientEvent(Listbox.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 
 	public Listbox() {
@@ -1445,6 +1448,31 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	public void setPageSize(int pgsz) throws WrongValueException {
 		pgi().setPageSize(pgsz);
+	}
+	
+	/**
+	 * Sets whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Listbox dynamically. 
+	 * @param autopaging true to turn on the auto-paging facility.
+	 */
+	public void setAutopaging(boolean autopaging) {
+		if (_autopaging != autopaging) {
+			_autopaging = autopaging;
+			smartUpdate("autopaging", autopaging);
+		}
+	}
+	
+	/**
+	 * Returns whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Listbox dynamically. 
+	 * @return whether the "autopaging" facility is turned on.
+	 */
+	public boolean isAutopaging() {
+		return _autopaging;
 	}
 
 	/**
@@ -3160,6 +3188,8 @@ public class Listbox extends XulElement implements Paginated,
 			if (_rod && ((Cropper)getDataLoader()).isCropper()) { //bug #2936064
 				renderer.render("_listbox$rod", true);
 			}
+			if (isAutopaging())
+				renderer.render("autopaging", true);
 		}
 	}
 
@@ -3179,6 +3209,22 @@ public class Listbox extends XulElement implements Paginated,
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
+		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2
+			final Map data = request.getData();
+			final int oldsize = getPageSize();
+			int size = AuRequests.getInt(data, "size", oldsize);
+			if (size != oldsize) {
+				int begin = getActivePage() * oldsize;
+				int end = begin + oldsize;
+				end = Math.min(getPaginal().getTotalSize(), end); 
+				int sel = getSelectedIndex();
+				if (sel < 0 || sel < begin || sel >= end) { //not in selection range
+					sel = size > oldsize ? (end-1) : begin;
+				}
+				int newpg = sel / size;
+				setPageSize(size);
+				setActivePage(newpg);
+			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);

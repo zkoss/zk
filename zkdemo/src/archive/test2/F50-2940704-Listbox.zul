@@ -1,0 +1,37 @@
+<zk>
+	Auto Paging shall re-calculate the page size every time the listbox height is changed.
+	<html>
+	<![CDATA[
+	<ol>
+	<li>Click browser's maximize button. The page size shall re-calculate and there should be NO vertical scrollbar appear in listbox</li>
+	<li>Click browser's restore button. The page size shall re-calculate and there should be NO vertical scrollbar appear in listbox</li>
+	<li>Drag to change browser's size, and the page size shall re-calculate and there should be NO vertical scrollbar appear in listbox</li>
+	<li>Click "top" radiobox, the listbox shall stay as is, only the paging bar is moved to top</li>
+	<li>Click "bottom" radiobox, the listbox shall stay as is, only the paging bar is moved back to bottom</li>
+	<li>Click "both" radiobox, the page size shall re-calculate and there should be NO vertical scrollbar appear in listbox. Both on top and bottom you can see the paging bar.</li>
+	<li>Done</li>
+	</ol>
+	]]>
+	</html>
+	<radiogroup
+		onCheck="tree.pagingPosition = self.selectedItem.label;listbox.pagingPosition = self.selectedItem.label">
+		<radio label="top" />
+		<radio label="bottom" checked="true" />
+		<radio label="both" />
+	</radiogroup>
+	<separator/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		listbox.pagingChild.mold = "os".equals(listbox.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
+	<zscript>
+		List items = new org.zkoss.zkdemo.userguide.BigList(1000); //a big list of Integer
+	</zscript>
+	<listbox id="listbox" autopaging="true" mold="paging" vflex="true">
+		<listhead>
+			<listheader label="column1"/>
+		</listhead>
+		<listitem forEach="&#36;{items}" label="${each}"/>
+	</listbox>
+</zk>
