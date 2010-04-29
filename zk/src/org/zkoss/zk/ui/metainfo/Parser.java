@@ -285,7 +285,7 @@ public class Parser {
 			pgdef.addResponseHeaderInfo(new ResponseHeaderInfo(
 				pgdef.getEvaluatorRef(),
 				(String)params.remove("name"), (String)params.remove("value"),
-				(String)params.remove("add"),
+				(String)params.remove("append"),
 				ConditionImpl.getInstance(
 					(String)params.remove("if"), (String)params.remove("unless"))));
 		} else if ("root-attributes".equals(target)) {

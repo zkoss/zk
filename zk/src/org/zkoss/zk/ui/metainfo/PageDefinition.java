@@ -438,7 +438,7 @@ public class PageDefinition extends NodeInfo {
 				final ResponseHeaderInfo rhi = (ResponseHeaderInfo)it.next();
 				headers.add(new Object[] {
 					rhi.getName(), rhi.getValue(page),
-					Boolean.valueOf(rhi.shallAdd(page))});
+					Boolean.valueOf(rhi.shallAppend(page))});
 			}
 		return headers;
 	}

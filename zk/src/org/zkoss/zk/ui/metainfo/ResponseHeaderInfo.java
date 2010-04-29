@@ -30,7 +30,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * {@link HeaderInfo} represents a tag located in the header of the generated content of a page.
  * For example, if the client is a HTTP browser, then {@link ResponseHeaderInfo} is equivalent
  * to invoke {@link Execution#setResponseHeader} and 
- * {@link org.zkoss.zk.ui.sys.ExecutionCtrl#addHeader}.
+ * {@link Execution#addResponseHeader}.
  * And, {@link HeaderInfo} represents the &lt;link&gt;, &lt;meta&gt; and &lt;script&gt; HTML tags
  * 
  * <p>It is not serializable.
@@ -41,7 +41,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
 public class ResponseHeaderInfo extends EvalRefStub
 implements Condition {
 	private final String _name;
-	private final ExValue _value, _add;
+	private final ExValue _value, _append;
 	private final ConditionImpl _cond;
 
 	/** Constructor.
@@ -49,16 +49,16 @@ implements Condition {
 	 * @param name the header's name, such as Refresh.
 	 * @param value the header's value. It could contain EL expressions.
 	 * It could be evaluated to a string, or a date ({@link Date}).
-	 * @param add whether to add the header, or to set the header. It could contain EL expressions.
+	 * @param append whether to append the header, or to set the header. It could contain EL expressions.
 	 */
-	public ResponseHeaderInfo(EvaluatorRef evalr, String name, String value, String add, ConditionImpl cond) {
+	public ResponseHeaderInfo(EvaluatorRef evalr, String name, String value, String append, ConditionImpl cond) {
 		if (name == null || name.length() == 0 || value == null)
 			throw new IllegalArgumentException();
 
 		_name = name;
 		_evalr = evalr;
 		_value = new ExValue(value, Object.class);
-		_add = add != null ? new ExValue(add, Boolean.class): null;
+		_append = append != null ? new ExValue(append, Boolean.class): null;
 		_cond = cond;
 	}
 	/** Returns the response header's name.
@@ -76,13 +76,13 @@ implements Condition {
 		final Object val = _value.getValue(_evalr, page);
 		return val != null ? val instanceof Date ? val: val.toString(): "";
 	}
-	/** Returns whether to add the response header, rather than replace.
+	/** Returns whether to append the response header, rather than replace.
 	 * <p>Notice that it does NOT invoke {@link #isEffective}, so the caller
 	 * has to call it first.
 	 */
-	public boolean shallAdd(Page page) {
-		final Boolean bAdd = _add != null ? (Boolean)_add.getValue(_evalr, page): null;
-		return bAdd != null && bAdd.booleanValue();
+	public boolean shallAppend(Page page) {
+		final Boolean bAppend = _append != null ? (Boolean)_append.getValue(_evalr, page): null;
+		return bAppend != null && bAppend.booleanValue();
 	}
 
 	public boolean isEffective(Component comp) {
