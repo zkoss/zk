@@ -100,6 +100,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The forEach info: [forEachBegin, forEachEnd].
 	 */
 	private ExValue[] _forEachInfo;
+	/** The widget class. */
+	private ExValue _wgtcls;
 	private String _replaceableText;
 
 	/** Constructs the information about how to create component.
@@ -564,6 +566,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * <pre><code>&lt;label w:setValue="function (value) {
 	 *  this.$setValue(value); //old method
 	 *}"/&gt;</code></pre>
+	 * @param script the client side script. EL expressions are allowed.
 	 */
 	public void addWidgetOverride(String name, String script, ConditionImpl cond) {
 		final WidgetOverride mtd =
@@ -572,6 +575,34 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_wgtovds = new LinkedList();
 		_wgtovds.add(mtd);
 	}
+
+	/** Sets the widget class.
+	 * @param wgtcls the widget class (at the client side).
+	 * EL expressions are allowed.
+	 * @since 5.0.2
+	 */
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ?
+			new ExValue(wgtcls, String.class): null;
+	}
+	/** Returns the widget class (might contain EL expressions), or null
+	 * if not available.
+	 * @since 5.0.2
+	 */
+	public String getWidgetClass() {
+		return _wgtcls != null ? _wgtcls.getRawValue(): null;
+	}
+	/** Resolves the widget class, or null if the default is expected.
+	 * It will evaluate EL expressions if any.
+	 * <p>You rarely need to invoke this method since it is called
+	 * automatically when {@link #applyProperties} is called.
+	 * @param comp the component that the widget class represents at the client.
+	 * @since 5.0.2
+	 */
+	public String resolveWidgetClass(Component comp) {
+		return _wgtcls != null ? (String)_wgtcls.getValue(getEvaluator(), comp): null;
+	}
+
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(ConditionImpl cond) {
@@ -753,12 +784,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * <p>It also invokes {@link ComponentDefinition#applyProperties}.
 	 *
-	 * <p>Note: custom attributes are not part of {@link ComponentInfo},
+	 * <p>Note: custom attributes are <i>not</i> part of {@link ComponentInfo},
 	 * so they won't be applied here.
 	 *
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
 	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
+	 *
+	 * <p>Note: the widget class ({@link #setWidgetClass}) is set by this method.
 	 *
 	 * @since 3.0.0
 	 */
@@ -779,6 +812,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_wgtovds != null)
 			for (Iterator it = _wgtovds.iterator(); it.hasNext();)
 				((WidgetOverride)it.next()).assign(comp);
+
+		comp.setWidgetClass(resolveWidgetClass(comp));
 	}
 
 	/** Evaluates and retrieves properties to the specified map from

@@ -61,10 +61,28 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * if not available.
 	 * The widget class is a JavaScript class, including the package name.
 	 * For example, "zul.wnd.Window".
+	 * <p>Default: the widget class is decided by the component definition
+	 * ({@link ComponentDefinition}) and the mold ({@link #getMold}).
+	 * <p>To override in Java, you could invoke {@link #setWidgetClass}.
+	 * To override in ZUML, you could use the client namespace as follows.
+	 * <pre><code>
+&lt;window xmlns:w="http://www.zkoss.org/2005/zk/client"
+w:use="foo.MyWindow"&gt;
+&lt;/window&gt;
+	 *</code></pre>
 	 * <p>Note: for Ajax devices, the widget class must be non-null.
 	 * @since 5.0.0
+	 * @see #setWidgetClass
 	 */
 	public String getWidgetClass();
+	/** Sets the widget class (aka., the widget type).
+	 * The widget class is a JavaScript class, including the package name.
+	 * For example, "zul.wnd.Window".
+	 * @param clsnm the widget's class name at the client side.
+	 * If null (or empty), the default one is used (see {@link #getWidgetClass}).
+	 * @since 5.0.2
+	 */
+	public void setWidgetClass(String clsnm);
 
 	/** Returns the component definition of this component (never null).
 	 */

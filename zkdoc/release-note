@@ -3,14 +3,15 @@ ZK 5.0.2
 * Features
   2988039: A way to defer rendering of client widgets
   2972509: Enhance jQuery selector to handle zk widget's ID and tag name
-  2974340: Generate zul's HTML content with JavaScript array/map
+  2940704: auto-set pageSize in paging mold per the component height
+  2994541: A way to specify the widget class
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
+  2974340: Generate zul's HTML content with JavaScript array/map
   2985686: A simpler way to change the imiplementation of FileuploadDlg
   2989181: Notify a desktop that it has been recycled- onDesktopRecycle
   2992673: A directive allow set custom HTTP response header key-value in zul page
   2983365: Able to get application event queue on a worker thread
-  2940704: auto-set pageSize in paging mold per the component height
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error

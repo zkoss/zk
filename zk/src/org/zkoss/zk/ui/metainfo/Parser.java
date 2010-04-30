@@ -1165,9 +1165,14 @@ public class Parser {
 			final String uri = attrns.getURI();
 			if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri)) {
 				if (name.length() == 0)
-					throw new UiException("Unknown client attribute: "+name);
-					//currently, support only method override
-				compInfo.addWidgetOverride(name, value, cond);
+					throw new UiException("Client attribute name required, "+xl);
+				if ("use".equals(name)) {
+					if (cond != null)
+						throw new UnsupportedOperationException("if and unless not allowed for w:use, "+xl);
+					compInfo.setWidgetClass(value);
+				} else {
+					compInfo.addWidgetOverride(name, value, cond);
+				}
 				return;
 			}
 		}

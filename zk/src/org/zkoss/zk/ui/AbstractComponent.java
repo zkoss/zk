@@ -108,7 +108,7 @@ import org.zkoss.zk.scripting.*;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20091007L;
+    private static final long serialVersionUID = 20100430L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map _clientEvents = new HashMap(128);
@@ -175,6 +175,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient boolean _evthdsShared;
 	/** the Au service. */
 	private transient AuService _ausvc;
+	/** The widget class. */
+	private String _wgtcls;
 	/** Whether this component is visible.
 	 * @since 3.5.0 (becomes protected)
 	 */
@@ -1572,11 +1574,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: return the widget class based on the current mold
 	 * (by use of {@link ComponentDefinition#getWidgetClass}), or null
 	 * if not found.
+	 * <p>To override in Java, you could invoke {@link #setWidgetClass}.
+	 * To override in ZUML, you could use the client namespace as follows.
+	 * <pre><code>
+&lt;window xmlns:w="http://www.zkoss.org/2005/zk/client"
+w:use="foo.MyWindow"&gt;
+&lt;/window&gt;
+	 *</code></pre>
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
+		if (_wgtcls != null)
+			return _wgtcls;
 		final String widgetClass = _def.getWidgetClass(getMold());
 		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
+	}
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls: null;
 	}
 
 	public String getMold() {

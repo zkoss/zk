@@ -177,9 +177,9 @@ function zkmprops(uuid, props) {
 		if (type) { //not page (=0)
 			if (type === 1) //1: zhtml.Widget
 				wi[0] = type = "zhtml.Widget";
-			var i = type.lastIndexOf('.');
-			if (i >= 0)
-				zk.load(type.substring(0, i), dt);
+			var j = type.lastIndexOf('.');
+			if (j >= 0)
+				zk.load(type.substring(0, j), dt);
 		}
 
 		for (var children = wi[3], j = children.length; j--;)
@@ -218,6 +218,7 @@ function zkmprops(uuid, props) {
 		for (;;) {
 			if (_createInf0.length)
 				return; //another page started
+
 			if (zk.loading) {
 				zk.afterLoad(mtBL0);
 				return;
