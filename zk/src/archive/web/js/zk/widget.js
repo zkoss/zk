@@ -331,10 +331,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			p.style.position = 'relative';
 		}
 		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
+			ptop = p.offsetTop,
+			pleft = p.offsetLeft,
 			tbp = zkp.sumStyles('t', jq.borders),
 			lbp = zkp.sumStyles('l', jq.borders),
-			segTop = sameOffParent ? (p.offsetTop + tbp) : tbp,
-			segLeft = sameOffParent ? (p.offsetLeft + lbp) : lbp,
+			segTop = sameOffParent ? (ptop + tbp) : tbp,
+			segLeft = sameOffParent ? (pleft + lbp) : lbp,
 			segBottom = segTop,
 			segRight = segLeft;
 
@@ -349,8 +351,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					offTop = c.offsetTop,
-					offLeft = c.offsetLeft,
+					ctop = c.offsetTop,
+					cleft = c.offsetLeft,
+					sameOffParent = c.offsetParent === p.offsetParent, 
+					offTop = sameOffParent ? ctop - ptop : ctop,
+					offLeft = sameOffParent ? cleft - pleft : cleft,
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
@@ -363,7 +368,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						offLeft = c.offsetLeft;
+						cleft = c.offsetLeft;
+						offLeft = sameOffParent ? cleft - pleft : cleft;
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 						segRight = Math.max(segRight, marginRight);
@@ -394,7 +400,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						offTop = c.offsetTop;
+						ctop = c.offsetTop;
+						offTop = sameOffParent ? ctop - ptop : ctop;
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 						segBottom = Math.max(segBottom, marginBottom);
