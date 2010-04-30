@@ -2980,6 +2980,14 @@ var Expr = Sizzle.selectors = {
 						checkSet[i] = isPartStr ?
 							elem.parentNode :
 							elem.parentNode === part;
+						
+						/* Jumper Chen, Potix, 20100430*/
+						if (!isPartStr && !checkSet[i]) {
+							var p = zk.Widget.$(part, {exact: 1}),
+								c = zk.Widget.$(elem, {exact: 1});
+							if (p && c)
+								checkSet[i] = p == c.parent;
+						}
 					}
 				}
 
