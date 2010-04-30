@@ -184,6 +184,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			var colled = this.$n('colled'),
 				real = this.$n('real');
 			if (open) {
+				// Bug 2994592
+				if (fromServer) {
+					var s = this.$n('real').style;
+					s.visibility = "hidden";
+					s.display = "";
+					this._syncSize(true);
+					s.visibility = "";
+					s.display = "none";
+					this._open = true;
+				}
 				if (colled) {
 					if (!nonAnima) 
 						zk(colled).slideOut(this, {
