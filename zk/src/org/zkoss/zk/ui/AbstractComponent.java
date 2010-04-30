@@ -1370,7 +1370,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Smart-updates a property of the peer widget associated with
-	 * the component, running at the client, with the specified value.
+	 * the component, running at the client, with the given value.
 	 *
 	 * <p>The second invocation with the same property will replace the previous
 	 * call. In other words, the same property will be set only once in
@@ -1409,10 +1409,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)
 	 * @see #updateByClient
+	 * @see #smartUpdateMultiple
 	 */
 	protected void smartUpdate(String attr, Object value) {
 		if (_page != null)
 			getAttachedUiEngine().addSmartUpdate(this, attr, value);
+	}
+	/** Smart-updates a property of the peer widget with the given value
+	 * that allows to be specified multiple times.
+	 * Unlike {@link #smartUpdate(String, Object)}, the value updated by this
+	 * method will be sent to the client one-by-one.
+	 * <p>For example, if you invoke <code>smartUpdate("attr", "value1")</code>
+	 * and <code>smartUpdate("attr", "value2")</code>, then only <code>value2</code>
+	 * will be sent to the client.
+	 * <p>However, if you invoke <code>smartUpdateMultiple("attr", "value1")</code>
+	 * and <code>smartUpdateMultiple("attr", "value2")</code>,
+	 * then both <code>value1</code> and <code>value2</code>
+	 * will be sent to the client. In other words, <code>wgt.setAttr("value1")</code>
+	 * and <code>wgt.setAttr("value2")</code> will be invoked at the client
+	 * accordingly.
+	 * @since 5.0.0
+	 * @see #smartUpdate(String, Object)
+	 */
+	protected void smartUpdateMultiple(String attr, Object value) {
+		if (_page != null)
+			getAttachedUiEngine().addSmartUpdateMultiple(this, attr, value);
 	}
 	/** A special smart update to update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1495,9 +1516,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
-		response(new AuInvoke(this, "setListener", evtnm, script));
-		//1. don't use smartUpdate since multiple methods might be overriden in one AU
-		//2. don't use JavaScriptValue since the client will generate it differently
+		smartUpdateMultiple("listener", new String[] {evtnm, script});
 	}
 	/** A special smart update to update a method or a field of the peer widget.
 	 * By default, it invokes the client widget's <code>setOverride</code> as follows.
@@ -1517,8 +1536,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdateWidgetOverride(String name, String script) {
-		response(new AuInvoke(this, "setOverride", name, new JavaScriptValue(script)));
-			//don't use smartUpdate since multiple methods might be overriden in one AU
+		smartUpdateMultiple("override", new Object[] {name, new JavaScriptValue(script)});
 	}
 
 	public void detach() {

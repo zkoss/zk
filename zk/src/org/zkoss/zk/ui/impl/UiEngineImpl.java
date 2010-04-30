@@ -254,6 +254,11 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
 	}
+	public void addSmartUpdateMultiple(Component comp, String attr, Object value) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addSmartUpdateMultiple(comp, attr, value);
+	}
 	public void addResponse(AuResponse response) {
 		getCurrentVisualizer().addResponse(response);
 	}

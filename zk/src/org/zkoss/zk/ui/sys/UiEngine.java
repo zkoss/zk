@@ -110,6 +110,11 @@ public interface UiEngine {
 	 * @param value the value.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
+	/** Smart-updates a property of the peer widget with the given value
+	 * that allows to be specified multiple times.
+	  * @since 5.0.2
+	 */
+	public void addSmartUpdateMultiple(Component comp, String attr, Object value);
 	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
 	 * as the override key.
 	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>
