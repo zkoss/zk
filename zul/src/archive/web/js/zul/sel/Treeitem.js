@@ -234,8 +234,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
 			cn = w.$n();
-			if (cn)
+			if (cn) {
 				w.removeHTML_(cn);
+				w.clearCache();
+			}
 		}
 		this.$supers('removeHTML_', arguments);
 	},
@@ -253,6 +255,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				items.push(newwgt);
 		}
 	},
+	_removeChildHTML: function (n) {
+		for(var cn, w = this.firstChild; (w = w.nextSibling);) {
+			if ((cn = w.$n()))
+				w.removeHTML_(cn);
+		}
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
 			jq(before).before(child.redrawHTML_());
@@ -260,6 +268,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			jq(this.getCaveNode()).after(child.redrawHTML_());
 				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
+	},
+	replaceHTML: function (n, desktop, skipper) {
+		this._removeChildHTML(n);
+		this.$supers('replaceHTML', arguments);
 	},
 	_syncIcon: function () {
 		if (this.desktop && this.treerow) {
