@@ -330,13 +330,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
-		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
-			ptop = p.offsetTop,
+		var ptop = p.offsetTop,
 			pleft = p.offsetLeft,
-			tbp = zkp.sumStyles('t', jq.borders),
-			lbp = zkp.sumStyles('l', jq.borders),
-			segTop = sameOffParent ? (ptop + tbp) : tbp,
-			segLeft = sameOffParent ? (pleft + lbp) : lbp,
+			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles("t", jq.paddings),
+			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles("l", jq.paddings),
+			segTop = 0,
+			segLeft = 0,
 			segBottom = segTop,
 			segRight = segLeft;
 
@@ -351,8 +350,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					ctop = c.offsetTop,
-					cleft = c.offsetLeft,
+					ctop = c.offsetTop - tbp,
+					cleft = c.offsetLeft - lbp,
 					sameOffParent = c.offsetParent === p.offsetParent, 
 					offTop = sameOffParent ? ctop - ptop : ctop,
 					offLeft = sameOffParent ? cleft - pleft : cleft,
@@ -368,7 +367,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						cleft = c.offsetLeft;
+						cleft = c.offsetLeft - lbp;
 						offLeft = sameOffParent ? cleft - pleft : cleft;
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
@@ -400,7 +399,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						ctop = c.offsetTop;
+						ctop = c.offsetTop - tbp;
 						offTop = sameOffParent ? ctop - ptop : ctop;
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
