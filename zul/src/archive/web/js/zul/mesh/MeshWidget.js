@@ -314,7 +314,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
-			this.$supers('replaceHTML', arguments);
+			//bug #2995434
+			//20100503, Henri: cannot use $supers(). $supers('replaceHTML') 
+			//will recursive back to this function via fire('onSize'). However, 
+			//ZK's $supers() is simulated and when we call $supers() again 
+			//here, the system thought it is calling from its super class rather
+			//than this class and it will be wrong. Therefore, we are forced to 
+			//call super class's replaceHTML directly instead. Therefore, if
+			//we add replaceHTML into zul.Widget, this must be changed accordingly.
+			zk.Widget.prototype.replaceHTML.apply(this, arguments);
+			//this.$supers('replaceHTML', arguments);
 		} finally {
 			this._syncingbodyrows = old;
 		}
