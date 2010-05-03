@@ -310,7 +310,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							p.appendChild(node);
 							p.style.position = 'relative';
 							if (!p.style.height) {
-								p.style.height = jq.px0(sh + 1);
+								p.style.height = jq.px0(sh + 1);//add the height(1px) of the lastest div (use for fix the width) in z-portalchildren-body
 								node._pheight = true;
 							}
 						}
