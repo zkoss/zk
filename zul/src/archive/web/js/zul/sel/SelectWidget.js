@@ -288,9 +288,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.ehead) this.ehead.style.width = wd;
 			if (this.efoot) this.efoot.style.width = wd;
 		}
+
+		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
+		if (zk.safari)
+			this.$n("a").style.display = 'none';
 		
-		//Bug 1659601: we cannot do it in init(); or, IE failed!
+		//Bug 1659601: we cannot do it in init(); or, IE failed!		
 		var tblwd = this.ebody.clientWidth;
+		
+		if (zk.safari)
+			this.$n("a").style.display = '';
+		
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
