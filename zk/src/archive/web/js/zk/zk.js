@@ -788,8 +788,17 @@ wgt.setSomething(somevalue, {force:true});
 	 * @return int the integer
 	 */
 	parseInt: function (v, b) {
-		v = v ? parseInt(v, b || 10): 0;
-		return isNaN(v) ? 0: v;
+		return v && !isNaN(v = parseInt(v, b || 10)) ? v: 0;
+	},
+	/** Parses a string to a floating number.
+	 * <p>It is the same as the built-in parseFloat method except it never return
+	 * NaN (rather, it returns 0). 
+	 * @param String v the text to parse
+	 * @return double the floating number
+	 * @since 5.0.2
+	 */
+	parseFloat: function (v) {
+		return v && !isNaN(v = parseFloat(v)) ? v: 0;
 	},
 
 	/** Assigns a value to the specified property.
