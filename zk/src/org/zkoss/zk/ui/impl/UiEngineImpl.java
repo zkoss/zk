@@ -249,15 +249,15 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
+	/** @deprecated As of release 5.0.2, replaced with {@link #smartUpdate(Component comp, String, Object, boolean)}.
+	 */
 	public void addSmartUpdate(Component comp, String attr, Object value) {
-		if (comp == null)
-			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+		addSmartUpdate(comp, attr, value, false);
 	}
-	public void addSmartUpdateMultiple(Component comp, String attr, Object value) {
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdateMultiple(comp, attr, value);
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value, append);
 	}
 	public void addResponse(AuResponse response) {
 		getCurrentVisualizer().addResponse(response);

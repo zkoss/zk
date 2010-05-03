@@ -223,20 +223,12 @@ import org.zkoss.zk.au.out.*;
 	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
 	 * execution
 	 * @param value the value.
+	 * @since 5.0.2
 	 */
-	public void addSmartUpdate(Component comp, String attr, Object value) {
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		final Map respmap = getAttrRespMap(comp);
 		if (respmap != null)
-			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
-	}
-	/** Smart-updates a property of the peer widget with the given value
-	 * that allows to be specified multiple times.
-	 */
-	public void addSmartUpdateMultiple(Component comp, String attr, Object value) {
-		addSmartUpdate(comp, attr, value);
-		final Map respmap = getAttrRespMap(comp);
-		if (respmap != null)
-			respmap.put(attr + ":" + _cntMultSU++,
+			respmap.put(append ? attr + ":" + _cntMultSU++: attr,
 				new TimedValue(_timed++, comp, attr, value));
 	}
 	/** Sets whether to disable the update of the client widget.
