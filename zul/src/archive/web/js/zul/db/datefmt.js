@@ -55,7 +55,9 @@ zk.fmt.Date = {
 		var	ts = [], mindex = fmt.indexOf("MMM"),
 			fmtlen = fmt.length, ary = [],
 			mmindex = mindex + 3,
-			isNumber = !isNaN(txt);
+			isNumber = !isNaN(txt)
+			tlen = txt.replace(/[^.]/g, '').length,
+			flen = fmt.replace(/[^.]/g, '').length;
 		for (var i = 0, j = txt.length; i < j; i++) {
 			var c = txt.charAt(i),
 				f = fmtlen > i ? fmt.charAt(i) : "";
@@ -65,7 +67,8 @@ zk.fmt.Date = {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
-					if (c.charCodeAt() < 128 && (c.charCodeAt() != 46 || f.charCodeAt() == 46)) {
+					if (c.charCodeAt() < 128 && (c.charCodeAt() != 46 ||
+								tlen == flen || f.charCodeAt() == 46)) {
 						if (ary.length) {
 							ts.push(ary.join(""));
 							ary = [];
