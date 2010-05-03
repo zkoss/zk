@@ -288,6 +288,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						var body = this.$n('body');
 						if (body) body.style.display = "";
 					}
+					var floated = this.isFloatable(),
+						$op = floated ? jq(node).offsetParent() : jq(node).parent();
+					var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 					
 					if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
 						var layout = this.parent.parent;
@@ -306,6 +309,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							this.setTopmost();
 							p.appendChild(node);
 							p.style.position = 'relative';
+							if (!p.style.height) {
+								p.style.height = jq.px0(sh + 1);
+								node._pheight = true;
+							}
 						}
 					}
 					var floated = this.isFloatable(),
@@ -320,8 +327,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.left = "-10000px";
 	
 					// Sometimes, the clientWidth/Height in IE6 is wrong.
-					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
-						sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth;
+					
 					if (!floated) {
 						sw -= $op.zk.paddingWidth();
 						sw = $n.revisedWidth(sw);
@@ -371,7 +378,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						var p = this.parent.parent.$n();
 						p.style.position = node._ppos;
 						p.parentNode.scrollTop = node._scrollTop;
-						node._scrollTop = node._ppos = node._zindex = node._pos = null;
+						if (node._pheight)
+							p.style.height = "";
+						node._scrollTop = node._ppos = node._zindex = node._pos = node._pheight = null;
 						this._inWholeMode = false;
 					}
 				}
