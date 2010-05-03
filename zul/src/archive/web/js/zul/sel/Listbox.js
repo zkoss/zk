@@ -164,7 +164,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this;
 	},
 	setItemsInvalid_: function(wgts) {
-		this.replaceCavedChildren_('rows', zAu.createWidgets(wgts));
+		var wgt = this;
+		zAu.createWidgets(wgts,
+			function (ws) {wgt.replaceCavedChildren_('rows', ws);});
 	},	
 	//-- super --//
 	getCaveNode: function () {

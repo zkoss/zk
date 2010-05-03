@@ -768,19 +768,27 @@ zAu.beforeSend = function (uri, req) {
 	 * Component.redraw() at the server.
 	 * <p>This method is usually used with Java's ComponentsCtrl.redraw, and
 	 * {@link Widget#replaceCavedChildren_}.
+	 * <p>Notice that, since the creation of widgets might cause some packages
+	 * to be loaded, the callback function, fn, might be called after this
+	 * method is returned
 	 * @param Array codes an array of JavaScript codes generated at the server.
 	 * For example, <code>smartUpdate("foo", ComponentsCtrl.redraw(getChildren());</code>
-	 * @return Array an array of {@link Widget}.
+	 * @param Function fn the callback function. When the widgets are created.
+	 * <code>fn</code> is called with an array of {@link Widget}. In other words,
+	 * the callback's signature is as follows:<br/>
+	 * <code>void callback(zk.Widget[] wgts);</code>
+	 * @since 5.0.2
 	 */
-	createWidgets: function (codes) {
+	createWidgets: function (codes, fn) {
 		var wgts = [];
 		for (var j = 0, len = codes.length; j < len; ++j) {
 			zAu.stub = function (newwgt) {
 				wgts.push(newwgt);
+				if (wgts.length == len)
+					fn(wgts);
 			};
 			jq.globalEval(codes[j]);
 		}
-		return wgts;
 	},
 
 	/* (not jsdoc)
