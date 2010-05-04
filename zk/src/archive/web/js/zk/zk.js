@@ -1138,7 +1138,7 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
-	 * Example: 
+	 * <p>Example: 
 <pre><code>
 multiply: function (n) {
  return this.$super('multiply', n + 2);
@@ -1149,17 +1149,39 @@ multiply: function (n) {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$supers
 	 */
-	$super: function (mtdnm) {
-		var args = [];
-		for (var j = arguments.length; --j > 0;)
+	/** Invokes a method defined in the superclass with any number of arguments.
+	 * It is like Function's call() that takes any number of arguments.
+	 * <p>It is similar to {@link #$super(String, Object...)}, but
+	 * this method works even if the superclass calls back the same member method.
+	 * In short, it is tedious but safer.
+	 * <p>Example: 
+<pre><code>
+foo.MyClass = zk.$extends(foo.MySuper, {
+  multiply: function (n) {
+   return this.$super(foo.MyClass, 'multiply', n + 2);
+  }
+</code></pre>
+	 * <p>Notice that the class specified in the first argument is <i>not</i>
+	 * the super class having the method. Rather,
+	 * it is the class that invokes this method.
+	 * @param Class klass the class that invokes this method.
+	 * @param String mtd the method name to invoke
+	 * @param Object... vararg any number of arguments
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$supers
+	 * @since 5.0.2
+	 */
+	$super: function (arg0, arg1) {
+		var args = [], bCls = typeof arg0 != "string";
+		for (var j = arguments.length, end = bCls ? 1: 0; --j > end;)
 			args.unshift(arguments[j]);
-		return this.$supers(mtdnm, args);
+		return bCls ? this.$supers(arg0, arg1, args): this.$supers(arg0, args);
 	},
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
-	 * Example: 
+	 * <p>Example: 
 <pre><code>
 multiply: function () {
- return this.$super('multiply', arguments);
+ return this.$supers('multiply', arguments);
 }
 </code></pre>
 	 * @param String mtd the method name to invoke
@@ -1168,33 +1190,61 @@ multiply: function () {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$super
 	 */
-	$supers: function (mtdnm, args) {
+	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
+	 * <p>It is similar to {@link #$supers(String, Array)}, but
+	 * this method works even if the superclass calls back the same member method.
+	 * In short, it is tedious but safer.
+	 * <p>Example: 
+<pre><code>
+foo.MyClass = zk.$extends(foo.MySuper, {
+  multiply: function () {
+   return this.$supers(foo.MyClass, 'multiply', arguments);
+  }
+</code></pre>
+	 * <p>Notice that the class specified in the first argument is <i>not</i>
+	 * the super class having the method. Rather,
+	 * it is the class that invokes this method.
+	 * @param Class klass the class that invokes this method.
+	 * @param String mtd the method name to invoke
+	 * @param Array args an array of arguments. In most case, you just pass
+	 * <code>arguments</code> (the built-in variable).
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$super
+	 * @since 5.0.2
+	 */
+	$supers: function (nm, args, argx) {
+		if (typeof nm != "string") { //zk.Class assumed
+			if (!(nm = nm.prototype._$super) || !(nm = nm[args])) //nm is zk.Class
+				throw args + " not in superclass"; //args is the method name
+			return nm.apply(this, argx);
+		}
+
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
 		//locate method
-		var old = supers[mtdnm], m, p, oldmtd;
+		var old = supers[nm], m, p, oldmtd;
 		if (old) {
-			oldmtd = old[mtdnm];
+			oldmtd = old[nm];
 			p = old;
 		} else {
-			oldmtd = this[mtdnm];
+			oldmtd = this[nm];
 			p = this;
 		}
-		for (;;) {
-			if (!(p = p._$super))
-				throw mtdnm + " not in superclass";
-			if (oldmtd != p[mtdnm]) {
-				m = p[mtdnm];
-				if (m) supers[mtdnm] = p;
+		while (p = p._$super)
+			if (oldmtd != p[nm]) {
+				m = p[nm];
+				if (m) supers[nm] = p;
 				break;
 			}
-		}
+
+		if (!m)
+			throw nm + " not in superclass";
 
 		try {
 			return m.apply(this, args);
 		} finally {
-			supers[mtdnm] = old; //restore
+			supers[nm] = old; //restore
 		}
 	},
 	_$subs: [],
