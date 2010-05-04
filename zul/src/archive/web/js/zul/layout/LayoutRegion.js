@@ -186,6 +186,15 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (open) {
 				// Bug 2994592
 				if (fromServer) {
+					
+					// Bug 2995770
+					if (!zk(this.$n()).isRealVisible()) {
+						if (colled) {
+							jq(real)[open ? 'show' : 'hide']();
+							jq(colled)[!open ? 'show' : 'hide']();
+						}
+						return;
+					}
 					var s = this.$n('real').style;
 					s.visibility = "hidden";
 					s.display = "";
