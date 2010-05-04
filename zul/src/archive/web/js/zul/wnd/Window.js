@@ -17,6 +17,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.wnd');
 
 (function () {
+	var _modals = [];
+
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;
 		var node = wgt.$n(),
@@ -572,6 +574,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (realVisible) {
 			this._prevmodal = zk.currentModal;
 			zk.currentModal = this;
+			_modals.unshift(this);
 			this._prevfocus = zk.currentFocus;
 
 			//au's focus uses wgt.focus(0), so we have to delay a bit (Z30-focus.zul)
@@ -1031,12 +1034,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
 
+		_modals.$remove(this);
 		if (zk.currentModal == this) {
-			zk.currentModal = this._prevmodal;
-			var prevfocus = this._prevfocus;
-			if (prevfocus) prevfocus.focus(0);
-			this._prevfocus = this._prevmodal = null;
+			var w = this._prevmodal;
+			if (!(zk.currentModal = w && w.desktop && w._mode == "modal" ? w: null)) {
+				if (w = zk.currentModal = _modals[0])
+					w.focus();
+			} else if ((w = this._prevfocus) && w.desktop)
+				w.focus(0);
 		}
+		this._prevfocus = this._prevmodal = null;
 
 		this.domUnlisten_(this.$n(), 'onMouseOver');
 		this.$supers('unbind_', arguments);
