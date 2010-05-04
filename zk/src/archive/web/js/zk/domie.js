@@ -140,6 +140,18 @@ zk.copy(zjq, {
 		}
 	},
 
+	_setOuter: function (n, html) {
+		try {
+			if ((n = jq(n)[0]) && !jq.nodeName(n, "td", "th", "table", "tr",
+			"caption", "tbody", "thead", "tfoot", "colgroup","col")) {
+				n.outerHTML = html; //less memory in IE
+				return;
+			}
+		} catch (e) { //Unable to handle table/tr/...
+		}
+		jq(n).replaceWith(html);
+	},
+
 	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
 	_fix1stJS: function (out, s) { //used in widget.js
 		var j;
