@@ -578,7 +578,7 @@ public class HtmlPageRenders {
 				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
 				//memory leak in IE), so we have to invoke globalEval manually if AU
 				if (au && extra.length() > 0)
-					extra = "jq.globalEval('"
+					extra = "zkjs('"
 						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
 						+ "');";
 				if (ac.length() > 0) {

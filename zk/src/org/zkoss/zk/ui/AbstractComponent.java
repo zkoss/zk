@@ -1707,7 +1707,7 @@ w:use="foo.MyWindow"&gt;
 				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
 				//memory leak in IE), so we have to invoke globalEval manually if AU
 				if (isAsyncUpdate())
-					extra = "jq.globalEval('"
+					extra = "zkjs('"
 						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
 						+ "');";
 			}

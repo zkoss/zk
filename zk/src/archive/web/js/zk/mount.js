@@ -383,6 +383,9 @@ function zkmprops(uuid, props) {
 		doAuCmds(arguments);
 	},
 
+	//Global eval
+	zkjs: jq.globalEval,
+
 	//begin of mounting
 	zkmb: function (binding) {
 		zk.mounting = true;
