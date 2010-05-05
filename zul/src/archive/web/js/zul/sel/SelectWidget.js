@@ -634,6 +634,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var	checkmark = evt.domTarget == row.$n('cm');
 			
 		if (checkmark) {
+			
+			// Bug 2997034
+			this._syncFocus(row);
+			
 			if (this.isMultiple()) {
 				this._toggleSelect(row, !row.isSelected(), evt);
 			} else {
