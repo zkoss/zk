@@ -534,7 +534,7 @@ public class HtmlPageRenders {
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		final int order = ComponentRedraws.beforeRedraw(false);
-		final String extra;
+		String extra;
 		try {
 			if (order < 0)
 				out.write("zkx(");
@@ -574,6 +574,13 @@ public class HtmlPageRenders {
 				out.write(',');
 				out.write(extra.length() > 0 ? '1': '0');
 					//Bug 2983792 (delay until non-defer script evaluated)
+
+				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
+				//memory leak in IE), so we have to invoke globalEval manually if AU
+				if (au && extra.length() > 0)
+					extra = "jq.globalEval('"
+						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
+						+ "');";
 				if (ac.length() > 0) {
 					out.write(",\n[");
 					out.write(ac);

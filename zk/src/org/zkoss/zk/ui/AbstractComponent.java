@@ -1665,7 +1665,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public void redraw(final Writer out) throws IOException {
 		final int order = ComponentRedraws.beforeRedraw(false);
-		final String extra;
+		String extra;
 		try {
 			if (order < 0)
 				out.write("zkx(");
@@ -1701,12 +1701,25 @@ w:use="foo.MyWindow"&gt;
 			extra = ComponentRedraws.afterRedraw();
 		}
 		if (order < 0) {
-			if (extra.length() > 0)
+			if (extra.length() > 0) {
 				out.write(",1"); //Bug 2983792 (delay until non-defer script evaluated)
+
+				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
+				//memory leak in IE), so we have to invoke globalEval manually if AU
+				if (isAsyncUpdate())
+					extra = "jq.globalEval('"
+						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
+						+ "');";
+			}
 			out.write(");\n");
 			out.write(extra);
 		}
 	}
+	private static final boolean isAsyncUpdate() {
+		final Execution exec = Executions.getCurrent();
+		return exec != null && exec.isAsyncUpdate(null);
+	}
+
 	/** Redraws childrens (and then recursively descandants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.
 	 * <p>If a derived class renders only a subset of its children
