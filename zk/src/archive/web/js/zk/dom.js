@@ -1896,7 +1896,17 @@ this._syncShadow(); //synchronize shadow
 		setTimeout(function () {jq(a).remove();}, 500);
 	}
 
-	/** Encodes a JavaScript object to a JSON string. To decode, use jq.parseJSON(s), where s is a JSON string.
+	/** Decodes a JSON string to a JavaScript object. 
+	 * <p>It is similar to jq.parseJSON (jQuery's default function), except
+	 * 1) it doesn't check if the string is a valid JSON
+	 * 2) it uses eval to evaluate
+	 * <p>Thus, it might not be safe to invoke this if the string's source
+	 * is not trustable (and then it is better to use jq.parseJSON)
+	 * @param String s the JSON string
+	 * @return Object the converted object.
+	 */
+	//evalJSON: function () {},
+	/** Encodes a JavaScript object to a JSON string. To decode, use jq.evalJSON(s), where s is a JSON string.
 	 *
 	 * <p>You can provide an optional replacer method. It will be passed the key and value of each member, with this bound to the containing object. The value that is returned from your method will be serialized. If your method returns undefined, then the member will be excluded from the serialization.
 	 * Values that do not have JSON representations, such as undefined or functions, will not be serialized. Such values in objects will be dropped; in arrays they will be replaced with null. You can use a replacer function to replace those with JSON values. JSON.stringify(undefined) returns undefined.

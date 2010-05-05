@@ -45,7 +45,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			cmds.pfIds = pfGetIds(req);
 		}
 
-		rt = jq.parseJSON(rt);
+		rt = jq.evalJSON(rt);
 		var	rs = rt.rs,
 			rid = rt.rid;
 		if (rid) {
@@ -516,7 +516,7 @@ zAu = {
 	 * @param String data the data in a JSON string.
 	 */
 	process: function (cmd, data) {
-		doProcess(cmd, data ? jq.parseJSON(data): []);
+		doProcess(cmd, data ? jq.evalJSON(data): []);
 	},
 	/** Returns whether to ignore the ESC keystroke.
 	 * It returns true if ZK Client Engine is sending an AU request
