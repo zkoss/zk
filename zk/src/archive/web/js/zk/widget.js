@@ -2325,6 +2325,10 @@ function () {
 		if (this.desktop) {
 			var n = this.$n();
 			if (n) {
+				var oldrod = this.z$rod;
+				this.z$rod = false;
+					//to avoid side effect since the caller might look for $n(xx)
+
 				if (skipper) {
 					var skipInfo = skipper.skip(this);
 					if (skipInfo) {
@@ -2336,10 +2340,11 @@ function () {
 							//to notify it is restored from rerender with skipper
 						zWatch.fireDown('beforeSize', this);
 						zWatch.fireDown('onSize', this);
-						return this; //done
 					}
-				}
-				this.replaceHTML(n);
+				} else
+					this.replaceHTML(n);
+
+				this.z$rod = oldrod;
 			}
 		}
 		return this;
