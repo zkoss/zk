@@ -264,25 +264,45 @@ public class Strings {
 
 		StringBuffer sb = null;
 		int j = 0;
-		for (int k, j2 = 0, len = src.length(); (k = anyOf(src, specials, j2)) < len;) {
-			char cc = src.charAt(k);
-			switch (cc) {
-			case '\n': cc = 'n'; break;
-			case '\t': cc = 't'; break;
-			case '\r': cc = 'r'; break;
-			case '\f': cc = 'f'; break;
-			case '/':
-				//escape </script>
-				if (specials == ESCAPE_JAVASCRIPT //handle it specially
-				&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
-					|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
-					j2 = k + 1;
-					continue;
+		l_out:
+		for (int j2 = 0, len = src.length();;) {
+			String enc = null;
+			char cc;
+			int k = j2;
+			for (;; ++k) {
+				if (k >= len)
+					break l_out;
+
+				cc = src.charAt(k);
+				if (shallEncodeUnicode(cc, specials)) {
+					enc = "u" + Integer.toHexString(cc);
+					break;
 				}
+				if (specials.indexOf(cc) >= 0)
+					break;
 			}
+
+			if (enc == null)
+				switch (cc) {
+				case '\n': cc = 'n'; break;
+				case '\t': cc = 't'; break;
+				case '\r': cc = 'r'; break;
+				case '\f': cc = 'f'; break;
+				case '/':
+					//escape </script>
+					if (specials == ESCAPE_JAVASCRIPT //handle it specially
+					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+						|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
+						j2 = k + 1;
+						continue;
+					}
+				}
+
 			if (sb == null)
 				sb = new StringBuffer(len + 4);
-			sb.append(src.substring(j, k)).append('\\').append(cc);
+			sb.append(src.substring(j, k)).append('\\');
+			if (enc != null) sb.append(enc);
+			else sb.append(cc);
 			j2 = j = k + 1;
 		}
 		if (sb == null)
@@ -311,31 +331,49 @@ public class Strings {
 			return dst;
 
 		for (int j = 0, j2 = 0, len = src.length();;) {
+			String enc = null;
+			char cc;
 			int k = j2;
-			for (; k < len && specials.indexOf(src.charAt(k)) < 0; ++k)
-				;
-			if (k >= len)
-				return dst.append((Object)src.subSequence(j, src.length()));
+			for (;; ++k) {
+				if (k >= len)
+					return dst.append((Object)src.subSequence(j, src.length()));
 
-			char cc = src.charAt(k);
-			switch (cc) {
-			case '\n': cc = 'n'; break;
-			case '\t': cc = 't'; break;
-			case '\r': cc = 'r'; break;
-			case '\f': cc = 'f'; break;
-			case '/':
-				//escape </script>
-				if (specials == ESCAPE_JAVASCRIPT //handle it specially
-				&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
-					|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
-					j2 = k + 1;
-					continue;
+				cc = src.charAt(k);
+				if (shallEncodeUnicode(cc, specials)) {
+					enc = "u" + Integer.toHexString(cc);
+					break;
 				}
+				if (specials.indexOf(cc) >= 0)
+					break;
 			}
-			dst.append((Object)src.subSequence(j, k)).append('\\').append(cc);
+
+			if (enc == null)
+				switch (cc) {
+				case '\n': cc = 'n'; break;
+				case '\t': cc = 't'; break;
+				case '\r': cc = 'r'; break;
+				case '\f': cc = 'f'; break;
+				case '/':
+					//escape </script>
+					if (specials == ESCAPE_JAVASCRIPT //handle it specially
+					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+						|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
+						j2 = k + 1;
+						continue;
+					}
+				}
+
+			dst.append((Object)src.subSequence(j, k)).append('\\');
+			if (enc != null) dst.append(enc);
+			else dst.append(cc);
 			j2 = j = k + 1;
 		}
 	}
+	private static final boolean shallEncodeUnicode(char cc, String specials) {
+		return specials == ESCAPE_JAVASCRIPT && cc > (char)127
+			&& !Character.isLetter(cc);
+	}
+
 	/** Un-escape the quoted string.
 	 * @see #escape
 	 */
