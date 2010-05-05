@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.wnd');
 
 (function () {
-	var _modals = [];
+	var _modals = [], _lastfocus;
 
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;
@@ -572,13 +572,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			});
 		}
 		if (realVisible) {
-			this._prevmodal = zk.currentModal;
 			zk.currentModal = this;
+			var wnd = _modals[0], fc = zk.currentFocus;
+			if (wnd) wnd._lastfocus = fc;
+			else _lastfocus = fc;
 			_modals.unshift(this);
-			this._prevfocus = zk.currentFocus;
 
 			//au's focus uses wgt.focus(0), so we have to delay a bit (Z30-focus.zul)
-			var wnd = this;
+			wnd = this;
 			setTimeout(function () {
 				if (!zUtl.isAncestor(wnd, zk.currentFocus))
 					wnd.focus();
@@ -1036,14 +1037,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		_modals.$remove(this);
 		if (zk.currentModal == this) {
-			var w = this._prevmodal;
-			if (!(zk.currentModal = w && w.desktop && w._mode == "modal" ? w: null)) {
-				if (w = zk.currentModal = _modals[0])
-					w.focus();
-			} else if ((w = this._prevfocus) && w.desktop)
-				w.focus(0);
+			var wnd = zk.currentModal = _modals[0],
+				fc = wnd ? wnd._lastfocus: _lastfocus;
+			if (!wnd)
+				_lastfocus = null;
+			if (!fc || !fc.desktop)
+				fc = wnd;
+			if (fc)
+				fc.focus();
 		}
-		this._prevfocus = this._prevmodal = null;
+		this._lastfocus = null;
 
 		this.domUnlisten_(this.$n(), 'onMouseOver');
 		this.$supers('unbind_', arguments);
