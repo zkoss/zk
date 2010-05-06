@@ -249,7 +249,7 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
-	/** @deprecated As of release 5.0.2, replaced with {@link #smartUpdate(Component comp, String, Object, boolean)}.
+	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value) {
 		addSmartUpdate(comp, attr, value, false);
