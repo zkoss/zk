@@ -57,3 +57,35 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		return this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
 });
+
+/** A long integer.
+ * @disable(zkgwt)
+ */
+zk.Long = zk.$extends(zk.Object, {
+	/** Constructor.
+	 * @param Object value a number or a string
+	 */
+	$init: function (value) {
+		value = value ? '' + value: '0';
+		var j = value.lastIndexOf('.');
+		if (j >= 0) {
+			value = value.substring(0, j);
+			this._dot = true;
+		}
+		this._value = value;
+	},
+	/** Returns a string for this long integer
+	 * To have a Locale-dependent string, use {@link #$toLocaleString}
+	 * instead.
+	 * @return String
+	 */
+	$toString: function() { //toString is reserved keyword for IE
+		return this._value + (this._dot ? '.' : '');
+	},
+	/** Returns a Locale-dependent string for this long integer.
+	 * @return String
+	 */
+	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
+		return this._value;// + (this._precision ? zk.DECIMAL : '');
+	}
+});
