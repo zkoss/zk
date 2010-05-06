@@ -102,6 +102,7 @@ public class AuRequests {
 	}
 
 	/** Returns the integer value of the specified key in the data.
+	 * It is the same as <code>getInt(data, key, defVal, false)</code>.
 	 * @param defVal the default value; used if not found.
 	 */
 	public static int getInt(Map data, String key, int defVal) {
@@ -109,11 +110,40 @@ public class AuRequests {
 		return o != null ? ((Number)o).intValue(): defVal;
 	}
 	/** Returns the integer value of the specified key in the data.
+	 * It is the same as <code>getLong(data, key, defVal, false)</code>.
 	 * @param defVal the default value; used if not found.
 	 */
 	public static long getLong(Map data, String key, long defVal) {
 		final Object o = data.get(key);
 		return o != null ? ((Number)o).longValue(): defVal;
+	}
+	/** Returns the integer value of the specified key in the data.
+	 * @param defVal the default value; used if not found.
+	 * @param silient whether not to throw an exception if failed to convert
+	 * @since 5.0.2
+	 */
+	public static int getInt(Map data, String key, int defVal, boolean silent) {
+		if (silent)
+			try {
+				return getInt(data, key, defVal);
+			} catch (Throwable ex) {
+				return defVal;
+			}
+		return getInt(data, key, defVal);
+	}
+	/** Returns the integer value of the specified key in the data.
+	 * @param defVal the default value; used if not found.
+	 * @param silient whether not to throw an exception if failed to convert
+	 * @since 5.0.2
+	 */
+	public static long getLong(Map data, String key, long defVal, boolean silent) {
+		if (silent)
+			try {
+				return getLong(data, key, defVal);
+			} catch (Throwable ex) {
+				return defVal;
+			}
+		return getLong(data, key, defVal);
 	}
 	/** Returns whether the specified key is defined.
 	 */
