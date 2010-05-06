@@ -70,16 +70,6 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format;
-		if (fmt && fmt.indexOf(';') != -1) {
-			var fmt2 = fmt.split(';'),
-				divscale = 0;
-			fmt2 = fmt2[value < 0 ? 1 : 0];
-
-			var cc = fmt2.charAt(fmt2.length - 1);
-			if (cc == zk.PERCENT) divscale += 2;
-			else if (cc == zk.PER_MILL) divscale += 3;
-			if (divscale) value = value * Math.pow(10, divscale);
-		}
 		return value == null ? '' : fmt ? 
 			zk.fmt.Number.format(fmt, value, this._rounding) : 
 			zk.DECIMAL == '.' ? (''+value) : (''+value).replace('.', zk.DECIMAL);

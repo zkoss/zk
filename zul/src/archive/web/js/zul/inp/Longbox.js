@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an integer.
  * <p>Default {@link #getZclass}: z-longbox.
  */
-zul.inp.Longbox = zk.$extends(zul.inp.Intbox, {
+zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	//bug #2997037, cannot enter large long integer into longbox
 	coerceFromString_: function (value) {
 		if (!value) return null;
@@ -37,6 +37,10 @@ zul.inp.Longbox = zk.$extends(zul.inp.Intbox, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-longbox";
+	},
+	doKeyPress_: function(evt){
+		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
+			this.$supers('doKeyPress_', arguments);
 	},
 	_isOutRange: function(val) {
 		var negative = val.charAt(0) == '-';

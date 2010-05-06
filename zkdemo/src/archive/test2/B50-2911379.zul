@@ -17,16 +17,16 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 You should see each label is the same as that of input element.
 <vbox>
 <hbox>
-<doublebox id="percent" format="0.00%;(0.00%)" /> = 99.00%
+<doublebox id="percent" format="0.00%;(0.00%)" width="200px"/> = 99.00%
 </hbox>
 <hbox>
-<doublebox id="value" format="#,##0;(#,##0)" /> = (200,000) 
+<doublebox id="value" format="#,##0.##;(#,##0.##)" width="200px"/> = (200,000) 
 </hbox>
 <hbox>
-<doublebox id="value2" format="#,##0;($#,##0)" /> = ($200,000) 
+<doublebox id="value2" format="#,##0.00;($#,##0.00)" width="200px"/> = ($200,000.00) 
 </hbox>
 <hbox>
-<decimalbox id="decimal" format="##0.00" /> = 8.00
+<decimalbox id="decimal" format="##0.00" width="200px"/> = 8.00
 </hbox>
 </vbox>
 
