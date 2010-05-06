@@ -19,6 +19,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 
 	<label id="inf"/>
 	<label id="inf2">
+		<!-- register later
 		<attribute w:name="setValue">
 		function (value, fromServer) {
 			this.$setValue(value, fromServer);
@@ -28,7 +29,9 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 			}
 		}
 		</attribute>
+		-->
 	</label>
+	<button label="setValue override" onClick="inf2.setWidgetOverride(&quot;setValue&quot;, &quot;function (value, fromServer) {this.$setValue(value, fromServer);if (this.desktop) {this._cnt = !this._cnt; this.setStyle('background:'+(this._cnt ? 'red':'green'));}}&quot;)"/>
 	<separator bar="true"/>
 	<script>
 	function getInf(wgt) {
