@@ -13,44 +13,6 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var fxNodes = [], //what to fix
-		$fns = {}; //super's fn
-
-	//fix DOM
-	function fixDom(n, nxt) { //exclude nxt (if null, means to the end)
-		for (; n && n != nxt; n = n.nextSibling)
-			if (n.nodeType == 1) {
-				fxNodes.push(n);
-				setTimeout(fixDom0, 100);
-			}
-	}
-	function fixDom0() {
-		var n = fxNodes.shift();
-		if (n) {
-			zjq._alphafix(n);
-			fixBU(n.getElementsByTagName("a")); //Bug 1635685, 1612312
-			fixBU(n.getElementsByTagName("area")); //Bug 1896749
-
-			if (fxNodes.length) setTimeout(fixDom0, 300);
-		}
-	}
-	function fixBU(ns) {
-		for (var j = ns.length; j--;) {
-			var n = ns[j];
-			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
-				n.z_fixed = true;
-				jq(n).click(doSkipBfUnload);
-			}
-		}
-	}
-	function doSkipBfUnload() {
-		zk.skipBfUnload = true;
-		setTimeout(unSkipBfUnload, 0); //restore
-	}
-	function unSkipBfUnload() {
-		zk.skipBfUnload = false;
-	}
-
 	//detect </script>
 	function containsScript(html) {
 		if (html)
@@ -58,69 +20,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
 					return true;
 	}
-
-zk.override(jq.fn, $fns, {
-	before: function () {
-		var e = this[0], ref;
-		if (e) ref = e.previousSibling;
-
-		ret = $fns.before.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling:
-			e.parentNode ? e.parentNode.firstChild: null, e);
-			//IE: som element might have no parent node (such as audio)
-		return ret;
-	},
-	after: function () {
-		var e = this[0], ref;
-		if (e) ref = e.nextSibling;
-
-		ret = $fns.after.apply(this, arguments);
-
-		if (e) fixDom(e.nextSibling, ref);
-		return ret;
-	},
-	append: function () {
-		var e = this[0], ref;
-		if (e) ref = e.lastChild;
-
-		ret = $fns.append.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling: e.firstChild);
-		return ret;
-	},
-	prepend: function () {
-		var e = this[0], ref;
-		if (e) ref = e.firstChild;
-
-		ret = $fns.prepend.apply(this, arguments);
-
-		if (e) fixDom(e.firstChild, ref);
-		return ret;
-	},
-	replaceWith: function () {
-		var e = this[0], ref, ref2;
-		if (e) {
-			ref = e.previousSibling;
-			ref2 = e.nextSibling;
-		}
-
-		ret = $fns.replaceWith.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling:
-			e.parentNode ? e.parentNode.firstChild: null, ref2);
-			//IE: som element might have no parent node (such as audio)
-		return ret;
-	},
-	html: function (content) {
-		var e = content === undefined ? null: this[0];
-
-		ret = $fns.html.apply(this, arguments);
-
-		if (e) fixDom(e.firstChild);
-		return ret;
-	}
-});
 
 var _zjq = {};
 zk.override(zjq, _zjq, {
@@ -148,6 +47,9 @@ zk.copy(zjq, {
 		}
 	},
 
+	_beforeOuter: zk.$void,
+	_afterOuter: zk.$void,
+
 	_setOuter: function (el, html) {
 		try {
 			//Note: IE's outerHTML cannot handle td/th.. and ignore script
@@ -158,8 +60,11 @@ zk.copy(zjq, {
 			//children of new created elements
 			if ((el = jq(el)[0]) && !jq.nodeName(el, "td", "th", "table", "tr",
 			"caption", "tbody", "thead", "tfoot", "colgroup","col")
-			&& !containsScript(html))
+			&& !containsScript(html)) {
+				var o = zjq._beforeOuter(el);
 				el.outerHTML = html; //less memory in IE
+				zjq._afterOuter(o);
+			}
 		} catch (e) { //Unable to handle table/tr/...
 		}
 		jq(el).replaceWith(html);
@@ -210,8 +115,6 @@ zk.copy(zjq.prototype, {
 });
 
 })();
-
-zjq._alphafix = zk.$void; //overriden if ie6_
 
 zk.override(jq.event, zjq._evt = {}, {
 	fix: function (evt) {

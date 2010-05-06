@@ -580,6 +580,15 @@ jq(function() {
 	.click(function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
+		//Bug 1635685, 1612312: <a>
+		//Bug 1896749: <area>
+		var n;
+		if (zk.ie && jq.nodeName(n = evt.target, "a", "area")
+		&& n.href.indexOf("javascript:") >= 0) {
+			zk.skipBfUnload = true;
+			setTimeout(function () {zk.skipBfUnload = false;}, 0); //restore
+		 }
+
 		_evtProxy(evt);
 		if (evt.which == 1)
 			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
