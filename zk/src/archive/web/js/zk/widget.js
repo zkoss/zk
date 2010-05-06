@@ -3647,6 +3647,18 @@ _doFooSelect: function (evt) {
 		}
 		return this;
 	},
+	/** Converts a coordinate related to the browser window into the coordinate
+	 * related to this widget.
+	 * @param int x the X coordinate related to the browser window
+	 * @param int y the Y coordinate related to the browser window
+	 * @return Offset the coordinate related to this widget (i.e., [0, 0] is
+	 * the left-top corner of the widget).
+	 * @since 5.0.2
+	 */
+	fromPageCoord: function (x, y) {
+		var ofs = zk(this).cmOffset();
+		return [x - ofs[0], y - ofs[1]];
+	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
 	}

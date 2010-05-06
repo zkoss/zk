@@ -286,11 +286,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		}
 	}
+	/* @param zk.Widget target
+	 */
 	function toJSON(target, data) {
 		if (data.pageX != null && data.x == null)  {
-			var ofs = target ? zk(target).cmOffset(): [0,0];
-			data.x = data.pageX - ofs[0];
-			data.y = data.pageY - ofs[1];
+			var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
+				[data.pageX, data.pageY];
+			data.x = ofs[0];
+			data.y = ofs[1];
 		}
 		return jq.toJSON(data);
 	}
