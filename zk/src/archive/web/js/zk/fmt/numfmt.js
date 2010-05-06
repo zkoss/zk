@@ -41,7 +41,7 @@ zk.fmt.Number = {
 		var isMINUS;
 		if (fmt.indexOf(';') != -1) {
 			fmt = fmt.split(';');
-			isMINUS = val < 0;
+			isMINUS = (''+val).charAt(0) == '-';
 			fmt = fmt[isMINUS ? 1 : 0];
 		}
 		

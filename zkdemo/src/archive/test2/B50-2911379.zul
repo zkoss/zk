@@ -26,12 +26,12 @@ You should see each label is the same as that of input element.
 <doublebox id="value2" format="#,##0.00;($#,##0.00)" width="200px"/> = ($200,000.00) 
 </hbox>
 <hbox>
-<decimalbox id="decimal" format="##0.00" width="200px"/> = 8.00
+<decimalbox id="decimal" format="##0.00;(#,##0.00)" width="200px"/> = (1,234,567,890.00)
 </hbox>
 </vbox>
 
 <zscript>
-decimal.value = new java.math.BigDecimal(8.0);
+decimal.value = new java.math.BigDecimal(-1234567890.0);
 </zscript>
 <zscript>
 percent.value = 0.99;
