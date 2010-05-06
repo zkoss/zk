@@ -47,7 +47,7 @@ zk.copy(zjq, {
 		}
 	},
 
-	_beforeOuter: zk.$void,
+	_beforeOuter: zk.$void, //overridden by domie6.js
 	_afterOuter: zk.$void,
 
 	_setOuter: function (el, html) {
@@ -55,8 +55,8 @@ zk.copy(zjq, {
 			//Note: IE's outerHTML cannot handle td/th.. and ignore script
 			//so we have skip them (the result is memory leak)
 			//
-			//Though we can use jquery's evalScript to handle script elements,
-			//unable to find what script are created since they might not be
+			//We can use jquery's evalScript to handle script elements,
+			//but unable to find what scripts are created since they might not be
 			//children of new created elements
 			if ((el = jq(el)[0]) && !jq.nodeName(el, "td", "th", "table", "tr",
 			"caption", "tbody", "thead", "tfoot", "colgroup","col")
