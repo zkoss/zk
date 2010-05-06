@@ -51,6 +51,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zk.skipBfUnload = false;
 	}
 
+	//detect </script>
+	function containsScript(html) {
+		if (html)
+			for (var j = 0, len = html.length; (j = html.indexOf("</", j)) >= 0 && j + 8 < len;)
+				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
+					return true;
+	}
+
 zk.override(jq.fn, $fns, {
 	before: function () {
 		var e = this[0], ref;
@@ -140,16 +148,21 @@ zk.copy(zjq, {
 		}
 	},
 
-	_setOuter: function (n, html) {
+	_setOuter: function (el, html) {
 		try {
-			if ((n = jq(n)[0]) && !jq.nodeName(n, "td", "th", "table", "tr",
-			"caption", "tbody", "thead", "tfoot", "colgroup","col")) {
-				n.outerHTML = html; //less memory in IE
-				return;
-			}
+			//Note: IE's outerHTML cannot handle td/th.. and ignore script
+			//so we have skip them (the result is memory leak)
+			//
+			//Though we can use jquery's evalScript to handle script elements,
+			//unable to find what script are created since they might not be
+			//children of new created elements
+			if ((el = jq(el)[0]) && !jq.nodeName(el, "td", "th", "table", "tr",
+			"caption", "tbody", "thead", "tfoot", "colgroup","col")
+			&& !containsScript(html))
+				el.outerHTML = html; //less memory in IE
 		} catch (e) { //Unable to handle table/tr/...
 		}
-		jq(n).replaceWith(html);
+		jq(el).replaceWith(html);
 	},
 
 	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
