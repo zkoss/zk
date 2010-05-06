@@ -138,8 +138,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
-			if (sel) //set back since _findItem ignores cases
-				this.getInputNode().value = sel.getLabel();
+			if (sel) { //set back since _findItem ignores cases
+				var inp = this.getInputNode(),
+					val = sel.getLabel();
+				this.valueEnter_ = inp.value = val;
+				zk(inp).setSelectionRange(0, val.length);
+			}
 
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
@@ -259,12 +263,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					this._select(sel, {sendOnSelect: true});
 			}
 		else
-			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera ? 10 : 0);
-			//use timeout, since, when key down, value not ready yet, opear need extra time to set value to dom
+			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.safari ? 10 : 0);
+			//use timeout, since, when key down, value not ready yet, opear and safari need extra time to set value to dom
 	},
 	_typeahead: function (bDel, ofs) {
 		if (zk.currentFocus != this) return;
-
 		var inp = this.getInputNode(),
 			val = inp.value,
 			ofs = ofs || zk(inp).getSelectionRange(),
