@@ -87,9 +87,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean disabled
 		 */
 		disabled: function (v) {
-			if (this.desktop)
+			if (this.desktop) {
+				if (this._upload)
+					this._cleanUpld();
 				if (this._mold != 'trendy') this.$n().disabled = v;
 				else this.rerender(); //bind and unbind required
+			}
 		},
 		image: function (v) {
 			if (this._mold == 'trendy') {

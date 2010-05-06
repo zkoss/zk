@@ -65,7 +65,12 @@ if (!zk.ModalFileViewer) {
 			
 			uploaded.setVisible(true);
 			jq(uploaded).append(html);
-			
+
+			this.max = ${arg.max};
+			if (this.max > 0 && this.max <= uploaded.$n().childNodes.length)
+				uploaded.$f("fileupload").setVisible(false);
+				
+				
 			this.viewer = jq('#'+ id)[0];
 			jq('#' + id + '-cancel').click(function() {
 				wgt.$f('submit').revert();
@@ -76,6 +81,9 @@ if (!zk.ModalFileViewer) {
 					zAu.send(new zk.Event(wgt.$o(), "onRemove", index));
 					jq(self.viewer).remove();
 				}
+				
+				if (self.max > 0 && self.max > uploaded.$n().childNodes.length)
+					uploaded.$f("fileupload").setVisible(true);
 			});
 		},
 		update: function (sent, total) {
