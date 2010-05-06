@@ -18,6 +18,7 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -32,9 +33,9 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuOuter extends AuResponse {
 	public AuOuter(Component comp, String content) {
-		super("outer", comp, new String[] {comp.getUuid(), content});
+		super("outer", comp, new Object[] {comp.getUuid(), new JavaScriptValue(content)});
 	}
 	public AuOuter(Page page, String content) {
-		super("outer", page, new String[] {page.getUuid(), content});
+		super("outer", page, new Object[] {page.getUuid(), new JavaScriptValue(content)});
 	}
 }

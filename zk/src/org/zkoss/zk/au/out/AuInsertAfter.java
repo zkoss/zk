@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -38,7 +39,7 @@ public class AuInsertAfter extends AuResponse {
 	 */
 	public AuInsertAfter(Component anchor, String content) {
 		super("addAft", anchor,
-			new String[] {anchor.getUuid(), content, getRefId(anchor)});
+			new Object[] {anchor.getUuid(), new JavaScriptValue(content), getRefId(anchor)});
 	}
 	private static String getRefId(Component anchor) {
 		//Bug 1939059: This is a dirty fix. We only handle roots

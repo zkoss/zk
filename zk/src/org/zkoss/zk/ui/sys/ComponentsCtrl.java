@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.xel.ExValue;
@@ -348,7 +349,8 @@ public class ComponentsCtrl {
 		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
 		4*60*60*1000);
 
-	/** An utilities to create an array of JavaScript codes that can be used
+	/** An utilities to create an array of JavaScript objects
+	 * ({@link JavaScriptValue}) that can be used
 	 * to mount the specified widget at the clients.
 	 *
 	 * @since 5.0.0
@@ -360,7 +362,7 @@ public class ComponentsCtrl {
 			for (Iterator it = comps.iterator(); it.hasNext();) {
 				((ComponentCtrl)it.next()).redraw(out);
 				final StringBuffer sb = out.getBuffer();
-				js.add(sb.toString());
+				js.add(new JavaScriptValue(sb.toString()));
 				sb.setLength(0);
 			}
 			return js;

@@ -534,10 +534,11 @@ public class HtmlPageRenders {
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		final int order = ComponentRedraws.beforeRedraw(false);
-		String extra;
+		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
+		final String extra;
 		try {
 			if (order < 0)
-				out.write("zkx(");
+				out.write(aupg ? "[": "zkx(");
 			else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
@@ -570,25 +571,40 @@ public class HtmlPageRenders {
 
 		if (order < 0) {
 			final String ac = outResponseJavaScripts(exec, true);
-			if (extra.length() > 0 || ac.length() > 0) {
-				out.write(',');
-				out.write(extra.length() > 0 ? '1': '0');
-					//Bug 2983792 (delay until non-defer script evaluated)
+			if (aupg) {
+				if (extra.length() > 0 || ac.length() > 0) {
+					out.write(",0,"); //no need to delay since js is evaluated by zkx
 
-				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
-				//memory leak in IE), so we have to invoke globalEval manually if AU
-				if (au && extra.length() > 0)
-					extra = "zkjs('"
-						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
-						+ "');";
-				if (ac.length() > 0) {
-					out.write(",\n[");
-					out.write(ac);
-					out.write(']');
+					if (ac.length() > 0) {
+						out.write("\n[");
+						out.write(ac);
+						out.write(']');
+					} else {
+						out.write("null");
+					}
+
+					if (extra.length() > 0) {
+						out.write(",'");
+						out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+						out.write('\'');
+					}
 				}
+				out.write(']');
+			} else {
+				if (extra.length() > 0 || ac.length() > 0) {
+					out.write(',');
+					out.write(extra.length() > 0 ? '1': '0');
+						//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
+
+					if (ac.length() > 0) {
+						out.write(",\n[");
+						out.write(ac);
+						out.write(']');
+					}
+				}
+				out.write(");\n");
+				out.write(extra);
 			}
-			out.write(");\n");
-			out.write(extra);
 		}
 
 		if (standalone) {

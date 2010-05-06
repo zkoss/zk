@@ -355,10 +355,11 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, delay, aucmds) {
+	zkx: function (wi, delay, aucmds, js) {
 		if (wi) {
 			zk.mounting = true;
 
+			if (js) jq.globalEval(js);
 			doAuCmds(aucmds);
 
 			if (wi[0] === 0) { //page
@@ -378,13 +379,14 @@ function zkmprops(uuid, props) {
 			else run(mount);
 		}
 	},
+	zkxs: function (args) {
+		zkx.apply(window, args);
+	},
+
 	//Run AU commands (used only with ZHTML)
 	zkac: function () {
 		doAuCmds(arguments);
 	},
-
-	//Global eval
-	zkjs: jq.globalEval,
 
 	//begin of mounting
 	zkmb: function (binding) {

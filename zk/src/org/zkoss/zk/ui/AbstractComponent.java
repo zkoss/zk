@@ -1665,10 +1665,11 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public void redraw(final Writer out) throws IOException {
 		final int order = ComponentRedraws.beforeRedraw(false);
-		String extra;
+		final boolean aupg = isAsyncUpdate();
+		final String extra;
 		try {
 			if (order < 0)
-				out.write("zkx(");
+				out.write(aupg ? "[": "zkx(");
 			else if (order > 0) //not first child
 				out.write(',');
 
@@ -1701,23 +1702,24 @@ w:use="foo.MyWindow"&gt;
 			extra = ComponentRedraws.afterRedraw();
 		}
 		if (order < 0) {
-			if (extra.length() > 0) {
-				out.write(",1"); //Bug 2983792 (delay until non-defer script evaluated)
-
-				//Bug 2997079: $eval is used in au (reason: jq.globalEval causes
-				//memory leak in IE), so we have to invoke globalEval manually if AU
-				if (isAsyncUpdate())
-					extra = "zkjs('"
-						+ Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT)
-						+ "');";
+			if (aupg) {
+				if (extra.length() > 0) {
+					out.write(",0,null,'");
+					out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+					out.write('\'');
+				}
+				out.write(']');
+			} else {
+				if (extra.length() > 0)
+					out.write(",1"); //Bug 2983792 (delay until non-defer script evaluated)
+				out.write(");\n");
+				out.write(extra);
 			}
-			out.write(");\n");
-			out.write(extra);
 		}
 	}
-	private static final boolean isAsyncUpdate() {
+	private final boolean isAsyncUpdate() {
 		final Execution exec = Executions.getCurrent();
-		return exec != null && exec.isAsyncUpdate(null);
+		return exec != null && exec.isAsyncUpdate(_page);
 	}
 
 	/** Redraws childrens (and then recursively descandants).
