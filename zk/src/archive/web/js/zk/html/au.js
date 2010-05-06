@@ -203,7 +203,7 @@ zkau._getMouseData = function (evt, target) {
 	var ofs = zPos.cumulativeOffset(target);
 	var x = Event.pointerX(evt) - ofs[0];
 	var y = Event.pointerY(evt) - ofs[1];
-	return [x, y, zkau.getKeys(evt)];
+	return [isNaN(x) ? 0: x, isNaN(y) ? 0: y, zkau.getKeys(evt)];
 };
 /** Returns the key info ("acs").
  * @since 3.6.0

@@ -13,6 +13,7 @@ ZK 3.6.5
   2976483: Fade effect to fast in FF 3.6
   2982663: CSS for dynamically disabled password textbox
   2991247: Invoking tab.setSelected() shouldn't fire onSelect to tabbox
+  2997111: BlackBerry mouse click error
 
 * Upgrade Notes:
 

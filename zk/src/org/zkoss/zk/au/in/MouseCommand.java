@@ -56,8 +56,15 @@ public class MouseCommand extends Command {
 		data.length == 1 ?
 			new MouseEvent(getId(), comp, data[0]):	//by area
 			new MouseEvent(getId(), comp,			//by coord
-				Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+				parseInt(data[0]), parseInt(data[1]),
 				data.length < 3 ? 0: Commands.parseKeys(data[2]));
 		Events.postEvent(event);
+	}
+	private static int parseInt(String s) {
+		try {
+			return Integer.parseInt(s);
+		} catch (Throwable ex) {
+			return 0;
+		}
 	}
 }
