@@ -12,6 +12,7 @@ ZK 5.0.2
   2989181: Notify a desktop that it has been recycled- onDesktopRecycle
   2992673: A directive allow set custom HTTP response header key-value in zul page
   2983365: Able to get application event queue on a worker thread
+  2998003: An option to control whether to use IE 7 Compatible mode
 
 * Bugs
   2972950: Dynamic adding a SimpleConstraint caues js error

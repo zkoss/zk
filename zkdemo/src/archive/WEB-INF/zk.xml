@@ -125,6 +125,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 
+	<!-- Turn on if you want to use IE7 compatible mode. It is useful if
+		some of JavaScript code doesn't work properly in IE8.
+	<library-property>
+		<name>org.zkoss.zk.ui.EmulateIE7</name>
+		<value>true</value>
+	</library-property>
+	-->
+
 	<!-- [ZK EE]
 		Turn on if you want to block the requests sent from inaccessible
 		widgets (such as invisible or disabled).

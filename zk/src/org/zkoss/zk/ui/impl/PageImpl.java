@@ -35,6 +35,7 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.util.CollectionsX;
@@ -767,6 +768,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (!au && !exec.isIncluded()
 		&& ((ctl=ExecutionsCtrl.getPageRedrawControl(exec)) == null
 			|| "desktop".equals(ctl))) {
+			if (!au && shallIE7Compatible())
+				try {
+					if (exec.isBrowser("ie8")
+					&& !exec.containsResponseHeader("X-UA-Compatible"))
+						exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+				} catch (Throwable ex) { //ignore (it might not be allowed)
+				}
+
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content
 //Why no: browsers seems fail to handle DHTML correctly (when BACK to
@@ -812,6 +821,13 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		(renderer != null ? renderer: _langdef.getPageRenderer())
 			.render(this, out);
 	}
+	private static boolean shallIE7Compatible() {
+		if (_ie7compat == null)
+			_ie7compat = Boolean.valueOf("true".equals(
+				Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
+		return _ie7compat.booleanValue();
+	}
+	private static Boolean _ie7compat;
 
 	/** @deprecated As of release 5.0.0, the concept of namespace is
 	 * deprecated and replaced with the attributes of a scope (such as
