@@ -78,6 +78,14 @@
 	border: 1px solid #DD7870;
 	border-right-width: 1px !important;
 }
+.z-combobox input.z-combobox-right-edge,
+.z-bandbox input.z-bandbox-right-edge,
+.z-datebox input.z-datebox-right-edge,
+.z-timebox input.z-timebox-right-edge,
+.z-spinner input.z-spinner-right-edge {
+	border-right-width: 1px !important;
+}
+
 .z-combobox-rounded input.z-combobox-rounded-text-invalid,
 .z-bandbox-rounded input.z-bandbox-rounded-text-invalid,
 .z-datebox-rounded input.z-datebox-rounded-text-invalid,

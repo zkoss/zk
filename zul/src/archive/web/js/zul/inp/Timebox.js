@@ -69,9 +69,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			var n = this.$n('btn'),
 				zcls = this.getZclass();
 			if (n) {
-				if (!this.inRoundedMold())
-					v ? jq(n).show() : jq(n).hide();
-				else {
+				if (!this.inRoundedMold()) {
+					jq(n)[v ? 'show': 'hide']();
+					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
+				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
 					
@@ -708,6 +709,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
+		if (this._readonly && !this.inRoundedMold())
+			jq(inp).addClass(this.getZclass() + '-right-edge');
+		
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, "onmousedown", "_btnDown");

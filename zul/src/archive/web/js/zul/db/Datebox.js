@@ -61,9 +61,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			var n = this.$n('btn'),
 				zcls = this.getZclass();
 			if (n) {
-				if (!this.inRoundedMold())
-					v ? jq(n).show() : jq(n).hide();
-				else {
+				if (!this.inRoundedMold()) {
+					jq(n)[v ? 'show': 'hide']();
+					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
+				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
 					
@@ -354,7 +355,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doClick_: function (evt) {
 		if (this._disabled) return;
-		if (this._readonly && this._pop)
+		if (this._readonly && this._buttonVisible && this._pop)
 			this._pop.open();
 		this.$supers('doClick_', arguments);
 	},
@@ -448,6 +449,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
+		if (this._readonly && !this.inRoundedMold())
+			jq(inp).addClass(this.getZclass() + '-right-edge');
 			
 		this.syncWidth();
 		

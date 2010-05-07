@@ -30,9 +30,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			var n = this.$n('btn'),
 				zcls = this.getZclass();
 			if (n) {
-				if (!this.inRoundedMold())
-					v ? jq(n).show() : jq(n).hide();
-				else {
+				if (!this.inRoundedMold()) {
+					jq(n)[v ? 'show': 'hide']();
+					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
+				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
 					
@@ -405,6 +406,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
+		if (this._readonly && !this.inRoundedMold())
+			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);
@@ -444,7 +447,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					focus: true,
 					sendOnOpen: true
 				});
-			else if (this._readonly && !this.isOpen())
+			else if (this._readonly && !this.isOpen() && this._buttonVisible)
 				this.open({
 					focus: true,
 					sendOnOpen: true
