@@ -77,7 +77,7 @@ zk.copy(zjq, {
 			"caption", "tbody", "thead", "tfoot", "colgroup","col")
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
-				el.outerHTML = html; //less memory in IE
+				el.outerHTML = html; //less memory leak in IE
 				done = true;
 				zjq._afterOuter(o);
 			}
