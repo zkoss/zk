@@ -191,6 +191,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//set minimum flex size and return it
 	function _setMinFlexSize(wgt, wgtn, o) {
+		wgt._minFlexed = true; //mark to avoid fireDown("onSize") calling in _fixFlex again
+		
 		//find the max size of all children
 		if (o == 'height') {
 			if (wgt._vflexsz === undefined) { //cached?
@@ -209,9 +211,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
-							var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
-								_setMinFlexSize(cwgt, c, o) : 
-								(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+							//bug# 2997862: vflex="min" not working on nested tabpanel
+							var sz = c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + 
+									(cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive	
+										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("t", jq.margins)): 
+										(c.offsetHeight + zk(c).sumStyles("b", jq.margins)));
 							if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
@@ -259,9 +263,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
-							var sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
-									_setMinFlexSize(cwgt, c, o) : 
-									(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+							//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
+							var sz = c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + 
+									(cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
+										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("l", jq.margins)) : 
+										(c.offsetWidth + zk(c).sumStyles("r", jq.margins)));
 							if (cwgt._sumFlexWidth) //@See East/West
 								totalsz += sz;
 							else if (sz > max)
@@ -296,6 +302,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//fix vflex/hflex of all my sibling nodes
 	function _fixFlex() {
+		if (this._minFlexed) { //avoid firedown("onSize") calling in again
+			delete this._minFlexed;
+			return;
+		}
+		
 		if (!this.parent.beforeChildrenFlex_(this)) { //don't do fixflex if return false
 			return;
 		}
