@@ -96,6 +96,7 @@ function zkmprops(uuid, props) {
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
+		_qfns = {}, //queued functions (such as dependent pages, owner != null)
 		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
 
 	//Issue of handling page's AU responses
@@ -205,9 +206,10 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1]), inf[2]]);
+			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2]]);
 				//inf[3]: owner passed from zkx
 				//inf[0]: desktop used as default parent if no owner
+				//true: don't update DOM
 	
 			if (_createInf0.length)
 				return run(mtBL);
@@ -295,7 +297,7 @@ function zkmprops(uuid, props) {
 	}
 
 	/* create the widget tree. */
-	function create(parent, wi) {
+	function create(parent, wi, ignoreDom) {
 		var wgt,
 			type = wi[0],
 			uuid = wi[1],
@@ -303,7 +305,7 @@ function zkmprops(uuid, props) {
 		if (type === 0) { //page
 			wgt = new zk.Page({uuid: uuid}, zk.cut(props, "ct"));
 			wgt.inServer = true;
-			if (parent) parent.appendChild(wgt);
+			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			var cls = zk.$import(type),
 				initOpts = {uuid: uuid},
@@ -313,7 +315,7 @@ function zkmprops(uuid, props) {
 			if (v) initOpts.mold = v;
 			var wgt = new cls(initOpts);
 			wgt.inServer = true;
-			if (parent) parent.appendChild(wgt);
+			if (parent) parent.appendChild(wgt, ignoreDom);
 
 			zkmprops(uuid, props);
 		}
@@ -385,6 +387,20 @@ function zkmprops(uuid, props) {
 	},
 	zkxs: function (args) {
 		zkx.apply(window, args);
+	},
+
+	//queue a function to invoke by zkqx
+	//@param id unique ID to identify the function, usually, widget's uuid
+	zkq: function (id, fn) {
+		_qfns[id] = fn;
+	},
+	//execute the function queued by zkq
+	zkqx: function (id) {
+		var fn = _qfns[id];
+		if (fn) {
+			delete _qfns[id];
+			fn(id);
+		}	
 	},
 
 	//Run AU commands (used only with ZHTML)

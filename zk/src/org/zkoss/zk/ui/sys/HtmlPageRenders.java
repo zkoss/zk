@@ -527,19 +527,24 @@ public class HtmlPageRenders {
 		}
 
 		//generate JS second
+		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		if (divRequired) {
-			out.write("\n<script>zkmb();try{");
+			out.write("\n<script>");
+			if (!aupg && owner != null) {
+				out.write("zkq('");
+				out.write(owner.getUuid());
+				out.write("',function(){");
+			}
+			out.write("zkmb();try{");
 			out.write(outZkIconJS());
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		final int order = ComponentRedraws.beforeRedraw(false);
-		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		final String extra;
 		try {
 			if (order < 0)
 				out.write(aupg ? "[": "zkx(");
-					//Use zkxd to defer since zk.Widget.$(ow) is not ready
 			else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
@@ -624,7 +629,10 @@ public class HtmlPageRenders {
 		}
 
 		if (divRequired) {
-			out.write("}finally{zkme();}</script>\n");
+			out.write("}finally{zkme();}");
+			if (!aupg && owner != null)
+				out.write("});");
+			out.write("</script>\n");
 		}
 	}
 
