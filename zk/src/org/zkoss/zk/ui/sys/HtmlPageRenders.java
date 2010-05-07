@@ -538,7 +538,8 @@ public class HtmlPageRenders {
 		final String extra;
 		try {
 			if (order < 0)
-				out.write(aupg ? "[": "zkx(");
+				out.write(aupg ? "[": owner != null ? "zkxd(": "zkx(");
+					//Use zkxd to defer since zk.Widget.$(ow) is not ready
 			else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
@@ -546,7 +547,9 @@ public class HtmlPageRenders {
 			out.write("',{");
 
 			final StringBuffer props = new StringBuffer(128);
-			if (owner == null) {
+			if (owner != null) {
+				appendProp(props, "ow", owner.getUuid());
+			} else {
 				appendProp(props, "dt", desktop.getId());
 				appendProp(props, "cu", getContextURI(exec));
 				appendProp(props, "uu", desktop.getUpdateURI(null));

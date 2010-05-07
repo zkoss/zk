@@ -205,8 +205,9 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[0], inf[1]), inf[2]]);
-				//desktop as parent for browser loading
+			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1]), inf[2]]);
+				//inf[3]: owner passed from zkx
+				//inf[0]: desktop used as default parent if no owner
 	
 			if (_createInf0.length)
 				return run(mtBL);
@@ -362,13 +363,16 @@ function zkmprops(uuid, props) {
 			if (js) jq.globalEval(js);
 			doAuCmds(aucmds);
 
+			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
 					._pguid = wi[1];
+				if (owner = zk.cut(props, "ow"))
+					owner = zk.Widget.$(owner);
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding]);
+			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
 			if (_createInf0.stub = zAu.stub) {
 				zk._t1 = zUtl.now();
 				zAu.stub = null;
@@ -381,6 +385,10 @@ function zkmprops(uuid, props) {
 	},
 	zkxs: function (args) {
 		zkx.apply(window, args);
+	},
+	zkxd: function () { //delayed exec for included pages
+		var args = arguments;
+		setTimeout(function () {zkxs(args);}, 0);
 	},
 
 	//Run AU commands (used only with ZHTML)
