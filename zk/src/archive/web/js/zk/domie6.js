@@ -68,38 +68,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//fix DOM
 	function fixDom(n, nxt) { //exclude nxt (if null, means to the end)
-		for (; n && n != nxt; n = n.nextSibling)
-			if (n.nodeType == 1) {
-				_nodesToFix.push(n);
-				setTimeout(fixDom0, 100);
-			}
+		var regex;
+		if (regex = jq.IE6_ALPHAFIX) {
+			if (typeof regex == 'string')
+				regex = jq.IE6_ALPHAFIX
+					= new RegExp(_regexEscape(regex) + "$", "i");
+
+			if (!zk.SPACER_URI)
+				zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', {au:true});
+
+			for (; n && n != nxt; n = n.nextSibling)
+				if (n.nodeType == 1) {
+					_nodesToFix.push(n);
+					setTimeout(fixDom0, 50);
+				}
+		}
 	}
 	function fixDom0() {
 		var n = _nodesToFix.shift();
 		if (n) {
-			_alphafix(n);
-
-			if (_nodesToFix.length) setTimeout(fixDom0, 100);
-		}
-	}
-	function _alphafix(n) {
-		var regex = jq.IE6_ALPHAFIX;
-		if (!regex) return;
-
-		if (typeof regex == 'string')
-			regex = jq.IE6_ALPHAFIX
-				= new RegExp(_regexEscape(regex) + "$", "i");
-		if (!zk.SPACER_URI)
-			zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', {au:true});
-		var imgs = n.getElementsByTagName("img");
-		for (var j = imgs.length; j--; ) {
-			var img = imgs[j], src = img.src,
-				k = src.lastIndexOf(';');
-			if (k >= 0) src = src.substring(0, k);
-			if (regex.test(img.src)) {
-				_fix(img);
-				jq(img).bind("propertychange", _onpropchange);
+			//alpha fix
+			var regex = jq.IE6_ALPHAFIX,
+				imgs = n.getElementsByTagName("img");
+			for (var j = imgs.length; j--; ) {
+				var img = imgs[j], src = img.src,
+					k = src.lastIndexOf(';');
+				if (k >= 0) src = src.substring(0, k);
+				if (regex.test(img.src)) {
+					_fix(img);
+					jq(img).bind("propertychange", _onpropchange);
+				}
 			}
+
+			//fix one at a time to have better performance
+			if (_nodesToFix.length) setTimeout(fixDom0, 50);
 		}
 	}
 

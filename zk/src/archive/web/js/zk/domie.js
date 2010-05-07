@@ -65,6 +65,7 @@ zk.copy(zjq, {
 	_afterOuter: zk.$void,
 
 	_setOuter: function (el, html) {
+		var done;
 		try {
 			//Note: IE's outerHTML cannot handle td/th.. and ignore script
 			//so we have skip them (the result is memory leak)
@@ -77,11 +78,13 @@ zk.copy(zjq, {
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
 				el.outerHTML = html; //less memory in IE
+				done = true;
 				zjq._afterOuter(o);
 			}
 		} catch (e) { //Unable to handle table/tr/...
 		}
-		jq(el).replaceWith(html);
+		if (!done)
+			jq(el).replaceWith(html);
 	},
 
 	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
