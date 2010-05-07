@@ -210,6 +210,7 @@ zk.copy(zjq, {
 	_cleanVisi: function (n) { //overriden in domopera.js
 		n.style.visibility = "inherit";
 	},
+	_fixClick: zk.$void, //overriden in domie.js
 
 	/* Replaces the specified element with the given HTML content.
 	 * It is the same as {@link _global_.jq#replaceWith}, except

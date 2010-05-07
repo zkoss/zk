@@ -228,8 +228,11 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 		if (cnt != null)
 			if (_defer)
 				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
-			else
-				ComponentRedraws.getScriptBuffer().append(cnt).append('\n');
+			else {
+				Writer out = ComponentRedraws.getScriptBuffer();
+				out.write(cnt);
+				out.write('\n');
+			}
 
 		if (_src != null) {
 			final HtmlPageRenders.RenderContext rc =

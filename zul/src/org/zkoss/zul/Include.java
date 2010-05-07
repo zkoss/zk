@@ -483,7 +483,7 @@ implements org.zkoss.zul.api.Include, Includer {
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());
-						cwout.write("\">");
+						cwout.write("\" style=\"display:none\">");
 						if (_comment)
 							cwout.write("\n<!--\n");
 						Files.write(cwout, sw.getBuffer());

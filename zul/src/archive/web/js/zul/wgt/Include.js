@@ -62,8 +62,9 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers("bind_", arguments);
-		if (jq.isArray(this._content)) //z$ea
-			for (var ctn = this._content, n = this.$n(), j = 0; j < ctn.length; ++j)
+		var ctn;
+		if (jq.isArray(ctn = this._content)) //z$ea
+			for (var n = this.$n(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
 	},
 	unbind_: function () {

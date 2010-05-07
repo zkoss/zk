@@ -20,6 +20,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
 					return true;
 	}
+	function noSkipBfUnload() {
+		zk.skipBfUnload = false;
+	}
 
 var _zjq = {};
 zk.override(zjq, _zjq, {
@@ -44,6 +47,17 @@ zk.copy(zjq, {
 				for (var ns = el.getElementsByTagName("iframe"), j = ns.length; j--;)
 					zk(ns[j]).redoSrc();
 		} catch (e) {
+		}
+	},
+
+	_fixClick: function (evt) {
+		//Bug 1635685, 1612312: <a>
+		//Bug 1896749: <area>
+		var n;
+		if (jq.nodeName(n = evt.target, "a", "area")
+		&& n.href.indexOf("javascript:") >= 0) {
+			zk.skipBfUnload = true;
+			setTimeout(noSkipBfUnload, 0); //restore
 		}
 	},
 
