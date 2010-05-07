@@ -275,7 +275,7 @@ public class Strings {
 
 				cc = src.charAt(k);
 				if (shallEncodeUnicode(cc, specials)) {
-					enc = "u" + Integer.toHexString(cc);
+					enc = encodeUnicode(cc);
 					break;
 				}
 				if (specials.indexOf(cc) >= 0)
@@ -340,7 +340,7 @@ public class Strings {
 
 				cc = src.charAt(k);
 				if (shallEncodeUnicode(cc, specials)) {
-					enc = "u" + Integer.toHexString(cc);
+					enc = encodeUnicode(cc);
 					break;
 				}
 				if (specials.indexOf(cc) >= 0)
@@ -370,9 +370,20 @@ public class Strings {
 		}
 	}
 	private static final boolean shallEncodeUnicode(char cc, String specials) {
-		return specials == ESCAPE_JAVASCRIPT && cc > (char)127
-			&& !Character.isLetter(cc);
+		return specials == ESCAPE_JAVASCRIPT && cc > (char)255
+			&& !Character.isLetterOrDigit(cc);
+			//don't check isSpaceChar since \u2028 will return true and it
+			//is not recoginized by firefox
 	}
+	/** Return "u????". */
+	private static final String encodeUnicode(int cc) {
+		final StringBuffer sb = new StringBuffer(6)
+			.append('u').append(Integer.toHexString(cc));
+		while (sb.length() < 5)
+			sb.insert(1, '0');
+		return sb.toString();
+	}
+		
 
 	/** Un-escape the quoted string.
 	 * @see #escape
