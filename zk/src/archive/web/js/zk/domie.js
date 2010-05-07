@@ -80,6 +80,7 @@ zk.copy(zjq, {
 				el.outerHTML = html; //less memory leak in IE
 				done = true;
 				zjq._afterOuter(o);
+				return;
 			}
 		} catch (e) { //Unable to handle table/tr/...
 		}
