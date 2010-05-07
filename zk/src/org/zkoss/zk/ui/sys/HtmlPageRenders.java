@@ -538,7 +538,7 @@ public class HtmlPageRenders {
 		final String extra;
 		try {
 			if (order < 0)
-				out.write(aupg ? "[": owner != null ? "zkxd(": "zkx(");
+				out.write(aupg ? "[": "zkx(");
 					//Use zkxd to defer since zk.Widget.$(ow) is not ready
 			else if (order > 0) //not first child
 				out.write(',');

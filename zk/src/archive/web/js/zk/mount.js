@@ -386,10 +386,6 @@ function zkmprops(uuid, props) {
 	zkxs: function (args) {
 		zkx.apply(window, args);
 	},
-	zkxd: function () { //delayed exec for included pages
-		var args = arguments;
-		setTimeout(function () {zkxs(args);}, 0);
-	},
 
 	//Run AU commands (used only with ZHTML)
 	zkac: function () {
