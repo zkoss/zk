@@ -395,9 +395,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (withpi) {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
-				response.setIntHeader("ZK-Error", response.SC_NOT_FOUND);
-					//Don't use sendError since browser might handle it
-				log.warning("Unknown path info: "+pi);
+				response.sendError(response.SC_NOT_FOUND);
+				log.debug("Unknown path info: "+pi);
 				return;
 			}
 
@@ -425,7 +424,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//AU
 		if (sess == null) {
-			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+			sendGone(response); //denote timeout
+
 			//Bug 1849088: rmDesktop might be sent after invalidate
 			//Bug 1859776: need send response to client for redirect or others
 			final String dtid = request.getParameter("dtid");
@@ -442,6 +442,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
+	}
+	/** Denotes a page is gone. We don't use sendError to avoid browser from
+	 * processing it.
+	 * Rather, we prefer to handle it with our Client Engine.
+	 */
+	private static void sendGone(HttpServletResponse response) {
+		response.setIntHeader("ZK-Error", response.SC_GONE);
+			//Don't use sendError since browser might handle it
+		response.setContentType("text/plain");
+			//To avoid firefox considers it as a download (such as /zkau/a.zip)
 	}
 	protected
 	void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -486,7 +496,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+				sendGone(response); //denote timeout
 				sessionTimeout(request, response, config, dtid);
 				return;
 			}
