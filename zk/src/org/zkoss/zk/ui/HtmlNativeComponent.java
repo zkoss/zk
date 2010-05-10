@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
+import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
@@ -61,6 +62,8 @@ implements DynamicTag, Native {
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";
+	/** The text before the tag name. */
+	private String _prefix;
 	private Map _props;
 	/** Declared namespaces ({@link Namespace}). */
 	private List _dns;
@@ -174,7 +177,8 @@ implements DynamicTag, Native {
 		super.renderProperties(renderer);
 
 		final NativeRenderContext rc = getNativeRenderContext(Executions.getCurrent());
-		render(renderer, "prolog", getPrologHalf(rc));
+		final String prolog = getPrologHalf(rc);
+		render(renderer, "prolog", _prefix != null ? _prefix + prolog: prolog);
 		render(renderer, "epilog", getEpilogHalf(rc));
 	}
 	private NativeRenderContext getNativeRenderContext(Execution exec) {
@@ -340,9 +344,6 @@ implements DynamicTag, Native {
 				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					sb.append('/');
 				sb.append('>');
-
-				if (!_noLFs.contains(tn) && !_begNoLFs.contains(tn))
-					sb.append('\n'); //make it more readable
 			}
 		}
 		public void getSecondHalf(StringBuffer sb, String tag) {
@@ -352,43 +353,11 @@ implements DynamicTag, Native {
 					return;
 
 				sb.append("</").append(tag).append('>');
-
-				if (!_noLFs.contains(tn))
-					sb.append('\n'); //make it more readable
 			}
 		}
 		public void appendText(StringBuffer sb, String text) {
 			sb.append(text); //don't encode (bug 2689443)
 		}
-	}
-	/** A set of tags that we shall append linefeed to it.
-	 */
-	private static final Set _noLFs, _begNoLFs;
-	static {
-		final String[] noLFs = {
-			"a", "abbr", "acronym", "address",
-			"b", "basefont", "bdo", "big", "blink",
-			"cite", "code",
-			"del", "dfn", "dir",
-			"em",
-			"font",
-			"i", "img", "input", "ins", "kbd", "q",
-			"s", "samp", "small", "strike", "strong", "style", "sub", "sup",
-			"u"
-		};
-		_noLFs = new HashSet((noLFs.length << 2) / 5);
-		for (int j = noLFs.length; --j >= 0;)
-			_noLFs.add(noLFs[j]);
-
-		final String[] begNoLFs = {
-			"caption", "dd", "div", "dt", "legend", "li",
-			"p", "pre",
-			"span", "td", "tfoot", "th", "title"
-			
-		};
-		_begNoLFs = new HashSet((begNoLFs.length << 2) / 5);
-		for (int j = begNoLFs.length; --j >= 0;)
-			_begNoLFs.add(begNoLFs[j]);
 	}
 	private static class NativeRenderContext {
 		boolean zktagGened;
@@ -398,6 +367,12 @@ implements DynamicTag, Native {
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	protected class ExtraCtrl implements DirectContent {
+	protected class ExtraCtrl implements DirectContent, PrologAllowed {
+		//-- PrologAware --//
+		public void setPrologContent(String prolog) {
+			_prefix = prolog;
+				//Notice: it is used as prefix (shown before the tag and children)
+				//while _prolog is the text shown after the tag and before the children
+		}
 	}
 }
