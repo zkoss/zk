@@ -42,6 +42,8 @@ abstract public class FormatInputElement extends InputElement {
 			final String old = _format;
 			_format = format;
 			smartUpdate("format", _format);
+			//bug #2998196: Problem with dynamic setting of format pattern
+			smartUpdate("value", this.coerceToString(_value));
 		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
