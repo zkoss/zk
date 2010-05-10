@@ -615,14 +615,15 @@ public class UiEngineImpl implements UiEngine {
 
 			child = ci.uf.newComponent(ci.page, parent, childInfo);
 
-			final boolean bNative = childInfo instanceof NativeInfo;
-			if (bNative) {
-				setProlog(ci, child, (NativeInfo)childInfo);
-			} else if (replaceableText != null) {
+			if (replaceableText != null) {
 				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
 				if (xc instanceof PrologAllowed)
 					((PrologAllowed)xc).setPrologContent(replaceableText);
 			}
+
+			final boolean bNative = childInfo instanceof NativeInfo;
+			if (bNative)
+				setProlog(ci, child, (NativeInfo)childInfo);
 
 			if (composerExt != null)
 				composerExt.doBeforeComposeChildren(child);
