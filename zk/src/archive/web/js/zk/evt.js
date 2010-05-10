@@ -203,42 +203,43 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 
 zWatch = (function () {
 	var _visiEvts = {onSize: true, onShow: true, onHide: true, beforeSize: true},
-		_watches = {}, //Map(watch-name, [watch objects]
+		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 		_dirty,
 		_Gun = zk.$extends(zk.Object, {
-			$init: function (name, infs, args, org) {
+			$init: function (name, xinfs, args, org) {
 				this.name = name;
-				this.infs = infs;
+				this.xinfs = xinfs;
 				this.args = args;
 				this.origin = org;
 			},
 			fire: function (ref) {
-				var inf,
+				var infs, inf, xinf,
 					name = this.name,
-					infs = this.infs,
+					xinfs = this.xinfs,
 					args = this.args;
 				if (ref) {
-					for (var j = 0, l = infs.length; j < l; ++j)
-						if (_target(inf = infs[j]) == ref) {
-							infs.splice(j, 1);
-							_invoke(name, inf, args);
+					for (var j = 0, l = xinfs.length; j < l; ++j)
+						if (xinfs[j][0] == ref) {
+							infs = xinfs[j][1]
+							xinfs.splice(j, 1);
+							_invoke(name, infs, ref, args);
 						}
 				} else
-					while (inf = infs.shift())
-						_invoke(name, inf, args);
+					while (xinf = xinfs.shift())
+						_invoke(name, xinf[1], xinf[0], args);
 			},
 			fireDown: function (ref) {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
-				(new _Gun(this.name, _visiChildSubset(this.name, this.infs, ref, true), this.args, this.origin))
+				(new _Gun(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin))
 				.fire();
 			}
 		});
 
-	function _invoke(name, inf, args) {
-		var o = _target(inf);
-		_fn(inf, o, name).apply(o, args);
+	function _invoke(name, infs, o, args) {
+		for (var j = 0, l = infs.length; j < l;)
+			_fn(infs[j++], o, name).apply(o, args);
 	}
 	//Returns if c is visible
 	function _visible(name, c) {
@@ -254,28 +255,29 @@ zWatch = (function () {
 				if (p == c) return true;
 		return false;
 	}
-	//Returns subset of infs that are visible childrens of p
-	function _visiChildSubset(name, infs, p, remove) {
+	//Returns subset of xinfs that are visible childrens of p
+	function _visiChildSubset(name, xinfs, p, remove) {
 		var found = [], bindLevel = p.bindLevel;
-		for (var j = infs.length; j--;) { //child first
-			var inf = infs[j],
-				o = _target(inf),
+		for (var j = xinfs.length; j--;) { //child first
+			var xinf = xinfs[j],
+				o = xinf[0],
 				diff = bindLevel > o.bindLevel;
 			if (diff) break;//nor ancestor, nor this (&sibling)
 			if ((p == o && _visible(name, o)) || _visibleChild(name, p, o)) {
-				if (remove) infs.splice(j, 1);
-				found.unshift(inf); //parent first
+				if (remove)
+					xinfs.splice(j, 1);
+				found.unshift(xinf); //parent first
 			}
 		}
 		return found;
 	}
-	function _visiSubset(name, infs) {
-		infs = infs.$clone(); //make a copy since unlisten might happen
+	function _visiSubset(name, xinfs) {
+		xinfs = xinfs.$clone(); //make a copy since unlisten might happen
 		if (_visiEvts[name])
-			for (var j = infs.length; j--;)
-				if (!_visible(name, _target(infs[j])))
-					infs.splice(j, 1);
-		return infs;
+			for (var j = xinfs.length; j--;)
+				if (!_visible(name, xinfs[j][0]))
+					xinfs.splice(j, 1);
+		return xinfs;
 	}
 	function _target(inf) {
 		return jq.isArray(inf) ? inf[0]: inf;
@@ -292,12 +294,12 @@ zWatch = (function () {
 		_dirty = false;
 		for (var nm in _watches) {
 			var wts = _watches[nm];
-			if (wts.length && _target(wts[0]).bindLevel != null)
+			if (wts.length && wts[0][0].bindLevel != null)
 				wts.sort(_cmpLevel);
 		}
 	}
 	function _cmpLevel(a, b) {
-		return _target(a).bindLevel - _target(b).bindLevel;
+		return a[0].bindLevel - b[0].bindLevel;
 	}
 	function _zsync(name, org) {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
@@ -369,24 +371,39 @@ zWatch({
 	listen: function (infs) {
 		for (var name in infs) {
 			var wts = _watches[name],
-				inf = infs[name];
+				inf = infs[name],
+				o = _target(inf),
+				xinf = [o, [inf]];
 			if (wts) {
-				var bindLevel = _target(inf).bindLevel;
-				if (bindLevel != null) {
+				var bindLevel = o.bindLevel;
+				if (bindLevel != null)
 					for (var j = wts.length;;) {
 						if (--j < 0) {
-							wts.unshift(inf);
+							wts.unshift(xinf);
 							break;
 						}
-						if (bindLevel >= _target(wts[j]).bindLevel) { //parent first
-							wts.splice(j + 1, 0, inf);
+						if (wts[j][0] == o) {
+							wts[j][1].push(inf);
+							break;
+						}
+						if (bindLevel >= wts[j][0].bindLevel) { //parent first
+							wts.splice(j + 1, 0, xinf);
 							break;
 						}
 					}
-				} else
-					wts.push(inf);
+				else
+					for (var j = wts.length;;) {
+						if (--j < 0) {
+							wts.push(xinf);
+							break;
+						}
+						if (wts[j][0] == o) {
+							wts[j][1].push(inf);
+							break;
+						}
+					}
 			} else
-				wts = _watches[name] = [inf];
+				_watches[name] = [xinf];
 		}
 	},
 	/** Removes watch listener(s).
@@ -395,7 +412,17 @@ zWatch({
 	unlisten: function (infs) {
 		for (var name in infs) {
 			var wts = _watches[name];
-			wts && wts.$remove(infs[name]);
+			if (wts) {
+				var inf = infs[name],
+					o = _target(inf);
+					for (var j = wts.length; j--;)
+						if (wts[j][0] == o) {
+							wts[j][1].$remove(inf);
+							if (!wts[j][1].length)
+								wts.splice(j, 1);
+							break;
+						}
+			}
 		}
 	},
 	/** Removes all listener of the specified watch. 
