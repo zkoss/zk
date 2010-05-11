@@ -3676,10 +3676,10 @@ _doFooSelect: function (evt) {
 	 * @see #domUnlisten_
 	 */
 	domListen_: function (n, evtnm, fn) {
-/*		if (!this.$weave) {
+		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).bind(inf[0], inf[1]);
-		}*/
+		}
 		return this;
 	},
 	/** Un-registers an event listener for the specified DOM element (aka., node).
