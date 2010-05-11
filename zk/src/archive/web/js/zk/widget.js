@@ -14,11 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _binds = {}, //{uuid, wgt}: bind but no node
+		_globals = {}, //global ID space {id, [wgt...]}
 		_fixBindMem = zk.$void, //fix IE memory leak
 		_bindcnt = 0,
 		_floatings = [], //[{widget,node}]
 		_nextUuid = 0,
-		_globals = {}, //global ID space {id, [wgt...]}
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
@@ -29,9 +29,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//IE doesn't free _binds (when delete _binds[x]); so clean it up
 	if (zk.ie)
 		_fixBindMem = function () {	
-			if (++_bindcnt > 2000) {
+			if (++_bindcnt > 3000) {
 				_bindcnt = 0;
 				_binds = zk.copy({}, _binds);
+				_globals = zk.copy({}, _globals);
 			}
 		};
 
@@ -1572,6 +1573,10 @@ wgt.$f().main.setTitle("foo");
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
+		var cf = zk.currentFocus;
+		if (cf && zUtl.isAncestor(this, cf))
+			zk.currentFocus = null;
+
 		if (this.z_rod) {
 			_unbindrod(this);
 			_bindrod(newwgt);
@@ -1590,10 +1595,7 @@ wgt.$f().main.setTitle("foo");
 		if (p)
 			p.onChildReplaced_(this, newwgt);
 
-		//avoid memory leak
-		this.parent = this.nextSibling = this.previousSibling
-			= this._node = this._nodeSolved = null;
-		this._subnodes = {};
+		this.parent = this.nextSibling = this.previousSibling = null;
 	},
 	/** Replaced the child widgets with the specified.
 	 * It is usefull if you want to replace a part of children whose
@@ -2598,10 +2600,10 @@ function () {
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
-			var after = [];
+			var after = [], fn;
 			this.bind_(desktop, skipper, after);
-			for (var j = 0, len = after.length; j < len;)
-				after[j++]();
+			while (fn = after.shift())
+				fn();
 		}
 		return this;
 	},
@@ -3674,10 +3676,10 @@ _doFooSelect: function (evt) {
 	 * @see #domUnlisten_
 	 */
 	domListen_: function (n, evtnm, fn) {
-		if (!this.$weave) {
+/*		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).bind(inf[0], inf[1]);
-		}
+		}*/
 		return this;
 	},
 	/** Un-registers an event listener for the specified DOM element (aka., node).
@@ -4191,10 +4193,7 @@ zk.Native = zk.$extends(zk.Widget, {
 
 	redraw: function (out) {
 		var s = this.prolog;
-		if (s) {
-			if (zk.ie) zjq._fix1stJS(out, s); //in domie.js
-			out.push(s);
-		}
+		if (s) out.push(s);
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

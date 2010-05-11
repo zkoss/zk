@@ -172,7 +172,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
 
-		if (!this.inDesign) {
+		if (!this.$weave) {
 			var $btn = jq(btn);
 			if (zk.ie)
 				$btn.mouseover(Splitter.onover)

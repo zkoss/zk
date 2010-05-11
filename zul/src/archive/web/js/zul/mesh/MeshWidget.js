@@ -217,14 +217,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		if (this.ebody)
 			this.domUnlisten_(this.ebody, 'onScroll');
-			
-		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
-			= this.eheadtbl = this.efoottbl = null;
-		
+
 		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 		
 		this.$supers('unbind_', arguments);
 	},
+	clearCache: function () {
+		this.$supers('clearCache', arguments);
+		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
+			= this.eheadtbl = this.efoottbl = this.ebodyrows
+			= this.ehdfaker = this.ebdfaker = null;
+	},
+
 	onResponse: function () {
 		if (this.desktop && this._shallSize) {
 			this.$n()._lastsz = null; //reset

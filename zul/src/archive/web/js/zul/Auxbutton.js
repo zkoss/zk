@@ -29,7 +29,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		var $btn = jq(btn);
 		$btn.zk.disableSelection();
 
-		if (!wgt.inDesign)
+		if (!wgt.$weave)
 			$btn.mouseover(this.proxy(this._domOver))
 				.mouseout(this.proxy(this._domOut))
 				.mousedown(this.proxy(this._domDown));
@@ -42,7 +42,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 
 		$btn.zk.enableSelection();
 
-		if (!this._wgt.inDesign)
+		if (!this._wgt.$weave)
 			$btn.unbind('mouseover', this.proxy(this._domOver))
 				.unbind('mouseout', this.proxy(this._domOut))
 				.unbind('mousedown', this.proxy(this._domDown));

@@ -77,27 +77,17 @@ zk.copy(zjq, {
 			"caption", "tbody", "thead", "tfoot", "colgroup","col")
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
-				el.outerHTML = html; //less memory leak in IE
+				//less memory leak in IE if innerHTML and then outerHTML
+				el.innerHTML = "";
+				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);
 				return;
 			}
-		} catch (e) { //Unable to handle table/tr/...
+		} catch (e) {
 		}
 		if (!done)
 			jq(el).replaceWith(html);
-	},
-
-	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
-	_fix1stJS: function (out, s) { //used in widget.js
-		var j;
-		if (this.previousSibling || s.indexOf('<script') < 0
-		|| (j = out.length) > 20)
-			return;
-		for (var cnt = 0; j--;)
-			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
-				return; //more than one
-	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
 	}
 });
 

@@ -214,7 +214,8 @@
         };
 //Tom: don't use eval(s) directly, since it won't (and cann't) be compressed)
 	$.evalJSON = function (s) {
-		return $eval("(" + s + ")"); //return (new Function('return '+s))();
+		return $eval("(" + s + ")");
+		//return (new Function('return (' + s +')'))(); //OK too but less tested
 	};
 //Tom//    }
 }(jq)); //Tom: jQuery might be another copy

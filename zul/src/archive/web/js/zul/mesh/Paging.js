@@ -253,7 +253,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			zcls = this.getZclass(),
 			Paging = this.$class;
 
-		if (!this.inDesign)
+		if (!this.$weave)
 			for (var i = inputs.length; i--;)
 				jq(inputs[i]).keydown(Paging._domKeyDown)
 					.blur(Paging._domBlur);
@@ -261,7 +261,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; k--; ) {
 			var btn = jq.$$(uuid, postfix[k]);
 			for (var j = btn.length; j--;) {
-				if (!this.inDesign)
+				if (!this.$weave)
 					jq(btn[j]).mouseover(Paging._domMouseOver)
 						.mouseout(Paging._domMouseOut)
 						.mousedown(Paging._domMouseDown)
