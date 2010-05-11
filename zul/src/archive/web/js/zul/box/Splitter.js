@@ -167,7 +167,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var node = this.$n(),
 			Splitter = this.$class,
 			vert = this.isVertical(),
-			btn = this.button = this.$n('btn');
+			btn = this.$n('btn');
 		node.style.cursor = this.isOpen() ?
 			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
@@ -204,7 +204,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
 
 		var Splitter = this.$class,
-			btn = this.button;
+			btn = this.$n('btn');
 		if (btn) {
 			var $btn = jq(btn);
 			if (zk.ie)
@@ -239,7 +239,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			[this.isOpen()?'removeClass':'addClass'](this.getZclass()+"-ns");
 	},
 	_fixbtn: function () {
-		var $btn = jq(this.button),
+		var $btn = jq(this.$n('btn')),
 			colps = this.getCollapse();
 		if (!colps || "none" == colps) {
 			$btn.hide();
@@ -263,7 +263,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		var node = this.$n(), pn = node.parentNode;
 		if (pn) {
-			var btn = this.button,
+			var btn = this.$n('btn'),
 				bfcolps = "before" == this.getCollapse();
 			if (this.isVertical()) {
 				//Note: when the browser resizes, it might adjust splitter's wd/hgh

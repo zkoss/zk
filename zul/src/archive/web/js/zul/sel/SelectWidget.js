@@ -593,8 +593,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
 				.domUnlisten_(btn, 'onKeyDown')
 				.domUnlisten_(btn, 'onBlur', 'doBlur_');
-		this.efield = null;
 		this.$supers('unbind_', arguments);
+	},
+	clearCache: function () {
+		this.$supers('clearCache', arguments);
+		this.efield = null;
 	},
 	doFocus_: function (evt) {
 		var row	= this._focusItem || this._lastSelectedItem;

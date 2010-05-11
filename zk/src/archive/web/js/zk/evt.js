@@ -415,13 +415,13 @@ zWatch({
 			if (wts) {
 				var inf = infs[name],
 					o = _target(inf);
-					for (var j = wts.length; j--;)
-						if (wts[j][0] == o) {
-							wts[j][1].$remove(inf);
-							if (!wts[j][1].length)
-								wts.splice(j, 1);
-							break;
-						}
+				for (var j = wts.length; j--;)
+					if (wts[j][0] == o) {
+						wts[j][1].$remove(inf);
+						if (!wts[j][1].length)
+							wts.splice(j, 1);
+						break;
+					}
 			}
 		}
 	},

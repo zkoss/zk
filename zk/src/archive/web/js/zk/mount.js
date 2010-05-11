@@ -313,7 +313,7 @@ function zkmprops(uuid, props) {
 			if (!cls)
 				throw 'Unknown widget: ' + type;
 			if (v) initOpts.mold = v;
-			var wgt = new cls(initOpts);
+			wgt = new cls(initOpts);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
