@@ -204,7 +204,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
-					pb = zkn.padBorderHeight(),
+					pbt = zkn.sumStyles("t", jq.paddings) + zkn.sumStyles("t", jq.borders),
 					max = 0,
 					totalsz = 0;
 				if (cwgt){ //try child widgets
@@ -212,10 +212,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
 							//bug# 2997862: vflex="min" not working on nested tabpanel
-							var sz = c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + 
-									(cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive	
+							var sameOffParent = c.offsetParent == noffParent,
+								sz = c.offsetTop - (sameOffParent ? ntop : 0) 
+									+ (cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive	
 										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("t", jq.margins)): 
-										(c.offsetHeight + zk(c).sumStyles("b", jq.margins)));
+										(c.offsetHeight + zk(c).sumStyles("b", jq.margins))) 
+									- (sameOffParent ? pbt : 0);
 							if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
@@ -224,21 +226,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				} else if (c) { //no child widget, try html element directly
 					for(; c; c = c.nextSibling) {
-						var sz = (c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+						var sameOffParent = c.offsetParent == noffParent,
+							sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop : 0) 
+								+ zk(c).sumStyles("b", jq.margins) - (sameOffParent ? pbt : 0);
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
-					max = n.offsetHeight - pb;  
+					max = n.offsetHeight - zkn.padBorderHeight();  
 
-				//n might not be widget's element, add up the pad/border/margin in between
+				//n might not be widget's element, add up the pad/border/margin/offsettop in between
+				var pb = 0,
+					precalc = false;
 				while (n && n != wgtn) {
-					pb += zkn.sumStyles("tb", jq.margins);
-					n = n.parentNode;
+					if (!precalc)
+						pb += zkn.padBorderHeight();
+					else {
+						pb += zkn.sumStyles("b", jq.paddings);
+						pb += zkn.sumStyles("b", jq.borders);
+					}
+					var p = n.parentNode,
+						ptop = p ? p.offsetTop : 0,
+						poffParent = p ? p.offsetParent : null;
+					precalc = n.offsetParent == poffParent; 
+					pb += n.offsetTop - (precalc ? ptop : 0);
+					pb += zkn.sumStyles("b", jq.margins);
+					n = p;
 					zkn = zk(n);
-					pb += zkn.padBorderHeight();
 				}
-					
+				if (!precalc)
+					pb += zkn.padBorderHeight();
+				else {
+					pb += zkn.sumStyles("b", jq.paddings);
+					pb += zkn.sumStyles("b", jq.borders);
+				}
 				var margin = zk(wgtn).sumStyles("tb", jq.margins),
 					sz = wgt.setFlexSize_({height:(max + totalsz + pb + margin)});
 				if (sz && sz.height >= 0)
@@ -256,7 +277,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
-					pb = zkn.padBorderWidth(),
+					pbl = zkn.sumStyles("l", jq.paddings)+ zkn.sumStyles("l", jq.borders), 
 					max = 0,
 					totalsz = 0;
 				if (cwgt) { //try child widgets
@@ -264,10 +285,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
 							//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
-							var sz = c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + 
-									(cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
+							var sameOffParent = c.offsetParent == noffParent,
+								sz = c.offsetLeft - (sameOffParent ? nleft : 0) 
+									+ (cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
 										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("l", jq.margins)) : 
-										(c.offsetWidth + zk(c).sumStyles("r", jq.margins)));
+										(c.offsetWidth + zk(c).sumStyles("r", jq.margins))) 
+									- (sameOffParent ? pbl : 0);
 							if (cwgt._sumFlexWidth) //@See East/West
 								totalsz += sz;
 							else if (sz > max)
@@ -276,19 +299,39 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				} else if (c) { //no child widget, try html element directly
 					for(; c; c = c.nextSibling) {
-						var sz = (c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+						var sameOffParent = c.offsetParent == noffParent,
+							sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft : 0) 
+								+ zk(c).sumStyles("r", jq.margins) - (sameOffParent ? pbl : 0);
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
-					max = n.offsetWidth - pb;
+					max = n.offsetWidth - zkn.padBorderWidth();
 				
 				//n might not be widget's element, add up the pad/border/margin in between
+				var pb = 0,
+					precalc = false;
 				while (n && n != wgtn) {
-					pb += zkn.sumStyles("lr", jq.margins);
-					n = n.parentNode;
+					if (!precalc)
+						pb += zkn.padBorderWidth();
+					else {
+						pb += zkn.sumStyles("r", jq.paddings);
+						pb += zkn.sumStyles("r", jq.borders);
+					}
+					var p = n.parentNode,
+						pleft = p ? p.offsetLeft : 0,
+						poffParent = p ? p.offsetParent : null;
+					precalc = n.offsetParent == poffParent; 
+					pb += n.offsetLeft - (precalc ? pleft : 0);
+					pb += zkn.sumStyles("r", jq.margins);
+					n = p;
 					zkn = zk(n);
-					pb += zkn.padBorderHeight();
+				}
+				if (!precalc)
+					pb += zkn.padBorderWidth();
+				else {
+					pb += zkn.sumStyles("r", jq.paddings);
+					pb += zkn.sumStyles("r", jq.borders);
 				}
 					
 				var margin = zk(wgtn).sumStyles("lr", jq.margins);
