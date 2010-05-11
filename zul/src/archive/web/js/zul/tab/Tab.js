@@ -189,10 +189,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		after.push(function () {
-			if (tab.isSelected()) 
-				tab._sel(false, true);
-			else if (tab.parent._isInited())
-				tab.parent._scrollcheck("init");
+			zk.afterMount(function () {
+    			if (tab.isSelected()) 
+    				tab._sel(false, true);
+    			else if (tab.parent._isInited())
+    				tab.parent._scrollcheck("init");
+			});
 		});
 	},
 	unbind_: function () {
