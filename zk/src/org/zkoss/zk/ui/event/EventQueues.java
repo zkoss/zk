@@ -110,7 +110,7 @@ public class EventQueues {
 	 * @see #lookup(String, WebApp, boolean)
 	 * @since 5.0.2
 	 */
-	public EventQueue lookup(String name, Session sess, boolean autoCreate) {
+	public static EventQueue lookup(String name, Session sess, boolean autoCreate) {
 		return getProvider().lookup(name, sess, autoCreate);
 	}
 	/** Returns the event queue with the specified name in the
@@ -123,7 +123,7 @@ public class EventQueues {
 	 * @see #lookup(String, Session, boolean)
 	 * @since 5.0.2
 	 */
-	public EventQueue lookup(String name, WebApp wapp, boolean autoCreate) {
+	public static EventQueue lookup(String name, WebApp wapp, boolean autoCreate) {
 		return getProvider().lookup(name, wapp, autoCreate);
 	}
 	/** Returns the desktop-level event queue with the specified name in the current
