@@ -139,6 +139,7 @@ public class JsContentRenderer implements ContentRenderer {
 				renderValue(me.getValue());
 			}
 			_buf.append('}');
+			return;
 		}
 		if (value instanceof List) {
 			_buf.append('[');
