@@ -119,7 +119,7 @@ public class AuRequests {
 	}
 	/** Returns the integer value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
-	 * @param silient whether not to throw an exception if failed to convert
+	 * @param silent whether not to throw an exception if failed to convert
 	 * @since 5.0.2
 	 */
 	public static int getInt(Map data, String key, int defVal, boolean silent) {
@@ -133,7 +133,7 @@ public class AuRequests {
 	}
 	/** Returns the integer value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
-	 * @param silient whether not to throw an exception if failed to convert
+	 * @param silent whether not to throw an exception if failed to convert
 	 * @since 5.0.2
 	 */
 	public static long getLong(Map data, String key, long defVal, boolean silent) {

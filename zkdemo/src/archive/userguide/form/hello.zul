@@ -69,5 +69,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 		</tabpanels>
 	</tabbox>
-	<toolbarbutton style="position:absolute;bottom:10px;right:10px;z-index:100" image="/img/Centigrade-Widget-Icons/IconsDesignedByCentigradeSi.png" href="http://www.centigrade.de/" target="zkdemo"/>
+	<a style="position:absolute;bottom:10px;right:10px;z-index:100" image="/img/Centigrade-Widget-Icons/IconsDesignedByCentigradeSi.png" href="http://www.centigrade.de/" target="zkdemo"/>
 </window>
