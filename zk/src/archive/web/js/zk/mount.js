@@ -375,17 +375,16 @@ function zkmprops(uuid, props) {
 			}
 
 			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
-			if (_createInf0.stub = zAu.stub) {
-				zk._t1 = zUtl.now();
-				zAu.stub = null;
-			}
 
 			mountpkg();
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
 		}
 	},
-	zkxs: function (args) {
+	//widget creation called by au.js
+	zkx_: function (args, stub) {
+		_createInf0.stub = stub;
+		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
 		zkx.apply(window, args);
 	},
 
