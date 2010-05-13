@@ -246,12 +246,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 					}
 				} else if (c) { //no child widget, try html element directly
+					//feature 3000339: The hflex of the cloumn will calculate by max width
+					var ignore = wgt.ignoreChildNodeOffset_('h');
 					for(; c; c = c.nextSibling) {
 						var zkc = zk(c),
-							sameOffParent = c.offsetParent == noffParent,
-							sz = c.offsetHeight + c.offsetTop,
-							bm = zkc.sumStyles("b", jq.margins);
-						if (sameOffParent)
+							sz = 0;
+						if (ignore) {
+							var el = c.firstChild,
+								txt = el && el.nodeType == 3 ? el.nodeValue : null;
+							if (txt) {
+								var dim = zkc.textSize(txt);
+								sz = dim[1]; //height
+								if (sz > max)
+									max = sz;
+							}
+						}
+						var sameOffParent = c.offsetParent == noffParent,
+							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
+						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop);
+						if (sameOffParent && !ignore)
 							sz -= ntop + pbt;
 						if (!zk.safari || bm >= 0)
 							sz += bm;
@@ -350,12 +363,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 					}
 				} else if (c) { //no child widget, try html element directly
+					//feature 3000339: The hflex of the cloumn will calculate by max width
+					var ignore = wgt.ignoreChildNodeOffset_('w');
 					for(; c; c = c.nextSibling) {
 						var zkc = zk(c),
-							sameOffParent = c.offsetParent == noffParent,
-							sz = c.offsetWidth + c.offsetLeft,
-							rm = zkc.sumStyles("r", jq.margins);
-						if (sameOffParent)
+							sz = 0;
+						if (ignore) {
+							var el = c.firstChild,
+								txt = el && el.nodeType == 3 ? el.nodeValue : null;
+							if (txt) {
+								var dim = zkc.textSize(txt);
+								sz = dim[0]; //width
+								if (sz > max)
+									max = sz;
+							}
+						}
+						var	sameOffParent = c.offsetParent == noffParent,
+							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
+						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft);
+						if (sameOffParent && !ignore)
 							sz -= nleft + pbl;
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
@@ -2898,6 +2924,10 @@ unbind_: function (skipper, after) {
 	},
 	ignoreFlexSize_: function(attr) { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore widget dimension in vflex/hflex calculation 
+		return false;
+	},
+	ignoreChildNodeOffset_: function(attr) { //'w' for width or 'h' for height calculation
+		//to be overridden, whether ignore child node offset in vflex/hflex calculation
 		return false;
 	},
 	afterChildrenMinFlex_: function() {
