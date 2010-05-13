@@ -102,10 +102,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.clearCache();
 
 		//IE doesn't free _binds (when delete _binds[x]); so clean it up
-		if (zk.ie && ++_bindcnt > 3000) {
+		if (zk.ie && ++_bindcnt > 9000) {
 			_bindcnt = 0;
 			_binds = zk.copy({}, _binds);
 			_globals = zk.copy({}, _globals);
+			jq.cache = zk.copy({}, jq.cache);
 		}
 	}
 	function _bindrod(wgt) {

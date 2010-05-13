@@ -65,6 +65,7 @@ zk.copy(zjq, {
 	_afterOuter: zk.$void,
 
 	_setOuter: function (el, html) {
+		//outerHTML instead of replaceWith to minimize memory leak in IE
 		var done;
 		try {
 			//Note: IE's outerHTML cannot handle td/th.. and ignore script
@@ -77,8 +78,10 @@ zk.copy(zjq, {
 			"caption", "tbody", "thead", "tfoot", "colgroup","col")
 			&& !containsScript(html)) {
 				var o = zjq._beforeOuter(el);
-				//less memory leak in IE if innerHTML and then outerHTML
-				el.innerHTML = "";
+
+				jq.cleanData(el.getElementsByTagName("*"));
+				jq.cleanData([el]);
+
 				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);
