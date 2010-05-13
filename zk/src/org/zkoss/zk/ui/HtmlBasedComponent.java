@@ -34,6 +34,10 @@ import org.zkoss.zk.fn.ZkFns;
  * A skeletal implementation for HTML based components.
  * It simplifies to implement methods common to HTML based components.
  *
+ * <p>Events:<br/>
+ *  onClick, onDoubleClick, onRightClick, onMove, onSize, onZIndex, onDrop,
+ * 	onOK, onCacnel and onCtrlKey.<br/>
+ * 
  * <p>It supports
  * <ul>
  * <li>{@link #getSclass} and {@link #getStyle}.</li>
@@ -43,8 +47,11 @@ import org.zkoss.zk.fn.ZkFns;
  * </ul>
  *
  * @author tomyeh
+ * @since 5.0.0 supports onOK event.
+ * @since 5.0.0 supports onCancel event.
+ * @since 5.0.0 supports onCtrlKey event.
  */
-abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent{
+abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent {
 	private String _tooltiptext;
 	/** The width. */
 	protected String _width;
@@ -62,6 +69,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** The droppable. */
 	private String _droppable;
 	private int _zIndex = -1;
+	private int _renderdefer = -1;
 	/** The prolog content that shall be generated before real content. */
 	private String _prolog;
 	/** The virtical flex */
@@ -447,7 +455,36 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public String getHflex() {
 		return _hflex;
 	}
-	
+
+	/** Returns the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 * @since 5.0.2
+	 */
+	public int getRenderdefer() {
+		return _renderdefer;
+	}
+	/** Sets the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 *
+	 * <p>This method is useful if you have a sophiscated page that takes
+	 * long to render at a slow client. You can specify a non-negative value
+	 * as the render-defer delay such that the other part of the UI can appear
+	 * earlier. The styling of the render-deferred widget is controlled by
+	 * a CSS class called <code>z-renderdefer</code>.
+	 *
+	 * <p>Notice that it has no effect if the component has been rendered
+	 * at the client.
+	 * @param ms time to wait in milliseconds before rendering.
+	 * Notice: 0 also implies deferring the rendering (just right after
+	 * all others are renderred).
+	 * @since 5.0.2
+	 */
+	public void setRenderdefer(int ms) {
+		_renderdefer = ms;
+	}
+
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
@@ -474,6 +511,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		render(renderer, "droppable", _droppable);  //getDroppable is final
 
 		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
+		if (_renderdefer >= 0) renderer.render("renderdefer", _renderdefer);
 
 		render(renderer, "prolog", _prolog);
 	}

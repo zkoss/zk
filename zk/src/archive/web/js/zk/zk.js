@@ -27,6 +27,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_logmsg,
 		_stamps = [];
 
+	function newClass() {
+		return function () {
+			this.$oid = ++_oid;
+			this.$init.apply(this, arguments);
+
+			var ais = this._$ais;
+			if (ais) {
+				delete this._$ais;
+				for (var j = ais.length; j--;)
+					ais[j].call(this);
+			}
+		};
+	}
 	function def(nm, before, after) {
 		return function (v, opts) {
 			if (before) v = before.apply(this, arguments);
@@ -392,7 +405,7 @@ zk.copy(Array.prototoype, {
 	 *
 	 * @param String name the name of the package.
 	 * @return Package
-	 * @see #$import
+	 * @see #$import(String)
 	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
@@ -412,7 +425,7 @@ zk.copy(Array.prototoype, {
 			j = k + 1;
 		}
 	},
-	/** Imports a package or a class. It returns null if the package or class is not defined yet.
+	/** Imports a class or a package. It returns null if the package or class is not defined yet.
 	 * <p>Example: 
 <pre><code>
 var foo = zk.$import('com.foo');
@@ -420,14 +433,32 @@ var cool = new foo.Cool();
 var Cool = zk.$import('com.foo.Cooler');
 var cooler = new Cooler();
 </code></pre>
-	 * <p>If you specify an additional function, then it assumes name is a class and it will load the package of the class first, if not found. Then, invoke the function after the class is loaded. For example, the following creates a Listbox widget after loading the package.
+	 * @param String name The name of the package or the class. 
+	 * @return Object a package ({@link Package}) or a class ({@link Class})
+	 * @see #$package
+	 * @see #load
+	 * @see #$import(String, Function)
+	 */
+	/** Imports a package or class, and load it if <code>fn</code> is specified.
+	 * It returns null if the package or class is not defined yet and
+	 * <code>fn</code> is null.
+	 * <p>If an additional function, <code>fn</code> is specified, 
+	 * this method assumes <code>name</code>
+	 * is a class and it will load the package of the class first.
+	 * If not found. Then, invoke the function after the class is loaded.
+	 * For example, the following creates a Listbox widget after loading
+	 * the package.
 <pre><code>
 zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 </code></pre>
 	 * @param String name The name of the package or the class. 
-	 * @param Function fn The function to call after the class is loaded. If specified, it assumes name is a class, and it will load the package of the class automatically. 
-	 * @return Package
+	 * @param Function fn The function to call after the class is loaded.
+	 * If specified, it assumes <code>name</code> is a class, and it will
+	 * load the package of the class automatically. 
+	 * In additions, the function is called with the class as the argument.
+	 * @return Object a package ({@link Package}) or a class ({@link Class})
 	 * @see #$package
+	 * @see #$import(String)
 	 * @see #load
 	 */
 	$import: function (name, fn) {
@@ -539,17 +570,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 		if (!superclass)
 			throw 'unknown superclass';
 
-		var jclass = function() {
-			this.$oid = ++_oid;
-			this.$init.apply(this, arguments);
-
-			var ais = this._$ais;
-			if (ais) {
-				delete this._$ais;
-				for (var j = ais.length; j--;)
-					ais[j].call(this);
-			}
-		};
+		var jclass = newClass();
 
 		var thispt = jclass.prototype,
 			superpt = superclass.prototype,
@@ -628,11 +649,34 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * @param Object dst the destination object to override
 	 * @param Map backup the map used to store the original members (or properties)
 	 * @param Map src the source map providing the new members
-	 * @return Map the destination map
+	 * @return Object the destination object
+	 * @see #override(Object, String, Object)
+	 */
+	/** Overrides a particular method.
+	 * The old method will be stored in method called $nm (assuming nm is
+	 * the method name to override. For example,
+	 *
+	 * <pre><code>zk.override(zul.inp.Combobox.prototype, "open",
+	 *  function () {
+	 *    this.$open.apply(this, arguments);
+	 *    //do whatever you want
+	 *  });</code></pre>
+	 *
+	 * @param Object dst the destination object to override
+	 * @param String nm the method name to override
+	 * @param Object val the value of the method. To override a method, it has
+	 * to be an instance of {@link Function}.
+	 * @return Object the destination object
+	 * @since 5.0.2
+	 * @see #override(Object, Map, Map)
 	 */
 	override: function (dst, backup, src) {
-		for (var nm in src)
-			_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
+		if (typeof backup == "string") {
+			dst['$' + backup] = dst[backup];
+			dst[backup] = src;
+		} else
+			for (var nm in src)
+				_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
 		return dst;
 	},
 
@@ -747,8 +791,17 @@ wgt.setSomething(somevalue, {force:true});
 	 * @return int the integer
 	 */
 	parseInt: function (v, b) {
-		v = v ? parseInt(v, b || 10): 0;
-		return isNaN(v) ? 0: v;
+		return v && !isNaN(v = parseInt(v, b || 10)) ? v: 0;
+	},
+	/** Parses a string to a floating number.
+	 * <p>It is the same as the built-in parseFloat method except it never return
+	 * NaN (rather, it returns 0). 
+	 * @param String v the text to parse
+	 * @return double the floating number
+	 * @since 5.0.2
+	 */
+	parseFloat: function (v) {
+		return v && !isNaN(v = parseFloat(v)) ? v: 0;
 	},
 
 	/** Assigns a value to the specified property.
@@ -821,7 +874,7 @@ zk.endProcessing();
 </code></pre>
 	 * @see #startProcessing
 	 */
-	endProcessing: function() {
+	endProcessing: function () {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},
@@ -849,7 +902,7 @@ zk.endProcessing();
 	 * @param String msg the error message
 	 * @see #errorDismiss
 	 * @see #log
-	 * @see #stamp
+	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
 		zAu.send(new zk.Event(null, "error", msg, {ignorable: true}), 800);
@@ -870,7 +923,7 @@ zk.log('reach here');
 zk.log('value is", value);
 </code></pre>
 	 * @param Object... detailed varient number of arguments to log
-	 * @see #stamp
+	 * @see #stamp(String, boolean)
 	 */
 	log: function (detailed) {		
 		var msg = toLogMsg(
@@ -892,10 +945,17 @@ zk.log('value is", value);
 	 * any two stamps (including beginning and ending) will be logged
 	 * (with {@link #log}).
 	 * @param String name the unique name to represent a time stamp
+	 * @param boolean noAutoLog whehter not to auto log the result.
+	 * If omitted or false, {@link #stamp()} will be invoked automatically
+	 * to log the info and clean up all stamps after mounting is completed.
+	 * Turn it off, if you prefer to invoke it manually.
 	 */
-	stamp: function (nm) {
-		if (arguments.length) {
-			if (!_stamps.length)
+	/** Logs the information of all stamps made by {@link #stamp(String, boolean)}.
+	 * After the invocation, all stamps are reset.
+	 */
+	stamp: function (nm, noAutoLog) {
+		if (nm) {
+			if (!noAutoLog && !_stamps.length)
 				setTimeout(_stampout, 0);
 			_stamps.push({n: nm, t: zUtl.now()});
 		} else if (_stamps.length) {
@@ -1082,7 +1142,7 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
-	 * Example: 
+	 * <p>Example: 
 <pre><code>
 multiply: function (n) {
  return this.$super('multiply', n + 2);
@@ -1093,17 +1153,39 @@ multiply: function (n) {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$supers
 	 */
-	$super: function (mtdnm) {
-		var args = [];
-		for (var j = arguments.length; --j > 0;)
+	/** Invokes a method defined in the superclass with any number of arguments.
+	 * It is like Function's call() that takes any number of arguments.
+	 * <p>It is similar to {@link #$super(String, Object...)}, but
+	 * this method works even if the superclass calls back the same member method.
+	 * In short, it is tedious but safer.
+	 * <p>Example: 
+<pre><code>
+foo.MyClass = zk.$extends(foo.MySuper, {
+  multiply: function (n) {
+   return this.$super(foo.MyClass, 'multiply', n + 2);
+  }
+</code></pre>
+	 * <p>Notice that the class specified in the first argument is <i>not</i>
+	 * the super class having the method. Rather,
+	 * it is the class that invokes this method.
+	 * @param Class klass the class that invokes this method.
+	 * @param String mtd the method name to invoke
+	 * @param Object... vararg any number of arguments
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$supers
+	 * @since 5.0.2
+	 */
+	$super: function (arg0, arg1) {
+		var args = [], bCls = typeof arg0 != "string";
+		for (var j = arguments.length, end = bCls ? 1: 0; --j > end;)
 			args.unshift(arguments[j]);
-		return this.$supers(mtdnm, args);
+		return bCls ? this.$supers(arg0, arg1, args): this.$supers(arg0, args);
 	},
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
-	 * Example: 
+	 * <p>Example: 
 <pre><code>
 multiply: function () {
- return this.$super('multiply', arguments);
+ return this.$supers('multiply', arguments);
 }
 </code></pre>
 	 * @param String mtd the method name to invoke
@@ -1112,33 +1194,61 @@ multiply: function () {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$super
 	 */
-	$supers: function (mtdnm, args) {
+	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
+	 * <p>It is similar to {@link #$supers(String, Array)}, but
+	 * this method works even if the superclass calls back the same member method.
+	 * In short, it is tedious but safer.
+	 * <p>Example: 
+<pre><code>
+foo.MyClass = zk.$extends(foo.MySuper, {
+  multiply: function () {
+   return this.$supers(foo.MyClass, 'multiply', arguments);
+  }
+</code></pre>
+	 * <p>Notice that the class specified in the first argument is <i>not</i>
+	 * the super class having the method. Rather,
+	 * it is the class that invokes this method.
+	 * @param Class klass the class that invokes this method.
+	 * @param String mtd the method name to invoke
+	 * @param Array args an array of arguments. In most case, you just pass
+	 * <code>arguments</code> (the built-in variable).
+	 * @return Object the object being returned by the method of the superclass.
+	 * @see #$super
+	 * @since 5.0.2
+	 */
+	$supers: function (nm, args, argx) {
+		if (typeof nm != "string") { //zk.Class assumed
+			if (!(nm = nm.prototype._$super) || !(nm = nm[args])) //nm is zk.Class
+				throw args + " not in superclass"; //args is the method name
+			return nm.apply(this, argx);
+		}
+
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
 		//locate method
-		var old = supers[mtdnm], m, p, oldmtd;
+		var old = supers[nm], m, p, oldmtd;
 		if (old) {
-			oldmtd = old[mtdnm];
+			oldmtd = old[nm];
 			p = old;
 		} else {
-			oldmtd = this[mtdnm];
+			oldmtd = this[nm];
 			p = this;
 		}
-		for (;;) {
-			if (!(p = p._$super))
-				throw mtdnm + " not in superclass";
-			if (oldmtd != p[mtdnm]) {
-				m = p[mtdnm];
-				if (m) supers[mtdnm] = p;
+		while (p = p._$super)
+			if (oldmtd != p[nm]) {
+				m = p[nm];
+				if (m) supers[nm] = p;
 				break;
 			}
-		}
+
+		if (!m)
+			throw nm + " not in superclass";
 
 		try {
 			return m.apply(this, args);
 		} finally {
-			supers[mtdnm] = old; //restore
+			supers[nm] = old; //restore
 		}
 	},
 	_$subs: [],
@@ -1155,6 +1265,8 @@ setInterval(wgt.proxy(wgt.doIt), 1000); //assume doIt is a member function of wg
 <pre><code>
 setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 </code></pre>
+	* <p>Notice that this method caches the result so that it will return the same
+	* proxied function, if you pass the same function again.
 	* @param Function func a method member of this object
 	* @return Function a function that can be called as a global function
 	* (that actually have <code>this</code> referencing to this object).

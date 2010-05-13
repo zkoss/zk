@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.test;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Executions;
@@ -103,6 +104,7 @@ public class DumbFailoverManager implements FailoverManager {
 				public String getStyle() {return killed.getStyle();} //if unknown, just pass null
 				public String getHeaders(boolean before) {return killedCtrl.getHeaders(before);} //if unknown, just pass null
 				public String getHeaders() {return killedCtrl.getHeaders();} //if unknown, just pass null
+				public Collection getResponseHeaders() {return killedCtrl.getResponseHeaders();}
 			});
 
 		String s = killedCtrl.getRootAttributes();

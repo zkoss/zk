@@ -417,6 +417,7 @@
 		<xs:attribute name="focus" type="booleanType" use="optional" />
 		<xs:attribute name="tooltiptext" type="xs:string" use="optional" />
 		<xs:attribute name="zindex" type="intType" use="optional" />
+		<xs:attribute name="renderdefer" type="intType" use="optional" />
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
 	</xs:attributeGroup>

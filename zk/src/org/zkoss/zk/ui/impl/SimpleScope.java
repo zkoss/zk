@@ -37,6 +37,8 @@ import org.zkoss.zk.ui.ext.ScopeListener;
  * {@link #hasAttribute(String,boolean)},
  * and invoke {@link #notifyParentChanged} if the parent is changed.
  *
+ * <p>Not thread safe.
+ *
  * @author tomyeh
  * @since 5.0.0
  */

@@ -16,13 +16,17 @@ zk.bmk = (function () { //used internally
 	var _curbk = "", _initbk = "";
 
 	/** bookmark iframe */
-	var _bkIframe = zk.ie ? function (nm) {
+	var _bkIframe = zk.ie && !zk.ie8 ? function (nm, oldnm) {
 		//Bug 2019171: we have to create iframe frist
 		var url = zk.ajaxURI("/web/js/zk/bookmark.html", {au:true,ignoreSession:true}),
 			ifr = jq('#zk_histy')[0];
+		if (!ifr)
+			ifr = jq.newFrame('zk_histy',
+				oldnm ? url + '?' +encodeURIComponent(oldnm): url);
+				//create iframe first to have a bookmark (so BACK will go to init one)
+				//side effect: # is append to the URL even if bookmark is empty
 		if (nm) url += '?' +encodeURIComponent(nm);
-		if (ifr) ifr.src = url;
-		else ifr = jq.newFrame('zk_histy', url);
+		ifr.src = url;
 	}: zk.$void;
 
 	function getBookmark() {
@@ -55,13 +59,14 @@ zk.bmk = (function () { //used internally
 	}
 	function _bookmark(nm, replace) {
 		if (_curbk != nm) {
+			var oldnm = _curbk;
 			_curbk = nm; //to avoid loop back the server
 
 			if (replace)
 				location.replace(location.href.replace(/#.*/, "") + _toHash(nm, true));
 			else
 				location.hash = _toHash(nm);
-			_bkIframe(nm);
+			_bkIframe(nm, oldnm);
 			zk.bmk.onURLChange();
 		}
 	}

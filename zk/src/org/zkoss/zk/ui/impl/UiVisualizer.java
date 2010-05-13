@@ -99,6 +99,8 @@ import org.zkoss.zk.au.out.*;
 	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
+	/** The counter used for smartUpdateMultiple. */
+	private int _cntMultSU;
 	/** Whether the first execution is for async-update. */
 	private final boolean _1stau;
 	/** Whether it is in recovering. */
@@ -221,11 +223,13 @@ import org.zkoss.zk.au.out.*;
 	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
 	 * execution
 	 * @param value the value.
+	 * @since 5.0.2
 	 */
-	public void addSmartUpdate(Component comp, String attr, Object value) {
-		final Map respmap = getAttrRespMap(comp, attr);
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
+		final Map respmap = getAttrRespMap(comp);
 		if (respmap != null)
-			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
+			respmap.put(append ? attr + ":" + _cntMultSU++: attr,
+				new TimedValue(_timed++, comp, attr, value));
 	}
 	/** Sets whether to disable the update of the client widget.
 	 * By default, if a component is attached to a page, modications that
@@ -261,7 +265,7 @@ import org.zkoss.zk.au.out.*;
 	/** Returns the response map for the specified attribute, or null if
 	 * nothing to do.
 	 */
-	private Map getAttrRespMap(Component comp, String attr) {
+	private Map getAttrRespMap(Component comp) {
 		final Page page = comp.getPage();
 		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp) || isCUDisabled(comp))
@@ -824,7 +828,7 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 	}
-	/** Removes redundant components cross _invalidate, _smartUpdate
+	/** Removes redundant components cross _invalidated, _smartUpdated
 	 * and _attached.
 	 */
 	private void removeCrossRedundant() {

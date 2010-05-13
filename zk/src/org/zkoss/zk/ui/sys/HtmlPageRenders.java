@@ -166,23 +166,29 @@ public class HtmlPageRenders {
 		return "";
 	}
 
-	/** Generates the AU responses.
+	/** Generates the AU responses that are part of a page rendering.
 	 * Notice that {@link #outPageContent} will invoke this method automatically.
+	 * <p>It is the same as <code>outResponseJavaScripts(exec, false)</code>.
 	 */
 	public static final String outResponseJavaScripts(Execution exec) {
-		return outAuCmds(exec, false);
+		return outResponseJavaScripts(exec, false);
 	}
 	/** Generates the AU responses that are part of a page rendering.
-	 * @param directJS whether to generate JS directly
+	 * Notice that {@link #outPageContent} will invoke this method automatically.
+	 * @param directJS whether to generate JS directly.
+	 * If true, it generates <code>"x,y"</code> where x and y are assumed to the responses.
+	 * If false, it generates <code>&lt;script&gt;zkac(x,y);&lt;/script&gt;</pre></code>
+	 * @since 5.0.2
 	 */
-	private static final String outAuCmds(Execution exec, boolean directJS) {
+	public static final String outResponseJavaScripts(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Collection responses = execCtrl.getResponses();
 		if (responses == null || responses.isEmpty()) return "";
 		execCtrl.setResponses(null);
 
-		final StringBuffer sb = new StringBuffer(256)
-			.append(directJS ? "\n,[": "<script>\nzkac(");
+		final StringBuffer sb = new StringBuffer(256);
+		if (!directJS)
+			sb.append("<script>\nzkac(");
 
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
@@ -201,7 +207,9 @@ public class HtmlPageRenders {
 				sb.append(",\n");
 		}
 
-		return sb.append(directJS ? "]": ");\n</script>").toString();
+		if (!directJS)
+			sb.append(");\n</script>");
+		return sb.toString();
 	}
 
 	/** Returns HTML tags to include all JavaScript files and codes that are
@@ -511,7 +519,7 @@ public class HtmlPageRenders {
 		if (divRequired) {
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
-			out.write(" class=\"z-temp\">");
+			out.write(" class=\"z-temp\"></div>");
 		}
 
 		if (standalone) { //switch out
@@ -519,8 +527,15 @@ public class HtmlPageRenders {
 		}
 
 		//generate JS second
+		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		if (divRequired) {
-			out.write("\n<script>zkmb();try{");
+			out.write("\n<script>");
+			if (!aupg && owner != null) {
+				out.write("zkq('");
+				out.write(owner.getUuid());
+				out.write("',function(){");
+			}
+			out.write("zkmb();try{");
 			out.write(outZkIconJS());
 		}
 
@@ -529,7 +544,7 @@ public class HtmlPageRenders {
 		final String extra;
 		try {
 			if (order < 0)
-				out.write("zkx(");
+				out.write(aupg ? "[": "zkx(");
 			else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
@@ -537,7 +552,9 @@ public class HtmlPageRenders {
 			out.write("',{");
 
 			final StringBuffer props = new StringBuffer(128);
-			if (owner == null) {
+			if (owner != null) {
+				appendProp(props, "ow", owner.getUuid());
+			} else {
 				appendProp(props, "dt", desktop.getId());
 				appendProp(props, "cu", getContextURI(exec));
 				appendProp(props, "uu", desktop.getUpdateURI(null));
@@ -561,12 +578,41 @@ public class HtmlPageRenders {
 		}
 
 		if (order < 0) {
-			out.write(',');
-			out.write(extra.length() > 0 ? '1': '0');
-				//Bug 2983792 (delay until non-defer script evaluated)
-			out.write(outAuCmds(exec, true));
-			out.write(");\n");
-			out.write(extra);
+			final String ac = outResponseJavaScripts(exec, true);
+			if (aupg) {
+				if (extra.length() > 0 || ac.length() > 0) {
+					out.write(",0,"); //no need to delay since js is evaluated by zkx
+
+					if (ac.length() > 0) {
+						out.write("\n[");
+						out.write(ac);
+						out.write(']');
+					} else {
+						out.write("null");
+					}
+
+					if (extra.length() > 0) {
+						out.write(",'");
+						out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+						out.write('\'');
+					}
+				}
+				out.write(']');
+			} else {
+				if (extra.length() > 0 || ac.length() > 0) {
+					out.write(',');
+					out.write(extra.length() > 0 ? '1': '0');
+						//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
+
+					if (ac.length() > 0) {
+						out.write(",\n[");
+						out.write(ac);
+						out.write(']');
+					}
+				}
+				out.write(");\n");
+				out.write(extra);
+			}
 		}
 
 		if (standalone) {
@@ -583,7 +629,10 @@ public class HtmlPageRenders {
 		}
 
 		if (divRequired) {
-			out.write("}finally{zkme();}</script>\n");
+			out.write("}finally{zkme();}");
+			if (!aupg && owner != null)
+				out.write("});");
+			out.write("</script>\n");
 		}
 	}
 
@@ -753,7 +802,6 @@ public class HtmlPageRenders {
 				.append("</script>\n");
 		}
 
-		sb.append(outAuCmds(exec, false));
 		return sb.toString();
 	}
 	private static String getContextURI(Execution exec) {

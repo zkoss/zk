@@ -77,9 +77,10 @@ public class MouseEvent extends Event {
 		final String area = (String)data.get("area");
 		return area != null ? new MouseEvent(name, comp, area, keys): //area
 			new MouseEvent(name, comp, //coord
-				AuRequests.getInt(data, "x", 0), AuRequests.getInt(data, "y", 0),
-				AuRequests.getInt(data, "pageX", 0), AuRequests.getInt(data, "pageY", 0),
-				keys);
+				AuRequests.getInt(data, "x", 0, true),
+				AuRequests.getInt(data, "y", 0, true),
+				AuRequests.getInt(data, "pageX", 0, true),
+				AuRequests.getInt(data, "pageY", 0, true), keys);
 	}
 
 	/** Construct a mouse relevant event with coordinate or area.

@@ -37,7 +37,7 @@ MyClass.find('abc');
 
     <h3>Like and Unlike Java</h3>
 
-    Like Java, all classes objects have #isAssignableFrom and #isInstance. Unlike Java, all static methods are available as a method of the class object, including the superclass's static methods.
+    <p>Like Java, all classes objects have #isAssignableFrom and #isInstance. Unlike Java, all static methods are available as a method of the class object, including the superclass's static methods.
 
 <pre><code>
 MyClass = zk.$extends(zk.Object, {}, {
@@ -50,7 +50,7 @@ MyDerive.static0(); //OK
 MyDerive.static1(); //OK
 </code></pre>
 
-    Unlike Java, you cannot access the static methods by an object. Rather, you have to go thru the class object
+    <p>Unlike Java, you cannot access the static methods by an object. Rather, you have to go thru the class object
 
 <pre><code>
 var md = new MyDerive();
@@ -60,13 +60,13 @@ md.$class.static0(); //OK
 MyDerive.static0(); //OK
 </code></pre>
 
-    Unlike Java, the class can by accessed directly, such as o.$instanceof(MyClass). In addition, the class objects are not instances of a particular class (Class in Java).
+    <p>Unlike Java, the class can by accessed directly, such as o.$instanceof(MyClass). In addition, the class objects are not instances of a particular class (Class in Java).
 
 <pre><code>
     o.$class.$instanceof(zk.Class); //wrong! no zk.Class
 </code></pre>
 
-    Unlike Java, if a static method of the class has the same name of a static method of the superclass, it 'overrides' it.
+    <p>Unlike Java, if a static method of the class has the same name of a static method of the superclass, it 'overrides' it.
 
 <pre><code>
     MyClass = zk.$extends(zk.Object, {}, {
@@ -82,6 +82,9 @@ MyDerive.static0(); //OK
 
     In additions, the static members are placed in different scope from the non-static members. Thus, it is OK that a static member has the same name as a non-static member, though it is not a good practice (due to confusion to users).
  * 
+ * <p>Like Java's <code>Class.forName</code>, you can use {@link _global_.zk#$import}
+ * to resolve the class from the class name.
+ *
  * @author tomyeh
  */
 public class Class extends zk.Object {

@@ -321,7 +321,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function () {
 		this._inplaceout = false;
-		this.$supers('doMouseOut_', arguments);
+		this.$supers('doMouseOver_', arguments);
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
@@ -581,25 +581,23 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
 			zcls = this.getZclass();
-		if (!no || !no.zclass) {
-			if (this._disabled)
-				sc += ' ' + zcls + '-disd';
-		}
-		if (!no || !no.input) {
-			if (this._disabled)
-				sc += ' ' + zcls + '-text-disd';
-			if (this._inplace) {
-				sc += ' ' + this.getInplaceCSS();
-			}
-		}
+		if ((!no || !no.zclass) && this._disabled)
+			sc += ' ' + zcls + '-disd';
+		
+		if ((!no || !no.input) && this._inplace)
+			sc += ' ' + this.getInplaceCSS();
 		return sc;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.getInputNode();
+		var inp = this.getInputNode(),
+			zcls = this.getZclass();
 		
 		if (this._readonly)
-			jq(inp).addClass(this.getZclass() + '-readonly');
+			jq(inp).addClass(zcls + '-readonly');
+		
+		if (this._disabled)
+			jq(inp).addClass(zcls + '-text-disd');
 			
 		this.domListen_(inp, "onFocus", "doFocus_")
 			.domListen_(inp, "onBlur", "doBlur_")

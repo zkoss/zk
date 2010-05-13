@@ -151,7 +151,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			if (tabs) tabs._fixWidth();
 		}
 		if (notify)
-			this.fire('onSelect', {items: [this.uuid], reference: this.uuid});
+			this.fire('onSelect', {items: [this], reference: this.uuid});
 	},
 	//protected
 	doClick_: function(evt) {
@@ -171,6 +171,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();
+		if (!label) label = '&nbsp;';
 		if (!img) return label;
 		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
 		return label ? img + ' ' + label: img;
@@ -189,10 +190,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		after.push(function () {
-			if (tab.isSelected()) 
-				tab._sel(false, true);
-			else if (tab.parent._isInited())
-				tab.parent._scrollcheck("init");
+			zk.afterMount(function () {
+    			if (tab.isSelected()) 
+    				tab._sel(false, true);
+    			else if (tab.parent._isInited())
+    				tab.parent._scrollcheck("init");
+			});
 		});
 	},
 	unbind_: function () {

@@ -101,15 +101,17 @@ public interface UiEngine {
 	 * Called when {@link Component#invalidate} is called.
 	 */
 	public void addInvalidate(Component comp);
-	/** Smart updates an attribute of a component.
-	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate(String,Object)}.
-	 *
-	 * <p>The second invocation of this method
-	 * in the same execution with the same attr will override the previous one.
-	 *
-	 * @param value the value.
+	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
+	/** Smart-updates a property of the peer widget.
+	 *
+	 * @param append whether to append the updates of properties with the same
+	 * name. If false, only the last value of the same property will be sent
+	 * to the client.
+	 * @since 5.0.2
+	 */
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append);
 	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
 	 * as the override key.
 	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>

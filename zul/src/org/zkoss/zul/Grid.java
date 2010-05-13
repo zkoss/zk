@@ -183,6 +183,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private transient ListDataListener _dataListener;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
+	private boolean _autopaging;
 	/** The paging controller, used only if mold = "paging" and user
 	 * doesn't assign a controller via {@link #setPaginal}.
 	 * If exists, it is the last child.
@@ -208,6 +209,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
 		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
+		addClientEvent(Grid.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 	
 	public Grid() {
@@ -578,6 +580,31 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void setPageSize(int pgsz) throws WrongValueException {
 		pgi().setPageSize(pgsz);
 	}
+	/**
+	 * Sets whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Grid dynamically. 
+	 * @param autopaging true to turn on the auto-paging facility.
+	 */
+	public void setAutopaging(boolean autopaging) {
+		if (_autopaging != autopaging) {
+			_autopaging = autopaging;
+			smartUpdate("autopaging", autopaging);
+		}
+	}
+	
+	/**
+	 * Returns whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Grid dynamically. 
+	 * @return whether the "autopaging" facility is turned on.
+	 */
+	public boolean isAutopaging() {
+		return _autopaging;
+	}
+
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
 	 * @since 3.0.4
@@ -1312,6 +1339,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (_rod && ((Cropper)getDataLoader()).isCropper()) {//bug #2936064 
 			renderer.render("_grid$rod", true);
 		}
+		if (isAutopaging())
+			renderer.render("autopaging", true);
 	}
 	/*package*/ boolean isRod() {
 		return _rod;
@@ -1357,6 +1386,19 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, getPreloadSize()));
+		} else if (inPagingMold() && cmd.equals("onChangePageSize")) {
+			final Map data = request.getData();
+			final int oldsize = getPageSize();
+			int size = AuRequests.getInt(data, "size", oldsize);
+			if (size != oldsize) {
+				int begin = getActivePage() * oldsize;
+				int end = begin + oldsize;
+				end = Math.min(getPaginal().getTotalSize(), end); 
+				int sel = size > oldsize ? (end-1) : begin;
+				int newpg = sel / size;
+				setPageSize(size);
+				setActivePage(newpg);
+			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);

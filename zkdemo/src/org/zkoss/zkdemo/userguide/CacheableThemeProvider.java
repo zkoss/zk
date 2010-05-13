@@ -58,6 +58,13 @@ public class CacheableThemeProvider implements ThemeProvider{
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		}
+		
+		if ("lg".equals(fsc)) {
+			uris.add("/css/fontlg.css.dsp");
+		} else if ("sm".equals(fsc)) {
+			uris.add("/css/fontsm.css.dsp");
+		}
+		
 		return uris;
 	}
 

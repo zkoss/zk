@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.event.EventQueue;
  * @since 5.0.0
  */
 public class ServerPushEventQueue implements EventQueue {
-	/*package*/ static final Log log = Log.lookup(ServerPushEventQueue.class);
+	private static final Log log = Log.lookup(ServerPushEventQueue.class);
 	/** A map of (Desktop, DesktopThread). */
 	private final Map _dts = new HashMap();
 
@@ -115,7 +115,7 @@ public class ServerPushEventQueue implements EventQueue {
 
 		final Desktop desktop = exec.getDesktop();
 		synchronized (_dts) {
-			DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
+			final DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
 			if (dtthd != null && dtthd.unsubscribe(listener)) {
 				if (dtthd.isIdle()) {
 					dtthd.cease();
@@ -128,6 +128,14 @@ public class ServerPushEventQueue implements EventQueue {
 			}
 		}
 		return false;
+	}
+	/** Called by DesktopThread when it is dying. */
+	private void cleanup(Desktop desktop) {
+		synchronized (_dts) {
+			final DesktopThread dtthd = (DesktopThread)_dts.remove(desktop);
+			if (dtthd != null && dtthd.serverPushEnabled)
+				desktop.enableServerPush(false);
+		}	
 	}
 	public void close() {
 		synchronized (_dts) {
@@ -148,116 +156,124 @@ public class ServerPushEventQueue implements EventQueue {
 		}
 		_dts.clear();
 	}
-}
-/*package*/ class DesktopThread extends Thread {
-	private static final Log log = ServerPushEventQueue.log;
 
-	private final Desktop _desktop;
-	private final DesktopEventQueue _que = new DesktopEventQueue();
-	private final List _evts = new LinkedList();
-	private final Object _mutex = new Object();
-	private transient boolean _ceased;
-	/** Indicates whether the server push is enabled by the event queue. */
-	/*package*/ boolean serverPushEnabled;
+	private class DesktopThread extends Thread {
+		private final Desktop _desktop;
+		private final DesktopEventQueue _que = new DesktopEventQueue();
+		private final List _evts = new LinkedList();
+		private final Object _mutex = new Object();
+		private transient boolean _ceased;
+		/** Indicates whether the server push is enabled by the event queue. */
+		private boolean serverPushEnabled;
 
-	/*package*/ DesktopThread(Desktop desktop) {
-		Threads.setDaemon(this, true);
-		_desktop = desktop;
-	}
-	/*package*/ void publish(Event event) {
-		if (!_ceased) {
-			final Execution exec = Executions.getCurrent();
-			if (exec != null && exec.getDesktop() == _desktop) {
-				//same desktop no need of working thread
-				List evts = new LinkedList();
-				synchronized (_mutex) {
-					evts.addAll(_evts);
-					_evts.clear(); 
-				}
-				evts.add(event);
-				process(evts);
-			} else {
-				synchronized (_mutex) {
-					_evts.add(event);
-					_mutex.notify();
-				}
-			}
+		private DesktopThread(Desktop desktop) {
+			Threads.setDaemon(this, true);
+			_desktop = desktop;
 		}
-	}
-	/*package*/ void subscribe(EventListener listener, EventListener callback, boolean async) {
-		if (callback != null)
-			_que.subscribe(listener, callback);
-		else
-			_que.subscribe(listener, async);
-	}
-	/*package*/ boolean isSubscribed(EventListener listener) {
-		return _que.isSubscribed(listener);
-	}
-	/*package*/ boolean unsubscribe(EventListener listener) {
-		return _que.unsubscribe(listener);
-	}
-	/*package*/ void cease() {
-		synchronized (_mutex) {
-			_evts.clear();
-			_ceased = true;
-			_mutex.notify();
-		}
-	}
-	/*package*/ boolean isIdle() {
-		return _que.isIdle();
-	}
-
-	private void process(List evts) {
-		Throwable ex = null;
-		do {
-			for (Iterator it = evts.iterator(); !_ceased && it.hasNext();) {
-				final Event evt = (Event)it.next();
-				try {
-					_que.publish(evt);
-				} catch (Throwable t) {
-					if (ex == null) ex = t;
-				}
-			}
-
-			//To process as many as events, check _evts again
-			evts.clear();
-			synchronized (_mutex) {
-				evts.addAll(_evts);
-				_evts.clear();
-			}
-		} while (!_ceased && !evts.isEmpty());
-
-		if (!_ceased && ex != null)
-			log.realCauseBriefly("Unable to process events", ex);
-	}
-	public void run() {
-		l_out:
-		while (!_ceased) {
-			try {
-				List evts = new LinkedList();
-				synchronized (_mutex) {
-					while (_evts.isEmpty()) {
-						_mutex.wait(30*60*1000); //30 mins
-						if (_ceased)
-							break l_out;
+		private void publish(Event event) {
+			if (!_ceased) {
+				final Execution exec = Executions.getCurrent();
+				if (exec != null && exec.getDesktop() == _desktop) {
+					//same desktop no need of working thread
+					List evts = new LinkedList();
+					synchronized (_mutex) {
+						evts.addAll(_evts);
+						_evts.clear(); 
 					}
-					evts.addAll(_evts);
-					_evts.clear(); 
-				}
-
-				Executions.activate(_desktop);
-				try {
+					evts.add(event);
 					process(evts);
-				} finally { //just in case
-					Executions.deactivate(_desktop);
+				} else {
+					synchronized (_mutex) {
+						_evts.add(event);
+						_mutex.notify();
+					}
 				}
-			} catch (DesktopUnavailableException ex) {
-				break;
-			} catch (Throwable ex) {
-				if (!_ceased) log.realCauseBriefly(ex);
 			}
 		}
-		_evts.clear();
-		_que.close();
+		private void subscribe(EventListener listener, EventListener callback, boolean async) {
+			if (callback != null)
+				_que.subscribe(listener, callback);
+			else
+				_que.subscribe(listener, async);
+		}
+		private boolean isSubscribed(EventListener listener) {
+			return _que.isSubscribed(listener);
+		}
+		private boolean unsubscribe(EventListener listener) {
+			return _que.unsubscribe(listener);
+		}
+		private void cease() {
+			synchronized (_mutex) {
+				_evts.clear();
+				_ceased = true;
+				_mutex.notify();
+			}
+		}
+		private boolean isIdle() {
+			return _que.isIdle();
+		}
+
+		private void process(List evts) {
+			Throwable ex = null;
+			do {
+				for (Iterator it = evts.iterator(); !_ceased && it.hasNext();) {
+					final Event evt = (Event)it.next();
+					try {
+						_que.publish(evt);
+					} catch (Throwable t) {
+						if (ex == null) ex = t;
+					}
+				}
+
+				//To process as many as events, check _evts again
+				evts.clear();
+				synchronized (_mutex) {
+					evts.addAll(_evts);
+					_evts.clear();
+				}
+			} while (!_ceased && !evts.isEmpty());
+
+			if (!_ceased && ex != null)
+				log.realCauseBriefly("Unable to process events", ex);
+		}
+		public void run() {
+			l_out:
+			while (!_ceased) {
+				try {
+					List evts = new LinkedList();
+					synchronized (_mutex) {
+						while (_evts.isEmpty()) {
+							_mutex.wait(30*60*1000); //30 mins
+							if (_ceased)
+								break l_out;
+						}
+						evts.addAll(_evts);
+						_evts.clear(); 
+					}
+
+					Executions.activate(_desktop);
+					try {
+						process(evts);
+					} finally { //just in case
+						Executions.deactivate(_desktop);
+					}
+				} catch (DesktopUnavailableException ex) {
+					break;
+				} catch (Throwable ex) {
+					if (!_ceased) log.realCauseBriefly(ex);
+				}
+			}
+			try {
+				_evts.clear();
+				_que.close();
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Failed to clean up", ex);
+			}
+			try {
+				cleanup(_desktop);
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Failed to clean up", ex);
+			}
+		}
 	}
 }

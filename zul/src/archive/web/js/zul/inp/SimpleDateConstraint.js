@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A simple date constraint.
+ * @disable(zkgwt)
  */
 zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	format: 'yyyyMMdd',

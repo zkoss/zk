@@ -168,6 +168,13 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public String getRequestPath();
+	/** Returns the query string that is contained in the request URL after the
+	 * path ({@link #getRequestPath}), or null if the URL does not have a query
+	 * string.
+	 * @since 5.0.2
+	 */
+	public String getQueryString();
+
 	/** Returns the current directory (never null).
 	 * It is empty if no current directory at all.
 	 * Otherwise, it must end with '/'.

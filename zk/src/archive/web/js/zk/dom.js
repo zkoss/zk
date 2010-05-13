@@ -210,6 +210,22 @@ zk.copy(zjq, {
 	_cleanVisi: function (n) { //overriden in domopera.js
 		n.style.visibility = "inherit";
 	},
+	_fixClick: zk.$void, //overriden in domie.js
+
+	/* Replaces the specified element with the given HTML content.
+	 * It is the same as {@link _global_.jq#replaceWith}, except
+	 * it has less memory leak running on IE.
+	 * <p>Currently, {@link zk.Widget} uses it to minimize the memory leak.
+	 * However, we don't make it to jQuery since this method assumes all
+	 * event listeners are unbound before calling this method.
+	 * @param DOMElement n the element to replace its content
+	 * @param String html the HTML content to show
+	 * @since 5.0.2
+	 */
+	_setOuter: function (n, html) { //overriden in domie.js
+		jq(n).replaceWith(html);
+	},
+
 	_src0: "" //an empty src; overriden in domie.js
 });
 
@@ -1882,7 +1898,11 @@ this._syncShadow(); //synchronize shadow
 	}
 
 	/** Decodes a JSON string to a JavaScript object. 
-	 * <p>Notice: don't use eval(s) since it won't be compressed by a JavaScript comrpessor. 
+	 * <p>It is similar to jq.parseJSON (jQuery's default function), except
+	 * 1) it doesn't check if the string is a valid JSON
+	 * 2) it uses eval to evaluate
+	 * <p>Thus, it might not be safe to invoke this if the string's source
+	 * is not trustable (and then it is better to use jq.parseJSON)
 	 * @param String s the JSON string
 	 * @return Object the converted object.
 	 */

@@ -362,7 +362,6 @@ if (c.isEmpty()) {
 	public void deactivateServerPush();
 
 	/** Processes an AU request.
-	 * If {@link AuRequest#getComponent} is not nul
 	 * Notice that not only the requests for a deskop but also the requests
 	 * for any component in the deskop will go thru this method.
 	 *
@@ -397,6 +396,9 @@ if (c.isEmpty()) {
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
+	 *
+	 * <p>If you want to intercept events, you can register a listener implementing
+	 * {@link EventInterceptor}, or overriding {@link #afterProcessEvent}.
 	 *
 	 * @param everError if any error ever occured before
 	 * processing this request. In other words, indicates if the previous

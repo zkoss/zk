@@ -318,7 +318,7 @@ public class Servlets {
 
 		if ("robot".equals(type)) return isRobot(userAgent);
 		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
-	}
+	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent

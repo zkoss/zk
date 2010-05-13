@@ -249,10 +249,15 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
+	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
+	 */
 	public void addSmartUpdate(Component comp, String attr, Object value) {
+		addSmartUpdate(comp, attr, value, false);
+	}
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value, append);
 	}
 	public void addResponse(AuResponse response) {
 		getCurrentVisualizer().addResponse(response);
@@ -389,6 +394,7 @@ public class UiEngineImpl implements UiEngine {
 					public String getStyle() {return null;}
 					public String getHeaders(boolean before) {return null;}
 					public String getHeaders() {return null;}
+					public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
 				});
 				final Composer composer = config.getComposer(page);
 				try {
@@ -485,7 +491,20 @@ public class UiEngineImpl implements UiEngine {
 
 		final UiVisualizer uv = doActivate(exec, false, false);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.setCurrentPage(page);
 		try {
+			Events.postEvent(new Event(Events.ON_DESKTOP_RECYCLE));
+
+			final Desktop desktop = exec.getDesktop();
+			Event event = nextEvent(uv);
+			do {
+				for (; event != null; event = nextEvent(uv))
+					process(desktop, event);
+				resumeAll(desktop, uv, null);
+			} while ((event = nextEvent(uv)) != null);
+
+			execCtrl.setResponses(uv.getResponses());
+
 			((PageCtrl)page).redraw(out);
 		} finally {
 			doDeactivate(exec);
@@ -641,14 +660,15 @@ public class UiEngineImpl implements UiEngine {
 
 			child = ci.uf.newComponent(ci.page, parent, childInfo);
 
-			final boolean bNative = childInfo instanceof NativeInfo;
-			if (bNative) {
-				setProlog(ci, child, (NativeInfo)childInfo);
-			} else if (replaceableText != null) {
+			if (replaceableText != null) {
 				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
 				if (xc instanceof PrologAllowed)
 					((PrologAllowed)xc).setPrologContent(replaceableText);
 			}
+
+			final boolean bNative = childInfo instanceof NativeInfo;
+			if (bNative)
+				setProlog(ci, child, (NativeInfo)childInfo);
 
 			if (composerExt != null)
 				composerExt.doBeforeComposeChildren(child);

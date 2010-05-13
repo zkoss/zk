@@ -60,6 +60,13 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			' ismap="ismap"');
 	},
 
+	//@Override
+	fromPageCoord: function (x, y) {
+		//2997402: Imagemap rightclick/doubleclick wrong coordinates
+		var ofs = zk(this.getImageNode()).cmOffset();
+		return [x - ofs[0], y - ofs[1]];
+	},
+
 	_doneURI: function () {
 		var Imagemap = zul.wgt.Imagemap,
 			url = Imagemap._doneURI;

@@ -14,6 +14,8 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.io.Writer;
+import java.io.StringWriter;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.UiException;
@@ -60,7 +62,7 @@ public class ComponentRedraws {
 		final List states;
 		final Object[] ctx = (Object[])_ctx.get();
 		if (ctx == null) {
-			_ctx.set(new Object[] {states = new LinkedList(), new StringBuffer()});
+			_ctx.set(new Object[] {states = new LinkedList(), new StringWriter()});
 			order = -1;
 		} else {
 			states = (List)ctx[0];
@@ -80,8 +82,8 @@ public class ComponentRedraws {
 	 * returned by {@link #afterRedraw} if it is called against
 	 * the top-level component.
 	 */
-	public static final StringBuffer getScriptBuffer() {
-		return (StringBuffer)((Object[])_ctx.get())[1];
+	public static final Writer getScriptBuffer() {
+		return (Writer)((Object[])_ctx.get())[1];
 	}
 	/** Called after finsishing the redrawing.
 	 * It must be called in the finally clause if {@link #beforeRedraw}
@@ -99,7 +101,7 @@ public class ComponentRedraws {
 			states.remove(0);
 			if (states.isEmpty()) {
 				_ctx.set(null);
-				return ((StringBuffer)ctx[1]).toString();
+				return ((StringWriter)ctx[1]).getBuffer().toString();
 			}
 		} catch (Throwable ex) {
 			_ctx.set(null); //just in case

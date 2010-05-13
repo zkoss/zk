@@ -18,7 +18,6 @@ package org.zkoss.web.fn;
 
 import java.io.Writer;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;

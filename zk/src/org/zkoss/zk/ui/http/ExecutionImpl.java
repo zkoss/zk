@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Enumeration;
+import java.util.Date;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
@@ -483,8 +484,14 @@ public class ExecutionImpl extends AbstractExecution {
 	public void setResponseHeader(String name, String value) {
 		_response.setHeader(name, value);
 	}
+	public void setResponseHeader(String name, Date value) {
+		_response.setDateHeader(name, value.getTime());
+	}
 	public void addResponseHeader(String name, String value) {
 		_response.addHeader(name, value);
+	}
+	public void addResponseHeader(String name, Date value) {
+		_response.addDateHeader(name, value.getTime());
 	}
 	public boolean containsResponseHeader(String name) {
 		return _response.containsHeader(name);

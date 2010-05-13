@@ -19,6 +19,7 @@ package org.zkoss.zk.au.out;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -32,7 +33,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuInsertBefore extends AuResponse {
 	public AuInsertBefore(Component anchor, String content) {
-		super("addBfr", anchor, new String[] {getRefId(anchor), content});
+		super("addBfr", anchor, new Object[] {getRefId(anchor), new JavaScriptValue(content)});
 	}
 	private static String getRefId(Component anchor) {
 		if (anchor instanceof Native)

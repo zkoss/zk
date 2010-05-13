@@ -13,106 +13,16 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var fxNodes = [], //what to fix
-		$fns = {}; //super's fn
-
-	//fix DOM
-	function fixDom(n, nxt) { //exclude nxt (if null, means to the end)
-		for (; n && n != nxt; n = n.nextSibling)
-			if (n.nodeType == 1) {
-				fxNodes.push(n);
-				setTimeout(fixDom0, 100);
-			}
+	//detect </script>
+	function containsScript(html) {
+		if (html)
+			for (var j = 0, len = html.length; (j = html.indexOf("</", j)) >= 0 && j + 8 < len;)
+				if (html.substring(j += 2, j + 6).toLowerCase() == "script")
+					return true;
 	}
-	function fixDom0() {
-		var n = fxNodes.shift();
-		if (n) {
-			zjq._alphafix(n);
-			fixBU(n.getElementsByTagName("a")); //Bug 1635685, 1612312
-			fixBU(n.getElementsByTagName("area")); //Bug 1896749
-
-			if (fxNodes.length) setTimeout(fixDom0, 300);
-		}
-	}
-	function fixBU(ns) {
-		for (var j = ns.length; j--;) {
-			var n = ns[j];
-			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
-				n.z_fixed = true;
-				jq(n).click(doSkipBfUnload);
-			}
-		}
-	}
-	function doSkipBfUnload() {
-		zk.skipBfUnload = true;
-		setTimeout(unSkipBfUnload, 0); //restore
-	}
-	function unSkipBfUnload() {
+	function noSkipBfUnload() {
 		zk.skipBfUnload = false;
 	}
-
-zk.override(jq.fn, $fns, {
-	before: function () {
-		var e = this[0], ref;
-		if (e) ref = e.previousSibling;
-
-		ret = $fns.before.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling:
-			e.parentNode ? e.parentNode.firstChild: null, e);
-			//IE: som element might have no parent node (such as audio)
-		return ret;
-	},
-	after: function () {
-		var e = this[0], ref;
-		if (e) ref = e.nextSibling;
-
-		ret = $fns.after.apply(this, arguments);
-
-		if (e) fixDom(e.nextSibling, ref);
-		return ret;
-	},
-	append: function () {
-		var e = this[0], ref;
-		if (e) ref = e.lastChild;
-
-		ret = $fns.append.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling: e.firstChild);
-		return ret;
-	},
-	prepend: function () {
-		var e = this[0], ref;
-		if (e) ref = e.firstChild;
-
-		ret = $fns.prepend.apply(this, arguments);
-
-		if (e) fixDom(e.firstChild, ref);
-		return ret;
-	},
-	replaceWith: function () {
-		var e = this[0], ref, ref2;
-		if (e) {
-			ref = e.previousSibling;
-			ref2 = e.nextSibling;
-		}
-
-		ret = $fns.replaceWith.apply(this, arguments);
-
-		if (e) fixDom(ref ? ref.nextSibling:
-			e.parentNode ? e.parentNode.firstChild: null, ref2);
-			//IE: som element might have no parent node (such as audio)
-		return ret;
-	},
-	html: function (content) {
-		var e = content === undefined ? null: this[0];
-
-		ret = $fns.html.apply(this, arguments);
-
-		if (e) fixDom(e.firstChild);
-		return ret;
-	}
-});
 
 var _zjq = {};
 zk.override(zjq, _zjq, {
@@ -140,16 +50,47 @@ zk.copy(zjq, {
 		}
 	},
 
-	//pacth IE7 bug: script ignored if it is the first child (script2.zul)
-	_fix1stJS: function (out, s) { //used in widget.js
-		var j;
-		if (this.previousSibling || s.indexOf('<script') < 0
-		|| (j = out.length) > 20)
-			return;
-		for (var cnt = 0; j--;)
-			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
-				return; //more than one
-	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
+	_fixClick: function (evt) {
+		//Bug 1635685, 1612312: <a>
+		//Bug 1896749: <area>
+		var n;
+		if (jq.nodeName(n = evt.target, "a", "area")
+		&& n.href.indexOf("javascript:") >= 0) {
+			zk.skipBfUnload = true;
+			setTimeout(noSkipBfUnload, 0); //restore
+		}
+	},
+
+	_beforeOuter: zk.$void, //overridden by domie6.js
+	_afterOuter: zk.$void,
+
+	_setOuter: function (el, html) {
+		//outerHTML instead of replaceWith to minimize memory leak in IE
+		var done;
+		try {
+			//Note: IE's outerHTML cannot handle td/th.. and ignore script
+			//so we have skip them (the result is memory leak)
+			//
+			//We can use jquery's evalScript to handle script elements,
+			//but unable to find what scripts are created since they might not be
+			//children of new created elements
+			if ((el = jq(el)[0]) && !jq.nodeName(el, "td", "th", "table", "tr",
+			"caption", "tbody", "thead", "tfoot", "colgroup","col")
+			&& !containsScript(html)) {
+				var o = zjq._beforeOuter(el);
+
+				jq.cleanData(el.getElementsByTagName("*"));
+				jq.cleanData([el]);
+				el.innerHTML = "";
+				el.outerHTML = html;
+				done = true;
+				zjq._afterOuter(o);
+				return;
+			}
+		} catch (e) {
+		}
+		if (!done)
+			jq(el).replaceWith(html);
 	}
 });
 
@@ -185,8 +126,6 @@ zk.copy(zjq.prototype, {
 });
 
 })();
-
-zjq._alphafix = zk.$void; //overriden if ie6_
 
 zk.override(jq.event, zjq._evt = {}, {
 	fix: function (evt) {

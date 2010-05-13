@@ -100,6 +100,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 /** A draggable object used to make a DOM element draggable. 
+ * @disable(zkgwt)
  */
 zk.Draggable = zk.$extends(zk.Object, {
 	/** The control object for this draggable.
@@ -366,7 +367,7 @@ String scroll; //DOM Element's ID</code></pre>
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
 		jq.clearSelection(); // Bug #2721980
-		if (this.opts.stackup) { // Bug #1911280
+		if (this.opts.overlay) { // Bug #1911280 and 2986227
 			var stackup = document.createElement("div");
 			document.body.appendChild(stackup);
 			stackup.className = "z-dd-stackup";
@@ -588,10 +589,11 @@ String scroll; //DOM Element's ID</code></pre>
 		var pos = zk(node).cmOffset();
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
-		if (!zk.ie) devt.stop();
-			//test/dragdrop.zul
-			//IE: if stop, onclick won't be fired in IE (unable to select)
+
+		if (zk.opera || zk.gecko) devt.preventDefault();
+			//IE: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged
+			//FF3: if stopPropagation, 2nd browser focused (Bug 2988327)
 			//Opera: if not stop, 'easy' to become selecting text
 	},
 	_keypress: function (devt) {

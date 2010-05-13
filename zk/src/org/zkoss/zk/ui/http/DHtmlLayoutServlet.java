@@ -200,6 +200,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				if (page != null) {
 					final Execution exec = new ExecutionImpl(
 						_ctx, request, response, desktop, page);
+					_webman.setDesktop(request, desktop);
 					wappc.getUiEngine().recycleDesktop(exec, page, out);
 				} else
 					desktop = null; //something wrong (not possible; just in case)

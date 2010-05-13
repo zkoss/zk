@@ -14,25 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _binds = {}, //{uuid, wgt}: bind but no node
-		_fixBindMem = zk.$void, //fix IE memory leak
+		_globals = {}, //global ID space {id, [wgt...]}
 		_bindcnt = 0,
 		_floatings = [], //[{widget,node}]
 		_nextUuid = 0,
-		_globals = {}, //global ID space {id, [wgt...]}
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
-		_noChildCallback; //used by removeChild/appendChild/insertBefore
-
-	//IE doesn't free _binds (when delete _binds[x]); so clean it up
-	if (zk.ie)
-		_fixBindMem = function () {	
-			if (++_bindcnt > 2000) {
-				_bindcnt = 0;
-				_binds = zk.copy({}, _binds);
-			}
-		};
+		_noChildCallback, //used by removeChild/appendChild/insertBefore
+		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -100,11 +91,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
+		if (wgt.id)
+			_addGlobal(wgt);
 	}
 	function _unbind0(wgt) {
+		if (wgt.id)
+			_rmGlobal(wgt);
 		delete _binds[wgt.uuid];
 		wgt.desktop = null;
 		wgt.clearCache();
+
+		//IE doesn't free _binds (when delete _binds[x]); so clean it up
+		if (zk.ie && ++_bindcnt > 9000) {
+			_bindcnt = 0;
+			_binds = zk.copy({}, _binds);
+			_globals = zk.copy({}, _globals);
+			jq.cache = zk.copy({}, jq.cache);
+		}
 	}
 	function _bindrod(wgt) {
 		_bind0(wgt);
@@ -163,24 +166,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ow = ow ? ow.$o(): null;
 		if (ow)
 			_rmIdSpaceDown0(wgt, ow);
-		else
-			_rmGlobalsIdSpace(wgt);
 	}
 	function _rmIdSpaceDown0(wgt, owner) {
-		if (wgt.id) {
+		if (wgt.id)
 			delete owner._fellows[wgt.id];
-			_rmGlobalsIdSpace(wgt);
-		}
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_rmIdSpaceDown0(wgt, owner);
 	}
-	function _rmGlobalsIdSpace(wgt) {
-		var g = _globals[wgt.id];
-		if (g)
-			g.$remove(wgt);
+	//note: wgt.id must be checked before calling this method
+	function _addGlobal(wgt) {
+		var gs = _globals[wgt.id];
+		if (gs)
+			gs.push(wgt);
+		else
+			_globals[wgt.id] = [wgt];
+	}
+	function _rmGlobal(wgt) {
+		var gs = _globals[wgt.id];
+		if (gs) {
+			gs.$remove(wgt);
+			if (!gs.length) delete _globals[wgt.id];
+		}
 	}
 	function _fireClick(wgt, evt) {
-		return !(wgt.shallIgnoreClick_(evt) ? evt.stopped: wgt.fireX(evt).stopped);
+		if (!wgt.shallIgnoreClick_(evt) && 
+			!wgt.fireX(evt).stopped && evt.shallStop) {
+			evt.stop();
+			return false;	
+		}
+		return !evt.stopped;
 	}
 
 	//set minimum flex size and return it
@@ -196,16 +210,36 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
-					pb = zkn.padBorderHeight(),
+					pbt = zkn.sumStyles("t", jq.paddings) + zkn.sumStyles("t", jq.borders),
 					max = 0,
 					totalsz = 0;
 				if (cwgt){ //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
-							var sz = cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive 
-								_setMinFlexSize(cwgt, c, o) : 
-								(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+							//bug# 2997862: vflex="min" not working on nested tabpanel
+							var zkc = zk(c),
+								sameOffParent = c.offsetParent == noffParent,
+								sz = 0;
+							if (!cwgt.ignoreFlexSize_('h')) {
+								sz = c.offsetTop;
+								if (sameOffParent)
+									sz -= ntop + pbt;
+								if (cwgt._vflex == 'min') {
+									if (zkc.isVisible()) {
+										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
+										var tm = zkc.sumStyles("t", jq.margins);
+										if (!zk.safari || tm >= 0)
+											sz -= tm;
+									} else
+										sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
+								} else {
+									sz += c.offsetHeight;
+									var bm = zkc.sumStyles("b", jq.margins);
+									if (!zk.safari || bm >= 0)
+										sz += bm;
+								}
+							}
 							if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
@@ -213,26 +247,73 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 					}
 				} else if (c) { //no child widget, try html element directly
+					//feature 3000339: The hflex of the cloumn will calculate by max width
+					var ignore = wgt.ignoreChildNodeOffset_('h');
 					for(; c; c = c.nextSibling) {
-						var sz = (c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+						var zkc = zk(c),
+							sz = 0;
+						if (ignore) {
+							var el = c.firstChild,
+								txt = el && el.nodeType == 3 ? el.nodeValue : null;
+							if (txt) {
+								var dim = zkc.textSize(txt);
+								sz = dim[1]; //height
+								if (sz > max)
+									max = sz;
+							}
+						}
+						var sameOffParent = c.offsetParent == noffParent,
+							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
+						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop);
+						if (sameOffParent && !ignore)
+							sz -= ntop + pbt;
+						if (!zk.safari || bm >= 0)
+							sz += bm;
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
-					max = n.offsetHeight - pb;  
+					max = n.offsetHeight - zkn.padBorderHeight();  
 
-				//n might not be widget's element, add up the pad/border/margin in between
+				if (totalsz > max)
+					max = totalsz;
+				
+				//n might not be widget's element, add up the pad/border/margin/offsettop in between
+				var pb = 0,
+					precalc = false;
 				while (n && n != wgtn) {
-					pb += zkn.sumStyles("tb", jq.margins);
-					n = n.parentNode;
+					if (!precalc)
+						pb += zkn.padBorderHeight();
+					else {
+						pb += zkn.sumStyles("b", jq.paddings);
+						pb += zkn.sumStyles("b", jq.borders);
+					}
+					var p = n.parentNode,
+						ptop = p ? p.offsetTop : 0,
+						poffParent = p ? p.offsetParent : null;
+					precalc = n.offsetParent == poffParent; 
+					pb += n.offsetTop;
+					if (precalc)
+						pb -= ptop;
+					var bm = zkn.sumStyles("b", jq.margins);
+					if (!zk.safari || bm >=0)
+						pb += bm;
+					n = p;
 					zkn = zk(n);
-					pb += zkn.padBorderHeight();
 				}
-					
-				var margin = zk(wgtn).sumStyles("tb", jq.margins),
-					sz = wgt.setFlexSize_({height:(max + totalsz + pb + margin)});
+				if (!precalc)
+					pb += zkn.padBorderHeight();
+				else {
+					pb += zkn.sumStyles("b", jq.paddings);
+					pb += zkn.sumStyles("b", jq.borders);
+				}
+				var margin = zk(wgtn).sumStyles("tb", jq.margins);
+				if (zk.safari && margin < 0) 
+					margin = 0;
+				sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
 					wgt._vflexsz = sz.height + margin;
+				wgt.afterChildrenMinFlex_();
 			}
 			return wgt._vflexsz;
 			
@@ -246,50 +327,162 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
-					pb = zkn.padBorderWidth(),
+					pbl = zkn.sumStyles("l", jq.paddings)+ zkn.sumStyles("l", jq.borders), 
 					max = 0,
 					totalsz = 0;
 				if (cwgt) { //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
-							var sz = cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
-									_setMinFlexSize(cwgt, c, o) : 
-									(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
-							if (cwgt._sumFlexWidth) //@See East/West
-								totalsz += sz;
-							else if (sz > max)
-								max = sz;
+							//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
+							var zkc = zk(c),
+								sameOffParent = c.offsetParent == noffParent,
+								sz = 0;
+							if (!cwgt.ignoreFlexSize_('w')) {
+								sz = c.offsetLeft;
+								if (sameOffParent)
+									sz -= nleft + pbl;
+								if (cwgt._hflex == 'min') {
+									if (zkc.isVisible()) {
+										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
+										var lm = zkc.sumStyles("l", jq.margins);
+										if (!zk.safari || lm >= 0)
+											sz -= lm;
+									} else
+										sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
+								} else {
+									sz += c.offsetWidth;
+									var rm = zkc.sumStyles("r", jq.margins);
+									if (!zk.safari || rm >= 0)
+										sz += rm;
+								}
+								if (cwgt._sumFlexWidth) //@See East/West
+									totalsz += sz;
+								else if (sz > max)
+									max = sz;
+							}
 						}
 					}
 				} else if (c) { //no child widget, try html element directly
+					//feature 3000339: The hflex of the cloumn will calculate by max width
+					var ignore = wgt.ignoreChildNodeOffset_('w');
 					for(; c; c = c.nextSibling) {
-						var sz = (c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+						var zkc = zk(c),
+							sz = 0;
+						if (ignore) {
+							var el = c.firstChild,
+								txt = el && el.nodeType == 3 ? el.nodeValue : null;
+							if (txt) {
+								var dim = zkc.textSize(txt);
+								sz = dim[0]; //width
+								if (sz > max)
+									max = sz;
+							}
+						}
+						var	sameOffParent = c.offsetParent == noffParent,
+							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
+						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft);
+						if (sameOffParent && !ignore)
+							sz -= nleft + pbl;
+						if (!zk.safari || rm >= 0)
+							sz +=  rm;
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
-					max = n.offsetWidth - pb;
+					max = n.offsetWidth - zkn.padBorderWidth();
+				
+				if (totalsz > max)
+					max = totalsz;
 				
 				//n might not be widget's element, add up the pad/border/margin in between
+				var pb = 0,
+					precalc = false;
 				while (n && n != wgtn) {
-					pb += zkn.sumStyles("lr", jq.margins);
-					n = n.parentNode;
+					if (!precalc)
+						pb += zkn.padBorderWidth();
+					else {
+						pb += zkn.sumStyles("r", jq.paddings);
+						pb += zkn.sumStyles("r", jq.borders);
+					}
+					var p = n.parentNode,
+						pleft = p ? p.offsetLeft : 0,
+						poffParent = p ? p.offsetParent : null;
+					precalc = n.offsetParent == poffParent; 
+					pb += n.offsetLeft;
+					if (precalc)
+						pb -= pleft;
+					var rm = zkn.sumStyles("r", jq.margins);
+					if (!zk.safari || rm >= 0)
+						pb += rm; 
+					n = p;
 					zkn = zk(n);
-					pb += zkn.padBorderHeight();
+				}
+				if (!precalc)
+					pb += zkn.padBorderWidth();
+				else {
+					pb += zkn.sumStyles("r", jq.paddings);
+					pb += zkn.sumStyles("r", jq.borders);
 				}
 					
 				var margin = zk(wgtn).sumStyles("lr", jq.margins);
-				var sz = wgt.setFlexSize_({width:(max + totalsz + pb + margin)});
+				if (zk.safari && margin < 0)
+					margin = 0;
+				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
+				wgt.afterChildrenMinFlex_();
 			}
 			return wgt._hflexsz;
 		} else
 			return 0;
 	}
 	//fix vflex/hflex of all my sibling nodes
+	//feature #3000873 tabbox can auto grow when select larger tabpanel
+	function _fixFlexX(ctl, opts, resize) {
+		//avoid firedown("onShow") firedown("onSize") calling in again
+		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+			return;
+		
+		//a resize fired by myself, simply call directly to _fixFlex
+		if (resize) {
+			_fixFlex.apply(this);
+			return;
+		}
+		
+		//normal triggering
+		var r1 = p1 = this,
+			j1 = -1;
+		if (this._hflex == 'min' && this._hflexsz === undefined) {
+			++j1;
+			while ((p1 = p1.parent) && p1._hflex == 'min') {
+				delete p1._hflexsz;
+				r1 = p1;
+				++j1;
+			}
+		}
+		var r2 = p2 = this,
+			j2 = -1;
+		if (this._vflex == 'min' && this._vflexsz === undefined) {
+			++j2;
+			while ((p2 = p2.parent) && p2._vflex == 'min') {
+				delete p2._vflexsz;
+				r2 = p2;
+				++j2;
+			}
+		}
+		if (j1 > 0 || j2 > 0)
+			zWatch.fireDown('onSize', j1 > j2 ? r1 : r2, null, true); //true to indicate this is a resize
+		else
+			_fixFlex.apply(r2);
+
+	}
+	//fix vflex/hflex of all my sibling nodes
 	function _fixFlex() {
+		//avoid firedown("onSize") calling in again
+		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+			return;
+		
 		if (!this.parent.beforeChildrenFlex_(this)) { //don't do fixflex if return false
 			return;
 		}
@@ -324,11 +517,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
-		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
-			tbp = zkp.sumStyles('t', jq.borders),
-			lbp = zkp.sumStyles('l', jq.borders),
-			segTop = sameOffParent ? (p.offsetTop + tbp) : tbp,
-			segLeft = sameOffParent ? (p.offsetLeft + lbp) : lbp,
+		var ptop = p.offsetTop,
+			pleft = p.offsetLeft,
+			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles("t", jq.paddings),
+			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles("l", jq.paddings),
+			segTop = 0,
+			segLeft = 0,
 			segBottom = segTop,
 			segRight = segLeft;
 
@@ -343,8 +537,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					offTop = c.offsetTop,
-					offLeft = c.offsetLeft,
+					ctop = c.offsetTop - tbp,
+					cleft = c.offsetLeft - lbp,
+					sameOffParent = c.offsetParent === p.offsetParent, 
+					offTop = sameOffParent ? ctop - ptop : ctop,
+					offLeft = sameOffParent ? cleft - pleft : cleft,
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
@@ -357,7 +554,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						offLeft = c.offsetLeft;
+						cleft = c.offsetLeft - lbp;
+						offLeft = sameOffParent ? cleft - pleft : cleft;
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 						segRight = Math.max(segRight, marginRight);
@@ -388,7 +586,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						offTop = c.offsetTop;
+						ctop = c.offsetTop - tbp;
+						offTop = sameOffParent ? ctop - ptop : ctop;
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 						segBottom = Math.max(segBottom, marginBottom);
@@ -414,7 +613,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				pretxt = false;
 			}
 		}
-
+		
 		if (zk.ie6_ && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
@@ -466,13 +665,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
+			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
+			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
 			delete wgt._flexListened;
 		}
 	}
@@ -614,6 +813,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else _prepareRemove(wgt, ary);
 		}
 	}
+
+	//render the render defer
+	function _rdrender(wgt) {
+		if (wgt._z$rd) { //might be redrawn by forcerender
+			delete wgt._z$rd;
+			wgt._norenderdefer = true;
+			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
+		}
+	}
+
 	var _dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
@@ -629,6 +838,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * for more information.
  * <p>Notice that, unlike the component at the server, {@link zk.Desktop}
  * and {@link zk.Page} are derived from zk.Widget. It means desktops, pages and widgets are in a widget tree. 
+ * @disable(zkgwt)
  */
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
@@ -1076,7 +1286,31 @@ new zul.wnd.Window{
 					_listenFlex(this);
 				zWatch.fireDown('onSize', this.parent);
 			}
-		}
+		},
+		/** Returns the number of milliseconds before rendering this component
+		 * at the client.
+		 * <p>Default: -1 (don't wait).
+		 * @return int the number of milliseconds to wait
+		 * @since 5.0.2
+		 */
+		/** Sets the number of milliseconds before rendering this component
+		 * at the client.
+		 * <p>Default: -1 (don't wait).
+		 *
+		 * <p>This method is useful if you have a sophiscated page that takes
+		 * long to render at a slow client. You can specify a non-negative value
+		 * as the render-defer delay such that the other part of the UI can appear
+		 * earlier. The styling of the render-deferred widget is controlled by
+		 * a CSS class called <code>z-render-defer</code>.
+		 *
+		 * <p>Notice that it has no effect if the component has been rendered
+		 * at the client.
+		 * @param int ms time to wait in milliseconds before rendering.
+		 * Notice: 0 also implies deferring the rendering (just right after
+		 * all others are renderred).
+		 * @since 5.0.2
+		 */
+		 renderdefer: null
 	},
 	/** Returns the owner of the ID space that this widget belongs to,
 	 * or null if it doesn't belong to any ID space.
@@ -1088,6 +1322,13 @@ new zul.wnd.Window{
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
 	},
+	/** Returns the map of all fellows of this widget.
+	 * <pre><code>
+wgt.$f().main.setTitle("foo");
+</code></pre>
+	 * @return Map the map of all fellows.
+	 * @since 5.0.2
+	 */
 	/** Returns the fellow of the specified ID of the ID space that this widget belongs to. It returns null if not found. 
 	 * @param String id the widget's ID ({@link #id})
 	 * @return zk.Widget
@@ -1101,6 +1342,8 @@ new zul.wnd.Window{
 	 */
 	$f: function (id, global) {
 		var f = this.$o();
+		if (!arguments.length)
+			return f ? f._fellows: {};
 		for (var ids = id.split('/'), j = 0, len = ids.length; j < len; ++j) {
 			id = ids[j];
 			if (id) {
@@ -1128,20 +1371,18 @@ new zul.wnd.Window{
 			if (zk.spaceless && this.desktop)
 				throw 'id cannot be changed after bound'; //since there might be subnodes
 
-			var old = this.id;
-			if (old) {
-				if (!zk.spaceless && (old=_globals[id]))
-					old.$remove(this);
+			if (this.id) {
 				_rmIdSpace(this);
+				_rmGlobal(this);
 			}
 
 			this.id = id;
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless)
-					(_globals[id] || (_globals[id] = [])).push(this);
 				_addIdSpace(this);
+				if (this.desktop)
+					_addGlobal(this);
 			}
 		}
 		return this;
@@ -1472,6 +1713,10 @@ new zul.wnd.Window{
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
+		var cf = zk.currentFocus;
+		if (cf && zUtl.isAncestor(this, cf))
+			zk.currentFocus = null;
+
 		if (this.z_rod) {
 			_unbindrod(this);
 			_bindrod(newwgt);
@@ -1490,10 +1735,7 @@ new zul.wnd.Window{
 		if (p)
 			p.onChildReplaced_(this, newwgt);
 
-		//avoid memory leak
-		this.parent = this.nextSibling = this.previousSibling
-			= this._node = this._nodeSolved = null;
-		this._subnodes = {};
+		this.parent = this.nextSibling = this.previousSibling = null;
 	},
 	/** Replaced the child widgets with the specified.
 	 * It is usefull if you want to replace a part of children whose
@@ -1932,18 +2174,68 @@ out.push('</div>');
 	 * <p>Default: it retrieves the redraw function associated with
 	 * the mold ({@link #getMold}) and then invoke it.
 	 * The redraw function must have the same signature as this method.
-	 * @param Array out an array of HTML fragments.
-	 * Technically it can be anything that has the method called <code>push></code>
+	 * @param Array out an array to output HTML fragments.
+	 * Technically it can be anything that has the method called <code>push</code>
 	 */
 	redraw: function (out) {
-		var s = this.prolog;
-		if (s) out.push(s);
+		if (!this.deferRedraw_(out)) {
+			var s = this.prolog;
+			if (s) out.push(s);
 
-		for (var p = this, mold = this._mold; p; p = p.superclass) {
-			var f = p.$class.molds[mold];
-			if (f) return f.apply(this, arguments);
+			for (var p = this, mold = this._mold; p; p = p.superclass) {
+				var f = p.$class.molds[mold];
+				if (f) return f.apply(this, arguments);
+			}
+			throw "mold "+mold+" not found in "+this.className;
 		}
-		throw "mold "+mold+" not found in "+this.className;
+	},
+	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
+	 * This method is called automatically by {@link #redraw},
+	 * so you only need to use it if you override {@link #redraw}.
+	 * <p>A typical usage is as follows.
+	 * <pre><code>
+redraw: function (out) {
+  if (!this.deferRedraw_(out)) {
+  	out.push(...); //redraw
+  }
+}
+	 * </code></pre>
+	 * @param Array out an array to output the HTML fragments.
+	 * @since 5.0.2
+	 */
+	deferRedraw_: function (out) {
+		var delay;
+		if ((delay = this._renderdefer) >= 0) {
+			if (!this._norenderdefer) {
+				this.z_rod = this._z$rd = true;
+				out.push('<div', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></div>');
+				out = null; //to free memory
+
+				var wgt = this;
+				setTimeout(function () {_rdrender(wgt);}, delay);
+				return true;
+			}
+			delete this._norenderdefer;
+			delete this.z_rod;
+		}
+		return false;
+	},
+	/** Forces the rendering if it is deferred.
+	 * A typical way to defer the render is to specify {@link #setRenderdefer}
+	 * with a non-negative value. The other example is some widget might be
+	 * optimized for the performance by not rendering some or the whole part
+	 * of the widget. If the rendering is deferred, the corresponding DOM elements
+	 * (@{link #$n}) are not available. If it is important to you, you can
+	 * force it to be rendered.
+	 * <p>Notice that this method only forces this widget to render. It doesn't
+	 * force any of its children. If you want, you have invoke {@link #forcerender}
+	 * one-by-one
+	 * <p>The derived class shall override this method, if it implements
+	 * the render deferring (other than {@link #setRenderdefer}).
+	 * @since 5.0.2
+	 */
+	forcerender: function () {
+		_rdrender(this);
 	},
 	/** Updates the DOM element's CSS class. It is called when the CSS class is changed (e.g., setZclass is called).
 	 * <p>Default: it changes the class of {@link #$n}. 
@@ -2101,15 +2393,25 @@ function () {
 			var s = this.domStyle_(no);
 			if (s) html += ' style="' + s + '"';
 		}
-		if (!no || !no.domclass) {
+		if (!no || !no.domClass) {
 			var s = this.domClass_();
 			if (s) html += ' class="' + s + '"';
 		}
 		if (!no || !no.tooltiptext) {
-			var s = this._tooltiptext;
+			var s = this.domTooltiptext_();
 			if (s) html += ' title="' + s + '"';
 		}
 		return html;
+	},
+	/** Returns the tooltiptext for generating the title attribute of the DOM element.
+	 * <p>Default: return {@link #getTooltiptext}.
+	 * <p>Deriving class might override this method if the parent widget
+	 * is not associated with any DOM element, such as treerow's parent: treeitem.
+	 * @return String the tooltiptext
+	 * @since 5.0.2
+	 */
+	domTooltiptext_ : function () {
+		return this.getTooltiptext();
 	},
 	/** Returns the style attribute that contains only the text related CSS styles. For example, it returns style="font-size:12pt;font-weight:bold" if #getStyle is border:none;font-size:12pt;font-weight:bold.
 	 * <p>It is usually used with {@link #getTextNode} to
@@ -2169,12 +2471,11 @@ function () {
 			var oldwgt = zk.Widget.$(n, {strict:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
-			jq(n).replaceWith(this.redrawHTML_(skipper, true));
+			zjq._setOuter(n, this.redrawHTML_(skipper, true));
 			this.bind(desktop, skipper);
 		}
 
 		if (!skipper) {
-			zWatch.fireDown('onRestore', this);
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this);
 		}
@@ -2220,6 +2521,10 @@ function () {
 		if (this.desktop) {
 			var n = this.$n();
 			if (n) {
+				var oldrod = this.z$rod;
+				this.z$rod = false;
+					//to avoid side effect since the caller might look for $n(xx)
+
 				if (skipper) {
 					var skipInfo = skipper.skip(this);
 					if (skipInfo) {
@@ -2228,12 +2533,14 @@ function () {
 						skipper.restore(this, skipInfo);
 
 						zWatch.fireDown('onRestore', this);
+							//to notify it is restored from rerender with skipper
 						zWatch.fireDown('beforeSize', this);
 						zWatch.fireDown('onSize', this);
-						return this; //done
 					}
-				}
-				this.replaceHTML(n);
+				} else
+					this.replaceHTML(n);
+
+				this.z$rod = oldrod;
 			}
 		}
 		return this;
@@ -2253,7 +2560,7 @@ function () {
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
-		jq(n).replaceWith(child.redrawHTML_(skipper, true));
+		zjq._setOuter(n, child.redrawHTML_(skipper, true));
 		child.bind(desktop, skipper);
 	},
 	/** Inserts the HTML content generated by the specified child widget before the reference widget (the before argument).
@@ -2433,10 +2740,10 @@ function () {
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
-			var after = [];
+			var after = [], fn;
 			this.bind_(desktop, skipper, after);
-			for (var j = 0, len = after.length; j < len;)
-				after[j++]();
+			while (fn = after.shift())
+				fn();
 		}
 		return this;
 	},
@@ -2541,7 +2848,6 @@ unbind_: function (skipper, after) {
 	 */
 	unbind_: function (skipper, after) {
 		_unbind0(this);
-		_fixBindMem();
 		_unlistenFlex(this);
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
@@ -2592,8 +2898,8 @@ unbind_: function (skipper, after) {
 				n.style.height = jq.px0(h);
 				var newmargins = zkn.sumStyles("tb", jq.margins);
 				if (h == jq(n).outerHeight(false)) //border-box
-					newh = sz.height - ((zk.safari && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins < margins)  //safari/chrome margin changed after set style.height
+					newh = sz.height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+				else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
 					newh = zkn.revisedHeight(sz.height, true);
 				if (newh != h) //h changed, re-assign height
 					n.style.height = jq.px0(newh);
@@ -2610,8 +2916,8 @@ unbind_: function (skipper, after) {
 				n.style.width = jq.px0(w);
 				var newmargins = zkn.sumStyles("lr", jq.margins);
 				if (w == jq(n).outerWidth(false)) //border-box
-					neww = sz.width - ((zk.safari && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins < margins) //safari/chrome margin changed after set style.width
+					neww = sz.width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+				else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
 					neww = zkn.revisedWidth(sz.width, true);
 				if (neww != w) //w changed, re-assign width
 					n.style.width = jq.px0(neww); 
@@ -2625,6 +2931,17 @@ unbind_: function (skipper, after) {
 		return true; //return true to continue children flex fixing
 	},
 	afterChildrenFlex_: function(kid) {
+		//to be overridden
+	},
+	ignoreFlexSize_: function(attr) { //'w' for width or 'h' for height calculation
+		//to be overridden, whether ignore widget dimension in vflex/hflex calculation 
+		return false;
+	},
+	ignoreChildNodeOffset_: function(attr) { //'w' for width or 'h' for height calculation
+		//to be overridden, whether ignore child node offset in vflex/hflex calculation
+		return false;
+	},
+	afterChildrenMinFlex_: function() {
 		//to be overridden
 	},
 	getParentSize_: function(p) {
@@ -2904,6 +3221,13 @@ focus: function (timeout) {
 	 * <p>Notice that {@link #sendAU_} is called against the widget sending the AU request
 	 * to the server, while {@link #beforeSendAU_} is called against the event's
 	 * target (evt.target).
+	 *
+	 * <p>Notice that since this method will stop the event propagation for onClick,
+	 * onRightClick and onDoubleClick, it means the event propagation is stopped
+	 * if the server registers a listener. However, it doesn't stop if
+	 * only a client listener is registered (and, in this case, {@link zk.Event#stop}
+	 * must be called explicitly if you want to stop).
+	 *
 	 * @param zk.Widget wgt the widget that causes the AU request to be sent.
 	 * It will be the target widget when the server receives the event.
 	 * @param zk.Event evt the event to be sent back to the server.
@@ -2914,7 +3238,7 @@ focus: function (timeout) {
 	beforeSendAU_: function (wgt, evt) {
 		var en = evt.name;
 		if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick')
-			evt.stop();
+			evt.shallStop = true;//Bug: 2975748: popup won't work when component with onClick handler
 	},
 	/** Sends an AU request to the server.
 	 * It is invoked when {@link #fire} will send an AU request to the server.
@@ -3529,6 +3853,18 @@ _doFooSelect: function (evt) {
 		}
 		return this;
 	},
+	/** Converts a coordinate related to the browser window into the coordinate
+	 * related to this widget.
+	 * @param int x the X coordinate related to the browser window
+	 * @param int y the Y coordinate related to the browser window
+	 * @return Offset the coordinate related to this widget (i.e., [0, 0] is
+	 * the left-top corner of the widget).
+	 * @since 5.0.2
+	 */
+	fromPageCoord: function (x, y) {
+		var ofs = zk(this).cmOffset();
+		return [x - ofs[0], y - ofs[1]];
+	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
 	}
@@ -3630,12 +3966,12 @@ _doFooSelect: function (evt) {
 		}
 	},
 	/**
-	 * Returns all elements with the given tag name.
-	 * @param String name the tag name.
-	 * @return Array
+	 * Returns all elements with the given widget name.
+	 * @param String name the widget name {@link #widgetName}.
+	 * @return Array an array of {@link DOMElement}
 	 * @since 5.0.2
 	 */
-	getElementsByTagName: function (name) {
+	getElementsByName: function (name) {
 		var els = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName)
@@ -3644,9 +3980,9 @@ _doFooSelect: function (evt) {
 		return els;
 	},
 	/**
-	 * Returns all elements with the given id.
-	 * @param String id the id of zk widget.
-	 * @return Array
+	 * Returns all elements with the given ID.
+	 * @param String id the id of a widget, {@link #id}.
+	 * @return Array an array of {@link DOMElement}
 	 * @since 5.0.2
 	 */
 	getElementsById: function (id) {
@@ -3655,6 +3991,7 @@ _doFooSelect: function (evt) {
 			els.unshift(wgts[i].$n());
 		return els;
 	},
+
 	//uuid//
 	/** Converts Converts an ID of a DOM element to UUID.
 	 * It actually removes '-*'. For example, zk.Widget.uuid('z_aa-box') returns 'z_aa'. 
@@ -3779,6 +4116,7 @@ zk.Widget.getClass('combobox');
  * <p>Developers rarely need it.
  * Currently, it is used only for the server to generate the JavaScript codes
  * for mounting.
+ * @disable(zkgwt)
  */
 zk.RefWidget = zk.$extends(zk.Widget, {
 	bind_: function () {
@@ -3808,7 +4146,6 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		//no need to call super since it is bound
 	}
 });
-})();
 
 //desktop//
 /** A desktop.
@@ -3818,6 +4155,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
  * <li>The desktop is a conceptual widget. It is never attached with the DOM tree. Its desktop field is always null. In addition, calling zk.Widget#appendChild won't cause the child to be attached to the DOM tree automatically.</li>
  * <li>The desktop's ID and UUID are the same. </li>
  * </ol>
+ * @disable(zkgwt)
  */
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
@@ -3842,11 +4180,19 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
+		var Desktop = zk.Desktop, dts = Desktop.all, dt = zUtl.now();
+		if (dt > _syncdt) { //Liferay+IE: widgets are created later so don't sync at beginning
+			_syncdt = dt + 60000;
+			Desktop.sync();
+		}
+
 		this._aureqs = [];
 		//Sever side effect: this.desktop = this;
 
-		var Desktop = zk.Desktop, dts = Desktop.all, dt = dts[dtid];
-		if (!dt) {
+		if (dt = dts[dtid]) {
+			if (updateURI != null) dt.updateURI = updateURI;
+			if (contextURI != null) dt.contextURI = contextURI;
+		} else {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI != null ? updateURI: zk.updateURI;
 			this.contextURI = contextURI != null ? contextURI: zk.contextURI;
@@ -3855,16 +4201,13 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			dts[dtid] = this;
 			++Desktop._ndt;
 			if (!Desktop._dt) Desktop._dt = this; //default desktop
-		} else {
-			if (updateURI != null) dt.updateURI = updateURI;
-			if (contextURI != null) dt.contextURI = contextURI;
 		}
-
-		Desktop.sync();
 	},
 	_exists: function () {
-		var id = this._pguid; //_pguid not assigned at beginning
-		return !id || jq(id, zk)[0];
+		if (this._pguid) //_pguid not assigned at beginning
+			for (var w = this.firstChild; w; w = w.nextSibling) //under JSP, page.$n is null so test all
+				if (w.$n())
+					return true;
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
@@ -3877,31 +4220,34 @@ zk.Desktop = zk.$extends(zk.Widget, {
 },{
 	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
 	 * <p>Notice that the desktop's ID and UUID are the same.
-	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element 
+	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element.
+	 * If not specified, the default desktop is assumed.
 	 * @return zk.Desktop
 	 */
 	$: function (dtid) {
-		var Desktop = zk.Desktop, dts = Desktop.all, w,
-			bStrId = typeof dtid == 'string';
-		if (Desktop._ndt > 1) {
-			if (bStrId) {
-				w = dts[dtid];
-				if (w) return w;
-			}
-			w = zk.Widget.$(dtid);
+		var Desktop = zk.Desktop, w;
+		if (dtid) {
+			if (Desktop.isInstance(dtid))
+				return dtid;
+
+			w = Desktop.all[dtid];
 			if (w)
-				for (; w; w = w.parent) {
-					if (w.desktop)
-						return w.desktop;
-					if (w.$instanceof(Desktop))
-						return w;
-				}
+				return w;
+
+			w = zk.Widget.$(dtid);
+			for (; w; w = w.parent) {
+				if (w.desktop)
+					return w.desktop;
+				if (w.$instanceof(Desktop))
+					return w;
+			}
+			return null;
 		}
+
 		if (w = Desktop._dt)
-			return !bStrId || w.id == dtid ? w: null;
-		if (!bStrId)
-			for (dtid in dts)
-				return dts[dtid];
+			return w;
+		for (dtid in Desktop.all)
+			return Desktop.all[dtid];
 	},
 	/** A map of all desktops (readonly).
 	 * The key is the desktop ID and the value is the desktop.
@@ -3927,10 +4273,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		return Desktop._dt;
 	}
 });
+})();
 
-/** A page
+/** A page.
  * Unlike the component at the server, a page is a widget.
- */
+ * @disable(zkgwt)
+*/
 zk.Page = zk.$extends(zk.Widget, {
 	_style: "width:100%;height:100%",
 	/** The class name (<code>zk.Page</code>).
@@ -3980,6 +4328,7 @@ zk.Widget.register('zk.Page', true);
 
 /** A native widget.
  * It is used mainly to represent the native componet created at the server.
+ * @disable(zkgwt)
  */
 zk.Native = zk.$extends(zk.Widget, {
 	/** The class name (<code>zk.Native</code>)
@@ -3994,10 +4343,7 @@ zk.Native = zk.$extends(zk.Widget, {
 
 	redraw: function (out) {
 		var s = this.prolog;
-		if (s) {
-			if (zk.ie) zjq._fix1stJS(out, s); //in domie.js
-			out.push(s);
-		}
+		if (s) out.push(s);
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -4067,7 +4413,8 @@ function (skipper) {
  return html + '</div></fieldset>';
 }
 </pre></code>
-	* <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ * <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ * @disable(zkgwt)
  */
 zk.Skipper = zk.$extends(zk.Object, {
 	/** Returns whether the specified child wiget will be skipped by {@link #skip}.

@@ -18,10 +18,14 @@ package org.zkoss.zul.impl;
 
 import java.util.LinkedList;
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zul.Window;
 
 /**
@@ -32,10 +36,17 @@ import org.zkoss.zul.Window;
  */
 public class FileuploadDlg extends Window {
 	private LinkedList _result = new LinkedList();
+	private static final String ATTR_FILEUPLOAD_TARGET = "org.zkoss.zul.Fileupload.target";
 	
 	public void onClose(Event evt) {
 		if (evt.getData() == null)
 			_result.clear();
+		else {
+			final Desktop desktop = Executions.getCurrent().getDesktop();
+			final Configuration config = desktop .getWebApp().getConfiguration();
+			if (!config.isEventThreadEnabled())
+				Events.postEvent(new UploadEvent(Events.ON_UPLOAD, (Component)desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
+		}
 		detach();
 	}
 	/**

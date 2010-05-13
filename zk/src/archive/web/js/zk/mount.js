@@ -96,6 +96,7 @@ function zkmprops(uuid, props) {
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
+		_qfns = {}, //queued functions (such as dependent pages, owner != null)
 		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
 
 	//Issue of handling page's AU responses
@@ -177,9 +178,9 @@ function zkmprops(uuid, props) {
 		if (type) { //not page (=0)
 			if (type === 1) //1: zhtml.Widget
 				wi[0] = type = "zhtml.Widget";
-			var i = type.lastIndexOf('.');
-			if (i >= 0)
-				zk.load(type.substring(0, i), dt);
+			var j = type.lastIndexOf('.');
+			if (j >= 0)
+				zk.load(type.substring(0, j), dt);
 		}
 
 		for (var children = wi[3], j = children.length; j--;)
@@ -205,8 +206,10 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[0], inf[1]), inf[2]]);
-				//desktop as parent for browser loading
+			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2]]);
+				//inf[3]: owner passed from zkx
+				//inf[0]: desktop used as default parent if no owner
+				//true: don't update DOM
 	
 			if (_createInf0.length)
 				return run(mtBL);
@@ -218,6 +221,7 @@ function zkmprops(uuid, props) {
 		for (;;) {
 			if (_createInf0.length)
 				return; //another page started
+
 			if (zk.loading) {
 				zk.afterLoad(mtBL0);
 				return;
@@ -293,7 +297,7 @@ function zkmprops(uuid, props) {
 	}
 
 	/* create the widget tree. */
-	function create(parent, wi) {
+	function create(parent, wi, ignoreDom) {
 		var wgt,
 			type = wi[0],
 			uuid = wi[1],
@@ -301,7 +305,7 @@ function zkmprops(uuid, props) {
 		if (type === 0) { //page
 			wgt = new zk.Page({uuid: uuid}, zk.cut(props, "ct"));
 			wgt.inServer = true;
-			if (parent) parent.appendChild(wgt);
+			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			var cls = zk.$import(type),
 				initOpts = {uuid: uuid},
@@ -309,9 +313,9 @@ function zkmprops(uuid, props) {
 			if (!cls)
 				throw 'Unknown widget: ' + type;
 			if (v) initOpts.mold = v;
-			var wgt = new cls(initOpts);
+			wgt = new cls(initOpts);
 			wgt.inServer = true;
-			if (parent) parent.appendChild(wgt);
+			if (parent) parent.appendChild(wgt, ignoreDom);
 
 			zkmprops(uuid, props);
 		}
@@ -354,27 +358,50 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, delay, aucmds) {
+	zkx: function (wi, delay, aucmds, js) {
 		if (wi) {
 			zk.mounting = true;
 
+			if (js) jq.globalEval(js);
 			doAuCmds(aucmds);
 
+			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
 					._pguid = wi[1];
+				if (owner = zk.cut(props, "ow"))
+					owner = zk.Widget.$(owner);
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding]);
-			_createInf0.stub = zAu.stub;
-			zAu.stub = null;
+			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
 
 			mountpkg();
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
 		}
 	},
+	//widget creation called by au.js
+	zkx_: function (args, stub) {
+		_createInf0.stub = stub;
+		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
+		zkx.apply(window, args);
+	},
+
+	//queue a function to invoke by zkqx
+	//@param id unique ID to identify the function, usually, widget's uuid
+	zkq: function (id, fn) {
+		_qfns[id] = fn;
+	},
+	//execute the function queued by zkq
+	zkqx: function (id) {
+		var fn = _qfns[id];
+		if (fn) {
+			delete _qfns[id];
+			fn(id);
+		}	
+	},
+
 	//Run AU commands (used only with ZHTML)
 	zkac: function () {
 		doAuCmds(arguments);
@@ -572,6 +599,8 @@ jq(function() {
 	.click(function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
+		zjq._fixClick(evt);
+
 		_evtProxy(evt);
 		if (evt.which == 1)
 			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
@@ -608,7 +637,7 @@ jq(function() {
 	});
 
 	jq(window).resize(function () {
-		if (!jq.isReady || zk.mounting)
+		if (zk.mounting)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
@@ -638,7 +667,7 @@ jq(function() {
 		//to remove the desktop.
 		//Good news: Opera preserves the most udpated content, when BACK to
 		//a cached page, its content. OTOH, IE/FF/Safari cannot.
-		//Note: Safari won't send rmDesktop when onunload is called
+		//Note: Safari/Chrome won't send rmDesktop when onunload is called
 		var bRmDesktop = !zk.opera && !zk.keepDesktop && !zk.light;
 		if (bRmDesktop || zk.pfmeter) {
 			try {

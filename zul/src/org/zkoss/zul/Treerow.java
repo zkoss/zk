@@ -75,31 +75,6 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		return _zclass == null ? "z-treerow" : _zclass;
 	}
 
-	/** Returns the same as {@link Treeitem#getContext}.
-	 */
-	public String getContext() {
-		final Treeitem ti = (Treeitem)getParent();
-		return ti != null ? ti.getContext(): null;
-	}
-	/** Returns the same as {@link Treeitem#getPopup}.
-	 */
-	public String getPopup() {
-		final Treeitem ti = (Treeitem)getParent();
-		return ti != null ? ti.getPopup(): null;
-	}
-	/** Returns the same as {@link Treeitem#getTooltip}.
-	 */
-	public String getTooltip() {
-		final Treeitem ti = (Treeitem)getParent();
-		return ti != null ? ti.getTooltip(): null;
-	}
-	/** Returns the same as {@link Treeitem#getTooltiptext}
-	 */
-	public String getTooltiptext() {
-		final Treeitem ti = (Treeitem)getParent();
-		return ti != null ? ti.getTooltiptext(): null;
-	}
-
 	/*obsolete: protected boolean isAsapRequired(String evtnm) {
 		if (!Events.ON_OPEN.equals(evtnm))
 			return super.isAsapRequired(evtnm);

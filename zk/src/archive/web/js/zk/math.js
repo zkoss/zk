@@ -12,7 +12,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** A big decimal
+/** A big decimal.
+ * @disable(zkgwt)
  */
 zk.BigDecimal = zk.$extends(zk.Object, {
 	_precision: 0,
@@ -54,5 +55,37 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
 		var j = this._value.length - this._precision;
 		return this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
+	}
+});
+
+/** A long integer.
+ * @disable(zkgwt)
+ */
+zk.Long = zk.$extends(zk.Object, {
+	/** Constructor.
+	 * @param Object value a number or a string
+	 */
+	$init: function (value) {
+		value = value ? '' + value: '0';
+		var j = value.lastIndexOf('.');
+		if (j >= 0) {
+			value = value.substring(0, j);
+			this._dot = true;
+		}
+		this._value = value;
+	},
+	/** Returns a string for this long integer
+	 * To have a Locale-dependent string, use {@link #$toLocaleString}
+	 * instead.
+	 * @return String
+	 */
+	$toString: function() { //toString is reserved keyword for IE
+		return this._value + (this._dot ? '.' : '');
+	},
+	/** Returns a Locale-dependent string for this long integer.
+	 * @return String
+	 */
+	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
+		return this._value;// + (this._precision ? zk.DECIMAL : '');
 	}
 });

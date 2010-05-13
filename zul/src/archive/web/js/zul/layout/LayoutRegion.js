@@ -184,6 +184,25 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			var colled = this.$n('colled'),
 				real = this.$n('real');
 			if (open) {
+				// Bug 2994592
+				if (fromServer) {
+					
+					// Bug 2995770
+					if (!zk(this.$n()).isRealVisible()) {
+						if (colled) {
+							jq(real)[open ? 'show' : 'hide']();
+							jq(colled)[!open ? 'show' : 'hide']();
+						}
+						return;
+					}
+					var s = this.$n('real').style;
+					s.visibility = "hidden";
+					s.display = "";
+					this._syncSize(true);
+					s.visibility = "";
+					s.display = "none";
+					this._open = true;
+				}
 				if (colled) {
 					if (!nonAnima) 
 						zk(colled).slideOut(this, {
@@ -317,7 +336,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				n.style.height = this._height ? this._height : '';
 			else {
 				var cave = this.$n('cave'),
-					hgh = cave ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
+					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
 				if (zk.ie) n.style.height = '';
 				n.style.height = jq.px0(hgh);
 			}

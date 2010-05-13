@@ -36,7 +36,7 @@ public class TagRenderContext {
 	/** The writer to output JavaScript codes.
 	 */
 	private final StringBuffer _jsout = new StringBuffer();
-	/** Used to decide the component, which {@link #renderBegin} is called against,
+	/** Used to decide if the component, which {@link #renderBegin} is called against,
 	 * is not a first child.
 	 */
 	private final List _2ndChild = new LinkedList();
@@ -112,7 +112,12 @@ public class TagRenderContext {
 	public void renderEnd(Component comp) {
 		_2ndChild.remove(0);
 		_jsout.append("]]");
-		if (_2ndChild.isEmpty())
+		if (_2ndChild.isEmpty()) {
+			final String ac = HtmlPageRenders
+				.outResponseJavaScripts(Executions.getCurrent(), true);
+			if (ac.length() > 0)
+				_jsout.append(",0,[").append(ac).append(']');
 			_jsout.append(");");
+		}
 	}
 }

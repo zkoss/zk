@@ -185,6 +185,10 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			this.domUnlisten_(btn, "onClick");
 		this.$supers('unbind_', arguments);
 	},
+	//@Override to avoid add child offset 
+	ignoreChildNodeOffset_: function(attr) {
+		return true;
+	},
 	_doMouseOver: function(evt) {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
 			var btn = this.$n('btn'),

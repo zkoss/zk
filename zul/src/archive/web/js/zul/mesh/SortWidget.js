@@ -131,6 +131,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	 * @param String ascending
 	 * @param jq.Event evt
 	 * @return boolean
+	 * @disable(zkgwt)
 	 */
 	sort: function (ascending, evt) {
 		var dir = this.getSortDirection();

@@ -41,10 +41,10 @@ zk.fmt.Number = {
 		var isMINUS;
 		if (fmt.indexOf(';') != -1) {
 			fmt = fmt.split(';');
-			isMINUS = val < 0;
+			isMINUS = (''+val).charAt(0) == '-';
 			fmt = fmt[isMINUS ? 1 : 0];
 		}
-    	
+		
 		//calculate number of fixed decimals
 		var re = new RegExp("[^#0.]", 'g'),
 			pureFmtStr = fmt.replace(re, ''),
@@ -54,12 +54,34 @@ zk.fmt.Number = {
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
 			
+		//handle PERCENT and PER_MILL case(/000)
+		//cannot just parseFloat(val) * 100, or large long integer and big decimal will not work
+		var shift = fmt.endsWith('%') ? 2 : fmt.endsWith(zk.PER_MILL) ? 3 : 0;
+		if (shift > 0) {
+			if (indVal >= 0) { //with dot
+				if (valFixed > shift) {
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1, indVal+1+shift) + '.' + valStr.substring(indVal+1+shift);
+					valFixed -= shift;
+					indVal += shift;
+				} else {
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+					for(var len = shift - valFixed; len-- > 0;)
+						valStr = valStr + '0';
+					if (valFixed == shift) indVal = -1;
+					valFixed = 0;
+				}
+			} else { //without dot
+				for(var len = shift; len-- > 0;)
+					valStr = valStr + '0';
+			}
+		}
+			
 		//fix value subpart
 		if (valFixed <= fixed) {
 			if (indVal == -1)
 				valStr += '.';
 			for(var len = fixed - valFixed; len-- > 0;)
-				valStr = valStr + '0'; 
+				valStr = valStr + '0';
 		} else { //preprocess for rounding
 			var ri = indVal + fixed + 1;
 			switch(rounding) {
@@ -151,41 +173,45 @@ zk.fmt.Number = {
 			pre = valStr.substr(0, j + 1) + pre;
 		
 		// Bug #2926718
-		var len = fmt.length - pureFmtStr.length;
+		var len = (indFmt < 0 ? fmt.length : indFmt) - (ind < 0 ? pureFmtStr.length : ind);
 		if (len > 0) {
-			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.]", 'g'), '');
+			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.,]", 'g'), '');
 			if (p)
 				pre = p + pre;
 		}
 		//sufpart
-		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl && j < vl; i++) {
+		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl; i++) {
 			var fmtcc = fmt.charAt(i); 
 			if (fmtcc == '#' || fmtcc == '0') {
-				suf += valStr.charAt(j);
-				j++;
+				if (j < vl) {
+					suf += valStr.charAt(j);
+					j++;
+				}
 			} else
-				suf += fmt.charAt(i);
+				suf += fmtcc == '%' ? zk.PERCENT : fmtcc;
 		}
 		if (j < valStr.length) 
 			suf = valStr.substr(j, valStr.length);
 		
-		if (j < fmt.length && fmt.charAt(fmt.length - 1) == '%') 
-			suf += zk.PERCENT;
-		
 		//remove optional '0' digit in sufpart
+		var e = -1;
 		for (var m = suf.length, n = fmt.length; m > 0; --m) {
-			if (suf.charAt(m-1) != '0' || fmt.charAt(--n) != '#') {
+			var cc = suf.charAt(m-1),
+				fmtcc = fmt.charAt(--n); 
+			if (cc == '0' &&  fmtcc == '#') { //optional 0
+				if (e < 0) e = m;
+			} else if (e >= 0)
 				break;
-			}
 		}
-		suf = suf.substring(0, m);
+		if (e >= 0)
+			suf = suf.substring(0, m) + suf.substring(e);
 		
 		//combine
 		if (pre)
 			pre = this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + zk.DECIMAL + suf : pre);
+		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
@@ -203,7 +229,7 @@ zk.fmt.Number = {
 			var cc = val.charAt(j);
 			if (sharp) {
 				if (cc == '#' || cc == zk.GROUPING) continue;
-				else sharp = false;
+				else if (/[\d]/.test(cc)) sharp = false; // Bug 2990659
 			}
 			ret = ret + (cc == '#' ? '0' : cc);
 		}

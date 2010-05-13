@@ -12,6 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event.impl;
 
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.*;
 
 /**
@@ -42,6 +44,24 @@ public interface EventQueueProvider {
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
 	public EventQueue lookup(String name, String scope, boolean autoCreate);
+	/** Returns the event queue with the specified name in the
+	 * give session (i.e., the scope).
+	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
+	 * can be called without an activated execution.
+	 * @param sess the session that the event queue is located (i.e.,
+	 * the scope)
+	 * @since 5.0.2
+	 */
+	public EventQueue lookup(String name, Session sess, boolean autoCreate);
+	/** Returns the event queue with the specified name in the
+	 * give application (i.e., the scope).
+	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
+	 * can be called without an activated execution.
+	 * @param wapp the Web application that the event queue is located (i.e.,
+	 * the scope)
+	 * @since 5.0.2
+	 */
+	public EventQueue lookup(String name, WebApp wapp, boolean autoCreate);
 	/** Removes the event qeueue.
 	 * @param name the name of the event queue.
 	 * @param scope the scope of the event queue.

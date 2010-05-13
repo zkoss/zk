@@ -37,12 +37,13 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		 * @param boolean visible
 	 	*/
 		buttonVisible: function(v){			
-			var n = this.btn,
+			var n = this.$n("btn"),
 				zcls = this.getZclass();
 			if (!n) return;
-			if (!this.inRoundedMold())
-				v ? jq(n).show() : jq(n).hide();
-			else {
+			if (!this.inRoundedMold()) {
+				jq(n)[v ? 'show': 'hide']();
+				jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
+			} else {
 				var fnm = v ? 'removeClass': 'addClass';
 				jq(n)[fnm](zcls + '-btn-right-edge');				
 				
@@ -156,7 +157,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			this._currentbtn = btn;
 		}
 		var inp = this.inp,
-			btn = this.btn;
+			btn = this.$n("btn");
 			
 		if(inp.disabled) return;
 
@@ -208,7 +209,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	_btnOut: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			jq(this.btn).removeClass(this.getZclass()+"-btn-over");
+			jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
 			
 		var inp = this.inp;
 		if(inp.disabled) return;
@@ -218,7 +219,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	_btnOver: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			jq(this.btn).addClass(this.getZclass()+"-btn-over");
+			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
 	},
 	_increase: function (is_add){
 		var inp = this.inp,
@@ -319,12 +320,15 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('bind_', arguments); 
 		this.timeId = null;
 		var inp = this.inp = this.$n("real"),
-			btn = this.btn = this.$n("btn");
+			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
 		
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
-			
+
+		if (this._readonly && !this.inRoundedMold())
+			jq(inp).addClass(this.getZclass() + '-right-edge');
+		
 		if(btn){
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, "onmousedown", "_btnDown");
@@ -340,7 +344,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			this.timerId = null;
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
-		var btn = this.btn;
+		var btn = this.$n("btn");
 		if(btn){
 			this._auxb.cleanup();
 			this._auxb = null;

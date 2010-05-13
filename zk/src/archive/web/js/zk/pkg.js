@@ -21,10 +21,8 @@ zk.copy(zk, (function() {
 		_afterPkgLoad = {}, //after pkg loaded
 		_pkgdepend = {},
 		_pkgver = {},
-		_pkghosts = {}/*package host*/, _defhost = []/*default host*/;
-
-	if (!zk.ie) _loaded['zk.canvas'] = true;
-	var _loading = zk.copy({}, _loaded); //loading (include loaded)
+		_pkghosts = {}/*package host*/, _defhost = []/*default host*/,
+		_loading = zk.copy({}, _loaded); //loading (include loaded)
 
 	//We don't use e.onload since Safari doesn't support t
 	//See also Bug 1815074

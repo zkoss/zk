@@ -397,9 +397,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (withpi) {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
-				response.setIntHeader("ZK-Error", response.SC_NOT_FOUND);
-					//Don't use sendError since browser might handle it
-				log.warning("Unknown path info: "+pi);
+				response.sendError(response.SC_NOT_FOUND);
+				log.debug("Unknown path info: "+pi);
 				return;
 			}
 
@@ -428,6 +427,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//AU
 		if (sess == null) {
 			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+
 			//Bug 1849088: rmDesktop might be sent after invalidate
 			//Bug 1859776: need send response to client for redirect or others
 			final String dtid = request.getParameter("dtid");

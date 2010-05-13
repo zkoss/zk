@@ -632,6 +632,10 @@ def alert(m):
 		<component-name>include</component-name>
 		<component-class>org.zkoss.zul.Include</component-class>
 		<widget-class>zul.wgt.Include</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/include.js</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>intbox</component-name>

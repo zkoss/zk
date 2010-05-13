@@ -111,6 +111,11 @@ public class JsContentRenderer implements ContentRenderer {
 			renderValue(((Byte)value).byteValue());
 			return;
 		}
+		if (value instanceof Boolean) {
+			renderValue(((Boolean)value).booleanValue());
+			return;
+		}
+
 		if (value instanceof Float) {
 			renderValue(((Float)value).floatValue());
 			return;
@@ -134,6 +139,7 @@ public class JsContentRenderer implements ContentRenderer {
 				renderValue(me.getValue());
 			}
 			_buf.append('}');
+			return;
 		}
 		if (value instanceof List) {
 			_buf.append('[');

@@ -288,9 +288,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.ehead) this.ehead.style.width = wd;
 			if (this.efoot) this.efoot.style.width = wd;
 		}
+
+		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
+		if (zk.safari)
+			this.$n("a").style.display = 'none';
 		
-		//Bug 1659601: we cannot do it in init(); or, IE failed!
+		//Bug 1659601: we cannot do it in init(); or, IE failed!		
 		var tblwd = this.ebody.clientWidth;
+		
+		if (zk.safari)
+			this.$n("a").style.display = '';
+		
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
@@ -585,8 +593,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
 				.domUnlisten_(btn, 'onKeyDown')
 				.domUnlisten_(btn, 'onBlur', 'doBlur_');
-		this.efield = null;
 		this.$supers('unbind_', arguments);
+	},
+	clearCache: function () {
+		this.$supers('clearCache', arguments);
+		this.efield = null;
 	},
 	doFocus_: function (evt) {
 		var row	= this._focusItem || this._lastSelectedItem;
@@ -604,12 +615,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
 	 * <p>Default: always false (don't ignore)
+	 * Notice that clicking on button/textbox are already ignored, i.e.,
+	 * this method won't be called if the user clicks on, say, a button.
 	 * @param zk.Event evt the event
 	 * @return boolean wether to ignore
 	 */
 	shallIgnoreSelect_: function (evt) {
-		//Since ZK 5, we always select the item
-		//It is hard to detect whether not to select if button is clicked(like ZK 3)
+		//see also _shallIgnore
 	},
 	_doItemSelect: function (row, evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
@@ -625,6 +637,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var	checkmark = evt.domTarget == row.$n('cm');
 			
 		if (checkmark) {
+			
+			// Bug 2997034
+			this._syncFocus(row);
+			
 			if (this.isMultiple()) {
 				this._toggleSelect(row, !row.isSelected(), evt);
 			} else {
@@ -833,6 +849,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * Selects all items.
 	 * @param boolean notify if true, fire onSelect event to server
 	 * @param jq.Event evt
+	 * @disable(zkgwt)
 	 */
 	setSelectAll: _zkf = function (notify, evt) {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
@@ -845,6 +862,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * Selects all items.
 	 * @param boolean notify if true, fire onSelect event to server
 	 * @param jq.Event evt
+	 * @disable(zkgwt)
 	 */
 	selectAll: _zkf,
 	/* Selects one and deselect others, and return whehter any changes.

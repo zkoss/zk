@@ -27,7 +27,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
-
+	_prehgh: -1,
+	
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.heads = [];
@@ -71,6 +72,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @param boolean byContent
 		 */
 		sizedByContent: _zkf,
+		/**
+		 * Returns whether turn on auto-paging facility when mold is
+		 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+		 * rather, the page size(number of item count) is automatically determined by the 
+		 * height of this widget dynamically.
+		 * @return boolean
+		 * @see #setAutopaging
+		 */
+		/**
+		 * Sets whether turn on auto-paging facility when mold is
+		 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+		 * rather, the page size(number of item count) is automatically determined by the 
+		 * height of this widget dynamically.
+		 * @param boolean autopaging
+		 */
+		autopaging: _zkf,
 		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
@@ -200,14 +217,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		if (this.ebody)
 			this.domUnlisten_(this.ebody, 'onScroll');
-			
-		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
-			= this.eheadtbl = this.efoottbl = null;
-		
+
 		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 		
 		this.$supers('unbind_', arguments);
 	},
+	clearCache: function () {
+		this.$supers('clearCache', arguments);
+		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
+			= this.eheadtbl = this.efoottbl = this.ebodyrows
+			= this.ehdfaker = this.ebdfaker = null;
+	},
+
 	onResponse: function () {
 		if (this.desktop && this._shallSize) {
 			this.$n()._lastsz = null; //reset
@@ -279,14 +300,45 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (this.domPad_ && !this.inPagingMold() && this._mold != 'select') this.domPad_(out, '-bpad');
 				jq(this.ebodytbl ).append(out.join(''));
 			}
-			this.ebodyrows = this.ebodytbl.tBodies[bds.length > 2 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;
-				//Note: bodyrows is null in FF if no rows, so no err msg
+			this._syncbodyrows();
 		}
 		if (this.ehead) {
 			this.ehdfaker = this.eheadtbl.tBodies[0].rows[0];
 			this.ebdfaker = this.ebodytbl.tBodies[0].rows[0];
 			if (this.efoottbl)
 				this.eftfaker = this.efoottbl.tBodies[0].rows[0];
+		}
+	},
+	_syncbodyrows: function() {
+		var bds = this.ebodytbl.tBodies;
+		this.ebodyrows = this.ebodytbl.tBodies[bds.length > 2 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;
+		//Note: bodyrows is null in FF if no rows, so no err msg
+	},
+	replaceHTML: function() { //tree outer
+		var old = this._syncingbodyrows;
+		this._syncingbodyrows = true;
+		try {
+			//bug #2995434
+			//20100503, Henri: cannot use $supers('replaceHTML') since it
+			//will recursive back to this function via fire('onSize'). However, 
+			//ZK's $supers() is simulated and when we call $supers() again 
+			//here, the system thought it is calling from its super class rather
+			//than this class and it will be wrong. Therefore, we are forced to 
+			//call super class's replaceHTML directly instead.
+			//Therefore, we have to specify MeshWidget as follows
+			this.$supers(zul.mesh.MeshWidget, 'replaceHTML', arguments);
+		} finally {
+			this._syncingbodyrows = old;
+		}
+	},
+	replaceChildHTML_: function() { //rows outer
+		var old = this._syncingbodyrows;
+		this._syncingbodyrows = true;
+		try {
+			this.$supers('replaceChildHTML_', arguments);
+			this._syncbodyrows();
+		} finally {
+			this._syncingbodyrows = old;
 		}
 	},
 	fireOnRender: function (timeout) {
@@ -312,18 +364,26 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_onRender: function () {
 		this._pendOnRender = false;
-
+		if (this._syncingbodyrows) {
+			this.fireOnRender(zk.gecko ? 200 : 60); //is syncing rows, try it later
+			return true;
+		}
+		
 		var rows = this.ebodyrows;
+		if (this.inPagingMold() && this._autopaging && rows && rows.length)
+			if (this._fixPageSize(rows)) return; //need to reload with new page size
+		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
 		var items = [],
 			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
-		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
+		for (var j = 0, it = this.getBodyWidgetIterator(), len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (w.isVisible() && !w._loaded) {
 				var row = rows[j], $row = zk(row),
 					top = $row.offsetTop();
+				
 				if (top + $row.offsetHeight() < min) continue;
 				if (top > max) break; //Bug 1822517
 				items.push(w);
@@ -332,7 +392,43 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (items.length)
 			this.fire('onRender', {items: items}, {implicit:true});
 	},
-
+	_fixPageSize: function(rows) {
+		var ebody = this.ebody;
+		if (!ebody) return; //not ready yet
+		var max = ebody.offsetHeight;
+		if (max == this._prehgh) return false; //same height, avoid fixing page size
+		this._prehgh = max;
+		var ebodytbl = this.ebodytbl,
+			etbparent = ebodytbl.offsetParent,
+			etbtop = ebodytbl.offsetTop,
+			hgh = 0, 
+			row = null,
+			j = 0;
+		for (var it = this.getBodyWidgetIterator(), len = rows.length, w; (w = it.next()) && j < len; j++) {
+			if (w.isVisible()) {
+				row = rows[j];
+				var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
+				if (top > max) {
+					--j;
+					break;
+				}
+				hgh = top;
+			}
+		}
+		if (row != null) { //there is row
+			if (top <= max) { //row not exceeds the height, estimate
+				hgh = hgh + row.offsetHeight;
+				j = Math.floor(j * max / hgh);
+			}
+			//enforce pageSize change
+			if (j == 0) j = 1; //at least one per page
+			if (j != this.getPageSize()) {
+				this.fire('onChangePageSize', {size: j});
+				return true;
+			}
+		}
+		return false;
+	},
 	//derive must override
 	//getHeadWidgetClass
 	//getBodyWidgetIterator

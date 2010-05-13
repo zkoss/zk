@@ -173,6 +173,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 });
 /**
  * The row iterator.
+ * @disable(zkgwt)
  */
 zul.grid.RowIter = zk.$extends(zk.Object, {
 	/** Constructor

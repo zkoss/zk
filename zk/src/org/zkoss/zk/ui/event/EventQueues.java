@@ -17,6 +17,8 @@ package org.zkoss.zk.ui.event;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zk.ui.event.impl.EventQueueProvider;
@@ -77,7 +79,10 @@ public class EventQueues {
 	 * <p>Note:
 	 * <ul>
 	 * <li>This method can be called only in an activated execution,
-	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.</li>
+	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
+	 * If you want to use it without an execution, please use
+	 * 	{@link #lookup(String, String, boolean)} or {@link #lookup(String, WebApp, boolean)}
+	 * instead.</li>
 	 * </ul>
 	 *
 	 * @param name the queue name.
@@ -86,12 +91,40 @@ public class EventQueues {
 	 * @param autoCreate whether to create the event queue if not found.
 	 * @return the event queue with the associated name, or null if
 	 * not found and autoCreate is false
+	 * @see #lookup(String, Session, boolean)
+	 * @see #lookup(String, WebApp, boolean)
 	 * @exception IllegalStateException if not in an activated execution
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
 	public static
 	EventQueue lookup(String name, String scope, boolean autoCreate) {
 		return getProvider().lookup(name, scope, autoCreate);
+	}
+	/** Returns the event queue with the specified name in the
+	 * give session (i.e., the session scope).
+	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
+	 * can be called without an activated execution.
+	 * @param sess the session that the event queue is located (i.e.,
+	 * the session scope)
+	 * @see #lookup(String, String, boolean)
+	 * @see #lookup(String, WebApp, boolean)
+	 * @since 5.0.2
+	 */
+	public static EventQueue lookup(String name, Session sess, boolean autoCreate) {
+		return getProvider().lookup(name, sess, autoCreate);
+	}
+	/** Returns the event queue with the specified name in the
+	 * give application (i.e., the application scope).
+	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
+	 * can be called without an activated execution.
+	 * @param wapp the Web application that the event queue is located (i.e.,
+	 * the application scope)
+	 * @see #lookup(String, String, boolean)
+	 * @see #lookup(String, Session, boolean)
+	 * @since 5.0.2
+	 */
+	public static EventQueue lookup(String name, WebApp wapp, boolean autoCreate) {
+		return getProvider().lookup(name, wapp, autoCreate);
 	}
 	/** Returns the desktop-level event queue with the specified name in the current
 	 * desktop.

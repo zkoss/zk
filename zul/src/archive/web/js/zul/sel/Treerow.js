@@ -48,29 +48,8 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-treerow" : this._zclass;
 	},
-	/** Returns the same as {@link Treeitem#getContext}.
-	 * @return String
-	 */
-	getContext: function () {
-		return this.parent ? this.parent.getContext() : null;
-	},
-	/** Returns the same as {@link Treeitem#getPopup}.
-	 * @return String
-	 */
-	getPopup: function () {
-		return this.parent ? this.parent.getPopup() : null;
-	},
-	/** Returns the same as {@link Treeitem#getTooltip}.
-	 * @return String
-	 */
-	getTooltip: function () {
-		return this.parent ? this.parent.getTooltip() : null;
-	},
-	/** Returns the same as {@link Treeitem#getTooltiptext}.
-	 * @return String
-	 */
-	getTooltiptext: function () {
-		return this.parent ? this.parent.getTooltiptext() : null;
+	domTooltiptext_ : function () {
+		return this._tooltiptext || this.parent._tooltiptext || this.parent.parent._tooltiptext;
 	},
 	/** Returns whether this is visible.
 	 * whether all its ancestors is open.

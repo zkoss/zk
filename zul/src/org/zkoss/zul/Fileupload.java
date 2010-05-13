@@ -40,6 +40,15 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
  *
+ * <p>5.0.2: If the event thread is disabled, an onUpload event ({@link UploadEvent})
+ * is posted to all root components when the upload dialog is closed.
+ * If you want the event being sent to a particular component, specify the
+ * component in the desktop's attribute called <code>org.zkoss.zul.Fileupload.target</code>.
+ * For example,
+ *
+ * <pre><code>desktop.setAttribute("org.zkoss.zul.Fileupload.target", mainWindow);
+ *Fileupload.get();</code></pre>
+ *
  * <h3>2. Embed as part of the page:</h3>
  *
  * <p>You can create it as a component and then listen to

@@ -53,6 +53,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * <p>It is not serializable.
  *
  * @author tomyeh
+ * @see ResponseHeaderInfo
  */
 public class HeaderInfo  extends EvalRefStub
 implements Condition {

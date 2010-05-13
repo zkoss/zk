@@ -59,6 +59,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
 	 * @return Radio
+	 * @disable(zkgwt)
 	 */
 	setChecked: _zkf = function (checked) {
 		if (checked != this._checked) {

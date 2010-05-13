@@ -364,6 +364,17 @@ implements org.zkoss.zul.api.Include, Includer {
 		_childpg = page;
 	}
 
+	//@Override
+	public void onPageAttached(Page newpage, Page oldpage) {
+		if (newpage != null)
+			Events.postEvent("onAfterCompose", this, null);
+		super.onPageAttached(newpage, oldpage);
+	}
+	public void onAfterCompose() {
+		if (!_afterComposed)
+			afterCompose();
+	}
+
 	//AfterCompose//
 	public void afterCompose() {
 		_afterComposed = true;
@@ -483,7 +494,7 @@ implements org.zkoss.zul.api.Include, Includer {
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());
-						cwout.write("\">");
+						cwout.write("\" style=\"display:none\">");
 						if (_comment)
 							cwout.write("\n<!--\n");
 						Files.write(cwout, sw.getBuffer());

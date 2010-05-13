@@ -1,0 +1,97 @@
+<window id="tabView" title="Case 2" closable="true" hflex="min" width="500px">
+
+	<borderlayout hflex="min" vflex="min">
+		<north hflex="min" vflex="min">
+
+			<tabbox hflex="min" vflex="min">
+				<tabs>
+					<tab label="Tab One"/>
+					<tab label="Tab Two"/>
+				</tabs>
+		
+				<tabpanels hflex="min" vflex="min">
+				<!-- 
+					<custom-attributes org.zkoss.zul.client.rod="false"/>
+				 -->
+					<tabpanel hflex="min" vflex="min">
+						<grid hflex="min" vflex="min">
+							<rows>
+								<row>
+									<label value="Top East"/>
+									<textbox />
+								</row>
+							</rows>
+						</grid>
+						
+					</tabpanel>
+					<tabpanel hflex="min" vflex="min">
+						<borderlayout hflex="min" vflex="min">
+							<west hflex="min" vflex="min">
+								<grid hflex="min" vflex="min">
+								<rows>
+								<row>
+									<label value="File:"/>
+									<textbox width="98%"/>
+								</row>
+								<row>
+									<label value="Type:"/>
+									<hbox>
+										<listbox rows="1" mold="select">
+											<listitem label="Java Files,(*.java)"/>
+											<listitem label="All Files,(*.*)"/>
+										</listbox>
+										<button label="Browse..."/>
+									</hbox>
+								</row>
+								<row>
+									<label value="Options:"/>
+									<textbox rows="3" hflex="min" vflex="min"/>
+								</row>
+								</rows>
+								</grid>
+							</west>
+							<east hflex="min" vflex="min">
+								<grid hflex="min" vflex="min">
+								 	<rows>
+										<row>
+											<label value="Top East"/>
+											<textbox />
+										</row>
+									</rows>
+								</grid>
+								
+							</east>
+						</borderlayout>
+						
+					</tabpanel>									
+				</tabpanels>
+			</tabbox>
+		</north>
+		<center hflex="min" vflex="min">
+		<borderlayout hflex="min" vflex="min">
+			<west hflex="min" vflex="min">
+				<grid hflex="min" vflex="min">
+					<rows>
+						<row>
+							<label value="Bottom West"/>
+							<textbox />
+						</row>
+					</rows>
+				</grid>
+			</west>
+			<east hflex="min" vflex="min">
+				<grid hflex="min" vflex="min">
+					<rows>
+						<row>
+							<label value="Bottom East"/>
+							<textbox />
+						</row>
+					</rows>
+				</grid>
+			</east>
+		</borderlayout>			
+		</center>
+	</borderlayout>
+
+
+</window>

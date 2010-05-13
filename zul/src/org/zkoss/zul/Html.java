@@ -117,7 +117,7 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 				final Writer cwout = rc.temp;
 				cwout.write("<div id=\"");
 				cwout.write(getUuid());
-				cwout.write("\">");
+				cwout.write("\" style=\"display:none\">");
 				cwout.write(cnt);
 				cwout.write("</div>\n");
 				cnt = null; //means already generated

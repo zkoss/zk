@@ -164,7 +164,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this;
 	},
 	setItemsInvalid_: function(wgts) {
-		this.replaceCavedChildren_('rows', zAu.createWidgets(wgts));
+		var wgt = this;
+		zAu.createWidgets(wgts,
+			function (ws) {wgt.replaceCavedChildren_('rows', ws);});
 	},	
 	//-- super --//
 	getCaveNode: function () {
@@ -284,19 +286,21 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	/**
 	 * Returns the tree item iterator.
 	 * @return zul.sel.ItemIter
+	 * @disable(zkgwt)
 	 */
 	itemIterator: _zkf = function () {
 		return new zul.sel.ItemIter(this);
 	},
-	/**
-	 * Returns the tree item iterator.
+	/**Returns the tree item iterator.
 	 * @return zul.sel.ItemIter
 	 * @see #itemIterator
+	 * @disable(zkgwt)
 	 */
 	getBodyWidgetIterator: _zkf
 });
 /**
  * The listitem iterator.
+ * @disable(zkgwt)
  */
 zul.sel.ItemIter = zk.$extends(zk.Object, {
 	/** Constructor

@@ -15,9 +15,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	//IE adds extra height to first and last row, so fix it
 	var _fixhgh = zk.ie ? function (btn) {
-		if (btn._mold == 'trendy') {
+		if (btn.desktop && btn._mold == 'trendy') {
 			var n = btn.$n(),
 				box = btn.$n('box');
+			box.rows[1].style.height = "";
+			box.style.height = !n.style.height || n.style.height == "auto" ? "": "100%";			
 			if (n.style.height && box.offsetHeight) {
 				var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
 				if (cellHgh != box.rows[0].cells[0].offsetHeight) {
@@ -27,7 +29,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}: zk.$void;
-
+	var _fixwidth = zk.ie ? function (btn) {
+		if (btn.desktop && btn._mold == 'trendy') {
+			var width = btn.$n().style.width;
+			btn.$n('box').style.width = !width || width == "auto" ? "": "100%";
+		}
+	}: zk.$void;
 /**
  * A button.
  * <p>Default {@link #getZclass}: z-button.
@@ -87,9 +94,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean disabled
 		 */
 		disabled: function (v) {
-			if (this.desktop)
+			if (this.desktop) {
+				if (this._upload)
+					this._cleanUpld();
 				if (this._mold != 'trendy') this.$n().disabled = v;
 				else this.rerender(); //bind and unbind required
+			}
 		},
 		image: function (v) {
 			if (this._mold == 'trendy') {
@@ -285,30 +295,21 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	//@Override
 	setWidth: zk.ie ? function (v) {
 		this.$supers('setWidth', arguments);
-
-		if (this.desktop && this._mold == 'trendy')
-			this.$n('box').style.width = !v || v == "auto" ? "": "100%";
+		_fixwidth(this);
 	}: function () {
 		this.$supers('setWidth', arguments);
 	},
 	//@Override
 	setHeight: zk.ie ? function (v) {
-		var b;
-		if (this.desktop && this._mold == 'trendy') {
-			(b = this.$n('box')).rows[1].style.height = "";
-			b.style.height = !v || v == "auto" ? "": "100%";
-		}
-
 		this.$supers('setHeight', arguments);
-
-		if (b)
-			_fixhgh(this);
+		_fixhgh(this);
 	}: function () {
 		this.$supers('setHeight', arguments);
 	},
 
 	onSize: _zkf = zk.ie ? function () {
 		_fixhgh(this);
+		_fixwidth(this);
 		if (this._uplder)
 			this._uplder.sync();
 	} : function () {
@@ -419,6 +420,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				n.style.width = jq.px0(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
 			else
 				n.style.width = this._width ? this._width : '';
+			_fixwidth(this);
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	}
