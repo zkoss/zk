@@ -4,6 +4,7 @@ ZK 5.0.3
 
 * Bugs
   3000881: Tabbox inside hbox should not expand 5 thousand width
+  3000860: tab without label looks strange
   
 * Upgrade Notes
 

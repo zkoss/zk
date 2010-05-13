@@ -171,6 +171,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();
+		if (!label) label = '&nbsp;';
 		if (!img) return label;
 		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
 		return label ? img + ' ' + label: img;
