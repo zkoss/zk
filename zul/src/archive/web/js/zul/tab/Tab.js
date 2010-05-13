@@ -151,7 +151,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			if (tabs) tabs._fixWidth();
 		}
 		if (notify)
-			this.fire('onSelect', {items: [this.uuid], reference: this.uuid});
+			this.fire('onSelect', {items: [this], reference: this.uuid});
 	},
 	//protected
 	doClick_: function(evt) {
