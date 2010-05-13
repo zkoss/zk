@@ -1,7 +1,10 @@
 	--------
 ZK 5.0.3
 * Features
+
 * Bugs
+  3000881: Tabbox inside hbox should not expand 5 thousand width
+  
 * Upgrade Notes
 
 	--------

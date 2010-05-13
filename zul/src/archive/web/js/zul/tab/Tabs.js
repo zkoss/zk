@@ -35,7 +35,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return "z-tabs" + (tabbox.getMold() == "default" && tabbox.isVertical() ? '-ver' : '');
 	},
 	onSize: _zkf = function () {
-		this._scrollcheck("init");
 		this._fixWidth();
 		
 		// Bug Z35-tabbox-004.zul, we need to check again.
@@ -101,15 +100,14 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			var header = this.$n("header"),
 				headerOffsetHeight = header.offsetHeight,
 				headerScrollTop = header.scrollTop,
-				childHeight = 0,
-				btnsize = this._getArrowSize();
+				childHeight = 0;
 				
 			jq(this.$n("cave")).children().each(function () {
 				childHeight += this.offsetHeight;
 			});
 
 			if (tabbox._scrolling) { //already in scrolling status
-				
+				var btnsize = this._getArrowSize();
 				if (tbsdiv.offsetHeight < btnsize)  return;
 				
 				var sel = tabbox.getSelectedTab(),
@@ -141,7 +139,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childHeight - (headerOffsetHeight - 10) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
-					var temp = tbx.offsetHeight - btnsize;
+					var btnsize = this._getArrowSize(),
+						temp = tbx.offsetHeight - btnsize;
 					header.style.height = temp > 0 ? temp + "px" : "";
 					if (way == "end") {
 						var d = childHeight - headerOffsetHeight - headerScrollTop + 2;
@@ -160,7 +159,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				headerOffsetWidth = header.offsetWidth,
 				headerScrollLeft = header.scrollLeft,
 				childWidth = 0,
-				btnsize = this._getArrowSize(),
 				toolbar = tabbox.toolbar;
 				
 			jq(cave).children().each(function () {
@@ -171,7 +169,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				toolbar = toolbar.$n();
 			if (tabbox._scrolling) { //already in scrolling status
 				if (toolbar) {
-					var outer, hgh;
+					var outer, hgh,
+						btnsize = this._getArrowSize();
 						
 					// fixed FF2's bug
 					if (zk.gecko2_) {
@@ -211,9 +210,14 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = this.$n("cave"),
+						btnsize = this._getArrowSize(),
 						temp = tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize;//coz show button then getsize again
 					cave.style.width = "5555px";
 					header.style.width = temp > 0 ? temp + "px" : "";
+					
+					if (toolbar) 
+						this.$n('right').style.right = toolbar.offsetWidth + 'px';
+					
 					if (way == "sel") {
 						if (nodeOffsetLeft < headerScrollLeft) {
 							this._doScroll("left", headerScrollLeft - nodeOffsetLeft);
@@ -373,8 +377,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixWidth: function() {
-		var tabs = this.$n(),
-			tabbox = this.getTabbox(),
+		var tabs = this.$n();
+		if (!zk(tabs).isRealVisible()) return;
+		
+		var	tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			cave = this.$n("cave"),
 			head = this.$n("header"),
