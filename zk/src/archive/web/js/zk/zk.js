@@ -27,6 +27,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_logmsg,
 		_stamps = [];
 
+	function newClass() {
+		return function () {
+			this.$oid = ++_oid;
+			this.$init.apply(this, arguments);
+
+			var ais = this._$ais;
+			if (ais) {
+				delete this._$ais;
+				for (var j = ais.length; j--;)
+					ais[j].call(this);
+			}
+		};
+	}
 	function def(nm, before, after) {
 		return function (v, opts) {
 			if (before) v = before.apply(this, arguments);
@@ -557,17 +570,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 		if (!superclass)
 			throw 'unknown superclass';
 
-		var jclass = function() {
-			this.$oid = ++_oid;
-			this.$init.apply(this, arguments);
-
-			var ais = this._$ais;
-			if (ais) {
-				delete this._$ais;
-				for (var j = ais.length; j--;)
-					ais[j].call(this);
-			}
-		};
+		var jclass = newClass();
 
 		var thispt = jclass.prototype,
 			superpt = superclass.prototype,
@@ -871,7 +874,7 @@ zk.endProcessing();
 </code></pre>
 	 * @see #startProcessing
 	 */
-	endProcessing: function() {
+	endProcessing: function () {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},

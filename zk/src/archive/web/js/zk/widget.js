@@ -91,8 +91,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
+		if (wgt.id)
+			_addGlobal(wgt);
 	}
 	function _unbind0(wgt) {
+		if (wgt.id)
+			_rmGlobal(wgt);
 		delete _binds[wgt.uuid];
 		wgt.desktop = null;
 		wgt.clearCache();
@@ -161,21 +165,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ow = ow ? ow.$o(): null;
 		if (ow)
 			_rmIdSpaceDown0(wgt, ow);
-		else
-			_rmGlobalsIdSpace(wgt);
 	}
 	function _rmIdSpaceDown0(wgt, owner) {
-		if (wgt.id) {
+		if (wgt.id)
 			delete owner._fellows[wgt.id];
-			_rmGlobalsIdSpace(wgt);
-		}
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_rmIdSpaceDown0(wgt, owner);
 	}
-	function _rmGlobalsIdSpace(wgt) {
-		var g = _globals[wgt.id];
-		if (g)
-			g.$remove(wgt);
+	//note: wgt.id must be checked before calling this method
+	function _addGlobal(wgt) {
+		var gs = _globals[wgt.id];
+		if (gs)
+			gs.push(wgt);
+		else
+			_globals[wgt.id] = [wgt];
+	}
+	function _rmGlobal(wgt) {
+		var gs = _globals[wgt.id];
+		if (gs) {
+			gs.$remove(wgt);
+			if (!gs.length) delete _globals[wgt.id];
+		}
 	}
 	function _fireClick(wgt, evt) {
 		if (!wgt.shallIgnoreClick_(evt) && 
@@ -1324,20 +1334,18 @@ wgt.$f().main.setTitle("foo");
 			if (zk.spaceless && this.desktop)
 				throw 'id cannot be changed after bound'; //since there might be subnodes
 
-			var old = this.id;
-			if (old) {
-				if (!zk.spaceless && (old=_globals[id]))
-					old.$remove(this);
+			if (this.id) {
 				_rmIdSpace(this);
+				_rmGlobal(this);
 			}
 
 			this.id = id;
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless)
-					(_globals[id] || (_globals[id] = [])).push(this);
 				_addIdSpace(this);
+				if (this.desktop)
+					_addGlobal(this);
 			}
 		}
 		return this;
