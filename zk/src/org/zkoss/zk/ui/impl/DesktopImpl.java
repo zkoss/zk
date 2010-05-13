@@ -157,6 +157,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
+	/** Used to recycle detached component's UUID. */
+	private transient List _uuidRecycle;
 
 	private transient ReqResult _lastRes;
 	private transient List _piggyRes;
@@ -455,7 +457,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 	}
 	public void removeComponent(Component comp) {
-		_comps.remove(comp.getUuid());
+		final String uuid = comp.getUuid();
+		if (_comps.remove(uuid) != null) {
+			if (_uuidRecycle == null)
+				_uuidRecycle = new LinkedList();
+			_uuidRecycle.add(uuid);
+		}
 	}
 
 	public Map getAttributes() {
@@ -605,6 +612,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _nextKey++;
 	}
 	public String getNextUuid() {
+		//The reason to recycle UUID is to keep it short (since _nextUuid won't grow too fast)
+		//Thus, it takes fewer memory at the client
+		if (_uuidRecycle != null && !_uuidRecycle.isEmpty())
+			return (String)_uuidRecycle.remove(0);
 		return ComponentsCtrl.toAutoId(_uuidPrefix, _nextUuid++);
 	}
 

@@ -77,7 +77,6 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		}
 	},
 	unbind_: function () {
-		this.$supers('unbind_', arguments);
 		var cm = this.$n('cm');
 		if (cm) { 
 			this._checked = this.getListbox()._headercm = null;
@@ -85,6 +84,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.domUnlisten_(cm, 'onMouseOver')
 				.domUnlisten_(cm, 'onMouseOut');
 		}
+		this.$supers('unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {
 		 var cls = this._checked ? '-img-over-seld' : '-img-over';

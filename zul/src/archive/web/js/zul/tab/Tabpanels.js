@@ -81,11 +81,11 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		this.$supers('unbind_', arguments);
 		if (this._zwatched) {
 			zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
 			this._zwatched = false;
 		}
+		this.$supers('unbind_', arguments);
 	},
 	onSize: _zkf = function () {
 		var parent = this.parent.$n();
