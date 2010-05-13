@@ -351,7 +351,7 @@ zWatch.listen({onSend: ml})
 
 <p>Then, ml.onSend will be called when sending an AU request.
 <h3>Invocation Sequence</h3>
-<h4>Sequence of #fireDown</h4>
+<h4>Sequence of {@link #fireDown}</h4>
 
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action. 
  */
@@ -364,8 +364,8 @@ zWatch({
   onHide: [this, this._onHide]
 });
 </code></pre>
-	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as #fire/#fireDown.
-	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation (#fire) is from the parent to the child if both are registered.
+	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link #fire}/{@link #fireDown}.3
+	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link #fire}) is from the parent to the child if both are registered.
 	* @param Map infs a map of the watch listeners. Each key of the map is the the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target. 
 	*/
 	listen: function (infs) {
@@ -502,7 +502,7 @@ onX: function (ctl) {
 </code></pre>
 	* <p>It is useful if a listener depends some of its children's listeners to complete (notice that the parent's listener is, by default, called first). For example, when onSize of a widget is called, it might want some of its children's onSiz to be called first (so he can have their updated size).
 	* @param String name the watch name, such as onShow.
-	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike #fire, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
+	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
 	* @param Map opts [optional] options:
 	* <ul><li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called. 
