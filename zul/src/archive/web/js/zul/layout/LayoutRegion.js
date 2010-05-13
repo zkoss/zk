@@ -336,7 +336,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				n.style.height = this._height ? this._height : '';
 			else {
 				var cave = this.$n('cave'),
-					hgh = cave ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
+					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
 				if (zk.ie) n.style.height = '';
 				n.style.height = jq.px0(hgh);
 			}

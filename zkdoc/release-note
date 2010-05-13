@@ -1,7 +1,8 @@
 	--------
 ZK 5.0.3
 * Features
-
+  3000873: Tabbox can auto grow size when select a larger size tabpanel
+  
 * Bugs
   3000881: Tabbox inside hbox should not expand 5 thousand width
   3000860: tab without label looks strange

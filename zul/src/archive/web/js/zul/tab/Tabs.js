@@ -490,5 +490,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var p = this.parent;
 		if (p && child == p._selTab)
 			p._selTab = null;
+	},
+	
+	ignoreFlexSize_: function(attr) {
+		var p = this.getTabbox();
+		return (p.isVertical() && 'h' == attr)
+			|| (p.isHorizontal() && 'w' == attr); 
 	}
 });

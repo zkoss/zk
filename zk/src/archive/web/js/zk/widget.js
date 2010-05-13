@@ -188,8 +188,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//set minimum flex size and return it
 	function _setMinFlexSize(wgt, wgtn, o) {
-		wgt._minFlexed = true; //mark to avoid fireDown("onSize") calling in _fixFlex again
-		
 		//find the max size of all children
 		if (o == 'height') {
 			if (wgt._vflexsz === undefined) { //cached?
@@ -209,12 +207,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
 							//bug# 2997862: vflex="min" not working on nested tabpanel
-							var sameOffParent = c.offsetParent == noffParent,
-								sz = c.offsetTop - (sameOffParent ? ntop : 0) 
-									+ (cwgt._vflex == 'min' && cwgt._vflexsz === undefined ? //recursive	
-										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("t", jq.margins)): 
-										(c.offsetHeight + zk(c).sumStyles("b", jq.margins))) 
-									- (sameOffParent ? pbt : 0);
+							var zkc = zk(c),
+								sameOffParent = c.offsetParent == noffParent,
+								sz = 0;
+							if (!cwgt.ignoreFlexSize_('h')) {
+								sz = c.offsetTop;
+								if (sameOffParent)
+									sz -= ntop + pbt;
+								if (cwgt._vflex == 'min') {
+									if (zkc.isVisible()) {
+										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
+										var tm = zkc.sumStyles("t", jq.margins);
+										if (!zk.safari || tm >= 0)
+											sz -= tm;
+									} else
+										sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
+								} else {
+									sz += c.offsetHeight;
+									var bm = zkc.sumStyles("b", jq.margins);
+									if (!zk.safari || bm >= 0)
+										sz += bm;
+								}
+							}
 							if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
@@ -223,15 +237,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				} else if (c) { //no child widget, try html element directly
 					for(; c; c = c.nextSibling) {
-						var sameOffParent = c.offsetParent == noffParent,
-							sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop : 0) 
-								+ zk(c).sumStyles("b", jq.margins) - (sameOffParent ? pbt : 0);
+						var zkc = zk(c),
+							sameOffParent = c.offsetParent == noffParent,
+							sz = c.offsetHeight + c.offsetTop,
+							bm = zkc.sumStyles("b", jq.margins);
+						if (sameOffParent)
+							sz -= ntop + pbt;
+						if (!zk.safari || bm >= 0)
+							sz += bm;
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
 					max = n.offsetHeight - zkn.padBorderHeight();  
 
+				if (totalsz > max)
+					max = totalsz;
+				
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
 				var pb = 0,
 					precalc = false;
@@ -246,8 +268,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						ptop = p ? p.offsetTop : 0,
 						poffParent = p ? p.offsetParent : null;
 					precalc = n.offsetParent == poffParent; 
-					pb += n.offsetTop - (precalc ? ptop : 0);
-					pb += zkn.sumStyles("b", jq.margins);
+					pb += n.offsetTop;
+					if (precalc)
+						pb -= ptop;
+					var bm = zkn.sumStyles("b", jq.margins);
+					if (!zk.safari || bm >=0)
+						pb += bm;
 					n = p;
 					zkn = zk(n);
 				}
@@ -257,10 +283,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb += zkn.sumStyles("b", jq.paddings);
 					pb += zkn.sumStyles("b", jq.borders);
 				}
-				var margin = zk(wgtn).sumStyles("tb", jq.margins),
-					sz = wgt.setFlexSize_({height:(max + totalsz + pb + margin)});
+				var margin = zk(wgtn).sumStyles("tb", jq.margins);
+				if (zk.safari && margin < 0) 
+					margin = 0;
+				sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
 					wgt._vflexsz = sz.height + margin;
+				wgt.afterChildrenMinFlex_();
 			}
 			return wgt._vflexsz;
 			
@@ -282,28 +311,52 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						c = cwgt.$n();
 						if (c) { //node might not exist if rod on
 							//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
-							var sameOffParent = c.offsetParent == noffParent,
-								sz = c.offsetLeft - (sameOffParent ? nleft : 0) 
-									+ (cwgt._hflex == 'min' && cwgt._hflexsz === undefined ? //recursive
-										(_setMinFlexSize(cwgt, c, o) - zk(c).sumStyles("l", jq.margins)) : 
-										(c.offsetWidth + zk(c).sumStyles("r", jq.margins))) 
-									- (sameOffParent ? pbl : 0);
-							if (cwgt._sumFlexWidth) //@See East/West
-								totalsz += sz;
-							else if (sz > max)
-								max = sz;
+							var zkc = zk(c),
+								sameOffParent = c.offsetParent == noffParent,
+								sz = 0;
+							if (!cwgt.ignoreFlexSize_('w')) {
+								sz = c.offsetLeft;
+								if (sameOffParent)
+									sz -= nleft + pbl;
+								if (cwgt._hflex == 'min') {
+									if (zkc.isVisible()) {
+										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
+										var lm = zkc.sumStyles("l", jq.margins);
+										if (!zk.safari || lm >= 0)
+											sz -= lm;
+									} else
+										sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
+								} else {
+									sz += c.offsetWidth;
+									var rm = zkc.sumStyles("r", jq.margins);
+									if (!zk.safari || rm >= 0)
+										sz += rm;
+								}
+								if (cwgt._sumFlexWidth) //@See East/West
+									totalsz += sz;
+								else if (sz > max)
+									max = sz;
+							}
 						}
 					}
 				} else if (c) { //no child widget, try html element directly
 					for(; c; c = c.nextSibling) {
-						var sameOffParent = c.offsetParent == noffParent,
-							sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft : 0) 
-								+ zk(c).sumStyles("r", jq.margins) - (sameOffParent ? pbl : 0);
+						var zkc = zk(c),
+							sameOffParent = c.offsetParent == noffParent,
+							sz = c.offsetWidth + c.offsetLeft,
+							rm = zkc.sumStyles("r", jq.margins);
+						if (sameOffParent)
+							sz -= nleft + pbl;
+						if (!zk.safari || rm >= 0)
+							sz +=  rm;
 						if (sz > max)
 							max = sz;
 					}
 				} else //no kids at all, use self
 					max = n.offsetWidth - zkn.padBorderWidth();
+				
+				if (totalsz > max)
+					max = totalsz;
 				
 				//n might not be widget's element, add up the pad/border/margin in between
 				var pb = 0,
@@ -319,8 +372,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						pleft = p ? p.offsetLeft : 0,
 						poffParent = p ? p.offsetParent : null;
 					precalc = n.offsetParent == poffParent; 
-					pb += n.offsetLeft - (precalc ? pleft : 0);
-					pb += zkn.sumStyles("r", jq.margins);
+					pb += n.offsetLeft;
+					if (precalc)
+						pb -= pleft;
+					var rm = zkn.sumStyles("r", jq.margins);
+					if (!zk.safari || rm >= 0)
+						pb += rm; 
 					n = p;
 					zkn = zk(n);
 				}
@@ -332,20 +389,62 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 					
 				var margin = zk(wgtn).sumStyles("lr", jq.margins);
-				var sz = wgt.setFlexSize_({width:(max + totalsz + pb + margin)});
+				if (zk.safari && margin < 0)
+					margin = 0;
+				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
+				wgt.afterChildrenMinFlex_();
 			}
 			return wgt._hflexsz;
 		} else
 			return 0;
 	}
 	//fix vflex/hflex of all my sibling nodes
-	function _fixFlex() {
-		if (this._minFlexed) { //avoid firedown("onSize") calling in again
-			delete this._minFlexed;
+	//feature #3000873 tabbox can auto grow when select larger tabpanel
+	function _fixFlexX(ctl, opts, resize) {
+		//avoid firedown("onShow") firedown("onSize") calling in again
+		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+			return;
+		
+		//a resize fired by myself, simply call directly to _fixFlex
+		if (resize) {
+			_fixFlex.apply(this);
 			return;
 		}
+		
+		//normal triggering
+		var r1 = p1 = this,
+			j1 = -1;
+		if (this._hflex == 'min' && this._hflexsz === undefined) {
+			++j1;
+			while ((p1 = p1.parent) && p1._hflex == 'min') {
+				delete p1._hflexsz;
+				r1 = p1;
+				++j1;
+			}
+		}
+		var r2 = p2 = this,
+			j2 = -1;
+		if (this._vflex == 'min' && this._vflexsz === undefined) {
+			++j2;
+			while ((p2 = p2.parent) && p2._vflex == 'min') {
+				delete p2._vflexsz;
+				r2 = p2;
+				++j2;
+			}
+		}
+		if (j1 > 0 || j2 > 0)
+			zWatch.fireDown('onSize', j1 > j2 ? r1 : r2, null, true); //true to indicate this is a resize
+		else
+			_fixFlex.apply(r2);
+
+	}
+	//fix vflex/hflex of all my sibling nodes
+	function _fixFlex() {
+		//avoid firedown("onSize") calling in again
+		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+			return;
 		
 		if (!this.parent.beforeChildrenFlex_(this)) { //don't do fixflex if return false
 			return;
@@ -477,7 +576,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				pretxt = false;
 			}
 		}
-
+		
 		if (zk.ie6_ && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
@@ -529,13 +628,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
+			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
+			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
 			delete wgt._flexListened;
 		}
 	}
@@ -2754,8 +2853,8 @@ unbind_: function (skipper, after) {
 				n.style.height = jq.px0(h);
 				var newmargins = zkn.sumStyles("tb", jq.margins);
 				if (h == jq(n).outerHeight(false)) //border-box
-					newh = sz.height - ((zk.safari && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins < margins)  //safari/chrome margin changed after set style.height
+					newh = sz.height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+				else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
 					newh = zkn.revisedHeight(sz.height, true);
 				if (newh != h) //h changed, re-assign height
 					n.style.height = jq.px0(newh);
@@ -2772,8 +2871,8 @@ unbind_: function (skipper, after) {
 				n.style.width = jq.px0(w);
 				var newmargins = zkn.sumStyles("lr", jq.margins);
 				if (w == jq(n).outerWidth(false)) //border-box
-					neww = sz.width - ((zk.safari && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins < margins) //safari/chrome margin changed after set style.width
+					neww = sz.width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+				else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
 					neww = zkn.revisedWidth(sz.width, true);
 				if (neww != w) //w changed, re-assign width
 					n.style.width = jq.px0(neww); 
@@ -2787,6 +2886,13 @@ unbind_: function (skipper, after) {
 		return true; //return true to continue children flex fixing
 	},
 	afterChildrenFlex_: function(kid) {
+		//to be overridden
+	},
+	ignoreFlexSize_: function(attr) { //'w' for width or 'h' for height calculation
+		//to be overridden, whether ignore widget dimension in vflex/hflex calculation 
+		return false;
+	},
+	afterChildrenMinFlex_: function() {
 		//to be overridden
 	},
 	getParentSize_: function(p) {
