@@ -394,6 +394,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_fixPageSize: function(rows) {
 		var ebody = this.ebody;
+		if (!ebody) return; //not ready yet
 		var max = ebody.offsetHeight;
 		if (max == this._prehgh) return false; //same height, avoid fixing page size
 		this._prehgh = max;

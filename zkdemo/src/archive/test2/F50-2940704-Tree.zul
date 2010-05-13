@@ -9,6 +9,7 @@
 	<li>Click "top" radiobox, the tree shall stay as is, only the paging bar is moved to top</li>
 	<li>Click "bottom" radiobox, the tree shall stay as is, only the paging bar is moved back to bottom</li>
 	<li>Click "both" radiobox, the page size shall re-calculate and there should be NO vertical scrollbar appear in tree. Both on top and bottom you can see the paging bar.</li>
+	<li>Drag to change browser's size very fast, if no JavaScript error, it is ok(testing Bug 3000936)</li>
 	<li>Done</li>
 	</ol>
 	]]>
