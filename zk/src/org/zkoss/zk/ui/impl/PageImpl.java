@@ -483,6 +483,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public boolean removeVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.remove(resolver);
 	}
+	public boolean hasVariableResolver(VariableResolver resolver) {
+		return _resolvers != null && _resolvers.contains(resolver);
+	}
 
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)

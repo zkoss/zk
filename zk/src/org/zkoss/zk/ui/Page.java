@@ -435,6 +435,11 @@ public interface Page extends IdSpace, Scope {
 	 * @return false if resolved is not added before.
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
+	/** Returns if the specified variable resolved has been registered
+	 * @see #addVariableResolver
+	 * @since 3.6.5
+	 */
+	public boolean hasVariableResolver(VariableResolver resolver);
 
 	//-- event listener --//
 	/** Adds an event listener to specified event for all components in
