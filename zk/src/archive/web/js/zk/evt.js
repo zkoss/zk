@@ -477,13 +477,14 @@ onX: function (ctl) {
 	 * </ol>
 	 * <p>{@link Widget} is a typical example ({@link Widget#parent} and {@link Widget#bindLevel}).
 	 *
-	 * <p>For example, zWatch.fireDown('onX', wgt, null, 'a', 123) will cause ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX and zUtl.isAncestor(wgt, ml) is true (zUtl#isAncestor).
+	 * <p>For example, zWatch.fireDown('onX', wgt, opts, 'a', 123) will cause ml.onX(ctl, opts, 'a', 123) being called -- assuming ml is a listener of onX and zUtl.isAncestor(wgt, ml) is true (zUtl#isAncestor).
 	 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listen can use to do further control. For example, origin (of fire()) can be retrieved by accessing the member of the controller called origin.
 <pre><code>
 onSize: function (ctl) {
   if (ctl.origin) //retrieve the origin
 ...
 </code></pre>
+	 * <p>Notice that the second argument (opts in the above example) is also a special argument used to pass optional control info to the zWatch engine.   
 	 * <p>The invocation sequence is, by default, evaluated in the order of parent-first, and you can use the controller to change it. For example, the following will cause the listener of specialTarget, if any, to execute first.
 <pre><code>
 onX: function (ctl) {
@@ -504,7 +505,7 @@ onX: function (ctl) {
 	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike #fire, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
 	* @param Map opts [optional] options:
 	* <ul><li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
-	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called. 
+	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called. 
 	*/
 	fireDown: function (name, org, opts) {
 		_fire(name, org, zk.copy(opts,{down:true}), arguments);
