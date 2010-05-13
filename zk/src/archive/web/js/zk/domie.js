@@ -81,7 +81,7 @@ zk.copy(zjq, {
 
 				jq.cleanData(el.getElementsByTagName("*"));
 				jq.cleanData([el]);
-
+				el.innerHTML = "";
 				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);
