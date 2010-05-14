@@ -24,16 +24,16 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  */
 public class StyleSheet implements java.io.Serializable, Cloneable {
-    private static final long serialVersionUID = 20060622L;
+    private static final long serialVersionUID = 20100514L;
 
-	private final String _href, _type, _content;
+	private final String _href, _type, _content, _media;
 	/** Creates by specifying the file to contain the style sheets.
 	 *
 	 * @param href URI of the file containing the style sheets.
 	 * @param type the type. If null, "text/css" is assumed.
 	 */
 	public StyleSheet(String href, String type) {
-		this(href, type, false);
+		this(href, type, null, false);
 	}
 	/** Creates by assigning the content (style sheets).
 	 *
@@ -43,6 +43,18 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 * an URI to an external content
 	 */
 	public StyleSheet(String content, String type, boolean byContent) {
+		this(content, type, null, byContent);
+	}
+	/** Creates by assigning the content (style sheets).
+	 *
+	 * @param content the style content or an URI to an external file.
+	 * @param type the type. If null, "text/css" is assumed.
+	 * @param media the media. If null, it is omitted.
+	 * @param byContent the content argument is the style content, or
+	 * an URI to an external content
+	 * @since 5.0.3
+	 */
+	public StyleSheet(String content, String type, String media, boolean byContent) {
 		if (content == null)
 			throw new IllegalArgumentException("null content");
 
@@ -54,6 +66,7 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 			_content = null;
 		}
 		_type = type != null && type.length() != 0 ? type: "text/css";
+		_media = media != null && media.length() != 0 ? media: null;
 	}
 
 	/** Returns the href that contains the style sheets, or null if
@@ -65,6 +78,13 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	/** Returns the type. */
 	public String getType() {
 		return _type;
+	}
+	/** Returns the media, or null if not available.
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 * @since 5.0.3
+	 */
+	public String getMedia() {
+		return _media;
 	}
 	/** Returns the style sheets, or null if {@link #getHref} is not null.
 	 */
@@ -94,6 +114,7 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 		final StyleSheet ss = (StyleSheet)o;
 		return Objects.equals(ss._href, _href)
 			&& Objects.equals(ss._type, _type)
-			&& Objects.equals(ss._content, _content);
+			&& Objects.equals(ss._content, _content)
+			&& Objects.equals(ss._media, _media);
 	}
 }

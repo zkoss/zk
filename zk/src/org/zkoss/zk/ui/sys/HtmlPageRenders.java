@@ -371,22 +371,26 @@ public class HtmlPageRenders {
 		//Process configuration
 		final ThemeProvider themeProvider = config.getThemeProvider();
 		if (themeProvider != null) {
-			final List org = new LinkedList();
+			final List orgss = new LinkedList();
 			for (Iterator it =  sses.iterator(); it.hasNext();) {
-				final String href = ((StyleSheet)it.next()).getHref();
+				final StyleSheet ss = (StyleSheet)it.next();
+				final String href = ss.getHref();
 				if (href != null && href.length() > 0)
-					org.add(href); //we don't support getContent
+					orgss.add(ss.getMedia() != null ? ss: (Object)href); //we don't support getContent
 			}
 
 			final String[] hrefs = config.getThemeURIs();
 			for (int j = 0; j < hrefs.length; ++j)
-				org.add(hrefs[j]);
+				orgss.add(hrefs[j]);
 
 			sses.clear();
-			final Collection res = themeProvider.getThemeURIs(exec, org);
+			final Collection res = themeProvider.getThemeURIs(exec, orgss);
 			if (res != null) {
-				for (Iterator it = res.iterator(); it.hasNext();)
-					sses.add(new StyleSheet((String)it.next(), "text/css"));
+				for (Iterator it = res.iterator(); it.hasNext();) {
+					final Object re = it.next();
+					sses.add(re instanceof StyleSheet ? (StyleSheet)re:
+						new StyleSheet((String)re, "text/css"));
+				}
 			}
 		} else {
 			final String[] hrefs = config.getThemeURIs();
@@ -399,16 +403,20 @@ public class HtmlPageRenders {
 	private static void append(StringBuffer sb, StyleSheet ss,
 	Execution exec, Page page) {
 		String href = ss.getHref();
+		String media = ss.getMedia();
 		if (href != null) {
 			try {
 				if (exec != null)
 					href = (String)exec.evaluate(page, href, String.class);
 
-				if (href != null && href.length() > 0)
+				if (href != null && href.length() > 0) {
 					sb.append("\n<link rel=\"stylesheet\" type=\"")
 						.append(ss.getType()).append("\" href=\"")
-						.append(ServletFns.encodeURL(href))
-						.append("\"/>");
+						.append(ServletFns.encodeURL(href));
+					if (media != null)
+						sb.append("\" media=\"").append(media);
+					sb.append("\"/>");
+				}
 			} catch (javax.servlet.ServletException ex) {
 				throw new UiException(ex);
 			}

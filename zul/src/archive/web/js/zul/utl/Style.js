@@ -35,9 +35,22 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 * 
 		 * @param String src the URI of an external style sheet
 		 */
-		src: function () {
+		src: _zkf = function () {
 			if (this.desktop) this._updLink();
-		}
+		},
+		/**
+		 * Returns the media dependencies for this style sheet.
+		 * <p>Default: null
+		 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+		 * @return String
+		 * @since 5.0.3
+		 */
+		/**
+		 * Sets the media dependencies for this style sheet.
+		 * @param String media the media of this style sheet.
+		 * @since 5.0.3
+		 */
+		media: _zkf
 	},
 
 	//super//
@@ -57,13 +70,16 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 				ln = this._getLink(head),
 				n = this.$n();
 			if (n) n.innerHTML = '';
-			if (ln) ln.href = this._src;
-			else {
+			if (ln) {
+				ln.href = this._src;
+				if (this._media) ln.media = this._media;
+			} else {
 				ln = document.createElement("link");
 				ln.id = this.uuid;
 				ln.rel = "stylesheet";
 				ln.type = "text/css";
 				ln.href = this._src;
+				if (this._media) ln.media = this._media;
 				head.appendChild(ln);
 			}
 		}

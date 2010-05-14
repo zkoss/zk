@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.util;
 import java.util.Collection;
 import java.util.List;
 
+import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.Attributes;
 
@@ -48,23 +49,29 @@ import org.zkoss.zk.ui.sys.Attributes;
  * @since 3.0.0
  */
 public interface ThemeProvider {
-	/** Returns a list of the theme's URIs (Collection&lt;String&gt;) of the specified execution,
+	/** Returns a list of the theme's URIs of the specified execution,
 	 * or null if no theme shall be generated.
+	 * Each item could be an instance of either {@link String} or {@link StyleSheet}.
+	 * If you want to specify the <code>media</code> attribute, use {@link StyleSheet}.
 	 *
 	 * <p>It is called when a desktop is about to be rendered.
 	 * It is called only once for each desktop.
+	 *
+	 * <p>Notice that {@link StyleSheet} is allowed since 5.0.3.
 	 *
 	 * @param exec the current execution (never null), where you can retrieve
 	 * the desktop, request and response.
 	 * Note: if your Web application supports multiple devices, you have
 	 * to check {@link org.zkoss.zk.ui.Desktop#getDevice}.
-	 * @param uris the default set of theme's URIs (List&lt;String&gt;),
+	 * @param uris the default set of theme's URIs,
 	 * i.e., the themes defined in language definitions (lang.xml and lang-addon.xml)
 	 * and the configuration (the <code>theme-uri</code> elements in web.xml).
-	 * Each URI is a String instance.
-	 * @return the collection of the theme's URIs (Collection&lt;String&gt;)
+	 * Each URI is an instance of of either {@link String} or {@link StyleSheet}.
+	 * Notice that, unless it is customized by application specific lang-addon,
+	 * all URIs are, by default, String instances.
+	 * @return the collection of the theme's URIs
 	 * that the current desktop shall use.
-	 * Each URI is a String instance.
+	 * Each URI is an instance of of either {@link String} or {@link StyleSheet}.
 	 */
 	public Collection getThemeURIs(Execution exec, List uris);
 
