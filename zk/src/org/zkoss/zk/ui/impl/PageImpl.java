@@ -87,7 +87,6 @@ import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.out.AuSetTitle;
@@ -618,14 +617,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			_uuid = uuid;
 			_id = id;
 		} else {
-			final IdGenerator idgen =
-				((WebAppCtrl)_desktop.getWebApp()).getIdGenerator();
-			if (idgen != null)
-				_uuid = idgen.nextPageUuid(this);
-			if (_uuid == null)
-				_uuid = ((DesktopCtrl)_desktop).getNextUuid();
-			else if (idgen != null)
-				ComponentsCtrl.checkUuid(_uuid);
+			_uuid = ((DesktopCtrl)_desktop).getNextUuid(this);
 
 			if (_id == null) {
 				final String id = config.getId();
