@@ -76,8 +76,6 @@ public class DataBinder implements java.io.Serializable {
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
 	
-	/*package*/ static final String UUID_PREFIX = "_bind_";
-
 	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
 	private Map _beanSameNodes = new HashMap(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
