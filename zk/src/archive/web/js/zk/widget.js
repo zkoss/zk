@@ -15,7 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
-		_bindcnt = 0,
 		_floatings = [], //[{widget,node}]
 		_nextUuid = 0,
 		_domevtfnm = {}, //{evtnm, funnm}
@@ -100,14 +99,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		delete _binds[wgt.uuid];
 		wgt.desktop = null;
 		wgt.clearCache();
-
-		//IE doesn't free _binds (when delete _binds[x]); so clean it up
-		if (zk.ie && ++_bindcnt > 9000) {
-			_bindcnt = 0;
-			_binds = zk.copy({}, _binds);
-			_globals = zk.copy({}, _globals);
-			jq.cache = zk.copy({}, jq.cache);
-		}
 	}
 	function _bindrod(wgt) {
 		_bind0(wgt);

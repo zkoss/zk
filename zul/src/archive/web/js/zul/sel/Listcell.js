@@ -44,8 +44,12 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	setLabel: function () {
 		this.$supers('setLabel', arguments);
-		if (_isPE() && this.desktop && this.parent.$instanceof(zkex.sel.Listgroup))
-			this.parent.rerender();
+		if (this.desktop) {
+    		if (_isPE() && this.parent.$instanceof(zkex.sel.Listgroup))
+    			this.parent.rerender();
+    		else if (this.parent.$instanceof(zul.sel.Option))
+    			this.getListbox().rerender(); // for IE, we cannot use this.parent.rerender();
+		}
 	},
 	/** Returns the list box that it belongs to.
 	 * @return Listbox

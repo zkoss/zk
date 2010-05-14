@@ -68,7 +68,6 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
@@ -612,15 +611,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	private String nextUuid(Desktop desktop) {
-		final IdGenerator idgen =
-			((WebAppCtrl)desktop.getWebApp()).getIdGenerator();
 		String uuid;
 		do {
-			uuid = idgen != null ? idgen.nextComponentUuid(desktop, this): null;
-			if (uuid == null)
-				uuid = ((DesktopCtrl)desktop).getNextUuid();
-			else
-				ComponentsCtrl.checkUuid(uuid);
+			uuid = ((DesktopCtrl)desktop).getNextUuid(this);
 		} while (desktop.getComponentByUuidIfAny(uuid) != null);
 		return uuid;
 	}

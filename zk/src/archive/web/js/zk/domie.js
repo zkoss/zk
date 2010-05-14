@@ -81,7 +81,7 @@ zk.copy(zjq, {
 
 				jq.cleanData(el.getElementsByTagName("*"));
 				jq.cleanData([el]);
-				el.innerHTML = "";
+				el.innerHTML = ""; //seems less memory leak
 				el.outerHTML = html;
 				done = true;
 				zjq._afterOuter(o);

@@ -48,15 +48,28 @@ public interface DesktopCtrl {
 	/** Returns the next available key which is unique in the whole desktop.
 	 */
 	public int getNextKey();
+	/** Returns the next available UUID for a page.
+	 * The returned UUID is unique in the desktop.
+	 * You can consider it as unique in the whole session, though
+	 * it may not be true if {@link org.zkoss.zk.ui.ext.RawId} is used
+	 * (developer's responsibility to avoid conflict),
+	 * integer overflow (too many UUID in one session, which
+	 * can be considered as impossible), or a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is used.
+	 * @since 5.0.3
+	 */
+	public String getNextUuid(Page page);
 	/** Returns the next available UUID for a component.
 	 * The returned UUID is unique in the desktop.
 	 * You can consider it as unique in the whole session, though
 	 * it may not be true if {@link org.zkoss.zk.ui.ext.RawId} is used
 	 * (developer's responsibility to avoid conflict),
-	 * or integer overflow (too many UUID in one session, which
-	 * can be considered as impossible).
+	 * integer overflow (too many UUID in one session, which
+	 * can be considered as impossible), or a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is used.
+	 * @since 5.0.3
 	 */
-	public String getNextUuid();
+	public String getNextUuid(Component comp);
 
 	/** Adds a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
