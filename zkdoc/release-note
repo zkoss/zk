@@ -9,6 +9,7 @@ ZK 5.0.3
   3000881: Tabbox inside hbox should not expand 5 thousand width
   3000860: tab without label looks strange
   3000936: Javascript error when change tree size with autopaging on
+  3000987: Listcell.setLabel() fails when listbox is on mold 'select'
   
 * Upgrade Notes
 
