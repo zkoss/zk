@@ -312,12 +312,10 @@ import org.zkoss.zk.au.out.*;
 		}
 	}
 	/** Called before changing the component's UUID.
-	 *
-	 * @param addOnlyMoved if true, it is added only if it was moved
-	 * before (see {@link #addMoved}).
+	 * @since 5.0.3
 	 */
-	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
-		if ((!addOnlyMoved || _moved.contains(comp))
+	public void addUuidChanged(Component comp) {
+		if (_exec.isAsyncUpdate(comp.getPage()) //only if not belong to a new page
 		&& (_idChgd == null || !_idChgd.containsKey(comp))
 		&& !isCUDisabled(comp)) {
 			if (_idChgd == null) _idChgd = new LinkedHashMap(23);

@@ -647,7 +647,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
 				if (_page != null) {
-					getAttachedUiEngine().addUuidChanged(this, false);
+					getAttachedUiEngine().addUuidChanged(this);
 						//called before uuid is changed
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 				}

@@ -270,15 +270,10 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addMoved(comp, oldparent, oldpg, newpg);
 	}
-	/** Called before changing the component's UUID.
-	 *
-	 * @param addOnlyMoved if true, it is added only if it was moved
-	 * before (see {@link #addMoved}).
-	 */
-	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
+	public void addUuidChanged(Component comp) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addUuidChanged(comp, addOnlyMoved);
+		getCurrentVisualizer().addUuidChanged(comp);
 	}
 	public boolean disableClientUpdate(Component comp, boolean disable) {
 		return getCurrentVisualizer().disableClientUpdate(comp, disable);
