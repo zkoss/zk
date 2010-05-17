@@ -110,7 +110,7 @@ zk.fmt.Date = {
 					if (y < 100) y += y > 29 ? 1900 : 2000;
 					break;
 				case 'M':
-					var mon = txt.substring(j).toLowerCase(),
+					var mon = txt.substring(j).toLowerCase().trim(),
 						mToken = token ? token.toLowerCase() : '';
 					for (var index = zk.SMON.length; --index >= 0;) {
 						var smon = zk.SMON[index].toLowerCase();
