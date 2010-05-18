@@ -118,7 +118,7 @@ String nextPrice() {
 	<rows>
 		<row forEach="&#36;{stocks}">
 			<detail open="false" fulfill="onOpen=/userguide/grid/season.zul"/>
-			<label value="${stocks[forEachStatus.index]}"/>
+			<label value="&#36;{stocks[forEachStatus.index]}"/>
 			<label value="31-Aug-09"/>
 			<label style="color:red;" onCreate='self.value = nextPrice()'/>
 			<label onCreate='self.value = nextPrice()'/>
