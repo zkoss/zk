@@ -1361,6 +1361,7 @@ wgt.$f().main.setTitle("foo");
 					if (!this.rawId)
 						throw 'id immutable after bound'; //might have subnodes
 					n.id = id;
+					delete _binds[this.uuid];
 					_binds[id] = this;
 					this.clearCache();
 				}
