@@ -614,7 +614,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
-		if (this._readonly && keyCode == 8) {
+		if (this._readonly && keyCode == 8 && evt.target == this) {
 			evt.stop(); // Bug #2916146
 			return;
 		}

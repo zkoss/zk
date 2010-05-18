@@ -311,9 +311,9 @@ public class DefinitionLoaders {
 			if (href != null && href.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
 					throw new UiException("You cannot specify the content if the href attribute is specified, "+el.getLocator());
-				ss = new StyleSheet(href, el.getAttributeValue("type"));
+				ss = new StyleSheet(href, el.getAttributeValue("type"), el.getAttributeValue("media"), false);
 			} else if (ctn != null && ctn.length() > 0) {
-				ss = new StyleSheet(ctn, el.getAttributeValue("type"), true);
+				ss = new StyleSheet(ctn, el.getAttributeValue("type"), el.getAttributeValue("media"), true);
 			} else {
 				throw new UiException("You must specify either the href attribute or the content, "+el.getLocator());
 			}

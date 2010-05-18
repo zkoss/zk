@@ -648,7 +648,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
 				if (_page != null) {
-					getAttachedUiEngine().addUuidChanged(this, false);
+					getAttachedUiEngine().addUuidChanged(this);
 						//called before uuid is changed
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 				}
@@ -658,7 +658,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_page != null) {
 					((DesktopCtrl)_page.getDesktop()).addComponent(this);
-					addMoved(_parent, _page, _page);
 				}
 			} else {
 				_id = id;

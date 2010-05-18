@@ -60,6 +60,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	private String _src;
 	/** _src and _content cannot be nonnull at the same time. */
 	private String _content;
+	private String _media;
 	/** Count the version of {@link #_content}. */
 	private byte _cntver;
 
@@ -72,6 +73,15 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	public Style(String src) {
 		this();
 		setSrc(src);
+	}
+	/**
+	 * @param src the URI of an external style sheet.
+	 * @param media the media dependencies for the style sheet.
+	 * @since 5.0.3
+	 */
+	public Style(String src, String media) {
+		this(src);
+		setMedia(media);
 	}
 	
 	/** @deprecated As of release 5.0.0, it is decided automatically.
@@ -108,6 +118,30 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 			_src = src;
 			_content = null;
 			smartUpdate("src", new EncodedURL());
+		}
+	}
+
+	/** Returns the media dependencies for this style sheet.
+	 *
+	 * <p>Default: null.
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 * @since 5.0.3
+	 */
+	public String getMedia() {
+		return _media;
+	}
+	/** Sets the media dependencies for this style sheet.
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 *
+	 * @param media the media dependencies for this style sheet
+	 * @since 5.0.3
+	 */
+	public void setMedia(String media) {
+		if (media != null && media.length() == 0)
+			media = null;
+		if (!Objects.equals(_media, media)) {
+			_media = media;
+			smartUpdate("media", _media);
 		}
 	}
 
@@ -161,14 +195,22 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 					//don't use rc.temp which will be replaced with widgets later
 				out.write("\n<style id=\"");
 				out.write(getUuid());
-				out.write("$css\" type=\"text/css\">\n");
+				out.write("$css\" type=\"text/css\"");
+				if (_media != null) {
+					out.write(" media=\"");
+					out.write(_media);
+					out.write('"');
+				}
+				out.write(">\n");
 				out.write(cnt);
 				out.write("\n</style>\n");
 				gened = true;
 			}
 		}
-		if (!gened)
+		if (!gened) {
 			render(renderer, "src", getEncodedURL());
+			render(renderer, "media", _media);
+		}
 	}
 
 	//Component//

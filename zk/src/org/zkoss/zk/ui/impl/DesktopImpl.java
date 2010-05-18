@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.util.DesktopActivationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -458,11 +459,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) != null) {
-			if (_uuidRecycle == null)
-				_uuidRecycle = new LinkedList();
-			_uuidRecycle.add(uuid);
-		}
+		if (_comps.remove(uuid) == null)
+			return;
+
+		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
+		//cause AuRemove to be sent
+		if (comp instanceof RawId &&
+		(!ComponentsCtrl.isAutoId(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
+			return;
+
+		if (_uuidRecycle == null)
+			_uuidRecycle = new LinkedList();
+		_uuidRecycle.add(uuid);
 	}
 
 	public Map getAttributes() {

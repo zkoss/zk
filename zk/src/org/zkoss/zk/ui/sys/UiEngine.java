@@ -152,11 +152,9 @@ public interface UiEngine {
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg);
 	/** Called before changing the component's UUID.
-	 *
-	 * @param addOnlyMoved if true, it is added only if it was moved
-	 * before (see {@link #addMoved}).
+	 * @since 5.0.3
 	 */
-	public void addUuidChanged(Component comp, boolean addOnlyMoved);
+	public void addUuidChanged(Component comp);
 
 	//-- execution --//
 	/** Creates components specified in the given page definition.

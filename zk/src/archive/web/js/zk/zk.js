@@ -492,21 +492,6 @@ zul.Label = zk.$extends(zk.Widget, {
  }
 });
 </code></pre>
-	 * <p>In additions, you can declare a class that depends a class that might not be loaded yet. It will cause the superclass to be loaded. However, you cannot access it until the superclass has been loaded.
-<pre><code>
-foo.Mine = zk.$extends('zul.inp.Textbox', {
-});
- 
-new foo.Mine(); //wrong! since zul.inp.Textbox might not be loaded yet
-afterLoad(function () { new foo.Mine();}); //correct!
- 
-if (foo.Mine.superclass) { //test if it has been defined correctly (true if zul.inp.Textbox is loaded)
-}
-if (zk.$import('zul.inp')) { //another way to know
-}
-if (zk.isLoaded('zul.inp')) { //another way to know
-}
-</code></pre>
 	 * <h3>$define</h3>
 	 * To simplify the declaration of the getters and setters, <code>$define</code>
 	 * is introduced. It is shortcut to invoke define. For example,
