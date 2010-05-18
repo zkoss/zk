@@ -1349,16 +1349,24 @@ wgt.$f().main.setTitle("foo");
 	 */
 	setId: function (id) {
 		if (id != this.id) {
-			if (zk.spaceless && this.desktop)
-				throw 'id cannot be changed after bound'; //since there might be subnodes
-
 			if (this.id) {
 				_rmIdSpace(this);
 				_rmGlobal(this);
 			}
 
+			if (zk.spaceless || this.rawId) {
+				var n = this.$n();
+				if (n) {
+					//Note: we assume RawId doesn't have sub-nodes
+					if (!this.rawId)
+						throw 'id immutable after bound'; //might have subnodes
+					n.id = id;
+					_binds[id] = this;
+					this.clearCache();
+				}
+				this.uuid = id;
+			}
 			this.id = id;
-			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
 				_addIdSpace(this);
@@ -2472,11 +2480,13 @@ function () {
 	redrawHTML_: function (skipper, noprolog) {
 		var out = [];
 		this.redraw(out, skipper);
-		if (noprolog && this.prolog && out[0] == this.prolog)
+		if (noprolog && !this.rawId && this.prolog && out[0] == this.prolog)
 			out[0] = '';
 			//Don't generate this.prolog if it is the one to re-render;
 			//otherwise, prolog will be generated twice if invalidated
 			//test: <div> <button onClick="self.invalidate()"/></div>
+			//However, always generated if rawId (such as XHTML), since it
+			//uses prolog for the enclosing tag
 		return out.join('');
 	},
 	/** Re-renders the DOM element(s) of this widget.
@@ -3879,13 +3889,15 @@ _doFooSelect: function (evt) {
 
 		if (!n || zk.Widget.isInstance(n)) return n;
 
+		var wgt, id;
 		if (typeof n == 'string') {
-			var v;
-			n = jq(v = n, zk)[0];
+			n = jq(id = n, zk)[0];
 			if (!n) { //some widget might not have DOM element (e.g., timer)
-				if (v.charAt(0) == '#') v = v.substring(1);
-				n = v.indexOf('-');
-				return _binds[n >= 0 ? v.substring(0, n): v];
+				if (id.charAt(0) == '#') id = id.substring(1);
+				wgt = _binds[id]; //try first (since ZHTML might use -)
+				if (!wgt)
+					wgt = (n = id.indexOf('-')) >= 0 ? _binds[id.substring(0, n)]: null;
+				return wgt;
 			}
 		}
 
@@ -3896,24 +3908,25 @@ _doFooSelect: function (evt) {
 
 		if (opts && opts.exact)
 			return _binds[n.id];
+
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
-			var id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
+			id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 			if (id) {
+				wgt = _binds[id]; //try first (since ZHTML might use -)
+				if (wgt) return wgt;
+
 				var j = id.indexOf('-');
 				if (j >= 0) {
 					id = id.substring(0, j);
-					if (opts && opts.child) {
-						var wgt = _binds[id];
-						if (wgt) {
+					wgt = _binds[id];
+					if (wgt)
+						if (opts && opts.child) {
 							var n2 = wgt.$n();
-							if (n2 && jq.isAncestor(n2, n)) return wgt;
-						}
-						if (opts && opts.strict) break;
-						continue;
-					}
+							if (n2 && jq.isAncestor(n2, n))
+								return wgt;
+						} else
+							return wgt;
 				}
-				wgt = _binds[id];
-				if (wgt) return wgt;
 			}
 			if (opts && opts.strict) break;
 		}

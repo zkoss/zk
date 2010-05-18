@@ -315,6 +315,11 @@ import org.zkoss.zk.au.out.*;
 	 * @since 5.0.3
 	 */
 	public void addUuidChanged(Component comp) {
+		//Algorithm of handling UUID change:
+		//1. If it belongs a new page, nothing to do (since there is no client widget)
+		//2. If not, it generates AuUuid of all modified UUID before generating
+		//any other responses such that client's UUID will be corrected first
+
 		if (_exec.isAsyncUpdate(comp.getPage()) //only if not belong to a new page
 		&& (_idChgd == null || !_idChgd.containsKey(comp))
 		&& !isCUDisabled(comp)) {
@@ -517,6 +522,15 @@ import org.zkoss.zk.au.out.*;
 */
 		final List responses = new LinkedList();
 
+		//0. Correct the UUID at the client first
+		if (_idChgd != null) {
+			for (Iterator it = _idChgd.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				responses.add(new AuUuid((Component)me.getKey(), (String)me.getValue()));
+			}
+			_idChgd = null; //just in case
+		}
+
 		//1. process dead comonents, cropping and the removed page
 		final Map croppingInfos;
 		{
@@ -531,6 +545,8 @@ import org.zkoss.zk.au.out.*;
 			//the client, they might not be parent-child relationship
 			Set removed = doMoved(responses);
 				//after called, _moved is cleared (add to _attached if necessary)
+				//And, AuRemove is generated (we have to generate AuRemove first,
+				//since UUID might be reused)
 
 			//1c. remove reduntant
 			removeRedundant(_invalidated);
@@ -552,7 +568,6 @@ import org.zkoss.zk.au.out.*;
 			clearInInvalidPage(_invalidated);
 			clearInInvalidPage(_attached);
 			clearInInvalidPage(_smartUpdated.keySet());
-			if (_idChgd != null) clearInInvalidPage(_idChgd.keySet());
 		}
 
 		//2b. remove pages. Note: we don't need to generate rm, becausee they
@@ -563,19 +578,12 @@ import org.zkoss.zk.au.out.*;
 				dtctl.removePage((Page)it.next());
 		}
 
-		//2c. generate response for invalidated pages
+		//3. generate response for invalidated pages
 		if (_pgInvalid != null) {
 			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
 				responses.add(new AuOuter(page, redraw(page)));
 			}
-		}
-
-		//3. Remove components who is moved and its UUID is changed
-		if (_idChgd != null) {
-			for (Iterator it = _idChgd.values().iterator(); it.hasNext();)
-				responses.add(new AuRemove((String)it.next()));
-			_idChgd = null; //just in case
 		}
 
 /*		if (log.finerable())

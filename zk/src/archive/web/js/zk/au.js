@@ -1188,6 +1188,16 @@ zAu.cmd1 = /*prototype*/ {
 		if (wgt)
 			wgt.detach();
 	},
+	/** Rename UUID.
+	 * @param zk.Widget wgt the widget to rename
+	 * @param String newId the new UUID
+	 * @since 5.0.3
+	 */
+	uuid: function (wgt, newId) {
+		if (wgt)
+			wgt.setId(newId);
+	},
+
 	/** Set the focus to the specified widget.
 	 * It invokes {@link zk.Widget#focus}. Not all widgets support
 	 * this method. In other words, it has no effect if the widget doesn't support it.

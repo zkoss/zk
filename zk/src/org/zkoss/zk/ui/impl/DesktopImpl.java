@@ -459,14 +459,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
+		if (_comps.remove(uuid) == null)
+			return;
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
-		if (_comps.remove(uuid) != null && !(comp instanceof RawId)) {
-			if (_uuidRecycle == null)
-				_uuidRecycle = new LinkedList();
-			_uuidRecycle.add(uuid);
-		}
+		if (comp instanceof RawId &&
+		(!ComponentsCtrl.isAutoId(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
+			return;
+
+		if (_uuidRecycle == null)
+			_uuidRecycle = new LinkedList();
+		_uuidRecycle.add(uuid);
 	}
 
 	public Map getAttributes() {

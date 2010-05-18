@@ -13,6 +13,8 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zhtml.Widget = zk.$extends(zk.Native, {
+	rawId: true,
+
 	setDynamicProperty: function (prop) {
 		var n = this.$n(), nm = prop[0], val = prop[1];
 		if (n)

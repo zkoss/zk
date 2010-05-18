@@ -657,7 +657,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 				if (_page != null) {
 					((DesktopCtrl)_page.getDesktop()).addComponent(this);
-					addMoved(_parent, _page, _page);
 				}
 			} else {
 				_id = id;
