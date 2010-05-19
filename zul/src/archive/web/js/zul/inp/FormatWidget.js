@@ -29,5 +29,17 @@ zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		}
+	},
+	setValue: function (val) {
+		var args;
+		if (val) {
+			args = [];
+			for (var j = arguments.length; --j > 0;)
+				args.unshift(arguments[j]);
+
+			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
+		} else
+			args = arguments;
+		this.$supers('setValue', args);
 	}
 });
