@@ -64,6 +64,8 @@ import org.zkoss.zk.ui.WebApp;
 	/** Sets whether to generate JS files that is easy to debug. */
 	public void setDebugJS(boolean debugJS) {
 		_debugJS = Boolean.valueOf(debugJS);
+		if (_cache != null)
+			_cache.clear();
 	}
 	/** Returns whether to generate JS files that is easy to debug. */
 	public boolean isDebugJS() {
