@@ -14,6 +14,7 @@ ZK 5.0.3
   3002536: Datebox can't select month with ZK3 and 5 on FF in French
   3002607: The textbox in readonly bandbox can't use "backspace" key
   3003180: Resizing header don't work on IE8 if one column is invisible
+  3003762: Radiobox's onCheck is not fired when the focus is in textbox
   
   
 * Upgrade Notes

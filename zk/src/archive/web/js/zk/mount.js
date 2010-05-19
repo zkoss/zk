@@ -597,7 +597,7 @@ jq(function() {
 		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), null, evt));
 	})
 	.click(function (evt) {
-		if (zk.processing || zk.Draggable.ignoreClick()) return;
+		if (zk.Draggable.ignoreClick()) return;
 
 		zjq._fixClick(evt);
 
@@ -608,7 +608,7 @@ jq(function() {
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
 	.dblclick(function (evt) {
-		if (zk.processing || zk.Draggable.ignoreClick()) return;
+		if (zk.Draggable.ignoreClick()) return;
 
 		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
@@ -620,8 +620,6 @@ jq(function() {
 		}
 	})
 	.bind("contextmenu", function (evt) {
-		if (zk.processing) return;
-
 		_evtProxy(evt);
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
