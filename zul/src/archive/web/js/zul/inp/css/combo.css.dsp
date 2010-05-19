@@ -408,7 +408,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-comboitem-disd, .z-comboitem-disd *,
 .z-combobox-disd, .z-combobox-disd * {
 	cursor: default !important;
-	color: #AAA !important;
+	color: #303030 !important;
 }
 .z-timebox-rounded-disd,
 .z-timebox-disd {
