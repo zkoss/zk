@@ -2013,12 +2013,13 @@ wgt.$f().main.setTitle("foo");
 		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
 				var zi = _topZIndex(wgt);
-				wgt.setZIndex(zi, {fire:true});
-
-				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
-					var w = _floatings[j].widget;
-					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible())
-						w.setFloatZIndex_(_floatings[j].node, ++zi);
+				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //from child to parent
+					var w = _floatings[j].widget,
+						n = _floatings[j].node;
+					if (wgt == w)
+						w.setFloatZIndex_(n, zi); //must be hit before any parent
+					else if (zUtl.isAncestor(wgt, w) && w.isVisible())
+						w.setFloatZIndex_(n, ++zi);
 				}
 				return zi;
 			}
