@@ -3674,7 +3674,7 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 		var elem = checkSet[i];
 		if ( elem ) {
 			/* Jumper Chen, Potix, 20100326*/
-			if (cur.indexOf("@") == 0 || cur.indexOf("$")) {
+			if (cur.indexOf("@") == 0 || cur.indexOf("$") == 0) {
 				var wgt = zk.Widget.$(elem, {exact: 1}),
 					fn = dir == "parentNode" ? "parent" : dir;
 				while (wgt && (wgt = wgt[fn])) {
@@ -3688,7 +3688,7 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 			while ( elem ) {
 				if ( elem.sizcache === doneName ) {
 					/* Jumper Chen, Potix, 20100520*/
-					match = checkSet[elem.sizset] === 0 ? cacheElem : false;
+					match = checkSet[elem.sizset] === 0 ? cacheElem : checkSet[elem.sizset];
 					break;
 				}
 
