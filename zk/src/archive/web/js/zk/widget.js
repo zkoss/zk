@@ -790,9 +790,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _topZIndex(wgt) {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
 		for (var j = _floatings.length; j--;) {
-			var w = _floatings[j].widget;
-			if (w._zIndex >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
-				zi = w._zIndex + 1;
+			var w = _floatings[j].widget,
+				wzi = w.getFloatZIndex_(_floatings[j].node);
+			if (wzi >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
+				zi = wzi + 1;
 		}
 		return zi;
 	}
@@ -1878,9 +1879,7 @@ wgt.$f().main.setTitle("foo");
 							w.setDomVisible_(n, true, {visibility:1});
 						else if (_floatVisibleDependent(this, w)) {
 							zi = zi >= 0 ? ++zi: _topZIndex(w);
-							if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
-							else w.setZIndex(zi, {fire:true});
-		
+							w.setFloatZIndex_(n, zi);
 							w.setDomVisible_(n, true, {visibility:1});
 						}
 					}
@@ -2018,15 +2017,38 @@ wgt.$f().main.setTitle("foo");
 
 				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
 					var w = _floatings[j].widget;
-					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
-						var n = _floatings[j].node;
-						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
-						else w.setZIndex(++zi, {fire:true});
-					}
+					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible())
+						w.setFloatZIndex_(_floatings[j].node, ++zi);
 				}
 				return zi;
 			}
 		return -1;
+	},
+	/** Sets the z-index for a floating widget.
+	 * It is called by {@link #setTopmost} to set the z-index,
+	 * and called only if {@link #setFloating_} is ever called.
+	 * @param DOMElement node the element whose z-index needs to be set.
+	 * It is the value specified in <code>opts.node</code> when {@link #setFloating_}
+	 * is called. If not specified, it is the same as {@link #$n}.
+	 * @param int zi the z-index to set
+	 * @see #setFloating_
+	 * @since 5.0.3
+	 */
+	setFloatZIndex_: function (node, zi) {
+		if (node != this.$n()) node.style.zIndex = zi; //only a portion
+		else this.setZIndex(zi, {fire:true});
+	},
+	/** Returns the z-index of a floating widget.
+	 * It is called by {@link #setTopmost} to decide the topmost z-index,
+	 * and called only if {@link #setFloating_} is ever called.
+	 * @param DOMElement node the element whose z-index needs to be set.
+	 * It is the value specified in <code>opts.node</code> when {@link #setFloating_}
+	 * is called. If not specified, it is the same as {@link #$n}.
+	 * @since 5.0.3
+	 * @see #setFloating_
+	 */
+	getFloatZIndex_: function (node) {
+		return node != this.$n() ? node.style.zIndex: this._zIndex;
 	},
 	/** Returns the top widget, which is the first floating ancestor,
 	 * or null if no floating ancestor.
