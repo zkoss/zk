@@ -793,7 +793,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var w = _floatings[j].widget,
 				wzi = zk.parseInt(w.getFloatZIndex_(_floatings[j].node));
 			if (wzi >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
-				zi = ++wzi;
+				zi = wzi + 1;
 		}
 		return zi;
 	}
