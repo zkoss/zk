@@ -247,7 +247,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-combobox-pp,
 .z-bandbox-pp,
 .z-datebox-pp {
-	display: block; position: absolute; z-index: 88000;
+	display: block; position: absolute;
 	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS};
 }

@@ -5,7 +5,6 @@ ZK 5.0.3
   3000339: The hflex of the cloumn will calculate by max width
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
-  3003820: Able to turn on/off debugJS dynamically
   
 * Bugs
   3000881: Tabbox inside hbox should not expand 5 thousand width
@@ -15,9 +14,8 @@ ZK 5.0.3
   3002536: Datebox can't select month with ZK3 and 5 on FF in French
   3002607: The textbox in readonly bandbox can't use "backspace" key
   3003180: Resizing header don't work on IE8 if one column is invisible
-  3003762: Radiobox's onCheck is not fired when the focus is in textbox
-  2997465: Text in disabled Combobox barely visible in Chrome
-  3003756: Doublebox's format is wrong with German language(de)
+  3004412: The bandpopup over the popup
+  
   
 * Upgrade Notes
 

@@ -142,12 +142,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		zWatch.fire('onFloatUp', this); //notify all
-		this.setTopmost();
+		var topZIndex = this.setTopmost();
 
 		var ppofs = this.getPopupSize_(pp);
 		pp.style.width = ppofs[0];
 		pp.style.height = "auto";
-		pp.style.zIndex = 88000; //on-top of everything
+		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1 ; //on-top of everything
 
 		var pp2 = this.$n("cave");
 		if (pp2) pp2.style.width = pp2.style.height = "auto";
@@ -411,6 +411,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);
+		
+		this.setFloating_(true,{node:this.$n('pp')});
 	},
 	unbind_: function () {
 		this.close();
