@@ -791,9 +791,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
 		for (var j = _floatings.length; j--;) {
 			var w = _floatings[j].widget,
-				wzi = w.getFloatZIndex_(_floatings[j].node);
+				wzi = zk.parseInt(w.getFloatZIndex_(_floatings[j].node));
 			if (wzi >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
-				zi = wzi + 1;
+				zi = ++wzi;
 		}
 		return zi;
 	}
