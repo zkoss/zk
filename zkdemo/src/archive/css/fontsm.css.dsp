@@ -1,4 +1,16 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+.z-combobox-rounded-inp,
+.z-bandbox-rounded-inp,
+.z-datebox-rounded-inp,
+.z-timebox-rounded-inp,
+.z-spinner-rounded-inp,
+.z-combobox-inp,
+.z-bandbox-inp,
+.z-datebox-inp,
+.z-timebox-inp,
+.z-spinner-inp {
+	height: 12px;
+}
 .z-combobox-rounded-inp {
 	background-image: url(${c:encodeURL('/img/component/combobox-rounded-s.gif')});
 }
