@@ -3877,7 +3877,7 @@ _doFooSelect: function (evt) {
 	 * @since 5.0.2
 	 */
 	fromPageCoord: function (x, y) {
-		var ofs = zk(this).cmOffset();
+		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	},
 	toJSON: function () { //used by JSON

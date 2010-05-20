@@ -15,7 +15,7 @@ ZK 5.0.3
   3002607: The textbox in readonly bandbox can't use "backspace" key
   3003180: Resizing header don't work on IE8 if one column is invisible
   3004412: The bandpopup over the popup
-  
+  2997402: Imagemap rightclick/doubleclick wrong coordinates
   
 * Upgrade Notes
 

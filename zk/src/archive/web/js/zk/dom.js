@@ -622,7 +622,17 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		return this;
 	},
 
-	/** Returns the revised (calibrated) offset, which subtracted the offset of the scrollbar
+	/** Returns the revised (i.e., browser's coordinate) offset of the selected
+	 * element.
+	 * In other words, it is the offset of the left-top corner related to
+	 * the browser window.
+	 * @return Offset the revised offset 
+	 * @see #cmOffset
+	 */
+	/** Converts the specified offset in the element's coordinate to
+	 * to the browser window's coordinateReturns the revised (calibrated) offset, i.e., the offset of the element
+	 * related to the screen.
+	 * <p>It is calculated by subtracting the offset of the scrollbar
 	 * ({@link #scrollOffset} and {@link jq#innerX}), for the first matched element.
 	 * @param Offset ofs the offset to revise. If not specified, the first matched
 	 * element's bounding rectange is assumed.
@@ -983,6 +993,8 @@ jq(el).zk.center(); //same as 'center'
 	},
 	/** Returns the cumulative offset of the first matched element from the top left corner of the document.
 	 * <p>It actually adds the cumulative offsetLeft and offsetTop of an element and all its parents.
+	 * <p>Note that it ignores the scroll offset. If you want the element's coordinate,
+	 * use {@link #revisedOffset()} instead.
 	 * <p>Note that all values are returned as numbers only although they are expressed in pixels. 
 	 * @return Offset the cumulative offset
 	 * @see #scrollOffset
