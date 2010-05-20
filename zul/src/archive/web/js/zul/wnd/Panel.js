@@ -297,6 +297,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						if (layout.getMaximizedMode() == 'whole') {
 							this._inWholeMode = true;
 							var p = layout.$n();
+							sh = zk.ie6_ && p.clientHeight == 0 ? p.offsetHeight - jq(p).zk.borderHeight() : p.clientHeight;
 							node._scrollTop = p.parentNode.scrollTop; 
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
