@@ -7,6 +7,7 @@ ZK 5.0.3
   3001081: Reuse UUID if possible to minimize memory use at client
   
 * Bugs
+  3005129: Multiple VariableResolver added to PageImpl
   3000881: Tabbox inside hbox should not expand 5 thousand width
   3000860: tab without label looks strange
   3000936: Javascript error when change tree size with autopaging on
