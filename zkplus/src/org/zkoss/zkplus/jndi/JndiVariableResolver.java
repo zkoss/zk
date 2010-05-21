@@ -142,4 +142,32 @@ public class JndiVariableResolver implements VariableResolver {
 		return obj;
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_jndiMapping == null) ? 0 : _jndiMapping.hashCode());
+		result = prime * result
+				+ ((_jndiPrepend == null) ? 0 : _jndiPrepend.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof JndiVariableResolver))
+			return false;
+		JndiVariableResolver other = (JndiVariableResolver) obj;
+		if (_jndiMapping == null) {
+			if (other._jndiMapping != null)
+				return false;
+		} else if (!_jndiMapping.equals(other._jndiMapping))
+			return false;
+		if (_jndiPrepend == null) {
+			if (other._jndiPrepend != null)
+				return false;
+		} else if (!_jndiPrepend.equals(other._jndiPrepend))
+			return false;
+		return true;
+	}
 }

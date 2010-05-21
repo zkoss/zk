@@ -16,17 +16,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.spring;
 
-import java.util.Map;
-import java.util.HashMap;
 import javax.servlet.ServletContext;
 
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-
+import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * SpringUtil, a Spring utility.
@@ -53,7 +51,9 @@ public class SpringUtil {
 	public static Object getBean(String name) {
 		Object o = null;
 		try {
-			o = getApplicationContext().getBean(name);
+			if(getApplicationContext().containsBean(name)) {
+				o = getApplicationContext().getBean(name);
+			}
 		} catch (NoSuchBeanDefinitionException ex) {
 			// ignore
 		}
@@ -66,8 +66,12 @@ public class SpringUtil {
 	public static Object getBean(String name, Class cls) {
 		Object o = null;
 		try {
-			o = getApplicationContext().getBean(name, cls);
+			if(getApplicationContext().containsBean(name)) {
+				o = getApplicationContext().getBean(name, cls);
+			}
 		} catch (NoSuchBeanDefinitionException ex) {
+			// ignore
+		} catch (BeanNotOfRequiredTypeException e) {
 			// ignore
 		}
 		return o;

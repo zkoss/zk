@@ -53,4 +53,29 @@ public class DelegatingVariableResolver implements VariableResolverX {
 		}
 		return null;
 	}
+	
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_cdiResolver == null) ? 0 : _cdiResolver.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DelegatingVariableResolver other = (DelegatingVariableResolver) obj;
+		if (_cdiResolver == null) {
+			if (other._cdiResolver != null)
+				return false;
+		} else if (!_cdiResolver.equals(other._cdiResolver))
+			return false;
+		return true;
+	}
+
 }
