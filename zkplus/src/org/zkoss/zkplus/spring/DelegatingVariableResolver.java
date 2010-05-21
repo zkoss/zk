@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
@@ -67,7 +68,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 				}
 			}
 		} else {
-			_variableResolvers.add(new AbstractDelegatingVariableResolver());
+			_variableResolvers.add(new DefaultDelegatingVariableResolver());
 		}
 
 	}
@@ -104,13 +105,30 @@ public class DelegatingVariableResolver implements VariableResolver {
 	}
 	
 	/**
-	 * Provides a default variable resolver implementation that resolves spring beans by name
+	 * Provides a default variable resolver implementation that resolves 
+	 * spring beans by name. It also declares an implicit variable springContext
+	 * that resolves to Spring webapp context
 	 * @author ashish
 	 *
 	 */
-	protected class AbstractDelegatingVariableResolver implements VariableResolver {
+	private static class DefaultDelegatingVariableResolver implements VariableResolver {
+
+		private ApplicationContext _ctx;
+
+		private ApplicationContext getApplicationContext() {
+			if (_ctx != null)
+				return _ctx;
+				
+			_ctx = SpringUtil.getApplicationContext();
+			return _ctx;
+		}
 
 		public Object resolveVariable(String name) throws XelException {
+			
+			if ("springContext".equals(name)) {
+				return getApplicationContext();
+			}
+
 			return SpringUtil.getBean(name);
 		}
 		public int hashCode() {
@@ -118,8 +136,12 @@ public class DelegatingVariableResolver implements VariableResolver {
 		}
 
 		public boolean equals(Object obj) {
-			if (this == obj)
+			if (this == obj) {
 				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
 			return getClass() == obj.getClass();
 		}
 	}
