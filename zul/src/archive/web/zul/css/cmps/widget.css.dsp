@@ -20,6 +20,8 @@
 	background: #FFF repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/misc/text-bg.gif')});
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;

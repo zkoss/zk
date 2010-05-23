@@ -52,13 +52,6 @@ zul._fixdbtn2 = function (cmp) {
 			var imghgh = $int(Element.getStyle(img, "height")) + v;
 			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
 		}
-
-		v = inp.offsetTop - img.offsetTop;
-		btn.style.top = v + "px";
-		if (zk.ie)
-			btn.style.zoom = 0;
-		btn.style.position = "relative";
-		if (zk.safari) btn.style.left = "-2px";
 	}
 };
 zul.ondropbtnover = function (evt) {
