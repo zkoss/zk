@@ -40,6 +40,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * It is used only if {@link #isInline}
 	 */
 	private Component[] _inlines;
+	private String _tag = "span";
 
 	public HtmlMacroComponent() {
 		init();
@@ -56,6 +57,25 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		return "zk.Macro";
 	}
 
+	/** Returns the tag name of this macro component.
+	 * <p>Default: span
+	 * @since 5.0.3
+	 */
+	public String getTag() {
+		return _tag;
+	}
+	/**Sets the tag name of this macro component.
+	 * <p>Default: span
+	 * @since 5.0.3
+	 */
+	public void setTag(String tag) {
+		if (tag == null || tag.length() == 0)
+			throw new IllegalArgumentException();
+		if (!_tag.equals(tag)) {
+			_tag = tag;
+			smartUpdate("tag", _tag);
+		}
+	}
 	//-- Macro --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
@@ -205,5 +225,13 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
 		_props.put(name, value);
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (!"span".equals(_tag))
+			renderer.render("tag", _tag);
 	}
 }

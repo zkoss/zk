@@ -4391,6 +4391,22 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "macro",
+	_tag: "span",
+
+	$define: {
+		/** Returns the tag name for this macro widget.
+		 * <p>Default: span
+		 * @return String the tag name (such as div or span)
+		 * @since 5.0.3
+		 */
+		/** Sets the tag name for this macro widget
+		 * @param String tag the tag name, such as div
+		 * @since 5.0.3
+		 */
+		tag: function () {
+			this.rerender();
+		}
+	},
 
 	/** Generates the HTML fragment for this macro component.
 	 * <p>Default: it generate SPAN to enclose the HTML fragment
@@ -4398,10 +4414,10 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {
-		out.push('<span', this.domAttrs_(), '>');
+		out.push('<', this._tag, this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</span>');
+		out.push('</', this._tag, '>');
 	}
 });
 
