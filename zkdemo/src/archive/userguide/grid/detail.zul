@@ -57,7 +57,7 @@ div.z-column-cnt {
 	text-align: center; font-weight: bold;
 }
 div.z-row-cnt span {
-	font-family: Tahoma,Arial,serif;
+	font-family: arial, sans-serif;
 	color: #0E3A99;
 }
 </style>

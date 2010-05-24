@@ -25,13 +25,13 @@
 <c:if test="${empty fontFamilyT}"><%-- title --%>
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyT')}"/>
 <c:set var="fontFamilyT" value="${val}" scope="request" unless="${empty val}"/>
-<c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
+<c:set var="fontFamilyT" value="arial, sans-serif"
 	scope="request" if="${empty fontFamilyT}"/>
 </c:if>
 <c:if test="${empty fontFamilyC}"><%-- content --%>
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyC')}"/>
 <c:set var="fontFamilyC" value="${val}" scope="request" unless="${empty val}"/>
-<c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
+<c:set var="fontFamilyC" value="arial, sans-serif"
 	scope="request" if="${empty fontFamilyC}"/>
 </c:if>
 

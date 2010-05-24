@@ -23,6 +23,16 @@ ZK 5.0.3
   3005632: Listbox fails to replace with empty model if in ROD mode
     
 * Upgrade Notes
+  + The default font size is changed to "arial, sans-serif". If you prefer the
+    original one, please specify the following in WEB-INF/zk.xml
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyT</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyC</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
 
 	--------
 ZK 5.0.2
