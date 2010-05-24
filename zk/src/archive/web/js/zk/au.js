@@ -783,13 +783,17 @@ zAu.beforeSend = function (uri, req) {
 	 * @since 5.0.2
 	 */
 	createWidgets: function (codes, fn) {
-		var wgts = [];
-		for (var j = 0, len = codes.length; j < len; ++j)
-			zkx_(codes[j], function (newwgt) {
-				wgts.push(newwgt);
-				if (wgts.length == len)
-					fn(wgts);
-			});
+		//bug #3005632: Listbox fails to replace with empty model if in ROD mode
+		var wgts = [], len = codes.length;
+		if (len > 0) {
+			for (var j = 0; j < len; ++j)
+				zkx_(codes[j], function (newwgt) {
+					wgts.push(newwgt);
+					if (wgts.length == len)
+						fn(wgts);
+				});
+		} else
+			fn(wgts);
 	},
 
 	/* (not jsdoc)
