@@ -203,6 +203,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					noffParent = n.offsetParent,
 					pbt = zkn.sumStyles("t", jq.paddings) + zkn.sumStyles("t", jq.borders),
 					max = 0,
+					vmax = 0,
 					totalsz = 0;
 				if (cwgt){ //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
@@ -231,7 +232,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										sz += bm;
 								}
 							}
-							if (cwgt._sumFlexHeight) //@See North/South
+							//bug #3006276: East/West bottom cut if East/West higher than Center.
+							if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
+								vmax = sz;
+							else if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
 								max = sz;
@@ -266,6 +270,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else //no kids at all, use self
 					max = n.offsetHeight - zkn.padBorderHeight();  
 
+				if (vmax)
+					totalsz += vmax;
 				if (totalsz > max)
 					max = totalsz;
 				
@@ -347,7 +353,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									if (!zk.safari || rm >= 0)
 										sz += rm;
 								}
-								if (cwgt._sumFlexWidth) //@See East/West
+								if (cwgt._sumFlexWidth) //@See East/West/Center
 									totalsz += sz;
 								else if (sz > max)
 									max = sz;
@@ -416,7 +422,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb += zkn.sumStyles("r", jq.borders);
 				}
 					
-				var margin = zk(wgtn).sumStyles("lr", jq.margins);
+				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
+				var margin = wgt._isIgnoreMargin && wgt._isIgnoreMargin() ? 0 : zk(wgtn).sumStyles("lr", jq.margins);
 				if (zk.safari && margin < 0)
 					margin = 0;
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
