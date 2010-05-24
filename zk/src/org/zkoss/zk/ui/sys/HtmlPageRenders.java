@@ -628,7 +628,6 @@ public class HtmlPageRenders {
 
 			StringBuffer sw = ((StringWriter)out).getBuffer();
 			out = rc.temp;
-			out.write("</div>"); //close div
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
 			Files.write(out, sw); //js
