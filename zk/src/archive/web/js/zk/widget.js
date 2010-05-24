@@ -4391,7 +4391,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "macro",
-	_tag: "span",
+	_enclosingTag: "span",
 
 	$define: {
 		/** Returns the tag name for this macro widget.
@@ -4403,7 +4403,7 @@ zk.Macro = zk.$extends(zk.Widget, {
 		 * @param String tag the tag name, such as div
 		 * @since 5.0.3
 		 */
-		tag: function () {
+		enclosingTag: function () {
 			this.rerender();
 		}
 	},
@@ -4414,10 +4414,10 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {
-		out.push('<', this._tag, this.domAttrs_(), '>');
+		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</', this._tag, '>');
+		out.push('</', this._enclosingTag, '>');
 	}
 });
 

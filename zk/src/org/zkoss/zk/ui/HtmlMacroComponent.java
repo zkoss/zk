@@ -57,23 +57,23 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		return "zk.Macro";
 	}
 
-	/** Returns the tag name of this macro component.
+	/** Returns the name of the enclosing tag for this macro component.
 	 * <p>Default: span
 	 * @since 5.0.3
 	 */
-	public String getTag() {
+	public String getEnclosingTag() {
 		return _tag;
 	}
-	/**Sets the tag name of this macro component.
+	/**Sets the the name of the enclosing tag for this macro component.
 	 * <p>Default: span
 	 * @since 5.0.3
 	 */
-	public void setTag(String tag) {
+	public void setEnclosingTag(String tag) {
 		if (tag == null || tag.length() == 0)
 			throw new IllegalArgumentException();
 		if (!_tag.equals(tag)) {
 			_tag = tag;
-			smartUpdate("tag", _tag);
+			smartUpdate("enclosingTag", _tag);
 		}
 	}
 	//-- Macro --//
@@ -232,6 +232,6 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (!"span".equals(_tag))
-			renderer.render("tag", _tag);
+			renderer.render("enclosingTag", _tag);
 	}
 }
