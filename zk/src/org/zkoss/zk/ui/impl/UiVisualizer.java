@@ -84,6 +84,10 @@ import org.zkoss.zk.au.out.*;
 	 * (comp, comp's parent).
 	 */
 	private final Map _detached = new LinkedHashMap(32);
+	/** A map of UUID of detached or moved components.
+	 * It is important since UUID might be re-used
+	 */
+	private final Map _uuids = new HashMap(32);
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
@@ -295,6 +299,8 @@ import org.zkoss.zk.au.out.*;
 		|| isCUDisabled(comp) || (oldparent != null && isCUDisabled(oldparent)))
 			return; //to avoid redundant AuRemove
 		if (_ending) throw new IllegalStateException("ended");
+
+		updateUuid(comp);
 
 		if (oldpg == null && !_moved.contains(comp)
 		&& !_detached.containsKey(comp)) { //new attached
@@ -666,6 +672,7 @@ import org.zkoss.zk.au.out.*;
 		_invalidated.clear();
 		_smartUpdated.clear();
 		_attached.clear();
+		_uuids.clear();
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
@@ -712,10 +719,12 @@ import org.zkoss.zk.au.out.*;
 				_invalidated.remove(comp);
 				_smartUpdated.remove(comp);
 
-				responses.add(new AuRemove(comp));
+				responses.add(new AuRemove(comp, uuid(comp)));
+					//Use the original UUID is important since it might be reused
 			} else { //page != null
 				if (_exec.isAsyncUpdate(page))
-					responses.add(new AuRemove(comp));
+					responses.add(new AuRemove(comp, uuid(comp)));
+						//Use the original UUID is important since it might be reused
 				_attached.add(comp);
 					//copy to _attached since we handle them later in the same way
 			}
@@ -723,6 +732,18 @@ import org.zkoss.zk.au.out.*;
 
 		_moved.clear(); //no longer required
 		return removed;
+	}
+	/** Stores the original UUID of the specified component.
+	 */
+	private void updateUuid(Component comp) {
+		if (!_uuids.containsKey(comp))
+			_uuids.put(comp, comp.getUuid());
+	}
+	/** Returns the original UUID of the specified component.
+	 */
+	private String uuid(Component comp) {
+		final String uuid = (String)_uuids.get(comp);
+		return uuid != null ? uuid: comp.getUuid();
 	}
 
 	/** Adds responses for a set of siblings which is new attached (or
