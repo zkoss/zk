@@ -48,8 +48,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				this.fire('onOpen', {open: open}, {toServer: indemand});
 			}
 			var tree = this.getTree();
-			if (tree)
+			if (tree) {
+				if (!open)
+					tree.$n('a').style.top = "";
 				tree.focus();
+			}
 		}
 	},
 	_showKids: function (open) {
