@@ -335,7 +335,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('w')) {
-								sz = sameOffParent ? c.offsetLeft - nleft - lbp : c.offsetLeft - lp;
+								sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
