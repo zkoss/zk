@@ -2841,10 +2841,14 @@ bind_: function (desktop, skipper, after) {
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
-		for (var child = this.firstChild; child; child = child.nextSibling)
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling;
+				//we have to store first since RefWidget will replace widget
+
 			if (!skipper || !skipper.skipped(this, child))
 				if (child.z_rod) _bindrod(child);
 				else child.bind_(desktop, null, after); //don't pass skipper
+		}
 
 		if (this.isListen('onBind')) {
 			var self = this;
@@ -2877,10 +2881,13 @@ unbind_: function (skipper, after) {
 		_unbind0(this);
 		_unlistenFlex(this);
 
-		for (var child = this.firstChild; child; child = child.nextSibling)
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling; //just in case
+
 			if (!skipper || !skipper.skipped(this, child))
 				if (child.z_rod) _unbindrod(child);
 				else child.unbind_(null, after); //don't pass skipper
+		}
 
 		if (this._draggable) this.cleanDrag_();
 
@@ -3937,7 +3944,7 @@ _doFooSelect: function (evt) {
 			}
 		}
 
-		if (!n.nodeType) { //skip Element
+		if (!n.nodeType) { //n could be an event (skip Element)
 			var e = n.originalEvent;
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
@@ -4156,7 +4163,8 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		var p = w.parent, q;
 		if (p) { //shall be a desktop
 			var dt = w.desktop, n = w._node;
-			w.desktop = w._node = null; //avoid unbind/bind
+			w.desktop = null; //avoid unbind/bind
+			w.clearCache();
 			p.removeChild(w);
 			w.desktop = dt; w._node = n;
 		}
