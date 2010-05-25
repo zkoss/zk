@@ -423,10 +423,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 					
 				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
-				var margin = wgt._isIgnoreMargin && wgt._isIgnoreMargin() ? 0 : zk(wgtn).sumStyles("lr", jq.margins);
+				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+				var ignoreMargin = wgt._isIgnoreMargin && wgt._isIgnoreMargin(), 
+					margin = ignoreMargin ? 0 : zk(wgtn).sumStyles("lr", jq.margins);
 				if (zk.safari && margin < 0)
 					margin = 0;
-				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
+				var sz = wgt.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
 				wgt.afterChildrenMinFlex_();
@@ -2910,14 +2912,14 @@ unbind_: function (skipper, after) {
 		if (add == false) delete _binds[uuid];
 		else _binds[uuid] = this;
 	},
-	setFlexSize_: function(sz) {
+	setFlexSize_: function(sz, ignoreMargins) {
 		var n = this.$n(),
 			zkn = zk(n);
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '') { //bug #2943174, #2979776
-				var h = zkn.revisedHeight(sz.height, true),
+				var h = zkn.revisedHeight(sz.height, !ignoreMargins),
 					newh = h,
 					margins = zkn.sumStyles("tb", jq.margins);
 				n.style.height = jq.px0(h);
@@ -2925,7 +2927,7 @@ unbind_: function (skipper, after) {
 				if (h == jq(n).outerHeight(false)) //border-box
 					newh = sz.height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
 				else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
-					newh = zkn.revisedHeight(sz.height, true);
+					newh = zkn.revisedHeight(sz.height, !ignoreMargins);
 				if (newh != h) //h changed, re-assign height
 					n.style.height = jq.px0(newh);
 			} else
@@ -2935,7 +2937,7 @@ unbind_: function (skipper, after) {
 			if (sz.width == 'auto')
 				n.style.width = '';
 			else if (sz.width != '') { //bug #2943174, #2979776
-				var w = zkn.revisedWidth(sz.width, true),
+				var w = zkn.revisedWidth(sz.width, !ignoreMargins),
 					neww = w,
 					margins = zkn.sumStyles("lr", jq.margins);
 				n.style.width = jq.px0(w);
@@ -2943,7 +2945,7 @@ unbind_: function (skipper, after) {
 				if (w == jq(n).outerWidth(false)) //border-box
 					neww = sz.width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
 				else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
-					neww = zkn.revisedWidth(sz.width, true);
+					neww = zkn.revisedWidth(sz.width, !ignoreMargins);
 				if (neww != w) //w changed, re-assign width
 					n.style.width = jq.px0(neww); 
 			} else
