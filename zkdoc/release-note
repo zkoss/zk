@@ -26,6 +26,7 @@ ZK 5.0.3
   3006718: The hflex listbox after separator cause wrong width on IE6
   3006762: The scroll bar appear after select a child node and close
   3006772: The focus arrow will not clean after close and open the tree
+  3006796: Some ZHTML widgets won't be bound (bind_ not called)
     
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
