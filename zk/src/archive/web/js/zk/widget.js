@@ -215,7 +215,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('h')) {
-								sz = sameOffParent ? c.offsetTop - ntop - tbp : c.offsetTop - tp; 
+								sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
@@ -258,7 +258,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var sameOffParent = c.offsetParent == noffParent,
 							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-						sz = c.offsetHeight + (ignore ? 0 : sameOffParent ? c.offsetTop - ntop - tbp : c.offsetTop - tp);
+						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop - (sameOffParent ? ntop + tbp : tp));
 						
 						if (!zk.safari || bm >= 0)
 							sz += bm;
@@ -375,7 +375,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var	sameOffParent = c.offsetParent == noffParent,
 							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-						sz = c.offsetWidth + (ignore ? 0 : sameOffParent ? c.offsetLeft - nleft - lbp : c.offsetLeft - lp);
+						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft - (sameOffParent ? nleft + lbp : lp));
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
@@ -534,11 +534,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					ctop = c.offsetTop,
-					cleft = c.offsetLeft,
 					sameOffParent = c.offsetParent === p.offsetParent, 
-					offTop = sameOffParent ? ctop - tbp - ptop : ctop - tp,
-					offLeft = sameOffParent ? cleft - lbp - pleft : cleft - lp,
+					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
+					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
@@ -551,8 +549,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						cleft = c.offsetLeft;
-						offLeft = sameOffParent ? cleft - lbp - pleft : cleft - lp;
+						offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 						segRight = Math.max(segRight, marginRight);
@@ -583,8 +580,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						ctop = c.offsetTop;
-						offTop = sameOffParent ? ctop - tbp - ptop : ctop - tp;
+						offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 						segBottom = Math.max(segBottom, marginBottom);
