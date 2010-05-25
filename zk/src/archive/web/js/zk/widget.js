@@ -215,11 +215,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('h')) {
-								sz = c.offsetTop;
-								if (sameOffParent)
-									sz -= ntop + tbp;
-								else
-									sz -= tp;
+								sz = sameOffParent ? c.offsetTop - ntop - tbp : c.offsetTop - tp; 
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
@@ -262,13 +258,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var sameOffParent = c.offsetParent == noffParent,
 							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop);
-						if (!ignore) {
-							if (sameOffParent)
-								sz -= ntop + tbp;
-							else
-								sz -= tp;
-						}
+						sz = c.offsetHeight + (ignore ? 0 : sameOffParent ? c.offsetTop - ntop - tbp : c.offsetTop - tp);
+						
 						if (!zk.safari || bm >= 0)
 							sz += bm;
 						if (sz > max)
@@ -344,11 +335,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('w')) {
-								sz = c.offsetLeft;
-								if (sameOffParent)
-									sz -= nleft + lbp;
-								else
-									sz -= lp;
+								sz = sameOffParent ? c.offsetLeft - nleft - lbp : c.offsetLeft - lp;
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
@@ -388,11 +375,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var	sameOffParent = c.offsetParent == noffParent,
 							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft);
-						if (sameOffParent && !ignore)
-							sz -= nleft + lbp;
-						else
-							sz -= lp;
+						sz = c.offsetWidth + (ignore ? 0 : sameOffParent ? c.offsetLeft - nleft - lbp : c.offsetLeft - lp);
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
