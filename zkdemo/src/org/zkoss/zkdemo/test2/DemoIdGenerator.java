@@ -6,11 +6,12 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.IdGenerator;
 
 public class DemoIdGenerator implements IdGenerator {
+	private static final String PREFIX = "zk_comp_";
 	public String nextComponentUuid(Desktop desktop, Component comp) {
 		int i = Integer.parseInt(desktop.getAttribute("Id_Num").toString());
 		i++;// Start from 1
 		desktop.setAttribute("Id_Num", String.valueOf(i));
-		return "zk-comp-" + i;
+		return PREFIX + i;
 	}
 
 	public String nextDesktopId(Desktop desktop) {
@@ -25,4 +26,7 @@ public class DemoIdGenerator implements IdGenerator {
 		return null;
 	}
 
+	public boolean isAutoUuid(Component comp, String uuid) {
+		return uuid == null || uuid.startsWith(PREFIX);
+	}
 }

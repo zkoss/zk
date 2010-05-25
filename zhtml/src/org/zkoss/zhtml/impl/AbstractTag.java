@@ -30,7 +30,6 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -293,7 +292,7 @@ implements DynamicPropertied, RawId {
 			.append('<').append(_tagnm);
 
 
-		if (!shallHideId() || !Components.isAutoId(getUuid()))
+		if (!shallHideId() || !ComponentsCtrl.isAutoId(this, getUuid()))
 			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {

@@ -73,10 +73,7 @@ implements Page, PageCtrl, java.io.Serializable {
 	throws ComponentNotFoundException {
 		final Component comp = (Component)_fellows.get(compId);
 		if (comp == null)
-			if (compId != null && ComponentsCtrl.isAutoId(compId))
-				throw new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
-			else
-				throw new ComponentNotFoundException("Fellow component not found: "+compId);
+			throw new ComponentNotFoundException("Fellow component not found: "+compId);
 		return comp;
 	}
 	public Component getFellowIfAny(String compId) {
@@ -111,7 +108,7 @@ implements Page, PageCtrl, java.io.Serializable {
 	//PageCtrl//
 	/*package*/ void addFellow(Component comp) {
 		final String compId = comp.getId();
-		assert D.OFF || !ComponentsCtrl.isAutoId(compId);
+		assert D.OFF || !ComponentsCtrl.isAutoId(comp, compId);
 
 		final Object old = _fellows.put(compId, comp);
 		if (old != comp) { //possible due to recursive call
@@ -245,7 +242,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		for (Iterator it = c.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			final String compId = comp.getId();
-			if (!ComponentsCtrl.isAutoId(compId))
+			if (!ComponentsCtrl.isAutoId(comp, compId))
 				addFellow(comp);
 			if (!(comp instanceof IdSpace))
 				fixFellows(comp.getChildren()); //recursive

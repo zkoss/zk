@@ -47,4 +47,7 @@ public class ZKTestIdGenerator implements IdGenerator {
 		return null;
 	}
 
+	public boolean isAutoUuid(Component comp, String uuid) {
+		return uuid == null || uuid.startsWith(PREFIX);
+	}
 }

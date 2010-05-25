@@ -989,7 +989,7 @@ new zul.wnd.Window{
 					this.set(nm, props[nm]);
 			}
 
-			if (zk.spaceless) {
+			if (zk.spaceless || this.rawId) {
 				if (this.id) this.uuid = this.id; //setId was called
 				else if (this.uuid) this.id = this.uuid;
 				else this.uuid = this.id = zk.Widget.nextUuid();
@@ -1352,10 +1352,13 @@ wgt.$f().main.setTitle("foo");
 		return this.id;
 	},
 	/** Sets the identifier of this widget.
-	 * @param String id the identifier to assigned to
+	 * @param String id the identifier to assigned to.
 	 * @return zk.Widget this widget
 	 */
 	setId: function (id) {
+		if (!id && this.rawId)
+			id = this.uuid;
+
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);

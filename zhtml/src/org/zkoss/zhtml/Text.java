@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zhtml.impl.PageRenderer;
@@ -75,7 +76,7 @@ public class Text extends AbstractComponent implements RawId {
 	private boolean isIdRequired() {
 		final Component p = getParent();
 		return p == null || !isVisible()
-			|| !Components.isAutoId(getId()) || !isRawLabel(p);
+			|| !ComponentsCtrl.isAutoId(this, getId()) || !isRawLabel(p);
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =

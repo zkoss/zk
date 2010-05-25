@@ -75,7 +75,7 @@ public class Path {
 		for (;;) {
 			if (sb.length() > 0) sb.insert(0, '/');
 			final String compId = comp.getId();
-			if (ComponentsCtrl.isAutoId(compId))
+			if (ComponentsCtrl.isAutoId(comp, compId))
 				throw new UiException(MZk.AUTO_ID_NOT_ALLOWED_IN_PATH, comp);
 			sb.insert(0, compId);
 			IdSpace is = comp.getSpaceOwner();

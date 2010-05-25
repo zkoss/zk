@@ -24,8 +24,6 @@ ZK 5.0.3
   3005632: Listbox fails to replace with empty model if in ROD mode
     
 * Upgrade Notes
-  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
-    your macro components uses this property, you have to rename it.
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
 	<library-property>
@@ -36,6 +34,12 @@ ZK 5.0.3
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
 		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
+  + IdGenerator introduced a new method called isAutoUuid. 
+    It is backward compatible if you prefer not to re-compile your codes.
+  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
+    your macro components uses this property, you have to rename it.
+  + Component's ID is default to be an empty string (rather than an auto-generated
+    ID).
 
 	--------
 ZK 5.0.2

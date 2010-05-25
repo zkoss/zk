@@ -39,7 +39,9 @@ import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -53,6 +55,8 @@ import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
+import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.xel.ExValue;
@@ -83,10 +87,42 @@ public class ComponentsCtrl {
 
 	/** Returns whether an ID is generated automatically.
 	 * Note: true is returned if id is null.
+	 * Also notice that this method doesn't check if a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
+	 * If so, use {@link #isAutoId(Component,String)} instead.
 	 */
 	public static final boolean isAutoId(String id) {
 		return id == null || (id.startsWith(AUTO_ID_PREFIX)
 			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
+	}
+	/** Returns if the given ID is generated automatically.
+	 * Note: use this method instead of {@link #isAutoId(String)} if possible,
+	 * since this method considered RawId and IdGenerator.
+	 * @since 5.0.3
+	 */
+	public static boolean isAutoId(Component comp, String id) {
+		if (id == null || id.length() == 0)
+			return true;
+
+		if (!(comp instanceof RawId)) //including comp is null
+			return false;
+
+		Desktop dt = comp.getDesktop();
+		if (dt == null) {
+			Execution exec = Executions.getCurrent();
+			if (exec != null)
+				dt = exec.getDesktop();
+		}
+		if (dt != null) {
+			IdGenerator idgen = ((WebAppCtrl)dt.getWebApp()).getIdGenerator();
+			if (idgen != null) {
+				try {
+					return idgen.isAutoUuid(comp, id);
+				} catch (AbstractMethodError ex) { //ignore (backward compatible)
+				}
+			}
+		}
+		return isAutoId(id);
 	}
 	/** @deprecated As of release 5.0.2, replaced with {@link #isAutoId}.
 	 * If you want to varify UUID, use {@link #checkUuid}.

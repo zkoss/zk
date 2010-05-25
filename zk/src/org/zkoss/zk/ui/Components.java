@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.xel.Evaluator;
@@ -310,10 +311,16 @@ public class Components {
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 
-	/** Returns whether an ID is generated automatically.
+	/** @deprecated As of release 5.0.3, replaced with {@link ComponentsCtrl#isAutoId(Component,String)}
+	 * or {@link ComponentsCtrl#isAutoId(String)}.
+	 * Returns whether an ID is generated automatically.
+	 * Note: true is returned if id is null.
+	 * Also notice that this method doesn't check if a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
+	 * If so, this method is not applicable.
 	 */
 	public static final boolean isAutoId(String id) {
-		return org.zkoss.zk.ui.sys.ComponentsCtrl.isAutoId(id);
+		return ComponentsCtrl.isAutoId(id);
 	}
 
 	/** Converts a component to a path (relavant to another component).
@@ -346,7 +353,7 @@ public class Components {
 	 		return ".";
 		} else {
 			final String id = comp.getId();
-			if (!(comp instanceof IdSpace) && isAutoId(id))
+			if (!(comp instanceof IdSpace) && ComponentsCtrl.isAutoId(comp, id))
 				throw new UnsupportedOperationException("comp must be assigned with ID or a space owner: "+comp);
 
 			final StringBuffer sb = new StringBuffer(128);
@@ -1004,7 +1011,8 @@ public class Components {
 			//try setXxx
 			final String fdname = (arg instanceof Page) ? 
 					((Page)arg).getId() : ((Component)arg).getId();
-			if (!Components.isAutoId(fdname)) {
+			if (!ComponentsCtrl.isAutoId(
+			arg instanceof Page ? null: ((Component)arg), fdname)) {
 				injectByName(arg, fdname);
 			}
 		}
