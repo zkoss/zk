@@ -82,9 +82,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 
 			var ret = f.apply(wgt, args);
-			if (typeof ret == 'undefined') ret = evt.returnValue;
+			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
-			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
+			return devt.type == 'dblclick' && ret === undefined ? false: ret;
 		};
 	}
 
