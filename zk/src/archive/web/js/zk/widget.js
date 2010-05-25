@@ -201,7 +201,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
-					pbt = zkn.sumStyles("t", jq.paddings) + zkn.sumStyles("t", jq.borders),
+					tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+					tbp = tp + zkn.sumStyles("t", jq.borders),
 					max = 0,
 					vmax = 0,
 					totalsz = 0;
@@ -216,7 +217,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							if (!cwgt.ignoreFlexSize_('h')) {
 								sz = c.offsetTop;
 								if (sameOffParent)
-									sz -= ntop + pbt;
+									sz -= ntop + tbp;
+								else
+									sz -= tp;
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
@@ -260,8 +263,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						var sameOffParent = c.offsetParent == noffParent,
 							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
 						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop);
-						if (sameOffParent && !ignore)
-							sz -= ntop + pbt;
+						if (!ignore) {
+							if (sameOffParent)
+								sz -= ntop + tbp;
+							else
+								sz -= tp;
+						}
 						if (!zk.safari || bm >= 0)
 							sz += bm;
 						if (sz > max)
@@ -324,7 +331,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
-					pbl = zkn.sumStyles("l", jq.paddings)+ zkn.sumStyles("l", jq.borders), 
+					lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+					lbp = lp + zkn.sumStyles("l", jq.borders), 
 					max = 0,
 					totalsz = 0;
 				if (cwgt) { //try child widgets
@@ -338,7 +346,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							if (!cwgt.ignoreFlexSize_('w')) {
 								sz = c.offsetLeft;
 								if (sameOffParent)
-									sz -= nleft + pbl;
+									sz -= nleft + lbp;
+								else
+									sz -= lp;
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
@@ -380,7 +390,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
 						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft);
 						if (sameOffParent && !ignore)
-							sz -= nleft + pbl;
+							sz -= nleft + lbp;
+						else
+							sz -= lp;
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
@@ -519,8 +531,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		var ptop = p.offsetTop,
 			pleft = p.offsetLeft,
-			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles("t", jq.paddings),
-			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles("l", jq.paddings),
+			tp = zkp.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+			tbp = zkp.sumStyles('t', jq.borders) + tp,
+			lp = zkp.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+			lbp = zkp.sumStyles('l', jq.borders) + lp, 
 			segTop = 0,
 			segLeft = 0,
 			segBottom = segTop,
@@ -537,11 +551,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					ctop = c.offsetTop - tbp,
-					cleft = c.offsetLeft - lbp,
+					ctop = c.offsetTop,
+					cleft = c.offsetLeft,
 					sameOffParent = c.offsetParent === p.offsetParent, 
-					offTop = sameOffParent ? ctop - ptop : ctop,
-					offLeft = sameOffParent ? cleft - pleft : cleft,
+					offTop = sameOffParent ? ctop - tbp - ptop : ctop - tp,
+					offLeft = sameOffParent ? cleft - lbp - pleft : cleft - lp,
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
@@ -554,8 +568,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						cleft = c.offsetLeft - lbp;
-						offLeft = sameOffParent ? cleft - pleft : cleft;
+						cleft = c.offsetLeft;
+						offLeft = sameOffParent ? cleft - lbp - pleft : cleft - lp;
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 						segRight = Math.max(segRight, marginRight);
@@ -586,8 +600,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						ctop = c.offsetTop - tbp;
-						offTop = sameOffParent ? ctop - ptop : ctop;
+						ctop = c.offsetTop;
+						offTop = sameOffParent ? ctop - tbp - ptop : ctop - tp;
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 						segBottom = Math.max(segBottom, marginBottom);

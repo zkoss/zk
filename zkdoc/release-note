@@ -23,6 +23,7 @@ ZK 5.0.3
   3006276: East bottom cut if East higher than Center.
   3005632: Listbox fails to replace with empty model if in ROD mode
   3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+  3006718: The hflex listbox after separator cause wrong width on IE6
     
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
