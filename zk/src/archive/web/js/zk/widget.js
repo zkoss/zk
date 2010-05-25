@@ -4004,9 +4004,15 @@ _doFooSelect: function (evt) {
 	getElementsByName: function (name) {
 		var els = [];
 		for (var wid in _binds) {
-			if (name == '*' || name == _binds[wid].widgetName)
-				els.push(_binds[wid].$n());
+			if (name == '*' || name == _binds[wid].widgetName) {
+				var n = _binds[wid].$n();
+				if (n) els.push(n);
+			}
 		}
+		if (els.length)
+			els.sort(function (a, b) {
+				return zk.Widget.$(a).$oid - zk.Widget.$(b).$oid;
+			});
 		return els;
 	},
 	/**
@@ -4017,8 +4023,10 @@ _doFooSelect: function (evt) {
 	 */
 	getElementsById: function (id) {
 		var els = [];
-		for (var wgts = _globals[id], i = wgts?wgts.length:0; i--;)
-			els.unshift(wgts[i].$n());
+		for (var n, wgts = _globals[id], i = wgts?wgts.length:0; i--;) {
+			n = wgts[i].$n();
+			if (n) els.unshift(n);
+		}
 		return els;
 	},
 
