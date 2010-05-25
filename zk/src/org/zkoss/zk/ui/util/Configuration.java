@@ -2108,6 +2108,9 @@ public class Configuration {
 	 * <p>If {@link #isDebugJS} is false (default),
 	 * abc.js is always loaded.
 	 *
+	 * <p>Prior to 5.0.3, the setting won't affect JavaScript files that have been
+	 * loaded. That is, the reboot is required.
+	 *
 	 * @param debug whether to debug JavaScript files.
 	 * If true, the original JavaScript files shall be
 	 * loaded instead of the compressed files.
@@ -2115,6 +2118,8 @@ public class Configuration {
 	 */
 	public void setDebugJS(boolean debug) {
 		_debugJS = debug;
+		if (_wapp != null)
+			org.zkoss.zk.ui.http.Utils.updateDebugJS(_wapp, debug);
 	}
 
 	/** Returns whether to use the same UUID sequence for desktops after

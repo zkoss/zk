@@ -32,8 +32,11 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.util.resource.ClassWebResource;
+import org.zkoss.web.util.resource.Extendlet;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -55,8 +58,24 @@ import org.zkoss.zk.ui.ext.Includer;
  * @author tomyeh
  * @since 2.4.1
  */
-/*package*/ class Utils {
+public class Utils {
 	private static Log log = Log.lookup(Utils.class);
+
+	/** Update the status of debug-js.
+	 * It is called by {@link org.zkoss.zk.ui.util.Configuration#setDebugJS}
+	 * to change the loading of JavaScript files dynamically.
+	 * @since 5.0.3
+	 */
+	public static void updateDebugJS(WebApp wapp, boolean debug) {
+		final WebManager wm = WebManager.getWebManagerIfAny(wapp);
+		if (wm != null) {
+			final ClassWebResource cwr = wm.getClassWebResource();
+			cwr.setDebugJS(debug);
+			final Extendlet ext = cwr.getExtendlet("wpd");
+			if (ext instanceof WpdExtendlet)
+				((WpdExtendlet)ext).setDebugJS(debug);
+		}
+	}
 
 	/** Handles exception being thrown when rendering a page.
 	 * @param ex the exception being throw. If null, it means the page

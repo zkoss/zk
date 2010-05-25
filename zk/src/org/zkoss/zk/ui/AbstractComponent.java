@@ -112,7 +112,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Map _clientEvents = new HashMap(128);
 
 	/*package*/ transient Page _page;
-	private String _id;
+	private String _id = "";
 	private String _uuid;
 	private transient ComponentDefinition _def;
 	/** The mold. */
@@ -302,7 +302,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Removes from the ID spaces, if any, when ID is changed. */
 	private static void removeFromIdSpaces(final Component comp) {
 		final String compId = getIdDirectly(comp);
-		if (comp instanceof NonFellow || ComponentsCtrl.isAutoId(compId))
+		if (comp instanceof NonFellow || ComponentsCtrl.isAutoId(comp, compId))
 			return; //nothing to do
 
 		if (comp instanceof IdSpace)
@@ -348,7 +348,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private static void addToIdSpacesDown(Component comp, Component owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
+		&& !ComponentsCtrl.isAutoId(comp, getIdDirectly(comp)))
 			((AbstractComponent)owner).bindToIdSpace(comp);
 
 		if (!(comp instanceof IdSpace))
@@ -361,7 +361,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
+		&& !ComponentsCtrl.isAutoId(comp, getIdDirectly(comp)))
 			owner.addFellow(comp);
 
 		if (!(comp instanceof IdSpace))
@@ -394,7 +394,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void removeFromIdSpacesDown(Component comp, Component owner) {
 		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(compId))
+		&& !ComponentsCtrl.isAutoId(comp, compId))
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
 
 		if (!(comp instanceof IdSpace))
@@ -406,7 +406,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private static void removeFromIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
+		&& !ComponentsCtrl.isAutoId(comp, getIdDirectly(comp)))
 			owner.removeFellow(comp);
 
 		if (!(comp instanceof IdSpace))
@@ -429,7 +429,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void checkIdSpacesDown(Component comp, SpaceInfo si) {
 		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(compId) && si.fellows.containsKey(compId))
+		&& !ComponentsCtrl.isAutoId(comp, compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
@@ -440,7 +440,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void checkIdSpacesDown(Component comp, AbstractPage page) {
 		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(compId) && page.hasFellow(compId))
+		&& !ComponentsCtrl.isAutoId(comp, compId) && page.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+page+": "+compId);
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
@@ -592,7 +592,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID
 				|| desktop.getComponentByUuidIfAny(_uuid) != null)
 					_uuid = nextUuid(desktop);
-				if (_id == null || (this instanceof RawId))
+				if (this instanceof RawId)
 					_id = _uuid;
 					//no need to handle ID space since it is either
 					//anonymous or uuid is not changed
@@ -618,8 +618,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return uuid;
 	}
 	public String getId() {
-		if (_id == null)
-			_id = getUuid();
 		return _id;
 	}
 	public void setId(String id) {
@@ -635,7 +633,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 			if (id != null) {
 				if (Names.isReserved(id)
-				|| (!(this instanceof NonFellow) && ComponentsCtrl.isAutoId(id)))
+				|| (!(this instanceof NonFellow) && ComponentsCtrl.isAutoId(this, id)))
 					throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
 				if (rawId && _page != null
@@ -666,7 +664,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (_id != null)
 				addToIdSpaces(this);
 
-			smartUpdate("id", ComponentsCtrl.isAutoId(_id) ? null: _id);
+			smartUpdate("id", ComponentsCtrl.isAutoId(this, _id) ? null: _id);
 		}
 	}
 
@@ -675,7 +673,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final Execution exec = Executions.getCurrent();
 			_uuid = exec == null ?
 				ComponentsCtrl.ANONYMOUS_ID: nextUuid(exec.getDesktop());
-			if (_id == null || (this instanceof RawId))
+			if (this instanceof RawId)
 				_id = _uuid;
 		}
 		return _uuid;
@@ -701,7 +699,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace) {
 			final Component comp = (Component)_spaceInfo.fellows.get(compId);
 			if (comp == null)
-				throw newNotFoundException(compId);
+				throw newNotFoundException(this, compId);
 			return comp;
 		}
 
@@ -710,8 +708,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new ComponentNotFoundException("This component doesn't belong to any ID space: "+this);
 		return idspace.getFellow(compId);
 	}
-	private static ComponentNotFoundException newNotFoundException(String compId) {
-		if (compId != null && ComponentsCtrl.isAutoId(compId))
+	private static ComponentNotFoundException newNotFoundException(Component comp, String compId) {
+		if (compId != null && ComponentsCtrl.isAutoId(comp, compId))
 			return new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
 		else
 			return new ComponentNotFoundException("Fellow component not found: "+compId);
@@ -734,7 +732,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws ComponentNotFoundException {
 		final Component comp = getFellowIfAny(compId, recurse);
 		if (comp == null)
-			throw newNotFoundException(compId);
+			throw newNotFoundException(this, compId);
 		return comp;
 	}
 	public Component getFellowIfAny(String compId, boolean recurse) {
@@ -1751,7 +1749,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	protected void renderProperties(ContentRenderer renderer)
 	throws IOException {
-		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
+		if (!ComponentsCtrl.isAutoId(this, _id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
 		if (!_visible) renderer.render("visible", false);
 		render(renderer, "autag", _autag);
@@ -2443,7 +2441,7 @@ w:use="foo.MyWindow"&gt;
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
 		return "<"+clsnm.substring(j+1)+' '
-			+(ComponentsCtrl.isAutoId(_id) ? _uuid: _id)+'>';
+			+(ComponentsCtrl.isAutoId(this, _id) ? _uuid: _id)+'>';
 	}
 	public boolean equals(Object o) { //no more override
 		return this == o;
@@ -2629,7 +2627,7 @@ w:use="foo.MyWindow"&gt;
 	}
 	private void cloneSpaceInfoFrom(SpaceInfo from) {
 		//rebuild ID space by binding itself and all children
-		if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
+		if (!ComponentsCtrl.isAutoId(this, getIdDirectly(this)))
 			this.bindToIdSpace(this);
 		for (AbstractComponent p = _first; p != null; p = p._next)
 			addToIdSpacesDown(p, this);
@@ -2792,7 +2790,7 @@ w:use="foo.MyWindow"&gt;
 			_spaceInfo = new SpaceInfo();
 
 			//restore ID space by binding itself and all children
-			if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
+			if (!ComponentsCtrl.isAutoId(this, getIdDirectly(this)))
 				bindToIdSpace(this);
 			for (AbstractComponent ac = _first; ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, this);

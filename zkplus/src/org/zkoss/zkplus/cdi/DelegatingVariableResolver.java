@@ -20,6 +20,8 @@ package org.zkoss.zkplus.cdi;
 import javax.el.ELContext;
 import javax.el.ELResolver;
 
+import org.zkoss.lang.Objects;
+
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
@@ -52,5 +54,13 @@ public class DelegatingVariableResolver implements VariableResolverX {
 			}
 		}
 		return null;
+	}
+
+	public int hashCode() {
+		return Objects.hashCode(_cdiResolver);
+	}
+	public boolean equals(Object o) {
+		return this == o || (o instanceof DelegatingVariableResolver
+			&& Objects.equals(_cdiResolver, ((DelegatingVariableResolver)o)._cdiResolver));
 	}
 }

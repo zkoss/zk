@@ -388,17 +388,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	<!-- Configure the font family for titles in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: Verdana, Tahoma, Arial, Helvetica, sans-serif.
+		Default: arial, sans-serif.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontFamilyT</name>
-		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+		<value>arial, sans-serif</value>
 	</library-property>
 	-->
 	<!-- Configure the font family for content in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: Verdana, Tahoma, Arial, serif.
+		Default: arial, sans-serif.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
-		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+		<value>arial, sans-serif</value>
 	</library-property>
 	-->
 

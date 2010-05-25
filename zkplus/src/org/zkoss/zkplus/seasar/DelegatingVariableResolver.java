@@ -54,4 +54,17 @@ public class DelegatingVariableResolver implements VariableResolver {
 		}
 		return null;
 	}
+	
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null) {
+			return false;
+		}
+		return getClass() == obj.getClass();
+	}
 }

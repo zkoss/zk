@@ -311,8 +311,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			cidx = $n.cellIndex(),
 			total = 0;
 			
-		for (var k = cells.length; k--;)
-			if (k !== cidx) total += cells[k].offsetWidth;
+		for (var k = cells.length; k--;) {
+			if (k !== cidx && zk(cells[k]).isVisible()) total += cells[k].offsetWidth;
+		}
 
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.

@@ -104,9 +104,9 @@ public interface ThemeProvider {
 	 * <dt>fontSizeXS</dt>
 	 * <dd>The font size for extreme small fonts. Default 10px</dd>
 	 * <dt>fontFamilyT</dt>
-	 * <dd>The font family for titles. Default: Verdana, Tahoma, Arial, Helvetica, sans-serif</dd>
+	 * <dd>The font family for titles. Default: arial, sans-serif</dd>
 	 * <dt>fontFamilyC</dt>
-	 * <dd>The font family for content. Default: Verdana, Tahoma, Arial, serif</dd>
+	 * <dd>The font family for content. Default: arial, sans-serif</dd>
 	 * </dl>
 	 *
 	 * <p>For example,

@@ -60,7 +60,7 @@
 	<input type="submit" value="Submit but not in form" zk:onClick='l.value="submit clicked"'/>
 	<z:label id="l"/>
 
-	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
+	<input type="image" src="/zkdemo/img/inet.png"/> <br/>
 	<z:textbox id="tb" focus="true"/>
 	<center>
 	center something

@@ -37,9 +37,7 @@
 	<c:if test="${c:isOpera()}">
 		font-style: normal;
 	</c:if>
-	<c:if test="${c:browser('linux')&& c:isGecko()}">
-		height: 14px;
-	</c:if>
+	height: 14px;
 }
 .z-combobox-rounded-inp,
 .z-bandbox-rounded-inp,
@@ -247,7 +245,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-combobox-pp,
 .z-bandbox-pp,
 .z-datebox-pp {
-	display: block; position: absolute; z-index: 88000;
+	display: block; position: absolute;
 	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS};
 }
@@ -408,7 +406,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-comboitem-disd, .z-comboitem-disd *,
 .z-combobox-disd, .z-combobox-disd * {
 	cursor: default !important;
-	color: #AAA !important;
+	color: #303030 !important;
 }
 .z-timebox-rounded-disd,
 .z-timebox-disd {

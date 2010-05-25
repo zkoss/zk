@@ -183,7 +183,7 @@ public class WebManager {
 
 		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
 		_cwr.setDebugJS(config.isDebugJS());
-		_cwr.addExtendlet("wpd", new WpdExtendlet());
+		_cwr.addExtendlet("wpd", new WpdExtendlet()); //add after _cwr.setDebugJS (since it calls back)
 		_cwr.addExtendlet("wcs", new WcsExtendlet());
 
 		//Register resource processors for each extension
@@ -311,6 +311,12 @@ public class WebManager {
 	 */
 	/*package*/ static final WebManager getWebManagerIfAny(ServletContext ctx) {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
+	}
+	/** Returns the Web manager of the specified {@link WebApp}.
+	 * @since 5.0.3
+	 */
+	/*package*/ static final WebManager getWebManagerIfAny(WebApp wapp) {
+		return getWebManagerIfAny((ServletContext)wapp.getNativeContext());
 	}
 	/** Returns the Web application of the specified context.
 	 * @exception UiException if not found (i.e., not initialized

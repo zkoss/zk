@@ -31,8 +31,8 @@ zk.canvas.Canvas = {
 	 * <p>For example,
 	 *<pre><code>
 	 * var main = jq("#main");
-	 * var canvas = zk.canvas.Canvas.create(main[0].clientWidth, main[0].clientHeight);
 	 * main.append(canvas);
+	 * var canvas = zk.canvas.Canvas.create(main.clientWidth, main.clientHeight);
 	 * var ctx = canvas.getContext("2d");
 	 * ctx.fillStyle = "rgb(200,0,0)";  
 	 * ctx.fillRect (10, 10, 55, 50);  

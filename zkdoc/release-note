@@ -25,17 +25,43 @@ ZK 5.0.3
   3000339: The hflex of the cloumn will calculate by max width
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
+  3006351: Able to specify the tag name for a macro component
   
 * Bugs
+  3005129: Multiple VariableResolver added to PageImpl
   3000881: Tabbox inside hbox should not expand 5 thousand width
   3000860: tab without label looks strange
   3000936: Javascript error when change tree size with autopaging on
   3000987: Listcell.setLabel() fails when listbox is on mold 'select'
   3002536: Datebox can't select month with ZK3 and 5 on FF in French
   3002607: The textbox in readonly bandbox can't use "backspace" key
-  
-  
+  3003180: Resizing header don't work on IE8 if one column is invisible
+  3004412: The bandpopup over the popup
+  2997402: Imagemap rightclick/doubleclick wrong coordinates
+  3004588: The height of the panel will not set the max height
+  3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
+  3006276: East bottom cut if East higher than Center.
+  3005632: Listbox fails to replace with empty model if in ROD mode
+  3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+  3006718: The hflex listbox after separator cause wrong width on IE6
+    
 * Upgrade Notes
+  + The default font size is changed to "arial, sans-serif". If you prefer the
+    original one, please specify the following in WEB-INF/zk.xml
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyT</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyC</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+  + IdGenerator introduced a new method called isAutoUuid. 
+    It is backward compatible if you prefer not to re-compile your codes.
+  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
+    your macro components uses this property, you have to rename it.
+  + Component's ID is default to be an empty string (rather than an auto-generated
+    ID).
 
 	--------
 ZK 5.0.2

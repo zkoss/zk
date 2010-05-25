@@ -82,9 +82,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 
 			var ret = f.apply(wgt, args);
-			if (typeof ret == 'undefined') ret = evt.returnValue;
+			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
-			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
+			return devt.type == 'dblclick' && ret === undefined ? false: ret;
 		};
 	}
 
@@ -201,8 +201,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					ntop = n.offsetTop,
 					noffParent = n.offsetParent,
-					pbt = zkn.sumStyles("t", jq.paddings) + zkn.sumStyles("t", jq.borders),
+					tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+					tbp = tp + zkn.sumStyles("t", jq.borders),
 					max = 0,
+					vmax = 0,
 					totalsz = 0;
 				if (cwgt){ //try child widgets
 					for (; cwgt; cwgt = cwgt.nextSibling) {
@@ -213,9 +215,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('h')) {
-								sz = c.offsetTop;
-								if (sameOffParent)
-									sz -= ntop + pbt;
+								sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
@@ -231,7 +231,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										sz += bm;
 								}
 							}
-							if (cwgt._sumFlexHeight) //@See North/South
+							//bug #3006276: East/West bottom cut if East/West higher than Center.
+							if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
+								vmax = sz;
+							else if (cwgt._sumFlexHeight) //@See North/South
 								totalsz += sz;
 							else if (sz > max)
 								max = sz;
@@ -255,9 +258,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var sameOffParent = c.offsetParent == noffParent,
 							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop);
-						if (sameOffParent && !ignore)
-							sz -= ntop + pbt;
+						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop - (sameOffParent ? ntop + tbp : tp));
+						
 						if (!zk.safari || bm >= 0)
 							sz += bm;
 						if (sz > max)
@@ -266,6 +268,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else //no kids at all, use self
 					max = n.offsetHeight - zkn.padBorderHeight();  
 
+				if (vmax)
+					totalsz += vmax;
 				if (totalsz > max)
 					max = totalsz;
 				
@@ -318,7 +322,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					nleft = n.offsetLeft,
 					noffParent = n.offsetParent,
-					pbl = zkn.sumStyles("l", jq.paddings)+ zkn.sumStyles("l", jq.borders), 
+					lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+					lbp = lp + zkn.sumStyles("l", jq.borders), 
 					max = 0,
 					totalsz = 0;
 				if (cwgt) { //try child widgets
@@ -330,9 +335,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sameOffParent = c.offsetParent == noffParent,
 								sz = 0;
 							if (!cwgt.ignoreFlexSize_('w')) {
-								sz = c.offsetLeft;
-								if (sameOffParent)
-									sz -= nleft + pbl;
+								sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
@@ -347,7 +350,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									if (!zk.safari || rm >= 0)
 										sz += rm;
 								}
-								if (cwgt._sumFlexWidth) //@See East/West
+								if (cwgt._sumFlexWidth) //@See East/West/Center
 									totalsz += sz;
 								else if (sz > max)
 									max = sz;
@@ -372,9 +375,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 						var	sameOffParent = c.offsetParent == noffParent,
 							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft);
-						if (sameOffParent && !ignore)
-							sz -= nleft + pbl;
+						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft - (sameOffParent ? nleft + lbp : lp));
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
@@ -416,10 +417,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb += zkn.sumStyles("r", jq.borders);
 				}
 					
-				var margin = zk(wgtn).sumStyles("lr", jq.margins);
+				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
+				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+				var ignoreMargin = wgt._isIgnoreMargin && wgt._isIgnoreMargin(), 
+					margin = ignoreMargin ? 0 : zk(wgtn).sumStyles("lr", jq.margins);
 				if (zk.safari && margin < 0)
 					margin = 0;
-				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
+				var sz = wgt.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
 				wgt.afterChildrenMinFlex_();
@@ -510,8 +514,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		var ptop = p.offsetTop,
 			pleft = p.offsetLeft,
-			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles("t", jq.paddings),
-			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles("l", jq.paddings),
+			tp = zkp.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+			tbp = zkp.sumStyles('t', jq.borders) + tp,
+			lp = zkp.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+			lbp = zkp.sumStyles('l', jq.borders) + lp, 
 			segTop = 0,
 			segLeft = 0,
 			segBottom = segTop,
@@ -528,11 +534,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					ctop = c.offsetTop - tbp,
-					cleft = c.offsetLeft - lbp,
 					sameOffParent = c.offsetParent === p.offsetParent, 
-					offTop = sameOffParent ? ctop - ptop : ctop,
-					offLeft = sameOffParent ? cleft - pleft : cleft,
+					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
+					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 					
@@ -545,8 +549,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._hflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'width');
 						//might change width in _setMinFlexSize(), so regain the value
-						cleft = c.offsetLeft - lbp;
-						offLeft = sameOffParent ? cleft - pleft : cleft;
+						offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 						segRight = Math.max(segRight, marginRight);
@@ -577,8 +580,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt._vflex == 'min') {
 						_setMinFlexSize(cwgt, c, 'height');
 						//might change height in _setMinFlexSize(), so regain the value
-						ctop = c.offsetTop - tbp;
-						offTop = sameOffParent ? ctop - ptop : ctop;
+						offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 						segBottom = Math.max(segBottom, marginBottom);
@@ -790,9 +792,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _topZIndex(wgt) {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
 		for (var j = _floatings.length; j--;) {
-			var w = _floatings[j].widget;
-			if (w._zIndex >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
-				zi = w._zIndex + 1;
+			var w = _floatings[j].widget,
+				wzi = zk.parseInt(w.getFloatZIndex_(_floatings[j].node));
+			if (wzi >= zi && !zUtl.isAncestor(wgt, w) && w.isVisible())
+				zi = wzi + 1;
 		}
 		return zi;
 	}
@@ -991,7 +994,7 @@ new zul.wnd.Window{
 					this.set(nm, props[nm]);
 			}
 
-			if (zk.spaceless) {
+			if (zk.spaceless || this.rawId) {
 				if (this.id) this.uuid = this.id; //setId was called
 				else if (this.uuid) this.id = this.uuid;
 				else this.uuid = this.id = zk.Widget.nextUuid();
@@ -1354,10 +1357,13 @@ wgt.$f().main.setTitle("foo");
 		return this.id;
 	},
 	/** Sets the identifier of this widget.
-	 * @param String id the identifier to assigned to
+	 * @param String id the identifier to assigned to.
 	 * @return zk.Widget this widget
 	 */
 	setId: function (id) {
+		if (!id && this.rawId)
+			id = this.uuid;
+
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
@@ -1888,9 +1894,7 @@ wgt.$f().main.setTitle("foo");
 							w.setDomVisible_(n, true, {visibility:1});
 						else if (_floatVisibleDependent(this, w)) {
 							zi = zi >= 0 ? ++zi: _topZIndex(w);
-							if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
-							else w.setZIndex(zi, {fire:true});
-		
+							w.setFloatZIndex_(n, zi);
 							w.setDomVisible_(n, true, {visibility:1});
 						}
 					}
@@ -2024,19 +2028,43 @@ wgt.$f().main.setTitle("foo");
 		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
 				var zi = _topZIndex(wgt);
-				wgt.setZIndex(zi, {fire:true});
-
-				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
-					var w = _floatings[j].widget;
-					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
-						var n = _floatings[j].node;
-						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
-						else w.setZIndex(++zi, {fire:true});
-					}
+				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //from child to parent
+					var w = _floatings[j].widget,
+						n = _floatings[j].node;
+					if (wgt == w)
+						w.setFloatZIndex_(n, zi); //must be hit before any parent
+					else if (zUtl.isAncestor(wgt, w) && w.isVisible())
+						w.setFloatZIndex_(n, ++zi);
 				}
 				return zi;
 			}
 		return -1;
+	},
+	/** Sets the z-index for a floating widget.
+	 * It is called by {@link #setTopmost} to set the z-index,
+	 * and called only if {@link #setFloating_} is ever called.
+	 * @param DOMElement node the element whose z-index needs to be set.
+	 * It is the value specified in <code>opts.node</code> when {@link #setFloating_}
+	 * is called. If not specified, it is the same as {@link #$n}.
+	 * @param int zi the z-index to set
+	 * @see #setFloating_
+	 * @since 5.0.3
+	 */
+	setFloatZIndex_: function (node, zi) {
+		if (node != this.$n()) node.style.zIndex = zi; //only a portion
+		else this.setZIndex(zi, {fire:true});
+	},
+	/** Returns the z-index of a floating widget.
+	 * It is called by {@link #setTopmost} to decide the topmost z-index,
+	 * and called only if {@link #setFloating_} is ever called.
+	 * @param DOMElement node the element whose z-index needs to be set.
+	 * It is the value specified in <code>opts.node</code> when {@link #setFloating_}
+	 * is called. If not specified, it is the same as {@link #$n}.
+	 * @since 5.0.3
+	 * @see #setFloating_
+	 */
+	getFloatZIndex_: function (node) {
+		return node != this.$n() ? node.style.zIndex: this._zIndex;
 	},
 	/** Returns the top widget, which is the first floating ancestor,
 	 * or null if no floating ancestor.
@@ -2816,10 +2844,14 @@ bind_: function (desktop, skipper, after) {
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
-		for (var child = this.firstChild; child; child = child.nextSibling)
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling;
+				//we have to store first since RefWidget will replace widget
+
 			if (!skipper || !skipper.skipped(this, child))
 				if (child.z_rod) _bindrod(child);
 				else child.bind_(desktop, null, after); //don't pass skipper
+		}
 
 		if (this.isListen('onBind')) {
 			var self = this;
@@ -2852,10 +2884,13 @@ unbind_: function (skipper, after) {
 		_unbind0(this);
 		_unlistenFlex(this);
 
-		for (var child = this.firstChild; child; child = child.nextSibling)
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling; //just in case
+
 			if (!skipper || !skipper.skipped(this, child))
 				if (child.z_rod) _unbindrod(child);
 				else child.unbind_(null, after); //don't pass skipper
+		}
 
 		if (this._draggable) this.cleanDrag_();
 
@@ -2887,14 +2922,14 @@ unbind_: function (skipper, after) {
 		if (add == false) delete _binds[uuid];
 		else _binds[uuid] = this;
 	},
-	setFlexSize_: function(sz) {
+	setFlexSize_: function(sz, ignoreMargins) {
 		var n = this.$n(),
 			zkn = zk(n);
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '') { //bug #2943174, #2979776
-				var h = zkn.revisedHeight(sz.height, true),
+				var h = zkn.revisedHeight(sz.height, !ignoreMargins),
 					newh = h,
 					margins = zkn.sumStyles("tb", jq.margins);
 				n.style.height = jq.px0(h);
@@ -2902,7 +2937,7 @@ unbind_: function (skipper, after) {
 				if (h == jq(n).outerHeight(false)) //border-box
 					newh = sz.height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
 				else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
-					newh = zkn.revisedHeight(sz.height, true);
+					newh = zkn.revisedHeight(sz.height, !ignoreMargins);
 				if (newh != h) //h changed, re-assign height
 					n.style.height = jq.px0(newh);
 			} else
@@ -2912,7 +2947,7 @@ unbind_: function (skipper, after) {
 			if (sz.width == 'auto')
 				n.style.width = '';
 			else if (sz.width != '') { //bug #2943174, #2979776
-				var w = zkn.revisedWidth(sz.width, true),
+				var w = zkn.revisedWidth(sz.width, !ignoreMargins),
 					neww = w,
 					margins = zkn.sumStyles("lr", jq.margins);
 				n.style.width = jq.px0(w);
@@ -2920,7 +2955,7 @@ unbind_: function (skipper, after) {
 				if (w == jq(n).outerWidth(false)) //border-box
 					neww = sz.width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
 				else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
-					neww = zkn.revisedWidth(sz.width, true);
+					neww = zkn.revisedWidth(sz.width, !ignoreMargins);
 				if (neww != w) //w changed, re-assign width
 					n.style.width = jq.px0(neww); 
 			} else
@@ -3864,7 +3899,7 @@ _doFooSelect: function (evt) {
 	 * @since 5.0.2
 	 */
 	fromPageCoord: function (x, y) {
-		var ofs = zk(this).cmOffset();
+		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	},
 	toJSON: function () { //used by JSON
@@ -3912,7 +3947,7 @@ _doFooSelect: function (evt) {
 			}
 		}
 
-		if (!n.nodeType) { //skip Element
+		if (!n.nodeType) { //n could be an event (skip Element)
 			var e = n.originalEvent;
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
@@ -4131,7 +4166,8 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		var p = w.parent, q;
 		if (p) { //shall be a desktop
 			var dt = w.desktop, n = w._node;
-			w.desktop = w._node = null; //avoid unbind/bind
+			w.desktop = null; //avoid unbind/bind
+			w.clearCache();
 			p.removeChild(w);
 			w.desktop = dt; w._node = n;
 		}
@@ -4371,6 +4407,22 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "macro",
+	_enclosingTag: "span",
+
+	$define: {
+		/** Returns the tag name for this macro widget.
+		 * <p>Default: span
+		 * @return String the tag name (such as div or span)
+		 * @since 5.0.3
+		 */
+		/** Sets the tag name for this macro widget
+		 * @param String tag the tag name, such as div
+		 * @since 5.0.3
+		 */
+		enclosingTag: function () {
+			this.rerender();
+		}
+	},
 
 	/** Generates the HTML fragment for this macro component.
 	 * <p>Default: it generate SPAN to enclose the HTML fragment
@@ -4378,10 +4430,10 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {
-		out.push('<span', this.domAttrs_(), '>');
+		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</span>');
+		out.push('</', this._enclosingTag, '>');
 	}
 });
 

@@ -2857,7 +2857,7 @@ Sizzle.filter = function(expr, set, inplace, not){
 				if ( match ) {
 					for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
 						if ( item ) {
-							found = filter( item, match, i, curLoop );
+							found = filter( item, match, i, curLoop, inplace/** inplace added by Jumper Chen, Potix 20100520*/);
 							var pass = not ^ !!found;
 
 							if ( inplace && found != null ) {
@@ -2940,6 +2940,8 @@ var Expr = Sizzle.selectors = {
 		"+": function(checkSet, part){
 			var isPartStr = typeof part === "string",
 				isTag = isPartStr && !/\W/.test(part),
+				isZTag = isPartStr && /@/.test(part),
+				isZID = isPartStr && /\$/.test(part),
 				isPartStrNotTag = isPartStr && !isTag;
 
 			if ( isTag ) {
@@ -2950,9 +2952,15 @@ var Expr = Sizzle.selectors = {
 				if ( (elem = checkSet[i]) ) {
 					while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
 
-					checkSet[i] = isPartStrNotTag || elem && elem.nodeName.toLowerCase() === part ?
-						elem || false :
-						elem === part;
+					/* Jumper Chen, Potix, 20100518*/
+					if (isZTag || isZID) {
+						var w = zk.Widget.$(elem, {exact: 1});
+						checkSet[i] = w && w[isZTag ? 'widgetName' : 'id'] == part.substring(1) ? elem : false;
+					} else {
+    					checkSet[i] = isPartStrNotTag || elem && elem.nodeName.toLowerCase() === part ?
+    						elem || false :
+    						elem === part;
+					}
 				}
 			}
 
@@ -2961,7 +2969,9 @@ var Expr = Sizzle.selectors = {
 			}
 		},
 		">": function(checkSet, part){
-			var isPartStr = typeof part === "string";
+			var isPartStr = typeof part === "string",
+				isZTag = isPartStr && /@/.test(part),
+				isZID = isPartStr && /\$/.test(part);
 
 			if ( isPartStr && !/\W/.test(part) ) {
 				part = part.toLowerCase();
@@ -2977,9 +2987,17 @@ var Expr = Sizzle.selectors = {
 				for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 					var elem = checkSet[i];
 					if ( elem ) {
-						checkSet[i] = isPartStr ?
-							elem.parentNode :
-							elem.parentNode === part;
+						
+						/* Jumper Chen, Potix, 20100520*/
+						if (isZTag || isZID) {
+							var c = zk.Widget.$(elem, {exact: 1}),
+								p = c ? c.parent : zk.Widget.$(elem.parentNode, {exact: 1});
+							checkSet[i] = p && p[isZTag ? 'widgetName' : 'id'] == part.substring(1) ? p.$n() : false;
+						} else {
+    						checkSet[i] = isPartStr ?
+    							elem.parentNode :
+    							elem.parentNode === part;
+						}
 						
 						/* Jumper Chen, Potix, 20100430*/
 						if (!isPartStr && !checkSet[i]) {
@@ -3297,8 +3315,8 @@ var Expr = Sizzle.selectors = {
 			return (match === "*" && elem.nodeType === 1) || elem.nodeName.toLowerCase() === match;
 		},
 		/* Jumper Chen, Potix, 20100325*/
-		ZTAG: function(elem, match){
-			var wgt = zk.Widget.$(elem);
+		ZTAG: function(elem, match, i, curloop, inplace){
+			var wgt = zk.Widget.$(elem, {exact: !inplace}) || false;
 			return wgt && wgt.className.toLowerCase().endsWith(match[1].substring(1));
 		},
 		/* Jumper Chen, Potix, 20100318*/
@@ -3648,12 +3666,16 @@ function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 }
 
 function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
+	/* Jumper Chen, Potix, 20100520*/
+	var isZID = /\$/.test(cur),
+		isZTag = /@/.test(cur),
+		cacheElem;
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 		var elem = checkSet[i];
 		if ( elem ) {
 			/* Jumper Chen, Potix, 20100326*/
-			if (cur.indexOf("@") == 0 || cur.indexOf("$")) {
-				var wgt = zk.Widget.$(elem),
+			if (cur.indexOf("@") == 0 || cur.indexOf("$") == 0) {
+				var wgt = zk.Widget.$(elem, {exact: 1}),
 					fn = dir == "parentNode" ? "parent" : dir;
 				while (wgt && (wgt = wgt[fn])) {
 					elem = wgt.$n(); // some widget may not have node
@@ -3665,7 +3687,8 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 
 			while ( elem ) {
 				if ( elem.sizcache === doneName ) {
-					match = checkSet[elem.sizset];
+					/* Jumper Chen, Potix, 20100520*/
+					match = checkSet[elem.sizset] === 0 ? cacheElem : checkSet[elem.sizset];
 					break;
 				}
 
@@ -3689,6 +3712,14 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 				elem = elem[dir];
 			}
 
+			/* Jumper Chen, Potix, 20100520*/
+			if (match && (isZID || isZTag)) {
+				var w = zk.Widget.$(checkSet[i], {exact: 1});
+				if (w && w[isZID ? 'id' : 'widgetName'] == cur.substring(1)) {
+					cacheElem = match;
+					match = 0; // using 0 make a different from false
+				}
+			}
 			checkSet[i] = match;
 		}
 	}

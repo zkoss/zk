@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.RequestQueue;
@@ -759,12 +760,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			sessWillPassivate();
 		} else {
 			exec = new org.zkoss.zk.ui.impl.PhantomExecution(this);
-			final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
-			uieng.activate(exec);
+			safeActivate(exec);
 			try {
 				sessWillPassivate();
 			} finally {
-				uieng.deactivate(exec);
+				safeDeactivate(exec);
 			}
 		}
 	}
@@ -777,13 +777,34 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			sessDidActivate();
 		} else {
 			exec = new org.zkoss.zk.ui.impl.PhantomExecution(this);
-			final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
-			uieng.activate(exec);
+			safeActivate(exec);
 			try {
 				sessDidActivate();
 			} finally {
-				uieng.deactivate(exec);
+				safeDeactivate(exec);
 			}
+		}
+	}
+	/** Safe to be called even if the Web application has been destroyed
+	 */
+	private void safeActivate(Execution exec) {
+		final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+		if (uieng != null) {
+			uieng.activate(exec);
+		} else {
+			_exec = exec;
+			ExecutionsCtrl.setCurrent(exec);
+		}
+	}
+	/** Safe to be called even if the Web application has been destroyed
+	 */
+	private void safeDeactivate(Execution exec) {
+		final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+		if (uieng != null) {
+			uieng.deactivate(exec);
+		} else {
+			_exec = null;
+			ExecutionsCtrl.setCurrent(null);
 		}
 	}
 	private void sessWillPassivate() {

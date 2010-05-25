@@ -195,7 +195,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 					//don't use rc.temp which will be replaced with widgets later
 				out.write("\n<style id=\"");
 				out.write(getUuid());
-				out.write("$css\" type=\"text/css\"");
+				out.write("-css\" type=\"text/css\"");
 				if (_media != null) {
 					out.write(" media=\"");
 					out.write(_media);
