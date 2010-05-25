@@ -64,8 +64,9 @@ public interface IdGenerator {
 	 *
 	 * <p>Notice that UUID cannot be empty and can only have alphanumeric characters or underscore
 	 * (i.e., a-z, A-Z, 0-9, and _).
+	 * In additions, UUID for pages cannot be the same as UUID for components.
 	 *
-	 * <p>Also notice that we can retrieve the execution by use of
+	 * <p>Also notice that the execution can be retrieved by use of
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 *
 	 * @return the next page UUID, or null to generate the

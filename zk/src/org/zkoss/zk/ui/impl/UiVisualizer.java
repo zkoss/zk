@@ -300,7 +300,7 @@ import org.zkoss.zk.au.out.*;
 			return; //to avoid redundant AuRemove
 		if (_ending) throw new IllegalStateException("ended");
 
-		updateUuid(comp);
+		snapshotUuid(comp);
 
 		if (oldpg == null && !_moved.contains(comp)
 		&& !_detached.containsKey(comp)) { //new attached
@@ -719,11 +719,11 @@ import org.zkoss.zk.au.out.*;
 				_invalidated.remove(comp);
 				_smartUpdated.remove(comp);
 
-				responses.add(new AuRemove(comp, uuid(comp)));
+				responses.add(new AuRemove(uuid(comp)));
 					//Use the original UUID is important since it might be reused
 			} else { //page != null
 				if (_exec.isAsyncUpdate(page))
-					responses.add(new AuRemove(comp, uuid(comp)));
+					responses.add(new AuRemove(uuid(comp)));
 						//Use the original UUID is important since it might be reused
 				_attached.add(comp);
 					//copy to _attached since we handle them later in the same way
@@ -735,7 +735,7 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Stores the original UUID of the specified component.
 	 */
-	private void updateUuid(Component comp) {
+	private void snapshotUuid(Component comp) {
 		if (!_uuids.containsKey(comp))
 			_uuids.put(comp, comp.getUuid());
 	}

@@ -29,18 +29,10 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuRemove extends AuResponse {
 	public AuRemove(Component comp) {
-		super("rm", comp, comp.getUuid());
-	}
-	/** Constructor.
-	 * @param comp the component to remove from the client
-	 * @param uuid the original UUID (it might or might not be the same as comp.getUuid())
-	 * @since 5.0.3
-	 */
-	public AuRemove(Component comp, String uuid) {
-		super("rm", comp, uuid);
+		this(comp.getUuid());
 	}
 	public AuRemove(Page page) {
-		super("rm", page, page.getUuid());
+		this(page.getUuid());
 	}
 	/** Removes a component by its UUID.
 	 * This constructor is used only if a component's UUID is changed.
