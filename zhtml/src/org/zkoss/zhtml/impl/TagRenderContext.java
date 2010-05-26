@@ -19,6 +19,8 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.zkoss.lang.Strings;
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -86,20 +88,29 @@ public class TagRenderContext {
 
 		_jsout.append(",'").append(comp.getUuid()).append("',{");
 
-		if (!lookup && clientEvents != null) {
+		if (!lookup) {
 			boolean first = true;
-			for (Iterator it = clientEvents.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String evtnm = (String)me.getKey();
-				final int flags = ((Integer)me.getValue()).intValue();
-				if ((flags & ComponentCtrl.CE_IMPORTANT) != 0
-				|| Events.isListened(comp, evtnm, false)) {
-					if (first) first = false;
-					else _jsout.append(',');
-					_jsout.append('$').append(evtnm).append(':')
-						.append(Events.isListened(comp, evtnm, true));
-						//$onClick and so on
+			final String id = comp.getId();
+			if (id.length() > 0) {
+				first = false;
+				_jsout.append("id:'")
+					.append(Strings.escape(id, Strings.ESCAPE_JAVASCRIPT)).append('\'');
+			}
+
+			if (clientEvents != null) {
+				for (Iterator it = clientEvents.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final String evtnm = (String)me.getKey();
+					final int flags = ((Integer)me.getValue()).intValue();
+					if ((flags & ComponentCtrl.CE_IMPORTANT) != 0
+					|| Events.isListened(comp, evtnm, false)) {
+						if (first) first = false;
+						else _jsout.append(',');
+						_jsout.append('$').append(evtnm).append(':')
+							.append(Events.isListened(comp, evtnm, true));
+							//$onClick and so on
+					}
 				}
 			}
 		}

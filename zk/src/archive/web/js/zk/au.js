@@ -1199,7 +1199,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	uuid: function (wgt, newId) {
 		if (wgt)
-			wgt.setId(newId);
+			wgt._setUuid(newId);
 	},
 
 	/** Set the focus to the specified widget.

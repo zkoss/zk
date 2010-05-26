@@ -8,7 +8,7 @@
 	<h1>ZHTML Demo</h1>
 	<ul id="ul">
 		<li>The first item.</li>
-		<li>The second item.</li>
+		<li id="li2" zk:onClick='self.setId("li2".equals(self.getId()) ? "":"li2")'>Click me to change Id.</li>
 	</ul>
 	<input type="button" value="Add Item" zk:onClick="addItem(null)"/>
 	<input id="mm" type="button" value="Add but cause failure" zk:onClick="addItem(&quot;mm&quot;)"/>
