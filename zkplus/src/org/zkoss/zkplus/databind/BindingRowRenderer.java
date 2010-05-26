@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Row;
 
@@ -48,7 +47,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		
 		//avoid duplicate id error, will set to new id when render()
 		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
-		if (!ComponentsCtrl.isAutoId(clone, clone.getId())) {
+		if (clone.getId().length() > 0) {
 			clone.setId(null);
 		}
 					

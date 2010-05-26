@@ -41,6 +41,6 @@ public class ViewIdGenerator implements IdGenerator {
 		return null;
 	}
 	public boolean isAutoUuid(Component comp, String uuid) {
-		return ComponentsCtrl.isAutoId(uuid);
+		return ComponentsCtrl.isAutoUuid(uuid);
 	}
 }

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 /**
@@ -114,7 +113,7 @@ import org.zkoss.zul.Comboitem;
 		//TODO: see if databinder has this kind of Comboitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		//Bug #1962153: Data binding generates duplicate id in some case add "_".
-		if (!ComponentsCtrl.isAutoId(clone, clone.getId())) {
+		if (clone.getId().length() > 0) {
 			clone.setId(null);
 		}
 					

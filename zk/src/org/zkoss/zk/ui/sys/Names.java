@@ -48,7 +48,7 @@ public class Names {
 	 * It also invokes {@link #isReserved}.
 	 */
 	public static final boolean isValid(String name) {
-		if (ComponentsCtrl.isAutoId(name) || isReserved(name))
+		if (ComponentsCtrl.isAutoUuid(name) || isReserved(name))
 			return false;
 
 		for (int j = name.length(); --j >= 0;) {

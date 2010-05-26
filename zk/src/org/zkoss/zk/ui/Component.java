@@ -107,12 +107,15 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public IdSpace getSpaceOwner();
 
-	/** Returns the ID. If it is a root component (i.e., without parent),
-	 * its ID must be unique among root components of the same page.
+	/** Returns the ID.
+	 *
+	 * <p>Default: "" (an empty string; it means no ID at all).
 	 *
 	 * <p>If a component belongs to an ID space (see {@link IdSpace}),
 	 * the ID must also be unique in the ID space it belongs.
 	 * any its parent and ancestor implements {@link IdSpace}.
+	 * If it is a root component (i.e., without any parent),
+	 * its ID must be unique among root components of the same page.
 	 *
 	 * <p>A page itself is also an ID space, so you could retrieve
 	 * components in a page by use of {@link Page#getFellow}, unless
@@ -122,22 +125,19 @@ w:use="foo.MyWindow"&gt;
 	 * against the owner of the ID space.
 	 *
 	 * <p>In zscript and EL, a component with explicit ID can be accessed
-	 * directly by the ID. In other word, a variable named by the ID is
-	 * created automatically.
+	 * directly by the ID.
 	 *
-	 * @see Page
+	 * @see Path
 	 */
 	public String getId();
 	/** Sets the ID. The scope of uniqueness depends on whether this component
 	 * is a root component. Refer to {@link #getId} for more details.
 	 *
-	 * <p>When a component is constructed, an ID is generated automatically.
-	 * Thus, calling this method only you need to identify a component.
+	 * <p>Default: "" (an empty string; it means no ID at all).
 	 *
-	 * @param id the identifier. It cannot be empty.
-	 * If null, it means the previous ID is removed (aka., reset)
-	 * and an anonymous ID is assigned.
-	 * @see Page
+	 * @param id the identifier.
+	 * You could specify null or an empty string to remove ID.
+	 * @see Path
 	 */
 	public void setId(String id);
 

@@ -465,8 +465,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
+		//Note: we don't check IdGenerator.isAutoUuid since it returns false if not implemented
 		if (comp instanceof RawId &&
-		(!ComponentsCtrl.isAutoId(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
+		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
 			return;
 
 		if (_uuidRecycle == null)

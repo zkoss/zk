@@ -85,13 +85,19 @@ public class ComponentsCtrl {
 		return sb.toString();
 	}
 
+	/** @deprecated As of release 5.0.3, replaced with {@link #isAutoUuid(String)}.
+	 */
+	public static final boolean isAutoId(String id) {
+		return isAutoUuid(id);
+	}
 	/** Returns whether an ID is generated automatically.
 	 * Note: true is returned if id is null.
 	 * Also notice that this method doesn't check if a custom ID generator
 	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
-	 * If so, use {@link #isAutoId(Component,String)} instead.
+	 * If so, use {@link #isAutoUuid(Component,String)} instead.
+	 * @since 5.0.3
 	 */
-	public static final boolean isAutoId(String id) {
+	public static final boolean isAutoUuid(String id) {
 		return id == null || (id.startsWith(AUTO_ID_PREFIX)
 			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
 	}
@@ -100,7 +106,7 @@ public class ComponentsCtrl {
 	 * since this method considered RawId and IdGenerator.
 	 * @since 5.0.3
 	 */
-	public static boolean isAutoId(Component comp, String id) {
+	public static boolean isAutoUuid(Component comp, String id) {
 		if (id == null || id.length() == 0)
 			return true;
 
