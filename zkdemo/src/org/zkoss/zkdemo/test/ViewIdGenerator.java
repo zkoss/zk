@@ -22,7 +22,6 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.IdGenerator;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 
 /**
  * Used to see the status when IdGenerator is called.
@@ -39,8 +38,5 @@ public class ViewIdGenerator implements IdGenerator {
 	}
 	public String nextDesktopId(Desktop desktop) {
 		return null;
-	}
-	public boolean isAutoUuid(Component comp, String uuid) {
-		return ComponentsCtrl.isAutoUuid(uuid);
 	}
 }

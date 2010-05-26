@@ -40,8 +40,6 @@ ZK 5.0.3
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
 		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
-  + IdGenerator introduced a new method called isAutoUuid. 
-    It is backward compatible if you prefer not to re-compile your codes.
   + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
     your macro components uses this property, you have to rename it.
   + Component's ID is default to be an empty string (rather than an auto-generated

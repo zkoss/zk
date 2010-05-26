@@ -291,7 +291,7 @@ implements DynamicPropertied, RawId {
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_tagnm);
 
-		if (!shallHideId() || !ComponentsCtrl.isAutoUuid(this, getUuid()))
+		if (!shallHideId() || getId().length() > 0)
 			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
