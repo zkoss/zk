@@ -21,7 +21,6 @@ import java.util.Collection;
 import org.zkoss.io.Files;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -75,8 +74,8 @@ public class Path {
 		for (;;) {
 			if (sb.length() > 0) sb.insert(0, '/');
 			final String compId = comp.getId();
-			if (ComponentsCtrl.isAutoId(comp, compId))
-				throw new UiException(MZk.AUTO_ID_NOT_ALLOWED_IN_PATH, comp);
+			if (compId.length() == 0)
+				throw new UiException("ID required: " + comp);
 			sb.insert(0, compId);
 			IdSpace is = comp.getSpaceOwner();
 			if (is instanceof Page) break; //done

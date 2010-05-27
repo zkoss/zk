@@ -118,11 +118,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var	tabs = this.parent,
 			oldtab = tabbox._selTab;
 		if (oldtab != this || init) {
-			if (tabbox.isVertical())
-				tabs._scrollcheck("vsel", this);
-			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck("sel", this);
-
 			if (oldtab && oldtab != this)
 				this._setSel(oldtab, false, false, init);
 			this._setSel(this, true, notify, init);
@@ -150,6 +145,14 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			var tabs = this.parent;
 			if (tabs) tabs._fixWidth();
 		}
+		
+		if (tab == this) {
+			if (tabbox.isVertical())
+				tabs._scrollcheck("vsel", this);
+			else if (!tabbox.inAccordionMold())
+				tabs._scrollcheck("sel", this);
+		}
+		
 		if (notify)
 			this.fire('onSelect', {items: [this], reference: this.uuid});
 	},

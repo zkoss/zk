@@ -119,7 +119,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** Used to retore _owner. */
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
-	private String _id, _uuid;
+	private String _id = "", _uuid;
 	private String _title = "", _style = "";
 	private final String _path;
 	private String _zslang;
@@ -246,8 +246,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public void setId(String id) {
 		if (_desktop != null && _desktop.getPages().contains(this))
-			throw new UiException("Unable to change ID after initialized");
-		if (id != null && id.length() > 0) _id = id;
+			throw new UiException("ID cannot be changed after initialized");
+		_id = id != null ? id: "";
 		//No need to update client since it is allowed only before init(...)
 	}
 	public String getTitle() {
@@ -589,18 +589,16 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		} else {
 			_uuid = ((DesktopCtrl)_desktop).getNextUuid(this);
 
-			if (_id == null) {
-				final String id = config.getId();
-				if (id != null && id.length() != 0) _id = id;
-			}
-			if (_id != null)
+			if (_id == null || _id.length() == 0)
+				_id = config.getId();
+			if (_id == null || _id.length() == 0)
 				_id = (String)exec.evaluate(this, _id, String.class);
-			if (_id != null && _id.length() != 0) {
+			if (_id == null) {
+				_id = "";
+			} else if (_id.length() != 0) {
 				final String INVALID = ".&\\%";
 				if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 					throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
-			} else {
-				_id = _uuid;
 			}
 		}
 
@@ -1097,6 +1095,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	//-- Object --//
 	public String toString() {
-		return "[Page "+_id+']';
+		return "[Page "+(_id.length() > 0 ? _id: _uuid)+']';
 	}
 }

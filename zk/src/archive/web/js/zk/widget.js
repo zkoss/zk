@@ -994,11 +994,9 @@ new zul.wnd.Window{
 					this.set(nm, props[nm]);
 			}
 
-			if (zk.spaceless || this.rawId) {
-				if (this.id) this.uuid = this.id; //setId was called
-				else if (this.uuid) this.id = this.uuid;
-				else this.uuid = this.id = zk.Widget.nextUuid();
-			} else if (!this.uuid)
+			if ((zk.spaceless || this.rawId) && this.id)
+				this.uuid = this.id; //setId was called
+			if (!this.uuid)
 				this.uuid = zk.Widget.nextUuid();
 		});
 	},
@@ -1361,28 +1359,14 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget
 	 */
 	setId: function (id) {
-		if (!id && this.rawId)
-			id = this.uuid;
-
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
 				_rmGlobal(this);
 			}
 
-			if (zk.spaceless || this.rawId) {
-				var n = this.$n();
-				if (n) {
-					//Note: we assume RawId doesn't have sub-nodes
-					if (!this.rawId)
-						throw 'id immutable after bound'; //might have subnodes
-					n.id = id;
-					delete _binds[this.uuid];
-					_binds[id] = this;
-					this.clearCache();
-				}
-				this.uuid = id;
-			}
+			if (id && (zk.spaceless || this.rawId))
+				this._setUuid(id);
 			this.id = id;
 
 			if (id) {
@@ -1392,6 +1376,23 @@ wgt.$f().main.setTitle("foo");
 			}
 		}
 		return this;
+	},
+	_setUuid: function (uuid) { //called by au.js
+		if (!uuid)
+			uuid = zk.Widget.nextUuid();
+		if (uuid != this.uuid) {
+			var n = this.$n();
+			if (n) {
+				//Note: we assume RawId doesn't have sub-nodes
+				if (!this.rawId)
+					throw 'id immutable after bound'; //might have subnodes
+				n.id = uuid;
+				delete _binds[this.uuid];
+				_binds[uuid] = this;
+				this.clearCache();
+			}
+			this.uuid = uuid;
+		}
 	},
 
 	/** Sets a property.
@@ -4014,9 +4015,15 @@ _doFooSelect: function (evt) {
 	getElementsByName: function (name) {
 		var els = [];
 		for (var wid in _binds) {
-			if (name == '*' || name == _binds[wid].widgetName)
-				els.push(_binds[wid].$n());
+			if (name == '*' || name == _binds[wid].widgetName) {
+				var n = _binds[wid].$n();
+				if (n) els.push(n);
+			}
 		}
+		if (els.length)
+			els.sort(function (a, b) {
+				return zk.Widget.$(a).$oid - zk.Widget.$(b).$oid;
+			});
 		return els;
 	},
 	/**
@@ -4027,8 +4034,10 @@ _doFooSelect: function (evt) {
 	 */
 	getElementsById: function (id) {
 		var els = [];
-		for (var wgts = _globals[id], i = wgts?wgts.length:0; i--;)
-			els.unshift(wgts[i].$n());
+		for (var n, wgts = _globals[id], i = wgts?wgts.length:0; i--;) {
+			n = wgts[i].$n();
+			if (n) els.unshift(n);
+		}
 		return els;
 	},
 

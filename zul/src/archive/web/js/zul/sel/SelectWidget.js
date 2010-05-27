@@ -694,6 +694,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			case 35: //End
 				if (!jq.nodeName(evt.domTarget, "a"))
 					this.focus();
+				if (evt.domTarget == this.$n('a')) {// for test tool.
+					if (evt.target == this) //try to avoid the condition inside the _doKeyDown()
+						evt.target = this._focusItem || this.getSelectedItem() || this;
+					this._doKeyDown(evt);
+				}
 				evt.stop();
 				return false;
 			}
@@ -723,6 +728,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			shift = false; //OK to
 
 		var endless = false, step, lastrow;
+		
+		// for test tool when browser is webkit
+		if (zk.safari && typeof data.keyCode == "string")
+			data.keyCode = zk.parseInt(data.keyCode);
 		switch (data.keyCode) {
 		case 33: //PgUp
 		case 34: //PgDn
@@ -790,9 +799,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
 		var focusEl = this.$n('a'),
-			offs;
-		if (row) {
-			var n = row.$n(), offs = zk(n).revisedOffset();
+			offs, n;
+		if (row && (n = row.$n())) {
+			offs = zk(n).revisedOffset();
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		} else
 			offs = [0, 0];

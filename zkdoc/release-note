@@ -44,6 +44,11 @@ ZK 5.0.3
   3005632: Listbox fails to replace with empty model if in ROD mode
   3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
   3006718: The hflex listbox after separator cause wrong width on IE6
+  3006762: The scroll bar appear after select a child node and close
+  3006772: The focus arrow will not clean after close and open the tree
+  3006796: Some ZHTML widgets won't be bound (bind_ not called)
+  3007194: The lastest tab right edge will not align with scroll button
+  3007217: Button.mold=trendy isn't applied to buttons in Messagebox
     
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
@@ -56,8 +61,6 @@ ZK 5.0.3
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
 		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
-  + IdGenerator introduced a new method called isAutoUuid. 
-    It is backward compatible if you prefer not to re-compile your codes.
   + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
     your macro components uses this property, you have to rename it.
   + Component's ID is default to be an empty string (rather than an auto-generated

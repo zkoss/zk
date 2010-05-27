@@ -19,11 +19,10 @@ package org.zkoss.zk.ui.ext;
 /**
  * Decorates {@link org.zkoss.zk.ui.Component} to denote that
  * the UUID ({@link org.zkoss.zk.ui.Component#getUuid} must be
- * the same as the ID ({@link org.zkoss.zk.ui.Component#getId}).
+ * the same as the ID ({@link org.zkoss.zk.ui.Component#getId}),
+ * if the applicaion assigns an ID for it.
  * Thus, if org.zkoss.zk.ui.Component#setId} is called,
  * both UUID and ID are changed.
- *
- * <p>In summary, if this interface is declared, ID == UUID.
  *
  * @author tomyeh
  */

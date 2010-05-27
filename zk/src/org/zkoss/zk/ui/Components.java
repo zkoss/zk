@@ -311,8 +311,7 @@ public class Components {
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 
-	/** @deprecated As of release 5.0.3, replaced with {@link ComponentsCtrl#isAutoId(Component,String)}
-	 * or {@link ComponentsCtrl#isAutoId(String)}.
+	/** @deprecated As of release 5.0.3, replaced with {@link ComponentsCtrl#isAutoUuid(String)}.
 	 * Returns whether an ID is generated automatically.
 	 * Note: true is returned if id is null.
 	 * Also notice that this method doesn't check if a custom ID generator
@@ -320,7 +319,7 @@ public class Components {
 	 * If so, this method is not applicable.
 	 */
 	public static final boolean isAutoId(String id) {
-		return ComponentsCtrl.isAutoId(id);
+		return ComponentsCtrl.isAutoUuid(id);
 	}
 
 	/** Converts a component to a path (relavant to another component).
@@ -353,7 +352,7 @@ public class Components {
 	 		return ".";
 		} else {
 			final String id = comp.getId();
-			if (!(comp instanceof IdSpace) && ComponentsCtrl.isAutoId(comp, id))
+			if (!(comp instanceof IdSpace) && id.length() == 0)
 				throw new UnsupportedOperationException("comp must be assigned with ID or a space owner: "+comp);
 
 			final StringBuffer sb = new StringBuffer(128);
@@ -1011,8 +1010,7 @@ public class Components {
 			//try setXxx
 			final String fdname = (arg instanceof Page) ? 
 					((Page)arg).getId() : ((Component)arg).getId();
-			if (!ComponentsCtrl.isAutoId(
-			arg instanceof Page ? null: ((Component)arg), fdname)) {
+			if (fdname.length() > 0) {
 				injectByName(arg, fdname);
 			}
 		}

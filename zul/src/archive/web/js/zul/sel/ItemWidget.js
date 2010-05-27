@@ -159,6 +159,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (n)
 			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
+		
+		if (n = this.getMeshWidget())
+			n._focusItem = this;			
 	},
 	_doFocusOut: function () {
 		var n = this.$n();

@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -49,7 +48,7 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 		//TODO: see if databinder has this kind of Listitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
-		if (!ComponentsCtrl.isAutoId(clone, clone.getId())) {
+		if (clone.getId().length() > 0) {
 			clone.setId(null);
 		}
 					

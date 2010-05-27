@@ -227,7 +227,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				jq(anc).removeClass(this.getZclass() + '-body-over');
 				anc = anc.parentNode;
 			}
-			if ('javascript:;' == anc.href) {
+			if (anc.href.startsWith('javascript:')) {
 				if (this.isAutocheck()) {
 					this.setChecked(!this.isChecked());
 					this.fire('onCheck', this.isChecked());

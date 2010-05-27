@@ -108,8 +108,6 @@ implements Page, PageCtrl, java.io.Serializable {
 	//PageCtrl//
 	/*package*/ void addFellow(Component comp) {
 		final String compId = comp.getId();
-		assert D.OFF || !ComponentsCtrl.isAutoId(comp, compId);
-
 		final Object old = _fellows.put(compId, comp);
 		if (old != comp) { //possible due to recursive call
 			if (old != null) {
@@ -242,7 +240,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		for (Iterator it = c.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			final String compId = comp.getId();
-			if (!ComponentsCtrl.isAutoId(comp, compId))
+			if (compId.length() > 0)
 				addFellow(comp);
 			if (!(comp instanceof IdSpace))
 				fixFellows(comp.getChildren()); //recursive

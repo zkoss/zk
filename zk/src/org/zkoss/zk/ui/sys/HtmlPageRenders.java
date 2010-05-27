@@ -560,6 +560,9 @@ public class HtmlPageRenders {
 			out.write("',{");
 
 			final StringBuffer props = new StringBuffer(128);
+			final String pgid = page.getId();
+			if (pgid.length() > 0)
+				appendProp(props, "id", pgid);
 			if (owner != null) {
 				appendProp(props, "ow", owner.getUuid());
 			} else {
