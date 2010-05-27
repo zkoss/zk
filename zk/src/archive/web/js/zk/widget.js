@@ -3893,6 +3893,18 @@ _doFooSelect: function (evt) {
 		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	},
+	/* Returns if the given watch shall be fired for this widget.
+	 * It is called by {@link zWatch} to check if the given watch shall be fired
+	 * @param String name the name of the watch, such as onShow
+	 * @return boolean
+	 * @5.0.3
+	 */
+	isWatchable_: function (name) {
+		var n;
+		return (n=this.$n()) && zk(n).isRealVisible(name!='onShow');
+		//if onShow, we don't check visibility since window uses it for
+		//non-embedded window that becomes invisible because of its parent
+	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
 	}
