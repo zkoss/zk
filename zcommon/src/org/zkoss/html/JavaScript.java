@@ -14,14 +14,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.web.servlet;
+package org.zkoss.html;
 
 import org.zkoss.lang.Objects;
 
 /**
- * Represents a javascript.
+ * Represents a javascript element.
  *
  * @author tomyeh
+ * @since 5.1.0
  */
 public class JavaScript {
 	private final String _src, _charset, _content;

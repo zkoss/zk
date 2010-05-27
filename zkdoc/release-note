@@ -17,6 +17,7 @@ ZK 5.1.0
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
     selected - Bug 2973303)
+  + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
 
 	--------
 ZK 5.0.3

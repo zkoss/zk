@@ -34,9 +34,9 @@ import org.zkoss.lang.Strings;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
-import org.zkoss.web.servlet.JavaScript;
-import org.zkoss.web.servlet.StyleSheet;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.JavaScript;
+import org.zkoss.html.StyleSheet;
+import org.zkoss.html.HTMLs;
 import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;

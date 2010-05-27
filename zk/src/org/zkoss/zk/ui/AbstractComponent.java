@@ -43,7 +43,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;

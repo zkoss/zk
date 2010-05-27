@@ -14,15 +14,18 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xml;
+package org.zkoss.html;
 
 import java.util.Set;
 import java.util.HashSet;
+
+import org.zkoss.xml.XMLs;
 
 /**
  * Utilities for HTML attributes and styles.
  *
  * @author tomyeh
+ * @since 5.1.0
  */
 public class HTMLs {
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").
@@ -46,7 +49,6 @@ public class HTMLs {
 	 *
 	 * @param emptyIgnored whether to ignore a null or empty string.
 	 * If false, it is always generated (null is generated as "null").
-	 * @since 5.0.0
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, String val,
@@ -63,21 +65,18 @@ public class HTMLs {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
 	/** Appends an attribute with a long value to the string buffer for HTML/XML (name="val").
-	 * @since 3.0.2
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, long val) {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
 	/** Appends an attribute with a long value to the string buffer for HTML/XML (name="val").
-	 * @since 5.0.0
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, double val) {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
 	/** Appends an attribute with a short value to the string buffer for HTML/XML (name="val").
-	 * @since 3.0.2
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, short val) {
@@ -194,7 +193,6 @@ public class HTMLs {
 	 * <p>For example, br and img are orphan tags.
 	 *
 	 * @param tagname the tag name, e.g., br and tr.
-	 * @since 3.0.0
 	 */
 	public static final boolean isOrphanTag(String tagname) {
 		return _orphans.contains(tagname.toLowerCase());

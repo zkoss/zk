@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 

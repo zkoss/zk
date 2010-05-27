@@ -23,7 +23,7 @@ import java.util.HashMap;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;

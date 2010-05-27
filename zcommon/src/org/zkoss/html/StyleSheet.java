@@ -14,7 +14,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.web.servlet;
+package org.zkoss.html;
 
 import org.zkoss.lang.Objects;
 
@@ -22,6 +22,7 @@ import org.zkoss.lang.Objects;
  * Represents a style sheet.
  *
  * @author tomyeh
+ * @since 5.1.0
  */
 public class StyleSheet implements java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20100514L;
@@ -52,7 +53,6 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 * @param media the media. If null, it is omitted.
 	 * @param byContent the content argument is the style content, or
 	 * an URI to an external content
-	 * @since 5.0.3
 	 */
 	public StyleSheet(String content, String type, String media, boolean byContent) {
 		if (content == null)
@@ -81,7 +81,6 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	}
 	/** Returns the media, or null if not available.
 	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
-	 * @since 5.0.3
 	 */
 	public String getMedia() {
 		return _media;

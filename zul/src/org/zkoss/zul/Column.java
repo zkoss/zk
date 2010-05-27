@@ -27,7 +27,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;

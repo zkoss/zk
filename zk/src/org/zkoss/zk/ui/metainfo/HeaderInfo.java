@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;

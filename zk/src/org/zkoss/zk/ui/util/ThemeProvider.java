@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.util;
 import java.util.Collection;
 import java.util.List;
 
-import org.zkoss.web.servlet.StyleSheet;
+import org.zkoss.html.StyleSheet;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.Attributes;
 

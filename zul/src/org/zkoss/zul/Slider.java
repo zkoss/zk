@@ -19,7 +19,7 @@ package org.zkoss.zul;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;

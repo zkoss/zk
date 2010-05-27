@@ -21,7 +21,7 @@ import java.io.IOException;
 import javax.swing.SpinnerNumberModel;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.NumberInputElement;
 import org.zkoss.zul.mesg.MZul;

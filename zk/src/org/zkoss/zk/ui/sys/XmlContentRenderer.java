@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 /**
  * An implementation of {@link ContentRenderer} that renders

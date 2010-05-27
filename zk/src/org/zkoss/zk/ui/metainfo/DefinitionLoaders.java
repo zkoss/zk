@@ -39,8 +39,8 @@ import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.taglib.Taglib;
-import org.zkoss.web.servlet.JavaScript;
-import org.zkoss.web.servlet.StyleSheet;
+import org.zkoss.html.JavaScript;
+import org.zkoss.html.StyleSheet;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;

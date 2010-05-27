@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;

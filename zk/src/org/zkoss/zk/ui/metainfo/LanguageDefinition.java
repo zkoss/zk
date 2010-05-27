@@ -33,8 +33,8 @@ import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
-import org.zkoss.web.servlet.JavaScript;
-import org.zkoss.web.servlet.StyleSheet;
+import org.zkoss.html.JavaScript;
+import org.zkoss.html.StyleSheet;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Page;

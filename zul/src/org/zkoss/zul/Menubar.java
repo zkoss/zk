@@ -21,7 +21,7 @@ import java.io.IOException;
 import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;

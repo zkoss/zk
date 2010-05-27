@@ -22,7 +22,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
 import org.zkoss.image.Image;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
