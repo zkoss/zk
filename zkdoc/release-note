@@ -29,6 +29,7 @@ ZK 5.0.3
   3006796: Some ZHTML widgets won't be bound (bind_ not called)
   3007194: The lastest tab right edge will not align with scroll button
   3007217: Button.mold=trendy isn't applied to buttons in Messagebox
+  3005122: Colorbox#setColor on client side
     
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
