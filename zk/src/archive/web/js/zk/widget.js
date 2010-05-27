@@ -308,7 +308,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
 					wgt._vflexsz = sz.height + margin;
-				wgt.afterChildrenMinFlex_();
+				wgt.afterChildrenMinFlex_('h');
 			}
 			return wgt._vflexsz;
 			
@@ -426,7 +426,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
-				wgt.afterChildrenMinFlex_();
+				wgt.afterChildrenMinFlex_('w');
 			}
 			return wgt._hflexsz;
 		} else

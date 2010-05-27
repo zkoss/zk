@@ -1121,6 +1121,20 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
+	},
+	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
+	afterChildrenMinFlex_: function (orient) {
+		this.$supers('afterChildrenMinFlex_', arguments);
+		if (this._mode == 'modal') { //win hflex="min"
+			this._updateDomPos(true); //force re-position since window width might changed.
+		}
+	},
+	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
+	afterChildrenFlex_: function (cwgt) {
+		this.$supers('afterChildrenFlex_', arguments);
+		if (this._mode == 'modal') {
+			this._updateDomPos(true); //force re-position since window width might changed.
+		}
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

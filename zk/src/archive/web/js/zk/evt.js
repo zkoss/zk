@@ -243,7 +243,7 @@ zWatch = (function () {
 	}
 	//Returns if c is visible
 	function _visible(name, c) {
-		return c.isWatchable_ && c.isWatchable_(); //in future, c might not be a widget
+		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
 	}
 	//Returns if c is a visible child of p
 	function _visibleChild(name, p, c) {

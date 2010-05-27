@@ -236,7 +236,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		this._resize(true);
 	},
-	onShow: _zkf
+	onShow: _zkf,
+	isWatchable_: function(name) {
+		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
+		return this.$super('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
+	}
 }, {
 	/**
 	 * The north layout constraint (top of container).

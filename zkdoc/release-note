@@ -30,7 +30,9 @@ ZK 5.0.3
   3007194: The lastest tab right edge will not align with scroll button
   3007217: Button.mold=trendy isn't applied to buttons in Messagebox
   3005122: Colorbox#setColor on client side
-    
+  3007908: modal window not centered if child sized with hflex="min"
+  3007911: Borderlayout in Borderlayout with hflex="min" not resize OK
+  
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
