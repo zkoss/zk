@@ -175,5 +175,8 @@ public class MessageboxDlg extends Window {
 			}
 			dlg.endModal(_button);
 		}
+		protected String getDefaultMold(Class klass) {
+			return super.getDefaultMold(org.zkoss.zul.Button.class);
+		}
 	}
 }

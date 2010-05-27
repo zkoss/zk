@@ -2988,7 +2988,18 @@ w:use="foo.MyWindow"&gt;
 		return null;
 	}
 
-	private static String getDefaultMold(Class klass) {
+	/** Returns the default mold for the given class.
+	 * <p>Default: check the library property called xxx.mold, where xxx is
+	 * the name of the give class.
+	 * <p>Subclass might override this method to use the default mold of the base
+	 * class, such as
+	 * <pre><code>
+	 *protected String getDefaultMold(Class klass) {
+	 *   return super.getDefaultMold(Button.class);
+	 *}</code></pre>
+	 * @since 5.0.3
+	 */
+	protected String getDefaultMold(Class klass) {
 		return (String)getDefaultInfo(klass);
 	}
 	private static Object getDefaultInfo(Class klass) { //use Object for future extension
