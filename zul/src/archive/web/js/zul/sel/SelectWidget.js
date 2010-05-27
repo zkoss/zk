@@ -799,9 +799,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
 		var focusEl = this.$n('a'),
-			offs;
-		if (row) {
-			var n = row.$n(), offs = zk(n).revisedOffset();
+			offs, n;
+		if (row && (n = row.$n())) {
+			offs = zk(n).revisedOffset();
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		} else
 			offs = [0, 0];
