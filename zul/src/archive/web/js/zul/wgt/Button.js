@@ -35,6 +35,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			btn.$n('box').style.width = !width || width == "auto" ? "": "100%";
 		}
 	}: zk.$void;
+
+var Button = 
 /**
  * A button.
  * <p>Default {@link #getZclass}: z-button.
@@ -246,7 +248,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return zcls != null ? zcls: this._mold != 'trendy' ? "z-button-os": "z-button";
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(Button, 'bind_', arguments);
 
 		var n;
 		if (this._mold != 'trendy') {
@@ -277,7 +279,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (this._upload || (zk.ie && trendy))
 			zWatch.unlisten({onSize: this, onShow: this});
 
-		this.$supers('unbind_', arguments);
+		this.$supers(Button, 'unbind_', arguments);
 	},
 	_initUpld: function () {
 		var v;
@@ -376,7 +378,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		if (!this._disabled && this != zul.wgt.Button._curdn
+		if (!this._disabled && this != Button._curdn
 		&& !(zk.ie && jq.isAncestor(this.$n('box'), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
 			jq(this.$n('box')).removeClass(this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);

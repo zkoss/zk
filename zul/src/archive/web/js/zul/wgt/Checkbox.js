@@ -28,6 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return v && jq.nodeName(v.target, "label");
 	}
 
+var Checkbox =
 /**
  * A checkbox.
  *
@@ -120,7 +121,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return html;
 	},
 	bind_: function (desktop) {
-		this.$supers('bind_', arguments);
+		this.$supers(Checkbox, 'bind_', arguments);
 
 		var n = this.$n('real');
 		
@@ -141,7 +142,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 
-		this.$supers('unbind_', arguments);
+		this.$supers(Checkbox, 'unbind_', arguments);
 	},
 	doSelect_: function (evt) {
 		if (!_shallIgnore(evt))

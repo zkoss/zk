@@ -58,7 +58,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		jq(this.hdfaker).remove();
 		jq(this.bdfaker).remove();
 		jq(this.ftfaker).remove();
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.mesh.HeadWidget, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

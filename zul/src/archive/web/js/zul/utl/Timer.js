@@ -101,11 +101,11 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	redraw: function () {
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.utl.Timer, 'bind_', arguments);
 		if (this._running) this._play();
 	},
 	unbind_: function () {
 		this._stop();
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.utl.Timer, 'unbind_', arguments);
 	}
 });

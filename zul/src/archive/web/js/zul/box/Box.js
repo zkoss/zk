@@ -98,6 +98,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	}
 
+var Box =
 /**
  * A box.
  * <p>Default {@link #getZclass}: z-vbox.
@@ -583,7 +584,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 	},
 	bind_: function() {
-		this.$supers('bind_', arguments);
+		this.$supers(Box, 'bind_', arguments);
 		this._bindFixTd();
 		if (this._isStretchAlign())
 			this._bindAlign();
@@ -594,7 +595,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._unbindWatch();
 		this._unbindAlign();
 		this._unbindFixTd();
-		this.$supers('unbind_', arguments);
+		this.$supers(Box, 'unbind_', arguments);
 	},
 	_bindAlign: function() {
 		if (!this._watchAlign) {

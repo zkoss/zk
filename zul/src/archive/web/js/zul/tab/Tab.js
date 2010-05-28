@@ -180,7 +180,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		return label ? img + ' ' + label: img;
 	},
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.tab.Tab, 'bind_', arguments);
 		var closebtn = this.$n('close'),
 			tab = this;
 		if (closebtn) {
@@ -209,7 +209,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				this.domUnlisten_(closebtn, "onMouseOver", '_toggleBtnOver')
 					.domUnlisten_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},
 	//event handler//
 	onClose: function () {

@@ -701,7 +701,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.inp.Timebox, 'bind_', arguments);
 		var inp = this.getInputNode(),
 			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
@@ -737,7 +737,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, "mouseover", "_btnOver");
 		}
 		this._changed = false;
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.Timebox, 'unbind_', arguments);
 	}
 
 });

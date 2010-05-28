@@ -144,7 +144,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return jq(this.$n()).find('>div:first')[0];
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable()) this._initsz();
 		this.fixedFaker_();
 	},
@@ -153,7 +153,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			this._dragsz.destroy();
 			this._dragsz = null;
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.mesh.HeaderWidget, 'unbind_', arguments);
 	},
 	_initsz: function () {
 		var n = this.$n();

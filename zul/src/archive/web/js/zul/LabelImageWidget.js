@@ -116,8 +116,9 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		}
 		return this._eimg;
 	},
-	unbind_: function () {
+	//@Override
+	clearCache: function () {
 		this._eimg = null;
-		this.$supers('unbind_', arguments);
+		this.$supers('clearCache', arguments);
 	}
 });

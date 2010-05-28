@@ -213,7 +213,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			+ (this.getName() ? ' name="' + this.getName() + '"': '');
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.sel.Select, 'bind_', arguments);
 		var n = this.$n();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
@@ -224,7 +224,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
-			.$supers('unbind_', arguments);
+			.$supers(zul.sel.Select, 'unbind_', arguments);
 	},
 	_doChange: function (evt) {		
 		var data = [], reference, n = this.$n();

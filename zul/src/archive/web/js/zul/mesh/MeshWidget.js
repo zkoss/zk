@@ -197,7 +197,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 		if (this.isVflex()) {
 			// added by Jumper for IE to get a correct offsetHeight so we need 
 			// to add this command faster than the this._calcSize() function.
@@ -220,7 +220,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 		
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.mesh.MeshWidget, 'unbind_', arguments);
 	},
 	clearCache: function () {
 		this.$supers('clearCache', arguments);

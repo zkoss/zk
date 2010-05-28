@@ -39,6 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+var Audio =
 /**
  * An audio clip.
  *
@@ -120,7 +121,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 
 	unbind_: function () {
 		this.stop(true);
-		this.$supers('unbind_', arguments);
+		this.$supers(Audio, 'unbind_', arguments);
 	},
 
 	domAttrs_: function(no){

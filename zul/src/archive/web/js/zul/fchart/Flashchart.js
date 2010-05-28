@@ -181,6 +181,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return dataProvider;
 	}
 
+var Flashchart =
 /**
  * The generic flash chart component. Developers set proper chart type, data model,
  * and the src attribute to draw proper chart. The model and type must match to each other;
@@ -252,7 +253,7 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 	},
 
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(Flashchart, 'bind_', arguments);
 		var _swfId = this.uuid + "-chart",
 			_flashvars = "allowedDomain=localhost&elementID=" + _swfId + "&eventHandler=zul.fchart.Flashchart.onEvent",
 			_params = {				

@@ -52,6 +52,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+var InputWidget =
 /**
  * A skeletal implementation for a input widget.
  *
@@ -589,7 +590,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return sc;
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(InputWidget, 'bind_', arguments);
 		var inp = this.getInputNode(),
 			zcls = this.getZclass();
 		
@@ -610,7 +611,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_")
 			.domUnlisten_(n, "onSelect")
-			.$supers('unbind_', arguments);
+			.$supers(InputWidget, 'unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;

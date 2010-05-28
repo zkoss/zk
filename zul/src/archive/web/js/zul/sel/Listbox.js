@@ -18,6 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.sel');
 	}
+
+var Listbox =
 /**
  * A listbox.
  * 
@@ -120,14 +122,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return "select" == this.getMold();
 	},
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		zWatch.listen({onResponse: this});
 		this._shallStripe = true;
 		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (this.desktop && this._shallStripe) {

@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
 
+var Rows =
 /**
  * Defines the rows of a grid.
  * Each child of a rows element should be a {@link Row} element.
@@ -64,13 +65,13 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-rows" : this._zclass;
 	},
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(Rows, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (this.desktop && this._shallStripe) { //since bind_(...after)

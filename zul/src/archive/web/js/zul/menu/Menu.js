@@ -122,7 +122,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this._contentHandler.onHide();
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.menu.Menu, 'bind_', arguments);
 
 		var anc = this.$n('a'),
 			type = this._contentType;
@@ -157,7 +157,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this._contentHandler)
 			this._contentHandler.unbind();
 
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.menu.Menu, 'unbind_', arguments);
 	},
 	doClick_: function (evt) {		
 		var node = this.$n();

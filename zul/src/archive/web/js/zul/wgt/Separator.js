@@ -65,7 +65,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 
 	//super//
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.Separator, 'bind_', arguments);
 
 		var n;
 		if (zk.ie && (n = this.$n()).offsetWidth <= 2)

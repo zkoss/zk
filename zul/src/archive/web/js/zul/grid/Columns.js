@@ -110,7 +110,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		return this._zclass == null ? "z-columns" : this._zclass;
 	},
 	bind_: function (dt, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.grid.Columns, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 		var w = this;
 		if (this._menupopup == 'auto') {
@@ -125,7 +125,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			this._mpop.parent.removeChild(this._mpop);
 			this._shallSync = this._mpop = null;			
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.grid.Columns, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (this._shallSync)

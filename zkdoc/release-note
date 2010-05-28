@@ -33,6 +33,7 @@ ZK 5.0.3
   3007908: modal window not centered if child sized with hflex="min"
   3007911: Borderlayout in Borderlayout with hflex="min" not resize OK
   3008291: Listbox _syncFocus not properly called
+  3008276: Listheader hflex with no label gives js error
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

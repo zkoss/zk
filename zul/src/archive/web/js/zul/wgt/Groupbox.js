@@ -178,7 +178,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return zcls ? zcls: this.isLegend() ? "z-fieldset": "z-groupbox";
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 
 		if (!this.isLegend())
 			zWatch.listen({onSize: this, onShow: this});
@@ -186,7 +186,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		if (!this.isLegend())
 			zWatch.unlisten({onSize: this, onShow: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

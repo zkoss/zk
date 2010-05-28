@@ -33,6 +33,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zk(inp).focus();
 		}
 	}
+
+var Datebox =
 /**
  * An edit box for holding a date. 
  * <p>Default {@link #getZclass}: z-datebox.
@@ -438,7 +440,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function (){
-		this.$supers('bind_', arguments);
+		this.$supers(Datebox, 'bind_', arguments);
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
 			
@@ -466,7 +468,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 			
 		zWatch.unlisten({onSize: this, onShow: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
@@ -518,6 +520,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	}
 });
 
+var CalendarPop =
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -650,7 +653,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this.close(true);
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(CalendarPop, 'bind_', arguments);
 		this._bindTimezoneEvt();
 
 		zWatch.listen({onFloatUp: this});
@@ -662,7 +665,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(CalendarPop, 'unbind_', arguments);
 	},
 	_bindTimezoneEvt: function () {
 		var wgt = this.parent;

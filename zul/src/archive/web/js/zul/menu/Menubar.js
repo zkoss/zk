@@ -78,10 +78,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 		
 		this._lastTarget = null;
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.menu.Menubar, 'unbind_', arguments);
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.menu.Menubar, 'bind_', arguments);
 		if (this.checkScrollable()) {
 			var left = this.$n('left'),
 				right = this.$n('right');

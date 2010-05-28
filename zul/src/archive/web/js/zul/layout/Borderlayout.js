@@ -43,6 +43,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	};
 
+var Borderlayout =
 /**
  * A border layout is a layout container for arranging and resizing
  * child components to fit in five regions: north, south, east, west, and center.
@@ -93,12 +94,12 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-borderlayout" : this._zclass;
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(Borderlayout, 'bind_', arguments);
 		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onShow: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(Borderlayout, 'unbind_', arguments);
 	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenFlex_: function () {

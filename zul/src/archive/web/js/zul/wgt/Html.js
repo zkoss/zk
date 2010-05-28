@@ -39,7 +39,7 @@ zul.wgt.Html = zk.$extends(zul.Widget, {
 		}
 	},
 	bind_: function () {
-		this.$supers("bind_", arguments);
+		this.$supers(zul.wgt.Html, "bind_", arguments);
 		if (jq.isArray(this._content)) //z$ea
 			for (var ctn = this._content, n = this.$n(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
@@ -48,6 +48,6 @@ zul.wgt.Html = zk.$extends(zul.Widget, {
 		if (jq.isArray(this._content)) //z$ea
 			for (var n = this.$n(); n.firstChild;)
 				n.removeChild(n.firstChild);
-		this.$supers("unbind_", arguments);
+		this.$supers(zul.wgt.Html, "unbind_", arguments);
 	}
 });

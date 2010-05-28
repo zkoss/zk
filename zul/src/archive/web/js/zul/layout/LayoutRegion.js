@@ -405,7 +405,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this;
 	},
 	bind_: function(){
-		this.$supers('bind_', arguments);
+		this.$supers(zul.layout.LayoutRegion, 'bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.$n('split');			
 			if (split) {
@@ -456,7 +456,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._drag = null;
 			}
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {

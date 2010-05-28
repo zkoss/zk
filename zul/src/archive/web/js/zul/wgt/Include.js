@@ -61,7 +61,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		return style;
 	},
 	bind_: function () {
-		this.$supers("bind_", arguments);
+		this.$supers(zul.wgt.Include, "bind_", arguments);
 		var ctn;
 		if (jq.isArray(ctn = this._content)) //z$ea
 			for (var n = this.$n(), j = 0; j < ctn.length; ++j)
@@ -72,6 +72,6 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		if (jq.isArray(this._content)) //z$ea
 			for (var n = this.$n(); n.firstChild;)
 				n.removeChild(n.firstChild);
-		this.$supers("unbind_", arguments);
+		this.$supers(zul.wgt.Include, "unbind_", arguments);
 	}
 });
