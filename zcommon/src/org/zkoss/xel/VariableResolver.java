@@ -22,7 +22,10 @@ package org.zkoss.xel;
  *
  * <p>Since 5.0.0, you can implement another interface called {@link VariableResolverX}
  * to have more control about resolving the variables.
- *
+ * 
+ * <p>Any class implementing this interface shall implement {@link Object#equals(Object)}
+ * and {@link Object#hashCode()}
+ * 
  * @author tomyeh
  * @since 3.0.0
  * @see VariableResolverX
