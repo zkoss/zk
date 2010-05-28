@@ -621,9 +621,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (Names.isReserved(id))
 					throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
-				if (rawId && _page != null
-				&& _page.getDesktop().getComponentByUuidIfAny(newUuid) != null)
-					throw new UiException("Replicated UUID is not allowed for "+getClass()+": "+newUuid);
+				if (rawId && _page != null) {
+					final Component c = _page.getDesktop().getComponentByUuidIfAny(newUuid);
+					if (c != null && c != this)
+						throw new UiException("Replicated UUID is not allowed for "+getClass()+": "+newUuid);
+				}
 
 				checkIdSpaces(this, id);
 			}
@@ -631,13 +633,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
 				if (_page != null) {
-					getAttachedUiEngine().addUuidChanged(this);
 						//called before uuid is changed
 					final Desktop dt = _page.getDesktop();
 					((DesktopCtrl)dt).removeComponent(this);
 
 					if (newUuid.length() == 0)
 						newUuid = nextUuid(dt);
+
+					if (!Objects.equals(_uuid, newUuid))
+						getAttachedUiEngine().addUuidChanged(this);
 				}
 
 				_id = id;
@@ -2966,6 +2970,8 @@ w:use="foo.MyWindow"&gt;
 			if (_id2uuidPrefix == NONE) {
 				_id2uuidPrefix = Library.getProperty(Attributes.ID_TO_UUID_PREFIX);
 				if (_id2uuidPrefix != null) {
+					Library.setProperty(Attributes.UUID_RECYCLE_DISABLED, "true"); //disable it
+
 					_id2uuidPageOfs = _id2uuidPrefix.indexOf("${page}");
 					if (_id2uuidPageOfs >= 0) {
 						_id2uuidPrefix2 = _id2uuidPrefix.substring(_id2uuidPageOfs + 7);

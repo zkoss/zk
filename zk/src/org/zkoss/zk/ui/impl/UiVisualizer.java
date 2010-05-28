@@ -532,7 +532,9 @@ import org.zkoss.zk.au.out.*;
 		if (_idChgd != null) {
 			for (Iterator it = _idChgd.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				responses.add(new AuUuid((Component)me.getKey(), (String)me.getValue()));
+				final Component comp = (Component)me.getKey();
+				if (!_attached.contains(comp))
+					responses.add(new AuUuid(comp, (String)me.getValue()));
 			}
 			_idChgd = null; //just in case
 		}
