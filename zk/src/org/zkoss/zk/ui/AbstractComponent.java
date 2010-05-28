@@ -612,11 +612,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void setId(String id) {
 		if (id == null) id = "";
 		if (!id.equals(_id)) {
-			boolean rawId = this instanceof RawId;
+			final boolean rawId = this instanceof RawId;
 			String newUuid;
 			if (rawId) newUuid = id;
-			else if ((newUuid = id2Uuid(id)) != null)
-				rawId = true;
 
 			if (id.length() > 0) {
 				if (Names.isReserved(id))
@@ -2859,38 +2857,6 @@ w:use="foo.MyWindow"&gt;
 	private Component resolveForwardTarget(Object fwd) {
 		return fwd instanceof String ?
 			Components.pathToComponent((String)fwd, this): (Component)fwd;
-	}
-
-	private static final String NONE = "";
-	private static String _id2uuidPrefix = NONE, _id2uuidPrefix2;
-	private static int _id2uuidPageOfs;
-	private static String id2Uuid(String id) {
-		if (id.length() > 0) {
-			if (_id2uuidPrefix == NONE) {
-				_id2uuidPrefix = Library.getProperty(Attributes.ID_TO_UUID_PREFIX);
-				if (_id2uuidPrefix != null) {
-					Library.setProperty(Attributes.UUID_RECYCLE_DISABLED, "true"); //disable it
-
-					_id2uuidPageOfs = _id2uuidPrefix.indexOf("${page}");
-					if (_id2uuidPageOfs >= 0) {
-						_id2uuidPrefix2 = _id2uuidPrefix.substring(_id2uuidPageOfs + 7);
-						_id2uuidPrefix = _id2uuidPrefix.substring(0, _id2uuidPageOfs);
-					}
-				}
-			}
-			if (_id2uuidPrefix != null) {
-				if (_id2uuidPageOfs >= 0) {
-					final ExecutionCtrl execCtrl = (ExecutionCtrl)Executions.getCurrent();
-					if (execCtrl != null) {
-						final Page page = execCtrl.getCurrentPage();
-						if (page != null)
-							return _id2uuidPrefix + page.getId() + _id2uuidPrefix2 + id;
-					}
-				}
-				return _id2uuidPrefix + id;
-			}
-		}
-		return null;
 	}
 
 	/** Returns the default mold for the given class.

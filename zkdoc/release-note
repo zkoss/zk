@@ -18,6 +18,7 @@ ZK 5.1.0
     are selected (in the prior version, the first item will be shown though it is not
     selected - Bug 2973303)
   + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
+  + The id-to-uuid-prefix configuration is removed
 
 	--------
 ZK 5.0.3
