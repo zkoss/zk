@@ -103,10 +103,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt._fireOnMove(evt.data);
 	}
 
+var Window =
 /**
  * A window.
  *
- * <p>Unlike other elements, each {@link zul.wnd.Window} is an independent ID space.
+ * <p>Unlike other elements, each {@link Window} is an independent ID space.
  * It means a window and all its descendants forms a ID space and
  * the ID of each of them is unique in this space.
  * You could retrieve any of them in this space by calling {@link #$f}.
@@ -964,7 +965,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(Window, 'bind_', arguments);
 
 		var mode = this._mode;
 		zWatch.listen({onSize: this, onShow: this});
@@ -1049,7 +1050,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._lastfocus = null;
 
 		this.domUnlisten_(this.$n(), 'onMouseOver');
-		this.$supers('unbind_', arguments);
+		this.$supers(Window, 'unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {
 		if (this._sizer) {
@@ -1121,6 +1122,20 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
+	},
+	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
+	afterChildrenMinFlex_: function (orient) {
+		this.$supers('afterChildrenMinFlex_', arguments);
+		if (this._mode == 'modal') { //win hflex="min"
+			this._updateDomPos(true); //force re-position since window width might changed.
+		}
+	},
+	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
+	afterChildrenFlex_: function (cwgt) {
+		this.$supers('afterChildrenFlex_', arguments);
+		if (this._mode == 'modal') {
+			this._updateDomPos(true); //force re-position since window width might changed.
+		}
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

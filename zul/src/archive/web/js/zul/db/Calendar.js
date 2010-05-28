@@ -30,6 +30,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		} : function (n) {
 			jq(n).focus();
 		};
+
+var Calendar =
 /**
  * A calendar.
  * <p>Default {@link #getZclass}: z-calendar.
@@ -204,7 +206,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	bind_: function (){
-		this.$supers('bind_', arguments);
+		this.$supers(Calendar, 'bind_', arguments);
 		var title = this.$n("title"),
 			mid = this.$n("mid"),
 			ly = this.$n("ly"),
@@ -245,7 +247,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domUnlisten_(ry, "onClick", '_doclickArrow')
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
-			.$supers('unbind_', arguments);
+			.$supers(Calendar, 'unbind_', arguments);
 		this.efield = null;
 	},
 	rerender: function () {

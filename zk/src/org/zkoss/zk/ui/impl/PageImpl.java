@@ -591,7 +591,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			if (_id == null || _id.length() == 0)
 				_id = config.getId();
-			if (_id == null || _id.length() == 0)
+			if (_id != null)
 				_id = (String)exec.evaluate(this, _id, String.class);
 			if (_id == null) {
 				_id = "";

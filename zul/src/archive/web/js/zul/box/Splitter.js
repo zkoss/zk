@@ -154,7 +154,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.box.Splitter, 'bind_', arguments);
 
 		var box = this.parent;
 		if (box && !box._splitterKid) box._bindWatch();
@@ -215,7 +215,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		this._drag.destroy();
 		this._drag = null;
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.box.Splitter, 'unbind_', arguments);
 	},
 
 	/* Fixed DOM class for the enclosing TR/TD tag. */

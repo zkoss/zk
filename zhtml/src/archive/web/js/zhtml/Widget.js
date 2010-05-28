@@ -85,7 +85,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		}
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zhtml.Widget, 'bind_', arguments);
 		if (this.isListen('onChange', {any:true})) {
 			this._doChange(null, -1);
 			this.domListen_(this.$n(), 'onChange');
@@ -95,6 +95,6 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	unbind_: function () {
 		this.domUnlisten_(this.$n(), 'onChange');
-		this.$supers('unbind_', arguments);
+		this.$supers(zhtml.Widget, 'unbind_', arguments);
 	}
 });

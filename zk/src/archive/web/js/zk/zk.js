@@ -1202,14 +1202,21 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @since 5.0.2
 	 */
 	$supers: function (nm, args, argx) {
-		if (typeof nm != "string") { //zk.Class assumed
-			if (!(nm = nm.prototype._$super) || !(nm = nm[args])) //nm is zk.Class
-				throw args + " not in superclass"; //args is the method name
-			return nm.apply(this, argx);
-		}
-
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
+
+		if (typeof nm != "string") { //zk.Class assumed
+			var old = supers[args], p; //args is method's name
+			if (!(p = nm.prototype._$super) || !(nm = p[args])) //nm is zk.Class
+				throw args + " not in superclass"; //args is the method name
+
+			supers[args] = p;
+			try {
+				return nm.apply(this, argx);
+			} finally {
+				supers[args] = old; //restore
+			}
+		}
 
 		//locate method
 		var old = supers[nm], m, p, oldmtd;

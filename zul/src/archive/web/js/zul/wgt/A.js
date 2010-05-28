@@ -95,7 +95,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	bind_: function(){
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.A, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
 			this.domListen_(n, "onFocus", "doFocus_")
@@ -107,7 +107,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.wgt.A, 'unbind_', arguments);
 	},
 	domContent_: function(){
 		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();

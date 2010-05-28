@@ -55,7 +55,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	},
 	//super//
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.inp.Errorbox, 'bind_', arguments);
 
 		var Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
@@ -74,7 +74,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		if (this.parent)
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
 		
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 		this._drag = null;
 	},
 	/** Reset the position on scroll

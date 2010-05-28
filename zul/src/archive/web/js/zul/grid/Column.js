@@ -168,7 +168,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		return this._zclass == null ? "z-column" : this._zclass;
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.grid.Column, 'bind_', arguments);
 		var n = this.$n();
 		this.domListen_(n, "onMouseOver")
 			.domListen_(n, "onMouseOut");
@@ -183,7 +183,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		var btn = this.$n('btn');
 		if (btn)
 			this.domUnlisten_(btn, "onClick");
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	//@Override to avoid add child offset 
 	ignoreChildNodeOffset_: function(attr) {

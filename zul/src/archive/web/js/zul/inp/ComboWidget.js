@@ -394,7 +394,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
 
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
@@ -427,7 +427,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.unzsync(this);
 		
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;

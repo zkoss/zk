@@ -55,12 +55,12 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 
 	//super//
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.utl.Style, 'bind_', arguments);
 		this._updLink();
 	},
 	unbind_: function () {
 		jq(this._getLink()).remove();
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.utl.Style, 'unbind_', arguments);
 	},
 	_updLink: function () {
 		if (this._src) {

@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.Imagemap, 'bind_', arguments);
 
 		if (!jq('#zk_hfr_')[0])
 			jq.newFrame('zk_hfr_', null,

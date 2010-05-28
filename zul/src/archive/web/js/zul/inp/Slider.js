@@ -287,7 +287,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		return this.inScaleMold() ? this.$n("real") : this.$n();
 	},
 	bind_: function() {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.inp.Slider, 'bind_', arguments);
 		var inner = this.$n("inner");
 		
 		if (this.isVertical()) {
@@ -310,6 +310,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._drag = null;
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.Slider, 'unbind_', arguments);
 	}	
 });

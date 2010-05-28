@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Executions;
@@ -92,16 +93,12 @@ public class DelegatingVariableResolver implements VariableResolver {
 	}
 
 	public int hashCode() {
-		return getClass().hashCode();
+		return Objects.hashCode(_variableResolvers);
 	}
 
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof DelegatingVariableResolver))
-			return false;
-		DelegatingVariableResolver other = (DelegatingVariableResolver) obj; 
-		return _variableResolvers.equals(other._variableResolvers);
+		return this == obj || (obj instanceof DelegatingVariableResolver
+				&& Objects.equals(_variableResolvers, ((DelegatingVariableResolver) obj)._variableResolvers));
 	}
 	
 	/**
@@ -132,17 +129,11 @@ public class DelegatingVariableResolver implements VariableResolver {
 			return SpringUtil.getBean(name);
 		}
 		public int hashCode() {
-			return getClass().hashCode();
+			return Objects.hashCode(getClass());
 		}
 
 		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			return getClass() == obj.getClass();
+			return this == obj || (obj instanceof DefaultDelegatingVariableResolver && getClass() == obj.getClass());
 		}
 	}
 }

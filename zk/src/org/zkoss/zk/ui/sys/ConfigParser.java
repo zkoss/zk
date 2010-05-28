@@ -587,9 +587,11 @@ public class ConfigParser {
 		if (s != null) config.setRepeatUuid(!"false".equals(s));
 
 		s = conf.getElementValue("id-to-uuid-prefix", true);
-		if (s != null)
+		if (s != null) {
+			log.warning("id-to-uuid-prefix deprecated, " + conf.getLocator());
 			Library.setProperty(Attributes.ID_TO_UUID_PREFIX, s);
 			//library-wide property
+		}
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {

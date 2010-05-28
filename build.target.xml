@@ -27,7 +27,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ======= -->
 <!-- COMPILE -->
 <!-- ======= -->
-<target name="compile0" depends="codegen.mesg">
+<target name="compile0" depends="codegen.mesg" if="src.dir.exist">
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>

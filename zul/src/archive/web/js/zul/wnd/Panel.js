@@ -730,7 +730,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	//super//
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wnd.Panel, 'bind_', arguments);
 
 		zWatch.listen({onSize: this, onShow: this, onHide: this});
 
@@ -790,7 +790,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._drag = null;
 		}
 		this.domUnlisten_(this.$n(), 'onMouseOver');
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {
 		if (this._sizer) {

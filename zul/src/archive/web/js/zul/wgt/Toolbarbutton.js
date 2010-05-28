@@ -140,7 +140,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return this.$n().firstChild.firstChild;
 	},
 	bind_: function(){
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.Toolbarbutton, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
 			this.domListen_(n, "onFocus", "doFocus_")
@@ -154,7 +154,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.wgt.Toolbarbutton, 'unbind_', arguments);
 	},
 	_initUpld: function () {
 		var v;

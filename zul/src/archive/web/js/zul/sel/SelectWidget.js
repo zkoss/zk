@@ -44,6 +44,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return true;
 	}
 
+var SelectWidget =
 /**
  * A skeletal implementation for a select widget.
  */
@@ -579,7 +580,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return false;
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(SelectWidget, 'bind_', arguments);
 		var btn = this.$n('a');
 		if (btn)
 			this.domListen_(btn, 'onFocus', 'doFocus_')
@@ -593,7 +594,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
 				.domUnlisten_(btn, 'onKeyDown')
 				.domUnlisten_(btn, 'onBlur', 'doBlur_');
-		this.$supers('unbind_', arguments);
+		this.$supers(SelectWidget, 'unbind_', arguments);
 	},
 	clearCache: function () {
 		this.$supers('clearCache', arguments);
@@ -988,6 +989,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._setFocus(this._focusItem, false)
 		else
 			this._focusItem = null;
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())
+			this._syncFocus(child);
 	}
 });
 

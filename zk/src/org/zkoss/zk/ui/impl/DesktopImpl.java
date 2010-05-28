@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Library;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
 import org.zkoss.util.logging.Log;
@@ -460,7 +461,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) == null)
+		if (_comps.remove(uuid) == null || recycleUuidDisabled())
 			return;
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
@@ -474,6 +475,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_uuidRecycle = new LinkedList();
 		_uuidRecycle.add(uuid);
 	}
+	private static boolean recycleUuidDisabled() {
+		if (_recycleUuidDisabled == null)
+			_recycleUuidDisabled = Boolean.valueOf(
+				"true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED)));
+		return _recycleUuidDisabled.booleanValue();
+	}
+	private static Boolean _recycleUuidDisabled;
 
 	public Map getAttributes() {
 		return _attrs.getAttributes();

@@ -132,7 +132,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf,
 	bind_: function() {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		if (this.getTabbox().isHorizontal()) {
 			this._zwatched = true;
 			zWatch.listen({onSize: this, onShow: this});
@@ -143,6 +143,6 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			zWatch.unlisten({onSize: this, onShow: this});
 			this._zwatched = false;
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.tab.Tabpanel, 'unbind_', arguments);
 	}
 });

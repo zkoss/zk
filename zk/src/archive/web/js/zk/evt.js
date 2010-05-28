@@ -243,10 +243,7 @@ zWatch = (function () {
 	}
 	//Returns if c is visible
 	function _visible(name, c) {
-		var n;
-		return c.$n && (n=c.$n()) && zk(n).isRealVisible(name!='onShow');
-		//if onShow, we don't check visibility since window uses it for
-		//non-embedded window that becomes invisible because of its parent
+		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
 	}
 	//Returns if c is a visible child of p
 	function _visibleChild(name, p, c) {

@@ -308,7 +308,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				sz = wgt.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
 					wgt._vflexsz = sz.height + margin;
-				wgt.afterChildrenMinFlex_();
+				wgt.afterChildrenMinFlex_('h');
 			}
 			return wgt._vflexsz;
 			
@@ -426,7 +426,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
 				if (sz && sz.width >= 0)
 					wgt._hflexsz = sz.width + margin;
-				wgt.afterChildrenMinFlex_();
+				wgt.afterChildrenMinFlex_('w');
 			}
 			return wgt._hflexsz;
 		} else
@@ -2823,7 +2823,7 @@ wgt.bind();
 	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example, 
 <pre><code>
 bind_: function (desktop, skipper, after) {
-  this.$super('bind_', arguments);
+  this.$supers('bind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterBind(something);
@@ -2872,7 +2872,7 @@ bind_: function (desktop, skipper, after) {
 	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
 <pre><code>
 unbind_: function (skipper, after) {
-  this.$super('unbind_', arguments);
+  this.$supers('unbind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterUnbind(something);
@@ -3902,6 +3902,18 @@ _doFooSelect: function (evt) {
 	fromPageCoord: function (x, y) {
 		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
+	},
+	/* Returns if the given watch shall be fired for this widget.
+	 * It is called by {@link zWatch} to check if the given watch shall be fired
+	 * @param String name the name of the watch, such as onShow
+	 * @return boolean
+	 * @5.0.3
+	 */
+	isWatchable_: function (name) {
+		var n;
+		return (n=this.$n()) && zk(n).isRealVisible(name!='onShow');
+		//if onShow, we don't check visibility since window uses it for
+		//non-embedded window that becomes invisible because of its parent
 	},
 	toJSON: function () { //used by JSON
 		return this.uuid;

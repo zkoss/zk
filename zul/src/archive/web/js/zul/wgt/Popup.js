@@ -188,7 +188,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.close({sendOnOpen:true});
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.wgt.Popup, 'bind_', arguments);
 		zWatch.listen({onFloatUp: this, onShow: this});
 		this.setFloating_(true);
 	},
@@ -200,7 +200,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		zWatch.unlisten({onFloatUp: this, onShow: this});
 		this.setFloating_(false);
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
 	onShow: function () {
 		this._fixWdh();

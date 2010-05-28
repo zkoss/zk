@@ -172,7 +172,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return null;
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.menu.Menuitem, 'bind_', arguments);
 
 		if (!this.isDisabled()) {
 			if (this.isTopmost()) {
@@ -193,7 +193,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);
 	},
 	_initUpld: function () {
 		zWatch.listen(zk.ie7_ ? {onShow: this, onSize: this} : {onShow: this});

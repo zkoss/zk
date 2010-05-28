@@ -190,7 +190,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		}
 	},
 	bind_: function (desktop, skipper, after) {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.tab.Tabbox, 'bind_', arguments);
 		
 		// used in Tabs.js
 		this._scrolling = false;

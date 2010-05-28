@@ -312,7 +312,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	unbind_: function () {
 		this._hilite2();
 		this._sel = this._lastsel = null;
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

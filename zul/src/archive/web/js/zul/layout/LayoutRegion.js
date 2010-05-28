@@ -405,7 +405,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this;
 	},
 	bind_: function(){
-		this.$supers('bind_', arguments);
+		this.$supers(zul.layout.LayoutRegion, 'bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.$n('split');			
 			if (split) {
@@ -456,7 +456,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._drag = null;
 			}
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
@@ -532,6 +532,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			break;
 		}
 		this.$supers('doClick_', arguments);		
+	},
+	isWatchable_: function(name) {
+		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
+		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
 	},
 	_docClick: function (evt) {
 		var target = evt.target;

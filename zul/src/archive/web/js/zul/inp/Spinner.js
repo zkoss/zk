@@ -317,7 +317,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
-		this.$supers('bind_', arguments); 
+		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
 		this.timeId = null;
 		var inp = this.inp = this.$n("real"),
 			btn = this.$n("btn");
@@ -353,7 +353,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, "onmouseout", "_btnOut");
 			this.domUnlisten_(btn, "mouseover", "_btnOver");
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
 	}
 	
 });

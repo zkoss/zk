@@ -23,10 +23,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
+import org.zkoss.zkplus.cdi.DelegatingVariableResolver;
 
 /**
  * JndiVariableResolver, a jndi variableResolver 
@@ -143,31 +145,12 @@ public class JndiVariableResolver implements VariableResolver {
 	}
 
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((_jndiMapping == null) ? 0 : _jndiMapping.hashCode());
-		result = prime * result
-				+ ((_jndiPrepend == null) ? 0 : _jndiPrepend.hashCode());
-		return result;
+		return Objects.hashCode(_jndiMapping) + Objects.hashCode(_jndiPrepend);
 	}
 
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof JndiVariableResolver))
-			return false;
-		JndiVariableResolver other = (JndiVariableResolver) obj;
-		if (_jndiMapping == null) {
-			if (other._jndiMapping != null)
-				return false;
-		} else if (!_jndiMapping.equals(other._jndiMapping))
-			return false;
-		if (_jndiPrepend == null) {
-			if (other._jndiPrepend != null)
-				return false;
-		} else if (!_jndiPrepend.equals(other._jndiPrepend))
-			return false;
-		return true;
+		return this == obj || (obj instanceof JndiVariableResolver 
+				&& Objects.equals(_jndiMapping, ((JndiVariableResolver) obj)._jndiMapping)
+				&& Objects.equals(_jndiPrepend, ((JndiVariableResolver) obj)._jndiPrepend));
 	}
 }

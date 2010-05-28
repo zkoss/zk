@@ -246,7 +246,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		return visible && (this._pageCount > 1 || !this._autohide);
 	},
 	bind_: function () {
-		this.$supers('bind_', arguments);
+		this.$supers(zul.mesh.Paging, 'bind_', arguments);
 		if (this.getMold() == "os") return;
 		var uuid = this.uuid,
 			inputs = jq.$$(uuid, 'real'),
@@ -295,7 +295,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		this.$supers('unbind_', arguments);
+		this.$supers(zul.mesh.Paging, 'unbind_', arguments);
 	}
 }, { //static
 	/**

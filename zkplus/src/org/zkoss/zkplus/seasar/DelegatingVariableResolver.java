@@ -19,6 +19,7 @@ package org.zkoss.zkplus.seasar;
 import org.seasar.framework.container.ComponentNotFoundRuntimeException;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 
 /**
@@ -56,15 +57,10 @@ public class DelegatingVariableResolver implements VariableResolver {
 	}
 	
 	public int hashCode() {
-		return getClass().hashCode();
+		return Objects.hashCode(getClass());
 	}
 	
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null) {
-			return false;
-		}
-		return getClass() == obj.getClass();
+		return this == obj || (obj instanceof DelegatingVariableResolver && getClass() == obj.getClass());
 	}
 }

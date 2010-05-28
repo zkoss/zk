@@ -49,8 +49,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 			var tree = this.getTree();
 			if (tree) {
-				if (!open)
-					tree.$n('a').style.top = "";
+				tree._syncFocus(this);
 				tree.focus();
 			}
 		}
