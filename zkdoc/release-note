@@ -32,6 +32,7 @@ ZK 5.0.3
   3005122: Colorbox#setColor on client side
   3007908: modal window not centered if child sized with hflex="min"
   3007911: Borderlayout in Borderlayout with hflex="min" not resize OK
+  3008291: Listbox _syncFocus not properly called
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

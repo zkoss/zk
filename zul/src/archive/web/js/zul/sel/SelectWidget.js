@@ -988,6 +988,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._setFocus(this._focusItem, false)
 		else
 			this._focusItem = null;
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())
+			this._syncFocus(child);
 	}
 });
 
