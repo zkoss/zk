@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Test of ZK OOP</title>
+	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk.wpd" charset="UTF-8">
+	</script>
+</head>
+<body>
+	<script>
+A = zk.$extends(zk.Object, {
+	f: function () {
+		zk.log('A.f called');
+	}
+});
+B = zk.$extends(A, {
+	f: function () {
+		zk.log('B.f called');
+		this.$supers('f');
+	}
+});
+C = zk.$extends(B, {
+	f: function () {
+		zk.log('C.f called');
+		this.$supers(C, 'f');
+	}
+});
+D = zk.$extends(C, {
+	f: function () {
+		zk.log('D.f called');
+		this.$supers('f');
+	}
+});
+E = zk.$extends(D, {
+	f: function () {
+		zk.log('E.f called');
+		this.$supers(E, 'f');
+	}
+});
+new E().f();
+</script>
+</body>
+</html>
