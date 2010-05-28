@@ -239,7 +239,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	isWatchable_: function(name) {
 		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
-		return this.$super('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
+		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
 	}
 }, {
 	/**

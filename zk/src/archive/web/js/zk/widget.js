@@ -2813,7 +2813,7 @@ wgt.bind();
 	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example, 
 <pre><code>
 bind_: function (desktop, skipper, after) {
-  this.$super('bind_', arguments);
+  this.$supers('bind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterBind(something);
@@ -2862,7 +2862,7 @@ bind_: function (desktop, skipper, after) {
 	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
 <pre><code>
 unbind_: function (skipper, after) {
-  this.$super('unbind_', arguments);
+  this.$supers('unbind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterUnbind(something);
