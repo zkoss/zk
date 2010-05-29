@@ -2919,40 +2919,46 @@ unbind_: function (skipper, after) {
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
-			else if (sz.height != '') { //bug #2943174, #2979776
-				var h = zkn.revisedHeight(sz.height, !ignoreMargins),
-					newh = h,
-					margins = zkn.sumStyles("tb", jq.margins);
-				n.style.height = jq.px0(h);
-				var newmargins = zkn.sumStyles("tb", jq.margins);
-				if (h == jq(n).outerHeight(false)) //border-box
-					newh = sz.height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
-					newh = zkn.revisedHeight(sz.height, !ignoreMargins);
-				if (newh != h) //h changed, re-assign height
-					n.style.height = jq.px0(newh);
-			} else
+			else if (sz.height != '') //bug #2943174, #2979776
+				this.setFlexSizeH(n, zkn, sz.height, ignoreMargins);
+			else
 				n.style.height = this._height || '';
 		}
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto')
 				n.style.width = '';
-			else if (sz.width != '') { //bug #2943174, #2979776
-				var w = zkn.revisedWidth(sz.width, !ignoreMargins),
-					neww = w,
-					margins = zkn.sumStyles("lr", jq.margins);
-				n.style.width = jq.px0(w);
-				var newmargins = zkn.sumStyles("lr", jq.margins);
-				if (w == jq(n).outerWidth(false)) //border-box
-					neww = sz.width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
-				else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
-					neww = zkn.revisedWidth(sz.width, !ignoreMargins);
-				if (neww != w) //w changed, re-assign width
-					n.style.width = jq.px0(neww); 
-			} else
+			else if (sz.width != '') //bug #2943174, #2979776
+				this.setFlexSizeW_(n, zkn, sz.width, ignoreMargins);
+			else
 				n.style.width = this._width || '';
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
+	},
+	setFlexSizeH_: function(n, zkn, height, ignoreMargins) {
+		var h = zkn.revisedHeight(height, !ignoreMargins),
+			newh = h,
+			margins = zkn.sumStyles("tb", jq.margins);
+		n.style.height = jq.px0(h);
+		var newmargins = zkn.sumStyles("tb", jq.margins);
+		if (h == jq(n).outerHeight(false)) //border-box
+			newh = height - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+		else if (zk.safari && newmargins >= 0 && newmargins < margins)  //safari/chrome margin changed after set style.height
+			newh = zkn.revisedHeight(height, !ignoreMargins);
+		if (newh != h) //h changed, re-assign height
+			n.style.height = jq.px0(newh);
+	},
+	setFlexSizeW_: function(n, zkn, width, ignoreMargins) {
+		var w = zkn.revisedWidth(width, !ignoreMargins),
+			neww = w,
+			margins = zkn.sumStyles("lr", jq.margins);
+		n.style.width = jq.px0(w);
+		var newmargins = zkn.sumStyles("lr", jq.margins);
+		if (w == jq(n).outerWidth(false)) //border-box
+			neww = width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
+		else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
+			neww = zkn.revisedWidth(width, !ignoreMargins);
+		if (neww != w) //w changed, re-assign width
+			n.style.width = jq.px0(neww); 
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden
