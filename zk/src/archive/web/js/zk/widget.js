@@ -189,12 +189,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//set minimum flex size and return it
-	function _setMinFlexSize(wgt, wgtn, o) {
+	function _fixMinFlex(wgtn, o) {
 		//find the max size of all children
-		if (o == 'height') {
-			if (wgt._vflexsz === undefined) { //cached?
-				wgt.setFlexSize_({height:'auto'});
-				var cwgt = wgt.firstChild, //bug #2928109
+		if (o == 'h') {
+			if (this._vflexsz === undefined) { //cached?
+				this.setFlexSize_({height:'auto'});
+				var cwgt = this.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
 					n = cwgtn ? cwgtn.parentNode : wgtn,
 					c = n.firstChild,
@@ -218,7 +218,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
-										sz += cwgt._vflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._vflexsz;
+										sz += cwgt._vflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
 										var tm = zkc.sumStyles("t", jq.margins);
 										if (!zk.safari || tm >= 0)
 											sz -= tm;
@@ -242,7 +242,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				} else if (c) { //no child widget, try html element directly
 					//feature 3000339: The hflex of the cloumn will calculate by max width
-					var ignore = wgt.ignoreChildNodeOffset_('h');
+					var ignore = this.ignoreChildNodeOffset_('h');
 					for(; c; c = c.nextSibling) {
 						var zkc = zk(c),
 							sz = 0;
@@ -305,17 +305,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var margin = zk(wgtn).sumStyles("tb", jq.margins);
 				if (zk.safari && margin < 0) 
 					margin = 0;
-				sz = wgt.setFlexSize_({height:(max + pb + margin)});
+				sz = this.setFlexSize_({height:(max + pb + margin)});
 				if (sz && sz.height >= 0)
-					wgt._vflexsz = sz.height + margin;
-				wgt.afterChildrenMinFlex_('h');
+					this._vflexsz = sz.height + margin;
+				this.afterChildrenMinFlex_('h');
 			}
-			return wgt._vflexsz;
+			return this._vflexsz;
 			
-		} else if (o == 'width') {
-			if (wgt._hflexsz === undefined) { //cached?
-				wgt.setFlexSize_({width:'auto'});
-				var cwgt = wgt.firstChild, //bug #2928109
+		} else if (o == 'w') {
+			if (this._hflexsz === undefined) { //cached?
+				this.setFlexSize_({width:'auto'});
+				var cwgt = this.firstChild, //bug #2928109
 					cwgtn = cwgt && cwgt.$n(),
 					n = cwgtn ? cwgtn.parentNode : wgtn,
 					c = n.firstChild,
@@ -338,7 +338,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
-										sz += cwgt._hflexsz === undefined ? _setMinFlexSize(cwgt, c, o) : cwgt._hflexsz;
+										sz += cwgt._hflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._hflexsz;
 										var lm = zkc.sumStyles("l", jq.margins);
 										if (!zk.safari || lm >= 0)
 											sz -= lm;
@@ -359,7 +359,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					}
 				} else if (c) { //no child widget, try html element directly
 					//feature 3000339: The hflex of the cloumn will calculate by max width
-					var ignore = wgt.ignoreChildNodeOffset_('w');
+					var ignore = this.ignoreChildNodeOffset_('w');
 					for(; c; c = c.nextSibling) {
 						var zkc = zk(c),
 							sz = 0;
@@ -419,16 +419,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					
 				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
 				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
-				var ignoreMargin = wgt._isIgnoreMargin && wgt._isIgnoreMargin(), 
+				var ignoreMargin = this._isIgnoreMargin && this._isIgnoreMargin(), 
 					margin = ignoreMargin ? 0 : zk(wgtn).sumStyles("lr", jq.margins);
 				if (zk.safari && margin < 0)
 					margin = 0;
-				var sz = wgt.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
+				var sz = this.setFlexSize_({width:(max + pb + margin)}, ignoreMargin);
 				if (sz && sz.width >= 0)
-					wgt._hflexsz = sz.width + margin;
-				wgt.afterChildrenMinFlex_('w');
+					this._hflexsz = sz.width + margin;
+				this.afterChildrenMinFlex_('w');
 			}
-			return wgt._hflexsz;
+			return this._hflexsz;
 		} else
 			return 0;
 	}
@@ -436,7 +436,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//feature #3000873 tabbox can auto grow when select larger tabpanel
 	function _fixFlexX(ctl, opts, resize) {
 		//avoid firedown("onShow") firedown("onSize") calling in again
-		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+		if ((this._vflex === undefined || (this._vflexsz && this._vflex == 'min'))
+			&& (this._hflex === undefined || (this._hflexsz && this._hflex == 'min'))) 
 			return;
 		
 		//a resize fired by myself, simply call directly to _fixFlex
@@ -475,7 +476,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//fix vflex/hflex of all my sibling nodes
 	function _fixFlex() {
 		//avoid firedown("onSize") calling in again
-		if (this._vflexsz && this._vflex == 'min' && this._hflexsz && this._hflex == 'min') 
+		if ((this._vflex === undefined || (this._vflexsz && this._vflex == 'min'))
+			&& (this._hflex === undefined || (this._hflexsz && this._hflex == 'min'))) 
 			return;
 		
 		if (!this.parent.beforeChildrenFlex_(this)) { //don't do fixflex if return false
@@ -547,8 +549,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						_setMinFlexSize(cwgt, c, 'width');
-						//might change width in _setMinFlexSize(), so regain the value
+						_fixMinFlex.apply(cwgt, [c, 'w']);
+						//might change width in _fixMinFlex(), so regain the value
 						offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
 						offwdh = zkc.offsetWidth();
 						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
@@ -578,8 +580,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						_setMinFlexSize(cwgt, c, 'height');
-						//might change height in _setMinFlexSize(), so regain the value
+						_fixMinFlex.apply(cwgt, [c, 'h']);
+						//might change height in _fixMinFlex(), so regain the value
 						offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
 						offhgh = zkc.offsetHeight();
 						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
@@ -2985,6 +2987,9 @@ unbind_: function (skipper, after) {
 	},
 	fixFlex_: function() {
 		_fixFlex.apply(this);
+	},
+	fixMinFlex_: function(n, orient) { //internal use
+		_fixMinFlex.apply(this, arguments);
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).

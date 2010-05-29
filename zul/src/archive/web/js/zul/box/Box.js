@@ -436,7 +436,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min')
-						_setMinFlexSize(cwgt, c, 'height');
+						cwgt.fixMinFlex_(c, 'h');
 					else {
 						vflexs.push(cwgt);
 						if (vert) vflexsz += cwgt._nvflex;
@@ -448,7 +448,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min')
-						_setMinFlexSize(cwgt, c, 'width');
+						cwgt.fixMinFlex_(c, 'w');
 					else {
 						hflexs.push(cwgt);
 						if (!vert) hflexsz += cwgt._nhflex;
