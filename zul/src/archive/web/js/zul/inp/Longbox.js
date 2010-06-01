@@ -23,7 +23,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	
 		var info = zk.fmt.Number.unformat(this._format, value),
 			val = new zk.Long(info.raw);
-		if (info.raw != val.$toString() && info.raw != '-'+val) //1e2 not supported (unlike Doublebox)
+		if (info.raw != val.$toString() && info.raw != '-'+val.$toString()) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (this._isOutRange(info.raw))
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−9223372036854775808 - 9223372036854775807)')};
