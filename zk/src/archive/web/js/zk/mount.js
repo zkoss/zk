@@ -474,19 +474,19 @@ jq(function() {
 		if (!wgt) wgt = evt.target;
 
 		var target = evt.domTarget,
-			body = document.body;
+			body = document.body,
+			old = zk.currentFocus;
 		if ((target != body && target != body.parentNode) ||
 				(evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 			
 		_doEvt(evt);
 		
-		var old = zk.currentFocus;
 		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
 		if (zk.ie) {
 			setTimeout(function () {
 				try {
-					if (!old.offsetWidth && !old.offsetHeight) {
+					if (zk.currentFocus != old && !old.offsetWidth && !old.offsetHeight) {
 						zk.currentFocus.focus();
 					}
 				} catch (e) {}
