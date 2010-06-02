@@ -480,6 +480,18 @@ jq(function() {
 			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 			
 		_doEvt(evt);
+		
+		var old = zk.currentFocus;
+		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
+		if (zk.ie) {
+			setTimeout(function () {
+				try {
+					if (!old.offsetWidth && !old.offsetHeight) {
+						zk.currentFocus.focus();
+					}
+				} catch (e) {}
+			});
+		}
 	}
 	
 	function _simFocus(wgt) {
