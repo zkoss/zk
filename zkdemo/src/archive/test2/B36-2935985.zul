@@ -14,7 +14,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <window title="Popup window" border="normal" width="350px">
-(opera not support right click event)
 <separator/>
 <menupopup id="menupopup" onOpen='menupopup.getChildren().clear();menupopup.appendChild(new Menuitem("Long caption Long caption Long caption Long caption Long caption"));' >
 <menuitem label="Item 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - shortItem 1 - short"/>
