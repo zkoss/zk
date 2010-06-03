@@ -2922,7 +2922,7 @@ unbind_: function (skipper, after) {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '') //bug #2943174, #2979776
-				this.setFlexSizeH(n, zkn, sz.height, ignoreMargins);
+				this.setFlexSizeH_(n, zkn, sz.height, ignoreMargins);
 			else
 				n.style.height = this._height || '';
 		}
