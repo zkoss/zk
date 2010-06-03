@@ -22,10 +22,8 @@ import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zhtml.impl.PageRenderer;
@@ -55,32 +53,10 @@ public class Head extends AbstractTag {
 
 		final Execution exec = Executions.getCurrent();
 		if (exec != null)
-			addHeaderZkTags(exec, getPage(), buf, "head");
+			Utils.addHeaderZkTags(exec, getPage(), buf, "head");
 
 		out.write(buf.toString());
 		out.write('\n');
-	}
-	/** Adds HtmlPageRenders.outHeaderZkTags if necessary.
-	 * @param tag the tag name, such as "head" and "body"
-	 */
-	/*package*/ static void
-	addHeaderZkTags(Execution exec, Page page, StringBuffer buf, String tag) {
-		if (HtmlPageRenders.isDirectContent(exec)) {
-			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, page);
-			if (zktags != null && zktags.length() > 0) {
-				int j = buf.indexOf("<" + tag);
-				if (j >= 0) {
-					j += tag.length() + 1;
-					for (int len = buf.length(); j < len; ++j) {
-						if (buf.charAt(j) == '>') {
-							buf.insert(j + 1, zktags);
-							return; //done
-						}
-					}
-				}
-				buf.append(zktags);
-			}
-		}
 	}
 
 	public void beforeParentChanged(Component parent) {

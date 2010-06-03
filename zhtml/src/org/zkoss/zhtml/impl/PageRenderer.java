@@ -147,7 +147,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		if (rcs.length() > 0) {
 			if (out instanceof StringWriter) {
 				final StringBuffer buf = ((StringWriter)out).getBuffer();
-				final int j = buf.lastIndexOf("</body>");
+				int j = buf.lastIndexOf("</body>");
+				if (j < 0)
+					j = buf.lastIndexOf("</html>");
 				if (j >= 0) buf.insert(j, rcs);
 				else buf.append(rcs);
 			} else {

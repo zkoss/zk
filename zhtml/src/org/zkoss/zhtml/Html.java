@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import java.lang.Object;
+import java.io.StringWriter;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -40,10 +41,17 @@ public class Html extends AbstractTag {
 	//-- super --//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final Execution exec = Executions.getCurrent();
+		final StringWriter bufout = new StringWriter();
 		final Page page = getPage();
-		final Object ret = PageRenderer.beforeRenderHtml(exec, page, out);
-		super.redraw(out);
-		PageRenderer.afterRenderHtml(exec, page, out, ret);
+		final Object ret = PageRenderer.beforeRenderHtml(exec, page, bufout);
+		super.redraw(bufout);
+		PageRenderer.afterRenderHtml(exec, page, bufout, ret);
+
+		final StringBuffer buf = bufout.getBuffer();
+		if (exec != null)
+			Utils.addAllZkTags(exec, getPage(), buf, "html");
+
+		out.write(buf.toString());
 	}
 	/** Don't generate the id attribute.
 	 */
