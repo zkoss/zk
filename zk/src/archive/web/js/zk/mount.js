@@ -483,15 +483,14 @@ jq(function() {
 		_doEvt(evt);
 		
 		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
-		if (zk.ie) {
+		if (old && zk.ie)
 			setTimeout(function () {
 				try {
-					if (zk.currentFocus != old && !old.offsetWidth && !old.offsetHeight) {
-						zk.currentFocus.focus();
-					}
+					var cf = zk.currentFocus;
+					if (cf != old && !old.offsetWidth && !old.offsetHeight)
+						cf.focus();
 				} catch (e) {}
 			});
-		}
 	}
 	
 	function _simFocus(wgt) {
