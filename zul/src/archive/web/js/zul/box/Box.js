@@ -382,9 +382,16 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 			}
 		}
+		//bug 3010663, boxes do not resize when browser window is resized
 		var p = this.$n(),
-			zkp = zk(p);
-		return zkp ? {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)} : {};
+			zkp = zk(p),
+			offhgh = p.offsetHeight,
+			offwdh = p.offsetWidth,
+			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles("tb", jq.margins) : offhgh,
+			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh,
+			hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
+			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
+		return zkp ? {height: hgh, width: wdh} : {};
 	},
 	beforeChildrenFlex_: function(child) {
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
