@@ -13,7 +13,25 @@ B36-2819521.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window title="Hello World!!" border="normal" width="300px" id="main">
+<window title="Hello World!!" border="normal" width="500px" id="main">
+	<html><![CDATA[
+		<ul>		
+			<li>Add below setting in zk.xml</li>
+		</ul>
+	]]></html>		
+	<label multiline="true" pre="true">
+		<attribute name="value"><![CDATA[
+			<listener>
+				<description>ThreadLocal Variables Synchronizer</description>
+				<listener-class>org.zkoss.zkplus.util.ThreadLocalListener</listener-class>
+			</listener>
+		]]></attribute>
+	</label>
+	<html><![CDATA[
+		<ul>		
+			<li>You sould not see any exception in console of the server</li>
+		</ul>
+	]]></html>
 	<attribute name="onF">
 	Events.postEvent(new Event("onX",main));
 	System.out.println("before:"+execution);
@@ -23,11 +41,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<attribute name="onX">
 	System.out.println("onX:"+execution);
 	</attribute>
+	<vbox>
 	<label value="You are using: ${desktop.webApp.version}" />
 	<button label="case 1, click me and press F5" forward="onF"/>
 	<button label="case 2, click me and press F5"
 	onClick='Events.sendEvent(new Event("onF",main))'/>
 	<button label="case 3, postEvent, click me and press F5"
 	onClick='Events.postEvent(new Event("onF",main))'/>
+	</vbox>
 	<window id="win" title="win" border="normal">modal</window>
 </window>

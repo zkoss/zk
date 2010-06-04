@@ -315,6 +315,9 @@ zk.copy(zjq.prototype, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
+	},
+	_updateProp: function(prop) {
+		_saveProp(this, prop);
 	}
 });
 })();

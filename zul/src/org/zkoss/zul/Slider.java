@@ -19,8 +19,6 @@ package org.zkoss.zul;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 
@@ -44,7 +42,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	private String _slidingtext = "{0}";
 
 	static {
-		addClientEvent(Slider.class, Events.ON_SCROLL, CE_DUPLICATE_IGNORE);
+		addClientEvent(Slider.class, Events.ON_SCROLL, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 		addClientEvent(Slider.class, Events.ON_SCROLLING, CE_DUPLICATE_IGNORE);
 	}
 

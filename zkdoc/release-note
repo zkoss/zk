@@ -56,6 +56,13 @@ ZK 5.0.3
   3007911: Borderlayout in Borderlayout with hflex="min" not resize OK
   3008291: Listbox _syncFocus not properly called
   3008276: Listheader hflex with no label gives js error
+  3008898: Bandpopup hflex="min" not properly sized
+  3008277: (Chrome/Safari)hflex breaks Listbox layout
+  3010663: boxes do not resize when browser window is resized
+  3006341: Slider UI broken
+  3006313: Slider#getCurpos() does not work
+  3010936: A ZHTML with native namespace without head causes JavaScript error
+  3009925: Clients.evalJavaScript is broken in zhtml with native namespace
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

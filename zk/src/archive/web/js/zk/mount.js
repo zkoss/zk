@@ -359,12 +359,12 @@ function zkmprops(uuid, props) {
 
 	//widget creations
 	zkx: function (wi, delay, aucmds, js) {
+		zk.mounting = true;
+
+		if (js) jq.globalEval(js);
+		doAuCmds(aucmds);
+
 		if (wi) {
-			zk.mounting = true;
-
-			if (js) jq.globalEval(js);
-			doAuCmds(aucmds);
-
 			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
@@ -377,9 +377,10 @@ function zkmprops(uuid, props) {
 			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
 
 			mountpkg();
-			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-			else run(mount);
 		}
+
+		if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+		else run(mount);
 	},
 	//widget creation called by au.js
 	zkx_: function (args, stub) {
@@ -474,12 +475,23 @@ jq(function() {
 		if (!wgt) wgt = evt.target;
 
 		var target = evt.domTarget,
-			body = document.body;
+			body = document.body,
+			old = zk.currentFocus;
 		if ((target != body && target != body.parentNode) ||
 				(evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 			
 		_doEvt(evt);
+		
+		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
+		if (old && zk.ie)
+			setTimeout(function () {
+				try {
+					var cf = zk.currentFocus;
+					if (cf != old && !old.offsetWidth && !old.offsetHeight)
+						cf.focus();
+				} catch (e) {}
+			});
 	}
 	
 	function _simFocus(wgt) {

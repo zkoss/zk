@@ -1,7 +1,6 @@
 <window>
 <html><![CDATA[
 <p>menuitem's href shall resolved as servlet-context relative (related to application name)</p>
-(opera not support right click event)
 <ol>
    <li>You show see a menu item "Test"</li>
    <li>Click to open the submenu. You shall see "href1", and "href2" two menu items.</li>

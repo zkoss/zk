@@ -17,7 +17,7 @@
 .z-slider-sphere-hor-center,
 .z-slider-scale-center,
 .z-slider-hor-center {
-	background: transparent no-repeat right -22px;
+	background-position: right -22px;
 	margin-right: -7px;
 	position: relative;
 }
@@ -55,7 +55,7 @@
 
 .z-slider-sphere-ver-center,
 .z-slider-ver-center {
-	background: transparent no-repeat -22px bottom;
+	background-position: -22px bottom;
 	margin-bottom: -7px;
 	position: relative;
 }

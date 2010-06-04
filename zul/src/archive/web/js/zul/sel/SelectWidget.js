@@ -450,10 +450,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 				}
 				
-				h = this.ebody.offsetHeight - this.ebody.clientHeight;
+				var oh = this.ebody.offsetHeight,
+					ch = this.ebody.clientHeight;
+				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
+				//in Chrome/Safari, clientHeight can be less than zero
+				h = oh - ((!zk.safari || ch >= 0) ? ch : 0); 
 				
 				// Bug #2805177, we have to check the clientWidth first.
-				if (this.ebody.clientHeight && h > 11)
+				if (ch && h > 11)
 					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
 			}
 		} else {
@@ -471,11 +475,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			
 			// bug #2799258
 			if (!hgh || hgh == "auto") {
-				hgh = this.ebody.offsetHeight - this.ebody.clientHeight;
+				var oh = this.ebody.offsetHeight,
+					ch = this.ebody.clientHeight;
+				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
+				//in Chrome/Safari, clientHeight can be less than zero
+				hgh = oh - ((!zk.safari || ch >= 0) ? ch : 0);
 				
 				// Bug #2805177, we have to check the clientWidth first.
-				if (this.ebody.clientHeight && hgh > 11)
-					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
+				if (ch && hgh > 11)
+					this.ebody.style.height = oh + jq.scrollbarWidth() + "px";
 			}
 		}
 	},

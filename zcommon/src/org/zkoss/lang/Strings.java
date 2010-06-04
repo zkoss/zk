@@ -153,6 +153,31 @@ public class Strings {
 		return encode(new StringBuffer(20), val).toString();
 	}
 
+	/** Returns the index of the give character in the given string buffer,
+	 * or -1 if not found.
+	 * It is equivalent to <code>sb.indexOf(""+cc, j);</code>, but faster.
+	 * @sine 5.0.3
+	 */
+	public static final int indexOf(StringBuffer sb, char cc, int j) {
+		for (int len = sb.length(); j < len; ++j)
+			if (sb.charAt(j) == cc)
+				return j;
+		return -1;
+	}
+	/** Returns the last index of the give character in the given string buffer,
+	 * or -1 if not found.
+	 * It is equivalent to <code>sb.lastIndexOf(""+cc, j);</code>, but faster.
+	 * @sine 5.0.3
+	 */
+	public static final int lastIndexOf(StringBuffer sb, char cc, int j) {
+		if (j >= sb.length())
+			j = sb.length() - 1;
+		for (; j >= 0; --j)
+			if (sb.charAt(j) == cc)
+				return j;
+		return -1;
+	}
+
 	/**
 	 * Returns the index that is one of delimiters, or the length if none
 	 * of delimiter is found.

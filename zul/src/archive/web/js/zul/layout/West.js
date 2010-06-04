@@ -19,8 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  */
 zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
-	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _setMinFlexSize in widget.js
-	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _setMinFlexSize in widget.js
+	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
+	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
 
 	/**
 	 * The height can't be specified in this component because its height is

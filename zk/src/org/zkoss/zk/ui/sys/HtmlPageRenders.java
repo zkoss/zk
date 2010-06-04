@@ -525,11 +525,8 @@ public class HtmlPageRenders {
 
 		//generate div first
 		if (divRequired) {
-			out.write("<div");
-			writeAttr(out, "id", page.getUuid());
-			out.write(" class=\"z-temp\"></div>");
+			outDivTemplate(out, page.getUuid());
 		}
-
 		if (standalone) { //switch out
 			out = new StringWriter();
 		}
@@ -589,41 +586,7 @@ public class HtmlPageRenders {
 		}
 
 		if (order < 0) {
-			final String ac = outResponseJavaScripts(exec, true);
-			if (aupg) {
-				if (extra.length() > 0 || ac.length() > 0) {
-					out.write(",0,"); //no need to delay since js is evaluated by zkx
-
-					if (ac.length() > 0) {
-						out.write("\n[");
-						out.write(ac);
-						out.write(']');
-					} else {
-						out.write("null");
-					}
-
-					if (extra.length() > 0) {
-						out.write(",'");
-						out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
-						out.write('\'');
-					}
-				}
-				out.write(']');
-			} else {
-				if (extra.length() > 0 || ac.length() > 0) {
-					out.write(',');
-					out.write(extra.length() > 0 ? '1': '0');
-						//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
-
-					if (ac.length() > 0) {
-						out.write(",\n[");
-						out.write(ac);
-						out.write(']');
-					}
-				}
-				out.write(");\n");
-				out.write(extra);
-			}
+			outEndJavaScriptFunc(exec, out, extra, aupg);
 		}
 
 		if (standalone) {
@@ -645,7 +608,55 @@ public class HtmlPageRenders {
 			out.write("</script>\n");
 		}
 	}
+	private static void outDivTemplate(Writer out, String uuid)
+	throws IOException {
+		out.write("<div");
+		writeAttr(out, "id", uuid);
+		out.write(" class=\"z-temp\"></div>");
+	}
+	/** Generates end of the function (of zkx).
+	 * It assumes the function name and the first parenthesis has been generated.
+	 * @param aupg whether the current page is caused by AU request
+	 */
+	private static void outEndJavaScriptFunc(Execution exec, Writer out,
+	String extra, boolean aupg)
+	throws IOException {
+		final String ac = outResponseJavaScripts(exec, true);
+		if (aupg) {
+			if (extra.length() > 0 || ac.length() > 0) {
+				out.write(",0,"); //no need to delay since js is evaluated by zkx
 
+				if (ac.length() > 0) {
+					out.write("\n[");
+					out.write(ac);
+					out.write(']');
+				} else {
+					out.write("null");
+				}
+
+				if (extra.length() > 0) {
+					out.write(",'");
+					out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+					out.write('\'');
+				}
+			}
+			out.write(']');
+		} else {
+			if (extra.length() > 0 || ac.length() > 0) {
+				out.write(',');
+				out.write(extra.length() > 0 ? '1': '0');
+					//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
+
+				if (ac.length() > 0) {
+					out.write(",\n[");
+					out.write(ac);
+					out.write(']');
+				}
+			}
+			out.write(");\n");
+			out.write(extra);
+		}
+	}
 	private static void appendProp(StringBuffer sb, String name, Object value) {
 		if (sb.length() > 0) sb.append(',');
 		sb.append(name).append(':');
@@ -697,15 +708,30 @@ public class HtmlPageRenders {
 	private static Boolean _crod;
 	/** Generates the content of a standalone componnent that
 	 * the peer widget is not a child of the page widget at the client.
+	 * @param comp the compoent to render. It is null if no child component
+	 * at all.
 	 */
 	public static final void outStandalone(Execution exec,
-	Component comp, Writer out) throws java.io.IOException {
-		out.write("<div id=\"");
-		out.write(comp.getUuid());
-		out.write("\"></div><script>zkmb();try{\n");
+	Component comp, Writer out) throws IOException {
+		if (ComponentRedraws.beforeRedraw(false) >= 0)
+			throw new InternalError("Not possible: "+comp);
 
-		((ComponentCtrl)comp).redraw(out);
+		final String extra;
+		try {
+			if (comp != null)
+				outDivTemplate(out, comp.getUuid());
 
+			out.write("<script>zkmb();try{zkx(\n");
+
+			if (comp != null)
+				((ComponentCtrl)comp).redraw(out);
+			else
+				out.write("null"); //no component at all
+		} finally {
+			extra = ComponentRedraws.afterRedraw();
+		}
+
+		outEndJavaScriptFunc(exec, out, extra, false); //generate );
 		out.write("\n}finally{zkme();}\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
@@ -794,9 +820,9 @@ public class HtmlPageRenders {
 	 */
 	public static
 	String outZkTags(Execution exec, WebApp wapp, String deviceType) {
-		if (exec.getAttribute("zkHtmlTagsGened") != null)
+		if (exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null)
 			return null;
-		exec.setAttribute("zkHtmlTagsGened", Boolean.TRUE);
+		exec.setAttribute(ATTR_ZK_TAGS_GENERATED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512).append('\n')
 			.append(outLangStyleSheets(exec, wapp, deviceType))
@@ -814,6 +840,14 @@ public class HtmlPageRenders {
 
 		return sb.toString();
 	}
+	/** Returns if the ZK specific HTML tags are generated.
+	 * @since 5.0.3
+	 */
+	public static boolean isZkTagsGenerated(Execution exec) {
+		return exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null;
+	}
+	/** Used to indicate ZK tags are generated. */
+	private static final String ATTR_ZK_TAGS_GENERATED = "zkHtmlTagsGened";
 	private static String getContextURI(Execution exec) {
 		if (exec != null) {
 			String s = exec.encodeURL("/");

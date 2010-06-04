@@ -1,0 +1,6 @@
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:z="http://www.zkoss.org/2005/zul" xmlns:zk="http://www.zkoss.org/2005/zk">
+<zk:zscript><![CDATA[
+Clients.evalJavaScript("alert('Correct if you see this')");
+]]></zk:zscript>
+</html>
