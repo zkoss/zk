@@ -794,9 +794,9 @@ public class HtmlPageRenders {
 	 */
 	public static
 	String outZkTags(Execution exec, WebApp wapp, String deviceType) {
-		if (exec.getAttribute("zkHtmlTagsGened") != null)
+		if (exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null)
 			return null;
-		exec.setAttribute("zkHtmlTagsGened", Boolean.TRUE);
+		exec.setAttribute(ATTR_ZK_TAGS_GENERATED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512).append('\n')
 			.append(outLangStyleSheets(exec, wapp, deviceType))
@@ -814,6 +814,14 @@ public class HtmlPageRenders {
 
 		return sb.toString();
 	}
+	/** Returns if the ZK specific HTML tags are generated.
+	 * @since 5.0.3
+	 */
+	public static boolean isZkTagsGenerated(Execution exec) {
+		return exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null;
+	}
+	/** Used to indicate ZK tags are generated. */
+	private static final String ATTR_ZK_TAGS_GENERATED = "zkHtmlTagsGened";
 	private static String getContextURI(Execution exec) {
 		if (exec != null) {
 			String s = exec.encodeURL("/");

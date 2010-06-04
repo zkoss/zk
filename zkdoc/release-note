@@ -39,6 +39,7 @@ ZK 5.0.3
   3010663: boxes do not resize when browser window is resized
   3006341: Slider UI broken
   3006313: Slider#getCurpos() does not work
+  3010936: A ZHTML with native namespace without head causes JavaScript error
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
