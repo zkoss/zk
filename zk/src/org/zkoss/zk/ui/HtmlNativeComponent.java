@@ -170,18 +170,24 @@ implements DynamicTag, Native {
 		out.write(getPrologHalf());
 
 		//children
-		if (root) HtmlPageRenders.setDirectContent(exec, true);
-		for (Component child = getFirstChild(); child != null;) {
-			Component next = child.getNextSibling();
-			if (child instanceof Native
-			|| ((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
-				((ComponentCtrl)child).redraw(out);
-			} else {
-				HtmlPageRenders.setDirectContent(exec, false);
-				HtmlPageRenders.outStandalone(exec, child, out);
+		Component child = getFirstChild();
+		if (child == null) {
+			HtmlPageRenders.outStandalone(exec, null, out);
+		} else {
+			if (root)
 				HtmlPageRenders.setDirectContent(exec, true);
-			}
-			child = next;
+			do {
+				Component next = child.getNextSibling();
+				if (child instanceof Native
+				|| ((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
+					((ComponentCtrl)child).redraw(out);
+				} else {
+					HtmlPageRenders.setDirectContent(exec, false);
+					HtmlPageRenders.outStandalone(exec, child, out);
+					HtmlPageRenders.setDirectContent(exec, true);
+				}
+				child = next;
+			} while (child != null);
 		}
 
 		out.write(getEpilogHalf());
@@ -204,7 +210,8 @@ implements DynamicTag, Native {
 					html = -1; //index of <html>
 				boolean unavailDone = false;
 				for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
-					if (jhead < 0 && startsWith(sb, "zkhead", ++j)) {
+					++j;
+					if (jhead < 0 && startsWith(sb, "zkhead", j)) {
 						int l = Strings.indexOf(sb, '>', j) + 1;
 						sb.delete(jhead = --j, l); //jhead found
 						len = sb.length();

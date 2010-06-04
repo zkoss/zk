@@ -359,12 +359,12 @@ function zkmprops(uuid, props) {
 
 	//widget creations
 	zkx: function (wi, delay, aucmds, js) {
+		zk.mounting = true;
+
+		if (js) jq.globalEval(js);
+		doAuCmds(aucmds);
+
 		if (wi) {
-			zk.mounting = true;
-
-			if (js) jq.globalEval(js);
-			doAuCmds(aucmds);
-
 			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
@@ -377,9 +377,10 @@ function zkmprops(uuid, props) {
 			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
 
 			mountpkg();
-			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-			else run(mount);
 		}
+
+		if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+		else run(mount);
 	},
 	//widget creation called by au.js
 	zkx_: function (args, stub) {
