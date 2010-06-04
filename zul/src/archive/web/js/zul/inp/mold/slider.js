@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 function (out) {
 	var zcls = this.getZclass(),
-		isScaleMold = this.inScaleMold(),
+		isScaleMold = this.inScaleMold() && !this.isVertical(),
 		uuid = this.uuid;
 		
 	if(isScaleMold){
