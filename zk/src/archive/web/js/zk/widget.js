@@ -2727,10 +2727,6 @@ function () {
 	 * @return zk.Page
 	 */
 	getPage: function () {
-		var page;
-		if (this.desktop && this.desktop.nChildren == 1)
-			return (page = this.desktop.firstChild) && page.$instanceof(zk.Page) ? page: null;
-			
 		for (page = this.parent; page; page = page.parent)
 			if (page.$instanceof(zk.Page))
 				return page;
