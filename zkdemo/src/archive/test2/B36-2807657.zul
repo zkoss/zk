@@ -1,8 +1,8 @@
 <window>
-But when trying to create it from RichLets, there is no codebase getter and
+But when trying to create it from Richlets, there is no codebase getter and
 settter.
 	<hbox>
-		<applet codebase="img/" code="ticker.class" msg="ZK is Simple and Rich!" id="ticker"
+		<applet codebase="classes" code="ticker" msg="ZK is Simple and Rich!" id="ticker"
 			width="400px" style="border: 1px" />
 		<listbox width="200px">
 			<attribute name="onSelect">

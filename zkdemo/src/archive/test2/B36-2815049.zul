@@ -16,6 +16,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 	If you can see this page with Applet, the bug was fixed (IE only).
 <window title="applet sample" width="300px" mode="popup">
-<applet codebase="img/" code="ticker.class" id="ticker"/>
+<applet codebase="classes" code="ticker" id="ticker"/>
 </window>
 </zk>

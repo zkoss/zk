@@ -31,6 +31,7 @@ import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A generic applet component.
+ * <p>See also <a href="http://www.w3schools.com/TAGS/tag_applet.asp">HTML applet tag</a>.
  * 
  * <p>
  * Non XUL extension.
@@ -41,9 +42,10 @@ import org.zkoss.zk.au.out.AuInvoke;
  */
 public class Applet extends HtmlBasedComponent implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
-	private String _code = "";
-	private String _codebase = "";
+	private String _code, _codebase, _archive,
+		_align, _hspace, _vspace;
 	private final Map _params = new LinkedHashMap();
+	private boolean _mayscript;
 
 	/** Return the code of the applet, i.e., the URI of the Java class.
 	 */
@@ -53,22 +55,112 @@ org.zkoss.zul.api.Applet {
 	/** Sets the code of the applet, i.e., the URI of the Java class.
 	 */
 	public void setCode(String code) {
-		_code = code;
-		invalidate();
+		if (!Objects.equals(_code, code)) {
+			_code = code;
+			invalidate();
+		}
 	}
 	
-	/** Return the codebase of the applet, i.e., the URI of the Java class.
+	/** Returns a relative base URL for applets specified in {@link #setCode} (URL).
+	 * <p>Default: null (no codebase at all).
 	 * @since 3.6.2
 	 */
 	public String getCodebase() {
 		return _codebase;
 	}
-	/** Sets the codebase of the applet, i.e., the URI of the Java class.
+	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
 	 * @since 3.6.2
 	 */
 	public void setCodebase(String codebase) {
-		_codebase = codebase;
-		invalidate();
+		if (!Objects.equals(_codebase, codebase)) {
+			_codebase = codebase;
+			invalidate();
+		}
+	}
+	/** Returns whether the applet is allowed to access the scripting object.
+	 * <p>Default: false.
+	 * <p>It is only necessary for the applet to control the page script objects.
+	 * It is not necessary for the page objects to control the applet.
+	 * @since 5.0.3
+	 */
+	public boolean isMayscript() {
+		return _mayscript;
+	}
+	/** Sets whether the applet is allowed to access the scripting object.
+	 * @since 5.0.3
+	 */
+	public void setMayscript(boolean mayscript) {
+		if (_mayscript != mayscript) {
+			_mayscript = mayscript;
+			invalidate();
+		}
+	}
+
+	/** Returns the location of an archive file (URL).
+	 * <p>Default: null (no archive at all)
+	 * @since 5.0.3
+	 */
+	public String getArchive() {
+		return _archive;
+	}
+	/** Sets the location of an archive file (URL).
+	 * @since 5.0.3
+	 */
+	public void setArchive(String  archive) {
+		if (!Objects.equals(_archive, archive)) {
+			_archive = archive;
+			invalidate();
+		}
+	}
+
+	/** Returns the alignment of an applet according to surrounding elements.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getAlign() {
+		return _align;
+	}
+	/** Sets the alignment of an applet according to surrounding elements.
+	 * @since 5.0.3
+	 */
+	public void setAlign(String align) {
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			invalidate();
+		}
+	}
+
+	/** Returns the horizontal spacing around an applet.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getHspace() {
+		return _hspace;
+	}
+	/** Sets the horizontal spacing around an applet.
+	 * @since 5.0.3
+	 */
+	public void setHspace(String hspace) {
+		if (!Objects.equals(_hspace, hspace)) {
+			_hspace = hspace;
+			invalidate();
+		}
+	}
+	/** Returns the vertical spacing around an applet.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getVspace() {
+		return _vspace;
+	}
+	/** Sets the vertical spacing around an applet.
+	 * @since 5.0.3
+	 */
+	public void setVspace(String vspace) {
+		if (!Objects.equals(_vspace, vspace)) {
+			_vspace = vspace;
+			invalidate();
+		}
 	}
 
 	/** Sets a map of parameters (all existent parameters are removed first).
@@ -146,6 +238,12 @@ org.zkoss.zul.api.Applet {
 
 		render(renderer, "code", getCode());
 		render(renderer, "codebase", getCodebase());
+		render(renderer, "archive", getArchive());
+		render(renderer, "align", getAlign());
+		render(renderer, "hspace", getHspace());
+		render(renderer, "vspace", getVspace());
+		if (isMayscript())
+			renderer.render("mayscript", true);
 
 		for (Iterator it = _params.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
