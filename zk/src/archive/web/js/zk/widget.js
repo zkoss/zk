@@ -2722,14 +2722,16 @@ function () {
 		this._subnodes = {};
 		this._nodeSolved = false;
 	},
-	/** Returns the page that this widget belongs to.
+	/** Returns the page that this widget belongs to, or null if there is
+	 * no page available.
 	 * @return zk.Page
 	 */
 	getPage: function () {
+		var page;
 		if (this.desktop && this.desktop.nChildren == 1)
-			return this.desktop.firstChild;
+			return (page = this.desktop.firstChild) && page.$instanceof(zk.Page) ? page: null;
 			
-		for (var page = this.parent; page; page = page.parent)
+		for (page = this.parent; page; page = page.parent)
 			if (page.$instanceof(zk.Page))
 				return page;
 				
