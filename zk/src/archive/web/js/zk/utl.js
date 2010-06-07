@@ -459,6 +459,27 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			out.push(separator, v, assign, map[v]);
 		out[0] = '';
 		return out.join('');
+	},
+	/** Appends an attribute.
+	 * Notice that the attribute won't be appended if val is empty or false.
+	 * In other words, it is equivalent to<br/>
+	 * <code>val ? ' ' + nm + '="' + val + '"': ""</code>.
+	 * <p>If you want to generate the attribute no matter what val is, use
+	 * {@link #appendAttr(String, Object, boolean)}.
+	 * @param String nm the name of the attribute
+	 * @param Object val the value of the attribute
+	 * @since 5.0.3
+	 */
+	/** Appends an attribute.
+	 * Notice that the attribute won't be appended.
+	 * @param String nm the name of the attribute
+	 * @param Object val the value of the attribute
+	 * @param boolean force whether to append attribute no matter what value it is.
+	 * If false (or omitted), it is the same as {@link #appendAttr(String, Object)}.
+	 * @since 5.0.3
+	 */
+	appendAttr: function (nm, val, force)  {
+		return val || force ? ' ' + nm + '="' + val + '"': "";
 	}
 };
 

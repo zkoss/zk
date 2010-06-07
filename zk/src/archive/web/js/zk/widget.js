@@ -2409,19 +2409,15 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
-		if (!no || !no.domStyle) {
-			var s = this.domStyle_(no);
-			if (s) html += ' style="' + s + '"';
-		}
-		if (!no || !no.domClass) {
-			var s = this.domClass_();
-			if (s) html += ' class="' + s + '"';
-		}
-		if (!no || !no.tooltiptext) {
-			var s = this.domTooltiptext_();
-			if (s) html += ' title="' + s + '"';
-		}
+		var html = "";
+		if (!no || !no.id)
+			html += zUtl.appendAttr("id", this.uuid);
+		if (!no || !no.domStyle)
+			html += zUtl.appendAttr("style", this.domStyle_(no));
+		if (!no || !no.domClass)
+			html += zUtl.appendAttr("class", this.domClass_());
+		if (!no || !no.tooltiptext)
+			html += zUtl.appendAttr("title", this.domTooltiptext_());
 		return html;
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
@@ -2442,11 +2438,7 @@ function () {
 	 */
 	domTextStyleAttr_: function () {
 		var s = this.getStyle();
-		if (s) {
-			s = jq.filterTextStyle(s);
-			if (s) s = ' style="' + s + '"';
-		}
-		return s;
+		return s ? zUtl.appendAttr("style", jq.filterTextStyle(s)): s;
 	},
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
