@@ -879,7 +879,7 @@ zk.invoke = function (nm, fn, dtid) {
  * @since 3.0.6
  */
 zk.addOnLoad = function (nm, script) {
-	if (zk._modules[nm]) {
+	if (zk._modules[nm] && !zk.loading) {
 		setTimeout(script, 0);
 	} else {
 		var ary = zk._js4ld[nm] = [];
