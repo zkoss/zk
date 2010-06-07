@@ -41,6 +41,7 @@ ZK 5.0.3
   3006313: Slider#getCurpos() does not work
   3010936: A ZHTML with native namespace without head causes JavaScript error
   3009925: Clients.evalJavaScript is broken in zhtml with native namespace
+  3012310: enable crawlable will show unwanted labels
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
