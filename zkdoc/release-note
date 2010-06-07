@@ -6,6 +6,7 @@ ZK 5.0.3
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
   3006351: Able to specify the tag name for a macro component
+  3011489: Decimalbox format issue
   
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
