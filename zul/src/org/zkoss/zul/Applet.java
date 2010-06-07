@@ -24,6 +24,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zul.impl.XulElement;
@@ -47,12 +48,13 @@ org.zkoss.zul.api.Applet {
 	private final Map _params = new LinkedHashMap();
 	private boolean _mayscript;
 
-	/** Return the code of the applet, i.e., the URI of the Java class.
+	/** Return the applet class to run.
+	 * Example: MyApplet.
 	 */
 	public String getCode() {
 		return _code;
 	}
-	/** Sets the code of the applet, i.e., the URI of the Java class.
+	/** Sets the applet class to run.
 	 */
 	public void setCode(String code) {
 		if (!Objects.equals(_code, code)) {
@@ -69,6 +71,7 @@ org.zkoss.zul.api.Applet {
 		return _codebase;
 	}
 	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 3.6.2
 	 */
 	public void setCodebase(String codebase) {
@@ -104,6 +107,7 @@ org.zkoss.zul.api.Applet {
 		return _archive;
 	}
 	/** Sets the location of an archive file (URL).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 5.0.3
 	 */
 	public void setArchive(String  archive) {
@@ -237,8 +241,8 @@ org.zkoss.zul.api.Applet {
 		super.renderProperties(renderer);
 
 		render(renderer, "code", getCode());
-		render(renderer, "codebase", getCodebase());
-		render(renderer, "archive", getArchive());
+		render(renderer, "codebase", getEncodedCodebase());
+		render(renderer, "archive", getEncodedArchive());
 		render(renderer, "align", getAlign());
 		render(renderer, "hspace", getHspace());
 		render(renderer, "vspace", getVspace());
@@ -250,5 +254,16 @@ org.zkoss.zul.api.Applet {
 			render(renderer, "param",
 				new String[] {(String)me.getKey(), (String)me.getValue()});
 		}
+	}
+
+	private String getEncodedArchive() {
+		final Desktop dt = getDesktop();
+		return _archive != null && dt != null ? dt.getExecution().encodeURL(_archive): null;
+			//if desktop is null, it doesn't belong to any execution
+	}
+	private String getEncodedCodebase() {
+		final Desktop dt = getDesktop();
+		return _codebase != null && dt != null ? dt.getExecution().encodeURL(_codebase): null;
+			//if desktop is null, it doesn't belong to any execution
 	}
 }

@@ -35,6 +35,7 @@ public interface Applet extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/** Returns a relative base URL for applets specified in {@link #setCode} (URL).
 	 * <p>Default: null (no codebase at all).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 5.0.3
 	 */
 	public String getCodebase();
@@ -61,6 +62,7 @@ public interface Applet extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 */
 	public String getArchive();
 	/** Sets the location of an archive file (URL).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 5.0.3
 	 */
 	public void setArchive(String  archive);

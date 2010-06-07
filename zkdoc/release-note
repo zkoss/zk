@@ -44,6 +44,7 @@ ZK 5.0.3
   3010936: A ZHTML with native namespace without head causes JavaScript error
   3009925: Clients.evalJavaScript is broken in zhtml with native namespace
   3012310: enable crawlable will show unwanted labels
+  3010511: Applet in content of Html Tag
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
@@ -62,6 +63,8 @@ ZK 5.0.3
     ID).
   + The id-to-uuid-prefix configuration is deprecated. Please use IdGenerator
     or jQuery selector instead.
+  + The codebase of the applet component will be encoded by including the session ID
+    and application's context. See also Bug 3012486.
 
 	--------
 ZK 5.0.2
