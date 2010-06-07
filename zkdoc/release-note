@@ -6,8 +6,7 @@ ZK 5.0.3
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
   3006351: Able to specify the tag name for a macro component
-  3012360: Applet supports all attributes, e.g., archive and mayscript
-  3011489: Decimalbox format issue
+  3012360: Applet supports all attributes, e.g., archive and mayscript  
   
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
@@ -45,6 +44,7 @@ ZK 5.0.3
   3009925: Clients.evalJavaScript is broken in zhtml with native namespace
   3012310: enable crawlable will show unwanted labels
   3010511: Applet in content of Html Tag
+  3011489: Decimalbox format issue
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
