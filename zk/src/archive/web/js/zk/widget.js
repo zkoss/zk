@@ -2727,12 +2727,15 @@ function () {
 	 * @return zk.Page
 	 */
 	getPage: function () {
+		var page, dt;
 		for (page = this.parent; page; page = page.parent)
 			if (page.$instanceof(zk.Page))
 				return page;
-				
-		return null;
+
+		return (page = (dt = this.desktop)._bpg) ?
+			page: (dt._bpg = new zk.Body(dt));
 	},
+
 	/** Binds this widget.
 	 * It is called to assoicate (aka., attach) the widget with
 	 * the DOM tree.
@@ -4379,6 +4382,17 @@ zk.Page = zk.$extends(zk.Widget, {
 });
 zk.Widget.register('zk.Page', true);
 
+//a fake page used in circumstance that a page is not available ({@link #getPage})
+zk.Body = zk.$extends(zk.Page, {
+	$init: function (dt) {
+		this.$super('$init', {});
+		this.desktop = dt;
+	},
+	$n: function (subId) {
+		return subId ? null: document.body;
+	},
+	redraw: zk.$void
+});
 /** A native widget.
  * It is used mainly to represent the native componet created at the server.
  * @disable(zkgwt)
