@@ -258,8 +258,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_removeChildHTML: function (n) {
-		for(var cn, w = this.firstChild; (w = w.nextSibling);) {
-			if ((cn = w.$n()))
+		for(var cn, w = this.firstChild; w; w = w.nextSibling) {
+			if (w != this.treerow && (cn = w.$n()))
 				w.removeHTML_(cn);
 		}
 	},

@@ -46,6 +46,7 @@ ZK 5.0.3
   3010511: Applet in content of Html Tag
   3011489: Decimalbox format issue
   3012994: Grid with menu and Upload failed in zhtml (native namespace)
+  3013126: Treeitem will disappeare when setDisabled on the treeitem
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
