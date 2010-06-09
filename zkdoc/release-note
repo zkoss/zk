@@ -48,6 +48,7 @@ ZK 5.0.3
   3011489: Decimalbox format issue
   3012994: Grid with menu and Upload failed in zhtml (native namespace)
   3013126: Treeitem will disappeare when setDisabled on the treeitem
+  3013538: Clients.reloadMessages throw exception
   3013539: Treecell can't change its label when others items disabled
 
 * Upgrade Notes

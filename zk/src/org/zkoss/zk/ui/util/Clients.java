@@ -294,7 +294,7 @@ public class Clients {
 		final Locale oldl = Locales.setThreadLocal(locale);
 		try {
 			final Execution exec = Executions.getCurrent();
-			sb.append(loadJS(exec, "~./js/zk/lang/mesg*.js"));
+			sb.append(loadJS(exec, "~./js/zk/lang/msgzk*.js"));
 			sb.append(Wpds.outLocaleJavaScript());
 			sb.append(loadJS(exec, "~./js/zul/lang/msgzul*.js"));
 		} finally {
