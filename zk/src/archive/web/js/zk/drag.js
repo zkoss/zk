@@ -450,10 +450,8 @@ String scroll; //DOM Element's ID</code></pre>
 	_updateDrag: function (pt, evt) {
 		if(!this.dragging) {
 			var v = this.opts.initSensitivity;
-			if (v && (pt[0] <= _initPt[0] + v
-			&& pt[0] >= _initPt[0] - v
-			&& pt[1] <= _initPt[1] + v
-			&& pt[1] >= _initPt[1] - v))
+			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
+			&& pt[1] <= _initPt[1] + v && pt[1] >= _initPt[1] - v)
 				return;
 			this._startDrag(evt);
 		}
@@ -591,7 +589,7 @@ String scroll; //DOM Element's ID</code></pre>
 		_activate(this, devt, pt);
 
 		if (zk.opera || zk.gecko) devt.preventDefault();
-			//IE: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
+			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged
 			//FF3: if stopPropagation, 2nd browser focused (Bug 2988327)
 			//Opera: if not stop, 'easy' to become selecting text
