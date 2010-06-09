@@ -241,8 +241,8 @@ org.zkoss.zul.api.Applet {
 		super.renderProperties(renderer);
 
 		render(renderer, "code", getCode());
-		render(renderer, "codebase", getEncodedCodebase());
-		render(renderer, "archive", getEncodedArchive());
+		render(renderer, "codebase", encode(getCodebase(), true));
+		render(renderer, "archive", encode(getArchive(), false));
 		render(renderer, "align", getAlign());
 		render(renderer, "hspace", getHspace());
 		render(renderer, "vspace", getVspace());
@@ -256,14 +256,18 @@ org.zkoss.zul.api.Applet {
 		}
 	}
 
-	private String getEncodedArchive() {
+	/**
+	 * @param appendable whether the URL is used as a base that can append
+	 * other URI.
+	 */
+	private String encode(String uri, boolean appendable) {
 		final Desktop dt = getDesktop();
-		return _archive != null && dt != null ? dt.getExecution().encodeURL(_archive): null;
-			//if desktop is null, it doesn't belong to any execution
-	}
-	private String getEncodedCodebase() {
-		final Desktop dt = getDesktop();
-		return _codebase != null && dt != null ? dt.getExecution().encodeURL(_codebase): null;
-			//if desktop is null, it doesn't belong to any execution
+		if (uri != null && dt != null) { //if desktop is null, it doesn't belong to any execution
+			uri = dt.getExecution().encodeURL(uri);
+			final int j = uri.lastIndexOf(";jsession");
+			if (j >= 0)
+				uri = uri.substring(0, j);
+		}
+		return uri;
 	}
 }
