@@ -159,6 +159,16 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		}
 		this.$supers('removeHTML_', arguments);
 	},
+	getOldWidget_: function (n) {
+		var old = this.$supers('getOldWidget_', arguments);
+		if (old && old.$instanceof(zul.sel.Treerow)) {
+			var ti = old.parent;
+			if (ti)
+				return ti.treechildren;
+			return null;
+		}
+		return old;
+	},
 	$n: function (nm) {
 		if (this.firstChild)
 			return nm ? this.firstChild.$n(nm) : this.firstChild.$n();

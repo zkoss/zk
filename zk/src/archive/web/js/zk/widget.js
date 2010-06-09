@@ -2481,7 +2481,7 @@ function () {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n, {strict:true});
+			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			zjq._setOuter(n, this.redrawHTML_(skipper, true));
@@ -2495,6 +2495,15 @@ function () {
 
 		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
 		return this;
+	},
+	/**
+	 * Returns the old widget from the given node element.
+	 * Some widgets may override the function when they have no a concrete DOM
+	 * element, such as Treeitem, and Treechildren. 
+	 * @param DOMElement n the DOM element to match the widget.
+	 */
+	getOldWidget_: function (n) {
+		return zk.Widget.$(n, {strict:true});
 	},
 	/** Returns the HTML fragment of this widget.
 	 * @param zk.Skipper skipper the skipper. Ignored if null
@@ -2571,7 +2580,7 @@ function () {
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n, {strict:true});
+		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
@@ -2679,6 +2688,7 @@ function () {
 	 */
 	removeHTML_: function (n) {
 		jq(n).remove();
+		this.clearCache();
 	},
 	/**
 	 * Returns the DOM element that this widget is bound to.
