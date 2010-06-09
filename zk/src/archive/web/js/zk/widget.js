@@ -2959,18 +2959,20 @@ unbind_: function (skipper, after) {
 		if (newh != h) //h changed, re-assign height
 			n.style.height = jq.px0(newh);
 	},
+	
 	setFlexSizeW_: function(n, zkn, width, ignoreMargins) {
 		var w = zkn.revisedWidth(width, !ignoreMargins),
 			neww = w,
-			margins = zkn.sumStyles("lr", jq.margins);
+			margins = zkn.sumStyles("lr", jq.margins),
+			pb = zkn.padBorderWidth();
+		if (zk.safari && !ignoreMargins && width == (n.offsetWidth + margins)) //in safari, new size is the same to original size + margins (shall ignore the margin)
+			w = width - pb;
 		n.style.width = jq.px0(w);
-		var newmargins = zkn.sumStyles("lr", jq.margins);
 		if (w == jq(n).outerWidth(false)) //border-box
-			neww = width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
-		else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
-			neww = zkn.revisedWidth(width, !ignoreMargins);
+			neww = w + pb;
 		if (neww != w) //w changed, re-assign width
-			n.style.width = jq.px0(neww); 
+			n.style.width = jq.px0(neww);
+			 
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden

@@ -70,8 +70,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //		xitems.add(info); 
 //		xitems.add(mark); 
  		
- 		MapsModel model1 = new MapsModelSet();
- 		MapsModel model2 = new MapsModelSet();
+ 		MapModel model1 = new MapModelSet();
+ 		MapModel model2 = new MapModelSet();
  		model1.add(mark3);
  		model1.add(mark1);
  		model1.add(info);
@@ -101,6 +101,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<window id="gmapwin2" title="mapwin 2" closable="true" width="610px">
 	<gmaps id="mymap" width="100%" height="350px" showSmallCtrl="true" model="${model2}" 
 		droppable="true" mapType="physical">
+		<ginfo id="myinfo" open="true">
+			<attribute name="content"><![CDATA[
+				Hello, <a href="http://www.zkoss.org">ZK</a>.
+			]]></attribute>
+		</ginfo>
 		<attribute name="onMapZoom">
 			myzoom.setValue(self.getZoom());
 		</attribute>
