@@ -62,14 +62,20 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 * @param int selectedIndex
 		 */
 		selectedIndex: function (selectedIndex) {
-			var n = this.$n();
-			if (n) {
-				var i = 0, j = 0;
-				for (var w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++)
-					if (!w.isVisible())
-						j++;
+			var i = 0, j = 0, w, n = this.$n();
+			this.clearSelection();
+			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
+				if (!w.isVisible())
+					j++;
+			}
+				
+			selectedIndex -= j;
+			if (n)
+				n.selectedIndex = selectedIndex;
 
-				n.selectedIndex = selectedIndex - j;
+			if (selectedIndex > -1 && w) {
+				w.setSelected(true);
+				this._selItems.push(w);
 			}
 		},
 		/**
@@ -177,7 +183,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				if (index < this._selectedIndex || this._selectedIndex < 0) {
 					this._selectedIndex = index;
 				}
-				item._selected = true;
+				item._setSelectedDirectly(true);
 				this._selItems.push(item);
 			}
 		}
@@ -187,7 +193,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			if (!this._multiple) {
 				this.clearSelection();
 			} else {
-				item._selected = false;
+				item._setSelectedDirectly(false);
 				this._selItems.$remove(item);				
 			}
 		}
@@ -199,7 +205,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		if (this._selItems.length) {
 			var item;
 			for(;(item = this._selItems.pop());)
-				item._selected = false;
+				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 		}
 	},

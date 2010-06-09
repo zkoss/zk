@@ -53,6 +53,7 @@ ZK 5.0.3
   3007738: The setImage of the comboitem isn't works
   3013433: (Chrome) grid in tabpanel not resize when browser resize
   3011477: Clear the frozen in the grid cause JavaScript error
+  3012466: Listbox's selection issue
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
