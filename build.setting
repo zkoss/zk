@@ -1,4 +1,4 @@
-D.ON=true
+ D.ON=true
 javadoc=~/prj/javadoc
 htmldoc=~/prj/zkweb/ptroot/WebContent/doc
 unzip=true
@@ -6,4 +6,4 @@ debug=true
 optimize=true
 #jboss.deploy=default/deploy
 #start.service=Apache Tomcat 6
-version=5.0.3-FL
+version=5.0.2.1
