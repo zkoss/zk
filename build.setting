@@ -1,4 +1,4 @@
- D.ON=true
+D.ON=true
 javadoc=~/prj/javadoc
 htmldoc=~/prj/zkweb/ptroot/WebContent/doc
 unzip=true
