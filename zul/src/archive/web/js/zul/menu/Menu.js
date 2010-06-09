@@ -126,33 +126,32 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 		var anc = this.$n('a'),
 			type = this._contentType;
-		if (!this.isTopmost()) {
+		if (this.isTopmost()) {
+			this.domListen_(anc, "onMouseOver")
+				.domListen_(anc, "onMouseOut");
+		} else {
 			var	n = this.$n();
 			this.domListen_(anc, "onFocus", "doFocus_")
 				.domListen_(anc, "onBlur", "doBlur_")
 				.domListen_(n, "onMouseOver")
 				.domListen_(n, "onMouseOut");
-		} else {
-			this.domListen_(anc, "onMouseOver")
-				.domListen_(anc, "onMouseOut");
 		}
 
 		if (this._contentHandler)
 			this._contentHandler.bind();
 	},
 	unbind_: function () {
-		if (!this.isTopmost()) {
-			var anc = this.$n('a'),
-				n = this.$n();
-			this.domUnlisten_(anc, "onFocus", "doFocus_")
-				.domUnlisten_(anc, "onBlur", "doBlur_")
-				.domUnlisten_(n, "onMouseOver")
-				.domUnlisten_(n, "onMouseOut");
-		} else {
-			var anc = this.$n('a');
-			this.domUnlisten_(anc, "onMouseOver")
-				.domUnlisten_(anc, "onMouseOut");
-		}
+		var anc = this.$n('a'),
+			n = this.$n();
+
+		//topmost (note: we cannot use isTopmost in unbind_ since beforeParent.. has been called)
+		this.domUnlisten_(anc, "onMouseOver")
+			.domUnlisten_(anc, "onMouseOut")
+		//!topmost
+			.domUnlisten_(anc, "onFocus", "doFocus_")
+			.domUnlisten_(anc, "onBlur", "doBlur_")
+			.domUnlisten_(n, "onMouseOver")
+			.domUnlisten_(n, "onMouseOut");
 
 		if (this._contentHandler)
 			this._contentHandler.unbind();

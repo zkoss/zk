@@ -766,11 +766,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._inWholeMode) {
 			var node = this.$n();
 			zk(node).undoVParent();
-			var p = this.parent;
-			if (p && (p = p.parent) && (p = p.$n())) {
-				p.style.position = node._ppos;
-				p.parentNode.scrollTop = node._scrollTop;
-			}
 			node._scrollTop = node._ppos = node._zindex = node._pos = null;
 			this._inWholeMode = false;
 		}
@@ -791,6 +786,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		this.domUnlisten_(this.$n(), 'onMouseOver');
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
+	},
+	beforeParentChanged_: function (np) {
+		if (!np) {
+			var p = this.parent;
+			if ((p = p.parent) && (p = p.$n())) {
+				p.style.position = node._ppos;
+				p.parentNode.scrollTop = node._scrollTop;
+			}
+		}
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	_doMouseOver: function (evt) {
 		if (this._sizer) {
