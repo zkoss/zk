@@ -1,0 +1,76 @@
+<window title="Test of Groupbox Client ROD">
+Make sure Enterprise Edition is installed.
+
+<groupbox id="g1" width="300px" mold="3d" open="false">
+	<caption label="Groupbox">
+		<button label="Press" onClick="alert(&quot;Press&quot;)"/>
+		<toolbarbutton label="Hello" onClick="alert(&quot;Hello&quot;)"/>
+	</caption>
+	<grid id="gd">
+		<columns>
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A+B" colspan="2"/>
+			<auxheader label="C"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<button label="prepend child" onClick='g1.insertBefore(new Label("new child"), gd)'/>
+<button label="append child" onClick='g1.appendChild(new Label("new child"))'/>
+<button label="toggle" onClick='g1.open = !g1.open'/>
+<groupbox id="g2" width="300px" open="false">
+	<caption label="Groupbox">
+		<button label="Press" onClick="alert(&quot;Press&quot;)"/>
+		<toolbarbutton label="Hello" onClick="alert(&quot;Hello&quot;)"/>
+	</caption>
+	<grid>
+		<columns>
+			<column label="AA"/>
+			<column label="BB"/>
+			<column label="CC"/>
+		</columns>
+		<auxhead>
+			<auxheader label="A+B" colspan="2"/>
+			<auxheader label="C"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+			<row>
+				<label value="AA01"/>
+				<label value="BB01"/>
+				<label value="CC01"/>
+			</row>
+		</rows>
+	</grid>
+</groupbox>
+<button label="toggle" onClick='g2.open = !g2.open'/>
+</window>

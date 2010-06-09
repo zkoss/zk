@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Create By Dennis
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<vbox>
+Grid:onColSize event.getColIndex() alwyas return 1
+	<label id="lab"/>
+	<grid width="500px">
+		<columns id="cs" sizable="true" onColSize='lab.value=new java.util.Date()+"col size change:"+event+","+event.getColumn()+",colindex:"+event.getColIndex()'>
+			<column label="AA" id="col1" />
+			<column label="BB" id="col2" />
+			<column label="CC" id="col3" />
+			<column label="DD" id="col4" />
+			<column label="EE" id="col5" />
+		</columns>
+		<rows>
+			<row>
+				<label value="AA01" />
+				<label value="BB01" />
+				<label value="CC01" />
+				<label value="DD01" />
+				<label value="EE01" />
+			</row>
+			<row>
+				<label value="AA02" />
+				<label value="BB02" />
+				<label value="CC02" />
+				<label value="DD02" />
+				<label value="EE02" />
+			</row>
+		</rows>
+	</grid>
+</vbox>

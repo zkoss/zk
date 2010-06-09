@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+combo.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr  3 15:35:52     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Test of combobox, bandbox" border="normal"
+onOK='alert("ENTER press")' onCancel='alert("ESC pressed")'>
+	combobox:
+	<combobox id="combo" onChange="comboOut.value = self.value" constraint="no empty">
+		<comboitem label="Simple and Rich"/>
+		<comboitem label="Cool!"/>
+		<comboitem label="Thumbs Up!"/>
+	</combobox>
+	<checkbox onCheck="combo.autodrop = self.checked" label="autodrop"/>
+	<checkbox onCheck="combo.autocomplete = self.checked" label="autocomplete" checked="true"/>
+	<separator/>
+	<combobox id="combo2" cols="10" onChange="comboOut.value = self.value">
+		<comboitem label="Another Commbo that is longer than input box"/>
+		<comboitem label="For testing auto-close"/>
+	</combobox>
+	<separator/>
+	combobox3:
+	<combobox id="combo3" cols="10" onChange="comboOut.value = self.value" autodrop="true">
+		<comboitem label="Item 1"/>
+		<comboitem label="Item 2"/>
+		<comboitem label="Item 3"/>
+		<comboitem label="Item 4"/>
+		<comboitem label="Item 5"/>
+		<comboitem label="Item 6"/>
+		<comboitem label="Item 7"/>
+		<comboitem label="Item 8"/>
+		<comboitem label="Item 9"/>
+		<comboitem label="Item 10"/>
+		<comboitem label="Item 11"/>
+		<comboitem label="Item 12"/>
+		<comboitem label="Item 13"/>
+		<comboitem label="Item 14"/>
+		<comboitem label="Item 15"/>
+		<comboitem label="Item 16"/>
+		<comboitem label="Item 17"/>
+		<comboitem label="Item 18"/>
+		<comboitem label="Item 19"/>
+		<comboitem label="Item 20"/>
+		<comboitem label="Item 21"/>
+		<comboitem label="Item 22"/>
+		<comboitem label="Item 23"/>
+		<comboitem label="Item 24"/>
+		<comboitem label="Item 25"/>
+		<comboitem label="Item 26"/>
+		<comboitem label="Item 27"/>
+		<comboitem label="Last"/>
+	</combobox>
+	<checkbox onCheck="combo3.autodrop = self.checked" label="autodrop" checked="true"/>
+	<separator bar="true"/>
+	Output of combo: <label id="comboOut"/>
+	<separator bar="true"/>
+	Dynamic Combo (0 item at 1st, 1 at 2nd, 3 at 3rd, 6 at 4th, 10 at 5th...)
+	<combobox id="dcombo" onOpen="if (event.open) onComboOpen()"/>
+	<zscript>
+		int opens = 0;
+		void onComboOpen() {
+			for (int j = opens++; --j >= 0;)
+				new Comboitem("New " + dcombo.getItemCount()).setParent(dcombo);
+		}
+	</zscript>
+	<separator/>
+	With description
+	<combobox>
+		<comboitem label="Simple and Rich" description="The simplest way to make Web applications rich"/>
+		<comboitem label="Cool!" description="The coolest technology"/>
+		<comboitem label="Thumbs Up!" description="Must try!"/>
+		<comboitem label="*disabled*" description="A disabled item" disabled="true"/>
+	</combobox>
+	<separator bar="true"/>
+	<bandbox>
+		<bandpopup>
+		<vbox>
+			<checkbox label="Option 1"/>
+			<checkbox label="Option 2"/>
+		</vbox>
+		</bandpopup>
+	</bandbox>
+</window>

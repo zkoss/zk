@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2926718.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  7 10:48:43 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>You should see "$123.3" in the decimalbox: <decimalbox format="$###.##" value="123.30" width="150px" /></zk>

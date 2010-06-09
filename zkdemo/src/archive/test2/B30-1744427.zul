@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk:window xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xmlns:zk="http://www.zkoss.org/2005/zul" 
+           xmlns:a="http://www.zkoss.org/2005/zk/annotation"
+           xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd "
+           border="normal" width="100%">
+1. Select a value from one of the listboxes. 
+2. If no NullPointerException, it is right.
+    <zk:zscript>
+    	import org.zkoss.zkdemo.test.MyBean;
+    	
+    	MyBean mb = new MyBean();
+    </zk:zscript>
+	
+	<a:bind model="mb.codeFilterTypeValues" selectedItem="mb.codeFilterType"/>
+	<zk:listbox id="codeFilterType" rows="1" mold="select">
+		<a:bind _var="compType"/>
+		<zk:listitem>
+			<a:bind label="compType" value="compType"/>
+			<zk:listcell/>
+		</zk:listitem>
+	</zk:listbox>
+	
+	<a:bind model="mb.titleFilterTypeValues" selectedItem="mb.titleFilterType"/>
+	<zk:listbox id="titleFilterType" rows="1" mold="select">
+		<a:bind _var="titleCompType"/>
+		<zk:listitem>
+			<a:bind label="titleCompType" value="titleCompType"/>
+			<zk:listcell/>
+		</zk:listitem>
+	</zk:listbox>
+	
+</zk:window>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1893245.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 14 10:35:18 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>The shading of Combobox, Bandbox, and Datebox should be the same with Textbox.</n:p>
+	<textbox></textbox>
+	<n:p/>
+	<bandbox></bandbox>
+	<combobox></combobox>
+	<datebox/>
+</zk>

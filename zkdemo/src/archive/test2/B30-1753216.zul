@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+bug1753216.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 16 14:57:11     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+If no error occur, it is right.
+<tree mold="paging" pageSize="3">
+	<treechildren>
+		<treeitem id="ti0" selected="true" onOpen="onOpen(event, 4)" open="false">
+			<treerow>
+				<treecell label="Add onOpen"/>
+			</treerow>
+			<treechildren id="tch">
+			</treechildren>
+		</treeitem>
+	</treechildren>
+</tree>
+<zscript><![CDATA[
+void onOpen(Event evt, int cnt) {
+	if (evt.open) {
+		for (int j = 1; j <= cnt; ++j) {
+			Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			new Treecell("new " + j).setParent(tr);
+			tr.setParent(ti);
+			ti.setParent(tch);
+		}
+
+	}
+}
+]]></zscript>
+</zk>

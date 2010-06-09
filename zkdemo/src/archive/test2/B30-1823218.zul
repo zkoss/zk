@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823218 ] Tree with vflex, body grows over boarder.</h:h3>
+	<h:pre>
+Tree with vflex, body grows over boarder.
+Notice: This only happens when there is tree columns
+	</h:pre>
+	<window border="normal" height="300px"> 
+		<tree id="tree" width="400px" height="30%" vflex="true">
+			<treecols id="cols">
+				<treecol label="Header"/>
+			</treecols>
+		</tree>
+		<button label="remove header" onClick="cols.setParent(null)" />
+		LALLALALALALALAL
+	</window> 
+</zk>

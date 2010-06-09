@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		WPD used for ZK Light
+	Description:
+		ZK 5 doesn't require this file since they are loaded by zul/zk.wpd
+	History:
+		Sat Jan 31 21:48:14     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.lang" cacheable="false">
+	<script src="msgzk*.js"/>
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outLocaleJavaScript()"/>
+
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outDeferJavaScriptPackages(java.lang.String)"
+		arg0="ajax"/>
+		<!-- To minimize # of zk.wpd, we put deferred package here -->
+</package>

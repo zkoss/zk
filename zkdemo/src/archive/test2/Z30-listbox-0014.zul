@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-listbox-0014.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 15 12:07:29 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>Please scroll down the list box to the 50th row.</n:li>
+		<n:li>mouse over the 50th row, it should lightheight the 50th row.</n:li>
+	</n:ol>
+	<window title="Live Data Demo" border="normal">
+		<zscript>
+			List items = new org.zkoss.zkdemo.userguide.BigList(100);
+			ListModel strset = new ListModelList(items);
+			ListitemRenderer render = new ListitemRenderer() { 
+				public void render(Listitem item, Object data) { 
+					new Listcell("column1 - " + item.getIndex()).setParent(item);
+					new Listcell("column2 - " +	item.getIndex()).setParent(item);
+					new Listcell("column3 - " + item.getIndex()).setParent(item);
+				}
+			};
+		</zscript>
+		<listbox id="list" width="600px" rows="20" model="&#36;{strset}"
+			itemRenderer="${render}">
+			<attribute name="onCreate">
+				list.renderItem(list.getItemAtIndex(50));
+			</attribute>
+			<listhead sizable="true">
+				<listheader label="Load on Demend1" sort="auto" />
+				<listheader label="Load on Demend2" sort="auto" />
+				<listheader label="Load on Demend3" sort="auto" />
+			</listhead>
+		</listbox>
+	</window>
+</zk>

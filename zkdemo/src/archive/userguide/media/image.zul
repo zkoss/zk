@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+image.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>Dynamic Image</h4>
+		<p>Change images dynamically either by changing the source or rendering by Graphics library.</p>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<hbox>
+		<window title="Label and Image" border="normal" width="300px"> 
+			<image src="/img/Centigrade-Widget-Icons/Globe-128x128.png"/>
+			<separator/>
+			Do you like the photo?
+			<label id="label"/>
+			<hbox>		
+				<button label="Yes" onClick="label.value = self.label"/>
+				<button label="No" onClick="label.value = self.label"/>
+			</hbox>
+		</window>
+		<window title="Dynamic Image" border="normal" width="300px">
+		Click the button to Change Image
+			<hbox>
+				<vbox>
+					<button label="Change Resource">
+						<attribute name="onClick">
+						image.setContent(new org.zkoss.image.AImage("t", desktop.webApp.getResourceAsStream((odd = !odd) ? "/img/msn2.gif" : "/img/msn1.gif")));				
+					</attribute>
+					</button>
+					<image id="image" src="/img/msn1.gif" />
+				</vbox>
+				<vbox>
+					<button label="Dynamic Render" onClick="update()" />
+					<image id="img" />
+				</vbox>
+			</hbox>
+			<zscript>
+			import java.awt.*;
+			import java.awt.image.*;
+			import java.awt.geom.*;
+			boolean odd = false;
+			boolean odd1 = false;
+			
+			void update() {
+				BufferedImage bufferimg = newimg((odd1 = !odd1));
+				img.setContent(bufferimg);
+			}
+			BufferedImage newimg(boolean update) {
+				BufferedImage bi = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
+				Graphics2D g2d = bi.createGraphics();
+				g2d.setStroke(new BasicStroke(5));
+				Line2D line = null; Rectangle2D retangle = null ;
+				if (update) {
+					line = new Line2D.Double(10, 10, 130, 130);
+					retangle = new Rectangle2D.Double(25,25,85,85);
+				}else {
+					line = new Line2D.Double(10, 130, 130, 10);
+					retangle = new Rectangle2D.Double(25,25,85,85);
+				}
+				g2d.setColor(update ? Color.cyan : Color.RED);
+				g2d.draw(line);
+				g2d.setColor(update ? Color.yellow : Color.pink);
+				g2d.draw(retangle);
+				return bi;
+			}
+			BufferedImage bufferimg = newimg(false);
+			img.setContent(bufferimg);
+			</zscript>
+		</window>
+	</hbox>
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

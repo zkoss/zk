@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Mar 26 16:29:07     2006, Created by tomyeh
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<!-- Turn on if you want to debug JavaScript.
+		Once turned on, the uncompressed JavaScript files will be loaded.
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	-->
+	<!-- Uncomment if you turn off the caching of resources loaded from
+		the class path (aka., class Web resources).
+		By default, class Web resources are cached by the browser until
+		you upgraded ZK to a newer version.
+		However, it is better to turn the cache off when you are developing
+		a theme or a component.
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache</name>
+		<value>false</value>
+	</library-property>
+	-->
+	
+	<!-- Turn on if you want to cache by etag for dynamic resource.
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache.etag</name>
+		<value>true</value>
+	</library-property>
+	-->
+	
+	<!-- Uncomment if you want to control the number of hours that
+		the CSS files of class Web resources won't be changed.
+		By default, it is 8760 (the same as other class Web resouces).
+		A non-positive value turns off the cache of the CSS files of
+		class Web resources.
+		This property is meaningless if org.zkoss.web.classWebResource.cache
+		is disabled.
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache.CSS.days</name>
+		<value>8760</value>
+	</library-property>
+	-->
+	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified
+		here. It is designed for testing purpose.
+		Notice ${page will be replaced with page's UUID. If you don't want it,
+		remove it.
+	<desktop-config>
+		<id-to-uuid-prefix>_zid_${page}_</id-to-uuid-prefix>
+	</desktop-config>
+	-->
+	<!-- Turn on if you want to use the same UUID sequence for the desktops
+		after reboot. It is mainly for testing purpose.
+	<desktop-config>
+		<repeat-uuid>true</repeat-uuid>
+	</desktop-config>
+	-->
+	<!--
+	<log>
+		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
+		<log-base>org.zkoss</log-base>
+	</log>
+	-->
+
+	<!-- Turn on the following if you want to use the trendy mold as default
+		for all buttons.
+	-->
+	<library-property>
+		<name>org.zkoss.zul.Button.mold</name>
+		<value>trendy</value>
+	</library-property>
+
+	<!-- Turn on the following if want to use the defer mode as the default,
+		which is compatible to 3.x
+	<library-property>
+		<name>org.zkoss.zul.include.mode</name>
+		<value>defer</value>
+	</library-property>
+	-->
+
+	<!-- Turn on if you want to use language addons.
+	<language-config>
+		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
+	</language-config>
+	 -->
+
+	<!-- Turn on if the processing time is longer than 9000 miliseconds.
+		http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Overview_The_client-config_Element#The_resend-delay_Element
+	<client-config>
+		<resend-delay>9000</resend-delay>
+	<client-config>
+	-->
+	<!-- Turn on if you want to ignore the consecutive click events,
+	if it happens too close to the previous one, or the server is still
+	serving the previous click.
+	<client-config>
+		<click-filter-delay>390</click-filter-delay>
+	</client-config>
+	-->
+
+	<!-- [ZK EE]
+		Turn on if you want to enable the render-on-demand feature for grid.
+		It improves the performance for huge grid.
+		Default: false
+	-->
+	<library-property>
+		<name>org.zkoss.zul.grid.rod</name>
+		<value>true</value>
+	</library-property>
+	<!-- [ZK EE]
+		Turn on if you want to enable the render-on-demand feature for listbox.
+		It improves the performance for huge listbox.
+		Default: false
+	-->
+	<library-property>
+		<name>org.zkoss.zul.listbox.rod</name>
+		<value>true</value>
+	</library-property>
+
+	<!-- Turn on if you want to use IE7 compatible mode. It is useful if
+		some of JavaScript code doesn't work properly in IE8.
+	<library-property>
+		<name>org.zkoss.zk.ui.EmulateIE7</name>
+		<value>true</value>
+	</library-property>
+	-->
+
+	<!-- [ZK EE]
+		Turn on if you want to block the requests sent from inaccessible
+		widgets (such as invisible or disabled).
+		It is used to protect your application from the attack that
+		goes through the invisible widgets.
+		Once turned on, the request from an invisible widget is blocked.
+		See also org.zkoss.zkmax.au.IWBS.events
+	<listener>
+		<listener-class>org.zkoss.zkmax.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
+	</listener>
+	-->
+	<!-- [ZK EE]
+		Turn on if you use InaccessibleWidgetBlockService (IWBS) and
+		want to block only particular events.
+		Default: all
+	<library-property>
+		<name>org.zkoss.zkmax.au.IWBS.events</name>
+		<value>onClick,onChange,onSelect</value>
+	</library-property>
+	-->
+
+	<!-- [ZK EE]
+		Turn on if you want to recycle the desktop if an user navigates
+		back to the same URL
+	<listener>
+		<listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle</listener-class>
+	</listener>
+	--> 
+
+	<!-- [ZK EE]
+		Turn on if you want to make your Web application crawlable (indexed)
+		by search engines.
+	<system-config>
+		<crawlable>true</crawlable>
+	</system-config>
+	-->
+
+	<!-- Optional -->
+	<!-- Map extensions to the xml language.
+		 By default, xml is mapped to xml -->
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>svg</extension>
+	</language-mapping>
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>xml2html</extension>
+	</language-mapping>
+	<!-- Map extensions to the xul/html language
+		 By default, xul/html are mapped to zul and xul.
+	<language-mapping>
+		<language-name>xul/html</language-name>
+		<extension>xxx</extension>
+	</language-mapping>
+	-->
+
+	<session-config>
+		<!-- Turn on the following if you want a different timeout
+			Note: The unit is seconds (while that of web.xml is minute)
+		<session-timeout>1800</session-timeout>
+		-->
+		<!-- Turn on the following if you want to reset the session-timeout
+		counter when receiving onTimer, like any other request
+		In other words, the session is never timeoout if the desktop has
+		a timer.
+		<timer-keep-alive>true</timer-keep-alive>
+		-->
+	</session-config>
+	<session-config>
+		<!-- 
+		 Uncomment it and set it to mil, if you want to configure for
+		 a mobile device.
+		 If omitted, ajax is assumed.
+		 Currently, only timeout-uri and automatic-timeout support per-device
+		 configuration.
+		<device-type>ajax</device-type>
+		-->
+		<timeout-uri>/timeout.zul</timeout-uri>
+			<!-- An empty URL can cause the browser to reload the same URL -->
+
+		<!-- Uncomment the following if you want to automatically redirect
+			to the timeout page. By default, it is triggered by the user
+			after timeout (such as clicking).
+		<automatic-timeout/>
+		-->
+	</session-config>
+
+	<!-- We turn on the event processing thread in zkdemo to demostrate
+	features that are available only if the eventprocessing thread is turned on.
+	However, the event processig thread is disabled by default since ZK 5.0,
+	to be complaint with Java Servlet specification. It is recommended to
+	disable if you intend to integrate Spring web flow and other sophisticated
+	frameworks.
+	-->
+	<system-config>
+		<disable-event-thread>false</disable-event-thread>
+	</system-config>
+	
+	<!-- Turn on the following if you want to use ZK with a clustering server
+		or cloud environment (such as Google App Engine)
+	<system-config>
+		<disable-event-thread/>
+		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
+	</system-config>
+	-->
+	<!-- Disable the serialization of BeanShell methods
+		Default: enable
+		Disable it if Google App Engine is used since it cannot serialize
+		BeanShell method correctly
+	<library-property>
+		<name>org.zkoss.zk.scripting.bsh.method.serializable</name>
+		<value>false</value>
+	</library-property>
+	-->
+	<!-- Turn on the following if you want to cache all desktops in a global
+	cache, rather than one for each session
+	<system-config>
+		<cache-provider-class>org.zkoss.zk.ui.sys.GlobalDesktopCacheProvider</cache-provider-class>
+	</system-config>
+	-->
+
+	<!-- Optional -->
+	<!-- You can define any number of richlets as follows.
+		Note: To use richlet, you have to map zkLoader to /xx/* in web.xml,
+		where xx could be any name. And, the final URL will be /xx/url-pattern.
+		This demo application maps all richlet to /zk (see web.xml),
+		so the richlet path will be, say, /zk/test/some
+	-->
+	<richlet>
+		<richlet-name>Test</richlet-name>
+		<richlet-class>org.zkoss.zkdemo.test.TestRichlet</richlet-class>
+		<!-- Any number of initial parameters.
+		<init-param>
+			<param-name>any</param-name>
+			<param-value>any</param-value>
+		</init-param>
+		-->
+	</richlet>
+	<richlet-mapping>
+		<richlet-name>Test</richlet-name>
+		<url-pattern>/test/*</url-pattern>
+	</richlet-mapping>
+
+	<!-- Uncomment if you want to embed JavaScript codes and any other
+	tags to be generated inside HTML HEAD.
+	<device-config>
+		<device-type>ajax</device-type>
+		<embed><![CDATA[
+	<script type="text/javascript">
+	</script>
+		]]></embed>
+	</device-config>
+	-->
+
+	<!-- Optional -->
+	<!-- the following listener is used to see # of sessions, desktops...
+	-->
+	<listener>
+		<description>[Optional] Mointor the statistic</description>
+		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
+	</listener>
+
+	<!-- Configure the error page
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/WEB-INF/sys/error.zul</location>
+	</error-page>
+	-->
+
+	<!-- Configure additional theme URIs
+	<desktop-config>
+		<theme-uri>/a.css</theme-uri>
+		<theme-uri>/b**.css</theme-uri>
+	</desktop-config>
+	-->
+	<desktop-config>
+	  <theme-provider-class>org.zkoss.zkdemo.userguide.CacheableThemeProvider</theme-provider-class>
+	</desktop-config>
+
+	<!-- Uncomment the following if you want to redirect to particular
+		page when ZK Client receives an error code.
+	<client-config>
+		<error-reload>
+			<device-type>ajax</device-type>
+			<error-code>301</error-code>
+			<reload-uri>/login.zul</reload-uri>
+		</error-reload>
+		<error-reload>
+			<device-type>ajax</device-type>
+			<error-code>410</error-code>
+			<reload-uri>/timeout.zul</reload-uri>
+			<connection-type>server-push</connection-type>
+		</error-reload>
+	</client-config>
+	-->
+
+	<!-- Uncomment the following to customize the client-polling-based
+		server push.
+		Note: the unit of PollingServerPush.delay.min and max is second.
+		Note: the values of PollingServerPush.start and stop are
+		the JavaScript codes to execute at the client.
+		Note: the value of PollingServerPush.delay.factor must be integer,
+	<preference>
+		<name>PollingServerPush.delay.min</name>
+		<value>3000</value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.delay.max</name>
+		<value>10000</value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.delay.factor</name>
+		<value>5</value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.start</name>
+		<value></value>
+	</preference>
+	<preference>
+		<name>PollingServerPush.stop</name>
+		<value></value>
+	</preference>
+	-->
+	
+	<!-- Configure the default font size in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: 12px.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeM</name>
+		<value>12px</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for menus in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: 11px.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeMS</name>
+		<value>11px</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for smaller fonts, such as toolbar,
+		 in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: 11px.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeS</name>
+		<value>11px</value>
+	</library-property>
+	-->
+	<!-- Configure the font size for extremely small fonts,
+		 in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: 10px.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontSizeXS</name>
+		<value>10px</value>
+	</library-property>
+	-->
+	<!-- Configure the font family for titles in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: arial, sans-serif.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyT</name>
+		<value>arial, sans-serif</value>
+	</library-property>
+	-->
+	<!-- Configure the font family for content in ZUL CSS file (~./zul/css/zk.wcs)
+		Default: arial, sans-serif.
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyC</name>
+		<value>arial, sans-serif</value>
+	</library-property>
+	-->
+
+	<!-- Configure ZUL not to override the standard HTML tags, such as body's
+		margin and padding
+	<library-property>
+		<name>org.zkoss.zul.theme.browserDefault</name>
+		<value>true</value>
+	</library-property>
+	-->
+
+	<!-- Configure the client where to display the progress box.
+		The progress box is a message box used to indicate the AU requests
+		have being processed by the server.
+		The allowed values: left, center, right, top, bottom and mouse.
+		If you want to specify two values, separate them with comma, such as
+		right,top.
+	<library-property>
+		<name>org.zkoss.zul.progressbox.position</name>
+		<value>mouse</value>
+	</library-property>
+	-->
+	
+	<!-- Uncommet to control the number of lines to log an error message.
+		Default: 6. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.realCauseBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+	<!-- Uncommet to control the number of lines to log a warning message.
+		Default: 3. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.warningBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+
+	<!-- Uncommet to control whether the label propeties files are located.
+		Default: /WEB-INF/i3-label.properties
+	<library-property>
+		<name>org.zkoss.util.label.web.location</name>
+		<value>/WEB-INF/i3-label.properties</value>
+	</library-property>
+	-->
+	<!-- Uncommet to control the encoding of the labe properties files
+		Default: UTF-8
+	<library-property>
+		<name>org.zkoss.util.label.web.charset</name>
+		<value>UTF-8</value>
+	</library-property>
+	-->
+
+	<!-- Uncommet to specify a directory, where ZK will load the so-called
+		Class-Web Resources (CWR), including JavaScript files, CSS files,
+		 and other resources (~./xxx), in addition to the class path.
+		Default: null (they are loaded only from the class path)
+	<library-property>
+		<name>org.zkoss.web.util.resource.dir</name>
+		<value>/WEB-INF/cwr</value>
+	</library-property>
+	-->
+	<!-- Defines a client package (and all of its sub-packages)
+		provided by this server.
+		It is used only if client packages might be loaded from different
+		servers, such as Ajax-as-Service.
+	<client-config>
+		<package>
+			<package-name></package-name>
+		</package>
+	</client-config>
+	-->
+
+	<!-- Uncomment it if you prefer to keep the desktops when an user browses to
+		another URL or reloads the page.
+	<client-config>
+		<keep-across-visits>true</keep-across-visits>
+	</client-config>
+	-->
+
+	<!-- Configure the Hibernate SessionFactory Lifecycle.
+	<listener>
+		<description>Hibernate SessionFactory Lifecycle</description>
+		<listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener</listener-class>
+	</listener>
+	-->
+	
+	<!-- Configure the Hibernate configuration file name if not "hibernate.cfg.xml"
+	<preference>
+		<name>HibernateUtil.config</name>
+		<value></value>
+	</preference>
+	-->
+	
+	<!-- Configure the Hibernate "Open Session In View" Session Lifecycle
+	<listener>
+		<description>Hibernate "Open Session In View" Session Lifecycle</description>
+		<listener-class>org.zkoss.zkplus.hibernate.OpenSessionInViewListener</listener-class>
+	</listener>
+	 -->
+
+	<!-- Hibernate thread session context handler
+	<listener>
+		<description>Hibernate thread session context handler</description>
+		<listener-class>
+			org.zkoss.zkplus.hibernate.HibernateSessionContextListener
+		</listener-class>
+	</listener>
+	 -->
+	 	
+	<!-- ZK Demo properties loader -->
+	<listener>
+		<description>ZK Demo properties loader</description>
+		<listener-class>
+			org.zkoss.zkdemo.userguide.DemoWebAppInit
+		</listener-class>
+	</listener>
+
+	<!-- Turn on if you want to debug by copying JavaScript files directly
+		to classpath
+	<desktop-config>
+		<extendlet-check-period>5</extendlet-check-period>
+	</desktop-config>
+	-->
+
+	<!-- Turn on if you want to JSP 2.1 EL as the default interpreter
+	<xel-config>
+		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
+	</xel-config>
+	-->
+</zk>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Bug 1615919
+-->
+<zk>
+	Click <button label="Create" onClick="create2()"/> to open a modal window
+	and test if it is draggable.
+	<zscript><![CDATA[
+	public void create2() {
+		final Window win = (Window) Executions.createComponentsDirectly(
+		"<window border=\"normal\" closable=\"true\" width=\"300px\" title=\"modal\">"
+		+"<listbox><listitem label=\"a1\"/></listbox></window>", null, null, null);
+		win.doModal();
+	}
+	]]></zscript>
+</zk>

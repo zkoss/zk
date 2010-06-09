@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+biglist.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 23 17:44:56     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<zscript>
+List items = new java.util.AbstractList() {
+	public int size() {
+		return 100;
+	}
+	public Object get(int j) {
+		return new Integer(j);
+		}
+};
+	int end = 50;
+	</zscript>
+	Show 5 to 50 and select 10.
+	<listbox id="l" rows="50">
+		<listitem forEach="${items}" forEachBegin="5" forEachEnd="${end}"
+		selected="${forEachStatus.index == 10}">
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		<listcell label="${each}"/>
+		</listitem>
+	</listbox>
+</window>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1899003.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 21 11:23:04     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<html><![CDATA[
+Test Environment: IE6<br/>
+Expected Result: you shall see a blue line between abc and xyz
+]]></html>
+<vbox width="100%">
+<label value="abc" />
+<label value="xyz" />
+</vbox>
+<style>
+tr.z-vbox-sep td {border-bottom: 1px solid blue}
+</style>
+</window>

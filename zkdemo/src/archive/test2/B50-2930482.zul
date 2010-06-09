@@ -1,0 +1,42 @@
+<?root-attributes xmlns:v="urn:schemas-microsoft-com:vml"?><!-- For IE -->
+<window id="mywin" width="100%" height="100%">
+<html><![CDATA[
+<ol>
+<li>Press "show map" button and you shall see a normal google maps under the button</li>
+<li>Otherwise, if you saw something like "... zk.googleAPIkey ...", it is a bug</li>
+</ol>
+]]></html>
+<!-- Replace "abcdefg" to proper Google Maps key per your host -->
+<zscript>
+	import org.zkoss.zk.ui.Execution;
+		final Execution exec = Executions.getCurrent();
+		final String sn = exec.getServerName();
+		final int sp = exec.getServerPort();
+
+		// To add more keys: http://www.google.com/apis/maps/signup.html
+
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey = "ABQIAAAAakIm31AXAvNGFHV8i1Tx8RSF4KLGEmvBsS1z1zAsQZvbQceuNRQBsm65qGaXpTWjZsc2bl-hm2Vyfw";
+		} else if (sn.indexOf("zktest") >= 0) { //zktest		
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTOLZK1h7IfBeBWqZtjq6JJy913gBRHY1uafo5XzZVSyXXksjv_jHoUsA";
+		} else if (sn.indexOf("zktest2") >= 0) { //zktest2	
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTWO6y1eecluAZvbpmC7meqCt-saxSETUOirx46xfUyu-Z-mqLCi4vo9A";
+		}else if (sn.indexOf("localhost") >= 0) { // localhost
+			if (sp == 80) // http://localhost/
+				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+		}
+</zscript>
+<script
+src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=${gkey}"
+type="text/javascript"/>
+<script content="zk.googleAPIkey='${gkey}'"/>
+<button label="show map"
+onClick='Executions.getCurrent().createComponents("B50-2930482_1.zul", mywin, null)'/>
+</window>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1876988.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 22 12:35:38 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+[ 1876988 ] Messagebox's button with wrong style in Opera. The confirm button in messagebox has wrong position
+in Opera.
+<button label="Question" width="100px">
+
+	<attribute name="onClick">{
+		Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
+	}</attribute>
+</button>
+</zk>

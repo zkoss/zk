@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1913290.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 13 15:55:42 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<label value="Network History"/>
+    <chart id="mychart" type="time_series" width="400" height="200"
+threeD="false" fgAlpha="128"/>
+    <zscript><![CDATA[
+        XYModel myModel = new SimpleXYModel();
+        myModel.addValue(new Integer(1), new Integer(10000), new
+Integer(89));
+        mychart.setModel(myModel);
+    ]]></zscript> 
+</zk>

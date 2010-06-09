@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+gmaps.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 12 18:33:16     2006, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<zscript><![CDATA[
+		String sn = Executions.getCurrent().getServerName();
+		int sp = Executions.getCurrent().getServerPort();
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("localhost") >= 0) { //localhost
+			if (sp == 80) // http://localhost/
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else if (sp == 7799)
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		}
+	]]></zscript>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${gkey}"
+	type="text/javascript" unless="${empty gkey}"/>
+	<div style="border: 1px solid red;margin-top:10px;margin-bottom:20px" if="${empty gkey}">
+		To use Google Maps for this site, you have to assign a proper Google Maps key for your site first.
+		<toolbarbutton label="Sign up for a Google Maps API key" href="http://www.google.com/apis/maps/signup.html"/>
+	</div>
+ 
+ 	<zscript><![CDATA[
+ 		import org.zkoss.gmaps.*;
+ 		import org.zkoss.gmaps.event.*;
+//		Set xitems = new HashSet();
+		Ginfo info = new Ginfo("Hello, <a href=\"http://www.zkoss.org\">ZK</a>");
+		info.setId("myinfo");
+		Gmarker mark1 = new Gmarker("Hello 2 on top of Gmarker", 0, 0);
+//		mark1.setOpen(true);
+		
+		Gmarker mark = new Gmarker("Hello on top of Gmarker", 37.4410, -122.1490);
+		Gmarker mark3 = new Gmarker("Hello 3 on top of Gmarker", 37.4490, -122.1590);
+		mark.setId("mymark");
+//		mark.setDraggingEnabled(true);
+//		mark.setPopup("editPopup2");
+//		mark.setContext("editContext2");
+//		mark.setTooltip("editTooltip2");
+		mark.setDraggable("true");
+		mark.setDroppable("true");
+		mark.addEventListener("onMapDrop", new EventListener() {
+			public void onEvent(Event evt) {
+				evt.getTarget().setContent(evt.getDragged().getTooltiptext());
+				evt.getTarget().setOpen(true);
+			}});
+			 
+		Gscreen screen = new Gscreen("/test2/img/sun.jpg", "200", "200", "0", "0", "100", "100");
+//		xitems.add(info); 
+//		xitems.add(mark); 
+ 		
+ 		MapsModel model1 = new MapsModelSet();
+ 		MapsModel model2 = new MapsModelSet();
+ 		model1.add(mark3);
+ 		model1.add(mark1);
+ 		model1.add(info);
+ 		model1.add(mark);
+// 		model1.add(screen);
+ 		
+ 		public void refresh() {
+			mylat.setValue(mymap.getLat());
+			mylng.setValue(mymap.getLng());
+			swlat.setValue(mymap.getSwLat());
+			swlng.setValue(mymap.getSwLng());
+			nelat.setValue(mymap.getNeLat());
+			nelng.setValue(mymap.getNeLng());
+ 		}
+ 		int popx = 500;
+ 		int popy = 200;
+ 	]]></zscript>
+<borderlayout width="100%">
+ 	<west width="50%">
+	<window id="gmapwin1" title="mapwin 1" closable="true" width="610px">
+	<gmaps id="mymap1" width="100%" height="350px" showSmallCtrl="true" model="${model1}" 
+		droppable="true" />
+	</window>
+	</west>
+	
+	<center>
+	<window id="gmapwin2" title="mapwin 2" closable="true" width="610px">
+	<gmaps id="mymap" width="100%" height="350px" showSmallCtrl="true" model="${model2}" 
+		droppable="true" mapType="physical">
+		<attribute name="onMapZoom">
+			myzoom.setValue(self.getZoom());
+		</attribute>
+		<attribute name="onMapMove">
+			refresh();
+		</attribute>
+<!-- 
+		<attribute name="onSelect">
+			Gmarker xmk = self.getSelectedItem(); 
+			if (xmk != null) xmk.setOpen(true);
+		</attribute>
+-->
+		<attribute name="onMapDrop"><![CDATA[
+			Gmarker drag = event.getDragged();
+			if ((event.getKeys() & DropEvent.CTRL_KEY) != 0) {
+				Gmarker ymk = new Gmarker(drag.getContent(), event.getLat(), event.getLng());
+				model2.add(ymk);
+			} else {
+				drag.setAnchor(event.getLat(), event.getLng());
+				model1.remove(drag);
+				model2.add(drag);
+			}
+		]]></attribute>
+		<attribute name="onMapRightClick">
+			editPopup.open(event.clientX, event.clientY);
+		</attribute>
+		<attribute name="onMapClick">
+			editPopup.open(event.clientX, event.clientY);
+		</attribute>
+<!-- 
+		<gscreen id="scr2" src="/test2/img/home.gif" screenX="50%" screenY="50%" width="50" height="50" offsetX="25" offsetY="25" />
+		<ginfo id="myinfo" open="true">
+			<attribute name="content"><![CDATA[
+				Hello, <a href="http://www.zkoss.org">ZK</a>.
+			]]></attribute>
+		</ginfo>
+		
+		<gmarker id="mymark" lat="37.4410" lng="-122.1490">
+			<attribute name="content"><![CDATA[
+				Hello, <a href="http://www.zkoss.org">ZK</a> on top of Gmarker.
+			]]></attribute>
+		</gmarker>
+-->
+	</gmaps>
+	<grid>
+	<rows>
+		<row>Latitude: <doublebox width="80%" id="mylat" value="${mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
+		<row>Longitude: <doublebox width="80%" id="mylng" value="${mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
+		<row>SW-Latitude: <doublebox width="80%" id="swlat" value="${mymap.swLat}" /></row>
+		<row>SW-Longitude: <doublebox width="80%" id="swlng" value="${mymap.swLng}"/></row>
+		<row>NE-Latitude: <doublebox width="80%" id="nelat" value="${mymap.neLat}" /></row>
+		<row>NE-Longitude: <doublebox width="80%" id="nelng" value="${mymap.neLng}" /></row>
+		<row>Zoom Level: <intbox width="80%" id="myzoom" value="${mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
+	</rows>
+	</grid>
+	<button label="remove gmark" onClick="((Set)model1).remove(mark)"/>
+	<button label="remove ginfo" onClick="((Set)model1).remove(info)"/>
+	<button label="refresh" onClick="refresh()"/>
+	<button label="add ginfo" onClick="((Set)model1).add(info)"/>
+	<button label="add gmarker" onClick="((Set)model1).add(mark)"/>
+	<button label="add gscreen" onClick="((Set)model1).add(screen)"/>
+
+	</window>
+	</center>
+	</borderlayout>
+ 
+	<button label="show gmap" >
+		<attribute name="onClick">
+/*Window win = new Window("Window Title","normal",true);
+win.setWidth("800px");
+win.setHeight("600px");
+
+Gmaps map = new Gmaps();
+map.setWidth("100%");
+map.setHeight("100%");
+map.setParent(win);
+
+win.setPage(page);
+*/
+gmapwin.doModal();		
+		</attribute>
+	</button>
+	<button label="popup" onClick="editPopup.open(100,100)"/> 
+<label id="poplabel"/>
+<menupopup id="editPopup" onOpen='poplabel.setValue(""+event.isOpen())'>
+        <menuitem label="editpop 1"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<menupopup id="editPopup2" onOpen='poplabel.setValue(""+event.getReference())'>
+        <menuitem label="editpop 2"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<menupopup id="editContext" onOpen='poplabel.setValue(""+event.isOpen())'>
+        <menuitem label="editctx 1"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<menupopup id="editContext2" onOpen='poplabel.setValue(""+event.getReference())'>
+        <menuitem label="editctx 2"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<menupopup id="editTooltip" onOpen='poplabel.setValue(""+event.isOpen())'>
+        <menuitem label="edittip 1"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<menupopup id="editTooltip2" onOpen='poplabel.setValue(""+event.getReference())'>
+        <menuitem label="edittip 2"/>
+        <menuitem label="Redo"/>
+</menupopup>
+<image id="mylabel" tooltiptext="drag me!" src="http://maps.google.com/intl/en_ALL/mapfiles/marker.png" draggable="true"/>
+</zk>

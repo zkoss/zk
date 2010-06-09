@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2096807.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep  8 15:21:55 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+Please click the changing paging, and then you should see the button of  the paging.
+<zscript>
+List items = new org.zkoss.zkdemo.userguide.BigList(100); //a big list ofInteger
+</zscript>
+<borderlayout height="300px"><center flex="true">
+<listbox mold="paging">
+<listitem forEach="&#36;{items}">
+<listcell label="&#36;{each}-1"/>
+<listcell label="&#36;{each}-2"/>
+<listcell label="&#36;{each}-3"/>
+<listcell label="&#36;{each}-4"/>
+</listitem>
+</listbox>
+</center></borderlayout>
+</window>
+

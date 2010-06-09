@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2056753.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 11 12:04:43 TST 2008, Created by robbiecheng
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?component name="panel" extends="panel" width="200px" height="200px" ?>
+
+<zk>
+<label value="3 columns, 1 colspan, 1 rowspan"/>
+
+<tablelayout id="tbl" columns="3">
+		<tablechildren id="tc1" colspan="2">
+			<panel title="table1" border="normal" 
+			 	maximizable="true" collapsible="true" >
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table2" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>
+			 </panel>
+		</tablechildren>
+		<tablechildren rowspan="2">
+			<panel title="table3" border="normal" 
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren >
+			<panel title="table4" border="normal" 
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table5" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table6" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table7" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table8" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+</tablelayout>
+</zk>

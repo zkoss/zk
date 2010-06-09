@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1918796.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 19 10:08:14 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Grid header should disappear in this case.</n:p>
+	<window width="250px">
+	<groupbox visible="false" id="gpb">
+		<caption label="caption" />
+		<grid>
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row>Test:</row>
+			</rows>
+		</grid>
+	</groupbox>
+	<button label="Show Hide 2nd groupbox"
+		onClick="gpb.setVisible(!gpb.isVisible())" />
+</window>
+</zk>

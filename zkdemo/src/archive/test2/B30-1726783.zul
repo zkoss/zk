@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+bug1726783.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 29 10:14:51     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<window onCreate="add(self)">
+The Selected tab must be true.       
+	Tab 1: <label id="info1"/>
+	Tab 2: <label id="info2"/>
+<zscript>
+void dump() {
+	info1.value = "" + tab1.isSelected();
+	info2.value = "" + tab2.isSelected();
+}
+void add(Component comp){
+	Tabbox tabbox = new Tabbox();
+	tabbox.addEventListener(Events.ON_SELECT, new EventListener(){
+		public void onEvent(Event event) {
+			dump();
+		}
+	});
+	tabbox.setParent(comp);
+	Tabs tabs = new Tabs();
+	Tab tab = new Tab("tab1");
+	tab.setId("tab1");
+	tab.setParent(tabs);
+	tab =new Tab("tab2");
+	tab.setId("tab2");
+	tab.setParent(tabs);
+	tabs.setParent(tabbox);
+
+	dump();
+}
+</zscript>
+</window>
+</zk>

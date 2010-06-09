@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<!--
+native2.zul
+
+	Purpose:
+		A complete ZUL page with native
+	Description:
+		
+	History:
+		Thu Jan  1 15:41:31     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:u="http://www.zkoss.org/2005/zul"
+xmlns:zk="http://www.zkoss.org/2005/zk">
+ <head>
+	<title>Native Complete Page</title>
+	<zkhead/>
+	<script>
+	var some = "Error";
+	setTimeout(function(){zk.log(some);},0); //test if quote is escaped
+	</script>
+ </head>
+ <body>
+ 	Test of Native Complete Page
+ 	<u:script>
+ 	some = "Correct";
+ 	</u:script>
+	<zk:zscript>
+	String[] values = new String[] {"Red", "Blue", "Purple"};
+	</zk:zscript>
+	<ol>
+		<li forEach="${values}"><u:textbox value="${each}"/></li>
+	</ol>
+	<u:button label="Hi" onClick='alert("Hi!")'/>
+	<u:groupbox mold="3d">
+		<u:caption label="Native inside"/>
+		<ul>
+			<li forEach="${values}">${each}</li>
+		</ul>
+	</u:groupbox>
+
+	<u:style id="s1">
+	.z5 {
+		background: #555;
+		color: white;
+	}
+	</u:style>
+	<div class="z5" style="width:350px;height:150px">
+	The background shall be dark grey and text color is white.
+	<u:button label="change to lite grey and black text"
+		onClick='s1.setContent(".z5 {background: #ccc;color: black}")'/>
+	</div>
+	<style>
+	.z5a {
+		background: #aaa;
+		color: white;
+		width: 50%;
+	}
+	</style>
+	<div class="z5a">
+		background: #aaa; color: white; width: 50%;
+	</div>
+ </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z31-funcmap.zul
+
+{{IS_NOTE
+	Purpose:
+		Test <?function-mapper?>
+	Description:
+		
+	History:
+		Mon May  5 16:04:38     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?function-mapper class="org.zkoss.zkdemo.test2.FuncMapper"?>
+<zk>
+	It is correct, if you saw 'Correct' below
+	<separator/>
+	${c:quote('Correct')}
+</zk>

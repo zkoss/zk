@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div width="20%">
+	<grid height="100px">
+		<rows>
+			<row>
+				Test:
+				<textbox id="badBox" width="95%" value="12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345"/>
+			</row>
+		</rows>
+	</grid>
+	<div width="80%">
+		<textbox id="badBox2" width="95%" value="12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345"/>
+	</div>
+	<textbox id="goodBox" width="95%" value="12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345 12345"/>
+</div>

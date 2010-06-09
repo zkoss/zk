@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z50-listbox-0001.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 24 12:50:46     2009, Created by sam
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Follow the order to click button without error
+<separator/>
+1. Click this only once to <button label="Remove listheader" onClick='listhead.detach();'></button>
+<separator/>
+2. Click this only once to <button label="Add listhead" onClick='Listhead head = new Listhead(); head.setId("listhead"); head.setParent(listbox);'></button>
+<separator/>
+3. Click this to <button label="Add listheader" onClick='listhead.appendChild(new Listheader("Added listheader"));'></button>
+<separator/>
+4. Click this only once to <button label="Remove listgroupfoot" onClick='listgroupfoot1.detach();'></button>
+<separator/>
+5. Click this only once to <button label="Remove listgroup" onClick='listgroup1.detach();'></button>
+<separator/>
+6. Click this to <button label="Add listgroup" onClick='Listgroup group = new Listgroup("Added listgroup"); group.setParent(listbox); '></button>
+<separator/>
+7. Click this to <button label="Add listgroupfoot" onClick='Listgroupfoot footer = new Listgroupfoot("Added listgroupfoot"); footer.setParent(listbox);'></button>
+<separator/>
+8. Click this only once to <button label="Remove listfoot" onClick='listfoot.detach();'></button>
+<separator/>
+9. Click this only once to <button label="Add listfoot" onClick='Listfoot listfoot = new Listfoot(); listfoot.setId("listfoot");listfoot.setParent(listbox); '></button>
+<separator/>
+10. Click to <button label="Add listfooter to listfoot" onClick='listfoot.appendChild(new Listfooter("Added listfooter"));'></button>
+<separator height="20px"/>
+<listbox id="listbox" width="500px">
+	<listhead id="listhead">
+		<listheader id="listheader" label="listheader" />
+	</listhead>
+	<listgroup id="listgroup1" label="listgroup 1"/>
+	<listitem>
+		<listcell label="cell 1" />
+	</listitem>
+	<listitem>
+		<listcell label="cell 2" />
+	</listitem>
+	<listitem>
+		<listcell label="cell 3" />
+	</listitem>
+	<listgroupfoot id="listgroupfoot1" label="listfooter 1"/>
+	<listgroup id="listgroup2" label="listgroup 2"/>
+	<listitem>
+		<listcell label="cell 4" />
+	</listitem>
+	<listitem>
+		<listcell label="cell 5" />
+	</listitem>
+	<listitem>
+		<listcell label="cell 6" />
+	</listitem>
+	<listgroupfoot id="listgroupfoot2" label="listfooter 2"/>
+	<listfoot id="listfoot">
+		<listfooter id="listfooter" label="listfooter"/>
+	</listfoot>
+</listbox>
+</zk>

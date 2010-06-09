@@ -1,0 +1,34 @@
+<window title="My First Window" border="normal" width="800px">
+<vbox>1.Type something in textbox.</vbox>
+<vbox>2.click "validate by set", you should see an error message box appear:Fail validation!!</vbox>
+<vbox>3.click "Throw exception directly", you should see "Failed!!!" message box.</vbox>
+<vbox>4.click "Show Error Message", then you should see a error message window. close it.</vbox>
+<vbox>5.click on :"clean up" you should see no errors anymore.</vbox>
+<vbox>6.click on "validate by set" and then click "cleanup" then you should see errors being cleaned up.</vbox>
+<vbox>7.click on "validate by set" again, then click "retrieve and cleanup", you should see error message cleaned up and displayed at bottom of this window.</vbox>
+<vbox>8.click on "cleanup by update" and you should see errors cleaned up and textbox appear 'ab'.</vbox>
+
+<vbox>
+<textbox id="box" constraint="no empty:Fail validation!!" />
+<button onClick="box.getValue()" label="Validate by get (it shall fail if error is not cleaned up)"/>
+<button onClick="box.setValue(&quot;&quot;)" label="Validate by set (it shall fail)"/>
+<button onClick="fail()" label="Throw exception directly"/>
+<button onClick="alert(box.getErrorMessage())" label="Show Error Message"/>
+<button onClick="cleanup()" label="Cleanup"/>
+<button onClick="cleanup2()" label="Retrieve and Cleanup"/>
+<button onClick="box.setValue(&quot;ab&quot;)" label='Cleanup by update (textbox will appear "ab")'/>
+<label id="info"/>
+</vbox>
+<zscript>
+public void cleanup() {
+	box.clearErrorMessage();
+}
+public void cleanup2() {
+	info.value = box.getErrorMessage();
+	cleanup();
+}
+public void fail() {
+	throw new WrongValueException(box, "Failed!!!");
+}
+</zscript>
+</window>

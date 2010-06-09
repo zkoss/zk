@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2890515.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  2 11:29:41     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please choose a date, for example, 20091102. And foucs in and out the
+datebox it should not show an error.
+<datebox constraint="before 20091102"/>
+</zk>

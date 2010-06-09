@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1858838.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 31 15:41:43 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h5>IE6 only</n:h5>
+<n:ol>
+	<n:li>Drag-drop two window components over the listbox.</n:li>
+	<n:li>Close two window components, and then the listbox should be shown. </n:li>
+</n:ol>
+<listbox id="rpt" width="200px" mold="select">
+<listitem label="--------- choose ---------"/>
+<listitem label="test12"/>
+<listitem label="test13"/>
+<listitem label="test14"/>
+</listbox>
+<window width="120px" top="50px" left="10px" closable="true" mode="overlapped" title="Window 1"
+border="normal"/>
+<window width="120px" top="50px" left="80px" closable="true" mode="overlapped" title="Window 2"
+border="normal"/>
+</zk>

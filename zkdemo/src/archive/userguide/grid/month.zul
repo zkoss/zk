@@ -1,0 +1,35 @@
+<zk>
+<zscript>
+int season = 3 * (self.getParent().getParent().getChildren().indexOf(self.getParent()));
+</zscript>
+<grid fixedLayout="true" sclass="blue" oddRowSclass="myinner">
+	<columns>
+		<column label="Month"/>
+		<column label="High"  align="center" sort="auto"/>
+		<column label="Low"  align="center" sort="auto"/>
+		<column label="volume" align="center" />
+	</columns>
+	<rows>
+		<row sclass="last" forEach="1,2,3">
+			<label value="${months[forEachStatus.index + season]}" />
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = random.nextInt(655360)+ ""'/>
+		</row>
+	</rows>
+</grid>
+	<chart type="line" width="600px" height="300px"
+			fgAlpha="128">
+		<attribute name="onCreate">
+		
+		SimpleCategoryModel cateModel = new SimpleCategoryModel();
+		Grid grid = (Grid)self.getPreviousSibling();
+		String stockName = grid.getParent().getParent().getParent().getGrid().getParent().getNextSibling().getValue();
+		for (Iterator it = grid.getRows().getChildren().iterator(); it.hasNext();) {
+			Row row = it.next();
+			cateModel.setValue(stockName, row.getChildren().get(0).getValue(), new Double(Double.parseDouble(row.getChildren().get(2).getValue())));
+		}
+		self.setModel(cateModel);
+		</attribute>
+	</chart>
+</zk>

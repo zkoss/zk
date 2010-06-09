@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+list2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 28 12:33:11     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Listbox with Paging">
+	<listbox id="list" width="300px" mold="paging">
+		<listhead>
+			<listheader label="Head 1"/>
+			<listheader label="Head 2" align="center"/>
+			<listheader label="Head 3" align="right"/>
+		</listhead>
+	</listbox>
+	<button label="add 5 children" onClick="add(-1, 5)"/>
+	<button label="add top" onClick="add(0, 1)"/>
+	<button label="Change the first label" onClick="changeLabel(0)"/>
+	<button label="Change the last label" onClick="changeLabel(-1)"/>
+	<button label="Remove selected" onClick="rmsel()"/>
+	<button label="Remove first" onClick="remove(0)"/>
+	<button label="Remove last" onClick="remove(-1)"/>
+	<button label="redraw" onClick="list.invalidate()"/>
+	<zscript><![CDATA[
+	void add(int ofs, int cnt) {
+		for (int j = 0; ++j <= cnt;) {
+			Listitem li = new Listitem();
+			String prefix = "Item " + (list.getItemCount() + 1);
+			new Listcell(prefix + "-L").setParent(li);
+			new Listcell(prefix + "-C").setParent(li);
+			new Listcell(prefix + "-R").setParent(li);
+			if (ofs < 0) li.setParent(list);
+			else list.getItems().add(ofs, li);
+		}
+	}
+	void changeLabel(int j) {
+		int sz = list.getItemCount();
+		if (j < 0) j = sz - 1;
+		if (j < 0 || j >= sz) {
+			alert("No label to change");
+		} else {
+			Listitem li = list.getItems().get(j);
+			li.getChildren().get(0).setLabel("Updated "+j);
+		}
+	}
+	void rmsel() {
+		Listitem item = list.getSelectedItem();
+		if (item != null) item.detach();
+	}
+	void remove(int j) {
+		List kids = list.getItems();
+		int sz = kids.size();
+		if (j < 0) j = sz -1;
+		if (j >= 0 && j < sz) kids.get(j).detach();
+	}
+	]]></zscript>
+
+	<zscript>
+		String[] d1 = new String[30];
+		List d2 = new LinkedList();
+		for(int j=0; j &lt; d1.length; ++j) {
+			d1[j] = "option "+j;
+			d2.add(d1[j]);
+		}
+		ListModel model1 = new SimpleListModel(d1);
+		ListModelList model2 = new ListModelList(d2);
+	</zscript>
+	<listbox width="200px" mold="paging" pageSize="5" model="${model1}">
+		<listhead>
+			<listheader label="Load on Demend"/>
+		</listhead>
+	</listbox>
+	<listbox id="lb2" width="200px" mold="paging" pageSize="5" model="${model2}">
+		<listhead>
+			<listheader label="Load on Demend"/>
+		</listhead>
+	</listbox>
+	<button label="remove 2nd" onClick="model2.remove(1)"/>
+	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
+	<button label="remove model" onClick="lb2.setModel(null)"/>
+	<button label="set model" onClick="lb2.setModel(model2)"/>
+</window>

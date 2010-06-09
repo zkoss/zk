@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+chart.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 13 15:28:00     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of Chart's Serialization">
+<vbox id="vb">   
+<zscript>
+  PieModel model = new SimplePieModel();
+  model.setValue("C/C++", new Double(21.2));
+  model.setValue("VB", new Double(10.2));
+  model.setValue("Java", new Double(40.4));
+  model.setValue("PHP", new Double(28.2));
+</zscript>           
+<chart id="mychart" title="Pie Chart Demo" model="${model}" width="500" height="250" type="pie" threeD="true" fgAlpha="128">
+<attribute name="onClick">
+  String areaid = event.getArea();
+  if (areaid != null) {
+  System.out.println(areaid);
+    Area area = self.getFellow(areaid);
+    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
+  }
+</attribute>
+</chart>
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="Clone">
+		<attribute name="onClick">{
+	Object l = mychart.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		}</attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(mychart);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+</vbox>
+</window>

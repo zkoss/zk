@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+fileupload-get.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug  5 15:20:08     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button label="Upload">
+	<attribute name="onClick">{
+		org.zkoss.util.media.Media[] media = Fileupload.get(-1);
+		if (media != null) {
+			for (int i = 0; i &lt; media.length; i++) {
+				if (media[i] instanceof org.zkoss.image.Image) {
+					org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+					image.setContent(media[i]);
+					image.setParent(pics);
+				} else {
+					Messagebox.show("Not an image: "+media[i], "Error", Messagebox.OK, Messagebox.ERROR);
+					break; //not to show too many errors
+				}
+			}
+		}
+	}</attribute>
+	</button>
+	<vbox id="pics" />
+</zk>

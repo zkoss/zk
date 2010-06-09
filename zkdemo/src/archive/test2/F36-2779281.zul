@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see A B C D and a button "save"</li>
+<li>Press the "save" button, you shall see E D C D and button "save"</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+	<label id="a" value="A"/>
+	<label id="b" value="B"/>
+	<label id="a1" value="@{a.value, save-when=btn.onClick, access=save}"/>
+	<label id="b1" value="@{b.value, save-after=btn.onClick, access=save}"/>
+	<zscript>
+		a1.setValue("C");
+		b1.setValue("D");
+	</zscript>
+	<button id="btn" label="save" onClick='a.setValue("E");b.setValue("F")'/>
+</window>

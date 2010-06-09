@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+fisheyebar.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 10 16:36:29 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+	<h4>Demo of ZK Fisheye Bar</h4>
+	<p>In this demo, we demostrate the use of its fisheye bar that is similar to the fish eye menu on the Mac OS.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="10" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Fisheye Bar" height="300px" border="normal">
+	<fisheyebar style="position:absolute;margin:20px;"
+		attachEdge="top">
+		<fisheye image="/img/icon_browser.png" label="Web Browser"
+			onClick="alert(self.label)" />
+		<fisheye image="/img/icon_calendar.png" label="Calendar"
+			onClick="alert(self.label)" />
+		<fisheye image="/img/icon_email.png" label="Email"
+			onClick="alert(self.label)" />
+		<fisheye image="/img/icon_texteditor.png" label="Text Editor"
+			onClick="alert(self.label)" />
+		<fisheye image="/img/icon_update.png" label="Software Update"
+			onClick="alert(self.label)" />
+		<fisheye image="/img/icon_users.png" label="Users"
+			onClick="alert(self.label)" />
+	</fisheyebar>
+</window>		]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

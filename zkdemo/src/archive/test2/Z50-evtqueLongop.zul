@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z50-evtqueLongop.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan  6 12:23:14 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="test of long operation" border="true">
+	<html><![CDATA[
+	<ul>
+	<li>Click the button it will start a long operation.</li>
+	<li>With this implementation, you can press the button again even if
+	the long operation is still being processed</li>
+	</ul>
+	]]></html>
+	<zscript>
+	void print(String msg) {
+		new Label(msg).setParent(inf);
+	}
+	</zscript>
+	<button label="async long op">
+		<attribute name="onClick"><![CDATA[
+   if (EventQueues.exists("longop")) {
+     print("It is busy. Please wait");
+     return; //busy
+   }
+
+   EventQueue eq = EventQueues.lookup("longop"); //create a queue
+   String result;
+
+   //subscribe async listener to handle long operation
+   eq.subscribe(new EventListener() {
+     public void onEvent(Event evt) { //asynchronous
+       org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
+       result = "done"; //store the result
+     }
+   }, new EventListener() { //callback
+     public void onEvent(Event evt) {
+       print(result); //show the result to the browser
+   	   EventQueues.remove("longop");
+   	 }
+   });
+
+   print("Wait for 3 seconds");
+   eq.publish(new Event("whatever")); //kick off the long operation
+  		]]></attribute>
+ 	</button>
+ 	<vbox id="inf"/>
+</window>

@@ -1,0 +1,171 @@
+<zk>
+	<hbox>
+		<window>
+			<vbox>
+				<hbox>
+					<button label="start"
+						onClick='tboxs.align="start"' />
+					<button label="center"
+						onClick='tboxs.align="center"' />
+					<button label="end"
+						onClick='tboxs.align="end"' />
+				</hbox>
+				<hbox>
+					<button label="disable tab1"
+						onClick="tab1.disabled=true" />
+					<button label="enable tab1"
+						onClick="tab1.disabled=false" />
+					<button label="select tab1"
+						onClick="tbox.selectedTab=tab1" />
+				</hbox>
+				<hbox>
+					<button label="disable tab2"
+						onClick="tab2.disabled=true" />
+					<button label="enable tab12"
+						onClick="tab2.disabled=false" />
+					<button label="select tab2"
+						onClick="tbox.selectedTab=tab2" />
+				</hbox>
+				<hbox>
+					<button label="disable tab3"
+						onClick="tab3.disabled=true" />
+					<button label="enable tab13"
+						onClick="tab3.disabled=false" />
+					<button label="select tab3"
+						onClick="tbox.selectedTab=tab3" />
+				</hbox>
+				<hbox>
+					<button label="horizontal"
+						onClick='tbox.orient="horizontal"' />
+					<button label="vertical"
+						onClick='tbox.orient="vertical"' />
+				</hbox>
+
+			</vbox>
+
+			<tabbox width="500px" id="tbox">
+				<tabs id="tboxs">
+					<tab label="Tab 1" disabled="true" id="tab1"
+						closable="true" />
+					<tab label="Tab 2" disabled="true" id="tab2" />
+					<tab label="Tab 3" id="tab3" closable="true" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						This is panel 1
+					</tabpanel>
+					<tabpanel fulfill="tab2.onSelect">
+						<window>
+							<vbox>
+								<hbox>
+									<button label="disable tab1"
+										onClick="tab1.disabled=true" />
+									<button label="enable tab1"
+										onClick="tab1.disabled=false" />
+									<button label="select tab1"
+										onClick="tbox.selectedTab=tab1" />
+								</hbox>
+								<hbox>
+									<button label="disable tab2"
+										onClick="tab2.disabled=true" />
+									<button label="enable tab12"
+										onClick="tab2.disabled=false" />
+									<button label="select tab2"
+										onClick="tbox.selectedTab=tab2" />
+								</hbox>
+								<hbox>
+									<button label="disable tab3"
+										onClick="tab3.disabled=true" />
+									<button label="enable tab13"
+										onClick="tab3.disabled=false" />
+									<button label="select tab3"
+										onClick="tbox.selectedTab=tab3" />
+								</hbox>
+								<hbox>
+									<button label="horizontal"
+										onClick='tbox.orient="horizontal"' />
+									<button label="vertical"
+										onClick='tbox.orient="vertical"' />
+								</hbox>
+
+							</vbox>
+
+							<tabbox width="400px" id="tbox"
+								mold="accordion">
+								<tabs>
+									<tab label="Tab 1" disabled="true"
+										id="tab1" closable="true" />
+									<tab label="Tab 2" disabled="true"
+										id="tab2" />
+									<tab label="Tab 3" id="tab3"
+										closable="true" />
+								</tabs>
+								<tabpanels>
+									<tabpanel>This is panel 1</tabpanel>
+									<tabpanel>
+										This is panel 2 The second panel
+									</tabpanel>
+									<tabpanel>This is panel 3</tabpanel>
+								</tabpanels>
+							</tabbox>
+						</window>
+
+					</tabpanel>
+					
+					<tabpanel>This is panel 3</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+		<window>
+			<vbox>
+				<hbox>
+					<button label="disable tab1"
+						onClick="tab1.disabled=true" />
+					<button label="enable tab1"
+						onClick="tab1.disabled=false" />
+					<button label="select tab1"
+						onClick="tbox.selectedTab=tab1" />
+				</hbox>
+				<hbox>
+					<button label="disable tab2"
+						onClick="tab2.disabled=true" />
+					<button label="enable tab12"
+						onClick="tab2.disabled=false" />
+					<button label="select tab2"
+						onClick="tbox.selectedTab=tab2" />
+				</hbox>
+				<hbox>
+					<button label="disable tab3"
+						onClick="tab3.disabled=true" />
+					<button label="enable tab13"
+						onClick="tab3.disabled=false" />
+					<button label="select tab3"
+						onClick="tbox.selectedTab=tab3" />
+				</hbox>
+				<hbox>
+					<button label="horizontal"
+						onClick='tbox.orient="horizontal"' />
+					<button label="vertical"
+						onClick='tbox.orient="vertical"' />
+				</hbox>
+
+			</vbox>
+
+			<tabbox width="400px" id="tbox" mold="accordion">
+				<tabs>
+					<tab label="Tab 1" disabled="true" id="tab1"
+						closable="true" />
+					<tab label="Tab 2" disabled="true" id="tab2" />
+					<tab label="Tab 3" id="tab3" closable="true" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>This is panel 1</tabpanel>
+					<tabpanel>
+						This is panel 2 The second panel
+					</tabpanel>
+					<tabpanel>This is panel 3</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+	</hbox>
+</zk>

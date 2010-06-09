@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2078093.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 28 09:14:31 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+
+<zk>
+1. Click the first button, then the window will disappear.
+<separator/>
+2. Click the second button, then the window should be shown, that is correct.
+<button >
+<attribute name="onCreate"><![CDATA[
+self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+]]></attribute>
+
+<attribute name="onClick"><![CDATA[
+win.setVisible(!win.isVisible());
+self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+]]></attribute>
+</button>
+<button onClick="win.doEmbedded()" label="doEmbedded"/>
+
+<window id="win" title="test"
+sizable="true"
+minimizable="true" maximizable="true" border="normal">
+
+
+
+
+</window>
+</zk>

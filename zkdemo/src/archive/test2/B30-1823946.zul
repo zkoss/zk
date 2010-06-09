@@ -1,0 +1,92 @@
+<zk>
+The update of list cell freeze IE.<separator/>
+<zscript><![CDATA[
+
+	void updateCell(){
+		c11.setLabel("c11:"+new java.util.Date());
+		ckk.setLabel("ckk"+new java.util.Date());
+	}
+	
+	void removeRow(){
+		lb.removeItemAt(1);
+	}
+	
+	void addRow(){
+		Listitem item = new Listitem();
+		new Listcell(""+(System.currentTimeMillis()>>>3)).setParent(item);
+		new Listcell("A2").setParent(item);
+		new Listcell("A3").setParent(item);
+		new Listcell("A4").setParent(item);
+		new Listcell("A5").setParent(item);
+		new Listcell("A6").setParent(item);
+		new Listcell("A7").setParent(item);
+		new Listcell("A8").setParent(item);
+		
+		lb.getChildren().add(lb.getItemCount(),item);
+	}
+	
+	String[] testArr = new String[30];
+	for(int i=0;i<30;i++)
+		testArr[i] = "s"+i;
+			
+
+]]></zscript>
+<button label="start timer" onClick="timer.start()"/>
+<button label="stop timer" onClick="timer.stop()"/>
+| <checkbox id="update" checked="true" />Update | <checkbox id="add" />Add |
+<checkbox id="remove"/>Remove (stop at last 3 rows)
+<timer id="timer" delay="1500" repeats="true" running="false">
+	<attribute name="onTimer"><![CDATA[
+		if (update.checked)
+			updateCell();
+		if(add.checked){
+			addRow();
+		}
+		if(remove.checked && lb.getItemCount()>3){
+			removeRow();
+		}
+	]]></attribute>
+</timer>
+<listbox id="lb" rows="30">
+	<listhead sizable="true">
+		<listheader label="1" />
+		<listheader label="2" />
+		<listheader label="3" />
+		<listheader label="4" />
+		<listheader label="5" />
+		<listheader label="6" />
+		<listheader label="7" />
+		<listheader label="8" />
+	</listhead>
+	<listitem>
+		<listcell label="1" id="c11"/>
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" />
+	</listitem>
+	<listitem forEach="${testArr}">
+		<listcell label="${each}.1" />
+		<listcell label="${each}.2" />
+		<listcell label="${each}.3" />
+		<listcell label="${each}.4" />
+		<listcell label="${each}.5" />
+		<listcell label="${each}.6" />
+		<listcell label="${each}.7" />
+		<listcell label="${each}.8" />
+	</listitem>
+	<listitem>
+		<listcell label="1" />
+		<listcell label="2" />
+		<listcell label="3" />
+		<listcell label="4" />
+		<listcell label="5" />
+		<listcell label="6" />
+		<listcell label="7" />
+		<listcell label="8" id="ckk"/>
+	</listitem>
+</listbox>
+</zk>

@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#
+# Authors: Tom M. Yeh
+# Contributors:
+# Create Date: 2001/5/17 07:57PM
+# Purpose: Modifies org/zkoss/lang/D.java 
+# Description:
+#	Execute 'setdbg -h' to know how to use.
+#
+#}}IS_NOTE
+#
+# Copyright (C) 2001 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+if [ \( "$1" = "-h" \) -o \( "$1" = "--help" \) ] ; then
+	echo "setdbg - modifies D.ON in org/zkoss/lang/D.java"
+	echo "Copyright (C) 2001 Potix Corporation. All Rights Reserved."
+	echo
+	echo "Usage:"
+	echo "  setdbg true|false"
+	echo
+	echo "Options:"
+	echo
+	echo "true"
+	echo "  Enable the debugging, i.e., D.ON = true."
+	echo "false"
+	echo "  Disable the debugging, i.e., D.ON = false."
+	exit 0
+fi
+
+if [ \( "$1" != "true" \) -a \( "$1" != "false" \) ] ; then
+	echo "Error: true or false must be specified."
+	echo "Execute 'setdbg --help' for information."
+	exit 1
+fi
+
+flnm=zcommon/src/org/zkoss/lang/D.java
+if [ ! -f $flnm ] ; then
+	echo "Error: $flnm does not exist"
+	exit 1
+fi
+
+if [ $1 = true ] ; then
+	onnew="\/\*-\*\/ON=true\/\*-\*\/"
+	onold="\/\*-\*\/ON=false\/\*-\*\/"
+else
+	onnew="\/\*-\*\/ON=false\/\*-\*\/"
+	onold="\/\*-\*\/ON=true\/\*-\*\/"
+fi
+
+grep -l "$onnew" $flnm > /dev/null
+if [ $? != 0 ] ; then
+	echo Update $flnm
+	../bin/overwrite $flnm sed "s/$onold/$onnew/" $flnm
+fi

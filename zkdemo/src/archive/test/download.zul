@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+download.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 16 14:55:28     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<button label="Download download.html">
+	<attribute name="onClick">{
+	java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test/download.html");
+	if (is != null)
+		Filedownload.save(is, "text/html", "download.html");
+	else
+		alert("/test/download.html not found");
+	}</attribute>
+</button>

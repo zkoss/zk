@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  7 11:49:07     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<config-name>zk</config-name><!-- used to resolve dependency -->
+	<version>
+		<version-class>org.zkoss.zk.Version</version-class>
+		<version-uid>5.0.3</version-uid>
+	</version>
+
+	<!-- Note: zscript-config is applied to the whole system. Not just this language.
+	-->
+	<zscript-config>
+		<language-name>Java</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.bsh.BSHInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>JavaScript</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.rhino.RhinoInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Groovy</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.groovy.GroovyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Ruby</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.jruby.JRubyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Python</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.jython.JythonInterpreter</interpreter-class>
+	</zscript-config>
+
+	<device-config>
+		<device-type>ajax</device-type>
+		<server-push-class>org.zkoss.zk.ui.impl.PollingServerPush</server-push-class>
+	</device-config>
+	<device-config>
+		<device-type>ajax</device-type>
+		<device-class>org.zkoss.zk.device.AjaxDevice</device-class>
+		<unavailable-message><![CDATA[
+<div class="noscript"><p>Sorry, JavaScript must be enabled.<br/>Change your browser options, then <a href="">try again</a>.</p></div>
+		]]></unavailable-message>
+	</device-config>
+	
+	<listener>
+		<listener-class>org.zkoss.zk.au.http.UploadInfoService$DesktopInit</listener-class>
+	</listener>
+</config>

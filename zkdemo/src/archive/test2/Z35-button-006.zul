@@ -1,0 +1,33 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  <window title="Test Buttons in various components." border="normal" width="400px">
+    <vbox><label>Buttons in listbox: Note: Button should look appropriate and tidy. </label><label>NOTE: Footer doesn't have scroll bar so if you cannot see the entire button is ok.</label>
+<listbox id="box" width="250px">
+        <listhead sizable="true">
+          <listheader label="name" sort="auto"/>
+          <listheader label="gender" sort="auto"/>
+        </listhead>
+        <listitem>
+          <listcell label="Longer">
+            <button label="ClickMe" onClick='self.setLabel("Tested OK with a longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr comment.")'/>
+          </listcell>
+          <listcell label="MALE">
+            <button label="ClickMe" onClick='self.setLabel("Tested OK with a very lonnnngggggggggggggggggggggggggggggggggggg comment to seee if scroll bar pops out.")'/>
+          </listcell>
+        </listitem>
+        <listfoot>
+          <listfooter>
+            <label value="This is footer1"/>
+            <button label="ClickMe" onClick='self.setLabel("Tested OK with looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong footer.")'/>
+          </listfooter>
+          <listfooter>
+            <label value="This is footer2"/>
+            <button label="ClickMe" onClick='self.setLabel("Tested OK, very very loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong subway foot long sandwich.")'/>
+          </listfooter>
+        </listfoot>
+      </listbox>
+    </vbox>
+  </window>
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2806448.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 15 16:15:47     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Right-click on the 'female' item to show a menu popup and left-click on
+the 'Mary' item, and then all the listbox should be removed, especially
+menupopup's shadow.
+<separator/>
+<div id="outer">
+<listbox width="250px" context="popup">
+<listhead sizable="true">
+<listheader label="Name"/>
+<listheader label="Gender"/>
+</listhead>
+<listitem onClick="outer.detach();">
+<listcell label="Mary"/>
+<listcell label="female"/>
+</listitem>
+</listbox>
+<menupopup id="popup">
+<menuitem label="Index" onClick="alert(self.label)"/>
+</menupopup>
+</div>
+</zk>

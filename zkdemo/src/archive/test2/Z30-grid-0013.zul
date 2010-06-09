@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ZK30-grid005-09.zul
+
+{{IS_NOTE
+	Purpose:
+		normal test of grid.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="test rowspan and colspan on auxheader">
+	<grid SizedByContent="true">
+	<auxhead>
+		<auxheader label="A" rowspan="2" />
+		<auxheader label="B" rowspan="2" />
+		<auxheader label="C" colspan="1" />
+	</auxhead>
+
+	<auxhead>
+		<auxheader label="C" colspan="1" />
+	</auxhead>
+	<columns sizable="true">
+		<column label="AA" />
+		<column label="BB" />
+		<column label="CC" />
+	</columns>
+	<rows>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+		<row>
+			<label value="AA01" />
+			<label value="BB01" />
+			<label value="CC01" />
+		</row>
+	</rows>
+</grid>
+</window>

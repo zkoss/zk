@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1829397.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 17 17:31:03     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of on-shot timer" xmlns:html="http://www.w3.org/1999/xhtml">
+    <vbox id="v"> 
+    	You shall see only one label below:
+        <timer delay="1000" repeats="false">
+            <attribute name="onTimer">
+                v.appendChild(new Label("You shall see this label only once!!! running:"+self.running));
+            </attribute>
+        </timer>
+    </vbox>
+</window>

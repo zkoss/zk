@@ -1,0 +1,14 @@
+<window title="Test System Attributes">
+	Click the following buttons to see if the correct label is added.
+	<separator bar="true"/>
+	<button label="set req attr" onClick='test.init(execution); execution.setAttribute("req", "rvalue")'/>
+	<button label="set sess attr" onClick='session.setAttribute("sess", "svalue")'/>
+	<button label="set app attr" onClick='application.setAttribute("app", "avalue")'/>
+	<separator bar="true"/>
+	<vbox id="inf"/>
+	<zscript><![CDATA[
+	Object test = new org.zkoss.zkdemo.test2.F2859159(inf);
+	test.init(session);
+	test.init(application);
+	]]></zscript>
+</window>

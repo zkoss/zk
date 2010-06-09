@@ -1,0 +1,105 @@
+<window title="Win" id="win">
+Test each button works properly.
+	<button label="doModal" onClick="win.doModal()" />
+	<button label="doEmbed" onClick="win.doEmbedded()" />
+	Nested header
+	<tree id="tree2" width="240px">
+		<treecols>
+			<treecol width="100px" id="tcola" label="A" />
+			<treecol label="B" />
+			<treecol label="C" />
+			<treecol label="D" />
+			<treecol label="E" />
+			<treecol label="F" />
+			<treecol id="tcolg" label="G" />
+		</treecols>
+		<auxhead>
+			<auxheader id="Phi"  label="Phi" colspan="2"/>
+			<auxheader id="Pi" label="Pi" colspan="2" />
+			<auxheader id="Kroc" label="Kroc" colspan="3"/>
+		</auxhead>
+		<auxhead id="ABG">
+			<auxheader id="Alpha" label="Alpha" colspan="2" />
+			<auxheader id="Beta" label="beta" colspan="2" />
+			<auxheader id="Gamma" label="gamma" colspan="3" />
+		</auxhead>
+		<treechildren>
+			<treeitem id="ti0" selected="true">
+				<treerow>
+					<treecell label="A" />
+					<treecell label="B" />
+					<treecell label="C" />
+					<treecell label="D" />
+					<treecell label="E" />
+					<treecell label="F" />
+					<treecell label="G" />
+				</treerow>
+				<treechildren>
+					<treeitem selected="true">
+						<treerow>
+							<treecell label="A-1" />
+							<treecell label="B" />
+							<treecell label="C" />
+							<treecell label="D" />
+							<treecell label="E" />
+							<treecell label="F" />
+							<treecell label="G" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="A-2" />
+							<treecell label="B" />
+							<treecell label="C" />
+							<treecell label="D" />
+							<treecell label="E" />
+							<treecell label="F" />
+							<treecell label="G" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	
+	<button label ="Alpha = A+B+C" >
+		<attribute name="onClick">
+			Alpha.setColspan(3);
+		</attribute>
+	</button>
+	<button label ="Alpha = A" >
+		<attribute name="onClick">
+			Alpha.setColspan(1);
+		</attribute>
+	</button>
+	<button label ="Add Seta After Gamma">
+		<attribute name="onClick">
+			Auxheader seta = new Auxheader();
+			seta.setLabel("seta");
+			seta.setColspan(1);
+			seta.setParent(ABG);
+		</attribute>
+	</button>
+	<button label="remove Phi">
+		<attribute name="onClick">
+			Phi.setParent(null);
+		</attribute>
+	</button>
+	<button label="remove G">
+		<attribute name="onClick">
+			tcolg.setParent(null);
+		</attribute>
+	</button>
+	<button label="setTreeWidth">
+		<attribute name="onClick">
+			tree2.setWidth(w.getValue()+"px");
+		</attribute>
+	</button>
+	<intbox id="w" constraint="no empty"/>
+             <separator/>
+	<button label="expand A">
+		<attribute name="onClick">
+			tcola.setWidth("400px");
+		</attribute>
+	</button>
+</window>

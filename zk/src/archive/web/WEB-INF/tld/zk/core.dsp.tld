@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!--
+Purpose:
+	Defines methods and actions for DSP
+Description:
+	
+Histroy:
+	Mon Jun 20 20:57:56     2005, Created by tomyeh
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+-->
+
+<taglib>
+	<uri>http://www.zkoss.org/dsp/zk/core</uri>
+	<description>
+	Methods and actions of ZK utilities
+	</description>
+
+	<!--         -->
+	<!-- Imports -->
+	<!--         -->
+
+	<!--           -->
+	<!-- Functions -->
+	<!--           -->
+	<!-- ZUML Functions -->
+	<function>
+		<name>toAbsoluteURI</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String toAbsoluteURI(java.lang.String, boolean)
+		</function-signature>
+		<description>
+	Converts the specified URI to abolute if necessary.
+	Note: it doesn't convert if this page is included by another page.
+		</description>
+	</function>
+
+	<function>
+		<name>outDeviceStyleSheets</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String outDeviceStyleSheets(java.lang.String)
+		</function-signature>
+		<description>
+	Returns HTML tags to include all style sheets used by the specified device.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
+		</description>
+	</function>
+	<function>
+		<name>outDeviceCSSContent</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String outDeviceCSSContent(java.lang.String)
+		</function-signature>
+		<description>
+	Generates and returns the complete CSS content of all components in the
+	specified device.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
+		</description>
+	</function>
+	<function>
+		<name>outZkHtmlTags</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String outZkHtmlTags(java.lang.String)
+		</function-signature>
+		<description>
+	Generates and returns the ZK specific HTML tags for the HTML output.
+	If you want to generate HTML HEAD and BODY tags by yourself, you
+	can invoke this method in the HTML HEAD tag.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
+		</description>
+	</function>
+
+	<function>
+		<name>setCacheControl</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	void setCacheControl(java.lang.String, int)
+		</function-signature>
+		<description>
+	Sets the Cache-Control and Expires headers for the current request.
+		</description>
+	</function>
+	<function>
+		<name>setCSSCacheControl</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	void setCSSCacheControl()
+		</function-signature>
+		<description>
+	Sets the Cache-Control and Expires headers for the CSS file
+	from class Web resource for the current request.
+		</description>
+	</function>
+	<function>
+		<name>setCWRCacheControl</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	void setCWRCacheControl()
+		</function-signature>
+		<description>
+	Sets the Cache-Control and Expires headers for
+	class Web resource for the current request.
+		</description>
+	</function>
+</taglib>

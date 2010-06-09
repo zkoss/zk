@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+jpa.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+	<vbox>
+		<html><![CDATA[
+				<h4>JPA</h4>
+				<h5>ZK With Spring JPA And A Model-View-Controller Pattern</h5>
+				<p>In this article we will introduce a refactored
+				version of the&nbsp;ZK&nbsp;<a target="zkdemo" href="http://zkforge.svn.sourceforge.net/viewvc/zkforge/trunk/todo/">ToDo</a>
+				sample application using
+				a <a target="zkdemo" href="http://static.springframework.org/spring/docs/2.5.x/reference/orm.html">Spring
+				JPA</a> database backend. The sample application
+				"ZkToDo2"&nbsp;demonstrates the&nbsp;MVC&nbsp;approach
+				documented by the <a target="zkdemo" href="http://www.zkoss.org/smalltalks/mvc3/">MVC
+				Patterns</a>
+				smalltalk. The MVC approach allows you to centralize application logic
+				in one or more classes resulting in code which is easier to maintain
+				over time.&nbsp;&nbsp;</p>
+				<p>The Spring and JPA configuration used in this article are
+				adapted
+				from the persistence add-on of the <a target="zkdemo" href="https://sourceforge.net/projects/loom/">Loom</a>
+				framework. My thanks go to Ignacio Coloma and his collaborators on
+				Loom for their well documented and&nbsp;discussed JPA
+				code.&nbsp;</p>
+			]]></html>
+		<separator bar="true" />		
+		<html><![CDATA[
+			<h5>Sample:ZK ToDo</h5>
+			<image src="http://www.zkoss.org/smalltalks/mvc4/zktodo2.png" />
+			<h5>Content:</h5>
+			<ul>
+				<li>Why Spring & JPA? </li>
+				<li>Obtaining & Building The Sample Code</li>
+				<li>Domain Object & Database Bindings</li>
+				<li>The User Interface Controller</li>
+				<li>The Service & Data Layers</li>
+			<ul>
+		]]></html>
+	</vbox>
+	For more information, see our
+	<toolbarbutton id="target" label="Smalltalk" target="zkdemo"
+		href="http://www.zkoss.org/smalltalks/mvc4/" />
+</window>

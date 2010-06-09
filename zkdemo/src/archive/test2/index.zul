@@ -1,0 +1,123 @@
+<?page title="ZK Test2 Platform"?>
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:w="http://www.zkoss.org/2005/zk/client">
+<script>
+function newWindow(url){
+	zUtl.go(url, {target:"_zktest2"});
+}
+</script>
+<h:form id="newform" target="_blank" method="post"/>
+	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
+	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<!-- ******************** Ctrl Panel ******************** -->
+			<window id="w1" contentStyle="overflow:auto;position:relative;">
+				<vbox>
+					<tabbox mold="accordion-lite">				
+						<tabs>
+							<tab label="Normal"/>
+							<tab label="Advance" selected="true"/>
+						</tabs>
+						<tabpanels>
+							<tabpanel>
+								<vbox>
+									File Name Filter:<textbox id="fnf"/>
+									<checkbox id="reg" label="Regular Expression"/>
+									<checkbox id="newb" label="Open in new Browser">
+										<attribute name="onCheck"><![CDATA[
+										if (lb.getSelectedItem() != null && self.checked) {
+											Clients.evalJavaScript("newWindow(\""+main.getFileName(lb.getSelectedIndex())+"\")");
+										}
+										]]></attribute>
+									</checkbox>
+									<hbox>
+										<combobox onCreate="self.selectedIndex=0;" readonly="true" 
+											onSelect="fnf.value = self.selectedItem.label;main.updateModel();">
+											<comboitem label="F30"/>
+											<comboitem label="F35"/>
+											<comboitem label="F36"/>
+											<comboitem label="B30"/>
+											<comboitem label="B35"/>
+											<comboitem label="Z30"/>
+											<comboitem label="Z35"/>
+										</combobox>
+									</hbox>
+								</vbox>
+							</tabpanel>
+							<tabpanel>
+								<vbox>
+								Filter File Name By Tag:
+								<textbox id="fnt"/>
+								<button mold="os" label="Show Uncategorized" onClick="main.showUncategorized();"/> 
+								For Example: [A,H,Grid,!BI]
+								</vbox>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+					<vbox>
+							<hbox>
+								<button mold="os" label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
+								<button mold="os" label="reload" onClick='main.getFellow("center").invalidate()'/>
+								<button mold="os" label="tracker">
+<attribute name="onClick"><![CDATA[
+if (lb.getSelectedItem() != null) {
+	String label = lb.getSelectedItem().getLabel();
+	if (label != null) {								
+		String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
+		if (label.startsWith("F")) {									
+			Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
+		} else if (label.startsWith("B")){
+			Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
+		}									
+	}
+} else {
+	alert("Please select a item!");
+}
+]]></attribute>
+								</button>
+							</hbox>
+					<hbox>
+						<button mold="os" label="Export File Name" onClick="main.exportFileName();"/>
+						<button mold="os" label="Import File Name" onClick="main.importFileName();"/>
+					</hbox>
+					</vbox>
+					<zscript>
+					org.zkoss.zkdemo.test2.FileDateCompare asc = new org.zkoss.zkdemo.test2.FileDateCompare(true),
+						 dsc = new org.zkoss.zkdemo.test2.FileDateCompare(false);
+					</zscript>
+					<listbox id="lb" mold="paging" pageSize="20" width="330px" pagingPosition="both">
+						<listhead>
+							<listheader label="Name" width="50%" sort="auto"/>
+							<listheader label="Date" width="50%" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
+						</listhead>
+						<attribute w:name="onSelect">
+							this.$f("ifr", true).setSrc("");
+						</attribute>
+						<attribute name="onSelect">
+							codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();
+							center.title = "ZK TEST2 : File-Name [" + main.getFileName(lb.getSelectedIndex()) + "]";
+						</attribute>
+					</listbox>
+				</vbox>			
+			</window>
+	</west>
+	<center id="center" title="ZK TEST2" autoscroll="true" flex="true">			
+		<!-- ******************** View Panel ******************** -->
+		<iframe id="ifr" height="98%" width="100%" autohide="true"/>
+	</center>
+	<south id="leftPanel" title="Code View" collapsible="true" maxsize="600" 
+		splittable="true" open="false" size="300px">
+		<!-- ******************** Code Panel ******************** -->
+		<window id="codeViewPanel">
+			<caption>
+				<button mold="os" label="Save" onClick=" main.saveBack(); leftPanel.setOpen(false)"/>
+				<button mold="os" label="Reload" onClick="main.reloadCodeView();leftPanel.setOpen(false)"/>
+			</caption>
+			<textbox id="codeView" class="code" rows="15" width="99%">
+				<attribute name="onCreate"><![CDATA[main.codeView=self;]]></attribute>
+				<attribute name="value"><![CDATA[]]></attribute>
+			</textbox>
+		</window>
+	
+	</south>
+</borderlayout>
+</zk>

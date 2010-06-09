@@ -1,0 +1,94 @@
+#!/bin/bash
+# deploy.unzip
+#
+#{{IS_NOTE
+#	Purpose:
+#		Unzip and deploy a war into Tomcat or Jetty server
+#		For deploy ear, use deploy.unzip
+#	Description:
+#		Unzip and deploy a war
+#	History:
+#		Wed Jan 3 12:33:46     2006, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+function helpit
+{
+	echo "deploy.unzip - Unzip and deploy a war into Tomcat or jetty server"
+	echo "Copyright (C) 2006 Potix Corporation. All Rights Reserved."
+	echo
+	echo "Usage:"
+	echo "  deploy.unzip srcdir dstdir [list] [old_name/new_name]"
+	echo
+	echo "srcdir - the directory containing source files"
+	echo "dstdir - the destination directory"
+	echo "list - a list of comma separated source files"
+	echo "old_name/new_name - rename the war's name from old_name to new_name"
+	exit 0
+}
+
+if [ $# -lt 2 ] ; then
+	echo "You have to specify at least the source file and destination directory"
+	exit 1
+fi
+if [ $1 = --help ] ; then
+	helpit
+fi
+srcdir=$1
+dstdir=$2
+fls=$3
+renwar=$4
+if [ ! -d "$srcdir" ] ; then
+	echo "$srcdir is not a directory"
+	exit 1
+fi
+if [ ! -d "$dstdir" ] ; then
+	echo "$dstdir doesn't exist. Make sure /usr/tomcat is linked to the Tomcat directory"
+	exit 1
+fi
+if [ "$fls" == "" ] ; then
+	exit 0
+fi
+oldnm="${renwar%/*}"
+newnm="${renwar#*/}"
+
+if [ "$srcdir" == "${srcdir#/}" ] ; then #relative
+	srcdir=$(pwd)/$srcdir
+fi
+
+oldIFS=$IFS
+IFS=,
+for f in $fls; do
+	if [ -f "$srcdir/$f" ] ; then
+		dstfn=${f%%.*}
+		if [ "$dstfn" = "$oldnm" ] ; then
+			dstfn="$newnm"
+		fi
+		srcfl=$srcdir/$f
+		if [ ! -f "$dstdir/$dstfn/WEB-INF/web.xml" ] || [ "$srcfl" -nt "$dstdir/$dstfn/WEB-INF/web.xml" ] ; then
+			echo "Unzip $srcfl to $dstfn"
+			(
+				mkdir -p "$dstdir/$dstfn"
+				cd "$dstdir/$dstfn"
+				
+				#convert srcfl to window format
+				if [ "$TERM" = "cygwin" ] ; then
+					srcfl=$(cygpath -wa $srcfl)
+				fi
+				jar xf "$srcfl"
+			)
+		else
+			echo "Skip $srcdir/$f because it is not newer"
+		fi
+	else
+		echo "Ignore: $srcdir/$f not found"
+	fi
+done
+IFS=$oldIFS

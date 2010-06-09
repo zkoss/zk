@@ -1,0 +1,126 @@
+<zk>
+Change window's height, component won't resize
+	<button label="Set window to 30%">
+		<attribute name="onClick">win.setHeight("30%");</attribute>
+	</button>
+	<button label="invalidate Tree" onClick='win.getFellow("tree2").invalidate()'/>
+	<window title = "Win" id="win" height="100%" width="90%" border="normal">
+		<tree id="tree2" vflex="true">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+				</treeitem>
+				<treeitem label="Item 3" />
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</window>
+</zk>

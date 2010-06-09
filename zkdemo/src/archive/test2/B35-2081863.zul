@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2081863.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 29 16:38:44 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->	
+<window id="win1">
+	After the page loaded, if you don't see any popup or alert , this bug fixed
+<hbox spacing="0" width="150px">
+<tabbox id="Tab1" onSelect="refresh()" width="780px">
+<tabs>
+<tab label="Tp1" />
+<tab label="Tp2" />
+<tab label="Exit" />
+</tabs>
+<tabpanels>
+
+<tabpanel id="tp1">
+</tabpanel>
+
+<tabpanel id="tp2">
+</tabpanel>
+
+<tabpanel id="exit">
+</tabpanel>
+</tabpanels>
+</tabbox>
+</hbox>
+<zscript>
+
+public void refresh() {
+
+if (Tab1.getSelectedPanel().getId().equals("tp1"))
+{
+alert("tp1");
+}
+if (Tab1.getSelectedPanel().getId().equals("tp2"))
+{
+alert("tp2");
+}
+if (Tab1.getSelectedPanel().getId().equals("exit"))
+{
+alert("exit");
+}
+}
+</zscript>
+</window>

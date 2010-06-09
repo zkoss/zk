@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Menu Sample"?>
+<!--
+menu.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 22 13:52:22     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Menu Sample">
+	<menubar id="menubar">
+		<menu label="File">
+			<menupopup>
+		        <menuitem label="New"/>
+		        <menuitem label="Open"/>
+		        <menuitem label="Save"/>
+		        <menuseparator/>
+		        <menuitem label="Exit"/>
+			</menupopup>
+		</menu>
+		<menu label="Edit">
+			<menupopup id="editPopup">
+		        <menuitem label="Undo"/>
+		        <menuitem label="Redo"/>
+		        <menu label="Sort">
+					<menupopup>
+				        <menuitem label="Sort by Name" autocheck="true"/>
+				        <menuitem label="Sort by Date" autocheck="true"/>
+					</menupopup>
+		        </menu>
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+		        <menuitem label="Index"/>
+		        <menu label="About">
+					<menupopup>
+				        <menuitem label="About Componany"/>
+				        <menuitem label="About Product"/>
+				        <menuitem label="Go Potix with target" href="http://www.zkoss.org" target="new"/>
+				        <menuitem label="Go Potix" href="http://www.zkoss.org"/>
+					</menupopup>
+		        </menu>
+			</menupopup>
+		</menu>
+	</menubar>
+	<button label="Add menuitem to Edit"
+	onClick="new Menuitem(&quot;More&quot;).setParent(editPopup)"/>
+	<button label="Add submenu to Edit">
+		<attribute name="onClick">{
+	Object menu = new Menu("Submenu");
+	menu.setParent(editPopup);
+	Object popup = new Menupopup();
+	popup.setParent(menu);
+	new Menuitem("Subitem").setParent(popup);
+		}</attribute>
+	</button>
+	<button label="Add Window menu">
+		<attribute name="onClick">{
+	Object menu = new Menu("Window");
+	menu.setParent(menubar);
+	Object popup = new Menupopup();
+	popup.setParent(menu);
+	new Menuitem("Cascade").setParent(popup);
+		}</attribute>
+	</button>
+	<button label="Change orient">
+		<attribute name="onClick">
+	menubar.setOrient(
+		"horizontal".equals(menubar.getOrient()) ? "vertical": "horizontal");
+		</attribute>
+	</button>
+
+	<button label="Change Autodrop">
+		<attribute name="onClick">
+	menubar.setAutodrop(!menubar.isAutodrop());
+		</attribute>
+	</button>
+	<datebox/>
+
+	<menubar>
+	<menu label="Modifier la couleur de fond">
+	<menupopup>
+	<menuitem image="/test2/img/inet.png"
+	onClick="alert(&quot;ok&quot;)"/>
+	</menupopup>
+	</menu>
+	</menubar>
+</window>

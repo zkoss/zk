@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+popup.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov  2 18:58:31     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of manual open/close">
+	<label value="Click Me! (popup)" popup="pp"/>
+	<button label="Open to 100,50" onClick="pp.open(100,50)"/>
+	<button label="Open under this" onClick="pp.open(self)"/>
+	<popup id="pp" width="300px">
+		<vbox>
+			<button label="Close" onClick="pp.close()"/>
+			ZK simply rich.
+			<toolbarbutton label="ZK your killer Web application now!" href="http://www.zkoss.org"/>
+		</vbox>
+	</popup>
+</window>

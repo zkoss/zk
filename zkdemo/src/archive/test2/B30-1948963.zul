@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1948963.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 23 12:59:04 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>Type a time into the Timebox, then click the button, then you should not see any error box.</n:li>
+	</n:ol>
+	<window title="My First Window" border="normal" width="200px">
+	<timebox id="time"/>
+	<button label="validate" onClick="validate()"/>
+	<zscript>
+	void validate()
+	{
+	if(time.getValue() == null)
+		throw new WrongValueException(time, &quot;Empty&quot;);
+	}
+	</zscript>
+	</window>
+</zk>

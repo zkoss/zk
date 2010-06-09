@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1893575.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 15 15:01:15 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="w" mode="modal" xmlns:n="http://www.zkoss.org/2005/zk/native" width="500px">
+	<n:p>Please click the "female" radio, and then click the "show" button, and then you should see that only "female" is checked. (Only IE)</n:p>
+	<radiogroup id="radiochoice">
+		<radio id="male1" label="male" checked="true" />
+		<radio id="female" label="female" />
+	</radiogroup>
+	 <button label="show">
+		<attribute name="onClick">
+			new Label("Test").page = w.page;
+		</attribute>
+	</button>
+</window>

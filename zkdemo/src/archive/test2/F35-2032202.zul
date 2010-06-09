@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2032202.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 30 12:04:43 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Please open/close the +/- button, and the layout of this page shows properly.
+	<grid fixedLayout="true" width="600px">
+		<columns>
+			<column width="25px" />
+			<column>Product Name</column>
+			<column>Price</column>
+			<column>Item location</column>
+		</columns>
+		<rows>
+			<row>
+				<detail>
+						<hbox>					
+						<image width="200px" height="200px" src="/test2/img/icon_update.png"/>
+						<vbox>
+						<label value="Item Specifics - Item Condition	"
+								style="font-weight:bold;font-style: italic;" />
+						<hbox>
+							<label value="Condition:" />
+							<label value="Used"
+								style="font-weight:bold;" />
+						</hbox>
+						<hbox>
+							<label value="Brand:" />
+							<label value="Apple"
+								style="font-weight:bold;" />
+						</hbox>
+						<hbox>
+							<label value="Technology:" />
+							<label value="DVI"
+								style="font-weight:bold;" />
+						</hbox>
+						<hbox>
+							<label value="Monitor Type:" />
+							<label value="LCD/Flat Panel"
+								style="font-weight:bold;" />
+						</hbox>
+						</vbox>
+					</hbox>
+				</detail>
+				<label value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+				<label style="color:green;float:right;" value="US $202.50" />
+				<label value="tulsa, ok, United States" />
+			</row>
+		</rows>
+	</grid>
+</zk>

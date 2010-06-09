@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2929887.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 12 11:28:23 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	It is correct if you see only this message (no error)
+
+<zk if="false">
+<zscript src="test/nosuchfile.java" />
+</zk>
+
+</zk>

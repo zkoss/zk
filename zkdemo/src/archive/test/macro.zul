@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+macro.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 22 13:53:37     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<grid id="mc_grid">
+<rows>
+	<row id="r">
+${empty arg.label ? 'Username': arg.label}
+<textbox/>
+	</row>
+</rows>
+<zscript>
+int mcnt = 0;
+void addInMacro() {
+	new Label("more "+mcnt++).setParent(r);
+}
+</zscript>
+</grid>

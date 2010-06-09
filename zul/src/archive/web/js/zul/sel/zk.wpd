@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 30 22:15:03     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.sel" language="xul/html" depends="zul.mesh">
+	<script src="SelectWidget.js" jsdoc="true"/>
+	<script src="ItemWidget.js" jsdoc="true"/>
+	<widget name="Listbox"/>
+	<widget name="Listitem"/>
+	<widget name="Listcell"/>
+	<widget name="Listhead"/>
+	<widget name="Listheader"/>
+	<widget name="Listfoot"/>
+	<widget name="Listfooter"/>
+	<widget name="Option"/>
+	<widget name="Select"/>
+	<widget name="Tree"/>
+	<widget name="Treecol"/>
+	<widget name="Treecols"/>
+	<widget name="Treechildren"/>
+	<widget name="Treeitem"/>
+	<widget name="Treerow"/>
+	<widget name="Treecell"/>
+	<widget name="Treefoot"/>
+	<widget name="Treefooter"/>
+</package>

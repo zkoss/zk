@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lang.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 24 14:43:11     2005, Created by tomyeh
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+-->
+
+<language>
+	<language-name>xhtml</language-name>
+	<device-type>ajax</device-type>
+	<namespace>http://www.w3.org/1999/xhtml</namespace>
+	<extension>zhtml</extension><!-- the first one is the major one -->
+	<extension>htm</extension>
+	<extension>html</extension>
+	<extension>xhtml</extension>
+
+	<version>
+		<version-class>org.zkoss.zhtml.Version</version-class>
+		<version-uid>5.0.3</version-uid>
+	</version>
+
+	<renderer-class>org.zkoss.zhtml.impl.PageRenderer</renderer-class>
+	<case-insensitive/>
+
+	<javascript package="zk"/>
+
+	<!-- To have better performance with BeanShell, import most-common later -->
+	<zscript language="Java">
+	import java.util.*;
+	import java.lang.*;
+	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zk.ui.event.*;
+	import org.zkoss.zk.ui.*;
+	import org.zkoss.zhtml.*;
+
+	void alert(String m) {
+		Messagebox.show(m);
+	}
+	</zscript>
+
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.java.lang);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zhtml);
+	function alert(m) {
+		Messagebox.show(m);
+	}
+	</zscript>
+
+	<!-- Groovy "forgot" what are imported, so we have to import each time
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import java.lang.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zhtml.*
+	</zscript>
+	<zscript language="Groovy">
+	alert = {m -> Messagebox.show(m)}
+	</zscript>
+
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.util'
+		include_package 'java.lang'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zhtml'
+	end
+	def alert (m)
+		Java::Messagebox.show m
+	end
+	</zscript>
+
+	<!-- Defines the component and attribute names used to represent
+	a label when a plain text is found in ZUL XML.
+	-->
+	<label-template>
+		<component-name>text</component-name>
+		<component-attribute>value</component-attribute>
+		<raw/><!-- 1) don't trim, 2) generated directly -->
+	</label-template>
+	<!-- Defines the template for macro components -->
+	<macro-template>
+		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
+	</macro-template>
+	<!-- Defines the template for the Native namespace -->
+	<native-template>
+		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
+	</native-template>
+
+	<!-- Defines the component used to generate components for unknown tags.
+	-->
+	<dynamic-tag>
+		<component-name>raw</component-name>
+		<!-- [event] means any onXxx attributes, such as onClick -->
+		<reserved-attribute>[event]</reserved-attribute>
+		<!-- Uncomment if any of the following attributes is used.
+		<reserved-attribute>if</reserved-attribute>
+		<reserved-attribute>unless</reserved-attribute>
+		<reserved-attribute>use</reserved-attribute>
+		-->
+	</dynamic-tag>
+
+	<component>
+		<component-name>a</component-name>
+		<component-class>org.zkoss.zhtml.A</component-class>
+	</component>
+	<component>
+		<component-name>abbr</component-name>
+		<component-class>org.zkoss.zhtml.Abbr</component-class>
+	</component>
+	<component>
+		<component-name>acronym</component-name>
+		<component-class>org.zkoss.zhtml.Acronym</component-class>
+	</component>
+	<component>
+		<component-name>address</component-name>
+		<component-class>org.zkoss.zhtml.Address</component-class>
+	</component>
+	<component>
+		<component-name>area</component-name>
+		<component-class>org.zkoss.zhtml.Area</component-class>
+	</component>
+	<component>
+		<component-name>b</component-name>
+		<component-class>org.zkoss.zhtml.B</component-class>
+	</component>
+	<component>
+		<component-name>base</component-name>
+		<component-class>org.zkoss.zhtml.Base</component-class>
+	</component>
+	<component>
+		<component-name>big</component-name>
+		<component-class>org.zkoss.zhtml.Big</component-class>
+	</component>
+	<component>
+		<component-name>blockquote</component-name>
+		<component-class>org.zkoss.zhtml.Blockquote</component-class>
+	</component>
+	<component>
+		<component-name>body</component-name>
+		<component-class>org.zkoss.zhtml.Body</component-class>
+	</component>
+	<component>
+		<component-name>br</component-name>
+		<component-class>org.zkoss.zhtml.Br</component-class>
+	</component>
+	<component>
+		<component-name>button</component-name>
+		<component-class>org.zkoss.zhtml.Button</component-class>
+	</component>
+	<component>
+		<component-name>caption</component-name>
+		<component-class>org.zkoss.zhtml.Caption</component-class>
+	</component>
+	<component>
+		<component-name>center</component-name>
+		<component-class>org.zkoss.zhtml.Center</component-class>
+	</component>
+	<component>
+		<component-name>cite</component-name>
+		<component-class>org.zkoss.zhtml.Cite</component-class>
+	</component>
+	<component>
+		<component-name>code</component-name>
+		<component-class>org.zkoss.zhtml.Code</component-class>
+	</component>
+	<component>
+		<component-name>col</component-name>
+		<component-class>org.zkoss.zhtml.Col</component-class>
+	</component>
+	<component>
+		<component-name>colgroup</component-name>
+		<component-class>org.zkoss.zhtml.Colgroup</component-class>
+	</component>
+	<component>
+		<component-name>dd</component-name>
+		<component-class>org.zkoss.zhtml.Dd</component-class>
+	</component>
+	<component>
+		<component-name>del</component-name>
+		<component-class>org.zkoss.zhtml.Del</component-class>
+	</component>
+	<component>
+		<component-name>dfn</component-name>
+		<component-class>org.zkoss.zhtml.Dfn</component-class>
+	</component>
+	<component>
+		<component-name>dir</component-name>
+		<component-class>org.zkoss.zhtml.Dir</component-class>
+	</component>
+	<component>
+		<component-name>div</component-name>
+		<component-class>org.zkoss.zhtml.Div</component-class>
+	</component>
+	<component>
+		<component-name>dl</component-name>
+		<component-class>org.zkoss.zhtml.Dl</component-class>
+	</component>
+	<component>
+		<component-name>dt</component-name>
+		<component-class>org.zkoss.zhtml.Dt</component-class>
+	</component>
+	<component>
+		<component-name>em</component-name>
+		<component-class>org.zkoss.zhtml.Em</component-class>
+	</component>
+	<component>
+		<component-name>embed</component-name>
+		<component-class>org.zkoss.zhtml.Embed</component-class>
+	</component>
+	<component>
+		<component-name>fieldset</component-name>
+		<component-class>org.zkoss.zhtml.Fieldset</component-class>
+	</component>
+	<component>
+		<component-name>font</component-name>
+		<component-class>org.zkoss.zhtml.Font</component-class>
+	</component>
+	<component>
+		<component-name>form</component-name>
+		<component-class>org.zkoss.zhtml.Form</component-class>
+	</component>
+	<component>
+		<component-name>h1</component-name>
+		<component-class>org.zkoss.zhtml.H1</component-class>
+	</component>
+	<component>
+		<component-name>h2</component-name>
+		<component-class>org.zkoss.zhtml.H2</component-class>
+	</component>
+	<component>
+		<component-name>h3</component-name>
+		<component-class>org.zkoss.zhtml.H3</component-class>
+	</component>
+	<component>
+		<component-name>h4</component-name>
+		<component-class>org.zkoss.zhtml.H4</component-class>
+	</component>
+	<component>
+		<component-name>head</component-name>
+		<component-class>org.zkoss.zhtml.Head</component-class>
+	</component>
+	<component>
+		<component-name>hr</component-name>
+		<component-class>org.zkoss.zhtml.Hr</component-class>
+	</component>
+	<component>
+		<component-name>html</component-name>
+		<component-class>org.zkoss.zhtml.Html</component-class>
+	</component>
+	<component>
+		<component-name>i</component-name>
+		<component-class>org.zkoss.zhtml.I</component-class>
+	</component>
+	<component>
+		<component-name>iframe</component-name>
+		<component-class>org.zkoss.zhtml.Iframe</component-class>
+	</component>
+	<component>
+		<component-name>img</component-name>
+		<component-class>org.zkoss.zhtml.Img</component-class>
+	</component>
+	<component>
+		<component-name>input</component-name>
+		<component-class>org.zkoss.zhtml.Input</component-class>
+	</component>
+	<component>
+		<component-name>ins</component-name>
+		<component-class>org.zkoss.zhtml.Ins</component-class>
+	</component>
+	<component>
+		<component-name>isindex</component-name>
+		<component-class>org.zkoss.zhtml.Isindex</component-class>
+	</component>
+	<component>
+		<component-name>kbd</component-name>
+		<component-class>org.zkoss.zhtml.Kbd</component-class>
+	</component>
+	<component>
+		<component-name>label</component-name>
+		<component-class>org.zkoss.zhtml.Label</component-class>
+	</component>
+	<component>
+		<component-name>legend</component-name>
+		<component-class>org.zkoss.zhtml.Legend</component-class>
+	</component>
+	<component>
+		<component-name>li</component-name>
+		<component-class>org.zkoss.zhtml.Li</component-class>
+	</component>
+	<component>
+		<component-name>link</component-name>
+		<component-class>org.zkoss.zhtml.Link</component-class>
+	</component>
+	<component>
+		<component-name>map</component-name>
+		<component-class>org.zkoss.zhtml.Map</component-class>
+	</component>
+	<component>
+		<component-name>menu</component-name>
+		<component-class>org.zkoss.zhtml.Menu</component-class>
+	</component>
+	<component>
+		<component-name>meta</component-name>
+		<component-class>org.zkoss.zhtml.Meta</component-class>
+	</component>
+	<component>
+		<component-name>nobr</component-name>
+		<component-class>org.zkoss.zhtml.Nobr</component-class>
+	</component>
+	<component>
+		<component-name>object</component-name>
+		<component-class>org.zkoss.zhtml.Object</component-class>
+	</component>
+	<component>
+		<component-name>ol</component-name>
+		<component-class>org.zkoss.zhtml.Ol</component-class>
+	</component>
+	<component>
+		<component-name>optgroup</component-name>
+		<component-class>org.zkoss.zhtml.Optgroup</component-class>
+	</component>
+	<component>
+		<component-name>option</component-name>
+		<component-class>org.zkoss.zhtml.Option</component-class>
+	</component>
+	<component>
+		<component-name>p</component-name>
+		<component-class>org.zkoss.zhtml.P</component-class>
+	</component>
+	<component>
+		<component-name>pre</component-name>
+		<component-class>org.zkoss.zhtml.Pre</component-class>
+	</component>
+	<component>
+		<component-name>q</component-name>
+		<component-class>org.zkoss.zhtml.Q</component-class>
+	</component>
+	<component>
+		<component-name>raw</component-name>
+		<component-class>org.zkoss.zhtml.Raw</component-class>
+	</component>
+	<component>
+		<component-name>s</component-name>
+		<component-class>org.zkoss.zhtml.S</component-class>
+	</component>
+	<component>
+		<component-name>samp</component-name>
+		<component-class>org.zkoss.zhtml.Samp</component-class>
+	</component>
+	<component>
+		<component-name>script</component-name>
+		<component-class>org.zkoss.zhtml.Script</component-class>
+	</component>
+	<component>
+		<component-name>select</component-name>
+		<component-class>org.zkoss.zhtml.Select</component-class>
+	</component>
+	<component>
+		<component-name>small</component-name>
+		<component-class>org.zkoss.zhtml.Small</component-class>
+	</component>
+	<component>
+		<component-name>span</component-name>
+		<component-class>org.zkoss.zhtml.Span</component-class>
+	</component>
+	<component>
+		<component-name>strong</component-name>
+		<component-class>org.zkoss.zhtml.Strong</component-class>
+	</component>
+	<component>
+		<component-name>style</component-name>
+		<component-class>org.zkoss.zhtml.Style</component-class>
+	</component>
+	<component>
+		<component-name>sub</component-name>
+		<component-class>org.zkoss.zhtml.Sub</component-class>
+	</component>
+	<component>
+		<component-name>sup</component-name>
+		<component-class>org.zkoss.zhtml.Sup</component-class>
+	</component>
+	<component>
+		<component-name>table</component-name>
+		<component-class>org.zkoss.zhtml.Table</component-class>
+	</component>
+	<component>
+		<component-name>tbody</component-name>
+		<component-class>org.zkoss.zhtml.Tbody</component-class>
+	</component>
+	<component>
+		<component-name>td</component-name>
+		<component-class>org.zkoss.zhtml.Td</component-class>
+	</component>
+	<component>
+		<component-name>text</component-name>
+		<component-class>org.zkoss.zhtml.Text</component-class>
+		<text-as>value</text-as>
+		<!-- to speed up the performance, we don't use DSP here -->
+	</component>
+	<component>
+		<component-name>textarea</component-name>
+		<component-class>org.zkoss.zhtml.Textarea</component-class>
+	</component>
+	<component>
+		<component-name>tfoot</component-name>
+		<component-class>org.zkoss.zhtml.Tfoot</component-class>
+	</component>
+	<component>
+		<component-name>th</component-name>
+		<component-class>org.zkoss.zhtml.Th</component-class>
+	</component>
+	<component>
+		<component-name>thead</component-name>
+		<component-class>org.zkoss.zhtml.Thead</component-class>
+	</component>
+	<component>
+		<component-name>title</component-name>
+		<component-class>org.zkoss.zhtml.Title</component-class>
+	</component>
+	<component>
+		<component-name>tr</component-name>
+		<component-class>org.zkoss.zhtml.Tr</component-class>
+	</component>
+	<component>
+		<component-name>tt</component-name>
+		<component-class>org.zkoss.zhtml.Tt</component-class>
+	</component>
+	<component>
+		<component-name>ul</component-name>
+		<component-class>org.zkoss.zhtml.Ul</component-class>
+	</component>
+	<component>
+		<component-name>var</component-name>
+		<component-class>org.zkoss.zhtml.Var</component-class>
+	</component>
+	<component>
+		<component-name>zkhead</component-name>
+		<component-class>org.zkoss.zhtml.Zkhead</component-class>
+	</component>
+</language>

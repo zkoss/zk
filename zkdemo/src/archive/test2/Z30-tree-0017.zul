@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<zk >
+
+1.open group0 and host-0
+<separator/>
+2.click add
+<separator/>
+3.click remove
+<separator/>
+4.click update
+
+	<window title="dynamic tree" border="normal" id="win">
+	<zscript>
+	
+		import org.zkoss.zkdemo.test2.tree.*;
+		
+		
+		HostTreeModel model = new HostTreeModel();
+		HostIconTreeRenderer renderer = new HostIconTreeRenderer();
+		int count = 10;
+	</zscript>
+		
+		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		</tree>
+		<button label="add" onClick='model.addProcessType(0,0,count,"C");count=count+1;' />
+		<button label="remove" onClick='model.removeProcessType(0,0,0,"C");count=count-1;' />
+		<button label="update" onClick='model.updateProcessType(0,0,0,"C")' />
+	</window>
+</zk>

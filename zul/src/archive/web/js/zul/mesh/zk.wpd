@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  4 16:50:13     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.mesh" language="xul/html" depends="zul">
+	<script src="MeshWidget.js" jsdoc="true"/>
+	<script src="HeadWidget.js" jsdoc="true"/>
+	<script src="HeaderWidget.js" jsdoc="true"/>
+	<script src="SortWidget.js" jsdoc="true"/>
+
+	<widget name="Paging"/>	
+	<widget name="Auxhead"/>
+	<widget name="Auxheader"/>
+	<widget name="Frozen"/>
+</package>

@@ -1,0 +1,27 @@
+<zk>
+	<html><![CDATA[      
+		<ul>		
+			<li>Click "HIDE ALL" button</li>
+			<li>You sould not see any exception</li>
+		</ul>
+	]]></html>
+	<zscript>
+	List items = new org.zkoss.zkdemo.userguide.BigList(1000);	//a big list of Integer
+	</zscript>
+	<listbox id="listbox" mold="paging">
+		<listitem forEach="&#36;{items}">
+			<listcell label="&#36;{each}-1" />
+			<listcell label="&#36;{each}-2" />
+			<listcell label="&#36;{each}-3" />
+			<listcell label="&#36;{each}-4" />
+		</listitem>
+	</listbox>
+	<button label="HIDE ALL">
+		<attribute name="onClick"><![CDATA[
+			import java.util.*;
+			for (Component c: listbox.getItems()){
+				c.setVisible(false);
+			}
+		]]></attribute>
+	</button>
+</zk>

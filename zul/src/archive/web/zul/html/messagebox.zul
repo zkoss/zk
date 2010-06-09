@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK Test" language="xul/html"?>
+<!--
+test.zul
+
+	Purpose:
+		View the specified subject.
+	Description:
+
+	History:
+		Mon May 30 19:13:47     2005, Created by tomyeh
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under LGPL Version 3.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+-->
+<window title="${arg.title}" border="normal" width="250pt" closable="true"
+use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<hbox>
+		<div sclass="${arg.icon}"/>
+		<div sclass="z-messagebox">
+			<label value="${arg.message}" multiline="true" >
+				<attribute w:name="onBind">
+					var node = this.$n(),
+						tr = node.parentNode.parentNode.parentNode,
+						width = node.offsetWidth + tr.cells[0].offsetWidth,
+						win = this.$o(),
+						cave = win.$n('cave'),
+						outer = win.$n();
+					width += zk(cave).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth()
+						+ zk((cave = cave.parentNode)).padBorderWidth();
+				
+					outer.style.width = jq.px0(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
+					zk(outer).center();
+					var top = zk.parseInt(outer.style.top), y = jq.innerY();
+					if (y) {
+						var y1 = top - y;
+						if (y1 > 100) outer.style.top = jq.px0(top - (y1 - 100));
+					} else if (top > 100)
+						outer.style.top = "100px";
+					win.onSize();
+				</attribute>
+			</label>
+		</div>
+	</hbox>
+	<separator bar="true"/>
+	<hbox style="margin-left:auto; margin-right:auto">
+	<button id="btn1" identity="${arg.OK}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.OK}"/>
+	<button identity="${arg.CANCEL}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.CANCEL}"/>
+	<button identity="${arg.YES}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.YES}"/>
+	<button identity="${arg.NO}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.NO}"/>
+	<button identity="${arg.RETRY}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.RETRY}"/>
+	<button identity="${arg.ABORT}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.ABORT}"/>
+	<button identity="${arg.IGNORE}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
+		if="${!empty arg.IGNORE}"/>
+	</hbox>
+</window>

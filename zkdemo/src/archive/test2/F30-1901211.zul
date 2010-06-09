@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1901211.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 25 16:57:12 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Please click the menu of File and Help, then check whether the checkmark and the indication is shown properly. </n:p>
+	<window title="Menu Demo" border="normal">
+		<menubar id="menubar">
+			<menu label="File">
+				<menupopup>
+					<menuitem label="New" onClick="alert(self.label)"/>
+					<menuitem checked="true" label="Open" onClick="alert(self.label)"/>
+					<menuitem label="Save" onClick="alert(self.label)"/>
+					<menuseparator/>
+					<menuitem label="Exit" onClick="alert(self.label)"/>
+				</menupopup>
+			</menu>
+			<menu label="Help">
+				<menupopup>
+					<menuitem label="Index" onClick="alert(self.label)"/>
+					<menu label="About">
+						<menupopup>
+							<menuitem label="About ZK" onClick="alert(self.label)"/>
+							<menuitem checked="true" label="About Potix" onClick="alert(self.label)"/>
+						</menupopup>
+					</menu>
+				</menupopup>
+			</menu>
+		</menubar>
+	</window>
+</zk>

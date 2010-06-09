@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2815049.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 14:51:43     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you can see this page with Applet, the bug was fixed (IE only).
+<window title="applet sample" width="300px" mode="popup">
+<applet codebase="classes" code="ticker" id="ticker"/>
+</window>
+</zk>

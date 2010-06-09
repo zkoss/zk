@@ -1,0 +1,43 @@
+<zk>
+<html><![CDATA[
+<ol>
+<li>For each input box, enter number and then tab away, the number in the input box and the one show after the input box shall be the same.</li>
+<li>Enter 0</li>
+<li>Enter 00.00</li>
+<li>Enter .12</li>
+<li>Enter 0.12</li>
+<li>Enter 1.2</li>
+<li>Enter 1.30</li>
+<li>Enter 1.400</li>
+<li>Enter 1.5000</li>
+<li>Enter 12</li>
+<li>Enter 12. (note the decimal point at the end)</li>
+<li>Enter 100</li>
+<li>Enter 123456789</li>
+<li>done</li>
+</ol>
+]]></html>
+<vbox>
+<hbox>doublebox (#.00#): <doublebox format="#.00#" width="140px" onChange='format("l2")'/><label id="l2"/></hbox>
+<hbox>doublebox (#.00): <doublebox format="#.00" width="140px" onChange='format("l1")'/><label id="l1"/></hbox>
+<hbox>decimalbox(#.0#): <decimalbox format="#.0#" width="140px" onChange='format("l3")'/><label id="l3"/></hbox>
+<hbox>decimalbox(#.##): <decimalbox format="#.##" width="140px" onChange='format("l4")'/><label id="l4"/></hbox>
+<hbox>doublebox (#0.00#): <doublebox format="#0.00#" width="140px" onChange='format("l5")'/><label id="l5"/></hbox>
+<hbox>doublebox (#00.00): <doublebox format="#00.00" width="140px" onChange='format("l6")'/><label id="l6"/></hbox>
+<hbox>doublebox (#,#00.00): <doublebox format="#,#00.00" width="140px" onChange='format("l7")'/><label id="l7"/></hbox>
+</vbox> 
+<zscript><![CDATA[
+import java.text.DecimalFormat;
+import org.zkoss.zul.Label;
+void format(String xid) {
+	Object rawval = self.getRawValue();
+	Label lbl = self.getFellow(xid);
+	if (rawval != null) {
+		DecimalFormat fmt = new DecimalFormat(self.getFormat());
+		lbl.setValue(fmt.format(rawval));
+	} else {
+		lbl.setValue("");
+	}
+}
+]]></zscript>
+</zk>

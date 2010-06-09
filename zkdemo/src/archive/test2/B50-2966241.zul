@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<window width="500px">
+<html><![CDATA[
+<ol>
+<li>You shoud see "OrderName - 3" as selected item in combobox.</li>
+<li>Now drop down the comboitem list and select "OrderName - 7" in combobox.</li>
+<li>Now drop down the comboitem list, the "OrderName - 7" is highlighted as selected</li>
+<li>Now check if "OrderName - 3" changed to "OrderName - 7".</li>
+<li>If "OrderName - 3" does not change, then it is OK; otherwise, it is a bug.</li>
+</ol>
+]]></html>
+<zscript><![CDATA[
+public class Order {
+  private String _orderName;
+  private String _orderNumber;
+  public void setOrderName(String o) {
+    _orderName = o;
+  }
+  public String getOrderName() {
+    return _orderName;
+  }
+  public void setOrderNumber(String n) {
+    _orderNumber = n;
+  }
+  public String getOrderNumber() {
+    return _orderNumber;
+  }
+}   
+    int count = 30;
+    List orders = new LinkedList();
+    for(int j= 0; j < count; ++j) {
+      Order o = new Order();
+      o.setOrderName("OrderName - " + j );
+      o.setOrderNumber("OrderNumber - " + j);
+      orders.add(o);
+    }   
+    selected = orders.get(3);
+  ]]></zscript>
+
+<combobox model="@{orders}" selectedItem="@{selected}" value="@{selected.orderName}">
+       <comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"/>
+</combobox>
+ </window>

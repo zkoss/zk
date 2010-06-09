@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1829640.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 19 14:48:04 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window xmlns:h="http://www.w3.org/1999/xhtml">
+Notice : <separator />
+Drag and drop Does not work in FF 2.0.0.9 but work in 2.0.0.13
+<separator />
+light bar only show in IE
+<separator />
+    <vbox id="parent" width="80%">
+        <html/>
+        <html/>
+        <html/>
+        <html/>
+        <html/>
+        <html/>
+    </vbox>
+
+
+    <zscript>
+        <![CDATA[
+        int lineno = 1;
+        for (Html h : parent.getChildren()) {
+            h.setContent("<table><tr><td>Line " + (lineno++) + " - drag and drop onto another line - works in IE7</td></tr></table>");
+            h.setDraggable("true");
+            h.setDroppable("true");
+            /* code to rearrange children after drop */
+            h.addEventListener("onDrop", new org.zkoss.zk.ui.event.EventListener() {
+                public void onEvent(e) {
+                    source = e.getDragged();
+                    target = e.getTarget();
+                    int targetIndex =parent.getChildren().indexOf(target);
+                    int sourceIndex =parent.getChildren().indexOf(source);
+
+                    if (sourceIndex < targetIndex) {
+                        if (targetIndex == parent.getChildren().size() -1)
+                            parent.appendChild(source);
+                        else
+                            parent.insertBefore(source,
+                                   
+(Component)parent.getChildren().get(targetIndex+1));
+                    } else {
+                        parent.insertBefore(source, target);
+                    }        
+                    /* Work-around for bug in ZK 3.0.0: 
+                     * If we do not invalidate the parent, it will crashwith
+                     * a java.lang.InternalError.
+                     */
+                     parent.invalidate();
+                }
+            });
+        }
+        ]]>
+    </zscript>
+</window>

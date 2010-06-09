@@ -1,0 +1,105 @@
+#!/bin/bash
+# zipcss
+#
+#{{IS_NOTE
+#	Purpose:
+#		Copy and compress Javascript
+#	Description:
+#		
+#	History:
+#		Thu Jan 26 14:17:26     2006, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+if [ $# != 3 ] ; then
+	echo "Usage:"
+	echo "  zipcss jarfl srcdir dstdir"
+	echo
+	echo "All files are copied from one directory to another."
+	echo "The JavaScript files are compressed during copying."
+	exit 1
+fi
+
+if [ ! -d "$2" ] ; then #nothing to copy
+	exit 0
+fi
+
+jarfl="$1"
+if [ "${jarfl#/}" = "$jarfl" ] ; then
+	jarfl="$(pwd)/$jarfl"
+fi
+dstdir="$3"
+if [ "${dstdir#/}" = "$dstdir" ] ; then
+	dstdir="$(pwd)/$dstdir"
+fi
+
+if [ ! -f "$jarfl" ] ; then
+	echo "$jarfl not found"
+	exit 1
+fi
+
+#convert jarfl to window format
+if [ "$TERM" = "cygwin" ] ; then
+	jarfl=$(cygpath -wa $jarfl)
+fi
+
+failed=false
+
+function zips
+{
+	local dst="$1"
+	local parent=$2
+	for f in *; do
+		if [ "$f" != "CVS" ] && [ "$f" != ".svn" ] ; then
+			dstfl=$dst/$f
+			if [ -d "$f" ] ; then
+				(
+				cd "$f"
+				zips "$dstfl" "$f"
+				)
+			elif [ -f "$f" ] ; then
+				mkdir -p "$dst"
+
+				if [ ! -f "$dstfl" ] || [ "$f" -nt "$dstfl" ] ;  then
+					local cvt=false
+					if [ "${f%.css.dsp}" != "$f" ] || [ "${f%.css}" != "$f" ] ; then
+						cvt=true
+					fi
+					if [ $cvt = true ] ; then
+						echo Compress $f
+						if [ "$TERM" = "cygwin" ] ; then
+							dstfl=$(cygpath -wa $dstfl)
+						fi
+						java -jar $jarfl --charset UTF-8 --type css "$f" -o "$dstfl" 2>&1
+						if [ $? != 0 ] ; then
+							echo "Warning failed to compress, use copy instead: $f"
+							cvt=false
+						fi
+					fi
+					if [ $cvt = false ] ; then
+						echo copy $f
+						cp -p ./"$f" $dst
+							#$f might starts with -
+						if [ $? != 0 ] ; then
+							echo "Failed:"
+							echo "  cp -p $f $dst"
+							failed=true
+						fi
+					fi
+				fi
+			fi
+		fi
+	done
+	cd ..
+}
+cd $2
+zips "$dstdir"
+if [ $failed = true ] ; then
+	exit 1
+fi

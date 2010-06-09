@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1926990.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 28 09:17:02     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Btn Visibility" width="300px" border="normal">
+Clicks <button label="show or hide">
+<attribute name="onClick">
+tb.buttonVisible = cb.buttonVisible = db.buttonVisible = bb.buttonVisible
+= !tb.buttonVisible;
+</attribute>
+</button> and you shall see the button shown up together.
+<separator bar="true"/>
+<timebox id="tb" buttonVisible="false"/>
+<separator/>
+<combobox id="cb" buttonVisible="false"/>
+<separator/>
+<datebox id="db" buttonVisible="false"/>
+<separator/>
+<bandbox id="bb" buttonVisible="false"/>
+</window>

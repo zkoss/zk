@@ -1,0 +1,163 @@
+#!/bin/bash
+# deploy.unzip
+#
+#{{IS_NOTE
+#	Purpose:
+#		Unzip and deploy an ear, jar or war
+#	Description:
+#		Unzip and deploy
+#	History:
+#		Wed Jun 11 09:48:46     2003, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+function helpit
+{
+	echo "deploy.unzip - Unzip and deploy an ear, jar or war"
+	echo "Copyright (C) 2003 Potix Corporation. All Rights Reserved."
+	echo
+	echo "You could unzip files inside of srcfile by specifying them in "
+	echo "comman-separated list."
+	echo
+	echo "Usage:"
+	echo "  deploy.unzip srcfile dstdir [list]"
+	echo
+	echo "srcfile - the source file"
+	echo "dstdir - the destination directory"
+	echo "list - a list of comma separated file in srcfile that need to unzip further"
+	exit 0
+}
+
+if [ $# -lt 2 ] ; then
+	echo "You have to specify at least the source file and destination directory"
+	exit 1
+fi
+if [ $1 = --help ] ; then
+	helpit
+fi
+srcfl=$1
+dstdir=$2
+inlist=$3
+if [ ! -f "$srcfl" ] ; then
+	echo "$srcfl not found"
+	exit 3
+fi
+if [ ! -d "$dstdir" ] ; then
+	echo "$dstdir doesn't exist. Make sure /usr/jboss is linked to the JBoss directory"
+	exit 3
+fi
+srcnm=${srcfl##*/}
+
+appxml=$dstdir/$srcnm/META-INF/application.xml
+if [ -f "$appxml" ] && [ "$appxml" -nt "$srcfl" ] ; then
+	exit 0 #dst is newer; nothing to do
+fi
+
+#convert srcfl to absolute
+if [ "$TERM" = "cygwin" ] ; then
+	srcfl=$(cygpath -wa $srcfl)
+else
+	if [ "$srcfl" = "${srcfl#/}" ] ; then #relative
+		srcfl=$(pwd)/$srcfl
+	fi
+fi
+
+#prepare
+cd $dstdir
+if [ $? != 0 ] ; then
+	echo "Failed to change directory to $dstdir"
+	exit 5
+fi
+mkdir -p $srcnm
+if [ $? != 0 ] ; then
+	echo "Failed to make directory $srcnm under $dstdir"
+	exit 5
+fi
+
+cd $srcnm
+
+tmpdir=../../tmp-$srcnm
+mkdir -p $tmpdir/old
+mkdir -p $tmpdir/new
+rm -rf $tmpdir/old/* $tmpdir/new/*
+
+#move existent unzip-ed directory to $tmpdir/old
+if [ "$inlist" != "" ] ; then
+	oldIFS=$IFS
+	IFS=,
+	for f in $inlist; do
+		if [ -d $f ] ; then
+			#echo mv $f $tmpdir/old
+			mv $f $tmpdir/old
+		fi
+	done
+	IFS=$oldIFS
+fi
+
+#unzip $srcfl
+echo jar xf $srcfl
+jar xf $srcfl
+
+#unzip $inlist
+if [ "$inlist" != "" ] ; then
+	oldIFS=$IFS
+	IFS=,
+	for f in $inlist; do
+		if [ -f $f ] ; then
+			#echo mv $f $tmpdir/new
+			mv $f $tmpdir/new
+		fi
+		if [ -d $tmpdir/old/$f ] ; then
+			#echo mv $tmpdir/old/$f .
+			mv $tmpdir/old/$f .
+		elif [ -f $tmpdir/new/$f ] ; then
+			mkdir $f
+			if [ $? != 0 ] ; then
+				echo "Failed to make directory $f"
+				exit 5
+			fi
+		fi
+	done
+	for f in $inlist; do
+		if [ -f $tmpdir/new/$f ] ; then
+			(
+				cd $f
+				echo jar xf $f
+				jar xf ../$tmpdir/new/$f
+			)
+		fi
+	done
+	for f in $inlist; do
+		#nullify jsp
+		if [ -d $f ] && [ "${f%.war}" != "$f" ] ; then
+			function nullifywar
+			{
+				for j in *; do
+					if [ "${j%.jsp}" != "$j" ] ; then
+						echo > $j
+					elif [ -d $j ] ; then
+						(
+							cd $j
+							nullifywar
+						)
+					fi
+				done
+			}
+			(
+				cd $f
+				echo nullify $f
+				nullifywar
+			)
+		fi
+	done
+	IFS=$oldIFS
+fi
+
+rm -rf $tmpdir

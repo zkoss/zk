@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2088269.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  2 16:33:21 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?component name="popup1" macro-uri="/test2/B1896588_1.zul"?>
+<zk>
+1. Press F5 to reload this page.
+<separator/>
+2. Select "All Groups" before it finish loading.
+<separator/>
+3. "All Groups" radio button should be selected and The words "Top N
+Groups" should change to "All Groups".
+<separator/>
+Note: zk.xml should add the following configuration.
+<![CDATA[
+	<client-config>
+		<disable-behind-modal>true</disable-behind-modal>
+	</client-config>
+]]>
+<popup1 />
+<popup1 />
+<popup1 />
+<popup1 />
+<popup1 />
+<popup1 />
+<popup1 />
+<menupopup id="menupopup">
+<menuitem label="Index"/>
+<menuitem label="Index"/>
+<menuitem label="Index"/>
+<menuitem label="Index"/>
+<menuitem label="Index"/>
+<menuitem label="Index"/>
+</menupopup>
+<window height="50px" />
+<vbox id="vbox" spacing="1em" visible="true">
+<hbox align="center" spacing="1em">
+<label value=" "/>
+<radiogroup id="topGroups" orient="vertical" onCheck="test.value =
+self.getSelectedItem().getLabel()">
+<radio id="topGroupsAll" label="All Groups"/>
+<radio id="topN" label="Top N Groups" checked="true" />
+</radiogroup>
+<label id="test" value="Top
+N Groups" />
+</hbox>
+</vbox>
+</zk>

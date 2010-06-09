@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<panel title="table1" border="normal"  collapsible="true">
+<panelchildren>
+<tablelayout>
+<tablechildren>
+<panel>
+<panelchildren>
+<label value="Panel" />
+</panelchildren>
+</panel>
+</tablechildren>
+</tablelayout>
+Panel
+</panelchildren>
+</panel>
+</zk>

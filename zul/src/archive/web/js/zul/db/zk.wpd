@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		Widget Package Descriptor
+	Description:
+		
+	History:
+		Fri June 09 10:51:58     2008, Created by Flyworld
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.db" language="xul/html" depends="zk.fmt,zul.inp">
+	<script src="datefmt.js"/>
+	<widget name="Calendar"/>
+	<widget name="Datebox"/>
+</package>

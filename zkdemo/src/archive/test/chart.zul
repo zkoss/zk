@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+charts.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug  10 12:37:06     2006, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<vbox>
+<zscript>
+  public Date date(int year, int month, int day) {
+	final java.util.Calendar calendar = java.util.Calendar.getInstance();
+	calendar.set(year, month-1, day);
+	final Date result = calendar.getTime();
+	return result;
+  }
+
+  public Date time(int year, int month, int day, int hour, int minute, int second) {
+	final java.util.Calendar calendar = java.util.Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+	calendar.set(year, month-1, day, hour, minute, second);
+	final Date result = calendar.getTime();
+	return result;
+  }
+
+  void drilldown() {
+  	String areaid = event.getArea();
+  	if (areaid != null) {
+	  	Area area = self.getFellow(areaid);
+	  	alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
+	}
+  }
+</zscript>
+<zscript>
+  PieModel piemodel = new SimplePieModel();
+  piemodel.setValue("C/C++", new Double(12.5));
+  piemodel.setValue("Java", new Double(50.2));
+  piemodel.setValue("VB", new Double(20.5));
+  piemodel.setValue("PHP", new Double(15.5));
+</zscript>
+<label value="pie"/>
+<chart id="piechart" title="Pie Chart" width="500" height="250" type="pie" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  piechart.setModel(piemodel);
+</zscript>
+
+<label value="pie+3d"/>
+<chart id="piechart3d" title="Pie Chart 3D" width="500" height="250" type="pie" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  piechart3d.setModel(piemodel);
+</zscript>
+
+<label value="ring"/>
+<chart id="ringchart" title = "Ring Chart" width="500" height="250" type="ring" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  ringchart.setModel(piemodel);
+</zscript>
+
+<zscript>
+CategoryModel catmodel = new SimpleCategoryModel();
+catmodel.setValue("2001", "Q1", new Integer(20));
+catmodel.setValue("2001", "Q2", new Integer(35));
+catmodel.setValue("2001", "Q3", new Integer(40));
+catmodel.setValue("2001", "Q4", new Integer(55));
+catmodel.setValue("2002", "Q1", new Integer(40));
+catmodel.setValue("2002", "Q2", new Integer(60));
+catmodel.setValue("2002", "Q3", new Integer(70));
+catmodel.setValue("2002", "Q4", new Integer(90));
+</zscript>
+
+<label value="bar"/>
+<chart id="barchart" title="Bar Chart" width="500" height="250" type="bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  barchart.setModel(catmodel);
+</zscript>
+
+<label value="bar+3d"/>
+<chart id="barchart3d" title="Bar Chart 3D" width="500" height="250" type="bar" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  barchart3d.setModel(catmodel);
+</zscript>
+
+<label value="stacked_bar"/>
+<chart id="sbarchart" title="Stacked Bar" width="500" height="250" type="stacked_bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sbarchart.setModel(catmodel);
+</zscript>
+
+<label value="stacked_bar+3d"/>
+<chart id="sbarchart3d" title="Stacked Bar 3D" width="500" height="250" type="stacked_bar" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sbarchart3d.setModel(catmodel);
+</zscript>
+
+<label value="line"/>
+<chart id="linechart" title="Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  linechart.setModel(catmodel);
+</zscript>
+
+<label value="line+3d"/>
+<chart id="linechart3d" title="Line Chart 3D" width="500" height="250" type="line" threeD="true" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  linechart3d.setModel(catmodel);
+</zscript>
+
+<label value="area"/>
+<chart id="areachart" title="Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  areachart.setModel(catmodel);
+</zscript>
+
+<label value="stacked_area"/>
+<chart id="sareachart" title="Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  sareachart.setModel(catmodel);
+</zscript>
+
+<label value="waterfall"/>
+<chart id="waterfall" title="Waterfall Chart" width="500" height="250" type="waterfall" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  waterfall.setModel(catmodel);
+</zscript>
+
+<zscript>
+XYModel xymodel = new SimpleXYModel();
+xymodel.addValue("2001", new Integer(20), new Integer(120));
+xymodel.addValue("2001", new Integer(40), new Integer(135));
+xymodel.addValue("2001", new Integer(60), new Integer(140));
+xymodel.addValue("2001", new Integer(80), new Integer(160));
+
+xymodel.addValue("2002", new Integer(30), new Integer(120));
+xymodel.addValue("2002", new Integer(50), new Integer(135));
+xymodel.addValue("2002", new Integer(70), new Integer(140));
+xymodel.addValue("2002", new Integer(90), new Integer(160));
+</zscript>
+
+
+<label value="polar"/>
+<chart id="polar" title="Polar Chart" width="500" height="250" type="polar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  polar.setModel(xymodel);
+</zscript>
+
+<label value="scatter"/>
+<chart id="scatter" title="Scatter Chart" width="500" height="250" type="scatter" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  scatter.setModel(xymodel);
+</zscript>
+
+<label value="time_series"/>
+<chart id="timeseries" title="Time Series Chart" width="500" height="250" type="time_series" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  timeseries.setModel(xymodel);
+</zscript>
+
+<label value="area"/>
+<chart id="xyarea" title="XY Area Chart" width="500" height="250" type="area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xyarea.setModel(xymodel);
+</zscript>
+
+<label value="line"/>
+<chart id="xyline" title="XY Line Chart" width="500" height="250" type="line" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xyline.setModel(xymodel);
+</zscript>
+
+<label value="step_area"/>
+<chart id="steparea" title="Step Area Chart" width="500" height="250" type="step_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  steparea.setModel(xymodel);
+</zscript>
+
+<zscript>
+XYModel datemodel = new SimpleXYModel();
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 1, 10, 15).getTime()), new Integer(120));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 2, 10, 15).getTime()), new Integer(135));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 3, 10, 15).getTime()), new Integer(140));
+datemodel.addValue("2001", new Long(time(2001, 5, 2, 4, 10, 15).getTime()), new Integer(160));
+
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 1, 10, 20).getTime()), new Integer(125));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 2, 10, 20).getTime()), new Integer(130));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 3, 10, 20).getTime()), new Integer(120));
+datemodel.addValue("2002", new Long(time(2001, 5, 2, 4, 10, 20).getTime()), new Integer(180));
+</zscript>
+
+<label value="step"/>
+<chart id="step" title="Step Chart" width="500" height="250" type="step" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  step.setModel(datemodel);
+</zscript>
+
+<label value="stacked_area"/>
+<chart id="xystackedarea" title="XY Stacked Area Chart" width="500" height="250" type="stacked_area" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xystackedarea.setModel(xymodel);
+</zscript>
+
+<label value="bar"/>
+<chart id="xybar" title="XY Bar Chart" width="500" height="250" type="bar" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  xybar.setModel(xymodel);
+</zscript>
+
+<label value="histogram"/>
+<chart id="histogram" title="Histogram Chart" width="500" height="250" type="histogram" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  histogram.setModel(xymodel);
+</zscript>
+
+<zscript>
+HiLoModel hilomodel = new SimpleHiLoModel();
+long d = new Date().getTime();
+hilomodel.addValue(new Date(d),  new Double(45.5),  new Double(54.2), new Double(19.9), new Double(42.8), new Double(20));
+hilomodel.addValue(new Date(d+1000),  new Double(46.5),  new Double(55.2),  new Double(43.8), new Double(50.9),   new Double(32));
+hilomodel.addValue(new Date(d+2000),  new Double(47.5),  new Double(56.2),  new Double(44.8), new Double(51.9),   new Double(33));
+hilomodel.addValue(new Date(d+3000),  new Double(48.5),  new Double(57.2),  new Double(45.8), new Double(52.9),   new Double(34));
+hilomodel.addValue(new Date(d+4000),  new Double(49.5),  new Double(58.2),  new Double(46.8), new Double(53.9),   new Double(35));
+hilomodel.addValue(new Date(d+5000),  new Double(50.5),  new Double(59.2),  new Double(47.8), new Double(54.9),   new Double(36));
+hilomodel.addValue(new Date(d+6000),  new Double(51.5),  new Double(60.2),  new Double(48.8), new Double(55.9),   new Double(37));
+hilomodel.addValue(new Date(d+7000),  new Double(52.5),  new Double(61.2),  new Double(49.8), new Double(56.9),   new Double(38));
+hilomodel.addValue(new Date(d+8000),  new Double(53.5),  new Double(62.2),  new Double(50.8), new Double(57.9),   new Double(39));
+hilomodel.addValue(new Date(d+9000),  new Double(54.5),  new Double(63.2),  new Double(51.8), new Double(58.9),   new Double(40));
+hilomodel.addValue(new Date(d+10000),  new Double(55.5),  new Double(64.2),  new Double(52.8), new Double(59.9),   new Double(41));
+hilomodel.addValue(new Date(d+11000),  new Double(56.5),  new Double(65.2),  new Double(53.8), new Double(60.9),   new Double(42));
+hilomodel.addValue(new Date(d+12000),  new Double(57.5),  new Double(66.2),  new Double(54.8), new Double(61.9),   new Double(43));
+hilomodel.addValue(new Date(d+13000),  new Double(58.5),  new Double(67.2),  new Double(55.8), new Double(62.9),   new Double(44));
+hilomodel.addValue(new Date(d+14000),  new Double(59.5),  new Double(68.2),  new Double(56.8), new Double(63.9),   new Double(45));
+hilomodel.addValue(new Date(d+15000),  new Double(60.5),  new Double(69.2),  new Double(57.8), new Double(64.9),   new Double(46));
+hilomodel.addValue(new Date(d+16000),  new Double(61.5),  new Double(70.2),  new Double(58.8), new Double(65.9),   new Double(47));
+hilomodel.addValue(new Date(d+17000),  new Double(62.5),  new Double(71.2),  new Double(59.8), new Double(66.9),   new Double(48));
+hilomodel.addValue(new Date(d+18000),  new Double(63.5),  new Double(72.2),  new Double(60.8), new Double(67.9),   new Double(49));
+</zscript>
+
+<label value="candlestick"/>
+<chart id="candlestick" title="Candlestick Chart" width="500" height="250" type="candlestick" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  candlestick.setModel(hilomodel);
+</zscript>
+
+<label value="highlow"/>
+<chart id="highlow" title="High Low Chart" width="500" height="250" type="highlow" threeD="false" fgAlpha="128" onClick="drilldown()"
+dateFormat="yyyy/MM/dd" />
+<zscript>
+  highlow.setModel(hilomodel);
+</zscript>
+
+<zscript>
+XYZModel xyzmodel = new SimpleXYZModel();
+xyzmodel.addValue("2001", new Integer(20), new Integer(120), new Integer(8));
+xyzmodel.addValue("2001", new Integer(40), new Integer(135), new Integer(10));
+xyzmodel.addValue("2001", new Integer(60), new Integer(140), new Integer(6));
+xyzmodel.addValue("2001", new Integer(80), new Integer(160), new Integer(12));
+
+xyzmodel.addValue("2002", new Integer(30), new Integer(120), new Integer(4));
+xyzmodel.addValue("2002", new Integer(50), new Integer(135), new Integer(5));
+xyzmodel.addValue("2002", new Integer(70), new Integer(140), new Integer(3));
+xyzmodel.addValue("2002", new Integer(90), new Integer(160), new Integer(6));
+</zscript>
+
+<label value="bubble"/>
+<chart id="bubble" title="Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"/>
+<zscript>
+  bubble.setModel(xyzmodel);
+</zscript>
+
+<label value="bubble horizontal"/>
+<chart id="hbubble" title="Horizontal Bubble Chart" width="500" height="250" type="bubble" threeD="false" fgAlpha="128" onClick="drilldown()"  orient="horizontal"/>
+<zscript>
+  hbubble.setModel(xyzmodel);
+</zscript>
+
+<zscript><![CDATA[
+final int xdim = 30;
+final int ydim = 20;
+final Random random = new Random();
+WaferMapModel wafermodel = new WaferMapModel(xdim, ydim);
+for (int x = 0; x < xdim; x++) {
+	for (int y = 0; y < ydim; y++) {
+		wafermodel.addValue(random.nextInt(5), x, y);
+	}
+}
+]]></zscript>
+
+<label value="wafermap"/>
+<chart id="wafermap" title="Wafer Map Chart" width="500" height="400" type="wafermap" threeD="false" fgAlpha="128" onClick="drilldown()" />
+<zscript>
+  wafermap.setModel(wafermodel);
+</zscript>
+
+<zscript><![CDATA[
+import org.zkoss.zul.GanttModel.GanttTask;
+
+//series, task (task description, start, end, complete percentage)
+GanttModel ganttmodel = new GanttModel();
+ganttmodel.addValue("Scheduled", new GanttTask("Write Proposal", date(2008,4,1), date(2008,4,5), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Obtain Approval", date(2008,4,9), date(2008,4,9), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Requirements Analysis", date(2008,4,10), date(2008,5,5), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Phase", date(2008,5,6), date(2008,5,30), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Signoff", date(2008,6,2), date(2008,6,2), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Alpha Implementation", date(2008,6,3), date(2008,7,31), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Design Review", date(2008,8,1), date(2008,8,8), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Revised Design Signoff", date(2008,8,10), date(2008,8,10), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Beta Implementation", date(2008,8,12), date(2008,9,12), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Testing", date(2008,9,13), date(2008,10,31), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Final Implementation", date(2008,11,1), date(2008,11,15), 0.0));
+ganttmodel.addValue("Scheduled", new GanttTask("Signoff", date(2008,11,28), date(2008,11,30), 0.0));
+
+ganttmodel.addValue("Actual", new GanttTask("Write Proposal", date(2008,4,1), date(2008,4,3), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Obtain Approval", date(2008,4,9), date(2008,4,9), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Requirements Analysis", date(2008,4,10), date(2008,5,15), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Phase", date(2008,5,15), date(2008,6,17), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Signoff", date(2008,6,30), date(2008,6,30), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Alpha Implementation", date(2008,7,1), date(2008,9,12), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Design Review", date(2008,9,12), date(2008,9,22), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Revised Design Signoff", date(2008,9,25), date(2008,9,27), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Beta Implementation", date(2008,8,12), date(2008,9,12), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Testing", date(2008,10,31), date(2008,11,17), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Final Implementation", date(2008,11,18), date(2008,12,5), 0.0));
+ganttmodel.addValue("Actual", new GanttTask("Signoff", date(2008,12,10), date(2008,12,11), 0.0));
+]]></zscript>
+
+<label value="gantt"/>
+<chart id="gantt" title="Gantt Chart" width="700" height="400" type="gantt" threeD="false" fgAlpha="128" onClick="drilldown()" 
+dateFormat="yyyy/MM/dd" />
+<zscript>
+  gantt.setModel(ganttmodel);
+</zscript>
+
+<zscript>
+XYZModel windmodel = new SimpleXYZModel();
+//series, date, direction (0-12), force(0-12)
+windmodel.addValue("Wind!", new Long(date(2008, 1, 3).getTime()), new Double(0d), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 4).getTime()), new Double(1d), new Double(8.5));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 5).getTime()), new Double(2.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 6).getTime()), new Double(3.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 7).getTime()), new Double(4.0), new Double(7.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 8).getTime()), new Double(5.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 9).getTime()), new Double(6.0), new Double(8.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 10).getTime()), new Double(7.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 11).getTime()), new Double(8.0), new Double(10.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 12).getTime()), new Double(9.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 13).getTime()), new Double(10.0), new Double(3.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 14).getTime()), new Double(11.0), new Double(9.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 15).getTime()), new Double(12.0), new Double(11.0));
+windmodel.addValue("Wind!", new Long(date(2008, 1, 16).getTime()), new Double(0.0), new Double(0.0));
+</zscript>
+
+<label value="wind"/>
+<chart id="wind" title="Wind Plot" width="700" height="400" type="wind" threeD="false" fgAlpha="128" onClick="drilldown()"
+dateFormat="yyyy/MM/dd" />
+<zscript>
+  wind.setModel(windmodel);
+</zscript>
+
+<label value="dial"/>
+<window onOK="doOK()" width="350px">
+<zscript>
+<![CDATA[
+    import org.zkoss.zul.DialModel;
+    import org.zkoss.zul.DialModelScale;
+
+    int val= 40;
+
+	DialModel dialmodel = new DialModel();
+	DialModelScale scale = dialmodel.newScale(0.0, 100.0, -120.0, -300.0, 10.0, 4);//scale's configuration data
+	scale.setText("Temperature");
+	scale.newRange(80, 100, "#FF0000", 0.83, 0.89);
+	scale.newRange(60, 80, "#FFC426", 0.83, 0.89);
+	scale.setValue(val);
+	String bg2 = dialmodel.getFrameBgColor2();
+
+]]>
+</zscript>
+<chart id="dial" title="Dial Plot" width="300" height="300" type="dial" threeD="false" fgAlpha="128"/>
+<zscript>
+  dial.setModel(dialmodel);
+</zscript>
+	<hbox>
+		<slider id="slx" curpos="${val}">
+			<attribute name="onScroll"><![CDATA[
+				val = slx.getCurpos();
+				if (val > 100) {
+					val = 100;
+				} else if (val < 0) {
+					val = 0;
+				}
+				dbx.setValue(""+val);
+				scale.setValue(val);
+				if (val > 80) {
+					scale.setNeedleColor(scale.getRange(0).getRangeColor());
+					dialmodel.setFrameBgColor2(scale.getRange(0).getRangeColor());
+				} else if (val > 60) {
+					scale.setNeedleColor(scale.getRange(1).getRangeColor());
+					dialmodel.setFrameBgColor2(scale.getRange(1).getRangeColor());
+				} else {
+					scale.setNeedleColor(dialmodel.getFrameFgColor());
+					dialmodel.setFrameBgColor2(bg2);
+				}
+			]]></attribute>
+		</slider>
+		<label id="dbx"/>
+	</hbox>
+</window>
+
+</vbox>

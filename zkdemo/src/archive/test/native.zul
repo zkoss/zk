@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-native.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 19 19:50:09     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>This is outside of any ZUL component</n:li>
+		<n:li><button label="Hi" focus="true" onClick='alert("Hi")'/></n:li>
+	</n:ol>
+
+<window id="wnd" title="Test of inline html tags">
+	<zscript>
+	String[] values = new String[] {"Red", "Blue", "Purple"};
+	</zscript>
+	<n:ul>
+		 <n:li id="direct"><!-- inline's id shall not be part of ID space -->
+		 	Some random text shall be consider part of inline.
+		 	<!-- a comment -->Something after comment.<n:br/>
+		 	Window title: ${wnd.title}
+		 </n:li>
+ 		<n:li id="direct"><!-- it is OK to have the same ID if inine -->
+			<textbox id="tb" onChanging="i1.value = event.value"/>
+			text in between
+			<combobox id="i1"/>
+		</n:li>
+  		<n:li style="color:blue">
+  			Mixed with
+			<datebox onChange="tb.value = org.zkoss.lang.Objects.toString(self.value)"/>
+			<n:br/>
+			and inline text.
+		 </n:li>
+	</n:ul>
+	<n:ul>
+		<n:li><n:code>Codes: <textbox/></n:code></n:li>
+	</n:ul>
+	<n:ol>
+		<n:li forEach="${values}">${each}</n:li>
+	</n:ol>
+	<n:div style="border:1px solid blue">
+		<zk forEach="${values}"><n:b>o</n:b> ${each}</zk>
+	</n:div>
+
+	<svg width="100%" height="100%" version="1.1" xmlns="native:http://www.w3.org/2000/svg">
+		<ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple"/>
+		<ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime"/>
+		<ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow"/>
+	</svg> 
+</window>
+</zk>

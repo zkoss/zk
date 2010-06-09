@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1796281.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 11 11:24:01 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>[ 1796281 ] Improve Working with Combobox. Both setSelectedItem(Comboitem item) and setSelectedIndex(int jsel) are
+supported.</n:p>
+	<n:ol>
+		<n:li>click selectedItem , then combobox will sets the selectItem to "Cool!"</n:li>
+		<n:li>click selectedIndex, then combobox will sets the selectItem to "Thumbs Up!"</n:li>
+	</n:ol>
+	<combobox id="cbbox">
+		<comboitem label="Apple" />
+		<comboitem label="Grape" />
+		<comboitem id="c" label="Cool!" />
+		<comboitem label="Simple and Rich" />
+		<comboitem label="Thumbs Up!" />
+	</combobox>
+	<button label="selectedItem = Cool!" onClick="cbbox.selectedItem = c"/>
+	<button label="selectedIndex = 4" onClick="cbbox.selectedIndex = 4"/>
+</zk>

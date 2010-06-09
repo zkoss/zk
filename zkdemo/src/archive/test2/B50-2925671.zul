@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-2925671.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Jan  7 10:05:22 TST 2010, Created by jimmyshiau
+	
+	Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	Please check the combobox drop down list will be close correct after clicking twice quickly
+	<combobox>
+		<comboitem label="Simple and Rich" />
+		<comboitem label="Cool!" />
+		<comboitem label="Thumbs Up!" />
+	</combobox>
+</zk>

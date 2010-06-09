@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1797701.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 29 14:55:25 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h2>[ 1797701 ] Slider tooltip text customization</n:h2>
+	<n:ol>
+		<n:li>drag the slider, it will show scrolling message, then click the button and drag again, the message should change.</n:li>
+	</n:ol>
+	<slider id="sld" slidingtext="Here is a position : {0}"/>
+	<button label="change" onClick='sld.slidingtext = "position {0} is here " '/>
+</zk>

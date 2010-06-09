@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1896737.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 19 18:00:02 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>Showing progessing when loading a zul by include component</n:h2>
+<window id="w">
+	<button label="Go Test Include">
+		<attribute name="onClick">
+			Include ic = new Include("./F1896737_1.zul");
+			ic.setProgressing(true); ic.setParent(w);
+		</attribute>
+	</button>
+</window>
+
+</zk>

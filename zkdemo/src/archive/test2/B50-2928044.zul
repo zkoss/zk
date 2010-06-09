@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2928044.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan  8 12:57:44 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should not type the words more than 3.
+<textbox maxlength="3"/>
+</zk>

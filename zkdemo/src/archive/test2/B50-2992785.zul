@@ -1,0 +1,38 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+Please click each link and the message should only consist of alphanumeric number and underscore (i.e., a-z, A-Z, 0-9 and _).
+<zscript>
+	public class Link {
+		private String _href;
+		
+		public Link(String href) {
+			setLink(href);
+		}
+		
+		public String getLink() {
+			return _href;
+		}
+		
+		public void setLink(String href) {
+			_href = href;
+		}
+	}
+
+	List links = new ArrayList(3);
+	links.add(new Link("http://www.zkoss.org"));
+	links.add(new Link("http://jp.zkoss.org"));
+	links.add(new Link("http://zh.zkoss.org"));
+	links.add(new Link("http://www.potix.com"));
+</zscript>
+
+<groupbox>
+	<caption label="grid"/>
+	<grid model="@{links}">
+	<rows>
+	<row each="@{link1}">
+		<h:a onclick="alert(this.id);"><label value="@{link1.link}"/></h:a>
+	</row>
+	</rows>
+	</grid>
+</groupbox>
+</zk>

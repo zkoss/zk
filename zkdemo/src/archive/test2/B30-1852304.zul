@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1852304.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 24 17:55:29 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h5>When you click the menu x and y, the listbox should be shown.</n:h5>
+	<window>
+		<checkbox label="autodrop" onCheck="menubar.autodrop = !menubar.autodrop"/>
+		<menubar id="menubar">
+			<menu label="x">
+				<menupopup>
+					<menuitem label="y" popup="z" />
+				</menupopup>
+			</menu>
+		</menubar>
+		<popup id="z"
+			style="padding: 3pt; border: outset 2px; background-color:#EEEEDD;">
+
+			<listbox width="250px">
+				<listhead sizable="true">
+					<listheader label="name" sort="auto" />
+					<listheader label="gender" sort="auto" />
+				</listhead>
+				<listitem>
+					<listcell label="Mary" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="John" />
+					<listcell label="MALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Jane" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Henry" />
+					<listcell label="MALE" />
+				</listitem>
+			</listbox>
+		</popup>
+	</window>
+</zk>

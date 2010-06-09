@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?variable-resolver class="org.zkoss.zkdemo.test.VariableResolverImpl"?>
+<?variable-resolver class="org.zkoss.zkdemo.test.VariableResolverImpl" arg0="abc"?>
+<!--
+F30-1843863.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec  6 18:27:41     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1843863 ]  Able to Pass Arguments to Variable-Resolver Directive</n:h2>
+<div>
+	You shall see this.
+	Also check the log (stdout).
+<n:br/>
+        (Oops~ the server is on the remote side, maybe we should find a better way to test this feature!!!)
+</div>
+</zk>

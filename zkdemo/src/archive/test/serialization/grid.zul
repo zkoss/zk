@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+grid.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 13 12:22:27     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of Grid's Serialization">
+<vbox id="vb">
+	<grid id="grid">
+		<columns sizable="true" menupopup="auto">
+			<column label="Type" sort="auto"/>
+			<column label="Content"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="File:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<label value="Type:"/>
+				<hbox>
+					<listbox rows="1" mold="select">
+						<listitem label="Java Files,(*.java)"/>
+						<listitem label="All Files,(*.*)"/>
+					</listbox>
+					<button label="Browse..."/>
+				</hbox>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="Clone">
+		<attribute name="onClick">{
+	Object l = grid.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		}</attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(grid);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+</vbox>
+</window>

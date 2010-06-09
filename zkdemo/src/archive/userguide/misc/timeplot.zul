@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+timeplot.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	<html><![CDATA[
+<h4>SIMILE Timeplot</h4>
+<p><a href="http://simile.mit.edu/timeplot/" target="zkdemo">Timeplot</a> is a DHTML-based AJAXy widget for plotting time
+series and overlay time-based events over them. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>  
+<div style="display:none;" id="infos">
+<p>You can populate Timeplot with data by pointing it to an space
+or comma separated file. Timeplot also supports Timeline's XML format, meaning that you can reuse the same data
+file of your Timeline and overlay them over a time series plot.</p>
+Source from <a href="misc/immigration.txt" target="zkdemo">immigration.txt</a> and
+<a href="misc/us_history.xml" target="zkdemo" >us_history.xml</a>.
+</div>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<div width="1200px">
+		New Legal Permanent Residents in the U.S. (per year) vs. U.S.
+		History
+		<zscript>
+			import org.zkforge.timeplot.geometry.*; 
+			import org.zkforge.timeplot.data.*;
+			import org.zkforge.timeplot.operator.*;
+			import org.zkforge.timeline.data.OccurEvent;
+			import org.zkoss.zul.*;
+			PlotDataSource pds=new PlotDataSource();
+			pds.setDataSourceUri("misc/immigration.txt");
+			pds.setSeparator(" ");
+			ValueGeometry vg=new DefaultValueGeometry();
+			vg.setGridColor("#000000");
+			TimeGeometry tg=new DefaultTimeGeometry();
+			tg.setAxisLabelsPlacement("bottom");
+		</zscript>
+		<timeplot width="1000px" height="300px">
+			<plotinfo id="plot 1" plotDataSource="&#36;{pds}"
+				dotColor="#000000" showValues="true" lineColor="#008bb6"
+				valueGeometry="&#36;{vg}" timeGeometry="&#36;{tg}"
+				eventSourceUri="misc/us_history.xml" />
+		</timeplot>
+	</div>
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

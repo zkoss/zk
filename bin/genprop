@@ -1,0 +1,164 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#
+# Authors: Tom M. Yeh
+# Contributors:
+# Create Date: 2001/3/30 05:46PM
+# Purpose: Generate Java classes from properties files
+# Description:
+#	Execute 'genprop -h' to know how to use.
+# History:
+#	5/19/2001	Tom M. Yeh, allow to processing non-utf files and specify
+#				different paths
+#
+#}}IS_NOTE
+#
+# Copyright (C) 2001 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+function showhelp
+{
+	echo "genprop - generate Java classes from properties files"
+	echo "Copyright (C) 2001 Potix Corporation. All Rights Reserved."
+	echo
+	echo "Usage:"
+	echo "  genprop [-f] [-h] [-u] prop_dir dst_dir"
+	echo
+	echo "prop_dir"
+	echo "    The directory holds the properties files, *.properties."
+	echo "    If -u is specified, *.properties.utf are expected."
+	echo "dst_dir"
+	echo "    The destination directory, where the generated java codes"
+	echo "    are stored."
+	echo
+	echo "Example:"
+	echo "    genpro src/conf codegen"
+	echo
+	echo "Options:"
+	echo " -f"
+	echo "    Force the generation without checking whether it is newer."
+	echo " -u"
+	echo "    UTF files (with .utf extension) expected."
+	echo " -x"
+	echo "    Exclude filename that contains '_'."
+	echo " -h or --help"
+	echo "    Show this message."
+	echo
+	echo "Format of the properties.utf file:"
+	echo "#@=TypeName"
+	echo "    and all constants are added with the type name, e.g, MT_SYS."
+	echo "    It must be at the first line."
+	echo
+	echo "#-=M_FILE_NOT_FOUND"
+	echo "1002=File Not Found"
+	echo "    Other part is composed as pair of lines. The first line of"
+	echo "    each pair specifies the constant name (at second column)"
+	echo "    The second line of each pair specifies the value (1002 in"
+	echo "    the above example). Notice: hexadecimal is assumed, only"
+	echo "    lower-case with four digits is allowed, and starts at 1000."
+	echo
+	echo " * 
+	echo " * You have to maintain org.zkoss.mesg.MessageConst.java"
+	echo "   consistently, if you add a new properties file."
+	echo " * Lines starting with # or being empty are ignored."
+}
+
+#-- check options
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
+	showhelp
+	exit 0
+fi
+
+if [ -f /usr/bin/gawk ] ; then
+	awkpg=/usr/bin/gawk
+elif [ -f /usr/bin/nawk ] ; then
+	awkpg=/usr/bin/nawk
+else
+	fn=$(which nawk)
+	if [ -f "$fn" ] ; then
+		awkpg=nawk
+	else
+		fn=$(which gawk)
+		if [ -f "$fn" ] ; then
+			awkpg=gawk
+		else
+			awkpg=awk
+		fi
+	fi
+fi
+
+awkpath=$0
+force=0
+flext=.properties
+exclude=N.O.E.X.I.S.T
+
+while getopts "fhux" opt; do
+  case $opt in
+  h )	showhelp
+		exit 0;;
+  f )	force=1;;
+  u )	flext=.properties.utf;;
+  x )	exclude=_;;
+  \? )	echo "Try 'genprop --help' for more information"
+		exit 1;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+if [ $# != 2 ] ; then
+	echo "genprop: wrong number of arguments"
+	echo "Try 'genprop --help' for more information"
+	exit 1
+fi
+
+cnfpath=$1
+codegendir=$2
+
+#-- check directory structure
+if [ ! -d $cnfpath ] ; then
+	echo "Error: $cnfpath is not a directory" 1>&2
+	exit 1
+fi
+
+#-- start process
+for fn in $cnfpath/*$flext ; do
+	if [ \( -f "$fn" \) -a \( "${fn#*$exclude}" = "$fn" \) ] ; then
+		msgnm=${fn##$cnfpath/}
+		msgnm=${msgnm%$flext}
+
+		clsnm=$(head -1 $fn)
+		clsnm=${clsnm###class=}
+		pkgnm=${clsnm%.*}
+		clsnm=${clsnm##*.}
+
+		if [ "$clsnm" = "" ] || [ "$pkgnm" = "" ] ; then
+			echo The first line of $fn must be "#class=package.class"
+			exit 1
+		fi
+
+		pkgpath=${codegendir}/${pkgnm//.//}
+		dstfn=${pkgpath}/${clsnm}.java
+
+		#update if newer
+		if [ \( force = 1 \) -o \( ! -f "$dstfn" \) -o \( "$fn" -nt "$dstfn" \) ] ; then
+			echo "Generating $dstfn..."
+
+			if [ "$awkfn" = "" ] ; then
+				if [ "$TERM" = "cygwin" ] ; then
+					awkpath=$(cygpath -u $awkpath)
+				fi
+				awkfn=${awkpath%/*}/genprop.awk
+			fi
+
+			mkdir -p $pkgpath
+			args="-f $awkfn -v pkgnm=$pkgnm -v clsnm=$clsnm -vmsgnm=$msgnm -vusernm=$USER"
+			$awkpg $args -v "when=$(date)" "$fn" > "$dstfn"
+		fi
+	fi
+done

@@ -1,0 +1,129 @@
+<!--
+desktop.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 21 18:59:49     2006, Created by Ian tsai
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<html><![CDATA[
+<h3>test Vertical/Horizontal Tabbox with different style</h3>
+]]></html>
+<zscript><![CDATA[  
+//@DECLARATION
+int count = 0;
+Tab tab = null;
+Tabpanel tPanel = null;
+
+void addTabAndPanel(){
+	count++;
+	tab = new Tab("add "+count);
+    tPanel = new Tabpanel();
+    new Label("Tab"+count).setParent(tPanel);
+    tbox.getTabs().getChildren().add(tab);
+    tbox.getTabpanels().getChildren().add(tPanel);
+}
+]]></zscript>
+<button label="invalidate">
+	<attribute name="onClick"><![CDATA[
+		tbox.invalidate();
+	]]></attribute>
+</button>
+<button label="Add and SelectTab">
+	<attribute name="onClick"><![CDATA[
+		addTabAndPanel();
+        tbox.setSelectedTab(tab);
+	]]></attribute>
+</button>
+<button label="Add and SelectTab">
+	<attribute name="onCreate"><![CDATA[
+            self.label=tbox.orient;
+	]]></attribute>
+
+	<attribute name="onClick"><![CDATA[
+		if(tbox.orient.equals("vertical"))tbox.orient = "horizontal";
+		else tbox.orient = "vertical";
+	]]></attribute>
+</button>
+<button label="Tabbox width 100%" onClick='tbox.width="100%";'/>
+<button label="Tabbox Height 100%" onClick='tbox.height="100%";'/>
+<button label="Tabbox width 70%" onClick='tbox.width="70%";'/>
+<button label="Tabbox Height 70%" onClick='tbox.height="70%";'/>
+<button label="Tabbox width 20%" onClick='tbox.width="20%";'/>
+<button label="Tabbox Height 20%" onClick='tbox.height="20%";'/>
+<tabbox id="tbox" orient="horizontal" width="50%" height="80%"><!-- mold="accordion-lite" -->
+	<tabs>
+		<tab label="test 1" image="../img/home.gif"/>
+		<tab label="test 2" image="../img/home.gif"/>
+		<tab label="sbffatgrjhit'hijtpi" image="../img/home.gif"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+		<!--CONTAIN-->
+
+		</tabpanel>
+		<tabpanel>
+		<!--CONTAIN-->
+		<window>
+			<zscript>
+		List items = new java.util.AbstractList() {
+			public int size() {
+				return 100;
+			}
+			public Object get(int j) {
+				return new Integer(j);
+				}
+		};
+			int end = 50;
+			</zscript>
+			Show 5 to 50 and select 10.
+			<listbox id="l" rows="50">
+				<listitem forEach="${items}" forEachBegin="5" forEachEnd="${end}"
+				selected="${forEachStatus.index == 10}">
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				</listitem>
+			</listbox>
+		</window>
+		</tabpanel>
+		<tabpanel>
+		<!--CONTAIN-->
+		<window>
+			<zscript>
+		List items = new java.util.AbstractList() {
+			public int size() {
+				return 100;
+			}
+			public Object get(int j) {
+				return new Integer(j);
+				}
+		};
+			int end = 50;
+			</zscript>
+			Show 5 to 50 and select 10.
+			<listbox id="l" rows="50">
+				<listitem forEach="${items}" forEachBegin="5" forEachEnd="${end}"
+				selected="${forEachStatus.index == 10}">
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+				</listitem>
+			</listbox>
+		</window>
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+</zk>

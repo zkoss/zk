@@ -1,0 +1,85 @@
+<window>
+<panel id="p1" title="Panel Component" border="normal" width="500px" maximizable="true" minimizable="true">
+	<panelchildren>
+		<grid>
+			<columns>
+				<column label="Name" />
+				<column label="Description" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Ivan" />
+					<label value="MIS" />
+				</row>
+				<row>
+					<label value="ohpizz" />
+					<label value="Testing" />
+				</row>
+			</rows>
+		</grid>
+	</panelchildren>
+</panel>
+		<button label="Close">
+			<attribute name="onClick">
+				p1.open = !p1.open;
+				self.label = p1.open == true ? "close" : "open";
+			</attribute>
+		</button>
+		
+		<separator />
+
+		<button label="Change maximized">
+			<attribute name="onClick">
+					p1.maximized=!p1.maximized;
+			</attribute>
+		</button>
+		<button label="Change minimized">
+			<attribute name="onClick">
+					p1.minimized=!p1.minimized;
+			</attribute>
+		</button>
+		
+		<separator />
+
+		<button label="Add top toolbar">
+			<attribute name="onClick">
+				if(topbar.visible==false) {
+					p1.addToolbar("tbar", topbar);
+					topbar.visible=true;
+				} else
+					alert("Only one top toolbar is allowed");
+			</attribute>
+		</button>
+		<button label="Add bottom toolbar">
+			<attribute name="onClick">
+				if(bottombar.visible==false) {
+					p1.addToolbar("bbar", bottombar);
+					bottombar.visible=true;
+				} else
+					alert("Only one bottom toolbar is allowed");
+			</attribute>
+		</button>
+		<button label="Add foot toolbar">
+			<attribute name="onClick">
+				if(footbar.visible==false) {
+					p1.addToolbar("fbar", footbar);
+					footbar.visible=true;
+				} else
+					alert("Only one foot toolbar is allowed");
+			</attribute>
+		</button>
+		<toolbar id="topbar" visible="false">
+			<toolbarbutton label="top1" />
+			<toolbarbutton label="top2" />
+		</toolbar>
+		<toolbar id="bottombar" visible="false">
+			<toolbarbutton label="bottom1" />
+			<toolbarbutton label="bottom2" />
+		</toolbar>
+		<toolbar id="footbar" visible="false">
+			<toolbarbutton label="foot1" />
+			<toolbarbutton label="foot2" />
+		</toolbar>
+		<separator />
+		Click buttons and it should work well.
+</window>

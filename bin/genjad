@@ -1,0 +1,32 @@
+#!/bin/bash
+# genjad
+#
+#{{IS_NOTE
+#	Purpose:
+#		Move prj.jad from src to codegen
+#	Description:
+#		
+#	History:
+#		Mon Nov 27 18:53:46     2006, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+if [ $# != 3 ] ; then
+	echo "Usage:"
+	echo "  genjad jar-file src-jad-file dst-jad-file"
+	echo
+	echo "Generate the destination JAD file based on the source JAD file, if any,"
+	echo "and the JAR file."
+	exit 1
+fi
+
+if [ -f $1 ] && [ -f $2 ] ; then
+	if [ ! -f $3 ] || [ $1 -nt $3 ] || [ $2 -nt $3 ]; then
+		jarsz=$(ls -og $1 | cut -d' ' -f3)
+		sed -e "s/{jar-size}/$jarsz/" $2 > $3
+	fi
+fi

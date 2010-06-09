@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="include" extends="include" mode="defer" ?>
+<!--
+	Z35-protal-0001.zul
+	
+	{{IS_NOTE
+	Purpose:
+	
+	Description:
+	
+	History:
+	Tue May  6 09:29:59 TST 2008, Created by DennisChen
+	}}IS_NOTE
+	
+	Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+	
+	{{IS_RIGHT
+	}}IS_RIGHT
+-->
+<window title="Grid with Group feature" border="normal">
+	<html><![CDATA[  
+	Test Protal base Functionativity <br/> 
+	1.Include many zk componet, all components whould work correctly
+	]]></html>
+	<zscript><![CDATA[//@IMPORT
+	
+	]]>
+	<![CDATA[//@DECLARATION
+	
+	]]>
+	<![CDATA[
+	
+	]]></zscript>
+	<button id="btn" label="fill"/>
+	<portallayout>
+		<portalchildren width="50%" fulfill="btn.onClick">
+			<panel height="80px" title="Listbox 1 with menu">
+				<panelchildren>
+					<include src="Z35-portallayout-comp.zul?menu1=true"/>
+					<include src="Z35-portallayout-comp.zul?listbox1=true"/>
+				</panelchildren>
+			</panel>
+			<panel height="200px" title="Listbox2">
+				<panelchildren>
+					<include src="Z35-portallayout-comp.zul?listbox2=true"/>
+				</panelchildren>
+			</panel>
+			<panel height="150px" title="Tree">
+				<panelchildren>
+					<include src="Z35-portallayout-comp.zul?tree1=true"/>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren width="30%" fulfill="btn.onClick">
+			<panel height="150px" title="Tabbox">
+				<panelchildren>
+					<include src="Z35-portallayout-comp.zul?tabbox1=true"/>
+				</panelchildren>
+			</panel>
+			<panel height="250px" title="Groupbox">
+				<panelchildren>
+					<include src="Z35-portallayout-comp.zul?groupbox1=true"/>
+					<include src="Z35-portallayout-comp.zul?groupbox1=true"/>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren width="20%" fulfill="btn.onClick">
+			<panel height="350px" title="Label/Image">
+				<panelchildren>
+				
+				<include src="Z35-portallayout-comp.zul?images1=true"/>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+
+	</portallayout>
+
+</window>

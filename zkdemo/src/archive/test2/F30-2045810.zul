@@ -1,0 +1,42 @@
+<?page id="firstZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk>
+	<html><![CDATA[
+	<ol>
+	<li>You shall see a window with a Listbox with "Item 0" ~ "Item 29", and a button "Add new Listbox".</li>
+	<li>Select "Item 2", you shall see "Item 2" appear at the bottom.</li>
+	<li>Select "Item 5", you shall see "Item 5" appear at the bottom.</li>
+	<li>Press the button "Add new Listbox", you shall see a new window with a new Listbox.
+	In the new added Listbox, you shall see "Added Item 0" ~ "Added Item 5"</li>
+	<li>Select "Added Item 3", you shall see "Added Item 3" appear at the bottom of the new window.
+	Notice that the "Item 5" at the bottom of the first window shall NOT change.</li>
+	<li>Select "Added Item 1", you shall see "Added Item 1" appear at the bottom of the new window.
+	Notice that the "Item 5" at the bottom of the first window shall NOT change.</li>
+	<li>Now Select "Item 1" of the first window, you shall see "Item 1" appear at the bottom.
+	Notice that the "Added Item 1" at the bottom of the new window shall NOT change.</li>
+	<li>Done</li>
+	</ol>
+	]]></html>
+<window id="mywin" title="First Window" border="normal" width="100%">
+	<zscript><![CDATA[
+		String[] list = new String[30];
+		for(int j = 0; j < list.length; ++j) {
+			list[j] = "Item "+j;
+		}
+	]]></zscript>
+	
+	<listbox model="@{list}" height="100px" selectedItem="@{current}">
+		<listitem self="@{each=str}" label="@{str}"/>
+	</listbox>
+	<label value="@{current}"/>
+	
+	
+	<button label="Add new Listbox">
+		<attribute name="onClick"><![CDATA[
+			Executions.createComponents("/test2/F30-2045810_1.zul", null, null);
+		]]></attribute>
+	</button>
+</window>
+
+</zk>

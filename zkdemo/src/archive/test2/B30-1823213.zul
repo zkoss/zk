@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:h3> [ 1823213 ] Listbox in hbox right side bound is gone</h:h3>
+	<h:pre>
+While put listbox in hbox the right side of listbox is gone.
+	</h:pre>
+<vbox>
+
+	<hbox width="502px">
+		<listbox width="500px" id="w_list_listbox" multiple="true" checkmark="true">
+			<listhead id="w_tr_listhead" >
+				<listheader label="account" width="25%" /> 
+				<listheader label="name" width="25%" /> 
+				<listheader label="email" width="25%" /> 
+				<listheader label="edit" width="25%" /> 
+			</listhead>
+			<listitem>
+				<listcell label="davidwu" /> 
+				<listcell label="David Wu"/> 
+				<listcell>
+					<label value="davidwu@hotmail.com"/> 
+				</listcell>
+				<listcell> 
+					<label value="davidwu@hotmail.com"/> 
+				</listcell> 
+			</listitem> 
+		</listbox> 
+	</hbox>
+
+	<listbox  width="500px">
+		<listhead>
+			<listheader label="Population"/>
+			<listheader label="Percentage"/>
+			<listheader label="Description"/>
+		</listhead>
+		<listitem id="li0" value="A">
+			<listcell label="A. Graduate"/>
+			<listcell label="20%"/>
+			<listcell label="More or less"/>
+		</listitem>
+	</listbox>
+</vbox>
+</zk>

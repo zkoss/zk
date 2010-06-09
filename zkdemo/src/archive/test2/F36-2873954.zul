@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2873954.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct  7 18:31:09     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Click upon the arrow left, you should see a popup message.
+	<separator/>
+	2. Click upon the arrow, you should see the submenu is shown.
+<menubar>
+ <menu label="Topmost" onClick='alert(1);'>
+  <menupopup>
+    <menuitem label="Submenu"/>
+  </menupopup>
+ </menu>
+</menubar>
+</zk>

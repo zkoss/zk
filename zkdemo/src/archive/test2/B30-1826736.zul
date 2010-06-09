@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<window id="win">
+The bug is that the first column of data disappear when i press the
+header to sort by a column.
+    <zscript><![CDATA[
+		List names = new ArrayList(3);
+		names.add("Tom");
+		names.add("John");
+		names.add("Mary");
+	]]></zscript>
+
+	<listbox width="500px" id="boxListado" height="200px" model="@{names}">
+		<listhead>
+			<listheader label="name" sort="auto"/>
+		</listhead>
+		<listitem self="@{each=obj}">
+			<listcell><label value="@{obj}"/></listcell>
+		</listitem>
+	</listbox>
+	
+<zscript>
+		AnnotateDataBinder binder = new AnnotateDataBinder(win);
+		binder.loadAll();
+</zscript>
+</window>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+drapdrop.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Feb 25 18:01:15     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<hbox>
+	Drag around an item:
+	<listbox id="src" multiple="true" width="200px">
+		<listhead>
+			<listheader label="Population"/>
+			<listheader align="right" label="%"/>
+		</listhead>
+		<listitem value="A" draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<listcell label="A. Graduate"/>
+			<listcell label="20%"/>
+		</listitem>
+		<listitem value="B" draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<listcell label="B. College"/>
+			<listcell label="23%"/>
+		</listitem>
+		<listitem value="C" draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<listcell label="C. High School"/>
+			<listcell label="40%"/>
+		</listitem>
+		<listfoot>
+			<listfooter label="More or less"/>
+			<listfooter label="100%"/>
+		</listfoot>
+		<listitem value="D" draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<listcell label="D. Others"/>
+			<listcell label="17%"/>
+		</listitem>
+	</listbox>
+	<zscript>
+	void move(Component dragged) {
+		if (dragged instanceof Listitem) {
+			self.parent.insertBefore(dragged, self);
+		} else {
+			alert("Not an list item");
+		}
+	}
+	int cnt = 0;
+	</zscript>
+	<button label="Switch 2nd/3rd by iter">
+		<attribute name="onClick">{
+Iterator it = src.children.iterator();
+it.next();
+Component c = it.next();
+it.remove();
+it.next();
+it.add(c);
+		}</attribute>
+	</button>
+
+	<vbox>
+	<label id="info"/>
+	<button label="count item">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = src.firstChild; c != null; c = c.nextSibling) {
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count backward">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Component c = src.lastChild; c != null; c = c.previousSibling) {
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count by iter">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (Iterator it = src.children.iterator(); it.hasNext();) {
+	Component c = it.next();
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	<button label="count backward by iter">
+		<attribute name="onClick">
+info.value = ++cnt + ": ";
+for (ListIterator it = src.children.listIterator(src.children.size()); it.hasPrevious();) {
+	Component c = it.previous();
+	info.value += c.firstChild.label + ", ";
+	if (c.parent != src)
+		alert("Not matched");
+}
+		</attribute>
+	</button>
+	</vbox>
+</hbox>
+	<image src="/test2/img/coffee.gif" draggable="1"/>
+	<image src="/test2/img/cubfirs.gif" draggable="2"/>
+	<label style="border: 1px solid blue" value="Type 1" droppable="1"/>
+	<label style="border: 1px solid blue" value="Type 2" droppable="2"/>
+</window>

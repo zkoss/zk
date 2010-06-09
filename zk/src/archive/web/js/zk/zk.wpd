@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 14 12:39:36     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk">
+	<script src="ext/jquery.js"/>
+	<script src="zk.js" jsdoc="true"/>
+	<script src="js.js"/>
+	<script src="dom.js" jsdoc="true"/>
+	<script src="domie.js" browser="ie"/>
+	<script src="domie6.js" browser="ie6-"/>
+	<script src="domopera.js" browser="opera"/>
+	<script src="domsafari.js" browser="safari"/>
+
+	<script src="evt.js" jsdoc="true"/>
+	<script src="anima.js" jsdoc="true"/>
+	<script src="drag.js" jsdoc="true"/>
+	<script src="effect.js" jsdoc="true"/>
+	<script src="math.js" jsdoc="true"/>
+	<script src="utl.js" jsdoc="true"/>
+	<script src="widget.js" jsdoc="true"/>
+	<script src="pkg.js" jsdoc="true"/>
+	<script src="mount.js" jsdoc="true"/>
+	<script src="bookmark.js"/>
+	<script src="au.js" jsdoc="true"/>
+
+	<script src="ext/jquery.json.js"/>
+</package>

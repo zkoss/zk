@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2769863.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 17 17:18:50 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+  it should not have scroll bar !
+  <menubar id="menubar" width="200px">
+    <menu label="Project"
+      image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+      <menupopup>
+	<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png"
+	  label="New"
+	  onClick="alert(self.label)" />
+	<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png"
+	  label="Open"
+	  onClick="alert(self.label)" />
+	<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
+	  label="Save"
+	  onClick="alert(self.label)" />
+	<menuseparator />
+	<menuitem label="Exit"
+	  image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png"
+	  onClick="alert(self.label)" />
+      </menupopup>
+    </menu>
+    <menu label="Help"
+      image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+      <menupopup>
+	<menuitem label="Index" onClick="alert(self.label)" />
+	<menu label="About">
+	  <menupopup>
+	    <menuitem label="About ZK"
+	      onClick="alert(self.label)" />
+	    <menuitem label="About Potix"
+	      onClick="alert(self.label)" />
+	  </menupopup>
+	</menu>
+      </menupopup>
+    </menu>
+    <menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+      <menupopup>
+	<menuitem label="Index" onClick="alert(self.label)" />
+      </menupopup>
+    </menu>
+  </menubar>
+  <checkbox label="Vertical orient">
+    <attribute name="onCheck">
+      menubar.orient= self.checked ? "vertical" : "horizontal";
+      menubar.width = self.checked ? "100px" : "200px";
+    </attribute>
+  </checkbox>
+</zk>

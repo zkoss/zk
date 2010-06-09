@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+python.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 30 11:34:39     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page zscript-language="Python"?>
+<window border="normal">
+	<vbox id="vb">
+		<label id="l" value="Hi"/>
+		<button label="change label" onClick="l.value='Hi, Python';"/>
+	</vbox>
+	<button label="alert" onClick="alert('Hi, Python')"/>
+</window>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z31-evtque.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  5 19:01:44     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of event queue">
+Type "AB" in the textbox, and then click the Test button.
+You shall see three copies of "AB", i.e., "ABABAB"
+<separator/>
+<textbox id="tb"/><button label="Test" onClick="test()"/>
+<separator bar="true"/>
+<label id="l"/>
+	<zscript>
+	import org.zkoss.zkmax.ui.eq.EventQueues;
+	EventListener listener = new EventListener() {
+		public void onEvent(Event event) {
+			l.value += tb.value;
+		}
+	};
+	EventQueues.lookup("test").subscribe(listener);
+	EventQueues.lookup("test").subscribe(listener);
+	EventQueues.lookup("test").subscribe(listener);
+
+	void test() {
+		l.value = "";
+		EventQueues.lookup("test").publish(event);
+	}
+	</zscript>
+</window>

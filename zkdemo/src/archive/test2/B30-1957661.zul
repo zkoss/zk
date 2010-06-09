@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1957661.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  5 12:41:05     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+It is correct, if you saw "MyFunction" below.
+<separator bar="true"/>
+<zscript>
+import org.zkoss.xel.Function;
+import org.zkoss.xel.util.MethodFunction;
+import org.zkoss.xel.util.SimpleMapper;
+
+public class MyFunction extends SimpleMapper {
+	public Function resolveFunction(String prefix, String name) {
+		if ("getString".equals(name)) {
+			try {
+				return new MethodFunction(MyFunction.class.getMethod("getString", null));
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public static String getString(){
+		return "MyFunction";
+	}
+}
+page.addFunctionMapper(new MyFunction());
+</zscript>
+<label value="${c:getString()}"/>
+</zk>

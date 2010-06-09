@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2940707.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 28 15:43:27 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<vbox>
+    <html>
+        <![CDATA[
+            <ol>
+<li>Press button 1. You shall see the layout nothing changed.</li>
+<li>Press button 2. You shall see the layout nothing changed again.</li>
+<li>Press button 3. You shall see Item 2.2.1 removed and the "triangle" icon before Item 2.2
+removed.</li>
+<li>Reload this test case.</li>
+<li>Press button 4. You shall see Item 2.2.1 removed and the "triangle"
+icon before Item 2.2. removed.</li>
+<li>Otherwise, it is a bug!</li>
+</ol>
+        ]]>
+    </html>
+    <tree id="tree" width="400px" rows="8">
+        <treecols sizable="true">
+            <treecol label="Name" />
+            <treecol label="Description" />
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell label="Item 1" />
+                    <treecell label="Item 1 description" />
+                </treerow>
+            </treeitem>
+            <treeitem>
+                <treerow>
+                    <treecell label="Item 2" />
+                    <treecell label="Item 2 description" />
+                </treerow>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2.1" />
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.1.1" />
+                                </treerow>
+                            </treeitem>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.1.2" />
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem id="item221parent">
+                        <treerow>
+                            <treecell label="Item 2.2" />
+                        </treerow>
+                        <treechildren id="item221">
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.2.1" />
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+            <treeitem label="Item 3" />
+        </treechildren>
+    </tree>
+    <button label="1. invalidate item 2.2"
+onClick="item221parent.invalidate();"/>
+    <button label="2. invalidate item 2.1 and item 2.2"
+onClick="item221parent.parent.invalidate();"/>
+    <button label="3. detach item 2.2.1" onClick="item221.detach();"/>
+    <button label="4. detach item 2.2.1 and invalidate item 2.2"
+onClick="item221.detach();item221parent.invalidate();"/>
+</vbox>
+

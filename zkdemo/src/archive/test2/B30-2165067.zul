@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2165067.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 14 11:03:16     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<div id="d">
+<label value="test"/>
+<label value="test"/>
+<label value="test"/>
+<button label="Remain me Only, that is correct!"/>
+</div>
+<button label="Click Me First.">
+	<attribute name="onClick">
+		 ListIterator it = d.getChildren().listIterator(3);
+		        for (int n = 3; --n >= 0;) {
+		        	it.previous();
+		            it.remove();
+		        }
+	</attribute>
+</button>
+</zk>

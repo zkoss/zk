@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		Google's AJAX APIs
+	Description:
+		
+	History:
+		Fri Dec  4 11:00:10     2009, Created by henrichen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.gapi" language="xul/html">
+	<script src="gapi.js" />
+</package>

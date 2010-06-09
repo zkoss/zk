@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2789992.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 31 12:30:41     2010, Created by jimmyshiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[      
+		<ol>		
+			<li>open IE7 and visit the page.</li>
+			<li>adjust the browser width to less than 800px to make sure there's horizontal scrollbar shown</li>
+			<li>enlarge the browser width by dragging the right side of the browser. observe the height of the listbox</li>
+			<li>enlarge the browser width again observe the height of the listbox</li>
+			<li>enlarge the browser width for the third time, observe the height of the listbox</li>
+			<li>you can see the height of listbox increase little by little, and then only the listheader is shown, and then the height increase again.</li>
+		</ol>
+	]]></html>
+	<zk>
+		<listbox id="fldTaskList" fixedLayout="true"
+			forward="onSelect=onSelect" mold="paging" pageSize="10">
+			<listhead sizable="true">
+				<listheader label="Source" width="200px" />
+				<listheader label="Source RTP Port" width="110px" />
+				<listheader label="Destination" width="200px" />
+				<listheader label="Destination RTP Port" width="140px" />
+				<listheader label="Audio Codec Type" width="120px" />
+				<listheader label="Audio Packet Interval" width="140px" />
+				<listheader label="Test Duration" width="100px" />
+				<listheader label="Status" width="100px" />
+			</listhead>
+			<listitem>
+				<listcell label="1"></listcell>
+				<listcell label="2"></listcell>
+				<listcell label="3"></listcell>
+				<listcell label="4"></listcell>
+				<listcell label="5"></listcell>
+				<listcell label="6"></listcell>
+				<listcell label="7"></listcell>
+				<listcell label="8"></listcell>
+			</listitem>
+		</listbox>
+	</zk>
+</zk> 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2139542.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct  1 11:56:27     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<hbox>
+	<datebox id="db" />
+	<button label="Click Me without error, that is correct!" onClick='db.setFormat("dd-MMM-yyyy")'/>
+</hbox>

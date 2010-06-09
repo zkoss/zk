@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1867539.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan  9 17:44:51 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1867539 ]   Combobox to support type-ahead.</n:h2>
+	<n:ol>
+		<n:li>Type 'Simple' in combobox, you should see a suggestion text will be showing in the box when you typing, that is "Simple and Rich"</n:li>
+	</n:ol>
+	Combobox to support type-ahead
+	<combobox onChanging="msg.value = event.value">
+		<comboitem label="Simple and Rich" />
+		<comboitem label="Cool!" />
+		<comboitem label="Thumbs Up!" />
+		<comboitem label="Simple and Rich 2" />
+		<comboitem label="Cool! 2" />
+		<comboitem label="Thumbs Up! 2" />
+	</combobox>
+	<label id="msg" />
+</zk>

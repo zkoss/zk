@@ -1,0 +1,50 @@
+<zk>
+<zscript><![CDATA[
+import java.text.*;
+int index = self.getParent().getParent().getChildren().indexOf(self.getParent());
+
+void doAvg(Footer f, boolean isFloat) {
+	Rows rows = f.getGrid().getRows();
+	int idx = f.getParent().getChildren().indexOf(f);
+	float total;
+	for (Iterator it = rows.getChildren().iterator(); it.hasNext();) {
+		total += Float.parseFloat(((Label)((Row)it.next()).getChildren().get(idx)).getValue());
+	}
+	DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(org.zkoss.util.Locales.getCurrent());
+	total /= rows.getChildren().size();
+	if (isFloat)
+		df.applyPattern("##.00");
+	f.setLabel(df.format(total));
+}
+]]></zscript>
+<grid fixedLayout="true" oddRowSclass="myinner" onCreate='self.sclass = color[index]'>
+	<columns>
+		<column width="25px" />
+		<column width="35px" >
+			<checkbox/>
+		</column>
+		<column label="Season"/>
+		<column label="High"  align="center" sort="auto"/>
+		<column label="Low"  align="center" sort="auto"/>
+		<column label="volume" align="center" />
+	</columns>
+	<rows>
+		<row forEach="1,2,3,4">
+			<detail open="false" fulfill="onOpen=/userguide/grid/month.zul"/>
+			<checkbox label=""  width="35px" />
+			<label value="Q-${forEachStatus.index + 1}"/>
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = random.nextInt(655360)+ ""'/>
+		</row>
+	</rows>
+	<foot>
+		<footer width="25px"/>
+		<footer label="Avg:" />
+		<footer/>
+		<footer onCreate='doAvg(self, true)' />
+		<footer onCreate='doAvg(self, true)' />
+		<footer onCreate='doAvg(self, false)' />
+	</foot>
+</grid>
+</zk>

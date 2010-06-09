@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+You should see a checkmark before the label "Group" and "Foot", rather than an
+open/close sign.
+<listbox id="box" fixedLayout="true" multiple="true" checkmark="true">
+	<listhead>
+		<listheader label="Name"/>
+		<listheader label="Gender"/>
+		<listheader label="Age"/>
+		<listheader label="Description"/>
+	</listhead>
+	<listgroup label="Group"/>
+	<listitem>
+		<listcell label="Mary"/>
+		<listcell label="FEMALE"/>
+		<listcell label="18"/>
+		<listcell label="A young lady."/>
+	</listitem>
+	<listitem>
+		<listcell label="John"/>
+		<listcell label="MALE"/>
+		<listcell label="20"/>
+		<listcell label="A college student."/>
+	</listitem>
+	<listgroupfoot label="Foot"/>
+</listbox>
+</zk>

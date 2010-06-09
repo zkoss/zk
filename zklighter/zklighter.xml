@@ -1,0 +1,146 @@
+<zklighter>
+	<javascript>
+		<destination>lib/js/zk.js</destination>
+		<source>../zk/codegen/archive/web/js/zk/zklt.wpd</source>
+		<!--source>../zk/codegen/archive/web/js/zk/wgt/zk.wpd</source-->
+		<source>../zul/codegen/archive/web/js/zul/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/lang.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/lang/zk.wpd</source>
+		<locale></locale>
+		<locale>ar</locale>
+		<locale>bg</locale>
+		<locale>ca</locale>
+		<locale>cs</locale>
+		<locale>de</locale>
+		<locale>es</locale>
+		<locale>fr</locale>
+		<locale>hu</locale>
+		<locale>id</locale>
+		<locale>it</locale>
+		<locale>ja</locale>
+		<locale>kr</locale>
+		<locale>nl</locale>
+		<locale>pt</locale>
+		<locale>ro</locale>
+		<locale>ru</locale>
+		<locale>si</locale>
+		<locale>sv</locale>
+		<locale>tr</locale>
+		<locale>uk</locale>
+		<locale>zh</locale>
+		<locale>zh_CN</locale>
+		<locale>zh_TW</locale>
+	</javascript>
+	<javascript>
+		<destination>lib/js/fmt.js</destination>
+		<source>../zk/codegen/archive/web/js/zk/fmt/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/xml.js</destination>
+		<source>../zk/codegen/archive/web/js/zk/xml/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/box.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/db.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/db/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/grid.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/inp.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/layout.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/layout/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/med.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/med/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/menu.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/mesh.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/sel.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/sel/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/tab.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/utl.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/utl/zklt.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/wgt.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/wnd.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
+	</javascript>
+
+	<javascript>
+		<destination>lib/js/zk-all.js</destination>
+		<source>../zk/codegen/archive/web/js/zk/zklt.wpd</source>
+		<!--source>../zk/codegen/archive/web/js/zk/wgt/zk.wpd</source-->
+		<source>../zk/codegen/archive/web/js/zk/fmt/zk.wpd</source>
+		<source>../zk/codegen/archive/web/js/zk/xml/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/db/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/utl/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/sel/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/layout/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/med/zk.wpd</source>
+	</javascript>
+
+	<copy>
+		<destination>lib/css/zkrc</destination>
+		<source>../zweb/src/archive/web/img</source>
+		<source>../zk/src/archive/web/zk/img</source>
+		<source>../zul/src/archive/web/zul/img</source>
+		<source>../zk/src/archive/web/zk/wordwrap.xml</source>
+	</copy>
+
+	<css>
+		<destination>lib/css/zk.css</destination>
+		<source class-web-path="../zul/src/archive/web">../zul/src/archive/web/zul/css/zk.wcs</source>
+			<!-- class-web-path: used to convert ~./ -->
+
+		<encodeURL prefix="">
+			<translate from="~./zk/img" to="zkrc"/>
+			<translate from="~./zul/img" to="zkrc"/>
+			<translate from="~./zk/wordwrap.xml" to="zkrc/wordwrap.xml"/>
+			<translate from="~./img" to="zkrc"/>
+		</encodeURL>
+
+		<variable name="fontSizeM">12px</variable>
+		<variable name="fontSizeMS">11px</variable>
+		<variable name="fontSizeS">11px</variable>
+		<variable name="fontSizeXS">10px</variable>
+		<variable name="fontFamilyT">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
+		<variable name="fontFamilyC">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
+	</css>
+</zklighter>

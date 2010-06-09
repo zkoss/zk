@@ -1,0 +1,56 @@
+<window title="listbox checkmark demo" border="normal">
+<html><![CDATA[
+The selection of listbox is not correct when use toggle multiple.<br/>
+reproducible step.<br/>
+1.select Henry and Dennis<br/>
+2.click toogle multiple ,<br/>
+3.click toogle multiple again.<br/>
+4.Disselect Henry.<br/>
+5.Click invalidate.<br/>
+<br/>
+Henry should <b>NOT</b> be selected.<br/>
+<br/>
+]]></html>
+	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>
+	<button label="Invalidate" onClick="box.invalidate()"/>
+	<separator bar="true"/>
+	<listbox id="box" width="460px" multiple="true" checkmark="true">
+		<listhead>
+			<listheader label="Name"/>
+			<listheader label="Gender"/>
+			<listheader label="Age"/>
+			<listheader label="Description"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary"/>
+			<listcell label="FEMALE"/>
+			<listcell label="18"/>
+			<listcell label="A young lady."/>
+		</listitem>
+		<listitem>
+			<listcell label="John"/>
+			<listcell label="MALE"/>
+			<listcell label="20"/>
+			<listcell label="A college student."/>
+		</listitem>
+		<listitem>
+			<listcell label="Jane"/>
+			<listcell label="FEMALE"/>
+			<listcell label="32"/>
+			<listcell label="A remarkable artist."/>
+		</listitem>
+		<listitem>
+			<listcell label="Henry"/>
+			<listcell label="MALE"/>
+			<listcell label="29"/>
+			<listcell label="A graduate."/>
+		</listitem>
+		<listitem>
+			<listcell label="Dennis"/>
+			<listcell label="MALE"/>
+			<listcell label="30"/>
+			<listcell label="A developer"/>
+		</listitem>
+	</listbox>		
+</window>
+				

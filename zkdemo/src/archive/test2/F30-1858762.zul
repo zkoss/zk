@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1858762.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 27 11:12:43 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1858762 ]   A way to show the busy message from server.</n:h2>
+	<n:ol>
+		<n:li>Click the button, it will show a waiting message about 5 sec.</n:li>
+	</n:ol>
+<button label="show" >
+<attribute name="onClick">
+	Clients.showBusy("This loading bar will disappear after 5 sec.");
+	timer.start();
+</attribute>
+</button>
+<timer id="timer" delay="5000" repeats="true" running="false"
+		onTimer='Clients.clearBusy();self.stop();'/>
+</zk>

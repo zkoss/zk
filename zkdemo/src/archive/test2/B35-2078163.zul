@@ -1,0 +1,18 @@
+<zk>c
+<vbox>
+<label value='1.click "set spinner constraint" button'/>
+<label value="2.click button of spinner"/>
+<label value="3.the number will be increased or decreased by 2 or it is not correct!"/>
+</vbox>
+<window title="Spinner test" border="normal">
+<spinner id="sp"/>
+<separator />
+<button label="set spinner constraint">
+<attribute name="onClick">
+sp.setValue(new Integer(1));
+sp.setStep(2);
+sp.setConstraint("min -10 max 10");
+</attribute>
+</button>
+</window>
+</zk>

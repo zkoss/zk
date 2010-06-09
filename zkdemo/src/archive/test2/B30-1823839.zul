@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1823839.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  5 15:57:14     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+
+<zk>
+<html><![CDATA[
+[ 1823839 ] iframe with PDF falid to draw while window sizable
+]]></html>
+
+<window id="win" title="PDF Demo" border="normal"
+width="500px" height="500px" sizable="true">
+<caption label="test in iframe">
+<button label="back" onClick='win.width="500px"'/>
+<button label="resize" onClick='win.width="800px"'/>
+</caption>
+
+<iframe id="test" width="100%" height="100%" src="http://www.zkoss.org/doc/ZK-JavaTwo-2006.pdf"/>
+</window>
+
+</zk>

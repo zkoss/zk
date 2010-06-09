@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2900977.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 10:56:16     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+
+
+<zscript>
+<![CDATA[
+
+
+void addrow(){
+Groupbox gr2=new Groupbox();
+Caption c2=new Caption("Group 2");
+Label ll2=new Label("move the in ie8 broken slider.");
+Slider sl1=new Slider();
+gr2.appendChild(ll2);
+gr2.appendChild(sl1);
+Vbox vbox=new Vbox();
+vbox.appendChild(gr2);
+Detail detail=new Detail();
+detail.appendChild(vbox);
+detail.setOpen(true);
+Label label=new Label("myLabel");
+Row row = new Row();
+row.appendChild(label);
+row.appendChild(detail);
+rows.appendChild(row);
+
+}
+]]>
+</zscript>
+
+<grid id="grid1" fixedLayout="true" width="300px" height="400px" >
+<columns>
+<column width="25px" />
+<column label="Attribut"/>
+<column width="25px" label="Status"/>
+</columns>
+<rows id="rows">
+
+</rows>
+</grid>
+<button label="Click Me twice, you should not see any error." onClick="addrow()" />
+
+
+</zk>

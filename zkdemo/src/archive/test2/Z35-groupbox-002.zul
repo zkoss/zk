@@ -1,0 +1,57 @@
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert (dada) -->
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+<vbox>
+<label>
+ Testing Groupbox basic functionality. If you can see a border layout in this group box, test is passed.
+</label>
+<label> 1.Open the groupbox by clicking on the button.</label>
+<label> 2.If the borderlayout is messed up, it's a bug</label>
+</vbox>
+  <window title="Groupbox test" width="100%">
+    <groupbox id="gb2" width="500px" open="false">
+      <caption image="/test2/img/inet.png" label="Testing Group Box"/>
+      <borderlayout height="500px">
+        <north maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
+          <borderlayout>
+            <west size="25%" border="none" flex="true" maxsize="250" splittable="true" collapsible="true">
+              <div style="background:#B8D335">
+                <label value="25%" style="color:white;font-size:50px"/>
+              </div>
+            </west>
+            <center border="none" flex="true">
+              <div style="background:#E6D92C">
+                <label value="25%" style="color:white;font-size:50px"/>
+              </div>
+            </center>
+            <east size="50%" border="none" flex="true">
+              <label value="Here is a non-border" style="color:gray;font-size:30px"/>
+            </east>
+          </borderlayout>
+        </north>
+        <center border="0">
+          <borderlayout>
+            <west maxsize="600" size="30%" flex="true" border="0" splittable="true" collapsible="true">
+              <div style="background:#E6D92C">
+                <label value="30%" style="color:white;font-size:50px"/>
+              </div>
+            </west>
+            <center>
+              <label value="Here is a border" style="color:gray;font-size:30px"/>
+            </center>
+            <east size="30%" flex="true" border="0" collapsible="true">
+              <div style="background:#B8D335">
+                <label value="30%" style="color:white;font-size:50px"/>
+              </div>
+            </east>
+          </borderlayout>
+        </center>
+      </borderlayout>
+      <vbox>TestVbox.</vbox>
+    </groupbox>
+    <button label="Open or Close GroupBox" onClick="gb2.setOpen(!gb2.isOpen());"/>
+    <checkbox label="Use 3d groupbox" checked="false" onCheck='gb2.mold=self.checked? "3d": "default"'/>
+  </window>
+ </zk>

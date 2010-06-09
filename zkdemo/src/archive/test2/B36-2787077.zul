@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2787077.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May  6 09:30:05     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[ 
+
+		ArrayList data = new ArrayList();
+		for (int i = 1; i <= 42; i++) {
+			data.add("Data " + i);
+		}
+
+		ListModel dataModel = new SimpleListModel(data);
+		 ]]></zscript>
+<listbox id="listbox" mold="paging"
+pageSize="10" pagingPosition="top" model="${dataModel}" activePage="4">
+<listhead>
+<listheader value="Data"/>
+</listhead>
+</listbox>
+
+<button id="button" label="Click Me, you should not see any error!">
+<attribute name="onClick"><![CDATA[ 
+
+		ArrayList data = new ArrayList();
+		for (int i = 1; i <= 39; i++) {
+			data.add("Data " + i);
+		}
+
+		ListModel dataModel = new SimpleListModel(data);
+		listbox.setModel(dataModel);
+		 ]]></attribute>
+</button>
+</zk>
+

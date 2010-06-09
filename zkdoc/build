@@ -1,0 +1,31 @@
+#!/bin/sh
+mode=$1
+
+if [ "$mode" = "" ] ; then
+	echo "Usage:"
+	echo "  ./build devguide|devref|styleguide|quickstart|all "	
+	exit 1
+fi
+
+if [ "$mode" = "devguide" ]||[ "$mode" = "all" ] ; then
+echo "Buiding deverloper's guide"
+xsltproc --output /usr/ptroot/doc/devguide/ --stringparam html.stylesheet "devguide.css" /usr/docbook/html/chunk-devguide.xsl devguide/ZK-devguide.xml
+xsltproc --output /usr/ptroot/doc/devguide-single/index.html --stringparam html.stylesheet "devguide.css" /usr/docbook/html/docbook-devguide.xsl devguide/ZK-devguide.xml
+fi
+
+if [ "$mode" = "devref" ]||[ "$mode" = "all" ] ; then
+echo "Buiding deverloper's reference"
+xsltproc --output /usr/ptroot/doc/devref/ --stringparam html.stylesheet "devref.css" /usr/docbook/html/chunk-devref.xsl devref/ZK-devref.xml
+xsltproc --output /usr/ptroot/doc/devref-single/index.html --stringparam html.stylesheet "devref.css" /usr/docbook/html/docbook-devref.xsl devref/ZK-devref.xml
+fi
+
+if [ "$mode" = "styleguide" ]||[ "$mode" = "all" ] ; then
+echo "Buiding style guide"
+xsltproc --output /usr/ptroot/doc/styleguide/ --stringparam html.stylesheet "styleguide.css" /usr/docbook/html/chunk-styleguide.xsl styleguide/ZK-styleguide.xml
+xsltproc --output /usr/ptroot/doc/styleguide-single/index.html --stringparam html.stylesheet "styleguide.css" /usr/docbook/html/docbook-styleguide.xsl styleguide/ZK-styleguide.xml
+fi
+
+if [ "$mode" = "quickstart" ]||[ "$mode" = "all" ] ; then
+echo "Buiding quickstart guide"
+xsltproc --output /usr/ptroot/doc/quickstart/ --stringparam html.stylesheet "quickstart.css" /usr/docbook/html/chunk-quickstart.xsl quickstart/ZK-quickstart.xml
+fi

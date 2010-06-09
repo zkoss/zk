@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1880950.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 28 16:02:48 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>Click the "show window1" button, and then click the "make higher" button.</n:li>
+		<n:li>Scroll down to end of scrollbar and click the "close" button.</n:li>
+		<n:li>You should see the current window is shown at correct position.</n:li>
+	</n:ol>
+	<vbox>
+		<button onClick="wnd1.doModal();wnd2.doModal();"
+			label="show window1" />
+	</vbox>
+
+	<window id="wnd1" visible="false" width="300px" title="wnd1">
+		<vbox>
+			<textbox />
+			<button label="make higher"
+				onClick="spacer.visible = true;" />
+			<separator spacing="1500px" id="spacer" visible="false" />
+			<button onClick="spaceOwner.visible = false" label="close" />
+			<separator spacing="10px" />
+		</vbox>
+	</window>
+
+	<window id="wnd2" visible="false" width="200px" title="wnd2">
+		<separator spacing="100px" id="spacer" />
+		<button onClick="spaceOwner.visible = false" label="close" />
+		<separator spacing="10px" />
+	</window>
+</zk>

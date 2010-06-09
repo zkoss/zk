@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+tree.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 18:36:13     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Tree with rows more than need:
+<tree id="tree" width="400px" rows="10">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+		<treecol label="Received"/>
+	</treecols>
+	<auxhead>
+		<auxheader/>
+		<auxheader label="Details" colspan="2"/>
+	</auxhead>
+	<auxhead>
+		<auxheader label="Some" colspan="2"/>
+		<auxheader/>
+	</auxhead>
+	<treechildren>
+		<treeitem id="ti0" selected="true">
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+				<treecell label="7-12-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem id="ti01">
+					<treerow>
+						<treecell label="Intel Snares XML"/>
+						<treecell label="Ria Coen"/>
+						<treecell label="7-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Unknown chaos"/>
+		<treeitem>
+			<treerow>
+				<treecell label="C# versus Java"/>
+				<treecell label="David Longman"/>
+				<treecell label="7-1o-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 3.1.1"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Power never easy"/>
+						<treecell label="Michelle Jordan"/>
+						<treecell label="6-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 4" open="false">
+			<zscript>item4 = self</zscript>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.1"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.2"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.3"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.4"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.5"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.6"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.7"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.8"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.9"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.10"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.11"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.12"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.13"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.14"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.15"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.16"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.17"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.18"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.19"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.20"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.21"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.22"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.23"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.24"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.25"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.26"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.27"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.28"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.29"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.30"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.31"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.32"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 4.33"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+	</treechildren>
+</tree>
+<vbox>
+<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark"/>
+<button label="Select 2nd" onClick="ti01.selected = true"/>
+<button label="Toggle Item 4" onClick="item4.setOpen(!item4.isOpen())"/>
+<button label="getItems" onClick="alert(&quot;&quot;+tree.getItems())"/>
+</vbox>
+
+Tree with rows
+<tree width="90%" rows="5">
+	<treecols>
+		<treecol label="Name"/>
+		<treecol label="Description"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 1"/>
+				<treecell label="Item 1 description"/>
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2"/>
+				<treecell label="Item 2 description"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1"/>
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2"/>
+						<treecell label="Item 2.2 is something who cares"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3"/>
+	</treechildren>
+</tree>
+
+Tree with vflex to grow:
+<tree width="400px" vflex="true">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+		<treecol label="Received"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+				<treecell label="7-12-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Intel Snares XML"/>
+						<treecell label="Ria Coen"/>
+						<treecell label="7-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Unknown chaos" selected="true"/>
+	</treechildren>
+</tree>
+</zk>

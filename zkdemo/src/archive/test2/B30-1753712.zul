@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1753712.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 18 12:36:50     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="reuse"><!-- ID must be called "reuse" -->
+	<vbox>
+	To test, you have to add org.zkoss.zkdemo.test2.DetachDesktopCleanup
+	as a listener.
+	Then, at the first visit, you see "n/a" in "Old UUID".
+	Then, open new browser and press F5 to reload this page.
+	You shall see "Old UUID" to be the same as "Current UUID"
+	in the previous page.
+	Note: depending on browsers, you might have to "Current UUID" will become
+	"Old UUID" in the 3rd reload (not 2nd reload)
+		<hbox>
+	Current UUID: <label id="lb" value="${reuse.uuid}"/>
+		</hbox>
+		<hbox>
+	Old UUID: <label id="la"/>
+		</hbox>
+	</vbox>
+	<zscript>{
+	Component c = org.zkoss.zkdemo.test2.DetachDesktopCleanup.reuse;
+	la.setValue(c != null ? c.uuid: "n/a");
+	}</zscript>
+</window>

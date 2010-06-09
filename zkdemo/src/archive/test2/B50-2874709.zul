@@ -1,0 +1,26 @@
+<window>
+<html><![CDATA[
+<ol>
+<li>Open the tree node 1, you shall see node 3, 4.</li>
+<li>Open the tree node 4, you shall see node 9.</li>
+<li>Press "Click" button, you shall see node 1 and 2 only.</li>
+<li>Open the tree node 1, you shall see node 3, 4.</li>
+<li>Open the tree node 4, you shall see node 9 and 10.</li>
+<li>Open the tree node 9, you shall see node 19</li>
+<li>Done</li>
+</ol>
+]]>
+</html>                           
+	<zscript>					
+	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(10)));
+
+       public void changeData() {
+            btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(20)));
+       }
+
+	</zscript>
+	<tree id="tree" model="${btm}"/>
+        <button label="Click" onClick="changeData(); tree.setModel(btm);" />
+</window>

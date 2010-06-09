@@ -1,0 +1,133 @@
+<!--
+Z30-listbox-0002.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 27 21:18:02     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Click each button, then the Listbox should work as you did.</n:p>
+<hbox>
+<zscript>
+	Comparator sa0 = new ListitemComparator(0),
+		sa1 = new ListitemComparator(1),
+		sd0 = new ListitemComparator(0, false, true),
+		sd1 = new ListitemComparator(1, false, true);
+</zscript>
+<listbox id="src" multiple="true" width="250px">
+	<listhead id="lh" sizable="true">
+		<listheader width="150px" label="Population" sortAscending="${sa0}" sortDescending="${sd0}"/>
+		<listheader width="100px" align="right" label="%" sortAscending="${sa1}" sortDescending="${sd1}"/>
+	</listhead>
+	<auxhead id="ah1">
+		<auxheader label="Total" colspan="2"/>
+	</auxhead>
+	<auxhead id="ah2">
+		<auxheader label="Total 2" colspan="2"/>
+	</auxhead>
+	<listitem id="a" value="A">
+		<listcell label="A. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem id="b" value="B">
+		<listcell label="B. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem id="c" value="C">
+		<listcell label="C. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+	<listfoot>
+		<listfooter label="More or less"/>
+		<listfooter label="100%"/>
+	</listfoot>
+	<listitem id="d" value="D">
+		<listcell label="D. Others"/>
+		<listcell><toolbarbutton label="Go Potix" href="http://www.zkoss.org"/></listcell>
+	</listitem>
+</listbox>
+<vbox>
+	<button label="=&gt;" onClick="move(src, dst)"/>
+	<button label="&lt;=" onClick="move(dst, src)"/>
+	<button label="remove 1st head" onClick="ah1.detach()"/>
+	<button label="remove 2nd head" onClick="ah2.detach()"/>
+	<button label="add aux head">
+		<attribute name="onClick">{
+		Auxhead ah = new Auxhead();
+		Auxheader ahr = new Auxheader("New aux");
+		ahr.setParent(ah);
+		ahr.setColspan(2);
+		src.insertBefore(ah, lh);
+		}</attribute>
+	</button>
+</vbox>
+<listbox id="dst" checkmark="true" multiple="true" width="250px">
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem id="e" value="E">
+		<listcell label="E. Supermen"/>
+		<listcell label="21%"/>
+	</listitem>
+	<listitem id="f" value="F">
+		<listcell label="F. Junior High Scroll"/>
+		<listcell label="12%"/>
+	</listitem>
+</listbox>
+</hbox>
+<vbox>
+The first column width above is 150, while the second is 100.
+<hbox>
+<button label="Move c before b" onClick="move(c, b)"/>
+<button label="Move b before a" onClick="move(b, a)"/>
+<button label="Move a before d" onClick="move(a, d)"/>
+<button label="Check index" onClick="checkIndex(src)"/>
+</hbox>
+</vbox>
+<zscript><![CDATA[
+void move(Listitem li, Listitem before) {
+	src.insertBefore(li, before);
+}
+void move(Listbox src, Listbox dst) {
+	Listitem s = src.getSelectedItem();
+	if (s == null)
+		Messagebox.show("Select an item first");
+	else
+		s.setParent(dst);
+}
+void checkIndex(Listbox l) {
+	boolean ok = true, selfound = false;
+	int j = 0;
+	for (Iterator it = l.getItems().iterator(); it.hasNext(); ++j) {
+		Listitem li = it.next();
+		if (li.getIndex() != j) {
+			ok = false;
+			alert("Wrong index "+li.getIndex()+" != "+j);
+		}
+		if (!selfound && li.isSelected()) {
+			selfound = true;
+			if (l.getSelectedIndex() != j) {
+				ok = false;
+				alert("Wrong selected "+l.getSelectedIndex()+" != "+j);
+			}
+		}
+	}
+	if (!selfound && l.getSelectedIndex() != -1) {
+		ok = false;
+		alert("None selected but "+l.getSelectedIndex());
+	}
+	if (ok) alert("Correct");
+}
+]]></zscript>
+</zk>

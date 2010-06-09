@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 16 10:19:46     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.debug">
+	<script src="debugger.js"/>
+</package>

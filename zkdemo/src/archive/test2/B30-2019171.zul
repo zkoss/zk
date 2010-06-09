@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2019171.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 17 14:23:44     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="wnd" title="Bookmark Demo" border="normal">
+	Environment: IE<separator/>
+	Steps: Click Tab2 and then click the BACK button<separator/>
+	Expected Result: "Tab 1" is selected
+	<separator bar="true"/>
+	<zscript>	
+	page.addEventListener("onBookmarkChange",	
+		new EventListener() {		
+			public void onEvent(Event event) throws UiException {
+				try {							
+					wnd.getFellow(wnd.desktop.bookmark).setSelected(true);					
+				} catch (ComponentNotFoundException ex) {				
+					tab1.setSelected(true);					
+				}				
+			}			
+		});
+	</zscript>	
+
+	<tabbox id="tbox" width="100%" onSelect="desktop.bookmark = self.selectedTab.id">	
+		<tabs>		
+			<tab id="tab1" label="Tab 1"/>			
+			<tab id="tab2" label="Tab 2"/>			
+			<tab id="tab3" label="Tab 3"/>			
+		</tabs>		
+		<tabpanels>		
+			<tabpanel>This is panel 1</tabpanel>			
+			<tabpanel>This is panel 2</tabpanel>			
+			<tabpanel>This is panel 3</tabpanel>			
+		</tabpanels>		
+	</tabbox>	
+</window>

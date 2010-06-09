@@ -1,0 +1,69 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  <window title="Test Buttons in various components." border="normal" width="400px">
+  Please click all buttons visible to you, make sure the buttons does not effect the current components. If found, it's a bug.
+NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen correctly. Please ignore this error.
+    <grid sizedByContent="true">
+      <columns sizable="true" width="500px">
+        <column label="Type"/>
+        <column label="Content"/>
+      </columns>
+      <rows>
+        <row>
+          <label value="File:"/>
+          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif"/>
+        </row>
+        <row>
+          <label value="Type:"/>
+          <hbox>
+            <listbox>
+              <listitem>
+                <listcell>Should See a button here.
+                          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")'/>
+                </listcell>
+              </listitem>
+              <listitem label="And A button here">
+                <listcell>
+                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
+                </listcell>
+              </listitem>
+            </listbox>
+            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
+          </hbox>
+        </row>
+        <row>
+          <label value="Options:"/>
+          <textbox rows="3" width="99%"/>
+        </row>
+      </rows>
+    </grid>
+    <grid sizedByContent="true">
+      <columns sizable="true">
+        <column label="Type"/>
+        <column label="Content"/>
+      </columns>
+      <rows>
+        <row>
+          <label value="File:"/>
+          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif"/>
+        </row>
+        <row>
+          <label value="Type:"/>
+          <hbox>
+            <listbox rows="1" mold="select">
+              <listitem label="Buttons may not be supported in Select Mold."/>
+              <listitem label="All Files,(*.*)"/>
+            </listbox>
+            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
+          </hbox>
+        </row>
+        <row>
+          <label value="Options:"/>
+          <textbox rows="3" width="99%"/>
+        </row>
+      </rows>
+    </grid>
+  </window>
+</zk>

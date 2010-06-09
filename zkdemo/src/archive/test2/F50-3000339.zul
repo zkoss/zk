@@ -1,0 +1,84 @@
+<?component name="column" extends="column" hflex="min" style="white-space:nowrap"?>
+<?component name="label" extends="label" style="white-space:nowrap"?>
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Check the first column header. If you can see the right most whole word 'longX', then it is OK</li>
+</ol>
+]]>
+</html>
+<window  border="normal" width="100%">
+<div width="100%">
+	<grid sizedByContent ="true">
+		<columns sizable="true">
+		    <column label="1ong long long long longX"/>
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover"/>
+			<column label="2" />
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover"/>
+			<column label="3" />
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover" />
+			<column label="4" />
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover" />
+			<column label="5" />
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover" />
+			<column label="6" />
+			<column label="Author" />
+			<column label="Title" />
+			<column label="Publisher"  />
+			<column label="Hardcover" />
+		</columns>
+		<rows>
+			<row>
+			    <label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pagesokleit"/>
+				<label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+				<label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+				<label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+				<label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+				<label value="Philip Hensher"/>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+				<label value="Knopf (October 30, 2008)"/>
+				<label value="608 pages"/>
+			</row>
+		</rows>
+	</grid>
+	</div>
+	</window>
+	</zk>
+

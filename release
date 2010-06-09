@@ -1,0 +1,603 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Mon Nov 14 14:29:09     2005, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+stamp=$(date +%Y-%m-%d)
+
+target=$1
+
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified
+		exit 1
+	fi
+fi
+javadocdir=$(grep '^javadoc' $setting)
+javadocdir=${javadocdir#javadoc=}
+if [ "$javadocdir" = "" ] ; then
+	echo javadoc must be specified in $setting
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+if [ ! -d "$javadocdir" ] ; then
+	echo $javadocdir is not found
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+if [ ! -d "$javadocdir/jsdoc" ] ; then
+	echo $javadocdir/jsdoc is not found
+	exit 1
+fi
+
+if [ "$target" == "official" ] ; then
+	htmldocdir=$(grep '^htmldoc' $setting)
+	htmldocdir=${htmldocdir#htmldoc=}
+	if [ "$htmldocdir" = "" ] ; then
+		echo htmldoc must be specified in $setting
+		exit 1
+	fi
+	htmldocdir=${htmldocdir/\~/$HOME}
+	if [ ! -d "$htmldocdir/devguide" ] ; then
+		echo $htmldocdir/devguide is not found
+		exit 1
+	fi
+fi
+
+ver=$(grep '^version=' $setting)
+ver=${ver#version=}
+
+#jar
+if [ "$target" == "official" ] ; then
+	binnm=zkee-bin-$ver
+	stdnm=zk-bin-$ver
+	profnm=zkpe-bin-$ver
+	
+	binnmevl=zkee-bin-eval-$ver
+	profnmevl=zkpe-bin-eval-$ver
+	
+	demonm=zk-demo-$ver
+	javadocnm=zk-javadoc-$ver
+	jsdocnm=zk-jsdoc-$ver
+	srcnm=zk-src-$ver
+	profsrcnm=zkpe-src-$ver
+	entsrcnm=zkee-src-$ver
+	echo "Release $binnm..."
+elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
+	target=daily
+
+	binnm=zk-bin-$ver-$stamp
+	stdnm=zk-bin-$ver-$stamp
+	profnm=zkpe-bin-$ver-$stamp
+	
+	binnmevl=zkee-bin-eval-$ver-$stamp
+	profnmevl=zkpe-bin-eval-$ver-$stamp
+	
+	demonm=zk-demo-$ver-$stamp
+	javadocnm=zk-javadoc-$ver-$stamp
+	jsdocnm=zk-jsdoc-$ver-$stamp
+	srcnm=zk-src-$ver-$stamp
+	docnm=zk-doc-$ver-$stamp
+	echo "Release $binnm..."
+else
+	echo "Usage: release [ official | daily ]"
+	echo Default: daily
+	exit 1
+fi
+
+rm -rf /tmp/zk
+rm -rf /tmp/maven
+maindir="$(pwd)"
+echo "Working directory $maindir"
+
+#build *-all.war *-all.ear
+if [ "$target" == "official" ] ; then
+	rm -rf dist/lib/zkdemo*.war dist/lib/zkdemos*.ear
+	cp -f zkdemo/war.libs.all zkdemo/war.libs
+	./build clean zkdemo zkdemos
+	./build zkdemo zkdemos
+
+	mv dist/lib/zkdemo.war dist/lib/zkdemo-all.war
+	mv dist/lib/zkdemos.ear dist/lib/zkdemos-all.ear
+
+	cp -f zkdemo/war.libs.minimal zkdemo/war.libs
+	./build clean zkdemo zkdemos
+	./build zkdemo zkdemos
+fi
+if [ "$target" == "daily" ] ; then
+	rm -rf dist/lib/zkdemo*.war
+	cp -f zkdemo/war.libs.all zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+
+	mv dist/lib/zkdemo.war dist/lib/zkdemo-all.war
+
+	cp -f zkdemo/war.libs.minimal zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+fi
+
+#Prepare the source codes
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	#mkdir -p /tmp/zk/$srcnm/dist/lib/ext
+	mkdir -p /tmp/zk/$srcnm/bin
+	mkdir -p /tmp/zk/$srcnm/dist/src
+	mkdir -p /tmp/zk/$srcnm/doc
+	chmod -R 755 $maindir
+	echo Prepare ${srcnm}.zip
+	
+	if [ "$target" == "official" ] ; then
+		echo Prepare ${profsrcnm}.zip ${entsrcnm}.zip
+		mkdir -p /tmp/zk/$profsrcnm/dist/src
+		mkdir -p /tmp/zk/$profsrcnm/doc
+		mkdir -p /tmp/zk/$entsrcnm/dist/src
+		mkdir -p /tmp/zk/$entsrcnm/doc
+	fi
+	
+	cd $maindir
+	cp bin/* /tmp/zk/$srcnm/bin
+	cp build* /tmp/zk/$srcnm
+	cp -rp bin /tmp/zk/$srcnm
+	cp -rp zcommon /tmp/zk/$srcnm
+	cp -rp zweb /tmp/zk/$srcnm
+	cp -rp zk /tmp/zk/$srcnm
+	cp -rp zul /tmp/zk/$srcnm
+	cp -rp zhtml /tmp/zk/$srcnm
+	cp -rp zkplus /tmp/zk/$srcnm
+	
+	if [ "$target" == "official" ] ; then
+		cp -rp zml /tmp/zk/$profsrcnm
+		cp -rp zkex /tmp/zk/$profsrcnm
+		cp -rp zkmax /tmp/zk/$entsrcnm
+		cp -rp /tmp/zk/$srcnm/* /tmp/zk/$profsrcnm
+		cp -rp /tmp/zk/$profsrcnm/* /tmp/zk/$entsrcnm 
+	fi
+	
+	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
+		
+	if [ "$target" == "official" ] ; then
+		# License
+		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+		mv /tmp/zk/CML_LICENSE /tmp/zk/LICENSE
+		chmod 644 /tmp/zk/LICENSE
+		
+		cp /tmp/zk/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$profsrcnm/doc
+		cp /tmp/zk/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$entsrcnm/doc
+		rm /tmp/zk/LICENSE
+	fi
+	
+	cd /tmp/zk/$srcnm
+	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+	find -name .svn | xargs rm -rf
+	
+	if [ "$target" == "official" ] ; then
+		cd /tmp/zk/$profsrcnm
+		rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+		rm -rf zml/debug zkex/debug
+		find -name .svn | xargs rm -rf
+		
+		cd /tmp/zk/$entsrcnm
+		rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug zkplus/debug
+		rm -rf zml/debug zkex/debug
+		rm -rf zkmax/debug
+		find -name .svn | xargs rm -rf
+	fi
+	
+	cd /tmp/zk
+	
+	#prepare *-sources.jar
+	echo Prepare '*-sources.jar'
+	mkdir -p src/zcommon
+	mkdir -p src/zweb
+	mkdir -p src/zk
+	mkdir -p src/zul
+	mkdir -p src/zhtml
+	mkdir -p src/zkplus
+	if [ "$target" == "official" ] ; then
+		mkdir -p src/zml
+		mkdir -p src/zkex
+		mkdir -p src/zkmax
+		cd $entsrcnm
+	else
+		cd $srcnm
+	fi
+	
+	
+	cp -rp zcommon/codegen/* zcommon/src/* ../src/zcommon
+	cp -rp zweb/codegen/* zweb/src/* ../src/zweb
+	cp -rp zk/codegen/* zk/src/* ../src/zk
+	cp -rp zul/codegen/* zul/src/* ../src/zul
+	cp -rp zhtml/codegen/* zhtml/src/* ../src/zhtml
+	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
+	
+	if [ "$target" == "official" ] ; then
+		cp -rp zml/codegen/* zml/src/* ../src/zml
+		cp -rp zkex/codegen/* zkex/src/* ../src/zkex
+		cp -rp zkmax/codegen/* zkmax/src/* ../src/zkmax
+	fi
+	
+	cd ..
+	
+	rm -rf src/*/archive
+	
+	echo Output '*-sources.jar'
+	cd src
+
+	find -name 'package.html' | xargs rm -rf
+	jar cfM zcommon-sources.jar -C zcommon .
+	jar cfM zweb-sources.jar -C zweb .
+	jar cfM zk-sources.jar -C zk .
+	jar cfM zul-sources.jar -C zul .
+	jar cfM zhtml-sources.jar -C zhtml .
+	jar cfM zkplus-sources.jar -C zkplus .
+	
+	if [ "$target" == "official" ] ; then
+		jar cfM zml-sources.jar -C zml .
+		jar cfM zkex-sources.jar -C zkex .
+		jar cfM zkmax-sources.jar -C zkmax .
+	fi
+	
+	chmod 644 *.jar
+	mv *-sources.jar ..
+	cd ..
+	rm -rf src
+
+
+	cd $maindir
+	
+	if [ "$target" == "official" ] ; then
+		mv -f /tmp/zk/*-sources.jar /tmp/zk/$entsrcnm/dist/src
+		
+		cd /tmp/zk/$entsrcnm/dist/src
+		find ! -name "zkmax-sources.jar" | xargs  -i  cp {} /tmp/zk/$profsrcnm/dist/src
+		cd /tmp/zk/$profsrcnm/dist/src
+		find ! -name "zkex-sources.jar" ! -name "zml-sources.jar" |xargs  -i  cp {} /tmp/zk/$srcnm/dist/src
+		
+		cd /tmp/zk
+		echo Output ${srcnm}.zip ${profsrcnm}.zip ${entsrcnm}.zip
+		zip -qr9 ${srcnm}.zip $srcnm
+		zip -qr9 ${profsrcnm}.zip $profsrcnm
+		zip -qr9 ${entsrcnm}.zip $entsrcnm
+	else
+		mv -f /tmp/zk/*-sources.jar /tmp/zk/$srcnm/dist/src
+		
+		cd /tmp/zk
+		echo Output ${srcnm}.zip
+		zip -qr9 ${srcnm}.zip $srcnm
+	fi
+	
+	#Prepare the binary release
+	mkdir -p /tmp/zk/$binnm/dist/lib/ext
+	mkdir -p /tmp/zk/$binnm/dist/lib/zkforge
+	mkdir -p /tmp/zk/$binnm/dist/WEB-INF/tld/
+	mkdir -p /tmp/zk/$binnm/dist/xsd
+	#mkdir -p /tmp/zk/$binnm/dist/src
+	mkdir -p /tmp/zk/$binnm/doc
+
+	cd $maindir
+	#mv -f /tmp/zk/*-sources.jar /tmp/zk/$binnm/dist/src
+	cp dist/lib/ext/commons-fileupload.jar dist/lib/ext/commons-io.jar /tmp/zk/$binnm/dist/lib/ext
+		#Fileupload
+	cp dist/lib/ext/jcommon.jar dist/lib/ext/jfreechart.jar /tmp/zk/$binnm/dist/lib/ext
+		#jFreeChart
+	cp dist/lib/ext/Filters.jar /tmp/zk/$binnm/dist/lib/ext
+		#captcha
+	cp dist/lib/ext/bsh.jar /tmp/zk/$binnm/dist/lib/ext
+		#BeanShell
+	cp dist/lib/ext/js.jar /tmp/zk/$binnm/dist/lib/ext
+		#JavaScript (rhino)
+	cp dist/lib/ext/groovy.jar /tmp/zk/$binnm/dist/lib/ext
+		#Groovy
+	cp dist/lib/ext/jruby.jar /tmp/zk/$binnm/dist/lib/ext
+		#Ruby (jruby)
+	cp dist/lib/ext/jython.jar /tmp/zk/$binnm/dist/lib/ext
+		#Python (jython)
+	cp dist/lib/ext/mvel.jar /tmp/zk/$binnm/dist/lib/ext
+		#MVEL
+	cp dist/lib/ext/ognl.jar /tmp/zk/$binnm/dist/lib/ext
+		#OGNL
+	cp dist/lib/ext/jasperreports.jar dist/lib/ext/itext.jar dist/lib/ext/jxl.jar dist/lib/ext/poi.jar dist/lib/ext/commons-collections.jar dist/lib/ext/commons-logging.jar /tmp/zk/$binnm/dist/lib/ext
+		#JasperReport
+
+	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/fckez.jar dist/lib/ckez.jar dist/lib/gmapsz.jar dist/lib/zuljsp.jar /tmp/zk/$binnm/dist/lib/zkforge
+	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
+	cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
+	chmod 644 /tmp/zk/$binnm/dist/lib/*.jar
+	chmod 644 /tmp/zk/$binnm/dist/lib/*/*.jar
+
+	cp -rp zweb/src/archive/web/WEB-INF/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
+	cp -rp zk/src/archive/web/WEB-INF/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
+	#cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
+
+	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
+	cp zkdoc/release-note /tmp/zk/$binnm/doc
+		
+	chmod 644 /tmp/zk/$binnm/dist/xsd/*.xsd /tmp/zk/$binnm/doc/release-note
+
+	# License
+	cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
+	chmod 644  /tmp/zk/$binnm/doc/LICENSE
+
+	cd $maindir/zkdoc
+	for f in */ZK-quickstart*.pdf ; do  
+		fn=${f%.pdf}
+		cp $f /tmp/zk/$binnm/doc/${fn#**/}-$ver.pdf
+	done
+
+	cd /tmp/zk/$binnm/doc
+	find -name .svn | xargs rm -rf
+		
+	cd /tmp/zk/$binnm/dist/WEB-INF/tld
+	find -name .svn | xargs rm -rf
+
+	cd /tmp/zk
+
+
+	if [ "$target" == "official" ] ; then
+		#Prepare maven repository
+		function mvnrepo {
+			local vertamp=`echo $ver | sed 's/-/./'`
+			mkdir -p $1
+			if [ $2 ] ; then
+				cp /tmp/zk/$entsrcnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
+			fi
+			
+			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
+			jar cfM $1-$vertamp-bundle.jar -C $1 .
+		}
+		mkdir -p maven
+		mkdir -p /tmp/maven
+		cd maven
+		mvnrepo zcommon true
+		mvnrepo zweb true
+		mvnrepo zk true
+		mvnrepo zul true
+		mvnrepo zhtml true
+		mvnrepo zml
+		mvnrepo zkex
+		mvnrepo zkmax
+		mvnrepo zkplus true
+		mv *-bundle.jar /tmp/maven
+		cd ..
+		rm -rf maven
+	else
+		#Prepare maven repository
+		function mvnrepo {
+			local vertamp=`echo $ver | sed 's/-/./'`.$(date +%Y%m%d)
+			mkdir -p $1
+			if [ $2 ] ; then
+				cp /tmp/zk/$srcnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
+			fi
+			
+			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
+			jar cfM $1-$vertamp-bundle.jar -C $1 .
+		}
+		mkdir -p maven
+		mkdir -p /tmp/maven
+		cd maven
+		mvnrepo zcommon true
+		mvnrepo zweb true
+		mvnrepo zk true
+		mvnrepo zul true
+		mvnrepo zhtml true
+		mvnrepo zml
+		mvnrepo zkex
+		mvnrepo zkmax
+		mvnrepo zkplus true
+		mv *-bundle.jar /tmp/maven
+		cd ..
+		rm -rf maven
+	fi
+
+	
+	mkdir $binnmevl
+	mkdir $profnmevl
+	mkdir -p /tmp/zk/$binnm/dist/src
+	
+	cp /tmp/zk/$srcnm/dist/src/* /tmp/zk/$binnm/dist/src/
+	
+	cp -rp $binnm/* $binnmevl
+	
+	mkdir -p metainfo/zk
+	
+	# EE version
+	cp $maindir/cmldoc/ee $maindir/cmldoc/pe metainfo/zk/
+
+	jar ufM $binnm/dist/lib/zkmax.jar -C metainfo/ zk/ee
+	jar ufM $binnm/dist/lib/zkex.jar -C metainfo/ zk/pe
+	
+	#Ouput ${binnm}
+	if [ "$target" == "official" ] ; then
+		# License
+		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+		mv CML_LICENSE /tmp/zk/$binnm/doc/LICENSE
+		chmod 644  /tmp/zk/$binnm/doc/LICENSE
+		
+		cd /tmp/zk/$entsrcnm/dist/src
+		cp zkmax-sources.jar zkex-sources.jar zml-sources.jar /tmp/zk/$binnm/dist/src/
+		
+		cd /tmp/zk
+		echo Output ${binnm}.zip
+		zip -qr9 ${binnm}.zip $binnm
+		
+		echo Output ${binnm}.tar.gz
+		tar zcf ${binnm}.tar.gz $binnm
+		
+		cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
+		chmod 644  /tmp/zk/$binnm/doc/LICENSE
+		
+		cd /tmp/zk/$binnm/dist/src/
+		rm -rf zkmax-sources.jar zkex-sources.jar zml-sources.jar
+		cd /tmp/zk
+	fi
+		
+	echo Output ${binnmevl}.zip
+	zip -qr9 ${binnmevl}.zip $binnmevl
+	
+	#Ouput ${profnm}
+	cd $binnm/dist/lib/ext
+	rm -rf mvel.jar ognl.jar
+
+	cd ..
+	rm zkmax.jar
+
+	cd zkforge
+	rm gmapsz.jar
+	rm zuljsp.jar
+	rm timeplotz.jar
+
+	cd /tmp/zk
+
+	mv $binnm $profnm
+	
+	# PE version
+	cp -rp $profnm/* $profnmevl
+	cp -rp $binnmevl/dist/lib/zkex.jar $profnmevl/dist/lib/
+	
+	if [ "$target" == "official" ] ; then
+		# License
+		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+		mv CML_LICENSE /tmp/zk/$profnm/doc/LICENSE
+		chmod 644  /tmp/zk/$profnm/doc/LICENSE
+		
+		cd /tmp/zk/$entsrcnm/dist/src
+		cp zkex-sources.jar zml-sources.jar /tmp/zk/$profnm/dist/src/
+		cd /tmp/zk
+		
+		echo Output ${profnm}.zip
+		zip -qr9 ${profnm}.zip $profnm
+		
+		echo Output ${profnm}.tar.gz
+		tar zcf ${profnm}.tar.gz $profnm
+		
+		cd /tmp/zk/$profnm/dist/src/
+		rm -rf zkex-sources.jar zml-sources.jar
+		cd /tmp/zk
+	fi
+	
+	echo Output ${profnmevl}.zip
+	zip -qr9 ${profnmevl}.zip $profnmevl
+
+	#Ouput ${stdnm}
+	cd $profnm/dist/lib/ext
+	rm -rf jcommon.jar jfreechart.jar Filters.jar
+	rm -rf jasperreports.jar itext.jar jxl.jar poi.jar commons-collections.jar commons-logging.jar
+
+	cd ..
+	rm zml.jar
+	rm zkex.jar
+
+	cd zkforge
+	rm timelinez.jar
+	rm ckez.jar
+
+	cd /tmp/zk
+	
+	rm $profnm/doc/LICENSE
+	
+	mv $profnm $stdnm
+	
+	cp $maindir/zkdoc/COPYING /tmp/zk/$stdnm/doc
+	
+	
+	if [ "$target" == "official" ] ; then
+		echo Output ${stdnm}.tar.gz
+		tar zcf ${stdnm}.tar.gz $stdnm
+	fi
+	
+	echo Output ${stdnm}.zip
+	zip -qr9 ${stdnm}.zip $stdnm
+	
+	rm -rf $stdnm
+	rm -rf metainfo
+	rm -rf $binnmevl
+	rm -rf $profnmevl
+	rm -rf $srcnm
+
+	if [ "$target" == "official" ] ; then
+		rm -rf $profsrcnm
+		rm -rf $entsrcnm
+		
+		mkdir proprietary
+		mv ${profsrcnm}.zip ${entsrcnm}.zip ${profnm}.zip ${profnm}.tar.gz ${binnm}.zip ${binnm}.tar.gz proprietary
+		
+		#Prepare the doc
+		cd $maindir
+		$maindir/bin/javadoc "$javadocdir/ZK"
+		$maindir/bin/javadoc "$javadocdir/jsdoc"
+	fi
+
+	rm -rf $binnm
+	
+	#Prepare the java doc
+	cd $javadocdir
+
+	echo Output ${javadocnm}.zip
+	zip -qr9 ${javadocnm}.zip ZK
+	mv ${javadocnm}.zip /tmp/zk
+	
+	#Prepare the JS doc
+	echo Output ${jsdocnm}.zip
+	zip -qr9 ${jsdocnm}.zip jsdoc
+	mv ${jsdocnm}.zip /tmp/zk
+
+	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
+	mkdir -p /tmp/zk/$demonm/zkdemo/src/org
+	mkdir -p /tmp/zk/$demonm/MyApp/WebContent
+	mkdir -p /tmp/zk/$demonm/doc
+
+	cd $maindir
+
+	cp -rp zkdemo/src/archive/* /tmp/zk/$demonm/zkdemo/WebContent
+	#cp -rp zkdemo/codegen/archive/* /tmp/zk/$demonm/zkdemo/WebContent
+	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
+	cp -rp MyApp/src/archive/* /tmp/zk/$demonm/MyApp/WebContent
+	cp cmldoc/LICENSE zkdoc/release-note /tmp/zk/$demonm/doc
+
+	cp dist/lib/zkdemo.war /tmp/zk/$demonm/zkdemo-min.war
+
+
+	cd zkdoc
+	for f in */ZK-quickstart*.pdf ; do  
+		fn=${f%.pdf}
+		cp $f /tmp/zk/$demonm/doc/${fn#**/}-$ver.pdf
+	done
+
+	cd /tmp/zk/$demonm/doc
+	find -name .svn | xargs rm -rf
+	
+	cd $maindir
+	
+	if [ "$target" == "official" ] ; then
+		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
+		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
+	fi
+
+	mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
+		
+	cd /tmp/zk
+	find -name .svn | xargs rm -rf
+
+	echo Output ${demonm}.zip
+	zip -qr9 ${demonm}.zip $demonm
+	rm -rf $demonm
+fi

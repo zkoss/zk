@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+serialize.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 15 18:52:11     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of Serialization">
+<vbox id="vb">
+	<listbox id="src" multiple="true" width="200px">
+		<listhead>
+			<listheader label="Population"/>
+			<listheader align="right" label="%"/>
+		</listhead>
+		<listitem value="A">
+			<listcell label="A. Graduate"/>
+			<listcell label="20%"/>
+		</listitem>
+		<listitem value="B">
+			<listcell label="B. College"/>
+			<listcell label="23%"/>
+		</listitem>
+		<listitem value="C">
+			<listcell label="C. High School"/>
+			<listcell label="40%"/>
+		</listitem>
+	</listbox>
+	<radiogroup id="rg">
+		<radio label="K1"/>
+		<radio label="K2"/>
+		<radio label="K3"/>
+	</radiogroup>
+
+	<zscript>
+	int cnt = 0;
+	void anyfunc() { //used to test serialization of desktop
+	}
+	</zscript>
+	<button label="Clone list">
+		<attribute name="onClick">{
+	Object l = src.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		}</attribute>
+	</button>
+	<button label="Clone list by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(src);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+	<button label="Clone radiogroup by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(rg);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+	<button label="Serialize Current Desktop">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(desktop);
+	vb.insertBefore(new Label(boa.toByteArray().length+" bytes copied"), self);
+
+	byte[] bs = boa.toByteArray();
+	vb.insertBefore(new Label("readback:"+new ObjectInputStream(new ByteArrayInputStream(bs)).readObject()), self); //read back
+		}</attribute>
+	</button>
+	<button label="Serialize All Desktops">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(desktop.webApp.desktopCacheProvider.getDesktopCache(session));
+	vb.insertBefore(new Label(boa.toByteArray().length+" bytes copied"), self);
+		}</attribute>
+	</button>
+	<button label="Serialize Current Session">
+		<attribute name="onClick">
+	import java.io.*;
+	new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(session);
+		</attribute>
+	</button>
+
+	Tree
+	<tree id="tree" rows="4" width="400px">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+				</treerow>
+				<treechildren/>
+			</treeitem>
+			<treeitem label="Item 2"/>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 3"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 3.1.1"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3.2"/>
+							<treecell label="3.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 4">
+				<treechildren/>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<button label="Clone">
+		<attribute name="onClick">{
+	Tree t = tree.clone();
+	t.setId("dst" + ++cnt);
+	vb.insertBefore(t, self);
+		}</attribute>
+	</button>
+</vbox>
+</window>

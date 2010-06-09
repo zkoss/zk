@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 10 15:25:39     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<version>
+		<version-class>org.zkoss.web.Version</version-class>
+		<version-uid>5.0.3</version-uid>
+	</version>
+	<taglib>
+		<taglib-uri>http://www.zkoss.org/dsp/web/core</taglib-uri>
+		<taglib-location>/web/WEB-INF/tld/web/core.dsp.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>http://www.zkoss.org/dsp/web/html</taglib-uri>
+		<taglib-location>/web/WEB-INF/tld/web/html.dsp.tld</taglib-location>
+	</taglib>
+</config>

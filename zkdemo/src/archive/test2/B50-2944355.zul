@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2944355.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb  2 15:53:49 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please press UP/Down on the keyboard, and it should select the value after you press(if you need to press twice, that is a bug).
+<separator/>
+2. Reload(F5) the page again, please type the word "a" to the combobox, and then its value should be highlighted.
+<separator/>
+	<combobox id="combo" autodrop="true" mold="rounded" focus="true"/>
+	<zscript>
+	String[] _dict = { 
+		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+		"bible", "bird", "bingle", "blog",
+		"cabane", "cape", "cease", "cedar",
+		"dacron", "defacto", "definable", "deluxe",
+		"each", "eager", "effect", "efficacy",
+		"far", "far from",
+		"girl", "gigantean", "giant",
+		"home", "honest", "huge",
+		"information", "inner",
+		"jump", "jungle", "jungle fever",
+		"kaka", "kale", "kame",
+		"lamella", "lane", "lemma",
+		"master", "maxima", "music",
+		"nerve", "new", "number",
+		"omega", "opera",
+		"pea", "peace", "peaceful",
+		"rock", "RIA",
+		"sound", "spread", "student", "super",
+		"tea", "teacher",
+		"unit", "universe",
+		"vector", "victory",
+		"wake", "wee", "weak", "web2.0",
+		"xeme",
+		"yea", "yellow",
+		"zebra", "zk",
+		
+	};
+	 ListModel dictModel= new SimpleListModel(_dict);
+	 combo.setModel(dictModel);
+	</zscript>
+</zk>

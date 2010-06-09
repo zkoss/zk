@@ -1,0 +1,42 @@
+<?root-attributes xmlns:v="urn:schemas-microsoft-com:vml"?><!-- For IE -->
+<window id="mywin" width="100%" height="100%">
+	<zscript><![CDATA[
+		String sn = Executions.getCurrent().getServerName();
+		int sp = Executions.getCurrent().getServerPort();
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("zktest") >= 0) { //zktest		
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTOLZK1h7IfBeBWqZtjq6JJy913gBRHY1uafo5XzZVSyXXksjv_jHoUsA";
+		} else if (sn.indexOf("zktest2") >= 0) { //zktest2	
+			gkey="ABQIAAAAWaNkzbzygbuWnmqS4YCEZhTWO6y1eecluAZvbpmC7meqCt-saxSETUOirx46xfUyu-Z-mqLCi4vo9A";
+		} else if (sn.indexOf("localhost") >= 0) { //localhost
+			if (sp == 80) // http://localhost/
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else if (sp == 7799)
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		}
+	]]></zscript>
+<script content="zk.googleAPIkey='${gkey}'"/>
+ <html>
+<![CDATA[
+<ol>
+<li>You shall see two Google Maps with one Gmarker(red boloon) in each Gmaps.</li>
+<li>Try to drag the Gmarker and the maps content.</li>
+<li>If you can drag it, it is OK; otherwise, it is Bug.</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+ <groupbox>
+ 	<caption>Groupbox</caption>
+	<hbox>
+		<include src="macrogmaps.zul"/>
+ 		<include src="macrogmaps.zul"/>
+	</hbox>
+ </groupbox>
+</window>

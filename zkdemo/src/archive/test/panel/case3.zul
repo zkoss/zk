@@ -1,0 +1,225 @@
+<zk>
+<panel id="panel" border="normal" width="300px" height="300px">
+	<panelchildren id="child">
+		Test
+	</panelchildren>
+</panel>
+<vbox>
+	<hbox>
+	Test smartUpdate:
+		<button label="change border">
+			<attribute name="onClick">
+				if ("normal".equals(panel.getBorder()))
+					panel.setBorder("none");
+				else 
+					panel.setBorder("normal");
+			</attribute>
+		</button>
+		<button label="change width">
+			<attribute name="onClick">
+				if ("500px".equals(panel.getWidth()))
+					panel.setWidth("300px");
+				else 
+					panel.setWidth("500px");
+			</attribute>
+		</button>
+		<button label="change height">
+			<attribute name="onClick">
+				if ("500px".equals(panel.getHeight()))
+					panel.setHeight("300px");
+				else 
+					panel.setHeight("500px");
+			</attribute>
+		</button>
+		<button label="change title">
+			<attribute name="onClick">
+				if ("Title".equals(panel.getTitle())) {
+					panel.setTitle("");
+					tools.visible = !tools.visible;
+					movable.visible = !movable.visible;
+				 } else { 
+					panel.setTitle("Title");
+					tools.visible = !tools.visible;
+					movable.visible = !movable.visible;
+				}
+			</attribute>
+		</button>
+	</hbox>
+	<hbox id="tools" visible="false" style="border:1px solid red;">
+	Test tool buttons (Title only)
+		<button label="change closable">
+			<attribute name="onClick">
+				panel.closable = !panel.closable;
+			</attribute>
+		</button>
+		<vbox>
+		<button label="change collapsible">
+			<attribute name="onClick">
+				panel.collapsible = !panel.collapsible;
+				open.visible = !open.visible;
+			</attribute>
+		</button>
+		<button id="open" visible="false" label="change open">
+			<attribute name="onClick">
+				panel.open = !panel.open;
+			</attribute>
+		</button>
+		</vbox>
+		<vbox>
+		<button label="change maximizable">
+			<attribute name="onClick">
+				panel.maximizable = !panel.maximizable;
+				maximized.visible = !maximized.visible;
+			</attribute>
+		</button>
+		<button id="maximized" visible="false" label="change maximized">
+			<attribute name="onClick">
+				panel.maximized = !panel.maximized;
+			</attribute>
+		</button>
+		</vbox>
+		<vbox>
+		<button label="change minimizable">
+			<attribute name="onClick">
+				panel.minimizable = !panel.minimizable;
+				minimized.visible = !minimized.visible;
+			</attribute>
+		</button>
+		<button id="minimized" visible="false" label="change minimized">
+			<attribute name="onClick">
+				panel.minimized = !panel.minimized;
+			</attribute>
+		</button>
+		</vbox>
+	</hbox>
+	<hbox>
+	Test layout:
+		<button label="change framable">
+			<attribute name="onClick">
+				panel.framable = !panel.framable;
+			</attribute>
+		</button>
+		<hbox style="border:1px solid green">
+		<button label="change floatable">
+			<attribute name="onClick">
+				panel.floatable = !panel.floatable;
+				floatgroups.visible = !floatgroups.visible;
+				panel.setTop("100px");
+				panel.setLeft("100px");
+			</attribute>
+		</button>
+		<div style="padding:3px" id="floatgroups" visible="false">
+		<button label="change top">
+			<attribute name="onClick">
+				if ("300px".equals(panel.getTop()))
+					panel.setTop("100px");
+				else 
+					panel.setTop("300px");
+			</attribute>
+		</button>
+		<button label="change left">
+			<attribute name="onClick">
+				if ("300px".equals(panel.getLeft()))
+					panel.setLeft("100px");
+				else 
+					panel.setLeft("300px");
+			</attribute>
+		</button>
+		</div>
+		<button id="movable" visible="false" label="change movable">
+			<attribute name="onClick">
+				panel.movable = !panel.movable;
+			</attribute>
+		</button>
+		</hbox>
+	</hbox>
+	<hbox>
+	Test dynamically add/delete children
+		<button label="add/delete Panelchildren">
+			<attribute name="onClick">
+				if (panel.panelchildren != null)
+					panel.panelchildren.detach();
+				else {
+					Panelchildren panelchild = new Panelchildren();
+					new Label("Test").setParent(panelchild);
+					panel.appendChild(panelchild);
+				}
+			</attribute>
+		</button>
+		<vbox>
+		<button label="add Toolbars">
+			<attribute name="onClick"><![CDATA[
+				Toolbar tool = new Toolbar();
+				new Toolbarbutton("Button 1").setParent(tool);
+				if (panel.topToolbar != null && panel.bottomToolbar != null && panel.footToolbar != null) {
+					alert("only three toolbars!");
+					return;
+				}
+				if (panel.panelchildren != null && panel.topToolbar == null)
+					panel.insertBefore(tool, panel.panelchildren);
+				else
+					panel.appendChild(tool);
+			]]></attribute>
+		</button>
+		<button label="add Top Toolbar">
+			<attribute name="onClick">
+				if (panel.topToolbar != null) {
+					alert("only one Top toolbar!");
+					return;
+				}
+				Toolbar tool = new Toolbar();
+				new Toolbarbutton("Top").setParent(tool);
+				panel.addToolbar("tbar", tool);
+			</attribute>
+		</button>
+		<button label="add Bottom Toolbar">
+			<attribute name="onClick">
+				if (panel.bottomToolbar != null) {
+					alert("only one Bottom toolbar!");
+					return;
+				}
+				Toolbar tool = new Toolbar();
+				new Toolbarbutton("Bottom").setParent(tool);
+				panel.addToolbar("bbar", tool);
+			</attribute>
+		</button>
+		<button label="add Foot Toolbar">
+			<attribute name="onClick">
+				if (panel.footToolbar != null) {
+					alert("only one Foot toolbar!");
+					return;
+				}
+				Toolbar tool = new Toolbar();
+				new Toolbarbutton("Foot").setParent(tool);
+				panel.addToolbar("fbar", tool);
+			</attribute>
+		</button>
+		</vbox>
+		<button label="delete Top Toolbar">
+			<attribute name="onClick">
+				if (panel.topToolbar == null)
+					alert("Top Toolbar is null");
+				else 
+					panel.topToolbar.detach();
+			</attribute>
+		</button>
+		<button label="delete Bottom Toolbar">
+			<attribute name="onClick">
+				if (panel.bottomToolbar == null)
+					alert("Bottom Toolbar is null");
+				else 
+					panel.bottomToolbar.detach();
+			</attribute>
+		</button>
+		<button label="delete Foot Toolbar">
+			<attribute name="onClick">
+				if (panel.footToolbar == null)
+					alert("Foot Toolbar is null");
+				else 
+					panel.footToolbar.detach();
+			</attribute>
+		</button>
+		
+	</hbox>
+</vbox>
+</zk>

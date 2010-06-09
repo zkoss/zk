@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1881557.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 29 14:06:08     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:ol>
+		<n:li>Clicks textbox (to gain focus), </n:li>
+		<n:li>Clicks other place (to lose focus),and then you shall see nothing happen.</n:li>
+		<n:li>It is wrong, if a messagebox is shown</n:li>
+</n:ol>
+<window>
+	<textbox onChange='alert("1");' constraint="no negative,no zero"/>
+</window>
+</zk>

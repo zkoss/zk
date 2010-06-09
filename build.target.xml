@@ -1,0 +1,319 @@
+<!-- build.target.xml
+	Purpose:
+		The target definitions for build.xml
+	Description:
+		The target definitions are put in a separate file for two reasons:
+		1) it is shared by two projects
+		2) reduce the complexity of build.xml
+	History:
+		Wed Aug 21 18:01:44  2002, Created by tomyeh
+
+Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
+-->
+
+<!-- ======= -->
+<!-- CODEGEN -->
+<!-- ======= -->
+<target name="codegen.mesg" depends="config.build" if="src.mesg.dir.exist">
+	<!-- generate MxxConst.java -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/genprop"/>
+		<arg value="-x"/>
+		<arg value="${src.mesg.dir}"/>
+		<arg value="${codegen.dir}"/>
+	</exec>
+</target>
+
+<!-- ======= -->
+<!-- COMPILE -->
+<!-- ======= -->
+<target name="compile0" depends="codegen.mesg" if="src.dir.exist">
+	<mkdir dir="${out.dir}"/>
+	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
+	<property name="srcdpc.dir" value=""/>
+	<available file="srcpv" property="srcpv.dir" value="srcpv"/>
+	<property name="srcpv.dir" value=""/>
+	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
+	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
+	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
+</target>
+<target name="compile5" depends="codegen.mesg, compile0" if="src5.dir.exist">
+	<javac srcdir="${src5.dir}:${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
+	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
+	 target="1.5" deprecation="${deprecation}" source="1.5"/>
+</target>
+<target name="compile" depends="compile0,compile5" if="compile.required">
+</target>
+
+<!-- ====== -->
+<!-- DEPLOY -->
+<!-- ====== -->
+<target name="deploy.lib" depends="config.build" if="deploy.lib.required">
+	<copy todir="${dist.lib.dir}" preservelastmodified="yes">
+		<fileset dir="${out.dir}" includes="${xar.name}, ${jad.name}"/>
+	</copy>
+</target>
+
+<target name="stop.service" depends="config.build"
+if="start.service.required">
+	<exec executable="net" dir="." failonerror="false">
+		<arg value="stop"/>
+		<arg value="${start.service}"/>
+	</exec>
+</target>
+<target name="start.service" depends="config.build"
+if="start.service.required">
+	<exec executable="net" dir="." failonerror="false">
+		<arg value="start"/>
+		<arg value="${start.service}"/>
+	</exec>
+</target>
+<target name="deploy.tomcat.files" depends="config.build"
+if="deploy.tomcat.required">
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/deploy.unzip.war"/>
+		<arg value="${dist.lib.dir}"/>
+		<arg value="${tomcat.webapps.dir}"/>
+		<arg value="${ear.libs}"/>
+		<arg value="${root.context}/ROOT"/>
+	</exec>
+
+	<copy todir="${tomcat.lib.dir}" preservelastmodified="yes">
+		<fileset dir="${dist.lib.dir}" includes="${server.libs}"/>
+		<fileset dir="${dist.lib.ext.dir}" includes="${server.libs}"/>
+	</copy>
+
+	<copy tofile="${tomcat.conf.dir}/i3-log.conf" file="${dist.conf.dir}/i3-log.conf.local"
+	preservelastmodified="yes" failonerror="false"/>
+</target>
+<target name="deploy.tomcat"
+depends="config.build, stop.service, deploy.tomcat.files, start.service"
+if="deploy.tomcat.required">
+</target>
+
+<target name="deploy.jboss.intact" depends="config.build"
+if="deploy.jboss.intact.required">
+	<!-- deploy to server intact -->
+	<copy todir="${jboss.deploy1.dir}" preservelastmodified="yes">
+		<fileset dir="${out.dir}" includes="${xar.name}"/>
+	</copy>
+</target>
+<target name="deploy.jboss.unzip" depends="config.build"
+if="deploy.jboss.unzip.required">
+	<!-- deploy to server by unzip -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/deploy.unzip"/>
+		<arg value="${out.dir}/${xar.name}"/>
+		<arg value="${jboss.deploy1.dir}"/>
+		<arg value="${deploy.unzip.list}"/>
+	</exec>
+</target>
+
+<target name="deploy.jboss"
+depends="config.build, deploy.jboss.unzip, deploy.jboss.intact"
+if="deploy.jboss.required">
+	<mkdir dir="${dist.conf.dir}"/>
+
+	<!-- deploy configuration files -->
+	<copy tofile="${jboss.conf.dir}/i3-log.conf" file="${dist.conf.dir}/i3-log.conf.local"
+	preservelastmodified="yes" failonerror="false"/>
+
+	<copy todir="${jboss.conf.dir}" preservelastmodified="yes">
+		<fileset dir="${dist.conf.dir}"
+		includes="*-service.xml,i3-ks,*-policy.xml,*.properties"/>
+	</copy>
+	<copy todir="${jboss.app.conf.dir}" preservelastmodified="yes">
+		<fileset dir="${dist.conf.dir}"
+		includes="i3-*.xml" excludes="*-service.xml,i3-ks"/>
+	</copy>
+
+	<!-- deploy external library -->
+	<copy todir="${jboss.lib.dir}" preservelastmodified="yes">
+		<fileset dir="${dist.lib.ext.dir}" includes="${server.libs}"/>
+	</copy>
+	<copy todir="${jboss.lib.dir}" preservelastmodified="yes">
+		<fileset dir="${dist.lib.dir}" includes="${server.libs}"/>
+	</copy>
+</target>
+
+<target name="deploy" depends="deploy.lib, deploy.tomcat, deploy.jboss">
+</target>
+
+<!-- ===== -->
+<!-- BUILD -->
+<!-- ===== -->
+<target name="build.jar" depends="gentime, compile" if="build.jar.required">
+	<mkdir dir="${src.archive.dir}"/>
+	<mkdir dir="${codegen.archive.dir}"/>
+
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/zipjs"/>
+		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		<arg value="${dist.lib.ext.dir}/bsh.jar"/>
+		<arg value="${bin.dir}/rmcomment.java"/>
+		<arg value="${src.archive.dir}/${zipjs}"/>
+		<arg value="${codegen.archive.dir}/${zipjs}"/>
+	</exec>
+	
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/zipcss"/>
+		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		<arg value="${src.archive.dir}/${zipcss}"/>
+		<arg value="${codegen.archive.dir}/${zipcss}"/>
+	</exec>
+	
+	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
+		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${src.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
+		<fileset dir="${codegen.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF"/>
+	</jar>
+</target>
+<target name="build.jad" depends="compile" if="build.jad.required">
+	<mkdir dir="${src.archive.dir}"/>
+	<mkdir dir="${codegen.archive.dir}"/>
+
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/preverify"/>
+		<arg value="${out.dir}"/>
+		<arg value="${outv.dir}"/>
+	</exec>
+	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
+		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${jad.name}"/>
+		<fileset dir="${src.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, META-INF/${jad.name}, ${zipjs}/**, ${zipcss}/**"/>
+		<fileset dir="${codegen.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF"/>
+	</jar>
+
+	<!-- generate ${out.dir}/${project-name}.jad -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/genjad"/>
+		<arg value="${out.dir}/${jar.name}"/>
+		<arg value="${src.archive.dir}/META-INF/${jad.name}"/>
+		<arg value="${out.dir}/${jad.name}"/>
+	</exec>
+</target>
+<target name="gentime" depends="config" if="gentime.required">
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/gentime"/>
+		<arg value="${codegen.dir}/${gentime}"/>
+	</exec>
+</target>
+
+<target name="build.war" depends="compile" if="build.war.required">
+	<mkdir dir="${out.dir}"/>
+	
+	<property name="src.web.xml" value="${war.dir}/WEB-INF/web.xml"/>
+		<!-- to let other targets have a chance to override it -->
+	<war warfile="${out.dir}/${war.name}" webxml="${src.web.xml}"
+	manifest="${war.dir}/META-INF/MANIFEST.MF">
+		<fileset dir="${war.dir}" includes="**"
+		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF"/>
+
+		<lib dir="${dist.lib.ext.dir}" includes="${war.libs}"/>
+		<lib dir="${dist.lib.dir}" includes="${war.libs}"/>
+		<classes dir="${out.dir}" includes="**" excludes="${exclude.list}"/>
+	</war>
+</target>
+
+<target name="build.ear" depends="config.build" if="build.ear.required">
+	<mkdir dir="${out.dir}"/>
+	<!-- build ear -->
+	<ear earfile="${out.dir}/${ear.name}" manifest="${manifest.mf}"
+	 appxml="${application.xml}">
+		<fileset dir="${dist.lib.dir}" includes="${ear.libs}"/>
+		<fileset dir="${src.archive.dir}"
+		 includes="META-INF/**"
+		 excludes="META-INF/MANIFEST.MF, META-INF/application.xml"/>
+	</ear>
+</target>
+
+<target name="build"
+ depends="config.build, build.war, build.jad, build.jar, build.ear, deploy">
+</target>
+
+<!-- ===== -->
+<!-- CLEAN -->
+<!-- ===== -->
+<target name="clean.bin" depends="config" if="clean.bin.required">
+	<delete quiet="true" dir="${bin.dir}"/>
+</target>
+
+<target name="clean" depends="clean.bin">
+	<delete quiet="true" dir="${out.dir}"/>
+	<delete quiet="true" dir="${tmp.dir}"/>
+	<delete quiet="true" dir="${outv.dir}"/>
+	<delete quiet="true" dir="${codegen.dir}"/>
+	<delete quiet="true">
+		<fileset dir="${dist.lib.dir}" includes="${xar.name}, ${jad.name}"/>
+		<!--fileset dir="${jboss.lib.dir}" includes="${xar.name}"/-->
+		<fileset dir="${jboss.deploy1.dir}" includes="${xar.name}"/>
+		<!--fileset dir="${tomcat.lib.dir}" includes="${xar.name}"/-->
+		<fileset dir="${tomcat.webapps.dir}" includes="${xar.name}"/>
+	</delete>
+</target>
+
+<!-- ========= -->
+<!-- UNIT TEST -->
+<!-- ========= -->
+<target name="utest" depends="build">
+	<property name="class.test" value="**/*Test.java"/><!-- test all if not defined -->
+
+	<echo message="Test ${class.test}..."/>
+	<junit fork="yes" haltonerror="${haltonerror}" dir="${out.dir}">
+		<jvmarg value="-ea"/>
+		<formatter type="plain" usefile="false"/>
+		<classpath>
+			<pathelement path="${java.class.path}"/>
+			<pathelement location="${out.dir}"/>
+		</classpath>
+		<batchtest>
+			<fileset dir="${src.dir}" includes="${class.test}"/>
+		</batchtest>
+	</junit>
+</target>
+
+<!-- ============= -->
+<!-- MISCELLANEOUS -->
+<!-- ============= -->
+<target name="javadoc" depends="config.build">
+	<javadoc 
+	 destdir="${working.javadoc.dir}"
+	 sourcepath="${src.dir}:${src5.dir}:${codegen.dir}"
+	 author="true" protected="true" version="true" use="true"
+	 windowtitle="${project.title} ${project.version} API"
+	 doctitle="${project.title} ${project.version} API"
+	 additionalparam="-breakiterator -source ${source.version}">
+	 <bottom><![CDATA[Copyright &copy; 2005-2010 Potix Corporation. All Rights Reserved.
+	 	<!--{{JAVASCRIPT_OUTPUT}}-->
+	 ]]></bottom>
+		<classpath>
+			<pathelement path="${javadoc.class.path}"/>
+		</classpath>
+	</javadoc>
+
+	<delete quiet="true" dir="${dist.javadoc.dir}"/>
+	<move todir="${dist.javadoc.dir}">
+		<fileset dir="${working.javadoc.dir}"/>
+	</move>
+	<delete quiet="true" dir="${working.javadoc.dir}"/>
+	<delete quiet="true" dir="${working.dir}"/>
+
+	<!-- copy xml and html to the destination since they might be referenced
+		by package.html -->
+	<copy todir="${dist.javadoc.dir}" preservelastmodified="yes">
+		<fileset dir="${src.dir}"
+		 includes="org/zkoss/**/*.xml, org/zkoss/**/*.html"
+		 excludes="**/package.html" />
+	</copy>
+</target>
+
+<target name="jsdoc">
+	<!-- generate JavaScript Doc -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/jsdoc"/>
+		<arg value="${project.name}"/>
+	</exec>
+</target>

@@ -1,0 +1,524 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#	Purpose:
+#		To build java projects
+#	Description:
+#		'build help' for more descriptions
+#	History:
+#		March 29 15:11 2001, Created by tomyeh
+#		August 21 13:59 2002, Rewritten by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+
+#-- precondition check
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified. Refer to $setting.sample.
+		exit 1
+	fi
+fi
+
+#-- help, verbose or continue
+if [ "$1" = "help" ] ; then
+	more build.txt
+	exit 0
+fi
+#nojc is obsolete
+#if [ "$1" = "nojc" ] ; then
+#	shift
+#	nojc="-Dnojc=true"
+#else
+#	nojc="-Dnojc=false"
+#fi
+if [ "$1" = "verbose" ] ; then
+	shift
+	verbose="-verbose -Dverbose.required=true"
+fi
+if [ "$1" = "continue" ] ; then
+	shift
+	haltonerror=off
+else
+	haltonerror=on
+fi
+if [ "$1" = "unzip" ] ; then
+	shift
+	unzip=true
+else
+	unzip=$(grep '^unzip=' $setting)
+	unzip=${unzip#unzip=}
+	if [ "$unzip" = "false" ] ; then
+		unzip=
+	fi
+fi
+
+jboss_profile=$(grep '^jboss.deploy' $setting)
+jboss_profile=${jboss_profile#jboss.deploy=}
+if [ "$jboss_profile" != "" ] ; then
+	jboss_ear=${jboss_profile#*/}
+	if [ "$jboss_ear" = "" ] ; then
+		echo "Illegal jboss.deploy: $jboss_profile. It must be xxx/yyy."
+	fi
+	jboss_profile=${jboss_profile%/*}
+fi
+jboss_home=/usr/jboss
+tomcat_home="$CATALINA_HOME"
+if [ ! -d "$tomcat_home" ]; then
+  tomcat_home=/usr/tomcat
+fi
+if [ "$TERM" = "cygwin" ] ; then
+	jboss_home=$(cygpath -w $jboss_home)
+	jboss_home=${jboss_home%\\}
+	tomcat_home=$(cygpath -w $tomcat_home)
+	tomcat_home=${tomcat_home%\\}
+fi
+
+start_service=$(grep '^start.service' $setting)
+start_service=${start_service#start.service=}
+
+#-- parsing dbglfag
+dbgflag=$(grep '^D.ON' $setting)
+dbgflag=${dbgflag#D.ON=}
+if [ "$dbgflag" = "true" ] ; then
+	cmd=build.debug
+	jstrim=false
+elif [ "$dbgflag" = "false" ] ; then
+	cmd=build.release
+	jstrim=true
+else
+	echo D.ON in $setting must be either true or false -- not $dbgflag
+	exit 1
+fi
+
+#-- parsing cmd
+cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc jsdoc help"
+if [ \( $# != 0 \) -a \( "${cmdList#* $1 }" != "$cmdList" \) ] ; then
+	cmd=$1
+	shift
+fi
+
+case $cmd in
+bd)   cmd=build.debug ;;
+br)   cmd=build.release ;;
+cd)   cmd=clean.debug ;;
+cr)   cmd=clean.release ;;
+ud)   cmd=utest.debug ;;
+ur)   cmd=utest.release ;;
+doc)  cmd=javadoc ;;
+esac
+
+outdir=${cmd#*\.}
+cmd=${cmd%\.*}
+if [ "$outdir" = "$cmd" ] ; then
+	if [ "$dbgflag" = "true" ] ; then
+		outdir=debug
+	else
+		outdir=release
+	fi
+fi
+
+#-- adjust javac debug and optimize flags
+dflag=$(grep '^debug=' $setting)
+dflag=${dflag#debug=}
+if [ "$dflag" = "true" ] ; then
+	dflag=on
+elif [ "$dflag" = "false" ] ; then
+	dflag=off
+elif [ "$dflag" != "" ] ; then
+	echo Illegal setting: debug=$dflag
+	exit 1
+fi
+
+oflag=$(grep '^optimize=' $setting)
+oflag=${oflag#optimize=}
+if [ "$oflag" = "true" ] ; then
+	oflag=on
+elif [ "$oflag" = "false" ] ; then
+	oflag=off
+elif [ "$oflag" != "" ] ; then
+	echo Illegal setting: optimize=$oflag
+	exit 1
+fi
+
+if [ "$outdir" = "release" ] ; then
+	if [ "$dflag" = "" ] ; then
+		dflag="off"
+	fi
+	if [ "$oflag" = "" ] ; then
+		oflag="on"
+	fi
+else
+	if [ "$dflag" = "" ] ; then
+		dflag="on"
+	fi
+	if [ "$oflag" = "" ] ; then
+		oflag="off"
+	fi
+fi
+echo "dflag=$dflag, oflag=$oflag"
+
+#-- Prepare define list
+dfnList=
+if [ $# != 0 ] ; then
+	while [ "$1" != "${1#*=}" ] ; do
+		dfnList="$dfnList -D$1"
+		shift
+	done
+fi
+
+#-- Prepare $targetList
+#Add a project to the target list (the redudant ones won't be added)
+if [ $# != 0 ] ; then
+	for target in $* ; do
+		target=${target%/}
+		targetListOld="$targetListOld $target"
+		if [ \( ! -d $target \) -a \( ! -d ${target}Test \) ] ; then
+			echo "Error: $target doesn't exist"
+			exit 1
+		fi
+	done
+else
+	if [ $cmd == "javadoc" ] ; then
+		javadocAll="true"
+	fi
+	if [ ! -f build.projects ] ; then
+		echo build.projects not found
+		exit 1
+	fi
+	targetListOld="$(cat build.projects | tr '\n' ' ')"
+	targetListOld="${targetListOld% }"
+	doall="-Ddo.all=true"
+		#denote all projects are built; passed to build.xml
+fi
+
+function addToTargetList
+{
+	if [ \( "${targetList#* $1 }" = "${targetList}" \) -a \
+	\( "${targetList% $1}" = "${targetList}" \) -a \
+	\( "${targetList#$1 }" = "${targetList}" \) ] ; then
+		targetList="$targetList $1"
+
+		#check wether the project is defined correctly
+		mustList="format"
+		if [ -d $target ] ; then
+			for v in $mustList ; do
+				if [ ! -f $target/$v ] ; then
+					echo "Error: $target/$v doesn't exist"
+					exit 1
+				fi
+			done
+		fi
+	fi
+}
+
+
+targetList=
+if [ "${cmd#utest}" != "$cmd" ] ; then #utest
+	for target in $targetListOld ; do
+		if [ "${target%Test}" = "$target" ] ; then
+			target=${target}Test
+		fi
+		addToTargetList $target
+	done
+else
+	for target in $targetListOld ; do
+		addToTargetList $target
+	done
+fi
+
+#-- prepare javadocdir ...
+if [ "$cmd" = "javadoc" ] ; then
+	javadocdir=$(grep '^javadoc' $setting)
+	javadocdir=${javadocdir#javadoc=}
+	if [ "$javadocdir" = "" ] ; then
+		echo javadoc must be specified in $setting
+		exit 1
+	fi
+	javadocdir=${javadocdir/\~/$HOME}
+else
+	javadocdir=nonexist
+fi
+
+#-- subroutine safe_cygpath
+#$1: cygpath option
+#$2: path
+#split path to chunks of $size size and do cygpath
+#this is a work around for the cygpath bug which cannot handle too long a path
+function safe_cygpath
+{
+	local path=$2
+	local size=400
+	local newpath=
+	while [ ${#path} -gt $size ] ; do
+		path1=${path:0:$size}
+		path1=${path1%:*}
+		offset=$((${#path1}+1))
+		newpath="$newpath;$(cygpath $1 $path1)"
+		path=${path:$offset}
+	done
+	if [ ${#path} -gt 0 ] ; then
+		newpath="$newpath;$(cygpath $1 $path)"
+	fi
+	newpath=${newpath#;}
+	echo ${newpath%;}
+}
+
+#-- subroutine invoke_ant
+#$1: cmd
+#$2: target
+function invoke_ant
+{
+	echo "$1.$outdir $2 $3..."
+	cd $2
+	
+	if [ $3 ] ; then
+		prjnm=$3
+	else
+		prjnm=$2
+	fi
+	
+	#handle class.test.local
+	local class_test=
+	if [ "${cmd#utest}" != "$cmd" ] ; then #utest
+		if [ -f class.test.local ] ; then
+			ctOrg=$(cat class.test.local | tr '\n' ' ')
+			class_test=
+			for cls in $ctOrg ; do
+				if [ "${cls#\#}" = "$cls" ] ; then
+					fl=$(echo $cls | tr '.' '/').java
+					if [ "$class_test" = "" ] ; then
+						class_test="-Dclass.test=$fl"
+					else
+						class_test="$class_test,$fl"
+							#Don't use whitespace
+					fi
+				fi
+			done
+		fi
+	fi
+
+	local CP=
+	if [ -f classpath ] ; then
+		#retrieve path
+		CP=$(cat classpath | tr '\n' ':')
+		CP=${CP%:}
+
+		#javadoc.class.path shall not contain '.', because xdoclet will
+		#ignore files that are found in classpath
+		DCP=$(echo $CP | sed -e 's/:\.:/:/g' -e 's/^\.://' -e 's/:\.$//')
+		if [ "$TERM" = "cygwin" ] ; then
+			DCP=$(safe_cygpath "-mp" "$DCP")
+				#Don't convert CP because it is used by bash directly
+		fi
+	fi
+	if [ "$verbose" != "" ] ; then
+		echo "CP: $CP"
+		echo "DCP: $DCP"
+	fi
+
+	local war_libs=
+	if [ -f war.libs ] ; then
+		war_libs=$(cat war.libs | tr '\n' ',')
+		war_libs=${war_libs%,}
+	fi
+	if [ "$war_libs" = "" ] ; then
+		war_libs=nonexist
+	fi
+
+	local server_libs=
+	if [ -f server.libs ] ; then
+		server_libs=$(cat server.libs | tr '\n' ',')
+		server_libs=${server_libs%,}
+	fi
+	if [ "$server_libs" = "" ] ; then
+		server_libs="nonexist"
+	fi
+
+	local ear_libs=
+	if [ -f ear.libs ] ; then
+		ear_libs=$(cat ear.libs | tr '\n' ',')
+		ear_libs=${ear_libs%,}
+	fi
+	if [ "$ear_libs" = "" ] ; then
+		ear_libs=nonexist
+	fi
+
+	local deploy=
+	local unziplist=
+	if [ -f deploy ] ; then
+		deploy=$(head -1 deploy)
+		if [ "$deploy" = "server" ] || [ "${cmd#utest}" != "$cmd" ] ; then
+			app=$(grep '^app=' deploy)
+			app=${app#app=}
+			if [ "$app" = "" ] ; then
+				echo "You must specify app=xxx in deploy, because deploy target is server or utest is required"
+				exit 1
+			fi
+			echo Application: $app
+		fi
+		if [ "$deploy" = "server" ] ; then
+			rootContext=$(grep '^root-context=' deploy)
+			rootContext=${rootContext#root-context=}
+
+			if [ "$unzip" != "" ]; then
+				unziplist=$(grep '^unzip' deploy|tr -d ' ')
+				unziplist=${unziplist#unzip=}
+				if [ "$unziplist" != "" ] ; then
+					unziplist=-Ddeploy.unzip.list="$unziplist"
+				fi
+			fi
+		fi
+
+		zipjslist=$(grep '^zipjs=' deploy)
+		zipjslist=${zipjslist#zipjs=}
+		zipcsslist=$(grep '^zipcss=' deploy)
+		zipcsslist=${zipcsslist#zipcss=}
+	else
+		deploy=unknown
+	fi
+	if [ "${zipjslist}" = "" ] ; then
+		zipjslist=_na_dir_
+	fi
+	if [ "${zipcsslist}" = "" ] ; then
+		zipcsslist=_na_dir_
+	fi
+
+	prjver="$(head -1 version)"
+	srcver=$(grep '^source=' version)
+	srcver=${srcver#source=}
+	if [ "$srcver" = "" ] ; then
+		srcver=1.4
+	fi
+	tgtver=$(grep '^target=' version)
+	tgtver=${tgtver#target=}
+	if [ "$tgtver" = "" ] ; then
+		tgtver=1.4
+	fi
+	deprecation=$(grep '^deprecation=' version)
+	deprecation=${deprecation#deprecation=}
+	if [ "$deprecation" = "" ] ; then
+		deprecation=on
+	fi
+
+	this_dflag=$dflag
+	dflagtmp=$(grep '^debug=' version)
+	dflagtmp=${dflagtmp#debug=}
+	if [ "$dflagtmp" = "true" ] ; then
+		this_dflag=on
+	elif [ "$dflagtmp" = "false" ] ; then
+		this_dflag=off
+	fi
+	this_oflag=$oflag
+	oflagtmp=$(grep '^optimize=' version)
+	oflagtmp=${oflagtmp#optimize=}
+	if [ "$oflagtmp" = "true" ] ; then
+		this_oflag=on
+	elif [ "$oflagtmp" = "false" ] ; then
+		this_oflag=off
+	fi
+
+	prjtitle=$(grep '^project=' version)
+	prjtitle=${prjtitle#project=}
+	if [ "$prjtitle" = "" ] ; then
+		prjtitle=$prjnm
+	fi
+
+	format="$(head -1 format)"
+	if [ "$format" = "cpp" ] ; then
+		if [ ! -d $outdir ] ; then
+			mkdir $outdir
+		fi
+		if [ \( "${cmd#build}" != "$cmd" \) -o \( "${cmd#clean}" != "$cmd" \) ] ; then
+		(
+			cd $outdir
+			DEPLOY_DIR=../../dist/lib make -f ../src/Makefile $1
+		)
+		fi
+	else
+		gentime=$(grep '^time=' format)
+		gentime=${gentime#time=}
+
+		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
+		$doall -Dformat="$format" -Ddeploy="$deploy" \
+		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
+		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \
+		-Djboss.home="$jboss_home" -Dtomcat.home="$tomcat_home" \
+		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
+		-Dzipcss=$zipcsslist\
+		-Dwar.libs="$war_libs" -Dbasedir=. \
+		-Dear.libs="$ear_libs" \
+		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
+		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
+		-Ddeprecation="$deprecation" \
+		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
+		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
+		-Dshare.javadoc.dir="$javadocdir" \
+		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
+		-Droot.context=$rootContext -Dgentime=$gentime \
+		$dfnList -buildfile ../build.xml $1
+	fi
+
+	if [ $? != 0 ] ; then
+		exit $?
+	fi
+
+	rm -rf velocity.log junit*.properties
+	cd ..
+}
+
+start=`date +%s`
+if [ "$javadocAll" = "true" ] ; then
+	echo "prepare javadoc all"
+	rm -rf javadoctmp
+	mkdir -p javadoctmp/src
+	maindir="$(pwd)"
+	chmod -R 755 $maindir
+	touch javadoctmp/tmp
+	for target in $targetList ; do
+		echo "copy $target"
+		if [ "$target" != "zkdemo" ] ; then
+			if [ -d $target/src/org ] ; then
+				cp -rp $target/src/org* javadoctmp/src
+			fi
+			if [ -d $target/codegen/org ] ; then
+				cp -rp $target/codegen/org* javadoctmp/src
+			fi
+			if [ -f $target/classpath ] ; then
+				cat $target/classpath >> javadoctmp/tmp
+			fi
+		fi
+	done
+	sort javadoctmp/tmp | uniq >> javadoctmp/classpath
+	rm javadoctmp/tmp
+	cp zk/version zk/format javadoctmp
+	invoke_ant javadoc javadoctmp ZK
+	rm -rf javadoctmp
+	exit 1
+else
+	echo "targets: ${targetList}"
+	for target in $targetList ; do
+		if [ -d $target ] ; then
+			invoke_ant $cmd $target
+		else
+			echo "Ignore: $target doesn't exist"
+		fi
+	done
+fi
+end=`date +%s`
+if [ "${end%s}" = "${end}" ] ; then
+	buildTime=$(( $end - $start ))
+	buildTimeMM=$(( $buildTime / 60 ))
+	buildTimeSS=$(( $buildTime % 60 ))
+	echo ""
+	echo "Total build process time: ${buildTimeMM} min ${buildTimeSS} sec."
+fi
+

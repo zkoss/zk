@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+annot.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov  3 12:16:26     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:a="http://www.zkoss.org/2005/zk/annotation"
+xmlns:h="http://www.w3.org/1999/xhtml">
+<a:author name="John Magic" date="3/17/2006"/>
+<a:editor name="Mary White" date="4/11/2006"/>
+<window id="main" title="Annotation" >
+	<a:bind field="value"/>
+	<a:bind source="bigcat:1099"/>
+	<textbox id="t1"/>
+	<textbox id="t2">
+		<a:hello say="hi"/>
+		<attribute name="value">Hello</attribute>
+	</textbox>
+	<textbox id="t3" a:mark="color='blue',shape='round'" value=""/>
+	<textbox id="t4" value="@{mark(color='blue',shape='round')}"/>
+	<textbox id="t5" value="@{selected.item}"/>
+	<textbox id="t6" value="@{first second(color='blue',round) third forth(ab) (cd='cd')}"/>
+	<textbox id="t7" value="@{bind(_var='person')}" self="@{each='person'}" rows="@{rows}">
+		<custom-attributes foo="@{custom(attr='found')}"/>
+	</textbox>
+	<h:a href="@{html(good)}"/>
+	<zscript>
+	void dump(StringBuffer sb, Component comp) {
+		sb.append(comp.getClass().getName()).append(' ').append(comp.getId()).append(": ")
+		  .append(comp.getAnnotations().toString())
+		  .append('\n');
+		for (Iterator it = comp.getAnnotatedProperties().iterator();
+		it.hasNext();) {
+			String prop = it.next();
+			sb.append(" with ").append(prop).append(": ")
+				.append(comp.getAnnotations(prop))
+				.append('\n');
+		}
+
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
+			dump(sb, it.next());
+	}
+	Datebox db = new Datebox();
+	db.addAnnotation("datebox", null);
+	db.setParent(main);
+	</zscript>
+	<button label="show">
+		<attribute name="onClick"><![CDATA[
+		StringBuffer sb = new StringBuffer(256);
+		dump(sb, main);
+		info.setValue(sb.toString());
+		]]></attribute>
+	</button>
+	<separator bar="true"/>
+	<label id="info" pre="true"/>
+	<separator bar="true"/>
+	<button label="serialize">
+		<attribute name="onClick"><![CDATA[
+	new java.io.ObjectOutputStream(new java.io.ByteArrayOutputStream()).writeObject(main);
+	new Label("Done").setParent(main);
+		]]></attribute>
+	</button>
+</window>
+</zk>

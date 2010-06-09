@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: ZK DEMO
+Specification-Version: 5.0.3
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zkdemo
+Implementation-URL: http://www.zkoss.org/
+Implementation-Version: 5.0.3
+Implementation-Vendor: Potix Corporation

@@ -1,0 +1,26 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<applet id="ap" codebase="classes" width="300px" code="Simple" />
+<button label="addword">
+	<attribute name="onClick">
+	<![CDATA[
+		ap.invoke("addWord","addword");
+	]]>
+	</attribute>
+</button>
+<button label="addwords">
+	<attribute name="onClick">
+	<![CDATA[
+    	String[] strs = {"addwords1","addwords2"};
+		ap.invoke("addWords",strs);
+	]]>
+	</attribute>
+</button>
+<button label="setField">
+	<attribute name="onClick">
+	<![CDATA[
+		ap.setField("testfield", " append ");
+	]]>
+	</attribute>
+</button>
+</zk>

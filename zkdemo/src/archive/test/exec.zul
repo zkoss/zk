@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+exec.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun  2 10:40:45     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="main" title="Execution Test">
+	<button label="Create Components">
+		<attribute name="onClick">
+	Map params = new HashMap();
+	params.put("first", "First");
+	params.put("second", 222);
+	params.put("third", new Date());
+	Executions.createComponents("exec1.zul", main, params);
+		</attribute>
+	</button>
+</window>

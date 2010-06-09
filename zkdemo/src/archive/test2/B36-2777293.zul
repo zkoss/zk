@@ -1,0 +1,40 @@
+<zk>
+Clicks the first button, you shall see only two items left and
+the paging number is 1.
+<separator/>
+Clicks the second button, you shall see all items are cleared and
+the paging number is 1.
+<separator/>
+<button label="Test new model">
+<attribute name="onClick">
+SimpleTreeNode a = new SimpleTreeNode("a", new
+ArrayList());
+SimpleTreeNode b = new SimpleTreeNode("b", new
+ArrayList());
+ArrayList rootNodes = new ArrayList();
+rootNodes.add(a);
+rootNodes.add(b);
+SimpleTreeNode root = new SimpleTreeNode(null, rootNodes);
+SimpleTreeModel m = new SimpleTreeModel(root);
+tree.setModel(m);
+</attribute>
+</button>
+<button label="Test null model">
+<attribute name="onClick">
+tree.setModel(null);
+</attribute>
+</button>
+<zscript>
+import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+
+BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
+org.zkoss.zkdemo.userguide.BigList(1000)));
+</zscript>
+<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}">
+<attribute name="onCreate">
+tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
+tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+self.getPagingChild().setAutohide(false);
+</attribute>
+</tree>
+</zk>

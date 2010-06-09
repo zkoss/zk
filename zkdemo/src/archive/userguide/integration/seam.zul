@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+seam.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+	<vbox>
+		<html><![CDATA[
+				<h4>Seam</h4>
+				<h5>How to Integrate ZK with Seam</h5>
+				<p><a href="http://labs.jboss.com/jbossseam/" target="zkdemo">JBoss Seam</a> is a
+				powerful application framework for build web applications by unifying
+				and integrating JSF, Ajax4jsf, EJB3 etc. Although Seam is powerful, but
+			it is binding the presentation layout with JSF and Ajax4jsf.</p>
+			<p>Now, we provide a way to integrate ZK with Seam, so you can use ZK
+			component to cooperate with Seam's context includes EJBs and JavaBeans.
+			In this article, we will show you a "SayHello" example by Seam first,
+			and then we will show you two examples which base "SayHello" but use ZK
+			to replace JSF.</p>
+			]]></html>		
+		<separator bar="true" />
+		<html><![CDATA[
+			<image src="http://www.zkoss.org/smalltalks/zkseam/1.png" />
+			<h5>Live Demo</h5>
+			<object id="obj1" width="640" height="300"
+			codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
+			classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000">
+			<param value="http://www.zkoss.org/smalltalks/zkseam/part2demo.swf" name="movie" />
+			<param value="High" name="quality" />
+			<embed align="middle" width="640" height="300" name="obj1"
+				type="application/x-shockwave-flash"
+				pluginspage="http://www.macromedia.com/go/getflashplayer"
+				src="http://www.zkoss.org/smalltalks/zkseam/part2demo.swf" /> </object>
+			<h5>Content:</h5>
+			<ul>
+				<li>Demo Installation</li>
+				<li>A CRUD Example "Say Hello" of Seam</li>
+				<li>How to Integrate ZK with Seam</li>
+				<li>Using bean context of Seam only</li>
+				<li>Download</li>
+			<ul>
+		]]></html>
+	</vbox>
+	For more information, see our
+	<toolbarbutton id="target" label="Smalltalk" target="zkdemo"
+		href="http://www.zkoss.org/smalltalks/zkseam/zkseam.dsp" />
+</window>

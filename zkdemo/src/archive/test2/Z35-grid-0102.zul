@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z35-grid-0102-2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May  6 09:29:59 TST 2008, Created by DennisChen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Live Data Demo" border="normal">
+	Grouping with Live Data - Different Model should has different grouping
+<groupbox open="false"><caption label="click to open instructaions"/>
+	<html><![CDATA[
+	<ol>
+	<li>Click 'group' (in column menu)to test group on column1 by name (Same alpha should in same group, forexample gorup A,group B),</li>
+	<li>you also need to check the group order in asc and dsc by click 'group' again</li>
+	<li>Click 'group '(in column menu) to test group on column2 by number (Same value should in same group, forexample group 0,group 1)</li>
+	<li>you also need to check the group order in asc and dsc by click 'group' again</li>
+	<li>in both group by col0 or col1, you should click the sort on the header, the group order will not change but order of item in each will change</li>
+	</ol>
+]]></html>
+</groupbox>
+	<zscript><![CDATA[//@DECLARATION
+	class MyComparator implements Comparator,GroupComparator {
+		boolean _asc;
+		boolean _gbyint;
+		public MyComparator(boolean asc,boolean gbyint) {
+			_asc = asc;
+			_gbyint = gbyint;
+		}
+		public int compare(Object o1, Object o2) {
+			String s1 = (String)o1;
+			String s2 = (String)o2;
+			int v = s1.compareTo(s2);
+			return _asc ? v: -v;
+		}
+		
+		public int compareGroup(Object o1,Object o2){
+			String s1 = (String)o1;
+			String s2 = (String)o2;
+			
+			if(_gbyint){
+				s1 = s1.substring(s1.length()-1);
+				s2 = s2.substring(s2.length()-1);
+			}else{
+				s1 = s1.substring(0,1);
+				s2 = s2.substring(0,1);
+			}
+			int v = s1.compareTo(s2);
+			return _asc ? v: -v;
+		}
+	}
+	
+	class MyRowRenderer implements RowRenderer{
+		public void render(Row row, java.lang.Object data){
+			if(data instanceof String[]){
+				String str = ((String[])data)[0].toString();
+				new Label(str).setParent(row);
+				if(Row.class.equals(row.getClass())) 
+					new Label(str.charAt(str.length()-1)+"").setParent(row);
+			}else if (data instanceof String){
+				String str = (data).toString();
+				new Label(str).setParent(row);
+				if(Row.class.equals(row.getClass())) 
+					new Label(str.charAt(str.length()-1)+"").setParent(row);
+			}else{
+				new Label("UNKNOW:"+data.toString()).setParent(row);
+				if(Row.class.equals(row.getClass())) 
+					new Label("UNKNOW:"+data.toString()).setParent(row);
+			}
+		}
+	}
+
+	MyRowRenderer renderer = new MyRowRenderer();
+	]]></zscript>	
+	<zscript><![CDATA[  
+	                  
+	   	ArrayList data = new ArrayList();
+		String[] datas ;
+
+		for(int j=0; j<=9; ++j) {
+			data.add("A option "+j);
+		}
+		for(int j=0; j<=8; ++j) {
+			data.add("B option "+j);
+		}
+		for(int j=0; j<=9; ++j) {
+			data.add("C option "+j);
+		}
+		for(int j=0; j<=8; ++j) {
+			data.add("D option "+j);
+		}
+		datas = data.toArray(new String[0]);
+		Comparator asc1 = new MyComparator(true,false);
+		Comparator dsc1 = new MyComparator(false,false);
+		
+		Comparator asc2 = new MyComparator(true,true);
+		Comparator dsc2 = new MyComparator(false,true);
+		
+		GroupsModel model1 = new ArrayGroupsModel(datas,asc1);
+		GroupsModel model2 = new org.zkoss.zkdemo.test2.group.Test1ArrayGroupsModel(datas,(Comparator)asc1);
+
+	]]></zscript>	
+	<div>
+	<button onClick="gd1.setModel(model1);" label="data head"/>
+	<button onClick="gd1.setModel(model2)" label="data ,head, foot"/>
+	<button onClick='if(gd1.mold.equals("default")){gd1.setMold("paging");gd1.setPageSize(6);}else{gd1.mold="default";}' label="set Paging"/>
+	<button onClick="gd1.invalidate();" label="invalidate"/> 
+	</div> 
+	<grid width="500px" height="400px" model="${model2}" id="gd1" rowRenderer="${renderer}">
+		<columns menupopup="auto" >
+			<column label="String" sortAscending="${asc1}" sortDescending="${dsc1}"/>
+			<column label="Number" sortAscending="${asc2}" sortDescending="${dsc2}" width="100px"/>
+		</columns>
+	</grid>
+	
+</window>

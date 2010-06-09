@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2820527.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 13 15:26:07     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window title="test" mode="modal" border="normal" height="95%" width="95%"
+  maximizable="true" closable="true" sizable="true" top="0px">Mouse-over the "Author" label to click the extra menu icon, and uncheck one of the menu-items, and then it should work as expected
+  <grid>
+    <columns menupopup="auto">
+      <column label="Author"/>
+      <column label="Title"/>
+      <column label="Publisher"/>
+      <column label="Hardcover"/>
+    </columns>
+    <rows>
+      <row>
+        <label value="Philip Hensher"/>
+        <label value="The Northern Clemency"/>
+        <label value="Knopf (October 30, 2008)"/>
+        <label value="608 pages"/>
+      </row>
+      <row>
+        <label value="Philip Hensher"/>
+        <label value="The Fit"/>
+        <label value="HarperPerennial (April 4, 2005)"/>
+        <label value="240 pages"/>
+      </row>
+    </rows>
+  </grid>
+  <grid>
+    <columns menupopup="auto">
+      <column label="Author"/>
+      <column label="Title"/>
+    </columns>
+    <rows>
+      <row>
+        <label>test</label>
+        <textbox/>
+      </row>
+    </rows>
+  </grid>
+</window>
+</zk>
+

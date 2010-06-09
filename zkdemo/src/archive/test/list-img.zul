@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+list2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 24 12:50:53     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window width="100%">
+<listbox width="100%" id="w_list_listbox" multiple="true" checkmark="true">
+<listhead id="w_tr_listhead" >
+	<listheader label="account" width="25%" /> 
+	<listheader label="name" width="25%" /> 
+	<listheader label="email" width="25%" /> 
+	<listheader label="edit" width="25%" /> 
+</listhead>
+<listitem> 
+	<listcell label="davidwu" /> 
+	<listcell label="David Wu"/> 
+	<listcell>
+	<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+	</listcell>
+	<listcell> 
+	<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+	</listcell> 
+</listitem> 
+</listbox> 
+<zscript> void callMe() { alert("AA"); } </zscript> 
+</window> 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+winmode.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 15 16:43:40     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<window id="win" border="normal" width="200px"
+	title="Hi there!"  sizable="true" closable="true"
+	onClose="self.visible=false;event.stopPropagation()">
+		<checkbox label="Hello, Wolrd!"/>
+		<button label="change title" onClick="win.title += &quot;A&quot;"/>
+		<button label="hide" onClick="win.visible = false"/>
+	</window>
+	<zscript>
+	int j = 0;
+	</zscript>
+	<button label="Modal" onClick="win.doModal();new Label(&quot;end-modal-&quot; + j++).setParent(win)"/>
+	<button label="Overlap" onClick="win.doOverlapped();"/>
+	<button label="Popup" onClick="win.doPopup();"/>
+	<button label="Embed" onClick="win.doEmbedded();"/>
+	<button label="visible" onClick="win.visible = !win.visible"/>
+</zk>

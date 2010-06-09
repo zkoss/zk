@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+composer.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 25 22:50:55     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Original" apply="org.zkoss.zkdemo.test2.MyComposer">
+	You shall see the title starting with "Composer: ", and with a border.
+	<window title="You shall not see this" apply="org.zkoss.zkdemo.test2.VoidComposer">
+	Something wrong if you saw this
+	</window>
+	<zscript>
+	voidComposer = new org.zkoss.zkdemo.test2.VoidComposer();
+	</zscript>
+	<window title="You shall not see this 2" apply="org.zkoss.zkdemo.test2.MyComposer, ${voidComposer}">
+	Something wrong if you saw this
+	</window>
+</window>

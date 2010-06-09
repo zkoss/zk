@@ -1,0 +1,28 @@
+if [ $# != 1 ] ; then
+	echo "Usage:"
+	echo "  javadoc srcdir"
+	exit 1
+fi
+main="$(pwd)"
+rootdst=$1
+echo $rootdst
+cd $rootdst
+function subfolder {
+	local rootdst="$1"
+	for f in *; do
+		if [ "$f" != "CVS" ] && [ "$f" != ".svn" ] ; then
+			dstfl=$dst/$f
+			if [ -d "$f" ] ; then
+				(
+				cd "$f"
+				subfolder "$dstfl"
+				)
+			elif [ -f "$f" ] ; then
+				echo "Replacing... $f"
+				$main/bin/overwrite $f sed -f $main/bin/javadoc.sed $f
+			fi
+		fi
+done
+}
+
+subfolder "$rootdst"

@@ -1,0 +1,23 @@
+<window>
+<html><![CDATA[
+<p>Button is not resised with hflex/vflex.</p>
+<ol>
+<li>You shall see 4 buttons: Button1, Button2, Button3, Button4.</li> 
+<li>Button1 and Button2 are in one row. Width of Button2 is 2 times of the Button1.</li>
+<li>Button3 and Button4 are in one row. Width of Button4 is 2 times of the Button1.</li>
+<li>Resize browser to make it narrower. You shall see width of all buttons is narrowed but 
+width of Button1 : Button2 is still 1 : 2 and Button3 : Button 4 is still 1 : 2.</li>
+<li>Resize browser to make it wider. You shall see width of all buttons is winden but 
+width of Button1 : Button2 is still 1 : 2 and Button3 : Button 4 is still 1 : 2.</li>
+<li>done</li>
+</ol>
+]]></html>
+<hbox width="100%" height="50px" align="center" spacing="0px">
+<button hflex="1" label="Button1"/>
+<button hflex="2" label="Button2"/>
+</hbox>
+<hbox width="100%" height="50px" align="center" spacing="0px">
+<button hflex="1" label="Button3" mold="os"/>
+<button hflex="2" label="Button4" mold="os"/>
+</hbox>
+</window>

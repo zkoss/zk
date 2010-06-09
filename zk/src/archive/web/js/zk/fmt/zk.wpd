@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 27 11:44:50     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.fmt" language="xul/html">
+	<script src="numfmt.js"/>
+	<script src="msgfmt.js"/>
+</package>

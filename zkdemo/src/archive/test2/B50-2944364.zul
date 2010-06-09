@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2944364.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 2 14:29:22 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Both of the editors will hidden at first, cilik visible button, it will show the both of the editors</li>
+</ol>
+]]>
+</html>
+<button label="visible" onClick="ed.visible = !ed.visible;fed.visible = !fed.visible;"/>
+	<ckeditor id="ed" visible="false" />
+	<fckeditor id="fed" visible="false" />
+</zk>

@@ -1,0 +1,277 @@
+<vbox>
+	<hbox>
+		<panel framable="true" width="300px"
+			title="has title with frame" border="normal">
+			<panelchildren>Test border</panelchildren>
+		</panel>
+		<panel framable="true" width="300px" border="normal">
+			<panelchildren>Test border</panelchildren>
+		</panel>
+		<panel title="has title" width="300px" border="normal">
+			<panelchildren>Test border</panelchildren>
+		</panel>
+		<panel border="normal" width="300px">
+			<panelchildren>Test border</panelchildren>
+		</panel>
+	</hbox>
+	<hbox>
+		<panel framable="true" title="has title with frame"
+			width="300px">
+			<panelchildren>Test none-border</panelchildren>
+		</panel>
+		<panel framable="true" width="300px">
+			<panelchildren>Test none-border</panelchildren>
+		</panel>
+		<panel title="has title" width="300px">
+			<panelchildren>Test none-border</panelchildren>
+		</panel>
+		<panel width="300px">
+			<panelchildren>Test none-border</panelchildren>
+		</panel>
+	</hbox>
+	<separator bar="true"/>
+	<hbox>
+		<panel framable="true" width="300px"
+			title="has title with frame" border="normal">
+			<toolbar>
+				<toolbarbutton label="top" />
+				<button label="top" />
+			</toolbar>
+			<panelchildren>Test for Toolbar</panelchildren>
+			<toolbar align="end">
+				<toolbarbutton label="bottom" />
+				<button label="bottom" />
+			</toolbar>
+			<toolbar mold="panel" align="center">
+				<toolbarbutton label="foot" />
+				<button label="foot" />
+			</toolbar>
+		</panel>
+		<panel framable="false" width="500px" border="normal">
+			<toolbar mold="panel" align="center">
+				<toolbarbutton label="top" />
+				<button label="top" />
+			</toolbar>
+			<panelchildren>
+				<listbox style="border:0px" rows="3">
+					<listhead sizable="true">
+						<listheader label="name" sort="auto" />
+						<listheader label="gender" sort="auto" />
+					</listhead>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="John" />
+						<listcell label="MALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Jane" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Henry" />
+						<listcell label="MALE" />
+					</listitem>
+				</listbox>
+			</panelchildren>
+			<toolbar align="end">
+				<toolbarbutton label="bottom" />
+				<button label="bottom" />
+			</toolbar>
+			<toolbar>
+				<toolbarbutton label="foot" />
+				<button label="foot" />
+			</toolbar>
+		</panel>
+	</hbox>
+	<separator bar="true"/>
+	<hbox>
+		<panel framable="true" width="500px"
+			title="Panel component - has frame" border="normal"
+			collapsible="true" closable="true">
+			<toolbar>
+				Search:
+				<bandbox id="bd" width="350px">
+					<bandpopup>
+						<vbox>
+							<hbox>
+								Search
+								<textbox />
+							</hbox>
+							<listbox width="200px"
+								onSelect="bd.value=self.selectedItem.label; bd.closeDropdown();">
+								<listhead>
+									<listheader label="Name" />
+									<listheader label="Description" />
+								</listhead>
+								<listitem>
+									<listcell label="John" />
+									<listcell label="CEO" />
+								</listitem>
+								<listitem>
+									<listcell label="Joe" />
+									<listcell label="Engineer" />
+								</listitem>
+								<listitem>
+									<listcell label="Mary" />
+									<listcell label="Supervisor" />
+								</listitem>
+							</listbox>
+						</vbox>
+					</bandpopup>
+				</bandbox>
+			</toolbar>
+			<panelchildren>
+				<listbox id="listbox" style="border:0px">
+					<listhead sizable="true">
+						<listheader label="name" sort="auto" />
+						<listheader label="gender" sort="auto" />
+					</listhead>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="John" />
+						<listcell label="MALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Jane" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Henry" />
+						<listcell label="MALE" />
+					</listitem>
+				</listbox>
+			</panelchildren>
+			<toolbar>
+				<paging id="paging"
+					onCreate='listbox.setMold("paging");listbox.paginal=self; listbox.setPageSize(3) ' />
+			</toolbar>
+
+			<toolbar mold="panel" align="center" orient="vertical">
+				<button label="button1" />
+				<button label="button1" />
+			</toolbar>
+		</panel>
+		<panel framable="false" width="500px" title="Panel component"
+			border="normal" collapsible="true" closable="true" >
+			<toolbar>
+				Search:
+				<bandbox id="bd1" width="350px">
+					<bandpopup>
+						<vbox>
+							<hbox>
+								Search
+								<textbox />
+							</hbox>
+							<listbox width="200px"
+								onSelect="bd1.value=self.selectedItem.label; bd1.closeDropdown();">
+								<listhead>
+									<listheader label="Name" />
+									<listheader label="Description" />
+								</listhead>
+								<listitem>
+									<listcell label="John" />
+									<listcell label="CEO" />
+								</listitem>
+								<listitem>
+									<listcell label="Joe" />
+									<listcell label="Engineer" />
+								</listitem>
+								<listitem>
+									<listcell label="Mary" />
+									<listcell label="Supervisor" />
+								</listitem>
+							</listbox>
+						</vbox>
+					</bandpopup>
+				</bandbox>
+			</toolbar>
+			<panelchildren>
+				<listbox id="listbox1" style="border:0px">
+					<listhead sizable="true">
+						<listheader label="name" sort="auto" />
+						<listheader label="gender" sort="auto" />
+					</listhead>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="John" />
+						<listcell label="MALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Jane" />
+						<listcell label="FEMALE" />
+					</listitem>
+					<listitem>
+						<listcell label="Henry" />
+						<listcell label="MALE" />
+					</listitem>
+				</listbox>
+			</panelchildren>
+			<toolbar>
+				<paging
+					onCreate='listbox1.setMold("paging");listbox1.paginal=self; listbox1.setPageSize(3) ' />
+			</toolbar>
+
+			<toolbar mold="panel" align="center">
+				<button label="button1" />
+				<button label="button1" />
+			</toolbar>
+		</panel>
+	</hbox>
+</vbox>

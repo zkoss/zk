@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+tree2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 26 10:49:27     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<tree width="400px">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+		<treecol label="Received"/>
+	</treecols>
+	<treechildren>
+		<treeitem id="ti">
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+				<treecell label="7-12-2005"/>
+			</treerow>
+			<treechildren id="tc">
+				<treeitem>
+					<treerow>
+						<treecell label="ZK - Simply Rich"/>
+						<treecell label="Ria Coen"/>
+						<treecell label="7-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Unknown chaos" selected="true"/>
+	</treechildren>
+</tree>
+<button label="detach" onClick="detach()"/>
+<button label="detach" onClick="attach()"/>
+<zscript>
+	Treechildren cached = null;
+	void detach() {
+		if (cached != null) alert("Already detached");
+		else {
+			cached = tc;
+			tc.detach();
+		}
+	}
+	void attach() {
+		if (cached == null) alert("Not detached yet");
+		else {
+			cached.setParent(ti);
+			cached = null;
+		}
+	}
+</zscript>
+</window>
