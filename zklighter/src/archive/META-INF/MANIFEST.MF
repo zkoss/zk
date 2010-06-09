@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: ZK Lighter
-Specification-Version: 1.0.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.zklighter
-Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 1.0.0
-Implementation-Vendor: Potix Corporation

@@ -1,4 +1,0 @@
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
-<window id="xwin" title="My First Window" border="normal" width="200px" apply="org.zkoss.zkdemo.test2.MyComposer">
-You shall see "Hello! ZK." --> <label value="@{xwin$MyComposer.hello}"/>
-</window>

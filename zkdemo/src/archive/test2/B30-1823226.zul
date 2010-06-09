@@ -1,9 +1,0 @@
-<zk>
-Splitter can be dragged over hbox border.
-<window border="normal" width="800px" title="Case 1: hbox and splitter">
-		<hbox height="100px" width="100%">
-		cdacdacdacdacdaca
-		<splitter id="hsplitter" collapse="none"/>
-		cdacdacdacdacacsdc
-		</hbox>
-	</window></zk>

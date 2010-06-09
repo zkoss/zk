@@ -1,8 +1,0 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-1. Click the datebox button to open the Calendar
-<separator/>
-2. the textbox inside the Calendar popup should be the current hour and min (same with the datebox above). If not, it's error.
-<separator/>
-<datebox cols="20" format="yyyy/MM/dd HH:mm" onCreate="self.value = new Date()"/>
-</zk>

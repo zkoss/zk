@@ -1,9 +1,0 @@
-<window title="Access Denied" border="normal" width="500px" onOK="doOK(self)">
-  <div align="center"><label value="${requestScope.ACEGI_SECURITY_403_EXCEPTION}"/></div>
-  <div align="center"><button label="OK" onClick="doOK(spaceOwner)"/></div>
-  <zscript>
-    void doOK(Window modalwin) {
-      modalwin.detach();
-    }
-  </zscript>
-</window>

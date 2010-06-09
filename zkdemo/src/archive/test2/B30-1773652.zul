@@ -1,7 +1,0 @@
-<zk>
-	abc.zs doesn't exist and it shall show up a more readable message, For example:
-	<separator/>
-	org.zkoss.zk.ui.UiException: File not found: abc.zs, at ...
-	<separator/>
-	<iframe src="B30-1773652_1.zul" width="500px" height="500px"/>
-</zk>
