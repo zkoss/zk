@@ -3093,7 +3093,7 @@ unbind_: function (skipper, after) {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
-		if (typeof msg == 'string' && msg.length > 9)
+		if (typeof msg == "string" && msg.length > 9)
 			msg = msg.substring(0, 9) + "...";
 
 		var dgelm = zk.DnD.ghost(drag, ofs, msg);
@@ -3943,7 +3943,7 @@ _doFooSelect: function (evt) {
 		if (!n || zk.Widget.isInstance(n)) return n;
 
 		var wgt, id;
-		if (typeof n == 'string') {
+		if (typeof n == "string") {
 			n = jq(id = n, zk)[0];
 			if (!n) { //some widget might not have DOM element (e.g., timer)
 				if (id.charAt(0) == '#') id = id.substring(1);
@@ -3963,23 +3963,26 @@ _doFooSelect: function (evt) {
 			return _binds[n.id];
 
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
-			id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
-			if (id) {
-				wgt = _binds[id]; //try first (since ZHTML might use -)
-				if (wgt) return wgt;
+			try {
+				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
+				if (id && typeof id == "string") {
+					wgt = _binds[id]; //try first (since ZHTML might use -)
+					if (wgt) return wgt;
 
-				var j = id.indexOf('-');
-				if (j >= 0) {
-					id = id.substring(0, j);
-					wgt = _binds[id];
-					if (wgt)
-						if (opts && opts.child) {
-							var n2 = wgt.$n();
-							if (n2 && jq.isAncestor(n2, n))
+					var j = id.indexOf('-');
+					if (j >= 0) {
+						id = id.substring(0, j);
+						wgt = _binds[id];
+						if (wgt)
+							if (opts && opts.child) {
+								var n2 = wgt.$n();
+								if (n2 && jq.isAncestor(n2, n))
+									return wgt;
+							} else
 								return wgt;
-						} else
-							return wgt;
+					}
 				}
+			} catch (e) { //ignore
 			}
 			if (opts && opts.strict) break;
 		}
