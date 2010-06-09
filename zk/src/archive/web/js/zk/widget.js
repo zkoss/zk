@@ -2497,10 +2497,17 @@ function () {
 		return this;
 	},
 	/**
-	 * Returns the old widget from the given node element.
-	 * Some widgets may override the function when they have no a concrete DOM
-	 * element, such as Treeitem, and Treechildren. 
+	 * Returns the widget associated with the given node element.
+	 * It is used by {@link #replaceHTML} and {@link #replaceChildHTML_} to retrieve
+	 * the widget associated with the note.
+	 * <p>It is similar to {@link #$} but it gives the widget a chance to
+	 * handle extreme cases. For example, Treeitem doesn't associate a DOM element
+	 * (or you can say Treeitem and Treerow shares the same DOM element), so
+	 * <code>zk.Widget.$(n)</code> will return Treerow, not Treeitem.
+	 * If it is the case, you can override it to make {@link #replaceHTML}
+	 * works correctly.
 	 * @param DOMElement n the DOM element to match the widget.
+	 * @since 5.0.3
 	 */
 	getOldWidget_: function (n) {
 		return zk.Widget.$(n, {strict:true});
