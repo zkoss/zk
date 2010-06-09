@@ -111,10 +111,15 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this, onSize: this});
-		var gbody = this.parent.$n('body');
-		if (gbody)
-			gbody.style.overflowX = '';
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
+	},
+	beforeParentChanged_: function (np) {
+		if (!np) {
+			var gbody = this.parent.$n('body');
+			if (gbody)
+				gbody.style.overflowX = '';
+		}
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	_doScroll: function (evt) {
 		var scroll = this.$n('scrollX'),
