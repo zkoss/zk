@@ -1720,11 +1720,11 @@ wgt.$f().main.setTitle("foo");
 			_unbindrod(this);
 			_bindrod(newwgt);
 		} else if (this.desktop) {
-			if (!newwgt.desktop) newwgt.desktop = this.desktop;
-			if (node) newwgt.replaceHTML(node, newwgt.desktop);
+			var dt = newwgt.desktop || this.desktop;
+			if (node) newwgt.replaceHTML(node, dt);
 			else {
 				this.unbind();
-				newwgt.bind();
+				newwgt.bind(dt);
 			}
 
 			_fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
