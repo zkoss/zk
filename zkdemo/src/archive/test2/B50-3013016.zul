@@ -1,0 +1,41 @@
+<window title="gmap" border="normal">
+<html>
+<![CDATA[
+<ol>
+<li>Click on the Gmaker</li>
+<li>You shall see "Hello!" info window popup on top of the Gmaker</li>
+<li>If not, it is a bug.</li>
+</ol>
+]]>
+</html>
+<script type="text/javascript" content="zk.googleAPIkey='${gkey}'"/>
+	<zscript><![CDATA[
+		String sn = Executions.getCurrent().getServerName();
+		int sp = Executions.getCurrent().getServerPort();
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("localhost") >= 0) { //localhost
+			if (sp == 80) // http://localhost/
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else if (sp == 7799) // http://localhost:7799
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		}
+	]]></zscript>
+	<script type="text/javascript" content="zk.googleAPIkey='${gkey}'"/>
+	<gmaps id="testMap" width="500px" height="300px" showSmallCtrl="true" lat="47.4" lng="-99.2">
+		<attribute name="onMapClick">
+			Gmarker gmarker = event.getGmarker();
+			if (gmarker != null) {				
+				gmarker.setOpen(true);
+			}
+		</attribute>
+		<gmarker content="hello" lat="47.4" lng="-99.2" >
+			Hello!
+		</gmarker>
+	</gmaps>
+</window>
