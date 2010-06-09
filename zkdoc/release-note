@@ -50,6 +50,7 @@ ZK 5.0.3
   3013126: Treeitem will disappeare when setDisabled on the treeitem
   3013538: Clients.reloadMessages throw exception
   3013539: Treecell can't change its label when others items disabled
+  3007738: The setImage of the comboitem isn't works
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
