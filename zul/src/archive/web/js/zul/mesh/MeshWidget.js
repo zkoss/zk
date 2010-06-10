@@ -450,7 +450,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efoot) 
 				this.efoot.style.width = "";
 				
-			n._lastsz = null;
+			n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
 		}
 	},
 	onSize: _zkf = function () {
