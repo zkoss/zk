@@ -78,20 +78,15 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	unbind_: function () {
 		var cm = this.$n('cm');
-		if (cm) { 
+		if (cm) {
+			var p = this.getListbox();
+			if (p) p._headercm = null;
 			this._checked = null;
 			this.domUnlisten_(cm, 'onClick')
 				.domUnlisten_(cm, 'onMouseOver')
 				.domUnlisten_(cm, 'onMouseOut');
 		}
 		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
-	},
-	beforeParentChanged_: function (np) {
-		if (!np) {
-			var p = this.getListbox();
-			if (p) p._headercm = null;
-		}
-		this.$supers("beforeParentChanged_", arguments);
 	},
 	_doMouseOver: function (evt) {
 		 var cls = this._checked ? '-img-over-seld' : '-img-over';

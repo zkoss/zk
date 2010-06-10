@@ -138,6 +138,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	beforeParentChanged_: function (newParent) {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
@@ -186,12 +187,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	unbind_: function () {
 		if (!this.isDisabled()) {
 			if (this._upload) this._cleanUpld();
-
-			//note: we cannot use isTopmost in unbind_ since beforeParent.. has been called
-			var anc = this.$n('a');
-			if (anc)
+			if (this.isTopmost()) {
+				var anc = this.$n('a');
 				this.domUnlisten_(anc, "onFocus", "doFocus_")
 					.domUnlisten_(anc, "onBlur", "doBlur_");
+			}
 		}
 
 		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);

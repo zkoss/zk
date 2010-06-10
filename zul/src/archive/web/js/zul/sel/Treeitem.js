@@ -195,6 +195,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (tree) 
 				tree._onTreeitemAdded(this);
 		}
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {

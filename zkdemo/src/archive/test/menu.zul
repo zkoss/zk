@@ -19,9 +19,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window title="Menu Sample">
 	<menubar id="menubar">
-		<menu label="File">
+		<menu label="File" id="ifile">
 			<menupopup>
-		        <menuitem label="New"/>
+		        <menuitem id="inew" label="New"/>
 		        <menuitem label="Open"/>
 		        <menuitem label="Save"/>
 		        <menuseparator/>
@@ -87,6 +87,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 	<datebox/>
+	<button label="Remove New" onClick="inew.detach()"/>
+	<button label="Remove File" onClick="ifile.detach()"/>
 
 	<menubar>
 	<menu label="Modifier la couleur de fond">

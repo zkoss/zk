@@ -1630,6 +1630,10 @@ wgt.$f().main.setTitle("foo");
 	/** Removes a child with more control.
 	 * It is similar to {@link #removeChild(zk.Widget)} except the caller
 	 * could prevent it from removing the DOM element.
+	 *
+	 * <p>Notice that the associated DOM elements and {@link #unbind_}
+	 * is called first (i.e., called before {@link #beforeParentChanged_},
+	 * modifying the widget tree, ID space, and {@link #onChildRemoved_}).
 	 * @param zk.Widget child the child to remove.
 	 * @param boolean ignoreDom whether to remove the DOM element
 	 * @return boolean whether it is removed successfully.
@@ -1641,6 +1645,12 @@ wgt.$f().main.setTitle("foo");
 			return false;
 		if (this != child.parent)
 			return false;
+
+		//Note: remove HTML and unbind first, so unbind_ will have all info
+		if (child.z_rod)
+			_unbindrod(child);
+		else if (child.desktop)
+			this.removeChildHTML_(child, p, ignoreDom);
 
 		child.beforeParentChanged_(null);
 
@@ -1655,10 +1665,6 @@ wgt.$f().main.setTitle("foo");
 
 		_rmIdSpaceDown(child);
 
-		if (child.z_rod)
-			_unbindrod(child);
-		else if (child.desktop)
-			this.removeChildHTML_(child, p, ignoreDom);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -2868,18 +2874,25 @@ bind_: function (desktop, skipper, after) {
 	/** Callback when a widget is unbound (aka., detached) from the DOM tree.
 	 * It is called before the DOM element(s) of this widget is going to be removed from the DOM tree (such as {@link #removeChild}.
 	 * <p>Note: don't invoke this method directly. Rather, invoke {@link #unbind} instead. 
+	 * <p>Note: after invoking <code>this.$supers('unbind_', arguments)</code>,
+	 * the association with DOM elements are lost. Thus it is better to invoke
+	 * it as the last statement.
+	 * <p>Notice that {@link #removeChild} removes DOM elements first, so
+	 * {@link #unbind_} is called before {@link #beforeParentChanged_} and
+	 * the modification of the widget tree. It means it is safe to access
+	 * {@link #parent} and other information here
 	 * @see #bind_
 	 * @see #unbind
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper 
 	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
 <pre><code>
 unbind_: function (skipper, after) {
-  this.$supers('unbind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterUnbind(something);
     ...
   }
+  this.$supers('unbind_', arguments);
 }
 </code></pre>
 	 */

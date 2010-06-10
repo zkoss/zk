@@ -150,6 +150,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
 		}
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
