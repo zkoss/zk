@@ -14,8 +14,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <window>
-	You shall see an alert dialog
 	<iframe src="http://www.google.com" width="100%" height="300px"
 	 xmlns:wa="http://www.zkoss.org/2005/zk/client/attribute"
 	 wa:onload="alert(window.location.href)"/>
+
+	You shall see an alert dialog
 </window>
