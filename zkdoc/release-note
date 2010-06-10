@@ -56,6 +56,7 @@ ZK 5.0.3
   3011477: Clear the frozen in the grid cause JavaScript error
   3012466: Listbox's selection issue
   3013683: The column in grid without width will calculator wrong width
+  3011319: Datebox may select wrong month
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
