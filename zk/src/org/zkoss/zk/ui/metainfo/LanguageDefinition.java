@@ -74,15 +74,30 @@ public class LanguageDefinition {
 	/** The namespace for ZK annotations.
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
-	/** The namespace for ZK native namespace.
+	/** The namespace for ZK native components.
 	 * @since 3.0.0
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
-	/*** The namespace for ZK client namespace. It is used to specify
-	 * the client attributes, such as the event listener.
+	/*** The namespace for ZK client (aka., widget). It is used to specify
+	 * the widget's properties and event listeners.
+	 * <p>Notice that {@link #CLIENT_NAMESPACE} specifies the property
+	 * or event listener for a widget, while {@link #CLIENT_ATTRIBUTE_NAMESPACE}
+	 * specifies the DOM attributes. In other words, the attribute specified
+	 * with {@link #CLIENT_ATTRIBUTE_NAMESPACE} are generated directly.
 	 * @since 5.0.0
 	 */
 	public static final String CLIENT_NAMESPACE = "http://www.zkoss.org/2005/zk/client";
+	/*** The namespace for ZK client attributes. It is used to specify
+	 * custom DOM attributes.
+	 * <p>Notice that {@link #CLIENT_NAMESPACE} specifies the property
+	 * or event listener for a widget, while {@link #CLIENT_ATTRIBUTE_NAMESPACE}
+	 * specifies the DOM attributes. In other words, the attribute specified
+	 * with {@link #CLIENT_ATTRIBUTE_NAMESPACE} are generated directly.
+	 * <p>You can use it to listen DOM events such as onload and specify
+	 * browser-specific attributes (such as accessibility related attributes).
+	 * @since 5.0.3
+	 */
+	public static final String CLIENT_ATTRIBUTE_NAMESPACE = "http://www.zkoss.org/2005/zk/client/attribute";
 
 	/** The namespace for ZK native namespace prefix.
 	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("native:"),

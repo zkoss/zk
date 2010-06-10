@@ -352,28 +352,49 @@ public class JsContentRenderer implements ContentRenderer {
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
 	/** Renders the JavaScript codes nippet to override the methods
-	 * and values of the peer widget.
+	 * and properties of the peer widget.
 	 * This method uses the widget's setOverrides method (at client),
 	 * so, if the value is a method, it will preserve the previous method
 	 * as '$' + method_name
 	 *
-	 * @param values a map of methods and values. Notice that the value
+	 * @param overrides a map of methods and properties. Notice that the value
 	 * must be a valid JavaScript snippet that can be evaluated to
-	 * a value. In fact, the map will be generated as:
+	 * a value. In fact, the map will be generated as follows.<br/>
 	 * <code>{name1: value1, name2: value2}</code>.
 	 * Examples of values: <code>function () {}</code>, <code>123</code>,
 	 * <code>new Date()</code>, and <code>"a literal string"</code>
 	 */
-	public void renderWidgetOverrides(Map values) {
-		if (values == null || values.isEmpty())
+	public void renderWidgetOverrides(Map overrides) {
+		if (overrides == null || overrides.isEmpty())
 			return;
 
 		renderName("overrides");
 		_buf.append('{');
-		for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
+		for (Iterator it = overrides.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			_buf.append(me.getKey()).append(":\n")
 				.append(me.getValue()).append("\n,");
+		}
+		_buf.setCharAt(_buf.length() - 1, '}');
+	}
+	/** Renders the client's DOM attributes for the peer widgets.
+	 * This method generates DOM attributes into a map and stores it
+	 * in a widget property called <code>domExtraAttrs</code>
+	 * and it will be used to generate DOM attributes when the peer widget
+	 * is bound to the DOM tree.
+	 * @since 5.0.3
+	 */
+	public void renderWidgetAttributes(Map attrs) {
+		if (attrs == null || attrs.isEmpty())
+			return;
+
+		renderName("domExtraAttrs");
+		_buf.append('{');
+		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			_buf.append(me.getKey()).append(":\n");
+			renderValue(me.getValue());
+			_buf.append("\n,");
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}

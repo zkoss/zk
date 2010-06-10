@@ -890,12 +890,12 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Set getWidgetListenerNames();
 
-	/*** Sets or removes a method or a field of a widget (at the client).
-	 * If there is a method or a field associated with the same name,
+	/*** Sets or removes a method or a property of the peer widget (at the client).
+	 * If there is a method or a property associated with the same name,
 	 * the previous one will be replaced and returned.
 	 * <p>For example,
 	 * <pre><code>comp.setWidgetOverride("setValue", "function (value) {}"); //override a method
-	 *comp.setWidgetOverride("myfield", "new Date()"); //override a field
+	 *comp.setWidgetOverride("myfield", "new Date()"); //override a property
 	 *</code></pre>
 	 *
 	 * <p>Notice that, unlike {@link #setWidgetListener}, if the method has been sent
@@ -904,7 +904,7 @@ w:use="foo.MyWindow"&gt;
 	 * In other words, invoking this method with a null value only removes
 	 * the method overrides if it has not YET been to sent to the client.
 	 *
-	 * <p>The previous method/field can be accessed by this.$xxx. For example
+	 * <p>The previous method/property can be accessed by this.$xxx. For example
 	 *<pre><code>function (value, fromServer) {
 	 *  this.$setValue(value, fromServer);
 	 *  if (this.desktop) {
@@ -926,7 +926,7 @@ w:use="foo.MyWindow"&gt;
 	 * <pre><code>&lt;label w:setValue="function (value) {
 	 *  this.$setValue(value); //old method
 	 *}"/&gt;</code></pre>
-	 * If null, the previous method, if any, will be stored.
+	 * If null, the previous method, if any, will be restored.
 	 * @return the previous script if any
 	 * @since 5.0.0
 	 */
@@ -941,6 +941,37 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public Set getWidgetOverrideNames();
+
+	/*** Sets or removes a DOM attribute of the peer widget (at the client).
+	 * ZK pass the attributes directly to the DOM attribute generated
+	 * at the client.
+	 * <p>Notice that {@link #setWidgetOverride} or {@link #setWidgetListener}
+	 * are used to customize the peer widget, while {@link #setWidgetAttribute}
+	 * customizes the DOM element of the peer widget directly.
+	 *
+	 * <p>Unlike {@link #setWidgetOverride} or {@link #setWidgetListener},
+	 * {@link #setWidgetAttribute} has no effect if the widget has been
+	 * generated at the client, unless {@link #invalidate} is called.
+	 *
+	 * @param name the attribute name to generate to the DOM element,
+	 * such as <code>onload</code>.
+	 * @param value the value of the attribute. It could be anything
+	 * depending on the attribute.
+	 * If null, the attribute will be removed. Make sure to specify an empty
+	 * string if you want an attribute with an empty value.
+	 * @return the previous value if any
+	 * @since 5.0.3
+	 */
+	public String setWidgetAttribute(String name, String value);
+	/** Returns the value of a DOM attribute
+	 * @since 5.0.3
+	 */
+	public String getWidgetAttribute(String name);
+	/** Returns a read-only collection of additions DOM attributes that shall be
+	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
+	 * @since 5.0.3
+	 */
+	public Set getWidgetAttributeNames();
 
 	/** Sets an AU service to process the AU request before the component's
 	 * default handling.

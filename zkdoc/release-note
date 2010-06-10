@@ -3,6 +3,7 @@ ZK 5.0.3
 * Features
   3000873: Tabbox can auto grow size when select a larger size tabpanel
   3000339: The hflex of the cloumn will calculate by max width
+  3014112: A way to specify custom DOM attributes, such as onload
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
   3006351: Able to specify the tag name for a macro component

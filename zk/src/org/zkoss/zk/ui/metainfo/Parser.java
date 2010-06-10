@@ -1141,6 +1141,10 @@ public class Parser {
 					compInfo.addWidgetListener(name, value, cond);
 					return;
 				}
+				if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)) {
+					compInfo.addWidgetAttribute(name, value, cond);
+					return;
+				}
 
 				final String pref = attrns.getPrefix();
 				LanguageDefinition langdef = compInfo.getLanguageDefinition();
@@ -1173,6 +1177,10 @@ public class Parser {
 				} else {
 					compInfo.addWidgetOverride(name, value, cond);
 				}
+				return;
+			}
+			if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)) {
+				compInfo.addWidgetAttribute(name, value, cond);
 				return;
 			}
 		}

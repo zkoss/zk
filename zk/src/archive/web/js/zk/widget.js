@@ -2415,7 +2415,7 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var html = "";
+		var html = "", attrs;
 		if (!no || !no.id)
 			html += zUtl.appendAttr("id", this.uuid);
 		if (!no || !no.domStyle)
@@ -2424,6 +2424,8 @@ function () {
 			html += zUtl.appendAttr("class", this.domClass_());
 		if (!no || !no.tooltiptext)
 			html += zUtl.appendAttr("title", this.domTooltiptext_());
+		for (var nm in (attrs = this.domExtraAttrs))
+			html += zUtl.appendAttr(nm, attrs[nm]);
 		return html;
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.

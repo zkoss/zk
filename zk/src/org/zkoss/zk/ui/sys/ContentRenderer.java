@@ -80,14 +80,20 @@ public interface ContentRenderer {
 	 */
 	public void renderWidgetListeners(Map listeners);
 	/** Renders the client code snippet to override the methods
-	 * and values of the peer widget.
+	 * and properties of the peer widget.
 	 *
-	 * @param values the map of methods or values to override the peer widget.
+	 * @param overrides the map of methods or properties to override the peer widget.
 	 * The key is the method name (such as setValue), and the value
 	 * must be a valid JavaScript snippet that can be evaluated to
 	 * a value. They are both instances of String.
-	 * In fact, the map will be generated as:
+	 * For example, the map will be generated as follows by {@link JsContentRenderer}:<br/>
 	 * <code>{name1: value1, name2: value2}</code>.
 	 */
-	public void renderWidgetOverrides(Map values);
+	public void renderWidgetOverrides(Map overrides);
+	/** Renders the client's DOM attributes for the peer widgets.
+	 * @param atts the map of attributes. The key is the attribute's name,
+	 * while the value is the attribute's value. They are both instances of String.
+	 * @since 5.0.3
+	 */
+	public void renderWidgetAttributes(Map attrs);
 }
