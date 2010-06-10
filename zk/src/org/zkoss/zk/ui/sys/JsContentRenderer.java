@@ -392,7 +392,8 @@ public class JsContentRenderer implements ContentRenderer {
 		_buf.append('{');
 		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
-			_buf.append(me.getKey()).append(":\n");
+			renderValue(me.getKey()); //allow ':' or others
+			_buf.append(':');
 			renderValue(me.getValue());
 			_buf.append("\n,");
 		}

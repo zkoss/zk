@@ -955,6 +955,8 @@ w:use="foo.MyWindow"&gt;
 	 *
 	 * @param name the attribute name to generate to the DOM element,
 	 * such as <code>onload</code>.
+	 * Unlike {@link #setWidgetOverride}, the name might contain
+	 * no alphanumeric characters, such as colon and dash.
 	 * @param value the value of the attribute. It could be anything
 	 * depending on the attribute.
 	 * If null, the attribute will be removed. Make sure to specify an empty

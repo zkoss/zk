@@ -585,6 +585,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * <p>Unlike {@link #addWidgetOverride}, the attributes added here are
 	 * generated directly as DOM attributes at the client.
 	 * In other words, it is not a property or method of the peer widget.
+	 * @param name the name of the attribute.
+	 * Unlike {@link #addWidgetOverride}, the name might contain
+	 * no alphanumeric characters, such as colon and dash.
 	 * @since 5.0.3
 	 * @see #addWidgetOverride
 	 */
