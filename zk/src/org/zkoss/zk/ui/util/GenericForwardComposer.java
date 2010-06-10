@@ -88,7 +88,7 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
-	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * ({@link org.zkoss.zk.ui.Page#addVariableResolver}) when wiring a member.
 	 * @since 5.0.3
 	 */
 	protected GenericForwardComposer(char separator, boolean ignoreZScript,
