@@ -440,7 +440,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			var n = this.$n();
 			
-			if (!zk.ie6_ || n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+			if (!zk.ie6_ && n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
 				return; //do nothing.
 				
 			if (this.ebody) 
@@ -449,6 +449,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ehead.style.width = "";
 			if (this.efoot) 
 				this.efoot.style.width = "";
+				
+			n._lastsz = null;
 		}
 	},
 	onSize: _zkf = function () {
