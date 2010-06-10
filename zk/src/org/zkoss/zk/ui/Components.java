@@ -448,7 +448,6 @@ public class Components {
 	}
 	/** Wire fellow components and space owner with full control.
 	 * @param separator the separator used to separate the component ID and event name.
-	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
@@ -512,7 +511,6 @@ public class Components {
 	}
 	/** Wire controller as a variable objects of the specified component with full control.
 	 * @param separator the separator used to separate the component ID and event name.
-	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
@@ -575,7 +573,6 @@ public class Components {
 	}
 	/** Wire accessible variable objects of the specified page with complete control.
 	 * @param separator the separator used to separate the component ID and event name.
-	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
@@ -613,7 +610,6 @@ public class Components {
 	}
 	/** Wire controller as a variable objects of the specified component with full control.
 	 * @param separator the separator used to separate the component ID and event name.
-	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
