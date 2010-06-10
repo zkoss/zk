@@ -882,7 +882,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * the URL of the AU request will contain <code>/_/foo.zul/xxx,yyy</code>,.
 	 * <p>Default: null.
 	 * @type String
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	//autag: null,
 
@@ -1640,6 +1640,10 @@ wgt.$f().main.setTitle("foo");
 	/** Removes a child with more control.
 	 * It is similar to {@link #removeChild(zk.Widget)} except the caller
 	 * could prevent it from removing the DOM element.
+	 *
+	 * <p>Notice that the associated DOM elements and {@link #unbind_}
+	 * is called first (i.e., called before {@link #beforeParentChanged_},
+	 * modifying the widget tree, ID space, and {@link #onChildRemoved_}).
 	 * @param zk.Widget child the child to remove.
 	 * @param boolean ignoreDom whether to remove the DOM element
 	 * @return boolean whether it is removed successfully.
@@ -1651,6 +1655,12 @@ wgt.$f().main.setTitle("foo");
 			return false;
 		if (this != child.parent)
 			return false;
+
+		//Note: remove HTML and unbind first, so unbind_ will have all info
+		if (child.z_rod)
+			_unbindrod(child);
+		else if (child.desktop)
+			this.removeChildHTML_(child, p, ignoreDom);
 
 		child.beforeParentChanged_(null);
 
@@ -1665,10 +1675,6 @@ wgt.$f().main.setTitle("foo");
 
 		_rmIdSpaceDown(child);
 
-		if (child.z_rod)
-			_unbindrod(child);
-		else if (child.desktop)
-			this.removeChildHTML_(child, p, ignoreDom);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -1730,11 +1736,11 @@ wgt.$f().main.setTitle("foo");
 			_unbindrod(this);
 			_bindrod(newwgt);
 		} else if (this.desktop) {
-			if (!newwgt.desktop) newwgt.desktop = this.desktop;
-			if (node) newwgt.replaceHTML(node, newwgt.desktop);
+			var dt = newwgt.desktop || this.desktop;
+			if (node) newwgt.replaceHTML(node, dt);
 			else {
 				this.unbind();
-				newwgt.bind();
+				newwgt.bind(dt);
 			}
 
 			_fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
@@ -2419,19 +2425,17 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
-		if (!no || !no.domStyle) {
-			var s = this.domStyle_(no);
-			if (s) html += ' style="' + s + '"';
-		}
-		if (!no || !no.domClass) {
-			var s = this.domClass_();
-			if (s) html += ' class="' + s + '"';
-		}
-		if (!no || !no.tooltiptext) {
-			var s = this.domTooltiptext_();
-			if (s) html += ' title="' + s + '"';
-		}
+		var html = "", attrs;
+		if (!no || !no.id)
+			html += zUtl.appendAttr("id", this.uuid);
+		if (!no || !no.domStyle)
+			html += zUtl.appendAttr("style", this.domStyle_(no));
+		if (!no || !no.domClass)
+			html += zUtl.appendAttr("class", this.domClass_());
+		if (!no || !no.tooltiptext)
+			html += zUtl.appendAttr("title", this.domTooltiptext_());
+		for (var nm in (attrs = this.domExtraAttrs))
+			html += zUtl.appendAttr(nm, attrs[nm]);
 		return html;
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
@@ -2452,11 +2456,7 @@ function () {
 	 */
 	domTextStyleAttr_: function () {
 		var s = this.getStyle();
-		if (s) {
-			s = jq.filterTextStyle(s);
-			if (s) s = ' style="' + s + '"';
-		}
-		return s;
+		return s ? zUtl.appendAttr("style", jq.filterTextStyle(s)): s;
 	},
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
@@ -2499,7 +2499,7 @@ function () {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n, {strict:true});
+			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
 			zjq._setOuter(n, this.redrawHTML_(skipper, true));
@@ -2513,6 +2513,22 @@ function () {
 
 		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
 		return this;
+	},
+	/**
+	 * Returns the widget associated with the given node element.
+	 * It is used by {@link #replaceHTML} and {@link #replaceChildHTML_} to retrieve
+	 * the widget associated with the note.
+	 * <p>It is similar to {@link #$} but it gives the widget a chance to
+	 * handle extreme cases. For example, Treeitem doesn't associate a DOM element
+	 * (or you can say Treeitem and Treerow shares the same DOM element), so
+	 * <code>zk.Widget.$(n)</code> will return Treerow, not Treeitem.
+	 * If it is the case, you can override it to make {@link #replaceHTML}
+	 * works correctly.
+	 * @param DOMElement n the DOM element to match the widget.
+	 * @since 5.0.3
+	 */
+	getOldWidget_: function (n) {
+		return zk.Widget.$(n, {strict:true});
 	},
 	/** Returns the HTML fragment of this widget.
 	 * @param zk.Skipper skipper the skipper. Ignored if null
@@ -2589,7 +2605,7 @@ function () {
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n, {strict:true});
+		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
@@ -2697,6 +2713,7 @@ function () {
 	 */
 	removeHTML_: function (n) {
 		jq(n).remove();
+		this.clearCache();
 	},
 	/**
 	 * Returns the DOM element that this widget is bound to.
@@ -2740,19 +2757,20 @@ function () {
 		this._subnodes = {};
 		this._nodeSolved = false;
 	},
-	/** Returns the page that this widget belongs to.
+	/** Returns the page that this widget belongs to, or null if there is
+	 * no page available.
 	 * @return zk.Page
 	 */
 	getPage: function () {
-		if (this.desktop && this.desktop.nChildren == 1)
-			return this.desktop.firstChild;
-			
-		for (var page = this.parent; page; page = page.parent)
+		var page, dt;
+		for (page = this.parent; page; page = page.parent)
 			if (page.$instanceof(zk.Page))
 				return page;
-				
-		return null;
+
+		return (page = (dt = this.desktop)._bpg) ?
+			page: (dt._bpg = new zk.Body(dt));
 	},
+
 	/** Binds this widget.
 	 * It is called to assoicate (aka., attach) the widget with
 	 * the DOM tree.
@@ -2868,18 +2886,25 @@ bind_: function (desktop, skipper, after) {
 	/** Callback when a widget is unbound (aka., detached) from the DOM tree.
 	 * It is called before the DOM element(s) of this widget is going to be removed from the DOM tree (such as {@link #removeChild}.
 	 * <p>Note: don't invoke this method directly. Rather, invoke {@link #unbind} instead. 
+	 * <p>Note: after invoking <code>this.$supers('unbind_', arguments)</code>,
+	 * the association with DOM elements are lost. Thus it is better to invoke
+	 * it as the last statement.
+	 * <p>Notice that {@link #removeChild} removes DOM elements first, so
+	 * {@link #unbind_} is called before {@link #beforeParentChanged_} and
+	 * the modification of the widget tree. It means it is safe to access
+	 * {@link #parent} and other information here
 	 * @see #bind_
 	 * @see #unbind
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper 
 	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
 <pre><code>
 unbind_: function (skipper, after) {
-  this.$supers('unbind_', arguments);
   var self = this;
   after.push(function () {
     self._doAfterUnbind(something);
     ...
   }
+  this.$supers('unbind_', arguments);
 }
 </code></pre>
 	 */
@@ -2959,18 +2984,20 @@ unbind_: function (skipper, after) {
 		if (newh != h) //h changed, re-assign height
 			n.style.height = jq.px0(newh);
 	},
+	
 	setFlexSizeW_: function(n, zkn, width, ignoreMargins) {
 		var w = zkn.revisedWidth(width, !ignoreMargins),
 			neww = w,
-			margins = zkn.sumStyles("lr", jq.margins);
+			margins = zkn.sumStyles("lr", jq.margins),
+			pb = zkn.padBorderWidth();
+		if (zk.safari && !ignoreMargins && width == (n.offsetWidth + margins)) //in safari, new size is the same to original size + margins (shall ignore the margin)
+			w = width - pb;
 		n.style.width = jq.px0(w);
-		var newmargins = zkn.sumStyles("lr", jq.margins);
 		if (w == jq(n).outerWidth(false)) //border-box
-			neww = width - ((zk.safari && newmargins >= 0 && newmargins < margins) ? newmargins : margins);
-		else if (zk.safari && newmargins >= 0 && newmargins < margins) //safari/chrome margin changed after set style.width
-			neww = zkn.revisedWidth(width, !ignoreMargins);
+			neww = w + pb;
 		if (neww != w) //w changed, re-assign width
-			n.style.width = jq.px0(neww); 
+			n.style.width = jq.px0(neww);
+			 
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden
@@ -3110,7 +3137,7 @@ unbind_: function (skipper, after) {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
-		if (typeof msg == 'string' && msg.length > 9)
+		if (typeof msg == "string" && msg.length > 9)
 			msg = msg.substring(0, 9) + "...";
 
 		var dgelm = zk.DnD.ghost(drag, ofs, msg);
@@ -3960,7 +3987,7 @@ _doFooSelect: function (evt) {
 		if (!n || zk.Widget.isInstance(n)) return n;
 
 		var wgt, id;
-		if (typeof n == 'string') {
+		if (typeof n == "string") {
 			n = jq(id = n, zk)[0];
 			if (!n) { //some widget might not have DOM element (e.g., timer)
 				if (id.charAt(0) == '#') id = id.substring(1);
@@ -3980,23 +4007,26 @@ _doFooSelect: function (evt) {
 			return _binds[n.id];
 
 		for (; n; n = zk(n).vparentNode()||n.parentNode) {
-			id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
-			if (id) {
-				wgt = _binds[id]; //try first (since ZHTML might use -)
-				if (wgt) return wgt;
+			try {
+				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
+				if (id && typeof id == "string") {
+					wgt = _binds[id]; //try first (since ZHTML might use -)
+					if (wgt) return wgt;
 
-				var j = id.indexOf('-');
-				if (j >= 0) {
-					id = id.substring(0, j);
-					wgt = _binds[id];
-					if (wgt)
-						if (opts && opts.child) {
-							var n2 = wgt.$n();
-							if (n2 && jq.isAncestor(n2, n))
+					var j = id.indexOf('-');
+					if (j >= 0) {
+						id = id.substring(0, j);
+						wgt = _binds[id];
+						if (wgt)
+							if (opts && opts.child) {
+								var n2 = wgt.$n();
+								if (n2 && jq.isAncestor(n2, n))
+									return wgt;
+							} else
 								return wgt;
-						} else
-							return wgt;
+					}
 				}
+			} catch (e) { //ignore
 			}
 			if (opts && opts.strict) break;
 		}
@@ -4399,6 +4429,17 @@ zk.Page = zk.$extends(zk.Widget, {
 });
 zk.Widget.register('zk.Page', true);
 
+//a fake page used in circumstance that a page is not available ({@link #getPage})
+zk.Body = zk.$extends(zk.Page, {
+	$init: function (dt) {
+		this.$super('$init', {});
+		this.desktop = dt;
+	},
+	$n: function (subId) {
+		return subId ? null: document.body;
+	},
+	redraw: zk.$void
+});
 /** A native widget.
  * It is used mainly to represent the native componet created at the server.
  * @disable(zkgwt)

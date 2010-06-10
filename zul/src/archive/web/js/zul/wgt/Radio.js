@@ -127,5 +127,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (newParent && newParent.$instanceof(zul.wgt.Radiogroup))
 				newParent._fixOnAdd(this); 
 		}
+		this.$supers("beforeParentChanged_", arguments);
 	}
 });

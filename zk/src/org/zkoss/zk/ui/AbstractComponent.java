@@ -163,6 +163,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private Map _wgtlsns;
 	/** A map of client properties to override, Map(String name, String script). */
 	private Map _wgtovds;
+	/** A map of client DOM attributes to set, Map(String name, String value). */
+	private Map _wgtattrs;
 	/** A map of forward conditions:
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
@@ -787,6 +789,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Set getWidgetOverrideNames() {
 		return _wgtovds != null ? _wgtovds.keySet(): Collections.EMPTY_SET;
+	}
+
+	public String setWidgetAttribute(String name, String value) {
+		if (name == null)
+			throw new IllegalArgumentException();
+
+		final String old;
+		if (value != null) {
+			if (_wgtattrs == null) _wgtattrs = new LinkedHashMap();
+			old = (String)_wgtattrs.put(name, value);
+		} else
+			old = _wgtattrs != null ? (String)_wgtattrs.remove(name): null;
+		return old;
+	}
+	public String getWidgetAttribute(String name) {
+		return _wgtattrs != null ? (String)_wgtattrs.get(name): null;
+	}
+	public Set getWidgetAttributeNames() {
+		return _wgtattrs != null ? _wgtattrs.keySet(): Collections.EMPTY_SET;
 	}
 
 	public Map getAttributes(int scope) {
@@ -1758,6 +1779,7 @@ w:use="foo.MyWindow"&gt;
 
 		renderer.renderWidgetListeners(_wgtlsns);
 		renderer.renderWidgetOverrides(_wgtovds);
+		renderer.renderWidgetAttributes(_wgtattrs);
 
 		Object o = getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)
@@ -2575,6 +2597,8 @@ w:use="foo.MyWindow"&gt;
 			clone._wgtlsns = new LinkedHashMap(_wgtlsns);
 		if (_wgtovds != null)
 			clone._wgtovds = new LinkedHashMap(_wgtovds);
+		if (_wgtattrs != null)
+			clone._wgtattrs = new LinkedHashMap(_wgtattrs);
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);

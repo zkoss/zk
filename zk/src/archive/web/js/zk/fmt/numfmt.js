@@ -67,7 +67,7 @@ zk.fmt.Number = {
 					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
 					for(var len = shift - valFixed; len-- > 0;)
 						valStr = valStr + '0';
-					if (valFixed == shift) indVal = -1;
+					indVal = -1;
 					valFixed = 0;
 				}
 			} else { //without dot

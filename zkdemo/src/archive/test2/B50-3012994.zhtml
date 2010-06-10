@@ -1,0 +1,17 @@
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:z="http://www.zkoss.org/2005/zul">
+
+<body>
+ <ol>
+ <li>Click the arrow icon on "Author" to open a menu popup. It shall be shown up correctly.</li>
+ <li>Click the "Upload" button and a file dialog shall show up</li>
+ </ol>
+
+ <z:grid width="100px">
+  <z:columns menupopup="auto">
+   <z:column label="Author" />
+  </z:columns>
+ </z:grid>
+ <z:fileupload label="Upload"/>
+</body>
+</html>

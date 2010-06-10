@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xml;
 
-/** @deprecated As of release 5.1.0, replaced with {@link org.zkoss.html.HTMLs}.
+/** @deprecated As of release 5.5.0, replaced with {@link org.zkoss.html.HTMLs}.
  *
  * @author tomyeh
  */

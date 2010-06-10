@@ -22,7 +22,7 @@ import org.zkoss.lang.Objects;
  * Represents a style sheet.
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public class StyleSheet implements java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20100514L;

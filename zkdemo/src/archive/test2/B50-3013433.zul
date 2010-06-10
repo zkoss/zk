@@ -1,0 +1,29 @@
+<zk>
+  <tabbox hflex="1">
+	<tabs>
+	  <tab label="My editions" />
+	</tabs>
+	<tabpanels>
+	  <tabpanel>
+	    <vbox hflex="1" style="border 1px #999999">
+			<html>
+			<![CDATA[
+			<ol>
+			<li>Chrome/Safari only.</li>
+			<li>Sizing the browser</li>
+			<li>You shall see the tabbox and grid resize along with browser's size</li>
+			<li>If not, it is a bug.</li>
+			</ol>
+			]]>
+			</html>
+		  <grid hflex="1" width="400px">
+		    <columns>
+			  <column width="10px" label="label1" />
+			  <column width="10px" label="label2" />
+		    </columns>
+		  </grid>	    	
+	    </vbox>
+	</tabpanel>
+	</tabpanels>
+  </tabbox>
+</zk>

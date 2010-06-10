@@ -164,20 +164,50 @@ implements ComponentCloneListener {
 	 */
 	protected transient Map param;
 	
-	/** The separator. */
+	/** The separator used to separate the component ID and event name.
+	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * is not applicable, you can specify '_'.
+	 */
 	protected final char _separator;
+	/** Indicates whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * <p>Default: false (not to ignore).
+	 */
+	private boolean _ignoreZScript;
+	/** Indicates whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * <p>Default: false (not to ignore).
+	 */
+	private boolean _ignoreXel;
 
+	/** The default constructor.
+	 */
 	protected GenericAutowireComposer() {
 		_separator = '$';
 	}
 	/** Constructor with a custom separator.
-	 * The separator is used to separate the component ID and event name.
-	 * By default, it is '$'. For Grooy and other environment that '$'
-	 * is not applicable, you can specify '_'.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * Refer to {@link #_separator} for details.
 	 * @since 3.6.0
 	 */
 	protected GenericAutowireComposer(char separator) {
 		_separator = separator;
+	}
+	/** Constructors with full control, including separator, whether to
+	 * search zscript and xel variables
+	 * @param separator the separator used to separate the component ID and event name.
+	 * Refer to {@link #_separator} for details.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	protected GenericAutowireComposer(char separator, boolean ignoreZScript,
+	boolean ignoreXel) {
+		this(separator);
+		_ignoreZScript = ignoreZScript;
+		_ignoreXel = ignoreXel;
 	}
 
 	/**
@@ -190,7 +220,7 @@ implements ComponentCloneListener {
 		super.doAfterCompose(comp);
 		
 		//wire variables to reference fields (include implicit objects) ASAP
-		Components.wireVariables(comp, this, _separator);
+		Components.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
 	
 		//register event to wire variables just before component onCreate
 		comp.addEventListener("onCreate", new BeforeCreateWireListener());
@@ -199,7 +229,7 @@ implements ComponentCloneListener {
 	private class BeforeCreateWireListener implements EventListener, Express {
 		public void onEvent(Event event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
-			Components.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator);
+			Components.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript, _ignoreXel);
 			//called only once
 			event.getTarget().removeEventListener("onCreate", this);
 		}
@@ -269,7 +299,7 @@ implements ComponentCloneListener {
 		//the composer somewhere other than the original component
 		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
 			if (self == null) { //Bug #2873310. didActivate only once
-				Components.wireVariables(comp, this, _separator);
+				Components.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
 			}
 		}
 	}

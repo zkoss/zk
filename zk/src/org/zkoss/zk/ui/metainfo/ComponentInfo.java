@@ -75,8 +75,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private EventHandlerMap _evthds;
 	/** A list of event listeners for the peer widget. */
 	private List _wgtlsns;
-	/** A list of method overrides for the peer widget. */
+	/** A list of method/property overrides for the peer widget. */
 	private List _wgtovds;
+	/** A list of DOM attributes for the peer widget. */
+	private List _wgtattrs;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
@@ -178,6 +180,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_wgtlsns = new LinkedList(compInfo._wgtlsns);
 		if (compInfo._wgtovds != null)
 			_wgtovds = new LinkedList(compInfo._wgtovds);
+		if (compInfo._wgtattrs != null)
+			_wgtattrs = new LinkedList(compInfo._wgtattrs);
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -556,6 +560,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *  this.$setValue(value); //old method
 	 *}"/&gt;</code></pre>
 	 * @param script the client side script. EL expressions are allowed.
+	 * @see #addWidgetAttribute
+	 * @since 5.0.0
 	 */
 	public void addWidgetOverride(String name, String script, ConditionImpl cond) {
 		final WidgetOverride mtd =
@@ -563,6 +569,23 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_wgtovds == null)
 			_wgtovds = new LinkedList();
 		_wgtovds.add(mtd);
+	}
+	/** Adds a custom DOM attribute to the peer widget.
+	 * <p>Unlike {@link #addWidgetOverride}, the attributes added here are
+	 * generated directly as DOM attributes at the client.
+	 * In other words, it is not a property or method of the peer widget.
+	 * @param name the name of the attribute.
+	 * Unlike {@link #addWidgetOverride}, the name might contain
+	 * no alphanumeric characters, such as colon and dash.
+	 * @since 5.0.3
+	 * @see #addWidgetOverride
+	 */
+	public void addWidgetAttribute(String name, String value, ConditionImpl cond) {
+		final WidgetAttribute attr =
+			new WidgetAttribute(_evalr, name, value, cond);
+		if (_wgtattrs == null)
+			_wgtattrs = new LinkedList();
+		_wgtattrs.add(attr);
 	}
 
 	/** Sets the widget class.
@@ -802,6 +825,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 			for (Iterator it = _wgtovds.iterator(); it.hasNext();)
 				((WidgetOverride)it.next()).assign(comp);
 
+		if (_wgtattrs != null)
+			for (Iterator it = _wgtattrs.iterator(); it.hasNext();)
+				((WidgetAttribute)it.next()).assign(comp);
+
 		comp.setWidgetClass(resolveWidgetClass(comp));
 	}
 
@@ -997,6 +1024,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_evthds);
 		out.writeObject(_wgtlsns);
 		out.writeObject(_wgtovds);
+		out.writeObject(_wgtattrs);
 		out.writeObject(_annots);
 		out.writeObject(_tag);
 		out.writeObject(_cond);
@@ -1028,6 +1056,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_evthds = (EventHandlerMap)in.readObject();
 		_wgtlsns = (List)in.readObject();
 		_wgtovds = (List)in.readObject();
+		_wgtattrs = (List)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();

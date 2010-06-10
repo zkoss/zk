@@ -34,6 +34,7 @@ import java.io.IOException;
 import javax.servlet.ServletRequest;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Threads;
@@ -1549,7 +1550,7 @@ public class UiEngineImpl implements UiEngine {
 				if (old == null) break; //grantable
 
 				try {
-					uvlock.wait(120*1000);
+					uvlock.wait(getRetryTimeout());
 				} catch (InterruptedException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -1580,6 +1581,23 @@ public class UiEngineImpl implements UiEngine {
 		}
 		return uv;
 	}
+
+	private static Integer _retryTimeout;
+	private static final int getRetryTimeout() {
+		if (_retryTimeout == null) {
+			int v = 0;
+			final String s = Library.getProperty(Attributes.ACTIVATE_RETRY_DELAY);
+			if (s != null) {
+				try {
+					v = Integer.parseInt(s);
+				} catch (Throwable t) {
+				}
+			}
+			_retryTimeout = new Integer(v > 0 ? v: 120*1000);
+		}
+		return _retryTimeout.intValue();
+	}
+
 	/** Returns whether the desktop is being recovered.
 	 */
 	private static final boolean isRecovering(Desktop desktop) {

@@ -631,6 +631,12 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attribute name="code" type="xs:string" use="optional" />
+		<xs:attribute name="codebase" type="xs:string" use="optional" />
+		<xs:attribute name="archive" type="xs:string" use="optional" />
+		<xs:attribute name="align" type="xs:string" use="optional" />
+		<xs:attribute name="hspace" type="xs:string" use="optional" />
+		<xs:attribute name="vspace" type="xs:string" use="optional" />
+		<xs:attribute name="mayscript" type="xs:string" use="optional" />
 		<xs:attribute name="params" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- area -->

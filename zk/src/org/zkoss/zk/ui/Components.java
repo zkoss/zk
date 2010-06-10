@@ -446,7 +446,20 @@ public class Components {
 	void wireFellows(IdSpace idspace, Object controller, char separator) {
 		new Wire(controller, separator).wireFellows(idspace);
 	}
-		
+	/** Wire fellow components and space owner with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireFellows(IdSpace idspace, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireFellows(idspace);
+	}
+
 	/** <p>Wire accessible variable objects of the specified component into a 
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
@@ -496,7 +509,20 @@ public class Components {
 	void wireVariables(Component comp, Object controller, char separator) {
 		new Wire(controller, separator).wireVariables(comp);
 	}
-	
+	/** Wire controller as a variable objects of the specified component with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireVariables(Component comp, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireVariables(comp);
+	}
+
 	/** <p>Wire accessible variables of the specified page into a 
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
@@ -545,6 +571,19 @@ public class Components {
 	void wireVariables(Page page, Object controller, char separator) {
 		new Wire(controller, separator).wireVariables(page);
 	}
+	/** Wire accessible variable objects of the specified page with complete control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireVariables(Page page, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireVariables(page);
+	}
 
 	/** Wire controller as a variable objects of the specified component with a custom separator.
 	 * The separator is used to separate the component ID and the controller.
@@ -557,7 +596,7 @@ public class Components {
 	void wireController(Component comp, Object controller) {
 		new Wire(controller).wireController(comp, comp.getId());
 	}
-	
+
 	/** Wire controller as a variable objects of the specified component with a custom separator.
 	 * The separator is used to separate the component ID and the controller.
 	 * By default, it is '$'. However, for Groovy or other environment that
@@ -569,7 +608,20 @@ public class Components {
 	void wireController(Component comp, Object controller, char separator) {
 		new Wire(controller, separator).wireController(comp, comp.getId());
 	}
-	
+	/** Wire controller as a variable objects of the specified component with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireController(Component comp, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireController(comp, comp.getId());
+	}
+
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 
@@ -800,13 +852,21 @@ public class Components {
 		private final Set _injected;
 		private final Map _fldMaps;
 		private final char _separator;
-		
+		private final boolean _ignoreZScript;
+		private final boolean _ignoreXel;
+
 		private Wire(Object controller) {
-			this(controller, '$');
+			this(controller, '$', false, false);
 		}
 		private Wire(Object controller, char separator) {
+			this(controller, separator, false, false);
+		}
+		private Wire(Object controller, char separator,
+		boolean ignoreZScript, boolean ignoreXel) {
 			_controller = controller;
 			_separator = separator;
+			_ignoreZScript = ignoreZScript;
+			_ignoreXel = ignoreXel;
 			_injected = new HashSet();
 			_fldMaps = new LinkedHashMap(64);
 			
@@ -822,6 +882,7 @@ public class Components {
 				cls = cls.getSuperclass();
 			} while (cls != null && !Object.class.equals(cls));
 		}
+
 		/**
 		 * Inject controller as variable of the specified component.
 		 */
@@ -965,37 +1026,37 @@ public class Components {
 		private boolean containsVariable(Object x, String fdname) {
 			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
 			if (x instanceof Page) {
-				final Page pg = (Page) x;
-				return pg.getZScriptVariable(fdname) != null
-					|| pg.hasAttributeOrFellow(fdname, true)
-					|| pg.getXelVariable(null, null, fdname, true) != null;
+				final Page page = (Page) x;
+				return (!_ignoreZScript && page.getZScriptVariable(fdname) != null)
+					|| page.hasAttributeOrFellow(fdname, true)
+					|| (!_ignoreXel && page.getXelVariable(null, null, fdname, true) != null);
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
-				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
+				return (!_ignoreZScript && page != null && page.getZScriptVariable(cmp, fdname) != null)
 					|| cmp.hasAttributeOrFellow(fdname, true)
-					|| (page != null && page.getXelVariable(null, null, fdname, true) != null);
+					|| (!_ignoreXel && page != null && page.getXelVariable(null, null, fdname, true) != null);
 			}
 		}
 		
 		private Object getVariable(Object x, String fdname) {
 			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
 			if (x instanceof Page) {
-				final Page pg = (Page) x;
-				Object arg = pg.getZScriptVariable(fdname);
+				final Page page = (Page) x;
+				Object arg = _ignoreZScript ? null: page.getZScriptVariable(fdname);
 				if (arg == null) {
-					arg = pg.getAttributeOrFellow(fdname, true);
-					if (arg == null)
-						arg = pg.getXelVariable(null, null, fdname, true);
+					arg = page.getAttributeOrFellow(fdname, true);
+					if (!_ignoreXel && arg == null)
+						arg = page.getXelVariable(null, null, fdname, true);
 				}
 				return arg;
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
-				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
+				Object arg = !_ignoreZScript && page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
 					arg = cmp.getAttributeOrFellow(fdname, true);
-					if (arg == null && page != null)
+					if (!_ignoreXel && arg == null && page != null)
 						arg = page.getXelVariable(null, null, fdname, true);
 				}
 				return arg;

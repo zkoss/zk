@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3014112.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 10 12:38:43 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<iframe src="http://www.google.com" width="100%" height="300px"
+	 xmlns:wa="http://www.zkoss.org/2005/zk/client/attribute"
+	 wa:onload="alert(window.location.href)"/>
+
+	You shall see an alert dialog
+</window>

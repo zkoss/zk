@@ -382,7 +382,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		//bug 3010663, boxes do not resize when browser window is resized
+		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
 			zkp = zk(p),
 			offhgh = p.offsetHeight,

@@ -64,11 +64,13 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		if (this._selected != selected) {
 			if (this.parent)
 				this.parent.toggleItemSelection(this);
-			
-			var n = this.$n();
-			if (n) n.selected = selected ? 'selected' : '';
-			this._selected = selected;
+			this._setSelectedDirectly(selected);
 		}
+	},
+	_setSelectedDirectly: function (selected) {
+		var n = this.$n();
+		if (n) n.selected = selected ? 'selected' : '';
+		this._selected = selected;
 	},
 	/** Returns whether it is selected.
 	 * <p>Default: false.
@@ -98,5 +100,16 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		var value = this.getValue();
 		return this.$supers('domAttrs_', arguments) + (this.isDisabled() ? ' disabled="disabled"' :'') +
 		(this.isSelected() ? ' selected="selected"' : '') + (value ? ' value=' + value : '');
+	},
+	replaceWidget: function (newwgt) {
+		this._syncItems(newwgt);
+		this.$supers('replaceWidget', arguments);
+	},
+	_syncItems: function (newwgt) {
+		if (this.parent && this.isSelected()) {
+			var items = this.parent._selItems;
+			if (items && items.$remove(this))
+				items.push(newwgt);
+		}
 	}
 });

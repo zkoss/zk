@@ -525,10 +525,13 @@ public class HtmlPageRenders {
 
 		//generate div first
 		if (divRequired) {
-			outDivTemplate(out, page.getUuid());
+			outDivTemplateBegin(out, page.getUuid());
 		}
 		if (standalone) { //switch out
+			//don't call outDivTemplateEnd yet since rc.temp will be generated before it
 			out = new StringWriter();
+		} else {
+			outDivTemplateEnd(out); //close it now since no rc.temp
 		}
 
 		//generate JS second
@@ -594,6 +597,8 @@ public class HtmlPageRenders {
 
 			StringBuffer sw = ((StringWriter)out).getBuffer();
 			out = rc.temp;
+			outDivTemplateEnd(out);
+				//close tag after temp, but before perm (so perm won't be destroyed)
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
 			Files.write(out, sw); //js
@@ -608,11 +613,15 @@ public class HtmlPageRenders {
 			out.write("</script>\n");
 		}
 	}
-	private static void outDivTemplate(Writer out, String uuid)
+	private static void outDivTemplateBegin(Writer out, String uuid)
 	throws IOException {
 		out.write("<div");
 		writeAttr(out, "id", uuid);
-		out.write(" class=\"z-temp\"></div>");
+		out.write(" class=\"z-temp\">");
+	}
+	private static void outDivTemplateEnd(Writer out)
+	throws IOException {
+		out.write("</div>");
 	}
 	/** Generates end of the function (of zkx).
 	 * It assumes the function name and the first parenthesis has been generated.
@@ -718,8 +727,10 @@ public class HtmlPageRenders {
 
 		final String extra;
 		try {
-			if (comp != null)
-				outDivTemplate(out, comp.getUuid());
+			if (comp != null) {
+				outDivTemplateBegin(out, comp.getUuid());
+				outDivTemplateEnd(out);
+			}
 
 			out.write("<script>zkmb();try{zkx(\n");
 

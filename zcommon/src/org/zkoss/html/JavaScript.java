@@ -22,7 +22,7 @@ import org.zkoss.lang.Objects;
  * Represents a javascript element.
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public class JavaScript {
 	private final String _src, _charset, _content;

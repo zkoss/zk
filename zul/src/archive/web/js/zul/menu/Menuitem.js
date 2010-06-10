@@ -138,6 +138,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	beforeParentChanged_: function (newParent) {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);

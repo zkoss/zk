@@ -195,6 +195,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (tree) 
 				tree._onTreeitemAdded(this);
 		}
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
@@ -236,10 +237,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
 			cn = w.$n();
-			if (cn) {
+			if (cn)
 				w.removeHTML_(cn);
-				w.clearCache();
-			}
 		}
 		this.$supers('removeHTML_', arguments);
 	},
@@ -258,8 +257,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_removeChildHTML: function (n) {
-		for(var cn, w = this.firstChild; (w = w.nextSibling);) {
-			if ((cn = w.$n()))
+		for(var cn, w = this.firstChild; w; w = w.nextSibling) {
+			if (w != this.treerow && (cn = w.$n()))
 				w.removeHTML_(cn);
 		}
 	},
@@ -270,6 +269,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			jq(this.getCaveNode()).after(child.redrawHTML_());
 				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
+	},
+	getOldWidget_: function (n) {
+		var old = this.$supers('getOldWidget_', arguments);
+		if (old && old.$instanceof(zul.sel.Treerow))
+			return old.parent;
+		return old;
 	},
 	replaceHTML: function (n, desktop, skipper) {
 		this._removeChildHTML(n);

@@ -78,8 +78,10 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	unbind_: function () {
 		var cm = this.$n('cm');
-		if (cm) { 
-			this._checked = this.getListbox()._headercm = null;
+		if (cm) {
+			var p = this.getListbox();
+			if (p) p._headercm = null;
+			this._checked = null;
 			this.domUnlisten_(cm, 'onClick')
 				.domUnlisten_(cm, 'onMouseOver')
 				.domUnlisten_(cm, 'onMouseOut');

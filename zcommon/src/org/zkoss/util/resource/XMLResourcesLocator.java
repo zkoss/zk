@@ -23,7 +23,7 @@ import org.zkoss.idom.Document;
  * Represents a locator used to locate XML resources.
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public interface XMLResourcesLocator extends Locator {
 	/** Returns an enumeration of resources.
@@ -53,7 +53,7 @@ public interface XMLResourcesLocator extends Locator {
 	String elDepends) throws IOException;
 
 	/** An item of the list returned by {@link XMLResourcesLocator#getDependentXMLResources}.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public static class Resource {
 		/** The URL of the resource. */

@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-/** @deprecated As of release 5.1.0, replaced with {@link org.zkoss.html.JavaScript}.
+/** @deprecated As of release 5.5.0, replaced with {@link org.zkoss.html.JavaScript}.
  * Represents a javascript.
  *
  * @author tomyeh

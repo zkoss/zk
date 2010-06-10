@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<applet id="ap" codebase="img/" width="300px" code="Simple.class" />
+<applet id="ap" codebase="classes" width="300px" code="Simple" />
 <button label="addword">
 	<attribute name="onClick">
 	<![CDATA[
