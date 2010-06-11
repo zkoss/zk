@@ -1,0 +1,18 @@
+<window mode="overlapped" border="normal">
+You shall see the popup covers the the listbox in IE6 after click the following link.
+<separator/>
+<a id="setUp" tooltip="pop" label="Click Me in IE6"/>
+<popup id="pop" width="760px" height="300px">
+<grid width="700px">
+<rows>
+<row>ABC</row>
+<row>ABC</row>
+<row>ABC</row>
+</rows>
+</grid>
+</popup>
+<listbox mold="select"/>
+<listbox mold="select"/>
+<listbox mold="select"/>
+<listbox mold="select"/>
+</window>

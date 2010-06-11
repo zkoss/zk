@@ -1727,6 +1727,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			ifr.style.height = el.offsetHeight + "px";
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
+			ifr.style.zIndex = el.style.zIndex;
 			el.parentNode.insertBefore(ifr, anchor || el);
 		}
 		return ifr;
