@@ -39,7 +39,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 			valind = valstr.length;
 			valstr += '.';
 		}
-		
+
 		var len = raw.length,	
 			vallen = valstr.length;
 		
@@ -57,7 +57,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 				valstr += '0';
 		}
 		
-		if (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0) //1e2: assumes OK
+		if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) //1e2: assumes OK
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);

@@ -256,8 +256,8 @@ zk.fmt.Number = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zkDecimal && cc != zkMinus && cc != '+'
-				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING || cc == ')'
-					|| (fmt && fmt.indexOf(cc) >= 0));
+				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING
+					|| cc == ')' || (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);
 			} else {
@@ -278,6 +278,23 @@ zk.fmt.Number = {
 				sb = sb.substring(2);
 			else
 				break;
+		}
+
+		//remove leading 0
+		for (var j = 0, k, len = sb.length; j < len; ++j) {
+			cc = sb.charAt(j);
+			if (cc > '0' && cc <= '9') {
+				if (k !== undefined)
+					sb = sb.substring(0, k) + sb.substring(j);
+				break; //done
+			} else if (cc == '0') {
+				if (k === undefined)
+					k = j;
+			} else if (k !== undefined) {
+				if (cc == zkDecimal && j > ++k)
+					sb = sb.substring(0, k) + sb.substring(j);
+				break;
+			}
 		}
 		return {raw: sb, divscale: divscale};
 	}

@@ -62,6 +62,7 @@ ZK 5.0.3
   3010419: Auxiliary Headers don't render in iPhone
   3014660: Combobox setValue issue when onChanging
   3014664: tabs & tabpanels cut half width if set hflex="1"
+  3014668: intbox doesn't accept 09
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
