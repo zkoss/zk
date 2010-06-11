@@ -32,10 +32,20 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	 */
 	$init: function (value) {
 		value = value ? '' + value: '0';
-		var j = value.lastIndexOf('.');
-		if (j >= 0) {
-			value = value.substring(0, j) + value.substring(j + 1);
-			this._precision = value.length - j;
+		var jdot = -1;
+		for (var j = 0, len = value.length; j < len; ++j) {
+			var cc = value.charAt(j);
+			if ((cc < '0' || cc > '9') && cc != '-' && cc != '+')
+				if (jdot < 0 && cc == '.') {
+					jdot = j;
+				} else {
+					value = value.substring(0, j);
+					break;
+				}
+		}
+		if (jdot >= 0) {
+			value = value.substring(0, jdot) + value.substring(jdot + 1);
+			this._precision = value.length - jdot;
 			this._dot = true;
 		}
 		this._value = value;
@@ -66,11 +76,16 @@ zk.Long = zk.$extends(zk.Object, {
 	 * @param Object value a number or a string
 	 */
 	$init: function (value) {
+	//Note: it shall work like parseInt:
+	//1) consider '.' rather than zkDecimal
+	//2) ignore unrecognized characters
 		value = value ? '' + value: '0';
-		var j = value.lastIndexOf('.');
-		if (j >= 0) {
-			value = value.substring(0, j);
-			this._dot = true;
+		for (var j = 0, len = value.length; j < len; ++j) {
+			var cc = value.charAt(j);
+			if ((cc < '0' || cc > '9') && cc != '-' && cc != '+') {
+				value = value.substring(0, j);
+				break;
+			}
 		}
 		this._value = value;
 	},
@@ -79,13 +94,11 @@ zk.Long = zk.$extends(zk.Object, {
 	 * instead.
 	 * @return String
 	 */
-	$toString: function() { //toString is reserved keyword for IE
-		return this._value + (this._dot ? '.' : '');
+	$toString: zkf = function() { //toString is reserved keyword for IE
+		return this._value;
 	},
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
 	 */
-	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
-		return this._value;// + (this._precision ? zk.DECIMAL : '');
-	}
+	$toLocaleString: zkf
 });

@@ -63,6 +63,7 @@ ZK 5.0.3
   3014660: Combobox setValue issue when onChanging
   3014664: tabs & tabpanels cut half width if set hflex="1"
   3014668: intbox doesn't accept 09
+  3014743: longbox and decimalbox doesn't reject 33ee34
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
