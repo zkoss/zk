@@ -179,6 +179,16 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
 		return label ? img + ' ' + label: img;
 	},
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Tab
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tab, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Tab
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tab, 'setHflex', v);
+	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
 		var closebtn = this.$n('close'),

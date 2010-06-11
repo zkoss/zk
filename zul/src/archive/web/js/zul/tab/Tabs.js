@@ -65,6 +65,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 		return zcls;
 	},
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Tabs
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabs, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Tabs
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabs, 'setHflex', v);
+	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
 		zWatch.listen({onSize: this, onShow: this});

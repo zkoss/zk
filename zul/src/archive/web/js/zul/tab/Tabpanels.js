@@ -70,6 +70,16 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 			zWatch.fireDown('onSize', this);
 		}
 	},
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Tabpanels
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabpanels, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Tabpanels
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabpanels, 'setHflex', v);
+	},
 	bind_: function () {
 		this.$supers(zul.tab.Tabpanels, 'bind_', arguments);
 		if (this.getTabbox().isVertical()) {

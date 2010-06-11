@@ -131,6 +131,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (zk.ie && !zk.ie8) zk(this.getTabbox().$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
 	},
 	onShow: _zkf,
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Tabpanel
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabpanel, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Tabpanel
+		if (v != 'min') v = false;
+		this.$super(zul.tab.Tabpanel, 'setHflex', v);
+	},
 	bind_: function() {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		if (this.getTabbox().isHorizontal()) {

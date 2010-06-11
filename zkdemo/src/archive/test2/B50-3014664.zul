@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml" width="100%" height="100%">
+  <vbox hflex="1" vflex="1">	
+    <tabbox hflex="1" vflex="1">
+      <tabs hflex="1" vflex="1">
+	    <tab label="All Editions"  visible="true" hflex="1" vflex="1"/>
+	    <tab label="Tab 2" visible="true" hflex="1" vflex="1"/>
+      </tabs>
+      <tabpanels hflex="1" vflex="1">
+        <tabpanel hflex="1" vflex="1">
+          <vbox hflex="1" vflex="1">
+            <vbox hflex="1"  style="border: 1px solid #999999">
+              Level1box
+            </vbox>
+            <separator hflex="1" />                    
+            <vbox hflex="1" style=" border: 1px solid #999999" vflex="1">
+			  <listbox hflex="1" vflex="1">
+			    <listhead sizable="true">
+				  <listheader width="125px" label="Id1" />
+				  <listheader width="125px" label="Id2" />
+				  <listheader width="125px" label="Id3" />
+				  <listheader width="125px" label="Id4" />
+			    </listhead>
+			    <listitem height="20px">
+				  <listcell label="label1" />
+				  <listcell label="label2" />
+				  <listcell label="label3" />
+				  <listcell label="label4" />
+			    </listitem>
+			  </listbox>
+		      <paging pageSize="20" />
+            </vbox>
+          </vbox>	
+		</tabpanel>
+        <tabpanel hflex="1" vflex="1">
+        	Panel 2
+        </tabpanel>
+	  </tabpanels>
+	</tabbox>
+  </vbox>
+</window>

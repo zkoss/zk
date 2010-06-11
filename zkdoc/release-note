@@ -61,7 +61,8 @@ ZK 5.0.3
   3008328: Intbox uneditable on FF if treerow draggable/droppable=true
   3010419: Auxiliary Headers don't render in iPhone
   3014660: Combobox setValue issue when onChanging
-
+  3014664: tabs & tabpanels cut half width if set hflex="1"
+  
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
