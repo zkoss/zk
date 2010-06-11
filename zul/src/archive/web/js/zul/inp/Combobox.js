@@ -75,6 +75,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	setValue: function (val) {
 		this.$supers('setValue', arguments);
 		this._reIndex();
+		this.valueEnter_ = null; // reset bug #3014660
 	},
 	_reIndex: function () {
 		var value = this.getValue();
