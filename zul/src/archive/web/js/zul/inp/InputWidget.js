@@ -660,7 +660,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	afterKeyDown_: function (evt) {
 		if (this._inplace) {
-			if (evt.keyCode == 13) {
+			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
 				if ($inp.toggleClass(inc).hasClass(inc)) 
 					$inp.zk.setSelectionRange(0, $inp[0].value.length);
