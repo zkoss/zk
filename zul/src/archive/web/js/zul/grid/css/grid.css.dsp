@@ -8,7 +8,10 @@ div.z-grid {
 	zoom: 1;
 }
 div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
-	border: 0; overflow: hidden; width: 100%;
+	border: 0; width: 100%;
+}
+div.z-grid-header, div.z-grid-footer {
+	overflow: hidden;
 }
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-color: #C3E7FB;
