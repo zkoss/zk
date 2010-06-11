@@ -58,6 +58,7 @@ ZK 5.0.3
   3013683: The column in grid without width will calculator wrong width
   3011319: Datebox may select wrong month
   3014084: Press "Enter" in a multiline and inplace  textbox lose text
+  3008328: Intbox uneditable on FF if treerow draggable/droppable=true
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

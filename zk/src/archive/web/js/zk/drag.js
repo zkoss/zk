@@ -588,11 +588,14 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
 
-		if (zk.opera || zk.gecko) devt.preventDefault();
+		if ((zk.opera || zk.gecko) && !jq.nodeName(devt.target, "input"))
+			devt.preventDefault();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged
 			//FF3: if stopPropagation, 2nd browser focused (Bug 2988327)
 			//Opera: if not stop, 'easy' to become selecting text
+			//
+			//input: if preventDefault, not editable
 	},
 	_keypress: function (devt) {
 		if(devt.keyCode == 27) {
