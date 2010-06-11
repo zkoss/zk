@@ -530,7 +530,7 @@ public class HtmlPageRenders {
 		if (standalone) { //switch out
 			//don't call outDivTemplateEnd yet since rc.temp will be generated before it
 			out = new StringWriter();
-		} else {
+		} else if (divRequired) {
 			outDivTemplateEnd(out); //close it now since no rc.temp
 		}
 
@@ -597,7 +597,8 @@ public class HtmlPageRenders {
 
 			StringBuffer sw = ((StringWriter)out).getBuffer();
 			out = rc.temp;
-			outDivTemplateEnd(out);
+			if (divRequired)
+				outDivTemplateEnd(out);
 				//close tag after temp, but before perm (so perm won't be destroyed)
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
