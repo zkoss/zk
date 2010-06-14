@@ -189,9 +189,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				var l = txt.indexOf(';', j + 1);
 				if (l >= 0) {
 					var dec = txt.charAt(j + 1) == '#' ?
-						String.fromCharCode(
-							parseInt(txt.substring(
-								txt.charAt(j + 2) == '0' ? j + 3: j + 2, l))):
+						String.fromCharCode(txt.charAt(j + 2) == 'x' ?
+							parseInt(txt.substring(j + 3, l), 16):
+							parseInt(txt.substring(j + 2, l), 10)):
 						_decs[txt.substring(j + 1, l)];
 					if (dec) {
 						out += txt.substring(k, j) + dec;
