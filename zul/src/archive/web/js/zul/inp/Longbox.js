@@ -53,9 +53,9 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 			return false;
 		var maxval = negative ? '9223372036854775808' : '9223372036854775807';
 		for(var j=0; j < 19; ++j) {
-			if (val.charAt(j) > maxval[j])
+			if (val.charAt(j) > maxval.charAt(j))
 				return true;
-			if (val.charAt(j) < maxval[j])
+			if (val.charAt(j) < maxval.charAt(j))
 				return false;
 		}
 		return false;
