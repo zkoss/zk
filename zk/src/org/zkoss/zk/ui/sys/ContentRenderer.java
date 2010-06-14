@@ -91,7 +91,7 @@ public interface ContentRenderer {
 	 */
 	public void renderWidgetOverrides(Map overrides);
 	/** Renders the client's DOM attributes for the peer widgets.
-	 * @param atts the map of attributes. The key is the attribute's name,
+	 * @param attrs the map of attributes. The key is the attribute's name,
 	 * while the value is the attribute's value. They are both instances of String.
 	 * @since 5.0.3
 	 */
