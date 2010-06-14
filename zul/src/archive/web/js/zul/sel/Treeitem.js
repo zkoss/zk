@@ -144,7 +144,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if (!this.treerow)
 			this.appendChild(new zul.sel.Treerow());
 
-		var cell = this.treerow.getFirstChild();
+		var cell = this.treerow.firstChild;
 		if (!cell) {
 			cell = new zul.sel.Treecell();
 			this.treerow.appendChild(cell);
