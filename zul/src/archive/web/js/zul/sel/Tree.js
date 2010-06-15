@@ -90,7 +90,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_onTreeitemRemoved: function (item) {
 		var fixSel,
-			prevSib = item.previousSibling;
+			prevSib = item.previousSibling,
+			parentItem = item.getParentItem();
 		if (item.isSelected()) {
 			this._selItems.$remove(item);
 			fixSel = this._sel == item;
@@ -100,7 +101,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}
 		this._onTreechildrenRemoved(item.treechildren);
 		if (fixSel) this._fixSelected();
-		if (prevSib) this._syncFocus(prevSib);
+		if (prevSib || parentItem) this._syncFocus(prevSib || parentItem);
 		else jq(this.$n('a')).offset({top: 0, left: 0});
 	},
 	_onTreechildrenAdded: function (tchs) {
