@@ -38,14 +38,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 var Renderer =
-/** The renderer used to render a calendar.
+/** @class zul.db.Renderer
+ * The renderer used to render a calendar.
  * It is designed to be overriden
  */
 zul.db.Renderer = {
 	/** Returns the HTML fragment representing a day cell.
+	 * By overriding this method, you could customize the look of a day cell.
+	 * <p>Default: <code>&lt;a href="javascript"&gt;day&lt;/a&gt;</code>
 	 * @param zul.db.Calendar cal the calendar
-	 * @param day the day of the month (between 1 and 31)
-	 * @param monthofs the month offset. If the day is in the same month,
+	 * @param int day the day of the month (between 1 and 31)
+	 * @param int monthofs the month offset. If the day is in the same month,
 	 * it is 0. If it is in the previous month, it is -1. If next month, it is 1.
 	 * @return String the HTML fragment
 	 * @since 5.0.3
@@ -60,16 +63,17 @@ zul.db.Renderer = {
 	 */
 	beforeRedraw: function (cal) {
 	},
-	/** Tests if the specified day is invalid (i.e., shall be disabled).
+	/** Tests if the specified date is disabled.
+	 * <p>Default: it depends on the constraint, if any
 	 * @param zul.db.Calendar cal the calendar
 	 * @param int y the year
 	 * @param int m the month (between 0 to 11)
 	 * @param int v the day (between 1 to 31)
 	 * @param Date today today
-	 * @sine 5.0.3
+	 * @since 5.0.3
 	 * @return boolean
 	 */
-	invalid: function (cal, y, m, v, today) {
+	disabled: function (cal, y, m, v, today) {
 		var d = new Date(y, m, v, 0, 0, 0, 0);
 		switch (cal._constraint) {
 		case 'no today':
@@ -527,7 +531,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						else
 							jq(cell).removeClass("z-outside");
 							
-						if (Renderer.invalid(this, y, m + monofs, v, today)) {
+						if (Renderer.disabled(this, y, m + monofs, v, today)) {
 							jq(cell).addClass(zcls+"-disd");
 						} else
 							jq(cell).removeClass(zcls+"-disd");

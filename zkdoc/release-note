@@ -12,6 +12,7 @@ ZK 5.0.3
   3010188: disable ZScriptVariables lookup for performance
   2824949: Calendar: different color for previous and next month
   2019205: Customization of Calendar's disabled days
+  2824946: Calendar Day Renderer
 
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
