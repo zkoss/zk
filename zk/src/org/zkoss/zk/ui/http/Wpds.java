@@ -20,11 +20,17 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormatSymbols;
 
+import javax.servlet.http.HttpSession;
+
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Locales;
+import org.zkoss.web.Attributes;
 
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 
@@ -109,12 +115,14 @@ public class Wpds {
 	/** Output date/calendar relevant labels.
 	 */
 	private final static String outDateJavaScript(Locale locale) {
+		final int firstDayOfWeek = getFirstDayOfWeek();
+		final String djkey = locale + ":" + firstDayOfWeek;
 		synchronized (_datejs) {
-			final String djs = (String)_datejs.get(locale);
+			final String djs = (String)_datejs.get(djkey);
 			if (djs != null) return djs;
 		}
 
-		String djs = getDateJavaScript(locale);
+		String djs = getDateJavaScript(locale, firstDayOfWeek);
 		synchronized (_datejs) { //OK to race
 			//To minimize memory use, reuse the string if they are the same
 			//which is common
@@ -123,17 +131,41 @@ public class Wpds {
 				if (val.equals(djs))
 					djs = val; 
 			}
-			_datejs.put(locale, djs);
+			_datejs.put(djkey, djs);
 		}
 		return djs;
 	}
-	private final static String getDateJavaScript(Locale locale) {
+	private final static int getFirstDayOfWeek() {
+		int firstDayOfWeek = -1;
+		final Session sess = Sessions.getCurrent();
+		if (sess != null) {
+			try {
+				Object o = sess.getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+				if (o == null) {
+					final Object hsess = sess.getNativeSession();
+					if (hsess instanceof HttpSession)
+						o = ((HttpSession)hsess).getServletContext().getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+					if (o == null)
+						o = Library.getProperty(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+				}
+				if (o instanceof Integer)
+					firstDayOfWeek = ((Integer)o).intValue();
+				else if (o instanceof String)
+					firstDayOfWeek = Integer.parseInt((String)o);
+				if (firstDayOfWeek < Calendar.SUNDAY || firstDayOfWeek > Calendar.SATURDAY)
+					firstDayOfWeek = -1;
+			} catch (Throwable ex) { //ignore
+			}
+		}
+		return firstDayOfWeek;
+	}
+	private final static String getDateJavaScript(Locale locale, int firstDayOfWeek) {
 		final StringBuffer sb = new StringBuffer(512);
-
 		final Calendar cal = Calendar.getInstance(locale);
 		cal.clear();
 
-		final int firstDayOfWeek = cal.getFirstDayOfWeek();
+		if (firstDayOfWeek < 0)
+			firstDayOfWeek = cal.getFirstDayOfWeek();
 		sb.append("zk.DOW_1ST=")
 			.append(firstDayOfWeek - Calendar.SUNDAY)
 			.append(";\n");

@@ -437,13 +437,6 @@ public class HtmlPageRenders {
 				throw new UiException(ex);
 			}
 
-			//Note: Jetty might encode jessionid into URL, which
-			//Dojo cannot handle, so we have to remove it
-			int j = url.lastIndexOf(';');
-			if (j > 0 && url.indexOf('.', j + 1) < 0
-			&& url.indexOf('/', j + 1) < 0)
-				url = url.substring(0, j);
-
 			sb.append(" src=\"").append(url).append('"');
 			final String charset = js.getCharset();
 			if (charset != null)

@@ -139,6 +139,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
+
 		final WpdContent wc =
 			zk || aaas || !cacheable || isWpdContentRequired(root) ?
 				new WpdContent(dir, cacheable): null;

@@ -176,6 +176,8 @@ public class Charsets {
 	 * {@link Attributes#PREFERRED_LOCALE}. If so, return it.</li>
 	 * <li>If not found, it checks if the servlet context has the
 	 * attribute called {@link Attributes#PREFERRED_LOCALE}. If so, return it.</li>
+	 * <li>If not found, it checks if the library property
+	 * called {@link Attributes#PREFERRED_LOCALE} is defined. If so, return it.</li>
 	 * <li>Otherwise, use ServletRequest.getLocale().</li>
 	 * </ol>
 	 *
@@ -185,6 +187,8 @@ public class Charsets {
 	Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
 		if (sess != null) {
 			Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
+			if (v == null)
+				v = sess.getAttribute(PX_PREFERRED_LOCALE); //backward compatible (prior to 5.0.3)
 			if (v != null) {
 				if (v instanceof Locale)
 					return (Locale)v;
@@ -192,16 +196,24 @@ public class Charsets {
 			}
 
 			v = sess.getServletContext().getAttribute(Attributes.PREFERRED_LOCALE);
+			if (v == null)
+				v = sess.getServletContext().getAttribute(PX_PREFERRED_LOCALE); //backward compatible (prior to 5.0.3)
 			if (v != null) {
 				if (v instanceof Locale)
 					return (Locale)v;
 				logLocaleError(v);
 			}
+
+			final String s = Library.getProperty(Attributes.PREFERRED_LOCALE);
+			if (s != null)
+				return Locales.getLocale(s);
 		}
 
 		final Locale l = request.getLocale();
 		return l != null ? l: Locale.getDefault();
 	}
+	/** The previous attribute name (backward compatible prior to 5.0.3. */
+	private static final String PX_PREFERRED_LOCALE = "px_preferred_locale";
 	private static void logLocaleError(Object v) {
 		log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
 	}
@@ -221,10 +233,12 @@ public class Charsets {
 	 */
 	public static final
 	void setPreferredLocale(HttpSession hsess, Locale locale) {
-		if (locale != null)
+		if (locale != null) {
 			hsess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
-		else
+		} else {
 			hsess.removeAttribute(Attributes.PREFERRED_LOCALE);
+			hsess.removeAttribute(PX_PREFERRED_LOCALE);
+		}
 	}
 	/** Sets the preferred locale for the specified servlet context.
 	 * It is the default locale for the whole Web application.
@@ -235,10 +249,12 @@ public class Charsets {
 	 */
 	public static final
 	void setPreferredLocale(ServletContext ctx, Locale locale) {
-		if (locale != null)
+		if (locale != null) {
 			ctx.setAttribute(Attributes.PREFERRED_LOCALE, locale);
-		else
+		} else {
 			ctx.removeAttribute(Attributes.PREFERRED_LOCALE);
+			ctx.removeAttribute(PX_PREFERRED_LOCALE);
+		}
 	}
 	/** @deprecated As of release 3.6.3, replaced with
 	 * {@link #setPreferredLocale(HttpSession, Locale)}

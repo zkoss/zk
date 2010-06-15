@@ -366,23 +366,28 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//use HttpSession to avoid loading SerializableSession in GAE
 			//and don't retrieve session if possible
 			final ClassWebResource cwr = getClassWebResource();
-			final HttpSession sess =
+			final HttpSession hsess =
 				shallSession(cwr, pi) ? request.getSession(false): null;
 			Object oldsess = null;
-			if (sess == null) {
+			if (hsess == null) {
 				oldsess = SessionsCtrl.getRawCurrent();
 				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
 			}
 
-			final Object old = sess != null?
-				I18Ns.setup(sess, request, response, "UTF-8"):
+			WebApp wapp;
+			Session sess;
+			final Object old = hsess != null?
+				(wapp = WebManager.getWebAppIfAny(_ctx)) != null &&
+				(sess = SessionsCtrl.getSession(wapp, hsess)) != null ?
+					I18Ns.setup(sess, request, response, "UTF-8"):
+					I18Ns.setup(hsess, request, response, "UTF-8"):
 				Charsets.setup(null, request, response, "UTF-8");
 			try {
 				cwr.service(request, response,
 						pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
-				if (sess != null) I18Ns.cleanup(request, old);
+				if (hsess != null) I18Ns.cleanup(request, old);
 				else {
 					Charsets.cleanup(request, old);
 					SessionsCtrl.setRawCurrent(oldsess);

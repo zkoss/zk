@@ -420,16 +420,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return result;
 		}
 	},
-	_markCal : function (opts) {
+	_markCal: function (opts) {
 		var	zcls = this.getZclass(),
-		 	val = this.getTime(),
-		 	m = val.getMonth(),
-			d = val.getDate(),
-			y = val.getFullYear(),
+		 	seldate = this.getTime(),
+		 	m = seldate.getMonth(),
+			d = seldate.getDate(),
+			y = seldate.getFullYear(),
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
 			today = zUtl.today(true);
+
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
 			var mon = this.$n("m" + j),
@@ -465,13 +466,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						if (k == 0) week.style.display = "";
 						var cell = week.cells[k],
 							monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
-							sel = cur == d;
+							bSel = cur == d;
 						cell.style.textDecoration = "";
 						cell._monofs = monofs;
 						//hightlight day
 						jq(cell).removeClass(zcls+"-over");
 						jq(cell).removeClass(zcls+"-over-seld");
-						if (sel)
+						if (bSel)
 							jq(cell).addClass(zcls+"-seld");
 						else
 							jq(cell).removeClass(zcls+"-seld");
@@ -482,7 +483,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).removeClass(zcls+"-disd");
 							 
 						jq(cell).html('<a href="javascript:;">' + v + '</a>').attr('_dt', v);
-						if (sel)
+						if (bSel)
 							_doFocus(cell.firstChild, opts ? opts.timeout : false);
 					}
 				}

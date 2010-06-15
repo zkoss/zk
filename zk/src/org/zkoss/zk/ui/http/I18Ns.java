@@ -23,6 +23,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.Attributes;
@@ -77,6 +78,10 @@ public class I18Ns {
 	 * {@link Attributes#PREFERRED_LOCALE} and
 	 * {@link Attributes#PREFERRED_TIME_ZONE} are set with the preferred
 	 * locale and timezone. If so, use it as the default.</li>
+	 * <li>Then, it checks if any library properties called
+	 * {@link Attributes#PREFERRED_LOCALE} and
+	 * {@link Attributes#PREFERRED_TIME_ZONE} are set with the preferred
+	 * locale and timezone. If so, use it as the default.</li>
 	 * <li>Otherwise, it depends the setting and location of the browser
 	 * (by checking the request's header).</li>
 	 * </ol>
@@ -114,9 +119,23 @@ public class I18Ns {
 
 			TimeZone tz = checkTimeZone(
 				hsess.getAttribute(Attributes.PREFERRED_TIME_ZONE));
-			if (tz == null)
+			if (tz == null) {
 				tz = checkTimeZone(
-					hsess.getServletContext().getAttribute(Attributes.PREFERRED_TIME_ZONE));
+					hsess.getAttribute(PX_PREFERRED_TIME_ZONE)); //backward compatible (prior to 5.0.3)
+				if (tz == null) {
+					tz = checkTimeZone(
+						hsess.getServletContext().getAttribute(Attributes.PREFERRED_TIME_ZONE));
+					if (tz == null) {
+						tz = checkTimeZone(
+							hsess.getServletContext().getAttribute(PX_PREFERRED_TIME_ZONE)); //backward compatible (prior to 5.0.3)
+						if (tz == null) {
+							String s = Library.getProperty(Attributes.PREFERRED_TIME_ZONE);
+							if (s != null)
+								tz = TimeZone.getTimeZone(s);
+						}
+					}
+				}
+			}
 
 			final Object otz = TimeZones.setThreadLocal(tz);
 
@@ -128,6 +147,8 @@ public class I18Ns {
 			SessionsCtrl.setCurrent((Session)sess);
 		return old;
 	}
+	/** The previous attribute name (backward compatible prior to 5.0.3. */
+	private static final String PX_PREFERRED_TIME_ZONE = "px_preferred_time_zone";
 	private static TimeZone checkTimeZone(Object tz) {
 		if (tz != null && !(tz instanceof TimeZone)) {
 			log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone is required, not "+tz.getClass());
@@ -160,10 +181,12 @@ public class I18Ns {
 	 */
 	public static final
 	void setPreferredTimeZone(HttpSession hsess, TimeZone timezone) {
-		if (timezone != null)
+		if (timezone != null) {
 			hsess.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
-		else
+		} else {
 			hsess.removeAttribute(Attributes.PREFERRED_TIME_ZONE);
+			hsess.removeAttribute(PX_PREFERRED_TIME_ZONE);
+		}
 	}
 	/** Sets the preferred timezone for the specified servlet context.
 	 * It is the default timezone for the whole Web application.
@@ -174,9 +197,11 @@ public class I18Ns {
 	 */
 	public static final
 	void setPreferredTimeZone(ServletContext ctx, TimeZone timezone) {
-		if (timezone != null)
+		if (timezone != null) {
 			ctx.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
-		else
+		} else {
 			ctx.removeAttribute(Attributes.PREFERRED_TIME_ZONE);
+			ctx.removeAttribute(PX_PREFERRED_TIME_ZONE);
+		}
 	}
 }
