@@ -1,4 +1,4 @@
-/* Datebox.js
+/* calendar.js
 
 {{IS_NOTE
 	Purpose:
@@ -63,7 +63,7 @@ function (out) {
 			var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
 			for (var j = 0 ; j < 7; ++j) {
 				out.push('<td');
-				if (j == sun || j == sat) out.push(' style="color:red"');
+				if (j == sun || j == sat) out.push(' class="z-weekend"');
 				out.push( '>' + zk.S2DOW[j] + '</td>');
 			}
 			out.push('</tr>');
@@ -89,7 +89,7 @@ function (out) {
 
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '"', (j == 0 || j == 11) ? ' style="color:gray;"' : '', ' ><a href="javascript:;">', yofs + ydelta, '</a></td>');
+			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" ><a href="javascript:;">', yofs + ydelta, '</a></td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
@@ -108,7 +108,7 @@ function (out) {
 			}
 			
 			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
-					' ><a href="javascript:;"', (j == 0 || j == 11) ? 'style="color:gray;"' : '', '>', temp + ydelta, '-<br />', temp + ydelta + 9, '</a></td>');
+					' ><a href="javascript:;">', temp + ydelta, '-<br />', temp + ydelta + 9, '</a></td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tr></table></td></tr>');

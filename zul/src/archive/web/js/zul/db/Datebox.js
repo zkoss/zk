@@ -688,14 +688,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
-	},
-	_chooseDate: function (evt) {
-		var target = evt.domTarget;
-		target = jq.nodeName(target, "td") ? target : target.parentNode;
-		if (target && (jq(target).hasClass(this.getZclass() + '-disd') || jq(target).attr('_dt') == undefined)) {
-			this.close();
-		} else
-			this.$supers('_chooseDate', arguments);
 	}
 });
 zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
