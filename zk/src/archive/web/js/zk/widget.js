@@ -3325,7 +3325,7 @@ focus: function (timeout) {
 	 * {@link #beforeSendAU_} to give the original target a chance to
 	 * process it.
 	 *
-	 * @param zk.Event the event that will be sent to the server.
+	 * @param zk.Event evt the event that will be sent to the server.
 	 * @param int timeout the delay before really sending out the AU request
 	 * @see #fire
 	 * @see #beforeSendAU_
@@ -3390,7 +3390,7 @@ wgt.listen({
 	 * <p>As shown above, you can register multiple listeners at the same time, and echo value in infos can be a target, a function, or a two-element array, where the first element is a target and the second the function.
 	 * A target can be any object that this will reference to when the event listener is called.
 	 * Notice it is not {@link zk.Event#target}. Rather, it is <code>this</code> when the listener is called.
-	 * <p>If the function is not specified, the target must must have a method having the same name as the event. For example, if wgt.listen({onChange: target}) was called, then target.onChange(evt) will be called when onChange event is fired (by {@link #fire}). On the other hand, if the target is not specified, the widget is assumed to be the target.
+	 * <p>If the function is not specified, the target must have a method having the same name as the event. For example, if wgt.listen({onChange: target}) was called, then target.onChange(evt) will be called when onChange event is fired (by {@link #fire}). On the other hand, if the target is not specified, the widget is assumed to be the target.
 	 * @param Map infos a map of event listeners.
 	 * Each key is the event name, and each value can be the target, the listener function, or a two-element array, where the first element is the target and the second the listener function.
 	 * Notice that the target is not {@link zk.Event#target}. Rather, it is <code>this</code> when the listener is called.
