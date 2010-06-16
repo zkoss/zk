@@ -3,16 +3,17 @@ ZK 5.0.3
 * Features
   3000873: Tabbox can auto grow size when select a larger size tabpanel
   3015861: Able to specify the first day of a week for each session
+  3016379: Able to control if a panel is draggable in portallayout
   3000339: The hflex of the cloumn will calculate by max width
   3014112: A way to specify custom DOM attributes, such as onload
+  2824949: Calendar: different color for previous and next month
+  2019205: Customization of Calendar's disabled days
+  2824946: Calendar Day Renderer
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
   3006351: Able to specify the tag name for a macro component
   3012360: Applet supports all attributes, e.g., archive and mayscript  
   3010188: disable ZScriptVariables lookup for performance
-  2824949: Calendar: different color for previous and next month
-  2019205: Customization of Calendar's disabled days
-  2824946: Calendar Day Renderer
 
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl

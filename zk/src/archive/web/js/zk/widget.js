@@ -188,6 +188,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return !evt.stopped;
 	}
 
+	//whether it is controlled by another dragControl
+	//@param invoke whether to invoke dragControl
+	function _dragCtl(wgt, invoke) {
+		var p;
+		return wgt && (p = wgt.parent) && p.dragControl && (!invoke || p.dragControl(wgt));
+	}
+
 	//set minimum flex size and return it
 	function _fixMinFlex(wgtn, o) {
 		//find the max size of all children
@@ -1137,28 +1144,6 @@ new zul.wnd.Window{
 			if (n) n.title = v || '';
 		},
 
-		/** Sets the identifier of a draggable type for this widget.
-		 * <p>Default: null
-		 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
-		 * If there are several types of draggable objects, you could assign an identifier for each type of draggable object.
-		 * The identifier could be anything but empty and "false". 
-		 * @param String draggable "false", null or "" to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable. 
-		 * @return zk.Widget this widget
-		 */
-		/** Returns the identifier of a draggable type for this widget, or null if not draggable.
-		 * @return String
-		 */
-		draggable: [
-			_zkf = function (v) {
-				return v && "false" != v ? v: null;
-			},
-			function (v) {
-				var n = this.$n();
-				if (this.desktop)
-					if (v) this.initDrag_();
-					else this.cleanDrag_();
-			}
-		],
 		/** Sets the identifier, or a list of identifiers of a droppable type for this widget.
 		 * <p>Default: null
 		 * <p>The simplest way to make a component droppable is to set this attribute to "true". To disable it, set this to "false" (or null).
@@ -1171,7 +1156,9 @@ new zul.wnd.Window{
 		 * @return String
 		 */
 		droppable: [
-			_zkf,
+			function (v) {
+				return v && "false" != v ? v: null;
+			},
 			function (v) {
 				var dropTypes;
 				if (v && v != "true") {
@@ -1295,6 +1282,29 @@ new zul.wnd.Window{
 		 * @since 5.0.2
 		 */
 		 renderdefer: null
+	},
+	/** Sets the identifier of a draggable type for this widget.
+	 * <p>Default: null
+	 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
+	 * If there are several types of draggable objects, you could assign an identifier for each type of draggable object.
+	 * The identifier could be anything but empty and "false". 
+	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable. 
+	 * @return zk.Widget this widget
+	 */
+	setDraggable: function (v) {
+		if (!v && v != null) v = "false"; //null means default
+		this._draggable = v;
+
+		if (this.desktop && !_dragCtl(this, true))
+			if (v && v != "false") this.initDrag_();
+			else this.cleanDrag_();
+	},
+	/** Returns the identifier of a draggable type for this widget, or null if not draggable.
+	 * @return String
+	 */
+	getDraggable: function () {
+		var v = this._draggable;
+		return v ? v: _dragCtl(this) ? "true": "false";
 	},
 	/** Returns the owner of the ID space that this widget belongs to,
 	 * or null if it doesn't belong to any ID space.
@@ -2850,7 +2860,9 @@ bind_: function (desktop, skipper, after) {
 		var p = this.parent;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		if (this._draggable) this.initDrag_();
+		var v = this._draggable;
+		if (v && v != "false" && !_dragCtl(this))
+			this.initDrag_();
 		
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
@@ -2910,7 +2922,7 @@ unbind_: function (skipper, after) {
 				else child.unbind_(null, after); //don't pass skipper
 		}
 
-		if (this._draggable) this.cleanDrag_();
+		this.cleanDrag_(); //ok to invoke even if not init
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
