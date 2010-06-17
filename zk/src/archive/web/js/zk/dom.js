@@ -1444,7 +1444,7 @@ zk.copy(jq, {
 		while (--j)
 			if (tag == arguments[j].toLowerCase())
 				return true;
-		return false;// don't remove this line, item texts are highlighted when multiple items are selected by shift-clicking with IE
+		return false;// don't remove this line, texts are highlighted when SHIFT-click listitems (because of IE's onselect depends on it)
 	},
 
 	/** Converting an integer to a string ending with "px".
