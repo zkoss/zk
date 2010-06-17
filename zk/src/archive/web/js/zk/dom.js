@@ -1444,6 +1444,7 @@ zk.copy(jq, {
 		while (--j)
 			if (tag == arguments[j].toLowerCase())
 				return true;
+		return false;
 	},
 
 	/** Converting an integer to a string ending with "px".
