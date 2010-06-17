@@ -65,9 +65,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	 */
 	setSelected: function (selected) {
 		if (this._selected != selected) {
-			var mesh = this.getMeshWidget();
-			if (mesh)
-				mesh.toggleItemSelection(this);
+			var box = this.getMeshWidget();
+			if (box)
+				box.toggleItemSelection(this);
 				
 			this._setSelectedDirectly(selected);
 		}
@@ -76,8 +76,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
-			if (this.$n('cm'))
-				this._checkClick();				
+			this._updHeaderCM();
 		}
 		this._selected = selected;
 	},
@@ -171,16 +170,17 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			jq(n.cells).removeClass(zcls + "-focus");
 		}
 	},
-	_checkAll: function () {
-		var box = this.getMeshWidget();		
-		if (!box || !box._headercm) return;
-		var cm = this.$n('cm');
-		if (cm && !this.isSelected()) {
+	_updHeaderCM: function () { //update header's checkmark
+		var box = this.getMeshWidget();
+		if (!box || !box._headercm || !box._multiple) return;
+
+		if (!this.isSelected()) {
 			var header = zk.Widget.$(box._headercm),
 				zcls = header.getZclass();
 			jq(box._headercm).removeClass(zcls + '-img-seld');
 			return;
 		}
+
 		var checked;
 		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
 			if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
@@ -194,10 +194,6 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 				zcls = header.getZclass();
 			jq(box._headercm).addClass(zcls + '-img-seld');
 		}
-	},
-	_checkClick: function (evt) {
-		if (this.getMeshWidget().isMultiple())
-			this._checkAll();
 	},
 	// event
 	doSelect_: function(evt) {

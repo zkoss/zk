@@ -70,6 +70,7 @@ ZK 5.0.3
   3014668: intbox doesn't accept 09
   3014743: longbox and decimalbox doesn't reject 33ee34
   3013637: Popup can't conver listbox in select mold (IE6)
+  3017010: Listbox - combination of checkmark and sorting does not work
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
