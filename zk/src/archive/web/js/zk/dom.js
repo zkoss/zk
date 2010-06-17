@@ -1444,7 +1444,7 @@ zk.copy(jq, {
 		while (--j)
 			if (tag == arguments[j].toLowerCase())
 				return true;
-		return false;
+		return false;// don't remove this line, item texts are highlighted when multiple items are selected by shift-clicking with IE
 	},
 
 	/** Converting an integer to a string ending with "px".
