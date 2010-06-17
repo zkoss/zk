@@ -25,6 +25,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.ext.DragControl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
@@ -303,13 +304,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * assign an identifier for each type of draggable object.
 	 * The identifier could be anything but empty.
 	 *
-	 * @param draggable "false", null or "" to denote non-draggable; "true" for draggable
-	 * with anonymous identifier; others for an identifier of draggable.
+	 * @param draggable "false", "" or null to denote non-draggable; "true" for draggable
+	 * with anonymous identifier; others for an identifier of draggable.<br/>
+	 * Notice that if the parent is {@link DragControl} and draggable is null,
+	 * then it means draggable.
 	 */
 	public void setDraggable(String draggable) {
-		if (draggable != null
-		&& (draggable.length() == 0 || "false".equals(draggable)))
-			draggable = null;
+		if (draggable != null && draggable.length() == 0)
+			draggable = "false";
 
 		if (!Objects.equals(_draggable, draggable)) {
 			_draggable = draggable;
@@ -319,8 +321,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** Returns the identifier of a draggable type of objects, or "false"
 	 * if not draggable (never null nor empty).
 	 */
-	public String getDraggable() { //Note: it is final
-		return _draggable != null ? _draggable: "false";
+	public String getDraggable() {
+		return _draggable != null ? _draggable:
+			getParent() instanceof DragControl ? "true": "false";
 	}
 	/** Sets "true" or "false" to denote whether a component is droppable,
 	 * or a list of identifiers of draggable types of objects that could
@@ -347,14 +350,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 
 		if (!Objects.equals(_droppable, droppable)) {
 			_droppable = droppable;
-			smartUpdate("droppable", _droppable); //getDroppable is final
+			smartUpdate("droppable", _droppable);
 		}
 	}
 	/** Returns the identifier, or a list of identifiers of a droppable type
 	 * of objects, or "false"
 	 * if not droppable (never null nor empty).
 	 */
-	public String getDroppable() { //Note: it is final
+	public String getDroppable() {
 		return _droppable != null ? _droppable: "false";
 	}
 
@@ -507,8 +510,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		render(renderer, "style", _style);
 		render(renderer, "left", _left);
 		render(renderer, "top", _top);
-		render(renderer, "draggable", _draggable); //getDraggable is final
-		render(renderer, "droppable", _droppable);  //getDroppable is final
+		if (_draggable != null
+		&& (getParent() instanceof DragControl || !_draggable.equals("false")))
+			render(renderer, "draggable", _draggable);
+
+		render(renderer, "droppable", _droppable);
 
 		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
 		if (_renderdefer >= 0) renderer.render("renderdefer", _renderdefer);

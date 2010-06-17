@@ -542,8 +542,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		
 		#Prepare the doc
 		cd $maindir
-		$maindir/bin/javadoc "$javadocdir/ZK"
-		$maindir/bin/javadoc "$javadocdir/jsdoc"
+		#$maindir/bin/javadoc "$javadocdir/ZK"
+		#$maindir/bin/javadoc "$javadocdir/jsdoc"
 	fi
 
 	rm -rf $binnm

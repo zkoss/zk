@@ -8,6 +8,7 @@ ZK 5.0.3
   3006351: Able to specify the tag name for a macro component
   3012360: Applet supports all attributes, e.g., archive and mayscript  
   3010188: disable ZScriptVariables lookup for performance
+  3016379: Able to control if a panel is draggable in portallayout
 
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
