@@ -327,10 +327,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final IdSpace is = getSpaceOwnerOfParent(comp);
 		if (is instanceof Component) {
 			if (((AbstractComponent)is)._spaceInfo.fellows.containsKey(newId))
-				throw new UiException("Not unique in the ID space of "+is);
+				throw new UiException("Not unique in ID space "+is+": "+newId);
 		} else if (is != null) {
 			if (is.hasFellow(newId))
-				throw new UiException("Not unique in the ID space of "+is);
+				throw new UiException("Not unique in ID space "+is+": "+newId);
 		}
 	}
 	private static boolean isAutoId(String compId) {
