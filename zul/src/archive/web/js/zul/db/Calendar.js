@@ -47,13 +47,13 @@ zul.db.Renderer = {
 	 * By overriding this method, you could customize the look of a day cell.
 	 * <p>Default: <code>&lt;a href="javascript"&gt;day&lt;/a&gt;</code>
 	 * @param zul.db.Calendar cal the calendar
-	 * @param int day the day of the month (between 1 and 31)
-	 * @param int monthofs the month offset. If the day is in the same month,
-	 * it is 0. If it is in the previous month, it is -1. If next month, it is 1.
+	 * @param int y the year
+	 * @param int m the month (between 0 to 11)
+	 * @param int day the day (between 1 to 31)
 	 * @return String the HTML fragment
 	 * @since 5.0.3
 	 */
-	cellHTML: function (cal, day, monthofs) {
+	cellHTML: function (cal, y, m, day) {
 		return '<a href="javascript:;">' + day + '</a>';
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
@@ -535,8 +535,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).addClass(zcls+"-disd");
 						} else
 							jq(cell).removeClass(zcls+"-disd");
-							 
-						jq(cell).html(Renderer.cellHTML(this, v, monofs)).attr('_dt', v);
+						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v)).attr('_dt', v);
 						if (bSel)
 							_doFocus(cell.firstChild, opts ? opts.timeout : false);
 					}
