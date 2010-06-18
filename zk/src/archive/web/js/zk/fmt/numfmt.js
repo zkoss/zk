@@ -281,6 +281,7 @@ zk.fmt.Number = {
 		}
 
 		//remove leading 0
+		//keep the zero after the decimal point (to preserve precision)
 		for (var j = 0, k, len = sb.length; j < len; ++j) {
 			cc = sb.charAt(j);
 			if (cc > '0' && cc <= '9') {
@@ -293,6 +294,8 @@ zk.fmt.Number = {
 			} else if (k !== undefined) {
 				if (cc == zkDecimal && j > ++k)
 					sb = sb.substring(0, k) + sb.substring(j);
+				break;
+			} else if (cc == zkDecimal) { //.xxx or .
 				break;
 			}
 		}
