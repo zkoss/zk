@@ -202,7 +202,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			});
 	},
 	//super//
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (this.isVertical() && child.$instanceof(zul.tab.Tabs))
 			jq(child.uuid + '-line', zk).remove();

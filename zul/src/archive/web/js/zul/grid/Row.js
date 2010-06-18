@@ -151,7 +151,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		
 		child.bind(desktop);
 	},
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdextr', zk).remove();
 	},

@@ -231,8 +231,10 @@ function zkmprops(uuid, props) {
 			if (!inf) break;
 
 			var wgt = inf[1];
-			if (inf[2]) wgt.bind(inf[0]); //binding
-			else wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+			if (inf[2])
+				wgt.bind(inf[0]); //binding
+			else
+				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
 		}
 
 		mtBL1();

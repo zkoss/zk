@@ -39,7 +39,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
 			for (var faker, fs = child.$class._faker, i = fs.length; i--;)

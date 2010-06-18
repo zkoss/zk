@@ -96,6 +96,7 @@ ZK 5.0.3
     or jQuery selector instead.
   + The codebase of the applet component will be encoded by including the session ID
     and application's context. See also Bug 3012486.
+  + JavaScript API: zk.Widget.removeChildHTML_ is changed
 
 	--------
 ZK 5.0.2

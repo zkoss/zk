@@ -88,6 +88,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		};
 	}
 
+	function _unlink(wgt, child) {
+		var p = child.previousSibling, n = child.nextSibling;
+		if (p) p.nextSibling = n;
+		else wgt.firstChild = n;
+		if (n) n.previousSibling = p;
+		else wgt.lastChild = p;
+		child.nextSibling = child.previousSibling = child.parent = null;
+
+		--wgt.nChildren;
+	}
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
@@ -149,8 +159,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _addIdSpaceDown0(wgt, owner) {
 		if (wgt.id) owner._fellows[wgt.id] = wgt;
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			_addIdSpaceDown0(wgt, owner);
+		if (!wgt._fellows)
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				_addIdSpaceDown0(wgt, owner);
 	}
 	function _rmIdSpaceDown(wgt) {
 		var ow = wgt.parent;
@@ -161,8 +172,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _rmIdSpaceDown0(wgt, owner) {
 		if (wgt.id)
 			delete owner._fellows[wgt.id];
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			_rmIdSpaceDown0(wgt, owner);
+		if (!wgt._fellows)
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				_rmIdSpaceDown0(wgt, owner);
 	}
 	//note: wgt.id must be checked before calling this method
 	function _addGlobal(wgt) {
@@ -1364,7 +1376,7 @@ wgt.$f().main.setTitle("foo");
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
-				_rmGlobal(this);
+				_rmGlobal(this); //no need to check this.desktop
 			}
 
 			if (id && (zk.spaceless || this.rawId))
@@ -1373,7 +1385,7 @@ wgt.$f().main.setTitle("foo");
 
 			if (id) {
 				_addIdSpace(this);
-				if (this.desktop)
+				if (this.desktop || this.z_rod)
 					_addGlobal(this);
 			}
 		}
@@ -1660,18 +1672,11 @@ wgt.$f().main.setTitle("foo");
 		if (child.z_rod)
 			_unbindrod(child);
 		else if (child.desktop)
-			this.removeChildHTML_(child, p, ignoreDom);
+			this.removeChildHTML_(child, ignoreDom);
 
 		child.beforeParentChanged_(null);
 
-		var p = child.previousSibling, n = child.nextSibling;
-		if (p) p.nextSibling = n;
-		else this.firstChild = n;
-		if (n) n.previousSibling = p;
-		else this.lastChild = p;
-		child.nextSibling = child.previousSibling = child.parent = null;
-
-		--this.nChildren;
+		_unlink(this, child);
 
 		_rmIdSpaceDown(child);
 
@@ -2679,10 +2684,9 @@ function () {
 	 * <p>Overrides this method or {@link #removeHTML_} if you have to
 	 * remove DOM elements other than child's node (and the descendants).
 	 * @param zk.Widget child the child widget to remove
-	 * @param zk.Widget prevsib the previous sibling, if any
 	 * @param boolean ignoreDom whether to remove the DOM element
 	 */
-	removeChildHTML_: function (child, prevsib, ignoreDom) {
+	removeChildHTML_: function (child, ignoreDom) {
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(child, cf))
 			zk.currentFocus = null;
@@ -4223,18 +4227,23 @@ zk.Widget.getClass('combobox');
  * @disable(zkgwt)
  */
 zk.RefWidget = zk.$extends(zk.Widget, {
+	/** The class name (<code>zk.RefWidget</code>).
+	 * @type String
+	 * @since 5.0.3
+	 */
+	className: "zk.RefWidget",
+	/** The widget name (<code>refWidget</code>).
+	 * @type String
+	 * @since 5.0.3
+	 */
+	widgetName: "refWidget",
 	bind_: function () {
 		var w = zk.Widget.$(this.uuid);
-		if (!w || !w.desktop) throw 'illegal: '+w;
+		if (!w) throw 'illegal: '+w;
 
-		var p = w.parent, q;
-		if (p) { //shall be a desktop
-			var dt = w.desktop, n = w._node;
-			w.desktop = null; //avoid unbind/bind
-			w.clearCache();
-			p.removeChild(w);
-			w.desktop = dt; w._node = n;
-		}
+		var p, q;
+		if (p = w.parent) //shall be a desktop
+			_unlink(p, w); //unlink only
 
 		p = w.parent = this.parent,
 		q = w.previousSibling = this.previousSibling;
@@ -4247,7 +4256,8 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 
 		this.parent = this.nextSibling = this.previousSibling = null;
 
-		_addIdSpaceDown(w);
+		_addIdSpaceDown(w); //add again since parent is changed
+
 		//no need to call super since it is bound
 	}
 });

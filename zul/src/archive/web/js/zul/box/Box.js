@@ -291,12 +291,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 		child.bind(desktop);
 	},
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
-		if (prevsib && this.lastChild == prevsib) //child is last
-			jq(prevsib.uuid + '-chdex2', zk).remove();
+		var sib;
+		if (this.lastChild == child && (sib = child.previousSibling)) //child is last
+			jq(sib.uuid + '-chdex2', zk).remove();
 	},
 	/** Enclose child with HTML tag such as TR or TD, 
 	 * and return a HTML code or add HTML fragments in out array.
