@@ -642,9 +642,23 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var el = this.jq[0];
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
+				var elst, oldvisi;
+				if (zk.ie && !zk.ie8 && el.style.display == "none") {
+				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
+					oldvisi = (elst = el.style).visibility;
+					elst.visibility = "hidden";
+					elst.display = "";
+				}
+
 				var b = el.getBoundingClientRect();
-				return [b.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
+				b = [b.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
 					b.top + jq.innerY() - el.ownerDocument.documentElement.clientTop];
+
+				if (elst) {
+					elst.display = "none";
+					elst.visibility = oldvisi;
+				}
+				return b;
 				// IE adds the HTML element's border, by default it is medium which is 2px
 				// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
 				// IE 7 standards mode, the border is always 2px
