@@ -63,7 +63,7 @@ zk.fmt.Date = {
 				f = fmtlen > i ? fmt.charAt(i) : "";
 			if (c.match(/\d/)) {
 				ary.push(c);
-			} else if ((mindex > -1 && mindex <= i && mmindex >= i) || (aa > -1 && aa <= i)) {
+			} else if ((mindex > -1 && mindex <= i /*&& mmindex >= i location French will lose last char */) || (aa > -1 && aa <= i)) {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
