@@ -108,17 +108,17 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.zsync();
 	},
 	onFloatUp: function(ctl) {
-		var wgt = ctl.origin;
 		if (!this.isVisible())
 			return;
-		var org = wgt;
+
+		var org = ctl.origin;
 		if (this.parent.menupopup == this && !this.parent.isTopmost() && !this.parent.$class._isActive(this.parent)) {
 			this.close({sendOnOpen:true});
 			return;
 		}
 
-		// check if the wgt belongs to the popup
-		for (var floatFound; wgt; wgt = wgt.parent) {
+		// check if org belongs to the popup
+		for (var floatFound, wgt = org; wgt; wgt = wgt.parent) {
 			if (wgt == this || (wgt.menupopup == this && !this._shallClose)) {
 				if (!floatFound)
 					this.setTopmost();
@@ -127,9 +127,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			floatFound = floatFound || wgt.isFloating_();
 		}
 
-		// check if the popup is one of the wgt's children
+		// check if the popup is one of org's children
 		if (org && org.$instanceof(zul.menu.Menu)) {
-			for (var floatFound, wgt = this.parent; wgt; wgt = wgt.parent) {
+			for (var floatFound, wgt = this; wgt = wgt.parent;) {
 				if (wgt == org) {
 					if (this._shallClose) break;
 					if (!floatFound)
@@ -138,7 +138,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				}
 				floatFound = floatFound || wgt.isFloating_();
 			}
-			
+
 			// check if the popup is an active menu
 			if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
 				var menubar = this.parent.getMenubar();
@@ -238,14 +238,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);
-	},
-	doMouseOver_: function (evt) {
-		this._shallClose = false;
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		this._shallClose = true;
-		this.$supers('doMouseOut_', arguments);
 	}
 }, {
 	_rmActive: function (wgt) {
