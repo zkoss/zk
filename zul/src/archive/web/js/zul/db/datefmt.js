@@ -54,7 +54,7 @@ zk.fmt.Date = {
 
 		var	ts = [], mindex = fmt.indexOf("MMM"),
 			fmtlen = fmt.length, ary = [],
-			mmindex = mindex + 3,
+			//mmindex = mindex + 3,
 			isNumber = !isNaN(txt),
 			tlen = txt.replace(/[^.]/g, '').length,
 			flen = fmt.replace(/[^.]/g, '').length;
@@ -121,6 +121,8 @@ zk.fmt.Date = {
 						}
 					}
 					if (len == 3 && token) {
+						if (nosep)
+							token = this._parseToken(mToken, ts, --i, token.length);//token.length: the length of French month is 4
 						break; // nothing to do.
 					}else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
