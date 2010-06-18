@@ -55,7 +55,7 @@ zk.fmt.Date = {
 		var	ts = [], mindex = fmt.indexOf("MMM"),
 			fmtlen = fmt.length, ary = [],
 			mmindex = mindex + 3,
-			isNumber = !isNaN(txt)
+			isNumber = !isNaN(txt),
 			tlen = txt.replace(/[^.]/g, '').length,
 			flen = fmt.replace(/[^.]/g, '').length;
 		for (var i = 0, j = txt.length; i < j; i++) {
