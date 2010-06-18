@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _drags = [],
 		_dragging = {},
 		_msdowning, //processing mousedown
-		_stackup, _activedg, _timeout, _initPt, _initEvt,
+		_stackup, _activedg, _timeout, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
 	function _activate(dg, devt, pt) {
@@ -29,11 +29,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
-		_initEvt = jq.Event.zk(devt, dg.control);
 	}
 	function _deactivate() {
 		_activedg = null;
-		setTimeout(function(){_initEvt=null;}, 0);
+		if (_dnEvt) setTimeout(function(){_dnEvt=null;}, 0);
 	}
 
 	function _docmousemove(devt) {
@@ -588,14 +587,17 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
 
-		if ((zk.opera || zk.gecko) && !jq.nodeName(devt.target, "input"))
-			devt.preventDefault();
+		if ((zk.opera || zk.gecko) && !jq.nodeName(devt.target, "input")) {
+			devt.stop();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged
-			//FF3: if stopPropagation, 2nd browser focused (Bug 2988327)
 			//Opera: if not stop, 'easy' to become selecting text
 			//
 			//input: if preventDefault, not editable
+
+			_dnEvt = jq.Event.zk(devt, this.control);
+			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
+		}
 	},
 	_keypress: function (devt) {
 		if(devt.keyCode == 27) {
@@ -767,7 +769,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 },{//static
 	ignoreMouseUp: function () { //called by mount
-		return zk.dragging ? true: _initEvt;
+		return zk.dragging ? true: _dnEvt;
 	},
 	ignoreClick: function () { //called by mount
 		return zk.dragging;

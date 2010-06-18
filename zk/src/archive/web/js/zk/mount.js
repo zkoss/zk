@@ -494,12 +494,6 @@ jq(function() {
 			});
 	}
 	
-	function _simFocus(wgt) {
-		if (wgt && wgt != zk.currentFocus) {
-			window.blur();
-			wgt.focus();
-		}
-	}
 	function _evtProxy(evt) { //handle proxy
 		var n;
 		
@@ -574,16 +568,21 @@ jq(function() {
 			wgt);
 	})
 	.mouseup(function (evt) {
-		var e = zk.Draggable.ignoreMouseUp();
+		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
 			return; //ingore
+
 		if (e != null) {
 			_docMouseDown(e, null, true); //simulate mousedown
-			_simFocus(e.target); //simulate focus
+
+			//simulate focus if zk.Draggable invokes evt.stop
+			if ((wgt = e.target) && wgt != zk.currentFocus)
+				try {wgt.focus();} catch (e) {}
+				//Bug 3017606/2988327: don't invoke window.blur,or browser might be min (IE/FF)
 		}
 
 		_evtProxy(evt);
-		var wgt = zk.mouseCapture;
+		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
