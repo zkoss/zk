@@ -50,10 +50,11 @@ zul.db.Renderer = {
 	 * @param int y the year
 	 * @param int m the month (between 0 to 11)
 	 * @param int day the day (between 1 to 31)
+	 * @param int monthofs the month offset. If the day is in the same month
 	 * @return String the HTML fragment
 	 * @since 5.0.3
 	 */
-	cellHTML: function (cal, y, m, day) {
+	cellHTML: function (cal, y, m, day, monthofs) {
 		return '<a href="javascript:;">' + day + '</a>';
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
@@ -535,7 +536,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).addClass(zcls+"-disd");
 						} else
 							jq(cell).removeClass(zcls+"-disd");
-						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v)).attr('_dt', v);
+						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
 						if (bSel)
 							_doFocus(cell.firstChild, opts ? opts.timeout : false);
 					}
