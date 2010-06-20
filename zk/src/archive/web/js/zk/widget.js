@@ -292,7 +292,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					totalsz += vmax;
 				if (totalsz > max)
 					max = totalsz;
-				
+
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
 				var pb = 0,
 					precalc = false;
@@ -3992,18 +3992,17 @@ _doFooSelect: function (evt) {
 		if (n && n.zk && n.zk.jq == n) //jq()
 			n = n[0];
 
-		if (!n || zk.Widget.isInstance(n)) return n;
+		if (!n || zk.Widget.isInstance(n))
+			return n;
 
 		var wgt, id;
 		if (typeof n == "string") {
-			n = jq(id = n, zk)[0];
-			if (!n) { //some widget might not have DOM element (e.g., timer)
-				if (id.charAt(0) == '#') id = id.substring(1);
-				wgt = _binds[id]; //try first (since ZHTML might use -)
-				if (!wgt)
-					wgt = (n = id.indexOf('-')) >= 0 ? _binds[id.substring(0, n)]: null;
-				return wgt;
-			}
+		//Don't look for DOM (there might be some non-ZK node with same ID)
+			if (n.charAt(0) == '#') n = n.substring(1);
+			wgt = _binds[n]; //try first (since ZHTML might use -)
+			if (!wgt)
+				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)]: null;
+			return wgt;
 		}
 
 		if (!n.nodeType) { //n could be an event (skip Element)
@@ -4019,7 +4018,8 @@ _doFooSelect: function (evt) {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
 					wgt = _binds[id]; //try first (since ZHTML might use -)
-					if (wgt) return wgt;
+					if (wgt)
+						return wgt;
 
 					var j = id.indexOf('-');
 					if (j >= 0) {

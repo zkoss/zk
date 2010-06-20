@@ -1872,7 +1872,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (_rows > 0)
 			renderer.render("rows", getRows());
 
-		render(renderer, "selectedItem", getSelectedId());
+		//render(renderer, "selectedItem", getSelectedId());
+			//No need to render and it is too early to render since children
+			//not ready yet
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());

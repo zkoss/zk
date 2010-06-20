@@ -78,11 +78,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>trendy</value>
 	</library-property>
 
-	<!-- Turn on the following if want to use the defer mode as the default,
+	<!-- Turn on the following if you want to use the defer mode as the default,
 		which is compatible to 3.x
 	<library-property>
 		<name>org.zkoss.zul.include.mode</name>
 		<value>defer</value>
+	</library-property>
+	-->
+
+	<!-- Turn on the following if you want to turn off the recycle of UUID.
+		Thus, it is backward compatible with 5.0.2 and prior (no recycling).
+	<library-property>
+		<name>org.zkoss.zk.ui.uuidRecycle.disabled</name>
+		<value>true</value>
 	</library-property>
 	-->
 
