@@ -274,10 +274,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (sz > max)
 									max = sz;
 							}
+						} else {
+							var sameOffParent = c.offsetParent == noffParent;
+							sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
 						}
-						var sameOffParent = c.offsetParent == noffParent,
-							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop - (sameOffParent ? ntop + tbp : tp));
+						var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
 						
 						if (!zk.safari || bm >= 0)
 							sz += bm;
@@ -391,10 +392,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (sz > max)
 									max = sz;
 							}
+						} else {
+							var	sameOffParent = c.offsetParent == noffParent;
+							sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
 						}
-						var	sameOffParent = c.offsetParent == noffParent,
-							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft - (sameOffParent ? nleft + lbp : lp));
+						var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
@@ -673,7 +675,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			cwgt._hflexsz = lastsz;
 		}
 		
-		//notify parent widget that all of its children with vflex is done.
+		//notify parent widget that all of its children with hflex/vflex is done.
 		this.parent.afterChildrenFlex_(this);
 		this._flexFixed = false;
 	}

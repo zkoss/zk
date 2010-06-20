@@ -57,10 +57,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 				wgt._inUpdateMesh = true;
 				try {
-					if (!this.parent._inAfterChildrenFlex) { //reset all hflex columns
-						for(var kid = this.parent.firstChild; kid; kid = kid.nextSibling)
-							delete kid._hflexWidth;
-					}
+					for(var kid = this.parent.firstChild; kid; kid = kid.nextSibling)
+						delete kid._hflexWidth;
 					wgt.rerender(); //might recursive back via HeadWidget#afterChildrenFlex_()
 					if (wgt._flexRerender) {//was mark to do rerender in #updateMesh_()
 						try {
@@ -75,11 +73,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	setFlexSize_: function (sz) { //TODO: if updateMesh_ is not implemented with rerender
+	setFlexSize_: function (sz) {
 		if (sz.width !== undefined && sz.width != 'auto' && sz.width != '') {
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			this._hflexWidth = jq.px0(sz.width);
+			this._hflexWidth = sz.width;
 			return {width: sz.width};
 		} else
 			return this.$supers('setFlexSize_', arguments);
@@ -255,6 +253,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			return this._insizer(pt[0] - ofs[0]);
 		}
 		return false;
+	},
+	//@Override to avoid add child offset 
+	ignoreChildNodeOffset_: function(attr) {
+		return true;
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;

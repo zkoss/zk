@@ -76,6 +76,7 @@ ZK 5.0.3
   3017859: decimalbox fail to handle 3.5%
   3017606: Browser window might lose focus
   3017938: The menupopup appears at a wrong position
+  3018735: listbox/grid/tree sizedByContent="true" shall show header  
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

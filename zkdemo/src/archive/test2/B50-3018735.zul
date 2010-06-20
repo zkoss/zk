@@ -1,0 +1,35 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window closable="true" maximizable="false" border="normal">
+		<listbox sizedByContent="true">
+			<listhead sizable="true">
+				<listheader label="name"/>
+				<listheader label="label"/>
+				<listheader label="blah"/>
+				<listheader label="Subject" sort="auto" />
+				<listheader label="Received" sort="auto" />
+			</listhead>
+			<listitem>
+				<listcell/>
+				<listcell/>
+				<listcell/>
+				<listcell label="URLs for iPhone-Optimized Google Sites" />
+				<listcell label="2008/11/17 15:56:37" />
+			</listitem>
+			<listitem>
+				<listcell label="&#160;" />
+				<listcell/>
+				<listcell label="&#160;" />
+				<listcell label="Style Guide for ZK 3.5 released" />
+				<listcell label="2008/11/14 13:23:07" />
+			</listitem>
+			<listitem >
+				<listcell/>
+				<listcell/>
+				<listcell label="&#160;" />
+				<listcell label="ZK Studio 0.9.0 released." />
+				<listcell label="2008/11/16 10:26:37" />
+			</listitem>
+		</listbox>
+	</window>
+</zk>

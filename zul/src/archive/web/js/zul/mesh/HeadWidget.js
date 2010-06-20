@@ -46,6 +46,17 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				jq(child.uuid + '-' + fs[i], zk).remove();
 	},
 	
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Listhead/Columns/Treecols
+		v = false;
+		this.$super(zul.mesh.HeadWidget, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Listhead/Columns/Treecols
+		v = false;
+		this.$super(zul.mesh.HeadWidget, 'setHflex', v);
+	},
+	
 	onColSize: function (evt) {
 		var owner = this.parent;
 		if (owner.isSizedByContent()) owner.$class._adjHeadWd(owner);
@@ -74,16 +85,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 		}
 	},
-	beforeChildrenFlex_: function(hwgt) { //avoid unnecessary zk.Widget#_fixFlex()
-		return !this._inAfterChildrenFlex && !this.parent._flexRerender; 
-	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
-		this._inAfterChildrenFlex = true;
-		try {
-			hwgt.updateMesh_(); //might recursive back #beforeChildrenFlex_()
-		} finally {
-			delete this._inAfterChildrenFlex;
-		}
+		var wgt = this.parent;
+		if (wgt && !wgt.isSizedByContent())
+			wgt._adjFlexWidth();
 	}
 },{ //static
 	redraw: function (out) {

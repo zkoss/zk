@@ -27,5 +27,15 @@ zul.sel.Listfoot = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-listfoot" : this._zclass;
+	},
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Listfoot
+		v = false;
+		this.$super(zul.sel.Listfoot, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Listfoot
+		v = false;
+		this.$super(zul.sel.Listfoot, 'setHflex', v);
 	}
 });

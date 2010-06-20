@@ -258,7 +258,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			var old = this.ehead.style.display; 
 			this.ehead.style.display = empty ? 'none' : '';
-			
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
 			if (empty && flex) 
 				for (var w = this.head.firstChild; w; w = w.nextSibling)
@@ -266,6 +265,33 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return old != this.ehead.style.display;
 		}
 		return false;
+	},
+	_adjFlexWidth: function () {
+		if (!this.head) return;
+		var hdfaker = this.ehdfaker,
+			bdfaker = this.ebdfaker,
+			ftfaker = this.eftfaker,
+			head = this.head,
+			headn = head.$n(),
+			i = 0;
+		for (var w = head.firstChild; w; w = w.nextSibling) {
+			if (w._hflexWidth !== undefined) {
+				var wd = w._hflexWidth;
+				this._setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
+			}
+			++i;
+		}
+	},
+	_setFakerWd: function (i, wd, hdfaker, bdfaker, ftfaker, headn) {
+		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
+		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (headn) {
+			var cpwd = zk(headn.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
+			headn.cells[i].style.width = cpwd + "px";
+			var cell = headn.cells[i].firstChild;
+			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+		}
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
@@ -502,7 +528,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto') {
-				n.style.width = '';
+				if (this._hflex != 'min') n.style.width = '';
 				if (head) head.style.width = '';
 			} else
 				return this.$supers('setFlexSize_', arguments);
@@ -666,6 +692,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wgt.ebody.offsetWidth > tblwd && wgt.ebody.offsetWidth - tblwd < 20)
 			total = tblwd;
 			
+		var xwds = wgt.$class._calcMinWd(wgt),
+			wds = xwds.wds,
+			width = xwds.width;
+		if (!wgt.$n().style.width || width > total) {
+			total = width;
+			head.style.width = total + 'px';
+		}
+		
 		var count = total;
 		hdtable.style.width = total + "px";	
 		
@@ -674,7 +708,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		for (var i = bdfaker.cells.length; i--;) {
 			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
+			var wd = i != 0 ? wds[i] : count;
 			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
 			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
@@ -765,5 +799,57 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
+	},
+	_calcMinWd: function (wgt) {
+		if (wgt.eheadtbl) {
+			wgt.ehead.style.width = '';
+			wgt.eheadtbl.width = '';
+			wgt.eheadtbl.style.width = '';
+		}
+		
+		if (wgt.head && wgt.head.$n())
+			wgt.head.$n().style.width = '';
+			
+		if (wgt.efoottbl) {
+			wgt.efoot.style.width = '';
+			wgt.efoottbl.width = '';
+			wgt.efoottbl.style.width = '';
+		}
+		
+		if (wgt.ebodytbl) {
+			wgt.ebody.style.width = '';
+			wgt.ebodytbl.width = '';
+			wgt.ebodytbl.style.width = '';
+		}
+		
+		//calculate widths
+		var hdfaker = wgt.ehdfaker,
+			bdfaker = wgt.ebdfaker,
+			ftfaker = wgt.eftfaker,
+			head = wgt.head,
+			headn = head ? head.$n() : null,
+			wds = [],
+			width = 0,
+			w = head ? head = head.lastChild : null;
+		for (var i = bdfaker.cells.length; i--;) {
+			var wd = bdwd = bdfaker.cells[i].offsetWidth,
+				hdwd = w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0,
+				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0;
+			if (hdwd > wd) wd = hdwd;
+			if (ftwd > wd) wd = ftwd;
+			wds[i] = wd;
+			width += wd;
+			if (w) w = w.previousSibling;
+		}
+		if (wgt.eheadtbl)
+			wgt.eheadtbl.width='100%';
+		
+		if (wgt.efoottbl)
+			wgt.efoottbl.width='100%';
+		
+		if (wgt.ebodytbl)
+			wgt.ebodytbl.width='100%';
+		
+		return {'width': width, 'wds': wds};
 	}
 });
