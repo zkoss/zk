@@ -77,6 +77,7 @@ ZK 5.0.3
   3017606: Browser window might lose focus
   3017938: The menupopup appears at a wrong position
   3018735: listbox/grid/tree sizedByContent="true" shall show header  
+  3018688: Recursive Loop in class XmlContentRenderer
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
