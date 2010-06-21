@@ -255,7 +255,23 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			inf[4](create(null, inf[1]));
+			var stub = inf[4][0], filter = inf[4][1],
+				Widget = zk.Widget,
+				old$, wgt;
+
+			if (filter) {
+				old$ = Widget.$;
+				Widget.$ = function (n, opts) {
+					return filter(old$(n, opts));
+				}
+			}
+			try {
+				wgt = create(null, inf[1]);
+			} finally {
+				if (filter) Widget.$ = old$;
+			}
+
+			stub(wgt);
 			if (_createInf0.length)
 				return run(mtAU); //loop back to check if loading
 		}
@@ -349,7 +365,7 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, stub, aucmds, js) { //2nd is either delay (BL) or stub (AU)
+	zkx: function (wi, extra, aucmds, js) { //extra is either delay (BL) or [stub, filter] (AU)
 		zk.mounting = true;
 
 		if (js) jq.globalEval(js);
@@ -365,13 +381,13 @@ function zkmprops(uuid, props) {
 					owner = zk.Widget.$(owner);
 			}
 
-			if (typeof stub != "function") { //if 2nd argument not function, it must be BL (see zkx_)
-				delay = stub;
-				stub = null;
+			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+				delay = extra;
+				extra = null;
 				mount = mtBL;
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, stub]);
+			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, extra]);
 
 			mountpkg();
 		}
@@ -380,9 +396,9 @@ function zkmprops(uuid, props) {
 		else run(mount);
 	},
 	//widget creation called by au.js
-	zkx_: function (args, stub) {
+	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
-		args[1] = stub; //assign stub as 2nd argument (see zkx)
+		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
 		zkx.apply(window, args);
 	},
 
