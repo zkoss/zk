@@ -79,6 +79,7 @@ ZK 5.0.3
   3017938: The menupopup appears at a wrong position
   3018735: listbox/grid/tree sizedByContent="true" shall show header  
   3018688: Recursive Loop in class XmlContentRenderer
+  2997698: quoted special characters in decimalbox
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

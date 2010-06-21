@@ -46,17 +46,16 @@ zk.fmt.Number = {
 		}
 		
 		//calculate number of fixed decimals
-		var re = new RegExp("[^#0.]", 'g'),
-			pureFmtStr = fmt.replace(re, ''),
-			ind = pureFmtStr.indexOf('.'),
+		var xfmt = this._escapeQuote(fmt);
+		fmt = xfmt.fmt;
+		var pureFmtStr = xfmt.pureFmtStr,
+			ind = xfmt.jdot,
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
 			valStr = (val + '').replace(/[^0123456789.]/g, ''),
 			indVal = valStr.indexOf('.'),
-			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
+			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0,
+			shift = xfmt.shift;
 			
-		//handle PERCENT and PER_MILL case(/000)
-		//cannot just parseFloat(val) * 100, or large long integer and big decimal will not work
-		var shift = fmt.endsWith('%') ? 2 : fmt.endsWith(zk.PER_MILL) ? 3 : 0;
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
@@ -213,6 +212,37 @@ zk.fmt.Number = {
 			pre = '0';
 		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
 	},
+	_escapeQuote: function (fmt) {
+		//note we do NOT support mixing of quoted and unquoted percent
+		var cc, q = -2, shift = 0, ret = '', jdot = -1, pure = '',
+			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+			//note we do NOT support mixing of quoted and unquoted percent|permill
+		for (var j = 0, len = fmt.length; j < len; ++j) {
+			cc = fmt.charAt(j);
+			if (cc == '%' && validPercent)
+				shift += 2;
+			else if (cc == zk.PER_MILL && validPercent)
+				shift += 3;
+			
+			if (cc == '\'') { // a single quote
+				if (q >= 0) {//close single quote
+					ret += q == (j-1) ? '\'' : fmt.substring(q+1, j);
+					q = -2;
+				} else
+					q = j; //open single quote
+			} else if (q < 0) { //not in quote
+				ret += cc;
+				if (cc == '#' || cc == '0')
+					pure += cc;
+				else if(cc == '.') {
+					if (jdot < 0) 
+						jdot = pure.length;
+					pure += cc;
+				}
+			}
+		}
+		return {'shift':shift, 'fmt':ret, 'pureFmtStr': pure, 'jdot':jdot};
+	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
 		for(var len=fmt.length; j < len; ++j) {
@@ -241,14 +271,16 @@ zk.fmt.Number = {
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
 			zkMinus = fmt ? zk.MINUS : '-',
-			zkDecimal = fmt ? zk.DECIMAL : '.'; //bug #2932443, no format and German Locale
+			zkDecimal = fmt ? zk.DECIMAL : '.', //bug #2932443, no format and German Locale
+			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
 			ignore = true;
 
 			//We handle percent and (nnn) specially
-			if (cc == zk.PERCENT) divscale += 2;
-			else if (cc == zk.PER_MILL) divscale += 3;
+			if (cc == zk.PERCENT && validPercent) divscale += 2;
+			else if (cc == zk.PER_MILL && validPercent) divscale += 3;
 			else if (cc == '(') minus = true;
 			else if (cc != '+') ignore = false;
 

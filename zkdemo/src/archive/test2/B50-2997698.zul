@@ -1,0 +1,12 @@
+<window title="Decimalbox Test" border="normal" width="500px">
+<html>
+<![CDATA[
+<ol>
+<li>If you see the numbers before the textbox are the same of in the textbox, then it is OK.</li>
+<li>Otherwise, it is a bug</li>
+</ol>
+]]>
+</html>
+<hbox>% 1,235<decimalbox format="'%' #,##0" value="1234.56"/></hbox>
+<hbox>% 1,235<decimalbox format="% #,##0" value="12.3456"/></hbox>
+</window>

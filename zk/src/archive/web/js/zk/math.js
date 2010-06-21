@@ -62,7 +62,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		if (j < 0)
 			for(var len = -j; len-- > 0;)
 				valFixed += '0';
-		return this._value.substring(0, j) + (this._dot ? '.' + valFixed + this._value.substring(j) : '');
+		return this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
 	},
 	/** Returns a Locale-dependent string for this big decimal(for human's eye).
 	 * @return String
