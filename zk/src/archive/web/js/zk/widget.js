@@ -3968,7 +3968,10 @@ _doFooSelect: function (evt) {
 }, {
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
-	 * it tried to resolve it with jq(n, zk) -- see {@link _global_.jq}.<br/>
+	 * it is assumed to be UUID, unless it starts with '$'.
+	 * For example, <code>zk.Widget.$('uuid')<code> is the same as <code>zk.Widget.$('#uuid')<code>,
+	 * and both look for a widget whose ID is 'uuid'. On the other hand,
+	 * <code>zk.Widget.$('$id') looks for a widget whose ID is 'id'.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called
@@ -3998,7 +4001,11 @@ _doFooSelect: function (evt) {
 		var wgt, id;
 		if (typeof n == "string") {
 		//Don't look for DOM (there might be some non-ZK node with same ID)
-			if (n.charAt(0) == '#') n = n.substring(1);
+			if ((id = n.charAt(0)) == '#') n = n.substring(1);
+			else if (id == '$') {
+				id = _globals[n.substring(1)];
+				return id ? id[0]: null;
+			}
 			wgt = _binds[n]; //try first (since ZHTML might use -)
 			if (!wgt)
 				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)]: null;
