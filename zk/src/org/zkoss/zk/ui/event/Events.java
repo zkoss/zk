@@ -53,11 +53,11 @@ public class Events {
 	/** The onMouseOver event (used with {@link MouseEvent}).
 	 * <p>Notice, if Internet connection is too far, the user might already move
 	 * the mouse out of a widget when the server receives onMouseOver.
-	 * @sine 5.0.3
+	 * @since 5.0.3
 	 */
 	public static final String ON_MOUSE_OVER = "onMouseOver";
 	/** The onMouseOut event (used with {@link MouseEvent}).
-	 * @sine 5.0.3
+	 * @since 5.0.3
 	 */
 	public static final String ON_MOUSE_OUT = "onMouseOut";
 
