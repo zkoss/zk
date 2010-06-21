@@ -186,17 +186,6 @@ function zkmprops(uuid, props) {
 		for (var children = wi[3], j = children.length; j--;)
 			pkgLoad(dt, children[j]);
 	}
-	//create and mount widget
-	function mount() {
-		var stub = _createInf0.stub;
-		if (stub) { //AU
-			_createInf0.stub = null;
-			mtAU(stub);
-		} else //browser loading
-			mtBL();
-			//note: jq(mtBL) is a bit slow (too late to execute)
-			//note: <div/> must be generated before <script/>
-	}
 	//mount for browser loading
 	function mtBL() {
 		if (zk.loading) {
@@ -258,17 +247,17 @@ function zkmprops(uuid, props) {
 	}
 
 	/* mount for AU */
-	function mtAU(stub) {
+	function mtAU() {
 		if (zk.loading) {
-			zk.afterLoad(function () {mtAU(stub);});
+			zk.afterLoad(mtAU);
 			return;
 		}
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			stub(create(null, inf[1]));
+			inf[4](create(null, inf[1]));
 			if (_createInf0.length)
-				return run(function () {mtAU(stub);}); //loop back to check if loading
+				return run(mtAU); //loop back to check if loading
 		}
 
 		mtAU0();
@@ -360,14 +349,14 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, delay, aucmds, js) {
+	zkx: function (wi, stub, aucmds, js) { //2nd is either delay (BL) or stub (AU)
 		zk.mounting = true;
 
 		if (js) jq.globalEval(js);
 		doAuCmds(aucmds);
 
+		var delay, mount = mtAU, owner;
 		if (wi) {
-			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
@@ -376,7 +365,13 @@ function zkmprops(uuid, props) {
 					owner = zk.Widget.$(owner);
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
+			if (typeof stub != "function") { //if 2nd argument not function, it must be BL (see zkx_)
+				delay = stub;
+				stub = null;
+				mount = mtBL;
+			}
+
+			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, stub]);
 
 			mountpkg();
 		}
@@ -386,8 +381,8 @@ function zkmprops(uuid, props) {
 	},
 	//widget creation called by au.js
 	zkx_: function (args, stub) {
-		_createInf0.stub = stub;
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
+		args[1] = stub; //assign stub as 2nd argument (see zkx)
 		zkx.apply(window, args);
 	},
 
