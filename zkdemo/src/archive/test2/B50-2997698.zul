@@ -9,4 +9,5 @@
 </html>
 <hbox>% 1,235<decimalbox format="'%' #,##0" value="1234.56"/></hbox>
 <hbox>% 1,235<decimalbox format="% #,##0" value="12.3456"/></hbox>
+<hbox># 1,234.6<decimalbox format="'#' #,##0.0" value="1234.56"/></hbox>
 </window>
