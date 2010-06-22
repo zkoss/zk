@@ -1,0 +1,9 @@
+<zk>
+	<datebox id="d" readonly="true" buttonVisible="false" />
+	<combobox id="c" readonly="true" buttonVisible="false" />
+	<bandbox id="b" readonly="true" buttonVisible="false" />
+	<timebox id="t" readonly="true" buttonVisible="false" />
+	<spinner id="s" readonly="true" buttonVisible="false" />
+	<button id="btn" label="invisible/visible"
+		onClick='b.buttonVisible = !b.buttonVisible;c.buttonVisible = !c.buttonVisible;d.buttonVisible = !d.buttonVisible;t.buttonVisible = !t.buttonVisible;s.buttonVisible = !s.buttonVisible' />
+</zk>

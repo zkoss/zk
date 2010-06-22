@@ -1,0 +1,35 @@
+<zk>
+	<tree id="tree" multiple="true">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="1" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="1.1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="1.1.1" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="1.1.2" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="1.1.3" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
