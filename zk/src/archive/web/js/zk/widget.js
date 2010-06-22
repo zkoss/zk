@@ -2035,6 +2035,8 @@ wgt.$f().main.setTitle("foo");
 	 * <p>If this widget is not floating, this method will look for its ancestors for the first ancestor who is floating. In other words, this method makes the floating containing this widget as topmost.
 	 * To make a widget floating, use {@link #setFloating_}.
 	 * <p>This method has no effect if it is not bound to the DOM tree, or none of the widget and its ancestors is floating. 
+	 * <p>Notice that it does not fire onFloatUp so it is caller's job if it is necessary
+	 * to close other popups.
 	 * @return int the new value of z-index of the topmost floating window, -1 if this widget and none of its ancestors is floating or not bound to the DOM tree. 
 	 * @see #setFloating_
 	 */
@@ -4067,6 +4069,7 @@ _doFooSelect: function (evt) {
 				setTimeout(function(){zk._cfByMD = false;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
+
 			if (wgt)
 				zWatch.fire('onFloatUp', wgt); //notify all
 			else

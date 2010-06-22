@@ -139,12 +139,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				floatFound = floatFound || wgt.isFloating_();
 			}
 
-			// check if the popup is an active menu
-			if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
-				var menubar = this.parent.getMenubar();
-				if (menubar && menubar._lastTarget == this.parent) 
-					return;
-			}
+			//No need to check _lastTarget since we have to close any other open menupopup
 		}
 		this.close({sendOnOpen:true});
 	},
