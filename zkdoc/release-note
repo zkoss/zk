@@ -81,6 +81,7 @@ ZK 5.0.3
   3018688: Recursive Loop in class XmlContentRenderer
   2997698: quoted special characters in decimalbox
   3019383: Failed to change the position of a root component to the end
+  3019360: button in os mold, setDisable() not add class -disd well
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
