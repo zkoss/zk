@@ -526,7 +526,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var pos = this.getPosition(),
 			n = this.$n(),
 			$n = zk(n);
-		if (!pos && !n.style.top && !n.style.left) {
+		if (!pos && (!n.style.top || !n.style.left)) {
 			var xy = $n.revisedOffset();
 			n.style.left = jq.px(xy[0]);
 			n.style.top = jq.px(xy[1]);

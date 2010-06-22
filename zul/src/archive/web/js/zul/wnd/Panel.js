@@ -676,7 +676,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_initFloat: function () {
 		var n = this.$n();
-		if (!n.style.top && !n.style.left) {
+		if (!n.style.top || !n.style.left) {
 			var xy = zk(n).revisedOffset();
 			n.style.left = jq.px(xy[0]);
 			n.style.top = jq.px(xy[1]);
