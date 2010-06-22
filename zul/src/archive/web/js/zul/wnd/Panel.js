@@ -558,13 +558,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
 		if (this.isMaximized() && !this.__maximized)
-			jq(this.$n()).width(0);
+			this.$n().style.width="";
 	},
 	//watch//
 	onSize: _zkf = (function() {
 		function syncMaximized (wgt) {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n(),
+				$n = zk(node),
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
@@ -573,14 +574,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth;
 			if (!floated) {
 				sw -= $op.zk.paddingWidth();
-				sw = $op.zk.revisedWidth(sw);
+				sw = $n.revisedWidth(sw);
 			}
 			s.width = jq.px0(sw);
 			if (wgt.isOpen()) {
 				var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 				if (!floated) {
 					sh -= $op.zk.paddingHeight();
-					sh = $op.zk.revisedHeight(sh);
+					sh = $n.revisedHeight(sh);
 				}
 				s.height = jq.px0(sh);
 			}
