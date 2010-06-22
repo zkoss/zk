@@ -18,6 +18,7 @@ ZK 3.6.5
   2997548: Whitespace and native components
   3002536: Datebox can't select month with ZK3 and 5 on FF in French
   2997527: IE6: datebox / combobox button disappears
+  3019383: Failed to change the position of a root component to the end
 
 * Upgrade Notes:
 
