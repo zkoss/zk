@@ -136,7 +136,7 @@ public class RequestQueueImpl implements RequestQueue {
 				final AuRequest req2 = (AuRequest)it.next();
 				if (req2.getCommand().equals(name)
 				&& Objects.equals(getUuid(req2), uuid)) {
-					it.remove(); //drop req2
+					it.remove(); //drop req2 (the old one)
 					break; //no need to iterate because impossible to have more
 				}
 			}
