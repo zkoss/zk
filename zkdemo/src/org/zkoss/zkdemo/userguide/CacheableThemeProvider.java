@@ -52,17 +52,22 @@ public class CacheableThemeProvider implements ThemeProvider{
 				}
 			}
 		}
-
+		
+		boolean hasSilvergray = "silvergray".equals(Themes.getSkinCookie(exec));
 		//slivergray
-		if ("silvergray".equals(Themes.getSkinCookie(exec))) {
+		if (hasSilvergray) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		}
 		
 		if ("lg".equals(fsc)) {
 			uris.add("/css/fontlg.css.dsp");
+			if (hasSilvergray)
+				uris.add("/css/silvergraylg.css.dsp");
 		} else if ("sm".equals(fsc)) {
 			uris.add("/css/fontsm.css.dsp");
+			if (hasSilvergray)
+				uris.add("/css/silvergraysm.css.dsp");
 		}
 		
 		return uris;
