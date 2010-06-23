@@ -37,17 +37,7 @@
 	<c:if test="${c:isOpera()}">
 		font-style: normal;
 	</c:if>
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			height: 12px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			height: 18px;
-		</c:when>
-		<c:otherwise>
-			height: 14px;
-		</c:otherwise>
-	</c:choose>
+	height: 14px;
 }
 .z-combobox-rounded-inp,
 .z-bandbox-rounded-inp,
@@ -58,57 +48,17 @@
 	padding: 5px 4px;
 }
 .z-combobox-rounded-inp {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-inp {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-inp {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-inp,
 .z-spinner-rounded-inp {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 .z-combobox-focus .z-combobox-inp,
 .z-bandbox-focus .z-bandbox-inp,
@@ -139,57 +89,23 @@
 .z-datebox-rounded input.z-datebox-rounded-text-invalid,
 .z-timebox-rounded input.z-timebox-rounded-text-invalid,
 .z-spinner-rounded input.z-spinner-rounded-text-invalid {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
-		</c:otherwise>
-	</c:choose>	
+	background: #FFF url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) repeat-x 0 0;
 }
 .z-combobox-rounded .z-combobox-rounded-text-invalid + i.z-combobox-rounded-btn-right-edge,
 .z-bandbox-rounded .z-bandbox-rounded-text-invalid + i.z-bandbox-rounded-btn-right-edge,
 .z-datebox-rounded .z-datebox-rounded-text-invalid + i.z-datebox-rounded-btn-right-edge,
 .z-timebox-rounded .z-timebox-rounded-text-invalid + i.z-timebox-rounded-btn-right-edge,
 .z-spinner-rounded .z-spinner-rounded-text-invalid + i.z-spinner-rounded-btn-right-edge {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('/img/component/redcombo-rounded-s.gif')});
-			background-position: 0 -22px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('/img/component/redcombo-rounded-l.gif')});
-			background-position: 0 -28px;
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
-			background-position: 0 -24px;
-		</c:otherwise>
-	</c:choose>	
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-position: 0 -24px;
 }
 i.z-combobox-rounded i.z-combobox-rounded-btn-right-edge-invalid,
 i.z-bandbox-rounded i.z-bandbox-rounded-btn-right-edge-invalid,
 i.z-datebox-rounded i.z-datebox-rounded-btn-right-edge-invalid,
 i.z-timebox-rounded i.z-timebox-rounded-btn-right-edge-invalid,
 i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('/img/component/redcombo-rounded-s.gif')});
-			background-position: 0 -22px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('/img/component/redcombo-rounded-l.gif')});
-			background-position: 0 -28px;
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
-			background-position: 0 -24px;
-		</c:otherwise>
-	</c:choose>	
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-position: 0 -24px;
 }
 .z-combobox-rounded .z-combobox-rounded-btn,
 .z-bandbox-rounded .z-bandbox-rounded-btn,
@@ -203,7 +119,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner .z-spinner-btn {
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
-	vertical-align: top; cursor: pointer; width: 17px; border: 0;
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
@@ -212,17 +128,6 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
 		margin-top: 1px;
 	</c:if>
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			height: 17px
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			height: 23px
-		</c:when>
-		<c:otherwise>
-			height: 19px
-		</c:otherwise>
-	</c:choose>
 }
 .z-combobox-rounded .z-combobox-rounded-btn,
 .z-bandbox-rounded .z-bandbox-rounded-btn,
@@ -230,93 +135,31 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded .z-timebox-rounded-btn,
 .z-spinner-rounded .z-spinner-rounded-btn {
 	border: 0;
-	width: 24px;
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			height: 22px;
-			background-position: 0 -110px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			height: 28px;
-			background-position: 0 -140px;
-		</c:when>
-		<c:otherwise>
-			height: 24px;
-			background-position: 0 -120px;
-		</c:otherwise>
-	</c:choose>
+	width: 24px; 
+	height: 24px;
+	background-position: 0 -120px;	
 }
-.z-combobox-rounded .z-combobox-rounded-btn{
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+.z-combobox-rounded .z-combobox-rounded-btn{	
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded .z-bandbox-rounded-btn {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded .z-datebox-rounded-btn {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded .z-timebox-rounded-btn,
 .z-spinner-rounded .z-spinner-rounded-btn {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
 }
 .z-combobox-rounded .z-combobox-rounded-btn-right-edge,
 .z-bandbox-rounded .z-bandbox-rounded-btn-right-edge,
 .z-datebox-rounded .z-datebox-rounded-btn-right-edge,
 .z-timebox-rounded .z-timebox-rounded-btn-right-edge,
 .z-spinner-rounded .z-spinner-rounded-btn-right-edge {
+	background-position: -19px -120px;
 	width: 5px;
 	cursor: default;
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: -19px -110px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: -19px -140px;
-		</c:when>
-		<c:otherwise>
-			background-position: -19px -120px;
-		</c:otherwise>
-	</c:choose>
 }
 .z-combobox .z-combobox-btn-over,
 .z-bandbox .z-bandbox-btn-over,
@@ -330,34 +173,14 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-inp-over,
 .z-timebox-rounded-inp-over,
 .z-spinner-rounded-inp-over {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -22px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -28px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -24px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -24px;
 }
 .z-combobox-rounded .z-combobox-rounded-btn-over,
 .z-bandbox-rounded .z-bandbox-rounded-btn-over,
 .z-datebox-rounded .z-datebox-rounded-btn-over,
 .z-timebox-rounded .z-timebox-rounded-btn-over,
 .z-spinner-rounded .z-spinner-rounded-btn-over  {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -132px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -168px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -144px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -144px;
 }
 .z-combobox-focus .z-combobox-btn,
 .z-bandbox-focus .z-bandbox-btn,
@@ -372,34 +195,14 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-focus .z-datebox-rounded-btn,
 .z-timebox-rounded-focus .z-timebox-rounded-btn,
 .z-spinner-rounded-focus .z-spinner-rounded-btn {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -176px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -224px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -192px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -192px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-right-edge,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn-right-edge,
 .z-datebox-rounded-focus .z-datebox-rounded-btn-right-edge,
 .z-timebox-rounded-focus .z-timebox-rounded-btn-right-edge,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-right-edge {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: -19px -110px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: -19px -140px;
-		</c:when>
-		<c:otherwise>
-			background-position: -19px -120px;
-		</c:otherwise>
-	</c:choose>
+	background-position: -19px -120px;
 }
 .z-combobox-focus .z-combobox-btn-over,
 .z-bandbox-focus .z-bandbox-btn-over,
@@ -413,17 +216,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-focus .z-datebox-rounded-btn-over,
 .z-timebox-rounded-focus .z-timebox-rounded-btn-over,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-over {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -198px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -252px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -216px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -216px;
 }
 .z-combobox-focus .z-combobox-btn-clk, .z-combobox .z-combobox-btn-clk,
 .z-bandbox-focus .z-bandbox-btn-clk, .z-bandbox .z-bandbox-btn-clk,
@@ -437,34 +230,14 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-focus .z-datebox-rounded-inp-clk, .z-datebox-rounded .z-datebox-inp-clk,
 .z-timebox-rounded-focus .z-timebox-rounded-inp-clk, .z-timebox-rounded .z-timebox-inp-clk,
 .z-spinner-rounded-focus .z-spinner-rounded-inp-clk, .z-spinner-rounded .z-spinner-inp-clk {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -44px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -56px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -48px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -48px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-clk, .z-combobox-rounded .z-combobox-rounded-btn-clk,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn-clk, .z-bandbox-rounded .z-bandbox-rounded-btn-clk,
 .z-datebox-rounded-focus .z-datebox-rounded-btn-clk, .z-datebox-rounded .z-datebox-rounded-btn-clk,
 .z-timebox-rounded-focus .z-timebox-rounded-btn-clk, .z-timebox-rounded .z-timebox-rounded-btn-clk,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-clk, .z-spinner-rounded .z-spinner-rounded-btn-clk {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -154px !important;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -196px !important;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -168px !important;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -168px !important;
 }
 .z-combobox-rounded-pp,
 .z-bandbox-rounded-pp,
@@ -669,70 +442,20 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-readonly,
 .z-timebox-rounded-readonly,
 .z-spinner-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -66px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -84px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -72px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -72px;
 }
 .z-combobox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-readonly,
 .z-spinner-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 .z-combobox-rounded .z-combobox-rounded-btn-right-edge.z-combobox-rounded-btn-readonly,
 .z-combobox-rounded i.z-combobox-rounded-btn-right-edge-readonly,
@@ -744,35 +467,16 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded i.z-timebox-rounded-btn-right-edge-readonly,
 .z-spinner-rounded .z-spinner-rounded-btn-right-edge.z-spinner-rounded-btn-readonly,
 .z-spinner-rounded i.z-spinner-rounded-btn-right-edge-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: -19px -176px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: -19px -224px;
-		</c:when>
-		<c:otherwise>
-			background-position: -19px -192px;
-		</c:otherwise>
-	</c:choose>
+	background-position: -19px -192px;
 }
 .z-combobox-rounded .z-combobox-rounded-btn-readonly,
 .z-bandbox-rounded .z-bandbox-rounded-btn-readonly,
 .z-datebox-rounded .z-datebox-rounded-btn-readonly,
 .z-timebox-rounded .z-timebox-rounded-btn-readonly,
 .z-spinner-rounded .z-spinner-rounded-btn-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -176px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -224px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -192px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -192px;
 }
+/****************************************************************************************************************************/
 .z-spinner-focus .z-spinner-readonly,
 .z-timebox-focus .z-timebox-readonly,
 .z-datebox-focus .z-datebox-readonly,
@@ -780,75 +484,26 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-combobox-focus .z-combobox-readonly {
 	background-image: url(${c:encodeURL('~./zul/img/button/readonly-focus-bg.gif')});
 }
+/************************************************* focus inp btn readonly *******************************************/
 .z-combobox-rounded-focus .z-combobox-rounded-readonly,
 .z-bandbox-rounded-focus .z-bandbox-rounded-readonly,
 .z-datebox-rounded-focus .z-datebox-rounded-readonly,
 .z-timebox-rounded-focus .z-timebox-rounded-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -88px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -112px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -96px;
-		</c:otherwise>
-	</c:choose>
+	background-position: 0 -96px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
 }
 .z-bandbox-rounded-focus .z-bandbox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/bandbox-rounded.gif')});
 }
 .z-datebox-rounded-focus .z-datebox-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>
+	background-image: url(${c:encodeURL('~./zul/img/button/datebox-rounded.gif')});
 }
 .z-timebox-rounded-focus .z-timebox-rounded-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-s.gif')});
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded-l.gif')});
-		</c:when>
-		<c:otherwise>
-			background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
-		</c:otherwise>
-	</c:choose>	
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-right-edge.z-combobox-rounded-btn-readonly,
 .z-combobox-rounded-focus i.z-combobox-rounded-btn-right-edge-readonly,
@@ -860,34 +515,14 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded-focus i.z-timebox-rounded-btn-right-edge-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-right-edge.z-spinner-rounded-btn-readonly,
 .z-spinner-rounded-focus i.z-spinner-rounded-btn-right-edge-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: -19px -198px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: -19px -252px;
-		</c:when>
-		<c:otherwise>
-			background-position: -19px -216px;
-		</c:otherwise>
-	</c:choose>	
+	background-position: -19px -216px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-readonly,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn-readonly,
 .z-datebox-rounded-focus .z-datebox-rounded-btn-readonly,
 .z-timebox-rounded-focus .z-timebox-rounded-btn-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-readonly {
-	<c:choose>
-		<c:when test="${fontSizeM == '10px'}">
-			background-position: 0 -198px;
-		</c:when>
-		<c:when test="${fontSizeM == '15px'}">
-			background-position: 0 -252px;
-		</c:when>
-		<c:otherwise>
-			background-position: 0 -216px;
-		</c:otherwise>
-	</c:choose>	
+	background-position: 0 -216px;
 }
 <%-- Inplace editing --%>
 .z-combobox-rounded-inplace,
