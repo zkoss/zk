@@ -704,15 +704,6 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	/**
-	 * Returns the UUID of the selected item (it is stored as the selId
-	 * attribute of the listbox).
-	 */
-	private String getSelUuid() {
-		final Listitem sel = getSelectedItem();
-		return sel != null ? sel.getUuid() : null;
-	}
-
-	/**
 	 * Returns the maximal length of each item's label.
 	 */
 	public int getMaxlength() {
