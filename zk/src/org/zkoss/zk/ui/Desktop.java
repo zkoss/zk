@@ -117,6 +117,11 @@ public interface Desktop extends Scope {
 	/** Returns a readonly collection of all {@link Page} in this desktop.
 	 */
 	public Collection getPages();
+	/** Returns the first page, or null if no page at all (happens when the desktop
+	 * has been destroyed)
+	 * @since 5.0.3
+	 */
+	public Page getFirstPage();
 	/** Returns whether a page exists.
 	 */
 	public boolean hasPage(String pageId);

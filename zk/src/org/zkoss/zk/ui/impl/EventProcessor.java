@@ -281,8 +281,7 @@ public class EventProcessor {
 		if (page != null)
 			return page;
 
-		final Iterator it = _desktop.getPages().iterator();
-		return it.hasNext() ? (Page)it.next(): null;
+		return _desktop.getFirstPage();
 	}
 
 	//Object//

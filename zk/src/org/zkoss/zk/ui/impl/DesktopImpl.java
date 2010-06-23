@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Collections;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -411,7 +412,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public Collection getPages() {
 		//No synchronized is required because it cannot be access concurrently
-		return _pages.values();
+		return Collections.unmodifiableCollection(_pages.values());
+	}
+	public Page getFirstPage() {
+		Iterator it = _pages.values().iterator();
+		return it.hasNext() ? (Page)it.next(): null;
 	}
 
 	public String getBookmark() {

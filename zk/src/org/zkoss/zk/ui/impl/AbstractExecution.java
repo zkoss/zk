@@ -82,12 +82,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			_curpage = getPage(desktop);
 	}
 	private static Page getPage(Desktop desktop) {
-		if (desktop != null) {
-			final Collection c = desktop.getPages();
-			if (c != null && !c.isEmpty())
-				return (Page)c.iterator().next();
-		}
-		return null;
+		return desktop != null ? desktop.getFirstPage(): null;
 	}
 
 	//-- Execution --//
