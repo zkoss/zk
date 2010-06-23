@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
-		_noChildCallback, //used by removeChild/appendChild/insertBefore
+		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
 
 	//Check if el is a prolog
@@ -1531,12 +1531,18 @@ wgt.$f().main.setTitle("foo");
 		if (child == this.lastChild)
 			return false;
 
-		var oldpt = child.parent;
-		if (oldpt != this)
+		var oldpt;
+		if ((oldpt = child.parent) != this)
 			child.beforeParentChanged_(this);
 
-		if (oldpt)
-			oldpt.removeChild(child);
+		if (oldpt) {
+			_noParentCallback = true;
+			try {
+				oldpt.removeChild(child);
+			} finally {
+				_noParentCallback = false;
+			}
+		}
 
 		child.parent = this;
 		var ref = this.lastChild;
@@ -1559,6 +1565,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
+		child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1613,11 +1620,18 @@ wgt.$f().main.setTitle("foo");
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
 
-		if (child.parent != this)
+		var oldpt;
+		if ((oldpt = child.parent) != this)
 			child.beforeParentChanged_(this);
 
-		if (child.parent)
-			child.parent.removeChild(child);
+		if (oldpt) {
+			_noParentCallback = true;
+			try {
+				oldpt.removeChild(child);
+			} finally {
+				_noParentCallback = false;
+			}
+		}
 
 		child.parent = this;
 		var ref = sibling.previousSibling;
@@ -1641,6 +1655,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
+		child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1665,9 +1680,10 @@ wgt.$f().main.setTitle("foo");
 	 * @see #clear
 	 */
 	removeChild: function (child, ignoreDom) {
-		if (!child.parent)
+		var oldpt;
+		if (!(oldpt = child.parent))
 			return false;
-		if (this != child.parent)
+		if (this != oldpt)
 			return false;
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
@@ -1676,12 +1692,15 @@ wgt.$f().main.setTitle("foo");
 		else if (child.desktop)
 			this.removeChildHTML_(child, ignoreDom);
 
-		child.beforeParentChanged_(null);
+		if (!_noParentCallback)
+			child.beforeParentChanged_(null);
 
 		_unlink(this, child);
 
 		_rmIdSpaceDown(child);
 
+		if (!_noParentCallback)
+			child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -1814,8 +1833,20 @@ wgt.$f().main.setTitle("foo");
 
 	/** A callback called before the parent is changed.
 	 * @param zk.Widget newparent the new parent (null if it is removed)
+	 * The previous parent can be found by {@link #parent}.
+	 * @see #onChildAdded_
+	 * @see #onChildRemoved_
+	 * @see #onParentChanged_
 	 */
 	beforeParentChanged_: function (/*newparent*/) {
+	},
+	/** A callback called after the parent has been changed.
+	 * @param zk.Widget oldparent the previous parent (null if it was not attached)
+	 * The current parent can be found by {@link #parent}.
+	 * @since 5.0.3
+	 * @see #beforeParentChanged_
+	 */
+	onParentChanged_: function (/*oldparent*/) {
 	},
 
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
@@ -1985,17 +2016,19 @@ wgt.$f().main.setTitle("foo");
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
 	/** A callback called after a child has been added to this widget.
-	 * <p>Notice: when overriding this method but not
-	 * {@link #onChildRemoved_}, {@link #onChildReplaced_}
+	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * is usually required to override, too.
 	 * @param zk.Widget child the child being added
+	 * @see #beforeParentChanged_
+	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
 	},
 	/** A callback called after a child has been removed to this widget.
-	 * <p>Notice: when overriding this method but not
-	 * {@link #onChildAdded_}, {@link #onChildReplaced_}
+	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * @param zk.Widget child the child being removed
+	 * @see #beforeParentChanged_
+	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
 	},
