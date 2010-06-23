@@ -71,12 +71,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function doProcess(cmd, data) { //decoded
 		//1. process zAu.cmd1 (cmd1 has higher priority)
-		var fn = zAu.cmd1[cmd];
+		var fn = zAu.cmd1[cmd], id;
 		if (fn) {
 			if (!data.length)
 				return zAu.showError("ILLEGAL_RESPONSE", "uuid required", cmd);
 
-			data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
+			data[0] = zk.Widget.$(id = data[0]); //might be null (such as rm)
+				//assign to id for debugging purpose (go thru stacktrace)
 		} else {
 			//2. process zAu.cmd0
 			fn = zAu.cmd0[cmd];

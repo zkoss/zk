@@ -484,11 +484,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		final Configuration config = wapp.getConfiguration();
-		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
+		Desktop desktop = getDesktop(sess, dtid);
 		if (desktop == null) {
 			final String cmdId = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(cmdId))
-				desktop = recover(sess, request, response, wappc, dtid);
+				desktop = recoverDesktop(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
@@ -556,6 +556,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		out.close(request, response);
 	}
+	/** Returns the desktop of the specified ID, or null if not found.
+	 * If null is returned, {@link #recoverDesktop} will be invoked.
+	 * @param sess the session (never null)
+	 * @param dtid the desktop ID to look for
+	 * @since 5.0.3
+	 */
+	protected Desktop getDesktop(Session sess, String dtid) {
+		return ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktopIfAny(dtid);
+	}
+
 	private static int getProcessTimeout(int resendDelay) {
 		if (resendDelay > 0) {
 			resendDelay = (resendDelay * 3) >> 2;
@@ -612,8 +622,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	/** Recovers the desktop if possible.
+	 * It is called if {@link #getDesktop} returns null.
+	 * <p>The default implementation will look for any failover manager ({@link Failovermanager})
+	 * is registered, and forward the invocation to it if found.
+	 * @return the recovered desktop, or null if failed to recover
+	 * @since 5.0.3
 	 */
-	private Desktop recover(Session sess,
+	protected Desktop recoverDesktop(Session sess,
 	HttpServletRequest request, HttpServletResponse response,
 	WebAppCtrl wappc, String dtid) {
 		final FailoverManager failover = wappc.getFailoverManager();
