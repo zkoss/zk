@@ -131,7 +131,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		var s = this.$supers('domContent_', arguments),
 			box = this.getListbox();
 		if (box != null && this.parent.firstChild == this 
-		&& box.isCheckmark() && box.isMultiple())
+		&& box._checkmark && box._multiple)
 			s = '<span id="' + this.uuid + '-cm" class="' + this.getZclass() + '-img"></span>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;

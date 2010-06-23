@@ -170,31 +170,36 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			jq(n.cells).removeClass(zcls + "-focus");
 		}
 	},
-	_updHeaderCM: function () { //update header's checkmark
+	_updHeaderCM: function (bRemove) { //update header's checkmark
 		var box = this.getMeshWidget();
-		if (!box || !box._headercm || !box._multiple) return;
+		if (box && box._headercm && box._multiple) {
+			if (bRemove) {
+				box._updHeaderCM();
+				return;
+			}
 
-		if (!this.isSelected()) {
-			var header = zk.Widget.$(box._headercm),
-				zcls = header.getZclass();
-			jq(box._headercm).removeClass(zcls + '-img-seld');
-			return;
-		}
+			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
+				$headercm = jq(box._headercm);
 
-		var checked;
-		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
-			if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
-				checked = false;
-				break;
-			} else
-				checked = true;
-		
-		if (checked) {
-			var header = zk.Widget.$(box._headercm),
-				zcls = header.getZclass();
-			jq(box._headercm).addClass(zcls + '-img-seld');
+			if (!this.isSelected())
+				$headercm.removeClass(zcls);
+			else if (!$headercm.hasClass(zcls))
+				box._updHeaderCM(); //update in batch since we have to examine one-by-one
 		}
 	},
+	//@Override
+	beforeParentChanged_: function (newp) {
+		if (!newp) //remove
+			this._updHeaderCM(true);
+		this.$supers("beforeParentChanged_", arguments);
+	},
+	//@Override
+	onParentChanged_: function () {
+		if (this.parent) //add
+			this._updHeaderCM();
+		this.$supers("onParentChanged_", arguments);
+	},
+
 	// event
 	doSelect_: function(evt) {
 		if (this.isDisabled()) return;

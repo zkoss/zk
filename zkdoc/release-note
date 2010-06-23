@@ -83,6 +83,8 @@ ZK 5.0.3
   3019383: Failed to change the position of a root component to the end
   3019360: button in os mold, setDisable() not add class -disd well
   3019524: Window/panel does position wrong if only left specified
+  3019517: Listbox selectAll checkmark bugs
+  3020040: Listbox.removeItemFromselection not work correctly
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the

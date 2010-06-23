@@ -44,6 +44,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return true;
 	}
 
+	function _updHeaderCM(box) { //update header's checkmark
+		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
+			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
+				$headercm = jq(box._headercm);
+			var checked;
+			for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
+				if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
+					checked = false;
+					break;
+				} else
+					checked = true;
+
+			$headercm[checked ? "addClass": "removeClass"](zcls);
+		}
+	}
+
 var SelectWidget =
 /**
  * A skeletal implementation for a select widget.
@@ -113,24 +129,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 					
 				this._selItems.push(item);
-				
-				// reset the selected id
-				this._chgSel = item.uuid;
 			}
 			if (this._checkmark && this.desktop)
 				this.rerender();
-		},
-		chgSel: function (val) {
-			var sels = {};
-			for (var j = 0;;) {
-				var k = val.indexOf(',', j),
-					s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
-				if (s) sels[s] = true;
-				if (k < 0) break;
-				j = k + 1;
-			}
-			for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
-				this._changeSelect(w, sels[w.uuid] == true);
 		},
 		/**
 		 * Returns the index of the selected item (-1 if no one is selected).
@@ -189,6 +190,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		name: function () {
 			if (this.destkop) this.updateFormData();	
 		}
+	},
+	setChgSel: function (val) { //called from the server
+		var sels = {};
+		for (var j = 0;;) {
+			var k = val.indexOf(',', j),
+				s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
+			if (s) sels[s] = true;
+			if (k < 0) break;
+			j = k + 1;
+		}
+		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
+			this._changeSelect(w, sels[w.uuid] == true);
 	},
 	updateFormData: function () {
 		if (this._name) {
@@ -568,6 +581,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			for(var item;(item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
+			this._updHeaderCM();
 		}
 	},
 	//super
@@ -595,6 +609,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				.domListen_(btn, 'onKeyDown')
 				.domListen_(btn, 'onBlur', 'doBlur_');
 		this.updateFormData();
+		this._updHeaderCM();
 	},
 	unbind_: function () {
 		var btn = this.$n('a');
@@ -995,6 +1010,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._setFocus(this._focusItem, false)
 		else
 			this._focusItem = null;
+	},
+	_updHeaderCM: function () { //update header's checkmark
+		if (this._headercm && this._multiple) {
+			var box = this, v;
+			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
+			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
+		}
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

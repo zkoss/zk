@@ -956,11 +956,8 @@ public class Listbox extends XulElement implements Paginated,
 			if (!_multiple) {
 				selectItem(item);
 			} else {
-				if (item.getIndex() < _jsel || _jsel < 0) {
+				if (item.getIndex() < _jsel || _jsel < 0)
 					_jsel = item.getIndex();
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
-				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				if (_model instanceof Selectable) {
@@ -1013,8 +1010,6 @@ public class Listbox extends XulElement implements Paginated,
 					item.smartUpdate("selected", false);
 				} else {
 					smartUpdateSelection();
-					if (oldSel != _jsel)
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 		}
@@ -1894,8 +1889,6 @@ public class Listbox extends XulElement implements Paginated,
 				if (newItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = newIndex;
-						if (!inSelectMold())
-							smartUpdate("selectedItem", getSelUuid());
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
 							((Selectable) _model).addSelection(_model
@@ -1904,8 +1897,6 @@ public class Listbox extends XulElement implements Paginated,
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
-							if (!inSelectMold())
-								smartUpdate("selectedItem", getSelUuid());
 						}
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
@@ -1929,9 +1920,6 @@ public class Listbox extends XulElement implements Paginated,
 								--_jsel;
 						}
 					}
-
-					if (oldjsel != _jsel && !inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 
 				if (newChild instanceof Listgroup) {
@@ -2097,14 +2085,10 @@ public class Listbox extends XulElement implements Paginated,
 				_selItems.remove(item);
 				if (_jsel == index) {
 					fixSelectedIndex(index);
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			} else {
 				if (!isLoadingModel() && _jsel >= index) {
 					--_jsel;
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 			if (child instanceof Listgroup) {
