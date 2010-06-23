@@ -131,7 +131,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (org && org.$instanceof(zul.menu.Menu)) {
 			for (var floatFound, wgt = this; wgt = wgt.parent;) {
 				if (wgt == org) {
-					if (this._shallClose) break;
+					if (this._shallClose)
+						break; //close it
 					if (!floatFound)
 						this.setTopmost();
 					return;
@@ -233,6 +234,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);
+	},
+	doMouseOver_: function (evt) {
+		this._shallClose = false;
+		this.$supers('doMouseOver_', arguments);
 	}
 }, {
 	_rmActive: function (wgt) {

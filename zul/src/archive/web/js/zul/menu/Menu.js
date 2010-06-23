@@ -216,15 +216,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (topmost && zk.ie && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return; // don't activate
 
+		if (this.menupopup)
+			this.menupopup._shallClose = false;
 		if (!topmost) {
-			if (this.menupopup) this.menupopup._shallClose = false;
 			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
 		} else {
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
 				menubar._lastTarget = this;
-				this.menupopup._shallClose = false;
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
 			} else {
@@ -248,7 +248,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (topmost) {
 			this.$class._rmActive(this);
 			if (this.menupopup && this.getMenubar().isAutodrop()) {
-				if (this.menupopup.isOpen()) this.menupopup._shallClose = true;
+				if (this.menupopup.isOpen())
+					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
 				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
