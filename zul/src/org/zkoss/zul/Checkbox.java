@@ -46,8 +46,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	
 	static {
 		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT);
-		addClientEvent(Checkbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-		addClientEvent(Checkbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_FOCUS, 0);
+		addClientEvent(Checkbox.class, Events.ON_BLUR, 0);
 	}
 	
 	public Checkbox() {

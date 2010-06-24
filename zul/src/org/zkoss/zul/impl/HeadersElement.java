@@ -29,7 +29,7 @@ import org.zkoss.zul.event.ZulEvents;
 abstract public class HeadersElement extends XulElement implements org.zkoss.zul.impl.api.HeadersElement{
 
 	static {
-		addClientEvent(HeadersElement.class, ZulEvents.ON_COL_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(HeadersElement.class, ZulEvents.ON_COL_SIZE, CE_IMPORTANT); //no CE_DUPLICATE_IGNORE (might apply to diff index)
 	}
 	
 	private boolean _sizable;

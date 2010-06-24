@@ -35,8 +35,8 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	private boolean _disabled;
 
 	static {
-		addClientEvent(A.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-		addClientEvent(A.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(A.class, Events.ON_FOCUS, 0);
+		addClientEvent(A.class, Events.ON_BLUR, 0);
 	}
 
 	public A() {

@@ -51,7 +51,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	private boolean _autohide;
 
 	static {
-		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, CE_DUPLICATE_IGNORE);
+		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, 0);
 	}
 
 	public Iframe() {
