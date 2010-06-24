@@ -85,6 +85,7 @@ ZK 5.0.3
   3019524: Window/panel does position wrong if only left specified
   3019517: Listbox selectAll checkmark bugs
   3020040: Listbox.removeItemFromselection not work correctly
+  3020565: Failed if add listhead and listitem to ROD listbox (zkmax)
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
