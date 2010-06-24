@@ -623,7 +623,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	/** Recovers the desktop if possible.
 	 * It is called if {@link #getDesktop} returns null.
-	 * <p>The default implementation will look for any failover manager ({@link Failovermanager})
+	 * <p>The default implementation will look for any failover manager ({@link FailoverManager})
 	 * is registered, and forward the invocation to it if found.
 	 * @return the recovered desktop, or null if failed to recover
 	 * @since 5.0.3
