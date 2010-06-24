@@ -36,9 +36,9 @@ It still doesn't work even add row after creation.
 		</div>
 		<grid id="g1" width="400px" sizedByContent="true">
 			<columns id="cols" sizable="true">
-				<column label="Type 50px" id="col1"  align="center" width="50px" style="position:relative;"/>
-				<column label="Content" id="col2" align="right"  style="position:relative;"/>
-				<column label="AA-BB" id="col3"  style="position:relative;"/>
+				<column label="Type 50px" id="col1"  align="center" width="50px"/>
+				<column label="Content" id="col2" align="right" />
+				<column label="AA-BB" id="col3" />
 			</columns>
 			<rows id="rows">
 			</rows>
