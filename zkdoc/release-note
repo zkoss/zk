@@ -15,7 +15,8 @@ ZK 5.0.3
   3012360: Applet supports all attributes, e.g., archive and mayscript  
   3010188: disable ZScriptVariables lookup for performance
   3016605: Support onMouseOver and onMouseOut at the server
-
+  2936220: Grid/Listbox/Tree sizedByContent="true" determins width
+  
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
   3000881: Tabbox inside hbox should not expand 5 thousand width

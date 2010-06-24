@@ -850,6 +850,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (wgt.ebodytbl)
 			wgt.ebodytbl.width='100%';
 		
-		return {'width': width, 'wds': wds};
+		return {width: width, wds: wds};
 	}
 });

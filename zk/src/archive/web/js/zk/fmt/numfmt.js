@@ -248,7 +248,7 @@ zk.fmt.Number = {
 				ret += cc;
 			}
 		}
-		return {'shift':shift, 'fmt':ret, 'pureFmtStr': pure, 'jdot':jdot, 'purejdot':purejdot, 'prej':prej};
+		return {shift:shift, fmt:ret, pureFmtStr: pure, jdot:jdot, purejdot:purejdot, prej:prej};
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
