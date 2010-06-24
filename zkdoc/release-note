@@ -99,10 +99,10 @@ ZK 5.0.3
 	</library-property>
   + Component's ID and page's ID are default to be an empty string
    (rather than an auto-generated ID).
-  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
-    your macro components uses this property, you have to rename it.
   + The codebase of the applet component will be encoded by including the session ID
     and application's context. See also Bug 3012486.
+  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
+    your macro components uses this property, you have to rename it.
   + The id-to-uuid-prefix configuration is deprecated. Please use IdGenerator
     or jQuery selector instead.
   + JavaScript API: zk.Widget.removeChildHTML_ is changed
