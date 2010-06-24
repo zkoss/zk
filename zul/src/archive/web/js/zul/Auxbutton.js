@@ -89,7 +89,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			if (inRoundedMold && !wgt.isReadonly() && !jq(inp).hasClass(zcls + '-text-invalid'))
 				jq(inp).addClass(zcls + "-inp-clk");			
 
-			jq(document.body).mouseup(this.proxy(this._domUp));
+			jq(document).mouseup(this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
 		}
@@ -107,7 +107,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			jq(curab._btn).removeClass(zcls + "-btn-clk");
 			jq(wgt.getInputNode()).removeClass(zcls + "-inp-clk");
 			
-			jq(document.body).unbind("mouseup", curab.proxy(this._domUp));
+			jq(document).unbind("mouseup", curab.proxy(this._domUp));
 		}
 	}
 });
