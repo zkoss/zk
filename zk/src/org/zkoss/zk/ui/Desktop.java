@@ -100,17 +100,19 @@ public interface Desktop extends Scope {
 	 */
 	public WebApp getWebApp();
 
-	/** Returns the page of the specified ID.
+	/** Returns the page of the specified ID or UUID.
 	 *
 	 * <p>This is one of the only few method you could access
 	 * before activating an execution.
 	 *
+	 * @param pageId the page's ID or UUID. ID has the higher priority.
 	 * @exception ComponentNotFoundException if page not found
 	 */
 	public Page getPage(String pageId)
 	throws ComponentNotFoundException;
-	/** Returns the page of the specified ID, or null if no such page.
+	/** Returns the page of the specified ID or UUID, or null if no such page.
 	 *
+	 * @param pageId the page's ID or UUID. ID has the higher priority.
 	 * @since 2.4.1
 	 */
 	public Page getPageIfAny(String pageId);

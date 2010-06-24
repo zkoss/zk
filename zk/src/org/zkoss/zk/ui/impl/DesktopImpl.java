@@ -403,14 +403,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Page getPageIfAny(String pageId) {
 		//Spec: we allow user to access this method concurrently, so
 		//synchronized is required
+		Page page = null;
 		synchronized (_pages) {
 			for (Iterator it = _pages.iterator(); it.hasNext();) {
-				final Page page = (Page)it.next();
-				if (Objects.equals(pageId, page.getId()))
-					return page;
+				final Page pg = (Page)it.next();
+				if (Objects.equals(pageId, pg.getId()))
+					return pg;
+				if (Objects.equals(pageId, pg.getUuid()))
+					page = pg;
 			}
 		}
-		return null;
+		return page;
 	}
 	public boolean hasPage(String pageId) {
 		return getPageIfAny(pageId) != null;
