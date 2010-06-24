@@ -174,6 +174,18 @@ public class Attributes {
 	 */
 	public static final String PORTLET_RENDER_PATCH_CLASS = "org.zkoss.zk.portlet.PageRenderPatch.class";
 
+	/** A library property to specify the timeout (in milliseconds) to
+	 * wait for the activation.
+	 * <p>Notice that, after timeout, the activation will restart automatically.
+	 * That is, the value won't really affect the result (no aborting or other).
+	 * It is designed to avoid the annoying warning messages found in some JVM.
+	 * For example, IBM JVM shows a warning if wait() exceeds 10 minutes.
+	 * To prevent the warning, you can set the value to less than 10 minutes.
+	 * <p>Default: 120000 (unit: milliseconds)
+	 * @since 5.0.3
+	 */
+	public static final String ACTIVATE_RETRY_DELAY = "org.zkoss.zk.ui.activate.wait.retry.timeout";
+
 	//URI//
 	/** A special prefix that is used if you want to inject a special
 	 * fragment into the URI of a clss Web resource (CWR).
