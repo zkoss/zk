@@ -736,7 +736,8 @@ public class HtmlPageRenders {
 			extra = ComponentRedraws.afterRedraw();
 		}
 
-		outEndJavaScriptFunc(exec, out, extra, false); //generate );
+		outEndJavaScriptFunc(exec, out, extra, false);
+			//generate extra, responses and ");"
 		out.write("\n}finally{zkme();}\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)

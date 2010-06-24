@@ -173,6 +173,7 @@ implements DynamicTag, Native {
 		Component child = getFirstChild();
 		if (child == null) {
 			HtmlPageRenders.outStandalone(exec, null, out);
+				//need to generate response JavaScript if any (Bug 3009925)
 		} else {
 			if (root)
 				HtmlPageRenders.setDirectContent(exec, true);
