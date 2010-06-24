@@ -372,6 +372,12 @@ function zkmprops(uuid, props) {
 		doAuCmds(aucmds);
 
 		var delay, mount = mtAU, owner;
+		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+			delay = extra;
+			extra = null;
+			mount = mtBL;
+		}
+
 		if (wi) {
 			if (wi[0] === 0) { //page
 				var props = wi[2];
@@ -379,12 +385,6 @@ function zkmprops(uuid, props) {
 					._pguid = wi[1];
 				if (owner = zk.cut(props, "ow"))
 					owner = zk.Widget.$(owner);
-			}
-
-			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
-				delay = extra;
-				extra = null;
-				mount = mtBL;
 			}
 
 			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, extra]);
