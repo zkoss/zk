@@ -172,8 +172,10 @@ implements DynamicTag, Native {
 		//children
 		Component child = getFirstChild();
 		if (child == null) {
-			HtmlPageRenders.outStandalone(exec, null, out);
-				//need to generate response JavaScript if any (Bug 3009925)
+			//need to invoke outStandalone to generate response if any (Bug 3009925)
+			//however, it is not required if not root (since others will invoke)
+			if (root)
+				HtmlPageRenders.outStandalone(exec, null, out);
 		} else {
 			if (root)
 				HtmlPageRenders.setDirectContent(exec, true);
