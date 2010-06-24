@@ -87,6 +87,7 @@ ZK 5.0.3
   3019517: Listbox selectAll checkmark bugs
   3020040: Listbox.removeItemFromselection not work correctly
   3020565: Failed if add listhead and listitem to ROD listbox (zkmax)
+  3020609: Dragging modal window might fail if dragging too fast
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
