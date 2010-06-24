@@ -37,13 +37,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		return this._zclass == null ? "z-tree" : this._zclass;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
-		if (this.$super('insertBefore', child, sibling, true)) {
+		if (this.$super('insertBefore', child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
-		if (this.$super('appendChild', child, true)) {
+		if (this.$super('appendChild', child, !this.z_rod)) {
 			if (!this.insertingBefore_)
 				this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
