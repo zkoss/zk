@@ -4597,7 +4597,8 @@ jQuery.extend({
 			deleteExpando = jQuery.support.deleteExpando;
 		
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
-			id = elem[ jQuery.expando ];
+			id = jq.nodeName(elem, "applet") ? '': elem[ jQuery.expando ];
+				//Potx: Bug 3010511: skip applet to avoid JS error (try/catch useless)
 			
 			if ( id ) {
 				data = cache[ id ];
