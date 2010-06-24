@@ -14,7 +14,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-please increase the column's width to show the horizontal scrollbar, and the scrollbar should not cover over the item. (IE only)
+please increase the column's width to try to make the horizontal scrollbar appear
+but it shall NOT appear whever you try
 <listbox fixedLayout="false">
 	<listhead sizable="true">
 		<listheader align="center" width="40px" label="col1" />
