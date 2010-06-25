@@ -68,7 +68,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		if (this.rows)
-			this.rows._syncStripe();
+			this.rows._syncStripe(true);
 		return this;
 	},
 	//-- super --//

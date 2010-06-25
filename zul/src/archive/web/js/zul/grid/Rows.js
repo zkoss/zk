@@ -17,6 +17,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
+	function _doStripe(wgt) {
+		if (wgt.desktop && wgt._shallStripe) { //since bind_(...after)
+			wgt.stripe();
+			wgt.getGrid().onSize();
+		}
+	}
 
 var Rows =
 /**
@@ -74,15 +80,14 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers(Rows, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop && this._shallStripe) { //since bind_(...after)
-			this.stripe();
-			this.getGrid().onSize();
-		}
+		_doStripe(this)
 	},
-	_syncStripe: function () {
+	_syncStripe: function (force) {
+		var wgt = this;
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
+		if (force || (!this.inServer && this.desktop)) {
+			setTimeout(function(){_doStripe(wgt);}, 10); 
+		}
 	},
 	/**
 	 * Stripes the class for each row.
