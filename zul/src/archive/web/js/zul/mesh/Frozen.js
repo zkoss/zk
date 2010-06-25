@@ -40,6 +40,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				for (; j < cl; ++j) {
 					var cell = cells[j];
 					_resetColspan(cell);
+					if (cell.style.display != "none")
+						break; //done
 					cell.style.display = "";
 				}
 				return;
