@@ -83,10 +83,10 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		_doStripe(this)
 	},
 	_syncStripe: function (force) {
-		var wgt = this;
 		this._shallStripe = true;
 		if (force || (!this.inServer && this.desktop)) {
-			setTimeout(function(){_doStripe(wgt);}, 10); 
+			var wgt = this;
+			setTimeout(function(){_doStripe(wgt);}, 50); 
 		}
 	},
 	/**
