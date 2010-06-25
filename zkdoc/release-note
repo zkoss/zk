@@ -92,6 +92,7 @@ ZK 5.0.3
   3021174: setLeft at a invisible window case js error
   3021217: Put a invisible Panel in a portallayout cause js error
   3021278: Hide the column of the grid, the css of the odd row is gone
+  3013640: Incorrect scrolling of auxheads if used with frozen columns
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
