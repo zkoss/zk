@@ -600,24 +600,25 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);
-
-		if (this._mode == 'embedded') {
-			if (this._shadowWgt) {
-				this._shadowWgt.destroy();
-				this._shadowWgt = null;
+		if (this.desktop) {
+			if (this._mode == 'embedded') {
+				if (this._shadowWgt) {
+					this._shadowWgt.destroy();
+					this._shadowWgt = null;
+				}
+			} else if (this._shadow) {
+				if (!this._shadowWgt)
+					this._shadowWgt = new zk.eff.Shadow(this.$n(),
+						{left: -4, right: 4, top: -2, bottom: 3});
+				if (this.isMaximized() || this.isMinimized())
+					this._hideShadow();
+				else
+					this._shadowWgt.sync();
 			}
-		} else if (this._shadow) {
-			if (!this._shadowWgt)
-				this._shadowWgt = new zk.eff.Shadow(this.$n(),
-					{left: -4, right: 4, top: -2, bottom: 3});
-			if (this.isMaximized() || this.isMinimized())
-				this._hideShadow();
-			else
-				this._shadowWgt.sync();
-		}
-		if (this._mask && this._shadowWgt) {
-			var n = this._shadowWgt.getBottomElement()||this.$n(); //null if ff3.5 (no shadow/stackup)
-			if (n) this._mask.sync(n);
+			if (this._mask && this._shadowWgt) {
+				var n = this._shadowWgt.getBottomElement()||this.$n(); //null if ff3.5 (no shadow/stackup)
+				if (n) this._mask.sync(n);
+			}
 		}
 	},
 	_hideShadow: function () {

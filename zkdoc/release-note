@@ -89,6 +89,7 @@ ZK 5.0.3
   3020565: Failed if add listhead and listitem to ROD listbox (zkmax)
   3020609: Dragging modal window might fail if dragging too fast
   3010511: Removing Applet causes JavaScript error in FF2
+  3021174: setLeft at a invisible window case js error
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
