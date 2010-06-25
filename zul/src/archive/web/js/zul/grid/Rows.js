@@ -73,7 +73,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
-		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
+		var wgt = this;
+		after.push(function(){_doStripe(wgt);});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -82,17 +83,18 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	onResponse: function () {
 		_doStripe(this)
 	},
-	_syncStripe: function (force) {
+	_syncStripe: function () {
 		this._shallStripe = true;
-		if (force || (!this.inServer && this.desktop)) {
+		if ((!this.inServer && this.desktop)) {
 			var wgt = this;
-			setTimeout(function(){_doStripe(wgt);}, 50); 
+			setTimeout(function(){wgt._shallStripe = true;}, 50); 
 		}
 	},
 	/**
 	 * Stripes the class for each row.
 	 */
 	stripe: function () {
+		this._shallStripe = false;
 		var grid = this.getGrid(),
 			scOdd = grid.getOddRowSclass();
 		if (!scOdd) return;
@@ -109,7 +111,6 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 				even = !even;
 			}
 		}
-		this._shallStripe = false;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
