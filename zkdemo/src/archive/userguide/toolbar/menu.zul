@@ -85,6 +85,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			menubar.width = self.checked ? "100px" : "200px";
 		</attribute>
 	</checkbox>
+	<checkbox label="Autodrop">
+		<attribute name="onCheck">
+			menubar.autodrop = self.checked;
+		</attribute>
+	</checkbox>
 </zk>
 			]]></attribute>
 						</textbox>
