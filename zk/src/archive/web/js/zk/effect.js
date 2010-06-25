@@ -211,14 +211,8 @@ if (!zk.css3) {
 		st.height = jq.px0(jq.innerHeight());
 		st.display = "block";
 
-		n = this.stackup;
-		if (n) {
-			n = n.style;
-			n.left = st.left;
-			n.top = st.top;
-			n.width = st.width;
-			n.height = st.height;
-		}
+		if (n = this.stackup)
+			zk.set(n.style, st, ["left", "top", "width", "height"]);
 	}
 
 /** A mask covers the browser window fully.

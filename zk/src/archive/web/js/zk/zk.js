@@ -14,10 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (zk = function (sel) {
 	return jq(sel, zk).zk;
-}).copy = function (dst, src) {
+}).copy = function (dst, src, bu) {
 	dst = dst || {};
-	for (var p in src)
+	for (var p in src) {
+		if (bu) bu[p] = dst[p];
 		dst[p] = src[p];
+	}
 	return dst;
 };
 
@@ -365,7 +367,7 @@ doMouseDown_: function () {
 	 */
 	//mouseCapture: null,
 
-	/** Copies a map of properties (or options) from one map to another.
+	/** Copies a map of properties (or options) from one object to another.
 	 * Example: extending Array 
 <pre><code>
 zk.copy(Array.prototoype, {
@@ -374,9 +376,39 @@ zk.copy(Array.prototoype, {
  }
 });
 </code></pre>
+	 * <p>Notice that {@link #copy} copies the properties directly regardless
+	 * if the target object has a setter or not. It is fast but if you want
+	 * to go thru the setter, if any, use {@link #set(Object, Object, Array, boolean)}
+	 * instead.
 	 * @param Object dst the destination object to copy properties to
 	 * @param Object src the source object to copy properties from
 	 * @return Object the destination object
+	 */
+	/** Copies a map of properties (or options) from one object to another
+	 * and copies the original value to another map.
+	 * Example: copy style and restore back
+<pre><code>
+var backup = {};
+zk.copy(n.style, {
+	visibility: 'hidden',
+	position: 'absolute',
+	display: 'block'
+	}, backup);
+try {
+	//do whatever
+} finally {
+	zk.copy(n.style, backup);
+}
+</code></pre>
+	 * <p>Notice that {@link #copy} copies the properties directly regardless
+	 * if the target object has a setter or not. It is fast but if you want
+	 * to go thru the setter, if any, use {@link #set(Object, Object, Array, boolean)}
+	 * instead.
+	 * @param Object dst the destination object to copy properties to
+	 * @param Object src the source object to copy properties from
+	 * @param Map backup the map to stor the original value
+	 * @return Object the destination object
+	 * @since 5.0.3
 	 */
 	//copy: function () {},
 
@@ -804,14 +836,47 @@ zk.set(o, 'value', true); //set a single property
 	 * as the extra argument (the second argument).
 	 * For example, <code>zk.set(obj, 'x', 123, true)</code> invokes <code>obj.setX(123, true)</code>.
 	 * @see #get
+	 * @return Object the destination object
+	 */
+	/** Sets the given properties from one object to another.
+	 * Example:
+<pre><code>
+zk.set(dst, src, ["foo", "mike"]);
+</code></pre>
+	 * If dst has a method called setFoo and src has method called getMike,
+	 * then it is equivalent to
+<pre><code>
+	dst.setFoo("foo", src["foo"]);
+	dst["mike"] = src.getMike();
+</code></pre>
+	 *
+	 * @param Object dst the destination object to copy properties to
+	 * @param Object src the source object to copy properties from
+	 * @param Array props an array of property names (String)
+	 * @param boolean ignoreUndefined whether to ignore undefined.
+	 * Optional (if not specified, false is assumed).
+	 * If true and src[name] is undefined, then dst[name] won't be assigned.
+	 * @return Object the destination object
+	 * @since 5.0.3
+	 * @see #copy
 	 */
 	set: function (o, name, value, extra) {
-		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
-		if (!m) o[name] = value;
-		else if (arguments.length >= 4)
-			m.call(o, value, extra);
-		else
-			m.call(o, value);
+		if (typeof name == "string") {
+			var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
+			if (!m) o[name] = value;
+			else if (arguments.length >= 4)
+				m.call(o, value, extra);
+			else
+				m.call(o, value);
+		} else //o: dst, name: src, value: props
+			for (var j = 0, len = value.length, m, n, v; j < len;) {
+				n = value[j++];
+				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
+				if (extra && !m && name[n] === undefined)
+					continue;
+				zk.set(o, n, m ? m.call(name): name[n]);
+			}
+		return o;
 	},
 	/** Retrieves a value from the specified property.
 	 * <p>For example, <code>zk.get(obj, "x")</code>:<br/>

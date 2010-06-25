@@ -1183,19 +1183,17 @@ jq(el).zk.center(); //same as 'center'
 	// All *Width and *Height properties give 0 on elements with display none,
 	// so enable the element temporarily
 		var st = this.jq[0].style,
-			originalVisibility = st.visibility,
-			originalPosition = st.position,
-			originalDisplay = st.display;
-		st.visibility = 'hidden';
-		st.position = 'absolute';
-		st.display = 'block';
+			backup = {};
+		zk.copy(st, {
+			visibility: 'hidden',
+			position: 'absolute',
+			display: 'block'
+			}, backup);
 		try {
 			return _addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 		} finally {
-			st.display = originalDisplay;
-			st.position = originalPosition;
-			st.visibility = originalVisibility;
+			zk.copy(st, backup);
 		}
 	},
 
