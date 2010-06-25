@@ -125,7 +125,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		zWatch.listen({onResponse: this});
 		this._shallStripe = true;
-		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
+		var w = this;
+		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
