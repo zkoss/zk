@@ -17,12 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
-	function _doStripe(wgt) {
-		if (wgt.desktop && wgt._shallStripe) { //since bind_(...after)
-			wgt.stripe();
-			wgt.getGrid().onSize();
-		}
-	}
 
 var Rows =
 /**
@@ -73,28 +67,27 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
-		var wgt = this;
-		after.push(this.proxy(zk.booted ? this.onResponse: function(){_doStripe(wgt);}));
+		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(Rows, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		_doStripe(this)
+		if (this.desktop && this._shallStripe) { //since bind_(...after)
+			this.stripe();
+			this.getGrid().onSize();
+		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop) {
-			var wgt = this;
-			setTimeout(function(){wgt._shallStripe = true;}, 50); 
-		}
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	/**
 	 * Stripes the class for each row.
 	 */
 	stripe: function () {
-		this._shallStripe = false;
 		var grid = this.getGrid(),
 			scOdd = grid.getOddRowSclass();
 		if (!scOdd) return;
@@ -111,6 +104,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 				even = !even;
 			}
 		}
+		this._shallStripe = false;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

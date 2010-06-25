@@ -19,13 +19,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return zk.feature.pe && zk.isLoaded('zkex.sel');
 	}
 
-	function _doStripe(wgt) {
-		if (wgt.desktop && wgt._shallStripe) {
-			wgt.stripe();
-			if (wgt._shallSize)
-				wgt.$supers('onResponse', arguments);
-		}
-	}
 var Listbox =
 /**
  * A listbox.
@@ -131,29 +124,30 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		zWatch.listen({onResponse: this});
-		var wgt = this;
-		after.push(this.proxy(zk.booted ? this.onResponse: function(){_doStripe(wgt);}));
+		this._shallStripe = true;
+		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		_doStripe(this)
+		if (this.desktop && this._shallStripe) {
+			this.stripe();
+			if (this._shallSize)
+				this.$supers('onResponse', arguments);
+		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop) {
-			var wgt = this;
-			setTimeout(function(){wgt._shallStripe = true;}, 50); 
-		}
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	/**
 	 * Stripes the class for each item.
 	 * @return Listbox
 	 */
 	stripe: function () {
-		this._shallStripe = false;
 		var scOdd = this.getOddRowSclass();
 		if (!scOdd) return;
 		var odd = this._offset & 1;
@@ -163,11 +157,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				even = !even;
 			}
 		}
+		this._shallStripe = false;
 		return this;
 	},
 	rerender: function () {
-		this._syncStripe();	
 		this.$supers('rerender', arguments);
+		this._syncStripe();		
 		return this;
 	},
 
