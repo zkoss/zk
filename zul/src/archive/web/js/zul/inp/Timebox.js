@@ -92,7 +92,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			var inp = this.getInputNode();
 			if (inp) {
 				inp.value = this.coerceToString_(this._value);
-				if (fromServer) inp.defaultValue = inp.value; //not clear error if by client app
+				if (fromServer)
+					this._defValue = inp.value; //not clear error if by client app
 			}
 		}
 	},

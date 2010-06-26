@@ -24,10 +24,10 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				else jq(n).hide();
 				break;
 			case 'checked':
-				n.checked = n.defaultChecked = 'true' == val;
+				n.checked = this._defChecked = 'true' == val;
 				break;
 			case 'value':
-				n.value = n.defaultValue = val;
+				n.value = this._defValue = val;
 				break;
 			case 'style':
 				zk(n).clearStyles().jq.css(jq.parseStyle(val));
@@ -47,8 +47,8 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		var n = this.$n();
 		if (n) {
 			var val = n.value;
-			if (val != n.defaultValue) {
-				this.defaultValue = val;
+			if (val != this._defValue) {
+				this._defValue = val;
 				this.fire('onChange', this._onChangeData(val), null,
 					timeout ? timeout: 150);
 			}
@@ -78,8 +78,8 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		var n = this.$n();
 		if (n) {
 			var val = n.checked;
-			if (val != n.defaultChecked) { //changed
-				n.defaultChecked = val;
+			if (val != this._defChecked) { //changed
+				this._defChecked = val;
 				this.fire('onCheck', val, timeout);
 			}
 		}

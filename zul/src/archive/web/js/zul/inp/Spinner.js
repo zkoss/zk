@@ -243,7 +243,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_clearValue: function(){
 		var real = this.inp;
-		real.value = real.defaultValue = "";
+		real.value = this._defValue = "";
 		return true;
 	},
 	_startAutoIncProc: function (isup){
