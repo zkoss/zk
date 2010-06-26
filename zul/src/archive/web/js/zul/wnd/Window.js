@@ -444,9 +444,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * assumed. If modal or highlighted, it is centered.
 		 * @return String
 		 */
-		position: function (pos) {
-			if (this.desktop && this._mode != 'embedded')
-				this._updateDomPos(); //TODO: handle pos = 'parent'
+		position: function (/*pos*/) {
+			this._updateDomPos(false, this.isVisible());
 		},
 		/**
 		 * Sets the minimum height in pixels allowed for this window.
@@ -491,6 +490,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this._shadowWgt = null;
 			}
 		}
+	},
+	/** Re-position the window based on the value of {@link #getPosition}.
+	 * @since 5.0.3
+	 */
+	repos: function () {
+		this._updateDomPos(false, this.isVisible());
 	},
 	/** Makes this window as overlapped with other components.
 	 */
@@ -592,11 +597,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	/** Must be called before calling makeVParent. */
 	_posByParent: function () {
 		var n = this.$n(),
-			ofs = zk(n.parentNode).revisedOffset(),
-			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
+			ofs = zk(zk(n).vparentNode(true)).revisedOffset();
 		this._offset = ofs;
-		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left));
-		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
+		n.style.left = jq.px(ofs[0] + zk.parseInt(this._left));
+		n.style.top = jq.px(ofs[1] + zk.parseInt(this._top));
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);
@@ -655,9 +659,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			});
 		}
 	},
-	_updateDomPos: function (force) {
+	_updateDomPos: function (force, posParent) {
+		if (!this.desktop || this._mode == 'embedded')
+			return;
+
 		var n = this.$n(), pos = this._position;
-		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
+		if (pos == "parent") {
+			if (posParent)
+				this._posByParent();
+			return;
+		}
+		if (!pos && !force)
 			return;
 
 		var st = n.style;
@@ -890,7 +902,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			} else if (this.isMinimized()) {
 				this.setMinimized(false);
 			}
+
 			this.$supers('setVisible', arguments);
+
+			if (visible)
+				this._updateDomPos(false, true);
 		}
 	},
 	setHeight: function (height) {

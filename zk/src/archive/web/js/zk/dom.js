@@ -1222,12 +1222,14 @@ jq(el).zk.center(); //same as 'center'
 		return this;
 	},
 
-	/** Returns the parent element, including the virtual parent,
-	 * of the first matched element.
+	/** Returns the virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information.
+	 * @param boolean real whether to return DOM element's parentNode if
+	 * no virtual parent. In other words, <code>zk(n).vparentNode(true)</code>
+	 * is the same as <code>zk(n).vparentNode()||n.parentNode</code>.
 	 * @return DOMElement
 	 */
-	vparentNode: function () {
+	vparentNode: function (real) {
 		var el = this.jq[0];
 		if (el) {
 			var v = el.z_vp; //might be empty
@@ -1235,6 +1237,8 @@ jq(el).zk.center(); //same as 'center'
 			v = el.z_vpagt;
 			if (v && (v = jq('#' +v)[0]))
 				return v.parentNode;
+			if (real)
+				return el.parentNode;
 		}
 	},
 	/** Creates a virtual parent for the specified element. Creating a virtual parent makes the specified element able to appear above any other element (such as a menu popup). By default, the Z order of an element is decided by its parent and ancestors (if any of them has the relative or absolute position). If you want to resolve this limitation, you can create a virtual parent for it with this method.
@@ -1500,7 +1504,7 @@ zk.copy(jq, {
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = zk(c).vparentNode()||c.parentNode)
+		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
 				return true;
 		return false;

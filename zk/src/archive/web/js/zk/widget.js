@@ -1873,7 +1873,7 @@ wgt.$f().main.setTitle("foo");
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var p = wgt.parent, n;
 			if (p && p.isVisible() && (p=p.$n()) && (n=wgt.$n()))
-				while ((n=zk(n).vparentNode()||n.parentNode) && p != n)
+				while ((n=zk(n).vparentNode(true)) && p != n)
 					if ((n.style||{}).display == 'none')
 						return false; //hidden by parent
 
@@ -4055,7 +4055,7 @@ _doFooSelect: function (evt) {
 		if (opts && opts.exact)
 			return _binds[n.id];
 
-		for (; n; n = zk(n).vparentNode()||n.parentNode) {
+		for (; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
