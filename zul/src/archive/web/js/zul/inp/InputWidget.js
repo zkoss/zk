@@ -51,6 +51,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				{ignorable:1}, timeout||5);
 		}
 	}
+	var _keyIgnorable = zk.ie ? function () {return true;}:
+		zk.opera ? function (code) {
+			return code == 32 || code > 46; //DEL
+		}: function (code) {
+			return code >= 32;
+		}
 
 var InputWidget =
 /**
@@ -525,7 +531,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_shallIgnore: function (evt, keys) {
 		var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
-		if (!evt.altKey && !evt.ctrlKey && (zk.ie || code >= 32)
+		if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
 		&& keys.indexOf(String.fromCharCode(code)) < 0) {
 			evt.stop();
 			return true;

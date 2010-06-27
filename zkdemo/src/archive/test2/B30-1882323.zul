@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>Left and Right key doesn't work (It should work) in intbox-Win (Safari only)</n:p>
+	<n:p>Press LEFT and RIGHT key to see if we can change the position,
+	also press HOME, END, DEL... to see if work (in intbox).
+	Test: Opera and Safari</n:p>
 	<intbox/>
 </zk>
