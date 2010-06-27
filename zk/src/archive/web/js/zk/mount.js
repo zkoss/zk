@@ -500,8 +500,9 @@ jq(function() {
 		if (old && zk.ie)
 			setTimeout(function () {
 				try {
-					var cf = zk.currentFocus;
-					if (cf != old && !old.offsetWidth && !old.offsetHeight)
+					var cf = zk.currentFocus,
+						n = jq(old)[0];
+					if (cf != old && n && !n.offsetWidth && !n.offsetHeight)
 						cf.focus();
 				} catch (e) {}
 			});
