@@ -573,7 +573,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_resetForm: function () {
 		var inp = this.getInputNode();
-		if (inp.value != inp.defaultValue) {
+		if (inp.value != inp.defaultValue) { //test if it will be reset
 			var wgt = this;
 			setTimeout(function () {wgt.updateChange_();}, 0);
 				//value not reset yet so wait a moment
