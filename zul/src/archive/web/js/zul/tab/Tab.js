@@ -205,7 +205,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 
-		after.push(function () {tab.parent._fixHgh();});//Bug 3022274: it shall do _fixHgh before slideDown ( such as panel )
+		after.push(function () {tab.parent._fixHgh();});
+			//Bug 3022274: required so it is is called before, say, panel's slideDown
+			//_sel will invoke _fixWidth but it is too late since it uses afterMount
 		after.push(function () {
 			zk.afterMount(function () {
     			if (tab.isSelected()) 
