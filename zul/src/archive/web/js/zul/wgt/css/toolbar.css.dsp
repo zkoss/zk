@@ -119,7 +119,7 @@
 	color:gray !important;
 	cursor:default !important;
 }
-.z-toolbarbutton-disd {
+.z-toolbarbutton-disd ${c:isExplorer() ? '*': ''} { <%-- bug 3022237 --%>
 	opacity: .5;
 	-moz-opacity: .5;
 	filter: alpha(opacity=50);
