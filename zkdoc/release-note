@@ -99,6 +99,7 @@ ZK 5.0.3
   3022197: Set 2nd tab of  tabbox in 2nd tab be selected isn't work
   3022274: Vertical tabbox in invisible comp has big height when onShow
   3022237: Image of toolbarbutton not disabled correctly (ie8)
+  3022178: Extra bottom border for selected tab
   
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
