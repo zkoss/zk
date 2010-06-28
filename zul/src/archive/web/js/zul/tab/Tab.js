@@ -65,8 +65,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean selected
 		 */
 		selected: function(selected) {
-			if (this.desktop)
-				this._sel();
+			this._sel();
 		}
 	},
 	/**
@@ -126,13 +125,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_setSel: function(tab, toSel, notify, init) {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass(),
-			panel = tab.getLinkedPanel();
+			panel = tab.getLinkedPanel(),
+			bound = this.desktop;
 		if (tab.isSelected() == toSel && notify)
 			return;
 
 		if (toSel)
 			tabbox._selTab = tab; //avoid loopback
 		tab._selected = toSel;
+		
+		if (!bound) return;
+		
 		if (toSel)
 			jq(tab).addClass(zcls + "-seld");
 		else
