@@ -508,16 +508,6 @@ jq(function() {
 			});
 	}
 	
-	function _evtProxy(evt) { //handle proxy
-		var n;
-		
-		// Firefox 3.5 will cause an error.
-		try {
-			if (((n = evt.target) && (n = n.z$proxy)) ||
-			((n = evt.originalTarget) && (n = n.z$proxy))) 
-				evt.target = n;
-		} catch (e) {}
-	}
 	function _docResize() {
 		if (!_reszInf.time) return; //already handled
 
@@ -545,7 +535,6 @@ jq(function() {
 
 	jq(document)
 	.keydown(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
@@ -562,20 +551,17 @@ jq(function() {
 			return false; //eat
 	})
 	.keyup(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	})
 	.keypress(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
 	.mousedown(function (evt) {
-		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
@@ -595,14 +581,12 @@ jq(function() {
 				//Bug 3017606/2988327: don't invoke window.blur,or browser might be min (IE/FF)
 		}
 
-		_evtProxy(evt);
 		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
 	.mousemove(function (evt) {
-		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -611,14 +595,12 @@ jq(function() {
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
-		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
 		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.mouseout(function (evt) {
-		_evtProxy(evt);
 		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.click(function (evt) {
@@ -626,7 +608,6 @@ jq(function() {
 
 		zjq._fixClick(evt);
 
-		_evtProxy(evt);
 		if (evt.which == 1)
 			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
 				'onClick', evt.mouseData(), {ctl:true}, evt));
@@ -635,7 +616,6 @@ jq(function() {
 	.dblclick(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
-		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
@@ -645,7 +625,6 @@ jq(function() {
 		}
 	})
 	.bind("contextmenu", function (evt) {
-		_evtProxy(evt);
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
 

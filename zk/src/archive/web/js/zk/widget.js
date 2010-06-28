@@ -4048,8 +4048,9 @@ _doFooSelect: function (evt) {
 		}
 
 		if (!n.nodeType) { //n could be an event (skip Element)
-			var e = n.originalEvent;
-			n = (e?e.z$target:null) || n.target || n; //check DOM event first
+			var e1, e2;
+			n = ((e1 = n.originalEvent) ? e1.z$target:null)
+				|| ((e1 = n.target) && (e2 = e1.z$proxy) ? e2: e1) || n; //check DOM event first
 		}
 
 		if (opts && opts.exact)
