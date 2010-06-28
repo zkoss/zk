@@ -2,7 +2,7 @@
    <html><![CDATA[
 	<ul>
 	<li>Check the bottom of "tab1" tab shall not has a border</li>
-	<li>especially the tabbox that with a toolbar </li>
+	<li>especially when the tabbox has a toolbar </li>
 	</ul>
 	]]></html>
 	<hbox>
