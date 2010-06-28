@@ -1,0 +1,18 @@
+<zk>
+Press <button label="click" onClick="win.visible = true;"/> and then click the B tab.
+You shall see a window in B's tabpanel (and no JavaScript error at all).
+<tabbox>
+<tabs>
+<tab label="A" />
+<tab label="B" />
+</tabs>
+<tabpanels>
+<tabpanel>A</tabpanel>
+<tabpanel>
+<window width="400px" title="win"
+border="normal" id="win" visible="false"
+closable="true" ></window>
+</tabpanel>
+</tabpanels>
+</tabbox>
+</zk>
