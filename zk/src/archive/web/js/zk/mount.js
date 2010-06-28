@@ -496,16 +496,18 @@ jq(function() {
 			
 		_doEvt(evt);
 		
-		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
-		if (old && zk.ie)
-			setTimeout(function () {
-				try {
-					var cf = zk.currentFocus,
-						n = jq(old)[0];
-					if (cf != old && n && !n.offsetWidth && !n.offsetHeight)
-						cf.focus();
-				} catch (e) {}
-			});
+		// bug 2799334 and 2635555, need to enforce a focus event (IE only)
+		if (old && zk.ie) {
+			var n = jq(old)[0];
+			if (n)
+				setTimeout(function () {
+					try {
+						var cf = zk.currentFocus;
+						if (cf != old && !n.offsetWidth && !n.offsetHeight)
+							cf.focus();
+					} catch (e) {}
+				});
+		}
 	}
 	
 	function _docResize() {
