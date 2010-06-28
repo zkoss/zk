@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 please increase the column's width to try to make the horizontal scrollbar appear
 but it shall NOT appear whever you try
-<listbox fixedLayout="false">
+<listbox fixedLayout="true">
 	<listhead sizable="true">
 		<listheader align="center" width="40px" label="col1" />
 		<listheader align="center" label="col2" />
