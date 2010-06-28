@@ -388,7 +388,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	_fixWidth: function() {
 		var tabs = this.$n();
-		if (!zk(tabs).isRealVisible()) return;
 		
 		var	tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),

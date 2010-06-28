@@ -205,6 +205,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 
+		after.push(function () {tab.parent._fixHgh();});
 		after.push(function () {
 			zk.afterMount(function () {
     			if (tab.isSelected()) 
