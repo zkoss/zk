@@ -364,6 +364,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * rather, the page size is automatically determined by the height of the 
 	 * Tree dynamically. 
 	 * @param autopaging true to turn on the auto-paging facility.
+	 * @since 5.0.2
 	 */
 	public void setAutopaging(boolean autopaging) {
 		if (_autopaging != autopaging) {
@@ -378,6 +379,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * rather, the page size is automatically determined by the height of the 
 	 * Tree dynamically. 
 	 * @return whether the "autopaging" facility is turned on.
+	 * @since 5.0.2
 	 */
 	public boolean isAutopaging() {
 		return _autopaging;

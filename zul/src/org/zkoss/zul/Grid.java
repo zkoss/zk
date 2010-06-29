@@ -586,6 +586,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * rather, the page size is automatically determined by the height of the 
 	 * Grid dynamically. 
 	 * @param autopaging true to turn on the auto-paging facility.
+	 * @since 5.0.2
 	 */
 	public void setAutopaging(boolean autopaging) {
 		if (_autopaging != autopaging) {
@@ -600,6 +601,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * rather, the page size is automatically determined by the height of the 
 	 * Grid dynamically. 
 	 * @return whether the "autopaging" facility is turned on.
+	 * @since 5.0.2
 	 */
 	public boolean isAutopaging() {
 		return _autopaging;
