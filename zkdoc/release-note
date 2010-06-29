@@ -100,7 +100,8 @@ ZK 5.0.3
   3022274: Vertical tabbox in invisible comp has big height when onShow
   3022237: Image of toolbarbutton not disabled correctly (ie8)
   3022178: Extra bottom border for selected tab
-  
+  3022174: Scroll remains upon closing tabs
+
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
