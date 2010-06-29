@@ -61,7 +61,11 @@
 	right: 0;
 	top: 0;
 	z-index: 1;
-	border-bottom: 1px solid #7EAAC6;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
+	height: 100%;
+	<c:if test="${c:browser('ie6-')}">
+		padding-bottom: 5px;
+	</c:if>
 }
 .z-toolbar-tabs-outer {
 	background: #C7E3F3 repeat-x 0 top;
