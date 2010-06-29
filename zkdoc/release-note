@@ -136,7 +136,7 @@ May 12, 2010
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
   2974340: Generate zul's HTML content with JavaScript array/map
-  2985686: A simpler way to change the imiplementation of FileuploadDlg
+  2985686: A simpler way to change the implementation of FileuploadDlg
   2989181: Notify a desktop that it has been recycled- onDesktopRecycle
   2992673: A directive allow set custom HTTP response header key-value in zul page
   2983365: Able to get application event queue on a worker thread
@@ -236,8 +236,6 @@ March 18, 2010
   2954280: Include component shall have clearDynamicProperties method
   2962487: Timeout popup translation and reload page
   2780660: Delay the onChanging event for autocomplete comboboxes
-  2831389: Tab Mold accordion should be able to take all the space
-  2971982: The  treefooter and the listfooter setSpan is not work
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
@@ -301,6 +299,8 @@ March 18, 2010
   2970695: Constraints on non-input fields spawns several error dialogs
   2970664: SimpleDateConstraint should not use static SimpleDateFormat
   2971730: ClientConstraint can't work with Datebox
+  2831389: Tab Mold accordion should be able to take all the space
+  2971982: The treefooter and the listfooter setSpan does not work
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
