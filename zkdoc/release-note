@@ -1,5 +1,6 @@
 	--------
 ZK 5.0.3
+June 29, 2010
 * Features
   3000873: Tabbox can auto grow size when select a larger size tabpanel
   3015861: Able to specify the first day of a week for each session
