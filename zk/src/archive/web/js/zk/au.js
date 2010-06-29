@@ -857,8 +857,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * For widget's error message, use {@link #wrongValue} instead.
 	 * @param String msg the error message
 	 */
-	alert: function (msg) {
-		jq.alert(msg, {icon:'ERROR'});
+	alert: function (msg, title, icon) {
+		jq.alert(msg, {icon: icon||'ERROR', title: title});
 	},
 	/** Redirects to the specified URL.
 	 * @param String url the URL to redirect to
