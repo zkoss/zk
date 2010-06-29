@@ -46,17 +46,16 @@ zk.fmt.Number = {
 		}
 		
 		//calculate number of fixed decimals
-		var re = new RegExp("[^#0.]", 'g'),
-			pureFmtStr = fmt.replace(re, ''),
-			ind = pureFmtStr.indexOf('.'),
+		var efmt = this._escapeQuote(fmt);
+		fmt = efmt.fmt;
+		var pureFmtStr = efmt.pureFmtStr,
+			ind = efmt.purejdot,
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
 			valStr = (val + '').replace(/[^0123456789.]/g, ''),
 			indVal = valStr.indexOf('.'),
-			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
+			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0,
+			shift = efmt.shift;
 			
-		//handle PERCENT and PER_MILL case(/000)
-		//cannot just parseFloat(val) * 100, or large long integer and big decimal will not work
-		var shift = fmt.endsWith('%') ? 2 : fmt.endsWith(zk.PER_MILL) ? 3 : 0;
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
@@ -119,7 +118,7 @@ zk.fmt.Number = {
 						valStr = r < h ? down(valStr, ri) : up(valStr, ri);
 			}
 		}
-		var indFmt = fmt.indexOf('.'),
+		var indFmt = efmt.jdot,
 			pre = '', suf = '';
 		
 		//pre part
@@ -173,9 +172,10 @@ zk.fmt.Number = {
 			pre = valStr.substr(0, j + 1) + pre;
 		
 		// Bug #2926718
-		var len = (indFmt < 0 ? fmt.length : indFmt) - (ind < 0 ? pureFmtStr.length : ind);
+		var len = (indFmt < 0 ? fmt.length : indFmt) - (ind < 0 ? pureFmtStr.length : ind),
+			prej = efmt.prej;
 		if (len > 0) {
-			var p = fmt.substring(0, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.,]", 'g'), '');
+			var p = fmt.substring(prej, prefmt > 0 ? prefmt : len).replace(new RegExp("[#0.,]", 'g'), '');
 			if (p)
 				pre = p + pre;
 		}
@@ -208,10 +208,47 @@ zk.fmt.Number = {
 		
 		//combine
 		if (pre)
-			pre = this._removePrefixSharps(pre);
+			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
 		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
+	},
+	_escapeQuote: function (fmt) {
+		//note we do NOT support mixing of quoted and unquoted percent
+		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej= -1,
+			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+			//note we do NOT support mixing of quoted and unquoted percent|permill
+		for (var j = 0, len = fmt.length; j < len; ++j) {
+			cc = fmt.charAt(j);
+			if (cc == '%' && validPercent)
+				shift += 2;
+			else if (cc == zk.PER_MILL && validPercent)
+				shift += 3;
+			
+			if (cc == '\'') { // a single quote
+				if (q >= 0) {//close single quote
+					ret += q == (j-1) ? '\'' : fmt.substring(q+1, j);
+					q = -2;
+				} else
+					q = j; //open single quote
+			} else if (q < 0) { //not in quote
+				if (prej < 0 
+					&& (cc == '#' || cc == '0' || cc == '.' || cc == '-' || cc == ',' || cc == 'E'))
+					prej = ret.length;
+					
+				if (cc == '#' || cc == '0')
+					pure += cc;
+				else if(cc == '.') {
+					if (purejdot < 0) 
+						purejdot = pure.length;
+					if (jdot < 0) 
+						jdot = ret.length;
+					pure += cc;
+				}
+				ret += cc;
+			}
+		}
+		return {shift:shift, fmt:ret, pureFmtStr: pure, jdot:jdot, purejdot:purejdot, prej:prej};
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
@@ -241,14 +278,16 @@ zk.fmt.Number = {
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
 			zkMinus = fmt ? zk.MINUS : '-',
-			zkDecimal = fmt ? zk.DECIMAL : '.'; //bug #2932443, no format and German Locale
+			zkDecimal = fmt ? zk.DECIMAL : '.', //bug #2932443, no format and German Locale
+			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
 			ignore = true;
 
 			//We handle percent and (nnn) specially
-			if (cc == zk.PERCENT) divscale += 2;
-			else if (cc == zk.PER_MILL) divscale += 3;
+			if (cc == zk.PERCENT && validPercent) divscale += 2;
+			else if (cc == zk.PER_MILL && validPercent) divscale += 3;
 			else if (cc == '(') minus = true;
 			else if (cc != '+') ignore = false;
 
@@ -256,8 +295,8 @@ zk.fmt.Number = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zkDecimal && cc != zkMinus && cc != '+'
-				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING || cc == ')'
-					|| (fmt && fmt.indexOf(cc) >= 0));
+				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING
+					|| cc == ')' || (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);
 			} else {
@@ -278,6 +317,26 @@ zk.fmt.Number = {
 				sb = sb.substring(2);
 			else
 				break;
+		}
+
+		//remove leading 0
+		//keep the zero after the decimal point (to preserve precision)
+		for (var j = 0, k, len = sb.length; j < len; ++j) {
+			cc = sb.charAt(j);
+			if (cc > '0' && cc <= '9') {
+				if (k !== undefined)
+					sb = sb.substring(0, k) + sb.substring(j);
+				break; //done
+			} else if (cc == '0') {
+				if (k === undefined)
+					k = j;
+			} else if (k !== undefined) {
+				if (cc == zkDecimal && j > ++k)
+					sb = sb.substring(0, k) + sb.substring(j);
+				break;
+			} else if (cc == zkDecimal) { //.xxx or .
+				break;
+			}
 		}
 		return {raw: sb, divscale: divscale};
 	}

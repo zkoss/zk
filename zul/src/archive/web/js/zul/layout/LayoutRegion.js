@@ -233,6 +233,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (!fromServer) this.fire('onOpen', {open:open});
 		}
 	},
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for LayoutRegion
+		if (v != 'min') v = false;
+		this.$super(zul.layout.LayoutRegion, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for LayoutRigion
+		if (v != 'min') v = false;
+		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
+	},
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
 	 * 

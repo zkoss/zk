@@ -368,23 +368,28 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//use HttpSession to avoid loading SerializableSession in GAE
 			//and don't retrieve session if possible
 			final ClassWebResource cwr = getClassWebResource();
-			final HttpSession sess =
+			final HttpSession hsess =
 				shallSession(cwr, pi) ? request.getSession(false): null;
 			Object oldsess = null;
-			if (sess == null) {
+			if (hsess == null) {
 				oldsess = SessionsCtrl.getRawCurrent();
 				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
 			}
 
-			final Object old = sess != null?
-				I18Ns.setup(sess, request, response, "UTF-8"):
+			WebApp wapp;
+			Session sess;
+			final Object old = hsess != null?
+				(wapp = WebManager.getWebAppIfAny(_ctx)) != null &&
+				(sess = SessionsCtrl.getSession(wapp, hsess)) != null ?
+					I18Ns.setup(sess, request, response, "UTF-8"):
+					I18Ns.setup(hsess, request, response, "UTF-8"):
 				Charsets.setup(null, request, response, "UTF-8");
 			try {
 				cwr.service(request, response,
 						pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
-				if (sess != null) I18Ns.cleanup(request, old);
+				if (hsess != null) I18Ns.cleanup(request, old);
 				else {
 					Charsets.cleanup(request, old);
 					SessionsCtrl.setRawCurrent(oldsess);
@@ -481,11 +486,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
 		final Configuration config = wapp.getConfiguration();
-		Desktop desktop = wappc.getDesktopCache(sess).getDesktopIfAny(dtid);
+		Desktop desktop = getDesktop(sess, dtid);
 		if (desktop == null) {
 			final String cmdId = request.getParameter("cmd.0");
 			if (!"rmDesktop".equals(cmdId))
-				desktop = recover(sess, request, response, wappc, dtid);
+				desktop = recoverDesktop(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
@@ -553,6 +558,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		out.close(request, response);
 	}
+	/** Returns the desktop of the specified ID, or null if not found.
+	 * If null is returned, {@link #recoverDesktop} will be invoked.
+	 * @param sess the session (never null)
+	 * @param dtid the desktop ID to look for
+	 * @since 5.0.3
+	 */
+	protected Desktop getDesktop(Session sess, String dtid) {
+		return ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktopIfAny(dtid);
+	}
+
 	private static int getProcessTimeout(int resendDelay) {
 		if (resendDelay > 0) {
 			resendDelay = (resendDelay * 3) >> 2;
@@ -609,8 +624,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	/** Recovers the desktop if possible.
+	 * It is called if {@link #getDesktop} returns null.
+	 * <p>The default implementation will look for any failover manager ({@link FailoverManager})
+	 * is registered, and forward the invocation to it if found.
+	 * @return the recovered desktop, or null if failed to recover
+	 * @since 5.0.3
 	 */
-	private Desktop recover(Session sess,
+	protected Desktop recoverDesktop(Session sess,
 	HttpServletRequest request, HttpServletResponse response,
 	WebAppCtrl wappc, String dtid) {
 		final FailoverManager failover = wappc.getFailoverManager();

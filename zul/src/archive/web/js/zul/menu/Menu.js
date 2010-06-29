@@ -176,14 +176,14 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 					clickOffsetX = evt.domEvent.clientX - ofs[0];
 
 				if (clickOffsetX > clickArea) {
-					this._openPopup();
+					this._togglePopup();
 					Event.stop(evt);
 				} else {
 					jq(this.$n('a')).removeClass(this.getZclass() + '-body-seld');
 					this.fireX(evt);
 				}		
 			} else {
-				this._openPopup();	
+				this._togglePopup();
 			}
 		} else {
 			var content = this._contentHandler;
@@ -199,9 +199,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (content && !content.isOpen())
 			content.onShow();
 	},
-	_openPopup: function () {
+	_togglePopup: function () {
 		if (!this.menupopup.isOpen())
-			this.menupopup.open();	
+			this.menupopup.open();
+		else if (this.isTopmost()) 
+			this.menupopup.close();
 		else {
 			var anc = this.menupopup.$n('a');
 			if (anc) anc.focus(); // force to get a focus 
@@ -214,15 +216,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (topmost && zk.ie && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return; // don't activate
 
+		if (this.menupopup)
+			this.menupopup._shallClose = false;
 		if (!topmost) {
-			if (this.menupopup) this.menupopup._shallClose = false;
 			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
 		} else {
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
 				menubar._lastTarget = this;
-				this.menupopup._shallClose = false;
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
 			} else {
@@ -246,7 +248,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (topmost) {
 			this.$class._rmActive(this);
 			if (this.menupopup && this.getMenubar().isAutodrop()) {
-				if (this.menupopup.isOpen()) this.menupopup._shallClose = true;
+				if (this.menupopup.isOpen())
+					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
 				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())

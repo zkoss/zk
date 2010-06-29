@@ -262,8 +262,8 @@ public class Listbox extends XulElement implements Paginated,
 		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT);
 		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Listbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-		addClientEvent(Listbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listbox.class, Events.ON_FOCUS, 0);
+		addClientEvent(Listbox.class, Events.ON_BLUR, 0);
 		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT); // since 5.0.0
 		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
@@ -704,15 +704,6 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	/**
-	 * Returns the UUID of the selected item (it is stored as the selId
-	 * attribute of the listbox).
-	 */
-	private String getSelUuid() {
-		final Listitem sel = getSelectedItem();
-		return sel != null ? sel.getUuid() : null;
-	}
-
-	/**
 	 * Returns the maximal length of each item's label.
 	 */
 	public int getMaxlength() {
@@ -956,11 +947,8 @@ public class Listbox extends XulElement implements Paginated,
 			if (!_multiple) {
 				selectItem(item);
 			} else {
-				if (item.getIndex() < _jsel || _jsel < 0) {
+				if (item.getIndex() < _jsel || _jsel < 0)
 					_jsel = item.getIndex();
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
-				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				if (_model instanceof Selectable) {
@@ -1013,8 +1001,6 @@ public class Listbox extends XulElement implements Paginated,
 					item.smartUpdate("selected", false);
 				} else {
 					smartUpdateSelection();
-					if (oldSel != _jsel)
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 		}
@@ -1894,8 +1880,6 @@ public class Listbox extends XulElement implements Paginated,
 				if (newItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = newIndex;
-						if (!inSelectMold())
-							smartUpdate("selectedItem", getSelUuid());
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
 							((Selectable) _model).addSelection(_model
@@ -1904,8 +1888,6 @@ public class Listbox extends XulElement implements Paginated,
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
-							if (!inSelectMold())
-								smartUpdate("selectedItem", getSelUuid());
 						}
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
@@ -1929,9 +1911,6 @@ public class Listbox extends XulElement implements Paginated,
 								--_jsel;
 						}
 					}
-
-					if (oldjsel != _jsel && !inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 
 				if (newChild instanceof Listgroup) {
@@ -2097,14 +2076,10 @@ public class Listbox extends XulElement implements Paginated,
 				_selItems.remove(item);
 				if (_jsel == index) {
 					fixSelectedIndex(index);
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			} else {
 				if (!isLoadingModel() && _jsel >= index) {
 					--_jsel;
-					if (!inSelectMold())
-						smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 			if (child instanceof Listgroup) {

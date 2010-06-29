@@ -31,6 +31,68 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			jq(n).focus();
 		};
 
+	function _newDate(year, month, day, bFix) {
+		var v = new Date(year, month, day);
+		return bFix && v.getMonth() != month ?
+			new Date(year, month + 1, 0): v; //last day of month
+	}
+
+var Renderer =
+/** @class zul.db.Renderer
+ * The renderer used to render a calendar.
+ * It is designed to be overriden
+ */
+zul.db.Renderer = {
+	/** Returns the HTML fragment representing a day cell.
+	 * By overriding this method, you could customize the look of a day cell.
+	 * <p>Default: <code>&lt;a href="javascript"&gt;day&lt;/a&gt;</code>
+	 * @param zul.db.Calendar cal the calendar
+	 * @param int y the year
+	 * @param int m the month (between 0 to 11)
+	 * @param int day the day (between 1 to 31)
+	 * @param int monthofs the month offset. If the day is in the same month
+	 * @return String the HTML fragment
+	 * @since 5.0.3
+	 */
+	cellHTML: function (cal, y, m, day, monthofs) {
+		return '<a href="javascript:;">' + day + '</a>';
+	},
+	/** Called before {@link zul.db.Calendar#redraw} is invoked.
+	 * <p>Default: does nothing
+	 * @param zul.db.Calendar cal the calendar
+	 * @since 5.0.3
+	 */
+	beforeRedraw: function (cal) {
+	},
+	/** Tests if the specified date is disabled.
+	 * <p>Default: it depends on the constraint, if any
+	 * @param zul.db.Calendar cal the calendar
+	 * @param int y the year
+	 * @param int m the month (between 0 to 11)
+	 * @param int v the day (between 1 to 31)
+	 * @param Date today today
+	 * @since 5.0.3
+	 * @return boolean
+	 */
+	disabled: function (cal, y, m, v, today) {
+		var d = new Date(y, m, v, 0, 0, 0, 0);
+		switch (cal._constraint) {
+		case 'no today':
+			return today - d == 0;
+		case 'no past':
+			return (d - today) / 86400000 < 0;
+		case 'no future':
+			return (today - d)/ 86400000 < 0;
+		}
+		var result = false;
+		if (cal._beg && (result = (d - cal._beg) / 86400000 < 0))
+			return result;
+		if (cal._end && (result = (cal._end - d) / 86400000 < 0))
+			return result;
+		return result;
+	}
+};
+
 var Calendar =
 /**
  * A calendar.
@@ -131,6 +193,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this.efield.name = this._name;
 		}
 	},
+	//@Override
+	redraw: function () {
+		Renderer.beforeRedraw(this);
+		this.$supers("redraw", arguments);
+	},
 	onChange: function (evt) {
 		this.updateFormData(evt.data.value);
 	},
@@ -163,7 +230,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = oldTime.getFullYear();
 			if (y + ofs < 1900 || y + ofs > 2100)
 				return;// out of range
-			break;
+//			break;
 		}		
 		this._shiftDate(this._view, ofs);
 		var newTime = this.getTime();
@@ -183,7 +250,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			break;
 		default:			
 			this.rerender();
-			break;
+//			break;
 		}
 	},
 	/** Returns the format of this component.
@@ -227,11 +294,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			if (anc)
 				_doFocus(anc.firstChild, true);
 		}
-			
+
 		this.domListen_(title, "onClick", '_changeView')
-			.domListen_(mid, "onClick", '_choiceData')
-			.domListen_(ly, "onClick", '_doclickArrow')
-			.domListen_(ry, "onClick", '_doclickArrow')
+			.domListen_(mid, "onClick", '_clickDate')
+			.domListen_(ly, "onClick", '_clickArrow')
+			.domListen_(ry, "onClick", '_clickArrow')
 			.domListen_(mid, "onMouseOver", '_doMouseEffect')
 			.domListen_(mid, "onMouseOut", '_doMouseEffect');
 		this.updateFormData(this._value || new zk.fmt.Calendar().formatDate(this.getTime(), this.getFormat()));
@@ -242,9 +309,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ly = this.$n("ly"),
 			ry = this.$n("ry");
 		this.domUnlisten_(title, "onClick", '_changeView')
-			.domUnlisten_(mid, "onClick", '_choiceData')
-			.domUnlisten_(ly, "onClick", '_doclickArrow')
-			.domUnlisten_(ry, "onClick", '_doclickArrow')
+			.domUnlisten_(mid, "onClick", '_clickDate')
+			.domUnlisten_(ly, "onClick", '_clickArrow')
+			.domUnlisten_(ry, "onClick", '_clickArrow')
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
 			.$supers(Calendar, 'unbind_', arguments);
@@ -262,24 +329,24 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return result;
 		}
 	},
-	_doclickArrow: function (evt) {
+	_clickArrow: function (evt) {
 		var node = evt.domTarget,
 			ofs = node.id.indexOf("-ly") > 0 ? -1 : 1;
 		if (jq(node).hasClass(this.getZclass() + (ofs == -1 ? '-left-icon-disd' : '-right-icon-disd')))
 			return;
 		switch(this._view) {
-			case "day" :
-				this._shiftDate("month", ofs);
-				break;
-			case "month" :
-				this._shiftDate("year", ofs);
-				break;
-			case "year" :
-				this._shiftDate("year", ofs*10);
-				break;
-			case "decade" :
-				this._shiftDate("year", ofs*100);
-				break;
+		case "day" :
+			this._shiftDate("month", ofs);
+			break;
+		case "month" :
+			this._shiftDate("year", ofs);
+			break;
+		case "year" :
+			this._shiftDate("year", ofs*10);
+			break;
+		case "decade" :
+			this._shiftDate("year", ofs*100);
+//			break;
 		}
 		this.rerender();
 	},
@@ -301,74 +368,87 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 *  <p>returns today if value is null
 	 * @return Date
 	 */
-	getTime : function () {
+	getTime: function () {
 		return this._value ? new zk.fmt.Calendar().parseDate(this._value, this.getFormat()) : zUtl.today(true);
 	},
-	_setTime : function (y, m, d, hr, mi) {
+	_setTime: function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
-		this._value = new zk.fmt.Calendar().formatDate(new Date(year, month, day), this.getFormat());
+		this._value = new zk.fmt.Calendar().formatDate(
+			_newDate(year, month, day, true), this.getFormat());
 		this.fire('onChange', {value: this._value});
 	},
-	_choiceData: function (evt) {
-		var target = evt.domTarget;
-		target = jq.nodeName(target, "td") ? target : target.parentNode;
-		
-		var val = jq(target).attr('_dt');
-		if (target && !jq(target).hasClass(this.getZclass() + '-disd') && !isNaN(val)) {
+	_clickDate: function (evt) {
+		var target = evt.domTarget, val;
+		for (; target; target = target.parentNode)
+			try { //Note: _dt is also used in mold/calendar.js
+				if ((val = jq(target).attr("_dt")) !== undefined) {
+					val = zk.parseInt(val);
+					break;
+				}
+			} catch (e) {
+				continue; //skip
+			}
+		this._chooseDate(target, val);
+		evt.stop();
+	},
+	_chooseDate: function (target, val) {
+		if (target && !jq(target).hasClass(this.getZclass() + '-disd')) {
 			var cell = target,
 				dateobj = this.getTime();
 			switch(this._view) {
-				case "day" :
-					var oldTime = this.getTime();
-					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
-							dateobj.getMonth() + cell._monofs : null, val);
-					var newTime = this.getTime();
-					if (oldTime.getYear() == newTime.getYear() &&
-						oldTime.getMonth() == newTime.getMonth()) {
-							this._markCal();
-					} else
-						this.rerender();
-					break;
-				case "month" :
-					this._setTime(null, val);
-					this._setView("day");
-					break;
-				case "year" :
-					this._setTime(val);
-					this._setView("month");
-					break;
-				case "decade" :
-					//Decade mode Set Year Also
-					this._setTime(val);
-					this._setView("year");
-					break;
+			case "day" :
+				var oldTime = this.getTime();
+				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
+						dateobj.getMonth() + cell._monofs : null, val);
+				var newTime = this.getTime();
+				if (oldTime.getYear() == newTime.getYear() &&
+					oldTime.getMonth() == newTime.getMonth()) {
+						this._markCal();
+				} else
+					this.rerender();
+				break;
+			case "month" :
+				this._setTime(null, val);
+				this._setView("day");
+				break;
+			case "year" :
+				this._setTime(val);
+				this._setView("month");
+				break;
+			case "decade" :
+				//Decade mode Set Year Also
+				this._setTime(val);
+				this._setView("year");
+//				break;
 			}
-			evt.stop();
 		}
 	},
 	_shiftDate: function (opt, ofs) {
 		var dateobj = this.getTime(),
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
-			day = dateobj.getDate();
+			day = dateobj.getDate(),
+			nofix;
 		switch(opt) {
-			case "day" :
-				day = day + ofs;
-				break;
-			case "month" :
-				month = month + ofs;
-				break;
-			case "year" :
-				year = year + ofs;
-				break;
-			case "decade" :
-				year = year + ofs;
-				break;
+		case "day" :
+			day += ofs;
+			nofix = true;
+			break;
+		case "month" :
+			month += ofs;
+			break;
+		case "year" :
+			year += ofs;
+			break;
+		case "decade" :
+			year += ofs;
+//			break;
 		}
-		this._value = new zk.fmt.Calendar().formatDate(new Date(year, month, day), this.getFormat());
+		this._value = new zk.fmt.Calendar().formatDate(
+			_newDate(year, month, day, !nofix), this.getFormat());
 		this.fire('onChange', {value: this._value, shallClose: false});
 	},
 	_changeView : function (evt) {
@@ -389,37 +469,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
-	_invalid: function (y, m, v, today) {
-		var d = new Date(y, m, v, 0, 0, 0, 0);
-		switch (this._constraint) {
-		case 'no today':
-			return today - d == 0;
-			break;
-		case 'no past':
-			return (d - today) / 86400000 < 0;
-			break;
-		case 'no future':
-			return (today - d)/ 86400000 < 0;
-			break;
-		default:
-			var result = false;
-			if (this._beg && (result = (d - this._beg) / 86400000 < 0))
-				return result;
-			if (this._end && (result = (this._end - d) / 86400000 < 0))
-				return result;
-			return result;
-		}
-	},
-	_markCal : function (opts) {
+	_markCal: function (opts) {
 		var	zcls = this.getZclass(),
-		 	val = this.getTime(),
-		 	m = val.getMonth(),
-			d = val.getDate(),
-			y = val.getFullYear(),
+		 	seldate = this.getTime(),
+		 	m = seldate.getMonth(),
+			d = seldate.getDate(),
+			y = seldate.getFullYear(),
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
 			today = zUtl.today(true);
+
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
 			var mon = this.$n("m" + j),
@@ -455,24 +515,29 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						if (k == 0) week.style.display = "";
 						var cell = week.cells[k],
 							monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
-							sel = cur == d;
+							bSel = cur == d;
 						cell.style.textDecoration = "";
 						cell._monofs = monofs;
+
 						//hightlight day
-						jq(cell).removeClass(zcls+"-over");
-						jq(cell).removeClass(zcls+"-over-seld");
-						if (sel)
+						jq(cell).removeClass(zcls+"-over")
+							.removeClass(zcls+"-over-seld");
+						if (bSel)
 							jq(cell).addClass(zcls+"-seld");
 						else
 							jq(cell).removeClass(zcls+"-seld");
+						//not same month
+						if (monofs)
+							jq(cell).addClass("z-outside");
+						else
+							jq(cell).removeClass("z-outside");
 							
-						if (this._invalid(y, m + monofs, v, today)) {
+						if (Renderer.disabled(this, y, m + monofs, v, today)) {
 							jq(cell).addClass(zcls+"-disd");
 						} else
 							jq(cell).removeClass(zcls+"-disd");
-							 
-						jq(cell).html('<a href="javascript:;">' + v + '</a>').attr('_dt', v);
-						if (sel)
+						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
+						if (bSel)
 							_doFocus(cell.firstChild, opts ? opts.timeout : false);
 					}
 				}

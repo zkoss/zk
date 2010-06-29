@@ -190,7 +190,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		if(model != null && _type != null){
 			if("pie".equals(_type)) {	//Draw PieChart
 				PieModel tempModel = (PieModel)model;
-				for(int i = 0; i < tempModel.getCategories().size(); i++){
+				for(int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++){
 					Comparable category = tempModel.getCategory(i);
 					JSONObject json = new JSONObject();
 					json.put("categoryField", category);
@@ -199,9 +199,9 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 				}
 			} else if("bar".equals(_type) || "line".equals(_type) || "column".equals(_type)) {
 				CategoryModel tempModel = (CategoryModel)model;
-				for (int j = 0; j < tempModel.getSeries().size(); j++) {
+				for (int j = 0,  nSeries = tempModel.getSeries().size(); j < nSeries; j++) {
 					Comparable series = tempModel.getSeries(j);
-					for (int i = 0; i < tempModel.getCategories().size(); i++) {
+					for (int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++) {
 						Comparable category = tempModel.getCategory(i);
 						JSONObject json = new JSONObject();
 						if ("line".equals(_type) || "column".equals(_type)) { // Draw, LineChart, and ColumnChart
@@ -219,14 +219,14 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 			} else if(_type.startsWith("stackbar")){		//Draw StackedBarChart
 				_seriesList = new LinkedList();
 				CategoryModel tempModel = (CategoryModel)model;
-				for(int i = 0; i < tempModel.getCategories().size(); i++){
+				for(int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++){
 					Comparable series = tempModel.getSeries(i);	
 					JSONObject json = new JSONObject();			
 					json.put("xField", series);
 					json.put("displayName", series);
 					_seriesList.add(json);
 				}
-				for(int i = 0; i < tempModel.getCategories().size(); i++){
+				for(int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++){
 					Comparable category = tempModel.getCategory(i);					
 					JSONObject jData = new JSONObject();
 					jData.put("verticalField", category);
@@ -240,7 +240,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 			} else if(_type.startsWith("stackcolumn")){		//Draw StackedColumnChart 
 				_seriesList = new LinkedList();
 				XYModel tempModel = (XYModel)model;
-				for(int i = 0; i < tempModel.getSeries().size(); i++){
+				for(int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++){
 					Comparable series = tempModel.getSeries(i);					
 					JSONObject jData = new JSONObject();
 					jData.put("horizontalField", series);

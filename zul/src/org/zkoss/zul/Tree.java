@@ -102,8 +102,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Tree.class, Events.ON_FOCUS, 0);
+		addClientEvent(Tree.class, Events.ON_BLUR, 0);
 		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 	
@@ -748,14 +748,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return count;
 	}
 	
-
-	/** Returns the ID of the selected item (it is stored as the selId
-	 * attribute of the tree).
-	 */
-	private String getSelectedId() {
-		return _sel != null ? _sel.getUuid(): "";
-	}
-
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
 	 *
@@ -827,8 +819,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				smartUpdateSelection();
-				if (fixSelected())
-					smartUpdate("selectedItem", getSelectedId());
 			}
 		}
 	}
@@ -1061,11 +1051,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (item.isSelected()) {
 			_selItems.remove(item);
 			fixSel = _sel == item;
-			if (fixSel && !_multiple) {
+			if (fixSel && !_multiple)
 				_sel = null;
-				smartUpdate("selectedItem", getSelectedId());
-				assert _selItems.isEmpty();
-			}
 		}
 		onTreechildrenRemoved(item.getTreechildren());
 		if (fixSel) fixSelected();
@@ -1089,7 +1076,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
-				smartUpdate("selectedItem", getSelectedId());
 			}
 		}
 	}
@@ -1107,8 +1093,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_sel == item) {
 					if (!_multiple) {
 						_sel = null;
-						smartUpdate("selectedItem", getSelectedId());
-						assert _selItems.isEmpty();
 						return; //done
 					}
 					fixSel = true;
@@ -1872,7 +1856,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (_rows > 0)
 			renderer.render("rows", getRows());
 
-		render(renderer, "selectedItem", getSelectedId());
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());

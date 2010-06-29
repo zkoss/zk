@@ -174,6 +174,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		//detach nc
 		setNext(nc._prev, nc._next);
 		setPrev(nc._next, nc._prev);
+		nc._next = nc._prev = null;
 		--_nRoot;
 
 		//add

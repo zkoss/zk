@@ -635,14 +635,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 		_ips.clear();
+		_ips = null; //not just clear since it is better to NPE than memory leak
 
 		//theorectically, the following is not necessary, but, to be safe...
 		_attrs.getAttributes().clear();
-		_ips = null; //not clear since it is better to NPE than memory leak
 		_desktop = null;
 		_owner = null;
 		_listeners = null;
 		_resolvers = null;
+	}
+	public boolean isAlive() {
+		return _ips != null;
 	}
 
 	private static final Map REQUEST_ATTRS = new AbstractMap() {

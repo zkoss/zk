@@ -58,7 +58,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</panel>
 		<panel height="300px" title="LabPixies Clock" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
-				<iframe width="100%" height="100%" src="http://34.gmodules.com/ig/ifr?url=http://www.labpixies.com/campaigns/clock/mini_clock.xml&amp;nocache=0&amp;up_skin_id=&amp;upt_skin_id=hidden&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=34&amp;ifpctok=-3234052241260630457&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
+				<iframe width="100%" height="100%" src="http://ig.gmodules.com/gadgets/ifr?url=http://www.labpixies.com/campaigns/clock/mini_clock.xml&amp;nocache=0&amp;up_skin_id=&amp;upt_skin_id=hidden&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=34&amp;ifpctok=-3234052241260630457&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
 			</panelchildren>
 		</panel>
 	</portalchildren>
@@ -66,7 +66,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<portalchildren style="padding: 5px" width="30%">
 		<panel height="300px" title="ToDo" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
-				<iframe width="100%" height="100%" src="http://cj399o2i-a.gmodules.com/ig/ifr?url=http://www.labpixies.com/campaigns/todo/todo.xml&amp;nocache=0&amp;up_saved_tasks=&amp;upt_saved_tasks=hidden&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=31&amp;ifpctok=-1474109439244469874&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
+				<iframe width="100%" height="100%" src="http://06bv6fa68lc8dljc3a5rv1h8tgo79oq6.ig.ig.gmodules.com/gadgets/ifr?url=http://www.labpixies.com/campaigns/todo/todo.xml&amp;nocache=0&amp;up_saved_tasks=&amp;upt_saved_tasks=hidden&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=31&amp;ifpctok=-1474109439244469874&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
 			</panelchildren>
 		</panel>
 		<panel height="100px" title="Wikipedia" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
@@ -79,7 +79,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<portalchildren style="padding: 5px" width="40%">
 		<panel height="400px" title="Trio" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
-				<iframe width="100%" height="100%" src="http://35.gmodules.com/ig/ifr?url=http://www.labpixies.com/campaigns/trio/trio.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=35&amp;ifpctok=7430207052966295609&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
+				<iframe width="100%" height="100%" src="http://ig.gmodules.com/gadgets/ifr?url=http://www.labpixies.com/campaigns/trio/trio.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=35&amp;ifpctok=7430207052966295609&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js"/>
 			</panelchildren>
 		</panel>
 	</portalchildren>

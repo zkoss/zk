@@ -19,14 +19,17 @@ package org.zkoss.zk.ui.http;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Calendar;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
@@ -75,6 +78,50 @@ public class Utils {
 			if (ext instanceof WpdExtendlet)
 				((WpdExtendlet)ext).setDebugJS(debug);
 		}
+	}
+
+	/** Returns the first day of the week, or -1 if no defined by the application.
+	 * It is the same as <code>getFirstDayOfWeek(Sessions.getCurrent())</code>.
+	 * @since 5.0.3
+	 */
+	public final static int getFirstDayOfWeek() {
+		return getFirstDayOfWeek(Sessions.getCurrent());
+	}
+	/** Returns the first day of the week of the given session, or -1 if no defined by the application.
+	 * It searches the following attributes and properties until found.
+	 * Notice that it doesn't look for {@link java.util.Calendar#getFirstDayOfWeek}.
+	 * <ol>
+	 * <li>Session attribute: {@link Attributes#PREFERRED_FIRST_DAY_OF_WEEK}</li>
+	 * <li>Application attribute: {@link Attributes#PREFERRED_FIRST_DAY_OF_WEEK}</li>
+	 * <li>Library property: {@link Attributes#PREFERRED_FIRST_DAY_OF_WEEK}</li>
+	 * </ol>
+	 * @param sess the session to look at. Ignored if null.
+	 * @since 5.0.3
+	 */
+	public final static int getFirstDayOfWeek(Session sess) {
+		int firstDayOfWeek = -1;
+		try {
+			Object o = null;
+			if (sess != null) {
+				o = sess.getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+				if (o == null) {
+					final Object hsess = sess.getNativeSession();
+					if (hsess instanceof HttpSession)
+						o = ((HttpSession)hsess).getServletContext().getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+				}
+			}
+			if (o == null)
+				o = Library.getProperty(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+
+			if (o instanceof Integer)
+				firstDayOfWeek = ((Integer)o).intValue();
+			else if (o instanceof String)
+				firstDayOfWeek = Integer.parseInt((String)o);
+		} catch (Throwable ex) { //ignore
+		}
+		if (firstDayOfWeek < Calendar.SUNDAY || firstDayOfWeek > Calendar.SATURDAY)
+			firstDayOfWeek = -1;
+		return firstDayOfWeek;
 	}
 
 	/** Handles exception being thrown when rendering a page.

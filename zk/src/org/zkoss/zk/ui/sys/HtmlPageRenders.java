@@ -437,13 +437,6 @@ public class HtmlPageRenders {
 				throw new UiException(ex);
 			}
 
-			//Note: Jetty might encode jessionid into URL, which
-			//Dojo cannot handle, so we have to remove it
-			int j = url.lastIndexOf(';');
-			if (j > 0 && url.indexOf('.', j + 1) < 0
-			&& url.indexOf('/', j + 1) < 0)
-				url = url.substring(0, j);
-
 			sb.append(" src=\"").append(url).append('"');
 			final String charset = js.getCharset();
 			if (charset != null)
@@ -530,7 +523,7 @@ public class HtmlPageRenders {
 		if (standalone) { //switch out
 			//don't call outDivTemplateEnd yet since rc.temp will be generated before it
 			out = new StringWriter();
-		} else {
+		} else if (divRequired) {
 			outDivTemplateEnd(out); //close it now since no rc.temp
 		}
 
@@ -597,7 +590,8 @@ public class HtmlPageRenders {
 
 			StringBuffer sw = ((StringWriter)out).getBuffer();
 			out = rc.temp;
-			outDivTemplateEnd(out);
+			if (divRequired)
+				outDivTemplateEnd(out);
 				//close tag after temp, but before perm (so perm won't be destroyed)
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
@@ -742,7 +736,8 @@ public class HtmlPageRenders {
 			extra = ComponentRedraws.afterRedraw();
 		}
 
-		outEndJavaScriptFunc(exec, out, extra, false); //generate );
+		outEndJavaScriptFunc(exec, out, extra, false);
+			//generate extra, responses and ");"
 		out.write("\n}finally{zkme();}\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)

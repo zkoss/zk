@@ -152,6 +152,13 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public String getRequestPath();
 
+	/** Returns whether the desktop is still alive.
+	 * It returns false once it is destroyed.
+	 * @see org.zkoss.zk.ui.sys.PageCtrl#destroy
+	 * @since 5.0.3
+	 */
+	public boolean isAlive();
+
 	/** Returns the desktop that this page belongs to.
 	 *
 	 * <p>Note: it returns null when

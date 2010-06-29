@@ -70,7 +70,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.sel.Listheader, 'bind_', arguments);
 		var cm = this.$n('cm');
 		if (cm) {
-			this.getListbox()._headercm = cm;
+			var box = this.getListbox();
+			if (box) box._headercm = cm;
 			this.domListen_(cm, 'onClick')
 				.domListen_(cm, 'onMouseOver')
 				.domListen_(cm, 'onMouseOut');
@@ -79,8 +80,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	unbind_: function () {
 		var cm = this.$n('cm');
 		if (cm) {
-			var p = this.getListbox();
-			if (p) p._headercm = null;
+			var box = this.getListbox();
+			if (box) box._headercm = null;
 			this._checked = null;
 			this.domUnlisten_(cm, 'onClick')
 				.domUnlisten_(cm, 'onMouseOver')
@@ -115,11 +116,22 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			box._select(null, evt);
 		}
 	},
+	//@Override
+	doClick_: function (evt) {
+		var box = this.getListbox();
+		if (box && box._checkmark) {
+			var n = evt.domTarget;
+			if (n.id && n.id.endsWith("-cm"))
+				return; //ignore it (to avoid sort or other activity)
+		}
+		this.$supers("doClick_", arguments);
+	},
+	//@Override
 	domContent_: function () {
 		var s = this.$supers('domContent_', arguments),
 			box = this.getListbox();
 		if (box != null && this.parent.firstChild == this 
-		&& box.isCheckmark() && box.isMultiple())
+		&& box._checkmark && box._multiple)
 			s = '<span id="' + this.uuid + '-cm" class="' + this.getZclass() + '-img"></span>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;

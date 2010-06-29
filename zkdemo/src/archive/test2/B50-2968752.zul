@@ -1,0 +1,11 @@
+<zk>
+	<menubar id="menubar" width="200px">
+		<menu id="menu" label="click me"
+			image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+			<menupopup>
+				<menuitem id="menuitem" label="Change"
+					onClick='menu.setImage("/img/Centigrade-Widget-Icons/Briefcase-16x16.png")' />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

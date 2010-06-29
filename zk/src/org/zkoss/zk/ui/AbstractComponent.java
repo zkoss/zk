@@ -328,10 +328,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final IdSpace is = getSpaceOwnerOfParent(comp);
 		if (is instanceof Component) {
 			if (((AbstractComponent)is)._spaceInfo.fellows.containsKey(newId))
-				throw new UiException("Not unique in the ID space of "+is);
+				throw new UiException("Not unique in ID space "+is+": "+newId);
 		} else if (is != null) {
 			if (is.hasFellow(newId))
-				throw new UiException("Not unique in the ID space of "+is);
+				throw new UiException("Not unique in ID space "+is+": "+newId);
 		}
 	}
 	private static boolean isAutoId(String compId) {
@@ -486,9 +486,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			setPageBefore(page, null); //append
 	}
 	public void setPageBefore(Page page, Component refRoot) {
-		if (refRoot != null && (page == null || refRoot == this
+		if (refRoot != null && (page == null
 		|| refRoot.getParent() != null || refRoot.getPage() != page))
 			refRoot = null;
+		if (refRoot != null /*&& refRoot.getPage() == page (checked)*/
+		&& (refRoot == this || refRoot == _next))
+			return; //nothing to do
 
 		if (_parent != null)
 			throw new UiException("Only the parent of a root component can be changed: "+this);

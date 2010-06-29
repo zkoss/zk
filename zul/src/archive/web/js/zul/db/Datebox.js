@@ -633,9 +633,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			oldDate = this.parent.getValue(),
 			readonly = this.parent.isReadonly();
 		if (oldDate) {
-			oldDate.setFullYear(date.getFullYear());
-			oldDate.setMonth(date.getMonth());
-			oldDate.setDate(date.getDate());
+			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
+			//since Date object will adjust month if date larger than max one
+			this.parent._value = new Date(date.getFullYear(), date.getMonth(),
+				date.getDate(), oldDate.getHours(),
+				oldDate.getMinutes(), oldDate.getSeconds());
 		} else
 			this.parent._value = date;
 		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
@@ -686,14 +688,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
-	},
-	_choiceData: function (evt) {
-		var target = evt.domTarget;
-		target = jq.nodeName(target, "td") ? target : target.parentNode;
-		if (target && (jq(target).hasClass(this.getZclass() + '-disd') || jq(target).attr('_dt') == undefined)) {
-			this.close();
-		} else
-			this.$supers('_choiceData', arguments);
 	}
 });
 zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {

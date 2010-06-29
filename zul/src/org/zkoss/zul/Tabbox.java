@@ -479,8 +479,6 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_seltab != null)
-			render(renderer, "selectedTab", _seltab.getUuid());
 		if (_panelSpacing != null )
 			render(renderer, "panelSpacing", _panelSpacing);
 		if (!"horizontal".equals(_orient))

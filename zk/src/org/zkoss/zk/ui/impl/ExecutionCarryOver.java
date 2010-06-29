@@ -74,9 +74,9 @@ public class ExecutionCarryOver {
 		else
 			_timeZone = null;
 
-		final Collection pages = _exec.getDesktop().getPages();
-		if (!pages.isEmpty())
-			execCtrl.setCurrentPage((Page)pages.iterator().next());
+		final Page page = _exec.getDesktop().getFirstPage();
+		if (page != null)
+			execCtrl.setCurrentPage(page);
 	}
 	/** Cleans up the info carried from onPiggyback to the current thread.
 	 * <p>Note: {@link #carryOver} and {@link #cleanup} must be

@@ -81,6 +81,25 @@ public class Clients {
 		response(new AuConfirmClose(mesg));
 	}
 
+	/** Shows an error message at the browser.
+	 * It is similar to {@link org.zkoss.zul.Messagebox}.
+	 * @since 5.0.3
+	 */
+	public static final void alert(String msg) {
+		response(new AuAlert(msg));
+	}
+	/** Shows an error message at the browser.
+	 * It is similar to {@link org.zkoss.zul.Messagebox}.
+	 * @param msg the message to display.
+	 * @param title the title of the message box
+	 * @param icon the icon to show. It could null,
+	 "QUESTION", "EXCLAMATION", "INFORMATION", "ERROR", "NONE".
+	 * If null, "ERROR" is assumed
+	 * @since 5.0.3
+	 */
+	public static final void alert(String msg, String title, String icon) {
+		response(new AuAlert(msg, title, icon));
+	}
 	/** Shows an error message for the specified component, if any,
 	 * at the browser.
 	 * <p>You have to clear the error message manually with {@link #clearWrongValue}.

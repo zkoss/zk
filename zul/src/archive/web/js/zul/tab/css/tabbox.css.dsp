@@ -61,19 +61,16 @@
 	right: 0;
 	top: 0;
 	z-index: 1;
-}
-.z-toolbar-tabs-outer .z-tabs-header {
-	padding-bottom: 1px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
+	height: 100%;
+	<c:if test="${c:browser('ie6-')}">
+		padding-bottom: 5px;
+	</c:if>
 }
 .z-toolbar-tabs-outer {
 	background: #C7E3F3 repeat-x 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
-	border-bottom: 1px solid #7EAAC6;
 	overflow: hidden;
-}
-.z-tabs-scroll .z-toolbar-tabs-outer  .z-tabs-cnt,
-.z-tabs .z-toolbar-tabs-outer  .z-tabs-cnt {
-	border-bottom: 0;
 }
 .z-tabs-scroll {
 	border: 1px solid #7EAAC6;

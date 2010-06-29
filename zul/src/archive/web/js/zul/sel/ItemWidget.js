@@ -65,9 +65,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	 */
 	setSelected: function (selected) {
 		if (this._selected != selected) {
-			var mesh = this.getMeshWidget();
-			if (mesh)
-				mesh.toggleItemSelection(this);
+			var box = this.getMeshWidget();
+			if (box)
+				box.toggleItemSelection(this);
 				
 			this._setSelectedDirectly(selected);
 		}
@@ -76,8 +76,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
-			if (this.$n('cm'))
-				this._checkClick();				
+			this._updHeaderCM();
 		}
 		this._selected = selected;
 	},
@@ -171,34 +170,36 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			jq(n.cells).removeClass(zcls + "-focus");
 		}
 	},
-	_checkAll: function () {
-		var box = this.getMeshWidget();		
-		if (!box || !box._headercm) return;
-		var cm = this.$n('cm');
-		if (cm && !this.isSelected()) {
-			var header = zk.Widget.$(box._headercm),
-				zcls = header.getZclass();
-			jq(box._headercm).removeClass(zcls + '-img-seld');
-			return;
-		}
-		var checked;
-		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
-			if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
-				checked = false;
-				break;
-			} else
-				checked = true;
-		
-		if (checked) {
-			var header = zk.Widget.$(box._headercm),
-				zcls = header.getZclass();
-			jq(box._headercm).addClass(zcls + '-img-seld');
+	_updHeaderCM: function (bRemove) { //update header's checkmark
+		var box = this.getMeshWidget();
+		if (box && box._headercm && box._multiple) {
+			if (bRemove) {
+				box._updHeaderCM();
+				return;
+			}
+
+			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
+				$headercm = jq(box._headercm);
+
+			if (!this.isSelected())
+				$headercm.removeClass(zcls);
+			else if (!$headercm.hasClass(zcls))
+				box._updHeaderCM(); //update in batch since we have to examine one-by-one
 		}
 	},
-	_checkClick: function (evt) {
-		if (this.getMeshWidget().isMultiple())
-			this._checkAll();
+	//@Override
+	beforeParentChanged_: function (newp) {
+		if (!newp) //remove
+			this._updHeaderCM(true);
+		this.$supers("beforeParentChanged_", arguments);
 	},
+	//@Override
+	onParentChanged_: function () {
+		if (this.parent) //add
+			this._updHeaderCM();
+		this.$supers("onParentChanged_", arguments);
+	},
+
 	// event
 	doSelect_: function(evt) {
 		if (this.isDisabled()) return;

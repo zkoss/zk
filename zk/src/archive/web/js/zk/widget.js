@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
-		_noChildCallback, //used by removeChild/appendChild/insertBefore
+		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
 
 	//Check if el is a prolog
@@ -88,6 +88,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		};
 	}
 
+	function _unlink(wgt, child) {
+		var p = child.previousSibling, n = child.nextSibling;
+		if (p) p.nextSibling = n;
+		else wgt.firstChild = n;
+		if (n) n.previousSibling = p;
+		else wgt.lastChild = p;
+		child.nextSibling = child.previousSibling = child.parent = null;
+
+		--wgt.nChildren;
+	}
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
@@ -149,8 +159,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _addIdSpaceDown0(wgt, owner) {
 		if (wgt.id) owner._fellows[wgt.id] = wgt;
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			_addIdSpaceDown0(wgt, owner);
+		if (!wgt._fellows)
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				_addIdSpaceDown0(wgt, owner);
 	}
 	function _rmIdSpaceDown(wgt) {
 		var ow = wgt.parent;
@@ -161,8 +172,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _rmIdSpaceDown0(wgt, owner) {
 		if (wgt.id)
 			delete owner._fellows[wgt.id];
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			_rmIdSpaceDown0(wgt, owner);
+		if (!wgt._fellows)
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				_rmIdSpaceDown0(wgt, owner);
 	}
 	//note: wgt.id must be checked before calling this method
 	function _addGlobal(wgt) {
@@ -186,6 +198,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return false;	
 		}
 		return !evt.stopped;
+	}
+
+	//whether it is controlled by another dragControl
+	//@param invoke whether to invoke dragControl
+	function _dragCtl(wgt, invoke) {
+		var p;
+		return wgt && (p = wgt.parent) && p.dragControl && (!invoke || p.dragControl(wgt));
 	}
 
 	//set minimum flex size and return it
@@ -255,10 +274,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (sz > max)
 									max = sz;
 							}
+						} else {
+							var sameOffParent = c.offsetParent == noffParent;
+							sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
 						}
-						var sameOffParent = c.offsetParent == noffParent,
-							bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-						sz = c.offsetHeight + (ignore ? 0 : c.offsetTop - (sameOffParent ? ntop + tbp : tp));
+						var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
 						
 						if (!zk.safari || bm >= 0)
 							sz += bm;
@@ -272,7 +292,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					totalsz += vmax;
 				if (totalsz > max)
 					max = totalsz;
-				
+
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
 				var pb = 0,
 					precalc = false;
@@ -372,10 +392,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (sz > max)
 									max = sz;
 							}
+						} else {
+							var	sameOffParent = c.offsetParent == noffParent;
+							sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
 						}
-						var	sameOffParent = c.offsetParent == noffParent,
-							rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-						sz = c.offsetWidth + (ignore ? 0 : c.offsetLeft - (sameOffParent ? nleft + lbp : lp));
+						var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
 						if (!zk.safari || rm >= 0)
 							sz +=  rm;
 						if (sz > max)
@@ -654,7 +675,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			cwgt._hflexsz = lastsz;
 		}
 		
-		//notify parent widget that all of its children with vflex is done.
+		//notify parent widget that all of its children with hflex/vflex is done.
 		this.parent.afterChildrenFlex_(this);
 		this._flexFixed = false;
 	}
@@ -1147,28 +1168,6 @@ new zul.wnd.Window{
 			if (n) n.title = v || '';
 		},
 
-		/** Sets the identifier of a draggable type for this widget.
-		 * <p>Default: null
-		 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
-		 * If there are several types of draggable objects, you could assign an identifier for each type of draggable object.
-		 * The identifier could be anything but empty and "false". 
-		 * @param String draggable "false", null or "" to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable. 
-		 * @return zk.Widget this widget
-		 */
-		/** Returns the identifier of a draggable type for this widget, or null if not draggable.
-		 * @return String
-		 */
-		draggable: [
-			_zkf = function (v) {
-				return v && "false" != v ? v: null;
-			},
-			function (v) {
-				var n = this.$n();
-				if (this.desktop)
-					if (v) this.initDrag_();
-					else this.cleanDrag_();
-			}
-		],
 		/** Sets the identifier, or a list of identifiers of a droppable type for this widget.
 		 * <p>Default: null
 		 * <p>The simplest way to make a component droppable is to set this attribute to "true". To disable it, set this to "false" (or null).
@@ -1181,7 +1180,9 @@ new zul.wnd.Window{
 		 * @return String
 		 */
 		droppable: [
-			_zkf,
+			function (v) {
+				return v && "false" != v ? v: null;
+			},
 			function (v) {
 				var dropTypes;
 				if (v && v != "true") {
@@ -1306,6 +1307,29 @@ new zul.wnd.Window{
 		 */
 		 renderdefer: null
 	},
+	/** Sets the identifier of a draggable type for this widget.
+	 * <p>Default: null
+	 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
+	 * If there are several types of draggable objects, you could assign an identifier for each type of draggable object.
+	 * The identifier could be anything but empty and "false". 
+	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable. 
+	 * @return zk.Widget this widget
+	 */
+	setDraggable: function (v) {
+		if (!v && v != null) v = "false"; //null means default
+		this._draggable = v;
+
+		if (this.desktop && !_dragCtl(this, true))
+			if (v && v != "false") this.initDrag_();
+			else this.cleanDrag_();
+	},
+	/** Returns the identifier of a draggable type for this widget, or null if not draggable.
+	 * @return String
+	 */
+	getDraggable: function () {
+		var v = this._draggable;
+		return v ? v: _dragCtl(this) ? "true": "false";
+	},
 	/** Returns the owner of the ID space that this widget belongs to,
 	 * or null if it doesn't belong to any ID space.
 	 * <p>Notice that, if this widget is an ID space owner, this method
@@ -1364,7 +1388,7 @@ wgt.$f().main.setTitle("foo");
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
-				_rmGlobal(this);
+				_rmGlobal(this); //no need to check this.desktop
 			}
 
 			if (id && (zk.spaceless || this.rawId))
@@ -1373,7 +1397,7 @@ wgt.$f().main.setTitle("foo");
 
 			if (id) {
 				_addIdSpace(this);
-				if (this.desktop)
+				if (this.desktop || this.z_rod)
 					_addGlobal(this);
 			}
 		}
@@ -1517,12 +1541,18 @@ wgt.$f().main.setTitle("foo");
 		if (child == this.lastChild)
 			return false;
 
-		var oldpt = child.parent;
-		if (oldpt != this)
+		var oldpt;
+		if ((oldpt = child.parent) != this)
 			child.beforeParentChanged_(this);
 
-		if (oldpt)
-			oldpt.removeChild(child);
+		if (oldpt) {
+			_noParentCallback = true;
+			try {
+				oldpt.removeChild(child);
+			} finally {
+				_noParentCallback = false;
+			}
+		}
 
 		child.parent = this;
 		var ref = this.lastChild;
@@ -1545,6 +1575,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
+		child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1599,11 +1630,18 @@ wgt.$f().main.setTitle("foo");
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
 
-		if (child.parent != this)
+		var oldpt;
+		if ((oldpt = child.parent) != this)
 			child.beforeParentChanged_(this);
 
-		if (child.parent)
-			child.parent.removeChild(child);
+		if (oldpt) {
+			_noParentCallback = true;
+			try {
+				oldpt.removeChild(child);
+			} finally {
+				_noParentCallback = false;
+			}
+		}
 
 		child.parent = this;
 		var ref = sibling.previousSibling;
@@ -1627,6 +1665,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
+		child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1651,30 +1690,27 @@ wgt.$f().main.setTitle("foo");
 	 * @see #clear
 	 */
 	removeChild: function (child, ignoreDom) {
-		if (!child.parent)
+		var oldpt;
+		if (!(oldpt = child.parent))
 			return false;
-		if (this != child.parent)
+		if (this != oldpt)
 			return false;
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
 		if (child.z_rod)
 			_unbindrod(child);
 		else if (child.desktop)
-			this.removeChildHTML_(child, p, ignoreDom);
+			this.removeChildHTML_(child, ignoreDom);
 
-		child.beforeParentChanged_(null);
+		if (!_noParentCallback)
+			child.beforeParentChanged_(null);
 
-		var p = child.previousSibling, n = child.nextSibling;
-		if (p) p.nextSibling = n;
-		else this.firstChild = n;
-		if (n) n.previousSibling = p;
-		else this.lastChild = p;
-		child.nextSibling = child.previousSibling = child.parent = null;
-
-		--this.nChildren;
+		_unlink(this, child);
 
 		_rmIdSpaceDown(child);
 
+		if (!_noParentCallback)
+			child.onParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -1807,8 +1843,20 @@ wgt.$f().main.setTitle("foo");
 
 	/** A callback called before the parent is changed.
 	 * @param zk.Widget newparent the new parent (null if it is removed)
+	 * The previous parent can be found by {@link #parent}.
+	 * @see #onChildAdded_
+	 * @see #onChildRemoved_
+	 * @see #onParentChanged_
 	 */
 	beforeParentChanged_: function (/*newparent*/) {
+	},
+	/** A callback called after the parent has been changed.
+	 * @param zk.Widget oldparent the previous parent (null if it was not attached)
+	 * The current parent can be found by {@link #parent}.
+	 * @since 5.0.3
+	 * @see #beforeParentChanged_
+	 */
+	onParentChanged_: function (/*oldparent*/) {
 	},
 
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
@@ -1835,7 +1883,7 @@ wgt.$f().main.setTitle("foo");
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var p = wgt.parent, n;
 			if (p && p.isVisible() && (p=p.$n()) && (n=wgt.$n()))
-				while ((n=zk(n).vparentNode()||n.parentNode) && p != n)
+				while ((n=zk(n).vparentNode(true)) && p != n)
 					if ((n.style||{}).display == 'none')
 						return false; //hidden by parent
 
@@ -1978,17 +2026,19 @@ wgt.$f().main.setTitle("foo");
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
 	/** A callback called after a child has been added to this widget.
-	 * <p>Notice: when overriding this method but not
-	 * {@link #onChildRemoved_}, {@link #onChildReplaced_}
+	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * is usually required to override, too.
 	 * @param zk.Widget child the child being added
+	 * @see #beforeParentChanged_
+	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
 	},
 	/** A callback called after a child has been removed to this widget.
-	 * <p>Notice: when overriding this method but not
-	 * {@link #onChildAdded_}, {@link #onChildReplaced_}
+	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * @param zk.Widget child the child being removed
+	 * @see #beforeParentChanged_
+	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
 	},
@@ -2028,6 +2078,8 @@ wgt.$f().main.setTitle("foo");
 	 * <p>If this widget is not floating, this method will look for its ancestors for the first ancestor who is floating. In other words, this method makes the floating containing this widget as topmost.
 	 * To make a widget floating, use {@link #setFloating_}.
 	 * <p>This method has no effect if it is not bound to the DOM tree, or none of the widget and its ancestors is floating. 
+	 * <p>Notice that it does not fire onFloatUp so it is caller's job if it is necessary
+	 * to close other popups.
 	 * @return int the new value of z-index of the topmost floating window, -1 if this widget and none of its ancestors is floating or not bound to the DOM tree. 
 	 * @see #setFloating_
 	 */
@@ -2679,10 +2731,9 @@ function () {
 	 * <p>Overrides this method or {@link #removeHTML_} if you have to
 	 * remove DOM elements other than child's node (and the descendants).
 	 * @param zk.Widget child the child widget to remove
-	 * @param zk.Widget prevsib the previous sibling, if any
 	 * @param boolean ignoreDom whether to remove the DOM element
 	 */
-	removeChildHTML_: function (child, prevsib, ignoreDom) {
+	removeChildHTML_: function (child, ignoreDom) {
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(child, cf))
 			zk.currentFocus = null;
@@ -2860,7 +2911,9 @@ bind_: function (desktop, skipper, after) {
 		var p = this.parent;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		if (this._draggable) this.initDrag_();
+		var v = this._draggable;
+		if (v && v != "false" && !_dragCtl(this))
+			this.initDrag_();
 		
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
@@ -2920,7 +2973,7 @@ unbind_: function (skipper, after) {
 				else child.unbind_(null, after); //don't pass skipper
 		}
 
-		if (this._draggable) this.cleanDrag_();
+		this.cleanDrag_(); //ok to invoke even if not init
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
@@ -3323,7 +3376,7 @@ focus: function (timeout) {
 	 * {@link #beforeSendAU_} to give the original target a chance to
 	 * process it.
 	 *
-	 * @param zk.Event the event that will be sent to the server.
+	 * @param zk.Event evt the event that will be sent to the server.
 	 * @param int timeout the delay before really sending out the AU request
 	 * @see #fire
 	 * @see #beforeSendAU_
@@ -3388,7 +3441,7 @@ wgt.listen({
 	 * <p>As shown above, you can register multiple listeners at the same time, and echo value in infos can be a target, a function, or a two-element array, where the first element is a target and the second the function.
 	 * A target can be any object that this will reference to when the event listener is called.
 	 * Notice it is not {@link zk.Event#target}. Rather, it is <code>this</code> when the listener is called.
-	 * <p>If the function is not specified, the target must must have a method having the same name as the event. For example, if wgt.listen({onChange: target}) was called, then target.onChange(evt) will be called when onChange event is fired (by {@link #fire}). On the other hand, if the target is not specified, the widget is assumed to be the target.
+	 * <p>If the function is not specified, the target must have a method having the same name as the event. For example, if wgt.listen({onChange: target}) was called, then target.onChange(evt) will be called when onChange event is fired (by {@link #fire}). On the other hand, if the target is not specified, the widget is assumed to be the target.
 	 * @param Map infos a map of event listeners.
 	 * Each key is the event name, and each value can be the target, the listener function, or a two-element array, where the first element is the target and the second the listener function.
 	 * Notice that the target is not {@link zk.Event#target}. Rather, it is <code>this</code> when the listener is called.
@@ -3960,7 +4013,10 @@ _doFooSelect: function (evt) {
 }, {
 	/** Retrieves the widget.
 	 * @param Object n the object to look for. If it is a string,
-	 * it tried to resolve it with jq(n, zk) -- see {@link _global_.jq}.<br/>
+	 * it is assumed to be UUID, unless it starts with '$'.
+	 * For example, <code>zk.Widget.$('uuid')<code> is the same as <code>zk.Widget.$('#uuid')<code>,
+	 * and both look for a widget whose ID is 'uuid'. On the other hand,
+	 * <code>zk.Widget.$('$id') looks for a widget whose ID is 'id'.<br/>
 	 * If it is an DOM element ({@link DOMElement}), it will look up
 	 * which widget it belongs to.<br/>
 	 * If the object is not a DOM element and has a property called
@@ -3984,34 +4040,39 @@ _doFooSelect: function (evt) {
 		if (n && n.zk && n.zk.jq == n) //jq()
 			n = n[0];
 
-		if (!n || zk.Widget.isInstance(n)) return n;
+		if (!n || zk.Widget.isInstance(n))
+			return n;
 
 		var wgt, id;
 		if (typeof n == "string") {
-			n = jq(id = n, zk)[0];
-			if (!n) { //some widget might not have DOM element (e.g., timer)
-				if (id.charAt(0) == '#') id = id.substring(1);
-				wgt = _binds[id]; //try first (since ZHTML might use -)
-				if (!wgt)
-					wgt = (n = id.indexOf('-')) >= 0 ? _binds[id.substring(0, n)]: null;
-				return wgt;
+		//Don't look for DOM (there might be some non-ZK node with same ID)
+			if ((id = n.charAt(0)) == '#') n = n.substring(1);
+			else if (id == '$') {
+				id = _globals[n.substring(1)];
+				return id ? id[0]: null;
 			}
+			wgt = _binds[n]; //try first (since ZHTML might use -)
+			if (!wgt)
+				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)]: null;
+			return wgt;
 		}
 
 		if (!n.nodeType) { //n could be an event (skip Element)
-			var e = n.originalEvent;
-			n = (e?e.z$target:null) || n.target || n; //check DOM event first
+			var e1, e2;
+			n = ((e1 = n.originalEvent) ? e1.z$target:null)
+				|| ((e1 = n.target) && (e2 = e1.z$proxy) ? e2: e1) || n; //check DOM event first
 		}
 
 		if (opts && opts.exact)
 			return _binds[n.id];
 
-		for (; n; n = zk(n).vparentNode()||n.parentNode) {
+		for (; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
 					wgt = _binds[id]; //try first (since ZHTML might use -)
-					if (wgt) return wgt;
+					if (wgt)
+						return wgt;
 
 					var j = id.indexOf('-');
 					if (j >= 0) {
@@ -4052,6 +4113,7 @@ _doFooSelect: function (evt) {
 				setTimeout(function(){zk._cfByMD = false;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
+
 			if (wgt)
 				zWatch.fire('onFloatUp', wgt); //notify all
 			else
@@ -4221,18 +4283,23 @@ zk.Widget.getClass('combobox');
  * @disable(zkgwt)
  */
 zk.RefWidget = zk.$extends(zk.Widget, {
+	/** The class name (<code>zk.RefWidget</code>).
+	 * @type String
+	 * @since 5.0.3
+	 */
+	className: "zk.RefWidget",
+	/** The widget name (<code>refWidget</code>).
+	 * @type String
+	 * @since 5.0.3
+	 */
+	widgetName: "refWidget",
 	bind_: function () {
 		var w = zk.Widget.$(this.uuid);
-		if (!w || !w.desktop) throw 'illegal: '+w;
+		if (!w) throw 'illegal: '+w;
 
-		var p = w.parent, q;
-		if (p) { //shall be a desktop
-			var dt = w.desktop, n = w._node;
-			w.desktop = null; //avoid unbind/bind
-			w.clearCache();
-			p.removeChild(w);
-			w.desktop = dt; w._node = n;
-		}
+		var p, q;
+		if (p = w.parent) //shall be a desktop
+			_unlink(p, w); //unlink only
 
 		p = w.parent = this.parent,
 		q = w.previousSibling = this.previousSibling;
@@ -4245,7 +4312,8 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 
 		this.parent = this.nextSibling = this.previousSibling = null;
 
-		_addIdSpaceDown(w);
+		_addIdSpaceDown(w); //add again since parent is changed
+
 		//no need to call super since it is bound
 	}
 });

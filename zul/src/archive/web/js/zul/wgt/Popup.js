@@ -92,9 +92,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			if (!this._stackup)
 				this._stackup = jq.newStackup(node, node.id + "-stk");
 			else {
-				this._stackup.style.top = node.style.top;
-				this._stackup.style.left = node.style.left;
-				this._stackup.style.display = "block";
+				var dst, src;
+				(dst = this._stackup.style).top = (src = node.style).top;
+				dst.left = src.left;
+				dst.zIndex = src.zIndex;
+				dst.display = "block";
 			}
 		}
 		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.

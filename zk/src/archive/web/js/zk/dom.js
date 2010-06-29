@@ -642,9 +642,23 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var el = this.jq[0];
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
+				var elst, oldvisi;
+				if (zk.ie && !zk.ie8 && el.style.display == "none") {
+				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
+					oldvisi = (elst = el.style).visibility;
+					elst.visibility = "hidden";
+					elst.display = "";
+				}
+
 				var b = el.getBoundingClientRect();
-				return [b.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
+				b = [b.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
 					b.top + jq.innerY() - el.ownerDocument.documentElement.clientTop];
+
+				if (elst) {
+					elst.display = "none";
+					elst.visibility = oldvisi;
+				}
+				return b;
 				// IE adds the HTML element's border, by default it is medium which is 2px
 				// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
 				// IE 7 standards mode, the border is always 2px
@@ -1169,19 +1183,17 @@ jq(el).zk.center(); //same as 'center'
 	// All *Width and *Height properties give 0 on elements with display none,
 	// so enable the element temporarily
 		var st = this.jq[0].style,
-			originalVisibility = st.visibility,
-			originalPosition = st.position,
-			originalDisplay = st.display;
-		st.visibility = 'hidden';
-		st.position = 'absolute';
-		st.display = 'block';
+			backup = {};
+		zk.copy(st, {
+			visibility: 'hidden',
+			position: 'absolute',
+			display: 'block'
+			}, backup);
 		try {
 			return _addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 		} finally {
-			st.display = originalDisplay;
-			st.position = originalPosition;
-			st.visibility = originalVisibility;
+			zk.copy(st, backup);
 		}
 	},
 
@@ -1210,12 +1222,14 @@ jq(el).zk.center(); //same as 'center'
 		return this;
 	},
 
-	/** Returns the parent element, including the virtual parent,
-	 * of the first matched element.
+	/** Returns the virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information.
+	 * @param boolean real whether to return DOM element's parentNode if
+	 * no virtual parent. In other words, <code>zk(n).vparentNode(true)</code>
+	 * is the same as <code>zk(n).vparentNode()||n.parentNode</code>.
 	 * @return DOMElement
 	 */
-	vparentNode: function () {
+	vparentNode: function (real) {
 		var el = this.jq[0];
 		if (el) {
 			var v = el.z_vp; //might be empty
@@ -1223,6 +1237,8 @@ jq(el).zk.center(); //same as 'center'
 			v = el.z_vpagt;
 			if (v && (v = jq('#' +v)[0]))
 				return v.parentNode;
+			if (real)
+				return el.parentNode;
 		}
 	},
 	/** Creates a virtual parent for the specified element. Creating a virtual parent makes the specified element able to appear above any other element (such as a menu popup). By default, the Z order of an element is decided by its parent and ancestors (if any of them has the relative or absolute position). If you want to resolve this limitation, you can create a virtual parent for it with this method.
@@ -1444,6 +1460,7 @@ zk.copy(jq, {
 		while (--j)
 			if (tag == arguments[j].toLowerCase())
 				return true;
+		return false;// don't remove this line, texts are highlighted when SHIFT-click listitems (because of IE's onselect depends on it)
 	},
 
 	/** Converting an integer to a string ending with "px".
@@ -1487,7 +1504,7 @@ zk.copy(jq, {
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = zk(c).vparentNode()||c.parentNode)
+		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
 				return true;
 		return false;
@@ -1727,6 +1744,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			ifr.style.height = el.offsetHeight + "px";
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
+			ifr.style.zIndex = el.style.zIndex;
 			el.parentNode.insertBefore(ifr, anchor || el);
 		}
 		return ifr;

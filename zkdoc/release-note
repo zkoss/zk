@@ -24,14 +24,21 @@ ZK 5.5.0
 ZK 5.0.3
 * Features
   3000873: Tabbox can auto grow size when select a larger size tabpanel
-  3000339: The hflex of the cloumn will calculate by max width
+  3015861: Able to specify the first day of a week for each session
+  3016379: Able to control if a panel is draggable in portallayout
+  3000339: sizedByContent="true" considers both header and row content
   3014112: A way to specify custom DOM attributes, such as onload
+  2824949: Calendar: different color for previous and next month
+  2019205: Customization of Calendar's disabled days
+  2824946: Calendar Day Renderer
   2997091: Media attribute support on style sheets
   3001081: Reuse UUID if possible to minimize memory use at client
   3006351: Able to specify the tag name for a macro component
   3012360: Applet supports all attributes, e.g., archive and mayscript  
   3010188: disable ZScriptVariables lookup for performance
-
+  3016605: Support onMouseOver and onMouseOut at the server
+  2936220: Grid/Listbox/Tree sizedByContent="true" determins width
+  
 * Bugs
   3005129: Multiple VariableResolver added to PageImpl
   3000881: Tabbox inside hbox should not expand 5 thousand width
@@ -78,7 +85,44 @@ ZK 5.0.3
   3011477: Clear the frozen in the grid cause JavaScript error
   3012466: Listbox's selection issue
   3013683: The column in grid without width will calculator wrong width
-
+  3011319: Datebox may select wrong month
+  3014084: Press "Enter" in a multiline and inplace  textbox lose text
+  3008328: Intbox uneditable on FF if treerow draggable/droppable=true
+  3010419: Auxiliary Headers don't render in iPhone
+  3014660: Combobox setValue issue when onChanging
+  3014664: tabs & tabpanels cut half width if set hflex="1"
+  3014668: intbox doesn't accept 09
+  3014743: longbox and decimalbox doesn't reject 33ee34
+  3013637: Popup can't conver listbox in select mold (IE6)
+  3017010: Listbox - combination of checkmark and sorting does not work
+  3015032: Flashchart generated IndexoutOfBoundsException
+  3017526: Panel height calculation bug
+  3017859: decimalbox fail to handle 3.5%
+  3017606: Browser window might lose focus
+  3017938: The menupopup appears at a wrong position
+  3018735: listbox/grid/tree sizedByContent="true" shall show header  
+  3018688: Recursive Loop in class XmlContentRenderer
+  2997698: quoted special characters in decimalbox
+  3019383: Failed to change the position of a root component to the end
+  3019360: button in os mold, setDisable() not add class -disd well
+  3019524: Window/panel does position wrong if only left specified
+  3019517: Listbox selectAll checkmark bugs
+  3020040: Listbox.removeItemFromselection not work correctly
+  3020565: Failed if add listhead and listitem to ROD listbox (zkmax)
+  3020609: Dragging modal window might fail if dragging too fast
+  3010511: Removing Applet causes JavaScript error in FF2
+  3021174: setLeft at a invisible window case js error
+  3021217: Put a invisible Panel in a portallayout cause js error
+  3021278: Hide the column of the grid, the css of the odd row is gone
+  3013640: Incorrect scrolling of auxheads if used with frozen columns
+  3021591: Window position parent not working repeatedly
+  3021739: Form's reset button unable to reset textbox
+  3022161: setVisible on a window that in second tab cause js error
+  3022197: Set 2nd tab of  tabbox in 2nd tab be selected isn't work
+  3022274: Vertical tabbox in invisible comp has big height when onShow
+  3022237: Image of toolbarbutton not disabled correctly (ie8)
+  3022178: Extra bottom border for selected tab
+  
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
@@ -90,14 +134,15 @@ ZK 5.0.3
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
 		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
-  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
-    your macro components uses this property, you have to rename it.
-  + Component's ID is default to be an empty string (rather than an auto-generated
-    ID).
-  + The id-to-uuid-prefix configuration is deprecated. Please use IdGenerator
-    or jQuery selector instead.
+  + Component's ID and page's ID are default to be an empty string
+   (rather than an auto-generated ID).
   + The codebase of the applet component will be encoded by including the session ID
     and application's context. See also Bug 3012486.
+  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
+    your macro components uses this property, you have to rename it.
+  + The id-to-uuid-prefix configuration is deprecated. Please use IdGenerator
+    or jQuery selector instead.
+  + JavaScript API: zk.Widget.removeChildHTML_ is changed
 
 	--------
 ZK 5.0.2

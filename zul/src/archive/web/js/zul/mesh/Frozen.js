@@ -12,6 +12,44 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _colspan(c) { //colspan specified in widget
+		var v = zk.Widget.$(c)._colspan;
+		return v ? v: 1;
+	}
+	function _resetColspan(c) {
+		c.colSpan = _colspan(c);
+	}
+	function _fixaux(cells, from, to) {
+		for (var j = 0, k = 0, cl = cells.length; j < cl; ++j) {
+			var ke = k + _colspan( zk.Widget.$(cells[j]));
+			if (from >= k && ke > from) { //found
+				for (; j < cl && k < to; ++j, k = ke) {
+					var cell = cells[j],
+						ke = k + _colspan(cell),
+						v = from - k, v2 = ke - to;
+					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
+					if (v) {
+						cell.colSpan = v;
+						cell.style.display = "";
+					} else {
+						_resetColspan(cell);
+						cell.style.display = "none";
+					}
+				}
+				for (; j < cl; ++j) {
+					var cell = cells[j];
+					_resetColspan(cell);
+					if (cell.style.display != "none")
+						break; //done
+					cell.style.display = "";
+				}
+				return;
+			}
+			k = ke;
+		}
+	}
+
 /**
  * A frozen component to represent a frozen column or row in grid, like MS Excel. 
  * <p>Default {@link #getZclass}: z-frozen.
@@ -59,7 +97,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	syncScorll: function () {
 		var scroll = this.$n('scrollX');
 		if (scroll)
-			scroll.scrollLeft = this._start * 100;
+			scroll.scrollLeft = this._start * 50;
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-frozen" : this._zclass;
@@ -83,7 +121,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				width -= leftWidth;
 			scroll.style.width = jq.px0(width);
 			var scrollScale = bdfaker.childNodes.length - this._columns - 1;
-			scroll.firstChild.style.width = jq.px0(width + 100 * scrollScale);
+			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			this.syncScorll();
 		}
 	},
@@ -118,7 +156,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	_doScroll: function (evt) {
 		var scroll = this.$n('scrollX'),
-			num = Math.ceil(scroll.scrollLeft / 100);
+			num = Math.ceil(scroll.scrollLeft / 50);
 		if (this._lastScale == num)
 			return;
 		this._lastScale = num;
@@ -138,41 +176,48 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (mesh.head) {
 
 			// set fixed size
-			for (var faker, w = mesh.head.firstChild.$n('hdfaker'); w;
-					w = w.nextSibling) {
-				if (w.style.width.indexOf('px') == -1) {
-					var sw = w.style.width = jq.px0(w.offsetWidth),
-						wgt = zk.Widget.$(w);
+			for (var faker, n = mesh.head.firstChild.$n('hdfaker'); n;
+					n = n.nextSibling) {
+				if (n.style.width.indexOf('px') == -1) {
+					var sw = n.style.width = jq.px0(n.offsetWidth),
+						wgt = zk.Widget.$(n);
 					if ((faker = wgt.$n('bdfaker')))
 						faker.style.width = sw;
 					if ((faker = wgt.$n('ftfaker')))
 						faker.style.width = sw;
 				}
 			}
-			for (var invisible, faker, index = this._columns,
+			var colhead = mesh.head.getChildAt(this._columns).$n();
+			for (var display, faker, index = this._columns,
 					tail = mesh.head.nChildren - index,
-					w = mesh.head.getChildAt(index).$n();
-					w; w = w.nextSibling, index++, tail--) {
-				invisible = cnt-- <= 0 ? '' : 'none';
-				if (w.style.display != invisible) {
-					w.style.display = invisible;
-					if ((faker = jq('#' + w.id + '-hdfaker')[0]))
-						faker.style.display = invisible;
-					if ((faker = jq('#' + w.id + '-bdfaker')[0]))
-						faker.style.display = invisible;
-					if ((faker = jq('#' + w.id + '-fdfaker')[0]))
-						faker.style.display = invisible;
+					n = colhead;
+					n; n = n.nextSibling, index++, tail--) {
+				display = cnt-- <= 0 ? '' : 'none';
+				if (n.style.display != display) {
+					n.style.display = display;
+					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
+						faker.style.display = display;
+					if ((faker = jq('#' + n.id + '-bdfaker')[0]))
+						faker.style.display = display;
+					if ((faker = jq('#' + n.id + '-fdfaker')[0]))
+						faker.style.display = display;
 
-
-					for (var r = rows[0], len; r && (len = r.childNodes.length) > tail;
-							r = r.nextSibling)
-						r.cells[len - tail].style.display = invisible;
+					//body
+					for (var i = 0, rl = rows.length, cells;
+					i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
+						cells[ofs].style.display = display;
 				}
 			}
 
-			for (var w = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
-					w; w = w.nextSibling)
-				width += zk.parseInt(w.style.width);
+			//auxhead
+			for (var hdr = colhead.parentNode, hdrs = hdr.parentNode.rows,
+				i = hdrs.length, r; i--;)
+				if ((r = hdrs[i]) != hdr) //skip Column
+					_fixaux(r.cells, this._columns, this._columns + num);
+
+			for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
+					n; n = n.nextSibling)
+				width += zk.parseInt(n.style.width);
 
 		} else {
 			
@@ -182,11 +227,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					c.style.width = jq.px0(zk(c).revisedWidth(c.offsetWidth));
 			}
 
-			for (var first = rows[0], invisible, index = this._columns,
+			for (var first = rows[0], display, index = this._columns,
 					len = first.childNodes.length; index < len; index++) {
-				invisible = cnt-- <= 0 ? '' : 'none';
+				display = cnt-- <= 0 ? '' : 'none';
 				for (var r = first; r; r = r.nextSibling)
-					r.cells[index].style.display = invisible;
+					r.cells[index].style.display = display;
 			}
 
 			for (var c = rows[0].cells[this._columns + num]; c; c = c.nextSibling)
@@ -202,3 +247,5 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh.efoottbl.style.width = width;
 	}
 });
+
+})();

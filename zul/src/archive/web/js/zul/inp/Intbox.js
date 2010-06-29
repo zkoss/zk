@@ -28,9 +28,9 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value),
-			val = parseInt(info.raw);
+			val = parseInt(info.raw, 10);
 		
-		if (info.raw != ''+val && info.raw != '-'+val)
+		if (isNaN(val) || (info.raw != ''+val && info.raw != '-'+val))
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};

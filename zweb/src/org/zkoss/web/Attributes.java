@@ -33,12 +33,23 @@ public class Attributes {
 	 */
 	public static final String TITLE = "px_title";
 
-	/** The attribute used to store the preferred locale (Locale) in a session.
+	/** The session attribute used to store the preferred locale (Locale) in a session.
 	 */
-	public static final String PREFERRED_LOCALE = "px_preferred_locale";
-	/** The attribute used to store the preferred time zone (TimeZone) in a session.
+	public static final String PREFERRED_LOCALE = "org.zkoss.web.preferred.locale";
+	/** The session attribute used to store the preferred time zone (TimeZone) in a session.
 	 */
-	public static final String PREFERRED_TIME_ZONE = "px_preferred_time_zone";
+	public static final String PREFERRED_TIME_ZONE = "org.zkoss.web.preferred.timeZone";
+	/** The session attribute used to store the preferred first-day-of-week.
+	 * The value must be one of {@link java.util.Calendar#SUNDAY},
+	 * {@link java.util.Calendar#MONDAY}, {@link java.util.Calendar#SATURDAY}
+	 * and so on.
+	 * <p>Default: -1 (it means {@link java.util.Calendar#getFirstDayOfWeek} is assumed)
+	 * <p>Notice that you could specify it as a library property such that
+	 * it will be the default value for the whole application
+	 * (with the higher priority than {@link java.util.Calendar}.
+	 * @since 5.0.3
+	 */
+	public static final String PREFERRED_FIRST_DAY_OF_WEEK = "org.zkoss.web.preferred.firstDayOfWeek";
 
 	/** The attribute name that contains the alert passed from
 	 * another request {@link org.zkoss.web.servlet.http.Https#sendRedirect}.
@@ -53,10 +64,10 @@ public class Attributes {
 	 */
 	public static final String ALERT_TYPE = "px_alert_type";
 
-	/** "j_domain" as part of the j_check_security request.
+	/** @deprecated As of release 5.0.0, useless
 	 */
 	public static final String J_DOMAIN = "j_domain";
-	/** "j_remember_me" as part of the j_check_security request.
+	/** @deprecated As of release 5.0.0, useless
 	 */
 	public static final String J_REMEMBER_ME = "j_remember_me";
 

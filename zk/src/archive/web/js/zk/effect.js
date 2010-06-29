@@ -211,14 +211,8 @@ if (!zk.css3) {
 		st.height = jq.px0(jq.innerHeight());
 		st.display = "block";
 
-		n = this.stackup;
-		if (n) {
-			n = n.style;
-			n.left = st.left;
-			n.top = st.top;
-			n.width = st.width;
-			n.height = st.height;
-		}
+		if (n = this.stackup)
+			zk.set(n.style, st, ["left", "top", "width", "height"]);
 	}
 
 /** A mask covers the browser window fully.
@@ -268,8 +262,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		_syncPos.call(this);
 
 		var f;
-		jq(mask).mousemove(f = jq.Event.stop)
-			.click(f);
+		jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
 		jq(window).resize(f = this.proxy(_syncPos))
 			.scroll(f);
 	},
@@ -277,8 +270,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 */
 	destroy: function () {
 		var mask = this.mask, f;
-		jq(mask).unbind("mousemove", f = jq.Event.stop)
-			.unbind("click", f)
+		jq(mask).unbind("click", jq.Event.stop)
 			.remove()
 		jq(window).unbind("resize", f = this.proxy(_syncPos))
 			.unbind("scroll", f);

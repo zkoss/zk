@@ -125,7 +125,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		zWatch.listen({onResponse: this});
 		this._shallStripe = true;
-		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
+		var w = this;
+		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -165,11 +166,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._syncStripe();		
 		return this;
 	},
-	setItemsInvalid_: function(wgts) {
-		var wgt = this;
-		zAu.createWidgets(wgts,
-			function (ws) {wgt.replaceCavedChildren_('rows', ws);});
-	},	
+
 	//-- super --//
 	getCaveNode: function () {
 		return this.$n('rows') || this.$n('cave');
@@ -185,13 +182,15 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {
-		if (this.$super('insertBefore', child, sibling, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+		if (this.$super('insertBefore', child, sibling,
+		ignoreDom || (!this.z_rod && !child.$instanceof(zul.sel.Listitem)))) {
 			this._fixOnAdd(child, ignoreDom);
 			return true;
 		}
 	},
 	appendChild: function (child, ignoreDom) {
-		if (this.$super('appendChild', child, ignoreDom || !child.$instanceof(zul.sel.Listitem))) {
+		if (this.$super('appendChild', child,
+		ignoreDom || (!this.z_rod && !child.$instanceof(zul.sel.Listitem)))) {
 			if (!this.insertingBefore_)
 				this._fixOnAdd(child, ignoreDom);
 			return true;

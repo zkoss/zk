@@ -39,11 +39,22 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
-	removeChildHTML_: function (child, prevsib) {
+	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
 			for (var faker, fs = child.$class._faker, i = fs.length; i--;)
 				jq(child.uuid + '-' + fs[i], zk).remove();
+	},
+	
+	//bug #3014664
+	setVflex: function (v) { //vflex ignored for Listhead/Columns/Treecols
+		v = false;
+		this.$super(zul.mesh.HeadWidget, 'setVflex', v);
+	},
+	//bug #3014664
+	setHflex: function (v) { //hflex ignored for Listhead/Columns/Treecols
+		v = false;
+		this.$super(zul.mesh.HeadWidget, 'setHflex', v);
 	},
 	
 	onColSize: function (evt) {
@@ -74,16 +85,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 		}
 	},
-	beforeChildrenFlex_: function(hwgt) { //avoid unnecessary zk.Widget#_fixFlex()
-		return !this._inAfterChildrenFlex && !this.parent._flexRerender; 
-	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
-		this._inAfterChildrenFlex = true;
-		try {
-			hwgt.updateMesh_(); //might recursive back #beforeChildrenFlex_()
-		} finally {
-			delete this._inAfterChildrenFlex;
-		}
+		var wgt = this.parent;
+		if (wgt && !wgt.isSizedByContent())
+			wgt._adjFlexWidth();
 	}
 },{ //static
 	redraw: function (out) {

@@ -1,0 +1,13 @@
+<zk>
+   <html><![CDATA[
+	<ul>
+	<li>If it keep loading, it is bug</li>
+	</ul>
+	]]></html>
+	<portallayout width="500px" height="300px">
+		<portalchildren>
+			<panel width="400px" title="Create Event" border="normal"
+				id="createEvent4" closable="true" visible="false"/>
+		</portalchildren>
+	</portallayout>
+</zk>

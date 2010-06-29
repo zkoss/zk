@@ -51,6 +51,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				{ignorable:1}, timeout||5);
 		}
 	}
+	var _keyIgnorable = zk.ie ? function () {return true;}:
+		zk.opera ? function (code) {
+			return code == 32 || code > 46; //DEL
+		}: function (code) {
+			return code >= 32;
+		}
 
 var InputWidget =
 /**
@@ -247,7 +253,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) {
 				inp.value = value = this.coerceToString_(value);
-				if (fromServer) inp.defaultValue = value; //not clear error if by client app
+				if (fromServer)
+					this._defValue = value; //not clear error if by client app
 			}
 		}
 	},
@@ -524,7 +531,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_shallIgnore: function (evt, keys) {
 		var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
-		if (!evt.altKey && !evt.ctrlKey && (zk.ie || code >= 32)
+		if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
 		&& keys.indexOf(String.fromCharCode(code)) < 0) {
 			evt.stop();
 			return true;
@@ -556,12 +563,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var upd;
 			if (!vi.error) {
 				inp.value = value = this.coerceToString_(vi.value);
-				//reason to use defaultValue rather than this._value is
+				//reason to use this._defValue rather than this._value is
 				//to save the trouble of coerceToString issue
-				upd = wasErr || value != inp.defaultValue;
+				upd = wasErr || value != this._defValue;
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
-					inp.defaultValue = value;
+					this._defValue = value;
 				}
 			}
 			if (upd || vi.server)
@@ -569,6 +576,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					vi.server ? {toServer:true}: null, 150);
 		}
 		return true;
+	},
+	_resetForm: function () {
+		var inp = this.getInputNode();
+		if (inp.value != inp.defaultValue) { //test if it will be reset
+			var wgt = this;
+			setTimeout(function () {wgt.updateChange_();}, 0);
+				//value not reset yet so wait a moment
+		}
 	},
 
 	//super//
@@ -591,18 +606,21 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(InputWidget, 'bind_', arguments);
-		var inp = this.getInputNode(),
+		var n = this.getInputNode(),
 			zcls = this.getZclass();
 		
 		if (this._readonly)
-			jq(inp).addClass(zcls + '-readonly');
+			jq(n).addClass(zcls + '-readonly');
 		
 		if (this._disabled)
-			jq(inp).addClass(zcls + '-text-disd');
+			jq(n).addClass(zcls + '-text-disd');
 			
-		this.domListen_(inp, "onFocus", "doFocus_")
-			.domListen_(inp, "onBlur", "doBlur_")
-			.domListen_(inp, "onSelect");
+		this.domListen_(n, "onFocus", "doFocus_")
+			.domListen_(n, "onBlur", "doBlur_")
+			.domListen_(n, "onSelect");
+
+		if (n = n.form)
+			jq(n).bind("reset", this.proxy(this._resetForm));
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);
@@ -610,8 +628,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var n = this.getInputNode();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_")
-			.domUnlisten_(n, "onSelect")
-			.$supers(InputWidget, 'unbind_', arguments);
+			.domUnlisten_(n, "onSelect");
+
+		if (n = n.form)
+			jq(n).unbind("reset", this.proxy(this._resetForm));
+
+		this.$supers(InputWidget, 'unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
@@ -648,7 +670,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
 				var inp = this.getInputNode(), val = inp.value;
-				if (val != inp.defaultValue && val.length > maxlen)
+				if (val != this._defValue && val.length > maxlen)
 					inp.value = val.substring(0, maxlen);
 			}
 		}
@@ -660,7 +682,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	afterKeyDown_: function (evt) {
 		if (this._inplace) {
-			if (evt.keyCode == 13) {
+			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
 				if ($inp.toggleClass(inc).hasClass(inc)) 
 					$inp.zk.setSelectionRange(0, $inp[0].value.length);

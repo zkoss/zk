@@ -24,8 +24,9 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value),
-			val = new zk.BigDecimal(info.raw);
-		if (info.raw != val.$toString() && info.raw != '-'+val) //1e2 not supported (unlike Doublebox)
+			val = new zk.BigDecimal(info.raw),
+			sval = val.$toString();
+		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
 		return val;

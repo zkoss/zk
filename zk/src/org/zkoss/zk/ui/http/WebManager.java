@@ -330,7 +330,11 @@ public class WebManager {
 			throw new UiException("The Web application not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
 		return wapp;
 	}
-	/*package*/ static final WebApp getWebAppIfAny(ServletContext ctx) {
+	/** Returns the Web application of the specified context, or null
+	 * if not available.
+	 * @since 5.0.3
+	 */
+	public static final WebApp getWebAppIfAny(ServletContext ctx) {
 		final WebManager webman = getWebManagerIfAny(ctx);
 		return webman != null ? webman.getWebApp(): null;
 	}

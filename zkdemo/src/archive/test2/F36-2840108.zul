@@ -14,17 +14,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<popup id="pp">
+	<popup id="pp" width="100px">
 		<image
 			src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" />
 		Here is popup
 	</popup>
-	<popup id="context">
+	<popup id="context" width="100px">
 		<image
 			src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png" />
 		Here is context
 	</popup>
-	<popup id="tip">
+	<popup id="tip" width="100px">
 		<image
 			src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"/>
 		Here is tooltip

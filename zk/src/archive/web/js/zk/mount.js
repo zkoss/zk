@@ -186,17 +186,6 @@ function zkmprops(uuid, props) {
 		for (var children = wi[3], j = children.length; j--;)
 			pkgLoad(dt, children[j]);
 	}
-	//create and mount widget
-	function mount() {
-		var stub = _createInf0.stub;
-		if (stub) { //AU
-			_createInf0.stub = null;
-			mtAU(stub);
-		} else //browser loading
-			mtBL();
-			//note: jq(mtBL) is a bit slow (too late to execute)
-			//note: <div/> must be generated before <script/>
-	}
 	//mount for browser loading
 	function mtBL() {
 		if (zk.loading) {
@@ -231,8 +220,10 @@ function zkmprops(uuid, props) {
 			if (!inf) break;
 
 			var wgt = inf[1];
-			if (inf[2]) wgt.bind(inf[0]); //binding
-			else wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+			if (inf[2])
+				wgt.bind(inf[0]); //binding
+			else
+				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
 		}
 
 		mtBL1();
@@ -256,17 +247,33 @@ function zkmprops(uuid, props) {
 	}
 
 	/* mount for AU */
-	function mtAU(stub) {
+	function mtAU() {
 		if (zk.loading) {
-			zk.afterLoad(function () {mtAU(stub);});
+			zk.afterLoad(mtAU);
 			return;
 		}
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			stub(create(null, inf[1]));
+			var stub = inf[4][0], filter = inf[4][1],
+				Widget = zk.Widget,
+				old$, wgt;
+
+			if (filter) {
+				old$ = Widget.$;
+				Widget.$ = function (n, opts) {
+					return filter(old$(n, opts));
+				}
+			}
+			try {
+				wgt = create(null, inf[1]);
+			} finally {
+				if (filter) Widget.$ = old$;
+			}
+
+			stub(wgt);
 			if (_createInf0.length)
-				return run(function () {mtAU(stub);}); //loop back to check if loading
+				return run(mtAU); //loop back to check if loading
 		}
 
 		mtAU0();
@@ -358,14 +365,20 @@ function zkmprops(uuid, props) {
 	},
 
 	//widget creations
-	zkx: function (wi, delay, aucmds, js) {
+	zkx: function (wi, extra, aucmds, js) { //extra is either delay (BL) or [stub, filter] (AU)
 		zk.mounting = true;
 
 		if (js) jq.globalEval(js);
 		doAuCmds(aucmds);
 
+		var delay, mount = mtAU, owner;
+		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+			delay = extra;
+			extra = null;
+			mount = mtBL;
+		}
+
 		if (wi) {
-			var owner;
 			if (wi[0] === 0) { //page
 				var props = wi[2];
 				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
@@ -374,7 +387,7 @@ function zkmprops(uuid, props) {
 					owner = zk.Widget.$(owner);
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding, owner]);
+			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, extra]);
 
 			mountpkg();
 		}
@@ -383,9 +396,9 @@ function zkmprops(uuid, props) {
 		else run(mount);
 	},
 	//widget creation called by au.js
-	zkx_: function (args, stub) {
-		_createInf0.stub = stub;
+	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
+		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
 		zkx.apply(window, args);
 	},
 
@@ -483,33 +496,20 @@ jq(function() {
 			
 		_doEvt(evt);
 		
-		// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
-		if (old && zk.ie)
-			setTimeout(function () {
-				try {
-					var cf = zk.currentFocus;
-					if (cf != old && !old.offsetWidth && !old.offsetHeight)
-						cf.focus();
-				} catch (e) {}
-			});
-	}
-	
-	function _simFocus(wgt) {
-		if (wgt && wgt != zk.currentFocus) {
-			window.blur();
-			wgt.focus();
+		// bug 2799334 and 2635555, need to enforce a focus event (IE only)
+		if (old && zk.ie) {
+			var n = jq(old)[0];
+			if (n)
+				setTimeout(function () {
+					try {
+						var cf = zk.currentFocus;
+						if (cf != old && !n.offsetWidth && !n.offsetHeight)
+							cf.focus();
+					} catch (e) {}
+				});
 		}
 	}
-	function _evtProxy(evt) { //handle proxy
-		var n;
-		
-		// Firefox 3.5 will cause an error.
-		try {
-			if (((n = evt.target) && (n = n.z$proxy)) ||
-			((n = evt.originalTarget) && (n = n.z$proxy))) 
-				evt.target = n;
-		} catch (e) {}
-	}
+	
 	function _docResize() {
 		if (!_reszInf.time) return; //already handled
 
@@ -537,7 +537,6 @@ jq(function() {
 
 	jq(document)
 	.keydown(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
@@ -554,42 +553,42 @@ jq(function() {
 			return false; //eat
 	})
 	.keyup(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	})
 	.keypress(function (evt) {
-		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
 	.mousedown(function (evt) {
-		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	})
 	.mouseup(function (evt) {
-		var e = zk.Draggable.ignoreMouseUp();
+		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
 			return; //ingore
+
 		if (e != null) {
 			_docMouseDown(e, null, true); //simulate mousedown
-			_simFocus(e.target); //simulate focus
+
+			//simulate focus if zk.Draggable invokes evt.stop
+			if ((wgt = e.target) && wgt != zk.currentFocus)
+				try {wgt.focus();} catch (e) {}
+				//Bug 3017606/2988327: don't invoke window.blur,or browser might be min (IE/FF)
 		}
 
-		_evtProxy(evt);
-		var wgt = zk.mouseCapture;
+		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
 	.mousemove(function (evt) {
-		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -598,22 +597,19 @@ jq(function() {
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
-		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
-		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.mouseout(function (evt) {
-		_evtProxy(evt);
-		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
 		zjq._fixClick(evt);
 
-		_evtProxy(evt);
 		if (evt.which == 1)
 			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
 				'onClick', evt.mouseData(), {ctl:true}, evt));
@@ -622,7 +618,6 @@ jq(function() {
 	.dblclick(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
-		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
@@ -632,7 +627,6 @@ jq(function() {
 		}
 	})
 	.bind("contextmenu", function (evt) {
-		_evtProxy(evt);
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
 

@@ -60,5 +60,5 @@ void doRightClick(Listcell lc) {
      popup.open(lc);
 }
 </zscript>
-<popup id="popup"></popup>
+<popup id="popup" width="100px"></popup>
 </zk>

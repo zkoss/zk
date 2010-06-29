@@ -50,7 +50,7 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author tomyeh
  */
 public class EventProcessor {
-//	private static final Log log = Log.lookup(EventProcessor.class);
+	private static final Log log = Log.lookup(EventProcessor.class);
 
 	/** The desktop that the component belongs to. */
 	private final Desktop _desktop;
@@ -146,8 +146,18 @@ public class EventProcessor {
 	}
 	private void process0(Scope scope) throws Exception {
 		final Page page = getPage();
-		final String evtnm = _event.getName();
+		if (page == null || !page.isAlive()) {
+			String msg = (page == null ? "No page is available in "+_desktop: "Page "+page+" was destroyed");
+			if (_desktop.isAlive())
+				msg += " (but desktop is alive)";
+			else
+				msg += " because desktop was destroyed.\n"
+				+"It is usually caused by invalidating the native session directly. "
+				+"If it is required, please set Attributes.RENEW_NATIVE_SESSION first.";
+			log.warning(msg);
+		}
 
+		final String evtnm = _event.getName();
 		final Set listenerCalled = new HashSet();
 			//OK to use Set since the same listener cannot be added twice
 		boolean retry = false;
@@ -171,7 +181,7 @@ public class EventProcessor {
 		}
 
 		final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
-		if (zscript != null) {
+		if (zscript != null && page != null) {
 			page.interpret(
 				zscript.getLanguage(), zscript.getContent(page, _comp), scope);
 			if (!_event.isPropagatable())
@@ -214,23 +224,22 @@ public class EventProcessor {
 
 		retry = false;
 		listenerCalled.clear();
-		for (Iterator it = page.getListenerIterator(evtnm);;) {
-			final EventListener el = nextListener(it);
-			if (el == null) {
-				break; //done
+		if (page != null)
+			for (Iterator it = page.getListenerIterator(evtnm);;) {
+				final EventListener el = nextListener(it);
+				if (el == null) {
+					break; //done
+				} else if (el == RETRY) {
+					retry = true;
+					it = page.getListenerIterator(evtnm);
+				} else if (!retry || !listenerCalled.contains(el)) {
+					listenerCalled.add(el);
 
-			} else if (el == RETRY) {
-				retry = true;
-				it = page.getListenerIterator(evtnm);
-
-			} else if (!retry || !listenerCalled.contains(el)) {
-				listenerCalled.add(el);
-
-				el.onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
+					el.onEvent(_event);
+					if (!_event.isPropagatable())
+						return; //done
+				}
 			}
-		}
 	}
 	private static EventListener nextListener(Iterator it) {
 		try {
@@ -272,8 +281,7 @@ public class EventProcessor {
 		if (page != null)
 			return page;
 
-		final Iterator it = _desktop.getPages().iterator();
-		return it.hasNext() ? (Page)it.next(): null;
+		return _desktop.getFirstPage();
 	}
 
 	//Object//

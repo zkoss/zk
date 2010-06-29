@@ -50,6 +50,17 @@ public class Events {
 	/** The onDoubleClick event (used with {@link MouseEvent}).
 	 */
 	public static final String ON_DOUBLE_CLICK = "onDoubleClick";
+	/** The onMouseOver event (used with {@link MouseEvent}).
+	 * <p>Notice, if Internet connection is too far, the user might already move
+	 * the mouse out of a widget when the server receives onMouseOver.
+	 * @since 5.0.3
+	 */
+	public static final String ON_MOUSE_OVER = "onMouseOver";
+	/** The onMouseOut event (used with {@link MouseEvent}).
+	 * @since 5.0.3
+	 */
+	public static final String ON_MOUSE_OUT = "onMouseOut";
+
 	/** The onOK event (used with {@link KeyEvent}).
 	 */
 	public static final String ON_OK = "onOK";

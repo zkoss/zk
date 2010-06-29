@@ -35,8 +35,8 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	private boolean _tabbable;
 
 	static {
-		addClientEvent(Textbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-		addClientEvent(Textbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Textbox.class, Events.ON_FOCUS, 0);
+		addClientEvent(Textbox.class, Events.ON_BLUR, 0);
 	}
 
 	public Textbox() {

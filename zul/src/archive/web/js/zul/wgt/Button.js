@@ -99,8 +99,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (this.desktop) {
 				if (this._upload)
 					this._cleanUpld();
-				if (this._mold != 'trendy') this.$n().disabled = v;
-				else this.rerender(); //bind and unbind required
+				if (this._mold == "os") {
+					var n = this.$n(),
+						zclass = this.getZclass();
+					if (zclass)
+						jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
+				} else
+					this.rerender(); //bind and unbind required
 			}
 		},
 		image: function (v) {

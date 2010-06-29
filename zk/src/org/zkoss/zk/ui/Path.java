@@ -115,12 +115,9 @@ public class Path {
 				final Desktop desktop = exec.getDesktop();
 				Page page = ((ExecutionCtrl)exec).getCurrentPage();
 				if (page == null) {
-					final Collection pages = desktop.getPages();
-					if (pages.isEmpty())
+					page = desktop.getFirstPage();
+					if (page == null)
 						return null;
-
-					page = (Page)pages.iterator().next();
-						//the first page assumed
 				}
 
 				if (path.length() == 1) // "/" only

@@ -6,7 +6,7 @@
 		</ul>
 	]]></html>
 	<zscript>
-	List items = new org.zkoss.zkdemo.userguide.BigList(1000);	//a big list of Integer
+	List items = new org.zkoss.zkdemo.userguide.BigList(100);	//a big list of Integer
 	</zscript>
 	<listbox id="listbox" mold="paging">
 		<listitem forEach="&#36;{items}">
@@ -22,6 +22,8 @@
 			for (Component c: listbox.getItems()){
 				c.setVisible(false);
 			}
+			listbox.invalidate();
+		new Label("hi").setPage(page);
 		]]></attribute>
 	</button>
 </zk>

@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Collections;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
@@ -100,7 +100,7 @@ import org.zkoss.zk.device.DeviceNotFoundException;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
-    private static final long serialVersionUID = 20081209L;
+    private static final long serialVersionUID = 20100623L;
 
 	/** Represents media stored with {@link #getDownloadMediaURI}.
 	 * It must be distinguishable from component's ID.
@@ -121,8 +121,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private final String _qs;
 	/** The URI to access the update engine. */
 	private final String _updateURI;
-	/** Map(String id, Page page). */
-	private final Map _pages = new LinkedHashMap(3);
+	/** List<Page>. */
+	private final List _pages = new LinkedList();
 	/** Map (String uuid, Component comp). */
 	private transient Map _comps;
 	/** A map of attributes. */
@@ -394,24 +394,36 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public Page getPage(String pageId) {
-		//We allow user to access this method concurrently, so synchronized
-		//is required
+		//Spec: we allow user to access this method concurrently
 		final Page page = getPageIfAny(pageId);
 		if (page == null)
 			throw new ComponentNotFoundException("Page not found: "+pageId);
 		return page;
 	}
 	public Page getPageIfAny(String pageId) {
+		//Spec: we allow user to access this method concurrently, so
+		//synchronized is required
+		Page page = null;
 		synchronized (_pages) {
-			return (Page)_pages.get(pageId);
+			for (Iterator it = _pages.iterator(); it.hasNext();) {
+				final Page pg = (Page)it.next();
+				if (Objects.equals(pageId, pg.getId()))
+					return pg;
+				if (Objects.equals(pageId, pg.getUuid()))
+					page = pg;
+			}
 		}
+		return page;
 	}
 	public boolean hasPage(String pageId) {
-		return _pages.containsKey(pageId);
+		return getPageIfAny(pageId) != null;
 	}
 	public Collection getPages() {
 		//No synchronized is required because it cannot be access concurrently
-		return _pages.values();
+		return Collections.unmodifiableCollection(_pages);
+	}
+	public Page getFirstPage() {
+		return _pages.isEmpty() ? null: (Page)_pages.get(0);
 	}
 
 	public String getBookmark() {
@@ -661,14 +673,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void addPage(Page page) {
 		//We have to synchronize it due to getPage allows concurrent access
 		synchronized (_pages) {
-			final Object old = _pages.put(page.getId(), page);
-			if (old != null) {
-				_pages.put(((Page)old).getId(), old); //recover
-				log.warning(
-					page == old ? "Register a page twice: "+page:
-						"Replicated ID: "+page+"; already used by "+old);
-				return;
-			}
+			_pages.add(page);
 //			if (D.ON && log.debugable()) log.debug("After added, pages: "+_pages);
 		}
 		afterPageAttached(page, this);
@@ -676,11 +681,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void removePage(Page page) {
 		synchronized (_pages) {
-			if (_pages.remove(page.getId()) == null) {
-				log.warning("Removing non-exist page: "+page+"\nCurrent pages: "+_pages.values());
+			if (!_pages.remove(page))
 				return;
-			}
-//			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages.values());
+				//Both UiVisualizer.getResponses and Include.setChildPage
+				//might calll removePage
+
+//			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages);
 		}
 		removeComponents(page.getRoots());
 
@@ -728,7 +734,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_spush = null;
 		}
 
-		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+		for (Iterator it = _pages.iterator(); it.hasNext();) {
 			final PageCtrl pgc = (PageCtrl)it.next();
 			try {
 				pgc.destroy();
@@ -817,7 +823,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 	}
 	private void sessWillPassivate() {
-		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+		for (Iterator it = _pages.iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionWillPassivate(this);
 
 		if (_dev != null) _dev.sessionWillPassivate(this);
@@ -833,7 +839,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void sessDidActivate() {
 		if (_dev != null) _dev.sessionDidActivate(this);
 
-		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+		for (Iterator it = _pages.iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
@@ -905,7 +911,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		init();
 
 		//get back _comps from _pages
-		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+		for (Iterator it = _pages.iterator(); it.hasNext();)
 			for (Iterator e = ((Page)it.next()).getRoots().iterator();
 			e.hasNext();)
 				addAllComponents((Component)e.next());
@@ -1053,7 +1059,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				addResponse(new AuBookmark(_bookmark));
 
 			l_out:
-			for (Iterator it = _pages.values().iterator(); it.hasNext();)
+			for (Iterator it = _pages.iterator(); it.hasNext();)
 				for (Iterator e = ((Page)it.next()).getRoots().iterator(); e.hasNext();)
 					if (Events.isListened((Component)e.next(), Events.ON_CLIENT_INFO, false)) {
 						addResponse(new AuClientInfo(this));
@@ -1249,7 +1255,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void onPiggyback() {
 		if (_piggybackListened) {
-			for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+			for (Iterator it = _pages.iterator(); it.hasNext();) {
 				final Page p = (Page)it.next();
 				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
 					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
@@ -1298,7 +1304,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void invalidate() {
-		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
+		for (Iterator it = _pages.iterator(); it.hasNext();) {
 			final Page page = (Page)it.next();
 			if (((PageCtrl)page).getOwner() == null)
 				page.invalidate();

@@ -5,9 +5,11 @@ div.z-listbox {
 	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
-	border: 0; overflow: hidden; width: 100%;
+	border: 0; width: 100%;
 }
-
+div.z-listbox-header, div.z-listbox-footer {
+	overflow: hidden;
+}
 div.z-listbox-header tr.z-listhead, div.z-listbox-header tr.z-auxhead {
 	background: #C7E5F1 repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});

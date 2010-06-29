@@ -67,7 +67,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
-		after.push(this.proxy(zk.booted ? this.onResponse: this.stripe));
+		var w = this;
+		after.push(zk.booted ? function(){setTimeout( function(){w.onResponse();},0)}: this.proxy(this.stripe));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});

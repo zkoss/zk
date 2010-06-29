@@ -30,4 +30,23 @@ public class AuAlert extends AuResponse {
 	public AuAlert(String message) {
 		super("alert", message); //component-independent
 	}
+	/**
+	 * @param message the message to display.
+	 * @param title the title of the message box
+	 * @since 5.0.3
+	 */
+	public AuAlert(String message, String title) {
+		super("alert", new String[] {message, title}); //component-independent
+	}
+	/**
+	 * @param message the message to display.
+	 * @param title the title of the message box
+	 * @param icon the icon to show. It could null,
+	 "QUESTION", "EXCLAMATION", "INFORMATION", "ERROR", "NONE".
+	 * If null, "ERROR" is assumed
+	 * @since 5.0.3
+	 */
+	public AuAlert(String message, String title, String icon) {
+		super("alert", new String[] {message, title, icon}); //component-independent
+	}
 }

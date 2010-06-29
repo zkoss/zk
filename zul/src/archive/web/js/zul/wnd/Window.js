@@ -444,9 +444,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * assumed. If modal or highlighted, it is centered.
 		 * @return String
 		 */
-		position: function (pos) {
-			if (this.desktop && this._mode != 'embedded')
-				this._updateDomPos(); //TODO: handle pos = 'parent'
+		position: function (/*pos*/) {
+			this._updateDomPos(false, this.isVisible());
 		},
 		/**
 		 * Sets the minimum height in pixels allowed for this window.
@@ -492,6 +491,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	/** Re-position the window based on the value of {@link #getPosition}.
+	 * @since 5.0.3
+	 */
+	repos: function () {
+		this._updateDomPos(false, this.isVisible());
+	},
 	/** Makes this window as overlapped with other components.
 	 */
 	doOverlapped: function () {
@@ -526,7 +531,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var pos = this.getPosition(),
 			n = this.$n(),
 			$n = zk(n);
-		if (!pos && !n.style.top && !n.style.left) {
+		if (!pos && (!n.style.top || !n.style.left)) {
 			var xy = $n.revisedOffset();
 			n.style.left = jq.px(xy[0]);
 			n.style.top = jq.px(xy[1]);
@@ -592,32 +597,32 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	/** Must be called before calling makeVParent. */
 	_posByParent: function () {
 		var n = this.$n(),
-			ofs = zk(n.parentNode).revisedOffset(),
-			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
+			ofs = zk(zk(n).vparentNode(true)).revisedOffset();
 		this._offset = ofs;
-		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left));
-		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
+		n.style.left = jq.px(ofs[0] + zk.parseInt(this._left));
+		n.style.top = jq.px(ofs[1] + zk.parseInt(this._top));
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);
-
-		if (this._mode == 'embedded') {
-			if (this._shadowWgt) {
-				this._shadowWgt.destroy();
-				this._shadowWgt = null;
+		if (this.desktop) {
+			if (this._mode == 'embedded') {
+				if (this._shadowWgt) {
+					this._shadowWgt.destroy();
+					this._shadowWgt = null;
+				}
+			} else if (this._shadow) {
+				if (!this._shadowWgt)
+					this._shadowWgt = new zk.eff.Shadow(this.$n(),
+						{left: -4, right: 4, top: -2, bottom: 3});
+				if (this.isMaximized() || this.isMinimized())
+					this._hideShadow();
+				else
+					this._shadowWgt.sync();
 			}
-		} else if (this._shadow) {
-			if (!this._shadowWgt)
-				this._shadowWgt = new zk.eff.Shadow(this.$n(),
-					{left: -4, right: 4, top: -2, bottom: 3});
-			if (this.isMaximized() || this.isMinimized())
-				this._hideShadow();
-			else
-				this._shadowWgt.sync();
-		}
-		if (this._mask && this._shadowWgt) {
-			var n = this._shadowWgt.getBottomElement()||this.$n(); //null if ff3.5 (no shadow/stackup)
-			if (n) this._mask.sync(n);
+			if (this._mask && this._shadowWgt) {
+				var n = this._shadowWgt.getBottomElement()||this.$n(); //null if ff3.5 (no shadow/stackup)
+				if (n) this._mask.sync(n);
+			}
 		}
 	},
 	_hideShadow: function () {
@@ -654,9 +659,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			});
 		}
 	},
-	_updateDomPos: function (force) {
+	_updateDomPos: function (force, posParent) {
+		if (!this.desktop || this._mode == 'embedded')
+			return;
+
 		var n = this.$n(), pos = this._position;
-		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
+		if (pos == "parent") {
+			if (posParent)
+				this._posByParent();
+			return;
+		}
+		if (!pos && !force)
 			return;
 
 		var st = n.style;
@@ -757,7 +770,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
 		if (this.isMaximized()&& !this.__maximized) 
-			jq(this.$n()).width(0);
+			this.$n().style.width="";
 	},
 	onSize: function() {
 		this._hideShadow();
@@ -889,7 +902,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			} else if (this.isMinimized()) {
 				this.setMinimized(false);
 			}
+
 			this.$supers('setVisible', arguments);
+
+			if (visible)
+				this._updateDomPos(false, true);
 		}
 	},
 	setHeight: function (height) {

@@ -64,7 +64,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		/** Set the minimum value.
 		 * @param int min
 		 */
-		min: _zkf = function(v){this._min = parseInt(v);},
+		min: _zkf = function(v){this._min = parseInt(v, 10);},
 		/** Returns the maximum value.
 		 * @return int
 		 */
@@ -99,7 +99,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format, value),
-			val = parseInt(info.raw);
+			val = parseInt(info.raw, 10);
 		if (info.raw != ''+val && info.raw != '-'+val)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 
@@ -223,7 +223,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_increase: function (is_add){
 		var inp = this.inp,
-			value = parseInt(inp.value);
+			value = parseInt(inp.value, 10);
 		if (is_add)
 			result = value + this._step;
 		else
@@ -243,7 +243,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_clearValue: function(){
 		var real = this.inp;
-		real.value = real.defaultValue = "";
+		real.value = this._defValue = "";
 		return true;
 	},
 	_startAutoIncProc: function (isup){

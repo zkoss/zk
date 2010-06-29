@@ -154,6 +154,13 @@
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }
 
+.z-calendar .z-weekend {
+	color: red;
+}
+.z-calendar .z-outside a {
+	color: #888;
+}
+
 <c:if test="${c:isExplorer()}">
 .z-datebox-rounded-calyear td,
 .z-calendar-calyear td, .z-datebox-calyear td {

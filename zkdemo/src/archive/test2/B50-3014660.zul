@@ -1,0 +1,16 @@
+<zk>
+	Please type "abx" into the combobox, and then you should see "ab" in
+	the combobox.
+	<combobox id="combo" autodrop="true">
+		<attribute name="onChanging"><![CDATA[
+	if (event.getValue().equals("abx")) {
+		self.setValue("ab");
+	}
+]]></attribute>
+	</combobox>
+	<zscript><![CDATA[
+	String[] _dict = { "abacus", "accuracy" };
+	ListModel dictModel = new SimpleListModel(_dict);
+	combo.setModel(dictModel);
+]]></zscript>
+</zk>
