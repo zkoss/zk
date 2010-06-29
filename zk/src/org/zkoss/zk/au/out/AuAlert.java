@@ -41,7 +41,7 @@ public class AuAlert extends AuResponse {
 	/**
 	 * @param message the message to display.
 	 * @param title the title of the message box
-	 * @para icon the icon to show. It could null,
+	 * @param icon the icon to show. It could null,
 	 "QUESTION", "EXCLAMATION", "INFORMATION", "ERROR", "NONE".
 	 * If null, "ERROR" is assumed
 	 * @since 5.0.3
