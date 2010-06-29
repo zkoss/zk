@@ -615,6 +615,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
 				this.$class.cpCellWidth(this);
 		}
+		
+		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
+		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
+			n.style.width = this.ebodytbl.offsetWidth + 'px';
+			this._hflexsz = n.offsetWidth;
+		}
+		
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		
 		// Bug in B36-2841185.zul
@@ -657,6 +664,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.heads.$remove(child);
 		} else if (child.$instanceof(zul.mesh.Auxhead))
 			this.heads.$remove(child);
+	},
+	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
+	beforeMinFlex_: function (orient) {
+		if (this._hflexsz === undefined && this.isSizedByContent() && orient == 'w' && this.width === undefined)
+			this._calcSize();
 	}
 }, { //static
 	_adjHeadWd: function (wgt) {

@@ -101,6 +101,7 @@ ZK 5.0.3
   3022237: Image of toolbarbutton not disabled correctly (ie8)
   3022178: Extra bottom border for selected tab
   3022174: Scroll remains upon closing tabs
+  3022669: listbox hflex="min" sizedByContent="true" not work
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
