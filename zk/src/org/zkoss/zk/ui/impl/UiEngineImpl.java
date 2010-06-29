@@ -48,6 +48,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
