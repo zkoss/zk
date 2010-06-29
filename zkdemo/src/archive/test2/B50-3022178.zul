@@ -38,5 +38,60 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
+	<tabbox width="200px">
+		<tabs>
+			<tab label="tab1" />
+			<tab label="tab2" />
+			<tab label="tab3" />
+		</tabs>
+		<toolbar width="90px">
+			<toolbarbutton label="button"/>
+		</toolbar>
+		<tabpanels>
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+		</tabpanels>
+	</tabbox>
+	<tabbox width="200px" sclass="a">
+		<tabs>
+			<tab label="tab1" />
+			<tab label="tab2" />
+			<tab label="tab3" />
+		</tabs>
+		<toolbar width="90px">
+			<toolbarbutton label="button"/>
+			<toolbarbutton image="/img/defender.gif"
+				onClick='alert("Defender")' />
+		</toolbar>
+		<tabpanels>
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+		</tabpanels>
+	</tabbox>
+	<tabbox width="150px"  height="100px" orient="vertical">
+		<tabs>
+			<tab label="tab1" />
+			<tab label="tab2" />
+			<tab label="tab3" />
+			<tab label="tab4" />
+			<tab label="tab5" />
+			<tab label="tab6" />
+		</tabs>
+		<toolbar width="90px">
+			<toolbarbutton label="button"/>
+			<toolbarbutton image="/img/defender.gif"
+				onClick='alert("Defender")' />
+		</toolbar>
+		<tabpanels>
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+			<tabpanel />
+		</tabpanels>
+	</tabbox>
 </hbox>
 </zk>
