@@ -4,7 +4,7 @@ ZK 5.0.3
   3000873: Tabbox can auto grow size when select a larger size tabpanel
   3015861: Able to specify the first day of a week for each session
   3016379: Able to control if a panel is draggable in portallayout
-  3000339: The hflex of the cloumn will calculate by max width
+  3000339: sizedByContent="true" considers both header and row content
   3014112: A way to specify custom DOM attributes, such as onload
   2824949: Calendar: different color for previous and next month
   2019205: Customization of Calendar's disabled days
