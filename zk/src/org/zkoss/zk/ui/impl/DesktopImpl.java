@@ -736,7 +736,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			try {
 				_spush.stop();
 			} catch (Throwable ex) {
-				log.error("Failed to stop server-push, "+_spush, ex);
+				log.warning("Failed to stop server-push, "+_spush, ex);
 			}
 			_spush = null;
 		}
@@ -746,7 +746,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			try {
 				pgc.destroy();
 			} catch (Throwable ex) {
-				log.error("Failed to destroy "+pgc, ex);
+				log.warning("Failed to destroy "+pgc, ex);
 			}
 		}
 
