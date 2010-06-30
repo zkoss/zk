@@ -726,7 +726,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
 	}
 
+	public boolean isAlive() {
+		return _rque != null;
+	}
 	public void destroy() {
+		_rque = null; //denote it is destroyed
+
 		if (_spush != null) {
 			try {
 				_spush.stop();
@@ -750,12 +755,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_attrs.getAttributes().clear();
 		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;
-		_rque = null;
 		//_sess = null; => not sure whether it can be nullify
 		//_wapp = null; => SimpleDesktopCache.desktopDestroyed depends on it
-	}
-	public boolean isAlive() {
-		return _rque != null;
 	}
 
 	public Collection getSuspendedThreads() {
