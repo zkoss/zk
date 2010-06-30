@@ -157,7 +157,7 @@ public class PollingServerPush implements ServerPush {
 		}
 
 		final boolean inexec = Executions.getCurrent() != null;
-		if (inexec) //Bug 1815480: don't send if timeout
+		if (inexec && _desktop.isAlive()) //Bug 1815480: don't send if timeout
 			stopClientPush();
 
 		_desktop = null; //to cause DesktopUnavailableException being thrown

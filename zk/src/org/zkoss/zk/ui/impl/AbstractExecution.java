@@ -314,12 +314,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		}
 	}
 	public void addAuResponse(AuResponse response) {
-		if (_desktop != null && _desktop.isAlive())
-			getUiEngine().addResponse(response);
+		getUiEngine().addResponse(response);
 	}
 	public void addAuResponse(String key, AuResponse response) {
-		if (_desktop != null && _desktop.isAlive())
-			getUiEngine().addResponse(key, response);
+		getUiEngine().addResponse(key, response);
 	}
 	public void setDesktop(Desktop desktop) {
 		if (desktop == null) throw new IllegalArgumentException("null");
