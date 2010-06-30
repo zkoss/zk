@@ -103,6 +103,7 @@ June 29, 2010
   3022178: Extra bottom border for selected tab
   3022174: Scroll remains upon closing tabs
   3022669: listbox hflex="min" sizedByContent="true" not work
+  3022839: (IE8) Clients.confirmClose & A component image without href
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
@@ -226,7 +227,7 @@ May 12, 2010
 ZK 5.0.1
 March 18, 2010
 * Features
-  2943477: ZK integrae JQuery 1.4.2
+  2943477: ZK integrates JQuery 1.4.2
   2053421: Jasperreport to work with Hibernate reports
   2941466: Jasperreport can work with SQL Connection
   2943475: Way to customize progressbox position

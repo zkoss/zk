@@ -53,12 +53,15 @@ zk.copy(zjq, {
 	_fixClick: function (evt) {
 		//Bug 1635685, 1612312: <a>
 		//Bug 1896749: <area>
-		var n;
-		if (jq.nodeName(n = evt.target, "a", "area")
-		&& n.href.indexOf("javascript:") >= 0) {
-			zk.skipBfUnload = true;
-			setTimeout(noSkipBfUnload, 0); //restore
-		}
+		if (zk.confirmClose)
+			for (var n = evt.target; n; n = n.parentNode)
+				if (jq.nodeName(n, "a", "area")) {
+					if (n.href.indexOf("javascript:") >= 0) {
+						zk.skipBfUnload = true;
+						setTimeout(noSkipBfUnload, 0); //restore
+					}
+					return;
+				}
 	},
 
 	_beforeOuter: zk.$void, //overridden by domie6.js
