@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.lang.D;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -37,6 +37,8 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  */
 abstract public class AbstractPage
 implements Page, PageCtrl, java.io.Serializable {
+	private static final Log log = Log.lookup(AbstractPage.class);
+
 	/** The first root component. */
 	private transient AbstractComponent _firstRoot;
 	/** The last root component. */
@@ -121,11 +123,17 @@ implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	/*package*/ void addRoot(Component comp) {
-		assert D.OFF || comp.getParent() == null;
-
 		final AbstractComponent nc = (AbstractComponent)comp;
-		if (_firstRoot == nc || nc._next != null || nc._prev != null)
-			return; //ignore if added twice
+		if (nc.getParent() != null || nc._next != null || nc._prev != null) {
+			log.warning("Ignored adding "+comp+": attached?");
+			return; //ignore
+		}
+		for (AbstractComponent ac = _firstRoot; ac != null; ac = ac._next) {
+			if (ac == nc) {
+				log.warning("Ignored adding "+comp+" twice");
+				return; //found and ignore
+			}
+		}
 
 		//Note: addRoot is called by AbstractComponent
 		//and it doesn't need to handle comp's _page
@@ -142,18 +150,26 @@ implements Page, PageCtrl, java.io.Serializable {
 		++_nRoot;
 	}
 	/*package*/ void removeRoot(Component comp) {
-		assert D.OFF || (comp.getParent() == null && comp.getPage() == this);
-
 		//Note: when AbstractComponent.setPage0 is called, parent is already
 		//null. Thus, we have to check if it is a root component
-		AbstractComponent oc = (AbstractComponent)comp;
-		if (_firstRoot != oc && oc._next == null && oc._prev == null)
-			return;
+		if (isMyRoot(comp)) {
+			final AbstractComponent oc = (AbstractComponent)comp;
+			setNext(oc._prev, oc._next);
+			setPrev(oc._next, oc._prev);
+			oc._next = oc._prev = null;
+			--_nRoot;
+		}
+	}
+	private boolean isMyRoot(Component comp) {
+		if (comp.getParent() != null || comp.getPage() != this)
+			return false;
 
-		setNext(oc._prev, oc._next);
-		setPrev(oc._next, oc._prev);
-		oc._next = oc._prev = null;
-		--_nRoot;
+		for (AbstractComponent ac = _firstRoot;; ac = ac._next) {
+			if (ac == null)
+				return false; //ignore (not a root)
+			if (ac == comp)
+				return true; //found
+		}
 	}
 	private final
 	void setNext(AbstractComponent comp, AbstractComponent next) {
@@ -166,10 +182,9 @@ implements Page, PageCtrl, java.io.Serializable {
 		else _lastRoot = prev;
 	}
 	/*package*/ void moveRoot(Component comp, Component refRoot) {
-		assert D.OFF || (comp.getPage() == this && comp.getParent() == null);
-
 		final AbstractComponent nc = (AbstractComponent)comp;
-		if (nc._next == refRoot) return; //nothing changed
+		if (!isMyRoot(comp) || nc._next == refRoot/*nothing changed*/)
+			return; 
 
 		//detach nc
 		setNext(nc._prev, nc._next);
