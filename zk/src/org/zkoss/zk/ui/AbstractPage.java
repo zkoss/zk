@@ -125,7 +125,7 @@ implements Page, PageCtrl, java.io.Serializable {
 	/*package*/ void addRoot(Component comp) {
 		final AbstractComponent nc = (AbstractComponent)comp;
 		if (nc.getParent() != null || nc._next != null || nc._prev != null) {
-			log.warning("Ignored adding "+comp+": attached?");
+			log.warning("Ignored adding "+comp+" twice");
 			return; //ignore
 		}
 		for (AbstractComponent ac = _firstRoot; ac != null; ac = ac._next) {
@@ -161,9 +161,6 @@ implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 	private boolean isMyRoot(Component comp) {
-		if (comp.getParent() != null || comp.getPage() != this)
-			return false;
-
 		for (AbstractComponent ac = _firstRoot;; ac = ac._next) {
 			if (ac == null)
 				return false; //ignore (not a root)
