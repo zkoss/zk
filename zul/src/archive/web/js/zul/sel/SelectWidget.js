@@ -335,6 +335,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
 				this.$class.cpCellWidth(this);
 		}
+		
+		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
+		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
+			n.style.width = this.ebodytbl.offsetWidth + 'px';
+			this._hflexsz = n.offsetWidth;
+		}
+		
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 
 		// Bug 279925

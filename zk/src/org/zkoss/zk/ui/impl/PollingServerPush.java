@@ -22,6 +22,7 @@ import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
@@ -156,19 +157,23 @@ public class PollingServerPush implements ServerPush {
 			return;
 		}
 
-		final boolean inexec = Executions.getCurrent() != null;
-		if (inexec) //Bug 1815480: don't send if timeout
-			stopClientPush();
+		final Execution exec = Executions.getCurrent();
+		final boolean inexec = exec != null && exec.getDesktop() == _desktop;
+			//it might be caused by DesktopCache expunge (when creating another desktop)
+		try {
+			if (inexec && _desktop.isAlive()) //Bug 1815480: don't send if timeout
+				stopClientPush();
+		} finally {
+			_desktop = null; //to cause DesktopUnavailableException being thrown
+			wakePending();
 
-		_desktop = null; //to cause DesktopUnavailableException being thrown
-		wakePending();
-
-		//if inexec, either in working thread, or other event listener
-		//if in working thread, we cannot notify here (too early to wake).
-		//if other listener, no need notify (since onPiggyback not running)
-		if (!inexec) {
-			synchronized (_mutex) {
-				_mutex.notify(); //wake up onPiggyback
+			//if inexec, either in working thread, or other event listener
+			//if in working thread, we cannot notify here (too early to wake).
+			//if other listener, no need notify (since onPiggyback not running)
+			if (!inexec) {
+				synchronized (_mutex) {
+					_mutex.notify(); //wake up onPiggyback
+				}
 			}
 		}
 	}

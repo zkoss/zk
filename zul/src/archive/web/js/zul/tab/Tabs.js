@@ -102,7 +102,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	_scrollcheck: function(way, tb) {
 		var tabbox = this.getTabbox();
-		if (!tabbox.isRealVisible() || !tabbox.isTabscroll()) return;
+		if (!this.desktop || !tabbox.isRealVisible() || !tabbox.isTabscroll())
+			return;
+
 		var tbsdiv = this.$n(),
 			tbx = tabbox.$n();
 		if (!tbsdiv || !tbx) return;	// tabbox is delete , no need to check scroll
@@ -170,7 +172,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				headerScrollLeft = header.scrollLeft,
 				childWidth = 0,
 				toolbar = tabbox.toolbar;
-				
+
 			jq(cave).children().each(function () {
 				childWidth += this.offsetWidth;
 			});
@@ -178,9 +180,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			if (toolbar)
 				toolbar = toolbar.$n();
 			if (tabbox._scrolling) { //already in scrolling status
+				var btnsize = this._getArrowSize();
 				if (toolbar) {
-					var outer, hgh,
-						btnsize = this._getArrowSize();
+					var outer, hgh;
 						
 					// fixed FF2's bug
 					if (zk.gecko2_) {
@@ -499,6 +501,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var p = this.parent;
 		if (p && child == p._selTab)
 			p._selTab = null;
+		this._scrollcheck("init");
+		this.$supers("onChildRemoved_", arguments);
+	},
+	onChildAdded_: function () {
+		this._scrollcheck("init");
+		this.$supers("onChildAdded_", arguments);
 	},
 	
 	ignoreFlexSize_: function(attr) {

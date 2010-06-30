@@ -618,7 +618,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (id == null) id = "";
 		if (!id.equals(_id)) {
 			final boolean rawId = this instanceof RawId;
-			String newUuid;
+			String newUuid = null;
 			if (rawId) newUuid = id;
 
 			if (id.length() > 0) {

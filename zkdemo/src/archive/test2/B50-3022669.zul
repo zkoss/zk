@@ -1,0 +1,41 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>If there are NO space between listbox right edge and "Message" header right edge, then it is OK</li>
+</ol>
+]]>
+</html>
+<listbox id="logMsgsGrid"  sizedByContent="true" style="border: 0;" hflex="min">
+  <listhead sizable="true">
+   <listheader label="Message Time" width="150px">
+   </listheader>
+   <listheader label="Level"
+    width="75px" sclass="r1-listheader">
+   </listheader>
+   <listheader label="Source"
+    width="75px" sclass="r1-listheader">
+   </listheader>
+   <listheader label="Message"/>
+  </listhead>
+  <listitem>
+   <listcell label="6/28/10 4:19:18 PM"/>
+   <listcell label="Info"/>
+   <listcell label="Server"/>
+   <listcell label="Merging recovery point 52 created 20 6/27/10 10 :11 PM"/>
+  </listitem>
+  <listitem>
+   <listcell label="6/28/10 4:19:18 PM"/>
+   <listcell label="Info"/>
+   <listcell label="Server"/>
+   <listcell label="Merging recovery point 52"/>
+  </listitem>
+  <listitem>
+   <listcell label="6/28/10 4:19:18 PM"/>
+   <listcell label="Info"/>
+   <listcell label="Server"/>
+   <listcell label="Merging recovery"/>
+  </listitem>
+  
+ </listbox>
+ </zk>

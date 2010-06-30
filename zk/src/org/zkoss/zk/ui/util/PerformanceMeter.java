@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.util;
 import org.zkoss.zk.ui.Execution;
 
 /**
- * A listener to measure the performance of the processing of client
+ * An application-level listener to measure the performance of the processing of client
  * requests.
  *
  * <p>Note: ZK doesn't fork another low-priority thread to call the

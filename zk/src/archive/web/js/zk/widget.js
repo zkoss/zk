@@ -209,6 +209,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//set minimum flex size and return it
 	function _fixMinFlex(wgtn, o) {
+		this.beforeMinFlex_(o);
 		//find the max size of all children
 		if (o == 'h') {
 			if (this._vflexsz === undefined) { //cached?
@@ -3066,6 +3067,9 @@ unbind_: function (skipper, after) {
 	ignoreChildNodeOffset_: function(attr) { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore child node offset in vflex/hflex calculation
 		return false;
+	},
+	beforeMinFlex_: function () {
+		//to be overridden
 	},
 	afterChildrenMinFlex_: function() {
 		//to be overridden

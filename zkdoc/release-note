@@ -22,6 +22,7 @@ ZK 5.5.0
 
 	--------
 ZK 5.0.3
+June 29, 2010
 * Features
   3000873: Tabbox can auto grow size when select a larger size tabpanel
   3015861: Able to specify the first day of a week for each session
@@ -122,7 +123,10 @@ ZK 5.0.3
   3022274: Vertical tabbox in invisible comp has big height when onShow
   3022237: Image of toolbarbutton not disabled correctly (ie8)
   3022178: Extra bottom border for selected tab
-  
+  3022174: Scroll remains upon closing tabs
+  3022669: listbox hflex="min" sizedByContent="true" not work
+  3022839: (IE8) Clients.confirmClose & A component image without href
+
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
@@ -154,7 +158,7 @@ ZK 5.0.2
   2979894: Widget's client script supports EL
   2982454: A way to make AU work with, say, Google Analytics
   2974340: Generate zul's HTML content with JavaScript array/map
-  2985686: A simpler way to change the imiplementation of FileuploadDlg
+  2985686: A simpler way to change the implementation of FileuploadDlg
   2989181: Notify a desktop that it has been recycled- onDesktopRecycle
   2992673: A directive allow set custom HTTP response header key-value in zul page
   2983365: Able to get application event queue on a worker thread
@@ -223,7 +227,7 @@ ZK 5.0.2
 ZK 5.0.1
 March 18, 2010
 * Features
-  2943477: ZK integrae JQuery 1.4.2
+  2943477: ZK integrates JQuery 1.4.2
   2053421: Jasperreport to work with Hibernate reports
   2941466: Jasperreport can work with SQL Connection
   2943475: Way to customize progressbox position
@@ -233,8 +237,6 @@ March 18, 2010
   2954280: Include component shall have clearDynamicProperties method
   2962487: Timeout popup translation and reload page
   2780660: Delay the onChanging event for autocomplete comboboxes
-  2831389: Tab Mold accordion should be able to take all the space
-  2971982: The  treefooter and the listfooter setSpan is not work
 
 * Bugs
   2941343: The combobox's popup widens to the entire width(IE6 only)
@@ -298,6 +300,8 @@ March 18, 2010
   2970695: Constraints on non-input fields spawns several error dialogs
   2970664: SimpleDateConstraint should not use static SimpleDateFormat
   2971730: ClientConstraint can't work with Datebox
+  2831389: Tab Mold accordion should be able to take all the space
+  2971982: The treefooter and the listfooter setSpan does not work
 
 * Upgrade Notes
   * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method

@@ -212,8 +212,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			zk.afterMount(function () {
     			if (tab.isSelected()) 
     				tab._sel(false, true);
-    			else if (tab.parent._isInited())
-    				tab.parent._scrollcheck("init");
 			});
 		});
 	},

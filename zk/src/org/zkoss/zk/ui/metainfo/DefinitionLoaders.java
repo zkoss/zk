@@ -77,6 +77,10 @@ public class DefinitionLoaders {
 	//2) deserialize LanguageDefinition (and maybe ComponentDefinition)
 
 	/** Adds a language addon.
+	 * It is usually used when an application want to load additional addon
+	 * dynamically. For example, if you want to load an addon only if
+	 * the professional edition is ready, you can register a
+	 * {@link org.zkoss.zk.ui.util.WebAppInit} listener.
 	 */
 	public static void addAddon(Locator locator, URL url) {
 		if (locator == null || url == null)

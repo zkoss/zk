@@ -75,6 +75,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -724,12 +725,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
 	}
 
+	public boolean isAlive() {
+		return _rque != null;
+	}
 	public void destroy() {
+		_rque = null; //denote it is destroyed
+
 		if (_spush != null) {
 			try {
 				_spush.stop();
 			} catch (Throwable ex) {
-				log.error("Failed to stop server-push, "+_spush, ex);
+				log.warning("Failed to stop server-push, "+_spush, ex);
 			}
 			_spush = null;
 		}
@@ -739,7 +745,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			try {
 				pgc.destroy();
 			} catch (Throwable ex) {
-				log.error("Failed to destroy "+pgc, ex);
+				log.warning("Failed to destroy "+pgc, ex);
 			}
 		}
 
@@ -748,12 +754,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_attrs.getAttributes().clear();
 		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;
-		_rque = null;
 		//_sess = null; => not sure whether it can be nullify
 		//_wapp = null; => SimpleDesktopCache.desktopDestroyed depends on it
-	}
-	public boolean isAlive() {
-		return _rque != null;
 	}
 
 	public Collection getSuspendedThreads() {
