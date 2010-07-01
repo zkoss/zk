@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.ext;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 
 /**
@@ -59,4 +60,19 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * @since 2.4.0
 	 */
 	public boolean isInline();
+	/** Sets the parent to the given one and insert the children of
+	 * the inline macro right before the given sibling (beforeSibling).
+	 * It is called only {@link #isInline} is true.
+	 *
+	 * <p>Notice that when {@link org.zkoss.zk.ui.AbstractComponent#insertBefore}
+	 * is called to insert an inline macro ({@link #isInline}),
+	 * the invocation will be forwarded to this method.
+	 *
+	 * @param parent the parent
+	 * @param beforeSibling a child of the parent that the macro component
+	 * will be inserted before
+	 * @return if it has been added successfully
+	 * @since 3.6.5
+	 */
+	public boolean setInlineParent(Component parent, Component beforeSibling);
 }

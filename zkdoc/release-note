@@ -20,6 +20,7 @@ ZK 3.6.5
   2997527: IE6: datebox / combobox button disappears
   3019383: Failed to change the position of a root component to the end
   3020609: Dragging modal window might fail if dragging too fast
+  3023619: inline macro cause nRoot to become a negative number
 
 * Upgrade Notes:
 
