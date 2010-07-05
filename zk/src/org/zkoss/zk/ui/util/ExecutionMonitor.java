@@ -19,6 +19,9 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * An application-level listener to know when an execution is activated,
  * deactivated, or waiting for activation.
+ * In addition, it also monitors the processing of an event, such that
+ * it can be used to monitor the performance of the processing of events
+ * (while {@link PerformanceMeter} monitors the AU requests).
  *
  * <p>Notice that the same listener is used for the whole application.
  * Make sure it is thread-safe and the performance is good.
