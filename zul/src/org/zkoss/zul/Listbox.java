@@ -393,11 +393,16 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	/**
-	 * Sets whether sizing listbox column width by its content. Default is
-	 * false, i.e. the outline of listbox is dependent on browser. It means, we
-	 * don't calculate the width of each cell. if set to true, the outline will
-	 * count on the content of body. In other words, the outline of listbox will be
-	 * like ZK version 2.4.1 that the header's width is only for reference.
+	 * Sets whether sizing listbox column width by its content.
+	 * <p>Default: false. It means the outline of listbox is dependent on
+	 * the header.
+	 * The performance is better and the user can precisely resize certain
+	 * headers. If you want a column to have the width of the content,
+	 * you can specify hflex="min".
+	 * <p>If set to true, the outline will depend on the content of body.
+	 * In other words, the width specified in the header is only for reference.
+	 * The browser will adjust the width when a column's width is changed, so
+	 * it might not be easy for user to adjust the column width as precise as he wants.
 	 * 
 	 * <p>
 	 * You can also specify the "sized-by-content" attribute of component in
