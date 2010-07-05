@@ -158,6 +158,21 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			super.setParent(parent);
 		}
 	}
+	public boolean setInlineParent(Component parent, Component beforeSibling) {
+		if (!isInline())
+			throw new InternalError("inline only");
+
+		if (_inlines == null)
+			afterCompose(); //autocreate
+
+		boolean inserted = false;
+		for (int j = 0; j < _inlines.length; ++j) {
+			if (parent.insertBefore(_inlines[j], beforeSibling))
+				inserted = true;
+		}
+		return inserted;
+	}
+
 	/** Changes the page.
 	 *
 	 * <p>Note: if this is an inline macro ({@link #isInline}),

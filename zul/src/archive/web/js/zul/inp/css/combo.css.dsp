@@ -476,7 +476,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-spinner-rounded .z-spinner-rounded-btn-readonly {
 	background-position: 0 -192px;
 }
-/****************************************************************************************************************************/
+
 .z-spinner-focus .z-spinner-readonly,
 .z-timebox-focus .z-timebox-readonly,
 .z-datebox-focus .z-datebox-readonly,
@@ -484,7 +484,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 .z-combobox-focus .z-combobox-readonly {
 	background-image: url(${c:encodeURL('~./zul/img/button/readonly-focus-bg.gif')});
 }
-/************************************************* focus inp btn readonly *******************************************/
+<%-- focus inp btn readonly --%>
 .z-combobox-rounded-focus .z-combobox-rounded-readonly,
 .z-bandbox-rounded-focus .z-bandbox-rounded-readonly,
 .z-datebox-rounded-focus .z-datebox-rounded-readonly,

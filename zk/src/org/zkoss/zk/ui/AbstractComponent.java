@@ -1149,6 +1149,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public boolean insertBefore(Component newChild, Component refChild) {
+		if ((newChild instanceof Macro) && ((Macro)newChild).isInline())
+			return ((Macro)newChild).setInlineParent(this, refChild);
+
 		checkParentChild(this, newChild);
 
 		if (refChild != null && refChild.getParent() != this)
