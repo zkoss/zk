@@ -5,6 +5,8 @@ ZK 5.0.4
 
 * Bugs
   3023619: inline macro cause nRoot to become a negative number
+  
+* Upgrade Notes
 
 	--------
 ZK 5.0.3
