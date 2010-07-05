@@ -1540,6 +1540,8 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Session sess = desktop.getSession();
+		final ExecutionMonitor execmon = desktop.getWebApp()
+			.getConfiguration().getExecutionMonitor();
 //		if (log.finerable()) log.finer("Activating "+desktop);
 
 		//lock desktop
@@ -1550,9 +1552,13 @@ public class UiEngineImpl implements UiEngine {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
 
+				if (execmon != null)
+					execmon.executionWait(exec, desktop);
 				try {
 					uvlock.wait(getRetryTimeout());
 				} catch (InterruptedException ex) {
+					if (execmon != null)
+						execmon.executionAbort(exec, desktop, ex);
 					throw UiException.Aide.wrap(ex);
 				}
 			}
@@ -1578,8 +1584,12 @@ public class UiEngineImpl implements UiEngine {
 				desktopCtrl.setExecution(null);
 				uvlock.notify(); //wakeup pending threads
 			}
+			if (execmon != null)
+				execmon.executionAbort(exec, desktop, ex);
 			throw UiException.Aide.wrap(ex);
 		}
+		if (execmon != null)
+			execmon.executionActivate(exec, desktop);
 		return uv;
 	}
 
@@ -1628,6 +1638,11 @@ public class UiEngineImpl implements UiEngine {
 			}
 			ExecutionsCtrl.setCurrent(null);
 			execCtrl.setCurrentPage(null);
+
+			final ExecutionMonitor execmon = desktop.getWebApp()
+				.getConfiguration().getExecutionMonitor();
+			if (execmon != null)
+				execmon.executionDeactivate(exec, desktop);
 		}
 
 		final SessionCtrl sessCtrl = (SessionCtrl)desktop.getSession();

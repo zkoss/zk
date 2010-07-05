@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 
@@ -195,6 +196,7 @@ implements EventProcessingThread {
 
 		//Spec: locking mutex is optional for app developers
 		//so we have to lock it first
+		ExecutionMonitor execmon = null;
 		_suspmutex = mutex;
 		try {
 			synchronized (_suspmutex) {
@@ -216,11 +218,22 @@ implements EventProcessingThread {
 					_evtmutex.notify();
 				}
 
-				if (_ceased == null) _suspmutex.wait();
+				if (_ceased == null) {
+					execmon = _proc.getDesktop().getWebApp()
+						.getConfiguration().getExecutionMonitor();
+						//init only required, so eventResume called if-only-if eventSuspend called
+					if (execmon != null)
+						execmon.eventSuspend(getEvent());
+
+					_suspmutex.wait();
+				}
 			}
 		} finally {
 			_suspmutex = null;
 			_suspended = false; //just in case (such as _ceased)
+
+			if (execmon != null)
+				execmon.eventResume(getEvent());
 		}
 
 		if (_ceased != null)

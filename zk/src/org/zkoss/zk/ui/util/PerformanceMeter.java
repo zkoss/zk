@@ -34,6 +34,9 @@ import org.zkoss.zk.ui.Execution;
  * For AU updates, {@link #requestStartAtClient} must be called
  * and the request ID a desktop-wide uique ID to identify a request.
  *
+ * <p>To monitor the performance of each event and execution, you
+ * can also implement {@link ExecutionMonitor}.
+ *
  * @author tomyeh
  * @since 3.0.0
  */

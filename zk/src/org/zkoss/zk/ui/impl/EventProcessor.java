@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -127,6 +128,8 @@ public class EventProcessor {
 	 * See also {@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}.
 	 */
 	public void process() throws Exception {
+		final ExecutionMonitor execmon =
+			_desktop.getWebApp().getConfiguration().getExecutionMonitor();
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final Scope scope = Scopes.beforeInterpret(_comp);
@@ -136,11 +139,16 @@ public class EventProcessor {
 
 			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
 			if (_event != null) {
+				if (execmon != null)
+					execmon.eventStart(_event);
+
 				Scopes.setImplicit("event", _event); //_event might change
 				process0(scope);
 				((DesktopCtrl)_desktop).afterProcessEvent(_event);
 			}
 		} finally {
+			if (execmon != null &&_event != null)
+				execmon.eventComplete(_event);
 			Scopes.afterInterpret();
 		}
 	}

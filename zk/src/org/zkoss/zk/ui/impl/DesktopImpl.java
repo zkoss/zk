@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.DesktopActivationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.RawId;
@@ -729,6 +730,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _rque != null;
 	}
 	public void destroy() {
+		final ExecutionMonitor execmon = _wapp != null ? //just in case
+			_wapp.getConfiguration().getExecutionMonitor(): null;
+
 		_rque = null; //denote it is destroyed
 
 		if (_spush != null) {
@@ -748,6 +752,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.warning("Failed to destroy "+pgc, ex);
 			}
 		}
+
+		if (execmon != null)
+			execmon.desktopDestroy(this);
 
 		//theorectically, the following is not necessary, but, to be safe...
 		_pages.clear();

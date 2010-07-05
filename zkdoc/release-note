@@ -6,6 +6,7 @@ ZK 5.5.0
   2920934: A plugin to load lang.xml, config.xml.. from custom location
   2947727: The instantiation of Composer & Server Push customizable
   2978342: A way to tag AU request for statistic purpose
+  3025389: A way to monitor the execution and event processing
 
 * Bugs
   2973303: listbox mold select and selectedIndex -1

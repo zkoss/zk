@@ -116,6 +116,7 @@ public class Configuration {
 	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
+	private ExecutionMonitor _execmon;
 	private DesktopRecycle _dtRecycle;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private ThemeProvider _themeProvider;
@@ -200,19 +201,25 @@ public class Configuration {
 
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
-				throw new UiException("Monitor listener can be assigned only once");
+				throw new UiException(onlyOnce(Monitor.class));
 			_monitor = (Monitor)(listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (PerformanceMeter.class.isAssignableFrom(klass)) {
 			if (_pfmeter != null)
-				throw new UiException("PerformanceMeter listener can be assigned only once");
+				throw new UiException(onlyOnce(PerformanceMeter.class));
 			_pfmeter = (PerformanceMeter)(listener = getInstance(klass, listener));
+			added = true;
+		}
+		if (ExecutionMonitor.class.isAssignableFrom(klass)) {
+			if (_execmon != null)
+				throw new UiException(onlyOnce(ExecutionMonitor.class));
+			_execmon = (ExecutionMonitor)(listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (DesktopRecycle.class.isAssignableFrom(klass)) {
 			if (_dtRecycle != null)
-				throw new UiException("PerformanceMeter listener can be assigned only once");
+				throw new UiException(onlyOnce(PerformanceMeter.class));
 			_dtRecycle = (DesktopRecycle)(listener = getInstance(klass, listener));
 			added = true;
 		}
@@ -311,6 +318,9 @@ public class Configuration {
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
 	}
+	private static final String onlyOnce(Class cls) {
+		return cls + " can be assigned only once";
+	}
 	private static Object getInstance(Class klass, Object listener)
 	throws Exception {
 		return listener != null ? listener: klass.newInstance();
@@ -323,6 +333,8 @@ public class Configuration {
 			_monitor = null;
 		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
 			_pfmeter = null;
+		if (_execmon != null && _execmon.getClass().equals(klass))
+			_execmon = null;
 		if (_dtRecycle != null && _dtRecycle.getClass().equals(klass))
 			_dtRecycle = null;
 
@@ -1769,6 +1781,33 @@ public class Configuration {
 	public PerformanceMeter setPerformanceMeter(PerformanceMeter meter) {
 		final PerformanceMeter old = _pfmeter;
 		_pfmeter = meter;
+		return old;
+	}
+
+	/** Returns the execution monitor for this application, or null if not set.
+	 * @since 5.5.0
+	 */
+	public ExecutionMonitor getExecutionMonitor() {
+		return _execmon;
+	}
+	/** Sets the execution monitor for this application, or null to disable it.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>There is at most one execution monitor for each Web application.
+	 * The previous meter will be replaced when this method is called.
+	 *
+	 * <p>In addition to call this method, you could specify
+	 * an execution monitor in zk.xml
+	 *
+	 * @param monitor the execution monitor. If null, the monitor function
+	 * is disabled.
+	 * @return the previous execution monitor, or null if not available.
+	 * @since 5.5.0
+	 */
+	public ExecutionMonitor setExecutionMonitor(ExecutionMonitor monitor) {
+		final ExecutionMonitor old = _execmon;
+		_execmon = monitor;
 		return old;
 	}
 
