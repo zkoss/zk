@@ -5,6 +5,7 @@ ZK 5.0.4
 
 * Bugs
   3023619: inline macro cause nRoot to become a negative number
+  3025339: incorrect implementation in Timebox and Spinner widget
   
 * Upgrade Notes
 
