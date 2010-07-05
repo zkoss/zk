@@ -142,25 +142,25 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyDown_', arguments);
 	},
-	ondropbtnup: function (evt) {
+	_ondropbtnup: function (evt) {
 		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
-		this.domUnlisten_(document.body, "mouseup", "ondropbtnup");
+		this.domUnlisten_(document.body, "onMouseUp", "_ondropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
-		if (this.inp && !this.inp.disabled && !zk.dragging) {
+		var inp = this.inp,
+			btn = this.$n("btn");
+		if(inp.disabled) return;
+		
+		if (inp && !inp.disabled && !zk.dragging) {
 			if (this._currentbtn)
 				this.ondropbtnup(evt);
 			jq(btn).addClass(this.getZclass() + "-btn-clk");
-			this.domListen_(document.body, "mouseup", "ondropbtnup");
+			this.domListen_(document.body, "onMouseUp", "_ondropbtnup");
 			this._currentbtn = btn;
 		}
-		var inp = this.inp,
-			btn = this.$n("btn");
-			
-		if(inp.disabled) return;
-
+		
 		this.checkValue();
 		
 		ofs = zk(btn).revisedOffset();
@@ -330,11 +330,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		if(btn){
-			this._auxb = new zul.Auxbutton(this, btn, inp);
-			this.domListen_(btn, "onmousedown", "_btnDown");
-			this.domListen_(btn, "onmouseup", "_btnUp");
-			this.domListen_(btn, "onmouseout", "_btnOut");
-			this.domListen_(btn, "mouseover", "_btnOver");
+			this.domListen_(btn, "onMouseDown", "_btnDown");
+			this.domListen_(btn, "onMouseUp", "_btnUp");
+			this.domListen_(btn, "onMouseOut", "_btnOut");
+			this.domListen_(btn, "onMouseOver", "_btnOver");
 		}
 		this.syncWidth();
 	},
@@ -346,12 +345,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
 		if(btn){
-			this._auxb.cleanup();
-			this._auxb = null;
-			this.domUnlisten_(btn, "onmousedown", "_btnDown");
-			this.domUnlisten_(btn, "onmouseup", "_btnUp");
-			this.domUnlisten_(btn, "onmouseout", "_btnOut");
-			this.domUnlisten_(btn, "mouseover", "_btnOver");
+			this.domUnlisten_(btn, "onMouseDown", "_btnDown");
+			this.domUnlisten_(btn, "onMouseUp", "_btnUp");
+			this.domUnlisten_(btn, "onMouseOut", "_btnOut");
+			this.domUnlisten_(btn, "onMouseOver", "_btnOver");
 		}
 		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
 	}
