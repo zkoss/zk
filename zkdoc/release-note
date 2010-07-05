@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.4
 * Features
+  3025279: Client: Able to listen the Ajax error
 
 * Bugs
   3023619: inline macro cause nRoot to become a negative number

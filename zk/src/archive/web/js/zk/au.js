@@ -13,8 +13,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _errURIs = {}, errCode,
+	var _errURIs = {}, _errCode,
 		_perrURIs = {}, //server-push error URI
+		_onErrs = [], //onError functions
 		cmdsQue = [], //response commands in XML
 		ajaxReq, ajaxReqInf, pendingReqInf, ajaxReqTries,
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
@@ -117,6 +118,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				ajaxSendNow(reqInf);
 		}
 	}
+	function onError(req, errCode) {
+		//$clone first since it might add or remove onError
+		for (var errs = _onErrs.$clone(), fn; fn = errs.shift();)
+			if (fn(req, errCode))
+				return true; //ignored
+	}
 	// Called when the response is received from ajaxReq.
 	function onResponseReady() {
 		var req = ajaxReq, reqInf = ajaxReqInf;
@@ -127,10 +134,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, pfGetIds(req));
 
-				var sid = req.getResponseHeader("ZK-SID");
-				if (req.status == 200) { //correct
+				var sid = req.getResponseHeader("ZK-SID"), rstatus;
+				if ((rstatus = req.status) == 200) { //correct
 					if (sid && sid != seqId) {
-						errCode = "ZK-SID " + (sid ? "mismatch": "required");
+						_errCode = "ZK-SID " + (sid ? "mismatch": "required");
 						return;
 					} //if sid null, always process (usually for error msg)
 
@@ -140,15 +147,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						ajaxReqTries = 0;
 						pendingReqInf = null;
 					}
-				} else if (!sid || sid == seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
-					errCode = req.status;
-					var eru = _errURIs['' + req.status];
+					var v;
+					if (v = req.getResponseHeader("ZK-Error"))
+						onError(req, v); //no need to the returned value
+				} else if ((!sid || sid == seqId) //ignore only if out-of-seq (note: 467 w/o sid)
+				&& !onError(req, _errCode = rstatus)) {
+					var eru = _errURIs['' + rstatus];
 					if (typeof eru == "string") {
 						zUtl.go(eru, {reload: true});
 					} else {
 					//handle MSIE's buggy HTTP status codes
 					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-						switch (req.status) { //auto-retry for certain case
+						switch (rstatus) { //auto-retry for certain case
 						default:
 							if (!ajaxReqTries) break;
 							//fall thru
@@ -168,7 +178,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 						if (!reqInf.ignorable && !zk.unloading) {
 							var msg = req.statusText;
-							if (zAu.confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
+							if (zAu.confirmRetry("FAILED_TO_RESPONSE", rstatus+(msg?": "+msg:""))) {
 								ajaxReqTries = 2; //one more try
 								ajaxReqResend(reqInf);
 								return;
@@ -191,9 +201,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			//Mozilla throws exception while IE returns a value
 			if (reqInf && !reqInf.ignorable && !zk.unloading) {
 				var msg = e.message;
-				errCode = "[Receive] " + msg;
-				//if (e.fileName) errCode += ", "+e.fileName;
-				//if (e.lineNumber) errCode += ", "+e.lineNumber;
+				_errCode = "[Receive] " + msg;
+				//if (e.fileName) _errCode += ", "+e.fileName;
+				//if (e.lineNumber) _errCode += ", "+e.lineNumber;
 				if (zAu.confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
 					ajaxReqResend(reqInf);
 					return;
@@ -254,9 +264,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			req.open("POST", uri ? uri: reqInf.uri, true);
 			req.setRequestHeader("Content-Type", setting.contentType);
 			req.setRequestHeader("ZK-SID", reqInf.sid);
-			if (errCode) {
-				req.setRequestHeader("ZK-Error-Report", errCode);
-				errCode = null;
+			if (_errCode) {
+				req.setRequestHeader("ZK-Error-Report", _errCode);
+				_errCode = null;
 			}
 
 			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
@@ -279,7 +289,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 			if (!reqInf.ignorable && !zk.unloading) {
 				var msg = e.message;
-				errCode = "[Send] " + msg;
+				_errCode = "[Send] " + msg;
 				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
 					ajaxReqResend(reqInf);
 					return;
@@ -390,6 +400,34 @@ zAu = {
 	},
 
 	//Error Handling//
+	/** Register a listener that will be called when the Ajax request failed.
+	 * The listener shall be
+	 * <pre><code>function (req, errCode)</code></pre>
+	 *
+	 * where req is an instance of {@link  _global_.XMLHttpRequest},
+	 * and errCode is the error code.
+	 * Furthermore, the listener could return true to ignore the error.
+	 * In other words, if true is returned, the error is ignored (the
+	 * listeners registered after won't be called either).
+	 * <p>Notice that req.status might be 200, since ZK might send the error
+	 * back with the ZK-Error header.
+	 *
+	 * <p>To remove the listener, use {@link #unError}.
+	 * @since 5.0.4
+	 * @see #unError
+	 * @see #confirmRetry
+	 */
+	onError: function (fn) {
+		_onErrs.push(fn);
+	},
+	/** Unregister a listener for handling errors.
+	 * @since 5.0.4
+	 * @see #onError
+	 */
+	unError: function (fn) {
+		_onErrs.$remove(fn);
+	},
+
 	/** Called to confirm the user whether to retry, when an error occurs.
 	 * @param String msgCode the message code
 	 * @param String msg2 the additional message. Ignored if not specified or null.
