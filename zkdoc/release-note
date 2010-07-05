@@ -21,6 +21,14 @@ ZK 5.5.0
   + The id-to-uuid-prefix configuration is removed
 
 	--------
+ZK 5.0.4
+* Features
+  3025279: Client: Able to listen the Ajax error
+
+* Bugs
+  3023619: inline macro cause nRoot to become a negative number
+
+	--------
 ZK 5.0.3
 June 29, 2010
 * Features

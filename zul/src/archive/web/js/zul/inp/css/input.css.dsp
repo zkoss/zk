@@ -175,18 +175,18 @@
 .z-arrow-u {
 	background-image: url(${c:encodeURL('~./zul/img/misc/arrowU.gif')});
 }
-.ie6 .z-errbox .z-popup-tl,
-.ie6 .z-errbox .z-popup-tr,
-.ie6 .z-errbox .z-popup-bl,
-.ie6 .z-errbox .z-popup-br {
+.z-errbox .z-popup-tl,
+.z-errbox .z-popup-tr,
+.z-errbox .z-popup-bl,
+.z-errbox .z-popup-br {
 	background-image:url(${c:encodeURL('~./zul/img/errbox/pp-corner.gif')});
 }
-.ie6 .z-errbox .z-popup-cm {
+.z-errbox .z-popup-cm {
 	background-color : #FDF2E7;
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.gif')});
 }
-.ie6 .z-errbox .z-popup-cl,
-.ie6 .z-errbox .z-popup-cr {
+.z-errbox .z-popup-cl,
+.z-errbox .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
 </c:if>

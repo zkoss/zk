@@ -74,9 +74,10 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	_play: function () {
 		if (this._running) {
 			var fn = this.proxy(this._tmfn);
-			if (this._repeats)
+			if (this._repeats) {
 				this._iid = setInterval(fn, this._delay);
-			else
+				zAu.onError(this.proxy(this._onErr));
+			} else
 				this._tid = setTimeout(fn, this._delay);
 		}
 	},
@@ -91,6 +92,11 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 			this._tid = null;
 			clearTimeout(id);
 		}
+		zAu.unError(this.proxy(this._onErr));
+	},
+	_onErr: function (req, errCode) {
+		if (errCode == "410" || errCode == "404")
+			this._stop();
 	},
 	_tmfn: function () {
 		if (!this._repeats) this._running = false;
