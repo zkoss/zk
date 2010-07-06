@@ -714,10 +714,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		if (btn) {
-			this.domListen_(btn, "onMouseDown", "_btnDown");
-			this.domListen_(btn, "onMouseUp", "_btnUp");
-			this.domListen_(btn, "onMouseOut", "_btnOut");
-			this.domListen_(btn, "onMouseOver", "_btnOver");
+			this.domListen_(btn, "onMouseDown", "_btnDown")
+				.domListen_(btn, "onMouseUp", "_btnUp")
+				.domListen_(btn, "onMouseOut", "_btnOut")
+				.domListen_(btn, "onMouseOver", "_btnOver");
 		}
 		this.syncWidth();
 	},
@@ -729,10 +729,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
 		if (btn) {
-			this.domUnlisten_(btn, "onMouseDown", "_btnDown");
-			this.domUnlisten_(btn, "onMouseUp", "_btnUp");
-			this.domUnlisten_(btn, "onMouseOut", "_btnOut");
-			this.domUnlisten_(btn, "onMouseOver", "_btnOver");
+			this.domUnlisten_(btn, "onMouseDown", "_btnDown")
+				.domUnlisten_(btn, "onMouseUp", "_btnUp")
+				.domUnlisten_(btn, "onMouseOut", "_btnOut")
+				.domUnlisten_(btn, "onMouseOver", "_btnOver");
 		}
 		this._changed = false;
 		this.$supers(zul.inp.Timebox, 'unbind_', arguments);
