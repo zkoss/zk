@@ -116,6 +116,7 @@ June 29, 2010
   3022174: Scroll remains upon closing tabs
   3022669: listbox hflex="min" sizedByContent="true" not work
   3022839: (IE8) Clients.confirmClose & A component image without href
+  3025674: When Listbox mold=select, add listhead cause html error
 
 * Upgrade Notes
   + The default font size is changed to "arial, sans-serif". If you prefer the
