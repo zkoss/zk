@@ -100,10 +100,9 @@ public class PollingServerPush implements ServerPush {
 		if (start != null)
 			return start;
 
-		final String dtid = _desktop.getId();
 		final StringBuffer sb = new StringBuffer(128)
 			.append("zk.load('zk.cpsp');zk.afterLoad(function(){zk.cpsp.start('")
-			.append(dtid).append('\'');
+			.append(_desktop.getId()).append('\'');
 
 		final int min = getIntPref("PollingServerPush.delay.min"),
 			max = getIntPref("PollingServerPush.delay.max"),
@@ -112,7 +111,7 @@ public class PollingServerPush implements ServerPush {
 			sb.append(',').append(min).append(',').append(max)
 				.append(',').append(factor);
 
-		return sb.append(");},'").append(dtid).append("');").toString();
+		return sb.append(");});").toString();
 	}
 	private int getIntPref(String key) {
 		final String s = _desktop.getWebApp().getConfiguration()

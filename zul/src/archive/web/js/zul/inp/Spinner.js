@@ -329,12 +329,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if (this._readonly && !this.inRoundedMold())
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
-		if(btn){
+		if(btn)
 			this.domListen_(btn, "onMouseDown", "_btnDown")
 				.domListen_(btn, "onMouseUp", "_btnUp")
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
-		}
+
 		this.syncWidth();
 	},
 	unbind_: function () {
@@ -344,12 +344,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
-		if(btn){
+		if(btn)
 			this.domUnlisten_(btn, "onMouseDown", "_btnDown")
 				.domUnlisten_(btn, "onMouseUp", "_btnUp")
 				.domUnlisten_(btn, "onMouseOut", "_btnOut")
 				.domUnlisten_(btn, "onMouseOver", "_btnOver");
-		}
+
 		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
 	}
 	

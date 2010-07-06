@@ -46,7 +46,6 @@ import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
@@ -2433,18 +2432,10 @@ w:use="foo.MyWindow"&gt;
 	public void service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if ("echo".equals(cmd)) {
-			final Map data = request.getData();
-			if (data == null)
-				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-					new Object[] {data, this});
-			final List data2 = (List)data.get("");
+			final List data2 = (List)request.getData().get("");
 			Events.postEvent(new Event((String)data2.get(0), this, data2.size() > 1 ? data2.get(1) : null));
 		} else if ("setAttr".equals(cmd)) {
-			final Map data = request.getData();
-			if (data == null)
-				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-					new Object[] {data, this});
-			final List data2 = (List)data.get("");
+			final List data2 = (List)request.getData().get("");
 			updateByClient((String)data2.get(0), data2.get(1));
 		} else
 			Events.postEvent(Event.getEvent(request));

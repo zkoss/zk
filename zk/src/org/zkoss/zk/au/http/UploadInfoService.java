@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -64,9 +63,6 @@ public class UploadInfoService implements AuService {
 	public boolean service(AuRequest request, boolean everError) {
 		if ("updateResult".equals(request.getCommand())) {
 			final Map data = request.getData();
-			if (data == null)
-				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-					new Object[] {data, request});
 			Desktop desktop = request.getDesktop();
 			final String uuid = (String) request.getData().get("wid");
 			final String sid = (String) request.getData().get("sid");

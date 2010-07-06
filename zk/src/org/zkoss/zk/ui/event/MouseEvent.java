@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
@@ -65,18 +64,12 @@ public class MouseEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static MouseEvent getMouseEvent(AuRequest request) {
-		final Component comp = request.getComponent();
-		if (comp == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
 		final String name = request.getCommand();
 		final int keys = AuRequests.parseKeys(data);
 		final String area = (String)data.get("area");
-		return area != null ? new MouseEvent(name, comp, area, keys): //area
-			new MouseEvent(name, comp, //coord
+		return area != null ? new MouseEvent(name, request.getComponent(), area, keys): //area
+			new MouseEvent(name, request.getComponent(), //coord
 				AuRequests.getInt(data, "x", 0, true),
 				AuRequests.getInt(data, "y", 0, true),
 				AuRequests.getInt(data, "pageX", 0, true),

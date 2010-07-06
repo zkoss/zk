@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
@@ -38,15 +37,8 @@ public class MaximizeEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final MaximizeEvent getMaximizeEvent(AuRequest request) {
-		final Component comp = request.getComponent();
-		if (comp == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
-
-		return new MaximizeEvent(request.getCommand(), comp,
+		return new MaximizeEvent(request.getCommand(), request.getComponent(),
 			(String)data.get("left"), (String)data.get("top"),
 			(String)data.get("width"), (String)data.get("height"),
 			AuRequests.getBoolean(data, "maximized"));

@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
@@ -78,23 +77,14 @@ public class AuRequests {
 	 */
 	public static String getInnerWidth(AuRequest request)
 	throws UiException {
-		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
-		return (String)data.get("");
+		return (String)request.getData().get("");
 	}
 
 	/** Returns the result of an AU request representing the update result.
 	 */
 	public static Object getUpdateResult(AuRequest request)
 	throws UiException {
-		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
-
-		final String key = (String)data.get("contentId");
+		final String key = (String)request.getData().get("contentId");
 		final Object result = request.getDesktop().removeAttribute(key);
 		if (result == null)
 			throw new UiException("Content not found: "+key);

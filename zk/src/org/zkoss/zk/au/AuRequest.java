@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class AuRequest {
 		_desktop = desktop;
 		_uuid = uuid;
 		_cmd = cmd;
-		_data = data;
+		_data = data != null ? data: Collections.EMPTY_MAP;
 	}
 	/** Constructor for a general request sent from client.
 	 * This is usully used to ask server to log or report status.
@@ -91,7 +92,7 @@ public class AuRequest {
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_cmd = cmd;
-		_data = data;
+		_data = data != null ? data: Collections.EMPTY_MAP;
 	}
 
 	/** Activates this request.
@@ -155,12 +156,15 @@ public class AuRequest {
 	public Component getComponent() {
 		return _comp;
 	}
-	/** Returns the data of this request, or null if not available.
+	/** Returns the data of this request.
 	 * If the client sends a string, a number or an array as data,
 	 * the data can be retrieved by the key, "". For example,
 	 * <code>getData().getInt("")</code>.
 	 *
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">how to process data with JSON</a>.
+	 *
+	 * <p>Notice that, since 5.0.4, this method never returns null.
+	 * If no data at all, it simply returns an empty map.
 	 * @since 5.0.0
 	 */
 	public Map getData() {
