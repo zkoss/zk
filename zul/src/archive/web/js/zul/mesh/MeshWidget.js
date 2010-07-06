@@ -845,7 +845,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			w = head ? head = head.lastChild : null;
 		for (var i = bdfaker.cells.length; i--;) {
 			var wd = bdwd = bdfaker.cells[i].offsetWidth,
-				hdwd = w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0,
+				hdwd = Math.max(w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0, hdfaker.cells[i].offsetWidth),
 				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0;
 			if (hdwd > wd) wd = hdwd;
 			if (ftwd > wd) wd = ftwd;
