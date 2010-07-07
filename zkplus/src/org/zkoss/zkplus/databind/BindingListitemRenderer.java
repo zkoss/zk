@@ -96,6 +96,9 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 
 		//apply the data binding
 		_binder.loadComponent(item);
+		
+		//feature# 3026221: Databinder shall fire onCreate when cloning each items
+		DataBinder.postOnCreateEvents(item); //since 5.0.4
 	}
 
 	//link cloned components with bindings of templates
