@@ -1,0 +1,19 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Click the button</li>
+	<li>Check the label, it shall in the bandpopup of the bandbox</li>
+</ol>
+]]>
+</html>
+	<zscript><![CDATA[
+		void addPop(){
+			Bandpopup bandpopup = new Bandpopup();
+			bandpopup.setParent(bandbox);
+			bandpopup.appendChild(new Label("label"));
+		}
+	]]></zscript>
+	<bandbox id="bandbox"/>
+	<button label="add bandpopup" onClick="addPop()"/>
+</zk>
