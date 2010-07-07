@@ -1174,6 +1174,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
+		return enableServerPush0(null, enable);
+	}
+	private boolean enableServerPush0(ServerPush sp, boolean enable) {
 		if (_sess == null)
 			throw new IllegalStateException("Server push cannot be enabled in a working thread");
 
@@ -1190,15 +1193,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: "+cnt:
 						"Server push is disabled");
 
-				final Class cls = getDevice().getServerPushClass();
-				if (cls == null)
-					throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
+				if (sp != null) {
+					_spush = sp;
+				} else {
+					final Class cls = getDevice().getServerPushClass();
+					if (cls == null)
+						throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
-				try {
-					_spush = (ServerPush)cls.newInstance();
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
+					try {
+						_spush = (ServerPush)cls.newInstance();
+					} catch (Throwable ex) {
+						throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
+					}
 				}
+
 				_spush.start(this);
 				++cnt;
 			} else if (_spush.isActive()) {
@@ -1214,15 +1222,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return old;
 	}
 	public boolean enableServerPush(ServerPush serverpush) {
-		if (serverpush == null)
-			return enableServerPush(false);
-
-		final boolean old = _spush != null;
-		if (!old || serverpush != _spush) {
-			if (old) enableServerPush(false);
-
-			_spush = serverpush;
-			_spush.start(this);
+		final boolean old = _spush != null,
+			enable = serverpush != null;
+		if (old != enable || serverpush != _spush) {
+			if (old)
+				enableServerPush(false);
+			if (enable)
+				enableServerPush0(serverpush, true);
 		}
 		return old;
 	}

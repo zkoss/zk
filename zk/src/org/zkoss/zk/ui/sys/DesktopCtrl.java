@@ -201,6 +201,14 @@ if (c.isEmpty()) {
 	public ServerPush getServerPush();
 	/** Enables the server-push feature with the specified server-push
 	 * controller.
+	 * If you want to use the default serverpush, use {@link Desktop#enableServerPush}
+	 * instead. This method allows the caller to provide a server push
+	 * for more control.
+	 * <p>Example:
+	 * <pre><code>desktop.enableServerPush(new PollingServerPush(1000,6000,5));</code></pre>
+	 *
+	 * <p>Notice: a server push controller can be used in one desktop.
+	 * It cannot be shared.
 	 *
 	 * @param serverpush the server-push controller. If null,
 	 * the server-push feature is disabled (for this desktop).

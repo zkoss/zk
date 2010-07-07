@@ -24,6 +24,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zul.*;
 
 /**
@@ -35,12 +36,18 @@ public class ServerPush {
 	private static final Log log = Log.lookup(ServerPush.class);
 
 	public static void start(Component info, Textbox tb) throws InterruptedException {
+		start(null, info, tb);
+	}
+	public static void start(org.zkoss.zk.ui.sys.ServerPush sp, Component info, Textbox tb) throws InterruptedException {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		if (desktop.isServerPushEnabled()) {
 			Messagebox.show("Already started");
 		} else {
 			desktop.removeAttribute("sp.ceased");
-			desktop.enableServerPush(true);
+			if (sp != null)
+				((DesktopCtrl)desktop).enableServerPush(sp);
+			else
+				desktop.enableServerPush(true);
 			new WorkingThread(info, tb).start();
 		}
 	}

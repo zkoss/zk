@@ -37,15 +37,21 @@ import org.zkoss.zk.au.out.AuScript;
  * <p>Developer can control the frequency of the polling by setting the preferences as follows:
  * <dl>
  * <dt><code>PollingServerPush.delay.min</code></dt>
- * <dd>The minimal delay to send a polling request (unit: milliseconds). Default: 1000.</dd>
+ * <dd>The minimal delay to send the second polling request (unit: milliseconds). Default: 1000.</dd>
  * <dt><code>PollingServerPush.delay.max</code></dt>
- * <dd>The maximal delay to send a polling request (unit: milliseconds). Default: 15000.</dd>
+ * <dd>The maximal delay to send the second polling request (unit: milliseconds). Default: 15000.</dd>
  * <dt><code>PollingServerPush.delay.factor</code></dt>
  * <dd>the delay factor. The real delay is the processing time multiplies the delay
  * factor. For example, if the last request
  * took 1 second to process, then the client polling will be delayed
  * for <code>1 x factor</code> seconds. Default: 5.
  * The larger the factor is, the longer delay it tends to be.</dd>
+ *
+ * <p>Another way to control the frequency is to instatiate an instance
+ * with {@link #PollingServerPush(int, int, int)}, and then assign it
+ * with {@link org.zkoss.zk.ui.sys.DesktopCtrl#enableServerPush(ServerPush)}.
+ *
+ * <pre><code>desktop.enableServerPush(new PollingServerPush(1000, 5000, -1));</code></pre>
  *
  * @author tomyeh
  * @since 5.0.0
@@ -62,10 +68,31 @@ public class PollingServerPush implements ServerPush {
 	private ThreadInfo _active;
 	/** The info to carray over from onPiggyback to the server-push thread. */
 	private ExecutionCarryOver _carryOver;
+	private final int _min, _max, _factor;
 	/** A mutex that is used by this object to wait for the server-push thread
 	 * to complete.
 	 */
 	private final Object _mutex = new Object();
+
+	public PollingServerPush() {
+		this(-1, -1, -1);
+	}
+	/**
+	 * @param min the minimal delay before sending the second polling request
+	 * (unit: miniseconds).
+	 * If negative, the default is used (see {@link PollingServerPush}).
+	 * @param max the maximal delay before sending the second polling request
+	 * (unit: miniseconds).
+	 * If negative, the default is used (see {@link PollingServerPush}).
+	 * @param factor the delay factor.
+	 * If negative, the default is used (see {@link PollingServerPush}).
+	 * @since 5.0.4
+	 */
+	public PollingServerPush(int min, int max, int factor) {
+		_min = min;
+		_max = max;
+		_factor = factor;
+	}
 
 	/** Sends an AU response to the client to start the server push.
 	 * It is called by {@link #start}.
@@ -104,9 +131,9 @@ public class PollingServerPush implements ServerPush {
 			.append("zk.load('zk.cpsp');zk.afterLoad(function(){zk.cpsp.start('")
 			.append(_desktop.getId()).append('\'');
 
-		final int min = getIntPref("PollingServerPush.delay.min"),
-			max = getIntPref("PollingServerPush.delay.max"),
-			factor = getIntPref("PollingServerPush.delay.factor");
+		final int min = _min > 0 ? _min: getIntPref("PollingServerPush.delay.min"),
+			max = _max > 0 ? _max: getIntPref("PollingServerPush.delay.max"),
+			factor = _factor > 0 ? _factor: getIntPref("PollingServerPush.delay.factor");
 		if (min > 0  || max > 0 || factor > 0)
 			sb.append(',').append(min).append(',').append(max)
 				.append(',').append(factor);

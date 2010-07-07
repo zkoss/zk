@@ -22,8 +22,6 @@ import java.util.Collection;
 import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.util.EventInterceptor;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.device.Device;
 
 /**
@@ -249,9 +247,11 @@ public interface Desktop extends Scope {
 	 * feature.
 	 * @see Executions#activate
 	 * @see Device#getServerPushClass
+	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#enableServerPush(org.zkoss.zk.ui.sys.ServerPush)
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
+
 	/** @deprecated As of release 5.0.2
 	 */
 	public void setServerPushDelay(int min, int max, int factor);
@@ -275,7 +275,7 @@ public interface Desktop extends Scope {
 	 * {@link org.zkoss.zk.ui.util.ExecutionInit},
 	 * {@link org.zkoss.zk.ui.util.ExecutionCleanup},
 	 * {@link org.zkoss.zk.ui.util.UiLifeCycle},
-	 * {@link EventInterceptor}
+	 * {@link org.zkoss.zk.ui.util.EventInterceptor}
 	 * and/or {@link org.zkoss.zk.au.AuService}.<br/>
 	 * Note: {@link org.zkoss.zk.ui.util.DesktopInit},
 	 * {@link org.zkoss.zk.ui.event.EventThreadInit},
