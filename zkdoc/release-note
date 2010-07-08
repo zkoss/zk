@@ -8,8 +8,10 @@ ZK 5.0.4
 * Bugs
   3023619: inline macro cause nRoot to become a negative number
   3025339: incorrect implementation in Timebox and Spinner widget
+  3026819: InputElement.setTabindex(-1) isn't work
   
 * Upgrade Notes
+	Changed default value of tabindex in InputElement from -1 to 0
 
 	--------
 ZK 5.0.3

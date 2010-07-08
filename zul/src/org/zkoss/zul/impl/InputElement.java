@@ -70,7 +70,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	/** The name. */
 	private String _name;
 	private int _maxlength, _cols;
-	private int _tabindex = -1;
+	private int _tabindex = 0;
 	private Constraint _constr;
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
@@ -405,7 +405,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		}
 	}
 	/** Returns the tab order of this component.
-	 * <p>Default: -1 (means the same as browser's default).
+	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
 		return _tabindex;
@@ -415,7 +415,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
+			if (tabindex == 0) smartUpdate("tabindex", (Object)null);
 			else smartUpdate("tabindex", _tabindex);
 		}
 	}
@@ -718,7 +718,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		render(renderer, "inplace", _inplace);
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		if (_cols > 0) renderer.render("cols", _cols);
-		if (_tabindex >= 0) renderer.render("tabindex", _tabindex);
+		if (_tabindex != 0) renderer.render("tabindex", _tabindex);
 
 		boolean constrDone = false;
 		if (_constr instanceof CustomConstraint) { //client ignored if custom
