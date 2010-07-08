@@ -30,6 +30,8 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.util.DesktopCleanup;
+import org.zkoss.zk.au.AuService;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * The default implementation of the server-push based event queue
@@ -86,8 +88,11 @@ public class ServerPushEventQueue implements EventQueue {
 			dtthd.subscribe(listener, callback, async);
 
 			if (startRequired) {
-				if (!desktop.isServerPushEnabled())
+				if (!desktop.isServerPushEnabled()) {
 					dtthd.enableCurrentServerPush();
+					desktop.addListener(new EQService(dtthd));
+						//add here since desktop is the current desktop
+				}
 				dtthd.start();
 			}
 		}
@@ -265,20 +270,18 @@ public class ServerPushEventQueue implements EventQueue {
 		}
 		private void disableServerPush() {
 			if (_spEnabled) {
-				_spEnabled = false;
+				final Execution exec = Executions.getCurrent();
+				if (exec != null && exec.getDesktop() == _desktop) {
+					_spEnabled = false;
 
-				if (_desktop.isAlive()) {
-					final Execution exec = Executions.getCurrent();
-					if (exec != null && exec.getDesktop() == _desktop) {
+					if (_desktop.isAlive())
 						try {
 							_desktop.enableServerPush(false);
 						} catch (Throwable ex) {
 							log.warningBriefly("Ingored: unable to stop server push", ex);
 						}
-					} else {
-						//TODO: disable non-current desktop
-					}
 				}
+				//if not current desktop, it is handled by EQService
 			}
 		}
 	}
@@ -293,6 +296,20 @@ public class ServerPushEventQueue implements EventQueue {
 				dtthd.cease();
 				dtthd.disableServerPush();
 			}
+		}
+	}
+	//Used to stop the server push if the event queue is closed by other thread
+	private static class EQService implements AuService {
+		private DesktopThread _dtthd;
+		private EQService(DesktopThread dtthd) {
+			_dtthd = dtthd;
+		}
+		public boolean service(AuRequest request, boolean everError) {
+			if (_dtthd._ceased) {
+				_dtthd.disableServerPush();
+				_dtthd._desktop.removeListener(this);
+			}
+			return false;
 		}
 	}
 }
