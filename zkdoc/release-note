@@ -12,7 +12,7 @@ ZK 5.0.4
   3026819: InputElement.setTabindex(-1) isn't work
   
 * Upgrade Notes
-	Changed default value of tabindex in InputElement from -1 to 0
+  + The default value of tabindex of InputElement is changed from -1 to 0
 
 	--------
 ZK 5.0.3
