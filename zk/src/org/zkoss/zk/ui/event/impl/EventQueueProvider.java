@@ -62,6 +62,7 @@ public interface EventQueueProvider {
 	 * @since 5.0.2
 	 */
 	public EventQueue lookup(String name, WebApp wapp, boolean autoCreate);
+
 	/** Removes the event qeueue.
 	 * @param name the name of the event queue.
 	 * @param scope the scope of the event queue.
@@ -70,4 +71,24 @@ public interface EventQueueProvider {
 	 * @return true if it is removed successfully
 	 */
 	public boolean remove(String name, String scope);
+	/** Removes the event queue of the specified session.
+	 * <p>Unlike {@link #remove(String, String)}, this method
+	 * can be called without an activated execution.
+	 * @param name the queue name.
+	 * @param sess the session that the event queue is located (i.e.,
+	 * the session scope)
+	 * @return true if it is removed successfully
+	 * @since 5.0.4
+	 */
+	public boolean remove(String name, Session sess);
+	/** Removes the event queue of the specified application.
+	 * <p>Unlike {@link #remove(String, String)}, this method
+	 * can be called without an activated execution.
+	 * @param name the queue name.
+	 * @param wapp the Web application that the event queue is located (i.e.,
+	 * the application scope)
+	 * @return true if it is removed successfully
+	 * @since 5.0.4
+	 */
+	public boolean remove(String name, WebApp wapp);
 }

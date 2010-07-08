@@ -16,6 +16,8 @@ package org.zkoss.zk.ui.event.impl;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.zkoss.lang.Threads;
@@ -34,7 +36,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 
 /**
- * The default implementation of the desktop-level event queue ({@link EventQueue}).
+ * The default implementation of the desktop-scoped event queue ({@link EventQueue}).
  * @author tomyeh
  * @since 5.0.0
  */
@@ -49,30 +51,22 @@ public class DesktopEventQueue implements EventQueue {
 	public DesktopEventQueue() {
 		_dummy.addEventListener("onQueue", new EventListener() {
 			public void onEvent(Event event) throws Exception {
-				//Note: we cannot use the same algorithm as EventProcessor.process0() because
-				//listeners can be registered multiple times to the event queue
 				final Event evt = (Event)event.getData();
-				final List listenerCalled = new LinkedList();
-				for (Iterator it = _listeners.iterator();;) {
-					final ListenerInfo inf;
-					try {
-						if (!it.hasNext())
-							return; //done
-						inf = (ListenerInfo)it.next();
-					} catch (java.util.ConcurrentModificationException ex) {
-						break;
+				final Set listenerCalled = new HashSet();
+				for (;;)
+					for (Iterator it = _listeners.iterator();;) {
+						final ListenerInfo inf;
+						try {
+							if (!it.hasNext())
+								return; //done
+							inf = (ListenerInfo)it.next();
+						} catch (java.util.ConcurrentModificationException ex) {
+							break;
+						}
+
+						if (listenerCalled.add(inf))
+							invoke(inf, evt);
 					}
-
-					listenerCalled.add(inf);
-					invoke(inf, evt);
-				}
-
-				//make a copy and iterate again
-				for (Iterator it = new LinkedList(_listeners).iterator(); it.hasNext();) {
-					final ListenerInfo inf = (ListenerInfo)it.next();
-					if (!listenerCalled.remove(inf) && _listeners.contains(inf))
-						invoke(inf, evt);
-				}
 			}
 		});
 	}

@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.util.DesktopCleanup;
 
 /**
  * The default implementation of the server-push based event queue
@@ -76,6 +77,8 @@ public class ServerPushEventQueue implements EventQueue {
 			boolean startRequired = false;
 			DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
 			if (dtthd == null) {
+				desktop.addListener(new EQCleanup());
+					//OK to call addListener since it is the current desktop
 				_dts.put(desktop, dtthd = new DesktopThread(desktop));
 				startRequired = true;
 			}
@@ -83,10 +86,8 @@ public class ServerPushEventQueue implements EventQueue {
 			dtthd.subscribe(listener, callback, async);
 
 			if (startRequired) {
-				if (!desktop.isServerPushEnabled()) {
-					dtthd.serverPushEnabled = true;
-					desktop.enableServerPush(true);
-				}
+				if (!desktop.isServerPushEnabled())
+					dtthd.enableCurrentServerPush();
 				dtthd.start();
 			}
 		}
@@ -120,38 +121,19 @@ public class ServerPushEventQueue implements EventQueue {
 				if (dtthd.isIdle()) {
 					dtthd.cease();
 					_dts.remove(desktop);
-
-					if (dtthd.serverPushEnabled)
-						desktop.enableServerPush(false);
+					dtthd.disableServerPush();
 				}
 				return true;
 			}
 		}
 		return false;
 	}
-	/** Called by DesktopThread when it is dying. */
-	private void cleanup(Desktop desktop) {
-		synchronized (_dts) {
-			final DesktopThread dtthd = (DesktopThread)_dts.remove(desktop);
-			if (dtthd != null && dtthd.serverPushEnabled)
-				desktop.enableServerPush(false);
-		}	
-	}
 	public void close() {
 		synchronized (_dts) {
-			for (Iterator it = _dts.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Desktop desktop = (Desktop)me.getKey();
-				final DesktopThread dtthd = (DesktopThread)me.getValue();
+			for (Iterator it = _dts.values().iterator(); it.hasNext();) {
+				final DesktopThread dtthd = (DesktopThread)it.next();
 				dtthd.cease();
-
-				if (dtthd.serverPushEnabled) {
-					try {
-						desktop.enableServerPush(false);
-					} catch (Throwable ex) {
-						log.warningBriefly("Ingored: unable to stop server push", ex);
-					}
-				}
+				dtthd.disableServerPush();
 			}
 		}
 		_dts.clear();
@@ -164,7 +146,7 @@ public class ServerPushEventQueue implements EventQueue {
 		private final Object _mutex = new Object();
 		private transient boolean _ceased;
 		/** Indicates whether the server push is enabled by the event queue. */
-		private boolean serverPushEnabled;
+		private boolean _spEnabled;
 
 		private DesktopThread(Desktop desktop) {
 			Threads.setDaemon(this, true);
@@ -263,16 +245,53 @@ public class ServerPushEventQueue implements EventQueue {
 					if (!_ceased) log.realCauseBriefly(ex);
 				}
 			}
+
 			try {
 				_evts.clear();
 				_que.close();
 			} catch (Throwable ex) {
-				log.realCauseBriefly("Failed to clean up", ex);
+				log.warningBriefly("Failed to clean up", ex);
 			}
-			try {
-				cleanup(_desktop);
-			} catch (Throwable ex) {
-				log.realCauseBriefly("Failed to clean up", ex);
+
+			synchronized (_dts) {
+				_dts.remove(_desktop);
+			}
+			disableServerPush();
+		}
+		/** _desktop must be the current desktop. */
+		private void enableCurrentServerPush() {
+			_spEnabled = true;
+			_desktop.enableServerPush(true);
+		}
+		private void disableServerPush() {
+			if (_spEnabled) {
+				_spEnabled = false;
+
+				if (_desktop.isAlive()) {
+					final Execution exec = Executions.getCurrent();
+					if (exec != null && exec.getDesktop() == _desktop) {
+						try {
+							_desktop.enableServerPush(false);
+						} catch (Throwable ex) {
+							log.warningBriefly("Ingored: unable to stop server push", ex);
+						}
+					} else {
+						//TODO: disable non-current desktop
+					}
+				}
+			}
+		}
+	}
+	private class EQCleanup implements DesktopCleanup {
+		public void cleanup(Desktop desktop) throws Exception {
+			final DesktopThread dtthd;
+			synchronized (_dts) {
+				dtthd = (DesktopThread)_dts.remove(desktop);
+			}
+
+			if (dtthd != null) {
+				dtthd.cease();
+				dtthd.disableServerPush();
 			}
 		}
 	}

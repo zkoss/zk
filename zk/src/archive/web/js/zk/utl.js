@@ -26,6 +26,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+	function _frames(ary, w) {
+		//Note: the access of frames is allowed for any window (even if it connects other website)
+		ary.push(w);
+		for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
+			_frames(ary, fs[j]);
+	}
+
 /** @class zUtl
  * @import zk.Widget
  * @import zk.xml.Utl
@@ -401,6 +408,20 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			}
 			location.reload();
 		}
+	},
+
+	/** Returns all descendant frames of the given window.
+	 * <p>To retrieve all, invoke <code>zUtl.frames(top)</code>.
+	 * Notice: w is included in the returned array.
+	 * If you want to exclude it, invoke <code>zUtl.frames(w).$remove(w)</code>.
+	 * @param Window w the browser window
+	 * @return Array
+	 * @since 5.0.4
+	 */
+	frames: function (w) {
+		var ary = [];
+		_frames(ary, w);
+		return ary;
 	},
 
 	/** Converts an integer array to a string (separated by comma).

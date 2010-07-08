@@ -928,10 +928,22 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * a long operation.
 	 * @param String dtid the desktop ID ({@link zk.Desktop}).
 	 * @see zk.AuCmd1#echo2
+	 * @see #echoGx
 	 */
 	echo: function (dtid) {
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
 	},
+	/** Ask the client to echo back globally.
+	 * <p>Unlike {@link #echo}, it will search all browser windows for
+	 * <p>Note: this feature requires ZK EE
+	 * the given desktop IDs.
+	 * @param String evtnm the event name
+	 * @param String data any string-typed data
+	 * @param String... any number of desktop IDs.
+	 * @since 5.0.4
+	 */
+	//echoGx: function () {}
+
 	/** Asks the client information.
 	 * The client will reply the information in the <code>onClientInfo</code> response.
 	 * @param String dtid the desktop ID ({@link zk.Desktop}).
@@ -1288,6 +1300,8 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param zk.Widget wgt the target widget to which the AU request will be sent
 	 * @param String evtnm the name of the event, such as onUser
 	 * @param Object data any data
+	 * @see zk.AuCmd0#echo
+	 * @see zk.AuCmd0#echoGx
 	 */
 	echo2: function (wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",
