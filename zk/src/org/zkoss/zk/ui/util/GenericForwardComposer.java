@@ -70,13 +70,32 @@ import org.zkoss.zk.ui.Components;
  */
 abstract public class GenericForwardComposer extends GenericAutowireComposer {
 	private static final long serialVersionUID = 20091006115726L;
-	
+
+	/** Constructor.
+	 * It is a shortcut of <code>GenericForwardComposer('$', true, true)</code>,
+	 * i.e., ignore variables defined in ZSCRIPT and XEL.
+	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
+	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, this constructor is the same as
+	 * <code>GenericAutowireComposer('$', false, false)</code>
+	 */	
 	protected GenericForwardComposer() {
 	}
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
 	 * By default, it is '$'. For Grooy and other environment that '$'
 	 * is not applicable, you can specify '_'.
+	 *
+	 * <p>It is a shortcut of <code>GenericForwardComposer(separator, true, true)</code>,
+	 * i.e., ignore variables defined in ZSCRIPT and XEL.
+	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
+	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, this constructor is the same as
+	 * <code>GenericAutowireComposer('$', false, false)</code>
 	 * @since 3.6.0
 	 */
 	protected GenericForwardComposer(char separator) {

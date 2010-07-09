@@ -171,21 +171,37 @@ implements ComponentCloneListener {
 	protected final char _separator;
 	/** Indicates whether to ignore variables defined in zscript when wiring
 	 * a member.
-	 * <p>Default: false (not to ignore).
+	 * <p>Default: true (ignore).
 	 */
-	private boolean _ignoreZScript;
+	private boolean _ignoreZScript = true;
 	/** Indicates whether to ignore variables defined in varible resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
-	 * <p>Default: false (not to ignore).
+	 * <p>Default: true (ignore).
 	 */
-	private boolean _ignoreXel;
+	private boolean _ignoreXel = true;
 
 	/** The default constructor.
+	 * It is a shortcut of <code>GenericAutowireComposer('$', true, true)</code>,
+	 * i.e., ignore variables defined in ZSCRIPT and XEL.
+	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	 * {@link #GenericAutowireComposer(char,boolean,boolean)} instead.
+	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, this constructor is the same as
+	 * <code>GenericAutowireComposer('$', false, false)</code>
 	 */
 	protected GenericAutowireComposer() {
 		_separator = '$';
 	}
 	/** Constructor with a custom separator.
+	 * It is a shortcut of <code>GenericAutowireComposer(separator, true, true)</code>,
+	 * i.e., ignore variables defined in ZSCRIPT and XEL.
+	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	 * {@link #GenericAutowireComposer(char,boolean,boolean)} instead.
+	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, this constructor is the same as
+	 * <code>GenericAutowireComposer('$', false, false)</code>
 	 * @param separator the separator used to separate the component ID and event name.
 	 * Refer to {@link #_separator} for details.
 	 * @since 3.6.0

@@ -12,6 +12,10 @@ ZK 5.5.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
+  + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
+	and GenericAutowireComposer ignore the variables defined
+	in zscript and XEL. If it causes problems, please use the construactor
+	with full control (GenericAutowireComposer(separator,boolean,boolean)).
   + Two new methods are, newComposer and newServerPush, added to
     org.zkoss.zk.ui.sys.UiFactory to allow developers to customize the instantiation
     of a composer or a server push implementation.
