@@ -23,10 +23,13 @@ import java.io.IOException;
 import java.net.URL;
 import javax.servlet.ServletContext;
 
-import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Classes;
+import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.idom.Document;
+import org.zkoss.util.resource.Loader;
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
@@ -43,6 +46,7 @@ import org.zkoss.zk.ui.metainfo.Parser;
  * @author tomyeh
  */
 public class PageDefinitions {
+	private static final Log log = Log.lookup(PageDefinitions.class);
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.zk.ui.PageCache";
 
 	/** Returns the page definition of the specified raw content; never null.
@@ -170,7 +174,25 @@ public class PageDefinitions {
 			synchronized (PageDefinitions.class) {
 				cache = (ResourceCache)wapp.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
-					cache = new ResourceCache(new MyLoader(wapp), 167);
+					Loader loader = null;
+					final String clsnm = Library.getProperty("org.zkoss.zk.ui.metainfo.page.Loader.class");
+					if (clsnm != null) {
+						try {
+							final Object o = Classes.newInstanceByThread(clsnm,
+								new Class[] {WebApp.class},
+								new Object[] {wapp});
+							if (o instanceof Loader)
+								loader = (Loader)o;
+							else
+								log.warning(clsnm + " must implement " + Loader.class.getName());
+						} catch (Throwable ex) {
+							log.warningBriefly("Unable to instantiate "+clsnm, ex);
+						}
+					}
+
+					if (loader == null)
+						loader = new MyLoader(wapp);
+					cache = new ResourceCache(loader, 167);
 					cache.setMaxSize(1024);
 					cache.setLifetime(60*60000); //1hr
 					wapp.setAttribute(ATTR_PAGE_CACHE, cache);
