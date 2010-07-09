@@ -2,6 +2,7 @@
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
@@ -9,7 +10,7 @@ ZK 5.0.4
 * Bugs
   3023619: inline macro cause nRoot to become a negative number
   3025339: incorrect implementation in Timebox and Spinner widget
-  3026819: InputElement.setTabindex(-1) isn't work
+  3026819: InputElement.setTabindex(-1) doesn't work
   3027158: The checkbox set focus dosen't work
   
 * Upgrade Notes
