@@ -1118,13 +1118,8 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var n = zk.Widget.$(id);
 			if (n && n.submit)
 				n.submit();
-			else {
-				n = zk(id).jq[0];
-				if (n && n.submit) {
-					jq.Event.fire(n, 'submit');
-					n.submit();
-				}
-			}
+			else
+				zk(id).submit();
 		}, 50);
 	},
 	/** Scrolls the widget or an DOM element into the view

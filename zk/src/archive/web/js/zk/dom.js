@@ -74,6 +74,13 @@ zjq = function (jq) { //ZK extension
 		} //IE throws exception when select() in some cases
 	}
 
+	function _submit() {
+		if (this.submit) {
+			jq.Event.fire(this, 'submit');
+			this.submit();
+		}
+	}
+
 	function _dissel() {
 		this.style.MozUserSelect = "none";
 	}
@@ -1382,6 +1389,15 @@ jq(el).zk.center(); //same as 'center'
 			}
 			range.select();
 		}
+		return this;
+	},
+
+	/** Submit the selected form.
+	 * @return jqzk this object
+	 * @since 5.0.4
+	 */
+	submit: function () {
+		this.jq.each(_submit);
 		return this;
 	},
 
