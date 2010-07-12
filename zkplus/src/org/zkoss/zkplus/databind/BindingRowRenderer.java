@@ -95,6 +95,9 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 
 		//apply the data binding
 		_binder.loadComponent(row);
+
+		//feature# 3026221: Databinder shall fire onCreate when cloning each items
+		DataBinder.postOnCreateEvents(row); //since 5.0.4
 	}
 
 	//link cloned components with bindings of templates

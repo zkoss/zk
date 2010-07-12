@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -48,14 +47,7 @@ public class URIEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final URIEvent getURIEvent(AuRequest request) {
-		final Component comp = request.getComponent();
-		if (comp == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
-
 		String uri = (String)data.get("");
 		int urilen = uri.length();
 		if (urilen > 0 && uri.charAt(0) == '/') {
@@ -73,7 +65,7 @@ public class URIEvent extends Event {
 			}
 		}
 
-		return new URIEvent(request.getCommand(), comp, uri);
+		return new URIEvent(request.getCommand(), request.getComponent(), uri);
 	}
 
 	/** Constructs an URI update event.

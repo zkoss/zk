@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -1596,6 +1597,17 @@ public class DataBinder implements java.io.Serializable {
 				final Dual o = (Dual) other;
 				return o._comp == _comp && o._binding == _binding;
 			}
+		}
+	}
+	
+	//feature #3026221: Databinder shall fire onCreate when cloning each items
+	/*package*/ static void postOnCreateEvents(Component item) {
+		for(final Iterator it = item.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			postOnCreateEvents(child); //recursive
+		}
+		if (Events.isListened(item, Events.ON_CREATE, false)) {
+			Events.postEvent(new CreateEvent(Events.ON_CREATE, item, null));
 		}
 	}
 }

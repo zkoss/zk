@@ -45,16 +45,18 @@ import org.zkoss.zk.ui.event.EventListener;
 public interface EventQueue {
 	/** Publishes an event the queue.
 	 *
-	 * <p>If this is a desktop-level event queue, this method must be called
-	 * within an activated exection,
-	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
+	 * <p>If the scope of a event queue is desktop or group,
+	 * this method must be called within an activated exection
+	 * (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null),
+	 * or in an asynchronous listener (see {@link EventQueue}).
 	 *
-	 * <p>On the other hand, if this is an application-level event queue,
+	 * <p>On the other hand, if the scope is session or application,
 	 * it is OK to be called without the current execution.
 	 *
 	 * @exception IllegalStateException if this method is called
 	 * not within an activated execution (such as a working thread),
-	 * and this is a desktop-level event queue.
+	 * and this is a ({@link EventQueues#DESKTOP}) or {@link EventQueues#GROUP}
+	 * event queue.
 	 */
 	public void publish(Event event);
 	/** Subscribes a listener to this queue.
@@ -62,19 +64,22 @@ public interface EventQueue {
 	 * ({@link #subscribe(EventListener,boolean)}. In other words,
 	 * it subscribes a synchronous listener.
 	 *
-	 * <p>Note: this method must be called within an activated exection,
-	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
+	 * <p>Note: this method must be called within an activated exection
+	 * (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null),
+	 * no matter what scope the event queue is.
 	 *
-	 * <p>Note: if this is an application-level event queue, the listener
-	 * shall not access the component associated with the event
-	 * {@link Event#getTarget}.
+	 * <p>Note: the listener could access the component associated with the event
+	 * ({@link Event#getTarget}), only if this is an {@link EventQueues#DESKTOP}
+	 *event queue.
 	 *
 	 * <p>An event listener can be subscribed multiple times, and
 	 * it will be invoked multiple times if an event is published.
 	 *
-	 * <p>Even if this is an application-level or session-level event queue,
-	 * the listener is subscribed for the current desktop only.
-	 * If you want to use the same listener for multiple desktops,
+	 * <p>Even if this is a {@link EventQueues#GROUP}, {@link EventQueues#SESSION},
+	 * or {@link  EventQueues#APPLICATION} event queue,
+	 * the listener is subscribed for the current desktop only, i.e.,
+	 * it can only access the components belong to the subscribed desktop.
+	 * If you want to use the same listener to manipulate multiple desktops,
 	 * you have to subscribe them separately when the corresponding
 	 * execution is available.
 	 * @see #subscribe(EventListener,EventListener)
@@ -200,9 +205,8 @@ public interface EventQueue {
   &lt;vbox id="inf"/&gt;
 &lt;/window&gt;
 </code></pre>
-	 * <p>The asynchornous event listener requires Server Push which
-	 * is available in ZK PE or EE, or you have to configure your own
-	 * implementation.
+	 * <p>The asynchornous event listener requires Server Push
+	 * ({@link org.zkoss.zk.ui.sys.ServerPush}).
 	 * <p>If you want to show a busy message to cover a portion of the desktop,
 	 * use {@link org.zkoss.zk.ui.util.Clients#showBusy(org.zkoss.zk.ui.Component,String)}
 	 * <p>Note: this method must be called within an activated exection,

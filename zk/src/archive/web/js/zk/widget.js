@@ -728,6 +728,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			zk.copy(dgelm.style, {
 				position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
 			});
+			jq(dgelm).addClass("z-drag-ghost");
 			document.body.appendChild(dgelm);
 			return dgelm;
 		}
@@ -743,7 +744,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function DD_pointer(evt) {
-		return [evt.pageX + 10, evt.pageY + 5];
+		return [evt.pageX + 7, evt.pageY + 5];
 	}
 	function DD_enddrag(drag, evt) {
 		DD_cleanLastDrop(drag);
@@ -845,7 +846,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
 		ghosting: DD_ghosting, endghosting: DD_endghosting,
-		constraint: DD_constraint,
+		constraint: DD_constraint, //s.t. cursor won't be overlapped with ghosting
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};

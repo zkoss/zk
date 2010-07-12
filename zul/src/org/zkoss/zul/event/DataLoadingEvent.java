@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -40,9 +39,6 @@ public class DataLoadingEvent extends Event {
 	 */
 	public static final DataLoadingEvent getDataLoadingEvent(AuRequest request, int preload) {
 		final Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
 		return new DataLoadingEvent(request.getCommand(),
 			request.getComponent(),
 			AuRequests.getInt(data, "offset", 0), AuRequests.getInt(data, "limit", 20)+preload);

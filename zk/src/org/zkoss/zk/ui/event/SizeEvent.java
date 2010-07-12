@@ -16,7 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
@@ -48,15 +47,8 @@ public class SizeEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final SizeEvent getSizeEvent(AuRequest request) {
-		final Component comp = request.getComponent();
-		if (comp == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 		final java.util.Map data = request.getData();
-		if (data == null)
-			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {data, request});
-
-		return new SizeEvent(request.getCommand(), comp,
+		return new SizeEvent(request.getCommand(), request.getComponent(),
 			(String)data.get("width"), (String)data.get("height"),
 			AuRequests.parseKeys(data));
 	}

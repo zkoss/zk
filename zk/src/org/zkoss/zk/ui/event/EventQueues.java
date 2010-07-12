@@ -44,37 +44,62 @@ public class EventQueues {
 	 * can be passed around only in the same desktop.
 	 */
 	public static final String DESKTOP = "desktop";
-	/** Represenets the event queue in the application scope.
+	/** Represents a group of desktops that belongs to the same top browser window.
+	 * A group of desktops belong the same top browser window
+	 * is formed if iframe or frameset is used., or
+	 * <p>Unlike {@link #APPLICATION} and {@link #SESSION}, it does NOT require
+	 * the server push, so there is no overhead.
+	 * However, it cannot communicate with desktops that belongs to other top
+	 * browser windows/tabs. Since there is no way to detect two desktops
+	 * (of the same session) belongs to the same top browser window, the developer
+	 * has to make sure of it by himself.
+	 * <p>Some portal container, such as Liferay, also forms a group of desktops
+	 * (they all belongs to the same browser window). However,
+	 * org.zkoss.zkmax.zul.Portallayout is a component and it won't cause
+	 * additional desktop to be created, unless iframe is used as the content.
+	 * <p>Note: this feature requires ZK EE.
+	 * @since 5.0.4
+	 */
+	public static final String GROUP = "group";
+	/** Represents the event queue in the application scope.
 	 * In other words, the events published to this kind of queues
 	 * can be passed around to any desktops of the same application.
-	 * <p>Notice that this feature requires ZK PE or EE, or you have to
-	 * provide your own implementation.
+	 * <p>Notice that this feature will enable the server push
+	 * ({@link org.zkoss.zk.ui.sys.ServerPush}.
 	 */
 	public static final String APPLICATION = "application";
-	/** Represenets the event queue in the sessionscope.
+	/** Represents the event queue in the sessionscope.
 	 * In other words, the events published to this kind of queues
 	 * can be passed around to any desktops of the same session.
-	 * <p>Notice that this feature requires ZK PE or EE, or you have to
-	 * provide your own implementation.
+	 * <p>Notice that this feature will enable the server push
+	 * ({@link org.zkoss.zk.ui.sys.ServerPush}.
 	 */
 	public static final String SESSION = "session";
 
 	/** Returns the event queue with the specified name in the
 	 * specified scope.
 	 *
-	 * <p>There are two kinds of event scopes: {@link #DESKTOP} and
-	 * {@link #APPLICATION}.
+	 * <p>There are several kinds of event scopes: {@link #DESKTOP},
+	 * {@link #GROUP}, {@link #SESSION}, and {@link #APPLICATION}.
 	 *
-	 * <p>If the desktop scope is selected, the event queue is associated
-	 * with the desktop of the current execution.
+	 * <p>If the {@link #DESKTOP} scope is specified, the event queue is
+	 * associated with the desktop of the current execution.
 	 * And, the event queue is gone if the desktop is removed,
 	 * or removed manually by {@link #remove}.
 	 *
-	 * <p>If the application scope is selected, the event queue is
+	 * <p>If the {@link #SESSION} or {@link #GROUP} scope is specified,
+	 * the event queue is associated with the current session.
+	 * And, the event queue is gone if the session is invalidated,
+	 * or removed manually by {@link #remove}.
+	 *
+	 * <p>If the {@link #APPLICATION} scope is specified, the event queue is
 	 * associated with the application, and remains until the application
 	 * stops or removed manually by {@link #remove}.
-	 * When an execution subscribes an event queue, the server push
-	 * is enabled automatically.
+	 *
+	 * <p>When an execution subscribes an event queue of {@link #SESSION}
+	 * or {@link #APPLICATION}, the server push is enabled automatically.
+	 * On the other hand, {@link #DESKTOP} and {@link #GROUP} does NOT
+	 * require the server push -- they use the AU requests for communication.
 	 *
 	 * <p>Note:
 	 * <ul>
@@ -87,7 +112,9 @@ public class EventQueues {
 	 *
 	 * @param name the queue name.
 	 * @param scope the scope fo the event queue. Currently,
-	 * it supports {@link #DESKTOP} and {@link #APPLICATION}.
+	 * it supports {@link #DESKTOP}, {@link #GROUP},
+	 * {@link #SESSION}, and {@link #APPLICATION}.
+	 * Note: {@link #GROUP} requires ZK EE.
 	 * @param autoCreate whether to create the event queue if not found.
 	 * @return the event queue with the associated name, or null if
 	 * not found and autoCreate is false
@@ -162,14 +189,40 @@ public class EventQueues {
 	public static boolean remove(String name) {
 		return remove(name, DESKTOP);
 	}
-	/** Removes the event queue of the specified scope
+	/** Removes the event queue of the specified scope.
 	 * @param name the queue name.
 	 * @param scope the scope fo the event queue. Currently,
-	 * it supports {@link #DESKTOP} and {@link #APPLICATION}.
+	 * it supports {@link #DESKTOP}, {@link #GROUP},
+	 * {@link #SESSION}, and {@link #APPLICATION}.
+	 * Note: {@link #GROUP} requires ZK EE.
 	 * @return true if it is removed successfully
 	 */
 	public static boolean remove(String name, String scope) {
 		return getProvider().remove(name, scope);
+	}
+	/** Removes the event queue of the specified session.
+	 * <p>Unlike {@link #remove(String, String)}, this method
+	 * can be called without an activated execution.
+	 * @param name the queue name.
+	 * @param sess the session that the event queue is located (i.e.,
+	 * the session scope)
+	 * @return true if it is removed successfully
+	 * @since 5.0.4
+	 */
+	public static boolean remove(String name, Session sess) {
+		return getProvider().remove(name, sess);
+	}
+	/** Removes the event queue of the specified application.
+	 * <p>Unlike {@link #remove(String, String)}, this method
+	 * can be called without an activated execution.
+	 * @param name the queue name.
+	 * @param wapp the Web application that the event queue is located (i.e.,
+	 * the application scope)
+	 * @return true if it is removed successfully
+	 * @since 5.0.4
+	 */
+	public static boolean remove(String name, WebApp wapp) {
+		return getProvider().remove(name, wapp);
 	}
 	private static final EventQueueProvider getProvider() {
 		if (_provider == null)

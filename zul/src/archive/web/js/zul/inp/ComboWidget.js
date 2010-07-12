@@ -74,7 +74,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	onShow: _zkf,
 	
 	onFloatUp: function (ctl) {
-		if (jq(this.$n('pp')).is(':animated') || (!this._inplace && !this.isOpen()))
+		if (jq(this.getPopupNode_()).is(':animated') || (!this._inplace && !this.isOpen()))
 			return;
 		var wgt = ctl.origin;
 		if (!zUtl.isAncestor(this, wgt)) {
@@ -101,7 +101,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				setTimeout(function() {self.onResponse(ctl, opts);}, 50);
 				return;
 			}
-			var pp = this.$n('pp'),
+			var pp = this.getPopupNode_(),
 				pz = this.getPopupSize_(pp);
 			pp.style.height = pz[1];
 			
@@ -137,7 +137,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus)
 			this.focus();
 
-		var pp = this.$n('pp'),
+		var pp = this.getPopupNode_(),
 			inp = this.getInputNode();
 		if (!pp) return;
 
@@ -149,7 +149,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.height = "auto";
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1 ; //on-top of everything
 
-		var pp2 = this.$n("cave");
+		var pp2 = this.getPopupNode_(true);
 		if (pp2) pp2.style.width = pp2.style.height = "auto";
 
 		pp.style.position = "absolute"; //just in case
@@ -208,6 +208,20 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_afterSlideDown: function (n) {
 		if (this._shadow) this._shadow.sync();
 	},
+	/** Returns the DOM element of the popup.
+	 * Default: <code>inner ? this.$n("cave"): this.$n("pp")</code>.
+	 * Override it if it is not the case.
+	 * @param boolean inner whether to return the inner popup.
+	 * ComboWidget assumes there is at least one popup and returned by
+	 * <code>getPopupNode_()</code>, and there might be an inner DOM element
+	 * returned by <code>getPopupNode_(true)</code>.
+	 * @return DOMElement
+	 * @since 5.0.4
+	 */
+	getPopupNode_: function (inner) {
+		return inner ? this.$n("cave"): this.$n("pp");
+	},
+
 	/** Closes the list of combo items ({@link Comboitem} if it was
 	 * dropped down.
 	 * It is the same as setOpen(false).
@@ -224,7 +238,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus)
 			this.focus();
 
-		var pp = this.$n('pp');
+		var pp = this.getPopupNode_();
 		if (!pp) return;
 
 		pp.style.display = "none";
@@ -242,10 +256,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.fireDown("onHide", this);
 	},
 	_fixsz: function (ppofs) {
-		var pp = this.$n('pp');
+		var pp = this.getPopupNode_();
 		if (!pp) return;
 
-		var pp2 = this.$n('cave');
+		var pp2 = this.getPopupNode_(true);
 		if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
 			pp.style.height = "250px";
 		} else if (pp.offsetHeight < 10) {
@@ -412,7 +426,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);
 		
-		this.setFloating_(true,{node:this.$n('pp')});
+		this.setFloating_(true,{node:this.getPopupNode_()});
 	},
 	unbind_: function () {
 		this.close();
@@ -444,7 +458,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
-			if (evt.domTarget == this.$n('pp'))
+			if (evt.domTarget == this.getPopupNode_())
 				this.close({
 					focus: true,
 					sendOnOpen: true

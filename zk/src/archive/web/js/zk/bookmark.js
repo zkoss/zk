@@ -138,7 +138,7 @@ zk.bmk = (function () { //used internally
 				$ifr.attr("z_xurl", url);
 			}
 		} catch (e) { //due to JS sandbox, we cannot access if not from same host
-			if (zk.debugJS) zk.log("Unable to access parent frame");
+//			if (zk.debugJS) zk.log("Unable to access parent frame");
 		}
 	}
   };

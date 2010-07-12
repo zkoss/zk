@@ -23,11 +23,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
+import org.zkoss.util.IdentityHashSet;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
 import org.zkoss.util.logging.Log;
@@ -596,10 +598,26 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void service(AuRequest request, boolean everError) {
-		if (_ausvcs != null)
-			for (Iterator it = _ausvcs.iterator(); it.hasNext();)
-				if (((AuService)it.next()).service(request, everError))
-					return; //done
+		if (_ausvcs != null) {
+			//Note: removeListener might be called when invoking svc.service()
+			final Set called = new IdentityHashSet();
+			l_svc:
+			for (;;) {
+				for (Iterator it = _ausvcs.iterator(); ;) {
+					final AuService svc;
+					try {
+						if (!it.hasNext())
+							break l_svc; //done
+						svc = (AuService)it.next();
+					} catch (java.util.ConcurrentModificationException ex) {
+						break; //loop again
+					}
+					if (called.add(svc)
+					&& svc.service(request, everError))
+						return; //done
+				}
+			}
+		}
 
 		final Component comp = request.getComponent();
 		if (comp != null) {
@@ -1180,6 +1198,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
+		return enableServerPush0(null, enable);
+	}
+	private boolean enableServerPush0(ServerPush sp, boolean enable) {
 		if (_sess == null)
 			throw new IllegalStateException("Server push cannot be enabled in a working thread");
 
@@ -1196,11 +1217,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: "+cnt:
 						"Server push is disabled");
 
-				final Class cls = getDevice().getServerPushClass();
-				if (cls == null)
-					throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
+				if (sp != null) {
+					_spush = sp;
+				} else {
+					final Class cls = getDevice().getServerPushClass();
+					if (cls == null)
+						throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
-				_spush = (ServerPush)((WebAppCtrl)_wapp).getUiFactory().newServerPush(cls, this);
+					_spush = (ServerPush)((WebAppCtrl)_wapp).getUiFactory().newServerPush(cls, this);
+				}
 				_spush.start(this);
 				++cnt;
 			} else if (_spush.isActive()) {
@@ -1216,15 +1241,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return old;
 	}
 	public boolean enableServerPush(ServerPush serverpush) {
-		if (serverpush == null)
-			return enableServerPush(false);
-
-		final boolean old = _spush != null;
-		if (!old || serverpush != _spush) {
-			if (old) enableServerPush(false);
-
-			_spush = serverpush;
-			_spush.start(this);
+		final boolean old = _spush != null,
+			enable = serverpush != null;
+		if (old != enable || serverpush != _spush) {
+			if (old)
+				enableServerPush(false);
+			if (enable)
+				enableServerPush0(serverpush, true);
 		}
 		return old;
 	}

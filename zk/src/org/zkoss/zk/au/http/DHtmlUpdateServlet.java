@@ -236,7 +236,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	public static final AuExtension getAuExtension(WebApp wapp, String prefix) {
 		DHtmlUpdateServlet upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
-		return upsv != null ? upsv.getAuExtension(prefix): null;
+		if (upsv == null) {
+			synchronized (DHtmlUpdateServlet.class) {
+				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
+				if (upsv == null) {
+					Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+					return aues != null ? (AuExtension)aues.get(prefix): null;
+				}
+			}
+		}
+		return upsv.getAuExtension(prefix);
 	}
 	/** Adds an AU extension and associates it with the specified prefix,
 	 * even before {@link DHtmlUpdateServlet} is started.

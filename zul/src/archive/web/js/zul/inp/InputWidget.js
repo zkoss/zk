@@ -72,7 +72,7 @@ var InputWidget =
 zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
 	_cols: 0,
-	_tabindex: -1,
+	_tabindex: 0,
 	_type: 'text',
 	$define: {
 		/** Returns the name of this component.
@@ -169,7 +169,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				inp.maxLength = maxlength;
 		},
 		/** Returns the tab order of this component.
-		 * <p>Default: -1 (means the same as browser's default).
+		 * <p>Default: 0 (means the same as browser's default).
 		 * @return int
 		 */
 		/** Sets the tab order of this component.
@@ -290,7 +290,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' maxlength="' + v + '"';
 		}
 		v = this._tabindex;
-		if (v >= 0) html += ' tabindex="' + v +'"';
+		if (v) html += ' tabindex="' + v +'"';
 		v = this._name;
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';

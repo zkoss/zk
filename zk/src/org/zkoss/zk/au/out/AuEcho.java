@@ -38,7 +38,7 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  * @since 3.0.0
  */
-public class AuEcho  extends AuResponse {
+public class AuEcho extends AuResponse {
 	/** Contructs an echo response with the specified desktop.
 	 *
 	 * @param desktop the desktop to send the echo response to.

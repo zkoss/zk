@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="zk.js"/>
 	<script src="js.js"/>
 
-	<script>zk.light='1.0.0-RC';zk.spaceless=true;zAu={};</script>
+	<script>zk.light='1.0.0-RC';zk.spaceless=true;zAu={};zk.feature={standard:true};</script>
 	<script src="dom.js"/>
 	<script>if(zk.ie){</script>
 		<script src="domie.js"/>

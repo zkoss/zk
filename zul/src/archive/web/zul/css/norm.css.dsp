@@ -341,6 +341,12 @@ div.z-drop-cnt {
 	font-family: ${fontFamilyC};
 }
 
+<%-- customized by users
+.z-drag-ghost {
+	border: 1px dotted #999;
+}
+--%>
+
 <%-- Focus Anchor --%>
 .z-focus-a {
 	position: absolute;

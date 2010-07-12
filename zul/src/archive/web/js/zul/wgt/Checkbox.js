@@ -103,6 +103,13 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
+	focus: function (timeout) {
+		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
+			zk(this.$n('real')||this.$n()).focus(timeout);
+			return true;
+		}
+		return false;
+	},
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-checkbox";
