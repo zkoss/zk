@@ -13,6 +13,7 @@ ZK 5.0.4
   3025339: incorrect implementation in Timebox and Spinner widget
   3026819: InputElement.setTabindex(-1) doesn't work
   3027158: The checkbox set focus dosen't work
+  3029341: Click at "a" comp  in the listbox will trigger select event
   
 * Upgrade Notes
   + The default value of tabindex of InputElement is changed from -1 to 0
