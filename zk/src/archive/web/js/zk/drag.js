@@ -26,7 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
-			if (zk.ie || _activedg || _activedg.node != dg.node)
+			if (!zk.ie || !_activedg || _activedg.node == dg.node)
 				_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
