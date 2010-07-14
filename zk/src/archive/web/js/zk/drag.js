@@ -26,6 +26,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _activate(dg, devt, pt) {
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
+			if (zk.ie && _activedg && _activedg.node != dg.node) 
+				return;
 			_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
@@ -575,12 +577,6 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
 			return;
-		}
-
-		if (zk.ie) { //since we don't stop event, we have to handle it ourselves
-			if (_msdowning) return;
-			_msdowning = true;
-			setTimeout(function(){_msdowning = false;},0);
 		}
 
 		var pos = zk(node).cmOffset();

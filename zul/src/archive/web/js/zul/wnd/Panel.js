@@ -664,6 +664,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_makeSizer: function () {
 		if (!this._sizer) {
+			this.domListen_(this.$n(), 'onMouseMove');
+			this.domListen_(this.$n(), 'onMouseOut');
 			var Panel = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
 				stackup: true, draw: Panel._drawsizing,
@@ -745,8 +747,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizable)
 			this._makeSizer();
 		
-		this.domListen_(this.$n(), 'onMouseOver');
-			
 		if (this.isFloatable()) {
 			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
@@ -790,10 +790,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		this.domUnlisten_(this.$n(), 'onMouseOver');
+		this.domListen_(this.$n(), 'onMouseMove');
+		this.domListen_(this.$n(), 'onMouseOut');
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
 	},
-	_doMouseOver: function (evt) {
+	_doMouseMove: function (evt) {
+		if (evt.target != this && evt.target != this.panelchildren)
+			return;
 		if (this._sizer) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
@@ -807,10 +810,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					c == 7 ? 'w-resize': 'nw-resize';
 				if (handle) handle.style.cursor = "";
 			} else {
-				n.style.cursor = this._backupCursor;
+				n.style.cursor = this._backupCursor || '';
 				if (handle) handle.style.cursor = "move";
 			}
 		}
+	},
+	_doMouseOut: function (evt) {
+		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {

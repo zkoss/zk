@@ -631,6 +631,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_makeSizer: function () {
 		if (!this._sizer) {
+			this.domListen_(this.$n(), 'onMouseMove');
+			this.domListen_(this.$n(), 'onMouseOut');
 			var Window = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
 				stackup: true, draw: Window._drawsizing,
@@ -1001,8 +1003,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		
 		if (this._sizable)
 			this._makeSizer();
-		this.domListen_(this.$n(), 'onMouseOver');
-		
+
 		if (this.isMaximizable() && this.isMaximized()) {
 			var self = this;
 			after.push(function() {
@@ -1066,10 +1067,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this._lastfocus = null;
 
-		this.domUnlisten_(this.$n(), 'onMouseOver');
+		this.domUnlisten_(this.$n(), 'onMouseMove');
+		this.domUnlisten_(this.$n(), 'onMouseOut');
 		this.$supers(Window, 'unbind_', arguments);
 	},
-	_doMouseOver: function (evt) {
+	_doMouseMove: function (evt) {
+		if (evt.target != this)
+			return;
 		if (this._sizer) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
@@ -1088,6 +1092,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (handle) handle.style.cursor = "move";
 			}
 		}
+	},
+	_doMouseOut: function (evt) {
+		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {

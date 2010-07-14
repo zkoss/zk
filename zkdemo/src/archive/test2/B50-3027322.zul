@@ -1,0 +1,55 @@
+<zk>
+	<window id="testWin" border="none" style="position:relative;">
+
+	<window id="contentPane" border="normal" height="600px" sizable="true"
+		width="800px" droppable="true" onDrop="dropped(event);">
+<html>
+<![CDATA[
+<ol>
+	<li>Mouseover on the border of the window and the panel</li>
+	<li>Then move to image </li>
+	<li>Check the cursor is correct </li>
+</ol>
+<ol>
+	<li>Resize the window and the panel</li>
+	<li>Drag the window and the panel</li>
+	<li>Check all of them are worked well </li>
+</ol>
+]]>
+</html>
+		<window id="win" sizable="true" border="normal" title="win"
+			style="position:absolute;top:300px;left:300px;"
+			onSize="resize(self);" draggable="true" minheight="0"
+			minwidth="0">
+			<image id="img"
+				src="/img/Centigrade-Widget-Icons/Globe-128x128.png"/>
+		</window>
+		
+		<panel id="panel" sizable="true" border="normal" title="panel"
+			style="position:absolute;top:400px;left:400px;"
+			onSize="resize(self);" draggable="true" minheight="0"
+			minwidth="0">
+			<panelchildren>
+			<image id="img"
+				src="/img/Centigrade-Widget-Icons/Globe-128x128.png"/>
+				</panelchildren>
+		</panel>
+
+	</window>
+	<zscript>
+	public void dropped(Event event) {
+		Component comp = event.getDragged();
+		int x = event.getX();
+		int y = event.getY();
+		comp.setLeft(x+ "px");
+		comp.setTop(y+ "px");
+	}
+	public void resize(Component comp) {
+		Image img = (Image) comp.getFellow("img");
+		img.setHeight(comp.getHeight());
+		img.setWidth(comp.getWidth());
+
+	}
+</zscript>
+</window>
+</zk>
