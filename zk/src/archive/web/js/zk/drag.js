@@ -19,16 +19,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _drags = [],
 		_dragging = {},
-		_msdowning, //processing mousedown
 		_stackup, _activedg, _timeout, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
 	function _activate(dg, devt, pt) {
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
-			if (zk.ie && _activedg && _activedg.node != dg.node) 
-				return;
-			_activedg = dg; 
+			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
+			if (zk.ie || _activedg || _activedg.node != dg.node)
+				_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
 	}
