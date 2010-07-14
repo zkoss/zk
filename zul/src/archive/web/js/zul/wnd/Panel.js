@@ -795,9 +795,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
 	},
 	_doMouseMove: function (evt) {
-		if (evt.target != this && evt.target != this.panelchildren)
-			return;
-		if (this._sizer) {
+		if ((evt.target == this || evt.target == this.panelchildren) && this._sizer) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this.isMovable() ? this.$n('cap') : false;

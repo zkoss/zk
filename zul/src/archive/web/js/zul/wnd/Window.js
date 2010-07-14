@@ -1072,9 +1072,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers(Window, 'unbind_', arguments);
 	},
 	_doMouseMove: function (evt) {
-		if (evt.target != this)
-			return;
-		if (this._sizer) {
+		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this._mode == 'embedded' ? false : this.$n('cap');
