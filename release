@@ -44,20 +44,6 @@ if [ ! -d "$javadocdir/jsdoc" ] ; then
 	exit 1
 fi
 
-if [ "$target" == "official" ] ; then
-	htmldocdir=$(grep '^htmldoc' $setting)
-	htmldocdir=${htmldocdir#htmldoc=}
-	if [ "$htmldocdir" = "" ] ; then
-		echo htmldoc must be specified in $setting
-		exit 1
-	fi
-	htmldocdir=${htmldocdir/\~/$HOME}
-	if [ ! -d "$htmldocdir/devguide" ] ; then
-		echo $htmldocdir/devguide is not found
-		exit 1
-	fi
-fi
-
 ver=$(grep '^version=' $setting)
 ver=${ver#version=}
 
@@ -363,21 +349,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
 			jar cfM $1-$vertamp-bundle.jar -C $1 .
 		}
-		mkdir -p maven
-		mkdir -p /tmp/maven
-		cd maven
-		mvnrepo zcommon true
-		mvnrepo zweb true
-		mvnrepo zk true
-		mvnrepo zul true
-		mvnrepo zhtml true
-		mvnrepo zml
-		mvnrepo zkex
-		mvnrepo zkmax
-		mvnrepo zkplus true
-		mv *-bundle.jar /tmp/maven
-		cd ..
-		rm -rf maven
 	else
 		#Prepare maven repository
 		function mvnrepo {
@@ -391,22 +362,22 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
 			jar cfM $1-$vertamp-bundle.jar -C $1 .
 		}
-		mkdir -p maven
-		mkdir -p /tmp/maven
-		cd maven
-		mvnrepo zcommon true
-		mvnrepo zweb true
-		mvnrepo zk true
-		mvnrepo zul true
-		mvnrepo zhtml true
-		mvnrepo zml
-		mvnrepo zkex
-		mvnrepo zkmax
-		mvnrepo zkplus true
-		mv *-bundle.jar /tmp/maven
-		cd ..
-		rm -rf maven
 	fi
+	mkdir -p maven
+	mkdir -p /tmp/maven
+	cd maven
+	mvnrepo zcommon true
+	mvnrepo zweb true
+	mvnrepo zk true
+	mvnrepo zul true
+	mvnrepo zhtml true
+	mvnrepo zml
+	mvnrepo zkex
+	mvnrepo zkmax
+	mvnrepo zkplus true
+	mv *-bundle.jar /tmp/maven
+	cd ..
+	rm -rf maven
 
 	
 	mkdir $binnmevl
@@ -418,7 +389,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp $binnm/* $binnmevl
 	
 	mkdir -p metainfo/zk
-	
+
+	###
 	# EE version
 	cp $maindir/cmldoc/ee $maindir/cmldoc/pe metainfo/zk/
 
@@ -426,30 +398,33 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	jar ufM $binnm/dist/lib/zkex.jar -C metainfo/ zk/pe
 	
 	#Ouput ${binnm}
-	if [ "$target" == "official" ] ; then
 		# License
 		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
 		mv CML_LICENSE /tmp/zk/$binnm/doc/LICENSE
 		chmod 644  /tmp/zk/$binnm/doc/LICENSE
 		
+	if [ "$target" == "official" ] ; then
 		cd /tmp/zk/$entsrcnm/dist/src
 		cp zkmax-sources.jar zkex-sources.jar zml-sources.jar /tmp/zk/$binnm/dist/src/
-		
-		cd /tmp/zk
-		echo Output ${binnm}.zip
-		zip -qr9 ${binnm}.zip $binnm
-		
-		echo Output ${binnm}.tar.gz
-		tar zcf ${binnm}.tar.gz $binnm
-		
-		cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
-		chmod 644  /tmp/zk/$binnm/doc/LICENSE
-		
-		cd /tmp/zk/$binnm/dist/src/
-		rm -rf zkmax-sources.jar zkex-sources.jar zml-sources.jar
-		cd /tmp/zk
 	fi
 		
+	cd /tmp/zk
+	echo Output ${binnm}.zip
+	zip -qr9 ${binnm}.zip $binnm
+		
+	echo Output ${binnm}.tar.gz
+	tar zcf ${binnm}.tar.gz $binnm
+	
+	cp $maindir/cmldoc/LICENSE /tmp/zk/$binnm/doc
+	chmod 644  /tmp/zk/$binnm/doc/LICENSE
+	
+	if [ "$target" == "official" ] ; then
+		cd /tmp/zk/$binnm/dist/src/
+		rm -rf zkmax-sources.jar zkex-sources.jar zml-sources.jar
+	fi
+	cd /tmp/zk
+
+	#Output bin-eval
 	echo Output ${binnmevl}.zip
 	zip -qr9 ${binnmevl}.zip $binnmevl
 	
@@ -468,31 +443,34 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd /tmp/zk
 
 	mv $binnm $profnm
-	
+
+	###
 	# PE version
 	cp -rp $profnm/* $profnmevl
 	cp -rp $binnmevl/dist/lib/zkex.jar $profnmevl/dist/lib/
 	
-	if [ "$target" == "official" ] ; then
-		# License
-		cp $maindir/cmldoc/CML_LICENSE /tmp/zk
-		mv CML_LICENSE /tmp/zk/$profnm/doc/LICENSE
-		chmod 644  /tmp/zk/$profnm/doc/LICENSE
+	# License
+	cp $maindir/cmldoc/CML_LICENSE /tmp/zk
+	mv CML_LICENSE /tmp/zk/$profnm/doc/LICENSE
+	chmod 644  /tmp/zk/$profnm/doc/LICENSE
 		
+	if [ "$target" == "official" ] ; then
 		cd /tmp/zk/$entsrcnm/dist/src
 		cp zkex-sources.jar zml-sources.jar /tmp/zk/$profnm/dist/src/
 		cd /tmp/zk
-		
-		echo Output ${profnm}.zip
-		zip -qr9 ${profnm}.zip $profnm
-		
-		echo Output ${profnm}.tar.gz
-		tar zcf ${profnm}.tar.gz $profnm
-		
+	fi		
+
+	echo Output ${profnm}.zip
+	zip -qr9 ${profnm}.zip $profnm
+	
+	echo Output ${profnm}.tar.gz
+	tar zcf ${profnm}.tar.gz $profnm
+	
+	if [ "$target" == "official" ] ; then
 		cd /tmp/zk/$profnm/dist/src/
 		rm -rf zkex-sources.jar zml-sources.jar
-		cd /tmp/zk
 	fi
+	cd /tmp/zk
 	
 	echo Output ${profnmevl}.zip
 	zip -qr9 ${profnmevl}.zip $profnmevl
