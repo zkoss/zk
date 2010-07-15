@@ -170,6 +170,15 @@ if="deploy.jboss.required">
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
 </target>
+<target name="build.jar2" depends="build.jar" if="build.jar2.required">
+	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
+		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${src.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
+		<fileset dir="${codegen.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, **/*.src.js"/>
+	</jar>
+</target>
 <target name="build.jad" depends="compile" if="build.jad.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
@@ -231,7 +240,7 @@ if="deploy.jboss.required">
 </target>
 
 <target name="build"
- depends="config.build, build.war, build.jad, build.jar, build.ear, deploy">
+ depends="config.build, build.war, build.jad, build.jar, build.jar2, build.ear, deploy">
 </target>
 
 <!-- ===== -->
