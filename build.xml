@@ -70,13 +70,27 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		</condition>
 		<condition property="build.jad.required">
 			<and>
-				<equals arg1="${format}" arg2="jar"/>
+				<or>
+					<equals arg1="${format}" arg2="jar"/>
+					<equals arg1="${format}" arg2="jar2"/>
+				</or>
 				<isset property="jad.exist"/>
 			</and>
 		</condition>
 		<condition property="build.jar.required">
 			<and>
-				<equals arg1="${format}" arg2="jar"/>
+				<or>
+					<equals arg1="${format}" arg2="jar"/>
+					<equals arg1="${format}" arg2="jar2"/>
+				</or>
+				<not>
+					<isset property="jad.exist"/>
+				</not>
+			</and>
+		</condition>
+		<condition property="build.jar2.required">
+			<and>
+				<equals arg1="${format}" arg2="jar2"/>
 				<not>
 					<isset property="jad.exist"/>
 				</not>
@@ -88,7 +102,10 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 		<condition property="compile.required">
 			<or>
-				<equals arg1="${format}" arg2="jar"/>
+				<or>
+					<equals arg1="${format}" arg2="jar"/>
+					<equals arg1="${format}" arg2="jar2"/>
+				</or>
 				<equals arg1="${format}" arg2="war"/>
 			</or>
 		</condition>

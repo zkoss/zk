@@ -19,14 +19,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _drags = [],
 		_dragging = {},
-		_msdowning, //processing mousedown
 		_stackup, _activedg, _timeout, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
 	function _activate(dg, devt, pt) {
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
-			_activedg = dg; 
+			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
+			if (!zk.ie || !_activedg || _activedg.node == dg.node)
+				_activedg = dg; 
 		}, dg.opts.delay);
 		_initPt = pt;
 	}
@@ -575,12 +576,6 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
 			return;
-		}
-
-		if (zk.ie) { //since we don't stop event, we have to handle it ourselves
-			if (_msdowning) return;
-			_msdowning = true;
-			setTimeout(function(){_msdowning = false;},0);
 		}
 
 		var pos = zk(node).cmOffset();

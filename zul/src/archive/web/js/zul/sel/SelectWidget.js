@@ -17,14 +17,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.sel');
 
 (function() {
-	function _shallIgnore(evt) {
-		return !evt.domTarget || !evt.target.canActivate()
-		|| (jq.nodeName(evt.domTarget, "input", "textarea",
-			"button", "select", "option") && !evt.target.$instanceof(zul.sel.SelectWidget))
-		|| (zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
-	}
 	function _beforeChildKey(wgt, evt) {
-		return zAu.processing() || _shallIgnore(evt)
+		return zAu.processing() || wgt._shallIgnore(evt)
 			|| (!wgt._focusItem && !wgt.getSelectedItem());
 	}
 	function _afterChildKey(evt) {
@@ -654,12 +648,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	shallIgnoreSelect_: function (evt) {
 		//see also _shallIgnore
 	},
+	_shallIgnore: function(evt) { // move this function in the widget for override 
+		return !evt.domTarget || !evt.target.canActivate()
+		|| (jq.nodeName(evt.domTarget, "input", "textarea",
+			"button", "select", "option", "a") && !evt.target.$instanceof(zul.sel.SelectWidget))
+		|| (zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
+	},
 	_doItemSelect: function (row, evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
-		if (zk.dragging || _shallIgnore(evt))
+		if (zk.dragging || this._shallIgnore(evt))
 			return;
 			
 		if (this.shallIgnoreSelect_(evt))
@@ -705,7 +705,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Handles keydown sent to the body. */
 	doKeyDown_: function (evt) {
-		if (!_shallIgnore(evt)) {
+		if (!this._shallIgnore(evt)) {
 
 		// Note: We don't intercept body's onfocus to gain focus back to anchor.
 		// Otherwise, it cause scroll problem on IE:
