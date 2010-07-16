@@ -2,6 +2,7 @@
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
@@ -20,6 +21,9 @@ ZK 5.0.4
   
 * Upgrade Notes
   + The default value of tabindex of InputElement is changed from -1 to 0
+  + The protected _left, _top, _width and _height members of HtmlBasedComponent
+  	are removed. Use setLeftDirectly, setTopDirecty, setWidthDirectly and
+  	setHeightDirectly instead.
 
 	--------
 ZK 5.0.3

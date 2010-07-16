@@ -84,9 +84,11 @@ try {
 		impl.setImplicit("self", scope);
 
 		if (scope instanceof Component)
-			impl.setImplicit("componentScope",
-				((Component)scope).getAttributes(Component.COMPONENT_SCOPE));
-
+			impl.setImplicit("componentScope", new DeferredScope(scope));
+				//Use DeferredScope so scope.getAttributes is called only if
+				//required.
+				//Reason: save footprint of AbstractComponent which stores
+				//attrs in _auxinf (and created only if necessary)
 		return scope;
 	}
 	private static Implicit beforeInterpret0(Scope scope) {
@@ -196,10 +198,27 @@ try {
 		}
 		private Object getImplicit(String name, Object defValue) {
 			Object val = _vars.get(name);
-			if (val != null || _vars.containsKey(name))
+			if (val != null || _vars.containsKey(name)) {
+				if (val instanceof Deferred)
+				 	_vars.put(name, val = ((Deferred)val).getValue());
 				return val;
+			}
 			val = getSysImplicit(name);
 			return val != null ? val: defValue;
+		}
+	}
+	/** Store a deferred value. */
+	private static interface Deferred {
+		/** Returns the real value. */
+		public Object getValue();
+	}
+	private static class DeferredScope {
+		private final Scope _scope;
+		private DeferredScope(Scope scope) {
+			_scope = scope;
+		}
+		public Object getValue() {
+			return _scope.getAttributes();
 		}
 	}
 }

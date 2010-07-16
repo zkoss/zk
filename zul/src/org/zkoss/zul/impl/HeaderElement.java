@@ -70,7 +70,7 @@ abstract public class HeaderElement extends LabelImageElement implements org.zko
 		}
 	}
 	void setWidthByClient(String width) {
-		_width = width;
+		setWidthDirectly(width);
 	}
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
