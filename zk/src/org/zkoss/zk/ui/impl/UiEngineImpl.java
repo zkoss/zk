@@ -1083,6 +1083,8 @@ public class UiEngineImpl implements UiEngine {
 			List prs = desktopCtrl.piggyResponse(null, true);
 			if (prs != null) responses.addAll(0, prs);
 
+			responses = AuWriters.marshal(responses);
+				//used the marshalled responses to avoid the references to components
 			final int resId = desktopCtrl.getResponseId(true);
 			desktopCtrl.responseSent(sid,
 				new Object[] {new Integer(resId), responses});

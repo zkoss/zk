@@ -61,10 +61,17 @@ public interface AuWriter {
 	 * @since 3.5.0
 	 */
 	public void writeResponseId(int resId) throws IOException;
-	/** Generates the specified the response to the output.
+	/** Generates the specified response to the output.
+	 * It is the same as <code>write(AuWriters.marshal(response))</code>.
 	 */
 	public void write(AuResponse response) throws IOException;
+	/** Generates the specified response to the output.
+	 * @since 5.0.4
+	 */
+	public void write(MarshalledResponse response) throws IOException;
 	/** Generates a list of responses to the output.
+	 * @param responses a collection of responses, either
+	 * {@link AuResponse} or {@link MarshalledResponse}.
 	 */
 	public void write(Collection responses) throws IOException;
 }

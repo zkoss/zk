@@ -28,6 +28,7 @@ import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.MarshalledResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 
@@ -111,14 +112,21 @@ public class HttpAuWriter implements AuWriter{
 		_out.put("rid", new Integer(resId));
 	}
 	public void write(AuResponse response) throws IOException {
+		write(new MarshalledResponse(response));
+	}
+	public void write(MarshalledResponse response) throws IOException {
 		final JSONArray r = new JSONArray();
-		r.add(response.getCommand());
-		r.add(response.getEncodedData());
+		r.add(response.command);
+		r.add(response.encodedData);
 		_rs.add(r);
 	}
 	public void write(Collection responses) throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			write((AuResponse)it.next());
+		for (Iterator it = responses.iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof AuResponse)
+				write((AuResponse)o);
+			else
+				write((MarshalledResponse)o);
+		}
 	}
-
 }
