@@ -52,8 +52,29 @@ public interface AuWriter {
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
 	 * @param response the response (HttpServletResponse if HTTP)
+	 * @return an object representing the whole content being
+	 * sent by this writer.
+	 * It is used to implement the resend-on-fail mechanism.
+	 * First, the return value is store, and the next request shall
+	 * invoke {@link #resendIf}
+	 * @since 5.0.4
 	 */
-	public void close(Object request, Object response)
+	public Object close(Object request, Object response)
+	throws IOException;
+
+	/** Resend the previous content returned
+	 * by {@link #close} for the previous writer.
+	 * <p>If {@link #resend} is called, {@link #open} and {@link #close}
+	 * shall not be called, and vice versa.
+	 *
+	 * @param request the request (HttpServletRequest if HTTP)
+	 * @param response the response (HttpServletResponse if HTTP)
+	 * @param prevContent the previous content returned by
+	 * {@link #close} of the previous {@link AuWriter}.
+	 * @exception IllegalArgumentException if prevContent is null.
+	 * @exception IllegalStateException if open has been called
+	 */
+	public void resend(Object request, Object response, Object prevContent)
 	throws IOException;
 
 	/** Generates the response ID to the output.
@@ -61,17 +82,10 @@ public interface AuWriter {
 	 * @since 3.5.0
 	 */
 	public void writeResponseId(int resId) throws IOException;
-	/** Generates the specified response to the output.
-	 * It is the same as <code>write(AuWriters.marshal(response))</code>.
+	/** Generates the specified the response to the output.
 	 */
 	public void write(AuResponse response) throws IOException;
-	/** Generates the specified response to the output.
-	 * @since 5.0.4
-	 */
-	public void write(MarshalledResponse response) throws IOException;
 	/** Generates a list of responses to the output.
-	 * @param responses a collection of responses, either
-	 * {@link AuResponse} or {@link MarshalledResponse}.
 	 */
 	public void write(Collection responses) throws IOException;
 }

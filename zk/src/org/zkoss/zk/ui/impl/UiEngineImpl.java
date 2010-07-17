@@ -917,24 +917,6 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	private boolean isReqDup0(Execution exec, AuWriter out, String sid)
-	throws IOException {
-		final Desktop desktop = exec.getDesktop();
-		final Object[] resInfo = (Object[])((DesktopCtrl)desktop)
-			.getLastResponse(sid);
-		if (resInfo != null) {
-			if (log.debugable()) {
-				final Object req = exec.getNativeRequest();
-				log.debug("Repeat request\n"+
-					(req instanceof ServletRequest ? Servlets.getDetail((ServletRequest)req):"sid: "+sid));
-			}
-
-			out.writeResponseId(((Integer)resInfo[0]).intValue());
-			out.write((Collection)resInfo[1]);
-			return true; //replicate
-		}
-		return false;
-	}
 	public void beginUpdate(Execution exec) {
 		final UiVisualizer uv = doActivate(exec, true, false);
 		final Desktop desktop = exec.getDesktop();
@@ -991,11 +973,6 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		final UiVisualizer uv = doActivate(exec, true, false);
-		final String sid = ((ExecutionCtrl)exec).getRequestId();
-		if (sid != null && isReqDup0(exec, out, sid)) {
-			doDeactivate(exec); //deactive
-			return;
-		}
 
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -1083,12 +1060,7 @@ public class UiEngineImpl implements UiEngine {
 			List prs = desktopCtrl.piggyResponse(null, true);
 			if (prs != null) responses.addAll(0, prs);
 
-			responses = AuWriters.marshal(responses);
-				//used the marshalled responses to avoid the references to components
-			final int resId = desktopCtrl.getResponseId(true);
-			desktopCtrl.responseSent(sid,
-				new Object[] {new Integer(resId), responses});
-			out.writeResponseId(resId);
+			out.writeResponseId(desktopCtrl.getResponseId(true));
 			out.write(responses);
 
 //			if (log.debugable())

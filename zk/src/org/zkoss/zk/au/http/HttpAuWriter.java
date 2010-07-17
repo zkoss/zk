@@ -28,7 +28,6 @@ import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.au.MarshalledResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 
@@ -77,18 +76,23 @@ public class HttpAuWriter implements AuWriter{
 	}
 	/** Closes the connection.
 	 */
-	public void close(Object request, Object response)
+	public Object close(Object request, Object response)
 	throws IOException {
 		final HttpServletRequest hreq = (HttpServletRequest)request;
 		final HttpServletResponse hres = (HttpServletResponse)response;
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		byte[] data = getResult().getBytes("UTF-8");
+		boolean compressed = false;
 		if (_compress && data.length > 200) {
 			byte[] bs = Https.gzip(hreq, hres, null, data);
-			if (bs != null) data = bs; //yes, browser support compress
+			if (compressed = (bs != null))
+				 data = bs; //yes, browser support compress
 		}
-
+		flush(hres, data);
+		return marshalResult(data, compressed);
+	}
+	private void flush(HttpServletResponse hres, byte[] data) throws IOException {
 		hres.setContentType(AuWriters.CONTENT_TYPE);
 			//we have to set content-type again. otherwise, tomcat might
 			//fail to preserve what is set in open()
@@ -96,6 +100,20 @@ public class HttpAuWriter implements AuWriter{
 		hres.getOutputStream().write(data);
 		hres.flushBuffer();
 	}
+	public void resend(Object request, Object response, Object prevContent)
+	throws IOException {
+		if (_out != null)
+			throw new IllegalStateException("open not allowed");
+		if (prevContent == null)
+			throw new IllegalArgumentException();
+
+		final HttpServletResponse hres = (HttpServletResponse)response;
+		Object[] cnt = (Object[])prevContent;
+		if (((Boolean)cnt[1]).booleanValue())
+			hres.addHeader("Content-Encoding", "gzip");
+		flush(hres, (byte[])cnt[0]);
+	}
+
 	/** Returns the result of responses that will be sent to client
 	 * (never null).
 	 * It is called by {@link #close} to retrieve the output.
@@ -108,25 +126,23 @@ public class HttpAuWriter implements AuWriter{
 		_rs = null;
 		return data;
 	}
+	/** Makes the content that can be returned by {@link #close}
+	 * @since 5.0.4
+	 */
+	protected Object marshalResult(byte[] result, boolean compressed) {
+		return new Object[] {result, Boolean.valueOf(compressed)};
+	}
 	public void writeResponseId(int resId) throws IOException {
 		_out.put("rid", new Integer(resId));
 	}
 	public void write(AuResponse response) throws IOException {
-		write(new MarshalledResponse(response));
-	}
-	public void write(MarshalledResponse response) throws IOException {
 		final JSONArray r = new JSONArray();
-		r.add(response.command);
-		r.add(response.encodedData);
+		r.add(response.getCommand());
+		r.add(response.getEncodedData());
 		_rs.add(r);
 	}
 	public void write(Collection responses) throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();) {
-			final Object o = it.next();
-			if (o instanceof AuResponse)
-				write((AuResponse)o);
-			else
-				write((MarshalledResponse)o);
-		}
+		for (Iterator it = responses.iterator(); it.hasNext();)
+			write((AuResponse)it.next());
 	}
 }

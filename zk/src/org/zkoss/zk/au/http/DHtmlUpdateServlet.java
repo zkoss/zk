@@ -551,10 +551,22 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
-		if (sid != null)
+		if (sid != null) {
 			((ExecutionCtrl)exec).setRequestId(sid);
+			Object prevc = desktopCtrl.getLastResponse(sid);
+			if (prevc != null) { //replicate request
+				if (log.debugable())
+					log.debug("replicate request\n"+Servlets.getDetail(request));
+
+				final AuWriter out = AuWriters.newInstance();
+				out.resend(request, response, prevc);
+				return;
+			}
+		}
+
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(_compress);
 		out.open(request, response,
@@ -563,8 +575,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//Note: getResendDelay() might return nonpositive
 		wappc.getUiEngine().execUpdate(exec, aureqs, out);
 
-		out.close(request, response);
+		desktopCtrl.responseSent(sid,
+			out.close(request, response));
 	}
+
 	/** Returns the desktop of the specified ID, or null if not found.
 	 * If null is returned, {@link #recoverDesktop} will be invoked.
 	 * @param sess the session (never null)

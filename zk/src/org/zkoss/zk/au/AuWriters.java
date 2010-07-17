@@ -16,10 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -70,16 +66,6 @@ public class AuWriters {
 		return new HttpAuWriter();
 	}
 
-	/** Converts a collection of {@link AuResponse} to a collection
-	 * of {@link MarshalledResponse}.
-	 * @since 5.0.4
-	 */
-	public static List marshal(Collection responses) {
-		final List result = new LinkedList();
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			result.add(new MarshalledResponse((AuResponse)it.next()));
-		return result;
-	}
 	/** The content type of the output.
 	 * @since 3.5.0
 	 */
