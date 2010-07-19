@@ -97,16 +97,14 @@ import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.scripting.*;
 
 /**
- * A skeletal implementation of {@link Component}. Though it is OK
- * to implement Component from scratch, this class simplifies some of
- * the chores.
+ * A skeletal implementation of {@link Component}.
  *
  * @author tomyeh
  */
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20100716L;
+	private static final long serialVersionUID = 20100719L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map _clientEvents = new HashMap(128);
@@ -126,22 +124,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ transient AbstractComponent _next;
 	/** The previous sibling. */
 	/*package*/ transient AbstractComponent _prev;
-	/** The first child. */
-	/*package*/ transient AbstractComponent _first;
-	/** The last child. */
-	/*package*/ transient AbstractComponent _last;
-	/** # of children. */
-	private short _nChild;
-	/** The modification count used to avoid co-modification of _next, _prev..
-	 */
-	private transient short _modCntChd;
-	/** Set of components that are being added or removed.
-	 * _aring[0]: add, _aring[1]: remove
-	 * It is used to prevent dead-loop between {@link #removeChild}
-	 * and {@link #setParent}.
-	 */
-	private transient Set[] _aring; //use an array to save memory
-
+	/** ChildInfo: use a class (rather than multiple member) to save footprint */
+	private transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
 	/** Whether this component is visible.
@@ -243,7 +227,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected class Children extends AbstractSequentialList {
 		public int size() {
-			return _nChild;
+			return nChild();
 		}
 		public ListIterator listIterator(int index) {
 			return new ChildIter(index);
@@ -323,7 +307,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).bindToIdSpace(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
 
@@ -335,7 +319,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			owner.addFellow(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
 
@@ -362,7 +346,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
 
@@ -373,7 +357,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			owner.removeFellow(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
 
@@ -395,7 +379,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !isAutoId(compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				checkIdSpacesDown(ac, si); //recursive
 	}
@@ -406,7 +390,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !isAutoId(compId) && page.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+page+": "+compId);
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				checkIdSpacesDown(ac, page); //recursive
 	}
@@ -568,7 +552,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//process all children recursively
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.setPage0(page); //recursive
 	}
 
@@ -716,10 +701,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _prev;
 	}
 	public Component getFirstChild() {
-		return _first;
+		return _chdinf != null ? _chdinf.first: null;
 	}
 	public Component getLastChild() {
-		return _last;
+		return _chdinf != null ? _chdinf.last: null;
+	}
+	private final int nChild() {
+		return _chdinf != null ? _chdinf.nChild: 0;
+	}
+	private int modCntChd() {
+		return _chdinf != null ? _chdinf.modCntChd: 0;
 	}
 
 	public String setWidgetListener(String evtnm, String script) {
@@ -982,7 +973,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_parent == parent)
 			return; //nothing changed
 
-		checkParentChild(parent, this);
+		checkParentChild(parent, this); //create _chdinf
 		beforeParentChanged(parent);
 
 		final boolean idSpaceChanged =
@@ -996,12 +987,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//call removeChild and clear _parent
 		final AbstractComponent op = _parent;
 		if (op != null) {
-			if (!op.inRemoving(this)) {
-				op.markRemoving(this, true);
+			if (!op._chdinf.inRemoving(this)) {
+				op._chdinf.markRemoving(this, true);
 				try {
 					op.removeChild(this); //spec: call back removeChild
 				} finally {
-					op.markRemoving(this, false);
+					op._chdinf.markRemoving(this, false);
 				}
 			}
 			_parent = null; //op.removeChild assumes _parent not changed yet
@@ -1013,12 +1004,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//call insertBefore and set _parent
 		if (parent != null) {
 			final AbstractComponent np = (AbstractComponent)parent;
-			if (!np.inAdding(this)) {
-				np.markAdding(this, true);
+			if (!np._chdinf.inAdding(this)) {
+				np._chdinf.markAdding(this, true);
 				try {
 					np.insertBefore(this, null); //spec: call back inserBefore
 				} finally {
-					np.markAdding(this, false);
+					np._chdinf.markAdding(this, false);
 				}
 			}
 			_parent = np; //np.insertBefore assumes _parent not changed yet
@@ -1060,40 +1051,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	/** Returns whether the child is being removed.
-	 */
-	private boolean inRemoving(Component child) {
-		return _aring != null && _aring[1] != null && _aring[1].contains(child);
-	}
-	/** Sets if the child is being removed.
-	 */
-	private void markRemoving(Component child, boolean set) {
-		markARing(child, set, 1);
-	}
-	/** Returns whether the child is being added.
-	 */
-	private boolean inAdding(Component child) {
-		return _aring != null && _aring[0] != null && _aring[0].contains(child);
-	}
-	/** Sets if the child is being added.
-	 */
-	private void markAdding(Component child, boolean set) {
-		markARing(child, set, 0);
-	}
-	private void markARing(Component child, boolean set, int which) {
-		if (set) {
-			if (_aring == null) _aring = new Set[2];
-			if (_aring[which] == null) _aring[which] = new HashSet(2);
-			_aring[which].add(child);
-		} else if (_aring != null && _aring[which] != null
-		&& _aring[which].remove(child) && _aring[which].isEmpty())
-			if (_aring[which == 0 ? 1: 0] == null) //both null
-				_aring = null;
-			else
-				_aring[which] = null;
-	}
-
 	/**
+	 * Checks the parent-child relation.
+	 * Notice it will create parent._chdinf
 	 * @param parent the parent (will-be). It may be null.
 	 * @param child the child (will-be). It cannot be null.
 	 */
@@ -1101,7 +1061,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws UiException {
 		if (parent != null) {
 			final AbstractComponent acp = (AbstractComponent)parent;
-			if (acp.inAdding(child))
+			if (acp.initChildInfo().inAdding(child))
 				return; //check only once
 
 			if (Components.isAncestor(child, parent))
@@ -1129,7 +1089,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if ((newChild instanceof Macro) && ((Macro)newChild).isInline())
 			return ((Macro)newChild).setInlineParent(this, refChild);
 
-		checkParentChild(this, newChild);
+		checkParentChild(this, newChild); ///create _chdinf
 
 		if (refChild != null && refChild.getParent() != this)
 			refChild = null;
@@ -1152,12 +1112,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} else { //new added
 			//Note: call setParent to detach nc from old parent, if any,
 			//before maintaining nc's _next, _prev...
-			if (!inAdding(nc)) {
-				markAdding(nc, true);
+			if (!_chdinf.inAdding(nc)) {
+				_chdinf.markAdding(nc, true);
 				try {
 					nc.setParent(this); //spec: callback setParent
 				} finally {
-					markAdding(nc, false);
+					_chdinf.markAdding(nc, false);
 				}
 			} else {
 				nc._parent = this;
@@ -1178,31 +1138,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			setNext(ref._prev, nc);
 			setPrev(ref, nc);
 		} else {
-			if (_last == null) {
-				_first = _last = nc;
+			if (_chdinf.last == null) {
+				_chdinf.first = _chdinf.last = nc;
 				nc._next = nc._prev = null;
 			} else {
-				_last._next = nc;
-				nc._prev = _last;
+				_chdinf.last._next = nc;
+				nc._prev = _chdinf.last;
 				nc._next = null;
-				_last = nc;
+				_chdinf.last = nc;
 			}
 		}
 
-		++_modCntChd;
+		++_chdinf.modCntChd;
 		if (!moved) { //new added
-			++_nChild;
+			++_chdinf.nChild;
 			onChildAdded(nc);
 		}
 		return true;
 	}
 	private void setNext(AbstractComponent comp, AbstractComponent next) {
 		if (comp != null) comp._next = next;
-		else _first = next;
+		else _chdinf.first = next;
 	}
 	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
-		else _last = prev;
+		else _chdinf.last = prev;
 	}
 
 	/** Appends a child to the end of all children.
@@ -1225,12 +1185,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
 
-		if (!inRemoving(oc)) {
-			markRemoving(oc, true);
+		if (!_chdinf.inRemoving(oc)) {
+			_chdinf.markRemoving(oc, true);
 			try {
 				oc.setParent(null); //spec: call back setParent
 			} finally {
-				markRemoving(oc, false);
+				_chdinf.markRemoving(oc, false);
 			}
 		} else {
 			oc._parent = null;
@@ -1239,8 +1199,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				//refer to insertBefore for more info.
 		}
 
-		++_modCntChd;
-		--_nChild;
+		++_chdinf.modCntChd;
+		--_chdinf.nChild;
 		onChildRemoved(child);
 		return true;
 	}
@@ -2272,7 +2232,8 @@ w:use="foo.MyWindow"&gt;
 			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
 				willPassivate((Collection)it.next());
 
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.sessionWillPassivate(page); //recursive
 	}
 
@@ -2300,7 +2261,8 @@ w:use="foo.MyWindow"&gt;
 			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
 				didActivate((Collection)it.next());
 
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.sessionDidActivate(page); //recursive
 	}
 	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
@@ -2534,27 +2496,28 @@ w:use="foo.MyWindow"&gt;
 		private int _modCntSnap;
 
 		private ChildIter(int index) {
-			if (index < 0 || index > _nChild)
-				throw new IndexOutOfBoundsException("Index: "+index+", Size: "+_nChild);
+			int nChild;
+			if (index < 0 || index > (nChild = nChild()))
+				throw new IndexOutOfBoundsException("Index: "+index+", Size: "+nChild());
 
-			if (index < (_nChild >> 1)) {
-				_p = _first;
+			if (index < (nChild >> 1)) {
+				_p = _chdinf.first;
 				for (_j = 0; _j < index; _j++)
 					_p = _p._next;
 			} else {
 				_p = null; //means the end of the list
-				for (_j = _nChild; _j > index; _j--)
-					_p = _p != null ? _p._prev: _last;
+				for (_j = nChild; _j > index; _j--)
+					_p = _p != null ? _p._prev: _chdinf.last;
 			}
 
-			_modCntSnap = _modCntChd;
+			_modCntSnap = modCntChd();
 		}
 		public boolean hasNext() {
 			checkComodification();
-			return _j < _nChild;
+			return _j < nChild();
 		}
 		public Object next() {
-			if (_j >= _nChild)
+			if (_j >= nChild())
 				throw new java.util.NoSuchElementException();
 			checkComodification();
 			
@@ -2568,16 +2531,16 @@ w:use="foo.MyWindow"&gt;
 			return _j > 0;
 		}
 		public Object previous() {
-		    if (_j <= 0)
+			if (_j <= 0)
 				throw new java.util.NoSuchElementException();
 			checkComodification();
 
-		    _lastRet = _p = _p != null ? _p._prev: _last;
-		    _j--;
-		    return _lastRet;
+			_lastRet = _p = _p != null ? _p._prev: _chdinf.last;
+			_j--;
+			return _lastRet;
 		}
 		private void checkComodification() {
-			if (_modCntChd != _modCntSnap)
+			if (modCntChd() != _modCntSnap)
 				throw new java.util.ConcurrentModificationException();
 		}
 		public int nextIndex() {
@@ -2599,7 +2562,7 @@ w:use="foo.MyWindow"&gt;
 			_lastRet = null;
 				//spec: cause remove to throw ex if no next/previous
 			++_modCntSnap;
-				//don't assign _modCntChd directly since deriving class
+				//don't assign modCntChd directly since deriving class
 				//might manipulate others in insertBefore
 		}
 		public void remove() {
@@ -2669,7 +2632,22 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		//2. clone children (deep cloning)
-		cloneChildren(clone);
+		if (_chdinf != null) {
+			clone._chdinf = new ChildInfo(clone, clone._chdinf);
+			AbstractComponent q = null;
+			for (AbstractComponent p = _chdinf.first; p != null; p = p._next) {
+				AbstractComponent child = (AbstractComponent)p.clone();
+				if (q != null) q._next = child;
+				else clone._chdinf.first = child;
+				child._prev = q;
+				q = child;
+
+				child._parent = clone; //correct it
+				if (child._auxinf != null && child._auxinf.attrs != null)
+					child._auxinf.attrs.notifyParentChanged(clone);
+			}
+			clone._chdinf.last = q;
+		}
 		clone._apiChildren = null;
 
 		//3. spaceinfo
@@ -2719,23 +2697,9 @@ w:use="foo.MyWindow"&gt;
 		//rebuild ID space by binding itself and all children
 		if (!isAutoId(_id))
 			this.bindToIdSpace(this);
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			addToIdSpacesDown(p, this);
-	}
-	private static void cloneChildren(final AbstractComponent comp) {
-		AbstractComponent q = null;
-		for (AbstractComponent p = comp._first; p != null; p = p._next) {
-			AbstractComponent child = (AbstractComponent)p.clone();
-			if (q != null) q._next = child;
-			else comp._first = child;
-			child._prev = q;
-			q = child;
-
-			child._parent = comp; //correct it
-			if (child._auxinf != null && child._auxinf.attrs != null)
-				child._auxinf.attrs.notifyParentChanged(comp);
-		}
-		comp._last = q;
 	}
 
 	//Serializable//
@@ -2760,7 +2724,8 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		//write children
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			s.writeObject(p);
 		s.writeObject(null);
 
@@ -2849,11 +2814,13 @@ w:use="foo.MyWindow"&gt;
 		for (AbstractComponent q = null;;) {
 			final AbstractComponent child = (AbstractComponent)s.readObject();
 			if (child == null) {
-				_last = q;
+				if (_chdinf != null)
+					_chdinf.last = q;
 				break; //no more
 			}
+			++initChildInfo().nChild;
 			if (q != null) q._next = child;
-			else _first = child;
+			else _chdinf.first = child;
 			child._prev = q;
 			child._parent = this;
 			q = child;
@@ -2890,7 +2857,8 @@ w:use="foo.MyWindow"&gt;
 			//restore ID space by binding itself and all children
 			if (!isAutoId(_id))
 				bindToIdSpace(this);
-			for (AbstractComponent ac = _first; ac != null; ac = ac._next)
+			for (AbstractComponent ac = (AbstractComponent)getFirstChild();
+			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, this);
 		}
 
@@ -3111,6 +3079,69 @@ w:use="foo.MyWindow"&gt;
 			renderer.renderWidgetListeners(wgtlsns);
 			renderer.renderWidgetOverrides(wgtovds);
 			renderer.renderWidgetAttributes(wgtattrs);
+		}
+	}
+
+	private final ChildInfo initChildInfo() {
+		if (_chdinf == null)
+			_chdinf = new ChildInfo();
+		return _chdinf;
+	}
+	private static class ChildInfo /*implements java.io.Serializable*/ {
+		/** The first child. */
+		private transient AbstractComponent first;
+		/** The last child. */
+		private transient AbstractComponent last;
+		/** # of children. */
+		private transient int nChild;
+		/** Set of components that are being added or removed.
+		 * _aring[0]: add, _aring[1]: remove
+		 * It is used to prevent dead-loop between {@link #removeChild}
+		 * and {@link #setParent}.
+		 */
+		private transient Set[] _aring; //use an array to save memory
+		/** The modification count used to avoid co-modification of _next, _prev..
+		 */
+		private transient int modCntChd;
+
+		private ChildInfo() {
+		}
+		private ChildInfo(Component owner, ChildInfo chdinf) {
+			this.nChild = chdinf.nChild;
+			this.modCntChd = chdinf.modCntChd;
+		}
+
+		/** Returns whether the child is being removed.
+		 */
+		private boolean inRemoving(Component child) {
+			return _aring != null && _aring[1] != null && _aring[1].contains(child);
+		}
+		/** Sets if the child is being removed.
+		 */
+		private void markRemoving(Component child, boolean set) {
+			markARing(child, set, 1);
+		}
+		/** Returns whether the child is being added.
+		 */
+		private boolean inAdding(Component child) {
+			return _aring != null && _aring[0] != null && _aring[0].contains(child);
+		}
+		/** Sets if the child is being added.
+		 */
+		private void markAdding(Component child, boolean set) {
+			markARing(child, set, 0);
+		}
+		private void markARing(Component child, boolean set, int which) {
+			if (set) {
+				if (_aring == null) _aring = new Set[2];
+				if (_aring[which] == null) _aring[which] = new HashSet(2);
+				_aring[which].add(child);
+			} else if (_aring != null && _aring[which] != null
+			&& _aring[which].remove(child) && _aring[which].isEmpty())
+				if (_aring[which == 0 ? 1: 0] == null) //both null
+					_aring = null;
+				else
+					_aring[which] = null;
 		}
 	}
 }
