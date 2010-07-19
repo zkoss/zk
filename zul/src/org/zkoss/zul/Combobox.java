@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.Utils;
 
 /**
@@ -260,8 +261,11 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render(subset, (Comboitem)it.next());
+			j < pgsz && it.hasNext(); ++j){
+				Comboitem item = (Comboitem)it.next();
+				renderer.render(subset, item);
+				afterInsert(item);// comboitem can be selected after set a label
+			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -605,6 +609,24 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
+	/**
+	 * Callback if a combo item has been inserted and rendered the label.
+	 * 
+	 * @since 5.0.4
+	 */
+	protected void afterInsert(Component comp) {
+		if (comp instanceof Comboitem && _model instanceof Selectable) {
+			Iterator it = ((Selectable) _model).getSelection().iterator();
+			if (!it.hasNext()) return;
+			
+			final Comboitem item = (Comboitem) comp;
+			if (it.next().equals(
+					_model.getElementAt(getItems().indexOf(item)))) {
+				setSelectedItem(item);
+			}
+		}
+	}
+	
 	/** Childable. */
 	protected boolean isChildable() {
 		return true;
