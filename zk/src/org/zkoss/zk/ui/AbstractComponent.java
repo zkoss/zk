@@ -2599,84 +2599,26 @@ w:use="foo.MyWindow"&gt;
 		clone._parent = null;
 		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
-		if (_auxinf != null) {
-			//1a. clone attributes
-			clone._auxinf = new AuxInfo(clone, _auxinf);
+		//2. clone AuxInfo
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)clone._auxinf.clone();
 
-			//1b. clone listeners
-			if (_auxinf.listeners != null) {
-				clone._auxinf.listeners = new HashMap(4);
-				for (Iterator it = _auxinf.listeners.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final List list = new LinkedList();
-					for (Iterator it2 = ((List)me.getValue()).iterator();
-					it2.hasNext();) {
-						Object val = it2.next();
-						if (val instanceof ComponentCloneListener) {
-							val = clone.willClone((ComponentCloneListener)val);
-							if (val == null) continue; //don't use it in clone
-						}
-						list.add(val);
-					}
-					if (!list.isEmpty())
-						clone._auxinf.listeners.put(me.getKey(), list);
-				}
-			}
-
-			//2c. clone annotation and event handlers
-			if (!_auxinf.annotsShared && _auxinf.annots != null)
-				clone._auxinf.annots = (AnnotationMap)_auxinf.annots.clone();
-			if (!_auxinf.evthdsShared && _auxinf.evthds != null)
-				clone._auxinf.evthds = (EventHandlerMap)_auxinf.evthds.clone();
-		}
-
-		//2. clone children (deep cloning)
+		//3. clone children (deep cloning)
 		if (_chdinf != null) {
-			clone._chdinf = new ChildInfo(clone, clone._chdinf);
-			AbstractComponent q = null;
-			for (AbstractComponent p = _chdinf.first; p != null; p = p._next) {
-				AbstractComponent child = (AbstractComponent)p.clone();
-				if (q != null) q._next = child;
-				else clone._chdinf.first = child;
-				child._prev = q;
-				q = child;
+			clone._chdinf = _chdinf.clone(clone);
 
-				child._parent = clone; //correct it
-				if (child._auxinf != null && child._auxinf.attrs != null)
-					child._auxinf.attrs.notifyParentChanged(clone);
-			}
-			clone._chdinf.last = q;
+			//child's attrs's notification
+			for (AbstractComponent p = clone._chdinf.first;
+			p != null; p = p._next)
+				if (p._auxinf != null && p._auxinf.attrs != null)
+					p._auxinf.attrs.notifyParentChanged(clone);
 		}
 		clone._apiChildren = null;
 
-		//3. spaceinfo
-		if (_auxinf != null && _auxinf.spaceInfo != null) {
-			clone._auxinf.spaceInfo = clone.new SpaceInfo();
-			clone.cloneSpaceInfoFrom(this._auxinf.spaceInfo);
-		}
+		//4. init AuxInfo
+		if (_auxinf != null)
+			_auxinf.initClone(clone, clone._auxinf);
 
-		//4. clone forwards
-		if (_auxinf != null && _auxinf.forwards != null) {
-			clone._auxinf.forwards = null;
-			for (Iterator it = _auxinf.forwards.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String orgEvent = (String)me.getKey();
-
-				final Object[] info = (Object[])me.getValue();
-				final List fwds = (List)info[1];
-				for (Iterator e = fwds.iterator(); e.hasNext();) {
-					final Object[] fwd = (Object[])e.next();
-					clone.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
-				}
-			}
-		}
-
-		if (_auxinf != null) {
-			Object val = clone._auxinf.ausvc;
-			if (val instanceof ComponentCloneListener)
-				clone._auxinf.ausvc = (AuService)clone.willClone((ComponentCloneListener)val);
-		}
 		return clone;
 	}
 	private Object willClone(ComponentCloneListener val) {
@@ -3023,7 +2965,7 @@ w:use="foo.MyWindow"&gt;
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The mold. */
 		private String mold;
 
@@ -3062,17 +3004,79 @@ w:use="foo.MyWindow"&gt;
 		/** Whether evthds is shared with other components. */
 		private transient boolean evthdsShared;
 
-		private AuxInfo() {
+		public Object clone() {
+			final AuxInfo clone;
+			try {
+				clone = (AuxInfo)super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+			if (wgtlsns != null)
+				clone.wgtlsns = new LinkedHashMap(wgtlsns);
+			if (wgtovds != null)
+				clone.wgtovds = new LinkedHashMap(wgtovds);
+			if (wgtattrs != null)
+				clone.wgtattrs = new LinkedHashMap(wgtattrs);
+
+			//clone annotation and event handlers
+			if (!annotsShared && annots != null)
+				clone.annots = (AnnotationMap)annots.clone();
+			if (!evthdsShared && evthds != null)
+				clone.evthds = (EventHandlerMap)evthds.clone();
+			return clone;
 		}
-		private AuxInfo(AbstractComponent owner, AuxInfo auxinf) {
-			if (auxinf.attrs != null)
-				attrs = auxinf.attrs.clone(owner);
-			if (auxinf.wgtlsns != null)
-				wgtlsns = new LinkedHashMap(auxinf.wgtlsns);
-			if (auxinf.wgtovds != null)
-				wgtovds = new LinkedHashMap(auxinf.wgtovds);
-			if (auxinf.wgtattrs != null)
-				wgtattrs = new LinkedHashMap(auxinf.wgtattrs);
+		/** 2nd phase of clone (after children are cloned). */
+		private void initClone(AbstractComponent owner, AuxInfo clone) {
+			//spaceinfo (after children is cloned)
+			if (spaceInfo != null) {
+				clone.spaceInfo = owner.new SpaceInfo();
+				owner.cloneSpaceInfoFrom(spaceInfo);
+			}
+
+			//clone attrs
+			if (attrs != null)
+				clone.attrs = attrs.clone(owner);
+
+			//clone listener
+			if (listeners != null) {
+				clone.listeners = new HashMap(4);
+				for (Iterator it = listeners.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final List list = new LinkedList();
+					for (Iterator it2 = ((List)me.getValue()).iterator();
+					it2.hasNext();) {
+						Object val = it2.next();
+						if (val instanceof ComponentCloneListener) {
+							val = owner.willClone((ComponentCloneListener)val);
+							if (val == null) continue; //don't use it in clone
+						}
+						list.add(val);
+					}
+					if (!list.isEmpty())
+						clone.listeners.put(me.getKey(), list);
+				}
+			}
+
+			//clone forwards (after children is cloned)
+			if (forwards != null) {
+				clone.forwards = null;
+				for (Iterator it = forwards.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final String orgEvent = (String)me.getKey();
+
+					final Object[] info = (Object[])me.getValue();
+					final List fwds = (List)info[1];
+					for (Iterator e = fwds.iterator(); e.hasNext();) {
+						final Object[] fwd = (Object[])e.next();
+						owner.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
+					}
+				}
+			}
+
+			//AuService
+			if (ausvc instanceof ComponentCloneListener)
+				clone.ausvc = (AuService)owner.willClone((ComponentCloneListener)ausvc);
 		}
 		private void render(ContentRenderer renderer)
 		throws IOException {
@@ -3087,7 +3091,7 @@ w:use="foo.MyWindow"&gt;
 			_chdinf = new ChildInfo();
 		return _chdinf;
 	}
-	private static class ChildInfo /*implements java.io.Serializable*/ {
+	private static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
 		/** The first child. */
 		private transient AbstractComponent first;
 		/** The last child. */
@@ -3106,9 +3110,28 @@ w:use="foo.MyWindow"&gt;
 
 		private ChildInfo() {
 		}
-		private ChildInfo(Component owner, ChildInfo chdinf) {
-			this.nChild = chdinf.nChild;
-			this.modCntChd = chdinf.modCntChd;
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
+		private ChildInfo clone(AbstractComponent owner) {
+			final ChildInfo clone = (ChildInfo)clone();
+
+			AbstractComponent q = null;
+			for (AbstractComponent p = first; p != null; p = p._next) {
+				AbstractComponent child = (AbstractComponent)p.clone();
+				if (q != null) q._next = child;
+				else clone.first = child;
+				child._prev = q;
+				q = child;
+
+				child._parent = owner; //correct it
+			}
+			clone.last = q;
+			return clone;
 		}
 
 		/** Returns whether the child is being removed.
