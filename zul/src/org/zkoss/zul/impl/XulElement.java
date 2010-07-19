@@ -35,23 +35,15 @@ import org.zkoss.zul.Popup;
  * @author tomyeh
  */
 abstract public class XulElement extends HtmlBasedComponent implements org.zkoss.zul.impl.api.XulElement {
-
-	/** The popup ID that will be shown when click. */
-	private String _popup;
-	/** The context ID that will be shown when right-click. */
-	private String _ctx;
-	/** The tooltip ID that will be shown when mouse-over. */
-	private String _tooltip;
-	/** What control and function keys to intercepts. */
-	private String _ctrlKeys;
-
+	/** AuxInfo: use a class (rather than multiple member) to save footprint */
+	private AuxInfo _auxinf;
 
 	/** Returns what keystrokes to intercept.
 	 * <p>Default: null.
 	 * @since 3.0.6
 	 */
 	public String getCtrlKeys() {
-		return _ctrlKeys;
+		return _auxinf != null ? _auxinf.ctrlKeys: null;
 	}
 	/** Sets what keystrokes to intercept.
 	 *
@@ -107,9 +99,9 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	public void setCtrlKeys(String ctrlKeys) throws UiException {
 		if (ctrlKeys != null && ctrlKeys.length() == 0)
 			ctrlKeys = null;
-		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
-			_ctrlKeys = ctrlKeys;
-			smartUpdate("ctrlKeys", _ctrlKeys);
+		if (!Objects.equals(_auxinf != null ? _auxinf.ctrlKeys: null, ctrlKeys)) {
+			initAuxInfo().ctrlKeys = ctrlKeys;
+			smartUpdate("ctrlKeys", getCtrlKeys());
 		}
 	}
 
@@ -119,7 +111,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <p>Default: null (no context menu).
 	 */
 	public String getContext() {
-		return _ctx;
+		return _auxinf != null ? _auxinf.ctx: null;
 	}
 	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -167,9 +159,9 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * @see #setContext(Popup)
 	 */
 	public void setContext(String context) {
-		if (!Objects.equals(_ctx, context)) {
-			_ctx = context;
-			smartUpdate("context", _ctx);
+		if (!Objects.equals(_auxinf != null ? _auxinf.ctx: null, context)) {
+			initAuxInfo().ctx = context;
+			smartUpdate("context", getContext());
 		}
 	}
 	/** Sets the UUID of the popup that should appear 
@@ -190,7 +182,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <p>Default: null (no popup).
 	 */
 	public String getPopup() {
-		return _popup;
+		return _auxinf != null ? _auxinf.popup: null;
 	}
 	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
@@ -227,9 +219,9 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setPopup(String popup) {
-		if (!Objects.equals(_popup, popup)) {
-			_popup = popup;
-			smartUpdate("popup", _popup);
+		if (!Objects.equals(_auxinf != null ? _auxinf.popup: null, popup)) {
+			initAuxInfo().popup = popup;
+			smartUpdate("popup", getPopup());
 		}
 	}
 	/** Sets the UUID of the popup that should appear
@@ -250,7 +242,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <p>Default: null (no tooltip).
 	 */
 	public String getTooltip() {
-		return _tooltip;
+		return _auxinf != null ? _auxinf.tooltip: null;
 	}
 	/** Sets the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -291,9 +283,9 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setTooltip(String tooltip) {
-		if (!Objects.equals(_tooltip, tooltip)) {
-			_tooltip = tooltip;
-			smartUpdate("tooltip", _tooltip);
+		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, tooltip)) {
+			initAuxInfo().tooltip = tooltip;
+			smartUpdate("tooltip", getTooltip());
 		}
 	}
 	/** Sets the UUID of the popup that should be used
@@ -323,9 +315,29 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "popup", _popup);
-		render(renderer, "context", _ctx);
-		render(renderer, "tooltip", _tooltip);
-		render(renderer, "ctrlKeys", _ctrlKeys);
+		render(renderer, "popup", getPopup());
+		render(renderer, "context", getContext());
+		render(renderer, "tooltip", getTooltip());
+		render(renderer, "ctrlKeys", getCtrlKeys());
+	}
+
+	private final AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	/** Merge multiple memembers into an single object (and create on demand)
+	 * to minimize the footprint
+	 * @since 5.0.4
+	 */
+	private static class AuxInfo implements java.io.Serializable {
+		/** The popup ID that will be shown when click. */
+		private String popup;
+		/** The context ID that will be shown when right-click. */
+		private String ctx;
+		/** The tooltip ID that will be shown when mouse-over. */
+		private String tooltip;
+		/** What control and function keys to intercepts. */
+		private String ctrlKeys;
 	}
 }
