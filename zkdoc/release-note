@@ -2,13 +2,14 @@
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3031544: Allow to specify a shortcut instead of full namespace
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
+  3030481: Combobox support Selectable (used with ListModel)
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
   3027238: A way to customize the resource loader of PageDefinitions
-  3030481: the model of the combobox support addSelection
   
 * Bugs
   3023619: inline macro cause nRoot to become a negative number
