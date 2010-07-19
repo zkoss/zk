@@ -264,7 +264,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			j < pgsz && it.hasNext(); ++j){
 				Comboitem item = (Comboitem)it.next();
 				renderer.render(subset, item);
-				afterInsert(item);// comboitem can be selected after set a label
+				afterRender(item);// comboitem can be selected after set a label
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -609,12 +609,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
-	/**
-	 * Callback if a combo item has been inserted and rendered the label.
-	 * 
-	 * @since 5.0.4
-	 */
-	protected void afterInsert(Component comp) {
+	private void afterRender(Component comp) {
 		if (comp instanceof Comboitem && _model instanceof Selectable) {
 			Iterator it = ((Selectable) _model).getSelection().iterator();
 			if (!it.hasNext()) return;
