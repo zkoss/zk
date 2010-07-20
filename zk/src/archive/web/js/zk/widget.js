@@ -207,6 +207,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return wgt && (p = wgt.parent) && p.dragControl && (!invoke || p.dragControl(wgt));
 	}
 
+	//backup current focus
+	function _bkFocus(wgt) {
+		var cf = zk.currentFocus;
+		if (cf && zUtl.isAncestor(wgt, cf)) {
+			zk.currentFocus = null;
+			return cf;
+		}
+	}
+	//restore focus
+	function _rsFocus(cf) {
+		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
+	}
+
 	//set minimum flex size and return it
 	function _fixMinFlex(wgtn, o) {
 		this.beforeMinFlex_(o);
@@ -2534,11 +2547,7 @@ function () {
 			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
-		var cf = zk.currentFocus;
-		if (cf && zUtl.isAncestor(this, cf)) {
-			zk.currentFocus = null;
-		} else
-			cf = null;
+		var cf = skipper ? null: _bkFocus(this);
 
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
@@ -2555,7 +2564,7 @@ function () {
 			zWatch.fireDown('onSize', this);
 		}
 
-		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
+		_rsFocus(cf);
 		return this;
 	},
 	/**
@@ -2618,9 +2627,12 @@ function () {
 				this.z$rod = false;
 					//to avoid side effect since the caller might look for $n(xx)
 
+				var skipInfo;
 				if (skipper) {
-					var skipInfo = skipper.skip(this);
+					skipInfo = skipper.skip(this);
 					if (skipInfo) {
+						var cf = _bkFocus(this);
+
 						this.replaceHTML(n, null, skipper);
 
 						skipper.restore(this, skipInfo);
@@ -2629,8 +2641,11 @@ function () {
 							//to notify it is restored from rerender with skipper
 						zWatch.fireDown('beforeSize', this);
 						zWatch.fireDown('onSize', this);
+
+						_rsFocus(cf);
 					}
-				} else
+				}
+				if (!skipInfo)
 					this.replaceHTML(n);
 
 				this.z$rod = oldrod;
@@ -4646,7 +4661,6 @@ Object skip(zk.Widget wgt);
 				//don't use jq to remove, since it unlisten events
 			return skip;
 		}
-		return null;
 	},
 	/** Restores the DOM elements that are detached (i.e., skipped) by {@link #skip}. 
 	 * @param zk.Widget wgt the widget being re-rendered

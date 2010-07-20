@@ -12,7 +12,7 @@ ZK 5.0.4
   3027238: A way to customize the resource loader of PageDefinitions
   
 * Bugs
-  3023619: inline macro cause nRoot to become a negative number
+  3023619: inline macro might cause nRoot to become a negative number
   3025339: incorrect implementation in Timebox and Spinner widget
   3026819: InputElement.setTabindex(-1) doesn't work
   3027158: The checkbox set focus dosen't work
