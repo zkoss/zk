@@ -27,7 +27,9 @@ import org.zkoss.zul.event.ListDataEvent;
 /**
  * A simple implementation of {@link ListModel}.
  * Note: It assumes the content is immutable. If not, use {@link ListModelList}
- * or {@link ListModelArray} nstead.
+ * or {@link ListModelArray} instead.
+ * In additions, it stores the data in the array format, so if the original
+ * data is not an array. It is better not to use this class.
  *
  * @author tomyeh
  * @see ListModelArray
@@ -70,6 +72,9 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	}
 
 	/** Constructor.
+	 * Notice the data will be converted to an array, so the performance
+	 * is not good if the data is huge. Use {@link ListModelList} instead
+	 * if the data is huge.
 	 * @since 2.4.1
 	 */
 	public SimpleListModel(List data) {
