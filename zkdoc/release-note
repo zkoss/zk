@@ -20,6 +20,7 @@ ZK 5.0.4
   3027322: draggable & sizeable conflicts
   3024208: Datebox rounded mold has error in image
   3030342: setModel to Listbox fail when onCreate and turn ROD on
+  3031526: Focus-look incorrect if window changes overlapped/embed
   
 * Upgrade Notes
   + The default value of tabindex of InputElement is changed from -1 to 0
