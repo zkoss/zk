@@ -564,7 +564,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public void setParent(Component parent);
 	/** Returns a live list of children.
-	 * You could add or remove a child by manipulating the returned list directly.
+	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 */
 	public List getChildren();
 	/** Returns the root of this component.

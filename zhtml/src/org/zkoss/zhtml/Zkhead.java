@@ -54,7 +54,7 @@ public class Zkhead extends AbstractComponent {
 		}
 	}
 
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {

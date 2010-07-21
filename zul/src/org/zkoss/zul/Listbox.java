@@ -347,7 +347,7 @@ public class Listbox extends XulElement implements Paginated,
 		return index - (offset < 0 ? 0 : offset);
 	}
 
-	protected List newChildren() {
+	public List getChildren() {
 		return new Children();
 	}
 
@@ -3310,7 +3310,7 @@ public class Listbox extends XulElement implements Paginated,
 			super.service(request, everError);
 	}
 
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 

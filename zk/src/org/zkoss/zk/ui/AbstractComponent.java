@@ -114,11 +114,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String _id = "";
 	private String _uuid;
 	private transient ComponentDefinition _def;
-	/** The extra controls. */
-	private transient Object _xtrl;
 
-	/** The list used for {@link #getChildren} only. */
-	private transient List _apiChildren;
 	private transient AbstractComponent _parent;
 	/** The next sibling. */
 	/*package*/ transient AbstractComponent _next;
@@ -215,14 +211,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/**
 	 * Creates and returns the instance for storing child components.
 	 * <p>Default: it instantiates {@link AbstractComponent.Children}.
+	 * @deprecated As of release 5.0.4, override {@link #getChildren} instead.
 	 * @since 3.5.1
 	 */
 	protected List newChildren() {
 		return new Children();
 	}
-	/** The default implementation for {@link #newChildren}.
+	/** The default implementation for {@link #getChildren}.
 	 * It is suggested to extend this class if you want to override
-	 * {@link #newChildren} to instantiate your own instance.
+	 * {@link #getChildren} to instantiate your own instance.
 	 * @since 3.5.1
 	 */
 	protected class Children extends AbstractSequentialList {
@@ -1211,10 +1208,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected boolean isChildable() {
 		return true;
 	}
+	/** Returns a live list of children.
+	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
+	 * <p>Default: instantiates and returns an instance of {@link Children}.
+	 */
 	public List getChildren() {
-		if (_apiChildren == null)
-			_apiChildren = newChildren();
-		return _apiChildren;
+		return newChildren(); //backward compatible: don't new Children() directly
 	}
 	/** Returns the root of the specified component.
 	 */
@@ -2310,23 +2309,17 @@ w:use="foo.MyWindow"&gt;
 	 * specially.
 	 * It is used only by component developers.
 	 *
-	 * <p>It is simpler to override {@link #newExtraCtrl} instead of this.
-	 * By use of {@link #newExtraCtrl}, you don't need to care of
-	 * cloning and serialization.
-	 *
-	 * <p>Default: return the object being created by {@link #newExtraCtrl},
-	 * if any.
+	 * <p>Default: null.
 	 *
 	 * @see ComponentCtrl#getExtraCtrl
 	 */
 	public Object getExtraCtrl() {
-		if (_xtrl == null)
-			_xtrl = newExtraCtrl();
-				//3.0.3: create as late as possible so component has a chance
-				//to customize which object to instantiate
-		return _xtrl;
+		return newExtraCtrl(); //backward compatible; don't return null directly
+			//3.0.3: create as late as possible so component has a chance
+			//to customize which object to instantiate
 	}
-	/** Used by {@link #getExtraCtrl} to create extra controls.
+	/**
+	 * Used by {@link #getExtraCtrl} to create extra controls.
 	 * It is used only by component developers.
 	 *
 	 * <p>Default: return null.
@@ -2335,6 +2328,7 @@ w:use="foo.MyWindow"&gt;
 	 * instead of {@link #getExtraCtrl}.
 	 * By use of {@link #newExtraCtrl}, you don't need to care of
 	 * cloning and serialization.
+	 * @deprecated As of release 5.0.4, override {@link #getExtraCtrl} instead.
 	 */
 	protected Object newExtraCtrl() {
 		return null;
@@ -2597,7 +2591,6 @@ w:use="foo.MyWindow"&gt;
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
-		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//2. clone AuxInfo
 		if (_auxinf != null)
@@ -2613,7 +2606,6 @@ w:use="foo.MyWindow"&gt;
 				if (p._auxinf != null && p._auxinf.attrs != null)
 					p._auxinf.attrs.notifyParentChanged(clone);
 		}
-		clone._apiChildren = null;
 
 		//4. init AuxInfo
 		if (_auxinf != null)

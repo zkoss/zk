@@ -359,7 +359,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

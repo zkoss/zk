@@ -28,6 +28,8 @@ ZK 5.0.4
   + The protected _left, _top, _width and _height members of HtmlBasedComponent
   	are removed. Use setLeftDirectly, setTopDirecty, setWidthDirectly and
   	setHeightDirectly instead.
+  + AbstractComponent's newChildren() and newExtraCtrl() are both deprecated.
+    Override getChildren() and getExtraCtrl() instead.
 
 	--------
 ZK 5.0.3

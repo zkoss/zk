@@ -242,7 +242,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

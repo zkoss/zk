@@ -1364,7 +1364,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
