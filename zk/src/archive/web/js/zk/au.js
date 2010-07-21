@@ -664,10 +664,11 @@ zAu.beforeSend = function (uri, req) {
 	 *
 	 * @param String uri the AU's request URI (such as /zkau)
 	 * @param Event aureq the AU request
+	 * @param zk.Desktop dt the desktop
 	 * @return String the AU's request URI.
 	 * @since 5.0.2
 	 */
-	beforeSend: function (uri, aureq) {
+	beforeSend: function (uri/*, aureq, dt*/) {
 		var target = aureq.target, tag;
 		if (target && (tag = target.autag)) {
 			tag = '/' + encodeURIComponent(tag);
@@ -684,6 +685,45 @@ zAu.beforeSend = function (uri, req) {
 		}
 		return uri;
 	},
+	/** Returns the content to send to the server.
+	 * By default, it is encoded into several parameters and the data
+	 * parameters (data_*) is encoded in JSON.
+	 * <p>If you prefer to encode it into another format, you could override
+	 * this method, and also implement a Java interface called
+	 * <a href="http://www.zkoss.org/javadoc/latest/zk/org/zkoss/zk/au/AuDecoder.html">org.zkoss.zk.au.AuDecoder</a>\
+	 * to decode the format at the server.
+	 * <p>If you prefer to encode it into URI, you could override
+	 * {@link #beforeSend}.
+	 * @param int j the order of the AU request. ZK sends a batch of AU
+	 * request at once and this argument indicates the order an AU request is
+	 * (starting from 0).
+	 * @param Event aureq the AU request
+	 * @param zk.Desktop dt the desktop
+	 * @return String the content of the AU request.
+	 * @since 5.0.4
+	 */
+	encode: function (j, aureq, dt) {
+		var target = aureq.target,
+			opts = aureq.opts||{},
+			content = j ? "": "dtid="+dt.id;
+
+		content += "&cmd_"+j+"="+aureq.name
+		if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
+			content += "&opt_"+j+"=i";
+			//thus, the server will ignore it if session timeout
+
+		if (target && target.className != 'zk.Desktop')
+			content += "&uuid_"+j+"="+target.uuid;
+
+		var data = aureq.data, dtype = typeof data;
+		if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
+		|| jq.isArray(data))
+			data = {'':data};
+		if (data)
+			content += "&data_"+j+"="+encodeURIComponent(toJSON(target, data));
+		return content;
+	},
+
 	/** Enforces all pending AU requests of the specified desktop to send immediately
 	 * @param Desktop dt
 	 * @return boolean whether it is sent successfully. If it has to wait
@@ -760,33 +800,14 @@ zAu.beforeSend = function (uri, req) {
 				break;
 			}
 
-			requri = zAu.beforeSend(requri, aureq);
-
-			var evtnm = aureq.name,
-				target = aureq.target,
-				opts = aureq.opts||{};
-
-			zk.copy(rtags, opts.rtags);
-
-			content += "&cmd_"+j+"="+evtnm;
-			if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
-				content += "&opt_"+j+"=i";
-				//thus, the server will ignore it if session timeout
-			if (target && target.className != 'zk.Desktop')
-				content += "&uuid_"+j+"="+target.uuid;
-
-			var data = aureq.data, dtype = typeof data;
-			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
-			|| jq.isArray(data))
-				data = {'':data};
-			if (data)
-				content += "&data_"+j+"="+encodeURIComponent(toJSON(target, data));
+			requri = zAu.beforeSend(requri, aureq, dt);
+			content += zAu.encode(j, aureq, dt);
+			zk.copy(rtags, (aureq.opts||{}).rtags);
 		}
 
 		if (content)
 			ajaxSendNow({
-				sid: seqId, uri: requri,
-				dt: dt, content: "dtid=" + dt.id + content,
+				sid: seqId, uri: requri, dt: dt, content: content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0, rtags: rtags
 			});

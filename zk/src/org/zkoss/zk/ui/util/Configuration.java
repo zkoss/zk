@@ -58,11 +58,12 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.MultiComposer;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuDecoder;
 
 /**
  * The ZK configuration.
@@ -125,7 +126,7 @@ public class Configuration {
 	/** A list of client packages. */
 	private final FastReadArray _clientpkgs = new FastReadArray(String.class);
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
-		_failmancls, _idgencls, _sesscachecls;
+		_failmancls, _idgencls, _sesscachecls, _audeccls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
@@ -219,7 +220,7 @@ public class Configuration {
 		}
 		if (DesktopRecycle.class.isAssignableFrom(klass)) {
 			if (_dtRecycle != null)
-				throw new UiException(onlyOnce(PerformanceMeter.class));
+				throw new UiException(onlyOnce(DesktopRecycle.class));
 			_dtRecycle = (DesktopRecycle)(listener = getInstance(klass, listener));
 			added = true;
 		}
@@ -1056,22 +1057,26 @@ public class Configuration {
 		_themeProvider = provider;
 	}
 
-	/** Sets the class that implements {@link UiEngine}, or null to
+	/** Sets the class used to handle UI loading and updates, or null to
 	 * use the default.
+	 * It must implement {@link UiEngine}.
 	 */
 	public void setUiEngineClass(Class cls) {
 		if (cls != null && !UiEngine.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
 		_uiengcls = cls;
 	}
-	/** Returns the class that implements {@link UiEngine}, or null if default is used.
+	/** Returns the class used to handle UI loading and updates,
+	 * or null if default is used.
+	 * It must implement {@link UiEngine}.
 	 */
 	public Class getUiEngineClass() {
 		return _uiengcls;
 	}
 
-	/** Sets the class that implements {@link WebApp} and
-	 * {@link WebAppCtrl}, or null to use the default.
+	/** Sets the class used to represent a Web application,
+	 * or null to use the default.
+	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1082,15 +1087,17 @@ public class Configuration {
 			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
 		_wappcls = cls;
 	}
-	/** Returns the class that implements {@link WebApp} and
-	 * {@link WebAppCtrl}, or null if default is used.
+	/** Returns the class used to represent a Web application,
+	 * or null if default is used.
+	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 */
 	public Class getWebAppClass() {
 		return _wappcls;
 	}
 
-	/** Sets the class that implements {@link DesktopCacheProvider}, or null to
+	/** Sets the class used to provide the desktop cache, or null to
 	 * use the default.
+	 * It must implement {@link DesktopCacheProvider}.
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1100,14 +1107,17 @@ public class Configuration {
 			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
 		_dcpcls = cls;
 	}
-	/** Returns the class that implements the UI engine, or null if default is used.
+	/** Returns the class used to provide the desktop cache, or null
+	 * if default is used.
+	 * It must implement {@link DesktopCacheProvider}.
 	 */
 	public Class getDesktopCacheProviderClass() {
 		return _dcpcls;
 	}
 
-	/** Sets the class that implements {@link UiFactory}, or null to
-	 * use the default.
+	/** Sets the class used to instantiate desktops, pages and components, or
+	 * null to use the default.
+	 * It must implement {@link UiFactory},
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1117,14 +1127,17 @@ public class Configuration {
 			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
 		_uiftycls = cls;
 	}
-	/** Returns the class that implements the UI engine, or null if default is used.
+	/** Returns the class used to instantiate desktops, pages and components,
+	 * or null if default is used.
+	 * It must implement {@link UiFactory},
 	 */
 	public Class getUiFactoryClass() {
 		return _uiftycls;
 	}
 
-	/** Sets the class that implements {@link FailoverManager}, or null if
+	/** Sets the class used to handle the failover mechanism, or null if
 	 * no custom failover mechanism.
+	 * It must implement {@link FailoverManager}.
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1134,8 +1147,9 @@ public class Configuration {
 			throw new IllegalArgumentException("FailoverManager not implemented: "+cls);
 		_failmancls = cls;
 	}
-	/** Returns the class that implements the failover manger,
+	/** Returns the class used to handle the failover mechanism,
 	 * or null if no custom failover mechanism.
+	 * It must implement {@link FailoverManager}.
 	 */
 	public Class getFailoverManagerClass() {
 		return _failmancls;
@@ -1154,8 +1168,9 @@ public class Configuration {
 			throw new IllegalArgumentException("IdGenerator not implemented: "+cls);
 		_idgencls = cls;
 	}
-	/** Returns the class that implements {@link IdGenerator},
-	 * or null if the default shall be used.
+	/** Returns the class used to generate UUID/ID for desktop,
+	 * page and components, or null if the default shall be used.
+	 * It must implement {@link IdGenerator}
 	 * @since 2.4.1
 	 */
 	public Class getIdGeneratorClass() {
@@ -1165,6 +1180,9 @@ public class Configuration {
 	/** Sets the class that is used to store ZK sessions,
 	 * or null to use the default.
 	 * It must implement {@link SessionCache}.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 * @since 3.0.5
 	 */
 	public void setSessionCacheClass(Class cls) {
@@ -1172,12 +1190,35 @@ public class Configuration {
 			throw new IllegalArgumentException("SessionCache not implemented: "+cls);
 		_sesscachecls = cls;
 	}
-	/** Returns the class that implements {@link SessionCache}, or null
+	/** Returns the class used to store ZK sessions, or null
 	 * if the default shall be used.
+	 * It must implement {@link SessionCache}.
 	 * @since 3.0.5
 	 */
 	public Class getSessionCacheClass() {
 		return _sesscachecls;
+	}
+
+	/** Sets the class that is used to decode AU requests,
+	 * or null to use the default.
+	 * It must implement {@link AuDecoder}.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
+	 * @since 5.0.4
+	 */
+	public void setAuDecoderClass(Class cls) {
+		if (cls != null && !AuDecoder.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("AuDecoder not implemented: "+cls);
+		_audeccls = cls;
+	}
+	/** Returns the class used to decode AU requests, or null
+	 * if the default shall be used.
+	 * It must implement {@link AuDecoder}.
+	 * @since 5.0.4
+	 */
+	public Class getAuDecoderClass() {
+		return _audeccls;
 	}
 
 	/** Specifies the maximal allowed time to process events, in milliseconds.

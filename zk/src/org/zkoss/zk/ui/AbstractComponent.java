@@ -96,32 +96,23 @@ import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.scripting.*;
 
 /**
- * A skeletal implementation of {@link Component}. Though it is OK
- * to implement Component from scratch, this class simplifies some of
- * the chores.
+ * A skeletal implementation of {@link Component}.
  *
  * @author tomyeh
  */
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20100430L;
+	private static final long serialVersionUID = 20100719L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map _clientEvents = new HashMap(128);
+	private static final String DEFAULT = "default";
 
 	/*package*/ transient Page _page;
 	private String _id = "";
 	private String _uuid;
 	private transient ComponentDefinition _def;
-	/** The mold. */
-	private String _mold;
-	/** The info of the ID space, or null if IdSpace is NOT implemented. */
-	private transient SpaceInfo _spaceInfo;
-	private transient SimpleScope _attrs;
-		//don't create it dynamically because _ip bind it at constructor
-	/** A map of event listener: Map(evtnm, List(EventListener)). */
-	private transient Map _listeners;
 	/** The extra controls. */
 	private transient Object _xtrl;
 
@@ -132,52 +123,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/*package*/ transient AbstractComponent _next;
 	/** The previous sibling. */
 	/*package*/ transient AbstractComponent _prev;
-	/** The first child. */
-	/*package*/ transient AbstractComponent _first;
-	/** The last child. */
-	/*package*/ transient AbstractComponent _last;
-	/** # of children. */
-	private int _nChild;
-	/** The modification count used to avoid co-modification of _next, _prev..
-	 */
-	private transient int _modCntChd;
-	/** A set of components that are being removed.
-	 * It is used to prevent dead-loop between {@link #removeChild}
-	 * and {@link #setParent}.
-	 */
-	private transient Set _rming;
-	/** A set of components that are being added.
-	 * It is used to prevent dead-loop between {@link #insertBefore}
-	 * and {@link #setParent}.
-	 */
-	private transient Set _adding;
-
-	/** A map of annotations. Serializable since a component might have
-	 * its own annotations.
-	 */
-	private AnnotationMap _annots;
-	/** A map of event handler to handle events. */
-	private EventHandlerMap _evthds;
-	/** A map of client event hanlders, Map(String evtnm, String script). */
-	private Map _wgtlsns;
-	/** A map of client properties to override, Map(String name, String script). */
-	private Map _wgtovds;
-	/** A map of client DOM attributes to set, Map(String name, String value). */
-	private Map _wgtattrs;
-	/** A map of forward conditions:
-	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
-	 */
-	private Map _forwards;
-	/** The AU tag. */
-	private String _autag;
-	/** Whether _annots is shared with other components. */
-	private transient boolean _annotsShared;
-	/** Whether _evthds is shared with other components. */
-	private transient boolean _evthdsShared;
-	/** the Au service. */
-	private transient AuService _ausvc;
-	/** The widget class. */
-	private String _wgtcls;
+	/** ChildInfo: use a class (rather than multiple member) to save footprint */
+	private transient ChildInfo _chdinf;
+	/** AuxInfo: use a class (rather than multiple member) to save footprint */
+	private AuxInfo _auxinf;
 	/** Whether this component is visible.
 	 * @since 3.5.0 (becomes protected)
 	 */
@@ -187,10 +136,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 3.0.7 (becomes public)
 	 */
 	public AbstractComponent() {
-		_mold = getDefaultMold(getClass());
+		final String mold = getDefaultMold(getClass());
+		if (mold != null && mold.length() > 0 && !DEFAULT.equals(mold))
+			initAuxInfo().mold = mold;
 
 		final Execution exec = Executions.getCurrent();
-
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		if (curInfo != null) {
 			ComponentsCtrl.setCurrentInfo((ComponentInfo)null); //to avoid mis-use
@@ -211,7 +161,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_def = ComponentsCtrl.DUMMY;
 		}
 
-		_spaceInfo = this instanceof IdSpace ? new SpaceInfo(): null;
+		if (this instanceof IdSpace)
+			initAuxInfo().spaceInfo = new SpaceInfo();
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
@@ -275,7 +226,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected class Children extends AbstractSequentialList {
 		public int size() {
-			return _nChild;
+			return nChild();
 		}
 		public ListIterator listIterator(int index) {
 			return new ChildIter(index);
@@ -321,12 +272,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return; //no need to check
 
 		if (comp instanceof IdSpace
-		&& comp._spaceInfo.fellows.containsKey(newId))
+		&& comp._auxinf.spaceInfo.fellows.containsKey(newId))
 			throw new UiException("Not unique in the ID space of "+comp);
 
 		final IdSpace is = getSpaceOwnerOfParent(comp);
 		if (is instanceof Component) {
-			if (((AbstractComponent)is)._spaceInfo.fellows.containsKey(newId))
+			if (((AbstractComponent)is)._auxinf.spaceInfo.fellows.containsKey(newId))
 				throw new UiException("Not unique in ID space "+is+": "+newId);
 		} else if (is != null) {
 			if (is.hasFellow(newId))
@@ -355,7 +306,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).bindToIdSpace(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
 
@@ -367,14 +318,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			owner.addFellow(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, owner); //recursive
 
 		((AbstractComponent)comp).notifyIdSpaceChanged(owner);
 	}
 	private void notifyIdSpaceChanged(IdSpace newIdSpace) {
-		if (_attrs != null) _attrs.notifyIdSpaceChanged(newIdSpace);
+		if (_auxinf != null && _auxinf.attrs != null)
+			_auxinf.attrs.notifyIdSpaceChanged(newIdSpace);
 	}
 
 	/** Adds its descendants to the ID space when parent or page is changed,
@@ -393,7 +345,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
 
@@ -404,7 +356,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			owner.removeFellow(comp);
 
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				removeFromIdSpacesDown(ac, owner); //recursive
 
@@ -415,7 +367,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static void checkIdSpacesDown(Component comp, Component newparent) {
 		final IdSpace is = newparent.getSpaceOwner();
 		if (is instanceof Component)
-			checkIdSpacesDown(comp, ((AbstractComponent)is)._spaceInfo);
+			checkIdSpacesDown(comp, ((AbstractComponent)is)._auxinf.spaceInfo);
 		else if (is != null)
 			checkIdSpacesDown(comp, (AbstractPage)is);
 	}
@@ -426,7 +378,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !isAutoId(compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				checkIdSpacesDown(ac, si); //recursive
 	}
@@ -437,7 +389,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !isAutoId(compId) && page.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+page+": "+compId);
 		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
 				checkIdSpacesDown(ac, page); //recursive
 	}
@@ -447,13 +399,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * comp's ID must be unquie (and not auto id)
 	 */
 	private void bindToIdSpace(Component comp) {
-		_spaceInfo.fellows.put(comp.getId(), comp);
+		_auxinf.spaceInfo.fellows.put(comp.getId(), comp);
 	}
 	/** Unbind comp from this ID space (owned by this component).
 	 * Called only if IdSpace is implemented.
 	 */
 	private void unbindFromIdSpace(String compId) {
-		_spaceInfo.fellows.remove(compId);
+		_auxinf.spaceInfo.fellows.remove(compId);
 	}
 
 	//-- Extra utlities --//
@@ -599,7 +551,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//process all children recursively
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.setPage0(page); //recursive
 	}
 
@@ -683,7 +636,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean hasFellow(String compId) {
 		if (this instanceof IdSpace)
-			return _spaceInfo.fellows.containsKey(compId);
+			return _auxinf.spaceInfo.fellows.containsKey(compId);
 
 		final IdSpace idspace = getSpaceOwner();
 		return idspace != null && idspace.hasFellow(compId);
@@ -691,7 +644,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Component getFellow(String compId)
 	throws ComponentNotFoundException {
 		if (this instanceof IdSpace) {
-			final Component comp = (Component)_spaceInfo.fellows.get(compId);
+			final Component comp = (Component)_auxinf.spaceInfo.fellows.get(compId);
 			if (comp == null)
 				throw new ComponentNotFoundException("Fellow component not found: "+compId);
 			return comp;
@@ -704,14 +657,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Component getFellowIfAny(String compId) {
 		if (this instanceof IdSpace)
-			return (Component)_spaceInfo.fellows.get(compId);
+			return (Component)_auxinf.spaceInfo.fellows.get(compId);
 
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? null: idspace.getFellowIfAny(compId);
 	}
 	public Collection getFellows() {
 		if (this instanceof IdSpace)
-			return Collections.unmodifiableCollection(_spaceInfo.fellows.values());
+			return Collections.unmodifiableCollection(_auxinf.spaceInfo.fellows.values());
 
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? Collections.EMPTY_LIST: idspace.getFellows();
@@ -745,10 +698,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _prev;
 	}
 	public Component getFirstChild() {
-		return _first;
+		return _chdinf != null ? _chdinf.first: null;
 	}
 	public Component getLastChild() {
-		return _last;
+		return _chdinf != null ? _chdinf.last: null;
+	}
+	private final int nChild() {
+		return _chdinf != null ? _chdinf.nChild: 0;
+	}
+	private int modCntChd() {
+		return _chdinf != null ? _chdinf.modCntChd: 0;
 	}
 
 	public String setWidgetListener(String evtnm, String script) {
@@ -757,19 +716,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (_wgtlsns == null) _wgtlsns = new LinkedHashMap();
-			old = (String)_wgtlsns.put(evtnm, script);
+			if (initAuxInfo().wgtlsns == null) _auxinf.wgtlsns = new LinkedHashMap();
+			old = (String)_auxinf.wgtlsns.put(evtnm, script);
 		} else
-			old = _wgtlsns != null ? (String)_wgtlsns.remove(evtnm): null;
+			old = _auxinf != null && _auxinf.wgtlsns != null ?
+				(String)_auxinf.wgtlsns.remove(evtnm): null;
 		if (!Objects.equals(script, old))
 			smartUpdateWidgetListener(evtnm, script);
 		return old;
 	}
 	public String getWidgetListener(String evtnm) {
-		return _wgtlsns != null ? (String)_wgtlsns.get(evtnm): null;
+		return _auxinf != null && _auxinf.wgtlsns != null ?
+			(String)_auxinf.wgtlsns.get(evtnm): null;
 	}
 	public Set getWidgetListenerNames() {
-		return _wgtlsns != null ? _wgtlsns.keySet(): Collections.EMPTY_SET;
+		return _auxinf != null && _auxinf.wgtlsns != null ?
+			_auxinf.wgtlsns.keySet(): Collections.EMPTY_SET;
 	}
 
 	public String setWidgetOverride(String name, String script) {
@@ -778,19 +740,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (_wgtovds == null) _wgtovds = new LinkedHashMap();
-			old = (String)_wgtovds.put(name, script);
+			if (initAuxInfo().wgtovds == null) _auxinf.wgtovds = new LinkedHashMap();
+			old = (String)_auxinf.wgtovds.put(name, script);
 		} else
-			old = _wgtovds != null ? (String)_wgtovds.remove(name): null;
+			old = _auxinf != null && _auxinf.wgtovds != null ?
+				(String)_auxinf.wgtovds.remove(name): null;
 		if (!Objects.equals(script, old))
 			smartUpdateWidgetOverride(name, script);
 		return old;
 	}
 	public String getWidgetOverride(String name) {
-		return _wgtovds != null ? (String)_wgtovds.get(name): null;
+		return _auxinf != null && _auxinf.wgtovds != null ?
+			(String)_auxinf.wgtovds.get(name): null;
 	}
 	public Set getWidgetOverrideNames() {
-		return _wgtovds != null ? _wgtovds.keySet(): Collections.EMPTY_SET;
+		return _auxinf != null && _auxinf.wgtovds != null ?
+			_auxinf.wgtovds.keySet(): Collections.EMPTY_SET;
 	}
 
 	public String setWidgetAttribute(String name, String value) {
@@ -799,17 +764,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (value != null) {
-			if (_wgtattrs == null) _wgtattrs = new LinkedHashMap();
-			old = (String)_wgtattrs.put(name, value);
+			if (initAuxInfo().wgtattrs == null) _auxinf.wgtattrs = new LinkedHashMap();
+			old = (String)_auxinf.wgtattrs.put(name, value);
 		} else
-			old = _wgtattrs != null ? (String)_wgtattrs.remove(name): null;
+			old = _auxinf != null && _auxinf.wgtattrs != null ?
+				(String)_auxinf.wgtattrs.remove(name): null;
 		return old;
 	}
 	public String getWidgetAttribute(String name) {
-		return _wgtattrs != null ? (String)_wgtattrs.get(name): null;
+		return _auxinf != null && _auxinf.wgtattrs != null ?
+			(String)_auxinf.wgtattrs.get(name): null;
 	}
 	public Set getWidgetAttributeNames() {
-		return _wgtattrs != null ? _wgtattrs.keySet(): Collections.EMPTY_SET;
+		return _auxinf.wgtattrs != null ? _auxinf.wgtattrs.keySet(): Collections.EMPTY_SET;
 	}
 
 	public Map getAttributes(int scope) {
@@ -842,9 +809,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	private SimpleScope attrs() {
-		if (_attrs == null)
-			_attrs = new SimpleScope(this);
-		return _attrs;
+		if (initAuxInfo().attrs == null)
+			_auxinf.attrs = new SimpleScope(this);
+		return _auxinf.attrs;
 	}
 	private Execution getExecution() {
 		return _page != null ? _page.getDesktop().getExecution():
@@ -878,16 +845,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return attrs().getAttributes();
 	}
 	public Object getAttribute(String name) {
-		return _attrs != null ? _attrs.getAttribute(name): null;
+		return _auxinf != null && _auxinf.attrs != null ? _auxinf.attrs.getAttribute(name): null;
 	}
 	public boolean hasAttribute(String name) {
-		return _attrs != null && _attrs.hasAttribute(name);
+		return _auxinf != null && _auxinf.attrs != null && _auxinf.attrs.hasAttribute(name);
 	}
 	public Object setAttribute(String name, Object value) {
 		return value != null ? attrs().setAttribute(name, value): removeAttribute(name);
 	}
 	public Object removeAttribute(String name) {
-		return _attrs != null ? _attrs.removeAttribute(name): null;
+		return _auxinf != null && _auxinf.attrs != null ? _auxinf.attrs.removeAttribute(name): null;
 	}
 	
 	public Object getAttribute(String name, boolean recurse) {
@@ -980,13 +947,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public String getAutag() {
-		return _autag;
+		return _auxinf != null ? _auxinf.autag: null;
 	}
 	public void setAutag(String tag) {
 		if (tag != null && tag.isEmpty()) tag = null;
-		if (!Objects.equals(_autag, tag)) {
-			_autag = tag;
-			smartUpdate("autag", tag);
+		if (!Objects.equals(_auxinf != null ? _auxinf.autag: null, tag)) {
+			initAuxInfo().autag = tag;
+			smartUpdate("autag", getAutag());
 		}
 	}
 
@@ -997,7 +964,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_parent == parent)
 			return; //nothing changed
 
-		checkParentChild(parent, this);
+		checkParentChild(parent, this); //create _chdinf
 		beforeParentChanged(parent);
 
 		final boolean idSpaceChanged =
@@ -1011,12 +978,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//call removeChild and clear _parent
 		final AbstractComponent op = _parent;
 		if (op != null) {
-			if (!op.inRemoving(this)) {
-				op.markRemoving(this, true);
+			if (!op._chdinf.inRemoving(this)) {
+				op._chdinf.markRemoving(this, true);
 				try {
 					op.removeChild(this); //spec: call back removeChild
 				} finally {
-					op.markRemoving(this, false);
+					op._chdinf.markRemoving(this, false);
 				}
 			}
 			_parent = null; //op.removeChild assumes _parent not changed yet
@@ -1028,12 +995,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//call insertBefore and set _parent
 		if (parent != null) {
 			final AbstractComponent np = (AbstractComponent)parent;
-			if (!np.inAdding(this)) {
-				np.markAdding(this, true);
+			if (!np._chdinf.inAdding(this)) {
+				np._chdinf.markAdding(this, true);
 				try {
 					np.insertBefore(this, null); //spec: call back inserBefore
 				} finally {
-					np.markAdding(this, false);
+					np._chdinf.markAdding(this, false);
 				}
 			}
 			_parent = np; //np.insertBefore assumes _parent not changed yet
@@ -1045,8 +1012,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
-		if (_attrs != null)
-			_attrs.notifyParentChanged(_parent != null ? _parent: (Scope)_page);
+		if (_auxinf != null && _auxinf.attrs != null)
+			_auxinf.attrs.notifyParentChanged(_parent != null ? _parent: (Scope)_page);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -1075,40 +1042,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	/** Returns whether the child is being removed.
-	 */
-	private boolean inRemoving(Component child) {
-		return _rming != null && _rming.contains(child);
-	}
-	/** Sets if the child is being removed.
-	 */
-	private void markRemoving(Component child, boolean set) {
-		if (set) {
-			if (_rming == null) _rming = new HashSet(2);
-			_rming.add(child);
-		} else {
-			if (_rming != null && _rming.remove(child) && _rming.isEmpty())
-				_rming = null;
-		}
-	}
-	/** Returns whether the child is being added.
-	 */
-	private boolean inAdding(Component child) {
-		return _adding != null && _adding.contains(child);
-	}
-	/** Sets if the child is being added.
-	 */
-	private void markAdding(Component child, boolean set) {
-		if (set) {
-			if (_adding == null) _adding = new HashSet(2);
-			_adding.add(child);
-		} else {
-			if (_adding != null && _adding.remove(child) && _adding.isEmpty())
-				_adding = null;
-		}
-	}
-
 	/**
+	 * Checks the parent-child relation.
+	 * Notice it will create parent._chdinf
 	 * @param parent the parent (will-be). It may be null.
 	 * @param child the child (will-be). It cannot be null.
 	 */
@@ -1116,7 +1052,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws UiException {
 		if (parent != null) {
 			final AbstractComponent acp = (AbstractComponent)parent;
-			if (acp.inAdding(child))
+			if (acp.initChildInfo().inAdding(child))
 				return; //check only once
 
 			if (Components.isAncestor(child, parent))
@@ -1144,7 +1080,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if ((newChild instanceof Macro) && ((Macro)newChild).isInline())
 			return ((Macro)newChild).setInlineParent(this, refChild);
 
-		checkParentChild(this, newChild);
+		checkParentChild(this, newChild); ///create _chdinf
 
 		if (refChild != null && refChild.getParent() != this)
 			refChild = null;
@@ -1167,12 +1103,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} else { //new added
 			//Note: call setParent to detach nc from old parent, if any,
 			//before maintaining nc's _next, _prev...
-			if (!inAdding(nc)) {
-				markAdding(nc, true);
+			if (!_chdinf.inAdding(nc)) {
+				_chdinf.markAdding(nc, true);
 				try {
 					nc.setParent(this); //spec: callback setParent
 				} finally {
-					markAdding(nc, false);
+					_chdinf.markAdding(nc, false);
 				}
 			} else {
 				nc._parent = this;
@@ -1193,31 +1129,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			setNext(ref._prev, nc);
 			setPrev(ref, nc);
 		} else {
-			if (_last == null) {
-				_first = _last = nc;
+			if (_chdinf.last == null) {
+				_chdinf.first = _chdinf.last = nc;
 				nc._next = nc._prev = null;
 			} else {
-				_last._next = nc;
-				nc._prev = _last;
+				_chdinf.last._next = nc;
+				nc._prev = _chdinf.last;
 				nc._next = null;
-				_last = nc;
+				_chdinf.last = nc;
 			}
 		}
 
-		++_modCntChd;
+		++_chdinf.modCntChd;
 		if (!moved) { //new added
-			++_nChild;
+			++_chdinf.nChild;
 			onChildAdded(nc);
 		}
 		return true;
 	}
 	private void setNext(AbstractComponent comp, AbstractComponent next) {
 		if (comp != null) comp._next = next;
-		else _first = next;
+		else _chdinf.first = next;
 	}
 	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
-		else _last = prev;
+		else _chdinf.last = prev;
 	}
 
 	/** Appends a child to the end of all children.
@@ -1240,12 +1176,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
 
-		if (!inRemoving(oc)) {
-			markRemoving(oc, true);
+		if (!_chdinf.inRemoving(oc)) {
+			_chdinf.markRemoving(oc, true);
 			try {
 				oc.setParent(null); //spec: call back setParent
 			} finally {
-				markRemoving(oc, false);
+				_chdinf.markRemoving(oc, false);
 			}
 		} else {
 			oc._parent = null;
@@ -1254,8 +1190,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				//refer to insertBefore for more info.
 		}
 
-		++_modCntChd;
-		--_nChild;
+		++_chdinf.modCntChd;
+		--_chdinf.nChild;
 		onChildRemoved(child);
 		return true;
 	}
@@ -1602,30 +1538,33 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
-		if (_wgtcls != null)
-			return _wgtcls;
+		if (_auxinf != null && _auxinf.wgtcls != null)
+			return _auxinf.wgtcls;
 		final String widgetClass = _def.getWidgetClass(getMold());
 		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
 	}
 	public void setWidgetClass(String wgtcls) {
-		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls: null;
+		if (wgtcls != null && wgtcls.length() > 0) {
+			initAuxInfo().wgtcls = wgtcls;
+		} else if (_auxinf != null) {
+			_auxinf.wgtcls = null;
+		}
 	}
 
 	public String getMold() {
-		return _mold;
+		final String mold = _auxinf != null ? _auxinf.mold: null;
+		return mold != null ? mold: DEFAULT;
 	}
 	public void setMold(String mold) {
-		if (mold == null || mold.length() == 0)
-			mold = "default";
-
-		if (!Objects.equals(_mold, mold)) {
-			if (!_def.hasMold(mold))
-				throw new UiException("Unknown mold: "+mold
-					+", while allowed include "+_def.getMoldNames());
+		if (mold != null && (DEFAULT.equals(mold) || mold.length() == 0))
+			mold = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.mold: mold, mold)) {
+			if (!_def.hasMold(mold != null ? mold: DEFAULT))
+				throw new UiException("Unknown mold: "+mold+"; allowed: "+_def.getMoldNames());
 			final String oldtype = getWidgetClass();
-			_mold = mold;
+			initAuxInfo().mold = mold;
 			if (Objects.equals(oldtype, getWidgetClass()))
-				smartUpdate("mold", _mold);
+				smartUpdate("mold", getMold());
 			else
 				invalidate();
 		}
@@ -1686,7 +1625,7 @@ w:use="foo.MyWindow"&gt;
 
 			out.write(']');
 			final String mold = getMold();
-			if (!"default".equals(mold)) {
+			if (!DEFAULT.equals(mold)) {
 				out.write(",'");
 				out.write(mold);
 				out.write('\'');
@@ -1761,7 +1700,7 @@ w:use="foo.MyWindow"&gt;
 	throws IOException {
 		render(renderer, "id", _id);
 		if (!_visible) renderer.render("visible", false);
-		render(renderer, "autag", _autag);
+		render(renderer, "autag", getAutag());
 
 		Boolean shallHandleImportant = null;
 		for (Iterator it = getClientEvents().entrySet().iterator();
@@ -1782,9 +1721,8 @@ w:use="foo.MyWindow"&gt;
 					//$onClick and so on
 		}
 
-		renderer.renderWidgetListeners(_wgtlsns);
-		renderer.renderWidgetOverrides(_wgtovds);
-		renderer.renderWidgetAttributes(_wgtattrs);
+		if (_auxinf != null)
+			_auxinf.render(renderer);
 
 		Object o = getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)
@@ -1918,9 +1856,10 @@ w:use="foo.MyWindow"&gt;
 
 		final boolean oldasap = Events.isListened(this, evtnm, true);
 
-		if (_listeners == null) _listeners = new HashMap(8);
+		if (initAuxInfo().listeners == null)
+			_auxinf.listeners = new HashMap(8);
 
-		List l = (List)_listeners.get(evtnm);
+		List l = (List)_auxinf.listeners.get(evtnm);
 		if (l != null) {
 			for (Iterator it = l.iterator(); it.hasNext();) {
 				final EventListener li = (EventListener)it.next();
@@ -1928,7 +1867,7 @@ w:use="foo.MyWindow"&gt;
 					return false;
 			}
 		} else {
-			_listeners.put(evtnm, l = new LinkedList());
+			_auxinf.listeners.put(evtnm, l = new LinkedList());
 		}
 		l.add(listener);
 
@@ -1950,16 +1889,16 @@ w:use="foo.MyWindow"&gt;
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 
-		if (_listeners != null) {
+		if (_auxinf != null && _auxinf.listeners != null) {
 			final boolean oldasap = Events.isListened(this, evtnm, true);
-			final List l = (List)_listeners.get(evtnm);
+			final List l = (List)_auxinf.listeners.get(evtnm);
 			if (l != null) {
 				for (Iterator it = l.iterator(); it.hasNext();) {
 					final EventListener li = (EventListener)it.next();
 					if (listener.equals(li)) {
 						it.remove();
 						if (l.isEmpty())
-							_listeners.remove(evtnm);
+							_auxinf.listeners.remove(evtnm);
 
 						final Desktop desktop = getDesktop();
 						if (desktop != null) {
@@ -2010,10 +1949,10 @@ w:use="foo.MyWindow"&gt;
 		else if (!Events.isValid(targetEvent))
 			throw new IllegalArgumentException("Illegal event name: "+targetEvent);
 
-		if (_forwards == null)
-			_forwards = new HashMap(4);
+		if (initAuxInfo().forwards == null)
+			_auxinf.forwards = new HashMap(4);
 
-		Object[] info = (Object[])_forwards.get(orgEvent);
+		Object[] info = (Object[])_auxinf.forwards.get(orgEvent);
 		final List fwds;
 		if (info != null) {
 			fwds = (List)info[1];
@@ -2033,7 +1972,7 @@ w:use="foo.MyWindow"&gt;
 			final ForwardListener listener = new ForwardListener(orgEvent);
 			addEventListener(orgEvent, listener);
 			info = new Object[] {listener, fwds = new LinkedList()};
-			_forwards.put(orgEvent, info);
+			_auxinf.forwards.put(orgEvent, info);
 		}
 
 		fwds.add(new Object[] {target, targetEvent, eventData});
@@ -2049,8 +1988,8 @@ w:use="foo.MyWindow"&gt;
 	}
 	private boolean removeForward0(
 	String orgEvent, Object target, String targetEvent) {
-		if (_forwards != null) {
-			final Object[] info = (Object[])_forwards.get(orgEvent);
+		if (_auxinf != null && _auxinf.forwards != null) {
+			final Object[] info = (Object[])_auxinf.forwards.get(orgEvent);
 			if (info != null) {
 				final List fwds = (List)info[1];
 				for (Iterator it = fwds.iterator(); it.hasNext();) {
@@ -2060,7 +1999,7 @@ w:use="foo.MyWindow"&gt;
 						it.remove(); //remove it
 
 						if (fwds.isEmpty()) { //no more event
-							_forwards.remove(orgEvent);
+							_auxinf.forwards.remove(orgEvent);
 							removeEventListener(
 								orgEvent, (EventListener)info[0]);
 						}
@@ -2073,8 +2012,8 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public boolean isListenerAvailable(String evtnm, boolean asap) {
-		if (_listeners != null) {
-			final List l = (List)_listeners.get(evtnm);
+		if (_auxinf != null && _auxinf.listeners != null) {
+			final List l = (List)_auxinf.listeners.get(evtnm);
 			if (l != null) {
 				if (!asap)
 					return !l.isEmpty();
@@ -2090,8 +2029,8 @@ w:use="foo.MyWindow"&gt;
 		return false;
 	}
 	public Iterator getListenerIterator(String evtnm) {
-		if (_listeners != null) {
-			final List l = (List)_listeners.get(evtnm);
+		if (_auxinf != null && _auxinf.listeners != null) {
+			final List l = (List)_auxinf.listeners.get(evtnm);
 			if (l != null)
 				return new ListenerIterator(l);
 		}
@@ -2144,18 +2083,18 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public ZScript getEventHandler(String evtnm) {
-		final EventHandler evthd =
-			_evthds != null ? _evthds.get(this, evtnm): null;
+		final EventHandler evthd = _auxinf != null && _auxinf.evthds != null ?
+			_auxinf.evthds.get(this, evtnm): null;
 		return evthd != null ? evthd.getZScript(): null;
 	}
 	public void addSharedEventHandlerMap(EventHandlerMap evthds) {
 		if (evthds != null && !evthds.isEmpty()) {
 			unshareEventHandlerMap(false);
-			if (_evthds == null) {
-				_evthds = evthds;
-				_evthdsShared = true;
+			if (initAuxInfo().evthds == null) {
+				_auxinf.evthds = evthds;
+				_auxinf.evthdsShared = true;
 			} else {
-				_evthds.addAll(evthds);
+				_auxinf.evthds.addAll(evthds);
 			}
 
 			final Desktop desktop = getDesktop();
@@ -2164,7 +2103,8 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 	public Set getEventHandlerNames() {
-		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+		return _auxinf != null && _auxinf.evthds != null ?
+			_auxinf.evthds.getEventNames(): Collections.EMPTY_SET;
 	}
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
@@ -2184,103 +2124,106 @@ w:use="foo.MyWindow"&gt;
 			throw new IllegalArgumentException("name and evthd required");
 
 		unshareEventHandlerMap(true);
-		_evthds.add(name, evthd);
+		_auxinf.evthds.add(name, evthd);
 	}
 	/** Clones the shared event handlers, if shared.
 	 * @param autocreate whether to create an event handler map if not available.
 	 */
 	private void unshareEventHandlerMap(boolean autocreate) {
-		if (_evthdsShared) {
-			_evthds = (EventHandlerMap)_evthds.clone();
-			_evthdsShared = false;
-		} else if (autocreate && _evthds == null) {
-			_evthds = new EventHandlerMap();
+		if (_auxinf != null && _auxinf.evthdsShared) {
+			_auxinf.evthds = (EventHandlerMap)_auxinf.evthds.clone();
+			_auxinf.evthdsShared = false;
+		} else if (autocreate && initAuxInfo().evthds == null) {
+			_auxinf.evthds = new EventHandlerMap();
 		}
 	}
 
 	public Annotation getAnnotation(String annotName) {
-		return _annots != null ? _annots.getAnnotation(annotName): null;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotation(annotName): null;
 	}
 	public Annotation getAnnotation(String propName, String annotName) {
-		return _annots != null ?
-			_annots.getAnnotation(propName, annotName): null;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotation(propName, annotName): null;
 	}
 	public Collection getAnnotations() {
-		return _annots != null ?
-			_annots.getAnnotations(): Collections.EMPTY_LIST;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotations(): Collections.EMPTY_LIST;
 	}
 	public Collection getAnnotations(String propName) {
-		return _annots != null ?
-			_annots.getAnnotations(propName): Collections.EMPTY_LIST;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotations(propName): Collections.EMPTY_LIST;
 	}
 	public List getAnnotatedPropertiesBy(String annotName) {
-		return _annots != null ?
-			_annots.getAnnotatedPropertiesBy(annotName): Collections.EMPTY_LIST;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotatedPropertiesBy(annotName): Collections.EMPTY_LIST;
 	}
 	public List getAnnotatedProperties() {
-		return _annots != null ?
-			_annots.getAnnotatedProperties(): Collections.EMPTY_LIST;
+		return _auxinf != null && _auxinf.annots != null ?
+			_auxinf.annots.getAnnotatedProperties(): Collections.EMPTY_LIST;
 	}
 	public void addSharedAnnotationMap(AnnotationMap annots) {
 		if (annots != null && !annots.isEmpty()) {
 			unshareAnnotationMap(false);
-			if (_annots == null) {
-				_annots = annots;
-				_annotsShared = true;
+			if (initAuxInfo().annots == null) {
+				_auxinf.annots = annots;
+				_auxinf.annotsShared = true;
 			} else {
-				_annots.addAll(annots);
+				_auxinf.annots.addAll(annots);
 			}
 		}
 	}
 	public void addAnnotation(String annotName, Map annotAttrs) {
 		unshareAnnotationMap(true);
-		_annots.addAnnotation(annotName, annotAttrs);
+		_auxinf.annots.addAnnotation(annotName, annotAttrs);
 	}
 	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
 		unshareAnnotationMap(true);
-		_annots.addAnnotation(propName, annotName, annotAttrs);
+		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 	/** Clones the shared annotations, if shared.
 	 * @param autocreate whether to create an annotation map if not available.
 	 */
 	private void unshareAnnotationMap(boolean autocreate) {
-		if (_annotsShared) {
-			_annots = (AnnotationMap)_annots.clone();
-			_annotsShared = false;
-		} else if (autocreate && _annots == null) {
-			_annots = new AnnotationMap();
+		if (_auxinf != null && _auxinf.annotsShared) {
+			_auxinf.annots = (AnnotationMap)_auxinf.annots.clone();
+			_auxinf.annotsShared = false;
+		} else if (autocreate && initAuxInfo().annots == null) {
+			_auxinf.annots = new AnnotationMap();
 		}
 	}
 
 	public void sessionWillPassivate(Page page) {
-		if (_attrs != null) {
-			willPassivate(_attrs.getAttributes().values());
-			willPassivate(_attrs.getListeners());
+		if (_auxinf != null && _auxinf.attrs != null) {
+			willPassivate(_auxinf.attrs.getAttributes().values());
+			willPassivate(_auxinf.attrs.getListeners());
 		}
 
-		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+		if (_auxinf != null && _auxinf.listeners != null)
+			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
 				willPassivate((Collection)it.next());
 
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.sessionWillPassivate(page); //recursive
 	}
 
 	public void sessionDidActivate(Page page) {
 		_page = page;
 
-		if (_attrs != null) {
-			didActivate(_attrs.getAttributes().values());
-			didActivate(_attrs.getListeners());
+		if (_auxinf != null && _auxinf.attrs != null) {
+			didActivate(_auxinf.attrs.getAttributes().values());
+			didActivate(_auxinf.attrs.getListeners());
 			if (_parent == null)
-				_attrs.notifyParentChanged(_page);
+				_auxinf.attrs.notifyParentChanged(_page);
 		}
 
-		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+		if (_auxinf != null && _auxinf.listeners != null)
+			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
 				didActivate((Collection)it.next());
 
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			p.sessionDidActivate(page); //recursive
 	}
 	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
@@ -2375,10 +2318,13 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public AuService getAuService() {
-		return _ausvc;
+		return _auxinf != null ? _auxinf.ausvc: null;
 	}
 	public void setAuService(AuService ausvc) {
-		_ausvc = ausvc;
+		if (ausvc != null)
+			initAuxInfo().ausvc = ausvc;
+		else if (_auxinf != null)
+			_auxinf.ausvc = null;
 	}
 
 	/** Handles an AU request. It is invoked internally.
@@ -2459,27 +2405,28 @@ w:use="foo.MyWindow"&gt;
 		private int _modCntSnap;
 
 		private ChildIter(int index) {
-			if (index < 0 || index > _nChild)
-				throw new IndexOutOfBoundsException("Index: "+index+", Size: "+_nChild);
+			int nChild;
+			if (index < 0 || index > (nChild = nChild()))
+				throw new IndexOutOfBoundsException("Index: "+index+", Size: "+nChild());
 
-			if (index < (_nChild >> 1)) {
-				_p = _first;
+			if (index < (nChild >> 1)) {
+				_p = _chdinf.first;
 				for (_j = 0; _j < index; _j++)
 					_p = _p._next;
 			} else {
 				_p = null; //means the end of the list
-				for (_j = _nChild; _j > index; _j--)
-					_p = _p != null ? _p._prev: _last;
+				for (_j = nChild; _j > index; _j--)
+					_p = _p != null ? _p._prev: _chdinf.last;
 			}
 
-			_modCntSnap = _modCntChd;
+			_modCntSnap = modCntChd();
 		}
 		public boolean hasNext() {
 			checkComodification();
-			return _j < _nChild;
+			return _j < nChild();
 		}
 		public Object next() {
-			if (_j >= _nChild)
+			if (_j >= nChild())
 				throw new java.util.NoSuchElementException();
 			checkComodification();
 			
@@ -2493,16 +2440,16 @@ w:use="foo.MyWindow"&gt;
 			return _j > 0;
 		}
 		public Object previous() {
-		    if (_j <= 0)
+			if (_j <= 0)
 				throw new java.util.NoSuchElementException();
 			checkComodification();
 
-		    _lastRet = _p = _p != null ? _p._prev: _last;
-		    _j--;
-		    return _lastRet;
+			_lastRet = _p = _p != null ? _p._prev: _chdinf.last;
+			_j--;
+			return _lastRet;
 		}
 		private void checkComodification() {
-			if (_modCntChd != _modCntSnap)
+			if (modCntChd() != _modCntSnap)
 				throw new java.util.ConcurrentModificationException();
 		}
 		public int nextIndex() {
@@ -2524,7 +2471,7 @@ w:use="foo.MyWindow"&gt;
 			_lastRet = null;
 				//spec: cause remove to throw ex if no next/previous
 			++_modCntSnap;
-				//don't assign _modCntChd directly since deriving class
+				//don't assign modCntChd directly since deriving class
 				//might manipulate others in insertBefore
 		}
 		public void remove() {
@@ -2561,103 +2508,41 @@ w:use="foo.MyWindow"&gt;
 		clone._parent = null;
 		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
-		//1a. clone attributes
-		if (_attrs != null)
-			clone._attrs = _attrs.clone(clone);
+		//2. clone AuxInfo
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)clone._auxinf.clone();
 
-		//1b. clone listeners
-		if (_listeners != null) {
-			clone._listeners = new HashMap(4);
-			for (Iterator it = _listeners.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final List list = new LinkedList();
-				for (Iterator it2 = ((List)me.getValue()).iterator();
-				it2.hasNext();) {
-					Object val = it2.next();
-					if (val instanceof ComponentCloneListener) {
-						val = ((ComponentCloneListener)val).willClone(clone);
-						if (val == null) continue; //don't use it in clone
-					}
-					list.add(val);
-				}
-				if (!list.isEmpty())
-					clone._listeners.put(me.getKey(), list);
-			}
+		//3. clone children (deep cloning)
+		if (_chdinf != null) {
+			clone._chdinf = _chdinf.clone(clone);
+
+			//child's attrs's notification
+			for (AbstractComponent p = clone._chdinf.first;
+			p != null; p = p._next)
+				if (p._auxinf != null && p._auxinf.attrs != null)
+					p._auxinf.attrs.notifyParentChanged(clone);
 		}
-
-		if (!_annotsShared && _annots != null)
-			clone._annots = (AnnotationMap)_annots.clone();
-		if (!_evthdsShared && _evthds != null)
-			clone._evthds = (EventHandlerMap)_evthds.clone();
-		if (_wgtlsns != null)
-			clone._wgtlsns = new LinkedHashMap(_wgtlsns);
-		if (_wgtovds != null)
-			clone._wgtovds = new LinkedHashMap(_wgtovds);
-		if (_wgtattrs != null)
-			clone._wgtattrs = new LinkedHashMap(_wgtattrs);
-
-		//2. clone children (deep cloning)
-		cloneChildren(clone);
 		clone._apiChildren = null;
 
-		//3. spaceinfo
-		if (clone._spaceInfo != null) {
-			clone._spaceInfo = clone.new SpaceInfo();
-			clone.cloneSpaceInfoFrom(this._spaceInfo);
-		}
-
-		//4. clone _forwards
-		if (clone._forwards != null) {
-			clone._forwards = null;
-			for (Iterator it = _forwards.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String orgEvent = (String)me.getKey();
-
-				final Object[] info = (Object[])me.getValue();
-				final List fwds = (List)info[1];
-				for (Iterator e = fwds.iterator(); e.hasNext();) {
-					final Object[] fwd = (Object[])e.next();
-					clone.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
-				}
-			}
-		}
-
-		Object val = clone._ausvc;
-		if (val instanceof ComponentCloneListener)
-			clone._ausvc = (AuService)((ComponentCloneListener)val).willClone(clone);
+		//4. init AuxInfo
+		if (_auxinf != null)
+			_auxinf.initClone(clone, clone._auxinf);
 		return clone;
 	}
 	private void cloneSpaceInfoFrom(SpaceInfo from) {
 		//rebuild ID space by binding itself and all children
 		if (!isAutoId(_id))
 			this.bindToIdSpace(this);
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			addToIdSpacesDown(p, this);
-	}
-	private static void cloneChildren(final AbstractComponent comp) {
-		AbstractComponent q = null;
-		for (AbstractComponent p = comp._first; p != null; p = p._next) {
-			AbstractComponent child = (AbstractComponent)p.clone();
-			if (q != null) q._next = child;
-			else comp._first = child;
-			child._prev = q;
-			q = child;
-
-			child._parent = comp; //correct it
-			if (child._attrs != null)
-				child._attrs.notifyParentChanged(comp);
-		}
-		comp._last = q;
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
-		//No need to unshare since they are stored as an independent copy
-		//unshareAnnotationMap(false);
-		//unshareEventHandlerMap(false);
+		//No need to unshare annots and evthds, since stored as an independent copy
 
 		s.defaultWriteObject();
 
@@ -2675,26 +2560,31 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		//write children
-		for (AbstractComponent p = _first; p != null; p = p._next)
+		for (AbstractComponent p = (AbstractComponent)getFirstChild();
+		p != null; p = p._next)
 			s.writeObject(p);
 		s.writeObject(null);
 
-		//write attrs
-		if (_attrs != null) {
-			final Map attrs = _attrs.getAttributes();
-			willSerialize(attrs.values());
-			final List lns = _attrs.getListeners();
-			willSerialize(lns);
+		//write auxinf if necessary
+		if (_auxinf == null)
+			return;
 
-			Serializables.smartWrite(s, attrs);
-			Serializables.smartWrite(s, lns);
+		//write attrs
+		if (_auxinf.attrs != null) {
+			final Map attrmap = _auxinf.attrs.getAttributes();
+			willSerialize(attrmap.values());
+			final List attrlns = _auxinf.attrs.getListeners();
+			willSerialize(attrlns);
+
+			Serializables.smartWrite(s, attrmap);
+			Serializables.smartWrite(s, attrlns);
 		} else {
 			Serializables.smartWrite(s, (Map)null);
 			Serializables.smartWrite(s, (List)null);
 		}
 
-		if (_listeners != null)
-			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
+		if (_auxinf.listeners != null)
+			for (Iterator it = _auxinf.listeners.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				s.writeObject(me.getKey());
 
@@ -2704,9 +2594,11 @@ w:use="foo.MyWindow"&gt;
 			}
 		s.writeObject(null);
 
-		willSerialize(_ausvc);
-		s.writeObject(_ausvc == null || (_ausvc instanceof java.io.Serializable)
-		|| (_ausvc instanceof java.io.Externalizable) ? _ausvc: null);
+		willSerialize(_auxinf.ausvc);
+		s.writeObject(_auxinf.ausvc != null
+			&& (_auxinf.ausvc instanceof java.io.Serializable
+			|| _auxinf.ausvc instanceof java.io.Externalizable) ?
+				_auxinf.ausvc: null);
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
 	 * for each object in the collection.
@@ -2758,54 +2650,61 @@ w:use="foo.MyWindow"&gt;
 		for (AbstractComponent q = null;;) {
 			final AbstractComponent child = (AbstractComponent)s.readObject();
 			if (child == null) {
-				_last = q;
+				if (_chdinf != null)
+					_chdinf.last = q;
 				break; //no more
 			}
+			++initChildInfo().nChild;
 			if (q != null) q._next = child;
-			else _first = child;
+			else _chdinf.first = child;
 			child._prev = q;
 			child._parent = this;
 			q = child;
 		}
 
+		//Read auxinf
+		if (_auxinf == null)
+			return;
+
 		//read attrs
 		attrs();
-		final Map attrs = _attrs.getAttributes();
-		Serializables.smartRead(s, attrs);
-		final List lns = _attrs.getListeners();
-		Serializables.smartRead(s, lns);
-		if (attrs.isEmpty() && lns.isEmpty())
-			_attrs = null;
+		final Map attrmap = _auxinf.attrs.getAttributes();
+		Serializables.smartRead(s, attrmap);
+		final List attrlns = _auxinf.attrs.getListeners();
+		Serializables.smartRead(s, attrlns);
+		if (attrmap.isEmpty() && attrlns.isEmpty())
+			_auxinf.attrs = null;
 		else if (_parent != null)
-			_attrs.notifyParentChanged(_parent);
+			_auxinf.attrs.notifyParentChanged(_parent);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_listeners == null) _listeners = new HashMap(4);
+			if (_auxinf.listeners == null) _auxinf.listeners = new HashMap(4);
 			final Collection ls = Serializables.smartRead(s, (Collection)null);
-			_listeners.put(evtnm, ls);
+			_auxinf.listeners.put(evtnm, ls);
 		}
 
-		//restore _spaceInfo
+		//restore _auxinf.spaceInfo
 		if (this instanceof IdSpace) {
-			_spaceInfo = new SpaceInfo();
+			_auxinf.spaceInfo = new SpaceInfo();
 
 			//restore ID space by binding itself and all children
 			if (!isAutoId(_id))
 				bindToIdSpace(this);
-			for (AbstractComponent ac = _first; ac != null; ac = ac._next)
+			for (AbstractComponent ac = (AbstractComponent)getFirstChild();
+			ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, this);
 		}
 
 		//didDeserialize
-		didDeserialize(attrs.values());
-		didDeserialize(lns);
-		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+		didDeserialize(attrmap.values());
+		didDeserialize(attrlns);
+		if (_auxinf.listeners != null)
+			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
 				didDeserialize((Collection)it.next());
-		didDeserialize(_ausvc = (AuService)s.readObject());
+		didDeserialize(_auxinf.ausvc = (AuService)s.readObject());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
 	 * for each object in the collection.
@@ -2841,7 +2740,7 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		public void onEvent(Event event) {
-			final Object[] info = (Object[])_forwards.get(_orgEvent);
+			final Object[] info = (Object[])_auxinf.forwards.get(_orgEvent);
 			if (info != null)
 				for (Iterator it = new ArrayList((List)info[1]).iterator();
 				it.hasNext();) {
@@ -2882,7 +2781,7 @@ w:use="foo.MyWindow"&gt;
 
 	/** Returns the default mold for the given class.
 	 * <p>Default: check the library property called xxx.mold, where xxx is
-	 * the name of the give class.
+	 * the name of the give class. If not found or empty, "default" is assumed.
 	 * <p>Subclass might override this method to use the default mold of the base
 	 * class, such as
 	 * <pre><code>
@@ -2901,7 +2800,7 @@ w:use="foo.MyWindow"&gt;
 				inf = _sinfs.get(klass);
 				if (inf == null) {
 					String mold = Library.getProperty(klass.getName() + ".mold");
-					inf = mold != null && mold.length() > 0 ? mold: "default";
+					inf = mold != null && mold.length() > 0 ? mold: DEFAULT;
 					_sinfs.put(klass, inf);
 				}
 				if (++_infcnt > 100 || _sinfs.size() > 20) {
@@ -2918,4 +2817,219 @@ w:use="foo.MyWindow"&gt;
 	private static transient Map _infs = new HashMap(), //readonly
 		_sinfs = new HashMap(); //synchronized
 	private static int _infcnt;
+
+	private final AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	/** Merge multiple memembers into an single object (and create on demand)
+	 * to minimize the footprint
+	 * @since 5.0.4
+	 */
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		/** The mold. */
+		private String mold;
+
+		/** The info of the ID space, or null if IdSpace is NOT implemented. */
+		private transient SpaceInfo spaceInfo;
+		/** Component attributes. */
+		private transient SimpleScope attrs;
+		/** A map of event listener: Map(evtnm, List(EventListener)). */
+		private transient Map listeners;
+
+		/** A map of annotations. Serializable since a component might have
+		 * its own annotations.
+		 */
+		private AnnotationMap annots;
+		/** A map of event handler to handle events. */
+		private EventHandlerMap evthds;
+		/** A map of forward conditions:
+		 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
+		 */
+		private Map forwards;
+
+		/** the Au service. */
+		private transient AuService ausvc;
+
+		/** The widget class. */
+		private String wgtcls;
+		/** A map of client event hanlders, Map(String evtnm, String script). */
+		private Map wgtlsns;
+		/** A map of client properties to override, Map(String name, String script). */
+		private Map wgtovds;
+		/** A map of client DOM attributes to set, Map(String name, String value). */
+		private Map wgtattrs;
+
+		/** The AU tag. */
+		private String autag;
+
+		/** Whether annots is shared with other components. */
+		private transient boolean annotsShared;
+		/** Whether evthds is shared with other components. */
+		private transient boolean evthdsShared;
+
+		public Object clone() {
+			final AuxInfo clone;
+			try {
+				clone = (AuxInfo)super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+			if (wgtlsns != null)
+				clone.wgtlsns = new LinkedHashMap(wgtlsns);
+			if (wgtovds != null)
+				clone.wgtovds = new LinkedHashMap(wgtovds);
+			if (wgtattrs != null)
+				clone.wgtattrs = new LinkedHashMap(wgtattrs);
+
+			//clone annotation and event handlers
+			if (!annotsShared && annots != null)
+				clone.annots = (AnnotationMap)annots.clone();
+			if (!evthdsShared && evthds != null)
+				clone.evthds = (EventHandlerMap)evthds.clone();
+			return clone;
+		}
+		/** 2nd phase of clone (after children are cloned). */
+		private void initClone(AbstractComponent owner, AuxInfo clone) {
+			//spaceinfo (after children is cloned)
+			if (spaceInfo != null) {
+				clone.spaceInfo = owner.new SpaceInfo();
+				owner.cloneSpaceInfoFrom(spaceInfo);
+			}
+
+			//clone attrs
+			if (attrs != null)
+				clone.attrs = attrs.clone(owner);
+
+			//clone listener
+			if (listeners != null) {
+				clone.listeners = new HashMap(4);
+				for (Iterator it = listeners.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final List list = new LinkedList();
+					for (Iterator it2 = ((List)me.getValue()).iterator();
+					it2.hasNext();) {
+						Object val = it2.next();
+						if (val instanceof ComponentCloneListener) {
+							val = ((ComponentCloneListener)val).willClone(owner);
+							if (val == null) continue; //don't use it in clone
+						}
+						list.add(val);
+					}
+					if (!list.isEmpty())
+						clone.listeners.put(me.getKey(), list);
+				}
+			}
+
+			//clone forwards (after children is cloned)
+			if (forwards != null) {
+				clone.forwards = null;
+				for (Iterator it = forwards.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final String orgEvent = (String)me.getKey();
+
+					final Object[] info = (Object[])me.getValue();
+					final List fwds = (List)info[1];
+					for (Iterator e = fwds.iterator(); e.hasNext();) {
+						final Object[] fwd = (Object[])e.next();
+						owner.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
+					}
+				}
+			}
+
+			//AuService
+			if (ausvc instanceof ComponentCloneListener)
+				clone.ausvc = (AuService)((ComponentCloneListener)ausvc).willClone(owner);
+		}
+		private void render(ContentRenderer renderer)
+		throws IOException {
+			renderer.renderWidgetListeners(wgtlsns);
+			renderer.renderWidgetOverrides(wgtovds);
+			renderer.renderWidgetAttributes(wgtattrs);
+		}
+	}
+
+	private final ChildInfo initChildInfo() {
+		if (_chdinf == null)
+			_chdinf = new ChildInfo();
+		return _chdinf;
+	}
+	private static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
+		/** The first child. */
+		private transient AbstractComponent first;
+		/** The last child. */
+		private transient AbstractComponent last;
+		/** # of children. */
+		private transient int nChild;
+		/** Set of components that are being added or removed.
+		 * _aring[0]: add, _aring[1]: remove
+		 * It is used to prevent dead-loop between {@link #removeChild}
+		 * and {@link #setParent}.
+		 */
+		private transient Set[] _aring; //use an array to save memory
+		/** The modification count used to avoid co-modification of _next, _prev..
+		 */
+		private transient int modCntChd;
+
+		private ChildInfo() {
+		}
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
+		private ChildInfo clone(AbstractComponent owner) {
+			final ChildInfo clone = (ChildInfo)clone();
+
+			AbstractComponent q = null;
+			for (AbstractComponent p = first; p != null; p = p._next) {
+				AbstractComponent child = (AbstractComponent)p.clone();
+				if (q != null) q._next = child;
+				else clone.first = child;
+				child._prev = q;
+				q = child;
+
+				child._parent = owner; //correct it
+			}
+			clone.last = q;
+			return clone;
+		}
+
+		/** Returns whether the child is being removed.
+		 */
+		private boolean inRemoving(Component child) {
+			return _aring != null && _aring[1] != null && _aring[1].contains(child);
+		}
+		/** Sets if the child is being removed.
+		 */
+		private void markRemoving(Component child, boolean set) {
+			markARing(child, set, 1);
+		}
+		/** Returns whether the child is being added.
+		 */
+		private boolean inAdding(Component child) {
+			return _aring != null && _aring[0] != null && _aring[0].contains(child);
+		}
+		/** Sets if the child is being added.
+		 */
+		private void markAdding(Component child, boolean set) {
+			markARing(child, set, 0);
+		}
+		private void markARing(Component child, boolean set, int which) {
+			if (set) {
+				if (_aring == null) _aring = new Set[2];
+				if (_aring[which] == null) _aring[which] = new HashSet(2);
+				_aring[which].add(child);
+			} else if (_aring != null && _aring[which] != null
+			&& _aring[which].remove(child) && _aring[which].isEmpty())
+				if (_aring[which == 0 ? 1: 0] == null) //both null
+					_aring = null;
+				else
+					_aring[which] = null;
+		}
+	}
 }

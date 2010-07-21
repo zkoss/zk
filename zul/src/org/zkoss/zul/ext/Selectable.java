@@ -38,18 +38,30 @@ public interface Selectable {
 	
 	/**
 	 * Add the specified object into selection.
+	 * <p>Notice that this method is designed to be called by a component
+	 * (such as {@link org.zkoss.zul.Listbox}).
+	 * If it is called by an application, the component's selection status
+	 * won't be changed.
 	 * @param obj the object to be as selection.
 	 */
 	public void addSelection(Object obj);
 	
 	/**
 	 * Remove the specified object from selection.
+	 * <p>Notice that this method is designed to be called by a component
+	 * (such as {@link org.zkoss.zul.Listbox}).
+	 * If it is called by an application, the component's selection status
+	 * won't be changed.
 	 * @param obj the object to be remove from selection.
 	 */
 	public void removeSelection(Object obj);
 	
 	/**
 	 * Clear all selection.
+	 * <p>Notice that this method is designed to be called by a component
+	 * (such as {@link org.zkoss.zul.Listbox}).
+	 * If it is called by an application, the component's selection status
+	 * won't be changed.
 	 */
 	public void clearSelection();
 }

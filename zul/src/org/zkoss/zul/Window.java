@@ -914,19 +914,19 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_MAXIMIZE)) {
 			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
-			_left = evt.getLeft();
-			_top = evt.getTop();
-			_width = evt.getWidth();
-			_height = evt.getHeight();
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
 			_maximized = evt.isMaximized();
 			if (_maximized) _visible = true;
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_MINIMIZE)) {
 			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
-			_left = evt.getLeft();
-			_top = evt.getTop();
-			_width = evt.getWidth();
-			_height = evt.getHeight();
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
 			_minimized = evt.isMinimized();
 			if (_minimized) {
 				_visible = false;

@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
+import org.zkoss.zk.au.AuDecoder;
 
 /**
  * A skeletal implementation of {@link WebApp}.
@@ -58,6 +59,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
 	private SessionCache _sesscache;
+	private AuDecoder _audec;
 
 	private static String _build;
 
@@ -181,6 +183,14 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			}
 		}
 
+		cls = _config.getAuDecoderClass();
+		if (cls != null) {
+			try {
+				_audec = (AuDecoder)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
@@ -269,6 +279,12 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_sesscache = cache;
 		_sesscache.init(this);
 	}		
+	public AuDecoder getAuDecoder() {
+		return _audec;
+	}
+	public void setAuDecoder(AuDecoder audec) {
+		_audec = audec;
+	}
 
 	/** Invokes {@link #getDesktopCacheProvider}'s
 	 * {@link DesktopCacheProvider#sessionWillPassivate}.

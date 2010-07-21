@@ -67,6 +67,7 @@ import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.SessionResolverImpl;
 import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
@@ -444,11 +445,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			//Bug 1849088: rmDesktop might be sent after invalidate
 			//Bug 1859776: need send response to client for redirect or others
-			final String dtid = request.getParameter("dtid");
+			final WebApp wapp = WebManager.getWebAppIfAny(_ctx);
+			final String dtid = getAuDecoder(wapp).getDesktopId(request);
 			if (dtid != null)
-				sessionTimeout(request, response,
-					WebManager.getWebManager(_ctx).getWebApp().getConfiguration(),
-					dtid);
+				sessionTimeout(request, response, wapp, dtid);
 			return;
 		}
 
@@ -480,7 +480,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			if (log.debugable()) log.debug("Error found at client: "+errClient+"\n"+Servlets.getDetail(request));
 
 		//parse desktop ID
-		final String dtid = request.getParameter("dtid");
+		final WebApp wapp = sess.getWebApp();
+		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final AuDecoder audec = getAuDecoder(wapp);
+		final String dtid = audec.getDesktopId(request);
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
 			if (log.debugable()) {
@@ -492,18 +495,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Configuration config = wapp.getConfiguration();
 		Desktop desktop = getDesktop(sess, dtid);
 		if (desktop == null) {
-			final String cmdId = request.getParameter("cmd.0");
+			final String cmdId = audec.getFirstCommand(request);
 			if (!"rmDesktop".equals(cmdId))
 				desktop = recoverDesktop(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
-				sessionTimeout(request, response, config, dtid);
+				sessionTimeout(request, response, wapp, dtid);
 				return;
 			}
 		}
@@ -515,26 +515,19 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			response.setHeader("ZK-SID", sid);
 
 		//parse commands
-		final List aureqs = new LinkedList();
-		final boolean timerKeepAlive = config.isTimerKeepAlive();
+		final Configuration config = wapp.getConfiguration();
+		final List aureqs;
 		boolean keepAlive = false;
 		try {
-			for (int j = 0;; ++j) {
-				final String cmdId = request.getParameter("cmd_"+j);
-				if (cmdId == null)
-					break;
-
-				keepAlive = keepAlive
-					|| (!(!timerKeepAlive && Events.ON_TIMER.equals(cmdId))
-						&& !"dummy".equals(cmdId));
+			final boolean timerKeepAlive = config.isTimerKeepAlive();
+			aureqs = audec.decode(request, desktop);
+			for (Iterator it = aureqs.iterator(); it.hasNext();) {
+				final String cmdId = ((AuRequest)it.next()).getCommand();
+				keepAlive = !(!timerKeepAlive && Events.ON_TIMER.equals(cmdId))
+					&& !"dummy".equals(cmdId);
 					//dummy is used for PollingServerPush for piggyback
-
-				final String uuid = request.getParameter("uuid_"+j);
-				final String data = request.getParameter("data_"+j);
-				final Map decdata = (Map)JSONValue.parse(data);
-				aureqs.add(uuid == null || uuid.length() == 0 ? 
-					new AuRequest(desktop, cmdId, decdata):
-					new AuRequest(desktop, uuid, cmdId, decdata));
+				if (keepAlive)
+					break; //done
 			}
 		} catch (Throwable ex) {
 			log.warningBriefly(ex);
@@ -553,10 +546,22 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
-		if (sid != null)
+		if (sid != null) {
 			((ExecutionCtrl)exec).setRequestId(sid);
+			Object prevc = desktopCtrl.getLastResponse(sid);
+			if (prevc != null) { //replicate request
+				if (log.debugable())
+					log.debug("replicate request\n"+Servlets.getDetail(request));
+
+				final AuWriter out = AuWriters.newInstance();
+				out.resend(request, response, prevc);
+				return;
+			}
+		}
+
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(_compress);
 		out.open(request, response,
@@ -565,8 +570,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//Note: getResendDelay() might return nonpositive
 		wappc.getUiEngine().execUpdate(exec, aureqs, out);
 
-		out.close(request, response);
+		desktopCtrl.responseSent(sid,
+			out.close(request, response));
 	}
+
 	/** Returns the desktop of the specified ID, or null if not found.
 	 * If null is returned, {@link #recoverDesktop} will be invoked.
 	 * @param sess the session (never null)
@@ -584,8 +591,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 		return resendDelay;
 	}
+	/**
+	 * @param wapp the Web application (or null if not available yet)
+	 */
 	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, Configuration config, String dtid)
+	HttpServletResponse response, WebApp wapp, String dtid)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null)
@@ -594,27 +604,21 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out =
 			AuWriters.newInstance().open(request, response, 0);
 
-		for (int j = 0;; ++j) {
-			if (request.getParameter("cmd_"+j) == null)
-				break;
-
-			final String opt = request.getParameter("opt_"+j);
-			if (opt == null || opt.indexOf("i") < 0) {
-				final String deviceType = getDeviceType(request);
-				URIInfo ui = (URIInfo)config.getTimeoutURI(getDeviceType(request));
-				String uri = ui != null ? ui.uri: null;
-				final AuResponse resp;
-				if (uri != null) {
-					if (uri.length() != 0)
-						uri = Encodes.encodeURL(_ctx, request, response, uri);
-					resp = new AuSendRedirect(uri, null);
-				} else {
-					resp = new AuObsolete(
-						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
-				}
-				out.write(resp);
-				break; //found
+		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
+			final String deviceType = getDeviceType(request);
+			URIInfo ui = wapp != null ? (URIInfo)wapp.getConfiguration()
+				.getTimeoutURI(getDeviceType(request)): null;
+			String uri = ui != null ? ui.uri: null;
+			final AuResponse resp;
+			if (uri != null) {
+				if (uri.length() != 0)
+					uri = Encodes.encodeURL(_ctx, request, response, uri);
+				resp = new AuSendRedirect(uri, null);
+			} else {
+				resp = new AuObsolete(
+					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
 			}
+			out.write(resp);
 		}
 
 		out.close(request, response);
@@ -676,4 +680,46 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
 	}
+
+	private static final AuDecoder getAuDecoder(WebApp wapp) {
+		AuDecoder audec = wapp != null ? ((WebAppCtrl)wapp).getAuDecoder(): null;
+		return audec != null ? audec: _audec;
+	}
+	private static final AuDecoder _audec = new AuDecoder() {
+		public String getDesktopId(Object request) {
+			return ((HttpServletRequest)request).getParameter("dtid");
+		}
+		public String getFirstCommand(Object request) {
+			return ((HttpServletRequest)request).getParameter("cmd.0");
+		}
+		public List decode(Object request, Desktop desktop) {
+			final List aureqs = new LinkedList();
+			final HttpServletRequest hreq = (HttpServletRequest)request;
+			for (int j = 0;; ++j) {
+				final String cmdId = hreq.getParameter("cmd_"+j);
+				if (cmdId == null)
+					break;
+
+				final String uuid = hreq.getParameter("uuid_"+j);
+				final String data = hreq.getParameter("data_"+j);
+				final Map decdata = (Map)JSONValue.parse(data);
+				aureqs.add(uuid == null || uuid.length() == 0 ? 
+					new AuRequest(desktop, cmdId, decdata):
+					new AuRequest(desktop, uuid, cmdId, decdata));
+			}
+			return aureqs;
+		}
+		public boolean isIgnorable(Object request, WebApp wapp) {
+			final HttpServletRequest hreq = (HttpServletRequest)request;
+			for (int j = 0;; ++j) {
+				if (hreq.getParameter("cmd_"+j) == null)
+					break;
+
+				final String opt = hreq.getParameter("opt_"+j);
+				if (opt == null || opt.indexOf("i") < 0)
+					return false; //not ignorable
+			}
+			return true;
+		}
+	};
 }

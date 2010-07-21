@@ -37,7 +37,7 @@ import org.zkoss.zk.fn.ZkFns;
  *
  * <p>Events:<br/>
  *  onClick, onDoubleClick, onRightClick, onMove, onSize, onZIndex, onDrop,
- * 	onOK, onCacnel and onCtrlKey.<br/>
+ *  onMouseOver, onMouseOut, onOK, onCacnel and onCtrlKey.<br/>
  * 
  * <p>It supports
  * <ul>
@@ -53,30 +53,12 @@ import org.zkoss.zk.fn.ZkFns;
  * @since 5.0.0 supports onCtrlKey event.
  */
 abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent {
-	private String _tooltiptext;
-	/** The width. */
-	protected String _width;
-	/** The height. */
-	protected String _height;
-	/** The CSS class. */
-	private String _sclass;
 	/** The ZK CSS class. */
 	protected String _zclass;
-	/** The CSS style. */
-	private String _style;
-	protected String _left, _top;
-	/** The draggable. */
-	private String _draggable;
-	/** The droppable. */
-	private String _droppable;
-	private int _zIndex = -1;
-	private int _renderdefer = -1;
 	/** The prolog content that shall be generated before real content. */
 	private String _prolog;
-	/** The virtical flex */
-	private String _vflex;
-	/** The horizontal flex */
-	private String _hflex;
+	/** AuxInfo: use a class (rather than multiple member) to save footprint */
+	private AuxInfo _auxinf;
 
 	static {
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK, 0);
@@ -97,7 +79,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** Returns the left position.
 	 */
 	public String getLeft() {
-		return _left;
+		return _auxinf != null ? _auxinf.left: null;
 	}
 	/** Sets the left position.
 	 * <p>If you want to specify <code>right</code>, use {@link #setStyle} instead.
@@ -105,15 +87,15 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @param left the left position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setLeft(String left) {
-		if (!Objects.equals(_left, left)) {
-			_left = left;
-			smartUpdate("left", _left);
+		if (!Objects.equals(getLeft(), left)) {
+			initAuxInfo().left = left;
+			smartUpdate("left", getLeft());
 		}
 	}
 	/** Returns the top position.
 	 */
 	public String getTop() {
-		return _top;
+		return _auxinf != null ? _auxinf.top: null;
 	}
 	/** Sets the top position.
 	 * <p>If you want to specify <code>bottom</code>, use {@link #setStyle} instead.
@@ -121,28 +103,28 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @param top the top position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setTop(String top) {
-		if (!Objects.equals(_top, top)) {
-			_top = top;
-			smartUpdate("top", _top);
+		if (!Objects.equals(getTop(), top)) {
+			initAuxInfo().top = top;
+			smartUpdate("top", getTop());
 		}
 	}
 	/** Returns the Z index.
 	 * <p>Default: -1 (means system default;
 	 */
 	public int getZIndex() {
-		return _zIndex;
+		return _auxinf != null ? _auxinf.zIndex: -1;
 	}
 	/** Sets the Z index.
 	 */
 	public void setZIndex(int zIndex) {
-		if (_zIndex < -1)
-			_zIndex = -1;
-		if (_zIndex != zIndex) {
-			_zIndex = zIndex;
-			if (_zIndex < 0)
+		if (zIndex < -1)
+			zIndex = -1;
+		if (getZIndex() != zIndex) {
+			initAuxInfo().zIndex = zIndex;
+			if ((zIndex = getZIndex()) < 0)
 				smartUpdate("zIndex", (Object)null);
 			else
-				smartUpdate("zIndex", _zIndex);
+				smartUpdate("zIndex", zIndex);
 		}
 	}
 	/** Returns the Z index.
@@ -163,49 +145,86 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * <p>Default: null.
 	 */
 	public String getHeight() {
-		return _height;
+		return _auxinf != null ? _auxinf.height: null;
 	}
 	/** Sets the height. If null, the best fit is used.
 	 */
 	public void setHeight(String height) {
 		if (height != null && height.length() == 0)
 			height = null;
-		if (!Objects.equals(_height, height)) {
-			_height = height;
-			smartUpdate("height", _height);
+		if (!Objects.equals(getHeight(), height)) {
+			initAuxInfo().height = height;
+			smartUpdate("height", getHeight());
 		}
 	}
 	/** Returns the width. If null, the best fit is used.
 	 * <p>Default: null.
 	 */
 	public String getWidth() {
-		return _width;
+		return _auxinf != null ? _auxinf.width: null;
 	}
 	/** Sets the width. If null, the best fit is used.
+	 * @see #setWidthDirectly
+	 * @see #disableClientUpdate
 	 */
 	public void setWidth(String width) {
 		if (width != null && width.length() == 0)
 			width = null;
-		if (!Objects.equals(_width, width)) {
-			_width = width;
-			smartUpdate("width", _width);
+		if (!Objects.equals(getWidth(), width)) {
+			initAuxInfo().width = width;
+			smartUpdate("width", getWidth());
 		}
+	}
+	/** Sets the width directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.4
+	 */
+	protected void setWidthDirectly(String width) {
+		initAuxInfo().width = width;
+	}
+	/** Sets the height directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.4
+	 */
+	protected void setHeightDirectly(String height) {
+		initAuxInfo().height = height;
+	}
+	/** Sets the left directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.4
+	 */
+	protected void setLeftDirectly(String left) {
+		initAuxInfo().left = left;
+	}
+	/** Sets the top directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.4
+	 */
+	protected void setTopDirectly(String top) {
+		initAuxInfo().top = top;
+	}
+	/** Sets the z-index directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.4
+	 */
+	protected void setZIndexDirectly(int zIndex) {
+		initAuxInfo().zIndex = zIndex;
 	}
 
 	/** Returns the text as the tooltip.
 	 * <p>Default: null.
 	 */
 	public String getTooltiptext() {
-		return _tooltiptext;
+		return _auxinf != null ? _auxinf.tooltiptext: null;
 	}
 	/** Sets the text as the tooltip.
 	 */
 	public void setTooltiptext(String tooltiptext) {
 		if (tooltiptext != null && tooltiptext.length() == 0)
 			tooltiptext = null;
-		if (!Objects.equals(_tooltiptext, tooltiptext)) {
-			_tooltiptext = tooltiptext;
-			smartUpdate("tooltiptext", _tooltiptext);
+		if (!Objects.equals(getTooltiptext(), tooltiptext)) {
+			initAuxInfo().tooltiptext = tooltiptext;
+			smartUpdate("tooltiptext", getTooltiptext());
 		}
 	}
 
@@ -259,7 +278,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @see #getZclass
 	 */
 	public String getSclass() {
-		return _sclass;
+		return _auxinf != null ? _auxinf.sclass: null;
 	}
 	/** Sets the CSS class.
 	 *
@@ -267,9 +286,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 */
 	public void setSclass(String sclass) {
 		if (sclass != null && sclass.length() == 0) sclass = null;
-		if (!Objects.equals(_sclass, sclass)) {
-			_sclass = sclass;
-			smartUpdate("sclass", _sclass);
+		if (!Objects.equals(getSclass(), sclass)) {
+			initAuxInfo().sclass = sclass;
+			smartUpdate("sclass", getSclass());
 		}
 	}
 	/** Sets the CSS class. This method is a bit confused with Java's class,
@@ -284,15 +303,15 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * <p>Default: null.
 	 */
 	public String getStyle() {
-		return _style;
+		return _auxinf != null ? _auxinf.style: null;
 	}
 	/** Sets the CSS style.
 	 */
 	public void setStyle(String style) {
 		if (style != null && style.length() == 0) style = null;
-		if (!Objects.equals(_style, style)) {
-			_style = style;
-			smartUpdate("style", _style);
+		if (!Objects.equals(getStyle(), style)) {
+			initAuxInfo().style = style;
+			smartUpdate("style", getStyle());
 		}
 	}
 
@@ -312,19 +331,19 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * then it means draggable.
 	 */
 	public void setDraggable(String draggable) {
-		if (draggable != null && draggable.length() == 0)
+		if (draggable != null && draggable.length() == 0) //empty means false (but not null)
 			draggable = "false";
 
-		if (!Objects.equals(_draggable, draggable)) {
-			_draggable = draggable;
-			smartUpdate("draggable", _draggable); //getDraggable is final
+		if (!Objects.equals(_auxinf != null ? _auxinf.draggable: null, draggable)) {
+			initAuxInfo().draggable = draggable;
+			smartUpdate("draggable", draggable); //getDraggable is final
 		}
 	}
 	/** Returns the identifier of a draggable type of objects, or "false"
 	 * if not draggable (never null nor empty).
 	 */
 	public String getDraggable() {
-		return _draggable != null ? _draggable:
+		return _auxinf != null && _auxinf.draggable != null ? _auxinf.draggable:
 			getParent() instanceof DragControl ? "true": "false";
 	}
 	/** Sets "true" or "false" to denote whether a component is droppable,
@@ -350,9 +369,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		&& (droppable.length() == 0 || "false".equals(droppable)))
 			droppable = null;
 
-		if (!Objects.equals(_droppable, droppable)) {
-			_droppable = droppable;
-			smartUpdate("droppable", _droppable);
+		if (!Objects.equals(_auxinf != null ? _auxinf.droppable: null, droppable)) {
+			initAuxInfo().droppable = droppable;
+			smartUpdate("droppable", droppable);
 		}
 	}
 	/** Returns the identifier, or a list of identifiers of a droppable type
@@ -360,7 +379,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * if not droppable (never null nor empty).
 	 */
 	public String getDroppable() {
-		return _droppable != null ? _droppable: "false";
+		return _auxinf != null && _auxinf.droppable != null ?
+			_auxinf.droppable: "false";
 	}
 
 	/** Sets focus to this element. If an element does not accept focus,
@@ -407,19 +427,22 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @see #getVflex 
 	 */
 	public void setVflex(String flex) {
-		if (!Objects.equals(_vflex, flex)) {
-			_vflex = flex;
-			smartUpdate("vflex", _vflex);
+		if (flex != null && flex.length() == 0)
+			flex = null;
+		if (!Objects.equals(getVflex(), flex)) {
+			initAuxInfo().vflex = flex;
+			smartUpdate("vflex", getVflex());
 		}
 	}
 	/**
 	 * Return vertical flex hint of this component.
+	 * <p>Default: null
 	 * @return vertical flex hint of this component.
 	 * @since 5.0.0
 	 * @see #setVflex 
 	 */
 	public String getVflex() {
-		return _vflex;
+		return _auxinf != null ? _auxinf.vflex: null;
 	}
 	/**
 	 * Sets horizontal flex hint of this component.
@@ -445,20 +468,23 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @see #getHflex 
 	 */
 	public void setHflex(String flex) {
-		if (!Objects.equals(_hflex, flex)) {
-			_hflex = flex;
-			smartUpdate("hflex", _hflex);
+		if (flex != null && flex.length() == 0)
+			flex = null;
+		if (!Objects.equals(getHflex(), flex)) {
+			initAuxInfo().hflex = flex;
+			smartUpdate("hflex", getHflex());
 		}
 	}
 	
 	/**
 	 * Returns horizontal flex hint of this component.
+	 * <p>Default: null
 	 * @return horizontal flex hint of this component.
 	 * @since 5.0.0
 	 * @see #setHflex 
 	 */
 	public String getHflex() {
-		return _hflex;
+		return _auxinf != null ? _auxinf.hflex: null;
 	}
 
 	/** Returns the number of milliseconds before rendering this component
@@ -467,7 +493,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @since 5.0.2
 	 */
 	public int getRenderdefer() {
-		return _renderdefer;
+		return _auxinf != null ? _auxinf.renderdefer: -1;
 	}
 	/** Sets the number of milliseconds before rendering this component
 	 * at the client.
@@ -487,7 +513,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @since 5.0.2
 	 */
 	public void setRenderdefer(int ms) {
-		_renderdefer = ms;
+		initAuxInfo().renderdefer = ms;
 	}
 
 	//-- rendering --//
@@ -502,25 +528,28 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "vflex", _vflex);
-		render(renderer, "hflex", _hflex);
-		render(renderer, "tooltiptext", _tooltiptext);
-		render(renderer, "width", _width);
-		render(renderer, "height", _height);
-		render(renderer, "sclass", _sclass);
+		render(renderer, "vflex", getVflex());
+		render(renderer, "hflex", getHflex());
+		render(renderer, "tooltiptext", getTooltiptext());
+		render(renderer, "width", getWidth());
+		render(renderer, "height", getHeight());
+		render(renderer, "sclass", getSclass());
 		render(renderer, "zclass", _zclass);
-		render(renderer, "style", _style);
-		render(renderer, "left", _left);
-		render(renderer, "top", _top);
+		render(renderer, "style", getStyle());
+		render(renderer, "left", getLeft());
+		render(renderer, "top", getTop());
 
-		if (_draggable != null
-		&& (getParent() instanceof DragControl || !_draggable.equals("false")))
-			render(renderer, "draggable", _draggable);
+		final String draggable = _auxinf != null ? _auxinf.draggable: null;
+		if (draggable != null
+		&& (getParent() instanceof DragControl || !draggable.equals("false")))
+			render(renderer, "draggable", draggable);
 
-		render(renderer, "droppable", _droppable);
+		render(renderer, "droppable", _auxinf != null ? _auxinf.droppable: null);
 
-		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
-		if (_renderdefer >= 0) renderer.render("renderdefer", _renderdefer);
+		int v = getZIndex();
+		if (v >= 0) renderer.render("zIndex", v);
+		v = getRenderdefer();
+		if (v >= 0) renderer.render("renderdefer", v);
 
 		render(renderer, "prolog", _prolog);
 	}
@@ -545,17 +574,17 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 			Events.postEvent(KeyEvent.getKeyEvent(request));
 		} else if (cmd.equals(Events.ON_MOVE)) {
 			MoveEvent evt = MoveEvent.getMoveEvent(request);
-			_left = evt.getLeft();
-			_top = evt.getTop();
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SIZE)) {
 			SizeEvent evt = SizeEvent.getSizeEvent(request);
-			_width = evt.getWidth();
-			_height = evt.getHeight();
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_Z_INDEX)) {
 			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);
-			_zIndex = evt.getZIndex();
+			setZIndexDirectly(evt.getZIndex());
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_DROP)) {
 			DropEvent evt = DropEvent.getDropEvent(request);
@@ -583,5 +612,39 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		public void setPrologContent(String prolog) {
 			_prolog = prolog;
 		}
+	}
+
+	private final AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	/** Merge multiple memembers into an single object (and create on demand)
+	 * to minimize the footprint
+	 * @since 5.0.4
+	 */
+	private static class AuxInfo implements java.io.Serializable {
+		/** The width. */
+		private String width;
+		/** The height. */
+		private  String height;
+		private String left;
+		private String top;
+		/** The virtical flex */
+		private String vflex;
+		/** The horizontal flex */
+		private String hflex;
+		/** The CSS class. */
+		private String sclass;
+		/** The CSS style. */
+		private String style;
+		/** The tooltip text. */
+		private String tooltiptext;
+		/** The draggable. */
+		private String draggable;
+		/** The droppable. */
+		private String droppable;
+		private int zIndex = -1;
+		private int renderdefer = -1;
 	}
 }

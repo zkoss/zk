@@ -26,6 +26,9 @@ import org.zkoss.zul.ext.Selectable;
  * <p>If the list model is used with sortable listbox or grid,
  * the developer must also implement {@link ListModelExt}.
  *
+ * <p>If the model also provides the selection, it could implement
+ * {@link Selectable}.
+ *
  * @author tomyeh
  * @see Grid
  * @see Listbox

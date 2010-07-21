@@ -29,22 +29,32 @@ ZK 5.5.0
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3031544: Allow to specify a shortcut instead of full namespace
+  3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
+  3030481: Combobox support Selectable (used with ListModel)
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
+  3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   
 * Bugs
-  3023619: inline macro cause nRoot to become a negative number
+  3023619: inline macro might cause nRoot to become a negative number
   3025339: incorrect implementation in Timebox and Spinner widget
   3026819: InputElement.setTabindex(-1) doesn't work
   3027158: The checkbox set focus dosen't work
   3029341: Click at "a" comp  in the listbox will trigger select event
   3027322: draggable & sizeable conflicts
+  3024208: Datebox rounded mold has error in image
+  3030342: setModel to Listbox fail when onCreate and turn ROD on
+  3031526: Focus-look incorrect if window changes overlapped/embed
   
 * Upgrade Notes
   + The default value of tabindex of InputElement is changed from -1 to 0
+  + The protected _left, _top, _width and _height members of HtmlBasedComponent
+  	are removed. Use setLeftDirectly, setTopDirecty, setWidthDirectly and
+  	setHeightDirectly instead.
 
 	--------
 ZK 5.0.3

@@ -19,7 +19,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test of Serialization">
 <vbox id="vb">
-	<listbox id="src" multiple="true" width="200px">
+	<div id="src">
+	<listbox multiple="true" width="200px" onSelect='self.parent.appendChild(new Label(self.selectedItem.label))'>
 		<listhead>
 			<listheader label="Population"/>
 			<listheader align="right" label="%"/>
@@ -37,6 +38,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<listcell label="40%"/>
 		</listitem>
 	</listbox>
+	</div>
 	<radiogroup id="rg">
 		<radio label="K1"/>
 		<radio label="K2"/>
