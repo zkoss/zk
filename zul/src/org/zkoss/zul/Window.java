@@ -845,7 +845,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
 	 */
 	public boolean setVisible(boolean visible) {
-		if (visible == _visible)
+		if (visible == isVisible())
 			return visible;
 		_maximized = _minimized = false;
 		return setVisible0(visible);
@@ -919,7 +919,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
 			_maximized = evt.isMaximized();
-			if (_maximized) _visible = true;
+			if (_maximized) setVisibleDirectly(true);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_MINIMIZE)) {
 			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
@@ -929,7 +929,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			setHeightDirectly(evt.getHeight());
 			_minimized = evt.isMinimized();
 			if (_minimized) {
-				_visible = false;
+				setVisibleDirectly(false);
 				if (_mode == MODAL) {
 					leaveModal(OVERLAPPED);
 				} else if (_mode == HIGHLIGHTED) {

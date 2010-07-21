@@ -124,10 +124,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
-	/** Whether this component is visible.
-	 * @since 3.5.0 (becomes protected)
-	 */
-	protected boolean _visible = true;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -1228,15 +1224,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 
 	public boolean isVisible() {
-		return _visible;
+		return _auxinf == null || _auxinf.visible;
 	}
 	public boolean setVisible(boolean visible) {
-		final boolean old = _visible;
+		final boolean old = _auxinf == null || _auxinf.visible;
 		if (old != visible) {
-			_visible = visible;
-			smartUpdate("visible", _visible);
+			initAuxInfo().visible = visible;
+			smartUpdate("visible", _auxinf.visible);
 		}
 		return old;
+	}
+	/** Changes the visibility directly without sending any update to the client.
+	 * It is the caller's responsibility to maintain the consistency.
+	 * It is rarely called. In most cases, you shall use {@link #setVisible} instead.
+	 * @since 5.0.4
+	 */
+	protected void setVisibleDirectly(boolean visible) {
+		initAuxInfo().visible = visible;
 	}
 
 	public boolean isInvalidated() {
@@ -1707,7 +1711,8 @@ w:use="foo.MyWindow"&gt;
 	protected void renderProperties(ContentRenderer renderer)
 	throws IOException {
 		render(renderer, "id", _id);
-		if (!_visible) renderer.render("visible", false);
+		if (_auxinf != null && !_auxinf.visible) //don't call isVisible since it might be overriden (backward compatible)
+			renderer.render("visible", false);
 
 		Boolean shallHandleImportant = null;
 		for (Iterator it = getClientEvents().entrySet().iterator();
@@ -2995,6 +3000,9 @@ w:use="foo.MyWindow"&gt;
 		private transient boolean annotsShared;
 		/** Whether evthds is shared with other components. */
 		private transient boolean evthdsShared;
+		/** Whether this component is visible.
+		 */
+		private boolean visible = true;
 
 		public Object clone() {
 			final AuxInfo clone;

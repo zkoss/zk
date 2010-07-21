@@ -25,9 +25,11 @@ ZK 5.0.4
   
 * Upgrade Notes
   + The default value of tabindex of InputElement is changed from -1 to 0
+  + The protected _visible member of AbstractComponent is removed.
+    Use setVisibleDirectly() instead.
   + The protected _left, _top, _width and _height members of HtmlBasedComponent
-  	are removed. Use setLeftDirectly, setTopDirecty, setWidthDirectly and
-  	setHeightDirectly instead.
+    are removed. Use setLeftDirectly(), setTopDirecty(), setWidthDirectly()
+    and setHeightDirectly() instead.
   + AbstractComponent's newChildren() and newExtraCtrl() are both deprecated.
     Override getChildren() and getExtraCtrl() instead.
 
