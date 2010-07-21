@@ -9,6 +9,7 @@ ZK 5.0.4
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
+  3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   
 * Bugs

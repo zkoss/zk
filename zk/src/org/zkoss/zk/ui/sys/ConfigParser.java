@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.AuWriter;
 
@@ -381,6 +382,7 @@ public class ConfigParser {
 			//	method-cache-class
 			//	url-encoder-class
 			//	au-writer-class
+			//	au-decoder-class
 				String s = el.getElementValue("disable-event-thread", true);
 				if (s != null) {
 					final boolean enable = "false".equals(s);
@@ -435,6 +437,9 @@ public class ConfigParser {
 
 				cls = parseClass(el, "session-cache-class", SessionCache.class);
 				if (cls != null) config.setSessionCacheClass(cls);
+
+				cls = parseClass(el, "au-decoder-class", AuDecoder.class);
+				if (cls != null) config.setAuDecoderClass(cls);
 
 				cls = parseClass(el, "web-app-class", WebApp.class);
 				if (cls != null) config.setWebAppClass(cls);

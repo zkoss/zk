@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.au.AuDecoder;
 
 /**
  * Additional interface of {@link org.zkoss.zk.ui.WebApp} for implementation.
@@ -109,6 +110,17 @@ public interface WebAppCtrl {
 	 * @since 3.6.0
 	 */
 	public void setSessionCache(SessionCache cache);
+
+	/** Returns the AU decoder for this Web application,
+	 * or null if not assigned.
+	 * @since 5.0.4
+	 */
+	public AuDecoder getAuDecoder();
+	/** Sets the AU decoder for this Web application.
+	 * <p>Default: null (using the system default).
+	 * @since 5.0.4
+	 */
+	public void setAuDecoder(AuDecoder audec);
 
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).

@@ -56,7 +56,7 @@ public interface AuWriter {
 	 * sent by this writer.
 	 * It is used to implement the resend-on-fail mechanism.
 	 * First, the return value is store, and the next request shall
-	 * invoke {@link #resendIf}
+	 * invoke {@link #resend}
 	 * @since 5.0.4
 	 */
 	public Object close(Object request, Object response)
