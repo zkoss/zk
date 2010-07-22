@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
-	_tabindex: -1,
+	//_tabindex: 0,
 
 	$define: {
 		/** Returns whether it is disabled.
@@ -87,7 +87,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) n.tabIndex = v < 0 ? '' : v;
+			if (n) n.tabIndex = v||'';
 		},
 		/** Returns non-null if this button is used for file upload, or null otherwise.
 		 * Refer to {@link #setUpload} for more details.

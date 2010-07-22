@@ -24,8 +24,9 @@ ZK 5.0.4
   3031526: Focus-look incorrect if window changes overlapped/embed
   
 * Upgrade Notes
-  + The default value of tabindex of InputElement and Button is
-    changed from -1 to 0
+  + The default value of tabindex is changed from -1 to 0.
+    Components that support tabbox include InputWidget, Button, A, Checkbox,
+    Listbox and derives.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.
   + The protected _left, _top, _width and _height members of HtmlBasedComponent

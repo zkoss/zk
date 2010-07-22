@@ -44,7 +44,7 @@ var Button =
 zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
-	_tabindex: -1,
+	//_tabindex: 0,
 
 	$define: {
 		/** Returns the href that the browser shall jump to, if an user clicks
@@ -126,7 +126,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) (this.$n('btn') || n).tabIndex = v >= 0 ? v: '';
+			if (n) (this.$n('btn') || n).tabIndex = v||'';
 		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this button.

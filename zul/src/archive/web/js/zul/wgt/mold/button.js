@@ -16,7 +16,7 @@ function (out) {
 	var zcls = this.getZclass(),
 		tabi = this._tabindex,
 		uuid = this.uuid;
-	tabi = tabi >= 0 ? ' tabindex="' + tabi + '"': '';
+	tabi = tabi ? ' tabindex="' + tabi + '"': '';
 
 	var btn = '<button type="button" id="' + uuid + '-btn" class="' + zcls + '"',
 		s = this.isDisabled();

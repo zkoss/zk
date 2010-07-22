@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Checkbox {
 	/** The name. */
 	private String _name;
-	private int _tabindex = -1;
+	private int _tabindex;
 	/** Whether it is checked. */
 	/*package*/ boolean _checked;
 	private boolean _disabled;
@@ -120,7 +120,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	}
 
 	/** Returns the tab order of this component.
-	 * <p>Default: -1 (means the same as browser's default).
+	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
 		return _tabindex;
@@ -130,8 +130,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
-			else smartUpdate("tabindex", _tabindex);
+			smartUpdate("tabindex", _tabindex);
 		}
 	}
 
@@ -150,7 +149,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_tabindex >= 0)
+		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 
 		render(renderer, "disabled", _disabled);

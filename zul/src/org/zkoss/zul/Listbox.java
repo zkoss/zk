@@ -238,7 +238,7 @@ public class Listbox extends XulElement implements Paginated,
 			_modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
-	private int _tabindex = -1;
+	private int _tabindex;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private boolean _multiple;
@@ -612,7 +612,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Currently, only the "select" mold supports this property.
 	 * <p>
-	 * Default: -1 (means the same as browser's default).
+	 * Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
 		return _tabindex;
@@ -3139,7 +3139,7 @@ public class Listbox extends XulElement implements Paginated,
 		if (inSelectMold()) {
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
-			if (_tabindex >= 0)
+			if (_tabindex != 0)
 				renderer.render("tabindex", getTabindex());
 			if (_maxlength > 0)
 				renderer.render("maxlength", getMaxlength());

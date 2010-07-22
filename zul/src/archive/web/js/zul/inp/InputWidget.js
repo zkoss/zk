@@ -72,7 +72,7 @@ var InputWidget =
 zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
 	_cols: 0,
-	_tabindex: 0,
+	//_tabindex: 0,
 	_type: 'text',
 	$define: {
 		/** Returns the name of this component.
@@ -178,7 +178,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		tabindex: function (tabindex) {
 			var inp = this.getInputNode();
 			if (inp)
-				inp.tabIndex = tabindex;
+				inp.tabIndex = tabindex||'';
 		},
 		/** Returns whether enable the inplace-editing.
 		 * <p>default: false.
