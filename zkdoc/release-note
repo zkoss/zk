@@ -22,6 +22,7 @@ ZK 5.0.4
   3024208: Datebox rounded mold has error in image
   3030342: setModel to Listbox fail when onCreate and turn ROD on
   3031526: Focus-look incorrect if window changes overlapped/embed
+  3031562: hbox, vbox layout has error in ZK5.0.4
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

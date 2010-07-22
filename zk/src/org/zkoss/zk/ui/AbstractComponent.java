@@ -1570,7 +1570,7 @@ w:use="foo.MyWindow"&gt;
 	public void setMold(String mold) {
 		if (mold != null && (DEFAULT.equals(mold) || mold.length() == 0))
 			mold = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.mold: mold, mold)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.mold: DEFAULT, mold)) {
 			if (!_def.hasMold(mold != null ? mold: DEFAULT))
 				throw new UiException("Unknown mold: "+mold+"; allowed: "+_def.getMoldNames());
 			final String oldtype = getWidgetClass();
