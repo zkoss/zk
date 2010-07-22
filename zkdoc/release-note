@@ -25,6 +25,7 @@ ZK 5.0.4
   3031526: Focus-look incorrect if window changes overlapped/embed
   3031562: hbox, vbox layout has error in ZK5.0.4
   3033010: Listbox with hflex listheader can expand but can not shrink
+  3033016: Extra empty row when shrink fixed width Listbox
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
