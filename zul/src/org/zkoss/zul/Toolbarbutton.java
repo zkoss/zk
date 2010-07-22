@@ -39,16 +39,6 @@ public class Toolbarbutton extends Button implements org.zkoss.zul.api.Toolbarbu
 		super(label, image);
 	}
 	
-	public void setUpload(String upload) {
-		if (upload != null
-		&& (upload.length() == 0 || "false".equals(upload)))
-			upload = null;
-		if (!Objects.equals(upload, _upload)) {
-			_upload = upload;
-			smartUpdate("upload", _upload);
-		}
-	}
-	
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-toolbarbutton" : _zclass;
