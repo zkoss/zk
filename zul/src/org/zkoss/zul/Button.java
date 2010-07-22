@@ -109,7 +109,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	 * <p>Default: "normal".
 	 */
 	public String getDir() {
-		return _auxinf != null ? _auxinf.dir: null;
+		return _auxinf != null ? _auxinf.dir: NORMAL;
 	}
 	/** Sets the direction.
 	 * @param dir either "normal" or "reverse".
@@ -118,7 +118,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (!"normal".equals(dir) && !"reverse".equals(dir))
 			throw new WrongValueException(dir);
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.dir: null, dir)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.dir: NORMAL, dir)) {
 			initAuxInfo().dir = dir;
 			smartUpdate("dir", getDir());
 		}
