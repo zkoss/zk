@@ -1003,8 +1003,8 @@ public class UiEngineImpl implements UiEngine {
 				//Tom Yeh: 20060120
 				//Don't process all requests if this thread has processed
 				//a while. Thus, user could see the response sooner.
-			for (AuRequest request; System.currentTimeMillis() < tmexpired
-			&& (request = rque.nextRequest()) != null;) {
+			for (AuRequest request; /*System.currentTimeMillis() < tmexpired //Not allowed if recycle UUID
+			&&*/ (request = rque.nextRequest()) != null;) {
 				//Cycle 1: Process one request
 				//Don't process more such that requests will be queued
 				//and we have the chance to optimize them
