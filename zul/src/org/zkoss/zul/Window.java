@@ -72,7 +72,8 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private static final Log log = Log.lookup(Window.class);
-	private static String _onshow = null;
+	private static final long serialVersionUID = 20100721L;
+
 	private transient Caption _caption;
 
 	private String _border = "none";
@@ -80,7 +81,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	/** One of MODAL, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
-	private transient Object _mutex;
+	private Mutex _mutex = new Mutex();
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
@@ -145,7 +146,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 
 	public Window() {
-		init();
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -157,9 +157,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		setTitle(title);
 		setBorder(border);
 		setClosable(closable);
-	}
-	private void init() {
-		_mutex = new Object();
 	}
 
 	/**
@@ -317,6 +314,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return _minwidth;
 	}
 	/**
+	 * @deprecated As release of 5.0.0, replaced with JavaScript overriding.
 	 * Sets the action of window component to show the animating effect by default.
 	 * 
 	 * <p>Default: null. In other words, if the property is null, it will refer to
@@ -331,16 +329,15 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @since 3.0.2
 	 */
 	public static void setDefaultActionOnShow(String onshow) {
-		if (!Objects.equals(_onshow, onshow))
-			_onshow = onshow;
 	}
 	
 	/**
+	 * @deprecated As release of 5.0.0, replaced with JavaScript overriding.
 	 * Returns the animating name of function.
 	 * @since 3.0.2
 	 */
 	public static String getDefaultActionOnShow() {
-		return _onshow;
+		return null;
 	}
 	
 	/** Returns the caption of this window.
@@ -877,7 +874,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();
-		clone.init();
+		clone._mutex = new Mutex();
 		if (clone._caption != null) clone.afterUnmarshal();
 		return clone;
 	}
@@ -895,7 +892,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		init();
 		afterUnmarshal();
 	}
 
@@ -950,3 +946,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return false;
 	}
 }
+/** Any serializable object. */
+/*package*/ class Mutex implements java.io.Serializable {
+}
+
