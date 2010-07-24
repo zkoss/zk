@@ -89,7 +89,8 @@ public interface DesktopCtrl {
 	 * @since 5.0.4
 	 */
 	public boolean removeComponent(Component comp, boolean recycleUuidAllowed);
-	/** @deprecated As of release 5.0.4, replaced with {@link removeComponent(Component, boolean)}.
+	/** @deprecated As of release 5.0.4, replaced with
+	* {@link #removeComponent(Component, boolean)}.
 	 */
 	public void removeComponent(Component comp);
 
