@@ -40,6 +40,12 @@ import org.zkoss.zk.ui.util.DeferredValue;
  * @author tomyeh
  */
 public class AuResponse {
+	/** ZK-Error (5501) indicating the request is out-of-sequence.
+	 * ZK-Error is returned as the response header of a failed AU request.
+	 * @since 5.0.4
+	 */
+	public static final int SC_OUT_OF_SEQUENCE = 5501;
+
 	protected String _cmd;
 	private final Object _depends;
 	/** Either String or DeferredValue. */

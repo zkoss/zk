@@ -42,6 +42,8 @@ public class HttpAuWriter implements AuWriter{
 	 */
 	private JSONObject _out;
 	private JSONArray _rs;
+	/** The result that shall be sent instead of _rs. */
+	private byte[] _result;
 	private boolean _compress = true;
 
 	public HttpAuWriter() {
@@ -74,64 +76,55 @@ public class HttpAuWriter implements AuWriter{
 		_out.put("rs", _rs = new JSONArray());
 		return this;
 	}
-	/** Closes the connection.
+	public void close(Object request, Object response) throws IOException {
+		flush(request, response, _compress);
+	}
+	public void resend(Object prevContent) throws IOException {
+		if (prevContent == null)
+			throw new IllegalArgumentException();
+		if (_result != null || !_rs.isEmpty())
+			throw new IllegalStateException(_rs.isEmpty() ? "resend twice or complete?": "write called");
+		_result = (byte[])prevContent;
+		_out = null;
+		_rs = null;
+	}
+
+	public Object complete() throws IOException {
+		if (_result != null)
+			throw new IllegalStateException();
+		_result = _out.toString().getBytes("UTF-8");
+		_out = null;
+		_rs = null;
+		return _result;
+	}
+	/** Flush the result of responses to client.
+	 * @param bCompress whether to compress (if allowed).
+	 * @since 5.0.4
 	 */
-	public Object close(Object request, Object response)
+	protected void flush(Object request, Object response, boolean bCompress)
 	throws IOException {
+		if (_result == null) {
+			_result = _out.toString().getBytes("UTF-8");
+			_out = null;
+			_rs = null;
+		}
+
 		final HttpServletRequest hreq = (HttpServletRequest)request;
 		final HttpServletResponse hres = (HttpServletResponse)response;
-
-		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] data = getResult().getBytes("UTF-8");
-		boolean compressed = false;
-		if (_compress && data.length > 200) {
-			byte[] bs = Https.gzip(hreq, hres, null, data);
-			if (compressed = (bs != null))
-				 data = bs; //yes, browser support compress
+		if (bCompress && _result.length > 200) {
+			final byte[] bs = Https.gzip(hreq, hres, null, _result);
+			if (bs != null)
+				 _result = bs; //yes, browser support compress
 		}
-		flush(hres, data);
-		return marshalResult(data, compressed);
-	}
-	private void flush(HttpServletResponse hres, byte[] data) throws IOException {
 		hres.setContentType(AuWriters.CONTENT_TYPE);
 			//we have to set content-type again. otherwise, tomcat might
 			//fail to preserve what is set in open()
-		hres.setContentLength(data.length);
-		hres.getOutputStream().write(data);
+		hres.setContentLength(_result.length);
+		hres.getOutputStream().write(_result);
+			//Use OutputStream due to Bug 1528592 (Jetty 6)
 		hres.flushBuffer();
 	}
-	public void resend(Object request, Object response, Object prevContent)
-	throws IOException {
-		if (_out != null)
-			throw new IllegalStateException("open not allowed");
-		if (prevContent == null)
-			throw new IllegalArgumentException();
 
-		final HttpServletResponse hres = (HttpServletResponse)response;
-		Object[] cnt = (Object[])prevContent;
-		if (((Boolean)cnt[1]).booleanValue())
-			hres.addHeader("Content-Encoding", "gzip");
-		flush(hres, (byte[])cnt[0]);
-	}
-
-	/** Returns the result of responses that will be sent to client
-	 * (never null).
-	 * It is called by {@link #close} to retrieve the output.
-	 * After invocation, the writer is reset.
-	 * @since 5.0.0
-	 */
-	protected String getResult() {
-		final String data = _out.toString();
-		_out = null;
-		_rs = null;
-		return data;
-	}
-	/** Makes the content that can be returned by {@link #close}
-	 * @since 5.0.4
-	 */
-	protected Object marshalResult(byte[] result, boolean compressed) {
-		return new Object[] {result, Boolean.valueOf(compressed)};
-	}
 	public void writeResponseId(int resId) throws IOException {
 		_out.put("rid", new Integer(resId));
 	}
