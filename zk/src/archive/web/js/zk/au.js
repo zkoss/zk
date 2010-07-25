@@ -143,7 +143,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 					var v;
 					if ((v = req.getResponseHeader("ZK-Error"))
-					&& !onError(req, v = zk.parseInt(v))
+					&& !onError(req, v = zk.parseInt(v)||v)
 					&& v == 5501 //Handle only ZK's SC_OUT_OF_SEQUENCE
 					&& zAu.confirmRetry("FAILED_TO_RESPONSE", "out of sequence")) {
 						ajaxReqResend(reqInf);
