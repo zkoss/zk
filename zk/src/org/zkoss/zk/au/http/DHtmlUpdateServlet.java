@@ -560,6 +560,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		try {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
 		} catch (RequestOutOfSequenceException ex) {
+			log.warning(ex.getMessage());
 			response.setHeader("ZK-SID", sid);
 			response.setIntHeader("ZK-Error", AuResponse.SC_OUT_OF_SEQUENCE);
 		}

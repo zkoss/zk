@@ -141,15 +141,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						return;
 					} //if sid null, always process (usually for error msg)
 
+					var v;
+					if ((v = req.getResponseHeader("ZK-Error"))
+					&& !onError(req, v = zk.parseInt(v))
+					&& v == 5501 //Handle only ZK's SC_OUT_OF_SEQUENCE
+					&& zAu.confirmRetry("FAILED_TO_RESPONSE", "out of sequence")) {
+						ajaxReqResend(reqInf);
+						return;
+					}
 					if (pushCmds(reqInf, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++seqId > 9999) seqId = 1;
 						ajaxReqTries = 0;
 						pendingReqInf = null;
 					}
-					var v;
-					if (v = req.getResponseHeader("ZK-Error"))
-						onError(req, v); //no need to the returned value
 				} else if ((!sid || sid == seqId) //ignore only if out-of-seq (note: 467 w/o sid)
 				&& !onError(req, _errCode = rstatus)) {
 					var eru = _errURIs['' + rstatus];
