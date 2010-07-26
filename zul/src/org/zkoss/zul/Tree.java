@@ -1480,7 +1480,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * Render the root of Tree
 	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
 	 */
-	private void renderTree(){
+	private void renderTree() {
 		if(_treechildren == null) {
 			Treechildren children = new Treechildren();
 			children.setParent(this);
@@ -1497,7 +1497,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		} finally {
 			renderer.doFinally();
 		}
-}
+		Events.postEvent("onAfterRender", this, null);// notify the tree when items have been rendered.
+	}
 	
 	/*
 	 * Renders the direct children for the specifed parent

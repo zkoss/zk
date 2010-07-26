@@ -2662,6 +2662,7 @@ public class Listbox extends XulElement implements Paginated,
 		} finally {
 			renderer.doFinally();
 		}
+		Events.postEvent("onAfterRender", this, null);// notify the listbox when items have been rendered. 
 	}
 
 	private void postOnInitRender() {

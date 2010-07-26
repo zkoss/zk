@@ -13,6 +13,7 @@ ZK 5.0.4
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
   3034530: The footer of components supports content alignment
+  3029931: Post onAfterRender after onInitRender/onInitRenderLater
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
