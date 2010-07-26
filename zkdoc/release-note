@@ -12,6 +12,7 @@ ZK 5.0.4
   3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
+  3034505: A listbox in poup, open it first-time, the position is wrong
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
