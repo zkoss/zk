@@ -35,6 +35,28 @@ zul.sel.Treefooter = zk.$extends(zul.LabelImageWidget, {
 		span: function (v) {
 			var n = this.$n();
 			if (n) n.colSpan = v;
+		},
+		/** Returns the horizontal alignment of this column.
+    	 * <p>Default: null (system default: left unless CSS specified).
+    	 * @return String
+    	 */
+    	/** Sets the horizontal alignment of this column.
+    	 * @param String align
+    	 */
+		align: function (v) {
+			var n = this.$n();
+			if (n) n.align = v;
+		},
+		/** Returns the vertical alignment of this grid.
+		 * <p>Default: null (system default: top).
+		 * @return String
+		 */
+		/** Sets the vertical alignment of this grid.
+		 * @param String valign
+		 */
+		valign: function (v) {
+			var n = this.$n();
+			if (n) n.vAlign = v;
 		}
 	},
 	/** Returns the tree that this belongs to.
@@ -59,11 +81,22 @@ zul.sel.Treefooter = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-treefooter" : this._zclass;
 	},
+	getAlignAttrs: function () {
+		return (this._align ? ' align="' + this._align + '"' : '')
+			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
+	},
 	//super
+	domStyle_: function (no) {
+		var style = '';
+		if (zk.ie8 && this._align)
+			style += 'text-align:' + this._align + ';';
+		
+		return style + this.$super('domStyle_', no);
+	},
 	domAttrs_: function () {
 		var attr = this.$supers('domAttrs_', arguments);
 		if (this._span > 1)
-			attr += ' colSpan="' + this._span + '"';
+			attr += ' colSpan="' + this._span + '"' + this.getAlignAttrs();
 		return attr;
 	}
 });

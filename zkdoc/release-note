@@ -12,7 +12,7 @@ ZK 5.0.4
   3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
-  3034505: A listbox in poup, open it first-time, the position is wrong
+  3034530: The footer of components supports content alignment
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -28,6 +28,7 @@ ZK 5.0.4
   3031562: hbox, vbox layout has error in ZK5.0.4
   3033010: Listbox with hflex listheader can expand but can not shrink
   3033016: Extra empty row when shrink fixed width Listbox
+  3034505: A listbox in poup, open it first-time, the position is wrong
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

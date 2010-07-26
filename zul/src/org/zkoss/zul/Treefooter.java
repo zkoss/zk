@@ -19,11 +19,9 @@ package org.zkoss.zul;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A column of the footer of a tree ({@link Tree}).
@@ -35,7 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * @author tomyeh
  */
-public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.Treefooter {
+public class Treefooter extends HeaderElement implements org.zkoss.zul.api.Treefooter {
 	private int _span = 1;
 
 	public Treefooter() {

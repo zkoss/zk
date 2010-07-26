@@ -34,6 +34,28 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 		span: function (v) {
 			var n = this.$n();
 			if (n) n.colSpan = v;
+		},
+		/** Returns the horizontal alignment of this column.
+    	 * <p>Default: null (system default: left unless CSS specified).
+    	 * @return String
+    	 */
+    	/** Sets the horizontal alignment of this column.
+    	 * @param String align
+    	 */
+		align: function (v) {
+			var n = this.$n();
+			if (n) n.align = v;
+		},
+		/** Returns the vertical alignment of this grid.
+		 * <p>Default: null (system default: top).
+		 * @return String
+		 */
+		/** Sets the vertical alignment of this grid.
+		 * @param String valign
+		 */
+		valign: function (v) {
+			var n = this.$n();
+			if (n) n.vAlign = v;
 		}
 	},
 	/** Returns the grid that this belongs to.
@@ -58,12 +80,25 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-footer" : this._zclass;
 	},
+	getAlignAttrs: function () {
+		return (this._align ? ' align="' + this._align + '"' : '')
+			+ (this._valign ? ' valign="' + this._valign + '"' : '') ;
+	},
 	//super
+	domStyle_: function (no) {
+		var style = '';
+		if (zk.ie8 && this._align)
+			style += 'text-align:' + this._align + ';';
+		
+		return style + this.$super('domStyle_', no);
+	},
 	domAttrs_: function () {
 		var head = this.getColumn(),
 			added;
 		if (head)
 			added = head.getColAttrs();
+		if (this._align || this._valign)
+			added = this.getAlignAttrs();
 		return this.$supers('domAttrs_', arguments)
 			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '')
 			+ (added ? ' ' + added : '');

@@ -21,7 +21,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A column of the footer of a list box ({@link Listbox}).
@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * @author tomyeh
  */
-public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.Listfooter {
+public class Listfooter extends HeaderElement implements org.zkoss.zul.api.Listfooter {
 	private int _span = 1;
 
 	public Listfooter() {
