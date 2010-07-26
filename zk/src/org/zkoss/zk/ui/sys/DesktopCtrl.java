@@ -78,9 +78,13 @@ public interface DesktopCtrl {
 	public void addComponent(Component comp);
 	/** Removes a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
-	 * explicityly.
+	 * explicitly.
+	 * @param recycleUuidAllowed whether it is OK to recycle UUID.
+	 * @return whether UUID is recycled. If true, the caller shall
+	 * reset UUID of the give component.
+	 * @since 5.0.4
 	 */
-	public void removeComponent(Component comp);
+	public boolean removeComponent(Component comp, boolean recycleUuidAllowed);
 
 	/** Adds a page to this desktop.
 	 * It must be called when a page is created.

@@ -310,7 +310,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

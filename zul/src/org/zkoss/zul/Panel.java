@@ -133,7 +133,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		return _floatable;
 	}
 	public boolean setVisible(boolean visible) {
-		if (visible == _visible)
+		if (visible == isVisible())
 			return visible;
 		_maximized = _minimized = false;
 		return setVisible0(visible);
@@ -682,7 +682,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
 			_maximized = evt.isMaximized();
-			if (_maximized) _visible = true;
+			if (_maximized) setVisibleDirectly(true);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_MINIMIZE)) {
 			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
@@ -691,7 +691,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
 			_minimized = evt.isMinimized();
-			if (_minimized) _visible = false;
+			if (_minimized) setVisibleDirectly(false);
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

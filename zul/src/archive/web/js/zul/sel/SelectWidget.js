@@ -312,7 +312,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.eheadtbl.offsetWidth !=
 			this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && (zk.ie8 || this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
+			if (tblwd && 
 			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
 					tblwd = 0;
@@ -463,8 +463,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 							this.ebodytbl.style.width = jq.px0(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
 					}
 				}
-				
-				var oh = this.ebody.offsetHeight,
+//bug# 3033016: Extra empty row when shrink fixed width Listbox
+//mark out				
+/*				var oh = this.ebody.offsetHeight,
 					ch = this.ebody.clientHeight;
 				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
 				//in Chrome/Safari, clientHeight can be less than zero
@@ -473,7 +474,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				// Bug #2805177, we have to check the clientWidth first.
 				if (ch && h > 11)
 					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
-			}
+*/			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
@@ -487,7 +488,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this.ebody.style.height = "";
 			}
 			
-			// bug #2799258
+			//bug# 3033016: Extra empty row when shrink fixed width Listbox
+			//mark out				
+/*			// bug #2799258
 			if (!hgh || hgh == "auto") {
 				var oh = this.ebody.offsetHeight,
 					ch = this.ebody.clientHeight;
@@ -499,7 +502,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (ch && hgh > 11)
 					this.ebody.style.height = oh + jq.scrollbarWidth() + "px";
 			}
-		}
+*/		}
 	},
 	/* Returns the real # of rows (aka., real size). */
 	_visibleRows: function (v) {

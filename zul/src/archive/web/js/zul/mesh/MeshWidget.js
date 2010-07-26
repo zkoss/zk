@@ -390,11 +390,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_onRender: function () {
 		this._pendOnRender = false;
-		if (this._syncingbodyrows) {
+		if (this._syncingbodyrows || zAu.processing()) { //wait if busy (it might run outer)
 			this.fireOnRender(zk.gecko ? 200 : 60); //is syncing rows, try it later
 			return true;
 		}
-		
+
 		var rows = this.ebodyrows;
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (this._fixPageSize(rows)) return; //need to reload with new page size
@@ -632,9 +632,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
-		for (var w = head.firstChild; w; w = w.nextSibling)
+		var allwidths = true;
+		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
+			if (allwidths && w._width === undefined && w._hflex === undefined)
+				allwidths = false;
+		}
+		//feature #3025419: flex column to compensate widget width and summation of column widths
+		if (!this.isSizedByContent())
+			out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th>'); 
 		out.push('</tr></tbody>');
 	},
 

@@ -85,11 +85,6 @@ public class ComponentsCtrl {
 		return sb.toString();
 	}
 
-	/** @deprecated As of release 5.0.3, replaced with {@link #isAutoUuid(String)}.
-	 */
-	public static final boolean isAutoId(String id) {
-		return isAutoUuid(id);
-	}
 	/** Returns whether an ID is generated automatically.
 	 * Note: true is returned if id is null.
 	 * Also notice that this method doesn't check if a custom ID generator
@@ -99,12 +94,6 @@ public class ComponentsCtrl {
 	public static final boolean isAutoUuid(String id) {
 		return id == null || (id.startsWith(AUTO_ID_PREFIX)
 			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
-	}
-	/** @deprecated As of release 5.0.2, replaced with {@link #isAutoUuid(String)}.
-	 * If you want to varify UUID, use {@link #checkUuid}.
-	 */
-	public static final boolean isUuid(String id) {
-		return isAutoUuid(id);
 	}
 
 	/** Checks if the given UUID is valid.

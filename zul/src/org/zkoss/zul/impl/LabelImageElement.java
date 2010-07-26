@@ -245,7 +245,7 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

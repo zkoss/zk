@@ -22,7 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	_dir: "normal",
-	_tabindex: -1,
+	//_tabindex: 0,
 
 	$define: {
 		/** Returns whether it is disabled.
@@ -84,7 +84,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n();
-			if (n) n.tabIndex = v < 0 ? '' : v;
+			if (n) n.tabIndex = v||'';
 		}
 	},
 

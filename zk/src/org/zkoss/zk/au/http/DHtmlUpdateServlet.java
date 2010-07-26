@@ -72,6 +72,7 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.au.RequestOutOfSequenceException;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
@@ -549,18 +550,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Execution exec = 
 			new ExecutionImpl(_ctx, request, response, desktop, null);
-		if (sid != null) {
+		if (sid != null)
 			((ExecutionCtrl)exec).setRequestId(sid);
-			Object prevc = desktopCtrl.getLastResponse(sid);
-			if (prevc != null) { //replicate request
-				if (log.debugable())
-					log.debug("replicate request\n"+Servlets.getDetail(request));
-
-				final AuWriter out = AuWriters.newInstance();
-				out.resend(request, response, prevc);
-				return;
-			}
-		}
 
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(_compress);
@@ -568,10 +559,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			desktop.getDevice().isSupported(Device.RESEND) ?
 				getProcessTimeout(config.getResendDelay()): 0);
 				//Note: getResendDelay() might return nonpositive
-		wappc.getUiEngine().execUpdate(exec, aureqs, out);
-
-		desktopCtrl.responseSent(sid,
-			out.close(request, response));
+		try {
+			wappc.getUiEngine().execUpdate(exec, aureqs, out);
+		} catch (RequestOutOfSequenceException ex) {
+			log.warning(ex.getMessage());
+			response.setHeader("ZK-SID", sid);
+			response.setIntHeader("ZK-Error", AuResponse.SC_OUT_OF_SEQUENCE);
+		}
+		out.close(request, response);
 	}
 
 	/** Returns the desktop of the specified ID, or null if not found.

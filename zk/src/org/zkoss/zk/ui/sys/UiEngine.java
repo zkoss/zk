@@ -101,9 +101,6 @@ public interface UiEngine {
 	 * Called when {@link Component#invalidate} is called.
 	 */
 	public void addInvalidate(Component comp);
-	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
-	 */
-	public void addSmartUpdate(Component comp, String attr, Object value);
 	/** Smart-updates a property of the peer widget.
 	 *
 	 * @param append whether to append the updates of properties with the same

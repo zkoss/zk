@@ -364,7 +364,7 @@ implements DynamicTag, Native {
 		}
 	}
 
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	protected class ExtraCtrl implements DirectContent, PrologAllowed {

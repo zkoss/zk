@@ -85,6 +85,33 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 		}
 	},
+	beforeChildrenFlex_: function (hwgt) { //HeaderWidget
+		if (hwgt && !hwgt._flexFixed) {
+			//bug #3033010
+			//clear associated hdfaker and bdfaker
+			var wgt = this.parent,
+				hdfaker = wgt.ehdfaker,
+				bdfaker = wgt.ebdfaker,
+				hdf = hdfaker ? hdfaker.firstChild : null,
+				bdf = bdfaker ? bdfaker.firstChild : null,
+				everFlex = false; 
+			for(var h = this.firstChild; h; h = h.nextSibling) {
+				if (h._nhflex > 0) { //not min or undefined
+					everFlex = true;
+					if (hdf) hdf.style.width = '';
+					if (bdf) bdf.style.width = '';
+				}
+				if (hdf) hdf = hdf.nextSibling;
+				if (bdf) bdf = bdf.nextSibling;
+			}
+			if (zk.ie && everFlex) { //ie6/7 will generate horizontal/vertical bar, has to set extra bdfaker to zero pixel(it works) 
+				if (hdf) hdf.style.width='0px';
+				if (bdf) bdf.style.width='0px';
+			}
+				
+		}
+		return true;
+	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
 		var wgt = this.parent;
 		if (wgt && !wgt.isSizedByContent())

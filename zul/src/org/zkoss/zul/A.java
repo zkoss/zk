@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	private String _dir = "normal";
 	private String _href, _target;
-	private int _tabindex = -1;
+	private int _tabindex;
 	private boolean _disabled;
 
 	static {
@@ -126,7 +126,7 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	}
 
 	/** Returns the tab order of this component.
-	 * <p>Default: -1 (means the same as browser's default).
+	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
 		return _tabindex;
@@ -151,7 +151,7 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_tabindex >= 0)
+		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 		if (!"normal".equals(_dir)) render(renderer, "dir", _dir);
 

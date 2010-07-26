@@ -592,20 +592,20 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		} else
 			super.service(request, everError);
 	}
-	/** Used by {@link #getExtraCtrl} to create a client control.
+	/** Returns the client control for this component.
 	 * It is used only by component developers.
 	 *
-	 * <p>Defaut: creates an instance of {@link HtmlBasedComponent.ExtraCtrl}.
+	 * <p>Default: creates an instance of {@link HtmlBasedComponent.ExtraCtrl}.
 	 */
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 *
 	 * <p>If a component requires more client controls, it is suggested to
-	 * override {@link #newExtraCtrl} to return an instance that extends from
-	 * this interface.
+	 * override {@link #getExtraCtrl} to return an instance that extends from
+	 * this class.
 	 */
 	protected class ExtraCtrl implements PrologAllowed {
 		//-- PrologAware --//

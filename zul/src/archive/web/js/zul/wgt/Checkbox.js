@@ -39,7 +39,7 @@ var Checkbox =
  * </ol>
  */
 zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
-	_tabindex: -1,
+	//_tabindex: 0,
 	_checked: false,
 
 	$define: {
@@ -98,7 +98,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n('real');
-			if (n) n.tabIndex = v >= 0 ? v: '';
+			if (n) n.tabIndex = v||'';
 		}
 	},
 
@@ -123,7 +123,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (this._checked)
 			html += ' checked="checked"';
 		v = this._tabindex;
-		if (v >= 0)
+		if (v)
 			html += ' tabindex="' + v + '"';
 		return html;
 	},

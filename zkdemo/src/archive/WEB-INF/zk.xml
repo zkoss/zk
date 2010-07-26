@@ -101,10 +101,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	 -->
 
 	<!-- Turn on if the processing time is longer than 9000 miliseconds.
-		http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Overview_The_client-config_Element#The_resend-delay_Element
+		Default: -1 (turned off)
+		http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element#The_resend-delay_Element
 	<client-config>
 		<resend-delay>9000</resend-delay>
-	<client-config>
+	</client-config>
 	-->
 	<!-- Turn on if you want to ignore the consecutive click events,
 	if it happens too close to the previous one, or the server is still

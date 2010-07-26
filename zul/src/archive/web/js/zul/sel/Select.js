@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.sel.Select = zk.$extends(zul.Widget, {
 	_selectedIndex: -1,
-	_tabindex: -1,
+	//_tabindex: 0,
 	_rows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -90,7 +90,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 */
 		tabindex: function (tabindex) {
 			var n = this.$n();
-			if (n) n.tabindex = tabindex >= 0 ? tabindex: '';
+			if (n) n.tabindex = tabindex||'';
 		},
 		/**
 		 * Returns the name of this component.
@@ -210,13 +210,14 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		}
 	},
 	domAttrs_: function () {
+		var v;
 		return this.$supers('domAttrs_', arguments)
 			+ (this.isDisabled() ? ' disabled="disabled"' :'')
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
-			+ (this.getSelectedIndex() > -1 ? ' selectedIndex=' + this.getSelectedIndex() : '')
-			+ (this.getTabindex() > -1 ? ' tabindex=' + this.getTabindex(): '')
-			+ (this.getRows() > 0 ? ' size=' + this.getRows(): '')
-			+ (this.getName() ? ' name="' + this.getName() + '"': '');
+			+ ((v=this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"': '')
+			+ ((v=this.getTabindex()) ? ' tabindex="' + v + '"': '')
+			+ ((v=this.getRows()) > 0 ? ' size="' + v + '"': '')
+			+ ((v=this.getName()) ? ' name="' + v + '"': '');
 	},
 	bind_: function () {
 		this.$supers(zul.sel.Select, 'bind_', arguments);

@@ -84,9 +84,16 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	getParentSize_: function (p) {
 		var wgt = this.getMeshWidget();
-		if (zk(wgt.ehead).isVisible()) 
-			return this.$supers('getParentSize_', arguments);
-		else {
+		if (zk(wgt.ehead).isVisible()) {
+			//bug# 3033010
+			//ie's header width shrink, so must get the one from hdfaker
+			var sz = this.$supers('getParentSize_', arguments);
+			if (zk.ie) {
+				var hdfaker = wgt.ehdfaker;
+				sz.width = zk(hdfaker).revisedWidth(hdfaker.offsetWidth);
+			}
+			return sz;
+		} else {
 			var xp = wgt.$n();
 			return {height: 0, width: zk(xp).revisedWidth(xp.offsetWidth)};
 		}

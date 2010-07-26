@@ -560,7 +560,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		s.defaultReadObject();
 		init();
 	}
-	protected List newChildren() {
+	public List getChildren() {
 		return new Children();
 	}
 	protected class Children extends AbstractComponent.Children {
@@ -584,7 +584,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	}
 	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

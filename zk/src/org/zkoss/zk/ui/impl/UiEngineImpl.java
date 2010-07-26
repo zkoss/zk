@@ -251,11 +251,6 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
-	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
-	 */
-	public void addSmartUpdate(Component comp, String attr, Object value) {
-		addSmartUpdate(comp, attr, value, false);
-	}
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		if (comp == null)
 			throw new IllegalArgumentException();
@@ -321,7 +316,7 @@ public class UiEngineImpl implements UiEngine {
 			uv = doReactivate(exec, olduv);
 			pfmeter = null; //don't count included pages
 		} else {
-			uv = doActivate(exec, false, false);
+			uv = doActivate(exec, false, false, null);
 		}
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
@@ -486,7 +481,7 @@ public class UiEngineImpl implements UiEngine {
 		final String pfReqId =
 			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
 
-		final UiVisualizer uv = doActivate(exec, false, false);
+		final UiVisualizer uv = doActivate(exec, false, false, null);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(page);
 		try {
@@ -908,7 +903,7 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final Session sess = desktop.getSession();
 
-		doActivate(exec, false, true); //it must not return null
+		doActivate(exec, false, true, null); //it must not return null
 		try {
 			failover.recover(sess, exec, desktop);
 		} finally {
@@ -918,7 +913,7 @@ public class UiEngineImpl implements UiEngine {
 
 	//-- Asynchronous updates --//
 	public void beginUpdate(Execution exec) {
-		final UiVisualizer uv = doActivate(exec, true, false);
+		final UiVisualizer uv = doActivate(exec, true, false, null);
 		final Desktop desktop = exec.getDesktop();
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
@@ -972,7 +967,13 @@ public class UiEngineImpl implements UiEngine {
 			meterAuClientComplete(pfmeter, exec);
 		}
 
-		final UiVisualizer uv = doActivate(exec, true, false);
+		final Object[] resultOfRepeat = new Object[1];
+		final UiVisualizer uv = doActivate(exec, true, false, resultOfRepeat);
+		if (resultOfRepeat[0] != null) {
+			out.resend(resultOfRepeat[0]);
+			doDeactivate(exec);
+			return;
+		}
 
 		final Monitor monitor = config.getMonitor();
 		if (monitor != null) {
@@ -998,13 +999,9 @@ public class UiEngineImpl implements UiEngine {
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List errs = new LinkedList();
-			final long tmexpired =
-				System.currentTimeMillis() + config.getMaxProcessTime();
-				//Tom Yeh: 20060120
-				//Don't process all requests if this thread has processed
-				//a while. Thus, user could see the response sooner.
-			for (AuRequest request; System.currentTimeMillis() < tmexpired
-			&& (request = rque.nextRequest()) != null;) {
+			//Process all; ignore getMaxProcessTime();
+			//we cannot handle them partially since UUID might be recycled
+			for (AuRequest request; (request = rque.nextRequest()) != null;) {
 				//Cycle 1: Process one request
 				//Don't process more such that requests will be queued
 				//and we have the chance to optimize them
@@ -1052,10 +1049,7 @@ public class UiEngineImpl implements UiEngine {
 				log.error(ex);
 			}
 
-			if (rque.isEmpty())
-				doneReqIds = rque.clearPerfRequestIds();
-			else
-				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
+			doneReqIds = rque.clearPerfRequestIds();
 
 			List prs = desktopCtrl.piggyResponse(null, true);
 			if (prs != null) responses.addAll(0, prs);
@@ -1070,6 +1064,10 @@ public class UiEngineImpl implements UiEngine {
 			cleaned = true;
 			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 			config.invokeExecutionCleanups(exec, null, errs);
+
+			final String seqId = ((ExecutionCtrl)exec).getRequestId();
+			if (seqId != null)
+				desktopCtrl.responseSent(seqId, out.complete());
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
@@ -1487,7 +1485,7 @@ public class UiEngineImpl implements UiEngine {
 	public void activate(Execution exec) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
-		doActivate(exec, false, false);
+		doActivate(exec, false, false, null);
 	}
 	public void deactivate(Execution exec) {
 		doDeactivate(exec);
@@ -1501,11 +1499,16 @@ public class UiEngineImpl implements UiEngine {
 	 * @param recovering whether it is in recovering, i.e.,
 	 * cause by {@link FailoverManager#recover}.
 	 * If true, the requests argument must be null.
+	 * @param resultOfRepeat a single element array to return a value, or null
+	 * if it is not called by execUpdate.
+	 * If a non-null value is assigned to the first element of the array,
+	 * it means it is a repeated request, and the caller shall return
+	 * the result directly without processing the request.
 	 * @return the visualizer once the execution is granted (never null).
 	 */
 	private static
 	UiVisualizer doActivate(Execution exec, boolean asyncupd,
-	boolean recovering) {
+	boolean recovering, Object[] resultOfRepeat) {
 		if (Executions.getCurrent() != null)
 			throw new IllegalStateException("Use doReactivate instead");
 		assert D.OFF || !recovering || !asyncupd; 
@@ -1516,6 +1519,8 @@ public class UiEngineImpl implements UiEngine {
 		final Session sess = desktop.getSession();
 		final ExecutionMonitor execmon = desktop.getWebApp()
 			.getConfiguration().getExecutionMonitor();
+		final String seqId =
+			resultOfRepeat != null ? ((ExecutionCtrl)exec).getRequestId(): null;
 //		if (log.finerable()) log.finer("Activating "+desktop);
 
 		//lock desktop
@@ -1526,8 +1531,16 @@ public class UiEngineImpl implements UiEngine {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
 
+				if (seqId != null) {
+					final String oldSeqId =
+						((ExecutionCtrl)old.getExecution()).getRequestId();
+					if (oldSeqId != null && !oldSeqId.equals(seqId))
+						throw new RequestOutOfSequenceException(seqId, oldSeqId);
+				}
+
 				if (execmon != null)
 					execmon.executionWait(exec, desktop);
+
 				try {
 					uvlock.wait(getRetryTimeout());
 				} catch (InterruptedException ex) {
@@ -1562,6 +1575,16 @@ public class UiEngineImpl implements UiEngine {
 				execmon.executionAbort(exec, desktop, ex);
 			throw UiException.Aide.wrap(ex);
 		}
+
+		if (seqId != null) {
+			if (log.debugable()) {
+				final Object req = exec.getNativeRequest();
+				log.debug("replicate request, SID: " + seqId
+					+(req instanceof ServletRequest ? "\n" + Servlets.getDetail((ServletRequest)req): ""));
+			}
+			resultOfRepeat[0] = desktopCtrl.getLastResponse(seqId);
+		}
+
 		if (execmon != null)
 			execmon.executionActivate(exec, desktop);
 		return uv;

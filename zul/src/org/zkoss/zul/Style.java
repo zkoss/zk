@@ -224,7 +224,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

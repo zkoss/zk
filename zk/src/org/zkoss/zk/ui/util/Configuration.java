@@ -1222,14 +1222,13 @@ public class Configuration {
 	}
 
 	/** Specifies the maximal allowed time to process events, in milliseconds.
-	 * ZK will keep processing the requests sent from
-	 * the client until all requests are processed, or the maximal allowed
-	 * time expires.
+	 * ZK will keep processing the requests until all requests are processed,
+	 * or the maximal allowed time expires.
 	 *
 	 * <p>Default: 3000.
 	 *
-	 * <p>Note: since 3.0.0, this setting has no effect on Ajax devices.
-	 * Ajax devices send the requests synchronously.
+	 * <p>Note: since 3.0.0, this setting has no effect on AU requests.
+	 * It controls only the requests from the client-polling server push.
 	 *
 	 * @param time the maximal allowed time to process events.
 	 * It must be positive.
@@ -1238,7 +1237,7 @@ public class Configuration {
 		_maxProcTime = time;
 	}
 	/** Returns the maximal allowed time to process events, in milliseconds.
-	 * It is always positive
+	 * It is always positive.
 	 */
 	public int getMaxProcessTime() {
 		return _maxProcTime;

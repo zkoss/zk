@@ -311,17 +311,6 @@ public class Components {
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 
-	/** @deprecated As of release 5.0.3, replaced with {@link ComponentsCtrl#isAutoUuid(String)}.
-	 * Returns whether an ID is generated automatically.
-	 * Note: true is returned if id is null.
-	 * Also notice that this method doesn't check if a custom ID generator
-	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
-	 * If so, this method is not applicable.
-	 */
-	public static final boolean isAutoId(String id) {
-		return ComponentsCtrl.isAutoUuid(id);
-	}
-
 	/** Converts a component to a path (relavant to another component).
 	 * It is usefully to implement a serializable component that contains
 	 * a reference to another component. In this case, we can not

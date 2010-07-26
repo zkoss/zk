@@ -52,30 +52,39 @@ public interface AuWriter {
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
 	 * @param response the response (HttpServletResponse if HTTP)
-	 * @return an object representing the whole content being
-	 * sent by this writer.
-	 * It is used to implement the resend-on-fail mechanism.
-	 * First, the return value is store, and the next request shall
-	 * invoke {@link #resend}
+	 */
+	public void close(Object request, Object response) throws IOException;
+
+	/** Indicates the writing has been completed.
+	 * Invokes this method before {@link #close},
+	 * if the caller supports the resend mechanism.
+	 * The caller usually stores the return value to a desktop by
+	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent}).
+	 * <p>Unlike {@link #close}, this method must be called
+	 * in an activated execution.
+	 * <p>Once this method is called, the caller shall not invoke
+	 * ay other write method. It shall invoke only {@link #close}
+	 * to end the writer.
 	 * @since 5.0.4
 	 */
-	public Object close(Object request, Object response)
-	throws IOException;
-
-	/** Resend the previous content returned
-	 * by {@link #close} for the previous writer.
-	 * <p>If {@link #resend} is called, {@link #open} and {@link #close}
-	 * shall not be called, and vice versa.
+	public Object complete() throws IOException;
+	/** Resend the content of the previous request returned by {@link #complete}.
+	 * <p>The content is usually stored to a desktop
+	 * by {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent},
+	 * and retrieved by {@link org.zkoss.zk.ui.sys.DesktopCtrl#getLastResponse}.
 	 *
-	 * @param request the request (HttpServletRequest if HTTP)
-	 * @param response the response (HttpServletResponse if HTTP)
+	 * <p>Once this method is called, the caller shall not invoke
+	 * ay other write method nor {@link #complete}.
+	 * It shall invoke only {@link #close} to end the writer.
+	 *
 	 * @param prevContent the previous content returned by
 	 * {@link #close} of the previous {@link AuWriter}.
 	 * @exception IllegalArgumentException if prevContent is null.
-	 * @exception IllegalStateException if open has been called
+	 * @exception IllegalStateException if any of write methods
+	 * (such as {@link #write}) is called.
+	 * @since 5.0.4
 	 */
-	public void resend(Object request, Object response, Object prevContent)
-	throws IOException;
+	public void resend(Object prevContent) throws IOException;
 
 	/** Generates the response ID to the output.
 	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#getResponseId

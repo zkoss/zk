@@ -164,7 +164,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
-	/** Used to recycle detached component's UUID. */
+	/** List<RecycleInfo>: used to recycle detached component's UUID. */
 	private transient List _uuidRecycle;
 
 	private transient ReqResult _lastRes;
@@ -468,28 +468,59 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			comp.getDefinition().getLanguageDefinition();
 		if (langdef != null && !_devType.equals(langdef.getDeviceType()))
 			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_devType);
-
-		final Object old = _comps.put(comp.getUuid(), comp);
-		if (old != comp && old != null) {
-			_comps.put(((Component)old).getUuid(), old); //recover
-			throw new InternalError("Caller shall prevent it: Register a component twice: "+comp);
-		}
-	}
-	public void removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) == null || recycleUuidDisabled())
-			return;
+		final Object old = _comps.put(uuid, comp);
+		if (old != comp && old != null) {
+			_comps.put(uuid, old); //recover
+			throw new InternalError("Caller shall prevent it: Register a component twice: "+comp);
+		}/* For performance reason, we don't check if a component is
+			detached and attached back (in another execution). Rather, reset
+			_uuid when it is recycled (refer to AbstractComponent.setPage0
+			(the caller of removeComponent has to reset)
+		 else if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
+			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
+				final List uuids = ((RecycleInfo)it.next()).uuids;
+				if (uuids.remove(uuid)) {
+					if (uuids.isEmpty())
+						it.remove();
+					break;
+				}
+			}
+		}*/
+	}
+	public boolean removeComponent(Component comp, boolean recycleAllowed) {
+		final String uuid = comp.getUuid();
+		if (!recycleAllowed || _comps.remove(uuid) == null || recycleUuidDisabled())
+			return false;
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
 		//Note: we don't check IdGenerator.isAutoUuid since it returns false if not implemented
 		if (comp instanceof RawId &&
 		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
-			return;
+			return false;
 
-		if (_uuidRecycle == null)
+		final int execId = getExecId();
+		RecycleInfo ri = null;
+		if (_uuidRecycle == null) {
 			_uuidRecycle = new LinkedList();
-		_uuidRecycle.add(uuid);
+		} else {
+			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
+				final RecycleInfo r = (RecycleInfo)it.next();
+				if (r.execId == execId) {
+					ri = r; //found
+					break;
+				}
+			}
+		}
+		if (ri == null)
+			_uuidRecycle.add(ri = new RecycleInfo(execId));
+		ri.uuids.add(uuid);
+		return true;
+	}
+	private static int getExecId() {
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? System.identityHashCode(exec): 0;
 	}
 	private static boolean recycleUuidDisabled() {
 		if (_recycleUuidDisabled == null)
@@ -675,8 +706,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public String getNextUuid(Component comp) {
 		//The reason to recycle UUID is to keep it short (since _nextUuid won't grow too fast)
 		//Thus, it takes fewer memory at the client
-		if (_uuidRecycle != null && !_uuidRecycle.isEmpty())
-			return (String)_uuidRecycle.remove(0);
+		if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
+			final int execId = getExecId();
+			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
+				final RecycleInfo ri = (RecycleInfo)it.next();
+				if (ri.execId != execId) { //reuse if diff
+					final String uuid = (String)ri.uuids.remove(0);
+					if (ri.uuids.isEmpty())
+						it.remove();
+					return uuid;
+				}
+			}
+		}
 
 		final IdGenerator idgen = ((WebAppCtrl)_wapp).getIdGenerator();
 		String uuid = idgen != null ? idgen.nextComponentUuid(this, comp): null;
@@ -719,7 +760,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			removeComponents(comp.getChildren()); //recursive
-			removeComponent(comp);
+			removeComponent(comp, true);
 		}
 	}
 
@@ -1348,6 +1389,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		private ReqResult(String id, Object response) {
 			this.id = id;
 			this.response = response;
+		}
+	}
+	private static class RecycleInfo implements java.io.Serializable {
+		private final int execId;
+		private final List uuids = new LinkedList();
+		private RecycleInfo(int execId) {
+			this.execId = execId;
+		}
+		public String toString() {
+			return '[' + execId + ": " + uuids + ']';
 		}
 	}
 }

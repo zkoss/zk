@@ -113,11 +113,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String _id = "";
 	private String _uuid;
 	private transient ComponentDefinition _def;
-	/** The extra controls. */
-	private transient Object _xtrl;
 
-	/** The list used for {@link #getChildren} only. */
-	private transient List _apiChildren;
 	private transient AbstractComponent _parent;
 	/** The next sibling. */
 	/*package*/ transient AbstractComponent _next;
@@ -127,10 +123,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient ChildInfo _chdinf;
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
-	/** Whether this component is visible.
-	 * @since 3.5.0 (becomes protected)
-	 */
-	protected boolean _visible = true;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -214,14 +206,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/**
 	 * Creates and returns the instance for storing child components.
 	 * <p>Default: it instantiates {@link AbstractComponent.Children}.
+	 * @deprecated As of release 5.0.4, override {@link #getChildren} instead.
 	 * @since 3.5.1
 	 */
 	protected List newChildren() {
 		return new Children();
 	}
-	/** The default implementation for {@link #newChildren}.
+	/** The default implementation for {@link #getChildren}.
 	 * It is suggested to extend this class if you want to override
-	 * {@link #newChildren} to instantiate your own instance.
+	 * {@link #getChildren} to instantiate your own instance.
 	 * @since 3.5.1
 	 */
 	protected class Children extends AbstractSequentialList {
@@ -526,9 +519,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final boolean bRoot = _parent == null;
 		if (_page != null) {
 			if (bRoot) ((AbstractPage)_page).removeRoot(this);
-			if (page == null) {
-				((DesktopCtrl)_page.getDesktop()).removeComponent(this);
-			}
+			if (page == null
+			&& ((DesktopCtrl)_page.getDesktop()).removeComponent(this, true))
+				_uuid = null; //recycled (so reset it -- refer to DesktopImpl for reason)
 		}
 
 		final Page oldpage = _page;
@@ -591,7 +584,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_page != null) {
 						//called before uuid is changed
 					final Desktop dt = _page.getDesktop();
-					((DesktopCtrl)dt).removeComponent(this);
+					((DesktopCtrl)dt).removeComponent(this, false);
 
 					if (newUuid.length() == 0)
 						newUuid = nextUuid(dt);
@@ -1202,10 +1195,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected boolean isChildable() {
 		return true;
 	}
+	/** Returns a live list of children.
+	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
+	 * <p>Default: instantiates and returns an instance of {@link Children}.
+	 */
 	public List getChildren() {
-		if (_apiChildren == null)
-			_apiChildren = newChildren();
-		return _apiChildren;
+		return newChildren(); //backward compatible: don't new Children() directly
 	}
 	/** Returns the root of the specified component.
 	 */
@@ -1220,15 +1215,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 
 	public boolean isVisible() {
-		return _visible;
+		return _auxinf == null || _auxinf.visible;
 	}
 	public boolean setVisible(boolean visible) {
-		final boolean old = _visible;
+		final boolean old = _auxinf == null || _auxinf.visible;
 		if (old != visible) {
-			_visible = visible;
-			smartUpdate("visible", _visible);
+			initAuxInfo().visible = visible;
+			smartUpdate("visible", _auxinf.visible);
 		}
 		return old;
+	}
+	/** Changes the visibility directly without sending any update to the client.
+	 * It is the caller's responsibility to maintain the consistency.
+	 * It is rarely called. In most cases, you shall use {@link #setVisible} instead.
+	 * @since 5.0.4
+	 */
+	protected void setVisibleDirectly(boolean visible) {
+		initAuxInfo().visible = visible;
 	}
 
 	public boolean isInvalidated() {
@@ -1558,7 +1561,7 @@ w:use="foo.MyWindow"&gt;
 	public void setMold(String mold) {
 		if (mold != null && (DEFAULT.equals(mold) || mold.length() == 0))
 			mold = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.mold: mold, mold)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.mold: DEFAULT, mold)) {
 			if (!_def.hasMold(mold != null ? mold: DEFAULT))
 				throw new UiException("Unknown mold: "+mold+"; allowed: "+_def.getMoldNames());
 			final String oldtype = getWidgetClass();
@@ -1699,7 +1702,8 @@ w:use="foo.MyWindow"&gt;
 	protected void renderProperties(ContentRenderer renderer)
 	throws IOException {
 		render(renderer, "id", _id);
-		if (!_visible) renderer.render("visible", false);
+		if (_auxinf != null && !_auxinf.visible) //don't call isVisible since it might be overriden (backward compatible)
+			renderer.render("visible", false);
 		render(renderer, "autag", getAutag());
 
 		Boolean shallHandleImportant = null;
@@ -2271,23 +2275,17 @@ w:use="foo.MyWindow"&gt;
 	 * specially.
 	 * It is used only by component developers.
 	 *
-	 * <p>It is simpler to override {@link #newExtraCtrl} instead of this.
-	 * By use of {@link #newExtraCtrl}, you don't need to care of
-	 * cloning and serialization.
-	 *
-	 * <p>Default: return the object being created by {@link #newExtraCtrl},
-	 * if any.
+	 * <p>Default: null.
 	 *
 	 * @see ComponentCtrl#getExtraCtrl
 	 */
 	public Object getExtraCtrl() {
-		if (_xtrl == null)
-			_xtrl = newExtraCtrl();
-				//3.0.3: create as late as possible so component has a chance
-				//to customize which object to instantiate
-		return _xtrl;
+		return newExtraCtrl(); //backward compatible; don't return null directly
+			//3.0.3: create as late as possible so component has a chance
+			//to customize which object to instantiate
 	}
-	/** Used by {@link #getExtraCtrl} to create extra controls.
+	/**
+	 * Used by {@link #getExtraCtrl} to create extra controls.
 	 * It is used only by component developers.
 	 *
 	 * <p>Default: return null.
@@ -2296,6 +2294,7 @@ w:use="foo.MyWindow"&gt;
 	 * instead of {@link #getExtraCtrl}.
 	 * By use of {@link #newExtraCtrl}, you don't need to care of
 	 * cloning and serialization.
+	 * @deprecated As of release 5.0.4, override {@link #getExtraCtrl} instead.
 	 */
 	protected Object newExtraCtrl() {
 		return null;
@@ -2506,7 +2505,6 @@ w:use="foo.MyWindow"&gt;
 		//1. make it not belonging to any page
 		clone._page = null;
 		clone._parent = null;
-		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//2. clone AuxInfo
 		if (_auxinf != null)
@@ -2522,7 +2520,6 @@ w:use="foo.MyWindow"&gt;
 				if (p._auxinf != null && p._auxinf.attrs != null)
 					p._auxinf.attrs.notifyParentChanged(clone);
 		}
-		clone._apiChildren = null;
 
 		//4. init AuxInfo
 		if (_auxinf != null)
@@ -2868,6 +2865,9 @@ w:use="foo.MyWindow"&gt;
 		private transient boolean annotsShared;
 		/** Whether evthds is shared with other components. */
 		private transient boolean evthdsShared;
+		/** Whether this component is visible.
+		 */
+		private boolean visible = true;
 
 		public Object clone() {
 			final AuxInfo clone;
