@@ -45,12 +45,13 @@ import org.zkoss.zul.impl.Utils;
  *
  * <p>Default {@link #getZclass}: z-combobox.(since 3.5.0)
  *
- * <p>Events: onOpen, onSelect<br/>
+ * <p>Events: onOpen, onSelect, onAfterRender<br/>
  * Developers can listen to the onOpen event and initializes it
  * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
- * clean up if false.
+ * clean up if false.<br/>
+ * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
  *
- * * <p>Besides assign a list model, you could assign a renderer
+ * <p>Besides assign a list model, you could assign a renderer
  * (a {@link ComboitemRenderer} instance) to a combobox, such that
  * the combobox will use this renderer to render the data returned by 
  * {@link ListModel#getElementAt}.
@@ -272,7 +273,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			renderer.doFinally();
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
-		Events.postEvent("onAfterRender", this, null);// notify the combobox when items have been rendered. 
+		Events.postEvent(Events.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
 	}
 	
 	private void postOnInitRender(String idx) {

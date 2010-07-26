@@ -224,6 +224,12 @@ public class Events {
 	 * @since 5.0.2
 	 */
 	public static final String ON_DESKTOP_RECYCLE = "onDesktopRecycle";
+	
+	/**The onAfterRender event
+	 * It will notify the component (with a setModel method) when the model's data has been rendered
+	 * @since 5.0.4
+	 */
+	public static final String ON_AFTER_RENDER = "onAfterRender";
 
 	/** Returns whether an event name is valid.
 	 *

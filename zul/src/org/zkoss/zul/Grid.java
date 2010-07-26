@@ -61,6 +61,9 @@ import org.zkoss.zul.impl.XulElement;
  * Both the rows and columns are displayed at once although only one will
  * typically contain content, while the other may provide size information.
  *
+ * <p>Events: onAfterRender<br/>
+ * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
+ * 
  * <p>Besides creating {@link Row} programmingly, you can assign
  * a data model (a {@link ListModel} or {@link GroupsModel} instance) to a grid via
  * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)}
@@ -911,7 +914,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onAfterRender", this, null);// notify the grid when all of the row have been rendered. 
+		Events.postEvent(Events.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 
 	}
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice

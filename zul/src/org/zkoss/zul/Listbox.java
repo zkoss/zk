@@ -65,8 +65,9 @@ import org.zkoss.zul.impl.XulElement;
  * <p>
  * Event:
  * <ol>
- * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes the
+ * <li>{@link org.zkoss.zk.ui.event.SelectEvent} is sent when user changes the
  * selection.</li>
+ * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
  * </ol>
  * 
  * <p>
@@ -2662,7 +2663,7 @@ public class Listbox extends XulElement implements Paginated,
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onAfterRender", this, null);// notify the listbox when items have been rendered. 
+		Events.postEvent(Events.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered. 
 	}
 
 	private void postOnInitRender() {
