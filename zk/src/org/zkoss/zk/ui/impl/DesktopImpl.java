@@ -763,7 +763,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			removeComponents(comp.getChildren()); //recursive
-			removeComponent(comp);
+			removeComponent(comp, true);
 		}
 	}
 
