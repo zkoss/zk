@@ -2277,8 +2277,9 @@ out.push('</div>');
 			if (s) out.push(s);
 
 			for (var p = this, mold = this._mold; p; p = p.superclass) {
-				var f = p.$class.molds[mold];
-				if (f) return f.apply(this, arguments);
+				var f = p.$class.molds;
+				if (f && (f = f[mold]))
+					return f.apply(this, arguments);
 			}
 			throw "mold "+mold+" not found in "+this.className;
 		}
