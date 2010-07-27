@@ -34,7 +34,6 @@ import org.zkoss.zul.impl.HeaderElement;
  * @author tomyeh
  */
 public class Footer  extends FooterElement implements org.zkoss.zul.api.Footer {
-	private int _span = 1;
 
 	public Footer() {
 	}
@@ -91,22 +90,6 @@ public class Footer  extends FooterElement implements org.zkoss.zul.api.Footer {
 		return getColumn();
 	}
 	
-	/** Returns number of columns to span this footer.
-	 * Default: 1.
-	 */
-	public int getSpan() {
-		return _span;
-	}
-	/** Sets the number of columns to span this footer.
-	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 */
-	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("span", _span);
-		}
-	}
-
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-footer" : _zclass;
@@ -116,10 +99,6 @@ public class Footer  extends FooterElement implements org.zkoss.zul.api.Footer {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (_span > 1)
-			renderer.render("span", _span);
-
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	

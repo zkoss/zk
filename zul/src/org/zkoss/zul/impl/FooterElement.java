@@ -19,19 +19,17 @@ import org.zkoss.lang.Objects;
 /**
  * A skeletal implementation for a footer.
  * @author jimmy
+ * @since 5.0.4
  */
 abstract public class FooterElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
+	private int _span = 1;
 	private String _align, _valign;
 
 	protected FooterElement() {
 	}
-	/** @since 5.0.4
-	 */
 	protected FooterElement(String label) {
 		super(label);
 	}
-	/** @since 5.0.4
-	 */
 	protected FooterElement(String label, String image) {
 		super(label, image);
 	}
@@ -64,6 +62,21 @@ abstract public class FooterElement extends LabelImageElement implements org.zko
 			smartUpdate("valign", _valign);
 		}
 	}
+	/** Returns number of columns to span this footer.
+	 * Default: 1.
+	 */
+	public int getSpan() {
+		return _span;
+	}
+	/** Sets the number of columns to span this footer.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 */
+	public void setSpan(int span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("span", _span);
+		}
+	}
 	void setWidthByClient(String width) {
 		setWidthDirectly(width);
 	}
@@ -73,6 +86,8 @@ abstract public class FooterElement extends LabelImageElement implements org.zko
 		super.renderProperties(renderer);
 		render(renderer, "valign", _valign);
 		render(renderer, "align", _align);
+		if (_span > 1)
+			renderer.render("span", _span);
 	}
 }
 

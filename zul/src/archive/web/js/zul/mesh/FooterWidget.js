@@ -68,7 +68,7 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 	getHeaderWidget: function () {
 		var meshWidget = this.getMeshWidget();
 		if (meshWidget) {
-			var cs = meshWidget.head;
+			var cs = meshWidget.getHeadWidget();
 			if (cs)
 				return cs.getChildAt(this.getChildIndex());
 		}

@@ -196,6 +196,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
+	/**
+	 * Returns the self's head widget.
+	 * @return zul.mesh.HeadWidget
+	 */
+	getHeadWidget: function () {
+		return this.head;
+	},
+
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 		if (this.isVflex()) {

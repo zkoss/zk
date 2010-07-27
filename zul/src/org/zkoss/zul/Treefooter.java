@@ -35,7 +35,6 @@ import org.zkoss.zul.impl.HeaderElement;
  * @author tomyeh
  */
 public class Treefooter extends FooterElement implements org.zkoss.zul.api.Treefooter {
-	private int _span = 1;
 
 	public Treefooter() {
 	}
@@ -92,30 +91,10 @@ public class Treefooter extends FooterElement implements org.zkoss.zul.api.Treef
 		return getTreecol();
 	}
 
-	/** Returns number of columns to span this footer.
-	 * Default: 1.
-	 */
-	public int getSpan() {
-		return _span;
-	}
-	/** Sets the number of columns to span this footer.
-	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 */
-	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("span", _span);
-		}
-	}
-
 	//-- super --//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (_span > 1)
-			renderer.render("span", _span);
-
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 	
