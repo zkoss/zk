@@ -35,13 +35,10 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * @author tomyeh
  */
 abstract public class LabelImageElement extends LabelElement implements org.zkoss.zul.impl.api.LabelImageElement{
-	private String _src;
-	/** The image. _src and _image cannot be both non-null. */
-	private Image _image;
-	/** The hover image's src. */
-	private String _hoversrc;
-	/** The hover image. */
-	private Image _hoverimg;
+	/** The image; either String or Image. */
+	private Object _image;
+	/** The hover image; either String or Image. */
+	private Object _hoverimg;
 	/** Count the version of {@link #_image}. */
 	private byte _imgver;
 	/** Count the version of {@link #_hoverimg}. */
@@ -65,7 +62,7 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * <p>Default: null.
 	 */
 	public String getImage() {
-		return _src;
+		return _image instanceof String ? (String)_image: null;
 	}
 	/** Sets the image URI.
 	 * <p>Calling this method implies setImageContent(null).
@@ -76,9 +73,8 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 */
 	public void setImage(String src) {
 		if (src != null && src.length() == 0) src = null;
-		if (_image != null || !Objects.equals(_src, src)) {
-			_src = src;
-			_image = null;
+		if (_image instanceof Image || !Objects.equals(_image, src)) {
+			_image = src;
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
@@ -105,9 +101,8 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * @see #setImage
 	 */
 	public void setImageContent(Image image) {
-		if (_src != null || image != _image) {
+		if (_image instanceof String || image != _image) {
 			_image = image;
-			_src = null;
 			if (_image != null) _imgver++; //enforce browser to reload image
 			smartUpdate("image", new EncodedImageURL());
 		}
@@ -137,7 +132,7 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * Actually, it returns null if {@link #setImage} was called.
 	 */
 	public Image getImageContent() {
-		return _image;
+		return _image instanceof Image ? (Image)_image: null;
 	}
 
 	/** Returns the URI of the hover image.
@@ -146,7 +141,7 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * @since 3.5.0
 	 */
 	public String getHoverImage() {
-		return _hoversrc;
+		return _hoverimg instanceof String ? (String)_hoverimg: null;
 	}
 	/** Sets the image URI.
 	 * The hover image is used when the mouse is moving over this component.
@@ -157,9 +152,8 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 */
 	public void setHoverImage(String src) {
 		if (src != null && src.length() == 0) src = null;
-		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
-			_hoversrc = src;
-			_hoverimg = null;
+		if (_hoverimg instanceof Image || !Objects.equals(_hoverimg, src)) {
+			_hoverimg = src;
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
@@ -174,9 +168,8 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image) {
-		if (_hoversrc != null || image != _hoverimg) {
+		if (_hoverimg instanceof String || image != _hoverimg) {
 			_hoverimg = image;
-			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
@@ -205,7 +198,7 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * {@link #setImageContent(org.zkoss.image.Image)} is called with non-null.
 	 */
 	public boolean isImageAssigned() {
-		return _src != null || _image != null;
+		return _image != null;
 	}
 	/** Returns the encoded URL for the image ({@link #getImage}
 	 * or {@link #getImageContent}), or null if no image.
@@ -213,26 +206,27 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 	 * <p>Note: this method can be invoked only if execution is not null.
 	 */
 	private String getEncodedImageURL() {
-		if (_image != null)
+		if (_image instanceof Image)
 			return Utils.getDynamicMediaURI( //already encoded
-				this, _imgver, "c/" + _image.getName(), _image.getFormat());
+				this, _imgver,
+				"c/" + ((Image)_image).getName(), ((Image)_image).getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _src != null ?
-			dt.getExecution().encodeURL(_src): null;
+		return dt != null && _image != null ?
+			dt.getExecution().encodeURL((String)_image): null;
 	}
 	/** Returns the encoded URL for the hover image or null if not
 	 * available.
 	 */
 	private String getEncodedHoverURL() {
-		if (_hoverimg != null)
+		if (_hoverimg instanceof Image)
 			return Utils.getDynamicMediaURI(
 				this, _hoverimgver,
-				"h/" + _hoverimg.getName(), _hoverimg.getFormat());
+				"h/" + ((Image)_hoverimg).getName(), ((Image)_hoverimg).getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _hoversrc != null ?
-			dt.getExecution().encodeURL(_hoversrc): null;
+		return dt != null && _hoverimg != null ?
+			dt.getExecution().encodeURL((String)_hoverimg): null;
 	}
 
 	//super//
@@ -260,10 +254,10 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 				if (j >= 0) {
 					int k = pathInfo.indexOf('/', ++j);
 					if (k == j + 1 && pathInfo.charAt(j) == 'h')
-						return _hoverimg;
+						return (Image)_hoverimg;
 				}
 			}
-			return _image;
+			return (Image)_image;
 		}
 	}
 	private class EncodedImageURL implements org.zkoss.zk.ui.util.DeferredValue {

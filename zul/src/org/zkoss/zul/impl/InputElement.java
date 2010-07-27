@@ -63,21 +63,11 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	protected Object _value;
 	/** Used to disable sending back the value */
 	private transient String _txtByClient;
-	/** The error message. Not null if users entered a wrong data (and
-	 * not correct it yet).
-	 */
-	private String _errmsg;
-	/** The name. */
-	private String _name;
-	private int _maxlength, _cols;
-	private int _tabindex = 0;
-	private Constraint _constr;
+	private int _cols;
+	private AuxInfo _auxinf;
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
 	private boolean _valided;
-	/** Whether the validation is calused by {@link #isValid}. */
-	private transient boolean _checkOnly;
-	
 	private boolean _inplace;
 
 	/**
@@ -140,7 +130,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * with other kind of clients.
 	 */
 	public String getName() {
-		return _name;
+		return _auxinf != null ? _auxinf.name: null;
 	}
 	/** Sets the name of this component.
 	 * <p>Don't use this method if your application is purely based
@@ -154,9 +144,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	public void setName(String name) {
 		if (name != null && name.length() == 0) name = null;
-		if (!Objects.equals(_name, name)) {
-			_name = name;
-			smartUpdate("name", _name);
+		if (!Objects.equals(_auxinf != null ? _auxinf.name: null, name)) {
+			initAuxInfo().name = name;
+			smartUpdate("name", getName());
 		}
 	}
 
@@ -174,7 +164,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 */
 	public String getErrorMessage() {
-		return _errmsg;
+		return _auxinf != null ? _auxinf.errmsg: null;
 	}
 	/** Clears the error message.
 	 *
@@ -205,8 +195,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @since 3.0.1
 	 */
 	public void clearErrorMessage(boolean revalidateRequired) {
-		if (_errmsg != null) {
-			_errmsg = null;
+		if (_auxinf != null && _auxinf.errmsg != null) {
+			_auxinf.errmsg = null;
 			Clients.clearWrongValue(this);
 		}
 		_valided = !revalidateRequired;
@@ -254,17 +244,17 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @param value the value; If null, it is considered as empty.
 	 */
 	public void setText(String value) throws WrongValueException {
-		if (_maxlength > 0 && value != null && value.length() > _maxlength)
+		if (_auxinf != null && _auxinf.maxlength > 0 && value != null && value.length() > _auxinf.maxlength)
 			throw showCustomError(
-				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_maxlength)));
+				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
 
 		final Object val = coerceFromString(value);
 		final boolean same = Objects.equals(_value, val);
 		boolean errFound = false;
-		if (!same || !_valided || _errmsg != null) { //note: the first time (!_valided) must always validate
+		if (!same || !_valided || (_auxinf != null && _auxinf.errmsg != null)) { //note: the first time (!_valided) must always validate
 			validate(val); //Bug 2946917: don't validate if not changed
 
-			errFound = _errmsg != null;
+			errFound = _auxinf != null && _auxinf.errmsg != null;
 			clearErrorMessage(); //no error at all
 		}
 
@@ -326,12 +316,12 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	protected void validate(Object value) throws WrongValueException {
 		final Constraint constr = getConstraint();
-		if (constr != null) {
+		if (constr != null) { //then _auxinf must be non-null
 			//Bug 1698190: contructor might be zscript
 			Scopes.beforeInterpret(this);
 			try {
 				constr.validate(this, value);
-				if (!_checkOnly && (constr instanceof CustomConstraint)) {
+				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint)) {
 					try {
 						((CustomConstraint)constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
@@ -340,7 +330,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 					}
 				}
 			} catch (WrongValueException ex) {
-				if (!_checkOnly && (constr instanceof CustomConstraint))
+				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint))
 					((CustomConstraint)constr).showCustomError(this, ex);
 				throw ex;
 			} finally {
@@ -360,10 +350,10 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @return the exception (ex)
 	 */
 	protected WrongValueException showCustomError(WrongValueException ex) {
-		if (_constr instanceof CustomConstraint) {
+		if (_auxinf != null && _auxinf.constr instanceof CustomConstraint) {
 			Scopes.beforeInterpret(this);
 			try {
-				((CustomConstraint)_constr).showCustomError(this, ex);
+				((CustomConstraint)_auxinf.constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.realCause(t); //and ignore it
 			} finally {
@@ -377,14 +367,14 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * <p>Default: 0 (non-postive means unlimited).
 	 */
 	public int getMaxlength() {
-		return _maxlength;
+		return _auxinf != null ? _auxinf.maxlength: 0;
 	}
 	/** Sets the maxlength.
 	 */
 	public void setMaxlength(int maxlength) {
-		if (_maxlength != maxlength) {
-			_maxlength = maxlength;
-			smartUpdate("maxlength", maxlength);
+		if ((_auxinf != null ? _auxinf.maxlength: 0) != maxlength) {
+			initAuxInfo().maxlength = maxlength;
+			smartUpdate("maxlength", getMaxlength());
 		}
 	}
 	/** Returns the cols.
@@ -408,15 +398,14 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
-		return _tabindex;
+		return _auxinf != null ? _auxinf.tabindex: 0;
 	}
 	/** Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
-		if (_tabindex != tabindex) {
-			_tabindex = tabindex;
-			if (tabindex == 0) smartUpdate("tabindex", (Object)null);
-			else smartUpdate("tabindex", _tabindex);
+		if ((_auxinf != null ? _auxinf.tabindex: 0) != tabindex) {
+			initAuxInfo().tabindex = tabindex;
+			smartUpdate("tabindex", getTabindex());
 		}
 	}
 	/** Returns whether it is multiline.
@@ -443,16 +432,16 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		setConstraint(constr != null ? SimpleConstraint.getInstance(constr): null); //Bug 2564298
 	}
 	public void setConstraint(Constraint constr) {
-		if (!Objects.equals(_constr, constr)) {
-			_constr = constr;
+		if (!Objects.equals(_auxinf != null ? _auxinf.constr: null, constr)) {
+			initAuxInfo().constr = constr;
 			_valided = false;
 
 			boolean constrDone = false;
-			if (_constr instanceof CustomConstraint) { //client ignored if custom
+			if (_auxinf.constr instanceof CustomConstraint) { //client ignored if custom
 				smartUpdate("constraint", "[c"); //implies validated at server
 				return;
-			} else if (_constr instanceof ClientConstraint) {
-				final ClientConstraint cc = (ClientConstraint)_constr;
+			} else if (_auxinf.constr instanceof ClientConstraint) {
+				final ClientConstraint cc = (ClientConstraint)_auxinf.constr;
 				try {
 					final String cpkg = cc.getClientPackages();
 					if (cpkg != null)
@@ -473,11 +462,11 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 					log.warning("Ignore incompatible constraint: "+cc);
 				}
 			}
-			smartUpdate("constraint", _constr != null ? "[s": null);
+			smartUpdate("constraint", _auxinf.constr != null ? "[s": null);
 		}
 	}
 	public Constraint getConstraint() {
-		return _constr;
+		return _auxinf != null ? _auxinf.constr: null;
 	}
 
 	/** Returns the value in the targeting type.
@@ -545,7 +534,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @see #getRawValue
 	 */
 	public void setRawValue(Object value) {
-		if (_errmsg != null || !Objects.equals(_value, value)) {
+		if ((_auxinf != null && _auxinf.errmsg != null)
+		|| !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
 			smartUpdate("value", coerceToString(_value));
@@ -570,17 +560,17 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * throws WrongValueException.
 	 */
 	public boolean isValid() {
-		if (_errmsg != null)
+		if (_auxinf != null && _auxinf.errmsg != null)
 			return false;
 
-		if (!_valided && _constr != null) {
-			_checkOnly = true;
+		if (!_valided && _auxinf != null && _auxinf.constr != null) {
+			_auxinf.checkOnly = true;
 			try {
 				validate(_value);
 			} catch (Throwable ex) {
 				return false;
 			} finally {
-				_checkOnly = false;
+				_auxinf.checkOnly = false;
 			}
 		}
 		return true;
@@ -643,13 +633,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * {@link #getText} and {@link #getTargetValue}.
 	 */
 	protected void checkUserError() throws WrongValueException {
-		if (_errmsg != null)
-			throw showCustomError(new WrongValueException(this, _errmsg));
+		if (_auxinf != null && _auxinf.errmsg != null)
+			throw showCustomError(new WrongValueException(this, _auxinf.errmsg));
 				//Note: we still throw exception to abort the exec flow
 				//It's client's job NOT to show the error box!
 				//(client checks z.srvald to decide whether to open error box)
 
-		if (!_valided && _constr != null)
+		if (!_valided && _auxinf != null && _auxinf.constr != null)
 			setText(coerceToString(_value));
 	}
 
@@ -661,7 +651,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 	//-- ComponentCtrl --//
 	public WrongValueException onWrongValue(WrongValueException ex) {
-		_errmsg = Exceptions.getMessage(ex);
+		initAuxInfo().errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
 	/** Processes an AU request.
@@ -683,7 +673,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 				if (oldval == _value)
 					return; //Bug 1881557: don't post event if not modified
 			} catch (WrongValueException ex) {
-				_errmsg = ex.getMessage();
+				initAuxInfo().errmsg = ex.getMessage();
 					//we have to 'remember' the error, so next call to getValue
 					//will throw an exception with proper value.
 				throw ex;
@@ -697,7 +687,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request);
 			final String msg = evt.getMessage();
-			_errmsg = msg != null && msg.length() > 0 ? msg: null;
+			initAuxInfo().errmsg = msg != null && msg.length() > 0 ? msg: null;
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECTION)) {
 			Events.postEvent(SelectionEvent.getSelectionEvent(request));
@@ -714,18 +704,20 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		render(renderer, "value", txt = coerceToString(_value));
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
-		render(renderer, "name", _name);
+		render(renderer, "name", getName());
 		render(renderer, "inplace", _inplace);
-		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
+		int v;
+		if ((v = getMaxlength()) > 0) renderer.render("maxlength", v);
 		if (_cols > 0) renderer.render("cols", _cols);
-		if (_tabindex != 0) renderer.render("tabindex", _tabindex);
+		if ((v = getTabindex()) != 0) renderer.render("tabindex", v);
 
 		boolean constrDone = false;
-		if (_constr instanceof CustomConstraint) { //client ignored if custom
+		final Constraint constr = _auxinf != null ? _auxinf.constr: null;
+		if (constr instanceof CustomConstraint) { //client ignored if custom
 			renderer.render("constraint", "[c"); //implies validated at server
 			constrDone = true;
-		} else if (_constr instanceof ClientConstraint) {
-			final ClientConstraint cc = (ClientConstraint)_constr;
+		} else if (constr instanceof ClientConstraint) {
+			final ClientConstraint cc = (ClientConstraint)constr;
 			try {
 				render(renderer, "z$pk", cc.getClientPackages());
 
@@ -744,9 +736,28 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 				log.warning("Ignore incompatible constraint: "+cc);
 			}
 		}
-		if (!constrDone && _constr != null)
+		if (!constrDone && constr != null)
 			renderer.render("constraint", "[s");
 
 		Utils.renderCrawlableText(txt);
+	}
+
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	private static class AuxInfo implements java.io.Serializable {
+		/** The error message. Not null if users entered a wrong data (and
+		 * not correct it yet).
+		 */
+		private String errmsg;
+		/** The name. */
+		private String name;
+		private int maxlength;
+		private int tabindex;
+		private Constraint constr;
+		/** Whether the validation is calused by {@link #isValid}. */
+		private transient boolean checkOnly;
 	}
 }
