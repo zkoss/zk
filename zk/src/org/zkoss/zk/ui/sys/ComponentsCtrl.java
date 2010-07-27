@@ -435,15 +435,22 @@ public class ComponentsCtrl {
 		public void addMold(String name, String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
-		/** @deprecated
-		 */
+		/** @deprecated */
 		public void addMold(String name, String moldURI, String z2cURI) {
 			throw new UnsupportedOperationException();
 		}
+		/** @deprecated */
 		public String getWidgetClass(String moldName) {
 			return null;
 		}
+		/** @deprecated */
 		public String getDefaultWidgetClass() {
+			return null;
+		}
+		public String getWidgetClass(Component comp, String moldName) {
+			return null;
+		}
+		public String getDefaultWidgetClass(Component comp) {
 			return null;
 		}
 		public void setDefaultWidgetClass(String widgetClass) {

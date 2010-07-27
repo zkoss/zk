@@ -8,11 +8,12 @@ ZK 5.0.4
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
+  3034530: The footer of components supports content alignment
   3025279: Client: Able to listen the Ajax error
+  3035171: <widget-class> (in lang.xml) shall suport EL
   3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
-  3034530: The footer of components supports content alignment
   3029931: Post onAfterRender after onInitRender/onInitRenderLater
   
 * Bugs

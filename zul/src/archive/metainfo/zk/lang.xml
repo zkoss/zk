@@ -129,6 +129,8 @@ def alert(m):
 		<component-name>foo</component-name> //the component name
 		<component-class>x.Foo</component-class> //the component class
 		<widget-class>x.Foo</widget-class> //the widget class (at client)
+			//EL is allowed in widget-class. However, if EL is used,
+			//mold-uri will be ignored (so zk.Widget's redraw must be implemented)
 
 		//Any number of molds are allowed and
 		//where mold-uri could be an expression or contain '~ctx/'

@@ -67,7 +67,7 @@ public class Wpds {
 			final ComponentDefinition compdef = (ComponentDefinition)it.next();
 			for (Iterator e = compdef.getMoldNames().iterator(); e.hasNext();) {
 				final String mold = (String)e.next();
-				final String wgtcls = compdef.getWidgetClass(mold);
+				final String wgtcls = compdef.getWidgetClass(null, mold);
 				if (wgtcls != null) {
 					if (first) first = false;
 					else sb.append(',');

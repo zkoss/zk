@@ -1552,8 +1552,8 @@ w:use="foo.MyWindow"&gt;
 	public String getWidgetClass() {
 		if (_auxinf != null && _auxinf.wgtcls != null)
 			return _auxinf.wgtcls;
-		final String widgetClass = _def.getWidgetClass(getMold());
-		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
+		final String widgetClass = _def.getWidgetClass(this, getMold());
+		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass(this);
 	}
 	public void setWidgetClass(String wgtcls) {
 		if (wgtcls != null && wgtcls.length() > 0) {
