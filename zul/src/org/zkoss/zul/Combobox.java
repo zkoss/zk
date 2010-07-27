@@ -24,7 +24,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -33,8 +32,8 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Selectable;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A combobox.
@@ -273,7 +272,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			renderer.doFinally();
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
-		Events.postEvent(Events.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
 	}
 	
 	private void postOnInitRender(String idx) {

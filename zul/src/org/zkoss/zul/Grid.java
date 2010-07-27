@@ -914,7 +914,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(Events.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 
 	}
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
