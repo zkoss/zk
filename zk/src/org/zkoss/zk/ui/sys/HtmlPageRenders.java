@@ -188,7 +188,7 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script>\nzkac(");
+			sb.append("<script type=\"text/javascript\">\nzkac(");
 
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
@@ -274,7 +274,7 @@ public class HtmlPageRenders {
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null;
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0) {
-			sb.append("<script>zkopt({");
+			sb.append("<script type=\"text/javascript\">zkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -530,7 +530,7 @@ public class HtmlPageRenders {
 		//generate JS second
 		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		if (divRequired) {
-			out.write("\n<script>");
+			out.write("\n<script type=\"text/javascript\">");
 			if (!aupg && owner != null) {
 				out.write("zkq('");
 				out.write(owner.getUuid());
@@ -726,7 +726,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(out);
 			}
 
-			out.write("<script>zkmb();try{zkx(\n");
+			out.write("<script type=\"text/javascript\">zkmb();try{zkx(\n");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -836,7 +836,7 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script>zkdt('")
+			sb.append("<script type=\"text/javascript\">zkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))

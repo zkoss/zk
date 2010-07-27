@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
 <?link  rel="stylesheet" type="text/css" href="/userguide/macros/userguide.css.dsp"?>
 <?script type="text/javascript" src="/userguide/macros/category.js"?>
-<?script content="jq.IE6_ALPHAFIX=/24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png|normal.png|normal-sel.png|large.png|large-sel.png/;"?>
+<?script type="text/javascript" content="jq.IE6_ALPHAFIX=/24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png|normal.png|normal-sel.png|large.png|large-sel.png/;"?>
 <?meta name="keywords" content="ZK, Ajax, Mobile, Framework, Ajax framekwork, RIA, Direct RIA, Java, JSP, JSF, Open Source, Comet" ?>
 <?component name="category" extends="button" widgetClass="userguide.Category" mold="default"?>
 <?component name="categorybar" extends="div" widgetClass="userguide.Categorybar"?>
