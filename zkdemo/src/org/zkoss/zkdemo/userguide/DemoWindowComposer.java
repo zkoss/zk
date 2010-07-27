@@ -51,26 +51,6 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		final Div inc = new Div();
 		Executions.createComponents("/userguide/bar.zul", inc, null);
 		inc.setStyle("float:right");
-		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
-			String cookie = Themes.getSkinCookie(Executions.getCurrent());
-			boolean isDefault = !"silvergray".equals(cookie);
-			String img = isDefault ? "/img/Centigrade-Widget-Icons/ButtonGray.png" : "/img/Centigrade-Widget-Icons/ButtonBlue.png";
-			Image skin = new Image(img);
-			skin.setSclass("pointer");
-			skin.setTooltiptext(isDefault ? "Gray Theme" : "Blue Theme");
-			skin.addEventListener(Events.ON_CLICK, new EventListener() {
-
-				public void onEvent(Event event) throws Exception {
-					Image skin = (Image)event.getTarget();
-					Execution exec = Executions.getCurrent();
-					boolean isDefault = skin.getSrc().indexOf("ButtonGray") < 0;
-					Themes.setSkinCookie(exec, isDefault ? "" : "silvergray");
-					exec.sendRedirect("");
-				}
-				
-			});
-			inc.insertBefore(skin, inc.getFirstChild());
-		}
 		comp.insertBefore(inc, comp.getFirstChild());
 		if (view != null) execute();
 	}

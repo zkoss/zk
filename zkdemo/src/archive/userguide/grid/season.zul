@@ -17,10 +17,10 @@ void doAvg(Footer f, boolean isFloat) {
 	f.setLabel(df.format(total));
 }
 ]]></zscript>
-<grid fixedLayout="true" oddRowSclass="myinner" onCreate='self.sclass = color[index]'>
+<grid fixedLayout="true" onCreate='self.sclass = color[index]'>
 	<columns>
-		<column width="25px" />
-		<column width="35px" >
+		<column width="40px" />
+		<column width="45px" >
 			<checkbox/>
 		</column>
 		<column label="Season"/>
@@ -31,7 +31,7 @@ void doAvg(Footer f, boolean isFloat) {
 	<rows>
 		<row forEach="1,2,3,4">
 			<detail open="false" fulfill="onOpen=/userguide/grid/month.zul"/>
-			<checkbox label=""  width="35px" />
+			<checkbox label=""  width="65px" />
 			<label value="Q-${forEachStatus.index + 1}"/>
 			<label onCreate='self.value = nextPrice()'/>
 			<label onCreate='self.value = nextPrice()'/>

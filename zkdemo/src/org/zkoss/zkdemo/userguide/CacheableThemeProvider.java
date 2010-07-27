@@ -17,9 +17,12 @@ package org.zkoss.zkdemo.userguide;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
-
+import org.zkoss.zul.Messagebox;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.util.ThemeProvider.Aide;
 
 /**
  * A cacheable theme provider.
@@ -34,43 +37,84 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  * since it is safe to cache</li>
  * </ol>
  * <p>See also {@link SimpleThemeProvider} - a simple theme provider.
- * @author tomyeh
+ * @author tomyeh / samchuang
  * @since 5.0.0
  */
 public class CacheableThemeProvider implements ThemeProvider{
-	private static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-
+	private final static String BLUE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
+	private final static String BREEZE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.breeze.zul";
+	
 	public Collection getThemeURIs(Execution exec, List uris) {
-		//font-size
-		final String fsc = Themes.getFontSizeCookie(exec);
-		if (fsc != null && fsc.length() > 0) {
-			for (ListIterator it = uris.listIterator(); it.hasNext();) {
-				final String uri = (String)it.next();
-				if (uri.startsWith(DEFAULT_WCS)) {
-					it.set(Aide.injectURI(uri, fsc));
-					break;
-				}
-			}
+		boolean isBreeze = Themes.isBreeze(exec);
+		Messagebox.setTemplate(isBreeze ? 
+				BREEZE_MESSAGEBOX_TEMPLATE_URI : BLUE_MESSAGEBOX_TEMPLATE_URI);
+		/* Use Breeze Theme as default theme*/
+		if (Themes.hasBreezeLib() && isBreeze) {
+			proessBreezeURI(uris);
+			return uris;
 		}
-		
-		boolean hasSilvergray = "silvergray".equals(Themes.getSkinCookie(exec));
+
+		String fsc = Themes.getFontSizeCookie(exec);
+		boolean isSilvergray = Themes.SILVERGRAY_THEME.equals(Themes.getThemeStyle(exec));
+		processSilverAndFontURI(isSilvergray, uris, fsc);
+
 		//slivergray
-		if (hasSilvergray) {
+		if (isSilvergray) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		}
 		
 		if ("lg".equals(fsc)) {
 			uris.add("/css/fontlg.css.dsp");
-			if (hasSilvergray)
+			if (isSilvergray)
 				uris.add("/css/silvergraylg.css.dsp");
 		} else if ("sm".equals(fsc)) {
 			uris.add("/css/fontsm.css.dsp");
-			if (hasSilvergray)
+			if (isSilvergray)
 				uris.add("/css/silvergraysm.css.dsp");
 		}
 		
 		return uris;
+	}
+	
+	/**
+	 * Setup inject URI for cache and removes silvergray URI
+	 * @param uris
+	 */
+	private static void proessBreezeURI (List uris) {
+		for (ListIterator it = uris.listIterator(); it.hasNext();) {
+			final String uri = (String)it.next();
+			
+			if (uri.startsWith(Themes.DEFAULT_WCS_URI)) {
+				it.set(Aide.injectURI(uri, Themes.BREEZE_THEME));
+				continue;
+			} else if (uri.startsWith(Themes.DEFAULT_SILVERGRAY_URI))
+				it.remove();
+		}
+	}
+	
+	/**
+	 * Setup inject URI for font and silvergray
+	 * @param isSilver
+	 * @param uris
+	 * @param fsn
+	 */
+	private static void processSilverAndFontURI (boolean isSilver, List uris, String fsn) {
+		for (ListIterator it = uris.listIterator(); it.hasNext();) {
+			final String uri = (String)it.next();
+			if (isSilver) {
+				if (uri.startsWith(Themes.DEFAULT_WCS_URI)) {
+					String injectURI = Themes.SILVERGRAY_THEME + ((fsn != null && fsn.length() > 0) ? "-" + fsn : "");
+					it.set(Aide.injectURI(uri, injectURI));
+				}
+			} else {
+				/*Remove silvergray URI*/
+				if (uri.startsWith(Themes.DEFAULT_SILVERGRAY_URI))
+					it.remove();
+				else if (fsn != null && fsn.length() > 0 && uri.startsWith(Themes.DEFAULT_WCS_URI))
+					it.set(Aide.injectURI(uri, fsn));
+			}
+		}
 	}
 
 	public int getWCSCacheControl(Execution exec, String uri) {
@@ -96,6 +140,11 @@ public class CacheableThemeProvider implements ThemeProvider{
 	}
 
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		return uri;
+		if (!Themes.hasBreezeLib() || !Themes.isBreeze(exec))
+			return uri;
+		if(!uri.startsWith("~./js/zul/") && !uri.startsWith("~./js/zkex/") 
+				&& !uri.startsWith("~./js/zkmax/"))
+			return uri;
+		return uri.replace(".css", ".breeze.css");
 	}
 }

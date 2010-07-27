@@ -17,7 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <?page id="userGuide" title="ZK Live Demo"?>
-<?init class="org.zkoss.zkdemo.userguide.MainLayoutInit" ?>
 <?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
 <?link  rel="stylesheet" type="text/css" href="/userguide/macros/userguide.css.dsp"?>
 <?script type="text/javascript" src="/userguide/macros/category.js"?>

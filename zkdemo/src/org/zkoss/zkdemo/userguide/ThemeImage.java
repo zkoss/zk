@@ -23,12 +23,15 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Image;
 
 /**
- * @author Dennis.Chen / Tom Yeh
+ * @author Dennis.Chen / Tom Yeh / Sam Chuang
  */
 public class ThemeImage extends Image {
 	
 	
 	public void onCreate(){
+		if (Themes.hasBreezeLib() && Themes.isBreeze(Executions.getCurrent()))
+			setVisible(false);
+
 		final String src = getSrc();
 		String fs = Themes.getFontSizeCookie(
 			Executions.getCurrent());
