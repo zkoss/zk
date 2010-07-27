@@ -70,7 +70,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		// the top is depend on children's height, if child will re-size after onSize/onShow, 
 		// popup need to re-position top after children height has calculated.
-		if (top == null || top.length == 0)
+		if (!top || !top.length)
 			this._openInfo = arguments;
 		
 		$n.css({position: "absolute"}).zk.makeVParent();
@@ -212,9 +212,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
-	onShow: function () {
+	onShow: function (ctl) {
 		//bug 3034505: call children's onShow to calculate the height first
-		zWatch.fireDown('onShow', this.firstChild);
+		ctl.fire(this.firstChild);
 		var openInfo = this._openInfo;
 		if (openInfo) {
 			this.position.apply(this, openInfo);
