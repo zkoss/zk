@@ -30,6 +30,7 @@ ZK 5.0.4
   3033010: Listbox with hflex listheader can expand but can not shrink
   3033016: Extra empty row when shrink fixed width Listbox
   3034505: A listbox in poup, open it first-time, the position is wrong
+  3035079: Dom elem isn't exist when widget do appendChild and rerender
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
