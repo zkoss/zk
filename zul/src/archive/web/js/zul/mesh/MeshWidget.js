@@ -199,6 +199,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	/**
 	 * Returns the self's head widget.
 	 * @return zul.mesh.HeadWidget
+	 * @since 5.0.4
 	 */
 	getHeadWidget: function () {
 		return this.head;
