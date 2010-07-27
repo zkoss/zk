@@ -30,7 +30,7 @@ ZK 5.0.4
   3033010: Listbox with hflex listheader can expand but can not shrink
   3033016: Extra empty row when shrink fixed width Listbox
   3034505: A listbox in poup, open it first-time, the position is wrong
-  3035079: Dom elem isn't exist when parent do appendChild and rerender
+  3035079: Dom elem doesn't exist when parent do appendChild and rerender
   3034771: <script> shall have the type attribute to W3C compliant
   
 * Upgrade Notes
