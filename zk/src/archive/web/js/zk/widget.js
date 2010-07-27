@@ -2975,6 +2975,7 @@ unbind_: function (skipper, after) {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
+			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
 			if (child.desktop && (!skipper || !skipper.skipped(this, child)))
 				if (child.z_rod) _unbindrod(child);
 				else child.unbind_(null, after); //don't pass skipper
