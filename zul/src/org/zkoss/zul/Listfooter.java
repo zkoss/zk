@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.FooterElement;
 import org.zkoss.zul.impl.HeaderElement;
 
 /**
@@ -33,7 +34,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * 
  * @author tomyeh
  */
-public class Listfooter extends HeaderElement implements org.zkoss.zul.api.Listfooter {
+public class Listfooter extends FooterElement implements org.zkoss.zul.api.Listfooter {
 	private int _span = 1;
 
 	public Listfooter() {

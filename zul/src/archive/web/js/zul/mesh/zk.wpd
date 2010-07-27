@@ -16,6 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<script src="HeadWidget.js" jsdoc="true"/>
 	<script src="HeaderWidget.js" jsdoc="true"/>
 	<script src="SortWidget.js" jsdoc="true"/>
+	<script src="FooterWidget.js" jsdoc="true"/>
 
 	<widget name="Paging"/>	
 	<widget name="Auxhead"/>
