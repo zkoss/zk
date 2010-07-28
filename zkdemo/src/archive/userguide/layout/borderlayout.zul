@@ -42,8 +42,21 @@ Rights Reserved.
 					<panelchildren>
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
-<borderlayout height="650px" style="background:#c5e6ef;">
-	<north size="80px" border="0" style="background:#c5e6ef;">
+<zk>
+<zscript>
+	javax.servlet.http.Cookie[] cookies = ((javax.servlet.http.HttpServletRequest)execution.getNativeRequest()).getCookies();
+	String theme = "breeze";
+	if(cookies != null) 
+		for(int i=0; i &lt; cookies.length; i++)
+			if("zktheme".equals(cookies[i].getName())) {
+				String t = cookies[i].getValue();
+				if (t != null) theme = t;
+			}
+	if(!"silvergray".equals(theme) &amp;&amp; org.zkoss.lang.Library.getProperty("org.zkoss.zul.themejar."+theme) == null) theme = "blue";
+	String color = "breeze".equals(theme)? "#F7F7F7" : "silvergray".equals(theme)? "#DDDDDD" : "#C5E6EF";
+</zscript>
+<borderlayout height="850px" style="background:${color};">
+	<north size="80px" border="0" style="background:${color};">
 		<div>
 			<div style="float:right">
  				<textbox sclass="demo-search-inp"/><separator orient="vertical"/><button label="Search Site"/>
@@ -54,7 +67,7 @@ Rights Reserved.
 		</div>
 	</north>
 	<!-- Sidebar -->
-	<west width="150px" border="0" flex="true" splittable="true" margins="0,5,0,0" style="background:#c5e6ef;">
+	<west width="150px" border="0" flex="true" splittable="true" margins="0,5,0,0" style="background:${color};">
 		<div>
 			<panel width="100%" border="normal" title="Navigation">
 				<panelchildren style="padding:5px;">
@@ -194,7 +207,7 @@ Rights Reserved.
 			</tablechildren>
 		</tablelayout>
 	</center>
-	<south size="40px" border="0" style="background:#c5e6ef;">
+	<south size="40px" border="0" style="background:${color};">
 		<toolbar mold="panel" align="center">
 			<toolbarbutton label="Sign in"/>
 			<toolbarbutton label="Home"/>
@@ -208,6 +221,7 @@ Rights Reserved.
 		</toolbar>
 	</south>
 </borderlayout>
+</zk>
 			]]></attribute>
 						</textbox>
 					</panelchildren>
