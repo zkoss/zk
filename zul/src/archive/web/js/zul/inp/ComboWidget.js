@@ -206,9 +206,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._shadow.sync();
 	},
 	_afterSlideDown: function (n) {
-		if (!this.desktop)
-			jq(n).remove();
+		if (!this.desktop) {
 			//Bug 3035847: close (called by unbind) won't remove popup when animating
+			zk(n).undoVParent();
+			jq(n).remove();
+		}
 		if (this._shadow) this._shadow.sync();
 	},
 	/** Returns the DOM element of the popup.
