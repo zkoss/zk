@@ -711,7 +711,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.1
 	 */
 	onChangingForced: true,
-	_allowKeys: "0123456789"+zk.MINUS
+	_allowKeys: "0123456789"+zk.MINUS+zk.PERCENT+zk.GROUPING
 });
 
 })();

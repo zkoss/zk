@@ -33,6 +33,7 @@ ZK 5.0.4
   3034505: A listbox in poup, open it first-time, the position is wrong
   3035079: Dom elem doesn't exist when parent do appendChild and rerender
   3034771: <script> shall have the type attribute to W3C compliant
+  3035818: The longbox,  doublebox receive a wrong value on server side
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
