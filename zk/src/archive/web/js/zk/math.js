@@ -84,6 +84,17 @@ zk.BigDecimal = zk.$extends(zk.Object, {
  * @disable(zkgwt)
  */
 zk.Long = zk.$extends(zk.Object, {
+	_precision: 0,
+	$define: {
+		/** Returns the precision.
+		 * <p>Default: 0
+		 * @return int
+		 */
+		/** Sets the precision
+		 * @param int precision the precision
+		 */
+		precision: null
+	},
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
@@ -107,7 +118,9 @@ zk.Long = zk.$extends(zk.Object, {
 	 * @return String
 	 */
 	$toString: zkf = function() { //toString is reserved keyword for IE
-		return this._value;
+		if (this._value.length == 0) return ''; 
+		var j = this._value.length - this._precision;
+		return j <= 0 ? 0: this._value.substring(0, j);
 	},
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String

@@ -35,6 +35,7 @@ ZK 5.0.4
   3034771: <script> shall have the type attribute to W3C compliant
   3035818: The longbox,  doublebox receive a wrong value on server side
   3035847: The popup of combobox shall be destroyed when detached
+  3035897: The longbox parse a wrong result when paste '100%'
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
