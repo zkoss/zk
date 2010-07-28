@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3035847.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 28 18:22:20 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Click the drop-down button, and the combobox shall be detached.
+	<separator/>
+	Bug: the popup remains when combobox is detached.
+	<separator/>
+	<combobox onOpen="self.detach()">
+		<comboitem forEach="1,1,1,1,1,1,1" label="item" />
+	</combobox>
+</zk>

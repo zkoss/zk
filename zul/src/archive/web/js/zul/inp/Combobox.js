@@ -315,6 +315,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._sel = this._lastsel = null;
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
+	//@Override
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs ? zcs: "z-combobox" + (this.inRoundedMold() ? "-rounded": "");
