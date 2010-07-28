@@ -84,7 +84,7 @@ public class HttpAuWriter implements AuWriter{
 			throw new IllegalArgumentException();
 		if (_result != null || !_rs.isEmpty())
 			throw new IllegalStateException(_rs.isEmpty() ? "resend twice or complete?": "write called");
-		_result = (byte[])prevContent;
+		_result = restore(prevContent);
 		_out = null;
 		_rs = null;
 	}
@@ -95,7 +95,7 @@ public class HttpAuWriter implements AuWriter{
 		_result = _out.toString().getBytes("UTF-8");
 		_out = null;
 		_rs = null;
-		return _result;
+		return save(_result);
 	}
 	/** Flush the result of responses to client.
 	 * @param bCompress whether to compress (if allowed).
@@ -123,6 +123,25 @@ public class HttpAuWriter implements AuWriter{
 		hres.getOutputStream().write(_result);
 			//Use OutputStream due to Bug 1528592 (Jetty 6)
 		hres.flushBuffer();
+	}
+	/** Called to encode the last response for repeated request before storing.
+	 * <p>Default: does nothing but return the input argument, data.
+	 *  The derived class might override this method to compress it.
+	 * @see #restore
+	 * @since 5.0.4
+	 */
+	protected Object save(byte[] data) {
+		return data;
+	}
+	/** Called to decode the last response for repeated request before retrieving.
+	 * <p>Default: does nothing but return the input argument, data.
+	 *  The derived class might override this method to uncompress it.
+	 * @param data the data returned by {@link #save}
+	 * @return the byte array that is passed to {@link #save}.
+	 * @since 5.0.4
+	 */
+	protected byte[] restore(Object data) {
+		return (byte[])data;
 	}
 
 	public void writeResponseId(int resId) throws IOException {

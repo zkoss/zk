@@ -323,6 +323,30 @@ public class Files {
 			}
 		}
 	}
+	/** Close an output stream without throwing an exception.
+	 * @since 5.0.4
+	 */
+	public static final void close(OutputStream strm) {
+		if (strm != null) {
+			try {
+				strm.close();
+			} catch (IOException ex) { //ignore it
+//				System.out.println("Unable to close an output stream");
+			}
+		}
+	}
+	/** Close a writer without throwing an exception.
+	 * @since 5.0.4
+	 */
+	public static final void close(Writer writer) {
+		if (writer != null) {
+			try {
+				writer.close();
+			} catch (IOException ex) { //ignore it
+//				System.out.println("Unable to close a writer");
+			}
+		}
+	}
 
 	/** Normalizes the catenation of two paths.
 	 *
