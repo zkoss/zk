@@ -155,3 +155,32 @@ div.demo-items {
 a.edition-field:hover {
 	text-decoration: underline;
 }
+
+<%-- Breeze, Silvergray --%>
+.silvergray .demo-header .z-north-body {
+	background-image: url(${c:encodeURL('/img/g-category-bg.png')});
+}
+.silvergray .demo-categorybar .demo-seld {
+	background-image: url(${c:encodeURL('/img/g-category-seld.png')});
+}
+.silvergray .demo-categorybar .demo-over {
+	background-image: url(${c:encodeURL('/img/g-category-over.png')});
+}
+.silvergray .demo-categorybar .demo-seld.demo-over {
+	background-image: url(${c:encodeURL('/img/g-category-over-seld.png')});
+}
+.breeze .demo-header .z-north-body {
+	background-image: url(${c:encodeURL('/img/breeze-category-bg.png')});
+}
+.breeze .demo-categorybar .demo-seld {
+	background-image: url(${c:encodeURL('/img/breeze-category-seld.png')});
+}
+.breeze .demo-categorybar .demo-over {
+	background-image: url(${c:encodeURL('/img/breeze-category-over.png')});
+}
+.breeze .demo-categorybar .demo-seld.demo-over {
+	background-image: url(${c:encodeURL('/img/breeze-category-over-seld.png')});
+}
+.breeze .demo-categorybar-left-scroll {
+	
+}

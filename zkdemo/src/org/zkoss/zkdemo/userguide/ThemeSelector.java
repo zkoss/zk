@@ -51,7 +51,7 @@ public class ThemeSelector extends Combobox {
 	}
 	
 	private void initChildren() {
-		boolean hasSilver = Themes.hasSilverLib();
+		boolean hasSilver = Themes.hasSilvergrayLib();
 		boolean hasBreeze = Themes.hasBreezeLib();
 		if (!hasSilver && !hasBreeze) {
 			setVisible(false);

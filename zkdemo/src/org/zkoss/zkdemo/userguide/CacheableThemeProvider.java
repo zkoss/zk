@@ -45,17 +45,17 @@ public class CacheableThemeProvider implements ThemeProvider{
 	private final static String BREEZE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.breeze.zul";
 	
 	public Collection getThemeURIs(Execution exec, List uris) {
-		boolean isBreeze = Themes.isBreeze(exec);
+		boolean isBreeze = Themes.isBreeze(exec) && Themes.hasBreezeLib();
 		Messagebox.setTemplate(isBreeze ? 
 				BREEZE_MESSAGEBOX_TEMPLATE_URI : BLUE_MESSAGEBOX_TEMPLATE_URI);
 		/* Use Breeze Theme as default theme*/
-		if (Themes.hasBreezeLib() && isBreeze) {
+		if (isBreeze) {
 			proessBreezeURI(uris);
 			return uris;
 		}
 
 		String fsc = Themes.getFontSizeCookie(exec);
-		boolean isSilvergray = Themes.SILVERGRAY_THEME.equals(Themes.getThemeStyle(exec));
+		boolean isSilvergray = Themes.isSilvergray(exec) && Themes.hasSilvergrayLib();
 		processSilverAndFontURI(isSilvergray, uris, fsc);
 
 		//slivergray
@@ -142,9 +142,9 @@ public class CacheableThemeProvider implements ThemeProvider{
 	public String beforeWidgetCSS(Execution exec, String uri) {
 		if (!Themes.hasBreezeLib() || !Themes.isBreeze(exec))
 			return uri;
-		if(!uri.startsWith("~./js/zul/") && !uri.startsWith("~./js/zkex/") 
-				&& !uri.startsWith("~./js/zkmax/"))
-			return uri;
-		return uri.replace(".css", ".breeze.css");
+		if(uri.startsWith("~./js/zul/") || uri.startsWith("~./js/zkex/") 
+				|| uri.startsWith("~./js/zkmax/"))
+			return uri.replace(".css", ".breeze.css");
+		return uri;
 	}
 }

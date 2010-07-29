@@ -25,7 +25,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <?component name="category" extends="button" widgetClass="userguide.Category" mold="default"?>
 <?component name="categorybar" extends="div" widgetClass="userguide.Categorybar"?>
 <zk>
-<borderlayout id="main" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
+<zscript><![CDATA[
+	boolean isBreeze = org.zkoss.zkdemo.userguide.Themes.isBreeze(execution) && 
+		org.zkoss.zkdemo.userguide.Themes.hasBreezeLib();
+	boolean isSilvergray = org.zkoss.zkdemo.userguide.Themes.isSilvergray(execution) &&
+		org.zkoss.zkdemo.userguide.Themes.hasSilvergrayLib();
+	String themeSClass = isBreeze? "breeze" : isSilvergray? "silvergray" : "blue";
+]]></zscript>
+<borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
 			<div sclass="demo-logo pointer" onClick='Executions.sendRedirect("http://www.zkoss.org")'>

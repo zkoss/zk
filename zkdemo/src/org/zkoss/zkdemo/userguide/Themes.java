@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 
 /**
  * Utilities to manipulate the cooke for theme preferences.
@@ -28,8 +27,8 @@ import org.zkoss.zk.ui.Executions;
  * @author Dennis Chen / Jumper Chen / Tom Yeh / Sam Chuang
  */
 public class Themes {
-	private static String COOKIE_FONT_SIZE = "zkdemotfs";
-	private static String THEME_COOKIE_KEY = "zktheme";
+	private final static String COOKIE_FONT_SIZE = "zkdemotfs";
+	private final static String THEME_COOKIE_KEY = "zktheme";
 	public final static String BREEZE_THEME = "breeze";
 	public final static String ZK_THEME = "zktheme";
 	public final static String SILVERGRAY_THEME = "silvergray";
@@ -111,24 +110,28 @@ public class Themes {
 	 * @return boolean
 	 */
 	public static boolean hasBreezeLib() {
-		return Library.getProperty("org.zkoss.zul.themejar.breeze") != null;
+		return "true".equals(Library.getProperty("org.zkoss.zul.themejar.breeze"));
 	}
 
 	/**
 	 * Returns whether has silver library or not
 	 * @return boolean
 	 */
-	public static boolean hasSilverLib() {
-		String prop = Library.getProperty("org.zkoss.zkdemo.theme.silvergray");
-		return prop != null ? "true".equals(prop) : false;
+	public static boolean hasSilvergrayLib() {
+		return "true".equals(Library.getProperty("org.zkoss.zkdemo.theme.silvergray"));
 	}
 
 	/**
-	 * Returns whether current theme is breeze or not 
-	 * @return boolean
+	 * Return true if current theme is Breeze
 	 */
 	public static boolean isBreeze(Execution exe){
-		String theme = getThemeStyle(exe);
-		return theme.isEmpty() || theme.equals(BREEZE_THEME);
+		return BREEZE_THEME.equals(getThemeStyle(exe)) || getThemeStyle(exe).isEmpty();
+	}
+	
+	/**
+	 * Return true if current theme is Silvergray
+	 */
+	public static boolean isSilvergray(Execution exe){
+		return SILVERGRAY_THEME.equals(getThemeStyle(exe));
 	}
 }
