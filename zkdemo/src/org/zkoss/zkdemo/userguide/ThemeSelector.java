@@ -34,6 +34,7 @@ public class ThemeSelector extends Combobox {
 	private HashMap themes = new HashMap();
 
 	public void onCreate() {
+		setReadonly(true);
 		initChildren();
 	}
 	
@@ -65,7 +66,7 @@ public class ThemeSelector extends Combobox {
 			appendChild(breeze);
 		}
 		
-		Comboitem zk = new Comboitem("ZK");
+		Comboitem zk = new Comboitem("Blue");
 		zk.setValue(Themes.ZK_THEME);
 		themes.put(Themes.ZK_THEME, zk);
 		appendChild(zk);

@@ -44,7 +44,7 @@ by dragging list items around.</p>
 <zk>
 	Drag project to other list or same list for reorder
 	<hbox>
-		<listbox id="left" height="200px" width="200px" onDrop="move(event.dragged)" droppable="true"
+		<listbox id="left" height="250px" width="200px" onDrop="move(event.dragged)" droppable="true"
 			oddRowSclass="non-odd" fixedLayout="true">
 			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
@@ -66,7 +66,7 @@ by dragging list items around.</p>
 			</listitem>
 		</listbox>
 		<separator />
-		<listbox id="right" height="200px" width="200px"
+		<listbox id="right" height="250px" width="200px"
 			oddRowSclass="non-odd" fixedLayout="true" onDrop="move(event.dragged)" droppable="true"
 			multiple="true" >
 			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">

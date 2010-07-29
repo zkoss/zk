@@ -123,7 +123,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 	color: #1c5178; font-size:10px
 }
 .demo-logo {
-	padding: 10px 10px 0 10px;
+	padding: 0 10px 0 10px;
 	float:left;
 }
 div.demo-items {
