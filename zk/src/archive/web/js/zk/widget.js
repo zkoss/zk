@@ -4313,7 +4313,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		if (p = w.parent) //shall be a desktop
 			_unlink(p, w); //unlink only
 
-		p = w.parent = this.parent,
+		p = w.parent = this.parent;
 		q = w.previousSibling = this.previousSibling;
 		if (q) q.nextSibling = w;
 		else if (p) p.firstChild = w;

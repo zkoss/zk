@@ -489,15 +489,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public boolean removeComponent(Component comp, boolean recycleAllowed) {
 		final String uuid = comp.getUuid();
-		if (!recycleAllowed || _comps.remove(uuid) == null || recycleUuidDisabled())
-			return false;
+		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled())
+			return false; //not recycled
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
 		//Note: we don't check IdGenerator.isAutoUuid since it returns false if not implemented
 		if (comp instanceof RawId &&
 		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
-			return false;
+			return false; //not recycled
 
 		final int execId = getExecId();
 		RecycleInfo ri = null;
@@ -515,7 +515,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (ri == null)
 			_uuidRecycle.add(ri = new RecycleInfo(execId));
 		ri.uuids.add(uuid);
-		return true;
+		return true; //recycled
 	}
 	public void removeComponent(Component comp) {
 		removeComponent(comp, false);
