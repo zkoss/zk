@@ -16,10 +16,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {au:true}));
 
+function _space(deep) {
+	var out = [];
+	for (; deep-- > 0;)
+		out.push('&nbsp;&nbsp;&nbsp;&nbsp;');
+	return out.join('');
+}
 function _dumpWgt(out, wgt, nLevel) {
-	for (var j = nLevel++; j--;)
-		out.push("&nbsp;&nbsp;");
-	out.push(wgt.widgetName, (wgt.id ? '$' + wgt.id: '#' + wgt.uuid), '<br/>');
+	out.push(_space(nLevel++), wgt.widgetName,
+		(wgt.id ? '$' + wgt.id: '#' + wgt.uuid), '<br/>');
 
 	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 		_dumpWgt(out, wgt, nLevel);
@@ -145,13 +150,13 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 					endTag, '&gt;</span>]</span><br/>');
 			return;
 		}
-		this.out.push(isEmpty ? '' : this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
+		this.out.push(isEmpty ? '' : _space(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	comment: function (deep, content) {
-		this.out.push(this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
+		this.out.push(_space(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	startTag: function (deep, content, isSingle, isEmpty) {
-		this.out.push(this._getSpace(deep), this._parseAttribute(content, isSingle), isEmpty ? '' : '<br/>');
+		this.out.push(_space(deep), this._parseAttribute(content, isSingle), isEmpty ? '' : '<br/>');
 	},
 	_parseAttribute: function (content, isSingle) {
 		var out = [];
@@ -205,7 +210,7 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 		if (content.indexOf('>') > -1)
 			this.error(content);		
 		else
-			this.out.push(this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
+			this.out.push(_space(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	error: function (content) {
 		this._errorNumber++;
@@ -216,12 +221,6 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 	},
 	getErrorNumber: function () {
 		return this._errorNumber;
-	},
-	_getSpace: function (deep) {
-		var out = [];
-		for (; deep-- > 0;)
-			out.push('&nbsp;&nbsp;&nbsp;&nbsp;');
-		return out.join('');
 	}
 });
 

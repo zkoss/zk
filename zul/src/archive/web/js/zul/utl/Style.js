@@ -74,7 +74,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 				ln.href = this._src;
 				if (this._media) ln.media = this._media;
 			} else
-				zk.load(this._src, this.uuid, this._media);
+				zk.loadCSS(this._src, this.uuid, this._media);
 		}
 	},
 	_getLink: function (head) {
