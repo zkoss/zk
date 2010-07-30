@@ -68,8 +68,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
 	}
 	function wgt2s(w) {
-		var s = w.className.substring(w.className.lastIndexOf('.') + 1);
-		return w.id ? s + '@' + w.id: s + '#' + w.uuid;
+		var s = w.widgetName;
+		return w.id ? s + '$' + w.id: s + '#' + w.uuid;
 	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];
@@ -974,7 +974,7 @@ zk.log('value is", value);
 	 * @param Object... detailed varient number of arguments to log
 	 * @see #stamp(String, boolean)
 	 */
-	log: function (detailed) {		
+	log: function (detailed) {
 		var msg = toLogMsg(
 			(detailed !== zk) ? arguments :
 				(function (args) {

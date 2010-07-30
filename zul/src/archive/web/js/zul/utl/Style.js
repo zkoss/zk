@@ -73,15 +73,8 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 			if (ln) {
 				ln.href = this._src;
 				if (this._media) ln.media = this._media;
-			} else {
-				ln = document.createElement("link");
-				ln.id = this.uuid;
-				ln.rel = "stylesheet";
-				ln.type = "text/css";
-				ln.href = this._src;
-				if (this._media) ln.media = this._media;
-				head.appendChild(ln);
-			}
+			} else
+				zk.load(this._src, this.uuid, this._media);
 		}
 	},
 	_getLink: function (head) {

@@ -228,6 +228,23 @@ zk.load('zul.utl', function () {
 		jq.head().appendChild(e);
 		return this;
 	},
+	/* Loads a CSS file.
+	 * @param String href the URL of the CSS file.
+	 * @param String id the identifier. Ignored if not specified.
+	 * @param String media the media attribute. Ignored if not specified.
+	 * @since 5.0.4
+	 * @return zk
+	 */
+	loadCSS: function (href, id, media) {
+		var ln = document.createElement("link");
+		if (id) ln.id = id;
+		ln.rel = "stylesheet";
+		ln.type = "text/css";
+		ln.href = href;
+		if (media) ln.media = media;
+		jq.head().appendChild(ln);
+		return this;
+	},
 
 	/** Returns the version of the specified package.
 	 * @param String pkg the package name
