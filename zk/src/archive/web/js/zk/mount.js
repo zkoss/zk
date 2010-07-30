@@ -255,10 +255,11 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			var stub = inf[4][0], filter = inf[4][1], wgt;
+			var stub = inf[4][0], filter = inf[4][1],
+				Widget = zk.Widget, wgt;
 
 			if (filter)
-				zk.Widget.$ = function (n, opts) {return filter(_wgt$(n, opts));}
+				Widget.$ = function (n, opts) {return filter(_wgt$(n, opts));}
 			try {
 				wgt = create(null, inf[1]);
 			} finally {
