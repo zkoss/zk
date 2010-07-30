@@ -152,6 +152,7 @@ implements DynamicTag, Native {
 		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
 			super.redraw(out); //renderProperties (assume in zscript)
+			stub();
 			return;
 		}
 
@@ -255,7 +256,13 @@ implements DynamicTag, Native {
 
 			oldout.write(sb.toString());
 		}
+		stub();
 	}
+	/** Transforms this component to a stub component. */
+	private void stub() {
+		new StubComponent().replace(this, false/*not fellow anymore*/);
+	}
+
 	/** Used to indicate the redrawing of the top native is found. */
 	private static final String ATTR_TOP_NATIVE = "zkHtmlTopNative";
 	private static boolean startsWith(StringBuffer sb, String tag, int start) {

@@ -91,7 +91,7 @@ function zkmprops(uuid, props) {
 }
 
 (function () {
-	var _wgts = [],
+	var _wgt$ = zk.Widget.$, //the original zk.Widget.$
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
@@ -255,20 +255,14 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			var stub = inf[4][0], filter = inf[4][1],
-				Widget = zk.Widget,
-				old$, wgt;
+			var stub = inf[4][0], filter = inf[4][1], wgt;
 
-			if (filter) {
-				old$ = Widget.$;
-				Widget.$ = function (n, opts) {
-					return filter(old$(n, opts));
-				}
-			}
+			if (filter)
+				zk.Widget.$ = function (n, opts) {return filter(_wgt$(n, opts));}
 			try {
 				wgt = create(null, inf[1]);
 			} finally {
-				if (filter) Widget.$ = old$;
+				if (filter) Widget.$ = _wgt$;
 			}
 
 			stub(wgt);
@@ -314,14 +308,23 @@ function zkmprops(uuid, props) {
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			var cls = zk.$import(type),
-				initOpts = {uuid: uuid},
-				v = wi[4]; //mold
-			if (!cls)
-				throw 'Unknown widget: ' + type;
-			if (v) initOpts.mold = v;
-			wgt = new cls(initOpts);
-			wgt.inServer = true;
+			if (type == "#stub") {
+				wgt = _wgt$(uuid); //use the original one since filter() might applied
+				if (!wgt)
+					throw "Unknow stub "+uuid;
+				var w = new zk.Widget();
+				zk._wgtutl.replace(wgt, w);
+				wgt.unbind(); //reuse it as new widget
+			} else {
+				var cls = zk.$import(type),
+					initOpts = {uuid: uuid},
+					v = wi[4]; //mold
+				if (!cls)
+					throw 'Unknown widget: ' + type;
+				if (v) initOpts.mold = v;
+				wgt = new cls(initOpts);
+				wgt.inServer = true;
+			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
 			zkmprops(uuid, props);
@@ -430,7 +433,6 @@ function zkmprops(uuid, props) {
 	},
 	//end of mounting
 	zkme: function () {
-		_wgts = [];
 		_mntctx.curdt = null;
 		_mntctx.binding = false;
 	}

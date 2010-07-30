@@ -41,6 +41,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 		<ul>
 			<li forEach="${values}">${each}</li>
 		</ul>
+		<u:button label="invalidate groupbox" onClick="self.parent.invalidate()"/>
 	</u:groupbox>
 
 	<u:style id="s1">

@@ -454,7 +454,7 @@ jq(function() {
 				if (wgt) wgt = wgt.getTopWidget();
 				if (wgt != _lastFloat) {
 					_lastFloat = wgt
-					zk.Widget._autohide();
+					zk._wgtutl.autohide(); //see widget.js
 				}
 			}
 		}, 120); //filter
@@ -464,7 +464,7 @@ jq(function() {
 		++_autohideCnt;
 		setTimeout(function () {
 			if (!--_autohideCnt)
-				zk.Widget._autohide();
+				zk._wgtutl.autohide();
 		}, 100); //filter
 	}
 

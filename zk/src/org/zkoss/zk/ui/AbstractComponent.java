@@ -159,6 +159,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
+	/** Constructs a stub component.
+	 * @param useless an useless argument
+	 */
+	/*package*/ AbstractComponent(boolean useless) { //called by StubComponent
+		_def = ComponentsCtrl.DUMMY;
+	}
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 */
@@ -231,6 +237,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * Caller has to make sure the uniqueness (and not auto id).
 	 */
 	private static void addToIdSpaces(final Component comp) {
+		final String compId = comp.getId();
+		if (comp instanceof NonFellow || isAutoId(compId))
+			return; //nothing to do
+
 		if (comp instanceof IdSpace)
 			((AbstractComponent)comp).bindToIdSpace(comp);
 
@@ -606,8 +616,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_id = id;
 			}
 
-			if (_id.length() > 0)
-				addToIdSpaces(this);
+			addToIdSpaces(this);
 
 			smartUpdate("id", _id);
 		}
@@ -1156,6 +1165,60 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
 		else _chdinf.last = prev;
+	}
+	/** Replaces with the given component.
+	 * This component will be detached at the end.
+	 */
+	/*package*/ void replaceWith(AbstractComponent comp, boolean bFellow) { //called by StubComponent
+		if (comp._parent != null || comp._next != null || comp._prev != null
+		|| comp._chdinf != null || comp._page != null)
+			throw new IllegalStateException();
+
+		comp._def = _def;
+		comp._uuid = _uuid;
+
+		//remove this from the fellow map
+		removeFromIdSpaces(this); //call before changing _parent...
+
+		//fix parent/sibling link
+		AbstractComponent p = comp._parent = _parent,
+			q = comp._prev = _prev;
+		if (q != null) q._next = comp;
+		else if (p != null) p._chdinf.first = comp;
+
+		q = comp._next = this._next;
+		if (q != null) q._prev = comp;
+		else if (p != null) p._chdinf.last = comp;
+
+		_parent = _next = _prev = null;
+
+		//fix children link
+		if (_chdinf != null) {
+			for (p = _chdinf.first; p != null; p = p._next)
+				p._parent = comp;
+			comp._chdinf = _chdinf;
+			_chdinf = null;
+		}
+
+		//fix the uuid-to-component map
+		if (_page != null) {
+			comp._page = _page;
+			if (comp._parent == null) { //root
+				((AbstractPage)_page).removeRoot(this);
+				((AbstractPage)_page).addRoot(comp);
+			}
+
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)_page.getDesktop();
+			desktopCtrl.removeComponent(this, false);
+			desktopCtrl.addComponent(comp);
+			_page = null;
+		}
+
+		//add comp to the fellow map
+		if (bFellow) {
+			comp._id = _id;
+			addToIdSpaces(comp); ///called after fixing comp._parent...
+		}
 	}
 
 	/** Appends a child to the end of all children.

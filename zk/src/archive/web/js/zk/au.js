@@ -330,7 +330,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
-		var rtags = cmds.rtags||{};
+		var rtags = cmds.rtags||{}, ex;
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
@@ -340,7 +340,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					doProcess(cmd.cmd, cmd.data);
 				} catch (e) {
 					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
-					throw e;
+					if (!ex) ex = e;
 				}
 			}
 		} finally {
@@ -349,6 +349,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
 			}
 		}
+		if (ex)
+			throw ex;
 		return true;
 	}
 	function _asBodyChild(child) {
@@ -1278,7 +1280,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	uuid: function (wgt, newId) {
 		if (wgt)
-			wgt._setUuid(newId);
+			zk._wgtutl.setUuid(wgt, newId); //see widget.js
 	},
 
 	/** Set the focus to the specified widget.

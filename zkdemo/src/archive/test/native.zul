@@ -23,7 +23,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<n:li><button label="Hi" focus="true" onClick='alert("Hi")'/></n:li>
 	</n:ol>
 
-<window id="wnd" title="Test of inline html tags">
+<window id="wnd" title="Test of inline html tags" border="normal">
+	<button label="invalidate window" onClick="self.parent.invalidate()"/>
 	<zscript>
 	String[] values = new String[] {"Red", "Blue", "Purple"};
 	</zscript>
