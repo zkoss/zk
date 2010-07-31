@@ -22,12 +22,13 @@ function _space(deep) {
 		out.push('&nbsp;&nbsp;&nbsp;&nbsp;');
 	return out.join('');
 }
-function _dumpWgt(out, wgt, nLevel) {
+function _dumpWgt(out, wgt, nLevel, inf) {
+	inf.cnt++;
 	out.push(_space(nLevel++), wgt.widgetName,
 		(wgt.id ? '$' + wgt.id: '#' + wgt.uuid), '<br/>');
 
 	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-		_dumpWgt(out, wgt, nLevel);
+		_dumpWgt(out, wgt, nLevel, inf);
 }
 function _parseHTML(text, handler) {
 	var begin, content, deep = 0, empty;
@@ -118,9 +119,9 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 		}
 	},
 	dumpWidgetTree: function (wgt) {
-		var out = [];
-		_dumpWgt(out, wgt, 0);
-		this._dump(wgt.className, out.join(''));
+		var out = [], inf = {cnt: 0};
+		_dumpWgt(out, wgt, 0, inf);
+		this._dump("Total: "+inf.cnt, out.join(''));
 	},
 	_dump: function (header, content) {
 		var console = this.getConsole();

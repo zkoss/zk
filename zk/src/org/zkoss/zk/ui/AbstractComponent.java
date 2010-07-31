@@ -708,7 +708,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Component getLastChild() {
 		return _chdinf != null ? _chdinf.last: null;
 	}
-	private final int nChild() {
+	/** Returns the number of children. */
+	/*package*/ final int nChild() { //called by HtmlNativeComponent
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
 	private int modCntChd() {
@@ -1158,18 +1159,37 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return true;
 	}
-	private void setNext(AbstractComponent comp, AbstractComponent next) {
+	/** Set the next sibling of the given child. (this is a parent of comp). */
+	/*package*/ final
+	void setNext(AbstractComponent comp, AbstractComponent next) {
 		if (comp != null) comp._next = next;
 		else _chdinf.first = next;
 	}
-	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
+	/** Set the prev sibling of the given child. (this is a parent of comp). */
+	/*package*/ final
+	void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
 		else _chdinf.last = prev;
 	}
+	/** Increases the number of children. It assumes _chdinf not null. */
+	/*package*/ final void incNChild(int diff) {
+		_chdinf.nChild += diff;
+	}
+	/** Returns the number of children. It assumes _chdinf not null. */
+	/*package*/ final
+	void nChild(AbstractComponent first, AbstractComponent last, int nChild) {
+		_chdinf.first = first;
+		_chdinf.last = last;
+		_chdinf.nChild = nChild;
+
+		for (; first != null; first = first._next)
+			first._parent = this;
+	}
+
 	/** Replaces with the given component.
 	 * This component will be detached at the end.
 	 */
-	/*package*/ void replaceWith(AbstractComponent comp, boolean bFellow) { //called by StubComponent
+	/*package*/ final void replaceWith(AbstractComponent comp, boolean bFellow) { //called by StubComponent
 		if (comp._parent != null || comp._next != null || comp._prev != null
 		|| comp._chdinf != null || comp._page != null)
 			throw new IllegalStateException();
