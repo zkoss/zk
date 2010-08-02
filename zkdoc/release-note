@@ -15,6 +15,7 @@ ZK 5.0.4
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
   3029931: Post onAfterRender after onInitRender/onInitRenderLater
+  3038128: Allow all system-config (eg, engine-class) in zk/config.xml
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
