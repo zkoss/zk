@@ -1902,8 +1902,26 @@ w:use="foo.MyWindow"&gt;
 		return Collections.EMPTY_MAP;
 	}
 	/** Adds an event that the client might send to the server.
-	 * It must be called when loading the class (i.e., in <code>static {}</code>).
-	 * It cannot be called after that.
+	 * {@link #addClientEvent} is usally called in the <code>static</code> clause
+	 * when the class is loaded. For example,
+	 * <pre><code>public class MyWidget extends HtmlBasedComponent {
+	 *  static {
+	 *    addClientEvent(MyWidget.class, "onFly", 0);
+	 *  }
+	 *...</code></pre>
+	 *
+	 * <p>For a programming language not easy to have the <code>static</code>
+	 * clause (such as Scala), {@link #addClientEvent} can be called in
+	 * the constructors. Notice that it is better not to add the client event
+	 * later than the contructor, since the derived classes will copy
+	 * the client events defined in the base class, when the first time
+	 * {@link #addClientEvent} is called with the class.
+	 *
+	 * <h3>Version History</h3>
+	 * <p>Since 5.0.4, it can be called in contructors
+	 * (in additions to the static clause). On othe thand, it can only
+	 * be called in the static clause (executed when the class is loaded)
+	 * in the prior version.
 	 * @param cls the component's class (implementation class).
 	 * @param flags a combination of {@link #CE_IMPORTANT}, {@link #CE_NON_DEFERRABLE}
 	 * {@link #CE_BUSY_IGNORE}, {@link #CE_DUPLICATE_IGNORE}
@@ -1916,30 +1934,35 @@ w:use="foo.MyWindow"&gt;
 			events = (Map)_clientEvents.get(cls);
 		}
 
-		//It is OK to race there
-		final boolean first = events == null;
-		if (first) {
-			//for better performance, we pack all event names of super
-			//classes, though it costs more memory
-			events = new HashMap(8);
-			for (Class c = cls ; c != null; c = c.getSuperclass()) {
-				Map evts;
+		if (events == null) {
+			synchronized (cls) {
 				synchronized (_clientEvents) {
-					evts = (Map)_clientEvents.get(c);
+					events = (Map)_clientEvents.get(cls);
 				}
-				if (evts != null) {
-					events.putAll(evts);
-					break;
+				if (events == null) {
+					//for better performance, we pack all event names of super
+					//classes, though it costs more memory
+					events = new HashMap(8);
+					for (Class c = cls ; c != null; c = c.getSuperclass()) {
+						final Map evts;
+						synchronized (_clientEvents) {
+							evts = (Map)_clientEvents.get(c);
+						}
+						if (evts != null) {
+							events.putAll(evts);
+							break;
+						}
+					}
+					synchronized (_clientEvents) {
+						_clientEvents.put(cls, events);
+					}
 				}
 			}
 		}
 
-		events.put(evtnm, new Integer(flags));
-		
-		if (first)
-			synchronized (_clientEvents) {
-				_clientEvents.put(cls, events);
-			}
+		synchronized (events) {
+			events.put(evtnm, new Integer(flags));
+		}
 	}
 
 	//Event//
