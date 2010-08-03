@@ -37,6 +37,7 @@ ZK 5.0.4
   3035818: The longbox,  doublebox receive a wrong value on server side
   3035847: The popup of combobox shall be destroyed when detached
   3035897: The longbox parse a wrong result when paste '100%'
+  3032997: Applet params are passed incorrectly
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
