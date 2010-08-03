@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.MouseEvent;
 
 /**
- * Used to notify that the widths of two adjacent column are changed.
+ * Used to notify that the width of a column is changed.
  *
  * <p>When an user drags the border of a sizable column, only the width of the
  * column itself is changed, other columns are not affected.
