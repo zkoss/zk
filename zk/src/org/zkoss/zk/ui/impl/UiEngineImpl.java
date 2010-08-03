@@ -55,7 +55,6 @@ import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
-import org.zkoss.zk.ui.ext.render.Merger;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.xel.Evaluators;
@@ -64,7 +63,7 @@ import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
 
 /**
- * An implementation of {@link UiEngine}.
+ * An implementation of {@link UiEngine} to create and update components.
  *
  * @author tomyeh
  */
@@ -369,13 +368,14 @@ public class UiEngineImpl implements UiEngine {
 						exec.forward(uri);
 					} else {
 						comps = uv.isAborting() || exec.isVoided() ? null:
-							create(new CreateInfo(
+							execCreate(new CreateInfo(
 								((WebAppCtrl)wapp).getUiFactory(), exec, page,
 								config.getComposer(page)),
 							pagedef, null);
 					}
 
 					inits.doAfterCompose(page, comps);
+					afterCreate(comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
 						throw UiException.Aide.wrap(ex);
@@ -398,9 +398,12 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					richlet.service(page);
 
-					if (composer != null)
-						for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-							composer.doAfterCompose((Component)it.next());
+					for (Iterator it = page.getRoots().iterator(); it.hasNext();) {
+						final Component comp = (Component)it.next();
+						if (composer != null)
+							composer.doAfterCompose(comp);
+						afterCreate(new Component[] {comp});
+					}
 				} catch (Throwable t) {
 					if (composer instanceof ComposerExt)
 						if (((ComposerExt)composer).doCatch(t))
@@ -510,18 +513,22 @@ public class UiEngineImpl implements UiEngine {
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
+	/** Called after the whole component tree has been created.
+	 * <p>Default: does nothing.
+	 * <p>Derived class might override this method to process the components
+	 * if necessary.
+	 * @param comps the components being created. It is never null but
+	 * it might be a zero-length array.
+	 * @since 5.0.4
+	 */
+	protected void afterCreate(Component[] comps) {
+	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();
 		return evt != null && !uv.isAborting() ? evt: null;
 	}
-	private static final Component[] create(
-	CreateInfo ci, NodeInfo parentInfo, Component parent) {
-		final Component[] comps = execCreate(ci, parentInfo, parent);
-		for (int j = comps.length; --j >= 0;)
-			comps[j] = merge(comps[j]);
-		return comps;
-	}
+
 	/** Cycle 1:
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
@@ -864,7 +871,7 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			if (fakepg) pagedef.init(page, false);
 
-			final Component[] comps = create(
+			final Component[] comps = execCreate(
 				new CreateInfo(
 					((WebAppCtrl)desktop.getWebApp()).getUiFactory(),
 					exec, page, null), //technically sys composer can be used but we don't (to make it simple)
@@ -877,6 +884,8 @@ public class UiEngineImpl implements UiEngine {
 					if (parent != null)
 						parent.appendChild(comps[j]);
 				}
+
+			afterCreate(comps);
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
@@ -1846,39 +1855,6 @@ public class UiEngineImpl implements UiEngine {
 					Classes.coerce(String.class, prop.getValue(comp)));
 		}
 		return map;
-	}
-
-	/** Merges components if possible. */
-	private static final Component merge(final Component comp) {
-		Merger p = null;
-		for (Component child = comp.getFirstChild(); child != null;) {
-			child = merge(child);
-			if (p != null) {
-				final Component c = p.mergeNextSibling();
-				if (c != null)
-					child = c;
-				p = null;
-			}
-
-			final Component n = child.getNextSibling();
-			if (p == null && n != null) {
-				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-				if (xc instanceof Merger)
-					p = (Merger)xc;
-			}
-			child = n;
-		}
-
-		final Component child = comp.getFirstChild();
-		if (child != null) {
-			final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
-			if (xc instanceof Merger) {
-				final Component c = ((Merger)xc).mergeChildren();
-				if (c != null) //merged
-					return c;
-			}
-		}
-		return comp;
 	}
 
 	//Supporting Classes//

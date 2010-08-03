@@ -45,8 +45,8 @@ import org.zkoss.zk.ui.ext.render.Merger;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
- * A comonent used to represent XML elements that are associated
- * with the inline namespace (http://www.zkoss.org/2005/zk/inline).
+ * A component used to represent XML elements that are associated
+ * with the native namespace (http://www.zkoss.org/2005/zk/native).
  *
  * <p>It contains the content that shall be sent directly to client.
  * It has three parts: prolog, children and epilog.
@@ -157,7 +157,6 @@ implements DynamicTag, Native {
 		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
 			super.redraw(out); //renderProperties (assume in zscript)
-			stub();
 			return;
 		}
 
@@ -261,11 +260,6 @@ implements DynamicTag, Native {
 
 			oldout.write(sb.toString());
 		}
-		stub();
-	}
-	/** Transforms this component to a stub component. */
-	private void stub() {
-		new StubComponent().replace(this, false/*not fellow anymore*/);
 	}
 
 	/** Used to indicate the redrawing of the top native is found. */
