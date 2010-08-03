@@ -219,15 +219,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this.menupopup)
 			this.menupopup._shallClose = false;
 		if (!topmost) {
-			if (zul.menu._nOpen)
-				zWatch.fire('onFloatUp', this); //notify all
+			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
 		} else {
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
 				menubar._lastTarget = this;
-				if (zul.menu._nOpen)
-					zWatch.fire('onFloatUp', this); //notify all
+				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
 			} else {
 				var target = menubar._lastTarget;
@@ -252,8 +250,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (this.menupopup && this.getMenubar().isAutodrop()) {
 				if (this.menupopup.isOpen())
 					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				if (zul.menu._nOpen)
-					zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
+				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);
