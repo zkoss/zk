@@ -385,9 +385,8 @@ public class DefinitionLoaders {
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //extends
-				if (log.finerable()) log.finer("Extends component definition: "+name);
-
 				final String extnm = el.getElementValue("extends", true);
+				if (log.finerable()) log.finer("Extends component definition, "+name+", from "+extnm);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
 				if (ref == null) {
 					log.warning("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
@@ -438,8 +437,9 @@ public class DefinitionLoaders {
 
 			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
-			if (wgtnm != null && !withEL(wgtnm)) {
-				wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
+			if (wgtnm != null) {
+				if (!withEL(wgtnm))
+					wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
 				compdef.setDefaultWidgetClass(wgtnm);
 			}
 
@@ -458,8 +458,8 @@ public class DefinitionLoaders {
 
 				compdef.addMold(nm, wn != null ? wn: wgtnm);
 
-				WidgetDefinition wd = wn !=  null ? withEL(wn) ? null: 
-					getWidgetDefinition(langdef, compdef, wn): wgtdef;
+				WidgetDefinition wd = wn == null ? wgtdef:
+					withEL(wn) ? null: getWidgetDefinition(langdef, compdef, wn);
 				if (moldURI != null) {
 					if (wd != null)
 						wd.addMold(nm, moldURI);
@@ -474,8 +474,12 @@ public class DefinitionLoaders {
 					final char cc = cssURI.charAt(0);
 					if (cc != '/' && cc != '~') {
 						String n = wn != null ? wn: wgtnm;
-						int k = n.lastIndexOf('.');
-						cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+						if (!withEL(n)) {
+							int k = n.lastIndexOf('.');
+							cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+						} else {
+							log.error("Absolute path required for cssURI, since the widget class contains EL expressions, "+e.getLocator());
+						}
 					}
 					langdef.addCSSURI(cssURI);
 				}
