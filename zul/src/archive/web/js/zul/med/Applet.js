@@ -200,9 +200,6 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	 * <code>{attr1:'value1', attr2:'value2'}</code> gives two <code>param</code> 
 	 * tags under <code>applet</code> tag with names <code>attr1, attr2</code>, 
 	 * values <code>value1, value2</code> respectively.
-	 * <pre><code>
-	 * <param 
-	 * </code></pre>
 	 * @since 5.0.4
 	 */
 	setParams: function (m) {
