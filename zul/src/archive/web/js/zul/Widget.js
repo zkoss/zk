@@ -86,6 +86,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			tip.close({sendOnOpen:true});
 		}
 	}
+	function _setCtrlKeysErr(msg) {
+		zk.error("setCtrlKeys: " + msg);
+	}
 
 /** The base class for ZUL widget.
 * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
@@ -376,7 +379,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			case '$':
 			case '@':
 				if (which)
-					throw "Combination of Shift, Alt and Ctrl not supported: "+keys;
+					return _setCtrlKeysErr("Combination of Shift, Alt and Ctrl not supported: "+keys);
 				which = cc == '^' ? 1: cc == '@' ? 2: 3;
 				break;
 			case '#':
@@ -388,7 +391,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 						break;
 				}
 				if (k == j + 1)
-					throw "Unexpected character "+cc+" in "+keys;
+					return _setCtrlKeysErr("Unexpected character "+cc+" in "+keys);
 
 				var s = keys.substring(j+1, k).toLowerCase();
 				if ("pgup" == s) cc = 33;
@@ -404,10 +407,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
-						throw "Unsupported function key: #f" + v;
+						return _setCtrlKeysErr("Unsupported function key: #f" + v);
 					cc = 112 + v - 1;
 				} else
-					throw "Unknown #"+s+" in "+keys;
+					return _setCtrlKeysErr("Unknown #"+s+" in "+keys);
 
 				parsed[which][cc] = true;
 				which = 0;
@@ -416,9 +419,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 			default:
 				if (!which || ((cc > 'Z' || cc < 'A') 
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
-					throw "Unexpected character "+cc+" in "+keys;
+					return _setCtrlKeysErr("Unexpected character "+cc+" in "+keys);
 				if (which == 3)
-					throw "$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.";
+					return _setCtrlKeysErr("$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.");
 
 				if (cc <= 'z' && cc >= 'a')
 					cc = cc.toUpperCase();
