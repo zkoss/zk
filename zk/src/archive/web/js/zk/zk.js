@@ -334,7 +334,7 @@ zk.copy(zk, {
 	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
-	 * By default, it is false. It is true if <a href="code.google.com/p/zkuery/">ZKuery</a>
+	 * By default, it is false. It is true if <a href="http://code.google.com/p/zkuery/">ZKuery</a>
 	 * is used
 	 * @type boolean
 	 */

@@ -388,7 +388,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * The AU Engine used to send the AU requests to the server and to process
  * the AU responses.
  * <p>Notice {@link zAu}, {@link AuCmd0} and {@link AuCmd1}
- * are not available in <a href="code.google.com/p/zkuery/">ZKuery</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  */
 zAu = {
 	_resetTimeout: function () { //called by mount.js
@@ -890,7 +890,7 @@ zAu.beforeSend = function (uri, req) {
  * The AU command handler for processes commands not related to widgets,
  * sent from the server.
  * <p>Notice {@link zAu}, {@link zk.AuCmd0} and {@link zk.AuCmd1}
- * are not available in <a href="code.google.com/p/zkuery/">ZKuery</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  * @see zAu#cmd0
  */
 zAu.cmd0 = /*prototype*/ { //no uuid at all
@@ -1163,7 +1163,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
  * The AU command handler for processes commands related to widgets,
  * sent from the server.
  * <p>Notice {@link zAu}, {@link zk.AuCmd0} and {@link zk.AuCmd1}
- * are not available in <a href="code.google.com/p/zkuery/">ZKuery</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  * @see zAu#cmd1
  */
 zAu.cmd1 = /*prototype*/ {

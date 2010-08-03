@@ -19,7 +19,7 @@ import java.io.FileInputStream;
 
 /**
  * Used by ZK Lighter to generate the JavaScript content of a WPD file
- for <a href="code.google.com/p/zkuery/">ZKuery</a>.
+ for <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  * Unlike {@link WpdExtendlet}, it is based on the file system.
  * 
  * @author tomyeh
