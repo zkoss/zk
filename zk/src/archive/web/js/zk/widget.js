@@ -971,9 +971,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	//inServer: false,
 	/** The UUID. Don't change it if it is bound to the DOM tree, or {@link #inServer} is true.
 	 * Developers rarely need to modify it since it is generated automatically. 
-	 * <h3>Note of ZK Light</h3>
+	 * <h3>Note of <a href="code.google.com/p/zkuery/">ZKuery</a></h3>
 	 * It is the same as {@link #id} if {@link _global_.zk#spaceless} is true,
-	 * such as ZK Light.
+	 * such as ZKuery.
 	 * @type String
 	 */
 	//uuid: null,

@@ -141,7 +141,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_shadow: true,
 
 	$init: function () {
-		if (!zk.light) this._fellows = {};
+		if (!zk.zkuery) this._fellows = {};
 
 		this.$supers('$init', arguments);
 

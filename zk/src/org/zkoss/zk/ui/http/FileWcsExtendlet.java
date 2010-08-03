@@ -21,7 +21,8 @@ import java.io.FileInputStream;
 import java.io.File;
 
 /**
- * Used by ZK Lighter to generate the CSS content of a WCS file.
+ * Used by ZK Lighter to generate the CSS content of a WCS file
+ * for <a href="code.google.com/p/zkuery/">ZKuery</a>.
  * Unlike {@link WcsExtendlet}, it is based on the file system.
  *
  * @author tomyeh

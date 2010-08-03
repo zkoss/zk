@@ -334,7 +334,7 @@ zk.copy(zk, {
 	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
-	 * By default, it is false. It is true if <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>
+	 * By default, it is false. It is true if <a href="code.google.com/p/zkuery/">ZKuery</a>
 	 * is used
 	 * @type boolean
 	 */
@@ -1387,7 +1387,7 @@ _zErb = zk.$extends(zk.Object, {
 	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id+'-p">';
-	if (!zk.light)
+	if (!zk.zkuery)
 		html += '<span class="btn" onclick="_zErb._redraw()">redraw</span>&nbsp;';
 	html += '<span class="btn" onclick="_zErb._close(\''+id+'\')">close</span></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
