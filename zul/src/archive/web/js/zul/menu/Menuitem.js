@@ -265,7 +265,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	doMouseOver_: function (evt) {
 		if (!this.$class._isActive(this) && this._canActivate(evt)) {
 			this.$class._addActive(this);
-			zWatch.fire('onFloatUp', this); //notify all
+			if (zul.menu._nOpen)
+				zWatch.fire('onFloatUp', this); //notify all
 		}
 		this.$supers('doMouseOver_', arguments);
 	},

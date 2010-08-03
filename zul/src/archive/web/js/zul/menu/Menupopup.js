@@ -74,6 +74,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (this._shadow) this._shadow.hide();
 	},
 	close: function () {
+		if (this.isOpen())
+			zul.menu._nOpen--;
+
 		this.$supers('close', arguments);
 		jq(this.$n()).hide(); // force to hide the element
 		this._hideShadow();
@@ -87,6 +90,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$class._rmActive(this);
 	},
 	open: function (ref, offset, position, opts) {
+		if (!this.isOpen())
+			zul.menu._nOpen++;
+
 		if (this.parent.$instanceof(zul.menu.Menu)) {
 			if (!offset) {
 				ref = this.parent.$n('a');
@@ -248,3 +254,4 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 	}
 });
+zul.menu._nOpen = 0;
