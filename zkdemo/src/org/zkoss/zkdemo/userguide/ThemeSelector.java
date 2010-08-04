@@ -66,14 +66,14 @@ public class ThemeSelector extends Combobox {
 			appendChild(breeze);
 		}
 		
-		Comboitem zk = new Comboitem("Blue");
+		Comboitem zk = new Comboitem(""Classic blue");
 		zk.setValue(Themes.ZK_THEME);
 		themes.put(Themes.ZK_THEME, zk);
 		appendChild(zk);
 		
 		
 		if (hasSilver) {
-			Comboitem silvergray = new Comboitem("Silvergray");
+			Comboitem silvergray = new Comboitem("Silver gray");
 			silvergray.setValue(Themes.SILVERGRAY_THEME);
 			themes.put(Themes.SILVERGRAY_THEME, silvergray);
 			appendChild(silvergray);
