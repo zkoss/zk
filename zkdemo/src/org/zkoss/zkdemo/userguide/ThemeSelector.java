@@ -54,32 +54,32 @@ public class ThemeSelector extends Combobox {
 	private void initChildren() {
 		boolean hasSilver = Themes.hasSilvergrayLib();
 		boolean hasBreeze = Themes.hasBreezeLib();
+		
 		if (!hasSilver && !hasBreeze) {
 			setVisible(false);
 			return;
 		}	
 		
-		if (Themes.hasBreezeLib()) {
+		if (hasBreeze) {
 			Comboitem breeze = new Comboitem("Breeze");
 			breeze.setValue(Themes.BREEZE_THEME);
 			themes.put(Themes.BREEZE_THEME, breeze);
 			appendChild(breeze);
 		}
 		
-		Comboitem zk = new Comboitem(""Classic blue");
-		zk.setValue(Themes.ZK_THEME);
-		themes.put(Themes.ZK_THEME, zk);
-		appendChild(zk);
+		Comboitem classicblue = new Comboitem("Classic Blue");
+		classicblue.setValue(Themes.CLASSICBLUE_THEME);
+		themes.put(Themes.CLASSICBLUE_THEME, classicblue);
+		appendChild(classicblue);
 		
 		
 		if (hasSilver) {
-			Comboitem silvergray = new Comboitem("Silver gray");
+			Comboitem silvergray = new Comboitem("Silver Gray");
 			silvergray.setValue(Themes.SILVERGRAY_THEME);
 			themes.put(Themes.SILVERGRAY_THEME, silvergray);
 			appendChild(silvergray);
 		}
 		
-
 		setSelectedItemByTheme();
 	}
 
@@ -91,16 +91,16 @@ public class ThemeSelector extends Combobox {
 	 * @param defaultItem
 	 */
 	private void setSelectedItemByTheme () {
-		Execution exe = Executions.getCurrent();
-		String current = Themes.getThemeStyle(exe);
+		String current = Themes.getThemeStyle(Executions.getCurrent());
 		Comboitem t =  (Comboitem)themes.get(current);
+		
 		if (t != null) {
 			setSelectedItem(t);
 			return;
 		}
 		
 		Comboitem defListitem = (Comboitem)themes.get(Themes.BREEZE_THEME);
-		defListitem = defListitem != null ? defListitem : (Comboitem)themes.get(Themes.ZK_THEME);
+		defListitem = defListitem != null ? defListitem : (Comboitem)themes.get(Themes.CLASSICBLUE_THEME);
 		defListitem = defListitem != null ? defListitem : (Comboitem)themes.get(Themes.SILVERGRAY_THEME);
 		setSelectedItem(defListitem);
 	}

@@ -30,7 +30,7 @@ public class Themes {
 	private final static String COOKIE_FONT_SIZE = "zkdemotfs";
 	private final static String THEME_COOKIE_KEY = "zktheme";
 	public final static String BREEZE_THEME = "breeze";
-	public final static String ZK_THEME = "zktheme";
+	public final static String CLASSICBLUE_THEME = "zktheme";
 	public final static String SILVERGRAY_THEME = "silvergray";
 	
 	public final static String DEFAULT_WCS_URI = "~./zul/css/zk.wcs";
