@@ -450,9 +450,11 @@ zkPop = {
 			zk.onVisiAt(cmp);
 			zkPop._fixWdh(cmp);
 			zkPop._fixHgh(cmp);
-			var ifram = $e(cmp.id + "!ifrstk");
-			ifram.style.height = cmp.style.height;
-			ifram.style.width = cmp.style.width;
+			if (zk.ie) {
+				var ifram = $e(cmp.id + "!ifrstk");
+				ifram.style.height = cmp.style.height;
+				ifram.style.width = cmp.style.width;
+			}
 			return true;
 		}
 		return false;
