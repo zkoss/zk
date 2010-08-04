@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-3039363.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug  4 19:50:30 TST 2010, Created by jimmy
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[      
+		<ol>		
+			<li>click button, the popup will appear</li>
+			<li>click "200px" button, check the listbox will not hide the popup</li>
+		</ol>
+	]]></html>
+<popup id="pop" width="100px" height="100px">
+<button label="100px" onClick='self.parent.height = "100px"' />
+<button label="200px" onClick='self.parent.height = "200px"' />
+</popup>
+<button label="click" onClick="pop.open(self);" />
+<separator height="100px" />
+<listbox mold="select" width="300px" />
+</zk>
