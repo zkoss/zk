@@ -450,8 +450,8 @@ zkPop = {
 			zk.onVisiAt(cmp);
 			zkPop._fixWdh(cmp);
 			zkPop._fixHgh(cmp);
-			if (zk.ie) {
-				var ifram = $e(cmp.id + "!ifrstk");
+			var ifram;
+			if (ifram = $e(cmp.id + "!ifrstk")) {
 				ifram.style.height = cmp.style.height;
 				ifram.style.width = cmp.style.width;
 			}
