@@ -89,6 +89,18 @@ import org.zkoss.zul.impl.XulElement;
  * adds a label to a Listitem by calling toString against the object returned by
  * {@link ListModel#getElementAt}
  * 
+ * [Since 5.0.4]
+ * <p>To retrieve what are selected in Listbox with a {@link Selectable} 
+ * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what 
+ * is currently selected object in {@link ListModel} rather than using 
+ * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of 
+ * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox} 
+ * if you use the {@link Selectable} {@link ListModel}.</p>
+ * 
+ * <pre><code>
+ * Set selection = ((Selectable)getModel()).getSelection();
+ * </code></pre>  
+ * 
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
  * {@link #getMold} is "default", scrolling is used if {@link #setHeight} is
@@ -179,17 +191,6 @@ import org.zkoss.zul.impl.XulElement;
  * later. Basically, you shall operate on the item of the {@link ListModel} 
  * rather than on the {@link Listitem} of the {@link Listbox} if you use the 
  * {@link ListModel} and ROD.</p>
- * 
- * <p>To retrieve what are selected in ROD Listbox, you shall use 
- * {@link Selectable#getSelection} to get what is currently selected object in
- * {@link ListModel} rather than using {@link Listbox#getSelectedItems}. That is, 
- * you shall operate on the item of the {@link ListModel} rather than on the 
- * {@link Listitem} of the {@link Listbox} if you use the {@link ListModel} and
- * ROD.</p>
- * 
- * <pre><code>
- * Set selection = ((Selectable)getModel()).getSelection();
- * </code></pre>  
  * 
  * @author tomyeh
  * @see ListModel
@@ -2170,13 +2171,6 @@ public class Listbox extends XulElement implements Paginated,
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
-		if (comp instanceof Listitem && _model instanceof Selectable && (isLoadingModel() || isSyncingModel())) {
-			final Listitem item = (Listitem) comp;
-			if (((Selectable) _model).getSelection().contains(
-					_model.getElementAt(item.getIndex()))) {
-				addItemToSelection(item);
-			}
-		}
 		updateVisibleCount((Listitem) comp, false);
 		checkInvalidateForMoved((Listitem) comp, false);
 	}
@@ -2706,9 +2700,18 @@ public class Listbox extends XulElement implements Paginated,
 				// (default)
 				cell.detach();
 			}
+			
+			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
+			//check if the item is a selected item and add into selected set
+			final Object value = _model.getElementAt(item.getIndex()); 
+			if (_model instanceof Selectable) {
+				if (((Selectable) _model).getSelection().contains(value)) {
+					addItemToSelection(item);
+				}
+			}
 
 			try {
-				_renderer.render(item, _model.getElementAt(item.getIndex()));
+				_renderer.render(item, value);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
