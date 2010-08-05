@@ -85,14 +85,21 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 	}
 
 	/** Returns the embedded content (i.e., HTML tags).
-	 * <p>Default: empty ("").
-	 * <p>Deriving class can override it to return whatever it wants
-	 * other than null.
 	 */
 	public String getContent() {
 		return _content;
 	}
 	/** Sets the embedded content (i.e., HTML tags).
+	 * <p>Default: empty ("").
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
+	 *
+	 * <h3>Security Note</h3>
+	 * <p>Unlike other methods, the content assigned to this method
+	 * is generated directly to the browser without escaping.
+	 * Thus, it is better not to have something input by the user to avoid
+	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Guide/Advanced_ZK/Security_Tip/Cross-site_scripting#The_content_Property_of_html_and_comboitem">XSS</a>
+	 * attach.
 	 */
 	public void setContent(String content) {
 		if (content == null) content = "";
