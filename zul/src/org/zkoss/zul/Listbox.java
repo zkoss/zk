@@ -2982,8 +2982,7 @@ public class Listbox extends XulElement implements Paginated,
 			final Execution exec = Executions.getCurrent(); 
 			exec.setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
 			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
-			// prepare a right moment to init Listbox (must be as early as
-			// possible)
+			// prepare a right moment to init Listbox (must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
@@ -3021,7 +3020,7 @@ public class Listbox extends XulElement implements Paginated,
 			} else if (_model != null){ //items in model not init yet
 				initModel(); //init the model
 			} else {
-				//The attribute shall be rmoved, otherwise DataLoader will not syncModel when setModel
+				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
 				Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
 			}
 			final DataLoader loader = getDataLoader();

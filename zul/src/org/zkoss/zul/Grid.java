@@ -238,7 +238,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) {
 			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
-			//prepare a right moment to init Grid
+			//prepare a right moment to init Grid(must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this));
 		}
@@ -272,6 +272,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				}
 			} else if (_model != null){ //rows not created yet
 				initModel();
+			} else {
+				//bug# 3039282: NullPointerException when assign a model to Grid at onCreate
+				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
+				Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
 			}
 			final DataLoader loader = getDataLoader();
 			
