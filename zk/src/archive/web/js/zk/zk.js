@@ -594,6 +594,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 			define = members['$define'];
 		delete members['$define'];
 		zk.copy(thispt, superpt); //inherit non-static
+		zk.define(jclass, define);
 		zk.copy(thispt, members);
 
 		for (var p in superclass) //inherit static
@@ -609,8 +610,6 @@ foo.Widget = zk.$extends(zk.Widget, {
 			//maintain a list of subclasses (used zk.override)
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
-
-		zk.define(jclass, define);
 
 		return jclass;
 	},
