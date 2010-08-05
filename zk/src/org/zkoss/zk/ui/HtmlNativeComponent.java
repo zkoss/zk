@@ -34,6 +34,7 @@ import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -385,6 +386,8 @@ implements DynamicTag, Native {
 		if (parent != null) {
 			final AbstractComponent n = (AbstractComponent)getNextSibling();
 			if (n instanceof HtmlNativeComponent) {
+				final DesktopCtrl desktopCtrl = _page != null ?
+					(DesktopCtrl)_page.getDesktop(): null;
 			 	if (n.getFirstChild() == null) {
 			 		//remove n
 			 		final AbstractComponent n2 = (AbstractComponent)n.getNextSibling();
@@ -394,6 +397,8 @@ implements DynamicTag, Native {
 
 					final String s = ((HtmlNativeComponent)n).getFullContent();
 			 		_postfix = _postfix != null ? _postfix + s: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(n, false); //ok but no need to recycle
 					return this;
 			 	}
 			 	if (getFirstChild() == null) {
@@ -406,6 +411,8 @@ implements DynamicTag, Native {
 			 		final String s = getFullContent(),
 			 			prefix = ((HtmlNativeComponent)n)._prefix;
 			 		((HtmlNativeComponent)n)._prefix = prefix != null ? s + prefix: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(this, false); //ok but no need to recycle
 					return n;
 			 	}
 			}
@@ -427,6 +434,8 @@ implements DynamicTag, Native {
 				}
 			}
 
+			final DesktopCtrl desktopCtrl = _page != null ?
+				(DesktopCtrl)_page.getDesktop(): null;
 			boolean bEpilog = false;
 			for (child = getFirstChild(); child != null;
 			child = child.getNextSibling()) {
@@ -440,6 +449,8 @@ implements DynamicTag, Native {
 				} else { //childWithChild
 					_prolog = nc.getFullContent() + _prolog;
 				}
+				if (desktopCtrl != null)
+					desktopCtrl.removeComponent(nc, false); //ok but no need to recycle
 			}
 			if (childWithChild == null) {
 				nChild(null, null, 0);
