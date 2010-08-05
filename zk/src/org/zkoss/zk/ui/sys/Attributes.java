@@ -199,4 +199,9 @@ public class Attributes {
 	 * ({@link org.zkoss.zk.ui.http.WcsExtendlet}).
 	 */
 	public static final String INJECT_URI_PREFIX = "_zkiju-";
+
+	/** An execution attribute to indicate that a page is rendering.
+	 * @since 5.0.4
+	 */
+	public static final String PAGE_RENDERING = "org.zkoss.zk.ui.page.rendering";
 }
