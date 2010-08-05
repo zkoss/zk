@@ -2951,9 +2951,9 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty(
-				"org.zkoss.zul.listbox.rod", "false");
-		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod"); //might be String or Boolean
+		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.listbox.rod", "false");
+		//bug# 3039948: Unable to turn on rod for Listbox if defined in its parent
+		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod", true); //might be String or Boolean
 		if (rod2 == null) {
 			rod2 = rod1;
 		}
