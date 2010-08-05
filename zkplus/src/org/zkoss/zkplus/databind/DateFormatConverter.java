@@ -32,7 +32,7 @@ import org.zkoss.zul.Listbox;
  * formated date String. You can specify the date format in 'format' annotation, 
  * and the converter will format the given date for you. e.g.
  * <pre>
- * &lt;label value="@{mydate, converter='org.zkoss.zkplus.datebind.DateFormatConverter' self="@{format(yyyy/MM/dd)}"/>
+ * &lt;label value="@{mydate, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(yyyy/MM/dd)}"/>
  * </pre> 
  * If format is not given, default to 'MM/dd/yyyy'.
  * 
