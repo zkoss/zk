@@ -72,7 +72,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	private int _len = 5; //text length, default 5
 	private String _exclude = null;
 	private String _value = ""; //captcha text value 
-	private boolean _noise, _border; //whether generate noise
+	private boolean _noise, _frame; //whether generate noise
 	private CaptchaEngine _engine; //the captcha engine that generate the distortion image.
 
 	public Captcha() {
@@ -294,17 +294,35 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	/** Sets whether generate border.
 	 * <p> Default to false.
 	 * @since 5.0.0
+	 * @deprecated As of release 5.0.4, use {@link #setFrame(boolean)} instead.
 	 */
 	public void setBorder(boolean b) {
-		_border = b;
+		setFrame(b);
 	}
 	
 	/** Returns whether generate border.
 	 * <p> Default to false.
 	 * @since 5.0.0
+	 * @deprecated As of release 5.0.4, use {@link #isFrame()} instead.
 	 */
 	public boolean isBorder() {
-		return _border;
+		return isFrame();
+	}
+
+	/** Sets whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public void setFrame(boolean frame) {
+		_frame = frame;
+	}
+
+	/** Returns whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public boolean isFrame(){
+		return _frame;
 	}
 	
 	/**

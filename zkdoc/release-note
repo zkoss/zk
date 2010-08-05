@@ -42,6 +42,7 @@ ZK 5.0.4
   3023305: Typo in DateFormatConverter API page
   3039843: Paging Listbox without rod, ListModel shall not fully loaded
   3039282: NullPointerException when assign a model to Grid at onCreate
+  3032567: No border is shown for captcha
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
