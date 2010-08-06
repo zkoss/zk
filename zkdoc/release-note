@@ -46,6 +46,7 @@ ZK 5.0.4
   3025747: Fisheyebar UI strange when vertical=true, attachEdge=bottom
   3039948: Unable to turn on rod for Listbox if defined in its parent
   3039339: Column is not aligned in some special combination of sizes
+  3037627: Cell with hflex in hbox causes JavaScript Error
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
