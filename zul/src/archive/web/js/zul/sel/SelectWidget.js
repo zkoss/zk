@@ -375,6 +375,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._visibleRows(sz);
 
                 hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
+                //bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
+                hgh -= (this.efrozen ? this.efrozen.offsetHeight : 0);
                 this.ebody.style.height = (hgh < 0 ? 0 : hgh) + "px";
 
 				//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
