@@ -45,6 +45,7 @@ ZK 5.0.4
   3032567: No border is shown for captcha
   3025747: Fisheyebar UI strange when vertical=true, attachEdge=bottom
   3039948: Unable to turn on rod for Listbox if defined in its parent
+  3039339: Column is not aligned in some special combination of sizes
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

@@ -384,10 +384,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_doScroll: function () {
 		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
-			if (this.ehead) 
-				this.ehead.scrollLeft = this.ebody.scrollLeft;
-			if (this.efoot) 
-				this.efoot.scrollLeft = this.ebody.scrollLeft;		
+			if (this._currentLeft != this.ebody.scrollLeft) { //care about horizontal scrolling only
+				if (this.ehead) {
+					this.ehead.scrollLeft = this.ebody.scrollLeft;
+					//bug# 3039339: Column is not aligned in some special combination of dimension
+					var diff = this.ebody.scrollLeft - this.ehead.scrollLeft;
+					var hdflex = jq(this.ehead).find('table>tbody>tr>th:last-child')[0];
+					if (diff) { //use the hdfakerflex to compensate
+						hdflex.style.width = (hdflex.offsetWidth + diff) + 'px';
+						this.ehead.scrollLeft = this.ebody.scrollLeft;
+					} else if (hdflex.style.width != '0px' && this.ebody.scrollLeft == 0) {
+						hdflex.style.width = '';
+					}
+				}
+				if (this.efoot) 
+					this.efoot.scrollLeft = this.ebody.scrollLeft;
+			}
 		}
 		
 		this._currentTop = this.ebody.scrollTop;
