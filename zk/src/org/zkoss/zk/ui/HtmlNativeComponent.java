@@ -112,6 +112,30 @@ implements DynamicTag, Native {
 		return _tag;
 	}
 
+	/** Returns whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>Unlike other kind of components, this method always return "true",
+	 * i.e., stub-only. In additions, its child component does not inherit
+	 * this value even if the child's {@link Component#getStubonly} is "inherit"
+	 * (and assumed to "false" if "inherit").
+	 * @since 5.0.4
+	 */
+	public String getStubonly() {
+		return "true";
+	}
+	/** Sets whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>Default: "true".
+	 * @exception UiException if stubonly is not "true".
+	 * @since 5.0.4
+	 */
+	public void setStubonly(String stubonly) {
+		if (!"true".equals(stubonly))
+			throw new UiException("Not allowed: "+stubonly);
+	}
+
 	//Native//
 	public List getDeclaredNamespaces() {
 		return _dns != null ? _dns: Collections.EMPTY_LIST;

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+stubonly.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug  9 14:47:14 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="test of stub-only" border="normal">
+	<zscript>
+	void on(Event event) {
+		inf.appendChild(new Label(event.getClass().getName()+":"+event.getName()));
+	}
+	</zscript>
+	<button label="invalidate window" onClick="self.parent.invalidate()"/>
+	<vbox stubonly="true">
+		<hbox>
+		This is a label at Row 1, Cell 1.
+		<textbox onChange="on(event)"/>
+		Another label at Row 1, Cell 2 (previous textbox is stub-only too)
+		</hbox>
+		<hbox>
+		Another at Row 2, Cell 1 (and the following listbox is not stub-only)
+		<listbox stubonly="false" width="50px" onSelect="on(event)">
+			<listitem label="item1"/>
+			<listitem label="item2"/>
+		</listbox>
+		and the following is stub-only
+		<listbox width="50px" onSelect="on(event)">
+			<listitem label="item1"/>
+			<listitem label="item2"/>
+		</listbox>
+		</hbox>
+	</vbox>
+	<vbox id="inf"/>
+</window>

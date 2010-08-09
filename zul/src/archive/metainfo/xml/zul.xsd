@@ -401,6 +401,7 @@
 		<xs:attribute name="mold" type="xs:string" use="optional" />
 		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
 		<xs:attribute name="auService" type="xs:string" use="optional" />
+		<xs:attribute name="stubonly" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />

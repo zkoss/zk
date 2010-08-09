@@ -549,6 +549,36 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public void unsetVariable(String name, boolean local);
 
+	/** Returns whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>There are three possible values: "true", "false" and "inherit".
+	 * @since 5.0.4
+	 */
+	public String getStubonly();
+	/** Sets whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>Default: "inherit" (i.e., the same as the parent's stub-only,
+	 * and "false" is assumed if none of parents is specified with stub-only).
+	 * <p>If a component is set to stub-only, the application running at
+	 * the server shall not access it anymore after renderred to the client.
+	 * The ZK loader will try to minimize the memory footprint by merging
+	 * stub-only components and replacing with light-weight components.
+	 * <p>However, the event listeners and handlers are preserved, so
+	 * they will be invoked if the corresponding event is received.
+	 * Since the original component is gone, the event is the more generic
+	 * format: an instance of {@link org.zkoss.zk.ui.event.Event}
+	 * (rather than MouseEvent or others).
+	 * <p>If a component is stub-only, the application usually access it only
+	 * at the client since all widgets are preserved at the client (so are events).
+	 * <p>This method is available only for ZK EE.
+	 * @param stubonly whether it is stub-only. The allowed values include
+	 * "true", "false" and "inherit".
+	 * @since 5.0.4
+	 */
+	public void setStubonly(String stubonly);
+
 	/** Returns the parent component, or null if this is the root component.
 	 */
 	public Component getParent();

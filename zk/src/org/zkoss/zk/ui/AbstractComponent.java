@@ -1189,7 +1189,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Replaces with the given component.
 	 * This component will be detached at the end.
 	 */
-	/*package*/ final void replaceWith(AbstractComponent comp, boolean bFellow) { //called by StubComponent
+	/*package*/ final //called by StubComponent
+	void replaceWith(AbstractComponent comp, boolean bFellow, boolean bListener) {
 		if (comp._parent != null || comp._next != null || comp._prev != null
 		|| comp._chdinf != null || comp._page != null)
 			throw new IllegalStateException();
@@ -1239,6 +1240,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			comp._id = _id;
 			addToIdSpaces(comp); ///called after fixing comp._parent...
 		}
+
+		if (_auxinf != null)
+			comp._auxinf = _auxinf.cloneStub(comp, bListener);
 	}
 
 	/** Appends a child to the end of all children.
@@ -1324,6 +1328,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected void setVisibleDirectly(boolean visible) {
 		initAuxInfo().visible = visible;
+	}
+
+	public String getStubonly() {
+		final int v = _auxinf != null ? _auxinf.stubonly: 0;
+		return v == 0 ? "inherit": v < 0 ? "false": "true";
+	}
+	public void setStubonly(String stubonly) {
+		int v;
+		if ("false".equals(stubonly)) v = -1;
+		else if ("true".equals(stubonly)) v = 1;
+		else if ("inherit".equals(stubonly)) v = 0;
+		else
+			throw new UiException("Not allowed: "+stubonly);
+
+		if ((_auxinf != null ? _auxinf.stubonly: 0) != v)
+			initAuxInfo().stubonly = (byte)v;
+			//no need to update client (it is all about server-side handling)
 	}
 
 	public boolean isInvalidated() {
@@ -3102,12 +3123,14 @@ w:use="foo.MyWindow"&gt;
 		/** A map of client DOM attributes to set, Map(String name, String value). */
 		private Map wgtattrs;
 
+		/** Whether this component is stub-only (0: inheirt, -1: false, 1: true). */
+		private byte stubonly;
+
 		/** Whether annots is shared with other components. */
 		private transient boolean annotsShared;
 		/** Whether evthds is shared with other components. */
 		private transient boolean evthdsShared;
-		/** Whether this component is visible.
-		 */
+		/** Whether this component is visible. */
 		private boolean visible = true;
 
 		public Object clone() {
@@ -3131,6 +3154,17 @@ w:use="foo.MyWindow"&gt;
 				clone.evthds = (EventHandlerMap)evthds.clone();
 			return clone;
 		}
+		/** Clone for the stub component ({@link replaceWith}). */
+		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
+			if (bListener && (evthds != null || listeners != null)) {
+				final AuxInfo clone = new AuxInfo();
+				if (evthds != null)
+					clone.evthds = evthdsShared ? evthds: (EventHandlerMap)evthds.clone();
+				cloneListeners(owner, clone);
+				return clone;
+			}
+			return null;
+		}
 		/** 2nd phase of clone (after children are cloned). */
 		private void initClone(AbstractComponent owner, AuxInfo clone) {
 			//spaceinfo (after children is cloned)
@@ -3144,25 +3178,7 @@ w:use="foo.MyWindow"&gt;
 				clone.attrs = attrs.clone(owner);
 
 			//clone listener
-			if (listeners != null) {
-				clone.listeners = new HashMap(4);
-				for (Iterator it = listeners.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final List list = new LinkedList();
-					for (Iterator it2 = ((List)me.getValue()).iterator();
-					it2.hasNext();) {
-						Object val = it2.next();
-						if (val instanceof ComponentCloneListener) {
-							val = owner.willClone((ComponentCloneListener)val);
-							if (val == null) continue; //don't use it in clone
-						}
-						list.add(val);
-					}
-					if (!list.isEmpty())
-						clone.listeners.put(me.getKey(), list);
-				}
-			}
+			cloneListeners(owner, clone);
 
 			//clone forwards (after children is cloned)
 			if (forwards != null) {
@@ -3183,6 +3199,27 @@ w:use="foo.MyWindow"&gt;
 			//AuService
 			if (ausvc instanceof ComponentCloneListener)
 				clone.ausvc = (AuService)owner.willClone((ComponentCloneListener)ausvc);
+		}
+		private void cloneListeners(AbstractComponent owner, AuxInfo clone) {
+			if (listeners != null) {
+				clone.listeners = new HashMap(4);
+				for (Iterator it = listeners.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final List list = new LinkedList();
+					for (Iterator it2 = ((List)me.getValue()).iterator();
+					it2.hasNext();) {
+						Object val = it2.next();
+						if (val instanceof ComponentCloneListener) {
+							val = owner.willClone((ComponentCloneListener)val);
+							if (val == null) continue; //don't use it in clone
+						}
+						list.add(val);
+					}
+					if (!list.isEmpty())
+						clone.listeners.put(me.getKey(), list);
+				}
+			}
 		}
 		private void render(ContentRenderer renderer)
 		throws IOException {
