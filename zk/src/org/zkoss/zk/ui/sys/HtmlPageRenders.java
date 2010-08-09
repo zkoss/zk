@@ -573,8 +573,9 @@ public class HtmlPageRenders {
 			out.write(props.toString());
 			out.write("},[");
 
-			for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-				((ComponentCtrl)it.next()).redraw(out);
+			for (Component root = page.getFirstRoot(); root != null;
+			root = root.getNextSibling())
+				((ComponentCtrl)root).redraw(out);
 
 			out.write("]]");
 		} finally {

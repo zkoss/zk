@@ -290,9 +290,8 @@ public class UiEngineImpl implements UiEngine {
 	Page page, Writer out) throws IOException {
 		execNewPage0(exec, pagedef, null, page, out);
 	}
-	/** It assumes exactly one of pagedef and richlet is not null.
-	 */
-	public void execNewPage0(final Execution exec, final PageDefinition pagedef,
+	/** It assumes exactly one of pagedef and richlet is not null. */
+	private void execNewPage0(final Execution exec, final PageDefinition pagedef,
 	final Richlet richlet, final Page page, final Writer out) throws IOException {
 		//Update the device type first. If this is the second page and not
 		//belonging to the same device type, an exception is thrown
@@ -398,11 +397,12 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					richlet.service(page);
 
-					for (Iterator it = page.getRoots().iterator(); it.hasNext();) {
-						final Component comp = (Component)it.next();
+					for (Component root = page.getFirstRoot(); root != null;
+					root = root.getNextSibling()) {
 						if (composer != null)
-							composer.doAfterCompose(comp);
-						afterCreate(new Component[] {comp});
+							composer.doAfterCompose(root);
+						afterCreate(new Component[] {root});
+							//root's next sibling might be changed
 					}
 				} catch (Throwable t) {
 					if (composer instanceof ComposerExt)
@@ -444,7 +444,7 @@ public class UiEngineImpl implements UiEngine {
 			else
 				execCtrl.setResponses(responses);
 
-			((PageCtrl)page).redraw(out);
+			redrawNewPage(page, out);
 		} catch (Throwable ex) {
 			cleaned = true;
 			final List errs = new LinkedList();
@@ -513,7 +513,8 @@ public class UiEngineImpl implements UiEngine {
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
-	/** Called after the whole component tree has been created.
+	/** Called after the whole component tree has been created by
+	 * this engine.
 	 * <p>Default: does nothing.
 	 * <p>Derived class might override this method to process the components
 	 * if necessary.
@@ -522,6 +523,19 @@ public class UiEngineImpl implements UiEngine {
 	 * @since 5.0.4
 	 */
 	protected void afterCreate(Component[] comps) {
+	}
+	/** Called to render the result of a page to the (HTTP) output,
+	 * when a new page is created and processed.
+	 * <p>Default: it invokes {@link PageCtrl#redraw}.
+	 * <p>Notice that it is called in the rendering phase (the last phase),
+	 * so it is not allowed to post events or to invoke invalidate or smartUpdate
+	 * in this method.
+	 * <p>Notice that it is not called if an old page is redrawn.
+	 * @since 5.0.4
+	 * @see #execNewPage
+	 */
+	protected void redrawNewPage(Page page, Writer out) throws IOException {
+		((PageCtrl)page).redraw(out);
 	}
 
 	private static final Event nextEvent(UiVisualizer uv) {

@@ -977,9 +977,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//get back _comps from _pages
 		for (Iterator it = _pages.iterator(); it.hasNext();)
-			for (Iterator e = ((Page)it.next()).getRoots().iterator();
-			e.hasNext();)
-				addAllComponents((Component)e.next());
+			for (Component root = ((Page)it.next()).getFirstRoot(); root != null;
+			root = root.getNextSibling())
+				addAllComponents(root);
 
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
@@ -1125,8 +1125,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 			l_out:
 			for (Iterator it = _pages.iterator(); it.hasNext();)
-				for (Iterator e = ((Page)it.next()).getRoots().iterator(); e.hasNext();)
-					if (Events.isListened((Component)e.next(), Events.ON_CLIENT_INFO, false)) {
+				for (Component root = ((Page)it.next()).getFirstRoot();
+				root != null; root = root.getNextSibling())
+					if (Events.isListened(root, Events.ON_CLIENT_INFO, false)) {
 						addResponse(new AuClientInfo(this));
 						break l_out;
 					}
@@ -1338,10 +1339,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			for (Iterator it = _pages.iterator(); it.hasNext();) {
 				final Page p = (Page)it.next();
 				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
-					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
-						final Component c = (Component)e.next();
-						if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
-							Events.postEvent(new Event(Events.ON_PIGGYBACK, c));
+					for (Component root = ((Page)it.next()).getFirstRoot();
+					root != null; root = root.getNextSibling()) {
+						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) //asap+deferrable
+							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
 					}
 				}
 			}

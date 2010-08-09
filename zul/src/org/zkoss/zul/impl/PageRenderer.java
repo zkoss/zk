@@ -16,14 +16,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -121,8 +120,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		HtmlPageRenders.setContentType(exec, page);
 
-		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).redraw(out);
+		for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
+			((ComponentCtrl)root).redraw(out);
 
 		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
