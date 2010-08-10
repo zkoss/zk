@@ -138,15 +138,16 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	onup_: function(evt) {
-		var btn = zul.inp.Slider.down_btn;
+		var btn = zul.inp.Slider.down_btn, widget;
 		if (btn) {
-			var widget = zk.Widget.$(btn),
-				zcls = widget.getZclass();
+			widget = zk.Widget.$(btn);
+			var	zcls = widget.getZclass();
 			jq(btn).removeClass(zcls + "-btn-drag").removeClass(zcls + "-btn-over");
 		}
 		
 		zul.inp.Slider.down_btn = null;
-		jq(document).unbind("mouseup", widget.onup_);
+		if (widget)
+			jq(document).unbind("mouseup", widget.onup_);
 	},
 	doMouseDown_: function(evt) {
 		var btn = this.$n("btn");
@@ -154,6 +155,25 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		jq(document).mouseup(this.onup_);
 		zul.inp.Slider.down_btn = btn;
 		this.$supers('doMouseDown_', arguments);
+	},
+	doClick_: function(evt) {
+		var $btn = jq(this.$n("btn")),
+			pos = $btn.zk.cmOffset(),
+			wgt = this,
+			newPosition = this.isVertical() ? 
+				{top: jq.px(evt.pageY - pos[1] + zk.parseInt($btn.css('top')) - $btn.height() / 2)}:
+				{left: jq.px(evt.pageX - pos[0] + zk.parseInt($btn.css('left')) - $btn.width() / 2)};
+
+		if ($btn[0] && !$btn.is(':animated')) {
+			$btn.animate(newPosition, "slow", function() {
+				pos = wgt._realpos();
+				if (pos > wgt._maxpos) 
+					pos = wgt._maxpos;
+				wgt.fire("onScroll", pos);
+				wgt._fixPos();
+			});
+		}
+		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function() {
 		this._drag = new zk.Draggable(this, this.$n("btn"), {
