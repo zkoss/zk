@@ -34,7 +34,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _newDate(year, month, day, bFix) {
 		var v = new Date(year, month, day);
 		return bFix && v.getMonth() != month ?
-			new Date(year, month + 1, 0): v; //last day of month
+			new Date(year, month + 1, 0)/*last day of month*/: v;
 	}
 
 var Renderer =

@@ -41,7 +41,7 @@ zk.fmt.Date = {
 		var val = zUtl.today(true),
 			y = val.getFullYear(),
 			m = val.getMonth(),
-			d = val.getDate(),
+			d = val.getDate(), dFound,
 			hr = val.getHours(),
 			min = val.getMinutes(),
 			sec = val.getSeconds(),
@@ -152,6 +152,7 @@ zk.fmt.Date = {
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					d = zk.parseInt(token);
+					dFound = true;
 					if (isNaN(d)) return null; //failed
 					break;
 				case 'H':
@@ -217,6 +218,8 @@ zk.fmt.Date = {
 		if (hasHour1 && isAM === false)
 			hr += 12;
 		var dt = new Date(y, m, d, hr, min, sec);
+		if (!dFound && dt.getMonth() != m)
+			dt = new Date(y, m + 1, 0, hr, min, sec); //last date of m
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
 				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec)

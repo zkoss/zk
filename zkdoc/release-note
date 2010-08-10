@@ -52,6 +52,7 @@ ZK 5.0.4
   3039339: Column is not aligned in some special combination of sizes
   3037627: Cell with hflex in hbox causes JavaScript Error
   3036398: frozen scrollbar disappear when listbox with vflex="1"
+  3040363: Datebox cannot select February
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
