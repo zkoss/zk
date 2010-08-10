@@ -3080,7 +3080,7 @@ unbind_: function (skipper, after) {
 		_fixFlex.apply(this);
 	},
 	fixMinFlex_: function(n, orient) { //internal use
-		_fixMinFlex.apply(this, arguments);
+		return _fixMinFlex.apply(this, arguments);
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).

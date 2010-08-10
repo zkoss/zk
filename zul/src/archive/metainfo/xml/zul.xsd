@@ -506,6 +506,7 @@
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
 			<xs:element ref="hbox" />
+			<xs:element ref="hlayout" />
 			<xs:element ref="html" />
 			<xs:element ref="iframe" />
 			<xs:element ref="image" />
@@ -538,6 +539,7 @@
 			<xs:element ref="toolbarbutton" />
 			<xs:element ref="tree" />
 			<xs:element ref="vbox" />
+			<xs:element ref="vlayout" />
 			<xs:element ref="window" />
 			<xs:element ref="zk" />
 			<xs:element ref="zscript" />
@@ -572,6 +574,7 @@
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
 				<xs:element ref="hbox" />
+				<xs:element ref="hlayout" />
 				<xs:element ref="html" />
 				<xs:element ref="iframe" />
 				<xs:element ref="image" />
@@ -603,6 +606,7 @@
 				<xs:element ref="toolbarbutton" />
 				<xs:element ref="tree" />
 				<xs:element ref="vbox" />
+				<xs:element ref="vlayout" />
 				<xs:element ref="window" />
 				<xs:element ref="zk" />
 				<xs:element ref="zscript" />
@@ -1239,7 +1243,6 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
-    <!-- hbox -->
     <!-- group -->
 	<xs:element name="group" type="groupType" />
 	<xs:complexType name="groupType" mixed="true">
@@ -1269,6 +1272,7 @@
         <!-- from group -->
 		<xs:attribute name="label" type="xs:string" use="optional" />
 	</xs:complexType>
+    <!-- hbox -->
 	<xs:element name="hbox" type="hboxType" />
 	<xs:complexType name="hboxType" mixed="true">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1281,6 +1285,16 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
+	</xs:complexType>
+    <!-- hlayout -->
+	<xs:element name="hlayout" type="hlayoutType" />
+	<xs:complexType name="hlayoutType" mixed="true">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="anyGroup" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="spacing" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- html -->
 	<xs:element name="html" type="htmlType" />
@@ -2302,6 +2316,16 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
+	</xs:complexType>
+    <!-- vlayout -->
+	<xs:element name="vlayout" type="vlayoutType" />
+	<xs:complexType name="vlayoutType" mixed="true">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="anyGroup" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="spacing" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- west -->
 	<xs:element name="west" type="westType" />

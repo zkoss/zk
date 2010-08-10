@@ -360,7 +360,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
-				if (kid._nvflex) {
+				if (kid._nvflex && kid.getVflex() != 'min') {
 					kid.setFlexSize_({height:'', width:''});
 					var chdex = kid.$n('chdex');
 					if (chdex) {
@@ -373,7 +373,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
-				if (kid._nhflex) {
+				if (kid._nhflex && kid.getHflex() != 'min') {
 					kid.setFlexSize_({height:'', width:''});
 					var chdex = kid.$n('chdex');
 					if (chdex) {
