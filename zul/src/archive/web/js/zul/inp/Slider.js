@@ -158,7 +158,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	doClick_: function(evt) {
 		var $btn = jq(this.$n("btn")),
-			pos = $btn.zk.cmOffset(),
+			pos = $btn.zk.revisedOffset(),
 			wgt = this,
 			newPosition = this.isVertical() ? 
 				{top: jq.px(evt.pageY - pos[1] + zk.parseInt($btn.css('top')) - $btn.height() / 2)}:
