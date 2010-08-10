@@ -169,6 +169,7 @@ public class Utils {
 		}
 	}
 
+	/** Handles DesktopRecyle. */
 	/*package*/ static Desktop beforeService(
 	DesktopRecycle dtrc, ServletContext ctx, Session sess,
 	HttpServletRequest request, HttpServletResponse response, String path) {
