@@ -922,7 +922,7 @@ jq(el).zk.center(); //same as 'center'
 			wd = this.dimension(), hgh = wd.height; //only width and height
 		wd = wd.width;
 		
-		if (zk.apple) { // Bug 3042165(iphone/ipad)
+		if (zk.ios) { // Bug 3042165(iphone/ipad)
 			x -= jq.innerX();
 			y -= jq.innerY();
 		}
