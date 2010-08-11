@@ -829,7 +829,9 @@ zk.position = function (el, ref, type) {
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
-
+	if (zk.apple) { // Bug 3042165(iphone/ipad)
+		refofs = [refofs[0] - scx, refofs[1] - scy];
+	}
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
 		y = refofs[1];

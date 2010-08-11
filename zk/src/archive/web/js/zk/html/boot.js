@@ -107,6 +107,7 @@ zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") >= 0;
 zk.opera = zk.agent.indexOf("opera") >= 0;
 zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+zk.apple = zk.agent.indexOf("iphone") >= 0 || zk.agent.indexOf("ipad") >= 0;
 if (zk.gecko) {
 	var j = zk.agent.indexOf("firefox/");
 	j = $int(zk.agent.substring(j + 8));

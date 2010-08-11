@@ -22,6 +22,7 @@ ZK 3.6.5
   3020609: Dragging modal window might fail if dragging too fast
   3023619: inline macro cause nRoot to become a negative number
   3039363: Listbox will hide the popup after the popup add height(IE6)
+  3042165: Misplaced drop-down list of auto-complete combobox on iPad
 
 * Upgrade Notes:
 
