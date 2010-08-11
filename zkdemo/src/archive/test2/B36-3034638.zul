@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-3034638.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 11 16:41:51 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please check the checkbox and uncheck the checkbox, you should see the font style is bold and non-bold.
+	<listbox>
+		<listitem>
+			<listcell id="lc" label="listcell"/>
+		</listitem>
+	</listbox>
+	<textbox id="lc1" value="listcell"/>
+	<checkbox>
+		<attribute name="onCheck">
+			<![CDATA[
+				if (self.isChecked()) {
+
+                                            	 lc.setStyle("font-weight:bold");
+
+                                            	 lc1.setStyle("font-weight:bold");
+                                             } else {
+
+                                            	 lc.setStyle(null);
+
+                                            	 lc1.setStyle(null);
+                                             }
+			]]>
+		</attribute>
+	</checkbox>
+</zk>
+

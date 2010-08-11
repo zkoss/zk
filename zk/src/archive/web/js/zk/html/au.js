@@ -888,6 +888,7 @@ zkau.setAttr = function (cmp, name, value) {
 		for (var j = 0, ol = cmp.options.length; j < ol; ++j)
 			cmp.options[j].selected = value;
 	} else if ("style" == name) {
+		zk.clearStyle(cmp);
 		zk.setStyle(cmp, value);
 	} else if (name.startsWith("z.")) { //ZK attributes
 		setZKAttr(cmp, name.substring(2), value);

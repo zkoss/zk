@@ -1709,7 +1709,18 @@ zk.resolve = function (fullnm) {
 		j = k + 1;
 	}
 };
-
+/** since 3.6.5 */
+zk.clearStyle = function (el) {
+	var st = el;
+	if (st && (st=st.style))
+		for (var nm in st)
+			if ((!zk.ie || nm != "accelerator")
+			&& st[nm] && typeof st[nm] == "string")
+				try {
+					st[nm] = "";
+				} catch (e) { //ignore
+				}
+};
 /** Sets the style. */
 zk.setStyle = function (el, style) {
 	for (var j = 0, k = 0; k >= 0; j = k + 1) {
