@@ -24,6 +24,7 @@ import java.text.ParseException;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Dates;
+import org.zkoss.util.TimeZones;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -150,10 +151,11 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 	}
 	private static SimpleDateFormat getDateFormat() {
-		 SimpleDateFormat df = (SimpleDateFormat)_df.get();
-		 if (df == null)
-		 	_df.set(df = new SimpleDateFormat("yyyyMMdd"));
-		 return df;
+		SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		if (df == null)
+			_df.set(df = new SimpleDateFormat("yyyyMMdd"));
+		df.setTimeZone(TimeZones.getCurrent());
+		return df;
 	}
 	private static final ThreadLocal _df = new ThreadLocal();
 

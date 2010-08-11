@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
 
 /**
  * DateFormat relevant utilities.
@@ -46,24 +47,26 @@ public class DateFormats {
 				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
 			return df.parse(s);
 		} else {
-			synchronized (TO_STRING_FORMAT) {
-				try {
-					return TO_STRING_FORMAT.parse(s);
-				} catch (ParseException ex) { //ignore it
-				}
+			try {
+				return getDateFormat().parse(s);
+			} catch (ParseException ex) { //ignore it
 			}
+
 			final DateFormat df =
 				DateFormat.getDateTimeInstance(
 					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
 			return df.parse(s);
 		}
 	}
-	/** The date formatter for generating Date.toString().
-	 * To use it, remember to synchronized(TO_STRING_FORMAT)
-	 */
-	private static final SimpleDateFormat TO_STRING_FORMAT =
-		new SimpleDateFormat(
-					"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+	private static final SimpleDateFormat getDateFormat() {
+		SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		if (df == null)
+			_df.set(df = new SimpleDateFormat(
+				"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US));
+		df.setTimeZone(TimeZones.getCurrent());
+		return df;
+	}
+	private static final ThreadLocal _df = new ThreadLocal();
 
 	/** Formats a Date object based on the current Locale.
 	 *
