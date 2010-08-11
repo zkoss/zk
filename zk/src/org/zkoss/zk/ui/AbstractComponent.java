@@ -2530,13 +2530,27 @@ w:use="foo.MyWindow"&gt;
 	 */
 	protected void updateByClient(String name, Object value) {
 		Method m;
+		final String mtdnm = Classes.toMethodName(name, "set");
 		Object[] args = new Object[] {value};
 		try {
-			m = Classes.getMethodByObject(getClass(),
-				Classes.toMethodName(name, "set"), args);
+			m = Classes.getMethodByObject(getClass(), mtdnm, args);
 		} catch (NoSuchMethodException ex) {
-			if (log.debugable()) log.debug("setter not found", ex);
-			return; //ingore it
+			try {
+				m = Classes.getCloseMethod(getClass(), mtdnm, new Class[] {String.class});
+			} catch (NoSuchMethodException e2) {
+				try {
+					m = Classes.getCloseMethod(getClass(), mtdnm, new Class[] {null});
+				} catch (NoSuchMethodException e3) {
+					log.warningBriefly("setter not found", ex);
+					return; //ingore it
+				}
+			}
+			try {
+				args[0] = Classes.coerce(m.getParameterTypes()[0], value);
+			} catch (Throwable e2) {
+				log.warning(m+" requires "+m.getParameterTypes()[0]+", not "+value);
+				return; //ingore it
+			}
 		}
 
 		disableClientUpdate(true);
