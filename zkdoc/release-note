@@ -61,6 +61,7 @@ ZK 5.0.4
   3035274: Doublebox not updating server when client side .smartUpdate
   3035121: Missing setErrorMessage method in InputElement.java
   3026665: Bandbox gets focus from children element focus
+  3031511: drag and drop intbox not triggerign onDrop event (FF only)
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
