@@ -60,6 +60,7 @@ ZK 5.0.4
   3025750: Fisheyebar CSS file should use .css.dsp
   3035274: Doublebox not updating server when client side .smartUpdate
   3035121: Missing setErrorMessage method in InputElement.java
+  3026665: Bandbox gets focus from children element focus
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

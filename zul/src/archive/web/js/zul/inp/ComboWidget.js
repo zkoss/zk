@@ -242,7 +242,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._open = false;
 		if (opts && opts.focus)
 			this.focus();
-
+		else
+			jq(this.$n()).removeClass(this.getZclass() + '-focus');
+		
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
