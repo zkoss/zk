@@ -305,7 +305,7 @@ zkPop = {
 			wd = zk.getDimension(el), hgh = wd[1]; //only width and height
 		wd = wd[0];
 
-		if (zk.apple) { // Bug 3042165(iphone/ipad)
+		if (zk.ios) { // Bug 3042165(iphone/ipad)
 			x -= zk.innerX();
 			y -= zk.innerY();
 		}
