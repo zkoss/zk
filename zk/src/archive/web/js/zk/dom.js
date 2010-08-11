@@ -921,7 +921,11 @@ jq(el).zk.center(); //same as 'center'
 		var x = dim.left, y = dim.top,
 			wd = this.dimension(), hgh = wd.height; //only width and height
 		wd = wd.width;
-
+		
+		if (zk.apple) { // Bug 3042165(iphone/ipad)
+			x -= jq.innerX();
+			y -= jq.innerY();
+		}
 		switch(where) {
 		case "before_start":
 			y -= hgh;
