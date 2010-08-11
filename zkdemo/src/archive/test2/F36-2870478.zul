@@ -42,7 +42,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   void drilldown() {
   	String areaid = event.getArea();
   	if (areaid != null) {
-	  	Area area = self.getFellow(areaid);
+	  	Area area = desktop.getComponentByUuid(areaid);
 	  	alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
 	}
   }

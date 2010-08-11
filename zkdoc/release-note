@@ -186,6 +186,8 @@ June 29, 2010
   3025674: When Listbox mold=select, add listhead cause html error
 
 * Upgrade Notes
+  + To retrieve the area of a chart (when implementing drilldrop), use
+    desktop.getComponentByUuid(event.getArea()) instead of getFellow().
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
 	<library-property>

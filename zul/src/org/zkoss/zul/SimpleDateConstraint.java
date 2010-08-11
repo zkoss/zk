@@ -152,6 +152,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		SimpleDateFormat df = (SimpleDateFormat)_df.get();
 		if (df == null)
 			_df.set(df = new SimpleDateFormat("yyyyMMdd"));
+				//OK not to use Locales.getCurrent() since yyyyMMdd all numbers
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}

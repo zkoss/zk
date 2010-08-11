@@ -332,7 +332,7 @@ text line2...
 			<attribute name="onClick"><![CDATA[  
 			  String areaid = event.getArea();
 			  if (areaid != null) {
-			    Area area = (Area)self.getFellow(areaid);
+			    Area area = desktop.getComponentByUuid(areaid);
 			    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
 			  }
 		  	]]></attribute>
