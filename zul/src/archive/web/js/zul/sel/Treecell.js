@@ -27,10 +27,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	 */
 	setWidth: zk.$void, // readonly
 	_colspan: 1,
-	$init: function () {
-		this.$supers('$init', arguments);
-		this._skipper = new zul.sel.TCSkipper();
-	},
 	$define: {
     	/** Returns number of columns to span this cell.
     	 * Default: 1.
@@ -100,7 +96,10 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
 	},
 	_syncIcon: function () {
-		this.rerender(this._skipper);
+		this.rerender();
+		var p;
+		if (p = this.parent)
+			p.clearCache(); //$n('open')
 	},
 	_colHtmlPre: function () {
 		if (this.parent.firstChild == this) {
@@ -219,21 +218,4 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	VBAR: "vbar",
 	SPACER: "spacer",
 	FIRSTSPACER: "firstspacer"
-});
-zul.sel.TCSkipper = zk.$extends(zk.Skipper, {
-	skipped: function () {
-		return true;
-	},
-	restore: function (wgt, skip) {
-		if (skip) {
-			var loc = jq(skip.id, zk)[0];
-			for (var el; el = skip.firstChild;) {
-				skip.removeChild(el);
-				if (el.id && el.id.indexOf('-') < 0) {
-					loc.appendChild(el);
-					if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
-				}
-			}
-		}
-	}
 });

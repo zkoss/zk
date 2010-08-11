@@ -56,6 +56,7 @@ ZK 5.0.4
   3039364: Open the popup cause js error with IE
   3042165: Misplaced drop-down list of auto-complete combobox on iPad
   3033439: Listfooter missing font CSS
+  3041907: drag-drop problem in tree (appendChild issue)
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
