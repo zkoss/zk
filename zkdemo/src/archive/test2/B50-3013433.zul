@@ -18,8 +18,8 @@
 			</html>
 		  <grid hflex="1" width="400px">
 		    <columns>
-			  <column width="10px" label="label1" />
-			  <column width="10px" label="label2" />
+			  <column label="label1" />
+			  <column label="label2" />
 		    </columns>
 		  </grid>	    	
 	    </vbox>
