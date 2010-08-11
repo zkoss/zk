@@ -255,7 +255,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	overflow: auto;
 }
 <%-- Comboitem --%>
--combobox-rounded-pp .z-comboitem-text, .z-combobox-rounded-pp .z-comboitem-btn,
+.z-combobox-rounded-pp .z-comboitem-text, .z-combobox-rounded-pp .z-comboitem-btn,
 .z-combobox-pp .z-comboitem-text, .z-combobox-pp .z-comboitem-btn {
 	white-space: nowrap; font-size: ${fontSizeS}; cursor: pointer;
 }
