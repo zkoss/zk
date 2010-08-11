@@ -20,7 +20,6 @@ ZK 5.0.4
   3038128: Allow all system-config (eg, engine-class) in zk/config.xml  
   3028270: Slider support for clicking to increment or decrement
   3040368: Provide a simple horizontal/vertical layout
-  3042165: Misplaced drop-down list of auto-complete combobox on iPad
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -55,6 +54,8 @@ ZK 5.0.4
   3036398: frozen scrollbar disappear when listbox with vflex="1"
   3040363: Datebox cannot select February
   3039364: Open the popup cause js error with IE
+  3042165: Misplaced drop-down list of auto-complete combobox on iPad
+  3033439: Listfooter missing font CSS
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
