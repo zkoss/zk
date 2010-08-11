@@ -785,8 +785,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._fixWdh();
 		if (this._mode != 'embedded') {
 			this._updateDomPos();
-			this.zsync();
 		}
+		this.zsync();
 	},
 	onFloatUp: function (ctl) {
 		if (!this.isVisible() || this._mode == 'embedded')
@@ -914,9 +914,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			this._fixHgh();
-			this.zsync();
-
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		}
@@ -924,9 +921,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
 		if (this.desktop) {
-			this._fixWdh();
-			this.zsync();
-
 			zWatch.fireDown('beforeSize', this);
 			zWatch.fireDown('onSize', this);
 		}
