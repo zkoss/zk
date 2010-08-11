@@ -1,4 +1,4 @@
-/* BaseLayout.js
+/* Layout.js
 
 	Purpose:
 		
@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
  */
-zul.layout.BaseLayout = zk.$extends(zk.Widget, {
+zul.layout.Layout = zk.$extends(zk.Widget, {
 	$define: {
 		/** Sets the spacing between adjacent children.
 	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
@@ -49,12 +49,12 @@ zul.layout.BaseLayout = zk.$extends(zk.Widget, {
 		child.bind(desktop);
 	},
 	bind_: function () {
-		this.$supers(zul.layout.BaseLayout, 'bind_', arguments);
+		this.$supers(zul.layout.Layout, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
-		this.$supers(zul.layout.BaseLayout, 'unbind_', arguments);
+		this.$supers(zul.layout.Layout, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (this._syncSize) {

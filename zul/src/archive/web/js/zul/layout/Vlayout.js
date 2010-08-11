@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-vlayout.
  * @since 5.0.4
  */
-zul.layout.Vlayout = zk.$extends(zul.layout.BaseLayout, {
+zul.layout.Vlayout = zk.$extends(zul.layout.Layout, {
 	getZclass: function () {
 		return this._zclass == null ? "z-vlayout" : this._zclass;
 	},
