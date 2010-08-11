@@ -221,7 +221,8 @@ zWatch = (function () {
 					for (var j = 0, l = xinfs.length; j < l; ++j)
 						if (xinfs[j][0] == ref) {
 							infs = xinfs[j][1]
-							xinfs.splice(j, 1);
+							xinfs.splice(j--, 1);
+							--l;
 							_invoke(name, infs, ref, args);
 						}
 				} else

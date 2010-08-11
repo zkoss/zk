@@ -54,6 +54,7 @@ ZK 5.0.4
   3037627: Cell with hflex in hbox causes JavaScript Error
   3036398: frozen scrollbar disappear when listbox with vflex="1"
   3040363: Datebox cannot select February
+  3039364: Open the popup cause js error with IE
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
