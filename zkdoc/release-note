@@ -63,6 +63,7 @@ ZK 5.0.4
   3026665: Bandbox gets focus from children element focus
   3031511: drag and drop intbox not triggerign onDrop event (FF only)
   3014817: DateFormat set timezone from TimeZones
+  3026667: Messagebox button does not have a min width on IE
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

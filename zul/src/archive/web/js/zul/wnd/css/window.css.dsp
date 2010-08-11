@@ -383,6 +383,9 @@
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+.z-messagebox-btn table {
+	width: 100%;
+}
 </c:if>
 <c:if test="${c:isGecko()}">
 .z-messagebox-btn {
