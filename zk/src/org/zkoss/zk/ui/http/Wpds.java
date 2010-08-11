@@ -141,6 +141,9 @@ public class Wpds {
 			.append(firstDayOfWeek - Calendar.SUNDAY)
 			.append(";\n");
 
+		//Note: no need to df.setTimeZone(TimeZones.getCurrent()) since
+		//it is used to generate locale-dependent labels
+
 		final boolean zhlang = locale.getLanguage().equals("zh");
 		SimpleDateFormat df = new SimpleDateFormat("E", locale);
 		final String[] sdow = new String[7], s2dow = new String[7];

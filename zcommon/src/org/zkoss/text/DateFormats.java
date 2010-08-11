@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
 
 /**
  * DateFormat relevant utilities.
@@ -56,11 +57,12 @@ public class DateFormats {
 		}
 	}
 	private static final SimpleDateFormat getDateFormat() {
-		 SimpleDateFormat df = (SimpleDateFormat)_df.get();
-		 if (df == null)
-		 	_df.set(df = new SimpleDateFormat(
+		SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		if (df == null)
+			_df.set(df = new SimpleDateFormat(
 				"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US));
-		 return df;
+		df.setTimeZone(TimeZones.getCurrent());
+		return df;
 	}
 	private static final ThreadLocal _df = new ThreadLocal();
 

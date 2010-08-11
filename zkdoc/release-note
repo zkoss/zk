@@ -62,6 +62,7 @@ ZK 5.0.4
   3035121: Missing setErrorMessage method in InputElement.java
   3026665: Bandbox gets focus from children element focus
   3031511: drag and drop intbox not triggerign onDrop event (FF only)
+  3014817: DateFormat set timezone from TimeZones
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
