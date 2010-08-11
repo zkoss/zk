@@ -1,0 +1,16 @@
+<zk>
+<html><![CDATA[
+<ul>
+ <li>Click the "click" button, and a popup shall show up (IE).</li>
+ <li>Click the "200px" button to enlarge the popup.</li>
+ <li>Click the "100px" button to shrink the popup.</li>
+</ul>
+]]></html>
+<popup id="pop" width="100px" height="100px">
+<button label="100px" onClick='self.parent.height = "100px"' />
+<button label="200px" onClick='self.parent.height = "200px"' />
+</popup>
+<button label="click" onClick="pop.open(self);" />
+<separator height="100px" />
+<listbox mold="select" width="300px" />
+</zk>
