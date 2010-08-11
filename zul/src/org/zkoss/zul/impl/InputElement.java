@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.out.AuSelect;
+import org.zkoss.zk.au.out.AuWrongValue;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.Constraint;
@@ -165,6 +166,22 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	public String getErrorMessage() {
 		return _auxinf != null ? _auxinf.errmsg: null;
+	}
+	/** Associates an error message to this input.
+	 * It will cause the given error message to be shown at the client.
+	 * <p>Notice that the application rarely invokes this method. Rather,
+	 * throw {@link WrongValueException} instead.
+	 * <p>Notice it does not invoke {@link CustomConstraint#showCustomError}
+	 * even if {@link #getConstraint} implements  {@link CustomConstraint}.
+	 * @since 5.0.4
+	 */
+	public void setErrorMessage(String errmsg) {
+		if (errmsg != null && errmsg.length() > 0) {
+			initAuxInfo().errmsg = errmsg;
+			response(new AuWrongValue(this, errmsg));
+		} else {
+			clearErrorMessage();
+		}
 	}
 	/** Clears the error message.
 	 *

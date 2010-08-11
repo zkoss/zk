@@ -59,6 +59,7 @@ ZK 5.0.4
   3041907: drag-drop problem in tree (appendChild issue)
   3025750: Fisheyebar CSS file should use .css.dsp
   3035274: Doublebox not updating server when client side .smartUpdate
+  3035121: Missing setErrorMessage method in InputElement.java
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
