@@ -123,6 +123,24 @@ zul.layout.Layout = zk.$extends(zk.Widget, {
 			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
 		return zkp ? {height: hgh, width: wdh} : {};
 	},
+	//bug#3042306
+	resetSize_: function (orient) { ////@Overrid zk.Widget#resetSize_, called when beforeSize
+		this.$supers(zul.layout.Layout, 'resetSize_', arguments);
+		var vert = this.isVertical_();
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+			if (vert ? (kid._nvflex && kid.getVflex() != 'min')
+					 : (kid._nhflex && kid.getHflex() != 'min')) {
+				
+				var chdex = kid.$n('chdex');
+				if (chdex) {
+					if (orient == 'h')
+						chdex.style.height = '';
+					if (orient == 'w')
+						chdex.style.width = '';
+				}
+			}
+		}
+	},
 	beforeChildrenFlex_: function(child) {
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete child._flexFixed;

@@ -1,0 +1,8 @@
+<zk>
+<vbox hflex="1" vflex="1">
+<label value="1. Shrink the browser size to see the green rectangle shrink accordingly."></label>
+<label value="2. If you see horizontal scrollbar, it is a bug."></label>
+<label value="3. If you see empty white space about the size of a scrollbar on bottom and/or right, it is a bug."></label>
+<div hflex="1" vflex="1" style="background:green"/>
+</vbox>
+</zk>

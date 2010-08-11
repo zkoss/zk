@@ -683,6 +683,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			cwgt.setFlexSize_({height:lastsz});
 			cwgt._vflexsz = lastsz;
 		}
+		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
+		//vertical scrollbar might disappear after height was set
+		var newpsz = this.getParentSize_(p);
+		if (newpsz.width > psz.width) //yes, the scrollbar gone!
+			wdh += (newpsz.width - psz.width); 
 		
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
@@ -707,13 +712,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
+			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX], beforeSize: wgt});
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
+			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX], beforeSize: wgt});
 			delete wgt._flexListened;
 		}
 	}
@@ -3081,6 +3086,22 @@ unbind_: function (skipper, after) {
 	},
 	fixMinFlex_: function(n, orient) { //internal use
 		return _fixMinFlex.apply(this, arguments);
+	},
+	resetSize_: function(orient) {
+		var n = this.$n();
+		if (orient == 'w')
+			n.style.width = '';
+		else if (orient == 'h')
+			n.style.height = '';
+	},
+	beforeSize: function () {
+		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
+		if (this.isRealVisible()) {
+			if (this._hflex && this._hflex != 'min')
+				this.resetSize_('w');
+			if (this._vflex && this._vflex != 'min')
+				this.resetSize_('h');
+		}
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).
