@@ -145,7 +145,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 
 		var top1 = this, top2 = wgt;
 		while ((top1 = top1.parent) && !top1.isFloating_())
-			;
+			if (top1 == wgt) //wgt is parent
+				return;
 		for (; top2 && !top2.isFloating_(); top2 = top2.parent)
 			;
 		if (top1 == top2) { //uncover if sibling
