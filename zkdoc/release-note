@@ -68,6 +68,7 @@ ZK 5.0.4
   3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
   3027214: Button of the default mold shall not submit the form
   3037626: Splitter Doesn't Resize Cells Containing Grid
+  3032885: Inplace rounded Combo Inputs have incorrect height
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
