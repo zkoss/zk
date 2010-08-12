@@ -323,22 +323,36 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
 			return;
 		
-		if (this._buttonVisible && this._inplace) {
-			if (!node.style.width) {
-				var $n = jq(node),
-					inc = this.getInplaceCSS();
-				$n.removeClass(inc);
-				if (zk.opera)
-					node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
-				else
-					node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
-				$n.addClass(inc);
-			}
-		} 
+		var inp = this.getInputNode(),
+    		$n = jq(node),
+    		$inp = jq(inp),
+    		inc = this.getInplaceCSS(),
+    		shallClean = !node.style.width && this._inplace;
+		if (this._buttonVisible && shallClean) {
+			$n.removeClass(inc);
+			$inp.removeClass(inc);
+			
+			if (zk.opera)
+				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
+			else
+				node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
+			$n.addClass(inc);
+			$inp.addClass(inc);
+		}
+		var extraWidth = this.inRoundedMold() && shallClean;
+		
+		if (extraWidth) {
+    		$n.removeClass(inc);
+    		$inp.removeClass(inc);
+		}
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn'),
-			inp = this.getInputNode();
+			btn = this.$n('btn');
+		
+		if (extraWidth) {
+    		$n.addClass(inc);
+    		$inp.addClass(inc);
+		}
 		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
 	},
 	doFocus_: function (evt) {
