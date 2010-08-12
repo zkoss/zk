@@ -260,6 +260,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
     					return;
     				}
     		});
+		} else if (this.getTabbox().inAccordionMold()) {
+			this.getTabbox()._syncSize();
 		}
 	}
 });

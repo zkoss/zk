@@ -70,6 +70,7 @@ ZK 5.0.4
   3037626: Splitter Doesn't Resize Cells Containing Grid
   3032885: Inplace rounded Combo Inputs have incorrect height
   3032892: Inplace Combo Input with no button have a tight width
+  3033022: Accordion Tabbox gets wrong height by closing unselected tab
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
