@@ -117,6 +117,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var	tabs = this.parent,
 			oldtab = tabbox._selTab;
 		if (oldtab != this || init) {
+			if (oldtab && tabbox.inAccordionMold()) {
+				var p = this.getLinkedPanel();
+				if (p) p._changeSel(oldtab.getLinkedPanel());
+			}
 			if (oldtab && oldtab != this)
 				this._setSel(oldtab, false, false, init);
 			this._setSel(this, true, notify, init);

@@ -62,6 +62,14 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tab = this.getLinkedTab();
 		return tab && tab.isSelected();
 	},
+	// Bug 3026669
+	_changeSel: function (oldPanel) {
+		if (oldPanel) {
+			var cave = this.$n('cave');
+			if (cave && !cave.style.height && (oldPanel = oldPanel.$n('cave')))
+				cave.style.height = oldPanel.style.height;
+		}
+	},
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
 		var accd = this.getTabbox().inAccordionMold();
 		if (accd && animation) {
@@ -127,8 +135,11 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		return cls;
 	},
 	onSize: _zkf = function() {
+		var tabbox = this.getTabbox();
+		if (tabbox.inAccordionMold() && !zk(this.$n("real")).isVisible())
+			return;
 		this._fixPanelHgh();		//Bug 2104974
-		if (zk.ie && !zk.ie8) zk(this.getTabbox().$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
+		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
 	},
 	onShow: _zkf,
 	//bug #3014664

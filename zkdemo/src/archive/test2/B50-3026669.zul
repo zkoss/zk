@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3026669.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 12 18:31:46 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Tabbox accordion mold UI jumps" contentType="text/html;charset=UTF-8"?>
+<zk>
+<html><![CDATA[
+<p>When opening a tab in accordion/accordion-lite mold, the other tabs below it
+           	bumps up and sometimes sticks on it during the animation.(If you can't understand, please contact Simon)</p>
+]]></html>
+	<window border="normal" width="300px" height="300px" >
+		<tabbox height="100%" mold="accordion">
+			<tabs>
+				<tab label="Tab1" />
+				<tab label="Tab2" />
+				<tab label="Tab3" />
+				<tab label="Tab4" />
+				<tab label="Tab5" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>Tabpanel Content 1</tabpanel>
+				<tabpanel>Tabpanel Content 2</tabpanel>
+				<tabpanel>Tabpanel Content 3</tabpanel>
+				<tabpanel>Tabpanel Content 4</tabpanel>
+				<tabpanel>Tabpanel Content 5</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+	<window border="normal" width="300px" height="300px" >
+		<tabbox height="100%" mold="accordion-lite">
+			<tabs>
+				<tab label="Tab1" />
+				<tab label="Tab2" />
+				<tab label="Tab3" />
+				<tab label="Tab4" />
+				<tab label="Tab5" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>Tabpanel Content 1</tabpanel>
+				<tabpanel>Tabpanel Content 2</tabpanel>
+				<tabpanel>Tabpanel Content 3</tabpanel>
+				<tabpanel>Tabpanel Content 4</tabpanel>
+				<tabpanel>Tabpanel Content 5</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>
