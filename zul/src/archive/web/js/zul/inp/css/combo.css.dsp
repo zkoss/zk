@@ -574,16 +574,20 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	border-right-width: 0 !important;
 }
 
-.z-combobox-rounded-inplace .z-combobox-rounded-btn,
-.z-bandbox-rounded-inplace .z-bandbox-rounded-btn,
-.z-datebox-rounded-inplace .z-datebox-rounded-btn,
-.z-timebox-rounded-inplace .z-timebox-rounded-btn,
-.z-spinner-rounded-inplace .z-spinner-rounded-btn,
 .z-combobox-inplace .z-combobox-btn,
 .z-bandbox-inplace .z-bandbox-btn,
 .z-datebox-inplace .z-datebox-btn,
 .z-timebox-inplace .z-timebox-btn,
 .z-spinner-inplace .z-spinner-btn {
+	display: none;
+}
+
+.z-combobox-rounded-inplace .z-combobox-rounded-btn,
+.z-bandbox-rounded-inplace .z-bandbox-rounded-btn,
+.z-datebox-rounded-inplace .z-datebox-rounded-btn,
+.z-timebox-rounded-inplace .z-timebox-rounded-btn,
+.z-spinner-rounded-inplace .z-spinner-rounded-btn {
+	visibility: hidden;
 	background: none !important;
 }
 <%-- IE --%>
