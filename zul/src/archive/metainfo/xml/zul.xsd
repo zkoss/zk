@@ -232,6 +232,20 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="buttonTypeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="button" />
+					<xs:enumeration value="submit" />
+					<xs:enumeration value="reset" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<xs:simpleType name="sortAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -758,6 +772,7 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="dir" type="dirAttrType" use="optional" />
+		<xs:attribute name="type" type="buttonTypeAttrType" use="optional" />
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />

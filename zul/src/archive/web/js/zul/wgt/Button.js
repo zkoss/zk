@@ -44,6 +44,7 @@ var Button =
 zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
+	_type: "button",
 	//_tabindex: 0,
 
 	$define: {
@@ -88,6 +89,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: _zkf,
+		/** Returns the button type.
+		 * <p>Default: "button".
+		 * @return String
+		 */
+		/** Sets the button type.
+		 * @param String type either "button", "submit" or "reset".
+		 */
+		type: _zkf,
 		/** Returns whether it is disabled.
 		 * <p>Default: false.
 		 * @return boolean
@@ -363,6 +372,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 					zWatch.listen({onResponse: aded});
 				else
 					setTimeout(function () {aded.onResponse();}, 800);
+			}
+
+			if (this._type != "button") {
+				var n;
+				if ((n = this.$n('btn')) && (n = n.form)) {
+					if (this._type != "reset") zk(n).submit();
+					else n.reset();
+					return;
+				}
 			}
 			
 			this.fireX(evt);

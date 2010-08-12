@@ -2,6 +2,7 @@
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3040368: Provide a simple horizontal/vertical layout
   3031544: Allow to specify a shortcut instead of full namespace
   3041822: A way to minimize memory by not maintaining state at server
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
@@ -19,7 +20,7 @@ ZK 5.0.4
   3042290: Provide utility to make component complaint with JSF easily
   3038128: Allow all system-config (eg, engine-class) in zk/config.xml  
   3028270: Slider support for clicking to increment or decrement
-  3040368: Provide a simple horizontal/vertical layout
+  1860341: Button support type="submit"
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -65,11 +66,13 @@ ZK 5.0.4
   3014817: DateFormat set timezone from TimeZones
   3026667: Messagebox button does not have a min width on IE
   3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
+  3027214: Button of the default mold shall not submit the form
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
     Components that support tabbox include InputWidget, Button, A, Checkbox,
     Listbox and derives.
+  + Specify type as submit to make a button to submit a form when clicked.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.
   + The protected _left, _top, _width and _height members of HtmlBasedComponent

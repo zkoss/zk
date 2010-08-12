@@ -18,7 +18,7 @@ function (out) {
 		uuid = this.uuid;
 	tabi = tabi ? ' tabindex="' + tabi + '"': '';
 
-	var btn = '<button type="button" id="' + uuid + '-btn" class="' + zcls + '"',
+	var btn = '<button type="' + this._type + '" id="' + uuid + '-btn" class="' + zcls + '"',
 		s = this.isDisabled();
 	if (s) btn += ' disabled="disabled"';
 	if (tabi && (zk.gecko || zk.safari)) btn += tabi;
