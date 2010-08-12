@@ -715,5 +715,27 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public void renderAll();
 
+	/** Renders the given set of list items.
+	 */
 	public void renderItems(Set items);
+
+	/**
+	 * Sets whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Listbox dynamically. 
+	 * @param autopaging true to turn on the auto-paging facility.
+	 * @since 5.0.2
+	 */
+	public void setAutopaging(boolean autopaging);
+	
+	/**
+	 * Returns whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Listbox dynamically. 
+	 * @return whether the "autopaging" facility is turned on.
+	 * @since 5.0.2
+	 */
+	public boolean isAutopaging();
 }

@@ -83,33 +83,10 @@ package org.zkoss.zul.api;
  */
 public interface Style {
 
-	/**
-	 * Sets whether to load an external Style Sheet dynamically.
-	 * <p>
-	 * Default: false.
-	 * 
-	 * @see #isDynamic
+	/** @deprecated As of release 5.0.0, it is decided automatically.
 	 */
 	public void setDynamic(boolean dynamic);
-
-	/**
-	 * Returns whether to load an external Style Sheet dynamically. If false, a
-	 * HTML STYLE or LINK tag is generated to represent the content or the src.
-	 * 
-	 * <p>
-	 * Due to IE's limitation, there is no effect if the style component is
-	 * added or removed dynamically and if {@link #isDynamic} is false.
-	 * 
-	 * <p>
-	 * If {@link #isDynamic} is true, this component can be added and removed
-	 * dynamically and the rules will be attached and detached accordingly.
-	 * Note: in this case, the HTML LINK tag is generated when this component is
-	 * initialized at the client, so the style will be loaded to the client
-	 * after all components are initialized.
-	 * 
-	 * <p>
-	 * Default: false.
-	 * 
+	/** @deprecated As of release 5.0.0, it is decided automatically.
 	 */
 	public boolean isDynamic();
 
@@ -158,4 +135,18 @@ public interface Style {
 	 */
 	public void setContent(String content);
 
+	/** Returns the media dependencies for this style sheet.
+	 *
+	 * <p>Default: null.
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 * @since 5.0.3
+	 */
+	public String getMedia();
+	/** Sets the media dependencies for this style sheet.
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 *
+	 * @param media the media dependencies for this style sheet
+	 * @since 5.0.3
+	 */
+	public void setMedia(String media);
 }

@@ -2819,6 +2819,8 @@ public class Listbox extends XulElement implements Paginated,
 		}
 	}
 
+	/** Renders the given set of list items.
+	 */
 	public void renderItems(Set items) {
 		if (_model == null)
 			return;

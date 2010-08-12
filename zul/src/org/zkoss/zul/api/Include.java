@@ -208,4 +208,9 @@ DynamicPropertied, AfterCompose, IdSpace {
 	 * @since 3.6.2
 	 */
 	public void setMode(String mode) throws WrongValueException;
+
+	/** Removes all dynamic properties.
+	 * @since 5.0.1
+	 */
+	public void clearDynamicProperties();
 }
