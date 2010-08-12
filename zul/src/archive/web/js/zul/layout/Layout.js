@@ -57,18 +57,23 @@ zul.layout.Layout = zk.$extends(zk.Widget, {
 		this.$supers(zul.layout.Layout, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._syncSize) {
+		if (this._shallSize) {
 			zWatch.fire('onSize', this);
-			this._syncSize = false;
+			this._shallSize = false;
 		}
+	},
+	_syncSize: function () {
+		this._shallSize = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	onChildAdded_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		this._syncSize = true;
+		this._syncSize();
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		this._syncSize = true;
+		this._syncSize();
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
