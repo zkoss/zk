@@ -289,7 +289,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		//autocomplete
 		val = val.toLowerCase();
-		var sel = this._sel;
+		sel = this._sel;
 		if (!sel || sel.parent != this) sel = fchild;
 
 		for (var item = sel;;) {
