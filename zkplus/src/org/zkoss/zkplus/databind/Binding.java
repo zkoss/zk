@@ -380,9 +380,9 @@ public class Binding implements java.io.Serializable {
 					value = Classes.coerce(m.getReturnType(), bean);
 				} catch (NoSuchMethodException ex) { //ignore it
 				}
-				if (!Objects.equals(oldv, value)) { //Bug 2874098 (avoid LoadOnSave to close errorbox in setRawValue())
-					Fields.set(comp, "rawValue", value, _converter == null);
-				}
+
+				//See both Bug 3000305 and 2874098
+				Fields.set(comp, "rawValue", value, _converter == null);
 			} else {
 				Fields.set(comp, _attr, bean, _converter == null);
 			}
