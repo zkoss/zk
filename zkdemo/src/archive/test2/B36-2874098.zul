@@ -36,7 +36,9 @@
 	<textbox id="tb2" value="@{mybean.name,save-when='none'}" constraint="no empty" />
 	<button id="buttonSave" label="Save" >
 		<attribute name="onClick">
+	binder.setLoadOnSave(false);
 	binder.saveAll();
+	binder.loadAll();
 	throw new WrongValueException(tb, "All values are wrong: " + mybean.shortname);
 </attribute>
 	</button>
