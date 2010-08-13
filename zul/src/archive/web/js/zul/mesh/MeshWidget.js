@@ -735,7 +735,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var xwds = wgt.$class._calcMinWd(wgt),
 			wds = xwds.wds,
 			width = xwds.width;
-		if (!wgt.$n().style.width || width > total) {
+		if (wgt.isSizedByContent() || !wgt.$n().style.width || width > total) {
 			total = width;
 			head.style.width = total + 'px';
 		}
