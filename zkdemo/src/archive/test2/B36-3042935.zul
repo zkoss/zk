@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-3042935.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 13 18:36:31 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click upon "iii", and then you should see "lInfo.onClick" only.
+	<listbox fixedLayout="true" width="21em">
+
+		<listhead>
+
+			<listheader label="Name" width="15em"/>
+
+			<listheader id="lhState" label="State" width="6em"  sort="auto" onSort='tb.value = tb.value + "\nlhState.onSort"' >
+
+				<label id="lInfo" value="iii" style="color:blue;font-weight:bold" onClick='tb.value = tb.value + "\nlInfo.onClick"'/>
+			</listheader>
+
+		</listhead>
+
+	</listbox>
+
+	<textbox id="tb" multiline="true" rows="12"/>
+
+</zk>

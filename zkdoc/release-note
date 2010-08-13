@@ -28,6 +28,7 @@ ZK 3.6.5
   3034638: Listcell cannot remove style (3.6)
   3000305: DataBinder cannot set a value when constraint error
   2975020: Image component behaves wrongly (3.6)
+  3042935: ZK 3.6 send extra onSort for listheader
 
 * Upgrade Notes:
 
