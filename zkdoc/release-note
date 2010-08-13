@@ -77,6 +77,7 @@ ZK 5.0.4
   3000305: DataBinder cannot set a value when constraint error
   3043561: decimalbox format error
   1952402: IFRAME inside Window load multiple times in FF if overlapped
+  3034550: Window header should use fontFamilyT
   3035367: Updating not yet rendered llistbox model when vflex="true"
   
 * Upgrade Notes
