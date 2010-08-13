@@ -21,6 +21,7 @@ ZK 5.0.4
   3038128: Allow all system-config (eg, engine-class) in zk/config.xml  
   3028270: Slider support for clicking to increment or decrement
   1860341: Button support type="submit"
+  2990932: Allow disable load-on-save mechanism in databinder
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
