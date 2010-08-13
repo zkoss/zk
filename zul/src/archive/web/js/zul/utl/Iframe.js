@@ -98,9 +98,16 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		}
 	},
 	//super//
+	bind_: function (desktop, skipper, after) {
+		this.$supers(zul.utl.Iframe, 'bind_', arguments);
+		if (this._src) {
+			var self = this;
+			after.push(function () {self.$n().src = self._src;});
+		}
+	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments)
-				+ ' src="' + (this._src || '') + '" frameborder="0"',
+				+ ' src="" frameborder="0"',
 			v = this._scrolling;
 		if ("auto" != v)
 			attr += ' scrolling="' + ('true' == v ? 'yes': 'false' == v ? 'no': v) + '"';

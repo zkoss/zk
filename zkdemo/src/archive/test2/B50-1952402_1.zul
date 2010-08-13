@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-1952402_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 13 12:09:14 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window
+width="300px" height="300px"
+id="test2">
+<zscript>
+		Integer count = (Integer)Sessions.getCurrent().getAttribute("B50-1952402");
+		if (count == null) {
+			count = new Integer(1);
+			Sessions.getCurrent().setAttribute("B50-1952402", count);
+		} else {
+			Sessions.getCurrent().setAttribute("B50-1952402", new Integer(count.intValue() + 1));
+		}
+		int n = count.intValue();
+	</zscript>
+	You should see the 1 inside the text box, otherwise, it is a bug.(Firefox only)
+	<textbox value="${n}"/>
+	<button label="Click me to reset the count after you tested" onClick='Sessions.getCurrent().removeAttribute("B50-1952402")'/>
+</window>
