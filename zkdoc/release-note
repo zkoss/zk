@@ -1,6 +1,7 @@
 	--------
 ZK 3.6.5
 * Features
+  2990932: Allow disable load-on-save mechanism in databinder
 
 * Bugs
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
