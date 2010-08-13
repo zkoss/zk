@@ -26,6 +26,7 @@ ZK 3.6.5
   3042165: Misplaced drop-down list of auto-complete combobox on iPad
   3034638: Listcell cannot remove style (3.6)
   3000305: DataBinder cannot set a value when constraint error
+  2975020: Image component behaves wrongly (3.6)
 
 * Upgrade Notes:
 

@@ -1323,7 +1323,7 @@ zkau._onDocLClick = function (evt) {
 				}
 			}
 
-			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt) && !zkau._lastClkUuid)
+			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt) && !zkau._lastClkUuid && zk.isAncestor(cmp, Event.element(evt)))
 				zkau.send({uuid: $uuid(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp), ctl: true});
 
