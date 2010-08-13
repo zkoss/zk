@@ -3,7 +3,8 @@
 	Purpose:
 		Widget - the UI object at the client
 	Description:
-		
+		z_rod indicates a widget is in the status of ROD (i.e., no rendered due to ROD)
+
 	History:
 		Tue Sep 30 09:23:56     2008, Created by tomyeh
 
@@ -1787,9 +1788,10 @@ wgt.$f().main.setTitle("foo");
 
 		this.parent = this.nextSibling = this.previousSibling = null;
 	},
-	/** Replaced the child widgets with the specified.
+	/** Replaced the child widgets with the specified widgets.
 	 * It is usefull if you want to replace a part of children whose
 	 * DOM element is a child element of <code>subId</code> (this.$n(subId)).
+	 * <p>Note: it assumes this.$n(subId) exists.
 	 * @param String subId the ID of the cave that contains the child widgets
 	 * to replace with.
 	 * @param Array wgts an arrray of widgets that will become children of this widget
