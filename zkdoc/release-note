@@ -25,6 +25,7 @@ ZK 3.6.5
   3039363: Listbox will hide the popup after the popup add height(IE6)
   3042165: Misplaced drop-down list of auto-complete combobox on iPad
   3034638: Listcell cannot remove style (3.6)
+  3000305: DataBinder cannot set a value when constraint error
 
 * Upgrade Notes:
 
