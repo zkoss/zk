@@ -74,6 +74,7 @@ ZK 5.0.4
   3026669: Tabbox accordion animation strange
   3035230: Sets sizedByContent to a grid with width doesn't work
   3000305: DataBinder cannot set a value when constraint error
+  3043561: decimalbox format error
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
