@@ -156,6 +156,15 @@ implements Page, PageCtrl, java.io.Serializable {
 			--_nRoot;
 		}
 	}
+	/** Called when a root compent's {@link AbstractComponent#replaceWith}
+	 * is called.
+	 */
+	/*package*/ void onReplaced(AbstractComponent from, AbstractComponent to) {
+		if (_firstRoot == from)
+			_firstRoot = to;
+		if (_lastRoot == from)
+			_lastRoot = to;
+	}
 	private boolean isMyRoot(Component comp) {
 		for (AbstractComponent ac = _firstRoot;; ac = ac._next) {
 			if (ac == null)

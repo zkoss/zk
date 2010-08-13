@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
@@ -36,7 +37,7 @@ public class AuInsertBefore extends AuResponse {
 		super("addBfr", anchor, new Object[] {getRefId(anchor), new JavaScriptValue(content)});
 	}
 	private static String getRefId(Component anchor) {
-		if (anchor instanceof Native)
+		if (anchor instanceof Native || anchor instanceof StubComponent)
 			throw new UiException("Adding a component before a native one not allowed: "+anchor);
 		return anchor.getUuid();	
 	}

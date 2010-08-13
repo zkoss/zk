@@ -514,7 +514,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (oldpg != null) dt = oldpg.getDesktop();
 		else if (newpg != null) dt = newpg.getDesktop();
 		else return;
-
 		((WebAppCtrl)dt.getWebApp())
 			.getUiEngine().addMoved(this, oldparent, oldpg, newpg);
 	}
@@ -1224,10 +1223,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//fix the uuid-to-component map
 		if (_page != null) {
 			comp._page = _page;
-			if (comp._parent == null) { //root
-				((AbstractPage)_page).removeRoot(this);
-				((AbstractPage)_page).addRoot(comp);
-			}
+			if (comp._parent == null)
+				((AbstractPage)_page).onReplaced(this, comp);
+				//call onReplaced instead addRoot/removeRoot
 
 			final DesktopCtrl desktopCtrl = (DesktopCtrl)_page.getDesktop();
 			desktopCtrl.removeComponent(this, false);

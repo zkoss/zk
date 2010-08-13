@@ -18,6 +18,7 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
@@ -45,7 +46,7 @@ public class AuInsertAfter extends AuResponse {
 		//Bug 1939059: This is a dirty fix. We only handle roots
 		//and assume it must be the last one
 		if (anchor.getParent() != null) {
-			if (anchor instanceof Native)
+			if (anchor instanceof Native || anchor instanceof StubComponent)
 				throw new UiException("Adding a component after a native one not allowed: "+anchor);
 
 			//Bug 2686585: if ZK JSP used, we have no info so no exception

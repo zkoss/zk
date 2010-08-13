@@ -825,7 +825,6 @@ import org.zkoss.zk.au.out.*;
 		}
 		assert D.OFF || (anchor == null && newsibs.isEmpty()): "anchor="+anchor+" newsibs="+newsibs+" sibs="+sibs;
 
-
 		//all siblings are changed (and none of them is processed)
 		final Iterator it = before.iterator();
 		if (it.hasNext()) {
