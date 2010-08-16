@@ -1702,6 +1702,8 @@ wgt.$f().main.setTitle("foo");
 		if (this != oldpt)
 			return false;
 
+		_rmIdSpaceDown(child);
+
 		//Note: remove HTML and unbind first, so unbind_ will have all info
 		if (child.z_rod)
 			_unbindrod(child);
@@ -1713,7 +1715,6 @@ wgt.$f().main.setTitle("foo");
 
 		_unlink(this, child);
 
-		_rmIdSpaceDown(child);
 
 		if (!_noParentCallback)
 			child.onParentChanged_(oldpt);

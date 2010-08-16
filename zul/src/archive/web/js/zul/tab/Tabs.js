@@ -95,6 +95,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, onShow: this});
+		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
+			if ((btn = this.$n(key[le])))
+				this.domUnlisten_(btn, "onClick");
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
 	_isInited: function () {
