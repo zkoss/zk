@@ -230,6 +230,8 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			_src = src;
 			fixMode();
 			if (!_instantMode) invalidate();
+			else super.invalidate();
+				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -301,8 +303,9 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			_localized = localized;
 			if (_localized)
 				fixMode();  //becomes defer mode if auto
-			if (!_instantMode) //always instant mode but future we might support
-				invalidate();
+			if (!_instantMode) invalidate();
+			else super.invalidate();
+				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -369,11 +372,13 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	 * reloaded (and new children will be created).
 	 */
 	public void invalidate() {
+		super.invalidate();
+			//invalidate is redudant in instant mode, but less memory leak in IE
+
 		if (_instantMode && _afterComposed) {
 			getChildren().clear();
 			afterCompose();
-		} else
-			super.invalidate();
+		}
 
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();

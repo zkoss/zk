@@ -104,6 +104,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			_inlines = null;
 		} else {
 			getChildren().clear();
+			invalidate();
 		}
 		afterCompose();
 	}
