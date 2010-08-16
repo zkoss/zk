@@ -249,6 +249,8 @@ implements org.zkoss.zul.api.Include, Includer {
 			_src = src;
 			fixMode();
 			if (!_instantMode) invalidate();
+			else super.invalidate();
+				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -316,9 +318,10 @@ implements org.zkoss.zul.api.Include, Includer {
 
 			_localized = localized;
 			if (_localized)
-				fixMode();  //becomes defer mode if auto
-			if (!_instantMode) //always instant mode but future we might support
-				invalidate();
+				fixMode(); //becomes defer mode if auto
+			if (!_instantMode) invalidate();
+			else super.invalidate();
+				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -438,11 +441,13 @@ implements org.zkoss.zul.api.Include, Includer {
 	 * reloaded (and new children will be created).
 	 */
 	public void invalidate() {
+		super.invalidate();
+			//invalidate is redudant in instant mode, but less memory leak in IE
+
 		if (_instantMode && _afterComposed) {
 			getChildren().clear();
 			afterCompose();
-		} else
-			super.invalidate();
+		}
 
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();
