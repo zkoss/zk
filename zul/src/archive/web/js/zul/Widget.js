@@ -543,11 +543,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 		switch (keyCode) {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = jq.nodeName(target);
-			if (tn == "textarea" || (tn == "button"
-			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup) 
-			&& (!target.id || !target.id.endsWith('-a')))
+			//don't change button's behavior (Bug 1556836 and 3030463)
+			if (tn == "textarea" || tn == "button"
 			|| (tn == "input" && target.type.toLowerCase() == "button"))
-				return; //don't change button's behavior (Bug 1556836)
+				return;
 			okcancel = evtnm = "onOK";
 			break;
 		case 27: //ESC
