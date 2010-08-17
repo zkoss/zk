@@ -29,6 +29,7 @@ ZK 3.6.5
   3000305: DataBinder cannot set a value when constraint error
   2975020: Image component behaves wrongly (3.6)
   3042935: ZK 3.6 send extra onSort for listheader
+  3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
 
 * Upgrade Notes:
 

@@ -190,6 +190,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		try {
 			_sesscache.destroy(this);
+		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (AbstractMethodError ex) { //backward compatible
 		}
 		_factory.stop(this);
@@ -198,6 +199,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		if (_failover != null) {
 			try {
 				_failover.stop(this);
+			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (AbstractMethodError ex) { //backward compatible
 			}
 			_failover = null;
@@ -207,7 +209,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine = null;
 		_sesscache = null;
 
-		org.zkoss.util.Cleanups.cleanup();
+		try {
+			org.zkoss.util.Cleanups.cleanup();
+		} catch (NoClassDefFoundError ex) { //Bug 3046360
+		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
