@@ -24,7 +24,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zk.skipBfUnload = false;
 	}
 
-var _zjq = {};
+var _zjq = {}, _jq = {};
+zk.override(jq.fn, _jq, {
+	replaceWith: function (html) {
+		//outerHTML to minimize memory leak in IE
+		var done, el;
+		try {
+			//Note: IE's outerHTML cannot handle td/th.. and ignore script
+			//so we have skip them (the result is memory leak)
+			//
+			//We can use jquery's evalScript to handle script elements,
+			//but unable to find what scripts are created since they might not be
+			//children of new created elements
+			if (typeof html == 'string' && (el = this[0])
+			&& !jq.nodeName(el, "td", "th", "table", "tr",
+			"caption", "tbody", "thead", "tfoot", "colgroup","col")
+			&& !containsScript(html)) {
+				var o = zjq._beforeOuter(el);
+
+				jq.cleanData(el.getElementsByTagName("*"));
+				jq.cleanData([el]);
+				el.innerHTML = ""; //seems less memory leak
+				el.outerHTML = html;
+				done = true;
+				zjq._afterOuter(o);
+				return this;
+			}
+		} catch (e) {
+		}
+		return done ? this: _jq.replaceWith.apply(this, arguments);
+	}
+});
 zk.override(zjq, _zjq, {
 	_fixCSS: function (el) {
 		var zoom = el.style.zoom;
@@ -65,36 +95,7 @@ zk.copy(zjq, {
 	},
 
 	_beforeOuter: zk.$void, //overridden by domie6.js
-	_afterOuter: zk.$void,
-
-	_setOuter: function (el, html) {
-		//outerHTML instead of replaceWith to minimize memory leak in IE
-		var done;
-		try {
-			//Note: IE's outerHTML cannot handle td/th.. and ignore script
-			//so we have skip them (the result is memory leak)
-			//
-			//We can use jquery's evalScript to handle script elements,
-			//but unable to find what scripts are created since they might not be
-			//children of new created elements
-			if ((el = jq(el)[0]) && !jq.nodeName(el, "td", "th", "table", "tr",
-			"caption", "tbody", "thead", "tfoot", "colgroup","col")
-			&& !containsScript(html)) {
-				var o = zjq._beforeOuter(el);
-
-				jq.cleanData(el.getElementsByTagName("*"));
-				jq.cleanData([el]);
-				el.innerHTML = ""; //seems less memory leak
-				el.outerHTML = html;
-				done = true;
-				zjq._afterOuter(o);
-				return;
-			}
-		} catch (e) {
-		}
-		if (!done)
-			jq(el).replaceWith(html);
-	}
+	_afterOuter: zk.$void
 });
 
 	function _dissel() {
