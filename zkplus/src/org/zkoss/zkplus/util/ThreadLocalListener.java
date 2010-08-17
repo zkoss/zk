@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CollectionsX;
@@ -73,7 +73,9 @@ import java.util.Collection;
  *		&lt;!--org.springframework.transaction.interceptor.TransactionAspectSupport=currentTransactionInfo; ver. 1.28 -->
  *		&lt;/value>
  *	&lt;/preference>
- * <p>
+ * <p>In additions to using the application preference, you can specify it
+ * in the library proeperty called <code>zkplus.util.ThreadLocalListener.fieldsMap</code>.
+ * The preference has the higher priority.
  * <p>Another example, when you specify the Spring's bean as scope="session", you have to specify the following
  * ThreadLocal variables since Spring 2.0 use RequestContextHolder to handle the bean's scope.</p>
  * <pre><code>
@@ -99,10 +101,12 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 		_enabled = app.getConfiguration().isEventThreadEnabled();
 		if (_fieldsMap == null) {
 			_fieldsMap = new HashMap(8);
-			app.setAttribute("zkplus.util.ThreadLocalListener.fieldsMap", _fieldsMap);
+			final String PREF = "zkplus.util.ThreadLocalListener.fieldsMap";
+			app.setAttribute(PREF, _fieldsMap);
 			//read preference
-			final Configuration config = app.getConfiguration();
-			final String val = config.getPreference("ThreadLocal", null);
+			String val = app.getConfiguration().getPreference("ThreadLocal", null);
+			if (val == null)
+				val = Library.getProperty(PREF);
 			if (val != null) {
 				final Collection klassSets = CollectionsX.parse(null, val, ';');
 				for(Iterator its = klassSets.iterator(); its.hasNext(); ) {
