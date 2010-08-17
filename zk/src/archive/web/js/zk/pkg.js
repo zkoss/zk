@@ -31,9 +31,10 @@ zk.copy(zk, (function() {
 		_loading[nm] = true;
 
 		_xloadings.push(nm);
-		if (updCnt() == 1 && zk.debugJS) {
+		if (updCnt() == 1) {
 			zk.disableESC();
-			setTimeout(prgbox, 380);
+			if (zk.debugJS)
+				setTimeout(prgbox, 380);
 		}
 	}
 	function doLoad(pkg, dt) {
