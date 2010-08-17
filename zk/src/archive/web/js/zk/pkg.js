@@ -33,7 +33,7 @@ zk.copy(zk, (function() {
 		_xloadings.push(nm);
 		if (updCnt() == 1) {
 			zk.disableESC();
-			if (zk.debugJS)
+			if (zk.debugJS) //Not to show another loading message if not debugging (better look)
 				setTimeout(prgbox, 380);
 		}
 	}
@@ -91,12 +91,10 @@ zk.copy(zk, (function() {
 	}
 	function updCnt() {
 		zk.loading = _xloadings.length;
-		if (zk.debugJS) {
-    		try {
-    			var n = jq("#zk_loadcnt")[0];
-    			if (n) n.innerHTML = loadmsg();
-    		} catch (ex) {
-    		}
+		try {
+			var n = jq("#zk_loadcnt")[0];
+			if (n) n.innerHTML = loadmsg();
+		} catch (ex) {
 		}
 		return zk.loading;
 	}
