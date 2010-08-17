@@ -41,6 +41,7 @@ import java.util.Map.Entry;
 import java.util.Date;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -1556,6 +1557,18 @@ public class Components {
 		public String locate(String path) {
 			return exec().locate(path);
 		}
+
+		public String toString() {
+			return Objects.toString(exec());
+		}
+		public int hashCode() {
+			return Objects.hashCode(exec());
+		}
+		public boolean equals(Object o) {
+			if (o instanceof Exec)
+				return Objects.equals(exec(), ((Exec)o).exec());
+			return Objects.equals(exec(), o);
+		}
 	}
 	
 	//Proxy to read current requestScope
@@ -1598,6 +1611,18 @@ public class Components {
 		}
 		public Collection values() {
 			return req().values();
+		}
+
+		public String toString() {
+			return Objects.toString(req());
+		}
+		public int hashCode() {
+			return Objects.hashCode(req());
+		}
+		public boolean equals(Object o) {
+			if (o instanceof RequestScope)
+				return Objects.equals(req(), ((RequestScope)o).req());
+			return Objects.equals(req(), o);
 		}
 	}
 }
