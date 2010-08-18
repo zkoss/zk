@@ -267,8 +267,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		var pp2 = this.getPopupNode_(true);
-		if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
-			pp.style.height = "250px";
+		if (ppofs[1] == "auto" && pp.offsetHeight > 350) {
+			pp.style.height = "350px";
 		} else if (pp.offsetHeight < 10) {
 			pp.style.height = "10px"; //minimal
 		}

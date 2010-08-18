@@ -86,6 +86,7 @@ ZK 5.0.4
   3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
   3046850: Decimalbox failed to handle very small number, 0.00000000001
   3046852: Doublebox wrong message for very small number, 0.00000000001
+  3047534: The breeze theme's bandpopup is not high enough w/ listbox
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

@@ -248,6 +248,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	display: block; position: absolute;
 	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS};
+	overflow: auto;
 }
 .z-combobox-rounded-pp,
 .z-combobox-pp {
