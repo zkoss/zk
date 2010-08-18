@@ -47,7 +47,7 @@ function (out) {
 
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="overflow:hidden;height:', hgh, '"');
-	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:"', this.getRows() * 15, 'px"');
+	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:', this.getRows() * 15, 'px"');
 	
 	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"');
 	if (!this.isSizedByContent())
