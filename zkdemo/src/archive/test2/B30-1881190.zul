@@ -28,7 +28,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute name="onClick">{ mywin.doModal(); }</attribute>
 	</button>
 	<window visible="false" id="mywin" width="100px" height="100px"
-		title="wnd1" action="onopen: ;">
+		title="wnd1">
 		<zscript>
 			List items = new org.zkoss.zkdemo.userguide.BigList(2000);
 			//a big list of Integer
