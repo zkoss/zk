@@ -94,6 +94,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.scripting.*;
 
 /**
@@ -2505,7 +2506,8 @@ w:use="foo.MyWindow"&gt;
 		final String cmd = request.getCommand();
 		if ("echo".equals(cmd)) {
 			final List data2 = (List)request.getData().get("");
-			Events.postEvent(new Event((String)data2.get(0), this, data2.size() > 1 ? data2.get(1) : null));
+			Events.postEvent(new Event((String)data2.get(0), this,
+				data2.size() > 1 ? AuEcho.getData(this, data2.get(1)): null));
 		} else if ("setAttr".equals(cmd)) {
 			final List data2 = (List)request.getData().get("");
 			updateByClient((String)data2.get(0), data2.get(1));

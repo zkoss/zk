@@ -4,6 +4,7 @@ ZK 5.0.4
   3026623: Able to communicate among iframes without server push
   3040368: Provide a simple horizontal/vertical layout
   3031544: Allow to specify a shortcut instead of full namespace
+  3046952: Clients.echoEvent supports any kind of object
   3041822: A way to minimize memory by not maintaining state at server
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3030481: Combobox support Selectable (used with ListModel)
