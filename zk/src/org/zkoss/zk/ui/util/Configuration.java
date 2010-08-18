@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.reflect.Fields;
@@ -2445,6 +2446,17 @@ public class Configuration {
 		}
 		public int compareTo(Object o) {
 			return o.getClass().equals(_klass) ? 0: 1;
+		}
+
+		//Object//
+		public String toString() {
+			return Objects.toString(_klass);
+		}
+		public boolean equals(Object o) {
+			return Objects.equals(_klass, o instanceof SameClass ? ((SameClass)o)._klass: o);
+		}
+		public int hashCode() {
+			return Objects.hashCode(_klass);
 		}
 	}
 	private static class TimeoutURIInfo extends URIInfo {
