@@ -197,10 +197,10 @@ zk.fmt.Number = {
 		var e = -1;
 		for (var m = suf.length, n = fmt.length; m > 0; --m) {
 			var cc = suf.charAt(m-1),
-				fmtcc = fmt.charAt(--n); 
+				fmtcc = fmt.charAt(--n);
 			if (cc == '0' &&  fmtcc == '#') { //optional 0
 				if (e < 0) e = m;
-			} else if (e >= 0)
+			} else if (e >= 0 || /[1-9]/.test(cc))
 				break;
 		}
 		if (e >= 0)

@@ -338,7 +338,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
-		var rtags = cmds.rtags||{};
+		var rtags = cmds.rtags||{}, ex;
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
@@ -348,7 +348,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					doProcess(cmd.cmd, cmd.data);
 				} catch (e) {
 					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
-					throw e;
+					if (!ex) ex = e;
 				}
 			}
 		} finally {
@@ -357,6 +357,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
 			}
 		}
+		if (ex)
+			throw ex;
 		return true;
 	}
 	function _asBodyChild(child) {
@@ -394,7 +396,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * The AU Engine used to send the AU requests to the server and to process
  * the AU responses.
  * <p>Notice {@link zAu}, {@link AuCmd0} and {@link AuCmd1}
- * are not available in <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  */
 zAu = {
 	_resetTimeout: function () { //called by mount.js
@@ -669,7 +671,7 @@ zAu.beforeSend = function (uri, req) {
 	 *
 	 * @param String uri the AU's request URI (such as /zkau)
 	 * @param Event aureq the AU request
-	 * @param zk.Desktop dt the desktop
+	 * @param Desktop dt the desktop
 	 * @return String the AU's request URI.
 	 * @since 5.0.2
 	 */
@@ -703,7 +705,7 @@ zAu.beforeSend = function (uri, req) {
 	 * request at once and this argument indicates the order an AU request is
 	 * (starting from 0).
 	 * @param Event aureq the AU request
-	 * @param zk.Desktop dt the desktop
+	 * @param Desktop dt the desktop
 	 * @return String the content of the AU request.
 	 * @since 5.0.4
 	 */
@@ -910,7 +912,7 @@ zAu.beforeSend = function (uri, req) {
  * The AU command handler for processes commands not related to widgets,
  * sent from the server.
  * <p>Notice {@link zAu}, {@link zk.AuCmd0} and {@link zk.AuCmd1}
- * are not available in <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  * @see zAu#cmd0
  */
 zAu.cmd0 = /*prototype*/ { //no uuid at all
@@ -1183,7 +1185,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
  * The AU command handler for processes commands related to widgets,
  * sent from the server.
  * <p>Notice {@link zAu}, {@link zk.AuCmd0} and {@link zk.AuCmd1}
- * are not available in <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>.
+ * are not available in <a href="http://code.google.com/p/zkuery/">ZKuery</a>.
  * @see zAu#cmd1
  */
 zAu.cmd1 = /*prototype*/ {
@@ -1300,7 +1302,7 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	uuid: function (wgt, newId) {
 		if (wgt)
-			wgt._setUuid(newId);
+			zk._wgtutl.setUuid(wgt, newId); //see widget.js
 	},
 
 	/** Set the focus to the specified widget.

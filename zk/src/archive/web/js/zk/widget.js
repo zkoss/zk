@@ -3,7 +3,8 @@
 	Purpose:
 		Widget - the UI object at the client
 	Description:
-		
+		z_rod indicates a widget is in the status of ROD (i.e., no rendered due to ROD)
+
 	History:
 		Tue Sep 30 09:23:56     2008, Created by tomyeh
 
@@ -98,6 +99,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--wgt.nChildren;
 	}
+	//replace the link of from with the link of to (note: it assumes no child)
+	function _replaceLink(from, to) {
+		var p = to.parent = from.parent,
+			q = to.previousSibling = from.previousSibling;
+		if (q) q.nextSibling = to;
+		else if (p) p.firstChild = to;
+
+		q = to.nextSibling = from.nextSibling;
+		if (q) q.previousSibling = to;
+		else if (p) p.lastChild = to;
+	}
+
 	function _bind0(wgt) {
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
@@ -671,6 +684,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			cwgt.setFlexSize_({height:lastsz});
 			cwgt._vflexsz = lastsz;
 		}
+		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
+		//vertical scrollbar might disappear after height was set
+		var newpsz = this.getParentSize_(p);
+		if (newpsz.width > psz.width) //yes, the scrollbar gone!
+			wdh += (newpsz.width - psz.width); 
 		
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
@@ -695,13 +713,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
+			zWatch.listen({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX], beforeSize: wgt});
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX]});
+			zWatch.unlisten({onSize: [wgt, _fixFlexX], onShow: [wgt, _fixFlexX], beforeSize: wgt});
 			delete wgt._flexListened;
 		}
 	}
@@ -969,9 +987,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	//inServer: false,
 	/** The UUID. Don't change it if it is bound to the DOM tree, or {@link #inServer} is true.
 	 * Developers rarely need to modify it since it is generated automatically. 
-	 * <h3>Note of ZK Light</h3>
+	 * <h3>Note of <a href="http://code.google.com/p/zkuery/">ZKuery</a></h3>
 	 * It is the same as {@link #id} if {@link _global_.zk#spaceless} is true,
-	 * such as ZK Light.
+	 * such as ZKuery.
 	 * @type String
 	 */
 	//uuid: null,
@@ -1407,7 +1425,7 @@ wgt.$f().main.setTitle("foo");
 			}
 
 			if (id && (zk.spaceless || this.rawId))
-				this._setUuid(id);
+				zk._wgtutl.setUuid(this, id);
 			this.id = id;
 
 			if (id) {
@@ -1417,23 +1435,6 @@ wgt.$f().main.setTitle("foo");
 			}
 		}
 		return this;
-	},
-	_setUuid: function (uuid) { //called by au.js
-		if (!uuid)
-			uuid = zk.Widget.nextUuid();
-		if (uuid != this.uuid) {
-			var n = this.$n();
-			if (n) {
-				//Note: we assume RawId doesn't have sub-nodes
-				if (!this.rawId)
-					throw 'id immutable after bound'; //might have subnodes
-				n.id = uuid;
-				delete _binds[this.uuid];
-				_binds[uuid] = this;
-				this.clearCache();
-			}
-			this.uuid = uuid;
-		}
 	},
 
 	/** Sets a property.
@@ -1711,6 +1712,8 @@ wgt.$f().main.setTitle("foo");
 		if (this != oldpt)
 			return false;
 
+		_rmIdSpaceDown(child);
+
 		//Note: remove HTML and unbind first, so unbind_ will have all info
 		if (child.z_rod)
 			_unbindrod(child);
@@ -1722,7 +1725,6 @@ wgt.$f().main.setTitle("foo");
 
 		_unlink(this, child);
 
-		_rmIdSpaceDown(child);
 
 		if (!_noParentCallback)
 			child.onParentChanged_(oldpt);
@@ -1766,15 +1768,7 @@ wgt.$f().main.setTitle("foo");
 	 * @since 5.0.1
 	 */
 	replaceWidget: function (newwgt) {
-		var node = this.$n(),
-			p = newwgt.parent = this.parent,
-			s = newwgt.previousSibling = this.previousSibling;
-		if (s) s.nextSibling = newwgt;
-		else if (p) p.firstChild = newwgt;
-
-		s = newwgt.nextSibling = this.nextSibling;
-		if (s) s.previousSibling = newwgt;
-		else if (p) p.lastChild = newwgt;
+		_replaceLink(this, newwgt);
 
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
@@ -1783,6 +1777,8 @@ wgt.$f().main.setTitle("foo");
 		if (cf && zUtl.isAncestor(this, cf))
 			zk.currentFocus = null;
 
+		var node = this.$n(),
+			p = this.parent;
 		if (this.z_rod) {
 			_unbindrod(this);
 			_bindrod(newwgt);
@@ -1803,9 +1799,10 @@ wgt.$f().main.setTitle("foo");
 
 		this.parent = this.nextSibling = this.previousSibling = null;
 	},
-	/** Replaced the child widgets with the specified.
+	/** Replaced the child widgets with the specified widgets.
 	 * It is usefull if you want to replace a part of children whose
 	 * DOM element is a child element of <code>subId</code> (this.$n(subId)).
+	 * <p>Note: it assumes this.$n(subId) exists.
 	 * @param String subId the ID of the cave that contains the child widgets
 	 * to replace with.
 	 * @param Array wgts an arrray of widgets that will become children of this widget
@@ -2287,8 +2284,9 @@ out.push('</div>');
 			if (s) out.push(s);
 
 			for (var p = this, mold = this._mold; p; p = p.superclass) {
-				var f = p.$class.molds[mold];
-				if (f) return f.apply(this, arguments);
+				var f = p.$class.molds;
+				if (f && (f = f[mold]))
+					return f.apply(this, arguments);
 			}
 			throw "mold "+mold+" not found in "+this.className;
 		}
@@ -2565,7 +2563,7 @@ function () {
 			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
-			zjq._setOuter(n, this.redrawHTML_(skipper, true));
+			jq(n).replaceWith(this.redrawHTML_(skipper, true));
 			this.bind(desktop, skipper);
 		}
 
@@ -2678,7 +2676,7 @@ function () {
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
-		zjq._setOuter(n, child.redrawHTML_(skipper, true));
+		jq(n).replaceWith(child.redrawHTML_(skipper, true));
 		child.bind(desktop, skipper);
 	},
 	/** Inserts the HTML content generated by the specified child widget before the reference widget (the before argument).
@@ -2985,7 +2983,8 @@ unbind_: function (skipper, after) {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
-			if (!skipper || !skipper.skipped(this, child))
+			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
+			if (child.desktop && (!skipper || !skipper.skipped(this, child)))
 				if (child.z_rod) _unbindrod(child);
 				else child.unbind_(null, after); //don't pass skipper
 		}
@@ -3099,7 +3098,23 @@ unbind_: function (skipper, after) {
 		_fixFlex.apply(this);
 	},
 	fixMinFlex_: function(n, orient) { //internal use
-		_fixMinFlex.apply(this, arguments);
+		return _fixMinFlex.apply(this, arguments);
+	},
+	resetSize_: function(orient) {
+		var n = this.$n();
+		if (orient == 'w')
+			n.style.width = '';
+		else if (orient == 'h')
+			n.style.height = '';
+	},
+	beforeSize: function () {
+		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
+		if (this.isRealVisible()) {
+			if (this._hflex && this._hflex != 'min')
+				this.resetSize_('w');
+			if (this._vflex && this._vflex != 'min')
+				this.resetSize_('h');
+		}
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).
@@ -4256,44 +4271,9 @@ zk.Widget.getClass('combobox');
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls(props);
-	},
-
-	_autohide: function () { //called by effect.js
-		if (!_floatings.length) {
-			for (var n; n = _hidden.shift();)
-				n.style.visibility = n.getAttribute('z_ahvis')||'';
-			return;
-		}
-		for (var tns = ['IFRAME', 'APPLET'], i = 2; i--;)
-			l_nxtel:
-			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
-				var n = ns[j], $n = zk(n), visi;
-				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
-				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
-					continue; //ignore
-
-				for (var tc = _topnode(n), k = _floatings.length; k--;) {
-					var f = _floatings[k].node,
-						tf = _topnode(f);
-					if (tf == tc || _zIndex(tf) < _zIndex(tc) || !$n.isOverlapped(f))
-						continue;
-
-					if (visi) {
-						_hidden.push(n);
-						try {
-							n.setAttribute('z_ahvis', n.style.visibility);
-						} catch (e) {
-						}
-						n.style.visibility = 'hidden';
-					}
-					continue l_nxtel;
-				}
-
-				if (_hidden.$remove(n))
-					n.style.visibility = n.getAttribute('z_ahvis')||'';
-			}
 	}
 });
+zkreg = zk.Widget.register; //a shortcut for WPD loader
 
 /** A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
@@ -4317,19 +4297,11 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		var w = zk.Widget.$(this.uuid);
 		if (!w) throw 'illegal: '+w;
 
-		var p, q;
+		var p;
 		if (p = w.parent) //shall be a desktop
 			_unlink(p, w); //unlink only
 
-		p = w.parent = this.parent,
-		q = w.previousSibling = this.previousSibling;
-		if (q) q.nextSibling = w;
-		else if (p) p.firstChild = w;
-
-		q = w.nextSibling = this.nextSibling;
-		if (q) q.previousSibling = w;
-		else if (p) p.lastChild = w;
-
+		_replaceLink(this, w);
 		this.parent = this.nextSibling = this.previousSibling = null;
 
 		_addIdSpaceDown(w); //add again since parent is changed
@@ -4464,6 +4436,70 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		return Desktop._dt;
 	}
 });
+
+zk._wgtutl = { //internal utilities
+	setUuid: function (wgt, uuid) { //called by au.js
+		if (!uuid)
+			uuid = zk.Widget.nextUuid();
+		if (uuid != wgt.uuid) {
+			var n = wgt.$n();
+			if (n) {
+				//Note: we assume RawId doesn't have sub-nodes
+				if (!wgt.rawId)
+					throw 'id immutable after bound'; //might have subnodes
+				n.id = uuid;
+				delete _binds[wgt.uuid];
+				_binds[uuid] = wgt;
+				wgt.clearCache();
+			}
+			wgt.uuid = uuid;
+		}
+	},
+	replace: function (from, to) { //called by mount.js
+		_replaceLink(from, to);
+		to.lastChild = from.lastChild;
+		for (var p = to.firstChild = from.firstChild; p; p = p.nextSibling)
+			p.parent = to;
+		from.parent = from.nextSibling = from.previousSibling =
+		from.firstChild = from.lastChild = null;
+	},
+
+	autohide: function () { //called by effect.js
+		if (!_floatings.length) {
+			for (var n; n = _hidden.shift();)
+				n.style.visibility = n.getAttribute('z_ahvis')||'';
+			return;
+		}
+		for (var tns = ['IFRAME', 'APPLET'], i = 2; i--;)
+			l_nxtel:
+			for (var ns = document.getElementsByTagName(tns[i]), j = ns.length; j--;) {
+				var n = ns[j], $n = zk(n), visi;
+				if ((!(visi=$n.isVisible(true)) && !_hidden.$contains(n))
+				|| (!i && !n.getAttribute("z_autohide") && !n.getAttribute("z.autohide"))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
+					continue; //ignore
+
+				for (var tc = _topnode(n), k = _floatings.length; k--;) {
+					var f = _floatings[k].node,
+						tf = _topnode(f);
+					if (tf == tc || _zIndex(tf) < _zIndex(tc) || !$n.isOverlapped(f))
+						continue;
+
+					if (visi) {
+						_hidden.push(n);
+						try {
+							n.setAttribute('z_ahvis', n.style.visibility);
+						} catch (e) {
+						}
+						n.style.visibility = 'hidden';
+					}
+					continue l_nxtel;
+				}
+
+				if (_hidden.$remove(n))
+					n.style.visibility = n.getAttribute('z_ahvis')||'';
+			}
+	}
+};
 })();
 
 /** A page.
@@ -4515,7 +4551,7 @@ zk.Page = zk.$extends(zk.Widget, {
 	 */
 	contained: []
 });
-zk.Widget.register('zk.Page', true);
+zkreg('zk.Page', true);
 
 //a fake page used in circumstance that a page is not available ({@link #getPage})
 zk.Body = zk.$extends(zk.Page, {
@@ -4715,7 +4751,6 @@ zk.Skipper.nonCaptionSkipper = new zk.Skipper();
 
 //Extra//
 
-zkreg = zk.Widget.register; //a shortcut for WPD loader
 function zkopt(opts) {
 	for (var nm in opts) {
 		var val = opts[nm];

@@ -93,6 +93,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.scripting.*;
 
 /**
@@ -158,6 +159,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
+	/** Constructs a stub component.
+	 * @param useless an useless argument
+	 */
+	/*package*/ AbstractComponent(boolean useless) { //called by StubComponent
+		_def = ComponentsCtrl.DUMMY;
+	}
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 */
@@ -203,15 +210,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return null;
 	}
 
-	/**
-	 * Creates and returns the instance for storing child components.
-	 * <p>Default: it instantiates {@link AbstractComponent.Children}.
-	 * @deprecated As of release 5.0.4, override {@link #getChildren} instead.
-	 * @since 3.5.1
-	 */
-	protected List newChildren() {
-		return new Children();
-	}
 	/** The default implementation for {@link #getChildren}.
 	 * It is suggested to extend this class if you want to override
 	 * {@link #getChildren} to instantiate your own instance.
@@ -230,6 +228,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * Caller has to make sure the uniqueness (and not auto id).
 	 */
 	private static void addToIdSpaces(final Component comp) {
+		final String compId = comp.getId();
+		if (comp instanceof NonFellow || isAutoId(compId))
+			return; //nothing to do
+
 		if (comp instanceof IdSpace)
 			((AbstractComponent)comp).bindToIdSpace(comp);
 
@@ -503,7 +505,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (oldpg != null) dt = oldpg.getDesktop();
 		else if (newpg != null) dt = newpg.getDesktop();
 		else return;
-
 		((WebAppCtrl)dt.getWebApp())
 			.getUiEngine().addMoved(this, oldparent, oldpg, newpg);
 	}
@@ -603,8 +604,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				_id = id;
 			}
 
-			if (_id.length() > 0)
-				addToIdSpaces(this);
+			addToIdSpaces(this);
 
 			smartUpdate("id", _id);
 		}
@@ -696,7 +696,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Component getLastChild() {
 		return _chdinf != null ? _chdinf.last: null;
 	}
-	private final int nChild() {
+	/** Returns the number of children. */
+	/*package*/ final int nChild() { //called by HtmlNativeComponent
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
 	private int modCntChd() {
@@ -1140,13 +1141,89 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return true;
 	}
-	private void setNext(AbstractComponent comp, AbstractComponent next) {
+	/** Set the next sibling of the given child. (this is a parent of comp). */
+	/*package*/ final
+	void setNext(AbstractComponent comp, AbstractComponent next) {
 		if (comp != null) comp._next = next;
 		else _chdinf.first = next;
 	}
-	private void setPrev(AbstractComponent comp, AbstractComponent prev) {
+	/** Set the prev sibling of the given child. (this is a parent of comp). */
+	/*package*/ final
+	void setPrev(AbstractComponent comp, AbstractComponent prev) {
 		if (comp != null) comp._prev = prev;
 		else _chdinf.last = prev;
+	}
+	/** Increases the number of children. It assumes _chdinf not null. */
+	/*package*/ final void incNChild(int diff) {
+		_chdinf.nChild += diff;
+	}
+	/** Returns the number of children. It assumes _chdinf not null. */
+	/*package*/ final
+	void nChild(AbstractComponent first, AbstractComponent last, int nChild) {
+		_chdinf.first = first;
+		_chdinf.last = last;
+		_chdinf.nChild = nChild;
+
+		for (; first != null; first = first._next)
+			first._parent = this;
+	}
+
+	/** Replaces with the given component.
+	 * This component will be detached at the end.
+	 */
+	/*package*/ final //called by StubComponent
+	void replaceWith(AbstractComponent comp, boolean bFellow, boolean bListener) {
+		if (comp._parent != null || comp._next != null || comp._prev != null
+		|| comp._chdinf != null || comp._page != null)
+			throw new IllegalStateException();
+
+		comp._def = _def;
+		comp._uuid = _uuid;
+
+		//remove this from the fellow map
+		removeFromIdSpaces(this); //call before changing _parent...
+
+		//fix parent/sibling link
+		AbstractComponent p = comp._parent = _parent,
+			q = comp._prev = _prev;
+		if (q != null) q._next = comp;
+		else if (p != null) p._chdinf.first = comp;
+
+		q = comp._next = this._next;
+		if (q != null) q._prev = comp;
+		else if (p != null) p._chdinf.last = comp;
+
+		_parent = _next = _prev = null;
+
+		//fix children link
+		if (_chdinf != null) {
+			for (p = _chdinf.first; p != null; p = p._next)
+				p._parent = comp;
+			comp._chdinf = _chdinf;
+			_chdinf = null;
+		}
+
+		//fix the uuid-to-component map
+		if (_page != null) {
+			comp._page = _page;
+			if (comp._parent == null)
+				((AbstractPage)_page).onReplaced(this, comp);
+				//call onReplaced instead addRoot/removeRoot
+
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)_page.getDesktop();
+			desktopCtrl.removeComponent(this, false);
+			desktopCtrl.addComponent(comp);
+			_page = null;
+		}
+
+		//add comp to the fellow map
+		if (bFellow) {
+			comp._id = _id;
+			addToIdSpaces(comp); ///called after fixing comp._parent...
+		}
+
+		if (_auxinf != null)
+			comp._auxinf = _auxinf.cloneStub(comp, bListener);
 	}
 
 	/** Appends a child to the end of all children.
@@ -1200,7 +1277,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: instantiates and returns an instance of {@link Children}.
 	 */
 	public List getChildren() {
-		return newChildren(); //backward compatible: don't new Children() directly
+		return new Children();
 	}
 	/** Returns the root of the specified component.
 	 */
@@ -1232,6 +1309,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected void setVisibleDirectly(boolean visible) {
 		initAuxInfo().visible = visible;
+	}
+
+	public String getStubonly() {
+		final int v = _auxinf != null ? _auxinf.stubonly: 0;
+		return v == 0 ? "inherit": v < 0 ? "false": "true";
+	}
+	public void setStubonly(String stubonly) {
+		int v;
+		if ("false".equals(stubonly)) v = -1;
+		else if ("true".equals(stubonly)) v = 1;
+		else if ("inherit".equals(stubonly)) v = 0;
+		else
+			throw new UiException("Not allowed: "+stubonly);
+
+		if ((_auxinf != null ? _auxinf.stubonly: 0) != v)
+			initAuxInfo().stubonly = (byte)v;
+			//no need to update client (it is all about server-side handling)
 	}
 
 	public boolean isInvalidated() {
@@ -1543,8 +1637,8 @@ w:use="foo.MyWindow"&gt;
 	public String getWidgetClass() {
 		if (_auxinf != null && _auxinf.wgtcls != null)
 			return _auxinf.wgtcls;
-		final String widgetClass = _def.getWidgetClass(getMold());
-		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
+		final String widgetClass = _def.getWidgetClass(this, getMold());
+		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass(this);
 	}
 	public void setWidgetClass(String wgtcls) {
 		if (wgtcls != null && wgtcls.length() > 0) {
@@ -1811,8 +1905,26 @@ w:use="foo.MyWindow"&gt;
 		return Collections.EMPTY_MAP;
 	}
 	/** Adds an event that the client might send to the server.
-	 * It must be called when loading the class (i.e., in <code>static {}</code>).
-	 * It cannot be called after that.
+	 * {@link #addClientEvent} is usally called in the <code>static</code> clause
+	 * when the class is loaded. For example,
+	 * <pre><code>public class MyWidget extends HtmlBasedComponent {
+	 *  static {
+	 *    addClientEvent(MyWidget.class, "onFly", 0);
+	 *  }
+	 *...</code></pre>
+	 *
+	 * <p>For a programming language not easy to have the <code>static</code>
+	 * clause (such as Scala), {@link #addClientEvent} can be called in
+	 * the constructors. Notice that it is better not to add the client event
+	 * later than the contructor, since the derived classes will copy
+	 * the client events defined in the base class, when the first time
+	 * {@link #addClientEvent} is called with the class.
+	 *
+	 * <h3>Version History</h3>
+	 * <p>Since 5.0.4, it can be called in contructors
+	 * (in additions to the static clause). On othe thand, it can only
+	 * be called in the static clause (executed when the class is loaded)
+	 * in the prior version.
 	 * @param cls the component's class (implementation class).
 	 * @param flags a combination of {@link #CE_IMPORTANT}, {@link #CE_NON_DEFERRABLE}
 	 * {@link #CE_BUSY_IGNORE}, {@link #CE_DUPLICATE_IGNORE}
@@ -1825,30 +1937,35 @@ w:use="foo.MyWindow"&gt;
 			events = (Map)_clientEvents.get(cls);
 		}
 
-		//It is OK to race there
-		final boolean first = events == null;
-		if (first) {
-			//for better performance, we pack all event names of super
-			//classes, though it costs more memory
-			events = new HashMap(8);
-			for (Class c = cls ; c != null; c = c.getSuperclass()) {
-				Map evts;
+		if (events == null) {
+			synchronized (cls) {
 				synchronized (_clientEvents) {
-					evts = (Map)_clientEvents.get(c);
+					events = (Map)_clientEvents.get(cls);
 				}
-				if (evts != null) {
-					events.putAll(evts);
-					break;
+				if (events == null) {
+					//for better performance, we pack all event names of super
+					//classes, though it costs more memory
+					events = new HashMap(8);
+					for (Class c = cls ; c != null; c = c.getSuperclass()) {
+						final Map evts;
+						synchronized (_clientEvents) {
+							evts = (Map)_clientEvents.get(c);
+						}
+						if (evts != null) {
+							events.putAll(evts);
+							break;
+						}
+					}
+					synchronized (_clientEvents) {
+						_clientEvents.put(cls, events);
+					}
 				}
 			}
 		}
 
-		events.put(evtnm, new Integer(flags));
-		
-		if (first)
-			synchronized (_clientEvents) {
-				_clientEvents.put(cls, events);
-			}
+		synchronized (events) {
+			events.put(evtnm, new Integer(flags));
+		}
 	}
 
 	//Event//
@@ -2280,23 +2397,6 @@ w:use="foo.MyWindow"&gt;
 	 * @see ComponentCtrl#getExtraCtrl
 	 */
 	public Object getExtraCtrl() {
-		return newExtraCtrl(); //backward compatible; don't return null directly
-			//3.0.3: create as late as possible so component has a chance
-			//to customize which object to instantiate
-	}
-	/**
-	 * Used by {@link #getExtraCtrl} to create extra controls.
-	 * It is used only by component developers.
-	 *
-	 * <p>Default: return null.
-	 *
-	 * <p>To provide extra controls, it is simpler to override this method
-	 * instead of {@link #getExtraCtrl}.
-	 * By use of {@link #newExtraCtrl}, you don't need to care of
-	 * cloning and serialization.
-	 * @deprecated As of release 5.0.4, override {@link #getExtraCtrl} instead.
-	 */
-	protected Object newExtraCtrl() {
 		return null;
 	}
 
@@ -2341,7 +2441,8 @@ w:use="foo.MyWindow"&gt;
 		final String cmd = request.getCommand();
 		if ("echo".equals(cmd)) {
 			final List data2 = (List)request.getData().get("");
-			Events.postEvent(new Event((String)data2.get(0), this, data2.size() > 1 ? data2.get(1) : null));
+			Events.postEvent(new Event((String)data2.get(0), this,
+				data2.size() > 1 ? AuEcho.getData(this, data2.get(1)): null));
 		} else if ("setAttr".equals(cmd)) {
 			final List data2 = (List)request.getData().get("");
 			updateByClient((String)data2.get(0), data2.get(1));
@@ -2364,13 +2465,27 @@ w:use="foo.MyWindow"&gt;
 	 */
 	protected void updateByClient(String name, Object value) {
 		Method m;
+		final String mtdnm = Classes.toMethodName(name, "set");
 		Object[] args = new Object[] {value};
 		try {
-			m = Classes.getMethodByObject(getClass(),
-				Classes.toMethodName(name, "set"), args);
+			m = Classes.getMethodByObject(getClass(), mtdnm, args);
 		} catch (NoSuchMethodException ex) {
-			if (log.debugable()) log.debug("setter not found", ex);
-			return; //ingore it
+			try {
+				m = Classes.getCloseMethod(getClass(), mtdnm, new Class[] {String.class});
+			} catch (NoSuchMethodException e2) {
+				try {
+					m = Classes.getCloseMethod(getClass(), mtdnm, new Class[] {null});
+				} catch (NoSuchMethodException e3) {
+					log.warningBriefly("setter not found", ex);
+					return; //ingore it
+				}
+			}
+			try {
+				args[0] = Classes.coerce(m.getParameterTypes()[0], value);
+			} catch (Throwable e2) {
+				log.warning(m+" requires "+m.getParameterTypes()[0]+", not "+value);
+				return; //ingore it
+			}
 		}
 
 		disableClientUpdate(true);
@@ -2857,16 +2972,17 @@ w:use="foo.MyWindow"&gt;
 		private Map wgtovds;
 		/** A map of client DOM attributes to set, Map(String name, String value). */
 		private Map wgtattrs;
-
 		/** The AU tag. */
 		private String autag;
+
+		/** Whether this component is stub-only (0: inheirt, -1: false, 1: true). */
+		private byte stubonly;
 
 		/** Whether annots is shared with other components. */
 		private transient boolean annotsShared;
 		/** Whether evthds is shared with other components. */
 		private transient boolean evthdsShared;
-		/** Whether this component is visible.
-		 */
+		/** Whether this component is visible. */
 		private boolean visible = true;
 
 		public Object clone() {
@@ -2890,6 +3006,17 @@ w:use="foo.MyWindow"&gt;
 				clone.evthds = (EventHandlerMap)evthds.clone();
 			return clone;
 		}
+		/** Clone for the stub component ({@link replaceWith}). */
+		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
+			if (bListener && (evthds != null || listeners != null)) {
+				final AuxInfo clone = new AuxInfo();
+				if (evthds != null)
+					clone.evthds = evthdsShared ? evthds: (EventHandlerMap)evthds.clone();
+				cloneListeners(owner, clone);
+				return clone;
+			}
+			return null;
+		}
 		/** 2nd phase of clone (after children are cloned). */
 		private void initClone(AbstractComponent owner, AuxInfo clone) {
 			//spaceinfo (after children is cloned)
@@ -2903,25 +3030,7 @@ w:use="foo.MyWindow"&gt;
 				clone.attrs = attrs.clone(owner);
 
 			//clone listener
-			if (listeners != null) {
-				clone.listeners = new HashMap(4);
-				for (Iterator it = listeners.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final List list = new LinkedList();
-					for (Iterator it2 = ((List)me.getValue()).iterator();
-					it2.hasNext();) {
-						Object val = it2.next();
-						if (val instanceof ComponentCloneListener) {
-							val = ((ComponentCloneListener)val).willClone(owner);
-							if (val == null) continue; //don't use it in clone
-						}
-						list.add(val);
-					}
-					if (!list.isEmpty())
-						clone.listeners.put(me.getKey(), list);
-				}
-			}
+			cloneListeners(owner, clone);
 
 			//clone forwards (after children is cloned)
 			if (forwards != null) {
@@ -2942,6 +3051,27 @@ w:use="foo.MyWindow"&gt;
 			//AuService
 			if (ausvc instanceof ComponentCloneListener)
 				clone.ausvc = (AuService)((ComponentCloneListener)ausvc).willClone(owner);
+		}
+		private void cloneListeners(AbstractComponent owner, AuxInfo clone) {
+			if (listeners != null) {
+				clone.listeners = new HashMap(4);
+				for (Iterator it = listeners.entrySet().iterator();
+				it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					final List list = new LinkedList();
+					for (Iterator it2 = ((List)me.getValue()).iterator();
+					it2.hasNext();) {
+						Object val = it2.next();
+						if (val instanceof ComponentCloneListener) {
+							val = ((ComponentCloneListener)val).willClone(owner);
+							if (val == null) continue; //don't use it in clone
+						}
+						list.add(val);
+					}
+					if (!list.isEmpty())
+						clone.listeners.put(me.getKey(), list);
+				}
+			}
 		}
 		private void render(ContentRenderer renderer)
 		throws IOException {

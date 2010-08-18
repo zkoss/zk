@@ -221,7 +221,7 @@ public class Events {
 	 * @since 5.0.2
 	 */
 	public static final String ON_DESKTOP_RECYCLE = "onDesktopRecycle";
-
+	
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character
@@ -336,7 +336,7 @@ public class Events {
 	 * <p>Note: if the target of an event is not attached to
 	 * the page yet, the event is ignored silently.
 	 * @see #sendEvent
-	 * @see #echoEvent
+	 * @see #echoEvent(String, Component, Object)
 	 * @see #postEvent(int, Event)
 	 */
 	public static final void postEvent(Event event) {
@@ -406,15 +406,38 @@ public class Events {
 	 * operartion. A typical case is to open a hightlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
+	 * <p>It is the same as <code>echoEvent(name, target, (Object)data)</code>.
+	 *
 	 * @since 3.0.2
 	 * @see #sendEvent
-	 * @see #echoEvent
+	 * @see #echoEvent(String, Component, Object)
 	 * @param name the event name, such as onSomething
 	 * @param target the component to receive the event (never null).
 	 * @param data the extra information, or null if not available.
 	 * It will become {@link Event#getData}.
 	 */
 	public static final void echoEvent(String name, Component target, String data) {
+		echoEvent(name, target, (Object)data);
+	}
+	/** Echos an event.
+	 * By echo we mean the event is fired after the client receives the AU
+	 * responses and then echoes back.
+	 * In other words, the event won't be execute in the current execution.
+	 * Rather, it executes after the client receives the AU responses
+	 * and then echoes back the event back.
+	 *
+	 * <p>It is usually if you want to prompt the user before doing a long
+	 * operartion. A typical case is to open a hightlighted window to
+	 * prevent the user from clicking any button before the operation gets done.
+	 *
+	 * @since 5.0.4
+	 * @see #sendEvent
+	 * @param name the event name, such as onSomething
+	 * @param target the component to receive the event (never null).
+	 * @param data the extra information, or null if not available.
+	 * It will become {@link Event#getData}.
+	 */
+	public static final void echoEvent(String name, Component target, Object data) {
 		if (name == null || name.length() == 0 || target == null)
 			throw new IllegalArgumentException();
 

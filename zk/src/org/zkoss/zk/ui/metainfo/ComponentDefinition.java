@@ -235,14 +235,18 @@ public interface ComponentDefinition extends Cloneable {
 	/** Returns the widget class assoicated with specified mold,
 	 * or the default widget class ({@link #getWidgetClass}) if not available.
 	 * The returned widget class includes the package name (JavaScript class).
+	 * @param comp the component used to evaluate EL expression, if any,
+	 * when retreiving the widget class. Ignored if null.
 	 * @param moldName the mold name
-	 * @since 5.0.0
+	 * @since 5.0.4
 	 */
-	public String getWidgetClass(String moldName);
+	public String getWidgetClass(Component comp, String moldName);
 	/** Returns the default widget class, or null if not available.
-	 * @since 5.0.0
+	 * @param comp the component used to evaluate EL expression, if any,
+	 * when retreiving the widget class. Ignored if null.
+	 * @since 5.0.4
 	 */
-	public String getDefaultWidgetClass();
+	public String getDefaultWidgetClass(Component comp);
 	/** Sets the default widget class.
 	 * @param widgetClass the name of the widget class (JavaScript class),
 	 * including the package name.

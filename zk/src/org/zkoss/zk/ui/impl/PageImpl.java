@@ -783,8 +783,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		final PageRenderer renderer = (PageRenderer)
 			exec.getAttribute(Attributes.PAGE_RENDERER);
-		(renderer != null ? renderer: _langdef.getPageRenderer())
-			.render(this, out);
+		final Object oldrendering =
+			exec.setAttribute(Attributes.PAGE_RENDERING, Boolean.TRUE);
+		try {
+			(renderer != null ? renderer: _langdef.getPageRenderer())
+				.render(this, out);
+		} finally {
+			if (oldrendering != null)
+				exec.setAttribute(Attributes.PAGE_RENDERING, oldrendering);
+			else
+				exec.removeAttribute(Attributes.PAGE_RENDERING);
+		}
 	}
 	private static boolean shallIE7Compatible() {
 		if (_ie7compat == null)
@@ -902,8 +911,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void sessionWillPassivate(Desktop desktop) {
-		for (Iterator it = getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).sessionWillPassivate(this);
+		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
+			((ComponentCtrl)root).sessionWillPassivate(this);
 
 		willPassivate(_attrs.getAttributes().values());
 		willPassivate(_attrs.getListeners());
@@ -922,8 +931,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			_ownerUuid = null;
 		}
 
-		for (Iterator it = getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).sessionDidActivate(this);
+		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
+			((ComponentCtrl)root).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
 		didActivate(_attrs.getListeners());

@@ -33,7 +33,8 @@ zk.copy(zk, (function() {
 		_xloadings.push(nm);
 		if (updCnt() == 1) {
 			zk.disableESC();
-			setTimeout(prgbox, 380);
+			if (zk.debugJS) //Not to show another loading message if not debugging (better look)
+				setTimeout(prgbox, 380);
 		}
 	}
 	function doLoad(pkg, dt) {
@@ -226,6 +227,23 @@ zk.load('zul.utl', function () {
 		e.charset = charset || "UTF-8";
 		e.src = src;
 		jq.head().appendChild(e);
+		return this;
+	},
+	/* Loads a CSS file.
+	 * @param String href the URL of the CSS file.
+	 * @param String id the identifier. Ignored if not specified.
+	 * @param String media the media attribute. Ignored if not specified.
+	 * @since 5.0.4
+	 * @return zk
+	 */
+	loadCSS: function (href, id, media) {
+		var ln = document.createElement("link");
+		if (id) ln.id = id;
+		ln.rel = "stylesheet";
+		ln.type = "text/css";
+		ln.href = href;
+		if (media) ln.media = media;
+		jq.head().appendChild(ln);
 		return this;
 	},
 

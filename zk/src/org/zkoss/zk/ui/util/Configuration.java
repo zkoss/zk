@@ -694,8 +694,9 @@ public class Configuration {
 			final Class klass = (Class)ary[j];
 			try {
 				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
+			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+klass, ex);
+				log.realCauseBriefly("Ignored: failed to invoke "+klass, ex);
 			}
 		}
 	}

@@ -34,6 +34,7 @@ import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -41,11 +42,12 @@ import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.ext.render.Merger;
 import org.zkoss.zk.ui.impl.NativeHelpers;
 
 /**
- * A comonent used to represent XML elements that are associated
- * with the inline namespace (http://www.zkoss.org/2005/zk/inline).
+ * A component used to represent XML elements that are associated
+ * with the native namespace (http://www.zkoss.org/2005/zk/native).
  *
  * <p>It contains the content that shall be sent directly to client.
  * It has three parts: prolog, children and epilog.
@@ -63,10 +65,14 @@ implements DynamicTag, Native {
 	private static final Helper _helper = new HtmlHelper();
 	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
+	//---------
+	//structure: _prefix <_tag> _prolog children _epilog </_tag> _postifx
+	//---------
+
 	private String _tag;
 	private String _prolog = "", _epilog = "";
 	/** The text before the tag name. */
-	private String _prefix;
+	private String _prefix, _postfix;
 	private Map _props;
 	/** Declared namespaces ({@link Namespace}). */
 	private List _dns;
@@ -85,7 +91,7 @@ implements DynamicTag, Native {
 	}
 
 	/** Contructs a {@link HtmlNativeComponent} component with the specified
-	 * prolog ad epilog.
+	 * prolog and epilog.
 	 */
 	public HtmlNativeComponent(String tag, String prolog, String epilog) {
 		this(tag);
@@ -104,6 +110,30 @@ implements DynamicTag, Native {
 	 */
 	public String getTag() {
 		return _tag;
+	}
+
+	/** Returns whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>Unlike other kind of components, this method always return "true",
+	 * i.e., stub-only. In additions, its child component does not inherit
+	 * this value even if the child's {@link Component#getStubonly} is "inherit"
+	 * (and assumed to "false" if "inherit").
+	 * @since 5.0.4
+	 */
+	public String getStubonly() {
+		return "true";
+	}
+	/** Sets whether this component is stub-only.
+	 * By stub-only, we mean we don't need to maintain the states of
+	 * the component at the server side.
+	 * <p>Default: "true".
+	 * @exception UiException if stubonly is not "true".
+	 * @since 5.0.4
+	 */
+	public void setStubonly(String stubonly) {
+		if (!"true".equals(stubonly))
+			throw new UiException("Not allowed: "+stubonly);
 	}
 
 	//Native//
@@ -256,6 +286,7 @@ implements DynamicTag, Native {
 			oldout.write(sb.toString());
 		}
 	}
+
 	/** Used to indicate the redrawing of the top native is found. */
 	private static final String ATTR_TOP_NATIVE = "zkHtmlTopNative";
 	private static boolean startsWith(StringBuffer sb, String tag, int start) {
@@ -268,14 +299,16 @@ implements DynamicTag, Native {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		final String prolog = getPrologHalf();
-		render(renderer, "prolog", _prefix != null ? _prefix + prolog: prolog);
+		render(renderer, "prolog", getPrologHalf());
 		render(renderer, "epilog", getEpilogHalf());
 	}
 	private String getPrologHalf() {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 			//don't use _helper directly, since the derive might override it
+
+		if (_prefix != null)
+			sb.append(_prefix);
 
 		//first half
 		helper.getFirstHalf(sb, _tag, _props, _dns);
@@ -293,7 +326,16 @@ implements DynamicTag, Native {
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
+
+		if (_postfix != null)
+			sb.append(_postfix);
 		return sb.toString();
+	}
+	/** Return the full content, getPrologHalf() + getFullLast().
+	 * It assumes it has no children.
+	 */
+	private final String getFullContent() {
+		return getPrologHalf() + getEpilogHalf();
 	}
 
 	//DynamicTag//
@@ -363,16 +405,107 @@ implements DynamicTag, Native {
 			sb.append(text); //don't encode (bug 2689443)
 		}
 	}
+	private final Component mergeNext() {
+		final AbstractComponent parent = (AbstractComponent)getParent();
+		if (parent != null) {
+			final AbstractComponent n = (AbstractComponent)getNextSibling();
+			if (n instanceof HtmlNativeComponent) {
+				final DesktopCtrl desktopCtrl = _page != null ?
+					(DesktopCtrl)_page.getDesktop(): null;
+			 	if (n.getFirstChild() == null) {
+			 		//remove n
+			 		final AbstractComponent n2 = (AbstractComponent)n.getNextSibling();
+			 		parent.setNext(this, n2);
+			 		parent.setPrev(n2, this);
+			 		parent.incNChild(-1);
 
+					final String s = ((HtmlNativeComponent)n).getFullContent();
+			 		_postfix = _postfix != null ? _postfix + s: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(n, false); //ok but no need to recycle
+					return this;
+			 	}
+			 	if (getFirstChild() == null) {
+			 		//remove this
+			 		final AbstractComponent p = (AbstractComponent)getPreviousSibling();
+			 		parent.setNext(p, n);
+			 		parent.setPrev(n, p);
+			 		parent.incNChild(-1);
+
+			 		final String s = getFullContent(),
+			 			prefix = ((HtmlNativeComponent)n)._prefix;
+			 		((HtmlNativeComponent)n)._prefix = prefix != null ? s + prefix: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(this, false); //ok but no need to recycle
+					return n;
+			 	}
+			}
+		}
+		return null;
+	}
+	private final Component mergeChild() {
+		Component child = getFirstChild();
+		if (child != null) {
+			HtmlNativeComponent childWithChild = null;
+			for (; child != null; child = child.getNextSibling()) {
+				if (!(child instanceof HtmlNativeComponent))
+					return null;
+				final Component cc = child.getFirstChild();
+				if (cc != null) {
+					if (childWithChild != null)
+						return null; //only one child-with-child is allowed
+					childWithChild = (HtmlNativeComponent)child;
+				}
+			}
+
+			final DesktopCtrl desktopCtrl = _page != null ?
+				(DesktopCtrl)_page.getDesktop(): null;
+			boolean bEpilog = false;
+			for (child = getFirstChild(); child != null;
+			child = child.getNextSibling()) {
+				final HtmlNativeComponent nc = (HtmlNativeComponent)child;
+				if (bEpilog) {
+					_epilog += nc.getFullContent();
+				} else if (child != childWithChild) {
+					_prolog += nc.getPrologHalf();
+					_epilog = nc.getEpilogHalf() + _epilog;
+					bEpilog = true;
+				} else { //childWithChild
+					_prolog = nc.getFullContent() + _prolog;
+				}
+				if (desktopCtrl != null)
+					desktopCtrl.removeComponent(nc, false); //ok but no need to recycle
+			}
+			if (childWithChild == null) {
+				nChild(null, null, 0);
+			} else {
+				nChild(
+					(AbstractComponent)(child = childWithChild.getFirstChild()),
+					(AbstractComponent)childWithChild.getLastChild(),
+					childWithChild.nChild());
+			}
+			return this;
+		}
+		return null;
+	}
+
+	//@Override
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	protected class ExtraCtrl implements DirectContent, PrologAllowed {
+	protected class ExtraCtrl implements DirectContent, PrologAllowed, Merger {
 		//-- PrologAware --//
 		public void setPrologContent(String prolog) {
 			_prefix = prolog;
 				//Notice: it is used as prefix (shown before the tag and children)
 				//while _prolog is the text shown after the tag and before the children
+		}
+		//Merger//
+		public Component mergeNextSibling() {
+			return mergeNext();
+		}
+		public Component mergeChildren() {
+			return mergeChild();
 		}
 	}
 }

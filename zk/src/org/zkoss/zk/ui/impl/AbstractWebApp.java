@@ -205,12 +205,20 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		_config.detroyRichlets();
 
-		_sesscache.destroy(this);
+		try {
+			_sesscache.destroy(this);
+		} catch (NoClassDefFoundError ex) { //Bug 3046360
+		} catch (AbstractMethodError ex) { //backward compatible
+		}
 		_factory.stop(this);
 		_provider.stop(this);
 		_engine.stop(this);
 		if (_failover != null) {
-			_failover.stop(this);
+			try {
+				_failover.stop(this);
+			} catch (NoClassDefFoundError ex) { //Bug 3046360
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
 			_failover = null;
 		}
 		_factory = null;
@@ -219,7 +227,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine = null;
 		_sesscache = null;
 
-		org.zkoss.util.Cleanups.cleanup();
+		try {
+			org.zkoss.util.Cleanups.cleanup();
+		} catch (NoClassDefFoundError ex) { //Bug 3046360
+		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}

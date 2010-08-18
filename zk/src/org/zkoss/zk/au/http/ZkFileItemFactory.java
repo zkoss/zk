@@ -31,7 +31,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * The file item factory that monitors the progress of uploading.

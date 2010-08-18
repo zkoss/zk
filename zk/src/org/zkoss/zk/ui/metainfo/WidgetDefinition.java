@@ -40,11 +40,9 @@ public interface WidgetDefinition {
 	 *
 	 * @param name the mold name.
 	 * @param moldURI an URI of the mold. Ignored if null.
-	 * @param cssURI an URI of the CSS. Ignored if null.
-	 * @param z2cURI an URI of the ZCS-to-CSS converter. Not supported yet.
-	 * Since 5.0, it doesn't allow any XEL expressions.
+	 * @since 5.0.4
 	 */
-	public void addMold(String name, String moldURI, String cssURI, String z2cURI);
+	public void addMold(String name, String moldURI);
 	/** Returns the URI (String) of the template to generate the mold,
 	 * or null if not available.
 	 * For Ajax clients, the template is a JavaScript method.
@@ -54,18 +52,6 @@ public interface WidgetDefinition {
 	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
 	public String getMoldURI(String name);
-	/** Returns the URI (String) of the CSS file of the mold, or null
-	 * if not available.
-	 * @param name the mold name
-	 * @return an URI in String
-	 */
-	public String getCSSURI(String name);
-	/** Returns the URI (String) of the Z2C file of the mold, or null
-	 * if not available.
-	 * @param name the mold name
-	 * @return an URI in String
-	 */
-	public String getZ2CURI(String name);
 
 	/** Returns whether to preserve the blank text.
 	 * If false, the blank text (a non-empty string consisting of whitespaces)

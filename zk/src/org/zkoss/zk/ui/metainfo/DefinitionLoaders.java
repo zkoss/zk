@@ -387,9 +387,8 @@ public class DefinitionLoaders {
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //extends
-				if (log.finerable()) log.finer("Extends component definition: "+name);
-
 				final String extnm = el.getElementValue("extends", true);
+				if (log.finerable()) log.finer("Extends component definition, "+name+", from "+extnm);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
 				if (ref == null) {
 					log.warning("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
@@ -439,10 +438,10 @@ public class DefinitionLoaders {
 				compdef.setBlankPreserved(true);
 
 			String wgtnm = el.getElementValue("widget-class", true);
-			noEL("widget-class", wgtnm, el);
 			WidgetDefinition wgtdef = null;
 			if (wgtnm != null) {
-				wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
+				if (!withEL(wgtnm))
+					wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
 				compdef.setDefaultWidgetClass(wgtnm);
 			}
 
@@ -455,28 +454,34 @@ public class DefinitionLoaders {
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
 				final String moldURI = e.getElementValue("mold-uri", true);
 				String cssURI = e.getElementValue("css-uri", true);
-				final String z2cURI = e.getElementValue("z2c-uri", true);
 				final String wn = e.getElementValue("widget-class", true);
 				noEL("mold-uri", moldURI, e); //5.0 limitation
 				noEL("css-uri", cssURI, e);
 
 				compdef.addMold(nm, wn != null ? wn: wgtnm);
 
-				WidgetDefinition wd =
-					wn !=  null ? getWidgetDefinition(langdef, compdef, wn): wgtdef;
-				if (moldURI != null || cssURI != null || z2cURI != null) {
+				WidgetDefinition wd = wn == null ? wgtdef:
+					withEL(wn) ? null: getWidgetDefinition(langdef, compdef, wn);
+				if (moldURI != null) {
 					if (wd != null)
-						wd.addMold(nm, moldURI, cssURI, z2cURI);
+						wd.addMold(nm, moldURI);
 					else
-						log.warning("Mold for "+name+" ignored because widget-class is required, "+e.getLocator());
+						log.error("Mold "+nm+" for "+name+" ignored because "+
+							((wn != null && withEL(wn)) || (wgtnm != null && withEL(wgtnm)) ?
+								"widget-class contains EL expressions":"widget-class is required")
+							+", "+e.getLocator());
 				}
 
 				if (cssURI != null && cssURI.length() > 0) {
 					final char cc = cssURI.charAt(0);
 					if (cc != '/' && cc != '~') {
 						String n = wn != null ? wn: wgtnm;
-						int k = n.lastIndexOf('.');
-						cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+						if (!withEL(n)) {
+							int k = n.lastIndexOf('.');
+							cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+						} else {
+							log.error("Absolute path required for cssURI, since the widget class contains EL expressions, "+e.getLocator());
+						}
 					}
 					langdef.addCSSURI(cssURI);
 				}
@@ -510,8 +515,11 @@ public class DefinitionLoaders {
 	}
 	private static void noEL(String nm, String val, Element el)
 	throws UiException {
-		if (val != null && val.indexOf("${") >= 0)
+		if (withEL(val))
 			throw new UiException(nm+" does not support EL expressions, "+el.getLocator());
+	}
+	private static boolean withEL(String val) {
+		return val != null && val.indexOf("${") >= 0;
 	}
 	/** Parse the processing instructions. */
 	private static void parsePI(LanguageDefinition langdef, Document doc)

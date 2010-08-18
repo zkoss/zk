@@ -124,10 +124,6 @@ implements Page, PageCtrl, java.io.Serializable {
 
 	/*package*/ void addRoot(Component comp) {
 		final AbstractComponent nc = (AbstractComponent)comp;
-		if (nc.getParent() != null || nc._next != null || nc._prev != null) {
-			log.warning("Ignored adding "+comp+" twice");
-			return; //ignore
-		}
 		for (AbstractComponent ac = _firstRoot; ac != null; ac = ac._next) {
 			if (ac == nc) {
 				log.warning("Ignored adding "+comp+" twice");
@@ -159,6 +155,15 @@ implements Page, PageCtrl, java.io.Serializable {
 			oc._next = oc._prev = null;
 			--_nRoot;
 		}
+	}
+	/** Called when a root compent's {@link AbstractComponent#replaceWith}
+	 * is called.
+	 */
+	/*package*/ void onReplaced(AbstractComponent from, AbstractComponent to) {
+		if (_firstRoot == from)
+			_firstRoot = to;
+		if (_lastRoot == from)
+			_lastRoot = to;
 	}
 	private boolean isMyRoot(Component comp) {
 		for (AbstractComponent ac = _firstRoot;; ac = ac._next) {

@@ -67,13 +67,6 @@ implements Condition, java.io.Serializable {
 	public String getScript(Component comp) {
 		return _script != null ? (String)_script.getValue(_evalr, comp): null;
 	}
-	/** @deprecated As of release 5.0.2, replaced with {@link #getRawScript}.
-	 * @see #getScript(Component)
-	 * Returns the script associated with this event handler.
-	 */
-	public String getScript() {
-		return getRawScript();
-	}
 	/** Returns the script passed to the constructor.
 	 * In other words, it might contains EL. 
 	 * @since 5.0.2

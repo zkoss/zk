@@ -18,6 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
@@ -36,6 +39,7 @@ public class MouseEvent extends Event {
 	private final int _x, _y, _pgx, _pgy;
 	private final String _area;
 	private final int _keys;
+	private Component _areacomp;
 
 	/** Indicates whether the Alt key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
@@ -119,12 +123,50 @@ public class MouseEvent extends Event {
 	/** Returns the logical name of the area that the click occurs, or
 	 * null if not available.
 	 *
-	 * <p>It is used only with some special components, such as <code>imagemap</code>,
+	 * <p>It is used only with some special components,
 	 * that partition itself into several logical areas.
+	 * <p>For example, <code>imagemap</code> and <code>chart</code>
+	 * partition an image into multiple sections represented with
+	 * the area component ({@link org.zkoss.zul.Area}).
+	 * <p>If each partition is represented with {@link org.zkoss.zul.Area}, the
+	 * return value is {@link org.zkoss.zul.Area#getId}, if it is assigned, or
+	 * {@link org.zkoss.zul.Area#getUuid} if not assigned.
+	 * To simplify the access, you can retrive it back with
+	 * {@link #getAreaComponent}.
+	 * @see #getAreaComponent
 	 */
 	public String getArea() {
 		return _area;
 	}
+	/** Returns the component representing the area that the click occurs,
+	 * or null if not associated with any component.
+	 * <p>This method assumes {@link #getArea} is ether a component's ID
+	 * or a component's UUID. It is true when {@link org.zkoss.zul.Area} is used
+	 * to partition a component, such as {@link org.zkoss.zul.Imagemap} and {@link org.zkoss.zul.Chart}.
+	 * @since 5.0.4
+	 */
+	public Component getAreaComponent() {
+		if (_areacomp == null && _area != null) {
+			final Component target = getTarget();
+			Desktop desktop = null;
+			if (target != null) {
+				_areacomp = target.getFellowIfAny(_area);
+				if (_areacomp != null)
+					return _areacomp;
+
+				desktop = target.getDesktop();
+			}
+			if (desktop == null) {
+				final Execution exec = Executions.getCurrent();
+				if (exec != null)
+					desktop = exec.getDesktop();
+			}
+			if (desktop != null)
+				return _areacomp = desktop.getComponentByUuidIfAny(_area);
+		}
+		return _areacomp;
+	}
+
 	/** Returns the horizontal coordinate of the mouse pointer relevant to
 	 * the component.
 	 */

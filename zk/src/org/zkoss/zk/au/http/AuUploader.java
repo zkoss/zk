@@ -57,7 +57,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.CharsetFinder;
-import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 

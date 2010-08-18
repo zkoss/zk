@@ -129,6 +129,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			_inlines = null;
 		} else {
 			getChildren().clear();
+			invalidate();
+				//invalidate is redudant, but less memory leak in IE
 		}
 		afterCompose();
 	}

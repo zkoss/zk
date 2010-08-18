@@ -490,15 +490,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public boolean removeComponent(Component comp, boolean recycleAllowed) {
 		final String uuid = comp.getUuid();
-		if (!recycleAllowed || _comps.remove(uuid) == null || recycleUuidDisabled())
-			return false;
+		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled())
+			return false; //not recycled
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
 		//Note: we don't check IdGenerator.isAutoUuid since it returns false if not implemented
 		if (comp instanceof RawId &&
 		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
-			return false;
+			return false; //not recycled
 
 		final int execId = getExecId();
 		RecycleInfo ri = null;
@@ -516,7 +516,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (ri == null)
 			_uuidRecycle.add(ri = new RecycleInfo(execId));
 		ri.uuids.add(uuid);
-		return true;
+		return true; //recycled
 	}
 	private static int getExecId() {
 		final Execution exec = Executions.getCurrent();
@@ -980,9 +980,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//get back _comps from _pages
 		for (Iterator it = _pages.iterator(); it.hasNext();)
-			for (Iterator e = ((Page)it.next()).getRoots().iterator();
-			e.hasNext();)
-				addAllComponents((Component)e.next());
+			for (Component root = ((Page)it.next()).getFirstRoot(); root != null;
+			root = root.getNextSibling())
+				addAllComponents(root);
 
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
@@ -1128,8 +1128,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 			l_out:
 			for (Iterator it = _pages.iterator(); it.hasNext();)
-				for (Iterator e = ((Page)it.next()).getRoots().iterator(); e.hasNext();)
-					if (Events.isListened((Component)e.next(), Events.ON_CLIENT_INFO, false)) {
+				for (Component root = ((Page)it.next()).getFirstRoot();
+				root != null; root = root.getNextSibling())
+					if (Events.isListened(root, Events.ON_CLIENT_INFO, false)) {
 						addResponse(new AuClientInfo(this));
 						break l_out;
 					}
@@ -1331,10 +1332,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			for (Iterator it = _pages.iterator(); it.hasNext();) {
 				final Page p = (Page)it.next();
 				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
-					for (Iterator e = p.getRoots().iterator(); e.hasNext();) {
-						final Component c = (Component)e.next();
-						if (Events.isListened(c, Events.ON_PIGGYBACK, false)) //asap+deferrable
-							Events.postEvent(new Event(Events.ON_PIGGYBACK, c));
+					for (Component root = ((Page)it.next()).getFirstRoot();
+					root != null; root = root.getNextSibling()) {
+						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) //asap+deferrable
+							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
 					}
 				}
 			}

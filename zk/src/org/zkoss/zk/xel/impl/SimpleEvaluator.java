@@ -24,6 +24,7 @@ import org.zkoss.xel.Expressions;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.SimpleXelContext;
+import org.zkoss.xel.util.DualFunctionMapper;
 
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
@@ -111,9 +112,9 @@ public class SimpleEvaluator implements Evaluator {
 			if (execCtrl != null)
 				ref = execCtrl.getCurrentPage();
 		}
-		if (ref instanceof Page)
-			return ((Page)ref).getFunctionMapper();
-		return _mapper;
+		return DualFunctionMapper.combine(
+			ref instanceof Page ? ((Page)ref).getFunctionMapper(): null,
+			_mapper);
 	}
 	/** Returns the variable resolver, or null if not available.
 	 *

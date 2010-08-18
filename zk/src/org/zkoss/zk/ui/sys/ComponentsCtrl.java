@@ -419,10 +419,10 @@ public class ComponentsCtrl {
 		public void addMold(String name, String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
-		public String getWidgetClass(String moldName) {
+		public String getWidgetClass(Component comp, String moldName) {
 			return null;
 		}
-		public String getDefaultWidgetClass() {
+		public String getDefaultWidgetClass(Component comp) {
 			return null;
 		}
 		public void setDefaultWidgetClass(String widgetClass) {

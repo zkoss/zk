@@ -106,24 +106,29 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		if (_webman != null) {
 			log.info("Web Manager was created before ZK loader");
 		} else {
-			String updateURI = config.getInitParameter("update-uri");
-			if (updateURI == null
-			|| (updateURI = updateURI.trim()).length() == 0
-			|| updateURI.charAt(0) != '/')
-				throw new ServletException("The update-uri parameter must be specified and starts with /");
-			if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
-				throw new ServletException("The update-uri parameter cannot contain ';' or '?'");
-				//Jetty will encode URL by appending ';jsess..' and we have to
-				//remove it under certain situations, so not alow it
-			if (updateURI.charAt(updateURI.length() - 1) == '\\') {
-				if (updateURI.length() == 1)
-					throw new ServletException("The update-uri parameter cannot contain only '/'");
-				updateURI = updateURI.substring(0, updateURI.length() - 1);
-					//remove the trailing '\\' if any
-			}
+			String updateURI = fixUpdateURI(
+				config.getInitParameter("update-uri"), "The update-uri parameter");
 			_webman = new WebManager(_ctx, updateURI);
 			_webmanCreated = true;
 		}
+	}
+	/*package*/ static final String fixUpdateURI(String updateURI, String info)
+	throws ServletException {
+		if (updateURI == null
+		|| (updateURI = updateURI.trim()).length() == 0
+		|| updateURI.charAt(0) != '/')
+			throw new ServletException(info+" must be specified and starts with /");
+		if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
+			throw new ServletException(info+" cannot contain ';' or '?'");
+			//Jetty will encode URL by appending ';jsess..' and we have to
+			//remove it under certain situations, so not alow it
+		if (updateURI.charAt(updateURI.length() - 1) == '\\') {
+			if (updateURI.length() == 1)
+				throw new ServletException(info+" cannot contain only '/'");
+			updateURI = updateURI.substring(0, updateURI.length() - 1);
+				//remove the trailing '\\' if any
+		}
+		return updateURI;
 	}
 	public void destroy() {
 		if (_webman != null) {

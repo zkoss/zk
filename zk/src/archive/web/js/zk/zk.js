@@ -68,8 +68,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			zUtl.progressbox("zk_proc", window.msgzk?msgzk.PLEASE_WAIT:'Processing...', mask, icon);
 	}
 	function wgt2s(w) {
-		var s = w.className.substring(w.className.lastIndexOf('.') + 1);
-		return w.id ? s + '@' + w.id: s + '#' + w.uuid;
+		var s = w.widgetName;
+		return w.id ? s + '$' + w.id: s + '#' + w.uuid;
 	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];
@@ -334,7 +334,7 @@ zk.copy(zk, {
 	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
-	 * By default, it is false. It is true if <a href="http://docs.zkoss.org/wiki/ZK_Light">ZK Light</a>
+	 * By default, it is false. It is true if <a href="http://code.google.com/p/zkuery/">ZKuery</a>
 	 * is used
 	 * @type boolean
 	 */
@@ -594,6 +594,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 			define = members['$define'];
 		delete members['$define'];
 		zk.copy(thispt, superpt); //inherit non-static
+		zk.define(jclass, define);
 		zk.copy(thispt, members);
 
 		for (var p in superclass) //inherit static
@@ -609,8 +610,6 @@ foo.Widget = zk.$extends(zk.Widget, {
 			//maintain a list of subclasses (used zk.override)
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
-
-		zk.define(jclass, define);
 
 		return jclass;
 	},
@@ -975,7 +974,7 @@ zk.log('value is", value);
 	 * @param Object... detailed varient number of arguments to log
 	 * @see #stamp(String, boolean)
 	 */
-	log: function (detailed) {		
+	log: function (detailed) {
 		var msg = toLogMsg(
 			(detailed !== zk) ? arguments :
 				(function (args) {
@@ -1086,6 +1085,7 @@ zk.log('value is", value);
 	zk.safari = zk.agent.indexOf("safari") >= 0;
 	zk.opera = zk.agent.indexOf("opera") >= 0;
 	zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+	zk.ios = zk.agent.indexOf("iphone") >= 0 || zk.agent.indexOf("ipad") >= 0;
 	var bodycls;
 	if (zk.gecko) {
 		var j = zk.agent.indexOf("firefox/");
@@ -1388,7 +1388,7 @@ _zErb = zk.$extends(zk.Object, {
 	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id+'-p">';
-	if (!zk.light)
+	if (!zk.zkuery)
 		html += '<span class="btn" onclick="_zErb._redraw()">redraw</span>&nbsp;';
 	html += '<span class="btn" onclick="_zErb._close(\''+id+'\')">close</span></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security

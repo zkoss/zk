@@ -63,7 +63,7 @@ import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
 
 /**
- * An implementation of {@link UiEngine}.
+ * An implementation of {@link UiEngine} to create and update components.
  *
  * @author tomyeh
  */
@@ -285,9 +285,8 @@ public class UiEngineImpl implements UiEngine {
 	Page page, Writer out) throws IOException {
 		execNewPage0(exec, pagedef, null, page, out);
 	}
-	/** It assumes exactly one of pagedef and richlet is not null.
-	 */
-	public void execNewPage0(final Execution exec, final PageDefinition pagedef,
+	/** It assumes exactly one of pagedef and richlet is not null. */
+	private void execNewPage0(final Execution exec, final PageDefinition pagedef,
 	final Richlet richlet, final Page page, final Writer out) throws IOException {
 		//Update the device type first. If this is the second page and not
 		//belonging to the same device type, an exception is thrown
@@ -370,6 +369,7 @@ public class UiEngineImpl implements UiEngine {
 					}
 
 					inits.doAfterCompose(page, comps);
+					afterCreate(comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
 						throw UiException.Aide.wrap(ex);
@@ -392,9 +392,13 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					richlet.service(page);
 
-					if (composer != null)
-						for (Iterator it = page.getRoots().iterator(); it.hasNext();)
-							composer.doAfterCompose((Component)it.next());
+					for (Component root = page.getFirstRoot(); root != null;
+					root = root.getNextSibling()) {
+						if (composer != null)
+							composer.doAfterCompose(root);
+						afterCreate(new Component[] {root});
+							//root's next sibling might be changed
+					}
 				} catch (Throwable t) {
 					if (composer instanceof ComposerExt)
 						if (((ComposerExt)composer).doCatch(t))
@@ -435,7 +439,7 @@ public class UiEngineImpl implements UiEngine {
 			else
 				execCtrl.setResponses(responses);
 
-			((PageCtrl)page).redraw(out);
+			redrawNewPage(page, out);
 		} catch (Throwable ex) {
 			cleaned = true;
 			final List errs = new LinkedList();
@@ -504,11 +508,36 @@ public class UiEngineImpl implements UiEngine {
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
+	/** Called after the whole component tree has been created by
+	 * this engine.
+	 * <p>Default: does nothing.
+	 * <p>Derived class might override this method to process the components
+	 * if necessary.
+	 * @param comps the components being created. It is never null but
+	 * it might be a zero-length array.
+	 * @since 5.0.4
+	 */
+	protected void afterCreate(Component[] comps) {
+	}
+	/** Called to render the result of a page to the (HTTP) output,
+	 * when a new page is created and processed.
+	 * <p>Default: it invokes {@link PageCtrl#redraw}.
+	 * <p>Notice that it is called in the rendering phase (the last phase),
+	 * so it is not allowed to post events or to invoke invalidate or smartUpdate
+	 * in this method.
+	 * <p>Notice that it is not called if an old page is redrawn.
+	 * @since 5.0.4
+	 * @see #execNewPage
+	 */
+	protected void redrawNewPage(Page page, Writer out) throws IOException {
+		((PageCtrl)page).redraw(out);
+	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();
 		return evt != null && !uv.isAborting() ? evt: null;
 	}
+
 	/** Cycle 1:
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
@@ -864,6 +893,8 @@ public class UiEngineImpl implements UiEngine {
 					if (parent != null)
 						parent.appendChild(comps[j]);
 				}
+
+			afterCreate(comps);
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);

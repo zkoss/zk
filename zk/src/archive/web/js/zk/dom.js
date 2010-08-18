@@ -219,20 +219,6 @@ zk.copy(zjq, {
 	},
 	_fixClick: zk.$void, //overriden in domie.js
 
-	/* Replaces the specified element with the given HTML content.
-	 * It is the same as {@link _global_.jq#replaceWith}, except
-	 * it has less memory leak running on IE.
-	 * <p>Currently, {@link zk.Widget} uses it to minimize the memory leak.
-	 * However, we don't make it to jQuery since this method assumes all
-	 * event listeners are unbound before calling this method.
-	 * @param DOMElement n the element to replace its content
-	 * @param String html the HTML content to show
-	 * @since 5.0.2
-	 */
-	_setOuter: function (n, html) { //overriden in domie.js
-		jq(n).replaceWith(html);
-	},
-
 	_src0: "" //an empty src; overriden in domie.js
 });
 
@@ -921,7 +907,11 @@ jq(el).zk.center(); //same as 'center'
 		var x = dim.left, y = dim.top,
 			wd = this.dimension(), hgh = wd.height; //only width and height
 		wd = wd.width;
-
+		
+		if (zk.ios) { // Bug 3042165(iphone/ipad)
+			x -= jq.innerX();
+			y -= jq.innerY();
+		}
 		switch(where) {
 		case "before_start":
 			y -= hgh;

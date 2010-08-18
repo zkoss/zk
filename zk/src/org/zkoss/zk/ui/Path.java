@@ -121,7 +121,7 @@ public class Path {
 				}
 
 				if (path.length() == 1) // "/" only
-					return getFirstRoot(page); //the first root assumed
+					return page.getFirstRoot(); //the first root assumed
 
 				if (path.charAt(1) == '/') { //starts with //
 					k = path.indexOf('/', 2);
@@ -161,10 +161,6 @@ public class Path {
 				return null;
 			is = (IdSpace)c;
 		}
-	}
-	private static Component getFirstRoot(Page page) {
-		final Collection roots = page.getRoots();
-		return roots.isEmpty() ? null: (Component)roots.iterator().next();
 	}
 
 	//--Object--//

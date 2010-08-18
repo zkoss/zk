@@ -163,7 +163,7 @@ public class ConfigParser {
 						if (!syscfgLoaded) {
 							parseSubZScriptConfig(el);
 							parseSubDeviceConfig(el);
-							parseSubSystemConfig(el);
+							parseSubSystemConfig(config, el);
 							parseSubClientConfig(config, el);
 							parseProperties(el);
 						}
@@ -197,28 +197,37 @@ public class ConfigParser {
 			Devices.add(el);
 		}
 	}
-	private static void parseSubSystemConfig(Element root) throws Exception {
+	private static
+	void parseSubSystemConfig(Configuration config, Element root)
+	throws Exception {
 		for (Iterator it = root.getElements("system-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			Class cls = parseClass(el, "au-writer-class", AuWriter.class);
-			if (cls != null)
-				AuWriters.setImplementationClass(cls);
-			cls = parseClass(el, "config-parser-class", org.zkoss.zk.ui.util.ConfigParser.class);
-			if (cls != null) {
-				if (_parsers == null)
-					_parsers = new LinkedList();
-				_parsers.add(cls.newInstance());
+			if (config != null) {
+				parseSystemConfig(config, el);
+			} else {
+				Class cls = parseClass(el, "au-writer-class", AuWriter.class);
+				if (cls != null)
+					AuWriters.setImplementationClass(cls);
+				cls = parseClass(el, "config-parser-class", org.zkoss.zk.ui.util.ConfigParser.class);
+				if (cls != null) {
+					if (_parsers == null)
+						_parsers = new LinkedList();
+					_parsers.add(cls.newInstance());
+				}
 			}
 		}
 	}
 	/** Unlike other private parseXxx, config might be null. */
-	private static void parseSubClientConfig(Configuration config, Element root) throws Exception {
+	private static
+	void parseSubClientConfig(Configuration config, Element root)
+	throws Exception {
 		for (Iterator it = root.getElements("client-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			if (config != null) parseClientConfig(config, el);
-			else {
+			if (config != null) {
+				parseClientConfig(config, el);
+			} else {
 				Integer v = parseInteger(el, "resend-delay", false);
 				if (v != null)
 					Library.setProperty(Attributes.RESEND_DELAY, v.toString());
@@ -384,74 +393,7 @@ public class ConfigParser {
 			//	url-encoder-class
 			//	au-writer-class
 			//	au-decoder-class
-				String s = el.getElementValue("disable-event-thread", true);
-				if (s != null) {
-					final boolean enable = "false".equals(s);
-					if (!enable) log.info("The event processing thread is disabled");
-					config.enableEventThread(enable);
-				}
-
-				Integer v = parseInteger(el, "max-spare-threads", false);
-				if (v != null) config.setMaxSpareThreads(v.intValue());
-				
-				v = parseInteger(el, "max-suspended-threads", false);
-				if (v != null) config.setMaxSuspendedThreads(v.intValue());
-
-				v = parseInteger(el, "event-time-warning", false);
-				if (v != null) config.setEventTimeWarning(v.intValue());
-				
-				v = parseInteger(el, "max-upload-size", false);
-				if (v != null) config.setMaxUploadSize(v.intValue());
-
-				v = parseInteger(el, "max-process-time", true);
-				if (v != null) config.setMaxProcessTime(v.intValue());
-
-				s = el.getElementValue("upload-charset", true);
-				if (s != null) config.setUploadCharset(s);
-
-				s = el.getElementValue("response-charset", true);
-				if (s != null) config.setResponseCharset(s);
-
-				s = el.getElementValue("crawlable", true);
-				if (s != null) config.setCrawlable(!"false".equals(s));
-
-				Class cls = parseClass(el, "upload-charset-finder-class",
-					CharsetFinder.class);
-				if (cls != null)
-					config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
-
-				cls = parseClass(el, "cache-provider-class",
-					DesktopCacheProvider.class);
-				if (cls != null) config.setDesktopCacheProviderClass(cls);
-
-				cls = parseClass(el, "ui-factory-class", UiFactory.class);
-				if (cls != null) config.setUiFactoryClass(cls);
-
-				cls = parseClass(el, "failover-manager-class", FailoverManager.class);
-				if (cls != null) config.setFailoverManagerClass(cls);
-
-				cls = parseClass(el, "engine-class", UiEngine.class);
-				if (cls != null) config.setUiEngineClass(cls);
-
-				cls = parseClass(el, "id-generator-class", IdGenerator.class);
-				if (cls != null) config.setIdGeneratorClass(cls);
-
-				cls = parseClass(el, "session-cache-class", SessionCache.class);
-				if (cls != null) config.setSessionCacheClass(cls);
-
-				cls = parseClass(el, "au-decoder-class", AuDecoder.class);
-				if (cls != null) config.setAuDecoderClass(cls);
-
-				cls = parseClass(el, "web-app-class", WebApp.class);
-				if (cls != null) config.setWebAppClass(cls);
-
-				cls = parseClass(el, "method-cache-class", Cache.class);
-				if (cls != null)
-					ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
-
-				cls = parseClass(el, "au-writer-class", AuWriter.class);
-				if (cls != null)
-					AuWriters.setImplementationClass(cls);
+				parseSystemConfig(config, el);
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
@@ -590,6 +532,78 @@ public class ConfigParser {
 
 		String s = conf.getElementValue("repeat-uuid", true);
 		if (s != null) config.setRepeatUuid(!"false".equals(s));
+	}
+	/** Parses client-config. */
+	private static void parseSystemConfig(Configuration config, Element el)
+	throws Exception {
+		String s = el.getElementValue("disable-event-thread", true);
+		if (s != null) {
+			final boolean enable = "false".equals(s);
+			if (!enable) log.info("The event processing thread is disabled");
+			config.enableEventThread(enable);
+		}
+
+		Integer v = parseInteger(el, "max-spare-threads", false);
+		if (v != null) config.setMaxSpareThreads(v.intValue());
+		
+		v = parseInteger(el, "max-suspended-threads", false);
+		if (v != null) config.setMaxSuspendedThreads(v.intValue());
+
+		v = parseInteger(el, "event-time-warning", false);
+		if (v != null) config.setEventTimeWarning(v.intValue());
+		
+		v = parseInteger(el, "max-upload-size", false);
+		if (v != null) config.setMaxUploadSize(v.intValue());
+
+		v = parseInteger(el, "max-process-time", true);
+		if (v != null) config.setMaxProcessTime(v.intValue());
+
+		s = el.getElementValue("upload-charset", true);
+		if (s != null) config.setUploadCharset(s);
+
+		s = el.getElementValue("response-charset", true);
+		if (s != null) config.setResponseCharset(s);
+
+		s = el.getElementValue("crawlable", true);
+		if (s != null) config.setCrawlable(!"false".equals(s));
+
+		Class cls = parseClass(el, "upload-charset-finder-class",
+			CharsetFinder.class);
+		if (cls != null)
+			config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
+
+		cls = parseClass(el, "cache-provider-class",
+			DesktopCacheProvider.class);
+		if (cls != null) config.setDesktopCacheProviderClass(cls);
+
+		cls = parseClass(el, "ui-factory-class", UiFactory.class);
+		if (cls != null) config.setUiFactoryClass(cls);
+
+		cls = parseClass(el, "failover-manager-class", FailoverManager.class);
+		if (cls != null) config.setFailoverManagerClass(cls);
+
+		cls = parseClass(el, "engine-class", UiEngine.class);
+		if (cls != null) config.setUiEngineClass(cls);
+
+		cls = parseClass(el, "id-generator-class", IdGenerator.class);
+		if (cls != null) config.setIdGeneratorClass(cls);
+
+		cls = parseClass(el, "session-cache-class", SessionCache.class);
+		if (cls != null) config.setSessionCacheClass(cls);
+
+		cls = parseClass(el, "au-decoder-class", AuDecoder.class);
+		if (cls != null) config.setAuDecoderClass(cls);
+
+		cls = parseClass(el, "web-app-class", WebApp.class);
+		if (cls != null) config.setWebAppClass(cls);
+
+		cls = parseClass(el, "method-cache-class", Cache.class);
+		if (cls != null)
+			ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
+
+		cls = parseClass(el, "au-writer-class", AuWriter.class);
+		if (cls != null)
+			AuWriters.setImplementationClass(cls);
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {
