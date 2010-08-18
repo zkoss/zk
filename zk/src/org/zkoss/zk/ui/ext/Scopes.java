@@ -220,5 +220,16 @@ try {
 		public Object getValue() {
 			return _scope.getAttributes();
 		}
+
+		public String toString() {
+			return _scope.toString();
+		}
+		public boolean equals(Object o) {
+			return _scope.equals(
+				o instanceof DeferredScope ? ((DeferredScope)o)._scope: o);
+		}
+		public int hashCode() {
+			return _scope.hashCode();
+		}
 	}
 }
