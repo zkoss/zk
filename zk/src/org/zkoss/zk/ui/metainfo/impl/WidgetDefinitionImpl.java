@@ -59,21 +59,12 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 			_molds = new HashMap(2);
 		_molds.put(name, new String[] {moldURI});
 	}
-	public void addMold(String name, String moldURI, String cssURI, String z2cURI) {
-		addMold(name, moldURI, null, null);
-	}
 	public String getMoldURI(String name) {
 		if (_molds == null)
 			return null;
 
 		final String[] info = (String[])_molds.get(name);
 		return info != null ? info[0]: null;
-	}
-	public String getCSSURI(String name) {
-		return null;
-	}
-	public String getZ2CURI(String name) {
-		return null;
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
