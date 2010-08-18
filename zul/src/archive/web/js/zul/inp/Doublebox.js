@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING+'e';
+	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+'e';
 		//supports 1e2
 /**
  * An edit box for holding an float point value (double).
@@ -29,36 +29,38 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 			valstr = ''+val,
 			valind = valstr.indexOf('.'),
 			rawind = raw.indexOf('.');
-		
-		if (rawind == 0) {
-			raw = '0' + raw;
-			++rawind;
-		}
-		
-		if (rawind >= 0 && raw.substring(raw.substring(rawind+1)) && valind < 0) { 
-			valind = valstr.length;
-			valstr += '.';
-		}
 
-		var len = raw.length,	
-			vallen = valstr.length;
+		if (isNaN(val) || valstr.indexOf('e') < 0) {
+			if (rawind == 0) {
+				raw = '0' + raw;
+				++rawind;
+			}
+
+			if (rawind >= 0 && raw.substring(raw.substring(rawind+1)) && valind < 0) { 
+				valind = valstr.length;
+				valstr += '.';
+			}
+
+			var len = raw.length,	
+				vallen = valstr.length;
 		
-		//pre zeros
-		if (valind >=0 && valind < rawind) {
-			vallen -= valind;
-			len -= rawind;
-			for(var zerolen = rawind - valind; zerolen-- > 0;)
-				valstr = '0' + valstr;
+			//pre zeros
+			if (valind >=0 && valind < rawind) {
+				vallen -= valind;
+				len -= rawind;
+				for(var zerolen = rawind - valind; zerolen-- > 0;)
+					valstr = '0' + valstr;
+			}
+
+			//post zeros
+			if (vallen < len) {
+				for(var zerolen = len - vallen; zerolen-- > 0;)
+					valstr += '0';
+			}
+
+			if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) //1e2: assumes OK
+				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		}
-		
-		//post zeros
-		if (vallen < len) {
-			for(var zerolen = len - vallen; zerolen-- > 0;)
-				valstr += '0';
-		}
-		
-		if (isNaN(val) || (raw != valstr && raw != '-'+valstr && raw.indexOf('e') < 0)) //1e2: assumes OK
-			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 		return val;

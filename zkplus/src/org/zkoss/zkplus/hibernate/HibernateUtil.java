@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -56,6 +57,10 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * @author henrichen
  */
 public class HibernateUtil {
+	/** A preference or a library property used to configure {@link HibernateUtil}.
+	 * It first looks up {@link org.zkoss.zk.ui.util.Configuration#getPreference}, and then
+	 * {@link Library#getProperty}. Ignored if none of them is specified.
+	 */
 	public static final String CONFIG = "HibernateUtil.config";
 	private static final Log log = Log.lookup(HibernateUtil.class);
 	
@@ -102,9 +107,10 @@ public class HibernateUtil {
 			}
 			String resource = null;
 			if (app != null) {
-				final org.zkoss.zk.ui.util.Configuration config = app.getConfiguration();
-				resource = config.getPreference(CONFIG, null);
+				resource = app.getConfiguration().getPreference(CONFIG, null);
 			}
+			if (resource == null)
+				resource = Library.getProperty(CONFIG);
 			return initSessionFactory(resource);
 		}
 		return _factory;

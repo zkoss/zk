@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  */
 public class SimpleThemeProvider implements ThemeProvider{
 	public Collection getThemeURIs(Execution exec, List uris) {
-		if ("silvergray".equals(Themes.getSkinCookie(exec))) {
+		if ("silvergray".equals(Themes.getThemeStyle(exec))) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		}

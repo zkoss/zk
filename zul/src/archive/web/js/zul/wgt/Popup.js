@@ -65,7 +65,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	open: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
+			top = node.style.top,
 			$n = jq(node);
+		
+		// the top is depend on children's height, if child will re-size after onSize/onShow, 
+		// popup need to re-position top after children height has calculated.
+		if (!top)
+			this._openInfo = arguments;
+
 		$n.css({position: "absolute"}).zk.makeVParent();
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
@@ -199,12 +206,20 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			jq(this._stackup).remove();
 			this._stackup = null;
 		}
-		
+		if (this._openInfo)
+			this._openInfo = null;
 		zWatch.unlisten({onFloatUp: this, onShow: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
-	onShow: function () {
+	onShow: function (ctl) {
+		//bug 3034505: call children's onShow to calculate the height first
+		ctl.fire(this.firstChild);
+		var openInfo = this._openInfo;
+		if (openInfo) {
+			this.position.apply(this, openInfo);
+			this._openInfo = null;
+		}
 		this._fixWdh();
 		this._fixHgh();
 	},
@@ -254,9 +269,15 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			if (last) last.firstChild.style.width = "";
 		}
 	}: zk.$void,
+	setHeight: function (height) {
+		this.$supers('setHeight', arguments);
+		if (this.desktop)
+			zWatch.fireDown('onShow', this);
+	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		zWatch.fireDown('onShow', this);
+		if (this.desktop)
+			zWatch.fireDown('onShow', this);
 	},
 	prologHTML_: function (out) {
 	},

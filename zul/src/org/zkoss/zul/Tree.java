@@ -56,8 +56,9 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Event:
  * <ol>
- * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes
+ * <li>{@link org.zkoss.zk.ui.event.SelectEvent} is sent when user changes
  * the selection.</li>
+ * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
  * </ol>
  *
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
@@ -1480,7 +1481,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * Render the root of Tree
 	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
 	 */
-	private void renderTree(){
+	private void renderTree() {
 		if(_treechildren == null) {
 			Treechildren children = new Treechildren();
 			children.setParent(this);
@@ -1497,7 +1498,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		} finally {
 			renderer.doFinally();
 		}
-}
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tree when items have been rendered.
+	}
 	
 	/*
 	 * Renders the direct children for the specifed parent

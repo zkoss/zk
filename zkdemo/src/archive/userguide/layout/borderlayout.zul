@@ -42,8 +42,18 @@ Rights Reserved.
 					<panelchildren>
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
-<borderlayout height="650px" style="background:#c5e6ef;">
-	<north size="80px" border="0" style="background:#c5e6ef;">
+<zk>
+<zscript deferred="true">
+	boolean isBreeze = org.zkoss.zkdemo.userguide.Themes.isBreeze(execution) &amp;&amp; org.zkoss.zkdemo.userguide.Themes.hasBreezeLib();
+	boolean isSilvergray = org.zkoss.zkdemo.userguide.Themes.isSilvergray(execution) &amp;&amp; org.zkoss.zkdemo.userguide.Themes.hasSilvergrayLib();
+	String bgColor = isBreeze? "#F7F7F7" : isSilvergray? "#DDDDDD" : "#C5E6EF";
+	String bgStyle = "background: " + bgColor;
+	b.setStyle(bgStyle);
+	n.setStyle(bgStyle);
+	w.setStyle(bgStyle);
+</zscript>
+<borderlayout id="b" height="850px">
+	<north id="n" size="80px" border="0">
 		<div>
 			<div style="float:right">
  				<textbox sclass="demo-search-inp"/><separator orient="vertical"/><button label="Search Site"/>
@@ -54,7 +64,7 @@ Rights Reserved.
 		</div>
 	</north>
 	<!-- Sidebar -->
-	<west width="150px" border="0" flex="true" splittable="true" margins="0,5,0,0" style="background:#c5e6ef;">
+	<west id="w" width="150px" border="0" flex="true" splittable="true" margins="0,5,0,0">
 		<div>
 			<panel width="100%" border="normal" title="Navigation">
 				<panelchildren style="padding:5px;">
@@ -170,10 +180,9 @@ Rights Reserved.
 						<chart id="mychart" title="Pie Chart Demo" width="450px"
 							type="pie" threeD="true" fgAlpha="128">
 							<attribute name="onClick">
-								String areaid = event.getArea(); if (areaid
-								!= null) { Area area =
-								self.getFellow(areaid);
-								alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());
+								Area area = event.getAreaComponent();
+								if (area != null) {
+									alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());
 								}
 							</attribute>
 							<zscript>
@@ -194,7 +203,7 @@ Rights Reserved.
 			</tablechildren>
 		</tablelayout>
 	</center>
-	<south size="40px" border="0" style="background:#c5e6ef;">
+	<south id="s" size="40px" border="0" style="background: none repeat scroll 0 0 ${color};">
 		<toolbar mold="panel" align="center">
 			<toolbarbutton label="Sign in"/>
 			<toolbarbutton label="Home"/>
@@ -208,6 +217,7 @@ Rights Reserved.
 		</toolbar>
 	</south>
 </borderlayout>
+</zk>
 			]]></attribute>
 						</textbox>
 					</panelchildren>

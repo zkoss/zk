@@ -380,9 +380,9 @@ public class Binding implements java.io.Serializable {
 					value = Classes.coerce(m.getReturnType(), bean);
 				} catch (NoSuchMethodException ex) { //ignore it
 				}
-				if (!Objects.equals(oldv, value)) { //Bug 2874098 (avoid LoadOnSave to close errorbox in setRawValue())
-					Fields.set(comp, "rawValue", value, _converter == null);
-				}
+
+				//See both Bug 3000305 and 2874098
+				Fields.set(comp, "rawValue", value, _converter == null);
 			} else {
 				Fields.set(comp, _attr, bean, _converter == null);
 			}
@@ -737,11 +737,15 @@ public class Binding implements java.io.Serializable {
 			//saveAttribute for each binding
 			Component loadOnSaveProxy = null;
 			Component dataTarget = null;
+			DataBinder binder = null;
 			final List loadOnSaveInfos = new ArrayList(tmplist.size());
 			for(final Iterator it = tmplist.iterator();it.hasNext();) {
 				final BindingInfo bi = (BindingInfo) it.next();
 				dataTarget = bi.getComponent();
 				final Binding binding = bi.getBinding();
+				if (binder == null) {
+					binder = binding.getBinder();
+				}
 				final Object[] vals = bi.getAttributeValues();
 				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos, triggerEventName);
 				if (loadOnSaveProxy == null && dataTarget.isListenerAvailable("onLoadOnSave", true)) {
@@ -756,7 +760,8 @@ public class Binding implements java.io.Serializable {
 			//	}
 			
 			// (use first working dataTarget as proxy)
-			if (loadOnSaveProxy != null) {
+			//feature#2990932, allow disable load-on-save mechanism
+			if (loadOnSaveProxy != null && binder.isLoadOnSave()) {
 				Events.postEvent(new Event("onLoadOnSave", loadOnSaveProxy, loadOnSaveInfos));
 			}
 			

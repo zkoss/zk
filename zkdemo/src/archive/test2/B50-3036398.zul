@@ -1,0 +1,27 @@
+<zk>
+<html>
+<![CDATA[
+<p>If you can see the frozen horizontal scrollbar at the bottom, then it is OK.</p>
+]]>
+</html>
+<listbox id="listbox" sizedByContent="true" width="400px" vflex="1">
+
+<frozen columns="1" ></frozen>
+
+<listhead sizable="true">
+	<listheader label="A"/>
+	<listheader label="B"/>
+	<listheader label="C"/>
+	<listheader label="D"/>
+	<listheader label="E"/>
+</listhead>
+
+<listitem>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddd</listcell>
+	<listcell>Eeeeeeeeeeeee</listcell>
+</listitem>
+</listbox>
+</zk>

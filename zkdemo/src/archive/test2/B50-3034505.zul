@@ -1,0 +1,59 @@
+<?page title="Sample" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<zscript><![CDATA[
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++) {
+		list.add("item" + i);
+	}
+	ListModel listModel = new SimpleListModel(list);
+	ListitemRenderer render = new ListitemRenderer () {
+			public void render(Listitem item, Object data) throws Exception {
+				item.setLabel(data.toString());
+			}
+	 };
+]]></zscript>
+	<window height="100%" width="100%">
+	<div vflex="100%" hflex="100%" style="border: 1px solid grey;">
+		<div vflex="true" />
+		<n:table width="100%">
+			<n:tr>
+				<n:td>
+					<space />
+				</n:td>
+				<n:td align="center">
+					<button id="button" label="Click to Popup">
+						<attribute w:name="onClick">
+							var popup = this.$f('mypopup'),
+								n = popup.$n(),
+								msg = this.$f('msg');
+							popup.open(this.uuid, null, 'before_end');
+							if ('0px' == n.style.top) {
+								jq(msg.$n()).css('color', 'red');
+								msg.setValue('popup positiopn is wrong');
+							} else {
+								jq(msg.$n()).css('color', 'black');
+								msg.setValue('popup positiopn is correct');
+							}
+						</attribute>
+					</button>
+					<label id="msg">
+					</label>
+				</n:td>
+				<n:td>
+					<space />
+				</n:td>
+			</n:tr>
+		</n:table>
+	</div>
+	<popup id="mypopup" width="380px">
+		<listbox id="listbox" rows="10" model="${listModel}"
+			itemRenderer="${renderer}">
+			<listhead>
+				<listheader label="Header" sort="auto" />
+			</listhead>
+		</listbox>
+	</popup>
+	</window>
+</zk>

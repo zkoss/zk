@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3035079.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 27 12:55:53 TST 2010, Created by jimmy
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Check both "add child" button</li>
+	<li>It will not js error happen</li>
+</ol>
+]]>
+</html>
+	<div width="500px">
+		<tree>
+			<treechildren>
+				<treeitem id="item">
+					<treerow>
+						<treecell>
+							<textbox></textbox>
+						</treecell>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+		<button label="add child">
+			<attribute name="onClick"><![CDATA[
+				Treechildren tc = new Treechildren();
+				Treeitem treeitem = new Treeitem();
+				Treerow treerow = new Treerow();
+				Treecell treecell = new Treecell();
+				
+				item.appendChild(tc);
+				tc.appendChild(treeitem);
+				treeitem.appendChild(treerow);
+				treerow.appendChild(treecell);
+				treecell.appendChild(new Textbox());
+			]]></attribute>
+		</button>
+		<grid id="grid"/>
+		<button label="add child">
+			<attribute name="onClick"><![CDATA[
+				Rows rows = new Rows();
+				Row row = new Row();
+				
+				grid.appendChild(rows);
+				rows.appendChild(row);
+				row.appendChild(new Textbox());
+			]]></attribute>
+		</button>
+	</div>
+</zk>

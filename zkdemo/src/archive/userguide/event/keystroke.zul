@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
    		<h4>onOK, onCancel and onCtrlKey</h4>
    		<p>Special keypress event for ENTER, ESC, CTRL key are 
    		handled via three special event listeners, onOK, onCancel, and onCtrlKey respectivly. Note that function keys are deemed as CTRL keys.</p>
-   		<p>Try to press "ENTER", "ESC", "CTRL+A", "F2" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
+   		<p>Try to press "ENTER", "ESC", "CTRL+A", "F8" and see what happened.(Note that the focus must be inside the demo widow when pressing the key.)</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">
@@ -46,7 +46,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<rows>
 			<row>
 				Password
-				<textbox id="inp" onOK="doOk()" onCancel="doCancel()" ctrlKeys="^a#f2" onCtrlKey="doCtrlKey()" type="password" value="123456789" width="150px" />
+				<textbox id="inp" onOK="doOk()" onCancel="doCancel()" ctrlKeys="^a#f8" onCtrlKey="doCtrlKey()" type="password" value="123456789" width="150px" />
 			</row>
 		</rows>
 	</grid>

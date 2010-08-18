@@ -196,6 +196,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
+	/**
+	 * Returns the self's head widget.
+	 * @return zul.mesh.HeadWidget
+	 * @since 5.0.4
+	 */
+	getHeadWidget: function () {
+		return this.head;
+	},
+
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 		if (this.isVflex()) {
@@ -375,10 +384,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_doScroll: function () {
 		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
-			if (this.ehead) 
-				this.ehead.scrollLeft = this.ebody.scrollLeft;
-			if (this.efoot) 
-				this.efoot.scrollLeft = this.ebody.scrollLeft;		
+			if (this._currentLeft != this.ebody.scrollLeft) { //care about horizontal scrolling only
+				if (this.ehead) {
+					this.ehead.scrollLeft = this.ebody.scrollLeft;
+					//bug# 3039339: Column is not aligned in some special combination of dimension
+					var diff = this.ebody.scrollLeft - this.ehead.scrollLeft;
+					var hdflex = jq(this.ehead).find('table>tbody>tr>th:last-child')[0];
+					if (diff) { //use the hdfakerflex to compensate
+						hdflex.style.width = (hdflex.offsetWidth + diff) + 'px';
+						this.ehead.scrollLeft = this.ebody.scrollLeft;
+					} else if (hdflex.style.width != '0px' && this.ebody.scrollLeft == 0) {
+						hdflex.style.width = '';
+					}
+				}
+				if (this.efoot) 
+					this.efoot.scrollLeft = this.ebody.scrollLeft;
+			}
 		}
 		
 		this._currentTop = this.ebody.scrollTop;
@@ -714,7 +735,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var xwds = wgt.$class._calcMinWd(wgt),
 			wds = xwds.wds,
 			width = xwds.width;
-		if (!wgt.$n().style.width || width > total) {
+		if (wgt.isSizedByContent() || !wgt.$n().style.width || width > total) {
 			total = width;
 			head.style.width = total + 'px';
 		}

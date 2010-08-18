@@ -47,9 +47,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <zk>
 <style>
-tr.myodd td.z-row-inner, tr.myodd {
-	background-color: #E4EBF8;
-}
 .myimg {
 	margin: 5px; border: 1px solid #B0C75E;
 }
@@ -83,9 +80,9 @@ import org.zkoss.zkdemo.userguide.*;
 Comparator asc = new RowDetailComparator(true),
 	dsc = new RowDetailComparator(false);
 </zscript>
-<grid fixedLayout="true" width="600px" oddRowSclass="myodd">
+<grid fixedLayout="true" width="600px">
 	<columns>
-		<column width="25px" />
+		<column width="40px" />
 		<column sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}" label="Product Name"/>
 		<column width="100px" label="Price"/>
 		<column label="Item location"/>

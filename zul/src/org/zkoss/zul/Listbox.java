@@ -65,8 +65,9 @@ import org.zkoss.zul.impl.XulElement;
  * <p>
  * Event:
  * <ol>
- * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes the
+ * <li>{@link org.zkoss.zk.ui.event.SelectEvent} is sent when user changes the
  * selection.</li>
+ * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
  * </ol>
  * 
  * <p>
@@ -87,6 +88,18 @@ import org.zkoss.zul.impl.XulElement;
  * assumes a label per list item, is used. In other words, the default renderer
  * adds a label to a Listitem by calling toString against the object returned by
  * {@link ListModel#getElementAt}
+ * 
+ * [Since 5.0.4]
+ * <p>To retrieve what are selected in Listbox with a {@link Selectable} 
+ * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what 
+ * is currently selected object in {@link ListModel} rather than using 
+ * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of 
+ * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox} 
+ * if you use the {@link Selectable} {@link ListModel}.</p>
+ * 
+ * <pre><code>
+ * Set selection = ((Selectable)getModel()).getSelection();
+ * </code></pre>  
  * 
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
@@ -178,17 +191,6 @@ import org.zkoss.zul.impl.XulElement;
  * later. Basically, you shall operate on the item of the {@link ListModel} 
  * rather than on the {@link Listitem} of the {@link Listbox} if you use the 
  * {@link ListModel} and ROD.</p>
- * 
- * <p>To retrieve what are selected in ROD Listbox, you shall use 
- * {@link Selectable#getSelection} to get what is currently selected object in
- * {@link ListModel} rather than using {@link Listbox#getSelectedItems}. That is, 
- * you shall operate on the item of the {@link ListModel} rather than on the 
- * {@link Listitem} of the {@link Listbox} if you use the {@link ListModel} and
- * ROD.</p>
- * 
- * <pre><code>
- * Set selection = ((Selectable)getModel()).getSelection();
- * </code></pre>  
  * 
  * @author tomyeh
  * @see ListModel
@@ -2169,13 +2171,6 @@ public class Listbox extends XulElement implements Paginated,
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
-		if (comp instanceof Listitem && _model instanceof Selectable && (isLoadingModel() || isSyncingModel())) {
-			final Listitem item = (Listitem) comp;
-			if (((Selectable) _model).getSelection().contains(
-					_model.getElementAt(item.getIndex()))) {
-				addItemToSelection(item);
-			}
-		}
 		updateVisibleCount((Listitem) comp, false);
 		checkInvalidateForMoved((Listitem) comp, false);
 	}
@@ -2662,6 +2657,7 @@ public class Listbox extends XulElement implements Paginated,
 		} finally {
 			renderer.doFinally();
 		}
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered. 
 	}
 
 	private void postOnInitRender() {
@@ -2704,9 +2700,18 @@ public class Listbox extends XulElement implements Paginated,
 				// (default)
 				cell.detach();
 			}
+			
+			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
+			//check if the item is a selected item and add into selected set
+			final Object value = _model.getElementAt(item.getIndex()); 
+			if (_model instanceof Selectable) {
+				if (((Selectable) _model).getSelection().contains(value)) {
+					addItemToSelection(item);
+				}
+			}
 
 			try {
-				_renderer.render(item, _model.getElementAt(item.getIndex()));
+				_renderer.render(item, value);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -2814,6 +2819,8 @@ public class Listbox extends XulElement implements Paginated,
 		}
 	}
 
+	/** Renders the given set of list items.
+	 */
 	public void renderItems(Set items) {
 		if (_model == null)
 			return;
@@ -2946,9 +2953,9 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty(
-				"org.zkoss.zul.listbox.rod", "false");
-		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod"); //might be String or Boolean
+		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.listbox.rod", "false");
+		//bug# 3039948: Unable to turn on rod for Listbox if defined in its parent
+		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod", true); //might be String or Boolean
 		if (rod2 == null) {
 			rod2 = rod1;
 		}
@@ -2977,8 +2984,7 @@ public class Listbox extends XulElement implements Paginated,
 			final Execution exec = Executions.getCurrent(); 
 			exec.setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
 			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
-			// prepare a right moment to init Listbox (must be as early as
-			// possible)
+			// prepare a right moment to init Listbox (must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
@@ -3016,7 +3022,7 @@ public class Listbox extends XulElement implements Paginated,
 			} else if (_model != null){ //items in model not init yet
 				initModel(); //init the model
 			} else {
-				//The attribute shall be rmoved, otherwise DataLoader will not syncModel when setModel
+				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
 				Executions.getCurrent().removeAttribute("zkoss.Listbox.deferInitModel_"+getUuid());
 			}
 			final DataLoader loader = getDataLoader();

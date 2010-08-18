@@ -1,0 +1,133 @@
+<zk>
+	<style>
+		.my-label { font-size:16px; font-weight:bold; }
+
+	</style>
+	<hbox>
+	<div width='500px'>
+		<div style="margin:10px;">
+			<label value="grid" sclass="my-label" />
+		</div>
+		<grid>
+			<columns>
+				<column label='column 1' />
+				<column label='column 2' />
+				<column label='column 3' />
+				<column label='column 4' />
+			</columns>
+			<rows>
+				<row spans='1,2'>
+					<label value='cell 2.1' />
+					<label value='cell 2.2 + 2.3' />
+					<label value='cell 2.4' />
+				</row>
+			</rows>
+			<foot>
+				<footer span='2' label="footer 1" align="center" />
+				<footer>footer 3</footer>
+				<footer>footer 4</footer>
+			</foot>
+		</grid>
+		<div style="margin:10px;">
+			<label value="group grid" sclass="my-label" />
+		</div>
+		<grid>
+			<columns>
+				<column label='column 1' />
+				<column label='column 2' />
+				<column label='column 3' />
+				<column label='column 4' />
+			</columns>
+			<rows>
+				<group label="Group1:" />
+				<row spans='1,2'>
+					<label value='cell 2.1' />
+					<label value='cell 2.2 + 2.3' />
+					<label value='cell 2.4' />
+				</row>
+				<groupfoot spans="2,1">
+					<cell colspan="2" align="center">
+						<label value="footer 1" />
+					</cell>
+					<label value="footer 3" />
+					<label value="footer 4" />
+				</groupfoot>
+			</rows>
+		</grid>
+		</div>
+		<separator orient="vertical"/>
+		<div width='500px'>
+		<div style="margin:10px;">
+			<label value="listbox" sclass="my-label" />
+		</div>
+		<listbox>
+			<listhead>
+				<listheader label='column 1' />
+				<listheader label='column 2' />
+				<listheader label='column 3' />
+				<listheader label='column 4' />
+			</listhead>
+			<listitem>
+				<listcell label='cell 2.1' />
+				<listcell label='cell 2.2 + 2.3' span="2" />
+				<listcell label='cell 2.4' />
+			</listitem>
+			<listfoot>
+				<listfooter span="2" label="footer 1" align="center" />
+				<listfooter>footer 3</listfooter>
+				<listfooter>footer 4</listfooter>
+			</listfoot>
+		</listbox>
+		<div style="margin:10px;">
+			<label value="group listbox" sclass="my-label" />
+		</div>
+		<listbox id="listbox" width="500px">
+			<listhead>
+				<listheader label='column 1' />
+				<listheader label='column 2' />
+				<listheader label='column 3' />
+				<listheader label='column 4' />
+			</listhead>
+			<listgroup label="listgroup 1" />
+			<listitem>
+				<listcell label='cell 2.1' />
+				<listcell label='cell 2.2 + 2.3' span="2" />
+				<listcell label='cell 2.4' />
+			</listitem>
+			<listgroupfoot>
+				<listcell span="2" label="footer 1" />
+				<listcell label="footer 3" />
+				<listcell label="footer 4" />
+			</listgroupfoot>
+		</listbox>
+		</div>
+		<separator orient="vertical"/>
+		<div width='500px'>
+		<div style="margin:10px;">
+			<label value="tree" sclass="my-label" />
+		</div>
+		<tree>
+			<treecols>
+				<treecol label='column 1' />
+				<treecol label='column 2' />
+				<treecol label='column 3' />
+				<treecol label='column 4' />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label='cell 2.1' />
+						<treecell label='cell 2.2 + 2.3' span="2" />
+						<treecell label='cell 2.4' />
+					</treerow>
+				</treeitem>
+			</treechildren>
+			<treefoot>
+				<treefooter span="2" label="footer 1" align="center" />
+				<treefooter>footer 3</treefooter>
+				<treefooter>footer 4</treefooter>
+			</treefoot>
+		</tree>
+	</div>
+	</hbox>
+</zk>

@@ -196,10 +196,27 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this._scrolling = false;
 		var tab = this._selTab;
 		
+		if (this.inAccordionMold())
+			zWatch.listen({onResponse: this});
 		if (tab)
 			after.push(function() {
 				tab.setSelected(true);
 			});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onResponse: this});
+		this.$supers(zul.tab.Tabbox, 'unbind_', arguments);
+	},
+	onResponse: function () {
+		if (this._shallSize) {
+			zWatch.fire('onSize', this);
+			this._shallSize = false;
+		}
+	},
+	_syncSize: function () {
+		this._shallSize = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	//super//
 	removeChildHTML_: function (child) {

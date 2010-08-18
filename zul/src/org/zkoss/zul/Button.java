@@ -115,7 +115,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	 * @param dir either "normal" or "reverse".
 	 */
 	public void setDir(String dir) throws WrongValueException {
-		if (!"normal".equals(dir) && !"reverse".equals(dir))
+		if (!NORMAL.equals(dir) && !"reverse".equals(dir))
 			throw new WrongValueException(dir);
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.dir: NORMAL, dir)) {
@@ -139,6 +139,30 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (!Objects.equals(_auxinf != null ? _auxinf.orient: HORIZONTAL, orient)) {
 			initAuxInfo().orient = orient;
 			smartUpdate("orient", getOrient());
+		}
+	}
+	/** Returns the button type.
+	 * <p>Default: "button".
+	 * @since 5.0.4
+	 */
+	public String getType() {
+		return _auxinf != null ? _auxinf.type: BUTTON;
+	}
+	/** Sets the button type.
+	 * <p>Default: "button".
+	 * It is meaningful only if it is used with a HTML form.
+	 * Refer to <a href="http://www.htmlcodetutorial.com/forms/_BUTTON_TYPE.html">HTML Button Type</a>
+	 * for details.
+	 * @param type either "button", "submit" or "reset".
+	 * @since 5.0.4
+	 */
+	public void setType(String type) throws WrongValueException {
+		if (!BUTTON.equals(type) && !"submit".equals(type) && !"reset".equals(type))
+			throw new WrongValueException(type);
+
+		if (!Objects.equals(_auxinf != null ? _auxinf.type: BUTTON, type)) {
+			initAuxInfo().type = type;
+			smartUpdate("type", getType());
 		}
 	}
 
@@ -273,6 +297,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		String s;
 		if (!NORMAL.equals(s = getDir())) render(renderer, "dir", s);
 		if (!HORIZONTAL.equals(s = getOrient())) render(renderer, "orient", s);
+		if (!BUTTON.equals(s = getType())) render(renderer, "type", s);
 
 		if (isDisabled())
 			render(renderer, "disabled", true);
@@ -307,9 +332,12 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static final String HORIZONTAL = "horizontal", NORMAL = "normal";
+	private static final String HORIZONTAL = "horizontal", NORMAL = "normal",
+		BUTTON = "button";
 	private static class AuxInfo implements java.io.Serializable {
-		private String orient = HORIZONTAL, dir = NORMAL;
+		private String orient = HORIZONTAL;
+		private String dir = NORMAL;
+		private String type = BUTTON;
 		private String href, target;
 		private String autodisable;
 		protected String upload;

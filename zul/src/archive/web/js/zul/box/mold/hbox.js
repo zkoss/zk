@@ -31,6 +31,7 @@ function (out) {
 	
 	if (!this._isStretchPack() && this._pack2) out.push(' align="', zul.box.Box._toHalign(this._pack2), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
+	if (this._splitterKid) out.push(';table-layout:fixed');
 	if (v == 'stretch') out.push(';height:100%');
 	if (this._isStretchPack()) out.push(';width:100%');
 

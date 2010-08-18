@@ -523,4 +523,23 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @return the treeitem from tree by given path
 	 */
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path);
+
+	/**
+	 * Sets whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Tree dynamically. 
+	 * @param autopaging true to turn on the auto-paging facility.
+	 * @since 5.0.2
+	 */
+	public void setAutopaging(boolean autopaging);
+	/**
+	 * Returns whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
+	 * rather, the page size is automatically determined by the height of the 
+	 * Tree dynamically. 
+	 * @return whether the "autopaging" facility is turned on.
+	 * @since 5.0.2
+	 */
+	public boolean isAutopaging();
 }

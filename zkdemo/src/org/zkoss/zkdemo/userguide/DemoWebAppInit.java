@@ -19,16 +19,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkdemo.userguide;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppInit;
 
@@ -59,6 +61,30 @@ public class DemoWebAppInit implements WebAppInit {
 	
 	public void init(WebApp wapp) throws Exception {
 		loadProperites((ServletContext)wapp.getNativeContext());
+		setThemeProperites();
+	}
+	
+	/**
+	 * Sets silvergray library property if there is silvergray.jar 
+	 */
+	private void setThemeProperites () {
+		String prop = Library.getProperty("org.zkoss.zkdemo.theme.silvergray");
+		if (prop == null) {
+			final ClassLocator loc = new ClassLocator();
+			try {
+				for (Enumeration en = loc.getResources("metainfo/zk/lang-addon.xml");
+				en.hasMoreElements();) {
+					final URL url = (URL)en.nextElement();
+					if (url.toString().lastIndexOf("silvergray.jar") >= 0) {
+						Library.setProperty("org.zkoss.zkdemo.theme.silvergray", "true");
+						return;
+					}
+				}
+			} catch (Exception ex) {
+				log.error(ex); //keep running
+			}
+			Library.setProperty("org.zkoss.zkdemo.theme.silvergray", "false");
+		}
 	}
 	static Map getCateMap() {
 		return _cateMap;

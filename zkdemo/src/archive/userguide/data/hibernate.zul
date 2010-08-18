@@ -23,9 +23,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		This example simply demostrate the possiblility to combine presentation 
 		components and Hibernate persistent system.</p>
 	]]></html>
-	<hbox>
+	<div>
 	Note that we comment out the <toolbarbutton id="target" label="script" popup="details"/> on purpose because it will not run on our web site.
-	</hbox>
+	</div>
 	<separator />
 	<popup id="details" fulfill="target.onClick" width="600px">
 	<div style="border:1px solid #538BA2; background: #FFF; ">

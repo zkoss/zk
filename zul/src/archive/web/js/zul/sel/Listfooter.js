@@ -20,54 +20,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link Listcell} also accepts children.
  * <p>Default {@link #getZclass}: z-listfooter.
  */
-zul.sel.Listfooter = zk.$extends(zul.LabelImageWidget, {
-	_span: 1,
-
-	$define: {
-    	/** Returns number of columns to span this footer.
-    	 * Default: 1.
-    	 * @return int
-    	 */
-    	/** Sets the number of columns to span this footer.
-    	 * <p>It is the same as the colspan attribute of HTML TD tag.
-    	 * @param int span
-    	 */
-		span: function (v) {
-			var n = this.$n();
-			if (n) n.colSpan = v;
-		}
-	},
-
+zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
+	
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
 	getListbox: function () {
-		return this.parent ? this.parent.parent : null;
+		return this.getMeshWidget();
 	},
 	/** Returns the list header that is in the same column as
 	 * this footer, or null if not available.
 	 * @return Listheader
 	 */
 	getListheader: function () {
-		var listbox = this.getListbox();
-		if (listbox) {
-			var cs = listbox.listhead;
-			if (cs)
-				return cs.getChildAt(this.getChildIndex());
-		}
-		return null;
+		return this.getHeaderWidget();
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-listfooter" : this._zclass;
-	},
-	//super
-	domAttrs_: function () {
-		var head = this.getListheader(),
-			added;
-		if (head)
-			added = head.getColAttrs();
-		return this.$supers('domAttrs_', arguments)
-			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '')
-			+ (added ? ' ' + added : '');
 	}
 });

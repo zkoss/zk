@@ -81,11 +81,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<chart id="mychart" title="Pie Chart Demo" width="500" height="250"
 		type="pie" threeD="true" fgAlpha="128">
 		<attribute name="onClick">
-			  String areaid = event.getArea();
-			  if (areaid != null) {
-			    Area area = self.getFellow(areaid);
+			Area area = event.getAreaComponent();
+			if (area != null) {
 			    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
-			  }
+			}
 		</attribute>
 		<zscript>
 			void update(int rowIndex) {

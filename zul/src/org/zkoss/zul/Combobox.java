@@ -24,7 +24,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -33,8 +32,8 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Selectable;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A combobox.
@@ -45,12 +44,13 @@ import org.zkoss.zul.impl.Utils;
  *
  * <p>Default {@link #getZclass}: z-combobox.(since 3.5.0)
  *
- * <p>Events: onOpen, onSelect<br/>
+ * <p>Events: onOpen, onSelect, onAfterRender<br/>
  * Developers can listen to the onOpen event and initializes it
  * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
- * clean up if false.
+ * clean up if false.<br/>
+ * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
  *
- * * <p>Besides assign a list model, you could assign a renderer
+ * <p>Besides assign a list model, you could assign a renderer
  * (a {@link ComboitemRenderer} instance) to a combobox, such that
  * the combobox will use this renderer to render the data returned by 
  * {@link ListModel#getElementAt}.
@@ -264,7 +264,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			j < pgsz && it.hasNext(); ++j){
 				Comboitem item = (Comboitem)it.next();
 				renderer.render(subset, item);
-				afterRender(item);// comboitem can be selected after set a label
+				fixSelectOnRender(item);// comboitem can be selected after set a label
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -272,6 +272,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			renderer.doFinally();
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
 	}
 	
 	private void postOnInitRender(String idx) {
@@ -609,7 +610,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
-	private void afterRender(Component comp) {
+	private void fixSelectOnRender(Component comp) {
 		if (comp instanceof Comboitem && _model instanceof Selectable) {
 			Iterator it = ((Selectable) _model).getSelection().iterator();
 			if (!it.hasNext()) return;

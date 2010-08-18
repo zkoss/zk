@@ -129,6 +129,8 @@ def alert(m):
 		<component-name>foo</component-name> //the component name
 		<component-class>x.Foo</component-class> //the component class
 		<widget-class>x.Foo</widget-class> //the widget class (at client)
+			//EL is allowed in widget-class. However, if EL is used,
+			//mold-uri will be ignored (so zk.Widget's redraw must be implemented)
 
 		//Any number of molds are allowed and
 		//where mold-uri could be an expression or contain '~ctx/'
@@ -581,6 +583,16 @@ def alert(m):
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
 			<css-uri>css/box.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>hlayout</component-name>
+		<component-class>org.zkoss.zul.Hlayout</component-class>
+		<widget-class>zul.layout.Hlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layout.js</mold-uri>
+			<css-uri>css/layout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1211,6 +1223,16 @@ def alert(m):
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
 			<css-uri>css/box.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>vlayout</component-name>
+		<component-class>org.zkoss.zul.Vlayout</component-class>
+		<widget-class>zul.layout.Vlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layout.js</mold-uri>
+			<css-uri>css/layout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

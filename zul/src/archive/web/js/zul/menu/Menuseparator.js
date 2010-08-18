@@ -37,7 +37,8 @@ zul.menu.Menuseparator = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-menu-separator" : this._zclass;
 	},
 	doMouseOver_: function () {
-		zWatch.fire('onFloatUp', this); //notify all
+		if (zul.menu._nOpen)
+			zWatch.fire('onFloatUp', this); //notify all
 		this.$supers('doMouseOver_', arguments);
 	}
 });

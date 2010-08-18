@@ -248,12 +248,7 @@ org.zkoss.zul.api.Applet {
 		render(renderer, "vspace", getVspace());
 		if (isMayscript())
 			renderer.render("mayscript", true);
-
-		for (Iterator it = _params.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			render(renderer, "param",
-				new String[] {(String)me.getKey(), (String)me.getValue()});
-		}
+		render(renderer, "params", _params);
 	}
 
 	/**

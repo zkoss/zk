@@ -54,6 +54,20 @@ org.zkoss.zk.ui.ext.Disable {
 	 */
 	public void setOrient(String orient) throws WrongValueException;
 
+	/** Returns the button type.
+	 * <p>Default: "button".
+	 * @since 5.0.4
+	 */
+	public String getType();
+	/** Sets the button type.
+	 * It is meaningful only if it is used with a HTML form.
+	 * Refer to <a href="http://www.htmlcodetutorial.com/forms/_BUTTON_TYPE.html">HTML Button Type</a>
+	 * for details.
+	 * @param type either "button", "submit" or "reset".
+	 * @since 5.0.4
+	 */
+	public void setType(String type) throws WrongValueException;
+
 	/**
 	 * Returns the href that the browser shall jump to, if an user clicks this
 	 * button.

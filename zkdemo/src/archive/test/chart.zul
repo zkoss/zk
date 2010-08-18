@@ -34,10 +34,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   }
 
   void drilldown() {
-  	String areaid = event.getArea();
-  	if (areaid != null) {
-	  	Area area = self.getFellow(areaid);
-	  	alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
+	Area area = event.getAreaComponent();
+	if (area != null) {
+	  	alert(area.getAttribute("entity")+": "+area.getTooltiptext());
 	}
   }
 </zscript>

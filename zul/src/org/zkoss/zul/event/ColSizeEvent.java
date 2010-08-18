@@ -21,17 +21,17 @@ import java.util.Map;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.MouseEvent;
 
 /**
- * Used to notify that the widths of two adjacent column are changed.
+ * Used to notify that the width of a column is changed.
  *
- * <p>When an user drags the border of sizable columns, the width of the
- * adjacent columns are changed accordingly -
- * one is enlarged, the other is shrinked and the total width is not changed.
+ * <p>When an user drags the border of a sizable column, only the width of the
+ * column itself is changed, other columns are not affected.
  *
  * <p>The event is sent to the parent (e.g., {@link org.zkoss.zul.Columns}
  * and {@link org.zkoss.zul.Treecols}).
@@ -41,7 +41,8 @@ import org.zkoss.zk.ui.event.MouseEvent;
 public class ColSizeEvent extends Event {
 	private final Component _col;
 	private final int _icol, _keys;
-	private String _width;
+	private final String _width;
+	private final String _oldWd;
 
 	/** Indicates whether the Alt key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
@@ -89,6 +90,8 @@ public class ColSizeEvent extends Event {
 		_icol = icol;
 		_col = col;
 		_width = width;
+		_oldWd = col instanceof HtmlBasedComponent ?
+			((HtmlBasedComponent)col).getWidth(): null;
 		_keys = keys;
 	}
 	/**
@@ -97,6 +100,13 @@ public class ColSizeEvent extends Event {
 	 */
 	public String getWidth() {
 		return _width;
+	}
+	/**
+	 * Returns the previous column width
+	 * @since 5.0.4
+	 */
+	public String getPreviousWidth() {
+		return _oldWd;
 	}
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.

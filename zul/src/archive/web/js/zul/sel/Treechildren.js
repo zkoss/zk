@@ -12,6 +12,22 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _prevsib(child) {
+		var p;
+		if ((p=child.parent) && p.lastChild == child)
+			return child.previousSibling;
+	}
+	function _fixOnAdd(oldsib, child, ignoreDom) {
+		if (!ignoreDom) {
+			if (oldsib) oldsib._syncIcon();
+			var p;
+			if ((p=child.parent) && p.lastChild == child
+			&& (p=child.previousSibling))
+				p._syncIcon();
+		}
+	}
+
 /**
  * A treechildren.
  */
@@ -34,35 +50,19 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
-		var oldsib = this._fixBeforeAdd(child);
-
+		var oldsib = _prevsib(child);
 		if (this.$supers('insertBefore', arguments)) {
-			this._fixOnAdd(oldsib, child, ignoreDom);
+			_fixOnAdd(oldsib, child, ignoreDom);
 			return true;
 		}
 	},
 	//@Override
 	appendChild: function (child, ignoreDom) {
-		var oldsib = this._fixBeforeAdd(child);
-
+		var oldsib = _prevsib(child);
 		if (this.$supers('appendChild', arguments)) {
 			if (!this.insertingBefore_)
-				this._fixOnAdd(oldsib, child, ignoreDom);
+				_fixOnAdd(oldsib, child, ignoreDom);
 			return true;
-		}
-	},
-	_fixBeforeAdd: function (child) {
-		var p;
-		if ((p=child.parent) && p.lastChild == child)
-			return child.previousSibling;
-	},
-	_fixOnAdd: function (oldsib, child, ignoreDom) {
-		if (!ignoreDom) {
-			if (oldsib) oldsib._syncIcon();
-			var p;
-			if ((p=child.parent) && p.lastChild == child
-        			&& (p=child.previousSibling))
-				p._syncIcon();
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -185,3 +185,5 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		this.$supers('replaceWidget', arguments);
 	}
 });
+
+})();

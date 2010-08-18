@@ -34,9 +34,8 @@
   }
 
   void drilldown() {
-  	String areaid = event.getArea();
-  	if (areaid != null) {
-	  	Area area = self.getFellow(areaid);
+	Area area = event.getAreaComponent();
+	if (area != null) {
 	  	alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
 	}
   }

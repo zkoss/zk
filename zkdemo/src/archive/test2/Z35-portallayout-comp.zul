@@ -330,9 +330,8 @@ text line2...
 		<checkbox label="3D Chart" checked="true" onCheck="mychart.setThreeD(self.isChecked())"/>
 		<chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128">
 			<attribute name="onClick"><![CDATA[  
-			  String areaid = event.getArea();
-			  if (areaid != null) {
-			    Area area = (Area)self.getFellow(areaid);
+			  Area area = event.getAreaComponent();
+			  if (area != null) {
 			    alert(""+area.getAttribute("entity")+": "+area.getTooltiptext());
 			  }
 		  	]]></attribute>

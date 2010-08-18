@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<button', this.domAttrs_());
+	out.push('<button type="', this._type, '"', this.domAttrs_());
 	var tabi = this._tabindex;
 	if (this._disabled) out.push(' disabled="disabled"');
 	if (tabi) out.push(' tabindex="', tabi, '"');

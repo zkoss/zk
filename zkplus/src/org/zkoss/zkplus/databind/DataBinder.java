@@ -89,6 +89,26 @@ public class DataBinder implements java.io.Serializable {
 	protected Map _collectionItemMap = new HashMap(3);
 	protected Map _collectionOwnerMap = new HashMap(3); //bug#1950313 F - 1764967 bug
 	
+	private boolean _loadOnSave = true; //whether firing the onLoadOnSave event to automate the loadOnSave operation 
+	
+	/**
+	 * Sets whether this DataBinder shall do load-on-save automatically.
+	 * @param b true to have this DataBinder shall do load-on-save automatically.
+	 * @since 5.0.4
+	 */
+	public void setLoadOnSave(boolean b) {
+		_loadOnSave = b;
+	}
+	
+	/**
+	 * Returns whether this DataBinder shall do load-on-save automatically(default is true).
+	 * @return whether this DataBinder shall do load-on-save automatically(default is true).
+	 * @since 5.0.4
+	 */
+	public boolean isLoadOnSave() {
+		return _loadOnSave;
+	}
+	
 	/** Binding bean to UI component. This is the same as 
 	 * addBinding(Component comp, String attr, String expr, (List)null, (List)null, (String)null, (String)null). 
 	 * @param comp The component to be associated.
@@ -1135,7 +1155,7 @@ public class DataBinder implements java.io.Serializable {
 			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp, triggerEventName};
 		if (loadOnSaveInfos != null) {
 			loadOnSaveInfos.add(loadOnSaveInfo);
-		} else {
+		} else if (isLoadOnSave()) { //feature#2990932, allow disable load-on-save mechanism
 			//do loadOnSave immediately
 			Events.postEvent(new Event("onLoadOnSave", comp, loadOnSaveInfo));
 		}

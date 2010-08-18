@@ -147,10 +147,9 @@ import org.zkoss.zkmax.zul.Columnchildren;
 					<chart id="mychart" title="Pie Chart Demo" width="300px"
 						type="pie" threeD="true" fgAlpha="128">
 						<attribute name="onClick">
-							String areaid = event.getArea(); if (areaid
-							!= null) { Area area =
-							self.getFellow(areaid);
-							alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());
+							Area area = event.getAreaComponent();
+							if (area != null) {
+								alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());
 							}
 						</attribute>
 						<zscript><![CDATA[ 

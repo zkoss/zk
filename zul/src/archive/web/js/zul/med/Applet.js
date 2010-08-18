@@ -176,9 +176,10 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				zk.error("Failed to set applet's field: "+ name+'\n'+e.message);
 			}
 	},
-
 	/** Sets the param. Notice that it is meaningful only if it is called
-	 * before redraw.
+	 * before redraw. For example, <code>setParam('attr1', 'value1')</code> 
+	 * gives a <code>param</code> tag under <code>applet</code> tag with name 
+	 * <code>attr1</code>, value <code>value1</code>.
 	 * There are two format:
 	 * setParam(nm, val)
 	 * and
@@ -194,7 +195,17 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 		if (val != null) this._params[nm] = val;
 		else delete this._params[nm];
 	},
-
+	/** Sets the params map. It should only be called before redraw.
+	 * @param Map m A map of param pairs, as applet parameters. For example, 
+	 * <code>{attr1:'value1', attr2:'value2'}</code> gives two <code>param</code> 
+	 * tags under <code>applet</code> tag with names <code>attr1, attr2</code>, 
+	 * values <code>value1, value2</code> respectively.
+	 * @since 5.0.4
+	 */
+	setParams: function (m) {
+		this._params = m;
+	},
+	
 	//super
 	domAttrs_: function(no){
 		return this.$supers('domAttrs_', arguments)

@@ -141,7 +141,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			InputEvent evt = InputEvent.getInputEvent(request);
+			InputEvent evt = InputEvent.getInputEvent(request, _value);
 			
 			final String value = evt.getValue();
 			try {

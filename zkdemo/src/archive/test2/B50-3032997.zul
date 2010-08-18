@@ -1,0 +1,9 @@
+<zk>
+	<vbox>
+		<applet code="ticker" codebase="classes" msg="ZK is Simple and Rich!" id="ticker"
+			width="400px" style="border: 1px" />
+		<applet code="ticker" codebase="classes" id="ticker2"
+			width="400px" style="border: 1px" attr1="value1" msg="ZK is Simple and Rich!" attr2="value2" />
+		<label>Both applets should show "ZK is Simple and Rich!"</label>
+	</vbox>
+</zk>

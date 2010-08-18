@@ -198,14 +198,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Returns the library property.
 		</description>
 	</function>
-	<function><!-- backward compatible -->
-		<name>getProperty</name>
-		<function-class>org.zkoss.lang.Library</function-class>
-		<function-signature>java.lang.String getProperty(java.lang.String)</function-signature>
-		<description>
-	Returns the library property.
-		</description>
-	</function>
 
 	<!--                  -->
 	<!-- String Utilities -->

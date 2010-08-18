@@ -177,7 +177,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			val = val.toLowerCase();
 			var beg = this._sel,
 				last = this._next(null, !bUp);
-			if (!beg || beg.parent != this) beg = this._next(null, bUp);
+			if (!beg || beg.parent != this)
+				beg = this._next(null, bUp);
+			if (!beg) {
+				evt.stop();
+				return; //ignore it
+			}
 
 			//Note: we always assume strict when handling up/dn
 			for (var item = beg;;) {
@@ -284,7 +289,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		//autocomplete
 		val = val.toLowerCase();
-		var sel = this._sel;
+		sel = this._sel;
 		if (!sel || sel.parent != this) sel = fchild;
 
 		for (var item = sel;;) {
@@ -315,6 +320,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._sel = this._lastsel = null;
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
+	//@Override
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs ? zcs: "z-combobox" + (this.inRoundedMold() ? "-rounded": "");

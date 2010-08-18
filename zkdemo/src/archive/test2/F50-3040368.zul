@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3040368.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 10 14:09:28 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<vlayout hflex="true" vflex="1">
+	<div vflex="min" style="background:red">Top</div>
+	<hlayout vflex="1">
+			<div hflex="min" vflex="1" style="background:green">Left</div>
+			<div hflex="1" vflex="1">
+			You should see the size of each region is accroding to its content(just like borderlayout),
+			even if you resize the browser window.
+			</div>
+			<div hflex="min" vflex="1" style="background:yellow">
+				Right
+			</div>
+	</hlayout>
+	<div vflex="min" style="background:cyan">Bottom</div>
+</vlayout>

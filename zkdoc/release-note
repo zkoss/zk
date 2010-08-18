@@ -12,6 +12,8 @@ ZK 5.5.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
+  + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
+    Override getChildren() and getExtraCtrl() instead.
   + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
 	and GenericAutowireComposer ignore the variables defined
 	in zscript and XEL. If it causes problems, please use the construactor
@@ -29,16 +31,30 @@ ZK 5.5.0
 ZK 5.0.4
 * Features
   3026623: Able to communicate among iframes without server push
+  3040368: Provide a simple horizontal/vertical layout
   3031544: Allow to specify a shortcut instead of full namespace
+  3046952: Clients.echoEvent supports any kind of object
+  3041822: A way to minimize memory by not maintaining state at server
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3030481: Combobox support Selectable (used with ListModel)
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items
+  3034530: The footer of components supports content alignment
+  3047459: Include old value in InputEvent
+  3038615: Include data of old width in ColSizeEvent
   3025279: Client: Able to listen the Ajax error
+  3035171: <widget-class> (in lang.xml) shall support EL
   3032033: A way to customize the data format of AU requests
   3027238: A way to customize the resource loader of PageDefinitions
   3025419: The fixed header in listbox without width has correct size
+  3029931: Post onAfterRender after onInitRender/onInitRenderLater
+  3042290: Provide utility to make component complaint with JSF easily
+  3038128: Allow all system-config (eg, engine-class) in zk/config.xml  
+  3028270: Slider support for clicking to increment or decrement
+  1860341: Button support type="submit"
+  2990932: Allow disable load-on-save mechanism in databinder
+  3024156: Make Spring DelegatingVariableResolver execution-independent
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -54,11 +70,57 @@ ZK 5.0.4
   3031562: hbox, vbox layout has error in ZK5.0.4
   3033010: Listbox with hflex listheader can expand but can not shrink
   3033016: Extra empty row when shrink fixed width Listbox
+  3034505: A listbox in poup, open it first-time, the position is wrong
+  3035079: Dom elem doesn't exist when parent do appendChild and rerender
+  3034771: <script> shall have the type attribute to W3C compliant
+  3035818: The longbox,  doublebox receive a wrong value on server side
+  3035847: The popup of combobox shall be destroyed when detached
+  3035897: The longbox parse a wrong result when paste '100%'
+  3032997: Applet params are passed incorrectly
+  3036584: poup window disappears when mouseOver menuitem
+  3023305: Typo in DateFormatConverter API page
+  3039843: Paging Listbox without rod, ListModel shall not fully loaded
+  3039282: NullPointerException when assign a model to Grid at onCreate
+  3032567: No border is shown for captcha
+  3025747: Fisheyebar UI strange when vertical=true, attachEdge=bottom
+  3039948: Unable to turn on rod for Listbox if defined in its parent
+  3039339: Column is not aligned in some special combination of sizes
+  3037627: Cell with hflex in hbox causes JavaScript Error
+  3036398: frozen scrollbar disappear when listbox with vflex="1"
+  3040363: Datebox cannot select February
+  3039364: Open the popup cause js error with IE
+  3042165: Misplaced drop-down list of auto-complete combobox on iPad
+  3033439: Listfooter missing font CSS
+  3041907: drag-drop problem in tree (appendChild issue)
+  3025750: Fisheyebar CSS file should use .css.dsp
+  3035274: Doublebox not updating server when client side .smartUpdate
+  3035121: Missing setErrorMessage method in InputElement.java
+  3026665: Bandbox gets focus from children element focus
+  3031511: drag and drop intbox not triggerign onDrop event (FF only)
+  3014817: DateFormat set timezone from TimeZones
+  3026667: Messagebox button does not have a min width on IE
+  3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
+  3027214: Button of the default mold shall not submit the form
+  3037626: Splitter Doesn't Resize Cells Containing Grid
+  3032885: Inplace rounded Combo Inputs have incorrect height
+  3032892: Inplace Combo Input with no button have a tight width
+  3033022: Accordion Tabbox gets wrong height by closing unselected tab
+  3026669: Tabbox accordion animation strange
+  3035230: Sets sizedByContent to a grid with width doesn't work
+  3000305: DataBinder cannot set a value when constraint error
+  3043561: decimalbox format error
+  1952402: IFRAME inside Window load multiple times in FF if overlapped
+  3034550: Window header should use fontFamilyT
+  3035367: Updating not yet rendered llistbox model when vflex="true"
+  3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
+  3046850: Decimalbox failed to handle very small number, 0.00000000001
+  3046852: Doublebox wrong message for very small number, 0.00000000001
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
     Components that support tabbox include InputWidget, Button, A, Checkbox,
     Listbox and derives.
+  + Specify type as submit to make a button to submit a form when clicked.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.
   + The protected _left, _top, _width and _height members of HtmlBasedComponent
@@ -176,6 +238,8 @@ June 29, 2010
   3025674: When Listbox mold=select, add listhead cause html error
 
 * Upgrade Notes
+  + To retrieve the area of a chart (when implementing drilldrop), use
+    desktop.getComponentByUuid(event.getArea()) instead of getFellow().
   + The default font size is changed to "arial, sans-serif". If you prefer the
     original one, please specify the following in WEB-INF/zk.xml
 	<library-property>

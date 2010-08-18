@@ -117,6 +117,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var	tabs = this.parent,
 			oldtab = tabbox._selTab;
 		if (oldtab != this || init) {
+			if (oldtab && tabbox.inAccordionMold()) {
+				var p = this.getLinkedPanel();
+				if (p) p._changeSel(oldtab.getLinkedPanel());
+			}
 			if (oldtab && oldtab != this)
 				this._setSel(oldtab, false, false, init);
 			this._setSel(this, true, notify, init);
@@ -158,6 +162,20 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		
 		if (notify)
 			this.fire('onSelect', {items: [this], reference: this.uuid});
+	},
+	setHeight: function (height) {
+		this.$supers('setHeight', arguments);
+		if (this.desktop) {
+			zWatch.fireDown('beforeSize', this.parent);
+			zWatch.fireDown('onSize', this.parent);
+		}
+	},
+	setWidth: function (width) {
+		this.$supers('setWidth', arguments);
+		if (this.desktop) {
+			zWatch.fireDown('beforeSize', this.parent);
+			zWatch.fireDown('onSize', this.parent);
+		}
 	},
 	//protected
 	doClick_: function(evt) {
@@ -246,6 +264,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
     					return;
     				}
     		});
+		} else if (this.getTabbox().inAccordionMold()) {
+			this.getTabbox()._syncSize();
 		}
 	}
 });

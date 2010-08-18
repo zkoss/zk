@@ -17,7 +17,7 @@ package _global_;
  * <p>For example, zk(el).cmOffset(); returns an offset.
  *
  * <pre><code>var ofs = zk(el).cmOffset();
-zk.debug("x,y = " + ofs[0] + "," + ofs[1]);</code></pre>
+zk.log("x,y = " + ofs[0] + "," + ofs[1]);</code></pre>
  *
  * @author tomyeh
  * @see Array

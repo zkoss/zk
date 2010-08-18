@@ -143,6 +143,17 @@ public interface Captcha extends org.zkoss.zul.api.Image {
 	 */
 	public boolean isNoise();
 
+	/** Sets whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public void setFrame(boolean frame);
+	/** Returns whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public boolean isFrame();
+
 	/**
 	 * Regenerates new captcha text value and redraw.
 	 */

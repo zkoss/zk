@@ -21,12 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
+
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.Execution;
 
 /**
  * <p>
@@ -40,6 +42,10 @@ import org.zkoss.zk.ui.util.Configuration;
  * Usage:<br>
  * <code>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt;</code>
  * 
+ * <p>Developers can specify a list of class names separated with comma in
+ * a library property called <code>org.zkoss.spring.VariableResolver.class</code>,
+ * such they are used as the default variable resolvers.
+ *
  * @author henrichen
  * @author ashish
  */
@@ -52,12 +58,19 @@ public class DelegatingVariableResolver implements VariableResolver {
 	protected List _variableResolvers = new ArrayList();
 
 	public DelegatingVariableResolver() {
-		final Configuration conf = Executions.getCurrent().getDesktop()
-				.getWebApp().getConfiguration();
-		final String value = conf.getPreference("org.zkoss.spring.VariableResolver",
-				null);
-		if (value != null) {
-			String[] vrClss = value.split(",");
+		final Execution exec = Executions.getCurrent();
+		String classes = null;
+		if (exec != null) {
+			classes = exec.getDesktop()
+				.getWebApp().getConfiguration()
+				.getPreference("org.zkoss.spring.VariableResolver", null);
+		}
+
+		if (classes == null)
+			classes = Library.getProperty("org.zkoss.spring.VariableResolver.class");
+
+		if (classes != null) {
+			String[] vrClss = classes.split(",");
 			for (int i = 0; i < vrClss.length; i++) {
 				try {
 					Object o = Classes.newInstanceByThread(vrClss[i]);
@@ -71,7 +84,6 @@ public class DelegatingVariableResolver implements VariableResolver {
 		} else {
 			_variableResolvers.add(new DefaultDelegatingVariableResolver());
 		}
-
 	}
 
 	/**

@@ -201,6 +201,28 @@ abstract public class NumberInputElement extends FormatInputElement {
 				}
 			}
 		}
+
+		//handle '%'
+		if (fmt != null && divscale > 0) {
+		l_out:
+			for (int j = 0, k, len = fmt.length(); (k = fmt.indexOf('\'', j)) >= 0;) {
+				while (++k < len){
+					final char cc = fmt.charAt(k);
+					if (cc == '%') divscale -= 2;
+					else if (cc == '\u2030') divscale -= 3;
+					else if (cc == '\'') {
+						++k;
+						break;
+					}
+					if (divscale <= 0) {
+						divscale = 0;
+						break l_out;
+					}
+				}
+				j = k;
+			}
+		}
+
 		return new Object[] {
 			(sb != null ? sb.toString(): val), new Integer(divscale)};
 	}
