@@ -680,7 +680,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			InputEvent evt = InputEvent.getInputEvent(request);
+			InputEvent evt = InputEvent.getInputEvent(request, _value);
 
 			final String value = evt.getValue();
 			_txtByClient = value;
@@ -700,9 +700,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGING)) {
-			Events.postEvent(InputEvent.getInputEvent(request));
+			Events.postEvent(InputEvent.getInputEvent(request, _value));
 		} else if (cmd.equals(Events.ON_ERROR)) {
-			ErrorEvent evt = ErrorEvent.getErrorEvent(request);
+			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);
 			final String msg = evt.getMessage();
 			initAuxInfo().errmsg = msg != null && msg.length() > 0 ? msg: null;
 			Events.postEvent(evt);

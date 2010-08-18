@@ -188,7 +188,7 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 				_noSmartUpdate = true;
 				setContent("#color=" + (String)data.get("color"));
 				_noSmartUpdate = false;
-				Events.postEvent(InputEvent.getInputEvent(request));
+				Events.postEvent(InputEvent.getInputEvent(request, _content));
 			}
 		} else
 			super.service(request, everError);
