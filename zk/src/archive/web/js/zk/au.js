@@ -1069,7 +1069,6 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zAu.cmd0.clearBusy(uuid);
 
 		var w = uuid ? zk.Widget.$(uuid): null;
-		zUtl.destroyProgressbox("zk_loadprog");
 		if (!uuid)
 			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
 		else if (w) {
