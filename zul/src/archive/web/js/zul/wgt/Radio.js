@@ -50,11 +50,39 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * @return Radiogroup
 	 */
 	getRadiogroup: function (parent) {
+		if (!parent && this._group)
+			return this._group;
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
+	/** Sets {@link Radiogroup that this radio button belongs to.
+	 * The radio automatically belongs to the nearest ancestral radiogroup.
+	 * Use this method only if the radio group is not one of its ancestors.
+	 * @param Radiogroup group the radio group, or null to dis-associate
+	 * @since 5.0.4
+	 */
+	setRadiogroup: function (group) {
+		var old;
+		if ((old = this._group) != group) {
+			if (old) old._rmExtern(this);
+			this._group = group;
+			if (group) group._addExtern(this);
+		}
+	},
+	set$group: function (gpuuid) { //called by server (render properties)
+		var self = this;
+		zk.afterMount(function () {
+			var group;
+			self.setRadiogroup(group = zk.Widget.$(gpuuid));
+			if (group) {
+				var n = self.$n("real");
+				if (n) n.name = group.getName();
+			}
+		});
+	},
+
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
@@ -110,8 +138,9 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		return group != null ? group.getName(): this.uuid;
 	},
 	contentAttrs_: function () {
-		var html = this.$supers('contentAttrs_', arguments);
-		html += ' value="' + this.getValue() + '"';
+		var html = this.$supers('contentAttrs_', arguments), v;
+		if (v = this.getValue())
+			html += ' value="' + v + '"';
 		return html;
 	},
 	getZclass: function () {

@@ -8,6 +8,7 @@ ZK 5.0.4
   3041822: A way to minimize memory by not maintaining state at server
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3030481: Combobox support Selectable (used with ListModel)
+  3048583: Allow radiogroup not ancestor of radio so it can be anywhere
   3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
   3025422: The listbox in a container support fixed header
   3026221: Databinder shall fire onCreate when cloning each items

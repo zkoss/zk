@@ -26,7 +26,10 @@ import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.xml.XMLs;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -285,5 +288,26 @@ public class Utils {
 				cwout.write("</div>\n");
 			}
 		}
+	}
+
+	/** Returns the component of the specified ID or UUID.
+	 * ID could be the component's ID or UUID.
+	 * To specify an UUID, it must be the fortmat: <code>uuid(comp_uuid)</code>.
+	 * @return the component, or null if not found
+	 * @since 5.0.4
+	 */
+	public static Component getComponentById(Component comp, String id) {
+		final int len = id.length();
+		if (id.startsWith("uuid(") && id.charAt(len - 1) == ')') {
+			Desktop dt = comp.getDesktop();
+			if (dt == null) {
+				final Execution exec = Executions.getCurrent();
+				if (exec == null)
+					return null;
+				dt = exec.getDesktop();
+			}
+			return dt != null ? dt.getComponentByUuidIfAny(id.substring(5, len - 1)): null;
+		}
+		return comp.getFellowIfAny(id);
 	}
 }

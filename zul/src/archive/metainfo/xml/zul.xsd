@@ -1796,6 +1796,7 @@
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
+		<xs:attribute name="radiogroup" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- radiogroup -->
 	<xs:element name="radiogroup" type="radiogroupType" />
