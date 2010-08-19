@@ -873,7 +873,7 @@ public class Listbox extends XulElement implements Paginated,
 					final int limit = getPageSize();
 					getDataLoader().syncModel(offset, limit); // force reloading
 				} else {
-					smartUpdate("jumpTo_", _jsel);
+					smartUpdate("selInView_", _jsel);
 				}
 			} else {
 				item.setSelectedDirectly(true);
@@ -3196,8 +3196,9 @@ public class Listbox extends XulElement implements Paginated,
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
-			if (_rod)
+			if (_rod) {
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
+			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
 		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2

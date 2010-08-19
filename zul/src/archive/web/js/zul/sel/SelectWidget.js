@@ -601,10 +601,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						break;
 					}
 			}
-			zk(btn).focus(timeout);
+			this.focusA_(btn, timeout);
 			return true;
 		}
 		return false;
+	},
+	focusA_: function(btn, timeout) {
+		zk(btn).focus(timeout);
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
