@@ -94,10 +94,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var img = imgs[j], src = img.src,
 					k = src.lastIndexOf(';');
 				if (k >= 0) src = src.substring(0, k);
-				if (regex.test(img.src)) {
-					_fix(img);
-					jq(img).bind("propertychange", _onpropchange);
-				}
+				if (regex.test(img.src))
+					zjq.alphafix(img);
 			}
 
 			//fix one at a time to have better performance
@@ -190,6 +188,22 @@ zk.copy(zjq, {
 	_afterOuter: function (o) {
 		if (o)
 			fixDom(o.ref ? o.ref.nextSibling: o.p ? o.p.firstChild: null, o.ref2);
+	},
+	_fixedVParent: function (el) {
+		try {
+			var inps = el.getElementsByTagName("INPUT");
+			for (var i in inps) {
+				if (inps[i].type == "checkbox")
+					inps[i].defaultChecked = inps[i].checked;
+			}
+		} catch (e) {}
+	},
+	/** Fixes an image ndoe.
+	 * @param DOMElement img the IMAGE element.
+	 */
+	alphafix: function (img) {
+		_fix(img);
+		jq(img).bind("propertychange", _onpropchange);
 	}
 });
 
@@ -211,15 +225,4 @@ jq(window).bind("beforeprint", function() {
 		_inPrint = false;
 	});
 
-zk.copy(zjq.prototype, {
-	_fixedVParent: function (el) {
-		try {
-			var inps = el.getElementsByTagName("INPUT");
-			for (var i in inps) {
-				if (inps[i].type == "checkbox")
-					inps[i].defaultChecked = inps[i].checked;
-			}
-		} catch (e) {}
-	}
-});
 })();

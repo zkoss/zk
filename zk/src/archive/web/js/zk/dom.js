@@ -218,6 +218,7 @@ zk.copy(zjq, {
 		n.style.visibility = "inherit";
 	},
 	_fixClick: zk.$void, //overriden in domie.js
+	_fixedVParent: zk.$void,
 
 	_src0: "" //an empty src; overriden in domie.js
 });
@@ -1261,7 +1262,7 @@ jq(el).zk.center(); //same as 'center'
 		agt.style.display = "none";
 		
 		// Bug 3049181
-		this._fixedVParent(el);
+		zjq._fixedVParent(el);
 		
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
@@ -1270,7 +1271,6 @@ jq(el).zk.center(); //same as 'center'
 		document.body.appendChild(el);
 		return this;
 	},
-	_fixedVParent: zk.$void,
 	/** Undoes the creation of a virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information. 
 	 * @return jqzk this object
@@ -1288,7 +1288,7 @@ jq(el).zk.center(); //same as 'center'
 			if (p) {
 				
 				// Bug 3049181
-				this._fixedVParent(el);
+				zjq._fixedVParent(el);
 				
 				if (agt) {
 					p.insertBefore(el, agt);
