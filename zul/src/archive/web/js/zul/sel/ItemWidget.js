@@ -149,9 +149,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			mesh._focusItem = this;
 		if (this.isVisible() && this.canActivate({checkOnly: true})) {
 			this._doFocusIn();
-			var btn = mesh.$n('a');
-			if (zk.currentFocus != btn)
-				mesh.focusA_(btn, timeout);
+			mesh.focusA_(mesh.$n('a'), timeout);
 		}
 		return false;
 	},
