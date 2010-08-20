@@ -95,6 +95,22 @@ ZK 5.0.4
   + The default value of tabindex is changed from -1 to 0.
     Components that support tabbox include InputWidget, Button, A, Checkbox,
     Listbox and derives.
+  + By default, HtmlMacroComponent supports auto forward events and wire
+    accessible variables.
+    You can turn on/off auto wire mechanism by specifying the Library
+    Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
+    If you did not specify the Library Property, default is false. 
+    <library-property>
+    	<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+    	<value>true</value>
+    </library-property>
+   or turn on/off auto forward events by specifying the Library Property
+   "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
+   If you did not specify the Library Property, default is false.
+    <library-property>
+   		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+    	<value>true</value>
+    </library-property>
   + Specify type as submit to make a button to submit a form when clicked.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.

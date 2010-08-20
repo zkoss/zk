@@ -115,6 +115,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</client-config>
 	-->
 
+	<!--
+		Turn off if you want to disable the auto wire for macro component.
+		Default: false
+	<library-property>
+		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
+
+	<!--
+		Turn off if you want to disable the auto forward for macro component.
+		Default: false
+	<library-property>
+		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
+	
 	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for grid.
 		It improves the performance for huge grid.
