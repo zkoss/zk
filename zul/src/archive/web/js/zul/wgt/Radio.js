@@ -57,7 +57,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
-	/** Sets {@link Radiogroup that this radio button belongs to.
+	/** Sets {@link Radiogroup} that this radio button belongs to.
 	 * The radio automatically belongs to the nearest ancestral radiogroup.
 	 * Use this method only if the radio group is not one of its ancestors.
 	 * @param Radiogroup group the radio group, or null to dis-associate
@@ -71,12 +71,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (group) group._addExtern(this);
 			this._fixName();
 		}
-	},
-	set_group: function (gpuuid) { //called by server (render properties)
-		var self = this;
-		zk.afterMount(function () {
-			self.setRadiogroup(zk.Widget.$(gpuuid));
-		});
 	},
 
 	/** Sets the radio is checked and unchecked the others in the same radio

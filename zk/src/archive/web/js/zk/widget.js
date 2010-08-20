@@ -1428,18 +1428,44 @@ wgt.$f().main.setTitle("foo");
 	},
 
 	/** Sets a property.
-	 * @param String name the name of property.
-	 * If the name starts with <code>on</code>, it is assumed to be
+	 * The property updates sent from the server, including
+	 * renderProperties and smartUpdate, will invoke this method.
+	 * <h2>Special Names</h2>
+	 * <h3>onXxx</h3>
+	 * <p>If the name starts with <code>on</code>, it is assumed to be
 	 * an event listener and {@link #setListener} will be called.
+	 *
+	 * <h3>$onXxx</h3>
+	 * <p>If the name starts with <code>$on</code>, the value is assumed to
+	 * be a boolean indicating if the server registers a listener.
+	 *
+	 * <h3>$$onXxx</h3>
+	 * <p>If the name starts with <code>$$on</code>, it indicates
+	 * the event is an important event that the client must send it
+	 * back to the server. In additions, the value is assumed to
+	 * be a boolean indicating if the server registers a listener.
+	 *
+	 * <h3>u$xxx</h3>
+	 * <p>If the name starts with <code>u$</code>, it indicates
+	 * the value is UUID of a widget, and it will be resolved to a widget
+	 * before calling the real method.
+	 * <p>However, since we cannot resolve a widget by its UUID until
+	 * the widget is bound (to DOM). Thus, ZK sets property after mounted.
+	 * For example, <code>wgt.set("u$radiogroup", uuid)</code> is equivalent
+	 * to the following.
+	 * <pre><code>zk.afterMount(function () {
+	 wgt.set("radiogroup", zk.Widget.$(uuid))
+	 *});</code></pre>
+	 *
+	 * @param String name the name of property.
 	 * @param Object value the value
 	 * @return zk.Widget this widget
 	 */
 	/** Sets a property.
+	 * The property updates sent from the server, including
+	 * renderProperties and smartUpdate, will invoke this method.
 	 * @param String name the name of property.
-	 * If the name starts with <code>$on</code>, the value is assumed to
-	 * be a boolean indicating if the server registers a listener.
-	 * If the name starts with <code>on</code>, the value is assumed to be
-	 * an event listener and {@link #setListener} will be called.
+	 * Refer to {@link #set(String, Object)} for special names.
 	 * @param Object value the value
 	 * @param Object extra the extra argument. It could be anything.
 	 * @return zk.Widget this widget
@@ -1455,10 +1481,23 @@ wgt.$f().main.setTitle("foo");
 		else if (name.length > 2 && name.startsWith('on')
 		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
 			this.setListener(name, value);
-		else if (arguments.length >= 3)
-			zk.set(this, name, value, extra);
-		else
-			zk.set(this, name, value);
+		else {
+			var useExtra = arguments.length >= 3;
+			if (name.startsWith("u$")) {
+				var self = this;
+				zk.afterMount(function () {
+					name = name.substring(2);
+					value = zk.Widget.$(value);
+					if (useExtra)
+						zk.set(self, name, value, extra);
+					else
+						zk.set(self, name, value);
+				});
+			} else if (useExtra)
+				zk.set(this, name, value, extra);
+			else
+				zk.set(this, name, value);
+		}
 		return this;
 	},
 	/** Retrieves a value from the specified property.
