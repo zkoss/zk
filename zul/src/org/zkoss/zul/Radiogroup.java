@@ -79,6 +79,8 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	 * @since 5.0.4
 	 */
 	public List getItems() {
+		//FUTURE: the algorithm is stupid and it shall be similar to Listbox
+		//however, it is OK since there won't be many radio buttons in a group
 		final List items = new LinkedList();
 		getItems0(this, items);
 		if (_externs != null)

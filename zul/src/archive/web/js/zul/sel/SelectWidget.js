@@ -606,7 +606,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return false;
 	},
-	focusA_: function(btn, timeout) {
+	focusA_: function(btn, timeout) { //called by derived class
 		zk(btn).focus(timeout);
 	},
 	bind_: function () {

@@ -94,13 +94,16 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	 * @since 5.0.4
 	 */
 	public void setRadiogroup(Radiogroup radiogroup) {
+		boolean inGroup = _groupId != null;
 		_groupId = null;
-		if (radiogroup != _group) {
+		if (inGroup || radiogroup != _group) {
 			if (_group != null)
 				_group.removeExternal(this);
 			_group = radiogroup;
 			if (_group != null)
 				_group.addExternal(this);
+
+			smartUpdate("_group", _group != null ? _group.getUuid(): null);
 		}
 	}
 	/** Associates the radiogroup to this radio component by giving ID.
@@ -111,23 +114,31 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	 * @since 5.0.4
 	 */
 	public void setRadiogroup(String radiogroupId) {
+		if (radiogroupId == null) {
+			setRadiogroup((Radiogroup)null);
+			return;
+		}
+
 		_group = null;
 		_groupId = radiogroupId;
-		resolveGroup(true);
-			//try to bind as soon as possible since they relate to each other
+		if (resolveGroup(true)) //try to bind as soon as possible since they relate to each other
+			smartUpdate("_group", _group != null ? _group.getUuid(): null);
+		else
+			invalidate(); //delay the retrieval of _group to redraw
 	}
 	/** @param silent whether NOT to throw an exception if not found. */
-	private void resolveGroup(boolean silent) {
+	private boolean resolveGroup(boolean silent) {
 		if (_groupId != null) {
 			_group = (Radiogroup)Utils.getComponentById(this, _groupId);
 			if (_group == null) {
 				if (!silent)
 					throw new WrongValueException("Radiogroup not found: "+_groupId);
-				return;
+				return false;
 			}
 			_groupId = null;
 			_group.addExternal(this);
 		}
+		return true;
 	}
 
 	/** Returns whether it is selected.
@@ -239,7 +250,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 			render(renderer, "value", _value);
 		resolveGroup(false);
 		if (_group != null)
-			render(renderer, "$group", _group.getUuid());
+			render(renderer, "_group", _group.getUuid());
 	}
 	
 	//-- ComponentCtrl --//

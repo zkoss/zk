@@ -69,17 +69,13 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (old) old._rmExtern(this);
 			this._group = group;
 			if (group) group._addExtern(this);
+			this._fixName();
 		}
 	},
-	set$group: function (gpuuid) { //called by server (render properties)
+	set_group: function (gpuuid) { //called by server (render properties)
 		var self = this;
 		zk.afterMount(function () {
-			var group;
-			self.setRadiogroup(group = zk.Widget.$(gpuuid));
-			if (group) {
-				var n = self.$n("real");
-				if (n) n.name = group.getName();
-			}
+			self.setRadiogroup(zk.Widget.$(gpuuid));
 		});
 	},
 
@@ -136,6 +132,11 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	getName: function () {
 		var group = this.getRadiogroup();
 		return group != null ? group.getName(): this.uuid;
+	},
+	_fixName: function () {
+		var n = this.$n("real");
+		if (n)
+			n.name = this.getName();
 	},
 	contentAttrs_: function () {
 		var html = this.$supers('contentAttrs_', arguments), v;
