@@ -1259,17 +1259,10 @@ jq(el).zk.center(); //same as 'center'
 			agt = document.createElement("span");
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
-
+		
 		// Bug 3049181
-		if (zk.ie6_) {
-			try {
-				var inps = el.getElementsByTagName("INPUT");
-				for (var i in inps) {
-					if (inps[i].type == "checkbox")
-						inps[i].defaultChecked = inps[i].checked;
-				}
-			} catch (e) {}
-		}
+		this._fixedVParent(el);
+		
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
 
@@ -1277,6 +1270,7 @@ jq(el).zk.center(); //same as 'center'
 		document.body.appendChild(el);
 		return this;
 	},
+	_fixedVParent: zk.$void,
 	/** Undoes the creation of a virtual parent of the first matched element.
 	 * <p>Refer to {@link #makeVParent} for more information. 
 	 * @return jqzk this object
@@ -1294,15 +1288,8 @@ jq(el).zk.center(); //same as 'center'
 			if (p) {
 				
 				// Bug 3049181
-				if (zk.ie6_) {
-					try {
-						var inps = el.getElementsByTagName("INPUT");
-						for (var i in inps) {
-							if (inps[i].type == "checkbox")
-								inps[i].defaultChecked = inps[i].checked;
-						}
-					} catch (e) {}
-				}
+				this._fixedVParent(el);
+				
 				if (agt) {
 					p.insertBefore(el, agt);
 					$agt.remove();

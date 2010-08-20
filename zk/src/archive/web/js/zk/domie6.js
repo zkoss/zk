@@ -211,4 +211,15 @@ jq(window).bind("beforeprint", function() {
 		_inPrint = false;
 	});
 
+zk.copy(zjq.prototype, {
+	_fixedVParent: function (el) {
+		try {
+			var inps = el.getElementsByTagName("INPUT");
+			for (var i in inps) {
+				if (inps[i].type == "checkbox")
+					inps[i].defaultChecked = inps[i].checked;
+			}
+		} catch (e) {}
+	}
+});
 })();
