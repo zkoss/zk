@@ -2745,7 +2745,7 @@ var Sizzle = function(selector, context, results, seed) {
 
 	if ( toString.call(checkSet) === "[object Array]" ) {
 		if ( !prune ) {
-			results.$addAll( checkSet ); //Potix
+			results.push.apply( results, checkSet );
 		} else if ( context && context.nodeType === 1 ) {
 			for ( var i = 0; checkSet[i] != null; i++ ) {
 				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && contains(context, checkSet[i])) ) {
@@ -3137,7 +3137,7 @@ var Expr = Sizzle.selectors = {
 				} else {
 					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
 					if ( !inplace ) {
-						result.$addAll( ret ); //Potix
+						result.push.apply( result, ret );
 					}
 					return false;
 				}
@@ -3388,7 +3388,7 @@ var makeArray = function(array, results) {
 	array = Array.prototype.slice.call( array, 0 );
 
 	if ( results ) {
-		results.$addAll( array ); //Potix
+		results.push.apply( results, array );
 		return results;
 	}
 	
@@ -4178,7 +4178,7 @@ jQuery.fn.extend({
 			});
 		} else if ( arguments.length ) {
 			var set = jQuery(arguments[0]);
-			set.$addAll( this.toArray() ); //Potix
+			set.push.apply( set, this.toArray() );
 			return this.pushStack( set, "before", arguments );
 		}
 	},
@@ -4190,7 +4190,7 @@ jQuery.fn.extend({
 			});
 		} else if ( arguments.length ) {
 			var set = this.pushStack( this, "after", arguments );
-			set.$addAll( jQuery(arguments[0]).toArray() ); //Potix
+			set.push.apply( set, jQuery(arguments[0]).toArray() );
 			return set;
 		}
 	},
