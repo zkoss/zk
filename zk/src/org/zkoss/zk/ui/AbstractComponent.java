@@ -246,22 +246,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (comp instanceof IdSpace)
 			((AbstractComponent)comp).bindToIdSpace(comp);
 
-		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is instanceof Component)
-			((AbstractComponent)is).bindToIdSpace(comp);
-		else if (is != null)
-			addFellowToPage(comp, is);
+		addFellow(comp, getSpaceOwnerOfParent(comp));
 	}
-	private static void addFellowToPage(Component comp, IdSpace owner) {
-		if (owner instanceof AbstractPage)
+	private static void addFellow(Component comp, IdSpace owner) {
+		if (owner instanceof Component)
+			((AbstractComponent)owner).bindToIdSpace(comp);
+		else if (owner instanceof Page)
 			((AbstractPage)owner).addFellow(comp);
-		else
+		else if (owner != null)
 			((SimpleIdSpace)owner).addFellow(comp);
 	}
-	private static void removeFellowFromPage(Component comp, IdSpace owner) {
-		if (owner instanceof AbstractPage)
+	private static void removeFellow(Component comp, IdSpace owner) {
+		if (owner instanceof Component)
+			((AbstractComponent)owner).unbindFromIdSpace(comp.getId());
+		else if (owner instanceof Page)
 			((AbstractPage)owner).removeFellow(comp);
-		else
+		else if (owner != null)
 			((SimpleIdSpace)owner).removeFellow(comp);
 	}
 	private static IdSpace getSpaceOwnerOfParent(Component comp) {
@@ -282,11 +282,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (comp instanceof IdSpace)
 			((AbstractComponent)comp).unbindFromIdSpace(compId);
 
-		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is instanceof Component)
-			((AbstractComponent)is).unbindFromIdSpace(compId);
-		else if (is != null)
-			removeFellowFromPage(comp, is);
+		removeFellow(comp, getSpaceOwnerOfParent(comp));
 	}
 	/** Checks the uniqueness in ID space when changing ID. */
 	private static void checkIdSpaces(final AbstractComponent comp, String newId) {
@@ -315,30 +311,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private static void addToIdSpacesDown(Component comp) {
 		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is instanceof Component)
-			addToIdSpacesDown(comp, (Component)is);
-		else if (is != null)
+		if (is != null)
 			addToIdSpacesDown(comp, is);
 	}
-	/** comp's ID might be auto id.
-	 * @param owner it must be an IdSpace
-	 */
-	private static void addToIdSpacesDown(Component comp, Component owner) {
-		if (!(comp instanceof NonFellow) && !isAutoId(comp.getId()))
-			((AbstractComponent)owner).bindToIdSpace(comp);
-
-		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
-			ac != null; ac = ac._next)
-				addToIdSpacesDown(ac, owner); //recursive
-
-		((AbstractComponent)comp).notifyIdSpaceChanged((IdSpace)owner);
-	}
-	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, IdSpace owner) {
-	//owner is non-component
 		if (!(comp instanceof NonFellow) && !isAutoId(comp.getId()))
-			addFellowToPage(comp, owner);
+			addFellow(comp, owner);
 
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
@@ -357,27 +335,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private static void removeFromIdSpacesDown(Component comp) {
 		final IdSpace is = getSpaceOwnerOfParent(comp);
-		if (is instanceof Component)
-			removeFromIdSpacesDown(comp, (Component)is);
-		else if (is != null)
+		if (is != null)
 			removeFromIdSpacesDown(comp, is);
 	}
-	private static void removeFromIdSpacesDown(Component comp, Component owner) {
-		final String compId = comp.getId();
-		if (!(comp instanceof NonFellow) && !isAutoId(compId))
-			((AbstractComponent)owner).unbindFromIdSpace(compId);
-
-		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
-			ac != null; ac = ac._next)
-				removeFromIdSpacesDown(ac, owner); //recursive
-
-		((AbstractComponent)comp).notifyIdSpaceChanged(null);
-	}
 	private static void removeFromIdSpacesDown(Component comp, IdSpace owner) {
-	//owner is non-component
 		if (!(comp instanceof NonFellow) && !isAutoId(comp.getId()))
-			removeFellowFromPage(comp, owner);
+			removeFellow(comp, owner);
 
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
@@ -390,32 +353,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Checks the uniqueness in ID space when changing parent. */
 	private static void checkIdSpacesDown(Component comp, Component newparent) {
 		final IdSpace is = newparent.getSpaceOwner();
-		if (is instanceof Component)
-			checkIdSpacesDown(comp, ((AbstractComponent)is)._auxinf.spaceInfo);
-		else if (is != null)
+		if (is != null)
 			checkIdSpacesDown(comp, is);
 	}
-	/** Checks comp and its descendants for the specified SpaceInfo. */
-	private static void checkIdSpacesDown(Component comp, SpaceInfo si) {
+	private static void checkIdSpacesDown(Component comp, IdSpace owner) {
 		final String compId = comp.getId();
-		if (!(comp instanceof NonFellow)
-		&& !isAutoId(compId) && si.fellows.containsKey(compId))
-			throw new UiException("Not unique in the new ID space: "+compId);
+		if (!(comp instanceof NonFellow) && !isAutoId(compId)
+		&& (owner instanceof Component ?
+			((AbstractComponent)owner)._auxinf.spaceInfo.fellows.containsKey(compId):
+			owner.hasFellow(compId)))
+			throw new UiException("Not unique in the ID space of "+owner+": "+compId);
 		if (!(comp instanceof IdSpace))
 			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
 			ac != null; ac = ac._next)
-				checkIdSpacesDown(ac, si); //recursive
-	}
-	/** Checks comp and its descendants for the specified page. */
-	private static void checkIdSpacesDown(Component comp, IdSpace idspace) {
-		final String compId = comp.getId();
-		if (!(comp instanceof NonFellow)
-		&& !isAutoId(compId) && idspace.hasFellow(compId))
-			throw new UiException("Not unique in the ID space of "+idspace+": "+compId);
-		if (!(comp instanceof IdSpace))
-			for (AbstractComponent ac = (AbstractComponent)comp.getFirstChild();
-			ac != null; ac = ac._next)
-				checkIdSpacesDown(ac, idspace); //recursive
+				checkIdSpacesDown(ac, owner); //recursive
 	}
 
 	/** Bind comp to this ID space (owned by this component).
@@ -478,7 +429,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_page != null && _page.getDesktop() != page.getDesktop())
 					throw new UiException("The new page must be in the same desktop: "+page);
 					//Not allow developers to access two desktops simutaneously
-				checkIdSpacesDown(this, (AbstractPage)page);
+				checkIdSpacesDown(this, page);
 
 				//No need to check UUID since checkIdSpacesDown covers it
 				//-- a page is an ID space
@@ -2806,7 +2757,7 @@ w:use="foo.MyWindow"&gt;
 			this.bindToIdSpace(this);
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
-			addToIdSpacesDown(p, this);
+			addToIdSpacesDown(p, (IdSpace)this);
 	}
 
 	//Serializable//
@@ -2966,7 +2917,7 @@ w:use="foo.MyWindow"&gt;
 				bindToIdSpace(this);
 			for (AbstractComponent ac = (AbstractComponent)getFirstChild();
 			ac != null; ac = ac._next)
-				addToIdSpacesDown(ac, this);
+				addToIdSpacesDown(ac, (IdSpace)this);
 		}
 
 		//didDeserialize
