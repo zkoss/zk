@@ -90,6 +90,7 @@ ZK 5.0.4
   3047534: The breeze theme's bandpopup is not high enough w/ listbox
   3048567: IE.Listbox rod.Drag huge data to bottom.Select and jump up
   3048564: IE only.Listbox rod, drag scroll to bottom, thumb jump up
+  3049181: Checkbox problem (bug) with Banbbox + tree
   
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

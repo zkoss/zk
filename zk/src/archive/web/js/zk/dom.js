@@ -1259,6 +1259,17 @@ jq(el).zk.center(); //same as 'center'
 			agt = document.createElement("span");
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
+
+		// Bug 3049181
+		if (zk.ie6_) {
+			try {
+				var inps = el.getElementsByTagName("INPUT");
+				for (var i in inps) {
+					if (inps[i].type == "checkbox")
+						inps[i].defaultChecked = inps[i].checked;
+				}
+			} catch (e) {}
+		}
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
 
@@ -1280,12 +1291,24 @@ jq(el).zk.center(); //same as 'center'
 			agt = $agt[0];
 
 			p = p ? jq('#' + p)[0]: agt ? agt.parentNode: null;
-			if (p)
+			if (p) {
+				
+				// Bug 3049181
+				if (zk.ie6_) {
+					try {
+						var inps = el.getElementsByTagName("INPUT");
+						for (var i in inps) {
+							if (inps[i].type == "checkbox")
+								inps[i].defaultChecked = inps[i].checked;
+						}
+					} catch (e) {}
+				}
 				if (agt) {
 					p.insertBefore(el, agt);
 					$agt.remove();
 				} else
 					p.appendChild(el);
+			}
 		}
 		return this;
 	},
