@@ -348,6 +348,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			node = wgt.$n(),
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
+			bfcolps = "before" == wgt.getCollapse(),
 			run = draggable.run, diff, fd;
 
 		if (vert) {
@@ -372,12 +373,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			s -= diff;
 			if (s < 0) s = 0;
 			run.next.style[fd] = s + "px";
+			if (!bfcolps) run.next.style.overflow = 'hidden';
 		}
 		if (run.prev) {
 			var s = zk.parseInt(run.prev.style[fd]);
 			s += diff;
 			if (s < 0) s = 0;
 			run.prev.style[fd] = s + "px";
+			if (bfcolps) run.prev.style.overflow = 'hidden';
 		}
 
 		if (run.nextwgt) zWatch.fireDown('onSize', run.nextwgt);
