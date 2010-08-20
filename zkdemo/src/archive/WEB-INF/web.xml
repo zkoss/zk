@@ -78,6 +78,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
+	<!--
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.svg</url-pattern>
@@ -86,10 +87,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.xml2html</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>zkLoader</servlet-name>
-		<url-pattern>*.mul</url-pattern>
-	</servlet-mapping>
+	-->
 
 	<!-- Optional. Uncomment it if you want to use richlets.
 	-->
