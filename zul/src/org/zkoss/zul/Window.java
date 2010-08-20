@@ -698,6 +698,10 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * <dt>center</dt>
 	 * <dd>Position the window at the center. {@link #setTop} and {@link #setLeft}
 	 * are both ignored.</dd>
+	 * <dt>nocenter</dt>
+	 * <dd>Not to position the window at the center. A modal window, by default,
+	 * will be position at the center. By specifying this value could
+	 * prevent it and the real position depends on {@link #setTop} and {@link #setLeft} (since 5.0.4)</dd>
 	 * <dt>left</dt>
 	 * <dd>Position the window at the left edge. {@link #setLeft} is ignored.</dd>
 	 * <dt>right</dt>

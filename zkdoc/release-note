@@ -9,12 +9,13 @@ ZK 5.0.4
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3030481: Combobox support Selectable (used with ListModel)
   3048583: Allow radiogroup not ancestor of radio so it can be anywhere
-  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
-  3025422: The listbox in a container support fixed header
-  3026221: Databinder shall fire onCreate when cloning each items
+  3049306: A way to control the position of a modal window by left/top
   3034530: The footer of components supports content alignment
   3047459: Include old value in InputEvent
   3038615: Include data of old width in ColSizeEvent
+  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
+  3025422: The listbox in a container support fixed header
+  3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
   3035171: <widget-class> (in lang.xml) shall support EL
   3032033: A way to customize the data format of AU requests
