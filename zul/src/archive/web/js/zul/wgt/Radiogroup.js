@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _concatItem(group) {
 		var sum = _concatItem0(group);
-		sum.push.apply(sum, group._externs);
+		sum.$addAll(group._externs);
 		return sum;
 	}
 	function _concatItem0(cmp) {

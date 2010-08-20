@@ -93,7 +93,7 @@ zk.copy(zk, (function() {
 			var afpk = _afterPkgLoad[pkg];
 			if (afpk) {
 				delete _afterPkgLoad[pkg];
-				_afterLoadFronts.push.apply(_afterLoadFronts, afpk); //add all
+				_afterLoadFronts.$addAll(afpk);
 			}
 
 			var deps = _pkgdepend[pkg];
