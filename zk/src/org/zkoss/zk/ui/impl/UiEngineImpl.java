@@ -852,22 +852,30 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException("pagedef");
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		boolean fakeIS = false;
 		if (parent != null) {
 			if (parent.getPage() != null)
 				page = parent.getPage();
-			if (page == null)
+			else
+				fakeIS = true;
+			if (page == null) {
+				fakeIS = true;
 				page = execCtrl.getCurrentPage();
+			}
 		}
 
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
 		final boolean fakepg = page == null;
-		if (fakepg) page = new PageImpl(pagedef);
+		if (fakepg) {
+			fakeIS = true;
+			page = new PageImpl(pagedef);
+		}
 
 		final Desktop desktop = exec.getDesktop();
-		final Page old = execCtrl.getCurrentPage();
-		if (page != null && page != old)
+		final Page prevpg = execCtrl.getCurrentPage();
+		if (page != null && page != prevpg)
 			execCtrl.setCurrentPage(page);
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPageDefinition(pagedef);
@@ -882,6 +890,9 @@ public class UiEngineImpl implements UiEngine {
 		//Note: the forward directives are ignore in this case
 
 		final Initiators inits = Initiators.doInit(pagedef, page);
+		final IdSpace prevIS = fakeIS ?
+			ExecutionsCtrl.setVirtualIdSpace(
+				fakepg ? (IdSpace)page: new SimpleIdSpace()): null;
 		try {
 			if (fakepg) pagedef.init(page, false);
 
@@ -906,8 +917,10 @@ public class UiEngineImpl implements UiEngine {
 			throw UiException.Aide.wrap(ex);
 		} finally {
 			exec.popArg();
-			execCtrl.setCurrentPage(old); //restore it
+			execCtrl.setCurrentPage(prevpg); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
+			if (fakeIS)
+				ExecutionsCtrl.setVirtualIdSpace(prevIS);
 
 			inits.doFinally();
 
