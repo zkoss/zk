@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 //define a package and returns the package info (used in WpdExtendlet)
 function zkpi(nm, wv) {
-	return {n: nm, p: zk.$package(nm, false, wv)};
+	return zk.isLoaded(nm) ? null: {n: nm, p: zk.$package(nm, false, wv)};
 }
 
 //ZK JSP: page creation (backward compatible)

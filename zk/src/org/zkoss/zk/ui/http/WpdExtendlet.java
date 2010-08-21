@@ -88,7 +88,24 @@ public class WpdExtendlet extends AbstractExtendlet {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
+		byte[] data = retrieve(request, response, path);
+		if (data == null)
+			return;
+
+		response.setContentType("text/javascript;charset=UTF-8");
+		if (_webctx.shallCompress(request, "wpd") && data.length > 200) {
+			byte[] bs = Https.gzip(request, response, null, data);
+			if (bs != null) data = bs; //yes, browser support compress
+		}
+		response.setContentLength(data.length);
+		response.getOutputStream().write(data);
+		response.flushBuffer();
+	}
+	private byte[] retrieve(HttpServletRequest request,
+	HttpServletResponse response, String path)
+	throws ServletException, IOException {
 		byte[] data;
+		String zkdevice = null; //non-null if zk
 		setProvider(new Provider(request, response));
 		try {
 			final Object rawdata = _cache.get(path);
@@ -97,7 +114,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 					log.error("Failed to load the resource: "+path);
 					//It might be eaten, so log the error
 				response.sendError(response.SC_NOT_FOUND, path);
-				return;
+				return null;
 			}
 
 			final boolean cacheable;
@@ -109,6 +126,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 				final WpdContent wc = (WpdContent)rawdata;
 				data = wc.toByteArray(request);
 				cacheable = wc.cacheable;
+				zkdevice = wc.zkdevice;
 			}
 			if (cacheable)
 				org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
@@ -117,14 +135,28 @@ public class WpdExtendlet extends AbstractExtendlet {
 			setProvider(null);
 		}
 
-		response.setContentType("text/javascript;charset=UTF-8");
-		if (_webctx.shallCompress(request, "wpd") && data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
-			if (bs != null) data = bs; //yes, browser support compress
+		if (zkdevice != null) {
+			ByteArrayOutputStream out = null;
+			for (Iterator it = LanguageDefinition.getByDeviceType(zkdevice).iterator();
+			it.hasNext();) {
+				for (Iterator it2 = ((LanguageDefinition)it.next())
+				.getMergeJavaScriptPackages().iterator(); it2.hasNext();) {
+					final String pkg = (String)it2.next();
+					if (out == null) {
+						out = new ByteArrayOutputStream(1024*100);
+						out.write(data);
+					}
+					data = retrieve(request, response, "/js/" + pkg + ".wpd");
+					if (data != null)
+						out.write(data);
+					else
+						log.error("Failed to load the resource: "+path);
+				}
+			}
+			if (out != null)
+				data = out.toByteArray();
 		}
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		return data;
 	}
 	/*package*/ Object parse(InputStream is, String path)
 	throws Exception {
@@ -142,10 +174,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 		final WpdContent wc =
 			zk || aaas || !cacheable || isWpdContentRequired(root) ?
-				new WpdContent(dir, cacheable): null;
+				new WpdContent(dir,
+					zk ? IDOMs.getRequiredAttributeValue(root, "device"): null,
+					cacheable): null;
 
 		final Provider provider = getProvider();
-		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
+		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*16);
 		String depends = null;
 		if (zk) {
 			write(out, "//ZK, Copyright 2009 Potix Corporation. Distributed under LGPL 3.0\n"
@@ -164,12 +198,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 				write(out, "',");
 			} else
 				write(out, '(');
-			write(out, "function(){zk._p=zkpi('");
+			write(out, "function(){if(zk._p=zkpi('");
 			write(out, name);
 			write(out, '\'');
 			if (provider != null && provider.getResource(dir + "wv/zk.wpd") != null)
 				write(out, ",true");
-			write(out, ");try{");
+			write(out, "))try{");
 		}
 
 		final Map moldInfos = new HashMap();
@@ -538,10 +572,16 @@ public class WpdExtendlet extends AbstractExtendlet {
 	/*package*/ class WpdContent {
 		private final String _dir;
 		private final List _cnt = new LinkedList();
+		private final String zkdevice;
 		private final boolean cacheable;
 
-		private WpdContent(String dir, boolean cacheable) {
+		/**
+		 * @param zkdevice the device type. It is not null if and only if
+		 * it is the zk package.
+		 */
+		private WpdContent(String dir, String zkdevice, boolean cacheable) {
 			_dir = dir;
+			this.zkdevice = zkdevice;
 			this.cacheable = cacheable;
 		}
 		private void add(byte[] bs) {

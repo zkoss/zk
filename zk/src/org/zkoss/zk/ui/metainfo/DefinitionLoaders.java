@@ -267,21 +267,20 @@ public class DefinitionLoaders {
 			final Element el = (Element)it.next();
 			String src = el.getAttributeValue("src"),
 				pkg = el.getAttributeValue("package"),
-				defer = el.getAttributeValue("defer");
+				merge = el.getAttributeValue("merge");
 			if (pkg != null) {
 				if (src != null)
 					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
-				if (!"true".equals(defer)) {
+				if (!"true".equals(merge)) {
 					src = "~./js/" + pkg + ".wpd";
 					pkg = null;
 				}
-			} else if ("true".equals(defer))
-				log.warning("The defer attribute omgpred since it can be used with package only, "+el.getLocator());
+			}
 
 			final String ctn = el.getText(true);
 			final JavaScript js;
 			if (pkg != null && pkg.length() > 0) {
-				langdef.addDeferJavaScriptPackage(pkg);
+				langdef.addMergeJavaScriptPackage(pkg);
 				continue; //TODO
 			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)

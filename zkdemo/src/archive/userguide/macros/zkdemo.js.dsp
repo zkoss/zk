@@ -1,8 +1,6 @@
 <%@ page contentType="text/javascript;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./js/zk.fmt.wpd"/>
-<c:include page="~./js/zul.wpd"/>
-<c:include page="~./js/zul.wgt.wpd"/>
 <c:include page="~./js/zul.mesh.wpd"/>
 <c:include page="~./js/zul.utl.wpd"/>
 <c:include page="~./js/zul.layout.wpd"/>
