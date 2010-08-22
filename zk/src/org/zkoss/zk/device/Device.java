@@ -172,4 +172,26 @@ public interface Device {
 	 * @since 5.0.0
 	 */
 	public boolean isClient(String userAgent, String type);
+
+	/** Reloads the client-side messages in the specified locale.
+	 *
+	 * <p>Notice that this method only reloads the <i>standard</i> messages.
+	 * The application has to update the component's content (such as labels)
+	 * manually if necessary.
+	 *
+	 * <p>Limitation: it reloads only the messages of ZK Client Engine
+	 * and ZUL components. It does not reload messages loaded by your
+	 * own JavaScript codes.
+	 *
+	 * @param locale the locale. If null, {@link org.zkoss.util.Locales#getCurrent}
+	 * is assumed.
+	 * @since 5.0.4
+	 */
+	public void reloadMessages(java.util.Locale locale)
+	throws java.io.IOException;
+	/** Converts a package to a path that can be accessible by the class loader
+	 * (classpath).
+	 * @since 5.0.4
+	 */
+	public String packageToPath(String pkg);
 }

@@ -55,6 +55,8 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.URIInfo;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * The extendlet to handle WPD (Widget Package Descriptor).
@@ -105,7 +107,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		byte[] data;
-		String zkdevice = null; //non-null if zk
+		boolean zkpkg = false;
 		setProvider(new Provider(request, response));
 		try {
 			final Object rawdata = _cache.get(path);
@@ -126,7 +128,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 				final WpdContent wc = (WpdContent)rawdata;
 				data = wc.toByteArray(request);
 				cacheable = wc.cacheable;
-				zkdevice = wc.zkdevice;
+				zkpkg = wc.zkpkg;
 			}
 			if (cacheable)
 				org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
@@ -135,29 +137,50 @@ public class WpdExtendlet extends AbstractExtendlet {
 			setProvider(null);
 		}
 
-		if (zkdevice != null) {
-			ByteArrayOutputStream out = null;
-			for (Iterator it = LanguageDefinition.getByDeviceType(zkdevice).iterator();
-			it.hasNext();) {
-				for (Iterator it2 = ((LanguageDefinition)it.next())
-				.getMergeJavaScriptPackages().iterator(); it2.hasNext();) {
-					final String pkg = (String)it2.next();
-					if (out == null) {
-						out = new ByteArrayOutputStream(1024*100);
-						out.write(data);
-					}
-					data = retrieve(request, response, "/js/" + pkg + ".wpd");
-					if (data != null)
-						out.write(data);
-					else
-						log.error("Failed to load the resource: "+path);
-				}
-			}
-			if (out != null)
-				data = out.toByteArray();
-		}
-		return data;
+		return zkpkg ? mergeJavaScript(request, response, data): data;
 	}
+	/** Returns the device type for this WpdExtendlet.
+	 * <p>Default: ajax.
+	 * The derived class might override it to implement a Wpd extendlet
+	 * for other devices.
+	 * @since 5.0.4
+	 */
+	protected String getDeviceType() {
+		return "ajax";
+	}
+	/** Merges the JavaScript code of the mergeable packages defined in
+	 * {@link LanguageDefinition#getMergeJavaScriptPackages}.
+	 * @since 5.0.4.
+	 */
+	protected byte[] mergeJavaScript(HttpServletRequest request,
+	HttpServletResponse response, byte[] data)
+	throws ServletException, IOException {
+		ByteArrayOutputStream out = null;
+		Device device = null;
+		final String deviceType = getDeviceType();
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			for (Iterator it2 = ((LanguageDefinition)it.next())
+			.getMergeJavaScriptPackages().iterator(); it2.hasNext();) {
+				final String pkg = (String)it2.next();
+				if (out == null) {
+					out = new ByteArrayOutputStream(1024*100);
+					out.write(data);
+
+					device = Devices.getDevice(deviceType);
+				}
+
+				final String path = device.packageToPath(pkg);
+				data = retrieve(request, response, path);
+				if (data != null)
+					out.write(data);
+				else
+					log.error("Failed to load the resource: "+path);
+			}
+		}
+		return out != null ? out.toByteArray(): data;
+	}
+
 	/*package*/ Object parse(InputStream is, String path)
 	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
@@ -174,9 +197,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 		final WpdContent wc =
 			zk || aaas || !cacheable || isWpdContentRequired(root) ?
-				new WpdContent(dir,
-					zk ? IDOMs.getRequiredAttributeValue(root, "device"): null,
-					cacheable): null;
+				new WpdContent(dir, zk, cacheable): null;
 
 		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*16);
@@ -572,16 +593,15 @@ public class WpdExtendlet extends AbstractExtendlet {
 	/*package*/ class WpdContent {
 		private final String _dir;
 		private final List _cnt = new LinkedList();
-		private final String zkdevice;
+		private final boolean zkpkg;
 		private final boolean cacheable;
 
 		/**
-		 * @param zkdevice the device type. It is not null if and only if
-		 * it is the zk package.
+		 * @param zkpkg whether it is the zk package.
 		 */
-		private WpdContent(String dir, String zkdevice, boolean cacheable) {
+		private WpdContent(String dir, boolean zkpkg, boolean cacheable) {
 			_dir = dir;
-			this.zkdevice = zkdevice;
+			this.zkpkg = zkpkg;
 			this.cacheable = cacheable;
 		}
 		private void add(byte[] bs) {

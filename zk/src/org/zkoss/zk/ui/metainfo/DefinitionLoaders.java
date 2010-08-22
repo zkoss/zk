@@ -46,6 +46,8 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.PageRenderer;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * Utilities to load language definitions.
@@ -211,9 +213,11 @@ public class DefinitionLoaders {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
 		final LanguageDefinition langdef;
+		final Device device;
 		if (addon) {
 			if (log.debugable()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
+			device = Devices.getDevice(langdef.getDeviceType());
 
 			if (root.getElement("case-insensitive") != null)
 				throw new UiException("case-insensitive not allowed in addon");
@@ -239,6 +243,7 @@ public class DefinitionLoaders {
 			langdef = new LanguageDefinition(
 				deviceType, lang, ns, exts, pageRenderer,
 				"true".equals(ignoreCase), "true".equals(bNative), locator);
+			device = Devices.getDevice(deviceType);
 		}
 
 		parsePI(langdef, doc);
@@ -273,7 +278,7 @@ public class DefinitionLoaders {
 				if (src != null)
 					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
 				if (!ondemand && !merge) {
-					src = "~./js/" + pkg + ".wpd";
+					src = "~." + device.packageToPath(pkg);
 					pkg = null;
 				}
 			}
@@ -282,7 +287,7 @@ public class DefinitionLoaders {
 			final JavaScript js;
 			if (pkg != null && pkg.length() > 0) {
 				if (ondemand) {
-					langdef.removeJavaScript("~./js/" + pkg + ".wpd");
+					langdef.removeJavaScript("~." + device.packageToPath(pkg));
 					langdef.removeMergeJavaScriptPackage(pkg);
 				} else {
 					langdef.addMergeJavaScriptPackage(pkg);

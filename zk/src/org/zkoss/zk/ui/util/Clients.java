@@ -19,17 +19,11 @@ package org.zkoss.zk.ui.util;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.io.InputStream;
-import java.io.IOException;
-
-import org.zkoss.util.Locales;
-import org.zkoss.io.Files;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.http.Wpds;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.*;
 
@@ -300,35 +294,13 @@ public class Clients {
 	 * and ZUL components. It does not reload messages loaded by your
 	 * own JavaScript codes.
 	 *
-	 * @param locale the locale. If null, {@link Locales#getCurrent}
+	 * @param locale the locale. If null, {@link org.zkoss.util.Locales#getCurrent}
 	 * is assumed.
+	 * @exception UnsupportedOperationException if the device is not ajax.
 	 * @since 3.6.3
 	 */
 	public static final void reloadMessages(Locale locale)
-	throws IOException {
-		if (locale == null)
-			locale = Locales.getCurrent();
-
-		final StringBuffer sb = new StringBuffer(4096);
-		final Locale oldl = Locales.setThreadLocal(locale);
-		try {
-			final Execution exec = Executions.getCurrent();
-			sb.append(loadJS(exec, "~./js/zk/lang/msgzk*.js"));
-			sb.append(Wpds.outLocaleJavaScript());
-			sb.append(loadJS(exec, "~./js/zul/lang/msgzul*.js"));
-		} finally {
-			Locales.setThreadLocal(oldl);
-		}
-		response("zk.reload", new AuScript(null, sb.toString()));
-	}
-	private static String loadJS(Execution exec, String path)
-	throws IOException {
-		path = exec.locate(path);
-		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
-		if (is == null)
-			throw new UiException("Unable to load "+path);
-		final byte[] bs = Files.readAll(is);
-		Files.close(is);
-		return new String(bs, "UTF-8"); //UTF-8 is assumed
+	throws java.io.IOException {
+		Executions.getCurrent().getDesktop().getDevice().reloadMessages(locale);
 	}
 }
