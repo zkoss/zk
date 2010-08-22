@@ -189,9 +189,16 @@ public interface Device {
 	 */
 	public void reloadMessages(java.util.Locale locale)
 	throws java.io.IOException;
-	/** Converts a package to a path that can be accessible by the class loader
-	 * (classpath).
+	/** Converts a package to an absolute path that can be accessible by
+	 * the class loader (classpath).
 	 * @since 5.0.4
 	 */
 	public String packageToPath(String pkg);
+	/** Converts a relative path to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * @param path the path (never null).
+	 * It is assumed to be a relative path if not starting with '/' or '~'.
+	 * @since 5.0.4
+	 */
+	public String toAbsolutePath(String path);
 }

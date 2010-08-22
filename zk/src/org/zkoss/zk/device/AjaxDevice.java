@@ -76,6 +76,18 @@ public class AjaxDevice extends GenericDevice {
 	public String packageToPath(String pkg) {
 		return "/js/" + pkg + ".wpd";
 	}
+	/** Converts a relative path to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * <p>Default: "/js/" + path (if path doesn't start with '/' or '~').
+	 * @param path the path (never null).
+	 * It is assumed to be a relative path if not starting with '/' or '~'.
+	 * @since 5.0.4
+	 */
+	public String toAbsolutePath(String path) {
+		final char cc = path.length() > 0 ? path.charAt(0): (char)0;
+		return cc != '/' && cc != '~' ? "/js/" + path: path;
+	}
+
 	public void reloadMessages(Locale locale)
 	throws IOException {
 		if (locale == null)

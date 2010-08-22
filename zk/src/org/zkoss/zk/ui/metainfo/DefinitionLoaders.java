@@ -486,7 +486,8 @@ public class DefinitionLoaders {
 						String n = wn != null ? wn: wgtnm;
 						if (!withEL(n)) {
 							int k = n.lastIndexOf('.');
-							cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+							cssURI = "~." + device.toAbsolutePath(
+								n.substring(0, k).replace('.', '/') + '/' + cssURI);
 						} else {
 							log.error("Absolute path required for cssURI, since the widget class contains EL expressions, "+e.getLocator());
 						}
