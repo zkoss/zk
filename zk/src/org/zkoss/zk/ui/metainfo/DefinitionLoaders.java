@@ -266,12 +266,13 @@ public class DefinitionLoaders {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			String src = el.getAttributeValue("src"),
-				pkg = el.getAttributeValue("package"),
-				merge = el.getAttributeValue("merge");
+				pkg = el.getAttributeValue("package");
+			final boolean merge = "true".equals(el.getAttributeValue("merge"));
+			final boolean ondemand = "true".equals(el.getAttributeValue("ondemand"));
 			if (pkg != null) {
 				if (src != null)
 					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
-				if (!"true".equals(merge)) {
+				if (!ondemand && !merge) {
 					src = "~./js/" + pkg + ".wpd";
 					pkg = null;
 				}
@@ -280,7 +281,12 @@ public class DefinitionLoaders {
 			final String ctn = el.getText(true);
 			final JavaScript js;
 			if (pkg != null && pkg.length() > 0) {
-				langdef.addMergeJavaScriptPackage(pkg);
+				if (ondemand) {
+					langdef.removeJavaScript("~./js/" + pkg + ".wpd");
+					langdef.removeMergeJavaScriptPackage(pkg);
+				} else {
+					langdef.addMergeJavaScriptPackage(pkg);
+				}
 				continue; //TODO
 			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)

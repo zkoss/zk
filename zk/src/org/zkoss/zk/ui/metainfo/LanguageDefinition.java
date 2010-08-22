@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.resource.Locator;
@@ -591,6 +592,20 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_js.add(js);
 	}
+	/** Removes a {@link JavaScript} of the give source required by this language.
+	 * @see #addJavaScript
+	 * @since 5.0.4
+	 */
+	public void removeJavaScript(String src) {
+		final Object[] ary = _js.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final JavaScript js = (JavaScript)ary[j];
+			if (Objects.equals(src, js.getSrc())) {
+				_js.remove(js);
+				return; //found
+			}
+		}
+	}
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
@@ -609,6 +624,12 @@ public class LanguageDefinition {
 		if (pkg == null || pkg.length() == 0)
 			throw new IllegalArgumentException();
 		_mergepkgs.add(pkg);
+	}
+	/** Removes a mergeable JavaScript package required by this language.
+	 * @since 5.0.4
+	 */
+	public void removeMergeJavaScriptPackage(String pkg) {
+		_mergepkgs.remove(pkg);
 	}
 	/** Returns a list of mergeable JavaScript package (String)
 	 * required by this language.
