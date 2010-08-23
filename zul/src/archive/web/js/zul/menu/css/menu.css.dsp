@@ -282,6 +282,7 @@
 	margin:2px 3px;
 	overflow:hidden;
 	width:auto;
+	height: 1px;
 }
 <%--define menubar hor scroll--%>
 .z-menubar-hor-scroll {
