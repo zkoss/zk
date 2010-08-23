@@ -238,6 +238,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				}
 			}							
 		}
+		//bug #3051305: Active Page not update when drag & drop item to the end
+		if (isReorder) {
+			checkInvalidateForMoved(newItem, true);
+		}
 		if (super.insertBefore(child, refChild)) {
 			if(hasGroup()) {
 				final int
@@ -284,7 +288,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				
 			}
 			
-			afterInsert(child);
+			//bug #3049167: Total size increase when drag & drop item in listbox/Grid
+			if (!isReorder) { 
+				afterInsert(child);
+			}
 			return true;
 		}
 		return false;

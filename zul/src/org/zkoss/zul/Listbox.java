@@ -1447,6 +1447,10 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			final Listitem newItem = (Listitem)newChild;
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
+			//bug #3051305: Active Page not update when drag & drop item to the end
+			if (isReorder && newChild instanceof Listitem) {
+				checkInvalidateForMoved((Listitem)newChild, true);
+			}
 			if (super.insertBefore(newChild, refChild)) {
 				//Maintain _items
 				final int
@@ -1528,7 +1532,10 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 						if (g[2] != -1 && (g[2] >= index || newItem instanceof Listgroupfoot)) g[2]++;
 					}
 				}
-				afterInsert(newChild);
+				//bug #3049167: Total size increase when drag & drop item in listbox/Grid
+				if (!isReorder) { 
+					afterInsert(newChild);
+				}
 				return true;
 			} //insert
 		} else if (newChild instanceof Listhead) {

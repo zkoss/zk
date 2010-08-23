@@ -184,6 +184,15 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		_visibleItemCount += count;
 	}
 	
+	//bug #3051305: Active Page not update when drag & drop item to the end
+	public boolean insertBefore(Component newChild, Component refChild) {
+		final Tree tree = getTree();
+		if (newChild.getParent() == this && tree != null && tree.inPagingMold()) { //might change page, have to invalidate 
+			invalidate();
+		}
+		return super.insertBefore(newChild, refChild);
+	}
+	
 	/** @deprecated As of release 3.0.7, the page size is controlled
 	 * by {@link Tree#getPageSize} rather than this method.
 	 * It always return -1 since 3.0.7.

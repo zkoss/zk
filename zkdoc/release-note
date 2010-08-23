@@ -30,7 +30,9 @@ ZK 3.6.5
   2975020: Image component behaves wrongly (3.6)
   3042935: ZK 3.6 send extra onSort for listheader
   3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
-
+  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+  3051305: Active Page not update when drag & drop item to the end
+  
 * Upgrade Notes:
 
 	--------
