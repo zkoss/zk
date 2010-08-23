@@ -103,9 +103,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		/** Returns the value.
 		 * <p>Default: "".
 		 * @return String
+		 * @since 5.0.4
 		 */
 		/** Sets the value.
 		 * @param String value the value; If null, it is considered as empty.
+		 * @since 5.0.4
 		 */
 		value: function (v) {
 			var n = this.$n('real');

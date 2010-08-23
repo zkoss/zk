@@ -61,6 +61,7 @@ org.zkoss.zk.ui.ext.Disable {
 	 * Returns the value.
 	 * <p>
 	 * Default: "".
+	 * @since 5.0.4
 	 */
 	public String getValue();
 
@@ -69,6 +70,7 @@ org.zkoss.zk.ui.ext.Disable {
 	 * 
 	 * @param value
 	 *            the value; If null, it is considered as empty.
+	 * @since 5.0.4
 	 */
 	public void setValue(String value);
 	

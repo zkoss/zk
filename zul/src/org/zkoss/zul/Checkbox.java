@@ -92,12 +92,14 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 
 	/** Returns the value.
 	 * <p>Default: "".
+	 * @since 5.0.4
 	 */
 	public String getValue() {
 		return _value;
 	}
 	/** Sets the value.
 	 * @param value the value; If null, it is considered as empty.
+	 * @since 5.0.4
 	 */
 	public void setValue(String value) {
 		if (value == null)
