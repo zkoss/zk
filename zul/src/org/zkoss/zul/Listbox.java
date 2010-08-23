@@ -1448,7 +1448,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			final int jfrom = newItem.getParent() == this ? newItem.getIndex(): -1;
 
 			//bug #3051305: Active Page not update when drag & drop item to the end
-			if (isReorder && newChild instanceof Listitem) {
+			if (isReorder) {
 				checkInvalidateForMoved((Listitem)newChild, true);
 			}
 			if (super.insertBefore(newChild, refChild)) {
