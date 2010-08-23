@@ -29,7 +29,8 @@ ZK 5.0.4
   2990932: Allow disable load-on-save mechanism in databinder
   3024156: Make Spring DelegatingVariableResolver execution-independent
   3050359: A way to merge serveral Javascript packages into the zk package
-  2142143:Support for Value property in checkbox
+  2142143: Support for Value property in checkbox
+  3051362: A way to specify system-wide variable resolver
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number

@@ -38,6 +38,7 @@ import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
+import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
@@ -101,7 +102,8 @@ public class Configuration {
 		_execInits = new FastReadArray(Class.class),
 		_execCleans = new FastReadArray(Class.class),
 		_uiCycles = new FastReadArray(UiLifeCycle.class),
-		_composers = new FastReadArray(Class.class);
+		_composers = new FastReadArray(Class.class),
+		_resolvers = new FastReadArray(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final FastReadArray
@@ -192,7 +194,7 @@ public class Configuration {
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link Composer},
+	 * {@link Composer}, {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
 	 * and/or {@link EventInterceptor} interfaces.
@@ -277,6 +279,10 @@ public class Configuration {
 			_composers.add(klass); //not instance
 			added = true;
 		}
+		if (VariableResolver.class.isAssignableFrom(klass)) {
+			_resolvers.add(klass); //not instance
+			added = true;
+		}
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
@@ -348,6 +354,7 @@ public class Configuration {
 		_execCleans.remove(klass);
 
 		_composers.remove(klass);
+		_resolvers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
@@ -924,6 +931,22 @@ public class Configuration {
 	 */
 	public Composer getComposer(Page page) throws Exception {
 		return MultiComposer.getComposer(page, (Class[])_composers.toArray());
+	}
+
+	/** Initializes the given page with the variable resolvers registered
+	 * by {@link #addListener}.
+	 * It must be called before accessing a page (actually in {@link org.zkoss.zk.ui.sys.PageCtrl#preInit}).
+	 * @since 5.0.4
+	 */
+	public void init(Page page) {
+		final Class[] classes = (Class[])_resolvers.toArray();
+		for (int j = 0; j < classes.length; ++j) {
+			try {
+				page.addVariableResolver((VariableResolver)classes[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+classes[j], ex);
+			}
+		}
 	}
 
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}

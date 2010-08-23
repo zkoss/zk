@@ -606,6 +606,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_desktop = exec.getDesktop();
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
+
+		_desktop.getWebApp().getConfiguration().init(this);
 	}
 	public void init(PageConfig config) {
 		final Execution exec = Executions.getCurrent();

@@ -356,8 +356,8 @@ public class UiEngineImpl implements UiEngine {
 				pagedef.initXelContext(page);
 
 				final Initiators inits = Initiators.doInit(pagedef, page);
-				try {
 					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
+				try {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 
 					final Component[] comps;

@@ -199,7 +199,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Optional -->
 	<!-- Map extensions to the xml language.
-		 By default, xml is mapped to xml -->
+		 By default, xml is mapped to xml
 	<language-mapping>
 		<language-name>xml</language-name>
 		<extension>svg</extension>
@@ -208,6 +208,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<language-name>xml</language-name>
 		<extension>xml2html</extension>
 	</language-mapping>
+	-->
 	<!-- Map extensions to the xul/html language
 		 By default, xul/html are mapped to zul and xul.
 	<language-mapping>
