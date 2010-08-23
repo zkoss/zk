@@ -172,6 +172,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			this._increase(false);
 			this._startAutoIncProc(false);
 		}
+		
+		// disable browser's text selection
+		evt.stop();
 	},
 	/**
 	 * Sets bound value if the value out of range 

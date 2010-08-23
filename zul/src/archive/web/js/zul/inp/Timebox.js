@@ -394,6 +394,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// cache it for IE
 		this._lastPos = this._getPos();
 		this._changed = true;
+		
+		// disable browser's text selection
+		evt.stop();
 	},
 	_btnUp: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
