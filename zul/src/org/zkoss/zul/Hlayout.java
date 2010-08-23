@@ -52,4 +52,12 @@ public class Hlayout extends HtmlBasedComponent {
 	public String getZclass() {
 		return _zclass == null ? "z-hlayout" : _zclass;
 	}
+	
+	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "spacing", _spacing);
+	}
 }

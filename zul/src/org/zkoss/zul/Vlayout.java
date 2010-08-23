@@ -51,4 +51,11 @@ public class Vlayout extends HtmlBasedComponent {
 	public String getZclass() {
 		return _zclass == null ? "z-vlayout" : _zclass;
 	}
+	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "spacing", _spacing);
+	}
 }
