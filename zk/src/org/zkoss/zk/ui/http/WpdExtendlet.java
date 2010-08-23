@@ -87,6 +87,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		config.addCompressExtension("wpd");
 	}
 
+	//@Override
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
@@ -103,7 +104,10 @@ public class WpdExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	private byte[] retrieve(HttpServletRequest request,
+	/** Retrieves the content of the given path.
+	 * @since 5.0.4
+	 */
+	protected byte[] retrieve(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		byte[] data;

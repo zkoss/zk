@@ -28,7 +28,7 @@ ZK 5.0.4
   1860341: Button support type="submit"
   2990932: Allow disable load-on-save mechanism in databinder
   3024156: Make Spring DelegatingVariableResolver execution-independent
-  3050359: A way to merge serveral JS packages into the zk package
+  3050359: A way to merge serveral Javascript packages into the zk package
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -230,6 +230,7 @@ June 29, 2010
   3022174: Scroll remains upon closing tabs
   3022669: listbox hflex="min" sizedByContent="true" not work
   3022839: (IE8) Clients.confirmClose & A component image without href
+  3049263: SelectEvent.getSelectEvent fails converting String to List
   3025674: When Listbox mold=select, add listhead cause html error
 
 * Upgrade Notes
