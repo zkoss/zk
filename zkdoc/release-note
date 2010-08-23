@@ -96,8 +96,9 @@ ZK 5.0.4
   3048564: IE only.Listbox rod, drag scroll to bottom, thumb jump up
   3049192: createComponents with parent but w/o page fail if fellow
   3049181: Checkbox problem (bug) with Banbbox + tree
-  3049167: Bug in drag & drop demo
+  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
   3051182: Nested box's splitter not fixed correctly if size inner one
+  3051305: Active Page not update when drag & drop item to the end
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

@@ -1775,6 +1775,10 @@ public class Listbox extends XulElement implements Paginated,
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
 			final boolean isReorder = newChild.getParent() == this;
+			//bug #3051305: Active Page not update when drag & drop item to the end
+			if (isReorder) {
+				checkInvalidateForMoved((Listitem)newChild, true);
+			}
 			if (_rod && hasGroupsModel()) {
 				if (_groupsInfo.isEmpty())
 					_groupsInfo = ((GroupsListModel) getModel())
@@ -1972,7 +1976,7 @@ public class Listbox extends XulElement implements Paginated,
 							g[2] = g[0] + g[1] - 1;
 					}
 				}
-				//bug #3049167: Bug in drag & drop demo
+				//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
 				if (!isReorder) { //if reorder, not an insert
 					afterInsert(newChild);
 				}
