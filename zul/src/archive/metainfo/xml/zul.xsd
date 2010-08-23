@@ -860,6 +860,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- colorbox -->

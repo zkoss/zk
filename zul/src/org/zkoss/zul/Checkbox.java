@@ -37,6 +37,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  */
 public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Checkbox {
+	private String _value = "";
 	/** The name. */
 	private String _name;
 	private int _tabindex;
@@ -89,6 +90,24 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 		}
 	}
 
+	/** Returns the value.
+	 * <p>Default: "".
+	 */
+	public String getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value; If null, it is considered as empty.
+	 */
+	public void setValue(String value) {
+		if (value == null)
+			value = "";
+		if (!Objects.equals(_value, value)) {
+			_value = value;
+			smartUpdate("value", _value);
+		}
+	}
+	
 	/** Returns the name of this component.
 	 * <p>Default: null.
 	 * <p>Don't use this method if your application is purely based
@@ -148,7 +167,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-
+		if (_value != null)
+			render(renderer, "value", _value);
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 

@@ -58,6 +58,21 @@ org.zkoss.zk.ui.ext.Disable {
 	public void setChecked(boolean checked);
 
 	/**
+	 * Returns the value.
+	 * <p>
+	 * Default: "".
+	 */
+	public String getValue();
+
+	/**
+	 * Sets the value.
+	 * 
+	 * @param value
+	 *            the value; If null, it is considered as empty.
+	 */
+	public void setValue(String value);
+	
+	/**
 	 * Returns the name of this component.
 	 * <p>
 	 * Default: null.

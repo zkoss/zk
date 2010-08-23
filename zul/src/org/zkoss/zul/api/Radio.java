@@ -44,20 +44,4 @@ public interface Radio extends Checkbox {
 	 * is a group.
 	 */
 	public org.zkoss.zul.api.Radiogroup getRadiogroupApi();
-
-	/**
-	 * Returns the value.
-	 * <p>
-	 * Default: "".
-	 */
-	public String getValue();
-
-	/**
-	 * Sets the value.
-	 * 
-	 * @param value
-	 *            the value; If null, it is considered as empty.
-	 */
-	public void setValue(String value);
-
 }

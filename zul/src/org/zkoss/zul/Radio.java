@@ -42,7 +42,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
-	private String _value = "";
+	
 	/** At most one of _group and _groupId will be non-null. */
 	private Radiogroup _group;
 	/** At most one of _group and _groupId will be non-null. */
@@ -183,24 +183,6 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 		}
 	}
 
-	/** Returns the value.
-	 * <p>Default: "".
-	 */
-	public String getValue() {
-		return _value;
-	}
-	/** Sets the value.
-	 * @param value the value; If null, it is considered as empty.
-	 */
-	public void setValue(String value) {
-		if (value == null)
-			value = "";
-		if (!Objects.equals(_value, value)) {
-			_value = value;
-			smartUpdate("value", _value);
-		}
-	}
-
 	/** Returns the name of this radio button.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
@@ -246,8 +228,6 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_value != null)
-			render(renderer, "value", _value);
 		resolveGroup(false);
 		if (_group != null)
 			render(renderer, "u$radiogroup", _group.getUuid());

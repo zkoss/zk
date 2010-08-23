@@ -28,19 +28,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
-	$define: {
-		/** Returns the value.
-		 * <p>Default: "".
-		 * @return String
-		 */
-		/** Sets the value.
-		 * @param String value the value; If null, it is considered as empty.
-		 */
-		value: function (v) {
-			var n = this.$n('real');
-			if (n) n.value = v || '';
-		}
-	},
 	/** Returns {@link Radiogroup} that this radio button belongs to.
 	 * It is the nearest ancestor {@link Radiogroup}.
 	 * In other words, it searches up the parent, parent's parent
@@ -131,12 +118,6 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		var n = this.$n("real");
 		if (n)
 			n.name = this.getName();
-	},
-	contentAttrs_: function () {
-		var html = this.$supers('contentAttrs_', arguments), v;
-		if (v = this.getValue())
-			html += ' value="' + v + '"';
-		return html;
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
