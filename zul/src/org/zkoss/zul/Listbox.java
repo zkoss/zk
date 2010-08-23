@@ -1774,18 +1774,21 @@ public class Listbox extends XulElement implements Paginated,
 
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
+			final boolean isReorder = newChild.getParent() == this;
 			if (_rod && hasGroupsModel()) {
 				if (_groupsInfo.isEmpty())
 					_groupsInfo = ((GroupsListModel) getModel())
 							.getGroupsInfo();
 				refChild = fixRefChildBeforeFoot(refChild);
 				if (super.insertBefore(newChild, refChild)) {
-					afterInsert(newChild);
+					//bug #3049167: Bug in drag & drop demo
+					if (!isReorder) {
+						afterInsert(newChild);
+					}
 					return true;
 				}
 				return false;
 			}
-			final boolean isReorder = newChild.getParent() == this;
 			if (newChild instanceof Listgroupfoot) {
 				if (refChild == null) {
 					if (isReorder) {
@@ -1969,7 +1972,10 @@ public class Listbox extends XulElement implements Paginated,
 							g[2] = g[0] + g[1] - 1;
 					}
 				}
-				afterInsert(newChild);
+				//bug #3049167: Bug in drag & drop demo
+				if (!isReorder) { //if reorder, not an insert
+					afterInsert(newChild);
+				}
 				return true;
 			} // insert
 		} else if (newChild instanceof Listhead) {

@@ -243,11 +243,15 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	}
 	public boolean insertBefore(Component child, Component refChild) {
 		final Grid grid = getGrid();
+		final boolean isReorder = child.getParent() == this;
 		if (grid != null && grid.isRod() && hasGroupsModel()) {
 			if (_groupsInfo.isEmpty())
 				_groupsInfo = ((GroupsListModel)grid.getModel()).getGroupsInfo();
 			if (super.insertBefore(child, refChild)) {
-				afterInsert(child);
+				//bug #3049167: Bug in drag & drop demo
+				if (!isReorder) {
+					afterInsert(child);
+				}
 				return true;
 			}
 			return false;
@@ -256,7 +260,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		Row newItem = (Row) child;
 		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
 
-		final boolean isReorder = child.getParent() == this;
 		if (newItem instanceof Groupfoot){
 			if (refChild == null) {
 				if (isReorder) {
@@ -335,7 +338,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				
 			}
 			
-			afterInsert(child);
+			//bug #3049167: Bug in drag & drop demo
+			if (!isReorder) {
+				afterInsert(child);
+			}
 			return true;
 		}
 		return false;
