@@ -247,10 +247,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var	topmost = this.isTopmost();
 		if (topmost) {
 			this.$class._rmActive(this);
-			if (this.menupopup && this.getMenubar().isAutodrop()) {
+			var mb = this.getMenubar();
+			if (this.menupopup && mb.isAutodrop()) {
 				if (this.menupopup.isOpen())
 					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
+				if (!mb._fixedWebKit)
+					zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);

@@ -246,13 +246,26 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					// Bug #2154611 we shall eat the onclick event, if it is FF3.
 				}
 			}
-			if (!topmost)
-				for (var p = this.parent; p; p = p.parent)
-					if (p.$instanceof(zul.menu.Menupopup))
+			if (!topmost) {
+				for (var fixedWebKit = zk.safari, p = this.parent; p; p = p.parent) {
+					if (p.$instanceof(zul.menu.Menupopup)) {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
-						if (p.isOpen() && !this._uplder /*Bug #2911385 && !this._popup*/)							
+						if (p.isOpen() && !this._uplder /*Bug #2911385 && !this._popup*/) {							
 							p.close({sendOnOpen:true});
-						else break;
+							if (fixedWebKit) {
+								var mb = this.getMenubar();
+								fixedWebKit = false;
+								if (mb.isAutodrop()) {
+									mb._fixedWebKit = true;
+    								setTimeout(function () {
+    									mb._fixedWebKit = false;
+    								}, 10);
+								}
+							}
+						} else break;
+					}
+				}
+			}
 										
 			this.$class._rmActive(this);
 			this.$super('doClick_', evt, true);			
