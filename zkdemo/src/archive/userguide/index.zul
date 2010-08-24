@@ -80,7 +80,7 @@ zk.override(zAu, "beforeSend", function (uri, req) {
 		&& !nm.startsWith("onChang") && !nm.startsWith("onBandScroll")) {
 			var data = req.data||{},
 				value = data.items && data.items[0]?data.items[0].id:data.value;
-			pageTracker._trackPageview((t.desktop?t.desktop.requestPath:"") + "/au/" + t.id + "/" + nm + (value?"/"+value:""));
+			pageTracker._trackPageview(uri +"/" + t.id + "/" + nm + (value?"/"+value:""));
 		}
 	} catch (e) {
 	}
