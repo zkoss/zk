@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3052381.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 25 00:22:34     2010, Created by Jimmyshiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ul> 
+			<li>Sets your browser in italian</li>
+			<li>The week names shall be the same with calendar</li>
+		</ul>
+	]]></html>
+	<script type="text/javascript"><![CDATA[
+		zk.load('zul.db');
+		setTimeout(function(){
+			var d = new Date();
+			for(var i = 0; i < 7; i++) {
+				zk.log(zk.fmt.Date.formatDate(d,'EEE MM/d'));
+				d.setDate(d.getDate() + 1);
+			}
+		},300);
+	]]></script>
+	<calendar/>
+</zk>
+

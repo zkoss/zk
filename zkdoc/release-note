@@ -100,6 +100,8 @@ ZK 5.0.4
   3051182: Nested box's splitter not fixed correctly if size inner one
   3051305: Active Page not update when drag & drop item to the end
   3042016: Grid rod does not work if new Grid with Java code
+  3051987: Readonly combobox has a border between button and input
+  3052381: Client side dateformater parse a wrong value in italian 
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
