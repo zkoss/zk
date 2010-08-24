@@ -111,7 +111,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * the sub model.
 	 * 
 	 * <p>Notice the maximal allowed number of items is decided by
-	 * {@link #getMaxNumberInSubModel}, which, by default, returns 10
+	 * {@link #getMaxNumberInSubModel}, which, by default, returns 15
 	 * if nRows is negative.
 	 *
 	 * @param value the value to retrieve the subset of the list model.
@@ -137,11 +137,11 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	}
 	/** Returns the maximal allowed number of matched items in the sub-model
 	 * returned by {@link #getSubModel}.
-	 * <p>Default: <code>nRows < 0 ? 10: nRows</code>.
+	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
 	 * @since 5.0.4
 	 */
 	protected int getMaxNumberInSubModel(int nRows) {
-		return nRows < 0 ? 10: nRows;
+		return nRows < 0 ? 15: nRows;
 	}
 	/** Compares if the given value shall belong to the submodel represented
 	 * by the key.
