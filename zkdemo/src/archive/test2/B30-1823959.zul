@@ -18,8 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <h:h3> [ 1823959 ] Grid failed to re-sync model (Opera/IE/IE7)</h:h3>
 <h:pre>
 
-In IE/IE7/Opera, JavaScript error when re-sync model
-multiple times.
+In IE/IE7/Opera, JavaScript error when re-sync model multiple times.
+(If you cannot see any JavaScript error, the bug is fixed)
 
 </h:pre>
 
