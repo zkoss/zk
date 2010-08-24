@@ -120,6 +120,8 @@ ZK 5.0.4
    		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
     	<value>true</value>
     </library-property>
+  + SimpleListModel's getSubModel returns an empty list if the value user entered
+    is empty. In additions, inSubModel is added to simplify the overriding.
   + Specify type as submit to make a button to submit a form when clicked.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.
@@ -235,7 +237,6 @@ June 29, 2010
   3022174: Scroll remains upon closing tabs
   3022669: listbox hflex="min" sizedByContent="true" not work
   3022839: (IE8) Clients.confirmClose & A component image without href
-  3049263: SelectEvent.getSelectEvent fails converting String to List
   3025674: When Listbox mold=select, add listhead cause html error
 
 * Upgrade Notes
