@@ -465,7 +465,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 			
 		this.syncWidth();

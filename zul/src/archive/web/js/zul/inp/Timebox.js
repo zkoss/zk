@@ -727,7 +727,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		if (btn) {
