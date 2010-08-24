@@ -442,7 +442,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
