@@ -210,6 +210,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 */
 	protected boolean inSubModel(Object key, Object value) {
 		String idx = Objects.toString(key);
-		return idx.length() > 0 && Objects.toString(value).startsWith(idx);
+		return idx != null && value != null && idx.length() > 0 &&
+				Objects.toString(value).startsWith(idx);
 	}
 }

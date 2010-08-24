@@ -409,7 +409,8 @@ implements ListModelExt, ListSubModel, Map, java.io.Serializable {
 	 */
 	protected boolean inSubModel(Object key, Object value) {
 		String idx = Objects.toString(key);
-		return idx.length() > 0 && Objects.toString(((Map.Entry) value).getValue()).startsWith(idx);
+		return idx != null && value != null && idx.length() > 0 &&
+				Objects.toString(((Map.Entry) value).getValue()).startsWith(idx);
 	}
 	
 	private class MyIterator implements Iterator {
