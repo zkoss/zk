@@ -16,10 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import java.util.SortedSet;
  * @see ListModelMap
  */
 public class ListModelList extends AbstractListModel
-implements ListModelExt, List, java.io.Serializable {
+implements ListModelExt, ListSubModel, List, java.io.Serializable {
 	protected List _list;
 
 	/**
@@ -384,5 +386,65 @@ implements ListModelExt, List, java.io.Serializable {
 	public void sort(Comparator cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+	}
+
+	
+	/**
+	 * Returns the subset of the list model data that matches
+	 * the specified value.
+	 * It is ususally used for implmentation of auto-complete.
+	 *
+	 * <p>The implementation uses {@link #inSubModel} to check if
+	 * the returned object of {@link #getElementAt} shall be in
+	 * the sub model.
+	 * 
+	 * <p>Notice the maximal allowed number of items is decided by
+	 * {@link #getMaxNumberInSubModel}, which, by default, returns 15
+	 * if nRows is negative.
+	 *
+	 * @param value the value to retrieve the subset of the list model.
+	 * It is the key argument when invoking {@link #inSubModel}.
+	 * this string.
+	 * @param nRows the maximal allowed number of matched items.
+	 * If negative, it means the caller allows any number, but the implementation
+	 * usually limits to a certain number (for better performance).
+	 * @see #inSubModel
+	 * @see #getMaxNumberInSubModel
+	 * @since 5.0.4
+	 */
+	public ListModel getSubModel(Object value, int nRows) {
+		final LinkedList data = new LinkedList();
+		nRows = getMaxNumberInSubModel(nRows);
+		for (Iterator it = _list.iterator(); it.hasNext();) {
+			Object o = it.next();
+			if (inSubModel(value, o)) {
+				data.add(o);
+				if (--nRows <= 0) break; //done
+			}
+		}
+		return new ListModelList(data);
+	}
+	/** Returns the maximal allowed number of matched items in the sub-model
+	 * returned by {@link #getSubModel}.
+	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
+	 * @since 5.0.4
+	 */
+	protected int getMaxNumberInSubModel(int nRows) {
+		return nRows < 0 ? 15: nRows;
+	}
+	/** Compares if the given value shall belong to the submodel represented
+	 * by the key.
+	 * <p>Default: converts both key and value to String objects and
+	 * then return true if the String object of value starts with
+	 * the String object
+	 * @param key the key representing the submodel. In autocomplete,
+	 * it is the value entered by user.
+	 * @param value the value in this model.
+	 * @see #getSubModel
+	 * @since 5.0.4
+	 */
+	protected boolean inSubModel(Object key, Object value) {
+		String idx = Objects.toString(key);
+		return idx.length() > 0 && Objects.toString(value).startsWith(idx);
 	}
 }

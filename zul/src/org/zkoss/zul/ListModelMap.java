@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -43,7 +44,7 @@ import java.lang.reflect.Method;
  * @see ListModelMap
  */
 public class ListModelMap extends AbstractListModel
-implements ListModelExt, Map, java.io.Serializable {
+implements ListModelExt, ListSubModel, Map, java.io.Serializable {
 	protected Map _map; //(key, value)
 	
 	/**
@@ -350,6 +351,65 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 			
 		return removed > 0;
+	}
+	
+	/**
+	 * Returns the subset of the list model data that matches
+	 * the specified value.
+	 * It is ususally used for implmentation of auto-complete.
+	 *
+	 * <p>The implementation uses {@link #inSubModel} to check if
+	 * the returned object of {@link #getElementAt} shall be in
+	 * the sub model.
+	 * 
+	 * <p>Notice the maximal allowed number of items is decided by
+	 * {@link #getMaxNumberInSubModel}, which, by default, returns 15
+	 * if nRows is negative.
+	 *
+	 * @param value the value to retrieve the subset of the list model.
+	 * It is the key argument when invoking {@link #inSubModel}.
+	 * this string.
+	 * @param nRows the maximal allowed number of matched items.
+	 * If negative, it means the caller allows any number, but the implementation
+	 * usually limits to a certain number (for better performance).
+	 * @see #inSubModel
+	 * @see #getMaxNumberInSubModel
+	 * @since 5.0.4
+	 */
+	public ListModel getSubModel(Object value, int nRows) {
+		final LinkedHashMap data = new LinkedHashMap();
+		nRows = getMaxNumberInSubModel(nRows);
+		for (Iterator it = _map.entrySet().iterator(); it.hasNext();) {
+			Map.Entry o = (Map.Entry) it.next();
+			if (inSubModel(value, o)) {
+				data.put(o.getKey(), o.getValue());
+				if (--nRows <= 0) break; //done
+			}
+		}
+		return new ListModelMap(data);
+	}
+	/** Returns the maximal allowed number of matched items in the sub-model
+	 * returned by {@link #getSubModel}.
+	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
+	 * @since 5.0.4
+	 */
+	protected int getMaxNumberInSubModel(int nRows) {
+		return nRows < 0 ? 15: nRows;
+	}
+	/** Compares if the given value shall belong to the submodel represented
+	 * by the key.
+	 * <p>Default: converts both key and value to String objects and
+	 * then return true if the String object of value starts with
+	 * the String object
+	 * @param key the key representing the submodel. In autocomplete,
+	 * it is the value entered by user.
+	 * @param value the value in this model.
+	 * @see #getSubModel
+	 * @since 5.0.4
+	 */
+	protected boolean inSubModel(Object key, Object value) {
+		String idx = Objects.toString(key);
+		return idx.length() > 0 && Objects.toString(((Map.Entry) value).getValue()).startsWith(idx);
 	}
 	
 	private class MyIterator implements Iterator {
