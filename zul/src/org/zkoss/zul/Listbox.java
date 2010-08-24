@@ -33,7 +33,9 @@ import java.util.Set;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -245,7 +247,6 @@ public class Listbox extends XulElement implements Paginated,
 	private int _preloadsz = 7;
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
-	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private boolean _sizedByContent;
@@ -573,7 +574,14 @@ public class Listbox extends XulElement implements Paginated,
 	 * Default: false.
 	 */
 	public boolean isVflex() {
-		return _vflex;
+		final String vflex = getVflex();
+		if ("true".equals(vflex)) {
+			return true;
+		}
+		if (Strings.isBlank(vflex) || "false".equals(vflex)) {
+			return false;
+		}
+		return Integer.parseInt(vflex) > 0;
 	}
 
 	/**
@@ -584,9 +592,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * Note: this attribute is ignored if {@link #setRows} is specified
 	 */
 	public void setVflex(boolean vflex) {
-		if (_vflex != vflex) {
-			_vflex = vflex;
-			smartUpdate("vflex", _vflex);
+		if (isVflex() != vflex) {
+			setVflex(""+vflex);
 		}
 	}
 
@@ -2975,7 +2982,7 @@ public class Listbox extends XulElement implements Paginated,
 	/* package */DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
-			final String loadercls = (String) getAttribute("listbox-dataloader");
+			final String loadercls = (String) Library.getProperty("org.zkoss.zul.listbox.DataLoader.class");
 			try {
 				_dataLoader = _rod && loadercls != null ? (DataLoader) Classes
 						.forNameByThread(loadercls).newInstance()
@@ -3164,8 +3171,6 @@ public class Listbox extends XulElement implements Paginated,
 
 			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
-
-			render(renderer, "vflex", _vflex);
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
