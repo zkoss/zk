@@ -748,7 +748,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
 				jq(document.body).append(
-					'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
 					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
 				drag._dragImg = jq("#zk_ddghost-img")[0];
 				return jq("#zk_ddghost")[0];
@@ -800,8 +800,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		var dragImg = drag._dragImg;
-		if (dragImg)
+		if (dragImg) {
+			if (found)
+				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
+			else
+				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
+			
 			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
+		}
 
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
 	}
