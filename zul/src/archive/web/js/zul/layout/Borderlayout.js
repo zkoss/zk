@@ -151,6 +151,13 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				w: width,
 				h: height
 			};
+		
+		// fixed Opera 10.5+ bug
+		if (zk.opera && !height && (!el.style.height || el.style.height == '100%')) {
+			var parent = el.parentNode;
+			center.h = height = zk(parent).revisedHeight(parent.offsetHeight);
+		}
+		
 		for (var region, ambit, margin,	j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()) {
