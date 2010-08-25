@@ -33,6 +33,7 @@ ZK 5.0.4
   3051362: A way to specify system-wide variable resolver
   3052723: Avoid unnecessary onScrollPos from being fired
   3052761: Calendar supports moving to next/prev mon by mouse scrolling
+  3052857: Provide a utile class for ListModel to support ListSubModel
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number

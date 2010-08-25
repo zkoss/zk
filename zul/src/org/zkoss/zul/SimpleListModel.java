@@ -104,7 +104,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	/**
 	 * Returns the subset of the list model data that matches
 	 * the specified value.
-	 * It is ususally used for implmentation of auto-complete.
+	 * It is usually used for implementation of auto-complete.
 	 *
 	 * <p>The implementation uses {@link #inSubModel} to check if
 	 * the returned object of {@link #getElementAt} shall be in
