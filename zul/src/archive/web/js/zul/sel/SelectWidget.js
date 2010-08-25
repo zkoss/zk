@@ -428,7 +428,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
 				else {
-					var tpadhgh = this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : 0;
+					//use B30-1878840 test case, IE only, scroll down and sort cause javascript error(listbox outer)
+					//if tpad.offsetHeight is zero, then tpadhgh must be zero; otherwise, use the cached value in _padsz if any
+					var tpad = this.$n('tpad'),
+						tpadoffsethgh = (tpad ? tpad.offsetHeight : 0),
+						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;  
 					if (nRows <= nVisiRows) {
 						var $midVisiRow = zk(midVisiRow);
 						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
