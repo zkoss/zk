@@ -246,7 +246,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	
 		var	topmost = this.isTopmost();
 		if (topmost) {
-			this.$class._rmActive(this);
+			this.$class._rmOver(this);
 			var mb = this.getMenubar();
 			if (this.menupopup && mb.isAutodrop()) {
 				if (this.menupopup.isOpen())
@@ -262,13 +262,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			cls = wgt.getZclass();
+		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			cls = wgt.getZclass();
+		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		jq(n).addClass(cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
@@ -276,8 +278,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			cls = wgt.getZclass();
+		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		jq(n).removeClass(cls);
+	},
+	_rmOver: function (wgt) {
+		var top = wgt.isTopmost(),
+			n = top ? wgt.$n('a') : wgt.$n(),
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+		jq(n).removeClass(cls);	
 	}
 });
 

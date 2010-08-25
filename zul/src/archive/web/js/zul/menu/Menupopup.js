@@ -249,8 +249,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_rmActive: function (wgt) {
 		if (wgt.parent.$instanceof(zul.menu.Menu)) {
 			wgt.parent.$class._rmActive(wgt.parent);
-			if (!wgt.parent.isTopmost())
-				this._rmActive(wgt.parent.parent);
 		}
 	}
 });
