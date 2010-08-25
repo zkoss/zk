@@ -13,7 +13,7 @@ Z50-evtqueLongop.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window title="test of long operation" border="true">
+<window title="test of long operation" border="normal">
 	<html><![CDATA[
 	<ul>
 	<li>Click the button it will start a long operation.</li>
@@ -41,7 +41,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
      public void onEvent(Event evt) {
        if ("doLongOp".equals(evt.getName())) {
          org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
-         result = "done"; //store the result
+         result = "success"; //store the result
          eq.publish(new Event("endLongOp")); //notify it is done
        }
      }
