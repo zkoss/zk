@@ -34,4 +34,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="au.js" jsdoc="true"/>
 
 	<script src="ext/jquery.json.js"/>
+	<script src="ext/jquery.mousewheel.js"/>
 </package>

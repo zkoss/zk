@@ -274,7 +274,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	bind_: function (){
 		this.$supers(Calendar, 'bind_', arguments);
-		var title = this.$n("title"),
+		var node = this.$n(),
+			title = this.$n("title"),
 			mid = this.$n("mid"),
 			ly = this.$n("ly"),
 			ry = this.$n("ry"),
@@ -290,7 +291,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this._view != 'decade') 
 			this._markCal({timeout: true});
 		else {
-			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
+			var anc = jq(node).find('.' + zcls + '-seld')[0];
 			if (anc)
 				_doFocus(anc.firstChild, true);
 		}
@@ -300,11 +301,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(ly, "onClick", '_clickArrow')
 			.domListen_(ry, "onClick", '_clickArrow')
 			.domListen_(mid, "onMouseOver", '_doMouseEffect')
-			.domListen_(mid, "onMouseOut", '_doMouseEffect');
+			.domListen_(mid, "onMouseOut", '_doMouseEffect')
+			.domListen_(node, 'onMousewheel');
+
 		this.updateFormData(this._value || new zk.fmt.Calendar().formatDate(this.getTime(), this.getFormat()));
 	},
 	unbind_: function () {
-		var title = this.$n("title"),
+		var node = this.$n(),
+			title = this.$n("title"),
 			mid = this.$n("mid"),
 			ly = this.$n("ly"),
 			ry = this.$n("ry");
@@ -314,6 +318,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domUnlisten_(ry, "onClick", '_clickArrow')
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
+			.domUnlisten_(node, 'onMousewheel')
 			.$supers(Calendar, 'unbind_', arguments);
 		this.efield = null;
 	},
@@ -334,6 +339,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			ofs = node.id.indexOf("-ly") > 0 ? -1 : 1;
 		if (jq(node).hasClass(this.getZclass() + (ofs == -1 ? '-left-icon-disd' : '-right-icon-disd')))
 			return;
+		this._shiftView(ofs);
+	},
+	_shiftView: function (ofs) {
 		switch(this._view) {
 		case "day" :
 			this._shiftDate("month", ofs);
@@ -349,6 +357,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 //			break;
 		}
 		this.rerender();
+	},
+	_doMousewheel: function (evt, intDelta) {
+		var ofs = -intDelta,
+			nm = ofs > 0 ? ["ry", '-right-icon-disd']: ["ly", '-left-icon-disd'];
+		
+		if (jq(this.$n(nm[0])).hasClass(this.getZclass() + nm[1]))
+			return;
+		
+		this._shiftView(ofs);
+		evt.stop();
 	},
 	_doMouseEffect: function (evt) {
 		var node = jq.nodeName(evt.domTarget, "td") ? evt.domTarget : evt.domTarget.parentNode,
