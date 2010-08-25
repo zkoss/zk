@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<label value="Network History"/>
+<label value="If you cannot see any error, that is correct!"/>
     <chart id="mychart" type="time_series" width="400" height="200"
 threeD="false" fgAlpha="128"/>
     <zscript><![CDATA[
