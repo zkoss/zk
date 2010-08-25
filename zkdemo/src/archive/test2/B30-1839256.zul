@@ -23,7 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<separator/>
 	Moreover, all following clicks are ignored before alert is shown (Feature 1859533).
 	<separator/>
-	<button label="Test">
+	<button label="Test" autodisable="self">
 		<attribute name="onClick">
 		org.zkoss.lang.Threads.sleep(10000);
 		alert("Everything goes fine");
