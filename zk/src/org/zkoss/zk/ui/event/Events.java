@@ -408,7 +408,7 @@ public class Events {
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
-	 * In other words, the event won't be execute in the current execution.
+	 * In other words, the event won't be processed in the current execution.
 	 * Rather, it executes after the client receives the AU responses
 	 * and then echoes back the event back.
 	 *
@@ -433,7 +433,7 @@ public class Events {
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
-	 * In other words, the event won't be execute in the current execution.
+	 * In other words, the event won't be processed in the current execution.
 	 * Rather, it executes after the client receives the AU responses
 	 * and then echoes back the event back.
 	 *
@@ -450,7 +450,7 @@ public class Events {
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
-	 * In other words, the event won't be execute in the current execution.
+	 * In other words, the event won't be processed in the current execution.
 	 * Rather, it executes after the client receives the AU responses
 	 * and then echoes back the event back.
 	 *

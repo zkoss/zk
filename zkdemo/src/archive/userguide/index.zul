@@ -51,7 +51,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"
-					itemRenderer="${main$MainLayoutComposer.itemRenderer}" model="${main$MainLayoutComposer.selectedModel}" fixedLayout="true" vflex="true">					
+					itemRenderer="${main$MainLayoutComposer.itemRenderer}" model="${main$MainLayoutComposer.selectedModel}" fixedLayout="true" vflex="true">
+					<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				</listbox>
 			</panelchildren>
 		</panel>
@@ -76,8 +77,8 @@ zk.override(zAu, "beforeSend", function (uri, req) {
 	try {
 		var t = req.target, nm;
 		if (t.id && (!req.opts || !req.opts.ignorable)
-		&& (nm = req.name) && !nm.startsWith("onScroll")
-		&& !nm.startsWith("onChang") && !nm.startsWith("onBandScroll")) {
+		/*&& (nm = req.name) && nm != "onChanging"
+		&& !nm.startsWith("onScroll") && nm != "onBandScroll"*/) {
 			var data = req.data||{},
 				value = data.items && data.items[0]?data.items[0].id:data.value;
 			pageTracker._trackPageview(uri +"/" + t.id + "/" + nm + (value?"/"+value:""));
