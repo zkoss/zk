@@ -267,7 +267,7 @@ public class Listbox extends XulElement implements Paginated,
 		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
 		addClientEvent(Listbox.class, Events.ON_FOCUS, 0);
 		addClientEvent(Listbox.class, Events.ON_BLUR, 0);
-		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE); // since 5.0.0
+		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
 		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
 		// 5.0.0
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE

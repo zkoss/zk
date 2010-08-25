@@ -403,30 +403,28 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		var t = this.ebody.scrollTop,
-			l = this.ebody.scrollLeft;
-		if (t != this._currentTop || l != this._currentLeft) {
+			l = this.ebody.scrollLeft,
+			scrolled = (t != this._currentTop || l != this._currentLeft);
+		if (scrolled) {
 			this._currentTop = t; 
 			this._currentLeft = l;
-			this._scrollChanged = true;
 		}
 		
 		if (!this.paging)
 			this.fireOnRender(zk.gecko ? 200 : 60);
-		
-		this._fireOnScrollPos();
+
+		if (scrolled)
+			this._fireOnScrollPos();
 	},
 	_timeoutId: null,
 	_fireOnScrollPos: function (time) {
-		if (this._scrollChanged) {
-			delete this._scrollChanged;
-			clearTimeout(this._timeoutId);
-			this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
-		}
+		clearTimeout(this._timeoutId);
+		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
 	},
 	_onScrollPos: function () {
 		this._currentTop = this.ebody.scrollTop; 
 		this._currentLeft = this.ebody.scrollLeft;
-		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft}, {toServer:true});
+		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
 	},
 	_onRender: function () {
 		this._pendOnRender = false;
