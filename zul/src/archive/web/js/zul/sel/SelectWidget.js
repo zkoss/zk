@@ -314,8 +314,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this.ebodytbl.style.width = ""; //reset
 			if (tblwd &&
 					// fixed column's sizing issue in B30-1895907.zul
-					this.eheadtbl.style.width &&
-					this.eheadtbl.style.width != this.eheadtbl.style.width &&
+					(!this.eheadtbl || !this.ebodytbl || !this.eheadtbl.style.width ||
+					this.eheadtbl.style.width != this.ebodytbl.style.width) &&
 					// end of the fixed
 					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
