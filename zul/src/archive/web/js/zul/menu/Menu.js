@@ -252,7 +252,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				if (this.menupopup.isOpen())
 					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
 				if (!mb._fixedWebKit)
-					zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
+					zWatch.fire('onFloatUp', this); //notify all
+					// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);

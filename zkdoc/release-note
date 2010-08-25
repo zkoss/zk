@@ -102,6 +102,7 @@ ZK 5.0.4
   3042016: Grid rod does not work if new Grid with Java code
   3051987: Readonly combobox has a border between button and input
   3052381: Client side dateformater parse a wrong value in italian 
+  3052208: Hovers on menu are a bit hit and miss with IE
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
