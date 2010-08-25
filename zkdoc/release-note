@@ -133,6 +133,9 @@ ZK 5.0.4
     and setHeightDirectly() instead.
   + AbstractComponent's newChildren() and newExtraCtrl() are both deprecated.
     Override getChildren() and getExtraCtrl() instead.
+  + The class name of the engine of chart and captcha must be specified in
+    the library properties called org.zkoss.zul.chart.engine.class and
+    org.zkoss.zul.captcha.engine.class respectively.
 
 	--------
 ZK 5.0.3
