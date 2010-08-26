@@ -26,11 +26,14 @@ import org.zkoss.zul.event.ListDataEvent;
 
 /**
  * A simple implementation of {@link ListModel}.
- * Note: It assumes the content is immutable. If not, use {@link ListModelList}
+ * <p>Note: It assumes the content is immutable. If not, use {@link ListModelList}
  * or {@link ListModelArray} instead.
  * In additions, it stores the data in the array format, so if the original
  * data is not an array. It is better not to use this class.
  *
+ * <p>Also notice that {@link SimpleListModel} also implements
+ * {@link ListSubModel}. It means when it is used with {@link Combobox},
+ * only the data that matches what the user typed will be shown.
  * @author tomyeh
  * @see ListModelArray
  * @see ListModelSet
