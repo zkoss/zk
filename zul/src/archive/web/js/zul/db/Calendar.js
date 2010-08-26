@@ -496,7 +496,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
-			today = zUtl.today(true);
+			today = zUtl.today();
 
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {

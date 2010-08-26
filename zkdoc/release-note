@@ -107,6 +107,7 @@ ZK 5.0.4
   3052381: Client side dateformater parse a wrong value in italian 
   3052208: Hovers on menu are a bit hit and miss with IE
   3053311: A colorbox in menu doesn't has same color when change orient
+  3053313: Constraint with no past can't select today
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
