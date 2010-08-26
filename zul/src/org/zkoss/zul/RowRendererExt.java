@@ -24,8 +24,9 @@ import org.zkoss.zk.ui.Component;
  * @author tomyeh
  */
 public interface RowRendererExt {
-	/** Creates an instance of {@link Row} for rendering.
-	 * The created component will be passed to {@link RowRenderer#render}.
+	/** Creates an instance of {@link Row} that will be attached to grid.
+	 * The created component will be passed to {@link RowRenderer#render}
+	 * to append the required information to show a row of the data.
 	 *
 	 * <p>Note: remember to invoke {@link Row#applyProperties} to initialize
 	 * the properties, defined in the component definition, properly.
@@ -43,20 +44,28 @@ return row;
 	 * if you want {@link Grid} to create it for you
 	 */
 	public Row newRow(Grid grid);
-	/** Create a component as the first cell of the row.
+	/** Create a component that will be attached to the <b>unloaded</b> row.
+	 * By unloaded row we mean the row that is not loaded with the data
+	 * retreived from the model. That is, {@link RowRenderer#render}
+	 * is not called yet.
+	 *
+	 * <p>Notice that this callback shall generate an empty cell,
+	 * rather than showing the data retrieved from the model.
+	 * The showing of the data from model shall be done
+	 * in {@link RowRenderer#render}.
+	 *
+	 * <p>If null is returned, the default cell is created as follows.
+<pre><code>
+final Label cell = new Label();
+cell.applyProperties();
+return cell;
+</code></pre>
 	 *
 	 * <p>Note: remember to invoke {@link Component#applyProperties} to
 	 * initialize the properties, defined in the component definition, properly,
 	 * if you create an instance instead of returning null.
 	 *
 	 * <p>Note: DO NOT call {@link Row#setParent}.
-	 *
-	 * <p>If null is returned, the default cell is created as follow.
-<pre><code>
-final Label cell = new Label();
-cell.applyProperties();
-return cell;
-</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Component#setParent}.
 	 * Don't create cells for other columns.
