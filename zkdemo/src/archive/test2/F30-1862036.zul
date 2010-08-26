@@ -21,8 +21,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <n:h2>[ 1862036 ]    Combobox supports ListModel.</n:h2>
 <n:p>selected index is not depends on whole model, it depends on a modle's subset</n:p>
 	<n:ol>
-		<n:li>Dropdown the combobox, you should only see 10 row(0-9)</n:li>
-<n:li>type "option 1" the combobox and dropdown it, you should only see 10 row(1,10-18)</n:li>
+		<n:li>Please type "opt" into the combobox, you should only see 15 row(0-14)</n:li>
+<n:li>type "option 1" the combobox and dropdown it, you should only see 11 row(1,10-19)</n:li>
 
 	</n:ol>
 
@@ -34,5 +34,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		ListModel strset = new SimpleListModel(data);
 	</zscript>
         <button label="selected index" onClick='alert("selectIndex:"+list.selectedIndex)'/>
-	<combobox id="list" width="200px" model="&#36;{strset}" />	
+	<combobox id="list" width="200px" model="&#36;{strset}" autodrop="true"/>	
 </zk>
