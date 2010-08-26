@@ -28,7 +28,8 @@ zjq = function (jq) { //ZK extension
 		_zsyncs = [],
 		_pendzsync = 0,
 		_vpId = 0, //id for virtual parent's reference node
-		_sbwDiv; //scrollbarWidth
+		_sbwDiv, //scrollbarWidth
+		doc = document;
 
 	function _elmOfWgt(id, ctx) {
 		var w = ctx && ctx !== zk ? zk.Widget.$(ctx): null, w2;
@@ -36,13 +37,13 @@ zjq = function (jq) { //ZK extension
 	}
 	function _ofsParent(el) {
 		if (el.offsetParent) return el.offsetParent;
-		if (el == document.body) return el;
+		if (el == doc.body) return el;
 
-		while ((el = el.parentNode) && el != document.body)
+		while ((el = el.parentNode) && el != doc.body)
 			if (el.style && jq(el).css('position') != 'static') //in IE, style might not be available
 				return el;
 
-		return document.body;
+		return doc.body;
 	}
 	function _zsync(org) {
 		if (--_pendzsync <= 0)
@@ -93,7 +94,7 @@ zjq = function (jq) { //ZK extension
 			var ooft = zk(outer).revisedOffset(),
 				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
 				top = ioft[1] - ooft[1] +
-						(outer == (zk.safari ? document.body : document.body.parentNode)
+						(outer == (zk.safari ? doc.body : doc.body.parentNode)
 								? 0 : outer.scrollTop),
 				ih = info ? info.h : inner.offsetHeight,
 				bottom = top + ih,
@@ -125,7 +126,7 @@ zjq = function (jq) { //ZK extension
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			var p = el.parentNode;
-			while (p && p != document.body) {
+			while (p && p != doc.body) {
 				var $p = jq(p),
 					style = $p.css("position");
 				if (style == "relative" || style == "absolute") {
@@ -155,7 +156,7 @@ zjq = function (jq) { //ZK extension
 				t += el.offsetTop || 0;
 				l += el.offsetLeft || 0;
 				//Bug 1721158: In FF, el.offsetParent is null in this case
-				el = zk.gecko && el != document.body ?
+				el = zk.gecko && el != doc.body ?
 					_ofsParent(el): el.offsetParent;
 			}
 		} while (el);
@@ -170,7 +171,7 @@ zjq = function (jq) { //ZK extension
 			t += el.offsetTop  || 0;
 			l += el.offsetLeft || 0;
 			//Bug 1721158: In FF, el.offsetParent is null in this case
-			el = zk.gecko && el != document.body ?
+			el = zk.gecko && el != doc.body ?
 				_ofsParent(el): el.offsetParent;
 			if (el) {
 				if(jq.nodeName(el, "body")) break;
@@ -359,10 +360,10 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
 			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
-				var el = document.getElementById(sel);
+				var el = doc.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);
-					ret.context = document;
+					ret.context = doc;
 					ret.selector = '#' + sel;
 					ret.zk = new zjq(ret);
 					return ret;
@@ -465,7 +466,7 @@ jq.fn.init.prototype = jq.fn;
 jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function () {
-		return !this.selector && this[0] === document ? this: _jq[nm].apply(this, arguments);
+		return !this.selector && this[0] === doc ? this: _jq[nm].apply(this, arguments);
 	};
 });
 jq.each(['before','after','append','prepend'], function (i, nm) {
@@ -563,7 +564,7 @@ zjq.prototype = {
 	scrollIntoView: function (parent) {
 		var n = this.jq[0];
 		if (n) {
-			parent = parent || document.body.parentNode;
+			parent = parent || doc.body.parentNode;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 				c = _scrlIntoView(p, n, c);
 		}
@@ -1127,7 +1128,7 @@ jq(el).zk.center(); //same as 'center'
 			l += p.offsetLeft || 0;
 
 			// Safari fix
-			if (p.offsetParent==document.body)
+			if (p.offsetParent==doc.body)
 			if (jq(p).css('position')=='absolute') break;
 
 		} while (p = p.offsetParent);
@@ -1146,9 +1147,9 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	textSize: function (txt) {
 		if (!_txtSizDiv) {
-			_txtSizDiv = document.createElement("div");
+			_txtSizDiv = doc.createElement("div");
 			_txtSizDiv.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
-			document.body.appendChild(_txtSizDiv);
+			doc.body.appendChild(_txtSizDiv);
 
 			_txtStylesCamel = [];
 			for (var ss = _txtStyles, j = ss.length; j--;)
@@ -1253,11 +1254,11 @@ jq(el).zk.center(); //same as 'center'
 	makeVParent: function () {
 		var el = this.jq[0],
 			p = el.parentNode;
-		if (el.z_vp || el.z_vpagt || p == document.body)
+		if (el.z_vp || el.z_vpagt || p == doc.body)
 			return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			agt = document.createElement("span");
+			agt = doc.createElement("span");
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
 		
@@ -1268,7 +1269,7 @@ jq(el).zk.center(); //same as 'center'
 		else p.appendChild(agt);
 
 		el.z_vp = p.id; //might be empty
-		document.body.appendChild(el);
+		doc.body.appendChild(el);
 		return this;
 	},
 	/** Undoes the creation of a virtual parent of the first matched element.
@@ -1343,8 +1344,8 @@ jq(el).zk.center(); //same as 'center'
 	getSelectionRange: function() {
 		var inp = this.jq[0];
 		try {
-			if (document.selection != null && inp.selectionStart == null) { //IE
-				var range = document.selection.createRange();
+			if (doc.selection != null && inp.selectionStart == null) { //IE
+				var range = doc.selection.createRange();
 				var rangetwo = inp.createTextRange();
 				var stored_range = "";
 				if(inp.type.toLowerCase() == "text"){
@@ -1510,7 +1511,7 @@ zk.copy(jq, {
 	 */
 	$$: function (id, subId) {
 		return typeof id == 'string' ?
-			id ? document.getElementsByName(id + (subId ? '-' + subId : '')): null: id;
+			id ? doc.getElementsByName(id + (subId ? '-' + subId : '')): null: id;
 	},
 
 	/** Tests if one element (p) is an ancestor of another (c). 
@@ -1530,45 +1531,44 @@ zk.copy(jq, {
 	 */
 	innerX: function () {
 		return window.pageXOffset
-			|| document.documentElement.scrollLeft
-			|| document.body.scrollLeft || 0;
+			|| doc.documentElement.scrollLeft
+			|| doc.body.scrollLeft || 0;
 	},
 	/** Returns the Y coordination of the visible part of the browser window. 
 	 * @return int
 	 */
 	innerY: function () {
 		return window.pageYOffset
-			|| document.documentElement.scrollTop
-			|| document.body.scrollTop || 0;
+			|| doc.documentElement.scrollTop
+			|| doc.body.scrollTop || 0;
 	},
 	/** Returns the height of the visible part of the browser window. 
 	 * @return int
 	 */
 	innerWidth: function () {
-		return typeof window.innerWidth == "number" ? window.innerWidth:
-			document.compatMode == "CSS1Compat" ?
-				document.documentElement.clientWidth: document.body.clientWidth;
+		return doc.compatMode ? doc.compatMode == "CSS1Compat" ?
+				doc.documentElement.clientWidth: doc.body.clientWidth : window.innerWidth;
 	},
 	/** Returns the width of the visible part of the browser window. 
 	 * @return int
 	 */
 	innerHeight: function () {
 		return typeof window.innerHeight == "number" ? window.innerHeight:
-			document.compatMode == "CSS1Compat" ?
-				document.documentElement.clientHeight: document.body.clientHeight;
+			doc.compatMode == "CSS1Compat" ?
+					doc.documentElement.clientHeight: doc.body.clientHeight;
 	},
 	/** Returns the pae total width.
 	 * @return int
 	 */
 	pageWidth: function () {
-		var a = document.body.scrollWidth, b = document.body.offsetWidth;
+		var a = doc.body.scrollWidth, b = doc.body.offsetWidth;
 		return a > b ? a: b;
 	},
 	/** Returns the pae total height. 
 	 * @return int
 	 */
 	pageHeight: function () {
-		var a = document.body.scrollHeight, b = document.body.offsetHeight;
+		var a = doc.body.scrollHeight, b = doc.body.offsetHeight;
 		return a > b ? a: b;
 	},
 
@@ -1602,9 +1602,9 @@ zk.copy(jq, {
 	 */
 	scrollbarWidth: function () {
 		if (!_sbwDiv) {
-			_sbwDiv = document.createElement("div");
+			_sbwDiv = doc.createElement("div");
 			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
-			document.body.appendChild(_sbwDiv);
+			doc.body.appendChild(_sbwDiv);
 		}
 		return _sbwDiv.offsetWidth - _sbwDiv.clientWidth;
 	},
@@ -1636,9 +1636,9 @@ zk.copy(jq, {
 			if (window["getSelection"]) {
 				if (zk.safari) window.getSelection().collapse();
 				else window.getSelection().removeAllRanges();
-			} else if (document.selection) {
-				if (document.selection.empty) document.selection.empty();
-				else if (document.selection.clear) document.selection.clear();
+			} else if (doc.selection) {
+				if (doc.selection.empty) doc.selection.empty();
+				else if (doc.selection.clear) doc.selection.clear();
 			}
 			return true;
 		} catch (e){
@@ -1727,7 +1727,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
 		if (style == null) style = 'display:none';
 		html += ' style="'+style+'"></iframe>';
-		jq(document.body).append(html);
+		jq(doc.body).append(html);
 		return zk(id).jq[0];
 	},
 	/** Creates a 'stackup' (actually, an iframe) that makes an element
@@ -1749,7 +1749,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 */
 	newStackup: function (el, id, anchor) {
 		el = jq(el||[], zk)[0];
-		var ifr = document.createElement("iframe");
+		var ifr = doc.createElement("iframe");
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
@@ -1772,7 +1772,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @return DOMElement
 	 */
 	newHidden: function (nm, val, parent) {
-		var inp = document.createElement("input");
+		var inp = doc.createElement("input");
 		inp.type = "hidden";
 		inp.name = nm;
 		inp.value = val;
@@ -1785,7 +1785,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @since 5.0.1
 	 */
 	head: function () {
-		return document.getElementsByTagName("head")[0] || document.documentElement;
+		return doc.getElementsByTagName("head")[0] || doc.documentElement;
 	},
 
 	//dialog//
@@ -1934,7 +1934,7 @@ this._syncShadow(); //synchronize shadow
 		var a = jq('#z_focusOut')[0];
 		if (!a) {
 			// for Chrome and Safari, we can't set "display:none;"
-			jq(document.body).append('<a href="javascript:;" style="position:absolute;'
+			jq(doc.body).append('<a href="javascript:;" style="position:absolute;'
 					+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
 					+ 'px;" id="z_focusOut"/>');
 			a = jq('#z_focusOut')[0];
@@ -2023,8 +2023,8 @@ zk.copy(jq.Event, {
 	 * @param DOMElement el the target element
 	 * @param String evtnm the name of the event
 	 */
-	fire: document.createEvent ? function (el, evtnm) {
-		var evt = document.createEvent('HTMLEvents');
+	fire: doc.createEvent ? function (el, evtnm) {
+		var evt = doc.createEvent('HTMLEvents');
 		evt.initEvent(evtnm, false, false);
 		el.dispatchEvent(evt);
 	}: function (el, evtnm) {

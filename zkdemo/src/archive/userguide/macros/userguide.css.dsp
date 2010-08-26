@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:include page="~./zul/css/ext.css.dsp"/>
 
-html {overflow:hidden;}
+html {overflow:auto;}
 img { -ms-interpolation-mode:bicubic }
 body {
 	padding: 0 !important;
