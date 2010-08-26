@@ -28,7 +28,7 @@ import org.zkoss.zul.ListSubModel;
 import org.zkoss.zul.event.ListDataListener;
 
 /**
- * A utility for {@link ListModel}
+ * A utility for handling {@link ListModel}.
  *  
  * @author jumperchen
  * @since 5.0.4
@@ -38,9 +38,11 @@ public class ListModels {
 	private ListModels() {}
 	
 	/**
-	 *  A String comparator for {@link ListSubModel} to match the value of
-	 *  the model from the given key that user typed.
-	 *  It will return 0 when the value starts with the key(no empty). 
+	 * A comparator for {@link ListSubModel#getSubModel} to check if
+	 * a value retrived from the model matches the user typed.
+	 * To compare, it will convert them to String instances, and
+	 * return 0 (i.e., matched), when the value starts with
+	 * the user typed, and both of them are not empty.
 	 */
 	public final static Comparator STRING_COMPARATOR = new Comparator() {
 		public int compare(Object key, Object value) {
@@ -51,9 +53,13 @@ public class ListModels {
 	};
 
 	/**
-	 *  A Map comparator for {@link ListSubModel} to match the value of
-	 *  the model from the given key that user typed.
-	 *  It will return 0 when the value starts with the key(no empty). 
+	 * A comparator for {@link ListSubModel#getSubModel} to checkif
+	 * a value retrived from the model matches the user typed.
+	 * It assumes the model is {@link Map}, and the value is
+	 * Map.Entry.
+	 * To compare, it will convert them to String instances, and
+	 * return 0 when the value (Map.Entry's getValue())
+	 * starts with the user typed, and both of them are not empty.
 	 */
 	public final static Comparator MAP_COMPARATOR = new Comparator() {
 		public int compare(Object key, Object value) {
@@ -66,31 +72,35 @@ public class ListModels {
 	/**
 	 * Returns a proxy instance of the given model that implements
 	 * {@link ListSubModel} and {@link ListModel} interface.
-	 * @param model a {@link ListModel}
-	 * @param comparator if return 0 means the value of the model is matched from
-	 *  the given key that user typed
+	 * @param model a model
+	 * @param comparator used to compare the value typed by user and
+	 * the value from the model. The first argument is the value typed by user,
+	 * and the second argument is the value retrieved from the model.
+	 * It shall return 0 if they matched (i.e., shall be shown).
 	 * @param nRows the maximal allowed number of matched items.
 	 */
 	public static ListModel toListSubModel(ListModel model, Comparator comparator, int nRows) {
-		return new ListModels0(model, comparator, nRows);
+		return new SubModel(model, comparator, nRows);
 	}
 	
 	/**
 	 * Returns a proxy instance of the given model that implements
 	 * {@link ListSubModel} and {@link ListModel} interface.
-	 * <p> The default comparator is depended on the type of the model, if the
-	 * model is a type of {@link ListModelMap}, the {@link #MAP_COMPARATOR} is used,
-	 * unless the {@link #STRING_COMPARATOR} is used.
-	 * <p>Default: <code>nRows is 15</code>.
+	 * <p>The default comparator depends on the type of the model, if the
+	 * model is an instance of {@link ListModelMap}, {@link #MAP_COMPARATOR} is used.
+	 * Otherwise, {@link #STRING_COMPARATOR} is used.
+	 * <p>In additions, the maximal allowed number of matched items is 15.
+	 * <p>If you want more control, use {@link #toListSubModel(ListModel, Comparator, int)}
+	 * instead.
 	 * @param model a {@link ListModel}
 	 * @see #toListSubModel(ListModel, Comparator, int)
 	 */
 	public static ListModel toListSubModel(ListModel model) {
-		return new ListModels0(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
+		return new SubModel(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
 					: STRING_COMPARATOR, 15);
 	}
 	
-	private static class ListModels0 implements ListModel, ListSubModel,
+	private static class SubModel implements ListModel, ListSubModel,
 			java.io.Serializable {
 		private final ListModel _model;
 
@@ -98,7 +108,7 @@ public class ListModels {
 
 		private final int _nRows;
 
-		private ListModels0(ListModel model, Comparator comparator, int nRows) {
+		private SubModel(ListModel model, Comparator comparator, int nRows) {
 			_model = model;
 			_comparator = comparator;
 			_nRows = nRows;
