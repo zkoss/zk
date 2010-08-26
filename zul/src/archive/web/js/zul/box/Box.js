@@ -261,6 +261,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	replaceChildHTML_: function (child) {
 		this.$supers('replaceChildHTML_', arguments);
 		this._fixChildDomVisible(child, child._visible);
+		if (child.$instanceof(zul.box.Splitter)) {
+			var n = this._chdextr(child);
+			if (n) {
+				n.style.height = "";
+				n.style.width = "";
+			}
+			zWatch.fireDown('onSize', this);
+		}
 	},
 	_fixChildDomVisible: function (child, visible) {
 		var n = this._chdextr(child);
