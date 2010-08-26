@@ -34,7 +34,6 @@ import org.zkoss.zul.event.ListDataListener;
  * @since 5.0.4
  */
 public class ListModels {
-	private static final ListModels INSTANCE = new ListModels();
 	
 	private ListModels() {}
 	
@@ -73,7 +72,7 @@ public class ListModels {
 	 * @param nRows the maximal allowed number of matched items.
 	 */
 	public static ListModel toListSubModel(ListModel model, Comparator comparator, int nRows) {
-		return INSTANCE.new ListModels0(model, comparator, nRows);
+		return new ListModels0(model, comparator, nRows);
 	}
 	
 	/**
@@ -87,11 +86,11 @@ public class ListModels {
 	 * @see #toListSubModel(ListModel, Comparator, int)
 	 */
 	public static ListModel toListSubModel(ListModel model) {
-		return INSTANCE.new ListModels0(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
+		return new ListModels0(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
 					: STRING_COMPARATOR, 15);
 	}
 	
-	private class ListModels0 implements ListModel, ListSubModel,
+	private static class ListModels0 implements ListModel, ListSubModel,
 			java.io.Serializable {
 		private final ListModel _model;
 
