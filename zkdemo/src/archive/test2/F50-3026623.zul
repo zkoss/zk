@@ -16,6 +16,7 @@
 		}
 	}
 	</zscript>
+	Please type some words into the short textbox, and then you should see every high textbox will append the same words.
 	<textbox id="i" onChange="publish()"/>		
 	<textbox id="o" rows="6"/>
 	<separator/>

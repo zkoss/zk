@@ -282,7 +282,9 @@
 	margin:2px 3px;
 	overflow:hidden;
 	width:auto;
+	<c:if test="${c:browser('safari')}">
 	height: 1px;
+	</c:if>
 }
 <%--define menubar hor scroll--%>
 .z-menubar-hor-scroll {

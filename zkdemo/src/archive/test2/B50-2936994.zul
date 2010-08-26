@@ -13,7 +13,7 @@ B50-2936994.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window height="100%">
+<window height="100%" contentStyle="height:100%;">
    <borderlayout width="30%">
     <center autoscroll="true" flex="true" >
      <tabbox id="tabbox" >
