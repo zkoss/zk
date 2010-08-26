@@ -670,13 +670,30 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
-		var allwidths = true;
+		var allwidths = true,
+			// IE6/7 bug in F30-1904532.zul
+			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
+		
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
-			if (allwidths && w._width === undefined && w._hflex === undefined)
+			if (allwidths && w._width === undefined && w._hflex === undefined) {
 				allwidths = false;
+				shallCheckSize = false;
+			} else if (shallCheckSize) {
+				var width = w._width;
+				if (width && width.indexOf('px') != -1)
+					totalWidth += zk.parseInt(width);
+				else shallCheckSize = false;
+			}
 		}
+		
+		if (shallCheckSize) {
+			var w = this._width;
+			if (w && w.indexOf('px') != -1)
+				allwidths = zk.parseInt(w) != totalWidth;
+		}
+		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
 		if (!this.isSizedByContent())
 			out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th>'); 

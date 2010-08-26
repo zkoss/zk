@@ -113,37 +113,37 @@ height="108px">
 <textbox value="Totals" />
 </footer>
 <footer>
-<textbox />
+<label style="text-align: center" value="ABCD0001" />
 </footer>
 <footer>
-<textbox />
+<label style="text-align: center" value="ABCD0001" />
 </footer>
 <footer>
-<textbox value="999" />
+<label style="text-align: center" value="999" />
 </footer>
 <footer>
-<textbox value="999" />
+<label style="text-align: center" value="999" />
 </footer>
 <footer>
-<textbox value="999" />
+<label style="text-align: center" value="999" />
 </footer>
 <footer>
-<textbox />
+<label style="text-align: center" value="999" />
 </footer>
 <footer>
-<textbox value="9999.99" />
+<label style="text-align: center" value="9999.99" />
 </footer>
 <footer>
-<textbox value="9999.99" />
+<label style="text-align: center" value="9999.99" />
 </footer>
 <footer>
-<textbox value="9999.99" />
+<label style="text-align: center" value="9999.99" />
 </footer>
 <footer>
-<textbox value="9999.99" />
+<label style="text-align: center" value="9999.99" />
 </footer>
 <footer width="90px">
-<textbox value="999999.99" />
+<label style="text-align: center" value="999999.99" />
 </footer>
 </foot>
 </grid>

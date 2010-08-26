@@ -162,8 +162,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.zsync();
 		var anc = this.$n('a');
 		if (anc) {
-			if(zk(anc).isRealVisible())
+			if(zk(anc).isRealVisible()) {
 				anc.focus();
+				zk.currentFocus = this; // IE's Bug in B36-2807475.zul
+			}
 		}
 	},
 	onHide: function () {
