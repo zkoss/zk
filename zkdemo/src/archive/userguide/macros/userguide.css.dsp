@@ -217,3 +217,13 @@ a.edition-field:hover {
 .breeze .demo-categorybar-right-scroll:hover {
 	background-position: 0 0;
 }
+<c:if test="${c:browser('ie6-')}">
+.breeze .demo-categorybar-left-scroll {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-left.png')}");
+}
+.breeze .demo-categorybar-right-scroll {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-right.png')}");
+}
+</c:if>
