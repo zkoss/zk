@@ -1,0 +1,61 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<zscript><![CDATA[
+		ListModelList lm = new ListModelList(Arrays.asList(new String[]{"David", "Thomas","Steven"}));
+		SimpleTreeModel stm = new SimpleTreeModel(new SimpleTreeNode("ROOT",
+				Arrays.asList(new SimpleTreeNode[]{
+						new SimpleTreeNode("David",new ArrayList()), 
+						new SimpleTreeNode("Thomas",new ArrayList()),
+						new SimpleTreeNode("Steven",new ArrayList())})));
+		
+		
+		ArrayList list = new ArrayList();
+		ArrayList list2 = new ArrayList();
+		int len = 50;
+		for(int i = 0; i < len; i++) {
+			list.add("item " + i);
+			list2.add(new SimpleTreeNode("item " + i,new ArrayList()));
+		}
+		ListModelList lm2 = new ListModelList(list);
+		
+		SimpleTreeModel stm2 = new SimpleTreeModel(
+				new SimpleTreeNode("ROOT", 
+						Arrays.asList(new SimpleTreeNode[]{new SimpleTreeNode("root",list2)})));
+		
+	]]></zscript>
+	<hbox>
+		<div width="200px">
+			<label value="EL"/>
+			<separator/>
+			<combobox model="${lm}" onAfterRender="self.setSelectedIndex(2)"/>
+			<listbox model="${lm}" mold="select" onAfterRender="self.setSelectedIndex(2)"/>
+			<listbox model="${lm}" onAfterRender="self.setSelectedIndex(2)"/>
+			<separator/>
+			<grid model="${lm}" onAfterRender='gridCount.setValue("row count: "+self.getRows().getChildren().size()+"");'/>
+			<label id="gridCount"/>
+			<tree model="${stm}" onAfterRender="self.setSelectedItem(self.getTreechildren().getLastChild())"/>
+		</div>
+		<div width="200px">
+			<label value="data binding"/>
+			<separator/>
+			<combobox model="@{lm}" onAfterRender="self.setSelectedIndex(2)"/>
+			<listbox model="@{lm}" mold="select" onAfterRender="self.setSelectedIndex(2)"/>
+			<listbox model="@{lm}" onAfterRender="self.setSelectedIndex(2)"/>
+			<separator/>
+			<grid model="@{lm}" onAfterRender='binfingGridCount.setValue("row count: "+self.getRows().getChildren().size()+"");'/>
+			<label id="binfingGridCount"/>
+		</div>
+		<div width="200px">
+			<label value="rod"/>
+			<separator/>
+			<combobox model="${lm2}" onAfterRender="self.setSelectedIndex(49)"/>
+			<listbox model="${lm2}" mold="select" onAfterRender="self.setSelectedIndex(49)"/>
+			<listbox model="${lm2}" height="100px" onAfterRender='self.setSelectedIndex(49);'><custom-attributes org.zkoss.zul.listbox.rod="false"/></listbox>
+			<separator/>
+			<grid model="${lm2}" height="100px" onAfterRender='rodGridCount.setValue("row count: "+self.getRows().getChildren().size()+"");'/>
+			<label id="rodGridCount"/>
+			<tree id="lb" model="${stm2}" height="100px" onAfterRender="self.setSelectedItem(self.getTreechildren().getFirstChild().getTreechildren().getLastChild())"/>
+			<button label="sel" onClick="lb.setSelectedItem(lb.getTreechildren().getFirstChild().getTreechildren().getLastChild())"></button>
+		</div>
+	</hbox>
+</zk>
