@@ -177,7 +177,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 				if (clickOffsetX > clickArea) {
 					this._togglePopup();
-					Event.stop(evt);
+					evt.stop();
 				} else {
 					jq(this.$n('a')).removeClass(this.getZclass() + '-body-seld');
 					this.fireX(evt);
