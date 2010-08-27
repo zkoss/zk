@@ -273,7 +273,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w._nhflex) w.fixFlex_();
 			return old != this.ehead.style.display;
 		}
-		return false;
 	},
 	_adjFlexWidth: function () {
 		if (!this.head) return;

@@ -12,6 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	//Bug 1926480: opera failed to add listheader dynamically (since hdfakerflex introduced)
+	var _fixOnChildChanged = zk.opera ? function (head) {
+		return (head = head.parent) && head.rerender(0); //later
+	}: zk.$void;
+
 /**
  * A skeletal implementation for headers, the parent of
  * a group of {@link HeaderWidget}.
@@ -73,17 +79,15 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (this.desktop) {
-			if (this.parent._fixHeaders())
-				this.parent.onSize();
-		}
+		if (this.desktop && !_fixOnChildChanged(this)
+		&& this.parent._fixHeaders())
+			this.parent.onSize();
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		if (this.desktop) {
-			if (!this.childReplacing_ && this.parent._fixHeaders())
-				this.parent.onSize();
-		}
+		if (this.desktop && !_fixOnChildChanged(this)
+		&& !this.childReplacing_ && this.parent._fixHeaders())
+			this.parent.onSize();
 	},
 	beforeChildrenFlex_: function (hwgt) { //HeaderWidget
 		if (hwgt && !hwgt._flexFixed) {
@@ -108,7 +112,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				if (hdf) hdf.style.width='0px';
 				if (bdf) bdf.style.width='0px';
 			}
-				
 		}
 		return true;
 	},
@@ -125,3 +128,5 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		out.push('</tr>');
 	}
 });
+
+})();

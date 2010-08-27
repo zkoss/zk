@@ -193,10 +193,10 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers("beforeParentChanged_", arguments);
 	},
 	//@Override
-	onParentChanged_: function () {
+	afterParentChanged_: function () {
 		if (this.parent) //add
 			this._updHeaderCM();
-		this.$supers("onParentChanged_", arguments);
+		this.$supers("afterParentChanged_", arguments);
 	},
 
 	// event

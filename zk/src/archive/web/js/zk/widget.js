@@ -112,6 +112,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _bind0(wgt) {
+		_rerenderDone(wgt); //cancel pending async rerender
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -870,13 +871,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	//render the render defer
+	//render the render defer (usually controlled by server)
 	function _rdrender(wgt) {
 		if (wgt._z$rd) { //might be redrawn by forcerender
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
 			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
 		}
+	}
+
+	//invoke rerender later
+	function _asyncRerender(wgt, timeout) {
+		wgt._asyncRerender = true;
+		setTimeout(function () {
+			if (wgt._asyncRerender) {
+				_rerenderDone(wgt);
+				wgt.rerender();
+			}
+		}, timeout);
+	}
+	function _rerenderDone(wgt) {
+		delete wgt._asyncRerender;
 	}
 
 	var _dragoptions = {
@@ -887,6 +902,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};
+
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -1626,7 +1642,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
-		child.onParentChanged_(oldpt);
+		child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1716,7 +1732,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
-		child.onParentChanged_(oldpt);
+		child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1762,7 +1778,7 @@ wgt.$f().main.setTitle("foo");
 
 
 		if (!_noParentCallback)
-			child.onParentChanged_(oldpt);
+			child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -1893,17 +1909,17 @@ wgt.$f().main.setTitle("foo");
 	 * The previous parent can be found by {@link #parent}.
 	 * @see #onChildAdded_
 	 * @see #onChildRemoved_
-	 * @see #onParentChanged_
+	 * @see #afterParentChanged_
 	 */
 	beforeParentChanged_: function (/*newparent*/) {
 	},
 	/** A callback called after the parent has been changed.
 	 * @param zk.Widget oldparent the previous parent (null if it was not attached)
 	 * The current parent can be found by {@link #parent}.
-	 * @since 5.0.3
+	 * @since 5.0.4
 	 * @see #beforeParentChanged_
 	 */
-	onParentChanged_: function (/*oldparent*/) {
+	afterParentChanged_: function (/*oldparent*/) {
 	},
 
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
@@ -2662,8 +2678,19 @@ function () {
 	 * to speed up the re-rendering.
 	 * @return zk.Widget this widget.
 	 */
+	/** Re-renders after the specified time (milliseconds).
+	 * @param int timeout the number milliseconds (non-negative) to wait
+	 * before rerender
+	 * @return zk.Widget this widget.
+	 * @since 5.0.4
+	 */
 	rerender: function (skipper) {
 		if (this.desktop) {
+			if (typeof skipper == "number") {
+				_asyncRerender(this, skipper);
+				return this;
+			}
+
 			var n = this.$n();
 			if (n) {
 				var oldrod = this.z$rod;

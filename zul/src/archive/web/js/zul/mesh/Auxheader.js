@@ -21,19 +21,20 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 	_rowspan: 1,
 
 	$define: {
-    	/** Returns number of columns to span this header.
-    	 * Default: 1.
-    	 * @return int
-    	 */
-    	/** Sets the number of columns to span this header.
-    	 * <p>It is the same as the colspan attribute of HTML TD tag.
-    	 * @param int colspan
-    	 */
+		/** Returns number of columns to span this header.
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of columns to span this header.
+		 * <p>It is the same as the colspan attribute of HTML TD tag.
+		 * @param int colspan
+		 */
 		colspan: function (v) {
 			var n = this.$n();
-			if (n)
-				if (zk.ie) this.rerender(); //IE's limitation
-				else n.colSpan = v;
+			if (n) {
+				n.colSpan = v;
+				if (zk.ie) this.rerender(0); //IE's limitation
+			}
 		},
 		/** Returns number of rows to span this header.
 		 * Default: 1.
@@ -45,15 +46,16 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 		 */
 		rowspan: function (v) {
 			var n = this.$n();
-			if (n)
-				if (zk.ie) this.rerender(); //IE's limitation
-				else n.rowSpan = v;
+			if (n) {
+				n.rowSpan = v;
+				if (zk.ie) this.rerender(0); //IE's limitation
+			}
 		}
 	},
 	/**
 	 * Nothing to do in the function
 	 */
-	fixedFaker_: zk.$void, //do nothing
+	fixFaker_: zk.$void, //do nothing
 	//super//
 	domAttrs_: function () {
 		var s = this.$supers('domAttrs_', arguments), v;
