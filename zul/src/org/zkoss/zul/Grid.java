@@ -303,7 +303,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if ("true".equals(vflex)) {
 			return true;
 		}
-		if (Strings.isBlank(vflex) || "false".equals(vflex)) {
+		if (Strings.isBlank(vflex) || "false".equals(vflex) || "min".equals(vflex)) {
 			return false;
 		}
 		return Integer.parseInt(vflex) > 0;
@@ -315,7 +315,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public void setVflex(boolean vflex) {
 		if (isVflex() != vflex) {
-			setVflex(""+vflex);
+			setVflex(String.valueOf(vflex));
 		}
 	}
 	/**
