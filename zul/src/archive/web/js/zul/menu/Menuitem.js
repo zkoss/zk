@@ -254,13 +254,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 						if (p.isOpen() && !this._uplder /*Bug #2911385 && !this._popup*/) {							
 							p.close({sendOnOpen:true});
 
-							//_fixedWebKit used in Menu to fix a bug
+							//_noFloatUp used in Menu.js to fix Bug 1852304
 							if (fixedWebKit) {
 								fixedWebKit = false;
-								mb._fixedWebKit = true;
-								setTimeout(function () {
-									mb._fixedWebKit = false;
-								}, 10);
+								mb._noFloatUp = true;
 							}
 						} else break;
 					}

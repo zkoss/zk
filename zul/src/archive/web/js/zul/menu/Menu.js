@@ -224,6 +224,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
+				menubar._noFloatUp = false; //used in _doMouseOut
 				menubar._lastTarget = this;
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
@@ -247,13 +248,16 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var	topmost = this.isTopmost();
 		if (topmost) {
 			this.$class._rmOver(this);
-			var mb = this.getMenubar();
-			if (this.menupopup && mb.isAutodrop()) {
+			var menubar = this.getMenubar();
+			if (this.menupopup && menubar.isAutodrop()) {
 				if (this.menupopup.isOpen())
 					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				if (!mb._fixedWebKit)
+				//_noFloatUp: Bug 1852304: Safari/Chrome unable to popup with menuitem
+				//because popup causes mouseout, and mouseout casues onfloatup
+				if (!menubar._noFloatUp)
 					zWatch.fire('onFloatUp', this); //notify all
 					// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
+				menubar._noFloatUp = false;
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);
