@@ -574,10 +574,10 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	public boolean isVflex() {
 		final String vflex = getVflex();
-		if ("true".equals(vflex)) {
+		if ("true".equals(vflex) || "min".equals(vflex)) {
 			return true;
 		}
-		if (Strings.isBlank(vflex) || "false".equals(vflex) || "min".equals(vflex)) {
+		if (Strings.isBlank(vflex) || "false".equals(vflex)) {
 			return false;
 		}
 		return Integer.parseInt(vflex) > 0;

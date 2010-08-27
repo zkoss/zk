@@ -7,102 +7,102 @@
 ]]>
 	</html>
 	<hbox>
-		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="true"
+		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="listbox"
 			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
-			<listitem draggable="true" > 
+			<listitem draggable="listbox" > 
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
 			</listitem>
-			<listitem draggable="true" >
+			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
 			</listitem>
 		</listbox>
-		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="true" 
+		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="grid" 
 			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
 			<rows>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK Forge" />
 			</row>
-			<row draggable="true" > 
+			<row draggable="grid" > 
 				<label value="ZK Mobile" />
 			</row>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK GWT" />
 			</row>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK JSF" />
 			</row>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK JSP" />
 			</row>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK Spring" />
 			</row>
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK" />
 			</row >
-			<row draggable="true" >
+			<row draggable="grid" >
 				<label value="ZK Studio" />
 			</row>
 			</rows>
 		</grid>
-		<tree height="250px" width="250px" onDrop="move(event.dragged)" droppable="true"
+		<tree height="250px" width="250px" onDrop="move(event.dragged)" droppable="tree"
 			fixedLayout="true" mold="paging" pageSize="5">
 			<treechildren>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK Forge"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK Mobile"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK GWT"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK JSF"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK JSP"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK Spring"/>
 				</treerow>
 			</treeitem>
 			<treeitem>
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK"/>
 				</treerow>
 			</treeitem>
 			<treeitem >
-				<treerow draggable="true">
+				<treerow draggable="tree">
 					<treecell label="ZK Studio"/>
 				</treerow>
 			</treeitem>
