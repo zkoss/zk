@@ -339,4 +339,10 @@ a.z-menu-item-cnt:visited,
 a.z-menu-item-cnt {
 	color: black;
 }
+<%-- Fixed the text in menu doesn't align with IE6 and IE7 --%>
+.z-menu-inner-m .z-menu-btn,
+.z-menu-item-inner-m .z-menu-item-btn{
+	padding-top:0px;
+	padding-right:0px;
+}
 </c:if>
