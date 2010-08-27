@@ -229,6 +229,10 @@ public class WebManager {
 				code ^= Objects.hashCode(me.getKey())
 					+ Objects.hashCode(me.getValue());
 			}
+			for (Iterator e = langdef.getMergeJavaScriptPackages().iterator();
+			e.hasNext();) {
+				code ^= Objects.hashCode(e.next());
+			}
 		}
 
 		return Integer.toHexString(code);
