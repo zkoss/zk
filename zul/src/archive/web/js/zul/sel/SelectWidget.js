@@ -713,7 +713,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 			//since row might was selected, we always enfoce focus here
 			row.focus();
-			//if (evt) Event.stop(evt);
+			//if (evt) evt.stop();
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
 		}
