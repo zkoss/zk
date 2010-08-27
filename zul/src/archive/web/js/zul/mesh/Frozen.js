@@ -123,7 +123,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			scroll.style.width = jq.px0(width);
 			
 			var scrollScale = bdfaker.childNodes.length - this._columns -
-					(parent.isSizedByContent() ? 1 : 2 /** fixed a bug related to the feature #3025419*/);
+					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
 			
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			this.syncScorll();
