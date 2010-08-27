@@ -220,7 +220,7 @@ public class WebManager {
 			^ _wapp.getBuild().hashCode()
 			^ WebApps.getEdition().hashCode();
 
-		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
