@@ -17,22 +17,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 	<description><![CDATA[ZK Demo]]></description>
 	<display-name>zkdemo</display-name>
-	<!--
-	<icon>
-		<small-icon></small-icon>
-		<large-icon></large-icon>
-	</icon>
-	-->
-	<!-- Spring ApplicationContext -->
-	<!-- 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring-config.xml</param-value>
-	</context-param>
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	 -->
+
 	<!-- //// -->
 	<!-- ZK -->
 	<listener>
