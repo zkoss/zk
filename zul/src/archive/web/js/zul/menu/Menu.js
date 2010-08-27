@@ -263,14 +263,16 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
 			cls = wgt.getZclass();
-		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
+			menupopup = wgt.menupopup,
+		cls += top ? (menupopup ? menupopup.isOpen(): false) ? '-body-seld' : '-body-over' : '-over';
 		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
+			menupopup = wgt.menupopup,
 			cls = wgt.getZclass();
-		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
+		cls += top ? (menupopup ? menupopup.isOpen(): false) ? '-body-seld' : '-body-over' : '-over';
 		jq(n).addClass(cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
