@@ -882,16 +882,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//invoke rerender later
 	function _asyncRerender(wgt, timeout) {
-		wgt._asyncRerender = true;
+		wgt._asyncRRD = true;
 		setTimeout(function () {
-			if (wgt._asyncRerender) {
+			if (wgt._asyncRRD) {
 				_rerenderDone(wgt);
 				wgt.rerender();
 			}
 		}, timeout);
 	}
 	function _rerenderDone(wgt) {
-		delete wgt._asyncRerender;
+		delete wgt._asyncRRD;
 	}
 
 	var _dragoptions = {
