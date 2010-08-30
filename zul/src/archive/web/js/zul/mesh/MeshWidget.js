@@ -222,6 +222,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ebody.style.overflowX = 'hidden'; // keep to hide
 		}
 		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
+		var paging;
+		if (zk.ie7_ && (paging = this.$n('pgib')))
+			zk(paging).redoCSS();
 	},
 	unbind_: function () {
 		if (this.ebody)
