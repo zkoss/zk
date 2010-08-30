@@ -90,35 +90,35 @@ Comparator asc = new RowDetailComparator(true),
 	<rows>
 		<row>
 			<detail open="true">
-				<hbox>
+				<hlayout>
 					<image sclass="myimg" width="100px" height="100px"
 						src="/img/item1.jpg" />
-					<vbox>
+					<vlayout>
 						<label
 							value="Item Specifics - Item Condition	"
 							style="font-weight:bold;font-style: italic;" />
-						<hbox>
+						<hlayout>
 							<label value="Condition:" />
 							<label value="Used"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Brand:" />
 							<label value="Apple"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Technology:" />
 							<label value="DVI"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Monitor Type:" />
 							<label value="LCD/Flat Panel"
 								style="font-weight:bold;" />
-						</hbox>
-					</vbox>
-				</hbox>
+						</hlayout>
+					</vlayout>
+				</hlayout>
 			</detail>
 			<label
 				value="Apple 20-inch Aluminum Cinema Display M9177/A" />
@@ -129,35 +129,35 @@ Comparator asc = new RowDetailComparator(true),
 		
 		<row>
 			<detail fulfill="onOpen">
-				<hbox>
+				<hlayout>
 					<image sclass="myimg" width="100px" height="100px"
 						src="/img/item2.jpg" />
-					<vbox>
+					<vlayout>
 						<label
 							value="Item Specifics"
 							style="font-weight:bold;font-style: italic;" />
-						<hbox>
+						<hlayout>
 							<label value="Condition:" />
 							<label value="Used"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Brand:" />
 							<label value="Kyocera"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Phone Type:" />
 							<label value="Phones without Service Contrac"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Product Type:" />
 							<label value="Cell Phones"
 								style="font-weight:bold;" />
-						</hbox>
-					</vbox>
-				</hbox>
+						</hlayout>
+					</vlayout>
+				</hlayout>
 			</detail>
 			<label
 				value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
@@ -167,45 +167,45 @@ Comparator asc = new RowDetailComparator(true),
 		</row>
 		<row>
 			<detail fulfill="onOpen">
-				<hbox>
+				<hlayout>
 					<image sclass="myimg" width="100px" height="100px"
 						src="/img/item3.jpg" />
-					<vbox>
+					<vlayout>
 						<label
 							value="Item Specifics - Video Game Systems"
 							style="font-weight:bold;font-style: italic;" />
-						<hbox>
+						<hlayout>
 							<label value="Manufacturer:" />
 							<label value="Microsoft"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Platform:" />
 							<label value="Microsoft Xbox 360"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="MPN:" />
 							<label value="52T-00013"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Condition:" />
 							<label value="Used"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Condition:" />
 							<label value="Used"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Media Type:" />
 							<label value="DVD-ROM"
 								style="font-weight:bold;" />
-						</hbox>
-					</vbox>
-				</hbox>
+						</hlayout>
+					</vlayout>
+				</hlayout>
 			</detail>
 			<label
 				value="Halo 3 ed. xbox 360 bundle pack" />
@@ -216,45 +216,45 @@ Comparator asc = new RowDetailComparator(true),
 		
 		<row>
 			<detail fulfill="onOpen">
-				<hbox>
+				<hlayout>
 					<image sclass="myimg" width="100px" height="100px"
 						src="/img/item4.jpg" />
-					<vbox>
+					<vlayout>
 						<label
 							value="Item Specifics - Cell Phones &amp; Smartphones"
 							style="font-weight:bold;font-style: italic;" />
-						<hbox>
+						<hlayout>
 							<label value="Carrier:" />
 							<label value="AT&amp;T, Cingular"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Brand:" />
 							<label value="Apple iPhone"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Technology:" />
 							<label value="GSM"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Camera:" />
 							<label value="1-2 Megapixels"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Condition:" />
 							<label value="Used"
 								style="font-weight:bold;" />
-						</hbox>
-						<hbox>
+						</hlayout>
+						<hlayout>
 							<label value="Features:" />
 							<label value="Bluetooth Enabled, Calendar, Color Screen, Email Access, GPS, Internet Browser, MP3 Player, PDA-PC Sync, SMS-Text Messaging, Speakerphone, Touch Screen, USB Interface"
 								style="font-weight:bold;" />
-						</hbox>
-					</vbox>
-				</hbox>
+						</hlayout>
+					</vlayout>
+				</hlayout>
 			</detail>
 			<label
 				value="Apple iPhone 8GB - 1st Generation, Version 2.0" />

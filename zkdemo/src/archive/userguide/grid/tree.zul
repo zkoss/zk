@@ -39,19 +39,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					<panelchildren>
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
-<hbox width="100%">
-<vbox>
+<hlayout width="100%">
+<vlayout>
 	Four style of trees :
 	<radiogroup
 		onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
-		<vbox>
+		<vlayout>
 			<radio label="Default" value="tree" selected="true"/>
 			<radio label="Dot Tree" value="dottree" />
 			<radio label="XP Explorer" value="filetree" />
 			<radio label="Vista Explorer" value="vfiletree" />
-		</vbox>
+		</vlayout>
 	</radiogroup>
-</vbox>
+</vlayout>
 <tree id="tree" width="400px" rows="8">
 	<treecols sizable="true">
 		<treecol label="Name" />
@@ -104,7 +104,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<treeitem label="Item 3" />
 	</treechildren>
 </tree>
-</hbox>
+</hlayout>
 					]]></attribute>
 						</textbox>
 					</panelchildren>
