@@ -371,8 +371,8 @@ doMouseDown_: function () {
 	 * Example: extending Array 
 <pre><code>
 zk.copy(Array.prototoype, {
- $add: function (o) {
-  this.push(o);
+ $addAll: function (o) {
+  return this.push.apply(this, o);
  }
 });
 </code></pre>

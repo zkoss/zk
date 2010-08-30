@@ -55,11 +55,6 @@ public class Array {
 	 */
 	public boolean $equals(Object o);
 
-	/** Adds the given element(s) to the end of this array.
-	 * It is the sasme as <code>push</code>.
-	 * @since 5.0.4
-	 */
-	public void $add(Object o);
 	/** Adds all elements of the given array to this array.
 	 * @since 5.0.4
 	 */
