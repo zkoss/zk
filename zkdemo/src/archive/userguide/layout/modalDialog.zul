@@ -54,7 +54,7 @@ closable=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>tru
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
 <window title="Modal Dialog" border="normal">
-<button label="Hello.doModal">
+<button label="Hello.doModal" autodisable="self">
 	<attribute name="onClick">{
 		final Window win = (Window) Executions.createComponents(
 				"/userguide/layout/hello-template.zul", null, null);
