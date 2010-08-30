@@ -15,8 +15,8 @@
 	 };
 ]]></zscript>
 	<window height="100%" width="100%">
-	<div vflex="100%" hflex="100%" style="border: 1px solid grey;">
-		<div vflex="true" />
+	<div vflex="true" hflex="true" style="border: 1px solid grey;">
+		<div vflex="true"><span>&#160;</span></div>
 		<n:table width="100%">
 			<n:tr>
 				<n:td>
