@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 zul.layout.Layout = zk.$extends(zk.Widget, {
+	_spacing: '0.3em',
 	$define: {
 		/** Sets the spacing between adjacent children.
 	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
@@ -26,16 +27,18 @@ zul.layout.Layout = zk.$extends(zk.Widget, {
 		/** Returns the spacing between adjacent children, or null if the default
 	 	 * spacing is used.
 	 	 *
-	 	 * <p>Default: null (means to use the default spacing).
+	 	 * <p>Default: 0.3em (means to use the default spacing).
 	 	 * @return String
 	 	 */
-		spacing: function () {
+		spacing: [function (v) {
+			return v ? v : '0.3em';
+		}, function () {
 			var n = this.$n(),
 				vert = this.isVertical_();
 			if (n) {
 				jq(n).children('div').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing ? this._spacing : '');
 			}
-		}
+		}]
 	},
 	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();

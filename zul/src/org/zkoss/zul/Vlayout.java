@@ -27,11 +27,11 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  */
 public class Vlayout extends HtmlBasedComponent {
 
-	private String _spacing;
+	private String _spacing = "0.3em";
 	
 	/** Returns the spacing between adjacent children, or null if the default
 	 * spacing is used.
-	 * <p>Default: null (means to use the default spacing).
+	 * <p>Default: 0.3em (means to use the default spacing).
 	 */
 	public String getSpacing() {
 		return _spacing;
@@ -42,7 +42,7 @@ public class Vlayout extends HtmlBasedComponent {
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {
-		if (spacing != null && spacing.length() == 0) spacing = null;
+		if (spacing == null || spacing.length() == 0) spacing = "0.3em";
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			smartUpdate("spacing", _spacing);
@@ -56,6 +56,7 @@ public class Vlayout extends HtmlBasedComponent {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "spacing", _spacing);
+		if (!"0.3em".equals(_spacing))
+			render(renderer, "spacing", _spacing);
 	}
 }
