@@ -134,6 +134,9 @@ public class AuUploader implements AuExtension {
 							.getDesktopCache(sess).getDesktop(dtid);
 						final Map params = parseRequest(request, desktop, uuid + '_' + sid);
 						nextURI = (String)params.get("nextURI");
+						
+						// Bug 3054784
+						params.put("native", request.getParameter("native"));
 						processItems(desktop, params, attrs);
 					}
 				}
