@@ -529,12 +529,15 @@ public class HtmlPageRenders {
 
 		//generate JS second
 		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
+		final boolean ie6only = exec.isBrowser("ie6-");
 		if (divRequired) {
 			out.write("\n<script type=\"text/javascript\">");
 			if (!aupg && owner != null) {
 				out.write("zkq('");
 				out.write(owner.getUuid());
 				out.write("',function(){");
+			} else if (ie6only) {
+				out.write("jq(function(){"); //Bug 3055849
 			}
 			out.write("zkmb();try{");
 			out.write(outZkIconJS());
@@ -603,7 +606,7 @@ public class HtmlPageRenders {
 
 		if (divRequired) {
 			out.write("}finally{zkme();}");
-			if (!aupg && owner != null)
+			if ((!aupg && owner != null) || ie6only)
 				out.write("});");
 			out.write("</script>\n");
 		}
@@ -721,13 +724,17 @@ public class HtmlPageRenders {
 			throw new InternalError("Not possible: "+comp);
 
 		final String extra;
+		final boolean ie6only = exec.isBrowser("ie6-");
 		try {
 			if (comp != null) {
 				outDivTemplateBegin(out, comp.getUuid());
 				outDivTemplateEnd(out);
 			}
 
-			out.write("<script type=\"text/javascript\">zkmb();try{zkx(\n");
+			out.write("<script type=\"text/javascript\">");
+			if (ie6only)
+				out.write("jq(function(){"); //Bug 3055849
+			out.write("zkmb();try{zkx(\n");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -739,7 +746,10 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("\n}finally{zkme();}\n</script>\n");
+		out.write("\n}finally{zkme();}");
+		if (ie6only)
+			out.write("})");
+		out.write("\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

@@ -108,6 +108,7 @@ ZK 5.0.4
   3052208: Hovers on menu are a bit hit and miss with IE
   3053311: A colorbox in menu doesn't has same color when change orient
   3053313: Constraint with no past can't select today
+  3055849: IE6 hangs if ZK used in a very complex page (incl. tables)
   3054784: Native parameter in Button.setUpload() is not effective
 
 * Upgrade Notes
