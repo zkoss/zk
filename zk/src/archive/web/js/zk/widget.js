@@ -589,9 +589,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
 					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
-					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
-					
-				var cwgt = _binds[c.id];
+					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins),
+					cwgt = _binds[c.id];
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {

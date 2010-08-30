@@ -28,7 +28,7 @@
 							var popup = this.$f('mypopup'),
 								msg = this.$f('msg');
 							popup.open(this.uuid, null, 'before_end'); 
-							var n = popup.$n(); //in rod, n is replaced when open the popup in rod, must get it after
+							var n = popup.$n(); //in rod, n is replaced when open the popup. Must get it after
 							if ('0px' == n.style.top) {
 								jq(msg.$n()).css('color', 'red');
 								msg.setValue('popup positiopn is wrong');
