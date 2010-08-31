@@ -825,8 +825,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				dg._rootoffs = {
 					maxs: maxs,
 					mins: mins,
-					top: ofs[1],
-					left : ofs[0],
+					top: ofs[1] + tb,
+					left : ofs[0] + lr,
 					right : real.offsetWidth,
 					bottom: real.offsetHeight
 				};
