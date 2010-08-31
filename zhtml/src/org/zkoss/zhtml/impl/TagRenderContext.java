@@ -48,7 +48,7 @@ public class TagRenderContext {
 	}
 
 	/** Completes the rendering by returning what are generated
-	 * by {@link #renderBegin} and {@link #renderEnd} (never null).
+	 * by {@link #renderBegin} and {@link #renderEnd} (never return null).
 	 * After rendering, the context is reset.
 	 */
 	public String complete() {
