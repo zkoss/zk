@@ -425,6 +425,16 @@ function zkmprops(uuid, props) {
 		doAuCmds(arguments);
 	},
 
+	//mount and zkx
+	zkmx: function () {
+		zkmb();
+		try {
+			zkx.apply(window, arguments);
+		} finally {
+			zkme();
+		}
+	},
+
 	//begin of mounting
 	zkmb: function (binding) {
 		zk.mounting = true;
