@@ -371,8 +371,8 @@ doMouseDown_: function () {
 	 * Example: extending Array 
 <pre><code>
 zk.copy(Array.prototoype, {
- $add: function (o) {
-  this.push(o);
+ $addAll: function (o) {
+  return this.push.apply(this, o);
  }
 });
 </code></pre>
@@ -1086,6 +1086,8 @@ zk.log('value is", value);
 	zk.opera = zk.agent.indexOf("opera") >= 0;
 	zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
 	zk.ios = zk.agent.indexOf("iphone") >= 0 || zk.agent.indexOf("ipad") >= 0;
+	zk.android = zk.agent.indexOf('android') >= 0;
+	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
 		var j = zk.agent.indexOf("firefox/");

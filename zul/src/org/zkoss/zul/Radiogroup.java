@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
@@ -45,6 +47,8 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	private String _orient = "horizontal";
 	/** The name of all child radio buttons. */
 	private String _name;
+	/** A list of external radio ({@link Radio}) components. */
+	private List _externs;
 	private int _jsel = -1;
 
 	public Radiogroup() {
@@ -70,6 +74,32 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		}
 	}
 
+	/** Returns a readonly list of {@link Radio}.
+	 * Note: any update to the list won't affect the state of this radio group.
+	 * @since 5.0.4
+	 */
+	public List getItems() {
+		//FUTURE: the algorithm is stupid and it shall be similar to Listbox
+		//however, it is OK since there won't be many radio buttons in a group
+		final List items = new LinkedList();
+		getItems0(this, items);
+		if (_externs != null)
+			for (Iterator it = _externs.iterator(); it.hasNext();) {
+				final Radio radio = (Radio)it.next();
+				if (!isRedudant(radio))
+					items.add(radio);
+			}
+		return items;
+	}
+	private static void getItems0(Component comp, List items) {
+		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component)it.next();
+			if (child instanceof Radio)
+				items.add(child);
+			else if (!(child instanceof Radiogroup)) //skip nested radiogroup
+				getItems0(child, items);
+		}
+	}
 	/** Returns the radio button at the specified index.
 	 */
 	public Radio getItemAtIndex(int index) {
@@ -77,10 +107,16 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 			throw new IndexOutOfBoundsException("Wrong index: "+index);
 
 		final MutableInteger cur = new MutableInteger(0);
-		final Radio radio = getAt(this, cur, index);
-		if (radio == null)
-			throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
-		return radio;
+		Radio radio = getAt(this, cur, index);
+		if (radio != null)
+			return radio;
+		if (_externs != null)
+			for (Iterator it = _externs.iterator(); it.hasNext();) {
+				radio = (Radio)it.next();
+				if (!isRedudant(radio) && cur.value++ == index)
+					return radio;
+			}
+		throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
 	}
 	/** Returns the radio button at the specified index.
 	 * @since 3.5.2
@@ -101,11 +137,24 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		}
 		return null;
 	}
+	private boolean isRedudant(Radio radio) {
+		for (Component p = radio; (p = p.getParent()) != null;)
+			if (p instanceof Radiogroup)
+				return p == this;
+		return false;
+	}
 
 	/** Returns the number of radio buttons in this group.
 	 */
 	public int getItemCount() {
-		return countItems(this);
+		int sum = countItems(this);
+		if (_externs != null)
+			for (Iterator it = _externs.iterator(); it.hasNext();) {
+				final Radio radio = (Radio)it.next();
+				if (!isRedudant(radio))
+					++sum;
+			}
+		return sum;
 	}
 	private static int countItems(Component comp) {
 		int sum = 0;
@@ -118,7 +167,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		}
 		return sum;
 	}
-	 
+
 	/** Returns the index of the selected radio button (-1 if no one is selected).
 	 */
 	public int getSelectedIndex() {
@@ -187,15 +236,19 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	public org.zkoss.zul.api.Radio appendItemApi(String label, String value) {
 		return appendItem(label, value);
 	}
-	/**  Removes the child radio button in the list box at the given index.
+	/**  Removes the child radio button in the radio group at the given index.
 	 * @return the removed radio button.
 	 */
 	public Radio removeItemAt(int index) {
 		final Radio item = getItemAtIndex(index);
-		removeChild(item);
+		if (item != null && !removeExternal(item)) {
+			final Component p = item.getParent();
+			if (p != null)
+				p.removeChild(item);
+		}
 		return item;
 	}
-	/**  Removes the child radio button in the list box at the given index.
+	/**  Removes the child radio button in the radio group at the given index.
 	 * @return the removed radio button.
 	 * @since 3.5.2
 	 */
@@ -248,7 +301,20 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	 * before (and excludes) j-the radio button.
 	 */
 	/*package*/ void fixSelectedIndex() {
-		_jsel = fixSelIndex(this, new MutableInteger(0));
+		final MutableInteger cur = new MutableInteger(0);
+		_jsel = fixSelIndex(this, cur);
+
+		if (_jsel < 0 && _externs != null)
+			for (Iterator it = _externs.iterator(); it.hasNext();) {
+				final Radio radio = (Radio)it.next();
+				if (!isRedudant(radio)) {
+					if (radio.isSelected()) {
+						_jsel = cur.value;
+						break; //found
+					}
+					++cur.value;
+				}
+			}
 	}
 	private static int fixSelIndex(Component comp, MutableInteger cur) {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
@@ -259,12 +325,33 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 				++cur.value;
 			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
 				int jsel = fixSelIndex(child, cur);
-				if (jsel >= 0) return jsel;
+				if (jsel >= 0)
+					return jsel;
 			}
 		}
 		return -1;
 	}
 
+	/** Adds an external radio. An external radio is a radio that is NOT a
+	 * descendant of the radio group.
+	 */
+	/*package*/ void addExternal(Radio radio) {
+		if (_externs == null)
+			_externs = new LinkedList();
+		_externs.add(radio);
+		if (!isRedudant(radio))
+			fixOnAdd(radio);
+	}
+	/** Removes an external radio.
+	 */
+	/*package*/ boolean removeExternal(Radio radio) {
+		if (_externs != null && _externs.remove(radio)) {
+			if (!isRedudant(radio))
+				fixOnRemove(radio);
+			return true;
+		}
+		return false;
+	}
 	/** Generates the group name for child radio buttons.
 	 */
 	private String genGroupName() {
@@ -290,6 +377,4 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	private static void fixClone(Radiogroup clone) {
 		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
 	}
-
-
 }

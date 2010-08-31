@@ -28,7 +28,9 @@ import java.util.Set;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
@@ -198,7 +200,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private boolean _sizedByContent, _vflex;
+	private boolean _sizedByContent;
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
@@ -209,7 +211,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE|CE_IMPORTANT); //since 5.0.0
+		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
 		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
@@ -297,7 +299,14 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @since 3.5.0
 	 */
 	public boolean isVflex() {
-		return _vflex;
+		final String vflex = getVflex();
+		if ("true".equals(vflex) || "min".equals(vflex)) {
+			return true;
+		}
+		if (Strings.isBlank(vflex) || "false".equals(vflex)) {
+			return false;
+		}
+		return Integer.parseInt(vflex) > 0;
 	}
 	/** Sets whether to grow and shrink vertical to fit their given space,
 	 * so called vertical flexibility.
@@ -305,9 +314,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @since 3.5.0
 	 */
 	public void setVflex(boolean vflex) {
-		if (_vflex != vflex) {
-			_vflex = vflex;
-			smartUpdate("vflex", _vflex);
+		if (isVflex() != vflex) {
+			setVflex(String.valueOf(vflex));
 		}
 	}
 	/**
@@ -1229,7 +1237,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/*package*/ DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
-			final String loadercls = (String) getAttribute("grid-dataloader");
+			final String loadercls = (String) Library.getProperty("org.zkoss.zul.grid.DataLoader.class");
 			try {
 				_dataLoader = _rod && loadercls != null ? 
 						(DataLoader) Classes.forNameByThread(loadercls).newInstance() :
@@ -1332,8 +1340,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		
 		if (isSizedByContent())
 			renderer.render("sizedByContent", true);
-		
-		render(renderer, "vflex", _vflex);
 		
 		if (_model != null)
 			render(renderer, "model", true);

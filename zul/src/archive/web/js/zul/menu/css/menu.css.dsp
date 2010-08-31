@@ -134,6 +134,7 @@
 .z-menu-item-body-over .z-menu-item-inner-m .z-menu-btn{
 	color:#233D6D;
 }
+<%-- remove the line beside the menu arrow
 .z-menubar-hor .z-menu-body-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
@@ -142,6 +143,7 @@
 	background: transparent no-repeat right 0;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-ver-over.gif')});
 }
+--%>
 <%--define disabled menuitem effect--%>
 .z-menubar-hor .z-menu-item-disd *, .z-menubar-ver .z-menu-item-disd *{
 	color:gray !important;
@@ -282,6 +284,9 @@
 	margin:2px 3px;
 	overflow:hidden;
 	width:auto;
+	<c:if test="${c:browser('safari')}">
+	height: 1px;
+	</c:if>
 }
 <%--define menubar hor scroll--%>
 .z-menubar-hor-scroll {
@@ -333,5 +338,11 @@
 a.z-menu-item-cnt:visited,
 a.z-menu-item-cnt {
 	color: black;
+}
+<%-- Fixed the text in menu doesn't align with IE6 and IE7 --%>
+.z-menu-inner-m .z-menu-btn,
+.z-menu-item-inner-m .z-menu-item-btn{
+	padding-top:0px;
+	padding-right:0px;
 }
 </c:if>

@@ -44,9 +44,8 @@ public class EventQueues {
 	 * can be passed around only in the same desktop.
 	 */
 	public static final String DESKTOP = "desktop";
-	/** Represents a group of desktops that belongs to the same top browser window.
-	 * A group of desktops belong the same top browser window
-	 * is formed if iframe or frameset is used., or
+	/** Represents a group of desktops that belongs to the same browser.
+	 * It is formed if iframe or frameset is used.
 	 * <p>Unlike {@link #APPLICATION} and {@link #SESSION}, it does NOT require
 	 * the server push, so there is no overhead.
 	 * However, it cannot communicate with desktops that belongs to other top
@@ -54,7 +53,7 @@ public class EventQueues {
 	 * (of the same session) belongs to the same top browser window, the developer
 	 * has to make sure of it by himself.
 	 * <p>Some portal container, such as Liferay, also forms a group of desktops
-	 * (they all belongs to the same browser window). However,
+	 * (they all belongs to the same browser window). Notice that
 	 * org.zkoss.zkmax.zul.Portallayout is a component and it won't cause
 	 * additional desktop to be created, unless iframe is used as the content.
 	 * <p>Note: this feature requires ZK EE.
@@ -68,7 +67,7 @@ public class EventQueues {
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}.
 	 */
 	public static final String APPLICATION = "application";
-	/** Represents the event queue in the sessionscope.
+	/** Represents the event queue in the sessions cope.
 	 * In other words, the events published to this kind of queues
 	 * can be passed around to any desktops of the same session.
 	 * <p>Notice that this feature will enable the server push

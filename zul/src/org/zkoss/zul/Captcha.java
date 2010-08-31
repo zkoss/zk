@@ -28,6 +28,7 @@ import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Library;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -381,9 +382,10 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
 	 *
-	 * <p>By default, it looks up the component attribute called
-	 * captcha-engine. If found, the value is assumed to be the class
-	 * or the class name of the default engine (it must implement
+	 * <p>By default, it looks up the libarry property called
+	 * org.zkoss.zul.captcha.engine.class.
+	 * If found, the value is assumed to be
+	 * the class name of the captcha engine (it must implement
 	 * {@link CaptchaEngine}.
 	 * If not found, {@link UiException} is thrown.
 	 *
@@ -394,22 +396,14 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	 * @since 3.0.0
 	 */
 	protected CaptchaEngine newCaptchaEngine() throws UiException {
-		Object v = getAttribute("captcha-engine");
-		if (v == null)
-			v = "org.zkoss.zkex.zul.impl.JHLabsCaptchaEngine";
+		final String PROP = "org.zkoss.zul.captcha.engine.class";
+		final String klass = Library.getProperty(PROP);
+		if (klass == null)
+			throw new UiException("Library property,  "+PROP+", required");
 
+		final Object v;
 		try {
-			final Class cls;
-			if (v instanceof String) {
-				cls = Classes.forNameByThread((String)v);
-			} else if (v instanceof Class) {
-				cls = (Class)v;
-			} else {
-				throw new UiException(v != null ? "Unknown captcha-engine, "+v:
-					"The captcha-engine attribute is not defined");
-			}
-	
-			v = cls.newInstance();
+			v = Classes.newInstanceByThread(klass);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}

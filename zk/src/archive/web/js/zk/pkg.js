@@ -33,8 +33,6 @@ zk.copy(zk, (function() {
 		_xloadings.push(nm);
 		if (updCnt() == 1) {
 			zk.disableESC();
-			if (zk.debugJS) //Not to show another loading message if not debugging (better look)
-				setTimeout(prgbox, 380);
 		}
 	}
 	function doLoad(pkg, dt) {
@@ -76,44 +74,9 @@ zk.copy(zk, (function() {
 			fn();
 		}
 	}
-
-	function loadmsg() {
-		var msg = '';
-		for (var j = _xloadings.length, k = 0; --j >=0;) {
-			if (msg) msg += ', ';
-			if (++k == 5) {
-				k = 0;
-				msg += '<br/>';
-			}
-			msg += _xloadings[j];
-		}
-		return msg;
-	}
 	function updCnt() {
-		zk.loading = _xloadings.length;
-		try {
-			var n = jq("#zk_loadcnt")[0];
-			if (n) n.innerHTML = loadmsg();
-		} catch (ex) {
-		}
-		return zk.loading;
+		return (zk.loading = _xloadings.length);
 	}
-	function prgbox() {
-		if (zk.loading) {
-			var n = jq("#zk_loadprog")[0];
-			if (!n) {
-				if (!jq.isReady)
-					return setTimeout(prgbox, 10);
-						//don't use jq() since it will be queued after others
-
-				zUtl.progressbox("zk_loadprog",
-					(window.msgzk?msgzk.LOADING:"Loading")
-					+' <span id="zk_loadcnt">'+loadmsg()+'</span>',
-					true);
-			}
-		}
-	}
-
 /** @partial zk
  */
   return { //internal utility
@@ -130,7 +93,7 @@ zk.copy(zk, (function() {
 			var afpk = _afterPkgLoad[pkg];
 			if (afpk) {
 				delete _afterPkgLoad[pkg];
-				_afterLoadFronts.push.apply(_afterLoadFronts, afpk); //add all
+				_afterLoadFronts.$addAll(afpk);
 			}
 
 			var deps = _pkgdepend[pkg];
@@ -144,7 +107,6 @@ zk.copy(zk, (function() {
 		if (!updCnt()) {
 			try {
 				zk.enableESC();
-				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
 			doEnd(_afterLoadFronts);

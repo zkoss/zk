@@ -99,6 +99,19 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		tabindex: function (v) {
 			var n = this.$n('real');
 			if (n) n.tabIndex = v||'';
+		},
+		/** Returns the value.
+		 * <p>Default: "".
+		 * @return String
+		 * @since 5.0.4
+		 */
+		/** Sets the value.
+		 * @param String value the value; If null, it is considered as empty.
+		 * @since 5.0.4
+		 */
+		value: function (v) {
+			var n = this.$n('real');
+			if (n) n.value = v || '';
 		}
 	},
 
@@ -115,16 +128,17 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return zcls != null ? zcls: "z-checkbox";
 	},
 	contentAttrs_: function () {
-		var html = '', v = this.getName(); // cannot use this._name for radio
-		if (v)
+		var html = '', v; // cannot use this._name for radio
+		if (v = this.getName())
 			html += ' name="' + v + '"';
 		if (this._disabled)
 			html += ' disabled="disabled"';
 		if (this._checked)
 			html += ' checked="checked"';
-		v = this._tabindex;
-		if (v)
+		if (v = this._tabindex)
 			html += ' tabindex="' + v + '"';
+		if (v = this.getValue())
+			html += ' value="' + v + '"';
 		return html;
 	},
 	bind_: function (desktop) {

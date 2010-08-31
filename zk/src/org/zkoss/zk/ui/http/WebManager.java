@@ -221,7 +221,7 @@ public class WebManager {
 			^ _wapp.getBuild().hashCode()
 			^ WebApps.getEdition().hashCode();
 
-		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		for (Iterator it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
@@ -229,6 +229,10 @@ public class WebManager {
 				final Map.Entry me = (Map.Entry)e.next();
 				code ^= Objects.hashCode(me.getKey())
 					+ Objects.hashCode(me.getValue());
+			}
+			for (Iterator e = langdef.getMergeJavaScriptPackages().iterator();
+			e.hasNext();) {
+				code ^= Objects.hashCode(e.next());
 			}
 		}
 

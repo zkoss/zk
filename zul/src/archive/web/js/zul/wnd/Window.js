@@ -528,7 +528,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_doOverlapped: function () {
-		var pos = this.getPosition(),
+		var pos = this._position,
 			n = this.$n(),
 			$n = zk(n);
 		if (!pos && (!n.style.top || !n.style.left)) {
@@ -545,7 +545,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._makeFloat();
 	},
 	_doModal: function () {
-		var pos = this.getPosition(),
+		var pos = this._position,
 			n = this.$n(),
 			$n = zk(n);
 		if (pos == "parent") this._posByParent();
@@ -677,7 +677,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var st = n.style;
 		st.position = "absolute"; //just in case
 		var ol = st.left, ot = st.top;
-		zk(n).center(pos);
+		if (pos != "nocenter")
+			zk(n).center(pos);
 		var sdw = this._shadowWgt;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
@@ -1142,16 +1143,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenMinFlex_: function (orient) {
 		this.$supers('afterChildrenMinFlex_', arguments);
-		if (this._mode == 'modal') { //win hflex="min"
+		if (this._mode == 'modal') //win hflex="min"
 			this._updateDomPos(true); //force re-position since window width might changed.
-		}
 	},
 	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenFlex_: function (cwgt) {
 		this.$supers('afterChildrenFlex_', arguments);
-		if (this._mode == 'modal') {
+		if (this._mode == 'modal')
 			this._updateDomPos(true); //force re-position since window width might changed.
-		}
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

@@ -306,8 +306,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 	_fixszAll: function () {
 		//1. find the topmost box
-		var box = this.parent;
-		if (box) this.$class._fixKidSplts(box.$n());
+		var box;
+		for (var p = this; p = p.parent;)
+			if (p.$instanceof(zul.box.Box))
+				box = p;
+
+		if (box) this.$class._fixKidSplts(box);
 		else this._fixsz();
 	}
 },{
@@ -348,6 +352,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			node = wgt.$n(),
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
+			bfcolps = "before" == wgt.getCollapse(),
 			run = draggable.run, diff, fd;
 
 		if (vert) {
@@ -372,12 +377,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			s -= diff;
 			if (s < 0) s = 0;
 			run.next.style[fd] = s + "px";
+			if (!bfcolps) run.next.style.overflow = 'hidden';
 		}
 		if (run.prev) {
 			var s = zk.parseInt(run.prev.style[fd]);
 			s += diff;
 			if (s < 0) s = 0;
 			run.prev.style[fd] = s + "px";
+			if (bfcolps) run.prev.style.overflow = 'hidden';
 		}
 
 		if (run.nextwgt) zWatch.fireDown('onSize', run.nextwgt);
@@ -422,15 +429,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return jq(n).prev().prev()[0];
 	},
 
-	_fixKidSplts: function (n) {
-		if (zk(n).isVisible()) { //n might not be an element
-			var wgt = n.z_wgt, //don't use zk.Widget.$ since we check each node
-				Splitter = zul.box.Splitter;
-			if (wgt && wgt.$instanceof(Splitter))
+	_fixKidSplts: function (wgt) {
+		if (wgt.isVisible()) { //n might not be an element
+			var Splitter = zul.box.Splitter;
+			if (wgt.$instanceof(Splitter))
 				wgt._fixsz();
 
-			for (n = n.firstChild; n; n = n.nextSibling)
-				Splitter._fixKidSplts(n);
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				Splitter._fixKidSplts(wgt);
 		}
 	}
 });

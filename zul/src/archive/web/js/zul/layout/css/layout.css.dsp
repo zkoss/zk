@@ -17,6 +17,9 @@
 	zoom: 1;
 }
 <c:if test="${c:isExplorer() and not c:browser('ie8')}">
+.z-hlayout, .z-vlayout {
+	position: relative;
+}
 .z-hlayout-inner {
 	display: inline;
 }

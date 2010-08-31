@@ -95,7 +95,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onResponse: function (ctl, opts) {
-		if (opts.rtags.onOpen && this.isOpen()) {
+		if ((opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			if (zk.animating()) {
 				var self = this;
 				setTimeout(function() {self.onResponse(ctl, opts);}, 50);
@@ -267,8 +267,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		var pp2 = this.getPopupNode_(true);
-		if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
-			pp.style.height = "250px";
+		if (ppofs[1] == "auto" && pp.offsetHeight > 350) {
+			pp.style.height = "350px";
 		} else if (pp.offsetHeight < 10) {
 			pp.style.height = "10px"; //minimal
 		}
@@ -442,7 +442,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});

@@ -311,9 +311,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
 			this.ebodytbl.offsetWidth) 
-				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && 
-			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
+				this.ebodytbl.style.width = ""; //reset
+			if (tblwd &&
+					// fixed column's sizing issue in B30-1895907.zul
+					(!this.eheadtbl || !this.ebodytbl || !this.eheadtbl.style.width ||
+					this.eheadtbl.style.width != this.ebodytbl.style.width) &&
+					// end of the fixed
+					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) 
 					tblwd = 0;
 				this.ebodytbl.style.width = tblwd + "px";
@@ -428,8 +432,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
 				else {
+					//use B30-1878840 test case, IE only, scroll down and sort cause javascript error(listbox outer)
+					//if tpad.offsetHeight is zero, then tpadhgh must be zero; otherwise, use the cached value in _padsz if any
 					var tpad = this.$n('tpad'),
-						tpadhgh = (tpad ? tpad.offsetHeight : 0);
+						tpadoffsethgh = (tpad ? tpad.offsetHeight : 0),
+						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;  
 					if (nRows <= nVisiRows) {
 						var $midVisiRow = zk(midVisiRow);
 						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
@@ -602,10 +609,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						break;
 					}
 			}
-			zk(btn).focus(timeout);
+			this.focusA_(btn, timeout);
 			return true;
 		}
 		return false;
+	},
+	focusA_: function(btn, timeout) { //called by derived class
+		zk(btn).focus(timeout);
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
@@ -703,7 +713,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 			//since row might was selected, we always enfoce focus here
 			row.focus();
-			//if (evt) Event.stop(evt);
+			//if (evt) evt.stop();
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
 		}

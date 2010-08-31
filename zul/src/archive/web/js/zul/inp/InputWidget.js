@@ -48,7 +48,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
 			this.fire('onChanging', _onChangeData(this, val, valsel == val),
-				{ignorable:1}, timeout||5);
+				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 		}
 	}
 	var _keyIgnorable = zk.ie ? function () {return true;}:

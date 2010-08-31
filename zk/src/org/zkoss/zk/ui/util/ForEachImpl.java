@@ -458,5 +458,9 @@ public class ForEachImpl implements ForEach {
 		public Integer getEnd() {
 			return this.end;
 		}
+
+		public String toString() {
+			return "[index=" + index + ']';
+		}
 	}
 }

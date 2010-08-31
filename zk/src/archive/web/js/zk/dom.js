@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zjq = function (jq) { //ZK extension
 	this.jq = jq;
 };
-(function () {
+(function (document, window) {
 	var _jq = {}, //original jQuery
 		//refer to http://www.w3schools.com/css/css_text.asp
 		_txtStyles = [
@@ -218,6 +218,7 @@ zk.copy(zjq, {
 		n.style.visibility = "inherit";
 	},
 	_fixClick: zk.$void, //overriden in domie.js
+	_fixedVParent: zk.$void,
 
 	_src0: "" //an empty src; overriden in domie.js
 });
@@ -1259,6 +1260,10 @@ jq(el).zk.center(); //same as 'center'
 			agt = document.createElement("span");
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
+		
+		// Bug 3049181
+		zjq._fixedVParent(el);
+		
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
 
@@ -1280,12 +1285,17 @@ jq(el).zk.center(); //same as 'center'
 			agt = $agt[0];
 
 			p = p ? jq('#' + p)[0]: agt ? agt.parentNode: null;
-			if (p)
+			if (p) {
+				
+				// Bug 3049181
+				zjq._fixedVParent(el);
+				
 				if (agt) {
 					p.insertBefore(el, agt);
 					$agt.remove();
 				} else
 					p.appendChild(el);
+			}
 		}
 		return this;
 	},
@@ -1535,9 +1545,8 @@ zk.copy(jq, {
 	 * @return int
 	 */
 	innerWidth: function () {
-		return typeof window.innerWidth == "number" ? window.innerWidth:
-			document.compatMode == "CSS1Compat" ?
-				document.documentElement.clientWidth: document.body.clientWidth;
+		return document.compatMode ? document.compatMode == "CSS1Compat" ?
+				document.documentElement.clientWidth: document.body.clientWidth : window.innerWidth;
 	},
 	/** Returns the width of the visible part of the browser window. 
 	 * @return int
@@ -1545,7 +1554,7 @@ zk.copy(jq, {
 	innerHeight: function () {
 		return typeof window.innerHeight == "number" ? window.innerHeight:
 			document.compatMode == "CSS1Compat" ?
-				document.documentElement.clientHeight: document.body.clientHeight;
+					document.documentElement.clientHeight: document.body.clientHeight;
 	},
 	/** Returns the pae total width.
 	 * @return int
@@ -2076,4 +2085,4 @@ zk.copy(jq.Event, {
 		return new zk.Event(target, 'on' + type, data, opts, evt);
 	}
 });
-})();
+})(document, window);

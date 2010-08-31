@@ -250,7 +250,9 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	font-size: ${fontSizeS};
 }
 .z-combobox-rounded-pp,
-.z-combobox-pp {
+.z-combobox-pp,
+.z-bandbox-rounded-pp,
+.z-bandbox-pp {
 	font-family: ${fontFamilyC};
 	overflow: auto;
 }

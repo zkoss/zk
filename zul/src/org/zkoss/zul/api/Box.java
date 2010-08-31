@@ -235,5 +235,22 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setHeights(String heights) throws WrongValueException;
-
+	/**
+	 * Sets whether sizing the cell's size by its content.
+	 * <p>Default: true. It means the cell's size is depended on its content.
+	 * 
+	 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
+	 * for resizing smoothly
+	 * @param byContent 
+	 * @since 5.0.4
+	 */
+	public void setSizedByContent(boolean byContent);
+	
+	/**
+	 * Returns whether sizing the cell's size by its content.
+	 * <p>Default: true.
+	 * @since 5.0.4
+	 * @see #setSizedByContent
+	 */
+	public boolean isSizedByContent();
 }

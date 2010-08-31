@@ -154,6 +154,11 @@ public class SimpleScope implements Scope {
 		return clone;
 	}
 
+	//Object//
+	public String toString() {
+		return _attrs != null ? _attrs.toString(): "{}";
+	}
+
 	//Helper Class//
 	private class Attrs extends HashMap {
 		public Object remove(Object key) {

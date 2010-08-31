@@ -149,8 +149,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			mesh._focusItem = this;
 		if (this.isVisible() && this.canActivate({checkOnly: true})) {
 			this._doFocusIn();
-			if (zk.currentFocus != mesh.$n('a'))
-				zk(mesh.$n('a')).focus(timeout);
+			mesh.focusA_(mesh.$n('a'), timeout);
 		}
 		return false;
 	},
@@ -194,10 +193,10 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers("beforeParentChanged_", arguments);
 	},
 	//@Override
-	onParentChanged_: function () {
+	afterParentChanged_: function () {
 		if (this.parent) //add
 			this._updHeaderCM();
-		this.$supers("onParentChanged_", arguments);
+		this.$supers("afterParentChanged_", arguments);
 	},
 
 	// event

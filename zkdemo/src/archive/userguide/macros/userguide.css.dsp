@@ -17,9 +17,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
+<c:include page="~./zul/css/ext.css.dsp"/>
 ${z:setCSSCacheControl()}
 
-html {overflow:hidden;}
+html {overflow:auto;}
 img { -ms-interpolation-mode:bicubic }
 body {
 	padding: 0 !important;
@@ -217,3 +218,13 @@ a.edition-field:hover {
 .breeze .demo-categorybar-right-scroll:hover {
 	background-position: 0 0;
 }
+<c:if test="${c:browser('ie6-')}">
+.breeze .demo-categorybar-left-scroll {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-left.png')}");
+}
+.breeze .demo-categorybar-right-scroll {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-right.png')}");
+}
+</c:if>

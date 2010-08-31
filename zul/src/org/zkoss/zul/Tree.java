@@ -106,6 +106,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		addClientEvent(Tree.class, Events.ON_FOCUS, 0);
 		addClientEvent(Tree.class, Events.ON_BLUR, 0);
 		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}
 	
 	public Tree() {

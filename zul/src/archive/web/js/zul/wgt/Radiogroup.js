@@ -12,6 +12,74 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+
+	function _concatItem(group) {
+		var sum = _concatItem0(group);
+		sum.$addAll(group._externs);
+		return sum;
+	}
+	function _concatItem0(cmp) {
+		var sum = [];
+		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {			
+			if (wgt.$instanceof(zul.wgt.Radio)) 
+				sum.push(wgt);
+			else if (!wgt.$instanceof(zul.wgt.Radiogroup)) //skip nested radiogroup
+				sum = sum.concat(_concatItem0(wgt));
+		}
+		return sum;
+	}
+
+	function _getAt(group, cur, index) {
+		var r = _getAt0(group, cur, index);
+		if (!r)
+			for (var extns = group._externs, j = 0, l = extns.length; j < l; ++j)
+				if (!_redudant(group, extns[j]) && cur.value++ == index)
+					return extns[j];
+		return r;
+	}
+	function _getAt0(cmp, cur, index) {
+		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {
+			if (wgt.$instanceof(zul.wgt.Radio)) {
+				if (cur.value++ == index) return wgt;
+			} else if (!wgt.$instanceof(zul.wgt.Radiogroup)) {
+				var r = _getAt0(wgt, cur, index);
+				if (r != null) return r;
+			}				
+		}
+	}
+
+	function _fixSelIndex(group, cur) {
+		var jsel = _fixSelIndex0(group, cur);
+		if (jsel < 0)
+			for (var extns = group._externs, j = 0, l = extns.length, radio; j < l; ++j)
+				if (!_redudant(group, radio = extns[j])) {
+					if (radio.isSelected())
+						return cur.value;
+					++cur.value;
+				}
+		return jsel;
+	}
+	function _fixSelIndex0(cmp, cur) {
+		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {
+			if (wgt.$instanceof(zul.wgt.Radio)) {
+				if (wgt.isSelected())
+					return cur.value;
+				++cur.value;
+			} else if (!wgt.$instanceof(zul.wgt.Radiogroup)) {
+				var jsel = _fixSelIndex0(wgt, cur);
+				if (jsel >= 0) return jsel;
+			}
+		}
+		return -1;
+	}
+
+	function _redudant(group, radio) {
+		for (var p = radio; (p = p.parent) != null;)
+			if (p.$instanceof(zul.wgt.Radiogroup))
+				return p == group;
+	}
+
 /**
  * A radio group.
  *
@@ -24,6 +92,10 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_jsel: -1,
 
+	$init: function () {
+		this.$supers("$init", arguments);
+		this._externs = [];
+	},
 	$define: { //zk.def
 		/** Returns the orient.
 		 * <p>Default: "horizontal".
@@ -50,7 +122,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		 */
 		name: function (v) {
 			for (var items = this.getItems(), i = items.length; i--;)
-				items[i].setName(name);
+				items[i].setName(v);
 		}
 	},
 	/** Returns the radio button at the specified index.
@@ -58,9 +130,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	 * @return Radio
 	 */
 	getItemAtIndex: function (index) {
-		if (index < 0)
-			return null;
-		return this._getAt(this, {value: 0}, index);
+		return index >= 0 ? _getAt(this, {value: 0}, index): null;
 	},
 	/** Returns the number of radio buttons in this group.
 	 * @return int
@@ -72,7 +142,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	 * @return Array
 	 */
 	getItems: function () {
-		return this._concatItem(this);
+		return _concatItem(this);
 	},
 	/** Returns the index of the selected radio button (-1 if no one is selected).
 	 * @return int
@@ -124,36 +194,16 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	 */
 	removeItemAt: function (index) {
 		var item = this.getItemAtIndex(index);
-		this.removeChild(item);
+		if (item && !this._rmExtern(item)) {
+			var p = item.parent;
+			if (p) p.removeChild(item);
+		}
 		return item;
 	},
 
 	/** private method */
 	_fixSelectedIndex: function () {
-		this._jsel = this._fixSelIndex(this, {value: 0});
-	},
-	_concatItem: function (cmp) {
-		var sum = [];
-		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {			
-			if (wgt.$instanceof(zul.wgt.Radio)) 
-				sum.push(wgt);
-			else 
-				if (!wgt.$instanceof(zul.wgt.Radiogroup)) { //skip nested radiogroup
-					sum = sum.concat(this._concatItem(wgt));
-				}
-		}
-		return sum;
-	},
-	_getAt: function (cmp, cur, index) {
-		for (var cnt = 0, wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {
-			if (wgt.$instanceof(zul.wgt.Radio)) {
-				if (cnt.value++ == index) return wgt;
-			} else if (!wgt.$instanceof(zul.wgt.Radiogroup)) {
-				var r = this._getAt(wgt, cur, index);
-				if (r != null) return r;
-			}				
-		}
-		return null;
+		this._jsel = _fixSelIndex(this, {value: 0});
 	},
 	_fixOnAdd: function (child) {
 		if (this._jsel >= 0 && child.isSelected()) {
@@ -169,17 +219,18 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 			this._fixSelectedIndex();
 		}
 	},
-	_fixSelIndex: function (cmp, cur) {
-		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {
-			if (wgt.$instanceof(zul.wgt.Radio)) {
-				if (wgt.isSelected())
-					return cur.value;
-				++cur.value;
-			} else if (!wgt.$instanceof(zul.wgt.Radiogroup)) {
-				var jsel = this._fixSelIndex(wgt, cur);
-				if (jsel >= 0) return jsel;
-			}
+
+	_addExtern: function (radio) {
+		this._externs.push(radio);
+		if (!_redudant(this, radio))
+			this._fixOnAdd(radio);
+	},
+	_rmExtern: function (radio) {
+		if (this._externs.$remove(radio)) {
+			if (!_redudant(this, radio))
+				this._fixOnRemove(radio);
+			return true;
 		}
-		return -1;
 	}
 });
+})();

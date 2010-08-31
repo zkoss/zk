@@ -112,6 +112,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _bind0(wgt) {
+		_rerenderDone(wgt); //cancel pending async rerender
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -588,9 +589,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
 					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
-					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
-					
-				var cwgt = _binds[c.id];
+					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins),
+					cwgt = _binds[c.id];
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -748,7 +748,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
 				jq(document.body).append(
-					'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
 					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
 				drag._dragImg = jq("#zk_ddghost-img")[0];
 				return jq("#zk_ddghost")[0];
@@ -800,8 +800,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		var dragImg = drag._dragImg;
-		if (dragImg)
+		if (dragImg) {
+			if (found)
+				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
+			else
+				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
+			
 			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
+		}
 
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
 	}
@@ -864,13 +870,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	//render the render defer
+	//render the render defer (usually controlled by server)
 	function _rdrender(wgt) {
 		if (wgt._z$rd) { //might be redrawn by forcerender
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
 			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
 		}
+	}
+
+	//invoke rerender later
+	function _asyncRerender(wgt, timeout) {
+		wgt._asyncRRD = true;
+		setTimeout(function () {
+			if (wgt._asyncRRD) {
+				_rerenderDone(wgt);
+				wgt.rerender();
+			}
+		}, timeout);
+	}
+	function _rerenderDone(wgt) {
+		delete wgt._asyncRRD;
 	}
 
 	var _dragoptions = {
@@ -881,6 +901,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
 	};
+
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -1438,18 +1459,44 @@ wgt.$f().main.setTitle("foo");
 	},
 
 	/** Sets a property.
-	 * @param String name the name of property.
-	 * If the name starts with <code>on</code>, it is assumed to be
+	 * The property updates sent from the server, including
+	 * renderProperties and smartUpdate, will invoke this method.
+	 * <h2>Special Names</h2>
+	 * <h3>onXxx</h3>
+	 * <p>If the name starts with <code>on</code>, it is assumed to be
 	 * an event listener and {@link #setListener} will be called.
+	 *
+	 * <h3>$onXxx</h3>
+	 * <p>If the name starts with <code>$on</code>, the value is assumed to
+	 * be a boolean indicating if the server registers a listener.
+	 *
+	 * <h3>$$onXxx</h3>
+	 * <p>If the name starts with <code>$$on</code>, it indicates
+	 * the event is an important event that the client must send it
+	 * back to the server. In additions, the value is assumed to
+	 * be a boolean indicating if the server registers a listener.
+	 *
+	 * <h3>u$xxx</h3>
+	 * <p>If the name starts with <code>u$</code>, it indicates
+	 * the value is UUID of a widget, and it will be resolved to a widget
+	 * before calling the real method.
+	 * <p>However, since we cannot resolve a widget by its UUID until
+	 * the widget is bound (to DOM). Thus, ZK sets property after mounted.
+	 * For example, <code>wgt.set("u$radiogroup", uuid)</code> is equivalent
+	 * to the following.
+	 * <pre><code>zk.afterMount(function () {
+	 wgt.set("radiogroup", zk.Widget.$(uuid))
+	 *});</code></pre>
+	 *
+	 * @param String name the name of property.
 	 * @param Object value the value
 	 * @return zk.Widget this widget
 	 */
 	/** Sets a property.
+	 * The property updates sent from the server, including
+	 * renderProperties and smartUpdate, will invoke this method.
 	 * @param String name the name of property.
-	 * If the name starts with <code>$on</code>, the value is assumed to
-	 * be a boolean indicating if the server registers a listener.
-	 * If the name starts with <code>on</code>, the value is assumed to be
-	 * an event listener and {@link #setListener} will be called.
+	 * Refer to {@link #set(String, Object)} for special names.
 	 * @param Object value the value
 	 * @param Object extra the extra argument. It could be anything.
 	 * @return zk.Widget this widget
@@ -1465,10 +1512,23 @@ wgt.$f().main.setTitle("foo");
 		else if (name.length > 2 && name.startsWith('on')
 		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
 			this.setListener(name, value);
-		else if (arguments.length >= 3)
-			zk.set(this, name, value, extra);
-		else
-			zk.set(this, name, value);
+		else {
+			var useExtra = arguments.length >= 3;
+			if (name.startsWith("u$")) {
+				var self = this;
+				zk.afterMount(function () {
+					name = name.substring(2);
+					value = zk.Widget.$(value);
+					if (useExtra)
+						zk.set(self, name, value, extra);
+					else
+						zk.set(self, name, value);
+				});
+			} else if (useExtra)
+				zk.set(this, name, value, extra);
+			else
+				zk.set(this, name, value);
+		}
 		return this;
 	},
 	/** Retrieves a value from the specified property.
@@ -1591,7 +1651,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, null, dt);
 			}
 
-		child.onParentChanged_(oldpt);
+		child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1681,7 +1741,7 @@ wgt.$f().main.setTitle("foo");
 				if (dt) this.insertChildHTML_(child, sibling, dt);
 			}
 
-		child.onParentChanged_(oldpt);
+		child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildAdded_(child);
 		return true;
@@ -1727,7 +1787,7 @@ wgt.$f().main.setTitle("foo");
 
 
 		if (!_noParentCallback)
-			child.onParentChanged_(oldpt);
+			child.afterParentChanged_(oldpt);
 		if (!_noChildCallback)
 			this.onChildRemoved_(child);
 		return true;
@@ -1858,17 +1918,17 @@ wgt.$f().main.setTitle("foo");
 	 * The previous parent can be found by {@link #parent}.
 	 * @see #onChildAdded_
 	 * @see #onChildRemoved_
-	 * @see #onParentChanged_
+	 * @see #afterParentChanged_
 	 */
 	beforeParentChanged_: function (/*newparent*/) {
 	},
 	/** A callback called after the parent has been changed.
 	 * @param zk.Widget oldparent the previous parent (null if it was not attached)
 	 * The current parent can be found by {@link #parent}.
-	 * @since 5.0.3
+	 * @since 5.0.4
 	 * @see #beforeParentChanged_
 	 */
-	onParentChanged_: function (/*oldparent*/) {
+	afterParentChanged_: function (/*oldparent*/) {
 	},
 
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
@@ -2627,8 +2687,19 @@ function () {
 	 * to speed up the re-rendering.
 	 * @return zk.Widget this widget.
 	 */
+	/** Re-renders after the specified time (milliseconds).
+	 * @param int timeout the number milliseconds (non-negative) to wait
+	 * before rerender
+	 * @return zk.Widget this widget.
+	 * @since 5.0.4
+	 */
 	rerender: function (skipper) {
 		if (this.desktop) {
+			if (typeof skipper == "number") {
+				_asyncRerender(this, skipper);
+				return this;
+			}
+
 			var n = this.$n();
 			if (n) {
 				var oldrod = this.z$rod;

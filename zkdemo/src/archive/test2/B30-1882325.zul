@@ -29,7 +29,7 @@ It shall disappear directly without this annoying effect.
 <div>Note: since the modal window contains many list items,
 the performance is no good -- it is not the issue.</div>
 	<window visible="false" id="mywin" width="250px" height="200px"
-	title="wnd1" action="onopen: ;">
+	title="wnd1">
 	<zscript>
 	List items = new org.zkoss.zkdemo.userguide.BigList(2000);
 	//a big list of Integer

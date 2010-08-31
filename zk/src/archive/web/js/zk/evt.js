@@ -185,8 +185,8 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	* (but not {@link #auStopped}).
 	* For fine control, you can use a combination of the following values:
 	<ul>
-	<li>revoke - revoke the stop, i.e., undo the last invocation of {@link #stop}<li>
-	<li>propagation - stop (or revoke) the event propagation ({@link #stopped}).<li>
+	<li>revoke - revoke the stop, i.e., undo the last invocation of {@link #stop}</li>
+	<li>propagation - stop (or revoke) the event propagation ({@link #stopped}).</li>
 	<li>dom - stop (or revoke) the native DOM event ({@link #domStopped}).</li>
 	<li>au - stop (or revoke) the sending of the AU request to the server ({@link #auStopped}).
 	Notice that, unlike the propagation and dom options, the sending of AU requests won't be stopped if opts is omitted.

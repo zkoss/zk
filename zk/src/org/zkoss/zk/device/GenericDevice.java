@@ -93,6 +93,31 @@ abstract public class GenericDevice implements Device {
 		return false;
 	}
 
+	/** Reloads the client-side messages in the specified locale.
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public void reloadMessages(java.util.Locale locale)
+	throws java.io.IOException {
+		throw new UnsupportedOperationException();
+	}
+	/** Converts a package to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public String packageToPath(String pkg) {
+		throw new UnsupportedOperationException();
+	}
+	/** Converts a relative path to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public String toAbsolutePath(String path) {
+		throw new UnsupportedOperationException();
+	}
+
 	public void init(String type, DeviceConfig config) {
 		_type = type;
 		_uamsg = config.getUnavailableMessage();

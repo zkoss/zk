@@ -37,12 +37,14 @@ ZK 5.0.4
   3041822: A way to minimize memory by not maintaining state at server
   3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
   3030481: Combobox support Selectable (used with ListModel)
-  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
-  3025422: The listbox in a container support fixed header
-  3026221: Databinder shall fire onCreate when cloning each items
+  3048583: Allow radiogroup not ancestor of radio so it can be anywhere
+  3049306: A way to control the position of a modal window by left/top
   3034530: The footer of components supports content alignment
   3047459: Include old value in InputEvent
   3038615: Include data of old width in ColSizeEvent
+  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
+  3025422: The listbox in a container support fixed header
+  3026221: Databinder shall fire onCreate when cloning each items
   3025279: Client: Able to listen the Ajax error
   3035171: <widget-class> (in lang.xml) shall support EL
   3032033: A way to customize the data format of AU requests
@@ -55,6 +57,12 @@ ZK 5.0.4
   1860341: Button support type="submit"
   2990932: Allow disable load-on-save mechanism in databinder
   3024156: Make Spring DelegatingVariableResolver execution-independent
+  3050359: A way to merge serveral Javascript packages into the zk package
+  2142143: Support for Value property in checkbox
+  3051362: A way to specify system-wide variable resolver
+  3052723: Avoid unnecessary onScrollPos from being fired
+  3052761: Calendar supports moving to next/prev mon by mouse scrolling
+  3052857: Provide a utile class for ListModel to support ListSubModel
   
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
@@ -115,11 +123,45 @@ ZK 5.0.4
   3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
   3046850: Decimalbox failed to handle very small number, 0.00000000001
   3046852: Doublebox wrong message for very small number, 0.00000000001
-  
+  3047534: The breeze theme's bandpopup is not high enough w/ listbox
+  3048567: IE.Listbox rod.Drag huge data to bottom.Select and jump up
+  3048564: IE only.Listbox rod, drag scroll to bottom, thumb jump up
+  3049192: createComponents with parent but w/o page fail if fellow
+  3049181: Checkbox problem (bug) with Banbbox + tree
+  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+  3051182: Nested box's splitter not fixed correctly if size inner one
+  3051305: Active Page not update when drag & drop item to the end
+  3042016: Grid rod does not work if new Grid with Java code
+  3051987: Readonly combobox has a border between button and input
+  3052381: Client side dateformater parse a wrong value in italian 
+  3052208: Hovers on menu are a bit hit and miss with IE
+  3053311: A colorbox in menu doesn't has same color when change orient
+  3053313: Constraint with no past can't select today
+  3055849: IE6 hangs if ZK used in a very complex page (incl. tables)
+  3054784: Native parameter in Button.setUpload() is not effective
+
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
     Components that support tabbox include InputWidget, Button, A, Checkbox,
     Listbox and derives.
+  + By default, HtmlMacroComponent supports auto forward events and wire
+    accessible variables.
+    You can turn on/off auto wire mechanism by specifying the Library
+    Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
+    If you did not specify the Library Property, default is false. 
+    <library-property>
+    	<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+    	<value>true</value>
+    </library-property>
+   or turn on/off auto forward events by specifying the Library Property
+   "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
+   If you did not specify the Library Property, default is false.
+    <library-property>
+   		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+    	<value>true</value>
+    </library-property>
+  + SimpleListModel's getSubModel returns an empty list if the value user entered
+    is empty. In additions, inSubModel is added to simplify the overriding.
   + Specify type as submit to make a button to submit a form when clicked.
   + The protected _visible member of AbstractComponent is removed.
     Use setVisibleDirectly() instead.
@@ -128,6 +170,9 @@ ZK 5.0.4
     and setHeightDirectly() instead.
   + AbstractComponent's newChildren() and newExtraCtrl() are both deprecated.
     Override getChildren() and getExtraCtrl() instead.
+  + The class name of the engine of chart and captcha must be specified in
+    the library properties called org.zkoss.zul.chart.engine.class and
+    org.zkoss.zul.captcha.engine.class respectively.
 
 	--------
 ZK 5.0.3

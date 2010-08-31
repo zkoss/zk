@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3049181.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 20 16:59:31 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Open the bandbox and then check the checkbox (IE6 only)
+	<separator/>
+	2. Reopen again, the checkbox should be checked.
+<bandbox width="650px" readonly="true">
+<bandpopup >
+<vbox>
+<tree id="tree" width="400px" >
+<treecols sizable="true">
+<treecol label="Name" />
+</treecols>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell >
+<checkbox id="testCheck" label="asdasd" />
+</treecell>
+</treerow>
+</treeitem>
+</treechildren>
+</tree>
+<button label="Check State in Tree" onClick="check(testCheck.checked)" />
+<zscript>
+public void check(boolean val) {
+checkVal.setText(" "+ val);
+}
+</zscript>
+<textbox id="checkVal" />
+</vbox>
+</bandpopup >
+</bandbox> 
+</zk>

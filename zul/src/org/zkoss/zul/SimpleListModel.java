@@ -26,11 +26,14 @@ import org.zkoss.zul.event.ListDataEvent;
 
 /**
  * A simple implementation of {@link ListModel}.
- * Note: It assumes the content is immutable. If not, use {@link ListModelList}
+ * <p>Note: It assumes the content is immutable. If not, use {@link ListModelList}
  * or {@link ListModelArray} instead.
  * In additions, it stores the data in the array format, so if the original
  * data is not an array. It is better not to use this class.
  *
+ * <p>Also notice that {@link SimpleListModel} also implements
+ * {@link ListSubModel}. It means when it is used with {@link Combobox},
+ * only the data that matches what the user typed will be shown.
  * @author tomyeh
  * @see ListModelArray
  * @see ListModelSet
@@ -104,46 +107,66 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	/**
 	 * Returns the subset of the list model data that matches
 	 * the specified value.
-	 * It is ususally used for implmentation of auto-complete.
+	 * It is usually used for implementation of auto-complete.
 	 *
-	 * <p>The implementation uses {@link #objectToString} to convert
-	 * the returned object of {@link #getElementAt} to the string.
-	 * And then, an element is considered as 'matched', if the string
-	 * starts with the specified value.
+	 * <p>The implementation uses {@link #inSubModel} to check if
+	 * the returned object of {@link #getElementAt} shall be in
+	 * the sub model.
 	 * 
-	 * <p>Note: If the nRows is a negative number, 10 is assumed.
+	 * <p>Notice the maximal allowed number of items is decided by
+	 * {@link #getMaxNumberInSubModel}, which, by default, returns 15
+	 * if nRows is negative.
 	 *
 	 * @param value the value to retrieve the subset of the list model.
-	 * It is converted to a string first by use of {@link #objectToString}.
-	 * Then, it is used to check if an element starts with (aka., prefix with)
+	 * It is the key argument when invoking {@link #inSubModel}.
 	 * this string.
+	 * @param nRows the maximal allowed number of matched items.
+	 * If negative, it means the caller allows any number, but the implementation
+	 * usually limits to a certain number (for better performance).
+	 * @see #inSubModel
+	 * @see #getMaxNumberInSubModel
 	 * @since 3.0.2
 	 */
 	public ListModel getSubModel(Object value, int nRows) {
-		final String idx = value == null ? "" : objectToString(value);
-		if (nRows < 0) nRows = 10;
 		final LinkedList data = new LinkedList();
+		nRows = getMaxNumberInSubModel(nRows);
 		for (int i = 0; i < _data.length; i++) {
-			if (idx.equals("") || _data[i].toString().startsWith(idx)) {
+			if (inSubModel(value, _data[i])) {
 				data.add(_data[i]);
 				if (--nRows <= 0) break; //done
 			}
 		}
 		return new SimpleListModel(data);
 	}
+	/** Returns the maximal allowed number of matched items in the sub-model
+	 * returned by {@link #getSubModel}.
+	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
+	 * @since 5.0.4
+	 */
+	protected int getMaxNumberInSubModel(int nRows) {
+		return nRows < 0 ? 15: nRows;
+	}
+	/** Compares if the given value shall belong to the submodel represented
+	 * by the key.
+	 * <p>Default: converts both key and value to String objects and
+	 * then return true if the String object of value starts with
+	 * the String object
+	 * @param key the key representing the submodel. In autocomplete,
+	 * it is the value entered by user.
+	 * @param value the value in this model.
+	 * @see #getSubModel
+	 * @since 5.0.4
+	 */
+	protected boolean inSubModel(Object key, Object value) {
+		String idx = objectToString(key);
+		return idx.length() > 0 && objectToString(value).startsWith(idx);
+	}
 	
 	/**
-	 * Returns the string from the value object. It is used to convert 
-	 * the object type to the string type for {@link #getSubModel(Object, int)}.
-	 *
-	 * <p>The implementation uses {@link Object#toString} to convert
-	 * the value to a string (and to an empty string if null).
-	 * If you need better control, you can override this method.
-	 * 
-	 * @param value the value object.
-	 * @since 3.0.2
+	 * @deprecated As of release 5.0.4, replaced with {@link #inSubModel}.
 	 */
 	protected String objectToString(Object value) {
-		return value != null ? value.toString(): "";
+		final String s = value != null ? value.toString(): "";
+		return s != null ? s: "";
 	}
 }

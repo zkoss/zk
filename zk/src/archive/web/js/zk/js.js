@@ -65,6 +65,9 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
+	$addAll: function (o) {
+		return this.push.apply(this, o);
+	},
 	$clone: function() {
 		return [].concat(this);
 	}

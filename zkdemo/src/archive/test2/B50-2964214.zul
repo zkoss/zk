@@ -15,6 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 <html><![CDATA[
 <ol>
+<li>Type a word in Ckeditor and click out the ckeditor</li>
 <li>Check the textbox's value, the a tag shall not has "_cke_saved_href" attribute</li>
 </ol>
 ]]>

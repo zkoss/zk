@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.lang.Objects;
 
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.List;
 import java.util.SortedSet;

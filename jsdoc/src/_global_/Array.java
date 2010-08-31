@@ -55,5 +55,10 @@ public class Array {
 	 */
 	public boolean $equals(Object o);
 
+	/** Adds all elements of the given array to this array.
+	 * @since 5.0.4
+	 */
+	public void $addAll(Array ary);
+
 	private Array() {}
 }

@@ -317,12 +317,19 @@ public class Events {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/** Sends the event the target specified in the event.
+	/** Sends the event to the target specified in the event, and processes it immedately.
 	 *
 	 * <p>Note: {@link Event#getTarget} cannot be null.
 	 */
 	public static void sendEvent(Event event) {
 		sendEvent(event.getTarget(), event);
+	}
+	/** Sends the event to the target, and processes it immedately.
+	 * @param target the target of the event (never null)
+	 * @since 5.0.4
+	 */
+	public static void sendEvent(String name, Component target, Object data) {
+		sendEvent(new Event(name, target, data));
 	}
 
 	/** Posts an event to the current execution.
@@ -398,7 +405,7 @@ public class Events {
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
-	 * In other words, the event won't be execute in the current execution.
+	 * In other words, the event won't be processed in the current execution.
 	 * Rather, it executes after the client receives the AU responses
 	 * and then echoes back the event back.
 	 *
@@ -419,10 +426,28 @@ public class Events {
 	public static final void echoEvent(String name, Component target, String data) {
 		echoEvent(name, target, (Object)data);
 	}
+	
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
-	 * In other words, the event won't be execute in the current execution.
+	 * In other words, the event won't be processed in the current execution.
+	 * Rather, it executes after the client receives the AU responses
+	 * and then echoes back the event back.
+	 *
+	 * <p>It is usually if you want to prompt the user before doing a long
+	 * operartion. A typical case is to open a hightlighted window to
+	 * prevent the user from clicking any button before the operation gets done.
+	 *
+	 * @since 5.0.4
+	 * @see #sendEvent
+	 */
+	public static final void echoEvent(Event event) {
+		echoEvent(event.getName(), event.getTarget(), event.getData());
+	}
+	/** Echos an event.
+	 * By echo we mean the event is fired after the client receives the AU
+	 * responses and then echoes back.
+	 * In other words, the event won't be processed in the current execution.
 	 * Rather, it executes after the client receives the AU responses
 	 * and then echoes back the event back.
 	 *

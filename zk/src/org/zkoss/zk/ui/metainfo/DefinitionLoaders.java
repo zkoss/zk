@@ -47,6 +47,8 @@ import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.impl.Utils;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * Utilities to load language definitions.
@@ -213,9 +215,11 @@ public class DefinitionLoaders {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
 		final LanguageDefinition langdef;
+		final Device device;
 		if (addon) {
 			if (log.debugable()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
+			device = Devices.getDevice(langdef.getDeviceType());
 
 			if (root.getElement("case-insensitive") != null)
 				throw new UiException("case-insensitive not allowed in addon");
@@ -241,6 +245,7 @@ public class DefinitionLoaders {
 			langdef = new LanguageDefinition(
 				deviceType, lang, ns, exts, pageRenderer,
 				"true".equals(ignoreCase), "true".equals(bNative), locator);
+			device = Devices.getDevice(deviceType);
 		}
 
 		parsePI(langdef, doc);
@@ -268,22 +273,27 @@ public class DefinitionLoaders {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			String src = el.getAttributeValue("src"),
-				pkg = el.getAttributeValue("package"),
-				defer = el.getAttributeValue("defer");
+				pkg = el.getAttributeValue("package");
+			final boolean merge = "true".equals(el.getAttributeValue("merge"));
+			final boolean ondemand = "true".equals(el.getAttributeValue("ondemand"));
 			if (pkg != null) {
 				if (src != null)
 					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
-				if (!"true".equals(defer)) {
-					src = "~./js/" + pkg + ".wpd";
+				if (!ondemand && !merge) {
+					src = "~." + device.packageToPath(pkg);
 					pkg = null;
 				}
-			} else if ("true".equals(defer))
-				log.warning("The defer attribute omgpred since it can be used with package only, "+el.getLocator());
+			}
 
 			final String ctn = el.getText(true);
 			final JavaScript js;
 			if (pkg != null && pkg.length() > 0) {
-				langdef.addDeferJavaScriptPackage(pkg);
+				if (ondemand) {
+					langdef.removeJavaScript("~." + device.packageToPath(pkg));
+					langdef.removeMergeJavaScriptPackage(pkg);
+				} else {
+					langdef.addMergeJavaScriptPackage(pkg);
+				}
 				continue; //TODO
 			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
@@ -478,7 +488,8 @@ public class DefinitionLoaders {
 						String n = wn != null ? wn: wgtnm;
 						if (!withEL(n)) {
 							int k = n.lastIndexOf('.');
-							cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+							cssURI = "~." + device.toAbsolutePath(
+								n.substring(0, k).replace('.', '/') + '/' + cssURI);
 						} else {
 							log.error("Absolute path required for cssURI, since the widget class contains EL expressions, "+e.getLocator());
 						}

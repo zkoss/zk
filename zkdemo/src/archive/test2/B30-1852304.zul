@@ -21,17 +21,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:h5>When you click the menu x and y, the listbox should be shown.</n:h5>
 	<window>
-		<checkbox label="autodrop" onCheck="menubar.autodrop = !menubar.autodrop"/>
-		<menubar id="menubar">
+		<checkbox label="autodrop" checked="true" onCheck="menubar.autodrop = !menubar.autodrop"/>
+		<menubar id="menubar" autodrop="true">
 			<menu label="x">
 				<menupopup>
 					<menuitem label="y" popup="z" />
 				</menupopup>
 			</menu>
 		</menubar>
-		<popup id="z"
-			style="padding: 3pt; border: outset 2px; background-color:#EEEEDD;">
-
+		<popup id="z">
 			<listbox width="250px">
 				<listhead sizable="true">
 					<listheader label="name" sort="auto" />

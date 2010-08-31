@@ -28,19 +28,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
-	$define: {
-		/** Returns the value.
-		 * <p>Default: "".
-		 * @return String
-		 */
-		/** Sets the value.
-		 * @param String value the value; If null, it is considered as empty.
-		 */
-		value: function (v) {
-			var n = this.$n('real');
-			if (n) n.value = v || '';
-		}
-	},
 	/** Returns {@link Radiogroup} that this radio button belongs to.
 	 * It is the nearest ancestor {@link Radiogroup}.
 	 * In other words, it searches up the parent, parent's parent
@@ -50,11 +37,29 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * @return Radiogroup
 	 */
 	getRadiogroup: function (parent) {
+		if (!parent && this._group)
+			return this._group;
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
+	/** Sets {@link Radiogroup} that this radio button belongs to.
+	 * The radio automatically belongs to the nearest ancestral radiogroup.
+	 * Use this method only if the radio group is not one of its ancestors.
+	 * @param Radiogroup group the radio group, or null to dis-associate
+	 * @since 5.0.4
+	 */
+	setRadiogroup: function (group) {
+		var old;
+		if ((old = this._group) != group) {
+			if (old) old._rmExtern(this);
+			this._group = group;
+			if (group) group._addExtern(this);
+			this._fixName();
+		}
+	},
+
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
@@ -109,10 +114,10 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		var group = this.getRadiogroup();
 		return group != null ? group.getName(): this.uuid;
 	},
-	contentAttrs_: function () {
-		var html = this.$supers('contentAttrs_', arguments);
-		html += ' value="' + this.getValue() + '"';
-		return html;
+	_fixName: function () {
+		var n = this.$n("real");
+		if (n)
+			n.name = this.getName();
 	},
 	getZclass: function () {
 		var zcls = this._zclass;

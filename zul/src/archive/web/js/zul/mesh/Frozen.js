@@ -104,9 +104,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf = function () {
 		if (!this._columns) return;
-		var bdfaker = this.parent.ebdfaker;
+		var parent = this.parent,
+			bdfaker = parent.ebdfaker;
 		if (!bdfaker) {
-			bdfaker = this.parent.ebodyrows[0];
+			bdfaker = parent.ebodyrows[0];
 			if (bdfaker)
 				bdfaker = bdfaker.$n();
 		}
@@ -117,10 +118,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 			this.$n('cave').style.width = jq.px0(leftWidth);
 			var scroll = this.$n('scrollX'),
-				width = this.parent.$n('body').offsetWidth;
+				width = parent.$n('body').offsetWidth;
 				width -= leftWidth;
 			scroll.style.width = jq.px0(width);
-			var scrollScale = bdfaker.childNodes.length - this._columns - 1;
+			
+			var scrollScale = bdfaker.childNodes.length - this._columns -
+					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
+			
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			this.syncScorll();
 		}

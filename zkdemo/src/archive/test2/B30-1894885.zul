@@ -22,10 +22,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<n:p>Grid alignment problem.
 </n:p>
 <n:p>
+Please click the button "Add new Dummy" 2 times, if the gird displays well, there is no bug existed.
+<!-- Bug comment  
 The following code shows the grid alignment when databinding one row. When
 displayed, click on the "Add new Dummy" ONE time and you will see the
 problem in the row added. When adding a second row it (the grid)
 straightens itself out:
+ -->
 </n:p>
 <window id="prods" title="Vboxing">
 	<zscript>

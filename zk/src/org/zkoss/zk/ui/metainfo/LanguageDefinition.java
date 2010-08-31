@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.resource.Locator;
@@ -143,7 +144,7 @@ public class LanguageDefinition {
 	/** A list of JavaScript. */
 	private final FastReadArray _js = new FastReadArray(JavaScript.class);
 	/** A list of deferrable JavaScript package. */
-	private final FastReadArray _pkgs = new FastReadArray(String.class);
+	private final FastReadArray _mergepkgs = new FastReadArray(String.class);
 	private final Map _jsmods = new HashMap(5),
 		_rojsmods = Collections.unmodifiableMap(_jsmods);
 	/** A list of StyleSheet. */
@@ -591,6 +592,20 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_js.add(js);
 	}
+	/** Removes a {@link JavaScript} of the give source required by this language.
+	 * @see #addJavaScript
+	 * @since 5.0.4
+	 */
+	public void removeJavaScript(String src) {
+		final Object[] ary = _js.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final JavaScript js = (JavaScript)ary[j];
+			if (Objects.equals(src, js.getSrc())) {
+				_js.remove(js);
+				return; //found
+			}
+		}
+	}
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
@@ -598,21 +613,30 @@ public class LanguageDefinition {
 		return new CollectionsX.ArrayCollection(_js.toArray());
 	}
 
-	/** Adds a deferrable JavaScript package required by this langauge.
+	/** Adds a mergeable JavaScript package required by this langauge.
+	 * The mergeable packages are packages that will be merged into
+	 * the zk package (to minimize the number of packages to load).
+	 * It reduces the load time if the package's footprint is small.
 	 * @param pkg the package name, such as "foo.fly"
-	 * @since 5.0.0
+	 * @since 5.0.4
 	 */
-	public void addDeferJavaScriptPackage(String pkg) {
+	public void addMergeJavaScriptPackage(String pkg) {
 		if (pkg == null || pkg.length() == 0)
 			throw new IllegalArgumentException();
-		_pkgs.add(pkg);
+		_mergepkgs.add(pkg);
 	}
-	/** Returns a list of deferrable JavaScript package (String)
-	 * required by this language.
-	 * @since 5.0.0
+	/** Removes a mergeable JavaScript package required by this language.
+	 * @since 5.0.4
 	 */
-	public Collection getDeferJavaScriptPackages() {
-		return new CollectionsX.ArrayCollection(_pkgs.toArray());
+	public void removeMergeJavaScriptPackage(String pkg) {
+		_mergepkgs.remove(pkg);
+	}
+	/** Returns a list of mergeable JavaScript package (String)
+	 * required by this language.
+	 * @since 5.0.4
+	 */
+	public Collection getMergeJavaScriptPackages() {
+		return new CollectionsX.ArrayCollection(_mergepkgs.toArray());
 	}
 
 	/** Adds the definition of a JavaScript module to this language.

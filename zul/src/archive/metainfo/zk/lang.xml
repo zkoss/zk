@@ -27,14 +27,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
 
-	<!-- Note: JavaScript/CSS that are listed here will be loaded no matter
-		what language is used.
+	<!-- Note: JavaScript/CSS that are listed here will be loaded
+		at the beginning (for the target device, such as ajax).
 
 		<javascript package="xxx"/> is equivalent to
 		<javascript src="~./js/xx.wpd"/>
+
+		If you want the JavaScript package merged into a single JavaScript file,
+		specify merge="true" as follows. It reduces the loading time if
+		the package is small. Notice it must be cacheable.
+		<javascript package="xxx" merge="true"/>
+
+		If you prefer not to load a particular package at beginning,
+		specify ondemand="true". Note: ondemand is default, so you need to
+		specify it only if it has been specified with other <javascript>.
 	-->
 	<javascript package="zk"/>
 	<javascript package="zul.lang"/>
+	<javascript package="zul" merge="true"/><!-- merge since usually required though optional -->
+	<javascript package="zul.wgt" merge="true"/><!-- merge since usually required though optional -->
 
 	<stylesheet href="~./zul/css/zk.wcs" type="text/css"/>
 

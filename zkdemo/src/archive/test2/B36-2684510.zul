@@ -1,9 +1,9 @@
 <zk>
-After clicking the test button, you shall see "&lt;Button b>:[MouseEvent onClick &lt;Button b>]:{}:void" below
+After clicking the test button, you shall see "&lt;Button b>:onClick:void" below
 <separator/>
 <label id="i"/>
 <zscript>
-public void test(){i.value = self+":"+event+":"+componentScope+":"+b;}
+public void test(){i.value = self+":"+event.getName()+":"+b;}
 </zscript>
 <window>
 <button id="b" label="test" onClick="test()"/>

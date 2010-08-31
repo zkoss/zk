@@ -16,10 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;

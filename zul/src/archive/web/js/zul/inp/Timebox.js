@@ -394,6 +394,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// cache it for IE
 		this._lastPos = this._getPos();
 		this._changed = true;
+		
+		// disable browser's text selection
+		evt.stop();
 	},
 	_btnUp: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
@@ -724,7 +727,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		if (btn) {

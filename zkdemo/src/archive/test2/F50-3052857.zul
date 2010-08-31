@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3052857.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 25 18:00:49 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <zscript>
+    List list = new LinkedList();
+    for(int j=0; j &lt; 30; ++j) {
+      list.add("option "+j);
+    }
+    ListModel strset = ListModels.toListSubModel(new ListModelList(list));
+    Set set = new LinkedHashSet();
+    for(int j=0; j &lt; 30; ++j) {
+      set.add("option "+j);
+    }
+    ListModel strset1 = ListModels.toListSubModel(new ListModelSet(set));
+    Map map = new LinkedHashMap();
+    for(int j=0; j &lt; 30; ++j) {
+      map.put(String.valueOf(j), "option "+j);
+    }
+    ListModel strset2 = ListModels.toListSubModel(new ListModelMap(map));
+    ComboitemRenderer renderer = new ComboitemRenderer() {
+    	public void render(Comboitem item, Object data) throws Exception {
+    		item.setLabel(((Map.Entry)data).getValue().toString());
+    	}
+    }
+  </zscript>
+  Please type "opt" into each textbox, then you shold see the content inside the list from
+   "option 0" to "option 14"
+  <separator/>
+  For ListModelList: <combobox id="list" width="200px" model="&#36;{strset}" autodrop="true"/>
+  <separator/>
+  For ListModelSet: <combobox id="list2" width="200px" model="&#36;{strset1}" autodrop="true"/>
+  <separator/>
+  For ListModelMap: <combobox id="list3" width="200px" itemRenderer="&#36;{renderer}" model="&#36;{strset2}" autodrop="true"/> 
+</zk>

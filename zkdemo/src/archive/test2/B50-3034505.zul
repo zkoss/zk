@@ -15,8 +15,8 @@
 	 };
 ]]></zscript>
 	<window height="100%" width="100%">
-	<div vflex="100%" hflex="100%" style="border: 1px solid grey;">
-		<div vflex="true" />
+	<div vflex="true" hflex="true" style="border: 1px solid grey;">
+		<div vflex="true">&#160;</div>
 		<n:table width="100%">
 			<n:tr>
 				<n:td>
@@ -26,9 +26,9 @@
 					<button id="button" label="Click to Popup">
 						<attribute w:name="onClick">
 							var popup = this.$f('mypopup'),
-								n = popup.$n(),
 								msg = this.$f('msg');
-							popup.open(this.uuid, null, 'before_end');
+							popup.open(this.uuid, null, 'before_end'); 
+							var n = popup.$n(); //in rod, n is replaced when open the popup. Must get it after
 							if ('0px' == n.style.top) {
 								jq(msg.$n()).css('color', 'red');
 								msg.setValue('popup positiopn is wrong');

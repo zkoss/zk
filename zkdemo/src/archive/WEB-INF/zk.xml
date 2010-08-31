@@ -115,6 +115,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</client-config>
 	-->
 
+	<!--
+		Turn off if you want to disable the auto wire for macro component.
+		Default: false
+	<library-property>
+		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
+
+	<!--
+		Turn off if you want to disable the auto forward for macro component.
+		Default: false
+	<library-property>
+		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
+	
 	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for grid.
 		It improves the performance for huge grid.
@@ -181,7 +199,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Optional -->
 	<!-- Map extensions to the xml language.
-		 By default, xml is mapped to xml -->
+		 By default, xml is mapped to xml
 	<language-mapping>
 		<language-name>xml</language-name>
 		<extension>svg</extension>
@@ -190,6 +208,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<language-name>xml</language-name>
 		<extension>xml2html</extension>
 	</language-mapping>
+	-->
 	<!-- Map extensions to the xul/html language
 		 By default, xul/html are mapped to zul and xul.
 	<language-mapping>

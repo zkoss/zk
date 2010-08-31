@@ -177,7 +177,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 				if (clickOffsetX > clickArea) {
 					this._togglePopup();
-					Event.stop(evt);
+					evt.stop();
 				} else {
 					jq(this.$n('a')).removeClass(this.getZclass() + '-body-seld');
 					this.fireX(evt);
@@ -224,6 +224,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
+				menubar._noFloatUp = false; //used in _doMouseOut
 				menubar._lastTarget = this;
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
@@ -246,11 +247,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	
 		var	topmost = this.isTopmost();
 		if (topmost) {
-			this.$class._rmActive(this);
-			if (this.menupopup && this.getMenubar().isAutodrop()) {
+			this.$class._rmOver(this);
+			var menubar = this.getMenubar();
+			if (this.menupopup && menubar.isAutodrop()) {
 				if (this.menupopup.isOpen())
 					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				zWatch.fire('onFloatUp', this, {timeout: 10}); //notify all
+				//_noFloatUp: Bug 1852304: Safari/Chrome unable to popup with menuitem
+				//because popup causes mouseout, and mouseout casues onfloatup
+				if (!menubar._noFloatUp)
+					zWatch.fire('onFloatUp', this); //notify all
+					// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
+				menubar._noFloatUp = false;
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);
@@ -259,13 +266,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			menupopup = wgt.menupopup,
+			cls = wgt.getZclass();
+		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			menupopup = wgt.menupopup,
+			cls = wgt.getZclass();
+		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		jq(n).addClass(cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
@@ -273,8 +284,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+			cls = wgt.getZclass();
+		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
 		jq(n).removeClass(cls);
+	},
+	_rmOver: function (wgt) {
+		var top = wgt.isTopmost(),
+			n = top ? wgt.$n('a') : wgt.$n(),
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
+		jq(n).removeClass(cls);	
 	}
 });
 

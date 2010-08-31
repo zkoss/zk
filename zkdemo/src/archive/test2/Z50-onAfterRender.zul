@@ -57,14 +57,5 @@
 			<tree id="lb" model="${stm2}" height="100px" onAfterRender="self.setSelectedItem(self.getTreechildren().getFirstChild().getTreechildren().getLastChild())"/>
 			<button label="sel" onClick="lb.setSelectedItem(lb.getTreechildren().getFirstChild().getTreechildren().getLastChild())"></button>
 		</div>
-		<div width="250px">
-			<label value="paging"/>
-			<separator/>
-			<listbox model="${lm2}" mold="paging" pageSize="5" onAfterRender="self.setSelectedIndex(49)"/>
-			<separator/>
-			<grid model="${lm2}" mold="paging" pageSize="5" onAfterRender='pagingGridCount.setValue("row count: "+self.getRows().getChildren().size()+"");'/>
-			<label id="pagingGridCount"/>
-			<tree model="${stm2}" mold="paging" pageSize="5" onAfterRender="self.setSelectedItem(self.getTreechildren().getFirstChild().getTreechildren().getLastChild())"/>
-		</div>
 	</hbox>
 </zk>

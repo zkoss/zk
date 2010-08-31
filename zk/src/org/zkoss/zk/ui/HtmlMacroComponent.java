@@ -19,10 +19,12 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * The implemetation of a macro component for HTML-based clients.
@@ -31,6 +33,31 @@ import org.zkoss.zk.ui.ext.Macro;
  * If a developer wants to create it manually, it has to instantiate from
  * the correct class, and then invoke {@link #afterCompose}.
  *
+ * <p>[Since 5.0.4] By default, invoking {@link #afterCompose} supports auto
+ * forward events and wire accessible variables to this component.
+ *  
+ * <p>You can turn on/off auto wire mechanism by specifying the Library
+ * Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
+ * If you did not specify the Library Property, default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
+ * or turn on/off auto forward events by specifying the Library Property
+ * "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
+ * If you did not specify the Library Property, default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
  * @author tomyeh
  */
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
@@ -89,6 +116,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 *
 	 * <p>If this is an line macro, this method is invoked automatically
 	 * if {@link #setParent} or {@link #setPage} called
+	 * 
+	 * <p>[Since 5.0.4] By default, supports auto forward events and wire accessible
+	 * variables to this component.
 	 */
 	public void afterCompose() {
 		final Execution exec = Executions.getCurrent();
@@ -109,6 +139,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			exec.createComponents(
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
+			Components.wireVariables(this, this);
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
+			Components.addForwards(this, this);
 	}
 	public String getMacroURI() {
 		return _uri != null ? _uri: getDefinition().getMacroURI();

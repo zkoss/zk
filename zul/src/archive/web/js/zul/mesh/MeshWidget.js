@@ -222,6 +222,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ebody.style.overflowX = 'hidden'; // keep to hide
 		}
 		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
+		var paging;
+		if (zk.ie7_ && (paging = this.$n('pgib')))
+			zk(paging).redoCSS();
 	},
 	unbind_: function () {
 		if (this.ebody)
@@ -273,7 +276,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w._nhflex) w.fixFlex_();
 			return old != this.ehead.style.display;
 		}
-		return false;
 	},
 	_adjFlexWidth: function () {
 		if (!this.head) return;
@@ -402,12 +404,29 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		
-		this._currentTop = this.ebody.scrollTop;
-		this._currentLeft = this.ebody.scrollLeft;
-		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
+		var t = this.ebody.scrollTop,
+			l = this.ebody.scrollLeft,
+			scrolled = (t != this._currentTop || l != this._currentLeft);
+		if (scrolled) {
+			this._currentTop = t; 
+			this._currentLeft = l;
+		}
 		
 		if (!this.paging)
 			this.fireOnRender(zk.gecko ? 200 : 60);
+
+		if (scrolled)
+			this._fireOnScrollPos();
+	},
+	_timeoutId: null,
+	_fireOnScrollPos: function (time) {
+		clearTimeout(this._timeoutId);
+		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
+	},
+	_onScrollPos: function () {
+		this._currentTop = this.ebody.scrollTop; 
+		this._currentLeft = this.ebody.scrollLeft;
+		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
 	},
 	_onRender: function () {
 		this._pendOnRender = false;
@@ -653,13 +672,30 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
-		var allwidths = true;
+		var allwidths = true,
+			// IE6/7 bug in F30-1904532.zul
+			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
+		
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
-			if (allwidths && w._width === undefined && w._hflex === undefined)
+			if (allwidths && w._width === undefined && w._hflex === undefined) {
 				allwidths = false;
+				shallCheckSize = false;
+			} else if (shallCheckSize) {
+				var width = w._width;
+				if (width && width.indexOf('px') != -1)
+					totalWidth += zk.parseInt(width);
+				else shallCheckSize = false;
+			}
 		}
+		
+		if (shallCheckSize) {
+			var w = this._width;
+			if (w && w.indexOf('px') != -1)
+				allwidths = zk.parseInt(w) != totalWidth;
+		}
+		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
 		if (!this.isSizedByContent())
 			out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th>'); 

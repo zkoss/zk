@@ -27,12 +27,13 @@ import org.zkoss.zk.ui.event.EventListener;
  * <p>There are two kinds of event listeners: synchronous and asynchronous.
  * A synchronous listener works the same as a normal event listener
  * (listeners registered to a component ({@link org.zkoss.zk.ui.Component#addEventListener}).
- * It is executed one-by-one (no two even listener will be executed at the same time)
- * and under an execution (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} never null).
- * In additions, it is allowed to manipulate the components belonging
+ * It is executed one-by-one. No two event listeners belonging to the same desktop 
+ * will be executed at the same time.
+ * In additions, it is invoked under an execution (i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} never null).
+ * It is allowed to manipulate the components belonging
  * to the current execution.
  * <p>On the other hand, an asynchronous listener is executed asynchronously
- * (in a working thread).
+ * in another thread.
  * It can <i>not</i> access the components belonging to any desktop.
  * There is no current execution ({@link org.zkoss.zk.ui.Executions#getCurrent} is null}.
  * However, it is useful to make the application more responsive when
@@ -89,11 +90,11 @@ public interface EventQueue {
 	
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
-	 * while an asynchronous listener is executed asynchrously (in an working thread).
+	 * while an asynchronous listener is executed asynchrously in an working thread.
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>Here is an example,
 <pre><code>
-&lt;window title="long operation" border="true">
+&lt;window title="long operation" border="normal">
 	&lt;zscript>
 	void print(String msg) {
 		new Label(msg).setParent(inf);
@@ -113,7 +114,7 @@ public interface EventQueue {
    eq.subscribe(new EventListener() {
      public void onEvent(Event evt) { //asynchronous
        org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
-       result = "done"; //store the result
+       result = "success"; //store the result
      }
    }, new EventListener() { //callback
      public void onEvent(Event evt) {
@@ -150,7 +151,7 @@ public interface EventQueue {
 
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
-	 * while an asynchronous listener is executed asynchrously (in an working thread).
+	 * while an asynchronous listener is executed asynchrously in an working thread.
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>The use of synchronous listeners is straightforward -- they
 	 * are just the same a normal event listener.
@@ -161,7 +162,7 @@ public interface EventQueue {
 	 * <p>There is another way to do the same job, callback, refer
 	 * to {@link #subscribe(EventListener,EventListener)} for example.
  	 * <pre><code>
-&lt;window title="long operation" border="true"&gt;
+&lt;window title="long operation" border="normal"&gt;
   &lt;zscript&gt;
   void print(String msg) {
     new Label(msg).setParent(inf);
@@ -182,7 +183,7 @@ public interface EventQueue {
      public void onEvent(Event evt) {
        if ("doLongOp".equals(evt.getName())) {
          org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
-         result = "done"; //store the result
+         result = "success"; //store the result
          eq.publish(new Event("endLongOp")); //notify it is done
        }
      }

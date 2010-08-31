@@ -465,7 +465,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold())
+		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
 			jq(inp).addClass(this.getZclass() + '-right-edge');
 			
 		this.syncWidth();
@@ -588,7 +588,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		pp.style.width = pp.style.height = "auto";
 		pp.style.position = "absolute"; //just in case
-		pp.style.overflow = "auto"; //just in case
+		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zkdemo/userguide/#f9)
 		pp.style.display = "block";
 		pp.style.zIndex = "88000";
 

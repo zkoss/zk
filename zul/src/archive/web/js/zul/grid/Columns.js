@@ -261,7 +261,7 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	syncColMenu: function () {
 		var w = this._columns;
 		for (var c = this.lastChild, p; c != this._desc;) {
-			p = c.previousSibling
+			p = c.previousSibling;
 			this.removeChild(c);
 			c = p;
 		}

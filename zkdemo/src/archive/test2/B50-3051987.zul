@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3051987.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 24 10:48:59 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ul>
+			<li>It shall not a line between button and input when combobox in readonly</li>
+		</ul>
+	]]></html>
+	<vbox>
+		<combobox id="cb" readonly="true"/>
+		<combobox buttonVisible="false" readonly="true"/>
+		<button label="buttonVisible" onClick="cb.buttonVisible = !cb.buttonVisible;"/>
+		<button label="readonly" onClick="cb.readonly = !cb.readonly;"/>
+	</vbox>
+</zk>

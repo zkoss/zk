@@ -267,7 +267,7 @@ zk.fmt.Date = {
 					txt += this.digitFixed(this.dayInMonth(val), len);
 					break;
 				case 'E':
-					if (len <= 3) txt += zk.SDOW[(val.getDay() - zk.DOW_1ST) % 7];
+					if (len <= 3) txt += zk.SDOW[(val.getDay() - zk.DOW_1ST + 7) % 7];
 					else txt += zk.FDOW[(val.getDay() - zk.DOW_1ST) % 7];
 					break;
 				case 'D':

@@ -16,10 +16,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<?page id="userGuide" title="ZK Live Demo"?>
-<?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
-<?link  rel="stylesheet" type="text/css" href="/userguide/macros/userguide.css.dsp"?>
-<?script type="text/javascript" src="/userguide/macros/category.js"?>
+<?page id="userGuide" title="ZK Sandbox"?>
+<?link rel="stylesheet" type="text/css" href="/userguide/macros/userguide.css.dsp?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" src="/userguide/macros/zkdemo.js.dsp?v=${desktop.webApp.build}"?>
 <?script type="text/javascript" content="jq.IE6_ALPHAFIX=/24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png|normal.png|normal-sel.png|large.png|large-sel.png/;"?>
 <?meta name="keywords" content="ZK, Ajax, Mobile, Framework, Ajax framekwork, RIA, Direct RIA, Java, JSP, JSF, Open Source, Comet" ?>
 <?component name="category" extends="button" widgetClass="userguide.Category" mold="default"?>
@@ -44,7 +43,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</categorybar>
 		</div>
 	</north>
-	<west title="ZK ${desktop.webApp.version} Live Demo" size="250px" flex="true" splittable="true"
+	<west title="ZK ${desktop.webApp.version}" size="250px" flex="true" splittable="true"
 		minsize="210" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
@@ -52,7 +51,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"
-					itemRenderer="${main$MainLayoutComposer.itemRenderer}" model="${main$MainLayoutComposer.selectedModel}" fixedLayout="true" vflex="true">					
+					itemRenderer="${main$MainLayoutComposer.itemRenderer}" model="${main$MainLayoutComposer.selectedModel}" fixedLayout="true" vflex="true">
+					<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				</listbox>
 			</panelchildren>
 		</panel>
@@ -75,17 +75,18 @@ pageTracker._trackPageview();
 
 zk.override(zAu, "beforeSend", function (uri, req) {
 	try {
-		var t = req.target;
-		if (t.id && (!req.opts || !req.opts.ignorable)) {
+		var t = req.target, nm;
+		if (t && t.id && (!req.opts || !req.opts.ignorable)) {
 			var data = req.data||{},
 				value = data.items && data.items[0]?data.items[0].id:data.value;
-			pageTracker._trackPageview((t.desktop?t.desktop.requestPath:"") + "/" + t.id + "/" + req.name + (value?"/"+value:""));
+			pageTracker._trackPageview(uri +"/" + t.id + "/" + nm + (value?"/"+value:""));
 		}
 	} catch (e) {
 	}
 	return zAu.$beforeSend(uri, req);
 });
-}catch(e){}
+}catch(e){
+}
 ]]></script>
 
 </zk>

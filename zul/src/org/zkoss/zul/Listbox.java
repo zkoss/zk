@@ -33,7 +33,9 @@ import java.util.Set;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -245,7 +247,6 @@ public class Listbox extends XulElement implements Paginated,
 	private int _preloadsz = 7;
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
-	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private boolean _sizedByContent;
@@ -266,8 +267,7 @@ public class Listbox extends XulElement implements Paginated,
 		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
 		addClientEvent(Listbox.class, Events.ON_FOCUS, 0);
 		addClientEvent(Listbox.class, Events.ON_BLUR, 0);
-		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE
-				| CE_IMPORTANT); // since 5.0.0
+		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
 		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
 		// 5.0.0
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
@@ -573,7 +573,14 @@ public class Listbox extends XulElement implements Paginated,
 	 * Default: false.
 	 */
 	public boolean isVflex() {
-		return _vflex;
+		final String vflex = getVflex();
+		if ("true".equals(vflex) || "min".equals(vflex)) {
+			return true;
+		}
+		if (Strings.isBlank(vflex) || "false".equals(vflex)) {
+			return false;
+		}
+		return Integer.parseInt(vflex) > 0;
 	}
 
 	/**
@@ -584,9 +591,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * Note: this attribute is ignored if {@link #setRows} is specified
 	 */
 	public void setVflex(boolean vflex) {
-		if (_vflex != vflex) {
-			_vflex = vflex;
-			smartUpdate("vflex", _vflex);
+		if (isVflex() != vflex) {
+			setVflex(String.valueOf(vflex));
 		}
 	}
 
@@ -873,7 +879,7 @@ public class Listbox extends XulElement implements Paginated,
 					final int limit = getPageSize();
 					getDataLoader().syncModel(offset, limit); // force reloading
 				} else {
-					smartUpdate("jumpTo_", _jsel);
+					smartUpdate("selInView_", _jsel);
 				}
 			} else {
 				item.setSelectedDirectly(true);
@@ -1774,18 +1780,25 @@ public class Listbox extends XulElement implements Paginated,
 
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
+			final boolean isReorder = newChild.getParent() == this;
+			//bug #3051305: Active Page not update when drag & drop item to the end
+			if (isReorder) {
+				checkInvalidateForMoved((Listitem)newChild, true);
+			}
 			if (_rod && hasGroupsModel()) {
 				if (_groupsInfo.isEmpty())
 					_groupsInfo = ((GroupsListModel) getModel())
 							.getGroupsInfo();
 				refChild = fixRefChildBeforeFoot(refChild);
 				if (super.insertBefore(newChild, refChild)) {
-					afterInsert(newChild);
+					//bug #3049167: Bug in drag & drop demo
+					if (!isReorder) {
+						afterInsert(newChild);
+					}
 					return true;
 				}
 				return false;
 			}
-			final boolean isReorder = newChild.getParent() == this;
 			if (newChild instanceof Listgroupfoot) {
 				if (refChild == null) {
 					if (isReorder) {
@@ -1969,7 +1982,10 @@ public class Listbox extends XulElement implements Paginated,
 							g[2] = g[0] + g[1] - 1;
 					}
 				}
-				afterInsert(newChild);
+				//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+				if (!isReorder) { //if reorder, not an insert
+					afterInsert(newChild);
+				}
 				return true;
 			} // insert
 		} else if (newChild instanceof Listhead) {
@@ -2965,7 +2981,7 @@ public class Listbox extends XulElement implements Paginated,
 	/* package */DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
-			final String loadercls = (String) getAttribute("listbox-dataloader");
+			final String loadercls = (String) Library.getProperty("org.zkoss.zul.listbox.DataLoader.class");
 			try {
 				_dataLoader = _rod && loadercls != null ? (DataLoader) Classes
 						.forNameByThread(loadercls).newInstance()
@@ -3155,8 +3171,6 @@ public class Listbox extends XulElement implements Paginated,
 			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
 
-			render(renderer, "vflex", _vflex);
-
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
 
@@ -3196,8 +3210,9 @@ public class Listbox extends XulElement implements Paginated,
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
-			if (_rod)
+			if (_rod) {
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
+			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
 		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2

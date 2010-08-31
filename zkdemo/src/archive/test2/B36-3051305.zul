@@ -1,0 +1,128 @@
+<zk><html>
+<![CDATA[
+	<p>1. Drag Listitem to the empty part of the listbox.</p>
+	<p>2. The first Listitem of the next page shall now be the last Listitem in this page(You shall still see 5 items in this page).</p>
+	<p>3. Check next page, and you shall see the previously dragged Listitem is now the last Listitem of the next page.</p>
+	<p>4. If not, it is a bug.
+]]>
+	</html>
+	<hbox>
+		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="listbox"
+			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
+			</listitem>
+			<listitem draggable="listbox" > 
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
+			</listitem>
+			<listitem draggable="listbox" >
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
+			</listitem>
+		</listbox>
+		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="grid" 
+			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			<rows>
+			<row draggable="grid" >
+				<label value="ZK Forge" />
+			</row>
+			<row draggable="grid" > 
+				<label value="ZK Mobile" />
+			</row>
+			<row draggable="grid" >
+				<label value="ZK GWT" />
+			</row>
+			<row draggable="grid" >
+				<label value="ZK JSF" />
+			</row>
+			<row draggable="grid" >
+				<label value="ZK JSP" />
+			</row>
+			<row draggable="grid" >
+				<label value="ZK Spring" />
+			</row>
+			<row draggable="grid" >
+				<label value="ZK" />
+			</row >
+			<row draggable="grid" >
+				<label value="ZK Studio" />
+			</row>
+			</rows>
+		</grid>
+		<tree height="250px" width="250px" onDrop="move(event.dragged)" droppable="tree"
+			fixedLayout="true" mold="paging" pageSize="5">
+			<treechildren>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK Forge"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK Mobile"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK GWT"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK JSF"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK JSP"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK Spring"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow draggable="tree">
+					<treecell label="ZK"/>
+				</treerow>
+			</treeitem>
+			<treeitem >
+				<treerow draggable="tree">
+					<treecell label="ZK Studio"/>
+				</treerow>
+			</treeitem>
+			</treechildren>
+		</tree>
+	</hbox>
+	<zscript>
+	void move(Component dragged) {
+		if (self instanceof Listitem || self instanceof Row) {
+			self.parent.insertBefore(dragged, self.getNextSibling());
+		} else if (self instanceof Treerow) {
+			Treeitem item = dragged.getParent();
+			self.parent.parent.insertBefore(item, self.getParent().getNextSibling());
+		} else if (self instanceof Grid) {
+			self.getRows().appendChild(dragged);
+		} else if (self instanceof Tree) {
+			self.getTreechildren().appendChild(dragged.getParent());
+		} else {
+			self.appendChild(dragged);
+		}
+	}
+	</zscript>
+</zk>

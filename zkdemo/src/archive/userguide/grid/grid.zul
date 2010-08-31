@@ -40,25 +40,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
 <zk>
-<!-- Due to the security constraint, ZK demo site doesn't allow
-	zscript to declare a class. Instead we use a pre-compiled Java class.
-	You can uncomment the following and try it in your local server.
-	<zscript>
-	class Comp implements Comparator {
-		private boolean _asc;
-		public Comp(boolean asc) {
-			_asc = asc;
-		}
-		public int compare(Object o1, Object o2) {
-			String s1 = o1.getChildren().get(0).getValue(),
-				s2 = o2.getChildren().get(0).getValue();
-			int v = s1.compareTo(s2);
-			return _asc ? v: -v;
-		}
-	}
-	Comp asc = new Comp(true), dsc = new Comp(false);
-	</zscript>
--->
 	<grid>
 		<columns sizable="true">
 			<column label="Type" sort="auto"/>
@@ -71,13 +52,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</row>
 			<row>
 				<label value="Type:"/>
-				<hbox>
+				<hlayout>
 					<listbox rows="1" mold="select">
 						<listitem label="Java Files,(*.java)"/>
 						<listitem label="All Files,(*.*)"/>
 					</listbox>
 					<button label="Browse..."/>
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="Options:"/>

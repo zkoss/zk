@@ -536,7 +536,6 @@ public class HtmlPageRenders {
 				out.write(owner.getUuid());
 				out.write("',function(){");
 			}
-			out.write("zkmb();try{");
 			out.write(outZkIconJS());
 		}
 
@@ -545,7 +544,7 @@ public class HtmlPageRenders {
 		final String extra;
 		try {
 			if (order < 0)
-				out.write(aupg ? "[": "zkx(");
+				out.write(aupg ? "[": divRequired ? "zkmx(": "zkx(");
 			else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
@@ -602,7 +601,6 @@ public class HtmlPageRenders {
 		}
 
 		if (divRequired) {
-			out.write("}finally{zkme();}");
 			if (!aupg && owner != null)
 				out.write("});");
 			out.write("</script>\n");
@@ -727,7 +725,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(out);
 			}
 
-			out.write("<script type=\"text/javascript\">zkmb();try{zkx(\n");
+			out.write("<script type=\"text/javascript\">\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -739,7 +737,7 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("\n}finally{zkme();}\n</script>\n");
+		out.write("\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

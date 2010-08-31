@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.api;
 
+import java.util.List;
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
@@ -46,6 +47,11 @@ public interface Radiogroup extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setOrient(String orient) throws WrongValueException;
 
+	/** Returns a readonly list of {@link Radio}.
+	 * Note: any update to the list won't affect the state of this radio group.
+	 * @since 5.0.4
+	 */
+	public List getItems();
 	/**
 	 * Returns the radio button at the specified index.
 	 */

@@ -151,7 +151,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	bind_: function () {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable()) this._initsz();
-		this.fixedFaker_();
+		this.fixFaker_();
 	},
 	unbind_: function () {
 		if (this._dragsz) {
@@ -176,9 +176,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	/**
-	 * Fixes the faker DOM element, if any.
+	 * Fixes the faker (an visible row for adjusting column), if any.
 	 */
-	fixedFaker_: function () {
+	fixFaker_: function () {
 		var n = this.$n(),
 			index = zk(n).cellIndex(),
 			owner = this.getMeshWidget();

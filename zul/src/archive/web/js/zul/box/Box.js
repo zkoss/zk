@@ -107,6 +107,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
 	_pack: 'start',
+	_sizedByContent: true,
 
 	$define: {
 		/** Sets the alignment of cells of this box in the 'opposite' direction
@@ -224,6 +225,22 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	 	 * @return String
 	 	 */
 		spacing: _zkf,
+		/**
+		 * Sets whether sizing the cell's size by its content.
+		 * <p>Default: true. It means the cell's size is depended on its content.
+		 * 
+		 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
+		 * for resizing smoothly
+		 * @param boolean byContent 
+		 * @since 5.0.4
+		 */
+		/**
+		 * Returns whether sizing the cell's size by its content.
+		 * <p>Default: true.
+		 * @since 5.0.4
+		 * @return boolean
+		 */
+		sizedByContent: _zkf,
 		widths: _zkf = function (val) {
 		    this._sizes = val;
 		    this.rerender();
@@ -261,6 +278,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	replaceChildHTML_: function (child) {
 		this.$supers('replaceChildHTML_', arguments);
 		this._fixChildDomVisible(child, child._visible);
+		if (child.$instanceof(zul.box.Splitter)) {
+			var n = this._chdextr(child);
+			if (n) {
+				n.style.height = "";
+				n.style.width = "";
+			}
+			zWatch.fireDown('onSize', this);
+		}
 	},
 	_fixChildDomVisible: function (child, visible) {
 		var n = this._chdextr(child);
