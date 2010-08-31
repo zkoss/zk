@@ -313,7 +313,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <p>Default: true. It means the cell's size is depended on its content.
 	 * 
 	 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
-	 * for resizing smoothly
+	 * for resizing smoothly, if it contains a grid or other sophisticated
+	 * components.
 	 * @param byContent 
 	 * @since 5.0.4
 	 */
