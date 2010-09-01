@@ -3,6 +3,7 @@ ZK 5.0.5
 * Features
 
 * Bugs
+  3057311: Select list fires a unnecessary onSelect on IE
 
 * Upgrade Notes
 

@@ -1058,7 +1058,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (!fc || !fc.desktop)
 				fc = wnd;
 			if (fc)
-				fc.focus();
+				zk(fc).focus(10); // use timeout for the bug 3057311
 		}
 		this._lastfocus = null;
 
