@@ -207,11 +207,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*16);
 		String depends = null;
 		if (zk) {
-			write(out, "//ZK, Copyright 2009 Potix Corporation. Distributed under LGPL 3.0\n"
-				+ "//jQuery, Copyright 2009 John Resig\n"
-				+ "function $eval(s){return eval(s);}"
-					//jq.globalEval() seems have memory leak problem, so use eval()
-				+ "if(!window.zk){");
+			write(out, "if(!window.zk){\n");
 					//may be loaded multiple times because specified in lang.xml
 		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");

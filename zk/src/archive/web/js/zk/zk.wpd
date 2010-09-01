@@ -12,6 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk">
+	<script>
+//ZK, Copyright 2009 Potix Corporation, LGPL
+//jQuery, Copyright 2009 John Resig, MIT
+//jQuery Mousewheel, Copyright (c) 2009 Brandon Aaron, MIT
+
+window.$eval=function(s){return eval(s);};
+	</script>
+		<!-- 1. jq.globalEval() seems have memory leak problem, so use eval()
+			 2. we cannot use eval() directly since compressor won't shorten names
+		-->
 	<script src="ext/jquery.js"/>
 	<script src="zk.js" jsdoc="true"/>
 	<script src="js.js"/>
