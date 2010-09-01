@@ -3,7 +3,6 @@ ZK 5.0.5
 * Features
 
 * Bugs
-  3057311: Select list fires a unnecessary onSelect on IE
 
 * Upgrade Notes
 
@@ -120,6 +119,7 @@ August 31, 2010
   3053313: Constraint with no past can't select today
   3055849: IE6 hangs if ZK used in a very complex page (incl. tables)
   3054784: Native parameter in Button.setUpload() is not effective
+  3057311: Select list fires a unnecessary onSelect on IE
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
