@@ -765,6 +765,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- button -->
 	<xs:element name="button" type="buttonType" />
@@ -1302,6 +1303,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- hlayout -->
 	<xs:element name="hlayout" type="hlayoutType" />
@@ -2334,6 +2336,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
+		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- vlayout -->
 	<xs:element name="vlayout" type="vlayoutType" />
