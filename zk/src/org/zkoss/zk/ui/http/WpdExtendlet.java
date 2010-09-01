@@ -224,7 +224,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			write(out, '\'');
 			if (provider != null && provider.getResource(dir + "wv/zk.wpd") != null)
 				write(out, ",true");
-			write(out, "))try{");
+			write(out, "))try{\n");
 		}
 
 		final Map moldInfos = new HashMap();
