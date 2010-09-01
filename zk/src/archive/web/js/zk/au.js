@@ -654,7 +654,7 @@ pageTracker._initData();
 pageTracker._trackPageview();
 
 var auBfSend = zAu.beforeSend;
-zAu.beforeSend = function (uri, req) {
+zAu.beforeSend = function (uri, req, dt) {
  try {
   var target = req.target;
   if (target.id) {
@@ -664,7 +664,7 @@ zAu.beforeSend = function (uri, req) {
   }
  } catch (e) {
  }
- return auBfSend(uri, req);
+ return auBfSend(uri, req, dt);
 };
 ]]>&lt;/script>
 	 *</code></pre>
@@ -675,9 +675,9 @@ zAu.beforeSend = function (uri, req) {
 	 * @return String the AU's request URI.
 	 * @since 5.0.2
 	 */
-	beforeSend: function (uri/*, aureq, dt*/) {
-		var target = aureq.target, tag;
-		if (target && (tag = target.autag)) {
+	beforeSend: function (uri, aureq/*, dt*/) {
+		var target, tag;
+		if ((target = aureq.target) && (tag = target.autag)) {
 			tag = '/' + encodeURIComponent(tag);
 			if (uri.indexOf("/_/") < 0) {
 				var v = target.desktop;
