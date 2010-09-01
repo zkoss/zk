@@ -1,0 +1,27 @@
+<zk>
+	<style>
+		.tall-fellow {
+			height: 700px;
+			background: #808080;
+		}
+	</style>
+	<div>
+		In Breeze theme, open the following combo widgets. You should see a scroll bar in each of the popups.
+	</div>
+	<combobox>
+		<comboitem sclass="tall-fellow" label="A" />
+	</combobox>
+	<bandbox>
+		<bandpopup>
+			<div sclass="tall-fellow">A</div>
+		</bandpopup>
+	</bandbox>
+	<combobox mold="rounded">
+		<comboitem sclass="tall-fellow" label="A" />
+	</combobox>
+	<bandbox mold="rounded">
+		<bandpopup>
+			<div sclass="tall-fellow">A</div>
+		</bandpopup>
+	</bandbox>
+</zk>
