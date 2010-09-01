@@ -15,7 +15,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<config-name>zk</config-name><!-- used to resolve dependency -->
 	<version>
 		<version-class>org.zkoss.zk.Version</version-class>
-		<version-uid>5.0.4</version-uid>
+		<version-uid>5.0.5</version-uid>
 	</version>
 
 	<!-- Note: zscript-config is applied to the whole system. Not just this language.

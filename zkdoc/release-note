@@ -1,5 +1,14 @@
 	--------
+ZK 5.0.5
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+	--------
 ZK 5.0.4
+August 31, 2010
 * Features
   3026623: Able to communicate among iframes without server push
   3040368: Provide a simple horizontal/vertical layout
