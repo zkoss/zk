@@ -30,8 +30,7 @@ function (out) {
 		if (!this._width) wd = "";
 		if (!this._height) hgh = "";
 	}
-	out.push('<span', this.domAttrs_(), ' class="', zcls, '"',
-			(!this.isVisible() ? ' style="display:none"' : ''),
+	out.push('<span', this.domAttrs_(),
 			'><table id="', uuid, '-box" style="width:', wd, ';height:', hgh, '"', zUtl.cellps0,
 			(tabi && !zk.gecko && !zk.safari ? tabi : ''),
 			'><tr><td class="', zcls, '-tl">', (!zk.ie ? btn : ''),
