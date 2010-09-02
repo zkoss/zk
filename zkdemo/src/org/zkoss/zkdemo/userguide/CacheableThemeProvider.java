@@ -143,7 +143,7 @@ public class CacheableThemeProvider implements ThemeProvider{
 		if (!Themes.hasBreezeLib() || !Themes.isBreeze(exec))
 			return uri;
 		if(uri.startsWith("~./js/zul/") || uri.startsWith("~./js/zkex/") 
-				|| uri.startsWith("~./js/zkmax/"))
+				|| uri.startsWith("~./js/zkmax/") || uri.startsWith("~./zul/css/"))
 			return uri.replace(".css", ".breeze.css");
 		return uri;
 	}

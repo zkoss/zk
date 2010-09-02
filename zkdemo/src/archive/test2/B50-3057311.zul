@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3057311.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep  1 17:25:35 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please select "ActionMovies" on the drop down list.
+  <listbox id='categoryLstBox' mold="select" rows="1">
+  		<attribute name="onSelect">
+  		Messagebox.show("Press on either Yes or No is okay, and then focus into the textbox, you shouldn't see the dialog again!",
+                      "Confirmation Prompt",
+                      Messagebox.YES | Messagebox.NO,
+                      Messagebox.QUESTION,
+                      new org.zkoss.zk.ui.event.EventListener() {
+                        public void onEvent(Event evt) throws Exception{
+                         categoryLstBox.selectedIndex = 0;
+                        }//end onEvent()
+                      }//end EventListener instance
+                      );
+      
+  		</attribute>
+     <listitem label='Cartoons' value='C' selected='true'/>
+     <listitem label='ActionMovies' value='A' />
+  </listbox>
+  <textbox focus="true"/>
+</zk>
