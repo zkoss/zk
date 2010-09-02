@@ -26,6 +26,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_maxpos: 100,
 	_pageIncrement: 10,
 	_slidingtext: "{0}",
+	_pageIncrement: -1,
 	
 	$define: {
 		/** Returns the orient.
@@ -84,12 +85,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		slidingtext: null,
 		/** Returns the amount that the value of {@link #getCurpos}
 		 * changes by when the tray of the scroll bar is clicked. 
-		 * <p>Default: 10.
-		 * @return int
+		 *
+		 * <p>Default: -1 (means it will scroll to the position the user clicks).
 		 */
 		/** Sets the amount that the value of {@link #getCurpos}
 		 * changes by when the tray of the scroll bar is clicked.
-		 * @param int pginc
+		 * <p>Default: -1 (means it will scroll to the position the user clicks).
+		 * @param pginc the page increment. If negative, slider will scroll
+		 * to the position that user clicks.
 		 */
 		pageIncrement: null,
 		/** Returns the name of this component.
@@ -160,19 +163,33 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		var $btn = jq(this.$n("btn")),
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
-			newPosition = this.isVertical() ? 
-				{top: jq.px(evt.pageY - pos[1] + zk.parseInt($btn.css('top')) - $btn.height() / 2)}:
-				{left: jq.px(evt.pageX - pos[0] + zk.parseInt($btn.css('left')) - $btn.width() / 2)};
-
-		if ($btn[0] && !$btn.is(':animated')) {
-			$btn.animate(newPosition, "slow", function() {
-				pos = wgt._realpos();
-				if (pos > wgt._maxpos) 
-					pos = wgt._maxpos;
-				wgt.fire("onScroll", pos);
+			pageIncrement = this._pageIncrement,
+			moveOnCursor = pageIncrement < 0,
+			isVertical = this.isVertical(),
+			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0],
+			newPosition;
+		
+		if (!$btn[0] || $btn.is(':animated')) return;
+		
+		if (moveOnCursor) {
+			newPosition = isVertical ? 
+				{top: jq.px0(offset + zk.parseInt($btn.css('top')) - $btn.height() / 2)}:
+				{left: jq.px0(offset + zk.parseInt($btn.css('left')) - $btn.width() / 2)};
+		} else {
+			this._curpos += offset > 0? pageIncrement: - pageIncrement;
+			newPosition = isVertical ? 
+				{top: jq.px0(this._getNewPos())}:
+				{left: jq.px0(this._getNewPos())};
+		}	
+		
+		$btn.animate(newPosition, "slow", function() {
+			pos = moveOnCursor ? wgt._realpos(): wgt._curpos;
+			if (pos > wgt._maxpos) 
+				pos = wgt._maxpos;
+			wgt.fire("onScroll", pos);
+			if (moveOnCursor)
 				wgt._fixPos();
-			});
-		}
+		});
 		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function() {
@@ -261,18 +278,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_fixPos: _zkf = function() {
 		var btn = this.$n("btn");
 		if (this.isVertical()) {
+			btn.style.top = jq.px0(this._getNewPos());
+		} else {
+			btn.style.left = jq.px0(this._getNewPos());
+		}
+	},
+	_getNewPos: _zkf = function() {
+		var btn = this.$n("btn");
+		btn.title = this._curpos;
+		this.updateFormData(this._curpos);
+		if (this.isVertical()) {
 			var ht = this._getHeight(), x = ht > 0 ? Math.round((this._curpos * ht) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
 			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(0, ofs[1] + x);
-			btn.style.top = ofs[1] + "px";
+			return ofs[1];
 		} else {
 			var wd = this._getWidth(), x = wd > 0 ? Math.round((this._curpos * wd) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
 			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(ofs[0] + x, 0);
-			btn.style.left = ofs[0] + "px";
+			return ofs[0];
 		}
-		btn.title = this._curpos;
-		this.updateFormData(this._curpos);
 	},
 	onSize: _zkf,
 	onShow: _zkf,
