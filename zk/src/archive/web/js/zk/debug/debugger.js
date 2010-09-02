@@ -24,7 +24,8 @@ function _space(deep) {
 }
 function _dumpWgt(out, wgt, nLevel, inf) {
 	inf.cnt++;
-	out.push(_space(nLevel++), wgt.widgetName,
+	out.push(_space(nLevel++),
+		(wgt.widgetName == 'widget' ? (wgt.$n() ? wgt.$n().tagName : wgt.widgetName) : wgt.widgetName),
 		(wgt.id ? '$' + wgt.id: '#' + wgt.uuid), '<br/>');
 
 	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
