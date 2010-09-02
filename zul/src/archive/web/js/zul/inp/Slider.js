@@ -91,7 +91,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		/** Sets the amount that the value of {@link #getCurpos}
 		 * changes by when the tray of the scroll bar is clicked.
 		 * <p>Default: -1 (means it will scroll to the position the user clicks).
-		 * @param pginc the page increment. If negative, slider will scroll
+		 * @param int pginc the page increment. If negative, slider will scroll
 		 * to the position that user clicks.
 		 */
 		pageIncrement: null,

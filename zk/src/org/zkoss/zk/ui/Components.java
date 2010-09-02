@@ -732,7 +732,7 @@ public class Components {
 		IMPLICIT_NAMES.add("requestScope");
 		IMPLICIT_NAMES.add("param");
 	}
-	
+
 	/** Retuns the implicit object of the specified name, or null
 	 * if not found.
 	 *
@@ -881,7 +881,10 @@ public class Components {
 						_fldMaps.put(fdname, fd);
 				}
 				cls = cls.getSuperclass();
-			} while (cls != null && !Object.class.equals(cls));
+			} while (cls != null && !Object.class.equals(cls)
+			&& !HtmlMacroComponent.class.equals(cls)
+			&& !HtmlBasedComponent.class.equals(cls)
+			&& !AbstractComponent.class.equals(cls));
 		}
 
 		/**
@@ -958,7 +961,8 @@ public class Components {
 				if ("param".equals(fdname) && arg != null) {
 					arg = new HashMap((Map) arg); 
 				}
-				injectByName(arg, fdname);
+				injectByName(arg, fdname,
+					x instanceof Component && "page".equals(fdname));
 			}
 		}
 		private void wireOthers(Object x) {
@@ -1073,20 +1077,21 @@ public class Components {
 			final String fdname = (arg instanceof Page) ? 
 					((Page)arg).getId() : ((Component)arg).getId();
 			if (fdname.length() > 0) {
-				injectByName(arg, fdname);
+				injectByName(arg, fdname, false);
 			}
 		}
 		
-		private void injectByName(Object arg, String fdname) {
+		private void injectByName(Object arg, String fdname, boolean fieldOnly) {
 			//argument to be injected is null; then no need to inject
 			if (arg != null) {
 				final String mdname = Classes.toMethodName(fdname, "set");
 				final Class parmcls = arg.getClass();
 				final Class tgtcls = _controller.getClass();
 				try {
-					final Method md = 
+					final Method md = fieldOnly ? null:
 						Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
-					if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+					if (fieldOnly
+					|| !injectByMethod(md, parmcls, parmcls, arg, fdname)) {
 						injectFieldByName(arg, tgtcls, parmcls, fdname);
 					}
 				} catch (NoSuchMethodException ex) {
