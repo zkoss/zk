@@ -402,7 +402,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		st.width = jq.px(w);
 		st.height = jq.px(h);
 		
-		var zi = $anchor.jq.offsetParent().css('z-index');
+		var zi = $anchor.jq.css('position') == 'absolute' ?
+				$anchor.jq.css('z-index') : $anchor.jq.offsetParent().css('z-index');
 		// IE bug
 		if (zk.ie && !zk.ie8)
 			zi = zi == 0 ? 1 : zi;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3057902.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  3 18:40:30 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="w" height="100%" width="1000px">
+<button label="click me">
+<attribute name="onClick"><![CDATA[
+Window win = Executions.createComponentsDirectly("<window id=\"win\" title=\"title\" border=\"normal\" height=\"300px\" width=\"400px\"><div height=\"100%\"><button label=\"click me to see a message, if not that is a bug.\" onClick='Clients.showBusy( win ,\"show the msg\");'/></div></window>", null, w, null);
+win.doHighlighted();
+]]>
+
+</attribute>
+</button>
+</window>
