@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	private String _orient = "horizontal";
-	private int _curpos, _maxpos = 100, _pginc = 10;
+	private int _curpos, _maxpos = 100, _pginc = -1;
 	/** The name. */
 	private String _name;
 	private String _slidingtext = "{0}";
@@ -177,18 +177,19 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	/** Returns the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked. 
 	 *
-	 * <p>Default: 10.
+	 * <p>Default: -1 (means it will scroll to the position the user clicks).
 	 */
 	public int getPageIncrement() {
 		return _pginc;
 	}
 	/** Sets the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked.
+	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	 * @param pginc the page increment. If negative, slider will scroll
+	 * to the position that user clicks.
 	 */
 	public void setPageIncrement(int pginc)
 	throws WrongValueException {
-		if (pginc <= 0)
-			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
 			smartUpdate("pageIncrement", _pginc);
@@ -285,7 +286,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			renderer.render("curpos", _curpos);
 		if(_maxpos != 100)
 			renderer.render("maxpos", _maxpos);
-		if(_pginc != 10)
+		if(_pginc >= 0)
 			renderer.render("pageIncrement", _pginc);
 		if(_name != null)
 			renderer.render("name", _name);

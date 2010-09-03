@@ -50,6 +50,13 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		 */
 		value: null
 	},
+	//@Override
+	focus: function (timeout) {
+		var p = this.parent;
+		if (p) p.focus(timeout);
+	},
+
+	//@Override
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this._visible = visible;

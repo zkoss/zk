@@ -72,7 +72,9 @@ August 31, 2010
   3052723: Avoid unnecessary onScrollPos from being fired
   3052761: Calendar supports moving to next/prev mon by mouse scrolling
   3052857: Provide a utile class for ListModel to support ListSubModel
-  
+  3057903: Slider setPageIncrement shall be supported
+  3040358: Create an option to turn off Combobox/Bandbox animation
+
 * Bugs
   3023619: inline macro might cause nRoot to become a negative number
   3025339: incorrect implementation in Timebox and Spinner widget
@@ -148,6 +150,9 @@ August 31, 2010
   3053313: Constraint with no past can't select today
   3055849: IE6 hangs if ZK used in a very complex page (incl. tables)
   3054784: Native parameter in Button.setUpload() is not effective
+  3057311: Select list fires a unnecessary onSelect on IE
+  3057288: Listbox in ROD, the items will disappear
+  3058547: In Liferay, if page has two portlet,  won't work 
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.

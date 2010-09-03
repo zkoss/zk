@@ -259,10 +259,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return null;
 	}
+	private static final String DESKTOP_ID_PREFIX = "zd_";
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
 			return Strings.encode(
-				new StringBuffer(12).append("zd_"), dc.getNextKey()).toString();
+				new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
 
 		final int v;
 		synchronized (DesktopImpl.class) {
@@ -281,8 +282,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
-		_uuidPrefix = _id.substring(1, _id.length() <= 2 ? 2: 3);
-			//the first few chars because of the encode's algorithm
+		String id = _id.startsWith(DESKTOP_ID_PREFIX) ?
+			_id.substring(DESKTOP_ID_PREFIX.length()): _id;
+		final int len = id.length();
+		_uuidPrefix = len > 3 ? id.substring(0, 3): id;
+			//since _id's first few character is changed first, we pick the first few
 	}
 
 	public String getId() {

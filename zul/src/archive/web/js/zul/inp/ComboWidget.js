@@ -174,7 +174,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
-		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});
+		this.slideDown_(pp);
 
 		//FF issue:
 		//If both horz and vert scrollbar are visible:
@@ -200,6 +200,24 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value}, {rtags: {onOpen: 1}});
 	},
+	/** Slides down the drop-down list.
+	 * <p>Default: <code>zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});</code>
+	 * @param DOMElement pp the DOM element of the drop-down list.
+	 * @since 5.0.4
+	 */
+	slideDown_: function (pp) {
+		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});
+	},
+	/** Slides up the drop-down list.
+	 * <p>Default: <code>pp.style.display = "none";</code><br/>
+	 * In other words, it just hides it without any animation effect.
+	 * @param DOMElement pp the DOM element of the drop-down list.
+	 * @since 5.0.4
+	 */
+	slideUp_: function (pp) {
+		pp.style.display = "none";
+	},
+
 	zsync: function () {
 		this.$supers('zsync', arguments);
 		if (!zk.css3 && this.isOpen() && this._shadow)
@@ -248,7 +266,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
-		pp.style.display = "none";
+		this.slideUp_(pp);
+
 		zk(pp).undoVParent();
 		if (this._shadow) {
 			this._shadow.destroy();
