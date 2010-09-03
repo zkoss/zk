@@ -123,6 +123,7 @@ August 31, 2010
   3054784: Native parameter in Button.setUpload() is not effective
   3057311: Select list fires a unnecessary onSelect on IE
   3057288: Listbox in ROD, the items will disappear
+  3058547: In Liferay, if page has two portlet,  won't work 
 
 * Upgrade Notes
   + The default value of tabindex is changed from -1 to 0.
