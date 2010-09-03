@@ -140,9 +140,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
-			Components.wireVariables(this, this);
+			Components.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
-			Components.addForwards(this, this);
+			Components.addForwards(this, this, '$');
 	}
 	public String getMacroURI() {
 		return _uri != null ? _uri: getDefinition().getMacroURI();
@@ -150,7 +150,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setMacroURI(String uri) {
 		if (!Objects.equals(_uri, uri)) {
 			if (uri != null && uri.length() == 0)
-				throw new IllegalArgumentException("empty uri");
+				throw new IllegalArgumentException("empty");
 			_uri = uri;
 			if (getParent() != null)
 				recreate();

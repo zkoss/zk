@@ -843,7 +843,24 @@ public class Components {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
-	
+
+	private static boolean ignoreFromWire(Class cls) {
+		return _igoreWires.contains(cls);
+	}
+	private static Set _igoreWires = new HashSet(8);
+	static {
+		final Class[] clses = new Class[] {
+			HtmlBasedComponent.class,
+			HtmlMacroComponent.class,
+			HtmlNativeComponent.class,
+			AbstractComponent.class,
+			org.zkoss.zk.ui.util.GenericComposer.class,
+			Object.class
+		};
+		for (int j = 0; j < clses.length; ++j)
+			_igoreWires.add(clses[j]);
+	}
+
 	/**
 	 * Utility class for wiring variables
 	 * @author henrichen
@@ -872,7 +889,7 @@ public class Components {
 			_fldMaps = new LinkedHashMap(64);
 			
 			Class cls = _controller.getClass();
-			do {
+			while (cls != null && !ignoreFromWire(cls)) {
 				Field[] flds = cls.getDeclaredFields();
 				for (int j = 0; j < flds.length; ++j) {
 					final Field fd = flds[j];
@@ -881,10 +898,7 @@ public class Components {
 						_fldMaps.put(fdname, fd);
 				}
 				cls = cls.getSuperclass();
-			} while (cls != null && !Object.class.equals(cls)
-			&& !HtmlMacroComponent.class.equals(cls)
-			&& !HtmlBasedComponent.class.equals(cls)
-			&& !AbstractComponent.class.equals(cls));
+			}
 		}
 
 		/**
