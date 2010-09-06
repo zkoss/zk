@@ -710,8 +710,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @type boolean
 	 * @since 5.0.1
 	 */
-	onChangingForced: true,
-	_allowKeys: "0123456789"+zk.MINUS+zk.PERCENT+zk.GROUPING
+	onChangingForced: true
 });
-
+zk.afterLoad('zul.lang', function () { // Fixed merging JS issue
+	zul.inp.InputWidget._allowKeys = "0123456789"+zk.MINUS+zk.PERCENT+zk.GROUPING;
+});
 })();

@@ -13,8 +13,12 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING;
-
+	var _allowKeys;
+    
+	// Fixed merging JS issue
+	zk.afterLoad('zul.lang', function () {
+		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING;
+	});
 /**
  * An edit box for holding BigDecimal.
  * <p>Default {@link #getZclass}: z-decimalbox.
