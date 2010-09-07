@@ -211,11 +211,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
-
 		var	topmost = this.isTopmost();
 		if (topmost && zk.ie && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return; // don't activate
-
 		if (this.menupopup)
 			this.menupopup._shallClose = false;
 		if (!topmost) {
@@ -244,23 +242,38 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
-	
 		var	topmost = this.isTopmost();
 		if (topmost) {
 			this.$class._rmOver(this);
+			this._doPopupClose();
 			var menubar = this.getMenubar();
 			if (this.menupopup && menubar.isAutodrop()) {
-				if (this.menupopup.isOpen())
-					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				//_noFloatUp: Bug 1852304: Safari/Chrome unable to popup with menuitem
-				//because popup causes mouseout, and mouseout casues onfloatup
-				if (!menubar._noFloatUp)
-					zWatch.fire('onFloatUp', this); //notify all
-					// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
 				menubar._noFloatUp = false;
 			}
 		} else if (!this.menupopup || !this.menupopup.isOpen())
 			this.$class._rmActive(this);
+	},
+	_doPopupClose: function () {
+		if (this._ppClose) {
+			clearTimeout(this._ppClose);
+			this._ppClose = null;
+		}
+		var wgt = this,
+			menubar = this.getMenubar(),
+			menupopup = this.menupopup,
+			doPPClose = function(){
+				if (menupopup && menubar.isAutodrop()) {
+					if (menupopup.isOpen())
+						menupopup._shallClose = true; //autodrop -> autoclose if mouseout
+					//_noFloatUp: Bug 1852304: Safari/Chrome unable to popup with menuitem
+					//because popup causes mouseout, and mouseout casues onfloatup
+					if (!menubar._noFloatUp)
+						zWatch.fire('onFloatUp', wgt); //notify all
+						// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
+					wgt._ppClose = null;
+				}
+			};
+		this._ppClose = setTimeout(doPPClose, 50);
 	}
 }, {
 	_isActive: function (wgt) {

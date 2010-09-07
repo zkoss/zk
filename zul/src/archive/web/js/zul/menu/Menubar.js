@@ -67,15 +67,18 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			var left = this.$n('left'),
 				right = this.$n('right');
 			if (left && right) {
-				this.domUnlisten_(left, 'onClick', '_doScroll');
-				this.domUnlisten_(left, 'onMouseover', '_onOver');
-				this.domUnlisten_(left, 'onMouseout', '_onOut');
-				this.domUnlisten_(right, 'onClick', '_doScroll');
-				this.domUnlisten_(right, 'onMouseover', '_onOver');
-				this.domUnlisten_(right, 'onMouseout', '_onOut');
+				this.domUnlisten_(left, 'onClick', '_doScroll')
+					.domUnlisten_(left, 'onMouseover', '_onOver')
+					.domUnlisten_(left, 'onMouseout', '_onOut')
+					.domUnlisten_(right, 'onClick', '_doScroll')
+					.domUnlisten_(right, 'onMouseover', '_onOver')
+					.domUnlisten_(right, 'onMouseout', '_onOut');
 			}
 			zWatch.unlisten({onSize: this, onShow: this});
 		}
+		var node = this.$n();
+		this.domUnlisten_(node, 'onMouseover', '_onMenuOver')
+			.domUnlisten_(node, 'onMouseout', '_onMenuOut');
 		
 		this._lastTarget = null;
 		this.$supers(zul.menu.Menubar, 'unbind_', arguments);
@@ -86,15 +89,18 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			var left = this.$n('left'),
 				right = this.$n('right');
 			if (left && right) {
-				this.domListen_(left, 'onClick', '_doScroll');
-				this.domListen_(left, 'onMouseover', '_onOver');
-				this.domListen_(left, 'onMouseout', '_onOut');
-				this.domListen_(right, 'onClick', '_doScroll');
-				this.domListen_(right, 'onMouseover', '_onOver');
-				this.domListen_(right, 'onMouseout', '_onOut');
+				this.domListen_(left, 'onClick', '_doScroll')
+					.domListen_(left, 'onMouseover', '_onOver')
+					.domListen_(left, 'onMouseout', '_onOut')
+					.domListen_(right, 'onClick', '_doScroll')
+					.domListen_(right, 'onMouseover', '_onOver')
+					.domListen_(right, 'onMouseout', '_onOut');
 			}
 			zWatch.listen({onSize: this, onShow: this});
 		}
+		var node = this.$n();
+		this.domListen_(node, 'onMouseover', '_onMenuOver')
+			.domListen_(node, 'onMouseout', '_onMenuOut');
 	},
 	/** Returns whether the menubar scrolling is enabled in horizontal orient.
 	 * @return boolean
@@ -212,6 +218,17 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		} else if (right == evtNode) {
 			jq(right).removeClass(zcls + "-right-scroll-over");
 		}
+	},
+	_onMenuOver: function (evt) {
+		this._noFloatUp = true;
+	},
+	_onMenuOut: function (evt) {
+//		if (zk.Widget.$(evt.domTarget).$instanceof(zul.menu.Menuitem))
+//			return;
+		this._noFloatUp = false;
+		var menu;
+		if (menu = this._lastTarget)
+		menu._doPopupClose();
 	},
 	_doScroll: function (evt) {
 		var target = evt.domTarget;
