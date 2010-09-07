@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _allowKeys;
 	
 	// Fixed merging JS issue
-	zk.afterLoad('zul.lang', function () {
+	zk.load('zul.lang', function () {
 		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+'e';
 	});
 		//supports 1e2
