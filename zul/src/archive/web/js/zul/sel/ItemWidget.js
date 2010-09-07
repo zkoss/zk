@@ -135,14 +135,19 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	_toggleEffect: function (undo) {
 		var n = this.$n(),
+			self = this,
 			zcls = this.getZclass();
-		if (undo) {
-			jq(n).removeClass(zcls + "-over-seld")
-				.removeClass(zcls + "-over");
-		} else {
+		setTimeout(function () {
 			var $n = jq(n);
-			$n.addClass($n.hasClass(zcls + "-seld") ? zcls + "-over-seld" : zcls + "-over");
-		}
+    		if (undo) {
+    			if (self.isSelected())
+    				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
+    			else
+    				$n.removeClass(zcls + "-over");
+    		} else if (self._musin) {
+    			$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
+    		}
+		});
 	},
 	focus: function (timeout) {
 		var mesh = this.getMeshWidget();
@@ -209,16 +214,18 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers('doSelect_', arguments);
 	},
 	doMouseOver_: function(evt) {
-		if (this.isDisabled()) return;
+		if (this._musin || this.isDisabled()) return;
+		this._musin = true;
 		this._toggleEffect();
 		evt.stop();
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		if (this.isDisabled() || (zk.ie &&
-				jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
+		if (this.isDisabled() || (this._musin &&
+					jq.isAncestor(this.$n(), evt.domEvent.relatedTarget ||
+								evt.domEvent.toElement)))
 			return;
-			
+		this._musin = false;
 		this._toggleEffect(true);
 		evt.stop({propagation: true});
 		this.$supers('doMouseOut_', arguments);

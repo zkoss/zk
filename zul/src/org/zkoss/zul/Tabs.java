@@ -18,8 +18,6 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -57,31 +55,16 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		return width;
 	}
 	
-	/** Returns the alignment of tab.
-	 *(not supported in mold accordion and version 3.5)
-	 * <p>Default: "start".
-	 *
-	 * <p>Note: only the default mold supports it (not supported in mold accordion and version 3.5).
-	 * 
-	 * @since 3.0.0
+	/** 
+	 * Reserved for future extension; not supported yet (@since 5.0.0)
 	 */
 	public String getAlign() {
 		return _align;
 	}
-	/** Sets the alignment of tab.
-	 * (not supported in mold accordion and version 3.5)
-	 * @param align must be "start" or "center" or "end".
-	 * @since 3.0.0
+	/** 
+	 * Reserved for future extension; not supported yet (@since 5.0.0)
 	 */
-	public void setAlign(String align) throws WrongValueException {
-		if (!"start".equals(align) && !"center".equals(align) && !"end".equals(align))
-			throw new WrongValueException(align);
-
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
-	}
+	public void setAlign(String align) throws WrongValueException {}
 	
 	public void invalidate() {
 		Tabbox tbox = getTabbox();

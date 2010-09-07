@@ -34,23 +34,12 @@ public interface Tabs extends org.zkoss.zul.impl.api.XulElement {
 	public org.zkoss.zul.api.Tabbox getTabboxApi();
 
 	/**
-	 * Returns the alignment of tab. (not supported in mold accordion and
-	 * version 3.5)
-	 * <p>
-	 * Default: "start".
-	 * 
-	 * <p>
-	 * Note: only the default mold supports it (not supported in mold accordion
-	 * and version 3.5).
+	 * Reserved for future extension; not supported yet (@since 5.0.0)
 	 */
 	public String getAlign();
 
 	/**
-	 * Sets the alignment of tab. (not supported in mold accordion and version
-	 * 3.5)
-	 * 
-	 * @param align
-	 *            must be "start" or "center" or "end".
+	 * Reserved for future extension; not supported yet (@since 5.0.0)
 	 */
 	public void setAlign(String align) throws WrongValueException;
 
