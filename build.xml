@@ -45,7 +45,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<!--tstamp/-->
 
 		<available file="${src.mesg.dir}" property="src.mesg.dir.exist"/>
-		<available file="${src5.dir}" property="src5.dir.exist"/>
 		<available file="${src.dir}" property="src.dir.exist"/>
 
 		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
@@ -101,13 +100,16 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		</condition>
 
 		<condition property="compile.required">
-			<or>
+			<and>
 				<or>
-					<equals arg1="${format}" arg2="jar"/>
-					<equals arg1="${format}" arg2="jar2"/>
+					<or>
+						<equals arg1="${format}" arg2="jar"/>
+						<equals arg1="${format}" arg2="jar2"/>
+					</or>
+					<equals arg1="${format}" arg2="war"/>
 				</or>
-				<equals arg1="${format}" arg2="war"/>
-			</or>
+				<isset property="src.dir.exist"/>
+			</and>
 		</condition>
 
 		<condition property="gentime.required">

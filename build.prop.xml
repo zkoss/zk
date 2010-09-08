@@ -30,7 +30,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <!-- property name="out.dir" value="debug"/ --> <!-- invoker must provide -->
 
 <property name="src.dir" value="src"/>
-<property name="src5.dir" value="src5"/>
 <property name="src.archive.dir" value="${src.dir}/archive"/>
 <property name="src.mesg.dir" value="${src.archive.dir}/metainfo/mesg"/>
 <property name="manifest.mf" value="${src.archive.dir}/META-INF/MANIFEST.MF"/>
