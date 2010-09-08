@@ -210,6 +210,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}			
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
+		var menubar = this.getMenubar();
+		if (menubar) {
+			menubar._bOver = true;
+			menubar._noFloatUp = false;
+		}
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
@@ -222,9 +227,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
 		} else {
-			var menubar = this.getMenubar();
-			if (this.menupopup && menubar.isAutodrop()) {
-				menubar._noFloatUp = false; //used in _doMouseOut
+			if (this.menupopup && menubar._autodrop) {
 				menubar._lastTarget = this;
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
@@ -242,25 +245,24 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$class._addActive(this);
 	},
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
-		if (zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		var menubar = this.getMenubar();
+		if (menubar) menubar._bOver = false;
+		if (!zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	
-		var	topmost = this.isTopmost();
-		if (topmost) {
+		var	topmost = this.isTopmost(),
+			menupopup = this.menupopup;
+		if (topmost) { //implies menubar
 			this.$class._rmOver(this);
-			var menubar = this.getMenubar();
-			if (this.menupopup && menubar.isAutodrop()) {
-				if (this.menupopup.isOpen())
-					this.menupopup._shallClose = true; //autodrop -> autoclose if mouseout
-				//_noFloatUp: Bug 1852304: Safari/Chrome unable to popup with menuitem
-				//because popup causes mouseout, and mouseout casues onfloatup
-				if (!menubar._noFloatUp)
-					zWatch.fire('onFloatUp', this); //notify all
-					// remove timeout: Bug 3052208: Hovers on menu are a bit hit and miss with IE
-				menubar._noFloatUp = false;
+			if (menupopup && menubar._autodrop) {
+				if (menupopup.isOpen())
+					menupopup._shallClose = true; //autodrop -> autoclose if mouseout
+				menubar._closeOnOut();
 			}
-		} else if (!this.menupopup || !this.menupopup.isOpen())
+		} else if (!menupopup || !menupopup.isOpen())
 			this.$class._rmActive(this);
+		else if (menupopup && menubar && menubar._autodrop)
+			menubar._closeOnOut();
 	}
 }, {
 	_isActive: function (wgt) {

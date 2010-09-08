@@ -105,6 +105,15 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
+
+		if (this.parent.$instanceof(zul.menu.Menu)) {
+			var n = this.$n();
+			if (n) {
+				var top = zk.parseInt(n.style.top),
+					pos = top + 2; 
+				jq(n).css('top', pos + 'px');
+			}
+		}
 	},
 	shallStackup_: function () {
 		return false;
@@ -243,9 +252,21 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);
 	},
+	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
+	 * @return zul.menu.Menubar
+	 * @since 5.0.5
+	 */
+	getMenubar: zul.menu.Menu.prototype.getMenubar,
 	doMouseOver_: function (evt) {
+		var menubar = this.getMenubar();
+		if (menubar) menubar._bOver = true;
 		this._shallClose = false;
 		this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (evt) {
+		var menubar = this.getMenubar();
+		if (menubar) menubar._bOver = false;
+		this.$supers('doMouseOut_', arguments);
 	}
 }, {
 	_rmActive: function (wgt) {

@@ -13,7 +13,12 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+'e';
+	var _allowKeys;
+	
+	// Fixed merging JS issue
+	zk.load('zul.lang', function () {
+		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+'e';
+	});
 		//supports 1e2
 /**
  * An edit box for holding an float point value (double).

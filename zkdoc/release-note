@@ -30,8 +30,9 @@ ZK 5.5.0
 	--------
 ZK 5.0.5
 * Features
-
+  3061676: Autodrop menubar shall be closed automatically when move out
 * Bugs
+  3057902: zk bug for window showbusy
 
 * Upgrade Notes
 

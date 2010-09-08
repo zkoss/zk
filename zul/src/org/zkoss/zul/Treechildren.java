@@ -222,9 +222,11 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	}
 	protected void smartUpdate(String name, Object value) {
 		Component comp = getParent();
-		if (comp instanceof Treeitem)
-			((Treeitem)comp).getTreerow().smartUpdate(name, value);
-		else
+		if (comp instanceof Treeitem) {
+			Treerow tr = ((Treeitem)comp).getTreerow();
+			if (tr != null)
+				tr.smartUpdate(name, value);
+		} else
 			((Tree)comp).smartUpdate(name, value);
 	}
 	/** Returns an iterator to iterate thru all visible children.

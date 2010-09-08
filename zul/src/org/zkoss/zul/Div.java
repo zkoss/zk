@@ -41,7 +41,7 @@ public class Div extends XulElement implements org.zkoss.zul.api.Div {
 	public String getAlign() {
 		return _align;
 	}
-	/** Sets the alignment: one of left, center, right, ustify,
+	/** Sets the alignment: one of left, center, right, justify,
 	 */
 	public void setAlign(String align) {
 		if (align != null && align.length() == 0)

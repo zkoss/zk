@@ -166,12 +166,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar: function () {
-		for (var p = this.parent; p; p = p.parent)
-			if (p.$instanceof(zul.menu.Menubar))
-				return p;
-		return null;
-	},
+	getMenubar: zul.menu.Menu.prototype.getMenubar,
 	bind_: function () {
 		this.$supers(zul.menu.Menuitem, 'bind_', arguments);
 
@@ -246,24 +241,21 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					// Bug #2154611 we shall eat the onclick event, if it is FF3.
 				}
 			}
-			if (!topmost) {
-				var mb, fixedWebKit = zk.safari && (mb=this.getMenubar()) && mb.isAutodrop();
-				for (var p = this.parent; p; p = p.parent) {
+			if (!topmost)
+				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup)) {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
-						if (p.isOpen() && !this._uplder /*Bug #2911385 && !this._popup*/) {							
-							p.close({sendOnOpen:true});
+						if (!p.isOpen() || this._uplder /*Bug #2911385 && !this._popup*/)
+							break;
+						p.close({sendOnOpen:true});
+					} else if (!p.$instanceof(zul.menu.Menu)) //either menubar or non-menu*
+						break;
 
-							//_noFloatUp used in Menu.js to fix Bug 1852304
-							if (fixedWebKit) {
-								fixedWebKit = false;
-								mb._noFloatUp = true;
-							}
-						} else break;
-					}
-				}
-			}
-										
+			var menubar;
+			if (zk.safari && (menubar=this.getMenubar()) && menubar._autodrop)
+				menubar._noFloatUp = true;
+				//_noFloatUp used in Menu.js to fix Bug 1852304
+
 			this.$class._rmActive(this);
 			this.$super('doClick_', evt, true);
 		}
@@ -273,6 +265,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	},
 	doMouseOver_: function (evt) {
+		var menubar = this.getMenubar();
+		if (menubar) {
+			menubar._bOver = true;
+			menubar._noFloatUp = false;
+		}
 		if (!this.$class._isActive(this) && this._canActivate(evt)) {
 			this.$class._addActive(this);
 			if (zul.menu._nOpen || !this.isTopmost())
@@ -281,6 +278,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
+		var menubar = this.getMenubar();
+		if (menubar) {
+			menubar._bOver = false;
+			menubar._closeOnOut();
+		}
 		if (!this.isDisabled()) {
 			var deact = !zk.ie;
 			if (!deact) {
