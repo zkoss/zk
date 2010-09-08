@@ -316,14 +316,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			table = owner.eheadtbl,
 			head = table.tBodies[0].rows[0], 
 			rwd = $n.revisedWidth(wd),
-			cells = head.cells,
-			cidx = $n.cellIndex(),
-			total = 0;
+			cidx = $n.cellIndex();
 			
-		for (var k = cells.length; k--;) {
-			if (k !== cidx && zk(cells[k]).isVisible()) total += cells[k].offsetWidth;
-		}
-
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
 		if (owner.efoottbl) {
@@ -343,13 +337,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var cell = n.firstChild;
 		cell.style.width = zk(cell).revisedWidth(rwd) + "px";
 		
-		table.style.width = total + wd + "px";
+		//bug 3061765: unexpected horizontal scrollbar when sizing
+/*		table.style.width = total + wd + "px";
+		
 		if (owner.efoottbl)
 			owner.efoottbl.style.width = table.style.width;
 		
 		if (owner.ebodytbl)
 			owner.ebodytbl.style.width = table.style.width;
-			
+*/			
 		if (zk.opera && fixed) owner.ebodytbl.style.tableLayout = fixed;
 		
 		wgt.parent.fire('onColSize', zk.copy({
