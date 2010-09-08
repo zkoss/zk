@@ -80,8 +80,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('close', arguments);
 		jq(this.$n()).hide(); // force to hide the element
 		this._hideShadow();
-		var menu = this.parent;
-		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
+		var menu;
+		if ((menu = this.getMenu()) && menu.isTopmost())
 			jq(menu.$n('a')).removeClass(menu.getZclass() + "-body-seld");
 
 		var item = this._currentChild();
@@ -92,13 +92,13 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	open: function (ref, offset, position, opts) {
 		if (!this.isOpen())
 			zul.menu._nOpen++;
-
-		if (this.parent.$instanceof(zul.menu.Menu)) {
+		var menu;
+		if (menu = this.getMenu()) {
 			if (!offset) {
-				ref = this.parent.$n('a');
+				ref = menu.$n('a');
 				if (!position)
-					if (this.parent.isTopmost())
-						position = this.parent.parent.getOrient() == 'vertical'
+					if (menu.isTopmost())
+						position = menu.parent.getOrient() == 'vertical'
 							? 'end_before' : 'after_start';
 					else position = 'end_before';
 			}
@@ -106,13 +106,11 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
 
-		if (this.parent.$instanceof(zul.menu.Menu)) {
-			var n = this.$n();
-			if (n) {
-				var top = zk.parseInt(n.style.top),
-					pos = top + 2; 
-				jq(n).css('top', pos + 'px');
-			}
+		if (menu) {
+			var n;
+			if (n = this.$n())
+				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
+					zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
 		}
 	},
 	shallStackup_: function () {
@@ -217,6 +215,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
+			menu,
 			keyCode = evt.keyCode;
 		switch (keyCode) {
 		case 38: //UP
@@ -228,8 +227,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		case 37: //LEFT
 			this.close();
 
-			if (this.parent.$instanceof(zul.menu.Menu) && !this.parent.isTopmost()) {
-				var pp = this.parent.parent;
+			if (((menu = this.getMenu())) && !menu.isTopmost()) {
+				var pp = menu.parent;
 				if (pp) {
 					var anc = pp.$n('a');
 					if (anc) anc.focus();
@@ -257,6 +256,15 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	 * @since 5.0.5
 	 */
 	getMenubar: zul.menu.Menu.prototype.getMenubar,
+	/** Returns the {@link Menu} that open this menupopup, or null if not available.
+	 * @return zul.menu.Menu
+	 */
+	getMenu: function () {
+		var p = this.parent;
+		if (p.$instanceof(zul.menu.Menu))
+			return p;
+		return null;
+	},
 	doMouseOver_: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = true;
