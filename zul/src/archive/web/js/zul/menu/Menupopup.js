@@ -12,6 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _getMenu(wgt) {
+		var p = wgt.parent;
+		return p.$instanceof(zul.menu.Menu) ? p: null;
+	}
 /**
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
@@ -81,7 +86,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		jq(this.$n()).hide(); // force to hide the element
 		this._hideShadow();
 		var menu;
-		if ((menu = this.getMenu()) && menu.isTopmost())
+		if ((menu = _getMenu(this)) && menu.isTopmost())
 			jq(menu.$n('a')).removeClass(menu.getZclass() + "-body-seld");
 
 		var item = this._currentChild();
@@ -93,7 +98,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (!this.isOpen())
 			zul.menu._nOpen++;
 		var menu;
-		if (menu = this.getMenu()) {
+		if (menu = _getMenu(this)) {
 			if (!offset) {
 				ref = menu.$n('a');
 				if (!position)
@@ -227,7 +232,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		case 37: //LEFT
 			this.close();
 
-			if (((menu = this.getMenu())) && !menu.isTopmost()) {
+			if (((menu = _getMenu(this))) && !menu.isTopmost()) {
 				var pp = menu.parent;
 				if (pp) {
 					var anc = pp.$n('a');
@@ -256,15 +261,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	 * @since 5.0.5
 	 */
 	getMenubar: zul.menu.Menu.prototype.getMenubar,
-	/** Returns the {@link Menu} that open this menupopup, or null if not available.
-	 * @return zul.menu.Menu
-	 */
-	getMenu: function () {
-		var p = this.parent;
-		if (p.$instanceof(zul.menu.Menu))
-			return p;
-		return null;
-	},
 	doMouseOver_: function (evt) {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = true;
@@ -284,3 +280,4 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	}
 });
 zul.menu._nOpen = 0;
+})();
