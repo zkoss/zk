@@ -105,7 +105,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
-			
+
 		if (this.parent.$instanceof(zul.menu.Menu)) {
 			var n = this.$n();
 			if (n) {
@@ -252,28 +252,20 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);
 	},
+	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
+	 * @return zul.menu.Menubar
+	 * @since 5.0.5
+	 */
+	getMenubar: zul.menu.Menu.prototype.getMenubar,
 	doMouseOver_: function (evt) {
-		var menu = this.parent,
-			menubar;
-		if (menu.$instanceof(zul.menu.Menu) && 
-			(menubar = menu.getMenubar()))
-			menubar._noFloatUp = true;
-		
+		var menubar = this.getMenubar();
+		if (menubar) menubar._bOver = true;
 		this._shallClose = false;
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		if (zk.Widget.$(evt.domTarget).$instanceof(zul.menu.Menuitem))
-			return;
-		this._shallClose = false;
-		
-		var menu = this.parent,
-			menubar;
-		if (menu.$instanceof(zul.menu.Menu) && 
-			(menubar = menu.getMenubar())) {
-			menubar._noFloatUp = false;
-			menu._doPopupClose();
-		}
+		var menubar = this.getMenubar();
+		if (menubar) menubar._bOver = false;
 		this.$supers('doMouseOut_', arguments);
 	}
 }, {
