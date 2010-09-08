@@ -85,7 +85,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	}
 	/** Constructs a script component with the specified content.
 	 * @param content the content (the code snippet).
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Script(String content) {
 		setContent(content);

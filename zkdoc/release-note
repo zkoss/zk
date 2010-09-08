@@ -1,5 +1,5 @@
 	--------
-ZK 5.5.0
+ZK 6.0.0
 * Features
   2974464: A way to customize message with i3-label
   2971889: Way to notify server of JS error

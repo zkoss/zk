@@ -19,8 +19,8 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	Compiler settings
 -->
 <property name="deprecation" value="on"/>
-<property name="target.version" value="1.4"/>
-<property name="source.version" value="1.4"/>
+<property name="target.version" value="1.5"/>
+<property name="source.version" value="1.5"/>
 
 <!--
 	Build tree settings

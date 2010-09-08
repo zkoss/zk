@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.event.Event;
  * when {@link #desktopDestroy} is called.
  *
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  * @see PerformanceMeter
  */
 public interface ExecutionMonitor {

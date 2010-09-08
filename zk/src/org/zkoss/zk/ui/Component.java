@@ -971,7 +971,7 @@ w:use="foo.MyWindow"&gt;
 	 * request path ({@link Desktop#getRequestPath}) is <code>/foo.zul</code>, then
 	 * the URL of the AU request will contain <code>/_/foo.zul/xxx,yyy</code>,.
 	 * <p>Default: null (no AU tag for this widget).
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 * @see #setAutag
 	 */
 	public String getAutag();
@@ -979,7 +979,7 @@ w:use="foo.MyWindow"&gt;
 	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
 	 * @param tag the AU tag. Both an empty string and null are consisered as null,
 	 * i.e., no AU tag for this widget.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 * @see #getAutag
 	 */
 	public void setAutag(String tag);

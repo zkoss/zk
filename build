@@ -396,12 +396,12 @@ function invoke_ant
 	srcver=$(grep '^source=' version)
 	srcver=${srcver#source=}
 	if [ "$srcver" = "" ] ; then
-		srcver=1.4
+		srcver=1.5
 	fi
 	tgtver=$(grep '^target=' version)
 	tgtver=${tgtver#target=}
 	if [ "$tgtver" = "" ] ; then
-		tgtver=1.4
+		tgtver=1.5
 	fi
 	deprecation=$(grep '^deprecation=' version)
 	deprecation=${deprecation#deprecation=}

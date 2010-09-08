@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-/** @deprecated As of release 5.5.0, replaced with {@link org.zkoss.html.StyleSheet}.
+/** @deprecated As of release 6.0.0, replaced with {@link org.zkoss.html.StyleSheet}.
  * Represents a style sheet.
  *
  * @author tomyeh

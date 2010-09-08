@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 /**
  * Utilities to implement ZK.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class Utils {
 	private static final Log log = Log.lookup(Utils.class);

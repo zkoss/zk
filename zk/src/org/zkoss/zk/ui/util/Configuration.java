@@ -1850,7 +1850,7 @@ public class Configuration {
 	}
 
 	/** Returns the execution monitor for this application, or null if not set.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ExecutionMonitor getExecutionMonitor() {
 		return _execmon;
@@ -1868,7 +1868,7 @@ public class Configuration {
 	 * @param monitor the execution monitor. If null, the monitor function
 	 * is disabled.
 	 * @return the previous execution monitor, or null if not available.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ExecutionMonitor setExecutionMonitor(ExecutionMonitor monitor) {
 		final ExecutionMonitor old = _execmon;

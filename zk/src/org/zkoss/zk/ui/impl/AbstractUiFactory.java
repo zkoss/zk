@@ -109,7 +109,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 
 	/** Instantiates a composer of the given class.
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Composer newComposer(Class klass, Page page) {
 		if (!Composer.class.isAssignableFrom(klass))
@@ -122,7 +122,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	/** Instantiates a server push of the given class.
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ServerPush newServerPush(Class klass, Desktop desktop) {
 		if (!ServerPush.class.isAssignableFrom(klass))

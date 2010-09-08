@@ -957,7 +957,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * the URL of the AU request will contain <code>/_/foo.zul/xxx,yyy</code>,.
 	 * <p>Default: null.
 	 * @type String
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	//autag: null,
 

@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.event.Event;
  * in WEB-INF/zk.xml (refer zk-test.xml)</li>
  * <li>Refer to console to see the activation/deactivation of executions.</li>
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class ExecutionMonitor implements
 org.zkoss.zk.ui.util.ExecutionMonitor {

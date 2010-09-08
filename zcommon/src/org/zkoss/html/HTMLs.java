@@ -25,7 +25,7 @@ import org.zkoss.xml.XMLs;
  * Utilities for HTML attributes and styles.
  *
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class HTMLs {
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").

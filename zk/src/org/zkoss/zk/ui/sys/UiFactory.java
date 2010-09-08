@@ -140,13 +140,13 @@ public interface UiFactory {
 	/** Creates and initializes a composer of the given class and page.
 	 * @param page the page that the composer will be created for.
 	 * @exception UiException if failed to instantiate
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Composer newComposer(Class klass, Page page);
 	/** Creates and initializes the server push of the given class and desktop.
 	 * @param desktop the desktop that the server push will be created for.
 	 * @exception UiException if failed to instantiate
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ServerPush newServerPush(Class klass, Desktop desktop);
 
