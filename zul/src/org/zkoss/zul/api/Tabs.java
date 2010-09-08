@@ -33,13 +33,17 @@ public interface Tabs extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public org.zkoss.zul.api.Tabbox getTabboxApi();
 
-	/**
-	 * Reserved for future extension; not supported yet (@since 5.0.0)
+	/** Returns the alignment of tab.
+	 * Reserved for future extension; not supported yet.
+	 * @since 3.0.0
 	 */
 	public String getAlign();
 
-	/**
-	 * Reserved for future extension; not supported yet (@since 5.0.0)
+	/** Sets the alignment of tab.
+	 * Reserved for future extension; not supported yet.
+	 * <p>Default: "start".
+	 * @param align must be "start" or "center" or "end".
+	 * @since 3.0.0
 	 */
 	public void setAlign(String align) throws WrongValueException;
 

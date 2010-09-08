@@ -55,16 +55,28 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		return width;
 	}
 	
-	/** 
-	 * Reserved for future extension; not supported yet (@since 5.0.0)
+	/** Returns the alignment of tab.
+	 * Reserved for future extension; not supported yet.
+	 * @since 3.0.0
 	 */
 	public String getAlign() {
 		return _align;
 	}
-	/** 
-	 * Reserved for future extension; not supported yet (@since 5.0.0)
+	/** Sets the alignment of tab.
+	 * Reserved for future extension; not supported yet.
+	 * <p>Default: "start".
+	 * @param align must be "start" or "center" or "end".
+	 * @since 3.0.0
 	 */
-	public void setAlign(String align) throws WrongValueException {}
+	public void setAlign(String align) throws WrongValueException {
+		if (!"start".equals(align) && !"center".equals(align) && !"end".equals(align))
+			throw new WrongValueException(align);
+
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			smartUpdate("align", _align);
+		}
+	}
 	
 	public void invalidate() {
 		Tabbox tbox = getTabbox();
