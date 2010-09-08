@@ -4,6 +4,7 @@ ZK 5.0.5
   3061676: Autodrop menubar shall be closed automatically when move out
 * Bugs
   3057902: zk bug for window showbusy
+  3061764: Opera only. Cannot sizing a column with width
   3061765: Unexpected horizontal scrollbar when sizing listheader
 
 * Upgrade Notes

@@ -311,25 +311,25 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			n = wgt.$n(), $n = zk(n),
-			owner = wgt.getMeshWidget(),
+			mesh = wgt.getMeshWidget(),
 			wd = dg._zszofs,
-			table = owner.eheadtbl,
+			table = mesh.eheadtbl,
 			head = table.tBodies[0].rows[0], 
 			rwd = $n.revisedWidth(wd),
 			cidx = $n.cellIndex();
 			
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
-		if (owner.efoottbl) {
-			owner.eftfaker.cells[cidx].style.width = wd + "px";
+		if (mesh.efoottbl) {
+			mesh.eftfaker.cells[cidx].style.width = wd + "px";
 		}
 		var fixed;
-		if (owner.ebodytbl) {
-			if (zk.opera && !owner.ebodytbl.style.tableLayout) {
+		if (mesh.ebodytbl) {
+			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
 				fixed = "auto";
-				owner.ebodytbl.style.tableLayout = "fixed";
+				mesh.ebodytbl.style.tableLayout = "fixed";
 			}
-			owner.ebdfaker.cells[cidx].style.width = wd + "px";
+			mesh.ebdfaker.cells[cidx].style.width = wd + "px";
 		}
 		
 		head.cells[cidx].style.width = wd + "px";
@@ -340,13 +340,23 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//bug 3061765: unexpected horizontal scrollbar when sizing
 /*		table.style.width = total + wd + "px";
 		
-		if (owner.efoottbl)
-			owner.efoottbl.style.width = table.style.width;
+		if (mesh.efoottbl)
+			mesh.efoottbl.style.width = table.style.width;
 		
-		if (owner.ebodytbl)
-			owner.ebodytbl.style.width = table.style.width;
+		if (mesh.ebodytbl)
+			mesh.ebodytbl.style.width = table.style.width;
 */			
-		if (zk.opera && fixed) owner.ebodytbl.style.tableLayout = fixed;
+		var meshn = mesh.$n();
+		if (zk.opera) {
+			if(fixed) 
+				mesh.ebodytbl.style.tableLayout = fixed;
+			
+			//bug 3061764: Opera only. Cannot sizing a column with width
+			var olddisp = meshn.style.display; //force redraw
+			meshn.style.display='none';
+			var redrawFix = meshn.offsetHeight;
+			meshn.style.display=olddisp;
+		}
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
@@ -354,10 +364,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			width: wd + "px"
 		}, evt.data), null, 0);
 		
-		var mesh = wgt.getMeshWidget();
-		
 		// bug #2799258 in IE, we have to force to recalculate the size.
-		mesh.$n()._lastsz = null;
+		meshn._lastsz = null;
 		
 		// bug #2799258
 		zWatch.fireDown('onSize', mesh);
