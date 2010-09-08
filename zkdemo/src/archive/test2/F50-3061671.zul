@@ -1,0 +1,30 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Click the button on each row. </li>
+<li>You shall see messgebox showing label 'btn' on each click.</li>
+<li>If not, it is a bug.</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+	<zscript><![CDATA[
+		List books = Arrays.asList(new String[]{"a", "b", "c"})
+	]]></zscript>
+	<listbox id="lb" model="@{books}">
+		<listhead>
+			<listheader label="Code" />
+			<listheader label="Description"/>
+		</listhead>
+		<listitem self="@{each=code}" value="@{book}">
+			<listcell label="@{code}" />
+			<listcell>
+				<window>
+					<button label="click" id="btn" onClick="alert(self.id)"/>
+				</window>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>
