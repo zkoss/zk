@@ -628,8 +628,8 @@ public class LanguageDefinition {
 	/** Removes a mergeable JavaScript package required by this language.
 	 * @since 5.0.4
 	 */
-	public void removeMergeJavaScriptPackage(String pkg) {
-		_mergepkgs.remove(pkg);
+	public boolean removeMergeJavaScriptPackage(String pkg) {
+		return _mergepkgs.remove(pkg);
 	}
 	/** Returns a list of mergeable JavaScript package (String)
 	 * required by this language.

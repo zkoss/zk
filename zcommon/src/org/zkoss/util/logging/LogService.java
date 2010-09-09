@@ -71,8 +71,12 @@ public class LogService {
 	 * {@link #init} is invoked.
 	 */
 	public static final boolean isInited(String rootnm) {
+		final Logger root = Logger.getLogger(rootnm);
+			//Tomcat has one root per Web app, while Logger.global is shared
+			//Thus we have to use getLogger to verify whether it is installed
+
 		synchronized (_svcs) {
-			return _svcs.containsKey(rootnm);
+			return _svcs.containsKey(root);
 		}
 	}
 
