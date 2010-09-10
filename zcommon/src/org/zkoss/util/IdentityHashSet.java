@@ -31,18 +31,18 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  * @see IdentityComparator
  */
-public class IdentityHashSet extends AbstractSet
-implements Set, Cloneable, java.io.Serializable {
+public class IdentityHashSet<T> extends AbstractSet<T>
+implements Set<T>, Cloneable, java.io.Serializable {
     private static final long serialVersionUID = 20060622L;
 
-    private transient IdentityHashMap map;
+    private transient IdentityHashMap<T, Object> _map;
 
     /**
      * Constructs a new, empty set; the backing <tt>IdentityHashMap</tt>
      * instance has default capacity (32).
      */
     public IdentityHashSet() {
-		map = new IdentityHashMap();
+		_map = new IdentityHashMap<T, Object>();
 	}
 
 	/**
@@ -52,8 +52,8 @@ implements Set, Cloneable, java.io.Serializable {
 	 * @param c the collection whose elements are to be placed into this set.
 	 * @throws NullPointerException if the specified collection is null.
 	 */
-	public IdentityHashSet(Collection c) {
-		map = new IdentityHashMap(Math.max((c.size()*4)/3, 16));
+	public IdentityHashSet(Collection<T> c) {
+		_map = new IdentityHashMap<T, Object>(Math.max((c.size()*4)/3, 16));
 		addAll(c);
 	}
 
@@ -64,35 +64,37 @@ implements Set, Cloneable, java.io.Serializable {
      * @throws IllegalArgumentException if <tt>expectedMaxSize</tt> is negative
 	 */
 	public IdentityHashSet(int expectedMaxSize) {
-		map = new IdentityHashMap(expectedMaxSize);
+		_map = new IdentityHashMap<T, Object>(expectedMaxSize);
 	}
 
 	//-- Set --//
-	public Iterator iterator() {
-		return map.keySet().iterator();
+	public Iterator<T> iterator() {
+		return _map.keySet().iterator();
 	}
 	public int size() {
-		return map.size();
+		return _map.size();
 	}
 	public boolean isEmpty() {
-		return map.isEmpty();
+		return _map.isEmpty();
 	}
 	public boolean contains(Object o) {
-		return map.containsKey(o);
+		return _map.containsKey(o);
 	}
-	public boolean add(Object o) {
-		return map.put(o, Objects.UNKNOWN)==null;
+	public boolean add(T o) {
+		return _map.put(o, Objects.UNKNOWN)==null;
 	}
 	public boolean remove(Object o) {
-		return map.remove(o)==Objects.UNKNOWN;
+		return _map.remove(o)==Objects.UNKNOWN;
 	}
 	public void clear() {
-		map.clear();
+		_map.clear();
 	}
+
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		try { 
-			IdentityHashSet newSet = (IdentityHashSet)super.clone();
-			newSet.map = (IdentityHashMap)map.clone();
+			IdentityHashSet<T> newSet = (IdentityHashSet<T>)super.clone();
+			newSet._map = (IdentityHashMap<T, Object>)_map.clone();
 			return newSet;
 		} catch (CloneNotSupportedException e) { 
 			throw new InternalError();
@@ -106,12 +108,13 @@ implements Set, Cloneable, java.io.Serializable {
 		s.defaultWriteObject();
 
 		// Write out size
-		s.writeInt(map.size());
+		s.writeInt(_map.size());
 
 		// Write out all elements in the proper order.
-		for (Iterator i=map.keySet().iterator(); i.hasNext(); )
-			s.writeObject(i.next());
+		for (T key: _map.keySet())
+			s.writeObject(key);
 	}
+	@SuppressWarnings("unchecked")
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		// Read in any hidden serialization magic
@@ -121,13 +124,13 @@ implements Set, Cloneable, java.io.Serializable {
         int size = s.readInt();
 
 		// Read in IdentityHashMap capacity and load factor and create backing IdentityHashMap
-		map = new IdentityHashMap((size*4)/3);
+		_map = new IdentityHashMap<T, Object>((size*4)/3);
 			// Allow for 33% growth (i.e., capacity is >= 2* size()).
 
 		// Read in all elements in the proper order.
 		for (int i=0; i<size; i++) {
 			Object e = s.readObject();
-			map.put(e, Objects.UNKNOWN);
+			_map.put((T)e, Objects.UNKNOWN);
 		}
 	}
 }

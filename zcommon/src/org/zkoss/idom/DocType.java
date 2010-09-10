@@ -84,15 +84,10 @@ public class DocType extends AbstractItem implements DocumentType {
 	 * @param publicId the public Id; null or empty if not availabl
 	 */
 	public final void setPublicId(String publicId) {
-		checkWritable();
-
 		if (publicId == null)
 			publicId = "";
 
-		if (!Objects.equals(_pubId, publicId)) {
-			_pubId = publicId;
-			setModified();
-		}
+		_pubId = publicId;
 	}
 	/**
 	 * Gets the system ID of an externally referenced DTD, or an empty
@@ -110,15 +105,10 @@ public class DocType extends AbstractItem implements DocumentType {
 	 * @param systemId the system Id; null or empty if not availabl
 	 */
 	public final void setSystemId(String systemId) {
-		checkWritable();
-
 		if (systemId == null)
 			systemId = "";
 
-		if (!Objects.equals(_sysId, systemId)) {
-			_sysId = systemId;
-			setModified();
-		}
+		_sysId = systemId;
 	}
 
 	/**
@@ -131,11 +121,7 @@ public class DocType extends AbstractItem implements DocumentType {
 	 * Sets the data for the internal subset.
 	 */
 	public final void setInternalSubset(String newData) {
-		checkWritable();
-		if (!Objects.equals(_intSubset, newData)) {
-			_intSubset = newData;
-			setModified();
-		}
+		_intSubset = newData;
 	}
 
 	//-- Item --//
@@ -146,17 +132,12 @@ public class DocType extends AbstractItem implements DocumentType {
 		return _name;
 	}
 	public final void setName(String elementName) {
-		checkWritable();
-
 		if (elementName == null)
 			elementName = "";
 
-		if (!Objects.equals(_name, elementName)) {
-			//TY: we don't verify it here because it might contain colon
-			//Verifier.checkElementName(elementName, getLocator());
-			_name = elementName;
-			setModified();
-		}
+		//TY: we don't verify it here because it might contain colon
+		//Verifier.checkElementName(elementName, getLocator());
+		_name = elementName;
 	}
 
 	//-- Node --//

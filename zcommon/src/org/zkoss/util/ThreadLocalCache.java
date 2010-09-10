@@ -29,8 +29,8 @@ import java.util.Map;
  * @author tomyeh
  * @since 3.0.0
  */
-public class ThreadLocalCache implements Cache {
-	private final ThreadLocal _cache = new ThreadLocal();
+public class ThreadLocalCache<K, V> implements Cache<K, V> {
+	private final ThreadLocal<CacheMap<K, V>> _cache = new ThreadLocal<CacheMap<K, V>>();
 	private int _maxsize, _lifetime;
 
 	/** Constucts a thread-local cache with the specified max size
@@ -54,7 +54,9 @@ public class ThreadLocalCache implements Cache {
 		return getCache().isEmpty();
 	}
 	/** Puts all object cached in the current thread to the specifed map.
+	 * @deprecated As of release 6.0.0, use {@link Map#putAll} instead.
 	 */
+	@SuppressWarnings("unchecked")
 	public void copyTo(Map map) {
 		map.putAll(getCache());
 	}
@@ -63,23 +65,23 @@ public class ThreadLocalCache implements Cache {
 	public boolean containsKey(Object key) {
 		return getCache().containsKey(key);
 	}
-	public Object get(Object key) {
+	public V get(Object key) {
 		return getCache().get(key);
 	}
-	public Object put(Object key, Object value) {
+	public V put(K key, V value) {
 		return getCache().put(key, value);
 	}
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		return getCache().remove(key);
 	}
 	public void clear() {
 		getCache().clear();
 	}
 
-	private CacheMap getCache() {
-		CacheMap cache = (CacheMap)_cache.get();
+	private CacheMap<K, V> getCache() {
+		CacheMap<K, V> cache = _cache.get();
 		if (cache == null)
-			_cache.set(cache = new CacheMap(_maxsize, _lifetime));
+			_cache.set(cache = new CacheMap<K, V>(_maxsize, _lifetime));
 		return cache;
 	}
 
@@ -87,7 +89,7 @@ public class ThreadLocalCache implements Cache {
 		return _lifetime;
 	}
 	public void setLifetime(int lifetime) {
-		final Cache cache = (Cache)_cache.get();
+		final Cache<K, V> cache = _cache.get();
 		if (cache != null)
 			cache.setLifetime(lifetime);
 		_lifetime = lifetime;
@@ -106,7 +108,7 @@ public class ThreadLocalCache implements Cache {
 		return _maxsize;
 	}
 	public void setMaxSize(int maxsize) {
-		final Cache cache = (Cache)_cache.get();
+		final Cache<K, V> cache = _cache.get();
 		if (cache != null)
 			cache.setMaxSize(maxsize);
 		_maxsize = maxsize;

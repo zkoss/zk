@@ -12,6 +12,8 @@ ZK 6.0.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
+  + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
+    are removed. org.zkoss.idom.Element and related don't implement TreeArray.
   + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
     Override getChildren() and getExtraCtrl() instead.
   + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer

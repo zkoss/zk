@@ -59,14 +59,14 @@ public class PropertyBundle {
 	private static final Log log = Log.lookup(PropertyBundle.class);
 
 	/** The cache to hold bundles (Key, PropertyBundle). */
-	private static final Cache _cache;
+	private static final Cache<Key, PropertyBundle> _cache;
 	static {
-		_cache = new CacheMap();
+		_cache = new CacheMap<Key, PropertyBundle>();
 		_cache.setMaxSize(100);
 	}
 
 	/** The map of properties. */
-	private final Map _map;
+	private final Map<String, String> _map;
 	/** The locale of the boundle. */
 	private final Locale _locale;
 
@@ -122,7 +122,7 @@ public class PropertyBundle {
 
 		final Key key = new Key(baseName, locale, locator, caseInsensitive);
 		synchronized(_cache) {
-			PropertyBundle bundle = (PropertyBundle)_cache.get(key);
+			PropertyBundle bundle = _cache.get(key);
 			if (bundle != null)
 				return bundle;
 		}
@@ -178,7 +178,7 @@ public class PropertyBundle {
 			final Locators.StreamLocation loc =
 			Locators.locateAsStream(baseName + ".properties", locale, locator);
 			if (loc != null) {
-				_map = new HashMap(32);
+				_map = new HashMap<String, String>(32);
 				Maps.load(_map, loc.stream, caseInsensitive);
 				_locale = loc.locale;
 			} else {
@@ -197,11 +197,11 @@ public class PropertyBundle {
 	 */
 	public final String getProperty(String key) {
 		//It is OK not to sync because _map is immutable
-		return (String)_map.get(key);
+		return _map.get(key);
 	}
 	/** Returns a map of all properties, (String key , String value).
 	 */
-	public final Map getProperties() {
+	public final Map<String, String> getProperties() {
 		return _map;
 	}
 	/** Returns the locale of the bundle, or null if it is the default.

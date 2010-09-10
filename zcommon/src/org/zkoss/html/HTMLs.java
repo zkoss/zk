@@ -176,12 +176,12 @@ public class HTMLs {
 			j = l + 1;
 		}
 	}
-	private final static Set _txtstyles;
+	private final static Set<String> _txtstyles;
 	static {
 		final String[] txts = {
 			"color", "background-color", "background", "white-space"
 		};
-		_txtstyles = new HashSet();
+		_txtstyles = new HashSet<String>();
 		for (int j = txts.length; --j >=0;)
 			_txtstyles.add(txts[j]);
 	}
@@ -198,7 +198,7 @@ public class HTMLs {
 		return _orphans.contains(tagname.toLowerCase());
 	}
 	/** A set of tags that don't have child. */
-	private static final Set _orphans = new HashSet(29);
+	private static final Set<String> _orphans = new HashSet<String>(29);
 	static {
 		final String[] orphans = {
 			"area", "base", "basefont", "bgsound", "br",

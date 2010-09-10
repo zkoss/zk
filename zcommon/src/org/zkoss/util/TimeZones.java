@@ -25,7 +25,7 @@ import java.util.TimeZone;
  */
 public class TimeZones {
 	private static final
-		InheritableThreadLocal _thdTZone = new InheritableThreadLocal();
+		InheritableThreadLocal<TimeZone> _thdTZone = new InheritableThreadLocal<TimeZone>();
 	/** Returns the current time zone; never null.
 	 * This is the time zone that every other objects shall use,
 	 * unless they have special consideration.
@@ -34,7 +34,7 @@ public class TimeZones {
 	 * the value is returned. Otherwise, TimeZone.getDefault() is returned,
 	 */
 	public static final TimeZone getCurrent() {
-		final TimeZone l = (TimeZone)_thdTZone.get();
+		final TimeZone l = _thdTZone.get();
 		return l != null ? l: TimeZone.getDefault();
 	}
 	/**
@@ -58,7 +58,7 @@ public class TimeZones {
 	 * @return the previous thread time zone, or null if no previous time zone
 	 */
 	public static final TimeZone setThreadLocal(TimeZone timezone) {
-		final TimeZone old = (TimeZone)_thdTZone.get();
+		final TimeZone old = _thdTZone.get();
 		_thdTZone.set(timezone);
 		return old;
 	}
@@ -69,7 +69,7 @@ public class TimeZones {
 	 * @see #getCurrent
 	 */
 	public static final TimeZone getThreadLocal() {
-		return (TimeZone)_thdTZone.get();
+		return _thdTZone.get();
 	}
 
 	/** Returns the time by specifying the offset in minutes.

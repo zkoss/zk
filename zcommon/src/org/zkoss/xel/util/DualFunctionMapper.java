@@ -64,17 +64,17 @@ public class DualFunctionMapper implements FunctionMapper, java.io.Serializable 
 		return m != null ? m:
 			_second != null ? _second.resolveFunction(prefix, name): null;
 	}
-	public Collection getClassNames() {
+	public Collection<String> getClassNames() {
 		return combine(
 			_first != null ? _first.getClassNames(): null,
 			_second != null ? _second.getClassNames(): null);
 	}
-	public Class resolveClass(String name) {
-		Class m = _first != null ? _first.resolveClass(name): null;
+	public Class<?> resolveClass(String name) {
+		Class<?> m = _first != null ? _first.resolveClass(name): null;
 		return m != null ? m:
 			_second != null ? _second.resolveClass(name): null;
 	}
-	private static Collection combine(Collection first, Collection second) {
+	private static final <T> Collection<T> combine(Collection<T> first, Collection<T> second) {
 		return DualCollection.combine(
 			first != null && !first.isEmpty() ? first: null,
 			second != null && !second.isEmpty() ? second: null);

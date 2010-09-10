@@ -88,7 +88,7 @@ public class FusionInvoker implements InvocationHandler, java.io.Serializable {
 	 *            the objects need to wrapped
 	 */
 	public static Object newInstance(Object[] targets) {
-		Set targetClasses = new HashSet();
+		Set<Class> targetClasses = new HashSet<Class>();
 		for (int i = 0; i < targets.length; i++) {
 			Class[] allClass = targets[i].getClass().getInterfaces();
 			for (int j = 0; j < allClass.length; j++) {

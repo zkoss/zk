@@ -143,10 +143,11 @@ implements FunctionMapper, java.io.Serializable {
 	public Function resolveFunction(String prefix, String name) {
 		return null;
 	}
-	public Collection getClassNames() {
+	@SuppressWarnings("unchecked")
+	public Collection<String> getClassNames() {
 		return Collections.EMPTY_LIST;
 	}
-	public Class resolveClass(String name) {
+	public Class<?> resolveClass(String name) {
 		return null;
 	}
 }

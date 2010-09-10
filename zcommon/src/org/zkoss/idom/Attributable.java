@@ -44,7 +44,7 @@ public interface Attributable {
 	 *
 	 * @return an empty list if no attribute at all
 	 */
-	public List getAttributeItems();
+	public List<Attribute> getAttributeItems();
 
 	/**
 	 * Gets the index of the first attribute that matches
@@ -128,7 +128,7 @@ public interface Attributable {
 	 * @param mode the serach mode; zero or any combination of Item.FIND_xxx
 	 * @return null if not found
 	 */
-	public List getAttributes(String namespace, String name, int mode);
+	public List<Attribute> getAttributes(String namespace, String name, int mode);
 
 	/**
 	 * Adds the giving attribute.
@@ -153,12 +153,10 @@ public interface Attributable {
 	 */
 	public Attribute setAttributeValue(String tname, String value);
 
-	/** Returns whether it is aware of the modificatioin of attributes.
-	 * If true, the modified flag is set if any of its attribute is modified.
-	 * <p>Default: false.
+	/** @deprecated As of release 6.0.0, it always returns false.
 	 */
 	public boolean isAttributeModificationAware();
-	/** Sets whether it is aware of the modificatioin of attributes.
+	/** @deprecated As of release 6.0.0, it does nothing.
 	 */
 	public void setAttributeModificationAware(boolean aware);
 }

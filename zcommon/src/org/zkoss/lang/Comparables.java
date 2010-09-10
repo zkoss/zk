@@ -28,6 +28,7 @@ public final class Comparables {
 	 * Note that the two Comparable must be with compatible type, or a
 	 * ClassCastException might be thrown.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Comparable min(Comparable a, Comparable b) {
 		return  (a.compareTo(b) < 0) ? a : b;
 	}
@@ -37,6 +38,7 @@ public final class Comparables {
 	 * Note that the two Comparable must be with compatible type, or a
 	 * ClassCastException might be thrown.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Comparable max(Comparable a, Comparable b) {
 		return  (a.compareTo(b) < 0) ? b : a;
 	}

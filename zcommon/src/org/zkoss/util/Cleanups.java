@@ -38,7 +38,7 @@ import org.zkoss.util.logging.Log;
  */
 public class Cleanups {
 	private static final Log log = Log.lookup(Cleanups.class);
-	private static final List _cleanups = new LinkedList();
+	private static final List<Cleanup> _cleanups = new LinkedList<Cleanup>();
 
 	/** Registers a cleanup.
 	 * @return true if it is added successfully, or false if the cleanup
@@ -66,19 +66,17 @@ public class Cleanups {
 	/** Invokes all cleanups registered with {@link #add}.
 	 */
 	public static void cleanup() {
-		final List cleanups;
+		final List<Cleanup> cleanups;
 		synchronized (_cleanups) {
-			cleanups = new ArrayList(_cleanups);
+			cleanups = new ArrayList<Cleanup>(_cleanups);
 		}
 
-		for (Iterator it = cleanups.iterator(); it.hasNext();) {
-			final Cleanup cleanup = (Cleanup)it.next();
+		for (Cleanup cleanup: cleanups) {
 			try {
 				cleanup.cleanup();
 			} catch (Throwable ex) {
 				log.error("Failed to invoke "+cleanup);
 			}
-				
 		}
 	}
 	/** The interface to implement for each cleanup.

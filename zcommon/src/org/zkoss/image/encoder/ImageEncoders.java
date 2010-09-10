@@ -33,10 +33,10 @@ import org.zkoss.image.AImage;
  */
 public class ImageEncoders {
 	/** Map(String format, Class encoder). */
-	private final static Map _encoders;
+	private final static Map<String, Class> _encoders;
 
 	static {
-		final Map encoders = new HashMap(4);
+		final Map<String, Class> encoders = new HashMap<String, Class>(4);
 		encoders.put("png", PNGEncoder.class);
 		encoders.put("jpeg", JPEGEncoder.class);
 		_encoders = Collections.synchronizedMap(encoders);
@@ -51,7 +51,7 @@ public class ImageEncoders {
      * @exception SystemException if failed to instantiate the encoder
      */
     public static ImageEncoder newInstance(String format) {
-    	final Class klass = (Class)_encoders.get(format.toLowerCase());
+    	final Class klass = _encoders.get(format.toLowerCase());
     	if (klass == null)
     		throw new IllegalArgumentException("Unsupported format: "+format);
 
@@ -75,12 +75,12 @@ public class ImageEncoders {
     public static Class setEncoderClass(String format, Class klass) {
     	if (!ImageEncoder.class.isAssignableFrom(klass))
     		throw new IllegalArgumentException(ImageEncoder.class+" must be implemented by "+klass);
-    	return (Class)_encoders.put(format.toLowerCase(), klass);
+    	return _encoders.put(format.toLowerCase(), klass);
     }
     /** Returns the class of the image encoder for the specified format,
      * or null if not specified yet.
      */
     public static Class getEncoderClass(String format) {
-    	return (Class)_encoders.get(format.toLowerCase());
+    	return _encoders.get(format.toLowerCase());
     }
 }

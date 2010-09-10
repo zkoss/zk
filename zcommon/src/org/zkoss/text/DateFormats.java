@@ -57,14 +57,14 @@ public class DateFormats {
 		}
 	}
 	private static final SimpleDateFormat getDateFormat() {
-		SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		SimpleDateFormat df = _df.get();
 		if (df == null)
 			_df.set(df = new SimpleDateFormat(
 				"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US));
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
-	private static final ThreadLocal _df = new ThreadLocal();
+	private static final ThreadLocal<SimpleDateFormat> _df = new ThreadLocal<SimpleDateFormat>();
 
 	/** Formats a Date object based on the current Locale.
 	 *

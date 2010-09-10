@@ -41,9 +41,8 @@ import org.zkoss.util.logging.Log;
  * {@link #shallExpunge}.
  *
  * <p>If the criteria is totally independent of GC, you could override
- * {@link #newQueue} to return null. Then, {@link #shallExpunge}
- * always returns true (rather than when GC is activated) -- of course,
- * you could override {@link #shallExpunge}, too.
+ * {@link #shallExpunge} to always return true
+ * (rather than when GC is activated).
  *
  * <p>It is different from WeakHashMap:
  *
@@ -68,20 +67,20 @@ import org.zkoss.util.logging.Log;
  *
  * @author tomyeh
  */
-public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
+public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20070907L;
 	//private static final Log log = Log.lookup(CacheMap.class);
 
 	/** The map to store the mappings. */
-	private Map _map; //it is OK to serialized
+	private Map<K, Value<V>> _map; //it is OK to serialized
 	/** The minimal lifetime. */
 	private int _lifetime = DEFAULT_LIFETIME;
 	/** The maximal allowed size. */
 	private int _maxsize = DEFAULT_MAX_SIZE;
 	/** The reference queue. */
-	private transient ReferenceQueue _que;
+	private transient ReferenceQueue<X> _que;
 	/** The reference. */
-	private transient WeakReference _ref;
+	private transient WeakReference<X> _ref;
 	/** A flag used for debug purpose. */
 	private transient boolean _inExpunge;
 
@@ -89,12 +88,12 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	private static class X {
 	}
 	/** The class to hold key/value. */
-	protected static final class Value implements java.io.Serializable, Cloneable {
-		private Object value;
+	protected static final class Value<V> implements java.io.Serializable, Cloneable {
+		private V value;
 		private long access; //when the mapping is accessed
 
 		/** Creates an instance to store in the map. */
-		private Value(Object value) {
+		private Value(V value) {
 			this.value = value;
 			updateAccessTime();
 		}
@@ -105,7 +104,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 
 		//-- utilities--//
 		/** Returns the value. */
-		public final Object getValue() {
+		public final V getValue() {
 			return this.value;
 		}
 		/** Returns the last access time. */
@@ -155,9 +154,9 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	 * Once shallExpunge returns true, values are examined one-by-one thru
 	 * {@link #canExpunge}, and expunged if EXPUNGE_YES.
 	 *
-	 * <p>This implementation returns true only if {@link #newQueue}
-	 * returns null (in constructor) or GC was activated.
-	 * You might override it to enforce expunge besides GC.
+	 * <p>This implementation returns true only if GC was activated.
+	 * You might override it to return true, such that expunge is enforced
+	 * no matter GC was activated.
 	 *
 	 * @see #canExpunge
 	 */
@@ -221,9 +220,8 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		_inExpunge = true;
 		try {
 			//dennis, bug 1815633, remove some control code here 
-			
-			for (final Iterator it = _map.values().iterator();it.hasNext();) {
-				final Value v = (Value)it.next();
+			for (final Iterator<Value<V>> it = _map.values().iterator();it.hasNext();) {
+				final Value<V> v = it.next();
 				final int result = canExpunge(v);
 				if ((result & EXPUNGE_YES) != 0) {
 					//if (D.ON && log.debugable())
@@ -241,25 +239,11 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 			_inExpunge = false;
 		}
 	}
-	/** Creates the reference queue.
-	 * It is called only once in the constructor (so it is meaningless
-	 * to change the returned value after constructed).
-	 *
-	 * <p>Default: new ReferenceQueue();<br>
-	 * Override this method to return null if you want to expunge items
-	 * every time {@link #get} or {@link #put} is called -- not only GC
-	 * is activated.
-	 * In other words, if {@link #newQueue} returns null, {@link #shallExpunge}
-	 * always returns true (unless you override it too).
-	 */
-	protected ReferenceQueue newQueue() {
-		return new ReferenceQueue();
-	}
 	/** Re-create the reference so we can detect if GC was activated.
 	 */
 	private void newRef() {
 		if (_que != null)
-			_ref = new WeakReference(new X(), _que);
+			_ref = new WeakReference<X>(new X(), _que);
 	}
 
 	//-- constructors --//
@@ -274,24 +258,24 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap() {
-		_map = new LinkedHashMap(16, 0.75f, true);
+		_map = new LinkedHashMap<K, Value<V>>(16, 0.75f, true);
 		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap) {
-		_map = new LinkedHashMap(cap, 0.75f, true);
+		_map = new LinkedHashMap<K, Value<V>>(cap, 0.75f, true);
 		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap, float load) {
-		_map = new LinkedHashMap(cap, load, true);
+		_map = new LinkedHashMap<K, Value<V>>(cap, load, true);
 		init();
 	}
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
-		_que = newQueue();
+		_que = new ReferenceQueue<X>();
 		newRef();
 	}
 
@@ -331,16 +315,6 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	public void setMaxSize(int maxsize) {
 		_maxsize = maxsize;
 	}
-	/**
-	 * Gets the last accessed time, in system millisecs.
-	 * @return the last accessed time; 0 if not found
-	 */
-	/* To support this method, we cannot use access-ordered for _map
-		Then, get() and put() shall use remove and add
-	public final long getLastAccessTime(Object key) {
-		final Value v = (Value)_map.get(key);
-		return v != null ? v.access: 0;
-	}*/
 
 	//-- Map --//
 	public boolean isEmpty() {
@@ -367,20 +341,20 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		_map.clear();
 	}
 
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		tryExpunge();
-		final Value v = (Value)_map.remove(key);
+		final Value<V> v = _map.remove(key);
 		return v != null ? v.value: null;
 	}
-	public Object get(Object key) {
+	public V get(Object key) {
 		tryExpunge();
 		return getWithoutExpunge(key);
 	}
 	/** Returns the value without trying to expunge first.
 	 * It is useful if you want to preserve all entries.
 	 */
-	public Object getWithoutExpunge(Object key) {
-		final Value v = (Value)_map.get(key); //re-order
+	public V getWithoutExpunge(Object key) {
+		final Value<V> v = _map.get(key); //re-order
 		if (v != null) {
 			v.updateAccessTime();
 			//assertion(key);
@@ -394,45 +368,42 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	}
 	public boolean containsValue(Object value) {
 		tryExpunge();
-		for (final Iterator it = _map.values().iterator(); it.hasNext();) {
-			final Value v = (Value)it.next();
-			if (Objects.equals(v.value, value))
+		for (Value<V> v: _map.values()) {
+			if (Objects.equals(value, v.value))
 				return true;
 		}
 		return false;
 	}
-	public Object put(Object key, Object value) {
+	public V put(K key, V value) {
 		tryExpunge();
-		final Value v = (Value)_map.put(key, new Value(value));
+		final Value<V> v = _map.put(key, new Value<V>(value));
 		return v != null ? v.value: null;
 	}
-	public void putAll(Map map) {
-		for (final Iterator it = map.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
+	public void putAll(java.util.Map<? extends K,? extends V> map) {
+		for (Map.Entry<? extends K, ? extends V> me: map.entrySet())
 			put(me.getKey(), me.getValue());
-		}
 	}
 
 	/** It wraps what is stored in _map, such that the caller
 	 * won't know the value is wrapped with Value.
 	 */
-	private class Entry implements Map.Entry {
-		final Map.Entry _me;
+	private static class Entry<K,V> implements Map.Entry<K, V> {
+		final Map.Entry<K,Value<V>> _me;
+
+		@SuppressWarnings("unchecked")
 		private Entry(Map.Entry me) {
 			_me = me;
 		}
-		public Object getKey() {
+		public K getKey() {
 			return _me.getKey();
 		}
-		public Object getValue() {
-			return ((Value)_me.getValue()).value;
+		public V getValue() {
+			return _me.getValue().value;
 		}
-		public Object setValue(Object o) {
-			assert(!(o instanceof Value));
-
+		public V setValue(V o) {
 			//we don't re-order it to avoid comodification error
-			final Value v = (Value)_me.getValue();
-			final Object old = v.value;
+			final Value<V> v = _me.getValue();
+			final V old = v.value;
 			v.value = o;
 			return old;
 		}
@@ -446,8 +417,8 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 	}
 	/** Abstract iterator. */
-	private class KeyIter implements Iterator {
-		protected Iterator _it;
+	private static class KeyIter implements Iterator {
+		private Iterator _it;
 		private KeyIter(Iterator it) {
 			_it = it;
 		}
@@ -462,12 +433,12 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 	}
 	/** Entry iterator. Don't call expunge to avoid co-modified exception. */
-	private class EntryIter extends KeyIter {
+	private static class EntryIter extends KeyIter {
 		private EntryIter(Iterator it) {
 			super(it);
 		}
 		public Object next() {
-			return new Entry((Map.Entry)_it.next());
+			return new Entry((Map.Entry)super.next());
 		}
 	}
 	/** The entry set. */
@@ -494,7 +465,8 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 			CacheMap.this.clear();
 		}
 	}
-	public Set entrySet() {
+	@SuppressWarnings("unchecked")
+	public Set<Map.Entry<K,V>> entrySet() {
 		tryExpunge();
 		return new EntrySet();
 	}
@@ -521,18 +493,19 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 			CacheMap.this.clear();
 		}
 	}
-	public Set keySet() {
+	@SuppressWarnings("unchecked")
+	public Set<K> keySet() {
 		tryExpunge();
 		return new KeySet();
 	}
 
 	/** Value iterator. Don't call expunge to avoid co-modified exception. */
-	private class ValueIter extends KeyIter {
+	private static class ValueIter extends KeyIter {
 		private ValueIter(Iterator it) {
 			super(it);
 		}
 		public Object next() {
-			return ((Value)_it.next()).value;
+			return ((Value)super.next()).value;
 		}
 	}
 	/** The value collection. */
@@ -550,7 +523,8 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 			CacheMap.this.clear();
 		}
 	}
-	public Collection values() {
+	@SuppressWarnings("unchecked")
+	public Collection<V> values() {
 		tryExpunge();
 		return new Values();
 	}
@@ -595,18 +569,18 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	}*/
 
 	//Cloneable//
+	@SuppressWarnings("unchecked")
 	public Object clone() {
-		final CacheMap clone;
+		final CacheMap<K,V> clone;
 		try {
-			clone = (CacheMap)super.clone();
+			clone = (CacheMap<K,V>)super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();
 		}
 
-		clone._map = new LinkedHashMap(clone._map);
-		for (Iterator it = clone._map.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			me.setValue(((Value)me.getValue()).clone());
+		clone._map = new LinkedHashMap<K, Value<V>>(clone._map);
+		for (Map.Entry<K, Value<V>> me: clone._map.entrySet()) {
+			me.setValue((Value<V>)me.getValue().clone());
 		}
 
 		clone.init();

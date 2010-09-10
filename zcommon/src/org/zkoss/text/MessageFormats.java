@@ -98,7 +98,7 @@ public class MessageFormats {
 	 * @see #formatByName(String, Map, Locale)
 	 */
 	public static final NameInfo parseByName(String pattern) {
-		final Map names = new LinkedHashMap();
+		final Map<String,Integer> names = new LinkedHashMap<String,Integer>();
 		final int len = pattern.length();
 		final StringBuffer sb = new StringBuffer(len + 32);
 		int j = 0;
@@ -124,7 +124,7 @@ public class MessageFormats {
 					break; //done
 
 				final String nm = pattern.substring(k + 1, l);
-				Integer pos = (Integer)names.get(nm);
+				Integer pos = names.get(nm);
 				if (pos == null) {
 					pos = new Integer(names.size());
 					names.put(nm, pos);
@@ -145,9 +145,9 @@ public class MessageFormats {
 		public final String pattern;
 		/** The name of relative position. */
 		public final String[] names;
-		NameInfo(String pattern, Collection names) {
+		NameInfo(String pattern, Collection<String> names) {
 			this.pattern = pattern;
-			this.names = (String[])names.toArray(new String[names.size()]);
+			this.names = names.toArray(new String[names.size()]);
 		}
 		NameInfo(String pattern, String[] names) {
 			this.pattern = pattern;

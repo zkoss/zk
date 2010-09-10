@@ -29,8 +29,8 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  * @since 3.0.0
  */
-public class MultiCache implements Cache, java.io.Serializable, Cloneable {
-	private final CacheMap[] _caches;
+public class MultiCache<K, V> implements Cache<K, V>, java.io.Serializable, Cloneable {
+	private final CacheMap<K, V>[] _caches;
 	private int _maxsize, _lifetime;
 
 	/** Constructs a multi cache with 17 inital caches.
@@ -45,10 +45,11 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 	 * The large the number the fast the performance.
 	 * @param maxSize the maximal allowed size of each cache
 	 */
+	@SuppressWarnings("unchecked")
 	public MultiCache(int nCache, int maxSize, int lifetime) {
 		if (nCache <= 0)
 			throw new IllegalArgumentException();
-		_caches = new CacheMap[nCache];
+		_caches = (CacheMap<K, V>[])new CacheMap[nCache];
 		_maxsize = maxSize;
 		_lifetime = lifetime;
 	}
@@ -67,25 +68,25 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 
 	//Cache//
 	public boolean containsKey(Object key) {
-		final CacheMap cache = getCache(key);
+		final CacheMap<K, V> cache = getCache(key);
 		synchronized (cache) {
 			return cache.containsKey(key);
 		}
 	}
-	public Object get(Object key) {
-		final CacheMap cache = getCache(key);
+	public V get(Object key) {
+		final CacheMap<K, V> cache = getCache(key);
 		synchronized (cache) {
 			return cache.get(key);
 		}
 	}
-	public Object put(Object key, Object value) {
-		final CacheMap cache = getCache(key);
+	public V put(K key, V value) {
+		final CacheMap<K, V> cache = getCache(key);
 		synchronized (cache) {
 			return cache.put(key, value);
 		}
 	}
-	public Object remove(Object key) {
-		final CacheMap cache = getCache(key);
+	public V remove(Object key) {
+		final CacheMap<K, V> cache = getCache(key);
 		synchronized (cache) {
 			return cache.remove(key);
 		}
@@ -97,16 +98,16 @@ public class MultiCache implements Cache, java.io.Serializable, Cloneable {
 		}
 	}
 
-	private CacheMap getCache(Object key) {
+	private CacheMap<K, V> getCache(Object key) {
 		int j = Objects.hashCode(key);
 		j = (j >= 0 ? j: -j) % _caches.length;
 
-		CacheMap cache = _caches[j];
+		CacheMap<K, V> cache = _caches[j];
 		if (cache == null)
 			synchronized (this) {
 				cache = _caches[j];
 				if (cache == null) {
-					cache = new CacheMap(4);
+					cache = new CacheMap<K, V>(4);
 					cache.setMaxSize(_maxsize);
 					cache.setLifetime(_lifetime);
 					_caches[j] = cache;

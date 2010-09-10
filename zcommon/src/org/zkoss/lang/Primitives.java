@@ -149,44 +149,47 @@ public class Primitives {
 			this.code = code;
 		}
 	}
-	private static final Map _prims = new HashMap(23);
+	private static final
+		Map<String, PrimInfo> _prims2i = new HashMap<String, PrimInfo>(16);
+	private static final
+		Map<Class, Class> _primc2c = new HashMap<Class, Class>(16);
 	static {
-		_prims.put("int",
+		_prims2i.put("int",
 			new PrimInfo(int.class, new Integer(0), 'I'));
-		_prims.put("boolean",
+		_prims2i.put("boolean",
 			new PrimInfo(boolean.class, Boolean.FALSE, 'Z'));
-		_prims.put("short",
+		_prims2i.put("short",
 			new PrimInfo(short.class, new Short((short)0), 'S'));
-		_prims.put("byte",
+		_prims2i.put("byte",
 			new PrimInfo(byte.class, new Byte((byte)0), 'B'));
-		_prims.put("char",
+		_prims2i.put("char",
 			new PrimInfo(char.class, new Character((char)0), 'C'));
-		_prims.put("long",
+		_prims2i.put("long",
 			new PrimInfo(long.class, new Long(0), 'L'));
-		_prims.put("double",
+		_prims2i.put("double",
 			new PrimInfo(double.class, new Double(0), 'D'));
-		_prims.put("float",
+		_prims2i.put("float",
 			new PrimInfo(float.class, new Float(0), 'F'));
-		_prims.put("void",
+		_prims2i.put("void",
 			new PrimInfo(void.class, null, 'V'));
 
 		//we can use the same map because key is in diff class
-		_prims.put(Integer.class, int.class);
-		_prims.put(Boolean.class, boolean.class);
-		_prims.put(Short.class, short.class);
-		_prims.put(Byte.class, byte.class);
-		_prims.put(Character.class, char.class);
-		_prims.put(Long.class, long.class);
-		_prims.put(Double.class, double.class);
-		_prims.put(Float.class, float.class);
-		_prims.put(Void.class, void.class);
+		_primc2c.put(Integer.class, int.class);
+		_primc2c.put(Boolean.class, boolean.class);
+		_primc2c.put(Short.class, short.class);
+		_primc2c.put(Byte.class, byte.class);
+		_primc2c.put(Character.class, char.class);
+		_primc2c.put(Long.class, long.class);
+		_primc2c.put(Double.class, double.class);
+		_primc2c.put(Float.class, float.class);
+		_primc2c.put(Void.class, void.class);
 	};
 	/** Returns the notation of a primitive class,
 	 * or ((char)0) if it is not a primitive class.
 	 * Example, I for int, Z for boolean...
 	 */
 	public static final char getNotation(String className) {
-		final PrimInfo pi = (PrimInfo)_prims.get(className);
+		final PrimInfo pi = _prims2i.get(className);
 		return pi != null ? pi.code: (char)0;
 	}
 	/** Returns the default value of a primitive class,
@@ -194,7 +197,7 @@ public class Primitives {
 	 * Example, getDefaultValue(int.class) returns Integer(0).
 	 */
 	public static final Object getDefaultValue(Class cls) {
-		final PrimInfo pi = (PrimInfo)_prims.get(cls.getName());
+		final PrimInfo pi = _prims2i.get(cls.getName());
 		return pi != null ? pi.defVal: null;
 	}
 	/** Converts a primitive from name to the class,
@@ -202,7 +205,7 @@ public class Primitives {
 	 * <p>Example, toClass("int") returns int.class.
 	 */
 	public static final Class toClass(String clsName) {
-		final PrimInfo pi = (PrimInfo)_prims.get(clsName);
+		final PrimInfo pi = _prims2i.get(clsName);
 		return pi != null ? pi.cls: null;
 	}
 	/** Returns the primitive class of the giving wrapper class,
@@ -210,7 +213,7 @@ public class Primitives {
 	 * <p>Example, toPrimitive(Integer.class) returns int.class.
 	 */
 	public static final Class toPrimitive(Class wrapper) {
-		return (Class)_prims.get(wrapper);
+		return _primc2c.get(wrapper);
 	}
 	/** Returns the wrapper class of a primitive class,
 	 * or null if it is not a primitive class.
@@ -226,6 +229,6 @@ public class Primitives {
 	/** Tests whether a class name is a primitive class, e.g., int and void.
 	 */
 	public static final boolean isPrimitive(String clsName) {
-		return _prims.containsKey(clsName);
+		return _prims2i.containsKey(clsName);
 	}
 }

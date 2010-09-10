@@ -47,7 +47,7 @@ public interface FunctionMapper {
 	 * In other words, it is the logical name maintained by this
 	 * function mapper.
 	 */
-	public Collection getClassNames();
+	public Collection<String> getClassNames();
 	/** Resolves a class with the specified logic name,
 	 * or null if not found.
 	 *
@@ -59,5 +59,5 @@ public interface FunctionMapper {
 	 *
 	 * @return the class of the specified logic name.
 	 */
-	public Class resolveClass(String name) throws XelException;
+	public Class<?> resolveClass(String name) throws XelException;
 }

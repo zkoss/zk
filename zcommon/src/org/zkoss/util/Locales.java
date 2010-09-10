@@ -32,7 +32,7 @@ import org.zkoss.lang.Objects;
  */
 public class Locales {
 	private final static
-		InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
+		InheritableThreadLocal<Locale> _thdLocale = new InheritableThreadLocal<Locale>();
 
 	/** Returns the current locale; never null.
 	 * This is the locale that every other objects shall use,
@@ -42,7 +42,7 @@ public class Locales {
 	 * the value is returned. Otherwise, Locale.getDefault() is returned,
 	 */
 	public static final Locale getCurrent() {
-		final Locale l = (Locale)_thdLocale.get();
+		final Locale l = _thdLocale.get();
 		return l != null ? l: Locale.getDefault();
 	}
 	/** Returns whether the current locale ({@link #getCurrent}) belongs
@@ -77,7 +77,7 @@ public class Locales {
 	 * @return the previous thread locale
 	 */
 	public static final Locale setThreadLocal(Locale locale) {
-		final Locale old = (Locale)_thdLocale.get();
+		final Locale old = _thdLocale.get();
 		_thdLocale.set(locale);
 		return old;
 	}
@@ -88,7 +88,7 @@ public class Locales {
 	 * @see #getCurrent
 	 */
 	public static final Locale getThreadLocal() {
-		return (Locale)_thdLocale.get();
+		return _thdLocale.get();
 	}
 
 	/** Converts a string that consists of language, country and variant
@@ -114,7 +114,7 @@ public class Locales {
 
 		if (separator == (char)0)
 			separator = localeString.indexOf('_') >= 0 ? '_' : ',';
-		LinkedList list = new LinkedList();
+		LinkedList<String> list = new LinkedList<String>();
 		CollectionsX.parse(list, localeString, separator);
 
 		String lang = "", cnt = "", var = "";
@@ -123,13 +123,13 @@ public class Locales {
 			return null;
 		default:
 			assert(list.size() <= 3);
-			var = (String)list.get(2);
+			var = list.get(2);
 		case 2:
-			cnt = (String)list.get(1);
+			cnt = list.get(1);
 			if (cnt.length() != 2)
 				throw new IllegalArgumentException("Not a valid country: "+localeString);
 		case 1:
-			lang = (String)list.get(0);
+			lang = list.get(0);
 			if (lang.length() != 2)
 				throw new IllegalArgumentException("Not a valid language: "+localeString);
 		}
@@ -153,16 +153,20 @@ public class Locales {
 	 *
 	 * <p>This method first look for any locale
 	 */
-	synchronized public static final Locale getLocale(Locale locale) {
-		final Locale l = (Locale)_founds.get(locale);
+	public static final Locale getLocale(Locale locale) {
+		final Locale l = _founds.get(locale);
 		if (l != null)
 			return l;
 
-		_founds.put(locale, locale);
+		synchronized  (_founds) {
+			final Map<Locale, Locale> fs = new HashMap<Locale, Locale>(_founds);
+			fs.put(locale, locale);
+			_founds = fs;
+		}
 		return locale;
 	}
 	/** Locales that are found so far. */
-	private static final Map _founds = new HashMap(17);
+	private static Map<Locale, Locale> _founds = new HashMap<Locale, Locale>(16);
 	static {
 		final Locale[] ls = new Locale[] {
 			Locale.TRADITIONAL_CHINESE, Locale.SIMPLIFIED_CHINESE,

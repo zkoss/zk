@@ -62,7 +62,7 @@ public class Utils {
 	 * @since 3.5.2
 	 */
 	public static final int[] parseVersion(String version) {
-		final List vers = new LinkedList();
+		final List<Integer> vers = new LinkedList<Integer>();
 		for (int j = 0, len = version.length(); j < len;) {
 			int k = nextVerSeparator(version, j);
 			vers.add(new Integer(convertSubversion(version.substring(j, k))));
@@ -71,8 +71,8 @@ public class Utils {
 
 		final int[] ivs = new int[vers.size()];
 		int j = 0;
-		for (Iterator it = vers.iterator(); it.hasNext();)
-			ivs[j++] = ((Integer)it.next()).intValue();
+		for (Integer ver: vers)
+			ivs[j++] = ver.intValue();
 		return ivs;
 	}
 	/** Compares two version.

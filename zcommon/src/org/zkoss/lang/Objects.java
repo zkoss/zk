@@ -342,8 +342,8 @@ public class Objects {
 			return ((String)o).toCharArray();
 
 		try {
-			Method m = o.getClass().getMethod("toCharArray", null);
-			return (char[])m.invoke(o, null);
+			Method m = o.getClass().getMethod("toCharArray");
+			return (char[])m.invoke(o);
 		} catch (Exception ex) {
 			return (o.toString()).toCharArray();
 		}
@@ -432,13 +432,13 @@ public class Objects {
 			return o;
 
 		try {
-			final Class kls = o.getClass();
+			final Class<?> kls = o.getClass();
 			if (kls.isArray())
 				return ArraysX.clone(o);
 
 			if (o instanceof Cloneable) {
 				try {
-					return kls.getMethod("clone", null).invoke(o, null);
+					return kls.getMethod("clone").invoke(o);
 				} catch (NoSuchMethodException ex) {
 					if (D.ON) log.warning("No clone() for "+kls);
 				}
@@ -446,7 +446,7 @@ public class Objects {
 
 			//:TODO: MarshalledObject is said with very bad performance, change it
 			//if exists other good deep clone method.
-			return new MarshalledObject(o).get();
+			return new MarshalledObject<Object>(o).get();
 		} catch (Exception ex) {
 			throw SystemException.Aide.wrap(ex);
 		}

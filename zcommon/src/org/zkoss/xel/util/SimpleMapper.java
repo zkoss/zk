@@ -55,7 +55,7 @@ public class SimpleMapper extends TaglibMapper {
 		return m != null ? m:
 			_parent != null ? _parent.resolveFunction(prefix, name): null;
 	}
-	public Collection getClassNames() {
+	public Collection<String> getClassNames() {
 		return combine(super.getClassNames(),
 			_parent != null ? _parent.getClassNames(): null);
 	}
@@ -64,7 +64,7 @@ public class SimpleMapper extends TaglibMapper {
 		return m != null ? m:
 			_parent != null ? _parent.resolveClass(name): null;
 	}
-	private static Collection combine(Collection first, Collection second) {
+	private static Collection<String> combine(Collection<String> first, Collection<String> second) {
 		return DualCollection.combine(
 			first != null && !first.isEmpty() ? first: null,
 			second != null && !second.isEmpty() ? second: null);

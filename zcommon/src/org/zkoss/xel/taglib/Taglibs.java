@@ -228,8 +228,8 @@ public class Taglibs {
 	 * @since 3.0.0
 	 */
 	public static final Map[] load(Element root) throws Exception {
-		final Map mtds = new HashMap();
-		final Map clses = new HashMap();
+		final Map<String, MethodFunction> mtds = new HashMap<String, MethodFunction>();
+		final Map<String, Class> clses = new HashMap<String, Class>();
 
 		Exception excp = null;
 		for (Iterator it = root.getElements("function").iterator();
@@ -308,7 +308,7 @@ public class Taglibs {
 //----------------------------------//
 	//Mapping of URI to TLD files//
 	/** The default TLD files: Map(String uri, URL location). */
-	private static Map _defURLs;
+	private static Map<String, URL> _defURLs;
 
 	/** Returns the URL associated with the specified taglib URI,
 	 * or null if not found.
@@ -319,11 +319,11 @@ public class Taglibs {
 	 * loader (i.e., must be part of class path).
 	 */
 	public static final URL getDefaultURL(String uri) {
-		return (URL)getDefaultTLDs().get(uri);
+		return getDefaultTLDs().get(uri);
 	}
 	/** Loads the default TLD files defined in /metainfo/tld/config.xml
 	 */
-	private static final Map getDefaultTLDs() {
+	private static final Map<String, URL> getDefaultTLDs() {
 		if (_defURLs != null)
 			return _defURLs;
 
@@ -331,12 +331,12 @@ public class Taglibs {
 			if (_defURLs != null)
 				return _defURLs;
 
-			final Map urls = new HashMap();
+			final Map<String, URL> urls = new HashMap<String, URL>();
 			try {
 				final ClassLocator loc = new ClassLocator();
-				for (Enumeration en = loc.getResources("metainfo/tld/config.xml");
+				for (Enumeration<URL> en = loc.getResources("metainfo/tld/config.xml");
 				en.hasMoreElements();) {
-					final URL url = (URL)en.nextElement();
+					final URL url = en.nextElement();
 					if (log.debugable()) log.debug("Loading "+url);
 					try {
 						final Document doc = new SAXBuilder(false, false, true).build(url);
@@ -349,11 +349,16 @@ public class Taglibs {
 			} catch (Exception ex) {
 				log.error(ex); //keep running
 			}
-			return _defURLs = urls.isEmpty() ? Collections.EMPTY_MAP: urls;
+			return _defURLs = urls.isEmpty() ? getEmptyTLDs(): urls;
 		}
 	}
+	@SuppressWarnings("unchecked")
+	private static final Map<String, URL> getEmptyTLDs() {
+		return Collections.EMPTY_MAP;
+	}
+
 	/** Parse config.xml. */
-	private static void parseConfig(Map urls, Element root, Locator loc) {
+	private static void parseConfig(Map<String, URL> urls, Element root, Locator loc) {
 		for (Iterator it = root.getElements("taglib").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();

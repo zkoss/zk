@@ -229,6 +229,23 @@ public class ArraysX {
 		return dst;
 	}
 	/**
+	 * Duplicates the specified generic array.
+	 *
+	 * <p>The array could be an array of objects or primiitives.
+	 *
+	 * @param ary the array
+	 * @param jb the beginning index (included)
+	 * @param je the ending index (excluded)
+	 * @return an array duplicated from ary
+	 * @exception IllegalArgumentException if ary is not any array
+	 * @exception IndexOutOfBoundsException if out of bounds
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] duplicate(T[] ary, int jb, int je) {
+		return (T[])duplicate((Object)ary, jb, je);
+	}
+	/**
 	 * Duplicates the specified array.
 	 * @param ary the array
 	 * @return an array duplicated from ary
@@ -237,6 +254,17 @@ public class ArraysX {
 	 */
 	public static final Object duplicate(Object ary) {
 		return duplicate(ary, 0, Array.getLength(ary));
+	}
+	/**
+	 * Duplicates the specified generic array.
+	 * @param ary the array
+	 * @return an array duplicated from ary
+	 * @exception IllegalArgumentException if ary is not any array
+	 * @exception IndexOutOfBoundsException if out of bounds
+	 * @since 6.0.0
+	 */
+	public static final <T> T[] duplicate(T[] ary) {
+		return duplicate(ary, 0, ary.length);
 	}
 
 	/**
@@ -260,7 +288,22 @@ public class ArraysX {
 		
 		return dst;
 	}
-	
+	/**
+	 * Concat the two specified generic array.
+	 *
+	 * <p>The array could be an array of objects or primiitives.
+	 *
+	 * @param ary the array
+	 * @param ary1 the array
+	 * @return an array concat the ary and ary1
+	 * @exception IllegalArgumentException if ary and ary1 component types are not compatible
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] concat(T[] ary, T[] ary1) {
+		return (T[])concat((Object)ary, (Object)ary1);
+	}
+
 	/**
 	 * Shrink the specified array. It is similar to duplicate, except
 	 * it returns the previous instance if je==length && jb==0.
@@ -278,6 +321,23 @@ public class ArraysX {
 		return duplicate(ary, jb, je);
 	}
 	/**
+	 * Shrink the specified array. It is similar to duplicate, except
+	 * it returns the previous instance if je==length && jb==0.
+	 *
+	 * @param ary the array
+	 * @param jb the beginning index (included)
+	 * @param je the ending index (excluded)
+	 * @return ary or an array duplicated from ary
+	 * @exception IllegalArgumentException if ary is not any array
+	 * @exception IndexOutOfBoundsException if out of bounds
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] shrink(T[] ary, int jb, int je) {
+		return (T[])shrink((Object)ary, jb, je);
+	}
+
+	/**
 	 * Resizes the specified array. Similar to {@link #shrink}, but
 	 * it can enlarge and it keeps elements from the first.
 	 */
@@ -290,6 +350,24 @@ public class ArraysX {
 		System.arraycopy(ary, 0, dst, 0, oldsz > size ? size: oldsz);
 		return dst;
 	}
+	/**
+	 * Resizes the specified generic array.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] resize(T[] ary, int size) {
+		return (T[])resize((Object)ary, size);
+	}
+	/**
+	 * Instantiates an array of the given type and size.
+	 * It is the same as <code>new T[size]</code> (but Java doesn't allow).
+	 * @since (not public yet)
+	 */
+//	@SuppressWarnings("unchecked")
+//	public static final <T> T[] newInstance(Class<T> c, int size) {
+//		return (T[])Array.newInstance(c, size);
+//	}
+
 	/** Clones an array.
 	 */
 	public static final Object clone(Object ary) {

@@ -38,8 +38,8 @@ import org.w3c.dom.TypeInfo;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.mesg.MCommon;
+import org.zkoss.util.NotableLinkedList;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.CheckableTreeArray;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
@@ -56,11 +56,9 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	/** The local name. */
 	protected String _lname;
 	/** The attributes. May be null. */
-	protected List _attrs = null;
+	protected List<Attribute> _attrs = null;
 	/** Additional namespaces. May be null*/
-	protected Map _addNamespaces = null;
-	/** Whether it is aware of the attribute modification. */
-	boolean _attrModAware = false;
+	protected Map<String, Namespace> _addNamespaces = null;
 
 	/**
 	 * Constructor.
@@ -138,7 +136,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			return ns;
 
 		if (_addNamespaces != null) {
-			ns = (Namespace)_addNamespaces.get(prefix);
+			ns = _addNamespaces.get(prefix);
 			if (ns != null)
 				return ns;
 		}
@@ -159,7 +157,8 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 *
 	 * @return the namespace declarations.
 	 */
-	public final Collection getDeclaredNamespaces() {
+	@SuppressWarnings("unchecked")
+	public final Collection<Namespace> getDeclaredNamespaces() {
 		return _addNamespaces == null ?
 			Collections.EMPTY_LIST: _addNamespaces.values();
 	}
@@ -172,9 +171,9 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 */
 	public final boolean addDeclaredNamespace(Namespace ns) {
 		if (_addNamespaces == null) {
-			_addNamespaces = new LinkedHashMap(5);
+			_addNamespaces = new LinkedHashMap<String, Namespace>(4);
 		} else {
-			final Namespace old = (Namespace)_addNamespaces.get(ns.getPrefix());
+			final Namespace old = _addNamespaces.get(ns.getPrefix());
 			if (old != null) {
 				if (!old.equals(ns))
 					throw new DOMException(DOMException.NAMESPACE_ERR, "Add a conflict namespace: "+ns+", while "+old+" already exists");
@@ -235,21 +234,21 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 */
 	public final Object setContent(Object obj) {
 		if (obj instanceof Item) {
-			getChildren().add(obj);
+			getChildren().add((Item)obj);
 			return null; //done
 		}
 		if (obj instanceof Collection) {
 			final Collection c = (Collection)obj;
 			final Iterator it = c.iterator();
 			if (it.hasNext() && (it.next() instanceof Item)) {
-				getChildren().addAll(c);
+				getChildren().addAll(toItemCollection(c));
 				return null; //done
 			}
 		} else if (obj instanceof Object[]) {
 			Object[] ary = (Object[])obj;
 			if (ary.length > 0 && (ary[0] instanceof Item)) {
 				for (int j = 0; j < ary.length; ++j)
-					getChildren().add(ary[j]);
+					getChildren().add((Item)ary[j]);
 				return null; //done
 			}
 		}
@@ -291,8 +290,12 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		}
 		if (obj != null)
 			_children.add(0,
-				bStr ? (Object)new Text((String)obj): (Object)new Binary(obj));
+				bStr ? (Item)new Text((String)obj): (Item)new Binary(obj));
 		return ret;
+	}
+	@SuppressWarnings("unchecked")
+	private static final Collection<Item> toItemCollection(Collection c) {
+		return c;
 	}
 
 	/**
@@ -476,7 +479,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * a namespace that has an URI but without a prefix.
 	 */
 	public final void setNamespace(Namespace ns) {
-		checkWritable();
 		if (ns == null) {
 			if (_ns != null && _ns.getPrefix().length() == 0)
 				return; //nothing to do
@@ -510,7 +512,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return _ns.tagNameOf(_lname);
 	}
 	public final void setTagName(String tname) {
-		checkWritable();
 		int kp = tname.indexOf(':');
 		String prefix = kp >= 0 ? tname.substring(0, kp): "";
 		String lname  = kp >= 0 ? tname.substring(kp + 1): tname;
@@ -522,50 +523,11 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return _lname;
 	}
 	public final void setLocalName(String lname) {
-		checkWritable();
 		Verifier.checkElementName(lname, getLocator());
 		_lname = lname;
 	}
 
 	//-- Item --//
-	/** Clear the modification flag.
-	 * <p>Note: if both includingDescendant and
-	 * {@link #isAttributeModificationAware} are true, attributes'
-	 * modified flags are cleaned.
-	 */
-	public void clearModified(boolean includingDescendant) {
-		if (includingDescendant && _attrModAware) {
-			for (final Iterator it = _attrs.iterator(); it.hasNext();)
-				((Item)it.next()).clearModified(true);
-		}
-		super.clearModified(includingDescendant);
-	}
-	public Item clone(boolean preserveModified) {
-		Element elem = (Element)super.clone(preserveModified);
-
-		if (_addNamespaces != null) {
-			elem._addNamespaces = new LinkedHashMap();
-			elem._addNamespaces.putAll(_addNamespaces);
-		}
-		if (_attrs != null) {
-			elem._attrs = elem.newAttrArray();
-				//NOTE: AttrArray is an inner class, so we must use the right
-				//object to create the array. Here is 'elem'.
-
-			for (final Iterator it = _attrs.iterator(); it.hasNext();) {
-				Item v = ((Item)it.next()).clone(preserveModified);
-				boolean bClearModified = !preserveModified || !v.isModified();
-
-				elem._attrs.add(v); //v becomes modified (v.setParent is called)
-
-				if (bClearModified)
-					v.clearModified(false);
-			}
-		}
-		elem._modified = preserveModified && _modified;
-		return elem;
-	}
-
 	/**
 	 * Gets the tag name of the element -- the name with prefix.
 	 * To get the local name, use getLocalName.
@@ -606,20 +568,23 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	//-- Attributable --//
+	/** @deprecated As of release 6.0.0, it always returns false.
+	 */
 	public final boolean isAttributeModificationAware() {
-		return _attrModAware;
+		return false;
 	}
+	/** @deprecated As of release 6.0.0, it does nothing.
+	 */
 	public final void setAttributeModificationAware(boolean aware) {
-		_attrModAware = aware;
 	}
-	public final List getAttributeItems() {
+	public final List<Attribute> getAttributeItems() {
 		if (_attrs == null)
 			_attrs = newAttrArray();
 		return _attrs;
 	}
 	/** Creates an empty list of attributes.
 	 */
-	protected List newAttrArray() {
+	protected List<Attribute> newAttrArray() {
 		return new AttrArray();
 	}
 
@@ -650,29 +615,29 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		int j= getAttributeIndex(0, tname);
 		return j >= 0 ? (Attribute)_attrs.get(j): null;
 	}
-	public final List getAttributes(String namespace, String name, int mode) {
+	public final List<Attribute> getAttributes(String namespace, String name, int mode) {
 		if (_attrs == null)
-			return Collections.EMPTY_LIST;
+			return getEmptyAttributeList();
 
 		Pattern ptn =
 			(mode & FIND_BY_REGEX) != 0 ? Pattern.compile(name): null;
 
-		final List list = new LinkedList();
-		for (final Iterator it = _attrs.iterator(); it.hasNext();) {
-			Attribute attr = (Attribute)it.next();
+		final List<Attribute> list = new LinkedList<Attribute>();
+		for (Attribute attr: _attrs)
 			if (match(attr, namespace, name, ptn, mode))
 				list.add(attr);
-		}
 		return list;
 	}
-
+	@SuppressWarnings("unchecked")
+	private static List<Attribute> getEmptyAttributeList() {
+		return Collections.EMPTY_LIST;
+	}
 	public final Attribute setAttribute(Attribute attr) {
-		checkWritable();
 		int j = getAttributeIndex(0, attr.getTagName());
 		if (j >= 0) {
-			return (Attribute)getAttributeItems().set(j, attr);
+			return (Attribute)getAttributeItems().set(j, (Attribute)attr);
 		} else {
-			getAttributeItems().add(attr);
+			getAttributeItems().add((Attribute)attr);
 			return null;
 		}
 	}
@@ -687,13 +652,30 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return attr != null ? attr.getValue(): null;
 	}
 	public final Attribute setAttributeValue(String tname, String value) {
-		checkWritable();
 		Attribute attr = getAttributeItem(tname);
 		if (attr != null)
 			attr.setValue(value);
 		else
 			getAttributeItems().add(new Attribute(tname, value));
 		return attr;
+	}
+
+	//Cloneable//
+	public Object clone() {
+		Element elem = (Element)super.clone();
+
+		if (_addNamespaces != null)
+			elem._addNamespaces = new LinkedHashMap<String, Namespace>(_addNamespaces);
+
+		if (_attrs != null) {
+			elem._attrs = elem.newAttrArray();
+				//NOTE: AttrArray is an inner class, so we must use the right
+				//object to create the array. Here is 'elem'.
+
+			for (Attribute attr:  _attrs)
+				elem._attrs.add((Attribute)attr.clone());
+		}
+		return elem;
 	}
 
 	//-- Node --//
@@ -751,8 +733,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 	public final void setAttributeNS
 	(String nsURI, String tname, String value) {
-		checkWritable();
-
 		int kp = tname.indexOf(':');
 		String prefix = kp >= 0 ? tname.substring(0, kp): "";
 		String lname  = kp >= 0 ? tname.substring(kp + 1): tname;
@@ -773,9 +753,9 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		int j = getAttributeIndex(
 			0, attr.getNamespace().getURI(), attr.getLocalName(), 0);
 		if (j >= 0) {
-			return (Attr)getAttributeItems().set(j, newAttr);
+			return (Attr)getAttributeItems().set(j, (Attribute)newAttr);
 		} else {
-			getAttributeItems().add(newAttr);
+			getAttributeItems().add((Attribute)newAttr);
 			return null;
 		}
 	}
@@ -841,62 +821,44 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	//-- AttrArray --//
-	protected class AttrArray extends CheckableTreeArray {
+	protected class AttrArray extends NotableLinkedList<Attribute> {
 		protected AttrArray() {
 		}
 
-		//-- utilities --//
-		private Attribute checkAdd(Object newItem) {
-			checkWritable();
-
-			if (!(newItem instanceof Attribute))
-				throw new DOMException(
-					DOMException.HIERARCHY_REQUEST_ERR, "Invalid type", getLocator());
-
-			Attribute attr = (Attribute)newItem;
-			if (attr.getOwner() != null)
-				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
-					"Attribute, "+attr.toString()+", owned by other; detach or clone it", getLocator());
-
-			return attr;
-		}
-
 		//-- CheckableTreeArray --//
-		protected void onAdd(Object newElement, Object followingElement) {
+		protected void onAdd(Attribute newElement, Attribute followingElement) {
 			checkAdd(newElement, followingElement, false);
 		}
-		protected void onSet(Object newElement, Object replaced) {
+		protected void onSet(Attribute newElement, Attribute replaced) {
 			assert(replaced != null);
 			checkAdd(newElement, replaced, true);
 		}
-		private void checkAdd(Object newItem, Object other, boolean replace) {
+		private void checkAdd(Attribute newItem, Attribute other, boolean replace) {
 			//first, remove any existent with the same uri and name
-			Object attrRemoved = null;
-			Attribute attr = checkAdd(newItem);
+			if (newItem.getOwner() != null)
+				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
+					"Attribute, "+newItem.toString()+", owned by other; detach or clone it", getLocator());
 
-			int j = getAttributeIndex(0, attr.getTagName());
+			int j = getAttributeIndex(0, newItem.getTagName());
 			if (j >= 0 && (!replace || get(j) != other))
 				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
-					"Attribute name, " + attr.getTagName() +", is conflicts with existent one (" + j + ')', getLocator());
+					"Attribute name, " + newItem.getTagName() +", is conflicts with existent one (" + j + ')', getLocator());
 
 			try {
 				if (replace)
 					onRemove(other);
-				attr.setOwner(Element.this);
+				newItem.setOwner(Element.this);
 			}catch(RuntimeException ex) {
 				if (replace) {
 					Attribute attrRep = (Attribute)other;
 					if (attrRep.getOwner() == null)
 						attrRep.setOwner(Element.this); //restore it
 				}
-				if (attrRemoved != null)
-					super.add(j, attrRemoved); //restore it
 				throw ex;
 			}
 		}
-		protected void onRemove(Object item) {
-			checkWritable();
-			((Attribute)item).setOwner(null);
+		protected void onRemove(Attribute item) {
+			item.setOwner(null);
 		}
 
 	}

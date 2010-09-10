@@ -84,8 +84,8 @@ implements Textual, CharacterData {
 		setText(s.substring(0, offset));
 
 		if (getParent() != null) {
-			List list = getParent().getChildren();
-			list.add(list.indexOf(this) + 1, vtx);
+			List<Item> list = getParent().getChildren();
+			list.add(list.indexOf(this) + 1, (Item)vtx);
 		}
 		return vtx;
 	}
@@ -105,15 +105,12 @@ implements Textual, CharacterData {
 		return _text;
 	}
 	public void setText(String text) {
-		checkWritable();
-
 		if (text == null)
 			text = "";
 
 		if (!Objects.equals(_text, text)) {
 			checkText(text);
 			_text = text;
-			setModified();
 		}
 	}
 

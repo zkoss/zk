@@ -115,7 +115,7 @@ public class Fields {
 				obj.getClass(), name, null,
 				Classes.B_GET|Classes.B_PUBLIC_ONLY);
 			return 	acs instanceof Method ?
-				((Method)acs).invoke(obj, null): ((Field)acs).get(obj);
+				((Method)acs).invoke(obj): ((Field)acs).get(obj);
 		} catch (NoSuchMethodException ex) {
 			throw ex;
 		} catch (Exception ex) {

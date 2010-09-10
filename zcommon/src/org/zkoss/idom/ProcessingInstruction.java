@@ -48,7 +48,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	}
 	/** Constructor.
 	 */
-	public ProcessingInstruction(String target, Map data) {
+	public ProcessingInstruction(String target, Map<String, String> data) {
 		setTarget(target);
 		setData(data);
 	}
@@ -62,11 +62,9 @@ implements org.w3c.dom.ProcessingInstruction {
 		return _target;
 	}
 	public final void setTarget(String target) {
-		checkWritable();
 		if (!Objects.equals(_target, target)) {
 			Verifier.checkPITarget(target, getLocator());
 			_target = target;
-			setModified();
 		}
 	}
 
@@ -74,20 +72,15 @@ implements org.w3c.dom.ProcessingInstruction {
 		return _rawData;
 	}
 	public final void setData(String data) {
-		checkWritable();
-
 		if (data == null)
 			data = "";
 
-		if (!Objects.equals(_rawData, data)) {
-			_rawData = data;
-			setModified();
-		}
+		_rawData = data;
 	}
 	/** Returns the parsed data in the form of Map (never null).
 	 */
-	public final Map parseData() {
-		return parseToMap(new LinkedHashMap(), getData());
+	public final Map<String, String> parseData() {
+		return parseToMap(new LinkedHashMap<String, String>(), getData());
 	}
 	/**
 	 * Sets the raw data with a data map.
@@ -96,7 +89,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * @exception org.zkoss.util.IllegalSyntaxException if name contains
 	 * an invalid character: '=', ' ', '\'', '"'
 	 */
-	public final void setData(Map data) {
+	public final void setData(Map<String, String> data) {
 		final String notAllowed = "= '\"";
 		for (final Iterator it = data.keySet().iterator(); it.hasNext();) {
 			final String key = (String)it.next();
@@ -127,17 +120,16 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * @return the map (never null)
 	 * @exception org.zkoss.util.IllegalSyntaxException if syntax erros
 	 */
-	public static final Map parseToMap(Map map, String rawData) {
+	public static final Map<String, String> parseToMap(Map<String, String> map, String rawData) {
 		if (rawData == null || rawData.trim().length() == 0)
-			return map != null ? map: Collections.EMPTY_MAP;
+			return map != null ? map: getEmptyDataMap();
 
 		map = Maps.parse(map, rawData, ' ', (char)1); //both ' and "
 
 		//&quot; and other are not processed by SAXHandler,
 		//so we have to handle them here
-		for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String val = (String)me.getValue();
+		for (Map.Entry<String, String> me: map.entrySet()) {
+			final String val = me.getValue();
 			StringBuffer sb = null;
 			for (int i = 0, j = 0, len = val.length();;) {
 				int k = val.indexOf('&', j);
@@ -175,6 +167,10 @@ implements org.w3c.dom.ProcessingInstruction {
 		}
 
 		return map;
+	}
+	@SuppressWarnings("unchecked")
+	private static final Map<String, String> getEmptyDataMap() {
+		return Collections.EMPTY_MAP;
 	}
 
 	//-- Item --//

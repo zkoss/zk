@@ -45,7 +45,7 @@ public class Evaluators {
 	private static final Log log = Log.lookup(Evaluators.class);
 
 	/** Map(name, Class/String class); */
-	private static final Map _evals = new HashMap(8);
+	private static final Map<String, Object> _evals = new HashMap<String, Object>(8);
 	private static boolean _loaded;
 
 	private Evaluators() {} //prevent from being instantiated

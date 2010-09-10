@@ -38,13 +38,12 @@ public class Serializables {
 	/** Writes only serializable entries of the specified map.
 	 * Non-serializable attributes are ignored.
 	 */
-	public static void smartWrite(ObjectOutputStream s, Map map)
+	public static <K, V> void smartWrite(ObjectOutputStream s, Map<K, V> map)
 	throws IOException {
 		if (map != null) {
-			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Object nm = me.getKey();
-				final Object val = me.getValue();
+			for (Map.Entry<K, V> me: map.entrySet()) {
+				final K nm = me.getKey();
+				final V val = me.getValue();
 				if (((nm instanceof Serializable) || (nm instanceof Externalizable))
 				&& (val == null || (val instanceof Serializable) || (val instanceof Externalizable))) {
 					s.writeObject(nm);
@@ -60,24 +59,24 @@ public class Serializables {
 	 * is read, a new map (HashMap) is created and returned.
 	 * @return the map being read
 	 */
-	public static Map smartRead(ObjectInputStream s, Map map)
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> smartRead(ObjectInputStream s, Map<K, V> map)
 	throws IOException, ClassNotFoundException {
 		for (;;) {
 			final Object nm = s.readObject();
 			if (nm == null) break; //no more
 
-			if (map == null) map = new HashMap();
-			map.put(nm, s.readObject());
+			if (map == null) map = new HashMap<K,V>();
+			map.put((K)nm, (V)s.readObject());
 		}
 		return map;
 	}
 	/** Writes only serializable elements of the specified collection.
 	 */
-	public static void smartWrite(ObjectOutputStream s, Collection col)
+	public static <T> void smartWrite(ObjectOutputStream s, Collection<T> col)
 	throws IOException {
 		if (col != null) {
-			for (Iterator it = col.iterator(); it.hasNext();) {
-				final Object val = it.next();
+			for (T val: col) {
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
 					s.writeObject(val);
@@ -92,14 +91,15 @@ public class Serializables {
 	 * and data is read, a new collection (LinkedList) is created and returned.
 	 * @return the collection being read
 	 */
-	public static Collection smartRead(ObjectInputStream s, Collection col)
+	@SuppressWarnings("unchecked")
+	public static <T> Collection<T> smartRead(ObjectInputStream s, Collection<T> col)
 	throws IOException, ClassNotFoundException {
 		for (;;) {
 			final Object val = s.readObject();
 			if (val == null) break; //no more
 
-			if (col == null) col = new LinkedList();
-			col.add(val);
+			if (col == null) col = new LinkedList<T>();
+			col.add((T)val);
 		}
 		return col;
 	}
@@ -108,11 +108,11 @@ public class Serializables {
 	 * <p>To read back, use {@link #smartRead(ObjectInputStream, Collection)}.
 	 * @since 3.0.0
 	 */
-	public static void smartWrite(ObjectOutputStream s, Object[] ary)
+	public static <T> void smartWrite(ObjectOutputStream s, T[] ary)
 	throws IOException {
 		if (ary != null) {
 			for (int j = 0; j < ary.length; ++j) {
-				final Object val = ary[j];
+				final T val = ary[j];
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
 					s.writeObject(val);

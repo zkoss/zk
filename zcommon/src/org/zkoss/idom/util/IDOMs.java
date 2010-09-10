@@ -125,8 +125,8 @@ public class IDOMs {
 	 * if no parameter is defined. The map is in the same order of the element tree.
 	 */
 	public static final
-	Map parseParams(Element elm, String type, String name, String value) {
-		final Map map = new LinkedHashMap();
+	Map<String, String> parseParams(Element elm, String type, String name, String value) {
+		final Map<String, String> map = new LinkedHashMap<String, String>();
 		for (Iterator it = elm.getElements(type).iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String nm = getRequiredElementValue(el, name);
@@ -142,7 +142,7 @@ public class IDOMs {
 	public static void format(Element e) {
 		//add proper spacing between consecutive elements
 		boolean elemFound = true;
-		for (final ListIterator it = e.getChildren().listIterator(); it.hasNext();) {
+		for (final ListIterator<Item> it = e.getChildren().listIterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
 				if (elemFound) { //insert space
@@ -164,6 +164,7 @@ public class IDOMs {
 	 * an element or an array or a collection of elements.
 	 * One item of an collection might be another collection or array.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Object toContents(Object obj) {
 		if (obj instanceof Collection) {
 			Collection c = (Collection)obj;
@@ -262,8 +263,6 @@ public class IDOMs {
 	dumpTree(PrintWriter s, Item vtx, String prefix) {
 		s.print(prefix);
 		s.print(vtx);
-		s.print(vtx.isReadonly() ? 'R' : ' ');
-		s.println(vtx.isModified() ? 'M' : ' ');
 		if (vtx instanceof Group) {
 			prefix = prefix + "  ";
 			for (Iterator it = ((Group)vtx).getChildren().iterator();

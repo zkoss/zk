@@ -34,18 +34,17 @@ import java.util.Comparator;
  * @author tomyeh
  * @see IdentityHashSet
  */
-public class IdentityComparator implements Comparator {
+public class IdentityComparator<T> implements Comparator<T> {
 	public IdentityComparator() {
 	}
 
 	//-- Comparator --//
-	public int compare(Object o1, Object o2) {
+	public int compare(T o1, T o2) {
 		if (o1 == o2)
 			return 0;
 
 		int c1 = System.identityHashCode(o1);
 		int c2 = System.identityHashCode(o2);
-		assert c1 != c2; //if o1 != o2, c1 != c2
-		return c1 > c2 ? 1: -1;
+		return c1 > c2 ? 1: c1 < c2 ? -1: 0;
 	}
 }

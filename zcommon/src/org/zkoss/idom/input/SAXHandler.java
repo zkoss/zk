@@ -86,9 +86,9 @@ implements LexicalHandler, DeclHandler {
 	/** Indicator of whether we are in a CDATA. */
 	protected boolean _inCData = false;
 	/** The Group stack. The top one is the current group being processed. */
-	protected Stack _stack = null;
+	protected Stack<Group> _stack = null;
 	/** The namespaces in between startPrefixMapping and endPrefixMapping. */
-	protected List _declNamespaces = null;
+	protected List<Namespace> _declNamespaces = null;
 	/** Temporary holder for the internal subset. */
 	private StringBuffer _internSubset = null;
 	/** Whether it is in internal subset. */
@@ -264,14 +264,14 @@ implements LexicalHandler, DeclHandler {
 	/** Returns the top group, or null if not available.
 	 */
 	protected final Group getTopGroup() {
-		return _stack.isEmpty() ? null: (Group)_stack.peek();
+		return _stack.isEmpty() ? null: _stack.peek();
 	}
 	/**
 	 * Adds the item to the current group; also attach the locator.
 	 */
 	protected final void addToCurrentGroup(Item vtx) {
 		attachLocator(vtx);
-		((Group)_stack.peek()).getChildren().add(vtx);
+		_stack.peek().getChildren().add(vtx);
 	}
 	/**
 	 * Adds a new group to the current group as a child,
@@ -290,7 +290,7 @@ implements LexicalHandler, DeclHandler {
 	 * new current group.
 	 */
 	protected final void popGroup() {
-		((Group)_stack.pop()).coalesce(false);
+		_stack.pop().coalesce(false);
 	}
 
 	//-- org.xml.sax.ext.DeclHandler --//
@@ -430,8 +430,8 @@ implements LexicalHandler, DeclHandler {
 
 	//-- org.xml.sax.ContentHandler --//
 	public void startDocument() throws SAXException {
-		_declNamespaces = new LinkedList();
-		_stack =  new Stack();
+		_declNamespaces = new LinkedList<Namespace>();
+		_stack = new Stack<Group>();
 
 		_doc = _factory.newDocument(null, null);
 		pushGroup(_doc);
@@ -469,8 +469,8 @@ implements LexicalHandler, DeclHandler {
 		if (D.ON && log.finerable())
 			log.finer("end prefix: " + prefix + SimpleLocator.toString(_loc));
 
-		for (Iterator itr = _declNamespaces.iterator(); itr.hasNext();) {
-			final Namespace ns = (Namespace) itr.next();
+		for (Iterator<Namespace> itr = _declNamespaces.iterator(); itr.hasNext();) {
+			final Namespace ns = itr.next();
 			if (prefix.equals(ns.getPrefix())) {
 				itr.remove();
 				break;
@@ -540,14 +540,12 @@ implements LexicalHandler, DeclHandler {
 
 		if (ns == null) {
 			if (_declNamespaces.size() > 0) {
-				for (Iterator it = _declNamespaces.iterator(); it.hasNext();) {
-					final Namespace n = (Namespace)it.next();
+				for (Namespace n: _declNamespaces)
 					if (n.getPrefix().equals(prefix) && n.getURI().equals(nsURI)) {
 						if (D.ON && log.finerable()) log.finer("Namespace found in _declNamespaces: "+n);
 						ns = n;
 						break; //found
 					}
-				}
 			}
 			if (ns == null && nsURI.length() > 0) {
 				if (D.ON && log.finerable()) log.finer("Create namespace: "+prefix+" "+nsURI);
@@ -560,8 +558,8 @@ implements LexicalHandler, DeclHandler {
 
 		//add to element's add. namespaces
 		if (_declNamespaces.size() > 0) {
-			for (Iterator it = _declNamespaces.iterator(); it.hasNext();)
-				element.addDeclaredNamespace((Namespace)it.next());
+			for (Namespace n: _declNamespaces)
+				element.addDeclaredNamespace(n);
 			_declNamespaces.clear();
 		}
 

@@ -70,7 +70,7 @@ public class Classes {
 	 * @see #newInstance(String, Class[], Object[])
 	 */
 	public static final
-	Object newInstance(Class cls, Class[] argTypes, Object[] args)
+	Object newInstance(Class<?> cls, Class<?>[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, IllegalAccessException {
  		return cls.getConstructor(argTypes).newInstance(args);
@@ -84,7 +84,7 @@ public class Classes {
 	 * @since 3.0.1
 	 */
 	public static final
-	Object newInstance(Class cls, Object[] args)
+	Object newInstance(Class<?> cls, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, IllegalAccessException {
 		if (args == null || args.length == 0)
@@ -92,14 +92,14 @@ public class Classes {
 
 		final Constructor[] cs = cls.getConstructors();
 		for (int j = 0; j < cs.length; ++j) {
-			final Class[] types = cs[j].getParameterTypes();
+			final Class<?>[] types = cs[j].getParameterTypes();
 			if (types.length == args.length) {
 				for (int k = args.length;;) {
 					if (--k < 0)
 						return cs[j].newInstance(args);
 
 					final Object arg = args[k];
-					final Class type = types[k];
+					final Class<?> type = types[k];
 					if (arg == null)
 						if (type.isPrimitive()) break; //mismatch
 						else continue; //match
@@ -141,7 +141,7 @@ public class Classes {
 	 * @see #newInstance(Class, Class[], Object[])
 	 */
 	public static final Object
-	newInstance(String clsName, Class[] argTypes, Object[] args)
+	newInstance(String clsName, Class<?>[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, ClassNotFoundException, IllegalAccessException {
 	 	return newInstance(Class.forName(clsName), argTypes, args);
@@ -166,7 +166,7 @@ public class Classes {
 	 * @see #newInstance(Class, Class[], Object[])
 	 */
 	public static final Object
-	newInstanceByThread(String clsName, Class[] argTypes, Object[] args)
+	newInstanceByThread(String clsName, Class<?>[] argTypes, Object[] args)
 	throws NoSuchMethodException, InstantiationException,
 	InvocationTargetException, ClassNotFoundException, IllegalAccessException {
 	 	return newInstance(forNameByThread(clsName), argTypes, args);
@@ -192,10 +192,10 @@ public class Classes {
 	 * @return the Class object representing the desired class
 	 * @exception ClassNotFoundException if the class cannot be located by the specified class loader
 	 */
-	public static final Class forNameByThread(String clsName)
+	public static final Class<?> forNameByThread(String clsName)
 	throws ClassNotFoundException {
 		clsName = toInternalForm(clsName);
-		final Class cls = Primitives.toClass(clsName);
+		final Class<?> cls = Primitives.toClass(clsName);
 		if (cls != null)
 			return cls;
 
@@ -280,12 +280,12 @@ public class Classes {
 	 * @return the topmost interface extending subIF, or null if subIF
 	 * is not implemented by cls
 	 */
-	public static Class getTopmostInterface(Class cls, Class subIF) {
+	public static Class<?> getTopmostInterface(Class<?> cls, Class<?> subIF) {
 		if (cls.isInterface())
 			return subIF.isAssignableFrom(cls) ? cls: null;
 
 		while (cls != null) {
-			final Class[] ifs = cls.getInterfaces();
+			final Class<?>[] ifs = cls.getInterfaces();
 			for (int j = 0; j < ifs.length; ++j)
 				if (subIF.isAssignableFrom(ifs[j]))
 					return ifs[j];
@@ -298,17 +298,17 @@ public class Classes {
 	 * <p>Unlike {@link Class#getInterfaces}, it recursively searches
 	 * for all derived classes.
 	 */
-	public static Class[] getAllInterfaces(Class cls) {
-		final List l = new LinkedList();
+	public static Class<?>[] getAllInterfaces(Class<?> cls) {
+		final List<Class<?>> l = new LinkedList<Class<?>>();
 		while (cls != null) {
-			final Class[] ifs = cls.getInterfaces();
+			final Class<?>[] ifs = cls.getInterfaces();
 			for (int j = 0; j < ifs.length; ++j)
 				l.add(ifs[j]);
 
 			cls = cls.getSuperclass();
 		}
 		final int sz = l.size();
-		return (Class[])l.toArray(new Class[sz]);
+		return l.toArray(new Class<?>[sz]);
 	}		
 
 	/**
@@ -321,7 +321,7 @@ public class Classes {
 	 * @return true if it contains the method
 	 */
 	public static final boolean containsMethod
-	(Class cls, String name, Class[] paramTypes) {
+	(Class<?> cls, String name, Class<?>[] paramTypes) {
 		try {
 			cls.getMethod(name, paramTypes);
 			return true;
@@ -504,8 +504,8 @@ public class Classes {
 		}
 		String method = signature.substring(j, k).trim();
 		
-		Collection argTypes = new LinkedList();
-		Collection argNames = new LinkedList();
+		Collection<String> argTypes = new LinkedList<String>();
+		Collection<String> argNames = new LinkedList<String>();
 		do {
 			j = Strings.skipWhitespaces(signature, k + 1);
 			if (signature.charAt(j) == ')') break;
@@ -544,8 +544,8 @@ public class Classes {
 		}
 	
 		return new MethodInfo(returnType, method, 
-					(String[])argTypes.toArray(new String[argTypes.size()]), 
-					(String[])argNames.toArray(new String[argNames.size()]), 
+					argTypes.toArray(new String[argTypes.size()]), 
+					argNames.toArray(new String[argNames.size()]), 
 					tEx);
 	}
 	
@@ -572,11 +572,11 @@ public class Classes {
 	 * null means no parameter names to return
 	 */
 	public static final Method
-	getMethodBySignature(Class cls, String signature, Collection params)
+	getMethodBySignature(Class<?> cls, String signature, Collection<String> params)
 	throws NoSuchMethodException, ClassNotFoundException {
 		MethodInfo mi = parseMethod(signature);
 
-		LinkedList argTypes = new LinkedList();
+		LinkedList<Class<?>> argTypes = new LinkedList<Class<?>>();
 		for (int i = 0; i < mi.argTypes.length; i++) {
 			argTypes.add(forNameByThread(mi.argTypes[i]));
 			if (params != null)
@@ -584,7 +584,7 @@ public class Classes {
 		}
 		
 		return getMethodInPublic(cls, mi.method,
-			(Class[])argTypes.toArray(new Class[argTypes.size()]));
+			argTypes.toArray(new Class<?>[argTypes.size()]));
 	}
 
 	/**
@@ -601,20 +601,20 @@ public class Classes {
 	 * class/interface is found to have the method.
 	 */
 	public static final Method
-	getMethodInPublic(Class cls, String name, Class[] argTypes)
+	getMethodInPublic(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
 		final Method m = cls.getMethod(name, argTypes);
 		if (Modifier.isPublic(m.getDeclaringClass().getModifiers()))
 			return m;
 
-		final Class[] clses = cls.getInterfaces();
+		final Class<?>[] clses = cls.getInterfaces();
 		for (int j = 0; j< clses.length; ++j)
 			try {
 				return getMethodInPublic(clses[j], name, argTypes);
 			} catch (NoSuchMethodException ex) { //ignore it
 			}
 
-		final Class basecls = cls.getSuperclass();
+		final Class<?> basecls = cls.getSuperclass();
 		if (basecls != null)
 			try {
 				return getMethodInPublic(basecls, name, argTypes);
@@ -628,12 +628,12 @@ public class Classes {
 	 * than the argument types. It actually calls {@link #getCloseMethod}.
 	 */
 	public static final Method
-	getMethodByObject(Class cls, String name, Object[] args)
+	getMethodByObject(Class<?> cls, String name, Object[] args)
 	throws NoSuchMethodException {
 		if (args == null)
 			return getMethodInPublic(cls, name, null);
 
-		final Class[] argTypes = new Class[args.length];
+		final Class<?>[] argTypes = new Class[args.length];
 		for (int j = 0; j < args.length; ++j)
 			argTypes[j] = args[j] != null ? args[j].getClass(): null;
 		return getCloseMethod(cls, name, argTypes);
@@ -667,13 +667,13 @@ public class Classes {
 	 * @exception NoSuchMethodException if the method is not found
 	 */
 	public static final Method
-	getCloseMethod(Class cls, String name, Class[] argTypes)
+	getCloseMethod(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
 		if (argTypes == null || argTypes.length == 0)
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
-		Method m = (Method)_closms.get(aoi);
+		Method m = _closms.get(aoi);
 		if (m != null)
 			return m;
 
@@ -688,13 +688,13 @@ public class Classes {
 	 * the same as or a subclass of the specified one.
 	 */
 	public static final Method
-	getCloseMethodBySubclass(Class cls, String name, Class[] argTypes)
+	getCloseMethodBySubclass(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
 		if (argTypes == null || argTypes.length == 0)
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
-		Method m = (Method)_closms.get(aoi);
+		Method m = _closms.get(aoi);
 		if (m != null)
 			return m;
 
@@ -702,13 +702,13 @@ public class Classes {
 		_closms.put(aoi, m);
 		return m;
 	}
-	private static Cache _closms = new MultiCache(
+	private static Cache<AOInfo, Method> _closms = new MultiCache<AOInfo, Method>(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
 		4*60*60*1000);
 	private static final Method
-	myGetCloseMethod(final Class cls, final String name,
-	final Class[] argTypes, final boolean bySubclass)
+	myGetCloseMethod(final Class<?> cls, final String name,
+	final Class<?>[] argTypes, final boolean bySubclass)
 	throws NoSuchMethodException {
 		assert D.OFF || argTypes != null: "Caller shall handle null";
 		for (int j = 0;; ++j) {
@@ -728,7 +728,7 @@ public class Classes {
 			if (!ms[j].getName().equals(name))
 				continue;
 
-			final Class[] mTypes = ms[j].getParameterTypes();
+			final Class<?>[] mTypes = ms[j].getParameterTypes();
 			if (mTypes.length != argTypes.length)
 				continue; //not matched
 
@@ -746,13 +746,13 @@ public class Classes {
 					break;//not match; look for next
 				}
 
-				final Class argType = argTypes[k], mType = mTypes[k];
+				final Class<?> argType = argTypes[k], mType = mTypes[k];
 				if (argType == null
 				|| (!bySubclass && mType.isAssignableFrom(argType))
 				|| (bySubclass && argType.isAssignableFrom(mType)))
 					continue; //match
 
-				final Class c = Primitives.toPrimitive(argType);
+				final Class<?> c = Primitives.toPrimitive(argType);
 				if (c == null || !c.equals(mType))
 					break; //not match
 			}
@@ -766,7 +766,7 @@ public class Classes {
 	 * and it won't throw any exception.
 	 */
 	public static final
-	Method[] getCloseMethods(Class cls, String name, Class[] argTypes) {
+	Method[] getCloseMethods(Class<?> cls, String name, Class<?>[] argTypes) {
 		if (argTypes == null || argTypes.length == 0) {
 			try {
 				return new Method[] {getMethodInPublic(cls, name, null)};
@@ -783,22 +783,22 @@ public class Classes {
 	 * the same as or a subclass of the specified one.
 	 */
 	public static final
-	Method[] getCloseMethodsBySubclass(Class cls, String name, Class[] argTypes) {
+	Method[] getCloseMethodsBySubclass(Class<?> cls, String name, Class<?>[] argTypes) {
 		if (argTypes == null || argTypes.length == 0)
 			return getCloseMethods(cls, name, null);
 		return myGetCloseMethods(cls, name, argTypes, true);
 	}
 	private static final Method[]
-	myGetCloseMethods(final Class cls, final String name,
-	final Class[] argTypes, final boolean bySubclass) {
+	myGetCloseMethods(final Class<?> cls, final String name,
+	final Class<?>[] argTypes, final boolean bySubclass) {
 		assert D.OFF || argTypes != null: "Caller shall handle null";
-		final List mtds = new LinkedList();
+		final List<Method> mtds = new LinkedList<Method>();
 		final Method [] ms = cls.getMethods();
 		for (int j = 0; j < ms.length; ++j) {
 			if (!ms[j].getName().equals(name))
 				continue;
 
-			final Class[] mTypes = ms[j].getParameterTypes();
+			final Class<?>[] mTypes = ms[j].getParameterTypes();
 			if (mTypes.length != argTypes.length)
 				continue; //not matched
 
@@ -818,18 +818,18 @@ public class Classes {
 					break; //found; next method
 				}
 
-				final Class argType = argTypes[k], mType = mTypes[k];
+				final Class<?> argType = argTypes[k], mType = mTypes[k];
 				if (argType == null
 				|| (!bySubclass && mType.isAssignableFrom(argType))
 				|| (bySubclass && argType.isAssignableFrom(mType)))
 					continue; //match one argument
 
-				final Class c = Primitives.toPrimitive(argType);
+				final Class<?> c = Primitives.toPrimitive(argType);
 				if (c == null || !c.equals(mType))
 					break; //not match; next method
 			}
 		}
-		return (Method[])mtds.toArray(new Method[mtds.size()]);
+		return mtds.toArray(new Method[mtds.size()]);
 	}
 
 	/**
@@ -883,10 +883,10 @@ public class Classes {
 	 * @exception SecurityException if access to the information is denied
 	 */
 	public static final AccessibleObject
-	getAccessibleObject(Class cls, String name, Class[] argTypes, int flags)
+	getAccessibleObject(Class<?> cls, String name, Class<?>[] argTypes, int flags)
 	throws NoSuchMethodException {
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, flags);
-		AccessibleObject ao = (AccessibleObject)_acsos.get(aoi);
+		AccessibleObject ao = _acsos.get(aoi);
 		if (ao != null)
 			return ao;
 
@@ -894,12 +894,12 @@ public class Classes {
 		_acsos.put(aoi, ao);
 		return ao;
 	}
-	private static Cache _acsos = new MultiCache(
+	private static Cache<AOInfo, AccessibleObject> _acsos = new MultiCache<AOInfo, AccessibleObject>(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
 		4*60*60*1000);
 	private static final AccessibleObject
-	myGetAcsObj(Class cls, String name, Class[] argTypes, int flags)
+	myGetAcsObj(Class<?> cls, String name, Class<?>[] argTypes, int flags)
 	throws NoSuchMethodException {
 		//try public set/get
 		final String decoratedName =
@@ -970,11 +970,11 @@ public class Classes {
 	}
 	/** The infomation of the access object. */
 	private static class AOInfo {
-		private Class cls;
+		private Class<?> cls;
 		private String name;
-		private Class[] argTypes;
+		private Class<?>[] argTypes;
 		private int flags;
-		private AOInfo(Class cls, String name, Class[] argTypes, int flags) {
+		private AOInfo(Class<?> cls, String name, Class<?>[] argTypes, int flags) {
 			this.cls = cls;
 			this.name = name;
 			this.argTypes = argTypes;
@@ -1028,12 +1028,12 @@ public class Classes {
 	 * @see #getAnyField(Class, String)
 	 */
 	public static final Method
-	getAnyMethod(Class cls, String name, Class[] argTypes)
+	getAnyMethod(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
 		try {
 			return cls.getDeclaredMethod(name, argTypes);
 		} catch (NoSuchMethodException ex) {
-			final Class[] clses = cls.getInterfaces();
+			final Class<?>[] clses = cls.getInterfaces();
 			for (int j = 0; j< clses.length; ++j)
 				try {
 					return getAnyMethod(clses[j], name, argTypes);
@@ -1065,7 +1065,7 @@ public class Classes {
 	 * @see #getAccessibleObject(Class, String, Class[], int)
 	 * @see #getAnyMethod(Class, String, Class[])
 	 */
-	public static final Field getAnyField(Class cls, String name)
+	public static final Field getAnyField(Class<?> cls, String name)
 	throws NoSuchFieldException {
 		for (;;) {
 			try {
@@ -1088,7 +1088,7 @@ public class Classes {
 	 * @return a subset of clsToCheck that are super-class of cls;
 	 * null if no one qualified
 	 */
-	public static final Class[] getSuperClasses(Class cls, Class[] clsToCheck) {
+	public static final Class<?>[] getSuperClasses(Class<?> cls, Class<?>[] clsToCheck) {
 		if (clsToCheck!=null) {
 			int[] hits = new int[clsToCheck.length];
 			int no = 0;
@@ -1099,7 +1099,7 @@ public class Classes {
 			if (no != clsToCheck.length) {
 				if (no == 0)
 					return null;
-				Class[] exc = new Class[no];
+				Class<?>[] exc = new Class[no];
 				for (int j=0; j<no; ++j)
 					exc[j] = clsToCheck[hits[j]];
 				return exc;
@@ -1111,7 +1111,7 @@ public class Classes {
 	/**
 	 * Check whether the specified class is a primitive or a primitive wrapper.
 	 */
-	public static final boolean isPrimitiveWrapper(Class cls) {
+	public static final boolean isPrimitiveWrapper(Class<?> cls) {
 		return Objects.equals(cls.getPackage(), Boolean.class.getPackage())
 			&& (cls.equals(Boolean.class) || cls.equals(Byte.class)
 				|| cls.equals(Character.class) || cls.equals(Double.class)
@@ -1123,7 +1123,7 @@ public class Classes {
 	 * @param extend whether to consider Date, char, boolean, Character
 	 * and Boolean as a numeric object.
 	 */
-	public static final boolean isNumeric(Class cls, boolean extend) {
+	public static final boolean isNumeric(Class<?> cls, boolean extend) {
 		if (cls.isPrimitive())
 			return extend ||
 				(!cls.equals(char.class) && !cls.equals(boolean.class));
@@ -1145,7 +1145,7 @@ public class Classes {
 	 * @exception ClassCastException if failed to convert
 	 * @see #coerce(Class, Object, boolean)
 	 */
-	public static Object coerce(Class cls, Object val)
+	public static Object coerce(Class<?> cls, Object val)
 	throws ClassCastException {
 		if (cls.isInstance(val))
 			return val;
@@ -1322,7 +1322,7 @@ public class Classes {
 	 * is equivalent to nullable=true.
 	 * @exception ClassCastException if failed to convert
 	 */
-	public static Object coerce(Class cls, Object val, boolean nullable)
+	public static Object coerce(Class<?> cls, Object val, boolean nullable)
 	throws ClassCastException {
 		if (nullable || val != null)
 			return coerce(cls, val);

@@ -54,7 +54,7 @@ public interface Group extends Item {
 	 * it returns an empty list. And, if any invocation tries to add
 	 * vertices to the returned list will cause UnsupportOperationException.
 	 */
-	public List getChildren();
+	public List<Item> getChildren();
 
 	/** Detaches all children and returns them in a list.
 	 *
@@ -63,7 +63,7 @@ public interface Group extends Item {
 	 * them first. Then, you could use this method:<br>
 	 * <code>group.addAll(e.detachChildren());</code>
 	 */
-	public List detachChildren();
+	public List<Item> detachChildren();
 
 	/**
 	 * Coalesces children if they are siblings with the same type
@@ -179,7 +179,7 @@ public interface Group extends Item {
 	 * @return a read-only list containing all matched children;
 	 * an empty list if not found or not supported
 	 */
-	public List getElements(String namespace, String name, int mode);
+	public List<Element> getElements(String namespace, String name, int mode);
 	/**
 	 * Gets a readonly list of children with the tag name.
 	 *
@@ -195,7 +195,7 @@ public interface Group extends Item {
 	 *
 	 * @param tname the tag name (i.e., Namespaceable.getName)
 	 */
-	public List getElements(String tname);
+	public List<Element> getElements(String tname);
 
 	/** Returns a readonly set of names of element children. 
 	 * Then, you could use {@link #getElements} to get elements.
@@ -206,7 +206,7 @@ public interface Group extends Item {
 	 *
 	 * @see #getElements()
 	 */
-	public Set getElementNames();
+	public Set<String> getElementNames();
 	/** Returns a cloned copy of all element childrens
 	 *
 	 * <p>Unlike {@link #getChildren} and {@link #getElementNames},
@@ -214,5 +214,5 @@ public interface Group extends Item {
 	 *
 	 * @see #getElementNames()
 	 */
-	public List getElements();
+	public List<Element> getElements();
 }

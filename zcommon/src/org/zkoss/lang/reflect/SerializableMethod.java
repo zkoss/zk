@@ -65,7 +65,7 @@ public class SerializableMethod implements Serializable, Cloneable {
 	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final Class cls = (Class)s.readObject();
+		final Class<?> cls = (Class<?>)s.readObject();
 		if (cls != null) {
 			final String nm = (String)s.readObject();
 			final int sz = s.readInt();

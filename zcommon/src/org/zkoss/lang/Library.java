@@ -38,7 +38,7 @@ import org.zkoss.util.logging.Log;
  */
 public class Library {
 	private static final Log log = Log.lookup(Library.class);
-	private static final Map _props = new HashMap();
+	private static final Map<String, String> _props = new HashMap<String, String>();
 
 	private Library() {}
 
@@ -64,7 +64,7 @@ public class Library {
 	public static String getProperty(String key) {
 		final String v;
 		synchronized (_props) {
-			v = (String)_props.get(key);
+			v = _props.get(key);
 		}
 		try {
 			return v != null ? v: System.getProperty(key);
@@ -87,7 +87,7 @@ public class Library {
 	public static String getProperty(String key, String def) {
 		final String v;
 		synchronized (_props) {
-			v = (String)_props.get(key);
+			v = _props.get(key);
 		}
 		try {
 			return v != null ? v: System.getProperty(key, def);
@@ -107,7 +107,7 @@ public class Library {
 		if (key.length() == 0) throw new IllegalArgumentException();
 
 		synchronized (_props) {
-			return (String)_props.put(key, value);
+			return _props.put(key, value);
 		}
 	}
 

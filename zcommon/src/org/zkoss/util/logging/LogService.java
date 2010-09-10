@@ -55,7 +55,7 @@ public class LogService {
 	/** One log service per the root logger.
 	 * <p>Note: Tomcat has one root logger per Web application.
 	 */
-	private static final Map _svcs = new HashMap(5);
+	private static final Map<Logger, LogService> _svcs = new HashMap<Logger, LogService>(4);
 	/** The service name. */
 	private static final String SERVICE_NAME = "logging";
 
@@ -71,8 +71,12 @@ public class LogService {
 	 * {@link #init} is invoked.
 	 */
 	public static final boolean isInited(String rootnm) {
+		final Logger root = Logger.getLogger(rootnm);
+			//Tomcat has one root per Web app, while Logger.global is shared
+			//Thus we have to use getLogger to verify whether it is installed
+
 		synchronized (_svcs) {
-			return _svcs.containsKey(rootnm);
+			return _svcs.containsKey(root);
 		}
 	}
 
@@ -98,7 +102,7 @@ public class LogService {
 			//Thus we have to use getLogger to verify whether it is installed
 
 		synchronized (_svcs) {
-			LogService svc = (LogService)_svcs.get(root);
+			LogService svc = _svcs.get(root);
 			if (svc != null) {
 				log.warning("Already started: "+rootnm);
 			} else {
@@ -126,7 +130,7 @@ public class LogService {
 
 		final LogService svc;
 		synchronized (_svcs) {
-			svc = (LogService)_svcs.get(root);
+			svc = _svcs.get(root);
 			if (svc == null) return;
 		}
 		svc.stop();
@@ -166,7 +170,7 @@ public class LogService {
 
 		final Logger root = Logger.getLogger(_root);
 		synchronized (_svcs) {
-			final Object o = _svcs.remove(root);
+			final LogService o = _svcs.remove(root);
 			if (o != this) {
 				_svcs.put(root, this); //resotre
 				throw new IllegalStateException("LogService has beeing stopped");

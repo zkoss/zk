@@ -32,7 +32,7 @@ import java.util.Collections;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.util.NotableLinkedList;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.*;
 
@@ -49,7 +49,7 @@ import org.zkoss.idom.*;
 public abstract class AbstractGroup extends AbstractItem implements Group {
 	/** The list of the children. Never null.
 	 */
-	protected List _children;
+	protected List<Item> _children;
 	
 	/** A helper map to enhance the searching speed with tag name.
 	 * If any deriving class don't contain this helper map, they should
@@ -74,44 +74,16 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 * <p>For performance issue, we introduced a map to improve the search 
 	 * speed for Element node associated with a tag name.
 	 */
-	protected List newChildren() {
+	protected List<Item> newChildren() {
 		return new ChildArray();
 	}
 
 	//-- Group --//
-	public void clearModified(boolean includingDescendant) {
-		if (includingDescendant) {
-			for (final Iterator it = _children.iterator(); it.hasNext();)
-				((Item)it.next()).clearModified(true);
-		}
-		super.clearModified(includingDescendant);
-	}
-	public Item clone(boolean preserveModified) {
-		AbstractGroup group = (AbstractGroup)super.clone(preserveModified);
-
-		group._children = group.newChildren();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
-			Item v = ((Item)it.next()).clone(preserveModified);
-			boolean bClearModified = !preserveModified || !v.isModified();
-
-			group._children.add(v); //v becomes modified (v.setParent is called)
-
-			if (bClearModified)
-				v.clearModified(false);
-		}
-
-		if (group._children instanceof ChildArray)
-			((ChildArray)group._children).afterClone();
-
-		group._modified = preserveModified && _modified;
-		return group;
-	}
-
-	public final List getChildren() {
+	public final List<Item> getChildren() {
 		return _children;
 	}
-	public final List detachChildren() {
-		List list = new ArrayList(_children); //make a copy first
+	public final List<Item> detachChildren() {
+		List<Item> list = new ArrayList<Item>(_children); //make a copy first
 
 		for (Iterator it = _children.iterator(); it.hasNext();) {
 			it.next();
@@ -131,11 +103,11 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 		return false;
 	}
-	public final Set getElementNames() {
+	public final Set<String> getElementNames() {
 		if (_elemMap != null)
 			return _elemMap.names();
 
-		final Set set = new LinkedHashSet();
+		final Set<String> set = new LinkedHashSet<String>();
 		for (final Iterator it = _children.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element)
@@ -143,12 +115,12 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 		return set;
 	}
-	public final List getElements() {
-		final List lst = new LinkedList();
+	public final List<Element> getElements() {
+		final List<Element> lst = new LinkedList<Element>();
 		for (final Iterator it = _children.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element)
-				lst.add(o);
+				lst.add((Element)o);
 		}
 		return lst;
 	}
@@ -202,19 +174,20 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return j >= 0 ? (Element)_children.get(j): null;
 	}
 
-	public final List getElements(String namespace, String name, int mode) {
+	public final List<Element> getElements(String namespace, String name, int mode) {
 		if (_elemMap != null && namespace == null && mode == FIND_BY_TAGNAME)
 			return getElements(name); //use the speed version
 
 		final Pattern ptn =
 			(mode & FIND_BY_REGEX) != 0 ? Pattern.compile(name): null;
 
-		final List list = new LinkedList();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
-			Object o = it.next();
-			if ((o instanceof Element)
-			&& match((Element)o, namespace, name, ptn, mode))
-				list.add(o);
+		final List<Element> list = new LinkedList<Element>();
+		for (Item item: _children) {
+			if (item instanceof Element) {
+				final Element e = (Element)item;
+				if (match(e, namespace, name, ptn, mode))
+					list.add(e);
+			}
 		}
 
 		if ((mode & FIND_RECURSIVE) != 0) {
@@ -226,7 +199,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 		return list;
 	}
-	public final List getElements(String tname) {
+	public final List<Element> getElements(String tname) {
 		if (_elemMap != null)
 			return _elemMap.getAll(tname);
 
@@ -297,7 +270,6 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return !_children.isEmpty();
 	}
 
-	//No need to call checkWritable here because _children is smart enough
 	public final Node insertBefore(Node newChild, Node refChild) {
 		if (refChild == null)
 			return appendChild(newChild);
@@ -305,14 +277,14 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		int j = _children.indexOf(refChild);
 		if (j < 0)
 			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
-		_children.add(j, newChild);
+		_children.add(j, (Item)newChild);
 		return newChild;
 	}
 	public final Node replaceChild(Node newChild, Node oldChild) {
 		int j = _children.indexOf(oldChild);
 		if (j < 0)
 			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
-		return (Node)_children.set(j, newChild);
+		return (Node)_children.set(j, (Item)newChild);
 	}
 	public final Node removeChild(Node oldChild) {
 		int j = _children.indexOf(oldChild);
@@ -321,8 +293,21 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return (Node)_children.remove(j);
 	}
 	public final Node appendChild(Node newChild) {
-		_children.add(newChild);
+		_children.add((Item)newChild);
 		return newChild;
+	}
+
+	//Cloneable//
+	public Object clone() {
+		AbstractGroup group = (AbstractGroup)super.clone();
+
+		group._children = group.newChildren();
+		for (Item src: _children)
+			group._children.add((Item)src.clone());
+
+		if (group._children instanceof ChildArray)
+			((ChildArray)group._children).afterClone();
+		return group;
 	}
 
 	//-- Serializable --//
@@ -340,7 +325,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 */
 	protected static class ElementMap {
 		/** the map of (String elemName, List of Elements). */
-		private final Map _map = new LinkedHashMap();
+		private final Map<String, List<Element>> _map = new LinkedHashMap<String, List<Element>>();
 		
 		protected ElementMap() {
 		}
@@ -352,15 +337,15 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		 */
 		public final void put(Element e, Element following) {
 			final String name = e.getName();
-			List valueList = (List)_map.get(name);
+			List<Element> valueList = _map.get(name);
 			if (valueList == null) {
-				valueList = new LinkedList();
+				valueList = new LinkedList<Element>();
 				_map.put(name, valueList);
 			}
 
 			if (following != null && name.equals(following.getName())) {
 				//add into list before the following
-				for (ListIterator it = valueList.listIterator(); it.hasNext();) {
+				for (ListIterator<Element> it = valueList.listIterator(); it.hasNext();) {
 					if (it.next() == following) { //no need to use equals
 						it.previous();
 						it.add(e);
@@ -376,14 +361,15 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		 * the same key, it returned the head for you.
 		 */
 		public final Element get(String name) {
-			final List vals = (List)_map.get(name);
+			final List<Element> vals = _map.get(name);
 			return vals != null && !vals.isEmpty() ? (Element)vals.get(0): null;
 		}
 		/**
 		 * Get a readonly list of all elements with name.
 		 */
-		public final List getAll(String name) {
-			final List vals = (List)_map.get(name);
+		@SuppressWarnings("unchecked")
+		public final List<Element> getAll(String name) {
+			final List<Element> vals = _map.get(name);
 			return vals != null ?
 				Collections.unmodifiableList(vals): Collections.EMPTY_LIST;
 		}
@@ -391,7 +377,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		 * Remove e from the map.
 		 */
 		public final void remove(Element e) {
-			final List vals = (List)_map.get(e.getName());
+			final List<Element> vals = _map.get(e.getName());
 			vals.remove(e);
 			if (vals.isEmpty())
 				_map.remove(e.getName());
@@ -403,15 +389,15 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 		/** Returns a readonly set of names of all elements.
 		 */
-		public final Set names() {
+		public final Set<String> names() {
 			return _map.keySet();
 		}
 		/** Returns the number of elements.
 		 */
 		public final int size() {
 			int sz = 0;
-			for (Iterator it = _map.values().iterator(); it.hasNext();) {
-				sz += ((List)it.next()).size();
+			for (List<Element> lst: _map.values()) {
+				sz += lst.size();
 			}
 			return sz;
 		}
@@ -420,7 +406,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	//-- ChildArray --//
 	/** The array to hold children.
 	 */
-	protected class ChildArray extends CheckableTreeArray {
+	protected class ChildArray extends NotableLinkedList<Item> {
 		protected ChildArray() {
 			_elemMap = new ElementMap();
 		}
@@ -444,16 +430,14 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 
 		//-- CheckableTreeArray --//
-		protected void onAdd(Object newElement, Object followingElement) {
+		protected void onAdd(Item newElement, Item followingElement) {
 			checkAdd(newElement, followingElement, false);
 		}
-		protected void onSet(Object newElement, Object replaced) {
+		protected void onSet(Item newElement, Item replaced) {
 			assert(replaced != null);
 			checkAdd(newElement, replaced, true);
 		}
-		private void checkAdd(Object newVal, Object other, boolean replace) {
-			checkWritable();
-
+		private void checkAdd(Item newVal, Item other, boolean replace) {
 			//allowed type?
 			if (!(newVal instanceof Element) && !(newVal instanceof Text)
 			&& !(newVal instanceof CData) && !(newVal instanceof Comment)
@@ -499,12 +483,11 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			
 			if (replace)
 				onRemove(other);
-			newItem.setParent(AbstractGroup.this); //it will call this.setModified
+			newItem.setParent(AbstractGroup.this);
 		}
-		protected void onRemove(Object item) {
-			checkWritable();
+		protected void onRemove(Item item) {
 			final Item removeItem = (Item)item;
-			removeItem.setParent(null); //it will call this.setModified
+			removeItem.setParent(null);
 
 			if (removeItem instanceof Element) //Element remove from map
 				_elemMap.remove((Element)removeItem);

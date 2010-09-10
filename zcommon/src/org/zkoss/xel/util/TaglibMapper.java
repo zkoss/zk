@@ -43,9 +43,9 @@ import org.zkoss.xel.taglib.Taglib;
  */
 public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializable {
 	/** Map(String prefix+":"+name, Function func). */
-	protected Map _mtds;
+	protected Map<String, Function> _mtds;
 	/** Map(String name, Class cls). */
-	protected Map _clses;
+	protected Map<String, Class> _clses;
 
 	public TaglibMapper() {
 	}
@@ -59,7 +59,7 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 		if (name == null || name.length() == 0 || cls == null)
 			throw new IllegalArgumentException();
 		if (_clses == null)
-			_clses = new HashMap(4);
+			_clses = new HashMap<String, Class>(4);
 		_clses.put(name, cls);
 	}
 	/** Adds the function that can be retrieved by {@link #resolveFunction}.
@@ -72,7 +72,7 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 		if (name == null || name.length() == 0 || func == null)
 			throw new IllegalArgumentException();
 		if (_mtds == null)
-			_mtds = new HashMap(4);
+			_mtds = new HashMap<String, Function>(4);
 		_mtds.put(prefix + ":" + name, func);
 	}
 
@@ -123,10 +123,11 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 			throw XelException.Aide.wrap(ex);
 		}
 	}
+	@SuppressWarnings("unchecked")
 	private void load0(String prefix, Map[] loaded) {
 		if (!loaded[0].isEmpty()) {
 			if (_mtds == null)
-				_mtds = new HashMap(8);
+				_mtds = new HashMap<String, Function>(8);
 			for (Iterator e = loaded[0].entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();
 				addFunction(prefix, (String)me.getKey(), (Function)me.getValue());
@@ -135,17 +136,18 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 
 		if (!loaded[1].isEmpty()) {
 			if (_clses == null)
-				_clses = new HashMap(4);
+				_clses = new HashMap<String, Class>(4);
 			_clses.putAll(loaded[1]);
 		}
 	}
 
 	//-- FunctionMapper --//
 	public Function resolveFunction(String prefix, String name) {
-		return _mtds != null ? (Function)_mtds.get(prefix+":"+name): null;
+		return _mtds != null ? _mtds.get(prefix+":"+name): null;
 	}
-	public Collection getClassNames() {
-		return _clses != null ? _clses.keySet(): (Collection)Collections.EMPTY_LIST;
+	@SuppressWarnings("unchecked")
+	public Collection<String> getClassNames() {
+		return _clses != null ? _clses.keySet(): (Collection<String>)Collections.EMPTY_LIST;
 	}
 	public Class resolveClass(String name) {
 		return _clses != null ? (Class)_clses.get(name): null;
@@ -161,9 +163,9 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 		}
 
 		if (_mtds != null)
-			clone._mtds = new HashMap(clone._mtds);
+			clone._mtds = new HashMap<String, Function>(clone._mtds);
 		if (_clses != null)
-			clone._clses = new HashMap(clone._clses);
+			clone._clses = new HashMap<String, Class>(clone._clses);
 		return clone;
 	}
 

@@ -297,7 +297,7 @@ public class CollectionsX {
 	 * @param iter the iterator; null is OK
 	 * @return the number element being added
 	 */
-	public static final int addAll(Collection col, Iterator iter) {
+	public static final <T> int addAll(Collection<T> col, Iterator<T> iter) {
 		int cnt = 0;
 		if (iter != null)
 			for (; iter.hasNext(); ++cnt)
@@ -308,7 +308,7 @@ public class CollectionsX {
 	 * @param enm the enumeration; null is OK
 	 * @return the number element being added
 	 */
-	public static final int addAll(Collection col, Enumeration enm) {
+	public static final <T> int addAll(Collection<T> col, Enumeration<T> enm) {
 		int cnt = 0;
 		if (enm != null)
 			for (; enm.hasMoreElements(); ++cnt)
@@ -319,7 +319,7 @@ public class CollectionsX {
 	 * @param ary the array; null is OK
 	 * @return the number element being added
 	 */
-	public static final int addAll(Collection col, Object[] ary) {
+	public static final <T> int addAll(Collection<T> col, T[] ary) {
 		int cnt = 0;
 		if (ary != null)
 			for (; cnt < ary.length; ++cnt)
@@ -358,8 +358,8 @@ public class CollectionsX {
 	 * @see Maps#parse
 	 * @see #parse(Collection, String, char, boolean, boolean)
 	 */
-	public static final Collection
-	parse(Collection c, final String src, char separator) {
+	public static final Collection<String>
+	parse(Collection<String> c, final String src, char separator) {
 		return parse(c, src, separator, true);
 	}
 	/**
@@ -372,7 +372,8 @@ public class CollectionsX {
 	 * @see Maps#parse
 	 * @see #parse(Collection, String, char, boolean, boolean)
 	 */
-	public static final Collection parse(Collection c, final String src,
+	public static final
+	Collection<String> parse(Collection<String> c, final String src,
 	char separator, boolean escBackslash) {
 		return parse(c, src, separator, escBackslash, false);
 	}
@@ -411,10 +412,10 @@ public class CollectionsX {
 	 * @see Maps#parse
 	 * @since 3.0.6
 	 */
-	public static final Collection parse(Collection c, final String src,
+	public static final Collection<String> parse(Collection<String> c, final String src,
 	char separator, boolean escBackslash, boolean parenthesis) {
 		if (c == null)
-			c = new LinkedList();
+			c = new LinkedList<String>();
 
 		final char[] seps = new char[] {separator};
 		int j = 0;

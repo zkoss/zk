@@ -54,9 +54,9 @@ public class LabelLoader {
 	private static final Log log = Log.lookup(LabelLoader.class);
 
 	/** A map of (Locale l, Map(String key, String label)). */
-	private final Map _labels = new HashMap(6);
+	private final Map<Locale, Object> _labels = new HashMap<Locale, Object>(6);
 	/** A list of LabelLocator. */
-	private final List _locators = new LinkedList();
+	private final List<LabelLocator> _locators = new LinkedList<LabelLocator>();
 	/** The XEL context. */
 	private XelContext _xelc;
 	private String _jarcharset, _warcharset;
@@ -99,8 +99,8 @@ public class LabelLoader {
 
 		synchronized (_locators) {
 			//no need to use hashset because # of locators are few
-			for (Iterator it = _locators.iterator(); it.hasNext();)
-				if (it.next().equals(locator)) {
+			for (LabelLocator loc: _locators)
+				if (loc.equals(locator)) {
 					log.warning("Ignored because of replication: "+locator);
 					return; //replicated
 				}
@@ -147,8 +147,10 @@ public class LabelLoader {
 	}
 
 	//-- private utilities --//
-	/** Returns Map(String key, String label) of the specified locale. */
-	private final Map getLabels(Locale locale) {
+	/** Returns Map(String key, String label) of the specified locale.
+	 */
+	@SuppressWarnings("unchecked")
+	private final Map<String, String> getLabels(Locale locale) {
 		WaitLock lock = null;
 		for (;;) {
 			final Object o;
@@ -159,7 +161,7 @@ public class LabelLoader {
 			}
 
 			if (o instanceof Map)
-				return (Map)o;
+				return (Map<String, String>)o;
 			if (o == null)
 				break; //go to load the page
 
@@ -180,7 +182,7 @@ public class LabelLoader {
 		try {
 			//get the class name
 			log.info("Loading labels for "+locale);
-			final Map labels = new HashMap(512);
+			final Map<String, String> labels = new HashMap<String, String>(512);
 
 			//1. load from modules
 			final ClassLocator locator = new ClassLocator();
@@ -193,8 +195,8 @@ public class LabelLoader {
 			}
 
 			//2. load from extra resource
-			for (Iterator it = _locators.iterator(); it.hasNext();) {
-				final URL url = ((LabelLocator)it.next()).locate(locale);
+			for (LabelLocator loc: _locators) {
+				final URL url = loc.locate(locale);
 				if (url != null)
 					load(labels, url, _warcharset);
 			}
@@ -215,19 +217,18 @@ public class LabelLoader {
 		}
 	}
 	/** Loads all labels from the specified URL. */
-	private static final void load(Map labels, URL url, String charset)
+	private static final void load(Map<String, String> labels, URL url, String charset)
 	throws IOException {
 		log.info("Opening "+url); //don't use MCommon since Messages might call getLabel
-		final Map news = new HashMap();
+		final Map<String, String> news = new HashMap<String, String>();
 		final InputStream is = url.openStream();
 		try {
 			Maps.load(news, is, charset);
 		} finally {
 			try {is.close();} catch (Throwable ex) {}
 		}
-		for (Iterator it = news.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final Object key = me.getKey();
+		for (Map.Entry<String, String> me: news.entrySet()) {
+			final String key = me.getKey();
 			if (labels.put(key, me.getValue()) != null)
 				log.warning("Label of "+key+" is replaced by "+url);
 		}

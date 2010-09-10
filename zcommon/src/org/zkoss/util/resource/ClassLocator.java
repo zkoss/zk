@@ -56,27 +56,27 @@ public class ClassLocator implements XMLResourcesLocator {
 	}
 
 	//XMLResourcesLocator//
-	public Enumeration getResources(String name) throws IOException {
+	public Enumeration<URL> getResources(String name) throws IOException {
 		name = resolveName(name);
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		if (cl != null) {
-			final Enumeration en = cl.getResources(name);
+			final Enumeration<URL> en = cl.getResources(name);
 			if (en.hasMoreElements()) return en;
 		}
 		cl = ClassLocator.class.getClassLoader();
 		if (cl != null) {
-			final Enumeration en = cl.getResources(name);
+			final Enumeration<URL> en = cl.getResources(name);
 			if (en.hasMoreElements()) return en;
 		}
 		return ClassLoader.getSystemResources(name);
 	}
-	public List getDependentXMLResources(String name, String elName,
+	public List<Resource> getDependentXMLResources(String name, String elName,
 	String elDepends) throws IOException {
-		final Map rcmap = new LinkedHashMap();
-		for (Enumeration en = getResources(name); en.hasMoreElements();) {
-			final URL url = (URL)en.nextElement();
+		final Map<String, XMLResource> rcmap = new LinkedHashMap<String, XMLResource>();
+		for (Enumeration<URL> en = getResources(name); en.hasMoreElements();) {
+			final URL url = en.nextElement();
 			final XMLResource xr = new XMLResource(url, elName, elDepends);
-			final XMLResource old = (XMLResource)rcmap.put(xr.name, xr);
+			final XMLResource old = rcmap.put(xr.name, xr);
 			if (old != null)
 				log.warning("Replicate resource: "+xr.name
 					+"\nOverwrite "+old.url+"\nwith "+xr.url);
@@ -85,28 +85,27 @@ public class ClassLocator implements XMLResourcesLocator {
 			//We overwrite because the order is the parent class loader first
 			//so WEB-INF/lib is placed after
 		}
-		if (D.ON && rcmap.isEmpty() && log.debugable()) log.debug("No resouce is found for "+name);
+//		if (D.ON && rcmap.isEmpty() && log.debugable()) log.debug("No resouce is found for "+name);
 
-		final List rcs = new LinkedList(); //a list of Document
-		final Set resolving = new LinkedHashSet();
+		final List<Resource> rcs = new LinkedList<Resource>(); //a list of Document
+		final Set<String> resolving = new LinkedHashSet<String>();
 			//a set of names used to prevent dead-loop
 		while (!rcmap.isEmpty()) {
-			final Iterator it = rcmap.values().iterator();
-			final XMLResource xr = (XMLResource)it.next();
+			final Iterator<XMLResource> it = rcmap.values().iterator();
+			final XMLResource xr = it.next();
 			it.remove();
 			resolveDependency(xr, rcs, rcmap, resolving);
 			assert D.OFF || resolving.isEmpty();
 		}
 		return rcs;
 	}
-	private static
-	void resolveDependency(XMLResource xr, List rcs, Map rcmap, Set resolving) {
+	private static void resolveDependency(XMLResource xr,
+	List<Resource> rcs, Map<String, XMLResource> rcmap, Set<String> resolving) {
 		if (!resolving.add(xr.name))
 			throw new IllegalStateException("Recusrive reference among "+resolving);
 
-		for (Iterator it = xr.depends.iterator(); it.hasNext();) {
-			final String nm = (String)it.next();
-			final XMLResource dep = (XMLResource)rcmap.remove(nm);
+		for (String nm: xr.depends) {
+			final XMLResource dep = rcmap.remove(nm);
 			if (dep != null) //not resolved yet
 				resolveDependency(dep, rcs, rcmap, resolving); //recusrively
 		}
@@ -121,7 +120,9 @@ public class ClassLocator implements XMLResourcesLocator {
 		private final String name;
 		private final URL url;
 		private final Document document;
-		private final List depends;
+		private final List<String> depends;
+
+		@SuppressWarnings("unchecked")
 		private XMLResource(URL url, String elName, String elDepends)
 		throws IOException{
 			if (D.ON && log.debugable()) log.debug("Loading "+url);
@@ -142,7 +143,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			if (deps == null || deps.length() == 0) {
 				this.depends = Collections.EMPTY_LIST;
 			} else {
-				this.depends = new LinkedList();
+				this.depends = new LinkedList<String>();
 				CollectionsX.parse(this.depends, deps, ',');
 				if (D.ON && log.finerable()) log.finer(this.name+" depends on "+this.depends);
 			}

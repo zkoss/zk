@@ -23,21 +23,21 @@ package org.zkoss.util;
  * @author tomyeh
  * @since 3.0.0
  */
-public interface Cache {
+public interface Cache<K,V> {
 	/** Returns whether the specified key is stored.
 	 */
 	public boolean containsKey(Object key);
 	/** Returns the object of the specified key, or null if not found.
 	 */
-	public Object get(Object key);
+	public V get(Object key);
 	/** Stores an object to the cache.
 	 * @return the previous value of the same, or null if no such value
 	 */
-	public Object put(Object key, Object value);
+	public V put(K key, V value);
 	/** Removes an object from the cache.
 	 * @return the object if found.
 	 */
-	public Object remove(Object key);
+	public V remove(Object key);
 	/** Clears all objects being cached.
 	 */
 	public void clear();

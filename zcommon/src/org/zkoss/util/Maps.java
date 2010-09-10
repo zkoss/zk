@@ -92,7 +92,7 @@ public class Maps {
 	 * @param caseInsensitive whether the key used to access the map
 	 * is case-insensitive. If true, all keys are converted to lower cases.
 	 */
-	public final static void load(Map map, InputStream sm, String charset,
+	public final static void load(Map<String, String> map, InputStream sm, String charset,
 	boolean caseInsensitive) throws IOException {
 		final PushbackInputStream pis = new PushbackInputStream(sm, 3);
 		if (charset == null || charset.startsWith("UTF")) {
@@ -117,7 +117,7 @@ public class Maps {
 		final BufferedReader in =
 			new BufferedReader(new InputStreamReader(pis, charset));
 
-		final List prefixes = new LinkedList();
+		final List<Integer> prefixes = new LinkedList<Integer>();
 		String prefix = null;
 		String line;
 		for (int lno = 1; (line = in.readLine()) != null; ++lno) {
@@ -151,7 +151,7 @@ public class Maps {
 					throw new IllegalSyntaxException("Invalid nesting: '}' must be the last character, line "+lno);
 				if (prefixes.isEmpty())
 					throw new IllegalSyntaxException("Invalid nesting: '}' does have any preceding '{', line "+lno);
-				final Integer i = (Integer)prefixes.remove(prefixes.size() - 1); //pop
+				final Integer i = prefixes.remove(prefixes.size() - 1); //pop
 				prefix = prefixes.isEmpty() ?
 					null: prefix.substring(0, prefix.length() - i.intValue());
 				continue;
@@ -206,7 +206,7 @@ public class Maps {
 	 * Reads a property list (key and element pairs) from the input stream,
 	 * by specifying the charset.
 	 */
-	public final static void load(Map map, InputStream sm, String charset)
+	public final static void load(Map<String, String> map, InputStream sm, String charset)
 	throws IOException {
 		load(map, sm, charset, false);
 	}
@@ -217,14 +217,14 @@ public class Maps {
 	 * @param caseInsensitive whether the key used to access the map
 	 * is case-insensitive. If true, all keys are converted to lower cases.
 	 */
-	public final static void load(Map map, InputStream sm,
+	public final static void load(Map<String, String> map, InputStream sm,
 	boolean caseInsensitive) throws IOException {
 		load(map, sm, null, caseInsensitive);
 	}
 	/** Reads a property list (key and element pairs) from the input stream,
 	 * by detecting correct charset.
 	 */
-	public final static void load(Map map, InputStream sm) throws IOException {
+	public final static void load(Map<String, String> map, InputStream sm) throws IOException {
 		load(map, sm, null, false);
 	}
 
@@ -235,10 +235,12 @@ public class Maps {
 	 *
 	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
 	 */
-	public static final Map 
-	parse(Map map, String src, char separator, char quote)
+	@SuppressWarnings("unchecked")
+	public static final Map<String, String> 
+	parse(Map<String, String> map, String src, char separator, char quote)
 	throws IllegalSyntaxException {
-		return parse(map, src, separator, quote, false, false, false);
+		return (Map<String,String>)
+			parse(map, src, separator, quote, false, false, false);
 	}
 	/**
 	 * Parses a string into a map.
@@ -248,10 +250,12 @@ public class Maps {
 	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
 	 * @since 2.4.0
 	 */
-	public static final Map 
-	parse(Map map, String src, char separator, char quote, boolean asValue)
+	@SuppressWarnings("unchecked")
+	public static final Map<String, String> 
+	parse(Map<String, String> map, String src, char separator, char quote, boolean asValue)
 	throws IllegalSyntaxException {
-		return parse(map, src, separator, quote, asValue, false, false);
+		return (Map<String,String>)
+			parse(map, src, separator, quote, asValue, false, false);
 	}
 	/**
 	 * Parse a string into a map.
@@ -272,7 +276,7 @@ public class Maps {
 	 * quote a single character (as Java does).
 	 *
 	 * @param map the map to put parsed results to; null to create a
-	 * new hash map
+	 * new hash map.
 	 * @param src the string to parse
 	 * @param separator the separator, e.g., ' ' or ','.
 
@@ -305,7 +309,8 @@ public class Maps {
 	 * Specify true if the value might contain EL expressions.
 	 * Note: it has no effect to the name.
 
-	 * @return the map being generated
+	 * @return the map being generated. If multiple, the value might be
+	 * a list of String objects (List&lt;String&gt;).
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
@@ -319,7 +324,7 @@ public class Maps {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
 		if (map == null)
-			map = new HashMap();
+			map = new HashMap<String, String>();
 		if (src == null || src.length() == 0)
 			return map; //nothing to do
 
@@ -414,15 +419,16 @@ public class Maps {
 			}
 		}
 	}
+	@SuppressWarnings("unchecked")
 	private static void put(Map map, String name, String value, boolean multiple) {
 		Object o = map.put(name, value);
 		if (multiple && o != null) {
 			if (o instanceof List) {
-				((List)o).add(value);
+				((List<String>)o).add(value);
 				map.put(name, o);
 			} else {
-				final List l = new LinkedList();
-				l.add(o);
+				final List<String> l = new LinkedList<String>();
+				l.add((String)o);
 				l.add(value);
 				map.put(name, l);
 			}
@@ -522,7 +528,7 @@ public class Maps {
 	 * @param separator the separator between two name=value pairs
 	 * @see #parse(Map, String, char, char)
 	 */
-	public static final String toString(Map map, char quote, char separator) {
+	public static final String toString(Map<String, String> map, char quote, char separator) {
 		return toStringBuffer(new StringBuffer(64), map, quote, separator)
 			.toString();
 	}
@@ -530,7 +536,7 @@ public class Maps {
 	 * @see #toString
 	 */
 	public static final StringBuffer
-	toStringBuffer(StringBuffer sb, Map map, char quote, char separator) {
+	toStringBuffer(StringBuffer sb, Map<String, String> map, char quote, char separator) {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
 		if (map.isEmpty())

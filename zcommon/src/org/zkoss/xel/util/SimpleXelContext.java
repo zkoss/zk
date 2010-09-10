@@ -32,7 +32,7 @@ import org.zkoss.xel.FunctionMapper;
 public class SimpleXelContext implements XelContext {
 	private VariableResolver _resolver;
 	private FunctionMapper _mapper;
-	private Map _attrs;
+	private Map<String, Object> _attrs;
 
 	public SimpleXelContext(VariableResolver resolver, FunctionMapper mapper) {
 		_resolver = resolver;
@@ -63,8 +63,8 @@ public class SimpleXelContext implements XelContext {
 		return _mapper;
 	}
 
-	private Map attrs() {
-		return _attrs != null ? _attrs: (_attrs = new HashMap());
+	private Map<String, Object> attrs() {
+		return _attrs != null ? _attrs: (_attrs = new HashMap<String, Object>());
 	}
 	public Object getAttribute(String name) {
 		return _attrs != null ? _attrs.get(name):  null;
@@ -78,7 +78,7 @@ public class SimpleXelContext implements XelContext {
 	public Object removeAttribute(String name) {
 		return _attrs != null ? _attrs.remove(name): null;
 	}
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attrs();
 	}
 }

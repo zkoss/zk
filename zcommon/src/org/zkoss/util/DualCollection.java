@@ -27,23 +27,23 @@ import java.util.AbstractCollection;
  * @author tomyeh
  * @since 3.0.0
  */
-public class DualCollection extends AbstractCollection
+public class DualCollection<T> extends AbstractCollection<T>
 implements java.io.Serializable {
-	private final Collection _first, _second;
+	private final Collection<T> _first, _second;
 
 	/** Returns a collection by combining two collections.
 	 * It checks whether any of them is null, or equals. And, returns
 	 * the non-null one if another is null.
 	 * If both null, it returns null.
 	 */
-	public static final
-	Collection combine(Collection first, Collection second) {
+	public static final <M>
+	Collection<M> combine(Collection<M> first, Collection<M> second) {
 		if (first == second) //we don't use equals to have better performance
 			return first;
 
 		if (first != null)
 			if (second != null)
-				return new DualCollection(first, second);
+				return new DualCollection<M>(first, second);
 			else
 				return first;
 		else
@@ -53,7 +53,8 @@ implements java.io.Serializable {
 	 * It is better to use {@link #combine} instead of this method
 	 * since it checks whether any of them is null or equals.
 	 */
-	public DualCollection(Collection first, Collection second) {
+	@SuppressWarnings("unchecked")
+	public DualCollection(Collection<T> first, Collection<T> second) {
 		_first = first != null ? first: Collections.EMPTY_LIST;
 		_second = second != null ? second: Collections.EMPTY_LIST;
 	}
@@ -62,11 +63,11 @@ implements java.io.Serializable {
 	public int size() {
 		return _first.size() + _second.size();
 	}
-	public Iterator iterator() {
+	public Iterator<T> iterator() {
 		return new Iter();
 	}
-	private class Iter implements Iterator {
-		private Iterator _it;
+	private class Iter implements Iterator<T> {
+		private Iterator<T> _it;
 		private boolean _bSecond;
 
 		private Iter() {
@@ -76,7 +77,7 @@ implements java.io.Serializable {
 		public boolean hasNext() {
 			return _it.hasNext() || (!_bSecond && !_second.isEmpty());
 		}
-		public Object next() {
+		public T next() {
 			if (!_bSecond && !_it.hasNext()) {
 				_it = _second.iterator();
 				_bSecond = true;

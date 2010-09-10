@@ -92,6 +92,7 @@ public class ResourceCache extends CacheMap {
 	//-- Map --//
 	/** Returns the resource, or null if not found.
 	 */
+	@SuppressWarnings("unchecked")
 	public Object get(Object src) {
 		WaitLock lock = null;
 		for (;;) {
@@ -159,6 +160,7 @@ public class ResourceCache extends CacheMap {
 		}
 	}
 	/** Don't use it.
+	 * @exception UnsupportedOperationException if called
 	 */
 	public Object put(Object src, Object val) {
 		throw new UnsupportedOperationException("Used only internally");

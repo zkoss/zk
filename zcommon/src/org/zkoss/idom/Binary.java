@@ -59,11 +59,7 @@ implements org.w3c.dom.Text, Binable {
 		return _value;
 	}
 	public final void setValue(Object o) {
-		checkWritable();
-		if (!Objects.equals(_value, o)) {
-			_value = o;
-			setModified();
-		}
+		_value = o;
 	}
 
 	//-- Item --//

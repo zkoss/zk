@@ -54,7 +54,7 @@ public interface MessageConst {
 	 * the identifier such that the client will have the same code as the server.
 	 */
 	public static class Aide {
-		private static Map _bis = new HashMap(4);
+		private static Map<Integer, BundleInfo> _bis = new HashMap<Integer, BundleInfo>(4);
 
 		/** Registers a message filename, and returns an identifier to
 		 * represent it.
@@ -75,7 +75,7 @@ public interface MessageConst {
 			int id = getId(sID);
 			synchronized (Aide.class) {
 				Integer iID;
-				final Map bis = new HashMap(_bis);
+				final Map<Integer, BundleInfo> bis = new HashMap<Integer, BundleInfo>(_bis);
 				while (bis.containsKey(iID = new Integer(id)))
 					++id; //not determinstic
 				bis.put(iID, bi);
@@ -92,7 +92,7 @@ public interface MessageConst {
 		 */
 		/*package*/ static final BundleInfo getBundleInfo(int code) {
 			final int id = code >>> 16;
-			final BundleInfo bi = (BundleInfo)_bis.get(new Integer(id));
+			final BundleInfo bi = _bis.get(new Integer(id));
 			if (bi == null)
 				throw new IllegalArgumentException("Wrong message ID: "+id
 					+" ("+code+")\nRegistered: "+_bis);

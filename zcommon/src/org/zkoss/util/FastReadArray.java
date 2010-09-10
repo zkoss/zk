@@ -36,17 +36,12 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  * @since 3.0.6
  */
-public class FastReadArray implements java.io.Serializable, Cloneable {
+public class FastReadArray<T> implements java.io.Serializable, Cloneable {
 	private Object[] _ary;
 
-	/** Constructs an array of Object.
-	 */
-	public FastReadArray() {
-		_ary = new Object[0];
-	}
 	/** Constructs an array of the specified class.
 	 */
-	public FastReadArray(Class klass) {
+	public FastReadArray(Class<? extends T> klass) {
 		_ary = (Object[])Array.newInstance(klass, 0);
 	}
 	/** Returns the array (never null).
@@ -56,8 +51,9 @@ public class FastReadArray implements java.io.Serializable, Cloneable {
 	 * <p>Note: the return array is readonly. Don't modify the value
 	 * of any element.
 	 */
-	public Object[] toArray() {
-		return _ary;
+	@SuppressWarnings("unchecked")
+	public T[] toArray() {
+		return (T[])_ary;
 	}
 	/** Returns if it is empty.
 	 */
@@ -72,7 +68,7 @@ public class FastReadArray implements java.io.Serializable, Cloneable {
 
 	/** Adds an object.
 	 */
-	synchronized public void add(Object val) {
+	synchronized public void add(T val) {
 		Object[] ary = (Object[])ArraysX.resize(_ary, _ary.length + 1);
 		ary[_ary.length] = val;
 		_ary = ary;
@@ -80,7 +76,8 @@ public class FastReadArray implements java.io.Serializable, Cloneable {
 	/** Removes an object.
 	 * @return whether the object is removed successfully (i.e., found).
 	 */
-	synchronized public boolean remove(Object val) {
+	@SuppressWarnings("unchecked")
+	synchronized public boolean remove(T val) {
 		final List l = new LinkedList();
 		boolean found = false;
 		for (int j = 0; j < _ary.length; ++j)
@@ -103,6 +100,7 @@ public class FastReadArray implements java.io.Serializable, Cloneable {
 	 * If true, only the first matched object, if any, is removed.
 	 * If false, all matched object are removed.
 	 */
+	@SuppressWarnings("unchecked")
 	synchronized public boolean removeBy(Comparable val, boolean atMostOne) {
 		final List l = new LinkedList();
 		boolean found = false;
