@@ -41,14 +41,14 @@ public class RequestContexts {
 	protected RequestContexts() {} //prevent from instantiated
 
 	/** A list of RequestContext. */
-	private static final ThreadLocal _elCtxs = new ThreadLocal();
+	private static final ThreadLocal<List<RequestContext>> _elCtxs = new ThreadLocal<List<RequestContext>>();
 
 	/** Returns the current page context if this thread is evaluating a page,
 	 * or null if not.
 	 */
 	public static final RequestContext getCurrent() {
-		final List jcs = (List)_elCtxs.get();
-		return jcs != null && !jcs.isEmpty() ? (RequestContext)jcs.get(0): null;
+		final List<RequestContext> jcs = _elCtxs.get();
+		return jcs != null && !jcs.isEmpty() ? jcs.get(0): null;
 	}
 
 	/** Pushes the context as the current context, such that it will
@@ -74,9 +74,9 @@ public class RequestContexts {
 		if (jc == null)
 			throw new IllegalArgumentException("null");
 
-		List jcs = (List)_elCtxs.get();
+		List<RequestContext> jcs = _elCtxs.get();
 		if (jcs == null)
-			_elCtxs.set(jcs = new LinkedList());
+			_elCtxs.set(jcs = new LinkedList<RequestContext>());
 		jcs.add(0, jc);
 	}
 	/** Pops the context out and use the previous one as the current context.
@@ -87,7 +87,7 @@ public class RequestContexts {
 	 * @see #push
 	 */
 	public static final void pop() {
-		final List l = (List)_elCtxs.get();
+		final List<RequestContext> l = _elCtxs.get();
 		if (l.size() == 1) _elCtxs.set(null);
 		else l.remove(0);
 	}

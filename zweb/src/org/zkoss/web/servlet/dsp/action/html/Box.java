@@ -117,14 +117,20 @@ public class Box extends AbstractAction {
 		if (!isEffective())
 			return;
 
-		final Map attrs = new HashMap();
-		put(attrs, "align", _align);
-		put(attrs, "color", _color);
-		put(attrs, "shadow", _shadow);
-		put(attrs, "spacing", _spacing);
-		put(attrs, "caption", _caption);
-		put(attrs, "width", _width);
-		put(attrs, "actionContext", ac);
+		final Map<String, Object> attrs = new HashMap<String, Object>();
+		attrs.put("shadow", _shadow);
+		if (_align != null)
+			attrs.put("align", _align);
+		if (_color != null)
+			attrs.put("color", _color);
+		if (_spacing != null)
+			attrs.put("spacing", _spacing);
+		if (_caption != null)
+			attrs.put("caption", _caption);
+		if (_width != null)
+			attrs.put("width", _width);
+		if (ac != null)
+			attrs.put("actionContext", ac);
 
 		ac.include("~./dsp/action/html/box.dsp", attrs);
 	}

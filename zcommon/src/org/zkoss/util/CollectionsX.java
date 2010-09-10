@@ -39,18 +39,18 @@ import org.zkoss.lang.Strings;
 public class CollectionsX {
 	/** An enumeration on top of a collection or iterator.
 	 */
-	public static final class CollectionEnumeration implements Enumeration {
-		private final Iterator _iter;
-		public CollectionEnumeration(Collection c) {
+	public static final class CollectionEnumeration<E> implements Enumeration<E> {
+		private final Iterator<? extends E> _iter;
+		public CollectionEnumeration(Collection<? extends E> c) {
 			this(c != null ? c.iterator(): null);
 		}
-		public CollectionEnumeration(Iterator iter) {
+		public CollectionEnumeration(Iterator<? extends E> iter) {
 			_iter = iter;
 		}
 		public final boolean hasMoreElements() {
 			return _iter != null && _iter.hasNext();
 		}
-		public final Object nextElement() {
+		public final E nextElement() {
 			if (_iter != null)
 				return _iter.next();
 			throw new NoSuchElementException();
@@ -58,7 +58,7 @@ public class CollectionsX {
 	}
 	/** An enumeration on top of an array.
 	 */
-	public static final class ArrayEnumeration implements Enumeration {
+	public static final class ArrayEnumeration<E> implements Enumeration<E> {
 		private final Object[] _ary;
 		private int _cursor = 0;
 		public ArrayEnumeration(Object[] ary) {
@@ -67,24 +67,25 @@ public class CollectionsX {
 		public final boolean hasMoreElements() {
 			return _ary != null && _cursor < _ary.length;
 		}
-		public final Object nextElement() {
+		@SuppressWarnings("unchecked")
+		public final E nextElement() {
 			if (hasMoreElements())
-				return _ary[_cursor++];
+				return (E)_ary[_cursor++];
 			throw new NoSuchElementException();
 		}
 	}
 	/** An enumeration that enumerates one element.
 	 */
-	public static final class OneEnumeration implements Enumeration {
+	public static final class OneEnumeration<E> implements Enumeration<E> {
 		private boolean _nomore;
-		private final Object _one;
-		public OneEnumeration(Object one) {
+		private final E _one;
+		public OneEnumeration(E one) {
 			_one = one;
 		}
 		public final boolean hasMoreElements() {
 			return !_nomore;
 		}
-		public final Object nextElement() {
+		public final E nextElement() {
 			if (_nomore)
 				throw new NoSuchElementException();
 			_nomore = true;
@@ -93,7 +94,7 @@ public class CollectionsX {
 	}
 	/** An readonly collection on top of an array.
 	 */
-	public static final class ArrayCollection extends AbstractCollection {
+	public static final class ArrayCollection<E> extends AbstractCollection<E> {
 		private final Object[] _ary;
 		public ArrayCollection(Object[] ary) {
 			_ary = ary;
@@ -101,13 +102,13 @@ public class CollectionsX {
 		public final int size() {
 			return _ary != null ? _ary.length: 0;
 		}
-		public Iterator iterator() {
-			return new ArrayIterator(_ary);
+		public Iterator<E> iterator() {
+			return new ArrayIterator<E>(_ary);
 		}
 	}
 	/** An readonly list on top of an array.
 	 */
-	public static final class ArrayList extends AbstractList {
+	public static final class ArrayList<E> extends AbstractList<E> {
 		private final Object[] _ary;
 		public ArrayList(Object[] ary) {
 			_ary = ary;
@@ -115,13 +116,14 @@ public class CollectionsX {
 		public final int size() {
 			return _ary != null ? _ary.length: 0;
 		}
-		public final Object get(int index) {
-			return _ary[index];
+		@SuppressWarnings("unchecked")
+		public final E get(int index) {
+			return (E)_ary[index];
 		}
 	}
 	/** An iterator on top of an array.
 	 */
-	public static class ArrayIterator implements Iterator {
+	public static class ArrayIterator<E> implements Iterator<E> {
 		/*package*/ final Object[] _ary;
 		/*package*/ int _cursor = 0, _last = -1;
 		/** @param ary an array or null. */
@@ -131,23 +133,24 @@ public class CollectionsX {
 		public final boolean hasNext() {
 			return _ary != null && _cursor < _ary.length;
 		}
-		public final Object next() {
+		@SuppressWarnings("unchecked")
+		public final E next() {
 			if (hasNext())
-				return _ary[_last = _cursor++];
+				return (E)_ary[_last = _cursor++];
 			throw new NoSuchElementException("cursor="+_cursor);
 		}
 		public final void remove() {
 			throw new UnsupportedOperationException();
 		}
 	}
-	public static class ArrayListIterator extends ArrayIterator
-	implements ListIterator {
+	public static class ArrayListIterator<E> extends ArrayIterator<E>
+	implements ListIterator<E> {
 		/** @param ary an array or null. */
 		public ArrayListIterator(Object[] ary) {
 			super(ary);
 		}
 		/** @param ary an array or null. */
-		public ArrayListIterator(Object[] ary, int index) {
+		public ArrayListIterator(E[] ary, int index) {
 			super(ary);
 			_cursor = index;
 			final int len = _ary != null ? _ary.length: 0;
@@ -157,9 +160,10 @@ public class CollectionsX {
 		public final boolean hasPrevious() {
 			return _ary != null && _cursor > 0;
 		}
-		public final Object previous() {
+		@SuppressWarnings("unchecked")
+		public final E previous() {
 			if (hasPrevious())
-				return _ary[_last = --_cursor];
+				return (E)_ary[_last = --_cursor];
 			throw new NoSuchElementException("cursor="+_cursor);
 		}
 		public final int nextIndex() {
@@ -168,41 +172,41 @@ public class CollectionsX {
 		public final int previousIndex() {
 			return _cursor - 1;
 		}
-		public final void set(Object o) {
+		public final void set(E o) {
 			if (_last < 0)
 				throw new IllegalStateException("neither next nor previous have been called");
 			_ary[_last] = o;
 		}
-		public final void add(Object o) {
+		public final void add(E o) {
 			throw new UnsupportedOperationException();
 		}
 	}
 	/** A collection that contains only one element.
 	 */
-	public static final class OneCollection extends AbstractCollection {
-		private final Object _one;
-		public OneCollection(Object one) {
+	public static final class OneCollection<E> extends AbstractCollection<E> {
+		private final E _one;
+		public OneCollection(E one) {
 			_one = one;
 		}
 		public final int size() {
 			return 1;
 		}
-		public Iterator iterator() {
-			return new OneIterator(_one);
+		public Iterator<E> iterator() {
+			return new OneIterator<E>(_one);
 		}
 	}
 	/** An iterator that iterates one element.
 	 */
-	public static final class OneIterator implements Iterator {
+	public static final class OneIterator<E> implements Iterator<E> {
 		private boolean _nomore;
-		private final Object _one;
-		public OneIterator(Object one) {
+		private final E _one;
+		public OneIterator(E one) {
 			_one = one;
 		}
 		public final boolean hasNext() {
 			return !_nomore;
 		}
-		public final Object next() {
+		public final E next() {
 			if (_nomore)
 				throw new NoSuchElementException();
 			_nomore = true;
@@ -214,18 +218,18 @@ public class CollectionsX {
 	}
 	/** An iterator that iterates thru an Enumeration.
 	 */
-	public static final class EnumerationIterator implements Iterator {
-		private final Enumeration _enm;
+	public static final class EnumerationIterator<E> implements Iterator<E> {
+		private final Enumeration<? extends E> _enm;
 		/**
 		 * @param enm the enumeration. If null, it means empty.
 		 */
-		public EnumerationIterator(Enumeration enm) {
+		public EnumerationIterator(Enumeration<? extends E> enm) {
 			_enm = enm;
 		}
 		public final boolean hasNext() {
 			return _enm != null && _enm.hasMoreElements();
 		}
-		public final Object next() {
+		public final E next() {
 			if (_enm == null)
 				throw new NoSuchElementException();
 			return _enm.nextElement();
@@ -297,7 +301,7 @@ public class CollectionsX {
 	 * @param iter the iterator; null is OK
 	 * @return the number element being added
 	 */
-	public static final <T> int addAll(Collection<T> col, Iterator<T> iter) {
+	public static final <T> int addAll(Collection<T> col, Iterator<? extends T> iter) {
 		int cnt = 0;
 		if (iter != null)
 			for (; iter.hasNext(); ++cnt)
@@ -308,7 +312,7 @@ public class CollectionsX {
 	 * @param enm the enumeration; null is OK
 	 * @return the number element being added
 	 */
-	public static final <T> int addAll(Collection<T> col, Enumeration<T> enm) {
+	public static final <T> int addAll(Collection<T> col, Enumeration<? extends T> enm) {
 		int cnt = 0;
 		if (enm != null)
 			for (; enm.hasMoreElements(); ++cnt)
@@ -319,17 +323,18 @@ public class CollectionsX {
 	 * @param ary the array; null is OK
 	 * @return the number element being added
 	 */
-	public static final <T> int addAll(Collection<T> col, T[] ary) {
+	@SuppressWarnings("unchecked")
+	public static final <T> int addAll(Collection<T> col, Object[] ary) {
 		int cnt = 0;
 		if (ary != null)
 			for (; cnt < ary.length; ++cnt)
-				col.add(ary[cnt]);
+				col.add((T)ary[cnt]);
 		return cnt;
 	}
 
 	/** Tests whether two sets has any intersection.
 	 */
-	public static final boolean isIntersected(Set a, Set b) {
+	public static final boolean isIntersected(Set<?> a, Set<?> b) {
 		final int sza = a != null ? a.size(): 0;
 		final int szb = b != null ? b.size(): 0;
 		if (sza == 0 || szb == 0)
@@ -433,6 +438,7 @@ public class CollectionsX {
 	 * Collection type of object can be Collection, Map (return the entry), or
 	 * Array.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Iterator iterator(Object obj) {
 		if (obj instanceof Object[]) {
 			return new ArrayIterator((Object[])obj);

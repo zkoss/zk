@@ -29,14 +29,22 @@ import javax.portlet.PortletMode;
 public class PortletModes {
 	/** Returns the portlet mode of the specified name.
 	 */
-	synchronized
+	
 	public static final PortletMode toPortletMode(String modeName) {
-		PortletMode mode = (PortletMode)_modes.get(modeName);
-		if (mode == null)
-			_modes.put(modeName, mode = new PortletMode(modeName));
+		PortletMode mode = _modes.get(modeName);
+		if (mode == null) {
+			synchronized (_modes) {
+				mode = _modes.get(modeName);
+				if (mode == null) {
+					Map<String, PortletMode> modes = new HashMap<String, PortletMode>(_modes);
+					modes.put(modeName, mode = new PortletMode(modeName));
+					_modes = modes;
+				}
+			}
+		}
 		return mode;
 	}
-	private static final Map _modes = new HashMap(5);
+	private static Map<String, PortletMode> _modes = new HashMap<String, PortletMode>(4);
 	static {
 		_modes.put("EDIT", PortletMode.EDIT);
 		_modes.put("HELP", PortletMode.HELP);

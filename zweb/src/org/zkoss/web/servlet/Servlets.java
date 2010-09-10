@@ -150,6 +150,7 @@ public class Servlets {
 	 * never null
 	 * @see Locales#getCurrent
 	 */
+	@SuppressWarnings("unchecked")
 	public static final String locate(ServletContext ctx,
 	ServletRequest request, String pgpath, Locator locator)
 	throws ServletException {
@@ -204,17 +205,17 @@ public class Servlets {
 
 
 		final String PGPATH_CACHE = "org.zkoss.web.pgpath.cache";
-		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
+		Map<URIIndex, String> map = (Map<URIIndex, String>)ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
 			map = Collections.synchronizedMap( //10 min
-				new CacheMap(500, 10*60*1000));
+				new CacheMap<URIIndex, String>(500, 10*60*1000));
 			ctx.setAttribute(PGPATH_CACHE, map);
 		}
 
 		final Locale locale = Locales.getCurrent();
 		final URIIndex index = new URIIndex(pgpath, locale);
 
-		String uri = (String)map.get(index);
+		String uri = map.get(index);
 		if (uri == null) {
 			final Locators.URLLocation loc =
 				Locators.locate(pgpath, locale,
@@ -622,7 +623,7 @@ public class Servlets {
 	 */
 	public static final
 	void forward(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
+	ServletResponse response, String uri, Map<?,?> params, int mode)
 	throws IOException, ServletException {
 //		if (D.ON && log.debugable()) log.debug("Forwarding "+uri);
 
@@ -694,7 +695,7 @@ public class Servlets {
 	 */
 	public static final
 	void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
+	ServletResponse response, String uri, Map<?,?> params, int mode)
 	throws IOException, ServletException {
 //		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
 
@@ -736,15 +737,15 @@ public class Servlets {
 	/** Sets the arg attribute to pass parameters thru request's attribute.
 	 */
 	private static final
-	Map setPassThruAttr(ServletRequest request, Map params) {
-		final Map old = (Map)request.getAttribute(Attributes.ARG);
+	Map<?,?> setPassThruAttr(ServletRequest request, Map<?,?> params) {
+		final Map<?,?> old = (Map<?,?>)request.getAttribute(Attributes.ARG);
 		request.setAttribute(Attributes.ARG, params);
 		return old;
 	}
 	/** Restores what has been done by {@link #setPassThruAttr}.
 	 */
 	private static final
-	void restorePassThruAttr(ServletRequest request, Map old) {
+	void restorePassThruAttr(ServletRequest request, Map<?,?> old) {
 		if (old != null)
 			request.setAttribute(Attributes.ARG, old);
 		else
@@ -767,7 +768,7 @@ public class Servlets {
 	 */
 	public static final RequestDispatcher
 	getRequestDispatcher(ServletContext ctx, ServletRequest request,
-	String uri, Map params, int mode)
+	String uri, Map<?,?> params, int mode)
 	throws ServletException {
 		final char cc = uri.length() > 0 ? uri.charAt(0): (char)0;
 		if (ctx == null || (cc != '/' && cc != '~')) {//... or relevant
@@ -830,7 +831,7 @@ public class Servlets {
 				_uri = uri;
 			}
 		}
-		private RequestDispatcher getRequestDispatcher(Map params, int mode) {
+		private RequestDispatcher getRequestDispatcher(Map<?,?> params, int mode) {
 			if (_extctx == null && _svlctx == null) //not found
 				return null;
 
@@ -879,7 +880,7 @@ public class Servlets {
 	 * not empty.
 	 * @see Encodes#encodeURL(ServletContext, ServletRequest, ServletResponse, String)
 	 */
-	public static final String generateURI(String uri, Map params, int mode) {
+	public static final String generateURI(String uri, Map<?,?> params, int mode) {
 		if (uri.startsWith("~"))
 			throw new IllegalArgumentException("~ctx not supported here: "+uri);
 
@@ -932,27 +933,29 @@ public class Servlets {
 	}
 
 	/** A list of context root paths (e.g., "/abc"). */
-	private static List _ctxroots;
+	private static List<String> _ctxroots;
 	/** Returns a list of context paths (e.g., "/abc") that this application
 	 * has. This implementation parse application.xml. For war that doesn't
 	 * contain application.xml might have to override this method and
 	 * parse another file to know what context being loaded.
 	 */
-	public static final List getContextPaths() {
+	public static final List<String> getContextPaths() {
 		if (_ctxroots != null)
 			return _ctxroots;
 
 		try {
 			synchronized (Servlets.class) {
-				return _ctxroots = myGetContextPaths();
+				if (_ctxroots == null)
+					_ctxroots = myGetContextPaths();
 			}
+			return _ctxroots;
 		} catch (Exception ex) {
 			throw SystemException.Aide.wrap(ex);
 		}
 	}
-	private static final List myGetContextPaths() throws Exception {
+	private static final List<String> myGetContextPaths() throws Exception {
 		final String APP_XML = "/META-INF/application.xml";
-		final List ctxroots = new LinkedList();
+		final List<String> ctxroots = new LinkedList<String>();
 		final URL xmlURL = Locators.getDefault().getResource(APP_XML);
 		if (xmlURL == null)
 			throw new SystemException("File not found: "+APP_XML);
@@ -961,9 +964,7 @@ public class Servlets {
 		final Element root =
 			new SAXBuilder(false,false,true).build(xmlURL).getRootElement();
 
-		for (Iterator it = root.getElements("module").iterator();
-		it.hasNext();) {
-			final Element e = (Element)it.next();
+		for (Element e: root.getElements("module")) {
 			final String ctxroot = (String)e.getContent("web/context-root");
 			if (ctxroot == null) {
 //				if (D.ON && log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
@@ -974,7 +975,7 @@ public class Servlets {
 		}
 
 //		log.info("Context found: "+ctxroots);
-		return new ArrayList(ctxroots);
+		return new ArrayList<String>(ctxroots);
 	}
 
 	/** Returns a token to represent a limit-time offer.
@@ -1015,28 +1016,29 @@ public class Servlets {
 	String name, ExtendletContext extctx) {
 		if (name == null || extctx == null)
 			throw new IllegalArgumentException("null");
-		return (ExtendletContext)getExtWebCtxs(ctx).put(name, extctx);
+		return getExtWebCtxs(ctx).put(name, extctx);
 	}
 	/** Removes an extended context of the specified name.
 	 */
 	public static final
 	ExtendletContext removeExtendletContext(ServletContext ctx, String name) {
-		return (ExtendletContext)getExtWebCtxs(ctx).remove(name);
+		return getExtWebCtxs(ctx).remove(name);
 	}
 	/** Returns the extended context of the specified name.
 	 */
 	public static final
 	ExtendletContext getExtendletContext(ServletContext ctx, String name) {
-		return (ExtendletContext)getExtWebCtxs(ctx).get(name);
+		return getExtWebCtxs(ctx).get(name);
 	}
-	private static final Map getExtWebCtxs(ServletContext ctx) {
+	@SuppressWarnings("unchecked")
+	private static final Map<String, ExtendletContext> getExtWebCtxs(ServletContext ctx) {
 		final String attr = "javax.zkoss.web.servlets.ExtendletContexts";
 			//such that it could be shared among portlets
 		synchronized (Servlets.class) { //don't use ctx because it might be a proxy (in portlet)
-			Map ctxs = (Map)ctx.getAttribute(attr);
+			Map<String, ExtendletContext> ctxs = (Map<String, ExtendletContext>)ctx.getAttribute(attr);
 			if (ctxs == null)
 				ctx.setAttribute(attr,
-					ctxs = Collections.synchronizedMap(new HashMap(5)));
+					ctxs = Collections.synchronizedMap(new HashMap<String, ExtendletContext>(4)));
 			return ctxs;
 		}
 	}

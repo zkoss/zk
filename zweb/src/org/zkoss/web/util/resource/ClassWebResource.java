@@ -83,13 +83,13 @@ public class ClassWebResource {
 	private final String _mappingURI;
 	private final CWC _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
-	private Set _compressExts;
+	private Set<String> _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map _extlets = new HashMap();
+	private final Map<String, Extendlet> _extlets = new HashMap<String, Extendlet>();
 	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
-	private final Map _reqfilters = new HashMap(2);
+	private final Map<String, FastReadArray<Filter>> _reqfilters = new HashMap<String, FastReadArray<Filter>>(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
-	private final Map _incfilters = new HashMap(2);
+	private final Map<String, FastReadArray<Filter>> _incfilters = new HashMap<String, FastReadArray<Filter>>(2);
 	/** Additional locator. */
 	private Locator _extraloc;
 	/** The prefix used to encode URL. */
@@ -285,7 +285,7 @@ public class ClassWebResource {
 		ext = ext.toLowerCase();
 		for (;;) {
 			synchronized (_extlets) {
-				Extendlet exlet = (Extendlet)_extlets.get(ext);
+				Extendlet exlet = _extlets.get(ext);
 				if (exlet != null) return exlet;
 			}
 
@@ -313,7 +313,7 @@ public class ClassWebResource {
 			public void addCompressExtension(String ext) {
 				synchronized (ClassWebResource.this) {
 					if (_compressExts == null)
-						_compressExts = new LinkedHashSet();
+						_compressExts = new LinkedHashSet<String>();
 					_compressExts.add(ext);
 				}
 			}
@@ -321,7 +321,7 @@ public class ClassWebResource {
 
 		ext = ext.toLowerCase();
 		synchronized (_extlets) {
-			return (Extendlet)_extlets.put(ext, extlet);
+			return _extlets.put(ext, extlet);
 		}
 	}
 	/** Removes the {@link Extendlet} (aka., resource processor)
@@ -338,7 +338,7 @@ public class ClassWebResource {
 
 		ext = ext.toLowerCase();
 		synchronized (_extlets) {
-			return (Extendlet)_extlets.remove(ext);
+			return _extlets.remove(ext);
 		}
 	}
 
@@ -361,7 +361,7 @@ public class ClassWebResource {
 			return null;
 
 		ext = ext.toLowerCase();
-		final Map filters =
+		final Map<String, FastReadArray<Filter>> filters =
 			flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters: _incfilters;
 		if (filters.isEmpty()) //no need to sync
 			return null; //optimize
@@ -409,12 +409,12 @@ public class ClassWebResource {
 		if ((flags & FILTER_INCLUDE) != 0)
 			addFilter(_incfilters, ext, filter);
 	}
-	private static void addFilter(Map filters, String ext, Filter filter) {
-		FastReadArray ary;
+	private static void addFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
+		FastReadArray<Filter> ary;
 		synchronized (filters) {
-			ary = (FastReadArray)filters.get(ext);
+			ary = filters.get(ext);
 			if (ary == null)
-				filters.put(ext, ary = new FastReadArray(Filter.class));
+				filters.put(ext, ary = new FastReadArray<Filter>(Filter.class));
 		}
 		ary.add(filter);
 	}
@@ -437,15 +437,15 @@ public class ClassWebResource {
 			removed = rmFilter(_incfilters, ext, filter) || removed;
 		return removed;
 	}
-	private static boolean rmFilter(Map filters, String ext, Filter filter) {
-		FastReadArray ary;
+	private static boolean rmFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
+		FastReadArray<Filter> ary;
 		synchronized (filters) {
-			ary = (FastReadArray)filters.get(ext);
+			ary = filters.get(ext);
 		}
 		if (ary != null && ary.remove(filter)) {
 			if (ary.isEmpty())
 				synchronized (filters) {
-					ary = (FastReadArray)filters.remove(ext);
+					ary = filters.remove(ext);
 					if (ary != null && !ary.isEmpty())
 						filters.put(ext, ary); //modify by other, so restore
 				}
@@ -465,7 +465,7 @@ public class ClassWebResource {
 	 */
 	public void setCompress(String[] exts) {
 		if (exts != null && exts.length > 0) {
-			final Set set = new LinkedHashSet();
+			final Set<String> set = new LinkedHashSet<String>();
 			for (int j = exts.length; --j >= 0;)
 				set.add(exts[j]);
 			_compressExts = set;
@@ -481,7 +481,7 @@ public class ClassWebResource {
 	 */
 	public String[] getCompress() {
 		return _compressExts != null ?
-			(String[])_compressExts.toArray(new String[_compressExts.size()]):
+			_compressExts.toArray(new String[_compressExts.size()]):
 			null;
 	}
 

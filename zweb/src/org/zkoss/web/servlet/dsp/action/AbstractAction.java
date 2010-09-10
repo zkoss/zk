@@ -31,11 +31,6 @@ import org.zkoss.web.servlet.dsp.DspException;
  * @author tomyeh
  */
 abstract public class AbstractAction implements Action {
-	/** A special integer to denote no attribute is assigned. */
-	protected static final int NULL_INT = Integer.MIN_VALUE + 0x68;
-	/** A special short to denote no attribute is assigned. */
-	protected static final short NULL_SHORT = Short.MIN_VALUE + 0x68;
-
 	private boolean _if = true;
 	private boolean _unless = false;
 
@@ -93,36 +88,6 @@ abstract public class AbstractAction implements Action {
 			"application".equals(scope) ? ActionContext.APPLICATION_SCOPE:
 				ActionContext.PAGE_SCOPE;
 	}
-	/** Puts an attribute to the map,
-	 * if <code>attrValue</code> is not null.
-	 */
-	protected static final
-	void put(Map params, String attrName, String attrValue) {
-		if (attrValue != null)
-			params.put(attrName, attrValue);
-	}
-	/** Puts an attribute to the map.
-	 * Unlike othere put(...), it always puts the specified attribute.
-	 */
-	protected static final
-	void put(Map params, String attrName, boolean avail) {
-		params.put(attrName, Boolean.valueOf(avail));
-	}
-	/** Puts an attribute to the map,
-	 * if <code>val</code> is not NULL_INT.
-	 */
-	protected static final
-	void put(Map params, String attrName, int val) {
-		if (val != NULL_INT)
-			params.put(attrName, new Integer(val));
-	}
-	/** Puts an object if it is not null.
-	 */
-	protected static final
-	void put(Map params, String attrName, Object attrValue) {
-		if (attrValue != null)
-			params.put(attrName, attrValue);
-	}
 
 	/** Appends an attribute to the string buffer,
 	 * if <code>attrValue</code> is not null.
@@ -142,14 +107,12 @@ abstract public class AbstractAction implements Action {
 		if (avail)
 			sb.append(' ').append(attrName);
 	}
-	/** Appends an attribute to the string buffer,
-	 * if <code>val</code> is not NULL_INT.
+	/** Appends an attribute to the string buffer.
 	 */
 	protected static final
 	void append(StringBuffer sb, String attrName, int val) {
-		if (val != NULL_INT)
-			sb.append(' ').append(attrName).append("=\"")
-				.append(Integer.toString(val)).append('"');
+		sb.append(' ').append(attrName).append("=\"")
+			.append(Integer.toString(val)).append('"');
 	}
 
 	//package-level utilities//

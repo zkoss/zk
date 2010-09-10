@@ -32,7 +32,7 @@ public interface XMLResourcesLocator extends Locator {
 	 *
 	 * @param name the resouce name, such as "metainfo/config.xml".
 	 */
-	public Enumeration getResources(String name) throws IOException;
+	public Enumeration<URL> getResources(String name) throws IOException;
 	/** Returns a list of resources ({@link Resource}) after resolving
 	 * the dependence.
 	 * The resource is returned in the format of {@link Resource}
@@ -49,7 +49,7 @@ public interface XMLResourcesLocator extends Locator {
 	 * @param elDepends the element used to specify the dependence.
 	 * @return a list of {@link Resource} of the specified name.
 	 */
-	public List getDependentXMLResources(String name, String elName,
+	public List<Resource> getDependentXMLResources(String name, String elName,
 	String elDepends) throws IOException;
 
 	/** An item of the list returned by {@link XMLResourcesLocator#getDependentXMLResources}.

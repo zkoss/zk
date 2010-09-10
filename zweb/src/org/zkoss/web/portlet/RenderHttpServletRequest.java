@@ -37,7 +37,7 @@ import org.zkoss.web.Attributes;
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
 	private String _enc = "UTF-8";
-	private final Map _attrs = new HashMap(9);
+	private final Map<String, String> _attrs = new HashMap<String, String>(8);
 
 	public static HttpServletRequest getInstance(RenderRequest req) {
 		if (req instanceof HttpServletRequest)
@@ -60,7 +60,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 
 	//-- ServletRequest --//
 	public Object getAttribute(String name) {
-		final String val = (String)_attrs.get(name);
+		final String val = _attrs.get(name);
 		return val != null ? val: _req.getAttribute(name);
 	}
 	public Enumeration getAttributeNames() {
@@ -192,7 +192,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getAuthType();
 	}
 	public String getContextPath() {
-		return (String)_attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
+		return _attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
 	}
 	public javax.servlet.http.Cookie[] getCookies() {
 		return new javax.servlet.http.Cookie[0];
@@ -216,13 +216,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return "GET";
 	}
 	public String getPathInfo() {
-		return (String)_attrs.get(Attributes.INCLUDE_PATH_INFO);
+		return _attrs.get(Attributes.INCLUDE_PATH_INFO);
 	}
 	public String getPathTranslated() {
 		return null;
 	}
 	public String getQueryString() {
-		return (String)_attrs.get(Attributes.INCLUDE_QUERY_STRING);
+		return _attrs.get(Attributes.INCLUDE_QUERY_STRING);
 	}
 	public String getRemoteUser() {
 		return _req.getRemoteUser();
@@ -231,13 +231,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getRequestedSessionId();
 	}
 	public String getRequestURI() {
-		return (String)_attrs.get(Attributes.INCLUDE_REQUEST_URI);
+		return _attrs.get(Attributes.INCLUDE_REQUEST_URI);
 	}
 	public StringBuffer getRequestURL() {
 		return new StringBuffer();
 	}
 	public String getServletPath() {
-		return (String)_attrs.get(Attributes.INCLUDE_SERVLET_PATH);
+		return _attrs.get(Attributes.INCLUDE_SERVLET_PATH);
 	}
 	public HttpSession getSession() {
 		return PortletHttpSession.getInstance(_req.getPortletSession());

@@ -103,6 +103,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 	}
 
 	//-- VariableResovler --//
+	@SuppressWarnings("unchecked")
 	public Object resolveVariable (String name) throws XelException {
 		if ("pageContext".equals(name)) {
 			return getPageContext();

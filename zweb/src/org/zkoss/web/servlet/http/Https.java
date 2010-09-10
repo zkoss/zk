@@ -390,7 +390,7 @@ public class Https extends Servlets {
 		return getDateFormats()[0].format(date);
 	}
 	private static final SimpleDateFormat[] getDateFormats() {
-		SimpleDateFormat[] dfs = (SimpleDateFormat[])_dfs.get();
+		SimpleDateFormat[] dfs = _dfs.get();
 		if (dfs == null)
 			_dfs.set(dfs = new SimpleDateFormat[] {
 				new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
@@ -399,7 +399,7 @@ public class Https extends Servlets {
 			});
 		return dfs;
 	}
-	private static final ThreadLocal _dfs = new ThreadLocal();
+	private static final ThreadLocal<SimpleDateFormat[]> _dfs = new ThreadLocal<SimpleDateFormat[]>();
 
 	/** Write the specified media to HTTP response.
 	 *

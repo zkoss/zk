@@ -34,15 +34,17 @@ import org.zkoss.web.servlet.dsp.action.ActionContext;
  */
 class InterpretResolver implements VariableResolver {
 	private final VariableResolver _parent;
-	private final Map _attrs = new HashMap();
+	private final Map<String, Object> _attrs = new HashMap<String, Object>();
 
 	InterpretResolver(VariableResolver parent) {
 		assert D.OFF || !(parent instanceof InterpretResolver);
 		_parent = parent;
 	}
 
-	/** Returns the attributes of the given scope. */
-	Map getAttributes(int scope) throws XelException {
+	/** Returns the attributes of the given scope.
+	 */
+	@SuppressWarnings("unchecked")
+	Map<String, Object> getAttributes(int scope) throws XelException {
 		if (scope == ActionContext.PAGE_SCOPE)
 			return _attrs;
 

@@ -73,7 +73,7 @@ public class Parser {
 			//We always create a page definition
 			final ActionNode action = new ActionNode(Page.class, 0);
 			root.addChild(0, action);
-			final Map attrs = new HashMap(2);
+			final Map<String, String> attrs = new HashMap<String, String>(2);
 
 			if (ctype == null) ctype = "text/html";
 			else if (ctype.startsWith(";")) ctype = "text/html" + ctype;
@@ -194,7 +194,7 @@ public class Parser {
 		}
 
 		//2: parse attributes
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		k = parseAttrs(ctx, attrs, ctlnm, k, to);
 		cc = ctx.content.charAt(k);
 		if (cc != '%')
@@ -254,7 +254,7 @@ public class Parser {
 		parent.addChild(action);
 
 		//2: action's attributes
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		j = parseAttrs(ctx, attrs, actnm, k, to);
 		char cc = ctx.content.charAt(j);
 		boolean ended = cc == '/';
@@ -352,7 +352,7 @@ public class Parser {
 	}
 	/** Parses the attributes.
 	 */
-	private static int parseAttrs(Context ctx, Map attrs, String actnm,
+	private static int parseAttrs(Context ctx, Map<String, String> attrs, String actnm,
 	int from, int to)
 	throws DspException {
 		for (int j, k = from;;) {
@@ -401,13 +401,12 @@ public class Parser {
 	/** Applies attributes.
 	 */
 	private static final
-	void applyAttrs(String actnm, ActionNode action, Map attrs,
+	void applyAttrs(String actnm, ActionNode action, Map<String, String> attrs,
 	ParseContext ctx)
 	throws DspException, XelException {
-		for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String attrnm = (String)me.getKey();
-			final String attrval = (String)me.getValue();
+		for (Map.Entry<String, String> me: attrs.entrySet()) {
+			final String attrnm = me.getKey();
+			final String attrval = me.getValue();
 			try {
 				action.addAttribute(attrnm, attrval, ctx);
 			} catch (NoSuchMethodException ex) {
@@ -467,12 +466,12 @@ public class Parser {
 	private static class Context implements ParseContext {
 		private final String content;
 		/** (String prefix, Map(String name, Class class)). */
-		private final Map _actions = new HashMap();
+		private final Map<String, Map<String, Class<?>>> _actions = new HashMap<String, Map<String, Class<?>>>();
 		private final Locator _locator;
 		private final ExpressionFactory _xelf;
 		private final SimpleMapper _mapper;
 		private final VariableResolver _resolver;
-		private Map _attrs;
+		private Map<String, Object> _attrs;
 		private int nLines;
 		/** Whether the page action is defined. */
 		private boolean pageDefined;
@@ -500,9 +499,9 @@ public class Parser {
 		private boolean hasPrefix(String prefix) {
 			return _actions.containsKey(prefix);
 		}
-		private Class getActionClass(String prefix, String actnm) {
-			final Map acts = (Map)_actions.get(prefix);
-			return acts != null ? (Class)acts.get(actnm): null;
+		private Class<?> getActionClass(String prefix, String actnm) {
+			final Map<String, Class<?>> acts = _actions.get(prefix);
+			return acts != null ? acts.get(actnm): null;
 		}
 		private void loadTaglib(String prefix, String uri)
 		throws DspException, IOException {
@@ -530,13 +529,13 @@ public class Parser {
 				.build(url).getRootElement();
 			_mapper.load(prefix, root);
 
-			final Map acts = new HashMap();
+			final Map<String, Class<?>> acts = new HashMap<String, Class<?>>();
 			for (Iterator it = root.getElements("tag").iterator();
 			it.hasNext();) {
 				final Element e = (Element)it.next();
 				final String name = IDOMs.getRequiredElementValue(e, "name");
 				final String clsName = IDOMs.getRequiredElementValue(e, "tag-class");
-				final Class cls = Classes.forNameByThread(clsName);
+				final Class<?> cls = Classes.forNameByThread(clsName);
 				if (!Action.class.isAssignableFrom(cls))
 					throw new DspException(cls+" doesn't implement "+Action.class);
 				acts.put(name, cls);
@@ -545,8 +544,8 @@ public class Parser {
 				_actions.put(prefix, acts);
 		}
 
-		private Map attrs() {
-			return _attrs != null ? _attrs: (_attrs = new HashMap());
+		private Map<String, Object> attrs() {
+			return _attrs != null ? _attrs: (_attrs = new HashMap<String, Object>());
 		}
 		public Object getAttribute(String name) {
 			return _attrs != null ? _attrs.get(name):  null;
@@ -560,7 +559,7 @@ public class Parser {
 		public Object removeAttribute(String name) {
 			return _attrs != null ? _attrs.remove(name): null;
 		}
-		public Map getAttributes() {
+		public Map<String, Object> getAttributes() {
 			return attrs();
 		}
 	}

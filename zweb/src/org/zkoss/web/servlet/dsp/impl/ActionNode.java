@@ -41,14 +41,14 @@ import org.zkoss.web.servlet.dsp.action.Action;
 class ActionNode extends Node {
 	private static final Log log = Log.lookup(ActionNode.class);
 
-	private final Class _cls;
-	private List _attrs;
+	private final Class<?> _cls;
+	private List<Attr> _attrs;
 	private final int _nLines;
 
 	/**
 	 * @param nLines which line this action is located.
 	 */
-	ActionNode(Class cls, int nLines) {
+	ActionNode(Class<?> cls, int nLines) {
 		_cls = cls;
 		_nLines = nLines;
 	}
@@ -59,10 +59,9 @@ class ActionNode extends Node {
 		try {
 			ic.action = newAction();
 			//1. apply attributes
-			if (_attrs != null) {
-				for (Iterator it = _attrs.iterator(); it.hasNext();)
-					((Attr)it.next()).apply(ic, ic.action);
-			}
+			if (_attrs != null)
+				for (Attr attr: _attrs)
+					attr.apply(ic, ic.action);
 
 			//2. render
 			ic.action.render(
@@ -102,7 +101,7 @@ class ActionNode extends Node {
 		if (nm == null || val == null)
 			throw new IllegalArgumentException("null");
 		if (_attrs == null)
-			_attrs = new LinkedList();
+			_attrs = new LinkedList<Attr>();
 
 		final Method mtd = (Method)Classes.getAccessibleObject(
 			_cls, nm, new Class[] {null},

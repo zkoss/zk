@@ -84,7 +84,7 @@ public interface ActionContext {
 	 * @param params a map of parameters, or null to ignore.
 	 * The map is passed thru the request attribute called arg.
 	 */
-	public void include(String uri, Map params)
+	public void include(String uri, Map<?,?> params)
 	throws DspException, IOException;
 
 	/** Returns whether this page is included.

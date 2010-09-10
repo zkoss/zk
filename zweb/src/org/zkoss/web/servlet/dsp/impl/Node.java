@@ -30,7 +30,7 @@ import org.zkoss.web.servlet.dsp.DspException;
  * @author tomyeh
  */
 abstract class Node {
-	protected List _children;
+	protected List<Node> _children;
 
 	/** Interprets the node to generate the result to the output
 	 * specified in the interpret context.
@@ -43,7 +43,7 @@ abstract class Node {
 		if (node == null)
 			throw new IllegalArgumentException("null");
 		if (_children == null)
-			_children = new LinkedList();
+			_children = new LinkedList<Node>();
 		_children.add(node);
 	}
 	/** Adds a child to the specified position. */
@@ -51,14 +51,15 @@ abstract class Node {
 		if (node == null)
 			throw new IllegalArgumentException("null");
 		if (_children == null)
-			_children = new LinkedList();
+			_children = new LinkedList<Node>();
 		_children.add(pos, node);
 	}
 
 	/** Returns the list of child nodes ({@link Node}).
 	 * @since 3.0.0
 	 */
-	public List getChildren() {
+	@SuppressWarnings("unchecked")
+	public List<Node> getChildren() {
 		return _children != null ? _children: Collections.EMPTY_LIST;
 	}
 }
