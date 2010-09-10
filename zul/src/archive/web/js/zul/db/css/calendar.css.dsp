@@ -62,7 +62,12 @@
 	border-right: 6px solid #D9DADA;
 }
 .z-calendar-disd {
+	<c:if test="${not c:isGecko3()}">
 	opacity: .6;
+	</c:if>
+	<c:if test="${c:isGecko3()}"> <%-- Firefox 3 bug --%>
+		color: rgba (170, 170, 170, 0.6);
+	</c:if>
 	filter: alpha(opacity=60);
 }
 .z-calendar-disd,
