@@ -121,8 +121,11 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * @exception org.zkoss.util.IllegalSyntaxException if syntax erros
 	 */
 	public static final Map<String, String> parseToMap(Map<String, String> map, String rawData) {
-		if (rawData == null || rawData.trim().length() == 0)
-			return map != null ? map: getEmptyDataMap();
+		if (rawData == null || rawData.trim().length() == 0) {
+			if (map != null)
+				return map;
+			return Collections.emptyMap();
+		}
 
 		map = Maps.parse(map, rawData, ' ', (char)1); //both ' and "
 
@@ -167,10 +170,6 @@ implements org.w3c.dom.ProcessingInstruction {
 		}
 
 		return map;
-	}
-	@SuppressWarnings("unchecked")
-	private static final Map<String, String> getEmptyDataMap() {
-		return Collections.EMPTY_MAP;
 	}
 
 	//-- Item --//

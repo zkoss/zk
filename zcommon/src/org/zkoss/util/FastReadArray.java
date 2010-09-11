@@ -41,7 +41,7 @@ public class FastReadArray<T> implements java.io.Serializable, Cloneable {
 
 	/** Constructs an array of the specified class.
 	 */
-	public FastReadArray(Class<? extends T> klass) {
+	public FastReadArray(Class<?> klass) {
 		_ary = (Object[])Array.newInstance(klass, 0);
 	}
 	/** Returns the array (never null).

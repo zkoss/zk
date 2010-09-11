@@ -53,11 +53,10 @@ public class ThreadLocalCache<K, V> implements Cache<K, V> {
 	public boolean isEmpty() {
 		return getCache().isEmpty();
 	}
-	/** Puts all object cached in the current thread to the specifed map.
+	/**
 	 * @deprecated As of release 6.0.0, use {@link Map#putAll} instead.
 	 */
-	@SuppressWarnings("unchecked")
-	public void copyTo(Map map) {
+	public void copyTo(Map<K, V> map) {
 		map.putAll(getCache());
 	}
 

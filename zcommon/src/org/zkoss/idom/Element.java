@@ -157,10 +157,10 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 *
 	 * @return the namespace declarations.
 	 */
-	@SuppressWarnings("unchecked")
 	public final Collection<Namespace> getDeclaredNamespaces() {
-		return _addNamespaces == null ?
-			Collections.EMPTY_LIST: _addNamespaces.values();
+		if (_addNamespaces != null)
+			return _addNamespaces.values();
+		return Collections.emptyList();
 	}
 	/**
 	 * Adds a namespace to the namespace declaration.
@@ -241,7 +241,8 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			final Collection c = (Collection)obj;
 			final Iterator it = c.iterator();
 			if (it.hasNext() && (it.next() instanceof Item)) {
-				getChildren().addAll(toItemCollection(c));
+				final Collection<Item> ci = CollectionsX.generic(c);
+				getChildren().addAll(ci);
 				return null; //done
 			}
 		} else if (obj instanceof Object[]) {
@@ -292,10 +293,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			_children.add(0,
 				bStr ? (Item)new Text((String)obj): (Item)new Binary(obj));
 		return ret;
-	}
-	@SuppressWarnings("unchecked")
-	private static final Collection<Item> toItemCollection(Collection c) {
-		return c;
 	}
 
 	/**
@@ -617,7 +614,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 	public final List<Attribute> getAttributes(String namespace, String name, int mode) {
 		if (_attrs == null)
-			return getEmptyAttributeList();
+			return Collections.emptyList();
 
 		Pattern ptn =
 			(mode & FIND_BY_REGEX) != 0 ? Pattern.compile(name): null;
@@ -627,10 +624,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			if (match(attr, namespace, name, ptn, mode))
 				list.add(attr);
 		return list;
-	}
-	@SuppressWarnings("unchecked")
-	private static List<Attribute> getEmptyAttributeList() {
-		return Collections.EMPTY_LIST;
 	}
 	public final Attribute setAttribute(Attribute attr) {
 		int j = getAttributeIndex(0, attr.getTagName());

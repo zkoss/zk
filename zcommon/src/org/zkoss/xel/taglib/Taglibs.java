@@ -232,10 +232,7 @@ public class Taglibs {
 		final Map<String, Class> clses = new HashMap<String, Class>();
 
 		Exception excp = null;
-		for (Iterator it = root.getElements("function").iterator();
-		it.hasNext();) {
-			final Element e = (Element)it.next();
-
+		for (Element e: root.getElements("function")) {
 			final String name = IDOMs.getRequiredElementValue(e, "name");
 			final String clsnm = IDOMs.getRequiredElementValue(e, "function-class");
 			final String sig = IDOMs.getRequiredElementValue(e, "function-signature");
@@ -269,9 +266,7 @@ public class Taglibs {
 			}
 		}
 
-		for (Iterator it = root.getElements("import").iterator();
-		it.hasNext();) {
-			final Element e = (Element)it.next();
+		for (Element e: root.getElements("import")) {
 			final String name = IDOMs.getRequiredElementValue(e, "import-name");
 			final String clsnm = IDOMs.getRequiredElementValue(e, "import-class");
 			try {
@@ -349,12 +344,10 @@ public class Taglibs {
 			} catch (Exception ex) {
 				log.error(ex); //keep running
 			}
-			return _defURLs = urls.isEmpty() ? getEmptyTLDs(): urls;
+			if (urls.isEmpty())
+				return _defURLs = Collections.emptyMap();
+			return _defURLs = urls;
 		}
-	}
-	@SuppressWarnings("unchecked")
-	private static final Map<String, URL> getEmptyTLDs() {
-		return Collections.EMPTY_MAP;
 	}
 
 	/** Parse config.xml. */

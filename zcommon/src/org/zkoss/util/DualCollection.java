@@ -53,10 +53,15 @@ implements java.io.Serializable {
 	 * It is better to use {@link #combine} instead of this method
 	 * since it checks whether any of them is null or equals.
 	 */
-	@SuppressWarnings("unchecked")
 	public DualCollection(Collection<T> first, Collection<T> second) {
-		_first = first != null ? first: Collections.EMPTY_LIST;
-		_second = second != null ? second: Collections.EMPTY_LIST;
+		if (first != null)
+			_first = first;
+		else
+			_first = Collections.emptyList();
+		if (second != null)
+			_second = second;
+		else
+			_second = Collections.emptyList();
 	}
 
 	//Collection//

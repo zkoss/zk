@@ -122,7 +122,6 @@ public class ClassLocator implements XMLResourcesLocator {
 		private final Document document;
 		private final List<String> depends;
 
-		@SuppressWarnings("unchecked")
 		private XMLResource(URL url, String elName, String elDepends)
 		throws IOException{
 			if (D.ON && log.debugable()) log.debug("Loading "+url);
@@ -141,7 +140,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			this.name = IDOMs.getRequiredElementValue(root, elName);
 			final String deps = root.getElementValue(elDepends, true);
 			if (deps == null || deps.length() == 0) {
-				this.depends = Collections.EMPTY_LIST;
+				this.depends = Collections.emptyList();
 			} else {
 				this.depends = new LinkedList<String>();
 				CollectionsX.parse(this.depends, deps, ',');

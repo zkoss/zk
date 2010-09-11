@@ -145,9 +145,10 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 	public Function resolveFunction(String prefix, String name) {
 		return _mtds != null ? _mtds.get(prefix+":"+name): null;
 	}
-	@SuppressWarnings("unchecked")
 	public Collection<String> getClassNames() {
-		return _clses != null ? _clses.keySet(): (Collection<String>)Collections.EMPTY_LIST;
+		if (_clses != null)
+			return _clses.keySet();
+		return Collections.emptyList();
 	}
 	public Class resolveClass(String name) {
 		return _clses != null ? (Class)_clses.get(name): null;

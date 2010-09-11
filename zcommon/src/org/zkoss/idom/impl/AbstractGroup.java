@@ -367,11 +367,11 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		/**
 		 * Get a readonly list of all elements with name.
 		 */
-		@SuppressWarnings("unchecked")
 		public final List<Element> getAll(String name) {
 			final List<Element> vals = _map.get(name);
-			return vals != null ?
-				Collections.unmodifiableList(vals): Collections.EMPTY_LIST;
+			if (vals != null)
+				return Collections.unmodifiableList(vals);
+			return Collections.emptyList();
 		}
 		/**
 		 * Remove e from the map.

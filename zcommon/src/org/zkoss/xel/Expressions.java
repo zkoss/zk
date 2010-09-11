@@ -143,9 +143,8 @@ implements FunctionMapper, java.io.Serializable {
 	public Function resolveFunction(String prefix, String name) {
 		return null;
 	}
-	@SuppressWarnings("unchecked")
 	public Collection<String> getClassNames() {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	public Class<?> resolveClass(String name) {
 		return null;
