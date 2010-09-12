@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.zkoss.lang.D;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.media.ContentTypes;
+import org.zkoss.util.resource.ResourceCache;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -56,12 +56,12 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 
 	private ExtendletContext _webctx;
 	/** DSP Interpretation cache. */
-	private ResourceCache _cache;
+	private ResourceCache<String, Interpretation> _cache;
 
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
 		final DspLoader loader = new DspLoader();
-		_cache = new ResourceCache(loader, 131);
+		_cache = new ResourceCache<String, Interpretation>(loader, 131);
 		_cache.setMaxSize(1024);
 		_cache.setLifetime(60*60*1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
@@ -73,7 +73,7 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
-		final Interpretation cnt = (Interpretation)_cache.get(path);
+		final Interpretation cnt = _cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
 				//It might be eaten, so log the error
@@ -126,12 +126,12 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 	}
 
 	/** Helper class. */
-	private class DspLoader extends ExtendletLoader {
+	private class DspLoader extends ExtendletLoader<Interpretation> {
 		private DspLoader() {
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path, String orgpath)
+		protected Interpretation parse(InputStream is, String path, String orgpath)
 		throws Exception {
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();

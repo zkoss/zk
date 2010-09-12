@@ -168,7 +168,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient List _uuidRecycle;
 
 	private transient ReqResult _lastRes;
-	private transient List _piggyRes;
+	private transient List<AuResponse> _piggyRes;
 
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -1368,15 +1368,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("Invalid response ID: "+resId);
 		_resId = resId < 0 ? 0: resId;
 	}
-	public List piggyResponse(List response, boolean reset) {
+	public List<AuResponse> piggyResponse(Collection<AuResponse> response, boolean reset) {
 		if (response != null) {
 			if (_piggyRes == null)
-				_piggyRes = response;
-			else
-				_piggyRes.addAll(response);
+				_piggyRes = new LinkedList<AuResponse>();
+			_piggyRes.addAll(response);
 		}
 
-		List l = _piggyRes;
+		List<AuResponse> l = _piggyRes;
 		if (reset) _piggyRes = null;
 		return l;
 	}

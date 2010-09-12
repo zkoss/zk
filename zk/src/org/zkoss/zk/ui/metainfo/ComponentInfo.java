@@ -70,15 +70,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The implemetation class/component (use). */
 	private ExValue _impl;
 	/** A list of {@link Property}, or null if no property at all. */
-	private List _props;
+	private List<Property> _props;
 	/** A Map of event handlers to handle events. */
 	private EventHandlerMap _evthds;
 	/** A list of event listeners for the peer widget. */
-	private List _wgtlsns;
+	private List<WidgetListener> _wgtlsns;
 	/** A list of method/property overrides for the peer widget. */
-	private List _wgtovds;
+	private List<WidgetOverride> _wgtovds;
 	/** A list of DOM attributes for the peer widget. */
-	private List _wgtattrs;
+	private List<WidgetAttribute> _wgtattrs;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
@@ -173,15 +173,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (compInfo._annots != null)
 			_annots = (AnnotationMap)compInfo._annots.clone();
 		if (compInfo._props != null)
-			_props = new LinkedList(compInfo._props);
+			_props = new LinkedList<Property>(compInfo._props);
 		if (compInfo._evthds != null)
 			_evthds = (EventHandlerMap)compInfo._evthds.clone();
 		if (compInfo._wgtlsns != null)
-			_wgtlsns = new LinkedList(compInfo._wgtlsns);
+			_wgtlsns = new LinkedList<WidgetListener>(compInfo._wgtlsns);
 		if (compInfo._wgtovds != null)
-			_wgtovds = new LinkedList(compInfo._wgtovds);
+			_wgtovds = new LinkedList<WidgetOverride>(compInfo._wgtovds);
 		if (compInfo._wgtattrs != null)
-			_wgtattrs = new LinkedList(compInfo._wgtattrs);
+			_wgtattrs = new LinkedList<WidgetAttribute>(compInfo._wgtattrs);
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -346,18 +346,18 @@ implements Cloneable, Condition, java.io.Externalizable {
 			return null;
 
 		try {
-			List composers = new LinkedList();
+			List<Composer> composers = new LinkedList<Composer>();
 			Evaluator eval = getEvaluator();
 			toComposers(composers, defapply, eval, page, comp);
 			toComposers(composers, _apply, eval, page, comp);
 
 			return MultiComposer.getComposer(page,
-				(Composer[])composers.toArray(new Composer[composers.size()]));
+				composers.toArray(new Composer[composers.size()]));
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	private static void toComposers(List composers, ExValue[] apply,
+	private static void toComposers(List<Composer> composers, ExValue[] apply,
 	Evaluator eval, Page page, Component comp)
 	throws Exception {
 		if (apply != null)
@@ -367,7 +367,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 						apply[j].getValue(eval, comp):
 						apply[j].getValue(eval, page));
 	}
-	private static void toComposer(List composers, Page page, Object o)
+	private static void toComposer(List<Composer> composers, Page page, Object o)
 	throws Exception {
 		if (o instanceof String) {
 			final String s = (String)o;
@@ -482,8 +482,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Returns a readonly list of properties ({@link Property}) (never null).
 	 * @since 2.4.0
 	 */
-	public List getProperties() {
-		return _props != null ? _props: Collections.EMPTY_LIST;
+	public List<Property> getProperties() {
+		if (_props != null)
+			return _props;
+		return Collections.emptyList();
 			//it is better to protect with Collections.unmodifiableList
 			//but for better performance...
 	}
@@ -498,7 +500,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 			throw new IllegalArgumentException("name cannot be empty");
 
 		if (_props == null)
-			_props = new LinkedList();
+			_props = new LinkedList<Property>();
 		_props.add(new Property(_evalr, name, value, cond));
 	}
 	/** Adds a property initializer based on the native content.
@@ -512,7 +514,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 			throw new IllegalArgumentException("name cannot be empty");
 
 		if (_props == null)
-			_props = new LinkedList();
+			_props = new LinkedList<Property>();
 		_props.add(new Property(_evalr, name, value, cond));
 	}
 
@@ -540,8 +542,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * @since 3.0.2
 	 */
-	public Set getEventHandlerNames() {
-		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
+	public Set<String> getEventHandlerNames() {
+		if (_evthds != null)
+			return _evthds.getEventNames();
+		return Collections.emptySet();
 	}
 	/** Adds an event listener for the peer widget.
 	 * @since 5.0.0
@@ -550,7 +554,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		final WidgetListener listener =
 			new WidgetListener(_evalr, name, script, cond);
 		if (_wgtlsns == null)
-			_wgtlsns = new LinkedList();
+			_wgtlsns = new LinkedList<WidgetListener>();
 		_wgtlsns.add(listener);
 	}
 	/** Adds a method or a value to the peer widget.
@@ -567,7 +571,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		final WidgetOverride mtd =
 			new WidgetOverride(_evalr, name, script, cond);
 		if (_wgtovds == null)
-			_wgtovds = new LinkedList();
+			_wgtovds = new LinkedList<WidgetOverride>();
 		_wgtovds.add(mtd);
 	}
 	/** Adds a custom DOM attribute to the peer widget.
@@ -584,7 +588,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		final WidgetAttribute attr =
 			new WidgetAttribute(_evalr, name, value, cond);
 		if (_wgtattrs == null)
-			_wgtattrs = new LinkedList();
+			_wgtattrs = new LinkedList<WidgetAttribute>();
 		_wgtattrs.add(attr);
 	}
 
@@ -814,20 +818,20 @@ implements Cloneable, Condition, java.io.Externalizable {
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
 		if (_props != null)
-			for (Iterator it = _props.iterator(); it.hasNext();)
-				((Property)it.next()).assign(comp);
+			for (Property prop: _props)
+				prop.assign(comp);
 
 		if (_wgtlsns != null)
-			for (Iterator it = _wgtlsns.iterator(); it.hasNext();)
-				((WidgetListener)it.next()).assign(comp);
+			for (WidgetListener wl: _wgtlsns)
+				wl.assign(comp);
 
 		if (_wgtovds != null)
-			for (Iterator it = _wgtovds.iterator(); it.hasNext();)
-				((WidgetOverride)it.next()).assign(comp);
+			for (WidgetOverride wo: _wgtovds)
+				wo.assign(comp);
 
 		if (_wgtattrs != null)
-			for (Iterator it = _wgtattrs.iterator(); it.hasNext();)
-				((WidgetAttribute)it.next()).assign(comp);
+			for (WidgetAttribute wa: _wgtattrs)
+				wa.assign(comp);
 
 		comp.setWidgetClass(resolveWidgetClass(comp));
 	}
@@ -842,16 +846,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param parent the parent component (may be null)
 	 * @param defIncluded whether to call {@link ComponentDefinition#evalProperties}.
 	 */
-	public Map evalProperties(Map propmap, Page owner, Component parent,
+	public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent,
 	boolean defIncluded) {
 		if (defIncluded)
 			propmap = _compdef.evalProperties(propmap, owner, parent);
 		else if (propmap == null)
-			propmap = new HashMap();
+			propmap = new HashMap<String, Object>();
 
 		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
+			for (Property prop: _props) {
 				if (parent != null) {
 					if (prop.isEffective(parent))
 						propmap.put(prop.getName(), prop.getValue(parent));
@@ -870,7 +873,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String annotName, Map annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
@@ -883,7 +886,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
@@ -1034,6 +1037,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_forEach);
 		out.writeObject(_forEachInfo);
 	}
+	@SuppressWarnings("unchecked")
 	private void readMembers(java.io.ObjectInput in)
 	throws java.io.IOException, ClassNotFoundException {
 		_children = (List)in.readObject();
@@ -1052,11 +1056,11 @@ implements Cloneable, Condition, java.io.Externalizable {
 		}
 
 		_impl = (ExValue)in.readObject();
-		_props = (List)in.readObject();
+		_props = (List<Property>)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
-		_wgtlsns = (List)in.readObject();
-		_wgtovds = (List)in.readObject();
-		_wgtattrs = (List)in.readObject();
+		_wgtlsns = (List<WidgetListener>)in.readObject();
+		_wgtovds = (List<WidgetOverride>)in.readObject();
+		_wgtattrs = (List<WidgetAttribute>)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();
@@ -1088,23 +1092,23 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * It is used to minimize the bytes to write when serialized.
 	 */
 	private static final EvaluatorRef getSerializingEvalRef() {
-		final List stack = (List)_evalRefStack.get();
-		return stack == null || stack.isEmpty() ? null: (EvaluatorRef)stack.get(0);
+		final List<EvaluatorRef> stack = _evalRefStack.get();
+		return stack == null || stack.isEmpty() ? null: stack.get(0);
 	}
 	/** Pushes the sepcified evaluator referene to be the current one.
 	 */
 	private static final void pushSerializingEvalRef(EvaluatorRef evalr) {
-		List stack = (List)_evalRefStack.get();
+		List<EvaluatorRef> stack = _evalRefStack.get();
 		if (stack == null)
-			_evalRefStack.set(stack = new LinkedList());
+			_evalRefStack.set(stack = new LinkedList<EvaluatorRef>());
 		stack.add(0, evalr);
 	}
 	/** Pops out the current evaluator reference.
 	 */
 	private static final void popSerializingEvalRef() {
-		((List)_evalRefStack.get()).remove(0);
+		_evalRefStack.get().remove(0);
 	}
-	private static final ThreadLocal _evalRefStack = new ThreadLocal();
+	private static final ThreadLocal<List<EvaluatorRef>> _evalRefStack = new ThreadLocal<List<EvaluatorRef>>();
 
 	private static class DupComponentInfo extends ComponentInfo {
 		private DupComponentInfo(ComponentInfo compInfo) {

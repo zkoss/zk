@@ -108,7 +108,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final long serialVersionUID = 20100719L;
 
 	/** Map(Class, Map(String name, Integer flags)). */
-	private static final Map _clientEvents = new HashMap(128);
+	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new HashMap<Class<? extends Component>, Map<String, Integer>>(128);
 	private static final String DEFAULT = "default";
 
 	/*package*/ transient Page _page;
@@ -216,11 +216,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * {@link #getChildren} to instantiate your own instance.
 	 * @since 3.5.1
 	 */
-	protected class Children extends AbstractSequentialList {
+	protected class Children extends AbstractSequentialList<Component> {
 		public int size() {
 			return nChild();
 		}
-		public ListIterator listIterator(int index) {
+		public ListIterator<Component> listIterator(int index) {
 			return new ChildIter(index);
 		}
 	}
@@ -625,12 +625,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? null: idspace.getFellowIfAny(compId);
 	}
-	public Collection getFellows() {
+	public Collection<Component> getFellows() {
 		if (this instanceof IdSpace)
 			return Collections.unmodifiableCollection(_auxinf.spaceInfo.fellows.values());
 
 		final IdSpace idspace = getSpaceOwner();
-		return idspace == null ? Collections.EMPTY_LIST: idspace.getFellows();
+		if (idspace != null)
+			return idspace.getFellows();
+		return Collections.emptyList();
 	}
 	public Component getFellow(String compId, boolean recurse)
 	throws ComponentNotFoundException {
@@ -680,8 +682,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (initAuxInfo().wgtlsns == null) _auxinf.wgtlsns = new LinkedHashMap();
-			old = (String)_auxinf.wgtlsns.put(evtnm, script);
+			if (initAuxInfo().wgtlsns == null) _auxinf.wgtlsns = new LinkedHashMap<String, String>();
+			old = _auxinf.wgtlsns.put(evtnm, script);
 		} else
 			old = _auxinf != null && _auxinf.wgtlsns != null ?
 				(String)_auxinf.wgtlsns.remove(evtnm): null;
@@ -693,9 +695,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _auxinf != null && _auxinf.wgtlsns != null ?
 			(String)_auxinf.wgtlsns.get(evtnm): null;
 	}
-	public Set getWidgetListenerNames() {
-		return _auxinf != null && _auxinf.wgtlsns != null ?
-			_auxinf.wgtlsns.keySet(): Collections.EMPTY_SET;
+	public Set<String> getWidgetListenerNames() {
+		if (_auxinf != null && _auxinf.wgtlsns != null)
+			return _auxinf.wgtlsns.keySet();
+		return Collections.emptySet();
 	}
 
 	public String setWidgetOverride(String name, String script) {
@@ -704,22 +707,23 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (script != null) {
-			if (initAuxInfo().wgtovds == null) _auxinf.wgtovds = new LinkedHashMap();
-			old = (String)_auxinf.wgtovds.put(name, script);
+			if (initAuxInfo().wgtovds == null) _auxinf.wgtovds = new LinkedHashMap<String, String>();
+			old = _auxinf.wgtovds.put(name, script);
 		} else
 			old = _auxinf != null && _auxinf.wgtovds != null ?
-				(String)_auxinf.wgtovds.remove(name): null;
+				_auxinf.wgtovds.remove(name): null;
 		if (!Objects.equals(script, old))
 			smartUpdateWidgetOverride(name, script);
 		return old;
 	}
 	public String getWidgetOverride(String name) {
 		return _auxinf != null && _auxinf.wgtovds != null ?
-			(String)_auxinf.wgtovds.get(name): null;
+			_auxinf.wgtovds.get(name): null;
 	}
-	public Set getWidgetOverrideNames() {
-		return _auxinf != null && _auxinf.wgtovds != null ?
-			_auxinf.wgtovds.keySet(): Collections.EMPTY_SET;
+	public Set<String> getWidgetOverrideNames() {
+		if (_auxinf != null && _auxinf.wgtovds != null)
+			return _auxinf.wgtovds.keySet();
+		return Collections.emptySet();
 	}
 
 	public String setWidgetAttribute(String name, String value) {
@@ -728,48 +732,58 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final String old;
 		if (value != null) {
-			if (initAuxInfo().wgtattrs == null) _auxinf.wgtattrs = new LinkedHashMap();
-			old = (String)_auxinf.wgtattrs.put(name, value);
+			if (initAuxInfo().wgtattrs == null)
+				_auxinf.wgtattrs = new LinkedHashMap<String, String>();
+			old = _auxinf.wgtattrs.put(name, value);
 		} else
 			old = _auxinf != null && _auxinf.wgtattrs != null ?
-				(String)_auxinf.wgtattrs.remove(name): null;
+				_auxinf.wgtattrs.remove(name): null;
 		return old;
 	}
 	public String getWidgetAttribute(String name) {
 		return _auxinf != null && _auxinf.wgtattrs != null ?
-			(String)_auxinf.wgtattrs.get(name): null;
+			_auxinf.wgtattrs.get(name): null;
 	}
-	public Set getWidgetAttributeNames() {
-		return _auxinf.wgtattrs != null ? _auxinf.wgtattrs.keySet(): Collections.EMPTY_SET;
+	public Set<String> getWidgetAttributeNames() {
+		if (_auxinf.wgtattrs != null)
+			return _auxinf.wgtattrs.keySet();
+		return Collections.emptySet();
 	}
 
-	public Map getAttributes(int scope) {
+	public Map<String, Object> getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
 			if (this instanceof IdSpace)
 				return getAttributes();
 			final IdSpace idspace = getSpaceOwner();
-			return idspace != null ? idspace.getAttributes(): Collections.EMPTY_MAP;
+			if (idspace != null)
+				return idspace.getAttributes();
+			return Collections.emptyMap();
 		case PAGE_SCOPE:
-			return _page != null ?
-				_page.getAttributes(): Collections.EMPTY_MAP;
+			if (_page != null)
+				return _page.getAttributes();
+			return Collections.emptyMap();
 		case DESKTOP_SCOPE:
-			return _page != null ?
-				_page.getDesktop().getAttributes(): Collections.EMPTY_MAP;
+			if (_page != null)
+				return _page.getDesktop().getAttributes();
+			return Collections.emptyMap();
 		case SESSION_SCOPE:
-			return _page != null ?
-				_page.getDesktop().getSession().getAttributes(): Collections.EMPTY_MAP;
+			if (_page != null)
+				return _page.getDesktop().getSession().getAttributes();
+			return Collections.emptyMap();
 		case APPLICATION_SCOPE:
-			return _page != null ?
-				_page.getDesktop().getWebApp().getAttributes(): Collections.EMPTY_MAP;
+			if (_page != null)
+				return _page.getDesktop().getWebApp().getAttributes();
+			return Collections.emptyMap();
 		case COMPONENT_SCOPE:
 			return getAttributes();
 		case REQUEST_SCOPE:
 			final Execution exec = getExecution();
-			if (exec != null) return exec.getAttributes();
+			if (exec != null)
+				return exec.getAttributes();
 			//fall thru
 		default:
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 		}
 	}
 	private SimpleScope attrs() {
@@ -789,7 +803,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Object setAttribute(String name, Object value, int scope) {
 		if (value != null) {
-			final Map attrs = getAttributes(scope);
+			final Map<String, Object> attrs = getAttributes(scope);
 			if (attrs == Collections.EMPTY_MAP)
 				throw new IllegalStateException("This component, "+this
 					+", doesn't belong to the "+Components.scopeToString(scope)+" scope");
@@ -800,12 +814,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Object removeAttribute(String name, int scope) {
 			final Map attrs = getAttributes(scope);
-			if (attrs == Collections.EMPTY_MAP)
+			if (attrs == Collections.emptyMap())
 				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
 		return attrs.remove(name);
 	}
 
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attrs().getAttributes();
 	}
 	public Object getAttribute(String name) {
@@ -1254,7 +1268,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 * <p>Default: instantiates and returns an instance of {@link Children}.
 	 */
-	public List getChildren() {
+	public List<Component> getChildren() {
 		return new Children();
 	}
 	/** Returns the root of the specified component.
@@ -1741,15 +1755,13 @@ w:use="foo.MyWindow"&gt;
 	protected void redrawChildren(Writer out) throws IOException {
 		final Object xc = getExtraCtrl();
 		if (xc instanceof Cropper) {
-			final Set crop = ((Cropper)xc).getAvailableAtClient();
+			final Set<Component> crop = ((Cropper)xc).getAvailableAtClient();
 			if (crop != null) {
-				for (Iterator it = crop.iterator(); it.hasNext();) {
-					final Component c = (Component)it.next();
+				for (Component c: crop)
 					if (c.getParent() == this)
 						((ComponentCtrl)c).redraw(out);
 					//Note: getAvialableAtClient might return all level
 					//of children in the same crop scope
-				}
 				return;
 			}
 		}
@@ -1809,10 +1821,11 @@ w:use="foo.MyWindow"&gt;
 	/** Adds this widget class to indicate that its important events
 	 * are generated
 	 */
+	@SuppressWarnings("unchecked")
 	private boolean markImportantEvent(Execution exec) {
-		Set wgtcls = (Set)exec.getAttribute(IMPORTANT_EVENTS);
+		Set<String> wgtcls = (Set<String>)exec.getAttribute(IMPORTANT_EVENTS);
 		if (wgtcls == null)
-			exec.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(8));
+			exec.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet<String>(8));
 		return wgtcls.add(getWidgetClass());
 	}
 	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";
@@ -1872,15 +1885,15 @@ w:use="foo.MyWindow"&gt;
 	 *
 	 * @since 5.0.0
 	 */
-	public Map getClientEvents() {
+	public Map<String, Integer> getClientEvents() {
 		for (Class cls = getClass(); cls != null; cls = cls.getSuperclass()) {
-			Map events;
+			Map<String, Integer> events;
 			synchronized (_clientEvents) {
-				events = (Map)_clientEvents.get(cls);
+				events = _clientEvents.get(cls);
 			}
 			if (events != null) return events;
 		}
-		return Collections.EMPTY_MAP;
+		return Collections.emptyMap();
 	}
 	/** Adds an event that the client might send to the server.
 	 * {@link #addClientEvent} is usally called in the <code>static</code> clause
@@ -1909,25 +1922,25 @@ w:use="foo.MyWindow"&gt;
 	 * and {@link #CE_REPEAT_IGNORE}.
 	 * @since 5.0.0
 	 */
-	protected static void addClientEvent(Class cls, String evtnm, int flags) {
-		Map events;
+	protected static void addClientEvent(Class<? extends Component> cls, String evtnm, int flags) {
+		Map<String, Integer> events;
 		synchronized (_clientEvents) {
-			events = (Map)_clientEvents.get(cls);
+			events = _clientEvents.get(cls);
 		}
 
 		if (events == null) {
 			synchronized (cls) {
 				synchronized (_clientEvents) {
-					events = (Map)_clientEvents.get(cls);
+					events = _clientEvents.get(cls);
 				}
 				if (events == null) {
 					//for better performance, we pack all event names of super
 					//classes, though it costs more memory
-					events = new HashMap(8);
+					events = new HashMap<String, Integer>(8);
 					for (Class c = cls ; c != null; c = c.getSuperclass()) {
-						final Map evts;
+						final Map<String, Integer> evts;
 						synchronized (_clientEvents) {
-							evts = (Map)_clientEvents.get(c);
+							evts = _clientEvents.get(c);
 						}
 						if (evts != null) {
 							events.putAll(evts);
@@ -1956,19 +1969,17 @@ w:use="foo.MyWindow"&gt;
 		final boolean oldasap = Events.isListened(this, evtnm, true);
 
 		if (initAuxInfo().listeners == null)
-			_auxinf.listeners = new HashMap(8);
+			_auxinf.listeners = new HashMap<String, List<EventListener>>(8);
 
-		List l = (List)_auxinf.listeners.get(evtnm);
-		if (l != null) {
-			for (Iterator it = l.iterator(); it.hasNext();) {
-				final EventListener li = (EventListener)it.next();
+		List<EventListener> ls = _auxinf.listeners.get(evtnm);
+		if (ls != null) {
+			for (EventListener li: ls)
 				if (listener.equals(li))
 					return false;
-			}
 		} else {
-			_auxinf.listeners.put(evtnm, l = new LinkedList());
+			_auxinf.listeners.put(evtnm, ls = new LinkedList<EventListener>());
 		}
-		l.add(listener);
+		ls.add(listener);
 
 		final Desktop desktop = getDesktop();
 		if (desktop != null) {
@@ -1978,7 +1989,7 @@ w:use="foo.MyWindow"&gt;
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 			} else if (getClientEvents().containsKey(evtnm)) {
 				final boolean asap = Events.isListened(this, evtnm, true);
-				if (l.size() == 1 || oldasap != asap)
+				if (ls.size() == 1 || oldasap != asap)
 					smartUpdate("$" + evtnm, asap);
 			}
 		}
@@ -1990,13 +2001,13 @@ w:use="foo.MyWindow"&gt;
 
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final boolean oldasap = Events.isListened(this, evtnm, true);
-			final List l = (List)_auxinf.listeners.get(evtnm);
-			if (l != null) {
-				for (Iterator it = l.iterator(); it.hasNext();) {
-					final EventListener li = (EventListener)it.next();
+			final List<EventListener> ls = _auxinf.listeners.get(evtnm);
+			if (ls != null) {
+				for (Iterator<EventListener> it = ls.iterator(); it.hasNext();) {
+					final EventListener li = it.next();
 					if (listener.equals(li)) {
 						it.remove();
-						if (l.isEmpty())
+						if (ls.isEmpty())
 							_auxinf.listeners.remove(evtnm);
 
 						final Desktop desktop = getDesktop();
@@ -2004,7 +2015,7 @@ w:use="foo.MyWindow"&gt;
 							onListenerChange(desktop, false);
 
 							if (getClientEvents().containsKey(evtnm)) {
-								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
+								if (ls.isEmpty() && !Events.isListened(this, evtnm, false))
 									smartUpdate("$" + evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
 									smartUpdate("$" + evtnm, !oldasap);
@@ -2049,14 +2060,13 @@ w:use="foo.MyWindow"&gt;
 			throw new IllegalArgumentException("Illegal event name: "+targetEvent);
 
 		if (initAuxInfo().forwards == null)
-			_auxinf.forwards = new HashMap(4);
+			_auxinf.forwards = new HashMap<String, ForwardInfo>(4);
 
-		Object[] info = (Object[])_auxinf.forwards.get(orgEvent);
-		final List fwds;
+		ForwardInfo info = _auxinf.forwards.get(orgEvent);
+		final List<Object[]> fwds;
 		if (info != null) {
-			fwds = (List)info[1];
-			for (Iterator it = fwds.iterator(); it.hasNext();) {
-				final Object[] fwd = (Object[])it.next();
+			fwds = info.targets;
+			for (Object[] fwd: fwds) {
 				if (Objects.equals(fwd[0], target)
 				&& Objects.equals(fwd[1], targetEvent)) { //found
 					if (Objects.equals(fwd[2], eventData)) {
@@ -2070,7 +2080,7 @@ w:use="foo.MyWindow"&gt;
 		} else {
 			final ForwardListener listener = new ForwardListener(orgEvent);
 			addEventListener(orgEvent, listener);
-			info = new Object[] {listener, fwds = new LinkedList()};
+			info = new ForwardInfo(listener, fwds = new LinkedList<Object[]>());
 			_auxinf.forwards.put(orgEvent, info);
 		}
 
@@ -2088,9 +2098,9 @@ w:use="foo.MyWindow"&gt;
 	private boolean removeForward0(
 	String orgEvent, Object target, String targetEvent) {
 		if (_auxinf != null && _auxinf.forwards != null) {
-			final Object[] info = (Object[])_auxinf.forwards.get(orgEvent);
+			final ForwardInfo info = _auxinf.forwards.get(orgEvent);
 			if (info != null) {
-				final List fwds = (List)info[1];
+				final List<Object[]> fwds = info.targets;
 				for (Iterator it = fwds.iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
 					if (Objects.equals(fwd[1], targetEvent)
@@ -2099,8 +2109,7 @@ w:use="foo.MyWindow"&gt;
 
 						if (fwds.isEmpty()) { //no more event
 							_auxinf.forwards.remove(orgEvent);
-							removeEventListener(
-								orgEvent, (EventListener)info[0]);
+							removeEventListener(orgEvent, info.listener);
 						}
 						return true;
 					}
@@ -2112,28 +2121,26 @@ w:use="foo.MyWindow"&gt;
 
 	public boolean isListenerAvailable(String evtnm, boolean asap) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List l = (List)_auxinf.listeners.get(evtnm);
-			if (l != null) {
+			final List<EventListener> ls = _auxinf.listeners.get(evtnm);
+			if (ls != null) {
 				if (!asap)
-					return !l.isEmpty();
+					return !ls.isEmpty();
 
-				for (Iterator it = l.iterator(); it.hasNext();) {
-					final EventListener li = (EventListener)it.next();
+				for (EventListener li: ls)
 					if (!(li instanceof Deferrable)
 					|| !(((Deferrable)li).isDeferrable()))
 						return true;
-				}
 			}
 		}
 		return false;
 	}
-	public Iterator getListenerIterator(String evtnm) {
+	public Iterator<EventListener> getListenerIterator(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List l = (List)_auxinf.listeners.get(evtnm);
-			if (l != null)
-				return new ListenerIterator(l);
+			final List<EventListener> ls = _auxinf.listeners.get(evtnm);
+			if (ls != null)
+				return new ListenerIterator(ls);
 		}
-		return CollectionsX.EMPTY_ITERATOR;
+		return CollectionsX.emptyIterator();
 	}
 
 	public void applyProperties() {
@@ -2201,9 +2208,10 @@ w:use="foo.MyWindow"&gt;
 				onListenerChange(desktop, true);
 		}
 	}
-	public Set getEventHandlerNames() {
-		return _auxinf != null && _auxinf.evthds != null ?
-			_auxinf.evthds.getEventNames(): Collections.EMPTY_SET;
+	public Set<String> getEventHandlerNames() {
+		if (_auxinf != null && _auxinf.evthds != null)
+			return _auxinf.evthds.getEventNames();
+		return Collections.emptySet();
 	}
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
@@ -2245,21 +2253,25 @@ w:use="foo.MyWindow"&gt;
 		return _auxinf != null && _auxinf.annots != null ?
 			_auxinf.annots.getAnnotation(propName, annotName): null;
 	}
-	public Collection getAnnotations() {
-		return _auxinf != null && _auxinf.annots != null ?
-			_auxinf.annots.getAnnotations(): Collections.EMPTY_LIST;
+	public Collection<Annotation> getAnnotations() {
+		if (_auxinf != null && _auxinf.annots != null)
+			return _auxinf.annots.getAnnotations();
+		return Collections.emptyList();
 	}
-	public Collection getAnnotations(String propName) {
-		return _auxinf != null && _auxinf.annots != null ?
-			_auxinf.annots.getAnnotations(propName): Collections.EMPTY_LIST;
+	public Collection<Annotation> getAnnotations(String propName) {
+		if (_auxinf != null && _auxinf.annots != null)
+			return _auxinf.annots.getAnnotations(propName);
+		return Collections.emptyList();
 	}
-	public List getAnnotatedPropertiesBy(String annotName) {
-		return _auxinf != null && _auxinf.annots != null ?
-			_auxinf.annots.getAnnotatedPropertiesBy(annotName): Collections.EMPTY_LIST;
+	public List<String> getAnnotatedPropertiesBy(String annotName) {
+		if (_auxinf != null && _auxinf.annots != null)
+			return _auxinf.annots.getAnnotatedPropertiesBy(annotName);
+		return Collections.emptyList();
 	}
-	public List getAnnotatedProperties() {
-		return _auxinf != null && _auxinf.annots != null ?
-			_auxinf.annots.getAnnotatedProperties(): Collections.EMPTY_LIST;
+	public List<String> getAnnotatedProperties() {
+		if (_auxinf != null && _auxinf.annots != null)
+			return _auxinf.annots.getAnnotatedProperties();
+		return Collections.emptyList();
 	}
 	public void addSharedAnnotationMap(AnnotationMap annots) {
 		if (annots != null && !annots.isEmpty()) {
@@ -2272,11 +2284,11 @@ w:use="foo.MyWindow"&gt;
 			}
 		}
 	}
-	public void addAnnotation(String annotName, Map annotAttrs) {
+	public void addAnnotation(String annotName, Map<String,String> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(annotName, annotAttrs);
 	}
-	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String,String> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs);
 	}
@@ -2330,7 +2342,7 @@ w:use="foo.MyWindow"&gt;
 	 * @param c a collection of objects. Ignored if null.
 	 * @since 3.6.4
 	 */
-	protected void willPassivate(Collection c) {
+	protected void willPassivate(Collection<?> c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willPassivate(it.next());
@@ -2350,7 +2362,7 @@ w:use="foo.MyWindow"&gt;
 	 * @param c a collection of objects. Ignored if null.
 	 * @since 3.6.4
 	 */
-	protected void didActivate(Collection c) {
+	protected void didActivate(Collection<?> c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didActivate(it.next());
@@ -2489,9 +2501,9 @@ w:use="foo.MyWindow"&gt;
 	/** Holds info shared of the same ID space. */
 	private class SpaceInfo {
 		/** A map of ((String id, Component fellow). */
-		private Map fellows = new HashMap(32);
+		private Map<String, Component> fellows = new HashMap<String, Component>(32);
 	}
-	private class ChildIter implements ListIterator  {
+	private class ChildIter implements ListIterator<Component>  {
 		private AbstractComponent _p, _lastRet;
 		private int _j;
 		private int _modCntSnap;
@@ -2517,7 +2529,7 @@ w:use="foo.MyWindow"&gt;
 			checkComodification();
 			return _j < nChild();
 		}
-		public Object next() {
+		public Component next() {
 			if (_j >= nChild())
 				throw new java.util.NoSuchElementException();
 			checkComodification();
@@ -2531,7 +2543,7 @@ w:use="foo.MyWindow"&gt;
 			checkComodification();
 			return _j > 0;
 		}
-		public Object previous() {
+		public Component previous() {
 			if (_j <= 0)
 				throw new java.util.NoSuchElementException();
 			checkComodification();
@@ -2550,10 +2562,9 @@ w:use="foo.MyWindow"&gt;
 		public int previousIndex() {
 			return _j - 1;
 		}
-		public void add(Object o) {
-			final Component newChild = (Component)o;
+		public void add(Component newChild) {
 			if (newChild.getParent() == AbstractComponent.this)
-				throw new UnsupportedOperationException("Unable to add component with the same parent: "+o);
+				throw new UnsupportedOperationException("Unable to add component with the same parent: "+newChild);
 				//1. it is confusing to allow adding (with replace)
 				//2. the code is sophisticated
 			checkComodification();
@@ -2579,7 +2590,7 @@ w:use="foo.MyWindow"&gt;
 			_lastRet = null;
 			++_modCntSnap;
 		}
-		public void set(Object o) {
+		public void set(Component o) {
 			throw new UnsupportedOperationException();
 				//Possible to implement this but confusing to developers
 				//if o has the same parent (since we have to move)
@@ -2661,24 +2672,23 @@ w:use="foo.MyWindow"&gt;
 
 		//write attrs
 		if (_auxinf.attrs != null) {
-			final Map attrmap = _auxinf.attrs.getAttributes();
+			final Map<String, Object> attrmap = _auxinf.attrs.getAttributes();
 			willSerialize(attrmap.values());
-			final List attrlns = _auxinf.attrs.getListeners();
+			final List<ScopeListener> attrlns = _auxinf.attrs.getListeners();
 			willSerialize(attrlns);
 
 			Serializables.smartWrite(s, attrmap);
 			Serializables.smartWrite(s, attrlns);
 		} else {
-			Serializables.smartWrite(s, (Map)null);
-			Serializables.smartWrite(s, (List)null);
+			Serializables.smartWrite(s, (Map<String,Object>)null);
+			Serializables.smartWrite(s, (List<ScopeListener>)null);
 		}
 
 		if (_auxinf.listeners != null)
-			for (Iterator it = _auxinf.listeners.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
+			for (Map.Entry<String, List<EventListener>> me: _auxinf.listeners.entrySet()) {
 				s.writeObject(me.getKey());
 
-				final Collection ls = (Collection)me.getValue();
+				final List<EventListener> ls = me.getValue();
 				willSerialize(ls);
 				Serializables.smartWrite(s, ls);
 			}
@@ -2758,9 +2768,9 @@ w:use="foo.MyWindow"&gt;
 
 		//read attrs
 		attrs();
-		final Map attrmap = _auxinf.attrs.getAttributes();
+		final Map<String, Object> attrmap = _auxinf.attrs.getAttributes();
 		Serializables.smartRead(s, attrmap);
-		final List attrlns = _auxinf.attrs.getListeners();
+		final List<ScopeListener> attrlns = _auxinf.attrs.getListeners();
 		Serializables.smartRead(s, attrlns);
 		if (attrmap.isEmpty() && attrlns.isEmpty())
 			_auxinf.attrs = null;
@@ -2771,8 +2781,8 @@ w:use="foo.MyWindow"&gt;
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_auxinf.listeners == null) _auxinf.listeners = new HashMap(4);
-			final Collection ls = Serializables.smartRead(s, (Collection)null);
+			if (_auxinf.listeners == null) _auxinf.listeners = new HashMap<String,List<EventListener>>(4);
+			final List<EventListener> ls = Serializables.smartRead(s, (List<EventListener>)null);
 			_auxinf.listeners.put(evtnm, ls);
 		}
 
@@ -2830,11 +2840,9 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		public void onEvent(Event event) {
-			final Object[] info = (Object[])_auxinf.forwards.get(_orgEvent);
+			final ForwardInfo info = _auxinf.forwards.get(_orgEvent);
 			if (info != null)
-				for (Iterator it = new ArrayList((List)info[1]).iterator();
-				it.hasNext();) {
-					final Object[] fwd = (Object[])it.next();
+				for (Object[] fwd: new ArrayList<Object[]>(info.targets)) {
 					Component target = resolveForwardTarget(fwd[0]);
 					if (target == null) {
 						final IdSpace owner = getSpaceOwner();
@@ -2880,10 +2888,10 @@ w:use="foo.MyWindow"&gt;
 	 *}</code></pre>
 	 * @since 5.0.3
 	 */
-	protected String getDefaultMold(Class klass) {
+	protected String getDefaultMold(Class<? extends Component> klass) {
 		return (String)getDefaultInfo(klass);
 	}
-	private static Object getDefaultInfo(Class klass) { //use Object for future extension
+	private static Object getDefaultInfo(Class<? extends Component> klass) { //use Object for future extension
 		Object inf = _infs.get(klass);
 		if (inf == null) {
 			synchronized (_sinfs) {
@@ -2895,7 +2903,8 @@ w:use="foo.MyWindow"&gt;
 				}
 				if (++_infcnt > 100 || _sinfs.size() > 20) {
 					_infcnt = 0;
-					Map infs = new HashMap(_infs);
+					Map<Class<? extends Component>, Object> infs =
+						new HashMap<Class<? extends Component>, Object>(_infs);
 					infs.putAll(_sinfs);
 					_infs = infs;
 					_sinfs.clear();
@@ -2904,8 +2913,8 @@ w:use="foo.MyWindow"&gt;
 		}
 		return inf;
 	}
-	private static transient Map _infs = new HashMap(), //readonly
-		_sinfs = new HashMap(); //synchronized
+	private static transient Map<Class<? extends Component>, Object> _infs = new HashMap<Class<? extends Component>, Object>(), //readonly
+		_sinfs = new HashMap<Class<? extends Component>, Object>(); //synchronized
 	private static int _infcnt;
 
 	private final AuxInfo initAuxInfo() {
@@ -2926,7 +2935,7 @@ w:use="foo.MyWindow"&gt;
 		/** Component attributes. */
 		private transient SimpleScope attrs;
 		/** A map of event listener: Map(evtnm, List(EventListener)). */
-		private transient Map listeners;
+		private transient Map<String, List<EventListener>> listeners;
 
 		/** A map of annotations. Serializable since a component might have
 		 * its own annotations.
@@ -2935,9 +2944,9 @@ w:use="foo.MyWindow"&gt;
 		/** A map of event handler to handle events. */
 		private EventHandlerMap evthds;
 		/** A map of forward conditions:
-		 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
+		 * Map(String orgEvt, ForwardInfo fi>).
 		 */
-		private Map forwards;
+		private Map<String, ForwardInfo> forwards;
 
 		/** the Au service. */
 		private transient AuService ausvc;
@@ -2945,11 +2954,11 @@ w:use="foo.MyWindow"&gt;
 		/** The widget class. */
 		private String wgtcls;
 		/** A map of client event hanlders, Map(String evtnm, String script). */
-		private Map wgtlsns;
+		private Map<String, String> wgtlsns;
 		/** A map of client properties to override, Map(String name, String script). */
-		private Map wgtovds;
+		private Map<String, String> wgtovds;
 		/** A map of client DOM attributes to set, Map(String name, String value). */
-		private Map wgtattrs;
+		private Map<String, String> wgtattrs;
 		/** The AU tag. */
 		private String autag;
 
@@ -2971,11 +2980,11 @@ w:use="foo.MyWindow"&gt;
 				throw new InternalError();
 			}
 			if (wgtlsns != null)
-				clone.wgtlsns = new LinkedHashMap(wgtlsns);
+				clone.wgtlsns = new LinkedHashMap<String, String>(wgtlsns);
 			if (wgtovds != null)
-				clone.wgtovds = new LinkedHashMap(wgtovds);
+				clone.wgtovds = new LinkedHashMap<String, String>(wgtovds);
 			if (wgtattrs != null)
-				clone.wgtattrs = new LinkedHashMap(wgtattrs);
+				clone.wgtattrs = new LinkedHashMap<String, String>(wgtattrs);
 
 			//clone annotation and event handlers
 			if (!annotsShared && annots != null)
@@ -3013,16 +3022,12 @@ w:use="foo.MyWindow"&gt;
 			//clone forwards (after children is cloned)
 			if (forwards != null) {
 				clone.forwards = null;
-				for (Iterator it = forwards.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String orgEvent = (String)me.getKey();
-
-					final Object[] info = (Object[])me.getValue();
-					final List fwds = (List)info[1];
-					for (Iterator e = fwds.iterator(); e.hasNext();) {
-						final Object[] fwd = (Object[])e.next();
+				for (Map.Entry<String, ForwardInfo> me: forwards.entrySet()) {
+					final String orgEvent = me.getKey();
+					final ForwardInfo info = me.getValue();
+					final List<Object[]> fwds = info.targets;
+					for (Object[] fwd: fwds)
 						owner.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
-					}
 				}
 			}
 
@@ -3032,16 +3037,12 @@ w:use="foo.MyWindow"&gt;
 		}
 		private void cloneListeners(AbstractComponent owner, AuxInfo clone) {
 			if (listeners != null) {
-				clone.listeners = new HashMap(4);
-				for (Iterator it = listeners.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final List list = new LinkedList();
-					for (Iterator it2 = ((List)me.getValue()).iterator();
-					it2.hasNext();) {
-						Object val = it2.next();
+				clone.listeners = new HashMap<String, List<EventListener>>(4);
+				for (Map.Entry<String, List<EventListener>> me: listeners.entrySet()) {
+					final List<EventListener> list = new LinkedList<EventListener>();
+					for (EventListener val: list) {
 						if (val instanceof ComponentCloneListener) {
-							val = ((ComponentCloneListener)val).willClone(owner);
+							val = (EventListener)((ComponentCloneListener)val).willClone(owner);
 							if (val == null) continue; //don't use it in clone
 						}
 						list.add(val);
@@ -3076,7 +3077,7 @@ w:use="foo.MyWindow"&gt;
 		 * It is used to prevent dead-loop between {@link #removeChild}
 		 * and {@link #setParent}.
 		 */
-		private transient Set[] _aring; //use an array to save memory
+		private transient Set<Component>[] _aring; //use an array to save memory
 		/** The modification count used to avoid co-modification of _next, _prev..
 		 */
 		private transient int modCntChd;
@@ -3127,10 +3128,11 @@ w:use="foo.MyWindow"&gt;
 		private void markAdding(Component child, boolean set) {
 			markARing(child, set, 0);
 		}
+		@SuppressWarnings("unchecked")
 		private void markARing(Component child, boolean set, int which) {
 			if (set) {
 				if (_aring == null) _aring = new Set[2];
-				if (_aring[which] == null) _aring[which] = new HashSet(2);
+				if (_aring[which] == null) _aring[which] = new HashSet<Component>(2);
 				_aring[which].add(child);
 			} else if (_aring != null && _aring[which] != null
 			&& _aring[which].remove(child) && _aring[which].isEmpty())
@@ -3138,6 +3140,15 @@ w:use="foo.MyWindow"&gt;
 					_aring = null;
 				else
 					_aring[which] = null;
+		}
+	}
+	private static class ForwardInfo {
+		private final EventListener listener;
+		//List([target or targetPath, targetEvent, eventData])]
+		private final List<Object[]> targets;
+		private ForwardInfo(EventListener listener, List<Object[]> targets) {
+			this.listener = listener;
+			this.targets = targets;
 		}
 	}
 }

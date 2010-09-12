@@ -26,7 +26,7 @@ import java.util.Map;
 public interface Scope {
 	/** Returns all custom attributes associated with this object (scope).
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 	/** Returns the custom attribute associated with this object (scope).
 	 */
 	public Object getAttribute(String name);

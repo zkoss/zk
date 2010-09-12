@@ -36,7 +36,7 @@ public interface Evaluator extends java.io.Serializable {
 	 * later.
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
-	public Expression parseExpression(String expression, Class expectedType)
+	public Expression parseExpression(String expression, Class<?> expectedType)
 	throws XelException;
 	/**
 	 * Evaluates the expression.

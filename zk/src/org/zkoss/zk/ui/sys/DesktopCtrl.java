@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * An addition interface to {@link Desktop}
@@ -151,7 +152,7 @@ if (c.isEmpty()) {
   }
 }</code></pre>
 	 */
-	public Collection getSuspendedThreads();
+	public Collection<EventProcessingThread> getSuspendedThreads();
 	/** Ceases the specified event thread.
 	 *
 	 * @param cause an arbitrary text to describe the cause.
@@ -295,7 +296,7 @@ if (c.isEmpty()) {
 	 * such that no error message will be displayed at the client.
 	 * @since 3.0.6
 	 */
-	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs);
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List<Throwable> errs);
 
 	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentAttached}.
 	 * @since 3.0.6
@@ -366,7 +367,7 @@ if (c.isEmpty()) {
 	 * if nothing in the queue.
 	 * @since 5.0.0
 	 */
-	public List piggyResponse(List response, boolean reset);
+	public List<AuResponse> piggyResponse(Collection<AuResponse> response, boolean reset);
 
 	/** Activates the server push.
 	 * It is called by {@link org.zkoss.zk.ui.Executions#activate}.

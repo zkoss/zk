@@ -34,10 +34,10 @@ public class MethodFunction extends SerializableMethod implements Function {
 		super(method);
 	}
 
-	public Class[] getParameterTypes() {
+	public Class<?>[] getParameterTypes() {
 		return getMethod().getParameterTypes();
 	}
-	public Class getReturnType() {
+	public Class<?> getReturnType() {
 		return getMethod().getReturnType();
 	}
 	public Object invoke(Object obj, Object[] args) throws Exception {

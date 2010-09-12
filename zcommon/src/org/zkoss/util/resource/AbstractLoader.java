@@ -25,13 +25,13 @@ import java.net.URL;
  *
  * @author tomyeh
  */
-abstract public class AbstractLoader implements Loader {
+abstract public class AbstractLoader<K, V> implements Loader<K, V> {
 	//-- Loader --//
-	public boolean shallCheck(Object src, long expiredMillis) {
+	public boolean shallCheck(K src, long expiredMillis) {
 		return expiredMillis > 0;
 		//FUTURE: prolong if src.url's protocol is http, https or ftp
 	}
-	public long getLastModified(Object src) {
+	public long getLastModified(K src) {
 		if (src instanceof URL) {
 		//Due to round-trip, we don't retrieve last-modified
 			final URL url = (URL)src;

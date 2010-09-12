@@ -33,6 +33,7 @@ import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.taglib.FunctionDefinition;
 import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Page;
@@ -64,11 +65,11 @@ public class PageDefinition extends NodeInfo {
 	private String _path = "";
 	/** The zscript language. */
 	private String _zslang = "Java";
-	private List _taglibs;
+	private List<Taglib> _taglibs;
 	/** A map of imported classes for expression, Map<String nm, Class cls>. */
-	private Map _expimps;
-	/** A map of XEL methods, List<[String prefix, String name, Function func]>. */
-	private List _xelmtds;
+	private Map<String, Class<?>> _expimps;
+	/** A list of XEL methods, List<FunctionDefinition>. */
+	private List<FunctionDefinition> _xelfuncs;
 	/** The evaluator. */
 	private Evaluator _eval;
 	/** The evaluator reference. */
@@ -254,10 +255,9 @@ public class PageDefinition extends NodeInfo {
 		}
 
 		if (pgdef._taglibs != null
-		&& directives != null && contains(directives, "taglib")) {
-			for (Iterator it = pgdef._taglibs.iterator(); it.hasNext();)
-				addTaglib((Taglib)it.next());
-		}
+		&& directives != null && contains(directives, "taglib"))
+			for (Taglib tl: _taglibs)
+				addTaglib(tl);
 
 		if (pgdef._resolvdefs != null
 		&& directives != null && contains(directives, "variable-resolver")) {
@@ -271,13 +271,10 @@ public class PageDefinition extends NodeInfo {
 				addFunctionMapperInfo((FunctionMapperInfo)it.next());
 		}
 
-		if (pgdef._xelmtds != null
-		&& directives != null && contains(directives, "xel-method")) {
-			for (Iterator it = pgdef._xelmtds.iterator(); it.hasNext();) {
-				final Object[] inf = (Object[])it.next();
-				addXelMethod((String)inf[0], (String)inf[1], (Function)inf[2]);
-			}
-		}
+		if (pgdef._xelfuncs != null
+		&& directives != null && contains(directives, "xel-method"))
+			for (FunctionDefinition xfi: _xelfuncs)
+				addXelMethod(xfi.prefix, xfi.name, xfi.function);
 
 		if (pgdef._hdBfrDefs != null
 		&& directives != null && contains(directives, "meta")) {
@@ -374,9 +371,9 @@ public class PageDefinition extends NodeInfo {
 	public void addXelMethod(String prefix, String name, Function func) {
 		if (name == null || prefix == null || func == null)
 			throw new IllegalArgumentException();
-		if (_xelmtds == null)
-			_xelmtds = new LinkedList();
-		_xelmtds.add(new Object[] {prefix, name, func});
+		if (_xelfuncs == null)
+			_xelfuncs = new LinkedList<FunctionDefinition>();
+		_xelfuncs.add(new FunctionDefinition(prefix, name, func));
 		_eval = null; //ask for re-gen
 		_mapper = null; //ask for re-parse
 	}
@@ -771,7 +768,7 @@ public class PageDefinition extends NodeInfo {
 			throw new IllegalArgumentException("null");
 
 		if (_taglibs == null)
-			_taglibs = new LinkedList();
+			_taglibs = new LinkedList<Taglib>();
 		_taglibs.add(taglib);
 		_eval = null; //ask for re-gen
 		_mapper = null; //ask for re-parse
@@ -779,11 +776,11 @@ public class PageDefinition extends NodeInfo {
 	/** Adds an imported class to the expression factory.
 	 * @since 3.0.0
 	 */
-	public void addExpressionImport(String nm, Class cls) {
+	public void addExpressionImport(String nm, Class<?> cls) {
 		if (nm == null || cls == null)
 			throw new IllegalArgumentException();
 		if (_expimps == null)
-			_expimps = new HashMap(4);
+			_expimps = new HashMap<String, Class<?>>(4);
 		_expimps.put(nm, cls);
 		_eval = null; //ask for re-gen
 		_mapper = null; //ask for re-parse
@@ -849,7 +846,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public FunctionMapper getTaglibMapper() {
 		if (_mapper == null) {
-			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _xelmtds, _locator);
+			_mapper = Taglibs.getFunctionMapper(_taglibs, _expimps, _xelfuncs, _locator);
 			if (_mapper == null)
 				_mapper = Expressions.EMPTY_MAPPER;
 		}

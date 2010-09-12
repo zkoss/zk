@@ -38,10 +38,10 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @since 3.0.0
  */
 public class NativeInfo extends ComponentInfo {
-	private List _prokids, _epikids;
+	private List<Object> _prokids, _epikids;
 	private NativeInfo _splitkid;
 	/** Declared namespaces (Namespace). */
-	private List _dns;
+	private List<Namespace> _dns;
 
 	/** Constructs a native info with a parent.
 	 *
@@ -65,14 +65,16 @@ public class NativeInfo extends ComponentInfo {
 
 	/** Returns a readonly list of the declared namespaces (never null).
 	 */
-	public List getDeclaredNamespaces() {
-		return _dns != null ? _dns: Collections.EMPTY_LIST;
+	public List<Namespace> getDeclaredNamespaces() {
+		if (_dns != null)
+			return _dns;
+		return Collections.emptyList();
 	}
 	/** Adds a declared namespace.
 	 */
 	public void addDeclaredNamespace(Namespace ns) {
 		if (_dns == null)
-			_dns = new LinkedList();
+			_dns = new LinkedList<Namespace>();
 		_dns.add(ns);
 	}
 
@@ -84,14 +86,18 @@ public class NativeInfo extends ComponentInfo {
 	 * In other words, a prolog child won't be created as part of
 	 * <p>The prolog children must be rendered before {@link #getChildren}.
 	 */
-	public List getPrologChildren() {
-		return _prokids != null ? _prokids: Collections.EMPTY_LIST;
+	public List<Object> getPrologChildren() {
+		if (_prokids != null)
+			return _prokids;
+		return Collections.emptyList();
 	}
 	/** Returns a readonly list of the epilog children ({@link NativeInfo}).
 	 * The epilog children must be rendered after {@link #getChildren}.
 	 */
-	public List getEpilogChildren() {
-		return _epikids != null ? _epikids: Collections.EMPTY_LIST;
+	public List<Object> getEpilogChildren() {
+		if (_epikids != null)
+			return _epikids;
+		return Collections.emptyList();
 	}
 	/** Adds a prolog child.
 	 *
@@ -145,7 +151,7 @@ public class NativeInfo extends ComponentInfo {
 	 */
 	/*package*/ void addPrologChildDirectly(Object child) {
 		if (_prokids == null)
-			_prokids = new LinkedList();
+			_prokids = new LinkedList<Object>();
 		_prokids.add(child);
 	}
 	/** Adds an epilog child.
@@ -189,7 +195,7 @@ public class NativeInfo extends ComponentInfo {
 	 */
 	/*package*/ void addEpilogChildDirectly(Object child) {
 		if (_epikids == null)
-			_epikids = new LinkedList();
+			_epikids = new LinkedList<Object>();
 		_epikids.add(child);
 	}
 
@@ -218,8 +224,8 @@ public class NativeInfo extends ComponentInfo {
 
 		if (_dns != null) {
 			final Native nc = (Native)comp;
-			for (Iterator it = _dns.iterator(); it.hasNext();)
-				nc.addDeclaredNamespace((Namespace)it.next());
+			for (Namespace ns: _dns)
+				nc.addDeclaredNamespace(ns);
 		}
 
 		return comp;
@@ -227,9 +233,9 @@ public class NativeInfo extends ComponentInfo {
 	public Object clone() {
 		final NativeInfo clone = (NativeInfo)super.clone();
 		if (clone._prokids != null)
-			clone._prokids = new LinkedList(clone._prokids);
+			clone._prokids = new LinkedList<Object>(clone._prokids);
 		if (clone._epikids != null)
-			clone._epikids = new LinkedList(clone._epikids);
+			clone._epikids = new LinkedList<Object>(clone._epikids);
 		return clone;
 	}
 }

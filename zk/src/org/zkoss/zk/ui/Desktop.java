@@ -116,7 +116,7 @@ public interface Desktop extends Scope {
 	public Page getPageIfAny(String pageId);
 	/** Returns a readonly collection of all {@link Page} in this desktop.
 	 */
-	public Collection getPages();
+	public Collection<Page> getPages();
 	/** Returns the first page, or null if no page at all (happens when the desktop
 	 * has been destroyed)
 	 * @since 5.0.3
@@ -128,7 +128,7 @@ public interface Desktop extends Scope {
 
 	/** Returns all custom attributes associated with this desktop.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 	/** Returns the value of the specified custom attribute associated with the desktop.
 	 */
 	public Object getAttribute(String name);
@@ -141,7 +141,7 @@ public interface Desktop extends Scope {
 
 	/** Returns all components contained in this desktop.
 	 */
-	public Collection getComponents();
+	public Collection<Component> getComponents();
 	/** Returns the component of the specified UUID ({@link Component#getUuid}).
 	 * @exception ComponentNotFoundException if component not found
 	 */

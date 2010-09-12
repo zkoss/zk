@@ -179,7 +179,7 @@ public interface ComponentCtrl {
 	 * @see Component#getWidgetListenerNames
 	 * @since 3.0.2
 	 */
-	public Set getEventHandlerNames();
+	public Set<String> getEventHandlerNames();
 
 	/** Returned by {@link #getClientEvents} to indicate the event is important
 	 * and the client must send it back even if no listener is registered.
@@ -217,7 +217,7 @@ public interface ComponentCtrl {
 	 *
 	 * @since 5.0.0
 	 */
-	public Map getClientEvents();
+	public Map<String, Integer> getClientEvents();
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.
@@ -285,7 +285,7 @@ public interface ComponentCtrl {
 	 * @param annotAttrs a map of attributes, or null if no attribute.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String annotName, Map annotAttrs);
+	public void addAnnotation(String annotName, Map<String, String> annotAttrs);
 	/** Adds an annotation to the specified proeprty of this component.
 	 *
 	 * @param propName the property name (never nul, nor empty).
@@ -293,7 +293,7 @@ public interface ComponentCtrl {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map annotAttrs);
+	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs);
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).

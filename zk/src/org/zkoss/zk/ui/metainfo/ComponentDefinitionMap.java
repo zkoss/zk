@@ -34,9 +34,9 @@ import java.util.Iterator;
 public class ComponentDefinitionMap
 implements Cloneable, java.io.Serializable {
 	/** A map of component definition defined in this page. */
-	private transient Map _compdefs;
+	private transient Map<String, ComponentDefinition> _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
-	private transient Map _compdefsByClass;
+	private transient Map<String, ComponentDefinition> _compdefsByClass;
 	/** Whether the element name is case-insensitive. */
 	private final boolean _ignoreCase;
 
@@ -56,17 +56,19 @@ implements Cloneable, java.io.Serializable {
 	/** Returns a readonly collection of the names (String)
 	 * of component definitions defined in this map.
 	 */
-	public Collection getNames() {
-		return _compdefs != null ?
-			_compdefs.keySet(): (Collection)Collections.EMPTY_LIST;
+	public Collection<String> getNames() {
+		if (_compdefs != null)
+			return _compdefs.keySet();
+		return Collections.emptyList();
 	}
 	/** Returns a readonly collection of component definitions
 	 * ({@link ComponentDefinition}) defined in this map.
 	 * @since 3.6.3
 	 */
-	public Collection getDefinitions() {
-		return _compdefs != null ?
-			_compdefs.values(): (Collection)Collections.EMPTY_LIST;
+	public Collection<ComponentDefinition> getDefinitions() {
+		if (_compdefs != null)
+			return _compdefs.values();
+		return Collections.emptyList();
 	}
 
 	/** Adds a component definition to this map.
@@ -88,13 +90,13 @@ implements Cloneable, java.io.Serializable {
 		synchronized (this) {
 			if (_compdefs == null) {
 				_compdefsByClass =
-					Collections.synchronizedMap(new HashMap(3));
+					Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
 				_compdefs =
-					Collections.synchronizedMap(new HashMap(3));
+					Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
 			}
 
 			_compdefs.put(name, compdef);
-			_compdefsByClass.put(implcls, compdef);
+			_compdefsByClass.put((String)implcls, compdef);
 		}
 	}
 	/** Returns whether the specified component exists.
@@ -146,8 +148,8 @@ implements Cloneable, java.io.Serializable {
 		if (_compdefs != null) {
 			synchronized (_compdefs) {
 				s.writeInt(_compdefs.size());
-				for (Iterator it = _compdefs.values().iterator(); it.hasNext();)
-					s.writeObject(it.next());
+				for (ComponentDefinition compdef: _compdefs.values())
+					s.writeObject(compdef);
 			}
 		} else {
 			s.writeInt(0);
@@ -168,9 +170,9 @@ implements Cloneable, java.io.Serializable {
 		try {
 			clone = (ComponentDefinitionMap)super.clone();
 			clone._compdefs =
-				Collections.synchronizedMap(new HashMap(_compdefs));
+				Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefs));
 			clone._compdefsByClass =
-				Collections.synchronizedMap(new HashMap(_compdefsByClass));
+				Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefsByClass));
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}

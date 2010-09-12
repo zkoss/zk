@@ -22,17 +22,17 @@ package org.zkoss.util.resource;
  *
  * @author tomyeh
  */
-public interface Loader {
+public interface Loader<K, V> {
 	/** Returns whether to call {@link #getLastModified}.
 	 * If false, it assumes the current cached content is up-to-date.
 	 *
 	 * @param expiredMillis how many milli-seconds are expired after the last
 	 * check. In most cases, just return true if expiredMillis > 0
 	 */
-	public boolean shallCheck(Object src, long expiredMillis);
+	public boolean shallCheck(K src, long expiredMillis);
 	/** Returns the last modified time, or -1 if reload is required or not exists.
 	 */
-	public long getLastModified(Object src);
+	public long getLastModified(K src);
 	/** Loads the resource.
 	 *
 	 * <p>The returned resource could be anything. It will be returned
@@ -46,22 +46,22 @@ public interface Loader {
 	 * @exception Exception you might throw any exception which will be
 	 * passed back to the caller of {@link ResourceCache#get}
 	 */
-	public Object load(Object src) throws Exception;
+	public V load(K src) throws Exception;
 
 	/** Represents the more information about an object loaded by
 	 * {@link Loader#load}.
 	 *
 	 * @since 5.0.0
 	 */
-	public class Resource {
+	public class Resource<V> {
 		/** The real resource that shall be returned by {@link ResourceCache#get}.
 		 */
-		public final Object resource;
+		public final V resource;
 		/** Whether the resource shall be cached in {@link ResourceCache}.
 		 */
 		public final boolean cacheable;
 
-		public Resource(Object resource, boolean cacheable) {
+		public Resource(V resource, boolean cacheable) {
 			this.cacheable = cacheable;
 			this.resource = resource;
 		}

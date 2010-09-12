@@ -57,7 +57,7 @@ public interface Cropper {
 	 * parents. It is useful if you want to implement multi-level cropping,
 	 * such as tree. Refer to {@link #getCropOwner}.
 	 */
-	public Set getAvailableAtClient();
+	public Set<Component> getAvailableAtClient();
 	/** Returns the owner of the cropping scope.
 	 * In most cases, {@link #getAvailableAtClient} returns only the
 	 * available direct children of this compnent,

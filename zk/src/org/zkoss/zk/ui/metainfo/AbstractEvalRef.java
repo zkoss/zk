@@ -36,7 +36,7 @@ abstract /*package*/ class AbstractEvalRef implements EvaluatorRef {
 	}
 
 	//Evaluator//
-	public Expression parseExpression(String expression, Class expectedType)
+	public Expression parseExpression(String expression, Class<?> expectedType)
 	throws XelException {
 		return getEvaluator().parseExpression(expression, expectedType);
 	}

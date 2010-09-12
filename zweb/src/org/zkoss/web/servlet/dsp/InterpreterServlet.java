@@ -37,7 +37,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.io.Files;
 import org.zkoss.xel.taglib.Taglibs;
@@ -46,6 +45,7 @@ import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.web.util.resource.ResourceCache;
 import org.zkoss.web.util.resource.ResourceLoader;
 import org.zkoss.web.util.resource.ClassWebResource;
 
@@ -168,7 +168,8 @@ public class InterpreterServlet extends HttpServlet {
 	}
 
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.servlet.dsp.PageCache";
-	private final ResourceCache getCache() {
+	@SuppressWarnings("unchecked")
+	private final ResourceCache<Interpretation> getCache() {
 		ResourceCache cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (InterpreterServlet.class) {
@@ -183,11 +184,11 @@ public class InterpreterServlet extends HttpServlet {
 		}
 		return cache;
 	}
-	private class MyLoader extends ResourceLoader {
+	private class MyLoader extends ResourceLoader<Interpretation> {
 		private MyLoader() {
 		}
 		//-- super --//
-		protected Object parse(String path, File file, Object extra)
+		protected Interpretation parse(String path, File file, Object extra)
 		throws Exception {
 			final InputStream is = new BufferedInputStream(new FileInputStream(file));
 			try {
@@ -203,7 +204,7 @@ public class InterpreterServlet extends HttpServlet {
 				Files.close(is);
 			}
 		}
-		protected Object parse(String path, URL url, Object extra)
+		protected Interpretation parse(String path, URL url, Object extra)
 		throws Exception {
 			InputStream is = url.openStream();
 			if (is != null) is = new BufferedInputStream(is);
@@ -220,7 +221,7 @@ public class InterpreterServlet extends HttpServlet {
 				Files.close(is);
 			}
 		}
-		private Object parse0(InputStream is, String ctype) throws Exception {
+		private Interpretation parse0(InputStream is, String ctype) throws Exception {
 			if (is == null) return null;
 
 			final String content =

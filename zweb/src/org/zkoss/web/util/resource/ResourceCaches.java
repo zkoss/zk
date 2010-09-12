@@ -28,31 +28,25 @@ import javax.servlet.ServletContext;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 
 import org.zkoss.web.servlet.Servlets;
 
 /**
- * Utilities to load (and parse) the servlet resource.
+ * Utilities to load (and parse) the Servlet resource.
+ * Notice that {@link ResourceCache} and {@link ResourceLoader}
+ * must be used rather than
+ * {@link org.zkoss.util.resource.ResourceCache}
+ * and {@link org.zkoss.util.resource.Loader}.
  *
- * <p>Usage 1:
- * <ol>
- * <li>Use {@link #getContent} to load the resource into a String-type content.
- * </ol>
- *
- * <p>Usage 2:
+ * <p>Usage:
  * <ol>
  * <li>Implements a loader by extending from {@link ResourceLoader}.</li>
  * <li>Creates a resource cache ({@link ResourceCache})
  * by use of the loader in the previous step.</li>
  * <li>Invoke {@link #get} to load the resource.</li>
  * </ol>
- *
- * <p>Usage 2 has better performance because you need to parse the content
- * only once. Usage 1 is simple if you don't pase it into any intermediate
- * format.
  *
  * @author tomyeh
  */
@@ -63,9 +57,6 @@ public class ResourceCaches {
 	 * or null if not found. The parser is defined by the loader defined
 	 * in {@link ResourceCache}.
 	 *
-	 * <p>If you don't need to parse the content, you might use
-	 * {@link #getContent}
-	 *
 	 * @param cache the resource cache.
 	 * Note: its loader must extend from {@link ResourceLoader}.
 	 * @param path the URI path
@@ -73,8 +64,8 @@ public class ResourceCaches {
 	 * {@link ResourceLoader#parse(String,File,Object)} and
 	 * {@link ResourceLoader#parse(String,URL,Object)}
 	 */
-	public static final
-	Object get(ResourceCache cache, ServletContext ctx, String path, Object extra) {
+	public static final <V>
+	V get(ResourceCache<V> cache, ServletContext ctx, String path, Object extra) {
 	//20050905: Tom Yeh
 	//We don't need to handle the default name if user specifies only a dir
 	//because it is handled by the container directlys
@@ -141,67 +132,5 @@ public class ResourceCaches {
 			log.warning("Unable to load "+path+"\n"+Exceptions.getMessage(ex));
 		}
 		return null;
-	}
-
-	//-- direct content without parser. --//
-	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.util.resource.PageCache";
-
-	/** Returns the content of the specified path, or null if not found.
-	 *
-	 * <p> The content is returned directly as a string without any parsing.
-	 *
-	 * <p>Note: the encoding is assumed to be "UTF-8".
-	 *
-	 * @param path the URI path
-	 */
-	public static final
-	String getContent(ServletContext ctx, String path) {
-		return (String)get(getCache(ctx), ctx, path, null);
-	}
-	private static final ResourceCache getCache(ServletContext ctx) {
-		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
-		if (cache == null) {
-			synchronized (ResourceCaches.class) {
-				cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
-				if (cache == null) {
-					cache = new ResourceCache(new ContentLoader(ctx), 29);
-					cache.setMaxSize(1024);
-					cache.setLifetime(60*60*1000); //1hr
-					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
-				}
-			}
-		}
-		return cache;
-	}
-	private static class ContentLoader extends ResourceLoader {
-		private final ServletContext _ctx;
-		private ContentLoader(ServletContext ctx) {
-			_ctx = ctx;
-		}
-
-		//-- super --//
-		protected Object parse(String path, File file, Object extra)
-		throws Exception {
-			final InputStream is = new BufferedInputStream(new FileInputStream(file));
-			try {
-				return readAll(is);
-			} finally {
-				Files.close(is);
-			}
-		}
-		protected Object parse(String path, URL url, Object extra)
-		throws Exception {
-			InputStream is = url.openStream();
-			if (is != null) is = new BufferedInputStream(is);
-			try {
-				return readAll(is);
-			} finally {
-				Files.close(is);
-			}
-		}
-		private String readAll(InputStream is) throws Exception {
-			if (is == null) return null;
-			return Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
-		}
 	}
 }

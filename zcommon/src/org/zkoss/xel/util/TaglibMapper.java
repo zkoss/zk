@@ -31,6 +31,7 @@ import org.zkoss.xel.Function;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.taglib.TaglibDefinition;
 
 /**
  * A function mapper that is capable to load function and class definitions
@@ -123,21 +124,18 @@ public class TaglibMapper implements FunctionMapper, Cloneable, java.io.Serializ
 			throw XelException.Aide.wrap(ex);
 		}
 	}
-	@SuppressWarnings("unchecked")
-	private void load0(String prefix, Map[] loaded) {
-		if (!loaded[0].isEmpty()) {
+	private void load0(String prefix, TaglibDefinition loaded) {
+		if (!loaded.functions.isEmpty()) {
 			if (_mtds == null)
 				_mtds = new HashMap<String, Function>(8);
-			for (Iterator e = loaded[0].entrySet().iterator(); e.hasNext();) {
-				final Map.Entry me = (Map.Entry)e.next();
-				addFunction(prefix, (String)me.getKey(), (Function)me.getValue());
-			}
+			for (Map.Entry<String, Function> me: loaded.functions.entrySet())
+				addFunction(prefix, me.getKey(), me.getValue());
 		}
 
-		if (!loaded[1].isEmpty()) {
+		if (!loaded.classes.isEmpty()) {
 			if (_clses == null)
 				_clses = new HashMap<String, Class>(4);
-			_clses.putAll(loaded[1]);
+			_clses.putAll(loaded.classes);
 		}
 	}
 

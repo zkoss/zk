@@ -44,7 +44,7 @@ import org.zkoss.zk.ui.ext.ScopeListener;
  */
 public class SimpleScope implements Scope {
 	private final Scope _owner;
-	private Map _attrs;
+	private Map<String, Object> _attrs;
 	private final ScopeListeners _listeners;
 
 	/** Constructor.
@@ -57,7 +57,7 @@ public class SimpleScope implements Scope {
 	}
 
 	//Scope//
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		if (_attrs == null) _attrs = new Attrs();
 		return _attrs;
 	}
@@ -118,7 +118,7 @@ public class SimpleScope implements Scope {
 	}
 	/** Returns a ist of all scope listners (never null).
 	 */
-	public List getListeners() {
+	public List<ScopeListener> getListeners() {
 		return _listeners.getListeners();
 	}
 
@@ -129,9 +129,8 @@ public class SimpleScope implements Scope {
 	public SimpleScope clone(Scope owner) {
 		final SimpleScope clone = new SimpleScope(owner);
 		if (_attrs != null) {
-			clone._attrs = new HashMap();
-			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
+			clone._attrs = new HashMap<String, Object>();
+			for (Map.Entry<String, Object> me: _attrs.entrySet()) {
 				Object val = me.getValue();
 				if (val instanceof ComponentCloneListener
 				&& owner instanceof Component) {
@@ -142,14 +141,13 @@ public class SimpleScope implements Scope {
 			}
 		}
 
-		for (Iterator it = _listeners.getListeners().iterator(); it.hasNext();) {
-			Object val = it.next();
+		for (ScopeListener val: _listeners.getListeners()) {
 			if (val instanceof ComponentCloneListener
 			&& owner instanceof Component) {
-				val = ((ComponentCloneListener)val).willClone((Component)owner);
+				val = (ScopeListener)((ComponentCloneListener)val).willClone((Component)owner);
 				if (val == null) continue; //don't use it in clone
 			}
-			clone._listeners.addScopeListener((ScopeListener)val);
+			clone._listeners.addScopeListener(val);
 		}
 		return clone;
 	}
@@ -160,22 +158,24 @@ public class SimpleScope implements Scope {
 	}
 
 	//Helper Class//
-	private class Attrs extends HashMap {
+	private class Attrs extends HashMap<String, Object> {
 		public Object remove(Object key) {
 			final Object o = super.remove(key);
 			if (o != null) _listeners.notifyRemoved((String)key);
 			return o;
 		}
-		public Object put(Object key, Object val) {
+		public Object put(String key, Object val) {
 			final Object o = super.put(key, val);
-			if (o != null) _listeners.notifyReplaced((String)key, val);
-			else _listeners.notifyAdded((String)key, val);
+			if (o != null) _listeners.notifyReplaced(key, val);
+			else _listeners.notifyAdded(key, val);
 			return o;
 		}
-		public Set entrySet() {
+		@SuppressWarnings("unchecked")
+		public Set<Map.Entry<String, Object>> entrySet() {
 			return new AttrSet(super.entrySet(), true);
 		}
-		public Set keySet() {
+		@SuppressWarnings("unchecked")
+		public Set<String> keySet() {
 			return new AttrSet(super.keySet(), false);
 		}
 		private class AttrSet extends AbstractSet {
@@ -191,6 +191,7 @@ public class SimpleScope implements Scope {
 			public int size() {
 				return _set.size();
 			}
+			@SuppressWarnings("unchecked")
 			public boolean add(Object o) {
 				if (_set.add(o)) {
 					if (_entry) {

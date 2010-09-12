@@ -32,12 +32,12 @@ public interface Function {
 	 * <p>Returns an array of length 0 if the underlying method
 	 * takes no parameters.
 	 */
-	public Class[] getParameterTypes();
+	public Class<?>[] getParameterTypes();
 	/** Returns a Class object that represents the formal return type
 	 * of the method
 	 * represented by this Method object.
 	 */
-	public Class getReturnType();
+	public Class<?> getReturnType();
 	/** Invokes this method with the specified arguments.
 	 *
 	 * @param obj the object the underlying method is invoked from.

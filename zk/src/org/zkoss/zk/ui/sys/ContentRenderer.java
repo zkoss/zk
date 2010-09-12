@@ -78,7 +78,7 @@ public interface ContentRenderer {
 	 * snippet (such as <code>this.getFellow('inf').setValue('new')</code>).
 	 * They are both String instances.
 	 */
-	public void renderWidgetListeners(Map listeners);
+	public void renderWidgetListeners(Map<String, String> listeners);
 	/** Renders the client code snippet to override the methods
 	 * and properties of the peer widget.
 	 *
@@ -89,11 +89,11 @@ public interface ContentRenderer {
 	 * For example, the map will be generated as follows by {@link JsContentRenderer}:<br/>
 	 * <code>{name1: value1, name2: value2}</code>.
 	 */
-	public void renderWidgetOverrides(Map overrides);
+	public void renderWidgetOverrides(Map<String, String> overrides);
 	/** Renders the client's DOM attributes for the peer widgets.
 	 * @param attrs the map of attributes. The key is the attribute's name,
 	 * while the value is the attribute's value. They are both instances of String.
 	 * @since 5.0.3
 	 */
-	public void renderWidgetAttributes(Map attrs);
+	public void renderWidgetAttributes(Map<String, String> attrs);
 }

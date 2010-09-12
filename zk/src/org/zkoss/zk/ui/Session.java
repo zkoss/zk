@@ -66,7 +66,7 @@ public interface Session extends Scope {
 
 	/** Returns a map of custom attributes associated with this session.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 
 	/** Returns the Web application that this session belongs to.
 	 */

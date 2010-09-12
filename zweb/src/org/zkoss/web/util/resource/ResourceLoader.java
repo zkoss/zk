@@ -31,7 +31,7 @@ import org.zkoss.util.logging.Log;
  *
  * @author tomyeh
  */
-abstract public class ResourceLoader implements Loader {
+abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	private static final Log log = Log.lookup(ResourceLoader.class);
 
 	protected ResourceLoader() {
@@ -44,7 +44,7 @@ abstract public class ResourceLoader implements Loader {
 	 *
 	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected Object parse(String path, File file, Object extra)
+	abstract protected V parse(String path, File file, Object extra)
 	throws Exception;
 	/** Parses the specified URL and returns the result which
 	 * will be stored into the cache ({@link ResourceCaches#get}).
@@ -53,22 +53,21 @@ abstract public class ResourceLoader implements Loader {
 	 *
 	 * @param extra the extra paramter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected Object parse(String path, URL url, Object extra)
+	abstract protected V parse(String path, URL url, Object extra)
 	throws Exception;
 
-	public boolean shallCheck(Object src, long expiredMillis) {
+	public boolean shallCheck(ResourceInfo src, long expiredMillis) {
 		return expiredMillis > 0;
 		//FUTURE: prolong if src.url's protocol is http, https or ftp
 	}
-	public long getLastModified(Object src) {
-		final ResourceInfo si =(ResourceInfo)src;
-		if (si.url != null) {
+	public long getLastModified(ResourceInfo src) {
+		if (src.url != null) {
 		//Due to round-trip, we don't retrieve last-modified
-			final String protocol = si.url.getProtocol().toLowerCase();
+			final String protocol = src.url.getProtocol().toLowerCase();
 			if (!"http".equals(protocol) && !"https".equals(protocol)
 			&& !"ftp".equals(protocol)) {
 				try {
-					return si.url.openConnection().getLastModified();
+					return src.url.openConnection().getLastModified();
 				} catch (Throwable ex) {
 					return -1; //reload
 				}
@@ -76,20 +75,19 @@ abstract public class ResourceLoader implements Loader {
 			return -1; //reload
 		}
 
-		return si.file.lastModified();
+		return src.file.lastModified();
 	}
-	public Object load(Object src) throws Exception {
-		final ResourceInfo si =(ResourceInfo)src;
-		if (si.url != null)
-			return parse(si.path, si.url, si.extra);
+	public V load(ResourceInfo src) throws Exception {
+		if (src.url != null)
+			return parse(src.path, src.url, src.extra);
 
-		if (!si.file.exists()) {
-			if (D.ON && log.debugable()) log.debug("Not found: "+si.file);
+		if (!src.file.exists()) {
+			if (D.ON && log.debugable()) log.debug("Not found: "+src.file);
 			return null; //File not found
 		}
-		if (D.ON && log.debugable()) log.debug("Loading "+si.file);
+		if (D.ON && log.debugable()) log.debug("Loading "+src.file);
 		try {
-			return parse(si.path, si.file, si.extra);
+			return parse(src.path, src.file, src.extra);
 		} catch (FileNotFoundException ex) {
 			return null;
 		}

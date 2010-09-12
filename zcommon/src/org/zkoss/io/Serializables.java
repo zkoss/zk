@@ -19,6 +19,7 @@ package org.zkoss.io;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.io.Serializable;
@@ -93,6 +94,25 @@ public class Serializables {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> smartRead(ObjectInputStream s, Collection<T> col)
+	throws IOException, ClassNotFoundException {
+		for (;;) {
+			final Object val = s.readObject();
+			if (val == null) break; //no more
+
+			if (col == null) col = new LinkedList<T>();
+			col.add((T)val);
+		}
+		return col;
+	}
+	/** Reads serializable elements back (serialized by {@link #smartWrite(ObjectOutputStream,Collection)})
+	 *
+	 * @param col the collection to hold the data beinig read. If null and
+	 * and data is read, a new collection (LinkedList) is created and returned.
+	 * @return the collection being read
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> smartRead(ObjectInputStream s, List<T> col)
 	throws IOException, ClassNotFoundException {
 		for (;;) {
 			final Object val = s.readObject();

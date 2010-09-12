@@ -55,7 +55,7 @@ public class Taglibs {
 	private static final Log log = Log.lookup(Taglibs.class);
 
 	//Loading of TLD files//
-	private static final ResourceCache _reces;
+	private static final ResourceCache<URL, TaglibDefinition> _reces;
 
 	/** Retursn the function mapper representing a list of {@link Taglib}
 	 * and imports, or null if nothing is loaded.
@@ -70,8 +70,8 @@ public class Taglibs {
 	 * @since 3.0.0
 	 */
 	public static final
-	FunctionMapper getFunctionMapper(List taglibs, Map imports, Locator loc) {
-		return getFunctionMapper((Collection)taglibs, imports, null, loc);
+	FunctionMapper getFunctionMapper(List<Taglib> taglibs, Map<String, Class<?>> imports, Locator loc) {
+		return getFunctionMapper((Collection<Taglib>)taglibs, imports, null, loc);
 	}
 	/** Retursn the function mapper representing a collection of {@link Taglib}
 	 * and imports, or null if nothing is loaded.
@@ -86,7 +86,7 @@ public class Taglibs {
 	 * @since 5.0.0
 	 */
 	public static final
-	FunctionMapper getFunctionMapper(Collection taglibs, Map imports, Locator loc) {
+	FunctionMapper getFunctionMapper(Collection<Taglib> taglibs, Map<String, Class<?>> imports, Locator loc) {
 		return getFunctionMapper(taglibs, imports, null, loc);
 	}
 	/** Retursn the function mapper representing a list of {@link Taglib},
@@ -105,9 +105,9 @@ public class Taglibs {
 	 * @param loc the locator used to load taglib
 	 * @since 3.0.0
 	 */
-	public static final FunctionMapper getFunctionMapper(List taglibs,
-	Map imports, List funcs, Locator loc) {
-		return getFunctionMapper((Collection)taglibs, imports, funcs, loc);
+	public static final FunctionMapper getFunctionMapper(List<Taglib> taglibs,
+	Map<String, Class<?>> imports, List<FunctionDefinition> funcs, Locator loc) {
+		return getFunctionMapper((Collection<Taglib>)taglibs, imports, funcs, loc);
 	}
 	/** Retursn the function mapper representing a collection of {@link Taglib},
 	 * imports and functions, or null if nothing is loaded.
@@ -125,13 +125,13 @@ public class Taglibs {
 	 * @param loc the locator used to load taglib
 	 * @since 5.0.0
 	 */
-	public static final FunctionMapper getFunctionMapper(Collection taglibs,
-	Map imports, Collection funcs, Locator loc) {
+	public static final FunctionMapper getFunctionMapper(Collection<Taglib> taglibs,
+	Map<String, Class<?>> imports, Collection<FunctionDefinition> funcs, Locator loc) {
 		TaglibMapper mapper = null;
 		if (taglibs != null && !taglibs.isEmpty()) {
 			mapper = new TaglibMapper();
-			for (Iterator it = taglibs.iterator(); it.hasNext();)
-				mapper.load((Taglib)it.next(), loc);
+			for (Taglib taglib: taglibs)
+				mapper.load(taglib, loc);
 		}
 
 		if (imports != null && !imports.isEmpty()) {
@@ -148,11 +148,8 @@ public class Taglibs {
 			if (mapper == null)
 				mapper = new TaglibMapper();
 
-			for (Iterator it = funcs.iterator(); it.hasNext();) {
-				final Object[] o = (Object[])it.next();
-				mapper.addFunction(
-					(String)o[0], (String)o[1], (Function)o[2]);
-			}
+			for (FunctionDefinition fi: funcs)
+				mapper.addFunction(fi.prefix, fi.name, fi.function);
 		}
 		return mapper;
 	}
@@ -165,8 +162,8 @@ public class Taglibs {
 	 * @param loc the locator used to load taglib
 	 */
 	public static final
-	FunctionMapper getFunctionMapper(List taglibs, Locator loc) {
-		return getFunctionMapper((Collection)taglibs, null, loc);
+	FunctionMapper getFunctionMapper(List<Taglib> taglibs, Locator loc) {
+		return getFunctionMapper((Collection<Taglib>)taglibs, null, loc);
 	}
 	/** Retursn the function mapper representing a collection of {@link Taglib},
 	 * or null if nothin is loaded.
@@ -178,7 +175,7 @@ public class Taglibs {
 	 * @since 5.0.0
 	 */
 	public static final
-	FunctionMapper getFunctionMapper(Collection taglibs, Locator loc) {
+	FunctionMapper getFunctionMapper(Collection<Taglib> taglibs, Locator loc) {
 		return getFunctionMapper(taglibs, null, loc);
 	}
 
@@ -189,8 +186,8 @@ public class Taglibs {
 	 *
 	 * @return a map of functions: (String name, Function mtd).
 	 */
-	public static final Map loadFunctions(URL xmlURL) throws Exception {
-		return load(xmlURL)[0];
+	public static final Map<String, Function> loadFunctions(URL xmlURL) throws Exception {
+		return load(xmlURL).functions;
 	}
 	/** Loads functions defined in the specified DOM.
 	 *
@@ -199,22 +196,19 @@ public class Taglibs {
 	 *
 	 * @return a map of function: (String name, Function mtd).
 	 */
-	public static final Map loadFunctions(Element root) throws Exception {
-		return load(root)[0];
+	public static final Map<String, Function> loadFunctions(Element root) throws Exception {
+		return load(root).functions;
 	}
 	/** Loads functions and imports defined in the specified URL.
 	 *
 	 * <p>Note: this method will cache the result, so next invocation
 	 * with the same xmlURL will read directly from the cache.
 	 *
-	 * @return a two-element array
-	 * [Map&lt;String nm, Function mtd&gt;, Map&lt;String nm, Class cls&gt;].
-	 * The first element is the map of the functions.
-	 * The second element is the map of classes to import.
-	 * @since 3.0.0
+	 * @return the content of the taglib.
+	 * @since 6.0.0
 	 */
-	public static final Map[] load(URL xmlURL) throws Exception {
-		return (Map[])_reces.get(xmlURL);
+	public static final TaglibDefinition load(URL xmlURL) throws Exception {
+		return _reces.get(xmlURL);
 	}
 	/** Loads functions and imports defined in the specified DOM.
 	 *
@@ -227,10 +221,8 @@ public class Taglibs {
 	 * The second element is the map of classes to import.
 	 * @since 3.0.0
 	 */
-	public static final Map[] load(Element root) throws Exception {
-		final Map<String, MethodFunction> mtds = new HashMap<String, MethodFunction>();
-		final Map<String, Class> clses = new HashMap<String, Class>();
-
+	public static final TaglibDefinition load(Element root) throws Exception {
+		final TaglibDefinition tagdef = new TaglibDefinition();
 		Exception excp = null;
 		for (Element e: root.getElements("function")) {
 			final String name = IDOMs.getRequiredElementValue(e, "name");
@@ -248,7 +240,7 @@ public class Taglibs {
 			try {
 				final Method mtd = Classes.getMethodBySignature(cls, sig, null);
 				if ((mtd.getModifiers() & Modifier.STATIC) != 0)
-					mtds.put(name, new MethodFunction(mtd));
+					tagdef.functions.put(name, new MethodFunction(mtd));
 				else
 					log.error("Not a static method: "+mtd);
 			} catch (ClassNotFoundException ex) {
@@ -270,7 +262,7 @@ public class Taglibs {
 			final String name = IDOMs.getRequiredElementValue(e, "import-name");
 			final String clsnm = IDOMs.getRequiredElementValue(e, "import-class");
 			try {
-				clses.put(name, Classes.forNameByThread(clsnm));
+				tagdef.classes.put(name, Classes.forNameByThread(clsnm));
 			} catch (ClassNotFoundException ex) {
 				log.error("Class not found: "+clsnm+", "+e.getLocator(), ex);
 				excp = ex;
@@ -279,23 +271,23 @@ public class Taglibs {
 
 		if (excp != null)
 			throw excp;
-		return new Map[] {mtds, clses};
+		return tagdef;
 	}
 
 	static {
 		try {
- 			_reces = new ResourceCache(new TaglibLoader());
+ 			_reces = new ResourceCache<URL, TaglibDefinition>(new TaglibLoader());
  			_reces.setCheckPeriod(30*60*1000);
  		} catch (Exception ex) {
 			throw XelException.Aide.wrap(ex);
 		}
 	}
 
-	private static class TaglibLoader extends AbstractLoader {
+	private static class TaglibLoader extends AbstractLoader<URL, TaglibDefinition> {
 		//-- Loader --//
-		public Object load(Object src) throws Exception {
+		public TaglibDefinition load(URL src) throws Exception {
 			final Element root =
-				new SAXBuilder(true, false, true).build((URL)src).getRootElement();
+				new SAXBuilder(true, false, true).build(src).getRootElement();
 			return Taglibs.load(root);
 		}
 	}

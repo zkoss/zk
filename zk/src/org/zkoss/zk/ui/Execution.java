@@ -89,7 +89,7 @@ public interface Execution extends Scope {
 	/** Returns a Map of the parameters of this request.
 	 * Request parameters are extra information sent with the request.
 	 */
-	public Map getParameterMap();
+	public Map<String, String[]> getParameterMap();
 
 	/** Returns the evaluator (never null).
 	 * It is usually used to parse the expression into {@link org.zkoss.xel.Expression}
@@ -500,7 +500,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Map)
 	 */
 	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map arg);
+	Component parent, Map<?, ?> arg);
 	/** Creates components from a page file specified by an URI.
 	 * The created components become the child of the specified parent,
 	 * or become the root components of the current page if parent is specified
@@ -525,7 +525,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponents(String uri, Component parent,
-	Map arg);
+	Map<?, ?> arg);
 	/** Creates components from the raw content specified by a string.
 	 * The created components become the child of the specified parent,
 	 * or become the root components of the current page if parent is specified
@@ -557,7 +557,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(String content, String extension,
-	Component parent, Map arg);
+	Component parent, Map<?, ?> arg);
 	/** Creates components from the raw content specified by a DOM tree.
 	 * The created components become the child of the specified parent,
 	 * or become the root components of the current page if parent is specified
@@ -589,7 +589,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(Document content, String extension,
-	Component parent, Map arg);
+	Component parent, Map<?, ?> arg);
 	/** Creates components from the raw content read from the specified reader.
 	 * The created components become the child of the specified parent,
 	 * or become the root components of the current page if parent is specified
@@ -621,7 +621,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(String, String, Component, Map)
 	 */
 	public Component createComponentsDirectly(Reader reader, String extension,
-	Component parent, Map arg) throws IOException;
+	Component parent, Map<?, ?> arg) throws IOException;
 
 	/** Creates components that don't belong to any page
 	 * from the specified page definition.
@@ -634,7 +634,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Map)
 	 * @since 2.4.0
 	 */
-	public Component[] createComponents(PageDefinition pagedef, Map arg);
+	public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg);
 	/** Creates components that don't belong to any page
 	 * from a page file specified by an URI.
 	 *
@@ -652,7 +652,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Map)
 	 * @since 2.4.0
 	 */
-	public Component[] createComponents(String uri, Map arg);
+	public Component[] createComponents(String uri, Map<?, ?> arg);
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *
@@ -678,7 +678,7 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(String content, String extension,
-	Map arg);
+	Map<?, ?> arg);
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a DOM tree.
 	 *
@@ -704,7 +704,7 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(Document content, String extension,
-	Map arg);
+	Map<?, ?> arg);
 	/** Creates components that don't belong to any page
 	 * from the raw content read from the specified reader.
 	 *
@@ -730,7 +730,7 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public Component[] createComponentsDirectly(Reader reader, String extension,
-	Map arg) throws IOException;
+	Map<?, ?> arg) throws IOException;
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -779,12 +779,12 @@ public interface Execution extends Scope {
 	 * However, {@link org.zkoss.zk.ui.event.CreateEvent#getArg} preserves
 	 * the map for its event listeners.
 	 */
-	public Map getArg();
+	public Map<?, ?> getArg();
 	/** Pushes the parameters (aka., arg) that EL could refer it by the arg variable.
 	 * Remember to call {@link #popArg} in the finally clause.
 	 * @see #getArg
 	 */
-	public void pushArg(Map arg);
+	public void pushArg(Map<?, ?> arg);
 	/** Pops the parameters (aka., arg) that is pushed by {@link #pushArg}.
 	 * <p>It never throws an exception.
 	 * @see #getArg
@@ -911,7 +911,7 @@ public interface Execution extends Scope {
 	public Object removeAttribute(String name);
 	/** Returns a map of request attributes associated with this session.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 
 	/** Returns the value of the specified header as a {@link String},
 	 * or null if not found.

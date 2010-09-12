@@ -90,7 +90,7 @@ public interface WebApp extends Scope, Locator {
 
 	/** Returns a map of custom attributes associated with this object.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 
 	/** Returns the WebApp that corresponds to a specified URL on the server,
 	 * or null if either none exists or the container wishes to restrict
@@ -156,7 +156,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 </code>
 </pre>
 	 */
-	public Set getResourcePaths(String path);
+	public Set<String> getResourcePaths(String path);
 
 	/** Returns the value of the named context-wide initialization parameter,
 	 * or null if the parameter does not exist.
@@ -166,7 +166,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * an Iterator of String objects, or an empty Iterator if the context
 	 * has no initialization parameters.
 	 */
-	public Iterator getInitParameterNames();
+	public Iterator<String> getInitParameterNames();
 
 	/** Returns the URI for asynchronous update.
 	 * <p>Both {@link #getUpdateURI} and {@link Desktop#getUpdateURI}

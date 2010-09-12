@@ -33,23 +33,21 @@ import org.zkoss.zk.xel.Evaluator;
  */
 /*package*/ class ArgumentInfo {
 	/** The arguments (String name, ExValue value), null if no argument. */
-	private final Map _args;
+	private final Map<String, ExValue> _args;
 
-	/*package*/ ArgumentInfo(Map args) {
+	/*package*/ ArgumentInfo(Map<String, String> args) {
 		if (args != null && !args.isEmpty()) {
-			for (Iterator it = args.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(new ExValue((String)me.getValue(), Object.class));
-			}
-			_args = args;
+			_args = new LinkedHashMap<String, ExValue>();
+			for (Map.Entry<String, String> me: args.entrySet())
+				_args.put(me.getKey(), new ExValue(me.getValue(), Object.class));
 		} else
 			_args = null;
 	}
 
-	/*package*/ Object newInstance(Class cls, Evaluator eval, Page page)
+	/*package*/ Object newInstance(Class<?> cls, Evaluator eval, Page page)
 	throws Exception {
 		if (_args != null) {
-			Map args = resolveArguments(eval, page);
+			Map<String, Object> args = resolveArguments(eval, page);
 			try {
 				return cls.getConstructor(new Class[] {Map.class})
 					.newInstance(new Object[] {args});
@@ -63,26 +61,23 @@ import org.zkoss.zk.xel.Evaluator;
 		}
 		return cls.newInstance();
 	}
-	/*package*/ Map resolveArguments(Evaluator eval, Page page) {
+	/*package*/ Map<String, Object> resolveArguments(Evaluator eval, Page page) {
 		if (_args == null)
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 
-		final Map args = new LinkedHashMap(); //eval order is important
-		for (Iterator it = _args.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			args.put(me.getKey(),
-				((ExValue)me.getValue()).getValue(eval, page));
-		}
+		final Map<String, Object> args = new LinkedHashMap<String, Object>(); //eval order is important
+		for (Map.Entry<String, ExValue> me: _args.entrySet())
+			args.put(me.getKey(), me.getValue().getValue(eval, page));
 		return args;
 	}
 
 	/** After called, args is destroyed so the caller cannot use it anymore.
 	 */
-	/*package*/ static Object[] toArray(Map args) {
+	/*package*/ static Object[] toArray(Map<String, Object> args) {
 		if (args.isEmpty())
 			return new Object[0];
 
-		final List lst = new LinkedList();
+		final List<Object> lst = new LinkedList<Object>();
 		for (int j = 0;;j++) {
 			final String nm = "arg" + j;
 			if (args.containsKey(nm))
@@ -91,6 +86,6 @@ import org.zkoss.zk.xel.Evaluator;
 				break;
 		}
 		lst.addAll(args.values());
-		return (Object[])lst.toArray(new Object[lst.size()]);
+		return lst.toArray(new Object[lst.size()]);
 	}
 }

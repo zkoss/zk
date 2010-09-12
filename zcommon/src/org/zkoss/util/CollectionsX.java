@@ -294,6 +294,21 @@ public class CollectionsX {
 			}
 		};
 
+	/** Returns a generic empty iterator.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> Iterator<T> emptyIterator() {
+		return EMPTY_ITERATOR;
+	}
+	/** Returns a generic empty enumeration.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> Enumeration<T> emptyEnumeration() {
+		return EMPTY_ENUMERATION;
+	}
+
 	/**
 	 * Returns the specified range of the specified collection into a new array.
      * The initial index of the range (<tt>from</tt>) must lie between zero

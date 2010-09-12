@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.ext.ScopeListener;
  */
 public class ScopeListeners {
 	private final Scope _owner;
-	private List _listeners;
+	private List<ScopeListener> _listeners;
 
 	/** Constructor.
 	 * @param owner the scope that is the owner (i.e., visible to the users).
@@ -49,7 +49,7 @@ public class ScopeListeners {
 			throw new IllegalArgumentException("null");
 
 		if (_listeners == null)
-			_listeners = new LinkedList();
+			_listeners = new LinkedList<ScopeListener>();
 		else if (_listeners.contains(listener))
 			return false;
 
@@ -63,8 +63,8 @@ public class ScopeListeners {
 	}
 	/** Returns a ist of all scope listners (never null).
 	 */
-	public List getListeners() {
-		if (_listeners == null) _listeners = new LinkedList();
+	public List<ScopeListener> getListeners() {
+		if (_listeners == null) _listeners = new LinkedList<ScopeListener>();
 		return _listeners;
 	}
 
@@ -75,8 +75,8 @@ public class ScopeListeners {
 	 */
 	public void notifyAdded(String name, Object value) {
 		if (_listeners != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).attributeAdded(_owner, name, value);
+			for (ScopeListener l: _listeners)
+				l.attributeAdded(_owner, name, value);
 	}
 	/** Invokes {@link ScopeListener#attributeReplaced} for registered
 	 * listeners.
@@ -85,8 +85,8 @@ public class ScopeListeners {
 	 */
 	public void notifyReplaced(String name, Object value) {
 		if (_listeners != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).attributeReplaced(_owner, name, value);
+			for (ScopeListener l: _listeners)
+				l.attributeReplaced(_owner, name, value);
 	}
 	/** Invokes {@link ScopeListener#attributeRemoved} for registered
 	 * listeners.
@@ -95,8 +95,8 @@ public class ScopeListeners {
 	 */
 	public void notifyRemoved(String name) {
 		if (_listeners != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).attributeRemoved(_owner, name);
+			for (ScopeListener l: _listeners)
+				l.attributeRemoved(_owner, name);
 	}
 	/** Invokes {@link ScopeListener#parentChanged} for registered
 	 * listeners.
@@ -105,8 +105,8 @@ public class ScopeListeners {
 	 */
 	public void notifyParentChanged(Scope newparent) {
 		if (_listeners != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).parentChanged(_owner, newparent);
+			for (ScopeListener l: _listeners)
+				l.parentChanged(_owner, newparent);
 	}
 
 	/** Invokes {@link ScopeListener#idSpaceChanged} for registered
@@ -117,7 +117,7 @@ public class ScopeListeners {
 	 */
 	public void notifyIdSpaceChanged(IdSpace newIdSpace) {
 		if (_listeners != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).idSpaceChanged(_owner, newIdSpace);
+			for (ScopeListener l: _listeners)
+				l.idSpaceChanged(_owner, newIdSpace);
 	}
 }

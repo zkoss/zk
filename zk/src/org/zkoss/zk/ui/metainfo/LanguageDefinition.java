@@ -60,13 +60,13 @@ public class LanguageDefinition {
 	private static final Log log = Log.lookup(LanguageDefinition.class);
 	//static//
 	/** A map of (String name or namespace, LanguageDefinition). */
-	private static final Map _ldefByName = new HashMap();
+	private static final Map<String, LanguageDefinition> _ldefByName = new HashMap<String, LanguageDefinition>();
 	/** A map of (String ext, LanguageDefinition). */
-	private static final Map _ldefsByExt = new HashMap();
+	private static final Map<String, LanguageDefinition> _ldefsByExt = new HashMap<String, LanguageDefinition>();
 	/** A map of (String deviceType, List(LanguageDefinition). */
-	private static final Map _ldefsByClient = new HashMap();
+	private static final Map<String, List<LanguageDefinition>> _ldefsByClient = new HashMap<String, List<LanguageDefinition>>();
 	/** A map of (String widgetClass, WidgetDefinition). */
-	private static final Map _wgtdefs = new HashMap();
+	private static final Map<String, WidgetDefinition> _wgtdefs = new HashMap<String, WidgetDefinition>();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
 	 * and attributes, such as zscript and use.
@@ -126,7 +126,7 @@ public class LanguageDefinition {
 	/** The name space. */
 	private final String _ns;
 	/** The extensions supported by this language definition. */
-	private List _exts;
+	private List<String> _exts;
 	/** The component map. */
 	private final ComponentDefinitionMap _compdefs;
 	/** The component name for dynamic tags. */
@@ -134,26 +134,26 @@ public class LanguageDefinition {
 	/** The component definition for dynamic tags. */
 	private ComponentDefinition _dyntagDefn;
 	/** The set of reserved attributes used by _dyntagDefn. */
-	private Set _dyntagRvAttrs;
+	private Set<String> _dyntagRvAttrs;
 	/** Map(String lang, String script). */
-	private final Map _initscripts = new HashMap();
+	private final Map<String, String> _initscripts = new HashMap<String, String>();
 	/** Map(String lang, String script). */
-	private final Map _eachscripts = new HashMap();
+	private final Map<String, String> _eachscripts = new HashMap<String, String>();
 	/** A list of Taglib. */
-	private final FastReadArray _taglibs = new FastReadArray(Taglib.class);
+	private final FastReadArray<Taglib> _taglibs = new FastReadArray<Taglib>(Taglib.class);
 	/** A list of JavaScript. */
-	private final FastReadArray _js = new FastReadArray(JavaScript.class);
+	private final FastReadArray<JavaScript> _js = new FastReadArray<JavaScript>(JavaScript.class);
 	/** A list of deferrable JavaScript package. */
-	private final FastReadArray _mergepkgs = new FastReadArray(String.class);
-	private final Map _jsmods = new HashMap(5),
+	private final FastReadArray<String> _mergepkgs = new FastReadArray<String>(String.class);
+	private final Map<String, String> _jsmods = new HashMap<String, String>(),
 		_rojsmods = Collections.unmodifiableMap(_jsmods);
 	/** A list of StyleSheet. */
-	private final FastReadArray _ss = new FastReadArray(StyleSheet.class);
+	private final FastReadArray<StyleSheet> _ss = new FastReadArray<StyleSheet>(StyleSheet.class);
 	private final Locator _locator;
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
-	private Class _macrocls;
+	private Class<?> _macrocls;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
@@ -163,7 +163,7 @@ public class LanguageDefinition {
 	/** The page renderer. */
 	private PageRenderer _pgrend;
 	/** A set of CSS URI. */
-	private final Set _cssURIs = new LinkedHashSet();
+	private final Set<String> _cssURIs = new LinkedHashSet<String>();
 	/** Whether it is a native language. */
 	private final boolean _native;
 
@@ -192,7 +192,7 @@ public class LanguageDefinition {
 			name = "xul/html";
 		final LanguageDefinition langdef;
 		synchronized (_ldefByName) {
-			langdef = (LanguageDefinition)_ldefByName.get(name);
+			langdef = _ldefByName.get(name);
 		}
 		if (langdef == null)
 			if (ZK_NAMESPACE.equals(name))
@@ -216,7 +216,7 @@ public class LanguageDefinition {
 
 		final LanguageDefinition langdef;
 		synchronized (_ldefsByExt) {
-			langdef = (LanguageDefinition)_ldefsByExt.get(ext);
+			langdef = _ldefsByExt.get(ext);
 		}
 		if (langdef == null)
 			throw new DefinitionNotFoundException("Language not found for extension "+ext);
@@ -252,14 +252,16 @@ public class LanguageDefinition {
 	 * @see #getDeviceType
 	 * @see #getAll
 	 */
-	public static final List getByDeviceType(String deviceType) {
+	public static final List<LanguageDefinition> getByDeviceType(String deviceType) {
 		init();
 
-		final List ldefs;
+		final List<LanguageDefinition> ldefs;
 		synchronized (_ldefsByClient) {
-			ldefs = (List)_ldefsByClient.get(deviceType);
+			ldefs = _ldefsByClient.get(deviceType);
 		}
-		return ldefs != null ? ldefs: Collections.EMPTY_LIST;
+		if (ldefs != null)
+			return ldefs;
+		return Collections.emptyList();
 
 	}
 	/** Returns a readonly list of all language definitions
@@ -268,14 +270,13 @@ public class LanguageDefinition {
 	 * @see #getByDeviceType
 	 * @since 2.4.1
 	 */
-	public static final List getAll() {
+	public static final List<LanguageDefinition> getAll() {
 		init();
 
-		final List list = new LinkedList();
+		final List<LanguageDefinition> list = new LinkedList<LanguageDefinition>();
 		synchronized (_ldefsByClient) {
-			for (Iterator it = _ldefsByClient.values().iterator();
-			it.hasNext();) {
-				list.addAll((List)it.next());
+			for (List<LanguageDefinition> langs: _ldefsByClient.values()) {
+				list.addAll(langs);
 			}
 		}
 		return list;
@@ -283,7 +284,7 @@ public class LanguageDefinition {
 	/** Returns a readonly collection of all device types.
 	 * @see #getByDeviceType
 	 */
-	public static final Collection getDeviceTypes() {
+	public static final Collection<String> getDeviceTypes() {
 		init();
 
 		return _ldefsByClient.keySet();
@@ -314,7 +315,7 @@ public class LanguageDefinition {
 	 * @since 5.0.0
 	 */
 	public LanguageDefinition(String deviceType, String name, String namespace,
-	List extensions, PageRenderer pageRenderer,
+	List<String> extensions, PageRenderer pageRenderer,
 	boolean ignoreCase, boolean bNative, Locator locator) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
@@ -341,10 +342,9 @@ public class LanguageDefinition {
 			&& _ldefByName.containsKey(namespace))
 				throw new UiException("Different language, "+name+", with the same namespace, "+namespace);
 
-			_ldefByName.put(namespace, this);
-			final Object old = _ldefByName.put(name, this);
+			final LanguageDefinition old = _ldefByName.put(name, this);
 			if (old != null) {
-				final List ldefs = (List)_ldefsByClient.get(deviceType);
+				final List<LanguageDefinition> ldefs = _ldefsByClient.get(deviceType);
 				if (ldefs != null) ldefs.remove(old);
 
 				replWarned = true;
@@ -357,22 +357,21 @@ public class LanguageDefinition {
 		}
 		if (extensions != null) {
 			synchronized (_ldefsByExt) {
-				for (Iterator it = extensions.iterator(); it.hasNext();) {
-					final String ext = (String)it.next();
-					final Object old = _ldefsByExt.put(ext, this);
+				for (String ext: extensions) {
+					final LanguageDefinition old = _ldefsByExt.put(ext, this);
 					if (!replWarned && old != null)
 						log.warning("Extension "+ext+", overriden by "+this);
 				}
 			}
 			_exts = Collections.unmodifiableList(extensions);
 		} else {
-			_exts = Collections.EMPTY_LIST;
+			_exts = Collections.emptyList();
 		}
 
 		synchronized (_ldefsByClient) {
-			List ldefs = (List)_ldefsByClient.get(deviceType);
+			List<LanguageDefinition> ldefs = _ldefsByClient.get(deviceType);
 			if (ldefs == null)
-				_ldefsByClient.put(deviceType, ldefs = new LinkedList());
+				_ldefsByClient.put(deviceType, ldefs = new LinkedList<LanguageDefinition>());
 			ldefs.add(this);
 		}
 	}
@@ -413,13 +412,13 @@ public class LanguageDefinition {
 	 * is associated with (never null).
 	 * @since 2.4.1
 	 */
-	public List getExtensions() {
+	public List<String> getExtensions() {
 		return _exts;
 	}
 	/** Returns a readonly collection of all component definitions in this language.
 	 * @since 3.6.3
 	 */
-	public Collection getComponentDefinitions() {
+	public Collection<ComponentDefinition> getComponentDefinitions() {
 		return _compdefs.getDefinitions();
 	}
 	/** Returns the map of components defined in this language (never null).
@@ -514,7 +513,7 @@ public class LanguageDefinition {
 	 * @since 5.0.0
 	 */
 	public WidgetDefinition getWidgetDefinitionIfAny(String widgetClass) {
-		return (WidgetDefinition)_wgtdefs.get(widgetClass);
+		return _wgtdefs.get(widgetClass);
 	}
 	/** Adds a widget definition.
 	 * @since 5.0.0
@@ -538,7 +537,7 @@ public class LanguageDefinition {
 		if (script != null && script.length() > 0) {
 			zslang = zslang.toLowerCase();
 			synchronized (_initscripts) {
-				final String s = (String)_initscripts.get(zslang);
+				final String s = _initscripts.get(zslang);
 				_initscripts.put(zslang, s != null ? s + '\n' + script: script);
 			}
 		}
@@ -549,7 +548,7 @@ public class LanguageDefinition {
 	public String getInitScript(String zslang) {
 		zslang = zslang.toLowerCase();
 		synchronized (_initscripts) {
-			return (String)_initscripts.get(zslang);
+			return _initscripts.get(zslang);
 		}
 	}
 
@@ -567,7 +566,7 @@ public class LanguageDefinition {
 		if (script != null && script.length() > 0) {
 			zslang = zslang.toLowerCase();
 			synchronized (_eachscripts) {
-				final String s = (String)_eachscripts.get(zslang);
+				final String s = _eachscripts.get(zslang);
 				_eachscripts.put(zslang, s != null ? s + '\n' + script: script);
 			}
 		}
@@ -581,7 +580,7 @@ public class LanguageDefinition {
 	public String getEachTimeScript(String zslang) {
 		zslang = zslang.toLowerCase();
 		synchronized (_eachscripts) {
-			return (String)_eachscripts.get(zslang);
+			return _eachscripts.get(zslang);
 		}
 	}
 
@@ -597,9 +596,9 @@ public class LanguageDefinition {
 	 * @since 5.0.4
 	 */
 	public void removeJavaScript(String src) {
-		final Object[] ary = _js.toArray();
+		final JavaScript[] ary = _js.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final JavaScript js = (JavaScript)ary[j];
+			final JavaScript js = ary[j];
 			if (Objects.equals(src, js.getSrc())) {
 				_js.remove(js);
 				return; //found
@@ -609,8 +608,8 @@ public class LanguageDefinition {
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
-	public Collection getJavaScripts() {
-		return new CollectionsX.ArrayCollection(_js.toArray());
+	public Collection<JavaScript> getJavaScripts() {
+		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
 	}
 
 	/** Adds a mergeable JavaScript package required by this langauge.
@@ -628,15 +627,15 @@ public class LanguageDefinition {
 	/** Removes a mergeable JavaScript package required by this language.
 	 * @since 5.0.4
 	 */
-	public void removeMergeJavaScriptPackage(String pkg) {
-		_mergepkgs.remove(pkg);
+	public boolean removeMergeJavaScriptPackage(String pkg) {
+		return _mergepkgs.remove(pkg);
 	}
 	/** Returns a list of mergeable JavaScript package (String)
 	 * required by this language.
 	 * @since 5.0.4
 	 */
-	public Collection getMergeJavaScriptPackages() {
-		return new CollectionsX.ArrayCollection(_mergepkgs.toArray());
+	public Collection<String> getMergeJavaScriptPackages() {
+		return new CollectionsX.ArrayCollection<String>(_mergepkgs.toArray());
 	}
 
 	/** Adds the definition of a JavaScript module to this language.
@@ -653,7 +652,7 @@ public class LanguageDefinition {
 	/** Returns a map of definitions of JavaScript modules,
 	 * (String name, String version).
 	 */
-	public Map getJavaScriptModules() {
+	public Map<String, String> getJavaScriptModules() {
 		return _rojsmods;
 	}
 
@@ -667,8 +666,8 @@ public class LanguageDefinition {
 	/** Returns a readonly list of all {@link StyleSheet} required
 	 * by this language.
 	 */
-	public Collection getStyleSheets() {
-		return new CollectionsX.ArrayCollection(_ss.toArray());
+	public Collection<StyleSheet> getStyleSheets() {
+		return new CollectionsX.ArrayCollection<StyleSheet>(_ss.toArray());
 	}
 
 	/** Returns whether the component names are case-insensitive.
@@ -776,13 +775,13 @@ public class LanguageDefinition {
 	 * the dynamic tag support. The reserved attributes are the if, unless
 	 * and use attributes.
 	 */
-	public void setDynamicTagInfo(String compnm, Set reservedAttrs) {
+	public void setDynamicTagInfo(String compnm, Set<String> reservedAttrs) {
 		if (compnm != null && _dyntagnm != null)
 			log.warning("Overwriting the definition of dynamic tag. Previous="+_dyntagnm+" New="+compnm+" for "+this);
 		_dyntagnm = compnm;
 		_dyntagDefn = null;
 		_dyntagRvAttrs = compnm == null || reservedAttrs.isEmpty() ? null:
-			Collections.unmodifiableSet(new HashSet(reservedAttrs));
+			Collections.unmodifiableSet(new HashSet<String>(reservedAttrs));
 	}
 	/** Returns the component defintion of the dynamic tag, or null if
 	 * this language doesn't support the dynamic tag.
@@ -848,7 +847,7 @@ public class LanguageDefinition {
 	/** Returns a readonly collection of the URIs of CSS files of this language.
 	 * @since 5.0.0
 	 */
-	public Collection getCSSURIs() {
+	public Collection<String> getCSSURIs() {
 		return _cssURIs;
 	}
 

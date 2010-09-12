@@ -58,8 +58,9 @@ abstract class Node {
 	/** Returns the list of child nodes ({@link Node}).
 	 * @since 3.0.0
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Node> getChildren() {
-		return _children != null ? _children: Collections.EMPTY_LIST;
+		if (_children != null)
+			return _children;
+		return Collections.emptyList();
 	}
 }

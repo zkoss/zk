@@ -255,7 +255,7 @@ w:use="foo.MyWindow"&gt;
 	 * The returned collection is read-only.
 	 * @since 3.0.6
 	 */
-	public Collection getFellows();
+	public Collection<Component> getFellows();
 	/** Returns whether a fellow exists in the same ID space of this component.
 	 * @since 5.0.0
 	 */
@@ -372,7 +372,7 @@ w:use="foo.MyWindow"&gt;
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
-	public Map getAttributes(int scope);
+	public Map<String, Object> getAttributes(int scope);
 	/** Returns the value of the specified custom attribute in the specified scope,
 	 * or null if not defined.
 	 *
@@ -448,7 +448,7 @@ w:use="foo.MyWindow"&gt;
 	/** Returns all custom attributes associated with this component, i.e.,
 	 * {@link #COMPONENT_SCOPE}.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 	/** Returns the custom attribute associated with this component, i.e.,
 	 * {@link #COMPONENT_SCOPE}.
 	 */
@@ -551,7 +551,7 @@ w:use="foo.MyWindow"&gt;
 	/** Returns a live list of children.
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 */
-	public List getChildren();
+	public List<Component> getChildren();
 	/** Returns the root of this component.
 	 */
 	public Component getRoot();
@@ -682,7 +682,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Since 3.6.3, the listener can be removed directly by invoking
 	 * Iterator.remove().
 	 */
-	public Iterator getListenerIterator(String evtnm);
+	public Iterator<EventListener> getListenerIterator(String evtnm);
 
 	/** Adds a forward condition to forward the event received
 	 * by this component to another component.
@@ -860,7 +860,7 @@ w:use="foo.MyWindow"&gt;
 	 * an empty collection if none is registered.
 	 * @since 5.0.0
 	 */
-	public Set getWidgetListenerNames();
+	public Set<String> getWidgetListenerNames();
 
 	/*** Sets or removes a method or a property of the peer widget (at the client).
 	 * If there is a method or a property associated with the same name,
@@ -912,7 +912,7 @@ w:use="foo.MyWindow"&gt;
 	 * shall be overridden, or an empty collection if none is registered.
 	 * @since 5.0.0
 	 */
-	public Set getWidgetOverrideNames();
+	public Set<String> getWidgetOverrideNames();
 
 	/*** Sets or removes a DOM attribute of the peer widget (at the client).
 	 * ZK pass the attributes directly to the DOM attribute generated
@@ -945,7 +945,7 @@ w:use="foo.MyWindow"&gt;
 	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
 	 * @since 5.0.3
 	 */
-	public Set getWidgetAttributeNames();
+	public Set<String> getWidgetAttributeNames();
 
 	/** Sets an AU service to process the AU request before the component's
 	 * default handling.

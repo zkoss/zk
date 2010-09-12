@@ -78,7 +78,7 @@ public interface IdSpace extends Scope {
 	 * The returned collection is readonly.
 	 * @since 3.0.6
 	 */
-	public Collection getFellows();
+	public Collection<Component> getFellows();
 	/** Returns whether there is a fellow named with the specified component ID.
 	 * @since 3.5.2
 	 */

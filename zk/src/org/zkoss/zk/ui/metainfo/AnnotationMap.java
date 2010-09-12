@@ -37,7 +37,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	/** The annotations of properties,
 	 * (String propName, Map(String annotName, AnnotImpl)).
 	 */
-	private Map _annots;
+	private Map<String, Map<String, AnnotImpl>> _annots;
 
 	/** Returns whether no annotation at all.
 	 */
@@ -67,7 +67,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	/** Returns a read-only collection of all annotations associated with the
 	 * component definition (never null).
 	 */
-	public Collection getAnnotations() {
+	public Collection<Annotation> getAnnotations() {
 		return getAnnotations0(null);
 	}
 	/** Returns a read-only collection of all annotations associated with the
@@ -76,7 +76,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 * @param propName the property name, e.g., "value".
 	 * @exception IllegalArgumentException if propName is null or empty
 	 */
-	public Collection getAnnotations(String propName) {
+	public Collection<Annotation> getAnnotations(String propName) {
 		if (propName == null || propName.length() == 0)
 			throw new IllegalArgumentException("The property name is required");
 		return getAnnotations0(propName);
@@ -84,38 +84,32 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	/** Returns a read-only list of the names (String) of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
-	public List getAnnotatedPropertiesBy(String annotName) {
-		List list = null;
+	public List<String> getAnnotatedPropertiesBy(String annotName) {
+		final List<String> list = new LinkedList<String>();
 		if (_annots != null) {
-			for (Iterator it = _annots.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Object propName = me.getKey();
+			for (Map.Entry<String, Map<String, AnnotImpl>> me: _annots.entrySet()) {
+				final String propName = me.getKey();
 				if (propName != null) {
-					final Map ans = (Map)me.getValue(); //ans is syncMap
-					if (ans.containsKey(annotName)) {
-						if (list == null) list = new LinkedList();
+					final Map<String, AnnotImpl> ans = me.getValue(); //ans is syncMap
+					if (ans.containsKey(annotName))
 						list.add(propName);
-					}
 				}
 			}
 		}
-		return list != null ? list: Collections.EMPTY_LIST;
+		return list;
 	}
 	/** Returns a read-only list of the name (String) of properties that
 	 * are associated at least one annotation (never null).
 	 */
-	public List getAnnotatedProperties() {
-		List list = null;
+	public List<String> getAnnotatedProperties() {
+		final List<String> list = new LinkedList<String>();
 		if (_annots != null) {
-			for (Iterator it = _annots.keySet().iterator(); it.hasNext();) {
-				final Object propName = it.next();
-				if (propName != null) {
-					if (list == null) list = new LinkedList();
+			for (String propName: _annots.keySet()) {
+				if (propName != null)
 					list.add(propName);
-				}
 			}
 		}
-		return list != null ? list: Collections.EMPTY_LIST;
+		return list;
 	}
 
 	//Modification API//
@@ -125,44 +119,41 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		if (src != null && !src.isEmpty()) {
 			initAnnots();
 
-			for (Iterator it = src._annots.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Object propName = me.getKey(); //may be null
-
-				Map ans = (Map)_annots.get(propName);
+			for (Map.Entry<String, Map<String, AnnotImpl>> me:
+			src._annots.entrySet()) {
+				final String propName = me.getKey(); //may be null
+				Map<String, AnnotImpl> ans = _annots.get(propName);
 				if (ans == null)
 					_annots.put(propName, ans = newAnnotImpls());
 
-				addAllAns(ans, (Map)me.getValue());
+				addAllAns(ans, me.getValue());
 			}
 		}			
 	}
 	/** Adds the value of _annots, Map(String annotName, AnnotImpl).
 	 */
-	public static void addAllAns(Map ans, Map srcans) {
-		for (Iterator it = srcans.entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String annotName = (String)me.getKey();
+	public static
+	void addAllAns(Map<String, AnnotImpl> ans, Map<String, AnnotImpl> srcans) {
+		for (Map.Entry<String, AnnotImpl> me: srcans.entrySet()) {
+			final String annotName = me.getKey();
 
-			AnnotImpl ai = (AnnotImpl)ans.get(annotName);
+			AnnotImpl ai = ans.get(annotName);
 			if (ai == null)
 				ans.put(annotName, ai = new AnnotImpl(annotName));
 
-			ai.addAttributes(((AnnotImpl)me.getValue())._attrs);
+			ai.addAttributes(me.getValue()._attrs);
 		}
 	}
 	/** Adds an annotation.
 	 */
-	public void addAnnotation(String annotName, Map annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
 		addAnnotation0(null, annotName, annotAttrs);
 	}
 	/** Adds an annotation to a proeprty.
 	 *
 	 * @param propName the property name.
 	 */
-	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
 		if (propName == null || propName.length() == 0)
 			throw new IllegalArgumentException("The property name is required");
 		addAnnotation0(propName, annotName, annotAttrs);
@@ -170,25 +161,28 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 
 	private Annotation getAnnotation0(String propName, String annotName) {
 		if (_annots != null) {
-			final Map ans = (Map)_annots.get(propName);
+			final Map<String, AnnotImpl> ans = _annots.get(propName);
 			if (ans != null)
-				return (Annotation)ans.get(annotName); //ans is syncMap
+				return ans.get(annotName); //ans is syncMap
 		}
 		return null;
 	}
-	private Collection getAnnotations0(String propName) {
+	@SuppressWarnings("unchecked")
+	private Collection<Annotation> getAnnotations0(String propName) {
 		if (_annots != null) {
-			final Map ans = (Map)_annots.get(propName);
-			if (ans != null)
-				return ans.values(); //ans is syncMap
+			final Map<String, AnnotImpl> ans = _annots.get(propName);
+			if (ans != null) {
+				Collection c = ans.values(); //ans is syncMap
+				return c; //OK to convert since readonly
+			}
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
-	private void addAnnotation0(String propName, String annotName, Map annotAttrs) {
+	private void addAnnotation0(String propName, String annotName, Map<String, String> annotAttrs) {
 		initAnnots();
 
-		Map ans = (Map)_annots.get(propName);
+		Map<String, AnnotImpl> ans = _annots.get(propName);
 		if (ans == null)
 			_annots.put(propName, ans = newAnnotImpls());
 
@@ -202,12 +196,12 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 */
 	private void initAnnots() {
 		if (_annots == null)
-			_annots = new HashMap(4);
+			_annots = new HashMap<String, Map<String, AnnotImpl>>(4);
 	}
 	/** Create a map used for (String name, AnnotImpl annot).
 	 */
-	private static Map newAnnotImpls() {
-		return new LinkedHashMap(4);
+	private static Map<String, AnnotImpl> newAnnotImpls() {
+		return new LinkedHashMap<String, AnnotImpl>(4);
 	}
 
 	//Cloneable//
@@ -222,13 +216,12 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		}
 
 		if (_annots != null) {
-			clone._annots = new HashMap(_annots);
+			clone._annots = new HashMap<String, Map<String, AnnotImpl>>(_annots);
 
-			for (Iterator it = clone._annots.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Map ans = clone.newAnnotImpls();
-				clone.addAllAns(ans, (Map)me.getValue());
+			for (Map.Entry<String, Map<String, AnnotImpl>> me:
+			clone._annots.entrySet()) {
+				final Map<String, AnnotImpl> ans = clone.newAnnotImpls();
+				clone.addAllAns(ans, me.getValue());
 				me.setValue(ans); //replace with the new one
 			}
 		}
@@ -242,7 +235,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 */
 	private static class AnnotImpl implements Annotation {
 		private final String _name;
-		private Map _attrs;
+		private Map<String, String> _attrs;
 
 		private AnnotImpl(String name) {
 			_name = name;
@@ -261,29 +254,29 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 				value = "";
 
 			if (_attrs == null)
-				_attrs = new LinkedHashMap(3);
+				_attrs = new LinkedHashMap<String, String>(3);
 			_attrs.put(name, value);
 		}
 		/** Adds a map of attributes, (String name, String value), to the annotation.
 		 */
-		private void addAttributes(Map attrs) {
-			if (attrs != null) {
-				for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					addAttribute((String)me.getKey(), (String)me.getValue());
-				}
-			}
+		private void addAttributes(Map<String, String> attrs) {
+			if (attrs != null)
+				for (Map.Entry<String, String> me: attrs.entrySet())
+					addAttribute(me.getKey(), me.getValue());
 		}
 
 		//Annotation//
 		public String getName() {
 			return _name;
 		}
-		public Map getAttributes() {
-			return _attrs != null ? _attrs: Collections.EMPTY_MAP;
+		@SuppressWarnings("unchecked")
+		public Map<String, String> getAttributes() {
+			if (_attrs != null)
+				return _attrs;
+			return Collections.emptyMap();
 		}
 		public String getAttribute(String name) {
-			return _attrs != null ? (String)_attrs.get(name): null;
+			return _attrs != null ? _attrs.get(name): null;
 		}
 		public String toString() {
 			return '[' + _name + ": " + _attrs + ']';

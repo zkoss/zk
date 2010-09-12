@@ -19,6 +19,8 @@ package org.zkoss.zk.ui.impl;
 import java.util.List;
 import java.util.Iterator;
 
+import org.zkoss.zk.ui.event.EventListener;
+
 /**
  * Used to iterate the event listener.
  *
@@ -31,12 +33,12 @@ import java.util.Iterator;
  *
  * @author tomyeh
  */
-public class ListenerIterator implements Iterator {
-	private final List _org;
+public class ListenerIterator implements Iterator<EventListener> {
+	private final List<EventListener> _org;
 	private int _orgsz;
-	private final Iterator _it;
+	private final Iterator<EventListener> _it;
 
-	public ListenerIterator(List list) {
+	public ListenerIterator(List<EventListener> list) {
 		_org = list;
 		_orgsz = list.size();
 		_it = list.iterator();
@@ -46,7 +48,7 @@ public class ListenerIterator implements Iterator {
 			throw new java.util.ConcurrentModificationException();
 		return _it.hasNext();
 	}
-	public Object next() {
+	public EventListener next() {
 		return _it.next();
 	}
 	/** Removes the listener been interated (available since 3.6.3)

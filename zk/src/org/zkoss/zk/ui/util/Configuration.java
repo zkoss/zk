@@ -86,48 +86,50 @@ public class Configuration {
 
 	private WebApp _wapp;
 	/** List of classes. */
-	private final FastReadArray
-		_evtInits = new FastReadArray(Class.class),
-		_evtCleans = new FastReadArray(Class.class),
-		_evtSusps = new FastReadArray(Class.class),
-		_evtResus = new FastReadArray(Class.class),
-		_appInits = new FastReadArray(Class.class),
-		_appCleans = new FastReadArray(Class.class),
-		_sessInits = new FastReadArray(Class.class),
-		_sessCleans = new FastReadArray(Class.class),
-		_dtInits = new FastReadArray(Class.class),
-		_dtCleans = new FastReadArray(Class.class),
-		_execInits = new FastReadArray(Class.class),
-		_execCleans = new FastReadArray(Class.class),
-		_uiCycles = new FastReadArray(UiLifeCycle.class),
-		_composers = new FastReadArray(Class.class),
-		_resolvers = new FastReadArray(Class.class);
+	private final FastReadArray<Class<?>>
+		_evtInits = new FastReadArray<Class<?>>(Class.class),
+		_evtCleans = new FastReadArray<Class<?>>(Class.class),
+		_evtSusps = new FastReadArray<Class<?>>(Class.class),
+		_evtResus = new FastReadArray<Class<?>>(Class.class),
+		_appInits = new FastReadArray<Class<?>>(Class.class),
+		_appCleans = new FastReadArray<Class<?>>(Class.class),
+		_sessInits = new FastReadArray<Class<?>>(Class.class),
+		_sessCleans = new FastReadArray<Class<?>>(Class.class),
+		_dtInits = new FastReadArray<Class<?>>(Class.class),
+		_dtCleans = new FastReadArray<Class<?>>(Class.class),
+		_execInits = new FastReadArray<Class<?>>(Class.class),
+		_execCleans = new FastReadArray<Class<?>>(Class.class),
+		_composers = new FastReadArray<Class<?>>(Class.class),
+		_resolvers = new FastReadArray<Class<?>>(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
-	private final FastReadArray
-		_uriIntcps = new FastReadArray(URIInterceptor.class),
-		_reqIntcps = new FastReadArray(RequestInterceptor.class);
-	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
+	private final FastReadArray<UiLifeCycle>
+		_uiCycles = new FastReadArray<UiLifeCycle>(UiLifeCycle.class);
+	private final FastReadArray<URIInterceptor>
+		_uriIntcps = new FastReadArray<URIInterceptor>(URIInterceptor.class);
+	private final FastReadArray<RequestInterceptor>
+		_reqIntcps = new FastReadArray<RequestInterceptor>(RequestInterceptor.class);
+	private final Map<String, String> _prefs  = Collections.synchronizedMap(new HashMap<String,String>());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
-	private final Map _richlets = new HashMap();
+	private final Map<String, Object> _richlets = new HashMap<String, Object>();
 	/** Map(String path, [String name, boolean wildcard]). */
-	private final Map _richletmaps = new HashMap();
+	private final Map<String, Object[]> _richletmaps = new HashMap<String, Object[]>();
 	/** Map(String deviceType, List(ErrorPage)). */
-	private final Map _errpgs = new HashMap(3);
+	private final Map<String, List<ErrorPage>> _errpgs = new HashMap<String, List<ErrorPage>>(4);
 	/** Map(String deviceType+connType, Map(errorCode, uri)) */
-	private final Map _errURIs = new HashMap();
-	/** Map(String deviceType, TimeoutInfo ti) */
-	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
+	private final Map<String, Map<Integer,String>> _errURIs = new HashMap<String, Map<Integer,String>>();
+	/** Map(String deviceType, TimeoutURIInfo ti) */
+	private final Map<String, TimeoutURIInfo> _timeoutURIs = Collections.synchronizedMap(new HashMap<String, TimeoutURIInfo>());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
 	private ExecutionMonitor _execmon;
 	private DesktopRecycle _dtRecycle;
-	private final FastReadArray _themeURIs = new FastReadArray(String.class);
+	private final FastReadArray<String> _themeURIs = new FastReadArray<String>(String.class);
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
-	private Set _disThemeURIs;
+	private Set<String> _disThemeURIs;
 	/** A list of client packages. */
-	private final FastReadArray _clientpkgs = new FastReadArray(String.class);
+	private final FastReadArray<String> _clientpkgs = new FastReadArray<String>(String.class);
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _sesscachecls, _audeccls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
@@ -142,7 +144,7 @@ public class Configuration {
 	private final EventInterceptors _eis = new EventInterceptors();
 	private int _evtTimeWarn = 600; //sec
 	/** A map of attributes. */
-	private final Map _attrs = Collections.synchronizedMap(new HashMap());
+	private final Map<String, Object> _attrs = Collections.synchronizedMap(new HashMap<String, Object>());
 	/** whether to use the event processing thread. */
 	private boolean _useEvtThd; //disabled by default since ZK 5
 	/** keep-across-visits. */
@@ -199,7 +201,8 @@ public class Configuration {
 	 * and/or {@link EventInterceptor} interfaces.
 	 * @see Desktop#addListener
 	 */
-	public void addListener(Class klass) throws Exception {
+	@SuppressWarnings("unchecked")
+	public void addListener(Class<?> klass) throws Exception {
 		boolean added = false;
 		Object listener = null;
 
@@ -291,7 +294,8 @@ public class Configuration {
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_uriIntcps.add(listener = getInstance(klass, listener));
+				_uriIntcps.add((URIInterceptor)
+					(listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -299,7 +303,8 @@ public class Configuration {
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_reqIntcps.add(listener = getInstance(klass, listener));
+				_reqIntcps.add((RequestInterceptor)
+					(listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -316,7 +321,8 @@ public class Configuration {
 		}
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
-				_uiCycles.add(listener = getInstance(klass, listener));
+				_uiCycles.add((UiLifeCycle)
+					(listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -329,14 +335,15 @@ public class Configuration {
 	private static final String onlyOnce(Class cls) {
 		return cls + " can be assigned only once";
 	}
-	private static Object getInstance(Class klass, Object listener)
+	private static Object getInstance(Class<?> klass, Object listener)
 	throws Exception {
 		return listener != null ? listener: klass.newInstance();
 	}
 	/** Removes a listener class.
 	 * @see Desktop#removeListener
 	 */
-	public void removeListener(final Class klass) {
+	@SuppressWarnings("unchecked")
+	public void removeListener(final Class<?> klass) {
 		if (_monitor != null && _monitor.getClass().equals(klass))
 			_monitor = null;
 		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
@@ -387,14 +394,14 @@ public class Configuration {
 	 * constructed in this method (and their {@link EventThreadInit#prepare}
 	 * are called successfully), or null.
 	 */
-	public List newEventThreadInits(Component comp, Event evt)
+	public List<EventThreadInit> newEventThreadInits(Component comp, Event evt)
 	throws UiException {
-		final Class[] ary = (Class[])_evtInits.toArray();
+		final Class<?>[] ary = _evtInits.toArray();
 		if (ary.length == 0) return null;
 
-		final List inits = new LinkedList();
+		final List<EventThreadInit> inits = new LinkedList<EventThreadInit>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class<?> klass = ary[j];
 			try {
 				final EventThreadInit init =
 					(EventThreadInit)klass.newInstance();
@@ -421,12 +428,11 @@ public class Configuration {
 	 * @return false if you want to ignore the event, i.e., not to proceed
 	 * any event processing for the specified event (evt).
 	 */
-	public boolean invokeEventThreadInits(List inits, Component comp, Event evt) 
+	public boolean invokeEventThreadInits(List<EventThreadInit> inits, Component comp, Event evt) 
 	throws UiException {
 		if (inits == null || inits.isEmpty()) return true; //not to ignore
 
-		for (Iterator it = inits.iterator(); it.hasNext();) {
-			final EventThreadInit fn = (EventThreadInit)it.next();
+		for (EventThreadInit fn: inits) {
 			try {
 				if (!fn.init(comp, evt))
 					return false; //ignore the event
@@ -459,11 +465,11 @@ public class Configuration {
 	 * @return a list of {@link EventThreadCleanup}, or null
 	 * @since 3.6.3
 	 */
-	public List newEventThreadCleanups(Component comp, Event evt, List errs, boolean silent) {
-		final Class[] ary = (Class[])_evtCleans.toArray();
+	public List<EventThreadCleanup> newEventThreadCleanups(Component comp, Event evt, List<Throwable> errs, boolean silent) {
+		final Class<?>[] ary = _evtCleans.toArray();
 		if (ary.length == 0) return null;
 
-		final List cleanups = new LinkedList();
+		final List<EventThreadCleanup> cleanups = new LinkedList<EventThreadCleanup>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class klass = (Class)ary[j];
 			try {
@@ -496,12 +502,11 @@ public class Configuration {
 	 * @param silent whether not to log the exception
 	 * @since 3.6.3
 	 */
-	public void invokeEventThreadCompletes(List cleanups, Component comp, Event evt,
-	List errs, boolean silent) {
+	public void invokeEventThreadCompletes(List<EventThreadCleanup> cleanups, Component comp, Event evt,
+	List<Throwable> errs, boolean silent) {
 		if (cleanups == null || cleanups.isEmpty()) return;
 
-		for (Iterator it = cleanups.iterator(); it.hasNext();) {
-			final EventThreadCleanup fn = (EventThreadCleanup)it.next();
+		for (EventThreadCleanup fn: cleanups) {
 			try {
 				fn.complete(comp, evt);
 			} catch (Throwable ex) {
@@ -527,11 +532,11 @@ public class Configuration {
 	 * @exception UiException to prevent a thread from suspending
 	 * @return a list of {@link EventThreadSuspend}, or null
 	 */
-	public List newEventThreadSuspends(Component comp, Event evt, Object obj) {
-		final Class[] ary = (Class[])_evtSusps.toArray();
+	public List<EventThreadSuspend> newEventThreadSuspends(Component comp, Event evt, Object obj) {
+		final Class<?>[] ary = _evtSusps.toArray();
 		if (ary.length == 0) return null;
 
-		final List suspends = new LinkedList();
+		final List<EventThreadSuspend> suspends = new LinkedList<EventThreadSuspend>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class klass = (Class)ary[j];
 			try {
@@ -561,12 +566,11 @@ public class Configuration {
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
 	 */
-	public void invokeEventThreadSuspends(List suspends, Component comp, Event evt)
+	public void invokeEventThreadSuspends(List<EventThreadSuspend> suspends, Component comp, Event evt)
 	throws UiException {
 		if (suspends == null || suspends.isEmpty()) return;
 
-		for (Iterator it = suspends.iterator(); it.hasNext();) {
-			final EventThreadSuspend fn = (EventThreadSuspend)it.next();
+		for (EventThreadSuspend fn: suspends) {
 			try {
 				fn.afterSuspend(comp, evt);
 			} catch (Throwable ex) {
@@ -591,14 +595,14 @@ public class Configuration {
 	 * in this method (and their {@link EventThreadResume#beforeResume}
 	 * are called successfully), or null.
 	 */
-	public List newEventThreadResumes(Component comp, Event evt)
+	public List<EventThreadResume> newEventThreadResumes(Component comp, Event evt)
 	throws UiException {
-		final Class[] ary = (Class[])_evtResus.toArray();
+		final Class<?>[] ary = _evtResus.toArray();
 		if (ary.length == 0) return null;
 
-		final List resumes = new LinkedList();
+		final List<EventThreadResume> resumes = new LinkedList<EventThreadResume>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				final EventThreadResume resume =
 					(EventThreadResume)klass.newInstance();
@@ -625,12 +629,11 @@ public class Configuration {
 	 * @param evt the event to process
 	 * If null, all exceptions are ignored (but logged)
 	 */
-	public void invokeEventThreadResumes(List resumes, Component comp, Event evt)
+	public void invokeEventThreadResumes(List<EventThreadResume> resumes, Component comp, Event evt)
 	throws UiException {
 		if (resumes == null || resumes.isEmpty()) return;
 
-		for (Iterator it = resumes.iterator(); it.hasNext();) {
-			final EventThreadResume fn = (EventThreadResume)it.next();
+		for (EventThreadResume fn: resumes) {
 			try {
 				fn.afterResume(comp, evt);
 			} catch (Throwable ex) {
@@ -855,8 +858,8 @@ public class Configuration {
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
 	 */
-	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
-		final Class[] ary = (Class[])_execCleans.toArray();
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List<Throwable> errs) {
+		final Class<?>[] ary = _execCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				((ExecutionCleanup)ary[j].newInstance())
@@ -1025,7 +1028,7 @@ public class Configuration {
 	 * <p>Default: an array with zero length.
 	 */
 	public String[] getThemeURIs() {
-		return (String[])_themeURIs.toArray();
+		return _themeURIs.toArray();
 	}
 	/** Enables or disables the default theme of the specified language.
 	 *
@@ -1041,7 +1044,7 @@ public class Configuration {
 
 		synchronized (this) {
 			if (_disThemeURIs == null)
-				_disThemeURIs = Collections.synchronizedSet(new HashSet(4));
+				_disThemeURIs = Collections.synchronizedSet(new HashSet<String>(4));
 		}
 		_disThemeURIs.add(uri);
 	}
@@ -1050,8 +1053,10 @@ public class Configuration {
 	 * @since 3.0.0
 	 * @see #addDisabledThemeURI
 	 */
-	public Set getDisabledThemeURIs() {
-		return _disThemeURIs != null ? _disThemeURIs: Collections.EMPTY_SET;
+	public Set<String> getDisabledThemeURIs() {
+		if (_disThemeURIs != null)
+			return _disThemeURIs;
+		return Collections.emptySet();
 	}
 
 	/** Returns the theme provider for the current execution,
@@ -1463,7 +1468,7 @@ public class Configuration {
 	public URIInfo getTimeoutURI(String deviceType) {
 		if (deviceType == null) deviceType = "ajax";
 
-		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		return inf != null && inf.uri != null ? inf: null;
 	}
 	/** Sets the timeout URI.
@@ -1485,7 +1490,7 @@ public class Configuration {
 		if (deviceType == null) deviceType = "ajax";
 
 		TimeoutURIInfo newi = new TimeoutURIInfo(timeoutURI, type);
-		TimeoutURIInfo oldi = (TimeoutURIInfo)_timeoutURIs.put(deviceType, newi);
+		TimeoutURIInfo oldi = _timeoutURIs.put(deviceType, newi);
 		if (oldi != null) newi.auto = oldi.auto;
 		return oldi != null && oldi.uri != null ? oldi: null;
 	}
@@ -1502,7 +1507,7 @@ public class Configuration {
 	public boolean isAutomaticTimeout(String deviceType) {
 		if (deviceType == null) deviceType = "ajax";
 
-		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		return inf != null && inf.auto;
 	}
 	/** Sets whether to automatically trigger the timeout at the client.
@@ -1521,7 +1526,7 @@ public class Configuration {
 	public boolean setAutomaticTimeout(String deviceType, boolean auto) {
 		if (deviceType == null) deviceType = "ajax";
 
-		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		if (inf != null) {
 			boolean old = inf.auto;
 			inf.auto = auto;
@@ -1555,10 +1560,10 @@ public class Configuration {
 
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
-			Map map = (Map)_errURIs.get(index);
+			Map<Integer, String> map = _errURIs.get(index);
 			if (map == null)
-				_errURIs.put(index, map = new LinkedHashMap());
-			return (String)map.put(new Integer(errCode), uri);
+				_errURIs.put(index, map = new LinkedHashMap<Integer, String>());
+			return map.put(errCode, uri);
 		}
 	}
 	/** Removes the URI to redirect to, when ZK Client Engine receives
@@ -1576,9 +1581,8 @@ public class Configuration {
 	String connType) {
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
-			Map map = (Map)_errURIs.get(index);
-			return map != null ?
-				(String)map.remove(new Integer(errCode)): null;
+			Map<Integer, String> map = _errURIs.get(index);
+			return map != null ? map.remove(errCode): null;
 		}
 	}
 	/** Returns the URI that is associated with the specified error code,
@@ -1595,9 +1599,8 @@ public class Configuration {
 	String connType) {
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
-			Map map = (Map)_errURIs.get(index);
-			return map != null ?
-				(String)map.get(new Integer(errCode)): null;
+			Map<Integer, String> map = _errURIs.get(index);
+			return map != null ? map.get(errCode): null;
 		}
 	}
 	/** Returns an array of pairs of the error code and URI info of
@@ -1619,14 +1622,13 @@ public class Configuration {
 	public Object[][] getClientErrorReloads(String deviceType, String connType) {
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
-			final Map map = (Map)_errURIs.get(index);
+			final Map<Integer, String> map = _errURIs.get(index);
 			if (map != null) {
 				Object[][] infs = new Object[map.size()][2];
 				int j = 0;
-				for (Iterator it = map.entrySet().iterator(); it.hasNext(); ++j) {
-					final Map.Entry me = (Map.Entry)it.next();
+				for (Map.Entry<Integer, String> me: map.entrySet()) {
 					infs[j][0] = me.getKey();
-					infs[j][1] = new URIInfo((String)me.getValue());
+					infs[j++][1] = new URIInfo(me.getValue());
 				}
 				return infs;
 			}
@@ -1932,7 +1934,7 @@ public class Configuration {
 	 * preference is not found.
 	 */
 	public String getPreference(String name, String defaultValue) {
-		final String value = (String)_prefs.get(name);
+		final String value = _prefs.get(name);
 		return value != null ? value: defaultValue;
 	}
 	/** Sets the value of the preference.
@@ -1944,7 +1946,7 @@ public class Configuration {
 	}
 	/** Returns a readonly set of all preference names.
 	 */
-	public Set getPreferenceNames() {
+	public Set<String> getPreferenceNames() {
 		return _prefs.keySet();
 	}
 
@@ -2120,7 +2122,7 @@ public class Configuration {
 	private Richlet getRichletByPath0(String path, boolean wildcardOnly) {
 		final Object[] info;
 		synchronized (_richletmaps) {
-			info = (Object[])_richletmaps.get(path);
+			info = _richletmaps.get(path);
 		}
 		return info != null &&
 			(!wildcardOnly || ((Boolean)info[1]).booleanValue()) ?
@@ -2313,7 +2315,7 @@ public class Configuration {
 	/** Returns a map of application-specific attributes.
 	 * @since 5.0.0
 	 */
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
 	/** Returns the value of an application-specific attribute, or
@@ -2362,7 +2364,7 @@ public class Configuration {
 	 * @since 5.0.0
 	 */
 	public String[] getClientPackages() {
-		return (String[])_clientpkgs.toArray();
+		return _clientpkgs.toArray();
 	}
 
 	/** Returns the time, in seconds, to show a warning message
@@ -2397,11 +2399,11 @@ public class Configuration {
 		if (location == null || deviceType == null)
 			throw new IllegalArgumentException();
 
-		List l;
+		List<ErrorPage> l;
 		synchronized (_errpgs) {
-			l = (List)_errpgs.get(deviceType);
+			l = _errpgs.get(deviceType);
 			if (l == null)
-				_errpgs.put(deviceType, l = new LinkedList());
+				_errpgs.put(deviceType, l = new LinkedList<ErrorPage>());
 		}
 
 		String previous = null;
@@ -2427,9 +2429,9 @@ public class Configuration {
 	 */
 	public String getErrorPage(String deviceType, Throwable error) {
 		if (!_errpgs.isEmpty()) {
-			final List l;
+			final List<ErrorPage> l;
 			synchronized (_errpgs) {
-				l = (List)_errpgs.get(deviceType);
+				l = _errpgs.get(deviceType);
 			}
 			if (l != null) {
 				synchronized (l) {

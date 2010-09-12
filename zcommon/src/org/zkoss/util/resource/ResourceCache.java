@@ -37,18 +37,18 @@ import org.zkoss.util.WaitLock;
  *
  * @author tomyeh
  */
-public class ResourceCache extends CacheMap {
+public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 	private static final Log log = Log.lookup(ResourceCache.class);
 
 	/** The loader. */
-	protected final Loader _loader;
+	protected final Loader<K, V> _loader;
 	/** unit=milliseconds. */
 	private int _checkPeriod;
 
 	/** Constructor.
 	 * @param loader the loader to load resource
 	 */
-	public ResourceCache(Loader loader) {
+	public ResourceCache(Loader<K, V> loader) {
 		if (loader == null)
 			throw new NullPointerException();
 		_loader = loader;
@@ -58,7 +58,7 @@ public class ResourceCache extends CacheMap {
 	 * @param loader the loader to load resource
 	 * @param initsz the initial size of the map
 	 */
-	public ResourceCache(Loader loader, int initsz) {
+	public ResourceCache(Loader<K, V> loader, int initsz) {
 		super(initsz);
 		if (loader == null)
 			throw new NullPointerException();
@@ -72,7 +72,7 @@ public class ResourceCache extends CacheMap {
 
 	/** Returns the loader.
 	 */
-	public Loader getLoader() {
+	public Loader<K, V> getLoader() {
 		return _loader;
 	}
 	/** Returns how often to check (unit=milliseconds).
@@ -93,16 +93,16 @@ public class ResourceCache extends CacheMap {
 	/** Returns the resource, or null if not found.
 	 */
 	@SuppressWarnings("unchecked")
-	public Object get(Object src) {
+	public V get(Object src) {
 		WaitLock lock = null;
 		for (;;) {
 			Info ri = null;
 			synchronized (this) {
 				Object o = super.get(src);
-				if (o instanceof Info) { //was loaded
-					ri = (Info)o;
-				} else if (o instanceof WaitLock) {
+				if (o instanceof WaitLock) {
 					lock = (WaitLock)o;
+				} else if (o != null) { //was loaded
+					ri = (Info)o;
 				} else {
 					super.put(src, lock = new WaitLock());
 					break; //then, load it
@@ -131,12 +131,12 @@ public class ResourceCache extends CacheMap {
 		//load it
 		try {
 			boolean cache;
-			final Info ri = new Info(src);
-			Object resource = ri.getResource();
+			final Info ri = new Info((K)src);
+			V resource = ri.getResource();
 
 			if (resource instanceof Loader.Resource) {
 				final Loader.Resource lr = (Loader.Resource)resource;
-				resource = lr.resource;
+				resource = (V)lr.resource;
 				cache = lr.cacheable;
 			} else
 				cache = resource != null;
@@ -186,9 +186,9 @@ public class ResourceCache extends CacheMap {
 	/** Providing info about a resource. */
 	private class Info {
 		/** The source. */
-		private final Object _src;
+		private final K _src;
 		/** The result resource. */
-		private Object _resource;
+		private V _resource;
 		private long _lastModified;
 		/* When to check lastModified again. */
 		private long _nextCheck;
@@ -196,14 +196,14 @@ public class ResourceCache extends CacheMap {
 		/**
 		 * @param src the source
 		 */
-		public Info(Object src) throws Exception {
+		public Info(K src) throws Exception {
 			//if (D.ON && log.debugable()) log.debug("Loading from "+src);
 			_src = src;
 			load();
 		}
 		/** Returns the result resource.
 		 */
-		public final Object getResource() {
+		public final V getResource() {
 			return _resource;
 		}
 		/** Quick check whether the page is still valid. */

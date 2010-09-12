@@ -33,8 +33,12 @@ ZK 6.0.0
 ZK 5.0.5
 * Features
   3061676: Autodrop menubar shall be closed automatically when move out
+  3061671: Databinding foreach keep cloned cmp's id when in spaceowner
+
 * Bugs
   3057902: zk bug for window showbusy
+  3061764: Opera only. Cannot sizing a column with width
+  3061765: Unexpected horizontal scrollbar when sizing listheader
 
 * Upgrade Notes
 

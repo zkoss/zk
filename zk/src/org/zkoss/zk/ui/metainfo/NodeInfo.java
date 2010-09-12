@@ -38,7 +38,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  */
 abstract public class NodeInfo {
 	/** A list of {@link ComponentInfo} and {@link ZScript}. */
-	/*pacakge*/ List _children = new LinkedList();
+	/*pacakge*/ List<Object> _children = new LinkedList<Object>();
 
 	public NodeInfo() {
 	}
@@ -137,7 +137,7 @@ abstract public class NodeInfo {
 	 * {@link #appendChild(ComponentInfo)} and {@link #removeChild(ComponentInfo)}
 	 * instead.
 	 */
-	public List getChildren() {
+	public List<Object> getChildren() {
 		return _children;
 	}
 }

@@ -138,7 +138,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * However, classes specified in a page (by use of class or use attributes)
 	 * might be resolved later because it might be defined by zscript.
 	 */
-	public void setImplementationClass(Class cls);
+	public void setImplementationClass(Class<? extends Component> cls);
 	/** Sets the class name to implements the component.
 	 * Unlike {@link #setImplementationClass(Class)}, the class won't
 	 * be resolved until {@link ComponentInfo#newInstance} or {@link #getImplementationClass}
@@ -166,7 +166,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
 	 */
-	public Class resolveImplementationClass(Page page, String clsnm)
+	public Class<? extends Component> resolveImplementationClass(Page page, String clsnm)
 	throws ClassNotFoundException;
 	/** Returns whether a component belongs to this definition.
 	 *
@@ -258,7 +258,7 @@ public interface ComponentDefinition extends Cloneable {
 	public boolean hasMold(String name);
 	/** Returns a readonly collection of the names of the mold.
 	 */
-	public Collection getMoldNames();
+	public Collection<String> getMoldNames();
 
 	/** Adds a property initializer.
 	 * It will initialize a component when created with is definition.
@@ -284,7 +284,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param owner the owner page; used if parent is null
 	 * @param parent the parent
 	 */
-	public Map evalProperties(Map propmap, Page owner, Component parent);
+	public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent);
 
 	/** Returns the annotation map defined in this definition, or null
 	 * if no annotation is ever defined.

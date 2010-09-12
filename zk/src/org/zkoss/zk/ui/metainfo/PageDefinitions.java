@@ -27,11 +27,10 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.idom.Document;
-import org.zkoss.util.resource.Loader;
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ResourceCaches;
+import org.zkoss.web.util.resource.ResourceCache;
 import org.zkoss.web.util.resource.ResourceLoader;
 
 import org.zkoss.zk.ui.WebApp;
@@ -141,7 +140,7 @@ public class PageDefinitions {
 
 		final Object ctx = wapp.getNativeContext();
 		if (ctx instanceof ServletContext)
-			return (PageDefinition)ResourceCaches.get(
+			return ResourceCaches.get(
 				getCache(wapp), (ServletContext)ctx, path, locator);
 		throw new UnsupportedOperationException("Unknown context: "+ctx);
 	}
@@ -168,23 +167,24 @@ public class PageDefinitions {
 		throw new UnsupportedOperationException("Unknown context: "+ctx);
 	}
 
-	private static final ResourceCache getCache(WebApp wapp) {
-		ResourceCache cache = (ResourceCache)wapp.getAttribute(ATTR_PAGE_CACHE);
+	@SuppressWarnings("unchecked")
+	private static final ResourceCache<PageDefinition> getCache(WebApp wapp) {
+		ResourceCache<PageDefinition> cache = (ResourceCache<PageDefinition>)wapp.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (PageDefinitions.class) {
 				cache = (ResourceCache)wapp.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
-					Loader loader = null;
+					ResourceLoader<PageDefinition> loader = null;
 					final String clsnm = Library.getProperty("org.zkoss.zk.ui.metainfo.page.Loader.class");
 					if (clsnm != null) {
 						try {
 							final Object o = Classes.newInstanceByThread(clsnm,
 								new Class[] {WebApp.class},
 								new Object[] {wapp});
-							if (o instanceof Loader)
-								loader = (Loader)o;
+							if (o instanceof ResourceLoader)
+								loader = (ResourceLoader)o;
 							else
-								log.warning(clsnm + " must implement " + Loader.class.getName());
+								log.warning(clsnm + " must implement " + ResourceLoader.class.getName());
 						} catch (Throwable ex) {
 							log.warningBriefly("Unable to instantiate "+clsnm, ex);
 						}
@@ -192,7 +192,7 @@ public class PageDefinitions {
 
 					if (loader == null)
 						loader = new MyLoader(wapp);
-					cache = new ResourceCache(loader, 167);
+					cache = new ResourceCache<PageDefinition>(loader, 167);
 					cache.setMaxSize(1024);
 					cache.setLifetime(60*60000); //1hr
 					wapp.setAttribute(ATTR_PAGE_CACHE, cache);
@@ -202,20 +202,20 @@ public class PageDefinitions {
 		return cache;
 	}
 
-	private static class MyLoader extends ResourceLoader {
+	private static class MyLoader extends ResourceLoader<PageDefinition> {
 		private final WebApp _wapp;
 		private MyLoader(WebApp wapp) {
 			_wapp = wapp;
 		}
 
 		//-- super --//
-		protected Object parse(String path, File file, Object extra)
+		protected PageDefinition parse(String path, File file, Object extra)
 		throws Exception {
 			final Locator locator =
 				extra != null ? (Locator)extra: getLocator(_wapp, path);
 			return new Parser(_wapp, locator).parse(file, path);
 		}
-		protected Object parse(String path, URL url, Object extra)
+		protected PageDefinition parse(String path, URL url, Object extra)
 		throws Exception {
 			final Locator locator =
 				extra != null ? (Locator)extra: getLocator(_wapp, path);

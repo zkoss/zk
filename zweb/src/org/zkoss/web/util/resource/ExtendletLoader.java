@@ -37,7 +37,7 @@ import org.zkoss.util.resource.Loader;
  * @see Extendlet
  * @since 3.0.6
  */
-abstract public class ExtendletLoader implements Loader {
+abstract public class ExtendletLoader<V> implements Loader<String, V> {
 	private static final Log log = Log.lookup(ExtendletLoader.class);
 
 	private int _checkPeriod;
@@ -64,23 +64,23 @@ abstract public class ExtendletLoader implements Loader {
 	}
 
 	//Loader//
-	public boolean shallCheck(Object src, long expiredMillis) {
+	public boolean shallCheck(String src, long expiredMillis) {
 		return expiredMillis > 0;
 	}
 	/** Returns the last modified time.
 	 */
-	public long getLastModified(Object src) {
+	public long getLastModified(String src) {
 		if (getCheckPeriod() < 0)
 			return 1; //any value (because it is not dynamic)
 
 		try {
-			final URL url = getExtendletContext().getResource((String)src);
+			final URL url = getExtendletContext().getResource(src);
 			return url != null ? url.openConnection().getLastModified(): -1;
 		} catch (Throwable ex) {
 			return -1; //reload
 		}
 	}
-	public Object load(Object src) throws Exception {
+	public V load(String src) throws Exception {
 //		if (D.ON && log.debugable()) log.debug("Parse "+src);
 		final String path = getRealPath((String)src);
 		InputStream is = null;
@@ -128,7 +128,7 @@ abstract public class ExtendletLoader implements Loader {
 	 * the additional information encoded into the URI.
 	 * @since 5.0.0
 	 */
-	abstract protected Object parse(InputStream is, String path, String orgpath)
+	abstract protected V parse(InputStream is, String path, String orgpath)
 	throws Exception;
 	/** Returns the extendlet context.
 	 */

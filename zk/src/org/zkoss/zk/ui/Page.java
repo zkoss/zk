@@ -168,7 +168,7 @@ public interface Page extends IdSpace, Scope {
 
 	/** Returns a readonly list of the root components.
 	 */
-	public Collection getRoots();
+	public Collection<Component> getRoots();
 	/** Returns the first root component.
 	 * @since 3.5.2
 	 */
@@ -221,7 +221,7 @@ public interface Page extends IdSpace, Scope {
 	 * @param scope {@link #APPLICATION_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
-	public Map getAttributes(int scope);
+	public Map<String, Object> getAttributes(int scope);
 	/** Returns the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -261,7 +261,7 @@ public interface Page extends IdSpace, Scope {
 
 	/** Returns all custom attributes associated with this page.
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 	/** Returns the value of the specified attribute associated with this page.
 	 */
 	public Object getAttribute(String name);
@@ -482,7 +482,7 @@ public interface Page extends IdSpace, Scope {
 	public Interpreter getInterpreter(String zslang);
 	/** Returns all loaded interpreters.
 	 */
-	public Collection getLoadedInterpreters();
+	public Collection<Interpreter> getLoadedInterpreters();
 
 	/** Returns the default scripting language which is assumed when
 	 * a zscript element doesn't specify any language.

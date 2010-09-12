@@ -431,8 +431,8 @@ public class ComponentsCtrl {
 		public boolean hasMold(String name) {
 			return false;
 		}
-		public Collection getMoldNames() {
-			return Collections.EMPTY_LIST;
+		public Collection<String> getMoldNames() {
+			return Collections.emptyList();
 		}
 		public void addProperty(String name, String value) {
 			throw new UnsupportedOperationException();

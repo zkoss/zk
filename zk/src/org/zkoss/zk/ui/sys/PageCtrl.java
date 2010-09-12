@@ -103,7 +103,7 @@ public interface PageCtrl {
 	 * theader. It is an instance of Boolean (and never null).
 	 * @since 5.0.2
 	 */
-	public Collection getResponseHeaders();
+	public Collection<Object> getResponseHeaders();
 	/** Returns the attributes of the root element declared in this page
 	 * (never null).
 	 * An empty string is returned if no special attribute is declared.
