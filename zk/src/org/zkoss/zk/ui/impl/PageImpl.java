@@ -681,33 +681,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _ips != null;
 	}
 
-	private static final Map REQUEST_ATTRS = new AbstractMap() {
-		public Set entrySet() {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return Collections.EMPTY_SET;
-			return exec.getAttributes().entrySet();
-		}
-		public Object put(Object name, Object value) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) throw new IllegalStateException("No execution at all");
-			return exec.getAttributes().put(name, value);
-		}
-		public boolean containsKey(Object name) {
-			final Execution exec = Executions.getCurrent();
-			return exec != null && exec.getAttributes().containsKey(name);
-		}
-		public Object get(Object name) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return null;
-			return exec.getAttributes().get(name);
-		}
-		public Object remove(Object name) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return null;
-			return exec.getAttributes().remove(name);
-		}
-	};
-
 	public String getHeaders(boolean before) {
 		return before ? _hdbfr: _hdaft;
 	}

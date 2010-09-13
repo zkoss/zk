@@ -341,7 +341,6 @@ public class LanguageDefinition {
 			&& _ldefByName.containsKey(namespace))
 				throw new UiException("Different language, "+name+", with the same namespace, "+namespace);
 
-			_ldefByName.put(namespace, this);
 			final Object old = _ldefByName.put(name, this);
 			if (old != null) {
 				final List ldefs = (List)_ldefsByClient.get(deviceType);

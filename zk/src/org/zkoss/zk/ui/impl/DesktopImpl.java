@@ -1341,9 +1341,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void onPiggyback() {
 		if (_piggybackListened) {
 			for (Iterator it = _pages.iterator(); it.hasNext();) {
-				final Page p = (Page)it.next();
-				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
-					for (Component root = ((Page)it.next()).getFirstRoot();
+				final Page page = (Page)it.next();
+				if (Executions.getCurrent().isAsyncUpdate(page)) { //ignore new created pages
+					for (Component root = page.getFirstRoot();
 					root != null; root = root.getNextSibling()) {
 						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) //asap+deferrable
 							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
