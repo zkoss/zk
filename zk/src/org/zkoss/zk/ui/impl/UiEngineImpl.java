@@ -141,8 +141,17 @@ public class UiEngineImpl implements UiEngine {
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
 		}
-		return map == null || map.isEmpty() ? Collections.EMPTY_LIST:
-			Collections.synchronizedMap(map).values();
+
+		if (map == null || map.isEmpty())
+			return Collections.EMPTY_LIST;
+
+		final List threads = new LinkedList();
+		synchronized (map) {
+			for (Iterator it = map.values().iterator(); it.hasNext();) {
+				threads.addAll((List)it.next());
+			}
+		}
+		return threads;
 	}
 	public boolean ceaseSuspendedThread(Desktop desktop,
 	EventProcessingThread evtthd, String cause) {
