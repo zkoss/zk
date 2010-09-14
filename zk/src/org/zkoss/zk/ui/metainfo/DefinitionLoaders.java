@@ -659,27 +659,4 @@ public class DefinitionLoaders {
 		}
 		return null;
 	}
-
-	private static class Addon {
-		private final Document document;
-		private final int priority;
-		private Addon(Document document) {
-			this.document = document;
-
-			final String p = document.getRootElement().getElementValue("priority", true);
-			this.priority = p != null && p.length() > 0 ? Integer.parseInt(p): 0;
-		}
-		private static void add(List addons, Document document) {
-			final Addon addon = new Addon(document);
-			for (ListIterator it = addons.listIterator(); it.hasNext();) {
-				final Addon a = (Addon)it.next();
-				if (a.priority < addon.priority) {
-					it.previous();
-					it.add(addon);
-					return; //done
-				}
-			}
-			addons.add(addon);
-		}
-	}
 }
