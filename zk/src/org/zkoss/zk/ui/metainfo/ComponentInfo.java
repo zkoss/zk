@@ -27,7 +27,7 @@ import java.util.Collections;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
-import org.zkoss.lang.Classes;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.CollectionsX;
 
 import org.zkoss.zk.ui.Page;
@@ -713,10 +713,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 		ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = impl instanceof Class ?
-				_compdef.newInstance((Class)impl):
-				impl instanceof Component ? (Component)impl:
-				_compdef.newInstance(page, (String)impl);
+			if (impl instanceof Class) {
+				Class<? extends Component> cls = cast((Class)impl);
+				comp = _compdef.newInstance(cls);
+			} else {
+				comp = impl instanceof Component ? (Component)impl:
+					_compdef.newInstance(page, (String)impl);
+			}
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {

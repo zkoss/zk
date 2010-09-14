@@ -24,6 +24,7 @@ import java.io.IOException;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;
 import org.zkoss.idom.impl.*;
@@ -127,7 +128,7 @@ implements org.w3c.dom.ProcessingInstruction {
 			return Collections.emptyMap();
 		}
 
-		map = Maps.parse(map, rawData, ' ', (char)1); //both ' and "
+		map = cast(Maps.parse(map, rawData, ' ', (char)1)); //both ' and "
 
 		//&quot; and other are not processed by SAXHandler,
 		//so we have to handle them here

@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.zkoss.lang.Strings;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Component;
@@ -43,8 +44,8 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * @since 3.0.0
  */
 public class AnnotationHelper {
-	/** A list of Object[] = {String annotName, Map annotAttrs}; */
-	final List _annots = new LinkedList();
+	/** A list of AnnotInfo */
+	final List<AnnotInfo> _annots = new LinkedList<AnnotInfo>();
 
 	/** Adds an annotation definition.
 	 * The annotation's attributes must be parsed into a map (annotAttrs).
@@ -55,16 +56,17 @@ public class AnnotationHelper {
 	 * @see #addByRawValue
 	 * @see #addByCompoundValue
 	 */
-	public void add(String annotName, Map annotAttrs) {
+	public void add(String annotName, Map<String, String> annotAttrs) {
 		if (annotName == null || annotName.length() == 0)
 			throw new IllegalArgumentException("empty");
-		_annots.add(new Object[] {annotName, annotAttrs});
+		_annots.add(new AnnotInfo(annotName, annotAttrs));
 	}
 	/** Adds an annotation by specify the value in the raw format:
 	 * <code>att1-name=att1-value, att2-name = att2-value</code>.
 	 */
 	public void addByRawValue(String annotName, String rawValue) {
-		final Map attrs = Maps.parse(null, rawValue, ',', '\'', true);
+		final Map<String, String> attrs =
+			cast(Maps.parse(null, rawValue, ',', '\'', true));
 		add(annotName, attrs);
 	}
 	/** Adds annotation by specifying the content in the compound format:
@@ -108,14 +110,11 @@ public class AnnotationHelper {
 	 */
 	public void applyAnnotations(ComponentInfo compInfo, String propName,
 	boolean clear) {
-		for (Iterator it = _annots.iterator(); it.hasNext();) {
-			final Object[] info = (Object[])it.next();
-			final String annotName = (String)info[0];
-			final Map annotAttrs = (Map)info[1];
+		for (AnnotInfo info: _annots) {
 			if (propName != null)
-				compInfo.addAnnotation(propName, annotName, annotAttrs);
+				compInfo.addAnnotation(propName, info.name, info.attrs);
 			else
-				compInfo.addAnnotation(annotName, annotAttrs);
+				compInfo.addAnnotation(info.name, info.attrs);
 		}
 		if (clear)
 			_annots.clear();
@@ -130,15 +129,12 @@ public class AnnotationHelper {
 	 */
 	public void applyAnnotations(Component comp, String propName,
 	boolean clear) {
-		for (Iterator it = _annots.iterator(); it.hasNext();) {
-			final Object[] info = (Object[])it.next();
-			final String annotName = (String)info[0];
-			final Map annotAttrs = (Map)info[1];
+		for (AnnotInfo info: _annots) {
 			ComponentCtrl ctrl = (ComponentCtrl) comp;
 			if (propName != null)
-				ctrl.addAnnotation(propName, annotName, annotAttrs);
+				ctrl.addAnnotation(propName, info.name, info.attrs);
 			else
-				ctrl.addAnnotation(annotName, annotAttrs);
+				ctrl.addAnnotation(info.name, info.attrs);
 		}
 		if (clear)
 			_annots.clear();
@@ -157,5 +153,15 @@ public class AnnotationHelper {
 			return true;
 		}
 		return false;
+	}
+
+	private static class AnnotInfo {
+		private final String name;
+		private final Map<String, String> attrs;
+
+		private AnnotInfo(String name, Map<String, String> attrs) {
+			this.name = name;
+			this.attrs = attrs;
+		}
 	}
 }

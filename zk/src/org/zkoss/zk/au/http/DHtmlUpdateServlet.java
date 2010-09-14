@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.json.JSONValue;
@@ -117,7 +118,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private ServletContext _ctx;
 	private long _lastModified;
 	/** (String name, AuExtension). */
-	private Map _aues = new HashMap(8);
+	private Map<String, AuExtension> _aues = new HashMap<String, AuExtension>(8);
 	private boolean _compress = true;
 
 	/** Returns the update servlet of the specified application, or
@@ -213,8 +214,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			addAuExtension("/view", new AuDynaMediar());
 	}
 	public void destroy() {
-		for (Iterator it = _aues.values().iterator(); it.hasNext();) {
-			final AuExtension aue = (AuExtension)it.next();
+		for (AuExtension aue: _aues.values()) {
 			try {
 				aue.destroy();
 			} catch (Throwable ex) {
@@ -268,10 +268,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 				if (upsv == null) {
 					checkAuExtension(prefix, extension);
-					Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+					Map<String, AuExtension> aues =
+						cast((Map)wapp.getAttribute(ATTR_AU_PROCESSORS));
 					if (aues == null)
-						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap(4));
-					return (AuExtension)aues.put(prefix, extension);
+						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap<String, AuExtension>(4));
+					return aues.put(prefix, extension);
 				}
 			}
 		}
@@ -307,8 +308,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//To avoid using sync in doGet(), we make a copy here
 		final AuExtension old;
 		synchronized (this) {
-			final Map ps = new HashMap(_aues);
-			old = (AuExtension)ps.put(prefix, extension);
+			final Map<String, AuExtension> ps = new HashMap<String, AuExtension>(_aues);
+			old = ps.put(prefix, extension);
 			_aues = ps;
 		}
 		if (old != null)
@@ -517,13 +518,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//parse commands
 		final Configuration config = wapp.getConfiguration();
-		final List aureqs;
+		final List<AuRequest> aureqs;
 		boolean keepAlive = false;
 		try {
 			final boolean timerKeepAlive = config.isTimerKeepAlive();
 			aureqs = audec.decode(request, desktop);
-			for (Iterator it = aureqs.iterator(); it.hasNext();) {
-				final String cmdId = ((AuRequest)it.next()).getCommand();
+			for (AuRequest aureq: aureqs) {
+				final String cmdId = aureq.getCommand();
 				keepAlive = !(!timerKeepAlive && Events.ON_TIMER.equals(cmdId))
 					&& !"dummy".equals(cmdId);
 					//dummy is used for PollingServerPush for piggyback
@@ -687,8 +688,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		public String getFirstCommand(Object request) {
 			return ((HttpServletRequest)request).getParameter("cmd.0");
 		}
-		public List decode(Object request, Desktop desktop) {
-			final List aureqs = new LinkedList();
+		public List<AuRequest> decode(Object request, Desktop desktop) {
+			final List<AuRequest> aureqs = new LinkedList<AuRequest>();
 			final HttpServletRequest hreq = (HttpServletRequest)request;
 			for (int j = 0;; ++j) {
 				final String cmdId = hreq.getParameter("cmd_"+j);

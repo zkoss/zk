@@ -15,6 +15,8 @@ package org.zkoss.zk.ui.event.impl;
 import java.util.Map;
 import java.util.HashMap;
 
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
@@ -45,11 +47,11 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				(Scope)exec.getDesktop().getWebApp(): exec.getSession(), autoCreate);
 		} else  if (EventQueues.DESKTOP.equals(scope)) {
 			final Desktop desktop = exec.getDesktop();
-			Map eqs = (Map)desktop.getAttribute(ATTR_EVENT_QUEUES);
+			Map<String, EventQueue> eqs = cast((Map)desktop.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
-				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap(4));
+				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue>(4));
 
-			EventQueue eq = (EventQueue)eqs.get(name);
+			EventQueue eq = eqs.get(name);
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new DesktopEventQueue());
 			return eq;
@@ -64,16 +66,16 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 	}
 	/** Looks up a session or application scoped event queue. */
 	private EventQueue lookup0(String name, Scope ctxscope, boolean autoCreate) {
-		Map eqs;
+		Map<String, EventQueue> eqs;
 		synchronized (ctxscope) {
-			eqs = (Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES);
+			eqs = cast((Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
-				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap(4));
+				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue>(4));
 		}
 
 		EventQueue eq;
 		synchronized (eqs) {
-			eq = (EventQueue)eqs.get(name);
+			eq = eqs.get(name);
 			if (autoCreate && eq == null)
 				eqs.put(name, eq = new ServerPushEventQueue());
 		}
@@ -99,14 +101,14 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 		return remove0(name, wapp);
 	}
 	private boolean remove0(String name, Scope ctxscope) {
-		Map eqs;
+		Map<String, EventQueue> eqs;
 		synchronized (ctxscope) {
-			eqs = (Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES);
+			eqs = cast((Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 		}
 		if (eqs != null) {
 			EventQueue eq;
 			synchronized (eqs) {
-				eq = (EventQueue)eqs.remove(name);
+				eq = eqs.remove(name);
 			}
 			if (eq != null) {
 				eq.close();

@@ -71,7 +71,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** A list of {@link Scope}.
 	 * Top of it is the current one (if null, it means Scopes.getCurrent)
 	 */
-	private final List _scopes = new LinkedList();
+	private final List<Object> _scopes = new LinkedList<Object>();
 	private Page _owner;
 	private String _zslang;
 

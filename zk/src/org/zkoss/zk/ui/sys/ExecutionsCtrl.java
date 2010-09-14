@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.sys.Attributes;
  */
 public class ExecutionsCtrl extends Executions {
 	/** The virtual ID space. */
-	private static final ThreadLocal _virtIS = new ThreadLocal();
+	private static final ThreadLocal<IdSpace> _virtIS = new ThreadLocal<IdSpace>();
 
 	protected ExecutionsCtrl() {} //prevent from instantiation
 
@@ -74,7 +74,7 @@ public class ExecutionsCtrl extends Executions {
 	 * @since 5.0.4
 	 */
 	public static IdSpace getVirtualIdSpace() {
-		return (IdSpace)_virtIS.get();
+		return _virtIS.get();
 	}
 	/** Sets the virtual ID space.
 	 * It is used by {@link Execution#createComponents} and related methods

@@ -43,7 +43,7 @@ import org.zkoss.zk.au.AuRequest;
 public class ServerPushEventQueue implements EventQueue {
 	private static final Log log = Log.lookup(ServerPushEventQueue.class);
 	/** A map of (Desktop, DesktopThread). */
-	private final Map _dts = new HashMap();
+	private final Map<Desktop, DesktopThread> _dts = new HashMap<Desktop, DesktopThread>();
 
 	/** Publishes an event.
 	 * Unlike {@link DesktopEventQueue}, an event can be published
@@ -54,8 +54,8 @@ public class ServerPushEventQueue implements EventQueue {
 			throw new IllegalArgumentException();
 
 		synchronized (_dts) {
-			for (Iterator it = _dts.values().iterator(); it.hasNext();)
-				((DesktopThread)it.next()).publish(event);
+			for (DesktopThread dtthd: _dts.values())
+				dtthd.publish(event);
 		}
 	}
 	public void subscribe(EventListener listener) {
@@ -77,7 +77,7 @@ public class ServerPushEventQueue implements EventQueue {
 		final Desktop desktop = exec.getDesktop();
 		synchronized (_dts) {
 			boolean startRequired = false;
-			DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
+			DesktopThread dtthd = _dts.get(desktop);
 			if (dtthd == null) {
 				desktop.addListener(new EQCleanup());
 					//OK to call addListener since it is the current desktop
@@ -107,7 +107,7 @@ public class ServerPushEventQueue implements EventQueue {
 
 		final Desktop desktop = exec.getDesktop();
 		synchronized (_dts) {
-			DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
+			DesktopThread dtthd = _dts.get(desktop);
 			return dtthd != null && dtthd.isSubscribed(listener);
 		}
 	}
@@ -121,7 +121,7 @@ public class ServerPushEventQueue implements EventQueue {
 
 		final Desktop desktop = exec.getDesktop();
 		synchronized (_dts) {
-			final DesktopThread dtthd = (DesktopThread)_dts.get(desktop);
+			final DesktopThread dtthd = _dts.get(desktop);
 			if (dtthd != null && dtthd.unsubscribe(listener)) {
 				if (dtthd.isIdle()) {
 					dtthd.cease();
@@ -135,8 +135,7 @@ public class ServerPushEventQueue implements EventQueue {
 	}
 	public void close() {
 		synchronized (_dts) {
-			for (Iterator it = _dts.values().iterator(); it.hasNext();) {
-				final DesktopThread dtthd = (DesktopThread)it.next();
+			for (DesktopThread dtthd: _dts.values()) {
 				dtthd.cease();
 				dtthd.disableServerPush();
 			}
@@ -147,7 +146,7 @@ public class ServerPushEventQueue implements EventQueue {
 	private class DesktopThread extends Thread {
 		private final Desktop _desktop;
 		private final DesktopEventQueue _que = new DesktopEventQueue();
-		private final List _evts = new LinkedList();
+		private final List<Event> _evts = new LinkedList<Event>();
 		private final Object _mutex = new Object();
 		private transient boolean _ceased;
 		/** Indicates whether the server push is enabled by the event queue. */
@@ -162,7 +161,7 @@ public class ServerPushEventQueue implements EventQueue {
 				final Execution exec = Executions.getCurrent();
 				if (exec != null && exec.getDesktop() == _desktop) {
 					//same desktop no need of working thread
-					List evts = new LinkedList();
+					List<Event> evts = new LinkedList<Event>();
 					synchronized (_mutex) {
 						evts.addAll(_evts);
 						_evts.clear(); 
@@ -200,11 +199,10 @@ public class ServerPushEventQueue implements EventQueue {
 			return _que.isIdle();
 		}
 
-		private void process(List evts) {
+		private void process(List<Event> evts) {
 			Throwable ex = null;
 			do {
-				for (Iterator it = evts.iterator(); !_ceased && it.hasNext();) {
-					final Event evt = (Event)it.next();
+				for (Event evt: evts) {
 					try {
 						_que.publish(evt);
 					} catch (Throwable t) {
@@ -227,7 +225,7 @@ public class ServerPushEventQueue implements EventQueue {
 			l_out:
 			while (!_ceased) {
 				try {
-					List evts = new LinkedList();
+					List<Event> evts = new LinkedList<Event>();
 					synchronized (_mutex) {
 						while (_evts.isEmpty()) {
 							_mutex.wait(30*60*1000); //30 mins
@@ -289,7 +287,7 @@ public class ServerPushEventQueue implements EventQueue {
 		public void cleanup(Desktop desktop) throws Exception {
 			final DesktopThread dtthd;
 			synchronized (_dts) {
-				dtthd = (DesktopThread)_dts.remove(desktop);
+				dtthd = _dts.remove(desktop);
 			}
 
 			if (dtthd != null) {

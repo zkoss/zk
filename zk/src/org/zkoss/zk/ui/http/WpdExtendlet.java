@@ -81,7 +81,7 @@ import org.zkoss.zk.device.Device;
  * @author tomyeh
  * @since 5.0.0
  */
-public class WpdExtendlet extends AbstractExtendlet {
+public class WpdExtendlet extends AbstractExtendlet<Object> {
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
 		config.addCompressExtension("wpd");
@@ -112,7 +112,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 	throws ServletException, IOException {
 		byte[] data;
 		boolean zkpkg = false;
-		setProvider(new Provider(request, response));
+		setProvider(new Provider(this, request, response));
 		try {
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
@@ -227,7 +227,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			write(out, "))try{\n");
 		}
 
-		final Map moldInfos = new HashMap();
+		final Map<String, String[]> moldInfos = new HashMap<String, String[]>();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
@@ -523,7 +523,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			sb.setLength(sb.length() - 1); //remove last comma
 	}
 
-	private static String outMain(String main, Map params) {
+	private static String outMain(String main, Map<String, String[]> params) {
 		final StringBuffer sb = new StringBuffer("\nzkamn('");
 		final int j = main.lastIndexOf('.');
 		if (j >= 0)
@@ -531,12 +531,11 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 		sb.append("',function(){\n").append(main).append(".main(");
 
-		final Map ms = new LinkedHashMap();
-		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
+		final Map<String, Object> ms = new LinkedHashMap<String, Object>();
+		for (Map.Entry<String, String[]> me: params.entrySet()) {
+			final String nm = me.getKey();
 			if (!"main".equals(nm)) {
-				final String[] vals = (String[])me.getValue();
+				final String[] vals = me.getValue();
 				ms.put(nm, vals.length == 0 ? null:
 					vals.length == 1 ? (Object)vals[0]: (Object)vals);
 			}
@@ -563,7 +562,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			.append(clientPackages).append(");").toString();
 	}
 
-	private class WpdLoader extends ExtendletLoader {
+	private class WpdLoader extends ExtendletLoader<Object> {
 		private WpdLoader() {
 		}
 
@@ -592,7 +591,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			
 	/*package*/ class WpdContent {
 		private final String _dir;
-		private final List _cnt = new LinkedList();
+		private final List<Object> _cnt = new LinkedList<Object>();
 		private final boolean zkpkg;
 		private final boolean cacheable;
 
@@ -616,11 +615,11 @@ public class WpdExtendlet extends AbstractExtendlet {
 		private void addHost(WebApp wapp, String clientPackages) {
 			_cnt.add(new Object[] {wapp, clientPackages});
 		}
+		@SuppressWarnings("unchecked")
 		/*package*/ byte[] toByteArray(HttpServletRequest request) throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			final String main = request != null ? request.getParameter("main"): null;
-			for (Iterator it = _cnt.iterator(); it.hasNext();) {
-				final Object o = it.next();
+			for (Object o: _cnt) {
 				if (o instanceof byte[]) {
 					out.write((byte[])o);
 				} else if (o instanceof MethodInfo) {

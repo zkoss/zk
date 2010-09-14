@@ -127,7 +127,7 @@ public class AuDynaMediar implements AuExtension {
 			} catch (Throwable ex) {
 				err = true;
 
-				final List errs = new LinkedList();
+				final List<Throwable> errs = new LinkedList<Throwable>();
 				errs.add(ex);
 				desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 				config.invokeExecutionCleanups(exec, oldexec, errs);

@@ -92,15 +92,15 @@ public class Composition implements Initiator, InitiatorExt {
 		// do nothing
 	}
 
-	public void doInit(Page page, Map args) throws Exception {
+	public void doInit(Page page, Map<String, Object> args) throws Exception {
 		//first called doInit, last called doAfterCompose
 		final Execution exec = Executions.getCurrent();
 		if (exec.getAttribute(RESOLVE_COMPOSITION) == null) {
 			exec.setAttribute(RESOLVE_COMPOSITION, this);
 		}
 		final Component parent = (Component) exec.getAttribute(PARENT);
-		for (Iterator it = args.values().iterator(); it.hasNext();)
-			exec.createComponents((String)it.next(), parent, null);
+		for (Object arg: args.values())
+			exec.createComponents((String)arg, parent, null);
 	}
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
@@ -113,13 +113,13 @@ public class Composition implements Initiator, InitiatorExt {
 		exec.removeAttribute(RESOLVE_COMPOSITION);
 		
 		// resolve insert components
-		final Map insertMap = new HashMap(); //(insert name, insert component)
+		final Map<String, Component> insertMap = new HashMap<String, Component>(); //(insert name, insert component)
 		final Component parent = (Component) exec.getAttribute(PARENT);
-		final Collection roots = parent == null ? page.getRoots() : parent.getChildren();
+		final Collection<Component> roots = parent == null ? page.getRoots() : parent.getChildren();
 		resolveInsertComponents(roots, insertMap);
 
 		if (!roots.isEmpty()) {
-			Component comp = (Component) roots.iterator().next();
+			Component comp = roots.iterator().next();
 			
 			// join "define" components as children of "insert" component
 			do {
@@ -127,7 +127,7 @@ public class Composition implements Initiator, InitiatorExt {
 				final Annotation annt = ((ComponentCtrl)comp).getAnnotation("define");
 				if (annt != null) {
 					final String joinId = annt.getAttribute("value");
-					final Component insertComp = (Component) insertMap.get(joinId);
+					final Component insertComp = insertMap.get(joinId);
 					if (insertComp != null) {
 						comp.setParent(insertComp);
 					} else {
@@ -139,9 +139,8 @@ public class Composition implements Initiator, InitiatorExt {
 		}
 	}
 	
-	private void resolveInsertComponents(Collection comps, Map map) {
-		for (final Iterator it = comps.iterator(); it.hasNext(); ) {
-			final Component comp = (Component) it.next();
+	private void resolveInsertComponents(Collection<Component> comps, Map<String, Component> map) {
+		for (Component comp: comps) {
 			final Annotation annt = ((ComponentCtrl)comp).getAnnotation("insert");
 			if (annt != null) {
 				final String insertName = annt.getAttribute("value");

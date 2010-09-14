@@ -43,7 +43,7 @@ public interface AuDecoder {
 	/** Returns a list of {@link AuRequest} by decoding the request.
 	 * @param request the request. For HTTP, it is HttpServletRequest.
 	 */
-	public List decode(Object request, Desktop desktop);
+	public List<AuRequest> decode(Object request, Desktop desktop);
 	/** Returns if the request is ignorable when an error occurs.
 	 * If true is returned, the request is simply ignored.
 	 * Otherwise, an error message, depending on the configuration,

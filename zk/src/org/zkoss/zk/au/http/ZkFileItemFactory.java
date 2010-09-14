@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 	/** # of bytes being received. */
 	private long _cbrcv;
 
+	@SuppressWarnings("unchecked")
 	/*package*/ ZkFileItemFactory(Desktop desktop, HttpServletRequest request, String key) {
     	setSizeThreshold(1024*128);	// maximum size that will be stored in memory
 
@@ -72,6 +73,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 		((Map)_desktop.getAttribute(Attributes.UPLOAD_SIZE)).put(key, new Long(_cbtotal));
 	}
 
+	@SuppressWarnings("unchecked")
 	/*package*/ void onProgress(long cbRead) {
 		int percent = 0;
 		if (_cbtotal > 0) {

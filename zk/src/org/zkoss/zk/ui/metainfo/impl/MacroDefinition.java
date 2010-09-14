@@ -16,6 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo.impl;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.*;
 
 /**
@@ -32,7 +33,7 @@ public class MacroDefinition extends ComponentDefinitionImpl {
 
 	/*package*/ MacroDefinition(LanguageDefinition langdef,
 	PageDefinition pgdef, String name,
-	Class cls, String macroURI, boolean inline) {
+	Class<? extends Component> cls, String macroURI, boolean inline) {
 		super(langdef, pgdef, name, cls);
 
 		if (name == null || cls == null)

@@ -23,6 +23,7 @@ import java.util.Enumeration;
 import java.net.URL;
 
 import org.zkoss.lang.Classes;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
@@ -32,6 +33,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
 
@@ -55,7 +57,8 @@ public class Evaluators {
 	 * @param name the name of the evaluator, say, MVEL.
 	 * @exception SystemException if not found or the class not found.
 	 */
-	public static final Class getEvaluatorClass(String name) {
+	@SuppressWarnings("unchecked")
+	public static final Class<? extends ExpressionFactory> getEvaluatorClass(String name) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("empty or null");
 
@@ -70,10 +73,13 @@ public class Evaluators {
 			throw new SystemException("Evaluator not found: " + name);
 
 		if (clsnm instanceof Class) {
-			return (Class)clsnm;
+			final Class<?> cls = (Class)clsnm;
+			if (!ExpressionFactory.class.isAssignableFrom(cls))
+				throw new SystemException(cls + " must implements " + ExpressionFactory.class);
+			return cast(cls);
 		} else {
 			try {
-				return Classes.forNameByThread((String)clsnm);
+				return cast(Classes.forNameByThread((String)clsnm));
 			} catch (ClassNotFoundException ex) {
 				throw new SystemException("Failed to load class "+clsnm);
 			}
@@ -97,12 +103,12 @@ public class Evaluators {
 	}
 
 	/** Adds an evaluator
-	 * (aka., the expression factory, {@link org.zkoss.xel.ExpressionFactory}).
+	 * (aka., the expression factory, {@link ExpressionFactory}).
 	 *
 	 * @param name the name of the evaluator, say, MVEL.
 	 * It is case insensitive.
 	 * @param evalcls the class name of the evaluator, aka., the expression factory
-	 * ({@link org.zkoss.xel.ExpressionFactory}).
+	 * ({@link ExpressionFactory}).
 	 * @return the previous class name, or null if not defined yet
 	 */
 	public static final String add(String name, String evalcls) {
@@ -118,11 +124,11 @@ public class Evaluators {
 			old = _evals.put(evalnm, evalcls);
 		}
 
-		return old instanceof Class ? ((Class)old).getName(): (String)old;
+		return old instanceof Class<?> ? ((Class<?>)old).getName(): (String)old;
 	}
 	/** Adds an evaluator based on the XML declaration.
 	 * The evaluator is also known as the expression factory,
-	 * {@link org.zkoss.xel.ExpressionFactory}.
+	 * {@link ExpressionFactory}.
 	 *
 	 * <pre><code>
 &lt;xel-config&gt;

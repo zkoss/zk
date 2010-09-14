@@ -142,7 +142,7 @@ public class AuResponse {
 	 * @see #getRawData
 	 * @since 5.0.0
 	 */
-	public List getEncodedData() {
+	public List<Object> getEncodedData() {
 		if (_data == null)
 			return null;
 

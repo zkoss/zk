@@ -66,7 +66,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		synchronized (_desktops) {
 			final boolean old = _desktops.disableExpunge(true);
 			try {
-				return (Desktop)_desktops.get(desktopId);
+				return _desktops.get(desktopId);
 			} finally {
 				_desktops.disableExpunge(old);
 			}
@@ -75,7 +75,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	public Desktop getDesktop(String desktopId) {
 		final Desktop desktop;
 		synchronized (_desktops) {
-			desktop = (Desktop)_desktops.get(desktopId);
+			desktop = _desktops.get(desktopId);
 		}
 		if (desktop == null)
 			throw new ComponentNotFoundException("Desktop not found: "+desktopId);
@@ -83,7 +83,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 	public void addDesktop(Desktop desktop) {
 		final boolean added;
-		final Object old;
+		final Desktop old;
 		synchronized (_desktops) {
 			old = _desktops.put(desktop.getId(), desktop);
 		}
@@ -98,7 +98,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	public void removeDesktop(Desktop desktop) {
 		final boolean oldexp = _desktops.disableExpunge(true);
 		try {
-			final Object old;
+			final Desktop old;
 			synchronized (_desktops) {
 				old = _desktops.remove(desktop.getId());
 			}
@@ -146,8 +146,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		synchronized (_desktops) {
 			final boolean old = _desktops.disableExpunge(true);
 			try {
-				for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-					((DesktopCtrl)it.next()).sessionWillPassivate(sess);
+				for (Desktop desktop: _desktops.values())
+					((DesktopCtrl)desktop).sessionWillPassivate(sess);
 			} finally {
 				_desktops.disableExpunge(old);
 			}
@@ -160,8 +160,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		synchronized (_desktops) {
 			final boolean old = _desktops.disableExpunge(true);
 			try {
-				for (Iterator it = _desktops.values().iterator(); it.hasNext();)
-					((DesktopCtrl)it.next()).sessionDidActivate(sess);
+				for (Desktop desktop: _desktops.values())
+					((DesktopCtrl)desktop).sessionDidActivate(sess);
 			} finally {
 				_desktops.disableExpunge(old);
 			}
@@ -173,9 +173,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			if (log.debugable()) log.debug("Invalidated and remove: "+_desktops);
 			final boolean old = _desktops.disableExpunge(true);
 			try {
-				for (Iterator it = new ArrayList(_desktops.values()).iterator();
-				it.hasNext();) {
-					desktopDestroyed((Desktop)it.next());
+				for (Desktop desktop: new ArrayList<Desktop>(_desktops.values())) {
+					desktopDestroyed(desktop);
 				}
 				_desktops.clear();
 			} finally {
@@ -185,7 +184,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	}
 
 	/** Holds desktops. */
-	private static class Cache extends CacheMap { //serializable
+	private static class Cache extends CacheMap<String, Desktop> { //serializable
 		private boolean _expungeDisabled;
 		private Cache(Configuration config) {
 			super(16);

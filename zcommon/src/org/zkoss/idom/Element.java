@@ -36,10 +36,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.TypeInfo;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.mesg.Messages;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.NotableLinkedList;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
@@ -241,7 +241,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			final Collection c = (Collection)obj;
 			final Iterator it = c.iterator();
 			if (it.hasNext() && (it.next() instanceof Item)) {
-				final Collection<Item> ci = CollectionsX.generic(c);
+				final Collection<Item> ci = cast(c);
 				getChildren().addAll(ci);
 				return null; //done
 			}

@@ -59,8 +59,9 @@ public class SimpleWebApp extends AbstractWebApp {
 		super.init(context, config);
 	}
 
-	private final Map _attrs = new AttributesMap() {
-		protected Enumeration getKeys() {
+	private final Map<String, Object> _attrs = new AttributesMap() {
+		@SuppressWarnings("unchecked")
+		protected Enumeration<String> getKeys() {
 			return _ctx.getAttributeNames();
 		}
 		protected Object getValue(String key) {
@@ -90,7 +91,7 @@ public class SimpleWebApp extends AbstractWebApp {
 		_ctx.removeAttribute(name);
 		return old;
 	}
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
 
@@ -149,7 +150,8 @@ public class SimpleWebApp extends AbstractWebApp {
 	public String getInitParameter(String name) {
 		return _ctx.getInitParameter(name);
 	}
-	public Iterator getInitParameterNames() {
+	@SuppressWarnings("unchecked")
+	public Iterator<String> getInitParameterNames() {
 		return new CollectionsX.EnumerationIterator(
 			_ctx.getInitParameterNames());
 	}
@@ -159,7 +161,8 @@ public class SimpleWebApp extends AbstractWebApp {
 	public String getMimeType(String file) {
 		return _ctx.getMimeType(file);
 	}
-	public Set getResourcePaths(String path) {
+	@SuppressWarnings("unchecked")
+	public Set<String> getResourcePaths(String path) {
 		return _ctx.getResourcePaths(path);
 	}
 	public Object getNativeContext() {

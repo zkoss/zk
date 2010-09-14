@@ -73,7 +73,7 @@ public interface ThemeProvider {
 	 * that the current desktop shall use.
 	 * Each URI is an instance of of either {@link String} or {@link StyleSheet}.
 	 */
-	public Collection getThemeURIs(Execution exec, List uris);
+	public Collection<?> getThemeURIs(Execution exec, List<?> uris);
 
 	/** Returns the number of hours that the specified WCS
 	 * (Widget CSS descriptor) file won't be changed.

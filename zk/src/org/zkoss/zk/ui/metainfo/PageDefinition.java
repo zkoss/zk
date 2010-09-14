@@ -77,24 +77,24 @@ public class PageDefinition extends NodeInfo {
 	/** The function mapper. */
 	private FunctionMapper _mapper;
 	/* List(InitiatorInfo). */
-	private List _initdefs;
+	private List<InitiatorInfo> _initdefs;
 	/** List(VariableResolverInfo). */
-	private List _resolvdefs;
-	/** List(FunctionMapper mapper). */
-	private List _mapperdefs;
+	private List<VariableResolverInfo> _resolvdefs;
+	/** List(FunctionMapperInfo mapper). */
+	private List<FunctionMapperInfo> _mapperdefs;
 	/** List(HeaderInfo). They are generated before ZK default headers, such as meta. */
-	private List _hdBfrDefs;
+	private List<HeaderInfo> _hdBfrDefs;
 	/** List(HeaderInfo). They are generated after ZK default headers. */
-	private List _hdAftDefs;
+	private List<HeaderInfo> _hdAftDefs;
 	/** List(ResponseHeaderInfo). */
-	private List _hdResDefs;
+	private List<ResponseHeaderInfo> _hdResDefs;
 	/** List(ForwardInfo). */
-	private List _forwdefs;
+	private List<ForwardInfo> _forwdefs;
 	/** Map(String name, ExValue value). */
-	private Map _rootAttrs;
+	private Map<String, ExValue> _rootAttrs;
 	private ExValue _contentType, _docType, _firstLine;
 	/** The expression factory (ExpressionFactory).*/
-	private Class _expfcls;
+	private Class<? extends ExpressionFactory> _expfcls;
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
@@ -245,8 +245,8 @@ public class PageDefinition extends NodeInfo {
 	public void imports(PageDefinition pgdef, String[] directives) {
 		if (pgdef._initdefs != null
 		&& (directives == null || contains(directives, "init")))
-			for (Iterator it = pgdef._initdefs.iterator(); it.hasNext();)
-				addInitiatorInfo((InitiatorInfo)it.next());
+			for (InitiatorInfo ii: pgdef._initdefs)
+				addInitiatorInfo(ii);
 
 		if (directives == null || contains(directives, "component")) {
 			for (Iterator it = pgdef._compdefs.getNames().iterator();
@@ -261,14 +261,14 @@ public class PageDefinition extends NodeInfo {
 
 		if (pgdef._resolvdefs != null
 		&& directives != null && contains(directives, "variable-resolver")) {
-			for (Iterator it = pgdef._resolvdefs.iterator(); it.hasNext();)
-				addVariableResolverInfo((VariableResolverInfo)it.next());
+			for (VariableResolverInfo vri: pgdef._resolvdefs)
+				addVariableResolverInfo(vri);
 		}
 
 		if (pgdef._mapperdefs != null
 		&& directives != null && contains(directives, "function-mapper")) {
-			for (Iterator it = pgdef._mapperdefs.iterator(); it.hasNext();)
-				addFunctionMapperInfo((FunctionMapperInfo)it.next());
+			for (FunctionMapperInfo fmi: pgdef._mapperdefs)
+				addFunctionMapperInfo(fmi);
 		}
 
 		if (pgdef._xelfuncs != null
@@ -278,19 +278,19 @@ public class PageDefinition extends NodeInfo {
 
 		if (pgdef._hdBfrDefs != null
 		&& directives != null && contains(directives, "meta")) {
-			for (Iterator it = pgdef._hdBfrDefs.iterator(); it.hasNext();)
-				addHeaderInfo((HeaderInfo)it.next(), true);
+			for (HeaderInfo hi: pgdef._hdBfrDefs)
+				addHeaderInfo(hi, true);
 		}
 		if (pgdef._hdAftDefs != null
 		&& directives != null && contains(directives, "meta")) {
-			for (Iterator it = pgdef._hdAftDefs.iterator(); it.hasNext();)
-				addHeaderInfo((HeaderInfo)it.next(), false);
+			for (HeaderInfo hi: pgdef._hdAftDefs)
+				addHeaderInfo(hi, false);
 		}
 
 		if (pgdef._hdResDefs != null
 		&& directives != null && contains(directives, "header")) {
-			for (Iterator it = pgdef._hdResDefs.iterator(); it.hasNext();)
-				addResponseHeaderInfo((ResponseHeaderInfo)it.next());
+			for (ResponseHeaderInfo rhi: pgdef._hdResDefs)
+				addResponseHeaderInfo(rhi);
 		}
 	}
 	private static boolean contains(String[] dirs, String dir) {
@@ -316,22 +316,21 @@ public class PageDefinition extends NodeInfo {
 			throw new IllegalArgumentException("null");
 
 		if (_initdefs == null)
-			_initdefs = new LinkedList();
+			_initdefs = new LinkedList<InitiatorInfo>();
 		_initdefs.add(init);
 	}
 	/** Returns a list of all {@link Initiator} and invokes
 	 * its {@link Initiator#doInit} before returning.
 	 * It never returns null.
 	 */
-	public List doInit(Page page) {
+	public List<Initiator> doInit(Page page) {
 		if (_initdefs == null)
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 
-		final List inits = new LinkedList();
-		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-			final InitiatorInfo def = (InitiatorInfo)it.next();
+		final List<Initiator> inits = new LinkedList<Initiator>();
+		for (InitiatorInfo ii: _initdefs) {
 			try {
-				final Initiator init = def.newInitiator(getEvaluator(), page);
+				final Initiator init = ii.newInitiator(getEvaluator(), page);
 				if (init != null) inits.add(init);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
@@ -347,7 +346,7 @@ public class PageDefinition extends NodeInfo {
 			throw new IllegalArgumentException("null");
 
 		if (_resolvdefs == null)
-			_resolvdefs = new LinkedList();
+			_resolvdefs = new LinkedList<VariableResolverInfo>();
 		_resolvdefs.add(resolver);
 	}
 	/** Adds a defintion of {@link FunctionMapper}.
@@ -358,7 +357,7 @@ public class PageDefinition extends NodeInfo {
 			throw new IllegalArgumentException("null");
 
 		if (_mapperdefs == null)
-			_mapperdefs = new LinkedList();
+			_mapperdefs = new LinkedList<FunctionMapperInfo>();
 		_mapperdefs.add(mapper);
 	}
 	/** Adds a XEL method.
@@ -385,11 +384,9 @@ public class PageDefinition extends NodeInfo {
 		page.addFunctionMapper(getTaglibMapper());
 
 		if (_mapperdefs != null)
-			for (Iterator it = _mapperdefs.iterator(); it.hasNext();) {
-				final FunctionMapperInfo def = (FunctionMapperInfo)it.next();
+			for (FunctionMapperInfo fmi: _mapperdefs) {
 				try {
-					FunctionMapper mapper =
-						def.newFunctionMapper(this, page);
+					FunctionMapper mapper = fmi.newFunctionMapper(this, page);
 					if (mapper != null) 
 						page.addFunctionMapper(mapper);
 				} catch (Throwable ex) {
@@ -398,11 +395,9 @@ public class PageDefinition extends NodeInfo {
 			}
 
 		if (_resolvdefs != null)
-			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
-				final VariableResolverInfo def = (VariableResolverInfo)it.next();
+			for (VariableResolverInfo vri: _resolvdefs) {
 				try {
-					VariableResolver resolver =
-						def.newVariableResolver(this, page);
+					VariableResolver resolver = vri.newVariableResolver(this, page);
 					if (resolver != null) 
 						page.addVariableResolver(resolver);
 				} catch (Throwable ex) {
@@ -418,7 +413,7 @@ public class PageDefinition extends NodeInfo {
 		if (header == null)
 			throw new IllegalArgumentException();
 		if (_hdResDefs == null)
-			_hdResDefs = new LinkedList();
+			_hdResDefs = new LinkedList<ResponseHeaderInfo>();
 		_hdResDefs.add(header);
 	}
 	/** Returns a map of response headers (never null).
@@ -428,11 +423,10 @@ public class PageDefinition extends NodeInfo {
 	 * The second element indicates whether to add (rather than set)
 	 * theader. It is an instance of Boolean (and never null).
 	 */
-	public Collection getResponseHeaders(Page page) {
-		final List headers = new LinkedList();
+	public Collection<Object[]> getResponseHeaders(Page page) {
+		final List<Object[]> headers = new LinkedList<Object[]>();
 		if (_hdResDefs != null)
-			for (Iterator it = _hdResDefs.iterator(); it.hasNext();) {
-				final ResponseHeaderInfo rhi = (ResponseHeaderInfo)it.next();
+			for (ResponseHeaderInfo rhi: _hdResDefs) {
 				headers.add(new Object[] {
 					rhi.getName(), rhi.getValue(page),
 					Boolean.valueOf(rhi.shallAppend(page))});
@@ -451,11 +445,11 @@ public class PageDefinition extends NodeInfo {
 
 		if (before) {
 			if (_hdBfrDefs == null)
-				_hdBfrDefs = new LinkedList();
+				_hdBfrDefs = new LinkedList<HeaderInfo>();
 			_hdBfrDefs.add(header);
 		} else {
 			if (_hdAftDefs == null)
-				_hdAftDefs = new LinkedList();
+				_hdAftDefs = new LinkedList<HeaderInfo>();
 			_hdAftDefs.add(header);
 		}
 	}
@@ -479,13 +473,12 @@ public class PageDefinition extends NodeInfo {
 	 * @since 3.6.1
 	 */
 	public String getHeaders(Page page, boolean before) {
-		final List defs = before ? _hdBfrDefs: _hdAftDefs;
+		final List<HeaderInfo> defs = before ? _hdBfrDefs: _hdAftDefs;
 		if (defs == null)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator it = defs.iterator(); it.hasNext();) {
-			final HeaderInfo hi = (HeaderInfo)it.next();
+		for (HeaderInfo hi: defs) {
 			if (hi.isEffective(page))
 				sb.append(hi.toHTML(page)).append('\n');
 		}
@@ -506,7 +499,7 @@ public class PageDefinition extends NodeInfo {
 			throw new IllegalArgumentException("null");
 
 		if (_forwdefs == null)
-			_forwdefs = new LinkedList();
+			_forwdefs = new LinkedList<ForwardInfo>();
 		_forwdefs.add(forward);
 	}
 	/** Returns the URI to forward to, or null if not to foward.
@@ -519,8 +512,8 @@ public class PageDefinition extends NodeInfo {
 		if (_forwdefs == null)
 			return null;
 
-		for (Iterator it = _forwdefs.iterator(); it.hasNext();) {
-			final String uri = ((ForwardInfo)it.next()).resolveURI(this, page);
+		for (ForwardInfo fi: _forwdefs) {
+			final String uri = fi.resolveURI(this, page);
 			if (uri != null)
 				return uri;
 		}
@@ -672,7 +665,7 @@ public class PageDefinition extends NodeInfo {
 		if (_rootAttrs == null) {
 			if (value == null)
 				return; //nothing to
-			_rootAttrs = new LinkedHashMap();
+			_rootAttrs = new LinkedHashMap<String, ExValue>();
 		}
 
 		if (value == null) _rootAttrs.remove(name);
@@ -689,12 +682,10 @@ public class PageDefinition extends NodeInfo {
 
 		final Evaluator eval = getEvaluator();
 		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator it = _rootAttrs.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String val = (String)
-				((ExValue)me.getValue()).getValue(eval, page);
+		for (Map.Entry<String, ExValue> me: _rootAttrs.entrySet()) {
+			final String val = (String)me.getValue().getValue(eval, page);
 			if (val != null)
-				HTMLs.appendAttribute(sb, (String)me.getKey(), val);
+				HTMLs.appendAttribute(sb, me.getKey(), val);
 		}
 		return sb.toString();
 	}
@@ -796,7 +787,7 @@ public class PageDefinition extends NodeInfo {
 	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
 	 * @since 3.0.0
 	 */
-	public void setExpressionFactoryClass(Class expfcls) {
+	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
 		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
 			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
 		_expfcls = expfcls;
@@ -809,7 +800,7 @@ public class PageDefinition extends NodeInfo {
 	 * @see #setExpressionFactoryClass
 	 * @since 3.0.0
 	 */
-	public Class getExpressionFactoryClass() {
+	public Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return _expfcls;
 	}
 
@@ -872,10 +863,10 @@ public class PageDefinition extends NodeInfo {
 					return evalHeaders ?
 						PageDefinition.this.getHeaders(page): "";
 				}
-				public Collection getResponseHeaders() {
-					return evalHeaders ?
-						PageDefinition.this.getResponseHeaders(page):
-							Collections.EMPTY_LIST;
+				public Collection<Object[]> getResponseHeaders() {
+					if (evalHeaders)
+						return PageDefinition.this.getResponseHeaders(page);
+					return Collections.emptyList();
 				}
 			});
 

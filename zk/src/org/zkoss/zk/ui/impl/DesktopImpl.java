@@ -126,9 +126,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The URI to access the update engine. */
 	private final String _updateURI;
 	/** List<Page>. */
-	private final List _pages = new LinkedList();
+	private final List<Page> _pages = new LinkedList<Page>();
 	/** Map (String uuid, Component comp). */
-	private transient Map _comps;
+	private transient Map<String, Component> _comps;
 	/** A map of attributes. */
 	private transient SimpleScope _attrs;
 		//don't create it dynamically because PageImp._ip bind it at constructor
@@ -152,20 +152,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The device. */
 	private transient Device _dev; //it will re-init each time getDevice called
 	/** A map of media (String key, Media content). */
-	private CacheMap _meds;
+	private CacheMap<String, Media> _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
 	private transient ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
-	private transient List _dtCleans, _execInits, _execCleans,
-		_uiCycles, _ausvcs;
+	private transient List<DesktopCleanup> _dtCleans;
+	private transient List<ExecutionInit> _execInits;
+	private transient List<ExecutionCleanup> _execCleans;
+	private transient List<UiLifeCycle> _uiCycles;
+	private transient List<AuService> _ausvcs;
 
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
 	/** List<RecycleInfo>: used to recycle detached component's UUID. */
-	private transient List _uuidRecycle;
+	private transient List<RecycleInfo> _uuidRecycle;
 
 	private transient ReqResult _lastRes;
 	private transient List<AuResponse> _piggyRes;
@@ -277,7 +280,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void init() {
 		_uvLock = new Object();
 		_rque = newRequestQueue();
-		_comps = new HashMap(64);
+		_comps = new HashMap<String, Component>(64);
 		_attrs = new SimpleScope(this);
 	}
 	/** Updates _uuidPrefix based on _id. */
@@ -371,7 +374,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("null media");
 
 		if (_meds == null) {
-			_meds = new CacheMap();
+			_meds = new CacheMap<String, Media>();
 			_meds.setMaxSize(1024);
 			_meds.setLifetime(15 * 60 * 1000);
 				//15 minutes (CONSIDER: configurable)
@@ -394,7 +397,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return getUpdateURI(sb.toString());
 	}
 	public Media getDownloadMedia(String medId, boolean reserved) {
-		return _meds != null ? (Media)_meds.get(medId): null;
+		return _meds != null ? _meds.get(medId): null;
 	}
 	/** Cleans up redudant data. */
 	private void housekeep() {
@@ -413,8 +416,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//synchronized is required
 		Page page = null;
 		synchronized (_pages) {
-			for (Iterator it = _pages.iterator(); it.hasNext();) {
-				final Page pg = (Page)it.next();
+			for (Page pg: _pages) {
 				if (Objects.equals(pageId, pg.getId()))
 					return pg;
 				if (Objects.equals(pageId, pg.getUuid()))
@@ -426,12 +428,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public boolean hasPage(String pageId) {
 		return getPageIfAny(pageId) != null;
 	}
-	public Collection getPages() {
+	public Collection<Page> getPages() {
 		//No synchronized is required because it cannot be access concurrently
 		return Collections.unmodifiableCollection(_pages);
 	}
 	public Page getFirstPage() {
-		return _pages.isEmpty() ? null: (Page)_pages.get(0);
+		return _pages.isEmpty() ? null: _pages.get(0);
 	}
 
 	public String getBookmark() {
@@ -454,7 +456,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		((WebAppCtrl) _wapp).getUiEngine().addResponse(response);
 	}
 
-	public Collection getComponents() {
+	public Collection<Component> getComponents() {
 		return _comps.values();
 	}
 	public Component getComponentByUuid(String uuid) {
@@ -473,7 +475,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (langdef != null && !_devType.equals(langdef.getDeviceType()))
 			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_devType);
 		final String uuid = comp.getUuid();
-		final Object old = _comps.put(uuid, comp);
+		final Component old = _comps.put(uuid, comp);
 		if (old != comp && old != null) {
 			_comps.put(uuid, old); //recover
 			throw new InternalError("Caller shall prevent it: Register a component twice: "+comp);
@@ -482,8 +484,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_uuid when it is recycled (refer to AbstractComponent.setPage0
 			(the caller of removeComponent has to reset)
 		 else if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
-			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
-				final List uuids = ((RecycleInfo)it.next()).uuids;
+			for (RecycleInfo ri: _uuidRecycle) {
+				final List uuids = ri.uuids;
 				if (uuids.remove(uuid)) {
 					if (uuids.isEmpty())
 						it.remove();
@@ -507,15 +509,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final int execId = getExecId();
 		RecycleInfo ri = null;
 		if (_uuidRecycle == null) {
-			_uuidRecycle = new LinkedList();
+			_uuidRecycle = new LinkedList<RecycleInfo>();
 		} else {
-			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
-				final RecycleInfo r = (RecycleInfo)it.next();
+			for (RecycleInfo r: _uuidRecycle)
 				if (r.execId == execId) {
 					ri = r; //found
 					break;
 				}
-			}
 		}
 		if (ri == null)
 			_uuidRecycle.add(ri = new RecycleInfo(execId));
@@ -534,7 +534,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	private static Boolean _recycleUuidDisabled;
 
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _attrs.getAttributes();
 	}
 	public Object getAttribute(String name) {
@@ -635,15 +635,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void service(AuRequest request, boolean everError) {
 		if (_ausvcs != null) {
 			//Note: removeListener might be called when invoking svc.service()
-			final Set called = new IdentityHashSet();
+			final Set<AuService> called = new IdentityHashSet<AuService>();
 			l_svc:
 			for (;;) {
-				for (Iterator it = _ausvcs.iterator(); ;) {
+				for (Iterator<AuService> it = _ausvcs.iterator(); ;) {
 					final AuService svc;
 					try {
 						if (!it.hasNext())
 							break l_svc; //done
-						svc = (AuService)it.next();
+						svc = it.next();
 					} catch (java.util.ConcurrentModificationException ex) {
 						break; //loop again
 					}
@@ -712,10 +712,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//Thus, it takes fewer memory at the client
 		if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
 			final int execId = getExecId();
-			for (Iterator it = _uuidRecycle.iterator(); it.hasNext();) {
+			for (Iterator<RecycleInfo> it = _uuidRecycle.iterator(); it.hasNext();) {
 				final RecycleInfo ri = (RecycleInfo)it.next();
 				if (ri.execId != execId) { //reuse if diff
-					final String uuid = (String)ri.uuids.remove(0);
+					final String uuid = ri.uuids.remove(0);
 					if (ri.uuids.isEmpty())
 						it.remove();
 					return uuid;
@@ -760,9 +760,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		((PageCtrl)page).destroy();
 	}
-	private void removeComponents(Collection comps) {
-		for (Iterator it = comps.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+	private void removeComponents(Collection<Component> comps) {
+		for (Component comp: comps) {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp, true);
 		}
@@ -807,12 +806,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_spush = null;
 		}
 
-		for (Iterator it = _pages.iterator(); it.hasNext();) {
-			final PageCtrl pgc = (PageCtrl)it.next();
+		for (Page page: _pages) {
 			try {
-				pgc.destroy();
+				((PageCtrl)page).destroy();
 			} catch (Throwable ex) {
-				log.warning("Failed to destroy "+pgc, ex);
+				log.warning("Failed to destroy "+page, ex);
 			}
 		}
 
@@ -822,13 +820,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//theorectically, the following is not necessary, but, to be safe...
 		_pages.clear();
 		_attrs.getAttributes().clear();
-		_comps = new HashMap(2); //not clear() since # of comps might huge
+		_comps = new HashMap<String, Component>(2); //not clear() since # of comps might huge
 		_meds = null;
 		//_sess = null; => not sure whether it can be nullify
 		//_wapp = null; => SimpleDesktopCache.desktopDestroyed depends on it
 	}
 
-	public Collection getSuspendedThreads() {
+	public Collection<EventProcessingThread> getSuspendedThreads() {
 		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
 	}
 	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause) {
@@ -895,8 +893,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 	}
 	private void sessWillPassivate() {
-		for (Iterator it = _pages.iterator(); it.hasNext();)
-			((PageCtrl)it.next()).sessionWillPassivate(this);
+		for (Page page: _pages)
+			((PageCtrl)page).sessionWillPassivate(this);
 
 		if (_dev != null) _dev.sessionWillPassivate(this);
 
@@ -911,8 +909,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void sessDidActivate() {
 		if (_dev != null) _dev.sessionDidActivate(this);
 
-		for (Iterator it = _pages.iterator(); it.hasNext();)
-			((PageCtrl)it.next()).sessionDidActivate(this);
+		for (Page page: _pages)
+			((PageCtrl)page).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
 		didActivate(_attrs.getListeners());
@@ -947,10 +945,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		final Map attrs = _attrs.getAttributes();
+		final Map<String, Object> attrs = _attrs.getAttributes();
 		willSerialize(attrs.values());
 		Serializables.smartWrite(s, attrs);
-		final List lns = _attrs.getListeners();
+		final List<ScopeListener> lns = _attrs.getListeners();
 		willSerialize(lns);
 		Serializables.smartWrite(s, lns);
 
@@ -983,21 +981,21 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		init();
 
 		//get back _comps from _pages
-		for (Iterator it = _pages.iterator(); it.hasNext();)
-			for (Component root = ((Page)it.next()).getFirstRoot(); root != null;
+		for (Page page: _pages)
+			for (Component root = page.getFirstRoot(); root != null;
 			root = root.getNextSibling())
 				addAllComponents(root);
 
-		final Map attrs = _attrs.getAttributes();
+		final Map<String, Object> attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
-		final List lns = _attrs.getListeners();
+		final List<ScopeListener> lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
 
-		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
-		_execInits = (List)Serializables.smartRead(s, _execInits);
-		_execCleans = (List)Serializables.smartRead(s, _execCleans);
-		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
-		_ausvcs = (List)Serializables.smartRead(s, _ausvcs);
+		_dtCleans = (List<DesktopCleanup>)Serializables.smartRead(s, _dtCleans);
+		_execInits = (List<ExecutionInit>)Serializables.smartRead(s, _execInits);
+		_execCleans = (List<ExecutionCleanup>)Serializables.smartRead(s, _execCleans);
+		_uiCycles = (List<UiLifeCycle>)Serializables.smartRead(s, _uiCycles);
+		_ausvcs = (List<AuService>)Serializables.smartRead(s, _ausvcs);
 
 		didDeserialize(attrs.values());
 		didDeserialize(lns);
@@ -1033,35 +1031,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 
 		if (listener instanceof DesktopCleanup) {
-			_dtCleans = addListener0(_dtCleans, listener);
+			_dtCleans = addListener0(_dtCleans, (DesktopCleanup)listener);
 			added = true;
 		}
 
 		if (listener instanceof ExecutionInit) {
-			_execInits = addListener0(_execInits, listener);
+			_execInits = addListener0(_execInits, (ExecutionInit)listener);
 			added = true;
 		}
 		if (listener instanceof ExecutionCleanup) {
-			_execCleans = addListener0(_execCleans, listener);
+			_execCleans = addListener0(_execCleans, (ExecutionCleanup)listener);
 			added = true;
 		}
 
 		if (listener instanceof UiLifeCycle) {
-			_uiCycles = addListener0(_uiCycles, listener);
+			_uiCycles = addListener0(_uiCycles, (UiLifeCycle)listener);
 			added = true;
 		}
 
 		if (listener instanceof AuService) {
-			_ausvcs = addListener0(_ausvcs, listener);
+			_ausvcs = addListener0(_ausvcs, (AuService)listener);
 			added = true;
 		}
 
 		if (!added)
 			throw new IllegalArgumentException("Unknown listener: "+listener);
 	}
-	private List addListener0(List list, Object listener) {
+	private <T> List<T> addListener0(List<T> list, T listener) {
 		if (list == null)
-			list = new LinkedList();
+			list = new LinkedList<T>();
 		list.add(listener);
 		return list;
 	}
@@ -1131,8 +1129,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				addResponse(new AuBookmark(_bookmark));
 
 			l_out:
-			for (Iterator it = _pages.iterator(); it.hasNext();)
-				for (Component root = ((Page)it.next()).getFirstRoot();
+			for (Page page: _pages)
+				for (Component root = page.getFirstRoot();
 				root != null; root = root.getNextSibling())
 					if (Events.isListened(root, Events.ON_CLIENT_INFO, false)) {
 						addResponse(new AuClientInfo(this));
@@ -1143,8 +1141,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void invokeDesktopCleanups() {
 		if (_dtCleans != null) {
-			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
-				final DesktopCleanup listener = (DesktopCleanup)it.next();
+			for (DesktopCleanup listener: _dtCleans) {
 				try {
 					listener.cleanup(this);
 				} catch (Throwable ex) {
@@ -1157,9 +1154,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
 		if (_execInits != null) {
-			for (Iterator it = _execInits.iterator(); it.hasNext();) {
+			for (ExecutionInit listener: _execInits) {
 				try {
-					((ExecutionInit)it.next()).init(exec, parent);
+					listener.init(exec, parent);
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 					//Don't intercept; to prevent the creation of a session
@@ -1167,10 +1164,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
-	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
+	public void invokeExecutionCleanups(Execution exec, Execution parent, List<Throwable> errs) {
 		if (_execCleans != null) {
-			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
-				final ExecutionCleanup listener = (ExecutionCleanup)it.next();
+			for (ExecutionCleanup listener: _execCleans) {
 				try {
 					listener.cleanup(exec, parent, errs);
 				} catch (Throwable ex) {
@@ -1183,8 +1179,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void afterComponentAttached(Component comp, Page page) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
-				final UiLifeCycle listener = (UiLifeCycle)it.next();
+			for (UiLifeCycle listener: _uiCycles) {
 				try {
 					listener.afterComponentAttached(comp, page);
 				} catch (Throwable ex) {
@@ -1333,10 +1328,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void onPiggyback() {
 		if (_piggybackListened) {
-			for (Iterator it = _pages.iterator(); it.hasNext();) {
-				final Page p = (Page)it.next();
-				if (Executions.getCurrent().isAsyncUpdate(p)) { //ignore new created pages
-					for (Component root = ((Page)it.next()).getFirstRoot();
+			for (Page page: _pages) {
+				if (Executions.getCurrent().isAsyncUpdate(page)) { //ignore new created pages
+					for (Component root = page.getFirstRoot();
 					root != null; root = root.getNextSibling()) {
 						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) //asap+deferrable
 							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
@@ -1381,11 +1375,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void invalidate() {
-		for (Iterator it = _pages.iterator(); it.hasNext();) {
-			final Page page = (Page)it.next();
+		for (Page page: _pages)
 			if (((PageCtrl)page).getOwner() == null)
 				page.invalidate();
-		}
 	}
 	private static class ReqResult {
 		private final String id;
@@ -1397,7 +1389,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	private static class RecycleInfo implements java.io.Serializable {
 		private final int execId;
-		private final List uuids = new LinkedList();
+		private final List<String> uuids = new LinkedList<String>();
 		private RecycleInfo(int execId) {
 			this.execId = execId;
 		}

@@ -33,6 +33,10 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ExecutionMonitor;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -56,13 +60,13 @@ implements EventProcessingThread {
 	/** Part of the command: time zone. */
 	private TimeZone _timeZone;
 	/** Part of the result: a list of EventThreadInit instances. */
-	private List _evtThdInits;
+	private List<EventThreadInit> _evtThdInits;
 	/** Part of the result: a list of EventThreadCleanup instances. */
-	private List _evtThdCleanups;
+	private List<EventThreadCleanup> _evtThdCleanups;
 	/** Part of the result: a list of EventThreadResume instances. */
-	private List _evtThdResumes;
+	private List<EventThreadResume> _evtThdResumes;
 	/** Part of the result. a list of EventThreadSuspend instances. */
-	private List _evtThdSuspends;
+	private List<EventThreadSuspend> _evtThdSuspends;
 	/** Result of the result. */
 	private Throwable _ex;
 	/** Whether the execution is activated. */
@@ -247,7 +251,7 @@ implements EventProcessingThread {
 			_acted = true;
 		}
 
-		final List resumes = _evtThdResumes;
+		final List<EventThreadResume> resumes = _evtThdResumes;
 		_evtThdResumes = null;
 		if (resumes != null && !resumes.isEmpty()) {
 			_proc.getDesktop().getWebApp().getConfiguration()
@@ -399,14 +403,14 @@ implements EventProcessingThread {
 
 	private void invokeEventThreadCompletes(Configuration config,
 	Component comp, Event event) throws UiException {
-		final List errs = new LinkedList();
+		final List<Throwable> errs = new LinkedList<Throwable>();
 		if (_ex != null) errs.add(_ex);
 
 		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty())
 			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs, _ceased != null);
 
 		_evtThdCleanups = null;
-		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
+		_ex = errs.isEmpty() ? null: errs.get(0);
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
@@ -514,7 +518,7 @@ implements EventProcessingThread {
 	/** Invokes {@link Configuration#newEventThreadCleanups}.
 	 */
 	private void newEventThreadCleanups(Configuration config, Throwable ex) {
-		final List errs = new LinkedList();
+		final List<Throwable> errs = new LinkedList<Throwable>();
 		if (ex != null) errs.add(ex);
 		_evtThdCleanups =
 			config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);

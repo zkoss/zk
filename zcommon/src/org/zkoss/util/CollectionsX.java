@@ -37,35 +37,6 @@ import org.zkoss.lang.Strings;
  * @see java.util.Collections
  */
 public class CollectionsX {
-	/** Returns a type-safe generic collection of the given un-typed collection.
-	 * @since 6.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> Collection<T> generic(Collection col) {
-		return col;
-	}
-	/** Returns a type-safe generic list of the given un-typed list.
-	 * @since 6.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> List<T> generic(List list) {
-		return list;
-	}
-	/** Returns a type-safe generic set of the given un-typed set.
-	 * @since 6.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> Set<T> generic(Set set) {
-		return set;
-	}
-	/** Returns a type-safe generic map of the given un-typed map.
-	 * @since 6.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <K, V> Map<K, V> generic(Map map) {
-		return map;
-	}
-
 	/** An enumeration on top of a collection or iterator.
 	 */
 	public static final class CollectionEnumeration<E> implements Enumeration<E> {

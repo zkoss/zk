@@ -25,6 +25,7 @@ import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.Function;
+import org.zkoss.xel.ExpressionFactory;
 
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
@@ -317,7 +318,7 @@ public interface Page extends IdSpace, Scope {
 	 * @return the class, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
-	public Class getZScriptClass(String clsnm);
+	public Class<?> getZScriptClass(String clsnm);
 	/** Resolves the class of the specified name.
 	 * It first looks at Classes and then all loaded interpreters
 	 * {@link #getLoadedInterpreters}.
@@ -332,7 +333,7 @@ public interface Page extends IdSpace, Scope {
 	 * @since 3.0.1
 	 * @see #getZScriptClass
 	 */
-	public Class resolveClass(String clsnm) throws ClassNotFoundException;
+	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException;
 
 	/** Returns the function of the specified name by searching
 	 * the loaded interpreters.
@@ -444,7 +445,7 @@ public interface Page extends IdSpace, Scope {
 	public boolean isListenerAvailable(String evtnm);
 	/** Returns an iterator for iterating listener for the specified event.
 	 */
-	public Iterator getListenerIterator(String evtnm);
+	public Iterator<EventListener> getListenerIterator(String evtnm);
 
 	//-- special control --//
 	/** Removes all components in this page.
@@ -508,7 +509,7 @@ public interface Page extends IdSpace, Scope {
 	 * @see #setExpressionFactoryClass
 	 * @since 3.0.4
 	 */
-	public Class getExpressionFactoryClass();
+	public Class<? extends ExpressionFactory> getExpressionFactoryClass();
 	/** Sets the implementation of the expression factory that
 	 * is used by this page.
 	 *
@@ -519,7 +520,7 @@ public interface Page extends IdSpace, Scope {
 	 * @see #getExpressionFactoryClass
 	 * @since 3.0.4
 	 */
-	public void setExpressionFactoryClass(Class expfcls);
+	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls);
 
 	/** Returns if this page is a complete page.
 	 * By complete we mean the page has everything that the client expects.
@@ -599,5 +600,5 @@ public interface Page extends IdSpace, Scope {
 	 *
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse);
+	public ComponentDefinition getComponentDefinition(Class<? extends Component> cls, boolean recurse);
 }

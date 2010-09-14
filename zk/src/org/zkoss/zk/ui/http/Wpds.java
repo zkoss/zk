@@ -95,7 +95,7 @@ public class Wpds {
 		final int firstDayOfWeek = Utils.getFirstDayOfWeek();
 		final String djkey = locale + ":" + firstDayOfWeek;
 		synchronized (_datejs) {
-			final String djs = (String)_datejs.get(djkey);
+			final String djs = _datejs.get(djkey);
 			if (djs != null) return djs;
 		}
 
@@ -103,8 +103,7 @@ public class Wpds {
 		synchronized (_datejs) { //OK to race
 			//To minimize memory use, reuse the string if they are the same
 			//which is common
-			for (Iterator it = _datejs.values().iterator(); it.hasNext();) {
-				final String val = (String)it.next();
+			for (String val: _datejs.values()) {
 				if (val.equals(djs))
 					djs = val; 
 			}
@@ -227,9 +226,9 @@ public class Wpds {
 		}
 		sb.append("];\n");
 	}
-	private static final CacheMap _datejs;
+	private static final CacheMap<String, String> _datejs;
 	static {
-		_datejs = new CacheMap(8);
+		_datejs = new CacheMap<String, String>(8);
 		_datejs.setLifetime(24*60*60*1000);
 	}
 }

@@ -57,16 +57,16 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private Page _curpage;
 	private PageDefinition _curpgdef;
 	/** A list of EventInfo. */
-	private final List _evtInfos = new LinkedList();
+	private final List<EventInfo> _evtInfos = new LinkedList<EventInfo>();
 	/** A stack of args being pushed by {@link #pushArg}. */
-	private List _args;
+	private List<Map<?, ?>> _args;
 	//private Event _evtInProc;
 	/** Which page is being created, or null if all in update mode. */
 	private final Page _creating;
 	/** The sequence ID of the current request. */
 	private String _reqId;
 	/** A collection of the AU responses that shall be generated to client */
-	private Collection _resps;
+	private Collection<AuResponse> _resps;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -111,8 +111,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (evt == null)
 			return; //done (ignored)
 
-		for (ListIterator it = _evtInfos.listIterator(_evtInfos.size());;) {
-			EventInfo ei = it.hasPrevious() ? (EventInfo)it.previous(): null;
+		for (ListIterator<EventInfo> it = _evtInfos.listIterator(_evtInfos.size());;) {
+			EventInfo ei = it.hasPrevious() ? it.previous(): null;
 			if (ei == null || ei.priority >= priority) {
 				if (ei != null) it.next();
 				it.add(new EventInfo(priority, evt));
@@ -178,14 +178,14 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	public Event getNextEvent() {
 		if (!_evtInfos.isEmpty())
-			return ((EventInfo)_evtInfos.remove(0)).event;
+			return _evtInfos.remove(0).event;
 
 		if (!_piggybacked) { //handle piggyback only once
 			((DesktopCtrl)_desktop).onPiggyback();
 			_piggybacked = true;
 
 			if (!_evtInfos.isEmpty())
-				return ((EventInfo)_evtInfos.remove(0)).event;
+				return _evtInfos.remove(0).event;
 		}
 		return null;
 	}
@@ -297,12 +297,14 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		getUiEngine().sendRedirect(uri, target);
 	}
 
-	public Map getArg() {
-		return _args != null ? (Map)_args.get(0): Collections.EMPTY_MAP;
+	public Map<?, ?> getArg() {
+		if (_args != null)
+			return _args.get(0);
+		return Collections.emptyMap();
 	}
-	public void pushArg(Map arg) {
+	public void pushArg(Map<?, ?> arg) {
 		if (_args == null)
-			_args = new LinkedList();
+			_args = new LinkedList<Map<?, ?>>();
 		_args.add(0, arg);
 	}
 	public void popArg() {
@@ -334,10 +336,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return _reqId;
 	}
 
-	public Collection getResponses() {
+	public Collection<AuResponse> getResponses() {
 		return _resps;
 	}
-	public void setResponses(Collection responses) {
+	public void setResponses(Collection<AuResponse> responses) {
 		_resps = responses;
 	}
 

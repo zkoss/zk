@@ -45,17 +45,17 @@ public class FunctionMapperInfo extends ArgumentInfo {
 	/** Constructs with a class.
 	 * @since 3.6.1
 	 */
-	public FunctionMapperInfo(Class cls, Map args) {
+	public FunctionMapperInfo(Class<? extends FunctionMapper> cls, Map<String, String> args) {
 		super(args);
 		checkClass(cls);
 		_mapper = cls;
 	}
 	/** Constructs with a class.
 	 */
-	public FunctionMapperInfo(Class cls) {
+	public FunctionMapperInfo(Class<? extends FunctionMapper> cls) {
 		this(cls, null);
 	}
-	private static void checkClass(Class cls) {
+	private static void checkClass(Class<?> cls) {
 		if (!FunctionMapper.class.isAssignableFrom(cls))
 			throw new UiException(FunctionMapper.class+" must be implemented: "+cls);
 	}
@@ -64,7 +64,7 @@ public class FunctionMapperInfo extends ArgumentInfo {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public FunctionMapperInfo(String clsnm, Map args)
+	public FunctionMapperInfo(String clsnm, Map<String, String> args)
 	throws ClassNotFoundException {
 		super(args);
 
@@ -73,7 +73,7 @@ public class FunctionMapperInfo extends ArgumentInfo {
 
 		if (clsnm.indexOf("${") < 0) {
 			try {
-				final Class cls = Classes.forNameByThread(clsnm);
+				final Class<?> cls = Classes.forNameByThread(clsnm);
 				checkClass(cls);
 				_mapper = cls;
 			} catch (ClassNotFoundException ex) {
@@ -116,7 +116,7 @@ public class FunctionMapperInfo extends ArgumentInfo {
 		if (_mapper instanceof FunctionMapper)
 			return (FunctionMapper)_mapper;
 
-		final Class cls;
+		final Class<?> cls;
 		if (_mapper instanceof ExValue) {
 			final String clsnm = (String)((ExValue)_mapper).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {

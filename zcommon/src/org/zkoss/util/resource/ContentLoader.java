@@ -32,9 +32,9 @@ import org.zkoss.io.Files;
  *
  * @author tomyeh
  */
-public class ContentLoader extends AbstractLoader {
+public class ContentLoader extends AbstractLoader<Object, String> {
 	//-- Loader --//
-	public Object load(Object src) throws Exception {
+	public String load(Object src) throws Exception {
 		final InputStream is;
 		if (src instanceof URL) {
 			is = ((URL)src).openStream();
@@ -48,7 +48,7 @@ public class ContentLoader extends AbstractLoader {
 		try {
 			return Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 		} finally {
-			try {is.close();} catch (Throwable ex) {}
+			Files.close(is);
 		}
 	}
 }

@@ -18,7 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.media.Media;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -39,11 +41,11 @@ public class UploadInfoService implements AuService {
 	private UploadInfoService() {
 	}
 	
-	private static Media[] parseResult(List result) {
+	private static Media[] parseResult(List<Media> result) {
 		if (result != null) {
 			//we have to filter items that user doesn't specify any file
-			for (Iterator it = result.iterator(); it.hasNext();) {
-				final Media media = (Media)it.next();
+			for (Iterator<Media> it = result.iterator(); it.hasNext();) {
+				final Media media = it.next();
 				if (media != null && media.inMemory() && media.isBinary()) {
 					final String nm = media.getName();
 					if (nm == null || nm.length() == 0) {
@@ -55,7 +57,7 @@ public class UploadInfoService implements AuService {
 			}
 
 			if (!result.isEmpty())
-				return (Media[])result.toArray(new Media[result.size()]);
+				return result.toArray(new Media[result.size()]);
 		}
 		return null;
 	}
@@ -66,9 +68,9 @@ public class UploadInfoService implements AuService {
 			Desktop desktop = request.getDesktop();
 			final String uuid = (String) request.getData().get("wid");
 			final String sid = (String) request.getData().get("sid");
+			final List<Media> result = cast((List)AuRequests.getUpdateResult(request));
 			Events.postEvent(new UploadEvent(Events.ON_UPLOAD,
-					desktop.getComponentByUuid(uuid),
-					parseResult((List)AuRequests.getUpdateResult(request))));
+					desktop.getComponentByUuid(uuid), parseResult(result)));
 
 			Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
 			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);

@@ -330,7 +330,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					Messages.get(MZk.PORTLET_PAGE_REQUIRED);
 		}
 
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		attrs.put(Attributes.ALERT_TYPE, "error");
 		attrs.put(Attributes.ALERT, msg);
 		Portlets.include(getPortletContext(), request, response,

@@ -166,7 +166,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
 	 */
-	public Class<? extends Component> resolveImplementationClass(Page page, String clsnm)
+	public Class<?> resolveImplementationClass(Page page, String clsnm)
 	throws ClassNotFoundException;
 	/** Returns whether a component belongs to this definition.
 	 *
@@ -221,7 +221,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @return the new component (never null)
 	 * @since 3.0.2
 	 */
-	public Component newInstance(Class cls);
+	public Component newInstance(Class<? extends Component> cls);
 
 	/** Adds a mold.
 	 *

@@ -83,7 +83,7 @@ public interface PageConfig {
 	public String getHeaders();
 
 	/** Returns a readonly collection of response headers (never null).
-	 * The entry is a three-element object array.
+	 * Each item is a three-element object array.
 	 * The first element is the header name.
 	 * The second element of the array is the value which is an instance of
 	 * {@link java.util.Date} or {@link String} (and never null).
@@ -91,5 +91,5 @@ public interface PageConfig {
 	 * theader. It is an instance of Boolean (and never null).
 	 * @since 5.0.2
 	 */
-	public Collection getResponseHeaders();
+	public Collection<Object[]> getResponseHeaders();
 }

@@ -45,7 +45,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 		//For better performance (of invoking beforeSendEvent and others
 		//we make a copy first
-		final List eilst = new LinkedList();
+		final List<EventInterceptor> eilst = new LinkedList<EventInterceptor>();
 		final EventInterceptor[] eis = _eis;
 		if (eis != null) {
 			for (int j = 0; j < eis.length; ++j)
@@ -53,8 +53,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		}
 		eilst.add(ei);
 
-		_eis = (EventInterceptor[])
-			eilst.toArray(new EventInterceptor[eilst.size()]);
+		_eis = eilst.toArray(new EventInterceptor[eilst.size()]);
 	}
 	/** Removes an event interceptor.
 	 *
@@ -65,7 +64,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 	 */
 	public boolean removeEventInterceptor(EventInterceptor ei) {
 		if (ei != null && _eis != null) {
-			final List eilst = new LinkedList();
+			final List<EventInterceptor> eilst = new LinkedList<EventInterceptor>();
 			final EventInterceptor[] eis = _eis;
 			boolean found = false;
 			for (int j = 0; j < eis.length; ++j) {
@@ -78,7 +77,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 			if (found) {
 				final int sz = eilst.size();
 				_eis = sz == 0 ? null:
-					(EventInterceptor[])eilst.toArray(new EventInterceptor[sz]);
+					eilst.toArray(new EventInterceptor[sz]);
 				return true;
 			}
 		}
@@ -93,7 +92,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 	 */
 	public boolean removeEventInterceptor(Class klass) {
 		if (klass != null && _eis != null) {
-			final List eilst = new LinkedList();
+			final List<EventInterceptor> eilst = new LinkedList<EventInterceptor>();
 			final EventInterceptor[] eis = _eis;
 			boolean found = false;
 			for (int j = 0; j < eis.length; ++j) {
@@ -106,7 +105,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 			if (found) {
 				final int sz = eilst.size();
 				_eis = sz == 0 ? null:
-					(EventInterceptor[])eilst.toArray(new EventInterceptor[sz]);
+					eilst.toArray(new EventInterceptor[sz]);
 				return true;
 			}
 		}
@@ -186,9 +185,8 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final Collection eilst = Serializables.smartRead(s, (Collection)null);
+		final Collection<EventInterceptor> eilst = Serializables.smartRead(s, (Collection<EventInterceptor>)null);
 		if (eilst != null)
-			_eis = (EventInterceptor[])
-				eilst.toArray(new EventInterceptor[eilst.size()]);
+			_eis = eilst.toArray(new EventInterceptor[eilst.size()]);
 	}
 }

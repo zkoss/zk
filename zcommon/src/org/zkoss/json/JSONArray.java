@@ -14,7 +14,7 @@ import java.util.List;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
-public class JSONArray extends LinkedList implements List, JSONAware {
+public class JSONArray extends LinkedList<Object> implements List<Object>, JSONAware {
 	private static final long serialVersionUID = 3957988303675231981L;
 
 	/**

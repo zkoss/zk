@@ -189,7 +189,7 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public Object removeAttribute(String name) {
 		return _scope.removeAttribute(name);
 	}
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _scope.getAttributes();
 	}
 
@@ -203,11 +203,11 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public String getHeader(String name) {
 		return null;
 	}
-	public Iterator getHeaders(String name) {
-		return CollectionsX.EMPTY_ITERATOR;
+	public Iterator<String> getHeaders(String name) {
+		return CollectionsX.emptyIterator();
 	}
-	public Iterator getHeaderNames() {
-		return CollectionsX.EMPTY_ITERATOR;
+	public Iterator<String> getHeaderNames() {
+		return CollectionsX.emptyIterator();
 	}
 	public void setResponseHeader(String name, String value) {
 		throw new UnsupportedOperationException();
@@ -231,8 +231,8 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public String getParameter(String name) {
 		return null;
 	}
-	public Map getParameterMap() {
-		return Collections.EMPTY_MAP;
+	public Map<String, String[]> getParameterMap() {
+		return Collections.emptyMap();
 	}
 	public org.zkoss.xel.VariableResolver getVariableResolver() {
 		return null;

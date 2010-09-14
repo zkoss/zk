@@ -169,7 +169,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 */
-	private static ComponentDefinition getDefinition(Execution exec, Class cls) {
+	private static ComponentDefinition getDefinition(Execution exec, Class<? extends Component> cls) {
 		if (exec != null) {
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();

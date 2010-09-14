@@ -2262,7 +2262,7 @@ public class Configuration {
 	 * Note: expfcls must implement {@link ExpressionFactory}.
 	 * @since 3.0.0
 	 */
-	public void setExpressionFactoryClass(Class expfcls) {
+	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
 		Expressions.setExpressionFactoryClass(expfcls);
 	}
 	/** Returns the implementation of the expression factory that
@@ -2271,7 +2271,7 @@ public class Configuration {
 	 * @see #setExpressionFactoryClass
 	 * @since 3.0.0
 	 */
-	public Class getExpressionFactoryClass() {
+	public Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return Expressions.getExpressionFactoryClass();
 	}
 

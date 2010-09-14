@@ -21,6 +21,7 @@ import java.io.Writer;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * A part of {@link Execution} for visualizing the components whose
@@ -57,7 +58,7 @@ public interface Visualizer {
 	 * @return true if respones are added; false if the first {@link Visualizer}
 	 * is NOT caused by assync responses.
 	 */
-	public boolean addToFirstAsyncUpdate(List responses);
+	public boolean addToFirstAsyncUpdate(List<AuResponse> responses);
 
 	/** Returns whether it is in recovering.
 	 * In other words, it is in the invocation of {@link FailoverManager#recover}.

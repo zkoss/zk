@@ -16,7 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -35,7 +37,7 @@ implements java.io.Serializable {
 	/** The implementation of the expression factory.
 	 * Used oly if _pagedef == null.
 	 */
-	private Class _expfcls;
+	private Class<? extends ExpressionFactory> _expfcls;
 	/** The function mapper for the evaluator.
 	 * Used oly if _pagedef == null.
 	 */
@@ -67,7 +69,7 @@ implements java.io.Serializable {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		_expfcls = (Class)s.readObject();
+		_expfcls = cast((Class)s.readObject());
 		_mapper = (FunctionMapper)s.readObject();
 	}
 }

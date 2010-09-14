@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.LinkedHashSet;
 
 import org.zkoss.lang.Classes;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
@@ -44,10 +45,10 @@ public class Interpreters {
 	private static final Log log = Log.lookup(Interpreters.class);
 
 	/** Map(zslang, Class/String class); */
-	private static final Map _ips = new HashMap();
+	private static final Map<String, Object> _ips = new HashMap<String, Object>();
 	/** A set of language names. */
-	private static final Set _zslangs =
-		Collections.synchronizedSet(new LinkedHashSet());
+	private static final Set<String> _zslangs =
+		Collections.synchronizedSet(new LinkedHashSet<String>());
 
 	private Interpreters() { //disable it
 	}
@@ -69,17 +70,19 @@ public class Interpreters {
 		if (clsnm == null)
 			throw new InterpreterNotFoundException(zslang, MZk.NOT_FOUND, zslang);
 
-		final Class cls;
+		final Class<? extends Interpreter> cls;
 		if (clsnm instanceof Class) {
-			cls = (Class)clsnm;
+			cls = cast((Class)clsnm);
 		} else {
+			Class<?> c;
 			try {
-				cls = Classes.forNameByThread((String)clsnm);
+				c = Classes.forNameByThread((String)clsnm);
 			} catch (ClassNotFoundException ex) {
 				throw new UiException("Failed to load class "+clsnm);
 			}
-			if (!Interpreter.class.isAssignableFrom(cls))
-				throw new IllegalArgumentException(cls+" must implements "+Interpreter.class);
+			if (!Interpreter.class.isAssignableFrom(c))
+				throw new IllegalArgumentException(c+" must implements "+Interpreter.class);
+			cls = cast(c);
 
 			synchronized (_ips) {
 				final Object old = _ips.put(zsl, cls);
@@ -89,7 +92,7 @@ public class Interpreters {
 		}
 
 		try {
-			final Interpreter ip = (Interpreter)cls.newInstance();
+			final Interpreter ip = cls.newInstance();
 			ip.init(owner, zslang);
 			return ip;
 		} catch (Exception ex) {
@@ -112,7 +115,7 @@ public class Interpreters {
 	/** Returns a set of names of the scripting languages supported by this
 	 * installation.
 	 */
-	public static final Set getZScriptLanguages() {
+	public static final Set<String> getZScriptLanguages() {
 		return _zslangs;
 	}
 

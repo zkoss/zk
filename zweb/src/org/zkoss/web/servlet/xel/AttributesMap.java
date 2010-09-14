@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Enumeration;
 
+import static org.zkoss.lang.Generics.cast;
+
 /**
  * A sketetal implementation for Map to wrap something with enumeration of
  * attributes, which must be String.
@@ -31,11 +33,11 @@ import java.util.Enumeration;
  * @author tomyeh
  * @since 3.0.0
  */
-public abstract class AttributesMap extends StringKeysMap {
-	private Set _entries;
-	public Set entrySet() {
+public abstract class AttributesMap extends StringKeysMap<Object> {
+	private Set<Map.Entry<String, Object>> _entries;
+	public Set<Map.Entry<String, Object>> entrySet() {
 		if (_entries == null) {
-			_entries = new AbstractSet() {
+			_entries = new AbstractSet<Map.Entry<String, Object>>() {
 				public int size() {
 					return AttributesMap.this.size();
 				}
@@ -45,8 +47,8 @@ public abstract class AttributesMap extends StringKeysMap {
 				public boolean isEmpty() {
 					return AttributesMap.this.isEmpty();
 				}
-				public Iterator iterator() {
-					return new EntryIter();
+				public Iterator<Map.Entry<String, Object>> iterator() {
+					return cast(new EntryIter());
 				}
 			};
 		}
@@ -55,21 +57,24 @@ public abstract class AttributesMap extends StringKeysMap {
 
 	public int size() {
 		int sz = 0;
-		for (Enumeration e = getKeys(); e.hasMoreElements(); ++sz)
+		for (Enumeration<String> e = getKeys(); e.hasMoreElements(); ++sz)
 			e.nextElement();
 		return sz;
 	}
 	public boolean isEmpty() {
 		return !getKeys().hasMoreElements();
 	}
-	public Object put(Object key, Object val) {
-		final Object o = getValue((String)key);
-		setValue((String)key, val);
+	public Object put(String key, Object val) {
+		final Object o = getValue(key);
+		setValue(key, val);
 		return o;
 	}
 	public Object remove(Object key) {
-		final Object o = getValue((String)key);
-		removeValue((String)key);
+		if (key != null && !(key instanceof String))
+			return null;
+		final String k = (String)key;
+		final Object o = getValue(k);
+		removeValue(k);
 		return o;
 	}
 }

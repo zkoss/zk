@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -42,7 +42,7 @@ import org.zkoss.zk.xel.impl.Utils;
 public class AttributesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
 	/** Map(String name, ExValue/ExValue[]/Map value). */
-	private final Map _attrs;
+	private final Map<String, Object> _attrs;
 	private final ConditionImpl _cond;
 	private final int _composite;
 	private final int _scope;
@@ -64,7 +64,7 @@ implements Condition, java.io.Serializable {
 	 * @since 3.0.6
 	 */
 	public AttributesInfo(EvaluatorRef evalr,
-	Map attrs, String scope, String composite, ConditionImpl cond) {
+	Map<String, String> attrs, String scope, String composite, ConditionImpl cond) {
 		if (evalr == null) throw new IllegalArgumentException();
 		if (composite == null || composite.length() == 0
 		|| composite.equals("none"))
@@ -77,14 +77,15 @@ implements Condition, java.io.Serializable {
 			throw new IllegalArgumentException("Unkonwn composite: "+composite);
 
 		_evalr = evalr;
-		_attrs = attrs;
-		if (_attrs != null) {
-			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(
-					Utils.parseComposite(
-						(String)me.getValue(), Object.class, _composite));
+		
+		if (attrs != null && !attrs.isEmpty()) {
+			_attrs = new LinkedHashMap<String, Object>();
+			for (Map.Entry<String, String> me: attrs.entrySet()) {
+				_attrs.put(me.getKey(),
+					Utils.parseComposite(me.getValue(), Object.class, _composite));
 			}
+		} else {
+			_attrs = null;
 		}
 
 		_scope = scope == null ?
@@ -104,7 +105,7 @@ implements Condition, java.io.Serializable {
 	 * @exception IllegalArgumentException if evalr is null
 	 */
 	public AttributesInfo(EvaluatorRef evalr,
-	Map attrs, String scope, ConditionImpl cond) {
+	Map<String, String> attrs, String scope, ConditionImpl cond) {
 		this(evalr, attrs, scope, null, cond);
 	}
 
@@ -128,9 +129,8 @@ implements Condition, java.io.Serializable {
 	public void apply(Component comp) {
 		if (_attrs != null && isEffective(comp)) {
 			final Evaluator eval = _evalr.getEvaluator();
-			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
+			for (Map.Entry<String, Object> me: _attrs.entrySet()) {
+				final String name = me.getKey();
 				final Object value = me.getValue();
 				comp.setAttribute(
 					name, Utils.evaluateComposite(eval, comp, value), _scope);
@@ -143,9 +143,8 @@ implements Condition, java.io.Serializable {
 	public void apply(Page page) {
 		if (_attrs != null && isEffective(page)) {
 			final Evaluator eval = _evalr.getEvaluator();
-			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
+			for (Map.Entry<String, Object> me: _attrs.entrySet()) {
+				final String name = me.getKey();
 				final Object value = me.getValue();
 				page.setAttribute(name,
 					Utils.evaluateComposite(eval, page, value), _scope);
@@ -165,8 +164,8 @@ implements Condition, java.io.Serializable {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(40).append("[custom-attributes:");
 		if (_attrs != null)
-			for (Iterator it = _attrs.keySet().iterator(); it.hasNext();)
-				sb.append(' ').append(it.next());
+			for (String name: _attrs.keySet())
+				sb.append(' ').append(name);
 		return sb.append(']').toString();
 	}
 }

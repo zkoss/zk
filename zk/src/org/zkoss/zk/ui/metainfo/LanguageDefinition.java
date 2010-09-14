@@ -153,7 +153,7 @@ public class LanguageDefinition {
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
-	private Class<?> _macrocls;
+	private Class<? extends Component> _macrocls;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
@@ -687,7 +687,7 @@ public class LanguageDefinition {
 	 *
 	 * @since 5.0.0
 	 */
-	public void setMacroTemplate(Class klass) {
+	public void setMacroTemplate(Class<? extends Component> klass) {
 		if (klass == null || !Component.class.isAssignableFrom(klass)
 		|| !Macro.class.isAssignableFrom(klass))
 			throw new IllegalArgumentException("Illegal macro class: "+klass);
@@ -718,7 +718,7 @@ public class LanguageDefinition {
 	/** Sets the native template.
 	 * @since 3.0.0
 	 */
-	public void setNativeTemplate(Class klass) {
+	public void setNativeTemplate(Class<? extends Component> klass) {
 		if (klass == null || !Component.class.isAssignableFrom(klass)
 		|| !Native.class.isAssignableFrom(klass))
 			throw new IllegalArgumentException("Illegal native class: "+klass);
@@ -820,7 +820,8 @@ public class LanguageDefinition {
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(
 			Taglibs.getFunctionMapper(
-				new CollectionsX.ArrayCollection(_taglibs.toArray()), _locator), null);
+				new CollectionsX.ArrayCollection<Taglib>(_taglibs.toArray()), _locator),
+				null);
 	}
 	/** Returns the evaluator reference (never null).
 	 * <p>This method is used only for implementation only.

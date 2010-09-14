@@ -44,7 +44,7 @@ public class DesktopEventQueue implements EventQueue {
 	/*package*/ static final Log log = Log.lookup(DesktopEventQueue.class);
 
 	private final Component _dummy = new AbstractComponent();
-	private final List _listeners = new LinkedList();
+	private final List<ListenerInfo> _listeners = new LinkedList<ListenerInfo>();
 	private int _nAsync;
 	private boolean _serverPushEnabled;
 
@@ -52,14 +52,14 @@ public class DesktopEventQueue implements EventQueue {
 		_dummy.addEventListener("onQueue", new EventListener() {
 			public void onEvent(Event event) throws Exception {
 				final Event evt = (Event)event.getData();
-				final Set listenerCalled = new HashSet();
+				final Set<ListenerInfo> listenerCalled = new HashSet<ListenerInfo>();
 				for (;;)
-					for (Iterator it = _listeners.iterator();;) {
+					for (Iterator<ListenerInfo> it = _listeners.iterator();;) {
 						final ListenerInfo inf;
 						try {
 							if (!it.hasNext())
 								return; //done
-							inf = (ListenerInfo)it.next();
+							inf = it.next();
 						} catch (java.util.ConcurrentModificationException ex) {
 							break;
 						}
@@ -125,8 +125,8 @@ public class DesktopEventQueue implements EventQueue {
 	}
 	public boolean unsubscribe(EventListener listener) {
 		if (listener != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();) {
-				final ListenerInfo inf = (ListenerInfo)it.next();
+			for (Iterator<ListenerInfo> it = _listeners.iterator(); it.hasNext();) {
+				final ListenerInfo inf = it.next();
 				if (listener.equals(inf.listener)) {
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
@@ -138,8 +138,8 @@ public class DesktopEventQueue implements EventQueue {
 	}
 	public boolean isSubscribed(EventListener listener) {
 		if (listener != null)
-			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				if (listener.equals(((ListenerInfo)it.next()).listener))
+			for (ListenerInfo li: _listeners)
+				if (listener.equals(li.listener))
 					return true;
 		return false;
 	}
@@ -176,7 +176,7 @@ public class DesktopEventQueue implements EventQueue {
 	private final EventQueue _que;
 	private final ListenerInfo _inf;
 	private final Event _event;
-	private List _pendingEvents;
+	private List<Event> _pendingEvents;
 	/*package*/ AsyncListenerThread(EventQueue que, ListenerInfo inf, Event event) {
 		_desktop = Executions.getCurrent().getDesktop();
 		_que = que;
@@ -186,7 +186,7 @@ public class DesktopEventQueue implements EventQueue {
 	}
 	/*package*/ void postEvent(Event event) {
 		if (_pendingEvents == null)
-			_pendingEvents = new LinkedList();
+			_pendingEvents = new LinkedList<Event>();
 		_pendingEvents.add(event);
 	}
 	public void run() {
@@ -198,8 +198,8 @@ public class DesktopEventQueue implements EventQueue {
 					Executions.activate(_desktop);
 					try {
 						if (_pendingEvents != null)
-							for (Iterator it = _pendingEvents.iterator(); it.hasNext();)
-								_que.publish((Event)it.next());
+							for (Event evt: _pendingEvents)
+								_que.publish(evt);
 
 						if (_inf.callback != null)
 							_inf.callback.onEvent(null);

@@ -41,7 +41,7 @@ public class Exceptions {
 	 *
 	 * @return the cause if found; null if not found
 	 */
-	public static final Throwable findCause(Throwable ex, Class cause) {
+	public static final Throwable findCause(Throwable ex, Class<?> cause) {
 		while (ex != null) {
 			if (cause.isInstance(ex))
 				return ex;
@@ -153,7 +153,7 @@ public class Exceptions {
 	 * @see SystemException.Aide#wrap
 	 */
 	public static final
-	Throwable wrap(Throwable ex, Class targetExceptCls) {
+	Throwable wrap(Throwable ex, Class<? extends Throwable> targetExceptCls) {
 		ex = myToAnother(ex, targetExceptCls);
 		if (targetExceptCls.isInstance(ex))
 			return ex;
@@ -168,7 +168,7 @@ public class Exceptions {
 		}
 	}
 	private static final Throwable
-	myToAnother(Throwable ex, Class targetExceptCls) {
+	myToAnother(Throwable ex, Class<? extends Throwable> targetExceptCls) {
 		assert D.OFF || ex != null: "null exception";
 
 		if (ex instanceof InvocationTargetException)
@@ -197,7 +197,7 @@ public class Exceptions {
 	 * the constructor: <code>MyException(String msg, Throwable cause);</code>
 	 */
 	public static final
-	Throwable wrap(Throwable ex, Class targetExceptCls, String msg) {
+	Throwable wrap(Throwable ex, Class<? extends Throwable> targetExceptCls, String msg) {
 		ex = myToAnother(ex, targetExceptCls);
 		if (targetExceptCls.isInstance(ex))
 			return ex;
@@ -220,7 +220,7 @@ public class Exceptions {
 	 * <code>MyException(int code, Object[] fmtArgs, Throwable cause);</code>
 	 */
 	public static final Throwable
-	wrap(Throwable ex, Class targetExceptCls, int code, Object[] fmtArgs) {
+	wrap(Throwable ex, Class<? extends Throwable> targetExceptCls, int code, Object[] fmtArgs) {
 		ex = myToAnother(ex, targetExceptCls);
 		if (targetExceptCls.isInstance(ex))
 			return ex;
@@ -243,7 +243,7 @@ public class Exceptions {
 	 * <code>MyException(int code, Object fmtArgs, Throwable cause);</code>
 	 */
 	public static final Throwable
-	wrap(Throwable ex, Class targetExceptCls, int code, Object fmtArg) {
+	wrap(Throwable ex, Class<? extends Throwable> targetExceptCls, int code, Object fmtArg) {
 		ex = myToAnother(ex, targetExceptCls);
 		if (targetExceptCls.isInstance(ex))
 			return ex;
@@ -266,7 +266,7 @@ public class Exceptions {
 	 * <code>MyException(int code, Throwable cause);</code>
 	 */
 	public static final Throwable
-	wrap(Throwable ex, Class targetExceptCls, int code) {
+	wrap(Throwable ex, Class<? extends Throwable> targetExceptCls, int code) {
 		ex = myToAnother(ex, targetExceptCls);
 		if (targetExceptCls.isInstance(ex))
 			return ex;

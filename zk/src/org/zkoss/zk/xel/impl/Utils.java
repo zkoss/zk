@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.Maps;
 import org.zkoss.util.CollectionsX;
 
@@ -69,7 +70,7 @@ public class Utils {
 			return null;
 
 		if (expr.length() != 0) {
-			List dst = new LinkedList();
+			List<ExValue> dst = new LinkedList<ExValue>();
 			Collection src = CollectionsX.parse(null, expr, ',', true, true);
 			for (Iterator it = src.iterator(); it.hasNext();) {
 				final String s = (String)it.next();
@@ -77,7 +78,7 @@ public class Utils {
 					dst.add(new ExValue(s, expcls));
 			}
 			if (!dst.isEmpty())
-				return (ExValue[])dst.toArray(new ExValue[dst.size()]);
+				return dst.toArray(new ExValue[dst.size()]);
 		}
 
 		return ignoreEmpty ? null: new ExValue[] {new ExValue(expr, expcls)};
@@ -111,10 +112,10 @@ public class Utils {
 
 		if (type == LIST) {
 			return parseList(expr, expcls, false);
-		} else if (type == MAP) {
-			Map dst = Maps.parse(new LinkedHashMap(), expr, ',', '\'', false, false, true);
-			for (Iterator it = dst.entrySet().iterator(); it.hasNext();) {
-				Map.Entry me = (Map.Entry)it.next();
+		} else if (type == MAP) {		
+			Map<String, Object> dst = new LinkedHashMap<String, Object>();
+			Maps.parse(dst, expr, ',', '\'', false, true);
+			for (Map.Entry<String, Object> me: dst.entrySet()) {
 				me.setValue(new ExValue((String)me.getValue(), expcls));
 			}
 			return dst;
@@ -139,12 +140,10 @@ public class Utils {
 				dst[j] = src[j].getValue(eval, comp);
 			return dst;
 		} else {
-			Map src = (Map)expr;
-			Map dst = new LinkedHashMap(src.size());
-			for (Iterator it = src.entrySet().iterator(); it.hasNext();) {
-				Map.Entry me = (Map.Entry)it.next();
-				dst.put(me.getKey(),
-					((ExValue)me.getValue()).getValue(eval, comp));
+			Map<?, ExValue> src = cast((Map)expr);
+			Map<Object, Object> dst = new LinkedHashMap<Object, Object>(src.size());
+			for (Map.Entry<?, ExValue> me: src.entrySet()) {
+				dst.put(me.getKey(), me.getValue().getValue(eval, comp));
 			}
 			return dst;
 		}
@@ -165,12 +164,10 @@ public class Utils {
 				dst[j] = src[j].getValue(eval, page);
 			return dst;
 		} else {
-			Map src = (Map)expr;
-			Map dst = new LinkedHashMap(src.size());
-			for (Iterator it = src.entrySet().iterator(); it.hasNext();) {
-				Map.Entry me = (Map.Entry)it.next();
-				dst.put(me.getKey(),
-					((ExValue)me.getValue()).getValue(eval, page));
+			Map<?, ExValue> src = cast((Map)expr);
+			Map<Object, Object> dst = new LinkedHashMap<Object, Object>(src.size());
+			for (Map.Entry<?, ExValue> me: src.entrySet()) {
+				dst.put(me.getKey(), me.getValue().getValue(eval, page));
 			}
 			return dst;
 		}

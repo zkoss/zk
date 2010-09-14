@@ -52,11 +52,11 @@ abstract public class RequestXelResolver implements VariableResolver {
 	private final ServletRequest _request;
 	private final ServletResponse _response;
 	private HttpSession _sess;
-	private Map _reqScope, _sessScope, _appScope;
+	private Map<String, Object> _reqScope, _sessScope, _appScope;
 	/** A fake page context implementation. */
 	private PageContext _pc;
 	/** cached cookies. */
-	private Map _cookies;
+	private Map<String, Cookie> _cookies;
 
 	/** Request-based resolver.
 	 * @param ctx the context; which might be null
@@ -200,7 +200,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 			|| cookies.length == 0)
 				return Collections.EMPTY_MAP;
 
-			_cookies = new HashMap();	
+			_cookies = new HashMap<String, Cookie>();	
 			for (int j = cookies.length; --j >=0;)
 				_cookies.put(cookies[j].getName(), cookies[j]);
 		}
@@ -222,21 +222,22 @@ abstract public class RequestXelResolver implements VariableResolver {
 		o = getSessionScope().get(name);
 		return o != null ? o: getApplicationScope().get(name);
 	}
-	private Map getRequestScope() {
+	private Map<String, Object> getRequestScope() {
 		if (_reqScope != null)
 			return _reqScope;
 		if (_request == null)
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 		return _reqScope = new RequestScope(_request);
 	}
-	private Map getSessionScope() {
+	private Map<String, Object> getSessionScope() {
 		if (_sessScope != null)
 			return _sessScope;
 		final HttpSession sess = getSession();
 		if (sess == null)
-			return _sessScope = Collections.EMPTY_MAP;
+			return _sessScope = Collections.emptyMap();
 		return _sessScope = new AttributesMap() {
-			protected Enumeration getKeys() {
+			@SuppressWarnings("unchecked")
+			protected Enumeration<String> getKeys() {
 				return sess.getAttributeNames();
 			}
 			protected Object getValue(String key) {
@@ -250,13 +251,14 @@ abstract public class RequestXelResolver implements VariableResolver {
 			}
 		};
 	}
-	private Map getApplicationScope() {
+	private Map<String, Object> getApplicationScope() {
 		if (_appScope != null)
 			return _appScope;
 		if (_ctx == null)
-			return _appScope = Collections.EMPTY_MAP;
+			return _appScope = Collections.emptyMap();
 		return _appScope = new AttributesMap() {
-			protected Enumeration getKeys() {
+			@SuppressWarnings("unchecked")
+			protected Enumeration<String> getKeys() {
 				return _ctx.getAttributeNames();
 			}
 			protected Object getValue(String key) {

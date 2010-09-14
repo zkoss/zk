@@ -87,7 +87,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * Note: it is the same map of HttpSession's attributes.
 	 * Note: No need to serialize attributes since it is done by Web server.
 	 */
-	private Map _attrs;
+	private Map<String, Object> _attrs;
 	private String _remoteAddr, _remoteHost, _serverName, _localAddr, _localName;
 	private DesktopCache _cache;
 	/** Next available component uuid. */
@@ -168,7 +168,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 */
 	private final void init() {
 		_attrs = new AttributesMap() {
-			protected Enumeration getKeys() {
+			protected Enumeration<String> getKeys() {
 				return getAttrNames();
 			}
 			protected Object getValue(String key) {
@@ -192,7 +192,8 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 		rmAttr(ATTR_PRIVATE);
 	}
-	private final Enumeration getAttrNames() {
+	@SuppressWarnings("unchecked")
+	private final Enumeration<String> getAttrNames() {
 		return _navsess instanceof HttpSession ?
 			((HttpSession)_navsess).getAttributeNames():
 			_navsess != null ?
@@ -225,6 +226,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	public boolean hasAttribute(String name) {
 		return getAttribute(name) != null; //Servlet limitation
 	}
+	@SuppressWarnings("unchecked")
 	public Object setAttribute(String name, Object value) {
 		final Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
@@ -315,7 +317,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		else if (_navsess != null)
 			((PortletSession)_navsess).removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
 
@@ -450,8 +452,8 @@ public class SimpleSession implements Session, SessionCtrl {
 
 		//Since HttpSession will serialize attributes by the container
 		//we ony invoke the notification
-		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-			final String nm = (String)en.nextElement();
+		for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
+			final String nm = en.nextElement();
 			willSerialize(getAttribute(nm));
 		}
 	}
@@ -485,8 +487,8 @@ public class SimpleSession implements Session, SessionCtrl {
 		try {
 			((WebAppCtrl)_wapp).sessionWillPassivate(this);
 
-			for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-				final String nm = (String)en.nextElement();
+			for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
+				final String nm = en.nextElement();
 				willPassivate(getAttribute(nm));
 			}
 		} finally {
@@ -517,8 +519,8 @@ public class SimpleSession implements Session, SessionCtrl {
 					}
 				});
 
-			for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-				final String nm = (String)en.nextElement();
+			for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
+				final String nm = en.nextElement();
 				didActivate(getAttribute(nm));
 			}
 		} finally {

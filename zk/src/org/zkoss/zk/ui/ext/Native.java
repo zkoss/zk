@@ -37,7 +37,7 @@ public interface Native extends NonFellow {
 	/** Returns a readonly list of the declared namespaces
 	 * ({@link Namespace}), or empty if no declared namespace.
 	 */
-	public List getDeclaredNamespaces();
+	public List<Namespace> getDeclaredNamespaces();
 	/** Adds a declared namespace.
 	 * The added declared namespace will be generated to the output.
 	 *
@@ -94,7 +94,7 @@ public interface Native extends NonFellow {
 		 * Note: EL expressions is not allowed
 		 */
 		public void getFirstHalf(StringBuffer sb, String tag,
-		Map props, Collection namespaces);
+		Map<String, Object> props, Collection namespaces);
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.

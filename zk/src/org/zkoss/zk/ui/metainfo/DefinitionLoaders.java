@@ -42,8 +42,11 @@ import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
+import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.impl.Utils;
@@ -58,9 +61,10 @@ import org.zkoss.zk.device.Device;
 public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
-	private static List _addons;
+	/** List<Object[Locator, URL]> */
+	private static List<Object[]> _addons;
 	/** A map of (String ext, String lang). */
-	private static Map _exts;
+	private static Map<String, String> _exts;
 	private static boolean _loaded, _loading;
 
 	//CONSIDER:
@@ -92,7 +96,7 @@ public class DefinitionLoaders {
 			loadAddon(locator, url);
 		} else {
 			if (_addons == null)
-				_addons = new LinkedList();
+				_addons = new LinkedList<Object[]>();
 			_addons.add(new Object[] {locator, url});
 		}
 	}
@@ -109,7 +113,7 @@ public class DefinitionLoaders {
 			if (lang == null || ext == null)
 				throw new IllegalArgumentException("null");
 			if (_exts == null)
-				_exts = new HashMap();
+				_exts = new HashMap<String, String>();
 			_exts.put(ext, lang);
 		}
 	}
@@ -184,10 +188,9 @@ public class DefinitionLoaders {
 
 		//5. process the extension
 		if (_exts != null) {
-			for (Iterator it = _exts.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String ext = (String)me.getKey();
-				final String lang = (String)me.getValue();
+			for (Map.Entry<String, String> me: _exts.entrySet()) {
+				final String ext = me.getKey();
+				final String lang = me.getValue();
 				try {
 					LanguageDefinition.addExtension(ext, lang);
 				} catch (DefinitionNotFoundException ex) {
@@ -225,17 +228,17 @@ public class DefinitionLoaders {
 				throw new UiException("case-insensitive not allowed in addon");
 		} else {
 			final String ns =
-				(String)IDOMs.getRequiredElementValue(root, "namespace");
+				IDOMs.getRequiredElementValue(root, "namespace");
 			final String deviceType =
-				(String)IDOMs.getRequiredElementValue(root, "device-type");
+				IDOMs.getRequiredElementValue(root, "device-type");
 
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
 			PageRenderer pageRenderer = (PageRenderer)
-				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"))
+				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"), PageRenderer.class)
 				.newInstance();
 
-			final List exts = parseExtensions(root);
+			final List<String> exts = parseExtensions(root);
 			if (exts.isEmpty())
 				throw new UiException("The extension must be specified for "+lang);
 
@@ -254,9 +257,7 @@ public class DefinitionLoaders {
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
 
-		for (Iterator it = root.getElements("library-property").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Element el: root.getElements("library-property")) {
 			final String nm = IDOMs.getRequiredElementValue(el, "name");
 			final String val = IDOMs.getRequiredElementValue(el, "value");
 			Library.setProperty(nm, val);
@@ -361,12 +362,12 @@ public class DefinitionLoaders {
 				IDOMs.getRequiredElementValue(el, "component-name");
 
 			String clsnm = el.getElementValue("component-class", true);
-			Class cls = null;
+			Class<? extends Component> cls = null;
 			if (clsnm != null) {
 				if (clsnm.length() > 0) {
 					noEL("component-class", clsnm, el);
 					try {
-						cls = locateClass(clsnm);
+						cls = locateClass(clsnm, Component.class);
 					} catch (Throwable ex) { //Feature 1873426
 						log.warning("Component "+name+" ignored. Reason: unable to load "+clsnm+" due to "
 							+ex.getClass().getName()+": "+ex.getMessage()
@@ -521,8 +522,15 @@ public class DefinitionLoaders {
 		langdef.addWidgetDefinition(wgtdef);
 		return wgtdef;
 	}
-	private static Class locateClass(String clsnm) throws Exception {
-		return Classes.forNameByThread(clsnm);
+	@SuppressWarnings("unchecked")
+	private static <T> Class<? extends T> locateClass(String clsnm, Class<?>... clses)
+	throws Exception {
+		final Class<?> c = Classes.forNameByThread(clsnm);
+		if (clses != null)
+			for (Class<?> cls: clses)
+				if (!cls.isAssignableFrom(c))
+					throw new UiException(c + " must implement "+cls);
+		return (Class<? extends T>)c;
 	}
 	private static void noEL(String nm, String val, Element el)
 	throws UiException {
@@ -575,8 +583,10 @@ public class DefinitionLoaders {
 	throws Exception {
 		el = el.getElement("macro-template");
 		if (el != null) {
-			langdef.setMacroTemplate(
-				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")));
+			final Class<? extends Component> cls =
+				locateClass(IDOMs.getRequiredElementValue(el, "macro-class"),
+					Component.class, Macro.class);
+			langdef.setMacroTemplate(cls);
 		}
 	}
 	private static
@@ -584,8 +594,10 @@ public class DefinitionLoaders {
 	throws Exception {
 		el = el.getElement("native-template");
 		if (el != null) {
-			langdef.setNativeTemplate(
-				locateClass(IDOMs.getRequiredElementValue(el, "native-class")));
+			final Class<? extends Component> cls =
+				locateClass(IDOMs.getRequiredElementValue(el, "native-class"),
+					Component.class, Native.class);
+			langdef.setNativeTemplate(cls);
 		}
 	}
 	private static
@@ -595,18 +607,16 @@ public class DefinitionLoaders {
 		if (el != null) {
 			final String compnm =
 				IDOMs.getRequiredElementValue(el, "component-name");
-			final Set reservedAttrs = new HashSet(8);
-			for (Iterator it = el.getElements("reserved-attribute").iterator();
-			it.hasNext();)
-				reservedAttrs.add(((Element)it.next()).getText(true));
+			final Set<String> reservedAttrs = new HashSet<String>(8);
+			for (Element e: el.getElements("reserved-attribute"))
+				reservedAttrs.add(e.getText(true));
 			langdef.setDynamicTagInfo(compnm, reservedAttrs);
 		}
 		//if (log.finerable()) log.finer(el);
 	}
-	private static List parseExtensions(Element elm) {
-		final List exts = new LinkedList();
-		for (Iterator it = elm.getElements("extension").iterator(); it.hasNext();) {
-			final Element el = (Element)it.next();
+	private static List<String> parseExtensions(Element elm) {
+		final List<String> exts = new LinkedList<String>();
+		for (Element el: elm.getElements("extension")) {
 			final String ext = el.getText(true);
 			if (ext.length() != 0) {
 				for (int j = 0, len = ext.length(); j < len; ++j) {
@@ -621,21 +631,20 @@ public class DefinitionLoaders {
 		///if (log.finerable()) log.finer(exts);
 		return exts;
 	}
-	private static Map parseProps(Element elm) {
+	private static Map<String, String> parseProps(Element elm) {
 		return IDOMs.parseParams(elm, "property", "property-name", "property-value");
 	}
-	private static Map parseCustAttrs(Element elm) {
+	private static Map<String, String> parseCustAttrs(Element elm) {
 		return IDOMs.parseParams(elm, "custom-attribute", "attribute-name", "attribute-value");
 	}
-	private static Map parseAttrs(Element elm) {
+	private static Map<String, String> parseAttrs(Element elm) {
 		return IDOMs.parseParams(elm, "attribute", "attribute-name", "attribute-value");
 	}
 
 	private static void parseAnnots(ComponentDefinitionImpl compdef, Element top) {
-		for (Iterator it = top.getElements("annotation").iterator(); it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Element el: top.getElements("annotation")) {
 			final String annotName = IDOMs.getRequiredElementValue(el, "annotation-name");
-			final Map annotAttrs = parseAttrs(el);
+			final Map<String, String> annotAttrs = parseAttrs(el);
 			final String prop = el.getElementValue("property-name", true);
 			if (prop == null || prop.length() == 0)
 				compdef.addAnnotation(annotName, annotAttrs);
@@ -660,28 +669,5 @@ public class DefinitionLoaders {
 			}
 		}
 		return null;
-	}
-
-	private static class Addon {
-		private final Document document;
-		private final int priority;
-		private Addon(Document document) {
-			this.document = document;
-
-			final String p = document.getRootElement().getElementValue("priority", true);
-			this.priority = p != null && p.length() > 0 ? Integer.parseInt(p): 0;
-		}
-		private static void add(List addons, Document document) {
-			final Addon addon = new Addon(document);
-			for (ListIterator it = addons.listIterator(); it.hasNext();) {
-				final Addon a = (Addon)it.next();
-				if (a.priority < addon.priority) {
-					it.previous();
-					it.add(addon);
-					return; //done
-				}
-			}
-			addons.add(addon);
-		}
 	}
 }

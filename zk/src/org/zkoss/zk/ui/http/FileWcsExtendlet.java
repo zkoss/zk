@@ -28,7 +28,7 @@ import java.io.File;
  * @author tomyeh
  * @since 5.0.0
  */
-public class FileWcsExtendlet extends WcsExtendlet{
+public class FileWcsExtendlet extends WcsExtendlet {
 	/** Parses and return the content of the specified WCS file.
 	 */
 	public String service(File fl, Includer includer) throws Exception {
@@ -49,8 +49,7 @@ public class FileWcsExtendlet extends WcsExtendlet{
 				}
 				sw.write('\n');
 			}
-			for (Iterator it = wi.langdef.getCSSURIs().iterator(); it.hasNext();) {
-				final String uri = (String)it.next();
+			for (String uri: wi.langdef.getCSSURIs()) {
 				try {
 					includer.include(uri, sw);
 				} catch (Throwable ex) {

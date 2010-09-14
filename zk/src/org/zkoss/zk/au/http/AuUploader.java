@@ -38,6 +38,7 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
@@ -91,7 +92,7 @@ public class AuUploader implements AuExtension {
 			return;
 		}
 
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		String alert = null, uuid = null, nextURI = null, sid = null;
 		Desktop desktop = null;
 		try {
@@ -100,8 +101,8 @@ public class AuUploader implements AuExtension {
 					uuid = request.getParameter("wid");
 					sid = request.getParameter("sid");
 					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(request.getParameter("dtid"));
-					Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
-					Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+					Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+					Map<String, Object> size = cast((Map)desktop.getAttribute(Attributes.UPLOAD_SIZE));
 					final String key = uuid + '_' + sid;
 					Object sinfo = size.get(key);
 					if (sinfo instanceof String) {
@@ -110,7 +111,7 @@ public class AuUploader implements AuExtension {
 						precent.remove(key);
 						return;
 					}
-					final Integer p = (Integer)precent.get(key);
+					final Integer p = precent.get(key);
 					final Long cb = (Long)sinfo;
 					response.getWriter().append((p != null ? p.intValue(): -1)+ ","
 								+(cb != null ? cb.longValue(): -1));
@@ -132,7 +133,7 @@ public class AuUploader implements AuExtension {
 					} else {
 						desktop = ((WebAppCtrl)sess.getWebApp())
 							.getDesktopCache(sess).getDesktop(dtid);
-						final Map params = parseRequest(request, desktop, uuid + '_' + sid);
+						final Map<String, Object> params = parseRequest(request, desktop, uuid + '_' + sid);
 						nextURI = (String)params.get("nextURI");
 						
 						// Bug 3054784
@@ -159,8 +160,8 @@ public class AuUploader implements AuExtension {
 			}
 
 			if (desktop != null) {
-				Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
-				Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+				Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+				Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 				final String key = uuid + '_' + sid;
 				if (precent != null) {
 					precent.remove(key);
@@ -176,8 +177,8 @@ public class AuUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
-			Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
-			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+			Map<String, Integer> precent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+			Map<String, Object> size = cast((Map)desktop.getAttribute(Attributes.UPLOAD_SIZE));
 			final String key = uuid + '_' + sid;
 			if (precent != null) {
 				precent.remove(key); 
@@ -222,9 +223,9 @@ public class AuUploader implements AuExtension {
 	/** Process fileitems named file0, file1 and so on.
 	 */
 	private static final
-	void processItems(Desktop desktop, Map params, Map attrs)
+	void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
 	throws IOException {
-		final List meds = new LinkedList();
+		final List<Media> meds = new LinkedList<Media>();
 		final boolean alwaysNative = "true".equals(params.get("native"));
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
@@ -330,10 +331,10 @@ public class AuUploader implements AuExtension {
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
 	 */
-	private static Map parseRequest(HttpServletRequest request,
+	private static Map<String, Object> parseRequest(HttpServletRequest request,
 	Desktop desktop, String key)
 	throws FileUploadException {
-		final Map params = new HashMap();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request, key);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 
@@ -359,11 +360,11 @@ public class AuUploader implements AuExtension {
 
 			final Object old = params.put(nm, val);
 			if (old != null) {
-				final List vals;
+				final List<Object> vals;
 				if (old instanceof List) {
-					params.put(nm, vals = (List)old);
+					params.put(nm, vals = cast((List)old));
 				} else {
-					params.put(nm, vals = new LinkedList());
+					params.put(nm, vals = new LinkedList<Object>());
 					vals.add(old);
 				}
 				vals.add(val);

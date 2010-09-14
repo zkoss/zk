@@ -32,7 +32,7 @@ public interface WidgetDefinition {
 	public String getWidgetClass();
 	/** Returns a collection of the mold names that have the molde URL.
 	 */
-	public Collection getMoldNames();
+	public Collection<String> getMoldNames();
 	/** Returns whether the mold URI exists for the given mold.
 	 */
 	public boolean hasMold(String name);

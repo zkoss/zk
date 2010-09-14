@@ -16,6 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -92,7 +93,7 @@ public class Maps {
 	 * @param caseInsensitive whether the key used to access the map
 	 * is case-insensitive. If true, all keys are converted to lower cases.
 	 */
-	public final static void load(Map<String, String> map, InputStream sm, String charset,
+	public final static void load(Map<? super String, ? super String> map, InputStream sm, String charset,
 	boolean caseInsensitive) throws IOException {
 		final PushbackInputStream pis = new PushbackInputStream(sm, 3);
 		if (charset == null || charset.startsWith("UTF")) {
@@ -206,7 +207,7 @@ public class Maps {
 	 * Reads a property list (key and element pairs) from the input stream,
 	 * by specifying the charset.
 	 */
-	public final static void load(Map<String, String> map, InputStream sm, String charset)
+	public final static void load(Map<? super String, ? super String> map, InputStream sm, String charset)
 	throws IOException {
 		load(map, sm, charset, false);
 	}
@@ -217,14 +218,14 @@ public class Maps {
 	 * @param caseInsensitive whether the key used to access the map
 	 * is case-insensitive. If true, all keys are converted to lower cases.
 	 */
-	public final static void load(Map<String, String> map, InputStream sm,
+	public final static void load(Map<? super String, ? super String> map, InputStream sm,
 	boolean caseInsensitive) throws IOException {
 		load(map, sm, null, caseInsensitive);
 	}
 	/** Reads a property list (key and element pairs) from the input stream,
 	 * by detecting correct charset.
 	 */
-	public final static void load(Map<String, String> map, InputStream sm) throws IOException {
+	public final static void load(Map<? super String, ? super String> map, InputStream sm) throws IOException {
 		load(map, sm, null, false);
 	}
 
@@ -233,29 +234,29 @@ public class Maps {
 	 * It is the same as<br/>
 	 * <pre><code>parse(map, src, separator, quote, false, false, false);</code></pre>
 	 *
-	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
+	 * @see #parse(Map, String, char, char, boolean, boolean)
+	 * @see #parseMultiple
 	 */
 	@SuppressWarnings("unchecked")
-	public static final Map<String, String> 
-	parse(Map<String, String> map, String src, char separator, char quote)
+	public static final Map<? super String, ? super String> 
+	parse(Map<? super String, ? super String> map, String src, char separator, char quote)
 	throws IllegalSyntaxException {
-		return (Map<String,String>)
-			parse(map, src, separator, quote, false, false, false);
+		return parse0(map, src, separator, quote, false, false, false);
 	}
 	/**
 	 * Parses a string into a map.
 	 * It is the same as<br/>
 	 * <pre><code>parse(map, src, separator, quote, asValue, false, false);</code></pre>
 	 *
-	 * @see #parse(Map, String, char, char, boolean, boolean, boolean)
+	 * @see #parse(Map, String, char, char, boolean, boolean)
+	 * @see #parseMultiple
 	 * @since 2.4.0
 	 */
 	@SuppressWarnings("unchecked")
-	public static final Map<String, String> 
-	parse(Map<String, String> map, String src, char separator, char quote, boolean asValue)
+	public static final Map<? super String, ? super String> 
+	parse(Map<? super String, ? super String> map, String src, char separator, char quote, boolean asValue)
 	throws IllegalSyntaxException {
-		return (Map<String,String>)
-			parse(map, src, separator, quote, asValue, false, false);
+		return parse0(map, src, separator, quote, asValue, false, false);
 	}
 	/**
 	 * Parse a string into a map.
@@ -295,31 +296,101 @@ public class Maps {
 	 * as a value. For example, 'a12' is considered as a value no matter
 	 * asValue is true or not.
 
-	 * @param multiple whehter to use List to store the values if
-	 * there are multiple entries with the same name.
-	 * For example, src is a1=x,a1=y, then, if multiple is true,
+	 * @param parenthesis whether to parse parenthesis in the value, {}, () and [].
+	 * If true, the separator is ignored inside the parenthesis.
+	 * Specify true if the value might contain EL expressions.
+	 * Note: it has no effect to the name.
+
+	 * @return the map being generated.
+	 *
+	 * @exception IllegalSyntaxException if syntax errors
+	 * @see CollectionsX#parse
+	 * @see #toString(Map, char, char)
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Map<? super String, ? super String>
+	parse(Map<? super String, ? super String> map,
+	String src, char separator, char quote, boolean asValue,
+	boolean parenthesis) throws IllegalSyntaxException {
+		return parse0(map, src, separator, quote, asValue, parenthesis, false);
+	}
+	/**
+	 * Parse a string into a map that allows multiple values.
+	 * <p>Unlike {@link #parse}, it assumes there might be multiple values.
+	 * Thus, the value of the map is a collection of String instances.
+	 * For example, src is a1=x,a1=y, then
 	 * the value for a1 is a list with two values, "x" and "y".
-	 * If multiple is false, the later one overwrites the former one and
-	 * the value for a1 in the above example is "y".
-	 * Note: if no replication, the value is always a String instance
-	 * (or null if not specified).
+	 *
+	 * <p>If = is omitted, whether it is considered as a key with the null
+	 * value or a value with the null key depends on
+	 * the asValue argument. If true, it is considered as a value with
+	 * the null key.
+	 *
+	 * <p>For example, if the following string is parsed with asValue=false:<br/>
+	 * a12=12,b3,c6=abc=125,x=y
+	 *
+	 * <p>Then, a map with the following content is returned:<br/>
+	 * ("a12", "12"), ("b3", null), ("c6", "abc=125"), ("x", "y")
+	 *
+	 * <p>Notice: only the first = after separator is meaningful,
+	 * so you don't have to escape the following =.
+	 * <p>Beside specifying the quote character, you could use backslash
+	 * quote a single character (as Java does).
+	 *
+	 * @param map the map to put parsed results to; null to create a
+	 * new hash map.
+	 * @param src the string to parse
+	 * @param separator the separator, e.g., ' ' or ','.
+
+	 * @param quote the quote character to surround the value.
+	 * Ingored if quote is (char)0.<br/>
+	 * Since 3.6.0: if quote is (char)1, then both ' and " are accepted.</br>
+	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
+	 * quote is '\''.<br/>
+	 * Note: the quote is taken off before storing to the map.<br/>
+	 * Note: the quote can <i>not</i> be used to surround the name
+
+	 * @param asValue whether to consider the substring without = as
+	 * a value (with the null key), or as a key (with the null value)
+	 * For example, a12 is considered as a key if asValue is false.
+	 * However, if you surround it with a quote, it is always considered
+	 * as a value. For example, 'a12' is considered as a value no matter
+	 * asValue is true or not.
 
 	 * @param parenthesis whether to parse parenthesis in the value, {}, () and [].
 	 * If true, the separator is ignored inside the parenthesis.
 	 * Specify true if the value might contain EL expressions.
 	 * Note: it has no effect to the name.
 
-	 * @return the map being generated. If multiple, the value might be
+	 * @return the map being generated. The value of the map is
 	 * a list of String objects (List&lt;String&gt;).
 	 *
 	 * @exception IllegalSyntaxException if syntax errors
 	 * @see CollectionsX#parse
 	 * @see #toString(Map, char, char)
-	 * @since 3.0.6
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Map<? super String, Collection<String>>
+	parseMultiple(Map<? super String, Collection<String>> map,
+	String src, char separator, char quote, boolean asValue,
+	boolean parenthesis) throws IllegalSyntaxException {
+		return parse0(map, src, separator, quote, asValue, parenthesis, true);
+	}
+	/** @deprecated As of release 6.0.0, replaced with
+	 * {@link #parse(Map, String, char, char, boolean, boolean)} and
+	 * {@link #parseMultiple}
 	 */
 	public static final Map
 	parse(Map map, String src, char separator, char quote, boolean asValue,
-	boolean multiple, boolean parenthesis)
+	boolean multiple, boolean parenthesis) throws IllegalSyntaxException {
+		return parse0(map, src, separator, quote, asValue, parenthesis, multiple);
+	}
+	
+	private static final Map
+	parse0(Map map, String src, char separator, char quote, boolean asValue,
+	boolean parenthesis, boolean multiple)
 	throws IllegalSyntaxException {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
@@ -421,17 +492,13 @@ public class Maps {
 	}
 	@SuppressWarnings("unchecked")
 	private static void put(Map map, String name, String value, boolean multiple) {
-		Object o = map.put(name, value);
-		if (multiple && o != null) {
-			if (o instanceof List) {
-				((List<String>)o).add(value);
-				map.put(name, o);
-			} else {
-				final List<String> l = new LinkedList<String>();
-				l.add((String)o);
-				l.add(value);
-				map.put(name, l);
-			}
+		if (multiple) {
+			List l = (List)map.get(name);
+			if (l == null)
+				map.put(name, l = new LinkedList());
+			l.add(value);
+		} else {
+			map.put(name, value);
 		}
 	}
 	private static final IllegalSyntaxException
@@ -528,7 +595,7 @@ public class Maps {
 	 * @param separator the separator between two name=value pairs
 	 * @see #parse(Map, String, char, char)
 	 */
-	public static final String toString(Map<String, String> map, char quote, char separator) {
+	public static final String toString(Map<? super String, ? super String> map, char quote, char separator) {
 		return toStringBuffer(new StringBuffer(64), map, quote, separator)
 			.toString();
 	}
@@ -536,7 +603,7 @@ public class Maps {
 	 * @see #toString
 	 */
 	public static final StringBuffer
-	toStringBuffer(StringBuffer sb, Map<String, String> map, char quote, char separator) {
+	toStringBuffer(StringBuffer sb, Map<? super String, ? super String> map, char quote, char separator) {
 		if (separator == (char)0)
 			throw new IllegalArgumentException("Separator cannot be 0");
 		if (map.isEmpty())

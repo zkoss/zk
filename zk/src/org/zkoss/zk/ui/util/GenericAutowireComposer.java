@@ -260,10 +260,10 @@ implements ComponentCloneListener {
 		//reflection. kind of weird :-).
 		try {
 			if (_alert == null) {
-				final Class mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
-				_alert = mboxcls.getMethod("show", new Class[] {String.class});
+				final Class<?> mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
+				_alert = mboxcls.getMethod("show", String.class);
 			}
-			_alert.invoke(null, new Object[] {m});
+			_alert.invoke(null, m);
 		} catch (InvocationTargetException e) {
 			throw UiException.Aide.wrap(e);
 		} catch (Exception e) {

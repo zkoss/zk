@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 
 import org.zkoss.idom.Document;
+import org.zkoss.xel.ExpressionFactory;
 
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -42,12 +43,12 @@ import org.zkoss.zk.ui.sys.ServerPush;
  */
 public class Executions {
 	/** Stores the current {@link Execution}. */
-	protected static final ThreadLocal _exec = new ThreadLocal();
+	protected static final ThreadLocal<Execution> _exec = new ThreadLocal<Execution>();
 
 	/** Returns the current execution.
 	 */
 	public static final Execution getCurrent() {
-		return (Execution)_exec.get();
+		return _exec.get();
 	}
 
 	/** Returns the evaluator of the current execution.
@@ -57,22 +58,22 @@ public class Executions {
 	 *
 	 * @param page the page that this evaluator is associated.
 	 * If null, the current page and then the first page is assumed.
-	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * @param expfcls the implementation of {@link ExpressionFactory},
 	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public static final Evaluator getEvaluator(Page page, Class expfcls) {
+	public static final Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 		return getCurrent().getEvaluator(page, expfcls);
 	}
 	/** Returns the evaluator of the current execution.
 	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
 	 *
 	 * @param comp the component to retrieve the page for the evaluator
-	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * @param expfcls the implementation of {@link ExpressionFactory},
 	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public static final Evaluator getEvaluator(Component comp, Class expfcls) {
+	public static final Evaluator getEvaluator(Component comp, Class<? extends ExpressionFactory> expfcls) {
 		return getCurrent().getEvaluator(comp, expfcls);
 	}
 

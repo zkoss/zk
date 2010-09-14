@@ -67,31 +67,32 @@ import org.zkoss.zk.au.out.*;
 	/** The associated execution. */
 	private final Execution _exec;
 	/** A set of invalidated pages. */
-	private Set _pgInvalid;
+	private Set<Page> _pgInvalid;
 	/** A set of removed pages. */
-	private Set _pgRemoved;
+	private Set<Page> _pgRemoved;
 	/** A set of invalidated components  (Component). */
-	private final Set _invalidated = new LinkedHashSet(32);
+	private final Set<Component> _invalidated = new LinkedHashSet<Component>(32);
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
-	private final Map _smartUpdated = new HashMap(64); //we use TimedValue for better sequence control
+	private final Map<Component, Map<String, TimedValue>> _smartUpdated = new HashMap<Component, Map<String, TimedValue>>(64); //we use TimedValue for better sequence control
 	/** A set of new attached components. */
-	private final Set _attached = new LinkedHashSet(32);
+	private final Set<Component> _attached = new LinkedHashSet<Component>(32);
 	/** A set of moved components (parent changed or page changed). */
-	private final Set _moved = new LinkedHashSet(32);
+	private final Set<Component> _moved = new LinkedHashSet<Component>(32);
 	/** A set of components whose client-update is disabled. */
-	private Set _updDisabled;
+	private Set<Component> _updDisabled;
 	/** A map of detached components (detached only -- not moved thereafter).
 	 * (comp, comp's parent).
 	 */
-	private final Map _detached = new LinkedHashMap(32);
+	private final Map<Component, Component> _detached = new LinkedHashMap<Component, Component>(32);
 	/** A map of UUID of detached or moved components.
 	 * It is important since UUID might be re-used
 	 */
-	private final Map _uuids = new HashMap(32);
+	private final Map<Component, String> _uuids = new HashMap<Component, String>(32);
 	/** A map of components whose UUID is changed (Component, UUID). */
-	private Map _idChgd;
-	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
-	private Map _responses;
+	private Map<Component, String> _idChgd;
+	/** A map of responses being added(Component/Page, ResponseInfo)).
+	 */
+	private Map<Object, ResponseInfo> _responses;
 	/** the component that is including a new page (and then
 	 * become the owner of the new page, if any).
 	 */
@@ -147,13 +148,13 @@ import org.zkoss.zk.au.out.*;
 	public final boolean isEverAsyncUpdate() {
 		return _1stau;
 	}
-	public final boolean addToFirstAsyncUpdate(List responses) {
+	public final boolean addToFirstAsyncUpdate(List<AuResponse> responses) {
 		if (!_1stau) return false;
 
 //		if (D.ON && log.finerable()) log.finer("Add to 1st au: "+responses);
 		UiVisualizer root = getRoot();
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			root.addResponse(null, (AuResponse)it.next());
+		for (AuResponse response: responses)
+			root.addResponse(null, response);
 		return true;
 	}
 	private UiVisualizer getRoot() {
@@ -199,7 +200,7 @@ import org.zkoss.zk.au.out.*;
 			return; //nothing to do
 
 		if (_pgInvalid == null)
-			_pgInvalid = new LinkedHashSet(7);
+			_pgInvalid = new LinkedHashSet<Page>(4);
 		_pgInvalid.add(page);
 	}
 	/** Adds an invalidated component. Once invalidated, all invocations
@@ -230,7 +231,7 @@ import org.zkoss.zk.au.out.*;
 	 * @since 5.0.2
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
-		final Map respmap = getAttrRespMap(comp);
+		final Map<String, TimedValue> respmap = getAttrRespMap(comp);
 		if (respmap != null)
 			respmap.put(append ? attr + ":" + _cntMultSU++: attr,
 				new TimedValue(_timed++, comp, attr, value));
@@ -247,7 +248,7 @@ import org.zkoss.zk.au.out.*;
 	public boolean disableClientUpdate(Component comp, boolean disable) {
 		if (disable) {
 			if (_updDisabled == null)
-				_updDisabled = new HashSet(4);
+				_updDisabled = new HashSet<Component>(4);
 			return !_updDisabled.add(comp);
 		}
 
@@ -269,7 +270,7 @@ import org.zkoss.zk.au.out.*;
 	/** Returns the response map for the specified attribute, or null if
 	 * nothing to do.
 	 */
-	private Map getAttrRespMap(Component comp) {
+	private Map<String, TimedValue> getAttrRespMap(Component comp) {
 		final Page page = comp.getPage();
 		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp) || isCUDisabled(comp))
@@ -278,9 +279,9 @@ import org.zkoss.zk.au.out.*;
 
 		checkDesktop(comp);
 
-		Map respmap = (Map)_smartUpdated.get(comp);
+		Map<String, TimedValue> respmap = _smartUpdated.get(comp);
 		if (respmap == null)
-			_smartUpdated.put(comp, respmap = new HashMap());
+			_smartUpdated.put(comp, respmap = new HashMap<String, TimedValue>());
 		return respmap;
 	}
 
@@ -329,7 +330,7 @@ import org.zkoss.zk.au.out.*;
 		if (_exec.isAsyncUpdate(comp.getPage()) //only if not belong to a new page
 		&& (_idChgd == null || !_idChgd.containsKey(comp))
 		&& !isCUDisabled(comp)) {
-			if (_idChgd == null) _idChgd = new LinkedHashMap(23);
+			if (_idChgd == null) _idChgd = new LinkedHashMap<Component, String>(23);
 			_idChgd.put(comp, comp.getUuid());
 		}
 	}
@@ -367,27 +368,24 @@ import org.zkoss.zk.au.out.*;
 			return; //nothing to do
 
 		if (_responses == null)
-			_responses = new HashMap();
+			_responses = new HashMap<Object, ResponseInfo>();
 
-		Map respmap = (Map)_responses.get(depends);
-		if (respmap == null)
-			_responses.put(depends, respmap = new HashMap());
+		ResponseInfo ri = _responses.get(depends);
+		if (ri == null)
+			_responses.put(depends, ri = new ResponseInfo());
 
 		final TimedValue tval = new TimedValue(_timed++, response);
 		if (key != null) {
-			respmap.put(key, tval);
+			ri.values.put(key, tval); //overwrite
 		} else {
-			List resps = (List)respmap.get(null);
-			if (resps == null)
-				respmap.put(null, resps = new LinkedList());
-			resps.add(tval); //don't overwrite
+			ri.keyless.add(tval); //don't overwrite
 		}
 	}
 
 	/** Process {@link Cropper} by removing cropped invalidates and so on.
 	 */
-	private Map doCrop() {
-		final Map croppingInfos = new HashMap();
+	private Map<Component, Set<Component>> doCrop() {
+		final Map<Component, Set<Component>> croppingInfos = new HashMap<Component, Set<Component>>();
 		crop(_attached, croppingInfos, false);
 		crop(_smartUpdated.keySet(), croppingInfos, false);
 		if (_responses != null)
@@ -397,7 +395,7 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Crop attached and moved.
 	 */
-	private void crop(Set coll, Map croppingInfos, boolean bResponse) {
+	private void crop(Set coll, Map<Component, Set<Component>> croppingInfos, boolean bResponse) {
 		for (Iterator it = coll.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (!(o instanceof Component))
@@ -411,7 +409,7 @@ import org.zkoss.zk.au.out.*;
 			}
 
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
-				final Set avail = getAvailableAtClient(p, croppingInfos);
+				final Set<Component> avail = getAvailableAtClient(p, croppingInfos);
 				if (avail != null) {
 					if (!avail.contains(c)) {
 						it.remove();
@@ -425,34 +423,34 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Returns the available children, or null if no cropping.
 	 */
-	private static Set getAvailableAtClient(Component comp, Map croppingInfos) {
+	private static Set<Component> getAvailableAtClient(Component comp, Map<Component, Set<Component>> croppingInfos) {
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Cropper) {
 			//we don't need to check isCropper first since its component's job
 			//to ensure the consistency
 
-			Object crop = croppingInfos.get(comp);
-			if (crop == Objects.UNKNOWN)
+			Set<Component> crop = croppingInfos.get(comp);
+			if (crop == EMPTY_CROP)
 				return null;
 			if (crop != null)
-				return (Set)crop;
+				return crop;
 
 			crop = ((Cropper)xc).getAvailableAtClient();
-			croppingInfos.put(comp, crop != null ? crop: Objects.UNKNOWN);
-			return (Set)crop;
+			croppingInfos.put(comp, crop != null ? crop: EMPTY_CROP);
+			return crop;
 		}
 		return null;
 	}
+	private static final Set<Component> EMPTY_CROP = new HashSet<Component>(1);
 
 	/** Prepares {@link #_pgRemoved} to contain set of pages that will
 	 * be removed.
 	 */
-	private void checkPageRemoved(Set removed) {
+	private void checkPageRemoved(Set<Component> removed) {
 		//1. scan once
 		final Desktop desktop = _exec.getDesktop();
-		Set pages = null;
-		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-			final Page page = (Page)it.next();
+		Set<Page> pages = null;
+		for (Page page: desktop.getPages()) {
 			final Component owner = ((PageCtrl)page).getOwner();
 			if (owner != null) { //included
 				final Page ownerPage = owner.getPage();
@@ -463,7 +461,7 @@ import org.zkoss.zk.au.out.*;
 				|| isAncestor(removed, owner, true)) {
 					addPageRemoved(page);
 				} else {
-					if (pages == null) pages = new LinkedHashSet();
+					if (pages == null) pages = new LinkedHashSet<Page>();
 					pages.add(page);
 				}
 			}
@@ -476,8 +474,8 @@ import org.zkoss.zk.au.out.*;
 		boolean pgRemovedFound;
 		do {
 			pgRemovedFound = false;
-			for (Iterator it = pages.iterator(); it.hasNext();) {
-				final Page page = (Page)it.next();
+			for (Iterator<Page> it = pages.iterator(); it.hasNext();) {
+				final Page page = it.next();
 				final Component owner = ((PageCtrl)page).getOwner();
 				if (_pgRemoved.contains(owner.getPage())) { 
 					it.remove();
@@ -488,15 +486,15 @@ import org.zkoss.zk.au.out.*;
 		} while (pgRemovedFound); //loop due to chain effect
 	}
 	private void addPageRemoved(Page page) {
-		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet();
+		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet<Page>();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);
 //		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
 	}
 	/** Clears components if it belongs to invalidated or removed page. */
-	private void clearInInvalidPage(Collection coll) {
-		for (Iterator it = coll.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+	private void clearInInvalidPage(Collection<Component> coll) {
+		for (Iterator<Component> it = coll.iterator(); it.hasNext();) {
+			final Component comp = it.next();
 			final Page page = comp.getPage();
 			if (page != null
 			&& ((_pgRemoved != null && _pgRemoved.contains(page))
@@ -508,9 +506,9 @@ import org.zkoss.zk.au.out.*;
 	 * @param includingEquals whether to return true if a equals B
 	 */
 	private
-	boolean isAncestor(Collection coll, Component comp, boolean includingEquals) {
-		for (Iterator it = coll.iterator(); it.hasNext();) {
-			final Component c = (Component)it.next();
+	boolean isAncestor(Collection<Component> coll, Component comp, boolean includingEquals) {
+		for (Iterator<Component> it = coll.iterator(); it.hasNext();) {
+			final Component c = it.next();
 			if ((includingEquals || c != comp) && Components.isAncestor(c, comp))
 				return true;
 		}
@@ -520,27 +518,26 @@ import org.zkoss.zk.au.out.*;
 	/** Returns a list of {@link AuResponse} according to what components
 	 * are invalidated and attached.
 	 */
-	public List getResponses() throws IOException {
+	public List<AuResponse> getResponses() throws IOException {
 /*		if (D.ON && log.finerable())
 			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
 				+"\npgInvalid: "+_pgInvalid	+"\nUuidChanged: "+_idChgd);
 */
-		final List responses = new LinkedList();
+		final List<AuResponse> responses = new LinkedList<AuResponse>();
 
 		//0. Correct the UUID at the client first
 		if (_idChgd != null) {
-			for (Iterator it = _idChgd.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Component comp = (Component)me.getKey();
+			for (Map.Entry<Component, String> me: _idChgd.entrySet()) {
+				final Component comp = me.getKey();
 				if (!_attached.contains(comp))
-					responses.add(new AuUuid(comp, (String)me.getValue()));
+					responses.add(new AuUuid(comp, me.getValue()));
 			}
 			_idChgd = null; //just in case
 		}
 
 		//1. process dead comonents, cropping and the removed page
-		final Map croppingInfos;
+		final Map<Component, Set<Component>> croppingInfos;
 		{
 			//1a. handle _detached to remove unncessary detach
 			doDetached();
@@ -551,7 +548,7 @@ import org.zkoss.zk.au.out.*;
 			//componetns are not removed yet
 			//Also, we have to remove both parent and child because, at
 			//the client, they might not be parent-child relationship
-			Set removed = doMoved(responses);
+			Set<Component> removed = doMoved(responses);
 				//after called, _moved is cleared (add to _attached if necessary)
 				//And, AuRemove is generated (we have to generate AuRemove first,
 				//since UUID might be reused)
@@ -582,16 +579,14 @@ import org.zkoss.zk.au.out.*;
 		//are included pages.
 		if (_pgRemoved != null) {
 			final DesktopCtrl dtctl = (DesktopCtrl)_exec.getDesktop();
-			for (final Iterator it = _pgRemoved.iterator(); it.hasNext();)
-				dtctl.removePage((Page)it.next());
+			for (Page page: _pgRemoved)
+				dtctl.removePage(page);
 		}
 
 		//3. generate response for invalidated pages
 		if (_pgInvalid != null) {
-			for (final Iterator it = _pgInvalid.iterator(); it.hasNext();) {
-				final Page page = (Page)it.next();
+			for (Page page: _pgInvalid)
 				responses.add(new AuOuter(page, redraw(page)));
-			}
 		}
 
 /*		if (log.finerable())
@@ -601,8 +596,7 @@ import org.zkoss.zk.au.out.*;
 		//4. process special interfaces
 
 		//5. generate replace for invalidated
-		for (Iterator it = _invalidated.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+		for (Component comp: _invalidated) {
 			responses.add(new AuOuter(comp, redraw(comp)));
 		}
 
@@ -611,9 +605,8 @@ import org.zkoss.zk.au.out.*;
 		//6. add attached components (including setParent)
 		//Due to cyclic references, we have to process all siblings
 		//at the same time
-		final List desktops = new LinkedList();
-		final Component[] attached = (Component[])
-			_attached.toArray(new Component[_attached.size()]);
+		final List<Set<Component>> desktops = new LinkedList<Set<Component>>();
+		final Component[] attached = _attached.toArray(new Component[_attached.size()]);
 		for (int j = 0; j < attached.length; ++j) {
 			final Component comp = attached[j];
 			//Note: attached comp might change from another page to
@@ -622,7 +615,7 @@ import org.zkoss.zk.au.out.*;
 				final Page page = comp.getPage();
 				if (page != null && _exec.isAsyncUpdate(page)) {
 					final Component parent = comp.getParent();
-					final Set newsibs = new LinkedHashSet(32);
+					final Set<Component> newsibs = new LinkedHashSet<Component>(32);
 					newsibs.add(comp);
 					desktops.add(newsibs);
 
@@ -636,23 +629,19 @@ import org.zkoss.zk.au.out.*;
 				}
 			}
 		}
-		for (Iterator it = desktops.iterator(); it.hasNext();) {
-			final Set newsibs = (Set)it.next();
+
+		for (Set<Component> newsibs: desktops)
 			addResponsesForCreatedPerSiblings(responses, newsibs, croppingInfos);
-		}
 
 		//7. Adds smart updates and response at once based on their time stamp
-		final List tvals = new LinkedList();
-		for (Iterator it = _smartUpdated.values().iterator(); it.hasNext();) {
-			final Map attrs = (Map)it.next();
+		final List<TimedValue> tvals = new LinkedList<TimedValue>();
+		for (Map<String, TimedValue> attrs: _smartUpdated.values()) {
 			tvals.addAll(attrs.values());
 		}
 		if (_responses != null) {
-			for (Iterator it = _responses.values().iterator(); it.hasNext();) {
-				final Map resps = (Map)it.next();
-				final List keyless = (List)resps.remove(null); //key == null
-				if (keyless != null) tvals.addAll(keyless);
-				tvals.addAll(resps.values()); //key != null
+			for (ResponseInfo ri: _responses.values()) {
+				tvals.addAll(ri.keyless);
+				ri.keyless.clear();
 			}
 		}
 		if (!tvals.isEmpty()) {
@@ -688,9 +677,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private void doDetached() {
 		l_out:
-		for (Iterator it = _detached.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			Component p = (Component)me.getValue();
+		for (Map.Entry<Component, Component> me: _detached.entrySet()) {
+			Component p = me.getValue();
 			for (;p != null; p = p.getParent())
 				if (_moved.contains(p) || _detached.containsKey(p)
 				|| _invalidated.contains(p) || _attached.contains(p))
@@ -708,11 +696,10 @@ import org.zkoss.zk.au.out.*;
 	 *
 	 * @return the dead components (i.e., not belong to any page)
 	 */
-	private Set doMoved(List responses) {
+	private Set<Component> doMoved(List<AuResponse> responses) {
 		//Remove components that have to removed from the client
-		final Set removed = new LinkedHashSet();
-		for (Iterator it = _moved.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+		final Set<Component> removed = new LinkedHashSet<Component>();
+		for (Component comp: _moved) {
 			final Page page = comp.getPage();
 			if (page == null) {
 				removed.add(comp);
@@ -744,7 +731,7 @@ import org.zkoss.zk.au.out.*;
 	/** Returns the original UUID of the specified component.
 	 */
 	private String uuid(Component comp) {
-		final String uuid = (String)_uuids.get(comp);
+		final String uuid = _uuids.get(comp);
 		return uuid != null ? uuid: comp.getUuid();
 	}
 
@@ -752,8 +739,8 @@ import org.zkoss.zk.au.out.*;
 	 * parent is changed).
 	 */
 	private static
-	void addResponsesForCreatedPerSiblings(List responses, Set newsibs,
-	Map croppingInfos) throws IOException {
+	void addResponsesForCreatedPerSiblings(List<AuResponse> responses, Set<Component> newsibs,
+	Map<Component, Set<Component>> croppingInfos) throws IOException {
 		final Component parent;
 		final Page page;
 		{
@@ -761,16 +748,15 @@ import org.zkoss.zk.au.out.*;
 			parent = comp.getParent();
 			page = comp.getPage();
 		}
-		Collection sibs;
+		Collection<Component> sibs;
 		if (parent != null) {
 			sibs = getAvailableAtClient(parent, croppingInfos);
 			if (sibs == null) //no cropping
 				sibs = parent.getChildren();
 			else if (sibs.size() > 1 && !(sibs instanceof LinkedHashSet)) {
 //				log.warning("Use LinkedHashSet instead of "+sibs.getClass());
-				final Set s = new LinkedHashSet(sibs.size() * 2);
-				for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
-					final Object o = it.next();
+				final Set<Component> s = new LinkedHashSet<Component>(sibs.size() * 2);
+				for (Component o: parent.getChildren()) {
 					if (sibs.remove(o)) {
 						s.add(o);
 						if (sibs.isEmpty())
@@ -791,13 +777,12 @@ import org.zkoss.zk.au.out.*;
 	3. If anchor is not found, use AuAppendChild for the first
 		and INSERT_AFTER for the rest
 		*/
-		final List before = new LinkedList();
+		final List<Component> before = new LinkedList<Component>();
 		Component anchor = null;
 		final ComponentCtrl parentCtrl = (ComponentCtrl)parent;
 		final Object parentxc =
 			parentCtrl != null ? parentCtrl.getExtraCtrl(): null;
-		for (Iterator it = sibs.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+		for (Component comp: sibs) {
 			if (anchor != null) {
 				if (newsibs.remove(comp)) {
 					responses.add(new AuInsertAfter(anchor, redraw(comp)));
@@ -812,9 +797,9 @@ import org.zkoss.zk.au.out.*;
 			} else {
 				//Generate before in the reverse order and INSERT_BEFORE
 				anchor = comp;
-				for (ListIterator i2 = before.listIterator(before.size());
+				for (ListIterator<Component> i2 = before.listIterator(before.size());
 				i2.hasPrevious();) {
-					final Component c = (Component)i2.previous();
+					final Component c = i2.previous();
 					responses.add(new AuInsertBefore(anchor, redraw(c)));
 					anchor = c;
 				}
@@ -826,16 +811,16 @@ import org.zkoss.zk.au.out.*;
 		assert D.OFF || (anchor == null && newsibs.isEmpty()): "anchor="+anchor+" newsibs="+newsibs+" sibs="+sibs;
 
 		//all siblings are changed (and none of them is processed)
-		final Iterator it = before.iterator();
+		final Iterator<Component> it = before.iterator();
 		if (it.hasNext()) {
-			anchor = (Component)it.next();
+			anchor = it.next();
 			responses.add(
 				parent != null ?
 					new AuAppendChild(parent, redraw(anchor)):
 					new AuAppendChild(page, redraw(anchor)));
 
 			while (it.hasNext()) {
-				final Component comp = (Component)it.next();
+				final Component comp = it.next();
 				responses.add(new AuInsertAfter(anchor, redraw(comp)));
 				anchor = comp;
 			}
@@ -843,12 +828,12 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Removes redundant components (i.e., an descendant of another).
 	 */
-	private static void removeRedundant(Set comps) {
+	private static void removeRedundant(Set<Component> comps) {
 		rudLoop:
-		for (Iterator j = comps.iterator(); j.hasNext();) {
-			final Component cj = (Component)j.next();
-			for (Iterator k = comps.iterator(); k.hasNext();) {
-				final Component ck = (Component)k.next();
+		for (Iterator<Component> j = comps.iterator(); j.hasNext();) {
+			final Component cj = j.next();
+			for (Iterator<Component> k = comps.iterator(); k.hasNext();) {
+				final Component ck = k.next();
 				if (ck != cj && Components.isAncestor(ck, cj)) {
 					j.remove();
 					continue rudLoop;
@@ -861,11 +846,11 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private void removeCrossRedundant() {
 		invLoop:
-		for (Iterator j = _invalidated.iterator(); j.hasNext();) {
-			final Component cj = (Component)j.next();
+		for (Iterator<Component> j = _invalidated.iterator(); j.hasNext();) {
+			final Component cj = j.next();
 
-			for (Iterator k = _attached.iterator(); k.hasNext();) {
-				final Component ck = (Component)k.next();
+			for (Iterator<Component> k = _attached.iterator(); k.hasNext();) {
+				final Component ck = k.next();
 				if (Components.isAncestor(ck, cj)) { //includes ck == cj
 					j.remove();
 					continue invLoop;
@@ -875,20 +860,19 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 		suLoop:
-		for (Iterator j = _smartUpdated.keySet().iterator(); j.hasNext();) {
-			final Component cj = (Component)j.next();
+		for (Iterator<Component> j = _smartUpdated.keySet().iterator(); j.hasNext();) {
+			final Component cj = j.next();
 
-			for (Iterator k = _invalidated.iterator(); k.hasNext();) {
-				final Component ck = (Component)k.next();
-
+			for (Iterator<Component> k = _invalidated.iterator(); k.hasNext();) {
+				final Component ck = k.next();
 
 				if (Components.isAncestor(ck, cj)) {
 					j.remove();
 					continue suLoop;
 				}
 			}
-			for (Iterator k = _attached.iterator(); k.hasNext();) {
-				final Component ck = (Component)k.next();
+			for (Iterator<Component> k = _attached.iterator(); k.hasNext();) {
+				final Component ck = k.next();
 				if (Components.isAncestor(ck, cj)) {
 					j.remove();
 					continue suLoop;
@@ -1004,5 +988,12 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public boolean isAborting() {
 		return _aborting != null && _aborting.isAborting();
+	}
+
+	private static class ResponseInfo {
+		/** A list of keyless responses. */
+		private final List<TimedValue> keyless = new LinkedList<TimedValue>();
+		/** A map of key and responses. */
+		private final Map<String, TimedValue> values = new HashMap<String, TimedValue>(4);
 	}
 }

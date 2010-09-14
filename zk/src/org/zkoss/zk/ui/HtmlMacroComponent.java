@@ -61,7 +61,7 @@ import org.zkoss.zk.ui.sys.Attributes;
  * @author tomyeh
  */
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
-	private transient Map _props;
+	private transient Map<String, Object> _props;
 	private String _uri;
 	/** An array of components created by this inline macro.
 	 * It is used only if {@link #isInline}
@@ -73,7 +73,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		init();
 	}
 	private void init() {
-		_props = new LinkedHashMap();
+		_props = new LinkedHashMap<String, Object>();
 		_props.put("includer", this);
 	}
 

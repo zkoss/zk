@@ -64,7 +64,7 @@ public interface Initiator {
 	 * each argument.
 	 * If no argument is specified, args is an empty map (never null).
 	 */
-	public void doInit(Page page, Map args) throws Exception;
+	public void doInit(Page page, Map<String, Object> args) throws Exception;
 	/** Called after all components are created (aka., composed),
 	 * and before any event is processed.
 	 *

@@ -89,7 +89,7 @@ public class WebManager {
 	/*package*/ static final String ATTR_DESKTOP = "javax.zkoss.zk.ui.desktop";
 
 	/** Map(ServletContext, List(WebManagerActivationListener)). */
-	private static final Map _actListeners = new HashMap();
+	private static final Map<ServletContext, List<WebManagerActivationListener>> _actListeners = new HashMap<ServletContext, List<WebManagerActivationListener>>();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
@@ -202,7 +202,7 @@ public class WebManager {
 			}
 		}
 
-		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
+		final List<WebManagerActivationListener> listeners = _actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
 			for (Iterator it = listeners.iterator(); it.hasNext();) {
 				try {
@@ -288,8 +288,9 @@ public class WebManager {
 			listener.didActivate(webman);
 		} else {
 			synchronized (WebManager.class) {
-				List l = (List)_actListeners.get(ctx);
-				if (l == null) _actListeners.put(ctx, l = new LinkedList());
+				List<WebManagerActivationListener> l = _actListeners.get(ctx);
+				if (l == null)
+					_actListeners.put(ctx, l = new LinkedList<WebManagerActivationListener>());
 				l.add(listener);
 			}
 		}

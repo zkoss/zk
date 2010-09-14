@@ -45,14 +45,14 @@ import org.zkoss.zk.xel.Evaluator;
  */
 public class SimpleEvaluator implements Evaluator {
 	private transient ExpressionFactory _expf;
-	private final Class _expfcls;
+	private final Class<? extends ExpressionFactory> _expfcls;
 	private final FunctionMapper _mapper;
 
 	/**
 	 * @param expfcls the class that implements the expression factory.
 	 * If null, the default one is used.
 	 */
-	public SimpleEvaluator(FunctionMapper mapper, Class expfcls) {
+	public SimpleEvaluator(FunctionMapper mapper, Class<? extends ExpressionFactory> expfcls) {
 		_expfcls = expfcls;
 		_mapper = mapper;
 	}
@@ -75,7 +75,7 @@ public class SimpleEvaluator implements Evaluator {
 	/** Returns the implementation class of the expression factory,
 	 * or null to use the default.
 	 */
-	public Class getExpressionFactoryClass() {
+	public Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return _expfcls;
 	}
 

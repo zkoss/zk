@@ -74,7 +74,7 @@ public class ComponentsCtrl {
 	 */
 	public static final String ANONYMOUS_ID = "z__i";
 
-	private static final ThreadLocal _compdef = new ThreadLocal();
+	private static final ThreadLocal<Object> _compdef = new ThreadLocal<Object>();
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
@@ -236,21 +236,16 @@ public class ComponentsCtrl {
 		if (forward == null)
 			return;
 
-		final Map fwds = new LinkedHashMap(); //remain the order
-		Maps.parse(fwds, forward, ',', '\'', true, true, true);
-		for (Iterator it = fwds.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String orgEvent = (String)me.getKey();
+		final Map<String, Collection<String>> fwds = new LinkedHashMap<String, Collection<String>>(); //remain the order
+		Maps.parseMultiple(fwds, forward, ',', '\'', true, true);
+		for (Map.Entry<String, Collection<String>> me: fwds.entrySet()) {
+			final String orgEvent = me.getKey();
 			if (orgEvent != null && !Events.isValid(orgEvent))
 				throw new UiException("Not an event name: "+orgEvent);
 
-			final Object cond = me.getValue();
-			if (cond instanceof Collection) {
-				for (Iterator e = ((Collection)cond).iterator(); e.hasNext();)
-					applyForward0(comp, orgEvent, (String)e.next());
-			} else {
-				applyForward0(comp, orgEvent, (String)cond);
-			}
+			final Collection<String> conds = me.getValue();
+			for (String cond: conds)
+				applyForward0(comp, orgEvent, cond);
 		}
 	}
 	private static final
@@ -302,7 +297,7 @@ public class ComponentsCtrl {
 	/** Returns the method for handling the specified event, or null
 	 * if not available.
 	 */
-	public static final Method getEventMethod(Class cls, String evtnm) {
+	public static final Method getEventMethod(Class<?> cls, String evtnm) {
 		final Pair key = new Pair(cls, evtnm);
 		final Object o = _evtmtds.get(key);
 		if (o != null)
@@ -314,7 +309,7 @@ public class ComponentsCtrl {
 					cls, evtnm, new Class[] {Event.class}); //with event arg
 		} catch (NoSuchMethodException ex) {
 			try {
-				mtd = cls.getMethod(evtnm, null); //no argument case
+				mtd = cls.getMethod(evtnm); //no argument case
 			} catch (NoSuchMethodException e2) {
 			}
 		}
@@ -334,13 +329,14 @@ public class ComponentsCtrl {
 	 * Once assigned, the caller shall not access it again.
 	 * @since 3.0.0
 	 */
+	@SuppressWarnings("unchecked")
 	public static final void setEventMethodCache(Cache cache) {
 		if (cache == null)
 			throw new IllegalArgumentException();
 		_evtmtds = cache;
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static Cache _evtmtds = new MultiCache(
+	private static Cache<Pair, Object> _evtmtds = new MultiCache<Pair, Object> (
 		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
 		4*60*60*1000);
@@ -351,12 +347,12 @@ public class ComponentsCtrl {
 	 *
 	 * @since 5.0.0
 	 */
-	public static final Collection redraw(Collection comps) {
+	public static final Collection<JavaScriptValue> redraw(Collection<Component> comps) {
 		try {
 			final StringWriter out = new StringWriter(1024*8);
-			final List js = new LinkedList();
-			for (Iterator it = comps.iterator(); it.hasNext();) {
-				((ComponentCtrl)it.next()).redraw(out);
+			final List<JavaScriptValue> js = new LinkedList<JavaScriptValue>();
+			for (Component comp: comps) {
+				((ComponentCtrl)comp).redraw(out);
 				final StringBuffer sb = out.getBuffer();
 				js.add(new JavaScriptValue(sb.toString()));
 				sb.setLength(0);
@@ -439,8 +435,8 @@ public class ComponentsCtrl {
 		}
 		public void applyProperties(Component comp) {
 		}
-		public Map evalProperties(Map propmap, Page owner, Component parent) {
-			return propmap != null ? propmap: new HashMap(3);
+		public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent) {
+			return propmap != null ? propmap: new HashMap<String, Object>(2);
 		}
 		public AnnotationMap getAnnotationMap() {
 			return null;

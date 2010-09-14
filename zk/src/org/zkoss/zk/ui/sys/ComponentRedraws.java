@@ -59,21 +59,19 @@ public class ComponentRedraws {
 	 */
 	public static final int beforeRedraw(boolean includingPage) {
 		final int order;
-		final List states;
-		final Object[] ctx = (Object[])_ctx.get();
+		Context ctx = _ctx.get();
 		if (ctx == null) {
-			_ctx.set(new Object[] {states = new LinkedList(), new StringWriter()});
+			_ctx.set(ctx = new Context());
 			order = -1;
 		} else {
-			states = (List)ctx[0];
-			if (states.isEmpty()) {
+			if (ctx.states.isEmpty()) {
 				order = -1;
 			} else {
-				order = ((Integer)states.get(0)).intValue();
-				states.set(0, new Integer(order + 1));
+				order = ctx.states.get(0).intValue();
+				ctx.states.set(0, new Integer(order + 1));
 			}
 		}
-		states.add(0, new Integer(includingPage ? -1: 0));
+		ctx.states.add(0, new Integer(includingPage ? -1: 0));
 		return order;
 	}
 	/** Returns the string buffer for the snippet that shall be generated
@@ -83,7 +81,7 @@ public class ComponentRedraws {
 	 * the top-level component.
 	 */
 	public static final Writer getScriptBuffer() {
-		return (Writer)((Object[])_ctx.get())[1];
+		return _ctx.get().out;
 	}
 	/** Called after finsishing the redrawing.
 	 * It must be called in the finally clause if {@link #beforeRedraw}
@@ -96,12 +94,11 @@ public class ComponentRedraws {
 	 */
 	public static final String afterRedraw() {
 		try {
-			final Object[] ctx = (Object[])_ctx.get();
-			final List states = (List)ctx[0];
-			states.remove(0);
-			if (states.isEmpty()) {
+			final Context ctx = _ctx.get();
+			ctx.states.remove(0);
+			if (ctx.states.isEmpty()) {
 				_ctx.set(null);
-				return ((StringWriter)ctx[1]).getBuffer().toString();
+				return ctx.out.getBuffer().toString();
 			}
 		} catch (Throwable ex) {
 			_ctx.set(null); //just in case
@@ -114,5 +111,10 @@ public class ComponentRedraws {
 	 * If Boolean.TRUE, it means it is the first child.
 	 * If Boolean.FALSE, it means other cases.
 	 */
-	private static final ThreadLocal _ctx = new ThreadLocal();
+	private static final ThreadLocal<Context> _ctx = new ThreadLocal<Context>();
+
+	private static class Context {
+		private final List<Integer> states = new LinkedList<Integer>();
+		private final StringWriter out = new StringWriter();
+	}
 }

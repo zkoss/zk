@@ -54,7 +54,7 @@ import org.zkoss.zk.fn.JspFns;
  * @author tomyeh
  * @since 5.0.0
  */
-public class WcsExtendlet extends AbstractExtendlet {
+public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 	public void init(ExtendletConfig config) {
 		init(config, new WcsLoader());
 		config.addCompressExtension("wcs");
@@ -62,7 +62,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, java.io.IOException {
-		final WcsInfo wi = (WcsInfo)_cache.get(path);
+		final WcsInfo wi = _cache.get(path);
 		if (wi == null) {
 			if (Servlets.isIncluded(request))
 				log.error("Failed to load the resource: "+path);
@@ -141,16 +141,15 @@ public class WcsExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/*package*/ Object parse(InputStream is, String path)
+	/*package*/ WcsInfo parse(InputStream is, String path)
 	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		if (lang.length() == 0)
 			throw new UiException("The language attribute must be specified, "+root.getLocator()+", "+path);
 
-		final List items = new LinkedList();
-		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
-			final Element el = (Element)it.next();
+		final List<Object> items = new LinkedList<Object>();
+		for (Element el: root.getElements()) {
 			final String elnm = el.getName();
 			if ("stylesheet".equals(elnm)) {
 				final String href = IDOMs.getRequiredAttributeValue(el, "href");
@@ -167,12 +166,12 @@ public class WcsExtendlet extends AbstractExtendlet {
 		return new WcsInfo(lang, items);
 	}
 
-	private class WcsLoader extends ExtendletLoader {
+	private class WcsLoader extends ExtendletLoader<WcsInfo> {
 		private WcsLoader() {
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path, String orgpath)
+		protected WcsInfo parse(InputStream is, String path, String orgpath)
 		throws Exception {
 			return WcsExtendlet.this.parse(is, path);
 		}
@@ -189,13 +188,13 @@ public class WcsExtendlet extends AbstractExtendlet {
 			return path;
 		}
 	}
-	/*package*/ static class WcsInfo {
-		/*package*/ final LanguageDefinition langdef;
-		/** A list of URI or static method. */
-		/*package*/ final Object[] items;
-		private WcsInfo(String lang, List items) {
-			this.langdef = LanguageDefinition.lookup(lang);
-			this.items = (Object[])items.toArray(new Object[items.size()]);
-		}
+}
+/*package*/ class WcsInfo {
+	/*package*/ final LanguageDefinition langdef;
+	/** A list of URI or static method. */
+	/*package*/ final Object[] items;
+	/*package*/ WcsInfo(String lang, List<Object> items) {
+		this.langdef = LanguageDefinition.lookup(lang);
+		this.items = (Object[])items.toArray(new Object[items.size()]);
 	}
 }

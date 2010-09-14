@@ -65,5 +65,5 @@ public interface RequestQueue {
 	 * or null if no request ID was added.
 	 * @since 3.0.5
 	 */
-	public Collection clearPerfRequestIds();
+	public Collection<String> clearPerfRequestIds();
 }

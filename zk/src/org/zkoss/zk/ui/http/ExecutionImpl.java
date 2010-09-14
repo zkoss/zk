@@ -85,7 +85,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final HttpServletRequest _request;
 	private final HttpServletResponse _response;
 	private final RequestContext _xelctx;
-	private final Map _attrs;
+	private final Map<String, Object> _attrs;
 	private MyEval _eval;
 	private ExecutionResolver _resolver;
 	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
@@ -105,7 +105,8 @@ public class ExecutionImpl extends AbstractExecution {
 		_xelctx = new ReqContext();
 
 		_attrs = new AttributesMap() {
-			protected Enumeration getKeys() {
+			@SuppressWarnings("unchecked")
+			protected Enumeration<String> getKeys() {
 				return _request.getAttributeNames();
 			}
 			protected Object getValue(String key) {
@@ -136,7 +137,8 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getParameter(String name) {
 		return _request.getParameter(name);
 	}
-	public Map getParameterMap() {
+	@SuppressWarnings("unchecked")
+	public Map<String, String[]> getParameterMap() {
 		return _request.getParameterMap();
 	}
 
@@ -156,7 +158,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return Expressions.newExpressionFactory();
 	}
 
-	public Evaluator getEvaluator(Page page, Class expfcls) {
+	public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 		if (page == null)
 			page = getCurrentPage();
 
@@ -168,19 +170,19 @@ public class ExecutionImpl extends AbstractExecution {
 			_eval = new MyEval(page, expfcls);
 		return _eval;
 	}
-	public Evaluator getEvaluator(Component comp, Class expfcls) {
+	public Evaluator getEvaluator(Component comp, Class<? extends ExpressionFactory> expfcls) {
 		return getEvaluator(comp != null ? comp.getPage(): null, expfcls);
 	}
 
-	public Object evaluate(Component comp, String expr, Class expectedType) {
+	public Object evaluate(Component comp, String expr, Class<?> expectedType) {
 		return evaluate0(comp, expr, expectedType,
 			comp != null ? comp.getPage(): null);
 	}
-	public Object evaluate(Page page, String expr, Class expectedType) {
+	public Object evaluate(Page page, String expr, Class<?> expectedType) {
 		return evaluate0(page, expr, expectedType, page);
 	}
 	private Object evaluate0(Object self, String expr,
-	Class expectedType, Page page) {
+	Class<?> expectedType, Page page) {
 		if (expr == null || expr.length() == 0 || expr.indexOf("${") < 0) {
 			if (expectedType == Object.class || expectedType == String.class)
 				return expr;
@@ -455,7 +457,7 @@ public class ExecutionImpl extends AbstractExecution {
 		return old;
 	}
 
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
 	public boolean addScopeListener(ScopeListener listener) {
@@ -473,13 +475,15 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getHeader(String name) {
 		return _request.getHeader(name);
 	}
-	public Iterator getHeaders(String name) {
-		final Enumeration enm = _request.getHeaders(name);
-		return enm != null ? new CollectionsX.EnumerationIterator(enm): null;
+	@SuppressWarnings("unchecked")
+	public Iterator<String> getHeaders(String name) {
+		final Enumeration<String> enm = _request.getHeaders(name);
+		return enm != null ? new CollectionsX.EnumerationIterator<String>(enm): null;
 	}
-	public Iterator getHeaderNames() {
-		final Enumeration enm = _request.getHeaderNames();
-		return enm != null ? new CollectionsX.EnumerationIterator(enm): null;
+	@SuppressWarnings("unchecked")
+	public Iterator<String> getHeaderNames() {
+		final Enumeration<String> enm = _request.getHeaderNames();
+		return enm != null ? new CollectionsX.EnumerationIterator<String>(enm): null;
 	}
 	public void setResponseHeader(String name, String value) {
 		_response.setHeader(name, value);
@@ -517,7 +521,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private class MyEval extends SimpleEvaluator { //not serializable
 		private Page page;
 
-		private MyEval(Page page, Class expfcls) {
+		private MyEval(Page page, Class<? extends ExpressionFactory> expfcls) {
 			super(null, expfcls);
 			this.page = page;
 		}

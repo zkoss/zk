@@ -50,14 +50,14 @@ import org.zkoss.zk.ui.WebApp;
  * @author tomyeh
  * @since 5.0.0
  */
-/*package*/ abstract class AbstractExtendlet implements Extendlet {
+/*package*/ abstract class AbstractExtendlet<V> implements Extendlet {
 	static final Log log = Log.lookup(WpdExtendlet.class);
 
 	ExtendletContext _webctx;
 	/** DSP interpretation cache. */
-	ResourceCache _cache;
+	ResourceCache<String, V> _cache;
 	/** The provider. */
-	private ThreadLocal _provider = new ThreadLocal();
+	private ThreadLocal<Provider> _provider = new ThreadLocal<Provider>();
 	private Boolean _debugJS;
 
 	//Public Utilities
@@ -79,7 +79,7 @@ import org.zkoss.zk.ui.WebApp;
 
 	//Package Utilities
 	Provider getProvider() {
-		return (Provider)_provider.get();
+		return _provider.get();
 	}
 	void setProvider(Provider provider) {
 		_provider.set(provider);
@@ -90,9 +90,9 @@ import org.zkoss.zk.ui.WebApp;
 	ServletContext getServletContext() {
 		return _webctx != null ? _webctx.getServletContext(): null;
 	}
-	void init(ExtendletConfig config, ExtendletLoader loader) {
+	void init(ExtendletConfig config, ExtendletLoader<V> loader) {
 		_webctx = config.getExtendletContext();
-		_cache = new ResourceCache(loader, 16);
+		_cache = new ResourceCache<String, V>(loader, 16);
 		_cache.setMaxSize(1024);
 		_cache.setLifetime(60*60*1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
@@ -157,6 +157,32 @@ import org.zkoss.zk.ui.WebApp;
 		return feature == ALLOW_DIRECT_INCLUDE;
 	}
 
+	/*package*/ //called by Provider
+	InputStream getResourceAsStream(HttpServletRequest request, String path, boolean locate)
+	throws IOException, ServletException {
+		if (locate)
+			path = Servlets.locate(_webctx.getServletContext(),
+				request, path, _webctx.getLocator());
+
+		if (_cache.getCheckPeriod() >= 0) {
+			//Due to Web server might cache the result, we use URL if possible
+			try {
+				URL url = _webctx.getResource(path);
+				if (url != null)
+					return url.openStream();
+			} catch (Throwable ex) {
+				log.warningBriefly("Unable to read from URL: "+path, ex);
+			}
+		}
+
+		//Note: _webctx will handle the renaming for debugJS (.src.js)
+		return _webctx.getResourceAsStream(path);
+	}
+	/*package*/ //called by Provider
+	URL getResource(String path) throws IOException {
+		return _webctx.getResource(path);
+	}
+
 	//utility class
 	/*package*/ static class MethodInfo {
 		final Method method;
@@ -166,64 +192,51 @@ import org.zkoss.zk.ui.WebApp;
 			this.arguments = arguments;
 		}
 	}
-	/*package*/ class Provider { //don't use private since WpdContent needs it
-		/*package*/ final HttpServletRequest request;
-		/*package*/ final HttpServletResponse response;
+}
 
-		/*package*/ Provider(HttpServletRequest request, HttpServletResponse response) {
-			this.request = request;
-			this.response = response;
-		}
+/*package*/ class Provider { //don't use private since WpdContent needs it
+	private AbstractExtendlet _extlet;
+	/*package*/ final HttpServletRequest request;
+	/*package*/ final HttpServletResponse response;
 
-		/*package*/
-		InputStream getResourceAsStream(String path, boolean locate)
-		throws IOException, ServletException {
-			if (locate)
-				path = Servlets.locate(_webctx.getServletContext(),
-					this.request, path, _webctx.getLocator());
-
-			if (_cache.getCheckPeriod() >= 0) {
-				//Due to Web server might cache the result, we use URL if possible
-				try {
-					URL url = _webctx.getResource(path);
-					if (url != null)
-						return url.openStream();
-				} catch (Throwable ex) {
-					log.warningBriefly("Unable to read from URL: "+path, ex);
-				}
-			}
-
-			//Note: _webctx will handle the renaming for debugJS (.src.js)
-			return _webctx.getResourceAsStream(path);
-		}
-		URL getResource(String path) throws IOException {
-			return _webctx.getResource(path);
-		}
+	/*package*/ Provider(AbstractExtendlet extlet, HttpServletRequest request, HttpServletResponse response) {
+		_extlet = extlet;
+		this.request = request;
+		this.response = response;
 	}
-	/*package*/ class FileProvider extends Provider {
-		private String _parent;
-		/*package*/ FileProvider(File file, boolean debugJS) {
-			super(null, null);
-			_parent = file.getParent();
+	InputStream getResourceAsStream(String path, boolean locate)
+	throws IOException, ServletException {
+		return _extlet.getResourceAsStream(this.request, path, locate);
+	}
+	URL getResource(String path) throws IOException {
+		return _extlet.getResource(path);
+	}
+}
+/*package*/ class FileProvider extends Provider {
+	private String _parent;
+	private boolean _debugJS;
+	/*package*/ FileProvider(File file, boolean debugJS) {
+		super(null, null, null);
+		_debugJS = debugJS;
+		_parent = file.getParent();
+	}
+	InputStream getResourceAsStream(String path, boolean locate)
+	throws IOException {
+		path = getRealPath(path);
+		final File file = new File(_parent, path);
+		return locate ? new FileInputStream(Files.locate(file.getPath())):
+			new FileInputStream(file);
+	}
+	URL getResource(String path) throws IOException {
+		path = getRealPath(path);
+		return new File(_parent, path).toURI().toURL();
+	}
+	protected String getRealPath(String path) {
+		if (_debugJS) {
+			final int j = path.lastIndexOf('.');
+			if (j >= 0)
+				return path.substring(0, j) + ".src" + path.substring(j);
 		}
-		InputStream getResourceAsStream(String path, boolean locate)
-		throws IOException {
-			path = getRealPath(path);
-			final File file = new File(_parent, path);
-			return locate ? new FileInputStream(Files.locate(file.getPath())):
-				new FileInputStream(file);
-		}
-		URL getResource(String path) throws IOException {
-			path = getRealPath(path);
-			return new File(_parent, path).toURI().toURL();
-		}
-		protected String getRealPath(String path) {
-			if (isDebugJS()) {
-				final int j = path.lastIndexOf('.');
-				if (j >= 0)
-					return path.substring(0, j) + ".src" + path.substring(j);
-			}
-			return path;
-		}
+		return path;
 	}
 }

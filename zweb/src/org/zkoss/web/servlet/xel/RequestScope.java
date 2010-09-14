@@ -30,7 +30,8 @@ public class RequestScope extends AttributesMap {
 		_request = request;
 	}
 
-	protected Enumeration getKeys() {
+	@SuppressWarnings("unchecked")
+	protected Enumeration<String> getKeys() {
 		return _request.getAttributeNames();
 	}
 	protected Object getValue(String key) {

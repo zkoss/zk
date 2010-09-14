@@ -41,7 +41,7 @@ public class Devices {
 	private Devices() {}
 
 	/** Map(String type, DeviceInfo info or Device device). */
-	private static final Map _devmap = new LinkedHashMap(8);
+	private static final Map<String, Object> _devmap = new LinkedHashMap<String, Object>(4);
 	/** A list of devices registered. It is a duplicated info (of _devmap)
 	 * but used to improve the performance.
 	 */
@@ -66,19 +66,18 @@ public class Devices {
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 
 		final Device device = ((DeviceInfo)o).newDevice(deviceType);
-		final List devs = new LinkedList();
+		final List<Device> devs = new LinkedList<Device>();
 		synchronized (_devmap) {
 			final Object old = _devmap.put(deviceType, device);
 			if (old != o)
 				_devmap.put(deviceType, old); //changed by someone else; so restore
 
-			for (Iterator it = _devmap.values().iterator(); it.hasNext();) {
-				final Object d = it.next();
+			for (Object d: _devmap.values()) {
 				if (d instanceof Device)
-					devs.add(d);
+					devs.add((Device)d);
 			}
 		}
-		_devs = (Device[])devs.toArray(new Device[devs.size()]);
+		_devs = devs.toArray(new Device[devs.size()]);
 		return device;
 	}
 	/** Returns the device for the specified client.
@@ -97,8 +96,8 @@ public class Devices {
 	throws DeviceNotFoundException {
 		String[] devTypes;
 		synchronized (_devmap) {
-			Collection c = _devmap.keySet();
-			devTypes = (String[])c.toArray(new String[c.size()]);
+			Collection<String> c = _devmap.keySet();
+			devTypes = c.toArray(new String[c.size()]);
 		}
 
 		Device device = null;

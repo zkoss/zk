@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -37,7 +37,7 @@ import org.zkoss.zk.xel.impl.Utils;
 public class VariablesInfo extends EvalRefStub
 implements Condition, java.io.Serializable {
 	/** Map(String name, ExValue/ExValue[]/Map value). */
-	private final Map _vars;
+	private final Map<String, Object> _vars;
 	private final ConditionImpl _cond;
 	private final int _composite;
 	private final boolean _local;
@@ -58,7 +58,7 @@ implements Condition, java.io.Serializable {
 	 * or the composite type is illegal.
 	 * @since 3.0.6
 	 */
-	public VariablesInfo(EvaluatorRef evalr, Map vars, boolean local,
+	public VariablesInfo(EvaluatorRef evalr, Map<String, String> vars, boolean local,
 	String composite, ConditionImpl cond) {
 		if (evalr == null) throw new IllegalArgumentException();
 		if (composite == null || composite.length() == 0
@@ -72,14 +72,14 @@ implements Condition, java.io.Serializable {
 			throw new IllegalArgumentException("Unkonwn composite: "+composite);
 
 		_evalr = evalr;
-		_vars = vars;
-		if (_vars != null) {
-			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(
-					Utils.parseComposite(
-						(String)me.getValue(), Object.class, _composite));
+		if (vars != null) {
+			_vars = new LinkedHashMap<String, Object>();
+			for (Map.Entry<String, String> me: vars.entrySet()) {
+				_vars.put(me.getKey(),
+					Utils.parseComposite(me.getValue(), Object.class, _composite));
 			}
+		} else {
+			_vars = null;
 		}
 
 		_local = local;
@@ -96,7 +96,7 @@ implements Condition, java.io.Serializable {
 	 * @param local whether they are local variables.
 	 * @exception IllegalArgumentException if evalr is null
 	 */
-	public VariablesInfo(EvaluatorRef evalr, Map vars, boolean local,
+	public VariablesInfo(EvaluatorRef evalr, Map<String, String> vars, boolean local,
 	ConditionImpl cond) {
 		this(evalr, vars, local, null, cond);
 	}
@@ -122,9 +122,8 @@ implements Condition, java.io.Serializable {
 	public void apply(Component comp) {
 		if (_vars != null && isEffective(comp)) {
 			final Evaluator eval = _evalr.getEvaluator();
-			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
+			for (Map.Entry<String, Object> me: _vars.entrySet()) {
+				final String name = me.getKey();
 				final Object value = me.getValue();
 				comp.getSpaceOwner().setAttribute(
 					name, Utils.evaluateComposite(eval, comp, value), !_local);
@@ -137,9 +136,8 @@ implements Condition, java.io.Serializable {
 	public void apply(Page page) {
 		if (_vars != null && isEffective(page)) {
 			final Evaluator eval = _evalr.getEvaluator();
-			for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
+			for (Map.Entry<String, Object> me: _vars.entrySet()) {
+				final String name = me.getKey();
 				final Object value = me.getValue();
 				page.setAttribute(
 					name, Utils.evaluateComposite(eval, page, value), !_local);
@@ -159,8 +157,8 @@ implements Condition, java.io.Serializable {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(40).append("[variables:");
 		if (_vars != null)
-			for (Iterator it = _vars.keySet().iterator(); it.hasNext();)
-				sb.append(' ').append(it.next());
+			for (String name: _vars.keySet())
+				sb.append(' ').append(name);
 		return sb.append(']').toString();
 	}
 }

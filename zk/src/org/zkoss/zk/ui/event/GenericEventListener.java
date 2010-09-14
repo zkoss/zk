@@ -78,7 +78,7 @@ abstract public class GenericEventListener implements EventListener {
 		final Method mtd =	ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
 		if (mtd != null) {
 			if (mtd.getParameterTypes().length == 0)
-				mtd.invoke(controller, null);
+				mtd.invoke(controller);
 			else if (evt instanceof ForwardEvent) { //ForwardEvent
 				final Class paramcls = (Class) mtd.getParameterTypes()[0];
 				//paramcls is ForwardEvent || Event

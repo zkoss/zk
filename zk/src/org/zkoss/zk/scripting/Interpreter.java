@@ -77,7 +77,7 @@ public interface Interpreter {
 
 	/** Returns the class defined in this interpreter, or null if not found.
 	 */
-	public Class getClass(String clsnm);
+	public Class<?> getClass(String clsnm);
 	/** Returns the method of the specified name defined in this interpreter,
 	 * or null if not defined.
 	 *

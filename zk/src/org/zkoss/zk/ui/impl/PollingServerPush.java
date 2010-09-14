@@ -63,7 +63,7 @@ public class PollingServerPush implements ServerPush {
 
 	private Desktop _desktop;
 	/** List of ThreadInfo. */
-	private final List _pending = new LinkedList();
+	private final List<ThreadInfo> _pending = new LinkedList<ThreadInfo>();
 	/** The active thread. */
 	private ThreadInfo _active;
 	/** The info to carray over from onPiggyback to the server-push thread. */
@@ -205,8 +205,7 @@ public class PollingServerPush implements ServerPush {
 	}
 	private void wakePending() {
 		synchronized (_pending) {
-			for (Iterator it = _pending.iterator(); it.hasNext();) {
-				final ThreadInfo info = (ThreadInfo)it.next();
+			for (ThreadInfo info: _pending) {
 				synchronized (info) {
 					info.notify();
 				}
@@ -234,7 +233,7 @@ public class PollingServerPush implements ServerPush {
 			synchronized (_pending) {
 				if (_pending.isEmpty())
 					return; //nothing to do
-				info = (ThreadInfo)_pending.remove(0);
+				info = _pending.remove(0);
 			}
 
 			//Note: we have to sync _mutex before info. Otherwise,

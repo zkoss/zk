@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.idom.Document;
 
 import org.zkoss.web.servlet.Servlets;
@@ -98,20 +99,20 @@ public interface Execution extends Scope {
 	 *
 	 * @param page the page that this evaluator is associated.
 	 * If null, the current page and then the first page is assumed.
-	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * @param expfcls the implementation of {@link ExpressionFactory},
 	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public Evaluator getEvaluator(Page page, Class expfcls);
+	public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls);
 	/** Returns the evaluator of the current execution.
 	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
 	 *
 	 * @param comp the component to retrieve the page for the evaluator
-	 * @param expfcls the implementation of {@link org.zkoss.xel.ExpressionFactory},
+	 * @param expfcls the implementation of {@link ExpressionFactory},
 	 * or null to use the default ({@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}.
 	 * @since 3.0.0
 	 */
-	public Evaluator getEvaluator(Component comp, Class expfcls);
+	public Evaluator getEvaluator(Component comp, Class<? extends ExpressionFactory> expfcls);
 
 	/** Evluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the page of the specified
@@ -132,7 +133,7 @@ public interface Execution extends Scope {
 	 * @see #getVariableResolver
 	 * @see #getEvaluator
 	 */
-	public Object evaluate(Component comp, String expr, Class expectedType);
+	public Object evaluate(Component comp, String expr, Class<?> expectedType);
 	/** Evluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the specified
 	 * page.
@@ -152,7 +153,7 @@ public interface Execution extends Scope {
 	 * @see #getVariableResolver
 	 * @see #getEvaluator
 	 */
-	public Object evaluate(Page page, String expr, Class expectedType);
+	public Object evaluate(Page page, String expr, Class<?> expectedType);
 
 	/** Returns the variable resolver for this execution, or null if not
 	 * available.
@@ -928,7 +929,7 @@ public interface Execution extends Scope {
 	 *
 	 * @since 3.5.0
 	 */
-	public Iterator getHeaders(String name);
+	public Iterator<String> getHeaders(String name);
 	/** Returns all header names this request contains.
 	 * If the request has no headers, this method returns an empty
 	 * {@link Iterator}.
@@ -936,7 +937,7 @@ public interface Execution extends Scope {
 	 * it returns null.
 	 * @since 3.5.0
 	 */
-	public Iterator getHeaderNames();
+	public Iterator<String> getHeaderNames();
 
 	/** Sets a response header with the give name and value.
 	 * If the header had already been set, the new value overwrites the previous one.

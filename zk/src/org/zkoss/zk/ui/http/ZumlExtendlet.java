@@ -62,7 +62,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	private static final Log log = Log.lookup(ZumlExtendlet.class);
 	private ExtendletContext _webctx;
 	/** PageDefinition cache. */
-	private ResourceCache _cache;
+	private ResourceCache<String, PageDefinition> _cache;
 
 	private ServletContext getServletContext() {
 		return _webctx.getServletContext();
@@ -78,7 +78,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
 		final ZumlLoader loader = new ZumlLoader();
-		_cache = new ResourceCache(loader, 17);
+		_cache = new ResourceCache<String, PageDefinition>(loader, 17);
 		_cache.setMaxSize(512);
 		_cache.setLifetime(60*60*1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
@@ -93,7 +93,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		final Session sess = WebManager.getSession(getServletContext(), request);
-		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
+		final PageDefinition pagedef = _cache.get(path);
 		if (pagedef == null) {
 			//FUTURE: support the error page (from Configuration)
 			handleError(sess, request, response, path, null);
@@ -193,13 +193,13 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	}
 
 	/** Helper class. */
-	private class ZumlLoader extends ExtendletLoader {
+	private class ZumlLoader extends ExtendletLoader<PageDefinition> {
 		private ZumlLoader() {
 		}
 
 		//-- super --//
 		//-- super --//
-		protected Object parse(InputStream is, String path, String orgpath)
+		protected PageDefinition parse(InputStream is, String path, String orgpath)
 		throws Exception {
 			return PageDefinitions.getPageDefinitionDirectly(
 				getWebApp(), _webctx.getLocator(),

@@ -272,6 +272,7 @@ public class ForEachImpl implements ForEach {
 		return _comp != null ? (Scope)_comp: _page;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void prepare(Object o, final int begin) {
 		if (begin > 0 && (o instanceof List)) {
 			final List l = (List)o;

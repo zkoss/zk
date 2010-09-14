@@ -47,7 +47,7 @@ public class Expressions {
 	public static final Expression DUMMY_EXPRESSION = new DummyExpr();
 
 	/** The implemetation of {@link ExpressionFactory}. */
-	private static Class _expfcls;
+	private static Class<? extends ExpressionFactory> _expfcls;
 
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
@@ -79,12 +79,12 @@ public class Expressions {
 	 * @exception XelException if the specified class failed to load,
 	 * or instantiate.
 	 */
-	public static final ExpressionFactory newExpressionFactory(Class expfcls) {
+	public static final ExpressionFactory newExpressionFactory(Class<? extends ExpressionFactory> expfcls) {
 		if (expfcls == null)
 			expfcls = _expfcls;
 		if (expfcls != null) {
 			try {
-				return (ExpressionFactory)expfcls.newInstance();
+				return expfcls.newInstance();
 			} catch (Throwable ex) {
 				throw XelException.Aide.wrap(ex, "Unable to instantiate "+expfcls);
 			}
@@ -106,7 +106,7 @@ public class Expressions {
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
 	public static final Object evaluate(XelContext ctx,
-	String expression, Class expectedType)
+	String expression, Class<?> expectedType)
 	throws XelException {
 		return newExpressionFactory().evaluate(ctx, expression, expectedType);
 	}
@@ -123,7 +123,7 @@ public class Expressions {
 	 * Note: expfcls must implement {@link ExpressionFactory}.
 	 * If null, the system default is used.
 	 */
-	public static final void setExpressionFactoryClass(Class expfcls) {
+	public static final void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
 		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
 			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
 		_expfcls = expfcls;
@@ -133,7 +133,7 @@ public class Expressions {
 	 *
 	 * @see #setExpressionFactoryClass
 	 */
-	public static final Class getExpressionFactoryClass() {
+	public static final Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return _expfcls;
 	}
 }

@@ -25,6 +25,7 @@ import java.net.URL;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
@@ -65,7 +66,7 @@ public class ConfigParser {
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static int[] _zkver;
 	private static boolean _syscfgLoaded;
-	private static List _parsers;
+	private static List<org.zkoss.zk.ui.util.ConfigParser> _parsers;
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 * It is the same as checkVersion(url, doc, false).
@@ -200,19 +201,17 @@ public class ConfigParser {
 	private static
 	void parseSubSystemConfig(Configuration config, Element root)
 	throws Exception {
-		for (Iterator it = root.getElements("system-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Element el: root.getElements("system-config")) {
 			if (config != null) {
 				parseSystemConfig(config, el);
 			} else {
-				Class cls = parseClass(el, "au-writer-class", AuWriter.class);
+				Class<org.zkoss.zk.ui.util.ConfigParser> cls = parseClass(el, "au-writer-class", AuWriter.class);
 				if (cls != null)
 					AuWriters.setImplementationClass(cls);
 				cls = parseClass(el, "config-parser-class", org.zkoss.zk.ui.util.ConfigParser.class);
 				if (cls != null) {
 					if (_parsers == null)
-						_parsers = new LinkedList();
+						_parsers = new LinkedList<org.zkoss.zk.ui.util.ConfigParser>();
 					_parsers.add(cls.newInstance());
 				}
 			}
@@ -222,9 +221,7 @@ public class ConfigParser {
 	private static
 	void parseSubClientConfig(Configuration config, Element root)
 	throws Exception {
-		for (Iterator it = root.getElements("client-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Element el: root.getElements("client-config")) {
 			if (config != null) {
 				parseClientConfig(config, el);
 			} else {
@@ -236,9 +233,8 @@ public class ConfigParser {
 	}
 	private static void parseListeners(Configuration config, Element root)
 	throws Exception {
-		for (Iterator it = root.getElements("listener").iterator();
-		it.hasNext();) {
-			parseListener(config, (Element)it.next());
+		for (Element el: root.getElements("listener")) {
+			parseListener(config, el);
 		}
 	}
 	private static void parseListener(Configuration config, Element el) {
@@ -397,7 +393,7 @@ public class ConfigParser {
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
-				Class cls = parseClass(el, "evaluator-class", ExpressionFactory.class);
+				Class<? extends ExpressionFactory> cls = parseClass(el, "evaluator-class", ExpressionFactory.class);
 				if (cls != null) config.setExpressionFactoryClass(cls);
 			} else if ("zscript-config".equals(elnm)) {
 			//zscript-config
@@ -433,9 +429,7 @@ public class ConfigParser {
 				parseSysProperty(el);
 			} else {
 				if (_parsers != null)
-					for (Iterator e = _parsers.iterator(); e.hasNext();) {
-						org.zkoss.zk.ui.util.ConfigParser parser =
-							(org.zkoss.zk.ui.util.ConfigParser)e.next();
+					for (org.zkoss.zk.ui.util.ConfigParser parser: _parsers) {
 						if (parser.parse(config, el))
 							continue l_out;
 					}
@@ -665,17 +659,17 @@ public class ConfigParser {
 	}
 	/** Parse a class, if specified, whether it implements cls.
 	 */
-	private static Class parseClass(Element el, String elnm, Class cls) {
+	private static <T> Class<T> parseClass(Element el, String elnm, Class cls) {
 		return parseClass(el, elnm, cls, false);
 	}
 	private static
-	Class parseClass(Element el, String elnm, Class cls, boolean required) {
+	<T> Class<T> parseClass(Element el, String elnm, Class<?> cls, boolean required) {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
-				final Class klass = Classes.forNameByThread(clsnm);
+				final Class<?> klass = Classes.forNameByThread(clsnm);
 				if (cls != null && !cls.isAssignableFrom(klass)) {
 					String msg = clsnm+" must implement "+cls.getName()+", "+el.getLocator();
 					if (required)
@@ -684,7 +678,7 @@ public class ConfigParser {
 					return null;
 				}
 //				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
-				return klass;
+				return cast(klass);
 			} catch (Throwable ex) {
 				String msg = ex instanceof ClassNotFoundException ?
 					clsnm + " not found": "Unable to load "+clsnm;

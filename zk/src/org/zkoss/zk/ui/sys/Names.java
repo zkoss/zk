@@ -27,9 +27,9 @@ import java.util.Collections;
  */
 public class Names {
 	private Names() {}
-	private static final Set _reves;
+	private static final Set<String> _reves;
 	static {
-		Set reves = new HashSet();
+		Set<String> reves = new HashSet<String>();
 		final String[] rs = new String[] {
 			"arg", "desktop", "event", "page", "self", "session",
 			"spaceOwner"
@@ -41,7 +41,7 @@ public class Names {
 
 	/** Returns a set of readonly reserved words.
 	 */
-	public static final Set getReservedNames() {
+	public static final Set<String> getReservedNames() {
 		return _reves;
 	}
 	/** Returns whether the specified is valid.

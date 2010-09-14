@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
  * @since 5.0.4
  */
 public class SimpleIdSpace extends SimpleScope implements IdSpace {
-	private final Map _fellows = new HashMap();
+	private final Map<String, Component> _fellows = new HashMap<String, Component>();
 
 	public SimpleIdSpace() {
 		super(null);
@@ -54,10 +54,10 @@ public class SimpleIdSpace extends SimpleScope implements IdSpace {
 	}
 	//@Override
 	public Component getFellowIfAny(String id) {
-		return (Component)_fellows.get(id);
+		return _fellows.get(id);
 	}
 	//@Override
-	public Collection getFellows() {
+	public Collection<Component> getFellows() {
 		return _fellows.values();
 	}
 	//@Override

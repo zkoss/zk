@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * an instance of{@link Initiators}.
 	 */
 	public static final Initiators doInit(PageDefinition pagedef, Page page) {
-		final List inits = pagedef.doInit(page);
+		final List<Initiator> inits = pagedef.doInit(page);
 		if (inits.isEmpty()) return new Initiators();
 		return new RealInits(inits);
 	}
@@ -59,13 +59,12 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 }
 /*package*/ class RealInits extends Initiators {
-	private final List _inits;
+	private final List<Initiator> _inits;
 	/**
 	 * @param inits a collection of {@link Initiator}.
 	 */
-	/*package*/ RealInits(List inits) {
+	/*package*/ RealInits(List<Initiator> inits) {
 		_inits = inits;
-		
 	}
 	/**
 	 * Invokes {@link Initiator#doAfterCompose}.
@@ -73,13 +72,12 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * @throws Exception
 	 */
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
-		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			final Object init = it.next();
+		for (Initiator init: _inits) {
 			if (init instanceof InitiatorExt) {
 				if (comps == null) comps = new Component[0];
 				((InitiatorExt)init).doAfterCompose(page, comps);
 			} else {
-				((Initiator)init).doAfterCompose(page);
+				init.doAfterCompose(page);
 			}
 		}
 	}
@@ -88,8 +86,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * Caller has to re-throw the exception.
 	 */
 	public boolean doCatch(Throwable t) {
-		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			final Initiator init = (Initiator)it.next();
+		for (Initiator init: _inits) {
 			try {
 				if (init.doCatch(t))
 					return true; //ignore and skip all other initiators
@@ -103,8 +100,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 */
 	public void doFinally() {
 		Throwable t = null;
-		for (Iterator it = _inits.iterator(); it.hasNext();) {
-			final Initiator init = (Initiator)it.next();
+		for (Initiator init: _inits) {
 			try {
 				init.doFinally();
 			} catch (Throwable ex) {

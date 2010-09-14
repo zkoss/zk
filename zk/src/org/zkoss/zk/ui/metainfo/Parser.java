@@ -49,6 +49,9 @@ import org.zkoss.idom.Item;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
@@ -60,6 +63,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -140,10 +144,10 @@ public class Parser {
 	public PageDefinition parse(Document doc, String extension)
 	throws Exception {
 		//1. parse the page and import directive if any
-		final List pis = new LinkedList(), imports = new LinkedList();
+		final List<ProcessingInstruction> pis = new LinkedList<ProcessingInstruction>();
+		final List<String[]> imports = new LinkedList<String[]>();
 		String lang = null;
-		for (Iterator it = doc.getChildren().iterator(); it.hasNext();) {
-			final Object o = it.next();
+		for (Object o: doc.getChildren()) {
 			if (!(o instanceof ProcessingInstruction)) continue;
 
 			final ProcessingInstruction pi = (ProcessingInstruction)o;
@@ -209,20 +213,23 @@ public class Parser {
 			parse(pgdef, pgdef, root, new AnnotationHelper(), false);
 		return pgdef;
 	}
-	private static Class locateClass(String clsnm) throws Exception {
-		try {
-			return Classes.forNameByThread(clsnm);
-		} catch (ClassNotFoundException ex) {
-			throw new ClassNotFoundException("Class not found: "+clsnm, ex);
-		}
+	@SuppressWarnings("unchecked")
+	private static <T> Class<? extends T> locateClass(String clsnm, Class<?>... clses)
+	throws Exception {
+		final Class<?> c = Classes.forNameByThread(clsnm);
+		if (clses != null)
+			for (Class<?> cls: clses)
+				if (!cls.isAssignableFrom(c))
+					throw new UiException(c + " must implement "+cls);
+		return (Class<? extends T>)c;
 	}
 	/** Parses a list of string separated by comma, into a String array.
 	 */
 	private static String[] parseToArray(String s) {
 		if (s == null)
 			return null;
-		Collection ims = CollectionsX.parse(null, s, ',', false); //NO EL
-		return (String[])ims.toArray(new String[ims.size()]);
+		Collection<String> ims = CollectionsX.parse(null, s, ',', false); //NO EL
+		return ims.toArray(new String[ims.size()]);
 	}
 
 	//-- derive to override --//
@@ -236,7 +243,7 @@ public class Parser {
 	private void parse(PageDefinition pgdef, ProcessingInstruction pi)
 	throws Exception {
 		final String target = pi.getTarget();
-		final Map params = pi.parseData();
+		final Map<String, String> params = pi.parseData();
 		if ("page".equals(target)) {
 			parsePageDirective(pgdef, pi, params);
 		} else if ("init".equals(target)) {
@@ -247,22 +254,31 @@ public class Parser {
 			if (isEmpty(clsnm))
 				throw new UiException("The class attribute is required, "+pi.getLocator());
 
-			final Map args = new LinkedHashMap(params);
-			if ("variable-resolver".equals(target))
-				pgdef.addVariableResolverInfo(
-					clsnm.indexOf("${") >= 0 ? //class supports EL
-						new VariableResolverInfo(clsnm, args):
-						new VariableResolverInfo(locateClass(clsnm), args));
-			else
-				pgdef.addFunctionMapperInfo(
-					clsnm.indexOf("${") >= 0 ? //class supports EL
-						new FunctionMapperInfo(clsnm, args):
-						new FunctionMapperInfo(locateClass(clsnm), args));
+			final Map<String, String> args = new LinkedHashMap<String, String>(params);
+			if ("variable-resolver".equals(target)) {
+				final VariableResolverInfo vri;
+				if (clsnm.indexOf("${") >= 0) {
+					vri = new VariableResolverInfo(clsnm, args);
+				} else {
+					Class<? extends VariableResolver> cls = locateClass(clsnm, VariableResolver.class);
+					vri = new VariableResolverInfo(cls, args);
+				}
+				pgdef.addVariableResolverInfo(vri);
+			} else {
+				final FunctionMapperInfo fmi;
+				if (clsnm.indexOf("${") >= 0) {
+					fmi = new FunctionMapperInfo(clsnm, args);
+				} else {
+					Class<? extends FunctionMapper> cls = locateClass(clsnm, FunctionMapper.class);
+					fmi = new FunctionMapperInfo(cls, args);
+				}
+				pgdef.addFunctionMapperInfo(fmi);
+			}
 		} else if ("component".equals(target)) { //declare a component
 			parseComponentDirective(pgdef, pi, params);
 		} else if ("taglib".equals(target)) {
-			final String uri = (String)params.remove("uri");
-			final String prefix = (String)params.remove("prefix");
+			final String uri = params.remove("uri");
+			final String prefix = params.remove("prefix");
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 			if (uri == null || prefix == null)
@@ -310,11 +326,11 @@ public class Parser {
 	}
 	/** Process the init directive. */
 	private void parseInitDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) throws Exception {
+	ProcessingInstruction pi, Map<String, String> params) throws Exception {
 		final String clsnm = (String)params.remove("class");
 		final String zsrc = (String)params.remove("zscript");
 
-		final Map args = new LinkedHashMap(params);
+		final Map<String, String> args = new LinkedHashMap<String, String>(params);
 		if (isEmpty(clsnm)) {
 			if (isEmpty(zsrc))
 				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
@@ -337,10 +353,14 @@ public class Parser {
 			if (!isEmpty(zsrc))
 				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
 
-			pgdef.addInitiatorInfo(
-				clsnm.indexOf("${") >= 0 ? //class supports EL
-					new InitiatorInfo(clsnm, args):
-					new InitiatorInfo(locateClass(clsnm), args));
+			final InitiatorInfo ii;
+			if (clsnm.indexOf("${") >= 0) {
+				ii = new InitiatorInfo(clsnm, args);
+			} else {
+				Class<? extends Initiator> cls = locateClass(clsnm, Initiator.class);
+				ii = new InitiatorInfo(cls, args);
+			}
+			pgdef.addInitiatorInfo(ii);
 				//Note: we don't resolve the class name later because
 				//no zscript run before init (and better performance)
 		}
@@ -459,7 +479,7 @@ public class Parser {
 				noELnorEmpty("class", clsnm, pi);
 
 				final ComponentDefinitionImpl cdi =
-					new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
+					new ComponentDefinitionImpl(null, pgdef, name, (Class<? extends Component>)null);
 				cdi.setCurrentDirectory(getLocator().getDirectory());
 					//mold URI requires it
 				compdef = cdi;
@@ -498,7 +518,8 @@ public class Parser {
 		final String clsnm = (String)params.remove("class");
 		if (clsnm != null && clsnm.length() > 0) {
 			noELnorEmpty("class", clsnm, pi);
-			pgdef.setExpressionFactoryClass(locateClass(clsnm));
+			Class<? extends ExpressionFactory> cls = locateClass(clsnm, ExpressionFactory.class);
+			pgdef.setExpressionFactoryClass(cls);
 		} else { //name has the lower priorty
 			final String nm = (String)params.remove("name");
 			if (nm != null)
@@ -1002,7 +1023,7 @@ public class Parser {
 			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null, scope = null, composite = null;
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		AnnotationHelper attrAnnHelper = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -1045,7 +1066,7 @@ public class Parser {
 
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
-		final Map vars = new HashMap();
+		final Map<String, String> vars = new HashMap<String, String>();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -1076,7 +1097,7 @@ public class Parser {
 		if (!el.getElements().isEmpty())
 			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
 
-		final Map attrs = new HashMap();
+		final Map<String, String> attrs = new HashMap<String, String>();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();

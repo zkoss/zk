@@ -62,7 +62,7 @@ public class EventProcessor {
 	/** Whether it is in processing an event.
 	 * It is used only the event processing thread is disabled.
 	 */
-	private static ThreadLocal _inEvt;
+	private static ThreadLocal<Boolean> _inEvt;
 
 	/** Returns whether the current thread is an event listener.
 	 */
@@ -79,7 +79,7 @@ public class EventProcessor {
 	/*package*/ static final void inEventListener(boolean in) {
 		if (in) {
 			if (_inEvt == null)
-				_inEvt = new ThreadLocal();
+				_inEvt = new ThreadLocal<Boolean>();
 			_inEvt.set(Boolean.TRUE);
 		} else {
 			if (_inEvt != null)
@@ -166,10 +166,10 @@ public class EventProcessor {
 		}
 
 		final String evtnm = _event.getName();
-		final Set listenerCalled = new HashSet();
+		final Set<EventListener> listenerCalled = new HashSet<EventListener>();
 			//OK to use Set since the same listener cannot be added twice
 		boolean retry = false;
-		for (Iterator it = _comp.getListenerIterator(evtnm);;) {
+		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm);;) {
 			final EventListener el = nextListener(it);
 			if (el == null) {
 				break; //done
@@ -198,7 +198,7 @@ public class EventProcessor {
 
 		retry = false;
 		listenerCalled.clear();
-		for (Iterator it = _comp.getListenerIterator(evtnm);;) {
+		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm);;) {
 			final EventListener el = nextListener(it);
 			if (el == null) {
 				break; //done
@@ -223,9 +223,9 @@ public class EventProcessor {
 //			if (log.finerable()) log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
 
 			if (mtd.getParameterTypes().length == 0)
-				mtd.invoke(_comp, null);
+				mtd.invoke(_comp);
 			else
-				mtd.invoke(_comp, new Object[] {_event});
+				mtd.invoke(_comp, _event);
 			if (!_event.isPropagatable())
 				return; //done
 		}
@@ -233,7 +233,7 @@ public class EventProcessor {
 		retry = false;
 		listenerCalled.clear();
 		if (page != null)
-			for (Iterator it = page.getListenerIterator(evtnm);;) {
+			for (Iterator<EventListener> it = page.getListenerIterator(evtnm);;) {
 				final EventListener el = nextListener(it);
 				if (el == null) {
 					break; //done
@@ -249,9 +249,9 @@ public class EventProcessor {
 				}
 			}
 	}
-	private static EventListener nextListener(Iterator it) {
+	private static EventListener nextListener(Iterator<EventListener> it) {
 		try {
-			return it.hasNext() ? (EventListener)it.next(): null;
+			return it.hasNext() ? it.next(): null;
 		} catch (java.util.ConcurrentModificationException ex) {
 			return RETRY;
 		}

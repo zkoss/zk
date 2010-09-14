@@ -264,7 +264,7 @@ implements SerializableAware, HierachicalAware {
 		return _ip;
 	}
 
-	public Class getClass(String clsnm) {
+	public Class<?> getClass(String clsnm) {
 		try {
 			return _bshns.getClass(clsnm);
 		} catch (UtilEvalError ex) {
@@ -781,8 +781,10 @@ implements SerializableAware, HierachicalAware {
 }
 /*package*/ class NSWrapSR extends NSWrap implements Serializable {
 	private static final Log log = BSHInterpreter.log;
-	private Map _vars;
-	private List _mtds, _clses, _pkgs;
+	private Map<String, Object> _vars;
+	private List<BshMethod> _mtds;
+	private List<String> _clses;
+	private List<String> _pkgs;
 
 	/*package*/ NSWrapSR(NameSpace ns) {
 		super(ns);
@@ -794,10 +796,9 @@ implements SerializableAware, HierachicalAware {
 		if (_bshns == null) {
 			_bshns = BSHInterpreter.getInterpreter(scope).newNS(scope);
 			if (_vars != null) {
-				for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
+				for (Map.Entry<String, Object> me: _vars.entrySet()) {
 					try {
-						_bshns.setVariable((String)me.getKey(), me.getValue(), false);
+						_bshns.setVariable(me.getKey(), me.getValue(), false);
 					} catch (Throwable ex) {
 						log.warning("Ignored failure of set "+me.getKey(), ex);
 					}
@@ -805,8 +806,7 @@ implements SerializableAware, HierachicalAware {
 				_vars = null;
 			}
 			if (_mtds != null) {
-				for (Iterator it = _mtds.iterator(); it.hasNext();) {
-					final BshMethod mtd = (BshMethod)it.next();
+				for (BshMethod mtd: _mtds) {
 					try {
 						_bshns.setMethod(mtd.getName(), mtd);
 					} catch (Throwable ex) {
@@ -816,8 +816,7 @@ implements SerializableAware, HierachicalAware {
 				_mtds = null;
 			}
 			if (_clses != null) {
-				for (Iterator it = _clses.iterator(); it.hasNext();) {
-					final String name = (String)it.next();
+				for (String name: _clses) {
 					try {
 						_bshns.importClass(name);
 					} catch (Throwable ex) {
@@ -827,8 +826,7 @@ implements SerializableAware, HierachicalAware {
 				_clses = null;
 			}
 			if (_pkgs != null) {
-				for (Iterator it = _pkgs.iterator(); it.hasNext();) {
-					final String name = (String)it.next();
+				for (String name: _pkgs) {
 					try {
 						_bshns.importPackage(name);
 					} catch (Throwable ex) {
@@ -860,19 +858,19 @@ implements SerializableAware, HierachicalAware {
 		if (s.readBoolean()) {
 			BSHInterpreter.read(new NameSpace(null, null, "nst") {
 				public void setVariable(String name, Object value, boolean strictJava) {
-					if (_vars == null) _vars = new HashMap();
+					if (_vars == null) _vars = new HashMap<String, Object>();
 					_vars.put(name, value);
 				}
 				public void setMethod(String name, BshMethod mtd) {
-					if (_mtds == null) _mtds = new LinkedList();
+					if (_mtds == null) _mtds = new LinkedList<BshMethod>();
 					_mtds.add(mtd);
 				}
 				public void importClass(String name) {
-					if (_clses == null) _clses = new LinkedList();
+					if (_clses == null) _clses = new LinkedList<String>();
 					_clses.add(name);
 				}
 				public void importPackage(String name) {
-					if (_pkgs == null) _pkgs = new LinkedList();
+					if (_pkgs == null) _pkgs = new LinkedList<String>();
 					_pkgs.add(name);
 				}
 				public void loadDefaultImports() {

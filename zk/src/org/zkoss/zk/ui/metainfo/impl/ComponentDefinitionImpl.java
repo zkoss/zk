@@ -59,13 +59,13 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A map of (String mold, ExValue widgetClass). */
-	private Map _molds;
+	private Map<String, ExValue> _molds;
 	/** The default widget class. */
 	private ExValue _defWgtClass;
 	/** A map of custom attributs (String name, ExValue value). */
-	private Map _custAttrs;
+	private Map<String, ExValue> _custAttrs;
 	/** A list of {@link Property}. */
-	private List _props;
+	private List<Property> _props;
 	/** the current directory. */
 	private String _curdir;
 	/** the property name to which the text within the element will be assigned. */
@@ -92,7 +92,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public ComponentDefinitionImpl(LanguageDefinition langdef,
-	PageDefinition pgdef, String name, Class cls) {
+	PageDefinition pgdef, String name, Class<? extends Component> cls) {
 		if (cls != null && !Component.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException(cls+" must implement "+Component.class);
 		init(langdef, pgdef, name, cls);
@@ -142,7 +142,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 */
 	public static final ComponentDefinition newMacroDefinition(
 	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class cls, String macroURI, boolean inline) {
+	Class<? extends Component> cls, String macroURI, boolean inline) {
 		return new MacroDefinition(langdef, pgdef, name, cls, macroURI, inline);
 	}
 	/** Constructs a native component definition.
@@ -152,7 +152,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newNativeDefinition(
-	LanguageDefinition langdef, String name, Class cls) {
+	LanguageDefinition langdef, String name, Class<? extends Component> cls) {
 		return new NativeDefinition(langdef, name, cls);
 	}
 
@@ -166,7 +166,7 @@ implements ComponentDefinition, java.io.Serializable {
 
 		final ExValue ev = new ExValue(value, Object.class);
 		if (_custAttrs == null)
-			_custAttrs = new HashMap(4);
+			_custAttrs = new HashMap<String, ExValue>(4);
 		_custAttrs.put(name, ev);
 	}
 
@@ -176,7 +176,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String annotName, Map annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
@@ -189,7 +189,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);
@@ -279,7 +279,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public Object getImplementationClass() {
 		return _implcls;
 	}
-	public void setImplementationClass(Class cls) {
+	public void setImplementationClass(Class<? extends Component> cls) {
 		if (!Component.class.isAssignableFrom(cls))
 			throw new UiException(Component.class.getName()+" must be implemented by "+cls);
 		_implcls = cls;
@@ -289,21 +289,23 @@ implements ComponentDefinition, java.io.Serializable {
 			throw new UiException("Non-empty class name is required");
 		_implcls = clsnm;
 	}
+	@SuppressWarnings("unchecked")
 	public Component newInstance(Page page, String clsnm) {
 		try {
-			return newInstance(resolveImplementationClass(page, clsnm));
+			return newInstance((Class<? extends Component>)
+				resolveImplementationClass(page, clsnm));
 		} catch (ClassNotFoundException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	public Component newInstance(Class cls) {
+	public Component newInstance(Class<? extends Component> cls) {
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		final boolean bSet = !(curInfo instanceof ComponentInfo)
 			|| ((ComponentInfo)curInfo).getComponentDefinition() != this;
 		if (bSet) ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = (Component)cls.newInstance();
+			comp = cls.newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
@@ -312,7 +314,7 @@ implements ComponentDefinition, java.io.Serializable {
 		return comp;
 	}
 	public boolean isInstance(Component comp) {
-		Class cls;
+		Class<?> cls;
 		if (_implcls instanceof String) {
 			final Page page = comp.getPage();
 			if (page != null) {
@@ -329,17 +331,17 @@ implements ComponentDefinition, java.io.Serializable {
 				}
 			}
 		} else {
-			cls = (Class)_implcls;
+			cls = (Class<?>)_implcls;
 		}
 		return cls.isInstance(comp);
 	}
-	public Class resolveImplementationClass(Page page, String clsnm)
+	public Class<?> resolveImplementationClass(Page page, String clsnm)
 	throws ClassNotFoundException {
 		Object cls = clsnm != null ? clsnm: _implcls;
 		if (cls instanceof String) {
 			clsnm = (String)cls;
 			try {
-				final Class found = Classes.forNameByThread(clsnm);
+				final Class<?> found = Classes.forNameByThread(clsnm);
 				if (clsnm == null) _implcls = found;
 					//cache to _implcls (to improve the performance)
 				return found;
@@ -348,7 +350,7 @@ implements ComponentDefinition, java.io.Serializable {
 				if (page != null) {
 					for (Iterator it = page.getLoadedInterpreters().iterator();
 					it.hasNext();) {
-						Class c = ((Interpreter)it.next()).getClass(clsnm);
+						Class<?> c = ((Interpreter)it.next()).getClass(clsnm);
 						if (c != null)
 							return c;
 					}
@@ -395,7 +397,7 @@ implements ComponentDefinition, java.io.Serializable {
 
 		final Property prop = new Property(_evalr, name, value, null);
 		if (_props == null)
-			_props = new LinkedList();
+			_props = new LinkedList<Property>();
 		_props.add(prop);
 	}
 	public void applyProperties(Component comp) {
@@ -403,28 +405,24 @@ implements ComponentDefinition, java.io.Serializable {
 		//by AbstractComponent's initial with getAnnotationMap()
 
 		if (_custAttrs != null) {
-			for (Iterator it = _custAttrs.entrySet().iterator();
-			it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				comp.setAttribute((String)me.getKey(),
-					((ExValue)me.getValue()).getValue(_evalr, comp));
+			for (Map.Entry<String, ExValue> me: _custAttrs.entrySet()) {
+				comp.setAttribute(me.getKey(),
+					me.getValue().getValue(_evalr, comp));
 			}
 		}
 		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
+			for (Property prop: _props) {
 				prop.assign(comp);
 			}
 		}
 	}
 
-	public Map evalProperties(Map propmap, Page owner, Component parent) {
+	public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent) {
 		if (propmap == null)
-			propmap = new HashMap();
+			propmap = new HashMap<String, Object>();
 
 		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
+			for (Property prop: _props) {
 				if (parent != null) {
 					if (prop.isEffective(parent))
 						propmap.put(prop.getName(), prop.getValue(parent));
@@ -442,20 +440,21 @@ implements ComponentDefinition, java.io.Serializable {
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
-			_molds = new HashMap(2);
+			_molds = new HashMap<String, ExValue>(2);
 		_molds.put(name, new ExValue(widgetClass, String.class));
 	}
 
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}
-	public Collection getMoldNames() {
-		return _molds != null ?
-			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
+	public Collection<String> getMoldNames() {
+		if (_molds != null)
+			return _molds.keySet();
+		return Collections.emptyList();
 	}
 	public String getWidgetClass(Component comp, String moldName) {
 		if (_molds != null) {
-			final ExValue wc = (ExValue)_molds.get(moldName);
+			final ExValue wc = _molds.get(moldName);
 			if (wc != null) {
 				final String s = (String)wc.getValue(_evalr, comp);
 				if (s != null)
@@ -474,8 +473,7 @@ implements ComponentDefinition, java.io.Serializable {
 
 		//replace mold's widget class if it is the old default one
 		if (oldwc != null && _molds != null)
-			for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
+			for (Map.Entry<String, ExValue> me: _molds.entrySet()) {
 				if (oldwc.equals(me.getValue()))
 					me.setValue(_defWgtClass);
 			}
@@ -534,11 +532,11 @@ implements ComponentDefinition, java.io.Serializable {
 		if (_annots != null)
 			compdef._annots = (AnnotationMap)_annots.clone();
 		if (_props != null)
-			compdef._props = new LinkedList(_props);
+			compdef._props = new LinkedList<Property>(_props);
 		if (_molds != null)
-			compdef._molds = new HashMap(_molds);
+			compdef._molds = new HashMap<String, ExValue>(_molds);
 		if (_custAttrs != null)
-			compdef._custAttrs = new HashMap(_custAttrs);
+			compdef._custAttrs = new HashMap<String, ExValue>(_custAttrs);
 		return compdef;
 	}
 }

@@ -40,10 +40,10 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 public class Scopes {
 	private static final Log log = Log.lookup(Scopes.class);
 
-	/** A stack of implict objects ({@link Implicts}. */
-	private static final ThreadLocal _implicits = new ThreadLocal();
+	/** A stack of implict objects ({@link Implicit}). */
+	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<List<Implicit>>();
 	/** A stack of current scope. */
-	private static final ThreadLocal _scopes = new ThreadLocal();
+	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<List<Scope>>();
 
 	/** Prepares implicit variable before calling {@link Page#interpret}.
 	 *
@@ -92,9 +92,9 @@ try {
 		return scope;
 	}
 	private static Implicit beforeInterpret0(Scope scope) {
-		List impls = (List)_implicits.get();
+		List<Implicit> impls = _implicits.get();
 		if (impls == null)
-			_implicits.set(impls = new LinkedList());
+			_implicits.set(impls = new LinkedList<Implicit>());
 		final Implicit impl = new Implicit();
 		impls.add(0, impl);
 
@@ -109,7 +109,7 @@ try {
 	 * variables.
 	 */
 	public static final void afterInterpret() {
-		((List)_implicits.get()).remove(0);
+		_implicits.get().remove(0);
 		pop();
 	}
 
@@ -118,8 +118,7 @@ try {
 	 * {@link #afterInterpret}.
 	 */
 	public static void setImplicit(String name, Object value) {
-		((Implicit)((List)_implicits.get()).get(0))
-			.setImplicit(name, value);
+		_implicits.get().get(0).setImplicit(name, value);
 	}
 	/** Returns the implict object.
 	 *
@@ -132,9 +131,9 @@ try {
 	 * object is not defined.
 	 */
 	public static Object getImplicit(String name, Object defValue) {
-		final List implicits = (List)_implicits.get();
+		final List<Implicit> implicits = _implicits.get();
 		if (implicits != null && !implicits.isEmpty()) //in case: beforeInterpret not called
-			return ((Implicit)implicits.get(0)).getImplicit(name, defValue);
+			return implicits.get(0).getImplicit(name, defValue);
 
 		Object val = getSysImplicit(name);
 		return val != null ? val: defValue;
@@ -158,9 +157,8 @@ try {
 	 * is assumed.
 	 */
 	public static final Scope getCurrent(Page page) {
-		final List nss = (List)_scopes.get();
-		final Scope scope =
-			nss != null && !nss.isEmpty() ? (Scope)nss.get(0): null;
+		final List<Scope> nss = _scopes.get();
+		final Scope scope = nss != null && !nss.isEmpty() ? nss.get(0): null;
 		if (scope != null)
 			return scope;
 
@@ -176,20 +174,20 @@ try {
 	 * @param scope the scope. If null, it means page's scope.
 	 */
 	private static final void push(Scope scope) {
-		List nss = (List)_scopes.get();
+		List<Scope> nss = _scopes.get();
 		if (nss == null)
-			_scopes.set(nss = new LinkedList());
+			_scopes.set(nss = new LinkedList<Scope>());
 		nss.add(0, scope);
 	}
 	/** Pops the current namespce (pushed by {@link #push}).
 	 */
 	private static final void pop() {
-		((List)_scopes.get()).remove(0);
+		_scopes.get().remove(0);
 	}
 
 	private static class Implicit {
 		/** Implicit variables. */
-		private final Map _vars = new HashMap();
+		private final Map<String, Object> _vars = new HashMap<String, Object>();
 
 		private Implicit() {
 		}

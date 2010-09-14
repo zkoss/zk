@@ -300,9 +300,9 @@ implements Condition, java.io.Serializable {
 		if (val != null) {
 			//Look for the most 'extended' and isInstance class
 			Method m = null;
-			Class t = null;
+			Class<?> t = null;
 			for (int j = 0; j < mtds.length; ++j) {
-				final Class type = mtds[j].getParameterTypes()[0];
+				final Class<?> type = mtds[j].getParameterTypes()[0];
 				if (type.isInstance(val)
 				&& (t == null || t.isAssignableFrom(type))) {
 					t = type;
@@ -317,9 +317,9 @@ implements Condition, java.io.Serializable {
 		if (val == null) {
 			//Look for the most 'extended' class
 			Method m = null;
-			Class t = null;
+			Class<?> t = null;
 			for (int j = 0; j < mtds.length; ++j) {
-				final Class type = mtds[j].getParameterTypes()[0];
+				final Class<?> type = mtds[j].getParameterTypes()[0];
 				if (!type.isPrimitive()
 				&& (t == null || t.isAssignableFrom(type))) {
 					t = type;

@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -57,8 +59,9 @@ public class SelectEvent extends Event {
 	public static final SelectEvent getSelectEvent(AuRequest request) {
 		final Map data = request.getData();
 		final Desktop desktop = request.getDesktop();
+		final List<String> items = cast((List)data.get("items"));
 		return new SelectEvent(request.getCommand(), request.getComponent(),
-			AuRequests.convertToItems(desktop, (List)data.get("items")),
+			AuRequests.convertToItems(desktop, items),
 			desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			AuRequests.parseKeys(data));
 	}

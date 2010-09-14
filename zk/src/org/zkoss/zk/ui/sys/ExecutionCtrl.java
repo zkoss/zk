@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.au.AuResponse;
 
 /**
  * Additional interface to {@link org.zkoss.zk.ui.Execution}
@@ -139,14 +140,14 @@ public interface ExecutionCtrl {
 	 */
 	public String getRequestId();
 
-	/** Returns the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	/** Returns the collection of the AU responses ({@link AuResponse})
 	 * that shall be generated to the output, or null if not available.
 	 * @since 5.0.0
 	 */
-	public Collection getResponses();
-	/** Sets the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	public Collection<AuResponse> getResponses();
+	/** Sets the collection of the AU responses ({@link AuResponse})
 	 * that shall be generated to the output.
 	 * @since 5.0.0
 	 */
-	public void setResponses(Collection responses);
+	public void setResponses(Collection<AuResponse> responses);
 }

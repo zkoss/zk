@@ -73,15 +73,15 @@ public class UiEngineImpl implements UiEngine {
 	/** The Web application this engine belongs to. */
 	private WebApp _wapp;
 	/** A pool of idle EventProcessingThreadImpl. */
-	private final List _idles = new LinkedList();
+	private final List<EventProcessingThreadImpl> _idles = new LinkedList<EventProcessingThreadImpl>();
 	/** A map of suspended processing:
 	 * (Desktop desktop, IdentityHashMap(Object mutex, List(EventProcessingThreadImpl)).
 	 */
-	private final Map _suspended = new HashMap();
+	private final Map<Desktop, Map<Object, List<EventProcessingThreadImpl>>> _suspended = new HashMap<Desktop, Map<Object, List<EventProcessingThreadImpl>>>();
 	/** A map of resumed processing
 	 * (Desktop desktop, List(EventProcessingThreadImpl)).
 	 */
-	private final Map _resumed = new HashMap();
+	private final Map<Desktop, List<EventProcessingThreadImpl>> _resumed = new HashMap<Desktop, List<EventProcessingThreadImpl>>();
 	/** # of suspended event processing threads.
 	 */
 	private int _suspCnt;
@@ -95,30 +95,27 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public void stop(WebApp wapp) {
 		synchronized (_idles) {
-			for (Iterator it = _idles.iterator(); it.hasNext();)
-				((EventProcessingThreadImpl)it.next()).cease("Stop application");
+			for (EventProcessingThreadImpl thread: _idles)
+				thread.cease("Stop application");
 			_idles.clear();
 		}
 
 		synchronized (_suspended) {
-			for (Iterator it = _suspended.values().iterator(); it.hasNext();) {
-				final Map map = (Map)it.next();
+			for (Map<Object, List<EventProcessingThreadImpl>> map: _suspended.values()) {
 				synchronized (map) {
-					for (Iterator i2 = map.values().iterator(); i2.hasNext();) {
-						final List list = (List)i2.next();
-						for (Iterator i3 = list.iterator(); i3.hasNext();)
-							((EventProcessingThreadImpl)i3.next()).cease("Stop application");
+					for (List<EventProcessingThreadImpl> threads: map.values()) {
+						for (EventProcessingThreadImpl thread: threads)
+							thread.cease("Stop application");
 					}
 				}
 			}
 			_suspended.clear();
 		}
 		synchronized (_resumed) {
-			for (Iterator it = _resumed.values().iterator(); it.hasNext();) {
-				final List list = (List)it.next();
-				synchronized (list) {
-					for (Iterator i2 = list.iterator(); i2.hasNext();)
-						((EventProcessingThreadImpl)i2.next()).cease("Stop application");
+			for (List<EventProcessingThreadImpl> threads: _resumed.values()) {
+				synchronized (threads) {
+					for (EventProcessingThreadImpl thread: threads)
+						thread.cease("Stop application");
 				}
 			}
 			_resumed.clear();
@@ -137,27 +134,37 @@ public class UiEngineImpl implements UiEngine {
 		return false;
 	}
 		
-	public Collection getSuspendedThreads(Desktop desktop) {
-		final Map map;
+	public Collection<EventProcessingThread> getSuspendedThreads(Desktop desktop) {
+		final Map<Object, List<EventProcessingThreadImpl>> map;
 		synchronized (_suspended) {
-			map = (Map)_suspended.get(desktop);
+			map = _suspended.get(desktop);
 		}
-		return map == null || map.isEmpty() ? Collections.EMPTY_LIST:
-			Collections.synchronizedMap(map).values();
+
+		if (map == null || map.isEmpty())
+			return Collections.emptyList();
+
+		final List<EventProcessingThread> threads = new LinkedList<EventProcessingThread>();
+		synchronized (map) {
+			for (List<EventProcessingThreadImpl> thds: map.values()) {
+				threads.addAll(thds);
+			}
+		}
+		return threads;
 	}
 	public boolean ceaseSuspendedThread(Desktop desktop,
 	EventProcessingThread evtthd, String cause) {
-		final Map map;
+		final Map<Object, List<EventProcessingThreadImpl>> map;
 		synchronized (_suspended) {
-			map = (Map)_suspended.get(desktop);
+			map = _suspended.get(desktop);
 		}
 		if (map == null) return false;
 
 		boolean found = false;
 		synchronized (map) {
-			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final List list = (List)me.getValue();
+			for (Iterator<Map.Entry<Object, List<EventProcessingThreadImpl>>>
+			it = map.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry<Object, List<EventProcessingThreadImpl>> me = it.next();
+				final List<EventProcessingThreadImpl> list = me.getValue();
 				found = list.remove(evtthd); //found
 				if (found) {
 					if (list.isEmpty())
@@ -386,7 +393,7 @@ public class UiEngineImpl implements UiEngine {
 					public String getStyle() {return null;}
 					public String getHeaders(boolean before) {return null;}
 					public String getHeaders() {return null;}
-					public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
+					public Collection<Object[]> getResponseHeaders() {return Collections.emptyList();}
 				});
 				final Composer composer = config.getComposer(page);
 				try {
@@ -428,7 +435,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Redraw the page (and responses)
-			List responses = uv.getResponses();
+			List<AuResponse> responses = uv.getResponses();
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -442,7 +449,7 @@ public class UiEngineImpl implements UiEngine {
 			redrawNewPage(page, out);
 		} catch (Throwable ex) {
 			cleaned = true;
-			final List errs = new LinkedList();
+			final List<Throwable> errs = new LinkedList<Throwable>();
 			errs.add(ex);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
@@ -581,7 +588,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static final Component[] execCreate0(
 	CreateInfo ci, NodeInfo parentInfo, Component parent) {
-		final List created = new LinkedList();
+		final List<Component> created = new LinkedList<Component>();
 		final Page page = ci.page;
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
 			//note: don't use page.getDefinition because createComponents
@@ -619,7 +626,7 @@ public class UiEngineImpl implements UiEngine {
 				execNonComponent(ci, parent, meta);
 			}
 		}
-		return (Component[])created.toArray(new Component[created.size()]);
+		return created.toArray(new Component[created.size()]);
 	}
 	private static Component[] execCreateChild(
 	CreateInfo ci, Component parent, ComponentInfo childInfo,
@@ -633,7 +640,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (childdef.isInlineMacro()) {
-			final Map props = new HashMap();
+			final Map<String, Object> props = new HashMap<String, Object>();
 			props.put("includer", parent);
 			childInfo.evalProperties(props, ci.page, parent, true);
 			return new Component[] {
@@ -762,7 +769,7 @@ public class UiEngineImpl implements UiEngine {
 					return execCreateChild(ci, parent, caseInfo, null);
 				}
 			} else {
-				final List created = new LinkedList();
+				final List<Component> created = new LinkedList<Component>();
 				while (forEach.next()) {
 					if (isEffective(caseInfo, page, parent)
 					&& isCaseMatched(caseInfo, page, parent, switchCond)) {
@@ -992,7 +999,7 @@ public class UiEngineImpl implements UiEngine {
 			doDeactivate(exec);
 		}
 	}
-	public void execUpdate(Execution exec, List requests, AuWriter out)
+	public void execUpdate(Execution exec, List<AuRequest> requests, AuWriter out)
 	throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException();
@@ -1042,7 +1049,7 @@ public class UiEngineImpl implements UiEngine {
 
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
-			final List errs = new LinkedList();
+			final List<Throwable> errs = new LinkedList<Throwable>();
 			//Process all; ignore getMaxProcessTime();
 			//we cannot handle them partially since UUID might be recycled
 			for (AuRequest request; (request = rque.nextRequest()) != null;) {
@@ -1078,7 +1085,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
-			List responses;
+			List<AuResponse> responses;
 			try {
 				//Note: we have to call visualizeErrors before uv.getResponses,
 				//since it might create/update components
@@ -1087,7 +1094,7 @@ public class UiEngineImpl implements UiEngine {
 
 				responses = uv.getResponses();
 			} catch (Throwable ex) {
-				responses = new LinkedList();
+				responses = new LinkedList<AuResponse>();
 				responses.add(new AuAlert(Exceptions.getMessage(ex)));
 
 				log.error(ex);
@@ -1095,7 +1102,7 @@ public class UiEngineImpl implements UiEngine {
 
 			doneReqIds = rque.clearPerfRequestIds();
 
-			List prs = desktopCtrl.piggyResponse(null, true);
+			List<AuResponse> prs = desktopCtrl.piggyResponse(null, true);
 			if (prs != null) responses.addAll(0, prs);
 
 			out.writeResponseId(desktopCtrl.getResponseId(true));
@@ -1115,7 +1122,7 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			if (!cleaned) {
 				cleaned = true;
-				final List errs = new LinkedList();
+				final List<Throwable> errs = new LinkedList<Throwable>();
 				errs.add(ex);
 				desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 				config.invokeExecutionCleanups(exec, null, errs);
@@ -1157,7 +1164,7 @@ public class UiEngineImpl implements UiEngine {
 	 * and processed later by {@link #visualizeErrors}.
 	 */
 	private static final
-	void handleError(Throwable ex, UiVisualizer uv, List errs) {
+	void handleError(Throwable ex, UiVisualizer uv, List<Throwable> errs) {
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			if (ex instanceof org.xml.sax.SAXException
@@ -1186,7 +1193,7 @@ public class UiEngineImpl implements UiEngine {
 		} else if (ex instanceof WrongValuesException) {
 			final WrongValueException[] wves =
 				((WrongValuesException)ex).getWrongValueExceptions();
-			final LinkedList infs = new LinkedList();
+			final LinkedList<String> infs = new LinkedList<String>();
 			for (int i = 0; i < wves.length; i++) {
 				final Component comp = wves[i].getComponent();
 				if (comp != null) {
@@ -1200,7 +1207,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 			uv.addResponse(
-				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
+				new AuWrongValue(infs.toArray(new String[infs.size()])));
 			return;
 		}
 
@@ -1210,10 +1217,9 @@ public class UiEngineImpl implements UiEngine {
 	 * Note: errs must be non-empty
 	 */
 	private final
-	void visualizeErrors(Execution exec, UiVisualizer uv, List errs) {
+	void visualizeErrors(Execution exec, UiVisualizer uv, List<Throwable> errs) {
 		final StringBuffer sb = new StringBuffer(128);
-		for (Iterator it = errs.iterator(); it.hasNext();) {
-			final Throwable t = (Throwable)it.next();
+		for (Throwable t: errs) {
 			if (sb.length() > 0) sb.append('\n');
 			sb.append(Exceptions.getMessage(t));
 		}
@@ -1283,12 +1289,11 @@ public class UiEngineImpl implements UiEngine {
 		} else {
 			//since an event might change the page/desktop/component relation,
 			//we copy roots first
-			final List roots = new LinkedList();
-			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-				roots.addAll(((Page)it.next()).getRoots());
+			final List<Component> roots = new LinkedList<Component>();
+			for (Page page: desktop.getPages()) {
+				roots.addAll(page.getRoots());
 			}
-			for (Iterator it = roots.iterator(); it.hasNext();) {
-				final Component c = (Component)it.next();
+			for (Component c: roots) {
 				if (c.getPage() != null) //might be removed, so check first
 					processEvent(desktop, c, event);
 			}
@@ -1314,18 +1319,18 @@ public class UiEngineImpl implements UiEngine {
 
 		incSuspended();
 
-		Map map;
+		Map<Object, List<EventProcessingThreadImpl>> map;
 		synchronized (_suspended) {
-			map = (Map)_suspended.get(desktop);
+			map = _suspended.get(desktop);
 			if (map == null)
-				_suspended.put(desktop, map = new IdentityHashMap(3));
+				_suspended.put(desktop, map = new IdentityHashMap<Object, List<EventProcessingThreadImpl>>(4));
 					//note: we have to use IdentityHashMap because user might
 					//use Integer or so as mutex
 		}
 		synchronized (map) {
-			List list = (List)map.get(mutex);
+			List<EventProcessingThreadImpl> list = map.get(mutex);
 			if (list == null)
-				map.put(mutex, list = new LinkedList());
+				map.put(mutex, list = new LinkedList<EventProcessingThreadImpl>());
 			list.add(evtthd);
 		}
 
@@ -1395,29 +1400,30 @@ public class UiEngineImpl implements UiEngine {
 		if (desktop == null || mutex == null)
 			throw new IllegalArgumentException("desktop and mutex cannot be null");
 
-		final Map map;
+		final Map<Object, List<EventProcessingThreadImpl>> map;
 		synchronized (_suspended) {
-			map = (Map)_suspended.get(desktop);
+			map = _suspended.get(desktop);
 		}
 		if (map == null) return; //nothing to notify
 
-		final List list;
+		final List<EventProcessingThreadImpl> list;
 		synchronized (map) {
-			list = (List)map.remove(mutex);
-			if (list == null) return; //nothing to notify
+			list = map.remove(mutex);
 		}
-		for (Iterator it = list.iterator(); it.hasNext();)
-			addResumed(desktop, (EventProcessingThreadImpl)it.next());
+		if (list == null) return; //nothing to notify
+
+		for (EventProcessingThreadImpl thread: list)
+			addResumed(desktop, thread);
 	}
 	/** Adds to _resumed */
 	private void addResumed(Desktop desktop, EventProcessingThreadImpl evtthd) {
 //		if (log.finerable()) log.finer("Ready to resume "+evtthd);
 
-		List list;
+		List<EventProcessingThreadImpl> list;
 		synchronized (_resumed) {
-			list = (List)_resumed.get(desktop);
+			list = _resumed.get(desktop);
 			if (list == null)
-				_resumed.put(desktop, list = new LinkedList());
+				_resumed.put(desktop, list = new LinkedList<EventProcessingThreadImpl>());
 		}
 		synchronized (list) {
 			list.add(evtthd);
@@ -1428,19 +1434,17 @@ public class UiEngineImpl implements UiEngine {
 	 * <p>Note 1: the current thread will wait until the resumed threads, if any, complete
 	 * <p>Note 2: {@link #resume} only puts a thread into a resume queue in execution.
 	 */
-	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
+	private void resumeAll(Desktop desktop, UiVisualizer uv, List<Throwable> errs) {
 		//We have to loop because a resumed thread might resume others
 		for (;;) {
-			final List list;
+			final List<EventProcessingThreadImpl> list;
 			synchronized (_resumed) {
-				list = (List)_resumed.remove(desktop);
+				list = _resumed.remove(desktop);
 				if (list == null) return; //nothing to resume; done
 			}
 
 			synchronized (list) {
-				for (Iterator it = list.iterator(); it.hasNext();) {
-					final EventProcessingThreadImpl evtthd =
-						(EventProcessingThreadImpl)it.next();
+				for (EventProcessingThreadImpl evtthd: list) {
 					if (uv.isAborting()) {
 						evtthd.ceaseSilently("Resume aborted");
 					} else {
@@ -1469,7 +1473,7 @@ public class UiEngineImpl implements UiEngine {
 			EventProcessingThreadImpl evtthd = null;
 			synchronized (_idles) {
 				while (!_idles.isEmpty() && evtthd == null) {
-					evtthd = (EventProcessingThreadImpl)_idles.remove(0);
+					evtthd = _idles.remove(0);
 					if (evtthd.isCeased()) //just in case
 						evtthd = null;
 				}
@@ -1490,14 +1494,15 @@ public class UiEngineImpl implements UiEngine {
 			//since they are in the same thread
 			EventProcessor proc = new EventProcessor(desktop, comp, event);
 				//Note: it also checks the correctness
-			List cleanups = null, errs = null;
+			List<EventThreadCleanup> cleanups = null;
+			List<Throwable> errs = null;
 			try {
-				final List inits = config.newEventThreadInits(comp, event);
+				final List<EventThreadInit> inits = config.newEventThreadInits(comp, event);
 				EventProcessor.inEventListener(true);
 				if (config.invokeEventThreadInits(inits, comp, event)) //false measn ignore
 					proc.process();
 			} catch (Throwable ex) {
-				errs = new LinkedList();
+				errs = new LinkedList<Throwable>();
 				errs.add(ex);
 				cleanups = config.newEventThreadCleanups(comp, event, errs, false);
 
@@ -1753,7 +1758,7 @@ public class UiEngineImpl implements UiEngine {
 		final Native nc = (Native)comp;
 		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
-		final List prokids = compInfo.getPrologChildren();
+		final List<Object> prokids = compInfo.getPrologChildren();
 		if (!prokids.isEmpty()) {
 			sb = new StringBuffer(256);
 			getNativeContent(ci, sb, comp, prokids, helper);
@@ -1783,7 +1788,7 @@ public class UiEngineImpl implements UiEngine {
 			getNativeSecondHalf(ci, sb, comp, splitInfo, helper);
 		}
 
-		final List epikids = compInfo.getEpilogChildren();
+		final List<Object> epikids = compInfo.getEpilogChildren();
 		if (!epikids.isEmpty()) {
 			if (sb == null) sb = new StringBuffer(256);
 			getNativeContent(ci, sb, comp, epikids, helper);
@@ -1793,7 +1798,7 @@ public class UiEngineImpl implements UiEngine {
 			nc.setEpilogContent(
 				sb.append(nc.getEpilogContent()).toString());
 	}
-	public String getNativeContent(Component comp, List children,
+	public String getNativeContent(Component comp, List<Object> children,
 	Native.Helper helper) {
 		final StringBuffer sb = new StringBuffer(256);
 		getNativeContent(
@@ -1806,9 +1811,8 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comp the native component
 	 */
 	private static final void getNativeContent(CreateInfo ci,
-	StringBuffer sb, Component comp, List children, Native.Helper helper) {
-		for (Iterator it = children.iterator(); it.hasNext();) {
-			final Object meta = it.next();
+	StringBuffer sb, Component comp, List<Object> children, Native.Helper helper) {
+		for (Object meta: children) {
 			if (meta instanceof NativeInfo) {
 				final NativeInfo childInfo = (NativeInfo)meta;
 				final ForEach forEach = childInfo.resolveForEach(ci.page, comp);
@@ -1858,7 +1862,7 @@ public class UiEngineImpl implements UiEngine {
 				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
-		final List prokids = childInfo.getPrologChildren();
+		final List<Object> prokids = childInfo.getPrologChildren();
 		if (!prokids.isEmpty())
 			getNativeContent(ci, sb, comp, prokids, helper);
 
@@ -1874,7 +1878,7 @@ public class UiEngineImpl implements UiEngine {
 		if (splitInfo != null && splitInfo.isEffective(comp))
 			getNativeSecondHalf(ci, sb, comp, splitInfo, helper); //recursive
 
-		final List epikids = childInfo.getEpilogChildren();
+		final List<Object> epikids = childInfo.getEpilogChildren();
 		if (!epikids.isEmpty())
 			getNativeContent(ci, sb, comp, epikids, helper);
 
@@ -1883,13 +1887,12 @@ public class UiEngineImpl implements UiEngine {
 	/** Returns a map of properties, (String name, String value).
 	 */
 	private static final
-	Map evalProperties(Component comp, List props) {
+	Map<String, Object> evalProperties(Component comp, List<Property> props) {
 		if (props == null || props.isEmpty())
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 
-		final Map map = new LinkedHashMap(props.size() * 2);
-		for (Iterator it = props.iterator(); it.hasNext();) {
-			final Property prop = (Property)it.next();
+		final Map<String, Object> map = new LinkedHashMap<String, Object>(props.size() * 2);
+		for (Property prop: props) {
 			if (prop.isEffective(comp))
 				map.put(prop.getName(),
 					Classes.coerce(String.class, prop.getValue(comp)));
@@ -1924,7 +1927,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 		private void init() {
 			_uri = null;
-			final List results = new LinkedList();
+			final List<Object[]> results = new LinkedList<Object[]>();
 			for (int j = 0, len = _fulfill.length();;) {
 				int k = j;
 				for (int elcnt = 0; k < len; ++k) {
@@ -1955,8 +1958,8 @@ public class UiEngineImpl implements UiEngine {
 			_targets = new Component[j];
 			_evtnms = new String[j];
 			j = 0;
-			for (Iterator it = results.iterator(); it.hasNext(); ++j) {
-				final Object[] result = (Object[])it.next();
+			for (Iterator<Object[]> it = results.iterator(); it.hasNext(); ++j) {
+				final Object[] result = it.next();
 				_targets[j] = (Component)result[0];
 				_evtnms[j] = (String)result[1];
 			}
@@ -2143,7 +2146,7 @@ public class UiEngineImpl implements UiEngine {
 	/*package*/ final Execution exec;
 	/*package*/ final Page page;
 	/*package*/ final UiFactory uf;
-	private List _composers, _composerExts;
+	private List<Composer> _composers, _composerExts;
 	private Composer _syscomposer;
 	/*package*/ CreateInfo(UiFactory uf, Execution exec, Page page, Composer composer) {
 		this.exec = exec;
@@ -2158,16 +2161,16 @@ public class UiEngineImpl implements UiEngine {
 	/*package*/ void pushFullComposer(Composer composer) {
 		assert composer instanceof FullComposer; //illegal state
 		if (_composers == null)
-			_composers = new LinkedList();
+			_composers = new LinkedList<Composer>();
 		_composers.add(0, composer);
 		if (composer instanceof ComposerExt) {
 			if (_composerExts == null)
-				_composerExts = new LinkedList();
+				_composerExts = new LinkedList<Composer>();
 			_composerExts.add(0, composer);
 		}
 	}
 	/*package*/ void popFullComposer() {
-		Object o = _composers.remove(0);
+		Composer o = _composers.remove(0);
 		if (_composers.isEmpty()) _composers = null;
 		if (o instanceof ComposerExt) {
 			_composerExts.remove(0);
@@ -2190,8 +2193,7 @@ public class UiEngineImpl implements UiEngine {
 	/*package*/ void doAfterCompose(Component comp, boolean bRoot)
 	throws Exception {
 		if (_composers != null)
-			for (Iterator it = _composers.iterator(); it.hasNext();) {
-				final Composer composer = (Composer)it.next();
+			for (Composer composer: _composers) {
 				final boolean old = beforeInvoke(composer, bRoot);
 
 				composer.doAfterCompose(comp);
@@ -2205,8 +2207,7 @@ public class UiEngineImpl implements UiEngine {
 	/*package*/ ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo, boolean bRoot) throws Exception {
 		if (_composerExts != null)
-			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-				final Composer composer = (Composer)it.next();
+			for (Composer composer: _composerExts) {
 				final boolean old = beforeInvoke(composer, bRoot);
 
 				compInfo = ((ComposerExt)composer)
@@ -2225,8 +2226,7 @@ public class UiEngineImpl implements UiEngine {
 	/*package*/ void doBeforeComposeChildren(Component comp, boolean bRoot)
 	throws Exception {
 		if (_composerExts != null)
-			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-				final Composer composer = (Composer)it.next();
+			for (Composer composer: _composerExts) {
 				final boolean old = beforeInvoke(composer, bRoot);
 
 				((ComposerExt)composer).doBeforeComposeChildren(comp);
@@ -2239,8 +2239,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/*package*/ boolean doCatch(Throwable ex, boolean bRoot) {
 		if (_composerExts != null)
-			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-				final Composer composer = (Composer)it.next();
+			for (Composer composer: _composerExts) {
 				final boolean old = beforeInvoke(composer, bRoot);
 				try {
 					final boolean ret = ((ComposerExt)composer).doCatch(ex);
@@ -2261,8 +2260,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/*package*/ void doFinally(boolean bRoot) throws Exception {
 		if (_composerExts != null)
-			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-				final Composer composer = (Composer)it.next();
+			for (Composer composer: _composerExts) {
 				final boolean old = beforeInvoke(composer, bRoot);
 
 				((ComposerExt)composer).doFinally();

@@ -82,6 +82,7 @@ public class AuEcho extends AuResponse {
 				(Object[])(new String[] {comp.getUuid(), evtnm}));
 	}
 	/** Note: data must be non-null. */
+	@SuppressWarnings("unchecked")
 	private static Integer getKeyOfData(Component comp, Object data) {
 		Object[] inf = (Object[])comp.getAttribute(Attributes.ECHO_DATA);
 		if (inf == null)

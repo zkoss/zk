@@ -240,12 +240,11 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(1536);
 
-		final Set jses = new LinkedHashSet(32);
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();)
-			jses.addAll(((LanguageDefinition)it.next()).getJavaScripts());
-		for (Iterator it = jses.iterator(); it.hasNext();)
-			append(sb, (JavaScript)it.next());
+		final Set<JavaScript> jses = new LinkedHashSet<JavaScript>(32);
+		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType))
+			jses.addAll(langdef.getJavaScripts());
+		for (JavaScript js: jses)
+			append(sb, js);
 
 		sb.append("\n<!-- ZK ").append(wapp.getVersion());
 		if (WebApps.getFeature("ee"))
@@ -351,16 +350,14 @@ public class HtmlPageRenders {
 	 * with desktop (a fake execution).
 	 */
 	public static final
-	List getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
+	List<StyleSheet> getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
 		if (wapp == null) wapp = exec.getDesktop().getWebApp();
 		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
 
 		final Configuration config = wapp.getConfiguration();
 		final Set disabled = config.getDisabledThemeURIs();
-		final List sses = new LinkedList(); //a list of StyleSheet
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+		final List<StyleSheet> sses = new LinkedList<StyleSheet>(); //a list of StyleSheet
+		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType)) {
 			for (Iterator e = langdef.getStyleSheets().iterator(); e.hasNext();) {
 				final StyleSheet ss = (StyleSheet)e.next();
 				if (!disabled.contains(ss.getHref()))
@@ -371,9 +368,8 @@ public class HtmlPageRenders {
 		//Process configuration
 		final ThemeProvider themeProvider = config.getThemeProvider();
 		if (themeProvider != null) {
-			final List orgss = new LinkedList();
-			for (Iterator it =  sses.iterator(); it.hasNext();) {
-				final StyleSheet ss = (StyleSheet)it.next();
+			final List<Object> orgss = new LinkedList<Object>();
+			for (StyleSheet ss:  sses) {
 				final String href = ss.getHref();
 				if (href != null && href.length() > 0)
 					orgss.add(ss.getMedia() != null ? ss: (Object)href); //we don't support getContent
@@ -384,10 +380,9 @@ public class HtmlPageRenders {
 				orgss.add(hrefs[j]);
 
 			sses.clear();
-			final Collection res = themeProvider.getThemeURIs(exec, orgss);
+			final Collection<?> res = themeProvider.getThemeURIs(exec, orgss);
 			if (res != null) {
-				for (Iterator it = res.iterator(); it.hasNext();) {
-					final Object re = it.next();
+				for (Object re: res) {
 					sses.add(re instanceof StyleSheet ? (StyleSheet)re:
 						new StyleSheet((String)re, "text/css"));
 				}

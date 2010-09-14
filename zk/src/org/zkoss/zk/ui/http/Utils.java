@@ -140,7 +140,7 @@ public class Utils {
 						Exceptions.formatStackTrace(null, err, null, 6)}):
 					Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
 
-			final Map attrs = new HashMap();
+			final Map<String, String> attrs = new HashMap<String, String>();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
 			Servlets.include(ctx, request, response,

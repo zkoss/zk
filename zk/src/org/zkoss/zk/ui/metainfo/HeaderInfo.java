@@ -58,8 +58,8 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
 public class HeaderInfo  extends EvalRefStub
 implements Condition {
 	private final String _name;
-	/** A list of [String nm, ExValue val]. */
-	private final List _attrs;
+	/** A list of AttrInfo. */
+	private final List<AttrInfo> _attrs;
 	private final ConditionImpl _cond;
 
 	/** Constructor.
@@ -70,7 +70,7 @@ implements Condition {
 	 * @param name the tag name, such as link (never null or empty).
 	 * @param attrs a map of (String, String) attributes.
 	 */
-	public HeaderInfo(EvaluatorRef evalr, String name, Map attrs, ConditionImpl cond) {
+	public HeaderInfo(EvaluatorRef evalr, String name, Map<String, String> attrs, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("empty");
 
@@ -78,19 +78,12 @@ implements Condition {
 		_evalr = evalr;
 		_cond = cond;
 		if (attrs == null || attrs.isEmpty()) {
-			_attrs = Collections.EMPTY_LIST;
+			_attrs = Collections.emptyList();
 		} else {
-			_attrs = new LinkedList();
-			for (Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final Object nm = me.getKey(), val = me.getValue();
-				if (!(nm instanceof String))
-					throw new IllegalArgumentException("String is expected, not "+nm);
-				if (!(val instanceof String))
-					throw new IllegalArgumentException("String is expected, not "+val);
-
-				_attrs.add(new Object[] {
-					nm, new ExValue((String)val, String.class)});
+			_attrs = new LinkedList<AttrInfo>();
+			for (Map.Entry<String, String> me: attrs.entrySet()) {
+				final String nm = me.getKey(), val = me.getValue();
+				_attrs.add(new AttrInfo(nm, new ExValue(val, String.class)));
 			}
 		}
 	}
@@ -115,10 +108,9 @@ implements Condition {
 		final boolean bScript = "script".equals(_name);
 		String scriptContent = null;
 
-		for (Iterator it = _attrs.iterator(); it.hasNext();) {
-			final Object[] p = (Object[])it.next();
-			final String nm = (String)p[0];
-			String val = (String)((ExValue)p[1]).getValue(_evalr, page);
+		for (AttrInfo attr: _attrs) {
+			final String nm = attr.name;
+			String val = (String)attr.value.getValue(_evalr, page);
 			if (bScript && "content".equals(nm)) {
 				scriptContent = val;
 				continue;
@@ -147,5 +139,14 @@ implements Condition {
 	}
 	public boolean isEffective(Page page) {
 		return _cond == null || _cond.isEffective(_evalr, page);
+	}
+
+	private static class AttrInfo {
+		private final String name;
+		private final ExValue value;
+		private AttrInfo(String name, ExValue value) {
+			this.name = name;
+			this.value = value;
+		}
 	}
 }

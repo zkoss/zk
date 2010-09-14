@@ -34,8 +34,8 @@ import org.zkoss.zk.ui.UiException;
 public class WidgetDefinitionImpl implements WidgetDefinition {
 	/** The widget class. */
 	private final String _class;
-	/** A map of molds (String mold, [String moldURI]). */
-	private Map _molds;
+	/** A map of molds (String mold, String moldURI). */
+	private Map<String, String> _molds;
 	/** Whether to preserve the blank text. */
 	private final boolean _blankpresv;
 
@@ -56,21 +56,21 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
-			_molds = new HashMap(2);
-		_molds.put(name, new String[] {moldURI});
+			_molds = new HashMap<String, String>(2);
+		_molds.put(name, moldURI);
 	}
 	public String getMoldURI(String name) {
 		if (_molds == null)
 			return null;
 
-		final String[] info = (String[])_molds.get(name);
-		return info != null ? info[0]: null;
+		return _molds.get(name);
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}
-	public Collection getMoldNames() {
-		return _molds != null ?
-			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
+	public Collection<String> getMoldNames() {
+		if (_molds != null)
+			return _molds.keySet();
+		return Collections.emptyList();
 	}
 }

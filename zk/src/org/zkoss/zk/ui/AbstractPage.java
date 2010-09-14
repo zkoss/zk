@@ -46,9 +46,9 @@ implements Page, PageCtrl, java.io.Serializable {
 	/** The number of root components. */
 	private int _nRoot;
 	/** The readonly root collection. */
-	private transient Collection _roots;
+	private transient Collection<Component> _roots;
 	/** A map of fellows. */
-	private transient Map _fellows;
+	private transient Map<String, Component> _fellows;
 
 	protected AbstractPage() {
 		init();
@@ -57,7 +57,7 @@ implements Page, PageCtrl, java.io.Serializable {
 	 */
 	private void init() {
 		_roots = new Roots();
-		_fellows = new HashMap();
+		_fellows = new HashMap<String, Component>();
 	}
 
 	//Page//
@@ -73,15 +73,15 @@ implements Page, PageCtrl, java.io.Serializable {
 	}
 	public Component getFellow(String compId)
 	throws ComponentNotFoundException {
-		final Component comp = (Component)_fellows.get(compId);
+		final Component comp = _fellows.get(compId);
 		if (comp == null)
 			throw new ComponentNotFoundException("Fellow component not found: "+compId);
 		return comp;
 	}
 	public Component getFellowIfAny(String compId) {
-		return (Component)_fellows.get(compId);
+		return _fellows.get(compId);
 	}
-	public Collection getFellows() {
+	public Collection<Component> getFellows() {
 		return Collections.unmodifiableCollection(_fellows.values());
 	}
 	/** The same as {@link #getFellow(String)}.
@@ -110,10 +110,10 @@ implements Page, PageCtrl, java.io.Serializable {
 	//PageCtrl//
 	/*package*/ void addFellow(Component comp) {
 		final String compId = comp.getId();
-		final Object old = _fellows.put(compId, comp);
+		final Component old = _fellows.put(compId, comp);
 		if (old != comp) { //possible due to recursive call
 			if (old != null) {
-				_fellows.put(((Component)old).getId(), old); //recover
+				_fellows.put(old.getId(), old); //recover
 				throw new InternalError("Called shall prevent replicated ID for roots");
 			}
 		}
@@ -207,7 +207,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 
-	public Collection getRoots() {
+	public Collection<Component> getRoots() {
 		return _roots;
 	}
 	public void removeComponents() {
@@ -220,7 +220,7 @@ implements Page, PageCtrl, java.io.Serializable {
 
 	public void destroy() {
 		_firstRoot = null; _nRoot = 0;
-		_fellows = new HashMap(1); //not clear() since # of fellows might huge
+		_fellows = new HashMap<String, Component>(2); //not clear() since # of fellows might huge
 	}
 
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
@@ -266,13 +266,13 @@ implements Page, PageCtrl, java.io.Serializable {
 	}
 
 	//help classes//
-	private class Roots extends AbstractCollection {
+	private class Roots extends AbstractCollection<Component> {
 		public int size() {return _nRoot;}
-		public Iterator iterator() {
+		public Iterator<Component> iterator() {
 			return new RootIter(_firstRoot);
 		}
 	}
-	private static class RootIter implements Iterator {
+	private static class RootIter implements Iterator<Component> {
 		private AbstractComponent _p;
 		private RootIter(AbstractComponent first) {
 			_p = first;
@@ -280,8 +280,8 @@ implements Page, PageCtrl, java.io.Serializable {
 		public boolean hasNext() {
 			return _p != null;
 		}
-		public Object next() {
-			Object c = _p;
+		public Component next() {
+			Component c = _p;
 			_p = _p._next;
 			return c;
 		}

@@ -48,7 +48,7 @@ public interface ExpressionFactory {
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
 	public Expression parseExpression(XelContext ctx, String expression,
-	Class expectedType)
+	Class<?> expectedType)
 	throws XelException;
 	/** Evaluates an expression.
 	 *
@@ -61,6 +61,6 @@ public interface ExpressionFactory {
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
 	public Object evaluate(XelContext ctx, String expression,
-	Class expectedType)
+	Class<?> expectedType)
 	throws XelException;
 }

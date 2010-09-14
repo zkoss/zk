@@ -234,16 +234,14 @@ implements Condition, java.io.Serializable {
 			url = (URL)_url;
 		}
 
-		final Object o = getCache().get(url);
+		final String o = getCache().get(url);
 			//It is OK to use cache here even if script might be located, say,
 			//at a database. Reason: it is Locator's job to implement
 			//the relevant function for URL (including lastModified).
 		if (o == null)
 			throw new UiException("File not found: "+_url);
 			//note: we don't throw FileNotFoundException since Tomcat 'eats' it
-		if (!(o instanceof String))
-			throw new UiException("Illegal file type: "+o.getClass());
-		return (String)o;
+		return o;
 	}
 
 	/** Returns whether the evaluation of the zscript shall be deferred.
@@ -282,13 +280,13 @@ implements Condition, java.io.Serializable {
 		return sb.append(']').toString();
 	}
 
-	private static ResourceCache _cache;
-	private static final ResourceCache getCache() {
+	private static ResourceCache<Object, String> _cache;
+	private static final ResourceCache<Object, String> getCache() {
 		if (_cache == null) {
 			synchronized (ZScript.class) {
 				if (_cache == null) {
-					final ResourceCache cache
-						= new ResourceCache(new ContentLoader());
+					final ResourceCache<Object, String> cache
+						= new ResourceCache<Object, String>(new ContentLoader());
 					cache.setMaxSize(512);
 					cache.setLifetime(60*60*1000); //1hr
 					_cache = cache;

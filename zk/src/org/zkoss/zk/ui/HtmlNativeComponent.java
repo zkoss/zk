@@ -73,9 +73,9 @@ implements DynamicTag, Native {
 	private String _prolog = "", _epilog = "";
 	/** The text before the tag name. */
 	private String _prefix, _postfix;
-	private Map _props;
+	private Map<String, Object> _props;
 	/** Declared namespaces ({@link Namespace}). */
-	private List _dns;
+	private List<Namespace> _dns;
 
 	/** Contructs a {@link HtmlNativeComponent} component.
 	 * 
@@ -137,15 +137,17 @@ implements DynamicTag, Native {
 	}
 
 	//Native//
-	public List getDeclaredNamespaces() {
-		return _dns != null ? _dns: Collections.EMPTY_LIST;
+	public List<Namespace> getDeclaredNamespaces() {
+		if (_dns != null)
+			return _dns;
+		return Collections.emptyList();
 	}
 	public void addDeclaredNamespace(Namespace ns) {
 		if (ns == null)
 			throw new IllegalArgumentException();
 
 		if (_dns == null)
-			_dns = new LinkedList();
+			_dns = new LinkedList<Namespace>();
 		_dns.add(ns);
 	}
 	public String getPrologContent() {
@@ -364,7 +366,7 @@ implements DynamicTag, Native {
 			if (_props != null) _props.remove(name);
 		} else {
 			if (_props == null)
-				_props = new LinkedHashMap();
+				_props = new LinkedHashMap<String, Object>();
 			_props.put(name, value);
 		}
 	}
@@ -379,7 +381,7 @@ implements DynamicTag, Native {
 			return nc;
 		}
 		public void getFirstHalf(StringBuffer sb, String tag,
-		Map props, Collection namespaces) {
+		Map<String, Object> props, Collection namespaces) {
 			if (tag != null)
 				sb.append('<').append(tag);
 

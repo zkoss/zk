@@ -54,7 +54,7 @@ public class InitiatorInfo extends ArgumentInfo {
 	 * instantiate a new instance.
 	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Class cls, Map args) {
+	public InitiatorInfo(Class<? extends Initiator> cls, Map<String, String> args) {
 		super(args);
 		checkClass(cls);
 		_init = cls;
@@ -65,7 +65,7 @@ public class InitiatorInfo extends ArgumentInfo {
 	 * @param clsnm the class name; it could be an EL expression.
 	 * @since 3.6.2
 	 */
-	public InitiatorInfo(String clsnm, Map args)
+	public InitiatorInfo(String clsnm, Map<String, String> args)
 	throws ClassNotFoundException {
 		super(args);
 		_init = toClass(clsnm);
@@ -74,7 +74,7 @@ public class InitiatorInfo extends ArgumentInfo {
 	 * {@link #newInitiator} is called.
 	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Initiator init, Map args) {
+	public InitiatorInfo(Initiator init, Map<String, String> args) {
 		super(args);
 		if (init == null)
 			throw new IllegalArgumentException("null");
@@ -87,7 +87,7 @@ public class InitiatorInfo extends ArgumentInfo {
 
 		if (clsnm.indexOf("${") < 0) {
 			try {
-				final Class cls = Classes.forNameByThread(clsnm);
+				final Class<?> cls = Classes.forNameByThread(clsnm);
 				checkClass(cls);
 				return cls;
 			} catch (ClassNotFoundException ex) {
@@ -97,7 +97,7 @@ public class InitiatorInfo extends ArgumentInfo {
 			return new ExValue(clsnm, String.class);
 		}
 	}
-	private static void checkClass(Class cls) {
+	private static void checkClass(Class<?> cls) {
 		if (!Initiator.class.isAssignableFrom(cls))
 			throw new UiException(Initiator.class+" must be implemented: "+cls);
 	}
@@ -118,7 +118,7 @@ public class InitiatorInfo extends ArgumentInfo {
 		if (_init instanceof Initiator)
 			return doInit((Initiator)_init, eval, page);
 
-		final Class cls;
+		final Class<?> cls;
 		if (_init instanceof ExValue) {
 			final String clsnm = (String)
 				((ExValue)_init).getValue(eval, page);
@@ -134,13 +134,13 @@ public class InitiatorInfo extends ArgumentInfo {
 				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_init+")", ex);
 			}
 		} else {
-			cls = (Class)_init;
+			cls = (Class<?>)_init;
 		}
 		return doInit((Initiator)cls.newInstance(), eval, page);
 	}
 	private Initiator doInit(Initiator init, Evaluator eval, Page page)
 	throws Exception {
-		final Map args = resolveArguments(eval, page);
+		final Map<String, Object> args = resolveArguments(eval, page);
 		init.doInit(page, args);
 		return init;
 	}

@@ -43,15 +43,15 @@ public class AuEchoGlobal extends AuResponse {
 	 * @param data the data to sent with the event when echoed back
 	 * @param dts a collection of desktops ({@link Desktop}) to receive the event.
 	 */
-	public AuEchoGlobal(String evtnm, String data, Collection dts) {
+	public AuEchoGlobal(String evtnm, String data, Collection<Desktop> dts) {
 		super("echoGx", toArray(evtnm, data, dts));
 	}
-	private static String[] toArray(String evtnm, String data, Collection dts) {
-		final List l = new LinkedList();
+	private static String[] toArray(String evtnm, String data, Collection<Desktop> dts) {
+		final List<String> l = new LinkedList<String>();
 		l.add(evtnm);
 		l.add(data);
-		for (Iterator it = dts.iterator(); it.hasNext();)
-			l.add(((Desktop)it.next()).getId());
-		return (String[])l.toArray(new String[l.size()]);
+		for (Desktop desktop: dts)
+			l.add(desktop.getId());
+		return l.toArray(new String[l.size()]);
 	}
 }

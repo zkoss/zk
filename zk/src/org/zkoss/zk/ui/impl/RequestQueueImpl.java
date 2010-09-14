@@ -45,25 +45,25 @@ public class RequestQueueImpl implements RequestQueue {
 	private static final Log log = Log.lookup(RequestQueueImpl.class);
 
 	/** A list of pending {@link AuRequest}. */
-	private final List _requests = new LinkedList();
+	private final List<AuRequest> _requests = new LinkedList<AuRequest>();
 	/** A list of request ID for performance measurement. */
-	private List _pfreqIds;
+	private List<String> _pfreqIds;
 
 	//-- RequestQueue --//
 	public void addPerfRequestId(String requestId) {
 		if (_pfreqIds == null)
-			_pfreqIds = new LinkedList();
+			_pfreqIds = new LinkedList<String>();
 		_pfreqIds.add(requestId);
 	}
-	public Collection clearPerfRequestIds() {
-		final List old = _pfreqIds;
+	public Collection<String> clearPerfRequestIds() {
+		final List<String> old = _pfreqIds;
 		_pfreqIds = null;
 		return old;
 	}
 
 	public boolean isEmpty() {
 		while (!_requests.isEmpty()) {
-			if (isObsolete((AuRequest)_requests.get(0)))
+			if (isObsolete(_requests.get(0)))
 				_requests.remove(0);
 			else
 				return false;
@@ -82,7 +82,7 @@ public class RequestQueueImpl implements RequestQueue {
 	}
 	public AuRequest nextRequest() {
 		while (!_requests.isEmpty()) {
-			final AuRequest request = (AuRequest)_requests.remove(0);
+			final AuRequest request = _requests.remove(0);
 			if (!isObsolete(request))
 				return request;
 		}
@@ -113,7 +113,7 @@ public class RequestQueueImpl implements RequestQueue {
 				return;
 			}
 
-			final AuRequest req2 = (AuRequest)_requests.get(last);
+			final AuRequest req2 = _requests.get(last);
 			if ((req2.getOptions() & AuRequest.BUSY_IGNORE) != 0) {
 				_requests.remove(last); //drop it
 				if (last == 0) {
@@ -132,8 +132,8 @@ public class RequestQueueImpl implements RequestQueue {
 		//as the arrival.
 		if ((opts & AuRequest.DUPLICATE_IGNORE) != 0) {
 			final String uuid = getUuid(request);
-			for (Iterator it = _requests.iterator(); it.hasNext();) {
-				final AuRequest req2 = (AuRequest)it.next();
+			for (Iterator<AuRequest> it = _requests.iterator(); it.hasNext();) {
+				final AuRequest req2 = it.next();
 				if (req2.getCommand().equals(name)
 				&& Objects.equals(getUuid(req2), uuid)) {
 					it.remove(); //drop req2 (the old one)
@@ -145,7 +145,7 @@ public class RequestQueueImpl implements RequestQueue {
 		//following is the same
 		} else if ((opts & AuRequest.REPEAT_IGNORE) != 0) {
 			final int last = _requests.size() - 1;
-			final AuRequest req2 = (AuRequest)_requests.get(last);
+			final AuRequest req2 = _requests.get(last);
 			if (req2.getCommand().equals(name)
 			&& Objects.equals(getUuid(req2), getUuid(request))) {
 				_requests.remove(last);

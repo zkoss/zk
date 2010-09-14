@@ -33,7 +33,7 @@ public class Evaluators {
 	 * @param comp the component to represent the self variable
 	 */
 	public static Object evaluate(Evaluator eval, Component comp,
-	String expr, Class expectedClass) {
+	String expr, Class<?> expectedClass) {
 		if (expr != null && expr.indexOf("${") >= 0) {
 			return eval.evaluate(comp, eval.parseExpression(expr, expectedClass));
 		} else {
@@ -46,7 +46,7 @@ public class Evaluators {
 	 * @param page the page to represent the self variable
 	 */
 	public static Object evaluate(Evaluator eval, Page page,
-	String expr, Class expectedClass) {
+	String expr, Class<?> expectedClass) {
 		if (expr != null && expr.indexOf("${") >= 0) {
 			return eval.evaluate(page, eval.parseExpression(expr, expectedClass));
 		} else {

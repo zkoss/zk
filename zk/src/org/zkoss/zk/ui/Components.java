@@ -46,6 +46,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.ExpressionFactory;
 
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.event.Events;
@@ -91,7 +92,7 @@ public class Components {
 	 * some replicated item in the list.
 	 * @see #sort(List, int, int, Comparator)
 	 */
-	public static void sort(List list, Comparator cpr) {
+	public static void sort(List<Component> list, Comparator<? super Component> cpr) {
 		sort(list, 0, list.size(), cpr);
 	}
 
@@ -126,8 +127,8 @@ public class Components {
 	 * @since 3.5.2
 	 */
 	public static
-	void replaceChildren(Component parent, Collection newChildren) {
-		final Collection children = parent.getChildren();
+	void replaceChildren(Component parent, Collection<Component> newChildren) {
+		final Collection<Component> children = parent.getChildren();
 		children.clear();
 		children.addAll(newChildren);
 	}
@@ -139,11 +140,11 @@ public class Components {
 	 * @param cpr the comparator to determine the order of the list.
 	 * @since 3.5.0
 	 */
-	public static void sort(List list, int from, int to, Comparator cpr) {
-		final Object ary[] = CollectionsX.toArray(list, from, to);
+	public static void sort(List<Component> list, int from, int to, Comparator<? super Component> cpr) {
+		final Component ary[] = (Component[])CollectionsX.toArray(list, from, to);
 		Arrays.sort(ary, cpr);
 
-		ListIterator it = list.listIterator(from);
+		ListIterator<Component> it = list.listIterator(from);
 		int j = 0, k = to - from;
 		for (; it.hasNext() && --k >= 0; ++j) {
 			if (it.next() != ary[j]) {
@@ -701,25 +702,21 @@ public class Components {
 		return IMPLICIT_NAMES.contains(id);
 	}
 
-	private static final Set IMPLICIT_NAMES = new HashSet();
-	static {  
-		IMPLICIT_NAMES.add("application");
-		IMPLICIT_NAMES.add("applicationScope");
-		IMPLICIT_NAMES.add("arg");
-		IMPLICIT_NAMES.add("componentScope");
-		IMPLICIT_NAMES.add("desktop");
-		IMPLICIT_NAMES.add("desktopScope");
-		IMPLICIT_NAMES.add("execution");
-		IMPLICIT_NAMES.add("event"); //since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
-		IMPLICIT_NAMES.add("self");
-		IMPLICIT_NAMES.add("session");
-		IMPLICIT_NAMES.add("sessionScope");
-		IMPLICIT_NAMES.add("spaceOwner");
-		IMPLICIT_NAMES.add("spaceScope");
-		IMPLICIT_NAMES.add("page");
-		IMPLICIT_NAMES.add("pageScope");
-		IMPLICIT_NAMES.add("requestScope");
-		IMPLICIT_NAMES.add("param");
+	private static final Set<String> IMPLICIT_NAMES = new HashSet<String>();
+	static { 
+		final String[] names = {
+			"application", "applicationScope", "arg",
+			"componentScope",
+			"desktop", "desktopScope",
+			"execution",
+			"event", //since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
+			"self",
+			"session", "sessionScope",
+			"spaceOwner", "spaceScope",
+			"page", "pageScope",
+			"requestScope", "param"};
+		for (int j = 0; j < names.length; ++j)
+			IMPLICIT_NAMES.add(names[j]);
 	}
 
 	/** Retuns the implicit object of the specified name, or null
@@ -833,10 +830,10 @@ public class Components {
 		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
 
-	private static boolean ignoreFromWire(Class cls) {
-		return _igoreWires.contains(cls);
+	private static boolean ignoreFromWire(Class<?> cls) {
+		return _ignoreWires.contains(cls);
 	}
-	private static Set _igoreWires = new HashSet(8);
+	private static final Set<Class<?>> _ignoreWires = new HashSet<Class<?>>(8);
 	static {
 		final Class[] clses = new Class[] {
 			HtmlBasedComponent.class,
@@ -847,7 +844,7 @@ public class Components {
 			Object.class
 		};
 		for (int j = 0; j < clses.length; ++j)
-			_igoreWires.add(clses[j]);
+			_ignoreWires.add(clses[j]);
 	}
 
 	/**
@@ -856,8 +853,8 @@ public class Components {
 	 */
 	private static class Wire {
 		private final Object _controller;
-		private final Set _injected;
-		private final Map _fldMaps;
+		private final Set<String> _injected;
+		private final Map<String, Field> _fldMaps;
 		private final char _separator;
 		private final boolean _ignoreZScript;
 		private final boolean _ignoreXel;
@@ -874,8 +871,8 @@ public class Components {
 			_separator = separator;
 			_ignoreZScript = ignoreZScript;
 			_ignoreXel = ignoreXel;
-			_injected = new HashSet();
-			_fldMaps = new LinkedHashMap(64);
+			_injected = new HashSet<String>();
+			_fldMaps = new LinkedHashMap<String, Field>(64);
 			
 			Class cls = _controller.getClass();
 			while (cls != null && !ignoreFromWire(cls)) {
@@ -951,6 +948,7 @@ public class Components {
 			wireImplicit(x);
 			wireOthers(x);
 		}
+		@SuppressWarnings("unchecked")
 		private void wireImplicit(Object x) {
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
@@ -1001,10 +999,9 @@ public class Components {
 			}
 
 			//check fields
-			for (final Iterator it=_fldMaps.entrySet().iterator();it.hasNext();) {
-				final Entry entry = (Entry) it.next();
-				final String fdname = (String) entry.getKey();
-				final Field fd = (Field) entry.getValue();
+			for (Entry<String, Field> entry: _fldMaps.entrySet()) {
+				final String fdname = entry.getKey();
+				final Field fd = entry.getValue();
 				if ((fd.getModifiers() & Modifier.STATIC) == 0
 				&& !_injected.contains(fdname)) { //if not injected by setXxx yet
 					if (containsVariable(x, fdname)) {
@@ -1119,9 +1116,9 @@ public class Components {
 		/** Returns false if there is such field but the target class doesn't match.
 		 * In other words, false means the caller can try another object (arg).
 		 */
-		private boolean injectByMethod(Method md, Class parmcls, Class argcls, Object arg, String fdname) {
+		private boolean injectByMethod(Method md, Class<?> parmcls, Class<?> argcls, Object arg, String fdname) {
 			if (argcls == null || parmcls.isAssignableFrom(argcls)) {
-				final Field fd = (Field) _fldMaps.get(fdname);
+				final Field fd = _fldMaps.get(fdname);
 				if (fd != null && fd.getType().equals(parmcls)) {
 					final boolean old = fd.isAccessible();
 					try {
@@ -1156,11 +1153,11 @@ public class Components {
 		/** Returns false if there is such field but the target class doesn't match.
 		 * In other words, false means the caller can try another object (arg).
 		 */
-		private boolean injectField(Object arg, Class argcls, Field fd) {
+		private boolean injectField(Object arg, Class<?> argcls, Field fd) {
 			final boolean old = fd.isAccessible();
 			try {
 				fd.setAccessible(true);
-				final Class fdcls = fd.getType();
+				final Class<?> fdcls = fd.getType();
 				if (argcls != null && fdcls.isAssignableFrom(argcls)) { //correct type 
 					final Object value = fd.get(_controller);
 					if (value == null) {
@@ -1306,7 +1303,7 @@ public class Components {
 			return exec().removeScopeListener(listener);
 		}
 
-		public Map getAttributes() {
+		public Map<String, Object> getAttributes() {
 			return exec().getAttributes();
 		}
 
@@ -1318,11 +1315,11 @@ public class Components {
 			return exec().getDesktop();
 		}
 
-		public Evaluator getEvaluator(Page page, Class expfcls) {
+		public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 			return exec().getEvaluator(page, expfcls);
 		}
 
-		public Evaluator getEvaluator(Component comp, Class expfcls) {
+		public Evaluator getEvaluator(Component comp, Class<? extends ExpressionFactory> expfcls) {
 			return exec().getEvaluator(comp, expfcls);
 		}
 
@@ -1369,7 +1366,7 @@ public class Components {
 			return exec().getParameter(name);
 		}
 
-		public Map getParameterMap() {
+		public Map<String, String[]> getParameterMap() {
 			return exec().getParameterMap();
 		}
 
@@ -1537,11 +1534,11 @@ public class Components {
 			return exec().getHeader(name);
 		}
 
-		public Iterator getHeaderNames() {
+		public Iterator<String> getHeaderNames() {
 			return exec().getHeaderNames();
 		}
 
-		public Iterator getHeaders(String name) {
+		public Iterator<String> getHeaders(String name) {
 			return exec().getHeaders(name);
 		}
 
@@ -1574,8 +1571,8 @@ public class Components {
 	}
 	
 	//Proxy to read current requestScope
-	private static class RequestScope implements Map {
-		protected Map req() {
+	private static class RequestScope implements Map<String, Object> {
+		protected Map<String, Object> req() {
 			return Executions.getCurrent().getAttributes();
 		}
 		public void clear() {
@@ -1587,7 +1584,7 @@ public class Components {
 		public boolean containsValue(Object value) {
 			return req().containsValue(value);
 		}
-		public Set entrySet() {
+		public Set<Map.Entry<String, Object>> entrySet() {
 			return req().entrySet();
 		}
 		public Object get(Object key) {
@@ -1596,13 +1593,13 @@ public class Components {
 		public boolean isEmpty() {
 			return req().isEmpty();
 		}
-		public Set keySet() {
+		public Set<String> keySet() {
 			return req().keySet();
 		}
-		public Object put(Object key, Object value) {
+		public Object put(String key, Object value) {
 			return req().put(key, value);
 		}
-		public void putAll(Map arg0) {
+		public void putAll(Map<? extends String, ? extends Object> arg0) {
 			req().putAll(arg0);
 		}
 		public Object remove(Object key) {
@@ -1611,7 +1608,7 @@ public class Components {
 		public int size() {
 			return req().size();
 		}
-		public Collection values() {
+		public Collection<Object> values() {
 			return req().values();
 		}
 

@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 
@@ -176,9 +177,9 @@ public interface UiEngine {
 	 *
 	 * <p>Note: the output must be XML and UTF-8.
 	 *
-	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest}.
+	 * @param requests a list of {@link AuRequest}.
 	 */
-	public void execUpdate(Execution exec, List requests, AuWriter out)
+	public void execUpdate(Execution exec, List<AuRequest> requests, AuWriter out)
 	throws IOException;
 
 	/** Executes the recovering.
@@ -207,7 +208,7 @@ public interface UiEngine {
 	 * @return the components being created.
 	 */
 	public Component[] createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent, Map arg);
+	PageDefinition pagedef, Page page, Component parent, Map<?, ?> arg);
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -376,7 +377,7 @@ public interface UiEngine {
 	 * @see org.zkoss.zk.ui.metainfo.Property
 	 * @since 3.5.0
 	 */
-	public String getNativeContent(Component comp, List children,
+	public String getNativeContent(Component comp, List<Object> children,
 	Native.Helper helper);
 
 	/** Returns if any suspended event processing thread in the
@@ -393,7 +394,7 @@ public interface UiEngine {
 	 * @param desktop the desktop that the suspended event processing
 	 * threads belong to (never null).
 	 */
-	public Collection getSuspendedThreads(Desktop desktop);
+	public Collection<EventProcessingThread> getSuspendedThreads(Desktop desktop);
 	/** Ceases the specified event thread.
 	 *
 	 * @param desktop which desktop the event thread belongs to

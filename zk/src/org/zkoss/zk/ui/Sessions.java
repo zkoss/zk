@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.SessionResolver;
  */
 public class Sessions {
 	/** Used to the store the session for the current thread. */
-	protected static final ThreadLocal _sess = new ThreadLocal();
+	protected static final ThreadLocal<Object> _sess = new ThreadLocal<Object>();
 	protected static int _cnt;
 
 	protected Sessions() {} //prevent from instantiated

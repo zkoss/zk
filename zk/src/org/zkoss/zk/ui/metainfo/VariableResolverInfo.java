@@ -47,17 +47,17 @@ public class VariableResolverInfo extends ArgumentInfo {
 	/** Constructs with a class.
 	 * @since 3.6.2
 	 */
-	public VariableResolverInfo(Class cls, Map args) {
+	public VariableResolverInfo(Class<? extends VariableResolver> cls, Map<String, String> args) {
 		super(args);
 		checkClass(cls);
 		_resolver = cls;
 	}
 	/** Constructs with a class.
 	 */
-	public VariableResolverInfo(Class cls) {
+	public VariableResolverInfo(Class<? extends VariableResolver> cls) {
 		this(cls, null);
 	}
-	private static void checkClass(Class cls) {
+	private static void checkClass(Class<?> cls) {
 		if (!VariableResolver.class.isAssignableFrom(cls))
 			throw new UiException(VariableResolver.class+" must be implemented: "+cls);
 	}
@@ -67,7 +67,7 @@ public class VariableResolverInfo extends ArgumentInfo {
 	 * @param clsnm the class name; it could be an EL expression.
 	 * @since 3.6.2
 	 */
-	public VariableResolverInfo(String clsnm, Map args)
+	public VariableResolverInfo(String clsnm, Map<String, String> args)
 	throws ClassNotFoundException {
 		super(args);
 
@@ -76,7 +76,7 @@ public class VariableResolverInfo extends ArgumentInfo {
 
 		if (clsnm.indexOf("${") < 0) {
 			try {
-				final Class cls = Classes.forNameByThread(clsnm);
+				final Class<?> cls = Classes.forNameByThread(clsnm);
 				checkClass(cls);
 				_resolver = cls;
 			} catch (ClassNotFoundException ex) {
@@ -119,7 +119,7 @@ public class VariableResolverInfo extends ArgumentInfo {
 		if (_resolver instanceof VariableResolver)
 			return (VariableResolver)_resolver;
 
-		final Class cls;
+		final Class<?> cls;
 		if (_resolver instanceof ExValue) {
 			final String clsnm = (String)((ExValue)_resolver)
 				.getValue(eval, page);
@@ -135,7 +135,7 @@ public class VariableResolverInfo extends ArgumentInfo {
 				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_resolver+")", ex);
 			}
 		} else {
-			cls = (Class)_resolver;
+			cls = (Class<?>)_resolver;
 		}
 
 		return (VariableResolver)newInstance(cls, eval, page);
