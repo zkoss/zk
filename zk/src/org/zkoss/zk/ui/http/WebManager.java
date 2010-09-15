@@ -310,15 +310,17 @@ public class WebManager {
 	public static final WebManager getWebManager(WebApp wapp) {
 		return getWebManager((ServletContext)wapp.getNativeContext());
 	}
-	/** Returns the Web manager, or null if not found.
+	/** Returns the Web manager of the give context, or null if not found.
+	 * @since 5.0.5
 	 */
-	/*package*/ static final WebManager getWebManagerIfAny(ServletContext ctx) {
+	public static final WebManager getWebManagerIfAny(ServletContext ctx) {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
 	}
-	/** Returns the Web manager of the specified {@link WebApp}.
-	 * @since 5.0.3
+	/** Returns the Web manager of the specified {@link WebApp},
+	 * or null if not found.
+	 * @since 5.0.5
 	 */
-	/*package*/ static final WebManager getWebManagerIfAny(WebApp wapp) {
+	public static final WebManager getWebManagerIfAny(WebApp wapp) {
 		return getWebManagerIfAny((ServletContext)wapp.getNativeContext());
 	}
 	/** Returns the Web application of the specified context.
