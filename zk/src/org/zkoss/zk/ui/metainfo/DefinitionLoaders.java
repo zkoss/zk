@@ -451,7 +451,7 @@ public class DefinitionLoaders {
 			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
 			if (wgtnm == null && extend)
-				wgtnm = compdef.getDefaultWidgetClass();
+				wgtnm = compdef.getDefaultWidgetClass(null);
 			if (wgtnm != null) {
 				if (!withEL(wgtnm))
 					wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
