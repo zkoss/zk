@@ -69,13 +69,16 @@ public class Standalones {
 	 * @param comp the component to output (never null). It might have child components.
 	 * @param path the request path. If null, the servlet path is assumed.
 	 * @param out the output (never null).
+	 * @param richlet the richlet to run. If you have only one component to show and no need
+	 * process it under an execution, you could use
+	 * {@link #output(ServletContext, HttpServletRequest, HttpServletResponse, Component, String, Writer)
+	 * instead.
+	 * @since 5.0.5
 	 */
 	public static final void output(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
-	Component comp, String path, Writer out)
+	Richlet richlet, String path, Writer out)
 	throws ServletException, IOException {
-		if (comp == null)
-			throw new IllegalArgumentException();
 		if (path == null)
 			path = Https.getThisServletPath(request);
 
@@ -108,8 +111,6 @@ public class Standalones {
 			((SessionCtrl)sess).notifyClientRequest(true);
 
 			final UiFactory uf = wappc.getUiFactory();
-			final Richlet richlet = new StandaloneRichlet(comp);
-
 			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
 			exec = new ExecutionImpl(ctx, request, response, desktop, page);
 			exec.setAttribute(Attributes.PAGE_REDRAW_CONTROL, "page");
@@ -124,6 +125,19 @@ public class Standalones {
 				exec.removeAttribute(Attributes.PAGE_RENDERER);
 			}
 		}
+	}
+	/** Outputs the HTML tags of the given component to the given writer.
+	 * @param comp the component to output (never null). It might have child components.
+	 * @param path the request path. If null, the servlet path is assumed.
+	 * @param out the output (never null).
+	 */
+	public static final void output(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response,
+	Component comp, String path, Writer out)
+	throws ServletException, IOException {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		output(ctx, request, response, new StandaloneRichlet(comp), path, out);
 	}
 	//Supporting classes//
 	private static class StandaloneRichlet extends GenericRichlet {
