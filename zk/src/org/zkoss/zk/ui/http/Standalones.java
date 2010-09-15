@@ -89,7 +89,7 @@ public class Standalones {
 			if (updateURI == null)
 				updateURI = "/zkau";
 			else
-				updateURI = DHtmlLayoutServlet.fixUpdateURI(updateURI, ATTR);
+				updateURI = Utils.fixUpdateURI(updateURI, ATTR);
 			webman = new WebManager(ctx, updateURI);
 		}
 
