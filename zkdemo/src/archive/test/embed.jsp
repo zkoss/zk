@@ -18,13 +18,6 @@
 		listbox.appendChild(new Listitem("Item 1"));
 		listbox.appendChild(new Listitem("Item 2"));
 		listbox.setPage(page);
-
-		Map map = (Map)sess.getAttribute("desktops");
-		if (map == null)
-			sess.setAttribute("desktops", map = new HashMap());
-		Desktop desktop = page.getDesktop();
-		map.put(desktop.getId(), desktop);
-			//stupid way to pass to Servlet, but it's for test purpose
 	}
 		}, null, out);
 		%>
@@ -42,7 +35,7 @@
 	}
 		</script>
 
-		This is regular button to send Ajax thru jQuery (not AU)
+		This is a regular button to send Ajax thru jQuery (not AU)
 		<button type="button" onclick="ajaxClick()">click me</button>
 
 		<p>This is a test of embed component: datebox.</p>

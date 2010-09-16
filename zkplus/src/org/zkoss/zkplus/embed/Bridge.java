@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.http.WebManager;
 
 /**
  * Utilities to allow developers to start an execution in foreign Ajax channel.
@@ -50,6 +51,8 @@ public class Bridge {
 	 * any components belonging the given desktop.
 	 * <p>After processing, the caller shall invoke {@link #close} to stop
 	 * the execution (in the finally clause).
+	 * @param desktop the desktop you want to access.
+	 * You could retrieve by use of {@link #getDesktop}.
 	 */
 	public static Bridge start(ServletContext svlctx, HttpServletRequest request,
 	HttpServletResponse response, Desktop desktop) {
@@ -58,6 +61,16 @@ public class Bridge {
 		} catch (Exception ex) { //not possible
 			throw UiException.Aide.wrap(ex);
 		}
+	}
+
+	/** Returns the desktop of the given desktop ID, or null if not found.
+	 * @param dtid the desktop's ID.
+	 */
+	public static Desktop
+	getDesktop(ServletContext svlctx, HttpServletRequest request, String dtid) {
+		return ((WebAppCtrl)WebManager.getWebApp(svlctx))
+			.getDesktopCache(WebManager.getSession(svlctx, request))
+			.getDesktop(dtid);
 	}
 
 	/** Constructor.

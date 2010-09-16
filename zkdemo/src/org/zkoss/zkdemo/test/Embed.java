@@ -48,7 +48,7 @@ public class Embed extends HttpServlet {
 		}
 	}
 	private Desktop getDesktop(HttpServletRequest request) {
-		return (Desktop)((Map)request.getSession().getAttribute("desktops"))
-			.get(request.getParameter("desktop"));
+		return Bridge.getDesktop(getServletContext(), request,
+			request.getParameter("desktop"));
 	}
 }
