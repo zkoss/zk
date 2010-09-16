@@ -43,7 +43,7 @@ public interface Richlet {
 	/** Called by the richlet container to create components when
 	 * the specified page is visited and created.
 	 */
-	public void service(Page page);
+	public void service(Page page) throws Exception;
 
 	/** Returns the default language defintion that this richlet belongs to.
 	 * Don't return null.

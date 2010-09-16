@@ -221,7 +221,14 @@ public class Utils {
 		return null;
 	}
 
-	/*package*/ static final String fixUpdateURI(String updateURI, String info)
+	/** Checks the update URI.
+	 * @param updateURI the update URI to be checked.
+	 * @param info the info to show if updateURI is incorrect.
+	 * @return the update URI (by removing ending / if any)
+	 * @exception ServletException if updateURI is incorrect.
+	 * @since 5.0.5
+	 */
+	public static final String checkUpdateURI(String updateURI, String info)
 	throws ServletException {
 		if (updateURI == null
 		|| (updateURI = updateURI.trim()).length() == 0

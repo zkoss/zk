@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.zkoss.json.JSONArray;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -183,6 +184,35 @@ public interface UiEngine {
 	 */
 	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException;
+
+	/** Activates an execution that will allow developers to update
+	 * the state of components.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 *
+	 * @return a context that shall be passed to {@link #finishUpdate}.
+	 * @since 5.0.5
+	 * @see #finishUpdate
+	 * @see #closeUpdate
+	 */
+	public Object startUpdate(Execution exec) throws IOException;
+	/** Finishes the update and returns the result in an array of JSON object.
+	 * Notice it does not deactivate the execution. Rather, the caller
+	 * has to invoke {@link #closeUpdate}.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 *
+	 * @param ctx the context returned by the previous call to {@link #startUpdate}
+	 * @since 5.0.5
+	 * @see #startUpdate
+	 * @see #closeUpdate
+	 */
+	public JSONArray finishUpdate(Object ctx) throws IOException;
+	/** Deactivates the execution and cleans up.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 * @since 5.0.5
+	 * @see #startUpdate
+	 * @see #finishUpdate
+	 */
+	public void closeUpdate(Object ctx) throws IOException;
 
 	/** Executes the recovering.
 	 */

@@ -1,4 +1,4 @@
-/* Standalones.java
+/* Renders.java
 
 	Purpose:
 		
@@ -10,7 +10,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-package org.zkoss.zk.ui.http;
+package org.zkoss.zkplus.embed;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -40,42 +40,59 @@ import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.ui.http.Utils;
 
 /**
- * Utilities to make a component as a JSF, JSP, Zimlet or other compliant
- * standalone component.
- * Being a standalone component allows application developers to use a component
- * without knowing the existence of ZK. For example, ZK Spreadsheet for JSF
- * is a JSF component running in a JSF page.
+ * Utilities to embed ZK component(s) as a native JSF component, a JSP tag, Zimlet or others.
+ * It allows application developers to use the native element without knowing the existence of ZK.
+ * For example, ZK Spreadsheet for JSF is a native JSF component made in this way.
  *
- * <p>To use a standalone component, ZK Update Engine
+ * <p>To use an embedded component, ZK Update Engine
  * ({@link org.zkoss.zk.au.http.DHtmlUpdateServlet}) is still required,
- * while ZK Loader ({@link DHtmlLayoutServlet}) is not needed (though not hurt).
+ * while ZK Loader ({@link org.zkoss.zk.ui.http.DHtmlLayoutServlet}) is not needed (though not hurt).
  * If ZK Loader not installed, it assumes the update URI is "/zkau", which
  * can be overriden by setting a library property called
- * "org.zkoss.zk.ui.standalone.updateURI".
+ * "org.zkoss.zkplus.embed.updateURI".
  *
  * <p>Example:
 <pre><code>
 	Calendar cal = new Calendar();
-	Standalones.output(config.getServletContext(), request, response, cal, null, out);
+	Renders.render(config.getServletContext(), request, response, cal, null, out);
 </code></pre>
  *
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Integration/Embed_ZK_Component_in_Foreign_Framework">Embed ZK Component in Foreign Framework</a>.
+ *
  * @author tomyeh
- * @since 5.0.4
+ * @since 5.0.5
  */
-public class Standalones {
+public class Renders {
 	/** Outputs the HTML tags of the given component to the given writer.
 	 * @param comp the component to output (never null). It might have child components.
 	 * @param path the request path. If null, the servlet path is assumed.
 	 * @param out the output (never null).
+	 * @since 5.0.5
+	 */
+	public static final void render(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response,
+	Component comp, String path, Writer out)
+	throws ServletException, IOException {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		render(ctx, request, response, new EmbedRichlet(comp), path, out);
+	}
+	/** Outputs the HTML tags of the given component to the given writer.
+	 * @param path the request path. If null, the servlet path is assumed.
+	 * @param out the output (never null).
 	 * @param richlet the richlet to run. If you have only one component to show and no need
 	 * process it under an execution, you could use
-	 * {@link #output(ServletContext, HttpServletRequest, HttpServletResponse, Component, String, Writer)
+	 * {@link #render(ServletContext, HttpServletRequest, HttpServletResponse, Component, String, Writer)}
 	 * instead.
 	 * @since 5.0.5
 	 */
-	public static final void output(ServletContext ctx,
+	public static final void render(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
 	Richlet richlet, String path, Writer out)
 	throws ServletException, IOException {
@@ -84,12 +101,12 @@ public class Standalones {
 
 		WebManager webman = WebManager.getWebManagerIfAny(ctx);
 		if (webman == null) {
-			final String ATTR = "org.zkoss.zk.ui.standalone.updateURI";
+			final String ATTR = "org.zkoss.zkplus.embed.updateURI";
 			String updateURI = Library.getProperty(ATTR);
 			if (updateURI == null)
 				updateURI = "/zkau";
 			else
-				updateURI = Utils.fixUpdateURI(updateURI, ATTR);
+				updateURI = Utils.checkUpdateURI(updateURI, ATTR);
 			webman = new WebManager(ctx, updateURI);
 		}
 
@@ -126,23 +143,10 @@ public class Standalones {
 			}
 		}
 	}
-	/** Outputs the HTML tags of the given component to the given writer.
-	 * @param comp the component to output (never null). It might have child components.
-	 * @param path the request path. If null, the servlet path is assumed.
-	 * @param out the output (never null).
-	 */
-	public static final void output(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	Component comp, String path, Writer out)
-	throws ServletException, IOException {
-		if (comp == null)
-			throw new IllegalArgumentException();
-		output(ctx, request, response, new StandaloneRichlet(comp), path, out);
-	}
 	//Supporting classes//
-	private static class StandaloneRichlet extends GenericRichlet {
+	private static class EmbedRichlet extends GenericRichlet {
 		private final Component _comp;
-		private StandaloneRichlet(Component comp) {
+		private EmbedRichlet(Component comp) {
 			_comp = comp;
 		}
 		//@Override

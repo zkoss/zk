@@ -106,7 +106,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		if (_webman != null) {
 			log.info("Web Manager was created before ZK loader");
 		} else {
-			String updateURI = Utils.fixUpdateURI(
+			String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
 			_webman = new WebManager(_ctx, updateURI);
 			_webmanCreated = true;

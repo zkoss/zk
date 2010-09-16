@@ -31,7 +31,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.doneTime = zUtl.now();
 		}
 	}
-	function pushCmds(reqInf, req) {
+	function pushReqCmds(reqInf, req) {
 		var dt = reqInf.dt,
 			rt = req.responseText;
 		if (!rt) {
@@ -54,6 +54,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
 
+		pushCmds(cmds, rs);
+		return true;
+	}
+	function pushCmds(cmds, rs) {
 		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
 			var r = rs[j],
 				cmd = r[0],
@@ -68,7 +72,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		cmdsQue.push(cmds);
-		return true;
 	}
 	function doProcess(cmd, data) { //decoded
 		//1. process zAu.cmd1 (cmd1 has higher priority)
@@ -149,7 +152,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						ajaxReqResend(reqInf);
 						return;
 					}
-					if (pushCmds(reqInf, req)) { //valid response
+					if (pushReqCmds(reqInf, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++seqId > 9999) seqId = 1;
 						ajaxReqTries = 0;
@@ -573,6 +576,17 @@ zAu = {
 	 */
 	shallIgnoreESC: function () {
 		return ajaxReq;
+	},
+	/** Process the specified commands.
+	 * @param String dtid the desktop's ID
+	 * @param Array rs a list of responses
+	 * @since 5.0.5
+	 */
+	doCmds: function (dtid, rs) {
+		var cmds = [];
+		cmds.dt = zk.Desktop.$(dtid);
+		pushCmds(cmds, rs);
+		this._doCmds();
 	},
 	_doCmds: function () { //called by mount.js, too
 		for (var fn; fn = doCmdFns.shift();)

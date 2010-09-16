@@ -72,8 +72,7 @@ public class HttpAuWriter implements AuWriter{
 			//Bug 1907640: with Glassfish v1, we cannot change content type
 			//in another thread, so we have to do it here
 
-		_out = new JSONObject();
-		_out.put("rs", _rs = new JSONArray());
+		_out = AuWriters.getJSONOutput(_rs = new JSONArray());
 		return this;
 	}
 	public void close(Object request, Object response) throws IOException {
@@ -148,10 +147,7 @@ public class HttpAuWriter implements AuWriter{
 		_out.put("rid", new Integer(resId));
 	}
 	public void write(AuResponse response) throws IOException {
-		final JSONArray r = new JSONArray();
-		r.add(response.getCommand());
-		r.add(response.getEncodedData());
-		_rs.add(r);
+		_rs.add(AuWriters.toJSON(response));
 	}
 	public void write(Collection responses) throws IOException {
 		for (Iterator it = responses.iterator(); it.hasNext();)
