@@ -763,8 +763,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <p>Note: the performance of the size method of returned collection
 	 * is no good.
 	 */
-	public Collection getItems() {
-		return _treechildren != null ? _treechildren.getItems(): Collections.EMPTY_LIST;
+	public Collection<Treeitem> getItems() {
+		if (_treechildren != null)
+			return _treechildren.getItems();
+		return Collections.emptyList();
 	}
 	/** Returns the number of child {@link Treeitem}.
 	 * The same as {@link #getItems}.size().

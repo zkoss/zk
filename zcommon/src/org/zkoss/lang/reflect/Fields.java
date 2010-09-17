@@ -148,9 +148,8 @@ public class Fields {
 			}
 			if (acs instanceof Method) {
 				final Method mtd = (Method)acs;
-				mtd.invoke(obj, new Object[] {
-					autoCoerce ?
-						Classes.coerce(mtd.getParameterTypes()[0], val): val});
+				mtd.invoke(obj,
+					autoCoerce ? Classes.coerce(mtd.getParameterTypes()[0], val): val);
 			} else {
 				final Field fld = (Field)acs;
 				fld.set(obj,

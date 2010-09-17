@@ -19,6 +19,7 @@ package org.zkoss.zk.au;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.json.*;
 import org.zkoss.idom.Verifier;
 
 import org.zkoss.zk.ui.UiException;
@@ -64,6 +65,31 @@ public class AuWriters {
 			}
 		}
 		return new HttpAuWriter();
+	}
+
+	/** Returns a JSON object representing the output that will be sent
+	 * to the client.
+	 * <p>You could add the responses to the given array by invoking
+	 * {@link #toJSON}.
+	 *
+	 * @param rs the array to hold the responses.
+	 * To output a response, invoke {@link #toJSON} as follows:
+	 * <code>rs.add(AuWriters.toJSON(response))</code>.
+	 * @since 5.0.5
+	 */
+	public static JSONObject getJSONOutput(JSONArray rs) {
+		final JSONObject out = new JSONObject();
+		out.put("rs", rs);
+		return out;
+	}
+	/** Converts a response to a JSON object.
+	 *@since 5.0.5
+	 */
+	public static JSONArray toJSON(AuResponse response) {
+		final JSONArray r = new JSONArray();
+		r.add(response.getCommand());
+		r.add(response.getEncodedData());
+		return r;
 	}
 
 	/** The content type of the output.

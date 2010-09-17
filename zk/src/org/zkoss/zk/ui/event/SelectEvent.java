@@ -35,8 +35,8 @@ import org.zkoss.zk.au.AuRequests;
  * 
  * @author tomyeh
  */
-public class SelectEvent extends Event {
-	private final Set _selectedItems;
+public class SelectEvent<T extends Component> extends Event {
+	private final Set<T> _selectedItems;
 	private final Component _ref;
 	private final int _keys;
 
@@ -56,27 +56,27 @@ public class SelectEvent extends Event {
 	/** Converts an AU request to a select event.
 	 * @since 5.0.0
 	 */
-	public static final SelectEvent getSelectEvent(AuRequest request) {
+	public static final <C extends Component> SelectEvent<C> getSelectEvent(AuRequest request) {
 		final Map data = request.getData();
 		final Desktop desktop = request.getDesktop();
-		final List<String> items = cast((List)data.get("items"));
-		return new SelectEvent(request.getCommand(), request.getComponent(),
-			AuRequests.convertToItems(desktop, items),
-			desktop.getComponentByUuidIfAny((String)data.get("reference")),
+		final List<String> sitems = cast((List)data.get("items"));
+		final Set<C> items = AuRequests.convertToItems(desktop, sitems);
+		return new SelectEvent<C>(request.getCommand(), request.getComponent(),
+			items, desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			AuRequests.parseKeys(data));
 	}
 
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
-	public SelectEvent(String name, Component target, Set selectedItems) {
+	public SelectEvent(String name, Component target, Set<T> selectedItems) {
 		this(name, target, selectedItems, null, 0);
 	}
 
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
-	public SelectEvent(String name, Component target, Set selectedItems,
+	public SelectEvent(String name, Component target, Set<T> selectedItems,
 	Component ref) {
 		this(name, target, selectedItems, ref, 0);
 	}
@@ -86,17 +86,20 @@ public class SelectEvent extends Event {
 	 * and {@link #ALT_KEY}.
 	 * @since 3.6.0
 	 */
-	public SelectEvent(String name, Component target, Set selectedItems,
+	public SelectEvent(String name, Component target, Set<T> selectedItems,
 	Component ref, int keys) {
 		super(name, target);
-		_selectedItems = selectedItems != null ?
-			selectedItems: Collections.EMPTY_SET;
+
+		if (selectedItems != null)
+			_selectedItems = selectedItems;
+		else
+			_selectedItems = Collections.emptySet();
 		_ref = ref;
 		_keys = keys;
 	}
 	/** Returns the selected items (never null).
 	 */
-	public final Set getSelectedItems() {
+	public final Set<T> getSelectedItems() {
 		return _selectedItems;
 	}
 

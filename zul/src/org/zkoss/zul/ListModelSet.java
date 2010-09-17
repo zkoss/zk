@@ -39,9 +39,9 @@ import java.util.Collections;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelSet extends AbstractListModel
-implements ListModelExt, Set, java.io.Serializable {
-	protected Set _set;
+public class ListModelSet<E> extends AbstractListModel<E>
+implements ListModelExt<E>, Set<E>, java.io.Serializable {
+	protected Set<E> _set;
 
 	/**
 	 * Constructor
@@ -60,31 +60,31 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
-	public ListModelSet(Set set, boolean live) {
-		_set = live ? set: new LinkedHashSet(set);
+	public ListModelSet(Set<E> set, boolean live) {
+		_set = live ? set: new LinkedHashSet<E>(set);
 	}
 	
 	/**
 	 * Constructor.
 	 */
 	public ListModelSet() {
-		_set = new LinkedHashSet();
+		_set = new LinkedHashSet<E>();
 	}
 
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified collection (i.e., not live).
 	 */
-	public ListModelSet(Collection c) {
-		_set = new LinkedHashSet(c);
+	public ListModelSet(Collection<? extends E> c) {
+		_set = new LinkedHashSet<E>(c);
 	}
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified array (i.e., not live).
 	 * @since 2.4.1
 	 */
-	public ListModelSet(Object[] array) {
-		_set = new LinkedHashSet(array.length);
+	public ListModelSet(E[] array) {
+		_set = new LinkedHashSet<E>(array.length);
 		for (int j = 0; j < array.length; ++j)
 			_set.add(array[j]);
 	}
@@ -94,7 +94,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * @param initialCapacity the initial capacity for this ListModelSet.
 	 */
 	public ListModelSet(int initialCapacity) {
-		_set = new LinkedHashSet(initialCapacity);
+		_set = new LinkedHashSet<E>(initialCapacity);
 	}
 
 	/**
@@ -103,13 +103,13 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * @param loadFactor the loadFactor to increase capacity of this ListModelMap.
 	 */
 	public ListModelSet(int initialCapacity, float loadFactor) {
-		_set = new LinkedHashSet(initialCapacity, loadFactor);
+		_set = new LinkedHashSet<E>(initialCapacity, loadFactor);
 	}
 
 	/**
 	 * Get the inner real set.
 	 */	
-	public Set getInnerSet() {
+	public Set<E> getInnerSet() {
 		return _set;
 	}
 	
@@ -118,12 +118,12 @@ implements ListModelExt, Set, java.io.Serializable {
 		return _set.size();
 	}
 	
-	public Object getElementAt(int j) {
+	public E getElementAt(int j) {
 		if (j < 0 || j >= _set.size())
 			throw new IndexOutOfBoundsException(""+j);
 
-		for (Iterator it = _set.iterator();;) {
-			final Object o = it.next();
+		for (Iterator<E> it = _set.iterator();;) {
+			final E o = it.next();
 			if (--j < 0)
 				return o;
 		}
@@ -134,7 +134,7 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * This implementation optimized on the LinkedHashSet(which guaratee the sequence of the added item). 
 	 * Other implementation needs one more linier search.
 	 */
- 	public boolean add(Object o) {
+ 	public boolean add(E o) {
  		if (!_set.contains(o)) {
 			boolean ret = _set.add(o);
 			//After add, the position can change if not LinkedHashSet
@@ -162,12 +162,12 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * guaratee the sequence of the added item). 
 	 * Other implementation needs one more linier search.
 	 */
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends E> c) {
 		if (_set instanceof LinkedHashSet) {
 			int begin = _set.size();
 			int added = 0;
-			for(final Iterator it = c.iterator(); it.hasNext();) {
-				Object o = it.next();
+			for(final Iterator<? extends E> it = c.iterator(); it.hasNext();) {
+				E o = it.next();
 				if (_set.contains(o)) {
 					continue;
 				}
@@ -220,14 +220,14 @@ implements ListModelExt, Set, java.io.Serializable {
 		return _set.toString();
 	}
     
-	public Iterator iterator() {
-		return new Iterator() {
-			private Iterator _it = _set.iterator();
-			private Object _current = null;
+	public Iterator<E> iterator() {
+		return new Iterator<E>() {
+			private Iterator<E> _it = _set.iterator();
+			private E _current = null;
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
-			public Object next() {
+			public E next() {
 				_current = _it.next();
 				return _current;
 			}
@@ -273,7 +273,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		return -1;
 	}
 	
-	public boolean removeAll(Collection c) {
+	public boolean removeAll(Collection<?> c) {
 		if (_set == c || this == c) { //special case
 			clear();
 			return true;
@@ -291,7 +291,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		}
 	}
 
-	public boolean retainAll(Collection c) {
+	public boolean retainAll(Collection<?> c) {
 		if (_set == c || this == c) { //special case
 			return false;
 		}
@@ -308,7 +308,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		}
 	}
 	
-	private boolean removePartial(Collection c, boolean isRemove) {
+	private boolean removePartial(Collection<?> c, boolean isRemove) {
 		int sz = c.size();
 		int removed = 0;
 		int retained = 0;
@@ -348,7 +348,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		return _set.toArray();
 	}
 
-	public Object[] toArray(Object[] a) {
+	public <T> T[] toArray(T[] a) {
 		return _set.toArray(a);
 	}
 
@@ -359,8 +359,8 @@ implements ListModelExt, Set, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
-		final List copy = new ArrayList(_set);
+	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		final List<E> copy = new ArrayList<E>(_set);
 		Collections.sort(copy, cmpr);
 		_set.clear();
 		_set.addAll(copy);

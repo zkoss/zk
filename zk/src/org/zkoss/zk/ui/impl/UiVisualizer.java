@@ -641,7 +641,7 @@ import org.zkoss.zk.au.out.*;
 		if (_responses != null) {
 			for (ResponseInfo ri: _responses.values()) {
 				tvals.addAll(ri.keyless);
-				ri.keyless.clear();
+				tvals.addAll(ri.values.values());
 			}
 		}
 		if (!tvals.isEmpty()) {

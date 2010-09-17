@@ -33,8 +33,8 @@ import org.zkoss.zul.event.GroupsDataListener;
  * @author tomyeh
  * @since 3.5.0
  */
-abstract public class AbstractGroupsModel implements GroupsModel {
-	private transient List _listeners = new LinkedList();
+abstract public class AbstractGroupsModel<D, G, F> implements GroupsModel<D, G, F> {
+	private transient List<GroupsDataListener> _listeners = new LinkedList<GroupsDataListener>();
 
 	/** Fires a {@link GroupsDataEvent} for all registered listener
 	 * (thru {@link #addGroupsDataListener}.
@@ -44,8 +44,8 @@ abstract public class AbstractGroupsModel implements GroupsModel {
 	protected void fireEvent(int type, int groupIndex, int index0, int index1) {
 		final GroupsDataEvent evt =
 			new GroupsDataEvent(this, type, groupIndex, index0, index1);
-		for (Iterator it = _listeners.iterator(); it.hasNext();)
-			((GroupsDataListener)it.next()).onChange(evt);
+		for (GroupsDataListener l: _listeners)
+			l.onChange(evt);
 	}
 
 	//-- GroupsModel --//
@@ -69,7 +69,7 @@ abstract public class AbstractGroupsModel implements GroupsModel {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_listeners = new LinkedList();
+		_listeners = new LinkedList<GroupsDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
 }

@@ -98,10 +98,10 @@ public interface Applet extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/** Sets a map of parameters (all existent parameters are removed first).
 	 */
-	public void setParams(Map params);
+	public void setParams(Map<String, String> params);
 	/** Returns a map of parameters (never null).
 	 */
-	public Map getParams();
+	public Map<String, String> getParams();
 	/** Sets a parameter.
 	 * If the value is null, the parameter is removed.
 	 */

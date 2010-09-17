@@ -417,7 +417,7 @@ implements SerializableAware, HierachicalAware {
 								NameSpace.class.getDeclaredMethod("getVariableImpl",
 									new Class[] {String.class, Boolean.TYPE});
 							m.setAccessible(true);
-							var = (Variable)m.invoke(parent, new Object[] {name, Boolean.TRUE});
+							var = (Variable)m.invoke(parent, name, Boolean.TRUE);
 						} catch (Exception ex) {
 							throw UiException.Aide.wrap(ex);
 						}
@@ -752,7 +752,7 @@ implements SerializableAware, HierachicalAware {
 		public Class getReturnType() {
 			return _method.getReturnType();
 		}
-		public Object invoke(Object obj, Object[] args) throws Exception {
+		public Object invoke(Object obj, Object... args) throws Exception {
 			return _method.invoke(args != null ? args: new Object[0], _ip);
 		}
 		public java.lang.reflect.Method toMethod() {

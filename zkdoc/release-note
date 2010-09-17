@@ -32,8 +32,9 @@ ZK 6.0.0
 	--------
 ZK 5.0.5
 * Features
-  3061676: Autodrop menubar shall be closed automatically when move out
+  3067232: A way to access components in 3rd framework (e.g. JSF 2)
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
+  3061676: Autodrop menubar shall be closed automatically when move out
 
 * Bugs
   3057902: zk bug for window showbusy
@@ -42,6 +43,8 @@ ZK 5.0.5
   3064997: Listen onPiggyback event threw NoSuchElementException
 
 * Upgrade Notes
+  + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
+    (such that the naming is consistent with ListModel's implementations)
 
 	--------
 ZK 5.0.4

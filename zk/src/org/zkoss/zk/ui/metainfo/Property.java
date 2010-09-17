@@ -285,7 +285,7 @@ implements Condition, java.io.Serializable {
 				}
 			}
 		}
-		m.invoke(comp, new Object[] {val});
+		m.invoke(comp, val);
 	}
 	private static Method findExact(final Method[] mtds, final Object val) {
 		if (val != null) {
@@ -392,7 +392,7 @@ implements Condition, java.io.Serializable {
 		if (mtd != null) {
 			try {
 				Object val = Classes.coerce(mtd.getParameterTypes()[0], value);
-				mtd.invoke(comp, new Object[] {val});
+				mtd.invoke(comp, val);
 			} catch (Exception ex) {
 				log.error("Failed to assign "+value+" to "+comp+"\n"+Exceptions.getMessage(ex));
 				throw UiException.Aide.wrap(ex);

@@ -43,9 +43,9 @@ import java.lang.reflect.Method;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelMap extends AbstractListModel
-implements ListModelExt, Map, java.io.Serializable {
-	protected Map _map; //(key, value)
+public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
+implements ListModelExt<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
+	protected Map<K, V> _map;
 	
 	/**
 	 * Constructor.
@@ -64,23 +64,23 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
-	public ListModelMap(Map map, boolean live) {
-		_map = live ? map: new LinkedHashMap(map);
+	public ListModelMap(Map<K, V> map, boolean live) {
+		_map = live ? map: new LinkedHashMap<K, V>(map);
 	}
 	
 	/**
 	 * Constructor.
 	 */
 	public ListModelMap() {
-		_map = new LinkedHashMap();
+		_map = new LinkedHashMap<K, V>();
 	}
 	
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified map (i.e., not live).
 	 */
-	public ListModelMap(Map map) {
-		_map = new LinkedHashMap(map);
+	public ListModelMap(Map<? extends K, ? extends V> map) {
+		_map = new LinkedHashMap<K, V>(map);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * @param initialCapacity the initial capacity for this ListModelMap.
 	 */
 	public ListModelMap(int initialCapacity) {
-		_map = new LinkedHashMap(initialCapacity);
+		_map = new LinkedHashMap<K, V>(initialCapacity);
 	}
 	
 	/**
@@ -97,13 +97,13 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * @param loadFactor the loadFactor to increase capacity of this ListModelMap.
 	 */
 	public ListModelMap(int initialCapacity, float loadFactor) {
-		_map = new LinkedHashMap(initialCapacity, loadFactor);
+		_map = new LinkedHashMap<K, V>(initialCapacity, loadFactor);
 	}
 
 	/**
 	 * Get the inner real Map.
 	 */	
-	public Map getInnerMap() {
+	public Map<K, V> getInnerMap() {
 		return _map;
 	}
 	
@@ -114,12 +114,12 @@ implements ListModelExt, Map, java.io.Serializable {
 	/**
 	 * Returns the entry (Map.Entry) at the specified index.
 	 */
-	public Object getElementAt(int j) {
+	public Map.Entry<K, V> getElementAt(int j) {
 		if (j < 0 || j >= _map.size())
 			throw new IndexOutOfBoundsException(""+j);
 
-		for (Iterator it = _map.entrySet().iterator();;) {
-			final Object o = it.next();
+		for (Iterator<Map.Entry<K, V>> it = _map.entrySet().iterator();;) {
+			final Map.Entry<K, V> o = it.next();
 			if (--j < 0)
 				return o;
 		}
@@ -144,8 +144,8 @@ implements ListModelExt, Map, java.io.Serializable {
 		return _map.containsValue(value);
 	}
 	
-	public Set entrySet() {
-		return new MyEntrySet(_map.entrySet());
+	public Set<Map.Entry<K, V>> entrySet() {
+		return new Entries(_map.entrySet());
 	}
     
 	public boolean equals(Object o) {
@@ -155,7 +155,7 @@ implements ListModelExt, Map, java.io.Serializable {
 		return _map.toString();
 	}
 	
-	public Object get(Object key){
+	public V get(Object key){
 		return _map.get(key);
 	}
 
@@ -166,13 +166,13 @@ implements ListModelExt, Map, java.io.Serializable {
 	public boolean isEmpty() {
 		return _map.isEmpty();
 	}
-    
-	public Set keySet() {
-		return new MyKeySet(_map.keySet());
+
+	public Set<K> keySet() {
+		return new Keys(_map.keySet());
 	}
 
-	public Object put(Object key, Object o) {
-		final Object ret;
+	public V put(K key, V o) {
+		final V ret;
 		if (_map.containsKey(key)) {
 			if (Objects.equals(o, _map.get(key))) {
 				return o; //nothing changed
@@ -227,33 +227,28 @@ implements ListModelExt, Map, java.io.Serializable {
 		return -1;
 	}
 
-	public void putAll(Map c) {
+	public void putAll(Map<? extends K, ? extends V> c) {
+		if (c == _map) //special case
+			return;
+
 		if (_map instanceof LinkedHashMap) {
 			int sz = c.size();
 			if (sz <= 0) {
 				return;
 			}
-			if (c == _map) { //special case
-				return;
-			}
 			
-			List added = new ArrayList(c.size());
-			for(Iterator it = c.entrySet().iterator(); it.hasNext();) {
-				final Entry entry = (Entry) it.next();
-				Object key = entry.getKey();
-				Object val = entry.getValue();
+			List<Map.Entry<? extends K, ? extends V>> added = new ArrayList<Map.Entry<? extends K, ? extends V>>(c.size());
+			for(Map.Entry<? extends K, ? extends V> me: c.entrySet()) {
+				K key = me.getKey();
 				if (_map.containsKey(key)) {
-					put(key, val);
+					put(key, me.getValue());
 				} else {
-					added.add(entry);
+					added.add(me);
 				}
 			}
 			
-			for(Iterator it = added.iterator(); it.hasNext();) {
-				final Entry entry = (Entry) it.next();
-				Object key = entry.getKey();
-				Object val = entry.getValue();
-				_map.put(key, val);
+			for(Map.Entry<? extends K, ? extends V> me: added) {
+				_map.put(me.getKey(), me.getValue());
 			}
 
 			int len = added.size();
@@ -267,10 +262,10 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 	}
 
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		if (_map.containsKey(key)) {
 			//bug #1819318 Problem while using SortedSet with Databinding
-			Object ret = null;
+			V ret = null;
 			removeSelectionByKey(key);
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				int index = indexOfKey(key);
@@ -284,13 +279,20 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 		return null;
 	}
-	
+
 	private void removeSelectionByKey(Object key) {
-		for(final Iterator it = getSelection().iterator(); it.hasNext();) {
-			final Map.Entry entry = (Map.Entry) it.next();
-			if (key.equals(entry.getKey())) {
+		for(Map.Entry<K, V> entry: getSelection()) {
+			if (Objects.equals(key, entry.getKey())) {
 				removeSelection(entry);
-				break;
+				return;
+			}
+		}
+	}
+	private void removeSelectionByValue(Object value) {
+		for(Map.Entry<K, V> entry: getSelection()) {
+			if (Objects.equals(value, entry.getValue())) {
+				removeSelection(entry);
+				return;
 			}
 		}
 	}
@@ -299,8 +301,8 @@ implements ListModelExt, Map, java.io.Serializable {
 		return _map.size();
 	}
 	
-	public Collection values() {
-		return new MyCollection(_map.values());
+	public Collection<V> values() {
+		return new Values(_map.values());
 	}
 
 	//-- ListModelExt --//
@@ -310,24 +312,23 @@ implements ListModelExt, Map, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
-		final List copy = new ArrayList(_map.entrySet());
+	public void sort(Comparator<Map.Entry<K, V>> cmpr, final boolean ascending) {
+		final List<Map.Entry<K, V>> copy = new ArrayList<Map.Entry<K, V>>(_map.entrySet());
 		Collections.sort(copy, cmpr);
 		_map.clear();
-		for(Iterator it = copy.iterator(); it.hasNext();) {
-			Entry entry = (Entry) it.next();
-			_map.put(entry.getKey(), entry.getValue());
+		for(Map.Entry<K, V> me: copy) {
+			_map.put(me.getKey(), me.getValue());
 		}
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 
-	private boolean removePartial(Collection master, Collection c, boolean isRemove) {
+	private boolean removePartial(Collection<?> master, Collection<?> c, boolean isRemove, boolean byKey, boolean byValue) {
 		int sz = c.size();
 		int removed = 0;
 		int retained = 0;
 		int index = 0;
 		int begin = -1;
-		for(final Iterator it = master.iterator(); 
+		for(final Iterator<?> it = master.iterator(); 
 			it.hasNext() && (!isRemove || removed < sz) && (isRemove || retained < sz); ++index) {
 			Object item = it.next();
 			if (c.contains(item) == isRemove) {
@@ -335,7 +336,9 @@ implements ListModelExt, Map, java.io.Serializable {
 					begin = index;
 				}
 				++removed;
-				removeSelection(item);
+				if (byKey) removeSelectionByKey(item);
+				else if (byValue) removeSelectionByValue(item);
+				else removeSelection(item);
 				it.remove();
 			} else {
 				++retained;
@@ -353,12 +356,12 @@ implements ListModelExt, Map, java.io.Serializable {
 		return removed > 0;
 	}
 	
-	private class MyIterator implements Iterator {
-		private Iterator _it;
-		private Object _current;
+	private class MyIterator<E> implements Iterator<E> {
+		private Iterator<E> _it;
+		private E _current;
 		private int _index = -1;
 		
-		public MyIterator(Iterator inner) {
+		public MyIterator(Iterator<E> inner) {
 			_it = inner;
 			_index = -1;
 		}
@@ -367,7 +370,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			return _it.hasNext();
 		}
 		
-		public Object next() {
+		public E next() {
 			++_index;
 			_current = _it.next(); 
 			return _current;
@@ -388,12 +391,12 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 	}
 
-	/** Represents the key set.
-	 */
-	private class MyKeySet implements Set {
-		private final Set _set;
-		public MyKeySet(Set inner) {
+	private abstract class MySet<E> implements Set<E> {
+		private final Set<E> _set;
+		private final boolean _keyset;
+		public MySet(Set<E> inner, boolean keyset) {
 			_set = inner;
+			_keyset = keyset;
 		}
 		
 		public void clear() {
@@ -422,11 +425,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 			return ret;
 		}
-		protected int indexOf(Object o) {
-			return indexOfKey(o);
-		}
+		abstract protected int indexOf(Object o);
 		
-		public boolean removeAll(Collection c) {
+		public boolean removeAll(Collection<?> c) {
 			if (_set == c || this == c) { //special case
 				clear();
 				return true;
@@ -434,7 +435,7 @@ implements ListModelExt, Map, java.io.Serializable {
 
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_set, c, true);
+				return removePartial(_set, c, true, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
 				removeAllSelection(c);
 				final boolean ret = _set.removeAll(c);
@@ -445,13 +446,13 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 		}
 	
-		public boolean retainAll(Collection c) {
+		public boolean retainAll(Collection<?> c) {
 			if (_set == c || this == c) { //special case
 				return false;
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_set, c, false);
+				return removePartial(_set, c, false, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
 				retainAllSelection(c);
 				final boolean ret = _set.retainAll(c);
@@ -462,15 +463,15 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 		}
 		
-		public Iterator iterator() {
-			return new MyIterator(_set.iterator());
+		public Iterator<E> iterator() {
+			return new MyIterator<E>(_set.iterator());
 		}
 
-		public boolean add(Object o) {
+		public boolean add(E o) {
 			throw new UnsupportedOperationException("add()");
 		}
 		
-		public boolean addAll(Collection col) {
+		public boolean addAll(Collection<? extends E> col) {
 			throw new UnsupportedOperationException("addAll()");
 		}
 
@@ -478,27 +479,26 @@ implements ListModelExt, Map, java.io.Serializable {
 			return _set == null ? false : _set.contains(o);
 		}
 		
-		public boolean containsAll(Collection c) {
+		public boolean containsAll(Collection<?> c) {
 			return _set == null ? false : _set.containsAll(c);
 		}
 		
+
 		public boolean equals(Object o) {
-			if (this == o) {
+			if (this == o)
 				return true;
-			}
-			if (o instanceof MyKeySet) {
-				return Objects.equals(((MyKeySet)o)._set, _set);
+			if (o instanceof MySet) {
+				return Objects.equals(((MySet)o)._set, _set);
 			} else {
 				return Objects.equals(_set, o);
 			}
 		}
-		
 		public int hashCode(){
-			return _set == null ? 0 : _set.hashCode();
+			return Objects.hashCode(_set);
 		}
-		
+
 		public boolean isEmpty() {
-			return _set == null ? true : _set.isEmpty();
+			return _set == null || _set.isEmpty();
 		}
 
 		public int size() {
@@ -509,39 +509,109 @@ implements ListModelExt, Map, java.io.Serializable {
 			return _set == null ? new Object[0] : _set.toArray();
 		}
 		
-		public Object[] toArray(Object[] a) {
+		public <T> T[] toArray(T[] a) {
 			return _set == null ? a : _set.toArray(a);
 		}
 	}
-	private class MyEntrySet extends MyKeySet {
-		private MyEntrySet(Set inner) {
-			super(inner);
+
+	/** Represents the key set.
+	 */
+	private class Keys extends MySet<K> {
+		public Keys(Set<K> inner) {
+			super(inner, true);
+		}
+		
+		protected int indexOf(Object o) {
+			return indexOfKey(o);
+		}
+	}
+	private class Entries extends MySet<Map.Entry<K, V>> {
+		private Entries(Set<Map.Entry<K, V>> inner) {
+			super(inner, false);
 		}
 		protected int indexOf(Object o) {
 			return indexOf(o);
 		}
 	}
 
-	private class MyCollection implements Collection {
-		private Collection _inner;
+	private abstract class MyCol<E> implements Collection<E> {
+		protected Collection<E> _col;
 		
-		public MyCollection(Collection inner) {
-			_inner = inner;
+		public MyCol(Collection<E> col) {
+			_col = col;
+		}
+
+		public Iterator<E> iterator() {
+			return new MyIterator<E>(_col.iterator());
+		}
+
+		public boolean add(E o) {
+			throw new UnsupportedOperationException("add()");
+		}
+		
+		public boolean addAll(Collection<? extends E> col) {
+			throw new UnsupportedOperationException("addAll()");
+		}
+
+		public boolean contains(Object o) {
+			return _col == null ? false : _col.contains(o);
+		}
+		
+		public boolean containsAll(Collection<?> c) {
+			return _col == null ? false : _col.containsAll(c);
+		}
+		
+		public int hashCode(){
+			return _col == null ? 0 : _col.hashCode();
+		}
+		
+		public boolean equals(Object o) {
+			if (this == o) {
+				return true;
+			}
+			if (o instanceof MyCol) {
+				return Objects.equals(((MyCol)o)._col, _col);
+			} else {
+				return Objects.equals(_col, o);
+			}
+		}
+
+		public boolean isEmpty() {
+			return _col == null ? true : _col.isEmpty();
+		}
+
+		public int size() {
+			return _col == null ? 0 : _col.size();
+		}
+		
+		public Object[] toArray() {
+			return _col == null ? new Object[0] : _col.toArray();
+		}
+		
+		public <T> T[] toArray(T[] a) {
+			return _col == null ? a : _col.toArray(a);
+		}
+	}
+	private class Values extends MyCol<V> {
+		private Collection<V> _col;
+		
+		public Values(Collection<V> col) {
+			super(col);
 		}
 
 		public void clear() {
-			int i2 = _inner.size() - 1;
+			int i2 = _col.size() - 1;
 			if (i2 < 0) {
 				return;
 			}
 			clearSelection();
-			_inner.clear();
+			_col.clear();
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 		}
 		
 		private int indexOfAndRemove(Object o) {
 			int j = 0;
-			for(Iterator it = _inner.iterator(); it.hasNext();++j) {
+			for(Iterator it = _col.iterator(); it.hasNext();++j) {
 				final Object val = it.next();
 				if (Objects.equals(val, o)) {
 					removeSelection(o);
@@ -563,7 +633,7 @@ implements ListModelExt, Map, java.io.Serializable {
 				return true;
 			} else {
 				removeSelection(o);
-				final boolean ret = _inner.remove(o);
+				final boolean ret = _col.remove(o);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 				}
@@ -571,18 +641,18 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 		}
 
-		public boolean removeAll(Collection c) {
-			if (_inner == c || this == c) { //special case
+		public boolean removeAll(Collection<?> c) {
+			if (_col == c || this == c) { //special case
 				clearSelection();
 				clear();
 				return true;
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_inner, c, true);
+				return removePartial(_col, c, true, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
 				removeAllSelection(c);
-				final boolean ret = _inner.removeAll(c);
+				final boolean ret = _col.removeAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 				}
@@ -590,72 +660,21 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 		}
 		
-		public boolean retainAll(Collection c) {
-			if (_inner == c || this == c) { //special case
+		public boolean retainAll(Collection<?> c) {
+			if (_col == c || this == c) { //special case
 				return false;
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_inner, c, false);
+				return removePartial(_col, c, false, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
 				retainAllSelection(c);
-				final boolean ret = _inner.retainAll(c);
+				final boolean ret = _col.retainAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 				}
 				return ret;
 			}
-		}
-		
-		public Iterator iterator() {
-			return new MyIterator(_inner.iterator());
-		}
-
-		public boolean add(Object o) {
-			throw new UnsupportedOperationException("add()");
-		}
-		
-		public boolean addAll(Collection col) {
-			throw new UnsupportedOperationException("addAll()");
-		}
-
-		public boolean contains(Object o) {
-			return _inner == null ? false : _inner.contains(o);
-		}
-		
-		public boolean containsAll(Collection c) {
-			return _inner == null ? false : _inner.containsAll(c);
-		}
-		
-		public boolean equals(Object o) {
-			if (this == o) {
-				return true;
-			}
-			if (o instanceof MyCollection) {
-				return Objects.equals(((MyCollection)o)._inner, _inner);
-			} else {
-				return Objects.equals(_inner, o);
-			}
-		}
-		
-		public int hashCode(){
-			return _inner == null ? 0 : _inner.hashCode();
-		}
-		
-		public boolean isEmpty() {
-			return _inner == null ? true : _inner.isEmpty();
-		}
-
-		public int size() {
-			return _inner == null ? 0 : _inner.size();
-		}
-		
-		public Object[] toArray() {
-			return _inner == null ? new Object[0] : _inner.toArray();
-		}
-		
-		public Object[] toArray(Object[] a) {
-			return _inner == null ? a : _inner.toArray(a);
 		}
 	}
 }

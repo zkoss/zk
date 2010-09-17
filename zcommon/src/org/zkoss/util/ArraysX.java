@@ -358,15 +358,6 @@ public class ArraysX {
 	public static final <T> T[] resize(T[] ary, int size) {
 		return (T[])resize((Object)ary, size);
 	}
-	/**
-	 * Instantiates an array of the given type and size.
-	 * It is the same as <code>new T[size]</code> (but Java doesn't allow).
-	 * @since (not public yet)
-	 */
-//	@SuppressWarnings("unchecked")
-//	public static final <T> T[] newInstance(Class<T> c, int size) {
-//		return (T[])Array.newInstance(c, size);
-//	}
 
 	/** Clones an array.
 	 */
@@ -376,4 +367,19 @@ public class ArraysX {
 		System.arraycopy(ary, 0, dst, 0, size);
 		return dst;
 	}
+	/** Clones an array.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] clone(T[] ary) {
+		return (T[])clone((Object)ary);
+	}
+
+//meaningless to provide this method since the caller's casting to Class<T> causes
+//an warning. But, if we use Class<?>, a compiler error is generated (T cannot be
+//determined...)
+//	@SuppressWarnings("unchecked")
+//	public static final <T> T[] newInstance(Class<T> cls, int size) {
+//		return (T[])Array.newInstance(cls, size);
+//	}
 }

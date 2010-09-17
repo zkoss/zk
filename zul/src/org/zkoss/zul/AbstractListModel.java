@@ -37,10 +37,10 @@ import org.zkoss.zul.ext.Selectable;
  *
  * @author tomyeh
  */
-abstract public class AbstractListModel
-implements ListModel, Selectable, java.io.Serializable {
-	private transient List _listeners = new LinkedList();
-	private Set _selection = new HashSet();
+abstract public class AbstractListModel<E>
+implements ListModel<E>, Selectable<E>, java.io.Serializable {
+	private transient List<ListDataListener> _listeners = new LinkedList<ListDataListener>();
+	private Set<E> _selection = new HashSet<E>();
 	
 	/** Fires a {@link ListDataEvent} for all registered listener
 	 * (thru {@link #addListDataListener}.
@@ -49,8 +49,8 @@ implements ListModel, Selectable, java.io.Serializable {
 	 */
 	protected void fireEvent(int type, int index0, int index1) {
 		final ListDataEvent evt = new ListDataEvent(this, type, index0, index1);
-		for (Iterator it = _listeners.iterator(); it.hasNext();)
-			((ListDataListener)it.next()).onChange(evt);
+		for (ListDataListener l: _listeners)
+			l.onChange(evt);
 	}
 
 	//-- ListModel --//
@@ -64,11 +64,11 @@ implements ListModel, Selectable, java.io.Serializable {
 	}
 
 	//Selectable
-	public Set getSelection() {
+	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
 	
-	public void addSelection(Object obj) {
+	public void addSelection(E obj) {
 		_selection.add(obj);
 	}
 	
@@ -80,11 +80,11 @@ implements ListModel, Selectable, java.io.Serializable {
 		_selection.clear();
 	}
 	
-	protected void removeAllSelection(Collection c) {
+	protected void removeAllSelection(Collection<?> c) {
 		_selection.removeAll(c);
 	}
 	
-	protected void retainAllSelection(Collection c) {
+	protected void retainAllSelection(Collection<?> c) {
 		_selection.retainAll(c);
 	}
 	
@@ -99,7 +99,7 @@ implements ListModel, Selectable, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_listeners = new LinkedList();
+		_listeners = new LinkedList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
 }

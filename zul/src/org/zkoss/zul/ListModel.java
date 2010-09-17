@@ -36,10 +36,10 @@ import org.zkoss.zul.ext.Selectable;
  * @see ListModelExt
  * @see Selectable
  */
-public interface ListModel {
+public interface ListModel<E> {
 	/** Returns the value at the specified index.
 	 */
-	public Object getElementAt(int index);
+	public E getElementAt(int index);
 	/** Returns the length of the list.
 	 */
 	public int getSize();

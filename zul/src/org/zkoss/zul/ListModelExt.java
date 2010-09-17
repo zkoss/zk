@@ -24,7 +24,7 @@ import java.util.Comparator;
  *
  * @author tomyeh
  */
-public interface ListModelExt {
+public interface ListModelExt<T> {
 	/** It called when {@link Listbox} or {@link Grid} has to sort
 	 * the content.
 	 *
@@ -46,5 +46,5 @@ public interface ListModelExt {
 	 * @param ascending whether to sort in the ascending order (or in
 	 * the descending order)
 	 */
-	public void sort(Comparator cmpr, boolean ascending);
+	public void sort(Comparator<T> cmpr, boolean ascending);
 }

@@ -15,6 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
+import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Collections;
@@ -282,36 +283,60 @@ public class CollectionsX {
 
 	/**
 	 * Returns the specified range of the specified collection into a new array.
-     * The initial index of the range (<tt>from</tt>) must lie between zero
-     * and <tt>col.size</tt>, inclusive. 
-     * The final index of the range (<tt>to</tt>), which must be greater than or
-     * equal to <tt>from</tt>.
-     * <p>The returned array will be "safe" in that no references to it are
-     * maintained by this list.  (In other words, this method must allocate
-     * a new array).  The caller is thus free to modify the returned array.
-     *
-     * <p>This method acts as bridge between array-based and collection-based
-     * APIs.
+	 * The initial index of the range (<tt>from</tt>) must lie between zero
+	 * and <tt>col.size</tt>, inclusive. 
+	 * The final index of the range (<tt>to</tt>), which must be greater than or
+	 * equal to <tt>from</tt>.
+	 * <p>The returned array will be "safe" in that no references to it are
+	 * maintained by this list.  (In other words, this method must allocate
+	 * a new array).  The caller is thus free to modify the returned array.
+	 *
+	 * <p>This method acts as bridge between array-based and collection-based
+	 * APIs.
 	 * @param col the collection to be copied.
 	 * @param from the initial index of the range to be copied, inclusive.
-     * @param to the final index of the range to be copied, exclusive.
-     * @since 3.0.6
+	 * @param to the final index of the range to be copied, exclusive.
+	 * @since 3.0.6
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Object[] toArray(Collection col, int from, int to) {
+		return toArray(col, new Object[0], from, to);
+	}
+	/**
+	 * Returns the specified range of the given collection;
+	 * the runtime type of the returned array is that of the specified array.
+	 * @param col the collection to be copied.
+	 * @param dst the array into which the elements of this list are to be stored,
+	 * if it is big enough (less than <code>to - from</code>; otherwise, a new array of the same runtime type is allocated for this purpose. 
+	 * Note: dst[0] will be col[from].
+	 * @param from the initial index of the range to be copied, inclusive.
+	 * @param to the final index of the range to be copied, exclusive.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] toArray(Collection<T> col, T[] dst, int from, int to) {
+		int sz = col.size();
+		if (to > sz) to = sz;
+		if (from < 0) from = 0;
+
 		int newLength = to - from;
 		if (newLength < 0)
-            throw new IllegalArgumentException(from + " > " + to);
-		Object[] result = new Object[newLength];
-        int i = 0, j = 0;
-        for (Iterator it = col.iterator(); it.hasNext() && i < result.length;) {
-        	if (j++ < from) {
-        		it.next();
-        		continue;
-        	}
-            result[i++] = it.next();
-        }
-		return result;
-    }
+			throw new IllegalArgumentException(from + " > " + to);
+
+		if (dst.length < newLength)
+			dst = (T[])Array.newInstance(dst.getClass().getComponentType(), newLength);
+
+		int i = 0, j = 0;
+		for (Iterator<T> it = col.iterator(); it.hasNext() && i < dst.length;) {
+			if (j++ < from) {
+				it.next();
+				continue;
+			}
+			dst[i++] = it.next();
+		}
+		return dst;
+	}
+
 	/** Adds all elements returned by the iterator to a collection.
 	 * @param iter the iterator; null is OK
 	 * @return the number element being added

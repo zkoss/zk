@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
@@ -141,8 +142,11 @@ implements org.zkoss.zul.ListitemRenderer, org.zkoss.zul.ListitemRendererExt, Se
 			return;
 		}
 		
-		for(final Iterator it = clone.getChildren().iterator(); it.hasNext(); ) {
-			setupCloneIds((Component) it.next()); //recursive
+		//Feature #3061671: Databinding foreach keep cloned cmp's id when in spaceowner
+		if (!(clone instanceof IdSpace)) { //parent is an IdSpace, so keep the id as is, no need to traverse down
+			for(final Iterator it = clone.getChildren().iterator(); it.hasNext(); ) {
+				setupCloneIds((Component) it.next()); //recursive
+			}
 		}
 	}
 }

@@ -21,11 +21,12 @@ import java.util.Comparator;
 /**
  * An extra interface that can be implemented with {@link GroupsModel}
  * to control the sorting and grouping of the data model.
- * 
+ *
+ * <p>D: the type of the data.
  * @author tomyeh
  * @since 3.5.0
  */
-public interface GroupsModelExt {
+public interface GroupsModelExt<D> {
 	/** It called when {@link Listbox} or {@link Grid} has to sort
 	 * the content.
 	 *
@@ -48,7 +49,7 @@ public interface GroupsModelExt {
 	 * the descending order)
 	 * @param colIndex the index of the column
 	 */
-	public void sort(Comparator cmpr, boolean ascending, int colIndex);
+	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex);
 
 	/**
 	 * Groups and sorts the data by the specified column.
@@ -61,5 +62,5 @@ public interface GroupsModelExt {
 	 * 	the descending order)
 	 * @param colIndex the index of the column
 	 */
-	public void group(Comparator cmpr, boolean ascending, int colIndex);
+	public void group(Comparator<D> cmpr, boolean ascending, int colIndex);
 }

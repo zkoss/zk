@@ -141,7 +141,7 @@ public class Components {
 	 * @since 3.5.0
 	 */
 	public static void sort(List<Component> list, int from, int to, Comparator<? super Component> cpr) {
-		final Component ary[] = (Component[])CollectionsX.toArray(list, from, to);
+		final Component ary[] = CollectionsX.toArray(list, new Component[0], from, to);
 		Arrays.sort(ary, cpr);
 
 		ListIterator<Component> it = list.listIterator(from);
@@ -1126,7 +1126,7 @@ public class Components {
 						fd.setAccessible(true);
 						final Object value = fd.get(_controller);
 						if (value == null) {
-							md.invoke(_controller, new Object[] {arg});
+							md.invoke(_controller, arg);
 							if (fd.get(_controller) == arg) { //field is set
 								_injected.add(fdname); //mark as injected
 							}
@@ -1139,7 +1139,7 @@ public class Components {
 					}
 				} else {
 					try {
-						md.invoke(_controller, new Object[] {arg});
+						md.invoke(_controller, arg);
 						_injected.add(fdname); //no field, just mark as injected
 						return true;
 					} catch (Exception ex) {

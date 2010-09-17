@@ -40,7 +40,7 @@ public class MethodFunction extends SerializableMethod implements Function {
 	public Class<?> getReturnType() {
 		return getMethod().getReturnType();
 	}
-	public Object invoke(Object obj, Object[] args) throws Exception {
+	public Object invoke(Object obj, Object... args) throws Exception {
 		return getMethod().invoke(obj, args);
 	}
 	public Method toMethod() {

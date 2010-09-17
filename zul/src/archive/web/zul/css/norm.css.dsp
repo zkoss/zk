@@ -356,7 +356,9 @@ span.z-upload input {
 	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
 }
 
-<%-- fileupload dialog --%>
+<%-- fileupload dialog 
+
+// no longer used since 5.0.0
 .z-fileupload-img {
 	width: 16px;
 	padding-top: 4px;
@@ -368,6 +370,7 @@ span.z-upload input {
 	width: 16px;
 	height: 17px;
 }
+--%>
 .z-fileupload-rm {
 	cursor: pointer;
 	background: transparent no-repeat 0 0;

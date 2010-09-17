@@ -169,7 +169,7 @@ public class Include extends XulElement
 implements org.zkoss.zul.api.Include, Includer {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
-	private Map _dynams;
+	private Map<String, Object> _dynams;
 	/** The child page. Note: it is recovered by PageImpl. */
 	private transient Page _childpg;
 	private String _mode = getDefaultMode();
@@ -384,7 +384,7 @@ implements org.zkoss.zul.api.Include, Includer {
 		fixModeOnly();
 		if (_instantMode) {
 			final Execution exec = getExecution();
-			final Map old = setupDynams(exec);
+			final Map<String, Object> old = setupDynams(exec);
 			try {
 				final int j = _src.indexOf('?');
 				exec.createComponents(j >= 0 ? _src.substring(0, j): _src, this, null);
@@ -425,7 +425,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	 */
 	public void setDynamicProperty(String name, Object value) {
 		if (_dynams == null)
-			_dynams = new HashMap();
+			_dynams = new HashMap<String, Object>();
 		_dynams.put(name, value);
 	}
 	/** Removes all dynamic properties.
@@ -522,7 +522,7 @@ implements org.zkoss.zul.api.Include, Includer {
 		final Desktop desktop = getDesktop();
 		final Execution exec = getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
-		final Map old = setupDynams(exec);
+		final Map<String, Object> old = setupDynams(exec);
 		ComponentRedraws.beforeRedraw(true); //starting a new page
 		try {
 			exec.include(out, src, null, 0);
@@ -550,7 +550,7 @@ implements org.zkoss.zul.api.Include, Includer {
 			final String msg = Messages.get(MZk.PAGE_FAILED,
 				new Object[] {src, Exceptions.getMessage(err),
 					Exceptions.formatStackTrace(null, err, null, 6)});
-			final HashMap attrs = new HashMap();
+			final Map<String, String> attrs = new HashMap<String, String>();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
 			exec.include(out,
@@ -560,14 +560,13 @@ implements org.zkoss.zul.api.Include, Includer {
 			restoreDynams(exec, old);
 		}
 	}
-	private Map setupDynams(Execution exec) {
+	private Map<String, Object> setupDynams(Execution exec) {
 		if (_dynams == null || _dynams.isEmpty())
 			return null;
 
-		final Map old = new HashMap();
-		for (Iterator it = _dynams.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
+		final Map<String, Object> old = new HashMap<String, Object>();
+		for (Map.Entry<String, Object> me: _dynams.entrySet()) {
+			final String nm = me.getKey();
 			final Object val = me.getValue();
 
 			old.put(nm, exec.getAttribute(nm));
@@ -577,11 +576,10 @@ implements org.zkoss.zul.api.Include, Includer {
 		}
 		return old;
 	}
-	private static void restoreDynams(Execution exec, Map old) {
+	private static void restoreDynams(Execution exec, Map<String, Object> old) {
 		if (old != null)
-			for (Iterator it = old.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String nm = (String)me.getKey();
+			for (Map.Entry<String, Object> me: old.entrySet()) {
+				final String nm = me.getKey();
 				final Object val = me.getValue();
 
 				if (val != null) exec.setAttribute(nm, val);

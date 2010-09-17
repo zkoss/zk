@@ -34,7 +34,7 @@ import org.zkoss.zul.event.ChartDataListener;
  */
 abstract public class AbstractChartModel implements ChartModel, java.io.Serializable {
 	private static final long serialVersionUID = 20091007120455L;
-	private List _listeners = new LinkedList();
+	private List<ChartDataListener> _listeners = new LinkedList<ChartDataListener>();
 
 	/** Fires a {@link ChartDataEvent} for all registered listener
 	 * (thru {@link #addChartDataListener}.
@@ -43,8 +43,8 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 	 */
 	protected void fireEvent(int type, Comparable series, Object data) {
 		final ChartDataEvent evt = new ChartDataEvent(this, type, series, data);
-		for (Iterator it = _listeners.iterator(); it.hasNext();)
-			((ChartDataListener)it.next()).onChange(evt);
+		for (ChartDataListener l: _listeners)
+			l.onChange(evt);
 	}
 
 	//-- ChartModel --//
@@ -68,7 +68,7 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_listeners = new LinkedList();
+		_listeners = new LinkedList<ChartDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
 }

@@ -382,6 +382,7 @@ public class DefinitionLoaders {
 
 			final String macroURI = el.getElementValue("macro-uri", true);
 			final ComponentDefinitionImpl compdef;
+			boolean extend = false;
 			if (macroURI != null && macroURI.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
@@ -398,6 +399,8 @@ public class DefinitionLoaders {
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //extends
+				extend = true;
+
 				final String extnm = el.getElementValue("extends", true);
 				if (log.finerable()) log.finer("Extends component definition, "+name+", from "+extnm);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
@@ -450,6 +453,8 @@ public class DefinitionLoaders {
 
 			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
+			if (wgtnm == null && extend)
+				wgtnm = compdef.getDefaultWidgetClass(null);
 			if (wgtnm != null) {
 				if (!withEL(wgtnm))
 					wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);

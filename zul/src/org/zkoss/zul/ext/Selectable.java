@@ -29,12 +29,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * @see ListModel
  * @see Listbox
  */
-public interface Selectable {
+public interface Selectable<E> {
 	/**
 	 * Returns current selection.
 	 * @return current selection.
 	 */
-	public Set getSelection();
+	public Set<E> getSelection();
 	
 	/**
 	 * Add the specified object into selection.
@@ -44,7 +44,7 @@ public interface Selectable {
 	 * won't be changed.
 	 * @param obj the object to be as selection.
 	 */
-	public void addSelection(Object obj);
+	public void addSelection(E obj);
 	
 	/**
 	 * Remove the specified object from selection.

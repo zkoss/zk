@@ -40,9 +40,9 @@ import java.util.SortedSet;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelList extends AbstractListModel
-implements ListModelExt, List, java.io.Serializable {
-	protected List _list;
+public class ListModelList<E> extends AbstractListModel<E>
+implements ListModelExt<E>, List<E>, java.io.Serializable {
+	protected List<E> _list;
 
 	/**
 	 * Constructor
@@ -61,31 +61,31 @@ implements ListModelExt, List, java.io.Serializable {
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
-	public ListModelList(List list, boolean live) {
-		_list = live ? list: new ArrayList(list);
+	public ListModelList(List<E> list, boolean live) {
+		_list = live ? list: new ArrayList<E>(list);
 	}
 
 	/**
 	 * Constructor.
 	 */
 	public ListModelList() {
-		_list = new ArrayList();
+		_list = new ArrayList<E>();
 	}
 	
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified collection (i.e., not live).
 	 */
-	public ListModelList(Collection c) {
-		_list = new ArrayList(c);
+	public ListModelList(Collection<? extends E> c) {
+		_list = new ArrayList<E>(c);
 	}
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified array (i.e., not live).
 	 * @since 2.4.1
 	 */
-	public ListModelList(Object[] array) {
-		_list = new ArrayList(array.length);
+	public ListModelList(E[] array) {
+		_list = new ArrayList<E>(array.length);
 		for (int j = 0; j < array.length; ++j)
 			_list.add(array[j]);
 	}
@@ -95,7 +95,7 @@ implements ListModelExt, List, java.io.Serializable {
 	 * @param initialCapacity the initial capacity for this ListModelList.
 	 */
 	public ListModelList(int initialCapacity) {
-		_list = new ArrayList(initialCapacity);
+		_list = new ArrayList<E>(initialCapacity);
 	}
 	
 	/**
@@ -116,8 +116,8 @@ implements ListModelExt, List, java.io.Serializable {
 			return;
 		}
 		int index = fromIndex;
-		for (final Iterator it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
-			final Object obj = it.next();
+		for (final Iterator<E> it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
+			final E obj = it.next();
 			removeSelection(obj);
 			it.remove();
 		}
@@ -127,7 +127,7 @@ implements ListModelExt, List, java.io.Serializable {
 	/**
 	 * Get the inner real List.
 	 */	
-	public List getInnerList() {
+	public List<E> getInnerList() {
 		return _list;
 	}
 
@@ -136,24 +136,24 @@ implements ListModelExt, List, java.io.Serializable {
 		return _list.size();
 	}
 	
-	public Object getElementAt(int j) {
+	public E getElementAt(int j) {
 		return _list.get(j);
 	}
 
 	//-- List --//
- 	public void add(int index, Object element){
+ 	public void add(int index, E element){
  		_list.add(index, element);
  		fireEvent(ListDataEvent.INTERVAL_ADDED, index, index);
  	}
  	
-	public boolean add(Object o) {
+	public boolean add(E o) {
 		int i1 = _list.size();
 		boolean ret = _list.add(o);
 		fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
 		return ret;
 	}
 
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends E> c) {
 		int sz = c.size();
 		if (sz <= 0) {
 			return false;
@@ -165,7 +165,7 @@ implements ListModelExt, List, java.io.Serializable {
 		return ret;
 	}
 	
-	public boolean addAll(int index, Collection c) {
+	public boolean addAll(int index, Collection<? extends E> c) {
 		int sz = c.size();
 		if (sz <= 0) {
 			return false;
@@ -191,7 +191,7 @@ implements ListModelExt, List, java.io.Serializable {
 		return ret;
 	}
 	
-	public boolean containsAll(Collection c) {
+	public boolean containsAll(Collection<?> c) {
 		return _list.containsAll(c);
 	}
 	
@@ -199,7 +199,7 @@ implements ListModelExt, List, java.io.Serializable {
 		return _list.equals(o instanceof ListModelList ? ((ListModelList)o)._list: o);
 	}
 	
-	public Object get(int index){
+	public E get(int index){
 		return _list.get(index);
 	}
 
@@ -218,14 +218,14 @@ implements ListModelExt, List, java.io.Serializable {
 		return _list.isEmpty();
 	}
     
-    public Iterator iterator() {
-		return new Iterator() {
-			private Iterator _it = _list.iterator();
-			private Object _current = null;
+    public Iterator<E> iterator() {
+		return new Iterator<E>() {
+			private Iterator<E> _it = _list.iterator();
+			private E _current = null;
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
-			public Object next() {
+			public E next() {
 				_current = _it.next();
 				return _current;
 			}
@@ -242,18 +242,18 @@ implements ListModelExt, List, java.io.Serializable {
     	return _list.lastIndexOf(elem);
     }
 	
-	public ListIterator listIterator() {
+	public ListIterator<E> listIterator() {
 		return _list.listIterator();
 	}
 	
-	public ListIterator listIterator(final int index) {
-		return new ListIterator() {
-			private ListIterator _it = _list.listIterator(index);
-			private Object _current = null;
+	public ListIterator<E> listIterator(final int index) {
+		return new ListIterator<E>() {
+			private ListIterator<E> _it = _list.listIterator(index);
+			private E _current = null;
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
-			public Object next() {
+			public E next() {
 				_current = _it.next();
 				return _current;
 			}
@@ -265,7 +265,7 @@ implements ListModelExt, List, java.io.Serializable {
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				}
 			}
-			public void add(Object arg0) {
+			public void add(E arg0) {
 				final int index = _it.nextIndex();
 				_it.add(arg0);
 				fireEvent(ListDataEvent.INTERVAL_ADDED, index, index);
@@ -276,14 +276,14 @@ implements ListModelExt, List, java.io.Serializable {
 			public int nextIndex() {
 				return _it.nextIndex();
 			}
-			public Object previous() {
+			public E previous() {
 				_current = _it.previous();
 				return _current;
 			}
 			public int previousIndex() {
 				return _it.previousIndex();
 			}
-			public void set(Object arg0) {
+			public void set(E arg0) {
 				final int index = _list.indexOf(_current);
 				if (index >= 0) {
 					_it.set(arg0);
@@ -293,9 +293,9 @@ implements ListModelExt, List, java.io.Serializable {
 		};
 	}
 	
-	public Object remove(int index) {
+	public E remove(int index) {
 		removeSelection(_list.get(index));
-		Object ret = _list.remove(index);
+		E ret = _list.remove(index);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 		return ret;
 	}
@@ -304,11 +304,12 @@ implements ListModelExt, List, java.io.Serializable {
 		int index = indexOf(o);
 		if (index >= 0) {
 			remove(index);
+			return true;
 		}
 		return false;
 	}
 	
-	public boolean removeAll(Collection c) {
+	public boolean removeAll(Collection<?> c) {
 		if (_list == c || this == c) { //special case
 			clearSelection();
 			clear();
@@ -317,19 +318,19 @@ implements ListModelExt, List, java.io.Serializable {
 		return removePartial(c, true);
 	}
 
-	public boolean retainAll(Collection c) {
+	public boolean retainAll(Collection<?> c) {
 		if (_list == c || this == c) { //special case
 			return false;
 		}
 		return removePartial(c, false);
 	}
 	
-	private boolean removePartial(Collection c, boolean exclude) {
+	private boolean removePartial(Collection<?> c, boolean exclude) {
 		boolean removed = false;
 		int index = 0;
 		int begin = -1;
-		for(final Iterator it = _list.iterator(); it.hasNext(); ++index) {
-			Object item = it.next();
+		for(final Iterator<E> it = _list.iterator(); it.hasNext(); ++index) {
+			E item = it.next();
 			if (c.contains(item) == exclude) {
 				if (begin < 0) {
 					begin = index;
@@ -352,8 +353,8 @@ implements ListModelExt, List, java.io.Serializable {
 		return removed;
 	}
 		
-	public Object set(int index, Object element) {
-		Object ret = _list.set(index, element);
+	public E set(int index, E element) {
+		E ret = _list.set(index, element);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 		return ret;
 	}
@@ -362,17 +363,17 @@ implements ListModelExt, List, java.io.Serializable {
 		return _list.size();
 	}
 
-	public List subList(int fromIndex, int toIndex) {
-		List list = _list.subList(fromIndex, toIndex);
+	public List<E> subList(int fromIndex, int toIndex) {
+		List<E> list = _list.subList(fromIndex, toIndex);
 		//bug 2448987: sublist must be live
-		return new ListModelList(list, true);
+		return new ListModelList<E>(list, true);
 	}
 	
 	public Object[] toArray() {
 		return _list.toArray();
 	}
 
-	public Object[] toArray(Object[] a) {
+	public <T> T[] toArray(T[] a) {
 		return _list.toArray(a);
 	}
 
@@ -383,7 +384,7 @@ implements ListModelExt, List, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
+	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}

@@ -211,7 +211,7 @@ public class Messagebox {
 	public static int show(String message, String title, int buttons, String icon,
 	int focus, EventListener listener)
 	throws InterruptedException {
-		final Map params = new HashMap();
+		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("message", message);
 		params.put("title", title != null ? title:
 			Executions.getCurrent().getDesktop().getWebApp().getAppName());

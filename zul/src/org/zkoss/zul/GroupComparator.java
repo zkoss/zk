@@ -31,7 +31,7 @@ import java.util.Comparator;
  * @author tomyeh
  * @since 3.5.0
  */
-public interface GroupComparator extends Comparator {
+public interface GroupComparator<D> extends Comparator<D> {
 	/** Compares if the two arguments is in the same group.
 	 *
 	 * <ul>
@@ -42,5 +42,5 @@ public interface GroupComparator extends Comparator {
 	 * and the order of x's group is less than that of y's group.<li>
 	 * </ul>
 	 */
-	public int compareGroup(Object o1, Object o2);
+	public int compareGroup(D o1, D o2);
 }

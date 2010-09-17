@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
@@ -79,8 +80,8 @@ public class ListModels {
 	 * It shall return 0 if they matched (i.e., shall be shown).
 	 * @param nRows the maximal allowed number of matched items.
 	 */
-	public static ListModel toListSubModel(ListModel model, Comparator comparator, int nRows) {
-		return new SubModel(model, comparator, nRows);
+	public static <T> ListModel<T> toListSubModel(ListModel<T> model, Comparator<T> comparator, int nRows) {
+		return new SubModel<T>(model, comparator, nRows);
 	}
 	
 	/**
@@ -95,20 +96,21 @@ public class ListModels {
 	 * @param model a {@link ListModel}
 	 * @see #toListSubModel(ListModel, Comparator, int)
 	 */
-	public static ListModel toListSubModel(ListModel model) {
-		return new SubModel(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
+	@SuppressWarnings("unchecked")
+	public static <T> ListModel<T> toListSubModel(ListModel<T> model) {
+		return new SubModel<T>(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
 					: STRING_COMPARATOR, 15);
 	}
 	
-	private static class SubModel implements ListModel, ListSubModel,
+	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>,
 			java.io.Serializable {
-		private final ListModel _model;
+		private final ListModel<E> _model;
 
-		private final Comparator _comparator;
+		private final Comparator<E> _comparator;
 
 		private final int _nRows;
 
-		private SubModel(ListModel model, Comparator comparator, int nRows) {
+		private SubModel(ListModel<E> model, Comparator<E> comparator, int nRows) {
 			_model = model;
 			_comparator = comparator;
 			_nRows = nRows;
@@ -128,21 +130,21 @@ public class ListModels {
 		 *            implementation usually limits to a certain number (for
 		 *            better performance).
 		 */
-		public ListModel getSubModel(Object value, int nRows) {
-			final LinkedList data = new LinkedList();
+		public ListModel<E> getSubModel(E value, int nRows) {
+			final List<E> data = new LinkedList<E>();
 			nRows = nRows < 0 ? _nRows : nRows;
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
-				Object o = _model.getElementAt(i);
+				E o = _model.getElementAt(i);
 				if (_comparator.compare(value, o) == 0) {
 					data.add(o);
 					if (--nRows <= 0)
 						break; // done
 				}
 			}
-			return new ListModelList(data);
+			return new ListModelList<E>(data);
 		}
 
-		public Object getElementAt(int index) {
+		public E getElementAt(int index) {
 			return _model.getElementAt(index);
 		}
 

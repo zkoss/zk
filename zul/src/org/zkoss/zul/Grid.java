@@ -183,7 +183,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private transient Frozen _frozen;
 	private transient Collection _heads;
 	private String _pagingPosition = "bottom";
-	private transient ListModel _model;
+	private transient ListModel<?> _model;
 	private transient RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	/** The paging controller, used only if mold = "paging". */
@@ -669,7 +669,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	public ListModel getModel() {
+	public ListModel<?> getModel() {
 		return _model;
 	}
 	/** Returns the list model associated with this grid, or null
@@ -678,7 +678,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #setModel(ListModel)
 	 * @since 3.5.0
 	 */
-	public ListModel getListModel() {
+	public ListModel<?> getListModel() {
 		return _model instanceof GroupsListModel ? null: _model;
 	}
 	/** Returns the groups model associated with this grid, or null
@@ -687,7 +687,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @since 3.5.0
 	 * @see #setModel(GroupsModel)
 	 */
-	public GroupsModel getGroupsModel() {
+	public GroupsModel<?, ?, ?> getGroupsModel() {
 		return _model instanceof GroupsListModel ?
 			((GroupsListModel)_model).getGroupsModel(): null;
 	}
@@ -701,7 +701,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
-	public void setModel(ListModel model) {
+	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -759,7 +759,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #setModel(ListModel)
 	 * @see #getGroupsModel()
 	 */
-	public void setModel(GroupsModel model) {
+	public void setModel(GroupsModel<?, ?, ?> model) {
 		setModel((ListModel)(model != null ? new GroupsListModel(model): null));
 	}
 	private void initDataListener() {
@@ -1430,8 +1430,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
-			final RenderEvent event = RenderEvent.getRenderEvent(request);
-			final Set items = event.getItems();
+			final RenderEvent<Row> event = RenderEvent.getRenderEvent(request);
+			final Set<Row> items = event.getItems();
 
 			int cnt = items.size();
 			if (cnt == 0) return; //nothing to do
@@ -1441,10 +1441,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				if (cnt > _preloadsz) cnt = _preloadsz;
 
 				//1. locate the first item found in items
-				final List toload = new LinkedList();
-				Iterator it = getRows().getChildren().iterator();
+				final List<Row> toload = new LinkedList<Row>();
+				Iterator<Row> it = getRows().getChildren().iterator();
 				while (it.hasNext()) {
-					final Row row = (Row)it.next();
+					final Row row = it.next();
 					if (items.contains(row)) //found
 						break;
 					if (!row.isLoaded())
@@ -1454,7 +1454,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				//2. add unload items before the found one
 				if (!toload.isEmpty()) {
 					int bfcnt = cnt/3;
-					for (Iterator e = toload.iterator();
+					for (Iterator<Row> e = toload.iterator();
 					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
 						items.add(e.next());
 					}
@@ -1462,7 +1462,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 				//3. add unloaded after the found one
 				while (cnt > 0 && it.hasNext()) {
-					final Row row = (Row)it.next();
+					final Row row = it.next();
 					if (!row.isLoaded() && items.add(row))
 						--cnt;
 				}

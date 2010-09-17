@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -36,14 +37,14 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see Chart
  * @since 3.5.0
  */
-public class GanttModel extends AbstractChartModel {
+public class GanttModel<E> extends AbstractChartModel {
 	private static final long serialVersionUID = 20091008183023L;
-	private Map _taskMap = new LinkedHashMap(13); //(series, task list)
+	private Map<Comparable<E>, List<GanttTask>> _taskMap = new LinkedHashMap<Comparable<E>, List<GanttTask>>(8); //(series, task list)
 	
-	public void addValue(Comparable series, GanttTask task) {
-		List tasks = (List) _taskMap.get(series);
+	public void addValue(Comparable<E> series, GanttTask task) {
+		List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
-			tasks = new ArrayList(13);
+			tasks = new ArrayList<GanttTask>(13);
 			_taskMap.put(series, tasks);
 		}
 		if (task.getSeries() != null) {
@@ -55,8 +56,8 @@ public class GanttModel extends AbstractChartModel {
 		fireEvent(ChartDataEvent.ADDED, series, task);
 	}
 	
-	public void removeValue(Comparable series, GanttTask task) {
-		final List tasks = (List) _taskMap.get(series);
+	public void removeValue(Comparable<E> series, GanttTask task) {
+		final List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
 			return;
 		}
@@ -69,14 +70,15 @@ public class GanttModel extends AbstractChartModel {
 	/** Return all series of this GanttModel.
 	 * @return all series of this GanttModel.
 	 */
-	public Comparable[] getAllSeries() {
-		final Collection allseries = _taskMap.keySet();
-		return (Comparable[]) allseries.toArray(new Comparable[allseries.size()]);
+	@SuppressWarnings("unchecked")
+	public Comparable<E>[] getAllSeries() {
+		final Set<Comparable<E>> allseries = _taskMap.keySet();
+		return allseries.toArray(new Comparable[allseries.size()]);
 	}
 	
 	public GanttTask[] getTasks(Comparable series) {
-		final List tasks = (List) _taskMap.get(series);
-		return tasks == null ? new GanttTask[0] : (GanttTask[]) tasks.toArray(new GanttTask[tasks.size()]);
+		final List<GanttTask> tasks = _taskMap.get(series);
+		return tasks == null ? new GanttTask[0] : tasks.toArray(new GanttTask[tasks.size()]);
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class GanttModel extends AbstractChartModel {
 		private Date _end;
 		private String _description;
 		private double _percent;
-		private Collection _subtasks;
+		private Collection<GanttTask> _subtasks;
 		private GanttModel _owner;
 		
 		public GanttTask(String description, Date start, Date end, double percent) {
@@ -100,7 +102,7 @@ public class GanttModel extends AbstractChartModel {
 			_start = start;
 			_end = end;
 			_percent = percent;
-			_subtasks = new LinkedList();
+			_subtasks = new LinkedList<GanttTask>();
 		}
 
 		public Date getStart() {
@@ -172,7 +174,7 @@ public class GanttModel extends AbstractChartModel {
 		}
 		
 		public GanttTask[] getSubtasks() {
-			return (GanttTask[]) _subtasks.toArray(new GanttTask[_subtasks.size()]);
+			return _subtasks.toArray(new GanttTask[_subtasks.size()]);
 		}
 		
 		private Comparable getSeries() {

@@ -297,7 +297,7 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 				if (parent instanceof Treeitem) {
 					for (Treeitem ti = (Treeitem)parent;;) {
 						if (!ti.isOpen())
-							return Collections.EMPTY_SET;
+							return Collections.emptySet();
 						Component gp = ti.getParent().getParent();
 						if (!(gp instanceof Treeitem))
 							break;

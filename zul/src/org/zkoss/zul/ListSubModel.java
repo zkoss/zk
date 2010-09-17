@@ -26,8 +26,7 @@ package org.zkoss.zul;
  * @author jumperchen
  * @since 3.0.2
  */
-public interface ListSubModel{
-	
+public interface ListSubModel<E> {
 	/** Returns the subset of list model data that the subset data is extract 
 	 * from combobox's list model data. It is ususally used for implmentation of
 	 * auto-complete.
@@ -41,5 +40,5 @@ public interface ListSubModel{
 	 * implementation of ListSubmodel.
 	 * @since 3.0.2
 	 */
-	public ListModel getSubModel(Object value, int nRows);
+	public ListModel<E> getSubModel(E value, int nRows);
 }

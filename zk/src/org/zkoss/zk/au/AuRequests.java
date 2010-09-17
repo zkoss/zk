@@ -39,13 +39,14 @@ public class AuRequests {
 	 *
 	 * @return a set of components.
 	 */
-	public static Set<Component> convertToItems(Desktop desktop, List<String> uuids) {
-		final Set<Component> items = new LinkedHashSet<Component>();
+	@SuppressWarnings("unchecked")
+	public static <T extends Component> Set<T> convertToItems(Desktop desktop, List<String> uuids) {
+		final Set<T> items = new LinkedHashSet<T>();
 		if (uuids != null)
 			for (String uuid: uuids) {
 				final Component item = desktop.getComponentByUuidIfAny(uuid.trim());
 				if (item != null)
-					items.add(item);
+					items.add((T)item);
 				//notice that it might be null (since the items might be
 				//removed by the last request)
 			}

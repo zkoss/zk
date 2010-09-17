@@ -14,7 +14,7 @@ import java.util.Map;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
-public class JSONObject extends LinkedHashMap<String, Object> implements Map<String, Object>, JSONAware {
+public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Object, Object>, JSONAware {
 	private static final long serialVersionUID = -503443796854799292L;
 	
 	/**

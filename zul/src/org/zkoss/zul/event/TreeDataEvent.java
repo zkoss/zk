@@ -24,7 +24,7 @@ import org.zkoss.zul.TreeModel;
  * @author Jeff Liu
  * @since ZK 3.0.0
  */
-public class TreeDataEvent {
+public class TreeDataEvent<E> {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
     /** Identifies the addition of children to a node. */    
@@ -32,11 +32,11 @@ public class TreeDataEvent {
     /** Identifies the removal of children to a node. */   
 	public static final int INTERVAL_REMOVED = 2;
 
-	private final TreeModel _model;
+	private final TreeModel<E> _model;
 	private final int _type;
 	private final int _indexFrom;
 	private final int _indexTo;
-	private final Object _parent;
+	private final E _parent;
 
 	/** Contructor.
 	 *
@@ -46,7 +46,7 @@ public class TreeDataEvent {
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 */
-	public TreeDataEvent(TreeModel model, int type, Object parent, int indexFrom, int indexTo) {
+	public TreeDataEvent(TreeModel<E> model, int type, E parent, int indexFrom, int indexTo) {
 		if (model == null)
 			throw new NullPointerException();
 		checkInterval(indexFrom,indexTo,model.getChildCount(parent));
@@ -84,7 +84,7 @@ public class TreeDataEvent {
 	 * Returns the parent node that one of its children being modified 
 	 * @return the parent node that one of its children being modified 
 	 */
-	public Object getParent(){
+	public E getParent(){
 		return _parent;
 	}
 	

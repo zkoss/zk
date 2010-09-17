@@ -23,27 +23,31 @@ import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * A simple implementation of {@link GroupsModel}.
- * Note: It assumes the content is immutable.
+ * This implementation assumes the content is immutable.
+ * If you allow the user to re-group the content, use {@link #GroupsModelArray}
+ * instead.
  * @author Dennis.Chen
  * @since 3.5.0
  * @see GroupsModel
+ * @see GroupsModelArray
  */
-public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsModelExt{
+public class SimpleGroupsModel<D, H, F> extends AbstractGroupsModel<D, Object, F>
+implements GroupsModelExt<D> {
 	
 	/**
 	 * member field to store group data
 	 */
-	protected Object[][] _data;
+	protected D[][] _data;
 	
 	/**
 	 * member field to store group head data
 	 */
-	protected Object[] _heads;
+	protected H[] _heads;
 	
 	/**
 	 * member field to store group foot data
 	 */
-	protected Object[] _foots;
+	protected F[] _foots;
 	
 	/**
 	 * memeber field to store group close status
@@ -64,8 +68,8 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * where data[0] is the array of element of the first group,
 	 * data[1] is of the second group and so on.
 	 */
-	public SimpleGroupsModel(Object[][] data){
-		this(data,null,(Object[])null);
+	public SimpleGroupsModel(D[][] data){
+		this(data, null, (F[])null);
 	}
 	
 	/**
@@ -76,8 +80,8 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * @param data a 2 dimension array to represent groups data
 	 * @param heads an array to represent head data of group
 	 */
-	public SimpleGroupsModel(Object[][] data,Object[] heads){
-		this(data,heads,(Object[])null);
+	public SimpleGroupsModel(D[][] data, H[] heads){
+		this(data, heads, (F[])null);
 	}
 	
 	/**
@@ -92,7 +96,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
 	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
 	 */
-	public SimpleGroupsModel(Object[][] data,Object[] heads,Object[] foots){
+	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots){
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
@@ -114,7 +118,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * @param closes an array of boolean to represent close status of group. If not specified, then
 	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
 	 */
-	public SimpleGroupsModel(Object[][] data,Object[] heads,Object[] foots, boolean[] closes){
+	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes){
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
@@ -123,7 +127,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		_closes = closes;
 	}
 	
-	public Object getChild(int groupIndex, int index) {
+	public D getChild(int groupIndex, int index) {
 		return _data[groupIndex][index];
 	}
 
@@ -132,7 +136,10 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		return _data[groupIndex].length;
 	}
 
-
+	/** Returns the data representing the group.
+	 * It is H, if heads is specified in the constructor, or D[] if
+	 * not specified.
+	 */
 	public Object getGroup(int groupIndex) {
 		return  _heads==null?_data[groupIndex]:_heads[groupIndex];
 	}
@@ -142,7 +149,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		return _data.length;
 	}
 
-	public Object getGroupfoot(int groupIndex) {
+	public F getGroupfoot(int groupIndex) {
 		return _foots == null ? null:_foots[groupIndex];
 	}
 
@@ -168,7 +175,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * Do nothing in default implementation, however developer can override it to 
 	 * re-group by manipulating {@link #_data},{@link #_heads},{@link #_foots}
 	 */
-	public void group(Comparator cmpr, boolean ascending, int colIndex) {
+	public void group(Comparator<D> cmpr, boolean ascending, int colIndex) {
 	}
 
 	/**
@@ -176,14 +183,20 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * {@link #sortGroupData(Object, Object[], Comparator, boolean, int)}
 	 * to customize.
 	 */
-	public void sort(Comparator cmpr, boolean ascending, int colIndex) {
+	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
 		for(int i=0;i<_data.length;i++){
 			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
 		}
 		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
 	}
 
-	protected void sortGroupData(Object group,Object[] groupdata,Comparator cmpr,boolean ascending, int colIndex){
+	/** Sorts a group of data.
+	 * <p>Default: <code>Arrays.sort(groupdata, cmpr)</code>
+	 * @param group the group (the same as {@link #getGroup})
+	 * @param groupdata the group of data to sort
+	 */
+	protected void sortGroupData(Object group, D[] groupdata,
+	Comparator<D> cmpr, boolean ascending, int colIndex){
 		Arrays.sort(groupdata,cmpr);
 	}
 

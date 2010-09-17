@@ -102,7 +102,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	public static final String WIND = "wind"; //@since 3.5.0
 	public static final String DIAL = "dial"; //@since 3.6.3
 	
-	private static final Map DEFAULT_MODEL = new HashMap();
+	private static final Map<String, String> DEFAULT_MODEL = new HashMap<String, String>();
 	static {
 		DEFAULT_MODEL.put(PIE, "org.zkoss.zul.SimplePieModel");
 		DEFAULT_MODEL.put(RING, "org.zkoss.zul.SimplePieModel");

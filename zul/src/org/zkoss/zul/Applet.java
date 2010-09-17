@@ -45,7 +45,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
 	private String _code, _codebase, _archive,
 		_align, _hspace, _vspace;
-	private final Map _params = new LinkedHashMap();
+	private final Map<String, String> _params = new LinkedHashMap<String, String>();
 	private boolean _mayscript;
 
 	/** Return the applet class to run.
@@ -169,7 +169,7 @@ org.zkoss.zul.api.Applet {
 
 	/** Sets a map of parameters (all existent parameters are removed first).
 	 */
-	public void setParams(Map params) {
+	public void setParams(Map<String, String> params) {
 		_params.clear();
 		if (params != null)
 			_params.putAll(params);
@@ -177,15 +177,14 @@ org.zkoss.zul.api.Applet {
 	}
 	/** Returns a map of parameters (never null).
 	 */
-	public Map getParams() {
+	public Map<String, String> getParams() {
 		return _params;
 	}
 	/** Sets a parameter.
 	 * If the value is null, the parameter is removed.
 	 */
 	public String setParam(String name, String value) {
-		return value != null ? (String)_params.put(name, value):
-			(String)_params.remove(name);
+		return value != null ? _params.put(name, value): _params.remove(name);
 	}
 
 	public Object getDynamicProperty(String name) {

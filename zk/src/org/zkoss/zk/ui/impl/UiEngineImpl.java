@@ -44,6 +44,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.json.*;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.*;
@@ -1160,6 +1161,84 @@ public class UiEngineImpl implements UiEngine {
 				meterAuServerComplete(pfmeter, doneReqIds, exec);
 		}
 	}
+	public Object startUpdate(Execution exec) throws IOException {
+		final Desktop desktop = exec.getDesktop();
+		UiVisualizer uv = doActivate(exec, true, false, null);
+		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
+		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
+		return new UpdateInfo(uv);
+	}
+	public JSONArray finishUpdate(Object ctx) throws IOException {
+		final UpdateInfo ui = (UpdateInfo)ctx;
+		final Execution exec = ui.uv.getExecution();
+		final Desktop desktop = exec.getDesktop();
+		final List<Throwable> errs = new LinkedList<Throwable>();
+
+		//1. process events
+		Event event = nextEvent(ui.uv);
+		do {
+			for (; event != null; event = nextEvent(ui.uv)) {
+				try {
+					process(desktop, event);
+				} catch (Throwable ex) {
+					handleError(ex, ui.uv, errs);
+					break; //skip the rest of events! 
+				}
+			}
+
+			resumeAll(desktop, ui.uv, errs);
+		} while ((event = nextEvent(ui.uv)) != null);
+
+		//2. Handle aborting reason
+		ui.abrn = ui.uv.getAbortingReason();
+		if (ui.abrn != null)
+			ui.abrn.execute(); //always execute even if !isAborting
+
+		//3. Retrieve responses
+		List<AuResponse> responses;
+		try {
+			if (!errs.isEmpty())
+				visualizeErrors(exec, ui.uv, errs);
+
+			responses = ui.uv.getResponses();
+		} catch (Throwable ex) {
+			responses = new LinkedList<AuResponse>();
+			responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+			log.error(ex);
+		}
+
+		final JSONArray rs = new JSONArray();
+		for (Iterator it = responses.iterator(); it.hasNext();)
+			rs.add(AuWriters.toJSON((AuResponse)it.next()));
+		return rs;
+	}
+	public void closeUpdate(Object ctx) throws IOException {
+		final UpdateInfo ui = (UpdateInfo)ctx;
+		final Execution exec = ui.uv.getExecution();
+
+		final Desktop desktop = exec.getDesktop();
+		((DesktopCtrl)desktop).invokeExecutionCleanups(exec, null, null);
+		desktop.getWebApp().getConfiguration().invokeExecutionCleanups(exec, null, null);
+
+		if (ui.abrn != null) {
+			try {
+				ui.abrn.finish();
+			} catch (Throwable t) {
+				log.warning(t);
+			}
+		}
+
+		doDeactivate(exec);
+	}
+	private static class UpdateInfo {
+		private final UiVisualizer uv;
+		private AbortingReason abrn;
+		private UpdateInfo(UiVisualizer uv) {
+			this.uv = uv;
+		}
+	}
+
 	/** Handles each error. The erros will be queued to the errs list
 	 * and processed later by {@link #visualizeErrors}.
 	 */

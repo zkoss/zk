@@ -47,7 +47,7 @@ public interface Function {
 	 * @param args the arguments used for the method call.
 	 * If null, an Object array with zero length is assumed.
 	 */
-	public Object invoke(Object obj, Object[] args) throws Exception;
+	public Object invoke(Object obj, Object... args) throws Exception;
 
 	/** Converts this function to a method, or null if unable to convert.
 	 */

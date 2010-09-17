@@ -220,4 +220,30 @@ public class Utils {
 		}
 		return null;
 	}
+
+	/** Checks the update URI.
+	 * @param updateURI the update URI to be checked.
+	 * @param info the info to show if updateURI is incorrect.
+	 * @return the update URI (by removing ending / if any)
+	 * @exception ServletException if updateURI is incorrect.
+	 * @since 5.0.5
+	 */
+	public static final String checkUpdateURI(String updateURI, String info)
+	throws ServletException {
+		if (updateURI == null
+		|| (updateURI = updateURI.trim()).length() == 0
+		|| updateURI.charAt(0) != '/')
+			throw new ServletException(info+" must be specified and starts with /");
+		if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
+			throw new ServletException(info+" cannot contain ';' or '?'");
+			//Jetty will encode URL by appending ';jsess..' and we have to
+			//remove it under certain situations, so not alow it
+		if (updateURI.charAt(updateURI.length() - 1) == '\\') {
+			if (updateURI.length() == 1)
+				throw new ServletException(info+" cannot contain only '/'");
+			updateURI = updateURI.substring(0, updateURI.length() - 1);
+				//remove the trailing '\\' if any
+		}
+		return updateURI;
+	}
 }

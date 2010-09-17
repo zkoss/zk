@@ -1,0 +1,23 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Sizing the column header to right and make it wider but not go over the listbox width.</li>
+<li>If you see a horizontal scrollbar, it is a bug; otherwise, it is OK.</li>
+<li>Now drag the column header to right and over the listbox right edge(wider than the listbox width)</li>
+<li>If you did not see a horizontal scrollbar, it is a bug; otherwise, it is OK.</li>
+<li>Done.</li>
+]]>
+</html>
+<listbox>
+	<listhead sizable="true">
+		<listheader label="column1" width="40px"/>
+	</listhead>
+	<listitem>
+		<listcell label="row1" />
+	</listitem>
+	<listitem>
+		<listcell label="row2" />
+	</listitem>
+</listbox>
+</zk>

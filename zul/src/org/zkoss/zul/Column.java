@@ -335,7 +335,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		//comparator might be zscript
 		Scopes.beforeInterpret(this);
 		try {
-			final ListModel model = grid.getModel();
+			final ListModel<?> model = grid.getModel();
 			boolean isPagingMold = grid.inPagingMold();
 			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
@@ -345,7 +345,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 				} else {
 					if (!(model instanceof ListModelExt))
 						throw new UiException("ListModelExt must be implemented in "+model.getClass());
-					((ListModelExt)model).sort(cmpr, ascending);
+					((ListModelExt<?>)model).sort(cmpr, ascending);
 					//CONSIDER: provide index for sort
 				}
 			} else { //not live data

@@ -33,27 +33,26 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @author Jeff Liu
  * @since ZK 3.0.0
  */
-public abstract class AbstractTreeModel implements TreeModel, java.io.Serializable  {
+public abstract class AbstractTreeModel<E> implements TreeModel<E>, java.io.Serializable  {
 	
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
-	private Object _root;
-	
-	private transient List _listeners = new LinkedList();
+	private E _root;
+	private transient List<TreeDataListener> _listeners = new LinkedList<TreeDataListener>();
 	
 	/**
 	 * Constructor
 	 * @param root - root of tree
 	 */
-	public AbstractTreeModel(Object root){
+	public AbstractTreeModel(E root){
 		_root = root;
 	}
 	/**
 	* Return the root of tree
 	* @return the root of tree
 	*/
-	public Object getRoot(){
+	public E getRoot(){
 		return _root;
 	}
 	
@@ -61,20 +60,20 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
-	protected void fireEvent(Object node, int indexFrom, int indexTo, int evtType){
-		final TreeDataEvent evt = new TreeDataEvent(this,evtType, node, indexFrom,indexTo);
-		for (Iterator it = _listeners.iterator(); it.hasNext();)
-			((TreeDataListener)it.next()).onChange(evt);
+	protected void fireEvent(E node, int indexFrom, int indexTo, int evtType){
+		final TreeDataEvent<E> evt = new TreeDataEvent<E>(this,evtType, node, indexFrom,indexTo);
+		for (TreeDataListener l: _listeners)
+			l.onChange(evt);
 	}
 	
 	//-TreeModel-//
-	public int[] getPath(Object parent, Object lastNode){
-		List l = new ArrayList();
+	public int[] getPath(E parent, E lastNode){
+		List<Integer> l = new ArrayList<Integer>();
 		dfSearch(l, parent, lastNode);
-		Object[] objs = l.toArray();
-		int[] path = new int[objs.length];
-		for(int i=0;i<objs.length; i++){
-			path[i] = ((Integer)objs[i]).intValue();
+		int[] path = new int[l.size()];
+		int i = 0;
+		for (Integer v: l) {
+			path[i++] = v.intValue();
 		}
 		return path;
 	}
@@ -87,7 +86,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * @param target destination
 	 * @return whether the target is found or not
 	 */
-	private boolean dfSearch(List path, Object node, Object target){
+	private boolean dfSearch(List<Integer> path, E node, E target){
 			if(node.equals(target)){
 				return true;
 			}
@@ -125,7 +124,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_listeners = new LinkedList();
+		_listeners = new LinkedList<TreeDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
 }

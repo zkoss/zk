@@ -130,8 +130,8 @@ for(int j=0; j<=9; ++j) {
 		Comparator asc2 = new MyComparator(true,true);
 		Comparator dsc2 = new MyComparator(false,true);
 		
-		GroupsModel model1 = new ArrayGroupsModel(datas,asc1);
-		GroupsModel model2 = new org.zkoss.zkdemo.test2.group.Test1ArrayGroupsModel(datas,(Comparator)asc1);
+		GroupsModel model1 = new GroupsModelArray(datas,asc1);
+		GroupsModel model2 = new org.zkoss.zkdemo.test2.group.Test1GroupsModelArray(datas,(Comparator)asc1);
 		GroupsModel lm = model2;
 
 	]]></zscript>	

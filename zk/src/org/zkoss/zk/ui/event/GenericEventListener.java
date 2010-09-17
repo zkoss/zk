@@ -84,15 +84,15 @@ abstract public class GenericEventListener implements EventListener {
 				//paramcls is ForwardEvent || Event
 				if (ForwardEvent.class.isAssignableFrom(paramcls)
 				|| Event.class.equals(paramcls)) { 
-					mtd.invoke(controller, new Object[] {evt});
+					mtd.invoke(controller, evt);
 				} else {
 					do {
 						evt = ((ForwardEvent)evt).getOrigin();
 					} while(evt instanceof ForwardEvent);
-					mtd.invoke(controller, new Object[] {evt});
+					mtd.invoke(controller, evt);
 				}
 			} else
-				mtd.invoke(controller, new Object[] {evt});
+				mtd.invoke(controller, evt);
 		}
 	}
 	

@@ -21,6 +21,8 @@ import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
+import static org.zkoss.lang.Generics.cast;
+
 import java.util.Comparator;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -37,8 +39,8 @@ import java.util.List;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelArray extends AbstractListModel
-implements ListModelExt, java.io.Serializable {
+public class ListModelArray<E> extends AbstractListModel<E>
+implements ListModelExt<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected final Object[] _array;
@@ -60,8 +62,8 @@ implements ListModelExt, java.io.Serializable {
 	 * Instead, modify it thru this object.
 	 * @since 2.4.0
 	 */
-	public ListModelArray(Object[] array, boolean live) {
-		_array = live ? array: (Object[])ArraysX.clone(array);
+	public ListModelArray(E[] array, boolean live) {
+		_array = live ? array: ArraysX.clone(array);
 	}
 
 	/**
@@ -69,8 +71,8 @@ implements ListModelExt, java.io.Serializable {
 	 * It mades a copy of the specified array (i.e., not live).
 	 * @param src the source array used to initialize this ListModelArray.
 	 */
-	public ListModelArray(Object[] src) {
-		_array = (Object[])ArraysX.clone(src);
+	public ListModelArray(E[] src) {
+		_array = ArraysX.clone(src);
 	}
 	
 	/**
@@ -85,21 +87,21 @@ implements ListModelExt, java.io.Serializable {
 	 * It mades a copy of the specified list (i.e., not live).
 	 * @since 2.4.1
 	 */
-	public ListModelArray(List list) {
+	public ListModelArray(List<? extends E> list) {
 		_array = list.toArray(new Object[list.size()]);
 	}
 
 	/** Get the value of this ListModelArray at specified index.
 	 * @param index the array index to be get value.
 	 */
-	public Object get(int index) {
+	public E get(int index) {
 		return getElementAt(index);
 	}
 	
 	/** Change content of the Array at specified index.
 	 * @param index the array index to be set the new value.
 	 */
-	public void set(int index, Object value) {
+	public void set(int index, E value) {
 		_array[index] = value;
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 	}
@@ -127,9 +129,9 @@ implements ListModelExt, java.io.Serializable {
 	public int getSize() {
 		return _array.length;
 	}
-	
-	public Object getElementAt(int j) {
-		return _array[j];
+	@SuppressWarnings("unchecked")
+	public E getElementAt(int j) {
+		return (E)_array[j];
 	}
 	
 	//-- ListModelExt --//
@@ -139,8 +141,9 @@ implements ListModelExt, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
-		Arrays.sort(_array, cmpr);
+	@SuppressWarnings("unchecked")
+	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		Arrays.sort(_array, (Comparator)cmpr);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 

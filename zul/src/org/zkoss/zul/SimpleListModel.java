@@ -41,8 +41,8 @@ import org.zkoss.zul.event.ListDataEvent;
  * @see ListModelMap
  * @see ListSubModel (since 3.0.2)
  */
-public class SimpleListModel extends AbstractListModel
-implements ListModelExt, ListSubModel, java.io.Serializable {
+public class SimpleListModel<E> extends AbstractListModel<E>
+implements ListModelExt<E>, ListSubModel<E>, java.io.Serializable {
     private static final long serialVersionUID = 20060707L;
 
 	private final Object[] _data;
@@ -62,15 +62,13 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * since {@link Listbox} is not smart enough to hanle it.
 	 * @since 2.4.1
 	 */
-	public SimpleListModel(Object[] data, boolean live) {
-		if (data == null)
-			throw new NullPointerException();
-		_data = live ? data: (Object[])ArraysX.clone(data);
+	public SimpleListModel(E[] data, boolean live) {
+		_data = live ? data: ArraysX.clone(data);
 	}
 	/** Constructor.
 	 * It made a copy of the specified array (<code>data</code>).
 	 */
-	public SimpleListModel(Object[] data) {
+	public SimpleListModel(E[] data) {
 		this(data, false);
 	}
 
@@ -80,16 +78,17 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * if the data is huge.
 	 * @since 2.4.1
 	 */
-	public SimpleListModel(List data) {
-		_data = data.toArray(new Object[data.size()]);
+	public SimpleListModel(List<? extends E> data) {
+		_data = data.toArray();
 	}
 
 	//-- ListModel --//
 	public int getSize() {
 		return _data.length;
 	}
-	public Object getElementAt(int j) {
-		return _data[j];
+	@SuppressWarnings("unchecked")
+	public E getElementAt(int j) {
+		return (E)_data[j];
 	}
 
 	//-- ListModelExt --//
@@ -99,8 +98,9 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
-		Arrays.sort(_data, cmpr);
+	@SuppressWarnings("unchecked")
+	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		Arrays.sort(_data, (Comparator)cmpr);
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 	}
 	
@@ -127,16 +127,17 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 * @see #getMaxNumberInSubModel
 	 * @since 3.0.2
 	 */
-	public ListModel getSubModel(Object value, int nRows) {
-		final LinkedList data = new LinkedList();
+	@SuppressWarnings("unchecked")
+	public ListModel<E> getSubModel(E value, int nRows) {
+		final List<E> data = new LinkedList<E>();
 		nRows = getMaxNumberInSubModel(nRows);
 		for (int i = 0; i < _data.length; i++) {
 			if (inSubModel(value, _data[i])) {
-				data.add(_data[i]);
+				data.add((E)_data[i]);
 				if (--nRows <= 0) break; //done
 			}
 		}
-		return new SimpleListModel(data);
+		return new SimpleListModel<E>(data);
 	}
 	/** Returns the maximal allowed number of matched items in the sub-model
 	 * returned by {@link #getSubModel}.

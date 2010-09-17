@@ -69,7 +69,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	private String _bgColor = "#FFFFFF"; //background color in #RRGGBB form
 	private int _bgRGB = 0xFFFFFF; //background color in 0xRRGGBB
 	
-	private List _fonts = new ArrayList(9); //fonts that can be used to draw text
+	private List<Font> _fonts = new ArrayList<Font>(9); //fonts that can be used to draw text
 	private int _len = 5; //text length, default 5
 	private String _exclude = null;
 	private String _value = ""; //captcha text value 
@@ -86,7 +86,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 	/**
 	 * Gets fonts list, default provide two fonts.
 	 */
-	public List getFonts() {
+	public List<Font> getFonts() {
 		return _fonts;
 	}
 	
@@ -105,7 +105,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 			return DEFAULT_FONTS[j];
 		}
 
-		return (Font) _fonts.get(j);
+		return _fonts.get(j);
 	}
 	
 	/**

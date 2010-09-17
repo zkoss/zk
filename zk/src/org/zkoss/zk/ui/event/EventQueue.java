@@ -44,7 +44,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * @since 5.0.0
  */
 public interface EventQueue {
-	/** Publishes an event the queue.
+	/** Publishes an event to the queue.
 	 *
 	 * <p>If the scope of a event queue is desktop or group,
 	 * this method must be called within an activated exection
@@ -54,12 +54,18 @@ public interface EventQueue {
 	 * <p>On the other hand, if the scope is session or application,
 	 * it is OK to be called without the current execution.
 	 *
+	 * @param event the event to publish.<br/>
+	 * Notice that all subscribers will receive the event no matter
+	 * what the event's name and target are.<br/>
+	 * You could publish an anonymous event by
+	 * <code>publish(new Event("", null, data))</code>.
 	 * @exception IllegalStateException if this method is called
 	 * not within an activated execution (such as a working thread),
 	 * and this is a ({@link EventQueues#DESKTOP}) or {@link EventQueues#GROUP}
 	 * event queue.
 	 */
 	public void publish(Event event);
+
 	/** Subscribes a listener to this queue.
 	 * It is the same as <code>subscribe(listener, false)</code>
 	 * ({@link #subscribe(EventListener,boolean)}. In other words,

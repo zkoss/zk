@@ -31,34 +31,34 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @since ZK 3.0.0
  *
  */
-public interface TreeModel {
+public interface TreeModel<E> {
 	
 	/**
 	 * Returns true if node is a leaf.
 	 * @param node a node in the tree, obtained from this data source
 	 * @return true if node is a leafs
 	 */
-	public boolean isLeaf(Object node);
+	public boolean isLeaf(E node);
 
 	/**
 	 * Returns the child of parent at index index in the parent's child array.
 	 * @param parent a node in the tree, obtained from this data source
 	 * @return the child of parent at index index
 	 */
-	public Object getChild(Object parent, int index);
+	public E getChild(E parent, int index);
 	
 	/**
 	 * Returns the number of children of parent.
 	 * @param parent a node in the tree, obtained from this data source
 	 * @return the number of children of the node parent
 	 */
-	public int getChildCount(Object parent);
+	public int getChildCount(E parent);
 	
 	/**
 	 * Returns the root of the tree.
 	 * @return the root of Tree.
 	 */
-	public Object getRoot();
+	public E getRoot();
 	
 	/**
 	 * Add a listener to the tree that's notified each time a change to the data model occurs
@@ -86,6 +86,6 @@ public interface TreeModel {
 	 * @param lastNode the destination of Path
 	 * @return an integer array to represent the path from parent to lastNode.
 	 */
-	public int[] getPath(Object parent, Object lastNode);
+	public int[] getPath(E parent, E lastNode);
 	
 }

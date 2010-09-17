@@ -32,7 +32,7 @@ public interface Captcha extends org.zkoss.zul.api.Image {
 	/**
 	 * Gets fonts list, default provide two fonts.
 	 */
-	public List getFonts();
+	public List<Font> getFonts();
 
 	/**
 	 * Gets the default font list.
