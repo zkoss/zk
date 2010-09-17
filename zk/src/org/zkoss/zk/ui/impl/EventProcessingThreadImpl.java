@@ -324,7 +324,7 @@ implements EventProcessingThread {
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		_evtThdInits = config.newEventThreadInits(comp, event);
 		try {
-			int evtTimeWarn = config.getEventTimeWarning();
+			long evtTimeWarn = config.getEventTimeWarning();
 			long begt = 0;
 			if (evtTimeWarn > 0) {
 				begt = System.currentTimeMillis();
