@@ -20,7 +20,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		<arg value="${bin.dir}/genprop"/>
 		<arg value="-x"/>
 		<arg value="${src.mesg.dir}"/>
-		<arg value="${codegen.dir}"/>
+		<arg value="${src.dir}"/>
 	</exec>
 </target>
 
