@@ -58,23 +58,6 @@ div.z-row-cnt span {
 	color: #0E3A99;
 }
 </style>
-<!-- Due to the security constraint, ZK demo site doesn't allow
-<zscript>
-class Comp implements Comparator {
-	private boolean _asc;
-	public Comp(boolean asc) {
-		_asc = asc;
-	}
-	public int compare(Object o1, Object o2) {
-		String s1 = o1.getChildren().get(1).getValue(),
-			s2 = o2.getChildren().get(1).getValue();
-		int v = s1.compareTo(s2);
-		return _asc ? v: -v;
-	}
-}
-Comp asc = new Comp(true), dsc = new Comp(false);
-</zscript>
--->
 <zscript>
 import org.zkoss.zkdemo.userguide.*;
 Comparator asc = new RowDetailComparator(true),
