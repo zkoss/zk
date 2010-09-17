@@ -12,6 +12,8 @@ ZK 5.0.5
   3064997: Listen onPiggyback event threw NoSuchElementException
 
 * Upgrade Notes
+  + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
+    (such that the naming is consistent with ListModel's implementations)
 
 	--------
 ZK 5.0.4

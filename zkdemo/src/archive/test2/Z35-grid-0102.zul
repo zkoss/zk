@@ -107,8 +107,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		Comparator asc2 = new MyComparator(true,true);
 		Comparator dsc2 = new MyComparator(false,true);
 		
-		GroupsModel model1 = new ArrayGroupsModel(datas,asc1);
-		GroupsModel model2 = new org.zkoss.zkdemo.test2.group.Test1ArrayGroupsModel(datas,(Comparator)asc1);
+		GroupsModel model1 = new GroupsModelArray(datas,asc1);
+		GroupsModel model2 = new org.zkoss.zkdemo.test2.group.Test1GroupsModelArray(datas,(Comparator)asc1);
 
 	]]></zscript>	
 	<div>
