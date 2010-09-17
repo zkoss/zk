@@ -2295,17 +2295,6 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	/**
-	 * Returns an iterator to iterate thru all visible children. Unlike
-	 * {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * 
-	 * @since 3.5.1
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
-
-	/**
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {

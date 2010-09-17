@@ -229,20 +229,16 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		} else
 			((Tree)comp).smartUpdate(name, value);
 	}
-	/** Returns an iterator to iterate thru all visible children.
-	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * @since 3.0.7
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
+
 	/**
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {
 		private final Iterator _it = getChildren().iterator();
 		private Tree _tree = getTree();
+
+		private VisibleChildrenIterator() {
+		}
 
 		public boolean hasNext() {
 			if (_tree == null || !_tree.inPagingMold()) return _it.hasNext();
@@ -262,7 +258,7 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	
 	protected void redrawChildren(Writer out) throws IOException {
 		if (getAttribute(Attributes.SHALL_RENDER_ITEM) == null) {
-			for (Iterator it = getVisibleChildrenIterator(); it.hasNext();)
+			for (Iterator it = new VisibleChildrenIterator(); it.hasNext();)
 				((ComponentCtrl)it.next()).redraw(out);
 		}
 	}

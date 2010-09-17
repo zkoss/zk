@@ -500,21 +500,16 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 	}
 
-	/** Returns an iterator to iterate thru all visible children.
-	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * @since 3.5.1
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
 	/**
 	 * An iterator used by visible children.
 	 */
+/** Not used
 	private class VisibleChildrenIterator implements Iterator {
 		private final ListIterator _it = getChildren().listIterator();
 		private Grid _grid = getGrid();
 		private int _count = 0;
+		private VisibleChildrenIterator() {
+		}
 		public boolean hasNext() {
 			if (_grid == null || !_grid.inPagingMold()) return _it.hasNext();
 			
@@ -555,6 +550,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			throw new UnsupportedOperationException();
 		}
 	}
+*/
+
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : _zclass;
 	}
