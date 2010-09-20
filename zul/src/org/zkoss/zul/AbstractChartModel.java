@@ -41,7 +41,7 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
-	protected void fireEvent(int type, Comparable series, Object data) {
+	protected void fireEvent(int type, Comparable<?> series, Object data) {
 		final ChartDataEvent evt = new ChartDataEvent(this, type, series, data);
 		for (ChartDataListener l: _listeners)
 			l.onChange(evt);

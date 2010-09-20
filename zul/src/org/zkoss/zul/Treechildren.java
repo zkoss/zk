@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.AbstractCollection;
 import java.util.Map;
 import java.util.Set;
+
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
@@ -104,22 +107,22 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	 * <p>Note: the performance of the size method of returned collection
 	 * is no good.
 	 */
-	public Collection getItems() {
-		return new AbstractCollection() {
+	public Collection<Treeitem> getItems() {
+		return new AbstractCollection<Treeitem>() {
 			public int size() {
 				return getItemCount();
 			}
 			public boolean isEmpty() {
 				return getChildren().isEmpty();
 			}
-			public Iterator iterator() {
-				return new Iterator() {
-					private final Iterator _it = getChildren().iterator();
-					private Iterator _sub;
+			public Iterator<Treeitem> iterator() {
+				return new Iterator<Treeitem>() {
+					private final Iterator<Component> _it = getChildren().iterator();
+					private Iterator<Treeitem> _sub;
 					public boolean hasNext() {
 						return (_sub != null && _sub.hasNext()) || _it.hasNext();
 					}
-					public Object next() {
+					public Treeitem next() {
 						if (_sub != null && _sub.hasNext())
 							return _sub.next();
 
@@ -229,20 +232,16 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		} else
 			((Tree)comp).smartUpdate(name, value);
 	}
-	/** Returns an iterator to iterate thru all visible children.
-	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * @since 3.0.7
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
+
 	/**
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {
 		private final Iterator _it = getChildren().iterator();
 		private Tree _tree = getTree();
+
+		private VisibleChildrenIterator() {
+		}
 
 		public boolean hasNext() {
 			if (_tree == null || !_tree.inPagingMold()) return _it.hasNext();
@@ -262,7 +261,7 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	
 	protected void redrawChildren(Writer out) throws IOException {
 		if (getAttribute(Attributes.SHALL_RENDER_ITEM) == null) {
-			for (Iterator it = getVisibleChildrenIterator(); it.hasNext();)
+			for (Iterator it = new VisibleChildrenIterator(); it.hasNext();)
 				((ComponentCtrl)it.next()).redraw(out);
 		}
 	}
@@ -284,14 +283,14 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			return getTree();
 				//the whole tree is a single cropping scope
 		}
-		public Set getAvailableAtClient() {
+		public Set<? extends Component> getAvailableAtClient() {
 			if (!isCropper()) return null;
 
 			final Tree tree = getTree();
 			final Component parent = getParent();
 			final Execution exe = Executions.getCurrent();
 			final String attrnm = VISIBLE_ITEM + tree.getUuid();
-			Map map = (Map)exe.getAttribute(attrnm);
+			Map<Treeitem, Boolean> map = cast((Map)exe.getAttribute(attrnm));
 			if (map == null) {
 				//Test very simple case first since getVisibleItems costly
 				if (parent instanceof Treeitem) {

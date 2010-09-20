@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	private boolean _open = true;
-	private transient List _items;
+	private transient List<Listitem> _items;
 
 	static {
 		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -58,14 +58,14 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		setValue(value);
 	}
 	private void init() {
-		_items =  new AbstractList() {
+		_items =  new AbstractList<Listitem>() {
 			public int size() {
 				return getItemCount();
 			}
-			public Iterator iterator() {
+			public Iterator<Listitem> iterator() {
 				return new IterItems();
 			}
-			public Object get(int index) {
+			public Listitem get(int index) {
 				final Listbox lb = getListbox();
 				if (lb == null)
 					throw new IndexOutOfBoundsException("Index: "+index);
@@ -76,7 +76,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	/** 
 	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
 	 */
-	public List getItems() {
+	public List<Listitem> getItems() {
 		return _items;
 	}
 	/** Returns the number of items.
@@ -207,14 +207,14 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	/**
 	 * An iterator used by _items.
 	 */
-	private class IterItems implements Iterator {
-		private final Iterator _it = getListbox().getItems().listIterator(getIndex()+1);
+	private class IterItems implements Iterator<Listitem> {
+		private final Iterator<Listitem> _it = getListbox().getItems().listIterator(getIndex()+1);
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < getItemCount();
 		}
-		public Object next() {
+		public Listitem next() {
 			++_j;
 			return _it.next();
 		}

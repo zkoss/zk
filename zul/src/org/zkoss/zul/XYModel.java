@@ -30,32 +30,32 @@ public interface XYModel extends ChartModel {
 	/**
 	 * Get a series of the specified index;
 	 */
-	public Comparable getSeries(int index);
+	public Comparable<?> getSeries(int index);
 	
 	/**
 	 * Get all series as a collection.
 	 */
-	public Collection getSeries();
+	public Collection<Comparable<?>> getSeries();
 	
 	/**
 	 * Get data count of a specified series.
 	 * @param series the specified series.
 	 */
-	public int getDataCount(Comparable series);
+	public int getDataCount(Comparable<?> series);
 
 	/**
 	 * Get X value of a specified series and data index.
 	 * @param series the series.
 	 * @param index the data index.
 	 */
-	public Number getX(Comparable series, int index);
+	public Number getX(Comparable<?> series, int index);
 
 	/**
 	 * Get Y value of a specified series and data index.
 	 * @param series the series.
 	 * @param index the data index.
 	 */
-	public Number getY(Comparable series, int index);
+	public Number getY(Comparable<?> series, int index);
 
 	/**
 	 * Replace the value of the new (x,y) into a series at specified index.
@@ -65,7 +65,7 @@ public interface XYModel extends ChartModel {
 	 * @param index the data index
 	 * @since 5.0.0
 	 */
-	public void setValue(Comparable series, Number x, Number y, int index);
+	public void setValue(Comparable<?> series, Number x, Number y, int index);
 	
 	/**
 	 * Append an (x,y) into a series.
@@ -73,7 +73,7 @@ public interface XYModel extends ChartModel {
 	 * @param x the x value.
 	 * @param y the y value.
 	 */	
-	public void addValue(Comparable series, Number x, Number y);
+	public void addValue(Comparable<?> series, Number x, Number y);
 
 	/**
 	 * Add an (x,y) into a series at specified index.
@@ -83,7 +83,7 @@ public interface XYModel extends ChartModel {
 	 * @param index the data index.
 	 * @since 5.0.0
 	 */	
-	public void addValue(Comparable series, Number x, Number y, int index);
+	public void addValue(Comparable<?> series, Number x, Number y, int index);
 	
 	/**
 	 * Set model to autosort on x value for each series.
@@ -100,14 +100,14 @@ public interface XYModel extends ChartModel {
 	 * Remove data of a specified series.
 	 * @param series the series
 	 */
-	public void removeSeries(Comparable series);
+	public void removeSeries(Comparable<?> series);
 
 	/**
 	 * Remove (x,Y) value of a specified series and data index.
 	 * @param series the series.
 	 * @param index the data index.
 	 */	
-	public void removeValue(Comparable series, int index);
+	public void removeValue(Comparable<?> series, int index);
 
 	/**
 	 * clear this model.

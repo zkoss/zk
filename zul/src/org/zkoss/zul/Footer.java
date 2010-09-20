@@ -75,7 +75,7 @@ public class Footer  extends FooterElement implements org.zkoss.zul.api.Footer {
 			final Columns cs = grid.getColumns();
 			if (cs != null) {
 				final int j = getColumnIndex();
-				final List cschs = cs.getChildren();
+				final List<Component> cschs = cs.getChildren();
 				if (j < cschs.size())
 					return (Column)cschs.get(j);
 			}

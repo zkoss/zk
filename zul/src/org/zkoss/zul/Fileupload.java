@@ -285,7 +285,7 @@ public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload {
 	public static
 	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
 	throws InterruptedException {
-		final Map params = new HashMap(8);
+		final Map<String, Object> params = new HashMap<String, Object>(8);
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
@@ -296,8 +296,7 @@ public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload {
 		params.put("maxsize", String.valueOf(maxsize));
 		
 		final FileuploadDlg dlg = (FileuploadDlg)
-			exec.createComponents(
-				_templ, null, params);
+			exec.createComponents(_templ, null, params);
 		try {
 			dlg.doModal();
 		} catch (Throwable ex) {

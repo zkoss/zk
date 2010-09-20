@@ -128,7 +128,7 @@ implements ListModelExt<E>, ListSubModel<E>, java.io.Serializable {
 	 * @since 3.0.2
 	 */
 	@SuppressWarnings("unchecked")
-	public ListModel<E> getSubModel(E value, int nRows) {
+	public ListModel<E> getSubModel(Object value, int nRows) {
 		final List<E> data = new LinkedList<E>();
 		nRows = getMaxNumberInSubModel(nRows);
 		for (int i = 0; i < _data.length; i++) {

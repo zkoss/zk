@@ -245,7 +245,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			if ((_flags & (NO_POSITIVE|NO_NEGATIVE|NO_ZERO)) == 0)
 				return; //nothing to check
 
-			final int cmp = ((Comparable)value).compareTo(
+			final int cmp = compareTo((Comparable)value,
 				Classes.coerce(value.getClass(), null, false)); //compare to zero
 			if (cmp > 0) {
 				if ((_flags & NO_POSITIVE) != 0)
@@ -289,6 +289,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 					throw wrongValue(comp, getMessageForDateDenied());
 			}
 		}
+	}
+	@SuppressWarnings("unchecked")
+	private static int compareTo(Comparable v1, Object v2) {
+		return v1.compareTo(v2);
 	}
 	private WrongValueException wrongValue(Component comp, int errcode) {
 		return _errmsg != null ? new WrongValueException(comp, _errmsg):

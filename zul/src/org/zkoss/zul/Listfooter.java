@@ -76,7 +76,7 @@ public class Listfooter extends FooterElement implements org.zkoss.zul.api.Listf
 			final Listhead lcs = listbox.getListhead();
 			if (lcs != null) {
 				final int j = getColumnIndex();
-				final List lcschs = lcs.getChildren();
+				final List<Component> lcschs = lcs.getChildren();
 				if (j < lcschs.size())
 					return (Listheader)lcschs.get(j);
 			}

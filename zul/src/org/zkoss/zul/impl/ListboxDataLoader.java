@@ -316,7 +316,7 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 				//we have to test >= rather than >
 	}
 	
-	public Set getAvailableAtClient() {
+	public Set<? extends Component> getAvailableAtClient() {
 		if (!isCropper())
 			return null;
 		
@@ -326,11 +326,11 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		return getAvailableAtClient(ofs, pgsz);
 	}
 	
-	protected Set getAvailableAtClient(int offset, int limit) {
+	protected Set<? extends Component> getAvailableAtClient(int offset, int limit) {
 		if (!isCropper())
 			return null;
 
-		final Set avail = new LinkedHashSet(32);
+		final Set<Component> avail = new LinkedHashSet<Component>(32);
 		avail.addAll(_listbox.getHeads());
 		final Listfoot listfoot = _listbox.getListfoot();
 		if (listfoot != null) avail.add(listfoot);
@@ -343,7 +343,7 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		int ofs = offset;
 		
 		if (_listbox.getItemCount() > 0) {
-			Component item = (Component) _listbox.getItems().get(0);
+			Component item = _listbox.getItems().get(0);
 			while(item != null) {
 				if (pgsz == 0) break;
 				if (item.isVisible() && item instanceof Listitem) {
@@ -359,8 +359,12 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 							item = (Listitem) item.getNextSibling();
 					}
 				}
-				if (item != null)
-					item = item.getNextSibling();
+				if (item != null) {
+					final Component c = item.getNextSibling();
+					if (c instanceof Listitem)
+						item = (Listitem)c;
+					break; //no more
+				}
 			}
 		}
 		return avail;

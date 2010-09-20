@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
@@ -208,11 +209,13 @@ public class Listbox extends XulElement implements Paginated,
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 
 	private transient DataLoader _dataLoader;
-	private transient List _items, _groupsInfo, _groups;
+	private transient List<Listitem> _items;
+	private transient List<int[]> _groupsInfo;
+	private transient List<Listgroup> _groups;
 	/** A list of selected items. */
-	private transient Set _selItems;
+	private transient Set<Listitem> _selItems;
 	/** A readonly copy of {@link #_selItems}. */
-	private transient Set _roSelItems;
+	private transient Set<Listitem> _roSelItems;
 	private int _maxlength;
 	private int _rows, _jsel = -1;
 	private transient Listhead _listhead;
@@ -221,7 +224,7 @@ public class Listbox extends XulElement implements Paginated,
 	private transient ListModel _model;
 	private transient ListitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
-	private transient Collection _heads;
+	private transient Collection<Component> _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
 
@@ -280,16 +283,16 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	private void init() {
-		_items = new AbstractSequentialList() {
-			public ListIterator listIterator(int index) {
+		_items = new AbstractSequentialList<Listitem>() {
+			public ListIterator<Listitem> listIterator(int index) {
 				return new ItemIter(index);
 			}
 
-			public Object get(int j) {
-				final Object o = Listbox.this.getChildren().get(j + _hdcnt);
-				if (!(o instanceof Listitem))
-					throw new IndexOutOfBoundsException("Wrong index: " + j);
-				return o;
+			public Listitem get(int j) {
+				final Component o = Listbox.this.getChildren().get(j + _hdcnt);
+				if (o instanceof Listitem)
+					return (Listitem)o;
+				throw new IndexOutOfBoundsException("Wrong index: " + j);
 			}
 
 			public int size() {
@@ -316,30 +319,30 @@ public class Listbox extends XulElement implements Paginated,
 				}
 			}
 		};
-		_selItems = new LinkedHashSet(5);
+		_selItems = new LinkedHashSet<Listitem>(4);
 		_roSelItems = Collections.unmodifiableSet(_selItems);
 
-		_heads = new AbstractCollection() {
+		_heads = new AbstractCollection<Component>() {
 			public int size() {
 				return _hdcnt;
 			}
 
-			public Iterator iterator() {
+			public Iterator<Component> iterator() {
 				return new Iter();
 			}
 		};
-		_groupsInfo = new LinkedList();
-		_groups = new AbstractList() {
+		_groupsInfo = new LinkedList<int[]>();
+		_groups = new AbstractList<Listgroup>() {
 			public int size() {
 				return getGroupCount();
 			}
 
-			public Iterator iterator() {
+			public Iterator<Listgroup> iterator() {
 				return new IterGroups();
 			}
 
-			public Object get(int index) {
-				return getItemAtIndex(((int[]) _groupsInfo.get(index))[0]);
+			public Listgroup get(int index) {
+				return (Listgroup)getItemAtIndex(_groupsInfo.get(index)[0]);
 			}
 		};
 	}
@@ -349,13 +352,13 @@ public class Listbox extends XulElement implements Paginated,
 		return index - (offset < 0 ? 0 : offset);
 	}
 
-	public List getChildren() {
+	public List<Component> getChildren() {
 		return new Children();
 	}
 
 	protected class Children extends AbstractComponent.Children {
 		protected void removeRange(int fromIndex, int toIndex) {
-			ListIterator it = listIterator(toIndex);
+			ListIterator<Component> it = listIterator(toIndex);
 			for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
 				it.previous();
 				it.remove();
@@ -490,7 +493,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * 
 	 * @since 3.0.0
 	 */
-	public Collection getHeads() {
+	public Collection<Component> getHeads() {
 		return _heads;
 	}
 
@@ -701,8 +704,8 @@ public class Listbox extends XulElement implements Paginated,
 			_multiple = multiple;
 			if (!_multiple && _selItems.size() > 1) {
 				final Listitem item = getSelectedItem();
-				for (Iterator it = _selItems.iterator(); it.hasNext();) {
-					final Listitem li = (Listitem) it.next();
+				for (Iterator<Listitem> it = _selItems.iterator(); it.hasNext();) {
+					final Listitem li = it.next();
 					if (li != item) {
 						li.setSelectedDirectly(false);
 						it.remove();
@@ -780,7 +783,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * or remove them directly with the List interface. In other words, you
 	 * could add or remove an item by manipulating the returned list directly.
 	 */
-	public List getItems() {
+	public List<Listitem> getItems() {
 		return _items;
 	}
 
@@ -801,8 +804,7 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	public Listitem getItemAtIndex(int index) {
 		final int realindex = getRealIndex(index);
-		return realindex < 0 || realindex >= _items.size() ? null
-				: (Listitem) _items.get(realindex);
+		return realindex < 0 || realindex >= _items.size() ? null: _items.get(realindex);
 	}
 
 	/**
@@ -865,8 +867,7 @@ public class Listbox extends XulElement implements Paginated,
 		if (jsel < 0) { // unselect all
 			clearSelection();
 		} else if (jsel != _jsel || (_multiple && _selItems.size() > 1) || !_selItems.contains(getItemAtIndex(_jsel))) {
-			for (Iterator it = _selItems.iterator(); it.hasNext();) {
-				final Listitem item = (Listitem) it.next();
+			for (Listitem item: _selItems) {
 				item.setSelectedDirectly(false);
 			}
 			_selItems.clear();
@@ -890,7 +891,7 @@ public class Listbox extends XulElement implements Paginated,
 				if (!isLoadingModel()) {
 					((Selectable) _model).clearSelection();
 				}
-				((Selectable) _model).addSelection(_model.getElementAt(_jsel));
+				addSelToModel(_model.getElementAt(_jsel));
 			}
 
 			if (inSelectMold()) {
@@ -913,6 +914,10 @@ public class Listbox extends XulElement implements Paginated,
 			if (pg != getActivePage())
 				setActivePage(pg);
 		}
+	}
+	@SuppressWarnings("unchecked")
+	private void addSelToModel(Object o) {
+		((Selectable) _model).addSelection(o);
 	}
 
 	/**
@@ -965,8 +970,7 @@ public class Listbox extends XulElement implements Paginated,
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				if (_model instanceof Selectable) {
-					((Selectable) _model).addSelection(_model.getElementAt(item
-							.getIndex()));
+					addSelToModel(_model.getElementAt(item.getIndex()));
 				}
 				if (inSelectMold()) {
 					item.smartUpdate("selected", true);
@@ -1037,10 +1041,10 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	private void smartUpdateSelection() {
 		final StringBuffer sb = new StringBuffer(80);
-		for (Iterator it = _selItems.iterator(); it.hasNext();) {
+		for (Listitem item: _selItems) {
 			if (sb.length() > 0)
 				sb.append(',');
-			sb.append(((Listitem) it.next()).getUuid());
+			sb.append(item.getUuid());
 		}
 		smartUpdate("chgSel", sb.toString());
 	}
@@ -1076,8 +1080,7 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	public void clearSelection() {
 		if (!_selItems.isEmpty()) {
-			for (Iterator it = _selItems.iterator(); it.hasNext();) {
-				final Listitem item = (Listitem) it.next();
+			for (Listitem item: _selItems) {
 				item.setSelectedDirectly(false);
 			}
 			_selItems.clear();
@@ -1102,8 +1105,7 @@ public class Listbox extends XulElement implements Paginated,
 					+ this);
 
 		if (_items.size() != _selItems.size()) {
-			for (Iterator it = _items.iterator(); it.hasNext();) {
-				final Listitem item = (Listitem) it.next();
+			for (Listitem item: _items) {
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
 			}
@@ -1113,7 +1115,7 @@ public class Listbox extends XulElement implements Paginated,
 		if (_model instanceof Selectable) {
 			if (_model.getSize() != ((Selectable) _model).getSelection().size()) {
 				for (int j = _model.getSize(); --j >= 0;) {
-					((Selectable) _model).addSelection(_model.getElementAt(j));
+					addSelToModel(_model.getElementAt(j));
 				}
 			}
 		}
@@ -1128,10 +1130,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * {@link #renderItem}.
 	 */
 	public Listitem getSelectedItem() {
-		return _jsel >= 0 ? _jsel > 0 && _selItems.size() == 1 ? // optimize for
-		// performance
-		(Listitem) _selItems.iterator().next()
-				: getItemAtIndex(_jsel) : null;
+		return _jsel >= 0 ? _jsel > 0 && _selItems.size() == 1 ? // optimize for performance
+			_selItems.iterator().next(): getItemAtIndex(_jsel) : null;
 	}
 
 	/**
@@ -1615,7 +1615,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * 
 	 * @since 3.5.0
 	 */
-	public List getGroups() {
+	public List<Listgroup> getGroups() {
 		return _groups;
 	}
 
@@ -1641,10 +1641,10 @@ public class Listbox extends XulElement implements Paginated,
 		}
 		if (realj < _items.size()) {
 			final int beginning = j;
-			for (Iterator it = _items.listIterator(realj); it.hasNext()
+			for (Iterator<Listitem> it = _items.listIterator(realj); it.hasNext()
 					&& (to < 0 || j <= to); ++j) {
-				Object o = it.next();
-				((Listitem) o).setIndexDirectly(j);
+				Listitem o = it.next();
+				o.setIndexDirectly(j);
 	
 				// if beginning is a group, we don't need to change its groupInfo,
 				// because
@@ -1681,8 +1681,8 @@ public class Listbox extends XulElement implements Paginated,
 	/* package */int getGroupIndex(int index) {
 		int j = 0, gindex = -1;
 		int[] g = null;
-		for (Iterator it = _groupsInfo.iterator(); it.hasNext(); ++j) {
-			g = (int[]) it.next();
+		for (Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext(); ++j) {
+			g = it.next();
 			if (index == g[0])
 				gindex = j;
 			else if (index < g[0])
@@ -1704,8 +1704,7 @@ public class Listbox extends XulElement implements Paginated,
 	 */
 	/* package */int[] getLastGroupsInfoAt(int index) {
 		int[] rg = null;
-		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
-			int[] g = (int[]) it.next();
+		for (int[] g: _groupsInfo) {
 			if (index == g[0])
 				rg = g;
 			else if (index < g[0])
@@ -1719,8 +1718,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * listgroup, and the other is the number of items of listgroup(inclusive).
 	 */
 	/* package */int[] getGroupsInfoAt(int index, boolean isListgroup) {
-		for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
-			int[] g = (int[]) it.next();
+		for (int[] g: _groupsInfo) {
 			if (isListgroup) {
 				if (index == g[0])
 					return g;
@@ -1787,8 +1785,7 @@ public class Listbox extends XulElement implements Paginated,
 			}
 			if (_rod && hasGroupsModel()) {
 				if (_groupsInfo.isEmpty())
-					_groupsInfo = ((GroupsListModel) getModel())
-							.getGroupsInfo();
+					_groupsInfo = ((GroupsListModel<?,?,?>)getModel()).getGroupsInfos();
 				refChild = fixRefChildBeforeFoot(refChild);
 				if (super.insertBefore(newChild, refChild)) {
 					//bug #3049167: Bug in drag & drop demo
@@ -1809,8 +1806,7 @@ public class Listbox extends XulElement implements Paginated,
 							ginfo[2] = -1;
 						}
 					}
-					final int[] g = (int[]) _groupsInfo
-							.get(getGroupCount() - 1);
+					final int[] g = _groupsInfo.get(getGroupCount() - 1);
 					
 					g[2] = ((Listitem) getItems().get(
 							getItems().size() - 1))
@@ -1904,8 +1900,7 @@ public class Listbox extends XulElement implements Paginated,
 						_jsel = newIndex;
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
-							((Selectable) _model).addSelection(_model
-									.getElementAt(_jsel));
+							addSelToModel(_model.getElementAt(_jsel));
 						}
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
@@ -1913,8 +1908,7 @@ public class Listbox extends XulElement implements Paginated,
 						}
 						_selItems.add(newItem);
 						if (_model instanceof Selectable) {
-							((Selectable) _model).addSelection(_model
-									.getElementAt(_jsel));
+							addSelToModel(_model.getElementAt(_jsel));
 						}
 					} else { // deselect
 						newItem.setSelectedDirectly(false);
@@ -1943,8 +1937,7 @@ public class Listbox extends XulElement implements Paginated,
 					else {
 						int idx = 0;
 						int[] prev = null, next = null;
-						for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
-							int[] g = (int[]) it.next();
+						for (int[] g: _groupsInfo) {
 							if (g[0] <= lg.getIndex()) {
 								prev = g;
 								idx++;
@@ -2109,8 +2102,7 @@ public class Listbox extends XulElement implements Paginated,
 			}
 			if (child instanceof Listgroup) {
 				int[] prev = null, remove = null;
-				for (Iterator it = _groupsInfo.iterator(); it.hasNext();) {
-					int[] g = (int[]) it.next();
+				for (int[] g: _groupsInfo) {
 					if (g[0] == index) {
 						remove = g;
 						break;
@@ -2151,7 +2143,7 @@ public class Listbox extends XulElement implements Paginated,
 
 			if (hasGroupsModel() && getItemCount() <= 0) { // remove to empty,
 				// reset _groupsInfo
-				_groupsInfo = new LinkedList();
+				_groupsInfo = new LinkedList<int[]>();
 			}
 			//bug 3057288			
 			//getDataLoader().updateModelInfo(); //itemsInvalidate after really removed
@@ -2295,17 +2287,6 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	/**
-	 * Returns an iterator to iterate thru all visible children. Unlike
-	 * {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * 
-	 * @since 3.5.1
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
-
-	/**
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {
@@ -2376,8 +2357,8 @@ public class Listbox extends XulElement implements Paginated,
 			if (realj < 0)
 				realj = 0;
 			if (realj < _items.size()) {
-				for (Iterator it = _items.listIterator(realj); it.hasNext(); ++j) {
-					final Listitem item = (Listitem) it.next();
+				for (Iterator<Listitem> it = _items.listIterator(realj); it.hasNext(); ++j) {
+					final Listitem item = it.next();
 					if (item.isSelected()) {
 						_jsel = j;
 						return;
@@ -2401,9 +2382,9 @@ public class Listbox extends XulElement implements Paginated,
 		if (realj < 0)
 			realj = 0;
 		if (realj < _items.size()) {
-			for (Iterator it = _items.listIterator(realj); it.hasNext()
+			for (Iterator<Listitem> it = _items.listIterator(realj); it.hasNext()
 					&& (to < 0 || j <= to); ++j)
-				((Listitem) it.next()).setIndexDirectly(j);
+				it.next().setIndexDirectly(j);
 		}
 	}
 
@@ -2419,7 +2400,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	public ListModel getModel() {
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getModel() {
 		return _model;
 	}
 
@@ -2431,7 +2413,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * @since 3.5.0
 	 * @see #setModel(ListModel)
 	 */
-	public ListModel getListModel() {
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getListModel() {
 		return _model instanceof GroupsListModel ? null : _model;
 	}
 
@@ -2443,7 +2426,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * @since 3.5.0
 	 * @see #setModel(GroupsModel)
 	 */
-	public GroupsModel getGroupsModel() {
+	@SuppressWarnings("unchecked")
+	public <D, G, F> GroupsModel<D, G, F> getGroupsModel() {
 		return _model instanceof GroupsListModel ? ((GroupsListModel) _model)
 				.getGroupsModel() : null;
 	}
@@ -2461,7 +2445,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
-	public void setModel(ListModel model) {
+	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -2525,8 +2509,9 @@ public class Listbox extends XulElement implements Paginated,
 	 * @see #setModel(ListModel)
 	 * @see #getGroupsModel()
 	 */
-	public void setModel(GroupsModel model) {
-		setModel((ListModel) (model != null ? new GroupsListModel(model) : null));
+	@SuppressWarnings("unchecked")
+	public void setModel(GroupsModel<?, ?, ?> model) {
+		setModel((ListModel) (model != null ? GroupsListModel.toListModel(model) : null));
 	}
 
 	/**
@@ -2896,8 +2881,8 @@ public class Listbox extends XulElement implements Paginated,
 		return _zclass == null ? "z-listbox" : _zclass;
 	}
 
-	private class ItemIter implements ListIterator, java.io.Serializable {
-		private ListIterator _it;
+	private class ItemIter implements ListIterator<Listitem>, java.io.Serializable {
+		private ListIterator<Listitem> _it;
 		private int _j;
 		private boolean _bNxt;
 
@@ -2905,7 +2890,7 @@ public class Listbox extends XulElement implements Paginated,
 			_j = index;
 		}
 
-		public void add(Object o) {
+		public void add(Listitem o) {
 			prepare();
 			_it.add(o);
 			++_j;
@@ -2919,23 +2904,23 @@ public class Listbox extends XulElement implements Paginated,
 			return _j > 0;
 		}
 
-		public Object next() {
-			if (!hasNext())
+		public Listitem next() {
+			if (!hasNext()) //use _items.size() to control if reach listfoot
 				throw new NoSuchElementException();
 
 			prepare();
-			final Object o = _it.next();
+			final Listitem o = _it.next();
 			++_j;
 			_bNxt = true;
 			return o;
 		}
 
-		public Object previous() {
-			if (!hasPrevious())
+		public Listitem previous() {
+			if (!hasPrevious()) //use _j >= 0 to control if reach listhead
 				throw new NoSuchElementException();
 
 			prepare();
-			final Object o = _it.previous();
+			final Listitem o = _it.previous();
 			--_j;
 			_bNxt = false;
 			return o;
@@ -2957,15 +2942,16 @@ public class Listbox extends XulElement implements Paginated,
 				--_j;
 		}
 
-		public void set(Object o) {
+		public void set(Listitem o) {
 			if (_it == null)
 				throw new IllegalStateException();
 			_it.set(o);
 		}
 
+		@SuppressWarnings("unchecked")
 		private void prepare() {
 			if (_it == null)
-				_it = getChildren().listIterator(_j + _hdcnt);
+				_it = cast(getChildren().listIterator(_j + _hdcnt));
 		}
 	}
 
@@ -3086,8 +3072,7 @@ public class Listbox extends XulElement implements Paginated,
 				if (li.isSelected()) {
 					_selItems.add(li);
 					if (_model instanceof Selectable) {
-						((Selectable) _model).addSelection(_model
-								.getElementAt(index - 1));
+						addSelToModel(_model.getElementAt(index - 1));
 					}
 				}
 			} else if (child instanceof Listhead) {
@@ -3266,8 +3251,8 @@ public class Listbox extends XulElement implements Paginated,
 					}
 
 					int j = 0;
-					for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
-						final Listitem item = (Listitem) it.next();
+					for (Iterator<Listitem> it = _items.iterator(); it.hasNext(); ++j) {
+						final Listitem item = it.next();
 						if (selItems.contains(item)) {
 							addItemToSelection(item);
 						} else if (!paging) {
@@ -3288,8 +3273,8 @@ public class Listbox extends XulElement implements Paginated,
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%" : width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
-			final Set items = AuRequests.convertToItems(request.getDesktop(),
-					(List) request.getData().get("items"));
+			final Set<Listitem> items = AuRequests.convertToItems(
+				request.getDesktop(), getRequestData(request));
 			int cnt = items.size();
 			if (cnt == 0)
 				return; // nothing to do
@@ -3300,8 +3285,8 @@ public class Listbox extends XulElement implements Paginated,
 					cnt = _preloadsz; // at most 8 more to load
 
 				// 1. locate the first item found in items
-				final List toload = new LinkedList();
-				Iterator it = _items.iterator();
+				final List<Listitem> toload = new LinkedList<Listitem>();
+				Iterator<Listitem> it = _items.iterator();
 				while (it.hasNext()) {
 					final Listitem li = (Listitem) it.next();
 					if (items.contains(li)) // found
@@ -3313,7 +3298,7 @@ public class Listbox extends XulElement implements Paginated,
 				// 2. add unload items before the found one
 				if (!toload.isEmpty()) {
 					int bfcnt = cnt / 3;
-					for (Iterator e = toload.iterator(); bfcnt > 0
+					for (Iterator<Listitem> e = toload.iterator(); bfcnt > 0
 							&& e.hasNext(); --bfcnt, --cnt) {
 						items.add(e.next());
 					}
@@ -3321,7 +3306,7 @@ public class Listbox extends XulElement implements Paginated,
 
 				// 3. add unloaded after the found one
 				while (cnt > 0 && it.hasNext()) {
-					final Listitem li = (Listitem) it.next();
+					final Listitem li = it.next();
 					if (!li.isLoaded() && items.add(li))
 						--cnt;
 				}
@@ -3330,6 +3315,10 @@ public class Listbox extends XulElement implements Paginated,
 			Listbox.this.renderItems(items);
 		} else
 			super.service(request, everError);
+	}
+	@SuppressWarnings("unchecked")
+	private List<String> getRequestData(org.zkoss.zk.au.AuRequest request) {
+		return (List<String>) request.getData().get("items");
 	}
 
 	public Object getExtraCtrl() {
@@ -3360,7 +3349,7 @@ public class Listbox extends XulElement implements Paginated,
 			return Listbox.this;
 		}
 
-		public Set getAvailableAtClient() {
+		public Set<? extends Component> getAvailableAtClient() {
 			return ((Cropper) getDataLoader()).getAvailableAtClient();
 		}
 	}
@@ -3368,16 +3357,16 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * An iterator used by _heads.
 	 */
-	private class Iter implements Iterator {
-		private final Iterator _it = getChildren().iterator();
+	private class Iter implements Iterator<Component> {
+		private final Iterator<Component> _it = getChildren().iterator();
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < _hdcnt;
 		}
 
-		public Object next() {
-			final Object o = _it.next();
+		public Component next() {
+			final Component o = _it.next();
 			++_j;
 			return o;
 		}
@@ -3390,16 +3379,16 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * An iterator used by _groups.
 	 */
-	private class IterGroups implements Iterator {
-		private final Iterator _it = _groupsInfo.iterator();
+	private class IterGroups implements Iterator<Listgroup> {
+		private final Iterator<int[]> _it = _groupsInfo.iterator();
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < getGroupCount();
 		}
 
-		public Object next() {
-			final Object o = getItemAtIndex(((int[]) _it.next())[0]);
+		public Listgroup next() {
+			final Listgroup o = (Listgroup)getItemAtIndex(((int[]) _it.next())[0]);
 			++_j;
 			return o;
 		}

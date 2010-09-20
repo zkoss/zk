@@ -31,7 +31,7 @@ import org.zkoss.zul.event.ChartDataEvent;
 public class DialModel extends AbstractChartModel {
 	private static final long serialVersionUID = 20091008183229L;
 
-	private List _series = new ArrayList(4);
+	private List<DialModelScale> _series = new ArrayList<DialModelScale>(4);
 	
 	//DialFrame background
 	private String _bgColor = "#FFFFFF";
@@ -103,7 +103,7 @@ public class DialModel extends AbstractChartModel {
 	 * @return the DialModelScale.
 	 */
 	public DialModelScale getScale(int index) {
-		return (DialModelScale) _series.get(index);
+		return _series.get(index);
 	}
 	
 	/**

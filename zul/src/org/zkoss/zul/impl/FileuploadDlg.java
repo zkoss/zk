@@ -35,7 +35,7 @@ import org.zkoss.zul.Window;
  * @author tomyeh
  */
 public class FileuploadDlg extends Window {
-	private LinkedList _result = new LinkedList();
+	private LinkedList<Media> _result = new LinkedList<Media>();
 	private static final String ATTR_FILEUPLOAD_TARGET = "org.zkoss.zul.Fileupload.target";
 	
 	public void onClose(Event evt) {
@@ -62,7 +62,7 @@ public class FileuploadDlg extends Window {
 	 * @return an array of media (length >= 1), or null if nothing.
 	 */
 	public Media[] getResult() {
-		return _result.isEmpty() ? null : (Media[])_result.toArray(new Media[0]);
+		return _result.isEmpty() ? null : _result.toArray(new Media[_result.size()]);
 	}
 	
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {

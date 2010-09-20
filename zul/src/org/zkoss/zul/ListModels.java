@@ -130,12 +130,13 @@ public class ListModels {
 		 *            implementation usually limits to a certain number (for
 		 *            better performance).
 		 */
-		public ListModel<E> getSubModel(E value, int nRows) {
+		@SuppressWarnings("unchecked")
+		public ListModel<E> getSubModel(Object value, int nRows) {
 			final List<E> data = new LinkedList<E>();
 			nRows = nRows < 0 ? _nRows : nRows;
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
 				E o = _model.getElementAt(i);
-				if (_comparator.compare(value, o) == 0) {
+				if (((Comparator)_comparator).compare(value, o) == 0) {
 					data.add(o);
 					if (--nRows <= 0)
 						break; // done

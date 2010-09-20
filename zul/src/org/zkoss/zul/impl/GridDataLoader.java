@@ -330,7 +330,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				//we have to test >= rather than >
 	}
 	
-	public Set getAvailableAtClient() {
+	public Set<? extends Component> getAvailableAtClient() {
 		if (!isCropper())
 			return null;
 		
@@ -340,8 +340,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return getAvailableAtClient(ofs, pgsz);
 	}
 	
-	protected Set getAvailableAtClient(int offset, int limit) {
-		final Set avail = new LinkedHashSet(32);
+	protected Set<? extends Component> getAvailableAtClient(int offset, int limit) {
+		final Set<Component> avail = new LinkedHashSet<Component>(32);
 		final Rows rows = _grid.getRows();
 		Row row = (Row) rows.getFirstChild();
 		while(row != null) {

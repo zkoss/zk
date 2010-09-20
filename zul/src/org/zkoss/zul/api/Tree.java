@@ -428,7 +428,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setModel(TreeModel model);
+	public void setModel(TreeModel<?> model);
 
 	// --TreeModel dependent codes--//
 	/**
@@ -439,7 +439,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * @return the list model associated with this tree
 	 */
-	public TreeModel getModel();
+	public <T> TreeModel<T> getModel();
 
 	/**
 	 * Sets the renderer which is used to render each item if {@link #getModel}

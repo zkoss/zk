@@ -34,61 +34,61 @@ import org.zkoss.zul.event.ChartDataEvent;
  */
 public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	private static final long serialVersionUID = 20091008182904L;
-	protected Map _seriesMap = new HashMap(13); //(series, XYPair)
-	protected List _seriesList = new ArrayList(13);
+	protected Map<Comparable<?>, List<XYPair>> _seriesMap = new HashMap<Comparable<?>, List<XYPair>>(8); //(series, XYPair)
+	protected List<Comparable<?>> _seriesList = new ArrayList<Comparable<?>>();
 	private boolean _autoSort = true;
-	
+
 	//-- XYModel --//
-	public Comparable getSeries(int index) {
-		return (Comparable)_seriesList.get(index);
+	public Comparable<?> getSeries(int index) {
+		return _seriesList.get(index);
 	}
 	
-	public Collection getSeries() {
+	public Collection<Comparable<?>> getSeries() {
 		return _seriesList;
 	}
 	
-	public int getDataCount(Comparable series) {
-		final List xyPairs = (List) _seriesMap.get(series);
+	public int getDataCount(Comparable<?> series) {
+		final List<XYPair> xyPairs =  _seriesMap.get(series);
 		return xyPairs != null ? xyPairs.size() : 0;
 	}
 
-	public Number getX(Comparable series, int index) {
-		final List xyPairs = (List) _seriesMap.get(series);
+	public Number getX(Comparable<?> series, int index) {
+		final List<XYPair> xyPairs = _seriesMap.get(series);
 		
 		if (xyPairs != null) {
-			return ((XYPair)xyPairs.get(index)).getX();
+			return xyPairs.get(index).getX();
 		}
 		return null;
 	}
 
-	public Number getY(Comparable series, int index) {
-		final List xyPairs = (List) _seriesMap.get(series);
+	public Number getY(Comparable<?> series, int index) {
+		final List<XYPair> xyPairs = _seriesMap.get(series);
 		
 		if (xyPairs != null) {
-			return ((XYPair)xyPairs.get(index)).getY();
+			return xyPairs.get(index).getY();
 		}
 		return null;
 	}
 	
-	public void setValue(Comparable series, Number x, Number y, int index) {
+	public void setValue(Comparable<?> series, Number x, Number y, int index) {
 		removeValue0(series, index);
 		addValue0(series, x, y, index);
 		fireEvent(ChartDataEvent.CHANGED, series, null);
 	}
 	
-	public void addValue(Comparable series, Number x, Number y) {
+	public void addValue(Comparable<?> series, Number x, Number y) {
 		addValue(series, x, y, -1);
 	}
 	
-	public void addValue(Comparable series, Number x, Number y, int index) {
+	public void addValue(Comparable<?> series, Number x, Number y, int index) {
 		addValue0(series, x, y, index);
 		fireEvent(ChartDataEvent.CHANGED, series, null);
 	}
 	
-	private void addValue0(Comparable series, Number x, Number y, int index) {
-		List xyPairs = (List) _seriesMap.get(series);
+	private void addValue0(Comparable<?> series, Number x, Number y, int index) {
+		List<XYPair> xyPairs = _seriesMap.get(series);
 		if (xyPairs == null) {
-			xyPairs = new ArrayList(13);
+			xyPairs = new ArrayList<XYPair>(15);
 			_seriesMap.put(series, xyPairs);
 			_seriesList.add(series);
 		}
@@ -106,20 +106,20 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		return _autoSort;
 	}
 	
-	public void removeSeries(Comparable series) {
+	public void removeSeries(Comparable<?> series) {
 		_seriesMap.remove(series);
 		_seriesList.remove(series);
 		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
 		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
-	public void removeValue(Comparable series, int index) {
+	public void removeValue(Comparable<?> series, int index) {
 		removeValue0(series, index);
 		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
-	private void removeValue0(Comparable series, int index) {
-		List xyPairs = (List) _seriesMap.get(series);
+	private void removeValue0(Comparable<?> series, int index) {
+		List<XYPair> xyPairs = _seriesMap.get(series);
 		if (xyPairs == null) {
 			return;
 		}

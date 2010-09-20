@@ -74,7 +74,7 @@ public interface Combobox extends Textbox {
 	 * 
 	 * @see org.zkoss.zul.ListSubModel#getSubModel(Object, int)
 	 */
-	public ListModel getModel();
+	public ListModel<?> getModel();
 
 	/**
 	 * Sets the list model associated with this combobox. If a non-null model is
@@ -87,7 +87,7 @@ public interface Combobox extends Textbox {
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setModel(ListModel model);
+	public void setModel(ListModel<?> model);
 
 	/**
 	 * Returns the renderer to render each row, or null if the default renderer
@@ -203,7 +203,7 @@ public interface Combobox extends Textbox {
 	 * Currently, it is the same as {@link #getChildren}. However, we might add
 	 * other kind of children in the future.
 	 */
-	public List getItems();
+	public List<org.zkoss.zul.Comboitem> getItems();
 
 	/**
 	 * Returns the number of items.

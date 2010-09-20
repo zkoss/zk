@@ -57,7 +57,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	private String _chartStyle;
 	private ChartModel _model;
 	private ChartDataListener _dataListener;
-	private LinkedList _seriesList;
+	private LinkedList<JSONObject> _seriesList;
 	private String _yAxis = "Series 1";
 	private String _xAxis = "Series 2";
 	/**
@@ -184,8 +184,8 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	public String getChartStyle() {
 		return _chartStyle;
 	}	
-	private List transferToJSONObject(ChartModel model){
-		LinkedList list = new LinkedList();
+	private List<JSONObject> transferToJSONObject(ChartModel model){
+		LinkedList<JSONObject> list = new LinkedList<JSONObject>();
 
 		if(model != null && _type != null){
 			if("pie".equals(_type)) {	//Draw PieChart
@@ -217,7 +217,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					}
 				}
 			} else if(_type.startsWith("stackbar")){		//Draw StackedBarChart
-				_seriesList = new LinkedList();
+				_seriesList = new LinkedList<JSONObject>();
 				CategoryModel tempModel = (CategoryModel)model;
 				for(int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++){
 					Comparable series = tempModel.getSeries(i);	
@@ -232,13 +232,13 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					jData.put("verticalField", category);
 					for(int j = 0; j < _seriesList.size(); j++){
 						Comparable series = tempModel.getSeries(j);	
-						JSONObject temp = (JSONObject) _seriesList.get(j);						
+						JSONObject temp = _seriesList.get(j);						
 						jData.put(temp.get("xField"), tempModel.getValue(series, category));
 					}
 					list.add(jData);					
 				}
 			} else if(_type.startsWith("stackcolumn")){		//Draw StackedColumnChart 
-				_seriesList = new LinkedList();
+				_seriesList = new LinkedList<JSONObject>();
 				XYModel tempModel = (XYModel)model;
 				for(int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++){
 					Comparable series = tempModel.getSeries(i);					

@@ -379,13 +379,12 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			boolean isPagingMold = box.inPagingMold();
 			int activePg = isPagingMold ? box.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
-				if (model instanceof GroupsListModel) {
-					((GroupsListModel)model).sort(cmpr, ascending,
-						box.getListhead().getChildren().indexOf(this));
+				if (model instanceof GroupsModelExt) {
+					sortGroupsModel(box, (GroupsModelExt)model, cmpr, ascending);
 				} else {
 					if (!(model instanceof ListModelExt))
 						throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
-					((ListModelExt)model).sort(cmpr, ascending);
+					sortListModel((ListModelExt)model, cmpr, ascending);
 				}
 			} else { //not live data
 				sort0(box, cmpr);
@@ -411,13 +410,23 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		
 		return true;
 	}
+	@SuppressWarnings("unchecked")
+	private void sortGroupsModel(Listbox box, GroupsModelExt model,
+	Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending, box.getListhead().getChildren().indexOf(this));
+	}
+	@SuppressWarnings("unchecked")
+	private void sortListModel(ListModelExt model, Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending);
+	}
 	/** Sorts the items. If with group, each group is sorted independently.
 	 */
+	@SuppressWarnings("unchecked")
 	private static void sort0(Listbox box, Comparator cmpr) {
 		if (box.hasGroup())
-			for (Iterator it = box.getGroups().iterator(); it.hasNext();) {
-				Listgroup g = (Listgroup)it.next();
-				Components.sort(box.getItems(), g.getIndex()+1, g.getIndex()+1 + g.getItemCount(), cmpr);
+			for (Listgroup g: box.getGroups()) {
+				int index = g.getIndex() + 1;
+				Components.sort(box.getItems(), index, index + g.getItemCount(), cmpr);
 			}
 		else Components.sort(box.getItems(), cmpr);
 	}

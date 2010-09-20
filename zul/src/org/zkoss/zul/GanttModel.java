@@ -37,11 +37,11 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see Chart
  * @since 3.5.0
  */
-public class GanttModel<E> extends AbstractChartModel {
+public class GanttModel extends AbstractChartModel {
 	private static final long serialVersionUID = 20091008183023L;
-	private Map<Comparable<E>, List<GanttTask>> _taskMap = new LinkedHashMap<Comparable<E>, List<GanttTask>>(8); //(series, task list)
+	private Map<Comparable<?>, List<GanttTask>> _taskMap = new LinkedHashMap<Comparable<?>, List<GanttTask>>(8); //(series, task list)
 	
-	public void addValue(Comparable<E> series, GanttTask task) {
+	public void addValue(Comparable<?> series, GanttTask task) {
 		List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
 			tasks = new ArrayList<GanttTask>(13);
@@ -56,7 +56,7 @@ public class GanttModel<E> extends AbstractChartModel {
 		fireEvent(ChartDataEvent.ADDED, series, task);
 	}
 	
-	public void removeValue(Comparable<E> series, GanttTask task) {
+	public void removeValue(Comparable<?> series, GanttTask task) {
 		final List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
 			return;
@@ -71,8 +71,8 @@ public class GanttModel<E> extends AbstractChartModel {
 	 * @return all series of this GanttModel.
 	 */
 	@SuppressWarnings("unchecked")
-	public Comparable<E>[] getAllSeries() {
-		final Set<Comparable<E>> allseries = _taskMap.keySet();
+	public Comparable<?>[] getAllSeries() {
+		final Set<Comparable<?>> allseries = _taskMap.keySet();
 		return allseries.toArray(new Comparable[allseries.size()]);
 	}
 	

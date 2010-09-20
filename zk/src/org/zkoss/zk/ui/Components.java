@@ -92,7 +92,7 @@ public class Components {
 	 * some replicated item in the list.
 	 * @see #sort(List, int, int, Comparator)
 	 */
-	public static void sort(List<Component> list, Comparator<? super Component> cpr) {
+	public static void sort(List<? extends Component> list, Comparator<? super Component> cpr) {
 		sort(list, 0, list.size(), cpr);
 	}
 
@@ -140,11 +140,11 @@ public class Components {
 	 * @param cpr the comparator to determine the order of the list.
 	 * @since 3.5.0
 	 */
-	public static void sort(List<Component> list, int from, int to, Comparator<? super Component> cpr) {
+	public static void sort(List<? extends Component> list, int from, int to, Comparator<? super Component> cpr) {
 		final Component ary[] = CollectionsX.toArray(list, new Component[0], from, to);
 		Arrays.sort(ary, cpr);
 
-		ListIterator<Component> it = list.listIterator(from);
+		ListIterator<? extends Component> it = list.listIterator(from);
 		int j = 0, k = to - from;
 		for (; it.hasNext() && --k >= 0; ++j) {
 			if (it.next() != ary[j]) {
@@ -163,7 +163,11 @@ public class Components {
 			it.remove();
 		}
 		for (; j < ary.length; ++j)
-			list.add(from + j, ary[j]);
+			add(list, from + j, ary[j]);
+	}
+	@SuppressWarnings("unchecked")
+	private static void add(List list, int index, Object o) {
+		list.add(index, o);
 	}
 
 	/** Returns the root component of the specified one.

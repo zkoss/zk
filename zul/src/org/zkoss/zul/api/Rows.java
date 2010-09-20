@@ -45,7 +45,7 @@ public interface Rows extends org.zkoss.zul.impl.api.XulElement {
 	 * Returns a list of all {@link Group}.
 	 * 
 	 */
-	public List getGroups();
+	public List<org.zkoss.zul.Group> getGroups();
 
 	/**
 	 * Returns whether Group exists.

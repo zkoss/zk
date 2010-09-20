@@ -33,7 +33,7 @@ public interface XYZModel extends XYModel {
 	 * @param series the series.
 	 * @param index the data index.
 	 */
-	public Number getZ(Comparable series, int index);
+	public Number getZ(Comparable<?> series, int index);
 
 	/**
 	 * Append an (x,y,z) into a series.
@@ -42,7 +42,7 @@ public interface XYZModel extends XYModel {
 	 * @param y the y value.
 	 * @param z the z value.
 	 */	
-	public void addValue(Comparable series, Number x, Number y, Number z);
+	public void addValue(Comparable<?> series, Number x, Number y, Number z);
 
 	/**
 	 * Add an (x,y,z) into a series at the specified index.
@@ -53,7 +53,7 @@ public interface XYZModel extends XYModel {
 	 * @param index the data index.
 	 * @since 5.0.0
 	 */	
-	public void addValue(Comparable series, Number x, Number y, Number z, int index);
+	public void addValue(Comparable<?> series, Number x, Number y, Number z, int index);
 
 	/**
 	 * Replace an (x,y,z) into a series at the specified index.
@@ -64,5 +64,5 @@ public interface XYZModel extends XYModel {
 	 * @param index the data index.
 	 * @since 5.0.0
 	 */	
-	public void setValue(Comparable series, Number x, Number y, Number z, int index);
+	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index);
 }	

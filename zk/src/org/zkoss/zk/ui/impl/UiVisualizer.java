@@ -384,8 +384,8 @@ import org.zkoss.zk.au.out.*;
 
 	/** Process {@link Cropper} by removing cropped invalidates and so on.
 	 */
-	private Map<Component, Set<Component>> doCrop() {
-		final Map<Component, Set<Component>> croppingInfos = new HashMap<Component, Set<Component>>();
+	private Map<Component, Set<? extends Component>> doCrop() {
+		final Map<Component, Set<? extends Component>> croppingInfos = new HashMap<Component, Set<? extends Component>>();
 		crop(_attached, croppingInfos, false);
 		crop(_smartUpdated.keySet(), croppingInfos, false);
 		if (_responses != null)
@@ -395,7 +395,7 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Crop attached and moved.
 	 */
-	private void crop(Set coll, Map<Component, Set<Component>> croppingInfos, boolean bResponse) {
+	private void crop(Set coll, Map<Component, Set<? extends Component>> croppingInfos, boolean bResponse) {
 		for (Iterator it = coll.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (!(o instanceof Component))
@@ -409,7 +409,7 @@ import org.zkoss.zk.au.out.*;
 			}
 
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
-				final Set<Component> avail = getAvailableAtClient(p, croppingInfos);
+				final Set<? extends Component> avail = getAvailableAtClient(p, croppingInfos);
 				if (avail != null) {
 					if (!avail.contains(c)) {
 						it.remove();
@@ -423,13 +423,13 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Returns the available children, or null if no cropping.
 	 */
-	private static Set<Component> getAvailableAtClient(Component comp, Map<Component, Set<Component>> croppingInfos) {
+	private static Set<? extends Component> getAvailableAtClient(Component comp, Map<Component, Set<? extends Component>> croppingInfos) {
 		final Object xc = ((ComponentCtrl)comp).getExtraCtrl();
 		if (xc instanceof Cropper) {
 			//we don't need to check isCropper first since its component's job
 			//to ensure the consistency
 
-			Set<Component> crop = croppingInfos.get(comp);
+			Set<? extends Component> crop = croppingInfos.get(comp);
 			if (crop == EMPTY_CROP)
 				return null;
 			if (crop != null)
@@ -537,7 +537,7 @@ import org.zkoss.zk.au.out.*;
 		}
 
 		//1. process dead comonents, cropping and the removed page
-		final Map<Component, Set<Component>> croppingInfos;
+		final Map<Component, Set<? extends Component>> croppingInfos;
 		{
 			//1a. handle _detached to remove unncessary detach
 			doDetached();
@@ -740,7 +740,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private static
 	void addResponsesForCreatedPerSiblings(List<AuResponse> responses, Set<Component> newsibs,
-	Map<Component, Set<Component>> croppingInfos) throws IOException {
+	Map<Component, Set<? extends Component>> croppingInfos) throws IOException {
 		final Component parent;
 		final Page page;
 		{
@@ -748,7 +748,7 @@ import org.zkoss.zk.au.out.*;
 			parent = comp.getParent();
 			page = comp.getPage();
 		}
-		Collection<Component> sibs;
+		Collection<? extends Component> sibs;
 		if (parent != null) {
 			sibs = getAvailableAtClient(parent, croppingInfos);
 			if (sibs == null) //no cropping

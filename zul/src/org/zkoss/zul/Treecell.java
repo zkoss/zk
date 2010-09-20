@@ -139,7 +139,7 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	/** Returns an array of Treeitem from the root.
 	 */
 	private Treeitem[] getTreeitems(Component item) {
-		final List pitems = new LinkedList();
+		final List<Treeitem> pitems = new LinkedList<Treeitem>();
 		for (;;) {
 			final Component tch = item.getParent();
 			if (tch == null)
@@ -147,9 +147,9 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 			item = tch.getParent();
 			if (item == null || item instanceof Tree)
 				break;
-			pitems.add(0, item);
+			pitems.add(0, (Treeitem)item);
 		}
-		return (Treeitem[])pitems.toArray(new Treeitem[pitems.size()]);
+		return pitems.toArray(new Treeitem[pitems.size()]);
 	}
 
 	private Treeitem getTreeitem() {

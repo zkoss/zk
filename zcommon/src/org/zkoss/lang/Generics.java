@@ -37,6 +37,13 @@ public class Generics {
 	public static final <T> Iterator<T> cast(Iterator it) {
 		return it;
 	}
+	/** Returns a type-safe generic list iterator of the given un-typed list iterator.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> ListIterator<T> cast(ListIterator it) {
+		return it;
+	}
 	/** Returns a type-safe generic enumeration of the given un-typed enumeration.
 	 * @since 6.0.0
 	 */

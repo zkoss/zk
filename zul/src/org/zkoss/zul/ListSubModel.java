@@ -40,5 +40,5 @@ public interface ListSubModel<E> {
 	 * implementation of ListSubmodel.
 	 * @since 3.0.2
 	 */
-	public ListModel<E> getSubModel(E value, int nRows);
+	public ListModel<E> getSubModel(Object value, int nRows);
 }

@@ -36,8 +36,8 @@ import org.zkoss.zul.event.GroupsDataListener;
  * @author tomyeh
  * @since 3.5.0
  */
-public class GroupsListModel extends AbstractListModel {
-	private final GroupsModel _model;
+public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
+	protected final GroupsModel<D, G, F> _model;
 	private transient int _size;
 	/** An array of the group offset.
 	 * The group offset is the offset from 0 that a group shall appear
@@ -52,9 +52,19 @@ public class GroupsListModel extends AbstractListModel {
 	private transient boolean[] _gpcloses;
 	private transient GroupsDataListener _listener;
 	/** groupInfo list used in {@link Rows} */
-	private transient List _gpinfo;
+	private transient List<int[]> _gpinfo;
 
-	public GroupsListModel(GroupsModel model) {
+	/** Returns the list model ({@link ListModel}) representing the given
+	 * groups model.
+	 * @since 6.0.0
+	 */
+	public static <D, G, F> GroupsListModel<D, G, F>
+	toListModel(GroupsModel<D, G, F> model) {
+		if (model instanceof GroupsModelExt)
+			return new GroupsListModelExt<D, G, F>(model);
+		return new GroupsListModel<D, G, F>(model);
+	}
+	protected GroupsListModel(GroupsModel<D, G, F> model) {
 		_model = model;
 		init();
 	}
@@ -78,8 +88,8 @@ public class GroupsListModel extends AbstractListModel {
 		
 	}
 	
-	public List getGroupsInfo() {
-		_gpinfo = new LinkedList();
+	public List<int[]> getGroupsInfos() {
+		_gpinfo = new LinkedList<int[]>();
 		for(int j=0; j < _gpofs.length; ++j) {
 			final int offset1 = _gpofs[j];
 			final int offset2 = getNextOffset(j);
@@ -99,7 +109,7 @@ public class GroupsListModel extends AbstractListModel {
 		return _gpofs[groupIndex];
 	}
 	
-	public GroupsModel getGroupsModel() {
+	public GroupsModel<D, G, F> getGroupsModel() {
 		return _model;
 	}
 	/** Returns the number of groups in the data model.
@@ -118,23 +128,6 @@ public class GroupsListModel extends AbstractListModel {
 	 */
 	/*package*/ boolean hasGroupfoot(int groupIndex) {
 		return _gpfts[groupIndex];
-	}
-	/**
-	 * Groups and sorts the data by the specified column and comparator.
-	 * It only called when {@link org.zkoss.zul.Listbox} or {@link org.zkoss.zul.Grid} has the sort function.
-	 * @param colIndex the index of the column
-	 */
-	public void group(Comparator cmpr, boolean ascending, int colIndex) {
-		if (!(_model instanceof GroupsModelExt))
-			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
-		((GroupsModelExt)_model).group(cmpr, ascending, colIndex);
-	}
-	/** Sorts the data by the specified column and comparator.
-	 */
-	public void sort(Comparator cmpr, boolean ascending, int colIndex) {
-		if (!(_model instanceof GroupsModelExt))
-			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
-		((GroupsModelExt)_model).sort(cmpr, ascending, colIndex);
 	}
 
 	/** Returns the offset of the next group.
@@ -272,5 +265,30 @@ public class GroupsListModel extends AbstractListModel {
 			this.offset = offset;
 			this.close = close;
 		}
+	}
+}
+/*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
+implements GroupsModelExt<D> {
+	/*package*/ GroupsListModelExt(GroupsModel<D, G, F> model) {
+		super(model);
+	}
+	/**
+	 * Groups and sorts the data by the specified column and comparator.
+	 * It only called when {@link org.zkoss.zul.Listbox} or {@link org.zkoss.zul.Grid} has the sort function.
+	 * @param colIndex the index of the column
+	 */
+	@SuppressWarnings("unchecked")
+	public void group(Comparator<D> cmpr, boolean ascending, int colIndex) {
+		if (!(_model instanceof GroupsModelExt))
+			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
+		((GroupsModelExt)_model).group(cmpr, ascending, colIndex);
+	}
+	/** Sorts the data by the specified column and comparator.
+	 */
+	@SuppressWarnings("unchecked")
+	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
+		if (!(_model instanceof GroupsModelExt))
+			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
+		((GroupsModelExt)_model).sort(cmpr, ascending, colIndex);
 	}
 }

@@ -314,7 +314,7 @@ public class CollectionsX {
 	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T> T[] toArray(Collection<T> col, T[] dst, int from, int to) {
+	public static final <T> T[] toArray(Collection<? extends T> col, T[] dst, int from, int to) {
 		int sz = col.size();
 		if (to > sz) to = sz;
 		if (from < 0) from = 0;
@@ -327,7 +327,7 @@ public class CollectionsX {
 			dst = (T[])Array.newInstance(dst.getClass().getComponentType(), newLength);
 
 		int i = 0, j = 0;
-		for (Iterator<T> it = col.iterator(); it.hasNext() && i < dst.length;) {
+		for (Iterator<? extends T> it = col.iterator(); it.hasNext() && i < dst.length;) {
 			if (j++ < from) {
 				it.next();
 				continue;

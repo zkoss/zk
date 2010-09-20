@@ -47,7 +47,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Group extends Row implements org.zkoss.zul.api.Group {
 	private boolean _open = true;	
-	private transient List _items;
+	private transient List<Row> _items;
 	
 	static {
 		addClientEvent(Group.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -67,22 +67,22 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	}
 
 	private void init() {
-		_items =  new AbstractList() {
+		_items =  new AbstractList<Row>() {
 			public int size() {
 				return getItemCount();
 			}
-			public Iterator iterator() {
+			public Iterator<Row> iterator() {
 				return new IterItems();
 			}
-			public Object get(int index) {
+			public Row get(int index) {
 				final Rows rows = (Rows)getParent();
 				if (rows != null) {
 					int i = 0;
-					for (Iterator it = rows.getChildren().listIterator(getIndex() + 1); 
+					for (Iterator<Component> it = rows.getChildren().listIterator(getIndex() + 1); 
 						it.hasNext() && i <= index; i++) {
 						if (i == index) 
-							return it.next();
-						it.next();	
+							return (Row)it.next();
+						it.next();
 					}
 				}
 				throw new IndexOutOfBoundsException("Index: "+index);
@@ -92,7 +92,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	/** 
 	 * Returns a list of all {@link Row} are grouped by this group.
 	 */
-	public List getItems() {
+	public List<Row> getItems() {
 		return _items;
 	}
 	/** Returns the number of items.
@@ -257,16 +257,16 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	/**
 	 * An iterator used by _items.
 	 */
-	private class IterItems implements Iterator {
-		private final Iterator _it = getParent().getChildren().listIterator(getIndex()+1);
+	private class IterItems implements Iterator<Row> {
+		private final Iterator<Component> _it = getParent().getChildren().listIterator(getIndex()+1);
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < getItemCount();
 		}
-		public Object next() {
+		public Row next() {
 			++_j;
-			return _it.next();
+			return (Row)_it.next();
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();

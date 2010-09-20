@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * A catetory chart data model.
@@ -29,22 +30,22 @@ public interface CategoryModel extends ChartModel {
 	/**
 	 * Get a series of the specified index;
 	 */
-	public Comparable getSeries(int index);
+	public Comparable<?> getSeries(int index);
 	
 	/**
 	 * Get a category of the specified index;
 	 */
-	public Comparable getCategory(int index);
+	public Comparable<?> getCategory(int index);
 
 	/**
 	 * Get all series as a collection.
 	 */
-	public Collection getSeries();
+	public Collection<Comparable<?>> getSeries();
 
 	/**
 	 * Get categories of a specified series as a collection.
 	 */
-	public Collection getCategories();
+	public Collection<Comparable<?>> getCategories();
 
 	/**
 	 * Get (series, category) pairs of this chart data model. The returned 
@@ -52,14 +53,14 @@ public interface CategoryModel extends ChartModel {
 	 * series, list.get(1) is the category, in the order the {@link #setValue} is 
 	 * called.
 	 */
-	public Collection getKeys();
+	public Collection<List<Comparable<?>>> getKeys();
 	
 	/**
 	 * Get value of the specified series and category.
 	 * @param series the series
 	 * @param category the category.
 	 */
-	public Number getValue(Comparable series, Comparable category);
+	public Number getValue(Comparable<?> series, Comparable<?> category);
 
 	/**
 	 * add or update the value of a specified series and category.
@@ -67,14 +68,14 @@ public interface CategoryModel extends ChartModel {
 	 * @param category the category.
 	 * @param value the value
 	 */
-	public void setValue(Comparable series, Comparable category, Number value);
+	public void setValue(Comparable<?> series, Comparable<?> category, Number value);
 
 	/**
 	 * remove the value of the specified series and category.
 	 * @param series the series
 	 * @param category the category.
 	 */	
-	public void removeValue(Comparable series, Comparable category);
+	public void removeValue(Comparable<?> series, Comparable<?> category);
 	
 	/**
 	 * clear the model.

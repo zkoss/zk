@@ -43,7 +43,7 @@ public interface Group extends Row {
 	/**
 	 * Returns a list of all {@link Row} are grouped by this group.
 	 */
-	public List getItems();
+	public List<org.zkoss.zul.Row> getItems();
 
 	/**
 	 * Returns the number of items.

@@ -302,7 +302,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * or remove them directly with the List interface. In other words, you
 	 * could add or remove an item by manipulating the returned list directly.
 	 */
-	public List getItems();
+	public List<org.zkoss.zul.Listitem> getItems();
 
 	/**
 	 * Returns the number of items.
@@ -558,7 +558,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * Returns a list of all {@link Listgroup}.
 	 * 
 	 */
-	public List getGroups();
+	public List<org.zkoss.zul.Listgroup> getGroups();
 
 	/**
 	 * Returns whether listgroup exists.
@@ -578,7 +578,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	public ListModel getModel();
+	public <T> ListModel<T> getModel();
 
 	/**
 	 * Returns the list model associated with this list box, or null if this
@@ -587,7 +587,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * @see #setModel(ListModel)
 	 */
-	public ListModel getListModel();
+	public <T> ListModel<T> getListModel();
 
 	/**
 	 * Returns the groups model associated with this list box, or null if this
@@ -596,7 +596,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * @see #setModel(GroupsModel)
 	 */
-	public GroupsModel getGroupsModel();
+	public <D, G, F> GroupsModel<D, G, F> getGroupsModel();
 
 	/**
 	 * Sets the list model associated with this listbox. If a non-null model is
@@ -611,7 +611,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
-	public void setModel(ListModel model);
+	public void setModel(ListModel<?> model);
 
 	/**
 	 * Sets the groups model associated with this list box. If a non-null model
@@ -629,7 +629,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @see #setModel(ListModel)
 	 * @see #getGroupsModel()
 	 */
-	public void setModel(GroupsModel model);
+	public void setModel(GroupsModel<?, ?, ?> model);
 
 	/**
 	 * Returns the renderer to render each item, or null if the default renderer

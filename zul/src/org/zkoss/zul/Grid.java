@@ -669,8 +669,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	public ListModel<?> getModel() {
-		return _model;
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getModel() {
+		return (ListModel)_model;
 	}
 	/** Returns the list model associated with this grid, or null
 	 * if this grid is associated with a {@link GroupsModel}
@@ -678,8 +679,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #setModel(ListModel)
 	 * @since 3.5.0
 	 */
-	public ListModel<?> getListModel() {
-		return _model instanceof GroupsListModel ? null: _model;
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getListModel() {
+		return _model instanceof GroupsListModel ? null: (ListModel)_model;
 	}
 	/** Returns the groups model associated with this grid, or null
 	 * if this grid is associated with a {@link ListModel}
@@ -687,9 +689,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @since 3.5.0
 	 * @see #setModel(GroupsModel)
 	 */
-	public GroupsModel<?, ?, ?> getGroupsModel() {
+	@SuppressWarnings("unchecked")
+	public <D, G, F> GroupsModel<D, G, F> getGroupsModel() {
 		return _model instanceof GroupsListModel ?
-			((GroupsListModel)_model).getGroupsModel(): null;
+			(GroupsModel)((GroupsListModel)_model).getGroupsModel(): null;
 	}
 	/** Sets the list model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -760,7 +763,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @see #getGroupsModel()
 	 */
 	public void setModel(GroupsModel<?, ?, ?> model) {
-		setModel((ListModel)(model != null ? new GroupsListModel(model): null));
+		setModel((ListModel)(model != null ? GroupsListModel.toListModel(model): null));
 	}
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -1442,9 +1445,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 				//1. locate the first item found in items
 				final List<Row> toload = new LinkedList<Row>();
-				Iterator<Row> it = getRows().getChildren().iterator();
+				Iterator<Component> it = getRows().getChildren().iterator();
 				while (it.hasNext()) {
-					final Row row = it.next();
+					final Row row = (Row)it.next();
 					if (items.contains(row)) //found
 						break;
 					if (!row.isLoaded())
@@ -1462,7 +1465,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 				//3. add unloaded after the found one
 				while (cnt > 0 && it.hasNext()) {
-					final Row row = it.next();
+					final Row row = (Row)it.next();
 					if (!row.isLoaded() && items.add(row))
 						--cnt;
 				}

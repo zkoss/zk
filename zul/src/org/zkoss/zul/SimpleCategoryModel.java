@@ -40,45 +40,45 @@ import java.util.Collection;
  */
 public class SimpleCategoryModel extends AbstractChartModel implements CategoryModel {
 	private static final long serialVersionUID = 20091008183445L;
-	private Map _seriesMap = new HashMap(13); // (series, usecount)
-	private List _seriesList = new ArrayList(13);
+	private Map<Comparable<?>, Integer> _seriesMap = new HashMap<Comparable<?>, Integer>(); // (series, usecount)
+	private List<Comparable<?>> _seriesList = new ArrayList<Comparable<?>>();
 
-	private Map _categoryMap = new HashMap(13); // (category, usecount)
-	private List _categoryList = new ArrayList(13);
+	private Map<Comparable<?>, Integer> _categoryMap = new HashMap<Comparable<?>, Integer>(); // (category, usecount)
+	private List<Comparable<?>> _categoryList = new ArrayList<Comparable<?>>();
 	
-	private Map _valueMap = new LinkedHashMap(79);
+	private Map<List<Comparable<?>>, Number> _valueMap = new LinkedHashMap<List<Comparable<?>>, Number>();
 	
 	//-- CategoryModel --//
-	public Comparable getSeries(int index) {
-		return (Comparable)_seriesList.get(index);
+	public Comparable<?> getSeries(int index) {
+		return _seriesList.get(index);
 	}
 
-	public Comparable getCategory(int index) {
-		return (Comparable)_categoryList.get(index);
+	public Comparable<?> getCategory(int index) {
+		return _categoryList.get(index);
 	}
 	
-	public Collection getSeries() {
+	public Collection<Comparable<?>> getSeries() {
 		return _seriesList;
 	}
 
-	public Collection getCategories() {
+	public Collection<Comparable<?>> getCategories() {
 		return _categoryList;
 	}
 	
-	public Collection getKeys() {
+	public Collection<List<Comparable<?>>> getKeys() {
 		return _valueMap.keySet();
 	}
 	
-	public Number getValue(Comparable series, Comparable category) {
-		List key = new ArrayList(2);
+	public Number getValue(Comparable<?> series, Comparable<?> category) {
+		List<Comparable<?>> key = new ArrayList<Comparable<?>>(2);
 		key.add(series);
 		key.add(category);
-		Number num = (Number) _valueMap.get(key);
+		Number num = _valueMap.get(key);
 		return num;
 	}
 
-	public void setValue(Comparable series, Comparable category, Number value) {
-		List key = new ArrayList(2);
+	public void setValue(Comparable<?> series, Comparable<?> category, Number value) {
+		List<Comparable<?>> key = new ArrayList<Comparable<?>>(2);
 		key.add(series);
 		key.add(category);
 		
@@ -95,12 +95,12 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 				_seriesMap.put(series, new Integer(1));
 				_seriesList.add(series);
 			} else {
-				Integer count = (Integer) _seriesMap.get(series);
+				Integer count = _seriesMap.get(series);
 				_seriesMap.put(series, new Integer(count.intValue()+1));
 
 			}
 		} else {
-			Number ovalue = (Number) _valueMap.get(key);
+			Number ovalue = _valueMap.get(key);
 			if (Objects.equals(ovalue, value)) {
 				return;
 			}
@@ -111,8 +111,8 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		fireEvent(ChartDataEvent.CHANGED, series, category);
 	}
 	
-	public void removeValue(Comparable series, Comparable category) {
-		List key = new ArrayList(2);
+	public void removeValue(Comparable<?> series, Comparable<?> category) {
+		List<Comparable<?>> key = new ArrayList<Comparable<?>>(2);
 		key.add(series);
 		key.add(category);
 		if (!_valueMap.containsKey(key)) {
@@ -129,7 +129,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 			_categoryList.remove(category);
 		}
 		
-		int scount = ((Integer) _seriesMap.get(series)).intValue();
+		int scount = _seriesMap.get(series).intValue();
 		if (scount > 1) {
 			_seriesMap.put(series, new Integer(scount-1));
 		} else {

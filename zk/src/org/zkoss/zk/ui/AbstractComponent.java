@@ -1755,7 +1755,7 @@ w:use="foo.MyWindow"&gt;
 	protected void redrawChildren(Writer out) throws IOException {
 		final Object xc = getExtraCtrl();
 		if (xc instanceof Cropper) {
-			final Set<Component> crop = ((Cropper)xc).getAvailableAtClient();
+			final Set<? extends Component> crop = ((Cropper)xc).getAvailableAtClient();
 			if (crop != null) {
 				for (Component c: crop)
 					if (c.getParent() == this)

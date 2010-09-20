@@ -98,7 +98,7 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	/**
 	 * Returns the ascending sorter, or null if not available.
 	 */
-	public Comparator getSortAscending();
+	public Comparator<?> getSortAscending();
 
 	/**
 	 * Sets the ascending sorter, or null for no sorter for the ascending order.
@@ -115,7 +115,7 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
-	public void setSortAscending(Comparator sorter);
+	public void setSortAscending(Comparator<?> sorter);
 
 	/**
 	 * Sets the ascending sorter with the class name, or null for no sorter for
@@ -127,7 +127,7 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	/**
 	 * Returns the descending sorter, or null if not available.
 	 */
-	public Comparator getSortDescending();
+	public Comparator<?> getSortDescending();
 
 	/**
 	 * Sets the descending sorter, or null for no sorter for the descending
@@ -145,7 +145,7 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
-	public void setSortDescending(Comparator sorter);
+	public void setSortDescending(Comparator<?> sorter);
 
 	/**
 	 * Sets the descending sorter with the class name, or null for no sorter for

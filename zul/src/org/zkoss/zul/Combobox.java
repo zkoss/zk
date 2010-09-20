@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
@@ -83,7 +84,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * If null, it means reIndex is required.
 	 */
 	private transient String _lastCkVal;
-	private ListModel _model;
+	private ListModel<?> _model;
 	private ComboitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener _eventListener;
@@ -122,7 +123,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.2
 	 * @see ListSubModel#getSubModel(Object, int)
 	 */
-	public ListModel getModel() {
+	public ListModel<?> getModel() {
 		return _model;
 	}
 	/** Sets the list model associated with this combobox.
@@ -134,7 +135,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.2
 	 */
-	public void setModel(ListModel model) {
+	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -219,10 +220,10 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	
 	/** Synchronizes the combobox to be consistent with the specified model.
 	 */
-	private ListModel syncModel(String index) {
+	private ListModel<?> syncModel(Object index) {
 		ComboitemRenderer renderer = null;
-		final ListModel subset = _model instanceof ListSubModel ? 
-			((ListSubModel)_model).getSubModel(index, -1) : _model;
+		final ListModel<?> subset = _model instanceof ListSubModel ? 
+			((ListSubModel<?>)_model).getSubModel(index, -1) : _model;
 		final int newsz = subset.getSize();
 
 		if (!getItems().isEmpty()) getItems().clear();
@@ -257,7 +258,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		removeAttribute("zul.Combobox.ON_INITRENDER"); //clear syncModel flag
 		final Renderer renderer = new Renderer();
 		final ListModel subset = syncModel(data.getData() != null ? 
-				(String)data.getData() : getRawText());
+				data.getData() : getRawText());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
@@ -307,7 +308,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
-		private void render(ListModel subset, Comboitem item) throws Throwable {
+		private void render(ListModel<?> subset, Comboitem item) throws Throwable {
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
@@ -437,8 +438,8 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * <p>Currently, it is the same as {@link #getChildren}. However,
 	 * we might add other kind of children in the future.
 	 */
-	public List getItems() {
-		return getChildren();
+	public List<Comboitem> getItems() {
+		return cast(getChildren());
 	}
 	/** Returns the number of items.
 	 */
@@ -448,7 +449,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	/** Returns the item at the specified index.
 	 */
 	public Comboitem getItemAtIndex(int index) {
-		return (Comboitem)getItems().get(index);
+		return getItems().get(index);
 	}
 	/** Returns the item at the specified index.
 	 * @since 3.5.2

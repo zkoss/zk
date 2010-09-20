@@ -26,11 +26,11 @@ import java.util.List;
  * @author Jeff
  * @since ZK 3.0.0
  */
-public class SimpleTreeNode implements java.io.Serializable {
+public class SimpleTreeNode<E> implements java.io.Serializable {
 
-	private Object _data;
+	private E _data;
 	
-	private List _children;
+	private List<SimpleTreeNode<E>> _children;
 	
 	/**
 	 * Constructor
@@ -39,7 +39,7 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 * <br>
 	 * Notice: Only <code>SimpleTreeNode</code> can be contained in The List <code>children</code>
 	 */
-	public SimpleTreeNode(Object data, List children){
+	public SimpleTreeNode(E data, List<SimpleTreeNode<E>> children){
 		_data = data;
 		_children = children;
 	}
@@ -48,7 +48,7 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 * Return data of the receiver
 	 * @return data of the receiver
 	 */
-	public Object getData(){
+	public E getData(){
 		return _data;
 	}
 	
@@ -56,7 +56,7 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 * Return children of the receiver
 	 * @return children of the receiver
 	 */
-	public List getChildren(){
+	public List<SimpleTreeNode<E>> getChildren(){
 		return _children;
 	}
 	
@@ -80,7 +80,7 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 * Returns the child SimpleTreeNode at index childIndex.
 	 * @return the child SimpleTreeNode at index childIndex.
 	 */
-	public Object getChildAt(int childIndex){
+	public SimpleTreeNode<E> getChildAt(int childIndex){
 		return _children.get(childIndex);
 	}
 	

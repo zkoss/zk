@@ -57,7 +57,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
-	private transient Comparator _sortAsc, _sortDsc;
+	private transient Comparator<?> _sortAsc, _sortDsc;
 	private String _sortAscNm = "none";
 	private String _sortDscNm = "none";
 	private Object _value;
@@ -194,7 +194,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 
 	/** Returns the ascending sorter, or null if not available.
 	 */
-	public Comparator getSortAscending() {
+	public Comparator<?> getSortAscending() {
 		return _sortAsc;
 	}
 	/** Sets the ascending sorter, or null for no sorter for
@@ -210,7 +210,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * Otherwise, {@link Comparator#compare} is used to group elements
 	 * and sort elements within a group.
 	 */
-	public void setSortAscending(Comparator sorter) {
+	public void setSortAscending(Comparator<?> sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
 			String nm = _sortAsc == null ? "none" : "fromServer";
@@ -235,7 +235,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 
 	/** Returns the descending sorter, or null if not available.
 	 */
-	public Comparator getSortDescending() {
+	public Comparator<?> getSortDescending() {
 		return _sortDsc;
 	}
 	/** Sets the descending sorter, or null for no sorter for the
@@ -251,7 +251,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * Otherwise, {@link Comparator#compare} is used to group elements
 	 * and sort elements within a group.
 	 */
-	public void setSortDescending(Comparator sorter) {
+	public void setSortDescending(Comparator<?> sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
 			String nm = _sortDsc == null ? "none" : "fromServer";
@@ -274,7 +274,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			setSortDescending(toComparator(clsnm));
 	}
 
-	private Comparator toComparator(String clsnm)
+	private Comparator<?> toComparator(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
 		if (clsnm == null || clsnm.length() == 0) return null;
@@ -286,7 +286,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
 			throw new UiException("Comparator must be implemented: "+clsnm);
-		return (Comparator)cls.newInstance();
+		return (Comparator<?>)cls.newInstance();
 	}
 
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
@@ -324,7 +324,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			if ("descending".equals(dir)) return false;
 		}
 
-		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
+		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
 		final Grid grid = getGrid();
@@ -339,14 +339,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			boolean isPagingMold = grid.inPagingMold();
 			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
-				if (model instanceof GroupsListModel) {
-					((GroupsListModel)model).sort(cmpr, ascending,
-						grid.getColumns().getChildren().indexOf(this));
+				if (model instanceof GroupsModelExt) {
+					sortGroupsModel(grid, (GroupsModelExt)model, cmpr, ascending);
 				} else {
 					if (!(model instanceof ListModelExt))
 						throw new UiException("ListModelExt must be implemented in "+model.getClass());
-					((ListModelExt<?>)model).sort(cmpr, ascending);
-					//CONSIDER: provide index for sort
+					sortListModel((ListModelExt)model, cmpr, ascending);
 				}
 			} else { //not live data
 				sort0(grid, cmpr);
@@ -364,13 +362,22 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		grid.getRows().invalidate();
 		return true;
 	}
+	@SuppressWarnings("unchecked")
+	private void sortGroupsModel(Grid grid, GroupsModelExt model,
+	Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending, grid.getColumns().getChildren().indexOf(this));
+	}
+	@SuppressWarnings("unchecked")
+	private void sortListModel(ListModelExt model, Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending);
+	}
 	/** Sorts the rows. If with group, each group is sorted independently.
 	 */
+	@SuppressWarnings("unchecked")
 	private static void sort0(Grid grid, Comparator cmpr) {
 		final Rows rows = grid.getRows();
 		if (rows.hasGroup())
-			for (Iterator it = rows.getGroups().iterator(); it.hasNext();) {
-				Group g = (Group)it.next();
+			for (Group g: rows.getGroups()) {
 				int index = g.getIndex() + 1;
 				Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
 			}
@@ -420,7 +427,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
-		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
+		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 		
 		final Grid grid = getGrid();
@@ -432,45 +439,40 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			final ListModel model = grid.getModel();
 			int index = grid.getColumns().getChildren().indexOf(this);
 			if (model != null) { //live data
-				if (!(model instanceof GroupsListModel))
+				if (!(model instanceof GroupsModelExt))
 					throw new UiException("GroupsModel must be implemented in "+model.getClass().getName());
-				((GroupsListModel)model).group(cmpr, ascending, index);
+				groupGroupsModel((GroupsModelExt)model, cmpr, ascending, index);
 			} else { // not live data
 				final Rows rows = grid.getRows();
 				if (rows == null) return false;//Avoid grid with null group		
 				if (rows.hasGroup()) {
-					final List groups = new ArrayList(rows.getGroups());
-					for (Iterator it = groups.iterator(); it.hasNext();)
-						((Group)it.next()).detach(); // Groupfoot is removed automatically, if any.
+					for (Group group: new ArrayList<Group>(rows.getGroups()))
+						group.detach(); // Groupfoot is removed automatically, if any.
 				}
 				
-				Comparator cmprx;
+				Comparator<?> cmprx;
 				if(cmpr instanceof GroupComparator){
-					cmprx = new Comparator(){
-						public int compare(Object o1, Object o2) {
-							return ((GroupComparator)cmpr).compareGroup(o1, o2);
-						}
-					};
+					cmprx = new GroupToComparator((GroupComparator)cmpr);
 				}else{
 					cmprx = cmpr;
 				}
 
-				final List children = new LinkedList(rows.getChildren());
+				final List<Component> children = new LinkedList<Component>(rows.getChildren());
 				rows.getChildren().clear();
-				Collections.sort(children, cmprx);
+				sortCollection(children, cmprx);
 
 				Row previous = null;
-				for (Iterator it = children.iterator(); it.hasNext();) {
+				for (Iterator<Component> it = children.iterator(); it.hasNext();) {
 					final Row row = (Row) it.next();
 					it.remove();
-					if (previous == null || cmprx.compare(previous, row) != 0) {
+					if (previous == null || compare(cmprx, previous, row) != 0) {
 						//new group
-						final List cells = row.getChildren();
+						final List<Component> cells = row.getChildren();
 						if (cells.size() < index)
 							throw new IndexOutOfBoundsException(
 									"Index: "+index+" but size: "+ cells.size());
 						Group group;
-						Component cell = (Component)cells.get(index);
+						Component cell = cells.get(index);
 						if (cell instanceof Label) {
 							String val = ((Label)cell).getValue();
 							group = new Group(val);
@@ -501,6 +503,19 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		// sometimes the items at client side are out of date
 		grid.getRows().invalidate();
 		return true;
+	}
+	@SuppressWarnings("unchecked")
+	private void groupGroupsModel(GroupsModelExt model, Comparator cmpr,
+	boolean ascending, int index) {
+		model.group(cmpr, ascending, index);
+	}
+	@SuppressWarnings("unchecked")
+	private static void sortCollection(List<Component> comps, Comparator cmpr) {
+		Collections.sort(comps, cmpr);
+	}
+	@SuppressWarnings("unchecked")
+	private static int compare(Comparator cmpr, Object a, Object b) {
+		return cmpr.compare(a, b);
 	}
 
 	// super
@@ -637,7 +652,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			_sortAsc = new RowComparator(this, true, igcs, false);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortAsc = (Comparator)s.readObject();
+			_sortAsc = (Comparator<?>)s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -646,7 +661,17 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			_sortDsc = new RowComparator(this, false, igcs, false);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortDsc = (Comparator)s.readObject();
+			_sortDsc = (Comparator<?>)s.readObject();
+		}
+	}
+	private static class GroupToComparator implements Comparator {
+		private final GroupComparator _gcmpr;
+		private GroupToComparator(GroupComparator gcmpr) {
+			_gcmpr = gcmpr;
+		}
+		@SuppressWarnings("unchecked")
+		public int compare(Object o1, Object o2) {
+			return _gcmpr.compareGroup(o1, o2);
 		}
 	}
 }

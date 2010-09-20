@@ -37,27 +37,27 @@ import java.util.Collection;
  */
 public class SimplePieModel extends AbstractChartModel implements PieModel {
 	private static final long serialVersionUID = 20091008183556L;
-	private List _categoryList = new ArrayList(13);
-	private Map _categoryMap = new HashMap(13);
+	private List<Comparable<?>> _categoryList = new ArrayList<Comparable<?>>();
+	private Map<Comparable<?>, Number> _categoryMap = new HashMap<Comparable<?>, Number>();
 	
 	//-- PieModel --//
-	public Comparable getCategory(int index) {
-		return (Comparable) _categoryList.get(index);
+	public Comparable<?> getCategory(int index) {
+		return _categoryList.get(index);
 	}
 
-	public Collection getCategories() {
+	public Collection<Comparable<?>> getCategories() {
 		return _categoryList;
 	}
 	
 	public Number getValue(Comparable category) {
-		return (Number)_categoryMap.get(category);
+		return _categoryMap.get(category);
 	}
 
-	public void setValue(Comparable category, Number value) {
+	public void setValue(Comparable<?> category, Number value) {
 		if (!_categoryMap.containsKey(category)) {
 			_categoryList.add(category);
 		} else {
-			Number ovalue = (Number)_categoryMap.get(category);
+			Number ovalue = _categoryMap.get(category);
 			if (Objects.equals(ovalue, value)) {
 				return;
 			}
@@ -66,7 +66,7 @@ public class SimplePieModel extends AbstractChartModel implements PieModel {
 		fireEvent(ChartDataEvent.CHANGED, null, category);
 	}
 	
-	public void removeValue(Comparable category) {
+	public void removeValue(Comparable<?> category) {
 		_categoryMap.remove(category);
 		_categoryList.remove(category);
 		fireEvent(ChartDataEvent.REMOVED, null, category);

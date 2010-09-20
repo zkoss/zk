@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +37,7 @@ public class WaferMapModel extends AbstractChartModel {
 	private int _xsize = 100;
 	private int _ysize = 100;
 	private double _space = 1d;
-	private Map _values; //(IntPair, Number)
+	private Map<IntPair, Number> _values; //(IntPair, Number)
 	
 	/**
 	 * data model to be used with wafermap chart.
@@ -113,7 +114,7 @@ public class WaferMapModel extends AbstractChartModel {
 	 */
 	public Number getValue(int x, int y) {
 		if (_values != null) {
-			return (Number) _values.get(new IntPair(x, y));
+			return _values.get(new IntPair(x, y));
 		}
 		return null;
 	}
@@ -131,7 +132,7 @@ public class WaferMapModel extends AbstractChartModel {
 		if (y >= _ysize) 
 			throw new IndexOutOfBoundsException("y size: "+_ysize+", y: "+y);
 		if (_values == null) {
-			_values = new HashMap(256);
+			_values = new HashMap<IntPair, Number>();
 		}
 		_values.put(new IntPair(x, y), new Integer(value));
 		fireEvent(ChartDataEvent.CHANGED, null, null);
@@ -139,8 +140,10 @@ public class WaferMapModel extends AbstractChartModel {
 	
 	/** Internal Use Only. The entrySet of the added values.
 	 */
-	public Collection getEntrySet() {
-		return _values == null ? new HashSet(0) : _values.entrySet();
+	public Collection<Map.Entry<IntPair, Number>> getEntrySet() {
+		if (_values != null)
+			return _values.entrySet();
+		return Collections.emptySet();
 	}
 	
 	/**
@@ -150,7 +153,7 @@ public class WaferMapModel extends AbstractChartModel {
 	 */	
 	public void removeValue(int x, int y) {
 		if (_values != null) {
-			final Object old = _values.remove(new IntPair(x, y));
+			final Number old = _values.remove(new IntPair(x, y));
 			if (old != null) {
 				fireEvent(ChartDataEvent.REMOVED, null, null);
 			}

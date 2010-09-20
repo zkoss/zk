@@ -48,7 +48,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	/** The name of all child radio buttons. */
 	private String _name;
 	/** A list of external radio ({@link Radio}) components. */
-	private List _externs;
+	private List<Radio> _externs;
 	private int _jsel = -1;
 
 	public Radiogroup() {
@@ -78,24 +78,22 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	 * Note: any update to the list won't affect the state of this radio group.
 	 * @since 5.0.4
 	 */
-	public List getItems() {
+	public List<Radio> getItems() {
 		//FUTURE: the algorithm is stupid and it shall be similar to Listbox
 		//however, it is OK since there won't be many radio buttons in a group
-		final List items = new LinkedList();
+		final List<Radio> items = new LinkedList<Radio>();
 		getItems0(this, items);
 		if (_externs != null)
-			for (Iterator it = _externs.iterator(); it.hasNext();) {
-				final Radio radio = (Radio)it.next();
+			for (Radio radio: _externs) {
 				if (!isRedudant(radio))
 					items.add(radio);
 			}
 		return items;
 	}
-	private static void getItems0(Component comp, List items) {
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
+	private static void getItems0(Component comp, List<Radio> items) {
+		for (Component child: comp.getChildren()) {
 			if (child instanceof Radio)
-				items.add(child);
+				items.add((Radio)child);
 			else if (!(child instanceof Radiogroup)) //skip nested radiogroup
 				getItems0(child, items);
 		}
@@ -111,10 +109,9 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		if (radio != null)
 			return radio;
 		if (_externs != null)
-			for (Iterator it = _externs.iterator(); it.hasNext();) {
-				radio = (Radio)it.next();
-				if (!isRedudant(radio) && cur.value++ == index)
-					return radio;
+			for (Radio r: _externs) {
+				if (!isRedudant(r) && cur.value++ == index)
+					return r;
 			}
 		throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
 	}
@@ -149,8 +146,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	public int getItemCount() {
 		int sum = countItems(this);
 		if (_externs != null)
-			for (Iterator it = _externs.iterator(); it.hasNext();) {
-				final Radio radio = (Radio)it.next();
+			for (Radio radio: _externs) {
 				if (!isRedudant(radio))
 					++sum;
 			}
@@ -305,8 +301,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		_jsel = fixSelIndex(this, cur);
 
 		if (_jsel < 0 && _externs != null)
-			for (Iterator it = _externs.iterator(); it.hasNext();) {
-				final Radio radio = (Radio)it.next();
+			for (Radio radio: _externs) {
 				if (!isRedudant(radio)) {
 					if (radio.isSelected()) {
 						_jsel = cur.value;
@@ -337,7 +332,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	 */
 	/*package*/ void addExternal(Radio radio) {
 		if (_externs == null)
-			_externs = new LinkedList();
+			_externs = new LinkedList<Radio>();
 		_externs.add(radio);
 		if (!isRedudant(radio))
 			fixOnAdd(radio);

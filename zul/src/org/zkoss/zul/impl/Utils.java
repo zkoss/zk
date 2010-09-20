@@ -54,7 +54,7 @@ public class Utils {
 		if (numbers == null)
 			return null;
 
-		List list = new LinkedList();
+		List<Integer> list = new LinkedList<Integer>();
 		for (int j = 0;;) {
 			int k = numbers.indexOf(',', j);
 			final String s =
@@ -79,8 +79,8 @@ public class Utils {
 		if (sz > 0) {
 			ary = new int[sz];
 			int j = 0;
-			for (Iterator it = list.iterator(); it.hasNext(); ++j) {
-				final Integer i = (Integer)it.next();
+			for (Iterator<Integer> it = list.iterator(); it.hasNext(); ++j) {
+				final Integer i = it.next();
 				ary[j] = i != null ? i.intValue(): defaultValue;
 			}
 		} else {
@@ -114,7 +114,7 @@ public class Utils {
 		if (src == null)
 			return null;
 
-		List list = new LinkedList();
+		List<String> list = new LinkedList<String>();
 		for (int j = 0;;) {
 			int k = src.indexOf(',', j);
 			final String s =
@@ -130,7 +130,7 @@ public class Utils {
 			j = k + 1;
 		}
 
-		return (String[])list.toArray(new String[list.size()]);
+		return list.toArray(new String[list.size()]);
 	}
 	/** Converts an array of objects to a string, by catenating them
 	 * together and separated with comma.

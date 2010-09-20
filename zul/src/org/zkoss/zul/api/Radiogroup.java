@@ -51,7 +51,7 @@ public interface Radiogroup extends org.zkoss.zul.impl.api.XulElement {
 	 * Note: any update to the list won't affect the state of this radio group.
 	 * @since 5.0.4
 	 */
-	public List getItems();
+	public List<org.zkoss.zul.Radio> getItems();
 	/**
 	 * Returns the radio button at the specified index.
 	 */

@@ -172,9 +172,14 @@ public class RowComparator implements Comparator {
 
 		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;
 		if (v2 == null) return _maxnull ? -1: 1;
-		final int v = ((Comparable)v1).compareTo(v2);
+		final int v = compareTo((Comparable)v1, v2);
 		return _asc ? v: -v;
 	}
+	@SuppressWarnings("unchecked")
+	private static int compareTo(Comparable v1, Object v2) {
+		return v1.compareTo(v2);
+	}
+
 	private Object handleCase(Object c) {
 		if (c instanceof Label)
 			c = ((Label) c).getValue();

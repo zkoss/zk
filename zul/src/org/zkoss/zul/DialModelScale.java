@@ -63,7 +63,7 @@ public class DialModelScale implements Serializable {
 	int _minorTickCount;
 	
 	//ranges
-	private List _ranges =  new ArrayList(4);
+	private List<DialModelRange> _ranges =  new ArrayList<DialModelRange>(4);
 	
 	//needle
 	private String _needleType = "pointer"; //"pointer", "pin"
@@ -399,7 +399,7 @@ public class DialModelScale implements Serializable {
 	 * @return the color range of the specified index.
 	 */
 	public DialModelRange getRange(int index) {
-		return (DialModelRange) _ranges.get(index);
+		return _ranges.get(index);
 	}
 	
 	/**

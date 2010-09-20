@@ -72,10 +72,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private transient Treefoot _treefoot;
 	private transient Treechildren _treechildren;
 	/** A list of selected items. */
-	private transient Set _selItems;
+	private transient Set<Treeitem> _selItems;
 	/** The first selected item. */
 	private transient Treeitem _sel;
-	private transient Collection _heads;
+	private transient Collection<Component> _heads;
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
@@ -85,7 +85,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private transient boolean _noSmartUpdate;
 	private String _innerWidth = "100%";
 
-	private TreeModel _model;
+	private TreeModel<Object> _model;
 	private TreeitemRenderer _renderer;	
 	private transient TreeDataListener _dataListener;
 	private boolean _sizedByContent;
@@ -113,8 +113,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		init();
 	}
 	private void init() {
-		_selItems = new LinkedHashSet(5);
-		_heads = new AbstractCollection() {
+		_selItems = new LinkedHashSet<Treeitem>(4);
+		_heads = new AbstractCollection<Component>() {
 			public int size() {
 				int sz = getChildren().size();
 				if (_treechildren != null) --sz;
@@ -122,7 +122,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_paging != null) --sz;
 				return sz;
 			}
-			public Iterator iterator() {
+			public Iterator<Component> iterator() {
 				return new Iter();
 			}
 		};
@@ -139,8 +139,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * Returens a map of current visible item.
 	 * @since 3.0.7
 	 */
-	Map getVisibleItems() {
-		Map map = new HashMap();
+	Map<Treeitem, Boolean> getVisibleItems() {
+		Map<Treeitem, Boolean> map = new HashMap<Treeitem, Boolean>();
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
 		final int ofs = pgi.getActivePage() * pgsz;
@@ -153,9 +153,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/**
 	 * Prepare the map of the visible items recursively in deep-first order.
 	 */
-	private boolean getVisibleItemsDFS(List list, Map map, int[] data) {
-		for (Iterator it = list.iterator(); it.hasNext(); ) {
-			Component cmp = (Component)it.next();
+	private boolean getVisibleItemsDFS(List<Component> list, Map<Treeitem, Boolean> map, int[] data) {
+		for (Component cmp: list) {
 			if (cmp instanceof Treeitem) {
 				if (data[4] >= data[0]) return false; // full
 				final Treeitem item = (Treeitem) cmp;
@@ -982,15 +981,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * it has no child
 	 */
 	public void clear() {
-		if (_treechildren == null)
-			return;
-
-		final List l = _treechildren.getChildren();
-		if (l.isEmpty())
-			return; //nothing to do
-
-		for (Iterator it = new ArrayList(l).iterator(); it.hasNext();)
-			((Component)it.next()).detach();
+		if (_treechildren != null)
+			_treechildren.getChildren().clear();
 	}
 
 	//-- Component --//
@@ -1411,7 +1403,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
 	 */
-	public void setModel(TreeModel model) {
+	public void setModel(TreeModel<?> model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -1421,7 +1413,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 						//don't call getItems().clear(), since it readonly
 				}
 
-				_model = model;
+				setModelDirectly(model);
 				initDataListener();
 			}
 			syncModel();
@@ -1432,6 +1424,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				//don't call getItems().clear(), since it readonly
 		}
 	}
+	@SuppressWarnings("unchecked")
+	private final void setModelDirectly(TreeModel model) {
+		_model = (TreeModel<Object>)model;
+	}
 	
 	//--TreeModel dependent codes--//
 	/** Returns the list model associated with this tree, or null
@@ -1440,8 +1436,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * @return the list model associated with this tree
 	 * @since 3.0.0
 	 */
-	public TreeModel getModel(){
-		return _model;
+	@SuppressWarnings("unchecked")
+	public <T> TreeModel<T> getModel(){
+		return (TreeModel)_model;
 	}
 	
 	/** Synchronizes the tree to be consistent with the specified model.
@@ -1771,8 +1768,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/**
 	 * return the path which is from ZK Component root to ZK Component lastNode 
 	 */
-	private List getTreeitemPath(Component root, Component lastNode){
-		List al = new ArrayList();
+	private List<Integer> getTreeitemPath(Component root, Component lastNode){
+		List<Integer> al = new ArrayList<Integer>();
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
 			if(curNode instanceof Treeitem){
@@ -1790,11 +1787,11 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * @return the node from tree by given path
 	 * @since 3.0.0
 	 */
-	private Object getNodeByPath(List path, Object root) {
+	private Object getNodeByPath(List<Integer> path, Object root) {
 		Object node = root;
 		int pathSize = path.size()-1;
 		for(int i=pathSize; i >= 0; i--){
-			node = _model.getChild(node, ((Integer)(path.get(i))).intValue());
+			node = _model.getChild(node, path.get(i));
 		}
 		return node;
 	}
@@ -1961,12 +1958,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 	/** An iterator used by _heads.
 	 */
-	private class Iter implements Iterator {
-		private final ListIterator _it = getChildren().listIterator();
+	private class Iter implements Iterator<Component> {
+		private final ListIterator<Component> _it = getChildren().listIterator();
 
 		public boolean hasNext() {
 			while (_it.hasNext()) {
-				Object o = _it.next();
+				Component o = _it.next();
 				if (o instanceof Treecols || o instanceof Auxhead) {
 					_it.previous();
 					return true;
@@ -1974,9 +1971,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 			return false;
 		}
-		public Object next() {
+		public Component next() {
 			for (;;) {
-				Object o = _it.next();
+				Component o = _it.next();
 				if (o instanceof Treecols || o instanceof Auxhead)
 					return o;
 			}

@@ -33,15 +33,15 @@ import org.zkoss.zul.event.ChartDataEvent;
  */
 public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 	private static final long serialVersionUID = 20091008182747L;
-	private Comparable _series; //the only series
-	private List _hlTuples = new ArrayList(31);
+	private Comparable<?> _series; //the only series
+	private List<HiLoTuple> _hlTuples = new ArrayList<HiLoTuple>(31);
 	
 	//-- HiLoModel --//
-	public Comparable getSeries() {
+	public Comparable<?> getSeries() {
 		return _series;
 	}
 	
-	public void setSeries(Comparable series) {
+	public void setSeries(Comparable<?> series) {
 		_series = series;
 	}
 	
@@ -50,27 +50,27 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 	}
 
 	public Date getDate(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getDate();
+		return _hlTuples.get(index).getDate();
 	}
 	
 	public Number getOpen(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getOpen();
+		return _hlTuples.get(index).getOpen();
 	}
 
 	public Number getHigh(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getHigh();
+		return _hlTuples.get(index).getHigh();
 	}
 
 	public Number getLow(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getLow();
+		return _hlTuples.get(index).getLow();
 	}
 
 	public Number getClose(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getClose();
+		return _hlTuples.get(index).getClose();
 	}
 
 	public Number getVolume(int index) {
-		return ((HiLoTuple)_hlTuples.get(index)).getVolume();
+		return _hlTuples.get(index).getVolume();
 	}
 	
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volume) {

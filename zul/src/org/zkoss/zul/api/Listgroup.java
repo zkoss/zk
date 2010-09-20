@@ -38,7 +38,7 @@ public interface Listgroup extends Listitem {
 	/**
 	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
 	 */
-	public List getItems();
+	public List<org.zkoss.zul.Listitem> getItems();
 
 	/**
 	 * Returns the number of items.

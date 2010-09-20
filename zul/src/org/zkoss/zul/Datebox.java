@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -52,7 +53,7 @@ import org.zkoss.zul.mesg.MZul;
 public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
-	private List _dtzones;
+	private List<TimeZone> _dtzones;
 	private boolean _btnVisible = true, _lenient = true, _open = false, _dtzonesReadonly = false;
 	static {
 		addClientEvent(Datebox.class, Events.ON_FOCUS, 0);
@@ -268,7 +269,7 @@ public class Datebox extends FormatInputElement implements
 	public void setTimeZone(TimeZone tzone) {
 		if (_tzone != tzone) {
 			if (_dtzones != null) {
-				_tzone = _dtzones.contains(tzone) ? tzone : (TimeZone) _dtzones.get(0);
+				_tzone = _dtzones.contains(tzone) ? tzone : _dtzones.get(0);
 			} else {
 				_tzone = tzone;
 			}
@@ -291,7 +292,7 @@ public class Datebox extends FormatInputElement implements
 	 * <p>Default: null
 	 * @since 3.6.3
 	 */
-	public List getDisplayedTimeZones() {
+	public List<TimeZone> getDisplayedTimeZones() {
 		return _dtzones;
 	}
 	/**
@@ -303,20 +304,20 @@ public class Datebox extends FormatInputElement implements
 	 * If empty, it assumed to be null.
 	 * @since 3.6.3
 	 */
-	public void setDisplayedTimeZones(List dtzones) {
+	public void setDisplayedTimeZones(List<TimeZone> dtzones) {
 		if (dtzones != null && dtzones.isEmpty())
 			dtzones = null;
 		if (_dtzones != dtzones) {
 			_dtzones = dtzones;
 			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < _dtzones.size(); i++) {
+			int i = 0;
+			for (Iterator<TimeZone> it = dtzones.iterator(); it.hasNext(); i++) {
 				if(i != 0) sb.append(",");
-				TimeZone tz = (TimeZone)_dtzones.get(i);
-				sb.append(tz.getID());
+				sb.append(it.next().getID());
 			}
 			smartUpdate("displayedTimeZones", sb.toString());
 			if (_tzone == null && _dtzones != null && _dtzones.get(0) != null)
-				_tzone = (TimeZone)_dtzones.get(0);
+				_tzone = _dtzones.get(0);
 		}
 	}
 	/**
@@ -330,11 +331,11 @@ public class Datebox extends FormatInputElement implements
 	 */
 	public void setDisplayedTimeZones(String dtzones) {
 		if (dtzones == null || dtzones.length() == 0) {
-			setDisplayedTimeZones((List)null);
+			setDisplayedTimeZones((List<TimeZone>)null);
 			return;
 		}
 		
-		LinkedList list = new LinkedList();
+		LinkedList<TimeZone> list = new LinkedList<TimeZone>();
 		String[] ids = dtzones.split(",");
 		for (int i = 0; i < ids.length; i++) {
 			TimeZone tzone = TimeZone.getTimeZone(ids[i].trim());

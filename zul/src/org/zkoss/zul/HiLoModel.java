@@ -31,13 +31,13 @@ public interface HiLoModel extends ChartModel {
 	/**
 	 * Get the only series.
 	 */
-	public Comparable getSeries();
+	public Comparable<?> getSeries();
 
 	/**
 	 * Set the only series.
 	 * @param series the only series in legend.
 	 */	
-	public void setSeries(Comparable series);
+	public void setSeries(Comparable<?> series);
 
 	/**
 	 * Get data count.

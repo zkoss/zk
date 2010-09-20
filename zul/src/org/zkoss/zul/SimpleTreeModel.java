@@ -23,36 +23,29 @@ package org.zkoss.zul;
  * @author Jeff Liu
  * @since 3.0.0
  */
-public class SimpleTreeModel extends AbstractTreeModel {
+public class SimpleTreeModel<E> extends AbstractTreeModel<SimpleTreeNode<E>> {
 	
 	/**
 	 * Constructor
 	 * @param root - the root of tree 
 	 */
-	public SimpleTreeModel(SimpleTreeNode root) {
+	public SimpleTreeModel(SimpleTreeNode<E> root) {
 		super(root);
 	}
 	
 	//--TreeModel--//
-	public Object getChild(Object parent, int index) {
-		SimpleTreeNode node = (SimpleTreeNode)parent;
-		return node.getChildAt(index);
+	public SimpleTreeNode<E> getChild(SimpleTreeNode<E> parent, int index) {
+		return parent.getChildAt(index);
 	}
 	
 	//--TreeModel--//
-	public int getChildCount(Object parent) {
-		SimpleTreeNode node = (SimpleTreeNode)parent;
-		return node.getChildCount();
+	public int getChildCount(SimpleTreeNode<E> parent) {
+		return parent.getChildCount();
 	}
 	
 	//--TreeModel--//
-	public boolean isLeaf(Object node) {
-		if(node instanceof SimpleTreeNode){
-			SimpleTreeNode node_ = (SimpleTreeNode)node;
-			return node_.isLeaf();
-		}else{
-			return true;
-		}
+	public boolean isLeaf(SimpleTreeNode<E> node) {
+		return node.isLeaf();
 	}
 
 }

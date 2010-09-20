@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.UiException;
 public class FieldComparator implements Comparator, Serializable {
 	private static final long serialVersionUID = 20090120111922L;
 	/** The field names collection. */
-	private Collection _fieldnames;
+	private Collection<FieldInfo> _fieldnames;
 	/** The cached field name string. */
 	private String _orderBy;
 	/** Whether to treat null as the maximum value. */
@@ -77,8 +77,7 @@ public class FieldComparator implements Comparator, Serializable {
 	
 	public int compare(Object o1, Object o2) {
 		try {
-			for(final Iterator it = _fieldnames.iterator(); it.hasNext();) {
-				final FieldInfo fi = (FieldInfo) it.next();
+			for(FieldInfo fi: _fieldnames) {
 				final int res = compare0(o1, o2, fi.fieldname, fi.asc, fi.func);
 				if (res != 0) {
 					return res;
@@ -93,13 +92,13 @@ public class FieldComparator implements Comparator, Serializable {
 	public String getOrderBy() {
 		if (_orderBy == null) {
 			final StringBuffer sb = new StringBuffer(_fieldnames.size() * 16);
-			final Iterator it = _fieldnames.iterator();
+			final Iterator<FieldInfo> it = _fieldnames.iterator();
 			if (it.hasNext()) {
-				appendField(sb, (FieldInfo) it.next());
+				appendField(sb, it.next());
 			}
 			while(it.hasNext()) {
 				sb.append(",");
-				appendField(sb, (FieldInfo) it.next());
+				appendField(sb, it.next());
 			}
 			_orderBy = sb.toString();
 		}
@@ -114,7 +113,7 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		sb.append(fi.asc ? " ASC" : " DESC");
 	}
-	
+	@SuppressWarnings("unchecked")
 	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException { 
 		final Object f1 = Fields.getByCompound(o1, fieldname);
 		final Object f2 = Fields.getByCompound(o2, fieldname);
@@ -144,11 +143,11 @@ public class FieldComparator implements Comparator, Serializable {
 		return c;
 	}
 
-	private Collection parseFieldNames(String fieldnames, boolean ascending) {
-		final Collection fields = CollectionsX.parse(new ArrayList(), fieldnames, ',');
-		final List results = new ArrayList(fields.size());
-		for (final Iterator it = fields.iterator(); it.hasNext();) {
-			final String field = ((String) it.next()).trim();
+	private Collection<FieldInfo> parseFieldNames(String fieldnames, boolean ascending) {
+		final Collection<String> fields = CollectionsX.parse(new ArrayList<String>(), fieldnames, ',');
+		final List<FieldInfo> results = new ArrayList<FieldInfo>(fields.size());
+		for (final Iterator<String> it = fields.iterator(); it.hasNext();) {
+			final String field = it.next().trim();
 			String fieldname;
 			String ascstr = "asc";
 			//whether a String

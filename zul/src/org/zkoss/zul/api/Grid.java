@@ -270,7 +270,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
-	public ListModel<?> getModel();
+	public <T> ListModel<T> getModel();
 
 	/**
 	 * Returns the list model associated with this grid, or null if this grid is
@@ -279,7 +279,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * @see #setModel(ListModel)
 	 */
-	public ListModel<?> getListModel();
+	public <T> ListModel<T> getListModel();
 
 	/**
 	 * Returns the groups model associated with this grid, or null if this grid
@@ -288,7 +288,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * @see #setModel(GroupsModel)
 	 */
-	public GroupsModel<?, ?, ?> getGroupsModel();
+	public <D, G, F> GroupsModel<D, G, F> getGroupsModel();
 
 	/**
 	 * Sets the list model associated with this grid. If a non-null model is
