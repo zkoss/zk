@@ -41,7 +41,7 @@ public class TagRenderContext {
 	/** Used to decide if the component, which {@link #renderBegin} is called against,
 	 * is not a first child.
 	 */
-	private final List _2ndChild = new LinkedList();
+	private final List<Boolean> _2ndChild = new LinkedList<Boolean>();
 
 	public TagRenderContext() {
 		HtmlPageRenders.setDirectContent(Executions.getCurrent(), true); //default: true

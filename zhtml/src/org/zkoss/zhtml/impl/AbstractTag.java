@@ -62,7 +62,7 @@ implements DynamicPropertied, RawId {
 
 	/** The tag name. */
 	protected String _tagnm;
-	private Map _props;
+	private Map<String, Object> _props;
 
 	protected AbstractTag(String tagname) {
 		if (tagname == null || tagname.length() == 0)
@@ -167,7 +167,7 @@ implements DynamicPropertied, RawId {
 			if (_props != null) _props.remove(name);
 		} else {
 			if (_props == null)
-				_props = new LinkedHashMap();
+				_props = new LinkedHashMap<String, Object>();
 			_props.put(name, value);
 		}
 	}
@@ -319,7 +319,7 @@ implements DynamicPropertied, RawId {
 	public Object clone() {
 		final AbstractTag clone = (AbstractTag)super.clone();
 		if (clone._props != null)
-			clone._props = new LinkedHashMap(clone._props);
+			clone._props = new LinkedHashMap<String, Object>(clone._props);
 		return clone;
 	}
 

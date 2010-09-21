@@ -80,4 +80,11 @@ public class Generics {
 	public static final <K, V> Map<K, V> cast(Map map) {
 		return map;
 	}
+	/** Returns a type-safe generic thread-local of the given un-typed thread-local.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> ThreadLocal<T> cast(ThreadLocal tl) {
+		return tl;
+	}
 }
