@@ -36,10 +36,10 @@ function (out) {
 				'<tr><td id="', uuid, '-title">');
 	switch(view) {
 	case "day" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "month" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span>, <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "year" :
 		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', yofs + ydelta + 1, '-', yofs + ydelta + 10, '</span>');
@@ -63,14 +63,14 @@ function (out) {
 			var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
 			for (var j = 0 ; j < 7; ++j) {
 				out.push('<td');
-				if (j == sun || j == sat) out.push(' class="z-weekend"');
+				zul.db.ThemeHandler.addDayOfWeekClass((j == sun || j == sat), out);
 				out.push( '>' + zk.S2DOW[j] + '</td>');
 			}
 			out.push('</tr>');
 			for (var j = 0; j < 6; ++j) { //at most 7 rows
 				out.push('<tr class="', zcls, '-caldayrow" id="', uuid, '-w', j, '" >');
 				for (var k = 0; k < 7; ++k)
-					out.push ('<td></td>');
+					zul.db.ThemeHandler.addDayRowClass((k == sun || k == sat), zcls, out);
 				out.push('</tr>');
 			}
 		out.push('</table></td></tr>');

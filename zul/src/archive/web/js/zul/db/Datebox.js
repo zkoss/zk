@@ -465,8 +465,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
-			jq(inp).addClass(this.getZclass() + '-right-edge');
+		
+		zul.db.ThemeHandler.addRightEdgeClass(this);
 			
 		this.syncWidth();
 		
@@ -728,4 +728,16 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 	}
 });
 
+zul.db.ThemeHandler = {
+	 addRightEdgeClass: function (wgt) {
+	  	if (wgt._readonly && !wgt.inRoundedMold() && !wgt._buttonVisible)
+			jq(wgt.getInputNode()).addClass(wgt.getZclass() + '-right-edge');
+	 },
+	 addDayOfWeekClass: function (isWeekend, out) {
+	 	if (isWeekend) out.push(' class="z-weekend"');
+	 },
+	 addDayRowClass: function (isWeekend, zcls, out) {
+	 	out.push ('<td></td>');
+	 }
+};
 })();
