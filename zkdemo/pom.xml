@@ -42,6 +42,10 @@
 			<id>ZK EE Evaluation</id>
 			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
 		</repository>
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.com/maven2</url>
+		</repository>		
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
