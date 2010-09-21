@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zul.Grid;
@@ -54,7 +56,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 					
 		//link cloned component with template
 		//each Row and its decendants share the same templatemap
-		Map templatemap = new HashMap(7);
+		Map<Object, Object> templatemap = new HashMap<Object, Object>(8);
 		linkTemplates(clone, _template, templatemap);
 		
 		//link this template map to parent templatemap (Grid in Grid)
@@ -63,7 +65,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 			templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
-		final List kids = new ArrayList(clone.getChildren());
+		final List<Component> kids = new ArrayList<Component>(clone.getChildren());
 		clone.setAttribute(KIDS, kids);
 		clone.getChildren().clear();
 		return clone;
@@ -79,7 +81,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		
 	//-- RowRenderer --//
 	public void render(Row row, java.lang.Object bean) {
-		final List kids = (List) row.getAttribute(KIDS);
+		final List<Component> kids = cast((List) row.getAttribute(KIDS));
 		row.getChildren().addAll(kids);
 //			row.removeAttribute(KIDS);
 			
@@ -91,7 +93,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 
 		//bind bean to the associated listitem and its decendant
 		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
-		final Map templatemap = (Map) row.getAttribute(DataBinder.TEMPLATEMAP);
+		final Map<Object, Object> templatemap = cast((Map) row.getAttribute(DataBinder.TEMPLATEMAP));
 		templatemap.put(varname, bean);
 
 		//apply the data binding
@@ -102,7 +104,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	}
 
 	//link cloned components with bindings of templates
-	private void linkTemplates(Component clone, Component template, Map templatemap) {
+	private void linkTemplates(Component clone, Component template, Map<Object, Object> templatemap) {
 		if (_binder.existsBindings(template)) {
 			templatemap.put(template, clone);
 			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);

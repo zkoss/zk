@@ -79,11 +79,11 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 						//We need this to support load-when:onSelect when first load 
 						//the page in (so it is called only once).
 		  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
-		    				Set items = new HashSet();
+		    				Set<Listitem> items = new HashSet<Listitem>();
 		    				items.add(item);
 		    				//bug #2140491
 		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid(), Boolean.TRUE);
-		    				Events.postEvent(new SelectEvent("onSelect", lbx, items, item));
+		    				Events.postEvent(new SelectEvent<Listitem>("onSelect", lbx, items, item));
 		    			}
 	    			}
 	  				return item;

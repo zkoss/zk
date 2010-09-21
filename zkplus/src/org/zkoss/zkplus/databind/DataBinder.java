@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Primitives;
 import org.zkoss.lang.reflect.Fields;
@@ -77,17 +79,17 @@ public class DataBinder implements java.io.Serializable {
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
 	
-	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
-	private Map _beans = new HashMap(29); //bean local to this DataBinder
-	private Map _beanSameNodes = new HashMap(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
+	private Map<Component, Map<String, Binding>> _compBindingMap = new LinkedHashMap<Component, Map<String, Binding>>(29); //(comp, Map(attr, Binding))
+	private Map<String, Object> _beans = new HashMap<String, Object>(29); //bean local to this DataBinder
+	private Map<Object, Set<Object>> _beanSameNodes = new HashMap<Object, Set<Object>>(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
 	private BindingNode _pathTree = new BindingNode("/", false, "/", false); //path dependency tree.
 	private boolean _defaultConfig = true; //whether load default configuration from lang-addon.xml
 	private boolean _init; //whether this databinder is initialized. 
 	private EventListener _listener = new LoadOnSaveEventListener();
 		//Databinder is init automatically when saveXXX or loadXxx is called
 	
-	protected Map _collectionItemMap = new HashMap(3);
-	protected Map _collectionOwnerMap = new HashMap(3); //bug#1950313 F - 1764967 bug
+	protected Map<String, CollectionItem> _collectionItemMap = new HashMap<String, CollectionItem>(3);
+	protected Map<String, CollectionItem> _collectionOwnerMap = new HashMap<String, CollectionItem>(3); //bug#1950313 F - 1764967 bug
 	
 	private boolean _loadOnSave = true; //whether firing the onLoadOnSave event to automate the loadOnSave operation 
 	
@@ -116,7 +118,7 @@ public class DataBinder implements java.io.Serializable {
 	 * @param expr The expression to associate the data bean.
 	 */
 	public void addBinding(Component comp, String attr, String expr) {
-		addBinding(comp, attr, expr, (List)null, (List)null, null, null);
+		addBinding(comp, attr, expr, (List<String>)null, (List<String>)null, null, null);
 	}
 
 	/** Binding bean to UI component. 
@@ -134,9 +136,9 @@ public class DataBinder implements java.io.Serializable {
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		String[] loadWhenEvents, String saveWhenEvent, String access, String converter) {
-		List loadEvents = null;
+		List<String> loadEvents = null;
 		if (loadWhenEvents != null && loadWhenEvents.length > 0) {
-			loadEvents = new ArrayList(loadWhenEvents.length);
+			loadEvents = new ArrayList<String>(loadWhenEvents.length);
 			for (int j = 0; j < loadWhenEvents.length; ++j) {
 				loadEvents.add(loadWhenEvents[j]);
 			}
@@ -160,16 +162,16 @@ public class DataBinder implements java.io.Serializable {
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		String[] loadWhenEvents, String[] saveWhenEvents, String access, String converter) {
-		List loadEvents = null;
+		List<String> loadEvents = null;
 		if (loadWhenEvents != null && loadWhenEvents.length > 0) {
-			loadEvents = new ArrayList(loadWhenEvents.length);
+			loadEvents = new ArrayList<String>(loadWhenEvents.length);
 			for (int j = 0; j < loadWhenEvents.length; ++j) {
 				loadEvents.add(loadWhenEvents[j]);
 			}
 		}
-		List saveEvents = null;
+		List<String> saveEvents = null;
 		if (saveWhenEvents != null && saveWhenEvents.length > 0) {
-			saveEvents = new ArrayList(saveWhenEvents.length);
+			saveEvents = new ArrayList<String>(saveWhenEvents.length);
 			for (int j = 0; j < saveWhenEvents.length; ++j) {
 				saveEvents.add(saveWhenEvents[j]);
 			}
@@ -191,8 +193,8 @@ public class DataBinder implements java.io.Serializable {
 	 *  and the associated bean. null means using the default class conversion method.
 	 */
 	public void addBinding(Component comp, String attr, String expr,
-		List loadWhenEvents, String saveWhenEvent, String access, String converter) {
-		List saveEvents = new ArrayList(1);
+		List<String> loadWhenEvents, String saveWhenEvent, String access, String converter) {
+		List<String> saveEvents = new ArrayList<String>();
 		saveEvents.add(saveWhenEvent);
 		addBinding(comp, attr, expr, loadWhenEvents, saveEvents, access, converter);
 	}
@@ -212,7 +214,7 @@ public class DataBinder implements java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public void addBinding(Component comp, String attr, String expr,
-		List loadWhenEvents, List saveWhenEvents, String access, String converter) {
+		List<String> loadWhenEvents, List<String> saveWhenEvents, String access, String converter) {
 		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null, null, null);
 	}
 	
@@ -232,7 +234,7 @@ public class DataBinder implements java.io.Serializable {
 	 * @since 3.5.0
 	 */
 /*	public void addBinding(Component comp, String attr, String expr,
-			List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args) {
+			List<String> loadWhenEvents, List<String> saveWhenEvents, String access, String converter, Map args) {
 		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, args, null, null);
 	}
 */
@@ -254,7 +256,8 @@ public class DataBinder implements java.io.Serializable {
 	 * @since 3.6.1
 	 */
 	public void addBinding(Component comp, String attr, String expr,
-		List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args, List loadAfterEvents, List saveAfterEvents) {
+		List<String> loadWhenEvents, List<String> saveWhenEvents, String access, String converter,
+		Map<Object, Object> args, List<String> loadAfterEvents, List<String> saveAfterEvents) {
 		//since 3.1, 20080416, Henri Chen: add a generic arguments map (string, string)
 		
 		//Since 3.0, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
@@ -279,10 +282,10 @@ public class DataBinder implements java.io.Serializable {
 			*/
 
 			if (loadWhenEvents == null && objs[1] != null) {
-				loadWhenEvents = (List) objs[1];
+				loadWhenEvents = cast((List) objs[1]);
 			}
 			if (saveWhenEvents == null && objs[2] != null) {
-				saveWhenEvents = (List) objs[2];
+				saveWhenEvents = cast((List) objs[2]);
 			}
 			if (access == null && objs[3] != null) {
 				access = (String) objs[3];
@@ -291,22 +294,21 @@ public class DataBinder implements java.io.Serializable {
 				converter = (String) objs[4];
 			}
 			if (args == null && objs[5] != null) {
-				args = (Map) objs[5];
+				args = cast((Map) objs[5]);
 			}
 			if (loadAfterEvents == null && objs[6] != null) {
-				loadAfterEvents = (List) objs[6];
+				loadAfterEvents = cast((List) objs[6]);
 			}
 			if (saveAfterEvents == null && objs[7] != null) {
-				saveAfterEvents = (List) objs[7];
+				saveAfterEvents = cast((List) objs[7]);
 			}
 		}
 	
 		//nullify check
-		LinkedHashSet loadEvents = null;
+		LinkedHashSet<String> loadEvents = null;
 		if (loadWhenEvents != null && loadWhenEvents.size() > 0) {
-			loadEvents = new LinkedHashSet(loadWhenEvents.size());
-			for(final Iterator it = loadWhenEvents.iterator(); it.hasNext();) {
-				final String event = (String) it.next();
+			loadEvents = new LinkedHashSet<String>(loadWhenEvents.size());
+			for(String event: loadWhenEvents) {
 				if (NULLIFY.equals(event)) {
 					loadEvents.clear();
 				} else {
@@ -318,11 +320,10 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 
-		LinkedHashSet lafterEvents = null;
+		LinkedHashSet<String> lafterEvents = null;
 		if (loadAfterEvents != null && loadAfterEvents.size() > 0) {
-			lafterEvents = new LinkedHashSet(loadAfterEvents.size());
-			for(final Iterator it = loadAfterEvents.iterator(); it.hasNext();) {
-				final String event = (String) it.next();
+			lafterEvents = new LinkedHashSet<String>(loadAfterEvents.size());
+			for(String event: loadAfterEvents) {
 				if (NULLIFY.equals(event)) {
 					lafterEvents.clear();
 				} else {
@@ -334,11 +335,10 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 		
-		LinkedHashSet saveEvents = null;
+		LinkedHashSet<String> saveEvents = null;
 		if (saveWhenEvents != null && saveWhenEvents.size() > 0) {
-			saveEvents = new LinkedHashSet(saveWhenEvents.size());
-			for(final Iterator it = saveWhenEvents.iterator(); it.hasNext();) {
-				final String event = (String) it.next();
+			saveEvents = new LinkedHashSet<String>(saveWhenEvents.size());
+			for(String event: saveWhenEvents) {
 				if (NULLIFY.equals(event)) {
 					saveEvents.clear();
 				} else {
@@ -350,11 +350,10 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 		
-		LinkedHashSet safterEvents = null;
+		LinkedHashSet<String> safterEvents = null;
 		if (saveAfterEvents != null && saveAfterEvents.size() > 0) {
-			safterEvents = new LinkedHashSet(saveAfterEvents.size());
-			for(final Iterator it = saveAfterEvents.iterator(); it.hasNext();) {
-				final String event = (String) it.next();
+			safterEvents = new LinkedHashSet<String>(saveAfterEvents.size());
+			for(String event: saveAfterEvents) {
 				if (NULLIFY.equals(event)) {
 					safterEvents.clear();
 				} else {
@@ -375,9 +374,9 @@ public class DataBinder implements java.io.Serializable {
 			converter = null;
 		}
 		
-		Map attrMap = (Map) _compBindingMap.get(comp);
+		Map<String, Binding> attrMap = _compBindingMap.get(comp);
 		if (attrMap == null) {
-			attrMap = new LinkedHashMap(3);
+			attrMap = new LinkedHashMap<String, Binding>(3);
 			_compBindingMap.put(comp, attrMap);
 		}
 			
@@ -404,7 +403,7 @@ public class DataBinder implements java.io.Serializable {
 		if (isClone(comp)) {
 			comp = (Component) comp.getAttribute(TEMPLATE);
 		}
-		Map attrMap = (Map) _compBindingMap.get(comp);
+		Map<String, Binding> attrMap = _compBindingMap.get(comp);
 		if (attrMap != null) {
 			attrMap.remove(attr);
 		}
@@ -418,29 +417,28 @@ public class DataBinder implements java.io.Serializable {
 		if (isClone(comp)) {
 			comp = (Component) comp.getAttribute(TEMPLATE);
 		}
-		Map attrMap = (Map) _compBindingMap.get(comp);
-		return attrMap != null ?  (Binding) attrMap.get(attr) : null;
+		Map<String, Binding> attrMap = _compBindingMap.get(comp);
+		return attrMap != null ?  attrMap.get(attr) : null;
 	}
 
 	/** Given component, return the associated list of {@link Binding}s.
 	 * @param comp the concerned component
 	 */
-	public Collection getBindings(Component comp) {
+	public Collection<Binding> getBindings(Component comp) {
 		if (isClone(comp)) {
 			comp = (Component) comp.getAttribute(TEMPLATE);
 		}
-		Map attrMap = (Map)_compBindingMap.get(comp);
-		return attrMap != null ?  (Collection) attrMap.values() : null;
+		Map<String, Binding> attrMap = _compBindingMap.get(comp);
+		return attrMap != null ?  attrMap.values() : null;
 	}
 	
 	/** Return all Bindings covered by this DataBinder
 	 * @return all Bindings covered by this DataBinder.
 	 * @since 3.5.2
 	 */
-	public Collection getAllBindings() {
-		final List bindings = new ArrayList(_compBindingMap.size() * 2);
-		for (final Iterator it = _compBindingMap.values().iterator(); it.hasNext();) {
-			final Map map = (Map) it.next();
+	public Collection<Binding> getAllBindings() {
+		final List<Binding> bindings = new ArrayList<Binding>(_compBindingMap.size() * 2);
+		for (Map<String, Binding> map: _compBindingMap.values()) {
 			bindings.addAll(map.values());
 		}
 		return bindings;
@@ -462,7 +460,7 @@ public class DataBinder implements java.io.Serializable {
 			comp = (Component) comp.getAttribute(TEMPLATE);
 		}
 		if (_compBindingMap.containsKey(comp)) {
-			Map attrMap = (Map) _compBindingMap.get(comp);
+			Map<String, Binding> attrMap = _compBindingMap.get(comp);
 			return attrMap.containsKey(attr);
 		}
 		return false;
@@ -570,8 +568,7 @@ public class DataBinder implements java.io.Serializable {
 	/** Load all value from data beans to UI components. */
 	public void loadAll() {
 		init();
-		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
-			final Component comp = (Component) it.next();
+		for (Component comp: _compBindingMap.keySet()) {
 			loadComponent0(comp);
 		}
 	}
@@ -579,8 +576,7 @@ public class DataBinder implements java.io.Serializable {
 	/** Save all values from UI components to beans. */
 	public void saveAll() {
 		init();
-		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
-			final Component comp = (Component) it.next();
+		for (Component comp: _compBindingMap.keySet()) {
 			saveComponent(comp);
 		}
 	}
@@ -604,19 +600,18 @@ public class DataBinder implements java.io.Serializable {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
 		if (ann != null) {
-			final Map attrs = ann.getAttributes(); //(tag, tagExpr)
-			List loadWhenEvents = null;
-			List saveWhenEvents = null;
-			List loadAfterEvents = null;
-			List saveAfterEvents = null;
+			final Map<String, String> attrs = ann.getAttributes(); //(tag, tagExpr)
+			List<String> loadWhenEvents = null;
+			List<String> saveWhenEvents = null;
+			List<String> loadAfterEvents = null;
+			List<String> saveAfterEvents = null;
 			String access = null;
 			String converter = null;
 			String expr = null;
-			Map args = null;
-			for (final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-				Map.Entry entry = (Map.Entry) it.next();
-				String tag = (String) entry.getKey();
-				String tagExpr = (String) entry.getValue();
+			Map<Object, Object> args = null;
+			for (Map.Entry<String, String> entry: attrs.entrySet()) {
+				String tag = entry.getKey();
+				String tagExpr = entry.getValue();
 				if ("save-when".equals(tag)) {
 					saveWhenEvents = parseExpression(tagExpr, ",");
 				} else if ("load-after".equals(tag)) {
@@ -633,7 +628,7 @@ public class DataBinder implements java.io.Serializable {
 					expr = tagExpr;
 				} else {
 					if (args == null) {
-						args = new HashMap();
+						args = new HashMap<Object, Object>();
 					}
 					args.put(tag, tagExpr);
 				}
@@ -652,13 +647,12 @@ public class DataBinder implements java.io.Serializable {
 			initCollectionItem();
 			
 			//setup all added bindings
-			final Set varnameSet = new HashSet();
-			final LinkedHashSet toBeDetached = new LinkedHashSet();
-			for(final Iterator it = _compBindingMap.entrySet().iterator(); it.hasNext(); ) {
-				final Entry me = (Entry) it.next();
-				final Component comp = (Component) me.getKey();
-				final Map attrMap = (Map) me.getValue();
-				final Collection bindings = attrMap.values();
+			final Set<String> varnameSet = new HashSet<String>();
+			final LinkedHashSet<Component> toBeDetached = new LinkedHashSet<Component>();
+			for(Entry<Component, Map<String, Binding>> me: _compBindingMap.entrySet()) {
+				final Component comp = me.getKey();
+				final Map<String, Binding> attrMap = me.getValue();
+				final Collection<Binding> bindings = attrMap.values();
 				
 				//_var special case; meaning a template component
 				if (attrMap.containsKey("_var")) {
@@ -687,8 +681,7 @@ public class DataBinder implements java.io.Serializable {
 			}
             
 			//detach template components so they will not interfer the visual part
-			for(final Iterator it = toBeDetached.iterator(); it.hasNext(); ) {
-				final Component comp = (Component) it.next();
+			for(Component comp: toBeDetached) {
 				comp.detach();
 			}
 		}
@@ -735,7 +728,7 @@ public class DataBinder implements java.io.Serializable {
 		} else if (comp instanceof Comboitem) {
 			name = Comboitem.class.getName();
 		}
-		CollectionItem decorName = (CollectionItem)_collectionItemMap.get(name);
+		CollectionItem decorName = _collectionItemMap.get(name);
 		if(decorName != null){
 			return decorName;
 		}else{
@@ -762,7 +755,7 @@ public class DataBinder implements java.io.Serializable {
 		} else if (comp instanceof Combobox) {
 			name = Combobox.class.getName();
 		}
-		CollectionItem decorName = (CollectionItem)_collectionOwnerMap.get(name);
+		CollectionItem decorName = _collectionOwnerMap.get(name);
 		return decorName;
 	}
 	
@@ -800,13 +793,13 @@ public class DataBinder implements java.io.Serializable {
 	    		final BindingListModelExt model = (BindingListModelExt) xmodel;
 	    		final int[] indexes = model.indexesOf(bean);
 	    		final int sz = indexes.length;
-	    		final List comps = new ArrayList(sz);
+	    		final List<Component> comps = new ArrayList<Component>(sz);
 	    		for (int j = 0; j < sz; ++j) {
 	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, indexes[j]), comp);
 	    			if (xcomp != null)
 	    				comps.add(xcomp);
 	    		}
-	    		return (Component[]) comps.toArray(new Component[comps.size()]);
+	    		return comps.toArray(new Component[comps.size()]);
 	    	} else 	if (xmodel instanceof BindingListModel) {
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(bean);
@@ -819,7 +812,7 @@ public class DataBinder implements java.io.Serializable {
 			//though the comp is in collection but the binding does not relate to _var, 
 			//have to scan through the whole cloned children items   
 			final int sz = xmodel.getSize();
-    		final List comps = new ArrayList(sz);
+    		final List<Component> comps = new ArrayList<Component>(sz);
 			if (decor instanceof CollectionItemExt) {
 				final List items = ((CollectionItemExt)decor).getItems(owner);
 				for (final Iterator it = items.iterator(); it.hasNext(); ) {
@@ -835,7 +828,7 @@ public class DataBinder implements java.io.Serializable {
 	    				comps.add(xcomp);
 				}
 			}
-    		return (Component[]) comps.toArray(new Component[sz]);
+    		return comps.toArray(new Component[sz]);
 		}
 		return new Component[0];
 	}
@@ -845,9 +838,8 @@ public class DataBinder implements java.io.Serializable {
 		getBindingCollectionItem(comp).setupBindingRenderer(comp, this);		
 	}
 	
-	private void setupPathTree(Collection bindings, Set varnameSet) {
-		for(final Iterator it = bindings.iterator(); it.hasNext(); ) {
-			final Binding binding = (Binding) it.next();
+	private void setupPathTree(Collection<Binding> bindings, Set<String> varnameSet) {
+		for(Binding binding: bindings) {
 			String[] paths = binding.getPaths();
 			for(int j = 0; j < paths.length; ++j) {
 				final String path = (String) paths[j];
@@ -901,18 +893,18 @@ public class DataBinder implements java.io.Serializable {
 			comp.setAttribute(OWNER, owner);
 			comp.setAttribute(ITEM, item);
 		}
-		List kids = comp.getChildren();
-		for(final Iterator it = kids.iterator(); it.hasNext(); ) {
-			mySetupTemplateComponent((Component) it.next(), owner, item); //recursive
+
+		for(Component c: comp.getChildren()) {
+			mySetupTemplateComponent(c, owner, item); //recursive
 		}
 	}
 	
 	//parse token and return as a List of String
-	/* package */ static List parseExpression(String expr, String separator) {
+	/* package */ static List<String> parseExpression(String expr, String separator) {
 		if (expr == null) {
 			return null;
 		}
-		List results = new ArrayList(6);
+		List<String> results = new ArrayList<String>(6);
 		while(true) {
 			int j = expr.indexOf(separator);
 			if (j < 0) {
@@ -957,18 +949,18 @@ public class DataBinder implements java.io.Serializable {
 	}
 	
 	//set a bean to SameNode Set 
-	/* package */ void setBeanSameNodes(Object bean, Set set) {
+	/* package */ void setBeanSameNodes(Object bean, Set<Object> set) {
 		_beanSameNodes.put(bean, set);
 	}
 	
 	//get SameNode Set of the given bean
-	/* package */ Set getBeanSameNodes(Object bean) {
-		return (Set) _beanSameNodes.get(bean);
+	/* package */ Set<Object> getBeanSameNodes(Object bean) {
+		return _beanSameNodes.get(bean);
 	}
 	
 	//remove SameNode set of the given bean
-	/* package */ Set removeBeanSameNodes(Object bean) {
-		return (Set) _beanSameNodes.remove(bean);
+	/* package */ Set<Object> removeBeanSameNodes(Object bean) {
+		return _beanSameNodes.remove(bean);
 	}
 
 	/** traverse the path nodes and return the final bean.
@@ -1038,16 +1030,16 @@ public class DataBinder implements java.io.Serializable {
 		return bean;
 	}
 	
-
+	@SuppressWarnings("unchecked")
 	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, 
-	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos, String triggerEventName) {
+	String path, boolean autoConvert, Object rawval, List<Object> loadOnSaveInfos, String triggerEventName) {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
 		boolean refChanged = false; //wether this setting change the reference
 		String beanid = null;
 		final List nodeids = parseExpression(path, ".");
-		final List nodes = new ArrayList(nodeids.size());
+		final List<BindingNode> nodes = new ArrayList<BindingNode>(nodeids.size());
 		final Iterator it = nodeids.iterator();
 		if (it != null && it.hasNext()) {
 			beanid = (String) it.next();
@@ -1165,8 +1157,8 @@ public class DataBinder implements java.io.Serializable {
 		if (isPrimitive(bean)) {
 			return;
 		}
-		final Set nodeSameNodes = node.getSameNodes();
-		final Set binderSameNodes = getBeanSameNodes(bean);
+		final Set<Object> nodeSameNodes = node.getSameNodes();
+		final Set<Object> binderSameNodes = getBeanSameNodes(bean);
 		//variable node(with _var) is special. Assume selectedItem then _var. 
 		//e.g. a Listitem but no selectedItem yet
 		if (node.isVar() && binderSameNodes == null) {
@@ -1262,7 +1254,7 @@ public class DataBinder implements java.io.Serializable {
 				//bug #2945974
 				//dirty patch
 				if ("param".equals(beanid) && bean != null) {
-					bean = new HashMap((Map) bean); 
+					bean = new HashMap<Object, Object>(cast((Map) bean));
 				}
 				if (bean == null) {
 					bean = page.getZScriptVariable(comp, beanid);
@@ -1327,7 +1319,7 @@ public class DataBinder implements java.io.Serializable {
 
 	// Given parentNode, path, and level, return associate same kid nodes of parent
 	// a1.b.c -> a2.b.c, a3.b.c, ...
-	private Set getAssociateSameNodes(BindingNode parentNode, String path, int level) {
+	private Set<Object> getAssociateSameNodes(BindingNode parentNode, String path, int level) {
 		final List nodeids = DataBinder.parseExpression(path, ".");
 		final int sz = nodeids.size();
 		final List subids = nodeids.subList(sz - level, sz);
@@ -1340,7 +1332,7 @@ public class DataBinder implements java.io.Serializable {
 		}
 		
 		//for each same node, find the associated kid node
-		final Set assocateSameNodes = new HashSet();
+		final Set<Object> assocateSameNodes = new HashSet<Object>();
 		for (final Iterator it = parentNode.getSameNodes().iterator(); it.hasNext();) {
 			//locate the associate kid node
 			BindingNode currentNode = null;
@@ -1402,8 +1394,8 @@ public class DataBinder implements java.io.Serializable {
 		
 		//-- EventListener --//
 		public void onEvent(Event event) {
-			final Set walkedNodes = new HashSet(32);
-			final Set loadedComps = new HashSet(32*2);
+			final Set<BindingNode> walkedNodes = new HashSet<BindingNode>(32);
+			final Set<Dual> loadedComps = new HashSet<Dual>(32*2);
 
 			Object obj = event.getData();
 			if (obj instanceof List) {
@@ -1416,7 +1408,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 		
-		private void doLoad(Object[] data, Set walkedNodes, Set loadedComps) {
+		private void doLoad(Object[] data, Set<BindingNode> walkedNodes, Set<Dual> loadedComps) {
 			if (!data[0].equals(DataBinder.this)) {
 				return; //not for this DataBinder, skip
 			}
@@ -1424,7 +1416,7 @@ public class DataBinder implements java.io.Serializable {
 			final Binding savebinding = (Binding) data[2]; //to be excluded binding
 			final Object bean = data[3]; //saved bean
 			final boolean refChanged = ((Boolean) data[4]).booleanValue(); //whether bean itself changed
-			final List nodes = (List) data[5]; //the complete nodes along the path to the node
+			final List<BindingNode> nodes = cast((List) data[5]); //the complete nodes along the path to the node
 			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
 			final String triggerEventName = (String) data[7]; //event that trigger the save
 			if (savecomp != null) {
@@ -1442,18 +1434,17 @@ public class DataBinder implements java.io.Serializable {
 		/** Load all associated BindingNodes below the given nodes (depth first traverse).
 		 */
 		private void loadAllNodes(Object bean, BindingNode node, Component collectionComp, 
-			Binding savebinding, boolean refChanged, List nodes, Set walkedNodes, Set loadedComps) {
+			Binding savebinding, boolean refChanged, List<BindingNode> nodes, Set<BindingNode> walkedNodes, Set<Dual> loadedComps) {
 			myLoadAllNodes(bean, node, new Component[] {collectionComp}, walkedNodes, savebinding, loadedComps, refChanged);
 
 			//for each ancestor, find associated same nodes			
 			if (!nodes.isEmpty()) {
 				final String path = node.getPath();
 				int level = 1;
-				for(final ListIterator it = nodes.listIterator(nodes.size()-1); it.hasPrevious(); ++level) {
-					final BindingNode parentNode = (BindingNode) it.previous();
-					final Set associateSameNodes = getAssociateSameNodes(parentNode, path, level);
-					for(final Iterator itx = associateSameNodes.iterator(); itx.hasNext();) {
-						Object obj = itx.next();
+				for(final ListIterator<BindingNode> it = nodes.listIterator(nodes.size()-1); it.hasPrevious(); ++level) {
+					final BindingNode parentNode = it.previous();
+					final Set<Object> associateSameNodes = getAssociateSameNodes(parentNode, path, level);
+					for(Object obj: associateSameNodes) {
 						if (obj instanceof BindingNode) {
 							BindingNode samenode = (BindingNode) obj;
 							myLoadAllNodes(bean, samenode, new Component[] {collectionComp}, walkedNodes, savebinding, loadedComps, refChanged);
@@ -1469,7 +1460,7 @@ public class DataBinder implements java.io.Serializable {
 		
 		//since 3.1, 20080416, Henri Chen: suppport one object multiple collection items of ListModel
 		private void myLoadAllNodes(Object bean, BindingNode node, Component[] collectionComps,
-		Set walkedNodes, Binding savebinding, Set loadedComps, boolean refChanged) {
+		Set<BindingNode> walkedNodes, Binding savebinding, Set<Dual> loadedComps, boolean refChanged) {
 			if (walkedNodes.contains(node)) {
 				return; //already walked, skip
 			}
@@ -1500,8 +1491,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 				
 			//walk all same nodes (different expression but keep same bean)
-			for(final Iterator it = new ArrayList(node.getSameNodes()).iterator(); it.hasNext();) {
-				final Object obj = it.next();
+			for(Object obj: new ArrayList<Object>(node.getSameNodes())) {
 				if (obj instanceof BindingNode) {
 					final BindingNode samenode = (BindingNode) obj;
 					if (node == samenode) {
@@ -1524,7 +1514,7 @@ public class DataBinder implements java.io.Serializable {
 	
 		//load each binding of the node and return nearest collection item Components (i.e. Listitem)
 		private Component[] loadAllBindings(Object bean, BindingNode node, Component collectionComp, 
-		Binding savebinding,  Set loadedComps, boolean refChanged) {
+		Binding savebinding,  Set<Dual> loadedComps, boolean refChanged) {
 			final Collection bindings = node.getBindings();
 			Component[] collectionComps = null;
 			for(final Iterator it = bindings.iterator(); it.hasNext();) {

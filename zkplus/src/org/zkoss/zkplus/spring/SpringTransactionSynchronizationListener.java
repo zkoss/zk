@@ -150,7 +150,8 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")	
 	private void setThreadLocals() {
 		if (_threadLocals != null) {
 			try {

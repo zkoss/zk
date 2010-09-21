@@ -53,12 +53,12 @@ public class JpaUtil {
 	/*
 	 * Get the EntityManagerFactories Map from WebApp scope
 	 */
-	private static Map getEmfMap() {
-		final Map appattrs = getWebApp().getAttributes(); 
-		Map map = (Map) appattrs.get(JPA_EMF_MAP);
+	@SuppressWarnings("unchecked")
+	private static Map<String, EntityManagerFactory> getEmfMap() {
+		Map map = (Map) getWebApp().getAttribute(JPA_EMF_MAP);
 		if (map == null) {
 			map = new HashMap();
-			appattrs.put(JPA_EMF_MAP, map);
+			getWebApp().setAttribute(JPA_EMF_MAP, map);
 		}
 		return map;
 	}
@@ -66,7 +66,8 @@ public class JpaUtil {
 	/*
 	 * Get the EntityManagers Map from Execution scope
 	 */
-	private static Map getEmMap() {
+	@SuppressWarnings("unchecked")
+	private static Map<String, EntityManager> getEmMap() {
 		Execution current = Executions.getCurrent();
 		Map map = (Map) current.getAttribute(JPA_EM_MAP);
 		if (map == null) {
@@ -181,7 +182,7 @@ public class JpaUtil {
 	 * @since 3.0.7
 	 */
 	public static void closeEntityManager(String puName) {
-		EntityManager em = (EntityManager) getEmMap().remove(getPersistenceUnitName(puName));
+		EntityManager em = getEmMap().remove(getPersistenceUnitName(puName));
 		if (em != null && em.isOpen()) em.close();
 	}
 	
@@ -208,7 +209,7 @@ public class JpaUtil {
 	private static EntityManagerFactory initEntityManagerFactory(String puName, Map properties) {
 		EntityManagerFactory emf;
 		if (properties == null) {
-			emf = (EntityManagerFactory) getEmfMap().get(puName);
+			emf = getEmfMap().get(puName);
 			if (emf == null) {
 				emf = createEntityManagerFactory(puName, null);
 				getEmfMap().put(puName, emf);
@@ -227,7 +228,7 @@ public class JpaUtil {
 	private static EntityManager initEntityManger(String puName,Map properties) {
 		EntityManager em;
 		if (properties == null) {
-			em = (EntityManager) getEmMap().get(puName);
+			em = getEmMap().get(puName);
 			if (em == null) {
 				em = createEntityManager(puName, null);
 				getEmMap().put(puName, em);

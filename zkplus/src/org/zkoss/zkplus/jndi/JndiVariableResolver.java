@@ -41,7 +41,7 @@ public class JndiVariableResolver implements VariableResolver {
 	
 	private String _jndiPrepend=null;
 	
-	private Map _jndiMapping = new HashMap();
+	private Map<String, Object> _jndiMapping = new HashMap<String, Object>();
 	
 	/**
 	 * This constructor take agruments to initialize JNDI names. 
@@ -77,8 +77,8 @@ public class JndiVariableResolver implements VariableResolver {
 	 * @param mapping key-value pairs for JNDI name and its corresponding variable name
 	 */
 	public JndiVariableResolver(String prepend, String mapping) {
-		_jndiMapping= new HashMap();
-		Maps.parse(_jndiMapping , (String)mapping, ',', '=');
+		_jndiMapping= new HashMap<String, Object>();
+		Maps.parse(_jndiMapping , mapping, ',', '=');
 		_jndiPrepend = prepend;
 	}
 	

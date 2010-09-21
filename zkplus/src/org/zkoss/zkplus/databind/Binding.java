@@ -23,8 +23,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+
+import static org.zkoss.lang.Generics.cast;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -53,15 +56,15 @@ public class Binding implements java.io.Serializable {
 	private Component _comp;
 	private String _attr;
 	private String _expression; //the bean expression
-	private LinkedHashSet _loadWhenEvents;
-	private LinkedHashSet _loadAfterEvents;
-	private LinkedHashSet _saveWhenEvents;
+	private LinkedHashSet<String> _loadWhenEvents;
+	private LinkedHashSet<String> _loadAfterEvents;
+	private LinkedHashSet<String> _saveWhenEvents;
 	private LinkedHashSet _saveAfterEvents; 
 	private boolean _loadable = true;
 	private boolean _savable;
 	private TypeConverter _converter;
 	private String[] _paths; //bean reference path (a.b.c)
-	private Map _args; //generic arguments
+	private Map<Object, Object> _args; //generic arguments
 	
 	/** Constrcutor to form a binding between UI component and backend data bean.
 	 * @param binder the associated Data Binder.
@@ -77,7 +80,7 @@ public class Binding implements java.io.Serializable {
 	 * and the associated bean expression. null means using the default class conversion method.
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter) {
+		LinkedHashSet<String> loadWhenEvents, LinkedHashSet<String> saveWhenEvents, String access, String converter) {
 		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null, null, null);
 	}
 	
@@ -97,7 +100,7 @@ public class Binding implements java.io.Serializable {
 	 * @since 3.1
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter, Map args) {
+		LinkedHashSet<String> loadWhenEvents, LinkedHashSet<String> saveWhenEvents, String access, String converter, Map<Object, Object> args) {
 		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, args, null, null);
 	}
 	
@@ -119,8 +122,8 @@ public class Binding implements java.io.Serializable {
 	 * @since 3.6.1
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter, Map args,
-		LinkedHashSet loadAfterEvents, LinkedHashSet saveAfterEvents) {
+		LinkedHashSet<String> loadWhenEvents, LinkedHashSet<String> saveWhenEvents, String access, String converter, Map<Object, Object> args,
+		LinkedHashSet<String> loadAfterEvents, LinkedHashSet saveAfterEvents) {
 		_binder = binder;
 		_comp = comp;
 		setAttr(attr);
@@ -159,14 +162,14 @@ public class Binding implements java.io.Serializable {
 		return _attr;
 	}
 	
-	/*package*/void setArgs(Map args) {
+	/*package*/void setArgs(Map<Object, Object> args) {
 		_args = args;
 	}
 	
 	/** Get generic arguments.
 	 * 
 	 */
-	public Map getArgs() {
+	public Map<Object, Object> getArgs() {
 		return _args;
 	}
 	
@@ -201,13 +204,13 @@ public class Binding implements java.io.Serializable {
 	/** Set save-when event expression.
 	 * @param saveWhenEvents the save-when expression.
 	 */
-	/*package*/ void setSaveWhenEvents(LinkedHashSet saveWhenEvents) {
+	/*package*/ void setSaveWhenEvents(LinkedHashSet<String> saveWhenEvents) {
 		_saveWhenEvents = saveWhenEvents;
 	}
 	
 	/** Get save-when event expression.
 	 */
-	public Set getSaveWhenEvents() {
+	public Set<String> getSaveWhenEvents() {
 		return _saveWhenEvents;
 	}
 
@@ -228,13 +231,13 @@ public class Binding implements java.io.Serializable {
 	/** Add load-when event expression.
 	 * @param loadWhenEvent the load-when expression.
 	 */
-	/*package*/ void setLoadWhenEvents(LinkedHashSet loadWhenEvents) {
+	/*package*/ void setLoadWhenEvents(LinkedHashSet<String> loadWhenEvents) {
 		_loadWhenEvents = loadWhenEvents;
 	}
 	
 	/** Get load-when event expression set.
 	 */
-	public LinkedHashSet getLoadWhenEvents() {
+	public LinkedHashSet<String> getLoadWhenEvents() {
 		return _loadWhenEvents;
 	}
 	
@@ -242,13 +245,13 @@ public class Binding implements java.io.Serializable {
 	 * 
 	 * @param loadAfterEvents the load-after expression.
 	 */
-	/*package*/ void setLoadAfterEvents(LinkedHashSet loadAfterEvents) {
+	/*package*/ void setLoadAfterEvents(LinkedHashSet<String> loadAfterEvents) {
 		_loadAfterEvents = loadAfterEvents;
 	}
 	
 	/** Get load-after event expression set.
 	 */
-	public LinkedHashSet getLoadAfterEvents() {
+	public LinkedHashSet<String> getLoadAfterEvents() {
 		return _loadAfterEvents;
 	}
 
@@ -352,9 +355,9 @@ public class Binding implements java.io.Serializable {
 			//since 3.1, 20080416, support bindingArgs for non-supported tag
 			//bug #2803575, merge bindingArgs together since a component can have
 			//multiple bindings on different attributes.
-			Map bindArgs = (Map) comp.getAttribute(DataBinder.ARGS);
+			Map<Object, Object> bindArgs = cast((Map) comp.getAttribute(DataBinder.ARGS));
 			if (bindArgs == null) {
-				bindArgs = new HashMap();
+				bindArgs = new HashMap<Object, Object>();
 				comp.setAttribute(DataBinder.ARGS, bindArgs);
 			}
 			if (_args != null) {
@@ -375,7 +378,7 @@ public class Binding implements java.io.Serializable {
 				Object value = bean;
 				Object oldv = null;
 				try { //Bug 1879389
-					final Method m = comp.getClass().getMethod("getValue", null);
+					final Method m = comp.getClass().getMethod("getValue");
 					oldv = ((InputElement)comp).getRawValue();
 					value = Classes.coerce(m.getReturnType(), bean);
 				} catch (NoSuchMethodException ex) { //ignore it
@@ -431,7 +434,7 @@ public class Binding implements java.io.Serializable {
 			saveAttributeValue(comp, vals, null, null);
 	}
 	
-	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos, String triggerEventName) {
+	private void saveAttributeValue(Component comp, Object[] vals, List<Object> loadOnSaveInfos, String triggerEventName) {
 		if (vals == null) return;
 		
 		final Object val = vals[0];
@@ -474,8 +477,7 @@ public class Binding implements java.io.Serializable {
 	/*package*/ void registerSaveEvents(Component comp) {
 		if (isSavable()) { //bug 1804356
 			if (_saveWhenEvents != null) { 
-				for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
-					final String expr = (String) it.next();
+				for(String expr: _saveWhenEvents) {
 					final Object[] objs =
 						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
 					//objs[0] component, objs[1] event name
@@ -518,8 +520,7 @@ public class Binding implements java.io.Serializable {
 	/*package*/ void registerLoadEvents(Component comp) {
 		if (isLoadable()) { //bug 1804356
 			if (_loadWhenEvents != null) {
-				for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
-					final String expr = (String) it.next();
+				for(String expr: _loadWhenEvents) {
 					final Object[] objs =
 						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
 					//objs[0] component, objs[1] event name
@@ -537,8 +538,7 @@ public class Binding implements java.io.Serializable {
 				}
 			} 
 			if (_loadAfterEvents != null) {
-				for(final Iterator it = _loadAfterEvents.iterator(); it.hasNext(); ) {
-					final String expr = (String) it.next();
+				for(String expr: _loadAfterEvents) {
 					final Object[] objs =
 						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
 					//objs[0] component, objs[1] event name
@@ -593,10 +593,10 @@ public class Binding implements java.io.Serializable {
 	}
 	
 	private static abstract class BaseEventListener implements EventListener, java.io.Serializable {
-		protected List _dataTargets;
+		protected List<BindingInfo> _dataTargets;
 		
 		public BaseEventListener() {
-			_dataTargets = new ArrayList(8);
+			_dataTargets = new ArrayList<BindingInfo>();
 		}
 		
 		public void addDataTarget(Binding binding, Component comp) {
@@ -609,8 +609,7 @@ public class Binding implements java.io.Serializable {
 			super();
 		}
 		protected void handleEvent(Event event) {
-			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
-				final BindingInfo bi = (BindingInfo) it.next();
+			for(BindingInfo bi: _dataTargets) {
 				final Component dt = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final DataBinder binder = binding.getBinder();
@@ -619,9 +618,8 @@ public class Binding implements java.io.Serializable {
 				if (dataTarget != null) {
 					binding.loadAttribute(dataTarget);
 				} else { //#bug 2897202
-					final List clones = scanClones(binder, dt);
-					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
-						final Component dataTarget1 = (Component)itc.next();
+					final List<Component> clones = scanClones(binder, dt);
+					for (final Component dataTarget1: clones) {
 						binding.loadAttribute(dataTarget1);
 					}
 				}
@@ -696,11 +694,10 @@ public class Binding implements java.io.Serializable {
 		protected void handleEvent(Event event) {
 			final Component target = event.getTarget();
 			final String triggerEventName = event.getName();
-			final List tmplist = new ArrayList(_dataTargets.size());
+			final List<BindingInfo> tmplist = new ArrayList<BindingInfo>(_dataTargets.size());
 			
 			//fire onSave for each binding
-			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
-				final BindingInfo bi = (BindingInfo) it.next();
+			for(BindingInfo bi: _dataTargets) {
 				final Component dt = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				final DataBinder binder = binding.getBinder();
@@ -718,9 +715,8 @@ public class Binding implements java.io.Serializable {
 				} else {
 					//bi.getComponent a template and a null dataTarget, meaning all collection items has to
 					//be handled. Search the owner to iterate all cloned items.
-					final List clones = scanClones(binder, dt);
-					for (final Iterator itc = clones.iterator(); itc.hasNext();) {
-						final Component dataTarget1 = (Component)itc.next();
+					final List<Component> clones = scanClones(binder, dt);
+					for (Component dataTarget1: clones) {
 						final Object[] vals = binding.getAttributeValues(dataTarget1);
 						if (vals != null) {
 							tmplist.add(new BindingInfo(binding, dataTarget1, vals));
@@ -738,9 +734,8 @@ public class Binding implements java.io.Serializable {
 			Component loadOnSaveProxy = null;
 			Component dataTarget = null;
 			DataBinder binder = null;
-			final List loadOnSaveInfos = new ArrayList(tmplist.size());
-			for(final Iterator it = tmplist.iterator();it.hasNext();) {
-				final BindingInfo bi = (BindingInfo) it.next();
+			final List<Object> loadOnSaveInfos = new ArrayList<Object>(tmplist.size());
+			for(BindingInfo bi: tmplist) {
 				dataTarget = bi.getComponent();
 				final Binding binding = bi.getBinding();
 				if (binder == null) {
@@ -768,12 +763,11 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	//scan up the component hierarchy until the real owner is found and collect all cloned components.
-	private static List scanClones(DataBinder binder, Component comp) {
+	private static List<Component> scanClones(DataBinder binder, Component comp) {
 		if (DataBinder.isTemplate(comp)) {
-			final List owners = scanClones(binder, binder.getCollectionOwner(comp)); //recursive
-			final List kidowners = new ArrayList(1024);
-			for (final Iterator it = owners.iterator(); it.hasNext();) {
-				final Component owner = (Component) it.next();
+			final List<Component> owners = scanClones(binder, binder.getCollectionOwner(comp)); //recursive
+			final List<Component> kidowners = new LinkedList<Component>();
+			for (Component owner: owners) {
 				final CollectionItem decor = binder.getCollectionItemByOwner(owner);
 				//backward compatible, CollectionItemEx.getItems() is faster
 				if (decor instanceof CollectionItemExt) {
@@ -795,7 +789,7 @@ public class Binding implements java.io.Serializable {
 			}
 			return kidowners;
 		} else {
-			final List owners = new ArrayList(1);
+			final List<Component> owners = new ArrayList<Component>();
 			owners.add(comp);
 			return owners;
 		}

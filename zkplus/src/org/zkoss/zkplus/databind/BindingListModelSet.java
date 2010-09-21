@@ -40,6 +40,7 @@ implements BindingListModelExt, java.io.Serializable {
 	/**
 	 * @since 3.0.5.
 	 */
+	@SuppressWarnings("unchecked")
 	public BindingListModelSet(Set set, boolean live) {
 		super(set, live);
 	}

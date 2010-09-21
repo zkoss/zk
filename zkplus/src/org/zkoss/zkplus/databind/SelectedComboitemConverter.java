@@ -96,19 +96,18 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 		    			
 		    			//We need this to support load-when:onSelect
 		  				if (item != null && selIndex != index) { // bug 1647817, avoid endless-loop
-		    				Set items = new HashSet();
+		    				Set<Comboitem> items = new HashSet<Comboitem>();
 		    				items.add(item);
 		    				//bug #2140491
 		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid(), Boolean.TRUE);
-		    				Events.postEvent(new SelectEvent("onSelect", cbbox, items, item));
+		    				Events.postEvent(new SelectEvent<Comboitem>("onSelect", cbbox, items, item));
 		    			}
 	    			}
 	  				return item;
 	  			}
 	  		} else if (xmodel == null) { //no model case, assume Comboitem.value to be used with selectedItem
 	  			//iterate to find the selected item assume the value (select mold)
-	  			for (final Iterator it = cbbox.getItems().iterator(); it.hasNext();) {
-	  				final Comboitem li = (Comboitem) it.next();
+	  			for (Comboitem li: cbbox.getItems()) {
 	  				if (val.equals(li.getValue())) {
 	  					return li;
 	  				}

@@ -35,10 +35,10 @@ import org.zkoss.zk.ui.UiException;
 /*package*/ class BindingNode implements java.io.Serializable {
 	private static final long serialVersionUID = 200808191424L;
 
-	private LinkedHashSet _bindingSet = new LinkedHashSet(); //(Binding set of this expression BindingNode)
-	private Map _kids = new LinkedHashMap(7); //(nodeid, BindingNode)
+	private LinkedHashSet<Binding> _bindingSet = new LinkedHashSet<Binding>(); //(Binding set of this expression BindingNode)
+	private Map<String, BindingNode> _kids = new LinkedHashMap<String, BindingNode>(8); //(nodeid, BindingNode)
 	private String _path; //path of this BindingNode
-	private Set _sameNodes = new HashSet(); //BindingNode Set that refer to the same object
+	private Set<Object> _sameNodes = new HashSet<Object>(); //BindingNode Set that refer to the same object
 	private boolean _var; //a var node
 	private String _nodeId; //node id of this BindingNode
 	private boolean _root; //whether root node of a path
@@ -56,21 +56,20 @@ import org.zkoss.zk.ui.UiException;
 		_root = root;
 	}
 	
-	public LinkedHashSet getBindings() {
+	public LinkedHashSet<Binding> getBindings() {
 		return _bindingSet;
 	}
 	
 	/** Get all Bindings below the given nodes (deepth first traverse).
 	 */
-	public LinkedHashSet getAllBindings() {
-		Set walkedNodes = new HashSet(23);
-		LinkedHashSet all = new LinkedHashSet(23*2);
+	public LinkedHashSet<Binding> getAllBindings() {
+		Set<BindingNode> walkedNodes = new HashSet<BindingNode>(23);
+		LinkedHashSet<Binding> all = new LinkedHashSet<Binding>(23*2);
 		myGetAllBindings(all, walkedNodes);
-		
 		return all;
 	}
 	
-	private void myGetAllBindings(LinkedHashSet all, Set walkedNodes) {
+	private void myGetAllBindings(LinkedHashSet<Binding> all, Set<BindingNode> walkedNodes) {
 		if (walkedNodes.contains(this)) {
 			return; //already walked, skip
 		}
@@ -78,12 +77,11 @@ import org.zkoss.zk.ui.UiException;
 		//mark as walked already
 		walkedNodes.add(this);
 		
-		for(final Iterator it = _kids.values().iterator(); it.hasNext();) {
-			((BindingNode) it.next()).myGetAllBindings(all, walkedNodes); //recursive
+		for(BindingNode bn: _kids.values()) {
+			bn.myGetAllBindings(all, walkedNodes); //recursive
 		}
 		
-		for(final Iterator it = _sameNodes.iterator(); it.hasNext();) {
-			final Object obj = it.next();
+		for(Object obj: _sameNodes) {
 			if (obj instanceof BindingNode) {
 				((BindingNode) obj).myGetAllBindings(all, walkedNodes); //recursive
 			}
@@ -190,13 +188,13 @@ import org.zkoss.zk.ui.UiException;
 	
 	/** get the sameNodes of this BindingNode.
 	 */
-	public Set getSameNodes() {
+	public Set<Object> getSameNodes() {
 		return _sameNodes;
 	}
 	
 	/** merge and set the given other sameNodes as sameNodes of this BindingNode.
 	 */
-	public void mergeAndSetSameNodes(Set other) {
+	public void mergeAndSetSameNodes(Set<Object> other) {
 		if (other == _sameNodes) { //same set, no need to merge
 			return;
 		}
@@ -211,13 +209,13 @@ import org.zkoss.zk.ui.UiException;
 	}
 
 	// Get kid nodes
-	/*package*/ Collection getKidNodes() {
+	/*package*/ Collection<BindingNode> getKidNodes() {
 		return _kids.values();
 	}
 	
 	// Get kid nodes of the specified nodeid.
 	/*package*/ BindingNode getKidNode(String nodeid) {
-		return (BindingNode) _kids.get(nodeid);
+		return _kids.get(nodeid);
 	}
 
 	private void addKidNode(String nodeid, BindingNode kid) {

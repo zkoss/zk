@@ -44,6 +44,7 @@ import org.zkoss.util.CollectionsX;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -109,10 +110,12 @@ public class ShowWindowEventListener implements EventListener {
 		}
 		
 		url = url.substring(j+1);
-		List list = (List) CollectionsX.parse(new ArrayList(), url, '&');
-		Map args = new HashMap();
-		for(final Iterator it = list.iterator(); it.hasNext();) {
-			List pair = (List) CollectionsX.parse(new ArrayList(2), (String) it.next(), '=');
+		List<String> list = new LinkedList<String>();
+		CollectionsX.parse(list, url, '&');
+		Map<String, String> args = new HashMap<String, String>();
+		for(String s: list) {
+			List<String> pair = new ArrayList<String>(2);
+			CollectionsX.parse(pair, s, '=');
 			args.put(pair.get(0), pair.get(1));
 		}
 		

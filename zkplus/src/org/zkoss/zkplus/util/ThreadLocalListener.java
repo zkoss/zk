@@ -30,6 +30,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
+import static org.zkoss.lang.Generics.cast;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -91,16 +92,16 @@ import java.util.Collection;
  */
 public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Log log = Log.lookup(ThreadLocalListener.class);
-	private Map _fieldsMap; //(class name, String[] of fields)
-	private Map _threadLocalsMap; //(class name, ThreadLocal_Contents[] for fields)
+	private Map<String, String[]> _fieldsMap; //(class name, String[] of fields)
+	private Map<String, Object[]> _threadLocalsMap; //(class name, ThreadLocal_Contents[] for fields)
 	private final boolean _enabled; //whether event thread enabled
 
 	public ThreadLocalListener() {
 		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
-		_fieldsMap = (Map) app.getAttribute("zkplus.util.ThreadLocalListener.fieldsMap");
+		_fieldsMap = cast((Map) app.getAttribute("zkplus.util.ThreadLocalListener.fieldsMap"));
 		_enabled = app.getConfiguration().isEventThreadEnabled();
 		if (_fieldsMap == null) {
-			_fieldsMap = new HashMap(8);
+			_fieldsMap = new HashMap<String, String[]>(8);
 			final String PREF = "zkplus.util.ThreadLocalListener.fieldsMap";
 			app.setAttribute(PREF, _fieldsMap);
 			//read preference
@@ -115,12 +116,12 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 					final Iterator itz = klassSet.iterator();
 					final String klass = (String) itz.next();
 					final String fieldsStr = (String) itz.next();
-					final Collection fields = CollectionsX.parse(null, fieldsStr, ',');
+					final Collection<String> fields = CollectionsX.parse(null, fieldsStr, ',');
 					_fieldsMap.put(klass, fields.toArray(new String[fields.size()]));
 				}
 			}
 		}
-		_threadLocalsMap = new HashMap(_fieldsMap.size());
+		_threadLocalsMap = new HashMap<String, Object[]>(_fieldsMap.size());
 	}
 	
 	//-- EventThreadInit --//
@@ -170,12 +171,11 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 
 	//-- utilities --//
 	private void getThreadLocals() {
-		for(final Iterator it= _fieldsMap.entrySet().iterator(); it.hasNext(); ) {
-			final Entry me = (Entry) it.next();
+		for(Entry<String, String[]> me: _fieldsMap.entrySet()) {
 			try {
-				final String clsName = (String) me.getKey();
+				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
-				final String[] fields = (String[]) me.getValue();
+				final String[] fields = me.getValue();
 				final Object[] threadLocals = new Object[fields.length];
 				_threadLocalsMap.put(clsName, threadLocals);
 				for(int j = 0; j < threadLocals.length; ++j) {
@@ -196,12 +196,11 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 	}
 
 	private void setThreadLocals() {
-		for(Iterator it = _threadLocalsMap.entrySet().iterator(); it.hasNext();) {
-			final Entry me = (Entry) it.next();
+		for(Entry<String, Object[]> me: _threadLocalsMap.entrySet()) {
 			try {
-				final String clsName = (String) me.getKey();
+				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
-				final Object[] threadLocals = (Object[]) me.getValue();
+				final Object[] threadLocals = me.getValue();
 				final String[] fields = (String[]) _fieldsMap.get(clsName);
 			
 				for(int j = 0; j < threadLocals.length; ++j) {
@@ -215,7 +214,7 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 		_threadLocalsMap.clear();
 	}
 
-	private ThreadLocal getThreadLocal(Class cls, String fldname) {
-		return ThreadLocals.getThreadLocal(cls, fldname);
+	private ThreadLocal<Object> getThreadLocal(Class cls, String fldname) {
+		return cast(ThreadLocals.getThreadLocal(cls, fldname));
 	}
 }

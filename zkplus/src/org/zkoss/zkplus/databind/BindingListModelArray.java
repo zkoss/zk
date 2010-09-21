@@ -43,6 +43,7 @@ implements BindingListModelExt, java.io.Serializable {
 	/**
 	 * @since 3.5.0
 	 */
+	@SuppressWarnings("unchecked")
 	public BindingListModelArray(Object[] c, boolean live, boolean distinct) {
 		super(c, live);
 		_distinct = distinct;
@@ -51,6 +52,7 @@ implements BindingListModelExt, java.io.Serializable {
 	/**
 	 * @since 3.0.5
 	 */
+	@SuppressWarnings("unchecked")
 	public BindingListModelArray(Object[] c, boolean live) {
 		super(c, live);
 	}
@@ -64,7 +66,7 @@ implements BindingListModelExt, java.io.Serializable {
 			final int idx = indexOf(elm);
 			return idx < 0 ? new int[0] : new int[] {idx};
 		} else {
-			final List indexes = new LinkedList();
+			final List<Integer> indexes = new LinkedList<Integer>();
 			for(int j = 0; j < _array.length; ++j) {
 				if (Objects.equals(elm, _array[j])) {
 					indexes.add(new Integer(j));
@@ -72,8 +74,8 @@ implements BindingListModelExt, java.io.Serializable {
 			}
 			final int[] result = new int[indexes.size()];
 			int j = 0;
-			for (final Iterator it = indexes.iterator(); it.hasNext(); ++j) {
-				final int idx = ((Integer) it.next()).intValue();
+			for (final Iterator<Integer> it = indexes.iterator(); it.hasNext(); ++j) {
+				final int idx = it.next().intValue();
 				result[j] = idx;
 			}
 			return result;

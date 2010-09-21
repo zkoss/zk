@@ -414,6 +414,7 @@ public class AnnotateDataBinder extends DataBinder {
 		loadComponentPropertyAnnotationByAnnotName(comp, "bind");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadComponentPropertyAnnotationByAnnotName(Component comp, String annotName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final List props = compCtrl.getAnnotatedPropertiesBy(annotName);
@@ -450,13 +451,13 @@ public class AnnotateDataBinder extends DataBinder {
 					}
 				}
 				
-				List loadWhenEvents = null;
-				List saveWhenEvents = null;
-				List loadAfterEvents = null;
-				List saveAfterEvents = null;
+				List<String> loadWhenEvents = null;
+				List<String> saveWhenEvents = null;
+				List<String> loadAfterEvents = null;
+				List<String> saveAfterEvents = null;
 				String access = null;
 				String converter = null;
-				Map args = null;
+				Map<Object, Object> args = null;
 				
 				//process tags
 				for(int j = 1; j < expr.size(); ++j) {
@@ -494,7 +495,7 @@ public class AnnotateDataBinder extends DataBinder {
 						}
 					} else {
 						if (args == null) {
-							args = new HashMap(1);
+							args = new HashMap<Object, Object>(1);
 						}
 						args.put(tags.get(0), tags.get(1));
 					}

@@ -23,10 +23,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static org.zkoss.lang.Generics.cast;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
+
 /**
  * @author jumperchen
  * @since 3.0.2
@@ -44,7 +47,7 @@ import org.zkoss.zul.Comboitem;
 	}
 
 	//link cloned components with bindings of templates
-	private void linkTemplates(Component clone, Component template, Map templatemap) {
+	private void linkTemplates(Component clone, Component template, Map<Object, Object> templatemap) {
 		if (_binder.existsBindings(template)) {
 			templatemap.put(template, clone);
 			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);
@@ -92,7 +95,7 @@ import org.zkoss.zul.Comboitem;
 	}
 
 	public void render(Comboitem item, Object bean) throws Exception {
-		final List kids = (List) item.getAttribute(KIDS);
+		final List<Component> kids = cast((List) item.getAttribute(KIDS));
 		item.getChildren().addAll(kids);
 		//item.removeAttribute(KIDS);
 			
@@ -104,7 +107,7 @@ import org.zkoss.zul.Comboitem;
 
 		//bind bean to the associated listitem and its decendant
 		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
-		final Map templatemap = (Map) item.getAttribute(DataBinder.TEMPLATEMAP);
+		final Map<Object, Object> templatemap = cast((Map) item.getAttribute(DataBinder.TEMPLATEMAP));
 		templatemap.put(varname, bean);
 
 		//apply the data binding
@@ -126,7 +129,7 @@ import org.zkoss.zul.Comboitem;
 					
 		//link cloned component with template
 		//each Comboitem and and it decendants share the same templatemap
-		Map templatemap = new HashMap(7);
+		Map<Object, Object> templatemap = new HashMap<Object, Object>(8);
 		linkTemplates(clone, _template, templatemap);
 		
 		//link this template map to parent templatemap (Combobox in Combobox)
@@ -135,7 +138,7 @@ import org.zkoss.zul.Comboitem;
 				templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
-		final List kids = new ArrayList(clone.getChildren());
+		final List<Component> kids = new ArrayList<Component>(clone.getChildren());
 		clone.setAttribute(KIDS, kids);
 		clone.getChildren().clear();
 		return clone;

@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationContext;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Executions;
@@ -50,12 +51,13 @@ import org.zkoss.zk.ui.Execution;
  * @author ashish
  */
 public class DelegatingVariableResolver implements VariableResolver {
+	private static final Log log = Log.lookup(DelegatingVariableResolver.class);
 
 	/**
 	 * Holds list of variable resolvers for Spring core (3.0RC and later),
 	 * Spring security(3.0RC and later) and Spring webflow(only for 1.x)
 	 */
-	protected List _variableResolvers = new ArrayList();
+	protected List<VariableResolver> _variableResolvers = new ArrayList<VariableResolver>();
 
 	public DelegatingVariableResolver() {
 		final Execution exec = Executions.getCurrent();
@@ -73,12 +75,12 @@ public class DelegatingVariableResolver implements VariableResolver {
 			String[] vrClss = classes.split(",");
 			for (int i = 0; i < vrClss.length; i++) {
 				try {
-					Object o = Classes.newInstanceByThread(vrClss[i]);
+					VariableResolver o = (VariableResolver)Classes.newInstanceByThread(vrClss[i]);
 					if(!_variableResolvers.contains(o)) {
 						_variableResolvers.add(o);
 					}
-				} catch (Exception e) {
-					// do nothing
+				} catch (Throwable e) {
+					log.warningBriefly("Ignored: failed to instantiate "+vrClss[i], e);
 				}
 			}
 		} else {
@@ -93,9 +95,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 	 */
 	public Object resolveVariable(String name) {
 		Object o = null;
-		for (Iterator iterator = _variableResolvers.iterator(); iterator
-				.hasNext();) {
-			VariableResolver resolver = (VariableResolver) iterator.next();
+		for (VariableResolver resolver: _variableResolvers) {
 			o = resolver.resolveVariable(name);
 			if (o != null) {
 				return o;
