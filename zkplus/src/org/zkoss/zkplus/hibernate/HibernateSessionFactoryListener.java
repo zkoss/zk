@@ -62,7 +62,7 @@ import org.hibernate.SessionFactory;
  *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
- *
+ * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
  */
 public class HibernateSessionFactoryListener 

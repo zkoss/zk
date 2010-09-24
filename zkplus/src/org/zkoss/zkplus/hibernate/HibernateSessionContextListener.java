@@ -54,7 +54,7 @@ import java.util.List;
  *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
- *
+ * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
  */
 public class HibernateSessionContextListener implements ExecutionInit, ExecutionCleanup, EventThreadInit, EventThreadResume {

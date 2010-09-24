@@ -57,6 +57,7 @@ import org.zkoss.zkplus.spring.SpringUtil;
  *	&lt;/listener>
  * </code></pre>
  * </p>
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  *
  * @author henrichen
  */

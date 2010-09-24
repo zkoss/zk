@@ -53,7 +53,7 @@ import java.util.List;
  *	&lt;/listener>
  * </code></pre>
  * </p>
- *
+ * <p>Applicable to Spring Framework version 2.x or later</p>
  * @author henrichen
  */
 public class SpringTransactionSynchronizationListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {

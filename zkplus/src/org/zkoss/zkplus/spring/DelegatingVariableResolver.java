@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.Execution;
  * <p>Developers can specify a list of class names separated with comma in
  * a library property called <code>org.zkoss.spring.VariableResolver.class</code>,
  * such they are used as the default variable resolvers.
- *
+ * <p>Applicable to Spring Framework version 2.x or later</p>
  * @author henrichen
  * @author ashish
  */

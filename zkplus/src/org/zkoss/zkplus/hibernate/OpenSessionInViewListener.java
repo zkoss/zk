@@ -39,7 +39,7 @@ import java.util.List;
  *	&lt;/listener>
  * </code></pre>
  * </p>
- *
+ * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
  */
 public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanup {
