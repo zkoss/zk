@@ -5,6 +5,8 @@
 .z-window-popup-shadow,
 .z-window-embedded-shadow,
 .z-window-highlighted-shadow {
+	border-radius: 4px;
+	box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 	-moz-border-radius: 4px;
 	-moz-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 4px;

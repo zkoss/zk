@@ -1528,6 +1528,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, Date value) {
 		smartUpdate(attr, (Object)value);
 	}
+	/** A special smart update to update a value to the given component.
+	 * <p>It is the same as
+	 * <code>smartUpdate(attr, comp != null ? comp.getUuid(): null)</code>.
+	 * @since 5.0.5
+	 */
+	protected void smartUpdate(String attr, Component comp) {
+		smartUpdate(attr, comp != null ? comp.getUuid(): null);
+	}
 	/** A special smart update to update an event listener for the
 	 * peer widget.
 	 * By default, it assumes the peer widget has a method called

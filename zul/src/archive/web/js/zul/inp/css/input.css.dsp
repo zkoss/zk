@@ -24,6 +24,7 @@
 	font-weight: normal;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 }

@@ -1,5 +1,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 .z-panel-shadow {
+	border-radius: 4px;
+	box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 	-moz-border-radius: 4px;
 	-moz-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 4px;

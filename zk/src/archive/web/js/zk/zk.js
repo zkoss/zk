@@ -274,6 +274,11 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//ie8c: false,
+	/** Whether it is Internet Exploer 9 or later.
+	 * @type boolean
+	 * @since 5.0.5
+	 */
+	//ie9: false,
 	/** Whether it is Gecko-based browsers, such as Firefox.
 	 * @type boolean
 	 */
@@ -1098,15 +1103,17 @@ zk.log('value is", value);
 	} else if (zk.opera) {
 		bodycls = 'opera';
 	} else {
-		var j = zk.agent.indexOf("msie ");
+		var j = zk.agent.indexOf("msie "), dm;
 		zk.ie = j >= 0;
 		if (zk.ie) {
 			j = zk.parseInt(zk.agent.substring(j + 5));
 			zk.ie7 = j >= 7; //ie7 or later
 			zk.ie8c = j >= 8; //ie8 or later (including compatible)
-			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
+			zk.ie8 = j >= 8 && (dm=document.documentMode) >= 8; //ie8 or later
+			zk.ie9 = j >= 9 && dm >= 9; //ie9 or later
 			zk.ie6_ = !zk.ie7;
 			zk.ie7_ = zk.ie7 && !zk.ie8;
+			zk.ie8_ = zk.ie8 && !zk.ie9;
 			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
 			bodycls = 'safari';
@@ -1114,7 +1121,7 @@ zk.log('value is", value);
 	if (zk.air = zk.agent.indexOf("adobeair") >= 0)
 		bodycls = 'air';
 
-	zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera);
+	zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera) || zk.ie9;
 	
 	if (bodycls)
 		jq(function () {
