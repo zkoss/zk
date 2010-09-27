@@ -775,7 +775,8 @@ public class HtmlPageRenders {
 			return null;
 
 		exec.setAttribute(attr, Boolean.TRUE); //generated only once
-		return ((PageCtrl)page).getHeaders(before);
+		return before ? ((PageCtrl)page).getBeforeHeadTags():
+			((PageCtrl)page).getAfterHeadTags();
 	}
 	/** Generates and returns the ZK specific HTML tags including
 	 * the headers defined in the specified page, or null if it was

@@ -72,32 +72,56 @@ public interface PageCtrl {
 	 */
 	public void destroy();
 
-	/** Returns the content of the specified condition
-	 * that shall be generated inside the header element
-	 * (never null).
+	/** Returns the tags that shall be generated inside the head element
+	 * and before ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
 	 *
-	 * <p>For HTML, the header element is the HEAD element.
+	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
+	 * it cannot override ZK's default behaviors.
 	 *
-	 * @param before whether to return the headers that shall be shown
-	 * before ZK's CSS/JS headers.
-	 * If true, only the headers that shall be shown before (such as meta)
-	 * are returned.
-	 * If true, only the headers that shall be shown after (such as link)
-	 * are returned.
-	 * @see #getHeaders()
-	 * @since 3.6.1
+	 * @see #getAfterHeadTags
+	 * @since 5.0.5
+	 */
+	public String getBeforeHeadTags();
+	/** Returns the tags that shall be generated inside the head element
+	 * and after ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 *
+	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
+	 * it could override ZK's default behaviors.
+	 *
+	 * @see #getBeforeHeadTags
+	 * @since 5.0.5
+	 */
+	public String getAfterHeadTags();
+	/** Adds the tags that will be generated inside the head element
+	 * and before ZK's default tags. For example,
+	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 *
+	 * <p>You could specify the link, meta and script directive to have the similar
+	 * result.
+	 * @since 5.0.5
+	 */
+	public void addBeforeHeadTags(String tags);
+	/** Adds the tags that will be generated inside the head element
+	 * and after ZK's default tags. For example,
+	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 *
+	 * <p>You could specify the link, meta and script directive to have the similar
+	 * result.
+	 * @since 5.0.5
+	 */
+	public void addAfterHeadTags(String tags);
+
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
 	 */
 	public String getHeaders(boolean before);
-	/** Returns all content that will be generated inside the header element
-	 * (never null).
-	 * <p>For HTML, the header element is the HEAD element.
-	 * <p>It returns all header no matter it shall be shown before or
-	 * after ZK's CSS/JS headers. To have more control, use
-	 * {@link #getHeaders(boolean)} instead.
-	 *
-	 * @see #getHeaders(boolean)
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
 	 */
 	public String getHeaders();
+
 	/** Returns a readonly collection of response headers (never null).
 	 * The entry is a three-element object array.
 	 * The first element is the header name.

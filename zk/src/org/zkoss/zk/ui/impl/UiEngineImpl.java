@@ -399,8 +399,12 @@ public class UiEngineImpl implements UiEngine {
 					public String getUuid() {return null;}
 					public String getTitle() {return null;}
 					public String getStyle() {return null;}
-					public String getHeaders(boolean before) {return null;}
-					public String getHeaders() {return null;}
+					public String getBeforeHeadTags() {return "";}
+					public String getAfterHeadTags() {return "";}
+					/** @deprecated */
+					public String getHeaders(boolean before) {return "";}
+					/** @deprecated */
+					public String getHeaders() {return "";}
 					public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
 				});
 				final Composer composer = config.getComposer(page);
