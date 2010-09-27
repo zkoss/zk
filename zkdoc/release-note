@@ -4,6 +4,7 @@ ZK 5.0.5
   3067232: A way to access components in 3rd framework (e.g. JSF 2)
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
   3061676: Autodrop menubar shall be closed automatically when move out
+  3076418: XmlMacroComponent supports autowire
 
 * Bugs
   3057902: zk bug for window showbusy
