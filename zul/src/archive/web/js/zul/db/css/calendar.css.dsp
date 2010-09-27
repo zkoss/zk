@@ -11,6 +11,7 @@
 }
 .z-calendar,
 .z-calendar-title-over {
+	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
@@ -127,6 +128,7 @@
 .z-calendar-calmon .z-calendar-over,
 .z-calendar-caldayrow .z-calendar-over {
 	background: #F1F9FC;
+	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
@@ -135,6 +137,7 @@
 .z-calendar-calmon td.z-calendar-seld,
 .z-calendar-calday td.z-calendar-seld {
 	background: #CCE0FB; 
+	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
@@ -144,6 +147,7 @@
 .z-datebox-calmon td.z-datebox-over-seld,
 .z-datebox-calday td.z-datebox-over-seld {
 	background: #5FA4FF;
+	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }

@@ -56,7 +56,7 @@ import java.util.Iterator;
  * <li>The url page must enclosed with a window component so it can be doModal().</li>
  * </ul>
  * <p>This implementation would automatically remove the added eventlistener from the target component.</p>
- *
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
  */
 public class ShowWindowEventListener implements EventListener {

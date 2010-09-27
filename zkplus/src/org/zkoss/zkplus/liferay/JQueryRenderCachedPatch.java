@@ -12,20 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.liferay;
 
-import java.io.Writer;
-import java.io.StringWriter;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.ServletRequest;
 
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
-
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.sys.PageRenderPatch;
 
 /**
  * Used to patch the rendering result of a ZK portlet for Liferay.

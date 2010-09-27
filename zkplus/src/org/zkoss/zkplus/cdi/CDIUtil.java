@@ -24,6 +24,7 @@ import javax.naming.NamingException;
 import org.zkoss.xel.XelException;
 /**
  * Some generic utility for use with CDI.
+ * <p>Applicable to CDI version 1.0 or later</p>
  * @author henrichen
  *
  */

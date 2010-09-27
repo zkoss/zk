@@ -607,9 +607,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (s != null) setStyle(s);
 		}
 
-		s = config.getHeaders(true);
+		s = config.getBeforeHeadTags();
 		if (s != null) _hdbfr = s;
-		s = config.getHeaders(false);
+		s = config.getAfterHeadTags();
 		if (s != null) _hdaft = s;
 		_hdres = config.getResponseHeaders();
 		if (_hdres.isEmpty()) _hdres = null;
@@ -638,12 +638,21 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _ips != null;
 	}
 
-	public String getHeaders(boolean before) {
-		return before ? _hdbfr: _hdaft;
+	public String getBeforeHeadTags() {
+		return _hdbfr;
 	}
-	public String getHeaders() {
-		return _hdbfr + _hdaft;
+	public String getAfterHeadTags() {
+		return _hdaft;
 	}
+	public void addBeforeHeadTags(String tags) {
+		if (tags != null && tags.length() > 0)
+			_hdbfr += '\n' + tags;
+	}
+	public void addAfterHeadTags(String tags) {
+		if (tags != null && tags.length() > 0)
+			_hdaft += '\n' + tags;
+	}
+
 	public Collection<Object[]> getResponseHeaders() {
 		if (_hdres != null)
 			return _hdres;

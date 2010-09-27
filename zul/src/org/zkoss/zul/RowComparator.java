@@ -25,7 +25,7 @@ import java.util.Comparator;
  * @author jumperchen
  * @since 3.6.0
  */
-public class RowComparator implements Comparator {
+public class RowComparator implements Comparator<Object> {
 
 	/** The column (optinal). */
 	private final Column _column;

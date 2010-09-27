@@ -7,7 +7,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<zk.version>5.0.5-FL</zk.version>
+		<zk.version>5.0.5.FL.20100920</zk.version>
 		<org.springframework.version>2.0.6</org.springframework.version>
 	</properties>
 	<version>${zk.version}</version>
@@ -57,21 +57,6 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zcommon</artifactId>
-			<version>${zk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zweb</artifactId>
-			<version>${zk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zk</artifactId>
-			<version>${zk.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>

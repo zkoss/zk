@@ -29,7 +29,7 @@ import org.zkoss.xel.XelContext;
 
 /**
  * An EL context that is based on XEL context for use with CDI.
- *
+ * <p>Applicable to CDI version 1.0 or later</p>
  * @author henrichen
  */
 /*package*/ class CDIELContext extends ELContext {

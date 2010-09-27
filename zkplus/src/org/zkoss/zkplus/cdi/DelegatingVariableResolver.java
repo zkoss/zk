@@ -27,7 +27,8 @@ import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 
 /**
- * Generic CDI EL named managed bean resolver. 
+ * Generic CDI EL named managed bean resolver.
+ * <p>Applicable to CDI version 1.0 or later</p>
  * @author henrichen
  *
  */

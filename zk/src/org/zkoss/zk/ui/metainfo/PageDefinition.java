@@ -460,20 +460,33 @@ public class PageDefinition extends NodeInfo {
 	public void addHeaderInfo(HeaderInfo header) {
 		addHeaderInfo(header, "meta".equals(header.getName()));
 	}
-	/** Converts the header definitions (added by {@link #addHeaderInfo}) to
-	 * HTML tags.
+	/** Returns the content that shall be generated inside the head element
+	 * and before ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
 	 *
-	 * @param before whether to return the headers that shall be shown
-	 * before ZK's CSS/JS headers.
-	 * If true, only the headers that shall be shown before (such as meta)
-	 * are returned.
-	 * If true, only the headers that shall be shown after (such as link)
-	 * are returned.
-	 * @see #getHeaders(Page)
-	 * @since 3.6.1
+	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
+	 * it cannot override ZK's default behaviors.
+	 *
+	 * @see #getAfterHeadTags
+	 * @since 5.0.5
 	 */
-	public String getHeaders(Page page, boolean before) {
-		final List<HeaderInfo> defs = before ? _hdBfrDefs: _hdAftDefs;
+	public String getBeforeHeadTags(Page page) {
+		return getHeadTags(page, _hdBfrDefs);
+	}
+	/** Returns the content that shall be generated inside the head element
+	 * and after ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 *
+	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
+	 * it could override ZK's default behaviors.
+	 *
+	 * @see #getBeforeHeadTags
+	 * @since 5.0.5
+	 */
+	public String getAfterHeadTags(Page page) {
+		return getHeadTags(page, _hdAftDefs);
+	}
+	private String getHeadTags(Page page, List<HeaderInfo> defs) {
 		if (defs == null)
 			return "";
 
@@ -484,14 +497,7 @@ public class PageDefinition extends NodeInfo {
 		}
 		return sb.toString();
 	}
-	/** Converts all header definitions (added by {@link #addHeaderInfo}) to
-	 * HTML tags, no matter that shall be shown before or after ZK's
-	 * CSS/JS headers.
-	 * To have better control, use {@link #getHeaders(Page,boolean)} instead.
-	 */
-	public String getHeaders(Page page) {
-		return getHeaders(page, true) + getHeaders(page, false);
-	}
+
 	/** Adds a forward definition ({@link ForwardInfo}).
 	 */
 	public void addForwardInfo(ForwardInfo forward) {
@@ -855,13 +861,13 @@ public class PageDefinition extends NodeInfo {
 				public String getUuid() {return null;}
 				public String getTitle() {return _title;}
 				public String getStyle() {return _style;}
-				public String getHeaders(boolean before) {
+				public String getBeforeHeadTags() {
 					return evalHeaders ?
-						PageDefinition.this.getHeaders(page, before): "";
+						PageDefinition.this.getBeforeHeadTags(page): "";
 				}
-				public String getHeaders() {
+				public String getAfterHeadTags() {
 					return evalHeaders ?
-						PageDefinition.this.getHeaders(page): "";
+						PageDefinition.this.getAfterHeadTags(page): "";
 				}
 				public Collection<Object[]> getResponseHeaders() {
 					if (evalHeaders)

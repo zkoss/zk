@@ -274,6 +274,11 @@ zk.copy(zk, {
 	 * @type boolean
 	 */
 	//ie8c: false,
+	/** Whether it is Internet Exploer 9 or later.
+	 * @type boolean
+	 * @since 5.0.5
+	 */
+	//ie9: false,
 	/** Whether it is Gecko-based browsers, such as Firefox.
 	 * @type boolean
 	 */
@@ -1081,42 +1086,50 @@ zk.log('value is", value);
 
 //zk.agent//
 (function () {
-	zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = zk.agent.indexOf("safari") >= 0;
-	zk.opera = zk.agent.indexOf("opera") >= 0;
-	zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
-	zk.ios = zk.agent.indexOf("iphone") >= 0 || zk.agent.indexOf("ipad") >= 0;
-	zk.android = zk.agent.indexOf('android') >= 0;
+	var agent = zk.agent = navigator.userAgent.toLowerCase();
+	zk.safari = agent.indexOf("safari") >= 0;
+	zk.opera = agent.indexOf("opera") >= 0;
+	zk.gecko = agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+	zk.ios = agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0;
+	zk.android = agent.indexOf('android') >= 0;
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
-		var j = zk.agent.indexOf("firefox/");
-		j = zk.parseInt(zk.agent.substring(j + 8));
-		zk.gecko3 = j >= 3;
+		var j = agent.indexOf("firefox/");
+		j = zk.parseInt(agent.substring(j + 8));
+		zk.css3 = zk.gecko3 = j >= 3;
 		zk.gecko2_ = !zk.gecko3;
-
 		bodycls = 'gecko gecko' + j;
 	} else if (zk.opera) {
 		bodycls = 'opera';
+		var j = agent.indexOf("version/"), v;
+		zk.css3 = j >= 0
+			&& ((v = zk.parseInt(agent.substring(j += 8))) > 10
+				|| (v == 10 && (j = agent.indexOf('.', j)) >= 0
+					&& zk.parseInt(agent.substring(j + 1)) >= 5)); //10.5 or later
 	} else {
-		var j = zk.agent.indexOf("msie ");
+		var j = agent.indexOf("msie "), dm;
 		zk.ie = j >= 0;
 		if (zk.ie) {
-			j = zk.parseInt(zk.agent.substring(j + 5));
+			j = zk.parseInt(agent.substring(j + 5));
 			zk.ie7 = j >= 7; //ie7 or later
 			zk.ie8c = j >= 8; //ie8 or later (including compatible)
-			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
+			zk.ie8 = j >= 8 && (dm=document.documentMode) >= 8; //ie8 or later
+			zk.css3 = zk.ie9 = j >= 9 && dm >= 9; //ie9 or later
 			zk.ie6_ = !zk.ie7;
 			zk.ie7_ = zk.ie7 && !zk.ie8;
+			zk.ie8_ = zk.ie8 && !zk.ie9;
 			bodycls = 'ie ie' + j;
-		} else if (zk.safari)
-			bodycls = 'safari';
+		} else {
+			if (zk.safari)
+				bodycls = 'safari';
+			zk.css3 = true;
+		}
 	}
-	if (zk.air = zk.agent.indexOf("adobeair") >= 0)
-		bodycls = 'air';
 
-	zk.css3 = !(zk.ie || zk.gecko2_ || zk.opera);
-	
+	if (zk.air = agent.indexOf("adobeair") >= 0)
+		bodycls = (bodycls || '') + ' air';
+
 	if (bodycls)
 		jq(function () {
 			var n = document.body,

@@ -347,7 +347,7 @@ public class ComponentsCtrl {
 	 *
 	 * @since 5.0.0
 	 */
-	public static final Collection<JavaScriptValue> redraw(Collection<Component> comps) {
+	public static final Collection<JavaScriptValue> redraw(Collection<? extends Component> comps) {
 		try {
 			final StringWriter out = new StringWriter(1024*8);
 			final List<JavaScriptValue> js = new LinkedList<JavaScriptValue>();

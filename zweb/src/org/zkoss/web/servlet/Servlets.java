@@ -284,7 +284,7 @@ public class Servlets {
 	/** Returns whether the user agent is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie9",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
 	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
@@ -305,12 +305,16 @@ public class Servlets {
 		if ("ie7-".equals(type)) return getIEVer(userAgent) == 7;
 		if ("ie8".equals(type)) return getIEVer(userAgent) >= 8;
 		if ("ie8-".equals(type)) return getIEVer(userAgent) == 8;
+		if ("ie9".equals(type)) return getIEVer(userAgent) >= 9;
+		if ("ie9-".equals(type)) return getIEVer(userAgent) == 9;
 
 		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
 		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
 		if ("gecko3".equals(type)) return isGecko3(userAgent);
 		if ("gecko3.5".equals(type)) return getGeckoVer(userAgent, true) >= 35;
 		if ("gecko3-".equals(type)) return getGeckoVer(userAgent) == 3;
+		if ("gecko4".equals(type)) return getGeckoVer(userAgent) >= 4;
+		if ("gecko4-".equals(type)) return getGeckoVer(userAgent) == 4;
 
 		if ("safari".equals(type)) return isSafari(userAgent);
 		if ("opera".equals(type)) return isOpera(userAgent);

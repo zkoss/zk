@@ -107,7 +107,7 @@ import org.springframework.util.Assert;
  *
  * ...
  * </code></pre>
- *
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author henrichen
  */
 public class ZkEventExceptionFilter implements Filter, InitializingBean {

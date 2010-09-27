@@ -300,7 +300,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	 $init: function(wgt, content) {
-	 	this.$supers('$init', arguments);
 		this._wgt = wgt;
 		this._content = content;
 	 },

@@ -1088,7 +1088,7 @@ public class Listbox extends XulElement implements Paginated,
 			if (inSelectMold())
 				smartUpdate("selectedIndex", -1);
 			else
-				smartUpdate("selectedItem", null);
+				smartUpdate("selectedItem", (Object)null);
 			// Bug 1734950: don't count on index (since it may change)
 		}
 		if (_model instanceof Selectable && !isLoadingModel()) {

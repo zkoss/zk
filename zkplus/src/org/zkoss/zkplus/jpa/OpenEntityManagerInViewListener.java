@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  *	&lt;/listener>
  * </code></pre>
  * </p>
- * 
+ * <p>Applicable to EJB version 3.2.ga or later</p>
  * @author Jeff
  * @since 3.0.2
  */

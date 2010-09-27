@@ -33,7 +33,7 @@ import org.zkoss.xel.VariableResolver;
  * 
  * in your zul file:<br/>
  * <code>&lt;?variable-resolver class="org.zkoss.zkplus.seasar.DelegatingVariableResolver"?&gt;</code>
- *
+ * <p>Applicable to Sesar Framework version 2.4 or later</p>
  * @author Dennis.Chen
  * @since 3.0.0
  */

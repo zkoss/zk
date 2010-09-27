@@ -29,6 +29,7 @@
 	border: 1px solid #86A4BE;
 	padding-top: 2px;
 	padding-bottom: 2px;
+	border-radius: 2px 0 0 2px;
 	-moz-border-radius: 2px 0 0 2px;
 	-webkit-border-radius: 2px 0 0 2px;
 	<c:if test="${c:isSafari()}">
@@ -123,6 +124,7 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 	border-bottom: 1px solid #86A4BE;
 	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
+	border-radius: 0 2px 2px 0;
 	-moz-border-radius: 0 2px 2px 0;
 	-webkit-border-radius: 0 2px 2px 0;
 	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
@@ -375,6 +377,8 @@ i.z-spinner-rounded i.z-spinner-rounded-btn-right-edge-invalid {
 <%-- Shadow --%>
 .z-combobox-rounded-shadow, .z-bandbox-rounded-shadow, .z-datebox-rounded-shadow,
 .z-combobox-shadow, .z-bandbox-shadow, .z-datebox-shadow {
+	border-radius: 3px;
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 	-moz-border-radius: 3px;
 	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 3px;

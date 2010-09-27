@@ -51,9 +51,9 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * </code></pre>
  * </p>
  
- * <p> Also notice that the zkplus.jar must be put under application's WEB-INF/lib because
+ * <p>Also notice that the zkplus.jar must be put under application's WEB-INF/lib because
  * the SessionFactory is stored as a class static member.
- *
+ * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
  */
 public class HibernateUtil {

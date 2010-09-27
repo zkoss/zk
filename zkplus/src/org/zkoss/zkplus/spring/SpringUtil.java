@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.UiException;
 
 /**
  * SpringUtil, a Spring utility.
- *
+ * <p>Applicable to Spring Framework version 2.x or later</p>
  * @author henrichen
  */
 public class SpringUtil {
