@@ -347,6 +347,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		zWatch.listen({onSize: this, onShow: this});
 		this.updateFormData(this._curpos);
+		this._fixPos();
 	},
 	unbind_: function() {
 		this.efield = null;

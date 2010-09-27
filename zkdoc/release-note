@@ -11,6 +11,7 @@ ZK 5.0.5
   3061764: Opera only. Cannot sizing a column with width
   3061765: Unexpected horizontal scrollbar when sizing listheader
   3064997: Listen onPiggyback event threw NoSuchElementException
+  3074492: Slider default  curpos not work
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
