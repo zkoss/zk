@@ -193,6 +193,14 @@ public class LanguageDefinition {
 		final LanguageDefinition langdef;
 		synchronized (_ldefByName) {
 			langdef = (LanguageDefinition)_ldefByName.get(name);
+			if (langdef == null) {
+				final String nm = "/" + name;
+				for (Iterator it = _ldefByName.entrySet().iterator(); it.hasNext();) {
+					Map.Entry me = (Map.Entry)it.next();
+					if (((String)me.getKey()).endsWith(nm))
+						return (LanguageDefinition)me.getValue();
+				}
+			}
 		}
 		if (langdef == null)
 			if (ZK_NAMESPACE.equals(name))
