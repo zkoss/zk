@@ -1300,6 +1300,12 @@ jq(el).zk.center(); //same as 'center'
 		return this;
 	},
 
+	/** Fixes DOM elements when a widget's unbind_ is called
+	 * and it will hide the DOM element (display="none" or visibility="hidden").
+	 * <p>For firefox, it has to reset the src attribute of iframe (Bug 3076384)
+	 */
+	beforeHideOnUnbind: zk.$void,
+
 	//focus/select//
 	/** Sets the focus to the first matched element. It is the same as DOMElement.focus, except it doesn't throw any exception (rather, returns false), and it can set the focus later (by use of timeout). 
 	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately. 

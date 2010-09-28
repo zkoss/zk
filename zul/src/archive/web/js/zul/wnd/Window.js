@@ -1014,6 +1014,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		var node = this.$n();
+		zk(node).beforeHideOnUnbind();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
 		if (!zk.css3) jq.unzsync(this);
