@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zk.fmt" language="xul/html">
+<package name="zk.fmt" language="xul/html" depends="zul.lang">
 	<script src="numfmt.js"/>
 	<script src="msgfmt.js"/>
 </package>

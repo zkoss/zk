@@ -35,12 +35,16 @@ ZK 5.0.5
   3067232: A way to access components in 3rd framework (e.g. JSF 2)
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
   3061676: Autodrop menubar shall be closed automatically when move out
+  3076418: XmlMacroComponent supports autowire
+  3077084: Able to specify the last word identify a component namespace
 
 * Bugs
   3057902: zk bug for window showbusy
   3061764: Opera only. Cannot sizing a column with width
   3061765: Unexpected horizontal scrollbar when sizing listheader
   3064997: Listen onPiggyback event threw NoSuchElementException
+  3074492: Slider default  curpos not work
+  3076840: DHtmlUpdateServlet's init mishandles processor params
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
