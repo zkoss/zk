@@ -12,6 +12,7 @@ ZK 5.0.5
   3061765: Unexpected horizontal scrollbar when sizing listheader
   3064997: Listen onPiggyback event threw NoSuchElementException
   3074492: Slider default  curpos not work
+  3076840: DHtmlUpdateServlet's init mishandles processor params
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

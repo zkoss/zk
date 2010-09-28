@@ -156,10 +156,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		//ZK 5: extension defined in init-param has the higher priority
-		for (int j = 0;;) {
-			param = config.getInitParameter("extension" + j++);
+		for (int j = 0;;++j) {
+			param = config.getInitParameter("extension" + j);
 			if (param == null) {
-				param = config.getInitParameter("processor" + j++); //backward compatible
+				param = config.getInitParameter("processor" + j); //backward compatible
 				if (param == null) break;
 			}
 			final int k = param.indexOf('=');
