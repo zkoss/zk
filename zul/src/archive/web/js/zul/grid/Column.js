@@ -186,7 +186,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
-		if (this.parent._menupopup || this.parent._menupopup != 'none') {
+		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var btn = this.$n('btn'),
 				n = this.$n();
 			jq(n).addClass(this.getZclass() + "-over");
@@ -194,7 +194,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		}
 	},
 	_doMouseOut: function (evt) {
-		if (this.parent._menupopup || this.parent._menupopup != 'none') {
+		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var btn = this.$n('btn'),
 				n = this.$n(), $n = jq(n),
 				zcls = this.getZclass();
@@ -204,7 +204,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		}
 	},
 	_doClick: function (evt) {
-		if (this.parent._menupopup || this.parent._menupopup != 'none') {
+		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
 				n = this.$n(),
 				btn = this.$n('btn'),
