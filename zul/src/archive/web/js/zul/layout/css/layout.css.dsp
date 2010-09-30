@@ -9,7 +9,7 @@
 	display:-moz-inline-box;
 	display: inline-block;
 	position: relative;
-	vertical-align: middle;
+	vertical-align: top;
 	zoom: 1;
 }
 .z-vlayout-inner {
