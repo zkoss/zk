@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
  */
-zul.layout.Layout = zk.$extends(zk.Widget, {
+zul.box.Layout = zk.$extends(zk.Widget, {
 	_spacing: '0.3em',
 	$define: {
 		/** Sets the spacing between adjacent children.
@@ -52,12 +52,12 @@ zul.layout.Layout = zk.$extends(zk.Widget, {
 		child.bind(desktop);
 	},
 	bind_: function () {
-		this.$supers(zul.layout.Layout, 'bind_', arguments);
+		this.$supers(zul.box.Layout, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
-		this.$supers(zul.layout.Layout, 'unbind_', arguments);
+		this.$supers(zul.box.Layout, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (this._shallSize) {
@@ -133,7 +133,7 @@ zul.layout.Layout = zk.$extends(zk.Widget, {
 	},
 	//bug#3042306
 	resetSize_: function (orient) { ////@Overrid zk.Widget#resetSize_, called when beforeSize
-		this.$supers(zul.layout.Layout, 'resetSize_', arguments);
+		this.$supers(zul.box.Layout, 'resetSize_', arguments);
 		var vert = this.isVertical_();
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			if (vert ? (kid._nvflex && kid.getVflex() != 'min')

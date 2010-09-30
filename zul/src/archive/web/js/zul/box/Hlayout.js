@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-hlayout.
  * @since 5.0.4
  */
-zul.layout.Hlayout = zk.$extends(zul.layout.Layout, {
+zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	isVertical_: function () {
 		return false;
 	},
