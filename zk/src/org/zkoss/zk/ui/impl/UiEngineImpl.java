@@ -376,7 +376,8 @@ public class UiEngineImpl implements UiEngine {
 						comps = new Component[0];
 						exec.forward(uri);
 					} else {
-						comps = uv.isAborting() || exec.isVoided() ? null:
+						comps = uv.isAborting() || exec.isVoided() ?
+							new Component[0]:
 							execCreate(new CreateInfo(
 								((WebAppCtrl)wapp).getUiFactory(), exec, page,
 								config.getComposer(page)),
