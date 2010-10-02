@@ -39,8 +39,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!img) return;
 			var cn = img.className;
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
+			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
-			zWatch.fireDown(open ? 'onShow': 'onHide', this);
+			if (open) zWatch.fireDown('onShow', this);
 			this.getMeshWidget().onSize();
 			if (!fromServer) {
 				var tree = this.getTree(),

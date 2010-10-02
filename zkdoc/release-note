@@ -18,6 +18,7 @@ ZK 5.0.5
   3079449: sendRedirect called in Initiator causes NPE (ZK EE 5.0.4)
   3079480: Child popup not removed if its parent removed
   3079879: datebox and colorbox shall close popup when detached
+  3079636: onHide should be fired before the widget hidden
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
