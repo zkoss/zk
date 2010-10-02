@@ -12,6 +12,14 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	//test if a treexxx is closed or any parent treeitem is closed
+	function _closed(ti) {
+		for (; ti && !ti.$instanceof(zul.sel.Tree); ti = ti.parent)
+			if (ti.isOpen && !ti.isOpen())
+				return true;
+	}
+
 /**
  * A treeitem.
  *
@@ -36,7 +44,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
     	 */
 		open: function (open, fromServer) {
 			var img = this.$n('open');
-			if (!img) return;
+			if (!img || _closed(this.parent))
+				return;
+
 			var cn = img.className;
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			if (!open) zWatch.fireDown('onHide', this);
@@ -294,3 +304,4 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	}
 });
+})();
