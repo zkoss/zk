@@ -20,6 +20,7 @@ ZK 5.0.5
   3079879: datebox and colorbox shall close popup when detached
   3079636: onHide should be fired before the widget hidden
   3079363: Opening a treeitem whose parent is closed  shows children
+  3079346: Textbox setType not workin in IE
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
