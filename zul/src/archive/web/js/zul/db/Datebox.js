@@ -474,8 +474,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
-		var btn = this.$n('btn');
-		if (btn) {
+		var btn;
+		if (btn = this._pop)
+			btn.close(true);
+
+		if (btn = this.$n('btn')) {
 			this._auxb.cleanup();
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
