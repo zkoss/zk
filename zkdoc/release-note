@@ -16,6 +16,7 @@ ZK 5.0.5
   3076840: DHtmlUpdateServlet's init mishandles processor params
   3076384: ComponentNotFoundException by closing AMedia
   3079449: sendRedirect called in Initiator causes NPE (ZK EE 5.0.4)
+  3079480: Child popup not removed if its parent removed
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

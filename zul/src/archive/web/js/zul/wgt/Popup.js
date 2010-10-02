@@ -202,6 +202,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(true);
 	},
 	unbind_: function () {
+		zk(this.$n()).undoVParent(); //Bug 3079480
 		if (this._stackup) {
 			jq(this._stackup).remove();
 			this._stackup = null;
