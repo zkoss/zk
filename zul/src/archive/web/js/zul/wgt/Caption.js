@@ -58,7 +58,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	/** Whether to generate a close button. */
 	_isCloseVisible: function () {
 		var parent = this.parent;
-		return parent.isClosable && parent.isClosable();
+		return parent.isClosable && parent.isClosable()
+			&& !parent.$instanceof(zul.wgt.Groupbox);
 	},
 	/** Whether to generate a minimize button. */
 	_isMinimizeVisible: function () {
