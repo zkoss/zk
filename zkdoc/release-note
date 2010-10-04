@@ -29,6 +29,7 @@ ZK 5.0.5
   3077716: Failed to set spillter close if collapse=after
   3074253: Drag and Drop nested components incorrect in Chrome
   3073531: portallayout.getPosition() don't work if dragged in same column
+  3058028: Combobox need two keypress of <TAB> in IE
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

@@ -124,7 +124,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				this._isStrict() || (opts && opts.strict)), opts);
 	},
 	_hilite2: function (sel, opts) {
-		if (!opts) opts = {};
+		opts = opts || {};
 
 		var oldsel = this._sel;
 		this._sel = sel;
@@ -143,7 +143,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				var inp = this.getInputNode(),
 					val = sel.getLabel();
 				this.valueEnter_ = inp.value = val;
-				zk(inp).setSelectionRange(0, val.length);
+				if (!opts.noSelectRange)
+					zk(inp).setSelectionRange(0, val.length);
 			}
 
 			if (opts.sendOnChange)
@@ -310,7 +311,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	updateChange_: function () {
 		if (this.$supers('updateChange_', arguments)) {
-			this._hilite({sendOnSelect:true});
+			this._hilite({sendOnSelect:true, noSelectRange:true});
 			return true;
 		}
 		this.valueEnter_ = null;
