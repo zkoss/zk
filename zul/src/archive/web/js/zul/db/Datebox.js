@@ -734,12 +734,6 @@ zul.db.ThemeHandler = {
 	 addRightEdgeClass: function (wgt) {
 	  	if (wgt._readonly && !wgt.inRoundedMold() && !wgt._buttonVisible)
 			jq(wgt.getInputNode()).addClass(wgt.getZclass() + '-right-edge');
-	 },
-	 addDayOfWeekClass: function (isWeekend, out) {
-	 	if (isWeekend) out.push(' class="z-weekend"');
-	 },
-	 addDayRowClass: function (isWeekend, zcls, out) {
-	 	out.push ('<td></td>');
 	 }
 };
 })();
