@@ -272,6 +272,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this.efield.value = val;
 		}
 	},
+	focus: function (timeout) {
+		if (this._view != 'decade') 
+			this._markCal({timeout: timeout});
+		else {
+			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
+			if (anc)
+				_doFocus(anc.firstChild, true);
+		}
+	},
 	bind_: function (){
 		this.$supers(Calendar, 'bind_', arguments);
 		var node = this.$n(),
@@ -285,16 +294,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				$(this).toggleClass(zcls + "-title-over");
 			},
 			function () {
-			    $(this).toggleClass(zcls + "-title-over");
+				$(this).toggleClass(zcls + "-title-over");
 			}
 		);
 		if (this._view != 'decade') 
-			this._markCal({timeout: true});
-		else {
-			var anc = jq(node).find('.' + zcls + '-seld')[0];
-			if (anc)
-				_doFocus(anc.firstChild, true);
-		}
+			this._markCal({silent: true});
 
 		this.domListen_(title, "onClick", '_changeView')
 			.domListen_(mid, "onClick", '_clickDate')
@@ -507,15 +511,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (m == j) {
 					jq(mon).addClass(zcls+"-seld");
 					jq(mon).removeClass(zcls+"-over");
-					_doFocus(mon.firstChild, opts ? opts.timeout : false);
+					if (!opts || !opts.silent)
+						_doFocus(mon.firstChild, opts && opts.timeout);
 				} else
 					jq(mon).removeClass(zcls+"-seld");
 			}
 			if (year) {
 				if (yy == j) {
 					jq(year).addClass(zcls+"-seld");
-				    jq(year).removeClass(zcls+"-over");
-					_doFocus(year.firstChild, opts ? opts.timeout : false);
+					jq(year).removeClass(zcls+"-over");
+					if (!opts || !opts.silent)
+						_doFocus(year.firstChild, opts && opts.timeout);
 				} else
 					jq(year).removeClass(zcls+"-seld");
 			}
@@ -555,8 +561,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						} else
 							jq(cell).removeClass(zcls+"-disd");
 						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
-						if (bSel)
-							_doFocus(cell.firstChild, opts ? opts.timeout : false);
+						if (bSel && (!opts || !opts.silent))
+							_doFocus(cell.firstChild, opts && opts.timeout );
 					}
 				}
 			}

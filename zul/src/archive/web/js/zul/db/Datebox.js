@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		this.appendChild(this._pop);
 		this.appendChild(this._tm);
 	}
-	function _reposition(wgt) {
+	function _reposition(wgt, silent) {
 		var db = wgt.$n();
 		if (!db) return;
 		var pp = wgt.$n("pp"),
@@ -30,7 +30,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if(pp) {
 			zk(pp).position(inp, "after_start");
 			wgt._pop.syncShadow();
-			zk(inp).focus();
+			if (!silent)
+				zk(inp).focus();
 		}
 	}
 
@@ -294,13 +295,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
-	setOpen: function(open) {
-		this._open = open;
-		var pp = this.$n("pp");
-		if (pp) {
-			if (!jq(pp).zk.isVisible()) this._pop.open();
-			else this._pop.close();
-		}
+	setOpen: function(open, _focus_) {
+		var pop;
+		if (pop = this._pop)
+			if (open) pop.open(!_focus_);
+			else pop.close(!_focus_);
 	},
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
@@ -490,7 +489,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled)
-			this.setOpen();
+			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), true);
 		evt.stop();
 	},
 	_doTimeZoneChange: function (evt) {
@@ -578,7 +577,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	isOpen: function () {
 		return zk(this.parent.$n("pp")).isVisible();
 	},
-	open: function() {
+	open: function(silent) {
 		var wgt = this.parent,
 			db = wgt.$n(), pp = wgt.$n("pp");
 		if (!db || !pp)
@@ -616,7 +615,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		zk(pp).position(wgt.getInputNode(), "after_start");
 		setTimeout(function() {
-			_reposition(wgt);
+			_reposition(wgt, silent);
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.

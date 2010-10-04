@@ -21,6 +21,8 @@ ZK 5.0.5
   3079636: onHide should be fired before the widget hidden
   3079363: Opening a treeitem whose parent is closed  shows children
   3079346: Textbox setType not workin in IE
+  3080682: Calendar shall not gain focus by default
+  3079203: datebox not open when specified open=true
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
