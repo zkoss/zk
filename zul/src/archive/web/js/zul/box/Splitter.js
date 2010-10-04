@@ -153,7 +153,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			this._fixDomClass(true);
 	},
 
-	bind_: function () {
+	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.box.Splitter, 'bind_', arguments);
 
 		var box = this.parent;
@@ -192,10 +192,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
 
-			var sib = colps == "before" ? Splitter._prev(nd): Splitter._next(nd);
-			jq(sib).hide(); //no onHide at bind_
-			var sibwgt = zk.Widget.$(sib);
-			sibwgt.parent._fixChildDomVisible(sibwgt, false);
+			//Bug 3077716: next sibling not bound yet
+			after.push(function () {
+				var sib = colps == "before" ? Splitter._prev(nd): Splitter._next(nd);
+				jq(sib).hide(); //no onHide at bind_
+				var sibwgt = zk.Widget.$(sib);
+				sibwgt.parent._fixChildDomVisible(sibwgt, false);
+			});
 
 			this._fixNSDomClass();
 		}
