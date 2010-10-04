@@ -1384,7 +1384,6 @@ jq(el).zk.center(); //same as 'center'
 
 		if (inp.setSelectionRange) {
 			inp.setSelectionRange(start, end);
-			inp.focus();
 		} else if (inp.createTextRange) {
 			var range = inp.createTextRange();
 			if(start != end){
