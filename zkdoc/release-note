@@ -27,6 +27,7 @@ ZK 5.0.5
   3077878: buttons in grid,  setDisabled problem with autodisabled
   3078580: Filename of Filedownload.save() shall not be encoded
   3077716: Failed to set spillter close if collapse=after
+  3074253: Drag and Drop nested components incorrect in Chrome
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
