@@ -28,6 +28,7 @@ ZK 5.0.5
   3078580: Filename of Filedownload.save() shall not be encoded
   3077716: Failed to set spillter close if collapse=after
   3074253: Drag and Drop nested components incorrect in Chrome
+  3073531: portallayout.getPosition() don't work if dragged in same column
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
