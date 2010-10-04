@@ -4162,17 +4162,21 @@ _doFooSelect: function (evt) {
 		if (opts && opts.exact)
 			return _binds[n.id];
 
-		for (; n; n = zk(n).vparentNode(true)) {
+		for (var orgId = false; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
+					var id2 = id.indexOf('-');
+					id2 = id2 >= 0 ? id.substring(0, id2): id;
+					if (orgId && id2 != orgId)
+						break; //not found
+
 					wgt = _binds[id]; //try first (since ZHTML might use -)
 					if (wgt)
 						return wgt;
 
-					var j = id.indexOf('-');
-					if (j >= 0) {
-						id = id.substring(0, j);
+					if (id != id2) {
+						id = id2;
 						wgt = _binds[id];
 						if (wgt)
 							if (opts && opts.child) {
@@ -4185,7 +4189,10 @@ _doFooSelect: function (evt) {
 				}
 			} catch (e) { //ignore
 			}
-			if (opts && opts.strict) break;
+			if (opts && opts.strict)
+				break;
+			if (orgId === false)
+				orgId = id;
 		}
 		return null;
 	},
