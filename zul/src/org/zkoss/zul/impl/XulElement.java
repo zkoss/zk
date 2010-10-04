@@ -321,6 +321,14 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		render(renderer, "ctrlKeys", getCtrlKeys());
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final XulElement clone = (XulElement)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
@@ -330,7 +338,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The popup ID that will be shown when click. */
 		private String popup;
 		/** The context ID that will be shown when right-click. */
@@ -339,5 +347,13 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		private String tooltip;
 		/** What control and function keys to intercepts. */
 		private String ctrlKeys;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

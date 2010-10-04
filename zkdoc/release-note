@@ -24,6 +24,7 @@ ZK 5.0.5
   3080682: Calendar shall not gain focus by default
   3079203: datebox not open when specified open=true
   3078523: 3D Caption in Groupbox  never show on right end
+  3077878: buttons in grid,  setDisabled problem with autodisabled
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

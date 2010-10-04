@@ -614,6 +614,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		}
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final HtmlBasedComponent clone = (HtmlBasedComponent)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
@@ -623,7 +631,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The width. */
 		private String width;
 		/** The height. */
@@ -646,5 +654,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		private String droppable;
 		private int zIndex = -1;
 		private int renderdefer = -1;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

@@ -153,6 +153,14 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox {
 		}
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final Textbox clone = (Textbox)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	//-- super --//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -175,10 +183,18 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable  {
 		private String type = TEXT;
 		private int rows = 1;
 		private boolean multiline;
 		private boolean tabbable;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }
