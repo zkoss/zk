@@ -52,7 +52,7 @@ zk.fmt.Date = {
 			hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
 			isAM;
 
-		var	ts = [], mindex = fmt.indexOf("MMM"),
+		var ts = [], mindex = fmt.indexOf("MMM"), eindex = fmt.indexOf("EE"),
 			fmtlen = fmt.length, ary = [],
 			//mmindex = mindex + 3,
 			isNumber = !isNaN(txt),
@@ -63,7 +63,8 @@ zk.fmt.Date = {
 				f = fmtlen > i ? fmt.charAt(i) : "";
 			if (c.match(/\d/)) {
 				ary.push(c);
-			} else if ((mindex > -1 && mindex <= i /*&& mmindex >= i location French will lose last char */) || (aa > -1 && aa <= i)) {
+			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
@@ -110,19 +111,19 @@ zk.fmt.Date = {
 					if (y < 100) y += y > 29 ? 1900 : 2000;
 					break;
 				case 'M':
-					var mon = txt.substring(j).toLowerCase().trim(),
-						mToken = token ? token.toLowerCase() : '';
-					for (var index = zk.SMON.length; --index >= 0;) {
-						var smon = zk.SMON[index].toLowerCase();
-						if (mon.startsWith(smon) || (mToken && mToken.startsWith(smon))) {
-							token = zk.SMON[index];
-							m = index;
-							break;
+					var mon = token ? token.toLowerCase() : '';
+					if (token)
+						for (var index = zk.SMON.length; --index >= 0;) {
+							var smon = zk.SMON[index].toLowerCase();
+							if (mon.startsWith(smon)) {
+								token = zk.SMON[index];
+								m = index;
+								break;
+							}
 						}
-					}
 					if (len == 3 && token) {
 						if (nosep)
-							token = this._parseToken(mToken, ts, --i, token.length);//token.length: the length of French month is 4
+							token = this._parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						break; // nothing to do.
 					}else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
@@ -147,6 +148,10 @@ zk.fmt.Date = {
 							}
 						}
 					}
+					break;
+				case 'E':
+					if (nosep)
+						this._parseToken(token, ts, --i, len);
 					break;
 				case 'd':
 					if (nosep)
@@ -207,7 +212,7 @@ zk.fmt.Date = {
 				case 'a':
 					if (!hasHour1)
 						break;
-					isAM = txt.substring(j).startsWith(zk.APM[0]);
+					isAM = token.startsWith(zk.APM[0]);
 					break
 				//default: ignored
 				}
