@@ -101,7 +101,8 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * @since 5.0.0
 	 */
 	public void close() {
-		selectNextTab();
+		if (_selected)
+			selectNextTab();
 		final Tabpanel panel = getLinkedPanel();
 		if (panel != null)
 			panel.detach();
