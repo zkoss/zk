@@ -32,6 +32,7 @@ ZK 5.0.5
   3058028: Combobox need two keypress of <TAB> in IE
   3059019: Datebox bug with format "Day in week" (EEEE)
   3059251: Datebox- value is not updated on server if  time changed
+  3081315: Fire onClose event shall not select next tab automatically
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
