@@ -4197,7 +4197,12 @@ _doFooSelect: function (evt) {
 		return null;
 	},
 
-	/** Called to mimic the mouse down event fired by the browser. It is used for implement a widget. In most cases, you don't need to invoke this method. However, it is useful if the widget you are implemented will 'eat' the mouse-down event so ZK Client Engine won't be able to intercept it at the document level.
+	/** Called to mimic the mouse down event fired by the browser.
+	 * It is used for implement a widget. In most cases, you don't need to
+	 * invoke this method.
+	 * <p>However, it is useful if the widget you are implemented will 'eat'
+	 * the mouse-down event so ZK Client Engine won't be able to intercept it
+	 * at the document level.
 	 * @param zk.Widget wgt the widget that receives the mouse-down event
 	 * @param boolean noFocusChange whether zk.currentFocus shall be changed to wgt. 
 	 */

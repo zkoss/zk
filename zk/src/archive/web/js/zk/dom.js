@@ -1519,9 +1519,13 @@ zk.copy(jq, {
 	},
 
 	/** Tests if one element (p) is an ancestor of another (c). 
+	 * <p>Notice that, if you want to test widgets, please use
+	 * {@link zUtl#isAncestor} instead.
+	 *
 	 * @param DOMElement p the parent element to test
 	 * @param DOMElement c the child element to test
 	 * @return boolean if p is an ancesotor of c.
+	 * @see zUtl#isAncestor
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
