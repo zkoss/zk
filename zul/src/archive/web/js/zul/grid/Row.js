@@ -254,17 +254,36 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			this.detail = null;
 	},
 	doMouseOver_: function(evt) {
-		if (zk.gecko && this._draggable
-		&& !jq.nodeName(evt.domTarget, "input", "textarea")) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
-		}
+		var n, 
+			zcls = this.getZclass() + '-over';
+		if ((n = this.$n()) && zk.gecko && this._draggable
+		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
+			n.firstChild.style.MozUserSelect = "none";
+		
+		// ADDED: remove onMouseOver CSS class
+		if (n && !jq(n).hasClass(zcls))
+			jq(n).addClass(zcls);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		if (zk.gecko && this._draggable) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
+		var n,
+			zcls = this.getZclass() + '-over'; // ADDED: add CSS class when onMouseOver on Row
+		if ((n = this.$n()) && zk.gecko && this._draggable)
+			n.firstChild.style.MozUserSelect = "none";
+		
+		// ADDED
+		/**
+		 * Calculate widget on page's position, removes CSS class
+		 * when the event's position is out of the range of the widget.
+		 */
+		if (n && jq(n).hasClass(zcls)) {
+			var x = evt.pageX,
+				y = evt.pageY,
+				of = zk(n).revisedOffset(),
+				p = 2;	/* Add extra padding for fault-tolerant */
+			if (x < (of[0] + p) || x > (of[0] + n.clientWidth - p) ||
+				y < (of[1] + p) || y > (of[1] + n.clientHeight - p)	)
+				jq(n).removeClass(zcls);
 		}
 		this.$supers('doMouseOut_', arguments);
 	},

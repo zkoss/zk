@@ -186,17 +186,14 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
-		if (this.parent._menupopup && this.parent._menupopup != 'none') {
-			var btn = this.$n('btn'),
-				n = this.$n();
-			jq(n).addClass(this.getZclass() + "-over");
-			if (btn) btn.style.height = n.offsetHeight - 1 + "px";
+		if (this.isSortable_() || this.parent._menupopup && this.parent._menupopup != 'none') {
+			jq(this.$n()).addClass(this.getZclass() + "-over");
+			zul.grid.Renderer.updateColumnMenuButton(this);
 		}
 	},
 	_doMouseOut: function (evt) {
-		if (this.parent._menupopup && this.parent._menupopup != 'none') {
-			var btn = this.$n('btn'),
-				n = this.$n(), $n = jq(n),
+		if (this.isSortable_() || this.parent._menupopup && this.parent._menupopup != 'none') {
+			var n = this.$n(), $n = jq(n),
 				zcls = this.getZclass();
 			if (!$n.hasClass(zcls + "-visi") &&
 				(!zk.ie || !jq.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))

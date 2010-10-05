@@ -12,6 +12,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** @class zul.grid.Renderer
+ * The renderer used to render a grid.
+ * It is designed to be overriden
+ */
+zul.grid.Renderer = {
+	/** Update the size of the column menu button when mouse over
+	 * 
+	 * @param zul.grid.Column col the column
+	 */
+	updateColumnMenuButton: function (col) {
+		var btn;
+		if (btn = col.$n('btn')) btn.style.height = col.$n().offsetHeight - 1 + "px";
+	}
+};
 /** The grid related widgets, such as grid and row.
  */
 //zk.$package('zul.grid');
