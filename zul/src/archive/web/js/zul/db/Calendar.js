@@ -90,9 +90,16 @@ zul.db.Renderer = {
 		if (cal._end && (result = (cal._end - d) / 86400000 < 0))
 			return result;
 		return result;
-	}
+	},
+	/** Add right edge class in the input node
+	 * 
+	 * @param zul.db.Datebox db the datebox
+	 */
+	addRightEdgeClass: function (db) {
+	  	if (db._readonly && !db.inRoundedMold() && !db._buttonVisible)
+			jq(db.getInputNode()).addClass(db.getZclass() + '-right-edge');
+	 }
 };
-
 var Calendar =
 /**
  * A calendar.

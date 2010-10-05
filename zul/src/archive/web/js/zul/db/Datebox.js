@@ -731,11 +731,4 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		evt.stop();
 	}
 });
-
-zul.db.ThemeHandler = {
-	 addRightEdgeClass: function (wgt) {
-	  	if (wgt._readonly && !wgt.inRoundedMold() && !wgt._buttonVisible)
-			jq(wgt.getInputNode()).addClass(wgt.getZclass() + '-right-edge');
-	 }
-};
 })();
