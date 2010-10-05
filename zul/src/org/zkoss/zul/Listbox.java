@@ -255,6 +255,7 @@ public class Listbox extends XulElement implements Paginated,
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; // since 5.0.0 top padding
+	private String _nonselTags; //since 5.0.5 for non-selectable tags
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -773,6 +774,30 @@ public class Listbox extends XulElement implements Paginated,
 			_name = name;
 			smartUpdate("name", name);
 		}
+	}
+
+	/** Sets a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Default: null (it means button, input, textarea and a). If you want
+	 * to select no matter which tag is clicked, please specify an empty string.
+	 * @param tags a list of HTML tag names that will <i>not</i> cause the list item
+	 * being selected if clicked. Specify null to use the default and "" to
+	 * indicate none.
+	 * @since 5.0.5
+	 */
+	public void setNonselectableTags(String tags) {
+		if (!Objects.equals(_nonselTags, tags)) {
+			_nonselTags = tags;
+			smartUpdate("nonselectableTags", tags);
+		}
+	}
+	/** Returns a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Refer to {@link #setNonselectableTags} for details.
+	 * @since 5.0.5
+	 */
+	public String getNonselectableTags() {
+		return _nonselTags;
 	}
 
 	/**
@@ -3185,6 +3210,8 @@ public class Listbox extends XulElement implements Paginated,
 			}
 			if (isAutopaging())
 				renderer.render("autopaging", true);
+			if (_nonselTags != null)
+				renderer.render("nonselectableTags", _nonselTags);
 		}
 	}
 
