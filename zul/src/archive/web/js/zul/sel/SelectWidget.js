@@ -677,17 +677,31 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
-		if (bSel && typeof (bSel = this.nonselectableTags) == "string") {
-			if (!bSel)
-				return; //not ignore
-
-			var tn = jq.nodeName(evt.domTarget),
-				bInpBtn = tn == "input" && evt.domTarget.type.toLowerCase() == "button";
-			if (bSel.indexOf(tn) < 0) {
-				return bSel.indexOf("button") >= 0
-					&& (_isButton(evt) || bInpBtn);
+		if (bSel) {
+			try {
+				var el = evt.domTarget;
+				if (el) //Not use jq.isAncestor since it calls vparentNode
+					for (;;) {
+						if (el.id == this.uuid) //listbox
+							break;
+						if (!(el = el.parentNode))
+							return true; //vparent
+					}
+			} catch (e) {
 			}
-			return !bInpBtn || bSel.indexOf("button") >= 0;
+
+			if (typeof (bSel = this.nonselectableTags) == "string") {
+				if (!bSel)
+					return; //not ignore
+
+				var tn = jq.nodeName(evt.domTarget),
+					bInpBtn = tn == "input" && evt.domTarget.type.toLowerCase() == "button";
+				if (bSel.indexOf(tn) < 0) {
+					return bSel.indexOf("button") >= 0
+						&& (_isButton(evt) || bInpBtn);
+				}
+				return !bInpBtn || bSel.indexOf("button") >= 0;
+			}
 		}
 
 		return _focusable(evt);
