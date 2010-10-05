@@ -143,7 +143,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				var inp = this.getInputNode(),
 					val = sel.getLabel();
 				this.valueEnter_ = inp.value = val;
-				if (!opts.noSelectRange)
+				if (!opts.noSelectRange) //Bug 3058028
 					zk(inp).setSelectionRange(0, val.length);
 			}
 
