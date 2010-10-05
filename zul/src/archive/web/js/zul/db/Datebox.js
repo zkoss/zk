@@ -571,7 +571,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (btn)
 			jq(btn).removeClass(zcls + "-btn-over");
 
-		if (!silent)
+		if (silent)
+			db.updateChange_();
+		else
 			jq(db.getInputNode()).focus();
 	},
 	isOpen: function () {
