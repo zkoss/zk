@@ -1381,8 +1381,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		assert D.OFF || inPagingMold() : "paging mold only";
-		assert D.OFF || (_paging == null && _pgi == null);
+//		assert D.OFF || inPagingMold() : "paging mold only";
+//		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
@@ -3212,8 +3212,20 @@ public class Listbox extends XulElement implements Paginated,
 				renderer.render("autopaging", true);
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
+			if (isCheckmarkDeselectOther())
+				renderer.render("_cdo", true);
 		}
 	}
+	/** Returns whether to toggle the selection if clicking on a list item
+	 * with a checkmark.
+	 */
+	private static boolean isCheckmarkDeselectOther() {
+		if (_ckDeselectOther == null) //ok to race
+			_ckDeselectOther = Boolean.valueOf(
+				"true".equals(Library.getProperty("org.zkoss.zul.listbox.checkmarkDeselectOthers")));
+		return _ckDeselectOther.booleanValue();
+	}
+	private static Boolean _ckDeselectOther;
 
 	/**
 	 * Processes an AU request.

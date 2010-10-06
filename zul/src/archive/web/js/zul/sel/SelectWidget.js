@@ -54,8 +54,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _isButton(evt) {
-		return zk.isLoaded('zul.wgt')
-			&& evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton);
+		return evt.target.$button //for extension, it makes a widget as a button
+			&& (zk.isLoaded('zul.wgt')
+			&& evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
 	}
 	function _focusable(evt) {
 		return (jq.nodeName(evt.domTarget, "input", "textarea", "button", "select", "option", "a")
@@ -717,16 +718,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (this.shallIgnoreSelect_(evt))
 			return;
 
-		var	checkmark = evt.domTarget == row.$n('cm');
-		if (checkmark) {
+		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
+		if (this._checkmark
+		&& (!this._cdo || evt.domTarget == row.$n('cm'))) {
 			// Bug 2997034
 			this._syncFocus(row);
 			
-			if (this.isMultiple()) {
-				this._toggleSelect(row, !row.isSelected(), evt, true);
-			} else {
-				this._select(row, evt, true);
-			}
+			if (this._multiple)
+				this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
+			else
+				this._select(row, evt, skipFocus);
 		} else {
 		//Bug 1650540: double click as select again
 		//Note: we don't handle if clicking on checkmark, since FF always
@@ -738,18 +739,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					return; //ignore double-click
 			}
 			this._syncFocus(row);
-			if (this.isMultiple()) {
+			if (this._multiple) {
 				if (evt.data.shiftKey)
-					this._selectUpto(row, evt, true);
+					this._selectUpto(row, evt, skipFocus);
 				else if (evt.data.ctrlKey)
-					this._toggleSelect(row, !row.isSelected(), evt, true);
+					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 				else // Bug: 1973470
-					this._select(row, evt, true);
+					this._select(row, evt, skipFocus);
 			} else
-				this._select(row, evt, true);
+				this._select(row, evt, skipFocus);
 
 			//since row might was selected, we always enfoce focus here
-			if (!_focusable(evt))
+			if (!skipFocus)
 				row.focus();
 			//if (evt) evt.stop();
 			//No much reason to eat the event.
@@ -806,7 +807,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var row = this._focusItem || this.getSelectedItem(),
 			data = evt.data,
 			shift = data.shiftKey, ctrl = data.ctrlKey;
-		if (shift && !this.isMultiple())
+		if (shift && !this._multiple)
 			shift = false; //OK to
 
 		var endless = false, step, lastrow;
@@ -827,7 +828,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			step = data.keyCode == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
-			if (this.isMultiple()) this._toggleSelect(row, !row.isSelected(), evt);
+			if (this._multiple) this._toggleSelect(row, !row.isSelected(), evt);
 			else this._select(row, evt);
 			break;
 		case 36: //Home
@@ -963,7 +964,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	_selectOne: function (row, skipFocus) {
 		var selItem = this.getSelectedItem();
-		if (this.isMultiple()) {
+		if (this._multiple) {
 			if (row && !skipFocus) this._unsetFocusExcept(row);
 			var changed = this._unsetSelectAllExcept(row);
 			if (!changed && row && selItem == row) {
@@ -991,7 +992,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Toggle the selection and notifies server. */
 	_toggleSelect: function (row, toSel, evt, skipFocus) {
-		if (!this.isMultiple()) {
+		if (!this._multiple) {
 			var old = this.getSelectedItem();
 			if (row != old && toSel)
 				this._changeSelect(row, false);

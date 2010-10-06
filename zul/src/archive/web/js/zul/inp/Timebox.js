@@ -408,13 +408,14 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode();
 		if(inp.disabled || zk.dragging) return;
 
+		if (zk.opera) inp.focus();
+			//unfortunately, in opera, it won't gain focus if we set in _btnDown
+
 		this._onChanging();
 		this._stopAutoIncProc();
 		
 		if ((zk.ie || zk.safari) && this._lastPos)
 			zk(inp).setSelectionRange(this._lastPos, this._lastPos);
-
-		if (zk.opera) inp.focus(); //unfortunately, opera won't gain focus
 	},
 	_btnOut: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;

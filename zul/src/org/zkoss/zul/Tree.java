@@ -31,6 +31,7 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -289,8 +290,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		assert D.OFF || inPagingMold(): "paging mold only";
-		assert D.OFF || (_paging == null && _pgi == null);
+//		assert D.OFF || inPagingMold(): "paging mold only";
+//		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
@@ -1906,7 +1907,20 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			renderer.render("autopaging", true);
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
+		if (isCheckmarkDeselectOther())
+			renderer.render("_cdo", true);
 	}
+	/** Returns whether to toggle the selection if clicking on a list item
+	 * with a checkmark.
+	 */
+	private static boolean isCheckmarkDeselectOther() {
+		if (_ckDeselectOther == null) //ok to race
+			_ckDeselectOther = Boolean.valueOf(
+				"true".equals(Library.getProperty("org.zkoss.zul.tree.checkmarkDeselectOthers")));
+		return _ckDeselectOther.booleanValue();
+	}
+	private static Boolean _ckDeselectOther;
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
