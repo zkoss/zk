@@ -817,15 +817,21 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
+		var maxBtn = this.$n('max'),
+			minBtn = this.$n('min'),
+			zcls = this.getZclass();
+		
 		switch (evt.domTarget) {
 		case this.$n('close'):
 			this.fire('onClose');
 			break;
-		case this.$n('max'):
+		case maxBtn:
 			this.setMaximized(!this.isMaximized());
+			jq(maxBtn).removeClass(zcls + '-max-over');
 			break;
-		case this.$n('min'):
+		case minBtn:
 			this.setMinimized(!this.isMinimized());
+			jq(minBtn).removeClass(zcls + '-min-over');
 			break;
 		case this.$n('exp'):
 			var body = this.$n('body'),
@@ -843,41 +849,43 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	doMouseOver_: function (evt) {
+		var zcls = this.getZclass();
+		
 		switch (evt.domTarget) {
 		case this.$n('close'):
-			jq(this.$n('close')).addClass(this.getZclass() + '-close-over');
+			jq(this.$n('close')).addClass(zcls + '-close-over');
 			break;
 		case this.$n('max'):
-			var zcls = this.getZclass(),
-				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
+			var added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
 			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).addClass(this.getZclass() + '-min-over');
+			jq(this.$n('min')).addClass(zcls + '-min-over');
 			break;
 		case this.$n('exp'):
-			jq(this.$n('exp')).addClass(this.getZclass() + '-exp-over');
+			jq(this.$n('exp')).addClass(zcls + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
+		var zcls = this.getZclass();
+		
 		switch (evt.domTarget) {
 		case this.$n('close'):
-			jq(this.$n('close')).removeClass(this.getZclass() + '-close-over');
+			jq(this.$n('close')).removeClass(zcls + '-close-over');
 			break;
 		case this.$n('max'):
-			var zcls = this.getZclass(),
-				$n = jq(this.$n('max'));
+			var $n = jq(this.$n('max'));
 			if (this.isMaximized())
 				$n.removeClass(zcls + '-maxd-over');
 			$n.removeClass(zcls + '-max-over');
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).removeClass(this.getZclass() + '-min-over');
+			jq(this.$n('min')).removeClass(zcls + '-min-over');
 			break;
 		case this.$n('exp'):
-			jq(this.$n('exp')).removeClass(this.getZclass() + '-exp-over');
+			jq(this.$n('exp')).removeClass(zcls + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);

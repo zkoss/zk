@@ -43,6 +43,7 @@ ZK 5.0.5
   3081372: Load on demand not load
   3066507: Panel in portallayout maxmize button style not change back
   3071613: problem with decimalbox' format and rounding mode
+  3073199: Grid sorting with "auto" breaks with hidden rows
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
