@@ -50,7 +50,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		 * @param int pageIncrement
 		 */
 		pageIncrement: _zkf = function () {
-			this.rerender();
+			this.rerender(0);
 		},
 		/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
 		 * @return boolean

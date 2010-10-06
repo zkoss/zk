@@ -44,6 +44,7 @@ ZK 5.0.5
   3066507: Panel in portallayout maxmize button style not change back
   3071613: problem with decimalbox' format and rounding mode
   3073199: Grid sorting with "auto" breaks with hidden rows
+  3082093: Paging settle error when modify the grid content
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

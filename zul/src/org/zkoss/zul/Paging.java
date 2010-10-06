@@ -98,8 +98,11 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		if (v == 0) v = 1;
 		if (v != _npg) {
 			_npg = v;
-			if (_actpg >= _npg)
+			smartUpdate("pageCount", _npg);
+			if (_actpg >= _npg) {
 				_actpg = _npg - 1;
+				smartUpdate("activePage", _actpg);
+			}
 		}
 	}
 
