@@ -97,12 +97,12 @@ zk.fmt.Number = {
 					valStr = val >= 0 ? down(valStr, ri) : up(valStr, ri);
 					break;
 				case 4: //HALF_UP
-					var h = Math.pow(10, valFixed - fixed) * 5,
+					var h = Math.pow(10, valFixed - fixed - 1) * 5,
 						r = valStr.substring(indVal + fixed + 1) | 0;
 					valStr = r < h ? down(valStr, ri) : up(valStr, ri);
 					break;
 				case 5: //HALF_DOWN
-					var h = Math.pow(10, valFixed - fixed) * 5,
+					var h = Math.pow(10, valFixed - fixed - 1) * 5,
 						r = valStr.substring(indVal + fixed + 1) | 0;
 					valStr = r <= h ? down(valStr, ri) : up(valStr, ri);
 					break;

@@ -520,14 +520,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
-					this._lastRawValVld = value; //raw (don't validate again if no changed and no error)
+					this._lastRawValVld = value;
 					return {value: val, server: true};
 				}
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
 				} else
-					this._lastRawValVld = value; //raw
+					this._lastRawValVld = value;
 			}
 			return {value: val};
 		} finally {
@@ -567,7 +567,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!vi.error || vi.server) {
 			var upd;
 			if (!vi.error) {
-				inp.value = value = this.coerceToString_(vi.value);
+				// _lastRawValVld must be updated after validate. Bug#3071613
+				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
 				//reason to use this._defValue rather than this._value is
 				//to save the trouble of coerceToString issue
 				upd = wasErr || value != this._defValue;

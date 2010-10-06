@@ -42,6 +42,7 @@ ZK 5.0.5
   3071275: onChanging different in IE and Firefox with Bandbox
   3081372: Load on demand not load
   3066507: Panel in portallayout maxmize button style not change back
+  3071613: problem with decimalbox' format and rounding mode
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
