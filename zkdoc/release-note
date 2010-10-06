@@ -41,6 +41,7 @@ ZK 5.0.5
   3067998: save-when crash with WrongValuesException
   3071275: onChanging different in IE and Firefox with Bandbox
   3081372: Load on demand not load
+  3066507: Panel in portallayout maxmize button style not change back
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
