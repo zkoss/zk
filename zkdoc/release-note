@@ -39,6 +39,7 @@ ZK 5.0.5
   3059280: Dateboxin Listbox- Unable to change month in calendar popup
   3065040: the return value is alway False in ListModelList.remove()
   3067998: save-when crash with WrongValuesException
+  3071275: onChanging different in IE and Firefox with Bandbox
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

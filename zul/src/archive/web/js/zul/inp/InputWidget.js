@@ -36,8 +36,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (onBlur) {
 			if (zul.inp.InputWidget.onChangingForced && wgt.isListen("onChanging"))
 				_onChanging.call(wgt, -1); //force
-			wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
+			_clearOnChanging(wgt);
 		}
+	}
+	function _clearOnChanging(wgt) {
+		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
 	}
 	function _onChanging(timeout) {
 		//Note: "this" is available here
@@ -246,13 +249,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
  			value = vi.value;
  		}
 
+		_clearOnChanging(this);
+
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
 		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
 			this._value = value;
 			var inp = this.getInputNode();
 			if (inp) {
-				inp.value = value = this.coerceToString_(value);
+				this._lastChg = inp.value = value = this.coerceToString_(value);
 				if (fromServer)
 					this._defValue = value; //not clear error if by client app
 			}
@@ -334,10 +339,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 
-		if (evt.domTarget.tagName) { //Bug 2111900
-			var inp = this.getInputNode();
-			this._lastChg = inp.value;
+		var inp = this.getInputNode();
+		if (inp) this._lastChg = inp.value;
 
+		if (evt.domTarget.tagName) { //Bug 2111900
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
