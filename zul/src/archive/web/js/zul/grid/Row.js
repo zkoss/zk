@@ -256,8 +256,9 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	doMouseOver_: function(evt) {
 		var n, 
 			zcls = this.getZclass() + '-over';
-		if ((n = this.$n()) && zk.gecko && this._draggable
-		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
+		if (zk.gecko && this._draggable
+		&& !jq.nodeName(evt.domTarget, "input", "textarea")
+		&& (n = this.$n()))
 			n.firstChild.style.MozUserSelect = "none";
 		
 		// ADDED: remove onMouseOver CSS class
@@ -268,7 +269,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	doMouseOut_: function(evt) {
 		var n,
 			zcls = this.getZclass() + '-over'; // ADDED: add CSS class when onMouseOver on Row
-		if ((n = this.$n()) && zk.gecko && this._draggable)
+		if (zk.gecko && this._draggable && (n = this.$n()))
 			n.firstChild.style.MozUserSelect = "none";
 		
 		// ADDED
