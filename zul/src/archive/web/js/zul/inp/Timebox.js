@@ -1,4 +1,4 @@
-/* inp.zul
+/* Timebox.zul
 
 	Purpose:
 		testing textbox.intbox.spinner,timebox,doublebox,longbox and decimalbox on zk5
