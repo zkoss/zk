@@ -4,7 +4,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zkdemo</artifactId>
 	<properties>
-		<zk.version>5.0.5.FL.20101004</zk.version>
+		<zk.version>5.0.5.FL.20101006</zk.version>
 		<zkel.version>1.1.0</zkel.version>
 		<commons-lang.version>2.4</commons-lang.version>
 		<bsh.version>2.0b4</bsh.version>

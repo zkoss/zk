@@ -7,7 +7,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<zk.version>5.0.5.FL.20101004</zk.version>
+		<zk.version>5.0.5.FL.20101006</zk.version>
 		<org.springframework.version>2.0.6</org.springframework.version>
 	</properties>
 	<version>${zk.version}</version>
