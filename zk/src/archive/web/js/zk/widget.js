@@ -4121,7 +4121,8 @@ _doFooSelect: function (evt) {
 	 * and the target widget will be returned.
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>exact - only check its uuid.(since 5.0.2)</li>
+	 * <li>exact - id must exactly match uuid (i.e., uuid-xx ignored).
+	 * It also implies strict (since 5.0.2)</li>
 	 * <li>strict - whether not to look up the parent node.(since 5.0.2)
 	 * If omitted, false is assumed (and it will look up parent).</li>
 	 * <li>child - whether to ensure the given element is a child element
@@ -4159,7 +4160,8 @@ _doFooSelect: function (evt) {
 				|| ((e1 = n.target) && (e2 = e1.z$proxy) ? e2: e1) || n; //check DOM event first
 		}
 
-		if (opts && opts.exact)
+		opts = opts || {};
+		if (opts.exact)
 			return _binds[n.id];
 
 		for (var orgId = false; n; n = zk(n).vparentNode(true)) {
@@ -4168,7 +4170,7 @@ _doFooSelect: function (evt) {
 				if (id && typeof id == "string") {
 					var id2 = id.indexOf('-');
 					id2 = id2 >= 0 ? id.substring(0, id2): id;
-					if (orgId && id2 != orgId)
+					if (orgId && id2 != orgId) //not bound yet
 						break; //not found
 
 					wgt = _binds[id]; //try first (since ZHTML might use -)
@@ -4178,18 +4180,20 @@ _doFooSelect: function (evt) {
 					if (id != id2) {
 						id = id2;
 						wgt = _binds[id];
-						if (wgt)
-							if (opts && opts.child) {
-								var n2 = wgt.$n();
-								if (n2 && jq.isAncestor(n2, n))
-									return wgt;
-							} else
+						if (wgt) {
+							if (!opts.child)
 								return wgt;
+
+							var n2 = wgt.$n();
+							if (n2 && jq.isAncestor(n2, n))
+								return wgt;
+							orgId = ''; //prevent orgId to be checked since it is not a unbound widget
+						}
 					}
 				}
 			} catch (e) { //ignore
 			}
-			if (opts && opts.strict)
+			if (opts.strict)
 				break;
 			if (orgId === false)
 				orgId = id;
