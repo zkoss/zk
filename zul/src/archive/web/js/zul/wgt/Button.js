@@ -106,8 +106,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 */
 		disabled: function (v) {
 			if (this.desktop) {
-				if (this._upload)
-					this._cleanUpld();
 				if (this._mold == "os") {
 					var n = this.$n(),
 						zclass = this.getZclass();
@@ -282,7 +280,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled && this._upload) this._initUpld();
 	},
 	unbind_: function () {
-		if (!this._disabled && this._upload) this._cleanUpld();
+		this._cleanUpld();
 
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.$n(): this.$n('btn');

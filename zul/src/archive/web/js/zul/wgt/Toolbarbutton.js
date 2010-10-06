@@ -124,9 +124,10 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 */
 		upload: function (v) {
 			var n = this.$n();
-			if (n && !this._disabled) {
+			if (n) {
 				this._cleanUpld();
-				if (v && v != 'false') this._initUpld();
+				if (v && v != 'false' && !this._disabled)
+					this._initUpld();
 			}
 		}
 	},
@@ -149,7 +150,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled && this._upload) this._initUpld();
 	},
 	unbind_: function(){
-		if (!this._disabled && this._upload) this._cleanUpld();
+		this._cleanUpld();
 		var n = this.$n();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
@@ -194,7 +195,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return attr;
 	},	
 	doClick_: function(evt){
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
 			this.fireX(evt);
 
 			if (!evt.stopped) {
@@ -206,13 +207,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	doMouseOver_: function (evt) {
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
 			jq(this).addClass(this.getZclass() + '-over');
 			this.$supers('doMouseOver_', arguments);
 		}
 	},
 	doMouseOut_: function (evt) {
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
 			jq(this).removeClass(this.getZclass() + '-over');
 			this.$supers('doMouseOut_', arguments);
 		}
