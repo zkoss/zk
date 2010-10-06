@@ -465,8 +465,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		
-		zul.db.Renderer.addRightEdgeClass(this);
-			
 		this.syncWidth();
 		
 		zWatch.listen({onSize: this, onShow: this});

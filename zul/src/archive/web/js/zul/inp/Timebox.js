@@ -360,19 +360,29 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_dodropbtnup: function (evt) {
-		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
+		var zcls = this.getZclass();
+		
+		jq(this._currentbtn).removeClass(zcls + "-btn-clk");
+		if (!this.inRoundedMold()) {
+			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
+			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
+		}
 		this.domUnlisten_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.getInputNode(),
-			btn = this.$n("btn");
-
-		if(!inp || inp.disabled) return;
+		var isRounded = this.inRoundedMold();
+		if (isRounded && !this._buttonVisible) return;
+		
+		var inp;
+		if(!(inp = this.getInputNode()) || inp.disabled) return;
+		
+		var btn = this.$n("btn"),
+			zcls = this.getZclass();
+			
 		if (this._currentbtn)
 			this._dodropbtnup(evt);
-		jq(btn).addClass(this.getZclass() + "-btn-clk");
+		jq(btn).addClass(zcls + "-btn-clk");
 		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
 
@@ -382,13 +392,21 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
-		var ofs = zk(btn).revisedOffset();
-		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
+		var ofs = zk(btn).revisedOffset(),
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
+		if (isOverUpBtn) { //up
 			this._doUp();
 			this._startAutoIncProc(true);
 		} else {
 			this._doDown();
 			this._startAutoIncProc(false);
+		}
+		
+		var sfx = isRounded? "" : 
+					isOverUpBtn? "-up":"-down";
+		if ((btn = this.$n("btn" + sfx)) && !isRounded) {
+			jq(btn).addClass(zcls + "-btn" + sfx + "-clk");
+			this._currentbtn = btn;
 		}
 		
 		// cache it for IE
@@ -733,9 +751,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
-			jq(inp).addClass(this.getZclass() + '-right-edge');
-		
 		if (btn) {
 			this.domListen_(btn, "onMouseDown", "_btnDown")
 				.domListen_(btn, "onMouseUp", "_btnUp")

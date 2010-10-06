@@ -60,7 +60,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}: function (code) {
 			return code >= 32;
 		}
-
+/** @class zul.inp.Renderer
+ * The renderer used to render a inputWidget.
+ * It is designed to be overriden
+ */
+zul.inp.Renderer = {
+	/** render the spinner's(timebox) button
+	* @param Array out an array of HTML fragments.
+	* @param zul.inp.ComboWidget wgt the combowidget
+	*/
+	renderSpinnerButton: function (out, wgt) {
+	}
+};
 var InputWidget =
 /**
  * A skeletal implementation for a input widget.
@@ -134,6 +145,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					fnm = readonly ? 'addClass': 'removeClass';
 				
 				inp.readOnly = readonly;
+				jq(this.$n())[fnm](zcls + '-real-readonly'); //ADDED
 				jq(inp)[fnm](zcls + '-readonly');
 				
 				if (!this.inRoundedMold()) return;
@@ -608,6 +620,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		
 		if ((!no || !no.input) && this._inplace)
 			sc += ' ' + this.getInplaceCSS();
+			
+		// ADDED
+		if ((!no || !no.zclass) && this._readonly)
+			sc += ' ' + zcls + '-real-readonly';
+			
 		return sc;
 	},
 	bind_: function () {
