@@ -186,13 +186,13 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.grid.Column, 'unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
-		if (this.isSortable_() || this.parent._menupopup && this.parent._menupopup != 'none') {
+		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
 			jq(this.$n()).addClass(this.getZclass() + "-over");
 			zul.grid.Renderer.updateColumnMenuButton(this);
 		}
 	},
 	_doMouseOut: function (evt) {
-		if (this.isSortable_() || this.parent._menupopup && this.parent._menupopup != 'none') {
+		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
 			var n = this.$n(), $n = jq(n),
 				zcls = this.getZclass();
 			if (!$n.hasClass(zcls + "-visi") &&
