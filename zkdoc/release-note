@@ -8,7 +8,8 @@ ZK 5.0.5
   3061676: Autodrop menubar shall be closed automatically when move out
   3076418: XmlMacroComponent supports autowire
   3077084: Able to specify the last word identify a component namespace
-
+  3081910: AnnotateDataBinderInit add "loadOnSave" config attribute
+  
 * Bugs
   3057902: zk bug for window showbusy
   3061764: Opera only. Cannot sizing a column with width
