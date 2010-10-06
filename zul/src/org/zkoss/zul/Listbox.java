@@ -206,6 +206,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	private static final Log log = Log.lookup(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
+	private static final int INIT_LIMIT = 100;
 
 	private transient DataLoader _dataLoader;
 	private transient List _items, _groupsInfo, _groups;
@@ -2886,7 +2887,7 @@ public class Listbox extends XulElement implements Paginated,
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, 40); // change offset back to 0
+					getDataLoader().syncModel(0, INIT_LIMIT); // change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); // paging mold -> non-paging mold
@@ -3004,7 +3005,7 @@ public class Listbox extends XulElement implements Paginated,
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, 40);
+			_dataLoader.init(this, 0, INIT_LIMIT);
 		}
 		return _dataLoader;
 	}
