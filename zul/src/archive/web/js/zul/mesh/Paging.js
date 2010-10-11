@@ -133,7 +133,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	setTooltiptext: function () {
 		this.$supers('setTooltiptext', arguments);
-		_rerenderIfBothPaging(this)'
+		_rerenderIfBothPaging(this);
 	},
 	replaceHTML: function () {
 		if (!_rerenderIfBothPaging(this))
