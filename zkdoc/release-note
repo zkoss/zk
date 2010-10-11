@@ -45,6 +45,7 @@ ZK 5.0.5
   3071613: problem with decimalbox' format and rounding mode
   3073199: Grid sorting with "auto" breaks with hidden rows
   3082093: Paging settle error when modify the grid content
+  3083980: Components.wireVariables() causes an exception if mode defined
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
@@ -55,6 +56,10 @@ ZK 5.0.5
     specify true to library properties called
     org.zkoss.zul.listbox.checkmarkDeselectOthers
     and org.zkoss.zul.tree.checkmarkDeselectOthers
+  + Autowire ignores the fields and methods declared in any class belong to
+    org.zkoss.zul and org.zkoss.zhtml, because it is error-proning.
+    However, if you want to wire them as 5.0.4 did, you could specify the library
+    property called org.zkoss.zk.ui.wire.zul.enabled with true.
 
 	--------
 ZK 5.0.4
