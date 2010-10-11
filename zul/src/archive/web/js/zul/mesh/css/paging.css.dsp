@@ -26,7 +26,21 @@
 .z-paging-os span {
 	font-size: ${fontSizeS}; color: #555; font-weight: normal;
 }
-
+div.z-paging-os-cnt-l,
+div.z-paging-os-cnt-r,
+div.z-paging-os-cnt-m,
+div.z-paging-os-cnt-seld-l,
+div.z-paging-os-cnt-seld-r,
+div.z-paging-os-cnt-seld-m,
+div.z-paging-os-cnt-l-over {
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+}
+.z-paging-os a.z-paging-os-cnt {
+	margin-left: 3px;
+	margin-right: 3px;
+}
 <%-- default mold --%>
 
 <%-- font properties --%>

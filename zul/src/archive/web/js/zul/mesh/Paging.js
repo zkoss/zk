@@ -19,6 +19,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return true;
 		}
 	}
+	
+	/**
+	 * Returns whether the string is integer or not
+	 * @return boolean 
+	 */
+	function _isUnsignedInteger(s) {
+		  return (s.toString().search(/^[0-9]+$/) == 0);
+	}
 
 /**
  * Paging of long content.
@@ -229,9 +237,19 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		return out.join('');
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {
-		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
-		out.push('<a class="', zclass, '" href="javascript:;" onclick="zul.mesh.Paging.go(this,',
-				val, ')">', label, '</a>&nbsp;');
+		var zcls = zclass + "-cnt" + (seld ? " " + zclass + "-seld" : ""),
+			isInt = _isUnsignedInteger(label);
+		zclass += '-cnt' + (seld ? '-seld' : '');
+		if (isInt)
+			out.push('<div class="', zclass, '-l"><div class="', zclass, '-r"><div class="', zclass, '-m">');
+		out.push('<a class="', zcls, '" href="javascript:;" onclick="zul.mesh.Paging.go(this,',
+				val, ')">', label, '</a>');
+		if (isInt)
+			out.push('</div></div></div>');
+	},
+	_doMouseEvt: function (evt) {
+		var zcls = this.getZclass() + '-cnt-l';
+		jq(evt.domTarget).parents('.' + zcls)[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](zcls + '-over');
 	},
 	getZclass: function () {
 		var added = "os" == this.getMold() ? "-os" : "";
@@ -243,7 +261,20 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Paging, 'bind_', arguments);
-		if (this.getMold() == "os") return;
+		
+		/**
+		 * Added
+		 */
+		if (this.getMold() == 'os') {
+			var childs = jq(this.$n()).find('div a'),
+				i = childs.length;
+				
+			while (i-- > 0) {
+				this.domListen_(childs[i], 'onMouseOver', '_doMouseEvt')
+					.domListen_(childs[i], 'onMouseOut', '_doMouseEvt');
+			}
+			return;
+		}
 		var uuid = this.uuid,
 			inputs = jq.$$(uuid, 'real'),
 			zcls = this.getZclass(),
@@ -289,6 +320,14 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						.unbind("mousedown", Paging._domMouseDown)
 						.unbind("click", Paging['_dom' + postfix[k] + 'Click']);
 				}
+			}
+		} else {
+			var childs = jq(this.$n()).find('div a'),
+				i = childs.length;
+				
+			while (i-- > 0) {
+				this.domUnlisten_(childs[i], 'onMouseOver', '_doMouseEvt')
+					.domUnlisten_(childs[i], 'onMouseOut', '_doMouseEvt');
 			}
 		}
 		this.$supers(zul.mesh.Paging, 'unbind_', arguments);
