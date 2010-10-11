@@ -32,7 +32,7 @@ function (out) {
 					'</span></span></div></div></div></div>');
 		} else {
 			if (tbx.getPanelSpacing() && this.getIndex())
-				out.push('<div style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
+				out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
 
 			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
 					'<div align="left" class="', zcls, '-header" >',

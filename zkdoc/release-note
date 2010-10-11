@@ -46,6 +46,7 @@ ZK 5.0.5
   3073199: Grid sorting with "auto" breaks with hidden rows
   3082093: Paging settle error when modify the grid content
   3083980: Components.wireVariables() causes an exception if mode defined
+  3077791: panelSpacing in tabbox has error (breeze only)
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

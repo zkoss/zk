@@ -24,9 +24,12 @@ function (out) {
 				'<ul id="', uuid, '-cave" class="', zcls, '-cnt">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('<li id="', uuid, '-edge" class="', zcls, '-edge" ></li></ul></div>',
-				'<div id="', uuid, '-up"> </div>',
-				'<div id="', uuid, '-down"></div></div><div id="', uuid,
+		// MODIFIED: introduce a few small divs to achieve "button is always 
+		// at the middle" feature
+		out.push('<li id="', uuid, '-edge" class="', zcls, '-edge"></li></ul></div>',
+				'<div id="', uuid, '-up"><div class="', zcls, '-up-scroll-hl">', 
+				'</div><div class="',zcls,'-up-scroll-hr"></div></div><div id="', uuid, '-down"><div class="', zcls, 
+				'-down-scroll-hl"></div><div class="',zcls,'-down-scroll-hr"></div></div></div><div id="', uuid,
 				'-line" class="', zcls, '-space" ></div>');
 	} else {
 		var hasToolbar = tbx.isTabscroll() && tbx.toolbar;
