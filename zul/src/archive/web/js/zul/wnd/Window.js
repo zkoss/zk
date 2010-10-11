@@ -126,7 +126,7 @@ zul.wnd.Renderer = {
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	getPanTitTopHeight: function (wgt) {
-		return isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
+		return wgt.isFramable() ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
 	},
 	/** Returns the cap height of the panel's title
 	 * 

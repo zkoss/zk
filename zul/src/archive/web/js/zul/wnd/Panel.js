@@ -641,8 +641,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var isFramable = this.isFramable(),
-			cap = this.$n('cap'),
+		var cap = this.$n('cap'),
 			top = zul.wnd.Renderer.getPanTitTopHeight(this);
 		return cap ? zul.wnd.Renderer.getPanCapHeight(this) + top: top;
 	},
