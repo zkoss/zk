@@ -195,6 +195,18 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		return this;
 	},
+	doMouseOver_: function (evt) {
+		var ico = this.$n('open');
+		if (evt.domTarget == ico)
+			jq(this.$n()).addClass(this.getZclass() + '-ico-over');
+		this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (evt) {
+		var ico = this.$n('open');	
+		if (evt.domTarget == ico)
+			jq(this.$n()).removeClass(this.getZclass() + '-ico-over');
+		this.$supers('doMouseOut_', arguments);
+	},
 	
 	beforeParentChanged_: function(newParent) {
 		var oldtree = this.getTree();

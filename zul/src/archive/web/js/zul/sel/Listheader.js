@@ -67,8 +67,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		return this._zclass == null ? "z-listheader" : this._zclass;
 	},
 	bind_: function () {
-		this.$supers(zul.sel.Listheader, 'bind_', arguments);
-		var cm = this.$n('cm');
+			this.$supers('bind_', arguments);
+		var cm = this.$n('cm'),
+			n = this.$n();
 		if (cm) {
 			var box = this.getListbox();
 			if (box) box._headercm = cm;
@@ -76,9 +77,13 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.domListen_(cm, 'onMouseOver')
 				.domListen_(cm, 'onMouseOut');
 		}
+		if (n)
+			this.domListen_(n, 'onMouseOver', '_doSortMouseEvt')
+				.domListen_(n, 'onMouseOut', '_doSortMouseEvt');
 	},
 	unbind_: function () {
-		var cm = this.$n('cm');
+		var cm = this.$n('cm'),
+			n = this.$n();
 		if (cm) {
 			var box = this.getListbox();
 			if (box) box._headercm = null;
@@ -87,7 +92,15 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.domUnlisten_(cm, 'onMouseOver')
 				.domUnlisten_(cm, 'onMouseOut');
 		}
+		if (n)
+			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
+				.domUnlisten_(n, 'onMouseOut', '_doSortMouseEvt');
 		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
+	},
+	_doSortMouseEvt: function (evt) {
+		var sort = this.getSortAscending();
+		if (sort != 'none')
+			jq(this.$n())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
 	},
 	_doMouseOver: function (evt) {
 		 var cls = this._checked ? '-img-over-seld' : '-img-over';
