@@ -102,7 +102,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.zsync();
 		wgt._fireOnMove(evt.data);
 	}
-
+/** @class zul.wnd.Renderer
+ * The renderer used to render a window.
+ * It is designed to be overriden
+ */
+zul.wnd.Renderer = {
+	/** Check the window's mold
+	 * 
+	 * @param zul.wnd.Window wgt the window
+	 */
+	checkWinMold: function (wgt) {
+		return wgt._mode != 'embedded' && wgt._mode != 'popup';
+	},
+	/** Check the panel whether to render the frama
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	checkPanFramableRender: function (wgt) {
+		return wgt.isFramable();
+	},
+	/** Gets the top height of the panel's title
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	getPanTitTopHeight: function (wgt) {
+		return isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
+	},
+	/** Gets the cap height of the panel's title
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	getPanCapHeight: function (wgt) {
+		return (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight;
+	}
+};
 var Window =
 /**
  * A window.
@@ -859,7 +892,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if(this._mode != 'embedded' && this._mode != 'popup') {
+		if(zul.wnd.Renderer.checkWinMold(this)) {
 			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],
 				cap = this.$n("cap");
@@ -875,7 +908,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var cap = this.$n('cap'),
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
-			this._mode != 'embedded' && this._mode != 'popup' ?
+			zul.wnd.Renderer.checkWinMold(this) ?
 				tl.offsetHeight: 0;
 	},
 

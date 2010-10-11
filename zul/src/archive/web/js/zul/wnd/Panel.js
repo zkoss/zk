@@ -643,8 +643,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_titleHeight: function (n) {
 		var isFramable = this.isFramable(),
 			cap = this.$n('cap'),
-			top = isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
-		return cap ? (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
+			top = zul.wnd.Renderer.getPanTitTopHeight(this);
+		return cap ? zul.wnd.Renderer.getPanCapHeight(this) + top: top;
 	},
 	onFloatUp: function (ctl) {
 		if (!this.isVisible() || !this.isFloatable())
