@@ -249,7 +249,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	_fixWdh: zk.ie7_ ? function () {
 		var node = this.$n(),
-			wdh = node.style.width,
+			tl = jq(node).find('> div:first-child')[0];
+		
+		if (!tl.offsetHeight) return;
+		var wdh = node.style.width,
 			cn = jq(node).children('div'),
 			fir = cn[0],
 			last = cn[cn.length - 1],
