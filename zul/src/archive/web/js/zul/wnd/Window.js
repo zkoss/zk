@@ -121,14 +121,14 @@ zul.wnd.Renderer = {
 	checkPanFramableRender: function (wgt) {
 		return wgt.isFramable();
 	},
-	/** Gets the top height of the panel's title
+	/** Returns the top height of the panel's title
 	 * 
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	getPanTitTopHeight: function (wgt) {
 		return isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
 	},
-	/** Gets the cap height of the panel's title
+	/** Returns the cap height of the panel's title
 	 * 
 	 * @param zul.wnd.Panel wgt the window
 	 */
