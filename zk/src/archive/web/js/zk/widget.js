@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
-		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
+		_syncdt = zUtl.now() + 60000, //when zk.Desktop.sync() shall be called
+		_rdque = [], _rdtid; //async rerender's queue and timeout ID
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -112,7 +113,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _bind0(wgt) {
-		_rerenderDone(wgt); //cancel pending async rerender
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -880,17 +880,32 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//invoke rerender later
-	function _asyncRerender(wgt, timeout) {
-		wgt._asyncRRD = true;
-		setTimeout(function () {
-			if (wgt._asyncRRD) {
-				_rerenderDone(wgt);
-				wgt.rerender();
-			}
-		}, timeout);
+	function _rerender(wgt, timeout) {
+		if (_rdtid)
+			clearTimeout(_rdtid);
+		_rdque.push(wgt);
+		_rdtid = setTimeout(_rerender0, timeout);
+	}
+	function _rerender0() {
+		_rdtid = null;
+		l_out:
+		for (var wgt; wgt = _rdque.shift();) {
+			if (!wgt.desktop)
+				continue;
+
+			for (var j = _rdque.length; j--;)
+				if (zUtl.isAncestor(wgt, _rdque[j]))
+					_rdque.splice(j, 1); //skip _rdque[j]
+				else if (zUtl.isAncestor(_rdque[j], wgt))
+					continue l_out; //skip wgt
+
+			wgt.rerender();
+		}
 	}
 	function _rerenderDone(wgt) {
-		delete wgt._asyncRRD;
+		for (var j = _rdque.length; j--;)
+			if (zUtl.isAncestor(wgt, _rdque[j]))
+				_rdque.splice(j, 1);
 	}
 
 	var _dragoptions = {
@@ -2678,6 +2693,11 @@ function () {
 	 * @return zk.Widget this widget.
 	 */
 	/** Re-renders after the specified time (milliseconds).
+	 * <p>Notice that, to have the best performance, we use the single timer
+	 * to handle all pending rerenders for all widgets.
+	 * In other words, if the previous timer is not expired (and called),
+	 * the second call will reset the expiration time to the value given
+	 * in the second call.
 	 * @param int timeout the number milliseconds (non-negative) to wait
 	 * before rerender
 	 * @return zk.Widget this widget.
@@ -2686,7 +2706,7 @@ function () {
 	rerender: function (skipper) {
 		if (this.desktop) {
 			if (typeof skipper == "number") {
-				_asyncRerender(this, skipper);
+				_rerender(this, skipper);
 				return this;
 			}
 
@@ -2915,6 +2935,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	bind: function (desktop, skipper) {
+		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
@@ -2941,6 +2962,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	unbind: function (skipper) {
+		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod)
 			_unbindrod(this);
 		else {
