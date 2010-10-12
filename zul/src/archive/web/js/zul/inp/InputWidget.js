@@ -342,7 +342,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doMouseOut_: function () {
 		this._inplaceout = true;
 		this.$supers('doMouseOut_', arguments);
-		
 	},
 	doMouseOver_: function () {
 		this._inplaceout = false;
@@ -382,9 +381,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.updateChange_();
 			this.$supers('doBlur_', arguments);
 		}
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
-		}
 	},
 
 	_doSelect: function (evt) { //domListen_

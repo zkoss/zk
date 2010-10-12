@@ -34,6 +34,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				zk(inp).focus();
 		}
 	}
+	function _blurInplace(wgt) {
+		var n;
+		if (wgt._inplace && wgt._inplaceout && (n = wgt.$n())
+		&& !jq(n).hasClass(wgt.getInplaceCSS())) {
+			jq(n).addClass(wgt.getInplaceCSS());
+			wgt.onSize();
+			n.style.width = wgt.getWidth() || '';
+		}
+	}
 
 var Datebox =
 /**
@@ -376,15 +385,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
+
 		this.$supers('doBlur_', arguments);
-		if (this._inplace && this._inplaceout) {
-			jq(n).addClass(this.getInplaceCSS());
-			this.onSize();
-			n.style.width = this.getWidth() || '';
-		}
+
+		_blurInplace(this);
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);
@@ -646,29 +652,32 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	},
 	onChange: function (evt) {
 		var date = this.getTime(),
-			oldDate = this.parent.getValue(),
-			readonly = this.parent.isReadonly();
-		if (oldDate) {
+			db = this.parent,
+			oldDate = db.getValue(),
+			readonly = db.isReadonly();
+		if (oldDate)
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
-			this.parent._value = new Date(date.getFullYear(), date.getMonth(),
+			db._value = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
 				oldDate.getMinutes(), oldDate.getSeconds());
-		} else
-			this.parent._value = date;
-		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
+		else
+			db._value = date;
+		db.getInputNode().value = evt.data.value = db.getRawText();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
-			this.close(readonly);
-			this.parent._inplaceout = true;
+			this.close();
+			db._inplaceout = true;
 		}
-		if (!readonly)
-			this.parent.focus();
 		evt.stop();
 	},
 	onFloatUp: function (ctl) {
-		if (!zUtl.isAncestor(this.parent, ctl.origin))
+		var db = this.parent;
+		if (!zUtl.isAncestor(db, ctl.origin)) {
 			this.close(true);
+			db._inplaceout = true;
+			_blurInplace(db);
+		}
 	},
 	bind_: function () {
 		this.$supers(CalendarPop, 'bind_', arguments);

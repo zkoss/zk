@@ -721,15 +721,15 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
-		
+
 		// skip onchange, Bug 2936568
 		if (!this.getValue() && !this._changed)
 			this.getInputNode().value = this._lastRawValVld = '';
 		
 		this.$supers('doBlur_', arguments);
+
 		if (this._inplace && this._inplaceout) {
 			jq(n).addClass(this.getInplaceCSS());
 			this.onSize();
