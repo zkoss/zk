@@ -18,15 +18,29 @@
 	display: inline;
 </c:if>
 }
+
+<c:if test="${not c:browser('ie6-')}">
+.z-valign-bottom > .z-hlayout-inner {
+	vertical-align: bottom;
+}
+.z-valign-top > .z-hlayout-inner {
+	vertical-align: top;
+}
+.z-valign-middle > .z-hlayout-inner {
+	vertical-align: middle;
+}
+</c:if>
+<c:if test="${c:browser('ie6-')}">
+.z-valign-bottom .z-hlayout-inner {
+	vertical-align: bottom;
+}
 .z-valign-top .z-hlayout-inner {
 	vertical-align: top;
 }
 .z-valign-middle .z-hlayout-inner {
 	vertical-align: middle;
 }
-.z-valign-bottom .z-hlayout-inner {
-	vertical-align: bottom;
-}
+</c:if>
 
 .z-vlayout-inner {
 	position: relative;
