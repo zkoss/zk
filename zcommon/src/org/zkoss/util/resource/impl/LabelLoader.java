@@ -31,6 +31,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;
 import org.zkoss.util.Locales;
 import org.zkoss.util.resource.LabelLocator;
+import org.zkoss.util.resource.LabelLocator2;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
@@ -44,10 +45,10 @@ import org.zkoss.xel.util.SimpleXelContext;
  *
  * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
- * <p>Notice that the encoding of i3-label.properties is assumed to be
- * UTF-8. If it is not the case, please refer to 
- * <a href="http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Library_Properties">Libraries Properties</a>
- * for configuration (avaible since 3.6.0).
+ * <p>Notice that the encoding of the Locale dependent file (*.properties)
+ * is assumed to be UTF-8. If it is not the case, please refer to 
+ * <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_library-property_Element/Library_Properties#org.zkoss.util.label.web.charset">ZK Configuration Reference</a>
+ * for more information.
  *
  * @author tomyeh
  */
@@ -56,7 +57,7 @@ public class LabelLoader {
 
 	/** A map of (Locale l, Map(String key, String label)). */
 	private final Map _labels = new HashMap(6);
-	/** A list of LabelLocator. */
+	/** A list of LabelLocator or LabelLocator2. */
 	private final List _locators = new LinkedList();
 	/** The XEL context. */
 	private XelContext _xelc;
@@ -91,10 +92,20 @@ public class LabelLoader {
 		_xelc = resolv != null ? new SimpleXelContext(resolv, null): null;
 		return old;
 	}
-	/** Registers a locator which is used to load i3-label*.properties
+	/** Registers a locator which is used to load the Locale-dependent labels
 	 * from other resource, such as servlet contexts.
 	 */
 	public void register(LabelLocator locator) {
+		register0(locator);
+	}
+	/** Registers a locator which is used to load the Locale-dependent labels
+	 * from other resource, such as database.
+	 * @since 5.0.5
+	 */
+	public void register(LabelLocator2 locator) {
+		register0(locator);
+	}
+	private void register0(Object locator) {
 		if (locator == null)
 			throw new NullPointerException("locator");
 
@@ -111,7 +122,7 @@ public class LabelLoader {
 		reset(); //Labels might be loaded before, so...
 	}
 	/** Resets all cached labels and next call to {@link #getLabel}
-	 * will cause re-loading i3-label*.proerties.
+	 * will cause re-loading the Locale-dependent labels.
 	 */
 	public void reset() {
 		synchronized (_labels) {
@@ -121,7 +132,7 @@ public class LabelLoader {
 
 	//-- deriver to override --//
 	/** Returns the property without interprets any expression.
-	 * It searches properties defined in i3-label*.properties
+	 * It searches properties defined in Locale-dependent files.
 	 * All label accesses are eventually done by this method.
 	 *
 	 * <p>To alter its behavior, you might override this method.
@@ -195,9 +206,19 @@ public class LabelLoader {
 
 			//2. load from extra resource
 			for (Iterator it = _locators.iterator(); it.hasNext();) {
-				final URL url = ((LabelLocator)it.next()).locate(locale);
-				if (url != null)
-					load(labels, url, _warcharset);
+				Object o = it.next();
+				if (o instanceof LabelLocator) {
+					final URL url = ((LabelLocator)o).locate(locale);
+					if (url != null)
+						load(labels, url, _warcharset);
+				} else {
+					final LabelLocator2 loc = (LabelLocator2)o;
+					final InputStream is = loc.locate(locale);
+					if (is != null) {
+						final String cs = loc.getCharset();
+						load(labels, is, cs != null ? cs: _warcharset);
+					}
+				}
 			}
 
 			//add to map
@@ -219,8 +240,12 @@ public class LabelLoader {
 	private static final void load(Map labels, URL url, String charset)
 	throws IOException {
 		log.info(MCommon.FILE_OPENING, url);
+		load(labels, url.openStream(), charset);
+	}
+	/** Loads all labels from the specified URL. */
+	private static final void load(Map labels, InputStream is, String charset)
+	throws IOException {
 		final Map news = new HashMap();
-		final InputStream is = url.openStream();
 		try {
 			Maps.load(news, is, charset);
 		} finally {
@@ -228,9 +253,7 @@ public class LabelLoader {
 		}
 		for (Iterator it = news.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
-			final Object key = me.getKey();
-			if (labels.put(key, me.getValue()) != null)
-				log.warning("Label of "+key+" is replaced by "+url);
+			labels.put(me.getKey(), me.getValue());
 		}
 	}
 }
