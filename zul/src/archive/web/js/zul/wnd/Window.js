@@ -134,7 +134,7 @@ zul.wnd.Renderer = {
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	getPanCapHeight: function (wgt) {
-		return (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight;
+		return (wgt.isFramable() ? jq(n).find('> div:first-child').next()[0]: wgt.$n('cap')).offsetHeight;
 	}
 };
 var Window =
