@@ -105,6 +105,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** @class zul.wnd.Renderer
  * The renderer used to render a window.
  * It is designed to be overriden
+ * @since 5.0.5
  */
 zul.wnd.Renderer = {
 	/** Check the window's mold

@@ -28,6 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** @class zul.menu.Renderer
  * The renderer used to render a menu.
  * It is designed to be overriden
+ * @since 5.0.5
  */
 zul.menu.Renderer = {
 	/** render the spinner's(timebox) button
