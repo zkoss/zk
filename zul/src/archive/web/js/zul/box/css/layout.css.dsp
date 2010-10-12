@@ -21,7 +21,7 @@
 .z-valign-top .z-hlayout-inner {
 	vertical-align: top;
 }
-.z-valign-center .z-hlayout-inner {
+.z-valign-middle .z-hlayout-inner {
 	vertical-align: middle;
 }
 .z-valign-bottom .z-hlayout-inner {
