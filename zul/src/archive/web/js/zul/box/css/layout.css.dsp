@@ -12,12 +12,22 @@
 	display:-moz-inline-box;
 	display: inline-block;
 	position: relative;
-	vertical-align: top;
+	vertical-align: middle; <%-- so it aligned better with single-line label --%>
 	zoom: 1;
 <c:if test="${c:isExplorer() and not c:browser('ie8')}">
 	display: inline;
 </c:if>
 }
+.z-valign-top .z-hlayout-inner {
+	vertical-align: top;
+}
+.z-valign-center .z-hlayout-inner {
+	vertical-align: middle;
+}
+.z-valign-bottom .z-hlayout-inner {
+	vertical-align: bottom;
+}
+
 .z-vlayout-inner {
 	position: relative;
 	zoom: 1;
