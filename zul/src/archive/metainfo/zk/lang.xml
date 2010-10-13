@@ -364,7 +364,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>mold/caption.js</mold-uri>
-			<css-uri>css/caption.css</css-uri>
+			<css-uri>css/caption.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
