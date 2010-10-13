@@ -250,3 +250,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 	}
 });
+/** @class zul.tab.Tab.Renderer
+ * The renderer used to render a Tab.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.tab.Tab.Renderer = {
+	/** Check the Tab whether to render the frame
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	isFrameRequired: function (wgt) {
+		return true;
+	}
+};

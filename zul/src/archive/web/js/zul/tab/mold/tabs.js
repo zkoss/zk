@@ -24,7 +24,7 @@ function (out) {
 				'<ul id="', uuid, '-cave" class="', zcls, '-cnt">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		// MODIFIED: introduce a few small divs to achieve "button is always 
+		// Merge breeze: introduce a few small divs to achieve "button is always 
 		// at the middle" feature
 		out.push('<li id="', uuid, '-edge" class="', zcls, '-edge"></li></ul></div>',
 				'<div id="', uuid, '-up"><div class="', zcls, '-up-scroll-hl">', 

@@ -480,7 +480,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			//tabpanels(+border)
 			this._forceStyle(child[2], "h", 
 				jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight - (2 - zk.parseInt(jq(this.$n('cave')).css('padding-top'))), true)));
-			// MODIFIED: now in vertical orientation Tabs has no border, but Tabpanels 
+			// Merge breeze: now in vertical orientation Tabs has no border, but Tabpanels 
 			// still has border, so we need to introduce a 2px offset
 		} else {
 			if (head) //accordion have no head
