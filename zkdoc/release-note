@@ -53,6 +53,7 @@ ZK 5.0.5
   3086343: JavaScript error stub unknown if moved
   3086348: Tooltip doesn't display when listitems use same tooltip
   3086333: typo in setCmargins in LayoutRegion.java
+  3086352: audio autostart="false" not work
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
