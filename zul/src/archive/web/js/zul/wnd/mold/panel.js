@@ -17,14 +17,14 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		framableRender = zul.wnd.Renderer.checkPanFramableRender(this),
+		isFrameRequired = zul.wnd.Panel.Renderer.isFrameRequired(this),
 		framable = this.isFramable(),
 		noborder = this.getBorder() != 'normal',
 		noheader = !caption && !title;
 		
 	out.push('<div', this.domAttrs_(), '>');
 	if (caption || title) {
-		if (framableRender) {
+		if (isFrameRequired) {
 			out.push('<div class="', zcls, '-tl"><div class="', zcls, '-tr"></div></div>');
 			out.push('<div class="', zcls, '-hl"><div class="', zcls, '-hr"><div class="', zcls, '-hm">');
 		}
@@ -54,7 +54,7 @@ function (out, skipper) {
 		
 		out.push('</div>');
 		
-		if (framableRender) out.push('</div></div></div>');
+		if (isFrameRequired) out.push('</div></div></div>');
 	} else if (framable) {
 		out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');		
 	}

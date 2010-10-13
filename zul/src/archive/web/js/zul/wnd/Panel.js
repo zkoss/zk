@@ -642,8 +642,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_titleHeight: function (n) {
 		var cap = this.$n('cap'),
-			top = zul.wnd.Renderer.getPanTitTopHeight(this);
-		return cap ? zul.wnd.Renderer.getPanCapHeight(this) + top: top;
+			top = isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
+		return cap ? (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
 	},
 	onFloatUp: function (ctl) {
 		if (!this.isVisible() || !this.isFloatable())
@@ -985,3 +985,18 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_aftersizing: zul.wnd.Window._aftersizing,
 	_drawsizing: zul.wnd.Window._drawsizing
 });
+
+/** @class zul.wnd.Panel.Renderer
+ * The renderer used to render a panel.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.wnd.Panel.Renderer = {
+	/** Check the panel whether to render the frame
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	isFrameRequired: function (wgt) {
+		return wgt.isFramable();
+	}
+};
