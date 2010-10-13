@@ -32,7 +32,7 @@ zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.setCmargins("0,3,3,0");
+		this._cmargins = [0, 3, 3, 0];
 	},
 	/**
 	 * Returns {@link Borderlayout#WEST}.

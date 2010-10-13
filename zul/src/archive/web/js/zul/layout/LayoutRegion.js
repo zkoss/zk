@@ -26,7 +26,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._margins = [0, 0, 0, 0];
-		this._cmargins = [5, 5, 5, 5];
+		this._cmargins = [3, 3, 3, 3]; //center
 	},
 
 	$define: {

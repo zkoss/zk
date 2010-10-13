@@ -68,6 +68,8 @@ ZK 5.0.5
     org.zkoss.zul and org.zkoss.zhtml, because it is error-proning.
     However, if you want to wire them as 5.0.4 did, you could specify the library
     property called org.zkoss.zk.ui.wire.zul.enabled with true.
+  + South and north's collapsed margins are changed from [5, 5, 5, 5]
+    to [3, 0, 0, 3]
   + The DOM structure of the pagging component's os mold has been modified, 
 	if you ever customized it, you might have to add the following CSS into your
 	customization: 

@@ -25,6 +25,11 @@ zul.layout.North = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 */
 	setWidth: zk.$void, // readonly
 	sanchor: 't',
+
+	$init: function () {
+		this.$supers('$init', arguments);
+		this._cmargins = [3, 0, 0, 3];
+	},
 	/**
 	 * Returns {@link Borderlayout#NORTH}.
 	 * @return String

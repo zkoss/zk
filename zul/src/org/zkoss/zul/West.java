@@ -26,7 +26,6 @@ package org.zkoss.zul;
  */
 public class West extends LayoutRegion implements org.zkoss.zul.api.West {
 	public West() {
-		setCmargins("0,3,3,0");
 	}
 
 	/**
@@ -56,5 +55,13 @@ public class West extends LayoutRegion implements org.zkoss.zul.api.West {
 	 */
 	public void setSize(String size) {
 		setWidth(size);
+	}
+
+	/** Returns the defaul collapsed margin ([0, 3, 3, 0]).
+	 * @since 5.0.5
+	 */
+	//@Override
+	protected int[] getDefaultCmargins() {
+		return new int[] { 0, 3, 3, 0 };
 	}
 }

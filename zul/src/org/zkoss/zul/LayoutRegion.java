@@ -42,7 +42,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	private String _title = null;	
 	private int _maxsize = 2000;
 	private int _minsize = 0;
-	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
+	private int[] _cmargins;
 	private boolean _splittable;
 	private boolean _collapsible;
 	private boolean _open = true;
@@ -53,6 +53,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	}
 
 	public LayoutRegion() {
+		_cmargins = getDefaultCmargins();
 	}
 
 	/**
@@ -260,9 +261,8 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
-	 * 
-	 * <p>
-	 * Default: "5,5,5,5".
+	 * @see #setCmargins
+	 * @see #getDefaultCmargins
 	 */
 	public String getCmargins() {
 		return Utils.intsToString(_cmargins);
@@ -271,6 +271,12 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	/**
 	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
+	 * 
+	 * <p>
+	 * Default: "3,3,3,3" for center, "0,3,3,0" for east and west,
+	 * and "3,0,0,3" for north and south.
+	 * @see #getCmargins
+	 * @see #getDefaultCmargins
 	 */
 	public void setCmargins(String cmargins) {
 		final int[] imargins = Utils.stringToInts(cmargins, 0);
@@ -279,6 +285,11 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 			smartUpdate("cmargins", getCmargins());
 		}
 	}
+
+	/** Returns the default collapsed margin.
+	 * @since 5.0.5
+	 */
+	abstract protected int[] getDefaultCmargins();
 
 	/**
 	 * Returns whether set the initial display to collapse.
@@ -358,7 +369,13 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 		render(renderer, "splittable", _splittable);
 		render(renderer, "collapsible", _collapsible);
 
-		render(renderer, "cmargins", getCmargins());
+		int[] cms = getDefaultCmargins();
+		for (int j = cms.length; --j >= 0;)
+			if (cms[j] != _cmargins[j]) {
+				render(renderer, "cmargins", getCmargins());
+				break;
+			}
+
 			//always generate since different region might have different default
 		if (!_open)
 			renderer.render("open", _open);
