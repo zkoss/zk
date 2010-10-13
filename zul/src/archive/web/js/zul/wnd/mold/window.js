@@ -20,7 +20,7 @@ function (out, skipper) {
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		mode = this.getMode(),
-		withFrame = zul.wnd.Renderer.checkWinMold(this),
+		withFrame = zul.wnd.Renderer.shallCheckBorder(this),
 		noborder = 'normal' != this.getBorder() ? '-noborder' : '';
 		
 	out.push('<div', this.domAttrs_(), '>');

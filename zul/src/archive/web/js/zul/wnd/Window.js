@@ -112,7 +112,7 @@ zul.wnd.Renderer = {
 	 * 
 	 * @param zul.wnd.Window wgt the window
 	 */
-	checkWinMold: function (wgt) {
+	shallCheckBorder: function (wgt) {
 		return wgt._mode != 'embedded' && wgt._mode != 'popup';
 	},
 	/** Check the panel whether to render the frama
@@ -893,7 +893,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if(zul.wnd.Renderer.checkWinMold(this)) {
+		if(zul.wnd.Renderer.shallCheckBorder(this)) {
 			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],
 				cap = this.$n("cap");
@@ -909,7 +909,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var cap = this.$n('cap'),
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
-			zul.wnd.Renderer.checkWinMold(this) ?
+			zul.wnd.Renderer.shallCheckBorder(this) ?
 				tl.offsetHeight: 0;
 	},
 
