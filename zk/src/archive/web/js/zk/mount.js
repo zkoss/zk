@@ -309,9 +309,9 @@ function zkmprops(uuid, props) {
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			if (type == "#stub") {
-				wgt = _wgt$(uuid); //use the original one since filter() might applied
-				if (!wgt)
+			if (type == "#stub") { //not possible if zkuery
+				if (!(wgt = _wgt$(uuid) //use the original one since filter() might applied
+				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknow stub "+uuid;
 				var w = new zk.Widget();
 				zk._wgtutl.replace(wgt, w);

@@ -50,6 +50,7 @@ ZK 5.0.5
   3083980: Components.wireVariables() causes an exception if mode defined
   3077791: panelSpacing in tabbox has error (breeze only)
   3085744: readonly+inplace datebox not become inplace if select day
+  3086343: JavaScript error stub unknown if moved
   3086348: Tooltip doesn't display when listitems use same tooltip
 
 * Upgrade Notes

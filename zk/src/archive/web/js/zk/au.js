@@ -22,11 +22,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
-		pfIndex = 0; //performance meter index
+		pfIndex = 0, //performance meter index
+		_detached = []; //used for resolving #stub in mount.js (it stores detached widgets in this AU)
 
 	// Checks whether to turn off the progress prompt
 	function checkProcessng() {
 		if (!zAu.processing()) {
+			_detached = []; //clean up
 			zk.endProcessing();
 			zAu.doneTime = zUtl.now();
 		}
@@ -342,6 +344,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				try {
 					doProcess(cmd.cmd, cmd.data);
 				} catch (e) {
+					zk.mounting = false; //make it able to proceed
 					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
 					if (!ex) ex = e;
 				}
@@ -382,6 +385,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			//serverAlive: the server shall not ignore it if session timeout
 	}
 
+	//store all widgets into a map
+	function _wgt2map(wgt, map) {
+		map[wgt.uuid] = wgt;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			_wgt2map(wgt, map);
+	}
+
 /** @class zAu
  * @import zk.Widget
  * @import zk.Desktop
@@ -407,6 +417,13 @@ zAu = {
 			//we cannot pass zAu.cmd0.clientInfo directly
 			//otherwise, FF will pass 1 as the firt argument,
 			//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
+	},
+	//Used by mount.js to search widget being detached in this AU
+	_wgt$: function (uuid) {
+		var map = _detached.wgts = _detached.wgts || {}, wgt;
+		while (wgt = _detached.shift())
+			_wgt2map(wgt, map);
+		return map[uuid];
 	},
 
 	//Error Handling//
@@ -1283,8 +1300,10 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param zk.Widget wgt the widget to remove
 	 */
 	rm: function (wgt) {
-		if (wgt)
+		if (wgt) {
 			wgt.detach();
+			_detached.push(wgt); //used by mount.js
+		}
 	},
 	/** Rename UUID.
 	 * @param zk.Widget wgt the widget to rename
