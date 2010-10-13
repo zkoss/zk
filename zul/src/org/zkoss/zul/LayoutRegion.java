@@ -128,7 +128,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 		final int[] imargins = Utils.stringToInts(margins, 0);
 		if (!Objects.equals(imargins, _margins)) {
 			_margins = imargins;
-			smartUpdate("imargins", getMargins());
+			smartUpdate("margins", getMargins());
 		}
 	}
 
@@ -276,7 +276,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 		final int[] imargins = Utils.stringToInts(cmargins, 0);
 		if (!Objects.equals(imargins, _cmargins)) {
 			_cmargins = imargins;
-			smartUpdate("imargins", getCmargins());
+			smartUpdate("cmargins", getCmargins());
 		}
 	}
 
