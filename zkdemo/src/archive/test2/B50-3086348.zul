@@ -1,0 +1,27 @@
+<zk>
+<label multiline="true">
+	<attribute name="value"><![CDATA[
+		How to test
+		1. mouse over on "row 1", wait for tooltip to display
+		2. move mouse to "row 2", tooltip should be close, then open again at row 2
+		3. if tooltip doesn't display, it's wrong
+		]]></attribute>
+</label>
+<listbox width="500px">
+		<listhead>
+			<listheader label="Operation" width="200px" />
+		</listhead>
+		<listitem tooltip="msg">
+			<listcell label="Row 1" />
+		</listitem>
+		<listitem tooltip="msg">
+			<listcell label="Row 2" />
+		</listitem>
+	</listbox>
+	<popup id="msg" width="300px">
+		<vbox>
+			This user is online now !
+			<toolbarbutton label="Mail him/her"/>
+		</vbox>
+	</popup>
+</zk>

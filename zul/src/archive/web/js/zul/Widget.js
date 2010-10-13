@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _tt_begin(tip, ref, params) {
 		_tt_params = params;
-		if (_tt_tip != tip) {
+		if (_tt_tip != tip || _tt_ref != ref) {
 			_tt_close_();
 
 			_tt_inf = {
