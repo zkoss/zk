@@ -38,7 +38,7 @@ function (out) {
 		out.push('" style="display:none"');	
 	
 	out.push('">');
-	// ADDED: for splitting timebox/spinner button to two pieces
+	//Merge breeze: for splitting timebox/spinner button to two pieces
 	zul.inp.Renderer.renderSpinnerButton(out, this);
 	out.push('</i></i>');
 	

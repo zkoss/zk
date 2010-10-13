@@ -117,7 +117,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			}
 			zWatch.listen({onSize: this, onShow: this});
 		}
-		this._syncChdWidth(); //ADDED
+		this._syncChdWidth(); //Merge breeze
 	},
 	/** Returns whether the menubar scrolling is enabled in horizontal orient.
 	 * @return boolean
@@ -132,13 +132,13 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();
-		this._syncChdWidth();	//ADDED
+		this._syncChdWidth();	//Merge breeze
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_)
 			this._checkScrolling();
-		this._syncChdWidth(); //ADDED
+		this._syncChdWidth(); //Merge breeze
 	},
 	_checkScrolling: function () {
 		if (!this.checkScrollable()) return;

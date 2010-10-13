@@ -262,10 +262,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.mesh.Paging, 'bind_', arguments);
 		
-		/**
-		 * Added
-		 */
-		if (this.getMold() == 'os') {
+		if (this.getMold() == 'os') {//Merge breeze
 			var childs = jq(this.$n()).find('div a'),
 				i = childs.length;
 				

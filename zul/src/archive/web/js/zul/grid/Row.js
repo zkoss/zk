@@ -260,19 +260,18 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
 			n.firstChild.style.MozUserSelect = "none";
 		
-		// ADDED: remove onMouseOver CSS class
+		//Merge breeze
 		if (n && !jq(n).hasClass(zcls))
 			jq(n).addClass(zcls);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
 		var n = this.$n(),
-			zcls = this.getZclass() + '-over'; // ADDED: add CSS class when onMouseOver on Row
+			zcls = this.getZclass() + '-over'; // Merge breeze
 		if (n && zk.gecko && this._draggable)
 			n.firstChild.style.MozUserSelect = "none";
 		
-		// ADDED
-		/**
+		/* Merge breeze
 		 * Calculate widget on page's position, removes CSS class
 		 * when the event's position is out of the range of the widget.
 		 */

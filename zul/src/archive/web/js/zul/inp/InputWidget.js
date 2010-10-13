@@ -145,7 +145,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					fnm = readonly ? 'addClass': 'removeClass';
 				
 				inp.readOnly = readonly;
-				jq(this.$n())[fnm](zcls + '-real-readonly'); //ADDED
+				jq(this.$n())[fnm](zcls + '-real-readonly'); //Merge breeze
 				jq(inp)[fnm](zcls + '-readonly');
 				
 				if (!this.inRoundedMold()) return;
@@ -619,7 +619,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if ((!no || !no.input) && this._inplace)
 			sc += ' ' + this.getInplaceCSS();
 			
-		// ADDED
+		// Merge breeze
 		if ((!no || !no.zclass) && this._readonly)
 			sc += ' ' + zcls + '-real-readonly';
 			

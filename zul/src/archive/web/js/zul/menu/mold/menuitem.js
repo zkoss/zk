@@ -52,6 +52,6 @@ function (out) {
 		out.push('<a href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
 		if (target)
 			out.push(' target="', target, '"');
-		out.push(' id="', uuid, '-a" class="', cls, '">', this.domContent_(), '</a></div></div></div></li>'); //ADDED
+		out.push(' id="', uuid, '-a" class="', cls, '">', this.domContent_(), '</a></div></div></div></li>'); //Merge breeze
 	}
 }
