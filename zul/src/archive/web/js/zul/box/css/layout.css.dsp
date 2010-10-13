@@ -19,28 +19,16 @@
 </c:if>
 }
 
-<c:if test="${not c:browser('ie6-')}">
-.z-valign-bottom > .z-hlayout-inner {
+<c:set var="dchild" value=">" unless="${c:browser('ie6-')}"/>
+.z-valign-bottom ${dchild} .z-hlayout-inner {
 	vertical-align: bottom;
 }
-.z-valign-top > .z-hlayout-inner {
+.z-valign-top ${dchild} .z-hlayout-inner {
 	vertical-align: top;
 }
-.z-valign-middle > .z-hlayout-inner {
+.z-valign-middle ${dchild} .z-hlayout-inner {
 	vertical-align: middle;
 }
-</c:if>
-<c:if test="${c:browser('ie6-')}">
-.z-valign-bottom .z-hlayout-inner {
-	vertical-align: bottom;
-}
-.z-valign-top .z-hlayout-inner {
-	vertical-align: top;
-}
-.z-valign-middle .z-hlayout-inner {
-	vertical-align: middle;
-}
-</c:if>
 
 .z-vlayout-inner {
 	position: relative;
