@@ -1,7 +1,17 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="new page title" border="normal" apply="org.phx.bug.ctrl.Bug3071613Composer">
+	<zscript>
+		import java.math.BigDecimal;
+	</zscript>
+	<html><![CDATA[
+		Type <b>"12.123"</b>, then move focus out of textbox, It will show <b>"12.12"</b>.<br />
+		Type <b>"12.125"</b>, then move focus out of textbox, It will show <b>"12.15"</b>.
+	]]></html>
+	<window title="new page title" border="normal">
 		<decimalbox id="myDeci" />
-		<button label="Click" onClick='alert("" + myDeci.doubleValue())' />
+		<zscript>
+			myDeci.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+			myDeci.setFormat("0.##");
+		</zscript>
 	</window>
 </zk>

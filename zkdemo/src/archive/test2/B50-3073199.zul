@@ -1,5 +1,8 @@
 <?page title="test" contentType="text/html;charset=UTF-8"?>
 <zk>
+	<html><![CDATA[
+		Click header <b>"first"</b> some times, it is OK if here shows no error messages.
+	]]></html>
 	<window border="none" height="100%">
 		<grid>
 			<columns>

@@ -1,3 +1,8 @@
+<zk>
+<html><![CDATA[
+Please click maxinum button on any panels, then click restore button, it is OK that the style maxinum button changed back.
+]]></html>
+
 <portallayout maximizedMode="whole">
 	<portalchildren style="padding: 5px" width="30%">
 		<panel height="150px" title="Google Tools" border="normal"
@@ -45,3 +50,4 @@
 		</panel>
 	</portalchildren>
 </portallayout>
+</zk>
