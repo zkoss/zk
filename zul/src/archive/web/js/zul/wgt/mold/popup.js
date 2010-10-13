@@ -13,15 +13,31 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var zcls = this.getZclass();
-    out.push('<div', this.domAttrs_(), '><div class="', zcls, '-tl"><div class="',
-			 zcls, '-tr"></div></div>', '<div id="', this.uuid, '-body" class="',
-			  zcls, '-cl"><div class="', zcls, '-cr"><div class="', zcls, '-cm">',
-			   '<div id="', this.uuid, '-cave" class="', zcls, '-cnt">');
+	var uuid = this.uuid,
+		zcls = this.getZclass(),
+		isFrameRequired = zul.wgt.Popup.Renderer.isFrameRequired();
+		
+	out.push('<div', this.domAttrs_(), '>');
+	
+	if (isFrameRequired)
+		out.push('<div class="', zcls, '-tl"><div class="', 
+					zcls, '-tr"></div></div>');
+	else if(this._fixarrow)	// Merge breeze: a div for pointer in Errorbox
+		out.push('<div id=', uuid, '-p class="z-pointer"></div>');
+		
+	out.push('<div id="', uuid, '-body" class="', zcls, '-cl">');
+	
+	if (isFrameRequired)
+		out.push('<div class="', zcls, '-cr"><div class="', zcls, '-cm">');
+		
+	out.push('<div id="', uuid, '-cave" class="', zcls, '-cnt">');
 	this.prologHTML_(out);
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	this.epilogHTML_(out);
-	out.push('</div></div></div></div><div class="', zcls, '-bl"><div class="',
-			zcls, '-br"></div></div></div>');
+	out.push('</div></div></div>');
+	
+	if (isFrameRequired)
+		out.push('</div><div class="', zcls, '-bl"><div class="',
+					zcls, '-br"></div></div></div>');
 }

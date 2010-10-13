@@ -226,16 +226,24 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function () {
 		var node = this.$n(),
-			h = node.offsetHeight - 1, 
-			tl = jq(node).find('> div:first-child')[0],
-			bl = jq(node).find('> div:last')[0],
-			n = this.getCaveNode().parentNode,
+			isFrameRequired = zul.wgt.Popup.Renderer.isFrameRequired(),
+			h = node.offsetHeight - (isFrameRequired ? 1: 0), 
 			bd = this.$n('body');
+		
+		if (isFrameRequired) {
+			var tl = jq(node).find('> div:first-child')[0],
+				bl = jq(node).find('> div:last')[0],
+				n = this.getCaveNode().parentNode,
+				bd = this.$n('body');
 		
 			h -= tl.offsetHeight;
 			h -= bl.offsetHeight;
 			h -= zk(n).padBorderHeight();
 			h -= zk(bd).padBorderHeight();
+		} else {
+			h -= zk(bd).padBorderHeight();
+		}
+		
 		return h;
 	},
 	_fixHgh: function () {
@@ -248,11 +256,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			c.style.height = "auto";
 	},
 	_fixWdh: zk.ie7_ ? function () {
+		if (!zul.wgt.Popup.Renderer.isFrameRequired()) return;
 		var node = this.$n(),
-			tl = jq(node).find('> div:first-child')[0];
-		
-		if (!tl.offsetHeight) return;
-		var wdh = node.style.width,
+			wdh = node.style.width,
 			cn = jq(node).children('div'),
 			fir = cn[0],
 			last = cn[cn.length - 1],
@@ -288,3 +294,17 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	epilogHTML_: function (out) {
 	}
 });
+/** @class zul.wgt.Popup.Renderer
+ * The renderer used to render a Popup.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.wgt.Popup.Renderer = {
+	/** Check the Popup whether to render the frame
+	 * 
+	 * @param zul.wgt.Popup wgt the window
+	 */
+	isFrameRequired: function () {
+		return true;
+	}
+};
