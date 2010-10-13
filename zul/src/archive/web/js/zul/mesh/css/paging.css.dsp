@@ -34,7 +34,9 @@ div.z-paging-os-cnt-seld-r,
 div.z-paging-os-cnt-seld-m,
 div.z-paging-os-cnt-l-over {
 	display: inline-block;
-	*display: inline;
+	<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+	display: inline;
+	</c:if>
 	zoom: 1;
 }
 .z-paging-os a.z-paging-os-cnt {
