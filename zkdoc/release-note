@@ -68,6 +68,29 @@ ZK 5.0.5
     org.zkoss.zul and org.zkoss.zhtml, because it is error-proning.
     However, if you want to wire them as 5.0.4 did, you could specify the library
     property called org.zkoss.zk.ui.wire.zul.enabled with true.
+  + The DOM structure of the pagging component has been modified, 
+	if you ever customized paging component, 
+	you have to add the following css in yor css file 
+	div.z-paging-os-cnt-l,
+	div.z-paging-os-cnt-r,
+	div.z-paging-os-cnt-m,
+	div.z-paging-os-cnt-seld-l,
+	div.z-paging-os-cnt-seld-r,
+	div.z-paging-os-cnt-seld-m,
+	div.z-paging-os-cnt-l-over {
+		display: inline-block;
+		<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+		display: inline;
+		</c:if>
+		zoom: 1;
+	}
+	.z-paging-os a.z-paging-os-cnt {
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+  + Rename caption.css to caption.css.dsp
+  + Rename tablelayout.css to tablelayout.css.dsp
+  
 
 	--------
 ZK 5.0.4
