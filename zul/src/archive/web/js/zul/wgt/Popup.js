@@ -226,7 +226,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function () {
 		var node = this.$n(),
-			isFrameRequired = zul.wgt.Popup.Renderer.isFrameRequired(),
+			isFrameRequired = zul.wgt.PopupRenderer.isFrameRequired(),
 			h = node.offsetHeight - (isFrameRequired ? 1: 0), 
 			bd = this.$n('body');
 		
@@ -256,7 +256,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			c.style.height = "auto";
 	},
 	_fixWdh: zk.ie7_ ? function () {
-		if (!zul.wgt.Popup.Renderer.isFrameRequired()) return;
+		if (!zul.wgt.PopupRenderer.isFrameRequired()) return;
 		var node = this.$n(),
 			wdh = node.style.width,
 			cn = jq(node).children('div'),
@@ -294,12 +294,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	epilogHTML_: function (out) {
 	}
 });
-/** @class zul.wgt.Popup.Renderer
+/** @class zul.wgt.PopupRenderer
  * The renderer used to render a Popup.
  * It is designed to be overriden
  * @since 5.0.5
  */
-zul.wgt.Popup.Renderer = {
+zul.wgt.PopupRenderer = {
 	/** Check the Popup whether to render the frame
 	 * 
 	 * @param zul.wgt.Popup wgt the window

@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		isFrameRequired = zul.wgt.Popup.Renderer.isFrameRequired();
+		isFrameRequired = zul.wgt.PopupRenderer.isFrameRequired();
 		
 	out.push('<div', this.domAttrs_(), '>');
 	

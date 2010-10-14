@@ -859,7 +859,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if(zul.wnd.Window.Renderer.shallCheckBorder(this)) {
+		if(WindowRenderer.shallCheckBorder(this)) {
 			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],
 				cap = this.$n("cap");
@@ -875,8 +875,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var cap = this.$n('cap'),
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
-			zul.wnd.Window.Renderer.shallCheckBorder(this) ?
-				tl.offsetHeight: 0;
+			WindowRenderer.shallCheckBorder(this) ? tl.offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1279,12 +1278,13 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 	}
 });
 
-/** @class zul.wnd.Window.Renderer
+var WindowRenderer =
+/** @class zul.wnd.WindowRenderer
  * The renderer used to render a window.
  * It is designed to be overriden
  * @since 5.0.5
  */
-zul.wnd.Window.Renderer = {
+zul.wnd.WindowRenderer = {
 	/** Returns whether to check the border's height.
 	 * 
 	 * @param zul.wnd.Window wgt the window

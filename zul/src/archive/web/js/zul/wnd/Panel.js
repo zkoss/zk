@@ -987,12 +987,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_drawsizing: zul.wnd.Window._drawsizing
 });
 
-/** @class zul.wnd.Panel.Renderer
+/** @class zul.wnd.PanelRenderer
  * The renderer used to render a panel.
  * It is designed to be overriden
  * @since 5.0.5
  */
-zul.wnd.Panel.Renderer = {
+zul.wnd.PanelRenderer = {
 	/** Check the panel whether to render the frame
 	 * 
 	 * @param zul.wnd.Panel wgt the window

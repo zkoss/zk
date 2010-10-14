@@ -17,7 +17,7 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		isFrameRequired = zul.wnd.Panel.Renderer.isFrameRequired(this),
+		isFrameRequired = zul.wnd.PanelRenderer.isFrameRequired(this),
 		framable = this.isFramable(),
 		noborder = this.getBorder() != 'normal',
 		noheader = !caption && !title;

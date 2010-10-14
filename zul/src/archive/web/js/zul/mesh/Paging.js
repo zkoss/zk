@@ -20,10 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	/**
-	 * Returns whether the string is integer or not
-	 * @return boolean 
-	 */
+	//Returns whether the string is integer or not
 	function _isUnsignedInteger(s) {
 		  return (s.toString().search(/^[0-9]+$/) == 0);
 	}

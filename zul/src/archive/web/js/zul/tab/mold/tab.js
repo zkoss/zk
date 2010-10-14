@@ -31,7 +31,7 @@ function (out) {
 					'<span class="', zcls, '-text">', this.domContent_(),
 					'</span></span></div></div></div></div>');
 		} else {
-			var isFrameRequired = zul.wgt.Popup.Renderer.isFrameRequired(),
+			var isFrameRequired = zul.wgt.TabRenderer.isFrameRequired(),
 				hm = '<div class="' + zcls + '-hm" >';
 			if (tbx.getPanelSpacing() && this.getIndex())
 				out.push('<div class="', zcls, '-spacing" style="margin:0;display:list-item;width:100%;height:', tbx.getPanelSpacing(), ';"></div>');
