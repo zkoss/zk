@@ -3012,14 +3012,7 @@ bind_: function (desktop, skipper, after) {
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
-		for (var child = this.firstChild, nxt; child; child = nxt) {
-			nxt = child.nextSibling;
-				//we have to store first since RefWidget will replace widget
-
-			if (!skipper || !skipper.skipped(this, child))
-				if (child.z_rod) _bindrod(child);
-				else child.bind_(desktop, null, after); //don't pass skipper
-		}
+		this.bindChildren_(desktop, skipper, after);
 
 		if (this.isListen('onBind')) {
 			var self = this;
@@ -3027,6 +3020,24 @@ bind_: function (desktop, skipper, after) {
 				if (self.desktop) //might be unbound
 					self.fire('onBind');
 			});
+		}
+	},
+	/** Binds the children of this widget.
+	 * It is called by {@link #bind_} to invoke child's {@link #bind_} one-by-one.
+	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example, 
+	 * @since 5.0.5
+	 */
+	bindChildren_: function (desktop, skipper, after) {
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling;
+				//we have to store first since RefWidget will replace widget
+
+			if (!skipper || !skipper.skipped(this, child))
+				if (child.z_rod) _bindrod(child);
+				else child.bind_(desktop, null, after); //don't pass skipper
 		}
 	},
 
@@ -3059,15 +3070,7 @@ unbind_: function (skipper, after) {
 		_unbind0(this);
 		_unlistenFlex(this);
 
-		for (var child = this.firstChild, nxt; child; child = nxt) {
-			nxt = child.nextSibling; //just in case
-
-			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
-			if (!skipper || !skipper.skipped(this, child))
-				if (child.z_rod) _unbindrod(child);
-				else if (child.desktop) child.unbind_(null, after); //don't pass skipper
-		}
-
+		this.unbindChildren_(skipper, after);
 		this.cleanDrag_(); //ok to invoke even if not init
 
 		if (this.isListen('onUnbind')) {
@@ -3084,6 +3087,23 @@ unbind_: function (skipper, after) {
 		}
 		this.effects_ = {};
 	},
+	/** Unbinds the children of this widget.
+	 * It is called by {@link #unbind_} to invoke child's {@link #unbind_} one-by-one.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper 
+	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
+	 * @since 5.0.5
+	 */
+	unbindChildren_: function (skipper, after) {
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling; //just in case
+
+			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
+			if (!skipper || !skipper.skipped(this, child))
+				if (child.z_rod) _unbindrod(child);
+				else if (child.desktop) child.unbind_(null, after); //don't pass skipper
+		}
+	},
+
 	/** Associates UUID with this widget.
 	 * <p>Notice that {@link #uuid} is automically associated (aka., bound) to this widget.
 	 * Thus, you rarely need to invoke this method unless you want to associate with other identifiers.
