@@ -455,7 +455,13 @@ function zkmprops(uuid, props) {
 jq(function() {
 	var _bfUploads = [],
 		_reszInf = {},
-		_oldBfUnload;
+		_oldBfUnload,
+		_subevts = { //additonal invocation
+			onClick: 'doSelect_',
+			onRightClick: 'doSelect_',
+			onMouseOver: 'doTooltipOver_',
+			onMouseOut: 'doTooltipOut_'
+		};
 
 	/** @partial zk
 	 */
@@ -481,13 +487,11 @@ jq(function() {
 	function _doEvt(wevt) {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
-			var en = wevt.name;
-			if (en == 'onClick' || en == 'onRightClick') {
-				wgt.doSelect_(wevt);
-				if (wevt.stopped)
-					en = null; //denote stop
-			}
-			if (en)
+			var en = wevt.name,
+				fn = _subevts[en];
+			if (fn)
+				wgt[fn].call(wgt, wevt);
+			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();

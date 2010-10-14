@@ -3738,12 +3738,17 @@ wgt.setListeners({
 	/** Called when the user clicks or right-clicks on widget or a child widget.
 	 * It is called before {@link #doClick_} and {@link #doRightClick_}.
 	 * <p>Default: does nothing but invokes the parent's {@link #doSelect_}.
+	 * Notice that it does not fire any event.
 	 * <p>Deriving class that supports selection (such as {@link zul.sel.ItemWidget})
 	 * shall override this to handle the selection.
 	 * <p>Technically, the selection can be handled in {@link #doClick_}.
 	 * However, it is better to handle here since this method is invoked first
 	 * such that the widget will be selected before one of its descendant widget
 	 * handles {@link #doClick_}.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doSelect_} and {@link #doClick_}/{@link #doRightClick_}.
+	 * If you just don't want to call parent's {@link #doSelect_}, simply
+	 * not to invoke super's doSelect_.
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3754,6 +3759,40 @@ wgt.setListeners({
 		if (!evt.stopped) {
 			var p = this.parent;
 			if (p) p.doSelect_(evt);
+		}
+	},
+	/** Called when the mouse is moved over this widget.
+	 * It is called before {@link #doMouseOver_}.
+	 * <p>Default: does nothing but invokes the parent's {@link #doTooltipOver_}.
+	 * Notice that it does not fire any event.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doTooltipOver_} and {@link #doMouseOver_}.
+	 * If you just don't want to call parent's {@link #doMouseOver_}, simply
+	 * not to invoke super's doMouseOver_.
+	 * @since 5.0.5
+	 * @see #doTooltipOut_
+	 */
+	doTooltipOver_: function (evt) {
+		if (!evt.stopped) {
+			var p = this.parent;
+			if (p) p.doTooltipOver_(evt);
+		}
+	},
+	/** Called when the mouse is moved out of this widget.
+	 * It is called before {@link #doMouseOut_}.
+	 * <p>Default: does nothing but invokes the parent's {@link #doTooltipOut_}.
+	 * Notice that it does not fire any event.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doTooltipOut_} and {@link #doMouseOut_}.
+	 * If you just don't want to call parent's {@link #doMouseOut_}, simply
+	 * not to invoke super's doMouseOut_.
+	 * @since 5.0.5
+	 * @see #doTooltipOver_
+	 */
+	doTooltipOut_: function (evt) {
+		if (!evt.stopped) {
+			var p = this.parent;
+			if (p) p.doTooltipOut_(evt);
 		}
 	},
 	/** Called when the user clicks on a widget or a child widget.
@@ -3834,6 +3873,7 @@ wgt.setListeners({
 	 * @see #doMouseOut_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
+	 * @see #doTooltipOver_
      */
 	doMouseOver_: function (evt) {
 		if (!this.fireX(evt).stopped) {
@@ -3853,6 +3893,7 @@ wgt.setListeners({
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
+	 * @see #doTooltipOut_
 	 */
 	doMouseOut_: function (evt) {
 		if (!this.fireX(evt).stopped) {
