@@ -56,6 +56,7 @@ ZK 5.0.5
   3086352: audio autostart="false" not work
   3086840: JSP including a ZUL with native html will disappear
   3087139: listbox mold="select" has js error if contains textbox
+  3087219: checkmark="true" in listbox, has extra icon
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
