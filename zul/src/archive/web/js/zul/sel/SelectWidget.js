@@ -720,6 +720,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
+		&& !evt.data.shiftKey && !evt.data.ctrlKey
 		&& (!this._cdo || evt.domTarget == row.$n('cm'))) {
 			// Bug 2997034
 			this._syncFocus(row);
