@@ -57,6 +57,7 @@ ZK 5.0.5
   3086840: JSP including a ZUL with native html will disappear
   3087139: listbox mold="select" has js error if contains textbox
   3087219: checkmark="true" in listbox, has extra icon
+  3087097: <row nowrap="true"> has no effect
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

@@ -47,9 +47,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		 * @param boolean nowrap
 		 */
 		nowrap: function (v) {
-			var n = this.$n();
-			if (n)
-				n.noWrap = v;
+			var cells = this.$n();
+			if (cells && (cells = cells.cells))
+				for (var j = cells.length; j--;)
+					cells[j].noWrap = v;
 		},
 		/** Returns the vertical alignment of the whole row.
 		 * <p>Default: null (system default: top).
@@ -214,16 +215,16 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				style += 'height:' + hgh + ';';
 		}
 		
-		var clx = isDetail ? child.getZclass() + "-outer" : this.getZclass() + "-inner";
-		
-		if (!colattrs && !style && span === 1)
-			return ' class="' + clx + '"';
-
-		var attrs = colattrs ? colattrs : '';
+		var clx = isDetail ? child.getZclass() + "-outer" : this.getZclass() + "-inner",
+			attrs = colattrs || '';
 		
 		if (span !== 1)
 			attrs += ' colspan="' + span + '"';
-		return attrs + ' style="' + style + '"' + ' class="' + clx + '"';
+		if (this._nowrap)
+			attrs += ' nowrap="nowrap"';
+		if (style)
+			attrs += ' style="' + style + '"'
+		return attrs + ' class="' + clx + '"';
 	},
 	/**
 	 * Returns whether is stripeable or not.
@@ -292,8 +293,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			attr += ' align="' + this._align + '"';
 		if (this._valign)
 			attr += ' valign="' + this._valign + '"';
-		if (this._nowrap)
-			attr += ' nowrap="nowrap"';
 		return attr;
 	},
 	domClass_: function () {
