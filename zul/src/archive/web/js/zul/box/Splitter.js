@@ -12,6 +12,57 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _setOpen(wgt, open, opts) {
+		var colps = wgt.getCollapse();
+		if (!colps || "none" == colps) return; //nothing to do
+
+		var nd = wgt.$n('chdex'),
+			vert = wgt.isVertical(),
+			Splitter = wgt.$class,
+			before = colps == "before",
+			sib = before ? Splitter._prev(nd): Splitter._next(nd),
+			sibwgt = zk.Widget.$(sib),
+			fd = vert ? "height": "width", diff;
+		if (sib) {
+			if (!open)
+				zWatch.fireDown('onHide', sibwgt);
+
+			sibwgt.setDomVisible_(sib, open);
+			sibwgt.parent._fixChildDomVisible(sibwgt, open);
+			
+			var c = vert && sib.cells.length ? sib.cells[0] : sib;
+			diff = zk.parseInt(c.style[fd]);
+			if (!before && sibwgt && !sibwgt.nextSibling) {
+				var sp = wgt.$n('chdex2');
+				if (sp) {
+					sp.style.display = open ? '': 'none';
+					diff += zk.parseInt(sp.style[fd]);
+				}
+			}
+		}
+
+		var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
+		if (sib2) {
+			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
+			diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
+			if (diff < 0) diff = 0;
+			c.style[fd] = diff + "px";
+		}
+		if (sib && open)
+			zWatch.fireDown('onShow', sibwgt);
+		if (sib2)
+			zWatch.fireDown('onSize', zk.Widget.$(sib2));
+
+		wgt.$n().style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
+		wgt._fixNSDomClass();
+		wgt._fixbtn();
+		wgt._fixszAll();
+
+		if (!opts || opts.sendOnOpen)
+			wgt.fire('onOpen', {open:open});
+			//if fromServer, opts is true
+	}
 /**
  * An element which should appear before or after an element inside a box
  * ({@link Box}).
@@ -45,56 +96,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	 	 * @return boolean
 	 	 */
 		open: function(open, opts) {
-			var node = this.$n();
-			if (!node) return;
-			var colps = this.getCollapse();
-			if (!colps || "none" == colps) return; //nothing to do
-
-			var nd = this.$n('chdex'),
-				vert = this.isVertical(),
-				Splitter = this.$class,
-				before = colps == "before",
-				sib = before ? Splitter._prev(nd): Splitter._next(nd),
-				sibwgt = zk.Widget.$(sib),
-				fd = vert ? "height": "width", diff;
-			if (sib) {
-				if (!open)
-					zWatch.fireDown('onHide', sibwgt);
-
-				sibwgt.setDomVisible_(sib, open);
-				sibwgt.parent._fixChildDomVisible(sibwgt, open);
-				
-				var c = vert && sib.cells.length ? sib.cells[0] : sib;
-				diff = zk.parseInt(c.style[fd]);
-				if (!before && sibwgt && !sibwgt.nextSibling) {
-					var sp = this.$n('chdex2');
-					if (sp) {
-						sp.style.display = open ? '': 'none';
-						diff += zk.parseInt(sp.style[fd]);
-					}
-				}
-			}
-
-			var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
-			if (sib2) {
-				var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
-				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
-				if (diff < 0) diff = 0;
-				c.style[fd] = diff + "px";
-			}
-			if (sib && open)
-				zWatch.fireDown('onShow', sibwgt);
-			if (sib2)
-				zWatch.fireDown('onSize', zk.Widget.$(sib2));
-
-			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
-			this._fixNSDomClass();
-			this._fixbtn();
-			this._fixszAll();
-
-			if (!opts || opts.sendOnOpen)
-				this.fire('onOpen', {open:open});
-				//if fromServer, opts is true
+			if (this.desktop)
+				_setOpen(this, open, opts);
 		}
 	},
 
@@ -153,7 +156,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			this._fixDomClass(true);
 	},
 
-	bind_: function (desktop, skipper, after) {
+	bind_: function () {
 		this.$supers(zul.box.Splitter, 'bind_', arguments);
 
 		var box = this.parent;
@@ -168,7 +171,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			Splitter = this.$class,
 			vert = this.isVertical(),
 			btn = this.$n('btn');
-		node.style.cursor = this.isOpen() ?
+		node.style.cursor = this._open ?
 			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
 
@@ -187,21 +190,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			ghosting: Splitter._ghostsizing, overlay: true, zIndex: 12000,
 			snap: Splitter._snap, endeffect: Splitter._endDrag});
 
-		if (!this.isOpen()) {
-			var nd = this.$n('chdex'),
-				colps = this.getCollapse();
-			if (!colps || "none" == colps) return; //nothing to do
-
-			//Bug 3077716: next sibling not bound yet
-			after.push(function () {
-				var sib = colps == "before" ? Splitter._prev(nd): Splitter._next(nd);
-				jq(sib).hide(); //no onHide at bind_
-				var sibwgt = zk.Widget.$(sib);
-				sibwgt.parent._fixChildDomVisible(sibwgt, false);
-			});
-
-			this._fixNSDomClass();
-		}
+		this._shallClose = !this._open;
+			//3086452: we have to close it after onSize
+			//3077716: next sibling is not bound yet
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
@@ -239,7 +230,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_fixNSDomClass: function () {
 		jq(this.$n())
-			[this.isOpen()?'removeClass':'addClass'](this.getZclass()+"-ns");
+			[this._open ? 'removeClass':'addClass'](this.getZclass()+"-ns");
 	},
 	_fixbtn: function () {
 		var $btn = jq(this.$n('btn')),
@@ -249,7 +240,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		} else {
 			var zcls = this.getZclass(),
 				before = colps == "before";
-			if (!this.isOpen()) before = !before;
+			if (!this._open) before = !before;
 
 			if (this.isVertical()) {
 				$btn.removeClass(zcls + "-btn-" + (before ? "b" : "t"));
@@ -300,6 +291,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+"px";
 			}
 		}
+
+		if (this._shallClose) { //set in bind_
+			delete this._shallClose;
+			_setOpen(this, false, {sendOnOpen:false});
+		}
 	},
 	onShow: _zkf,
 	onSize: _zkf,
@@ -321,13 +317,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);
 		jq(wgt.button).removeClass(wgt.getZclass() + "-btn-visi");
-		wgt.setOpen(!wgt.isOpen());
+		wgt.setOpen(!wgt._open);
 	},
 
 	//drag
 	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.control;
-		if (!wgt.isOpen() || wgt.button == evt.domTarget) return true;
+		if (!wgt._open || wgt.button == evt.domTarget) return true;
 
 		var run = draggable.run = {},
 			node = wgt.$n(),
@@ -469,3 +465,5 @@ if (zk.opera) { //only opera needs it
 	};
 } else
 	zul.box.Splitter._fixLayout = zul.box.Splitter._unfixLayout = zk.$void;
+
+})();
