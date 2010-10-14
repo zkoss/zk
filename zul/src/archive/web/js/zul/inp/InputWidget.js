@@ -268,11 +268,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
 			this._value = value;
 			var inp = this.getInputNode();
-			if (inp) {
-				this._lastChg = inp.value = value = this.coerceToString_(value);
-				if (fromServer)
-					this._defValue = value; //not clear error if by client app
-			}
+			if (inp)
+				this._defValue = this._lastChg = inp.value = value = this.coerceToString_(value);
 		}
 	},
 	/** Returns the input node of this widget
@@ -579,8 +576,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (!vi.error) {
 				// _lastRawValVld must be updated after validate. Bug#3071613
 				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
-				//reason to use this._defValue rather than this._value is
-				//to save the trouble of coerceToString issue
+					//reason to use this._defValue rather than this._value is
+					//to save the trouble of coerceToString issue
 				upd = wasErr || value != this._defValue;
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
@@ -629,7 +626,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers(InputWidget, 'bind_', arguments);
 		var n = this.getInputNode(),
 			zcls = this.getZclass();
-		
+
+		this._defValue = n.value;
+
 		if (this._readonly)
 			jq(n).addClass(zcls + '-readonly');
 		
