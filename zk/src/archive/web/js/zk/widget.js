@@ -2658,20 +2658,16 @@ function () {
 	},
 	/** Returns the HTML fragment of this widget.
 	 * @param zk.Skipper skipper the skipper. Ignored if null
-	 * @param boolean noprolog whether <i>not</i> to generate the prolog
+	 * @param boolean trim whether to trim the HTML content before replacing
 	 * @return String the HTML fragment
 	 */
-	redrawHTML_: function (skipper, noprolog) {
+	redrawHTML_: function (skipper, trim) {
 		var out = [];
 		this.redraw(out, skipper);
-		if (noprolog && !this.rawId && this.prolog && out[0] == this.prolog)
-			out[0] = '';
-			//Don't generate this.prolog if it is the one to re-render;
-			//otherwise, prolog will be generated twice if invalidated
-			//test: <div> <button onClick="self.invalidate()"/></div>
-			//However, always generated if rawId (such as XHTML), since it
-			//uses prolog for the enclosing tag
-		return out.join('');
+		out = out.join('');
+		return trim ? out.trim(): out;
+			//To avoid the prolog being added repeatedly if keep invalidated:
+			//<div><textbox/> <button label="Click!" onClick="self.invalidate()"/></div>
 	},
 	/** Re-renders the DOM element(s) of this widget.
 	 * By re-rendering we mean to generate HTML again ({@link #redraw})
