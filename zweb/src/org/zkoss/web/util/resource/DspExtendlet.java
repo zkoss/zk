@@ -49,9 +49,9 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
  * DSP can change by use of the page directive.
  *
  * @author tomyeh
- * @since 2.4.1
+ * @since 2.4.1 (public since 5.0.5)
  */
-/*package*/ class DspExtendlet implements Extendlet {
+public class DspExtendlet implements Extendlet {
 	private static final Log log = Log.lookup(DspExtendlet.class);
 
 	private ExtendletContext _webctx;
