@@ -576,19 +576,19 @@ public class PageDefinition extends NodeInfo {
 	 * @since 3.0.0
 	 */
 	public String getDocType(Page page) {
-		return _docType != null ?
-			(String)_docType.getValue(_evalr, page): null;
+		return _docType != null ? (String)_docType.getValue(_evalr, page): null;
 	}
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (use the device default).
 	 *
 	 * @param docType the doc type. It may coontain EL expressions.
+	 * If null, it means device's default will be used.
+	 * If empty, it means no doc type will be generated.
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType) {
-		_docType = docType != null && docType.length() > 0 ?
-			new ExValue(docType, String.class): null;
+		_docType = docType != null ? new ExValue(docType, String.class): null;
 	}
 	/** Returns the first line to be generated to the output
 	 * (after evaluation), or null if nothing to generate.

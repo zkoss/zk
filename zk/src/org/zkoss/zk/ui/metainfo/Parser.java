@@ -375,8 +375,7 @@ public class Parser {
 				noEmpty("contentType", val, pi);
 				pgdef.setContentType(val);
 			} else if ("docType".equals(nm)) {
-				noEmpty("docType", val, pi);
-				pgdef.setDocType("<!DOCTYPE " + val + '>');
+				pgdef.setDocType(isEmpty(val) ? "": "<!DOCTYPE " + val + '>');
 			} else if ("xml".equals(nm)) {
 				noEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
