@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3078476.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 15 10:07:39 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+			<li>Mouse over to the groupbox's header</li>
+			<li>over on the header of non-closable groupbox, the cursor shall not change to palm</li>
+			</ol>
+		]]>
+	</html>
+	<window title="closable" border="normal">
+		<groupbox>
+			<caption label="Type Control"></caption>
+		</groupbox>
+		<groupbox mold="3d" >
+			<caption label="Type Control"></caption>
+		</groupbox>
+	</window>
+	<window title="readonly" border="normal">
+		<groupbox closable="false">
+			<caption label="Type Control"></caption>
+		</groupbox>
+		<groupbox mold="3d" closable="false">
+			<caption label="Type Control"></caption>
+		</groupbox>
+	</window>
+</zk>
+

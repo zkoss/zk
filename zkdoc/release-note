@@ -59,6 +59,7 @@ ZK 5.0.5
   3087219: checkmark="true" in listbox, has extra icon
   3087097: <row nowrap="true"> has no effect
   3086452: open="false" in splitter behavior not consistent
+  3078476: Groupbox cursor problem
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

@@ -22,7 +22,7 @@ function (out, skipper) {
 	if (cap) {
 		out.push('<div class="', zcls, '-tl"><div class="', zcls,
 			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
-			zcls, '-hr"><div class="', zcls, '-hm"><div class="',
+			zcls, '-hr"><div class="', zcls, '-hm',(this._closable? '': ' ' + zcls + '-hm-readonly'),'"><div class="',
 			zcls, '-header">');
 		cap.redraw(out);
 		out.push('</div></div></div></div>');

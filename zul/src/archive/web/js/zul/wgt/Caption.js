@@ -44,6 +44,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return label ? img + ' ' + label: img;
 	},
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments),
+			parent = this.parent;
+			
+		if (!parent.$instanceof(zul.wgt.Groupbox))
+			return sc;
+			
+		return sc + (parent._closable ? '': ' ' + this.getZclass() + '-readonly');
+	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
 			this.parent.setOpen(!this.parent.isOpen());

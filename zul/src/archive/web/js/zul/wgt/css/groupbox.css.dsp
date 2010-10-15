@@ -12,6 +12,12 @@
 .z-fieldset-colpsd .z-fieldset-cnt {
 	position: absolute; left: -1000px; top: -1000px;
 }
+.z-fieldset .z-caption:hover {
+	cursor: pointer;
+}
+.z-fieldset .z-caption-readonly:hover {
+	cursor: default;
+}
 
 <%-- 3D --%>
 .z-groupbox{
@@ -54,6 +60,12 @@
 	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.png')});
 	overflow:hidden;
 	zoom: 1;
+}
+.z-groupbox-hm:hover {
+	cursor: pointer;
+}
+.z-groupbox-hm-readonly:hover {
+	cursor: default;
 }
 .z-groupbox-header {
 	overflow: hidden;
