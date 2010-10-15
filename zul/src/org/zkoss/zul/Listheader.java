@@ -305,12 +305,15 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	/** Returns the maximal length of each item's label.
-	 * Default: 0 (no limit).
+	 * <p>Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
 	}
 	/** Sets the maximal length of each item's label.
+	 * <p>Default: 0 (no limit).
+	 * <p>Notice that maxlength will be applied to this header and all
+	 * listcell of the same column.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
@@ -473,6 +476,9 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
+
+		if (_maxlength > 0)
+			renderer.render("maxlength", _maxlength);
 
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}

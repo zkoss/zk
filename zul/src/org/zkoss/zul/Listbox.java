@@ -636,7 +636,7 @@ public class Listbox extends XulElement implements Paginated,
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			smartUpdate("tabindex", _tabindex);
+			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -720,6 +720,8 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the maximal length of each item's label.
+	 * <p>
+	 * It is meaningful only for the select mold.
 	 */
 	public int getMaxlength() {
 		return _maxlength;
@@ -3178,9 +3180,9 @@ public class Listbox extends XulElement implements Paginated,
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
 			if (_tabindex != 0)
-				renderer.render("tabindex", getTabindex());
+				renderer.render("tabindex", _tabindex);
 			if (_maxlength > 0)
-				renderer.render("maxlength", getMaxlength());
+				renderer.render("maxlength", _maxlength);
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
 

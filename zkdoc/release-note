@@ -65,6 +65,8 @@ ZK 5.0.5
   3060550: setDisabled(boolean) doesn't apply inmediatly
   3087421: autodisable doesn't work for toolbarbutton
   3087949: Crawlable doesn't work with listbox
+  3085854: maxlength in listheader has no effect
+  3087270: maxlength in treecol has no effect
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

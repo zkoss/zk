@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 
 	function _isPE() {
-		return zk.feature.pe && zk.isLoaded('zkex.sel');
+		return zk.isLoaded('zkex.sel');
 	}
 /**
  * A list item.
