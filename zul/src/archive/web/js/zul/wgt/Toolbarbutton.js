@@ -89,6 +89,48 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) n.tabIndex = v||'';
 		},
+		/** Returns a list of component IDs that shall be disabled when the user
+		 * clicks this button.
+		 *
+		 * <p>To represent the button itself, the developer can specify <code>self</code>.
+		 * For example, 
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('self,cancel');
+		 * </code></pre>
+		 * is the same as
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('ok,cancel');
+		 * </code></pre>
+		 * that will disable
+		 * both the ok and cancel buttons when an user clicks it.
+		 *
+		 * <p>The button being disabled will be enabled automatically
+		 * once the client receives a response from the server.
+		 * In other words, the server doesn't notice if a button is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('+self,+cancel');
+		 * </code></pre>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets whether to disable the button after the user clicks it.
+		 * @param String autodisable
+		 */
+		autodisable: null,
 		/** Returns non-null if this button is used for file upload, or null otherwise.
 		 * Refer to {@link #setUpload} for more details.
 		 * @return String
@@ -196,6 +238,34 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	},	
 	doClick_: function(evt){
 		if (!this._disabled) {
+			var ads = this._autodisable, aded;
+			if (ads) {
+				ads = ads.split(',');
+				for (var j = ads.length; j--;) {
+					var ad = ads[j].trim();
+					if (ad) {
+						var perm;
+						if (perm = ad.charAt(0) == '+')
+							ad = ad.substring(1);
+						ad = "self" == ad ? this: this.$f(ad);
+						if (ad) {
+							ad.setDisabled(true);
+							if (this.inServer)
+								if (perm)
+									ad.smartUpdate('disabled', true);
+								else if (!aded) aded = [ad];
+								else aded.push(ad);
+						}
+					}
+				}
+			}
+			if (aded) {
+				aded = new zul.wgt.ADBS(aded);
+				if (this.isListen('onClick', {asapOnly:true}))
+					zWatch.listen({onResponse: aded});
+				else
+					setTimeout(function () {aded.onResponse();}, 800);
+			}
 			this.fireX(evt);
 
 			if (!evt.stopped) {
