@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/**
+	/**
  * A toolbar button.
  *
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
@@ -238,34 +238,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	},	
 	doClick_: function(evt){
 		if (!this._disabled) {
-			var ads = this._autodisable, aded;
-			if (ads) {
-				ads = ads.split(',');
-				for (var j = ads.length; j--;) {
-					var ad = ads[j].trim();
-					if (ad) {
-						var perm;
-						if (perm = ad.charAt(0) == '+')
-							ad = ad.substring(1);
-						ad = "self" == ad ? this: this.$f(ad);
-						if (ad) {
-							ad.setDisabled(true);
-							if (this.inServer)
-								if (perm)
-									ad.smartUpdate('disabled', true);
-								else if (!aded) aded = [ad];
-								else aded.push(ad);
-						}
-					}
-				}
-			}
-			if (aded) {
-				aded = new zul.wgt.ADBS(aded);
-				if (this.isListen('onClick', {asapOnly:true}))
-					zWatch.listen({onResponse: aded});
-				else
-					setTimeout(function () {aded.onResponse();}, 800);
-			}
+			zul.wgt.ADBS.autodisable(this);
 			this.fireX(evt);
 
 			if (!evt.stopped) {
