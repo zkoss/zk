@@ -309,6 +309,10 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
+	//@Override
+	protected void renderCrawlable(String label) throws java.io.IOException {
+		//does nothing since generated in renderProperties
+	}
 	public String getZclass() {
 		return _zclass != null ? _zclass:
 			!"trendy".equals(getMold()) ? "z-button-os": "z-button";

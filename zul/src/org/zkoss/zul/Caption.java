@@ -44,13 +44,6 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 		return _zclass == null ? "z-caption" : _zclass;
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
-		super.renderProperties(renderer);
-
-		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
-	}
-
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Window)

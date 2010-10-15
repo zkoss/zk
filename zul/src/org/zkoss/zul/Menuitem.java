@@ -26,7 +26,6 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A single choice in a {@link Menupopup} element.
@@ -278,7 +277,11 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		render(renderer, "upload", _upload);
 		render(renderer, "value", _value);
 
-		Utils.renderCrawlableA(href, getLabel());
+		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
+	}
+	//@Override
+	protected void renderCrawlable(String label) throws java.io.IOException {
+		//does nothing since generated in renderProperties
 	}
 
 	//-- ComponentCtrl --//

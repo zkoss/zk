@@ -64,6 +64,7 @@ ZK 5.0.5
   3067572: Cannot fire Group children's on click event in breeze
   3060550: setDisabled(boolean) doesn't apply inmediatly
   3087421: autodisable doesn't work for toolbarbutton
+  3087949: Crawlable doesn't work with listbox
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
