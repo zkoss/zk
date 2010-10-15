@@ -118,5 +118,9 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 			if (items && items.$remove(this))
 				items.push(newwgt);
 		}
+	},
+	bindChildren_: function () { //not bind children
+	},
+	unbindChildren_: function () {
 	}
 });

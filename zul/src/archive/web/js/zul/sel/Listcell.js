@@ -179,16 +179,6 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (head && !head.isVisible())
 			style += "display:none;";
 		return style;
-	},
-	bindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("bindChildren_", arguments);
-	},
-	unbindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("unbindChildren_", arguments);
 	}
 });
 })();
