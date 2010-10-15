@@ -186,11 +186,11 @@ implements DynamicTag, Native {
 		}
 
 		Writer oldout = null;
-		String tn = null;
 		if (exec != null && !HtmlPageRenders.isZkTagsGenerated(exec)
 		&& exec.getAttribute(ATTR_TOP_NATIVE) == null) { //need to check topmost native only
-			tn = _tag != null ? _tag.toLowerCase(): "";
-			if ("html".equals(tn) || "body".equals(tn) || "head".equals(tn)) {
+			String tn;
+			if (root || "html".equals(tn = _tag != null ? _tag.toLowerCase(): "")
+			|| "body".equals(tn) || "head".equals(tn)) {
 				exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
 				oldout = out;
 				out = new StringWriter();
@@ -260,14 +260,33 @@ implements DynamicTag, Native {
 					}
 				}
 
+				boolean disableUnavailable = false;
 				if (jhead < 0 && ((jhead = heade) < 0) //use </head> if no <zkhead>
 				&& ((jhead = head) < 0) //use <head> if no </head> (though unlikely)
 				&& ((jhead = junav) < 0) //use <body> if no <head>
-				&& ((jhead = html) < 0)) //use <html> if no <body>
-					jhead = 0; //insert at head if not found
+				&& ((jhead = html) < 0)) { //use <html> if no <body>
+					if (_tag != null) {
+						final String tn = _tag.toLowerCase();
+						if ("div".equals(tn) || "span".equals("tn")) {
+							l_loop:
+							for (int j = 0, len = sb.length(); j < len; ++j)
+								switch (sb.charAt(j)) {
+								case '>':
+									disableUnavailable = true; //make output cleaner
+									jhead = j + 1; //found
+								case '=':  //it might have something depends on JS
+								case '"':
+									break l_loop;
+								}
+						}
+					}
+					if (jhead < 0)
+						jhead = 0; //insert at head if not found
+				}
 
 				final String msg = HtmlPageRenders.outUnavailable(exec);
-				if (msg != null) {
+					//called if disableUnavailable (so it won't be generated later)
+				if (msg != null && !disableUnavailable) {
 					if (junav < 0) {
 						if (html >= 0)
 							junav = sb.lastIndexOf("</html");
