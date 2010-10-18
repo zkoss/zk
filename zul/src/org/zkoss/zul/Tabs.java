@@ -51,9 +51,9 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 	}
 	public String getWidth() {
 		String width = super.getWidth();
-		if (getTabbox().isVertical()){
-			if (width == null) width = "50px";
-		}
+		Tabbox tabbox = getTabbox();
+		if (width == null && tabbox != null && tabbox.isVertical())
+			width = "50px";
 		return width;
 	}
 	

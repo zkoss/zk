@@ -67,6 +67,7 @@ ZK 5.0.5
   3087949: Crawlable doesn't work with listbox
   3085854: maxlength in listheader has no effect
   3087270: maxlength in treecol has no effect
+  3089492: Sets a width to the tabs before setParent cause error
 
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
