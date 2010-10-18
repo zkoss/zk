@@ -267,7 +267,7 @@ implements DynamicTag, Native {
 				&& ((jhead = html) < 0)) { //use <html> if no <body>
 					if (_tag != null) {
 						final String tn = _tag.toLowerCase();
-						if ("div".equals(tn) || "span".equals("tn")) {
+						if ("div".equals(tn) || "span".equals(tn)) {
 							l_loop:
 							for (int j = 0, len = sb.length(); j < len; ++j)
 								switch (sb.charAt(j)) {
