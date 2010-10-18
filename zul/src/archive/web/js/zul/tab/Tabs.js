@@ -26,6 +26,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	getTabbox: function() {
 		return this.parent;
 	},
+	//@Override
+	getWidth: function () {
+		var wd = this._width;
+		if (!wd) {
+			var tabbox = this.getTabbox();
+			if (tabbox && tabbox.isVertical())
+				return "50px";
+		}
+		return wd;
+	},
 	getZclass: function() {
 		if (this._zclass != null)
 			return this._zclass;
