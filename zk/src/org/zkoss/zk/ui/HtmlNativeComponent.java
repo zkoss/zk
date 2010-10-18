@@ -480,21 +480,27 @@ implements DynamicTag, Native {
 			final DesktopCtrl desktopCtrl = _page != null ?
 				(DesktopCtrl)_page.getDesktop(): null;
 			boolean bEpilog = false;
+			final StringBuffer prolog = new StringBuffer(_prolog),
+				epilog = new StringBuffer();
 			for (child = getFirstChild(); child != null;
 			child = child.getNextSibling()) {
 				final HtmlNativeComponent nc = (HtmlNativeComponent)child;
-				if (bEpilog) {
-					_epilog += nc.getFullContent();
-				} else if (child != childWithChild) {
-					_prolog += nc.getPrologHalf();
-					_epilog = nc.getEpilogHalf() + _epilog;
-					bEpilog = true;
+				if (bEpilog) { //after childWithChild
+					epilog.append(nc.getFullContent());
+				} else if (child != childWithChild) { //in front of childWithChild
+					prolog.append(nc.getFullContent());
 				} else { //childWithChild
-					_prolog = nc.getFullContent() + _prolog;
+					prolog.append(nc.getPrologHalf());
+					epilog.append(nc.getEpilogHalf());
+					bEpilog = true;
 				}
 				if (desktopCtrl != null)
 					desktopCtrl.removeComponent(nc, false); //ok but no need to recycle
 			}
+
+			_prolog = prolog.toString();
+			_epilog = epilog.append(_epilog).toString();
+
 			if (childWithChild == null) {
 				nChild(null, null, 0);
 			} else {
