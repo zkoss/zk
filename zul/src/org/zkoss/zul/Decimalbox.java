@@ -79,6 +79,10 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 	 * @exception WrongValueException if value is wrong
 	 */
 	public void setValue(BigDecimal value) throws WrongValueException {
+		//bug #3089502: setScale in decimalbox not working
+		if (_scale != AUTO && value != null) {
+			value = value.setScale(_scale, getRoundingMode());
+		}
 		validate(value);
 		setRawValue(value);
 	}
@@ -102,7 +106,17 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 	 * <p>Default: {@link #AUTO}.
 	 */
 	public void setScale(int scale) {
-		_scale = scale;
+		//bug #3089502: setScale in decimalbox not working
+		if (_scale != scale) {
+			_scale = scale;
+			smartUpdate("scale", scale);
+			if(scale != AUTO) {
+				BigDecimal v = (BigDecimal)_value;
+				if (v != null) {
+					setValue(v);
+				}
+			}
+		}
 	}
 
 	//-- super --//
@@ -138,5 +152,12 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		return value != null && getFormat() == null ?
 			value instanceof BigDecimal ? ((BigDecimal)value).toPlainString():
 				value.toString()/*just in case*/: formatNumber(value, null);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_scale != AUTO)
+			renderer.render("scale", _scale);
 	}
 }

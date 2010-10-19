@@ -33,16 +33,86 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			val = valStr.substring(0, j) + val;
 		return k ? '1'+val : val;
 	}
+	function compareHalf(valStr, ri) {
+		var ch,
+			result,
+			base = '5';
+		for (var j = ri, len = valStr.length; j < len; ++j) {
+			result = valStr.charAt(j) - base;
+			if (j == ri) { //first digit
+				base = '0';
+			}
+			if (result != 0) 
+				return result;
+		}
+		return result;
+	}
+	function preDigit(valStr, ri) {
+		for (var j = ri; --j >= 0;) {
+			var ch = valStr.charAt(j);
+			if (ch >= '0' && ch <= '9')
+				return ch;
+		}
+		return null;
+	}
 zk.fmt.Number = {
+	setScale: function (val, scale, rounding) { //bug #3089502: setScale in decimalbox not working
+		if (scale === undefined || scale < 0)
+			return val;
+		var valStr = val.$toString(),
+			indVal = valStr.indexOf('.'),
+			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0;
+		if (valFixed <= scale) // no need to do any thing
+			return val;
+		else {
+			var ri = indVal + scale + 1;
+			valStr = this.rounding(valStr, ri, rounding, valStr < 0);
+			return new zk.BigDecimal(valStr);
+		}
+	},
+	rounding: function (valStr, ri, rounding, minus) {
+		switch(rounding) {
+			case 0: //UP
+				valStr = up(valStr, ri);
+				break;
+			case 1: //DOWN
+				valStr = down(valStr, ri);
+				break;
+			case 2: //CELING
+				valStr = minus ? down(valStr, ri) : up(valStr, ri);
+				break;
+			case 3: //FLOOR
+				valStr = !minus ? down(valStr, ri) : up(valStr, ri);
+				break;
+			case 4: //HALF_UP
+				var r = compareHalf(valStr, ri);
+				valStr = r < 0 ? down(valStr, ri) : up(valStr, ri);
+				break;
+			case 5: //HALF_DOWN
+				var r = compareHalf(valStr, ri);
+				valStr = r > 0 ? up(valStr, ri) : down(valStr, ri);
+				break;
+			case 6: //HALF_EVEN
+				//falling down
+			default:
+				var r = compareHalf(valStr, ri);
+				if (r == 0) { //half
+					var evenChar = preDigit(valStr, ri);
+					valStr = (evenChar & 1) ? up(valStr, ri) : down(valStr, ri);
+				} else
+					valStr = r < 0 ? down(valStr, ri) : up(valStr, ri);
+		}
+		return valStr;
+	},
 	format: function (fmt, val, rounding) {
 		if (val == null) return '';
 		if (!fmt) return '' + val;
 		
-		var isMINUS;
+		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
 			fmt = fmt.split(';');
-			isMINUS = (''+val).charAt(0) == '-';
-			fmt = fmt[isMINUS ? 1 : 0];
+			useMinsuFmt = val < 0;
+			fmt = fmt[useMinsuFmt ? 1 : 0];
 		}
 		
 		//calculate number of fixed decimals
@@ -83,40 +153,7 @@ zk.fmt.Number = {
 				valStr = valStr + '0';
 		} else { //preprocess for rounding
 			var ri = indVal + fixed + 1;
-			switch(rounding) {
-				case 0: //UP
-					valStr = up(valStr, ri);
-					break;
-				case 1: //DOWN
-					valStr = down(valStr, ri);
-					break;
-				case 2: //CELING
-					valStr = val < 0 ? down(valStr, ri) : up(valStr, ri);
-					break;
-				case 3: //FLOOR
-					valStr = val >= 0 ? down(valStr, ri) : up(valStr, ri);
-					break;
-				case 4: //HALF_UP
-					var h = Math.pow(10, valFixed - fixed - 1) * 5,
-						r = valStr.substring(indVal + fixed + 1) | 0;
-					valStr = r < h ? down(valStr, ri) : up(valStr, ri);
-					break;
-				case 5: //HALF_DOWN
-					var h = Math.pow(10, valFixed - fixed - 1) * 5,
-						r = valStr.substring(indVal + fixed + 1) | 0;
-					valStr = r <= h ? down(valStr, ri) : up(valStr, ri);
-					break;
-				case 6: //HALF_EVEN
-					//falling down
-				default:
-					var h = Math.pow(10, valFixed - fixed - 1) * 5,
-						r = valStr.substring(indVal + fixed + 1) | 0;
-					if (r == h) { //half
-						var evenChar = valStr.charAt(fixed == 0 ? indVal - 1 : indVal + fixed);
-						valStr = (evenChar & 1) ? up(valStr, ri) : down(valStr, ri);
-					} else
-						valStr = r < h ? down(valStr, ri) : up(valStr, ri);
-			}
+			valStr = this.rounding(valStr, ri, rounding, val < 0);
 		}
 		var indFmt = efmt.jdot,
 			pre = '', suf = '';
@@ -211,7 +248,7 @@ zk.fmt.Number = {
 			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		return (val < 0 && !isMINUS? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
+		return (val < 0 && !useMinsuFmt? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
 	},
 	_escapeQuote: function (fmt) {
 		//note we do NOT support mixing of quoted and unquoted percent

@@ -24,6 +24,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
 zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
+	$define: { //zk.def
+		/** Returns the rounding mode.
+		 * <ul>
+		 * <li>0: ROUND_UP</li>
+		 * <li>1: ROUND_DOWN</li>
+		 * <li>2: ROUDN_CEILING</li>
+		 * <li>3: ROUND_FLOOR</li>
+		 * <li>4: ROUND_HALF_UP</li>
+		 * <li>5: ROUND_HALF_DOWN</li>
+		 * <li>6: ROUND_HALF_EVEN</li>
+		 * </ul>
+		 * @return int
+		 */
+		/** Sets the rounding mode.
+		 * <ul>
+		 * <li>0: ROUND_UP</li>
+		 * <li>1: ROUND_DOWN</li>
+		 * <li>2: ROUDN_CEILING</li>
+		 * <li>3: ROUND_FLOOR</li>
+		 * <li>4: ROUND_HALF_UP</li>
+		 * <li>5: ROUND_HALF_DOWN</li>
+		 * <li>6: ROUND_HALF_EVEN</li>
+		 * </ul>
+		 * @param int rounding mode
+		 */
+		rounding: null,
+		/** Returns the precision scale.
+		 * @return int
+		 */
+		/** Sets the precision scale.
+		 * @param int scale
+		 */
+		scale: null
+	},
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
@@ -33,6 +67,8 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
+		if (this._scale > 0) //bug #3089502: setScale in decimalbox not working
+			val = zk.fmt.Number.setScale(val, this._scale, this._rounding);
 		return val;
 	},
 	coerceToString_: function(value) {
