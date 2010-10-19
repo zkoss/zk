@@ -3453,21 +3453,18 @@ focus: function (timeout) {
 			if (!evt.auStopped) {
 				var toServer = evt.opts && evt.opts.toServer;
 				if (toServer || (this.inServer && this.desktop)) {
-					if (evt.opts.sendAhead) {
-						this.sendAU_(evt, timeout >= 0 ? timeout : 38);
-					} else {
-						var asap = toServer || this._asaps[evtnm];
-						if (asap == null) {
-							var ime = this.$class._importantEvts;
-							if (ime) {
-								var ime = ime[evtnm];
-								if (ime != null) 
-									asap = ime;
-							}
+					var asap = toServer || this._asaps[evtnm];
+					if (asap == null) {
+						var ime = this.$class._importantEvts;
+						if (ime) {
+							var ime = ime[evtnm];
+							if (ime != null) 
+								asap = ime;
 						}
-						if (asap != null) //true or false
-							this.sendAU_(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
 					}
+					if (asap != null //true or false
+					|| evt.opts.sendAhead)
+						this.sendAU_(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
 				}
 			}
 			return evt;
