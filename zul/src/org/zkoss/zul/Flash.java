@@ -40,7 +40,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	private String _src;
 	private Media _media;
 	private String _wmode = "transparent";	
-	private String _quality = "hight";
+	private String _quality = "high";
 	private String _version = "6,0,0,0";
 	private String _bgcolor;
 	private byte _medver;
