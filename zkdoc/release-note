@@ -12,6 +12,8 @@ ZK 5.0.5
   3077084: Able to specify the last word identify a component namespace
   3081910: AnnotateDataBinderInit add "loadOnSave" config attribute
   3085654: LabelLocator allows to return InputStream instead of URL
+  3091085: Upgrade to jQuery 1.4.3
+  3091086: The A component shall allow children
   
 * Bugs
   3057902: zk bug for window showbusy
