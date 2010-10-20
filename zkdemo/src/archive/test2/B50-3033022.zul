@@ -1,0 +1,22 @@
+<zk>
+	<hbox>
+		<window border="normal" height="300px" width="300px">
+			<tabbox mold="accordion" height="100%">
+				<tabs>
+					<tab label="Tab 1" closable="true" />
+					<tab id="tb2" label="Tab 2" closable="true" />
+					<tab id="tb3" label="Tab 3" closable="true" />
+					<tab id="tb4" label="Tab 4" closable="true" />
+					<tab id="tb5" label="Tab 5" closable="true" />
+				</tabs>
+				<tabpanels>
+					<tabpanel id="tabpanel1">Tabpanel 1</tabpanel>
+					<tabpanel id="tabpanel2">Tabpanel 2</tabpanel>
+					<tabpanel>Tabpanel 3</tabpanel>
+					<tabpanel>Tabpanel 4</tabpanel>
+					<tabpanel>Tabpanel 5</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+	</hbox>
+</zk>
