@@ -76,6 +76,7 @@ ZK 5.0.5
   3090979: typo (_quality="hight") in Flash.java
   3091160: WrongValueException not handled if thrown in onCreate listener
   3091045: Non integer Page number in paging mold="os"
+  3091153: selectAll(), clearSelection() in Tree
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
@@ -112,7 +113,6 @@ ZK 5.0.5
 	}
   + Rename caption.css to caption.css.dsp
   + Rename tablelayout.css to tablelayout.css.dsp
-  
 
 	--------
 ZK 5.0.4
