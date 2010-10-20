@@ -125,7 +125,7 @@ public class Themes {
 	 * Return true if current theme is Breeze
 	 */
 	public static boolean isBreeze(Execution exe){
-		return BREEZE_THEME.equals(getThemeStyle(exe)) || getThemeStyle(exe).isEmpty();
+		return BREEZE_THEME.equals(getThemeStyle(exe));
 	}
 	
 	/**

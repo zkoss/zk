@@ -45,6 +45,9 @@ public class CacheableThemeProvider implements ThemeProvider{
 	private final static String BREEZE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.breeze.zul";
 	
 	public Collection getThemeURIs(Execution exec, List uris) {
+		if (Themes.getThemeStyle(exec).isEmpty())
+			Themes.setThemeStyle(exec, Themes.BREEZE_THEME);
+		
 		boolean isBreeze = Themes.isBreeze(exec) && Themes.hasBreezeLib();
 		Messagebox.setTemplate(isBreeze ? 
 				BREEZE_MESSAGEBOX_TEMPLATE_URI : BLUE_MESSAGEBOX_TEMPLATE_URI);
