@@ -859,7 +859,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if(this._mode != 'embedded' && this._mode != 'popup') {
+		if(WindowRenderer.shallCheckBorder(this)) {
 			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],
 				cap = this.$n("cap");
@@ -875,8 +875,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var cap = this.$n('cap'),
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
-			this._mode != 'embedded' && this._mode != 'popup' ?
-				tl.offsetHeight: 0;
+			WindowRenderer.shallCheckBorder(this) ? tl.offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -1014,6 +1013,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		var node = this.$n();
+		zk(node).beforeHideOnUnbind();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
 		if (!zk.css3) jq.unzsync(this);
@@ -1277,4 +1277,20 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 		}
 	}
 });
+
+var WindowRenderer =
+/** @class zul.wnd.WindowRenderer
+ * The renderer used to render a window.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.wnd.WindowRenderer = {
+	/** Returns whether to check the border's height.
+	 * 
+	 * @param zul.wnd.Window wgt the window
+	 */
+	shallCheckBorder: function (wgt) {
+		return wgt._mode != 'embedded' && wgt._mode != 'popup';
+	}
+};
 })();

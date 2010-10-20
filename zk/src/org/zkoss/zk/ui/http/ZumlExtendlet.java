@@ -56,9 +56,9 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * loaded from the classpath.
  *
  * @author tomyeh
- * @since 2.4.1
+ * @since 2.4.1 (public since 5.0.5)
  */
-/*package*/ class ZumlExtendlet implements Extendlet {
+public class ZumlExtendlet implements Extendlet {
 	private static final Log log = Log.lookup(ZumlExtendlet.class);
 	private ExtendletContext _webctx;
 	/** PageDefinition cache. */

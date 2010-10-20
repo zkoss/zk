@@ -751,12 +751,20 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		Utils.renderCrawlableText(txt);
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final InputElement clone = (InputElement)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	private AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The error message. Not null if users entered a wrong data (and
 		 * not correct it yet).
 		 */
@@ -768,5 +776,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		private Constraint constr;
 		/** Whether the validation is calused by {@link #isValid}. */
 		private transient boolean checkOnly;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

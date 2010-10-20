@@ -12,6 +12,36 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _getBtnNewPos(wgt) {
+		var btn = wgt.$n("btn");
+		
+		btn.title = wgt._curpos;
+		wgt.updateFormData(wgt._curpos);
+		
+		var isVertical = wgt.isVertical(),
+			ofs = zk(wgt.getRealNode()).cmOffset(),
+			totalLen = isVertical ? wgt._getHeight(): wgt._getWidth(),
+			x = totalLen > 0 ? Math.round((wgt._curpos * totalLen) / wgt._maxpos) : 0;
+			
+		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
+		ofs = isVertical ? [0, (ofs[1] + x)]: [(ofs[0] + x), 0];
+		ofs = wgt._snap(ofs[0], ofs[1]);
+		
+		return ofs[(isVertical ? 1: 0)];
+	}
+	function _getNextPos(wgt, offset) {
+		var $btn = jq(wgt.$n("btn")),
+			fum = wgt.isVertical()? ['top', 'height']: ['left', 'width'],
+			newPosition = {};
+			
+		newPosition[fum[0]] = jq.px0(offset ? 
+			(offset + zk.parseInt($btn.css(fum[0])) - $btn[fum[1]]() / 2):
+			_getBtnNewPos(wgt));
+				
+		return newPosition;
+	}
+	
 /**
  * A slider.
  *  <p>Default {@link #getZclass} as follows:
@@ -164,30 +194,23 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
 			pageIncrement = this._pageIncrement,
-			moveOnCursor = pageIncrement < 0,
+			moveToCursor = pageIncrement < 0,
 			isVertical = this.isVertical(),
-			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0],
-			newPosition;
+			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0];
 		
 		if (!$btn[0] || $btn.is(':animated')) return;
 		
-		if (moveOnCursor) {
-			newPosition = isVertical ? 
-				{top: jq.px0(offset + zk.parseInt($btn.css('top')) - $btn.height() / 2)}:
-				{left: jq.px0(offset + zk.parseInt($btn.css('left')) - $btn.width() / 2)};
-		} else {
+		if (!moveToCursor) {
 			this._curpos += offset > 0? pageIncrement: - pageIncrement;
-			newPosition = isVertical ? 
-				{top: jq.px0(this._getNewPos())}:
-				{left: jq.px0(this._getNewPos())};
-		}	
+			offset = null; // update by _curpos
+		}
 		
-		$btn.animate(newPosition, "slow", function() {
-			pos = moveOnCursor ? wgt._realpos(): wgt._curpos;
+		$btn.animate(_getNextPos(this, offset), "slow", function() {
+			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
 			if (pos > wgt._maxpos) 
 				pos = wgt._maxpos;
 			wgt.fire("onScroll", pos);
-			if (moveOnCursor)
+			if (moveToCursor)
 				wgt._fixPos();
 		});
 		this.$supers('doClick_', arguments);
@@ -276,28 +299,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		return this.getRealNode().clientHeight - this.$n("btn").offsetHeight + 7;
 	},
 	_fixPos: _zkf = function() {
-		var btn = this.$n("btn");
-		if (this.isVertical()) {
-			btn.style.top = jq.px0(this._getNewPos());
-		} else {
-			btn.style.left = jq.px0(this._getNewPos());
-		}
-	},
-	_getNewPos: _zkf = function() {
-		var btn = this.$n("btn");
-		btn.title = this._curpos;
-		this.updateFormData(this._curpos);
-		if (this.isVertical()) {
-			var ht = this._getHeight(), x = ht > 0 ? Math.round((this._curpos * ht) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
-			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
-			ofs = this._snap(0, ofs[1] + x);
-			return ofs[1];
-		} else {
-			var wd = this._getWidth(), x = wd > 0 ? Math.round((this._curpos * wd) / this._maxpos) : 0, ofs = zk(this.getRealNode()).cmOffset();
-			ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
-			ofs = this._snap(ofs[0] + x, 0);
-			return ofs[0];
-		}
+		this.$n("btn").style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
 	onSize: _zkf,
 	onShow: _zkf,
@@ -359,3 +361,4 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.$supers(zul.inp.Slider, 'unbind_', arguments);
 	}	
 });
+})();

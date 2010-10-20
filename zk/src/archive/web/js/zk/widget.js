@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
-		_syncdt = zUtl.now() + 60000; //when zk.Desktop.sync() shall be called
+		_syncdt = zUtl.now() + 60000, //when zk.Desktop.sync() shall be called
+		_rdque = [], _rdtid; //async rerender's queue and timeout ID
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -112,7 +113,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _bind0(wgt) {
-		_rerenderDone(wgt); //cancel pending async rerender
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -875,22 +875,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt._z$rd) { //might be redrawn by forcerender
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
-			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null);
+			wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop: null, null, true);
 		}
 	}
 
 	//invoke rerender later
-	function _asyncRerender(wgt, timeout) {
-		wgt._asyncRRD = true;
-		setTimeout(function () {
-			if (wgt._asyncRRD) {
-				_rerenderDone(wgt);
-				wgt.rerender();
-			}
-		}, timeout);
+	function _rerender(wgt, timeout) {
+		if (_rdtid)
+			clearTimeout(_rdtid);
+		_rdque.push(wgt);
+		_rdtid = setTimeout(_rerender0, timeout);
+	}
+	function _rerender0() {
+		_rdtid = null;
+		l_out:
+		for (var wgt; wgt = _rdque.shift();) {
+			if (!wgt.desktop)
+				continue;
+
+			for (var j = _rdque.length; j--;)
+				if (zUtl.isAncestor(wgt, _rdque[j]))
+					_rdque.splice(j, 1); //skip _rdque[j]
+				else if (zUtl.isAncestor(_rdque[j], wgt))
+					continue l_out; //skip wgt
+
+			wgt.rerender();
+		}
 	}
 	function _rerenderDone(wgt) {
-		delete wgt._asyncRRD;
+		for (var j = _rdque.length; j--;)
+			if (zUtl.isAncestor(wgt, _rdque[j]))
+				_rdque.splice(j, 1);
 	}
 
 	var _dragoptions = {
@@ -1844,7 +1859,7 @@ wgt.$f().main.setTitle("foo");
 			_bindrod(newwgt);
 		} else if (this.desktop) {
 			var dt = newwgt.desktop || this.desktop;
-			if (node) newwgt.replaceHTML(node, dt);
+			if (node) newwgt.replaceHTML(node, dt, null, true);
 			else {
 				this.unbind();
 				newwgt.bind(dt);
@@ -2609,7 +2624,7 @@ function () {
 	 * @see _global_.jq#replaceWith
 	 * @return zk.Widget
 	 */
-	replaceHTML: function (n, desktop, skipper) {
+	replaceHTML: function (n, desktop, skipper, _trim_) {
 		if (!desktop) {
 			desktop = this.desktop;
 			if (!zk.Desktop._ndt) zk.stateless();
@@ -2618,12 +2633,12 @@ function () {
 		var cf = skipper ? null: _bkFocus(this);
 
 		var p = this.parent;
-		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
+		if (p) p.replaceChildHTML_(this, n, desktop, skipper, _trim_);
 		else {
 			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
-			jq(n).replaceWith(this.redrawHTML_(skipper, true));
+			jq(n).replaceWith(this.redrawHTML_(skipper, _trim_));
 			this.bind(desktop, skipper);
 		}
 
@@ -2653,20 +2668,16 @@ function () {
 	},
 	/** Returns the HTML fragment of this widget.
 	 * @param zk.Skipper skipper the skipper. Ignored if null
-	 * @param boolean noprolog whether <i>not</i> to generate the prolog
+	 * @param boolean trim whether to trim the HTML content before replacing
 	 * @return String the HTML fragment
 	 */
-	redrawHTML_: function (skipper, noprolog) {
+	redrawHTML_: function (skipper, trim) {
 		var out = [];
 		this.redraw(out, skipper);
-		if (noprolog && !this.rawId && this.prolog && out[0] == this.prolog)
-			out[0] = '';
-			//Don't generate this.prolog if it is the one to re-render;
-			//otherwise, prolog will be generated twice if invalidated
-			//test: <div> <button onClick="self.invalidate()"/></div>
-			//However, always generated if rawId (such as XHTML), since it
-			//uses prolog for the enclosing tag
-		return out.join('');
+		out = out.join('');
+		return trim ? out.trim(): out;
+			//To avoid the prolog being added repeatedly if keep invalidated:
+			//<div><textbox/> <button label="Click!" onClick="self.invalidate()"/></div>
 	},
 	/** Re-renders the DOM element(s) of this widget.
 	 * By re-rendering we mean to generate HTML again ({@link #redraw})
@@ -2688,6 +2699,11 @@ function () {
 	 * @return zk.Widget this widget.
 	 */
 	/** Re-renders after the specified time (milliseconds).
+	 * <p>Notice that, to have the best performance, we use the single timer
+	 * to handle all pending rerenders for all widgets.
+	 * In other words, if the previous timer is not expired (and called),
+	 * the second call will reset the expiration time to the value given
+	 * in the second call.
 	 * @param int timeout the number milliseconds (non-negative) to wait
 	 * before rerender
 	 * @return zk.Widget this widget.
@@ -2696,7 +2712,7 @@ function () {
 	rerender: function (skipper) {
 		if (this.desktop) {
 			if (typeof skipper == "number") {
-				_asyncRerender(this, skipper);
+				_rerender(this, skipper);
 				return this;
 			}
 
@@ -2712,7 +2728,7 @@ function () {
 					if (skipInfo) {
 						var cf = _bkFocus(this);
 
-						this.replaceHTML(n, null, skipper);
+						this.replaceHTML(n, null, skipper, true);
 
 						skipper.restore(this, skipInfo);
 
@@ -2725,7 +2741,7 @@ function () {
 					}
 				}
 				if (!skipInfo)
-					this.replaceHTML(n);
+					this.replaceHTML(n, null, null, true);
 
 				this.z$rod = oldrod;
 			}
@@ -2742,12 +2758,12 @@ function () {
 	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
-	replaceChildHTML_: function (child, n, desktop, skipper) {
+	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
 		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
-		jq(n).replaceWith(child.redrawHTML_(skipper, true));
+		jq(n).replaceWith(child.redrawHTML_(skipper, _trim_));
 		child.bind(desktop, skipper);
 	},
 	/** Inserts the HTML content generated by the specified child widget before the reference widget (the before argument).
@@ -2925,6 +2941,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	bind: function (desktop, skipper) {
+		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
 		else {
@@ -2951,6 +2968,7 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	unbind: function (skipper) {
+		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod)
 			_unbindrod(this);
 		else {
@@ -3004,14 +3022,7 @@ bind_: function (desktop, skipper, after) {
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
-		for (var child = this.firstChild, nxt; child; child = nxt) {
-			nxt = child.nextSibling;
-				//we have to store first since RefWidget will replace widget
-
-			if (!skipper || !skipper.skipped(this, child))
-				if (child.z_rod) _bindrod(child);
-				else child.bind_(desktop, null, after); //don't pass skipper
-		}
+		this.bindChildren_(desktop, skipper, after);
 
 		if (this.isListen('onBind')) {
 			var self = this;
@@ -3019,6 +3030,24 @@ bind_: function (desktop, skipper, after) {
 				if (self.desktop) //might be unbound
 					self.fire('onBind');
 			});
+		}
+	},
+	/** Binds the children of this widget.
+	 * It is called by {@link #bind_} to invoke child's {@link #bind_} one-by-one.
+	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example, 
+	 * @since 5.0.5
+	 */
+	bindChildren_: function (desktop, skipper, after) {
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling;
+				//we have to store first since RefWidget will replace widget
+
+			if (!skipper || !skipper.skipped(this, child))
+				if (child.z_rod) _bindrod(child);
+				else child.bind_(desktop, null, after); //don't pass skipper
 		}
 	},
 
@@ -3051,15 +3080,7 @@ unbind_: function (skipper, after) {
 		_unbind0(this);
 		_unlistenFlex(this);
 
-		for (var child = this.firstChild, nxt; child; child = nxt) {
-			nxt = child.nextSibling; //just in case
-
-			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
-			if (!skipper || !skipper.skipped(this, child))
-				if (child.z_rod) _unbindrod(child);
-				else if (child.desktop) child.unbind_(null, after); //don't pass skipper
-		}
-
+		this.unbindChildren_(skipper, after);
 		this.cleanDrag_(); //ok to invoke even if not init
 
 		if (this.isListen('onUnbind')) {
@@ -3076,6 +3097,23 @@ unbind_: function (skipper, after) {
 		}
 		this.effects_ = {};
 	},
+	/** Unbinds the children of this widget.
+	 * It is called by {@link #unbind_} to invoke child's {@link #unbind_} one-by-one.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper 
+	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example, 
+	 * @since 5.0.5
+	 */
+	unbindChildren_: function (skipper, after) {
+		for (var child = this.firstChild, nxt; child; child = nxt) {
+			nxt = child.nextSibling; //just in case
+
+			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
+			if (!skipper || !skipper.skipped(this, child))
+				if (child.z_rod) _unbindrod(child);
+				else if (child.desktop) child.unbind_(null, after); //don't pass skipper
+		}
+	},
+
 	/** Associates UUID with this widget.
 	 * <p>Notice that {@link #uuid} is automically associated (aka., bound) to this widget.
 	 * Thus, you rarely need to invoke this method unless you want to associate with other identifiers.
@@ -3425,21 +3463,18 @@ focus: function (timeout) {
 			if (!evt.auStopped) {
 				var toServer = evt.opts && evt.opts.toServer;
 				if (toServer || (this.inServer && this.desktop)) {
-					if (evt.opts.sendAhead) {
-						this.sendAU_(evt, timeout >= 0 ? timeout : 38);
-					} else {
-						var asap = toServer || this._asaps[evtnm];
-						if (asap == null) {
-							var ime = this.$class._importantEvts;
-							if (ime) {
-								var ime = ime[evtnm];
-								if (ime != null) 
-									asap = ime;
-							}
+					var asap = toServer || this._asaps[evtnm];
+					if (asap == null) {
+						var ime = this.$class._importantEvts;
+						if (ime) {
+							var ime = ime[evtnm];
+							if (ime != null) 
+								asap = ime;
 						}
-						if (asap != null) //true or false
-							this.sendAU_(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
 					}
+					if (asap != null //true or false
+					|| evt.opts.sendAhead)
+						this.sendAU_(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
 				}
 			}
 			return evt;
@@ -3726,12 +3761,17 @@ wgt.setListeners({
 	/** Called when the user clicks or right-clicks on widget or a child widget.
 	 * It is called before {@link #doClick_} and {@link #doRightClick_}.
 	 * <p>Default: does nothing but invokes the parent's {@link #doSelect_}.
+	 * Notice that it does not fire any event.
 	 * <p>Deriving class that supports selection (such as {@link zul.sel.ItemWidget})
 	 * shall override this to handle the selection.
 	 * <p>Technically, the selection can be handled in {@link #doClick_}.
 	 * However, it is better to handle here since this method is invoked first
 	 * such that the widget will be selected before one of its descendant widget
 	 * handles {@link #doClick_}.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doSelect_} and {@link #doClick_}/{@link #doRightClick_}.
+	 * If you just don't want to call parent's {@link #doSelect_}, simply
+	 * not to invoke super's doSelect_.
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3742,6 +3782,40 @@ wgt.setListeners({
 		if (!evt.stopped) {
 			var p = this.parent;
 			if (p) p.doSelect_(evt);
+		}
+	},
+	/** Called when the mouse is moved over this widget.
+	 * It is called before {@link #doMouseOver_}.
+	 * <p>Default: does nothing but invokes the parent's {@link #doTooltipOver_}.
+	 * Notice that it does not fire any event.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doTooltipOver_} and {@link #doMouseOver_}.
+	 * If you just don't want to call parent's {@link #doMouseOver_}, simply
+	 * not to invoke super's doMouseOver_.
+	 * @since 5.0.5
+	 * @see #doTooltipOut_
+	 */
+	doTooltipOver_: function (evt) {
+		if (!evt.stopped) {
+			var p = this.parent;
+			if (p) p.doTooltipOver_(evt);
+		}
+	},
+	/** Called when the mouse is moved out of this widget.
+	 * It is called before {@link #doMouseOut_}.
+	 * <p>Default: does nothing but invokes the parent's {@link #doTooltipOut_}.
+	 * Notice that it does not fire any event.
+	 * <p>Notice that calling {@link zk.Event#stop} will stop the invocation of
+	 * parent's {@link #doTooltipOut_} and {@link #doMouseOut_}.
+	 * If you just don't want to call parent's {@link #doMouseOut_}, simply
+	 * not to invoke super's doMouseOut_.
+	 * @since 5.0.5
+	 * @see #doTooltipOver_
+	 */
+	doTooltipOut_: function (evt) {
+		if (!evt.stopped) {
+			var p = this.parent;
+			if (p) p.doTooltipOut_(evt);
 		}
 	},
 	/** Called when the user clicks on a widget or a child widget.
@@ -3822,6 +3896,7 @@ wgt.setListeners({
 	 * @see #doMouseOut_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
+	 * @see #doTooltipOver_
      */
 	doMouseOver_: function (evt) {
 		if (!this.fireX(evt).stopped) {
@@ -3841,6 +3916,7 @@ wgt.setListeners({
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
+	 * @see #doTooltipOut_
 	 */
 	doMouseOut_: function (evt) {
 		if (!this.fireX(evt).stopped) {
@@ -4131,7 +4207,8 @@ _doFooSelect: function (evt) {
 	 * and the target widget will be returned.
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
-	 * <li>exact - only check its uuid.(since 5.0.2)</li>
+	 * <li>exact - id must exactly match uuid (i.e., uuid-xx ignored).
+	 * It also implies strict (since 5.0.2)</li>
 	 * <li>strict - whether not to look up the parent node.(since 5.0.2)
 	 * If omitted, false is assumed (and it will look up parent).</li>
 	 * <li>child - whether to ensure the given element is a child element
@@ -4169,38 +4246,53 @@ _doFooSelect: function (evt) {
 				|| ((e1 = n.target) && (e2 = e1.z$proxy) ? e2: e1) || n; //check DOM event first
 		}
 
-		if (opts && opts.exact)
+		opts = opts || {};
+		if (opts.exact)
 			return _binds[n.id];
 
-		for (; n; n = zk(n).vparentNode(true)) {
+		for (var orgId = false; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
+					var id2 = id.indexOf('-');
+					id2 = id2 >= 0 ? id.substring(0, id2): id;
+					if (orgId && id2 != orgId) //not bound yet
+						break; //not found
+
 					wgt = _binds[id]; //try first (since ZHTML might use -)
 					if (wgt)
 						return wgt;
 
-					var j = id.indexOf('-');
-					if (j >= 0) {
-						id = id.substring(0, j);
+					if (id != id2) {
+						id = id2;
 						wgt = _binds[id];
-						if (wgt)
-							if (opts && opts.child) {
-								var n2 = wgt.$n();
-								if (n2 && jq.isAncestor(n2, n))
-									return wgt;
-							} else
+						if (wgt) {
+							if (!opts.child)
 								return wgt;
+
+							var n2 = wgt.$n();
+							if (n2 && jq.isAncestor(n2, n))
+								return wgt;
+							orgId = ''; //prevent orgId to be checked since it is not a unbound widget
+						}
 					}
 				}
 			} catch (e) { //ignore
 			}
-			if (opts && opts.strict) break;
+			if (opts.strict)
+				break;
+			if (orgId === false)
+				orgId = id;
 		}
 		return null;
 	},
 
-	/** Called to mimic the mouse down event fired by the browser. It is used for implement a widget. In most cases, you don't need to invoke this method. However, it is useful if the widget you are implemented will 'eat' the mouse-down event so ZK Client Engine won't be able to intercept it at the document level.
+	/** Called to mimic the mouse down event fired by the browser.
+	 * It is used for implement a widget. In most cases, you don't need to
+	 * invoke this method.
+	 * <p>However, it is useful if the widget you are implemented will 'eat'
+	 * the mouse-down event so ZK Client Engine won't be able to intercept it
+	 * at the document level.
 	 * @param zk.Widget wgt the widget that receives the mouse-down event
 	 * @param boolean noFocusChange whether zk.currentFocus shall be changed to wgt. 
 	 */

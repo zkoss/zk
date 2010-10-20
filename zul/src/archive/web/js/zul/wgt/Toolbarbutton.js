@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/**
+	/**
  * A toolbar button.
  *
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
@@ -89,6 +89,48 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) n.tabIndex = v||'';
 		},
+		/** Returns a list of component IDs that shall be disabled when the user
+		 * clicks this button.
+		 *
+		 * <p>To represent the button itself, the developer can specify <code>self</code>.
+		 * For example, 
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('self,cancel');
+		 * </code></pre>
+		 * is the same as
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('ok,cancel');
+		 * </code></pre>
+		 * that will disable
+		 * both the ok and cancel buttons when an user clicks it.
+		 *
+		 * <p>The button being disabled will be enabled automatically
+		 * once the client receives a response from the server.
+		 * In other words, the server doesn't notice if a button is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <pre><code>
+		 * button.setId('ok');
+		 * wgt.setAutodisable('+self,+cancel');
+		 * </code></pre>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets whether to disable the button after the user clicks it.
+		 * @param String autodisable
+		 */
+		autodisable: null,
 		/** Returns non-null if this button is used for file upload, or null otherwise.
 		 * Refer to {@link #setUpload} for more details.
 		 * @return String
@@ -124,9 +166,10 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 */
 		upload: function (v) {
 			var n = this.$n();
-			if (n && !this._disabled) {
+			if (n) {
 				this._cleanUpld();
-				if (v && v != 'false') this._initUpld();
+				if (v && v != 'false' && !this._disabled)
+					this._initUpld();
 			}
 		}
 	},
@@ -149,7 +192,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled && this._upload) this._initUpld();
 	},
 	unbind_: function(){
-		if (!this._disabled && this._upload) this._cleanUpld();
+		this._cleanUpld();
 		var n = this.$n();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
@@ -194,7 +237,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return attr;
 	},	
 	doClick_: function(evt){
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
+			zul.wgt.ADBS.autodisable(this);
 			this.fireX(evt);
 
 			if (!evt.stopped) {
@@ -206,13 +250,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	doMouseOver_: function (evt) {
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
 			jq(this).addClass(this.getZclass() + '-over');
 			this.$supers('doMouseOver_', arguments);
 		}
 	},
 	doMouseOut_: function (evt) {
-		if (!this.isDisabled()) {
+		if (!this._disabled) {
 			jq(this).removeClass(this.getZclass() + '-over');
 			this.$supers('doMouseOut_', arguments);
 		}

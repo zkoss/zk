@@ -26,6 +26,12 @@ zk.copy(zjq.prototype, {
 	},
 	enableSelection: function () {
 		return this.jq.each(_ensel);
+	},
+	beforeHideOnUnbind: function () { //Bug 3076384 (though i cannot reproduce in chrome/safari)
+		return this.jq.each(function () {
+			for (var ns = this.getElementsByTagName("iframe"), j = ns.length; j--;)
+				ns[j].src = zjq._src0;
+		});
 	}
 });
 

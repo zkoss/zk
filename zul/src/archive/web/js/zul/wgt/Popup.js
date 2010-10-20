@@ -202,6 +202,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(true);
 	},
 	unbind_: function () {
+		zk(this.$n()).undoVParent(); //Bug 3079480
 		if (this._stackup) {
 			jq(this._stackup).remove();
 			this._stackup = null;
@@ -225,16 +226,24 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function () {
 		var node = this.$n(),
-			h = node.offsetHeight - 1, 
-			tl = jq(node).find('> div:first-child')[0],
-			bl = jq(node).find('> div:last')[0],
-			n = this.getCaveNode().parentNode,
+			isFrameRequired = zul.wgt.PopupRenderer.isFrameRequired(),
+			h = node.offsetHeight - (isFrameRequired ? 1: 0), 
 			bd = this.$n('body');
+		
+		if (isFrameRequired) {
+			var tl = jq(node).find('> div:first-child')[0],
+				bl = jq(node).find('> div:last')[0],
+				n = this.getCaveNode().parentNode,
+				bd = this.$n('body');
 		
 			h -= tl.offsetHeight;
 			h -= bl.offsetHeight;
 			h -= zk(n).padBorderHeight();
 			h -= zk(bd).padBorderHeight();
+		} else {
+			h -= zk(bd).padBorderHeight();
+		}
+		
 		return h;
 	},
 	_fixHgh: function () {
@@ -247,6 +256,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			c.style.height = "auto";
 	},
 	_fixWdh: zk.ie7_ ? function () {
+		if (!zul.wgt.PopupRenderer.isFrameRequired()) return;
 		var node = this.$n(),
 			wdh = node.style.width,
 			cn = jq(node).children('div'),
@@ -284,3 +294,17 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	epilogHTML_: function (out) {
 	}
 });
+/** @class zul.wgt.PopupRenderer
+ * The renderer used to render a Popup.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.wgt.PopupRenderer = {
+	/** Check the Popup whether to render the frame
+	 * 
+	 * @param zul.wgt.Popup wgt the window
+	 */
+	isFrameRequired: function () {
+		return true;
+	}
+};

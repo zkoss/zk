@@ -16,6 +16,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.grid');
 
+/** @class zul.grid.Renderer
+ * The renderer used to render a grid.
+ * It is designed to be overriden
+ */
+zul.grid.Renderer = {
+	/** Update the size of the column menu button when mouse over
+	 * 
+	 * @param zul.grid.Column col the column
+	 */
+	updateColumnMenuButton: function (col) {
+		var btn;
+		if (btn = col.$n('btn')) btn.style.height = col.$n().offsetHeight - 1 + "px";
+	}
+};
+
 /**
  * A grid is an element that contains both rows and columns elements.
  * It is used to create a grid of elements.

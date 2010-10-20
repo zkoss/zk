@@ -36,8 +36,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (onBlur) {
 			if (zul.inp.InputWidget.onChangingForced && wgt.isListen("onChanging"))
 				_onChanging.call(wgt, -1); //force
-			wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
+			_clearOnChanging(wgt);
 		}
+	}
+	function _clearOnChanging(wgt) {
+		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
 	}
 	function _onChanging(timeout) {
 		//Note: "this" is available here
@@ -57,7 +60,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}: function (code) {
 			return code >= 32;
 		}
-
+/** @class zul.inp.Renderer
+ * The renderer used to render a inputWidget.
+ * It is designed to be overriden
+ */
+zul.inp.Renderer = {
+	/** render the spinner's(timebox) button
+	* @param Array out an array of HTML fragments.
+	* @param zul.inp.ComboWidget wgt the combowidget
+	*/
+	renderSpinnerButton: function (out, wgt) {
+	}
+};
 var InputWidget =
 /**
  * A skeletal implementation for a input widget.
@@ -131,6 +145,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					fnm = readonly ? 'addClass': 'removeClass';
 				
 				inp.readOnly = readonly;
+				jq(this.$n())[fnm](zcls + '-real-readonly'); //Merge breeze
 				jq(inp)[fnm](zcls + '-readonly');
 				
 				if (!this.inRoundedMold()) return;
@@ -246,16 +261,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
  			value = vi.value;
  		}
 
+		_clearOnChanging(this);
+
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
 		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
 			this._value = value;
 			var inp = this.getInputNode();
-			if (inp) {
-				inp.value = value = this.coerceToString_(value);
-				if (fromServer)
-					this._defValue = value; //not clear error if by client app
-			}
+			if (inp)
+				this._defValue = this._lastChg = inp.value = value = this.coerceToString_(value);
 		}
 	},
 	/** Returns the input node of this widget
@@ -325,7 +339,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doMouseOut_: function () {
 		this._inplaceout = true;
 		this.$supers('doMouseOut_', arguments);
-		
 	},
 	doMouseOver_: function () {
 		this._inplaceout = false;
@@ -334,10 +347,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 
-		if (evt.domTarget.tagName) { //Bug 2111900
-			var inp = this.getInputNode();
-			this._lastChg = inp.value;
+		var inp = this.getInputNode();
+		if (inp) this._lastChg = inp.value;
 
+		if (evt.domTarget.tagName) { //Bug 2111900
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
@@ -365,9 +378,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.updateChange_();
 			this.$supers('doBlur_', arguments);
 		}
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
-		}
 	},
 
 	_doSelect: function (evt) { //domListen_
@@ -515,14 +527,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
-					this._lastRawValVld = value; //raw (don't validate again if no changed and no error)
+					this._lastRawValVld = value;
 					return {value: val, server: true};
 				}
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
 				} else
-					this._lastRawValVld = value; //raw
+					this._lastRawValVld = value;
 			}
 			return {value: val};
 		} finally {
@@ -562,9 +574,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!vi.error || vi.server) {
 			var upd;
 			if (!vi.error) {
-				inp.value = value = this.coerceToString_(vi.value);
-				//reason to use this._defValue rather than this._value is
-				//to save the trouble of coerceToString issue
+				// _lastRawValVld must be updated after validate. Bug#3071613
+				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
+					//reason to use this._defValue rather than this._value is
+					//to save the trouble of coerceToString issue
 				upd = wasErr || value != this._defValue;
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
@@ -602,13 +615,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		
 		if ((!no || !no.input) && this._inplace)
 			sc += ' ' + this.getInplaceCSS();
+			
+		// Merge breeze
+		if ((!no || !no.zclass) && this._readonly)
+			sc += ' ' + zcls + '-real-readonly';
+			
 		return sc;
 	},
 	bind_: function () {
 		this.$supers(InputWidget, 'bind_', arguments);
 		var n = this.getInputNode(),
 			zcls = this.getZclass();
-		
+
+		this._defValue = n.value;
+
 		if (this._readonly)
 			jq(n).addClass(zcls + '-readonly');
 		

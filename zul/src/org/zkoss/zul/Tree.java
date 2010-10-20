@@ -31,6 +31,7 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -91,6 +92,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private boolean _sizedByContent;
 
 	private transient Paginal _pgi;
+	private String _nonselTags; //since 5.0.5 for non-selectable tags
 	private boolean _autopaging;
 	/** The paging controller, used only if mold = "paging" and user
 	 * doesn't assign a controller via {@link #setPaginal}.
@@ -287,8 +289,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		assert D.OFF || inPagingMold(): "paging mold only";
-		assert D.OFF || (_paging == null && _pgi == null);
+//		assert D.OFF || inPagingMold(): "paging mold only";
+//		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
@@ -565,6 +567,30 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_name = name;
 			smartUpdate("name", name);
 		}
+	}
+
+	/** Sets a list of HTML tag names that shall <i>not</i> cause the tree item
+	 * being selected if they are clicked.
+	 * <p>Default: null (it means button, input, textarea and a). If you want
+	 * to select no matter which tag is clicked, please specify an empty string.
+	 * @param tags a list of HTML tag names that will <i>not</i> cause the tree item
+	 * being selected if clicked. Specify null to use the default and "" to
+	 * indicate none.
+	 * @since 5.0.5
+	 */
+	public void setNonselectableTags(String tags) {
+		if (!Objects.equals(_nonselTags, tags)) {
+			_nonselTags = tags;
+			smartUpdate("nonselectableTags", tags);
+		}
+	}
+	/** Returns a list of HTML tag names that shall <i>not</i> cause the tree item
+	 * being selected if they are clicked.
+	 * <p>Refer to {@link #setNonselectableTags} for details.
+	 * @since 5.0.5
+	 */
+	public String getNonselectableTags() {
+		return _nonselTags;
 	}
 
 	/** Returns whether the check mark shall be displayed in front
@@ -1878,7 +1904,22 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			render(renderer, "pagingPosition", _pagingPosition);
 		if (isAutopaging())
 			renderer.render("autopaging", true);
+		if (_nonselTags != null)
+			renderer.render("nonselectableTags", _nonselTags);
+		if (isCheckmarkDeselectOther())
+			renderer.render("_cdo", true);
 	}
+	/** Returns whether to toggle the selection if clicking on a list item
+	 * with a checkmark.
+	 */
+	private static boolean isCheckmarkDeselectOther() {
+		if (_ckDeselectOther == null) //ok to race
+			_ckDeselectOther = Boolean.valueOf(
+				"true".equals(Library.getProperty("org.zkoss.zul.tree.checkmarkDeselectOthers")));
+		return _ckDeselectOther.booleanValue();
+	}
+	private static Boolean _ckDeselectOther;
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},

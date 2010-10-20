@@ -123,4 +123,12 @@ public class Center extends LayoutRegion implements org.zkoss.zul.api.Center {
 	public void setSize(String size) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
+	/** Returns the defaul collapsed margin ([3, 3, 3, 3]).
+	 * @since 5.0.5
+	 */
+	//@Override
+	protected int[] getDefaultCmargins() {
+		return new int[] { 3, 3, 3, 3 };
+	}
 }

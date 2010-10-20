@@ -35,18 +35,20 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 	
 	$define: {
-    	/** Returns the maximal length of each item's label.
-    	 * Default: 0 (no limit).
-    	 * @return int
-    	 */
-    	/** Sets the maximal length of each item's label.
-    	 * @param int maxlength
-    	 */
+		/** Returns the maximal length of each item's label.
+		 * Default: 0 (no limit).
+		 * @return int
+		 */
+		/** Sets the maximal length of each item's label.
+		 * @param int maxlength
+		 */
 		maxlength: [function (v) {
 			return !v || v < 0 ? 0 : v; 
 		}, function () {
-			if (this.desktop)
+			if (this.desktop) {
+				this.rerender(0);
 				this.updateCells_();
+			}
 		}]
 	},
 	/**
@@ -57,10 +59,14 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		if (box == null || box.getMold() == 'select')
 			return;
 
-		var jcol = this.getChildIndex();
-		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
+		var jcol = this.getChildIndex(), w;
+		for (var it = box.getBodyWidgetIterator(); (w = it.next());)
 			if (jcol < w.nChildren)
-				return w.getChildAt(jcol).rerender();
+				w.getChildAt(jcol).rerender(0);
+
+		w = box.listfoot;
+		if (w && jcol < w.nChildren)
+			w.getChildAt(jcol).rerender(0);
 	},
 	//super//
 	getZclass: function () {
@@ -68,7 +74,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.sel.Listheader, 'bind_', arguments);
-		var cm = this.$n('cm');
+		var cm = this.$n('cm'),
+			n = this.$n();
 		if (cm) {
 			var box = this.getListbox();
 			if (box) box._headercm = cm;
@@ -76,9 +83,13 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.domListen_(cm, 'onMouseOver')
 				.domListen_(cm, 'onMouseOut');
 		}
+		if (n)
+			this.domListen_(n, 'onMouseOver', '_doSortMouseEvt')
+				.domListen_(n, 'onMouseOut', '_doSortMouseEvt');
 	},
 	unbind_: function () {
-		var cm = this.$n('cm');
+		var cm = this.$n('cm'),
+			n = this.$n();
 		if (cm) {
 			var box = this.getListbox();
 			if (box) box._headercm = null;
@@ -87,7 +98,15 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				.domUnlisten_(cm, 'onMouseOver')
 				.domUnlisten_(cm, 'onMouseOut');
 		}
+		if (n)
+			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
+				.domUnlisten_(n, 'onMouseOut', '_doSortMouseEvt');
 		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
+	},
+	_doSortMouseEvt: function (evt) {
+		var sort = this.getSortAscending();
+		if (sort != 'none')
+			jq(this.$n())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
 	},
 	_doMouseOver: function (evt) {
 		 var cls = this._checked ? '-img-over-seld' : '-img-over';
@@ -135,5 +154,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			s = '<span id="' + this.uuid + '-cm" class="' + this.getZclass() + '-img"></span>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;
+	},
+	//@Override
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
 	}
 });

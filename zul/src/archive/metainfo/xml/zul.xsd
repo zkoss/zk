@@ -1502,6 +1502,7 @@
 		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
+		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="listboxPagingPositionAttrType">
 		<xs:union>
@@ -2225,6 +2226,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="treeitemRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />

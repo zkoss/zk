@@ -309,9 +309,9 @@ function zkmprops(uuid, props) {
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			if (type == "#stub") {
-				wgt = _wgt$(uuid); //use the original one since filter() might applied
-				if (!wgt)
+			if (type == "#stub") { //not possible if zkuery
+				if (!(wgt = _wgt$(uuid) //use the original one since filter() might applied
+				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknow stub "+uuid;
 				var w = new zk.Widget();
 				zk._wgtutl.replace(wgt, w);
@@ -455,7 +455,13 @@ function zkmprops(uuid, props) {
 jq(function() {
 	var _bfUploads = [],
 		_reszInf = {},
-		_oldBfUnload;
+		_oldBfUnload,
+		_subevts = { //additonal invocation
+			onClick: 'doSelect_',
+			onRightClick: 'doSelect_',
+			onMouseOver: 'doTooltipOver_',
+			onMouseOut: 'doTooltipOut_'
+		};
 
 	/** @partial zk
 	 */
@@ -481,13 +487,11 @@ jq(function() {
 	function _doEvt(wevt) {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
-			var en = wevt.name;
-			if (en == 'onClick' || en == 'onRightClick') {
-				wgt.doSelect_(wevt);
-				if (wevt.stopped)
-					en = null; //denote stop
-			}
-			if (en)
+			var en = wevt.name,
+				fn = _subevts[en];
+			if (fn)
+				wgt[fn].call(wgt, wevt);
+			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();

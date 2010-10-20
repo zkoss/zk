@@ -1300,6 +1300,12 @@ jq(el).zk.center(); //same as 'center'
 		return this;
 	},
 
+	/** Fixes DOM elements when a widget's unbind_ is called
+	 * and it will hide the DOM element (display="none" or visibility="hidden").
+	 * <p>For firefox, it has to reset the src attribute of iframe (Bug 3076384)
+	 */
+	beforeHideOnUnbind: zk.$void,
+
 	//focus/select//
 	/** Sets the focus to the first matched element. It is the same as DOMElement.focus, except it doesn't throw any exception (rather, returns false), and it can set the focus later (by use of timeout). 
 	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately. 
@@ -1378,7 +1384,6 @@ jq(el).zk.center(); //same as 'center'
 
 		if (inp.setSelectionRange) {
 			inp.setSelectionRange(start, end);
-			inp.focus();
 		} else if (inp.createTextRange) {
 			var range = inp.createTextRange();
 			if(start != end){
@@ -1514,9 +1519,13 @@ zk.copy(jq, {
 	},
 
 	/** Tests if one element (p) is an ancestor of another (c). 
+	 * <p>Notice that, if you want to test widgets, please use
+	 * {@link zUtl#isAncestor} instead.
+	 *
 	 * @param DOMElement p the parent element to test
 	 * @param DOMElement c the child element to test
 	 * @return boolean if p is an ancesotor of c.
+	 * @see zUtl#isAncestor
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;

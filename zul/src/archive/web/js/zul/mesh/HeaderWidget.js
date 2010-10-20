@@ -375,7 +375,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
 		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
-				zcls, '-cnt"', this.domTextStyleAttr_(), '>', this.domContent_());
+				zcls, '-cnt"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-img"></div>', this.domContent_());
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
 			out.push('<a id="', uuid, '-btn"  href="javascript:;" class="', zcls, '-btn"></a>');

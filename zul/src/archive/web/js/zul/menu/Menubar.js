@@ -25,7 +25,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!menubar._noFloatUp && !menubar._bOver && zul.menu._nOpen)
 			zWatch.fire('onFloatUp', menubar); //notify all
 	}
-
+/** @class zul.menu.Renderer
+ * The renderer used to render a menu.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.menu.Renderer = {
+	/** render the spinner's(timebox) button
+	* @param Array out an array of HTML fragments.
+	* @param zul.inp.ComboWidget wgt the combowidget
+	*/
+	renderSpinnerButton: function (out, wgt) {
+	}
+};
 /**
  * A container that usually contains menu elements.
  *
@@ -105,6 +117,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			}
 			zWatch.listen({onSize: this, onShow: this});
 		}
+		this._syncChdWidth(); //Merge breeze
 	},
 	/** Returns whether the menubar scrolling is enabled in horizontal orient.
 	 * @return boolean
@@ -119,13 +132,15 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();
+		this._syncChdWidth();	//Merge breeze
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_)
 			this._checkScrolling();
+		this._syncChdWidth(); //Merge breeze
 	},
-	_checkScrolling: function () {	
+	_checkScrolling: function () {
 		if (!this.checkScrollable()) return;
 		
 		var node = this.$n();
@@ -162,6 +177,11 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 				body.style.width = jq.px0(fixedSize);
 			}
 		}
+	},
+	/**
+	 * Sync each menu's width
+	 */
+	_syncChdWidth: function () {	
 	},
 	_fixScrollPos: function () {
 		var body = this.$n('body'),

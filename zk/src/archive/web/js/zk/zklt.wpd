@@ -22,10 +22,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<script src="domie.js"/>
 		<script>if(zk.ie6_){</script>
 			<script src="domie6.js"/>
-	<script>}}else if(zk.opera){</script>
-		<script src="domopera.js"/>
+	<script>}}else if(zk.gecko){</script>
+		<script src="domgecko.js"/>
 	<script>}else if(zk.safari){</script>
 		<script src="domsafari.js"/>
+	<script>}else if(zk.opera){</script>
+		<script src="domopera.js"/>
 	<script>}</script>
 
 	<script src="anima.js"/>

@@ -101,12 +101,27 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * @since 5.0.0
 	 */
 	public void close() {
+		if (_selected)
+			selectNextTab();
 		final Tabpanel panel = getLinkedPanel();
 		if (panel != null)
 			panel.detach();
 		detach();
 	}
 
+	private void selectNextTab() {
+		for (Tab tab = (Tab) getNextSibling(); tab != null; tab = (Tab) tab.getNextSibling())
+			if (!tab.isDisabled()) {
+				tab.setSelected(true);
+				return;
+			}
+		for (Tab tab = (Tab) getPreviousSibling(); tab != null; tab = (Tab) tab.getPreviousSibling())
+			if (!tab.isDisabled()) {
+				tab.setSelected(true);
+				return;
+			}
+	}
+	
 	/**
 	 * Returns the tabbox owns this component.
 	 */
@@ -267,7 +282,5 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			render(renderer, "selected", _selected);
 		if (_closable)
 			render(renderer, "closable", _closable);
-
-		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 }

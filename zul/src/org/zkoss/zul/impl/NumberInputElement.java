@@ -52,6 +52,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 			if (!JVMs.isJava6())
 				throw new UnsupportedOperationException("Java 6 or above is required");
 			_rounding = mode;
+			smartUpdate("rounding", mode);
 		}
 	}
 	/** Sets the rounding mode by the name.

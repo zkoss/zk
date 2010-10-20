@@ -132,8 +132,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			attr += ' align="' + v + '"';
 		if (v = this._border) 
 			attr += ' border="' + v + '"';
-		if (v = this._autostart) 
-			attr += ' autostart="' + v + '"';
+		attr += ' autostart="' + (this._autostart||false) + '"'; //Bug 3086352: autostart shall be generated
 		if (v = this._loop) 
 			attr += ' loop="' + v + '"';
 		return attr;

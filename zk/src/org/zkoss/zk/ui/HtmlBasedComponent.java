@@ -87,9 +87,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @param left the left position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setLeft(String left) {
-		if (!Objects.equals(getLeft(), left)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.left: null, left)) {
 			initAuxInfo().left = left;
-			smartUpdate("left", getLeft());
+			smartUpdate("left", left);
 		}
 	}
 	/** Returns the top position.
@@ -103,9 +103,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @param top the top position. Remember to specify <code>px</code>, <code>pt</code> or <code>%</code>.
 	 */
 	public void setTop(String top) {
-		if (!Objects.equals(getTop(), top)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.top: null, top)) {
 			initAuxInfo().top = top;
-			smartUpdate("top", getTop());
+			smartUpdate("top", top);
 		}
 	}
 	/** Returns the Z index.
@@ -119,9 +119,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setZIndex(int zIndex) {
 		if (zIndex < -1)
 			zIndex = -1;
-		if (getZIndex() != zIndex) {
+		if ((_auxinf != null ? _auxinf.zIndex: -1) != zIndex) {
 			initAuxInfo().zIndex = zIndex;
-			if ((zIndex = getZIndex()) < 0)
+			if (zIndex < 0)
 				smartUpdate("zIndex", (Object)null);
 			else
 				smartUpdate("zIndex", zIndex);
@@ -152,9 +152,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setHeight(String height) {
 		if (height != null && height.length() == 0)
 			height = null;
-		if (!Objects.equals(getHeight(), height)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.height: null, height)) {
 			initAuxInfo().height = height;
-			smartUpdate("height", getHeight());
+			smartUpdate("height", height);
 		}
 	}
 	/** Returns the width. If null, the best fit is used.
@@ -170,9 +170,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setWidth(String width) {
 		if (width != null && width.length() == 0)
 			width = null;
-		if (!Objects.equals(getWidth(), width)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.width: null, width)) {
 			initAuxInfo().width = width;
-			smartUpdate("width", getWidth());
+			smartUpdate("width", width);
 		}
 	}
 	/** Sets the width directly without sending back the result
@@ -222,9 +222,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setTooltiptext(String tooltiptext) {
 		if (tooltiptext != null && tooltiptext.length() == 0)
 			tooltiptext = null;
-		if (!Objects.equals(getTooltiptext(), tooltiptext)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.tooltiptext: null, tooltiptext)) {
 			initAuxInfo().tooltiptext = tooltiptext;
-			smartUpdate("tooltiptext", getTooltiptext());
+			smartUpdate("tooltiptext", tooltiptext);
 		}
 	}
 
@@ -286,9 +286,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 */
 	public void setSclass(String sclass) {
 		if (sclass != null && sclass.length() == 0) sclass = null;
-		if (!Objects.equals(getSclass(), sclass)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.sclass: null, sclass)) {
 			initAuxInfo().sclass = sclass;
-			smartUpdate("sclass", getSclass());
+			smartUpdate("sclass", sclass);
 		}
 	}
 	/** Sets the CSS class. This method is a bit confused with Java's class,
@@ -309,9 +309,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 */
 	public void setStyle(String style) {
 		if (style != null && style.length() == 0) style = null;
-		if (!Objects.equals(getStyle(), style)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.style: null, style)) {
 			initAuxInfo().style = style;
-			smartUpdate("style", getStyle());
+			smartUpdate("style", style);
 		}
 	}
 
@@ -429,9 +429,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setVflex(String flex) {
 		if (flex != null && flex.length() == 0)
 			flex = null;
-		if (!Objects.equals(getVflex(), flex)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.vflex: null, flex)) {
 			initAuxInfo().vflex = flex;
-			smartUpdate("vflex", getVflex());
+			smartUpdate("vflex", flex);
 		}
 	}
 	/**
@@ -470,9 +470,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	public void setHflex(String flex) {
 		if (flex != null && flex.length() == 0)
 			flex = null;
-		if (!Objects.equals(getHflex(), flex)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.hflex: null, flex)) {
 			initAuxInfo().hflex = flex;
-			smartUpdate("hflex", getHflex());
+			smartUpdate("hflex", flex);
 		}
 	}
 	
@@ -528,29 +528,31 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "vflex", getVflex());
-		render(renderer, "hflex", getHflex());
-		render(renderer, "tooltiptext", getTooltiptext());
-		render(renderer, "width", getWidth());
-		render(renderer, "height", getHeight());
-		render(renderer, "sclass", getSclass());
+		if (_auxinf != null) {
+			render(renderer, "width", _auxinf.width);
+			render(renderer, "height", _auxinf.height);
+			render(renderer, "left", _auxinf.left);
+			render(renderer, "top", _auxinf.top);
+			render(renderer, "vflex", _auxinf.vflex);
+			render(renderer, "hflex", _auxinf.hflex);
+			render(renderer, "sclass", _auxinf.sclass);
+			render(renderer, "style", _auxinf.style);
+			render(renderer, "tooltiptext", _auxinf.tooltiptext);
+
+			if (_auxinf.zIndex >= 0)
+				renderer.render("zIndex", _auxinf.zIndex);
+			if (_auxinf.renderdefer >= 0)
+				renderer.render("renderdefer", _auxinf.renderdefer);
+
+			final String draggable = _auxinf.draggable;
+			if (draggable != null
+			&& (getParent() instanceof DragControl || !draggable.equals("false")))
+				render(renderer, "draggable", draggable);
+
+			render(renderer, "droppable", _auxinf.droppable);
+		}
+
 		render(renderer, "zclass", _zclass);
-		render(renderer, "style", getStyle());
-		render(renderer, "left", getLeft());
-		render(renderer, "top", getTop());
-
-		final String draggable = _auxinf != null ? _auxinf.draggable: null;
-		if (draggable != null
-		&& (getParent() instanceof DragControl || !draggable.equals("false")))
-			render(renderer, "draggable", draggable);
-
-		render(renderer, "droppable", _auxinf != null ? _auxinf.droppable: null);
-
-		int v = getZIndex();
-		if (v >= 0) renderer.render("zIndex", v);
-		v = getRenderdefer();
-		if (v >= 0) renderer.render("renderdefer", v);
-
 		render(renderer, "prolog", _prolog);
 	}
 
@@ -614,6 +616,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		}
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final HtmlBasedComponent clone = (HtmlBasedComponent)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
@@ -623,7 +633,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * to minimize the footprint
 	 * @since 5.0.4
 	 */
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The width. */
 		private String width;
 		/** The height. */
@@ -646,5 +656,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		private String droppable;
 		private int zIndex = -1;
 		private int renderdefer = -1;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

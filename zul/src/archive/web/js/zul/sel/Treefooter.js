@@ -34,7 +34,23 @@ zul.sel.Treefooter = zk.$extends(zul.mesh.FooterWidget, {
 	getTreecol: function () {
 		return this.getHeaderWidget();
 	},
+	/** Returns the maximal length for this cell.
+	 * It is the same as the correponding {@link #getTreecol}'s 
+	 * {@link Treecol#getMaxlength}.
+	 *
+	 * @return int
+	 * @since 5.0.5
+	 */
+	getMaxlength: function () {
+		var tc = this.getTreecol();
+		return tc ? tc.getMaxlength() : 0;
+	},
+	//@Override
 	getZclass: function () {
 		return this._zclass == null ? "z-treefooter" : this._zclass;
+	},
+	//@Override
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 });

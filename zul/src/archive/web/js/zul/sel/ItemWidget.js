@@ -18,14 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_checkable: true,
 	$define: {
-    	/** Returns whether it is checkable.
-    	 * <p>Default: true.
-    	 * @return boolean
-    	 */
-    	/** Sets whether it is checkable.
-    	 * <p>Default: true.
-    	 * @param boolean checkable
-    	 */
+		/** Returns whether it is checkable.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether it is checkable.
+		 * <p>Default: true.
+		 * @param boolean checkable
+		 */
 		checkable: function () {
 			if (this.desktop)
 				this.rerender();
@@ -134,19 +134,17 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		return scls;
 	},
 	_toggleEffect: function (undo) {
-		var n = this.$n(),
-			self = this,
-			zcls = this.getZclass();
+		var self = this;
 		setTimeout(function () {
-			var $n = jq(n);
-    		if (undo) {
-    			if (self.isSelected())
-    				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
-    			else
-    				$n.removeClass(zcls + "-over");
-    		} else if (self._musin) {
-    			$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
-    		}
+			var $n = jq(self.$n()),
+				zcls = self.getZclass();
+			if (undo) {
+   				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
+   					//we have to remove both since _setSelectedDirectly doesn't
+   					//remove -over-seld
+			} else if (self._musin) {
+				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
+			}
 		});
 	},
 	focus: function (timeout) {

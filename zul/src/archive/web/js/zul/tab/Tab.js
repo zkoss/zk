@@ -245,27 +245,22 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	//event handler//
 	onClose: function () {
-		if (this.isSelected()) {
-			var self = this,
-				p = this.parent;
-			
-			// Bug 2931212, send onSelect after onClose
-			setTimeout(function () {
-    			if (!self.parent || self.parent != p)
-    				return; // nothing to do
-    			for (var tab = self; tab = tab.nextSibling;)
-    				if (!tab.isDisabled()) {
-    					tab._sel(true);
-    					return;
-    				}
-    			for (var tab = self; tab = tab.previousSibling;)
-    				if (!tab.isDisabled()) {
-    					tab._sel(true);
-    					return;
-    				}
-    		});
-		} else if (this.getTabbox().inAccordionMold()) {
+		if (this.getTabbox().inAccordionMold()) {
 			this.getTabbox()._syncSize();
 		}
 	}
 });
+/** @class zul.tab.TabRenderer
+ * The renderer used to render a Tab.
+ * It is designed to be overriden
+ * @since 5.0.5
+ */
+zul.tab.TabRenderer = {
+	/** Check the Tab whether to render the frame
+	 * 
+	 * @param zul.wnd.Panel wgt the window
+	 */
+	isFrameRequired: function (wgt) {
+		return true;
+	}
+};

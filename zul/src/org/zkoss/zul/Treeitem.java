@@ -285,7 +285,11 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
-	 * <p>If it is not created, we automatically create it.
+	 * <p>If treerow and treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treerow and treecell automatically
+	 * if they don't exist. Thus, you cannot attach a treerow to it again if
+	 * set an image or a label.
 	 */
 	public void setLabel(String label) {
 		autoFirstCell().setLabel(label);
@@ -329,7 +333,11 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
-	 * <p>If it is not created, we automatically create it.
+	 * <p>If treerow and treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treerow and treecell automatically
+	 * if they don't exist. Thus, you cannot attach a treerow to it again if
+	 * set an image or a label.
 	 */
 	public void setImage(String image) {
 		autoFirstCell().setImage(image);

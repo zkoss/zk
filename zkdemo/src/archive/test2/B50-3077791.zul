@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3077791.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 11 21:19:25 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Check has a space between two tabs</li>
+</ol>
+]]>
+</html>
+<tabbox width="400px" mold="accordion" panelSpacing="10px">
+<tabs>
+<tab label="Tab 1" />
+<tab label="Tab 2" />
+</tabs>
+<tabpanels>
+<tabpanel>This is panel 1</tabpanel>
+<tabpanel>This is panel 2</tabpanel>
+</tabpanels>
+</tabbox>
+</zk>

@@ -266,6 +266,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
+		zWatch.fireDown("onHide", this);
 		this.slideUp_(pp);
 
 		zk(pp).undoVParent();
@@ -278,8 +279,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
-
-		zWatch.fireDown("onHide", this);
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getPopupNode_();
@@ -345,20 +344,27 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	redraw_: function (out) {
 		var uuid = this.uuid,
-			zcls = this.getZclass();
+			zcls = this.getZclass(),
+			isButtonVisible = this._buttonVisible;
+			
 		out.push('<i', this.domAttrs_({text:true}), '><input id="',
-			uuid, '-real" class="', zcls, '-inp" autocomplete="off"',
+			uuid, '-real" class="', zcls, '-inp');
+			
+		if(!isButtonVisible)
+			out.push(' ', zcls, '-right-edge');
+			
+		out.push('" autocomplete="off"',
 			this.textAttrs_(), '/><i id="', uuid, '-btn" class="',
 			zcls, '-btn');
 
 		if (this.inRoundedMold()) {
-			if (!this._buttonVisible)
+			if (!isButtonVisible)
 				out.push(' ', zcls, '-btn-right-edge');
 			if (this._readonly)
 				out.push(' ', zcls, '-btn-readonly');	
-			if (zk.ie6_ && !this._buttonVisible && this._readonly)
+			if (zk.ie6_ && !isButtonVisible && this._readonly)
 				out.push(' ', zcls, '-btn-right-edge-readonly');
-		} else if (!this._buttonVisible)
+		} else if (!isButtonVisible)
 			out.push('" style="display:none');
 
 		out.push('"></i>');
@@ -432,10 +438,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
+
 		this.$supers('doBlur_', arguments);
+
 		if (this._inplace && this._inplaceout) {
 			jq(n).addClass(this.getInplaceCSS());
 			this.onSize();
@@ -461,8 +468,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
-			jq(inp).addClass(this.getZclass() + '-right-edge');
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);

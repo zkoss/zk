@@ -23,7 +23,7 @@ import org.zkoss.xel.VariableResolver;
 
 /**
  * Utilities to access labels. A label is a Locale-dependent string
- * that is stored in i3-label*properties.
+ * that is stored in a Locale-dependent file (*.properties).
  *
  * @author tomyeh
  */
@@ -110,7 +110,7 @@ public class Labels {
 	}
 
 	/** Resets all cached labels and next call to {@link #getLabel(String)}
-	 * will cause re-loading i3-label*.proerties.
+	 * will cause re-loading the Locale dependent files.
 	 */
 	public static final void reset() {
 		_loader.reset();
@@ -126,10 +126,17 @@ public class Labels {
 	VariableResolver setVariableResolver(VariableResolver resolv) {
 		return _loader.setVariableResolver(resolv);
 	}
-	/** Registers a locator which is used to load i3-label*.properties
-	 * from other resource, such as servlet contexts.
+	/** Registers a locator which is used to load the Locale-dependent
+	 * labels from other resource, such as servlet contexts.
 	 */
 	public static final void register(LabelLocator locator) {
+		_loader.register(locator);
+	}
+	/** Registers a locator which is used to load the Locale-dependent
+	 * labels from other resource, such as database.
+	 * @since 5.0.5
+	 */
+	public static final void register(LabelLocator2 locator) {
 		_loader.register(locator);
 	}
 }

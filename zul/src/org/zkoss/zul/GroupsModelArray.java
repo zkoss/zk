@@ -28,7 +28,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
 /**
  * An array implementation of {@link GroupsModel}.
  * This implementation supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
- * For immutable content (no re-grouping allowed), please use {@link #SimpleGroupsModel} instead.
+ * For immutable content (no re-grouping allowed), please use {@link SimpleGroupsModel} instead.
  * 
  * @author Dennis.Chen
  * @since 5.0.5

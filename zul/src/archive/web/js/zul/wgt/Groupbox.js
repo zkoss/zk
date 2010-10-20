@@ -36,10 +36,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			var node = this.$n();
 			if (node && this._closable) {
 				if (this.isLegend()) { //legend
+					if (!open) zWatch.fireDown('onHide', this);
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
-					zWatch.fireDown(open ? 'onShow': 'onHide', this);
 					if (zk.ie6_) // Bug Z35-groupbox-002.zul
 						zk(this).redoCSS();
+					if (open) zWatch.fireDown('onShow', this);
 				} else {
 					zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
 				}

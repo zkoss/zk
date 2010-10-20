@@ -53,6 +53,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$headercm[checked ? "addClass": "removeClass"](zcls);
 		}
 	}
+	function _isButton(evt) {
+		return evt.target.$button //for extension, it makes a widget as a button
+			&& (zk.isLoaded('zul.wgt')
+			&& evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
+	}
+	function _focusable(evt) {
+		return (jq.nodeName(evt.domTarget, "input", "textarea", "button", "select", "option", "a")
+				&& !evt.target.$instanceof(zul.sel.SelectWidget))
+			|| _isButton(evt);
+	}
 
 var SelectWidget =
 /**
@@ -149,7 +159,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					for (var it = this.getBodyWidgetIterator(); selected-- >=0;)
 						w = it.next();
 					if (w) {
-						this._selectOne(w, false);
+						this._selectOne(w, true);
 						zk(w).scrollIntoView(this.ebody);
 					}						
 				}
@@ -226,7 +236,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (!item)
 			this.clearSelection();
 		else if (item = zk.Widget.$(item)) {
-			this._selectOne(item, false);
+			this._selectOne(item, true);
 			zk(item).scrollIntoView(this.ebody);
 		}
 	},
@@ -663,33 +673,62 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	shallIgnoreSelect_: function (evt) {
 		//see also _shallIgnore
 	},
-	_shallIgnore: function(evt) { // move this function in the widget for override 
-		return !evt.domTarget || !evt.target.canActivate()
-		|| (jq.nodeName(evt.domTarget, "input", "textarea",
-			"button", "select", "option", "a") && !evt.target.$instanceof(zul.sel.SelectWidget))
-		|| (zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
+	//@param bSel whether it is called by _doItemSelect
+	_shallIgnore: function(evt, bSel) { // move this function in the widget for override 
+		if (!evt.domTarget || !evt.target.canActivate())
+			return true;
+
+		if (bSel) {
+			try {
+				var el = evt.domTarget;
+				if (el) //Not use jq.isAncestor since it calls vparentNode
+					for (;;) {
+						if (el.id == this.uuid) //listbox
+							break;
+						if (!(el = el.parentNode))
+							return true; //vparent
+					}
+			} catch (e) {
+			}
+
+			if (typeof (bSel = this.nonselectableTags) == "string") {
+				if (!bSel)
+					return; //not ignore
+
+				var tn = jq.nodeName(evt.domTarget),
+					bInpBtn = tn == "input" && evt.domTarget.type.toLowerCase() == "button";
+				if (bSel.indexOf(tn) < 0) {
+					return bSel.indexOf("button") >= 0
+						&& (_isButton(evt) || bInpBtn);
+				}
+				return !bInpBtn || bSel.indexOf("button") >= 0;
+			}
+		}
+
+		return _focusable(evt);
 	},
 	_doItemSelect: function (row, evt) { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
-		if (zk.dragging || this._shallIgnore(evt))
+		if (zk.dragging || this._shallIgnore(evt, true))
 			return;
 			
 		if (this.shallIgnoreSelect_(evt))
 			return;
 
-		var	checkmark = evt.domTarget == row.$n('cm');
-		if (checkmark) {
+		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
+		if (this._checkmark
+		&& !evt.data.shiftKey && !evt.data.ctrlKey
+		&& (!this._cdo || evt.domTarget == row.$n('cm'))) {
 			// Bug 2997034
 			this._syncFocus(row);
 			
-			if (this.isMultiple()) {
-				this._toggleSelect(row, !row.isSelected(), evt);
-			} else {
-				this._select(row, evt);
-			}
+			if (this._multiple)
+				this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
+			else
+				this._select(row, evt, skipFocus);
 		} else {
 		//Bug 1650540: double click as select again
 		//Note: we don't handle if clicking on checkmark, since FF always
@@ -701,18 +740,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					return; //ignore double-click
 			}
 			this._syncFocus(row);
-			if (this.isMultiple()) {
+			if (this._multiple) {
 				if (evt.data.shiftKey)
-					this._selectUpto(row, evt);
+					this._selectUpto(row, evt, skipFocus);
 				else if (evt.data.ctrlKey)
-					this._toggleSelect(row, !row.isSelected(), evt);
+					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 				else // Bug: 1973470
-					this._select(row, evt);
+					this._select(row, evt, skipFocus);
 			} else
-				this._select(row, evt);
+				this._select(row, evt, skipFocus);
 
 			//since row might was selected, we always enfoce focus here
-			row.focus();
+			if (!skipFocus)
+				row.focus();
 			//if (evt) evt.stop();
 			//No much reason to eat the event.
 			//Oppositely, it disabled popup (bug 1578659)
@@ -768,7 +808,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var row = this._focusItem || this.getSelectedItem(),
 			data = evt.data,
 			shift = data.shiftKey, ctrl = data.ctrlKey;
-		if (shift && !this.isMultiple())
+		if (shift && !this._multiple)
 			shift = false; //OK to
 
 		var endless = false, step, lastrow;
@@ -789,7 +829,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			step = data.keyCode == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
-			if (this.isMultiple()) this._toggleSelect(row, !row.isSelected(), evt);
+			if (this._multiple) this._toggleSelect(row, !row.isSelected(), evt);
 			else this._select(row, evt);
 			break;
 		case 36: //Home
@@ -858,8 +898,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return [x - ofs1[0] + x2, y  - ofs1[1] + y2];
 	},
 	/* Selects an item, notify server and change focus if necessary. */
-	_select: function (row, evt) {
-		if (this._selectOne(row, true)) {
+	_select: function (row, evt, skipFocus) {
+		if (this._selectOne(row, skipFocus)) {
 			//notify server
 			this.fireOnSelect(row, evt);
 		}
@@ -867,9 +907,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
 	 */
-	_selectUpto: function (row, evt) {
+	_selectUpto: function (row, evt, skipFocus) {
 		if (row.isSelected()) {
-			this._focus(row);
+			if (!skipFocus)
+				this._focus(row);
 			return; //nothing changed
 		}
 
@@ -895,7 +936,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 
-		this._focus(row);
+		if (!skipFocus)
+			this._focus(row);
 		this.fireOnSelect(row, evt);
 	},
 	/**
@@ -921,44 +963,45 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* Selects one and deselect others, and return whehter any changes.
 	 * It won't notify the server.
 	 */
-	_selectOne: function (row, toFocus) {
+	_selectOne: function (row, skipFocus) {
 		var selItem = this.getSelectedItem();
-		if (this.isMultiple()) {
-			if (row && toFocus) this._unsetFocusExcept(row);
+		if (this._multiple) {
+			if (row && !skipFocus) this._unsetFocusExcept(row);
 			var changed = this._unsetSelectAllExcept(row);
 			if (!changed && row && selItem == row) {
-				if (toFocus) this._setFocus(row, true);
+				if (!skipFocus) this._setFocus(row, true);
 				return false; //not changed
 			}
 		} else {
 			if (selItem) {
 				if (selItem == row) {
-					if (toFocus) this._setFocus(row, true);
+					if (!skipFocus) this._setFocus(row, true);
 					return false; //not changed
 				}
 				this._changeSelect(selItem, false);
 				if (row)
-					if(toFocus) this._setFocus(selItem, false);
+					if(!skipFocus) this._setFocus(selItem, false);
 			}
-			if (row && toFocus) this._unsetFocusExcept(row);
+			if (row && !skipFocus) this._unsetFocusExcept(row);
 		}
 		//we always invoke _changeSelect to change focus
 		if (row) {
 			this._changeSelect(row, true);
-			if (toFocus) this._setFocus(row, true);
+			if (!skipFocus) this._setFocus(row, true);
 		}
 		return true;
 	},
 	/* Toggle the selection and notifies server. */
-	_toggleSelect: function (row, toSel, evt) {
-		if (!this.isMultiple()) {
+	_toggleSelect: function (row, toSel, evt, skipFocus) {
+		if (!this._multiple) {
 			var old = this.getSelectedItem();
 			if (row != old && toSel)
 				this._changeSelect(row, false);
 		}
 		
 		this._changeSelect(row, toSel);
-		this._focus(row);
+		if (!skipFocus)
+			this._focus(row);
 
 		//notify server
 		this.fireOnSelect(row, evt);
@@ -997,19 +1040,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return this._focusItem == row;
 	},
 	/* Changes the focus status, and return whether it is changed. */
-	_setFocus: function (row, toFocus) {
-		var changed = this._isFocus(row) != toFocus;
+	_setFocus: function (row, bFocus) {
+		var changed = this._isFocus(row) != bFocus;
 		if (changed) {
-			if (toFocus) {
-				if (!row.focus()) {
+			if (bFocus) {
+				if (!row.focus())
 					this.focus();
-				}
+
 				if (!this.paging && zk.gecko) 
 					this.fireOnRender(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			}
 		}
-		if (!toFocus)
+		if (!bFocus)
 			row._doFocusOut();
 		return changed;
 	},

@@ -35,7 +35,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this;
 		setTimeout(function() {
-			self.open(owner, null, "end_before", {overflow:true});
+			if (self.parent) //Bug #3067998: if 
+				self.open(owner, null, "end_before", {overflow:true});
 		}, 0);
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},

@@ -175,6 +175,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Grid.onInitLaterPosted";
+	private static final int INIT_LIMIT = 100;
 
 	private transient DataLoader _dataLoader;
 	private transient Rows _rows;
@@ -520,8 +521,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		assert D.OFF || inPagingMold(): "paging mold only";
-		assert D.OFF || (_paging == null && _pgi == null);
+//		assert D.OFF || inPagingMold(): "paging mold only";
+//		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
@@ -1131,7 +1132,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, 40); //change offset back to 0
+					getDataLoader().syncModel(0, INIT_LIMIT); //change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); //paging mold -> non-paging mold
@@ -1248,7 +1249,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, 40);
+			_dataLoader.init(this, 0, INIT_LIMIT);
 		}
 		return _dataLoader;
 	}

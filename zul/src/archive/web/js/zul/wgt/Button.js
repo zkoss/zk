@@ -106,8 +106,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 */
 		disabled: function (v) {
 			if (this.desktop) {
-				if (this._upload)
-					this._cleanUpld();
 				if (this._mold == "os") {
 					var n = this.$n(),
 						zclass = this.getZclass();
@@ -282,7 +280,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled && this._upload) this._initUpld();
 	},
 	unbind_: function () {
-		if (!this._disabled && this._upload) this._cleanUpld();
+		this._cleanUpld();
 
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.$n(): this.$n('btn');
@@ -345,35 +343,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
-			var ads = this._autodisable, aded;
-			if (ads) {
-				ads = ads.split(',');
-				for (var j = ads.length; j--;) {
-					var ad = ads[j].trim();
-					if (ad) {
-						var perm;
-						if (perm = ad.charAt(0) == '+')
-							ad = ad.substring(1);
-						ad = "self" == ad ? this: this.$f(ad);
-						if (ad) {
-							ad.setDisabled(true);
-							if (this.inServer)
-								if (perm)
-									ad.smartUpdate('disabled', true);
-								else if (!aded) aded = [ad];
-								else aded.push(ad);
-						}
-					}
-				}
-			}
-			if (aded) {
-				aded = new zul.wgt.ADBS(aded);
-				if (this.isListen('onClick', {asapOnly:true}))
-					zWatch.listen({onResponse: aded});
-				else
-					setTimeout(function () {aded.onResponse();}, 800);
-			}
-
+			zul.wgt.ADBS.autodisable(this);
 			if (this._type != "button") {
 				var n;
 				if ((n = this.$n('btn')) && (n = n.form)) {
@@ -459,6 +429,41 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		for (var ads = this._ads, ad; ad = ads.shift();)
 			ad.setDisabled(false);
 		zWatch.unlisten({onResponse: this});
+	}
+},{ //static
+	/**
+	 * Disable Targets and re-enable after response
+	 * @param zk.Widget wgt
+	 */
+	autodisable: function(wgt) {
+		var ads = wgt._autodisable, aded;
+		if (ads) {
+			ads = ads.split(',');
+			for (var j = ads.length; j--;) {
+				var ad = ads[j].trim();
+				if (ad) {
+					var perm;
+					if (perm = ad.charAt(0) == '+')
+						ad = ad.substring(1);
+					ad = "self" == ad ? wgt: wgt.$f(ad);
+					if (ad) {
+						ad.setDisabled(true);
+						if (wgt.inServer)
+							if (perm)
+								ad.smartUpdate('disabled', true);
+							else if (!aded) aded = [ad];
+							else aded.push(ad);
+					}
+				}
+			}
+		}
+		if (aded) {
+			aded = new zul.wgt.ADBS(aded);
+			if (wgt.isListen('onClick', {asapOnly:true}))
+				zWatch.listen({onResponse: aded});
+			else
+				setTimeout(function () {aded.onResponse();}, 800);
+		}
 	}
 });
 

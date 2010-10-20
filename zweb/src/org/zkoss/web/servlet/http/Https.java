@@ -37,14 +37,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
-import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
-import org.zkoss.net.URLs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -331,7 +330,7 @@ public class Https extends Servlets {
 		uri = locate(ctx, request, uri, null);
 		final String encodedUrl =
 			encodeRedirectURL(ctx, request, response, uri, params, mode);
-		if (D.ON && log.debugable()) log.debug("redirect to " + encodedUrl);
+		//if (log.debugable()) log.debug("redirect to " + encodedUrl);
 		response.sendRedirect(encodedUrl);
 	}
 	/** Encodes an URL such that it can be used with HttpServletResponse.sendRedirect.
@@ -431,7 +430,7 @@ public class Https extends Servlets {
 				String value = "attachment";
 				final String flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=\"" + URLs.encode(flnm) +'"';
+					value += ";filename=" + encodeFilename(flnm);
 				response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
 			}
@@ -553,6 +552,13 @@ public class Https extends Servlets {
 			}
 			out.flush();
 		}
+	}
+	/** Filename can be quoted-string.
+	 * Refer to http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
+	 * and http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html
+	*/
+	private static String encodeFilename(String flnm) {
+		return '"' + Strings.escape(flnm, "\"") + '"';
 	}
 	static private String getCharset(String contentType) {
 		if (contentType != null) {

@@ -207,6 +207,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	private static final Log log = Log.lookup(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
+	private static final int INIT_LIMIT = 100;
 
 	private transient DataLoader _dataLoader;
 	private transient List<Listitem> _items;
@@ -258,6 +259,7 @@ public class Listbox extends XulElement implements Paginated,
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; // since 5.0.0 top padding
+	private String _nonselTags; //since 5.0.5 for non-selectable tags
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -637,7 +639,7 @@ public class Listbox extends XulElement implements Paginated,
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			smartUpdate("tabindex", _tabindex);
+			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -721,6 +723,8 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the maximal length of each item's label.
+	 * <p>
+	 * It is meaningful only for the select mold.
 	 */
 	public int getMaxlength() {
 		return _maxlength;
@@ -776,6 +780,30 @@ public class Listbox extends XulElement implements Paginated,
 			_name = name;
 			smartUpdate("name", name);
 		}
+	}
+
+	/** Sets a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Default: null (it means button, input, textarea and a). If you want
+	 * to select no matter which tag is clicked, please specify an empty string.
+	 * @param tags a list of HTML tag names that will <i>not</i> cause the list item
+	 * being selected if clicked. Specify null to use the default and "" to
+	 * indicate none.
+	 * @since 5.0.5
+	 */
+	public void setNonselectableTags(String tags) {
+		if (!Objects.equals(_nonselTags, tags)) {
+			_nonselTags = tags;
+			smartUpdate("nonselectableTags", tags);
+		}
+	}
+	/** Returns a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Refer to {@link #setNonselectableTags} for details.
+	 * @since 5.0.5
+	 */
+	public String getNonselectableTags() {
+		return _nonselTags;
 	}
 
 	/**
@@ -1356,8 +1384,8 @@ public class Listbox extends XulElement implements Paginated,
 	 * Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		assert D.OFF || inPagingMold() : "paging mold only";
-		assert D.OFF || (_paging == null && _pgi == null);
+//		assert D.OFF || inPagingMold() : "paging mold only";
+//		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
@@ -2857,7 +2885,7 @@ public class Listbox extends XulElement implements Paginated,
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, 40); // change offset back to 0
+					getDataLoader().syncModel(0, INIT_LIMIT); // change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); // paging mold -> non-paging mold
@@ -2976,7 +3004,7 @@ public class Listbox extends XulElement implements Paginated,
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, 40);
+			_dataLoader.init(this, 0, INIT_LIMIT);
 		}
 		return _dataLoader;
 	}
@@ -3148,9 +3176,9 @@ public class Listbox extends XulElement implements Paginated,
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
 			if (_tabindex != 0)
-				renderer.render("tabindex", getTabindex());
+				renderer.render("tabindex", _tabindex);
 			if (_maxlength > 0)
-				renderer.render("maxlength", getMaxlength());
+				renderer.render("maxlength", _maxlength);
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
 
@@ -3181,8 +3209,22 @@ public class Listbox extends XulElement implements Paginated,
 			}
 			if (isAutopaging())
 				renderer.render("autopaging", true);
+			if (_nonselTags != null)
+				renderer.render("nonselectableTags", _nonselTags);
+			if (isCheckmarkDeselectOther())
+				renderer.render("_cdo", true);
 		}
 	}
+	/** Returns whether to toggle the selection if clicking on a list item
+	 * with a checkmark.
+	 */
+	private static boolean isCheckmarkDeselectOther() {
+		if (_ckDeselectOther == null) //ok to race
+			_ckDeselectOther = Boolean.valueOf(
+				"true".equals(Library.getProperty("org.zkoss.zul.listbox.checkmarkDeselectOthers")));
+		return _ckDeselectOther.booleanValue();
+	}
+	private static Boolean _ckDeselectOther;
 
 	/**
 	 * Processes an AU request.

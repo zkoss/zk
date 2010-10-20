@@ -245,10 +245,15 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * It assumes the object has either a method called <code>getParent</code>
 	 * or a field called <code>parent</code>.
 	 * A typical example is used to test the widgets ({@link Widget}).
+	 *
+	 * <p>Notice that, if you want to test DOM elements, please use
+	 * {@link jq#isAncestor} instead.
+	 *
 	 * @param Object p the parent. This method return true if p is null
 	 or p is the same as c
 	 * @param Object c the child
 	 * @return boolean
+	 * @see jq#isAncestor
 	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;

@@ -47,9 +47,11 @@ function (out) {
 		out.push('</div></td><td class="', zcls, '-inner-r"><span class="', zcls, '-space"></span></td></tr></tbody></table></td>');
 
 	} else {
-		out.push('<li', this.domAttrs_(), '><a href="javascript:;" id="', uuid,
-				'-a" class="', zcls, '-cnt ', zcls, '-cnt-img">', this.domContent_(), '</a>');
-
+		//Merge breeze: append DIV for border
+		out.push('<li', this.domAttrs_(), '><div class="', zcls, '-cl"><div class="', zcls, '-cr"><div class="', zcls, '-cm">')
+		
+		out.push('<a href="javascript:;" id="', uuid,
+				'-a" class="', zcls, '-cnt ', zcls, '-cnt-img">', this.domContent_(), '</a></div></div></div>'); //Merge breeze
 		if (this.menupopup)
 			this.menupopup.redraw(out);
 		else if (contentHandler)

@@ -51,5 +51,16 @@ abstract public class LabelElement extends XulElement implements org.zkoss.zul.i
 		super.renderProperties(renderer);
 
 		render(renderer, "label", _label);
+		renderCrawlable(_label);
+	}
+	/** Renders the crawlable information.
+	 * It is called by {@link #renderProperties},
+	 * and designed to be overriden if the deriving class wants to generate
+	 * it differently.
+	 * <p>Default: <code>org.zkoss.zul.impl.Utils.renderCrawlableText(label)</code>
+	 * @since 5.0.5
+	 */
+	protected void renderCrawlable(String label) throws java.io.IOException {
+		org.zkoss.zul.impl.Utils.renderCrawlableText(label);
 	}
 }

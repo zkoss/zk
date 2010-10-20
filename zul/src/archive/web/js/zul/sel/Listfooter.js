@@ -35,7 +35,26 @@ zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
 	getListheader: function () {
 		return this.getHeaderWidget();
 	},
+	/** Returns the maximal length for this cell.
+	 * If listbox's mold is "select", it is the same as
+	 * {@link Select#getMaxlength}
+	 * If not, it is the same as the correponding {@link #getListheader}'s 
+	 * {@link Listheader#getMaxlength}.
+	 *
+	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
+	 * @return int
+	 * @since 5.0.5
+	 */
+	getMaxlength: function () {
+		var lc = this.getListheader();
+		return lc ? lc.getMaxlength() : 0;
+	},
+	//@Override
 	getZclass: function () {
 		return this._zclass == null ? "z-listfooter" : this._zclass;
+	},
+	//@Override
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 });

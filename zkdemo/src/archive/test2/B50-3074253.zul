@@ -1,0 +1,21 @@
+<zk>
+<html><![CDATA[
+Test environment: Chrome and Safari
+<ul>
+<li>Try to drag "way inner". It shall be able to be dragged alone (without moving inner2 or other).</li>
+</ul>
+]]></html>
+
+<hbox style="background-color: #777777; border: 1px solid #000000; margin: 5px; padding: 5px; font-size: 14pt;" draggable="true">
+<label value="outer"/>
+<hbox style="background-color: #999999; border: 1px solid #000000; margin: 5px; padding: 5px; font-size: 14pt;" draggable="test" vflex="1">
+<label value="inner1"/>
+</hbox>
+<hbox style="background-color: #999999; border: 1px solid #000000; margin: 5px; padding: 5px; font-size: 14pt;" draggable="true" vflex="1">
+<label value="inner2"/>
+<hbox style="background-color: #bbbbbb; border: 1px solid #000000; margin: 5px; padding: 5px; font-size: 14pt;" draggable="true" vflex="1" >
+<label value="way inner"/>
+</hbox>
+</hbox>
+</hbox>
+</zk>

@@ -1,0 +1,53 @@
+<zk>
+<html><![CDATA[
+Please click maxinum button on any panels, then click restore button, it is OK that the style maxinum button changed back.
+]]></html>
+
+<portallayout maximizedMode="whole">
+	<portalchildren style="padding: 5px" width="30%">
+		<panel height="150px" title="Google Tools" border="normal"
+			collapsible="true" closable="true" maximizable="true"
+			style="margin-bottom:10px">
+			<panelchildren>
+				<iframe width="100%" height="100%" />
+			</panelchildren>
+		</panel>
+		<panel height="300px" title="LabPixies Clock" border="normal"
+			collapsible="true" closable="true" maximizable="true"
+			style="margin-bottom:10px">
+			<panelchildren>
+				<iframe width="100%" height="100%"
+					 />
+			</panelchildren>
+		</panel>
+	</portalchildren>
+	<portalchildren style="padding: 5px" width="30%">
+		<panel height="300px" title="ToDo" border="normal"
+			collapsible="true" closable="true" maximizable="true"
+			style="margin-bottom:10px">
+			<panelchildren>
+				<iframe width="100%" height="100%"
+					 />
+			</panelchildren>
+		</panel>
+		<panel height="100px" title="Wikipedia" border="normal"
+			collapsible="true" closable="true" maximizable="true"
+			style="margin-bottom:10px">
+			<panelchildren>
+				<iframe width="100%" height="100%"
+					 />
+			</panelchildren>
+		</panel>
+	</portalchildren>
+	<portalchildren style="padding: 5px" width="40%">
+		<panel height="400px" title="Trio" border="normal"
+			collapsible="true" closable="true" maximizable="true"
+			style="margin-bottom:10px">
+			<panelchildren>
+				<iframe width="100%" height="100%"
+					 />
+			</panelchildren>
+		</panel>
+	</portalchildren>
+</portallayout>
+</zk>

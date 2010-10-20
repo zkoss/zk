@@ -1,0 +1,19 @@
+<zk>
+	<html><![CDATA[
+	<ul>
+	<li>Test environment: IE</li>
+	<li>Press TAB to change focus to "bb"</li>
+	<li>Press TAB again and the focus shall switch to "cc"</li>
+	</ul>
+	]]></html>
+
+	<textbox focus="true"/>
+	<combobox value="bb">
+		<comboitem label="aa"/>
+		<comboitem label="bb"/>
+	</combobox>
+	<combobox value="cc">
+		<comboitem label="aa"/>
+		<comboitem label="bb"/>
+	</combobox>
+</zk>

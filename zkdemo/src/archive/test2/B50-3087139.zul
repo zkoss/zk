@@ -1,0 +1,10 @@
+<zk>
+It is correct if you see no JavaScript error, and OK to select items.
+<listbox mold="select">
+	<listitem>
+		<listcell label="abc">
+		<textbox/>
+		</listcell>
+	</listitem>
+</listbox>
+</zk>

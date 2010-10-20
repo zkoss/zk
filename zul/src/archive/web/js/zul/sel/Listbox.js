@@ -14,9 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 
-	var _inInsertBefore;
-	function _isPE() {
-		return zk.feature.pe && zk.isLoaded('zkex.sel');
+	function _isListgroup(wgt) {
+		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
 
 var Listbox =
@@ -199,7 +198,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_fixOnAdd: function (child, ignoreDom, stripe) {
 		var noRerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
-			if (_isPE() && child.$instanceof(zkex.sel.Listgroup))
+			if (_isListgroup(child))
 				this._groupsInfo.push(child);
 			if (!this.firstItem || !this.previousItem(child))
 				this.firstItem = child;
@@ -256,7 +255,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					;
 				this.lastItem = p;
 			}
-			if (_isPE() && child.$instanceof(zkex.sel.Listgroup))
+			if (_isListgroup(child))
 				this._groupsInfo.$remove(child);
 			--this._nrows;
 			

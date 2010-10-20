@@ -309,9 +309,21 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
+	//@Override
+	protected void renderCrawlable(String label) throws java.io.IOException {
+		//does nothing since generated in renderProperties
+	}
 	public String getZclass() {
 		return _zclass != null ? _zclass:
 			!"trendy".equals(getMold()) ? "z-button-os": "z-button";
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Button clone = (Button)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
 	}
 
 	//Component//
@@ -334,7 +346,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	}
 	private static final String HORIZONTAL = "horizontal", NORMAL = "normal",
 		BUTTON = "button";
-	private static class AuxInfo implements java.io.Serializable {
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String orient = HORIZONTAL;
 		private String dir = NORMAL;
 		private String type = BUTTON;
@@ -343,5 +355,13 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		protected String upload;
 		private int tabindex;
 		private boolean disabled;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

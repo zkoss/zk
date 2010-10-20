@@ -7,7 +7,7 @@
 	<artifactId>zcommon</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<zk.version>5.0.5.FL.20100920</zk.version>
+		<zk.version>5.0.5.FL.20101006</zk.version>
 	</properties>
 	<version>${zk.version}</version>
 	<name>The ZKoss Common Library</name>

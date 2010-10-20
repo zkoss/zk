@@ -582,11 +582,12 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
 
-		if (zk.opera || zk.gecko) {
+		if (!zk.ie) {
 			devt.stop();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged (test/dragdrop.zul) and INPUT not droppable (Bug 3031511)
 			//Opera: if not stop, 'easy' to become selecting text
+			//Chrome (Bug 3074253): unable to select the nested draggable element
 			//
 			//Bug 3008328: input: if preventDefault(), not editable (both FF and Opera) => solution: stop()
 

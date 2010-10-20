@@ -7,6 +7,7 @@ ZK 6.0.0
   2947727: The instantiation of Composer & Server Push customizable
   2978342: A way to tag AU request for statistic purpose
   3025389: A way to monitor the execution and event processing
+  3061730: Make ZK complaint to Java 5, such generics
 
 * Bugs
   2973303: listbox mold select and selectedIndex -1
@@ -32,12 +33,18 @@ ZK 6.0.0
 	--------
 ZK 5.0.5
 * Features
+  3017896: A way to specify whether clicking input will select listitem
+  3081432: An option clicking on listitem with checkmark will toggle
+  3085801: A way to specify vertical alignment for hlayout
   3067232: A way to access components in 3rd framework (e.g. JSF 2)
+  3087902: Make a ZUL page generating as a HTML fragment
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
   3061676: Autodrop menubar shall be closed automatically when move out
   3076418: XmlMacroComponent supports autowire
   3077084: Able to specify the last word identify a component namespace
-
+  3081910: AnnotateDataBinderInit add "loadOnSave" config attribute
+  3085654: LabelLocator allows to return InputStream instead of URL
+  
 * Bugs
   3057902: zk bug for window showbusy
   3061764: Opera only. Cannot sizing a column with width
@@ -45,10 +52,94 @@ ZK 5.0.5
   3064997: Listen onPiggyback event threw NoSuchElementException
   3074492: Slider default  curpos not work
   3076840: DHtmlUpdateServlet's init mishandles processor params
-
+  3076384: ComponentNotFoundException by closing AMedia
+  3079449: sendRedirect called in Initiator causes NPE (ZK EE 5.0.4)
+  3079480: Child popup not removed if its parent removed
+  3079879: datebox and colorbox shall close popup when detached
+  3079636: onHide should be fired before the widget hidden
+  3079363: Opening a treeitem whose parent is closed  shows children
+  3079346: Textbox setType not workin in IE
+  3080682: Calendar shall not gain focus by default
+  3079203: datebox not open when specified open=true
+  3078523: 3D Caption in Groupbox  never show on right end
+  3077878: buttons in grid,  setDisabled problem with autodisabled
+  3078580: Filename of Filedownload.save() shall not be encoded
+  3077716: Failed to set spillter close if collapse=after
+  3074253: Drag and Drop nested components incorrect in Chrome
+  3073531: portallayout.getPosition() don't work if dragged in same column
+  3058028: Combobox need two keypress of <TAB> in IE
+  3059019: Datebox bug with format "Day in week" (EEEE)
+  3059251: Datebox- value is not updated on server if  time changed
+  3081315: Fire onClose event shall not select next tab automatically
+  3059280: Dateboxin Listbox- Unable to change month in calendar popup
+  3065040: the return value is alway False in ListModelList.remove()
+  3067998: save-when crash with WrongValuesException
+  3071275: onChanging different in IE and Firefox with Bandbox
+  3081372: Load on demand not load
+  3066507: Panel in portallayout maxmize button style not change back
+  3071613: problem with decimalbox' format and rounding mode
+  3073199: Grid sorting with "auto" breaks with hidden rows
+  3082093: Paging settle error when modify the grid content
+  3083980: Components.wireVariables() causes an exception if mode defined
+  3077791: panelSpacing in tabbox has error (breeze only)
+  3085744: readonly+inplace datebox not become inplace if select day
+  3086343: JavaScript error stub unknown if moved
+  3086348: Tooltip doesn't display when listitems use same tooltip
+  3086333: typo in setCmargins in LayoutRegion.java
+  3086352: audio autostart="false" not work
+  3086840: JSP including a ZUL with native html will disappear
+  3087139: listbox mold="select" has js error if contains textbox
+  3087219: checkmark="true" in listbox, has extra icon
+  3087097: <row nowrap="true"> has no effect
+  3086452: open="false" in splitter behavior not consistent
+  3078476: Groupbox cursor problem
+  3067572: Cannot fire Group children's on click event in breeze
+  3060550: setDisabled(boolean) doesn't apply inmediatly
+  3087421: autodisable doesn't work for toolbarbutton
+  3087949: Crawlable doesn't work with listbox
+  3085854: maxlength in listheader has no effect
+  3087270: maxlength in treecol has no effect
+  3089492: Sets a width to the tabs before setParent cause error
+  3089641: use HtmlNativeComponent with zkmax cause UI error
+  3088034: datebox string convert error (shall show error message)
+  3089502: setScale in decimalbox not working
+  
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
     (such that the naming is consistent with ListModel's implementations)
+  + For listbox and tree, if checkmark is enabled, clicking an item will toggle
+    the selection rather than deselect all others.
+    If you want to deselect all others (as 5.0.4 or ealier did), please
+    specify true to library properties called
+    org.zkoss.zul.listbox.checkmarkDeselectOthers
+    and org.zkoss.zul.tree.checkmarkDeselectOthers
+  + Autowire ignores the fields and methods declared in any class belong to
+    org.zkoss.zul and org.zkoss.zhtml, because it is error-proning.
+    However, if you want to wire them as 5.0.4 did, you could specify the library
+    property called org.zkoss.zk.ui.wire.zul.enabled with true.
+  + South and north's collapsed margins are changed from [5, 5, 5, 5]
+    to [3, 0, 0, 3]
+  + The DOM structure of the pagging component's os mold has been modified, 
+	if you ever customized it, you might have to add the following CSS into your
+	customization: 
+	div.z-paging-os-cnt-l,
+	div.z-paging-os-cnt-r,
+	div.z-paging-os-cnt-m,
+	div.z-paging-os-cnt-seld-l,
+	div.z-paging-os-cnt-seld-r,
+	div.z-paging-os-cnt-seld-m,
+	div.z-paging-os-cnt-l-over {
+		display: inline-block;
+		*display: inline;
+		zoom: 1;
+	}
+	.z-paging-os a.z-paging-os-cnt {
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+  + Rename caption.css to caption.css.dsp
+  + Rename tablelayout.css to tablelayout.css.dsp
+  
 
 	--------
 ZK 5.0.4

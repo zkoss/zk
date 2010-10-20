@@ -26,6 +26,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	getTabbox: function() {
 		return this.parent;
 	},
+	//@Override
+	getWidth: function () {
+		var wd = this._width;
+		if (!wd) {
+			var tabbox = this.getTabbox();
+			if (tabbox && tabbox.isVertical())
+				return "50px";
+		}
+		return wd;
+	},
 	getZclass: function() {
 		if (this._zclass != null)
 			return this._zclass;
@@ -478,7 +488,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			//separator(+border)
 			this._forceStyle(child[1], "h", jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
 			//tabpanels(+border)
-			this._forceStyle(child[2], "h", jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight, true)));
+			this._forceStyle(child[2], "h", 
+				jq.px0(jq(child[1]).zk.revisedHeight(tabs.offsetHeight - (2 - zk.parseInt(jq(this.$n('cave')).css('padding-top'))), true)));
+			// Merge breeze: now in vertical orientation Tabs has no border, but Tabpanels 
+			// still has border, so we need to introduce a 2px offset
 		} else {
 			if (head) //accordion have no head
 				head.style.height = "";

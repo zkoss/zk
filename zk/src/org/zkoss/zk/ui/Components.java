@@ -41,6 +41,7 @@ import java.util.Map.Entry;
 import java.util.Date;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
@@ -835,9 +836,11 @@ public class Components {
 	}
 
 	private static boolean ignoreFromWire(Class<?> cls) {
-		return _ignoreWires.contains(cls);
+		Package pkg;
+		return cls != null && (_ignoreWires.contains(cls.getName())
+		|| ((pkg = cls.getPackage()) != null && _ignoreWires.contains(pkg.getName())));
 	}
-	private static final Set<Class<?>> _ignoreWires = new HashSet<Class<?>>(8);
+	private static final Set<String> _ignoreWires = new HashSet<String>(16);
 	static {
 		final Class[] clses = new Class[] {
 			HtmlBasedComponent.class,
@@ -848,7 +851,16 @@ public class Components {
 			Object.class
 		};
 		for (int j = 0; j < clses.length; ++j)
-			_ignoreWires.add(clses[j]);
+			_ignoreWires.add(clses[j].getName());
+
+		//5.0.5: ignore zul by default (but able to enable for backward compatible)
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.wire.zul.enabled"))) {
+			//a dirty solution but no better way until we use annotation instead
+			_ignoreWires.add("org.zkoss.zul");
+			_ignoreWires.add("org.zkoss.zkex.zul");
+			_ignoreWires.add("org.zkoss.zkmax.zul");
+			_ignoreWires.add("org.zkoss.zhtml");
+		}
 	}
 
 	/**
@@ -979,7 +991,8 @@ public class Components {
 				final String mdname = md.getName();
 				if ((md.getModifiers() & Modifier.STATIC) == 0
 				&& mdname.length() > 3 && mdname.startsWith("set") 
-				&& Character.isUpperCase(mdname.charAt(3))) {
+				&& Character.isUpperCase(mdname.charAt(3))
+				&& !ignoreFromWire(md.getDeclaringClass())) {
 					final String fdname = Classes.toAttributeName(mdname);
 					if (!_injected.contains(fdname)) { //if not injected yet
 						final Class[] parmcls = md.getParameterTypes();

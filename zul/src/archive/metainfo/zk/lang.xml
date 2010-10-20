@@ -364,7 +364,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>mold/caption.js</mold-uri>
-			<css-uri>css/caption.css</css-uri>
+			<css-uri>css/caption.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -599,7 +599,7 @@ def alert(m):
 	<component>
 		<component-name>hlayout</component-name>
 		<component-class>org.zkoss.zul.Hlayout</component-class>
-		<widget-class>zul.layout.Hlayout</widget-class>
+		<widget-class>zul.box.Hlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/layout.js</mold-uri>
@@ -1239,7 +1239,7 @@ def alert(m):
 	<component>
 		<component-name>vlayout</component-name>
 		<component-class>org.zkoss.zul.Vlayout</component-class>
-		<widget-class>zul.layout.Vlayout</widget-class>
+		<widget-class>zul.box.Vlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/layout.js</mold-uri>

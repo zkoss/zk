@@ -40,7 +40,7 @@ function (out) {
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 	
-		out.push('</table></div>');
+		out.push('</table></div><div class="', zcls, '-header-bg"></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
 

@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		this.appendChild(this._pop);
 		this.appendChild(this._tm);
 	}
-	function _reposition(wgt) {
+	function _reposition(wgt, silent) {
 		var db = wgt.$n();
 		if (!db) return;
 		var pp = wgt.$n("pp"),
@@ -30,7 +30,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if(pp) {
 			zk(pp).position(inp, "after_start");
 			wgt._pop.syncShadow();
-			zk(inp).focus();
+			if (!silent)
+				zk(inp).focus();
+		}
+	}
+	function _blurInplace(wgt) {
+		var n;
+		if (wgt._inplace && wgt._inplaceout && (n = wgt.$n())
+		&& !jq(n).hasClass(wgt.getInplaceCSS())) {
+			jq(n).addClass(wgt.getInplaceCSS());
+			wgt.onSize();
+			n.style.width = wgt.getWidth() || '';
 		}
 	}
 
@@ -294,13 +304,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
-	setOpen: function(open) {
-		this._open = open;
-		var pp = this.$n("pp");
-		if (pp) {
-			if (!jq(pp).zk.isVisible()) this._pop.open();
-			else this._pop.close();
-		}
+	setOpen: function(open, _focus_) {
+		var pop;
+		if (pop = this._pop)
+			if (open) pop.open(!_focus_);
+			else pop.close(!_focus_);
 	},
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
@@ -377,15 +385,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
+
 		this.$supers('doBlur_', arguments);
-		if (this._inplace && this._inplaceout) {
-			jq(n).addClass(this.getInplaceCSS());
-			this.onSize();
-			n.style.width = this.getWidth() || '';
-		}
+
+		_blurInplace(this);
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);
@@ -466,16 +471,17 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		
-		zul.db.ThemeHandler.addRightEdgeClass(this);
-			
 		this.syncWidth();
 		
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
-		var btn = this.$n('btn');
-		if (btn) {
+		var btn;
+		if (btn = this._pop)
+			btn.close(true);
+
+		if (btn = this.$n('btn')) {
 			this._auxb.cleanup();
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
@@ -487,7 +493,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled)
-			this.setOpen();
+			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), true);
 		evt.stop();
 	},
 	_doTimeZoneChange: function (evt) {
@@ -569,13 +575,15 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (btn)
 			jq(btn).removeClass(zcls + "-btn-over");
 
-		if (!silent)
+		if (silent)
+			db.updateChange_();
+		else
 			jq(db.getInputNode()).focus();
 	},
 	isOpen: function () {
 		return zk(this.parent.$n("pp")).isVisible();
 	},
-	open: function() {
+	open: function(silent) {
 		var wgt = this.parent,
 			db = wgt.$n(), pp = wgt.$n("pp");
 		if (!db || !pp)
@@ -613,7 +621,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		zk(pp).position(wgt.getInputNode(), "after_start");
 		setTimeout(function() {
-			_reposition(wgt);
+			_reposition(wgt, silent);
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
@@ -644,29 +652,32 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	},
 	onChange: function (evt) {
 		var date = this.getTime(),
-			oldDate = this.parent.getValue(),
-			readonly = this.parent.isReadonly();
-		if (oldDate) {
+			db = this.parent,
+			oldDate = db.getValue(),
+			readonly = db.isReadonly();
+		if (oldDate)
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
-			this.parent._value = new Date(date.getFullYear(), date.getMonth(),
+			db._value = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
 				oldDate.getMinutes(), oldDate.getSeconds());
-		} else
-			this.parent._value = date;
-		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
+		else
+			db._value = date;
+		db.getInputNode().value = evt.data.value = db.getRawText();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
-			this.close(readonly);
-			this.parent._inplaceout = true;
+			this.close();
+			db._inplaceout = true;
 		}
-		if (!readonly)
-			this.parent.focus();
 		evt.stop();
 	},
 	onFloatUp: function (ctl) {
-		if (!zUtl.isAncestor(this.parent, ctl.origin))
+		var db = this.parent;
+		if (!zUtl.isAncestor(db, ctl.origin)) {
 			this.close(true);
+			db._inplaceout = true;
+			_blurInplace(db);
+		}
 	},
 	bind_: function () {
 		this.$supers(CalendarPop, 'bind_', arguments);
@@ -727,17 +738,4 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		evt.stop();
 	}
 });
-
-zul.db.ThemeHandler = {
-	 addRightEdgeClass: function (wgt) {
-	  	if (wgt._readonly && !wgt.inRoundedMold() && !wgt._buttonVisible)
-			jq(wgt.getInputNode()).addClass(wgt.getZclass() + '-right-edge');
-	 },
-	 addDayOfWeekClass: function (isWeekend, out) {
-	 	if (isWeekend) out.push(' class="z-weekend"');
-	 },
-	 addDayRowClass: function (isWeekend, zcls, out) {
-	 	out.push ('<td></td>');
-	 }
-};
 })();

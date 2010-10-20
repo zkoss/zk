@@ -43,13 +43,15 @@ function (out) {
 		out.push('>', zUtl.encodeXML(this.getLabel()), '&nbsp;</', btn, '></div></td><td class="',
 					zcls, '-inner-r"><span class="', zcls, '-space"></span></td></tr></tbody></table></a></td>');
 	} else {
-		out.push('<li', this.domAttrs_(), '>');
+		out.push('<li', this.domAttrs_(), '><div class="', zcls, '-cl"><div class="', zcls, '-cr"><div class="', zcls, '-cm">');
 		var cls = zcls + '-cnt' +
 				(!img && this.isCheckmark() ?
-						' ' + zcls + (this.isChecked() ? '-cnt-ck' : '-cnt-unck') : '');
+						' ' + zcls + (this.isChecked() ? '-cnt-ck' : '-cnt-unck') : ''),
+			mold = this.getMold();
+		
 		out.push('<a href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
 		if (target)
 			out.push(' target="', target, '"');
-		out.push(' id="', uuid, '-a" class="', cls, '">', this.domContent_(), '</a></li>');
+		out.push(' id="', uuid, '-a" class="', cls, '">', this.domContent_(), '</a></div></div></div></li>'); //Merge breeze
 	}
 }

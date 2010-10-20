@@ -21,14 +21,18 @@ import java.net.URL;
 
 /**
  * A locater used to locate extra resource for {@link Labels}.
- * Once registered (by {@link Labels#register}), the label loader
+ * Once registered (by {@link Labels#register(LabelLocator)}), the label loader
  * will invoke {@link #locate} to locate any extra resource.
- * If so, it will load labels from it.
+ *
+ * <p>If the resource is not easy to be represented in URL, you could implement
+ * {@link LabelLocator2} instead.
  *
  * @author tomyeh
+ * @see LabelLocator2
  */
 public interface LabelLocator {
-	/** Returns URL for the specified locale, or null if not available.
+	/** Returns URL containing the labels for the specified locale,
+	 * or null if not available.
 	 * <p>It must be thread-safe.
 	 */
 	public URL locate(Locale locale) throws Exception;

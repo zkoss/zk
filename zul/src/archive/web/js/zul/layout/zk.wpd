@@ -12,8 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.layout" language="xul/html" depends="zul">
-	<script src="Layout.js" jsdoc="true"/>
-	
 	<widget name="Borderlayout"/>
 	<widget name="LayoutRegion"/>
 	<widget name="North"/>
@@ -21,6 +19,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Center"/>
 	<widget name="East"/>
 	<widget name="West"/>
-	<widget name="Hlayout"/>
-	<widget name="Vlayout"/>
 </package>

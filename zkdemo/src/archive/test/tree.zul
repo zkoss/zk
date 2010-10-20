@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Tree with rows more than need:
-<tree id="tree" width="400px" rows="10">
+<tree id="tree" width="400px" rows="10" multiple="true">
 	<treecols>
 		<treecol label="Subject"/>
 		<treecol label="From"/>

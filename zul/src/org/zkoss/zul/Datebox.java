@@ -32,6 +32,7 @@ import org.zkoss.util.TimeZones;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -54,7 +55,7 @@ public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
 	private List<TimeZone> _dtzones;
-	private boolean _btnVisible = true, _lenient = true, _open = false, _dtzonesReadonly = false;
+	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 	static {
 		addClientEvent(Datebox.class, Events.ON_FOCUS, 0);
 		addClientEvent(Datebox.class, Events.ON_BLUR, 0);
@@ -384,7 +385,7 @@ public class Datebox extends FormatInputElement implements
 	 * @since 3.0.1
 	 */
 	public void open() {
-		smartUpdate("open", true);
+		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 
 	/**
@@ -393,7 +394,7 @@ public class Datebox extends FormatInputElement implements
 	 * @since 3.0.1
 	 */
 	public void close() {
-		smartUpdate("open", false);
+		response("open", new AuInvoke(this, "setOpen", false));//don't use smartUpdate
 	}
 
 	/** Processes an AU request.

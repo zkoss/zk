@@ -26,7 +26,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._margins = [0, 0, 0, 0];
-		this._cmargins = [5, 5, 5, 5];
+		this._cmargins = [3, 3, 3, 3]; //center
 	},
 
 	$define: {
@@ -212,8 +212,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						});
 					else {
 						jq(real)[open ? 'show' : 'hide']();
+						if (!open) zWatch.fireDown('onHide', this);
 						jq(colled)[!open ? 'show' : 'hide']();
-						zWatch.fireDown(open ? 'onShow' : 'onHide', this);
+						if (open) zWatch.fireDown('onShow', this);
 					}
 				}
 			} else {

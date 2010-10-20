@@ -20,7 +20,7 @@ function (out, skipper) {
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		mode = this.getMode(),
-		withFrame = 'embedded' != mode && 'popup' != mode,
+		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
 		noborder = 'normal' != this.getBorder() ? '-noborder' : '';
 		
 	out.push('<div', this.domAttrs_(), '>');

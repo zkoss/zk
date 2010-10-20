@@ -47,9 +47,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		 * @param boolean nowrap
 		 */
 		nowrap: function (v) {
-			var n = this.$n();
-			if (n)
-				n.noWrap = v;
+			var cells = this.$n();
+			if (cells && (cells = cells.cells))
+				for (var j = cells.length; j--;)
+					cells[j].noWrap = v;
 		},
 		/** Returns the vertical alignment of the whole row.
 		 * <p>Default: null (system default: top).
@@ -73,7 +74,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			if (this.isStripeable_() && this.parent)
+			if (visible && this.isStripeable_() && this.parent)
 				this.parent.stripe();
 		}
 	},
@@ -214,16 +215,16 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				style += 'height:' + hgh + ';';
 		}
 		
-		var clx = isDetail ? child.getZclass() + "-outer" : this.getZclass() + "-inner";
-		
-		if (!colattrs && !style && span === 1)
-			return ' class="' + clx + '"';
-
-		var attrs = colattrs ? colattrs : '';
+		var clx = isDetail ? child.getZclass() + "-outer" : this.getZclass() + "-inner",
+			attrs = colattrs || '';
 		
 		if (span !== 1)
 			attrs += ' colspan="' + span + '"';
-		return attrs + ' style="' + style + '"' + ' class="' + clx + '"';
+		if (this._nowrap)
+			attrs += ' nowrap="nowrap"';
+		if (style)
+			attrs += ' style="' + style + '"'
+		return attrs + ' class="' + clx + '"';
 	},
 	/**
 	 * Returns whether is stripeable or not.
@@ -254,17 +255,35 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			this.detail = null;
 	},
 	doMouseOver_: function(evt) {
-		if (zk.gecko && this._draggable
-		&& !jq.nodeName(evt.domTarget, "input", "textarea")) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
-		}
+		var n = this.$n(), 
+			zcls = this.getZclass() + '-over';
+		if (n && zk.gecko && this._draggable
+		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
+			n.firstChild.style.MozUserSelect = "none";
+		
+		//Merge breeze
+		if (n && !jq(n).hasClass(zcls))
+			jq(n).addClass(zcls);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		if (zk.gecko && this._draggable) {
-			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
+		var n = this.$n(),
+			zcls = this.getZclass() + '-over'; // Merge breeze
+		if (n && zk.gecko && this._draggable)
+			n.firstChild.style.MozUserSelect = "none";
+		
+		/* Merge breeze
+		 * Calculate widget on page's position, removes CSS class
+		 * when the event's position is out of the range of the widget.
+		 */
+		if (n && jq(n).hasClass(zcls)) {
+			var x = evt.pageX,
+				y = evt.pageY,
+				of = zk(n).revisedOffset(),
+				p = 2;	/* Add extra padding for fault-tolerant */
+			if (x < (of[0] + p) || x > (of[0] + n.clientWidth - p) ||
+				y < (of[1] + p) || y > (of[1] + n.clientHeight - p)	)
+				jq(n).removeClass(zcls);
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
@@ -274,8 +293,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			attr += ' align="' + this._align + '"';
 		if (this._valign)
 			attr += ' valign="' + this._valign + '"';
-		if (this._nowrap)
-			attr += ' nowrap="nowrap"';
 		return attr;
 	},
 	domClass_: function () {

@@ -41,7 +41,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		 * @param boolean sizable
 		 */
 		sizable: function () {
-			this.rerender();
+			this.rerender(0);
 		}
 	},
 

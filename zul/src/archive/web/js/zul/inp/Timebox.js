@@ -1,4 +1,4 @@
-/* inp.zul
+/* Timebox.zul
 
 	Purpose:
 		testing textbox.intbox.spinner,timebox,doublebox,longbox and decimalbox on zk5
@@ -360,19 +360,29 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_dodropbtnup: function (evt) {
-		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
+		var zcls = this.getZclass();
+		
+		jq(this._currentbtn).removeClass(zcls + "-btn-clk");
+		if (!this.inRoundedMold()) {
+			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
+			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
+		}
 		this.domUnlisten_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) {
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.getInputNode(),
-			btn = this.$n("btn");
-
-		if(!inp || inp.disabled) return;
+		var isRounded = this.inRoundedMold();
+		if (isRounded && !this._buttonVisible) return;
+		
+		var inp;
+		if(!(inp = this.getInputNode()) || inp.disabled) return;
+		
+		var btn = this.$n("btn"),
+			zcls = this.getZclass();
+			
 		if (this._currentbtn)
 			this._dodropbtnup(evt);
-		jq(btn).addClass(this.getZclass() + "-btn-clk");
+		jq(btn).addClass(zcls + "-btn-clk");
 		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
 
@@ -382,8 +392,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
-		var ofs = zk(btn).revisedOffset();
-		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
+		var ofs = zk(btn).revisedOffset(),
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
+		if (isOverUpBtn) { //up
 			this._doUp();
 			this._startAutoIncProc(true);
 		} else {
@@ -391,25 +402,38 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._startAutoIncProc(false);
 		}
 		
+		var sfx = isRounded? "" : 
+					isOverUpBtn? "-up":"-down";
+		if ((btn = this.$n("btn" + sfx)) && !isRounded) {
+			jq(btn).addClass(zcls + "-btn" + sfx + "-clk");
+			this._currentbtn = btn;
+		}
+		
 		// cache it for IE
 		this._lastPos = this._getPos();
 		this._changed = true;
 		
+		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
+		inp.focus(); //we have to set it here; otherwise, if it is in popup of
+			//datebox, datebox's onblur will find zk.currentFocus is null
+
 		// disable browser's text selection
 		evt.stop();
 	},
 	_btnUp: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
+
 		var inp = this.getInputNode();
 		if(inp.disabled || zk.dragging) return;
+
+		if (zk.opera) inp.focus();
+			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
 		this._onChanging();
 		this._stopAutoIncProc();
 		
 		if ((zk.ie || zk.safari) && this._lastPos)
 			zk(inp).setSelectionRange(this._lastPos, this._lastPos);
-
-		inp.focus();
 	},
 	_btnOut: function(evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
@@ -697,15 +721,15 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
-		
+
 		// skip onchange, Bug 2936568
 		if (!this.getValue() && !this._changed)
 			this.getInputNode().value = this._lastRawValVld = '';
 		
 		this.$supers('doBlur_', arguments);
+
 		if (this._inplace && this._inplaceout) {
 			jq(n).addClass(this.getInplaceCSS());
 			this.onSize();
@@ -727,9 +751,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
-			jq(inp).addClass(this.getZclass() + '-right-edge');
-		
 		if (btn) {
 			this.domListen_(btn, "onMouseDown", "_btnDown")
 				.domListen_(btn, "onMouseUp", "_btnUp")

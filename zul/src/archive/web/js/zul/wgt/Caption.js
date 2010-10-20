@@ -44,6 +44,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return label ? img + ' ' + label: img;
 	},
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments),
+			parent = this.parent;
+			
+		if (!parent.$instanceof(zul.wgt.Groupbox))
+			return sc;
+			
+		return sc + (parent._closable ? '': ' ' + this.getZclass() + '-readonly');
+	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
 			this.parent.setOpen(!this.parent.isOpen());
@@ -58,7 +67,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	/** Whether to generate a close button. */
 	_isCloseVisible: function () {
 		var parent = this.parent;
-		return parent.isClosable && parent.isClosable();
+		return parent.isClosable && parent.isClosable()
+			&& !parent.$instanceof(zul.wgt.Groupbox);
 	},
 	/** Whether to generate a minimize button. */
 	_isMinimizeVisible: function () {

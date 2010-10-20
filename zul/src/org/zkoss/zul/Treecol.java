@@ -68,11 +68,15 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		return getTree();
 	}
 	/** Returns the maximal length of each item's label.
+	 * <p>Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
 	}
 	/** Sets the maximal length of each item's label.
+	 * <p>Default: 0 (no limit).
+	 * <p>Notice that maxlength will be applied to this header and all
+	 * listcell of the same column.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
@@ -102,6 +106,8 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
+		if (_maxlength > 0)
+			renderer.render("maxlength", _maxlength);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
 

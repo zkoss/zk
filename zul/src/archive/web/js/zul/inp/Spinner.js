@@ -143,34 +143,52 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_ondropbtnup: function (evt) {
-		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
+		var zcls = this.getZclass();
+		
+		jq(this._currentbtn).removeClass(zcls + "-btn-clk");
+		if (!this.inRoundedMold()) {
+			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
+			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
+		}
 		this.domUnlisten_(document.body, "onMouseUp", "_ondropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt){
-		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.inp,
-			btn = this.$n("btn");
-		if(!inp || inp.disabled) return;
+		var isRounded = this.inRoundedMold();
+		if (isRounded && !this._buttonVisible) return;
 		
+		var inp;
+		if(!(inp = this.inp) || inp.disabled) return;
+		
+		var btn = this.$n("btn"),
+			zcls = this.getZclass();
+			
 		if (!zk.dragging) {
 			if (this._currentbtn)
 				this.ondropbtnup(evt);
-			jq(btn).addClass(this.getZclass() + "-btn-clk");
+			jq(btn).addClass(zcls + "-btn-clk");
 			this.domListen_(document.body, "onMouseUp", "_ondropbtnup");
 			this._currentbtn = btn;
 		}
 		
 		this.checkValue();
 		
-		ofs = zk(btn).revisedOffset();
+		var ofs = zk(btn).revisedOffset(),
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
 		
-		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
+		if (isOverUpBtn) { //up
 			this._increase(true);
 			this._startAutoIncProc(true);
 		} else {	// down
 			this._increase(false);
 			this._startAutoIncProc(false);
+		}
+		
+		var sfx = isRounded? "" : 
+						isOverUpBtn? "-up":"-down";
+		if ((btn = this.$n("btn" + sfx)) && !isRounded) {
+			jq(btn).addClass(zcls + "-btn" + sfx + "-clk");
+			this._currentbtn = btn;
 		}
 		
 		// disable browser's text selection
@@ -317,10 +335,11 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
-		if (this._inplace && this._inplaceout) {
+		if (this._inplace && this._inplaceout)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-		}
+
 		this.$supers('doBlur_', arguments);
+
 		if (this._inplace && this._inplaceout) {
 			jq(n).addClass(this.getInplaceCSS());
 			this.onSize();
@@ -343,9 +362,6 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (this._readonly && !this.inRoundedMold() && !this._buttonVisible)
-			jq(inp).addClass(this.getZclass() + '-right-edge');
-		
 		if(btn)
 			this.domListen_(btn, "onMouseDown", "_btnDown")
 				.domListen_(btn, "onMouseUp", "_btnUp")

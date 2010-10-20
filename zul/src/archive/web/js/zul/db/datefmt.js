@@ -52,7 +52,7 @@ zk.fmt.Date = {
 			hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
 			isAM;
 
-		var	ts = [], mindex = fmt.indexOf("MMM"),
+		var ts = [], mindex = fmt.indexOf("MMM"), eindex = fmt.indexOf("EE"),
 			fmtlen = fmt.length, ary = [],
 			//mmindex = mindex + 3,
 			isNumber = !isNaN(txt),
@@ -63,7 +63,8 @@ zk.fmt.Date = {
 				f = fmtlen > i ? fmt.charAt(i) : "";
 			if (c.match(/\d/)) {
 				ary.push(c);
-			} else if ((mindex > -1 && mindex <= i /*&& mmindex >= i location French will lose last char */) || (aa > -1 && aa <= i)) {
+			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
@@ -79,7 +80,8 @@ zk.fmt.Date = {
 			} else if (ary.length) {
 				ts.push(ary.join(""));
 				ary = [];
-			}
+			} else if (c.match(/\w/))
+				return; //failed
 		}
 		if (ary.length) ts.push(ary.join(""));
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -106,23 +108,23 @@ zk.fmt.Date = {
 						}
 					}
 					y = zk.parseInt(token);
-					if (isNaN(y)) return null; //failed
+					if (isNaN(y)) return; //failed
 					if (y < 100) y += y > 29 ? 1900 : 2000;
 					break;
 				case 'M':
-					var mon = txt.substring(j).toLowerCase().trim(),
-						mToken = token ? token.toLowerCase() : '';
-					for (var index = zk.SMON.length; --index >= 0;) {
-						var smon = zk.SMON[index].toLowerCase();
-						if (mon.startsWith(smon) || (mToken && mToken.startsWith(smon))) {
-							token = zk.SMON[index];
-							m = index;
-							break;
+					var mon = token ? token.toLowerCase() : '';
+					if (token)
+						for (var index = zk.SMON.length; --index >= 0;) {
+							var smon = zk.SMON[index].toLowerCase();
+							if (mon.startsWith(smon)) {
+								token = zk.SMON[index];
+								m = index;
+								break;
+							}
 						}
-					}
 					if (len == 3 && token) {
 						if (nosep)
-							token = this._parseToken(mToken, ts, --i, token.length);//token.length: the length of French month is 4
+							token = this._parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						break; // nothing to do.
 					}else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
@@ -130,10 +132,9 @@ zk.fmt.Date = {
 							token = token.substring(0, 2);
 						}
 						m = zk.parseInt(token) - 1;
-						if (isNaN(m)) return null; //failed
 					} else {
 						for (var l = 0;; ++l) {
-							if (l == 12) return null; //failed
+							if (l == 12) return; //failed
 							if (len == 3) {
 								if (zk.SMON[l] == token) {
 									m = l;
@@ -147,13 +148,20 @@ zk.fmt.Date = {
 							}
 						}
 					}
+					if (isNaN(m) || m < 0 || m > 11) //restrict since user might input year for month
+						return;//failed
+					break;
+				case 'E':
+					if (nosep)
+						this._parseToken(token, ts, --i, len);
 					break;
 				case 'd':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					d = zk.parseInt(token);
 					dFound = true;
-					if (isNaN(d)) return null; //failed
+					if (isNaN(d) || d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+						return; //failed
 					break;
 				case 'H':
 					if (hasHour1)
@@ -161,7 +169,7 @@ zk.fmt.Date = {
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
-					if (isNaN(hr)) return null; //failed
+					if (isNaN(hr)) return; //failed
 					break;
 				case 'h':
 					if (!hasHour1)
@@ -171,7 +179,7 @@ zk.fmt.Date = {
 					hr = zk.parseInt(token);
 					if (hr == 12)
 						hr = 0;
-					if (isNaN(hr)) return null; //failed
+					if (isNaN(hr)) return; //failed
 					break;
 				case 'K':
 					if (!hasHour1)
@@ -179,7 +187,7 @@ zk.fmt.Date = {
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
-					if (isNaN(hr)) return null; //failed
+					if (isNaN(hr)) return; //failed
 					hr %= 12;
 					break;
 				case 'k':
@@ -190,24 +198,24 @@ zk.fmt.Date = {
 					hr = zk.parseInt(token);
 					if (hr == 24)
 						hr = 0;
-					if (isNaN(hr)) return null; //failed
+					if (isNaN(hr)) return; //failed
 					break;					
 				case 'm':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					min = zk.parseInt(token);
-					if (isNaN(min)) return null; //failed
+					if (isNaN(min)) return; //failed
 					break;
 				case 's':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
 					sec = zk.parseInt(token);
-					if (isNaN(sec)) return null; //failed
+					if (isNaN(sec)) return; //failed
 					break;
 				case 'a':
 					if (!hasHour1)
 						break;
-					isAM = txt.substring(j).startsWith(zk.APM[0]);
+					isAM = token.startsWith(zk.APM[0]);
 					break
 				//default: ignored
 				}
@@ -223,7 +231,7 @@ zk.fmt.Date = {
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
 				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec)
-				return null; //failed
+				return; //failed
 
 			txt = txt.trim();
 			txt = this.checkDate(zk.FDOW, txt);

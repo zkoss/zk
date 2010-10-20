@@ -41,7 +41,8 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" 
  * 	[root="component|component-path"] 
  *  [loadDefault="true|false"]
- *  [name="binder's name"] ?>
+ *  [name="binder's name"]
+ *  [loadOnSave="true|false"] ?>
  * </pre>
  * <p>Where the root attribute is the component itself (via EL expression) or the component path that 
  * specifies the component the AnnotateDataBinder covers. You can use absolute path that 
@@ -53,6 +54,8 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * If the loadDefault attribute is not specified it is default to true.</p>
  * <p>(since 3.6.2) Where the name attribute is used to specify the created DataBinder's name (default to "binder")
  * which you can access it via EL or component.getAttribute(name) later.
+ * <p>(since 5.0.5) Where the loadOnSave attribute(default to true) is used to specify whether DataBinder shall automatically "load" associated 
+ * binding value back into UI component after doing a "save" operation to the binding bean.</p>
  *
  * <p>For application design to run ZK prior to 3.6.2, it can use arg0 instead
  * of root, and arg1 instead of loadDefault.
@@ -78,6 +81,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	private String _compPath;
 	private String _defaultConfig;
 	private String _name;
+	private boolean _loadOnSave;
 	
 	/** The AnnotateDataBinder created in doAfterCompose() */
 	protected AnnotateDataBinder _binder; 
@@ -122,6 +126,15 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		_name = (String) args.get("name");
 		if (_name == null) {
 			_name = "binder";
+		}
+		
+		Object loadOnSave = args.get("loadOnSave");
+		if (loadOnSave == null) {
+			_loadOnSave = true;
+		} else if (loadOnSave instanceof String) {
+			_loadOnSave = !"false".equals(loadOnSave);
+		} else if (loadOnSave instanceof Boolean) {
+			_loadOnSave = ((Boolean)loadOnSave).booleanValue();
 		}
 	}
 	
@@ -172,6 +185,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			_binder = new AnnotateDataBinder(comp, b);
 			saveBinder(comp);//comp.setAttribute(_name, _binder);
 		}
+		_binder.setLoadOnSave(_loadOnSave);
 		_binder.loadAll(); //load data bean properties into UI components
 	}
 }
