@@ -68,11 +68,11 @@
 .z-spinner-focus .z-spinner-inp {
 	border: 1px solid #90BCE6;
 }
-.z-combobox-text-invalid,
-.z-bandbox-text-invalid,
-.z-datebox-text-invalid,
-.z-timebox-text-invalid,
-.z-spinner-text-invalid {
+.z-combobox .z-combobox-text-invalid,
+.z-bandbox .z-bandbox-text-invalid,
+.z-datebox .z-datebox-text-invalid,
+.z-timebox .z-timebox-text-invalid,
+.z-spinner .z-spinner-text-invalid {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 	border-right-width: 1px !important;
