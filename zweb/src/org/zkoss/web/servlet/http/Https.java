@@ -44,7 +44,6 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
-import org.zkoss.net.URLs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
