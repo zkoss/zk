@@ -196,7 +196,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_innerTags: function () {
 		var out = [];
 
-		var half = this._pageIncrement / 2,
+		var half = Math.round(this._pageIncrement / 2),
 			begin, end = this._activePage + half - 1;
 		if (end >= this._pageCount) {
 			end = this._pageCount - 1;
