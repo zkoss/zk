@@ -74,6 +74,7 @@ ZK 5.0.5
   3088034: datebox string convert error (shall show error message)
   3089502: setScale in decimalbox not working
   3090979: typo (_quality="hight") in Flash.java
+  3091160: WrongValueException not handled if thrown in onCreate listener
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

@@ -435,10 +435,18 @@ public class UiEngineImpl implements UiEngine {
 
 			//Cycle 2: process pending events
 			//Unlike execUpdate, execution is aborted here if any exception
+			final List errs = new LinkedList();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						if (!handleError(ex, uv, errs))
+							break; //skip the rest of events! 
+					}
+				}
+
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
@@ -448,7 +456,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Redraw the page (and responses)
-			List responses = uv.getResponses();
+			List responses = getResponses(exec, uv, errs);
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -1083,8 +1091,8 @@ public class UiEngineImpl implements UiEngine {
 						try {
 							process(desktop, event);
 						} catch (Throwable ex) {
-							handleError(ex, uv, errs);
-							break; //skip the rest of events! 
+							if (!handleError(ex, uv, errs))
+								break; //skip the rest of events! 
 						}
 					}
 
@@ -1098,24 +1106,11 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
-			List responses;
-			try {
-				//Note: we have to call visualizeErrors before uv.getResponses,
-				//since it might create/update components
-				if (!errs.isEmpty())
-					visualizeErrors(exec, uv, errs);
-
-				responses = uv.getResponses();
-			} catch (Throwable ex) {
-				responses = new LinkedList();
-				responses.add(new AuAlert(Exceptions.getMessage(ex)));
-
-				log.error(ex);
-			}
+			final List responses = getResponses(exec, uv, errs);
 
 			doneReqIds = rque.clearPerfRequestIds();
 
-			List prs = desktopCtrl.piggyResponse(null, true);
+			final List prs = desktopCtrl.piggyResponse(null, true);
 			if (prs != null) responses.addAll(0, prs);
 
 			out.writeResponseId(desktopCtrl.getResponseId(true));
@@ -1193,8 +1188,8 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					process(desktop, event);
 				} catch (Throwable ex) {
-					handleError(ex, ui.uv, errs);
-					break; //skip the rest of events! 
+					if (!handleError(ex, ui.uv, errs))
+						break; //skip the rest of events! 
 				}
 			}
 
@@ -1207,18 +1202,7 @@ public class UiEngineImpl implements UiEngine {
 			ui.abrn.execute(); //always execute even if !isAborting
 
 		//3. Retrieve responses
-		List responses;
-		try {
-			if (!errs.isEmpty())
-				visualizeErrors(exec, ui.uv, errs);
-
-			responses = ui.uv.getResponses();
-		} catch (Throwable ex) {
-			responses = new LinkedList();
-			responses.add(new AuAlert(Exceptions.getMessage(ex)));
-
-			log.error(ex);
-		}
+		final List responses = getResponses(exec, ui.uv, errs);
 
 		final JSONArray rs = new JSONArray();
 		for (Iterator it = responses.iterator(); it.hasNext();)
@@ -1253,9 +1237,11 @@ public class UiEngineImpl implements UiEngine {
 
 	/** Handles each error. The erros will be queued to the errs list
 	 * and processed later by {@link #visualizeErrors}.
+	 * @return whether it is handled (i.e., become an AuResponse)
+	 * (and won't be added to errs).
 	 */
 	private static final
-	void handleError(Throwable ex, UiVisualizer uv, List errs) {
+	boolean handleError(Throwable ex, UiVisualizer uv, List errs) {
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			if (ex instanceof org.xml.sax.SAXException
@@ -1279,7 +1265,7 @@ public class UiEngineImpl implements UiEngine {
 					uv.addResponse(
 						new AuWrongValue(c, Exceptions.getMessage(wve)));
 				}
-				return;
+				return true;
 			}
 		} else if (ex instanceof WrongValuesException) {
 			final WrongValueException[] wves =
@@ -1299,10 +1285,28 @@ public class UiEngineImpl implements UiEngine {
 			}
 			uv.addResponse(
 				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
-			return;
+			return true;
 		}
 
 		errs.add(ex);
+		return false;
+	}
+	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
+		List responses;
+		try {
+			//Note: we have to call visualizeErrors before uv.getResponses,
+			//since it might create/update components
+			if (!errs.isEmpty())
+				visualizeErrors(exec, uv, errs);
+
+			responses = uv.getResponses();
+		} catch (Throwable ex) {
+			responses = new LinkedList();
+			responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+			log.error(ex);
+		}
+		return responses;
 	}
 	/** Post-process the errors to represent them to the user.
 	 * Note: errs must be non-empty
