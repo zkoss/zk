@@ -14,6 +14,7 @@ ZK 5.0.5
   3085654: LabelLocator allows to return InputStream instead of URL
   3091085: Upgrade to jQuery 1.4.3
   3091086: The A component shall allow children
+  3091764: Able to prevent users enter the grouping character
   
 * Bugs
   3057902: zk bug for window showbusy

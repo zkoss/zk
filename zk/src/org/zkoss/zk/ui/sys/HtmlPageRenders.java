@@ -271,13 +271,16 @@ public class HtmlPageRenders {
 				}
 			}
 		}
-		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null;
+		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null,
+			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
-		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0) {
+		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
 			sb.append("<script type=\"text/javascript\">zkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
+			if (!groupingAllowed)
+				sb.append("gd:1,");
 			if (tmout > 0)
 				sb.append("to:").append(tmout).append(",");
 			if (progressboxPos.length() > 0)
@@ -701,6 +704,7 @@ public class HtmlPageRenders {
 		if (o != null)
 			return (o instanceof Boolean && ((Boolean)o).booleanValue())
 				|| !"false".equals(o);
+
 		if (_crod == null) {
 			final String s = Library.getProperty(Attributes.CLIENT_ROD);
 			_crod = Boolean.valueOf(s == null || !"false".equals(s));
@@ -708,6 +712,28 @@ public class HtmlPageRenders {
 		return _crod.booleanValue();
 	}
 	private static Boolean _crod;
+
+	private static final boolean isGroupingAllowed(Desktop desktop) {
+		final String name = "org.zkoss.zk.ui.input.grouping.allowed";
+		if (desktop != null) {
+			final Collection pages = desktop.getPages();
+			if (!pages.isEmpty()) {
+				final Page page = (Page)pages.iterator().next();
+				Object o = page.getAttribute(name);
+				if (o != null)
+					return (o instanceof Boolean && ((Boolean)o).booleanValue())
+						|| !"false".equals(o);
+			}
+		}
+
+		if (_groupingAllowed == null) {
+			final String s = Library.getProperty(name);
+			_groupingAllowed = Boolean.valueOf(s == null || !"false".equals(s));
+		}
+		return _groupingAllowed.booleanValue();
+	}
+	private static Boolean _groupingAllowed;
+		
 	/** Generates the content of a standalone componnent that
 	 * the peer widget is not a child of the page widget at the client.
 	 * @param comp the compoent to render. It is null if no child component

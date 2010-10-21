@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
     
 	// Fixed merging JS issue
 	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING;
+		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL;
 	});
 /**
  * An edit box for holding BigDecimal.

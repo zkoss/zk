@@ -4916,6 +4916,7 @@ function zkopt(opts) {
 		case "pf": zk.pfmeter = val; break;
 		case "cd": zk.clickFilterDelay = val; break;
 		case "ta": zk.timerAlive = val; break;
+		case "gd": zk.groupingDenied = val; break;
 		case "to":
 			zk.timeout = val;
 			zAu._resetTimeout();
