@@ -88,8 +88,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Adding causes a smaller list?");
 			}
-			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold())
-				_grid.invalidate(); //performance is better
+			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold() && rows != null)
+				rows.invalidate(); //performance is better (outer better than add a lot)
 			if (min < 0)
 				if (max < 0) min = 0;
 				else min = max - cnt + 1;
@@ -253,8 +253,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > INVALIDATE_THRESHOLD && !inPaging)
-					_grid.invalidate(); //performance is better
+				if (newcnt > INVALIDATE_THRESHOLD && !inPaging && rows != null)
+					rows.invalidate(); //performance is better
 
 				Component comp = (Component)rows.getChildren().get(max);
 				next = comp.getNextSibling();
@@ -282,8 +282,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 					row = next;
 				}
 
-				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPaging)
-					_grid.invalidate(); //performance is better
+				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPaging && rows != null)
+					rows.invalidate(); //performance is better
 			}
 		} else {
 			min = 0;
@@ -307,7 +307,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			pgi.setActivePage(atg);
 		}
 	}
-	
+
 	protected boolean inPagingMold() {
 		return "paging".equals(_grid.getMold());
 	}
