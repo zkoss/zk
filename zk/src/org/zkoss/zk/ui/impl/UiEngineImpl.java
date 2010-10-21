@@ -201,37 +201,41 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private void desktopDestroyed0(Desktop desktop) {
 		final Configuration config = _wapp.getConfiguration();
-		final Map map;
-		synchronized (_suspended) {
-			map = (Map)_suspended.remove(desktop);
-		}
-		if (map != null) {
-			synchronized (map) {
-				for (Iterator it = map.values().iterator(); it.hasNext();) {
-					final List list = (List)it.next();
-					for (Iterator i2 = list.iterator(); i2.hasNext();) {
-						final EventProcessingThreadImpl evtthd =
-							(EventProcessingThreadImpl)i2.next();
-						evtthd.ceaseSilently("Destroy desktop "+desktop);
-						config.invokeEventThreadResumeAborts(
-							evtthd.getComponent(), evtthd.getEvent());
+		if (!_suspended.isEmpty()) { //no need to sync (better performance)
+			final Map map;
+			synchronized (_suspended) {
+				map = (Map)_suspended.remove(desktop);
+			}
+			if (map != null) {
+				synchronized (map) {
+					for (Iterator it = map.values().iterator(); it.hasNext();) {
+						final List list = (List)it.next();
+						for (Iterator i2 = list.iterator(); i2.hasNext();) {
+							final EventProcessingThreadImpl evtthd =
+								(EventProcessingThreadImpl)i2.next();
+							evtthd.ceaseSilently("Destroy desktop "+desktop);
+							config.invokeEventThreadResumeAborts(
+								evtthd.getComponent(), evtthd.getEvent());
+						}
 					}
 				}
 			}
 		}
 
-		final List list;
-		synchronized (_resumed) {
-			list = (List)_resumed.remove(desktop);
-		}
-		if (list != null) {
-			synchronized (list) {
-				for (Iterator it = list.iterator(); it.hasNext();) {
-					final EventProcessingThreadImpl evtthd =
-						(EventProcessingThreadImpl)it.next();
-					evtthd.ceaseSilently("Destroy desktop "+desktop);
-					config.invokeEventThreadResumeAborts(
-						evtthd.getComponent(), evtthd.getEvent());
+		if (!_resumed.isEmpty()) { //no need to sync (better performance)
+			final List list;
+			synchronized (_resumed) {
+				list = (List)_resumed.remove(desktop);
+			}
+			if (list != null) {
+				synchronized (list) {
+					for (Iterator it = list.iterator(); it.hasNext();) {
+						final EventProcessingThreadImpl evtthd =
+							(EventProcessingThreadImpl)it.next();
+						evtthd.ceaseSilently("Destroy desktop "+desktop);
+						config.invokeEventThreadResumeAborts(
+							evtthd.getComponent(), evtthd.getEvent());
+					}
 				}
 			}
 		}
@@ -342,7 +346,6 @@ public class UiEngineImpl implements UiEngine {
 		final String pfReqId =
 			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
 		AbortingReason abrn = null;
-		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 			desktopCtrl.invokeExecutionInits(exec, oldexec);
@@ -467,14 +470,15 @@ public class UiEngineImpl implements UiEngine {
 				execCtrl.setResponses(responses);
 
 			redrawNewPage(page, out);
+
+			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
+			config.invokeExecutionCleanups(exec, oldexec, errs);
 		} catch (Throwable ex) {
-			cleaned = true;
 			final List errs = new LinkedList();
 			errs.add(ex);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
-				//CONSIDER: whether to pass cleanup's error to users
 
 			if (!errs.isEmpty()) {
 				ex = (Throwable)errs.get(0);
@@ -482,11 +486,6 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
-				config.invokeExecutionCleanups(exec, oldexec, null);
-				//CONSIDER: whether to pass cleanup's error to users
-			}
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -518,15 +517,21 @@ public class UiEngineImpl implements UiEngine {
 		try {
 			Events.postEvent(new Event(Events.ON_DESKTOP_RECYCLE));
 
+			final List errs = new LinkedList();
 			final Desktop desktop = exec.getDesktop();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			execCtrl.setResponses(uv.getResponses());
+			execCtrl.setResponses(getResponses(exec, uv, errs));
 
 			((PageCtrl)page).redraw(out);
 		} finally {
@@ -991,31 +996,42 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public void endUpdate(Execution exec)
 	throws IOException {
-		boolean cleaned = false;
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final UiVisualizer uv = (UiVisualizer)execCtrl.getVisualizer();
 		try {
+			final List errs = new LinkedList();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			desktopCtrl.piggyResponse(uv.getResponses(), false);
+			desktopCtrl.piggyResponse(getResponses(exec, uv, errs), false);
 
-			cleaned = true;
-			desktopCtrl.invokeExecutionCleanups(exec, null, null);
-			config.invokeExecutionCleanups(exec, null, null);
-		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, null, null);
-				config.invokeExecutionCleanups(exec, null, null);
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+		} catch (Throwable ex) {
+			final List errs = new LinkedList();
+			errs.add(ex);
+
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+
+			if (!errs.isEmpty()) {
+				ex = (Throwable)errs.get(0);
+				if (ex instanceof IOException) throw (IOException)ex;
+				throw UiException.Aide.wrap(ex);
 			}
-
+		} finally {
 			doDeactivate(exec);
 		}
 	}
@@ -1059,7 +1075,6 @@ public class UiEngineImpl implements UiEngine {
 			pfmeter != null ? meterAuStart(pfmeter, exec, startTime): null;
 		Collection doneReqIds = null; //request IDs that have been processed
 		AbortingReason abrn = null;
-		boolean cleaned = false;
 		try {
 			final RequestQueue rque = desktopCtrl.getRequestQueue();
 			rque.addRequests(requests);
@@ -1118,33 +1133,25 @@ public class UiEngineImpl implements UiEngine {
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
-			cleaned = true;
-			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
-			config.invokeExecutionCleanups(exec, null, errs);
-
 			final String seqId = ((ExecutionCtrl)exec).getRequestId();
 			if (seqId != null)
 				desktopCtrl.responseSent(seqId, out.complete());
-		} catch (Throwable ex) {
-			if (!cleaned) {
-				cleaned = true;
-				final List errs = new LinkedList();
-				errs.add(ex);
-				desktopCtrl.invokeExecutionCleanups(exec, null, errs);
-				config.invokeExecutionCleanups(exec, null, errs);
-				ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
-			}
 
-			if (ex != null) {
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+		} catch (Throwable ex) {
+			final List errs = new LinkedList();
+			errs.add(ex);
+
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+
+			if (!errs.isEmpty()) {
+				ex = (Throwable)errs.get(0);
 				if (ex instanceof IOException) throw (IOException)ex;
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, null, null);
-				config.invokeExecutionCleanups(exec, null, null);
-			}
-
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -1234,8 +1241,6 @@ public class UiEngineImpl implements UiEngine {
 
 	/** Handles each error. The erros will be queued to the errs list
 	 * and processed later by {@link #visualizeErrors}.
-	 * @return whether it is handled (i.e., become an AuResponse)
-	 * (and won't be added to errs).
 	 */
 	private static final
 	void handleError(Throwable ex, UiVisualizer uv, List errs) {
@@ -1287,6 +1292,7 @@ public class UiEngineImpl implements UiEngine {
 
 		errs.add(ex);
 	}
+	/** Returns the list of response of the given execution. */
 	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
 		List responses;
 		try {
@@ -1528,7 +1534,7 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
 		//We have to loop because a resumed thread might resume others
-		for (;;) {
+		while (!_resumed.isEmpty()) { //no need to sync (better performance)
 			final List list;
 			synchronized (_resumed) {
 				list = (List)_resumed.remove(desktop);
