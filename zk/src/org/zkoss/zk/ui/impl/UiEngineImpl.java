@@ -442,8 +442,7 @@ public class UiEngineImpl implements UiEngine {
 					try {
 						process(desktop, event);
 					} catch (Throwable ex) {
-						if (!handleError(ex, uv, errs))
-							break; //skip the rest of events! 
+						handleError(ex, uv, errs);
 					}
 				}
 
@@ -1091,8 +1090,7 @@ public class UiEngineImpl implements UiEngine {
 						try {
 							process(desktop, event);
 						} catch (Throwable ex) {
-							if (!handleError(ex, uv, errs))
-								break; //skip the rest of events! 
+							handleError(ex, uv, errs);
 						}
 					}
 
@@ -1188,8 +1186,7 @@ public class UiEngineImpl implements UiEngine {
 				try {
 					process(desktop, event);
 				} catch (Throwable ex) {
-					if (!handleError(ex, ui.uv, errs))
-						break; //skip the rest of events! 
+					handleError(ex, ui.uv, errs);
 				}
 			}
 
@@ -1241,7 +1238,7 @@ public class UiEngineImpl implements UiEngine {
 	 * (and won't be added to errs).
 	 */
 	private static final
-	boolean handleError(Throwable ex, UiVisualizer uv, List errs) {
+	void handleError(Throwable ex, UiVisualizer uv, List errs) {
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			if (ex instanceof org.xml.sax.SAXException
@@ -1265,7 +1262,7 @@ public class UiEngineImpl implements UiEngine {
 					uv.addResponse(
 						new AuWrongValue(c, Exceptions.getMessage(wve)));
 				}
-				return true;
+				return;
 			}
 		} else if (ex instanceof WrongValuesException) {
 			final WrongValueException[] wves =
@@ -1285,11 +1282,10 @@ public class UiEngineImpl implements UiEngine {
 			}
 			uv.addResponse(
 				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
-			return true;
+			return;
 		}
 
 		errs.add(ex);
-		return false;
 	}
 	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
 		List responses;
