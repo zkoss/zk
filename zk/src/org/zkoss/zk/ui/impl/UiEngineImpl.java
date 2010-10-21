@@ -416,10 +416,16 @@ public class UiEngineImpl implements UiEngine {
 
 			//Cycle 2: process pending events
 			//Unlike execUpdate, execution is aborted here if any exception
+			final List errs = new LinkedList();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
@@ -429,7 +435,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Redraw the page (and responses)
-			List responses = uv.getResponses();
+			List responses = getResponses(exec, uv, errs);
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -1039,7 +1045,6 @@ public class UiEngineImpl implements UiEngine {
 							process(desktop, event);
 						} catch (Throwable ex) {
 							handleError(ex, uv, errs);
-							break; //skip the rest of events! 
 						}
 					}
 
@@ -1053,20 +1058,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
-			List responses;
-			try {
-				//Note: we have to call visualizeErrors before uv.getResponses,
-				//since it might create/update components
-				if (!errs.isEmpty())
-					visualizeErrors(exec, uv, errs);
-
-				responses = uv.getResponses();
-			} catch (Throwable ex) {
-				responses = new LinkedList();
-				responses.add(new AuAlert(Exceptions.getMessage(ex)));
-
-				log.error(ex);
-			}
+			final List responses = getResponses(exec, uv, errs);
 
 			if (rque.isEmpty())
 				doneReqIds = rque.clearPerfRequestIds();
@@ -1179,6 +1171,23 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		errs.add(ex);
+	}
+	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
+		List responses;
+		try {
+			//Note: we have to call visualizeErrors before uv.getResponses,
+			//since it might create/update components
+			if (!errs.isEmpty())
+				visualizeErrors(exec, uv, errs);
+
+			responses = uv.getResponses();
+		} catch (Throwable ex) {
+			responses = new LinkedList();
+			responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+			log.error(ex);
+		}
+		return responses;
 	}
 	/** Post-process the errors to represent them to the user.
 	 * Note: errs must be non-empty

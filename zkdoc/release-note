@@ -32,7 +32,8 @@ ZK 3.6.5
   3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
   3049167: Totalsize increase when drag & drop in paging Listbox/Grid
   3051305: Active Page not update when drag & drop item to the end
-  
+  3091160: WrongValueException not handled if thrown in onCreate listener
+
 * Upgrade Notes:
 
 	--------
