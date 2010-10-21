@@ -118,15 +118,5 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 			if (items && items.$remove(this))
 				items.push(newwgt);
 		}
-	},
-	bindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("bindChildren_", arguments);
-	},
-	unbindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
-			this.$supers("unbindChildren_", arguments);
 	}
 });
