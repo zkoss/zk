@@ -1,0 +1,87 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<html><![CDATA[
+<ol>
+ <li>Click the open icon to open the tree item</li>
+ <li>Click the deSelectAll button to deselect all. All of them shall be de-selected</li>
+ <li>Click the selectAll button and all shall be selected</li>
+</ol>
+]]></html>
+
+<zscript>
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Tree;
+import org.zkoss.zul.TreeModel;
+import org.zkoss.zul.Treeitem;
+import org.zkoss.zul.TreeitemRenderer;
+import org.zkoss.zul.Window;
+import org.zkoss.zul.event.TreeDataListener;
+
+public class Test14105Window extends Window implements AfterCompose {
+	private Tree tree;
+
+	public void afterCompose() {
+		tree = this.getFellow("tree");
+		tree.setTreeitemRenderer(new MyTreeitemRenderer());
+		tree.setModel(new MyTreeModel());
+	}
+}
+public class MyTreeitemRenderer implements TreeitemRenderer {
+	public void render(Treeitem treeitem, Object arg1) throws Exception {
+		treeitem.setLabel(arg1.toString());
+		treeitem.setSelected(true);
+	}
+}
+public class MyTreeModel implements TreeModel {
+	public void addTreeDataListener(TreeDataListener arg0) {
+		// TODO Auto-generated method stub	
+	}
+
+	public Object getChild(Object arg0, int arg1) {
+		if (arg0.getClass().isArray())
+			return "tttt";
+		return "dd";
+	}
+
+	public int getChildCount(Object arg0) {
+		if (arg0.getClass().isArray())
+			return ((String[]) arg0).length;
+			// TODO Auto-generated method stub
+		return "tttt".equals(arg0) ? 5 : 0;
+	}
+
+	public int[] getPath(Object arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public Object getRoot() {
+		// TODO Auto-generated method stub
+		return new String[] { "tttt" };
+	}
+
+	public boolean isLeaf(Object arg0) {
+		if (arg0.getClass().isArray())
+			return false;
+		// TODO Auto-generated method stub
+		return !"tttt".equals(arg0);
+	}
+
+	public void removeTreeDataListener(TreeDataListener arg0) {
+		// TODO Auto-generated method stub
+	}
+}
+</zscript>
+<window use="Test14105Window" title="new page title"	
+border="normal">
+<tree id="tree" height="300px" checkmark="true" multiple="true" />
+<button label="selectAll" onClick="tree.selectAll()"/>
+<button label="deSelectAll" onClick="tree.clearSelection()"/>
+</window>
+</zk>
+
+
