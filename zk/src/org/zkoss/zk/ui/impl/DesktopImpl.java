@@ -281,11 +281,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
-		String id = _id.startsWith(DESKTOP_ID_PREFIX) ?
-			_id.substring(DESKTOP_ID_PREFIX.length()): _id;
-		final int len = id.length();
-		_uuidPrefix = len > 3 ? id.substring(0, 3): id;
-			//since _id's first few character is changed first, we pick the first few
+		_uuidPrefix = Integer.toHexString(_id.hashCode());
+		if (_uuidPrefix.length() > 3)
+			_uuidPrefix = _uuidPrefix.substring(_uuidPrefix.length() - 3);
 	}
 
 	public String getId() {
