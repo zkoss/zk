@@ -3272,7 +3272,7 @@ var Expr = Sizzle.selectors = {
 			var isPartStr = typeof part === "string",
 				isTag = isPartStr && !/\W/.test(part),
 				isZTag = isPartStr && /@/.test(part), //Jumper Chen, Potix
-				isZID = isPartStr && /\$/.test(part),
+				isZID = isPartStr && /\$/.test(part), //Jumper Chen, Potix
 				isPartStrNotTag = isPartStr && !isTag;
 
 			if ( isTag ) {
@@ -3302,7 +3302,7 @@ var Expr = Sizzle.selectors = {
 		">": function(checkSet, part){
 			var isPartStr = typeof part === "string",
 				isZTag = isPartStr && /@/.test(part), //Jumper Chen, Potix
-				isZID = isPartStr && /\$/.test(part);
+				isZID = isPartStr && /\$/.test(part), //Jumper Chen, Potix
 				elem, i = 0, l = checkSet.length;
 
 			if ( isPartStr && !/\W/.test(part) ) {
