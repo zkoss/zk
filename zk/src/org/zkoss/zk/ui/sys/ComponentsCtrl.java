@@ -90,11 +90,9 @@ public class ComponentsCtrl {
 
 		do {
 			//IE6/7's ID case insensitive (safer, though jQuery fixes it)
-			int v = val % 37;
-			val /= 37;
-			if (v-- == 0) {
-				sb.append('_');
-			} else if (v < 10) {
+			int v = val % 36;
+			val /= 36;
+			if (v < 10) {
 				sb.append((char)('0' + v));
 //			} else if (v < 36) {
 			} else {
