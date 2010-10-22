@@ -234,13 +234,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: ignore the selection if it is clicked on the open icon
+	 * <p>Default: ignore the selection if it is clicked on the open icon or {@link #isRightSelct} is true and event is onRightClick.
 	 * @param zk.Event evt the event
 	 * @return boolean whether to ignore the selection
 	 */
 	shallIgnoreSelect_: function (evt) {
 		var n = evt.domTarget;
-		return n && n.id && n.id.endsWith('-open');
+		return n && n.id && n.id.endsWith('-open') || (evt.name == 'onRightClick' && !this._rightSelect);
 	}
 });
 /**

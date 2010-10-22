@@ -1,9 +1,9 @@
 /* SelectWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:13:24     2009, Created by tomyeh
 
@@ -43,7 +43,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
 				$headercm = jq(box._headercm);
 			var checked;
-			for (var it = box.getBodyWidgetIterator(), w; (w = it.next());) 
+			for (var it = box.getBodyWidgetIterator(), w; (w = it.next());)
 				if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
 					checked = false;
 					break;
@@ -70,6 +70,7 @@ var SelectWidget =
  */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_rows: 0,
+	_rightSelect: true,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -125,13 +126,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		multiple: function (multiple) {
 			if (!this._multiple && this._selItems.length) {
 				var item = this.getSelectedItem();
-				for (var it; (it = this._selItems.pop());) 
+				for (var it; (it = this._selItems.pop());)
 					if (it != item) {
 						if (!this._checkmark)
 							it._setSelectedDirectly(false);
 						else it._selected = false;
 					}
-					
+
 				this._selItems.push(item);
 			}
 			if (this._checkmark && this.desktop)
@@ -161,7 +162,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (w) {
 						this._selectOne(w, true);
 						zk(w).scrollIntoView(this.ebody);
-					}						
+					}
 				}
 			}
 		],
@@ -187,12 +188,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		 * <p>
 		 * Don't use this method if your application is purely based on ZK's
 		 * event-driven model.
-		 * 
+		 *
 		 * @param String name
 		 *            the name of this component.
 		 */
 		name: function () {
-			if (this.destkop) this.updateFormData();	
+			if (this.destkop) this.updateFormData();
 		}
 	},
 	setChgSel: function (val) { //called from the server
@@ -209,17 +210,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	updateFormData: function () {
 		if (this._name) {
-			if (!this.efield) 
+			if (!this.efield)
 				this.efield = jq(this.$n()).append('<div style="display:none;"></div>').find('> div:last-child')[0];
-			
+
 			jq(this.efield).children().remove();
-			
+
 			// don't use jq.newHidden() in this case, because the performance is not good.
 			var data = [],
 				tmp = '<input type="hidden" name="' + this._name + '" value="';
 			for (var i = 0, j = this._selItems.length; i < j; i++)
 				data.push(tmp, this._selItems[i].getValue(), '"/>');
-				
+
 			jq(this.efield).append(data.join(''));
 		} else if (this.efield) {
 			jq(this.efield).remove();
@@ -276,18 +277,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* Calculates the size. */
 	_calcSize: function () {
 		var anchor, oldCSS;
-		
+
 		// Bug 279925
 		if (zk.ie8) {
 			anchor = this.$n('a');
 			oldCSS = anchor.style.display;
 			anchor.style.display = "none";
 		}
-		
-		//Bug in B30-1926094-1.zul 
+
+		//Bug in B30-1926094-1.zul
 		if (zk.ie)
 			this._syncFocus(this._focusItem);
-			
+
 		this._calcHgh();
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -310,17 +311,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
 		if (zk.safari)
 			this.$n("a").style.display = 'none';
-		
-		//Bug 1659601: we cannot do it in init(); or, IE failed!		
+
+		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.ebody.clientWidth;
-		
+
 		if (zk.safari)
 			this.$n("a").style.display = '';
-		
+
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
-			this.ebodytbl.offsetWidth) 
+			this.ebodytbl.offsetWidth)
 				this.ebodytbl.style.width = ""; //reset
 			if (tblwd &&
 					// fixed column's sizing issue in B30-1895907.zul
@@ -328,7 +329,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					this.eheadtbl.style.width != this.ebodytbl.style.width) &&
 					// end of the fixed
 					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
-				if (--tblwd < 0) 
+				if (--tblwd < 0)
 					tblwd = 0;
 				this.ebodytbl.style.width = tblwd + "px";
 			}
@@ -343,13 +344,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
 				this.$class.cpCellWidth(this);
 		}
-		
+
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
 			this._hflexsz = n.offsetWidth;
 		}
-		
+
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 
 		// Bug 279925
@@ -446,7 +447,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					//if tpad.offsetHeight is zero, then tpadhgh must be zero; otherwise, use the cached value in _padsz if any
 					var tpad = this.$n('tpad'),
 						tpadoffsethgh = (tpad ? tpad.offsetHeight : 0),
-						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;  
+						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;
 					if (nRows <= nVisiRows) {
 						var $midVisiRow = zk(midVisiRow);
 						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
@@ -466,11 +467,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
 			// and IE7 at initializing phase.
 			// 2008/03/28 The unnecessary scroll bar will appear when the vflex is true.
-			
+
 			// bug #2799258
 			var h = n.style.height;
 			if (!h || h == "auto") {
-				
+
 				// Bug #2129992 somethings the size of the offsetHeight in IE6,
 				// IE7, and IE7 in compatible mode is wrong.
 				if (zk.ie && !zk.ie8 && this.ebodytbl) {
@@ -483,13 +484,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 				}
 //bug# 3033016: Extra empty row when shrink fixed width Listbox
-//mark out				
+//mark out
 /*				var oh = this.ebody.offsetHeight,
 					ch = this.ebody.clientHeight;
 				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
 				//in Chrome/Safari, clientHeight can be less than zero
-				h = oh - ((!zk.safari || ch >= 0) ? ch : 0); 
-				
+				h = oh - ((!zk.safari || ch >= 0) ? ch : 0);
+
 				// Bug #2805177, we have to check the clientWidth first.
 				if (ch && h > 11)
 					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
@@ -506,9 +507,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			} else {
 				this.ebody.style.height = "";
 			}
-			
+
 			//bug# 3033016: Extra empty row when shrink fixed width Listbox
-			//mark out				
+			//mark out
 /*			// bug #2799258
 			if (!hgh || hgh == "auto") {
 				var oh = this.ebody.offsetHeight,
@@ -516,7 +517,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				//bug 3008277:hflex breaks Listbox layout in Chrome, Safari
 				//in Chrome/Safari, clientHeight can be less than zero
 				hgh = oh - ((!zk.safari || ch >= 0) ? ch : 0);
-				
+
 				// Bug #2805177, we have to check the clientWidth first.
 				if (ch && hgh > 11)
 					this.ebody.style.height = oh + jq.scrollbarWidth() + "px";
@@ -562,7 +563,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
 	 * It is the same as {@link #setSelectedItem}.
-	 * 
+	 *
 	 * @param ItemWidget item
 	 *            the item to select. If null, all items are deselected.
 	 */
@@ -592,7 +593,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this.clearSelection();
 			} else {
 				item._setSelectedDirectly(false);
-				this._selItems.$remove(item);				
+				this._selItems.$remove(item);
 			}
 		}
 	},
@@ -664,7 +665,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: always false (don't ignore)
+	 * <p>Default: always false (don't ignore) unless {@link #isRightSelct} is true and event is onRightClick.
 	 * Notice that clicking on button/textbox are already ignored, i.e.,
 	 * this method won't be called if the user clicks on, say, a button.
 	 * @param zk.Event evt the event
@@ -672,9 +673,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	shallIgnoreSelect_: function (evt) {
 		//see also _shallIgnore
+		return evt.name == 'onRightClick' && !this._rightSelect;
 	},
 	//@param bSel whether it is called by _doItemSelect
-	_shallIgnore: function(evt, bSel) { // move this function in the widget for override 
+	_shallIgnore: function(evt, bSel) { // move this function in the widget for override
 		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
@@ -722,7 +724,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		&& (!this._cdo || evt.domTarget == row.$n('cm'))) {
 			// Bug 2997034
 			this._syncFocus(row);
-			
+
 			if (this._multiple)
 				this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 			else
@@ -810,7 +812,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			shift = false; //OK to
 
 		var endless = false, step, lastrow;
-		
+
 		// for test tool when browser is webkit
 		if (zk.safari && typeof data.keyCode == "string")
 			data.keyCode = zk.parseInt(data.keyCode);
@@ -996,7 +998,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (row != old && toSel)
 				this._changeSelect(row, false);
 		}
-		
+
 		this._changeSelect(row, toSel);
 		if (!skipFocus)
 			this._focus(row);
@@ -1006,7 +1008,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	fireOnSelect: function (reference, evt) {
 		var data = [];
-		
+
 		for (var it = this.getSelectedItems(), j = it.length; j--;)
 			if (it[j].isSelected())
 				data.push(it[j]);
@@ -1045,7 +1047,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (!row.focus())
 					this.focus();
 
-				if (!this.paging && zk.gecko) 
+				if (!this.paging && zk.gecko)
 					this.fireOnRender(5);
 					//Firefox doesn't call onscroll when we moving by cursor, so...
 			}
@@ -1069,7 +1071,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * is changed.
 	 */
 	_unsetFocusExcept: function (row) {
-		if (this._focusItem && this._focusItem != row) 
+		if (this._focusItem && this._focusItem != row)
 			this._setFocus(this._focusItem, false)
 		else
 			this._focusItem = null;
