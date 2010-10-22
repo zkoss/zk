@@ -452,7 +452,8 @@ jq(function() {
 		++_autohideCnt;
 		setTimeout(function () {
 			if (!--_autohideCnt) {
-				if (wgt) wgt = wgt.getTopWidget();
+				if (wgt && !wgt.isFloating_({dropdown:true}))
+					wgt = wgt.getTopWidget();
 				if (wgt != _lastFloat) {
 					_lastFloat = wgt
 					zk._wgtutl.autohide(); //see widget.js
@@ -497,7 +498,7 @@ jq(function() {
 				w2hide(name);
 			}
 		});
-		zWatch.listen({onFloatUp: _onFloatUp});
+		zWatch.listen({onFloatUp: ['', _onFloatUp]});
 	}
 }); //jq
 

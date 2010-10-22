@@ -236,10 +236,10 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			if (this._sortAscending != "none" || this._sortDescending != "none") {
 				switch (this._sortDirection) {
 				case "ascending":
-					added = zcls + "-sort-asc";
+					added = zcls + "-sort " + zcls + "-sort-asc";
 					break;
 				case "descending":
-					added = zcls + "-sort-dsc";
+					added = zcls + "-sort " + zcls + "-sort-dsc";
 					break;
 				default: // "natural"
 					added = zcls + "-sort";

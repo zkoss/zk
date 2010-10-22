@@ -44,6 +44,10 @@ ZK 5.0.5
   3077084: Able to specify the last word identify a component namespace
   3081910: AnnotateDataBinderInit add "loadOnSave" config attribute
   3085654: LabelLocator allows to return InputStream instead of URL
+  3091085: Upgrade to jQuery 1.4.3
+  3091086: The A component shall allow children
+  3091764: Able to prevent users enter the grouping character
+  3092641: Listbox/Tree support whether to toggle selection or not when right click on item
   
 * Bugs
   3057902: zk bug for window showbusy
@@ -103,6 +107,11 @@ ZK 5.0.5
   3089641: use HtmlNativeComponent with zkmax cause UI error
   3088034: datebox string convert error (shall show error message)
   3089502: setScale in decimalbox not working
+  3090979: typo (_quality="hight") in Flash.java
+  3091160: WrongValueException not handled if thrown in onCreate listener
+  3091045: Non integer Page number in paging mold="os"
+  3091153: selectAll(), clearSelection() in Tree
+  3091949: Calendar/Combobox above pdf not display popup correctly
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
@@ -139,7 +148,6 @@ ZK 5.0.5
 	}
   + Rename caption.css to caption.css.dsp
   + Rename tablelayout.css to tablelayout.css.dsp
-  
 
 	--------
 ZK 5.0.4

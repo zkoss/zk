@@ -1,9 +1,9 @@
 /* Tree.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  6 18:51:33     2005, Created by tomyeh
 
@@ -87,7 +87,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private String _innerWidth = "100%";
 
 	private TreeModel<Object> _model;
-	private TreeitemRenderer _renderer;	
+	private TreeitemRenderer _renderer;
 	private transient TreeDataListener _dataListener;
 	private boolean _sizedByContent;
 
@@ -101,7 +101,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener;
 	private String _pagingPosition = "bottom";
-	
+
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
@@ -110,7 +110,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}
-	
+
 	public Tree() {
 		init();
 	}
@@ -146,7 +146,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		final Paginal pgi = getPaginal();
 		final int pgsz = pgi.getPageSize();
 		final int ofs = pgi.getActivePage() * pgsz;
-		
+
 		// data[pageSize, beginPageIndex, visitedCount, visitedTotal, RenderedCount]
 		int[] data = new int[]{pgsz, ofs, 0, 0, 0};
 		getVisibleItemsDFS(getChildren(), map, data);
@@ -161,7 +161,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (data[4] >= data[0]) return false; // full
 				final Treeitem item = (Treeitem) cmp;
 				if (item.isVisible()) {
-					int count = item.isOpen() && item.getTreechildren() != null ? 
+					int count = item.isOpen() && item.getTreechildren() != null ?
 							item.getTreechildren().getVisibleItemCount(): 0;
 					boolean shoulbBeVisited = data[1] < data[2] + 1 + count;
 					data[2] += (shoulbBeVisited ? 1 : count + 1);
@@ -213,7 +213,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 		}
 	}
-	
+
 	//--Paging--//
 	/**
 	 * Sets how to position the paging of tree at the client screen.
@@ -342,8 +342,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * by {@link #setPaginal}.
 	 * @since 3.5.2
 	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi() { 
-		return getPagingChild(); 
+	public org.zkoss.zul.api.Paging getPagingChildApi() {
+		return getPagingChild();
 	}
 	/** Returns the page size, aka., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
@@ -363,9 +363,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	/**
 	 * Sets whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
-	 * rather, the page size is automatically determined by the height of the 
-	 * Tree dynamically. 
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Tree dynamically.
 	 * @param autopaging true to turn on the auto-paging facility.
 	 * @since 5.0.2
 	 */
@@ -375,19 +375,19 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			smartUpdate("autopaging", autopaging);
 		}
 	}
-	
+
 	/**
 	 * Returns whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
-	 * rather, the page size is automatically determined by the height of the 
-	 * Tree dynamically. 
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Tree dynamically.
 	 * @return whether the "autopaging" facility is turned on.
 	 * @since 5.0.2
 	 */
 	public boolean isAutopaging() {
 		return _autopaging;
 	}
-	
+
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
 	 * @since 3.0.7
@@ -419,11 +419,11 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/*package*/ boolean inPagingMold() {
 		return "paging".equals(getMold());
 	}
-	
+
 	private int getVisibleItemCount() {
 		return _treechildren != null ? _treechildren.getVisibleItemCount() : 0;
 	}
-	
+
 	/**
 	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 * @param fixedLayout true to outline this grid by browser
@@ -437,7 +437,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
 	}
-	
+
 	/**
 	 * Sets whether sizing tree grid column width by its content.
  	 * <p>Default: false. It means the outline of listbox is dependent on
@@ -449,10 +449,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * In other words, the width specified in the header is only for reference.
 	 * The browser will adjust the width when a column's width is changed, so
 	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 * 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
+	 *
+	 * <p> You can also specify the "sized-by-content" attribute of component in
 	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent 
+	 * @param byContent
 	 * @since 5.0.0
 	 */
 	public void setSizedByContent(boolean byContent) {
@@ -463,7 +463,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	/**
 	 * Returns whether sizing tree grid column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
+	 * <p>Note: if the "sized-by-content" attribute of component is specified,
 	 * it's prior to the original value.
 	 * @since 5.0.0
 	 * @see #setSizedByContent
@@ -476,7 +476,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		} else
 			return "true".equalsIgnoreCase(s);
 	}
-	
+
 	/** Returns the treecols that this tree owns (might null).
 	 */
 	public Treecols getTreecols() {
@@ -668,7 +668,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public String getInnerWidth() {
 		return _innerWidth;
 	}
-	
+
 	/** Returns the seltype.
 	 * <p>Default: "single".
 	 */
@@ -725,13 +725,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (pg != getActivePage())
 					setActivePage(pg);
 			}
-				
+
 		}
 	}
 	/** Sets the active page in which the specified item is.
 	 * The active page will become the page that contains the specified item.
 	 *
-	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}   
+	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}
  	 * @since 3.5.2
 	 */
 	public void setActivePageApi(org.zkoss.zul.api.Treeitem itemApi) {
@@ -781,7 +781,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		return count;
 	}
-	
+
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
 	 *
@@ -835,7 +835,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * the given item.
 	 * <p>It is the same as {@link #setSelectedItem}.
 	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}
-	 * @since 3.5.2   
+	 * @since 3.5.2
 	 */
 	public void selectItemApi(org.zkoss.zul.api.Treeitem itemApi) {
 		Treeitem item = (Treeitem) itemApi;
@@ -860,14 +860,14 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	/** Selects the given item, without deselecting any other items
 	 * that are already selected..
-	 * @param itemApi 
-	 * 				assume as a {@link org.zkoss.zul.Treeitem}   
+	 * @param itemApi
+	 * 				assume as a {@link org.zkoss.zul.Treeitem}
 	 * @since 3.5.2
 	 */
 	public void addItemToSelectionApi(org.zkoss.zul.api.Treeitem itemApi) {
 		Treeitem item = (Treeitem) itemApi;
 		addItemToSelection(item);
-		
+
 	}
 	/**  Deselects the given item without deselecting other items.
 	 */
@@ -886,11 +886,11 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 	}
 	/**  Deselects the given item without deselecting other items.
-	 * @param itemApi 
+	 * @param itemApi
 	 * 			assume as a {@link org.zkoss.zul.Treeitem}
 	 * @since 3.5.2
 	 */
-	public void removeItemFromSelectionApi(org.zkoss.zul.api.Treeitem itemApi) {		
+	public void removeItemFromSelectionApi(org.zkoss.zul.api.Treeitem itemApi) {
 		Treeitem item = (Treeitem) itemApi;
 		removeItemFromSelection(item);
 	}
@@ -902,7 +902,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		for (Iterator it = _selItems.iterator(); it.hasNext();) {
 			final Treeitem item = (Treeitem)it.next();
 			if (sb.length() > 0) sb.append(',');
-			sb.append(item.getUuid());			
+			sb.append(item.getUuid());
 		}
 		smartUpdate("chgSel", sb.toString());
 	}
@@ -917,8 +917,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/** If the specified item is selected, it is deselected.
 	 * If it is not selected, it is selected. Other items in the tree
 	 * that are selected are not affected, and retain their selected state.
-	 * 
-	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}   
+	 *
+	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}
 	 * @since 3.5.2
 	 */
 	public void toggleItemSelectionApi(org.zkoss.zul.api.Treeitem itemApi) {
@@ -984,7 +984,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * the given item.
 	 * <p>It is the same as {@link #selectItem}.
 	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}
-	 * @since 3.5.2  
+	 * @since 3.5.2
 	 */
 	public void setSelectedItemApi(org.zkoss.zul.api.Treeitem itemApi) {
 		Treeitem item = (Treeitem) itemApi;
@@ -1259,24 +1259,24 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		init();
 
 		afterUnmarshal(-1, -1);
-		
+
 		if (_model != null) initDataListener();
 	}
 
 	//-- ComponentCtrl --//
 	/*
-	 * Handles when the tree model's content changed 
+	 * Handles when the tree model's content changed
 	 * <p>Author: jeffliu
 	 */
-	private void onTreeDataChange(TreeDataEvent event){	
+	private void onTreeDataChange(TreeDataEvent event){
 		//if the treeparent is empty, render tree's treechildren
 		Object node = event.getParent();
 		Component parent = getChildByNode(node);
-		/* 
+		/*
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
-		 * 
-		 * 2008/02/12 --- issue: [ 1884112 ] 
+		 *
+		 * 2008/02/12 --- issue: [ 1884112 ]
 		 * When getChildByNode returns null, do nothing
 		 */
 		if(parent != null &&
@@ -1297,7 +1297,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 					onTreeDataContentChange(parent,node,i);
 				break;
 			}
-		}			
+		}
 	}
 
 	/** @param parent either a Tree or Treeitem instance. */
@@ -1310,7 +1310,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		return tc;
 	}
-	
+
 	/*
 	 * Handle Treedata insertion
 	 */
@@ -1330,62 +1330,62 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 		renderChangedItem(newTi,_model.getChild(node,index));
 	}
-		
+
 	/*
 	 * Handle event that child is removed
 	 */
 	private void onTreeDataRemoved(Component parent,Object node, int index){
 		final Treechildren tc = treechildrenOf(parent);
-		final List items = tc.getChildren();		
+		final List items = tc.getChildren();
 		if(items.size()>1){
 			((Treeitem)items.get(index)).detach();
 		}else{
 			tc.detach();
 		}
 	}
-	
+
 	/*
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChange(Component parent,Object node, int index){
-		List items = treechildrenOf(parent).getChildren();		
+		List items = treechildrenOf(parent).getChildren();
 
 		/*
 		 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
-		 * When I update a children node data of the TreeModel , and fire a 
-		 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a 
+		 * When I update a children node data of the TreeModel , and fire a
+		 * CONTENTS_CHANGED event, it will throw a IndexOutOfBoundsException , If a
 		 * node doesn't open yet or not load yet.
-		 * 
-		 * if parent is loaded, change content. 
+		 *
+		 * if parent is loaded, change content.
 		 * else do nothing
 		 */
 		if(!items.isEmpty())
 			renderChangedItem(
 				(Treeitem)items.get(index), _model.getChild(node,index));
 	}
-	
+
 	/**
 	 * Return the Tree or Treeitem component by a given associated node in model.<br>
 	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
-	 * Treeitem (or Tree) via path. You can override this method to speed up 
-	 * performance if possible. 
+	 * Treeitem (or Tree) via path. You can override this method to speed up
+	 * performance if possible.
 	 * Return null, if the Tree or Treeitem is not yet rendered.
 	 * <p>Author: jeffliu
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node){
 		int[] path = _model.getPath(_model.getRoot(), node);
-		
-		//If path is null or empty, return root(Tree) 
+
+		//If path is null or empty, return root(Tree)
 		if(path == null || path.length == 0)
 			return this;
 		else{
-			
+
 			Treeitem ti = null;
 			List children =null;
 			for(int i=0; i<path.length; i++){
 				if(i==0){
-					children = this.getTreechildren().getChildren(); 
+					children = this.getTreechildren().getChildren();
 				}else{
 					children = ti.getTreechildren().getChildren();
 				}
@@ -1401,7 +1401,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			return ti;
 		}
 	}
-	
+
 	/*
 	 * Initial Tree data listener
 	 * <p>Author: jeffliu
@@ -1416,13 +1416,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 		_model.addTreeDataListener(_dataListener);
 	}
-	
-	/** Sets the tree model associated with this tree. 
+
+	/** Sets the tree model associated with this tree.
 	 *
 	 * <p>Note: changing a render will not cause the tree to re-render.
-	 * If you want it to re-render, you could assign the same model again 
+	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
-	 * 
+	 *
 	 * <p>Author: jeffliu
 	 * @param model the tree model to associate, or null to dis-associate
 	 * any previous model.
@@ -1454,7 +1454,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private final void setModelDirectly(TreeModel model) {
 		_model = (TreeModel<Object>)model;
 	}
-	
+
 	//--TreeModel dependent codes--//
 	/** Returns the list model associated with this tree, or null
 	 * if this tree is not associated with any tree data model.
@@ -1466,19 +1466,19 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public <T> TreeModel<T> getModel(){
 		return (TreeModel)_model;
 	}
-	
+
 	/** Synchronizes the tree to be consistent with the specified model.
 	 * <p>Author: jeffliu
 	 */
 	private void syncModel() {
 		renderTree();
 	}
-	
+
 	/** Sets the renderer which is used to render each item
 	 * if {@link #getModel} is not null.
 	 *
 	 * <p>Note: changing a render will not cause the tree to re-render.
-	 * If you want it to re-render, you could assign the same model again 
+	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 *
 	 * <p>Author: jeffliu
@@ -1493,7 +1493,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				syncModel();
 		}
 	}
-	
+
 	/** Returns the renderer to render each item, or null if the default
 	 * renderer is used.
 	 * @return the renderer to render each item, or null if the default
@@ -1514,7 +1514,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		} else {
 			_treechildren.getChildren().clear();
 		}
-	
+
 		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
 		try {
@@ -1526,7 +1526,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tree when items have been rendered.
 	}
-	
+
 	/*
 	 * Renders the direct children for the specifed parent
 	 */
@@ -1537,7 +1537,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);
 			renderer.render(ti, childNode);
-			if(!_model.isLeaf(childNode) && ti.getTreechildren() == null){	
+			if(!_model.isLeaf(childNode) && ti.getTreechildren() == null){
 				Treechildren tc = new Treechildren();
 				tc.setParent(ti);
 			}
@@ -1548,7 +1548,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		ti.setOpen(false);
 		return ti;
 	}
-	
+
 	private static TreeitemRenderer getDefaultItemRenderer() {
 		return _defRend;
 	}
@@ -1561,9 +1561,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				tr = new Treerow();
 				tr.setParent(ti);
 			}else{
-				tr = ti.getTreerow(); 
+				tr = ti.getTreerow();
 				tr.getChildren().clear();
-			}		
+			}
 			tc.setParent(tr);
 		}
 	};
@@ -1580,13 +1580,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
-		
+
 		private void render(Treeitem item, Object node) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
-			
+
 			try {
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
@@ -1599,7 +1599,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 			_rendered = true;
 		}
-		
+
 		private void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
@@ -1616,7 +1616,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				((RendererCtrl)_renderer).doFinally();
 		}
 	}
-	
+
 	/** Renders the specified {@link Treeitem}, if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
@@ -1650,15 +1650,15 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		Treeitem item = (Treeitem) itemApi;
 		renderItem(item);
 	}
-	
+
 	/** Renders the specified {@link Treeitem}, if not loaded yet,
 	 * with {@link #getTreeitemRenderer}.
 	 *
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
 	 *<p>Note: Since the corresponding node is given,
-	 * This method has better performance than 
-	 * renderItem(Treeitem item) due to not searching for its 
+	 * This method has better performance than
+	 * renderItem(Treeitem item) due to not searching for its
 	 * corresponding node.
 	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
 	 * @see #renderItems
@@ -1682,8 +1682,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <p>It does nothing if {@link #getModel} returns null.
 	 *
 	 *<p>Note: Since the corresponding node is given,
-	 * This method has better performance than 
-	 * renderItem(Treeitem item) due to not searching for its 
+	 * This method has better performance than
+	 * renderItem(Treeitem item) due to not searching for its
 	 * corresponding node.
 	 * <p>To unload treeitem, use {@link Treeitem#unload()}.
 	 * @param itemApi assume as a {@link org.zkoss.zul.Treeitem}
@@ -1692,13 +1692,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 */
 	public void renderItemApi(org.zkoss.zul.api.Treeitem itemApi, Object node) {
 		Treeitem item = (Treeitem) itemApi;
-		renderItem(item, node);		
+		renderItem(item, node);
 	}
 	/** Note: it doesn't call render doCatch/doFinally */
 	private void renderItem0(Renderer renderer, Treeitem item)
 	throws Throwable {
 		renderItem0(renderer, item, getAssociatedNode(item,this));
-	}	
+	}
 	/** Note: it doesn't call render doCatch/doFinally */
 	private void renderItem0(Renderer renderer, Treeitem item, Object node)
 	throws Throwable {
@@ -1706,7 +1706,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			return;
 
 		/*
-		 * After modified the node in tree model, if node is leaf, 
+		 * After modified the node in tree model, if node is leaf,
 		 * its treechildren is needed to be dropped.
 		 */
 		Treechildren tc = item.getTreechildren();
@@ -1728,10 +1728,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		item.setLoaded(true);
 	}
-	
+
 	private void renderChangedItem(Treeitem item, Object node){
 		/*
-		 * After modified the node in tree model, if node is leaf, 
+		 * After modified the node in tree model, if node is leaf,
 		 * its treechildren is needed to be dropped.
 		 */
 		if(_model != null) {
@@ -1790,9 +1790,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	protected Object getAssociatedNode(Treeitem ti, Tree t){
 		return getNodeByPath(getTreeitemPath(t,ti),_model.getRoot());
 	}
-	
+
 	/**
-	 * return the path which is from ZK Component root to ZK Component lastNode 
+	 * return the path which is from ZK Component root to ZK Component lastNode
 	 */
 	private List<Integer> getTreeitemPath(Component root, Component lastNode){
 		List<Integer> al = new ArrayList<Integer>();
@@ -1805,7 +1805,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		return al;
 	}
-	
+
 	/**
 	 * Get the node from tree by given path
 	 * @param path
@@ -1821,13 +1821,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		}
 		return node;
 	}
-	
+
 	/**
 	 * Load treeitems through path <b>path</b>
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
-	 * @param path - an int[] path, see {@link TreeModel#getPath} 
+	 * @param path - an int[] path, see {@link TreeModel#getPath}
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
 	 */
@@ -1844,12 +1844,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			if(path[i] <0 || path[i] > children.size())
 				return null;
 			Treeitem parentTi = ti;
-			
+
 			ti = (Treeitem) children.get(path[i]);
-			
-			if(i<path.length-1) 
+
+			if(i<path.length-1)
 				ti.setOpen(true);
-			
+
 			if(ti.getTreechildren()!=null){
 				children = ti.getTreechildren().getChildren();
 			}else{
@@ -1865,7 +1865,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
-	 * @param path - an int[] path, see {@link TreeModel#getPath} 
+	 * @param path - an int[] path, see {@link TreeModel#getPath}
 	 * @return the treeitem from tree by given path
 	 * @since 3.5.2
 	 */
@@ -1881,12 +1881,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			removeAttribute(Attributes.VISITED_ITEM_TOTAL);
 		}
 	}
-	
+
 	// AREA JEFF ADDED END
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "name", _name);
 		if (_rows > 0)
 			renderer.render("rows", getRows());
@@ -1899,7 +1899,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 		if (_model != null)
 			render(renderer, "model", true);
-		
+
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
 		if (isAutopaging())
@@ -1908,7 +1908,19 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())
 			renderer.render("_cdo", true);
+		if (!isRightSelect())
+			renderer.render("_rightSelect", false);
 	}
+	/** Returns whether to toggle a list item selection on right click
+	 */
+	private boolean isRightSelect() {
+		if (_rightSelect == null) //ok to race
+			_rightSelect = Boolean.valueOf(
+				!"false".equals(Library.getProperty("org.zkoss.zul.tree.rightSelect")));
+		return _rightSelect.booleanValue();
+	}
+	private static Boolean _rightSelect;
+
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
 	 */
@@ -1935,7 +1947,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
-				
+
 				final boolean paging = inPagingMold();
 				if (!_multiple
 						|| (!paging && (selItems == null || selItems.size() <= 1))) {
@@ -1980,7 +1992,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			if (size != oldsize) {
 				int begin = getActivePage() * oldsize;
 				int end = begin + oldsize;
-				end = Math.min(getPaginal().getTotalSize(), end); 
+				end = Math.min(getPaginal().getTotalSize(), end);
 				Treeitem item = getSelectedItem();
 				int sel = getVisibleIndexOfItem(item);
 				if (sel < 0 || sel < begin || sel >= end) { //not in selection range

@@ -265,14 +265,26 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final String DESKTOP_ID_PREFIX = "zd_";
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
-			return Strings.encode(
+			return encodeId(
 				new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
 
 		final int v;
 		synchronized (DesktopImpl.class) {
 			v = _keyWithoutDC++;
 		}
-		return Strings.encode(new StringBuffer(12).append("_g"), v).toString();
+		return encodeId(new StringBuffer(12).append("_g"), v).toString();
+	}
+	private static String encodeId(StringBuffer sb, int val) {
+		if (val < 0) {
+			sb.append('_');
+			val = -val;
+		}
+		do {
+			int v = val % 62;
+			val /= 62;
+			sb.append(toLetter(v));
+		} while (val != 0);
+		return sb.toString();
 	}
 	private static int _keyWithoutDC;
 
@@ -285,13 +297,32 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
-		String id = _id.startsWith(DESKTOP_ID_PREFIX) ?
-			_id.substring(DESKTOP_ID_PREFIX.length()): _id;
-		final int len = id.length();
-		_uuidPrefix = len > 3 ? id.substring(0, 3): id;
-			//since _id's first few character is changed first, we pick the first few
-	}
+		final StringBuffer sb = new StringBuffer();
+		int val = _id.hashCode();
+		if (val < 0) val = -val;
 
+		//Note: ComponentsCtrl.isAutoUuid assumes
+		//(0: letter, 1: digit, 2: letter, 3: upper case
+		int v = (val % 52) + 10;
+		val /= 52;
+		sb.append(toLetter(v));
+		v = val % 10;
+		val /= 10;
+		sb.append(toLetter(v));
+		v = (val % 52) + 10;
+		val /= 52;
+		sb.append(toLetter(v));
+		_uuidPrefix = sb.append(toLetter((val % 26) + 10)).toString();
+	}
+	private static final char toLetter(int v) {
+		if (v < 10) {
+			return (char)('0' + v);
+		} else if (v < 36) {
+			return (char)(v + ((int)'A' - 10));
+		} else {
+			return (char)(v + ((int)'a' - 36));
+		}
+	}
 	public String getId() {
 		return _id;
 	}
@@ -501,7 +532,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
-		//Note: we don't check IdGenerator.isAutoUuid since it returns false if not implemented
 		if (comp instanceof RawId &&
 		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
 			return false; //not recycled

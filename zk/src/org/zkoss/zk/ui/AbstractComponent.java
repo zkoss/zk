@@ -110,6 +110,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new HashMap<Class<? extends Component>, Map<String, Integer>>(128);
 	private static final String DEFAULT = "default";
+	private static final String ANONYMOUS_ID = "z__i";
 
 	/*package*/ transient Page _page;
 	private String _id = "";
@@ -502,7 +503,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (bRoot) ((AbstractPage)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
-				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID
+				if (_uuid == null || _uuid == ANONYMOUS_ID
 				|| desktop.getComponentByUuidIfAny(_uuid) != null)
 					_uuid = nextUuid(desktop);
 
@@ -584,7 +585,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_uuid == null) {
 			final Execution exec = Executions.getCurrent();
 			_uuid = exec == null ?
-				ComponentsCtrl.ANONYMOUS_ID: nextUuid(exec.getDesktop());
+				ANONYMOUS_ID: nextUuid(exec.getDesktop());
 		}
 		return _uuid;
 	}

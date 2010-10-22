@@ -48,6 +48,10 @@ div.z-listbox-body .z-listcell, div.z-listbox-footer .z-listfooter {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
+div.z-listbox-body .z-listgroupfoot-inner,
+div.z-listbox-body .z-listgroup-inner {
+	cursor: default;
+}
 div.z-listbox-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }

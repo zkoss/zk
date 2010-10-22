@@ -199,7 +199,7 @@ function zkmprops(uuid, props) {
 				//inf[3]: owner passed from zkx
 				//inf[0]: desktop used as default parent if no owner
 				//true: don't update DOM
-	
+
 			if (_createInf0.length)
 				return run(mtBL);
 		}
@@ -221,7 +221,7 @@ function zkmprops(uuid, props) {
 
 			var wgt = inf[1];
 			if (inf[2])
-				wgt.bind(inf[0]); //binding
+				wgt.bind(inf[0]); //bindOnly
 			else
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
 		}
@@ -391,7 +391,7 @@ function zkmprops(uuid, props) {
 					owner = zk.Widget.$(owner);
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.binding, owner, extra]);
+			_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
 
 			mountpkg();
 		}
@@ -436,16 +436,16 @@ function zkmprops(uuid, props) {
 	},
 
 	//begin of mounting
-	zkmb: function (binding) {
+	zkmb: function (bindOnly) {
 		zk.mounting = true;
-		_mntctx.binding = binding;
+		_mntctx.bindOnly = bindOnly;
 		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
 		zk.startProcessing(t > 0 ? t: 0);
 	},
 	//end of mounting
 	zkme: function () {
 		_mntctx.curdt = null;
-		_mntctx.binding = false;
+		_mntctx.bindOnly = false;
 	}
   });
 

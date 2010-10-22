@@ -13,5 +13,10 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<a ', this.domAttrs_(), '>', this.domContent_(), '</a>');
+	out.push('<a ', this.domAttrs_(), '>', this.domContent_());
+
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
+
+	out.push('</a>');
 }

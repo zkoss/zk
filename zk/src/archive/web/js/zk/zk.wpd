@@ -14,8 +14,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <package name="zk">
 	<script>
 //ZK, Copyright 2009 Potix Corporation, LGPL
-//jQuery, Copyright 2009 John Resig, MIT
-//jQuery Mousewheel, Copyright (c) 2009 Brandon Aaron, MIT
+//jQuery, (c) John Resig, MIT
+//Sizzle, (c) The Dojo Foundation, MIT
+//jQuery Mousewheel, (c) Brandon Aaron, MIT
 
 window.$eval=function(s){return eval(s);};
 	</script>

@@ -20,6 +20,33 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return true;
 	}
 
+	function _syncSelItems(oldwgt, newwgt) {
+		var tree = oldwgt.getTree();
+		if (tree) {
+			var items = tree._selItems;
+			_rmSelItemsDown(items, oldwgt)
+			_addSelItemsDown(items, newwgt);
+		}
+	}
+	function _rmSelItemsDown(items, wgt) {
+		if (wgt.isSelected())
+			items.$remove(wgt);
+
+		var w;
+		if (w = wgt.treechildren)
+			for (w = w.firstChild; w && items.length; w = w.nextSibling)
+				_rmSelItemsDown(items, w);
+	}
+	function _addSelItemsDown(items, wgt) {
+		if (wgt.isSelected())
+			items.push(wgt);
+
+		var w;
+		if (w = wgt.treechildren)
+			for (w = w.firstChild; w; w = w.nextSibling)
+				_addSelItemsDown(items, w);
+	}
+
 /**
  * A treeitem.
  *
@@ -268,18 +295,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('removeHTML_', arguments);
 	},
 	replaceWidget: function (newwgt) {
-		this._syncSelectedItem(newwgt);
+		_syncSelItems(this, newwgt);
 		if (this.treechildren)
 			this.treechildren.detach();
 		this.$supers('replaceWidget', arguments);
-	},
-	_syncSelectedItem: function (newwgt) {
-		var tree = this.getTree();
-		if (tree && this.isSelected()) {
-			var items = tree._selItems;
-			if (items && items.$remove(this))
-				items.push(newwgt);
-		}
 	},
 	_removeChildHTML: function (n) {
 		for(var cn, w = this.firstChild; w; w = w.nextSibling) {

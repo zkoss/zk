@@ -1,9 +1,9 @@
 /* Listbox.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 15 17:25:00     2005, Created by tomyeh
 
@@ -64,7 +64,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A listbox.
- * 
+ *
  * <p>
  * Event:
  * <ol>
@@ -72,17 +72,17 @@ import org.zkoss.zul.impl.XulElement;
  * selection.</li>
  * <li>onAfterRender is sent when the model's data has been rendered.(since 5.0.4)</li>
  * </ol>
- * 
+ *
  * <p>
  * See <a href="package-summary.html">Specification</a>.
  * </p>
- * 
+ *
  * <p>
  * Besides creating {@link Listitem} programmingly, you could assign a data
  * model (a {@link ListModel} or {@link GroupsModel} instance) to a listbox via
  * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)} and then the
  * listbox will retrieve data via {@link ListModel#getElementAt} when necessary.
- * 
+ *
  * <p>
  * Besides assign a list model, you could assign a renderer (a
  * {@link ListitemRenderer} instance) to a listbox, such that the listbox will
@@ -91,26 +91,26 @@ import org.zkoss.zul.impl.XulElement;
  * assumes a label per list item, is used. In other words, the default renderer
  * adds a label to a Listitem by calling toString against the object returned by
  * {@link ListModel#getElementAt}
- * 
+ *
  * [Since 5.0.4]
- * <p>To retrieve what are selected in Listbox with a {@link Selectable} 
- * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what 
- * is currently selected object in {@link ListModel} rather than using 
- * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of 
- * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox} 
+ * <p>To retrieve what are selected in Listbox with a {@link Selectable}
+ * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what
+ * is currently selected object in {@link ListModel} rather than using
+ * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of
+ * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox}
  * if you use the {@link Selectable} {@link ListModel}.</p>
- * 
+ *
  * <pre><code>
  * Set selection = ((Selectable)getModel()).getSelection();
- * </code></pre>  
- * 
+ * </code></pre>
+ *
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
  * {@link #getMold} is "default", scrolling is used if {@link #setHeight} is
  * called and too much content to display. If {@link #getMold} is "paging",
  * paging is used if two or more pages are required. To control the number of
  * items to display in a page, use {@link #setPageSize}.
- * 
+ *
  * <p>
  * If paging is used, the page controller is either created automatically or
  * assigned explicitly by {@link #setPaginal}. The paging controller specified
@@ -118,83 +118,83 @@ import org.zkoss.zul.impl.XulElement;
  * is useful if you want to put the paging controller at different location
  * (other than as a child component), or you want to use the same controller to
  * control multiple listboxes.
- * 
+ *
  * <p>
  * Default {@link #getZclass}: z-listbox.(since 3.5.0)
- * 
+ *
  * <p>
  * To have a list box without stripping, you can specify a non-existent style
  * class to {@link #setOddRowSclass}.
- * 
+ *
  * <h3>Clustering and Serialization</h3>
- * 
+ *
  * <p>
  * When used in a clustering environment, you have to make
  * {@link ListitemRenderer} ({@link #setItemRenderer}) and {@link ListModel} (
  * {@link #setModel}) either serializable or re-assign them when
  * {@link #sessionDidActivate} is called.
- * 
+ *
  * <h3>Render on Demand (rod)</h3>
  * [ZK EE]
  * [Since 5.0.0]
- * 
- * <p>For huge data, you can turn on Listbox's ROD to request ZK engine to load from 
+ *
+ * <p>For huge data, you can turn on Listbox's ROD to request ZK engine to load from
  * {@link ListModel} only the required data chunk and create only the required
- * {@link Listitem}s in memory and render only the required DOM elements in 
- * browser. So it saves both the memory and the processing time in both server 
- * and browser for huge data. If you don't use the {@link ListModel} with the 
- * Listbox, turn on the ROD will still have ZK engine to render only a chunk of 
- * DOM elements in browser so it at least saves the memory and processing time 
- * in browser. Note that ROD works only if the Listbox is configured to has a 
- * limited "view port" height. That is, either the Listbox is in the "paging" 
- * mold or you have to {@link #setHeight(String)},{@link #setVflex(String)}, 
+ * {@link Listitem}s in memory and render only the required DOM elements in
+ * browser. So it saves both the memory and the processing time in both server
+ * and browser for huge data. If you don't use the {@link ListModel} with the
+ * Listbox, turn on the ROD will still have ZK engine to render only a chunk of
+ * DOM elements in browser so it at least saves the memory and processing time
+ * in browser. Note that ROD works only if the Listbox is configured to has a
+ * limited "view port" height. That is, either the Listbox is in the "paging"
+ * mold or you have to {@link #setHeight(String)},{@link #setVflex(String)},
  * or {@link #setRows(int)} of the Listbox to make ROD works.</p>
- * 
- * <p>You can turn on/off ROD for all Listboxes in the application or only 
- * for a specific Listbox. To turn on ROD for all Listboxes in the application, 
- * you have to specify the Library Property "org.zkoss.zul.listbox.rod" to 
- * "true" in WEB-INF/zk.xml. If you did not specify the Library Property, 
+ *
+ * <p>You can turn on/off ROD for all Listboxes in the application or only
+ * for a specific Listbox. To turn on ROD for all Listboxes in the application,
+ * you have to specify the Library Property "org.zkoss.zul.listbox.rod" to
+ * "true" in WEB-INF/zk.xml. If you did not specify the Library Property,
  * default is false.</p>
- * 
+ *
  * <pre><code>
  *	<library-property>
  *		<name>org.zkoss.zul.listbox.rod</name>
  *		<value>true</value>
  *	</library-property>
  * </code></pre>
- * 
- * <p>To turn on ROD for a specific Listbox, you have to specify the Listbox's 
- * attribute map with key "org.zkoss.zul.listbox.rod" to true. That is, for 
- * example, if in a zul file, you shall specify &lt;custom-attributes> of the 
+ *
+ * <p>To turn on ROD for a specific Listbox, you have to specify the Listbox's
+ * attribute map with key "org.zkoss.zul.listbox.rod" to true. That is, for
+ * example, if in a zul file, you shall specify &lt;custom-attributes> of the
  * Listbox like this:</p>
- * 
+ *
  * <pre><code>
  *	<listbox ...>
  *    <custom-attributes org.zkoss.zul.listbox.rod="true"/>
  *  </listbox>
  * </code></pre>
- * 
+ *
  * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
  * The &lt;custom-attributes> way always takes higher priority. So you
- * can turn OFF ROD in general and turn ON only some specific Listbox component. 
- * Or you can turn ON ROD in general and turn OFF only some specific Listbox 
+ * can turn OFF ROD in general and turn ON only some specific Listbox component.
+ * Or you can turn ON ROD in general and turn OFF only some specific Listbox
  * component.</P>
- * 
- * <p>Since only partial {@link Listitem}s are created and rendered in the 
- * Listbox if you turn the ROD on, there will be some limitations on accessing 
+ *
+ * <p>Since only partial {@link Listitem}s are created and rendered in the
+ * Listbox if you turn the ROD on, there will be some limitations on accessing
  * {@link Listitem}s. For example, if you call
  * <pre><code>
  * Listitem itemAt100 = (Listitem) getItemAtIndex(100);
  * </code></pre>
- * <p>The {@link Listitem} in index 100 is not necessary created yet if it is 
+ * <p>The {@link Listitem} in index 100 is not necessary created yet if it is
  * not in the current "view port" and you will get "null" instead.</p>
- * 
- * <p>And it is generally a bad idea to "cache" the created {@link Listitem} 
- * in your application if you turn the ROD on because Listitems might be removed 
- * later. Basically, you shall operate on the item of the {@link ListModel} 
- * rather than on the {@link Listitem} of the {@link Listbox} if you use the 
+ *
+ * <p>And it is generally a bad idea to "cache" the created {@link Listitem}
+ * in your application if you turn the ROD on because Listitems might be removed
+ * later. Basically, you shall operate on the item of the {@link ListModel}
+ * rather than on the {@link Listitem} of the {@link Listbox} if you use the
  * {@link ListModel} and ROD.</p>
- * 
+ *
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -235,7 +235,7 @@ public class Listbox extends XulElement implements Paginated,
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
 	private boolean _autopaging;
-	
+
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
 	 * assign a controller via {@link #setPaginal}. If exists, it is the last
@@ -310,7 +310,7 @@ public class Listbox extends XulElement implements Paginated,
 
 			/**
 			 * override for Listgroup
-			 * 
+			 *
 			 * @since 3.5.1
 			 */
 			protected void removeRange(int fromIndex, int toIndex) {
@@ -410,11 +410,11 @@ public class Listbox extends XulElement implements Paginated,
 	 * In other words, the width specified in the header is only for reference.
 	 * The browser will adjust the width when a column's width is changed, so
 	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 * 
+	 *
 	 * <p>
 	 * You can also specify the "sized-by-content" attribute of component in
 	 * lang-addon.xml directly, it will then take higher priority.
-	 * 
+	 *
 	 * @param byContent
 	 * @since 5.0.0
 	 */
@@ -431,7 +431,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Note: if the "sized-by-content" attribute of component is specified, it's
 	 * prior to the original value.
-	 * 
+	 *
 	 * @since 5.0.0
 	 * @see #setSizedByContent
 	 */
@@ -455,7 +455,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns {@link Listhead} belonging to this listbox, or null if no list
 	 * headers at all.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Listhead getListheadApi() {
@@ -472,7 +472,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the frozen child.
-	 * 
+	 *
 	 * @since 5.0.0
 	 */
 	public Frozen getFrozen() {
@@ -482,7 +482,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns {@link Listfoot} belonging to this listbox, or null if no list
 	 * footers at all.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Listfoot getListfootApi() {
@@ -492,7 +492,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns a collection of heads, including {@link #getListhead} and
 	 * auxiliary heads ({@link Auxhead}) (never null).
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
 	public Collection<Component> getHeads() {
@@ -533,14 +533,14 @@ public class Listbox extends XulElement implements Paginated,
 	 * the inner table. By default, it is 100%. That is, it is the same as the
 	 * width of this component. However, it is changed when the user is sizing
 	 * the column's width.
-	 * 
+	 *
 	 * <p>
 	 * Application developers rarely call this method, unless they want to
 	 * preserve the widths of sizable columns changed by the user. To preserve
 	 * the widths, the developer have to store the widths of all columns and the
 	 * inner width ({@link #getInnerWidth}), and then restore them when
 	 * re-creating this component.
-	 * 
+	 *
 	 * @param innerWidth
 	 *            the inner width. If null, "100%" is assumed.
 	 * @since 3.0.0
@@ -559,7 +559,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * of the inner table.
 	 * <p>
 	 * Default: "100%"
-	 * 
+	 *
 	 * @see #setInnerWidth
 	 * @since 3.0.0
 	 */
@@ -570,10 +570,10 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns whether to grow and shrink vertical to fit their given space, so
 	 * called vertial flexibility.
-	 * 
+	 *
 	 * <p>
 	 * Note: this attribute is ignored if {@link #setRows} is specified
-	 * 
+	 *
 	 * <p>
 	 * Default: false.
 	 */
@@ -591,7 +591,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Sets whether to grow and shrink vertical to fit their given space, so
 	 * called vertial flexibility.
-	 * 
+	 *
 	 * <p>
 	 * Note: this attribute is ignored if {@link #setRows} is specified
 	 */
@@ -769,7 +769,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Don't use this method if your application is purely based on ZK's
 	 * event-driven model.
-	 * 
+	 *
 	 * @param name
 	 *            the name of this component.
 	 */
@@ -824,7 +824,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the item at the specified index.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
@@ -837,12 +837,12 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the item at the specified index.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Listitem getItemAtIndexApi(int index) {
@@ -858,7 +858,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the index of the specified item, or -1 if not found.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -952,7 +952,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
 	 * It is the same as {@link #setSelectedItem}.
-	 * 
+	 *
 	 * @param item
 	 *            the item to select. If null, all items are deselected.
 	 */
@@ -971,7 +971,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
 	 * It is the same as {@link #setSelectedItem}.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1012,7 +1012,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Selects the given item, without deselecting any other items that are
 	 * already selected..
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1053,7 +1053,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Deselects the given item without deselecting other items.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1093,7 +1093,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * If the specified item is selected, it is deselected. If it is not
 	 * selected, it is selected. Other items in the list box that are selected
 	 * are not affected, and retain their selected state.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1151,7 +1151,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the selected item.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
@@ -1164,12 +1164,12 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the selected item.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Listitem getSelectedItemApi() {
@@ -1189,7 +1189,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
 	 * It is the same as {@link #selectItem}.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1201,7 +1201,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Selects the given listitems.
-	 * 
+	 *
 	 * @since 3.6.0
 	 */
 	public void setSelectedItems(Set listItems) {
@@ -1215,7 +1215,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns all selected items.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
@@ -1234,7 +1234,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Appends an item.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
@@ -1249,12 +1249,12 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Appends an item.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Listitem appendItemApi(String label, String value) {
@@ -1263,12 +1263,12 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Removes the child item in the list box at the given index.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
-	 * 
+	 *
 	 * @return the removed item.
 	 */
 	public Listitem removeItemAt(int index) {
@@ -1279,12 +1279,12 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Removes the child item in the list box at the given index.
-	 * 
+	 *
 	 * <p>
 	 * Note: if live data is used ({@link #getModel} is not null), the returned
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
-	 * 
+	 *
 	 * @since 3.5.2
 	 * @return the removed item.
 	 */
@@ -1296,7 +1296,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Sets how to position the paging of listbox at the client screen. It is
 	 * meaningless if the mold is not in "paging".
-	 * 
+	 *
 	 * @param pagingPosition
 	 *            how to position. It can only be "bottom" (the default), or
 	 *            "top", or "both".
@@ -1318,7 +1318,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns how to position the paging of listbox at the client screen. It is
 	 * meaningless if the mold is not in "paging".
-	 * 
+	 *
 	 * @since 3.0.4
 	 */
 	public String getPagingPosition() {
@@ -1328,12 +1328,12 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns the paging controller, or null if not available. Note: the paging
 	 * controller is used only if {@link #getMold} is "paging".
-	 * 
+	 *
 	 * <p>
 	 * If mold is "paging", this method never returns null, because a child
 	 * paging controller is created automcatically (if not specified by
 	 * developers with {@link #setPaginal}).
-	 * 
+	 *
 	 * <p>
 	 * If a paging controller is specified (either by {@link #setPaginal}, or by
 	 * {@link #setMold} with "paging"), the listbox will rely on the paging
@@ -1346,10 +1346,10 @@ public class Listbox extends XulElement implements Paginated,
 	/*
 	 * Specifies the paging controller. Note: the paging controller is used only
 	 * if {@link #getMold} is "paging".
-	 * 
+	 *
 	 * <p>It is OK, though without any effect, to specify a paging controller
 	 * even if mold is not "paging".
-	 * 
+	 *
 	 * @param pgi the paging controller. If null and {@link #getMold} is
 	 * "paging", a paging controller is created automatically as a child
 	 * component (see {@link #getPagingChild}).
@@ -1437,7 +1437,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Returns the child paging controller that is created automatically, or
 	 * null if mold is not "paging", or the controller is specified externally
 	 * by {@link #setPaginal}.
-	 * 
+	 *
 	 * @since 3.0.7
 	 */
 	public Paging getPagingChild() {
@@ -1448,7 +1448,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Returns the child paging controller that is created automatically, or
 	 * null if mold is not "paging", or the controller is specified externally
 	 * by {@link #setPaginal}.
-	 * 
+	 *
 	 * @since 3.5.2
 	 */
 	public org.zkoss.zul.api.Paging getPagingChildApi() {
@@ -1457,7 +1457,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the page size, aka., the number items per page.
-	 * 
+	 *
 	 * @exception IllegalStateException
 	 *                if {@link #getPaginal} returns null, i.e., mold is not
 	 *                "paging" and no external controller is specified.
@@ -1468,7 +1468,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets the page size, aka., the number items per page.
-	 * 
+	 *
 	 * @exception IllegalStateException
 	 *                if {@link #getPaginal} returns null, i.e., mold is not
 	 *                "paging" and no external controller is specified.
@@ -1476,12 +1476,12 @@ public class Listbox extends XulElement implements Paginated,
 	public void setPageSize(int pgsz) throws WrongValueException {
 		pgi().setPageSize(pgsz);
 	}
-	
+
 	/**
 	 * Sets whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
-	 * rather, the page size is automatically determined by the height of the 
-	 * Listbox dynamically. 
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Listbox dynamically.
 	 * @param autopaging true to turn on the auto-paging facility.
 	 * @since 5.0.2
 	 */
@@ -1491,12 +1491,12 @@ public class Listbox extends XulElement implements Paginated,
 			smartUpdate("autopaging", autopaging);
 		}
 	}
-	
+
 	/**
 	 * Returns whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
-	 * rather, the page size is automatically determined by the height of the 
-	 * Listbox dynamically. 
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Listbox dynamically.
 	 * @return whether the "autopaging" facility is turned on.
 	 * @since 5.0.2
 	 */
@@ -1507,7 +1507,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns the number of pages. Note: there is at least one page even no
 	 * item at all.
-	 * 
+	 *
 	 * @since 3.0.4
 	 */
 	public int getPageCount() {
@@ -1516,7 +1516,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the active page (starting from 0).
-	 * 
+	 *
 	 * @since 3.0.4
 	 */
 	public int getActivePage() {
@@ -1525,7 +1525,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets the active page (starting from 0).
-	 * 
+	 *
 	 * @since 3.0.4
 	 * @see #setActivePage(Listitem)
 	 */
@@ -1542,7 +1542,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Sets the active page in which the specified item is. The active page will
 	 * become the page that contains the specified item.
-	 * 
+	 *
 	 * @param item
 	 *            the item to show. If the item is null or doesn't belong to
 	 *            this listbox, nothing happens.
@@ -1560,7 +1560,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Sets the active page in which the specified item is. The active page will
 	 * become the page that contains the specified item.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -1580,7 +1580,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the number of visible descendant {@link Listitem}.
-	 * 
+	 *
 	 * @since 3.5.1
 	 */
 	public int getVisibleItemCount() {
@@ -1606,7 +1606,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Returns the style class for the odd rows.
 	 * <p>
 	 * Default: {@link #getZclass()}-odd. (since 3.5.0)
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
 	public String getOddRowSclass() {
@@ -1617,7 +1617,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Sets the style class for the odd rows. If the style class doesn't exist,
 	 * the striping effect disappears. You can provide different effects by
 	 * providing the proper style classes.
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
 	public void setOddRowSclass(String scls) {
@@ -1631,7 +1631,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the number of listgroup
-	 * 
+	 *
 	 * @since 3.5.0
 	 */
 	public int getGroupCount() {
@@ -1640,7 +1640,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns a list of all {@link Listgroup}.
-	 * 
+	 *
 	 * @since 3.5.0
 	 */
 	public List<Listgroup> getGroups() {
@@ -1649,7 +1649,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns whether listgroup exists.
-	 * 
+	 *
 	 * @since 3.5.0
 	 */
 	public boolean hasGroup() {
@@ -1673,7 +1673,7 @@ public class Listbox extends XulElement implements Paginated,
 					&& (to < 0 || j <= to); ++j) {
 				Listitem o = it.next();
 				o.setIndexDirectly(j);
-	
+
 				// if beginning is a group, we don't need to change its groupInfo,
 				// because
 				// it is not reliable when infront is true.
@@ -1701,7 +1701,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Returns the group index which matches with the ListModel index.
-	 * 
+	 *
 	 * @param index
 	 *            the list item index
 	 * @return the associated group index of the list item index.
@@ -1716,8 +1716,8 @@ public class Listbox extends XulElement implements Paginated,
 			else if (index < g[0])
 				break;
 		}
-		return gindex != -1 ? gindex : 
-			g != null && index < (g[0]+g[1]) ? (j-1) : 
+		return gindex != -1 ? gindex :
+			g != null && index < (g[0]+g[1]) ? (j-1) :
 			g != null && index == (g[0]+g[1]) && g[2] == -1 ? (j-1) : gindex;
 	}
 
@@ -1835,7 +1835,7 @@ public class Listbox extends XulElement implements Paginated,
 						}
 					}
 					final int[] g = _groupsInfo.get(getGroupCount() - 1);
-					
+
 					g[2] = ((Listitem) getItems().get(
 							getItems().size() - 1))
 							.getIndex();
@@ -2173,7 +2173,7 @@ public class Listbox extends XulElement implements Paginated,
 				// reset _groupsInfo
 				_groupsInfo = new LinkedList<int[]>();
 			}
-			//bug 3057288			
+			//bug 3057288
 			//getDataLoader().updateModelInfo(); //itemsInvalidate after really removed
 			//return true;
 		} else if (_paging == child) {
@@ -2190,11 +2190,11 @@ public class Listbox extends XulElement implements Paginated,
 
 		return true;
 	}
-	
+
 	private boolean isSyncingModel() {
 		return getAttribute(SYNCING_MODEL) != null;
 	}
-	
+
 	/**
 	 * Callback if a list item has been inserted.
 	 * <p>
@@ -2204,7 +2204,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Default: invalidate if it is the paging mold and it affects the view of
 	 * the active page.
-	 * 
+	 *
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
@@ -2218,7 +2218,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * Default: invalidate if it is the paging mold and it affects the view of
 	 * the active page.
-	 * 
+	 *
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
@@ -2291,7 +2291,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Checks whether to invalidate, when a child has been added or or will be
 	 * removed.
-	 * 
+	 *
 	 * @param bRemove
 	 *            if child will be removed
 	 */
@@ -2399,7 +2399,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Fix Childitem._index since j-th item.
-	 * 
+	 *
 	 * @param j
 	 *            the start index (inclusion)
 	 * @param to
@@ -2420,11 +2420,11 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns the model associated with this list box, or null if this list box
 	 * is not associated with any list data model.
-	 * 
+	 *
 	 * <p>
 	 * Note: if {@link #setModel(GroupsModel)} was called with a groups model,
 	 * this method returns an instance of {@link ListModel} encapsulating it.
-	 * 
+	 *
 	 * @see #setModel(ListModel)
 	 * @see #setModel(GroupsModel)
 	 */
@@ -2437,7 +2437,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Returns the list model associated with this list box, or null if this
 	 * list box is associated with a {@link GroupsModel} or not associated with
 	 * any list data model.
-	 * 
+	 *
 	 * @since 3.5.0
 	 * @see #setModel(ListModel)
 	 */
@@ -2450,7 +2450,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Returns the groups model associated with this list box, or null if this
 	 * list box is associated with a {@link ListModel} or not associated with
 	 * any list data model.
-	 * 
+	 *
 	 * @since 3.5.0
 	 * @see #setModel(GroupsModel)
 	 */
@@ -2464,7 +2464,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * Sets the list model associated with this listbox. If a non-null model is
 	 * assigned, no matter whether it is the same as the previous, it will
 	 * always cause re-render.
-	 * 
+	 *
 	 * @param model
 	 *            the list model to associate, or null to dis-associate any
 	 *            previous model.
@@ -2490,13 +2490,13 @@ public class Listbox extends XulElement implements Paginated,
 				initDataListener();
 			}
 
-			final Execution exec = Executions.getCurrent(); 
+			final Execution exec = Executions.getCurrent();
 			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
 			final boolean rod = evalRod();
 			//Always syncModel because it is easier for user to enfore reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1);
-			} else if (inPagingMold()) { 
+			} else if (inPagingMold()) {
 				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 				//must update paginal totalSize or exception in setActivePage
 				final Paginal pgi = getPaginal();
@@ -2524,10 +2524,10 @@ public class Listbox extends XulElement implements Paginated,
 	 * Sets the groups model associated with this list box. If a non-null model
 	 * is assigned, no matter whether it is the same as the previous, it will
 	 * always cause re-render.
-	 * 
+	 *
 	 * <p>
 	 * The groups model is used to represent a list of data with grouping.
-	 * 
+	 *
 	 * @param model
 	 *            the groups model to associate, or null to dis-associate any
 	 *            previous model.
@@ -2553,12 +2553,12 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Sets the renderer which is used to render each item if {@link #getModel}
 	 * is not null.
-	 * 
+	 *
 	 * <p>
 	 * Note: changing a render will not cause the listbox to re-render. If you
 	 * want it to re-render, you could assign the same model again (i.e.,
 	 * setModel(getModel())), or fire an {@link ListDataEvent} event.
-	 * 
+	 *
 	 * @param renderer
 	 *            the renderer, or null to use the default.
 	 * @exception UiException
@@ -2598,18 +2598,18 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Returns the number of items to preload when receiving the rendering
 	 * request from the client.
-	 * 
+	 *
 	 * <p>
 	 * Default: 7.
-	 * 
+	 *
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.
-	 * 
+	 *
 	 * <p>
 	 * Note: if the "pre-load-size" attribute of component is specified, it's
 	 * prior to the original value.(@since 3.0.4)
-	 * 
+	 *
 	 * @since 2.4.1
 	 */
 	public int getPreloadSize() {
@@ -2623,7 +2623,7 @@ public class Listbox extends XulElement implements Paginated,
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.
-	 * 
+	 *
 	 * @param sz
 	 *            the number of items to preload. If zero, no preload at all.
 	 * @exception UiException
@@ -2687,7 +2687,7 @@ public class Listbox extends XulElement implements Paginated,
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
 	}
 
 	private void postOnInitRender() {
@@ -2730,10 +2730,10 @@ public class Listbox extends XulElement implements Paginated,
 				// (default)
 				cell.detach();
 			}
-			
+
 			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
 			//check if the item is a selected item and add into selected set
-			final Object value = _model.getElementAt(item.getIndex()); 
+			final Object value = _model.getElementAt(item.getIndex());
 			if (_model instanceof Selectable) {
 				if (((Selectable) _model).getSelection().contains(value)) {
 					addItemToSelection(item);
@@ -2780,11 +2780,11 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Renders the specified {@link Listitem} if not loaded yet, with
 	 * {@link #getItemRenderer}.
-	 * 
+	 *
 	 * <p>
 	 * It does nothing if {@link #getModel} returns null. In other words, it is
 	 * meaningful only if live data model is used.
-	 * 
+	 *
 	 * @see #renderItems
 	 * @see #renderAll
 	 * @return the list item being passed to this method
@@ -2806,11 +2806,11 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Renders the specified {@link Listitem} if not loaded yet, with
 	 * {@link #getItemRenderer}.
-	 * 
+	 *
 	 * <p>
 	 * It does nothing if {@link #getModel} returns null. In other words, it is
 	 * meaningful only if live data model is used.
-	 * 
+	 *
 	 * @param itemApi
 	 *            assume as a {@link org.zkoss.zul.Listitem}
 	 * @since 3.5.2
@@ -2827,7 +2827,7 @@ public class Listbox extends XulElement implements Paginated,
 	/**
 	 * Renders all {@link Listitem} if not loaded yet, with
 	 * {@link #getItemRenderer}.
-	 * 
+	 *
 	 * @see #renderItem
 	 * @see #renderItems
 	 */
@@ -2837,7 +2837,7 @@ public class Listbox extends XulElement implements Paginated,
 
 		_renderAll = true;
 		getDataLoader().setLoadAll(_renderAll);
-		
+
 		final Renderer renderer = new Renderer();
 		try {
 			for (Iterator it = getItems().iterator(); it.hasNext();)
@@ -3012,7 +3012,7 @@ public class Listbox extends XulElement implements Paginated,
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) { // mark as a new attached Listbox
-			final Execution exec = Executions.getCurrent(); 
+			final Execution exec = Executions.getCurrent();
 			exec.setAttribute("zkoss.Listbox.deferInitModel_"+getUuid(), Boolean.TRUE);
 			exec.setAttribute("zkoss.Listbox.attached_"+getUuid(), Boolean.TRUE);
 			// prepare a right moment to init Listbox (must be as early as possible)
@@ -3026,7 +3026,7 @@ public class Listbox extends XulElement implements Paginated,
 			_dataLoader = null;
 		}
 	}
-	
+
 	private class ModelInitListener implements EventListener {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
@@ -3084,12 +3084,12 @@ public class Listbox extends XulElement implements Paginated,
 	}
 
 	private void afterUnmarshal() {
-		//recreate the DataLoader 
-		final int offset = getDataLoader().getOffset(); 
+		//recreate the DataLoader
+		final int offset = getDataLoader().getOffset();
 		final int limit = getDataLoader().getLimit();
-		resetDataLoader(); 
+		resetDataLoader();
 		getDataLoader().init(this, offset, limit);
-		
+
 		int index = offset;
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
@@ -3169,7 +3169,7 @@ public class Listbox extends XulElement implements Paginated,
 
 		if (_rows > 0)
 			renderer.render("rows", getRows());
-		
+
 		render(renderer, "name", _name);
 
 		if (inSelectMold()) {
@@ -3213,8 +3213,20 @@ public class Listbox extends XulElement implements Paginated,
 				renderer.render("nonselectableTags", _nonselTags);
 			if (isCheckmarkDeselectOther())
 				renderer.render("_cdo", true);
+			if (!isRightSelect())
+				renderer.render("_rightSelect", false);
 		}
 	}
+	/** Returns whether to toggle a list item selection on right click
+	 */
+	private boolean isRightSelect() {
+		if (_rightSelect == null) //ok to race
+			_rightSelect = Boolean.valueOf(
+				!"false".equals(Library.getProperty("org.zkoss.zul.listbox.rightSelect")));
+		return _rightSelect.booleanValue();
+	}
+	private static Boolean _rightSelect;
+
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
 	 */
@@ -3228,11 +3240,11 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Processes an AU request.
-	 * 
+	 *
 	 * <p>
 	 * Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onSelect.
-	 * 
+	 *
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
@@ -3250,7 +3262,7 @@ public class Listbox extends XulElement implements Paginated,
 			if (size != oldsize) {
 				int begin = getActivePage() * oldsize;
 				int end = begin + oldsize;
-				end = Math.min(getPaginal().getTotalSize(), end); 
+				end = Math.min(getPaginal().getTotalSize(), end);
 				int sel = getSelectedIndex();
 				if (sel < 0 || sel < begin || sel >= end) { //not in selection range
 					sel = size > oldsize ? (end-1) : begin;

@@ -168,11 +168,6 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	}
 
 	//Component//
-	/** No child is allowed.
-	 */
-	protected boolean isChildable() {
-		return false;
-	}
 	public String getZclass() {
 		return _zclass != null ? _zclass: "z-a";
 	}
