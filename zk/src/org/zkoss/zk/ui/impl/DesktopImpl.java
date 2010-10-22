@@ -258,29 +258,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return null;
 	}
-	private static final String DESKTOP_ID_PREFIX = "zd_";
+	private static final String DESKTOP_ID_PREFIX = "z_";
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
-			return encodeId(
+			return ComponentsCtrl.encodeId(
 				new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
 
 		final int v;
 		synchronized (DesktopImpl.class) {
 			v = _keyWithoutDC++;
 		}
-		return encodeId(new StringBuffer(12).append("_g"), v).toString();
-	}
-	private static String encodeId(StringBuffer sb, int val) {
-		if (val < 0) {
-			sb.append('_');
-			val = -val;
-		}
-		do {
-			int v = val % 62;
-			val /= 62;
-			sb.append(toLetter(v));
-		} while (val != 0);
-		return sb.toString();
+		return ComponentsCtrl.encodeId(new StringBuffer(12).append("_g"), v).toString();
 	}
 	private static int _keyWithoutDC;
 

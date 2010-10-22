@@ -76,21 +76,31 @@ public class ComponentsCtrl {
 	/** Returns the automatically generate component's UUID/ID.
 	 */
 	public static final String toAutoId(String prefix, int val) {
-		final StringBuffer sb = new StringBuffer(16).append(prefix);
+		return encodeId(new StringBuffer(16).append(prefix), val);
+	}
+	/** Returns an ID representing the specified number
+	 * The ID consists of 0-9, a-z and _.
+	 * @since 5.0.5
+	 */
+	public static final String encodeId(StringBuffer sb, int val) {
 		if (val < 0) {
 			sb.append('_');
 			val = -val;
 		}
 
 		do {
-			int v = val & 62;
-			val /= 62;
-			if (v < 10) {
+			//IE6/7's ID case insensitive (safer, though jQuery fixes it)
+			int v = val % 37;
+			val /= 37;
+			if (v-- == 0) {
+				sb.append('_');
+			} else if (v < 10) {
 				sb.append((char)('0' + v));
-			} else if (v < 36) {
-				sb.append((char)(v + ((int)'a' - 10)));
+//			} else if (v < 36) {
 			} else {
-				sb.append((char)(v + ((int)'A' - 36)));
+				sb.append((char)(v + ((int)'a' - 10)));
+//			} else {
+//				sb.append((char)(v + ((int)'A' - 36)));
 			}
 		} while (val != 0);
 		return sb.toString();
