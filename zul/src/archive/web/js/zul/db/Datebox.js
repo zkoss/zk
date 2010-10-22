@@ -619,14 +619,15 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		zk(pp).position(wgt.getInputNode(), "after_start");
+		var inp = wgt.getInputNode();
+		zk(pp).position(inp, "after_start");
 		setTimeout(function() {
 			_reposition(wgt, silent);
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = wgt.getTimeFormat(),
-			value = wgt.getValue();
+			value = zk.fmt.Date.parseDate(inp.value, wgt._format) || wgt.getValue();
 
 		if (value) {
 			var calVal = new zk.fmt.Calendar().formatDate(value, this.getFormat());
