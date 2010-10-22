@@ -29,7 +29,6 @@ import java.util.Date;
 import java.io.StringWriter;
 import java.net.URL;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
@@ -67,10 +66,8 @@ import org.zkoss.zk.xel.ExValue;
  * @author tomyeh
  */
 public class ComponentsCtrl {
-	/** The prefix for auto generated ID. */
-	private static final String
-		AUTO_ID_PREFIX = "z_";
-	/** The anonymous UUID. Used only internally.
+	/** @deprecated
+	 * The anonymous UUID. Used only internally.
 	 */
 	public static final String ANONYMOUS_ID = "z__i";
 
@@ -78,10 +75,24 @@ public class ComponentsCtrl {
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
-	public static final String toAutoId(String prefix, int id) {
-		final StringBuffer sb = new StringBuffer(16)
-			.append(AUTO_ID_PREFIX).append(prefix).append('_');
-		Strings.encode(sb, id);
+	public static final String toAutoId(String prefix, int val) {
+		final StringBuffer sb = new StringBuffer(16).append(prefix);
+		if (val < 0) {
+			sb.append('_');
+			val = -val;
+		}
+
+		do {
+			int v = val & 62;
+			val /= 62;
+			if (v < 10) {
+				sb.append((char)('0' + v));
+			} else if (v < 36) {
+				sb.append((char)(v + ((int)'a' - 10)));
+			} else {
+				sb.append((char)(v + ((int)'A' - 36)));
+			}
+		} while (val != 0);
 		return sb.toString();
 	}
 
@@ -97,8 +108,28 @@ public class ComponentsCtrl {
 	 * @since 5.0.3
 	 */
 	public static final boolean isAutoUuid(String id) {
-		return id == null || (id.startsWith(AUTO_ID_PREFIX)
-			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
+		if (id == null)
+			return true;
+
+		//(0: letter, 1: digit, 2: letter, 3: upper case
+		//See also DesktopImpl.updateUuidPrefix
+		if (id.length() < 5)
+			return false;
+		char cc;
+		return (isUpper(cc = id.charAt(0)) || isLower(cc))
+			&& isDigit(id.charAt(1))
+			&& (isUpper(cc = id.charAt(2)) || isLower(cc))
+			&& isUpper(id.charAt(3));
+		
+	}
+	private static boolean isUpper(char cc) {
+		return cc >= 'A' && cc <= 'Z';
+	}
+	private static boolean isLower(char cc) {
+		return cc >= 'a' && cc <= 'z';
+	}
+	private static boolean isDigit(char cc) {
+		return cc >= '0' && cc <= '9';
 	}
 	/** @deprecated As of release 5.0.2, replaced with {@link #isAutoUuid(String)}.
 	 * If you want to varify UUID, use {@link #checkUuid}.
