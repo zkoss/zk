@@ -15,6 +15,7 @@ ZK 5.0.5
   3091085: Upgrade to jQuery 1.4.3
   3091086: The A component shall allow children
   3091764: Able to prevent users enter the grouping character
+  3092641: Listbox/Tree support whether to toggle selection or not when right click on item
   
 * Bugs
   3057902: zk bug for window showbusy
