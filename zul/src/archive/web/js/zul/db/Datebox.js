@@ -21,26 +21,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		this.appendChild(this._pop);
 		this.appendChild(this._tm);
 	}
-	function _reposition(wgt, silent) {
-		var db = wgt.$n();
-		if (!db) return;
-		var pp = wgt.$n("pp"),
-			inp = wgt.getInputNode();
+	function _reposition(db, silent) {
+		if (!db.$n()) return;
+		var pp = db.$n("pp"),
+			inp = db.getInputNode();
 
 		if(pp) {
 			zk(pp).position(inp, "after_start");
-			wgt._pop.syncShadow();
+			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
 		}
 	}
-	function _blurInplace(wgt) {
+	function _blurInplace(db) {
 		var n;
-		if (wgt._inplace && wgt._inplaceout && (n = wgt.$n())
-		&& !jq(n).hasClass(wgt.getInplaceCSS())) {
-			jq(n).addClass(wgt.getInplaceCSS());
-			wgt.onSize();
-			n.style.width = wgt.getWidth() || '';
+		if (db._inplace && db._inplaceout && (n = db.$n())
+		&& !jq(n).hasClass(db.getInplaceCSS())) {
+			jq(n).addClass(db.getInplaceCSS());
+			db.onSize();
+			n.style.width = db.getWidth() || '';
 		}
 	}
 
@@ -570,6 +569,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.className = zcls + "-pp";
 
 		jq(pp).zk.undoVParent();
+		db.setFloating_(false, {dropdown:true});
 
 		var btn = this.$n("btn");
 		if (btn)
@@ -584,14 +584,16 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		return zk(this.parent.$n("pp")).isVisible();
 	},
 	open: function(silent) {
-		var wgt = this.parent,
-			db = wgt.$n(), pp = wgt.$n("pp");
-		if (!db || !pp)
+		var db = this.parent,
+			dbn = db.$n(), pp = db.$n("pp");
+		if (!dbn || !pp)
 			return;
-		this._setView("day");
-		var zcls = wgt.getZclass();
 
-		pp.className = db.className + " " + pp.className;
+		zWatch.fire('onFloatUp', db); //notify all
+		this._setView("day");
+		var zcls = db.getZclass();
+
+		pp.className = dbn.className + " " + pp.className;
 		jq(pp).removeClass(zcls);
 
 		pp.style.width = pp.style.height = "auto";
@@ -603,6 +605,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
+		db.setFloating_(true, {dropdown:true, node:pp});
 
 		if (pp.offsetHeight > 200) {
 			//pp.style.height = "200px"; commented by the bug #2796461
@@ -610,24 +613,25 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		} else if (pp.offsetHeight < 10) {
 			pp.style.height = "10px"; //minimal
 		}
-		if (pp.offsetWidth < db.offsetWidth) {
-			pp.style.width = db.offsetWidth + "px";
+		if (pp.offsetWidth < dbn.offsetWidth) {
+			pp.style.width = dbn.offsetWidth + "px";
 		} else {
 			var wd = jq.innerWidth() - 20;
-			if (wd < db.offsetWidth)
-				wd = db.offsetWidth;
+			if (wd < dbn.offsetWidth)
+				wd = dbn.offsetWidth;
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		var inp = wgt.getInputNode();
+		var inp = db.getInputNode();
 		zk(pp).position(inp, "after_start");
+
 		setTimeout(function() {
-			_reposition(wgt, silent);
+			_reposition(db, silent);
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
-		var fmt = wgt.getTimeFormat(),
-			value = zk.fmt.Date.parseDate(inp.value, wgt._format) || wgt.getValue();
+		var fmt = db.getTimeFormat(),
+			value = zk.fmt.Date.parseDate(inp.value, db._format) || db.getValue();
 
 		if (value) {
 			var calVal = new zk.fmt.Calendar().formatDate(value, this.getFormat());
@@ -636,13 +640,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 
 		if (fmt) {
-			var tm = wgt._tm;
+			var tm = db._tm;
 			tm.setVisible(true);
 			tm.setFormat(fmt);
 			tm.setValue(value || new Date());
 			tm.onShow();
 		} else {
-			wgt._tm.setVisible(false);
+			db._tm.setVisible(false);
 		}
 	},
 	syncShadow: function () {
@@ -696,19 +700,19 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers(CalendarPop, 'unbind_', arguments);
 	},
 	_bindTimezoneEvt: function () {
-		var wgt = this.parent;
-		var select = wgt.$n('dtzones');
+		var db = this.parent;
+		var select = db.$n('dtzones');
 		if (select) {
-			select.disabled = wgt.isTimeZonesReadonly() ? "disable" : "";
-			wgt.domListen_(select, 'onChange', '_doTimeZoneChange');
-			wgt._setTimeZonesIndex();
+			select.disabled = db.isTimeZonesReadonly() ? "disable" : "";
+			db.domListen_(select, 'onChange', '_doTimeZoneChange');
+			db._setTimeZonesIndex();
 		}
 	},
 	_unbindfTimezoneEvt: function () {
-		var wgt = this.parent,
-			select = wgt.$n('dtzones');
+		var db = this.parent,
+			select = db.$n('dtzones');
 		if (select)
-			wgt.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
+			db.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	},
 	_setView: function (val) {
 		if (this.parent.getTimeFormat())

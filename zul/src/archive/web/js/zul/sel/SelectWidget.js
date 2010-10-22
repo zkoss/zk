@@ -712,10 +712,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
-		if (zk.dragging || this._shallIgnore(evt, true))
-			return;
-			
-		if (this.shallIgnoreSelect_(evt))
+		if (zk.dragging || this._shallIgnore(evt, true)
+		|| this.shallIgnoreSelect_(evt))
 			return;
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element

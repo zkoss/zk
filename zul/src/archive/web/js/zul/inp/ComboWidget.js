@@ -174,6 +174,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
+		this.setFloating_(true, {dropdown:true, node:pp});
 		this.slideDown_(pp);
 
 		//FF issue:
@@ -266,10 +267,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
+		this.setFloating_(false, {dropdown:true});
 		zWatch.fireDown("onHide", this);
 		this.slideUp_(pp);
 
 		zk(pp).undoVParent();
+
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
@@ -471,8 +474,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);
-		
-		this.setFloating_(true,{node:this.getPopupNode_()});
 	},
 	unbind_: function () {
 		this.close();

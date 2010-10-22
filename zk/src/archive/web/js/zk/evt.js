@@ -362,7 +362,7 @@ zWatch({
   onHide: [this, this._onHide]
 });
 </code></pre>
-	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link #fire}/{@link #fireDown}.3
+	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link #fire}/{@link #fireDown}.
 	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link #fire}) is from the parent to the child if both are registered.
 	* @param Map infs a map of the watch listeners. Each key of the map is the the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target. 
 	*/

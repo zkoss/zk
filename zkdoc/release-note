@@ -78,6 +78,7 @@ ZK 5.0.5
   3091160: WrongValueException not handled if thrown in onCreate listener
   3091045: Non integer Page number in paging mold="os"
   3091153: selectAll(), clearSelection() in Tree
+  3091949: Calendar/Combobox above pdf not display popup correctly
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
