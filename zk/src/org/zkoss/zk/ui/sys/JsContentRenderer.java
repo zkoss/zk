@@ -25,6 +25,7 @@ import java.util.Date;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.json.JSONAware;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * An implementation of {@link ContentRenderer} that renders
@@ -372,8 +373,19 @@ public class JsContentRenderer implements ContentRenderer {
 		_buf.append('{');
 		for (Iterator it = overrides.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
-			_buf.append(me.getKey()).append(":\n")
-				.append(me.getValue()).append("\n,");
+			final String name = (String)me.getKey();
+			final String value = (String)me.getValue();
+			if (value != null) {
+				//It is too costly to detect if it is a legal expression
+				//so we only check the most common illegal case
+				final String v = value.trim();
+				if (v.length() == 0 
+				|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0))
+					throw new UiException("Illegal client override: "+v+
+						(name.startsWith("on") ? "\nTo listen an event, remember to captalize the third letter, such as onClick":
+							"\nIt must be a legal JavaScript expression (not statement)"));
+			}
+			_buf.append(name).append(":\n").append(value).append("\n,");
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
