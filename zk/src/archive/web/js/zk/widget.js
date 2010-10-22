@@ -2379,7 +2379,8 @@ out.push('</div>');
 				if (f && (f = f[mold]))
 					return f.apply(this, arguments);
 			}
-			throw "mold "+mold+" not found in "+this.className;
+
+			zk.error("Mold "+mold+" not found in "+this.className);
 		}
 	},
 	/* Utilities for handling the so-called render defer ({@link #setRenderdefer}).
@@ -4447,8 +4448,10 @@ zk.Widget.getClass('combobox');
 	 */
 	newInstance: function (wgtnm, props) {
 		var cls = _wgtcls[wgtnm];
-		if (!cls)
-			throw 'widget not found: '+wgtnm;
+		if (!cls) {
+			zk.error(cls = 'Unknown widget: '+wgtnm);
+			throw cls;
+		}
 		return new cls(props);
 	}
 });
@@ -4474,7 +4477,10 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 	widgetName: "refWidget",
 	bind_: function () {
 		var w = zk.Widget.$(this.uuid);
-		if (!w) throw 'illegal: '+w;
+		if (!w) {
+			zk.error("RefWidget not found: " + this.uuid);
+			return;
+		}
 
 		var p;
 		if (p = w.parent) //shall be a desktop
