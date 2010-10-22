@@ -379,7 +379,9 @@ public class JsContentRenderer implements ContentRenderer {
 				//It is too costly to detect if it is a legal expression
 				//so we only check the most common illegal case
 				final String v = value.trim();
+				char cc;
 				if (v.length() == 0 
+				|| (cc=v.charAt(v.length() - 1)) == ';' || cc == ','
 				|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0))
 					throw new UiException("Illegal client override: "+v+
 						(name.startsWith("on") ? "\nTo listen an event, remember to captalize the third letter, such as onClick":
