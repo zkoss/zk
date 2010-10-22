@@ -3240,8 +3240,7 @@ Sizzle.error = function( msg ) {
 	throw "Syntax error, unrecognized expression: " + msg;
 };
 
-var isZID, isZTag, //Jumper Chen, Potix
-	Expr = Sizzle.selectors = {
+var Expr = Sizzle.selectors = {
 	// Jumper Chen, Potix, 20100326
 	order: [ "ID", "ZID", "NAME", "TAG", "ZTAG" ],
 	match: {
@@ -3272,6 +3271,8 @@ var isZID, isZTag, //Jumper Chen, Potix
 		"+": function(checkSet, part){
 			var isPartStr = typeof part === "string",
 				isTag = isPartStr && !/\W/.test(part),
+				isZTag = isPartStr && /@/.test(part), //Jumper Chen, Potix
+				isZID = isPartStr && /\$/.test(part),
 				isPartStrNotTag = isPartStr && !isTag;
 
 			if ( isTag ) {
@@ -3300,6 +3301,8 @@ var isZID, isZTag, //Jumper Chen, Potix
 		},
 		">": function(checkSet, part){
 			var isPartStr = typeof part === "string",
+				isZTag = isPartStr && /@/.test(part), //Jumper Chen, Potix
+				isZID = isPartStr && /\$/.test(part);
 				elem, i = 0, l = checkSet.length;
 
 			if ( isPartStr && !/\W/.test(part) ) {
@@ -4081,9 +4084,9 @@ function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 
 function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	/* Jumper Chen, Potix, 20100520*/
-	var cacheElem;
-	isZID = /\$/.test(cur);
-	isZTag = /@/.test(cur);
+	var cacheElem,
+		isZID = /\$/.test(cur),
+		isZTag = /@/.test(cur);
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 		var elem = checkSet[i];
 		if ( elem ) {
