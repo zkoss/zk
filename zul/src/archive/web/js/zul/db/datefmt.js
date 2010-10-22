@@ -58,8 +58,8 @@ zk.fmt.Date = {
 			isNumber = !isNaN(txt),
 			tlen = txt.replace(/[^.]/g, '').length,
 			flen = fmt.replace(/[^.]/g, '').length;
-		for (var i = 0, j = txt.length; i < j; i++) {
-			var c = txt.charAt(i),
+		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
+			var c = txt.charAt(k),
 				f = fmtlen > i ? fmt.charAt(i) : "";
 			if (c.match(/\d/)) {
 				ary.push(c);
@@ -68,8 +68,8 @@ zk.fmt.Date = {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
-					if (c.charCodeAt() < 128 && (c.charCodeAt() != 46 ||
-								tlen == flen || f.charCodeAt() == 46)) {
+					if (c.charCodeAt(0) < 128 && (c.charCodeAt(0) != 46 ||
+								tlen == flen || f.charCodeAt(0) == 46)) {
 						if (ary.length) {
 							ts.push(ary.join(""));
 							ary = [];
@@ -78,6 +78,11 @@ zk.fmt.Date = {
 						ary.push(c);
 				}
 			} else if (ary.length) {
+				if (txt.charAt(k-1).match(/\d/))
+					while (f == fmt.charAt(i-1)) {
+						i++;
+						f = fmt.charAt(i);
+					}
 				ts.push(ary.join(""));
 				ary = [];
 			} else if (c.match(/\w/))
