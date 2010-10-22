@@ -89,6 +89,7 @@ zk.fmt.Date = {
 				return; //failed
 		}
 		if (ary.length) ts.push(ary.join(""));
+		if (!ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
