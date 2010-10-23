@@ -248,7 +248,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getValue: function () {
 		return this._value;
 	},
-	/** Sets the value in the String format.
+	/** Sets the value in the String format(assumes no locale issue).
 	 * @param String value the value; If null, it is considered as empty.
 	 * @param boolean fromServer it will clear error message if true
 	 */
@@ -265,7 +265,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
-		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
+		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
 			this._value = value;
 			var inp = this.getInputNode();
 			if (inp)
@@ -455,7 +455,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * with value = null. Derives shall handle this case properly.
 	 * @return String
 	 */
-	coerceFromString_: function (value) {
+	coerceFromString_: function (value, localeAware) {
 		return value;
 	},
 	/** Coerces the value passed to {@link #setValue}.
@@ -506,12 +506,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return msg;
 		}
 	},
-	_validate: function (value) {
+	_validate: function (value, localeAware) {
 		zul.inp.validating = true;
 		try {
 			var val = value, msg;
 			if (typeof val == 'string' || val == null) {
-				val = this.coerceFromString_(val);
+				val = this.coerceFromString_(val, localeAware);
 				if (val && (msg = val.error)) {
 					this.clearErrorMessage(true);
 					if (this._cst == "[c") //CustomConstraint
@@ -558,6 +558,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		eb.show(this, msg);
 		return eb;
 	},
+	_equalValue: function(a, b) {
+		if (a == b) return true;
+		return this.marshall_(a) == this.marshall_(b);
+	},
+	marshall_: function(val) {
+		return val;
+	},
 	/** Updates the change to server by firing onChange if necessary. 
 	 * @return boolean
 	 */
@@ -570,7 +577,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return false; //not changed
 
 		var wasErr = this._errmsg,
-			vi = this._validate(value);
+			vi = this._validate(value, true); //true to handle locale since this is entered by end user
 		if (!vi.error || vi.server) {
 			var upd;
 			if (!vi.error) {
@@ -578,14 +585,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
 					//reason to use this._defValue rather than this._value is
 					//to save the trouble of coerceToString issue
-				upd = wasErr || value != this._defValue;
+				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
 					this._defValue = value;
 				}
 			}
 			if (upd || vi.server)
-				this.fire('onChange', _onChangeData(this, value),
+				this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
 					vi.server ? {toServer:true}: null, 150);
 		}
 		return true;

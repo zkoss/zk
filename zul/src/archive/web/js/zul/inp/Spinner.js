@@ -95,10 +95,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}else
 			this.$supers('setConstraint', arguments);
 	},
-	coerceFromString_: function (value) {//copy from intbox
+	coerceFromString_: function (value, localeAware) {//copy from intbox
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, localeAware),
 			val = parseInt(info.raw, 10);
 		if (info.raw != ''+val && info.raw != '-'+val)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};

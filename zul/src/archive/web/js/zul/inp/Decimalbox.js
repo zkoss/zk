@@ -58,10 +58,10 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		scale: null
 	},
-	coerceFromString_: function (value) {
+	coerceFromString_: function (value, localeAware) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, localeAware),
 			val = new zk.BigDecimal(info.raw),
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
@@ -83,6 +83,9 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, _allowKeys))
 			this.$supers('doKeyPress_', arguments);
+	},
+	marshall_: function(val) {
+		return val ? val.$toString() : val;
 	}
 });
 

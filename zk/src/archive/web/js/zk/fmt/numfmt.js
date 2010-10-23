@@ -309,22 +309,26 @@ zk.fmt.Number = {
 		}
 		return ret;
 	},
-	unformat: function (fmt, val) {
+	unformat: function (fmt, val, localeAware) {
 		if (!val) return {raw: val, divscale: 0};
 
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
-			zkMinus = fmt ? zk.MINUS : '-',
-			zkDecimal = fmt ? zk.DECIMAL : '.', //bug #2932443, no format and German Locale
-			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+			zkMinus = localeAware ? zk.MINUS : '-',
+			zkDecimal = localeAware ? zk.DECIMAL : '.', //bug #2932443, no format and German Locale
+			zkPercent = localeAware ? zk.PERCENT : '%',
+			permill = String.fromCharCode(0x2030),
+			zkPermill = localeAware ? zk.PER_MILL : permill, 
+			zkGrouping = localeAware ? zk.GROUPING : ',',
+			validPercent = !new RegExp('\(\'[%|'+permill+']+\'\)', 'g').test(fmt); 
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
 			ignore = true;
 
 			//We handle percent and (nnn) specially
-			if (cc == zk.PERCENT && validPercent) divscale += 2;
-			else if (cc == zk.PER_MILL && validPercent) divscale += 3;
+			if (cc == zkPercent && validPercent) divscale += 2;
+			else if (cc == zkPermill && validPercent) divscale += 3;
 			else if (cc == '(') minus = true;
 			else if (cc != '+') ignore = false;
 
@@ -332,7 +336,7 @@ zk.fmt.Number = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zkDecimal && cc != zkMinus && cc != '+'
-				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING
+				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zkGrouping
 					|| cc == ')' || (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);

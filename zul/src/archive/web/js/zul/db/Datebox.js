@@ -312,7 +312,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
 	},
-	coerceFromString_: function (val) {
+	coerceFromString_: function (val, localeAware) {
 		if (val) {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
@@ -536,6 +536,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				out.push('<option value="', timezones[i], '" class="', cls, '-timezone-item">', timezones[i], '</option>');
 			out.push('</select><div>');
 		}
+	},
+	marshall_: function(val) {
+		return val != null && typeof val != "string"? this.coerceToString_(val) : val;
 	}
 });
 

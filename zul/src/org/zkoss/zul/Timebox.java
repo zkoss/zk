@@ -195,6 +195,12 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 		final DateFormat df = getDateFormat(getFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
+	protected Object marshall(Object value) {
+		return coerceToString(value);
+	}
+	protected Object unmarshall(Object val) {
+		return coerceFromString((String)val);
+	}
 	
 	/** Returns the date format of the time only,
 	 *

@@ -417,7 +417,12 @@ public class Datebox extends FormatInputElement implements
 		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
 																					// 2564298
 	}
-
+	protected Object marshall(Object value) {
+		return coerceToString(value);
+	}
+	protected Object unmarshall(Object value) {
+		return coerceFromString((String)value);
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;

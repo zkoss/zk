@@ -43,20 +43,12 @@ abstract public class FormatInputElement extends InputElement {
 			_format = format;
 			smartUpdate("format", _format);
 			//bug #2998196: Problem with dynamic setting of format pattern
-			smartUpdate("value", this.coerceToString(_value));
+			smartUpdate("value", marshall(_value));
 		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
-		Object old = _value;
-		try {
-			_value = null;
-			super.renderProperties(renderer);
-		} finally {
-			_value = old;
-		}
-
+		super.renderProperties(renderer);
 		render(renderer, "format", _format);
-		render(renderer, "value", this.coerceToString(_value));
 	}
 }
