@@ -83,16 +83,17 @@ public class ComponentsCtrl {
 	 * @since 5.0.5
 	 */
 	public static final String encodeId(StringBuffer sb, int val) {
-		if (val < 0) {
-			sb.append('_');
-			val = -val;
-		}
+		//Thus, the number will 0, 1... max, 0, 1..., max, 0, 1 (less conflict)
+		if (val < 0 && (val += Integer.MIN_VALUE) < 0)
+			val = -val; //impossible but just in case
 
 		do {
 			//IE6/7's ID case insensitive (safer, though jQuery fixes it)
-			int v = val % 36;
-			val /= 36;
-			if (v < 10) {
+			int v = val % 37;
+			val /= 37;
+			if (v-- == 0) {
+				sb.append('_');
+			} else if (v < 10) {
 				sb.append((char)('0' + v));
 //			} else if (v < 36) {
 			} else {
@@ -119,14 +120,14 @@ public class ComponentsCtrl {
 		if (id == null)
 			return true;
 
-		//(0: letter, 1: digit, 2: letter, 3: upper case
+		//0: lower, 1: digit or upper, 2: letter or digit, 3: upper
 		//See also DesktopImpl.updateUuidPrefix
 		if (id.length() < 5)
 			return false;
 		char cc;
-		return (isUpper(cc = id.charAt(0)) || isLower(cc))
-			&& isDigit(id.charAt(1))
-			&& (isUpper(cc = id.charAt(2)) || isLower(cc))
+		return isLower(id.charAt(0))
+			&& (isUpper(cc = id.charAt(1))  || isDigit(cc))
+			&& (isUpper(cc = id.charAt(2)) || isLower(cc) || isDigit(cc))
 			&& isUpper(id.charAt(3));
 		
 	}

@@ -283,18 +283,21 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void updateUuidPrefix() {
 		final StringBuffer sb = new StringBuffer();
 		int val = _id.hashCode();
-		if (val < 0) val = -val;
+
+		//Thus, the number will 0, 1... max, 0, 1..., max, 0, 1 (less conflict)
+		if (val < 0 && (val += Integer.MIN_VALUE) < 0)
+			val = -val; //impossible but just in case
 
 		//Note: ComponentsCtrl.isAutoUuid assumes
-		//(0: letter, 1: digit, 2: letter, 3: upper case
-		int v = (val % 52) + 10;
-		val /= 52;
+		//0: lower, 1: digit or upper, 2: letter or digit, 3: upper
+		int v = (val % 26) + 36;
+		val /= 26;
 		sb.append(toLetter(v));
-		v = val % 10;
-		val /= 10;
+		v = val % 36;
+		val /= 36;
 		sb.append(toLetter(v));
-		v = (val % 52) + 10;
-		val /= 52;
+		v = val % 62;
+		val /= 62;
 		sb.append(toLetter(v));
 		_uuidPrefix = sb.append(toLetter((val % 26) + 10)).toString();
 	}
