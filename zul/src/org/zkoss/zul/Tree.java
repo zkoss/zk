@@ -1285,8 +1285,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		 * 2008/02/12 --- issue: [ 1884112 ]
 		 * When getChildByNode returns null, do nothing
 		 */
-		if(parent != null &&
-		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded())){
+		if(parent != null){
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
 			switch (event.getType()) {

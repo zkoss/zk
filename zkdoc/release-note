@@ -82,6 +82,7 @@ ZK 5.0.5
   3091153: selectAll(), clearSelection() in Tree
   3091949: Calendar/Combobox above pdf not display popup correctly
   3093594: Decimalbox does not respect current Locales if no format
+  3094118: Tree.onTreeDataChange does not update the tree correctly
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
