@@ -25,16 +25,16 @@ Grid with width 350px, you can see the layout of grid shows properly.
 	</columns>
 	<rows>
 		<row spans="2,3">
-			<label value="(2,3)"/>
-			<label value="Item B.5"/><label value="Item B.6"/>
+			<label value="(2,3)(2 cols)"/>
+			<label value="Item B.5(3 cols)"/><label value="Item B.6"/>
 		</row>
 		<row spans="3">
-			<label value="(3)"/><label value="Item C.4"/>
+			<label value="(3)(3 cols)"/><label value="Item C.4"/>
 			<label value="Item C.5"/><label value="Item C.6"/>
 		</row>
 		<row spans=",,1,2">
 			<label value="(,,1,2)"/><label value="Item D.2"/>
-			<label value="Item D.3"/><label value="Item D.4"/>
+			<label value="Item D.3"/><label value="Item D.4  (2 cols)"/>
 			<label value="Item D.5"/>
 		</row>
 	</rows>

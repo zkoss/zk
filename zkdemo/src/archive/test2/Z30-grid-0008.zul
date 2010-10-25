@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Horz Scrollbar only (20%)">
+                    Check about if grid is width 20% and hoze scrollbar should appear and  works.
 	<grid width="20%">
 		<columns>
 			<column width="200px" label="Head 1"/>

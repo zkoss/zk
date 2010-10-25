@@ -57,4 +57,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
+                     <div style="margin-top:20px;border:1px solid;red;width:200px;height:100px;display:block">This is a 200*100 example div , make sure the grid is same width,height with me.</div>
 </window>

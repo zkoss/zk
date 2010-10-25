@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-	Use external paging component in two grids
+	Use external paging component in two grids , when you click next page ,both the two grid should change to next page .
 <vbox>
 <paging id="pg" pageSize="4"/>
 <hbox>
