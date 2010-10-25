@@ -68,6 +68,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_tt_tip = inf.tip,
 			_tt_ref = inf.ref;
 			_tt_inf = null;
+
+			var n = _tt_ref.$n();
+			if (n && !zk(n).isRealVisible()) //gone
+				return _tt_tip = _tt_ref = null;
+
 			var params = inf.params,
 				xy = params.x !== undefined ? [params.x, params.y]
 							: zk.currentPointer;
@@ -605,6 +610,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * 		key. In other words, if true is returned, the control key is ignored. 
 	 */
 	beforeCtrlKeys_: function (evt) {
+	}
+},{
+	/** Returns the tooltip that is opened, or null if no tooltip is opened.
+	 * @return zk.Widget
+	 * @since 5.0.5
+	 */
+	getOpenTooltip: function () {
+		return _tt_tip && _tt_tip.isOpen() ? _tt_tip: null;
 	}
 });
 
