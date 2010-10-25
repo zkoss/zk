@@ -273,9 +273,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	//value object set from server(smartUpdate, renderProperites)
-	set_value: function (value) {
-		value = this.unmarshall_(value);
-		this.setValue(value, true);
+	set_value: function (value, fromServer) {
+		this.setValue(this.unmarshall_(value), fromServer);
 	},
 	/** Returns the input node of this widget
 	 * @return DOMElement
@@ -567,8 +566,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return eb;
 	},
 	_equalValue: function(a, b) {
-		if (a == b) return true;
-		return this.marshall_(a) == this.marshall_(b);
+		return a == b || this.marshall_(a) == this.marshall_(b);
 	},
 	marshall_: function(val) {
 		return val;
