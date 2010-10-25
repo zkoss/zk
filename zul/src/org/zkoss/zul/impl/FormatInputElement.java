@@ -43,7 +43,7 @@ abstract public class FormatInputElement extends InputElement {
 			_format = format;
 			smartUpdate("format", _format);
 			//bug #2998196: Problem with dynamic setting of format pattern
-			smartUpdate("value", marshall(_value));
+			smartUpdate("_value", marshall(_value));
 		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

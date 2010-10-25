@@ -119,6 +119,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	marshall_: function (val) {
 		return val && typeof val != "string" ? this.coerceToString_(val) : val;
 	},
+	unmarshall_: function (val) {
+		return val && typeof val == "string" ? this.coerceFromString_(val) : val;
+	},
 	_checkFormat: function (fmt) {
 		var error, out = [];
 		for (var i = 0, j = fmt.length; i < j; i++) {

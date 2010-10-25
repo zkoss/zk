@@ -278,9 +278,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 		if (!same) {
 			_value = val;
-			smartUpdate("value", marshall(val));
+			smartUpdate("_value", marshall(val));
 		} else if (errFound) {
-			smartUpdate("value", marshall(_value)); //send back original value
+			smartUpdate("_value", marshall(_value)); //send back original value
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
@@ -537,7 +537,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		|| !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
-			smartUpdate("value", marshall(_value));
+			smartUpdate("_value", marshall(_value));
 		}
 	}
 	/** Sets the value directly.
@@ -668,7 +668,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * <p>Overrides it if the value returned is not JSON Compatible.
 	 * @param value the value returned from client
 	 * @return the unmarshalled value
-	 * @since 5..0.5
+	 * @since 5.0.5
 	 */
 	protected Object unmarshall(Object value) {
 		return value;
@@ -690,7 +690,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (!same) {
 			_value = value;
 		} else if (errFound) {
-			smartUpdate("value", marshall(_value)); //send back original value
+			smartUpdate("_value", marshall(_value)); //send back original value
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
@@ -748,7 +748,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "value", marshall(_value));
+		render(renderer, "_value", marshall(_value));
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", getName());

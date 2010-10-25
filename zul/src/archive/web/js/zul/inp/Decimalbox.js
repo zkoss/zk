@@ -86,6 +86,9 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	marshall_: function(val) {
 		return val ? val.$toString() : val;
+	},
+	unmarshall_: function(val) {
+		return val ? new zk.BigDecimal(val) : val; 
 	}
 });
 

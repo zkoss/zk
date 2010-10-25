@@ -539,6 +539,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	marshall_: function (val) {
 		return val && typeof val != "string" ? this.coerceToString_(val) : val;
+	},
+	unmarshall_: function (val) {
+		return val && typeof val == "string" ? this.coerceFromString_(val) : val;
 	}
 });
 
