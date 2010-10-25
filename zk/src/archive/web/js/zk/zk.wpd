@@ -46,6 +46,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="au.js" jsdoc="true"/>
 
 	<script src="fixie6.js" browser="ie6-"/>
+	<script src="fixie6.js" browser="ie7-"/>
 
 	<script src="ext/jquery.json.js"/>
 	<script src="ext/jquery.mousewheel.js"/>

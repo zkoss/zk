@@ -754,9 +754,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(out);
 			}
 
-			//Note: we cannot use zkmx. Otherwise, B30-1813518.zhtml failed in IE6
-			//(the 2nd zkx runs before the first zkmx -- violate script order!!)
-			out.write("<script type=\"text/javascript\">\nzkmb();try{zkx(");
+			out.write("<script type=\"text/javascript\">\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -768,7 +766,7 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("\n}finally{zkme();}</script>\n");
+		out.write("\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

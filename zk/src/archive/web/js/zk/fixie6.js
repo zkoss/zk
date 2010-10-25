@@ -12,11 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
 (function (window) {
-	var _prevzkmx = zkmx;
+	var _prevzkmx = zkmx, _prevzkmbx = zkmbx;
 	zkmx = function () { //Bug 3055849: jq() is required
 		var args = arguments;
 		jq(function () {
 			_prevzkmx.apply(window, args);
+		});
+	}
+	zkmbx = function () { //Bug 3055849: jq() is required
+		var args = arguments;
+		jq(function () {
+			_prevzkmbx.apply(window, args);
 		});
 	}
 

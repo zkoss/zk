@@ -436,6 +436,15 @@ function zkmprops(uuid, props) {
 			zkme();
 		}
 	},
+	//zkmb(true) and then execute fn
+	zkmbx: function (fn) {
+		zkmb(true);
+		try {
+			fn();
+		} finally {
+			zkme();
+		}
+	},
 
 	//begin of mounting
 	zkmb: function (bindOnly) {
