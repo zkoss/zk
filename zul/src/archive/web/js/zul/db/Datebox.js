@@ -572,7 +572,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.className = zcls + "-pp";
 
 		jq(pp).zk.undoVParent();
-		db.setFloating_(false, {dropdown:true});
+		db.setFloating_(false);
 
 		var btn = this.$n("btn");
 		if (btn)
@@ -592,7 +592,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (!dbn || !pp)
 			return;
 
+		db.setFloating_(true, {node:pp});
 		zWatch.fire('onFloatUp', db); //notify all
+		var topZIndex = this.setTopmost();
 		this._setView("day");
 		var zcls = db.getZclass();
 
@@ -603,12 +605,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.style.position = "absolute"; //just in case
 		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zkdemo/userguide/#f9)
 		pp.style.display = "block";
-		pp.style.zIndex = "88000";
+		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
-		db.setFloating_(true, {dropdown:true, node:pp});
 
 		if (pp.offsetHeight > 200) {
 			//pp.style.height = "200px"; commented by the bug #2796461
