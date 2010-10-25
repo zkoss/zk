@@ -452,7 +452,7 @@ jq(function() {
 		++_autohideCnt;
 		setTimeout(function () {
 			if (!--_autohideCnt) {
-				if (wgt && !wgt.isFloating_({dropdown:true}))
+				if (wgt)
 					wgt = wgt.getTopWidget();
 				if (wgt != _lastFloat) {
 					_lastFloat = wgt

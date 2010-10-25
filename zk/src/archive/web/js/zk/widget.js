@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]
-		_dropdning, //[widget, node] (combobox's dropdown, unable to be part of floating)
 		_nextUuid = 0,
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
@@ -2217,19 +2216,11 @@ wgt.$f().main.setTitle("foo");
 	},
 	/** Returns if this widget is floating. 
 	 * <p>We say a widget is floating if the widget floats on top of others, rather than embed inside the parent. For example, an overlapped window is floating, while an embedded window is not.
-	 * @param Map opts [optional] The options. Allowed options:
-	 * <ul>
-	 * <li>dropdown: (since 5.0.5)
-	 * whether to check if a node of this widget is dropped down, rather
-	 * than the whole widget becomes floating. In other words,
-	 * it checks if isFloating_({dropdown:true}) was called.</li>
-	 * </ul>
 	 * @return boolean
 	 * @see #setFloating_
 	 */
-	isFloating_: function (opts) {
-		return opts && opts.dropdown ?
-			_dropdning && this == _dropdning[0]: this._floating;
+	isFloating_: function () {
+		return this._floating;
 	},
 	/** Sets a status to indicate if this widget is floating.
 	 * <p>Notice that it doesn't change the DOM tree. It is caller's job. 
@@ -2239,26 +2230,12 @@ wgt.$f().main.setTitle("foo");
 	 * @param Map opts [optional] The options. Allowed options:
 	 * <ul>
 	 * <li>node: the DOM element. If omitted, {@link #n} is assumed.</li>
-	 * <li>dropdown: (since 5.0.5)
-	 * whether a node of this widget is dropped down, rather
-	 * than the whole widget becomes floating. For example, combobox
-	 * and datebox could specify true for this option.<br/>
-	 * Notes:
-	 * <ol>
-	 * <li>It assumes there is only one dropdown, so don't call setFloating_(true, {dropdown:true,node:pp})
-	 * twice without calling setFloating_(false, {dropdown:false}) in between.</li>
-	 * <li>if this option is specified, isFloating() returns false.
-	 * And, you shall call isFloating_({dropdown:true}) instead.</li>
-	 * <li>if this option is specified, opts.node must be specified too.</li>
-	 * </ol></li>
 	 * </ul>
 	 * @return zk.Widget this widget
 	 * @see #isFloating_
 	 */
 	setFloating_: function (floating, opts) {
-		if (opts && opts.dropdown)
-			_dropdning = floating ? [this, opts.node]: null;
-		else if (this._floating != floating) {
+		if (this._floating != floating) {
 			if (floating) {
 				//parent first
 				var inf = {widget: this, node: opts && opts.node? opts.node: this.$n()},
@@ -4650,7 +4627,7 @@ zk._wgtutl = { //internal utilities
 	},
 
 	autohide: function () { //called by effect.js
-		if (!_floatings.length && !_dropdning) {
+		if (!_floatings.length) {
 			for (var n; n = _hidden.shift();)
 				n.style.visibility = n.getAttribute('z_ahvis')||'';
 			return;
@@ -4684,8 +4661,6 @@ zk._wgtutl = { //internal utilities
 				for (var k = _floatings.length; k--;)
 					if (hide(_floatings[k].node))
 						continue l_nxtel;
-				if (_dropdning && hide(_dropdning[1]))
-					continue;
 
 				if (_hidden.$remove(n))
 					n.style.visibility = n.getAttribute('z_ahvis')||'';
