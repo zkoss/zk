@@ -17,7 +17,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 1. Please select "ActionMovies" on the drop down list.
   <listbox id='categoryLstBox' mold="select" rows="1">
   		<attribute name="onSelect">
-  		Messagebox.show("Press on either Yes or No is okay, and then focus into the textbox, you shouldn't see the dialog again!",
+  		Messagebox.show("Press on either Yes or No is okay, and then focus into the listbox, you shouldn't see the dialog again!",
                       "Confirmation Prompt",
                       Messagebox.YES | Messagebox.NO,
                       Messagebox.QUESTION,
