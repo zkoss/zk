@@ -14,17 +14,9 @@
 		<zscript>
 		<![CDATA[
 	class TestTreeModel extends org.zkoss.zul.AbstractTreeModel {
-
-		/** Constructor.
-		 *
-		 * @param root - the root of tree
-		 *
-		 */
 		public TestTreeModel(Object root) {
 			super(root);
 		}
-
-		//-- TreeModel --//
 		public int getChildCount(Object parent) {
 			if (isLeaf(parent))
 				return -1;
@@ -33,8 +25,6 @@
 				return al.size();
 			}
 		}
-
-		//-- TreeModel --//
 		public boolean isLeaf(Object node) {
 			boolean isLeaf = !(node instanceof ArrayList);
 			if (!isLeaf) {
@@ -42,18 +32,13 @@
 			}
 			return isLeaf;
 		}
-
-		//-- TreeModel --//
 		public Object getChild(Object parent, int index) {
 			ArrayList al = (ArrayList) parent;
 			return al.get(index);
 		}
-
-		//-- AbstractTreeModel --//
 		public Object getRoot() {
 			return super.getRoot();
 		}
-
 		public void insert(Object parent, int indexFrom, int indexTo, Object[] newNodes)
 				throws IndexOutOfBoundsException {
 			ArrayList al = (ArrayList) parent;
@@ -69,22 +54,13 @@
 		}
 	}
 	import java.util.ArrayList;
-	//An ArrayList is created to be the root of tree
 	ArrayList mother = new ArrayList();
-	//Create a branch "child1" and assign children to it
 	ArrayList child1 = new ArrayList();
-	child1.add("Tommy");
-	child1.add("Juile");
 
 	//Assign children to root "mother"
-	mother.add("Andy");
 	mother.add("Davis");
 	mother.add(child1);
-	mother.add("Matter");
-	mother.add("Kitty");
 
-	//TreeModelA class is contructed, only the root "mother" of tree is passed to its constructor.
-	int index = 0;
 	TestTreeModel tma = new TestTreeModel(mother);
 	public void insert() {
 		Object[] datas = { _v.getValue() };
@@ -93,20 +69,19 @@
 ]]>
 </zscript>
 		<div>1.click insert</div>
-		<div>2.click "tommy,Juile" tree item</div>
+		<div>2.click "[]" tree item</div>
 		<div>3."aaa" should be first tree node.</div>
 		<vbox>
-			<tree model="${tma}" id="tree" pageSize="5"></tree>
+			<tree model="${tma}" id="tree" pageSize="5" onSelect='alert("hi");'></tree>
 			<hbox></hbox>
 			<hbox>
 				Insert Node:
 				<textbox id="_v" value="aaa" />
 				<button label="insert" onClick="insert();" />
+				<button label="invalidate" onClick="tree.invalidate();" />
 			</hbox>
-
 		</vbox>
 		<zscript>
-
 	</zscript>
 	</window>
 
