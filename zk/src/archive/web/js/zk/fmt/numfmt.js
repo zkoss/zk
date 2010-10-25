@@ -309,17 +309,17 @@ zk.fmt.Number = {
 		}
 		return ret;
 	},
-	unformat: function (fmt, val, localeAware) {
+	unformat: function (fmt, val, ignoreLocale) {
 		if (!val) return {raw: val, divscale: 0};
 
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
-			zkMinus = localeAware ? zk.MINUS : '-',
-			zkDecimal = localeAware ? zk.DECIMAL : '.', //bug #2932443, no format and German Locale
-			zkPercent = localeAware ? zk.PERCENT : '%',
+			zkMinus = ignoreLocale ? '-': zk.MINUS,
+			zkDecimal = ignoreLocale ? '.': zk.DECIMAL, //bug #2932443, no format and German Locale
+			zkPercent = ignoreLocale ? '%': zk.PERCENT,
 			permill = String.fromCharCode(0x2030),
-			zkPermill = localeAware ? zk.PER_MILL : permill, 
-			zkGrouping = localeAware ? zk.GROUPING : ',',
+			zkPermill = ignoreLocale ? permill: zk.PER_MILL, 
+			zkGrouping = ignoreLocale ? ',': zk.GROUPING,
 			validPercent = !new RegExp('\(\'[%|'+permill+']+\'\)', 'g').test(fmt); 
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {

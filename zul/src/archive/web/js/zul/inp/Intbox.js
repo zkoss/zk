@@ -24,10 +24,10 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	intValue: function (){
 		return this.$supers('getValue', arguments);
 	},
-	coerceFromString_: function (value, localeAware) {
+	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, localeAware),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			val = parseInt(info.raw, 10);
 		
 		if (isNaN(val) || (info.raw != ''+val && info.raw != '-'+val))

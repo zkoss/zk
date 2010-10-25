@@ -104,7 +104,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			for (var j = arguments.length; --j > 0;)
 				args.unshift(arguments[j]);
 
-			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
+			args.unshift(typeof val == 'string' ? this.coerceFromString_(val) : val);
 		} else
 			args = arguments;
 		this.$supers('setValue', args);
@@ -116,8 +116,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	getRawText: function () {
 		return this.coerceToString_(this._value);
 	},
-	marshall_: function(val) {
-		return val != null && typeof val != "string"? this.coerceToString_(val) : val;
+	marshall_: function (val) {
+		return val && typeof val != "string" ? this.coerceToString_(val) : val;
 	},
 	_checkFormat: function (fmt) {
 		var error, out = [];
@@ -221,9 +221,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			out.push(this._fmthdler[i].format(date));
 		return out.join('');
 	},
-	coerceFromString_: function (val, localeAware) {
+	coerceFromString_: function (val) {
 		if (!val) return null;
-
 
 		var error;
 		if ((error = this._checkFormat(this._format)))

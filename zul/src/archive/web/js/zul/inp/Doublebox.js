@@ -25,10 +25,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-doublebox.
  */
 zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
-	coerceFromString_: function (value, localeAware) {
+	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, localeAware),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			raw = info.raw,
 			val = parseFloat(raw),
 			valstr = ''+val,

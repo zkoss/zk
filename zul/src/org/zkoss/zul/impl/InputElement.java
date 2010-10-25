@@ -65,8 +65,6 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 	/** The value. */
 	protected Object _value;
-	/** Used to disable sending back the value */
-//	private transient String _txtByClient;
 	private int _cols;
 	private AuxInfo _auxinf;
 	private boolean _disabled, _readonly;
@@ -657,18 +655,20 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	}
 	/** Marshall value to be sent to the client if needed.
 	 *
-	 * <p>Derives if the value to be sent to the client is not JSON Compatible.
+	 * <p>Overrides it if the value to be sent to the client is not JSON Compatible.
 	 * @param value the value to be sent to the client
 	 * @return the marshalled value
+	 * @since 5.0.5
 	 */
 	protected Object marshall(Object value) {
 		return value;
 	}
 	/** Unmarshall value returned from client if needed.
 	 *
-	 * <p>Derives if the value returned is not JSON Compatible.
+	 * <p>Overrides it if the value returned is not JSON Compatible.
 	 * @param value the value returned from client
 	 * @return the unmarshalled value
+	 * @since 5..0.5
 	 */
 	protected Object unmarshall(Object value) {
 		return value;
@@ -702,10 +702,10 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		final Map data = request.getData();
-		final Object clientv = data.get("value");
-		final Object oldval = _value;
 		if (cmd.equals(Events.ON_CHANGE)) {
+			final Map data = request.getData();
+			final Object clientv = data.get("value");
+			final Object oldval = _value;
 			final Object value = unmarshall(clientv);
 			final String valstr = coerceToString(value);
 			try {
@@ -718,16 +718,19 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 					//will throw an exception with proper value.
 				throw ex;
 			}
-			final InputEvent evt = new InputEvent(cmd, request.getComponent(),
-					valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
-					AuRequests.getBoolean(data, "bySelectBack"),
-					AuRequests.getInt(data, "start", 0));
+			final InputEvent evt = new InputEvent(cmd, this,
+				valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGING)) {
-			final InputEvent evt = new InputEvent(cmd, request.getComponent(),
-					clientv == null ? "" : clientv.toString(), oldval,
-					AuRequests.getBoolean(data, "bySelectBack"),
-					AuRequests.getInt(data, "start", 0));
+			final Map data = request.getData();
+			final Object clientv = data.get("value");
+			final Object oldval = _value;
+			final InputEvent evt = new InputEvent(cmd, this,
+				clientv == null ? "" : clientv.toString(), oldval, //clientv is what user input (not marshal)
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);

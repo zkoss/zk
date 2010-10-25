@@ -50,7 +50,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			this.fire('onChanging', _onChangeData(this, val, valsel == val),
+			this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
 				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 		}
 	}
@@ -453,9 +453,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 *
 	 * <p>Moreover, when {@link zul.inp.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
+	 *
+	 * @param String value the string to coerce from
 	 * @return String
 	 */
-	coerceFromString_: function (value, localeAware) {
+	coerceFromString_: function (value) {
 		return value;
 	},
 	/** Coerces the value passed to {@link #setValue}.
@@ -466,6 +468,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * If you want to store the value in other type, say BigDecimal,
 	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
 	 * to convert between a string and your targeting type.
+	 * @param Object value the value that will be coerced to a string
 	 * @return String
 	 */
 	coerceToString_: function (value) {
@@ -506,12 +509,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return msg;
 		}
 	},
-	_validate: function (value, localeAware) {
+	_validate: function (value) {
 		zul.inp.validating = true;
 		try {
 			var val = value, msg;
 			if (typeof val == 'string' || val == null) {
-				val = this.coerceFromString_(val, localeAware);
+				val = this.coerceFromString_(val);
 				if (val && (msg = val.error)) {
 					this.clearErrorMessage(true);
 					if (this._cst == "[c") //CustomConstraint
@@ -577,7 +580,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return false; //not changed
 
 		var wasErr = this._errmsg,
-			vi = this._validate(value, true); //true to handle locale since this is entered by end user
+			vi = this._validate(value);
 		if (!vi.error || vi.server) {
 			var upd;
 			if (!vi.error) {

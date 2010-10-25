@@ -18,10 +18,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	//bug #2997037, cannot enter large long integer into longbox
-	coerceFromString_: function (value, localeAware) {
+	coerceFromString_: function (value) {
 		if (!value) return null;
 	
-		var info = zk.fmt.Number.unformat(this._format, value, localeAware),
+		var info = zk.fmt.Number.unformat(this._format, value),
 			val = new zk.Long(info.raw),
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
