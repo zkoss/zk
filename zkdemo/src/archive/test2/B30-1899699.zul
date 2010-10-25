@@ -25,7 +25,8 @@ http://www.zkoss.org/2005/zul/zul.xsd "
 id="prova"
 border="normal"
 width="100%"
-height="250">
+height="250"
+contentStyle="position:relative;">
 
 <zk:label value="Check column size in listbox is correct"></zk:label>
 
