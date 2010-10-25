@@ -61,6 +61,10 @@
 	mother.add("Davis");
 	mother.add(child1);
 
+	ArrayList child2 = new ArrayList();
+	child2.add("test");
+	mother.add(child2);
+
 	TestTreeModel tma = new TestTreeModel(mother);
 	public void insert() {
 		Object[] datas = { _v.getValue() };
@@ -69,16 +73,17 @@
 ]]>
 </zscript>
 		<div>1.click insert</div>
-		<div>2.click "[]" tree item</div>
-		<div>3."aaa" should be first tree node.</div>
+		<div>2."[]" tree item should appear the open icon.</div>
+		<div>3.click "[]" tree item</div>
+		<div>4."aaa" should be first tree node.</div>
 		<vbox>
-			<tree model="${tma}" id="tree" pageSize="5" onSelect='alert("hi");'></tree>
+			<tree model="${tma}" id="tree" pageSize="5" ></tree>
 			<hbox></hbox>
 			<hbox>
 				Insert Node:
 				<textbox id="_v" value="aaa" />
 				<button label="insert" onClick="insert();" />
-				<button label="invalidate" onClick="tree.invalidate();" />
+				<button label="tree invalidate" onClick="tree.invalidate();" />
 			</hbox>
 		</vbox>
 		<zscript>
