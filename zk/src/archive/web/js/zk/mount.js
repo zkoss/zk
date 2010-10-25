@@ -190,10 +190,8 @@ function zkmprops(uuid, props) {
 	}
 	//mount for browser loading
 	function mtBL() {
-		if (zk.loading) {
-			zk.afterLoad(mtBL);
-			return;
-		}
+		if (zk.loading)
+			return zk.afterLoad(mtBL);
 
 		var inf = _createInf0.shift();
 		if (inf) {
@@ -213,10 +211,11 @@ function zkmprops(uuid, props) {
 			if (_createInf0.length)
 				return; //another page started
 
-			if (zk.loading) {
-				zk.afterLoad(mtBL0);
-				return;
-			}
+			if (zk.loading)
+				return zk.afterLoad(mtBL0);
+
+			if (!jq.isReady && zk.ie && !zk.ie8) //3055849: ie6/ie7 has to wait until isReady
+				return jq(mtBL0);
 
 			var inf = _createInf1.shift();
 			if (!inf) break;
@@ -432,15 +431,6 @@ function zkmprops(uuid, props) {
 		zkmb();
 		try {
 			zkx.apply(window, arguments);
-		} finally {
-			zkme();
-		}
-	},
-	//zkmb(true) and then execute fn
-	zkmbx: function (fn) {
-		zkmb(true);
-		try {
-			fn();
 		} finally {
 			zkme();
 		}
