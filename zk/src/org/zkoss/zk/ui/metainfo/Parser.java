@@ -361,6 +361,8 @@ public class Parser {
 				pgdef.setStyle(val);
 			} else if ("id".equals(nm)) {
 				pgdef.setId(val);
+			} else if ("widgetClass".equals(nm)) {
+				pgdef.setWidgetClass(val);
 			} else if ("zscriptLanguage".equals(nm)
 			|| "zscript-language".equals(nm)) { //backward compatible with 2.4.x
 				noELnorEmpty("zscriptLanguage", val, pi);

@@ -16,6 +16,7 @@ ZK 5.0.5
   3091086: The A component shall allow children
   3091764: Able to prevent users enter the grouping character
   3092641: Listbox/Tree support whether to toggle selection or not when right click on item
+  3094640: A way to specify page's widget class (in the page directive)
   
 * Bugs
   3057902: zk bug for window showbusy

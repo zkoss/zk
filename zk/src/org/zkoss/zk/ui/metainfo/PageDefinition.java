@@ -91,7 +91,7 @@ public class PageDefinition extends NodeInfo {
 	private List _forwdefs;
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
-	private ExValue _contentType, _docType, _firstLine;
+	private ExValue _contentType, _docType, _firstLine, _wgtcls;
 	/** The expression factory (ExpressionFactory).*/
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
@@ -212,6 +212,23 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public void setStyle(String style) {
 		_style = style != null && style.length() > 0 ? style: null;
+	}
+
+	/** Returns the widget class of the given page, or null if the default is used.
+	 * @since 5.0.5
+	 */
+	public String getWidgetClass(Page page) {
+		return _wgtcls != null ?
+			(String)_wgtcls.getValue(_evalr, page): null;
+	}
+	/** Sets the widget class of the page.
+	 * @param wgtcls the widget class. It may contain EL expressions.
+	 * If null or empty, the default widget class is assumed.
+	 * @since 5.0.5
+	 */
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ?
+			new ExValue(wgtcls, String.class): null;
 	}
 
 	/** Returns the request path of this page definition, or ""
@@ -919,6 +936,9 @@ public class PageDefinition extends NodeInfo {
 
 		s = getFirstLine(page);
 		if (s != null) pageCtrl.setFirstLine(s);
+
+		s = getWidgetClass(page);
+		if (s != null) pageCtrl.setWidgetClass(s);
 
 		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
 		if (_autoTimeout != null) pageCtrl.setAutomaticTimeout(_autoTimeout);

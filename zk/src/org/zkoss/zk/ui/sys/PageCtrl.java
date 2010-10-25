@@ -184,6 +184,19 @@ public interface PageCtrl {
 	 */
 	public void setContentType(String contentType);
 
+	/** Returns the widget class of this page, or null to use the device default.
+	 *
+	 * @since 5.0.5
+	 */
+	public String getWidgetClass();
+	/** Sets the widget class of this page.
+	 *
+	 * @param wgtcls the widget class. The device default is assumed if wgtcls
+	 * is null or empty.
+	 * @since 5.0.5
+	 */
+	public void setWidgetClass(String wgtcls);
+
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *

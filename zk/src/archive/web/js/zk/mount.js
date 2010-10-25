@@ -175,9 +175,11 @@ function zkmprops(uuid, props) {
 		if (v) zk.load(v);
 
 		var type = wi[0];
-		if (type) { //not page (=0)
-			if (type === 1) //1: zhtml.Widget
-				wi[0] = type = "zhtml.Widget";
+		if (type === 0) //page
+			type = wi[2].wc;
+		else if (type === 1) //1: zhtml.Widget
+			wi[0] = type = "zhtml.Widget";
+		if (type) {
 			var j = type.lastIndexOf('.');
 			if (j >= 0)
 				zk.load(type.substring(0, j), dt);
@@ -305,8 +307,9 @@ function zkmprops(uuid, props) {
 			uuid = wi[1],
 			props = wi[2]||{};
 		if (type === 0) { //page
-			wgt = new zk.Page({uuid: uuid}, zk.cut(props, "ct"));
-			wgt.inServer = true;
+			type = zk.cut(props, "wc")
+			var cls = type ? zk.$import(type): zk.Page;
+			(wgt = new cls({uuid: uuid}, zk.cut(props, "ct"))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			if (type == "#stub") { //not possible if zkuery
@@ -323,8 +326,7 @@ function zkmprops(uuid, props) {
 				if (!cls)
 					throw 'Unknown widget: ' + type;
 				if (v) initOpts.mold = v;
-				wgt = new cls(initOpts);
-				wgt.inServer = true;
+				(wgt = new cls(initOpts)).inServer = true;
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 

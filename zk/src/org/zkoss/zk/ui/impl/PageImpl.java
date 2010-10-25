@@ -112,7 +112,7 @@ import org.zkoss.zk.scripting.*;
  */
 public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
-    private static final long serialVersionUID = 20091008L;
+    private static final long serialVersionUID = 20101025L;
 
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
@@ -141,7 +141,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private Collection _hdres;
 	/** The root attributes. */
 	private String _rootAttrs = "";
-	private String _contentType, _docType, _firstLine;
+	private String _contentType, _docType, _firstLine, _wgtcls;
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
 	/** The expression factory (ExpressionFactory).*/
@@ -722,6 +722,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public void setContentType(String contentType) {
 		_contentType = contentType;
+	}
+	public String getWidgetClass() {
+		return _wgtcls;
+	}
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls: null;
 	}
 	public String getDocType() {
 		return _docType;

@@ -566,6 +566,9 @@ public class HtmlPageRenders {
 				appendProp(props, "uu", desktop.getUpdateURI(null));
 				appendProp(props, "ru", desktop.getRequestPath());
 			}
+			final String pageWgtCls = pageCtrl.getWidgetClass();
+			if (pageWgtCls != null)
+				appendProp(props, "wc", pageWgtCls);
 			if (style != null)
 				appendProp(props, "style", style);
 			if (!isClientROD(page))
