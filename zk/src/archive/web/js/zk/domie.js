@@ -97,6 +97,16 @@ zk.copy(zjq, {
 	_beforeOuter: zk.$void, //overridden by domie6.js
 	_afterOuter: zk.$void
 });
+/* Bug 3092040 but not sure it is worth to fix
+  (there might be side effect since skipResize is not reset immediately)
+if (zk.ie8_) //ie8 only
+	zjq._fixedVParent = function (el, make) {
+		if (make) {
+			zk.skipResize = true;
+			setTimeout(function () {zk.skipResize = false;}, 0);
+		}
+	};
+*/
 
 	function _dissel() {
 		this.onselectstart = _dissel0;

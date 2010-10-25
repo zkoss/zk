@@ -658,7 +658,7 @@ jq(function() {
 	});
 
 	jq(window).resize(function () {
-		if (zk.mounting)
+		if (zk.mounting || zk.skipResize)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:

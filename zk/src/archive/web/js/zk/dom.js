@@ -1261,8 +1261,8 @@ jq(el).zk.center(); //same as 'center'
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
 		
-		// Bug 3049181
-		zjq._fixedVParent(el);
+		// Bug 3049181 and 3092040
+		zjq._fixedVParent(el, true);
 		
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
