@@ -78,11 +78,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * Note: if the hflex attribute of component is specified, it's  will ignore 
 		 * this functionality
 		 * @param boolean span
+		 * @since 5.0.5
 		 */
 		/**
 		 * Returns whether span column width when {@link #isSizedByContent} is true.
 		 * <p>Default: false.
 		 * @return boolean
+		 * @since 5.0.5
 		 */
 		span: _zkf,
 		/**
