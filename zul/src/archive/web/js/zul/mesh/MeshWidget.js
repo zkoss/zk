@@ -789,12 +789,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wds = xwds.wds,
 			width = xwds.width,
 			isSpan = !wgt.getHflex() && wgt.isSpan(),
-			extSum;
-		if (!isSpan && (wgt.isSizedByContent() || !wgt.$n().style.width || width > total)) {
+			extSum = isSpan ? total - width : 0;
+		if (extSum <= 0 && (wgt.isSizedByContent() || !wgt.$n().style.width || width > total)) {
 			total = width;
 			head.style.width = total + 'px';
 		}
-		extSum = isSpan ? total - width : 0;
 
 		var count = total;
 		hdtable.style.width = total + "px";	
@@ -942,8 +941,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		for (var i = bdfaker.cells.length; i--;) {
 			var wd = bdwd = bdfaker.cells[i].offsetWidth,
 				hdwd = w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0,
-				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0;
-			if (headWgt.getChildAt(i).getWidth())
+				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
+				header;
+			if ((header = headWgt.getChildAt(i)) && header.getWidth())
 				hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
 			if (hdwd > wd) wd = hdwd;
 			if (ftwd > wd) wd = ftwd;
