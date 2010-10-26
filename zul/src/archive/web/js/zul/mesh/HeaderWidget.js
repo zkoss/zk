@@ -239,13 +239,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;
-		var $n = jq(this.$n()),
-			ofs = $n.zk.revisedOffset(), // Bug #1812154
-			sizingClass = this.getZclass() + "-sizing";
-		if (this._insizer(evt.pageX - ofs[0]) && !$n.hasClass(sizingClass)) 
-			$n.addClass(sizingClass);
-		else if($n.hasClass(sizingClass))
-			$n.removeClass(sizingClass);
+		var n = this.$n(),
+			ofs = zk(n).revisedOffset(); // Bug #1812154
+		if (this._insizer(evt.pageX - ofs[0])) {
+			jq(n).addClass(this.getZclass() + "-sizing");
+		} else {
+			jq(n).removeClass(this.getZclass() + "-sizing");
+		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {

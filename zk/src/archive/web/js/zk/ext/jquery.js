@@ -1402,8 +1402,11 @@ jQuery.fn.extend({
 	}
 });
 
-
-
+/* Jimmy Shiau, Potix, 20101026*/
+function setClassName( elem, className ) {
+	if (elem.className != className)
+		elem.className = className;
+}
 
 var rclass = /[\n\t]/g,
 	rspaces = /\s+/,
@@ -1453,7 +1456,7 @@ jQuery.fn.extend({
 								setClass += " " + classNames[c];
 							}
 						}
-						elem.className = jQuery.trim( setClass );
+						setClassName( elem, jQuery.trim( setClass ) );/* Jimmy Shiau, Potix, 20101026*/
 					}
 				}
 			}
@@ -1482,7 +1485,7 @@ jQuery.fn.extend({
 						for ( var c = 0, cl = classNames.length; c < cl; c++ ) {
 							className = className.replace(" " + classNames[c] + " ", " ");
 						}
-						elem.className = jQuery.trim( className );
+						setClassName( elem, jQuery.trim( className ) );/* Jimmy Shiau, Potix, 20101026*/
 
 					} else {
 						elem.className = "";
