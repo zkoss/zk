@@ -231,7 +231,6 @@ public class Listbox extends XulElement implements Paginated,
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
-	private boolean _autopaging;
 
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
@@ -246,18 +245,19 @@ public class Listbox extends XulElement implements Paginated,
 	private int _tabindex;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
-	private boolean _multiple;
-	private boolean _disabled, _checkmark;
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
-	private boolean _sizedByContent;
-	private boolean _span; //since 5.0.5
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; // since 5.0.0 top padding
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
+	private boolean _autopaging;
+	private boolean _multiple;
+	private boolean _disabled, _checkmark;
+	/** disable smartUpdate; usually caused by the client. */
+	private boolean _noSmartUpdate;
+	private boolean _sizedByContent;
+	private boolean _span; //since 5.0.5
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -442,10 +442,12 @@ public class Listbox extends XulElement implements Paginated,
 			return "true".equalsIgnoreCase(s);
 	}
 	/**
-	 * Sets whether span column width when {@link #isSizedByContent} is true.
-	 * <p>Default: false
-	 * Note: if the hflex attribute of component is specified, it's  will ignore 
-	 * this functionality
+	 * Sets whether to span the width of the columns to occupy the whole listbox.
+	 * It is meaningful only if {@link #isSizedByContent} is true, and
+	 * {@link #getHflex} is not speciifed.
+	 * <p>Default: false. It means the width of a column takes only the
+	 * required space based on its content (when {@link #isSizedByContent}
+	 * is specified).
 	 * @param span
 	 * @since 5.0.5
 	 */
