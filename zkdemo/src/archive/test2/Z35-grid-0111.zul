@@ -103,7 +103,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
           <column width="50px" label="Size"/>
         </columns>
         <rows id="myrows">
-          <group open="false">
+          <group open="true">
           	<label value=""/>
             <label value="1.Date:Today [From]"/>
             <label value="[Subject]"/>
