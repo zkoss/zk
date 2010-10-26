@@ -3211,10 +3211,9 @@ public class Listbox extends XulElement implements Paginated,
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
 
-			if (isSizedByContent()) {
+			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
-				renderer.render("span", _span);
-			}
+			renderer.render("span", _span);
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());

@@ -373,10 +373,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			return "true".equalsIgnoreCase(s);
 	}
 	/**
-	 * Sets whether span column width when {@link #isSizedByContent} is true.
-	 * <p>Default: false
-	 * Note: if the hflex attribute of component is specified, it's  will ignore 
-	 * this functionality
+	 * Sets whether to span the width of the columns to occupy the whole listbox.
+	 * It is meaningful only if {@link #isSizedByContent} is true, and
+	 * {@link #getHflex} is not speciifed.
+	 * <p>Default: false. It means the width of a column takes only the
+	 * required space based on its content (when {@link #isSizedByContent}
+	 * is specified).
 	 * @param span
 	 * @since 5.0.5
 	 */
@@ -1362,10 +1364,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 		render(renderer, "oddRowSclass", _scOddRow);
 		
-		if (isSizedByContent()) {
+		if (isSizedByContent())
 			renderer.render("sizedByContent", true);
-			renderer.render("span", _span);
-		}
+		renderer.render("span", _span);
 		
 		if (_model != null)
 			render(renderer, "model", true);

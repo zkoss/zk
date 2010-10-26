@@ -73,10 +73,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		sizedByContent: _zkf,
 		/**
-		 * Sets whether span column width when {@link #isSizedByContent} is true.
-		 * <p>Default: false
-		 * Note: if the hflex attribute of component is specified, it's  will ignore 
-		 * this functionality
+		 * Sets whether to span the width of the columns to occupy the whole listbox.
+		 * It is meaningful only if {@link #isSizedByContent} is true, and
+		 * {@link #getHflex} is not speciifed.
+		 * <p>Default: false. It means the width of a column takes only the
+		 * required space based on its content (when {@link #isSizedByContent}
+		 * is specified).
 		 * @param boolean span
 		 * @since 5.0.5
 		 */
