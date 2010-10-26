@@ -73,7 +73,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		sizedByContent: _zkf,
 		/**
-		 * Sets whether to span the width of the columns to occupy the whole listbox.
+		 * Sets whether to span the width of the columns to occupy the whole widget.
 		 * It is meaningful only if {@link #isSizedByContent} is true, and
 		 * {@link #getHflex} is not speciifed.
 		 * <p>Default: false. It means the width of a column takes only the
