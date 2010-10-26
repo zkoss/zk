@@ -52,17 +52,6 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 			var n = this.getImageNode();
 			if (n) n.align = v || '';
 		},
-		/** Returns the width of the border.
-		 * <p>Default: null (use browser default).
-		 * @return String
-		 */
-		/** Sets the width of the border.
-		 * @param String border
-		 */
-		border: function (v) {
-			var n = this.getImageNode();
-			if (n) n.border = v || '';
-		},
 		/** Returns number of pixels of extra space to the left and right
 		 * side of the image.
 		 * <p>Default: null (use browser default).
@@ -127,8 +116,6 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		var attr = ' src="' + (this._src || '') + '"', v;
 		if (v = this._align) 
 			attr += ' align="' + v + '"';
-		if (v = this._border) 
-			attr += ' border="' + v + '"';
 		if (v = this._hspace) 
 			attr += ' hspace="' + v + '"';
 		if (v = this._vspace) 

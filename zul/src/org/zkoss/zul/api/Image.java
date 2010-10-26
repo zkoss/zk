@@ -47,15 +47,10 @@ public interface Image extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setAlign(String align);
 
-	/**
-	 * Returns the width of the border.
-	 * <p>
-	 * Default: null (use browser default).
+	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public String getBorder();
-
-	/**
-	 * Sets the width of the border.
+	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public void setBorder(String border);
 
