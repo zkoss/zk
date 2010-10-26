@@ -73,6 +73,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		sizedByContent: _zkf,
 		/**
+		 * Sets whether span column width when {@link #isSizedByContent} is true.
+		 * <p>Default: false
+		 * Note: if the hflex attribute of component is specified, it's  will ignore 
+		 * this functionality
+		 * @param boolean span
+		 */
+		/**
+		 * Returns whether span column width when {@link #isSizedByContent} is true.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		span: _zkf,
+		/**
 		 * Returns whether turn on auto-paging facility when mold is
 		 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
 		 * rather, the page size(number of item count) is automatically determined by the 
@@ -770,12 +783,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			
 		var xwds = wgt.$class._calcMinWd(wgt),
 			wds = xwds.wds,
-			width = xwds.width;
-		if (wgt.isSizedByContent() || !wgt.$n().style.width || width > total) {
+			width = xwds.width,
+			isSpan = !wgt.getHflex() && wgt.isSpan(),
+			extSum;
+		if (!isSpan && (wgt.isSizedByContent() || !wgt.$n().style.width || width > total)) {
 			total = width;
 			head.style.width = total + 'px';
 		}
-		
+		extSum = isSpan ? total - width : 0;
+
 		var count = total;
 		hdtable.style.width = total + "px";	
 		
@@ -784,7 +800,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		for (var i = bdfaker.cells.length; i--;) {
 			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			var wd = i != 0 ? wds[i] : count;
+			var wd,
+				minW = wds[i],
+				extW = 0;
+			if (isSpan && extSum > 0) {
+				var difW = bdfaker.cells[i].offsetWidth - minW;
+				if (difW > 0) {
+					extW = extSum > difW ? difW : extSum;
+					extSum -= extW;
+				}	
+			}
+			wd = i != 0 ? minW + extW : count;
 			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
 			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
@@ -906,11 +932,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			headn = head ? head.$n() : null,
 			wds = [],
 			width = 0,
-			w = head ? head = head.lastChild : null;
+			w = head ? head = head.lastChild : null,
+			headWgt = wgt.getHeadWidget();
+
 		for (var i = bdfaker.cells.length; i--;) {
 			var wd = bdwd = bdfaker.cells[i].offsetWidth,
-				hdwd = Math.max(w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0, hdfaker.cells[i].offsetWidth),
+				hdwd = w ? (zk(w.$n('cave')).textSize()[0] + zk(w.$n()).padBorderWidth()) : 0,
 				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0;
+			if (headWgt.getChildAt(i).getWidth())
+				hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
 			if (hdwd > wd) wd = hdwd;
 			if (ftwd > wd) wd = ftwd;
 			wds[i] = wd;

@@ -17,6 +17,7 @@ ZK 5.0.5
   3091764: Able to prevent users enter the grouping character
   3092641: Listbox/Tree support whether to toggle selection or not when right click on item
   3094640: A way to specify page's widget class (in the page directive)
+  3095460: Listbox/Grid support span attribute, extend column width when there are available extra space 
   
 * Bugs
   3057902: zk bug for window showbusy

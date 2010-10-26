@@ -202,6 +202,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
 	private boolean _sizedByContent;
+	private boolean _span; //since 5.0.5
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
@@ -370,6 +371,28 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
 		} else
 			return "true".equalsIgnoreCase(s);
+	}
+	/**
+	 * Sets whether span column width when {@link #isSizedByContent} is true.
+	 * <p>Default: false
+	 * Note: if the hflex attribute of component is specified, it's  will ignore 
+	 * this functionality
+	 * @param span
+	 * @since 5.0.5
+	 */
+	public void setSpan(boolean span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("span", span);
+		}
+	}
+	/**
+	 * Returns whether span column width when {@link #isSizedByContent} is true.
+	 * <p>Default: false.
+	 * @since 5.0.5
+	 */
+	public boolean isSpan() {
+		return _span;
 	}
 	
 	/** Returns the rows.
@@ -1339,8 +1362,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 		render(renderer, "oddRowSclass", _scOddRow);
 		
-		if (isSizedByContent())
+		if (isSizedByContent()) {
 			renderer.render("sizedByContent", true);
+			renderer.render("span", _span);
+		}
 		
 		if (_model != null)
 			render(renderer, "model", true);

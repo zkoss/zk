@@ -251,6 +251,7 @@ public class Listbox extends XulElement implements Paginated,
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private boolean _sizedByContent;
+	private boolean _span; //since 5.0.5
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
@@ -439,6 +440,28 @@ public class Listbox extends XulElement implements Paginated,
 			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
 		} else
 			return "true".equalsIgnoreCase(s);
+	}
+	/**
+	 * Sets whether span column width when {@link #isSizedByContent} is true.
+	 * <p>Default: false
+	 * Note: if the hflex attribute of component is specified, it's  will ignore 
+	 * this functionality
+	 * @param span
+	 * @since 5.0.5
+	 */
+	public void setSpan(boolean span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("span", span);
+		}
+	}
+	/**
+	 * Returns whether span column width when {@link #isSizedByContent} is true.
+	 * <p>Default: false.
+	 * @since 5.0.5
+	 */
+	public boolean isSpan() {
+		return _span;
 	}
 
 	/**
@@ -3186,8 +3209,10 @@ public class Listbox extends XulElement implements Paginated,
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
 
-			if (isSizedByContent())
+			if (isSizedByContent()) {
 				renderer.render("sizedByContent", true);
+				renderer.render("span", _span);
+			}
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
