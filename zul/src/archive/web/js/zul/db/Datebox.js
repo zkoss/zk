@@ -665,8 +665,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	onChange: function (evt) {
 		var date = this.getTime(),
 			db = this.parent,
+			tm = db._tm,
+			time = tm.getValue(), 
 			oldDate = db.getValue(),
 			readonly = db.isReadonly();
+			
+		date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+		
 		if (oldDate)
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
