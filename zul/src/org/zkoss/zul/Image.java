@@ -79,6 +79,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	 * @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public String getBorder() {
+		return null;
 	}
 	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
