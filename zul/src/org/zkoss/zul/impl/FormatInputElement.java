@@ -48,7 +48,7 @@ abstract public class FormatInputElement extends InputElement {
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
+		render(renderer, "format", _format);//value depend on format
 		super.renderProperties(renderer);
-		render(renderer, "format", _format);
 	}
 }
