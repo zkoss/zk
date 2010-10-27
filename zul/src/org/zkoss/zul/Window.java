@@ -425,6 +425,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * suspends the execution if executed in an event listener, or
 	 * throws an exception if <em>not</em> executed in an event listener.
 	 *
+	 * Refer to <a href="http://www.zkoss.org/doc/devguide/ch07s02s07.html">Overlapped, Popup, Modal, Highlighted and Embedded</a>
+	 * for more information.
+	 * 
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
