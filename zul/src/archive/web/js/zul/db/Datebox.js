@@ -306,8 +306,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
 			return d;
-		} else
-			return val;
+		}
+		return null;
 	},
 	coerceToString_: function (val) {
 		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat()) : '';
@@ -616,7 +616,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-			value = zk.fmt.Date.parseDate(inp.value, db._format, false, db._value) || db._value;
+			value = zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)
+				|| (inp.value ? db._value: zUtl.today(fmt));
 
 		if (value)
 			this.setValue(value);
@@ -720,13 +721,15 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		var date = this.coerceFromString_(evt.data.value), //onChanging's data is string
 			oldDate = this.parent.getValue();
 		if (oldDate) {
+			oldDate = new Date(oldDate); //make a copy
 			oldDate.setHours(date.getHours());
 			oldDate.setMinutes(date.getMinutes());
 			oldDate.setSeconds(date.getSeconds());
 			oldDate.setMilliseconds(date.getMilliseconds());
-		} else
-			this.parent._value = date;
-		this.parent.getInputNode().value = evt.data.value = this.parent.getText();
+			date = oldDate;
+		}
+		this.parent.getInputNode().value = evt.data.value
+			= this.parent.coerceToString_(date);
 
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
