@@ -122,7 +122,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	 * it is possible that it obscues the popup that shall be shown
 	 * above it. To resolve this, you have to specify autohide="true"
 	 * to this component, and specify the following in the page:
-	 * <pre><code>&lt;script content="zk.useStack='auto';"?>
+	 * <pre><code>&lt;?script content="zk.useStack='auto';"?>
 	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/JavaScript_Customization">JavaScript Customization</a>
 	 * for more information.
 	 */
@@ -131,6 +131,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	}
 	/** Sets whether to automatically hide this component if
 	 * a popup or dropdown is overlapped with it.
+	 * Refer to {@link #isAutohide} for more information
 	 */
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
