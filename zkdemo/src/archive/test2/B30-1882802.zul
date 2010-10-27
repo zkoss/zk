@@ -18,6 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+      click enable/disable and make sure every one is disable/enabled
+      <vbox>
 	<button label="enable/disable"
 		onClick="a1.disabled= !a1.disabled;a2.disabled= !a2.disabled;a3.disabled= !a3.disabled;a4.disabled= !a4.disabled;a5.disabled= !a5.disabled;a6.disabled= !a6.disabled;a7.disabled= !a7.disabled;" />
 	<textbox id="a1" rows="5" cols="40">
@@ -34,4 +36,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<radio id="a6" label="Apple" />
 	</radiogroup>
 	<checkbox id="a7" label="Apple" />
+      </vbox>
 </zk>

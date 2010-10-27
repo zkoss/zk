@@ -18,7 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk>
+<zk xmlns:n="native">
+    <n:p> 1. enter something in acc/pwd , then click login , you will see the message with "login button is clicked"  </n:p>
+    <n:p> 2. you press Enter key , you will get the message for "onOK is triggered, pwd = " , and you should check the pwd  is correct or not.  </n:p>
 <window id="login_window" title="Login" border="normal" width="420px"
 sizable="false" mode="overlapped" position="center"
 onOK='alert("Window.onOK triggered, password=" + password.getValue())'
