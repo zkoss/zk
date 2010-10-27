@@ -677,7 +677,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return _multiple ? "multiple": "single";
 	}
 	/** Sets the seltype.
-	 * Currently, only "single" is supported.
+	 * "single","multiple" is supported.
 	 */
 	public void setSeltype(String seltype) throws WrongValueException {
 		if ("single".equals(seltype)) setMultiple(false);
