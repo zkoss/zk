@@ -418,7 +418,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._pop.isOpen()) {
 			var ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 			if (ofs)
-				this._pop._shift(ofs);
+				this._pop._shift(ofs, {silent: true});
 		}
 	},
 	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
@@ -562,7 +562,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (silent)
 			db.updateChange_();
 		else
-			jq(db.getInputNode()).focus();
+			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
 		return zk(this.parent.$n("pp")).isVisible();

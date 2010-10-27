@@ -50,16 +50,16 @@ zjq = function (jq) { //ZK extension
 				_zsyncs[j].zsync(org);
 	}
 	function _focus(n) {
-		var w = zk.Widget.$(n);
-		if (w) zk.currentFocus = w;
 		try {
 			n.focus();
+			var w = zk.Widget.$(n);
+			if (w) zk.currentFocus = w;
 		} catch (e) {
 			setTimeout(function() {
 				try {
-					n.focus();
+					_focus(n);
 				} catch (e) {
-					setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
+					setTimeout(function() {try {_focus(n);} catch (e) {}}, 100);
 				}
 			}, 0);
 		} //IE throws exception if failed to focus in some cases
@@ -1933,6 +1933,7 @@ this._syncShadow(); //synchronize shadow
 
 	/** Move the focus out of any element.
 	 * <p>Notice that you cannot simply use <code>jq(window).focus()</code>
+	 * or <code>zk(window).focus()</code>,
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */

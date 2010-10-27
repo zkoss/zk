@@ -204,10 +204,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this.menupopup.open();
 		else if (this.isTopmost()) 
 			this.menupopup.close();
-		else {
-			var anc = this.menupopup.$n('a');
-			if (anc) anc.focus(); // force to get a focus 
-		}			
+		else
+			zk(this.menupopup.$n('a')).focus(); // force to get a focus 
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		var menubar = this.getMenubar();

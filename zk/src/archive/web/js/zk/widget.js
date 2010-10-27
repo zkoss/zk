@@ -231,7 +231,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//restore focus
 	function _rsFocus(cf) {
-		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
+		if (cf && cf.desktop && !zk.currentFocus)
+			cf.focus();
 	}
 
 	//set minimum flex size and return it

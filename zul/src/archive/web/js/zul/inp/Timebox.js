@@ -419,7 +419,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._changed = true;
 		
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
-		inp.focus(); //we have to set it here; otherwise, if it is in popup of
+		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null
 
 		// disable browser's text selection
@@ -431,7 +431,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode();
 		if(inp.disabled || zk.dragging) return;
 
-		if (zk.opera) inp.focus();
+		if (zk.opera) zk(inp).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
 		this._onChanging();

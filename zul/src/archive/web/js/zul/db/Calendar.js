@@ -23,12 +23,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	var _doFocus = zk.gecko ? function (n, timeout) {
 			if (timeout)
 				setTimeout(function () {
-					jq(n).focus();
+					zk(n).focus();
 				});
 			else
-				jq(n).focus();
+				zk(n).focus();
 		} : function (n) {
-			jq(n).focus();
+			zk(n).focus();
 		};
 
 	function _newDate(year, month, day, bFix) {
@@ -208,7 +208,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		} else 
 			this.$supers('doKeyDown_', arguments);
 	},
-	_shift: function (ofs) {
+	_shift: function (ofs, opts) {
 		var oldTime = this.getTime();	
 		
 		switch(this._view) {
@@ -237,13 +237,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		case 'day':
 			if (oldTime.getYear() == newTime.getYear() &&
 				oldTime.getMonth() == newTime.getMonth()) {
-				this._markCal();
+				this._markCal(opts);
 			} else 
 				this.rerender();
 			break;
 		case 'month':
 			if (oldTime.getYear() == newTime.getYear())
-				this._markCal();
+				this._markCal(opts);
 			else
 				this.rerender();
 			break;
