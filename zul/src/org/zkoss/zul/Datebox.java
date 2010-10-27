@@ -412,6 +412,10 @@ public class Datebox extends FormatInputElement implements
 			super.service(request, everError);
 	}
 	
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: "between 20071012 and 20071223", "before 20080103"
+	 */
 	// -- super --//
 	public void setConstraint(String constr) {
 		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
