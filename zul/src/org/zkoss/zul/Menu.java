@@ -96,7 +96,7 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	 * <p>It is useful to show the description in more versatile way.
 	 * 
 	 * <p>There is a way to create Colorbox automatically by using
-	 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
+	 * #color=#RRGGBB, usage example <code>setContent("#color=#FFFFFF")</code>
 	 *
 	 * @since 5.0.0
 	 */
