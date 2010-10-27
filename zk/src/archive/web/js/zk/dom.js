@@ -1981,7 +1981,25 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @param Object obj any JavaScript object
 	 * @param Object replace an optional parameter that determines how object values are stringified for objects. It can be a function. 
 	 */
-	//toJSON: function () {}
+	//toJSON: function () {},
+	/**
+	 * Marshalls the Date object into a string such that it can be sent
+	 * back to the server.
+	 * <p>It works with org.zkoss.json.JSONs.d2j() to transfer data from client
+	 * to server.
+	 * @param Date d the date object to marshall. If null, null is returned
+	 * @return String a string
+	 * @since 5.0.5
+	 */
+	//d2j: function (d) {},
+	/** Unmarshalls the string back to a Date object.
+	 * <p>It works with org.zkoss.json.JSONs.j2d() to transfer data from server
+	 * to client.
+	 * @param String s the string that is marshalled at the server
+	 * @return Date the date object after unmarshalled back
+	 * @since 5.0.5
+	 */
+	//j2d: function (s) {}
 });
 
 /** @class jq.Event

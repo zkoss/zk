@@ -16,7 +16,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 Click follow buttons without errors
 <separator/>
-1. Remove Item 1-1-1, <button label="Remove Treechildren" onClick="item1.detach();"></button>
+1. Remove Item 1-1-1, <button label="Remove Treeitem" onClick="item1.detach();"></button>
+<button label="Remove Treechildren" onClick="tc1.detach();"></button>
 <separator/>
 2. Add Item 1-3,
 <button label="Add treeitem">
@@ -30,8 +31,10 @@ row.appendChild(new Treecell("Item 1-3"));
 </button>
 <separator/>
 3. <button label="Open treeitem" onClick='treeitem.setOpen(true);'></button>, under Item 1, the order should be Item 1-1, Item 1-2, Item 1-3
+<separator/>
+<button label="invalidate" onClick="tree.invalidate()"/>
 <separator height="30px"/>
-<tree width="500px" zclass="z-dottree">
+<tree id="tree" width="500px" zclass="z-dottree">
 	<treecols>
 		<treecol label="treecol 1" />
 	</treecols>
@@ -45,7 +48,7 @@ row.appendChild(new Treecell("Item 1-3"));
 					<treerow>
 						<treecell label="Item 1-1"/>
 					</treerow>
-					<treechildren>
+					<treechildren id="tc1">
 						<treeitem id="item1">
 							<treerow><treecell label="Item 1-1-1"/></treerow>
 							<treechildren>
