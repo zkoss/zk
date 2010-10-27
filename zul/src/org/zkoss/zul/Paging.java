@@ -112,6 +112,10 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getActivePage() {
 		return _actpg;
 	}
+	/**
+	 * Set the active page
+	 * <p>Note: In server side, active page starts from 0. But in browser UI, it starts from 1
+	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		if (pg >= _npg || pg < 0)
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
