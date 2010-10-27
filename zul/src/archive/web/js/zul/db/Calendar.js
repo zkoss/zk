@@ -198,7 +198,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this.$supers("redraw", arguments);
 	},
 	onChange: function (evt) {
-		this.updateFormData(evt.data.value);
+		this._updFormData(evt.data.value);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode,
@@ -262,7 +262,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-calendar";
 	},
-	updateFormData: function (val) {
+	_updFormData: function (val) {
+		val = new zk.fmt.Calendar().formatDate(val, this.getFormat())
 		if (this._name) {
 			val = val || '';
 			if (!this.efield)
@@ -307,7 +308,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(mid, "onMouseOut", '_doMouseEffect')
 			.domListen_(node, 'onMousewheel');
 
-		this.updateFormData(this._value || new zk.fmt.Calendar().formatDate(this.getTime(), this.getFormat()));
+		this._updFormData(this.getTime());
 	},
 	unbind_: function () {
 		var node = this.$n(),
@@ -390,15 +391,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value ? new zk.fmt.Calendar().parseDate(this._value, this.getFormat()) : zUtl.today(true);
+		return this._value || zUtl.today(true);
 	},
 	_setTime: function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
-		this._value = new zk.fmt.Calendar().formatDate(
-			_newDate(year, month, day, true), this.getFormat());
+		this._value = _newDate(year, month, day, true);
 		this.fire('onChange', {value: this._value});
 	},
 	_clickDate: function (evt) {
@@ -468,8 +468,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year += ofs;
 //			break;
 		}
-		this._value = new zk.fmt.Calendar().formatDate(
-			_newDate(year, month, day, !nofix), this.getFormat());
+		this._value = _newDate(year, month, day, !nofix);
 		this.fire('onChange', {value: this._value, shallClose: false});
 	},
 	_changeView : function (evt) {

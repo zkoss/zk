@@ -310,11 +310,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	/* @param zk.Widget target
 	 */
 	function toJSON(target, data) {
-		if (data.pageX != null && data.x == null)  {
-			var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
-				[data.pageX, data.pageY];
-			data.x = ofs[0];
-			data.y = ofs[1];
+		if (!jq.isArray(data)) {
+			if (data.pageX != null && data.x == null)  {
+				var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
+					[data.pageX, data.pageY];
+				data.x = ofs[0];
+				data.y = ofs[1];
+			}
+
+			for (var n in data) {
+				var v;
+				if ((v = data[n]) && v.getFullYear && v.getMonth && v.getMilliseconds) {
+					data[n] = jq.d2j(v);
+					data["z_type_" + n] = "Date";
+				}
+			}
 		}
 		return jq.toJSON(data);
 	}

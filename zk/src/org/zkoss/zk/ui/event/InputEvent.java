@@ -35,10 +35,10 @@ public class InputEvent extends Event {
 	private final int _start;
 
 	/** Converts an AU request to an input event.
+	 * Notice that this method will convert the value to a string object.
+	 * If it is not what you want, you have to parse it by yourself.
 	 * @param oldValue the previous value
 	 * @since 5.0.4
-	 * @deprecated As of release 5.0.5, the input event shall be parsed
-	 * by the caller since the value is passed as an object (such as double)
 	 */
 	public static final
 	InputEvent getInputEvent(AuRequest request, Object oldValue) {

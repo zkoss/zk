@@ -109,11 +109,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			args = arguments;
 		this.$supers('setValue', args);
 	},
-	/** Returns the String of the time that is assigned to this component.
-	 *  <p>returns empty String if value is null
+	/** Returns the string representing the time assigned to this widget,
+	 * or an empty string if the time is null
 	 * @return String
 	 */
-	getRawText: function () {
+	getText: function () {
 		return this.coerceToString_(this._value);
 	},
 	marshall_: function (val) {

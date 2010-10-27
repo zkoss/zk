@@ -36,15 +36,16 @@ zk.fmt.Date = {
 		}
 		return token;
 	},
-	parseDate : function (txt, fmt, strict) {
+	parseDate : function (txt, fmt, strict, refval) {
 		if (!fmt) fmt = "yyyy/MM/dd";
-		var val = zUtl.today(true),
-			y = val.getFullYear(),
-			m = val.getMonth(),
-			d = val.getDate(), dFound,
-			hr = val.getHours(),
-			min = val.getMinutes(),
-			sec = val.getSeconds(),
+		refval = refval || zUtl.today(true);
+		var y = refval.getFullYear(),
+			m = refval.getMonth(),
+			d = refval.getDate(), dFound,
+			hr = refval.getHours(),
+			min = refval.getMinutes(),
+			sec = refval.getSeconds(),
+			msec = refval.getMilliseconds(),
 			aa = fmt.indexOf('a'),
 			hh = fmt.indexOf('h'),
 			KK = fmt.indexOf('K'),
@@ -231,12 +232,12 @@ zk.fmt.Date = {
 
 		if (hasHour1 && isAM === false)
 			hr += 12;
-		var dt = new Date(y, m, d, hr, min, sec);
+		var dt = new Date(y, m, d, hr, min, sec, msec);
 		if (!dFound && dt.getMonth() != m)
-			dt = new Date(y, m + 1, 0, hr, min, sec); //last date of m
+			dt = new Date(y, m + 1, 0, hr, min, sec, msec); //last date of m
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
-				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec)
+				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
 				return; //failed
 
 			txt = txt.trim();
@@ -250,10 +251,11 @@ zk.fmt.Date = {
 			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
 				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
-					return null; //failed
+					return; //failed
 			}
 		}
-		return dt;
+		return +dt == +refval ? refval: dt;
+			//we have to use getTime() since dt == refVal always false
 	},
 	formatDate : function (val, fmt) {
 		if (!fmt) fmt = "yyyy/MM/dd";
@@ -406,8 +408,8 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt);
 	},
-	parseDate: function (txt, fmt, strict) {
-		var d = zk.fmt.Date.parseDate(txt, fmt, strict);
+	parseDate: function (txt, fmt, strict, refval) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
 		if (this._offset && fmt) {
 			var cnt = 0;
 			for (var i = fmt.length; i--;)

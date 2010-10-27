@@ -152,7 +152,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 			var inp = this.getInputNode();
 			if (inp)
-				inp.value = this.coerceToString_(this._value);
+				inp.value = this.getText();
 		},
 		/** Sets the constraint.
 	 	 * <p>Default: null (means no constraint all all).
@@ -227,18 +227,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		lenient: null
 	},
-	setValue: function (val) {
-		var args;
-		if (val) {
-			args = [];
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-
-			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
-		} else
-			args = arguments;
-		this.$supers('setValue', args);
-	},
 	_setTimeZonesIndex: function () {
 		var select = this.$n('dtzones');
 		if (select && this._timezone) {
@@ -259,11 +247,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	/** Returns the String of the Date that is assigned to this component.
-	 *  <p>returns empty String if value is null
+	/** Returns the text represent the value in the given format,
+	 * or an empty etring if value is null
 	 * @return String
+	 * @since 5.0.5
 	 */
-	getRawText: function () {
+	getText: function () {
 		return this.coerceToString_(this._value);
 	},
 	/** Returns the Time format of the specified format
@@ -314,7 +303,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (val) {
-			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient);
+			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
 			return d;
 		} else
@@ -536,12 +525,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				out.push('<option value="', timezones[i], '" class="', cls, '-timezone-item">', timezones[i], '</option>');
 			out.push('</select><div>');
 		}
-	},
-	marshall_: function (val) {
-		return val && typeof val != "string" ? this.coerceToString_(val) : val;
-	},
-	unmarshall_: function (val) {
-		return val && typeof val == "string" ? this.coerceFromString_(val) : val;
 	}
 });
 
@@ -552,12 +535,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.listen({onChange: this}, -1000);
 	},
 	setFormat: function (fmt) {
-		if (fmt != this._fmt) {
-			var old = this._fmt;
-			this._fmt = fmt;
-			if (this.getValue())
-				this._value = new zk.fmt.Calendar().formatDate(new zk.fmt.Calendar().parseDate(this.getValue(), old), fmt);
-		}
+		this._fmt = fmt;
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
@@ -638,13 +616,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-			value = zk.fmt.Date.parseDate(inp.value, db._format) || db.getValue();
+			value = zk.fmt.Date.parseDate(inp.value, db._format, false, db._value) || db._value;
 
-		if (value) {
-			var calVal = new zk.fmt.Calendar().formatDate(value, this.getFormat());
-			if (calVal)
-				this.setValue(calVal);
-		}
+		if (value)
+			this.setValue(value);
 
 		if (fmt) {
 			var tm = db._tm;
@@ -680,10 +655,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			//since Date object will adjust month if date larger than max one
 			db._value = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
-				oldDate.getMinutes(), oldDate.getSeconds());
+				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
 		else
 			db._value = date;
-		db.getInputNode().value = evt.data.value = db.getRawText();
+		db.getInputNode().value = db.getText();
+		evt.data.value = db.getValue();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
@@ -741,15 +717,17 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		this.listen({onChanging: this}, -1000);
 	},
 	onChanging: function (evt) {
-		var date = this.coerceFromString_(evt.data.value),
+		var date = this.coerceFromString_(evt.data.value), //onChanging's data is string
 			oldDate = this.parent.getValue();
 		if (oldDate) {
 			oldDate.setHours(date.getHours());
 			oldDate.setMinutes(date.getMinutes());
 			oldDate.setSeconds(date.getSeconds());
+			oldDate.setMilliseconds(date.getMilliseconds());
 		} else
 			this.parent._value = date;
-		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
+		this.parent.getInputNode().value = evt.data.value = this.parent.getText();
+
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
