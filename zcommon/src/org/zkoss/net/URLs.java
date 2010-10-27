@@ -26,7 +26,7 @@ import org.zkoss.lang.SystemException;
  */
 public class URLs {
 	/** @deprecated As of release 5.0.5, for simple ZK core. */
-	private static URLEncoder _enc;
+	private static Object _enc; //use Object instead of URLEncoder to avoid compiler warning
 
 	/**
 	 * @deprecated As of release 5.0.5, for simple ZK core.
@@ -59,6 +59,6 @@ public class URLs {
 				};
 			}
 		}
-		return _enc.encode(s);
+		return ((URLEncoder)_enc).encode(s);
 	}
 }

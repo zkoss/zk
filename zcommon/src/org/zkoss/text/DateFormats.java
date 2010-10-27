@@ -88,5 +88,4 @@ public class DateFormats {
 		return df;
 	}
 	private static final ThreadLocal _df = new ThreadLocal();
-
 }
