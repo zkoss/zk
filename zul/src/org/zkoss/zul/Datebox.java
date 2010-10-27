@@ -423,13 +423,11 @@ public class Datebox extends FormatInputElement implements
 																					// 2564298
 	}
 	protected Object marshall(Object value) {
-		if (value == null) return null;
-		if (_tzone == null) return value;
+		if (value == null || _tzone == null) return value;
 		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
 	}
 	protected Object unmarshall(Object value) {
-		if (value == null) return null;
-		if (_tzone == null) return value;
+		if (value == null || _tzone == null) return value;
 		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
