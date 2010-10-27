@@ -16,17 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.zkoss.mesg.MCommon;
-import org.zkoss.text.DateFormats;
-import org.zkoss.util.Locales;
 import org.zkoss.util.IllegalSyntaxException;
 
 /**

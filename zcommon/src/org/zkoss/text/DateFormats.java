@@ -30,33 +30,56 @@ import org.zkoss.util.TimeZones;
  * @author tomyeh
  */
 public class DateFormats {
+	/** Formats a Date object based on the current Locale
+	 * and the default date format ({@link DateFormat#DEFAULT}.
+	 *
+	 * @param dateOnly indicates whether to show only date; false to show
+	 * both date and time
+	 */
+	public static final String format(Date d, boolean dateOnly) {
+		return getDateFormat(dateOnly).format(d);
+	}
 	/**
-	 * Parses a string to a date.
-	 * It is smart enough to know whether to use DateFormat.getDateInstance
-	 * and DateFormat.getDateTimeInstance.
-	 * It also uses {@link Locales#getCurrent}.
+	 * Parses a string, that is formatted by {@link #format}, to a date.
+	 * It assumes the current locale is {@link Locales#getCurrent}.
+	 *
+	 * @param dateOnly indicates whether to show only date; false to show
+	 * both date and time
+	 * @since 5.0.5
+	 */
+	public static final Date parse(String s, boolean dateOnly)
+	throws ParseException {
+		return getDateFormat(dateOnly).parse(s);
+	}
+	private static final DateFormat getDateFormat(boolean dateOnly) {
+		final Locale locale = Locales.getCurrent();
+		return dateOnly ?
+			DateFormat.getDateInstance(DateFormat.DEFAULT, locale):
+			DateFormat.getDateTimeInstance(
+					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
+	}
+
+	/**
+	 * @deprecated As of release 5.0.5, replaced with {@link #parse(String, boolean)}.
+	 * Unlike {@link #parse(String, boolean)}, it detects the format by
+	 * searching the existence of colon. However, it is not safe so
+	 * {@link #parse(String, boolean)} shall be used.
 	 */
 	public static final Date parse(String s)
 	throws ParseException {
 		final Locale locale = Locales.getCurrent();
 		
 		if (s.indexOf(':') < 0) { //date only
-			final DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.parse(s);
+			return getDateFormat(true).parse(s);
 		} else {
-			try {
-				return getDateFormat().parse(s);
+			try { //backward compatible (wrong spec)
+				return getHttpDateFormat().parse(s);
 			} catch (ParseException ex) { //ignore it
 			}
-
-			final DateFormat df =
-				DateFormat.getDateTimeInstance(
-					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.parse(s);
+			return getDateFormat(false).parse(s);
 		}
 	}
-	private static final SimpleDateFormat getDateFormat() {
+	private static final SimpleDateFormat getHttpDateFormat() {
 		SimpleDateFormat df = (SimpleDateFormat)_df.get();
 		if (df == null)
 			_df.set(df = new SimpleDateFormat(
@@ -66,23 +89,4 @@ public class DateFormats {
 	}
 	private static final ThreadLocal _df = new ThreadLocal();
 
-	/** Formats a Date object based on the current Locale.
-	 *
-	 * @param dateOnly indicates whether to show only date; false to show
-	 * both date and time
-	 */
-	public static final String format(Date d, boolean dateOnly) {
-		Locale locale = Locales.getCurrent();
-
-		if (dateOnly) {
-			DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.format(d);
-		} else {
-			DateFormat df =
-				DateFormat.getDateTimeInstance(
-					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.format(d);
-		}
-	}
 }
