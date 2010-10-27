@@ -101,7 +101,7 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 		return _spacing;
 	}
 	/** Sets the spacing.
-	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em")
+	 * @param spacing the spacing (such as "0", "5px", "3pt")
 	 */
 	public void setSpacing(String spacing) {
 		if (spacing != null)
