@@ -168,13 +168,36 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.smartUpdate('start', num);
 		this._start = num;
 	},
+	//bug# 3092890: Rows.invalidate() does not respect frozen state.
+	syncRows_: function (num) {
+		if (!num) //no frozen  
+			return;
+		var width = this.$n('cave').offsetWidth,
+		mesh = this.parent,
+		cnt = num,
+		rows = mesh.ebodyrows;
+
+		if (!rows || !rows.length) //no rows
+			return;
+	
+		//body
+		for (var first = rows[0], display, index = this._columns,
+				len = first.childNodes.length; index < len; index++) {
+			display = cnt-- <= 0 ? '' : 'none';
+			var cell = first.cells[index];
+			if (cell.style.display != display) {
+				for (var r = first; r; r = r.nextSibling)
+					r.cells[index].style.display = display;
+			}
+		}
+	},
 	_doScrollNow: function (num) {
 		var width = this.$n('cave').offsetWidth,
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
 
-		if (!mesh.head && (!rows || rows.length))
+		if (!mesh.head && (!rows || !rows.length))
 			return;
 
 		if (mesh.head) {

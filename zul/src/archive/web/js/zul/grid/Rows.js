@@ -26,6 +26,7 @@ var Rows =
  * @import zkex.grid.Group
  */
 zul.grid.Rows = zk.$extends(zul.Widget, {
+	_firstLoad: true,
 	_visibleItemCount: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -78,6 +79,13 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (this.desktop && this._shallStripe) { //since bind_(...after)
 			this.stripe();
 			this.getGrid().onSize();
+		}
+		if (this._firstLoad) { //call only when invalidate or first loaded
+			this._firstLoad = false;
+			var grid = this.getGrid(),
+				frozen = grid ? grid.frozen : null;
+			if (frozen)
+				frozen.syncRows_(frozen._start);
 		}
 	},
 	_syncStripe: function () {

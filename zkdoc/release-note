@@ -86,6 +86,7 @@ ZK 5.0.5
   3093594: Decimalbox does not respect current Locales if no format
   3094118: Tree.onTreeDataChange does not update the tree correctly
   3094686: border in image not work
+  3092890: Rows.invalidate does not respect frozen state
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
