@@ -59,16 +59,12 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		_value = value != null ? value: Dates.today();
 	}
 
-	/** Returns the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public TimeZone getTimeZone() {
 		return _tzone;
 	}
-	/** Sets the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public void setTimeZone(TimeZone tzone) {
 		_tzone = tzone;
@@ -93,8 +89,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	private DateFormat getDateFormat() {
 		final DateFormat df =
 			new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
-		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
-		df.setTimeZone(tz);
+		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
 

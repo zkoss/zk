@@ -788,7 +788,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
-		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
