@@ -1138,6 +1138,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 	}
 
+	/**
+	 *  Sets the mold to "default" or "paging" 
+	 */
 	//-- super --//
 	public void setMold(String mold) {
 		final String old = getMold();
