@@ -273,7 +273,8 @@ public class Datebox extends FormatInputElement implements
 			} else {
 				_tzone = tzone;
 			}
-			invalidate();
+			smartUpdate("timeZone", _tzone.getID());
+			smartUpdate("_value", marshall(_value));
 		}
 	}
 	/** Sets the time zone that this date box belongs to, or null if
@@ -420,6 +421,16 @@ public class Datebox extends FormatInputElement implements
 	public void setConstraint(String constr) {
 		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
 																					// 2564298
+	}
+	protected Object marshall(Object value) {
+		if (value == null) return null;
+		if (_tzone == null) return value;
+		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
+	}
+	protected Object unmarshall(Object value) {
+		if (value == null) return null;
+		if (_tzone == null) return value;
+		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
