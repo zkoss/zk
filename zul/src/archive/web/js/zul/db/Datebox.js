@@ -652,16 +652,14 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		
 		if (oldDate)
-			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
-			//since Date object will adjust month if date larger than max one
-			db._value = new Date(date.getFullYear(), date.getMonth(),
+			date = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
 				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
-		else
-			db._value = date;
-		db.getInputNode().value = db.getText();
-		evt.data.value = db.getValue();
-		this.parent.fire(evt.name, evt.data);
+			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
+			//since Date object will adjust month if date larger than max one
+
+		db.getInputNode().value = db.coerceToString_(date);
+
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			db._inplaceout = true;
@@ -718,8 +716,9 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 		this.listen({onChanging: this}, -1000);
 	},
 	onChanging: function (evt) {
-		var date = this.coerceFromString_(evt.data.value), //onChanging's data is string
-			oldDate = this.parent.getValue();
+		var db = this.parent,
+			date = this.coerceFromString_(evt.data.value), //onChanging's data is string
+			oldDate = db.getValue();
 		if (oldDate) {
 			oldDate = new Date(oldDate); //make a copy
 			oldDate.setHours(date.getHours());
@@ -728,13 +727,13 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 			oldDate.setMilliseconds(date.getMilliseconds());
 			date = oldDate;
 		}
-		this.parent.getInputNode().value = evt.data.value
-			= this.parent.coerceToString_(date);
+		db.getInputNode().value = evt.data.value
+			= db.coerceToString_(date);
 
-		this.parent.fire(evt.name, evt.data);
+		db.fire(evt.name, evt.data); //onChanging
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
-			this.parent._inplaceout = true;
+			db._inplaceout = true;
 		}
 		evt.stop();
 	}
