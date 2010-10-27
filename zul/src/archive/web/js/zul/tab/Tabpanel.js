@@ -110,6 +110,15 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
     			var n = this.$n(),
     				hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
     			hgh = zk(n.parentNode).revisedHeight(hgh);
+				
+				// fixed Opera 10.5+ bug
+				if (zk.opera) {
+					var parent = tbx.parentNode,
+						height = zk(parent).revisedHeight(parent.offsetHeight);
+					if (tbx.style.height == '100%' && hgh != height)
+						hgh = height;
+				}
+				
     			for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
     				if (e != n) hgh -= e.offsetHeight;
     			hgh -= n.firstChild.offsetHeight;
