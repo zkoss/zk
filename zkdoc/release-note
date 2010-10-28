@@ -93,6 +93,7 @@ ZK 5.0.5
   3095469: tree should resize header while scrollbar appear
   3095549: rod in tree make add child not work
   3095453: tree can't expand if model is set in button onClick
+  3097181: Colorbox in menu, doesn't work with menubar autodrop="true"
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
