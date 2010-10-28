@@ -1992,7 +1992,7 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @return String a string
 	 * @since 5.0.5
 	 */
-	//d2j: function (d) {},
+	//d2j: function () {},
 	/** Unmarshalls the string back to a Date object.
 	 * <p>It works with org.zkoss.json.JSONs.j2d() to transfer data from server
 	 * to client.
@@ -2000,7 +2000,7 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @return Date the date object after unmarshalled back
 	 * @since 5.0.5
 	 */
-	//j2d: function (s) {}
+	//j2d: function () {}
 });
 
 /** @class jq.Event

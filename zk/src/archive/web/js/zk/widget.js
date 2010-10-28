@@ -2230,7 +2230,7 @@ wgt.$f().main.setTitle("foo");
 	 * @param boolean floating whther to make it floating
 	 * @param Map opts [optional] The options. Allowed options:
 	 * <ul>
-	 * <li>node: the DOM element. If omitted, {@link #n} is assumed.</li>
+	 * <li>node: the DOM element. If omitted, {@link #$n} is assumed.</li>
 	 * </ul>
 	 * @return zk.Widget this widget
 	 * @see #isFloating_
@@ -3698,12 +3698,25 @@ wgt.setListeners({
 		for (var evt in infs)
 			this.setListener(evt, infs[evt]);
 	},
-	/** Sets a listener
+	/** Sets a listener that can be unlistened easily.
+	 * It is designed to be called from server.
+	 * For client-side programming, it is suggested to use {@link #listen}.
+	 * <p>It is based {@link #listen}, but, unlike {@link #listen}, the second
+	 * invocation for the same event will unlisten the previous one automatically.
+	 * <p>In additions, if the function (specified in the second element of inf)
+	 * is null, it unlistens the previous invocation.
 	 * @param Array inf a two-element array. The first element is the event name,
 	 * while the second is the listener function
 	 * @see #setListeners
 	 */
 	/** Sets a listener
+	 * It is designed to be called from server.
+	 * For client-side programming, it is suggested to use {@link #listen}.
+	 * Use it only if you want to unlisten the listener registered at the
+	 * server (by use of the client namespace).
+	 * <p>It is based {@link #listen}, but, unlike {@link #listen}, the second
+	 * invocation for the same event will unlisten the previous one automatically.
+	 * <p>In additions, if fn is null, it unlistens the previous invocation.
 	 * @param String evt the event name
 	 * @param Function fn the listener function.
 	 * If null, it means unlisten.
