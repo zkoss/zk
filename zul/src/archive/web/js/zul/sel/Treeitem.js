@@ -76,7 +76,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 
 			var cn = img.className,
 				tree = this.getTree(),
-				oldwd = tree ? tree.ebodytbl.clientWidth: 0;
+				ebodytbl = tree ? tree.ebodytbl: null,
+				oldwd = ebodytbl ? ebodytbl.clientWidth: 0; //ebodytbl shall not be null (just in case)
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
@@ -92,13 +93,14 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				tree._syncFocus(this);
 				tree.focus();
 
-				if (oldwd != tree.ebodytbl.clientWidth) {
-					var cnt = tree._fixhwcnt;
-					tree._fixhwcnt = cnt ? cnt + 1: 1;
+				if (ebodytbl) {
+					tree._fixhdwcnt = tree._fixhdwcnt || 0;
+					if (!tree._fixhdwcnt++)
+						tree._fixhdoldwd = oldwd;
 					setTimeout(function () {
-						if (!--tree._fixhwcnt)
+						if (!--tree._fixhdwcnt && tree._fixhdoldwd != ebodytbl.clientWidth)
 							tree._calcSize();
-					}, 200);
+					}, 250);
 				}
 			}
 		}

@@ -369,9 +369,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			ftfaker = this.eftfaker,
 			headn = head.$n(),
 			i = 0;
-		for (var w = head.firstChild; w; w = w.nextSibling) {
-			if (w._hflexWidth !== undefined)
-				_setFakerWd(i, w._hflexWidth, hdfaker, bdfaker, ftfaker, headn);
+		for (var w = head.firstChild, wd; w; w = w.nextSibling) {
+			if ((wd = w._hflexWidth) !== undefined)
+				_setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
 			++i;
 		}
 	},
