@@ -9,9 +9,9 @@
 <li>Done.</li>
 ]]>
 </html>
-<listbox>
+<listbox  width="81px">
 	<listhead sizable="true">
-		<listheader label="column1" width="40px"/>
+		<listheader label="column1" width="80px"/>
 	</listhead>
 	<listitem>
 		<listcell label="row1" />

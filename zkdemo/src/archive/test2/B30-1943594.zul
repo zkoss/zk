@@ -8,7 +8,7 @@ xmlns="http://www.zkoss.org/2005/zul">
 <li>
 Click dropdown and select an item. A exception dialog shall show up.
 Click OK to close the  dialog. Then, the dialog shall <b>NOT</b> re-appear again.</li>
-<li>Click combobox's dropdown button and then click datebox's dropdown button.
+<li>Click combobox's dropdown button, then click other place of this page.
 A exception dialog shall show up.Click OK to close the dialog. Then, the dialog shall <b>not</b>
 re-appear again.</li>
 </ul>
