@@ -640,12 +640,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			oldDate = db.getValue(),
 			readonly = db.isReadonly();
 
-		if (fmt) {
-			var tm = db._tm,
-				time = tm.getValue();
-			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
-		}
-
 		if (oldDate)
 			date = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
@@ -653,6 +647,12 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
 
+		if (fmt) {
+			var tm = db._tm,
+				time = tm.getValue();
+			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+		}
+		
 		db.getInputNode().value = db.coerceToString_(date);
 
 		if (this._view == 'day' && evt.data.shallClose !== false) {
