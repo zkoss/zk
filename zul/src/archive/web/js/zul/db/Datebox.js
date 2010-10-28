@@ -45,7 +45,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 var Datebox =
 /**
- * An edit box for holding a date. 
+ * An edit box for holding a date.
  * <p>Default {@link #getZclass}: z-datebox.
  */
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
@@ -78,11 +78,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
-					
-					if (zk.ie6_) {						
-						jq(n)[fnm](zcls + 
+
+					if (zk.ie6_) {
+						jq(n)[fnm](zcls +
 							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
-						
+
 						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
 							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
 					}
@@ -208,17 +208,17 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._dtzones = dtzones.split(",");
 		},
 		/** Sets whether or not date/time parsing is to be lenient.
-		 * 
+		 *
 		 * <p>
 		 * With lenient parsing, the parser may use heuristics to interpret inputs
 		 * that do not precisely match this object's format. With strict parsing,
 		 * inputs must match this object's format.
-		 * 
+		 *
 		 * <p>Default: true.
 		 * @param boolean lenient
 		 */
 		/** Returns whether or not date/time parsing is to be lenient.
-		 * 
+		 *
 		 * <p>
 		 * With lenient parsing, the parser may use heuristics to interpret inputs
 		 * that do not precisely match this object's format. With strict parsing,
@@ -234,7 +234,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			for (var i = opts.length; i--;) {
 				if (opts[i].text == this._timezone) select.selectedIndex = i;
 			}
-		}		
+		}
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -318,7 +318,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
 			return;
-		
+
 		var inp = this.getInputNode(),
     		$n = jq(node),
     		$inp = jq(inp),
@@ -327,7 +327,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._buttonVisible && shallClean) {
 			$n.removeClass(inc);
 			$inp.removeClass(inc);
-			
+
 			if (zk.opera)
 				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
 			else
@@ -336,7 +336,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			$inp.addClass(inc);
 		}
 		var extraWidth = this.inRoundedMold() && shallClean;
-		
+
 		if (extraWidth) {
     		$n.removeClass(inc);
     		$inp.removeClass(inc);
@@ -344,7 +344,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn');
-		
+
 		if (extraWidth) {
     		$n.addClass(inc);
     		$inp.addClass(inc);
@@ -355,7 +355,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var n = this.$n();
 		if (this._inplace)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-			
+
 		this.$supers('doFocus_', arguments);
 
 		if (this._inplace) {
@@ -414,7 +414,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
-		
+
 		if (this._pop.isOpen()) {
 			var ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 			if (ofs)
@@ -443,24 +443,23 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	afterKeyDown_: function (evt) {
 		if (this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
-			
+
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function (){
 		this.$supers(Datebox, 'bind_', arguments);
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
-			
+
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
-			
+
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		
 		this.syncWidth();
-		
+
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this._format);
 	},
@@ -474,7 +473,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
-			
+
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
@@ -616,12 +615,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-			value = zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)
+        //2010/10/28 TonyQ:for B36-2940739 testing bug, we use db.getValue() insteadof inp.value
+        //                 the data should be a current date for system locale,
+        //                 we only use different when present it. (like inp.value)
+			value = zk.fmt.Date.parseDate(db.getValue(), db._format, false, db._value)
 				|| (inp.value ? db._value: zUtl.today(fmt));
-
 		if (value)
 			this.setValue(value);
-
 		if (fmt) {
 			var tm = db._tm;
 			tm.setVisible(true);
@@ -644,13 +644,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
 			readonly = db.isReadonly();
-			
+
 		if (fmt) {
 			var tm = db._tm,
 				time = tm.getValue();
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 		}
-		
+
 		if (oldDate)
 			date = new Date(date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
