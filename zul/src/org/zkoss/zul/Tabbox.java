@@ -127,7 +127,8 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 
 	/**
-	 * Sets whether to eable the tab scrolling
+	 * Sets whether to enable the tab scrolling.
+	 * When enabled, if tab list is wider than tab bar, left, right arrow will appear.
 	 * @since 3.5.0
 	 */
 	public void setTabscroll(boolean tabscroll) {
