@@ -486,9 +486,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doTimeZoneChange: function (evt) {
 		var select = this.$n('dtzones'),
 			timezone = select.value;
-		if (!this.getValue()) {
-			this.setValue(this._tm.getValue());
-		}
 		this.updateChange_();
 		this.fire("onTimeZoneChange", {timezone: timezone}, {toServer:true}, 150);
 		if (this._pop) this._pop.close();
