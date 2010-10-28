@@ -411,7 +411,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
     toUTCDate: function () {
         var d;
         if ((d = this._date) && this._offset)
-            (d = new Date(d.getTime()))
+            (d = new Date(d))
                 .setFullYear(d.getFullYear() - this._offset);
         return d;
     }, 
