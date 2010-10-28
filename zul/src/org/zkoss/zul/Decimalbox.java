@@ -99,6 +99,7 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).
 	 *
+	 * <p>For example, set the scale of 1234.1234 to 2, the result will be 1234.12
 	 * <p>Default: {@link #AUTO}.
 	 */
 	public void setScale(int scale) {
