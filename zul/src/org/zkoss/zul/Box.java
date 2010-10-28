@@ -167,6 +167,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	/** Sets the alignment of cells of this box in the 'opposite' direction
 	 * (<i>start</i>, center, end, stretch).
 	 *
+	 * <p>Refer to {@link #getAlign} for more information
+	 * 
 	 * @param align the alignment in the 'opposite' direction.
 	 * Allowed values: start, center, end, stretch.
 	 * If empty or null, the browser's default is used
