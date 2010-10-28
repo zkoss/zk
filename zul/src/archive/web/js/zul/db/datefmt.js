@@ -408,12 +408,13 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt);
 	},
-	toUTCDate: function () {
-		if (this._date && this._offset)
-			(this._date = new Date(this._date.getTime()))
-				.setFullYear(d.getFullYear() - this._offset);
-		return this._date;
-	},
+    toUTCDate: function () {
+        var d;
+        if ((d = this._date) && this._offset)
+            (d = new Date(d.getTime()))
+                .setFullYear(d.getFullYear() - this._offset);
+        return d;
+    }, 
 	parseDate: function (txt, fmt, strict, refval) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
 		if (this._offset && fmt) {
