@@ -5,7 +5,7 @@
 	Description:
 
 	History:
-		Fri Jan 16 19:13:43     2009, Created by Flyworld
+		Fri Jan 16 19:13:43	 2009, Created by Flyworld
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
@@ -403,22 +403,17 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	formatDate: function (val, fmt) {
 		var d;
 		if (this._offset) {
-    		d = new Date(val);
-    		d.setFullYear(d.getFullYear() + this._offset);
+			d = new Date(val);
+			d.setFullYear(d.getFullYear() + this._offset);
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt);
 	},
-    toLocaleDate: function () {
-        return this._date;
-    },
-    toUTCDate: function () {
-        var d;
-        if (this._date && this._offset) {
-            d = new Date(this._date.getTime());
-            d.setFullYear(d.getFullYear() - this._offset);
-        }
-        return d || this._date;
-    },
+	toUTCDate: function () {
+		if (this._date && this._offset)
+			(this._date = new Date(this._date.getTime()))
+				.setFullYear(d.getFullYear() - this._offset);
+		return this._date;
+	},
 	parseDate: function (txt, fmt, strict, refval) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
 		if (this._offset && fmt) {
