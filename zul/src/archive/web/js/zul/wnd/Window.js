@@ -584,7 +584,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else _lastfocus = fc;
 			_modals.unshift(this);
 
-			//au's focus uses wgt.focus(0), so we have to delay a bit (Z30-focus.zul)
+			//au's focus uses wgt.focus(0), so we have to delay a bit
+			//to see if focus has been changed to its decendant (Z30-focus.zul)
 			wnd = this;
 			setTimeout(function () {
 				if (!zUtl.isAncestor(wnd, zk.currentFocus))
