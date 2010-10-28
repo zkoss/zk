@@ -615,10 +615,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-            ldate =zk.fmt.Date.parseDate(inp.value, db._format, false, db._value),
-                //we should use UTC date instead of Locale date to our value.
-    			value = new zk.fmt.Calendar(ldate).toUTCDate()
-                    || (inp.value ? db._value: zUtl.today(fmt));
+			//we should use UTC date instead of Locale date to our value.
+			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)).toUTCDate()
+				|| (inp.value ? db._value: zUtl.today(fmt));
 		if (value)
 			this.setValue(value);
 		if (fmt) {
