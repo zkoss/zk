@@ -702,6 +702,8 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets the seltype.
+	 * Allowed values:single,multiple
+	 * 
 	 */
 	public void setSeltype(String seltype) throws WrongValueException {
 		if ("single".equals(seltype))
