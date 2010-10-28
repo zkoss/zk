@@ -68,6 +68,10 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getPageSize() {
 		return _pgsz;
 	}
+	
+	/**Sets the items to show in each page
+	 * 
+	 */
 	public void setPageSize(int size) throws WrongValueException {
 		if (size <= 0)
 			throw new WrongValueException("positive only");
@@ -83,6 +87,10 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getTotalSize() {
 		return _ttsz;
 	}
+	
+	/**Sets total size of items
+	 * 
+	 */
 	public void setTotalSize(int size) throws WrongValueException {
 		if (size < 0)
 			throw new WrongValueException("non-negative only");
@@ -130,6 +138,10 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getPageIncrement() {
 		return _pginc;
 	}
+	
+	/**
+	 * Sets the number of page list icon when mold is "os"
+	 */
 	public void setPageIncrement(int pginc) throws WrongValueException {
 		if (pginc <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
@@ -142,6 +154,10 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public boolean isDetailed() {
 		return _detailed;
 	}
+	
+	/** Sets whether to show total size and index of items in current page
+	 * 
+	 */
 	public void setDetailed(boolean detailed) {
 		if (_detailed != detailed) {
 			_detailed = detailed;
