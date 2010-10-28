@@ -1,9 +1,9 @@
 /* datefmt.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 16 19:13:43     2009, Created by Flyworld
 
@@ -206,7 +206,7 @@ zk.fmt.Date = {
 					if (hr == 24)
 						hr = 0;
 					if (isNaN(hr)) return; //failed
-					break;					
+					break;
 				case 'm':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
@@ -377,7 +377,7 @@ zk.fmt.Date = {
 	}
 };
 /**
- * The <code>calendar</code> object provides a way  
+ * The <code>calendar</code> object provides a way
  * to convert between a specific instant in time for locale-sensitive
  * like buddhist's time.
  * <p>By default the year offset is specified from server if any.</p>
@@ -408,6 +408,17 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt);
 	},
+    toLocaleDate: function () {
+        return this._date;
+    },
+    toUTCDate: function () {
+        var d;
+        if (this._date && this._offset) {
+            d = new Date(this._date.getTime());
+            d.setFullYear(d.getFullYear() - this._offset);
+        }
+        return d || this._date;
+    },
 	parseDate: function (txt, fmt, strict, refval) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
 		if (this._offset && fmt) {
