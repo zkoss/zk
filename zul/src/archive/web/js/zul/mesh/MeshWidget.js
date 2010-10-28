@@ -19,6 +19,73 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.mesh');
 
+(function () {
+	function _setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn) {
+		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
+		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+		if (headn) {
+			var cpwd = zk(headn.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
+			headn.cells[i].style.width = cpwd + "px";
+			var cell = headn.cells[i].firstChild;
+			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+		}
+	}
+	function _calcMinWd(wgt) {
+		if (wgt.eheadtbl) {
+			wgt.ehead.style.width = '';
+			wgt.eheadtbl.width = '';
+			wgt.eheadtbl.style.width = '';
+		}
+		if (wgt.head && wgt.head.$n())
+			wgt.head.$n().style.width = '';
+		if (wgt.efoottbl) {
+			wgt.efoot.style.width = '';
+			wgt.efoottbl.width = '';
+			wgt.efoottbl.style.width = '';
+		}
+		if (wgt.ebodytbl) {
+			wgt.ebody.style.width = '';
+			wgt.ebodytbl.width = '';
+			wgt.ebodytbl.style.width = '';
+		}
+
+		//calculate widths
+		var hdfaker = wgt.ehdfaker,
+			bdfaker = wgt.ebdfaker,
+			ftfaker = wgt.eftfaker,
+			head = wgt.head,
+			headn = head ? head.$n() : null,
+			wds = [],
+			width = 0,
+			w = head ? head = head.lastChild : null,
+			headWgt = wgt.getHeadWidget();
+
+		for (var i = bdfaker.cells.length; i--;) {
+			var wd = bdwd = bdfaker.cells[i].offsetWidth,
+				$cv = zk(w.$n('cave')),
+				hdwd = w ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
+				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
+				header;
+			if ((header = headWgt.getChildAt(i)) && header.getWidth())
+				hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
+			if (hdwd > wd) wd = hdwd;
+			if (ftwd > wd) wd = ftwd;
+			wds[i] = wd;
+			width += wd;
+			if (w) w = w.previousSibling;
+		}
+
+		if (wgt.eheadtbl)
+			wgt.eheadtbl.width='100%';
+		if (wgt.efoottbl)
+			wgt.efoottbl.width='100%';
+		if (wgt.ebodytbl)
+			wgt.ebodytbl.width='100%';
+		
+		return {width: width, wds: wds};
+	}
+
 /**
  *  A skeletal implementation for a mesh widget.
  *  @see zul.grid.Grid
@@ -294,31 +361,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return old != this.ehead.style.display;
 		}
 	},
-	_adjFlexWidth: function () {
-		if (!this.head) return;
+	_adjFlexWd: function () { //used by HeadWidget
+		var head = this.head;
+		if (!head) return;
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
 			ftfaker = this.eftfaker,
-			head = this.head,
 			headn = head.$n(),
 			i = 0;
 		for (var w = head.firstChild; w; w = w.nextSibling) {
-			if (w._hflexWidth !== undefined) {
-				var wd = w._hflexWidth;
-				this._setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
-			}
+			if (w._hflexWidth !== undefined)
+				_setFakerWd(i, w._hflexWidth, hdfaker, bdfaker, ftfaker, headn);
 			++i;
-		}
-	},
-	_setFakerWd: function (i, wd, hdfaker, bdfaker, ftfaker, headn) {
-		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
-		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-		if (headn) {
-			var cpwd = zk(headn.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
-			headn.cells[i].style.width = cpwd + "px";
-			var cell = headn.cells[i].firstChild;
-			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 		}
 	},
 	_bindDomNode: function () {
@@ -665,12 +719,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ehead) {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
 			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
-				this.$class._adjHeadWd(this);
+				this._adjHeadWd();
 			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
-				this.$class.cpCellWidth(this);
+				this._cpCellWd();
 		}
 		
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
@@ -750,21 +804,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	beforeMinFlex_: function (orient) {
 		if (this._hflexsz === undefined && this.isSizedByContent() && orient == 'w' && this.width === undefined)
 			this._calcSize();
-	}
-}, { //static
-	_adjHeadWd: function (wgt) {
-		var hdfaker = wgt.ehdfaker,
-			bdfaker = wgt.ebdfaker,
-			ftfaker = wgt.eftfaker;
+	},
+	_adjHeadWd: function () {
+		var hdfaker = this.ehdfaker,
+			bdfaker = this.ebdfaker,
+			ftfaker = this.eftfaker;
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
 		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
-		|| !wgt.getBodyWidgetIterator().hasNext()) return;
+		|| !this.getBodyWidgetIterator().hasNext()) return;
 		
-		var hdtable = wgt.ehead.firstChild, head = wgt.head.$n();
+		var hdtable = this.ehead.firstChild, head = this.head.$n();
 		if (!head) return; 
 		if (zk.opera) {
 			if (!hdtable.style.width) {
-				var isFixed = true, tt = wgt.ehead.offsetWidth;
+				var isFixed = true, tt = this.ehead.offsetWidth;
 				for(var i = hdfaker.cells.length; i--;) {
 					if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
 						isFixed = false; 
@@ -777,20 +830,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		// Bug #1886788 the size of these table must be specified a fixed size.
-		var bdtable = wgt.ebody.firstChild,
+		var bdtable = this.ebody.firstChild,
 			total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
 			tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
 			
-		if (total == wgt.ebody.offsetWidth && 
-			wgt.ebody.offsetWidth > tblwd && wgt.ebody.offsetWidth - tblwd < 20)
+		if (total == this.ebody.offsetWidth && 
+			this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
 			total = tblwd;
 			
-		var xwds = wgt.$class._calcMinWd(wgt),
+		var xwds = _calcMinWd(this),
 			wds = xwds.wds,
 			width = xwds.width,
-			isSpan = !wgt.getHflex() && wgt.isSpan(),
+			isSpan = !this.getHflex() && this.isSpan(),
 			extSum = isSpan ? total - width : 0;
-		if (extSum <= 0 && (wgt.isSizedByContent() || !wgt.$n().style.width || width > total)) {
+		if (extSum <= 0 && (this.isSizedByContent() || !this.$n().style.width || width > total)) {
 			total = width;
 			head.style.width = total + 'px';
 		}
@@ -799,7 +852,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		hdtable.style.width = total + "px";	
 		
 		if (bdtable) bdtable.style.width = hdtable.style.width;
-		if (wgt.efoot) wgt.efoot.firstChild.style.width = hdtable.style.width;
+		if (this.efoot) this.efoot.firstChild.style.width = hdtable.style.width;
 		
 		for (var i = bdfaker.cells.length; i--;) {
 			if (!zk(hdfaker.cells[i]).isVisible()) continue;
@@ -827,25 +880,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// in some case, the total width of this table may be changed.
 		if (total != hdtable.offsetWidth) {
 			total = hdtable.offsetWidth;
-			tblwd = Math.min(wgt.ebody.clientWidth, bdtable.offsetWidth);
-			if (total == wgt.ebody.offsetWidth && 
-				wgt.ebody.offsetWidth > tblwd && wgt.ebody.offsetWidth - tblwd < 20)
+			tblwd = Math.min(this.ebody.clientWidth, bdtable.offsetWidth);
+			if (total == this.ebody.offsetWidth && 
+				this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
 				total = tblwd;
 				
 			hdtable.style.width = total + "px";	
 			if (bdtable) bdtable.style.width = hdtable.style.width;
-			if (wgt.efoot) wgt.efoot.firstChild.style.width = hdtable.style.width;
+			if (this.efoot) this.efoot.firstChild.style.width = hdtable.style.width;
 		}
 	},
-	cpCellWidth: function (wgt) {
-		var dst = wgt.efoot.firstChild.rows[0],
-			srcrows = wgt.ebodyrows;
+	_cpCellWd: function () {
+		var dst = this.efoot.firstChild.rows[0],
+			srcrows = this.ebodyrows;
 		if (!dst || !srcrows || !srcrows.length || !dst.cells.length)
 			return;
 		var ncols = dst.cells.length,
 			src, maxnc = 0;
-		for (var j = 0, it = wgt.getBodyWidgetIterator(), w; (w = it.next());) {
-			if (!w.isVisible() || (wgt._modal && !w._loaded)) continue;
+		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next());) {
+			if (!w.isVisible() || (this._modal && !w._loaded)) continue;
 
 			var row = srcrows[j++], $row = zk(row),
 				cells = row.cells, nc = $row.ncols(),
@@ -899,68 +952,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 	
-		if (zk.opera && wgt.isSizedByContent())
+		if (zk.opera && this.isSizedByContent())
 			dst.parentNode.parentNode.style.width = sum + "px";
 	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
-	},
-	_calcMinWd: function (wgt) {
-		if (wgt.eheadtbl) {
-			wgt.ehead.style.width = '';
-			wgt.eheadtbl.width = '';
-			wgt.eheadtbl.style.width = '';
-		}
-		
-		if (wgt.head && wgt.head.$n())
-			wgt.head.$n().style.width = '';
-			
-		if (wgt.efoottbl) {
-			wgt.efoot.style.width = '';
-			wgt.efoottbl.width = '';
-			wgt.efoottbl.style.width = '';
-		}
-		
-		if (wgt.ebodytbl) {
-			wgt.ebody.style.width = '';
-			wgt.ebodytbl.width = '';
-			wgt.ebodytbl.style.width = '';
-		}
-		
-		//calculate widths
-		var hdfaker = wgt.ehdfaker,
-			bdfaker = wgt.ebdfaker,
-			ftfaker = wgt.eftfaker,
-			head = wgt.head,
-			headn = head ? head.$n() : null,
-			wds = [],
-			width = 0,
-			w = head ? head = head.lastChild : null,
-			headWgt = wgt.getHeadWidget();
-
-		for (var i = bdfaker.cells.length; i--;) {
-			var wd = bdwd = bdfaker.cells[i].offsetWidth,
-				$cv = zk(w.$n('cave')),
-				hdwd = w ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
-				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
-				header;
-			if ((header = headWgt.getChildAt(i)) && header.getWidth())
-				hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
-			if (hdwd > wd) wd = hdwd;
-			if (ftwd > wd) wd = ftwd;
-			wds[i] = wd;
-			width += wd;
-			if (w) w = w.previousSibling;
-		}
-		if (wgt.eheadtbl)
-			wgt.eheadtbl.width='100%';
-		
-		if (wgt.efoottbl)
-			wgt.efoottbl.width='100%';
-		
-		if (wgt.ebodytbl)
-			wgt.ebodytbl.width='100%';
-		
-		return {width: width, wds: wds};
 	}
 });
+})();

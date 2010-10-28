@@ -118,7 +118,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
 		var wgt = this.parent;
 		if (wgt && !wgt.isSizedByContent())
-			wgt._adjFlexWidth();
+			wgt._adjFlexWd();
 	}
 },{ //static
 	redraw: function (out) {

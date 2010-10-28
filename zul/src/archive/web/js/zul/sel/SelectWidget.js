@@ -337,12 +337,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (this.ehead) {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
 			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
-				this.$class._adjHeadWd(this);
+				this._adjHeadWd();
 			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
-				this.$class.cpCellWidth(this);
+				this._cpCellWd();
 		}
 
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work

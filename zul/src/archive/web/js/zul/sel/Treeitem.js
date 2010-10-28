@@ -74,7 +74,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!img || _closed(this.parent))
 				return;
 
-			var cn = img.className;
+			var cn = img.className,
+				tree = this.getTree(),
+				oldwd = tree ? tree.ebodytbl.clientWidth: 0;
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
@@ -85,10 +87,19 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					indemand = tree.inPagingMold() || tree.isModel();
 				this.fire('onOpen', {open: open}, {toServer: indemand});
 			}
-			var tree = this.getTree();
+
 			if (tree) {
 				tree._syncFocus(this);
 				tree.focus();
+
+				if (oldwd != tree.ebodytbl.clientWidth) {
+					var cnt = tree._fixhwcnt;
+					tree._fixhwcnt = cnt ? cnt + 1: 1;
+					setTimeout(function () {
+						if (!--tree._fixhwcnt)
+							tree._calcSize();
+					}, 200);
+				}
 			}
 		}
 	},
