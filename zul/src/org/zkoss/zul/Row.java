@@ -84,6 +84,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		return _align;
 	}
 	/** Sets the horizontal alignment of the whole row.
+	 * Allowed values: right, left, center, justify, char
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
@@ -112,6 +113,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		return _valign;
 	}
 	/** Sets the vertical alignment of the whole row.
+	 * Allowed values: top, middle, bottom, baseline
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
