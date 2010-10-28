@@ -190,6 +190,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return true;
 	}
 
+	/** Sets the mold to render this component.
+	 *
+	 * @param mold the mold. If null or empty, "default" is assumed.
+	 * Allowed values: default, paging
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
+	 */	
 	//-- super --//
 	public void setMold(String mold) {
 		final String old = getMold();
@@ -355,7 +361,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return inPagingMold() ? pgi().getPageSize(): 0;
 	}
 	/** Sets the page size, aka., the number items per page.
-	 * <p>Note: mold is not "paging" and no external controller is specified.
+	 * <p>Note: mold is "paging" and no external controller is specified.
 	 * @since 2.4.1
 	 */
 	public void setPageSize(int pgsz) throws WrongValueException {
