@@ -272,7 +272,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this.efield.value = val;
 		}
 	},
-	focus: function (timeout) {
+	focus_: function (timeout) {
 		if (this._view != 'decade') 
 			this._markCal({timeout: timeout});
 		else {
@@ -280,6 +280,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			if (anc)
 				_doFocus(anc.firstChild, true);
 		}
+		return true;
 	},
 	bind_: function (){
 		this.$supers(Calendar, 'bind_', arguments);

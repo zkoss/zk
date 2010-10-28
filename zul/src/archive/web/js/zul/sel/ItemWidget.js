@@ -147,14 +147,12 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			}
 		});
 	},
-	focus: function (timeout) {
+	focus_: function (timeout) {
 		var mesh = this.getMeshWidget();
 			mesh._focusItem = this;
-		if (this.isVisible() && this.canActivate({checkOnly: true})) {
-			this._doFocusIn();
-			mesh.focusA_(mesh.$n('a'), timeout);
-		}
-		return false;
+		this._doFocusIn();
+		mesh.focusA_(mesh.$n('a'), timeout);
+		return true;
 	},
 	_doFocusIn: function () {
 		var n = this.$n();

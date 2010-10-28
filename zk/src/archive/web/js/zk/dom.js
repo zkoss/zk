@@ -55,23 +55,13 @@ zjq = function (jq) { //ZK extension
 			var w = zk.Widget.$(n);
 			if (w) zk.currentFocus = w;
 		} catch (e) {
-			setTimeout(function() {
-				try {
-					_focus(n);
-				} catch (e) {
-					setTimeout(function() {try {_focus(n);} catch (e) {}}, 100);
-				}
-			}, 0);
-		} //IE throws exception if failed to focus in some cases
+		}
 	}
 	function _select(n) {
 		try {
 			n.select();
 		} catch (e) {
-			setTimeout(function() {
-				try {n.select();} catch (e) {}
-			}, 0);
-		} //IE throws exception when select() in some cases
+		}
 	}
 
 	function _submit() {
@@ -1307,7 +1297,15 @@ jq(el).zk.center(); //same as 'center'
 	beforeHideOnUnbind: zk.$void,
 
 	//focus/select//
-	/** Sets the focus to the first matched element. It is the same as DOMElement.focus, except it doesn't throw any exception (rather, returns false), and it can set the focus later (by use of timeout). 
+	/** Sets the focus to the first matched element.
+	 * It is the same as jq(n).focus() and n.focus, except
+	 * <ul>
+	 * <li>it doesn't throw any exception (rather, returns false).</li>
+	 * <li>it can set the focus later (by use of timeout). </li>
+	 * <li>it maintains {@link zk#currentFocus}.</li>
+	 * </ul>
+	 * <p>In general, it is suggested to use zk(n).focus(), unless
+	 * n does not belong to any widget.
 	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately. 
 	 * @return boolean whether the focus is allowed to set to the element. Currently, only SELECT, BUTTON, INPUT and IFRAME is allowed. 
 	 * @see #select

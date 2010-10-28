@@ -24,7 +24,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt = zUtl.now() + 60000, //when zk.Desktop.sync() shall be called
-		_rdque = [], _rdtid; //async rerender's queue and timeout ID
+		_rdque = [], _rdtid, //async rerender's queue and timeout ID
+		_ignCanActivate; //whether canActivate always returns true
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -231,8 +232,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//restore focus
 	function _rsFocus(cf) {
-		if (cf && cf.desktop && !zk.currentFocus)
-			cf.focus();
+		if (cf && cf.desktop && !zk.currentFocus) {
+			_ignCanActivate = true;
+			try {
+				cf.focus();
+			} finally {
+				_ignCanActivate = false;
+			}
+		}
 	}
 
 	//set minimum flex size and return it
@@ -3350,32 +3357,41 @@ unbind_: function (skipper, after) {
 
 	/** Sets the focus to this widget.
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
-	 * <p>Default: call child widget's focus until it returns true, or no child at all. 
-	 * <h3>Subclass Note</h3>
-	 * <ul>
-	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _global_.jqzk#focus}.</li>
-	 * </ul>
-<pre><code>
-focus: function (timeout) {
- if (this.isVisible() && this.canActivate({checkOnly:true}))
-  zk(this).focus(timeout);
-}
-</pre></code>
+	 * <p>Notice: don't override this method. Rather, override {@link #focus_},
+	 * which this method depends on.
      * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately, 
 	 * @return boolean whether the focus is gained to this widget. 
 	 */
 	focus: function (timeout) {
-		var node;
-		if (this.isVisible() && this.canActivate({checkOnly:true})
-		&& (node = this.$n())) {
-			if (zk(node).focus(timeout)) {
-				this.setTopmost();
-				return true;
-			}
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w.isVisible() && w.focus(timeout))
-					return true;
+		return this.canActivate({checkOnly:true})
+			&& zk(this.$n()).isRealVisible()
+			&& this.focus_(timeout);
+	},
+	/** Called by {@link #focus} to set the focus.
+	 * <p>Default: call child widget's focus until it returns true, or no child at all. 
+	 * <h3>Subclass Note</h3>
+	 * <ul>
+	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _global_.jqzk#focus}.</li>
+	 * <li>It is called only if the DOM element is real visible (so you don't need to check again)</li>
+	 * </ul>
+<pre><code>
+focus_: function (timeout) {
+  zk(this.$n('foo').focus(timeout);
+  return true;
+}
+</pre></code>
+     * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately, 
+	 * @return boolean whether the focus is gained to this widget. 
+	 * @since 5.0.5
+	 */
+	focus_: function (timeout) {
+		if (zk(this.$n()).focus(timeout)) {
+			this.setTopmost();
+			return true;
 		}
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w.isVisible() && w.focus(timeout))
+				return true;
 		return false;
 	},
 	/** Checks if this widget can be activated (gaining focus and so on).
@@ -3396,6 +3412,8 @@ focus: function (timeout) {
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
+		if (_ignCanActivate)
+			return true;
 		if (zk.busy && (!opts || !opts.checkOnly)) { //Bug 2912533: none of widget can be activated if busy
 			jq.focusOut(); // Bug 2968706
 			return false;

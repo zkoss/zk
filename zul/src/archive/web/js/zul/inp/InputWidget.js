@@ -616,12 +616,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	focus: function (timeout) {
-		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.getInputNode()).focus(timeout);
-			return true;
-		}
-		return false;
+	focus_: function (timeout) {
+		zk(this.getInputNode()).focus(timeout);
+		return true;
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
