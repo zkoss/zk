@@ -222,6 +222,7 @@ zk.fmt.Date = {
 				case 'a':
 					if (!hasHour1)
 						break;
+					if (!token) return; //failed
 					isAM = token.startsWith(zk.APM[0]);
 					break
 				//default: ignored
