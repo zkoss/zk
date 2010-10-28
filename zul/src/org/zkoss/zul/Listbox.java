@@ -634,6 +634,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets whether it is disabled.
+	 * <p>Note that it is only applied when mold is "select".
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
@@ -2898,7 +2899,12 @@ public class Listbox extends XulElement implements Paginated,
 		}
 	}
 
-	// -- super --//
+	/** Sets the mold to render this component.
+	 *
+	 * @param mold the mold. If null or empty, "default" is assumed.
+	 * Allowed values: default, select, paging 
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
+	 */
 	public void setMold(String mold) {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
