@@ -98,6 +98,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	
 	/**
 	 * Sets whether to enable the menubar scrolling
+	 * When enable, if menubar is shorter than total width of menu, left,right arrow will appear.
 	 * @since 3.6.3
 	 */
 	public void setScrollable(boolean scrollable){
