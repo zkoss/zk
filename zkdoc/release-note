@@ -88,9 +88,11 @@ ZK 5.0.5
   3094118: Tree.onTreeDataChange does not update the tree correctly
   3094686: border in image not work
   3092890: Rows.invalidate does not respect frozen state
+  3096210: Listbox/Grid rod show blank view in special scroll pattern
   3096342: onChange not fired if change time in timebox (of popup)
   3095469: tree should resize header while scrollbar appear
   3095549: rod in tree make add child not work
+  3095453: tree can't expand if model is set in button onClick
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

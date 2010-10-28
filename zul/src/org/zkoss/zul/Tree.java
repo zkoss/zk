@@ -1448,6 +1448,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				} else {
 					if (_treechildren != null) _treechildren.detach();
 						//don't call getItems().clear(), since it readonly
+					//bug# 3095453: tree can't expand if model is set in button onClick
+					smartUpdate("model", true);
 				}
 
 				_model = model;
@@ -1459,6 +1461,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_model = null;
 			if (_treechildren != null) _treechildren.detach();
 				//don't call getItems().clear(), since it readonly
+			//bug# 3095453: tree can't expand if model is set in button onClick
+			smartUpdate("model", false);
 		}
 	}
 
