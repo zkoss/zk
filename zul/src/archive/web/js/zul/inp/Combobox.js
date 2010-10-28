@@ -97,7 +97,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	 * @param String val the name of flag, such as "no positive".
 	 */
 	validateStrict: function (val) {
-		return this._findItem(val, true) ? null: msgzul.VALUE_NOT_MATCHED;
+		var cst = this._cst;
+		return this._findItem(val, true) ? null: 
+			(cst ? cst._errmsg: '') || msgzul.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
 		return this._findItem0(val, strict);

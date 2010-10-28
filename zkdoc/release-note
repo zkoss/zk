@@ -94,6 +94,7 @@ ZK 5.0.5
   3095549: rod in tree make add child not work
   3095453: tree can't expand if model is set in button onClick
   3097181: Colorbox in menu, doesn't work with menubar autodrop="true"
+  3097199: Combobox strict constraint not using custom message
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
