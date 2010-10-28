@@ -90,6 +90,7 @@ ZK 5.0.5
   3092890: Rows.invalidate does not respect frozen state
   3096342: onChange not fired if change time in timebox (of popup)
   3095469: tree should resize header while scrollbar appear
+  3095549: rod in tree make add child not work
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
