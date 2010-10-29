@@ -28,6 +28,8 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
@@ -258,19 +260,26 @@ public class HtmlPageRenders {
 		sb.append(" -->\n");
 
 		int tmout = 0;
-		if (desktop != null) {
-			final Boolean autoTimeout = getAutomaticTimeout(desktop);
-			if (autoTimeout != null ?
-			autoTimeout.booleanValue():
-			wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
+		final Boolean autoTimeout = getAutomaticTimeout(desktop);
+		if (autoTimeout != null ? autoTimeout.booleanValue():
+		wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
+			if (desktop != null) {
 				tmout = desktop.getSession().getMaxInactiveInterval();
-				if (tmout > 0) { //unit: seconds
-					int extra = tmout / 8;
-					tmout += extra > 60 ? 60: extra < 3 ? 3: extra;
-						//Add extra seconds to ensure it is really timeout
+			} else {
+				Object req = exec.getNativeRequest();
+				if (req instanceof HttpServletRequest)  {
+					HttpSession sess = ((HttpServletRequest)req).getSession(false);
+					if (sess != null)
+						tmout = sess.getMaxInactiveInterval();
 				}
 			}
+			if (tmout > 0) { //unit: seconds
+				int extra = tmout / 8;
+				tmout += extra > 60 ? 60: extra < 3 ? 3: extra;
+					//Add extra seconds to ensure it is really timeout
+			}
 		}
+
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null,
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
@@ -299,10 +308,11 @@ public class HtmlPageRenders {
 		return sb.toString();
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
-		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-			Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
-			if (b != null) return b;
-		}
+		if (desktop != null)
+			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+				Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+				if (b != null) return b;
+			}
 		return null;
 	}
 	/** Returns HTML tags to include all style sheets that are
