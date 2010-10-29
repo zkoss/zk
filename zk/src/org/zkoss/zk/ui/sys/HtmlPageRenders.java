@@ -266,7 +266,7 @@ public class HtmlPageRenders {
 				tmout = desktop.getSession().getMaxInactiveInterval();
 				if (tmout > 0) { //unit: seconds
 					int extra = tmout / 8;
-					tmout += extra > 180 ? 180: extra < 3 ? 3: extra;
+					tmout += extra > 60 ? 60: extra < 3 ? 3: extra;
 						//Add extra seconds to ensure it is really timeout
 				}
 			}
