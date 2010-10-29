@@ -386,6 +386,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {
+		if (jq.nodeName(evt.domTarget, 'option', 'select'))
+			return;
+			
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
 		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
