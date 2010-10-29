@@ -276,7 +276,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this._view != 'decade') 
 			this._markCal({timeout: timeout});
 		else {
-			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
+			var anc = jq(this.$n()).find('.' + this.getZclass() + '-seld')[0];
 			if (anc)
 				_doFocus(anc.firstChild, true);
 		}
