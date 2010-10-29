@@ -705,7 +705,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('_setView', arguments);
 	}
 });
-zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
+zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onChanging: this}, -1000);

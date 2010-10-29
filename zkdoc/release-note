@@ -100,6 +100,7 @@ ZK 5.0.5
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
     (such that the naming is consistent with ListModel's implementations)
+  + zul.inp.Timebox is renamed to zul.db.Timebox (JavaScript)
   + For listbox and tree, if checkmark is enabled, clicking an item will toggle
     the selection rather than deselect all others.
     If you want to deselect all others (as 5.0.4 or ealier did), please

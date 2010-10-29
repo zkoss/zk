@@ -171,9 +171,20 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
+		if (_tzone != tzone) {
+			_tzone = tzone;
+			smartUpdate("_value", marshall(_value));
+		}
 	}
 	
+	protected Object marshall(Object value) {
+		if (value == null || _tzone == null) return value;
+		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
+	}
+	protected Object unmarshall(Object value) {
+		if (value == null || _tzone == null) return value;
+		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		//null or empty string,
 		if (value == null || value.length() == 0){
@@ -195,12 +206,6 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 		final DateFormat df = getDateFormat(getFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
-	protected Object marshall(Object value) {
-		return coerceToString(value);
-	}
-	protected Object unmarshall(Object val) {
-		return coerceFromString((String)val);
-	}
 	
 	/** Returns the date format of the time only,
 	 *
@@ -220,6 +225,7 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
+
 		if(_btnVisible != true)
 			renderer.render("buttonVisible", _btnVisible);
 	}

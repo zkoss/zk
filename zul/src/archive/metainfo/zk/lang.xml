@@ -1090,14 +1090,14 @@ def alert(m):
 	<component>
 		<component-name>timebox</component-name>
 		<component-class>org.zkoss.zul.Timebox</component-class>
-		<widget-class>zul.inp.Timebox</widget-class>
+		<widget-class>zul.db.Timebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/spinner.js</mold-uri>
+			<mold-uri>mold/timebox.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
-			<mold-uri>mold/spinner.js</mold-uri>
+			<mold-uri>mold/timebox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
