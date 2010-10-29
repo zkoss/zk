@@ -69,7 +69,7 @@ zk.copy(zjq, {
 	_src0: "javascript:false;",
 		//IE: prevent secure/nonsecure warning with HTTPS
 
-	_fixIframe: function (el) { //used in widget.js
+	_fixIframe: function (el) { //used in widget.js (Bug 2900274)
 		try {
 			if (jq.nodeName(el, 'iframe'))
 				zk(el).redoSrc();

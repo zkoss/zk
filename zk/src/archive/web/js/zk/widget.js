@@ -4920,7 +4920,7 @@ Object skip(zk.Widget wgt);
 				skip.removeChild(el);
 				loc.appendChild(el);
 
-				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
+				zjq._fixIframe(el); //in domie.js, Bug 2900274
 			}
 		}
 	}
