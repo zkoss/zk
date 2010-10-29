@@ -209,6 +209,7 @@ zk.copy(zjq, {
 	},
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
+	_useQS: zk.$void, //overriden in domie67.js (used in zAU)
 
 	_src0: "" //an empty src; overriden in domie.js
 });

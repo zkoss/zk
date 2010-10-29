@@ -267,7 +267,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function ajaxSendNow(reqInf) {
 		var setting = zAu.ajaxSettings,
 			req = setting.xhr(),
-			uri = shallUseQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
+			uri = zjq._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (cpsp)
 		try {
 			req.onreadystatechange = onResponseReady;
@@ -328,21 +328,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 		return jq.toJSON(data);
 	}
-
-	//IE: use query string if possible to avoid incomplete-request problem
-	var shallUseQS = zk.ie ? function (reqInf) {
-		var s = reqInf.content, j = s.length, prev, cc;
-		if (j + reqInf.uri.length < 2000) {
-			while (j--) {
-				cc = s.charAt(j);
-				if (cc == '%' && prev >= '8') //%8x, %9x...
-					return false;
-				prev = cc;
-			}
-			return true;
-		}
-		return false;
-	}: zk.$void;
 
 	function doCmdsNow(cmds) {
 		var rtags = cmds.rtags||{}, ex;
