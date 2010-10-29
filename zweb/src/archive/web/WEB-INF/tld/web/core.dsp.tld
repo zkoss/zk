@@ -186,7 +186,40 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<function-signature>java.lang.Object new_(java.lang.Object)</function-signature>
 		<description>
 	Instantiates the specified class.
-	The argument could be either a string (class name) or a Class instance.
+	The parameter could be either a string (class name) or a Class instance.
+		</description>
+	</function>
+	<function>
+		<name>new1</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.Object new_(java.lang.Object, java.lang.Object)</function-signature>
+		<description>
+	Instantiates the specified class and argument.
+	The first parameter could be either a string (class name) or a Class instance.
+	The second parameter is the argument passed to the constructor.
+		</description>
+	</function>
+	<function>
+		<name>new2</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.Object new_(java.lang.Object, java.lang.Object, java.lang.Object)</function-signature>
+		<description>
+	Instantiates the specified class and two arguments.
+	The first parameter could be either a string (class name) or a Class instance.
+	The second parameter is the first argument passed to the constructor.
+	The third parameter is the second argument passed to the constructor.
+		</description>
+	</function>
+	<function>
+		<name>new3</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.Object new_(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)</function-signature>
+		<description>
+	Instantiates the specified class and three arguments.
+	The first parameter could be either a string (class name) or a Class instance.
+	The second parameter is the first argument passed to the constructor.
+	The third parameter is the second argument passed to the constructor.
+	The fourth parameter is the third argument passed to the constructor.
 		</description>
 	</function>
 

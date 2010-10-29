@@ -20,6 +20,7 @@ ZK 5.0.5
   3095460: Listbox/Grid support span attribute, extend column width when there are available extra space 
   3096119: Smart-update supports the Date object
   3096990: The mold attrs of the window shall be public
+  3097894: EL supports more instantiation functions, e.g., new1, new2
   
 * Bugs
   3057902: zk bug for window showbusy
