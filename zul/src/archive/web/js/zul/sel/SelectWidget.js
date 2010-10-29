@@ -70,7 +70,12 @@ var SelectWidget =
  */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_rows: 0,
-	_rightSelect: true,
+	/** Whether to toggle a list item selection on right click
+	 * <p>Default: true (unless the server changes the setting)
+	 * @since 5.0.5
+	 * @type boolean
+	 */
+	rightSelect: true,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -664,15 +669,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: always false (don't ignore) unless {@link #isRightSelct} is true and event is onRightClick.
+	 * <p>Default: always false (don't ignore) unless {@link #rightSelect} is true and event is onRightClick.
 	 * Notice that clicking on button/textbox are already ignored, i.e.,
 	 * this method won't be called if the user clicks on, say, a button.
 	 * @param zk.Event evt the event
+	 * @param ItemWidget row the row about to be selected
 	 * @return boolean wether to ignore
 	 */
-	shallIgnoreSelect_: function (evt) {
+	shallIgnoreSelect_: function (evt/*, row*/) { //row has to be the second argument for backward compatible
 		//see also _shallIgnore
-		return evt.name == 'onRightClick' && !this._rightSelect;
+		return evt.name == 'onRightClick' && !this.rightSelect;
 	},
 	//@param bSel whether it is called by _doItemSelect
 	_shallIgnore: function(evt, bSel) { // move this function in the widget for override
@@ -714,7 +720,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
 		if (zk.dragging || this._shallIgnore(evt, true)
-		|| this.shallIgnoreSelect_(evt))
+		|| this.shallIgnoreSelect_(evt, row))
 			return;
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element

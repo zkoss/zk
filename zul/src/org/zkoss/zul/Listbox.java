@@ -3252,7 +3252,7 @@ public class Listbox extends XulElement implements Paginated,
 			if (isCheckmarkDeselectOther())
 				renderer.render("_cdo", true);
 			if (!isRightSelect())
-				renderer.render("_rightSelect", false);
+				renderer.render("rightSelect", false);
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click

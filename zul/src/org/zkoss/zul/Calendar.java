@@ -42,7 +42,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
-	private TimeZone _tzone;
 	private Date _value;
 	/** The name. */
 	private String _name;
@@ -62,12 +61,11 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public TimeZone getTimeZone() {
-		return _tzone;
+		return null;
 	}
 	/** As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
 	}
 
 	/** Returns the value that is assigned to this component, never null.

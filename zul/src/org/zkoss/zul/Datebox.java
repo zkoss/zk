@@ -419,8 +419,7 @@ public class Datebox extends FormatInputElement implements
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
-																					// 2564298
+		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
 	}
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;

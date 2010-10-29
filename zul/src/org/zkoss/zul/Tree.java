@@ -1919,7 +1919,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (isCheckmarkDeselectOther())
 			renderer.render("_cdo", true);
 		if (!isRightSelect())
-			renderer.render("_rightSelect", false);
+			renderer.render("rightSelect", false);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
