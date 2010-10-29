@@ -275,7 +275,7 @@ public class HtmlPageRenders {
 			}
 			if (tmout > 0) { //unit: seconds
 				int extra = tmout / 8;
-				tmout += extra > 60 ? 60: extra < 3 ? 3: extra;
+				tmout += extra > 60 ? 60: extra < 5 ? 5: extra;
 					//Add extra seconds to ensure it is really timeout
 			}
 		}

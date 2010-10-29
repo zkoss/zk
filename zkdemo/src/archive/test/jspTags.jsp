@@ -20,7 +20,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <html>
 	<head>
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
 		<title>Test of ZK JSP Tags</title>
+<%
+	request.setAttribute(org.zkoss.zk.ui.sys.Attributes.NO_CACHE, Boolean.TRUE);
+%>
 		<z:zkhead/>
 	</head>
 	<body style="height:auto">
