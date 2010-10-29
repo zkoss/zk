@@ -59,7 +59,7 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
-		if (typeof val.getTime == 'function') {
+		if (val && typeof val.getTime == 'function') {
 			var v = new Date(val.getFullYear(), val.getMonth(), val.getDate());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
 				return this.outOfRangeValue();
