@@ -3,8 +3,6 @@ package org.zkoss.zkdemo.test;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hibernate.criterion.MatchMode;
-
 public class ComparisonType {
     private ComparisonType(String name) {
         this.name =name;
