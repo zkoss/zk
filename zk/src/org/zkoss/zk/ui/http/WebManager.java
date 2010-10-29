@@ -344,8 +344,8 @@ public class WebManager {
 		return webman != null ? webman.getWebApp(): null;
 	}
 
-	/**  Returns the session associated with the specified request request,
-	 * or if the request does not have a session, creates one.
+	/**  Returns the session associated with the specified request request.
+	 * If the request does not have a session, creates one.
 	 */
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {

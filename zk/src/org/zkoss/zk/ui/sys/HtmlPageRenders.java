@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -268,9 +269,20 @@ public class HtmlPageRenders {
 			} else {
 				Object req = exec.getNativeRequest();
 				if (req instanceof HttpServletRequest)  {
-					HttpSession sess = ((HttpServletRequest)req).getSession(false);
-					if (sess != null)
-						tmout = sess.getMaxInactiveInterval();
+					final HttpSession hsess = ((HttpServletRequest)req).getSession(false);
+					if (hsess != null) {
+						final Session sess = SessionsCtrl.getSession(wapp, hsess);
+						if (sess != null) {
+							tmout = sess.getMaxInactiveInterval();
+						} else {
+							//try configuration first since HttpSession's timeout is set
+							//when ZK Session is created (so it is not set yet)
+							tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
+							if (tmout == 0) //system default
+								tmout = hsess.getMaxInactiveInterval();
+						}
+					} else
+						tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
 				}
 			}
 			if (tmout > 0) { //unit: seconds

@@ -120,7 +120,8 @@ public class SessionsCtrl extends Sessions {
 	private static final String ATTR_REQUEST_COUNT
 		= "org.zkoss.zk.ui.sys.RequestCount";
 
-	/** Returns the ZK session associated with the specified native session.
+	/** Returns the ZK session associated with the specified native session,
+	 * or null if not found.
 	 *
 	 * @param navsess the native session (never null).
 	 * If HTTP, it is HttpSession. If portlet, it is PortletSession.
