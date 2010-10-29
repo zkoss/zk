@@ -25,6 +25,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<title>Test of ZK JSP Tags</title>
 <%
 	request.setAttribute(org.zkoss.zk.ui.sys.Attributes.NO_CACHE, Boolean.TRUE);
+		//No need to keep desktop since no-cache is specified above
 %>
 		<z:zkhead/>
 	</head>

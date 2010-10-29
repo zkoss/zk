@@ -275,10 +275,12 @@ public class HtmlPageRenders {
 						if (sess != null) {
 							tmout = sess.getMaxInactiveInterval();
 						} else {
-							//try configuration first since HttpSession's timeout is set
-							//when ZK Session is created (so it is not set yet)
+						//try configuration first since HttpSession's timeout is set
+						//when ZK Session is created (so it is not set yet)
+						//Note: no need to setMaxInactiveInternval here since it will
+						//be set later or not useful at the end
 							tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
-							if (tmout == 0) //system default
+							if (tmout <= 0) //system default
 								tmout = hsess.getMaxInactiveInterval();
 						}
 					} else
