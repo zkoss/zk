@@ -21,5 +21,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<n:p>Press LEFT and RIGHT key to see if we can change the position,
 	also press HOME, END, DEL... to see if work (in intbox).
 	Test: Opera and Safari</n:p>
-	<intbox/>
+	<intbox id="intbox" />
 </zk>
