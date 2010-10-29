@@ -234,6 +234,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _rsFocus(cf) {
 		if (cf && cf.desktop && !zk.currentFocus) {
 			_ignCanActivate = true;
+				//s.t., Window's rerender could gain focus back and receive onblur correctly
 			try {
 				cf.focus();
 			} finally {
