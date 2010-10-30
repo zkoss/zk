@@ -249,17 +249,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._value;
 	},
 	/** Sets the value in the String format(assumes no locale issue).
-	 * @param String value the value; If null, it is considered as empty.
+	 * @param Object value the value. If it is a string, {@link #coerceFromString_}
+	 * will be called to convert it.
 	 * @param boolean fromServer it will clear error message if true
 	 */
 	setValue: function (value, fromServer) {
 		var vi;
 		if (fromServer) this.clearErrorMessage(true);
-		else if (value == this._lastRawValVld) return; //not changed
- 		else {
+		else {
+			if (typeof value == 'string')
+				value = this.coerceFromString_(value);
+			if (value == this._lastRawValVld)
+				return; //not changed
+
  			vi = this._validate(value);
  			value = vi.value;
- 		}
+	 	}
 
 		_clearOnChanging(this);
 
