@@ -97,13 +97,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 	},
-	/** Returns the string representing the time assigned to this widget,
-	 * or an empty string if the time is null
-	 * @return String
-	 */
-	getText: function () {
-		return this.coerceToString_(this._value);
-	},
 	_checkFormat: function (fmt) {
 		var error, out = [];
 		for (var i = 0, j = fmt.length; i < j; i++) {

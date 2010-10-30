@@ -247,14 +247,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	/** Returns the text represent the value in the given format,
-	 * or an empty etring if value is null
-	 * @return String
-	 * @since 5.0.5
-	 */
-	getText: function () {
-		return this.coerceToString_(this._value);
-	},
 	/** Returns the Time format of the specified format
 	 * @return String
 	 */

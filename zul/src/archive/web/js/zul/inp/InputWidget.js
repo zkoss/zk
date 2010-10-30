@@ -242,6 +242,23 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	inRoundedMold: function(){
 		return this._mold == "rounded";
 	},
+
+	/** Returns the text representing the value in the given format,
+	 * or an empty etring if value is null
+	 * @return String
+	 * @since 5.0.5
+	 */
+	getText: function () {
+		return this.coerceToString_(this.getValue());
+	},
+	/** Sets the text representing the value in the given format.
+	 * @param String txt the text
+	 * @since 5.0.5
+	 */
+	setText: function (txt) {
+		this.setValue(this.coerceFromString_(txt));
+	},
+
 	/** Returns the value in the String format.
 	 * @return String
 	 */
@@ -249,16 +266,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._value;
 	},
 	/** Sets the value in the String format(assumes no locale issue).
-	 * @param Object value the value. If it is a string, {@link #coerceFromString_}
-	 * will be called to convert it.
-	 * @param boolean fromServer it will clear error message if true
+	 * @param Object value the value.
+	 * @param boolean fromServer whether it is called from the server.
+	 * The error message will be cleared if true
 	 */
 	setValue: function (value, fromServer) {
 		var vi;
 		if (fromServer) this.clearErrorMessage(true);
 		else {
-			if (typeof value == 'string')
-				value = this.coerceFromString_(value);
 			if (value == this._lastRawValVld)
 				return; //not changed
 
