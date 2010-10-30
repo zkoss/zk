@@ -167,9 +167,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	focus_: function (timeout) {
 		var cap = this.caption;
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != cap && w.focus(timeout))
+			if (w != cap && w.focus_(timeout))
 				return true;
-		return cap && cap.focus(timeout);
+		return cap && cap.focus_(timeout);
 	},
 	getZclass: function () {
 		var zcls = this._zclass;

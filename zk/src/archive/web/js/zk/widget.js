@@ -3391,7 +3391,7 @@ focus_: function (timeout) {
 			return true;
 		}
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w.isVisible() && w.focus(timeout))
+			if (w.isVisible() && w.focus_(timeout))
 				return true;
 		return false;
 	},

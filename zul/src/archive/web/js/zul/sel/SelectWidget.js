@@ -617,13 +617,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	focus_: function (timeout) {
 		var btn;
 		if (btn = this.$n('a')) {
-			if (this._focusItem) {
+			if (this._focusItem)
 				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 					if (this._isFocus(w)) {
-						w.focus();
+						w.focus_(timeout);
 						break;
 					}
-			}
+
 			this.focusA_(btn, timeout);
 			return true;
 		}
