@@ -1011,17 +1011,28 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//notify server
 		this.fireOnSelect(row, evt);
 	},
-	fireOnSelect: function (reference, evt) {
+	/** Fires the onSelect event.
+	 * If the widget is created at the server, the event will be sent
+	 * to the server too.
+	 * @param zk.Widget ref the reference which causes this onSelect event.
+	 * Ignored if null.
+	 * @since 5.0.5
+	 */
+	fireOnSelect: function (ref, evt) {
 		var data = [];
 
 		for (var it = this.getSelectedItems(), j = it.length; j--;)
 			if (it[j].isSelected())
 				data.push(it[j]);
-		var edata = evt.data, keep;
-		if (this._multiple)
-			keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
 
-		this.fire('onSelect', zk.copy({items: data, reference: reference, clearFirst: !keep}, edata));
+		var edata, keep;
+		if (evt) {
+			edata = evt.data
+			if (this._multiple)
+				keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
+		}
+
+		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
 	},
 	/* Changes the specified row as focused. */
 	_focus: function (row) {

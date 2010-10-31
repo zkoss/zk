@@ -622,10 +622,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 			if (upd || vi.server)
 				this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
-					vi.server ? {toServer:true}: null, 150);
+					vi.server ? {toServer:true}: null, 90);
 		}
 		return true;
 	},
+	/** Fires the onChange event.
+	 * If the widget is created at the server, the event will be sent
+	 * to the server too.
+	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
+	 * @since 5.0.5
+	 */
+	fireOnChange: function (opts) {
+		this.fire('onChange', _onChangeData(this, this.marshall_(this.getValue())), opts);
+	},
+
 	_resetForm: function () {
 		var inp = this.getInputNode();
 		if (inp.value != inp.defaultValue) { //test if it will be reset
