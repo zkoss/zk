@@ -266,6 +266,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._value;
 	},
 	/** Sets the value in the String format(assumes no locale issue).
+	 * <p>Notice that the invocation of {@link #getValue} won't fire
+	 * the onChange event. To fire it, you have to invoke {@link #fireOnChange}
+	 * explicitly.
 	 * @param Object value the value.
 	 * @param boolean fromServer whether it is called from the server.
 	 * The error message will be cleared if true
