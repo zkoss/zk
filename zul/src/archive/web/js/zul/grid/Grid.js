@@ -123,6 +123,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncSize();  //sync-size required
 	},
 	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
 		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true); //_syncSize required
 	},

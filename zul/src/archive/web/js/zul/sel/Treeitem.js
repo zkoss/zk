@@ -287,6 +287,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
 		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true);
 	},

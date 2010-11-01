@@ -65,6 +65,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._syncSize();
 	},
 	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
 		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true);
 	},

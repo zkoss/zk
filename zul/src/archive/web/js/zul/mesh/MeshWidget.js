@@ -774,6 +774,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
+		if (oldc == this.head)
+			this.head = newc;
+
+		for (var heads = this.heads, j = heads.length; j--;)
+			if (heads[j] == oldc) {
+				heads[j] = newc;
+				break;
+			}
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 

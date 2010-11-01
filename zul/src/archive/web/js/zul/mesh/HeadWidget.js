@@ -87,13 +87,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},
 
-	//@Override
-	replaceWidget: function (newwgt) {
-		var mesh = this.getMeshWidget();
-		if (mesh && mesh.head == this)
-			mesh.head = newwgt;
-		this.$supers('replaceWidget', arguments);
-	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(HeadWidget, 'bind_', arguments);
 		var w = this;
