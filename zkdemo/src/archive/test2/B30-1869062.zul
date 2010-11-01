@@ -24,7 +24,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<combobox autodrop="true">
 			<attribute name="onChange">
 				if(self.getSelectedItem()!=null){
-					msg.value = self.getSelectedItem().getLabel()
+					msg.value = self.getSelectedItem().getLabel();
 				}
 			</attribute>
 			<comboitem label="Simple and Rich" />
