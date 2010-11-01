@@ -17,6 +17,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isListgroup(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
+	function _syncFrozen(wgt) {
+		if (wgt && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
 
 var Listbox =
 /**
@@ -126,6 +130,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._shallStripe = true;
 		var w = this;
 		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
+		after.push(function () {
+			_syncFrozen(w);
+		});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -225,6 +232,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this._syncStripe();
 		if (!ignoreDom)
 			this._syncSize();
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	removeChild: function (child, ignoreDom) {
 		if (this.$super('removeChild', child, ignoreDom)) {
