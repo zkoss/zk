@@ -16,13 +16,10 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	rawId: true,
 
 	setDynamicProperty: function (prop) {
-		var n = this.$n(), nm = prop[0], val = prop[1];
-		if (n)
+		var n = this.$n();
+		if (n) {
+			var nm = prop[0], val = prop[1];
 			switch (nm) {
-			case 'visibility':
-				if ('true' == val) jq(n).show();
-				else jq(n).hide();
-				break;
 			case 'checked':
 				n.checked = this._defChecked = 'true' == val;
 				break;
@@ -42,6 +39,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			default:
 				n[nm] = val;
 			}
+		}
 	},
 	_doChange: function (evt, timeout) {
 		var n = this.$n();

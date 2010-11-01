@@ -22,6 +22,7 @@ ZK 5.0.5
   3096119: Smart-update supports the Date object
   3096990: The mold attrs of the window shall be public
   3097894: EL supports more instantiation functions, e.g., new1, new2
+  3098249: Component not updated after onClick
   
 * Bugs
   3057902: zk bug for window showbusy
