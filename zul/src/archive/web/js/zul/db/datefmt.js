@@ -155,7 +155,7 @@ zk.fmt.Date = {
 							}
 						}
 					}
-					if (isNaN(m) || m < 0 || m > 11) //restrict since user might input year for month
+					if (isNaN(m) || m > 11 /*|| m < 0 accept 0 since it is a common-yet-acceptable error*/) //restrict since user might input year for month
 						return;//failed
 					break;
 				case 'E':
