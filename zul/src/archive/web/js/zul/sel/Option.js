@@ -106,7 +106,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	domAttrs_: function () {
 		var value = this.getValue();
 		return this.$supers('domAttrs_', arguments) + (this.isDisabled() ? ' disabled="disabled"' :'') +
-		(this.isSelected() ? ' selected="selected"' : '') + (value ? ' value=' + value : '');
+		(this.isSelected() ? ' selected="selected"' : '') + (value ? ' value="' + value + '"': '');
 	},
 	replaceWidget: function (newwgt) {
 		this._syncItems(newwgt);
