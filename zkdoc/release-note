@@ -101,6 +101,7 @@ ZK 5.0.5
   3098096: The comboitem cannot be selected with iphone safari
   3097458: Right click on Tree and also Listbox in IE8
   3099277: Listbox : value of Listitem with space
+  3100455: Something wrong at frozen grid when updating live data
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

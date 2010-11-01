@@ -18,6 +18,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return (head = head.parent) && head.rerender(0); //later
 	}: zk.$void;
 
+	function _syncFrozen(wgt) {
+		if ((wgt = wgt.getMeshWidget()) && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
+
+var HeadWidget =
 /**
  * A skeletal implementation for headers, the parent of
  * a group of {@link HeaderWidget}.
@@ -55,14 +61,23 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Listhead/Columns/Treecols
 		v = false;
-		this.$super(zul.mesh.HeadWidget, 'setVflex', v);
+		this.$super(HeadWidget, 'setVflex', v);
 	},
 	//bug #3014664
 	setHflex: function (v) { //hflex ignored for Listhead/Columns/Treecols
 		v = false;
-		this.$super(zul.mesh.HeadWidget, 'setHflex', v);
+		this.$super(HeadWidget, 'setHflex', v);
 	},
-	
+
+	/**
+	 * Returns the mesh widget that this belongs to.
+	 * @return zul.mesh.MeshWidget
+	 * @since 5.0.5
+	 */
+	getMeshWidget: function () {
+		return this.parent;
+	},
+
 	onColSize: function (evt) {
 		var owner = this.parent;
 		if (owner.isSizedByContent()) owner.$class._adjHeadWd(owner);
@@ -71,17 +86,34 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		owner.fire('onInnerWidth', owner._innerWidth);
 		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},
+
+	//@Override
+	replaceWidget: function (newwgt) {
+		var mesh = this.getMeshWidget();
+		if (mesh && mesh.head == this)
+			mesh.head = newwgt;
+		this.$supers('replaceWidget', arguments);
+	},
+	bind_: function (desktop, skipper, after) {
+		this.$supers(HeadWidget, 'bind_', arguments);
+		var w = this;
+		after.push(function () {
+			_syncFrozen(w);
+		});
+	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();
 		jq(this.bdfaker).remove();
 		jq(this.ftfaker).remove();
-		this.$supers(zul.mesh.HeadWidget, 'unbind_', arguments);
+		this.$supers(HeadWidget, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (this.desktop && !_fixOnChildChanged(this)
-		&& this.parent._fixHeaders())
-			this.parent.onSize();
+		if (this.desktop) {
+			if (!_fixOnChildChanged(this) && this.parent._fixHeaders())
+				this.parent.onSize();
+			_syncFrozen(this);
+		}
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);

@@ -168,40 +168,22 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.smartUpdate('start', num);
 		this._start = num;
 	},
-	//bug# 3092890: Rows.invalidate() does not respect frozen state.
-	syncRows_: function (num) {
-		if (!num) //no frozen  
-			return;
-		var width = this.$n('cave').offsetWidth,
-		mesh = this.parent,
-		cnt = num,
-		rows = mesh.ebodyrows;
-
-		if (!rows || !rows.length) //no rows
-			return;
-	
-		//body
-		for (var first = rows[0], display, index = this._columns,
-				len = first.childNodes.length; index < len; index++) {
-			display = cnt-- <= 0 ? '' : 'none';
-			var cell = first.cells[index];
-			if (cell.style.display != display) {
-				for (var r = first; r; r = r.nextSibling)
-					r.cells[index].style.display = display;
-			}
-		}
+	_syncFrozen: function () { //called by Rows, HeadWidget...
+		this._scrlcnt = (this._scrlcnt||0) + 1;
+		var self = this;
+		return setTimeout(function () {
+				var num;
+				if (!--self._scrlcnt && (num = self._start))
+					self._doScrollNow(num, true);
+			}, 10);
 	},
-	_doScrollNow: function (num) {
+	_doScrollNow: function (num, force) {
 		var width = this.$n('cave').offsetWidth,
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
 
-		if (!mesh.head && (!rows || !rows.length))
-			return;
-
 		if (mesh.head) {
-
 			// set fixed size
 			for (var faker, n = mesh.head.firstChild.$n('hdfaker'); n;
 					n = n.nextSibling) {
@@ -220,7 +202,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					n = colhead;
 					n; n = n.nextSibling, index++, tail--) {
 				display = cnt-- <= 0 ? '' : 'none';
-				if (n.style.display != display) {
+				if (force || n.style.display != display) {
 					n.style.display = display;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 						faker.style.display = display;
@@ -246,6 +228,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					n; n = n.nextSibling)
 				width += zk.parseInt(n.style.width);
 
+		} else if (!rows || !rows.length) {
+			return;
 		} else {
 			
 			// set fixed size

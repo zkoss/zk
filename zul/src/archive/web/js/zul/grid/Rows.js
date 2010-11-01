@@ -17,6 +17,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
+	function _syncFrozen(wgt) {
+		if ((wgt = wgt.getGrid()) && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
 
 var Rows =
 /**
@@ -26,7 +30,6 @@ var Rows =
  * @import zkex.grid.Group
  */
 zul.grid.Rows = zk.$extends(zul.Widget, {
-	_firstLoad: true,
 	_visibleItemCount: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -70,6 +73,11 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		zWatch.listen({onResponse: this});
 		var w = this;
 		after.push(zk.booted ? function(){setTimeout( function(){w.onResponse();},0)}: this.proxy(this.stripe));
+
+		//bug# 3092890: Rows.invalidate() does not respect frozen state
+		after.push(function () {
+			_syncFrozen(w);
+		});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -79,13 +87,6 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (this.desktop && this._shallStripe) { //since bind_(...after)
 			this.stripe();
 			this.getGrid().onSize();
-		}
-		if (this._firstLoad) { //call only when invalidate or first loaded
-			this._firstLoad = false;
-			var grid = this.getGrid(),
-				frozen = grid ? grid.frozen : null;
-			if (frozen)
-				frozen.syncRows_(frozen._start);
 		}
 	},
 	_syncStripe: function () {
@@ -120,6 +121,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
 		this._syncStripe();
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
