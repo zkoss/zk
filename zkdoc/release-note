@@ -99,6 +99,7 @@ ZK 5.0.5
   3097181: Colorbox in menu, doesn't work with menubar autodrop="true"
   3097199: Combobox strict constraint not using custom message
   3098096: The comboitem cannot be selected with iphone safari
+  3097458: Right click on Tree and also Listbox in IE8
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3097458.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  1 13:00:49 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	right click on item, a dialog appear and shall show "512";
+	<tree zclass="z-dottree" multiple="true" onSelect="alert(event.getKeys());">
+		<treechildren>
+			<treeitem forEach="1,1,1,1" label="item"/>		
+		</treechildren>
+	</tree>
+</zk>

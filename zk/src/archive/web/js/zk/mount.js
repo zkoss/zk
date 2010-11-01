@@ -650,6 +650,8 @@ jq(function() {
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
+			if (zk.ie)
+				evt.which = 3;
 			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
