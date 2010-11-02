@@ -283,11 +283,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	onChildReplaced_: function (oldc, newc) {
 		this.$supers('onChildReplaced_', arguments);
 
-		this._fixOnRemove(oldc, true);
-		this._fixOnAdd(newc, true, false, true); //ignoreAll: no sync stripe...
+		if (oldc) this._fixOnRemove(oldc, true);
+		if (newc) this._fixOnAdd(newc, true, false, true); //ignoreAll: no sync stripe...
 
-		if ((oldc != null && oldc.$instanceof(zul.sel.Listitem))
-		|| (newc != null && newc.$instanceof(zul.sel.Listitem)))
+		if ((oldc && oldc.$instanceof(zul.sel.Listitem))
+		|| (newc && newc.$instanceof(zul.sel.Listitem)))
 			this._syncStripe();
 		this._syncSize();
 		if (this.desktop)

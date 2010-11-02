@@ -129,8 +129,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		} finally {
 			delete this._noOnRm;
 		}
-		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true); //_syncSize required
+		if (oldc) this.onChildRemoved_(oldc, true);
+		if (newc) this._fixOnAdd(newc, true); //_syncSize required
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);

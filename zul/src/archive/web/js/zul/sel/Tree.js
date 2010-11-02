@@ -71,8 +71,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		} finally {
 			delete this._noOnRm;
 		}
-		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true);
+		if (oldc) this.onChildRemoved_(oldc, true);
+		if (newc) this._fixOnAdd(newc, true);
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
