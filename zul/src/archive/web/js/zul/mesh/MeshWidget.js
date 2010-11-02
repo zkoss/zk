@@ -774,8 +774,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	/** Called when a child is replaced.
+	 * <p>Notice that it doesn't call super's onChildReplace_, i.e.,
+	 * onChildAdded_ and onChildRemoved_ won't be called.
+	 * The deriving class have to handle it explicitly
+	 * @since 5.0.5
+	 */
 	onChildReplaced_: function (oldc, newc) {
-		this.$supers('onChildReplaced_', arguments);
+		//this.$supers('onChildReplaced_', arguments);
+			//dirty but not to call back to avoid calling onAdd/onRemove
+			//since the deriving class will handle it manually (to have better performance)
+
 		if (oldc == this.head)
 			this.head = newc;
 
