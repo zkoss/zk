@@ -774,26 +774,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	/** Called when a child is replaced.
-	 * <p>Notice that it doesn't call super's onChildReplace_, i.e.,
-	 * onChildAdded_ and onChildRemoved_ won't be called.
-	 * The deriving class have to handle it explicitly
-	 * @since 5.0.5
-	 */
-	onChildReplaced_: function (oldc, newc) {
-		//this.$supers('onChildReplaced_', arguments);
-			//dirty but not to call back to avoid calling onAdd/onRemove
-			//since the deriving class will handle it manually (to have better performance)
-
-		if (oldc == this.head)
-			this.head = newc;
-
-		for (var heads = this.heads, j = heads.length; j--;)
-			if (heads[j] == oldc) {
-				heads[j] = newc;
-				break;
-			}
-	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 
@@ -806,7 +786,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (nsib)
 			for (var hds = this.heads, j = 0, len = hds.length; j < len; ++j)
 				if (hds[j] == nsib) {
-					this.heads.splice(j, 0, child);
+					hds.splice(j, 0, child);
 					return; //done
 				}
 		this.heads.push(child);

@@ -123,12 +123,21 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncSize();  //sync-size required
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.$supers('onChildReplaced_', arguments);
+		this._noOnRm = true; //not to callback since we will handle it later to have better performance
+		try {
+			this.$supers('onChildReplaced_', arguments);
+		} finally {
+			delete this._noOnRm;
+		}
 		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true); //_syncSize required
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
+
+		if (this._noOnRm) //$supers still need to be called since it might depend on it
+			return;
+
 		var isRows;
 		if (child == this.rows) {
 			this.rows = null;
