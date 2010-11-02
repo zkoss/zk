@@ -23,12 +23,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	var _doFocus = zk.gecko ? function (n, timeout) {
 			if (timeout)
 				setTimeout(function () {
-					jq(n).focus();
+					zk(n).focus();
 				});
 			else
-				jq(n).focus();
+				zk(n).focus();
 		} : function (n) {
-			jq(n).focus();
+			zk(n).focus();
 		};
 
 	function _newDate(year, month, day, bFix) {
@@ -198,7 +198,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this.$supers("redraw", arguments);
 	},
 	onChange: function (evt) {
-		this.updateFormData(evt.data.value);
+		this._updFormData(evt.data.value);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode,
@@ -208,7 +208,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		} else 
 			this.$supers('doKeyDown_', arguments);
 	},
-	_shift: function (ofs) {
+	_shift: function (ofs, opts) {
 		var oldTime = this.getTime();	
 		
 		switch(this._view) {
@@ -237,13 +237,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		case 'day':
 			if (oldTime.getYear() == newTime.getYear() &&
 				oldTime.getMonth() == newTime.getMonth()) {
-				this._markCal();
+				this._markCal(opts);
 			} else 
 				this.rerender();
 			break;
 		case 'month':
 			if (oldTime.getYear() == newTime.getYear())
-				this._markCal();
+				this._markCal(opts);
 			else
 				this.rerender();
 			break;
@@ -262,7 +262,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-calendar";
 	},
-	updateFormData: function (val) {
+	_updFormData: function (val) {
+		val = new zk.fmt.Calendar().formatDate(val, this.getFormat())
 		if (this._name) {
 			val = val || '';
 			if (!this.efield)
@@ -271,14 +272,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this.efield.value = val;
 		}
 	},
-	focus: function (timeout) {
+	focus_: function (timeout) {
 		if (this._view != 'decade') 
 			this._markCal({timeout: timeout});
 		else {
-			var anc = jq(this.$n()).find('.' + zcls + '-seld')[0];
+			var anc = jq(this.$n()).find('.' + this.getZclass() + '-seld')[0];
 			if (anc)
 				_doFocus(anc.firstChild, true);
 		}
+		return true;
 	},
 	bind_: function (){
 		this.$supers(Calendar, 'bind_', arguments);
@@ -307,7 +309,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(mid, "onMouseOut", '_doMouseEffect')
 			.domListen_(node, 'onMousewheel');
 
-		this.updateFormData(this._value || new zk.fmt.Calendar().formatDate(this.getTime(), this.getFormat()));
+		this._updFormData(this.getTime());
 	},
 	unbind_: function () {
 		var node = this.$n(),
@@ -390,15 +392,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value ? new zk.fmt.Calendar().parseDate(this._value, this.getFormat()) : zUtl.today(true);
+		return this._value || zUtl.today(true);
 	},
 	_setTime: function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
-		this._value = new zk.fmt.Calendar().formatDate(
-			_newDate(year, month, day, true), this.getFormat());
+		this._value = _newDate(year, month, day, true);
 		this.fire('onChange', {value: this._value});
 	},
 	_clickDate: function (evt) {
@@ -468,8 +469,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year += ofs;
 //			break;
 		}
-		this._value = new zk.fmt.Calendar().formatDate(
-			_newDate(year, month, day, !nofix), this.getFormat());
+		this._value = _newDate(year, month, day, !nofix);
 		this.fire('onChange', {value: this._value, shallClose: false});
 	},
 	_changeView : function (evt) {

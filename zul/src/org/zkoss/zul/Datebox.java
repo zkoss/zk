@@ -274,7 +274,8 @@ public class Datebox extends FormatInputElement implements
 			} else {
 				_tzone = tzone;
 			}
-			invalidate();
+			smartUpdate("timeZone", _tzone.getID());
+			smartUpdate("_value", marshall(_value));
 		}
 	}
 	/** Sets the time zone that this date box belongs to, or null if
@@ -413,12 +414,22 @@ public class Datebox extends FormatInputElement implements
 			super.service(request, everError);
 	}
 	
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: "between 20071012 and 20071223", "before 20080103"
+	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
-																					// 2564298
+		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
 	}
-
+	protected Object marshall(Object value) {
+		if (value == null || _tzone == null) return value;
+		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
+	}
+	protected Object unmarshall(Object value) {
+		if (value == null || _tzone == null) return value;
+		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;

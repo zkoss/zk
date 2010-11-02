@@ -1,11 +1,11 @@
 /* datefmt.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
-		Fri Jan 16 19:13:43     2009, Created by Flyworld
+		Fri Jan 16 19:13:43	 2009, Created by Flyworld
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
@@ -36,15 +36,16 @@ zk.fmt.Date = {
 		}
 		return token;
 	},
-	parseDate : function (txt, fmt, strict) {
+	parseDate : function (txt, fmt, strict, refval) {
 		if (!fmt) fmt = "yyyy/MM/dd";
-		var val = zUtl.today(true),
-			y = val.getFullYear(),
-			m = val.getMonth(),
-			d = val.getDate(), dFound,
-			hr = val.getHours(),
-			min = val.getMinutes(),
-			sec = val.getSeconds(),
+		refval = refval || zUtl.today(true);
+		var y = refval.getFullYear(),
+			m = refval.getMonth(),
+			d = refval.getDate(), dFound,
+			hr = refval.getHours(),
+			min = refval.getMinutes(),
+			sec = refval.getSeconds(),
+			msec = refval.getMilliseconds(),
 			aa = fmt.indexOf('a'),
 			hh = fmt.indexOf('h'),
 			KK = fmt.indexOf('K'),
@@ -154,7 +155,7 @@ zk.fmt.Date = {
 							}
 						}
 					}
-					if (isNaN(m) || m < 0 || m > 11) //restrict since user might input year for month
+					if (isNaN(m) || m > 11 /*|| m < 0 accept 0 since it is a common-yet-acceptable error*/) //restrict since user might input year for month
 						return;//failed
 					break;
 				case 'E':
@@ -205,7 +206,7 @@ zk.fmt.Date = {
 					if (hr == 24)
 						hr = 0;
 					if (isNaN(hr)) return; //failed
-					break;					
+					break;
 				case 'm':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
@@ -221,6 +222,7 @@ zk.fmt.Date = {
 				case 'a':
 					if (!hasHour1)
 						break;
+					if (!token) return; //failed
 					isAM = token.startsWith(zk.APM[0]);
 					break
 				//default: ignored
@@ -231,12 +233,12 @@ zk.fmt.Date = {
 
 		if (hasHour1 && isAM === false)
 			hr += 12;
-		var dt = new Date(y, m, d, hr, min, sec);
+		var dt = new Date(y, m, d, hr, min, sec, msec);
 		if (!dFound && dt.getMonth() != m)
-			dt = new Date(y, m + 1, 0, hr, min, sec); //last date of m
+			dt = new Date(y, m + 1, 0, hr, min, sec, msec); //last date of m
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
-				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec)
+				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
 				return; //failed
 
 			txt = txt.trim();
@@ -250,10 +252,11 @@ zk.fmt.Date = {
 			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
 				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
-					return null; //failed
+					return; //failed
 			}
 		}
-		return dt;
+		return +dt == +refval ? refval: dt;
+			//we have to use getTime() since dt == refVal always false
 	},
 	formatDate : function (val, fmt) {
 		if (!fmt) fmt = "yyyy/MM/dd";
@@ -375,7 +378,7 @@ zk.fmt.Date = {
 	}
 };
 /**
- * The <code>calendar</code> object provides a way  
+ * The <code>calendar</code> object provides a way
  * to convert between a specific instant in time for locale-sensitive
  * like buddhist's time.
  * <p>By default the year offset is specified from server if any.</p>
@@ -401,13 +404,20 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	formatDate: function (val, fmt) {
 		var d;
 		if (this._offset) {
-    		d = new Date(val);
-    		d.setFullYear(d.getFullYear() + this._offset);
+			d = new Date(val);
+			d.setFullYear(d.getFullYear() + this._offset);
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt);
 	},
-	parseDate: function (txt, fmt, strict) {
-		var d = zk.fmt.Date.parseDate(txt, fmt, strict);
+    toUTCDate: function () {
+        var d;
+        if ((d = this._date) && this._offset)
+            (d = new Date(d))
+                .setFullYear(d.getFullYear() - this._offset);
+        return d;
+    }, 
+	parseDate: function (txt, fmt, strict, refval) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
 		if (this._offset && fmt) {
 			var cnt = 0;
 			for (var i = fmt.length; i--;)

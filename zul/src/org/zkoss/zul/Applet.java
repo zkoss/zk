@@ -125,6 +125,7 @@ org.zkoss.zul.api.Applet {
 		return _align;
 	}
 	/** Sets the alignment of an applet according to surrounding elements.
+	 * <p>Refer to <a href="http://www.w3schools.com/tags/tag_applet.asp">HTML &lt;applet> Tag</a>for more information.
 	 * @since 5.0.3
 	 */
 	public void setAlign(String align) {
@@ -141,7 +142,7 @@ org.zkoss.zul.api.Applet {
 	public String getHspace() {
 		return _hspace;
 	}
-	/** Sets the horizontal spacing around an applet.
+	/** Sets the horizontal spacing in pixels around an applet.
 	 * @since 5.0.3
 	 */
 	public void setHspace(String hspace) {
@@ -157,7 +158,7 @@ org.zkoss.zul.api.Applet {
 	public String getVspace() {
 		return _vspace;
 	}
-	/** Sets the vertical spacing around an applet.
+	/** Sets the vertical spacing in pixels around an applet.
 	 * @since 5.0.3
 	 */
 	public void setVspace(String vspace) {

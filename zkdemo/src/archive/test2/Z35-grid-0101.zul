@@ -83,8 +83,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button onClick="gd1.setModel(model1);" label="data only"/>
 	<button onClick="gd1.setModel(model2)" label="data ,head"/>
 	<button onClick="gd1.setModel(model3)" label="data,head,foot"/>
-	<button onClick="gd1.setModel(model4)" label="not all foot"/>
-	<button onClick="gd1.setModel(model5)" label="not all foot 2"/>
+	<button onClick="gd1.setModel(model4)" label="not all foot(only A1,C1)"/>
+	<button onClick="gd1.setModel(model5)" label="not all foot 2(only B2,D2) "/>
 	<button onClick='if(gd1.mold.equals("default")){gd1.setMold("paging");gd1.setPageSize(7);}else{gd1.mold="default";}' label="set Paging"/>
 	<button onClick="gd1.invalidate();" label="invalidate"/> 
 	</hbox> 

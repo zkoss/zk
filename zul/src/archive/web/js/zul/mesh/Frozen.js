@@ -168,17 +168,22 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.smartUpdate('start', num);
 		this._start = num;
 	},
-	_doScrollNow: function (num) {
+	_syncFrozen: function () { //called by Rows, HeadWidget...
+		this._scrlcnt = (this._scrlcnt||0) + 1;
+		var self = this;
+		return setTimeout(function () {
+				var num;
+				if (!--self._scrlcnt && (num = self._start))
+					self._doScrollNow(num, true);
+			}, 10);
+	},
+	_doScrollNow: function (num, force) {
 		var width = this.$n('cave').offsetWidth,
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
 
-		if (!mesh.head && (!rows || rows.length))
-			return;
-
 		if (mesh.head) {
-
 			// set fixed size
 			for (var faker, n = mesh.head.firstChild.$n('hdfaker'); n;
 					n = n.nextSibling) {
@@ -197,7 +202,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					n = colhead;
 					n; n = n.nextSibling, index++, tail--) {
 				display = cnt-- <= 0 ? '' : 'none';
-				if (n.style.display != display) {
+				if (force || n.style.display != display) {
 					n.style.display = display;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 						faker.style.display = display;
@@ -223,6 +228,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					n; n = n.nextSibling)
 				width += zk.parseInt(n.style.width);
 
+		} else if (!rows || !rows.length) {
+			return;
 		} else {
 			
 			// set fixed size

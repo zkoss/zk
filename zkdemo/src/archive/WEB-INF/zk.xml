@@ -231,15 +231,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</session-config>
 	<session-config>
 		<!-- 
-		 Uncomment it and set it to mil, if you want to configure for
-		 a mobile device.
+		 Uncomment it and set it to android, if you want to configure for
+		 an Android device.
 		 If omitted, ajax is assumed.
 		 Currently, only timeout-uri and automatic-timeout support per-device
 		 configuration.
 		<device-type>ajax</device-type>
 		-->
+
+		<!-- Comment it out if you prefer to show a message instead of redirecting
+			Note: an empty URL can cause the browser to reload the same URL
+		-->
 		<timeout-uri>/timeout.zul</timeout-uri>
-			<!-- An empty URL can cause the browser to reload the same URL -->
+
+		<!-- Uncomment it if you prefer to have a custom message.
+			Notice that, to make it work, timeout-uri shall be removed.
+			See http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element
+		<timeout-message></timeout-message>
+		-->
 
 		<!-- Uncomment the following if you want to automatically redirect
 			to the timeout page. By default, it is triggered by the user

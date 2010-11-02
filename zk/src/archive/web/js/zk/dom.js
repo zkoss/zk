@@ -50,28 +50,18 @@ zjq = function (jq) { //ZK extension
 				_zsyncs[j].zsync(org);
 	}
 	function _focus(n) {
-		var w = zk.Widget.$(n);
-		if (w) zk.currentFocus = w;
 		try {
 			n.focus();
+			var w = zk.Widget.$(n);
+			if (w) zk.currentFocus = w;
 		} catch (e) {
-			setTimeout(function() {
-				try {
-					n.focus();
-				} catch (e) {
-					setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
-				}
-			}, 0);
-		} //IE throws exception if failed to focus in some cases
+		}
 	}
 	function _select(n) {
 		try {
 			n.select();
 		} catch (e) {
-			setTimeout(function() {
-				try {n.select();} catch (e) {}
-			}, 0);
-		} //IE throws exception when select() in some cases
+		}
 	}
 
 	function _submit() {
@@ -219,6 +209,8 @@ zk.copy(zjq, {
 	},
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
+	_fixIframe: zk.$void,
+	_useQS: zk.$void, //overriden in domie67.js (used in zAU)
 
 	_src0: "" //an empty src; overriden in domie.js
 });
@@ -1261,8 +1253,8 @@ jq(el).zk.center(); //same as 'center'
 		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
 		agt.style.display = "none";
 		
-		// Bug 3049181
-		zjq._fixedVParent(el);
+		// Bug 3049181 and 3092040
+		zjq._fixedVParent(el, true);
 		
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
@@ -1307,7 +1299,15 @@ jq(el).zk.center(); //same as 'center'
 	beforeHideOnUnbind: zk.$void,
 
 	//focus/select//
-	/** Sets the focus to the first matched element. It is the same as DOMElement.focus, except it doesn't throw any exception (rather, returns false), and it can set the focus later (by use of timeout). 
+	/** Sets the focus to the first matched element.
+	 * It is the same as jq(n).focus() and n.focus, except
+	 * <ul>
+	 * <li>it doesn't throw any exception (rather, returns false).</li>
+	 * <li>it can set the focus later (by use of timeout). </li>
+	 * <li>it maintains {@link zk#currentFocus}.</li>
+	 * </ul>
+	 * <p>In general, it is suggested to use zk(n).focus(), unless
+	 * n does not belong to any widget.
 	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately. 
 	 * @return boolean whether the focus is allowed to set to the element. Currently, only SELECT, BUTTON, INPUT and IFRAME is allowed. 
 	 * @see #select
@@ -1933,6 +1933,7 @@ this._syncShadow(); //synchronize shadow
 
 	/** Move the focus out of any element.
 	 * <p>Notice that you cannot simply use <code>jq(window).focus()</code>
+	 * or <code>zk(window).focus()</code>,
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */
@@ -1981,7 +1982,25 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @param Object obj any JavaScript object
 	 * @param Object replace an optional parameter that determines how object values are stringified for objects. It can be a function. 
 	 */
-	//toJSON: function () {}
+	//toJSON: function () {},
+	/**
+	 * Marshalls the Date object into a string such that it can be sent
+	 * back to the server.
+	 * <p>It works with org.zkoss.json.JSONs.d2j() to transfer data from client
+	 * to server.
+	 * @param Date d the date object to marshall. If null, null is returned
+	 * @return String a string
+	 * @since 5.0.5
+	 */
+	//d2j: function () {},
+	/** Unmarshalls the string back to a Date object.
+	 * <p>It works with org.zkoss.json.JSONs.j2d() to transfer data from server
+	 * to client.
+	 * @param String s the string that is marshalled at the server
+	 * @return Date the date object after unmarshalled back
+	 * @since 5.0.5
+	 */
+	//j2d: function () {}
 });
 
 /** @class jq.Event

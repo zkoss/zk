@@ -175,9 +175,11 @@ function zkmprops(uuid, props) {
 		if (v) zk.load(v);
 
 		var type = wi[0];
-		if (type) { //not page (=0)
-			if (type === 1) //1: zhtml.Widget
-				wi[0] = type = "zhtml.Widget";
+		if (type === 0) //page
+			type = wi[2].wc;
+		else if (type === 1) //1: zhtml.Widget
+			wi[0] = type = "zhtml.Widget";
+		if (type) {
 			var j = type.lastIndexOf('.');
 			if (j >= 0)
 				zk.load(type.substring(0, j), dt);
@@ -188,10 +190,8 @@ function zkmprops(uuid, props) {
 	}
 	//mount for browser loading
 	function mtBL() {
-		if (zk.loading) {
-			zk.afterLoad(mtBL);
-			return;
-		}
+		if (zk.loading)
+			return zk.afterLoad(mtBL);
 
 		var inf = _createInf0.shift();
 		if (inf) {
@@ -211,10 +211,11 @@ function zkmprops(uuid, props) {
 			if (_createInf0.length)
 				return; //another page started
 
-			if (zk.loading) {
-				zk.afterLoad(mtBL0);
-				return;
-			}
+			if (zk.loading)
+				return zk.afterLoad(mtBL0);
+
+			if (!jq.isReady && zk.ie && !zk.ie8) //3055849: ie6/ie7 has to wait until isReady
+				return jq(mtBL0);
 
 			var inf = _createInf1.shift();
 			if (!inf) break;
@@ -305,8 +306,9 @@ function zkmprops(uuid, props) {
 			uuid = wi[1],
 			props = wi[2]||{};
 		if (type === 0) { //page
-			wgt = new zk.Page({uuid: uuid}, zk.cut(props, "ct"));
-			wgt.inServer = true;
+			type = zk.cut(props, "wc")
+			var cls = type ? zk.$import(type): zk.Page;
+			(wgt = new cls({uuid: uuid}, zk.cut(props, "ct"))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			if (type == "#stub") { //not possible if zkuery
@@ -323,8 +325,7 @@ function zkmprops(uuid, props) {
 				if (!cls)
 					throw 'Unknown widget: ' + type;
 				if (v) initOpts.mold = v;
-				wgt = new cls(initOpts);
-				wgt.inServer = true;
+				(wgt = new cls(initOpts)).inServer = true;
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
@@ -649,6 +650,8 @@ jq(function() {
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
+			if (zk.ie)
+				evt.which = 3;
 			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
@@ -658,7 +661,7 @@ jq(function() {
 	});
 
 	jq(window).resize(function () {
-		if (zk.mounting)
+		if (zk.mounting || zk.skipResize)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:

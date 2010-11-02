@@ -52,7 +52,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		width="200px" mode="overlapped" height="100px" contentStyle="background:#ee8">
 			${w21.title}
 			<window id="w211" border="normal" title="Popup in Overlapped in Overlapped"
-			width="200px" visible="false">
+			width="200px" visible="false" tooltip="tip">
 			${w211.title}
 				<window id="w2111" border="normal" title="Overlapped in Popup"
 				width="200px" mode="overlapped">
@@ -69,4 +69,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<datebox/><combobox/>
 	</window>
 	<button label="Visible 2nd" onClick="w2.visible = !w2.visible"/>
+	<popup id="tip" width="300px">
+	<vbox>
+	I am a Tooltip!.
+	</vbox>
+	</popup>
 </window>

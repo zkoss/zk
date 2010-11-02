@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Image extends XulElement implements org.zkoss.zul.api.Image{
-	private String _align, _border, _hspace, _vspace;
+	private String _align, _hspace, _vspace;
 	private String _src;
 	/** The image. _src and _image cannot be nonnull at the same time.  */
 	private org.zkoss.image.Image _image;
@@ -75,22 +75,15 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			smartUpdate("align", _align);
 		}
 	}
-	/** Returns the width of the border.
-	 * <p>Default: null (use browser default).
+	/** 
+	 * @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public String getBorder() {
-		return _border;
+		return null;
 	}
-	/** Sets the width of the border.
+	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public void setBorder(String border) {
-		if (border != null && border.length() == 0)
-			border = null;
-
-		if (!Objects.equals(_border, border)) {
-			_border = border;
-			smartUpdate("border", _border);
-		}
 	}
 	/** Returns number of pixels of extra space to the left and right
 	 * side of the image.
@@ -296,7 +289,6 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 		if (_hoversrc != null || _hoverimg != null)
 			render(renderer, "hover", getEncodedHoverURL());
 		render(renderer, "align", _align);
-		render(renderer, "border", _border);
 		render(renderer, "hspace", _hspace);
 		render(renderer, "vspace", _vspace);
 	}

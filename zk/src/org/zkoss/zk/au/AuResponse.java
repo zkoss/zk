@@ -19,9 +19,12 @@ package org.zkoss.zk.au;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONAware;
+import org.zkoss.json.JSONs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -153,6 +156,8 @@ public class AuResponse {
 				d = ((DeferredValue)d).getValue();
 			if (d instanceof Component)
 				d = ((Component)d).getUuid();
+			if (d instanceof Date)
+				d = new JSONDate((Date)d);
 			encdata.add(d);
 		}
 		return encdata;
@@ -218,5 +223,14 @@ public class AuResponse {
 		if (s == null) return null;
 		s = s.trim();
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
+	}
+}
+/*package*/ class JSONDate implements JSONAware {
+	private Date _d;
+	/*package*/ JSONDate(Date d) {
+		_d = d;
+	}
+	public String toJSONString() {
+		return "jq.j2d('" + JSONs.d2j(_d) + "')";
 	}
 }

@@ -185,7 +185,7 @@ a.z-column-btn:hover {
 	background-image: url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.png')});
 }
 <%-- ZK Column's sizing --%>
-.z-grid-header .z-column.z-column-sizing, .z-grid-header .z-column.z-column-sizing .z-column-cnt {
+div.z-grid-header .z-column.z-column-sizing, div.z-grid-header .z-column.z-column-sizing div.z-column-cnt {
 	cursor: e-resize;
 }
 

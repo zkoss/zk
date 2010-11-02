@@ -87,6 +87,12 @@
 .z-datebox-calday {
 	border: 1px solid #ddd;
 }
+.z-datebox-timezone-body,
+.z-datebox-timezone-item {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+}
 .z-calendar-calctrl td {
 	font-size: ${fontSizeM}; 
 	text-align: center;

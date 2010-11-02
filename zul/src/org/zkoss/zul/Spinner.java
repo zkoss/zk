@@ -114,6 +114,10 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 		return _zclass == null ?  "z-spinner" : _zclass;
 	}
 	
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 */
 	// -- super --//
 	public void setConstraint(String constr) {
 		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr): null); //Bug 2564298

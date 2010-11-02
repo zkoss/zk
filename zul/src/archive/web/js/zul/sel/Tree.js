@@ -65,11 +65,21 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._syncSize();
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true);
+		this._noOnRm = true; //not to callback since we will handle it later to have better performance
+		try {
+			this.$supers('onChildReplaced_', arguments);
+		} finally {
+			delete this._noOnRm;
+		}
+		if (oldc) this.onChildRemoved_(oldc, true);
+		if (newc) this._fixOnAdd(newc, true);
 	},
 	onChildRemoved_: function (child, _noSync) {
 		this.$supers('onChildRemoved_', arguments);
+
+		if (this._noOnRm) //$supers still need to be called since it might depend on it
+			return;
+
 		if (child == this.treecols)
 			this.treecols = null;
 		else if (child == this.treefoot)
@@ -234,13 +244,14 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: ignore the selection if it is clicked on the open icon or {@link #isRightSelct} is true and event is onRightClick.
+	 * <p>Default: ignore the selection if it is clicked on the open icon or {@link #rightSelect} is true and event is onRightClick.
 	 * @param zk.Event evt the event
+	 * @param ItemWidget row the row about to be selected
 	 * @return boolean whether to ignore the selection
 	 */
-	shallIgnoreSelect_: function (evt) {
+	shallIgnoreSelect_: function (evt/*, row*/) {
 		var n = evt.domTarget;
-		return n && n.id && n.id.endsWith('-open') || (evt.name == 'onRightClick' && !this._rightSelect);
+		return n && n.id && n.id.endsWith('-open') || (evt.name == 'onRightClick' && !this.rightSelect);
 	}
 });
 /**

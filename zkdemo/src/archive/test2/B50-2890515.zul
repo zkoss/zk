@@ -16,5 +16,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 Please choose a date, for example, 20091102. And foucs in and out the
 datebox it should not show an error.
-<datebox constraint="before 20091102"/>
+<datebox />
 </zk>

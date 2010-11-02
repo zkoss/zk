@@ -1495,6 +1495,44 @@ public class Configuration {
 		return oldi != null && oldi.uri != null ? oldi: null;
 	}
 
+	/** Returns the timeout message for this device, or null if the default
+	 * message is preferred.
+	 * It is used only if {@link #getTimeoutURI} returns null.
+	 * @since 5.0.5
+	 * @see #setTimeoutMessage
+	 */
+	public String getTimeoutMessage(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null ? inf.message: null;
+	}
+	/** Sets the timeout message for this device, or null if the default
+	 * message is preferred.
+	 * It is used only if {@link #getTimeoutURI} returns null.
+	 * <p>To specify an I18N label, prefix the key with <code>label:</code>.
+	 * To specify the JavaScript code, prefix the code with <code>script:</code>.
+	 * Refer to <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element#The_timeout-message_Element">ZK Configuration Reference</a>
+	 * for more information.
+	 * @return the previous message, if any
+	 * @since 5.0.5
+	 */
+	public String setTimeoutMessage(String deviceType, String message) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		if (inf != null) {
+			String old = inf.message;
+			inf.message = message;
+			return old;
+		}
+
+		inf = new TimeoutURIInfo();
+		inf.message = message;
+		_timeoutURIs.put(deviceType, inf);
+		return null;
+	}
+
 	/** Returns whether to automatically trigger the timeout at the client.
 	 * Refer to {@link #setAutomaticTimeout} for details.
 	 *
@@ -2477,6 +2515,7 @@ public class Configuration {
 		}
 	}
 	private static class TimeoutURIInfo extends URIInfo {
+		private String message;
 		private boolean auto;
 		private TimeoutURIInfo() {
 			super(null);

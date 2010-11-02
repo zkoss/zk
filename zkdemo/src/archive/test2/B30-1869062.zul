@@ -5,9 +5,9 @@ B30-1869062.zul
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 11 17:27:58 TST 2008, Created by jumperchen
 }}IS_NOTE
@@ -21,9 +21,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<n:p>Please type the "c" word into combobox and then press the ENTER on the keyboard, it should not be shown any error.</n:p>
 	<window title="Combobox demo" border="normal">
 		Combobox:
-		<combobox
-			onChange="msg.value = self.getSelectedItem().getLabel()"
-			autodrop="true">
+		<combobox autodrop="true">
+			<attribute name="onChange">
+				if(self.getSelectedItem()!=null){
+					msg.value = self.getSelectedItem().getLabel();
+				}
+			</attribute>
 			<comboitem label="Simple and Rich" />
 			<comboitem label="Cool!" />
 			<comboitem label="Thumbs Up!" />

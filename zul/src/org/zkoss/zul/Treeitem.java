@@ -76,6 +76,8 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		return _checkable;
 	}
 	/** Sets whether it is checkable.
+	 * 
+	 * <p>Note that it is only applied when isCheckmark() of Tree is true.
 	 * <p>Default: true.
 	 * @since 3.0.4
 	 */

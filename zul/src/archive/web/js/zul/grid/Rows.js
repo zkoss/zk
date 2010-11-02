@@ -17,6 +17,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
+	function _syncFrozen(wgt) {
+		if ((wgt = wgt.getGrid()) && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
 
 var Rows =
 /**
@@ -69,6 +73,11 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		zWatch.listen({onResponse: this});
 		var w = this;
 		after.push(zk.booted ? function(){setTimeout( function(){w.onResponse();},0)}: this.proxy(this.stripe));
+
+		//bug# 3092890: Rows.invalidate() does not respect frozen state
+		after.push(function () {
+			_syncFrozen(w);
+		});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -112,6 +121,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
 		this._syncStripe();
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);

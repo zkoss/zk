@@ -17,6 +17,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isListgroup(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
 	}
+	function _syncFrozen(wgt) {
+		if (wgt && (wgt = wgt.frozen))
+			wgt._syncFrozen();
+	}
 
 var Listbox =
 /**
@@ -126,6 +130,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._shallStripe = true;
 		var w = this;
 		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
+		after.push(function () {
+			_syncFrozen(w);
+		});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -195,7 +202,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			return true;
 		}
 	},
-	_fixOnAdd: function (child, ignoreDom, stripe) {
+	_fixOnAdd: function (child, ignoreDom, stripe, ignoreAll) {
 		var noRerender;
 		if (child.$instanceof(zul.sel.Listitem)) {
 			if (_isListgroup(child))
@@ -219,12 +226,16 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.frozen = child;
 		}
 
-		if (!ignoreDom && !noRerender)
+		if (!ignoreAll) {
+			if (!ignoreDom && !noRerender)
 				return this.rerender();
-		if (stripe)
-			this._syncStripe();
-		if (!ignoreDom)
-			this._syncSize();
+			if (stripe)
+				this._syncStripe();
+			if (!ignoreDom)
+				this._syncSize();
+			if (this.desktop)
+				_syncFrozen(this);
+		}
 	},
 	removeChild: function (child, ignoreDom) {
 		if (this.$super('removeChild', child, ignoreDom)) {
@@ -264,17 +275,23 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			stripe = true;
 		}
 
-		if (!ignoreDom) {
+		if (!ignoreDom) { //unlike _fixOnAdd, it ignores strip too (historical reason; might be able to be better)
 			if (stripe) this._syncStripe();
 			this._syncSize();
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.$supers('onChildReplaced_', arguments);
-		if ((oldc != null && oldc.$instanceof(zul.sel.Listitem))
-		|| (newc != null && newc.$instanceof(zul.sel.Listitem)))
+
+		if (oldc) this._fixOnRemove(oldc, true);
+		if (newc) this._fixOnAdd(newc, true, false, true); //ignoreAll: no sync stripe...
+
+		if ((oldc && oldc.$instanceof(zul.sel.Listitem))
+		|| (newc && newc.$instanceof(zul.sel.Listitem)))
 			this._syncStripe();
 		this._syncSize();
+		if (this.desktop)
+			_syncFrozen(this);
 	},
 	/**
 	 * Returns the head widget class

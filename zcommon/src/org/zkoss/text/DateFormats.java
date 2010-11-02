@@ -18,11 +18,9 @@ package org.zkoss.text;
 import java.util.Locale;
 import java.util.Date;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import org.zkoss.util.Locales;
-import org.zkoss.util.TimeZones;
 
 /**
  * DateFormat relevant utilities.
@@ -30,59 +28,32 @@ import org.zkoss.util.TimeZones;
  * @author tomyeh
  */
 public class DateFormats {
-	/**
-	 * Parses a string to a date.
-	 * It is smart enough to know whether to use DateFormat.getDateInstance
-	 * and DateFormat.getDateTimeInstance.
-	 * It also uses {@link Locales#getCurrent}.
-	 */
-	public static final Date parse(String s)
-	throws ParseException {
-		final Locale locale = Locales.getCurrent();
-		
-		if (s.indexOf(':') < 0) { //date only
-			final DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.parse(s);
-		} else {
-			try {
-				return getDateFormat().parse(s);
-			} catch (ParseException ex) { //ignore it
-			}
-
-			final DateFormat df =
-				DateFormat.getDateTimeInstance(
-					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.parse(s);
-		}
-	}
-	private static final SimpleDateFormat getDateFormat() {
-		SimpleDateFormat df = _df.get();
-		if (df == null)
-			_df.set(df = new SimpleDateFormat(
-				"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US));
-		df.setTimeZone(TimeZones.getCurrent());
-		return df;
-	}
-	private static final ThreadLocal<SimpleDateFormat> _df = new ThreadLocal<SimpleDateFormat>();
-
-	/** Formats a Date object based on the current Locale.
+	/** Formats a Date object based on the current Locale
+	 * and the default date format ({@link DateFormat#DEFAULT}.
 	 *
 	 * @param dateOnly indicates whether to show only date; false to show
 	 * both date and time
 	 */
 	public static final String format(Date d, boolean dateOnly) {
-		Locale locale = Locales.getCurrent();
-
-		if (dateOnly) {
-			DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.format(d);
-		} else {
-			DateFormat df =
-				DateFormat.getDateTimeInstance(
+		return getDateFormat(dateOnly).format(d);
+	}
+	/**
+	 * Parses a string, that is formatted by {@link #format}, to a date.
+	 * It assumes the current locale is {@link Locales#getCurrent}.
+	 *
+	 * @param dateOnly indicates whether to show only date; false to show
+	 * both date and time
+	 * @since 5.0.5
+	 */
+	public static final Date parse(String s, boolean dateOnly)
+	throws ParseException {
+		return getDateFormat(dateOnly).parse(s);
+	}
+	private static final DateFormat getDateFormat(boolean dateOnly) {
+		final Locale locale = Locales.getCurrent();
+		return dateOnly ?
+			DateFormat.getDateInstance(DateFormat.DEFAULT, locale):
+			DateFormat.getDateTimeInstance(
 					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.format(d);
-		}
 	}
 }

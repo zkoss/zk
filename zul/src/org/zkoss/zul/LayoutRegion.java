@@ -293,6 +293,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 
 	/**
 	 * Returns whether set the initial display to collapse.
+	 * <p>It only applied when {@link #getTitle()} is not null. (since 3.5.0)
 	 * <p>
 	 * Default: false.
 	 */

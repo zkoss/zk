@@ -478,6 +478,10 @@ public class ConfigParser {
 		if (s != null)
 			config.setTimeoutURI(deviceType, s, URIInfo.SEND_REDIRECT);
 
+		s = conf.getElementValue("timeout-message", true);
+		if (s != null)
+			config.setTimeoutMessage(deviceType, s);
+
 		s = conf.getElementValue("automatic-timeout", true);
 		if (s != null)
 			config.setAutomaticTimeout(deviceType, !"false".equals(s));

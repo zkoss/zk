@@ -35,14 +35,17 @@ public class InputEvent extends Event {
 	private final int _start;
 
 	/** Converts an AU request to an input event.
+	 * Notice that this method will convert the value to a string object.
+	 * If it is not what you want, you have to parse it by yourself.
 	 * @param oldValue the previous value
 	 * @since 5.0.4
 	 */
 	public static final
 	InputEvent getInputEvent(AuRequest request, Object oldValue) {
 		final Map data = request.getData();
+		final Object val = data.get("value");
 		return new InputEvent(request.getCommand(), request.getComponent(),
-			(String)data.get("value"),
+			val == null ? "" : val.toString(),
 			oldValue,
 			AuRequests.getBoolean(data, "bySelectBack"),
 			AuRequests.getInt(data, "start", 0));

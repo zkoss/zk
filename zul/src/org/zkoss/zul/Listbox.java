@@ -234,7 +234,6 @@ public class Listbox extends XulElement implements Paginated,
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
-	private boolean _autopaging;
 
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
@@ -249,17 +248,19 @@ public class Listbox extends XulElement implements Paginated,
 	private int _tabindex;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
-	private boolean _multiple;
-	private boolean _disabled, _checkmark;
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
-	private boolean _sizedByContent;
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; // since 5.0.0 top padding
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
+	private boolean _autopaging;
+	private boolean _multiple;
+	private boolean _disabled, _checkmark;
+	/** disable smartUpdate; usually caused by the client. */
+	private boolean _noSmartUpdate;
+	private boolean _sizedByContent;
+	private boolean _span; //since 5.0.5
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -443,6 +444,30 @@ public class Listbox extends XulElement implements Paginated,
 		} else
 			return "true".equalsIgnoreCase(s);
 	}
+	/**
+	 * Sets whether to span the width of the columns to occupy the whole listbox.
+	 * It is meaningful only if {@link #isSizedByContent} is true, and
+	 * {@link #getHflex} is not speciifed.
+	 * <p>Default: false. It means the width of a column takes only the
+	 * required space based on its content (when {@link #isSizedByContent}
+	 * is specified).
+	 * @param span
+	 * @since 5.0.5
+	 */
+	public void setSpan(boolean span) {
+		if (_span != span) {
+			_span = span;
+			smartUpdate("span", span);
+		}
+	}
+	/**
+	 * Returns whether span column width when {@link #isSizedByContent} is true.
+	 * <p>Default: false.
+	 * @since 5.0.5
+	 */
+	public boolean isSpan() {
+		return _span;
+	}
 
 	/**
 	 * Returns {@link Listhead} belonging to this listbox, or null if no list
@@ -612,6 +637,7 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets whether it is disabled.
+	 * <p>Note that it is only applied when mold is "select".
 	 */
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
@@ -679,6 +705,8 @@ public class Listbox extends XulElement implements Paginated,
 
 	/**
 	 * Sets the seltype.
+	 * Allowed values:single,multiple
+	 * 
 	 */
 	public void setSeltype(String seltype) throws WrongValueException {
 		if ("single".equals(seltype))
@@ -2869,7 +2897,12 @@ public class Listbox extends XulElement implements Paginated,
 		}
 	}
 
-	// -- super --//
+	/** Sets the mold to render this component.
+	 *
+	 * @param mold the mold. If null or empty, "default" is assumed.
+	 * Allowed values: default, select, paging 
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
+	 */
 	public void setMold(String mold) {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
@@ -3184,6 +3217,7 @@ public class Listbox extends XulElement implements Paginated,
 
 			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
+			renderer.render("span", _span);
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
@@ -3214,7 +3248,7 @@ public class Listbox extends XulElement implements Paginated,
 			if (isCheckmarkDeselectOther())
 				renderer.render("_cdo", true);
 			if (!isRightSelect())
-				renderer.render("_rightSelect", false);
+				renderer.render("rightSelect", false);
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click

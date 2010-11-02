@@ -1520,6 +1520,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart update to update a value in Date.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * <p>Notice that the Date object is marshalled to a string based
+	 * on {@link org.zkoss.util.TimeZones#getCurrent}, and then
+	 * unmarshalled back at the client. In other words, if the client
+	 * is in different time-zone, the value returned by getTime() might
+	 * be different. However, the value will remain the same if
+	 * the client marshalled the Date object back.
+	 * In other words, it assumes the browser's time zone from enduser's
+	 * perspective (not really browser's setting) shall be the same
+	 * as {@link org.zkoss.util.TimeZones#getCurrent}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, Date value) {

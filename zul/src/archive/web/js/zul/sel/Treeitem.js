@@ -74,7 +74,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!img || _closed(this.parent))
 				return;
 
-			var cn = img.className;
+			var cn = img.className,
+				tree = this.getTree(),
+				ebodytbl = tree ? tree.ebodytbl: null,
+				oldwd = ebodytbl ? ebodytbl.clientWidth: 0; //ebodytbl shall not be null (just in case)
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
@@ -85,10 +88,20 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					indemand = tree.inPagingMold() || tree.isModel();
 				this.fire('onOpen', {open: open}, {toServer: indemand});
 			}
-			var tree = this.getTree();
+
 			if (tree) {
 				tree._syncFocus(this);
 				tree.focus();
+
+				if (ebodytbl) {
+					tree._fixhdwcnt = tree._fixhdwcnt || 0;
+					if (!tree._fixhdwcnt++)
+						tree._fixhdoldwd = oldwd;
+					setTimeout(function () {
+						if (!--tree._fixhdwcnt && tree._fixhdoldwd != ebodytbl.clientWidth)
+							tree._calcSize();
+					}, 250);
+				}
 			}
 		}
 	},
@@ -274,6 +287,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
+		this.$supers('onChildReplaced_', arguments);
 		this.onChildRemoved_(oldc, true);
 		this._fixOnAdd(newc, true);
 	},

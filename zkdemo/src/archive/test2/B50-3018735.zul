@@ -1,5 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
+	It is correct if the following grid displays well.
 	<window closable="true" maximizable="false" border="normal">
 		<listbox sizedByContent="true">
 			<listhead sizable="true">

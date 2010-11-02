@@ -45,7 +45,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 var Datebox =
 /**
- * An edit box for holding a date. 
+ * An edit box for holding a date.
  * <p>Default {@link #getZclass}: z-datebox.
  */
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
@@ -78,11 +78,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
 					jq(n)[fnm](zcls + '-btn-right-edge');
-					
-					if (zk.ie6_) {						
-						jq(n)[fnm](zcls + 
+
+					if (zk.ie6_) {
+						jq(n)[fnm](zcls +
 							(this._readonly ? '-btn-right-edge-readonly':'-btn-right-edge'));
-						
+
 						if (jq(this.getInputNode()).hasClass(zcls + "-text-invalid"))
 							jq(n)[fnm](zcls + "-btn-right-edge-invalid");
 					}
@@ -152,7 +152,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 			var inp = this.getInputNode();
 			if (inp)
-				inp.value = this.coerceToString_(this._value);
+				inp.value = this.getText();
 		},
 		/** Sets the constraint.
 	 	 * <p>Default: null (means no constraint all all).
@@ -208,17 +208,17 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._dtzones = dtzones.split(",");
 		},
 		/** Sets whether or not date/time parsing is to be lenient.
-		 * 
+		 *
 		 * <p>
 		 * With lenient parsing, the parser may use heuristics to interpret inputs
 		 * that do not precisely match this object's format. With strict parsing,
 		 * inputs must match this object's format.
-		 * 
+		 *
 		 * <p>Default: true.
 		 * @param boolean lenient
 		 */
 		/** Returns whether or not date/time parsing is to be lenient.
-		 * 
+		 *
 		 * <p>
 		 * With lenient parsing, the parser may use heuristics to interpret inputs
 		 * that do not precisely match this object's format. With strict parsing,
@@ -227,18 +227,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		lenient: null
 	},
-	setValue: function (val) {
-		var args;
-		if (val) {
-			args = [];
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-
-			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
-		} else
-			args = arguments;
-		this.$supers('setValue', args);
-	},
 	_setTimeZonesIndex: function () {
 		var select = this.$n('dtzones');
 		if (select && this._timezone) {
@@ -246,7 +234,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			for (var i = opts.length; i--;) {
 				if (opts[i].text == this._timezone) select.selectedIndex = i;
 			}
-		}		
+		}
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -258,13 +246,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
-	},
-	/** Returns the String of the Date that is assigned to this component.
-	 *  <p>returns empty String if value is null
-	 * @return String
-	 */
-	getRawText: function () {
-		return this.coerceToString_(this._value);
 	},
 	/** Returns the Time format of the specified format
 	 * @return String
@@ -314,11 +295,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (val) {
-			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient);
+			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this._format)};
 			return d;
-		} else
-			return val;
+		}
+		return null;
 	},
 	coerceToString_: function (val) {
 		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat()) : '';
@@ -329,7 +310,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
 			return;
-		
+
 		var inp = this.getInputNode(),
     		$n = jq(node),
     		$inp = jq(inp),
@@ -338,7 +319,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._buttonVisible && shallClean) {
 			$n.removeClass(inc);
 			$inp.removeClass(inc);
-			
+
 			if (zk.opera)
 				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
 			else
@@ -347,7 +328,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			$inp.addClass(inc);
 		}
 		var extraWidth = this.inRoundedMold() && shallClean;
-		
+
 		if (extraWidth) {
     		$n.removeClass(inc);
     		$inp.removeClass(inc);
@@ -355,7 +336,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn');
-		
+
 		if (extraWidth) {
     		$n.addClass(inc);
     		$inp.addClass(inc);
@@ -366,7 +347,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var n = this.$n();
 		if (this._inplace)
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-			
+
 		this.$supers('doFocus_', arguments);
 
 		if (this._inplace) {
@@ -397,6 +378,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {
+		if (jq.nodeName(evt.domTarget, 'option', 'select'))
+			return;
+			
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
 		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
@@ -425,11 +409,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
-		
+
 		if (this._pop.isOpen()) {
 			var ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 			if (ofs)
-				this._pop._shift(ofs);
+				this._pop._shift(ofs, {silent: true});
 		}
 	},
 	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
@@ -454,24 +438,23 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	afterKeyDown_: function (evt) {
 		if (this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
-			
+
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function (){
 		this.$supers(Datebox, 'bind_', arguments);
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
-			
+
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
-			
+
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		
 		this.syncWidth();
-		
+
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this._format);
 	},
@@ -485,7 +468,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
-			
+
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
@@ -498,9 +481,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doTimeZoneChange: function (evt) {
 		var select = this.$n('dtzones'),
 			timezone = select.value;
-		if (!this.getValue()) {
-			this.setValue(this._tm.getValue());
-		}
 		this.updateChange_();
 		this.fire("onTimeZoneChange", {timezone: timezone}, {toServer:true}, 150);
 		if (this._pop) this._pop.close();
@@ -546,12 +526,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.listen({onChange: this}, -1000);
 	},
 	setFormat: function (fmt) {
-		if (fmt != this._fmt) {
-			var old = this._fmt;
-			this._fmt = fmt;
-			if (this.getValue())
-				this._value = new zk.fmt.Calendar().formatDate(new zk.fmt.Calendar().parseDate(this.getValue(), old), fmt);
-		}
+		this._fmt = fmt;
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
@@ -569,7 +544,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.className = zcls + "-pp";
 
 		jq(pp).zk.undoVParent();
-		db.setFloating_(false, {dropdown:true});
+		db.setFloating_(false);
 
 		var btn = this.$n("btn");
 		if (btn)
@@ -578,7 +553,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (silent)
 			db.updateChange_();
 		else
-			jq(db.getInputNode()).focus();
+			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
 		return zk(this.parent.$n("pp")).isVisible();
@@ -589,7 +564,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (!dbn || !pp)
 			return;
 
+		db.setFloating_(true, {node:pp});
 		zWatch.fire('onFloatUp', db); //notify all
+		var topZIndex = this.setTopmost();
 		this._setView("day");
 		var zcls = db.getZclass();
 
@@ -600,12 +577,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.style.position = "absolute"; //just in case
 		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zkdemo/userguide/#f9)
 		pp.style.display = "block";
-		pp.style.zIndex = "88000";
+		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
-		db.setFloating_(true, {dropdown:true, node:pp});
 
 		if (pp.offsetHeight > 200) {
 			//pp.style.height = "200px"; commented by the bug #2796461
@@ -631,14 +607,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-			value = zk.fmt.Date.parseDate(inp.value, db._format) || db.getValue();
-
-		if (value) {
-			var calVal = new zk.fmt.Calendar().formatDate(value, this.getFormat());
-			if (calVal)
-				this.setValue(calVal);
-		}
-
+			//we should use UTC date instead of Locale date to our value.
+			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)).toUTCDate()
+				|| (inp.value ? db._value: zUtl.today(fmt));
+		if (value)
+			this.setValue(value);
 		if (fmt) {
 			var tm = db._tm;
 			tm.setVisible(true);
@@ -658,18 +631,25 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	onChange: function (evt) {
 		var date = this.getTime(),
 			db = this.parent,
+			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
 			readonly = db.isReadonly();
+
 		if (oldDate)
+			date = new Date(date.getFullYear(), date.getMonth(),
+				date.getDate(), oldDate.getHours(),
+				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
-			db._value = new Date(date.getFullYear(), date.getMonth(),
-				date.getDate(), oldDate.getHours(),
-				oldDate.getMinutes(), oldDate.getSeconds());
-		else
-			db._value = date;
-		db.getInputNode().value = evt.data.value = db.getRawText();
-		this.parent.fire(evt.name, evt.data);
+
+		if (fmt) {
+			var tm = db._tm,
+				time = tm.getValue();
+			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+		}
+		
+		db.getInputNode().value = db.coerceToString_(date);
+
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			db._inplaceout = true;
@@ -720,25 +700,30 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('_setView', arguments);
 	}
 });
-zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
+zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onChanging: this}, -1000);
 	},
 	onChanging: function (evt) {
-		var date = this.coerceFromString_(evt.data.value),
-			oldDate = this.parent.getValue();
+		var db = this.parent,
+			date = this.coerceFromString_(evt.data.value), //onChanging's data is string
+			oldDate = db.getValue();
 		if (oldDate) {
+			oldDate = new Date(oldDate); //make a copy
 			oldDate.setHours(date.getHours());
 			oldDate.setMinutes(date.getMinutes());
 			oldDate.setSeconds(date.getSeconds());
-		} else
-			this.parent._value = date;
-		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
-		this.parent.fire(evt.name, evt.data);
+			oldDate.setMilliseconds(date.getMilliseconds());
+			date = oldDate;
+		}
+		db.getInputNode().value = evt.data.value
+			= db.coerceToString_(date);
+
+		db.fire(evt.name, evt.data); //onChanging
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
-			this.parent._inplaceout = true;
+			db._inplaceout = true;
 		}
 		evt.stop();
 	}

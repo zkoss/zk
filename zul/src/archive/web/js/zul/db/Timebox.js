@@ -19,13 +19,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
- * <p>Like {@link Combobox} and {@link zul.db.Datebox},
+ * <p>Like {@link zul.inp.Combobox} and {@link zul.db.Datebox},
  * the value of a read-only time box ({@link #isReadonly}) can be changed
  * by clicking the up or down button (though users cannot type anything
  * in the input box).
  *
  */
-zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
+zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	LEGAL_CHARS: 'ahKHksm',
     /**Useful constant for MINUTE (m) field alignment.
      * @type int
@@ -96,25 +96,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					this._defValue = inp.value; //not clear error if by client app
 			}
 		}
-	},
-	setValue: function (val) {
-		var args;
-		if (val) {
-			args = [];
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-
-			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
-		} else
-			args = arguments;
-		this.$supers('setValue', args);
-	},
-	/** Returns the String of the time that is assigned to this component.
-	 *  <p>returns empty String if value is null
-	 * @return String
-	 */
-	getRawText: function () {
-		return this.coerceToString_(this._value);
 	},
 	_checkFormat: function (fmt) {
 		var error, out = [];
@@ -221,7 +202,6 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (val) {
 		if (!val) return null;
 
-
 		var error;
 		if ((error = this._checkFormat(this._format)))
 			return {error: error};
@@ -232,6 +212,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var date = zUtl.today(true),
 			hasAM, isAM, hasHour1,
 			fmt = [];
+		date.setSeconds(0);
+		date.setMilliseconds(0);
 
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
 			if (this._fmthdler[i].type == this.AM_PM_FIELD) {
@@ -414,7 +396,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._changed = true;
 		
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
-		inp.focus(); //we have to set it here; otherwise, if it is in popup of
+		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null
 
 		// disable browser's text selection
@@ -426,7 +408,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode();
 		if(inp.disabled || zk.dragging) return;
 
-		if (zk.opera) inp.focus();
+		if (zk.opera) zk(inp).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
 		this._onChanging();
@@ -725,9 +707,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 
 		// skip onchange, Bug 2936568
-		if (!this.getValue() && !this._changed)
+		if (!this._value && !this._changed)
 			this.getInputNode().value = this._lastRawValVld = '';
-		
+
 		this.$supers('doBlur_', arguments);
 
 		if (this._inplace && this._inplaceout) {
@@ -743,7 +725,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
-		this.$supers(zul.inp.Timebox, 'bind_', arguments);
+		this.$supers(zul.db.Timebox, 'bind_', arguments);
 		var inp = this.getInputNode(),
 			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
@@ -773,7 +755,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				.domUnlisten_(btn, "onMouseOver", "_btnOver");
 		}
 		this._changed = false;
-		this.$supers(zul.inp.Timebox, 'unbind_', arguments);
+		this.$supers(zul.db.Timebox, 'unbind_', arguments);
 	}
 
 });

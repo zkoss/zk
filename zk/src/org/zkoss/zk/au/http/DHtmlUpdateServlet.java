@@ -37,6 +37,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
 import org.zkoss.json.JSONValue;
 
@@ -602,7 +603,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);
 			URIInfo ui = wapp != null ? (URIInfo)wapp.getConfiguration()
-				.getTimeoutURI(getDeviceType(request)): null;
+				.getTimeoutURI(deviceType): null;
 			String uri = ui != null ? ui.uri: null;
 			final AuResponse resp;
 			if (uri != null) {
@@ -610,8 +611,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					uri = Encodes.encodeURL(_ctx, request, response, uri);
 				resp = new AuSendRedirect(uri, null);
 			} else {
-				resp = new AuObsolete(
-					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+				String msg = wapp.getConfiguration().getTimeoutMessage(deviceType);
+				if (msg != null && msg.startsWith("label:")) {
+					final String key;
+					msg = Labels.getLabel(key = msg.substring(6), new Object[] {dtid});
+					if (msg == null)
+						log.warning("Label not found, "+key);
+				}
+				if (msg == null)
+					msg = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid);
+				resp = new AuObsolete(dtid, msg);
 			}
 			out.write(resp);
 		}

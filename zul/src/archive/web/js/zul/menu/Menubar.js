@@ -355,7 +355,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	//Closes all menupopup when mouse is moved out
 	_closeOnOut: function () {
 		var self = this;
-		if (self._autodrop)
+		if (self._autodrop && !zul.Widget.getOpenTooltip()) //dirty fix: don't auto close if tooltip shown
 			setTimeout(function () {_closeOnOut(self);}, 200);
 	}
 });

@@ -189,6 +189,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return true;
 	}
 
+	/** Sets the mold to render this component.
+	 *
+	 * @param mold the mold. If null or empty, "default" is assumed.
+	 * Allowed values: default, paging
+	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
+	 */	
 	//-- super --//
 	public void setMold(String mold) {
 		final String old = getMold();
@@ -354,7 +360,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return inPagingMold() ? pgi().getPageSize(): 0;
 	}
 	/** Sets the page size, aka., the number items per page.
-	 * <p>Note: mold is not "paging" and no external controller is specified.
+	 * <p>Note: mold is "paging" and no external controller is specified.
 	 * @since 2.4.1
 	 */
 	public void setPageSize(int pgsz) throws WrongValueException {
@@ -676,7 +682,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		return _multiple ? "multiple": "single";
 	}
 	/** Sets the seltype.
-	 * Currently, only "single" is supported.
+	 * "single","multiple" is supported.
 	 */
 	public void setSeltype(String seltype) throws WrongValueException {
 		if ("single".equals(seltype)) setMultiple(false);
@@ -1279,8 +1285,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		 * 2008/02/12 --- issue: [ 1884112 ]
 		 * When getChildByNode returns null, do nothing
 		 */
-		if(parent != null &&
-		(!(parent instanceof Treeitem) || ((Treeitem)parent).isLoaded())){
+		if(parent != null){
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
 			switch (event.getType()) {
@@ -1437,6 +1442,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				} else {
 					if (_treechildren != null) _treechildren.detach();
 						//don't call getItems().clear(), since it readonly
+					//bug# 3095453: tree can't expand if model is set in button onClick
+					smartUpdate("model", true);
 				}
 
 				setModelDirectly(model);
@@ -1448,6 +1455,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_model = null;
 			if (_treechildren != null) _treechildren.detach();
 				//don't call getItems().clear(), since it readonly
+			//bug# 3095453: tree can't expand if model is set in button onClick
+			smartUpdate("model", false);
 		}
 	}
 	@SuppressWarnings("unchecked")
@@ -1909,7 +1918,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (isCheckmarkDeselectOther())
 			renderer.render("_cdo", true);
 		if (!isRightSelect())
-			renderer.render("_rightSelect", false);
+			renderer.render("rightSelect", false);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

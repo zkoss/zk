@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="test rowspan and colspan on auxheader">
 	<grid SizedByContent="true">
 	<auxhead>
-		<auxheader label="A" rowspan="2" />
-		<auxheader label="B" rowspan="2" />
+		<auxheader label="A(2 row)" rowspan="2" />
+		<auxheader label="B(2 row)" rowspan="2" />
 		<auxheader label="C" colspan="1" />
 	</auxhead>
 

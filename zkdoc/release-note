@@ -36,6 +36,7 @@ ZK 5.0.5
   3017896: A way to specify whether clicking input will select listitem
   3081432: An option clicking on listitem with checkmark will toggle
   3085801: A way to specify vertical alignment for hlayout
+  3097933: A way to customize the timeout message
   3067232: A way to access components in 3rd framework (e.g. JSF 2)
   3087902: Make a ZUL page generating as a HTML fragment
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
@@ -48,6 +49,12 @@ ZK 5.0.5
   3091086: The A component shall allow children
   3091764: Able to prevent users enter the grouping character
   3092641: Listbox/Tree support whether to toggle selection or not when right click on item
+  3094640: A way to specify page's widget class (in the page directive)
+  3095460: Listbox/Grid support span attribute, extend column width when there are available extra space 
+  3096119: Smart-update supports the Date object
+  3096990: The mold attrs of the window shall be public
+  3097894: EL supports more instantiation functions, e.g., new1, new2
+  3098249: Component not updated after onClick
   
 * Bugs
   3057902: zk bug for window showbusy
@@ -112,10 +119,26 @@ ZK 5.0.5
   3091045: Non integer Page number in paging mold="os"
   3091153: selectAll(), clearSelection() in Tree
   3091949: Calendar/Combobox above pdf not display popup correctly
+  3093594: Decimalbox does not respect current Locales if no format
+  3094118: Tree.onTreeDataChange does not update the tree correctly
+  3094686: border in image not work
+  3092890: Rows.invalidate does not respect frozen state
+  3096210: Listbox/Grid rod show blank view in special scroll pattern
+  3096342: onChange not fired if change time in timebox (of popup)
+  3095469: tree should resize header while scrollbar appear
+  3095549: rod in tree make add child not work
+  3095453: tree can't expand if model is set in button onClick
+  3097181: Colorbox in menu, doesn't work with menubar autodrop="true"
+  3097199: Combobox strict constraint not using custom message
+  3098096: The comboitem cannot be selected with iphone safari
+  3097458: Right click on Tree and also Listbox in IE8
+  3099277: Listbox : value of Listitem with space
+  3100455: Something wrong at frozen grid when updating live data
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
     (such that the naming is consistent with ListModel's implementations)
+  + zul.inp.Timebox is renamed to zul.db.Timebox (JavaScript)
   + For listbox and tree, if checkmark is enabled, clicking an item will toggle
     the selection rather than deselect all others.
     If you want to deselect all others (as 5.0.4 or ealier did), please

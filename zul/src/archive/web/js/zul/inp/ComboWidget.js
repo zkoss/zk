@@ -141,6 +141,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inp = this.getInputNode();
 		if (!pp) return;
 
+		this.setFloating_(true, {node:pp});
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost();
 
@@ -174,7 +175,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
-		this.setFloating_(true, {dropdown:true, node:pp});
 		this.slideDown_(pp);
 
 		//FF issue:
@@ -267,7 +267,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
-		this.setFloating_(false, {dropdown:true});
+		this.setFloating_(false);
 		zWatch.fireDown("onHide", this);
 		this.slideUp_(pp);
 

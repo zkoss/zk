@@ -17,18 +17,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.zkoss.lang.Objects;
 
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.au.out.AuWrongValue;
 
@@ -62,8 +65,6 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 	/** The value. */
 	protected Object _value;
-	/** Used to disable sending back the value */
-	private transient String _txtByClient;
 	private int _cols;
 	private AuxInfo _auxinf;
 	private boolean _disabled, _readonly;
@@ -277,28 +278,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 		if (!same) {
 			_value = val;
-
-			final String fmtval = coerceToString(_value);
-			if (_txtByClient == null
-			|| !Objects.equals(_txtByClient, fmtval)) {
-				_txtByClient = null; //only once
-				smartUpdate("value", fmtval);
-				//Note: we have to disable the sending back of the value
-				//Otherwise, it cause Bug 1488579's problem 3.
-				//Reason: when user set a value to correct one and set
-				//to an illegal one, then click the button cause both events
-			}
-		} else if (_txtByClient != null) {
-			//value equals but formatted result might differ because
-			//our parse is more fault tolerant
-			final String fmtval = coerceToString(_value);
-			if (!Objects.equals(_txtByClient, fmtval)) {
-				_txtByClient = null; //only once
-				smartUpdate("value", fmtval);
-					//being sent back to the server.
-			}
+			smartUpdate("_value", marshall(val));
 		} else if (errFound) {
-			smartUpdate("value", coerceToString(_value));
+			smartUpdate("_value", marshall(_value)); //send back original value
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
@@ -551,7 +533,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		|| !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
-			smartUpdate("value", coerceToString(_value));
+			smartUpdate("_value", marshall(_value));
 		}
 	}
 	/** Sets the value directly.
@@ -667,6 +649,47 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		initAuxInfo().errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
+	/** Marshall value to be sent to the client if needed.
+	 *
+	 * <p>Overrides it if the value to be sent to the client is not JSON Compatible.
+	 * @param value the value to be sent to the client
+	 * @return the marshalled value
+	 * @since 5.0.5
+	 */
+	protected Object marshall(Object value) {
+		return value;
+	}
+	/** Unmarshall value returned from client if needed.
+	 *
+	 * <p>Overrides it if the value returned is not JSON Compatible.
+	 * @param value the value returned from client
+	 * @return the unmarshalled value
+	 * @since 5.0.5
+	 */
+	protected Object unmarshall(Object value) {
+		return value;
+	}
+	private void setValueByClient(Object value, String valstr) {
+		if (_auxinf != null && _auxinf.maxlength > 0 && valstr != null && valstr.length() > _auxinf.maxlength)
+			throw showCustomError(
+				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
+
+		final boolean same = Objects.equals(_value, value);
+		boolean errFound = false;
+		if (!same || !_valided || (_auxinf != null && _auxinf.errmsg != null)) { //note: the first time (!_valided) must always validate
+			validate(value); //Bug 2946917: don't validate if not changed
+
+			errFound = _auxinf != null && _auxinf.errmsg != null;
+			clearErrorMessage(); //no error at all
+		}
+
+		if (!same) {
+			_value = value;
+		} else if (errFound) {
+			smartUpdate("_value", marshall(_value)); //send back original value
+				//Bug 1876292: make sure client see the updated value
+		}
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -676,27 +699,35 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			InputEvent evt = InputEvent.getInputEvent(request, _value);
-
-			final String value = evt.getValue();
-			_txtByClient = value;
+			final Map data = request.getData();
+			final Object clientv = data.get("value");
+			final Object oldval = _value;
+			final Object value = unmarshall(clientv);
+			final String valstr = coerceToString(value);
 			try {
-				final Object oldval = _value;
-				setText(value); //always since it might have func even not change
-				if (oldval == _value)
+				setValueByClient(value, valstr); //always since it might have func even not change
+				if (Objects.equals(oldval, _value))
 					return; //Bug 1881557: don't post event if not modified
 			} catch (WrongValueException ex) {
 				initAuxInfo().errmsg = ex.getMessage();
 					//we have to 'remember' the error, so next call to getValue
 					//will throw an exception with proper value.
 				throw ex;
-			} finally {
-				_txtByClient = null;
 			}
-
+			final InputEvent evt = new InputEvent(cmd, this,
+				valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGING)) {
-			Events.postEvent(InputEvent.getInputEvent(request, _value));
+			final Map data = request.getData();
+			final Object clientv = data.get("value");
+			final Object oldval = _value;
+			final InputEvent evt = new InputEvent(cmd, this,
+				clientv == null ? "" : clientv.toString(), oldval, //clientv is what user input (not marshal)
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
+			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);
 			final String msg = evt.getMessage();
@@ -713,8 +744,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		final String txt;		
-		render(renderer, "value", txt = coerceToString(_value));
+		render(renderer, "_value", marshall(_value));
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", getName());
@@ -748,7 +778,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (!constrDone && constr != null)
 			renderer.render("constraint", "[s");
 
-		Utils.renderCrawlableText(txt);
+		Utils.renderCrawlableText(coerceToString(_value));
 	}
 
 	//Cloneable//

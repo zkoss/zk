@@ -67,6 +67,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	static {
 		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
 		addClientEvent(Panel.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Panel.class, Events.ON_OPEN, CE_IMPORTANT);
 		addClientEvent(Panel.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Panel.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -273,6 +274,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	 * Sets whether to show a toggle button on the title bar.
 	 * <p>Default: false.
 	 * <p>Note: the toggle button won't be displayed if no title or caption at all.
+	 * <p>Note: onOpen event will be sent when you click the toggle button
 	 */
 	public void setCollapsible(boolean collapsible) {
 		if (_collapsible != collapsible) {

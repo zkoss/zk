@@ -116,12 +116,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	focus: function (timeout) {
-		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.$n('real')||this.$n()).focus(timeout);
-			return true;
-		}
-		return false;
+	focus_: function (timeout) {
+		zk(this.$n('real')||this.$n()).focus(timeout);
+		return true;
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -176,7 +173,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			if (checked != this._checked) //changed
 				this.setChecked(checked) //so Radio has a chance to override it
 					.fire('onCheck', checked);
-			if (zk.safari) jq(real).focus();
+			if (zk.safari) zk(real).focus();
 			return this.$supers('doClick_', arguments);
 		}
 	},

@@ -112,6 +112,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	}
 	/** Sets the character encoding of the source.
 	 * It is used with {@link #setSrc}.
+	 * <p>Refer to <a href="http://www.w3schools.com/TAGS/ref_charactersets.asp">HTML Character Sets</a>for more information.
 	 */
 	public void setCharset(String charset) {
 		if (charset != null && charset.length() == 0)

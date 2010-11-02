@@ -96,6 +96,11 @@ public class TagRenderContext {
 				_jsout.append("id:'")
 					.append(Strings.escape(id, Strings.ESCAPE_JAVASCRIPT)).append('\'');
 			}
+			if (!comp.isVisible()) {
+				if (first) first = false;
+				else _jsout.append(',');
+				_jsout.append("visible:false");
+			}
 
 			if (clientEvents != null) {
 				for (Iterator it = clientEvents.entrySet().iterator();

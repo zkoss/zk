@@ -99,7 +99,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private int _minheight = 100, _minwidth = 200; 
 
 	/** Embeds the window as normal component. */
-	private static final int EMBEDDED = 0;
+	public static final int EMBEDDED = 0;
 	/** Makes the window as a modal dialog. once {@link #doModal}
 	 * is called, the execution of the event processing thread
 	 * is suspended until one of the following occurs.
@@ -116,15 +116,15 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 *
 	 * @see #HIGHLIGHTED
 	 */
-	private static final int MODAL = 1;
+	public static final int MODAL = 1;
 	/** Makes the window as overlapped other components.
 	 */
-	private static final int OVERLAPPED = 2;
+	public static final int OVERLAPPED = 2;
 	/** Makes the window as popup.
 	 * It is similar to {@link #OVERLAPPED}, except it is auto hidden
 	 * when user clicks outside of the window.
 	 */
-	private static final int POPUP = 3;
+	public static final int POPUP = 3;
 	/** Makes the window as highlighted.
 	 * Its visual effect is the same as {@link #MODAL}.
 	 * However, from the server side's viewpoint, it is similar to
@@ -134,11 +134,12 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @see #MODAL
 	 * @see #OVERLAPPED
 	 */
-	private static final int HIGHLIGHTED = 4;
+	public static final int HIGHLIGHTED = 4;
 
 	static {
 		addClientEvent(Window.class, Events.ON_CLOSE, 0);
 		addClientEvent(Window.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Window.class, Events.ON_OPEN, CE_IMPORTANT);
 		addClientEvent(Window.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Window.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -425,6 +426,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * suspends the execution if executed in an event listener, or
 	 * throws an exception if <em>not</em> executed in an event listener.
 	 *
+	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Window">Overlapped, Popup, Modal, Highlighted and Embedded</a>
+	 * for more information.
+	 * 
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.

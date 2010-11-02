@@ -5,7 +5,7 @@
 	</zscript>
 	<html><![CDATA[
 		Type <b>"12.123"</b>, then move focus out of textbox, It will show <b>"12.12"</b>.<br />
-		Type <b>"12.125"</b>, then move focus out of textbox, It will show <b>"12.15"</b>.
+		Type <b>"12.125"</b>, then move focus out of textbox, It will show <b>"12.13"</b>.
 	]]></html>
 	<window title="new page title" border="normal">
 		<decimalbox id="myDeci" />

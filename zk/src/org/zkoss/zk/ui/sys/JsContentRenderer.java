@@ -25,6 +25,7 @@ import java.util.Date;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.json.JSONAware;
+import org.zkoss.json.JSONs;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -74,9 +75,9 @@ public class JsContentRenderer implements ContentRenderer {
 	}
 	private void renderValue(Date value) {
 		if (value == null) _buf.append((String)null);
-		else _buf.append("new Date(")
-			.append(((Date)value).getTime())
-			.append(')');
+		else _buf.append("jq.j2d('")
+			.append(JSONs.d2j((Date)value))
+			.append("')");
 	}
 	/** Renders an arbitary object. */
 	public void render(String name, Object value) {

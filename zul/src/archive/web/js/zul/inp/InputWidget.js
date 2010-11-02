@@ -50,7 +50,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			this.fire('onChanging', _onChangeData(this, val, valsel == val),
+			this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
 				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 		}
 	}
@@ -242,35 +242,62 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	inRoundedMold: function(){
 		return this._mold == "rounded";
 	},
+
+	/** Returns the text representing the value in the given format,
+	 * or an empty etring if value is null
+	 * @return String
+	 * @since 5.0.5
+	 */
+	getText: function () {
+		return this.coerceToString_(this.getValue());
+	},
+	/** Sets the text representing the value in the given format.
+	 * @param String txt the text
+	 * @since 5.0.5
+	 */
+	setText: function (txt) {
+		this.setValue(this.coerceFromString_(txt));
+	},
+
 	/** Returns the value in the String format.
 	 * @return String
 	 */
 	getValue: function () {
 		return this._value;
 	},
-	/** Sets the value in the String format.
-	 * @param String value the value; If null, it is considered as empty.
-	 * @param boolean fromServer it will clear error message if true
+	/** Sets the value in the String format(assumes no locale issue).
+	 * <p>Notice that the invocation of {@link #getValue} won't fire
+	 * the onChange event. To fire it, you have to invoke {@link #fireOnChange}
+	 * explicitly.
+	 * @param Object value the value.
+	 * @param boolean fromServer whether it is called from the server.
+	 * The error message will be cleared if true
 	 */
 	setValue: function (value, fromServer) {
 		var vi;
 		if (fromServer) this.clearErrorMessage(true);
-		else if (value == this._lastRawValVld) return; //not changed
- 		else {
+		else {
+			if (value == this._lastRawValVld)
+				return; //not changed
+
  			vi = this._validate(value);
  			value = vi.value;
- 		}
+	 	}
 
 		_clearOnChanging(this);
 
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
-		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
+		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
 			this._value = value;
 			var inp = this.getInputNode();
 			if (inp)
 				this._defValue = this._lastChg = inp.value = value = this.coerceToString_(value);
 		}
+	},
+	//value object set from server(smartUpdate, renderProperites)
+	set_value: function (value, fromServer) {
+		this.setValue(this.unmarshall_(value), fromServer);
 	},
 	/** Returns the input node of this widget
 	 * @return DOMElement
@@ -453,6 +480,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 *
 	 * <p>Moreover, when {@link zul.inp.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
+	 *
+	 * @param String value the string to coerce from
 	 * @return String
 	 */
 	coerceFromString_: function (value) {
@@ -466,6 +495,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * If you want to store the value in other type, say BigDecimal,
 	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
 	 * to convert between a string and your targeting type.
+	 * @param Object value the value that will be coerced to a string
 	 * @return String
 	 */
 	coerceToString_: function (value) {
@@ -558,6 +588,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		eb.show(this, msg);
 		return eb;
 	},
+	_equalValue: function(a, b) {
+		return a == b || this.marshall_(a) == this.marshall_(b);
+	},
+	marshall_: function(val) {
+		return val;
+	},
+	unmarshall_: function(val) {
+		return val;
+	},
 	/** Updates the change to server by firing onChange if necessary. 
 	 * @return boolean
 	 */
@@ -578,18 +617,28 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
 					//reason to use this._defValue rather than this._value is
 					//to save the trouble of coerceToString issue
-				upd = wasErr || value != this._defValue;
+				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
 					this._defValue = value;
 				}
 			}
 			if (upd || vi.server)
-				this.fire('onChange', _onChangeData(this, value),
-					vi.server ? {toServer:true}: null, 150);
+				this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
+					vi.server ? {toServer:true}: null, 90);
 		}
 		return true;
 	},
+	/** Fires the onChange event.
+	 * If the widget is created at the server, the event will be sent
+	 * to the server too.
+	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
+	 * @since 5.0.5
+	 */
+	fireOnChange: function (opts) {
+		this.fire('onChange', _onChangeData(this, this.marshall_(this.getValue())), opts);
+	},
+
 	_resetForm: function () {
 		var inp = this.getInputNode();
 		if (inp.value != inp.defaultValue) { //test if it will be reset
@@ -600,12 +649,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	focus: function (timeout) {
-		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.getInputNode()).focus(timeout);
-			return true;
-		}
-		return false;
+	focus_: function (timeout) {
+		zk(this.getInputNode()).focus(timeout);
+		return true;
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),

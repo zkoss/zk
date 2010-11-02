@@ -26,9 +26,9 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
-		if (this._isOutRange(info.raw))
-			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−9223372036854775808 - 9223372036854775807)')};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
+		if (this._isOutRange(val.$toString()))
+			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−9223372036854775808 - 9223372036854775807)')};
 		return val;
 	},
 	coerceToString_: function(value) {
@@ -60,5 +60,11 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 				return false;
 		}
 		return false;
+	},
+	marshall_: function(val) {
+		return val ? val.$toString() : val;
+	},
+	unmarshall_: function(val) {
+		return val ? new zk.Long(val) : val;
 	}
 });

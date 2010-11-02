@@ -39,6 +39,7 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 		return _align;
 	}
 	/** Sets the horizontal alignment.
+	 * Allowed values: left,right,center,justify,char. 
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
@@ -53,6 +54,7 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 		return _valign;
 	}
 	/** Sets the vertical alignment of this grid.
+	 * Allowed values: 	top, middle, bottom, baseline
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {

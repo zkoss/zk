@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-Long label in grid.	
+Long label in grid. (check the word in view is ok or not  , ex. words should not be shortened .)
 <grid width="400px">
 	<columns>
 		<column label="Name"/>

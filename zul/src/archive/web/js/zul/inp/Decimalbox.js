@@ -83,6 +83,12 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, _allowKeys))
 			this.$supers('doKeyPress_', arguments);
+	},
+	marshall_: function(val) {
+		return val ? val.$toString() : val;
+	},
+	unmarshall_: function(val) {
+		return val ? new zk.BigDecimal(val) : val; 
 	}
 });
 

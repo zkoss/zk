@@ -28,6 +28,8 @@ import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
@@ -53,6 +55,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -257,19 +260,39 @@ public class HtmlPageRenders {
 		sb.append(" -->\n");
 
 		int tmout = 0;
-		if (desktop != null) {
-			final Boolean autoTimeout = getAutomaticTimeout(desktop);
-			if (autoTimeout != null ?
-			autoTimeout.booleanValue():
-			wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
+		final Boolean autoTimeout = getAutomaticTimeout(desktop);
+		if (autoTimeout != null ? autoTimeout.booleanValue():
+		wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
+			if (desktop != null) {
 				tmout = desktop.getSession().getMaxInactiveInterval();
-				if (tmout > 0) { //unit: seconds
-					int extra = tmout / 8;
-					tmout += extra > 180 ? 180: extra;
-						//Add extra seconds to ensure it is really timeout
+			} else {
+				Object req = exec.getNativeRequest();
+				if (req instanceof HttpServletRequest)  {
+					final HttpSession hsess = ((HttpServletRequest)req).getSession(false);
+					if (hsess != null) {
+						final Session sess = SessionsCtrl.getSession(wapp, hsess);
+						if (sess != null) {
+							tmout = sess.getMaxInactiveInterval();
+						} else {
+						//try configuration first since HttpSession's timeout is set
+						//when ZK Session is created (so it is not set yet)
+						//Note: no need to setMaxInactiveInternval here since it will
+						//be set later or not useful at the end
+							tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
+							if (tmout <= 0) //system default
+								tmout = hsess.getMaxInactiveInterval();
+						}
+					} else
+						tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
 				}
 			}
+			if (tmout > 0) { //unit: seconds
+				int extra = tmout / 8;
+				tmout += extra > 60 ? 60: extra < 5 ? 5: extra;
+					//Add extra seconds to ensure it is really timeout
+			}
 		}
+
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null,
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
@@ -298,10 +321,11 @@ public class HtmlPageRenders {
 		return sb.toString();
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
-		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-			Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
-			if (b != null) return b;
-		}
+		if (desktop != null)
+			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
+				Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+				if (b != null) return b;
+			}
 		return null;
 	}
 	/** Returns HTML tags to include all style sheets that are
@@ -561,6 +585,9 @@ public class HtmlPageRenders {
 				appendProp(props, "uu", desktop.getUpdateURI(null));
 				appendProp(props, "ru", desktop.getRequestPath());
 			}
+			final String pageWgtCls = pageCtrl.getWidgetClass();
+			if (pageWgtCls != null)
+				appendProp(props, "wc", pageWgtCls);
 			if (style != null)
 				appendProp(props, "style", style);
 			if (!isClientROD(page))
@@ -746,9 +773,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(out);
 			}
 
-			//Note: we cannot use zkmx. Otherwise, B30-1813518.zhtml failed in IE6
-			//(the 2nd zkx runs before the first zkmx -- violate script order!!)
-			out.write("<script type=\"text/javascript\">\nzkmb();try{zkx(");
+			out.write("<script type=\"text/javascript\">\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -760,7 +785,7 @@ public class HtmlPageRenders {
 
 		outEndJavaScriptFunc(exec, out, extra, false);
 			//generate extra, responses and ");"
-		out.write("\n}finally{zkme();}</script>\n");
+		out.write("\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

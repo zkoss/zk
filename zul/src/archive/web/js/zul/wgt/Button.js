@@ -228,12 +228,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		return this;
 	},
-	focus: function (timeout) {
-		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.$n('btn')||this.$n()).focus(timeout);
-			return true;
-		}
-		return false;
+	focus_: function (timeout) {
+		zk(this.$n('btn')||this.$n()).focus(timeout);
+		return true;
 	},
 
 	domContent_: function () {
@@ -431,8 +428,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		zWatch.unlisten({onResponse: this});
 	}
 },{ //static
-	/**
-	 * Disable Targets and re-enable after response
+	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
 	autodisable: function(wgt) {

@@ -584,7 +584,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else _lastfocus = fc;
 			_modals.unshift(this);
 
-			//au's focus uses wgt.focus(0), so we have to delay a bit (Z30-focus.zul)
+			//au's focus uses wgt.focus(0), so we have to delay a bit
+			//to see if focus has been changed to its decendant (Z30-focus.zul)
 			wnd = this;
 			setTimeout(function () {
 				if (!zUtl.isAncestor(wnd, zk.currentFocus))
@@ -697,7 +698,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
+		this._updDOFocus = false; //it might be set by unbind_
 		this.rerender(this._skipper);
+		var cf;
+		if (cf = this._updDOFocus) //asked by unbind_
+			cf.focus(10);
+		delete this._updDOFocus;
 	},
 
 	//event handler//
@@ -943,15 +949,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.zsync();
 	},
 	setZindex: _zkf,
-	focus: function (timeout) {
-		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
-			var cap = this.caption;
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w != cap && w.focus(timeout))
-					return true;
-			return cap && cap.focus(timeout);
-		}
-		return false;
+	focus_: function (timeout) {
+		var cap = this.caption;
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w != cap && w.focus_(timeout))
+				return true;
+		return cap && cap.focus_(timeout);
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -1058,7 +1061,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (!fc || !fc.desktop)
 				fc = wnd;
 			if (fc)
-				fc.focus(10); // use timeout for the bug 3057311
+				if (this._updDOFocus === false)
+					this._updDOFocus = fc; //let _updateDomOuter handle it
+				else
+					fc.focus(10); // use timeout for the bug 3057311
 		}
 		this._lastfocus = null;
 

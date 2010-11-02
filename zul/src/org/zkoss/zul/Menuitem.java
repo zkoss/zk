@@ -64,6 +64,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	}
 	/** Sets whether the check mark shall be displayed in front
 	 * of each item.
+	 * <p>Note the checkbox can be checked only if {@link #isAutocheck()} is true
 	 * @since 3.5.0
 	 */
 	public void setCheckmark(boolean checkmark) {

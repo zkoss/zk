@@ -275,7 +275,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function ajaxSendNow(reqInf) {
 		var setting = zAu.ajaxSettings,
 			req = setting.xhr(),
-			uri = shallUseQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
+			uri = zjq._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (cpsp)
 		try {
 			req.onreadystatechange = onResponseReady;
@@ -318,29 +318,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	/* @param zk.Widget target
 	 */
 	function toJSON(target, data) {
-		if (data.pageX != null && data.x == null)  {
-			var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
-				[data.pageX, data.pageY];
-			data.x = ofs[0];
-			data.y = ofs[1];
+		if (!jq.isArray(data)) {
+			if (data.pageX != null && data.x == null)  {
+				var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
+					[data.pageX, data.pageY];
+				data.x = ofs[0];
+				data.y = ofs[1];
+			}
+
+			for (var n in data) {
+				var v;
+				if (jq.type(v = data[n]) == 'date') {
+					data[n] = jq.d2j(v);
+					data["z_type_" + n] = "Date";
+				}
+			}
 		}
 		return jq.toJSON(data);
 	}
-
-	//IE: use query string if possible to avoid incomplete-request problem
-	var shallUseQS = zk.ie ? function (reqInf) {
-		var s = reqInf.content, j = s.length, prev, cc;
-		if (j + reqInf.uri.length < 2000) {
-			while (j--) {
-				cc = s.charAt(j);
-				if (cc == '%' && prev >= '8') //%8x, %9x...
-					return false;
-				prev = cc;
-			}
-			return true;
-		}
-		return false;
-	}: zk.$void;
 
 	function doCmdsNow(cmds) {
 		var rtags = cmds.rtags||{}, ex;
@@ -960,6 +955,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String msg the error message
 	 */
 	obsolete: function (dtid, msg) {
+		if (msg.startsWith("script:"))
+			return $eval(msg.substring(7));
+
 		var v = zk.Desktop.$(dtid);
 		if (v && (v = v.requestPath))
 			msg = msg.replace(dtid, v + ' (' + dtid + ')');

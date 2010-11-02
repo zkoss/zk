@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="EL foreach" border="normal" width="600px" height="600px">
+<window title="EL foreach" border="normal" width="600px" height="660px">
 	<html><![CDATA[
 	1.Check the data generate correct (should be 0~50)
 	]]></html>

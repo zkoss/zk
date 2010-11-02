@@ -69,7 +69,7 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 	public String getDir() {
 		return _dir;
 	}
-	/** Sets the direction.
+	/** Sets the direction to layout with image.
 	 * @param dir either "normal" or "reverse".
 	 */
 	public void setDir(String dir) throws WrongValueException {

@@ -171,7 +171,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	}
 	/**
 	 * Sets the quality of the Flash movie.
-	 * @param quality the quality of the Flash movie.
+	 * @param quality the quality of the Flash movie. Accept "high","medium","low"
 	 * @since 5.0.0
 	 */
 	public void setQuality(String quality) {

@@ -111,7 +111,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	public String getDir() {
 		return _auxinf != null ? _auxinf.dir: NORMAL;
 	}
-	/** Sets the direction.
+	/** Sets the direction to layout image.
 	 * @param dir either "normal" or "reverse".
 	 */
 	public void setDir(String dir) throws WrongValueException {
@@ -129,7 +129,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	public String getOrient() {
 		return _auxinf != null ? _auxinf.orient: HORIZONTAL;
 	}
-	/** Sets the orient.
+	/** Sets the orient to layout image.
 	 * @param orient either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {

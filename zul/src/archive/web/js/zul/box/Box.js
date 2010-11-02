@@ -37,7 +37,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
 		if (s) oo.push(' style="', s, '"');
 
-		oo.push('>', vert?'<td>':'', zUtl.i0, vert?'</td></tr>':'</td>');
+		oo.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
 		return oo.join('');
 	}
 

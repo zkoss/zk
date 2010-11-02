@@ -49,7 +49,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	/** Sets the shape of this area.
 	 *
 	 * @exception WrongValueException if shape is not one of
-	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
+	 * null, "rect", "rectangle", "circle", "circ", "polygon", and "poly".
 	 */
 	public void setShape(String shape) throws WrongValueException {
 		if (shape != null)

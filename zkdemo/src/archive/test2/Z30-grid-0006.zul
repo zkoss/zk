@@ -6,7 +6,7 @@ ZK30-grid005-02.zul
 	Purpose:
 		normal test of grid.
 	Description:
-		
+
 	History:
 		Create by Dennis
 }}IS_NOTE
@@ -46,7 +46,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</columns>
 		<rows>
 			<row>
-				Orange
+				<label value="Orange"/>
 				<listbox mold="select">
 					<listitem label="AB"/>
 					<listitem label="CD"/>
@@ -55,13 +55,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<textbox rows="3"/>
 			</row>
 			<row>
-				Apple
+				<label value="Apple"/>
 				<label value="A11"/>
 				<label value="A12"/>
 				<label value="A13"/>
 			</row>
 			<row>
-				Lemon
+				<label value="Lemon"/>
 				<checkbox checked="true" label="Option 1"/>
 				<checkbox label="Option 2"/>
 				<radiogroup>
@@ -71,7 +71,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				</radiogroup>
 			</row>
 			<row>
-				Tomato
+				<label value="Tomato"/>
 				<checkbox checked="true" label="Option 1"/>
 				<checkbox label="Option 2"/>
 				<radiogroup orient="vertical">

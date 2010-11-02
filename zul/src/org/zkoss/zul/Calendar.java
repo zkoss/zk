@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -26,8 +27,11 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.au.AuRequests;
+
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -38,7 +42,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
-	private TimeZone _tzone;
 	private Date _value;
 	/** The name. */
 	private String _name;
@@ -55,19 +58,14 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		_value = value != null ? value: Dates.today();
 	}
 
-	/** Returns the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public TimeZone getTimeZone() {
-		return _tzone;
+		return null;
 	}
-	/** Sets the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
 	}
 
 	/** Returns the value that is assigned to this component, never null.
@@ -82,15 +80,14 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("value", getDateFormat().format(_value));
+			smartUpdate("value", _value);
 		}
 	}
 
 	private DateFormat getDateFormat() {
 		final DateFormat df =
 			new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
-		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
-		df.setTimeZone(tz);
+		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
 
@@ -141,18 +138,16 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			InputEvent evt = InputEvent.getInputEvent(request, _value);
-			
-			final String value = evt.getValue();
-			try {
-				final Date newval = getDateFormat().parse(value);
-				if (Objects.equals(_value, newval))
-					return; //not post event
-				_value = newval;
-			} catch (ParseException ex) {
-				throw new InternalError(value);
-			}
+			final Map data = request.getData();
+			final Object value = data.get("value");
+			if (Objects.equals(_value, value))
+				return; //nothing happen
 
+			_value = (Date)value;
+			final InputEvent evt = new InputEvent(cmd, this,
+				getDateFormat().format(value), value,
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else {
 			
@@ -164,6 +159,6 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
-		render(renderer, "value", getDateFormat().format(_value));
+		render(renderer, "value", _value);
 	}
 }

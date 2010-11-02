@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]
-		_dropdning, //[widget, node] (combobox's dropdown, unable to be part of floating)
 		_nextUuid = 0,
 		_domevtfnm = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
@@ -25,7 +24,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt = zUtl.now() + 60000, //when zk.Desktop.sync() shall be called
-		_rdque = [], _rdtid; //async rerender's queue and timeout ID
+		_rdque = [], _rdtid, //async rerender's queue and timeout ID
+		_ignCanActivate; //whether canActivate always returns true
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -232,7 +232,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//restore focus
 	function _rsFocus(cf) {
-		if (cf && cf.desktop && !zk.currentFocus) cf.focus();
+		if (cf && cf.desktop && !zk.currentFocus) {
+			_ignCanActivate = true;
+				//s.t., Window's rerender could gain focus back and receive onblur correctly
+			try {
+				cf.focus();
+			} finally {
+				_ignCanActivate = false;
+			}
+		}
 	}
 
 	//set minimum flex size and return it
@@ -2227,19 +2235,11 @@ wgt.$f().main.setTitle("foo");
 	},
 	/** Returns if this widget is floating. 
 	 * <p>We say a widget is floating if the widget floats on top of others, rather than embed inside the parent. For example, an overlapped window is floating, while an embedded window is not.
-	 * @param Map opts [optional] The options. Allowed options:
-	 * <ul>
-	 * <li>dropdown: (since 5.0.5)
-	 * whether to check if a node of this widget is dropped down, rather
-	 * than the whole widget becomes floating. In other words,
-	 * it checks if isFloating_({dropdown:true}) was called.</li>
-	 * </ul>
 	 * @return boolean
 	 * @see #setFloating_
 	 */
-	isFloating_: function (opts) {
-		return opts && opts.dropdown ?
-			_dropdning && this == _dropdning[0]: this._floating;
+	isFloating_: function () {
+		return this._floating;
 	},
 	/** Sets a status to indicate if this widget is floating.
 	 * <p>Notice that it doesn't change the DOM tree. It is caller's job. 
@@ -2248,27 +2248,13 @@ wgt.$f().main.setTitle("foo");
 	 * @param boolean floating whther to make it floating
 	 * @param Map opts [optional] The options. Allowed options:
 	 * <ul>
-	 * <li>node: the DOM element. If omitted, {@link #n} is assumed.</li>
-	 * <li>dropdown: (since 5.0.5)
-	 * whether a node of this widget is dropped down, rather
-	 * than the whole widget becomes floating. For example, combobox
-	 * and datebox could specify true for this option.<br/>
-	 * Notes:
-	 * <ol>
-	 * <li>It assumes there is only one dropdown, so don't call setFloating_(true, {dropdown:true,node:pp})
-	 * twice without calling setFloating_(false, {dropdown:false}) in between.</li>
-	 * <li>if this option is specified, isFloating() returns false.
-	 * And, you shall call isFloating_({dropdown:true}) instead.</li>
-	 * <li>if this option is specified, opts.node must be specified too.</li>
-	 * </ol></li>
+	 * <li>node: the DOM element. If omitted, {@link #$n} is assumed.</li>
 	 * </ul>
 	 * @return zk.Widget this widget
 	 * @see #isFloating_
 	 */
 	setFloating_: function (floating, opts) {
-		if (opts && opts.dropdown)
-			_dropdning = floating ? [this, opts.node]: null;
-		else if (this._floating != floating) {
+		if (this._floating != floating) {
 			if (floating) {
 				//parent first
 				var inf = {widget: this, node: opts && opts.node? opts.node: this.$n()},
@@ -3382,32 +3368,41 @@ unbind_: function (skipper, after) {
 
 	/** Sets the focus to this widget.
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
-	 * <p>Default: call child widget's focus until it returns true, or no child at all. 
-	 * <h3>Subclass Note</h3>
-	 * <ul>
-	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _global_.jqzk#focus}.</li>
-	 * </ul>
-<pre><code>
-focus: function (timeout) {
- if (this.isVisible() && this.canActivate({checkOnly:true}))
-  zk(this).focus(timeout);
-}
-</pre></code>
+	 * <p>Notice: don't override this method. Rather, override {@link #focus_},
+	 * which this method depends on.
      * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately, 
 	 * @return boolean whether the focus is gained to this widget. 
 	 */
 	focus: function (timeout) {
-		var node;
-		if (this.isVisible() && this.canActivate({checkOnly:true})
-		&& (node = this.$n())) {
-			if (zk(node).focus(timeout)) {
-				this.setTopmost();
-				return true;
-			}
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w.isVisible() && w.focus(timeout))
-					return true;
+		return this.canActivate({checkOnly:true})
+			&& zk(this.$n()).isRealVisible()
+			&& this.focus_(timeout);
+	},
+	/** Called by {@link #focus} to set the focus.
+	 * <p>Default: call child widget's focus until it returns true, or no child at all. 
+	 * <h3>Subclass Note</h3>
+	 * <ul>
+	 * <li>If a widget is able to gain focus, it shall override this method to invoke {@link _global_.jqzk#focus}.</li>
+	 * <li>It is called only if the DOM element is real visible (so you don't need to check again)</li>
+	 * </ul>
+<pre><code>
+focus_: function (timeout) {
+  zk(this.$n('foo').focus(timeout);
+  return true;
+}
+</pre></code>
+     * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately, 
+	 * @return boolean whether the focus is gained to this widget. 
+	 * @since 5.0.5
+	 */
+	focus_: function (timeout) {
+		if (zk(this.$n()).focus(timeout)) {
+			this.setTopmost();
+			return true;
 		}
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w.isVisible() && w.focus_(timeout))
+				return true;
 		return false;
 	},
 	/** Checks if this widget can be activated (gaining focus and so on).
@@ -3428,6 +3423,8 @@ focus: function (timeout) {
 	 * @return boolean
 	 */
 	canActivate: function (opts) {
+		if (_ignCanActivate)
+			return true;
 		if (zk.busy && (!opts || !opts.checkOnly)) { //Bug 2912533: none of widget can be activated if busy
 			jq.focusOut(); // Bug 2968706
 			return false;
@@ -3730,12 +3727,25 @@ wgt.setListeners({
 		for (var evt in infs)
 			this.setListener(evt, infs[evt]);
 	},
-	/** Sets a listener
+	/** Sets a listener that can be unlistened easily.
+	 * It is designed to be called from server.
+	 * For client-side programming, it is suggested to use {@link #listen}.
+	 * <p>It is based {@link #listen}, but, unlike {@link #listen}, the second
+	 * invocation for the same event will unlisten the previous one automatically.
+	 * <p>In additions, if the function (specified in the second element of inf)
+	 * is null, it unlistens the previous invocation.
 	 * @param Array inf a two-element array. The first element is the event name,
 	 * while the second is the listener function
 	 * @see #setListeners
 	 */
 	/** Sets a listener
+	 * It is designed to be called from server.
+	 * For client-side programming, it is suggested to use {@link #listen}.
+	 * Use it only if you want to unlisten the listener registered at the
+	 * server (by use of the client namespace).
+	 * <p>It is based {@link #listen}, but, unlike {@link #listen}, the second
+	 * invocation for the same event will unlisten the previous one automatically.
+	 * <p>In additions, if fn is null, it unlistens the previous invocation.
 	 * @param String evt the event name
 	 * @param Function fn the listener function.
 	 * If null, it means unlisten.
@@ -4660,7 +4670,7 @@ zk._wgtutl = { //internal utilities
 	},
 
 	autohide: function () { //called by effect.js
-		if (!_floatings.length && !_dropdning) {
+		if (!_floatings.length) {
 			for (var n; n = _hidden.shift();)
 				n.style.visibility = n.getAttribute('z_ahvis')||'';
 			return;
@@ -4694,8 +4704,6 @@ zk._wgtutl = { //internal utilities
 				for (var k = _floatings.length; k--;)
 					if (hide(_floatings[k].node))
 						continue l_nxtel;
-				if (_dropdning && hide(_dropdning[1]))
-					continue;
 
 				if (_hidden.$remove(n))
 					n.style.visibility = n.getAttribute('z_ahvis')||'';
@@ -4922,7 +4930,7 @@ Object skip(zk.Widget wgt);
 				skip.removeChild(el);
 				loc.appendChild(el);
 
-				if (zk.ie) zjq._fixIframe(el); //in domie.js, Bug 2900274
+				zjq._fixIframe(el); //in domie.js, Bug 2900274
 			}
 		}
 	}

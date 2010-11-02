@@ -20,6 +20,7 @@
 	background-position: right -22px;
 	margin-right: -7px;
 	position: relative;
+	cursor: pointer;
 }
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
@@ -27,6 +28,7 @@
 	width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.png')});
+	cursor: pointer;
 }
 .z-slider-scale-btn {
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-scale.gif')});

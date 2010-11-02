@@ -217,5 +217,16 @@
 		return (new Function('return (' + s +')'))(); //won't count on the current scope
 		//return $eval("(" + s + ")"); //assume the current scope
 	};
+	$.j2d = function (s) {
+		//yyyy.M.d.H.m.s.S (see org.zkoss.json.JSONs.d2j)
+		if (s == null) return null;
+		var s = s.split('.');
+		return new Date(parseInt(s[0], 10), parseInt(s[1]) - 1, parseInt(s[2]),
+			parseInt(s[3]), parseInt(s[4]), parseInt(s[5]), parseInt(s[6]));
+	};
+	$.d2j = function (d) {
+		return d ? [d.getFullYear(), d.getMonth() + 1, d.getDate(),
+			d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()].join('.'): null;
+	};
 //Tom//    }
 }(jq)); //Tom: jQuery might be another copy

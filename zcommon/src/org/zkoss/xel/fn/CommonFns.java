@@ -172,4 +172,48 @@ public class CommonFns {
 			throw new IllegalArgumentException("Unknow object for new: "+o);
 		}
 	}
+	/** Instantiates the specified class, and argument.
+	 * @param o the class name or class
+	 * @param arg the argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg});
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
+	/** Instantiates the specified class, and two arguments.
+	 * @param o the class name or class
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg1, Object arg2) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg1, arg2});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg1, arg2});
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
+	/** Instantiates the specified class, and two arguments.
+	 * @param o the class name or class
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg1, Object arg2, Object arg3) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg1, arg2, arg3});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg1, arg2, arg3});
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
 }
