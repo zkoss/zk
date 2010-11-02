@@ -60,6 +60,7 @@
 	background-position: -22px bottom;
 	margin-bottom: -7px;
 	position: relative;
+	cursor: pointer;
 }
 
 .z-slider-sphere-ver-btn,
@@ -67,6 +68,7 @@
 	width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.png')});
+	cursor: pointer;
 }
 .z-slider-sphere-ver-btn {
  	height: 14px;
