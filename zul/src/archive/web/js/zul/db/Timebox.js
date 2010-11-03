@@ -12,6 +12,132 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _checkFormat(fmt) {
+		var error, out = [];
+		for (var i = 0, j = fmt.length; i < j; i++) {
+			var c = fmt.charAt(i);
+			switch (c) {
+			case 'K':
+			case 'h':
+			case 'H':
+			case 'k':
+			case 'm':
+			case 's':
+				if (fmt.charAt(i+1) == c)
+					i++;
+				else
+					error = true;
+				out.push(c + c);
+				break;
+			default:
+				out.push(c);
+			}
+		}
+		if (error)
+			return zk.fmt.Text.format(msgzul.DATE_REQUIRED + out.join(''));
+	}
+
+	var LEGAL_CHARS = 'ahKHksm',
+		/*constant for MINUTE (m) field alignment.
+		 * @type int
+		 */
+		MINUTE_FIELD = 1,
+		/*constant for SECOND (s) field alignment.
+		 * @type int
+		 */
+		SECOND_FIELD = 2,
+		/*constant for AM_PM (a) field alignment.
+		 * @type int
+		 */
+		AM_PM_FIELD = 3,
+		/*constant for HOUR0 (H) field alignment. (Hour in day (0-23))
+		 * @type int
+		 */
+		HOUR0_FIELD = 4,
+		/*constant for HOUR1 (k) field alignment. (Hour in day (1-24))
+		 * @type int
+		 */
+		HOUR1_FIELD = 5,
+		/*constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
+		 * @type int
+		 */
+		HOUR2_FIELD = 6,
+		/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
+		 * @type int
+		 */
+		HOUR3_FIELD = 7;
+	function _updFormat(wgt, fmt) {
+		var index = [];
+		for (var i = 0, j = fmt.length; i < j; i++) {
+			var c = fmt.charAt(i);
+			switch (c) {
+			case 'a':
+				var len = zk.APM[0].length;
+				index.push(new zul.inp.AMPMHandler([i, i + len - 1], AM_PM_FIELD));
+				break;
+			case 'K':
+				var start = i,
+					end = fmt.charAt(i+1) == 'K' ? ++i : i;
+				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD));
+				break;
+			case 'h':
+				var start = i,
+					end = fmt.charAt(i+1) == 'h' ? ++i : i;
+				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD));
+				break;
+			case 'H':
+				var start = i,
+					end = fmt.charAt(i+1) == 'H' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
+				break;;
+			case 'k':
+				var start = i,
+					end = fmt.charAt(i+1) == 'k' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD));
+				break;
+			case 'm':
+				var start = i,
+					end = fmt.charAt(i+1) == 'm' ? ++i : i;
+				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD));
+				break;
+			case 's':
+				var start = i,
+					end = fmt.charAt(i+1) == 's' ? ++i : i;
+				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
+				break;
+			default:
+				var ary = [],
+					start = i,
+					end = i;
+
+				while ((ary.push(c)) && ++end < j) {
+					c = fmt.charAt(end);
+					if (LEGAL_CHARS.indexOf(c) != -1) {
+						end--;
+						break;
+					}
+				}
+				index.push({index: [start, end], format: (function (text) {
+					return function() {
+						return text;
+					};
+				})(ary.join(''))});
+				i = end;
+			}
+		}
+		for (var shift, i = 0, j = index.length; i < j; i++) {
+			if (index[i].type == AM_PM_FIELD) {
+				shift = index[i].index[1] - index[i].index[0];
+				if (!shift) break; // no need to shift.
+			} else if (shift) {
+				index[i].index[0] += shift;
+				index[i].index[1] += shift;
+			}
+		}
+		wgt._fmthdler = index;
+	}
+
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
@@ -26,37 +152,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
-	LEGAL_CHARS: 'ahKHksm',
-    /**Useful constant for MINUTE (m) field alignment.
-     * @type int
-     */
-    MINUTE_FIELD: 1,
-    /**Useful constant for SECOND (s) field alignment.
-     * @type int
-     */
-    SECOND_FIELD: 2,
-    /**Useful constant for AM_PM (a) field alignment.
-     * @type int
-     */
-    AM_PM_FIELD: 3,
-    /**Useful constant for HOUR0 (H) field alignment. (Hour in day (0-23))
-     * @type int
-     */
-    HOUR0_FIELD: 4,
-    /**Useful constant for HOUR1 (k) field alignment. (Hour in day (1-24))
-     * @type int
-     */
-    HOUR1_FIELD: 5,
-    /**Useful constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
-     * @type int
-     */
-    HOUR2_FIELD: 6,
-    /**Useful constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
-     * @type int
-     */
-    HOUR3_FIELD: 7,
 	_buttonVisible: true,
 	_format: 'HH:mm',
+	$init: function() {
+		this.$supers('$init', arguments);
+		_updFormat(this, this._format);
+	},
 	$define: {
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -86,114 +187,14 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 				this.onSize();
 			}
-		},
-		format: function (fmt, fromServer) {
-			this._parseFormat(fmt);
-			var inp = this.getInputNode();
-			if (inp) {
-				inp.value = this.coerceToString_(this._value);
-				if (fromServer)
-					this._defValue = inp.value; //not clear error if by client app
-			}
 		}
 	},
-	_checkFormat: function (fmt) {
-		var error, out = [];
-		for (var i = 0, j = fmt.length; i < j; i++) {
-			var c = fmt.charAt(i);
-			switch (c) {
-			case 'K':
-			case 'h':
-			case 'H':
-			case 'k':
-			case 'm':
-			case 's':
-				if (fmt.charAt(i+1) == c)
-					i++;
-				else
-					error = true;
-				out.push(c + c);
-				break;
-			default:
-				out.push(c);
-			}
-		}
-		if (error)
-			return zk.fmt.Text.format(msgzul.DATE_REQUIRED + out.join(''));
-	},
-	_parseFormat: function (fmt) {
-		var index = [];
-		for (var i = 0, j = fmt.length; i < j; i++) {
-			var c = fmt.charAt(i);
-			switch (c) {
-			case 'a':
-				var len = zk.APM[0].length;
-				index.push(new zul.inp.AMPMHandler([i, i + len - 1], this.AM_PM_FIELD));
-				break;
-			case 'K':
-				var start = i,
-					end = fmt.charAt(i+1) == 'K' ? ++i : i;
-				index.push(new zul.inp.HourHandler2([start, end], this.HOUR3_FIELD));
-				break;
-			case 'h':
-				var start = i,
-					end = fmt.charAt(i+1) == 'h' ? ++i : i;
-				index.push(new zul.inp.HourHandler([start, end], this.HOUR2_FIELD));
-				break;
-			case 'H':
-				var start = i,
-					end = fmt.charAt(i+1) == 'H' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler([start, end], this.HOUR0_FIELD));
-				break;;
-			case 'k':
-				var start = i,
-					end = fmt.charAt(i+1) == 'k' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler2([start, end], this.HOUR1_FIELD));
-				break;
-			case 'm':
-				var start = i,
-					end = fmt.charAt(i+1) == 'm' ? ++i : i;
-				index.push(new zul.inp.MinuteHandler([start, end], this.MINUTE_FIELD));
-				break;
-			case 's':
-				var start = i,
-					end = fmt.charAt(i+1) == 's' ? ++i : i;
-				index.push(new zul.inp.SecondHandler([start, end], this.SECOND_FIELD));
-				break;
-			default:
-				var ary = [],
-					start = i,
-					end = i;
-
-				while ((ary.push(c)) && ++end < j) {
-					c = fmt.charAt(end);
-					if (this.LEGAL_CHARS.indexOf(c) != -1) {
-						end--;
-						break;
-					}
-				}
-				index.push({index: [start, end], format: (function (text) {
-					return function() {
-						return text;
-					};
-				})(ary.join(''))});
-				i = end;
-			}
-		}
-		for (var shift, i = 0, j = index.length; i < j; i++) {
-			if (index[i].type == this.AM_PM_FIELD) {
-				shift = index[i].index[1] - index[i].index[0];
-				if (!shift) break; // no need to shift.
-			} else if (shift) {
-				index[i].index[0] += shift;
-				index[i].index[1] += shift;
-			}
-		}
-		this._fmthdler = index;
-
+	setFormat: function (fmt) {
+		_updFormat(this, fmt);
+		this.$supers('setFormat', arguments);
 	},
 	coerceToString_: function (date) {
-		if (!this._fmthdler || (!this._changed && !date && arguments.length)) return '';
+		if (!this._changed && !date && arguments.length) return '';
 		var out = [];
 		for (var i = 0, j = this._fmthdler.length; i < j; i++)
 			out.push(this._fmthdler[i].format(date));
@@ -203,11 +204,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!val) return null;
 
 		var error;
-		if ((error = this._checkFormat(this._format)))
+		if ((error = _checkFormat(this._format)))
 			return {error: error};
-
-		if (!this._fmthdler)
-			this._parseFormat(this._format);
 
 		var date = zUtl.today(true),
 			hasAM, isAM, hasHour1,
@@ -216,7 +214,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		date.setMilliseconds(0);
 
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
-			if (this._fmthdler[i].type == this.AM_PM_FIELD) {
+			if (this._fmthdler[i].type == AM_PM_FIELD) {
 				hasAM = true;
 				isAM = this._fmthdler[i].unformat(date, val);
 			} else if (this._fmthdler[i].type)
@@ -225,7 +223,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (hasAM) {
 			for (var i = 0, j = fmt.length; i < j; i++) {
-				if (fmt[i].type == this.HOUR2_FIELD || fmt[i].type == this.HOUR3_FIELD) {
+				if (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD) {
 					hasHour1 = true;
 					break;
 				}
@@ -234,12 +232,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (hasHour1) {
 			for (var i = 0, j = fmt.length; i < j; i++) {
-				if (fmt[i] != this.HOUR0_FIELD && fmt[i] != this.HOUR1_FIELD)
+				if (fmt[i] != HOUR0_FIELD && fmt[i] != HOUR1_FIELD)
 					date = fmt[i].unformat(date, val, isAM);
 			}
 		} else {
 			for (var i = 0, j = fmt.length; i < j; i++) {
-				if (fmt[i] != this.HOUR2_FIELD && fmt[i].type != this.HOUR3_FIELD)
+				if (fmt[i] != HOUR2_FIELD && fmt[i].type != HOUR3_FIELD)
 					date = fmt[i].unformat(date, val);
 			}
 		}
@@ -255,11 +253,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!width || width.indexOf('%') != -1)
 			inp.style.width = '';
 
-		if (inp && this._value && !inp.value) {
-			if (!this._fmthdler)
-				this._parseFormat(this._format);
+		if (inp && this._value && !inp.value)
 			inp.value = this.coerceToString_(this._value);
-		}
 
 		this.syncWidth();
 	},
@@ -368,9 +363,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
 
-		if (!this._fmthdler)
-			this._parseFormat(this._format);
-
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
@@ -436,16 +428,13 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_doCheckPos: function (pos) {
 		var inp = this.getInputNode();
 
-		if (!this._fmthdler)
-			this._parseFormat(this._format);
-
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
 			var idx = this._fmthdler[i];
 			if (idx.index[1] + 1 == pos) {
 				if (idx.type) break;// in a legal area
 				var end = i;
 				while(this._fmthdler[++end]) {
-					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+					if (this._fmthdler[end].type == AM_PM_FIELD) {
 						pos = this._fmthdler[end].index[1] + 1;
 						break;
 					} else if (this._fmthdler[end].type) {
@@ -474,7 +463,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 							}
 						}
 					}
-				}  else if (idx.type == this.AM_PM_FIELD) {
+				}  else if (idx.type == AM_PM_FIELD) {
 					pos = idx.index[1] + 1;
 					break;
 				} else {
@@ -503,7 +492,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 				break;
 			} else if (idx.index[0] < pos && idx.index[1] >= pos) {
-				if (!idx.type || idx.type == this.AM_PM_FIELD) {
+				if (!idx.type || idx.type == AM_PM_FIELD) {
 					var end = i;
 					pos++;
 					while (this._fmthdler[--end]) {
@@ -516,7 +505,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					break;// in a legal area
 			}
 		}
-		if (hdler.type && hdler.type != this.AM_PM_FIELD) {
+		if (hdler.type && hdler.type != AM_PM_FIELD) {
 			if (pos <= hdler.index[0] || pos > hdler.index[1] + 1) {
 				var val = inp.value, text = val.substring(hdler.index[0], hdler.index[1] + 1);
 				text = text.replace(/ /g, '0');
@@ -535,7 +524,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				var end = i;
 				pos--;
 				while (this._fmthdler[++end]) {
-					if (this._fmthdler[end].type == this.AM_PM_FIELD) {
+					if (this._fmthdler[end].type == AM_PM_FIELD) {
 						pos = this._fmthdler[end].index[1] + 1;
 						break;
 					} else if (this._fmthdler[end].type) {
@@ -545,7 +534,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 				break;
 			} else if (idx.index[0] < pos && idx.index[1] + 1 >= pos) {
-				if (!idx.type || idx.type == this.AM_PM_FIELD) {
+				if (!idx.type || idx.type == AM_PM_FIELD) {
 					var end = i;
 					pos--;
 					while (this._fmthdler[++end]) {
@@ -558,7 +547,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					break;// in a legal area
 			}
 		}
-		if (hdler.type && hdler.type != this.AM_PM_FIELD) {
+		if (hdler.type && hdler.type != AM_PM_FIELD) {
 			if (pos <= hdler.index[0] || pos > hdler.index[1] + 1) {
 				var val = inp.value, text = val.substring(hdler.index[0], hdler.index[1] + 1);
 				text = text.replace(/ /g, '0');
@@ -683,9 +672,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		this.$supers('doFocus_', arguments);	
 
-		if (!this._fmthdler)
-			this._parseFormat(this._format);
-			
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 
@@ -1012,3 +998,5 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		zk(inp).setSelectionRange(start, end);
 	}
 });
+
+})();
