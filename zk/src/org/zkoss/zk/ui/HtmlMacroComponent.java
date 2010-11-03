@@ -187,7 +187,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * If "before", the macro component is composed (aka., creates child components)
 	 * when {@link #beforeCompose} is called.
 	 * If "after" (default), it is composed when {@link #afterCompose} is called.
-	 * @sine 5.0.5
+	 * @since 5.0.5
 	 */
 	public String getComposeCondition() {
 		return getDefinition().getComposeCondition();
@@ -195,7 +195,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	/** Called by ZK Loader before it sets the properties.
 	 * If the macro component wants to create components from the template
 	 * before the setter method is called, it could createComponents in
-	 * this method, rather than {@link AfterCompose#afterCompose}.
+	 * this method, rather than {@link #afterCompose}.
 	 * <p>The default implementation creates the components from the template
 	 * ({@link #getMacroURI}) if {@link #getComposeCondition} is true
 	 * (defined by the component definition).
