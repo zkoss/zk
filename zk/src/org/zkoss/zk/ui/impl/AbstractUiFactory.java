@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -90,6 +91,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);
 
+		if (comp instanceof Macro)
+			((Macro)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
 		return comp;
 	}
