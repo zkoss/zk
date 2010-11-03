@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.IdSpace;
  *
  * @author tomyeh
  */
-public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
+public interface Macro extends AfterCompose, BeforeCompose, IdSpace, DynamicPropertied {
 	/** Sets the macro URI.
 	 * It affects only this component.
 	 *
@@ -77,12 +77,13 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 */
 	public boolean setInlineParent(Component parent, Component beforeSibling);
 
-	/** Called by ZK Loader before it sets the properties.
-	 * If the macro component wants to create components from the template
+	/** Called by ZK Loader before it sets any properties, and before
+	 * creates any child component.
+	 * If the component wants to create components from the template
 	 * before the setter method is called, it could createComponents in
 	 * this method, rather than {@link AfterCompose#afterCompose}.
 	 * @return whether the template is rendered.
 	 * @since 5.0.5
 	 */
-	public boolean beforeCompose();
+	public void beforeCompose();
 }

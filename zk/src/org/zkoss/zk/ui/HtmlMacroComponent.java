@@ -121,7 +121,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * variables to this component.
 	 */
 	public void afterCompose() {
-		compose();
+		if (!"before".equals(getComposeCondition()))
+			compose();
 	}
 	/** Composes the macro component.
 	 * It is called by {@link #afterCompose}, {@link #beforeCompose} and others
@@ -201,12 +202,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * (defined by the component definition).
 	 * @since 5.0.5
 	 */
-	public boolean beforeCompose() {
-		if ("before".equals(getComposeCondition())) {
+	public void beforeCompose() {
+		if ("before".equals(getComposeCondition()))
 			compose();
-			return true;
-		}
-		return false;
 	}
 
 	//Component//
