@@ -127,6 +127,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	/** Composes the macro component.
 	 * It is called by {@link #afterCompose}, {@link #beforeCompose} and others
 	 * to do the rendering based on {@link #getMacroURI}.
+	 * <p>Notice this method shall not compose the macro component again
+	 * if it was called. It is {@link #recreate}'s job to clean up and
+	 * call this method again.
 	 * @since 5.0.5
 	 */
 	protected void compose() {

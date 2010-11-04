@@ -1,5 +1,12 @@
 	--------
+ZK 5.0.6
+* Features
+
+* Bugs
+
+	--------
 ZK 5.0.5
+November 02, 2010
 * Features
   3017896: A way to specify whether clicking input will select listitem
   3081432: An option clicking on listitem with checkmark will toggle

@@ -20,7 +20,7 @@ package org.zkoss.zk.ui.ext;
  * after all properties are set and child components are created.
  * 
  * @author tomyeh
- * @since 5.0.5
+ * @since 5.0.6
  * @see AfterCompose
  */
 public interface BeforeCompose {
