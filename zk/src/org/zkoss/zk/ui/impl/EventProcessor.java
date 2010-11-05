@@ -180,9 +180,9 @@ public class EventProcessor {
 			}
 		}
 		
-		if (_comp.getDesktop() != null) {
+		if (page != null && _comp.getDesktop() != null) {
 			final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
-			if (zscript != null && page != null) {
+			if (zscript != null) {
 				page.interpret(
 						zscript.getLanguage(), zscript.getContent(page, _comp), scope);
 				if (!_event.isPropagatable())

@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.AccessibleObject;
 
-import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
@@ -119,7 +118,7 @@ public class Fields {
 		} catch (NoSuchMethodException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw SystemException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
+			throw SystemException.Aide.wrap(ex, "Not found: " + name);
 		}
 	}
 	/** Sets the value of the specified public filed or public method
@@ -159,7 +158,7 @@ public class Fields {
 		} catch (NoSuchMethodException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw ModificationException.Aide.wrap(ex, "not found: " + name);
+			throw ModificationException.Aide.wrap(ex, "Not found: " + name);
 		}
 	}
 
