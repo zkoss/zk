@@ -159,7 +159,7 @@ public class Fields {
 		} catch (NoSuchMethodException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw ModificationException.Aide.wrap(ex, MCommon.NOT_FOUND, name);
+			throw ModificationException.Aide.wrap(ex, "not found: " + name);
 		}
 	}
 
