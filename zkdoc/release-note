@@ -3,6 +3,7 @@ ZK 5.0.6
 * Features
 
 * Bugs
+  3102812: Using databinding with onCreate event, target is null
 
 	--------
 ZK 5.0.5

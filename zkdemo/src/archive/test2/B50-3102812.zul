@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3102812.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Fri Nov  5 17:17:41 TST 2010, Created by jimmy
+	
+	Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+	
+-->
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+
+<window>
+It fixed if you not see any error.
+	<zscript><![CDATA[
+		ArrayList ary = new ArrayList();
+		for (int i = 0; i < 5; i++) {
+			ary.add("item: " + i);
+		}
+		void print() {
+			System.out.println("done");
+		}
+	]]></zscript>
+	<listbox model="@{ary}">
+		<listitem>
+			<listcell>
+				<textbox>
+					<attribute name="onCreate">
+						print();
+					</attribute>
+				</textbox>
+			</listcell>
+		</listitem>
+	</listbox>
+</window>
+
