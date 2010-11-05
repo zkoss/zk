@@ -22,6 +22,8 @@ package org.zkoss.zk.ui.ext;
  * {@link #afterCompose} is called, after ZK loader creates this component,
  * all of its children, and assigns all properties defined in the ZUML page.
  * It is so-called "compose".
+ * <p>On the other hand, {@link BeforeCompose#beforeCompose} is called
+ * before any properties are set and before any child components are created.
  *
  * <p>It is similar to listen the onCreate event since it is called after
  * all children are created. However, unlike onCreate, it is called in
@@ -41,6 +43,7 @@ package org.zkoss.zk.ui.ext;
  *
  * @author tomyeh
  * @see org.zkoss.zk.ui.util.Composer
+ * @see BeforeCompose
  */
 public interface AfterCompose {
 	/** Invokes after ZK loader creates this component,

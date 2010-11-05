@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.ext.BeforeCompose;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -93,6 +94,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);
 
+		if (comp instanceof BeforeCompose)
+			((BeforeCompose)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
 		return comp;
 	}

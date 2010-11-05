@@ -426,14 +426,16 @@ public class Parser {
 			//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
 
 			final String inline = (String)params.remove("inline");
+			final String compose = (String)params.remove("compose");
 			noEL("inline", inline, pi);
 			noEL("macroURI", macroURI, pi);
+			noEL("compose", compose, pi);
 				//no EL because pagedef must be loaded to resolve
 				//the impl class before creating an instance of macro
 
 			final boolean bInline = "true".equals(inline);
 			compdef = langdef.getMacroDefinition(
-				name, toAbsoluteURI(macroURI, false), bInline, pgdef);
+				name, toAbsoluteURI(macroURI, false), compose, bInline, pgdef);
 			if (!isEmpty(clsnm)) {
 				if (bInline)
 					throw new UiException("class not allowed with inline macros, "+pi.getLocator());

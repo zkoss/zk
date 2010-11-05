@@ -121,6 +121,18 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * variables to this component.
 	 */
 	public void afterCompose() {
+		if (!"before".equals(getComposeCondition()))
+			compose();
+	}
+	/** Composes the macro component.
+	 * It is called by {@link #afterCompose}, {@link #beforeCompose} and others
+	 * to do the rendering based on {@link #getMacroURI}.
+	 * <p>Notice this method shall not compose the macro component again
+	 * if it was called. It is {@link #recreate}'s job to clean up and
+	 * call this method again.
+	 * @since 5.0.5
+	 */
+	protected void compose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available");
@@ -139,6 +151,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			exec.createComponents(
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
+
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
 			Components.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
@@ -166,10 +179,35 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			invalidate();
 				//invalidate is redudant, but less memory leak in IE
 		}
-		afterCompose();
+		compose();
 	}
 	public boolean isInline() {
 		return getDefinition().isInlineMacro();
+	}
+
+	/** Returns when to compose the macro component.
+	 * <p>The value depends on the component definiton (the compose attribute).
+	 * Currently, it supports two values: before and after.
+	 * If "before", the macro component is composed (aka., creates child components)
+	 * when {@link #beforeCompose} is called.
+	 * If "after" (default), it is composed when {@link #afterCompose} is called.
+	 * @since 5.0.5
+	 */
+	public String getComposeCondition() {
+		return getDefinition().getComposeCondition();
+	}
+	/** Called by ZK Loader before it sets the properties.
+	 * If the macro component wants to create components from the template
+	 * before the setter method is called, it could createComponents in
+	 * this method, rather than {@link #afterCompose}.
+	 * <p>The default implementation creates the components from the template
+	 * ({@link #getMacroURI}) if {@link #getComposeCondition} is true
+	 * (defined by the component definition).
+	 * @since 5.0.5
+	 */
+	public void beforeCompose() {
+		if ("before".equals(getComposeCondition()))
+			compose();
 	}
 
 	//Component//
@@ -186,7 +224,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setParent(Component parent) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setParent(parent);
@@ -199,7 +237,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			throw new InternalError("inline only");
 
 		if (_inlines == null)
-			afterCompose(); //autocreate
+			compose(); //autocreate
 
 		boolean inserted = false;
 		for (int j = 0; j < _inlines.length; ++j) {
@@ -222,7 +260,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setPage(Page page) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setPage(page);

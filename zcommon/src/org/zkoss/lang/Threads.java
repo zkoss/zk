@@ -16,7 +16,6 @@ Copyright (C) 2003 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
 
 /**

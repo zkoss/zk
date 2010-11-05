@@ -110,6 +110,10 @@ public interface ComponentDefinition extends Cloneable {
 	/** Returns the macro URI, or null if not a macro.
 	 */
 	public String getMacroURI();
+	/** Returns the compose condition, or null if not a macro
+	 * @since 5.0.5
+	 */
+	public String getComposeCondition();
 	/** Returns whether this is an inline macro.
 	 * If false, you have to examine {@link #isMacro} to see whether it
 	 * is a regular macro.

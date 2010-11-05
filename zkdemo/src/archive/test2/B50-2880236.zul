@@ -70,7 +70,7 @@ ListModel people = new BindingListModelList(peopleList, true);
 			<decimalbox id="newBalance" format="##,###.##" hflex="1"/>
 		</footer>
 		<footer>
-			<button label="Add">
+			<button id="add" label="Add">
 				<attribute name="onClick"><![CDATA[
 				people.add(new Person(newBalance.value, newName.value));
 				newName.rawValue = null;
