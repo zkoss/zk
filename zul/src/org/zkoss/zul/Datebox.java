@@ -73,7 +73,7 @@ public class Datebox extends FormatInputElement implements
 	}
 
 	/**
-	 * Returns the default format, which is used when contructing a datebox.
+	 * Returns the default format, which is used when constructing a datebox.
 	 * <p>
 	 * The default format ({@link #getFormat}) depends on JVM's setting and the
 	 * current user's locale. That is,
@@ -92,7 +92,19 @@ public class Datebox extends FormatInputElement implements
 		}
 		return "yyyy/MM/dd";
 	}
-
+	
+	/**
+	 * Returns the localized format, which is used when constructing a datebox.
+	 * <p>
+	 * You might override this method to provide your own localized format.
+	 */
+	protected String getLocalizedFormat() {
+		String format = getFormat();
+		if (format == null)
+			format = getDefaultFormat();
+		return new SimpleDateFormat(format, Locales.getCurrent()).toLocalizedPattern();
+	}
+	
 	/**
 	 * Returns whether or not date/time parsing is to be lenient.
 	 * 
@@ -492,5 +504,6 @@ public class Datebox extends FormatInputElement implements
 
 		if (_tzone != null)
 			renderer.render("timeZone", _tzone.getID());
+		renderer.render("localizedFormat", getLocalizedFormat());
 	}
 }
