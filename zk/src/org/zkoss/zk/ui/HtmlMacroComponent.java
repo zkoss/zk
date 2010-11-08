@@ -121,6 +121,14 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * variables to this component.
 	 */
 	public void afterCompose() {
+		compose();
+	}
+	/** Composes the macro component.
+	 * It is called by {@link #afterCompose}, {@link #beforeCompose} and others
+	 * to do the rendering based on {@link #getMacroURI}.
+	 * @since 5.0.5
+	 */
+	protected void compose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available");
@@ -139,6 +147,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			exec.createComponents(
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
+
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
 			Components.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
@@ -166,7 +175,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			invalidate();
 				//invalidate is redudant, but less memory leak in IE
 		}
-		afterCompose();
+		compose();
 	}
 	public boolean isInline() {
 		return getDefinition().isInlineMacro();
@@ -214,7 +223,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setParent(Component parent) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setParent(parent);
@@ -227,7 +236,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			throw new InternalError("inline only");
 
 		if (_inlines == null)
-			afterCompose(); //autocreate
+			compose(); //autocreate
 
 		boolean inserted = false;
 		for (int j = 0; j < _inlines.length; ++j) {
@@ -250,7 +259,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setPage(Page page) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setPage(page);

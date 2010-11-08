@@ -5,6 +5,7 @@ ZK 5.0.5
   3081432: An option clicking on listitem with checkmark will toggle
   3085801: A way to specify vertical alignment for hlayout
   3097933: A way to customize the timeout message
+  3101960: A way to compose a macro component before setting property
   3067232: A way to access components in 3rd framework (e.g. JSF 2)
   3087902: Make a ZUL page generating as a HTML fragment
   3061671: Databinding foreach keep cloned cmp's id when in spaceowner
@@ -102,6 +103,7 @@ ZK 5.0.5
   3097458: Right click on Tree and also Listbox in IE8
   3099277: Listbox : value of Listitem with space
   3100455: Something wrong at frozen grid when updating live data
+  3101558: Spinner default width not work in bounded parents at IE 6
   
 * Upgrade Notes
   + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray

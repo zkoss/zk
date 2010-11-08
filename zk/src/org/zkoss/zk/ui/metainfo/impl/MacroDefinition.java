@@ -27,12 +27,17 @@ import org.zkoss.zk.ui.metainfo.*;
  */
 public class MacroDefinition extends ComponentDefinitionImpl {
 	private final String _macroURI;
+	private final String _compose;
 	/** Whether it is an inline macro. */
 	private final boolean _inline;
 
+	/** Constructor
+	 * @param compose the compose condition, either before or after.
+	 * If null, after is assumed
+	 */
 	/*package*/ MacroDefinition(LanguageDefinition langdef,
 	PageDefinition pgdef, String name,
-	Class cls, String macroURI, boolean inline) {
+	Class cls, String macroURI, String compose, boolean inline) {
 		super(langdef, pgdef, name, cls);
 
 		if (name == null || cls == null)
@@ -41,6 +46,7 @@ public class MacroDefinition extends ComponentDefinitionImpl {
 			throw new IllegalArgumentException("empty macroURI");
 
 		_macroURI = macroURI;
+		_compose = compose != null ? compose: "after";
 		_inline = inline;
 	}
 
@@ -52,5 +58,12 @@ public class MacroDefinition extends ComponentDefinitionImpl {
 	}
 	public boolean isInlineMacro() {
 		return _inline;
+	}
+	/** Returns whether to compose the macro component.
+	 * The return value is either before or after.
+	 * @since 5.0.5
+	 */
+	public String getComposeCondition() {
+		return _compose;
 	}
 }

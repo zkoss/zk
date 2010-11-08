@@ -76,4 +76,13 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * @since 5.0.4
 	 */
 	public boolean setInlineParent(Component parent, Component beforeSibling);
+
+	/** Called by ZK Loader before it sets the properties.
+	 * If the macro component wants to create components from the template
+	 * before the setter method is called, it could createComponents in
+	 * this method, rather than {@link AfterCompose#afterCompose}.
+	 * @return whether the template is rendered.
+	 * @since 5.0.5
+	 */
+	public boolean beforeCompose();
 }

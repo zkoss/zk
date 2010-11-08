@@ -440,6 +440,9 @@ public class ComponentsCtrl {
 		public String getMacroURI() {
 			return null;
 		}
+		public String getComposeCondition() {
+			return null;
+		}
 		public boolean isInlineMacro() {
 			return false;
 		}
