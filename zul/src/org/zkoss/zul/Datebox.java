@@ -256,6 +256,7 @@ public class Datebox extends FormatInputElement implements
 		else
 			getDateFormat(format); // make sure the format is correct
 		super.setFormat(format);
+		smartUpdate("localizedFormat", getLocalizedFormat());
 	}
 
 	/**
