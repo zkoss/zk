@@ -708,21 +708,19 @@ public class LanguageDefinition {
 	 * If null, it belongs to this language definition.
 	 * @param macroURI the ZUML page's URI that is used to render
 	 * instances of this macro definition.
-	 * @param compose the compose condition, either before or after.
-	 * If null, after is assumed
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the macros
 	 * @since 3.0.0
 	 */
 	public ComponentDefinition getMacroDefinition(
-	String name, String macroURI, String compose, boolean inline, PageDefinition pgdef) {
+	String name, String macroURI, boolean inline, PageDefinition pgdef) {
 		if (_macrocls == null)
 			throw new UiException("Macro not supported by "+this);
 
 		final ComponentDefinition compdef =
 			ComponentDefinitionImpl.newMacroDefinition(
 				pgdef != null ? null: this, pgdef,
-				name, _macrocls, macroURI, compose, inline);
+				name, _macrocls, macroURI, inline);
 		return compdef;
 	}
 

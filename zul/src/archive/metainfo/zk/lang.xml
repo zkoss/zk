@@ -100,7 +100,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Java::Messagebox.show m
 	end
 	</zscript>
-		<zscript language="Python">
+	<zscript language="Python">
 import java.util
 import java.lang
 import org.zkoss.zk.ui.util.Clients
