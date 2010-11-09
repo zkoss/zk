@@ -82,7 +82,6 @@ public interface Macro extends AfterCompose, BeforeCompose, IdSpace, DynamicProp
 	 * If the component wants to create components from the template
 	 * before the setter method is called, it could createComponents in
 	 * this method, rather than {@link AfterCompose#afterCompose}.
-	 * @return whether the template is rendered.
 	 * @since 5.0.5
 	 */
 	public void beforeCompose();
