@@ -47,7 +47,7 @@ public class CacheableThemeProvider implements ThemeProvider{
 	
 	public Collection getThemeURIs(Execution exec, List uris) {
 		String theme = Themes.getThemeStyle(exec);
-		if(Strings.isEmpty(theme) || Strings.isBlank(theme)){
+		if(Strings.isEmpty(theme) || Strings.isBlank(theme))
 			Themes.setThemeStyle(exec, Themes.BREEZE_THEME);
 		
 		boolean isBreeze = Themes.isBreeze(exec) && Themes.hasBreezeLib();
