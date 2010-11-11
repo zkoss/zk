@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ListIterator;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.ThemeProvider;
@@ -45,7 +46,8 @@ public class CacheableThemeProvider implements ThemeProvider{
 	private final static String BREEZE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.breeze.zul";
 	
 	public Collection getThemeURIs(Execution exec, List uris) {
-		if (Themes.getThemeStyle(exec).isEmpty())
+		String theme = Themes.getThemeStyle(exec);
+		if(Strings.isEmpty(theme) || Strings.isBlank(theme)){
 			Themes.setThemeStyle(exec, Themes.BREEZE_THEME);
 		
 		boolean isBreeze = Themes.isBreeze(exec) && Themes.hasBreezeLib();
