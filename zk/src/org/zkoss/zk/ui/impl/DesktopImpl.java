@@ -379,7 +379,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		final StringBuffer sb = new StringBuffer(64)
 			.append("/view/").append(getId())
-			.append('/').append(comp.getUuid());
+			.append('/').append(comp.getUuid()).append('/');
+		Strings.encode(sb, (System.identityHashCode(comp)) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
 			if (!pathInfo.startsWith("/")) sb.append('/');
@@ -406,7 +407,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		final StringBuffer sb = new StringBuffer(64)
 			.append("/view/").append(getId())
-			.append('/').append(medId);
+			.append('/').append(medId).append('/');
+		Strings.encode(sb, (System.identityHashCode(media)) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
 			if (!pathInfo.startsWith("/")) sb.append('/');
