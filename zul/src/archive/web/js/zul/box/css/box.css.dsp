@@ -41,6 +41,7 @@ tr.z-vbox-sep {
 	display: -moz-inline-box;
 	vertical-align: top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display: inline-block;
+	cursor: pointer;
 }
 .z-splitter-hor-outer,
 .z-splitter-os-hor-outer {

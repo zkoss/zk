@@ -54,7 +54,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (sib2)
 			zWatch.fireDown('onSize', zk.Widget.$(sib2));
 
-		wgt.$n().style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 		wgt._fixNSDomClass();
 		wgt._fixbtn();
 		wgt._fixszAll();
@@ -168,15 +167,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//Bug 1921830: if spiltter is invalidated...
 
 		var node = this.$n(),
-			Splitter = this.$class,
-			vert = this.isVertical(),
-			btn = this.$n('btn');
-		node.style.cursor = this._open ?
-			vert ? "s-resize": "e-resize": "default";
-		btn.style.cursor = "pointer";
+			Splitter = this.$class;
 
 		if (!this.$weave) {
-			var $btn = jq(btn);
+			var $btn = jq(this.$n('btn'));
 			if (zk.ie)
 				$btn.mouseover(Splitter.onover)
 					.mouseout(Splitter.onout);
@@ -198,8 +192,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
 
 		var Splitter = this.$class,
-			btn = this.$n('btn');
-		if (btn) {
+			btn;
+		if (btn = this.$n('btn')) {
 			var $btn = jq(btn);
 			if (zk.ie)
 				$btn.unbind("mouseover", Splitter.onover)
