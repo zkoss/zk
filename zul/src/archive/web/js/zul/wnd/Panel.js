@@ -696,7 +696,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_initMove: function (cmp) {
 		var handle = this.$n('cap');
 		if (handle && !this._drag) {
-			handle.style.cursor = "move";
+			jq(handle).addClass(this.getZclass() + '-header-move');
 			var $Panel = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
@@ -798,7 +798,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._sizer && (evt.target == this || evt.target == this.panelchildren)) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this.isMovable() ? this.$n('cap') : false;
+				handle = this.isMovable() ? this.$n('cap') : false,
+				zcls = this.getZclass();
 			if (!this.isMaximized() && this.isOpen() && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
@@ -806,10 +807,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 					c == 7 ? 'w-resize': 'nw-resize';
-				if (handle) handle.style.cursor = "";
+				if (handle) jq(handle).removeClass(zcls + '-header-move');
 			} else {
 				n.style.cursor = this._backupCursor || '';
-				if (handle) handle.style.cursor = "move";
+				if (handle) jq(handle).addClass(zcls + '-header-move');
 			}
 		}
 	},

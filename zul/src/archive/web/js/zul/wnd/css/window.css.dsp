@@ -164,6 +164,12 @@
 .z-window-embedded-header a, .z-window-embedded-header a:visited, .z-window-embedded-header a:hover {
 	color: #222222;
 }
+.z-window-modal-header-move,
+.z-window-highlighted-header-move,
+.z-window-overlapped-header-move,
+.z-window-popup-header-move {
+	cursor: move;
+} 
 <%-- Caption and Toolbarbutton --%>
 .z-window-modal-header a,
 .z-window-modal-header a:visited,
