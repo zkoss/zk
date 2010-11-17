@@ -1703,7 +1703,6 @@ wgt.$f().main.setTitle("foo");
 	 * @param zk.Widget sibling the sibling widget (the 'insert' point where
 	 * the new widget will be placed before). If null or omitted, it is
 	 * the same as {@link #appendChild}
-	 * @param boolean ignoreDom whether not to generate DOM elements
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
 	 * @see #appendChild(zk.Widget,boolean)
 	 */
