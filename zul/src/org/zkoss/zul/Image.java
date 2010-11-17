@@ -316,6 +316,9 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 				int j = pathInfo.indexOf('/', 1);
 				if (j >= 0) {
 					int k = pathInfo.indexOf('/', ++j);
+					if (k == j + 1) {
+						k = pathInfo.indexOf('/', (j+=2));
+					}
 					if (k == j + 1 && pathInfo.charAt(j) == 'h')
 						return _hoverimg;
 				}
