@@ -118,7 +118,7 @@ public class AuDynaMediar implements AuExtension {
 					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
 					if (!(cc instanceof DynamicMedia))
 						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
-					media = ((DynamicMedia)cc).getMedia(l >= 0 ? pi.substring(l): "");
+					media = ((DynamicMedia)cc).getMedia(l >= 0 ? pi.substring(pi.indexOf('/', l + 1)) : "");
 					if (media == null) {
 						response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
 						return;
