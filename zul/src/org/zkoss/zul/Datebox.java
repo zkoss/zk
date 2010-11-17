@@ -55,10 +55,8 @@ public class Datebox extends FormatInputElement implements
 	private TimeZone _tzone;
 	private List _dtzones;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
+	
 	static {
-		addClientEvent(Datebox.class, Events.ON_FOCUS, 0);
-		addClientEvent(Datebox.class, Events.ON_BLUR, 0);
-		addClientEvent(Datebox.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT|CE_DUPLICATE_IGNORE);
 	}
 
