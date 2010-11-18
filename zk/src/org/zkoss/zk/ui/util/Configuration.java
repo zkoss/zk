@@ -1419,8 +1419,7 @@ public class Configuration {
 	 * the request to the server.
 	 *
 	 * <p>Default: -1 (i.e., disabled).
-	 * However, if zkmax.jar was installed (or with ZK 3.0.1 and 3.0.2),
-	 * the default is 9000.
+	 * However, if ZK 5.0.3 EE or prior, the default is 9000.
 	 *
 	 * <p>There are many reasons an Ajax request is not received by
 	 * the server. With the resending mechanism, ZK ensures the reliable
