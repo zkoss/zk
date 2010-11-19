@@ -24,6 +24,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
+	// optimized for treechildren to identify
+	_isTree: true,
 	/**
 	 * clears the tree children.
 	 */
@@ -52,13 +54,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	_fixOnAdd: function (child, ignoreDom, _noSync) {
 		if (child.$instanceof(zul.sel.Treecols))
 			this.treecols = child;
-		else if (child.$instanceof(zul.sel.Treefoot))
-			this.treefoot = child;
 		else if (child.$instanceof(zul.sel.Treechildren)) {
 			this.treechildren = child;
 			this._fixSelectedSet();
 		} else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
+		else if (child.$instanceof(zul.sel.Treefoot))
+			this.treefoot = child;
 		if (!ignoreDom)
 			this.rerender();
 		if (!_noSync)
