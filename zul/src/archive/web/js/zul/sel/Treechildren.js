@@ -52,7 +52,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 */
 	isTopmost: function () {
 		return this.parent && this.parent._isTree;
-	}
+	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
 		var oldsib = _prevsib(child);
