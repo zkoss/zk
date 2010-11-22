@@ -51,7 +51,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * @return zk.Widget
 	 */	
 	getCell: function (row, col) {
-		if (!this.rows) return null;
+		var rows;
+		if (!(rows = this.rows)) return null;
 		if (rows.nChildren <= row) return null;
 
 		var row = rows.getChildAt(row);

@@ -648,7 +648,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_makeFloat: function () {
 		var handle = this.$n('cap');
 		if (handle && !this._drag) {
-			handle.style.cursor = "move";
+			jq(handle).addClass(this.getZclass() + '-header-move');
 			var Window = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
@@ -1076,7 +1076,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
-				handle = this._mode == 'embedded' ? false : this.$n('cap');
+				handle = this._mode == 'embedded' ? false : this.$n('cap'),
+				zcls = this.getZclass();
 			if (!this.isMaximized() && c) {
 				if (this.isMaximized()) return; // unsupported this case.
 				if (this._backupCursor == undefined)
@@ -1085,10 +1086,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
 					c == 7 ? 'w-resize': 'nw-resize';
-				if (handle) handle.style.cursor = "";
+				if (handle) jq(handle).removeClass(zcls + '-header-move');
 			} else {
 				n.style.cursor = this._backupCursor || ''; // bug #2977948
-				if (handle) handle.style.cursor = "move";
+				if (handle) jq(handle).addClass(zcls + '-header-move');
 			}
 		}
 	},

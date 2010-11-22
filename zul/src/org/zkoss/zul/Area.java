@@ -109,6 +109,12 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 		}
 	}
 
+	/** Default: not childable.
+	 */
+	protected boolean isChildable() {
+		return false;
+	}
+	
 	//-- super --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))

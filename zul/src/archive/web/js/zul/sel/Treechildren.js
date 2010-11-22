@@ -36,17 +36,22 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 * @return Tree
 	 */
 	getTree: function () {
-		for (var wgt = this.parent; wgt; wgt = wgt.parent)
-			if (wgt.$instanceof(zul.sel.Tree)) return wgt;
-		return null;
+		return this.isTopmost() ? this.parent : this.parent ? this.parent.getTree() : null;
 	},
 	/** Returns the {@link Treerow} that is associated with
 	 * this treechildren, or null if no such treerow.
 	 * @return Treerow
 	 */
 	getLinkedTreerow: function () {
-		return this.parent && this.parent.$instanceof(zul.sel.Treeitem) ?
-			this.parent.treerow: null;
+		// optimised to assume the tree doesn't have treerow property
+		return this.parent ? this.parent.treerow : null;
+	},
+	/** Returns whether this treechildren is topmost.
+	 * @param boolean
+	 * @since 5.0.6
+	 */
+	isTopmost: function () {
+		return this.parent && this.parent._isTree;
 	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
@@ -66,10 +71,10 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var ben;
+		var ben, isTopmost = this.isTopmost();
 		if (before)
 			before = before.getFirstNode_();
-		if (!before && !this.parent.$instanceof(zul.sel.Tree))
+		if (!before && !isTopmost)
 			ben = this.getCaveNode() || this.parent.getCaveNode();
 
 		if (before)
@@ -77,7 +82,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		else if (ben)
 			jq(ben).after(child.redrawHTML_());
 		else {
-			if (this.parent.$instanceof(zul.sel.Tree))
+			if (isTopmost)
 				jq(this.parent.$n('rows')).append(child.redrawHTML_());
 			else
 				jq(this).append(child.redrawHTML_());
@@ -101,13 +106,9 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		if (!this.$supers('isVisible', arguments))
 			return false;
 
-		if (!this.parent) return false;
-		if (!(this.parent.$instanceof(zul.sel.Treeitem)))
-			return true;
-		if (!this.parent.isOpen())
-			return false;
-		return !(this.parent.parent.$instanceof(zul.sel.Treechildren))
-			|| this.parent.parent.isVisible(); //recursive
+		var p;
+		return this.isTopmost()
+			|| ((p = this.parent) && p.isOpen() && (p = p.parent) && p.isVisible()); //recursive
 	},
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
@@ -147,7 +148,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			oldtree._onTreechildrenRemoved(this);
 			
 		if (newParent) {
-			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
+			var tree = newParent._isTree ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
 		}
 		this.$supers("beforeParentChanged_", arguments);

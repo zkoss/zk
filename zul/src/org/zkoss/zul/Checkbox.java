@@ -156,6 +156,12 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	}
 
 	//-- super --//
+	/** Default: not childable.
+	 */
+	protected boolean isChildable() {
+		return false;
+	}
+	
 	/** Returns the Style of checkbox label
 	 *
 	 * <p>Default: "z-checkbox"

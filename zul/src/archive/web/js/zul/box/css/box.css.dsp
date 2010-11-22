@@ -41,6 +41,7 @@ tr.z-vbox-sep {
 	display: -moz-inline-box;
 	vertical-align: top;<%-- vertical-align: make it looks same in diff browsers --%>
 	display: inline-block;
+	cursor: pointer;
 }
 .z-splitter-hor-outer,
 .z-splitter-os-hor-outer {
@@ -63,6 +64,10 @@ tr.z-vbox-sep {
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
 }
 .z-splitter-hor,
+.z-splitter-os-hor {
+	cursor: e-resize;
+}
+.z-splitter-hor,
 .z-splitter-hor-outer,
 .z-splitter-os-hor,
 .z-splitter-os-hor-ns,
@@ -74,6 +79,10 @@ tr.z-vbox-sep {
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
 }
 .z-splitter-ver,
+.z-splitter-os-ver {
+	cursor: s-resize;
+}
+.z-splitter-ver,
 .z-splitter-os-ver,
 .z-splitter-os-ver-ns,
 .z-splitter-ver-outer .z-splitter-ver-outer-td,
@@ -83,6 +92,12 @@ tr.z-vbox-sep {
 .z-splitter-hor-ns,
 .z-splitter-ver-ns {
 	background-image: none; background-position: none;
+}
+.z-splitter-hor-ns,
+.z-splitter-ver-ns,
+.z-splitter-os-hor-ns,
+.z-splitter-os-ver-ns {
+	cursor: default;
 }
 .z-splitter-ver-btn-t:hover,
 .z-splitter-ver-btn-b:hover,

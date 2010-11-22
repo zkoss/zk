@@ -1,15 +1,13 @@
-/* ServerPushWindow.java
+/* ServerPush2.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Aug  6 12:37:13     2007, Created by tomyeh
-}}IS_NOTE
+		Mon Nov 22 10:46:57 TST 2010, Created by tomyeh
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
 package org.zkoss.zkdemo.test2;
@@ -21,15 +19,17 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.*;
 
 /**
- * Used to test the server-push feature.
+ * Used to test the server-push's schedule feature.
  *
  * @author tomyeh
  */
-public class ServerPush {
-	private static final Log log = Log.lookup(ServerPush.class);
+public class ServerPush2 {
+	private static final Log log = Log.lookup(ServerPush2.class);
 
 	public static void start(Component info, Textbox tb) throws InterruptedException {
 		start(null, info, tb);
@@ -79,26 +79,16 @@ public class ServerPush {
 			_tb = tb;
 		}
 		public void run() {
-			try {
-				while (_desktop.getAttribute("sp.ceased") == null) {
-					Executions.activate(_desktop);
-					try {
-						updateInfo(_info, _tb, "comet");
-					} catch (RuntimeException ex) {
-						log.error(ex);
-						throw ex;
-					} catch (Error ex) {
-						log.error(ex);
-						throw ex;
-					} finally {
-						Executions.deactivate(_desktop);
-					}
-					Threads.sleep(2000); //Update every two seconds
-				}
-				log.info("The server push thread ceased");
-			} catch (InterruptedException ex) {
-				log.info("The server push thread interrupted", ex);
+			while (_desktop.getAttribute("sp.ceased") == null) {
+				Executions.schedule(_desktop,
+					new EventListener() {
+						public void onEvent(Event event) {
+							updateInfo(_info, _tb, "comet(sched)");
+						}
+					}, null);
+				Threads.sleep(2000); //Update every two seconds
 			}
+			log.info("The server push thread ceased");
 		}
 	}
 }

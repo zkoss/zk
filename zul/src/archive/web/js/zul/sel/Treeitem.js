@@ -121,9 +121,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 * @return Tree
 	 */
 	getMeshWidget: _zkf = function () {
-		for (var wgt = this.parent; wgt; wgt = wgt.parent)
-			if (wgt.$instanceof(zul.sel.Tree)) return wgt;
-		return null;		
+		return this.parent ? this.parent.getTree() : null;
 	},
 	/**
 	 * Returns the {@link Tree}.

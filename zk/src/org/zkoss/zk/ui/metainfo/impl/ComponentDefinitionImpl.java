@@ -142,8 +142,8 @@ implements ComponentDefinition, java.io.Serializable {
 	 */
 	public static final ComponentDefinition newMacroDefinition(
 	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class<? extends Component> cls, String macroURI, String compose, boolean inline) {
-		return new MacroDefinition(langdef, pgdef, name, cls, macroURI, compose, inline);
+	Class<? extends Component> cls, String macroURI, boolean inline) {
+		return new MacroDefinition(langdef, pgdef, name, cls, macroURI, inline);
 	}
 	/** Constructs a native component definition.
 	 * It is the component definition used to implement the native namespace.
@@ -266,9 +266,6 @@ implements ComponentDefinition, java.io.Serializable {
 		return false;
 	}
 	public String getMacroURI() {
-		return null;
-	}
-	public String getComposeCondition() {
 		return null;
 	}
 	public boolean isInlineMacro() {

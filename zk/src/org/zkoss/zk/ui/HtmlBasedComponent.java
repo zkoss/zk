@@ -36,7 +36,7 @@ import org.zkoss.zk.fn.ZkFns;
  * It simplifies to implement methods common to HTML based components.
  *
  * <p>Events:<br/>
- *  onClick, onDoubleClick, onRightClick, onMove, onSize, onZIndex, onDrop,
+ *  onClick, onDoubleClick, onRightClick, onDrop,
  *  onMouseOver, onMouseOut, onOK, onCacnel and onCtrlKey.<br/>
  * 
  * <p>It supports

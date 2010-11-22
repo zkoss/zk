@@ -121,11 +121,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * variables to this component.
 	 */
 	public void afterCompose() {
-		if (!"before".equals(getComposeCondition()))
-			compose();
+		compose();
 	}
 	/** Composes the macro component.
-	 * It is called by {@link #afterCompose}, {@link #beforeCompose} and others
+	 * It is called by {@link #afterCompose} and others
 	 * to do the rendering based on {@link #getMacroURI}.
 	 * <p>Notice this method shall not compose the macro component again
 	 * if it was called. It is {@link #recreate}'s job to clean up and
@@ -183,31 +182,6 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	}
 	public boolean isInline() {
 		return getDefinition().isInlineMacro();
-	}
-
-	/** Returns when to compose the macro component.
-	 * <p>The value depends on the component definiton (the compose attribute).
-	 * Currently, it supports two values: before and after.
-	 * If "before", the macro component is composed (aka., creates child components)
-	 * when {@link #beforeCompose} is called.
-	 * If "after" (default), it is composed when {@link #afterCompose} is called.
-	 * @since 5.0.5
-	 */
-	public String getComposeCondition() {
-		return getDefinition().getComposeCondition();
-	}
-	/** Called by ZK Loader before it sets the properties.
-	 * If the macro component wants to create components from the template
-	 * before the setter method is called, it could createComponents in
-	 * this method, rather than {@link #afterCompose}.
-	 * <p>The default implementation creates the components from the template
-	 * ({@link #getMacroURI}) if {@link #getComposeCondition} is true
-	 * (defined by the component definition).
-	 * @since 5.0.5
-	 */
-	public void beforeCompose() {
-		if ("before".equals(getComposeCondition()))
-			compose();
 	}
 
 	//Component//
@@ -294,7 +268,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
 		clone.init();
 		clone._props.putAll(_props);
-		clone._props.put("includer", this);
+		clone._props.put("includer", clone);
 
 		if (_inlines != null) { //deep clone
 			clone._inlines = new Component[_inlines.length];

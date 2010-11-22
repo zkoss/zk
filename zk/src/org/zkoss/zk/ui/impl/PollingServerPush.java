@@ -26,7 +26,10 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.Scheduler;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.au.out.AuScript;
@@ -258,6 +261,10 @@ public class PollingServerPush implements ServerPush {
 				}
 			}
 		}
+	}
+
+	public void schedule(EventListener listener, Event event, Scheduler scheduler) {
+		scheduler.schedule(listener, event); //delegate back
 	}
 
 	public boolean activate(long timeout)

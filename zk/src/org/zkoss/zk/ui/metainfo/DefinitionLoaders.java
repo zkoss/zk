@@ -387,10 +387,9 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
 				final String inline = el.getElementValue("inline", true);
-				final String compose = el.getElementValue("compose", true);
 				compdef = (ComponentDefinitionImpl)
 					langdef.getMacroDefinition(
-						name, macroURI, compose, "true".equals(inline), null);
+						name, macroURI, "true".equals(inline), null);
 
 				if (cls != null)
 					compdef.setImplementationClass(cls);

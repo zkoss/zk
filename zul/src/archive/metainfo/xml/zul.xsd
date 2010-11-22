@@ -1273,6 +1273,7 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
         <!-- from group -->
 		<xs:attribute name="label" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
 	</xs:complexType>
     
     <!-- groupfoot -->

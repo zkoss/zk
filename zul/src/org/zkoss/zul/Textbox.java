@@ -31,11 +31,6 @@ import org.zkoss.zul.impl.InputElement;
 public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox {
 	private AuxInfo _auxinf;
 
-	static {
-		addClientEvent(Textbox.class, Events.ON_FOCUS, 0);
-		addClientEvent(Textbox.class, Events.ON_BLUR, 0);
-	}
-
 	public Textbox() {
 		setValueDirectly("");
 	}

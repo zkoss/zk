@@ -42,9 +42,9 @@
 	Person person = new Person("Hello", "ZK");
 </zscript>
 	<grid><rows>
-	<row>First Name<textbox value="@{person.firstname,save-when='btn.onClick'}"/></row>
-	<row>Last Name<textbox value="@{person.lastname,save-when='btn.onClick'}"/></row>
-	<row>Full Name<label value="@{person.fullname}"/></row>
+	<row>First Name<textbox id="fn" value="@{person.firstname,save-when='btn.onClick'}"/></row>
+	<row>Last Name<textbox id="ln" value="@{person.lastname,save-when='btn.onClick'}"/></row>
+	<row>Full Name<label id="fullname" value="@{person.fullname}"/></row>
 	</rows></grid>
 	<button id="btn" label="Change" onClick=""/>
 </window>

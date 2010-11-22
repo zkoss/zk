@@ -59,6 +59,9 @@
 	border: 1px solid #B1CBD5;
 	padding: 5px 3px 4px 5px;
 }
+.z-panel-header-move {
+	cursor: move;
+}
 <%-- Header Left --%>
 .z-panel-hl {
 	background: transparent no-repeat 0 0;
