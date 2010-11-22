@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.Scheduler;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.Attributes;
@@ -112,6 +114,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** A session attribute holding the number of server pushes.
 	 */
 	private static final String ATTR_PUSH_COUNT = "org.zkoss.zk.ui.pushes.count";
+	/** A special event for scheduling a task for server push.
+	 */
+	private static final Event SCHEDULE_EVENT = new Event("onServerPushSchedule", null);
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -132,6 +137,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient SimpleScope _attrs;
 		//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
+	/** A list of ScheduleInfo; must be thread safe */
+	private final List _schedInfos = new LinkedList();
 	/** Next available key. */
 	private int _nextKey;
 	/** Next available UUID. */
@@ -1136,13 +1143,41 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			event = _wapp.getConfiguration().beforePostEvent(event);
 		return event;
 	}
-	public Event beforeProcessEvent(Event event) {
+	public Event beforeProcessEvent(Event event) throws Exception {
+		if (event == SCHEDULE_EVENT) {
+			final long max = System.currentTimeMillis() + 3000; //3 seconds
+			while (!_schedInfos.isEmpty()) {
+				final List schedInfos;
+				synchronized (_schedInfos) { //must be thread safe
+					schedInfos = new ArrayList(_schedInfos);
+					_schedInfos.clear();
+				}
+				for (Iterator it = schedInfos.iterator(); it.hasNext();) {
+					final ScheduleInfo si = (ScheduleInfo)it.next();
+					try {
+						si.listener.onEvent(si.event);
+					} catch (Throwable t) {
+						synchronized (_schedInfos) { //add back not called
+							int j = 0;
+							while (it.hasNext())
+								_schedInfos.add(j++, it.next());
+						}
+						if (t instanceof Exception)
+							throw (Exception)t;
+						throw (Error)t;
+					}
+				}
+				if (System.currentTimeMillis() > max)
+					break; //avoid if server push is coming too fast
+			}
+			return null; //ignore the event
+		}
 		event = _eis.beforeProcessEvent(event);
 		if (event != null)
 			event = _wapp.getConfiguration().beforeProcessEvent(event);
 		return event;
 	}
-	public void afterProcessEvent(Event event) {
+	public void afterProcessEvent(Event event) throws Exception {
 		_eis.afterProcessEvent(event);
 		_wapp.getConfiguration().afterProcessEvent(event);
 
@@ -1328,15 +1363,34 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public ServerPush getServerPush() {
 		return _spush;
 	}
-	public boolean activateServerPush(long timeout)
-	throws InterruptedException {
+	public void scheduleServerPush(EventListener listener, Event event) {
+		if (listener == null)
+			throw new IllegalArgumentException("null listener");
+		checkSeverPush("schedule");
+
+		_spush.schedule(listener, event, new Scheduler() {
+			public void schedule(EventListener listener, Event event) {
+				synchronized (_schedInfos) { //must be thread safe
+					_schedInfos.add(new ScheduleInfo(listener, event));
+				}
+			}
+		});
+	}
+	public boolean scheduledServerPush() {
+		return !_schedInfos.isEmpty(); //no need to sync
+	}
+	private void checkSeverPush(String what) {
 		if (_spush == null)
 			if (isAlive())
-				throw new IllegalStateException("Before activation, the server push must be enabled for "+this);
+				throw new IllegalStateException("Before calling Executions."+what+"(), the server push must be enabled for "+this);
 			else
 				throw new DesktopUnavailableException("Stopped");
-
-		if (Events.inEventListener())
+	}
+	public boolean activateServerPush(long timeout)
+	throws InterruptedException {
+		checkSeverPush("activate");
+		if (Events.inEventListener()
+		&& Executions.getCurrent().getDesktop() == this)
 			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
 
 		return _spush.activate(timeout);
@@ -1374,6 +1428,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				}
 			}
 		}
+
+		if (!_schedInfos.isEmpty())
+			Events.postEvent(SCHEDULE_EVENT);
+			//we could not process them here (otherwise, event handling, thread
+			//might not work)
+			//Thus, we post an event and handle it in bebeforeProcessEvent
 
 		if (_spush != null)
 			_spush.onPiggyback();
@@ -1434,6 +1494,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		public String toString() {
 			return '[' + execId + ": " + uuids + ']';
+		}
+	}
+	private static class ScheduleInfo implements java.io.Serializable {
+		private final EventListener listener;
+		private final Event event;
+		private ScheduleInfo(EventListener listener, Event event) {
+			this.listener = listener;
+			this.event = event;
 		}
 	}
 }

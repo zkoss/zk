@@ -26,6 +26,8 @@ import java.net.MalformedURLException;
 import org.zkoss.idom.Document;
 
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.xel.Evaluator;
@@ -803,27 +805,67 @@ public void run() {
 		getUiEngine(desktop).notifyAll(desktop, mutex);
 	}
 
-	/** Activates a server-push thread.
+	/** Schedules a task to run under the server push of the given desktop asynchronously.
+	 * The caller can be any thread, not
+	 * limited to the event listener of the given desktop.
+	 *
+	 * <p>The task is executed when the server push of the given desktop
+	 * is granted. The task is executed asynchronously. That is, this method
+	 * return without waiting for the task to be executed.
+	 *
+	 * <p>The task is executed in the thread serving the server-push request,
+	 * so no additional thread will be created. It is safe to use in a clustering
+	 * environment.
+	 *
+	 * <p>The task is represented by an event listener. When the server push
+	 * is ready to serve the given task, {@link EventListener#onEvent} is called
+	 * with the given event.
+	 *
+	 * <p>Like {@link #activate}, this method can be called anywhere, not limited
+	 * to the event listener of the given desktop. It can be called even
+	 * if there is no current execution.
+	 *
+	 * <p>Alternative to {@link #schedule}, you could use {@link #activate}/{@link #deactivate}
+	 * if you prefer something to be done synchrnously.
+	 *
+	 * <p>The server-push is disabled by default. To use it, you have to enable
+	 * it first with {@link Desktop#enableServerPush} for the given desktop.
+	 * Once enabled, you can use as many as sevrer-push threads you like
+	 * (for the desktop with the server-push feature enabled).
+	 *
+	 * @param task the task to execute
+	 * @param event the event to be passed to the task (i.e., the event listener).
+	 * It could null or any instance as long as the task recognizes it.
+	 * @exception IllegalStateException if the server push is not enabled.
+	 * @exception DesktopUnavailableException if the desktop is removed
+	 * (when activating).
+	 * @since 5.0.6
+	 */
+	public static void schedule(Desktop desktop, EventListener task, Event event) {
+		((DesktopCtrl)desktop).scheduleServerPush(task, event);
+	}
+	/** Activates a thread to allow it access the given desktop synchronously.
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
 	 * or some other thread interrupts this thread.
 	 *
-	 * <p>A server-push thread is a working thread that manipulates a desktop
-	 * independent of event listeners. It can manipulate the components
-	 * of the desktop as long as it is activated.
+	 * <p>Alternative to {@link #activate}/{@link #deactivate}, you could use
+	 * {@link #schedule} to execute a task under server push. {@link #schedule} is
+	 * asynchronous, while {@link #activate}/{@link #deactivate} is synchronous
 	 *
-	 * <p>Due to the overhead of using server-push threads, the server-push
-	 * feature is disabled by default. To use it, you have to enable
-	 * it first with {@link Desktop#enableServerPush}.
+	 * <p>Like {@link #schedule}, this method can be called anywhere, not limited
+	 * to the event listener of the given desktop. It can be called even
+	 * if there is no current execution.
+	 *
+	 * <p>The server-push is disabled by default. To use it, you have to enable
+	 * it first with {@link Desktop#enableServerPush} for the given desktop.
 	 * Once enabled, you can use as many as sevrer-push threads you like
 	 * (for the desktop with the server-push feature enabled).
 	 *
-	 * <p>Before a server-push thread can access the components of the
-	 * desktop it belongs, you have to activate it first.
-	 * To activate a server-push thread, you have to invoke {@link #activate}.
-	 * Once it returns, the server-push thread is activated and it, like
-	 * event listeners, can manipulate the components of the corresponding
-	 * desktop directly.
+	 * <p>Before a thread, not running in the event listener of the given desktop,
+	 * can access the desktop, you have to activate it first by {@link #activate}.
+	 * Once this method returns, the thread is activated and it, like
+	 * an event listener of the given desktop, can manipulate the desktop directly.
 	 *
 	 * <p>A typical use pattern:
 	 *
@@ -844,13 +886,13 @@ public void run() {
 	 *         }
 	 *       } catch (DesktopUnavailableException ex) {
 	 *         //clean up (since desktop is dead)
-	*       }
+	 *       }
 	 *   }
 	 * }
 	 *}</code></pre>
 	 *
 	 * <p>Note: the access of components is sequentialized. That is,
-	 * at most one server-push thread is activated. All others, including
+	 * at most one thread is activated. All others, including
 	 * the event listeners, have to wait util it is deactivated
 	 * (i.e., until {@link #deactivate} is called).
 	 * Thus, it is better to minimize the time remaining activated.
@@ -868,6 +910,7 @@ public void run() {
 	 * since it is already activated when an event listen starts execution.
 	 *
 	 * @exception InterruptedException if it is interrupted by other thread
+	 * @exception IllegalStateException if the server push is not enabled.
 	 * @exception DesktopUnavailableException if the desktop is removed
 	 * (when activating).
 	 * @since 3.0.0
@@ -876,8 +919,8 @@ public void run() {
 	throws InterruptedException, DesktopUnavailableException {
 		activate(desktop, 0);
 	}
-	/** Activates a server-push thread with, or until a certain amount of
-	 * real time has elapsed.
+	/** Activates a thread to allow it access the given desktop synchronously,
+	 * or until a certain amount of time has elapsed.
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
 	 * some other thread interrupts this thread,
@@ -900,7 +943,7 @@ public void run() {
 	throws InterruptedException, DesktopUnavailableException {
 		return ((DesktopCtrl)desktop).activateServerPush(timeout);
 	}
-	/** Deactivates a server-push thread.
+	/** Deactivates a thread that has invoked {@link #activate} successfully.
 	 * @since 3.0.0
 	 * @see #activate(Desktop)
 	 * @see #activate(Desktop, long)

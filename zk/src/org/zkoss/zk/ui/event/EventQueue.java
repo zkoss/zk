@@ -259,4 +259,8 @@ public interface EventQueue {
 	 * Rather, use {@link EventQueues#remove} instead.
 	 */
 	public void close();
+	/** Returns whether it is closed.
+	 * @since 5.0.6
+	 */
+	public boolean isClose();
 }

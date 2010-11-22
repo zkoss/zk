@@ -18,6 +18,8 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 
 /**
  * Represents a server-push controller.
@@ -78,6 +80,21 @@ public interface ServerPush {
 	 */
 	public void setDelay(int min, int max, int factor);
 
+	/** Called by the associated desktop to schedule a task to execute
+	 * asynchronously.
+	 * <p>The implementation usually delegates the scheduling to
+	 * the scheduler passed as the third argument, which is controlled
+	 * by the desktop.
+	 * Of course, it could schedule it by itself.
+	 * @param task the task to execute
+	 * @param event the event to be passed to the task (i.e., the event listener).
+	 * It could null or any instance as long as the task recognizes it.
+	 * @param scheduler the default scheduler to schedule the task.
+	 * The implementation usually delegates the scheduling back to it.
+	 * If you prefer to handle it by yourself, you could ignore it.
+	 * @since 5.0.6
+	 */
+	public void schedule(EventListener task, Event event, Scheduler scheduler);
 	/** Activate the current thread (which must be a server-push thread).
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
