@@ -30,6 +30,8 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.util.DesktopCleanup;
+import org.zkoss.zk.au.AuService;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * The default implementation of the server-push based event queue
@@ -79,7 +81,8 @@ public class ServerPushEventQueue implements EventQueue {
 		synchronized (_dtInfos) {
 			di = (DesktopInfo)_dtInfos.get(desktop);
 			if (di == null)
-				_dtInfos.put(desktop, di = new DesktopInfo(desktop, new EQCleanup()));
+				_dtInfos.put(desktop,
+					di = new DesktopInfo(desktop, new EQService(), new EQCleanup()));
 		}
 		di.subscribe(listener, callback, async);
 	}
@@ -92,7 +95,7 @@ public class ServerPushEventQueue implements EventQueue {
 			throw new IllegalStateException("execution required");
 
 		final Desktop desktop = exec.getDesktop();
-		DesktopInfo di;
+		final DesktopInfo di;
 		synchronized (_dtInfos) {
 			di = (DesktopInfo)_dtInfos.get(desktop);
 		}
@@ -121,11 +124,18 @@ public class ServerPushEventQueue implements EventQueue {
 	}
 	public void close() {
 		_closed = true;
+		final Execution exec = Executions.getCurrent();
+		if (exec != null)
+			close(exec.getDesktop());
+			//queues of other desktops will be closed in EQService
+	}
+	private void close(Desktop desktop) {
+		final DesktopInfo di;
 		synchronized (_dtInfos) {
-			for (Iterator it = _dtInfos.values().iterator(); it.hasNext();)
-				((DesktopInfo)it.next()).close();
-			_dtInfos.clear();
+			di = (DesktopInfo)_dtInfos.remove(desktop);
 		}
+		if (di != null)
+			di.close();
 	}
 	public boolean isClose() {
 		return _closed;
@@ -134,16 +144,18 @@ public class ServerPushEventQueue implements EventQueue {
 	private static class DesktopInfo implements java.io.Serializable {
 		private final Desktop _desktop;
 		private final DesktopEventQueue _que;
+		private final EQService _service;
 		private final EQCleanup _cleanup;
 		/** Indicates whether the server push is enabled by the event queue. */
 		private boolean _spEnabled;
 
-		private DesktopInfo(Desktop desktop, EQCleanup cleanup) {
+		private DesktopInfo(Desktop desktop, EQService service, EQCleanup cleanup) {
 			_desktop = desktop;
 			_que = new DesktopEventQueue();
 			_spEnabled = !desktop.isServerPushEnabled();
 			if (_spEnabled)
 				desktop.enableServerPush(true);
+			desktop.addListener(_service = service);
 			desktop.addListener(_cleanup = cleanup);
 				//OK to call addListener since it is the current desktop
 		}
@@ -169,6 +181,7 @@ public class ServerPushEventQueue implements EventQueue {
 		private void close() {
 			_que.close();
 			_desktop.removeListener(_cleanup);
+			_desktop.removeListener(_service);
 			if (_spEnabled) {
 				final Execution exec = Executions.getCurrent();
 				if (exec != null && exec.getDesktop() == _desktop) {
@@ -193,6 +206,13 @@ public class ServerPushEventQueue implements EventQueue {
 		public void onEvent(Event event) {
 			if (!_que.isClose()) //just in case
 				_que.publish(event);
+		}
+	}
+	private class EQService implements AuService, java.io.Serializable {
+		public boolean service(AuRequest request, boolean everError) {
+			if (_closed)
+				close(request.getDesktop());
+			return false;
 		}
 	}
 	private class EQCleanup implements DesktopCleanup, java.io.Serializable {
