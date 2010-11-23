@@ -16,11 +16,10 @@ package org.zkoss.zk.ui.event.impl;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.zkoss.lang.Threads;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
@@ -54,19 +53,6 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 
 	public DesktopEventQueue() {
 		_dummyTarget.addEventListener(ON_QUEUE, new QueueListener());
-	}
-
-	/** A working thread is created to handle it if it is an asynchronous
-	 * listener.
-	 * @param async whether it is an asynchronous event listener.
-	 */
-	private void invoke(ListenerInfo inf, Event event)
-	throws Exception {
-		if (inf.async) {
-			new AsyncListenerThread(this, inf, event).start();
-		} else {
-			inf.listener.onEvent(event);
-		}
 	}
 
 	/** Returns if there is listener being registered.
@@ -131,7 +117,6 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 	public void close() {
 		_closed = true;
 		_listenerInfos.clear();
-
 		if (_serverPushEnabled) {
 			try {
 				Executions.getCurrent().getDesktop().enableServerPush(false);
@@ -145,22 +130,16 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 	}
 	private class QueueListener implements EventListener, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
-			final Event evt = (Event)event.getData();
-			final Set listenerCalled = new HashSet();
-			for (;;)
-				for (Iterator it = _listenerInfos.iterator();;) {
-					final ListenerInfo inf;
-					try {
-						if (!it.hasNext())
-							return; //done
-						inf = (ListenerInfo)it.next();
-					} catch (java.util.ConcurrentModificationException ex) {
-						break;
-					}
-
-					if (listenerCalled.add(inf))
-						invoke(inf, evt);
-				}
+			event = (Event)event.getData();
+			for (Iterator it = CollectionsX.comodifiableIterator(_listenerInfos);
+			it.hasNext();) {
+				final ListenerInfo inf = (ListenerInfo)it.next();
+				if (inf.async)
+					new AsyncListenerThread(DesktopEventQueue.this, inf, event)
+						.start();
+				else
+					inf.listener.onEvent(event);
+			}
 		}
 	}
 }

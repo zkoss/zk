@@ -517,7 +517,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		
 		if (_resolvers != null) {
-			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers);
+			it.hasNext();) {
 				Object o = Evaluators.resolveVariable(
 					ctx, (VariableResolver)it.next(), base, name);
 				if (o != null)
@@ -978,13 +979,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+			for (Iterator it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
 				willPassivate((Collection)it.next());
 
 		willPassivate(_resolvers);
 
 		//backward compatible (we store variables in attributes)
-		for (Iterator it = _attrs.getAttributes().values().iterator();
+		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
 		it.hasNext();) {
 			final Object val = it.next();
 			if (val instanceof NamespaceActivationListener) //backward compatible
@@ -1006,13 +1008,15 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+			for (Iterator it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
 				didActivate((Collection)it.next());
 
 		didActivate(_resolvers);
 
 		//backward compatible (we store variables in attributes)
-		for (Iterator it = _attrs.getAttributes().values().iterator(); it.hasNext();) {
+		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
+		it.hasNext();) {
 			final Object val = it.next();
 			if (val instanceof NamespaceActivationListener) //backward compatible
 				((NamespaceActivationListener)val).didActivate(_ns);

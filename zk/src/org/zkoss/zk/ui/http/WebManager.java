@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
@@ -203,11 +204,10 @@ public class WebManager {
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
-			for (Iterator it = listeners.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(listeners);
+			it.hasNext();) {
 				try {
 					((WebManagerActivationListener)it.next()).didActivate(this);
-				} catch (java.util.ConcurrentModificationException ex) {
-					throw ex;
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}

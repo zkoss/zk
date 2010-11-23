@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.event;
  *
  * <p>It is the same as {@link EventListener} except it also extends
  * java.io.Serializable. It is useful for instantiating a serializable instance of
- * an anonymous class. For example,
+ * an anonymous class (so it could work in a clustering environment). For example,
  * <pre><code>
  *comp.addEventListener("onSomething",
  *  new SerializableEventListener() {

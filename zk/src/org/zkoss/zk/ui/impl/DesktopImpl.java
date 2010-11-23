@@ -30,9 +30,9 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
-import org.zkoss.util.IdentityHashSet;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 import org.zkoss.io.Serializables;
@@ -670,23 +670,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void service(AuRequest request, boolean everError) {
 		if (_ausvcs != null) {
 			//Note: removeListener might be called when invoking svc.service()
-			final Set called = new IdentityHashSet();
-			l_svc:
-			for (;;) {
-				for (Iterator it = _ausvcs.iterator(); ;) {
-					final AuService svc;
-					try {
-						if (!it.hasNext())
-							break l_svc; //done
-						svc = (AuService)it.next();
-					} catch (java.util.ConcurrentModificationException ex) {
-						break; //loop again
-					}
-					if (called.add(svc)
-					&& svc.service(request, everError))
-						return; //done
-				}
-			}
+			for (Iterator it = CollectionsX.comodifiableIterator(_ausvcs); it.hasNext();)
+				if (((AuService)it.next()).service(request, everError))
+					return;
 		}
 
 		final Component comp = request.getComponent();
@@ -1187,7 +1173,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void invokeDesktopCleanups() {
 		if (_dtCleans != null) {
-			for (Iterator it = _dtCleans.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_dtCleans); it.hasNext();) {
 				final DesktopCleanup listener = (DesktopCleanup)it.next();
 				try {
 					listener.cleanup(this);
@@ -1201,7 +1187,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
 		if (_execInits != null) {
-			for (Iterator it = _execInits.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_execInits); it.hasNext();) {
 				try {
 					((ExecutionInit)it.next()).init(exec, parent);
 				} catch (Throwable ex) {
@@ -1213,7 +1199,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List errs) {
 		if (_execCleans != null) {
-			for (Iterator it = _execCleans.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_execCleans); it.hasNext();) {
 				final ExecutionCleanup listener = (ExecutionCleanup)it.next();
 				try {
 					listener.cleanup(exec, parent, errs);
@@ -1227,7 +1213,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void afterComponentAttached(Component comp, Page page) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_uiCycles); it.hasNext();) {
 				final UiLifeCycle listener = (UiLifeCycle)it.next();
 				try {
 					listener.afterComponentAttached(comp, page);
@@ -1239,7 +1225,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void afterComponentDetached(Component comp, Page prevpage) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_uiCycles); it.hasNext();) {
 				final UiLifeCycle listener = (UiLifeCycle)it.next();
 				try {
 					listener.afterComponentDetached(comp, prevpage);
@@ -1251,7 +1237,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_uiCycles); it.hasNext();) {
 				final UiLifeCycle listener = (UiLifeCycle)it.next();
 				try {
 					listener.afterComponentMoved(parent, child, prevparent);
@@ -1263,7 +1249,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	private void afterPageAttached(Page page, Desktop desktop) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_uiCycles); it.hasNext();) {
 				final UiLifeCycle listener = (UiLifeCycle)it.next();
 				try {
 					listener.afterPageAttached(page, desktop);
@@ -1275,7 +1261,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	private void afterPageDetached(Page page, Desktop prevdesktop) {
 		if (_uiCycles != null) {
-			for (Iterator it = _uiCycles.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_uiCycles); it.hasNext();) {
 				final UiLifeCycle listener = (UiLifeCycle)it.next();
 				try {
 					listener.afterPageDetached(page, prevdesktop);

@@ -442,4 +442,101 @@ public class CollectionsX {
 		}
 		throw new IllegalArgumentException("obj must be a Collection, a Map, or an Object array. obj: "+obj);
 	}
+
+	/** Returns an iterator that allows the caller to modify the collection
+	 * directly. In other words, the iterator will handle
+	 * java.util.ConcurrentModificationException and return the items one-by-one
+	 * even if collection's add, remove or other method was called.
+	 * <p>Notice that the iterator returned col.iterator() only allows the
+	 * caller to modify it by Iterator.remove().
+	 * <p>Limitation:
+	 * <ul><li>It is still not safe to modify the collection
+	 * between hasNext() and next().Modify it after next(), if necessary.</li>
+	 * <li>If the collection have multiple items referencing to the same object,
+	 * and if we remove the item that has been iterated, the other item might
+	 * be ingored. For example, if a collection has A, B, C, B, then the
+	 * following code only iterates A, B, C</li>
+	 * </ul>
+	 * <pre><code>
+	for (Iterator it = org.zkoss.util.CollectionsX.comodifiableIterator(list); it.hasNext();) {
+		it.next();
+		l.remove(0);
+	}</code></pre>
+	 * @since 5.0.6
+	 */
+	public static Iterator comodifiableIterator(Collection col) {
+		return new ComodifiableIterator(col);
+	}
+}
+/*package*/ class ComodifiableIterator implements Iterator {
+	private final List _visited = new LinkedList();
+	private List _lastVisited;
+	private final Collection _col;
+	private Iterator _it;
+	private Object _next;
+	private boolean _nextAvail;
+
+	/*package*/ ComodifiableIterator(Collection col) {
+		_col = col;
+		_it = col.iterator();
+	}
+	public boolean hasNext() {
+		//Note: we cannot just check hasNext() since it does not throw
+		//ConcurrentModificationException, so if _col is cleared, hasNext()
+		//might still return true!!
+		//if (_lastVisited == null) //no comodified
+		//	return _it.hasNext();
+
+		if (_nextAvail)
+			return true;
+		while (_it.hasNext()) {
+			final Object o;
+			try {
+				o = _it.next();
+			} catch (java.util.ConcurrentModificationException ex) {
+				_lastVisited = new LinkedList(_visited); //make a copy
+				_it = _col.iterator();
+				continue; //do it again
+			}
+			if (!removeFromLastVisited(o)) { //not visited before
+				_visited.add(o);
+				_next = o;
+				return _nextAvail = true;
+			}
+		}
+		return false;
+	}
+	public Object next() {
+		if (_nextAvail) {
+			_nextAvail = false;
+			return _next;
+		}
+		for (;;) {
+			final Object o;
+			try {
+				o = _it.next();
+			} catch (java.util.ConcurrentModificationException ex) {
+				_lastVisited = new LinkedList(_visited); //make a copy
+				_it = _col.iterator();
+				continue; //do it again
+			}
+			if (!removeFromLastVisited(o)) { //not visited before
+				_visited.add(o);
+				return o;
+			}
+		}
+	}
+	private boolean removeFromLastVisited(Object o) {
+		if (_lastVisited != null)
+			for (Iterator it = _lastVisited.iterator(); it.hasNext();) {
+				if (it.next() == o) { //not equals (more retricted)
+					it.remove();
+					return true;
+				}
+			}
+		return false;
+	}
+	public void remove() {
+		_it.remove();
+	}
 }
