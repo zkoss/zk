@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.event;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * An listener that will be notified when an event occurs, if it is
+ * An event listener that will be notified when an event occurs, if it is
  * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
  * <p>If an event listener also implements {@link Deferrable}
@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  * @see Deferrable
  * @see Express
+ * @see SerializableEventListener
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.
