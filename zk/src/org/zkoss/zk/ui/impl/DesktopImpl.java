@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Execution;
@@ -106,7 +107,7 @@ import org.zkoss.zk.device.DeviceNotFoundException;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
-    private static final long serialVersionUID = 20100623L;
+    private static final long serialVersionUID = 20101123L;
 
 	/** Represents media stored with {@link #getDownloadMediaURI}.
 	 * It must be distinguishable from component's ID.
@@ -117,7 +118,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final String ATTR_PUSH_COUNT = "org.zkoss.zk.ui.pushes.count";
 	/** A special event for scheduling a task for server push.
 	 */
-	private static final Event SCHEDULE_EVENT = new Event("onServerPushSchedule", null);
+	private static final String ON_SCHEDULE = "onSchedule";
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -140,6 +141,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient Execution _exec;
 	/** A list of ScheduleInfo; must be thread safe */
 	private final List<ScheduleInfo> _schedInfos = new LinkedList<ScheduleInfo>();
+	/** For handling scheduled task in onSchedule. */
+	private Component _dummyTarget = null;
 	/** Next available key. */
 	private int _nextKey;
 	/** Next available UUID. */
@@ -993,7 +996,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		willSerialize(_ausvcs);
 		Serializables.smartWrite(s, _ausvcs);
 
-		s.writeBoolean(_spush != null);
+		if (_spush == null || _spush instanceof java.io.Serializable
+		|| _spush instanceof java.io.Externalizable)
+			s.writeObject(_spush);
+		else
+			s.writeObject(_spush.getClass());
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -1035,8 +1042,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		didDeserialize(_uiCycles);
 		didDeserialize(_ausvcs);
 
-		if (s.readBoolean())
-			enableServerPush(true);
+		Object o = s.readObject();
+		if (o != null) {
+			ServerPush sp = null;
+			if (o instanceof Class) {
+				try {
+					sp = (ServerPush)((Class)o).newInstance();
+				} catch (Throwable ex) {
+				}
+			} else
+				sp = (ServerPush)o;
+			enableServerPush0(sp, true);
+		}
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
@@ -1145,34 +1162,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return event;
 	}
 	public Event beforeProcessEvent(Event event) throws Exception {
-		if (event == SCHEDULE_EVENT) {
-			final long max = System.currentTimeMillis() + 3000; //3 seconds
-			while (!_schedInfos.isEmpty()) {
-				final List<ScheduleInfo> schedInfos;
-				synchronized (_schedInfos) { //must be thread safe
-					schedInfos = new ArrayList<ScheduleInfo>(_schedInfos);
-					_schedInfos.clear();
-				}
-				for (Iterator<ScheduleInfo> it = schedInfos.iterator(); it.hasNext();) {
-					final ScheduleInfo si = it.next();
-					try {
-						si.listener.onEvent(si.event);
-					} catch (Throwable t) {
-						synchronized (_schedInfos) { //add back not called
-							int j = 0;
-							while (it.hasNext())
-								_schedInfos.add(j++, it.next());
-						}
-						if (t instanceof Exception)
-							throw (Exception)t;
-						throw (Error)t;
-					}
-				}
-				if (System.currentTimeMillis() > max)
-					break; //avoid if server push is coming too fast
-			}
-			return null; //ignore the event
-		}
 		event = _eis.beforeProcessEvent(event);
 		if (event != null)
 			event = _wapp.getConfiguration().beforeProcessEvent(event);
@@ -1364,6 +1353,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_spush.schedule(listener, event, new Scheduler() {
 			public void schedule(EventListener listener, Event event) {
 				synchronized (_schedInfos) { //must be thread safe
+					if (_dummyTarget == null) {
+						_dummyTarget = new AbstractComponent();
+						_dummyTarget.addEventListener(ON_SCHEDULE, new ScheduleListener());
+					}
 					_schedInfos.add(new ScheduleInfo(listener, event));
 				}
 			}
@@ -1417,10 +1410,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 
 		if (!_schedInfos.isEmpty())
-			Events.postEvent(SCHEDULE_EVENT);
+			Events.postEvent(ON_SCHEDULE, _dummyTarget, null);
 			//we could not process them here (otherwise, event handling, thread
 			//might not work)
-			//Thus, we post an event and handle it in bebeforeProcessEvent
+			//Thus, we post an event and handle it in _dummyTarget
 
 		if (_spush != null)
 			_spush.onPiggyback();
@@ -1486,6 +1479,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		private ScheduleInfo(EventListener listener, Event event) {
 			this.listener = listener;
 			this.event = event;
+		}
+	}
+	private class ScheduleListener implements EventListener, java.io.Serializable {
+		public void onEvent(Event event) throws Exception {
+			final long max = System.currentTimeMillis() + 3000; //3 seconds
+			while (!_schedInfos.isEmpty()) {
+				final List<ScheduleInfo> schedInfos;
+				synchronized (_schedInfos) { //must be thread safe
+					schedInfos = new ArrayList<ScheduleInfo>(_schedInfos);
+					_schedInfos.clear();
+				}
+				for (Iterator<ScheduleInfo> it = schedInfos.iterator(); it.hasNext();) {
+					final ScheduleInfo si = it.next();
+					try {
+						si.listener.onEvent(si.event);
+					} catch (Throwable t) {
+						synchronized (_schedInfos) { //add back not called
+							int j = 0;
+							while (it.hasNext())
+								_schedInfos.add(j++, it.next());
+						}
+						if (t instanceof Exception)
+							throw (Exception)t;
+						throw (Error)t;
+					}
+				}
+				if (System.currentTimeMillis() > max)
+					break; //avoid if server push is coming too fast
+			}
 		}
 	}
 }

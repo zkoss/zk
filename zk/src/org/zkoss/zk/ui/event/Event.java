@@ -30,7 +30,7 @@ import org.zkoss.zk.au.AuRequest;
  * @author tomyeh
  * @see Component
  */
-public class Event {
+public class Event implements java.io.Serializable {
 	private final String _name;
 	private final Component _target;
 	private final Object _data;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3116100.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 23 09:55:16 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	click both buttons, it shall has animation effect.
+	<progressmeter value="50" />
+	<progressmeter id="progressmeter" />
+	<button label="move to 50%" onClick="progressmeter.value = 50;"/>
+	<button label="move to 0%" onClick="progressmeter.value = 0;"/>
+</zk>

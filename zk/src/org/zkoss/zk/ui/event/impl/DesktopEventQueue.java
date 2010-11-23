@@ -43,33 +43,17 @@ import org.zkoss.zk.ui.event.EventQueue;
 public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 	/*package*/ static final Log log = Log.lookup(DesktopEventQueue.class);
 
-	private final Component _dummy = new AbstractComponent();
+	private static final String ON_QUEUE = "onQueue";
+
+	/** A dummy target for handling onQueue. */
+	private final Component _dummyTarget = new AbstractComponent();
 	private final List<ListenerInfo> _listenerInfos = new LinkedList<ListenerInfo>();
 	private int _nAsync;
 	private boolean _serverPushEnabled;
 	private boolean _closed;
 
 	public DesktopEventQueue() {
-		_dummy.addEventListener("onQueue", new EventListener() {
-			public void onEvent(Event event) throws Exception {
-				final Event evt = (Event)event.getData();
-				final Set<ListenerInfo> listenerCalled = new HashSet<ListenerInfo>();
-				for (;;)
-					for (Iterator<ListenerInfo> it = _listenerInfos.iterator();;) {
-						final ListenerInfo inf;
-						try {
-							if (!it.hasNext())
-								return; //done
-							inf = it.next();
-						} catch (java.util.ConcurrentModificationException ex) {
-							break;
-						}
-
-						if (listenerCalled.add(inf))
-							invoke(inf, evt);
-					}
-			}
-		});
+		_dummyTarget.addEventListener(ON_QUEUE, new QueueListener());
 	}
 
 	/** A working thread is created to handle it if it is an asynchronous
@@ -102,7 +86,7 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 
 			((AsyncListenerThread)thd).postEvent(event);
 		} else {
-			Events.postEvent("onQueue", _dummy, event);
+			Events.postEvent(ON_QUEUE, _dummyTarget, event);
 		}
 	}
 	public void subscribe(EventListener listener) {
@@ -158,6 +142,26 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 	}
 	public boolean isClose() {
 		return _closed;
+	}
+	private class QueueListener implements EventListener, java.io.Serializable {
+		public void onEvent(Event event) throws Exception {
+			final Event evt = (Event)event.getData();
+			final Set<ListenerInfo> listenerCalled = new HashSet<ListenerInfo>();
+			for (;;)
+				for (Iterator<ListenerInfo> it = _listenerInfos.iterator();;) {
+					final ListenerInfo inf;
+					try {
+						if (!it.hasNext())
+							return; //done
+						inf = it.next();
+					} catch (java.util.ConcurrentModificationException ex) {
+						break;
+					}
+
+					if (listenerCalled.add(inf))
+						invoke(inf, evt);
+				}
+		}
 	}
 }
 /** Info of a listener */
