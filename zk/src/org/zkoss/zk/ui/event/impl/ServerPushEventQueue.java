@@ -40,7 +40,7 @@ import org.zkoss.zk.au.AuRequest;
  * @author tomyeh
  * @since 5.0.0
  */
-public class ServerPushEventQueue implements EventQueue {
+public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 	private static final Log log = Log.lookup(ServerPushEventQueue.class);
 
 	/** Map(desktop, DesktopInfo). */
