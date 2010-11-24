@@ -8,6 +8,7 @@ ZK 5.0.6
 * Bugs
   3102812: Using databinding with onCreate event, target is null
   3109358: Recycle uuid causes image's URI caching in browser
+  3117370: Tree ROD fail
 
 	--------
 ZK 5.0.5

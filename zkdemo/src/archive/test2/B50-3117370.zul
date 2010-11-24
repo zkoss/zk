@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3117370.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 24 15:42:10 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		int level1 = 2,
+			level2 = 2;
+		
+		for (int i = 0; i < level1; i++) {
+			List subList = new ArrayList();
+			for (int j = 0; j < level2; j++) {
+				subList.add("item");
+			}
+			list.add(subList);
+		}
+	]]></zscript>
+	click the button, it shall be "0".
+	<tree id="tree">
+		<treechildren>
+			<treeitem forEach="${list}" label="item ${forEachStatus.index}" open="false">
+				<treechildren>
+					<treeitem forEach="${each}" label="item ${forEachStatus.index}"></treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<button label="click" xmlns:w="client" w:onClick="jq.alert(zk.Widget.$('$tree').treechildren.firstChild.treechildren.firstChild.$n().children.length);"/>
+</zk>
