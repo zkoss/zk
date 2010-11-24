@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Iterator;
 
 /**
+ * @deprecated As of release 5.0.6, replaced with
+ * {@link org.zkoss.util.CollectionsX#comodifiableIterator}.
  * Used to iterate the event listener.
  *
  * <p>It resolves a bug of LinkedList:

@@ -85,7 +85,6 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.SimpleScope;
@@ -2169,7 +2168,7 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final List l = (List)_auxinf.listeners.get(evtnm);
 			if (l != null)
-				return new ListenerIterator(l);
+				return CollectionsX.comodifiableIterator(l);
 		}
 		return CollectionsX.EMPTY_ITERATOR;
 	}

@@ -726,6 +726,9 @@ w:use="foo.MyWindow"&gt;
 	 *
 	 * <p>Since 3.6.3, the listener can be removed directly by invoking
 	 * Iterator.remove().
+	 * <p>Since 5.0.6, the iterator is an instance returned by
+	 * {@link org.zkoss.util.CollectionsX#comodifiableIterator}, so it
+	 * is OK to add or remove listeners among the invocation of next().
 	 */
 	public Iterator getListenerIterator(String evtnm);
 

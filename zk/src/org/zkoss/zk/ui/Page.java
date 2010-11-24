@@ -489,6 +489,9 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public boolean isListenerAvailable(String evtnm);
 	/** Returns an iterator for iterating listener for the specified event.
+	 * <p>Since 5.0.6, the iterator is an instance returned by
+	 * {@link org.zkoss.util.CollectionsX#comodifiableIterator}, so it
+	 * is OK to add or remove listeners among the invocation of next().
 	 */
 	public Iterator getListenerIterator(String evtnm);
 

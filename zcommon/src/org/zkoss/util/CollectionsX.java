@@ -444,11 +444,11 @@ public class CollectionsX {
 	}
 
 	/** Returns an iterator that allows the caller to modify the collection
-	 * directly. In other words, the iterator will handle
+	 * directly (in addition to Iterator.remove()).
+	 * In other words, the iterator will handle
 	 * java.util.ConcurrentModificationException and return the items one-by-one
-	 * even if collection's add, remove or other method was called.
-	 * <p>Notice that the iterator returned col.iterator() only allows the
-	 * caller to modify it by Iterator.remove().
+	 * even if collection's add, remove or other method was called
+	 * (which is not allowed by a regular iterator).
 	 * <p>Limitation:
 	 * <ul><li>It is still not safe to modify the collection
 	 * between hasNext() and next().Modify it after next(), if necessary.</li>
@@ -483,16 +483,16 @@ public class CollectionsX {
 	public boolean hasNext() {
 		//Note: we cannot just check hasNext() since it does not throw
 		//ConcurrentModificationException, so if _col is cleared, hasNext()
-		//might still return true!!
-		//if (_lastVisited == null) //no comodified
-		//	return _it.hasNext();
-
+		//might still return true! Moreover, hasNext() might return false
+		//while there is more
 		if (_nextAvail)
 			return true;
-		while (_it.hasNext()) {
+		while (!_col.isEmpty()) { //isEmpty is reliable and empty is a common case
 			final Object o;
 			try {
 				o = _it.next();
+			} catch (java.util.NoSuchElementException ex) {
+				return false;
 			} catch (java.util.ConcurrentModificationException ex) {
 				_lastVisited = new LinkedList(_visited); //make a copy
 				_it = _col.iterator();
