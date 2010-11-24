@@ -156,7 +156,6 @@ public class EventProcessor {
 		}
 
 		final String evtnm = _event.getName();
-			//OK to use Set since the same listener cannot be added twice
 		for (Iterator it = _comp.getListenerIterator(evtnm); it.hasNext();) {
 		//Note: CollectionsX.comodifiableIterator is used so OK to iterate
 			final EventListener el = (EventListener)it.next();
