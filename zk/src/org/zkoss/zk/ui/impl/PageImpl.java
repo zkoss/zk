@@ -479,8 +479,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		
 		if (_resolvers != null) {
-			for (VariableResolver resolver: _resolvers) {
-				Object o = Evaluators.resolveVariable(ctx, resolver, base, name);
+			for (Iterator<VariableResolver> it = CollectionsX.comodifiableIterator(_resolvers);
+			it.hasNext();) {
+				Object o = Evaluators.resolveVariable(ctx, it.next(), base, name);
 				if (o != null)
 					return o;
 			}
@@ -873,9 +874,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public Iterator<EventListener> getListenerIterator(String evtnm) {
 		if (_listeners != null) {
-			final List<EventListener> ls = _listeners.get(evtnm);
-			if (ls != null)
-				return new ListenerIterator(ls);
+			final List<EventListener> l = _listeners.get(evtnm);
+			if (l != null)
+				return CollectionsX.comodifiableIterator(l);
 		}
 		return CollectionsX.emptyIterator();
 	}
@@ -899,9 +900,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (List<EventListener> ls: _listeners.values())
-				willPassivate(ls);
-
+			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
+				willPassivate(it.next());
 		willPassivate(_resolvers);
 	}
 	public void sessionDidActivate(Desktop desktop) {
@@ -919,8 +920,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (List<EventListener> ls: _listeners.values())
-				didActivate(ls);
+			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
+				didActivate(it.next());
 
 		didActivate(_resolvers);
 	}

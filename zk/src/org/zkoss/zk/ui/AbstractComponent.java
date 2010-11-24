@@ -84,7 +84,6 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.SimpleScope;
@@ -189,9 +188,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				compdef: compdef2; //Feature 2816083: use compdef2 if same class
 		}
 
-		for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
+		for (String deviceType: LanguageDefinition.getDeviceTypes()) {
 			final ComponentDefinition compdef =
-				Components.getDefinitionByDeviceType((String)it.next(), cls);
+				Components.getDefinitionByDeviceType(deviceType, cls);
 			if (compdef != null)
 				return compdef;
 		}
@@ -199,9 +198,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	private ComponentDefinition
 	getDefinitionByDeviceType(String deviceType, String name) {
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			final LanguageDefinition ld = (LanguageDefinition)it.next();
+		for (LanguageDefinition ld: LanguageDefinition.getByDeviceType(deviceType)) {
 			try {
 				final ComponentDefinition def = ld.getComponentDefinition(name);
 				if (def.isInstance(this))
@@ -1810,11 +1807,9 @@ w:use="foo.MyWindow"&gt;
 		render(renderer, "autag", getAutag());
 
 		Boolean shallHandleImportant = null;
-		for (Iterator it = getClientEvents().entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String evtnm = (String)me.getKey();
-			final int flags = ((Integer)me.getValue()).intValue();
+		for (Map.Entry<String, Integer> me: getClientEvents().entrySet()) {
+			final String evtnm = me.getKey();
+			final int flags = me.getValue().intValue();
 			if ((flags & CE_IMPORTANT) != 0) {
 				if (shallHandleImportant == null) {
 					Execution exec = Executions.getCurrent();
@@ -2120,8 +2115,8 @@ w:use="foo.MyWindow"&gt;
 			final ForwardInfo info = _auxinf.forwards.get(orgEvent);
 			if (info != null) {
 				final List<Object[]> fwds = info.targets;
-				for (Iterator it = fwds.iterator(); it.hasNext();) {
-					final Object[] fwd = (Object[])it.next();
+				for (Iterator<Object[]> it = fwds.iterator(); it.hasNext();) {
+					final Object[] fwd = it.next();
 					if (Objects.equals(fwd[1], targetEvent)
 					&& Objects.equals(fwd[0], target)) { //found
 						it.remove(); //remove it
@@ -2155,9 +2150,9 @@ w:use="foo.MyWindow"&gt;
 	}
 	public Iterator<EventListener> getListenerIterator(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List<EventListener> ls = _auxinf.listeners.get(evtnm);
-			if (ls != null)
-				return new ListenerIterator(ls);
+			final List<EventListener> l = _auxinf.listeners.get(evtnm);
+			if (l != null)
+				return CollectionsX.comodifiableIterator(l);
 		}
 		return CollectionsX.emptyIterator();
 	}
@@ -2195,9 +2190,9 @@ w:use="foo.MyWindow"&gt;
 				return;
 			}
 		} else {
-			for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
+			for (String deviceType: LanguageDefinition.getDeviceTypes()) {
 				final ComponentDefinition compdef =
-					getDefinitionByDeviceType((String)it.next(), name);
+					getDefinitionByDeviceType(deviceType, name);
 				if (compdef != null) {
 					setDefinition(compdef);
 					return;
@@ -2330,8 +2325,9 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		if (_auxinf != null && _auxinf.listeners != null)
-			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
-				willPassivate((Collection)it.next());
+			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
+			it.hasNext();)
+				willPassivate(it.next());
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
@@ -2349,8 +2345,9 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		if (_auxinf != null && _auxinf.listeners != null)
-			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
-				didActivate((Collection)it.next());
+			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
+			it.hasNext();)
+				didActivate(it.next());
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
@@ -2821,8 +2818,9 @@ w:use="foo.MyWindow"&gt;
 		didDeserialize(attrmap.values());
 		didDeserialize(attrlns);
 		if (_auxinf.listeners != null)
-			for (Iterator it = _auxinf.listeners.values().iterator(); it.hasNext();)
-				didDeserialize((Collection)it.next());
+			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
+			it.hasNext();)
+				didDeserialize(it.next());
 		didDeserialize(_auxinf.ausvc = (AuService)s.readObject());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}

@@ -72,6 +72,7 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.1</version>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 	<build>

@@ -16,8 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Set;
-import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.reflect.Method;
@@ -166,22 +164,10 @@ public class EventProcessor {
 		}
 
 		final String evtnm = _event.getName();
-		final Set<EventListener> listenerCalled = new HashSet<EventListener>();
-			//OK to use Set since the same listener cannot be added twice
-		boolean retry = false;
-		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm);;) {
-			final EventListener el = nextListener(it);
-			if (el == null) {
-				break; //done
-
-			} else if (el == RETRY) {
-				retry = true;
-				it = _comp.getListenerIterator(evtnm);
-
-			} else if ((el instanceof Express)
-			&& (!retry || !listenerCalled.contains(el))) {
-				listenerCalled.add(el);
-
+		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm); it.hasNext();) {
+		//Note: CollectionsX.comodifiableIterator is used so OK to iterate
+			final EventListener el = it.next();
+			if (el instanceof Express) {
 				el.onEvent(_event);
 				if (!_event.isPropagatable())
 					return; //done
@@ -198,21 +184,10 @@ public class EventProcessor {
 			}
 		}
 
-		retry = false;
-		listenerCalled.clear();
-		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm);;) {
-			final EventListener el = nextListener(it);
-			if (el == null) {
-				break; //done
-
-			} else if (el == RETRY) {
-				retry = true;
-				it = _comp.getListenerIterator(evtnm);
-
-			} else if (!(el instanceof Express)
-			&& (!retry || !listenerCalled.contains(el))) {
-				listenerCalled.add(el);
-
+		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm); it.hasNext();) {
+		//Note: CollectionsX.comodifiableIterator is used so OK to iterate
+			final EventListener el = it.next();
+			if (!(el instanceof Express)) {
 				el.onEvent(_event);
 				if (!_event.isPropagatable())
 					return; //done
@@ -232,37 +207,15 @@ public class EventProcessor {
 				return; //done
 		}
 
-		retry = false;
-		listenerCalled.clear();
 		if (page != null)
-			for (Iterator<EventListener> it = page.getListenerIterator(evtnm);;) {
-				final EventListener el = nextListener(it);
-				if (el == null) {
-					break; //done
-				} else if (el == RETRY) {
-					retry = true;
-					it = page.getListenerIterator(evtnm);
-				} else if (!retry || !listenerCalled.contains(el)) {
-					listenerCalled.add(el);
-
-					el.onEvent(_event);
-					if (!_event.isPropagatable())
-						return; //done
-				}
+			for (Iterator<EventListener> it = page.getListenerIterator(evtnm); it.hasNext();) {
+			//Note: CollectionsX.comodifiableIterator is used so OK to iterate
+				final EventListener el = it.next();
+				el.onEvent(_event);
+				if (!_event.isPropagatable())
+					return; //done
 			}
 	}
-	private static EventListener nextListener(Iterator<EventListener> it) {
-		try {
-			return it.hasNext() ? it.next(): null;
-		} catch (java.util.ConcurrentModificationException ex) {
-			return RETRY;
-		}
-	}
-	/** Represents {@link #nextListener} encounter co-modification error. */
-	private static final EventListener RETRY = new EventListener() {
-		public void onEvent(Event event) {
-		}
-	};
 
 	/** Setup this processor before processing the event by calling
 	 * {@link #process}.

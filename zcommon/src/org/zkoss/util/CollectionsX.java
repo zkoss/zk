@@ -1,6 +1,5 @@
 /* CollectionsX.java
 
-
 	Purpose:
 	Description:
 	History:
@@ -488,5 +487,102 @@ public class CollectionsX {
 			return ((Map)obj).entrySet().iterator();
 		}
 		throw new IllegalArgumentException("obj must be a Collection, a Map, or an Object array. obj: "+obj);
+	}
+
+	/** Returns an iterator that allows the caller to modify the collection
+	 * directly (in addition to Iterator.remove()).
+	 * In other words, the iterator will handle
+	 * java.util.ConcurrentModificationException and return the items one-by-one
+	 * even if collection's add, remove or other method was called
+	 * (which is not allowed by a regular iterator).
+	 * <p>Limitation:
+	 * <ul><li>It is still not safe to modify the collection
+	 * between hasNext() and next().Modify it after next(), if necessary.</li>
+	 * <li>If the collection have multiple items referencing to the same object,
+	 * and if we remove the item that has been iterated, the other item might
+	 * be ingored. For example, if a collection has A, B, C, B, then the
+	 * following code only iterates A, B, C</li>
+	 * </ul>
+	 * <pre><code>
+	for (Iterator it = org.zkoss.util.CollectionsX.comodifiableIterator(list); it.hasNext();) {
+		it.next();
+		l.remove(0);
+	}</code></pre>
+	 * @since 5.0.6
+	 */
+	public static <E> Iterator<E> comodifiableIterator(Collection<E> col) {
+		return new ComodifiableIterator<E>(col);
+	}
+}
+/*package*/ class ComodifiableIterator<E> implements Iterator<E> {
+	private final List<E> _visited = new LinkedList<E>();
+	private List<E> _lastVisited;
+	private final Collection<E> _col;
+	private Iterator<E> _it;
+	private E _next;
+	private boolean _nextAvail;
+
+	/*package*/ ComodifiableIterator(Collection<E> col) {
+		_col = col;
+		_it = col.iterator();
+	}
+	public boolean hasNext() {
+		//Note: we cannot just check hasNext() since it does not throw
+		//ConcurrentModificationException, so if _col is cleared, hasNext()
+		//might still return true! Moreover, hasNext() might return false
+		//while there is more
+		if (_nextAvail)
+			return true;
+		while (!_col.isEmpty()) { //isEmpty is reliable and empty is a common case
+			final E o;
+			try {
+				o = _it.next();
+			} catch (java.util.NoSuchElementException ex) {
+				return false;
+			} catch (java.util.ConcurrentModificationException ex) {
+				_lastVisited = new LinkedList<E>(_visited); //make a copy
+				_it = _col.iterator();
+				continue; //do it again
+			}
+			if (!removeFromLastVisited(o)) { //not visited before
+				_visited.add(o);
+				_next = o;
+				return _nextAvail = true;
+			}
+		}
+		return false;
+	}
+	public E next() {
+		if (_nextAvail) {
+			_nextAvail = false;
+			return _next;
+		}
+		for (;;) {
+			final E o;
+			try {
+				o = _it.next();
+			} catch (java.util.ConcurrentModificationException ex) {
+				_lastVisited = new LinkedList<E>(_visited); //make a copy
+				_it = _col.iterator();
+				continue; //do it again
+			}
+			if (!removeFromLastVisited(o)) { //not visited before
+				_visited.add(o);
+				return o;
+			}
+		}
+	}
+	private boolean removeFromLastVisited(E o) {
+		if (_lastVisited != null)
+			for (Iterator<E> it = _lastVisited.iterator(); it.hasNext();) {
+				if (it.next() == o) { //not equals (more retricted)
+					it.remove();
+					return true;
+				}
+			}
+		return false;
+	}
+	public void remove() {
+		_it.remove();
 	}
 }

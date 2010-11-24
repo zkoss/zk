@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
@@ -190,9 +191,9 @@ public class WebManager {
 		//FUTURE: Extendlet can be specified in zk.xml
 		//Note: getAll loads config.xml, which must be processed before zk.xml
 		ZumlExtendlet extlet = null;
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator<LanguageDefinition> it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final LanguageDefinition langdef = it.next();
 			final List exts = langdef.getExtensions();
 			if (!exts.isEmpty()) {
 				if (extlet == null)
@@ -204,11 +205,10 @@ public class WebManager {
 
 		final List<WebManagerActivationListener> listeners = _actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
-			for (Iterator it = listeners.iterator(); it.hasNext();) {
+			for (Iterator<WebManagerActivationListener> it = CollectionsX.comodifiableIterator(listeners);
+			it.hasNext();) {
 				try {
-					((WebManagerActivationListener)it.next()).didActivate(this);
-				} catch (java.util.ConcurrentModificationException ex) {
-					throw ex;
+					it.next().didActivate(this);
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
@@ -221,9 +221,9 @@ public class WebManager {
 			^ _wapp.getBuild().hashCode()
 			^ WebApps.getEdition().hashCode();
 
-		for (Iterator it = LanguageDefinition.getAll().iterator();
+		for (Iterator<LanguageDefinition> it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final LanguageDefinition langdef = it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
 			e.hasNext();) {
 				final Map.Entry me = (Map.Entry)e.next();

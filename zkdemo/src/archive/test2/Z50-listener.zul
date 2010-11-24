@@ -1,0 +1,23 @@
+<window title="Test of adding/removing listener in listener" border="normal">
+  <button id="b1" label="remove itself after click"/>
+  <vlayout id="inf"/>
+  <zscript><![CDATA[
+void log(String msg) {
+	inf.appendChild(new Label(msg));
+}
+
+EventListener ls1 = new EventListener() {
+	public void onEvent(Event event) {
+		log("b1 click 1");
+		b1.removeEventListener("onClick", ls1);
+	}
+};
+EventListener ls2 = new EventListener() {
+	public void onEvent(Event event) {
+		log("b1 click 2");
+	}
+};
+b1.addEventListener("onClick", ls1);
+b1.addEventListener("onClick", ls2);
+  ]]></zscript>
+</window>

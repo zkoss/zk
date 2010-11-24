@@ -185,7 +185,7 @@ public class HtmlPageRenders {
 	 */
 	public static final String outResponseJavaScripts(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		final Collection responses = execCtrl.getResponses();
+		final Collection<AuResponse> responses = execCtrl.getResponses();
 		if (responses == null || responses.isEmpty()) return "";
 		execCtrl.setResponses(null);
 
@@ -193,8 +193,8 @@ public class HtmlPageRenders {
 		if (!directJS)
 			sb.append("<script type=\"text/javascript\">\nzkac(");
 
-		for (Iterator it = responses.iterator(); it.hasNext();) {
-			final AuResponse response = (AuResponse)it.next();
+		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
+			final AuResponse response = it.next();
 			sb.append("'").append(response.getCommand())
 				.append("',");
 			final List encdata = response.getEncodedData();
@@ -322,8 +322,8 @@ public class HtmlPageRenders {
 	}
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
 		if (desktop != null)
-			for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-				Boolean b = ((PageCtrl)it.next()).getAutomaticTimeout();
+			for (Page page: desktop.getPages()) {
+				Boolean b = ((PageCtrl)page).getAutomaticTimeout();
 				if (b != null) return b;
 			}
 		return null;
@@ -356,9 +356,8 @@ public class HtmlPageRenders {
 		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512);
-		for (Iterator it = getStyleSheets(exec, wapp, deviceType).iterator();
-		it.hasNext();)
-			append(sb, (StyleSheet)it.next(), exec, null);
+		for (StyleSheet ss: getStyleSheets(exec, wapp, deviceType))
+			append(sb, ss, exec, null);
 
 		if (sb.length() > 0) sb.append('\n');
 		return sb.toString();
@@ -385,8 +384,7 @@ public class HtmlPageRenders {
 		final Set disabled = config.getDisabledThemeURIs();
 		final List<StyleSheet> sses = new LinkedList<StyleSheet>(); //a list of StyleSheet
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType)) {
-			for (Iterator e = langdef.getStyleSheets().iterator(); e.hasNext();) {
-				final StyleSheet ss = (StyleSheet)e.next();
+			for (StyleSheet ss: langdef.getStyleSheets()) {
 				if (!disabled.contains(ss.getHref()))
 					sses.add(ss);
 			}
