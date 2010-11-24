@@ -79,8 +79,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	 * @return int
 	 */
 	getMaxlength: function () {
-		var box = this.getTree();
-		if (!box) return 0;
 		var tc = this.getTreecol();
 		return tc ? tc.getMaxlength() : 0;
 	},
