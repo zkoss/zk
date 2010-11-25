@@ -144,6 +144,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		var wgt = this.parent;
 		if (wgt && !wgt.isSizedByContent())
 			wgt._adjFlexWd();
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 },{ //static
 	redraw: function (out) {

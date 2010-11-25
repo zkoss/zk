@@ -267,6 +267,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<th', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></th>');
 	}
 }, { //static
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],

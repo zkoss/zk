@@ -37,5 +37,8 @@ zul.sel.Treefoot = zk.$extends(zul.Widget, {
 	setHflex: function (v) { //hflex ignored for Treefoot
 		v = false;
 		this.$super(zul.sel.Treefoot, 'setHflex', v);
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 });

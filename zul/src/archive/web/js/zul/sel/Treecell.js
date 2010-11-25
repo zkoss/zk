@@ -203,6 +203,9 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('updateDomContent_', arguments);
 		if (this.parent)
 			this.parent.clearCache();
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
 }, {
 	ROOT_OPEN: "root-open",
