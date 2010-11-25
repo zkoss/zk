@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -659,24 +660,31 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void destroy() {
 		super.destroy();
 
-		for (Iterator it = getLoadedInterpreters().iterator(); it.hasNext();) {
-			final Interpreter ip = (Interpreter)it.next();
-			try {
-				ip.destroy();
-			} catch (Throwable ex) {
-				log.error("Failed to destroy "+ip, ex);
+		try {
+			if (_ips != null) {
+				final List ips = new ArrayList(_ips.values());
+				_ips.clear();
+				_ips = null; //not just clear since it is better to NPE than memory leak
+				for (Iterator it = ips.iterator(); it.hasNext();) {
+					final Interpreter ip = (Interpreter)it.next();
+					try {
+						ip.destroy();
+					} catch (Throwable ex) {
+						log.warning("Failed to destroy "+ip, ex);
+					}
+				}
 			}
+		} catch (Throwable ex) { //avoid racing
+			log.warning("Failed to clean up interpreters of "+this, ex);
 		}
-		_ips.clear();
-		_ips = null; //not just clear since it is better to NPE than memory leak
 
 		//theorectically, the following is not necessary, but, to be safe...
-		_attrs.getAttributes().clear();
 		_desktop = null;
 		_owner = null;
 		_listeners = null;
 		_ns = null;
 		_resolvers = null;
+		_attrs.getAttributes().clear();
 	}
 	public boolean isAlive() {
 		return _ips != null;

@@ -817,26 +817,32 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void destroy() {
 		_rque = null; //denote it is destroyed
 
-		if (_spush != null) {
-			try {
-				_spush.stop();
-			} catch (Throwable ex) {
-				log.warning("Failed to stop server-push, "+_spush, ex);
-			}
+		final ServerPush sp = _spush; //avoid racing
+		if (sp != null) {
 			_spush = null;
+			try {
+				sp.stop();
+			} catch (Throwable ex) {
+				log.warning("Failed to stop server-push, "+sp, ex);
+			}
 		}
 
-		for (Iterator it = _pages.iterator(); it.hasNext();) {
-			final PageCtrl pgc = (PageCtrl)it.next();
-			try {
-				pgc.destroy();
-			} catch (Throwable ex) {
-				log.warning("Failed to destroy "+pgc, ex);
+		try {
+			final List pages = new ArrayList(_pages);
+			_pages.clear();
+			for (Iterator it = pages.iterator(); it.hasNext();) {
+				final PageCtrl pgc = (PageCtrl)it.next();
+				try {
+					pgc.destroy();
+				} catch (Throwable ex) {
+					log.warning("Failed to destroy "+pgc, ex);
+				}
 			}
+		} catch (Throwable ex) {
+			log.warning("Failed to clean up pages of "+this, ex);
 		}
 
 		//theorectically, the following is not necessary, but, to be safe...
-		_pages.clear();
 		_attrs.getAttributes().clear();
 		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;

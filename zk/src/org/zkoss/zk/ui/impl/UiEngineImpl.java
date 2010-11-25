@@ -189,11 +189,12 @@ public class UiEngineImpl implements UiEngine {
 			//Bug 2015878: exec is null if it is caused by session invalidated
 			//while listener (ResumeAbort and so) might need it
 			exec = new PhantomExecution(desktop);
-			activate(exec);
+			boolean activated = activate(exec, 3000); //3 seconds
 			try {
 				desktopDestroyed0(desktop);
 			} finally {
-				deactivate(exec);
+				if (activated)
+					deactivate(exec);
 			}
 		} else {
 			desktopDestroyed0(desktop);
@@ -334,7 +335,7 @@ public class UiEngineImpl implements UiEngine {
 			uv = doReactivate(exec, olduv);
 			pfmeter = null; //don't count included pages
 		} else {
-			uv = doActivate(exec, false, false, null);
+			uv = doActivate(exec, false, false, null, -1);
 		}
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
@@ -511,7 +512,7 @@ public class UiEngineImpl implements UiEngine {
 		final String pfReqId =
 			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
 
-		final UiVisualizer uv = doActivate(exec, false, false, null);
+		final UiVisualizer uv = doActivate(exec, false, false, null, -1);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(page);
 		try {
@@ -979,7 +980,7 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final Session sess = desktop.getSession();
 
-		doActivate(exec, false, true, null); //it must not return null
+		doActivate(exec, false, true, null, -1); //it must not return null
 		try {
 			failover.recover(sess, exec, desktop);
 		} finally {
@@ -989,7 +990,7 @@ public class UiEngineImpl implements UiEngine {
 
 	//-- Asynchronous updates --//
 	public void beginUpdate(Execution exec) {
-		final UiVisualizer uv = doActivate(exec, true, false, null);
+		final UiVisualizer uv = doActivate(exec, true, false, null, -1);
 		final Desktop desktop = exec.getDesktop();
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
@@ -1055,7 +1056,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		final Object[] resultOfRepeat = new Object[1];
-		final UiVisualizer uv = doActivate(exec, true, false, resultOfRepeat);
+		final UiVisualizer uv = doActivate(exec, true, false, resultOfRepeat, -1);
 		if (resultOfRepeat[0] != null) {
 			out.resend(resultOfRepeat[0]);
 			doDeactivate(exec);
@@ -1175,7 +1176,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	public Object startUpdate(Execution exec) throws IOException {
 		final Desktop desktop = exec.getDesktop();
-		UiVisualizer uv = doActivate(exec, true, false, null);
+		UiVisualizer uv = doActivate(exec, true, false, null, -1);
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
 		return new UpdateInfo(uv);
@@ -1631,9 +1632,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void activate(Execution exec) {
+		activate(exec, -1);
+	}
+	public boolean activate(Execution exec, int timeout) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
-		doActivate(exec, false, false, null);
+		return doActivate(exec, false, false, null, timeout) != null;
 	}
 	public void deactivate(Execution exec) {
 		doDeactivate(exec);
@@ -1652,11 +1656,15 @@ public class UiEngineImpl implements UiEngine {
 	 * If a non-null value is assigned to the first element of the array,
 	 * it means it is a repeated request, and the caller shall return
 	 * the result directly without processing the request.
-	 * @return the visualizer once the execution is granted (never null).
+	 * @param timeout how many milliseconds to wait before timeout.
+	 * If non-negative and it waits more than it before granted, null is turned
+	 * to indicate failure.
+	 * @return the visualizer once the execution is granted, or null
+	 * if timeout is specified and it takes longer than the given value.
 	 */
 	private static
 	UiVisualizer doActivate(Execution exec, boolean asyncupd,
-	boolean recovering, Object[] resultOfRepeat) {
+	boolean recovering, Object[] resultOfRepeat, int timeout) {
 		if (Executions.getCurrent() != null)
 			throw new IllegalStateException("Use doReactivate instead");
 		assert D.OFF || !recovering || !asyncupd; 
@@ -1672,10 +1680,13 @@ public class UiEngineImpl implements UiEngine {
 		//lock desktop
 		final UiVisualizer uv;
 		final Object uvlock = desktopCtrl.getActivationLock();
+		final int tmout = timeout >= 0 ? timeout: getRetryTimeout();
 		synchronized (uvlock) {
-			for (;;) {
+			for (boolean tried = false;;) {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
+				if (tried && timeout >= 0)
+					return null; //failed
 
 				if (seqId != null) {
 					final String oldSeqId =
@@ -1684,7 +1695,8 @@ public class UiEngineImpl implements UiEngine {
 						throw new RequestOutOfSequenceException(seqId, oldSeqId);
 				}
 				try {
-					uvlock.wait(getRetryTimeout());
+					uvlock.wait(tmout);
+					tried = true;
 				} catch (InterruptedException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
