@@ -189,7 +189,7 @@ public class UiEngineImpl implements UiEngine {
 			//Bug 2015878: exec is null if it is caused by session invalidated
 			//while listener (ResumeAbort and so) might need it
 			exec = new PhantomExecution(desktop);
-			boolean activated = activate(exec, 3000); //3 seconds
+			boolean activated = activate(exec, getDestroyTimeout());
 			try {
 				desktopDestroyed0(desktop);
 			} finally {
@@ -1737,7 +1737,7 @@ public class UiEngineImpl implements UiEngine {
 		return uv;
 	}
 
-	private static Integer _retryTimeout;
+	private static Integer _retryTimeout, _destroyTimeout;
 	private static final int getRetryTimeout() {
 		if (_retryTimeout == null) {
 			int v = 0;
@@ -1751,6 +1751,20 @@ public class UiEngineImpl implements UiEngine {
 			_retryTimeout = new Integer(v > 0 ? v: 120*1000);
 		}
 		return _retryTimeout.intValue();
+	}
+	private static final int getDestroyTimeout() {
+		if (_destroyTimeout == null) {
+			int v = 0;
+			final String s = Library.getProperty("org.zkoss.zk.ui.activate.wait.destroy.timeout");
+			if (s != null) {
+				try {
+					v = Integer.parseInt(s);
+				} catch (Throwable t) {
+				}
+			}
+			_destroyTimeout = new Integer(v > 0 ? v: 20*1000); //20 sec
+		}
+		return _destroyTimeout.intValue();
 	}
 
 	/** Returns whether the desktop is being recovered.
