@@ -655,6 +655,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			db._inplaceout = true;
+			
+			// Bug 3122159
+			evt.data.value = db._value = date;
+			this.parent.fire(evt.name, evt.data);
 		}
 		evt.stop();
 	},
