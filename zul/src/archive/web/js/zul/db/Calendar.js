@@ -37,7 +37,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			new Date(year, month + 1, 0)/*last day of month*/: v;
 	}
 
-var Renderer =
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
  * It is designed to be overriden
@@ -194,7 +193,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	//@Override
 	redraw: function () {
-		Renderer.beforeRedraw(this);
+		zul.db.Renderer.beforeRedraw(this);
 		this.$supers("redraw", arguments);
 	},
 	onChange: function (evt) {
@@ -555,11 +554,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						else
 							jq(cell).removeClass("z-outside");
 							
-						if (Renderer.disabled(this, y, m + monofs, v, today)) {
+						if (zul.db.Renderer.disabled(this, y, m + monofs, v, today)) {
 							jq(cell).addClass(zcls+"-disd");
 						} else
 							jq(cell).removeClass(zcls+"-disd");
-						jq(cell).html(Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
+						jq(cell).html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
 						if (bSel && (!opts || !opts.silent))
 							_doFocus(cell.firstChild, opts && opts.timeout );
 					}
