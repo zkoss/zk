@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  * @author jumperchen
  * @since 5.0.4
  */
-public class Vlayout extends HtmlBasedComponent {
+public class Vlayout extends HtmlBasedComponent implements org.zkoss.zul.api.Vlayout {
 
 	private String _spacing = "0.3em";
 	
