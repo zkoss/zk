@@ -113,7 +113,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 * <p>Unlike other methods, the content assigned to this method
 	 * is generated directly to the browser without escaping.
 	 * Thus, it is better not to have something input by the user to avoid
-	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Guide/Advanced_ZK/Security_Tip/Cross-site_scripting#The_content_Property_of_html_and_comboitem">XSS</a>
+	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
 	 * attach.
 	 * @see #setDescription
 	 * @since 3.0.0

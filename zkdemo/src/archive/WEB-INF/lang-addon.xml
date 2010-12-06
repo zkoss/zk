@@ -25,11 +25,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- an example
 	<component>
-		<component-name>button</component-name>
-		<extends>button</extends>
+		<component-name>window</component-name>
+		<extends>window</extends>
 		<property>
-			<property-name>mold</property-name>
-			<property-value>trendy</property-value>
+			<property-name>border</property-name>
+			<property-value>normal</property-value>
 		</property>
 	</component>
  	-->

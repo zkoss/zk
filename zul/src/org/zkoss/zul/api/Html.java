@@ -66,7 +66,7 @@ package org.zkoss.zul.api;
  * <p>
  * If you need to generate the HTML tags directly without enclosing with SPAN,
  * you can use the Native namespace, http://www.zkoss.org/2005/zk/native. Refer
- * to the Developer's Guide for more information.
+ * to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Patterns/HTML_Tags">ZK Developer's Reference</a> for more information.
  * 
  * <p>
  * A non-XUL extension.

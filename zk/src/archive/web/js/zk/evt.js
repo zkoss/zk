@@ -337,7 +337,7 @@ zWatch = (function () {
 
 <h3>Add a Watch</h3>
 
-<p>To add a listener to a watch, use #listen. The listener must implement a method with the same as the action name. For example,
+<p>To add a listener to a watch, use {@link #listen}. The listener must implement a method with the same as the action name. For example,
 <pre><code>
 MyListener = zk.$extends(zk.Object, {
   onSend: function() {

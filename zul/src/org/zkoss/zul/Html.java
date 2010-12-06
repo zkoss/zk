@@ -64,7 +64,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>If you need to generate the HTML tags directly
  * without enclosing with SPAN, you can use the Native namespace,
  * http://www.zkoss.org/2005/zk/native.
- * Refer to the Developer's Guide for more information.
+ * Refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Patterns/HTML_Tags">ZK Developer's Reference</a> for more information.
  *
  * <p>A non-XUL extension.
  *
@@ -98,7 +98,7 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 	 * <p>Unlike other methods, the content assigned to this method
 	 * is generated directly to the browser without escaping.
 	 * Thus, it is better not to have something input by the user to avoid
-	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Guide/Advanced_ZK/Security_Tip/Cross-site_scripting#The_content_Property_of_html_and_comboitem">XSS</a>
+	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
 	 * attach.
 	 */
 	public void setContent(String content) {

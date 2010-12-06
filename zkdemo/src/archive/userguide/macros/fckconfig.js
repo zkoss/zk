@@ -20,8 +20,6 @@
  *
  * Editor configuration settings.
  *
- * Follow this link for more information:
- * http://wiki.fckeditor.net/Developer%27s_Guide/Configuration/Configurations_Settings
  */
 
 FCKConfig.CustomConfigurationsPath = '' ;
