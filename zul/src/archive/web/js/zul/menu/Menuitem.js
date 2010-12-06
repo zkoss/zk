@@ -298,6 +298,10 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this.$class._rmActive(this);
 		}
 		this.$supers('doMouseOut_', arguments);
+	},
+	deferRedrawHTML_: function (out) {
+		var tag = this.isTopmost() ? 'td' : 'li';
+		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
 	}
 }, {
 	_isActive: function (wgt) {

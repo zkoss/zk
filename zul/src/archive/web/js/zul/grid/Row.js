@@ -301,6 +301,9 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (grid && jq(this.$n()).hasClass(grid = grid.getOddRowSclass()))
 			return cls + ' ' + grid; 
 		return cls;
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 });
 })();

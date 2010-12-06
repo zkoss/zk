@@ -91,7 +91,8 @@ public interface SessionCtrl {
 	 * or the request shall be ignored.
 	 * If the request shall be ignored and the session is timeout,
 	 * it will cause the session to expire (i.e., be invalidated).
+	 * @return whether the session is invalidated (since 6.0.0)
 	 * @since 3.0.0
 	 */
-	public void notifyClientRequest(boolean keepAlive);
+	public boolean notifyClientRequest(boolean keepAlive);
 }

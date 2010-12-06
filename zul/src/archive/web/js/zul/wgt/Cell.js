@@ -118,5 +118,8 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-cell" : this._zclass;
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
 });

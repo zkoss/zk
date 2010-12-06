@@ -124,5 +124,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-comboitem";
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 });

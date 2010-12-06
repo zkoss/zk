@@ -154,6 +154,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						ajaxReqResend(reqInf);
 						return;
 					}
+					if (v != 410) //not timeout (SC_GONE)
+						zAu._resetTimeout();
+
 					if (pushReqCmds(reqInf, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++seqId > 9999) seqId = 1;
@@ -802,7 +805,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
 
 		//decide ignorable
-		var ignorable = true, ctli, ctlc, alive;
+		var ignorable = true, ctli, ctlc;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
 				evtnm = aureq.name,
@@ -816,12 +819,7 @@ zAu.beforeSend = function (uri, req, dt) {
 				ctli = aureq.target.uuid;
 				ctlc = evtnm;
 			}
-			if (!alive && (zk.timerAlive || evtnm != "onTimer") && evtnm != "dummy")
-				alive = true;
 		}
-
-		if (alive)
-			zAu._resetTimeout();
 
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "", rtags = {},

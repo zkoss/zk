@@ -48,7 +48,7 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * and want to re-create child components to reflect the new values.
 	 * Note: it is convenient but the performance is better if you can manipulate
 	 * only the child components that need to be changed.
-	 * Refer to the Developer's Guide for details.
+	 * Refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Composing/Macro_Component">ZK Developer's Reference</a> for details.
 	 */
 	public void recreate();
 	/** Returns whether this is an inline macro.

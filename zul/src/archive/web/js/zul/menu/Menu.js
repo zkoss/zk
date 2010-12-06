@@ -386,5 +386,9 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 				return 'vertical' == bar.getOrient() ? 'end_before' : 'after_start';
 		}
 		return 'end_before';
+	},
+	deferRedrawHTML_: function (out) {
+		var tag = this.isTopmost() ? 'td' : 'li';
+		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
 	}
 });

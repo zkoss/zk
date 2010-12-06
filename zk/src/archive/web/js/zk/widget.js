@@ -2397,7 +2397,7 @@ redraw: function (out) {
 		if ((delay = this._renderdefer) >= 0) {
 			if (!this._norenderdefer) {
 				this.z_rod = this._z$rd = true;
-				out.push('<div', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></div>');
+				this.deferRedrawHTML_(out);
 				out = null; //to free memory
 
 				var wgt = this;
@@ -2408,6 +2408,17 @@ redraw: function (out) {
 			delete this.z_rod;
 		}
 		return false;
+	},
+	/**
+	 * Renders a fake DOM element that will replace with the correct element after
+	 * the deferring time is up. The method is designed for some widgets to override,
+	 * such as Treeitem, Listitem, and Row, whose HTML tag is created inside a table.
+	 * <p>By default, the Div tag is assumed.
+	 * @param Array out an array to output the HTML fragments.
+	 * @since 5.0.6
+	 */
+	deferRedrawHTML_: function (out) {
+		out.push('<div', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></div>');
 	},
 	/** Forces the rendering if it is deferred.
 	 * A typical way to defer the render is to specify {@link #setRenderdefer}

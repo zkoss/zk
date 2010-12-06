@@ -367,15 +367,18 @@ public class SimpleSession implements Session, SessionCtrl {
 		return _navsess;
 	}
 
-	public void notifyClientRequest(boolean keepAlive) {
+	public boolean notifyClientRequest(boolean keepAlive) {
 		final long now = System.currentTimeMillis();
 		if (keepAlive) {
 			_tmLastReq = now;
 		} else {
 			final int tmout = getMaxInactiveInterval();
-			if (tmout >= 0 && (now - _tmLastReq) / 1000 > tmout)
+			if (tmout >= 0 && (now - _tmLastReq) / 1000 > tmout) {
 				invalidate();
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public final WebApp getWebApp() {

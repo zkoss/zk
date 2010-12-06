@@ -189,6 +189,9 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		var p;
 		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
 			this.$supers("unbindChildren_", arguments);
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
 	}
 	
 });

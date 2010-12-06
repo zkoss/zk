@@ -369,6 +369,16 @@ public interface UiEngine {
 	 * invalidate and do any smart updates. In other words, READ ONLY.
 	 */
 	public void activate(Execution exec);
+	/** Activates an execution such that you can access a component.
+	 * Unlike {@link #activate(Execution)}, you could specify an amount of
+	 * time (timeout), and it returns false if it takes longer than the given
+	 * amount of time before granted.
+	 * @param timeout the number of milliseconds to wait before giving up.
+	 * It is ignored if negative, i.e., it waits until granted if negative.
+	 * @return whether the activation succeeds
+	 * @since 5.0.6
+	 */
+	public boolean activate(Execution exec, int timeout);
 	/** Deactivates an execution, such that other threads could activate
 	 * and access components.
 	 */

@@ -67,9 +67,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<row>
 					<radio label="ZK Demo" />
 					<radio label="Style Guide" />
-					<radio label="Developer Guide" />
-					<radio label="Developer Reference" />
-					<radio label="Component Developer's Guide" />
+					<radio label="Developer's Reference" />
+					<radio label="Component Reference" />
+					<radio label="Client-side Reference" />
 				</row>
 			</rows>
 		</grid>

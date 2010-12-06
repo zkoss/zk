@@ -238,5 +238,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		zk(mate.$n()).enableSelection();
 		mate._doKeyUp(evt);
 		this.$supers('doKeyUp_', arguments);
+	},
+	deferRedrawHTML_: function (out) {
+		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 });
