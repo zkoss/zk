@@ -239,7 +239,7 @@ w:use="foo.MyWindow"&gt;
 	public String getUuid();
 
 	/** Returns a component of the specified ID in the same ID space.
-	 * Components in the same ID space are called fellows.
+	 * Components in the same ID space assinged with ID are called fellows.
 	 *
 	 * <p>Unlike {@link #getFellowIfAny}, it throws an exception if not found.
 	 *
@@ -252,6 +252,8 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Component getFellowIfAny(String id);
 	/** Returns all fellows in the same ID space of this component.
+	 * Notice that only components that are assigned with ID are considered
+	 * as fellows.
 	 * The returned collection is read-only.
 	 * @since 3.0.6
 	 */
