@@ -13,6 +13,7 @@ ZK 5.0.6
   3117384: renderdefer fails in tree on IE and Chrome
   3122159: onChange not working for datebox
   3131173: Tree checkmark/multiple issue
+  3131458: The column setSortDirection fail with breeze theme
   
 	--------
 ZK 5.0.5

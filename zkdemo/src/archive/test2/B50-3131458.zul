@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3131458.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  7 21:52:52 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Switch to breeze theme.click both of the buttons make sure sortting arrow will appear.
+	<listbox>
+		<listhead>
+			<listheader id="hd" label="header" />
+		</listhead>
+	</listbox>
+	<grid>
+		<columns>
+			<column id="col" label="column" />
+		</columns>
+	</grid>
+	<button label="ascending"
+		onClick='hd.setSortDirection("ascending");col.setSortDirection("ascending");' />
+	<button label="descending"
+		onClick='hd.setSortDirection("descending");col.setSortDirection("descending");' />
+</zk>

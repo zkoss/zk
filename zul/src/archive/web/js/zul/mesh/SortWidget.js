@@ -40,17 +40,13 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			if (n) {
 				var zcls = this.getZclass(),
 					$n = jq(n);
-				$n.removeClass(zcls + "-sort-dsc").removeClass(zcls + "-sort-asc");
+				$n.removeClass(zcls + "-sort-dsc").removeClass(zcls + "-sort-asc").addClass(zcls + "-sort");
 				switch (v) {
 				case "ascending":
 					$n.addClass(zcls + "-sort-asc");
 					break;
 				case "descending":
 					$n.addClass(zcls + "-sort-dsc");
-					break;
-				default: // "natural"
-					$n.addClass(zcls + "-sort");
-					break;
 				}
 			}
 		},
