@@ -18,30 +18,30 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
-import org.zkoss.lang.D;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.au.AuRequests;
-
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
@@ -886,6 +886,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			} else {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
+				
+				if(_sel == item) //bug fix:3131173 
+					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
+								
 				smartUpdateSelection();
 			}
 		}
