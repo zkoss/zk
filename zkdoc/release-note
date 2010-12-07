@@ -12,7 +12,8 @@ ZK 5.0.6
   3117370: Tree ROD fail
   3117384: renderdefer fails in tree on IE and Chrome
   3122159: onChange not working for datebox
-
+  3131173: Tree checkmark/multiple issue
+  
 	--------
 ZK 5.0.5
 November 02, 2010
