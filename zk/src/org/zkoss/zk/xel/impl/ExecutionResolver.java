@@ -144,9 +144,8 @@ public class ExecutionResolver implements VariableResolverX {
 			//We have to look getZScriptVariable first and then namespace
 			//so it is in the same order of interpreter
 			final Page page = getPage(comp);
-			if (page != null) {
-				final Object o =
-					page.getZScriptVariable(comp, name);
+			if (page != null && !shallSkipZscript(name)) {
+				final Object o = page.getZScriptVariable(comp, name);
 				if (o != null)
 					return o;
 			}
@@ -173,11 +172,13 @@ public class ExecutionResolver implements VariableResolverX {
 			}
 
 			if (page != null) {
-				Object o = page.getZScriptVariable(name);
-				if (o != null)
-					return o;
+				if (!shallSkipZscript(name)) {
+					final Object o = page.getZScriptVariable(name);
+					if (o != null)
+						return o;
+				}
 
-				o = _exec.getAttribute(name);
+				Object o = _exec.getAttribute(name);
 				if (o != null || _exec.hasAttribute(name))
 					return o;
 
@@ -196,6 +197,10 @@ public class ExecutionResolver implements VariableResolverX {
 		}
 
 		return Evaluators.resolveVariable(_parent, name);
+	}
+	private static boolean shallSkipZscript(String name) {
+		return "param".equals(name);
+			//Bug 3131983: we have to let the default resolver to solve param
 	}
 	private static Page getPage(Component comp) {
 		Page page = comp.getPage();

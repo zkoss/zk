@@ -4,14 +4,15 @@ ZK 5.0.6
   3105037: Show the locale format in error messages
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
-  3118161: When desktop destroyed, better to fore cleanup if timeout
+  3118161: When desktop destroyed, better to force cleanup if timeout
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
   3109358: Recycle uuid causes image's URI caching in browser
   3117370: Tree ROD fail
   3117384: renderdefer fails in tree on IE and Chrome
-  3122159: onChange not working for datebox
+  3122159: onChange shall fire immediately for datebox if select a date
+  3131983: EL's param shall not Map<String,String[]> if zscript used
   3131173: Tree checkmark/multiple issue
   3131458: The column setSortDirection fail with breeze theme
   
