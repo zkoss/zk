@@ -1029,9 +1029,10 @@ w:use="foo.MyWindow"&gt;
 	public AuService getAuService();
 
 	/** Clones the component.
-	 * All of its children is cloned.
-	 * Notice that the cloned component doesn't belong to any page, nor
-	 * desktop. It doesn't have parent, either.
+	 * All of its children and descendants are cloned.
+	 * Also, ID are preserved.
+	 * @return the new component. Notice that it doesn't belong to any page, nor
+	 * desktop. It doesn't have a parent, either.
 	 */
 	public Object clone();
 }
