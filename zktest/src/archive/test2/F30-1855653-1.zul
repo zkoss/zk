@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1855653-1.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 24 16:06:41 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Live Data Demo - Grid" border="normal">
+	<zscript>
+		List items = new org.zkoss.zkdemo.userguide.BigList(1000);
+		ListModel strset = new ListModelList(items);
+		RowRenderer render = new RowRenderer() {
+		public void render(Row item, Object data) {
+			new Label("column1 - ").setParent(item);
+			new Label("column2 - ").setParent(item);
+			new Label("column3 - ").setParent(item);
+			new Label("column4 - ").setParent(item);
+		}
+		};
+	</zscript>
+	<grid id="grid" width="600px" height="150px" model="&#36;{strset}" rowRenderer="${render}">
+		<columns sizable="true">
+			<column label="Load on Demend1"/>
+			<column label="Load on Demend2"/>
+			<column label="Load on Demend3"/>
+			<column label="Load on Demend4"/>
+		</columns>
+	</grid>
+</window>

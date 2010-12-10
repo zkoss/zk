@@ -1,0 +1,17 @@
+<zk>
+<html><![CDATA[
+<ul>
+<li>Click "Unselect first", and then "item 2" and "item 3" shall remain selected</li>
+</ul>
+]]></html>
+
+<listbox id="box" multiple="true" checkmark="true">
+<listhead>
+<listheader label="Index"/>
+</listhead>
+<listitem label="item 1" selected="true"/>
+<listitem label="item 2" selected="true"/>
+<listitem label="item 3" selected="true"/>
+</listbox>
+<button label="Unselect first" onClick="box.removeItemFromSelection(box.getItemAtIndex(0))"/>
+</zk>

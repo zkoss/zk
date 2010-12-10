@@ -1,0 +1,19 @@
+<window >
+<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+<html><![CDATA[
+<ol>
+<li>Drag scrollbar handle down, pause(~1 sec, DONT release mouse), drag back to top immediately.</li>
+<li>If you see blank view, it is a bug!</li>
+</ol>
+]]>
+</html>
+<zscript>
+ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel(20000);
+</zscript>
+
+<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
+<listhead>
+<listheader label="Load on Demend" sort="auto"/>
+</listhead>
+</listbox>
+</window>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2090137.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep  3 12:38:18 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window width="550px" title="abc" border="normal" contentStyle="position:relative;">
+The width of grid should not exceed the width of window, if any, that is wrong.
+<separator/>
+In IE6, please specify the following CSS to the window.
+<separator/>
+For example, 
+<![CDATA[  <window width="200px" title="abc"
+contentStyle="width:200px;overflow:hidden;">]]>
+<grid width="450px">
+<columns>
+<column label="Name" />
+<column label="Description" />
+</columns>
+<rows>
+<row>
+<label value="Ivan" />
+<label value="MIS" />
+</row>
+<row>
+<label value="ohpizz" />
+<label value="Testing" />
+</row>
+</rows>
+</grid>
+
+</window>

@@ -1,0 +1,180 @@
+<zk>
+	<window title="Dynamically Change by Model">
+	<zscript>
+		
+		import org.zkoss.zkdemo.test2.tree.TreeModelA;
+		//An ArrayList is created to be the root of tree
+		ArrayList mother = new ArrayList();
+		
+		//Create a branch "child1" and assign children to it
+		ArrayList child1 = new ArrayList();
+		child1.add("Tommy");
+		child1.add("Juile");
+		
+		//Create a branch "child2" and assign children to it
+		ArrayList child2 = new ArrayList();
+		child2.add("Gray");
+		
+		//Create a branch "grandchild" and assign children to it
+		ArrayList grandChild = new ArrayList();
+		grandChild.add("Paul");
+		grandChild.add("Eric");
+		
+		//Assign branch "grandchild" to be branch "child2"'s child
+		child2.add(grandChild);
+		
+		//Assign branch "grand2" to be branch "child1"'s child
+		child1.add(child2);
+		
+		//Assign children to root "mother"
+		mother.add("Andy");
+		mother.add("Davis");
+		mother.add(child1);
+		mother.add("Matter");
+		mother.add("Kitty");
+		
+		//TreeModelA class is contructed, only the root "mother" of tree is passed to its constructor.
+		TreeModelA tma = new TreeModelA(mother);
+		
+		ArrayList child2 = new ArrayList();
+		child2.add("Clinton");
+		child2.add("Obama");
+		
+		int index =0;
+		
+		public void changeData(){
+			Object[] data = {_vMD.getValue()};
+			tma.set(child1,_iMD.intValue(),_iMD.intValue(),data);
+		}
+		
+		public void changeBranch(){
+			int[] indexes = {_iMD2.intValue()};
+			Object[] data = {child2};
+			tma.set(child1,_iMD2.intValue(),_iMD2.intValue(),data);
+		}
+		
+		public void change2Data(){
+			Object[] data = {_vMD3.getValue(),_vMD3.getValue(),_vMD3.getValue()};
+			tma.set(child1,0,2,data);
+		}
+		
+		public void append(){
+			Object[] data = {_vAP.getValue()};
+			tma.add(child1,data);
+		}
+		
+		public void remove()
+		{
+			tma.remove(child1,_iRM.intValue(),_iRM.intValue());
+		}
+		
+		public void removeMuti(){
+			tma.remove(child1,0,2);
+		}
+		
+		public void insert(){
+			Object[] datas = {_v.getValue()};
+			tma.insert(child1, _i.intValue(),_i.intValue(), datas);
+		}
+		
+		public void insertMuti(){
+			Object[] datas = {_vIM.getValue(),_vIM.getValue(),_vIM.getValue()};
+			tma.insert(child1, 2,4, datas);
+		}
+		
+		public void change2DataError(){
+			Object[] data = {"johnny","johnny","johnny"};
+			tma.set(child1,5,3,data);
+		}
+		
+		public void removeMutiError(){
+			tma.remove(child1,2,0);
+		}
+	</zscript>
+		
+		<vbox>
+			<tree model="${tma}" id="tree" >
+		</tree>
+		<hbox>
+			Set Tree Rows:
+			<intbox id="rows"/>
+			<button label="set">
+				<attribute name="onClick">
+					tree.setRows(rows.getValue());
+				</attribute>
+			</button>
+		</hbox>
+			<hbox>
+			Set Tree Height:("px")
+			<intbox id="h"/>
+			<button label="set">
+				<attribute name="onClick">
+					tree.setHeight(h.getValue() + "px");
+				</attribute>
+			</button>
+		</hbox>
+<label value="First of all, please open the [Tommy, Juile, [Gray, [Paul, Eric]]] node for the following test case." style="font-weight:bold"/>
+		<hbox>
+			Insert Node:
+			<textbox id="_v" />
+			at index: 
+			<intbox id="_i" />
+			<button label="insert" onClick="insert();" />
+		</hbox>
+		<hbox>
+			Insert Node:
+			<textbox id="_vIM" />
+			at index: 
+			from 
+			2 to 4
+			<button label="insert" onClick="insertMuti();" />
+		</hbox>
+		<hbox>
+			Append Node:
+			<textbox id="_vAP" /> 
+			<button label="append" onClick="append();" />	
+		</hbox>
+		<hbox>
+			Remove Node at Index: 
+			<intbox id="_iRM" />
+			<button label="remove" onClick="remove();" />
+		</hbox>
+		<hbox>
+			Remove Node at Index: 
+			from 0 to 2
+			<button label="remove" onClick="removeMuti();" />
+		</hbox>
+		<hbox>
+			Replace Node at Index:
+			<intbox id="_iMD" />
+			With New Value
+			<textbox id="_vMD" />	
+			<button label="Replace" onClick="changeData();" />
+		</hbox>
+		<hbox>
+			Replace Node at Index: from 3 to 5
+			<textbox id="_vMD3" />
+			<button label="Replace" onClick="change2Data();" />
+		</hbox>
+		<hbox>
+			Replace Node at Index:
+			<intbox id="_iMD2" />
+			With a New Branch
+			<button label="Replace" onClick="changeBranch();" />
+		</hbox>
+		<hbox>
+			Error Case:
+		</hbox>
+		<hbox>
+			Replace Node at Index: 5 and 3
+			with "Johhny"
+			<button label="Replace" onClick="change2DataError();" />
+		</hbox>
+		<hbox>
+			Remove Node at Index: 
+			from 2 to 0
+			<button label="remove" onClick="removeMutiError();" />
+		</hbox>
+		</vbox>
+	</window>
+</zk>

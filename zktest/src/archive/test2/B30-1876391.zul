@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1876391.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 26 11:11:43     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	Click the test button and you shall see "OK" being appended.
+	<button label="test">
+		<attribute name="onClick"><![CDATA[
+	cb.setText("BB");
+	Comboitem ci = cb.getSelectedItem();
+	new Label(ci != null && "BB".equals(ci.label) ? "OK": "Failed "+ci)
+		.setParent(self.parent);
+		]]></attribute>
+	</button>
+	<combobox id="cb">
+		<comboitem label="AA"/>
+		<comboitem label="BB"/>
+		<comboitem label="CC"/>
+	</combobox>
+</window>

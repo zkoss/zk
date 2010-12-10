@@ -1,0 +1,46 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window width="500px">
+<zscript><![CDATA[
+
+List strings = new ArrayList();
+for(int j= 0; j < 20; ++j)
+{
+strings.add("test"+j);
+}
+String testStr = "Ths is a test!!!";
+import org.zkoss.zk.ui.util.Composer;
+public class AnnotatedDatabinderComposer implements Composer
+{
+	public void doAfterCompose(Component comp) throws Exception
+	{
+		AnnotateDataBinder binder = new AnnotateDataBinder(comp, true);
+		comp.setVariable("binder", binder, true);
+		binder.loadAll();
+	}
+
+}
+
+AnnotatedDatabinderComposer composer = new AnnotatedDatabinderComposer();
+]]></zscript>
+<label value="[ 1843038 ] Fulfill doesn't support EL in apply property"/>
+<label value="While clicking this button, there must be a grid with data of String list."/>
+<button id="bt1" label="show" onClick='alert(grid.getModel()+"")'/>
+<div fulfill="bt1.onClick">
+<label value="${testStr}"/>
+<grid id="grid" height="500px" model="@{strings}"
+apply="${composer}">
+
+<columns>
+<column label="First Name"/>
+<column label="desc"/>
+</columns>
+<rows>
+<row self="@{each=str}">
+<label value="@{str}"/>
+<label value="${testStr}"/>
+</row>
+</rows>
+</grid>
+</div>
+
+</window>

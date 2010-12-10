@@ -1,0 +1,31 @@
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>When you choose each radio button, the textbox inside the vbox is located properly.</n:p>
+	<n:p><n:strong>PACK: </n:strong>It means vertical position.</n:p>
+	<n:p><n:strong>ALIGN: </n:strong>It means horizontal position.</n:p>
+	<window border="normal" height="500px" width="500px">
+		<vbox sclass="b" id="vb" pack="start" align="start"
+ width="100%" height="400px">
+			<textbox height="30px" width="30px" />
+			<splitter />
+			<textbox height="30px" width="30px" />
+		</vbox>
+		PACK:
+		<radiogroup>
+			<attribute name="onCheck">
+				vb.setPack(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+		ALIGN:
+		<radiogroup>
+			<attribute name="onCheck">
+				vb.setAlign(self.selectedItem.label);
+			</attribute>
+			<radio checked="true" label="start" />
+			<radio label="center" />
+			<radio label="end" />
+		</radiogroup>
+	</window>
+</zk>

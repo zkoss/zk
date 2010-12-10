@@ -1,0 +1,105 @@
+<zk>
+        <zscript>
+void callMe() {
+    alert("Click");
+}
+        </zscript>
+	The complex listbox should show properly.
+	<listbox width="500px" id="w_list_listbox" multiple="true" checkmark="true">
+		<listhead  >
+			<listheader label="account" width="25%" /> 
+			<listheader label="name" width="25%" /> 
+			<listheader label="email" width="25%" /> 
+			<listheader label="edit" width="35%" /> 
+		</listhead>
+		<listitem> 
+			<listcell label="davidwu" style="border-top: 2px solid blue" /> 
+			<listcell label="David Wu" style="border-left:4px solid green;border-bottom: 4px solid green"/> 
+			<listcell  style="border-bottom: 2px solid blue">
+			<label  value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell style="border-right:4px solid green;border-top: 4px solid green"> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem> 
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell  style="border:4px solid green">
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell>
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell>
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+	</listbox> 
+
+	<listbox width="500px" id="w_list_listbox2" multiple="true" checkmark="true">
+		<listhead id="w_tr_listhead" >
+			<listheader label="account" width="25%" /> 
+			<listheader label="name" width="25%" /> 
+			<listheader label="email" width="25%" /> 
+			<listheader label="edit" width="35%" /> 
+		</listhead>
+		<listitem> 
+			<listcell label="davidwu"/> 
+			<listcell label="David Wu" /> 
+			<listcell>
+			<label  value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell > 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem> 
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell  >
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell>
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+		<listitem> 
+			<listcell label="davidwu" /> 
+			<listcell label="David Wu"/> 
+			<listcell>
+			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
+			</listcell>
+			<listcell> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
+			</listcell> 
+		</listitem>
+	</listbox> 
+</zk>

@@ -1,0 +1,22 @@
+<zk>
+ <html><![CDATA[
+ <ul>
+ 	<li>Scroll down and click the doModal button</li>
+ 	<li>Then, try to drag it around</li>
+ 	<li>Test environment: Firefox</li>
+ </ul>
+ ]]></html>
+ <div height="2000px"/>
+ <window title="Modal Dialog" border="normal">
+  <button label="doModal">
+   <attribute name="onClick">
+ {
+  final Window win = (Window) Executions.createComponents(
+    "/userguide/layout/hello-template.zul", null, null);
+  win.setMaximizable(true);
+  win.doModal();
+ }
+ </attribute>
+  </button>
+ </window>
+</zk>

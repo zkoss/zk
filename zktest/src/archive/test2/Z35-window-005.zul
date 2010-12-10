@@ -1,0 +1,44 @@
+
+
+
+<zk>
+<html><![CDATA[
+<h3>test Window Attribute in different mode</h3>
+]]></html>
+<button onClick="win.doHighlighted()" label="doHighlighted"/>
+<button onClick="win.doEmbedded()" label="doEmbedded"/>
+<button onClick="win.doModal()" label="doModal"/>
+
+<window id="win" title="Becareful, if you doMdal, don't press Minimize Button!!!" 
+		sizable="true"
+		minimizable="true" maximizable="true" border="normal">
+	<caption label="Test Caption Label">
+		<button onClick="win.doEmbedded()" label="doEmbedded"/>
+		<button onClick="win.doOverlapped()" label="doOverlapped"/>
+		<button onClick="win.doPopup()" label="doPopup"/>
+		<button onClick='win.setWidth("100%")' label="Win.width = 100%"/>
+		<button onClick='win.setHeight("100%")' label="Win.height = 100%"/>	
+		<button onClick='win.setWidth("50%")' label="Win.width = 50%"/>
+		<button onClick='win.setHeight("50%")' label="Win.height = 50%"/>
+		<button >
+			<attribute name="onCreate"><![CDATA[ 
+				self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+			]]></attribute>
+			
+			<attribute name="onClick"><![CDATA[ 
+				win.setVisible(!win.isVisible());
+				self.setLabel("DO: Win.setVisible="+(!win.isVisible()));
+			]]></attribute>
+		</button>	
+	</caption>	
+		
+
+
+<window title="width50%,Height50%,sizable" border="normal" width="50%" height="50%" sizable="true">
+	
+	<!--CONTAIN-->
+	
+</window>
+
+</window>
+</zk>

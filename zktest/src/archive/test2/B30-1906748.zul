@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1906748.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 14 12:12:43 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>This bug is only caused by running Tomcat with Java6, so if the test case runs on Tomcat with Java6 without any error that is correct.</n:p>
+<window width="500px" xmlns:n="http://www.zkoss.org/2005/zk/native">
+   <zscript>
+public class Order {
+	private String _orderName;
+	private String _orderNumber;
+	
+	public void setOrderName(String o) {
+		_orderName = o;
+	}
+	
+	public String getOrderName() {
+		return _orderName;
+	}
+	
+	public void setOrderNumber(String n) {
+		_orderNumber = n;
+	}
+	
+	public String getOrderNumber() {
+		return _orderNumber;
+	}
+}   
+    int count = 30;
+    List orders = new LinkedList();
+    for(int j= 0; j &lt; count; ++j) {
+      Order o = new Order();
+      o.setOrderName("OrderName - " + j );
+      o.setOrderNumber("OrderNumber - " + j);
+      orders.add(o);
+    }   
+    selected = orders.get(0);
+  </zscript>
+
+  <combobox model="@{orders}" selectedItem="@{selected}">
+       <comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"/>
+   </combobox>
+  <grid>
+	<auxhead><auxheader align="center" colspan="2">Order Information</auxheader></auxhead>
+  	<columns>
+  		<column align="center" width="200px" label="Item"/>
+  		<column align="center" width="200px" label="Value"/>
+	</columns>	
+  	<rows>
+  		<row>OrderNumber: <label value="@{selected.orderNumber}"/></row>
+  		<row>OrderName: <label  value="@{selected.orderName}"/></row>
+  	</rows>
+  </grid>
+</window>
+</zk>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1973470.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 27 09:51:08 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="listbox demo" border="normal">
+	When you right-click or left-click the listitem, only that item is selected.
+	<separator/>
+	<listbox width="250px" multiple="true" checkmark="true">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto" />
+			<listheader label="gender" sort="auto" />
+		</listhead>
+		<listitem context="popupen">
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem context="popupen">
+			<listcell label="John" />
+			<listcell label="MALE" />
+		</listitem>
+		<listitem context="popupen">
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem context="popupen">
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+		</listitem>
+	</listbox>
+	<menupopup id="popupen">
+		<menuitem label="test" />
+		<menuitem label="test2" />
+	</menupopup>
+</window>

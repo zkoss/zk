@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init zscript="macro.zs"?>
+<?component name="username" macroURI="macro.zul" class="Username"?>
+
+<!--
+usemacro.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 22 18:02:40     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="wnd">
+	<username id="ua"/>
+	<username label="Account"/>
+	<button label="Add Row" onClick="ua.addRow(&quot;ID&quot;)"/>
+	<button label="Create Manullay">
+	<attribute name="onClick">{
+	Username ua = new Username();
+	ua.setParent(wnd);
+	ua.afterCompose();
+	}</attribute>
+	</button>
+
+	<button label="Create Manullay by Definition">
+	<attribute name="onClick">{
+	Component ua = page.getComponentDefinition("username", false).newInstance(page, null);
+	ua.setParent(wnd);
+	ua.applyProperties();
+	ua.afterCompose();
+	}</attribute>
+	</button>
+
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="Clone">
+		<attribute name="onClick">{
+Username c = ua.clone();
+c.setId("new"+cnt++);
+vb.appendChild(c);
+		}</attribute>
+	</button>
+	<vbox id="vb"/>
+</window>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+window.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 11 17:08:00     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<window border="normal">
+No title, no cpation
+<button label="change title" onClick="self.parent.title = &quot;new title&quot;"/>
+</window>
+<window title="title" border="normal">
+Title only
+<button label="change title" onClick="self.parent.title = &quot;new title&quot;"/>
+</window>
+<window title="title" closable="true" border="normal">
+Title and closable
+<button label="change title" onClick="self.parent.title = &quot;new title&quot;"/>
+</window>
+<window border="normal">
+	<caption label="caption"/>
+	Caption only
+</window>
+<window closable="true" border="normal" height="200px">
+	<caption label="caption"/>
+	Caption, closable and height = 200px
+	<window title="abc" border="normal" height="50px">
+	</window>
+</window>
+</zk>

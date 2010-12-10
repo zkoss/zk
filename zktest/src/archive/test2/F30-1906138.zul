@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1906138.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar  3 17:55:12 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1906138 ] A way to specify whether the item is checkable(Listbox/Tree)</n:h2>
+	<n:ol>
+		<n:li>click change listitme or change treeitem, the ckeckmark of 2nd item will show or disappear.</n:li>
+		<n:li>you should still be able to select a item even it doesn't have check mark..</n:li>
+	</n:ol>
+	<window title="Listbox" border="normal">
+		<listbox id="box" width="460px" multiple="true"
+			checkmark="true">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Gender" />
+				<listheader label="Age" />
+				<listheader label="Description" />
+			</listhead>
+			<listitem id="li0" checkable="true">
+				<listcell label="Mary1" />
+				<listcell label="FEMALE" />
+				<listcell label="18" />
+				<listcell label="A young lady." />
+			</listitem>
+			<listitem id="li" checkable="false" disabled="true">
+				<listcell label="Mary2" />
+				<listcell label="FEMALE" />
+				<listcell label="18" />
+				<listcell label="A young lady." />
+			</listitem>
+			<listitem id="li2" checkable="true">
+				<listcell label="Mary3" />
+				<listcell label="FEMALE" />
+				<listcell label="18" />
+				<listcell label="A young lady." />
+			</listitem>
+			<listitem id="li3" checkable="true">
+				<listcell label="Mary3" />
+				<listcell label="FEMALE" />
+				<listcell label="18" />
+				<listcell label="A young lady." />
+			</listitem>
+		</listbox>
+		<button label="change listitem"
+			onClick='li.checkable = !li.checkable; li.disabled = !li.disabled' />
+	</window>
+	<window title="Tree" border="normal">
+		<tree id="tree" width="90%" multiple="true" checkmark="true">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem id="ti1" >
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+				<treeitem id="ti" checkable="false" disabled = "true">
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+
+				<treeitem id="ti2" >
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+
+				<treeitem id="ti3" >
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Item 1 description" />
+					</treerow>
+				</treeitem>
+
+			</treechildren>
+		</tree>
+		<button label="change treeitem"
+			onClick='ti.checkable = !ti.checkable; ti.disabled = !ti.disabled' />
+	</window>
+</zk>

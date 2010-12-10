@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2783319.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 29 08:44:08 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<separator />
+	Datebox format enhance,
+	it should have time change control area
+	<datebox id="DTbox" format="yyyy/MM/dd HH:mm a" cols="25" />	
+	 
+	<separator />
+	<separator />
+	<groupbox width="800px" >
+		<caption>Format Test</caption>
+		<hbox>
+			<button id="b1" label="yyyy/MM/dd-HH:mm">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(b1.getLabel());	                                   	
+	]]></attribute>
+			</button>
+
+			<button id="b4" label="yyyy/MM/dd-kk:mm">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(b4.getLabel());	                                   	
+	]]></attribute>
+			</button>
+			<button id="b2" label="yyyy/MM/dd-h:mm a">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(b2.getLabel());	                                   	
+	]]></attribute>
+			</button>
+			<button id="b3" label="yyyy/MM/dd-K:mm a">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(b3.getLabel());	                                   	
+	]]></attribute>
+			</button>
+			<button id="b5" label="yyyy/MM/dd- a">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(b5.getLabel());	                                   	
+	]]></attribute>
+			</button>
+		</hbox>
+		<vbox>
+			<textbox id="tx" />
+			<button id="b6" label="Custom Format">
+				<attribute name="onClick"><![CDATA[
+		DTbox.setFormat(tx.getValue());	                                   	
+	]]></attribute>
+			</button>
+		</vbox>
+
+	</groupbox>
+	<button id="today" label="Today">
+		<attribute name="onClick"><![CDATA[
+		DTbox.setValue(new Date());	                                   	
+	]]></attribute>
+	</button>
+	<button id="back" label="Send Back">
+		<attribute name="onClick"><![CDATA[
+		alert(DTbox.getValue().toString());	                                   	
+	]]></attribute>
+	</button>
+
+</zk>

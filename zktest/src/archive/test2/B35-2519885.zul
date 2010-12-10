@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2519885.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 23 16:16:21     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Check two or three rows on first page.
+	<separator/>
+	2. Click the next button to go to the next page.
+	<separator/>
+	3. Check one row (you must check on the checkbox, not on the row), and then click the previous button to go back to first page.
+	<separator/>
+	4. You should see the first step checking some rows should be remained.
+	<zscript>					
+	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(1000)));
+	</zscript>
+	<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}"
+checkmark="true" multiple="true">
+		<attribute name="onCreate">
+		tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
+		tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+		</attribute>
+	</tree>
+</zk>
+

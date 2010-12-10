@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK 5 Test"?>
+<?component name="macro" macroURI="z5macro.zul"?>
+
+<!--
+z5.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 10 11:37:37     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+<div xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<zscript>int cnt = 0;</zscript>
+	<label value="This is the first label with tooltiptext." tooltiptext="This is tooltip"/>
+	<div>
+		This is 2nd label in the inner div
+		<textbox focus="true" value="&amp;init" onChange="i.value = self.value"/>
+		<textbox value="&lt;" rows="5"/>
+		This is 3nd label in the inner div
+		<separator bar="true"/>
+		<label id="i"/>
+		<include src="z5-1.zul" height="auto"/>
+		<include src="z5-2.html" height="auto"/>
+	</div>
+	<label value="smartUpdate" style="border:1px solid #233;padding:0 2px"
+		onClick='self.value += "!"'/>
+	<label value="invalidate" style="border:1px solid #233;padding:0 2px"
+		onClick='self.value += "#";self.invalidate();'/>
+	<button label="go zkoss.org" href="http://www.zkoss.org"/>
+	<toolbarbutton label="hi" onClick='alert("hi")'/>
+	<toolbarbutton label="go zkoss.org" href="http://www.zkoss.org"/>
+	<button id="b" label="disabled" disabled="true"
+		onClick='alert("I am disabled?")'/>
+	<button label="toggle disabled" onClick="b.disabled = !b.disabled"/>
+	<button label="verify bindLevel">
+		<attribute w:name="onClick">
+		var verify = function (wgt, level) {
+				if (wgt.bindLevel != level) {
+					zk.log("Error", wgt.uuid, bindLevel, level);
+					return false;
+				}
+				++level;
+				for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+					if (!verify(wgt, level))
+						return false;
+				return true;
+			};
+		var dts = zk.Desktop.all;
+		for (var dtid in dts) {
+			zk.log('Verifying desktop: '+dtid);
+			if (verify(dts[dtid], 0)) {
+				zk.log("SUCCESS");
+			} else {
+				zk.log("FAILED");
+				break;
+			}
+		}
+		</attribute>
+	</button>
+	<button label="Redraw" w:onClick="zk._sendRedraw();"/>
+	<separator bar="true"/>
+	Div:
+	<div id="div" style="border:1px solid #999"/>
+	<button label="append 2" image="/img/m1.gif" hoverImage="/img/m2.gif"
+		onClick='new Label("Append "+ ++cnt).setParent(div);new Label("Append_ "+ ++cnt).setParent(div)'/>
+	<button label="insert"
+		onClick='div.insertBefore(new Label("Insert "+ ++cnt),
+			div.children.empty ? null: div.children.get(0))'/>
+	<button label="remove first"
+		onClick="if (!div.children.empty) div.firstChild.detach();"/>
+	<button label="remove last"
+		onClick="if (!div.children.empty) div.lastChild.detach();"/>
+
+	<separator bar="true"/>
+	<button label="button mold" mold="os"
+		onClick='self.mold = "os".equals(self.mold) ? "trendy": "os"'/>
+	<separator bar="true"/>
+	Vbox/hbox:
+	<box id="box">
+	First <label value="Second"/>
+	</box>
+	<button label="orient"
+	onClick='box.setOrient(box.vertical?"horizontal":"vertical")'/>
+	<button label="append"
+		onClick='new Label("Append "+ ++cnt).setParent(box)'/>
+	<button label="insert"
+		onClick='box.insertBefore(new Label("Insert "+ ++cnt),
+			box.children.empty ? null: box.children.get(0))'/>
+	<button label="hide/show first"
+		onClick="if (!box.children.empty) box.firstChild.visible = !box.firstChild.visible;"/>
+	<button label="remove first"
+		onClick="if (!box.children.empty) box.firstChild.detach();"/>
+	<button label="remove last"
+		onClick="if (!box.children.empty) box.lastChild.detach();"/>
+	<separator bar="true"/>
+ <hbox>
+	<groupbox width="300px" height="250px" mold="3d">
+		<caption image="/img/inet.png" label="Groupbox 3d">
+			<button label="Label" onClick='self.parent.label += "!"'/>
+		</caption>
+		This is a group box (300x 200)
+		<button label="change mold"
+			onClick='self.parent.mold = self.parent.mold == "default" ? "3d": "default";'/>
+		More in a group box
+		<button label="add" onClick='new Label("new "+ ++cnt).setParent(self.parent)'/>
+	</groupbox>
+	<groupbox width="200px">
+		<caption image="/img/inet.png" label="Groupbox">
+			<button label="Label" onClick='self.parent.label += "!"'/>
+		</caption>
+		This is a group box
+		<button label="a button"/>
+		More in a group box
+	</groupbox>
+ </hbox>
+ 
+	<separator/>
+	<label id="l"/>
+	<zscript><![CDATA[
+	l.value = "<ul><li>A label with HTML content</li></ul>";
+	]]></zscript>
+	<html onClick='alert("html clicked")'><![CDATA[
+	<ul>
+		<li>This is the content of the html component</li>
+		<li id="something">Try to click me (test of zk.Widget.$)</li>
+	</ul>
+	]]></html>
+	Macro: <macro title="macro"/>
+	<separator bar="true"/>
+	End of file
+</div>

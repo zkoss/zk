@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-1733461.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 16 12:48:23     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Please click the "Throw All Exceptions" button, and then all the error boxes should appear.
+<vbox>
+<intbox id="t1"/>
+<intbox id="t2"/>
+<intbox id="t3"/>
+<intbox id="t4"/>
+<intbox id="t5"/>
+<button label="Throw All Exceptions">
+	<attribute name="onClick">
+		WrongValueException[] wves = new WrongValueException[] {
+			new WrongValueException(t1, "Error, 1"),
+			new WrongValueException(t2, "Error, 2"),
+			new WrongValueException(t3, "Error, 3"),
+			new WrongValueException(t4, "Error, 4"),
+			new WrongValueException(t5, "Error, 5")
+		};
+		throw new WrongValuesException(wves);
+	</attribute>
+</button>
+</vbox>
+</zk>

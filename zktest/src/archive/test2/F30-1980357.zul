@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1980357.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun  3 10:37:02     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title='Test of forEach="a, b, c"'>
+	You shall see the following text below (triple):
+	<vbox>
+	<label value="1 apple"/>
+	<label value="2 orange"/>
+	<label value="3 cola"/>
+	<label value="4 (a, (apple, 1), 2)"/>
+	<label value="5 ((a),"/>
+	</vbox>
+	<separator bar="true"/>
+
+	<variables a="apple" c="cola"/>
+	<vbox>
+	<label value="${forEachStatus.index} ${each}"
+		forEach="void, ${a}, orange, ${c}, (a, (${a}, 1), 2), ((a),"
+		forEachBegin="1"/>
+	</vbox>
+
+	<separator bar="true"/>
+	<variables vars="void, ${a}, orange, ${c}, (a, (${a}, 1), 2), ((a),"
+		composite="list"/>
+	<vbox>
+	<label value="${forEachStatus.index} ${each}" forEach="${vars}"
+		forEachBegin="1"/>
+	</vbox>
+
+	<separator bar="true"/>
+	<variables vars="a=void, b=${a}, c=orange, d=${c}, e=(a, (${a}, 1), 2), f=((a),"
+		composite="map"/>
+	<vbox>
+	<label value="${forEachStatus.index} ${each.value}" forEach="${vars}"
+		forEachBegin="1"/>
+	</vbox>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-focus.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 15 18:12:58     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of focus">
+<html><![CDATA[
+<ol>
+<li>Click "Try 1" and the following window shall become modal
+and the focus remains on the first textbox</li>
+<li>Click "Restore to embedded"</li>
+<li>Click "Try 2' the focus shall remains on the second modal</li>
+</ol>
+]]></html>
+	<window id="w" title="Window 1" border="normal" width="300px">
+		<textbox id="t1" value="First"/>
+		<textbox id="t2" value="Second"/>
+		<button label="Restore to embedded" onClick="w.doEmbedded()"/>
+	<button label="Try 1" onClick="t1.focus();w.doModal()"/>
+	<button label="Try 2" onClick="t2.focus();w.doModal()"/>
+	</window>
+</window>

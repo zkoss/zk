@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1991859.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 12 19:42:29 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="test" title="test" border="normal" height="100%">
+	Please click the button, and then you should only see one alert message.
+<listbox width="400px">
+<listhead>
+<listheader label="1" />
+<listheader label="2" />
+</listhead>
+<listitem>
+<listcell span="2" onClick='alert("you cannot see this one!")'>
+<button label="Click"
+onClick='alert("only this one!");'/>
+</listcell>
+</listitem>
+</listbox>
+</window>

@@ -1,0 +1,24 @@
+<vlayout id="inf">
+	<html><![CDATA[
+	<ol>
+	<li>Case 1: Drop down and change the time in the timebox (of the popup).</li>
+	<li>Then, click anywhere other than the datebox and popup to cause onChange</li>
+	<li>Then, you shall see some message appended to the end of this page saying onChange:...</li>
+	<li>Case 2: clean the content of datebox (delete all characters) and press TAB</li>
+	<li>Then, you shall see onChange being fired with a null value (shown in the message being added)</li>
+	</ol>
+	]]></html>
+	<zscript>
+	int cnt = 0;
+	void out(Object e, Object o) {
+		inf.appendChild(new Label(e.target.id + ":" + e.name + ": "+o));
+	}
+	</zscript>
+	<hlayout>
+		<datebox id="d2" width="150px" format="MMM d, yyyy HH:mm:ss"
+			onChange='out(event, self.value)'
+			onChangingx='out(event, event.value)'
+			onCreate="self.value = new Date()"/>
+		<button label="reset" onClick='d2.setValue(new Date())'/>
+	</hlayout>
+</vlayout>

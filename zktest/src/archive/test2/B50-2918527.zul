@@ -1,0 +1,12 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+Click the button, the "textbox" below should move to center
+<button label="Click Me">
+	<attribute name="onClick">
+		div.setAlign("center");	
+	</attribute>
+</button>
+<div id="div">
+<textbox />
+</div>
+</zk>

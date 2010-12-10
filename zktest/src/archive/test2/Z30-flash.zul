@@ -1,0 +1,4 @@
+<window title="flash test" style="width:600px" border="normal">
+    <flash src="http://mirrors.creativecommons.org/reticulum_rex/cc.milestones.121503.swf" width="620" height="320" ></flash>
+	<label value="This Flash movie is licensed under a Creative Commons License."></label>
+</window>

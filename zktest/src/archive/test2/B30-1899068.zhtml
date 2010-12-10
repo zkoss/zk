@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1899068.zhtml
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar  4 18:37:04     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:h="http://www.w3.org/1999/xhtml"
+xmlns:z="http://www.zkoss.org/2005/zul"
+xmlns:zk="http://www.zkoss.org/2005/zk">
+	<head>
+	<title>ZHTML Demo</title>
+	</head>
+	<body>
+	<z:borderlayout>
+	<z:north>
+	<z:label>Click browser's [View | Page Source] to see if LINK/SCRIPT is placed inside HEAD.</z:label>
+	</z:north>
+	<z:south>
+	<z:label value="South Label"></z:label>
+	</z:south>
+	<z:east>
+	<z:label value="East Label"></z:label>
+	</z:east>
+	<z:west>
+	<z:label value="West Label"></z:label>
+	</z:west>
+	<z:center>
+	<z:label value="Center what up"/>
+	</z:center>
+	</z:borderlayout>
+	</body>
+</html> 

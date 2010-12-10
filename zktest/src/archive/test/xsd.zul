@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+xsd.zul
+
+{{IS_NOTE
+	Purpose:
+		Test zul.xsd
+	Description:
+		
+	History:
+		Fri Mar  2 15:40:38     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window xmlns="http://www.zkoss.org/2005/zul" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul C:\home\tomyeh\prj\zk1\zul\src\export\WEB-INF\xsd\zul\zul.xsd">
+	<grid>
+	<columns/>
+	<rows></rows><foot></foot><attribute name="abc" trim="${a}"/>
+	</grid>
+	<grid><foot></foot><columns></columns><rows></rows>
+	</grid>
+	<tree><treechildren></treechildren><treecols></treecols><treefoot></treefoot><custom-attributes></custom-attributes></tree>
+	<tree><treefoot></treefoot><treechildren></treechildren></tree>
+</window>

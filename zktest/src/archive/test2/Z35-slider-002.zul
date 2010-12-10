@@ -1,0 +1,52 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  All sliders should work.
+<groupbox>
+<vbox>
+<label value="1. Operate sliders so the values of the label is changed accordingly."/>
+<label value="2. When slider nob button is clicked and dragged away, color should not lock."/>
+</vbox>
+</groupbox>
+  <window title="Vertical Sliders in Containers" border="normal" width="400px">
+    <hbox>
+    Slider in a hbox
+    <slider id="slider" orient="vertical" curpos="4" maxpos="5">
+        <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+      </slider>
+      <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."/>
+    </hbox>
+    <vbox>
+    Slider in a vbox
+    <slider id="slider2" orient="vertical" curpos="4" maxpos="5">
+        <attribute name="onScroll">
+   textLabel2.setValue("The Scrolled value is..... "+slider2.getCurpos()+"");
+   </attribute>
+      </slider>
+      <label id="textLabel2" value="TESTING SLIDERS FUNCTIONALITY..."/>
+    </vbox>
+  </window>
+  <window title="Horizontal Sliders in Containers" border="normal" width="400px">
+    <hbox>
+    Slider in a hbox
+    <slider id="slider" orient="horizontal" curpos="4" maxpos="5">
+        <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+      </slider>
+      <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."/>
+    </hbox>
+    <vbox>
+    Slider in a vbox
+    <slider id="slider2" orient="horizontal" curpos="4" maxpos="5">
+        <attribute name="onScroll">
+   textLabel2.setValue("The Scrolled value is..... "+slider2.getCurpos()+"");
+   </attribute>
+      </slider>
+      <label id="textLabel2" value="TESTING SLIDERS FUNCTIONALITY..."/>
+    </vbox>
+  </window>
+</zk>

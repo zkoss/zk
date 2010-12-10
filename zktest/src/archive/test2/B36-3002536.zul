@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-3002536.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 17 12:32:29 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please change browser language to French(fr), and reload the page again.
+<separator/>
+2. Choose a month(avr. or nov.), and the date should be selected.
+<datebox/>
+</zk>

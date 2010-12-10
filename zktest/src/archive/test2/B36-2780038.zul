@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2780038.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 24 11:38:04     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please check both images showing by pressing the two button.
+<button label="Zhtml click" onClick='org.zkoss.zul.Messagebox.show("are you sure to quit?","title",16|32,org.zkoss.zhtml.Messagebox.INFORMATION);'/>
+<button label="zul click" onClick='org.zkoss.zul.Messagebox.show("are you sure to quit?","title",16|32,org.zkoss.zul.Messagebox.INFORMATION);'/>
+</zk>

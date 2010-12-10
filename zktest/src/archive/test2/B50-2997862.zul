@@ -1,0 +1,27 @@
+<window vflex="min">
+<html>
+<![CDATA[
+<ol>
+<li>If the content of the tabpanel is not chopped half way, it is OK.</li>
+</ol>
+]]>
+</html>
+<borderlayout vflex="min">
+<north vflex="min">
+
+<tabbox vflex="min">
+<tabs vflex="min">
+<tab label="Tab 1" vflex="min"/>
+</tabs>
+
+<tabpanels vflex="min">
+<tabpanel vflex="min">
+
+<include src="B50-2997862-1.zul" />
+
+</tabpanel>
+</tabpanels>
+</tabbox>
+</north>
+</borderlayout>
+</window>

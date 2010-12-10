@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hyphen.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 28 16:29:09     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal" width="100px">
+	<vbox id="result">
+	maxlength is 9:
+	</vbox>
+	<zscript><![CDATA[
+	String[] s = {"this is 9", "this is ten more to show", "this framework", "performance is everything"};
+	for (int j = 0; j < s.length; ++j) {
+		Label l = new Label(s[j]);
+		l.maxlength = 9;
+		l.hyphen = true;
+		l.parent = result;
+	}
+	]]></zscript>
+</window>

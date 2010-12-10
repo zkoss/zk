@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2841185.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 18:13:59     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window height="400px">
+
+<zscript>
+String[] data = new String[100];
+for(int i = 0; i&lt;data.length;i++)
+data[i] = "data_"+i;
+ListModel model = new ListModelList(data);
+</zscript>
+
+<caption label="Firefox Bug"/>
+<borderlayout>
+<north splittable="true" height="180px">
+<borderlayout>
+<north size="10px" border="0"></north>
+<center id="nc" flex="true" border="none" style="padding:5px">
+<grid mold="paging" model="&#36;{model}">
+<columns>
+<column label="Grid"/>
+</columns>
+</grid>
+</center>
+</borderlayout>
+</north>
+<center flex="true" style="padding:5px">
+<div>
+Please insert 2 into the paging number, and press ENTER, if you see the grid disappears that is a bug.(Firefox only)
+</div>
+</center>
+</borderlayout>
+</window>

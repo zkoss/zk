@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1906405.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  5 18:53:13     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<div>
+<html><![CDATA[
+1. Move mouse point  on top of the image for a while, then  the tooltip shall show ! <br />
+2. Right click the image and the context menu shall show up. (the tooltip shall never show)<br />
+]]></html> 
+<zscript>contacts = new String[] {"Monday"};</zscript>
+<zk forEach="${contacts }">
+<window>
+	<vbox context="popup_${each}" tooltip="tooltip_${each}">
+	<image src="/test2/img/sun.jpg" />
+	<label value="${each}"/>
+	</vbox>
+
+	<popup id="tooltip_${each}" width="300px">
+	<vbox>
+	<label value="${each}"/>
+	<label value="Some more info"/>
+	<label value="And an extra line here too"/>
+	</vbox>
+	</popup>
+
+	<menupopup id="popup_${each}">
+		<menu label="File">
+			<menupopup>
+			<menuitem label="Open" onClick="alert(&quot;Not Yet&quot;)"/>
+			</menupopup>
+		</menu>
+	</menupopup>
+</window>
+</zk>
+</div>

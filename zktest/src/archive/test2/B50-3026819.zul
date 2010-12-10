@@ -1,0 +1,15 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Click tab to navigator each textbox</li>
+	<li>Check it will skip second textbox</li>
+</ol>
+]]>
+</html>
+	<div>
+		<textbox id="txt1" value="tabindex1" />
+		<textbox id="txt2" value="tabindex-1" tabindex="-1" />
+		<textbox id="txt3" value="tabindex2" />
+	</div>
+</zk>

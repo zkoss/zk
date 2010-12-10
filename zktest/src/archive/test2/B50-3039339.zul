@@ -1,0 +1,124 @@
+<!-- Scrollbar is not counted in grid width when hflex="min" in all columns -->
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Scroll the horizontal scroll bar to right for the first two grids. </li>
+<li>The header and the content(body) shall ALIGN vertically</li>
+<li>Scroll the vertical scroll bar down for the three grids.</li>
+<li>The header and the content(body) shall ALIGN vertically</li>
+<li>If they are not align, it is a bug.</li>
+</ol>
+]]>
+</html>
+<grid id="grid1" width="300px" height="100px">
+		<columns>
+			<column label="Column1" width="57px"/>
+			<column label="Column2" width="57px"/>
+			<column label="Column3" width="57px"/>
+			<column label="Column4" width="57px"/>
+			<column label="Column5" width="57px"/>
+			<column label="Column6" width="57px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Column11" />
+				<label value="Column12" />
+				<label value="Column13" />
+				<label value="Column14" />
+				<label value="Column15" />
+				<label value="Column16" />
+			</row>
+			<row>
+				<label value="Column2111" />
+				<label value="Column2222" />
+				<label value="Column2333" />
+				<label value="Column2444" />
+				<label value="Column2555" />
+				<label value="Column2666" />
+			</row>
+			<row>
+				<label value="Column311111" />
+				<label value="Column322222" />
+				<label value="Column333333" />
+				<label value="Column344444" />
+				<label value="Column355555" />
+				<label value="Column366666" />
+			</row>
+		</rows>
+</grid>
+<separator/>
+<grid id="grid2" width="342px" height="80px">
+		<columns>
+			<column label="Column1" width="57px"/>
+			<column label="Column2" width="57px"/>
+			<column label="Column3" width="57px"/>
+			<column label="Column4" width="57px"/>
+			<column label="Column5" width="57px"/>
+			<column label="Column6" width="57px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Column11" />
+				<label value="Column12" />
+				<label value="Column13" />
+				<label value="Column14" />
+				<label value="Column15" />
+				<label value="Column16" />
+			</row>
+			<row>
+				<label value="Column2111" />
+				<label value="Column2222" />
+				<label value="Column2333" />
+				<label value="Column2444" />
+				<label value="Column2555" />
+				<label value="Column2666" />
+			</row>
+			<row>
+				<label value="Column311111" />
+				<label value="Column322222" />
+				<label value="Column333333" />
+				<label value="Column344444" />
+				<label value="Column355555" />
+				<label value="Column366666" />
+			</row>
+		</rows>
+</grid>
+<separator/>
+<grid id="grid3" width="359px" height="80px">
+		<columns>
+			<column label="Column1" width="57px"/>
+			<column label="Column2" width="57px"/>
+			<column label="Column3" width="57px"/>
+			<column label="Column4" width="57px"/>
+			<column label="Column5" width="57px"/>
+			<column label="Column6" width="57px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Column11" />
+				<label value="Column12" />
+				<label value="Column13" />
+				<label value="Column14" />
+				<label value="Column15" />
+				<label value="Column16" />
+			</row>
+			<row>
+				<label value="Column2111" />
+				<label value="Column2222" />
+				<label value="Column2333" />
+				<label value="Column2444" />
+				<label value="Column2555" />
+				<label value="Column2666" />
+			</row>
+			<row>
+				<label value="Column311111" />
+				<label value="Column322222" />
+				<label value="Column333333" />
+				<label value="Column344444" />
+				<label value="Column355555" />
+				<label value="Column366666" />
+			</row>
+		</rows>
+</grid>
+</zk>

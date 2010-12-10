@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3054784.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 30 11:31:21 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please upload any text file(such as html, js, or txt filetype), then you should see the "true" in the dialog
+	<button label="Upload" upload="true,native" onUpload="alert(event.getMedia().isBinary());" />
+</zk>
+

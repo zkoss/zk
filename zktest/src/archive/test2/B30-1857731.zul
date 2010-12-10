@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1857731.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 25 11:00:59 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Listbox Bug">	
+	<toolbarbutton id="With Bug" label="Click Me! And no error msg!" onClick="openNewTab()"/>
+	
+	<tabbox>
+		<tabs id="tbsMain">
+			<tab label="tab1"/>
+		</tabs>
+		<tabpanels id="tbpMain">
+			<tabpanel>
+			<listbox width="250px">
+			<listhead sizable="true">
+				<listheader label="name"/>
+				<listheader label="gender"/>
+			</listhead>
+			<listitem>
+				<listcell label="Mary"/>
+				<listcell label="FEMALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="John"/>
+				<listcell label="MALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="Jane"/>
+				<listcell label="FEMALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="Henry"/>
+				<listcell label="MALE"/>
+			</listitem>
+		</listbox>		
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<zscript><![CDATA[
+	public void openNewTab()
+	{
+		Tabpanel tabPanel = new Tabpanel();
+		tbpMain.appendChild(tabPanel);
+		
+		Tab tab = new Tab();
+		tab.setLabel("Tab2");
+		tbsMain.appendChild(tab);
+		
+		tabPanel.appendChild(new Label("Test"));
+		
+		tab.setSelected(true);
+	}
+	]]></zscript>
+</window>

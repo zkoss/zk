@@ -1,0 +1,48 @@
+<window title="Test of FullComposer" border="normal">
+	<zscript><![CDATA[
+	info = "";
+	import org.zkoss.zk.ui.metainfo.*;
+	import org.zkoss.zk.ui.util.*;
+	class Composer1 implements Composer, ComposerExt {
+		public void doAfterCompose(Component comp) throws Exception {
+			info += "doAfterCompose(" + comp + ")\n";
+		}
+		public ComponentInfo doBeforeCompose(Page page, Component parent,
+		ComponentInfo compInfo) throws Exception {
+			info += "doBeforeCompose(" + parent + "," + compInfo + ")\n";
+			return compInfo;
+		}
+		public void doBeforeComposeChildren(Component comp) throws Exception {
+			info += "doBeforeComposeChildren(" + comp + ")\n";
+		}
+		public boolean doCatch(Throwable ex) throws Exception {
+			info += "doCatch(" + ex + ")\n";
+			return false;
+		}
+		public void doFinally() throws Exception {
+			info += "doFinally()\n";
+		}
+	}
+	class Composer2 extends Composer1 implements FullComposer {
+	}
+	]]></zscript>
+	<div id="a" apply="Composer1" style="border:1px solid blue">
+		<textbox id="a_1" value="a_1"/>
+		<div id="a_2" apply="Composer1">
+			<label id="a_2_1" value="a_2_1"/>
+			<label id="a_2_2" value="a_2_2"/>
+		</div>
+	</div>
+	<label value="${info}" multiline="true"/>
+	<zscript>
+	info = "";
+	</zscript>
+	<div id="b" apply="Composer2" style="border:1px solid blue">
+		<textbox id="b_1" value="b_2"/>
+		<div id="b_2" apply="Composer2">
+			<label id="b_2_1" value="b_2_1"/>
+			<label id="b_2_2" value="b_2_2"/>
+		</div>
+	</div>
+	<label value="${info}" multiline="true"/>
+</window>

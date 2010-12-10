@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+groovy.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb  9 16:55:30     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page zscript-language="Ruby"?>
+<window border="normal">
+	<vbox id="vb">
+		<label id="l" value="Hi"/>
+		<button label="change label" onClick="$l.value='Hi, Ruby';"/>
+		<button label="add label"
+			onClick="(Java::Label.new 'New').parent = $vb"/>
+	</vbox>
+	<button label="alert" onClick="alert 'Hi, Ruby'"/>
+</window>

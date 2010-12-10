@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?page title="Tab on Demand"?>
+<!--
+tabOnDemand.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 20 18:46:57     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<tabbox id="tabbox" width="400" onSelect="load()" mold="accordion">
+	<tabs>
+		<tab label="First"/>
+		<tab label="OnDemand"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+	This panel is pre-loaded.
+	<tabbox mold="accordion">
+		<tabs>
+			<tab label="Inner 1"/>
+			<tab label="Inner 2"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+			Inner 1.1a
+			</tabpanel>
+			<tabpanel>
+			Inner 1.2
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+		</tabpanel>
+		<tabpanel>
+		</tabpanel>
+	</tabpanels>
+	<zscript><![CDATA[
+void load() {
+	Tabpanel panel = tabbox.getSelectedPanel();
+	if (panel != null && panel.getChildren().isEmpty()) {
+		new Label("Second panel is loaded").setParent(panel);
+		new Label("Hello").setParent(panel);
+
+		Html html = new Html();
+		html.setParent(panel);
+		html.setContent(
+			"<table border=\"1\"><tr><td>Some</td><td>Another</td></tr></h:table>");
+	}
+}
+	]]></zscript>
+</tabbox>

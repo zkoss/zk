@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+grid2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 22 14:25:28     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid with Paging">
+	<grid id="grid" width="300px" mold="paging">
+		<columns>
+			<column label="Head 1"/>
+			<column label="Head 2" align="center"/>
+			<column label="Head 3" align="right"/>
+		</columns>
+		<rows>
+		</rows>
+	</grid>
+	<button label="add 5 children" onClick="add(-1, 5)"/>
+	<button label="add top" onClick="add(0, 1)"/>
+	<button label="Change the first label" onClick="changeLabel(0)"/>
+	<button label="Change the last label" onClick="changeLabel(-1)"/>
+	<button label="Remove first" onClick="remove(0)"/>
+	<button label="Remove last" onClick="remove(-1)"/>
+	<button label="redraw" onClick="grid.invalidate()"/>
+	<button label="set page size" onClick="grid.paginal.pageSize = 10"/>
+	<zscript><![CDATA[
+	void add(int ofs, int cnt) {
+		for (int j = 0; ++j <= cnt;) {
+			Row r = new Row();
+			String prefix = "Item " + (grid.getRows().getChildren().size() + 1);
+			new Label(prefix + "-L").setParent(r);
+			new Label(prefix + "-C").setParent(r);
+			new Label(prefix + "-R").setParent(r);
+			if (ofs < 0) r.setParent(grid.getRows());
+			else grid.getRows().getChildren().add(ofs, r);
+		}
+	}
+	void changeLabel(int j) {
+		int sz = grid.getRows().getChildren().size();
+		if (j < 0) j = sz - 1;
+		if (j < 0 || j >= sz) {
+			alert("No label to change");
+		} else {
+			Row r = grid.getRows().getChildren().get(j);
+			r.getChildren().get(0).setValue("Updated "+j);
+		}
+	}
+	void remove(int j) {
+		List kids = grid.getRows().getChildren();
+		int sz = kids.size();
+		if (j < 0) j = sz -1;
+		if (j >= 0 && j < sz) kids.get(j).detach();
+	}
+	]]></zscript>
+
+<vbox>
+<paging id="pg" pageSize="4"/>
+<hbox>
+	<grid width="300px" mold="paging" paginal="${pg}">
+		<columns>
+			<column label="Left"/>
+			<column label="Right"/>
+		</columns>
+		<auxhead>
+			<auxheader label="Whole" colspan="2"/>
+		</auxhead>
+		<rows>
+			<row>
+				<label value="Item 1.1"/>
+				<label value="Item 1.2"/>
+			</row>
+			<row>
+				<label value="Item 2.1"/>
+				<label value="Item 2.2"/>
+			</row>
+			<row>
+				<label value="Item 3.1"/>
+				<label value="Item 3.2"/>
+			</row>
+			<row>
+				<label value="Item 4.1"/>
+				<label value="Item 4.2"/>
+			</row>
+			<row>
+				<label value="Item 5.1"/>
+				<label value="Item 5.2"/>
+			</row>
+			<row>
+				<label value="Item 6.1"/>
+				<label value="Item 6.2"/>
+			</row>
+			<row>
+				<label value="Item 7.1"/>
+				<label value="Item 7.2"/>
+			</row>
+		</rows>
+	</grid>
+	<grid width="300px" mold="paging" paginal="${pg}">
+		<columns>
+			<column label="Left"/>
+			<column label="Right"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Item A.1"/>
+				<label value="Item A.2"/>
+			</row>
+			<row>
+				<label value="Item B.1"/>
+				<label value="Item B.2"/>
+			</row>
+			<row>
+				<label value="Item C.1"/>
+				<label value="Item C.2"/>
+			</row>
+			<row>
+				<label value="Item D.1"/>
+				<label value="Item D.2"/>
+			</row>
+			<row>
+				<label value="Item E.1"/>
+				<label value="Item E.2"/>
+			</row>
+			<row>
+				<label value="Item F.1"/>
+				<label value="Item F.2"/>
+			</row>
+		</rows>
+	</grid>
+</hbox>
+	Empty grid:
+	<grid id="gd" mold="paging"/>
+	<button label="add rows" onClick="new Rows().setParent(gd)"/>
+</vbox>
+</window>

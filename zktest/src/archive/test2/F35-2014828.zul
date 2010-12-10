@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2014828.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 10 16:36:29 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<fisheyebar id="fish" style="position: absolute; top: 50px; left:100px;margin:20px;" attachEdge="top">
+		<fisheye image="/test2/img/icon_browser.png" label="Web Browser"
+			onClick="alert(self.label)" />
+		<fisheye image="/test2/img/icon_calendar.png" label="Calendar"
+			onClick="alert(self.label)" />
+		<fisheye image="/test2/img/icon_email.png" label="Email"
+			onClick="alert(self.label)" />
+		<fisheye image="/test2/img/icon_texteditor.png" label="Text Editor"
+			onClick="alert(self.label)" />
+		<fisheye image="/test2/img/icon_update.png" label="Software Update"
+			onClick="alert(self.label)" />
+		<fisheye image="/test2/img/icon_users.png" label="Users"
+			onClick="alert(self.label)" />
+	</fisheyebar>
+	<separator height="250px"/>
+	<button label="add Fisheye">
+		<attribute name="onClick">
+			new Fisheye("Added Item", "/test2/img/icon_browser.png").setParent(fish);
+		</attribute>
+	</button>
+	<button label="delete Fisheye">
+		<attribute name="onClick">
+			if (fish.getChildren().isEmpty()) {
+				alert("Nothing to do");
+			}
+			fish.getChildren().get(fish.getChildren().size()-1).detach();
+		</attribute>
+	</button>
+	<button label="change itemWidth and itemHeight">
+		<attribute name="onClick">
+			if (fish.itemWidth == 50) {
+				fish.itemWidth = 100;
+				fish.itemHeight = 100;
+			} else {
+				fish.itemWidth = 50;
+				fish.itemHeight = 50;
+			}
+		</attribute>
+	</button>
+	<button label="change orient">
+		<attribute name="onClick">
+			if (fish.orient.equals("horizontal")) {
+				fish.orient = "vertical";
+			} else {
+				fish.orient = "horizontal";
+			}
+		</attribute>
+	</button>
+	<button label="change attachEdge">
+		<attribute name="onClick">
+			if (fish.orient.equals("horizontal")) {
+				if (!fish.attachEdge.equals("bottom"))
+					fish.attachEdge = "bottom";
+				else 
+					fish.attachEdge = "top";
+			} else {
+				if (!fish.attachEdge.equals("left"))
+					fish.attachEdge = "left";
+				else 
+					fish.attachEdge = "right";
+			}
+		</attribute>
+	</button>
+	<button label="change labelEdge">
+		<attribute name="onClick">
+			if (fish.orient.equals("horizontal")) {
+				if (!fish.labelEdge.equals("bottom"))
+					fish.labelEdge = "bottom";
+				else 
+					fish.labelEdge = "top";
+			} else {
+				if (!fish.labelEdge.equals("left"))
+					fish.labelEdge = "left";
+				else 
+					fish.labelEdge = "right";
+			}
+		</attribute>
+	</button>
+</zk>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-2831389.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar  5 15:08:30 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Click each panel/tabpanel(the root tabbox) to see the height of each panel/tabpanel(the root tabbox) is the same.
+	<separator/>
+	2. Change its mold via checking the checkbox to see the result as step 1.
+	<checkbox label="accordion-lite"
+		onCheck='tb.mold = self.checked ? "accordion-lite" : "default"' />
+	<checkbox label="accordion" checked="true"
+		onCheck='tb.mold = self.checked ? "accordion" : "default"' />
+	<div height="400px" style="overflow:hidden">
+		<tabbox id="tb" width="400px" mold="accordion" vflex="true">
+			<tabs>
+				<tab label="Tab 1" />
+				<tab label="Tab 2" />
+			</tabs>
+			<tabpanels>
+				<tabpanel style="overflow:auto">
+					<tabbox id="tb2" orient="vertical">
+						<tabs width="20px">
+							<tab label="A" />
+							<tab label="B" />
+							<tab label="C" />
+							<tab label="D" />
+							<tab label="E" />
+						</tabs>
+						<tabpanels>
+							<tabpanel>This is panel A</tabpanel>
+							<tabpanel>This is panel B</tabpanel>
+							<tabpanel>This is panel C</tabpanel>
+							<tabpanel>This is panel D</tabpanel>
+							<tabpanel>This is panel E</tabpanel>
+						</tabpanels>
+					</tabbox>
+					<checkbox label="Horizonal orient"
+						onCheck='tb2.orient=self.checked?"horizontal":"vertical"' />
+					<div style="border:1px solid blue" height="400px">
+						another
+					</div>
+				</tabpanel>
+				<tabpanel>This is panel 2 The second panel</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</div>
+</zk>
+
+

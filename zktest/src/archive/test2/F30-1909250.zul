@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1909250.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar  7 11:24:13 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1909250 ] A way to specify the component with long word wrapping</n:h2>
+	<n:ol>
+		<n:li>Block of Wrap1 and Wrap2 should have long-word wrapped, and others should be truncate(check gray,blue and green block)</n:li>
+	</n:ol>
+
+	<n:p>Long word wrapping : [unsupported for Opera]</n:p>
+	<vbox>
+	<listbox width="250px" fixedLayout="true">
+	<listhead>
+		<listheader label="name"/>
+		<listheader label="gender"/>
+	</listhead>
+	<listitem>
+		<listcell sclass="z-word-wrap"
+			label="Wrap1-ThisAreaShouldBeWrapt....................................................................End">
+			<label style="background:gray"
+				value="ThisAreaIsNotWraptttttttttttttttttttttttttttttttttttttttttttttttttt">
+			</label>
+			<div style="background:blue">OtherDivTaggggggggggxyxyxyxxyxyxyxyxyx</div>
+		</listcell>
+		<listcell label="FEMALE" />
+	</listitem>
+	<listitem>
+		<listcell label="John" />
+		<listcell label="MALE" />
+	</listitem>
+	<listitem>
+		<listcell label="Jane" />
+		<listcell label="FEMALE" />
+	</listitem>
+	<listitem>
+		<listcell label="Henry" />
+		<listcell label="MALE" />
+	</listitem>
+</listbox>
+	<window title="mix HTML demo" xmlns:h="http://www.w3.org/1999/xhtml"
+		xmlns:zk="http://www.zkoss.org/2005/zk" width="300px">
+		<h:table border="1" style="width:300px;table-layout:fixed;">
+			<h:tr>
+				<h:td>column 1</h:td>
+				<h:td>
+					<h:div width="30px" class="z-word-wrap">Wrap2-LongWordWrappingWithSpecialWord&amp;.....................&amp;nbsp;LongWordLongWordLongWordLongWordLongWordLongWord&amp;LongWordLongWordLongWordLongWordLongWordLongWord
+						<h:div style="background:green">
+							dddddddddddddddddddddddddddddddddddddddddddddddd
+						</h:div>
+					</h:div>
+<label sclass="z-word-wrap" value="llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"/>
+				</h:td>
+			</h:tr>
+		</h:table>
+	</window>
+	</vbox>
+</zk>
+

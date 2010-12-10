@@ -1,0 +1,129 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+<html><![CDATA[
+1: Select an item and update the street of the item in the listbox. Now tab away, the two grids should get the updated value<br/>
+2: Update the street in the edit grid on the right side and tab away, the bottom grid and the listbox should gets the updated value<br/>
+3: Update the street in the bottom grid("after save" ) and tab away, the right hand side grid and listbox should NOT change.<br/>
+4. Now press save button, the right hand side grid and the listbox should gets the updated value now.<br/>
+]]></html>
+	<zscript src="B30-1769047-1.zs"/>
+
+	<window id="mainwin" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+	<hbox>
+		<listbox model="@{personList}" selectedItem="@{selected}" width="600px" rows="8">
+			<listhead>
+				<listheader width="200px"/>
+				<listheader width="200px"/>
+				<listheader width="200px"/>
+				<listheader width="200px"/>
+				<listheader width="200px"/>
+			</listhead>
+			<listitem _var="@{person}" onDoubleClick="alert(&quot;doubleclick&quot;);">
+				<listcell style="white-space:nowrap;overflow:hidden">
+					<textbox id="fn" value="@{person.firstName}"/>
+				</listcell>
+				<listcell style="white-space:nowrap;overflow:hidden">
+					<textbox id="ln" value="@{person.lastName}"/>
+				</listcell>
+				<!-- Test binding nested attribute "address.street" to the listbox -->
+				<listcell style="white-space:nowrap;overflow:hidden">
+					<textbox id="ps" value="@{person.address.street}"/>
+				</listcell>
+				<listcell style="white-space:nowrap;overflow:hidden">
+					<label maxlength="20" value="@{person.fullName}"/>
+				</listcell>
+				<listcell>
+					<listbox mold="select" rows="1" model="@{emailList}" selectedItem="@{person.email}">
+						<listitem _var="@{email}" label="@{email}"/>
+					</listbox>
+				</listcell>
+			</listitem>
+		</listbox>
+
+		<grid sizedByContent="true">
+		<rows>
+			<row>
+				First Name: <textbox value="@{selected.firstName}" id="firstName"/>
+			</row>
+			<row>
+				Last Name: <textbox value="@{selected.lastName}" id="lastName"/>
+			</row>
+			<row>
+				Email: 
+				<listbox model="@{emailList}" selectedItem="@{selected.email}" mold="select" rows="1">
+					<listitem _var="@{email}" label="@{email}"/>
+				</listbox>
+			</row>
+			<row>
+				Email:
+				<listbox model="@{emailList}" selectedItem="@{selected.email}" mold="select" rows="1">
+					<listitem _var="@{email}" label="@{email}"/>
+				</listbox>
+			</row>
+			<row>
+				Street:	<textbox value="@{selected.address.street}" id="street"/>
+			</row>
+			<row>
+				City: <textbox value="@{selected.address.city}" id="city"/>
+			</row>
+		</rows>
+		</grid>
+	</hbox>
+	
+	<grid>
+	<columns>
+		<column width="50%"/>
+		<column width="50%"/>
+	</columns>
+	<rows>
+		<row>
+			<label value="FirstName, after Save button:" />
+			<textbox value="@{selected.firstName,save-when='SaveButton.onClick'}" id="ID"/>
+		</row>
+		<row>
+			<label value="LastName, after Save button:" />
+			<textbox value="@{selected.lastName,save-when='SaveButton.onClick'}" id="Phone1"/>
+		</row>
+		<!-- Test binding nested attribute address.street -->
+		<row>
+			<label value="Street, after Save button:" />
+			<textbox value="@{selected.address.street,save-when='SaveButton.onClick'}" id="addressStreet"/>
+		</row>
+	</rows>
+	</grid>
+	
+	<button id="SaveButton" label="Save" onClick="doNothing()"/>
+	
+	<zscript>
+		doNothing() { }
+
+		//prepare collection list
+		setupPerson(Person person, int j) {
+			person.setFirstName("First"+j);
+			person.setLastName("Last"+j);
+			person.setEmail("email"+j+"@potix.com");
+			person.setAddress(new Address("Street"+j, "City"+j));
+		}
+
+		//prepare a selected person
+		Person selected = new Person();
+
+		//prepare the example person List
+		int count = 30;
+		List personList = new ArrayList();
+		// self.setVariable("personList", personList, false);
+		for(int j= 0; j &lt; count; ++j) {
+			Person personx = new Person();
+			setupPerson(personx, j);
+			personList.add(personx);
+		}
+		selected = personList.get(1);
+		
+		//prepare email list
+		Set emailList = new LinkedHashSet();
+		for(int j= 0; j &lt; count; ++j) {
+			emailList.add("email"+j+"@potix.com");
+		}
+	</zscript>
+	</window>
+</zk>

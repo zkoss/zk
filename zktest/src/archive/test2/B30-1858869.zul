@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1858869.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 27 19:17:01     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="w" title="Test of textbox with onOK">
+	<textbox id="test" onOK="test()"/>
+	<zscript>
+void test() {
+	new Label(test.getValue()).setParent(w);
+}
+	</zscript>
+</window>

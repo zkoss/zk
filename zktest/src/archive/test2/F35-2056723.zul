@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	F35-2056723.zul
+{{IS_NOTE
+	Purpose:
+	
+	Description:
+	
+	History:
+	Mon Aug  18 11:22:32 TST 2008, Created by Ryanwu
+}}IS_NOTE
+	
+	Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+	
+{{IS_RIGHT
+ 	This program is distributed under GPL Version 3.0 in the hope that
+ 	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+-->
+<window xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h3 >1. click add then the tabbox will show scrolling button;</n:h3>
+	<n:h3 >2. click delete then the scrolling will disable</n:h3>
+	<n:h3 >3. try add/delete/click tabs and check it scrolling </n:h3>
+	<vbox>
+		<label value="default - scrolling" />
+		<hbox>
+			<button label="Add" onClick="add()" />		
+			<textbox value="MyTabislonglong" id="txb" />		
+			<button label="delete" onClick="del()" />
+		</hbox>
+		<tabbox id="mytab" width="400px">
+			<tabs id="ts">
+				<tab id="a1" label="Default 1" Closable="true" />
+				<tab id="a2" label="Default 2" Closable="true" />
+				<tab id="a3" label="Default 3" />
+				<tab id="a4" label="Default 4" Closable="true" />
+			</tabs>
+			<tabpanels id="tp">
+				<tabpanel>test1</tabpanel>
+				<tabpanel>test2</tabpanel>
+				<tabpanel>test3</tabpanel>
+				<tabpanel>test4</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<separator />
+		<n:h3 >4. see new style of tabbox and check it's OK </n:h3>			
+		<label value="accordion" />
+		<tabbox id="mytab2" width="400px" mold="accordion">
+			<tabs id="ts2">
+				<tab id="a12" label="Default 1" Closable="true" />
+				<tab id="a22" label="Default 2" Closable="true" />
+				<tab id="a32" label="Default 3" />
+				<tab id="a42" label="Default 4" Closable="true" />
+			</tabs>
+			<tabpanels id="tp2">
+				<tabpanel>test1</tabpanel>
+				<tabpanel>test2</tabpanel>
+				<tabpanel>test3</tabpanel>
+				<tabpanel>test4</tabpanel>
+			</tabpanels>
+		</tabbox>
+			<separator />
+		<label value="accordion-lite" />
+		<tabbox id="mytab3" width="400px" mold="accordion-lite">
+			<tabs id="ts3">
+				<tab id="a13" label="Default 1" Closable="true" />
+				<tab id="a23" label="Default 2" Closable="true" />
+				<tab id="a33" label="Default 3" />
+				<tab id="a43" label="Default 4" Closable="true" />
+			</tabs>
+			<tabpanels id="tp3">
+				<tabpanel>test1</tabpanel>
+				<tabpanel>test2</tabpanel>
+				<tabpanel>test3</tabpanel>
+				<tabpanel>test4</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</vbox>
+	<zscript>
+		<![CDATA[ //@DECLARATION
+       		int f = 0;   
+  	         void add(){    	        	 
+  	        	String mystr = txb.getValue().equals("")?"0":txb.getValue();			
+   	         	Tab newtemp= new Tab(mystr);
+   	 			newtemp.setParent(ts); 
+   	 			Tabpanel newtemp2 = new Tabpanel();
+   	 			newtemp2.setParent(tp); 
+   	 			f++;
+    	        }
+  	       void del(){			
+	  			if (mytab.getSelectedPanel() != null){
+	 				mytab.getSelectedPanel().detach();
+	  			}
+	 			mytab.getSelectedTab().detach();
+	 			
+	  		}  
+    	]]>
+	</zscript>
+</window>

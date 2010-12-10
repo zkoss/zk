@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1911864.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 12 10:13:18     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="combobox in listbox" border="normal">
+<vbox>
+	Clicks the dropdown button of the combobox to see if the dropdown
+	appears or not (it shall appear).
+	<listbox width="250px">
+	<listhead sizable="true">
+	<listheader label="name" sort="auto"/>
+	<listheader label="gender" sort="auto"/>
+	</listhead>
+	<listitem>
+	<listcell label="Mary"/>
+	<listcell label="FEMALE"/>
+	</listitem>
+	<listitem>
+	<listcell label="John"/>
+	<listcell>
+	<combobox id="cf8" cols="7">
+		<comboitem label="male"/>
+		<comboitem label="female"/>
+		<comboitem label="unkown"/>
+	</combobox>
+	</listcell>
+	</listitem>
+	<listitem>
+	<listcell label="Jane"/>
+	<listcell>
+	<datebox/>
+	</listcell>
+	</listitem>
+	<listitem>
+	<listcell label="Henry"/>
+	<listcell label="MALE"/>
+	</listitem>
+	</listbox>
+</vbox>
+</window>

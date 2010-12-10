@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2019158.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 16 12:18:24 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Column's Menu Demo" border="normal" width="500px">
+	<zscript>
+	import org.zkoss.zkdemo.userguide.*;
+	Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
+	</zscript>
+	1. First of all, you should move the mouse over the header, and then test whether each menuitem works.
+	<separator/>
+	2. Click the "change customized menu" button, and then see the column's menu whether it is changed.
+	<menupopup id="editPopup">
+        <menuitem label="Group" image="~./zul/img/grid/menu-group.png"/>
+        <menuitem label="Sort Ascending" image="~./zul/img/grid/menu-arrowup.png"/>
+        <menuitem label="Sort Descending" image="~./zul/img/grid/menu-arrowdown.png"/>
+	</menupopup>
+	<button label="change customized menu" onClick='cols.menupopup="editPopup"'/>
+	<grid>
+		<columns sizable="true" menupopup="auto" id="cols">
+			<column id="col" label="Type" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
+			<column id="col1" label="Type1" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
+			<column id="col2" label="Content"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="File:"/>
+				<label value="File1:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<label value="File:"/>
+				<label value="File1:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<label value="Files:"/>
+				<label value="File1s:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<label value="Type:"/>
+				<label value="Type2:"/>
+				<hbox>
+					<listbox rows="1" mold="select">
+						<listitem label="Java Files,(*.java)"/>
+						<listitem label="All Files,(*.*)"/>
+					</listbox>
+					<button label="Browse..."/>
+				</hbox>
+			</row>
+			<row>
+				<label value="Options:"/>
+				<label value="Options2:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+</window>
+				

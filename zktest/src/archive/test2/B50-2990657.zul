@@ -1,0 +1,14 @@
+<zk>
+	<div>Set Combobox autocomplete="false" doesn't work, still has autocomplete</div>
+	<div>Type in the combobox "ab" and press enter, the text in the combobox should be "ab", not "abacus"</div>
+	
+	<combobox id="combo" autodrop="true" autocomplete="false"/>
+	<zscript>
+	String[] _dict = { 
+		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+		"jump", "jungle", "jungle fever"
+	};
+	 ListModel dictModel= new SimpleListModel(_dict);
+	 combo.setModel(dictModel);
+	</zscript>
+</zk>

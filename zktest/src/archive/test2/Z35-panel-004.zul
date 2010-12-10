@@ -1,0 +1,44 @@
+<window>
+<panel id="p1" title="Panel Component" border="normal" width="500px" maximizable="true" minimizable="true">
+	<panelchildren>
+		<grid width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Description" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Ivan" />
+					<label value="MIS" />
+				</row>
+				<row>
+					<label value="ohpizz" />
+					<label value="Testing" />
+				</row>
+			</rows>
+		</grid>
+	</panelchildren>
+</panel>
+		<button label="Change maximized">
+			<attribute name="onClick">
+					p1.maximized=!p1.maximized;
+			</attribute>
+		</button>
+		<button label="Close">
+			<attribute name="onClick">
+				p1.open = !p1.open;
+				self.label = p1.open == true ? "close" : "open";
+			</attribute>
+		</button>
+		<button label="Change minimized">
+			<attribute name="onClick">
+					p1.minimized=!p1.minimized;
+			</attribute>
+		</button>
+	<separator />	
+	1. Click "Change maximized" button. There shouldn't be a space between panel and bottons.
+	<separator />
+	2. Then click "Close" button and open it. The space is disappeared.
+	<separator />
+	3. Then click "Change minimized" twice. The panel's layout shouldn't be out of expected.
+</window>

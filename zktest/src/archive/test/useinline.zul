@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="myrow" macroURI="inline.zul" inline="true"?>
+
+<!--
+useinline.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 13 13:00:44     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of inline macros" border="normal">
+	<zscript><![CDATA[
+	import org.zkoss.util.Pair;
+
+	List infos = new LinkedList();
+	for (int j = 0; j < 10; ++j) {
+		infos.add(new Pair("A" + j, "B" + j));
+	}
+	]]></zscript>
+	<grid>
+		<rows id="rows">
+			<myrow col1="${each.x}" col2="${each.y}" forEach="${infos}"/>
+		</rows>
+	</grid>
+	<button label="Create Manullay by Definition">
+	<attribute name="onClick">{
+	Component ua = page.getComponentDefinition("myrow", false).newInstance(page, null);
+	ua.setParent(rows); //it calls afterCompose automatically (inline only)
+	}</attribute>
+	</button>
+</window>

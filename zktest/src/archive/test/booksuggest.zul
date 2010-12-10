@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<!--
+native2.zul
+
+	Purpose:
+		A complete ZUL page with native
+	Description:
+		
+	History:
+		Thu Jan  1 15:41:31     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:u="http://www.zkoss.org/2005/zul"
+xmlns:zk="http://www.zkoss.org/2005/zk">
+ <head>
+	<title>Native Complete Page</title>
+	<zkhead/>
+	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk.zuml.wpd" charset="UTF-8">
+	</script>
+ </head>
+ <body>
+	<h1>Demostration of Pure Client by Using ZUL</h1>
+	<div id="main"><![CDATA[
+		<!--
+		<window id="main" title="Book Suggest" border="normal">
+			What is your favorite?
+			<combobox readonly="true" cols="30"
+			onSelect="loadSuggest(event.data.items[0])">
+				<comboitem id="bm" label="Biographies and Memoirs"/>
+				<comboitem id="ci" label="Computer and Internet"/>
+				<comboitem id="lf" label="Literature and Fiction"/>
+			</combobox>
+			<separator bar="true"/>
+		</window>
+		-->
+	]]></div>
+	<script>
+	zk.afterLoad(function () {
+		zk.zuml.Parser.createAt('#main');
+	});
+
+	function loadSuggest(item) {
+		 jq.ajax({
+			   type: 'POST',
+			   url: zk.ajaxURI('/booksuggest'),
+			   dataType: 'json',
+			   data: 'bookId=' + item.id,
+			   success: function (bookInfo) {
+					var suggestInfo = zk.Widget.$('$suggestInfo');
+					if (suggestInfo) suggestInfo.detach();
+					zk.zuml.Parser.createAt('#suggestInfo',
+						{replaceHTML:false}, {infos: bookInfo},
+						function (w) {
+							zk.Widget.$('$main').appendChild(w);
+						});
+				}
+			 });
+	}
+	</script>
+	<div id="suggestInfo" style="display:none"><![CDATA[
+		<!--
+		<grid id="suggestInfo">
+			<columns>
+				<column label="Title"/>
+				<column label="Author"/>
+				<column label="Author"/>
+			</columns>
+			<rows>
+				<row forEach="&#36;{_.infos}">
+					<label value="&#36;{each.title}"/>
+					<label value="&#36;{each.author1}"/>
+					<label value="&#36;{each.author2}"/>
+				</row>
+			</rows>
+		</grid> 
+		 -->
+	]]></div>
+ </body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+serialize2.zul
+
+{{IS_NOTE
+	Purpose:
+		Test Serializable with Live Data
+	Description:
+		
+	History:
+		Tue May 29 17:38:37     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Serialize Live Data" border="normal">
+	<zscript>
+	import java.io.*;
+	String[] data = new String[30];
+	for(int j=0; j &lt; data.length; ++j) {
+		data[j] = "option "+j;
+	}
+	ListModel strset = new SimpleListModel(data);
+	int cnt = 0;
+
+	void serialize(Component from) {
+		ByteArrayOutputStream boa = new ByteArrayOutputStream();
+		new ObjectOutputStream(boa).writeObject(from);
+		byte[] bs = boa.toByteArray();
+		Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+		l.setId("dst" + ++cnt);
+		l.setParent(vb);
+		new Label(bs.length+" bytes copied").setParent(vb);
+	}
+	void clone(Component from) {
+		Object l = from.clone();
+		l.setId("dst" + ++cnt);
+		l.setParent(vb);
+	}
+	</zscript>
+	<vbox id="vb">
+	Listbox with live data
+	<listbox id="lst" width="200px" rows="10" model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+
+	Combobox with fulfill
+	<combobox id="cbx" fulfill="onOpen">
+		<comboitem label="Simple ${self.parent.uuid}">
+			<custom-attributes some="less"/>
+			<variables one="more"/>
+			<zscript if="${!empty param.zscript}">
+			System.out.println("comboitem");
+			</zscript>
+		</comboitem>
+		<comboitem label="Rich ${self.parent.id}"/>
+	</combobox>
+	</vbox>
+
+	<button label="serialize list" onClick="serialize(lst)"/>
+	<button label="serialize combobox" onClick="serialize(cbx)"/>
+	<button label="clone combobox" onClick="clone(cbx)"/>
+</window>

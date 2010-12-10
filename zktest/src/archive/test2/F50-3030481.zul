@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3030481.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 19 14:54:19 TST 2010, Created by jimmy
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+				<li>Check "David" shall be selected</li>
+			</ol>
+		]]>
+	</html>
+	<combobox id="combobox" width="100px">
+		<attribute name="onCreate"><![CDATA[
+			List list2 = new ArrayList();
+			list2.add("David");
+			list2.add("Thomas");
+			list2.add("Steven");
+			ListModelList lm2 = new ListModelList(list2);
+			lm2.addSelection(lm2.get(0));
+			combobox.setModel(lm2);
+		]]></attribute>
+	</combobox>
+</zk>

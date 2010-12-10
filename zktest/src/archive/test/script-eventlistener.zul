@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+script-eventlistener.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		Tests whether the interpreter's namespace is current
+		(i.e., use Namespaces.getCurrent).
+	History:
+		Mon Feb 12 22:27:16     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<window id="myWindow" title="more event listener demo" border="normal" width="400px">
+		<vbox>
+			<label id="myLabel" value="Hello, World!"/>
+			<button id="myButton" label="Change label"/>
+		</vbox>
+
+		<zscript>
+		private class ClickEventListener implements EventListener {
+			public void onEvent(Event event) throws UiException {
+				myLabel.value = "Hello, Event!";
+			}
+		}
+		myButton.addEventListener("onClick", new ClickEventListener());
+		</zscript>
+	</window>
+</window>

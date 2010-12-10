@@ -1,0 +1,23 @@
+<zk>
+<vbox>
+<label style="font-weight:bold">modify spinner constraint at run time:</label>
+<label>1. Originally, the spinner has no constrant;</label>
+<label>2. Make spinner's value up &amp; down until over the 10 or -10.</label> 
+<label>3. Click the button will set the spinner to init value = 1, min = -10 &amp; max = 10, step = 2</label>
+<label>4. Make spinner's value up &amp; down, watch it's behavior.</label>
+</vbox>
+
+<window title="Spinner test" border="normal" width="200px">
+<spinner id="sp"/>
+<separator />
+<button label="set spinner constraint">
+<attribute name="onClick"><![CDATA[
+                  
+                  sp.setValue(new Integer(1));
+                  sp.setStep(2);
+                  sp.setConstraint("min -10 max 10");
+                  
+                  ]]></attribute>
+</button>                  
+</window>
+</zk>

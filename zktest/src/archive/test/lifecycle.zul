@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+lifecycle.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 15 13:02:12     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="host" border="normal">
+	<button label="Create non-attached window" onClick="create(false)"/>
+	<button label="Create attached window" onClick="create(true)"/>
+	<button label="Remove last window" onClick="remove()"/>
+	<zscript>
+	List wnds = new LinkedList();
+	void create(boolean attached) {
+		Window wnd = new Window();
+		new Label((attached ? "Attached": "Non-attached")+wnds.size()).setParent(wnd);
+		wnd.setTitle(attached ? "Attached": "Non-acctached");
+		if (attached)
+			wnd.setPage(host.getPage());
+		wnds.add(wnd);
+	}
+	void remove() {
+		if (wnds.isEmpty())
+			Messagebox.show("Not created yet", "Error", Messagebox.OK, Messagebox.ERROR);
+		else
+			wnds.remove(0).detach();
+	}
+	</zscript>
+</window>

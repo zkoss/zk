@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2100105.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 14 09:08:58     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<hbox>
+		<html><![CDATA[
+		<h3>Due to eclipse import issue, if you want to try this feature,
+		please rename the ticker.klass to ticker.class.</h3>
+		]]>
+		</html>
+		<applet codebase="classes" code="ticker" msg="ZK is Simple and Rich!" id="ticker"
+			width="400px" style="border: 1px" />
+		<listbox width="200px">
+			<attribute name="onSelect">
+			<![CDATA[			 
+				Map params = ticker.getParams();
+				params.put("msg",self.getSelectedItem().getLabel());
+				ticker.setParams(params);
+			]]>
+			</attribute>
+			<listgroup>
+				<listcell label="Simple and Rich!" />
+			</listgroup>
+			<listitem>
+				<listcell label="Rich Ajax Component" />
+			</listitem>
+			<listitem>
+				<listcell label="Xml Style Layout" />
+			</listitem>
+			<listgroup>
+				<listcell label="Better Ajax Framework" />
+			</listgroup>
+			<listitem>
+				<listcell label="Rich User Experience" />
+			</listitem>
+			<listitem>
+				<listcell label="Open Source" />
+			</listitem>
+		</listbox>
+	</hbox>
+	<hbox>
+		<toolbarbutton label="Stop" onClick='ticker.invoke("stop");' />
+		<toolbarbutton label="Start" onClick='ticker.invoke("start");' />
+		<textbox id="textbox" value="ZK Applet is Great" />
+		<toolbarbutton label="Change Message"
+			onClick='ticker.setField("message", textbox.value);' />
+	</hbox>
+</window>

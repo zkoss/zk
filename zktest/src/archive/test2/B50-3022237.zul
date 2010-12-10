@@ -1,0 +1,15 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+The disabled items shall look them (both image and label are disabled correctly)
+(IE8)
+<window title="new page title" border="normal" mode="modal">
+	<menubar>
+		<menuitem image="/img/live.gif" disabled="true" label="disabled" />
+		<menuitem image="/img/live.gif" label="enabled" />
+	</menubar>
+	<toolbar>
+		<toolbarbutton image="/img/live.gif" label="disabled" disabled="true" />
+		<toolbarbutton image="/img/live.gif" label="enabled"  />
+	</toolbar>
+</window>
+</zk>

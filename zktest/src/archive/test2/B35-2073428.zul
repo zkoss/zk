@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Welcome to ZK Demo"?>
+	<!--
+		index.zul {{IS_NOTE Purpose: Description: History: Thu May 11 17:24:33
+		2006, Created by tomyeh }}IS_NOTE Copyright (C) 2006 Potix
+		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
+	-->
+<window title="Menu Demo" border="normal">	
+	<label value='button "stone" should not be freezed after clicked and move the mouse away (it means the mouseover style should be removed)'/>
+	<menubar>		
+		<menu label="stone" id="stone" />
+	</menubar>	
+</window>

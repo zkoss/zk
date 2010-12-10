@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-2950309.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Feb 12 12:55:51 TST 2010, Created by jimmyshiau
+	
+	Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+	
+-->
+<?page zscriptLanguage="Groovy"?>
+
+<zk>
+	<datebox id="db" readonly="true" />
+	<button label="disabled" onClick="db.disabled=!db.disabled" />
+</zk>

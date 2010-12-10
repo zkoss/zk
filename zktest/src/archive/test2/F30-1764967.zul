@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1764967.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  3 16:30:57 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<window width="500px" xmlns:n="http://www.zkoss.org/2005/zk/native">
+   <zscript>
+public class Order {
+	private String _orderName;
+	private String _orderNumber;
+	
+	public void setOrderName(String o) {
+		_orderName = o;
+	}
+	
+	public String getOrderName() {
+		return _orderName;
+	}
+	
+	public void setOrderNumber(String n) {
+		_orderNumber = n;
+	}
+	
+	public String getOrderNumber() {
+		return _orderNumber;
+	}
+}   
+    int count = 30;
+    List orders = new LinkedList();
+    for(int j= 0; j &lt; count; ++j) {
+      Order o = new Order();
+      o.setOrderName("OrderName - " + j );
+      o.setOrderNumber("OrderNumber - " + j);
+      orders.add(o);
+    }   
+    selected = null;
+  </zscript>
+  <n:h2>[1764967] Combobox to support List binding</n:h2>
+	<n:ol>
+		<n:li>Combobox should has multiple entries.</n:li>
+		<n:li>Select an entry from combobox, and databinding Load-on-Save mechanism should triggered. grid below will be updated to selected value</n:li>
+		<n:li>Try to type a non-exist string, gird will be updated to empty</n:li>    
+	</n:ol>
+
+  <combobox model="@{orders}" selectedItem="@{selected}">
+       <comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"/>
+   </combobox>
+  <grid>
+	<auxhead><auxheader align="center" colspan="2">Order Information</auxheader></auxhead>
+  	<columns>
+  		<column align="center" width="200px" label="Item"/>
+  		<column align="center" width="200px" label="Value"/>
+	</columns>	
+  	<rows>
+  		<row>OrderNumber: <label value="@{selected.orderNumber}"/></row>
+  		<row>OrderName: <label  value="@{selected.orderName}"/></row>
+  	</rows>
+  </grid>
+</window>

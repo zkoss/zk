@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3067572.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 15 10:38:28 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+			<li>Click the hello button</li>
+			<li>it shall show a hello window</li>
+			</ol>
+		]]>
+	</html>
+	<grid>
+		<columns>
+			<column label="C1" />
+			<column label="C2" />
+		</columns>
+		<rows>
+			<group label="X">
+				<button label="hello" onClick='alert("hello");' />
+			</group>
+			<row></row>
+		</rows>
+	</grid>
+</zk>

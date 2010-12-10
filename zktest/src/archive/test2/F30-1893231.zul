@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<window title="auto-closed tree" border="normal">
+	<n:ol>
+		<n:li>Click on Group0.</n:li>
+		<n:li>Click on host-0, host-0 should be loaded with items</n:li>
+		<n:li>Click on host-1, host-0 should be unloaded and host-1 is loaded. </n:li>
+                <n:li>So on when clicking host-0,1,2,3 in each group</n:li>
+	</n:ol>
+	<zscript>
+	
+		import org.zkoss.zkdemo.test2.tree.*;
+		HostTreeModel model = new HostTreeModel();
+		HostTreeOpenCtrlRenderer2 renderer = new HostTreeOpenCtrlRenderer2();
+	</zscript>
+		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		</tree>
+	</window>
+</zk>

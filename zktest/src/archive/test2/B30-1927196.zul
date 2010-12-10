@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1927196.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 28 17:27:34     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Groupbox demo" border="normal">
+[IE6 only]: Click groupbox title to close grid's content,
+then open the groupbox by click title again.
+After clicking a couple times, the position of grid is wrong (overlapped
+with groupbox).
+<vbox>
+Which kind of fruit do you want?
+<groupbox id="gb" mold="3d" width="300px">
+<caption image="/test2/img/inet.png" label="fruits"/>
+<radiogroup onCheck="fruit.value = self.selectedItem.label">
+<radio label="Apple"/>
+<radio label="Orange"/>
+<radio label="Grape"/>
+</radiogroup>
+
+<grid id="sGrid">
+<rows>
+<row>
+<label value="111111111" />
+<label value="222222222" />
+</row>
+<row>
+<label value="111111111" />
+<label value="222222222" />
+</row>
+<row>
+<label value="111111111" />
+<label value="222222222" />
+</row>
+</rows>
+</grid>
+<div align="center">
+<button label="aaaa" onClick="" />
+<button label="bbbb" onClick="" />
+</div>
+
+</groupbox>
+<hbox>You have selected :<label id="fruit"/></hbox>
+<checkbox label="Use 3d groupbox" checked="true"
+onCheck='gb.mold=self.checked? "3d": "default"'/>
+</vbox>
+</window>

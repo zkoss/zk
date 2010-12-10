@@ -1,0 +1,14 @@
+<vbox>
+<label>
+Test procedure:
+</label>
+<label>
+1.Click on upper half of down arrow in FireFox, if number increases, it's a
+bug.
+</label>
+<label>
+2.Drag spinner image into text area, it should not be
+draggable by default. This is in Firefox aswell.
+</label>
+<spinner/>
+</vbox>

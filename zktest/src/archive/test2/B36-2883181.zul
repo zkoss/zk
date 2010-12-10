@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2883181.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 22 10:03:55     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Wnen you scoll the horizontal scrollbar, the head and body should be scolled correctly.
+<listbox fixedLayout="true">
+<listhead sizable="true">
+<listheader label="Subject" width="20em" sort="auto" />
+<listheader label="Subt34" width="20em" sort="auto" />
+<listheader label="Subj" width="20em" sort="auto" />
+<listheader label="Subjdsdft" width="64em" sort="auto" />
+<listheader label="Received" width="16em" align="center" sort="auto" />
+</listhead>
+<listitem>
+<listcell label="/img Centigrade-Widget-Icons ArrowUpOrange-16x16 png"
+/>
+<listcell label="/img Centigrade-Widget-Icons EnvelopeOpen-16x16 png" />
+<listcell label="/img Centigrade-Widget-Icons PaperClip-16x16 png" />
+<listcell label="ZK Jet 0.8.0 is released" />
+<listcell label="2008/11/17 17:41:29" />
+</listitem>
+</listbox>
+</zk>

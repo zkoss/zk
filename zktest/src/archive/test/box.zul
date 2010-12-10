@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+box.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  5 18:46:17     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="box layout demo" border="normal">
+	<hbox spacing="0">
+		<window border="normal">0</window>
+		<vbox spacing="0" id="v">
+			<hbox spacing="0" id="vh">
+				<window border="normal">1</window> <window border="normal">2</window>
+				<vbox spacing="0">
+					<window border="normal">3</window> 
+					<window border="normal">4</window>
+				</vbox>
+			</hbox>
+			<hbox spacing="0">
+				<vbox spacing="0">
+					<window border="normal">5</window> 
+					<window border="normal">6</window>
+				</vbox>
+				<window border="normal">7</window> <window border="normal">8</window> <window border="normal">9</window>
+			</hbox>
+		</vbox>
+	</hbox>
+	<button label="add after 4">
+		<attribute name="onClick">
+new Label("New Label A").setParent(vh);
+		</attribute>
+	</button>
+	<button label="add after 7">
+		<attribute name="onClick">
+new Label("New Label B").setParent(v);
+		</attribute>
+	</button>
+</window>

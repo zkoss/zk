@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3052761.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 25 17:01:57 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ul> 
+			<li>Calendar supports moving to next/prev mon by mouse scrolling</li>
+		</ul>
+	]]></html>
+	<calendar/>
+	<datebox/>
+</zk>

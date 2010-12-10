@@ -1,0 +1,15 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Click "click to setModel", you shall see a "root" with triangle icon (point to 3 o'clock direction)</li>
+<li>Click the triangle icon and you shall see root followed with children item 0 ~ item9; the triangle icon now shall point to 5 o'clock direction</li>
+<li>If not, it is a bug.</li>
+</ol>
+]]>
+</html>
+	<window title="test tree" border="normal" apply="org.zkoss.zkdemo.test2.tree.TreeClickComposer">
+		<tree id="tree"></tree>
+		<button label="click to setModel" id="btn2"></button>
+	</window>
+</zk>

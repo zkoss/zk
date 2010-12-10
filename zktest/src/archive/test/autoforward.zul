@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window title="Auto Forward Test" apply="org.zkoss.zkdemo.test.MyForwardComposer">
+    <textbox id="mytextbox"/>
+    <label id="mylabel"/>
+</window>

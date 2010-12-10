@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3025422.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 5 20:00:43 TST 2010, Created by jimmy shiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<style>
+    div.z-listcell-cnt{
+        white-space:nowrap;
+    }
+</style>
+
+	<panel title="panel" border="normal" width="800px" >
+		<panelchildren style="overflow:auto;">
+			<listbox sizedByContent="true"
+				style="border: 0;" hflex="min">
+				<listhead sizable="true">
+					<listheader label="Message Time" width="150px"></listheader>
+					<listheader label="Level" width="75px"
+						sclass="r1-listheader">
+					</listheader>
+					<listheader label="Source" width="75px"
+						sclass="r1-listheader">
+					</listheader>
+					<listheader label="Message" />
+				</listhead>
+				<listitem>
+					<listcell label="6/28/10 4:19:18 PM" />
+					<listcell label="Info" />
+					<listcell label="Server" />
+					<listcell
+						label="Merging recovery point 52 created 20 6/27/10 10 :11 PM" />
+				</listitem>
+				<listitem>
+					<listcell label="6/28/10 4:19:18 PM" />
+					<listcell label="Info" />
+					<listcell label="Server" />
+					<listcell label="Merging recovery point 52" />
+				</listitem>
+				<listitem>
+					<listcell label="6/28/10 4:19:18 PM" />
+					<listcell label="Info" />
+					<listcell label="Server" />
+					<listcell label="Merging recovery" />
+				</listitem>
+				<listitem>
+					<listcell label="6/28/10 4:19:18 PM" />
+					<listcell label="Info" />
+					<listcell label="Server" />
+					<listcell
+						label="Merging recovery------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*" />
+				</listitem>
+			</listbox>
+		</panelchildren>
+	</panel>
+</zk>

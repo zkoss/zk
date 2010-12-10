@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2090152.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep  3 10:52:18 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window width="300px">
+press button in grid, the image should appear in the left side of the
+button text label, that is correct. (IE6~7 only).
+	<grid sizedByContent="true">
+		<columns sizable="true" width="500px">
+			<column label="Type" />
+			<column label="Content" />
+		</columns>
+		<rows>
+			<row>
+				<label value="File:" />
+				<button label="ClickMe"
+					onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif" />
+			</row>
+			<row>
+				<label value="Type:" />
+				<hbox>
+					<listbox width="150px">
+						<listitem>
+							<listcell>
+								Should See a button here.
+								<button label="ClickMe"
+									onClick='self.setLabel("Clicked OK.")' />
+							</listcell>
+						</listitem>
+						<listitem label="And A button here">
+							<listcell>
+								<button label="ClickMe"
+									onClick='self.setLabel("ClickedOK."); self.setImage("/test2/img/coffee.gif")' />
+							</listcell>
+						</listitem>
+					</listbox>
+					<button label="ClickMe"
+						onClick='self.setLabel("Clicked OK.");self.setImage("/test2/img/coffee.gif")' />
+				</hbox>
+			</row>
+			<row>
+				<label value="Options:" />
+				<textbox rows="3" width="99%" />
+			</row>
+		</rows>
+	</grid>
+</window>

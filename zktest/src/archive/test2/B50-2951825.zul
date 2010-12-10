@@ -1,0 +1,8 @@
+<zk>
+<window title="Test" border="normal">
+<vbox hflex="1" vflex="1" style="margin:10px" id="cntbox">
+<div id="cntdiv" hflex="1" height="175px">Hello world</div>
+<script type="text/javascript">alert("hello");</script>
+</vbox>
+</window>
+</zk>

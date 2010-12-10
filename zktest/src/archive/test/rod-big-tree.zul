@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+bigrod-tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Nov  7 17:50:51     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Test of ROD for big tree" border="normal">
+	<zscript>
+		data = new byte[10];
+	</zscript>
+	<tree id="tree" width="100%">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem forEach="${data}" open="false">
+				<treerow>
+					<treecell label="Name ${forEachStatus.index}"/>
+					<treecell label="Description ${forEachStatus.index}"/>
+				</treerow>
+                <treechildren>
+                    <treeitem forEach="${data}" open="false">
+						<treerow>
+							<treecell label="Name ${forEachStatus.previous.index}.${forEachStatus.index}"/>
+							<treecell label="Description ${forEachStatus.previous.index}.${forEachStatus.index}"/>
+						</treerow>
+		                <treechildren>
+		                    <treeitem forEach="${data}" open="false">
+								<treerow>
+									<treecell label="Name ${forEachStatus.previous.previous.index}.${forEachStatus.previous.index}.${forEachStatus.index}"/>
+									<treecell label="Description ${forEachStatus.previous.previous.index}.${forEachStatus.previous.index}.${forEachStatus.index}"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</window>

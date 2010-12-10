@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2882221.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 20 16:59:47     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<button label="Test with Long text" width="100px">
+	<attribute name="onClick">{
+			Messagebox.show("You are closingsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.tab.that has unsaved changes You are closing a tab that has unsaved changes. Would you like to save your changes?", "Longer than Browser's width", Messagebox.OK, Messagebox.EXCLAMATION);
+	}</attribute>
+</button>
+<button label="Test with Short text" width="100px">
+	<attribute name="onClick">{
+			Messagebox.show("You are OK?", "Shorter than 330px", Messagebox.OK, Messagebox.EXCLAMATION);
+	}</attribute>
+</button>
+<button label="Test with Normal text" width="100px">
+	<attribute name="onClick">{
+			Messagebox.show("Would you like to save a longerrrrrrrrrrrrrrrrrrr word? Would you like to save a longerrrrrrrrrrrrrrrrrrr word? Would you like to save a longerrrrrrrrrrrrrrrrrrr word?", "The long word can be broken correctly", Messagebox.OK, Messagebox.EXCLAMATION);
+	}</attribute>
+</button>
+</zk>

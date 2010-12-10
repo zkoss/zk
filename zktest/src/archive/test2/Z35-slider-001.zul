@@ -1,0 +1,70 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd">
+  All sliders should work. Make sure slider icon image cannot be locked by click and dragging outside slider track.
+  <window title="Test Horizontal Sliders Functionality -onScroll" border="normal" width="400px">
+   <slider id="slider">
+   <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+   <window title="Test Horizontal Sliders Functionality -onScrolling" border="normal" width="400px">
+   <slider id="slider" >
+   <attribute name="onScrolling">
+   textLabel.setValue("The onScrolling value is..... "+event.getPos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+  
+    <window title="Test Vertical Sliders Functionality -onScroll" border="normal" width="400px">
+   <slider id="slider" orient="vertical">
+   <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+   <window title="Test Vertical Sliders Functionality -onScrolling" border="normal" width="400px">
+   <slider id="slider" orient="vertical">
+   <attribute name="onScrolling">
+   textLabel.setValue("The onScrolling value is..... "+event.getPos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+     <window title="Test Vertical Sliders Functionality -onScrolling maxpos 20" border="normal" width="400px">
+   <slider id="slider" orient="vertical" maxpos="20">
+   <attribute name="onScrolling">
+   textLabel.setValue("The onScrolling value is..... "+event.getPos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+    <window title="Test Horizontal Sliders Functionality -onScroll maxpos 20" border="normal" width="400px">
+   <slider id="slider" orient="horizontal" maxpos="20">
+   <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+      <window title="Test Vertical Sliders Functionality -onScroll with curpos=4 maxpos=5" border="normal" width="400px">
+   <slider id="slider" orient="vertical" curpos="4" maxpos="5">
+   <attribute name="onScroll">
+   textLabel.setValue("The Scrolled value is..... "+slider.getCurpos()+"");
+   </attribute>
+   </slider>
+   <label id="textLabel" value="TESTING SLIDERS FUNCTIONALITY..."></label>
+  </window>
+  
+</zk>

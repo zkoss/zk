@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hbox.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr  2 13:05:25     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal" width="250px">
+	<hbox id="hb">	
+		<label id="l" value="def"/>
+	</hbox>
+	<button label="Add 200px Child">
+		<attribute name="onClick">
+	Label l2 = new Label("abc");
+	l2.setWidth("200px");
+	l2.setSclass("z-inline-block");
+	hb.insertBefore(l2, l);
+		</attribute>
+	</button>
+	<button label="Change 200px to 100px" onClick="l2.width = &quot;100px&quot;"/>
+	<button label="Show/Hide created" onClick="l2.visible = !l2.visible"/>
+</window>

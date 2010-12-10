@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1852895.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 18 16:21:13 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:h4>Select one comboitem from combobox, and then click the "alert" button if the result is not null!</n:h4>
+	<combobox id="cb">
+		<comboitem label="Simple and Rich" value="1" image="/test2/img/coffee.gif"
+		description="The simplest way to make Web applications rich"/>
+		<comboitem label="Cool!" value="2" image="/test2/img/corner.gif"
+		description="The coolest technology"/>
+		<comboitem label="Ajax and RIA" value="3" image="/test2/img/cubfirs.gif"
+		description="Rich Internet Application by Ajax"/>
+	</combobox>
+	<button label="alert" onClick='alert(cb.getSelectedItem().getValue() + "");'/>
+</zk>

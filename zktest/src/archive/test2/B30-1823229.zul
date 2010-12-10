@@ -1,0 +1,20 @@
+<zk>
+Splitter- The image of bar isn't updated, when dynamically call setCollapse method.
+<window border="normal" width="800px" title="Case 1: hbox and splitter">
+		<hbox height="100px" width="100%">
+		cdacdacdacdacdaca
+		<splitter id="hsplitter" collapse="none"/>
+		cdacdacdacdacacsdc
+		</hbox>
+		<label id="d" />
+		<radiogroup>
+			<attribute name="onCheck">
+				hsplitter.setCollapse(self.selectedItem.label);
+				d.setValue("Collapse: "+self.selectedItem.label);
+			</attribute>
+			<radio selected="true" label="none"/>
+			<radio label="before"/>
+			<radio label="after"/>
+		</radiogroup>
+</window>
+</zk>

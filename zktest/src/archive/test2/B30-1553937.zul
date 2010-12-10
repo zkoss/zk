@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+bug1553937.zul
+
+{{IS_NOTE
+	Purpose:
+		Bug 1553937: listbox with long text and the following component (Hi)
+		is placed at the wrong location (IE only)
+	Description:
+		http://sourceforge.net/tracker/index.php?func=detail&aid=1553937&group_id=152762&atid=785191
+	History:
+		Fri Sep  8 15:59:44     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+listbox's horizontal scrollbar causes side effects
+<separator/>
+<hbox width="300px">
+	<listbox width="200px" height="200px" sizedByContent="true">
+		<listitem>
+			<listcell style="white-space: nowrap;"
+label="xxxx x xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxx xxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxx"/>
+		</listitem>
+	</listbox>
+	<label value="Hi" style="font-size: 16px; font-weight: bold"/>
+</hbox>
+</zk>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1914109.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 14 16:24:35 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:ol>
+<n:li>Click set a smaller height button, and you should see the listbox
+is shorter and has a scroll bar</n:li>
+</n:ol>
+
+<window title="Live Data Demo" border="normal">
+<button label="set a smaller height" onClick='list.height="150px"' />
+<zscript>
+List items = new org.zkoss.zkdemo.userguide.BigList(100);
+ListModel strset = new ListModelList(items);
+ListitemRenderer render = new ListitemRenderer() {
+public void render(Listitem item, Object data) {
+new Listcell("col - " + item.getIndex()).setParent(item);
+new Listcell("col - " + item.getIndex()).setParent(item);
+new Listcell("col - " + item.getIndex()).setParent(item);
+new Listcell("col - " + item.getIndex()).setParent(item);
+new Listcell("col - " + item.getIndex()).setParent(item);
+}
+};
+</zscript>
+<listbox id="list" width="100%" model="&#36;{strset}"
+itemRenderer="${render}" mold="paging" pagingPosition="both" >
+<listhead sizable="true">
+<listheader label="Col 1" sort="auto" />
+<listheader label="Col 2" sort="auto" />
+<listheader label="Col 3" sort="auto" />
+<listheader label="Col 4" sort="auto" />
+<listheader label="Col 5" sort="auto" />
+</listhead>
+</listbox>
+</window>
+</zk>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1997828.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 20 10:35:01 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Customizable Tooltips" border="normal" width="360px">
+	Please click the image, then you should see the popup component.
+	<toolbarbutton src="/test2/img/icon_email.png"  popup="any"/>
+	<popup id="any" width="300px">
+		<vbox>
+			ZK simply rich.
+			<toolbarbutton label="ZK your killer Web application now!" href="http://www.zkoss.org"/>
+		</vbox>
+	</popup>
+</window>

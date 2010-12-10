@@ -1,0 +1,10 @@
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click the "add listener" button first</li>
+<li>Then click "Click Me", and then you shall see a "onClick" dialog shown up</li>
+</ol>
+]]></html>
+	<div id="d" style="border:1px solid blue">Click Me</div>
+	<button label="add listener" onClick='d.setWidgetListener("onClick", "jq.alert(event.name)")'/>
+</zk>

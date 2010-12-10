@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    
+    <window title="Dynamically Change by Model">
+     Click button setOpen shall render the treeitem .
+        <zscript><![CDATA[
+        class MySimpleTreeNode extends SimpleTreeNode {
+                private String myData = null;
+                public MySimpleTreeNode(String data, List children) {
+                      super(data, children);
+                      myData = data.toString();
+                }
+                 
+                public String toString() {
+                     return "Node: " + myData;
+                }
+                
+                public void append(String data) {
+                    myData = myData + data;
+                }
+                public Object getData() {
+                    return myData;
+                }
+        }
+        
+       List aChildren = new ArrayList();
+       List empty = new ArrayList();
+       List a2Children = new ArrayList();
+       MySimpleTreeNode a20 = new MySimpleTreeNode("A2-0", empty);
+       MySimpleTreeNode a21 = new MySimpleTreeNode("A2-1", empty);
+       MySimpleTreeNode a22 = new MySimpleTreeNode("A2-2", empty);
+       a2Children.add(a20);
+       a2Children.add(a21);
+       a2Children.add(a22);
+       
+       MySimpleTreeNode a0 = new MySimpleTreeNode("A0", empty);
+       MySimpleTreeNode a1 = new MySimpleTreeNode("A1", empty);
+       MySimpleTreeNode a2 = new MySimpleTreeNode("A2", a2Children);
+       aChildren.add(a0);
+       aChildren.add(a1);
+       aChildren.add(a2);
+       
+       List children = new ArrayList();
+       MySimpleTreeNode a = new MySimpleTreeNode("A", aChildren);
+       children.add(a);
+       List bChildren = new ArrayList();
+       MySimpleTreeNode b0 = new MySimpleTreeNode("B0", empty);
+       MySimpleTreeNode b1 = new MySimpleTreeNode("B1", empty);
+       MySimpleTreeNode b2 = new MySimpleTreeNode("B2", empty);
+       bChildren.add(b0);
+       bChildren.add(b1);
+       bChildren.add(b2);
+    	
+       
+    	
+       MySimpleTreeNode b = new MySimpleTreeNode("B", bChildren);
+       children.add(b);
+       
+       List rList = new ArrayList();
+       rList.add(a);
+       rList.add(b);
+       MySimpleTreeNode r = new MySimpleTreeNode("Root", rList);
+       
+       List rootList = new ArrayList();
+       rootList.add(r);
+       MySimpleTreeNode root = new MySimpleTreeNode("Root", rootList);
+       
+       SimpleTreeModel stm = new SimpleTreeModel(root);
+       
+       
+       public void setOpen(){
+       		Treeitem it  = (Treeitem)tree.getItems().iterator().next();
+       		it.setOpen(true);
+       }
+       
+        ]]></zscript>
+        
+        <vbox>
+            <tree model="${stm}" id="tree" width="700PX">
+            </tree>
+            <hbox>           
+                <button label='setOpen' onClick='setOpen()' />
+           </hbox>
+        </vbox>
+    </window>
+    
+</zk>

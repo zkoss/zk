@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1899749.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  5 16:51:10     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of Progressmetter">
+	<html><![CDATA[
+<p>At beginning, it shall be 30%.</p>
+Case 1:
+<ol>
+<li>Click "width 200" and it shall scale correctly.</li>
+<li>Click "hide", then "set 80", then, "show" and it shall be 80%.</li>
+<li>Click "hide", then "width 100", then, "show" and it shall be 80% and 100px width.</li>
+</ol>
+Case 2: With IE6,
+<ol>
+<li>Click "set 80", "width 200" and "width 100"</li>
+</li>
+	]]></html>
+
+	<div id="sp">
+		<progressmeter width="100px" id="pm" value="30"/>
+	</div>
+	<button label="set 0" onClick="pm.setValue(0)"/>
+	<button label="set 10" onClick="pm.setValue(10)"/>
+	<button label="set 80" onClick="pm.setValue(80)"/>
+	<button label="set 100" onClick="pm.setValue(100)"/>
+	<button label="width 200">
+		<attribute name="onClick">pm.setWidth("200px")</attribute>
+	</button>
+	<button label="width 100">
+		<attribute name="onClick">pm.setWidth("100px")</attribute>
+	</button>
+	<button label="hide" onClick="sp.setVisible(false)"/>
+	<button label="show" onClick="sp.setVisible(true)"/>
+</window>

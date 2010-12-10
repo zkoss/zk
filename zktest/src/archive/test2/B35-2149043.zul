@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2149043.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct  6 16:21:23     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window height="600px">
+ <fisheyebar id="fish" style="position: absolute; top: 50px; left:100px;margin:20px;" attachEdge="top">
+  <fisheye id="f1" image="/test2/img/icon_browser.png" label="Web Browser"
+   onClick="alert(self.label)" />
+  <fisheye image="/test2/img/icon_calendar.png" label="Calendar"
+   onClick="alert(self.label)" />
+  <fisheye image="/test2/img/icon_email.png" label="Email"
+   onClick="alert(self.label)" />
+  <fisheye image="/test2/img/icon_texteditor.png" label="Text Editor"
+   onClick="alert(self.label)" />
+  <fisheye image="/test2/img/icon_update.png" label="Software Update"
+   onClick="alert(self.label)" />
+  <fisheye image="/test2/img/icon_users.png" label="Users"
+   onClick="alert(self.label)" />
+ </fisheyebar>
+ Click "Change image" button, and then it should work well. If it is out of expected, it is bug.
+ <separator />
+<button label="Change image" onClick='f1.setImage("/test2/img/icon_email.png")'/>
+</window>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2890514.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  2 11:12:14     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+The "File:" label should align to right.
+<grid>
+<columns sizable="true">
+<column label="Type" sort="auto"/>
+<column label="Content"/>
+</columns>
+<rows>
+<row align="right">
+<label value="File:"/>
+<textbox width="98%"/>
+</row>
+<row>
+<label value="Type:"/>
+<hbox>
+<listbox rows="1" mold="select">
+<listitem label="Java Files,(*.java)"/>
+<listitem label="All Files,(*.*)"/>
+</listbox>
+<button label="Browse..."/>
+</hbox>
+</row>
+<row>
+<label value="Options:"/>
+<textbox rows="3" width="98%"/>
+</row>
+</rows>
+</grid>
+</zk>

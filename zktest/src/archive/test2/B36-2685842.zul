@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2685842.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 27 16:14:51     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<hbox id="mainBox" widths="20%,1024px,20%" height="768px"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.zkoss.org/2005/zul"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<box>
+		<window id="mainWindow" border="normal" width="1024px"
+			height="768px">
+			<!-- The height for the include is important or IE will interpret the height as 100% of the screen -->
+			<hbox pack="center" align="center"
+				widths="100px,824px,100px">
+				<label />
+				<label />
+			</hbox>
+			After you press the "Click Me!" button, the both windows inside the tabpanel should display well, especially the right corner of the window(IE only)
+			<button label="Click Me!" onClick="addTag()" />
+			<tabbox id="bidSessionSelectorTabBox" width="1016px"
+				height="685px">
+				<tabs>
+					<tab id="homeTab" label="Home" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>This is the original tab</tabpanel>
+				</tabpanels>
+			</tabbox>
+			<zscript><![CDATA[//@DECLARATION  
+			 public void addTag() {
+      			Tab tab = new Tab("NewTab");
+      			bidSessionSelectorTabBox.getTabs().appendChild(tab);
+      			tab.setClosable(true);
+      			tab.setVisible(true);
+      			Tabpanel tabPanel = new Tabpanel();
+      			Executions.createComponents("B2685842_1.zul", tabPanel, null);
+      			bidSessionSelectorTabBox.getTabpanels().appendChild(tabPanel);
+      			tab.setSelected(true);
+   			}
+			 ]]></zscript>
+		</window>
+	</box>
+
+</hbox>

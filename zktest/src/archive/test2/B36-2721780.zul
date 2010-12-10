@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2721780.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 30 15:33:23 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Resize the outer window, the inner most window should not change.
+<window id="out" border="normal" title="." sizable="true"
+  mode="overlapped" width="500px" height="500px">
+  <window id="middle" border="normal" width="300px" height="300px">
+    <window id="innermost" border="normal" width="100px"
+      height="100px" sizable="true" mode="overlapped">
+
+    </window>
+  </window>
+</window>
+</zk>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1830886.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 16 10:09:05 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml" xmlns:n="http://www.zkoss.org/2005/zk/native">
+<h:h3> [ 1830886 ] A way to make the listbox change its model less "drastic"</h:h3>
+	<n:ol>
+		<n:li>scroll down the listbox, and select a item.</n:li>
+		<n:li>click button, check if the listbox grow it height and reduce back, then it is fail.</n:li>
+	</n:ol>
+<window title="Live Data Demo" border="normal" xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<zscript>
+		List data = new ArrayList();
+		for(int j=0; j &lt; 30; ++j) {
+			data.add("option "+j); 
+		} 
+		ListModel strset = new ListModelList(data);
+	</zscript>
+	<listbox id="list" width="200px" height="100px"
+		model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto" />
+		</listhead>
+	</listbox>
+	<button label="change">
+		<attribute name="onClick">
+			ListModelList model = (ListModelList) list.getModel();
+			if (model!=null) {
+				model.clear();
+			} 
+			model = new ListModelList(data); 
+			list.setModel(model);
+		</attribute>
+	</button>
+</window>
+</zk>
+

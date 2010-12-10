@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1752907.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr  3 10:20:34 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<groupbox mold="3d">
+	<caption label="Please click me" />
+	<div
+		style="overflow:auto;height:300px;">
+		And then the animation should not jump over the title (FireFox only).
+	</div>
+</groupbox>

@@ -1,0 +1,43 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see a Listbox with FIXED column widths.</li>
+<li>Drag the browser window, the listbox width shall change accordingly. However, the column width shall stay without any change</li>
+<li>If the column width changed because of the listbox width change, it is a BUG</li>
+</ol>
+]]>
+</html>
+<listbox >
+	<listhead>
+		<listheader label="150px wide" width="150px"/>
+		<listheader label="75px wide" width="75px"/>
+		<listheader label="75px wide" width="75px"/>
+		<listheader label="300px wide" width="300px"/>
+	</listhead>
+	<listitem>
+		<listcell label="6/28/10 4:19:18 PM" />
+		<listcell label="Info" />
+		<listcell label="Server" />
+		<listcell label="Merging recovery" />
+	</listitem>
+	<listitem>
+		<listcell label="6/28/10 4:19:18 PM" />
+		<listcell label="Info" />
+		<listcell label="Server" />
+		<listcell label="Merging recovery " />
+	</listitem>
+	<listitem>
+		<listcell label="6/28/10 4:19:18 PM" />
+		<listcell label="Info" />
+		<listcell label="Server" />
+		<listcell label="Merging recovery" />
+	</listitem>
+	<listitem>
+		<listcell label="6/28/10 4:19:18 PM" />
+		<listcell label="Info" />
+		<listcell label="Server" />
+		<listcell label="Merging recovery" />
+	</listitem>
+</listbox>
+</zk>

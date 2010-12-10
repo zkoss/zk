@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2383106.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec  5 09:31:45     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<vbox>
+<label>Check the checkbox and radiobox</label>
+<checkbox id="cb" />
+<radio />
+<label>Then click the link below, hit the back button and click "Go"
+again</label>
+<toolbarbutton label="Google" href="http://www.google.com" />
+<label>Safari and Opera will set the checkbox and the radiobox to checked but the "Go" button script
+will fail</label>
+</vbox>
+</window>

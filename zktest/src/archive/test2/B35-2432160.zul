@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2432160.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 16 09:07:09 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<groupbox mold="3d">
+	<caption label="setting" />
+	add these setting into your zk.xml (the TestRichlet2 already exists)
+	then restart tomcat
+	<html><![CDATA[
+	<h3>richlet</h3>
+	<pre>
+&lt;richlet>
+	&lt;richlet-name>Test2&lt;/richlet-name>
+	&lt;richlet-class>org.zkoss.zkdemo.test.TestRichlet2&lt;/richlet-class>	
+&lt;/richlet>
+&lt;richlet-mapping>
+	&lt;richlet-name>Test2&lt;/richlet-name>
+	&lt;url-pattern>/*&lt;/url-pattern>
+&lt;/richlet-mapping>
+	</pre>
+	<h3>error handling</h3>
+	<pre>
+&lt;error-page>
+	&lt;exception-type>java.lang.Throwable&lt;/exception-type>
+	&lt;location>/WEB-INF/sys/error.zul&lt;/location>
+&lt;/error-page>
+	</pre>
+	]]></html>
+</groupbox>
+
+now goto the richlet, then click the button, 
+if you can't see the error handling page,it is a bug. 
+<toolbarbutton label="TestRichlet2" href="/zk/" target="_blank" /> 
+
+</window>

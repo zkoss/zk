@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Test ZK 5 Canvas</title>
+
+	<link rel="stylesheet" type="text/css" href="/zkdemo/zkau/web/zul/css/zk.wcs"/>
+
+	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk.wpd" charset="UTF-8">
+	</script>
+	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk.canvas.wpd" charset="UTF-8">
+	</script>
+	<script type="text/javascript" src="/zkdemo/zkau/web/js/zul.wgt.wpd" charset="UTF-8">
+	</script>
+</head>
+<body>
+	<h1>Test ZK 5 Canvas</h1>
+	<div id="main" style="width:200px;height:150px;border:1px solid blue">
+	</div>
+	<script>
+	zk.afterLoad(function () {
+		var main = jq("#main");
+		var canvas = zk.canvas.Canvas.create(main[0].clientWidth, main[0].clientHeight);
+		main.append(canvas);
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle = "rgb(200,0,0)";  
+		ctx.fillRect (10, 10, 55, 50);  
+
+		ctx.fillStyle = "rgba(0, 0, 200, 0.5)";  
+		ctx.fillRect (30, 30, 255, 50);
+
+		main.after(
+			new zul.wgt.Button({
+				label: "enlarge",
+				onClick: function () {
+					jq(canvas).width("300px");
+				}
+			}));
+	});
+	</script>
+</body>
+</html>

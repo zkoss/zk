@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1914113.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 14 17:03:06 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>[Empty space in listbox] It's true, if you don't see any space into the listbox right.</n:p>
+	<style>
+BODY,HTML{
+padding:0px;
+overflow:hidden;
+}
+</style>
+<listbox vflex="true" height="100%" width="100%" fixedLayout="true">
+<listhead sizable="true">
+<listheader sort="auto">Header 1</listheader>
+<listheader sort="auto">Header 2</listheader>
+<listheader sort="auto">Header 3</listheader>
+<listheader sort="auto">Header 4</listheader>
+<listheader sort="auto">Header 5</listheader>
+<listheader sort="auto">Header 6</listheader>
+</listhead>
+<listitem>
+<listcell>Data 1.1 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 2.1 alsf alasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 3.1 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+<listcell>Data 4.1 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 5.1 alsf flasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 6.1 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+</listitem>
+<listitem>
+<listcell>Data 1.2 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 2.2 alsf alasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 3.2 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+<listcell>Data 4.2 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 5.2 alsf glasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 6.2 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+</listitem>
+<listitem>
+<listcell>Data 1.3 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 2.3 alsf dlasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 3.3 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+<listcell>Data 4.3 lakf kla flka flas faslf asf af lkafslk asf</listcell>
+<listcell>Data 5.3 alsf alasfklasfas fasf as fasfasf as
+fasfasfafasfasfasfafasfasf</listcell>
+<listcell>Data 6.3 klas fasfasfasfas fkl asfasfafasfl
+asfklasfafasfasfasfasfklasfafkl asf</listcell>
+</listitem>
+</listbox> 
+</zk>

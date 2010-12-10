@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1881267.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 29 10:30:20 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Grid/listbox's contents slides up from its borders. The problem is somehow
+related to modal windows.</n:p>
+	<button label="go" onClick="win.doModal()"/>
+
+<window id="win" width="700px" height="250px" title="title"
+visible="false">
+
+<grid width="600px">
+<rows>
+<row>
+<label value="text"/>
+</row>
+</rows>
+</grid>
+
+<separator/><separator/><separator/>
+<separator/><separator/><separator/>
+
+<listbox width="600px">
+<listhead>
+<listheader label="h1"/>
+<listheader label="h2"/>
+</listhead>
+<listitem>
+<listcell label="text"/>
+<listcell label="text"/>
+</listitem>
+</listbox>
+
+</window>
+</zk>

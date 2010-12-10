@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.useStackup = 'auto/gecko';"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	Try to click the icon on each input (or press Alt+DOWN) to drop down a popup,
+	and check if PDF is hidden when the popup covers it:
+	<hlayout>
+		<listbox id="format" mold="select" onSelect="showReport()">
+			<listitem label="PDF" value="pdf" selected="true" />
+			<listitem label="XML" value="xml" />
+			<listitem label="HTML" value="html" />
+			<listitem label="Word (RTF)" value="rtf" />
+			<listitem label="Excel" value="xls" />
+			<listitem label="Excel (JXL)" value="jxl" />
+			<listitem label="CSV" value="csv" />
+			<listitem label="OpenOffice (ODT)" value="odt"
+				unless="false" />
+		</listbox>
+		<bandbox>
+			<bandpopup>
+			<div height="100px">whatever</div>
+			</bandpopup>
+		</bandbox>
+		<combobox>
+			<comboitem label="item 1"/>
+			<comboitem label="item 2"/>
+			<comboitem label="item 3"/>
+			<comboitem label="item 4"/>
+			<comboitem label="item 5"/>
+		</combobox>
+		<datebox />
+		<menubar width="200px">
+			<menu label="test">
+				<menupopup>
+					<menuitem label="test" />
+					<menuitem label="test" />
+					<menuitem label="test" />
+					<menuitem label="test" />
+				</menupopup>
+			</menu>
+		</menubar>
+		<textbox/>
+	</hlayout>
+	<window title="iframe/pdf" border="normal" sizable="true">
+		<iframe style="background-color:transparent"
+			src="/test2/B1896797.pdf" width="100%" autohide="true" height="300px"/>
+	</window>
+	<jasperreport id="report" height="360px" autohide="true" />
+	<zscript>
+	import org.zkoss.zkdemo.userguide.CustomDataSource;
+	void showReport() {
+		//Preparing parameters
+		Map parameters = new HashMap();
+		parameters.put("ReportTitle", "Address Report");
+		parameters.put("DataFile", "CustomDataSource from java");
+
+		report.setSrc("/userguide/data/jasperreport.jasper");
+		report.setParameters(parameters);
+		report.setDatasource(new CustomDataSource());
+		report.setType((String) format.getSelectedItem().getValue());
+	}
+</zscript>
+</zk>

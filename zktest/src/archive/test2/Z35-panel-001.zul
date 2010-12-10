@@ -1,0 +1,39 @@
+<window>
+<panel id="p1" width="500px">
+	<panelchildren>
+		Change view: Click following buttons and it should work well.
+	</panelchildren>
+</panel>
+		<button label="Change title">
+			<attribute name="onClick">
+				if(p1.title=="")
+					p1.setTitle("Panel Component");
+				else
+					p1.setTitle("");
+			</attribute>
+		</button>
+		<button label="Change border">
+			<attribute name="onClick">
+				if(p1.border=="none")
+					p1.setBorder("normal");
+				else
+					p1.setBorder("none");
+			</attribute>
+		</button>
+		<button label="Change framable">
+			<attribute name="onClick">
+					p1.framable=!p1.framable;
+			</attribute>
+		</button>
+		<button label="Change width and height">
+			<attribute name="onClick">
+				if(p1.width.equals("500px")) {
+					p1.setWidth("700px");
+					p1.setHeight("300px");
+				} else {
+					p1.setWidth("500px");
+					p1.setHeight("150px");
+				}
+			</attribute>
+		</button>
+</window>

@@ -1,0 +1,23 @@
+<window>
+	<html><![CDATA[
+	<ol>
+		<li>Dropdown the calendar popup, and click the arrow key.<br/>
+		Result: you shall be able to change month to April (and April 30 is hilighted).</li>
+		<li>Click the reset button</li>
+		<li>Dropdown the calendar popup, click the month at the title,
+		and click Feburary.<br/>
+		Result: Feburary must be shown up</li>
+	</ol>
+	]]></html>
+	<datebox id="db"/>
+	<zscript>
+	import java.util.Calendar;
+	void set() {
+		final Calendar cal = Calendar.getInstance();
+		cal.set(2010, 4, 31);
+		db.setValue(cal.getTime());
+	}
+	set()
+	</zscript>
+	<button label="reset" onClick="set()"/>
+</window>

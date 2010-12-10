@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2713338.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 23 16:53:24 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Select any tree item at the tree then click the button,
+
+the button should show "Not Null", if "Null" the it's a BUG.
+	<zscript>	
+import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+
+BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
+org.zkoss.zkdemo.userguide.BigList(1000)));
+</zscript>
+	<tree id="tree" model="&#36;{btm}" />
+	<button label="Test">
+		<attribute name="onClick">
+if (tree.getSelectedItem().getValue() == null) {
+self.label="Null";
+} else {
+self.label="Not Null";
+}
+</attribute>
+	</button>
+</zk>
+

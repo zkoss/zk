@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window title="frame2" border="normal" onOK="publish()">
+	<zscript>
+		EventQueue que = EventQueues.lookup("groupTest", "group", true);
+		que.subscribe(new EventListener() {
+			public void onEvent(Event evt) {
+				o.setValue(o.getValue() + evt.getData() + "\n");
+			}
+		});
+		void publish() {
+			String text = i.getValue();
+			if (text.length() > 0) {
+				i.setValue("");
+				que.publish(new Event("onGroupTest", null, text));
+			}
+		}
+	</zscript>
+	<textbox id="i" onChange="publish()"/>		
+	<textbox id="o" rows="6"/>
+</window>

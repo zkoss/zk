@@ -1,0 +1,21 @@
+<zk xmlns:n="native">
+<zscript>
+void change(Div d) {
+	parent.insertBefore(d, parent.firstChild);
+}
+</zscript>
+Please click the blue area, it shall become the first child.
+Then click the red area, it shall become the first child.
+<div id="parent">
+	<div id="first" onClick="change(self)" style="background:red">
+		<n:h1>Item A.1</n:h1>
+		<n:h1>Item A.2</n:h1>
+		<n:h1>Item A.3</n:h1>
+	</div>
+	<div id="second" onClick="change(self)" style="background:blue">
+		<n:h1>Item B.1</n:h1>
+		<n:h1>Item B.2</n:h1>
+		<n:h1>Item B.3</n:h1>
+	</div>
+</div>
+</zk>

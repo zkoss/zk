@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2821745.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 15 17:18:26     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        String[] data = new String[10];
+		for(int j=0; j &lt; data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+	
+    </zscript>
+    <listbox id="list" width="200px" rows="10" onSelect='gb.open = true;' model="&#36;{strset}"></listbox>
+    <groupbox id="gb" mold="3d" width="400px">
+        <caption label="Quickly press on the Close Me button, and then select one item, the groupbox should open again!"/>
+        <button label="Close Me" onClick="gb.open = false"/>
+    </groupbox>
+</zk>
+

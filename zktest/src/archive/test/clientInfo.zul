@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+clientInfo.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 28 12:36:57     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<grid onClientInfo="onClientInfo(event)">
+	<rows>
+		<row>Time Zone <label id="tm"/></row>
+		<row>Screen <label id="scrn"/></row>
+		<row>Browser <label id="brw"/></row>
+		</rows>
+		
+	<zscript>
+	void onClientInfo(ClientInfoEvent evt) {
+		tm.setValue(evt.getTimeZone().toString());
+		scrn.setValue(evt.getScreenWidth()+"x"+evt.getScreenHeight()+"x"+evt.getColorDepth());
+		brw.setValue(evt.getDesktopWidth()+"x"+evt.getDesktopHeight());
+	}
+	</zscript>
+</grid>

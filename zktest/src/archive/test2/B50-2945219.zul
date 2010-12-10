@@ -1,0 +1,18 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="ZkAdhoc">
+<attribute name="onCreate">
+	self.addEventListener(Events.ON_CTRL_KEY, new org.zkoss.zk.ui.event.EventListener() {
+				public void onEvent(Event event) throws Exception {
+					Messagebox.show("Key " + event.getKeyCode() + " is clicked");
+				}				
+			});
+	self.setCtrlKeys("#f1#f2#f3#f4#f5#f6#f7#f8#f9#f10#f11#f12$#f1$#f2$#f3$#f4$#f5$#f6$#f7$#f8$#f9$#f10$#f11$#f12");
+</attribute>
+1. focus on the textbox below by click it
+<separator/>
+2. Fellow orders to click F1 ~ F12 button, after click button, the messagebox will popup and show key code
+<separator/>
+<textbox></textbox>
+</window>
+</zk>

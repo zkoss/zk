@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sample2.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  6 19:21:56     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<tree multiple="true" rows="4" width="400px">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+		<treecol label="Received"/>
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+				<treecell label="7-12-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Intel Snares XML"/>
+						<treecell label="Ria Coen"/>
+						<treecell label="7-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Unknown chaos"/>
+		<treeitem>
+			<treerow>
+				<treecell label="C# versus Java"/>
+				<treecell label="David Longman"/>
+				<treecell label="7-1o-2005"/>
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 3.1.1"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Power never easy"/>
+						<treecell label="Michelle Jordan"/>
+						<treecell label="6-12-2005"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 4">
+			<treechildren/>
+		</treeitem>
+	</treechildren>
+</tree>

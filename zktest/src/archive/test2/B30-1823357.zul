@@ -1,0 +1,18 @@
+<zk>
+
+<html><![CDATA[
+[ 1823357 ] auxHeader(IE)- Can not change rowspan dynamically</br>
+
+]]></html>
+	<tree id="tree2" width="240px">
+		<treecols>
+			<treecol label="A" />
+			<treecol label="B" />
+			<treecol label="C" />
+		</treecols>
+		<auxhead>
+			<auxheader id="Phi" label="Phi"  colspan="2" />
+		</auxhead>
+	</tree>
+	<button label="test" onClick="Phi.setColspan(3)" />
+</zk>

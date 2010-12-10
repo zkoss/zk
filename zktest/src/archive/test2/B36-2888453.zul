@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2888453.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 29 09:53:09     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="win" title="Bug in IE">
+please click the close button, and no JavaScript error is correct. (IE only)
+<textbox constraint="no empty" focus="true"/>
+<button label="close" forward="onClose"/>
+</window>

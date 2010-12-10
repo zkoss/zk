@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1984025.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun  4 12:51:19 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test" border="normal">
+	You should see the "Ready" footer in this demo.
+<listbox width="250px" height="400px">
+<listhead sizable="true">
+<listheader label="name" sort="auto"/>
+<listheader label="gender" sort="auto"/>
+</listhead>
+<listitem>
+<listcell label="Mary"/>
+<listcell label="FEMALE"/>
+</listitem>
+<listitem>
+<listcell label="John"/>
+<listcell label="MALE"/>
+</listitem>
+<listitem>
+<listcell label="Jane"/>
+<listcell label="FEMALE"/>
+</listitem>
+<listitem>
+<listcell label="Henry"/>
+<listcell label="MALE"/>
+</listitem><listfoot>
+<listfooter label="Ready" />
+</listfoot>
+</listbox>
+</window>
+

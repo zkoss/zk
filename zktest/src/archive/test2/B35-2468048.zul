@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2468048.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 26 15:05:24     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[  
+<ol>
+<li>You shall see three windows: A window, B window, and C window.</li>
+<li>C window is inside A window</li>
+<li>Press 'show variable x' button inside C window. You shall see popup "A".</li>
+<li>Press 'Move C window with div wrapper from A to B' button.</li>
+<li>You shall see C window is moved to be inside B window.</li>
+<li>Now press 'show variable x' button inside C window again. You shall see popup "B".</li>
+<li>Done</li> 
+</ol>
+]]></html>
+
+<window id="levelA" title="A window" width="500px" border="normal">
+ <variables x="A"/>
+ <div id="levelC_wrapper">
+ Following is C Window :
+  <window id="levelC" title="C window" width="400px" border="normal">
+   <button label="show variable x" onClick='alert(self.getVariable("x", false))'/>
+  </window>
+ </div>
+</window>
+
+<space spacing="50px" bar="true"/>
+
+<window id="levelB" title="B window" width="500px" border="normal">
+ <variables x="B"/>
+</window>
+
+<space spacing="50px" bar="true"/>
+
+<div>
+<button label="Move C window with div wrapper from A to B">
+ <attribute name="onClick">
+  Component c = Path.getComponent("/levelA/levelC_wrapper");
+   c.setParent(levelB);
+  </attribute>
+</button>
+</div>
+
+</zk>

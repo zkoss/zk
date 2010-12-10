@@ -1,0 +1,21 @@
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>You can choose each radio button, then the image of this splitter is shown as you choose.</n:p>
+	<window border="normal" title="vbox and splitter">
+		<vbox height="100px" width="100%">
+		Some words......
+		<splitter id="vsplitter" collapse="none"/>
+		Column 2: Whether a splitter allows users to open or collapse
+		depending on the collapse attribue.
+		</vbox>
+		<label id="d" />
+		<radiogroup>
+			<attribute name="onCheck">
+				vsplitter.setCollapse(self.selectedItem.label);
+				d.setValue("Collapse: "+self.selectedItem.label);
+			</attribute>
+			<radio selected="true" label="none"/>
+			<radio label="before"/>
+			<radio label="after"/>
+		</radiogroup>
+	</window>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-2046129.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 11 12:04:43 TST 2008, Created by robbiecheng
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<hbox>
+		<slider orient="vertical" height="300px"/>
+		<separator />
+		<slider orient="vertical" mold="sphere" height="200px"/>
+	</hbox>
+	<slider width="300px"/>
+		<separator />			
+	<slider width="300px" mold="scale"/>
+		<separator />
+	<slider width="300px" mold="sphere"/>
+
+</zk>
