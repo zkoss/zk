@@ -42,7 +42,7 @@ public class DemoWebAppInit implements WebAppInit {
 
 	private static final Log log = Log.lookup(DemoWebAppInit.class);
 	
-	final static String PATH = "/userguide/";
+	final static String PATH = "/";
 
 	final static String CONFIG = "zkdemo.properties";
 

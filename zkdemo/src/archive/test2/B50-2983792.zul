@@ -1,9 +1,0 @@
-<div id="d" xmlns:w="http://www.zkoss.org/2005/zk/client">
-	It works if you see "Success!" shown below.
-	<script>
-		function f() {
-			zk.log("Success!");
-		}
-	</script>
-	<div w:bind_="function(a,b,c){this.$bind_(a,b,c); f();}"/>
-</div>

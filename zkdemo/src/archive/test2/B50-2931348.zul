@@ -1,6 +1,0 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-1. Click this <button label="Set Iframe Name" onClick='iframe1.setName("iframe1")'></button>, if popup a error message box, it's wrong
-<separator height="20px"/>
-<iframe id="iframe1"/>
-</zk>

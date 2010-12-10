@@ -1,6 +1,0 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-Please focus in and out, and click the close sign (X), the errorbox should
-be closed.
-<textbox constraint="no empty"/>
-</zk>

@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
-	<artifactId>zkdemo</artifactId>
+	<artifactId>zksandbox</artifactId>
 	<properties>
 		<zk.version>5.0.6.FL.20101130</zk.version>
 		<zkel.version>1.1.0</zkel.version>
@@ -21,13 +21,14 @@
 		<jfreechart.version>1.0.13</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
 		<ckez.version>3.3.2_50</ckez.version>
+		<gmapsz.version>2.0.51</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 	</properties>
 	<version>${zk.version}</version>
 	<packaging>war</packaging>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zkdemo</url>
+		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zksandbox</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -66,6 +67,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>${servlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.theme</groupId>
+			<artifactId>breeze</artifactId>
+			<version>${zk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -191,6 +197,11 @@
 			<groupId>org.zkoss.zkforge</groupId>
 			<artifactId>timeplotz</artifactId>
 			<version>${timeplotz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>gmapsz</artifactId>
+			<version>${gmapsz.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

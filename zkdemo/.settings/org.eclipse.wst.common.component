@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="zkdemo">
+    <wb-module deploy-name="zksandbox">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zk/zk">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/breeze/breeze">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zul/zul">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zcommon/zcommon">
@@ -13,10 +16,10 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zweb/zweb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zkplus/zkplus">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zk/zk">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zul/zul">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zkplus/zkplus">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zhtml/zhtml">
@@ -28,7 +31,7 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/zkmax/zkmax">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="zkdemo"/>
         <property name="java-output-path" value="/zkdemo/target/classes"/>
+        <property name="context-root" value="zksandbox"/>
     </wb-module>
 </project-modules>

@@ -1,6 +1,0 @@
-<zk>
-<button label="inv" onClick="cal.invalidate()" />
-<button label="get" onClick="alert(cal.getValue())" />
-<calendar id="cal"/>
-
-</zk>

@@ -49,7 +49,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		((Window)comp).setContentSclass("demo-main-cnt");
 		((Window)comp).setSclass("demo-main");
 		final Div inc = new Div();
-		Executions.createComponents("/userguide/bar.zul", inc, null);
+		Executions.createComponents("/bar.zul", inc, null);
 		inc.setStyle("float:right");
 		comp.insertBefore(inc, comp.getFirstChild());
 		if (view != null) execute();
@@ -61,7 +61,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 			if (tryBtn.isVisible())
 				Executions.createComponentsDirectly(code, "zul", view, null);
 			else 
-				Executions.createComponents("/userguide/macros/warning.zul", view, null);
+				Executions.createComponents("/macros/warning.zul", view, null);
 		} catch (RuntimeException e) {
 			if ("true".equalsIgnoreCase(System.getProperty("zkdemo.debug")))
 				System.out.println("\n Error caused by zkdemo at : " + new java.util.Date() + "\n code: " + code);

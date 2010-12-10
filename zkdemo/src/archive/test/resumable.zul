@@ -1,4 +1,0 @@
-<window title="Save Resumable" border="normal">
-	<button label="download"
-	onClick='Filedownload.saveResumable("resumable.zul", "text/plain", null)'/>
-</window>

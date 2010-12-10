@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="${xwin}"?>
-<window id="xwin" title="My First Window" border="normal" width="200px" closable="true">
-Hello, World!
-</window>
