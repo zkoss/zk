@@ -15,7 +15,8 @@ ZK 5.0.6
   3131983: EL's param shall not Map<String,String[]> if zscript used
   3131173: Tree checkmark/multiple issue
   3131458: The column setSortDirection fail with breeze theme
-  
+  3134159: Progressmeter animation error
+   
 	--------
 ZK 5.0.5
 November 02, 2010
