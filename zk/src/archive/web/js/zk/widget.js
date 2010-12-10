@@ -1695,17 +1695,6 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
 	 * @see #appendChild(zk.Widget)
 	 */
-	/** Insert a child widget with more control.
-	 * It is similar to {@link #insertBefore(zk.Widget,zk.Widget)} except the caller
-	 * could prevent it from generating DOM element.
-	 * It is usually used with {@link #rerender}.
-	 * @param zk.Widget child the child widget
-	 * @param zk.Widget sibling the sibling widget (the 'insert' point where
-	 * the new widget will be placed before). If null or omitted, it is
-	 * the same as {@link #appendChild}
-	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}). 
-	 * @see #appendChild(zk.Widget,boolean)
-	 */
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (!sibling || sibling.parent != this) {
 			this.insertingBefore_ = true;
