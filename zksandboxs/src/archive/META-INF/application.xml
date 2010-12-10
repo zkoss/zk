@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   "http://java.sun.com/dtd/application_1_3.dtd">
 
 <application>
-	<display-name>zkdemo</display-name>
+	<display-name>zksandbox</display-name>
 	<module>
 		<web>
-			<web-uri>zkdemo.war</web-uri>
-			<context-root>/zkdemo</context-root>
+			<web-uri>zksandbox.war</web-uri>
+			<context-root>/zksandbox</context-root>
 		</web>
 	</module>
 </application>
