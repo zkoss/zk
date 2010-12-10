@@ -21,6 +21,7 @@
 		<jfreechart.version>1.0.13</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
 		<ckez.version>3.3.2_50</ckez.version>
+		<gmapsz.version>2.0.51</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 	</properties>
@@ -191,6 +192,11 @@
 			<groupId>org.zkoss.zkforge</groupId>
 			<artifactId>timeplotz</artifactId>
 			<version>${timeplotz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>gmapsz</artifactId>
+			<version>${gmapsz.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
