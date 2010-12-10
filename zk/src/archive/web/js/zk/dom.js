@@ -2014,7 +2014,8 @@ zk.copy(jq.Event.prototype, {
 		this.stopPropagation();
 	},
 	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information 
-	 * @return Map a map of data. Refer to <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
+	 * @return Map a map of data.
+	 * @see zk.Event#data
 	 */
 	mouseData: function () {
 		return zk.copy({
@@ -2022,7 +2023,8 @@ zk.copy(jq.Event.prototype, {
 		}, this.metaData());
 	},
 	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information ({@link #metaData}). 
-	 * @return Map a map of data. Refer to <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
+	 * @return Map a map of data.
+	 * @see zk.Event#data
 	 */
 	keyData: function () {
 		return zk.copy({
@@ -2031,7 +2033,8 @@ zk.copy(jq.Event.prototype, {
 			}, this.metaData());
 	},
 	/** Retrieve the meta-information of a DOM event. The properties of the returned object include altKey, shiftKey, ctrlKey, leftClick, rightClick and which. 
-	 * @return Map a map of data. Refer to <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
+	 * @return Map a map of data.
+	 * @see zk.Event#data
 	 */
 	metaData: function () {
 		var inf = {};

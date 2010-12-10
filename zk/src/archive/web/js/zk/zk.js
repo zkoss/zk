@@ -432,9 +432,13 @@ try {
 		return v;
 	},
 
-	/** Defines a package. It creates the package if not defined yet.
+	/** Defines a package. It creates and returns the package if not defined yet.
+	 * If the package is already defined, it does nothing but returns the package.
 	 * It is similar to Java's package statement except it returns the package
 	 * object.
+	 * <p>Notice the package is usually defined automatically by use of
+	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor>WPD</a>,
+	 * so you're rarely need to use this method.
 	 *
 	 * <p>Example:
 	 * <pre><code>var foo = zk.$package('com.foo');

@@ -26,13 +26,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  *
  * <p>See Also
  * <ul>
- * <li><a href="http://docs.zkoss.org/wiki/AU_Request">AU Request</a> - a full list of built-in AU requests (aka., widget events)</li>
- * <li><a href="http://docs.zkoss.org/wiki/AU_Response">AU Response</a> - a full list of built-in AU responses.</li>
- * <li><a href="http://docs.zkoss.org/wiki/Client_Watches">Watches</a> - a full list of watches.</li>
- * <li><a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events#Listen_By_Overriding">Widget and DOM Events</a></li>
- * <li><a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">How to Process Request with JSON</a></li>
- * <li><a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a></li>
- * </ul>
+ * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests">AU Requests</a></li>
+ * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Responses">AU Responses</a></li>
+ * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Client_Activity_Watches">Client Activity Watches</a> - a full list of watches.</li>
+ * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">Widget Events and DOM Events</a></li>
+  * </ul>
  * <p>Common Key Codes:
  * <table>
  * <tr>
@@ -93,8 +91,7 @@ onClick: function (evt) {
   }
 }
 </code></pre>
-	 * <p>Refer to How to <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">How to Process Request with JSON</a>
-	 * and <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a> for more information.
+	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
  	 */
  	//data: null,
@@ -147,7 +144,6 @@ onClick: function (evt) {
 	 * @param zk.Widget target the target widget.
 	 * @param String name the event name, such as onClick
 	 * @param Object data [optional] the data depending on the event.
-	 * Here is a list of <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
@@ -333,7 +329,7 @@ zWatch = (function () {
  *
  * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
  *
- * <p>Here is a full list of <a href="http://docs.zkoss.org/wiki/Client_Watches">watches</a></li>. 
+ * <p>Here is a full list of <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Client_Activity_Watches">Client Activity Watches</a></li>. 
 
 <h3>Add a Watch</h3>
 

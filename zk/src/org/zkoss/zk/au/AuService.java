@@ -23,7 +23,7 @@ package org.zkoss.zk.au;
  * <p>Notice that the AU service plugged to a component takes the higher
  * proirity than the default handling ({@link org.zkoss.zk.ui.sys.ComponentCtrl#service}).
  *
- * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
  * @author tomyeh
  * @since 5.0.0
  */

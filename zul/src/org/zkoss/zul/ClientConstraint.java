@@ -59,8 +59,8 @@ public interface ClientConstraint {
 	 *Object showCustomError(Widget wgt, String errmsg);
 	 *boolean serverValidate;</code></pre>
 	 *
-	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
-	 * <a href="http://docs.zkoss.org/wiki/Zul.inp.SimpleConstraint">zul.inp.SimpleConstraint</a>
+	 * <p>Please refer to
+	 * <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zul/inp/SimpleConstraint.html">zul.inp.SimpleConstraint</a>
 	 * for details.
 	 *
 	 * <p>Notice that {@link CustomConstraint} has the higher priority than

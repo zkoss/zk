@@ -2512,7 +2512,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
 	 * disable any update to the client, when calling the setter
 	 *
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Widget#smartUpdate">zk.Widget.smartUpdate()</a>.
+	 * <p>See also <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/Widget.html#smartUpdate%28_global_.String,%20zk.Object,%20int%29">zk.Widget.smartUpdate()</a>.
 	 * @since 5.0.0
 	 */
 	protected void updateByClient(String name, Object value) {

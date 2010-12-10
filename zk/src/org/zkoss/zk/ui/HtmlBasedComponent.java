@@ -520,7 +520,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * tags and children.
 	 *
 	 * <p>See also
-	 * <a href="http://docs.zkoss.org/zk/Render_Special_Properties">Render Special Properties</a>
+	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component Development/Server-side/Property_Rendering">ZK Client-side Reference: Property Rendering</a>
 	 * @since 5.0.0
 	 */
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

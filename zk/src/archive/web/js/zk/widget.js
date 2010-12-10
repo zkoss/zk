@@ -929,7 +929,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
- * Refer to <a href="http://docs.zkoss.org/wiki/ZK5:_Component_Development_Guide">Component Development Guide</a>
+ * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Development_Essentials">ZK Component Development Essentials</a>
+ * and <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference">ZK Client-side Reference</a>
  * for more information.
  * <p>Notice that, unlike the component at the server, {@link zk.Desktop}
  * and {@link zk.Page} are derived from zk.Widget. It means desktops, pages and widgets are in a widget tree. 
@@ -2456,7 +2457,7 @@ redraw: function (out) {
 	 * <p>For example, {@link #updateDomStyle_} will change the style
 	 * of the text node, if any, to make sure the text is displayed correctly.
 	 * @return DOMElement the DOM element.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/How_to_pass_text_styles_to_an_inner_tag">How to pass text styles to an inner tag</a>.
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component_Development/Client-side/Text_Styles_and_Inner_Tags">ZK Client-side Reference: Text Styles and Inner Tags</a>.
 	 * @see #domTextStyleAttr_
 	 * @see #updateDomStyle_
 	 */
@@ -2592,7 +2593,7 @@ function () {
 	},
 	/** Returns the style attribute that contains only the text related CSS styles. For example, it returns style="font-size:12pt;font-weight:bold" if #getStyle is border:none;font-size:12pt;font-weight:bold.
 	 * <p>It is usually used with {@link #getTextNode} to
-	 * <a href="http://docs.zkoss.org/wiki/How_to_pass_text_styles_to_an_inner_tag">pass text styles to an inner tag</a>. 
+	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component_Development/Client-side/Text_Styles_and_Inner_Tags">ZK Client-side Reference: Text Styles and Inner Tags</a>. 
 	 * @see #getTextNode
 	 * @return String the CSS style that are related to text (string).
 	 */
@@ -3569,10 +3570,9 @@ focus_: function (timeout) {
 	 *
 	 * <p>If the event propagation is not stopped (i.e., {@link zk.Event#stop} not called)
 	 * and {@link #inServer} is true, the event will be converted to an AU request and sent to the server.
-	 Refer to <a href="http://docs.zkoss.org/wiki/Notify_Server">Notify Server</a> for more information.
+	 Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Client-side_Firing">ZK Client-side Reference: AU Requests: Client-side Firing</a> for more information.
 	 * @param String evtnm the event name, such as onClick
-	 * @param Object data [optional] the data depending on the event.
-	 * Here is a list of <a href="http://docs.zkoss.org/wiki/CDG5:_Event_Data">Event Data</a>
+	 * @param Object data [optional] the data depending on the event ({@link zk.Event}).
 	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
 	 * @param int timeout the delay before sending the non-deferrable AU request (if necessary).
 	 * If not specified or negative, it is decided automatically.
@@ -3854,7 +3854,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doDoubleClick_
@@ -3876,7 +3876,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doDoubleClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3897,7 +3897,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doRightClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3914,7 +3914,7 @@ wgt.setListeners({
 	 * Rather, it shall override this method if necessary.
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseOver_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3937,7 +3937,7 @@ wgt.setListeners({
 	 * call parent's doMouseOut_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @see #doMouseMove_
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
@@ -3955,7 +3955,7 @@ wgt.setListeners({
 	 * Rather, it shall override this method if necessary. 
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3976,7 +3976,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3997,7 +3997,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseMove_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseOver_
@@ -4019,7 +4019,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyUp_
@@ -4038,7 +4038,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyDown_
@@ -4057,7 +4057,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyPress_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyDown_
@@ -4084,7 +4084,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doFocus_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doBlur_
@@ -4109,7 +4109,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doBlur_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Widget_and_DOM_Events">Widget and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doFocus_
@@ -4142,7 +4142,7 @@ _doChange_: function (evt) { //evt is an instance of zk.Event
 _doFooSelect: function (evt) {
 }
 </code></pre>
-	 * See also <a href="http://docs.zkoss.org/wiki/Listen_DOM_Events_with_Member_Method">Listen DOM Events with Member Method</a>.
+	 * See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>.
 	 *
 	 * <h3>Design Mode</h3>
 	 * If a widget is created and controlled by ZK Weaver for visual design,
@@ -4532,7 +4532,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @param String updateURI the URI of ZK Update Engine, such as <code>/zkdemo/zkau</code>
 	 * @param String reqURI the URI of the request path.
 	 * @param boolean stateless whether this desktop is used for a stateless page.
-	 * Specify true if you want to use <a href="http://docs.zkoss.org/wiki/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
+	 * Specify true if you want to use <a href="http://books.zkoss.org/wiki/Small_Talks/2009/July/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
 	 */
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
@@ -4866,7 +4866,7 @@ function (skipper) {
  return html + '</div></fieldset>';
 }
 </pre></code>
- * <p>See also <a href="http://docs.zkoss.org/wiki/Rerender_Portions_of_Widget">Rerender Portions of Widget</a>.
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component Development/Server-side/Property_Rendering">ZK Client-side Reference: Property Rendering</a>.
  * @disable(zkgwt)
  */
 zk.Skipper = zk.$extends(zk.Object, {
