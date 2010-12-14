@@ -29,7 +29,8 @@ var jQuery = function( selector, context ) {
 	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
-	_$ = window.$,
+//Potix: no need since we don't override the old copy (see below)
+//	_$ = window.$,
 
 	// A central reference to the root jQuery(document)
 	rootjQuery,
