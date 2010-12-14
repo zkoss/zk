@@ -169,6 +169,8 @@ import org.zkoss.zul.mesg.MZul;
 public class Include extends XulElement
 implements org.zkoss.zul.api.Include, Includer {
 	private static final Log log = Log.lookup(Include.class);
+	private static final String ATTR_RENDERED =
+		"org.zkoss.zul.Include.rendered";
 	private String _src;
 	private Map _dynams;
 	/** The child page. Note: it is recovered by PageImpl. */
@@ -389,12 +391,17 @@ implements org.zkoss.zul.api.Include, Includer {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map old = setupDynams(exec);
-			try {
-				final int j = _src.indexOf('?');
-				exec.createComponents(j >= 0 ? _src.substring(0, j): _src, this, null);
-					//TODO: convert query string to arg
-			} finally {
-				restoreDynams(exec, old);
+			final String oldSrc  = (String) exec.getAttribute(ATTR_RENDERED);
+			if (!Objects.equals(oldSrc, _src)) {
+				try {
+					final int j = _src.indexOf('?');
+					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
+							this, null);
+					// TODO: convert query string to arg
+					exec.setAttribute(ATTR_RENDERED, _src);
+				} finally {
+					restoreDynams(exec, old);
+				}
 			}
 		}
 	}

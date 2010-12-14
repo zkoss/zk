@@ -18,6 +18,7 @@ ZK 5.0.6
   3134159: Progressmeter animation error
   3136243: Bug within JQuery 1.4.3, please upgrade to 1.4.4
   3136453: H/Vlayout inheritance
+  3136963: doAfterCompose invoke twice when the zul  include by setSrc
    
 	--------
 ZK 5.0.5
