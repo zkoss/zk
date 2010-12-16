@@ -16,10 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Date;
-
-import javax.swing.SpinnerNumberModel;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
