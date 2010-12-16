@@ -59,8 +59,10 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 			_molds = new HashMap(2);
 		_molds.put(name, new String[] {moldURI});
 	}
+	/** @deprecated As of release 5.0.4, replaced with {@link #addMold(String, String)}.
+	 */
 	public void addMold(String name, String moldURI, String cssURI, String z2cURI) {
-		addMold(name, moldURI, null, null);
+		addMold(name, moldURI);
 	}
 	public String getMoldURI(String name) {
 		if (_molds == null)
@@ -69,9 +71,11 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 		final String[] info = (String[])_molds.get(name);
 		return info != null ? info[0]: null;
 	}
+	/** @deprecated As of release 5.0.4, always return null. */
 	public String getCSSURI(String name) {
 		return null;
 	}
+	/** @deprecated As of release 5.0.4, always return null. */
 	public String getZ2CURI(String name) {
 		return null;
 	}

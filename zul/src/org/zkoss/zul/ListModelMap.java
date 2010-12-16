@@ -531,7 +531,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			super(inner, false);
 		}
 		protected int indexOf(Object o) {
-			return indexOf(o);
+			return ListModelMap.this.indexOf(o);
 		}
 	}
 
