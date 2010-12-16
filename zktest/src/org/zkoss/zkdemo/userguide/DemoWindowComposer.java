@@ -18,19 +18,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.userguide;
 
-import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
-import org.zkoss.zul.Image;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -49,7 +44,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		((Window)comp).setContentSclass("demo-main-cnt");
 		((Window)comp).setSclass("demo-main");
 		final Div inc = new Div();
-		Executions.createComponents("/userguide/bar.zul", inc, null);
+		Executions.createComponents("/bar.zul", inc, null);
 		inc.setStyle("float:right");
 		comp.insertBefore(inc, comp.getFirstChild());
 		if (view != null) execute();
