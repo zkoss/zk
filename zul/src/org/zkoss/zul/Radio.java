@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
+public class Radio extends Checkbox {
 	
 	/** At most one of _group and _groupId will be non-null. */
 	private Radiogroup _group;
@@ -75,17 +75,6 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 				return (Radiogroup)q;
 			p = q;
 		}
-	}
-	/** Returns {@link Radiogroup} that this radio button belongs to.
-	 * It is the nearest ancestor {@link Radiogroup}.
-	 * In other words, it searches up the parent, parent's parent
-	 * and so on for any {@link Radiogroup} instance.
-	 * If found this radio belongs the found radiogroup.
-	 * If not, this radio itself is a group.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Radiogroup getRadiogroupApi() {
-		return getRadiogroup();
 	}
 
 	/** Associates the radiogroup to this radio component.

@@ -23,7 +23,7 @@ package org.zkoss.zul;
  * @author jumperchen
  * @since 5.0.0
  */
-public class North extends LayoutRegion implements org.zkoss.zul.api.North {
+public class North extends LayoutRegion {
 	public North() {
 	}
 

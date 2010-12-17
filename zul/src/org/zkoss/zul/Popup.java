@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
+public class Popup extends XulElement {
 	static {
 		addClientEvent(Popup.class, Events.ON_OPEN, CE_IMPORTANT);
 	}

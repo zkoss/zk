@@ -56,7 +56,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Style extends AbstractComponent implements org.zkoss.zul.api.Style {
+public class Style extends AbstractComponent {
 	private String _src;
 	/** _src and _content cannot be nonnull at the same time. */
 	private String _content;

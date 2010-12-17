@@ -13,6 +13,8 @@ ZK 6.0.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
+  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
+    are removed.
   + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
     are removed. org.zkoss.idom.Element and related don't implement TreeArray.
   + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
@@ -37,15 +39,22 @@ ZK 5.0.6
   3105037: Show the locale format in error messages
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
-  3118161: When desktop destroyed, better to fore cleanup if timeout
+  3118161: When desktop destroyed, better to force cleanup if timeout
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
   3109358: Recycle uuid causes image's URI caching in browser
   3117370: Tree ROD fail
   3117384: renderdefer fails in tree on IE and Chrome
-  3122159: onChange not working for datebox
-
+  3122159: onChange shall fire immediately for datebox if select a date
+  3131983: EL's param shall not Map<String,String[]> if zscript used
+  3131173: Tree checkmark/multiple issue
+  3131458: The column setSortDirection fail with breeze theme
+  3134159: Progressmeter animation error
+  3136243: Bug within JQuery 1.4.3, please upgrade to 1.4.4
+  3136453: H/Vlayout inheritance
+  3136963: doAfterCompose invoke twice when the zul  include by setSrc
+   
 	--------
 ZK 5.0.5
 November 02, 2010

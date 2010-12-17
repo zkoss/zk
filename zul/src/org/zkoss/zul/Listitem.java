@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
+public class Listitem extends XulElement {
 	private static final Log log = Log.lookup(Listitem.class);
 
 	private Object _value;
@@ -61,13 +61,6 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public Listbox getListbox() {
 		return (Listbox)getParent();
 	}
-	/** Returns the list box that it belongs to.
-	 * <p>It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Listbox getListboxApi() {
-		return getListbox();
-	}
 	/** Returns whether the HTML's select tag is used.
 	 */
 	private boolean inSelectMold() {
@@ -85,13 +78,6 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		if (lb != null)
 			return lb.getListgroupAt(getIndex());
 		return null;
-	}
-	/**
-	 * Returns the listgroup that this item belongs to, or null.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Listgroup getListgroupApi() {
-		return getListgroup();
 	}
 
 	public String getZclass() {

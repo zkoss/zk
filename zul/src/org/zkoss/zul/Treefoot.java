@@ -28,20 +28,14 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-treefoot (since 5.0.0)
  * @author tomyeh
  */
-public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
+public class Treefoot extends XulElement {
 	/** Returns the tree that it belongs to.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tree getTree() {
 		return (Tree)getParent();
 	}
-	/** Returns the tree that it belongs to.
-	 * <p>It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tree getTreeApi() {
-		return getTree();
-	}
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-treefoot" : _zclass;

@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.NumberInputElement;
  *
  * @author tomyeh
  */
-public class Intbox extends NumberInputElement implements org.zkoss.zul.api.Intbox {
+public class Intbox extends NumberInputElement {
 	public Intbox() {
 		setCols(11);
 	}

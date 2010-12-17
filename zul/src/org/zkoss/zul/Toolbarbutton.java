@@ -29,7 +29,7 @@ import org.zkoss.lang.Objects;
  *
  * @author tomyeh
  */
-public class Toolbarbutton extends Button implements org.zkoss.zul.api.Toolbarbutton {
+public class Toolbarbutton extends Button {
 	public Toolbarbutton() {
 	}
 	public Toolbarbutton(String label) {

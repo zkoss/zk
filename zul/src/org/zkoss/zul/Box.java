@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.Utils;
  *<p>Default {@link #getZclass}: z-vbox.(since 3.5.0)
  * @author tomyeh
  */
-public class Box extends XulElement implements org.zkoss.zul.api.Box {
+public class Box extends XulElement {
 	private String _spacing;
 	private String _align = "start", _pack = "start";
 	/** Array of width/height for each cell. */

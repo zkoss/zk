@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.event.Events;
  *
  * @author tomyeh
  */
-public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer {
+public class Timer extends HtmlBasedComponent {
 	private int _delay;
 	private boolean _repeats, _running = true;
 

@@ -23,7 +23,7 @@ import org.zkoss.lang.Objects;
  *
  * @author tomyeh
  */
-abstract public class LabelElement extends XulElement implements org.zkoss.zul.impl.api.LabelElement{
+abstract public class LabelElement extends XulElement {
 	/** The label. */
 	private String _label = "";
 

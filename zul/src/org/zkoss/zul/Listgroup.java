@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
+public class Listgroup extends Listitem {
 	private boolean _open = true;
 	private transient List<Listitem> _items;
 
@@ -132,13 +132,6 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		if (index < 0) return null;
 		final Listbox lb = (Listbox)getParent();
 		return (Listfoot) lb.getChildren().get(index);
-	}
-	/**
-	 * Returns the Listfoot, if any. Otherwise, null is returned.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Listfoot getListfootApi() {
-		return getListfoot();
 	}
 	/** Returns whether this container is open.
 	 * <p>Default: true.

@@ -26,7 +26,7 @@ import org.zkoss.zul.event.ZulEvents;
  *
  * @author tomyeh
  */
-abstract public class HeadersElement extends XulElement implements org.zkoss.zul.impl.api.HeadersElement{
+abstract public class HeadersElement extends XulElement {
 
 	static {
 		addClientEvent(HeadersElement.class, ZulEvents.ON_COL_SIZE, CE_IMPORTANT); //no CE_DUPLICATE_IGNORE (might apply to diff index)

@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-treerow (since 5.0.0)
  * @author tomyeh
  */
-public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
+public class Treerow extends XulElement {
 	/** Returns the {@link Tree} instance containing this element.
 	 */
 	public Tree getTree() {
@@ -33,12 +33,6 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 			if (p instanceof Tree)
 				return (Tree)p;
 		return null;
-	}
-	/** Returns the {@link Tree} instance containing this element.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tree getTreeApi() {
-		return getTree();
 	}
 
 	/** Returns the level this cell is. The root is level 0.
@@ -58,16 +52,6 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 	public Treechildren getLinkedTreechildren() {
 		final Component parent = getParent();
 		return parent != null ? ((Treeitem)parent).getTreechildren(): null;
-	}
-	/** Returns the {@link Treechildren} associated with this
-	 * {@link Treerow}.
-	 * In other words, it is {@link Treeitem#getTreechildren} of
-	 * {@link #getParent}.
-	 * @since 3.5.2
-	 * @see Treechildren#getLinkedTreerow
-	 */
-	public org.zkoss.zul.api.Treechildren getLinkedTreechildrenApi() {
-		return getLinkedTreechildren();
 	}
 
 	//-- Component --//

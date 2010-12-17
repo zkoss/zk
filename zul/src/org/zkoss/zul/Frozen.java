@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 5.0.0
  */
-public class Frozen extends XulElement implements org.zkoss.zul.api.Frozen {
+public class Frozen extends XulElement {
 
 	private int _columns;
 	private int _start;

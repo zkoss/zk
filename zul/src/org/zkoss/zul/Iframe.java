@@ -37,10 +37,13 @@ import org.zkoss.zul.impl.Utils;
  * property. Rather, use the CSS style to customize the border (like
  * any other components).
  *
+ * <p>To handle the onload event, you have to use the client-attribute namespace.
+ * Please refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Iframe#onload">ZK Component Reference: iframe</a> fore more information.
+ *
  * @author tomyeh
  * @see Include
  */
-public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Iframe {
+public class Iframe extends HtmlBasedComponent {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */
@@ -123,7 +126,7 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	 * above it. To resolve this, you have to specify autohide="true"
 	 * to this component, and specify the following in the page:
 	 * <pre><code>&lt;?script content="zk.useStack='auto';"?>
-	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/JavaScript_Customization">JavaScript Customization</a>
+	 * <p>Please refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Stackup_and_Shadow">Stackup and Shadow</a>
 	 * for more information.
 	 */
 	public boolean isAutohide() {

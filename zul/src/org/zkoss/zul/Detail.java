@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
+public class Detail extends XulElement {
 	private boolean _open;
 	/** The style used for the content block. */
 	private String _cntStyle;

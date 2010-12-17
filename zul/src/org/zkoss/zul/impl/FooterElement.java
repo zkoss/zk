@@ -21,7 +21,7 @@ import org.zkoss.lang.Objects;
  * @author jimmy
  * @since 5.0.4
  */
-abstract public class FooterElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
+abstract public class FooterElement extends LabelImageElement {
 	private int _span = 1;
 	private String _align, _valign;
 

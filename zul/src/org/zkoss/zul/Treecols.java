@@ -27,19 +27,12 @@ import org.zkoss.zul.impl.HeadersElement;
  * <p>Default {@link #getZclass}: z-treecols (since 5.0.0)
  * @author tomyeh
  */
-public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treecols {
+public class Treecols extends HeadersElement {
 	/** Returns the tree that it belongs to.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tree getTree() {
 		return (Tree)getParent();
-	}
-	/** Returns the tree that it belongs to.
-	 * <p>It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tree getTreeApi() {
-		return getTree();
 	}
 
 	//super//

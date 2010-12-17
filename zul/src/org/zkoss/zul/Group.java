@@ -45,7 +45,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Group extends Row implements org.zkoss.zul.api.Group {
+public class Group extends Row {
 	private boolean _open = true;	
 	private transient List<Row> _items;
 	
@@ -147,13 +147,6 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 		if (index < 0) return null;
 		final Rows rows = (Rows)getParent();
 		return (Groupfoot) rows.getChildren().get(index);
-	}
-	/**
-	 * Returns the Groupfoot, if any. Otherwise, null is returned.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Groupfoot getGroupfootApi() {
-		return getGroupfoot();
 	}
 	/** Returns whether this container is open.
 	 * <p>Default: true.

@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-public class Imagemap extends Image implements org.zkoss.zul.api.Imagemap{
+public class Imagemap extends Image {
 	//-- super --//
 	/** Default: childable.
 	 */

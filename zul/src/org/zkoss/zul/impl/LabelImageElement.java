@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * 
  * @author tomyeh
  */
-abstract public class LabelImageElement extends LabelElement implements org.zkoss.zul.impl.api.LabelImageElement{
+abstract public class LabelImageElement extends LabelElement {
 	/** The image; either String or Image. */
 	private Object _image;
 	/** The hover image; either String or Image. */

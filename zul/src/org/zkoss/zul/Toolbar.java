@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  *  
  * @author tomyeh
  */
-public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
+public class Toolbar extends XulElement {
 	private String _orient = "horizontal";
 	private String _align = "start";
 

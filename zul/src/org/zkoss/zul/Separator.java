@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Separator extends XulElement implements org.zkoss.zul.api.Separator {
+public class Separator extends XulElement {
 	private String _orient = "horizontal";
 	private String _spacing;
 	private boolean _bar;

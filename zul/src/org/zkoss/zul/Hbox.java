@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
  *
  * @author tomyeh
  */
-public class Hbox extends Box implements org.zkoss.zul.api.Hbox {
+public class Hbox extends Box {
 	public Hbox() {
 		super("horizontal");
 	}

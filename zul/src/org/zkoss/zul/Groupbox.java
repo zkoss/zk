@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
+public class Groupbox extends XulElement {
 	private transient Caption _caption;
 	/** The style used for the content block. */
 	private String _cntStyle;
@@ -51,12 +51,6 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	 */
 	public Caption getCaption() {
 		return _caption;
-	}
-	/** Returns the caption of this groupbox.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Caption getCaptionApi() {
-		return getCaption();
 	}
 
 	/** Returns whether this groupbox is open.

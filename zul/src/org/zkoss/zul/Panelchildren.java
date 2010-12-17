@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Panelchildren extends XulElement implements org.zkoss.zul.api.Panelchildren {
+public class Panelchildren extends XulElement {
 	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Panel))

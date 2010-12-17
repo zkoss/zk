@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * 
  * @author tomyeh
  */
-public class Treefooter extends FooterElement implements org.zkoss.zul.api.Treefooter {
+public class Treefooter extends FooterElement {
 
 	public Treefooter() {
 	}
@@ -50,12 +50,6 @@ public class Treefooter extends FooterElement implements org.zkoss.zul.api.Treef
 	public Tree getTree() {
 		final Component comp = getParent();
 		return comp != null ? (Tree)comp.getParent(): null;
-	}
-	/** Returns the tree that it belongs to.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tree getTreeApi() {
-		return getTree();
 	}
 	/** Returns the column index, starting from 0.
 	 */
@@ -82,13 +76,6 @@ public class Treefooter extends FooterElement implements org.zkoss.zul.api.Treef
 			}
 		}
 		return null;
-	}
-	/** Returns the tree header that is in the same column as
-	 * this footer, or null if not available.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Treecol getTreecolApi() {
-		return getTreecol();
 	}
 
 	//-- super --//

@@ -530,7 +530,7 @@ implements ListModelExt<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			super(inner, false);
 		}
 		protected int indexOf(Object o) {
-			return indexOf(o);
+			return ListModelMap.this.indexOf(o);
 		}
 	}
 

@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.Utils;
  * @author Jeff
  * @since 3.0.0
  */
-public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash {
+public class Flash extends HtmlBasedComponent {
 	private String _src;
 	private Media _media;
 	private String _wmode = "transparent";	

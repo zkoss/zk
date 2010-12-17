@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  * @since 3.5.0
  */
-public class Span extends XulElement implements org.zkoss.zul.api.Span {
+public class Span extends XulElement {
 	public Span() {
 	}
 }

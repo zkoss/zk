@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * @author tomyeh
  */
-public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
+public class Tab extends LabelImageElement {
 	private boolean _selected;
 	/** Whether to show a close button. */
 	private boolean _closable;
@@ -129,13 +129,6 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 		final Tabs tabs = (Tabs) getParent();
 		return tabs != null ? tabs.getTabbox() : null;
 	}
-	/**
-	 * Returns the tabbox owns this component.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tabbox getTabboxApi() {
-		return getTabbox();
-	}
 
 	/**
 	 * Returns the panel associated with this tab.
@@ -151,13 +144,6 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			}
 		}
 		return null;
-	}
-	/**
-	 * Returns the panel associated with this tab.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tabpanel getLinkedPanelApi() {
-		return getLinkedPanel();
 	}
 
 	/**

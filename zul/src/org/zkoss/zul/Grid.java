@@ -169,7 +169,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see RowRenderer
  * @see RowRendererExt
  */
-public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Grid {
+public class Grid extends XulElement implements Paginated{
 	private static final Log log = Log.lookup(Grid.class);
 	private static final long serialVersionUID = 20091111L;
 
@@ -402,22 +402,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public Rows getRows() {
 		return _rows;
 	}
-	/** Returns the rows.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Rows getRowsApi() {
-		return getRows();
-	}
 	/** Returns the columns.
 	 */
 	public Columns getColumns() {
 		return _cols;
-	}
-	/** Returns the columns.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Columns getColumnsApi() {
-		return getColumns();
 	}
 	/** Returns the foot.
 	 */
@@ -431,12 +419,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public Frozen getFrozen() {
 		return _frozen;
-	}
-	/** Returns the foot.
-	 * @since 3.5.2
-	 */	
-	public org.zkoss.zul.api.Foot getFootApi() {
-		return getFoot();
 	}
 	/** Returns a collection of heads, including {@link #getColumns}
 	 * and auxiliary heads ({@link Auxhead}) (never null).
@@ -603,14 +585,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public Paging getPagingChild() {
 		return _paging;
-	}
-	/** Returns the child paging controller that is created automatically,
-	 * or null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi() {
-		return getPagingChild();
 	}
 	/** Returns the page size, aka., the number rows per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
@@ -1059,18 +1033,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		} finally {
 			renderer.doFinally();
 		}
-	}
-	/** Renders the specified {@link Row} if not loaded yet,
-	 * with {@link #getRowRenderer}.
-	 *
-	 * <p>It does nothing if {@link #getModel} returns null.
-	 * In other words, it is meaningful only if live data model is used.
-	 * @param rowApi assume as a {@link org.zkoss.zul.Row}   
-	 * @since 3.5.2
-	 */
-	public void renderRowApi(org.zkoss.zul.api.Row rowApi) {
-		Row row = (Row) rowApi;
-		renderRow(row);		
 	}
 	/** Renders all {@link Row} if not loaded yet,
 	 * with {@link #getRowRenderer}.

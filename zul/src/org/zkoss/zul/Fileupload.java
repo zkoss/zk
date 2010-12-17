@@ -60,7 +60,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
+public class Fileupload extends Button { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 	
 	public Fileupload() {

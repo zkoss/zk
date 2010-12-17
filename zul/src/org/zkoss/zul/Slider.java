@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
-public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
+public class Slider extends XulElement {
 	private String _orient = "horizontal";
 	private int _curpos, _maxpos = 100, _pginc = -1;
 	/** The name. */

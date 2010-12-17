@@ -68,7 +68,7 @@ import org.zkoss.zk.ui.UiException;
  * @author jumperchen
  * @since 5.0.0
  */
-public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.api.Borderlayout {
+public class Borderlayout extends HtmlBasedComponent {
 
 	/**
 	 * The north layout constraint (top of container).
@@ -128,24 +128,6 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 		return _center;
 	}
 
-	public org.zkoss.zul.api.North getNorthApi() {
-		return _north;
-	}
-	public org.zkoss.zul.api.South getSouthApi() {
-		return _south;
-	}
-
-	public org.zkoss.zul.api.West getWestApi() {
-		return _west;
-	}
-
-	public org.zkoss.zul.api.East getEastApi() {
-		return _east;
-	}
-
-	public org.zkoss.zul.api.Center getCenterApi() {
-		return _center;
-	}
 	/**
 	 * Re-size this layout component.
 	 */

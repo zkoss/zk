@@ -77,7 +77,7 @@ import java.util.TimeZone;
  * @see ChartModel
  * @author henrichen
  */
-public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
+public class Chart extends Imagemap {
 	private static final long serialVersionUID = 20091008183601L;
 	//chart type
 	public static final String PIE = "pie";

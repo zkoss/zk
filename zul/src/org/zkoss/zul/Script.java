@@ -75,7 +75,7 @@ import org.zkoss.zk.ui.sys.ComponentRedraws;
  *
  * @author tomyeh
  */
-public class Script extends AbstractComponent implements org.zkoss.zul.api.Script {
+public class Script extends AbstractComponent {
 	private String _src, _charset;
 	private String _content;
 	private String _packages;

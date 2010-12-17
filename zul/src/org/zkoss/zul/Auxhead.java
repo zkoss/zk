@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.0.0
  * @author tomyeh
  */
-public class Auxhead extends XulElement implements org.zkoss.zul.api.Auxhead {
+public class Auxhead extends XulElement {
 	public Auxhead() {
 	}
 

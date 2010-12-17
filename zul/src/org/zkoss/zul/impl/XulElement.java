@@ -34,7 +34,7 @@ import org.zkoss.zul.Popup;
  * 
  * @author tomyeh
  */
-abstract public class XulElement extends HtmlBasedComponent implements org.zkoss.zul.impl.api.XulElement {
+abstract public class XulElement extends HtmlBasedComponent {
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
 

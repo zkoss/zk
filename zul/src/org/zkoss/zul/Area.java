@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.WrongValueException;
  *
  * @author tomyeh
  */
-public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
+public class Area extends AbstractComponent {
 	private String _shape;
 	private String _coords;
 	private String _tooltiptext;

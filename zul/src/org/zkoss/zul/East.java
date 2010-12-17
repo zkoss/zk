@@ -24,7 +24,7 @@ package org.zkoss.zul;
  * @author jumperchen
  * @since 5.0.0
  */
-public class East extends LayoutRegion implements org.zkoss.zul.api.East {
+public class East extends LayoutRegion {
 	public East() {
 	}
 

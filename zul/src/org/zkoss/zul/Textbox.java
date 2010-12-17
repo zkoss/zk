@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.InputElement;
  * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)
  * @author tomyeh
  */
-public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox {
+public class Textbox extends InputElement {
 	private AuxInfo _auxinf;
 
 	public Textbox() {

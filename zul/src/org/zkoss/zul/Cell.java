@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 5.0.0
  */
-public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
+public class Cell extends XulElement {
 	private String _align, _valign;
 	private int _colspan = 1, _rowspan = 1;
 

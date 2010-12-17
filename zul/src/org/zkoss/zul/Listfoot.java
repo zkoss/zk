@@ -29,19 +29,12 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Listfoot extends XulElement implements org.zkoss.zul.api.Listfoot {
+public class Listfoot extends XulElement {
 	/** Returns the list box that it belongs to.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
 		return (Listbox)getParent();
-	}
-	/** Returns the list box that it belongs to.
-	 * <p>It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Listbox getListboxApi() {
-		return getListbox();
 	}
 
 	//-- Component --//

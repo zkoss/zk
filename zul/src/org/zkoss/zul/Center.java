@@ -29,7 +29,7 @@ package org.zkoss.zul;
  * @author jumperchen
  * @since 5.0.0
  */
-public class Center extends LayoutRegion implements org.zkoss.zul.api.Center {
+public class Center extends LayoutRegion {
 
 	public Center() {
 	}

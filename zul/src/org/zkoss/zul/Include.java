@@ -59,13 +59,6 @@ import org.zkoss.zul.mesg.MZul;
  * <p>If this component is the only child of its parent, the default width
  * and height will become 100%.
  *
- * <p>Since 3.6.2, there are three modes: auto (default), instant and defer.
- * The behavior prior to 3.6.2 is the same as the defer mode.
- * The default mode is <code>auto</code> since 5.0.
- * However, you can change it to <code>defer</code> by specifying a library
- * property named <code>org.zkoss.zul.include.mode</code> (for fully backward
- * compatibility).
- *
  * <h3>The instant mode</h3>
  *
  * <p>In the instant mode, the page to be included are loaded 'instantly'
@@ -113,6 +106,14 @@ import org.zkoss.zul.mesg.MZul;
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
  * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
  *
+ * <p><b>Backward Compatibility:<b/>
+ * Since 3.6.2, there are three modes: auto (default), instant and defer.
+ * The behavior prior to 3.6.2 is the same as the defer mode.
+ * The default mode is <code>auto</code> since 5.0.
+ * However, you can change it to <code>defer</code> by specifying a library
+ * property named <code>org.zkoss.zul.include.mode</code> (for backward
+ * compatibility).
+ *
  * <h3>Passing Parameters</h3>
  *
  * <p>There are two ways to pass parameters to the included page:
@@ -139,7 +140,7 @@ import org.zkoss.zul.mesg.MZul;
  * <h3>Macro Component versus {@link Include}</h3>
  *
  * If the include component is in the instant mode, it is almost the same as
- * a macro component. On the other hand, if in the pag mode, they are different:
+ * a macro component. On the other hand, if in the defer mode, they are different:
  * <ol>
  * <li>{@link Include} (in defer mode) could include anything include ZUML,
  * JSP or any other
@@ -165,9 +166,10 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement
-implements org.zkoss.zul.api.Include, Includer {
+public class Include extends XulElement implements Includer {
 	private static final Log log = Log.lookup(Include.class);
+	private static final String ATTR_RENDERED =
+		"org.zkoss.zul.Include.rendered";
 	private String _src;
 	private Map<String, Object> _dynams;
 	/** The child page. Note: it is recovered by PageImpl. */
@@ -192,6 +194,9 @@ implements org.zkoss.zul.api.Include, Includer {
 	 * This implementation will automatically use an echo event like {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} 
 	 * to suspend the including progress before using the {@link Clients#showBusy(String)} 
 	 * method to show the {@link MZul#PLEASE_WAIT} message at client side. 
+	 *
+	 * <p>If setProgressing(true) is called, the <code>defer</code> mode is enabled automatically
+	 * if the current mode is <code>auto</code>.
 	 * 
 	 * <p>Default: false.
 	 * @since 3.0.4
@@ -385,12 +390,17 @@ implements org.zkoss.zul.api.Include, Includer {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map<String, Object> old = setupDynams(exec);
-			try {
-				final int j = _src.indexOf('?');
-				exec.createComponents(j >= 0 ? _src.substring(0, j): _src, this, null);
-					//TODO: convert query string to arg
-			} finally {
-				restoreDynams(exec, old);
+			final String oldSrc  = (String) exec.getAttribute(ATTR_RENDERED);
+			if (!Objects.equals(oldSrc, _src)) {
+				try {
+					final int j = _src.indexOf('?');
+					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
+							this, null);
+					// TODO: convert query string to arg
+					exec.setAttribute(ATTR_RENDERED, _src);
+				} finally {
+					restoreDynams(exec, old);
+				}
 			}
 		}
 	}
@@ -437,8 +447,9 @@ implements org.zkoss.zul.api.Include, Includer {
 
 	//-- Component --//
 	/** Invalidates this component.
-	 * Notice that all children will be detached and the page will be
-	 * reloaded (and new children will be created).
+	 * It works for both the instant and defer mode.
+	 * Notice that all children will be detached (the instant mode) and
+	 * the page will be reloaded (and new children will be created).
 	 */
 	public void invalidate() {
 		super.invalidate();

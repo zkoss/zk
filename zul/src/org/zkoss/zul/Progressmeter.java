@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Progressmeter extends XulElement implements org.zkoss.zul.api.Progressmeter {
+public class Progressmeter extends XulElement {
 	private int _val;
 
 	public Progressmeter() {

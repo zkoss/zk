@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.event.Events;
  *
  * @author tomyeh
  */
-public class Menupopup extends Popup implements org.zkoss.zul.api.Menupopup {
+public class Menupopup extends Popup {
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-menu-popup" : _zclass;

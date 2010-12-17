@@ -27,19 +27,12 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Foot extends XulElement implements org.zkoss.zul.api.Foot {
+public class Foot extends XulElement {
 	/** Returns the grid that it belongs to.
 	 * It is the same as {@link #getParent}.
 	 */
 	public Grid getGrid() {
 		return (Grid)getParent();
-	}
-	/** Returns the grid that it belongs to.
-	 * It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Grid getGridApi() {
-		return getGrid();
 	}
 
 	//-- Component --//

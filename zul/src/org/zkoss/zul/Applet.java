@@ -41,8 +41,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * @author Tomyeh
  * @since 3.6.0
  */
-public class Applet extends HtmlBasedComponent implements DynamicPropertied,
-org.zkoss.zul.api.Applet {
+public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	private String _code, _codebase, _archive,
 		_align, _hspace, _vspace;
 	private final Map<String, String> _params = new LinkedHashMap<String, String>();

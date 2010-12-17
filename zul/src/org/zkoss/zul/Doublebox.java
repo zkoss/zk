@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.NumberInputElement;
  *
  * @author henrichen
  */
-public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.Doublebox {
+public class Doublebox extends NumberInputElement {
 	public Doublebox() {
 		setCols(11);
 	}

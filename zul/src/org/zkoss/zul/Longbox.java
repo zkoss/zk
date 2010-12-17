@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.NumberInputElement;
  *
  * @author tomyeh
  */
-public class Longbox extends NumberInputElement implements org.zkoss.zul.api.Longbox {
+public class Longbox extends NumberInputElement {
 	public Longbox() {
 		setCols(11);
 	}

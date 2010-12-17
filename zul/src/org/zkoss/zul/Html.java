@@ -70,7 +70,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Html extends XulElement implements org.zkoss.zul.api.Html {
+public class Html extends XulElement {
 	private String _content = "";
 
 	/** Contructs a {@link Html} component to embed HTML tags.

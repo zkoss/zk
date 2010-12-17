@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Row extends XulElement implements org.zkoss.zul.api.Row {
+public class Row extends XulElement {
 	private static final long serialVersionUID = 20091111L;
 
 	private Object _value;
@@ -57,24 +57,10 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	public Detail getDetailChild() {
 		return _detail;
 	}
-	/**
-	 * Returns the child detail component.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Detail getDetailChildApi() {
-		return getDetailChild();
-	}
 	/** Returns the grid that contains this row. */
 	public Grid getGrid() {
 		final Component parent = getParent();
 		return parent != null ? (Grid)parent.getParent(): null;
-	}
-
-	/** Returns the grid that contains this row. 
-	 * @since 3.5.2
-	 * */
-	public org.zkoss.zul.api.Grid getGridApi() {		
-		return getGrid();
 	}
 
 	/** Returns the horizontal alignment of the whole row.
@@ -224,13 +210,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
-	/**
-	 * Returns the group that this row belongs to, or null.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Group getGroupApi() {
-		return getGroup();
-	}
+
 	//-- super --//
 	/** Returns the style class.
 	 * By default, it is the same as grid's stye class, unless

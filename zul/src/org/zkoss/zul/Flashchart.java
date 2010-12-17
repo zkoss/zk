@@ -47,7 +47,7 @@ import org.zkoss.zul.event.ChartDataListener;
  * @author Joy Lo
  * @since 5.0.0
  */
-public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
+public class Flashchart extends Flash {
 
 	private static final long serialVersionUID = 20091126115842L;
 	/**

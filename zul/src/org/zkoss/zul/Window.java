@@ -70,7 +70,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
  * @author tomyeh
  */
-public class Window extends XulElement implements org.zkoss.zul.api.Window {
+public class Window extends XulElement {
 	private static final Log log = Log.lookup(Window.class);
 	private static final long serialVersionUID = 20100721L;
 
@@ -345,13 +345,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 */
 	public Caption getCaption() {
 		return _caption;
-	}
-	/** Returns the caption of this window.
-	 *
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Caption getCaptionApi() {
-		return getCaption();
 	}
 
 	/** Returns the border.

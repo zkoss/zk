@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <p>Default {@link #getZclass}: z-treecol (since 5.0.0)
  * @author tomyeh
  */
-public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol {
+public class Treecol extends HeaderElement {
 	private int _maxlength;
 
 	public Treecol() {
@@ -61,12 +61,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		final Component comp = getParent();
 		return comp != null ? (Tree)comp.getParent(): null;
 	}
-	/** Returns the tree that it belongs to.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Tree getTreeApi() {
-		return getTree();
-	}
+
 	/** Returns the maximal length of each item's label.
 	 * <p>Default: 0 (no limit).
 	 */

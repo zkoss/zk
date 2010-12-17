@@ -50,7 +50,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <p>Default {@link #getZclass}: z-listheader.(since 5.0.0)
  * @author tomyeh
  */
-public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listheader {
+public class Listheader extends HeaderElement {
     private static final long serialVersionUID = 20080218L;
 
 	private String _sortDir = "natural";
@@ -92,12 +92,6 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public Listbox getListbox() {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
-	}
-	/** Returns the listbox that this belongs to.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Listbox getListboxApi() {
-		return getListbox();
 	}
 
 	/** Returns the value.

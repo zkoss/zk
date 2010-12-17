@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
+public class Calendar extends XulElement {
 	private Date _value;
 	/** The name. */
 	private String _name;

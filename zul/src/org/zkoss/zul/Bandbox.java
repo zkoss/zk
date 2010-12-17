@@ -46,7 +46,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
+public class Bandbox extends Textbox {
 	private transient Bandpopup _drop;
 	private boolean _autodrop, _btnVisible = true;
 
@@ -65,12 +65,6 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	 */
 	public Bandpopup getDropdown() {
 		return _drop;
-	}
-	/** Returns the dropdown window belonging to this band box.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Bandpopup getDropdownApi() {
-		return getDropdown();
 	}
 
 	/** Returns whether to automatically drop the list if users is changing

@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.Utils;
  * @author jumperchen
  * @since 5.0.0
  */
-public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.api.LayoutRegion {
+public abstract class LayoutRegion extends XulElement {
 
 	private String _border = "normal";
 	private int[] _margins = new int[] { 0, 0, 0, 0 };

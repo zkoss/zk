@@ -51,7 +51,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Panel {
+public class Panel extends XulElement implements Framable {
 	private transient Toolbar _tbar, _bbar, _fbar;
 	private transient Panelchildren _panelchildren;
 	private transient Caption _caption;
@@ -370,12 +370,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public Caption getCaption() {
 		return _caption;
 	}
-	/** Returns the caption of this panel.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Caption getCaptionApi() {		
-		return getCaption();
-	}
 	/** Returns the border.
 	 * The border actually controls via {@link Panelchildren#getSclass()}. 
 	 * In fact, the name of the border (except "normal") is generate as part of 
@@ -458,18 +452,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		}
 		return false;
 	}
-	/**
-	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
-	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,
-	 * and "fbar" the name of foot toolbar.
-	 * 
-	 * @param toolbarApi assume as a {@link org.zkoss.zul.Toolbar}
-	 * @since 3.5.2
-	 */
-	public boolean addToolbarApi(String name, org.zkoss.zul.api.Toolbar toolbarApi) {
-		Toolbar toolbar = (Toolbar) toolbarApi;
-		return addToolbar(name, toolbar);
-	}
 	/** Process the onClose event sent when the close button is pressed.
 	 * <p>Default: detach itself.
 	 */
@@ -484,24 +466,10 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		return _tbar;
 	}
 	/**
-	 * Returns the top toolbar of this panel.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Toolbar getTopToolbarApi() {		
-		return getTopToolbar();
-	}
-	/**
 	 * Returns the bottom toolbar of this panel.
 	 */
 	public Toolbar getBottomToolbar() {
 		return _bbar;
-	}
-	/**
-	 * Returns the bottom toolbar of this panel.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Toolbar getBottomToolbarApi() {		
-		return getBottomToolbar();
 	}
 	/**
 	 * Returns the foot toolbar of this panel.
@@ -509,26 +477,12 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public Toolbar getFootToolbar() {
 		return _fbar;
 	}
-	/**
-	 * Returns the foot toolbar of this panel.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Toolbar getFootToolbarApi() {		
-		return getFootToolbar();
-	}
 
 	/**
 	 * Returns the panelchildren of this panel.
 	 */
 	public Panelchildren getPanelchildren() {
 		return _panelchildren;
-	}
-	/**
-	 * Returns the panelchildren of this panel.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Panelchildren getPanelchildrenApi() {		
-		return getPanelchildren();
 	}
 
 	public String getZclass() {

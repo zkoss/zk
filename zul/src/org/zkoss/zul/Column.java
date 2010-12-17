@@ -55,7 +55,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
+public class Column extends HeaderElement {
 	private String _sortDir = "natural";
 	private transient Comparator<?> _sortAsc, _sortDsc;
 	private String _sortAscNm = "none";
@@ -96,12 +96,6 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public Grid getGrid() {
 		final Component parent = getParent();
 		return parent != null ? (Grid)parent.getParent(): null;
-	}
-	/** Returns the grid that contains this column.
-	 * @since 3.5.2 
-	 * */
-	public org.zkoss.zul.api.Grid getGridApi() {		
-		return getGrid();
 	}
 	
 	/** Returns the sort direction.

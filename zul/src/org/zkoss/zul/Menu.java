@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-mean. (since 3.5.0)
  * @author tomyeh
  */
-public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
+public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 	private String _content = "";
 	private boolean _noSmartUpdate = false;
@@ -69,12 +69,6 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	 */
 	public Menupopup getMenupopup() {
 		return _popup;
-	}
-	/** Returns the {@link Menupopup} it owns, or null if not available.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Menupopup getMenupopupApi() {
-		return getMenupopup();		
 	}
 	
 	/** Returns the embedded content (i.e., HTML tags) that is

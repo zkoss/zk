@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-abstract public class HeaderElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
+abstract public class HeaderElement extends LabelImageElement {
 	private String _align, _valign;
 
 	protected HeaderElement() {

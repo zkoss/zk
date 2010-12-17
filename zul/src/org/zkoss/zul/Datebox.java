@@ -51,8 +51,7 @@ import org.zkoss.zul.mesg.MZul;
  * 
  * @author tomyeh
  */
-public class Datebox extends FormatInputElement implements
-		org.zkoss.zul.api.Datebox {
+public class Datebox extends FormatInputElement {
 	private TimeZone _tzone;
 	private List<TimeZone> _dtzones;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;

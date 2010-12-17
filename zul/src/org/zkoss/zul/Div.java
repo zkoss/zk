@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Div extends XulElement implements org.zkoss.zul.api.Div {
+public class Div extends XulElement {
 	private String _align;
 
 	/** Returns the alignment.

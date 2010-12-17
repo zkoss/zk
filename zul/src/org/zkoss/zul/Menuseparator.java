@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
-public class Menuseparator extends XulElement implements org.zkoss.zul.api.Menuseparator {
+public class Menuseparator extends XulElement {
 
 	//-- Component --//
 	public String getZclass() {

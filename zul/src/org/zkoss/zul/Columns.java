@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.HeadersElement;
  *
  * @author tomyeh
  */
-public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns {
+public class Columns extends HeadersElement {
 	private String _mpop = "none";
 	private Object _value;
 	private boolean _columnshide = true;
@@ -42,13 +42,6 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	 */
 	public Grid getGrid() {
 		return (Grid)getParent();
-	}
-	/** Returns the grid that it belongs to.
-	 * <p>It is the same as {@link #getParent}.
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Grid getGridApi() {
-		return getGrid();
 	}
 
 	/**
@@ -134,11 +127,6 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	 */
 	public void setPopup(Menupopup mpop) {
 		super.setPopup(mpop);
-	}
-	/** @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
-	 */
-	public void setPopupApi(org.zkoss.zul.api.Menupopup mpopApi) {
-		super.setPopup((Popup)mpopApi);		
 	}
 	
 	// super

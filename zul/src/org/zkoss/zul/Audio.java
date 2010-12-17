@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
+public class Audio extends XulElement {
 	private String _align, _border;
 	protected String _src;
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
