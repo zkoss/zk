@@ -137,6 +137,9 @@ public class ExecutionResolver implements VariableResolverX {
 				return ((Page)_self).getAttributes();
 			return Collections.EMPTY_MAP;
 		}
+		if ("param".equals(name) || "paramValues".equals(name))
+			return Evaluators.resolveVariable(_parent, name);
+			//Bug 3131983: cannot go through getZScriptVariable
 
 		if (_self instanceof Component) {
 			final Component comp = (Component)_self;
@@ -145,8 +148,7 @@ public class ExecutionResolver implements VariableResolverX {
 			//so it is in the same order of interpreter
 			final Page page = getPage(comp);
 			if (page != null) {
-				final Object o =
-					page.getZScriptVariable(comp, name);
+				final Object o = page.getZScriptVariable(comp, name);
 				if (o != null)
 					return o;
 			}

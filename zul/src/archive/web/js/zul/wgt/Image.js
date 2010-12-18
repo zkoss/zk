@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * An image.
  *
- * <p>See also <a href="http://docs.zkoss.org/wiki/ZK/How-Tos/Concepts-and-Tricks#How_to_fix_the_alpha_transparency_problem_of_PNG_files_found_in_IE6.3F">how to fix the alpha transparency problem of PNG files found in IE6?</a>
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Alphafix_for_IE6">how to fix the alpha transparency problem of PNG files found in IE6?</a>
  */
 zul.wgt.Image = zk.$extends(zul.Widget, {
 	$define: {

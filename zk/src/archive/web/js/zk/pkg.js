@@ -250,7 +250,7 @@ zk.load('zul.utl', function () {
 	 */
 	/** Declares a function that shall be executed only if the specified
 	 * package(s) are loaded (and {@link #loading} is 0). Notice that it won't cause the package(s) to execute. Rather, it defers the execution of the specified function until someone else loads the package (by use of {@link #load}).
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Customize_JavaScript_Codes">Customize JavaScript Codes</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/General_Control/JavaScript_Packaging">JavaScript Packaging</a>
 	 * <p>To know whether all requested packages are loaded (i.e., ZK is not loading any package), you can check {@link #loading} if it is 0.
 	 * <p>Notice that functions specified in the second format execute before those specified in the first format.
 	 * <p>Example

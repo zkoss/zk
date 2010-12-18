@@ -283,7 +283,9 @@ public interface Execution extends Scope {
 	public String locate(String path);
 
 	/** Returns whether the execution is voided.
-	 * By void we mean the request is taken charged by other servlet.
+	 * By void we mean ZK Loader shall stop evaluation of a ZUML document,
+	 * since the request will be taken charged by other servlet
+	 * or redirect to another page.
 	 * The execution shall not do anything more. In other words,
 	 * the execution is avoided and won't generate any ouput.
 	 *
@@ -294,12 +296,17 @@ public interface Execution extends Scope {
 	 */
 	public boolean isVoided();
 	/** Sets whether the execution is voided.
-	 * By void we mean the request is taken charged by other servlet.
+	 * By void we mean ZK Loader shall stop evaluation of a ZUML document,
+	 * since the request will be taken charged by other servlet
+	 * or redirect to another page.
 	 *
 	 * <p>If you invoke {@link #forward}, this method is called automatically
 	 * with true. Thus, you rarely need to invoke this method, unless
 	 * you forward to other servlet by use javax.servlet.RequestDispatcher
 	 * directly.
+	 *
+	 * <p>The other case to invoke this method is if you'd likd to redirect
+	 * to another (by specifying the refresh header).
 	 *
 	 * @since 2.4.1
 	 */

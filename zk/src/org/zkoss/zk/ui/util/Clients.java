@@ -236,7 +236,7 @@ public class Clients {
 	 * <p>To execute a long operation asynchronously, the developer can use
 	 * a working thread,
 	 * or use {@link org.zkoss.zk.ui.event.EventQueue#subscribe(org.zkoss.zk.ui.event.EventListener,boolean)}.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Long_Operations">Long Operations</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Patterns/Long_Operations">Long Operations</a>
 	 *
 	 * @param comp the component that the busy message to cover.
 	 * Ignored if null. Notice that if the component is not found,

@@ -58,7 +58,7 @@ public interface WidgetDefinition {
 	 * are ignored.
 	 * If true, they are converted to a label child.
 	 *
-	 * <p>It is used only with <a href="http://docs.zkoss.org/wiki/IZUML">iZUML</a>.
+	 * <p>It is used only with <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/General_Control/iZUML">iZUML</a>.
 	 */
 	public boolean isBlankPreserved();
 }

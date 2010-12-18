@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page title="${c:l('page.title')}"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zk"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd"> 
+
+	<zscript>
+		import org.zkoss.zul.Listitem;
+		import org.zkoss.zul.event.ListDataEvent;
+		import org.zkoss.zul.event.ListDataListener;
+
+		class Item
+		{
+			private int id;
+			private String name;
+			
+			public Item(int id,String name)
+			{
+				this.id=id;
+				this.name=name;
+			}
+			
+			public int getId()
+			{
+				return id;
+			}
+			
+			public void setId(int id)
+			{
+				this.id=id;
+			}
+			
+			public String getName()
+			{
+				return name;
+			}
+			
+			public void setName(String name)
+			{
+				this.name=name;
+			}
+		}
+		
+		class ItemModel extends AbstractListModel implements ListModel
+		{
+			private List data;
+			
+			public int getSize()
+			{
+				return data.size();
+			}
+			
+			public Object getElementAt(int index)
+			{
+				return data.get(index);
+			}
+			
+			public List getData()
+			{
+				return data;
+			}
+			
+			public void setData(List data)
+			{
+				this.data=data;
+			}
+			
+			public void add( Object obj )
+			{
+				data.add(obj);
+				fireEvent(ListDataEvent.CONTENTS_CHANGED,0,data.size()-1);
+			}
+			
+			public void remove( Object obj, int index )
+			{
+				data.remove(obj); 
+				fireEvent(ListDataEvent.INTERVAL_REMOVED ,index,index);  
+			}
+		}
+		
+		public class ItemModelRenderer implements ListitemRenderer
+		{
+	
+			public void render( Listitem item, java.lang.Object data )
+			{
+				Item itemData = (Item)data;
+
+				item.setAttribute("item",itemData,Component.COMPONENT_SCOPE);
+		
+				cell = new Listcell(""+itemData.getId());
+				cell.setParent(item);
+		
+				cell = new Listcell(itemData.getName());
+				cell.setParent(item);
+			}
+		}
+		
+		class aaa implements ListDataListener
+		{
+			public void onChange(ListDataEvent event)
+			{
+//				event.getModel().refresh();
+			}
+		}
+		
+		List data=new ArrayList();
+		ItemModel model = new ItemModel();
+
+		model.addListDataListener(new aaa());
+
+
+		ItemModelRenderer modelRenderer = new ItemModelRenderer();
+		
+		data.add(new Item(1,"One"));
+		data.add(new Item(2,"Two"));
+		data.add(new Item(3,"Three"));
+		data.add(new Item(4,"Four"));
+		data.add(new Item(5,"Five"));
+		data.add(new Item(6,"Six"));
+		model.setData(data);
+		
+		class Event
+		{
+			public static void delSelected( Listbox listBox, ListModel model )
+			{
+				if ( listBox.getSelectedCount() == 0 )
+				{
+					alert("Select min one element");
+				}
+				else
+				{
+					Set items = listBox.getSelectedItems();
+	
+					for ( Object tmp: items )
+					{
+						Listitem listItem = (Listitem)tmp;
+						Item item = (Item)listItem.getAttribute("item");
+						int index = listBox.getItems().indexOf(listItem); 
+						model.remove(item, index);  						
+					}
+				}
+			}
+			
+			public static void add( Listbox listBox, ListModel model, String id, String  name)
+			{
+				if ( name.equals("") || id.equals("") )
+				{
+					alert("id or name empty");
+				}
+				else
+				{
+					Item item = new Item(Integer.parseInt(id),name);
+					model.add(item);
+				}
+			}
+			
+		}
+	</zscript>
+
+	<window id="mainWindow" width="800px">
+1. when delete item (row) from e.g. page 1, numbers of rows in that page shouldn't decrease by one.
+<separator/>
+2. when delete second item on that page(page one) items from page 2 shouldn't disappear.
+		<listbox
+			style="margin-bottom: 10px"
+			mold="paging"
+			pageSize="4"
+			id="userList"
+			model="${model}"
+			itemRenderer="${modelRenderer}">
+			<listhead>
+				<listheader label="id"/>
+				<listheader label="name"/>
+			</listhead>
+		</listbox>
+		<button label="Delete Selected" onClick="Event.delSelected(userList,model)"/>
+		ID: <intbox id="itemId" /> NAME: <textbox id="itemName" />
+		<button label="Add" onClick="Event.add(userList,model,itemId.getText(),itemName.getText())"/>
+		<button label="Redraw" onClick="userList.invalidate()"/>	
+	</window>
+</zk>

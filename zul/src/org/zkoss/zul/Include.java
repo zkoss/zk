@@ -37,7 +37,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -207,9 +206,14 @@ public class Include extends XulElement implements Includer {
 				throw new UnsupportedOperationException("progressing not allowed in instant mode");
 
 			_progressing = progressing;
-			if (_progressing)
-				fixMode(); //becomes defer mode if auto
+			fixMode(); //becomes defer mode if auto
 			checkProgressing();
+			
+			if (!_instantMode) {
+				getChildren().clear();
+				invalidate();
+			} else
+				super.invalidate();
 		}
 	}
 	/**
@@ -225,7 +229,7 @@ public class Include extends XulElement implements Includer {
 	 *@since 3.0.4
 	 */
 	public void onEchoInclude() {
-		Clients.clearBusy();
+ 		Clients.clearBusy();
 		super.invalidate();
 	}
 	/** Returns the src.
@@ -282,6 +286,8 @@ public class Include extends XulElement implements Includer {
 
 			_mode = mode;
 			fixMode();
+			if (!_instantMode) invalidate();
+			else super.invalidate();
 		}
 	}
 	private void fixMode() {
@@ -290,7 +296,6 @@ public class Include extends XulElement implements Includer {
 			afterCompose();
 	}
 	private void fixModeOnly() { //called by afterCompose
-		boolean oldInstantMode = _instantMode;
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
 				_instantMode = _src.endsWith(".zul") || _src.endsWith(".zhtml");
@@ -298,11 +303,6 @@ public class Include extends XulElement implements Includer {
 				_instantMode = false;
 		} else
 			_instantMode = "instant".equals(_mode);
-
-		getChildren().clear();
-
-		if (_instantMode != oldInstantMode)
-			invalidate();
 	}
 
 	/** Returns whether the source depends on the current Locale.
@@ -393,6 +393,7 @@ public class Include extends XulElement implements Includer {
 			final String oldSrc  = (String) exec.getAttribute(ATTR_RENDERED);
 			if (!Objects.equals(oldSrc, _src)) {
 				try {
+					getChildren().clear();
 					final int j = _src.indexOf('?');
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
 							this, null);

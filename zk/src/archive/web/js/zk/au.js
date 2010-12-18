@@ -540,9 +540,9 @@ zAu = {
 	/** Sends an AU request and appends it to the end if there is other pending
 	 * AU requests.
 	 *
-	 * @param Event the request. If {@link Event#target} is null,
+	 * @param Event aureq the request. If {@link Event#target} is null,
 	 * the request will be sent to each desktop at the client.
-	 * @param int timeout the time to wait before sending the request.
+	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 * 0 is assumed if not specified or negative.
 	 * If negative, the request is assumed to be implicit, i.e., no message will
 	 * be shown if an error occurs.
@@ -561,9 +561,9 @@ zAu = {
 		}
 	},
 	/** Sends an AU request by placing in front of any other pending request.
-	 * @param Event the request. If {@link Event#target} is null,
+	 * @param Event aureq the request. If {@link Event#target} is null,
 	 * the request will be sent to each desktop at the client.
-	 * @param int timeout the time to wait before sending the request.
+	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 * 0 is assumed if not specified or negative.
 	 * If negative, the request is assumed to be implicit, i.e., no message will
 	 * be shown if an error occurs.

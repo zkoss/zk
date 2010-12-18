@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Bug1612312.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:    [ 1612312 ] Listbox conflict with Clients.confirmClose (IE and IE7 only)
+
+	History:
+		Tue Dec 12 15:51:30     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="confirmClose Conflict on IE/IE7" border="normal" width="400px">
+confirmClose is not supported in Opera.(It's correct)
+	<listbox mold="paging" pageSize="2">
+		<listhead>
+			<listheader label="a"/>
+			<listheader label="b"/>
+			<listheader label="c"/>
+		</listhead>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+		<listitem>
+			<listcell label="1"/><listcell label="2"/><listcell label="3"/>
+		</listitem>
+	</listbox>
+	<zscript>
+	Clients.confirmClose("Hello");
+	</zscript>
+</window>

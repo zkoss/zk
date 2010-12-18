@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Desktop;
  * caches the desktop when {@link #beforeRemove} is called,
  * and then return it if {@link #beforeService} matches it.
  *
- * <p>Refer to <a href="http://docs.zkoss.org/wiki/Performance_Tip#Reuse_Desktops">Performance Tip</a>
+ * <p>Please refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Performance_Tips/Reuse_Desktops">Performance Tips</a>
  * for more information.
  *
  * @author tomyeh

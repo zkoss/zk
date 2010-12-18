@@ -239,7 +239,7 @@ w:use="foo.MyWindow"&gt;
 	public String getUuid();
 
 	/** Returns a component of the specified ID in the same ID space.
-	 * Components in the same ID space are called fellows.
+	 * Components in the same ID space assinged with ID are called fellows.
 	 *
 	 * <p>Unlike {@link #getFellowIfAny}, it throws an exception if not found.
 	 *
@@ -252,6 +252,8 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Component getFellowIfAny(String id);
 	/** Returns all fellows in the same ID space of this component.
+	 * Notice that only components that are assigned with ID are considered
+	 * as fellows.
 	 * The returned collection is read-only.
 	 * @since 3.0.6
 	 */
@@ -957,7 +959,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Default: null.
 	 * <p>If you want to provide an AU service for the AU requests
 	 * targeting the desktop. Use {@link Desktop#addListener}.
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">How to process AU requests with JSON</a>.
 	 * @since 5.0.0
 	 */
 	public void setAuService(AuService service);
@@ -988,9 +990,10 @@ w:use="foo.MyWindow"&gt;
 	public void setAutag(String tag);
 
 	/** Clones the component.
-	 * All of its children is cloned.
-	 * Notice that the cloned component doesn't belong to any page, nor
-	 * desktop. It doesn't have parent, either.
+	 * All of its children and descendants are cloned.
+	 * Also, ID are preserved.
+	 * @return the new component. Notice that it doesn't belong to any page, nor
+	 * desktop. It doesn't have a parent, either.
 	 */
 	public Object clone();
 }

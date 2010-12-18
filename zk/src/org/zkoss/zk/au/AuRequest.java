@@ -184,7 +184,7 @@ public class AuRequest {
 	 * the data can be retrieved by the key, "". For example,
 	 * <code>getData().getInt("")</code>.
 	 *
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">how to process data with JSON</a>.
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>
 	 *
 	 * <p>Notice that, since 5.0.4, this method never returns null.
 	 * If no data at all, it simply returns an empty map.
