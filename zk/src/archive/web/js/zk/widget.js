@@ -4155,7 +4155,7 @@ _doFooSelect: function (evt) {
 	 * @param String evtnm the event name to register, such as onClick.
 	 * @param Object fn the name ({@link String}) of the member method to handle the event,
 	 * or the function ({@link Function}).
-	 * It is optional. If omitted, <i>_doEvtnm</i> is assumed, where <i>evtnm</it>
+	 * It is optional. If omitted, <i>_doEvtnm</i> is assumed, where <i>evtnm</i>
 	 * is the value passed thru the <code>evtnm</code> argument.
 	 * For example, if the event name is onFocus, then the method is assumed to be
 	 * _doFocus.
