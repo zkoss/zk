@@ -31,7 +31,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">Notifications</a></li>
   * </ul>
  * <p>Common Key Codes:
- * <table>
+ * <table cellspacing="0" cellpadding="3" border="1">
  * <tr>
  * <td>BACKSSPACE</td><td>8</td>
  * <td>TAB</td><td>9</td>

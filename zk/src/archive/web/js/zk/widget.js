@@ -1144,7 +1144,7 @@ new zul.wnd.Window{
 		sclass: function () {
 			this.updateDomClass_();
 		},
-		/** Sets the ZK Cascading Style class(es) for this widget. It is the CSS class used to implement a mold of this widget. n implementation It usually depends on the implementation of the mold (@{link #getMold}).
+		/** Sets the ZK Cascading Style class(es) for this widget. It is the CSS class used to implement a mold of this widget. n implementation It usually depends on the implementation of the mold ({@link #getMold}).
 		 * <p>Default: null but an implementation usually provides a default class, such as z-button.
 		 * <p>Calling setZclass with a different value will completely replace the default style of a widget.
 		 * Once you change it, all default styles are gone.
@@ -2405,7 +2405,7 @@ redraw: function (out) {
 	 * with a non-negative value. The other example is some widget might be
 	 * optimized for the performance by not rendering some or the whole part
 	 * of the widget. If the rendering is deferred, the corresponding DOM elements
-	 * (@{link #$n}) are not available. If it is important to you, you can
+	 * ({@link #$n}) are not available. If it is important to you, you can
 	 * force it to be rendered.
 	 * <p>Notice that this method only forces this widget to render. It doesn't
 	 * force any of its children. If you want, you have invoke {@link #forcerender}
@@ -2991,7 +2991,7 @@ function () {
 wgt.bind();
 </code></pre>
 	 * <h3>Subclass Note</h3>
-	 * <p>Subclass overrides this method to initialize the DOM element(s), such as adding a DOM listener. Refer to Widget and DOM Events and {link #domListen_} for more information. 
+	 * <p>Subclass overrides this method to initialize the DOM element(s), such as adding a DOM listener. Refer to Widget and DOM Events and {@link #domListen_} for more information. 
 	 *
 	 * @see #bind
 	 * @see #unbind_
