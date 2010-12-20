@@ -6,6 +6,7 @@ ZK 5.0.6
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout
   3138362: Add a Doublespinner comopnent to support double value
+  3139008: Add Vietnamese language
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
