@@ -476,6 +476,22 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>doublespinner</component-name>
+		<component-class>org.zkoss.zul.Doublespinner</component-class>
+		<widget-class>zul.inp.Doublespinner</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<!-- same as spinner -->
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>east</component-name>
 		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.East</component-class>

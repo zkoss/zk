@@ -99,6 +99,36 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="spinnerConstraintAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="no empty" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>				
+					<xs:pattern value="(min [0-9]+)?|(max [0-9]+)?|(min [0-9]+ max [0-9]+)?"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="doubleSpinnerConstraintAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="no empty" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>				
+					<xs:pattern value="(min [0-9\.]+)?|(max [0-9\.]+)?|(min [0-9\.]+ max [0-9\.]+)?"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<xs:simpleType name="alignAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -512,6 +542,7 @@
 			<xs:element ref="decimalbox" />
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
+			<xs:element ref="doublespinner" />
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
@@ -580,6 +611,7 @@
 				<xs:element ref="decimalbox" />
 				<xs:element ref="div" />
 				<xs:element ref="doublebox" />
+				<xs:element ref="doublespinner" />
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
@@ -1002,6 +1034,17 @@
 		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+    <!-- doublespinner -->
+	<xs:element name="doublespinner" type="doublespinnerType" />
+	<xs:complexType name="doublespinnerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="doubleSpinnerConstraintAttrType" use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="step" type="doubleType" use="optional" />
+		<xs:attribute name="value" type="doubleType" use="optional" />
 	</xs:complexType>
     <!-- east -->
 	<xs:element name="east" type="eastType" />
@@ -1929,7 +1972,7 @@
 	<xs:complexType name="spinnerType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
+		<xs:attribute name="constraint" type="spinnerConstraintAttrType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="step" type="xs:integer" use="optional" />

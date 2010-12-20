@@ -5,6 +5,7 @@ ZK 5.0.6
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout
+  3138362: Add a Doublespinner comopnent to support double value
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
