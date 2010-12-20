@@ -26,7 +26,8 @@ import org.zkoss.zk.ui.event.Events;
  *
  * @author tomyeh
  */
-abstract public class FormatInputElement extends InputElement {
+abstract public class FormatInputElement extends InputElement
+implements org.zkoss.zul.impl.api.FormatInputElement {
 	private String _format;
 
 	/** Returns the format.
