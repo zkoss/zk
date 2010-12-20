@@ -3854,7 +3854,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doDoubleClick_
@@ -3876,7 +3876,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doDoubleClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3897,7 +3897,7 @@ wgt.setListeners({
 	 * <p>Note: if {@link #shallIgnoreClick_} returns true, {@link #fireX} won't be
 	 * called and this method invokes the parent's {@link #doRightClick_} instead
 	 * (unless {@link zk.Event#stopped} is set).
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doClick_
@@ -3914,7 +3914,7 @@ wgt.setListeners({
 	 * Rather, it shall override this method if necessary.
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseOver_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3937,7 +3937,7 @@ wgt.setListeners({
 	 * call parent's doMouseOut_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @see #doMouseMove_
 	 * @see #doMouseOver_
 	 * @see #doMouseDown_
@@ -3955,7 +3955,7 @@ wgt.setListeners({
 	 * Rather, it shall override this method if necessary. 
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3976,7 +3976,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseMove_
@@ -3997,7 +3997,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doMouseMove_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doMouseOver_
@@ -4019,7 +4019,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyDown_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyUp_
@@ -4038,7 +4038,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyUp_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyDown_
@@ -4057,7 +4057,7 @@ wgt.setListeners({
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doKeyPress_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doKeyDown_
@@ -4084,7 +4084,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doFocus_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doBlur_
@@ -4109,7 +4109,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doBlur_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
-	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 * @param zk.Event evt the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
 	 * @see #doFocus_
@@ -4142,7 +4142,7 @@ _doChange_: function (evt) { //evt is an instance of zk.Event
 _doFooSelect: function (evt) {
 }
 </code></pre>
-	 * See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">ZK Client-side Reference: Widget Events and DOM Events</a>.
+	 * See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
 	 *
 	 * <h3>Design Mode</h3>
 	 * If a widget is created and controlled by ZK Weaver for visual design,
