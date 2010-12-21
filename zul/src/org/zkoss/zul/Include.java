@@ -404,6 +404,9 @@ implements org.zkoss.zul.api.Include, Includer {
 					restoreDynams(exec, old);
 				}
 			}
+		} else {
+			// just in case
+			getChildren().clear();
 		}
 	}
 	private Execution getExecution() {
@@ -458,7 +461,6 @@ implements org.zkoss.zul.api.Include, Includer {
 			//invalidate is redudant in instant mode, but less memory leak in IE
 
 		if (_instantMode && _afterComposed) {
-			getChildren().clear();
 			afterCompose();
 		}
 
