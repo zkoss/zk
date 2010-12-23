@@ -60,7 +60,15 @@ import org.zkoss.zk.xel.Evaluator;
  * componentScope, spaceScope, pageScope, desktopScope, sessionScope, 
  * applicationScope, and requestScope, so you can use them directly. Besides 
  * that, it also provides alert(String message) method, so you can call alert() 
- * without problems.</p>
+ * without problems. Since 3.5.2, the composer itself would be assigned as an 
+ * attribute of the supervised component per the naming convention of 
+ * the component id and composer class name or of component id and "composer". 
+ * e.g. If the component id is "mywin" and the composer class is org.zkoss.MyComposer, 
+ * then the composer can be referenced by the variable name of "mywin$MyController" or 
+ * "mywin$composer". Notice that the '$' separator can be changed to other character
+ * such as '_' for Groovy or other environment that '$' is not applicable. Simply
+ * extends this class and calling {@link #GenericAutowireComposer(char separator)}
+ * constructor with proper separator character.</p>
  * 
  * <p>Notice that since this composer kept references to the components, single
  * instance composer object cannot be shared by multiple components.</p>
@@ -68,7 +76,8 @@ import org.zkoss.zk.xel.Evaluator;
  * <p>The following is an example. The onOK event listener is registered into 
  * the target window, and the Textbox component with id name "mytextbox" is
  * injected into the "mytextbox" field automatically (so you can use 
- * mytextbox variable directly in onOK).</p>
+ * mytextbox variable directly in onOK). The "value" property of "mytextbox" 
+ * is assigned with composer's getTitle(), i.e. "ZK".</p>
  * 
  * <pre><code>
  * MyComposer.java
@@ -80,12 +89,15 @@ import org.zkoss.zk.xel.Evaluator;
  *         mytextbox.setValue("Enter Pressed");
  *         alert("Hi!");
  *     }
+ *     public String getTitle() {
+ *         return "ZK";
+ *     }
  * }
  * 
  * test.zul
  * 
  * &lt;window id="mywin" apply="MyComposer">
- *     &lt;textbox id="mytextbox"/>
+ *     &lt;textbox id="mytextbox" value="${mywin$composer.title}"/>
  * &lt;/window>
  * </code></pre>
  * 

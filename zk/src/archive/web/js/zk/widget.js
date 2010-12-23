@@ -281,6 +281,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									} else
 										sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
 								} else {
+									cwgt.beforeParentMinFlex_(o);
 									sz += c.offsetHeight;
 									var bm = zkc.sumStyles("b", jq.margins);
 									if (!zk.safari || bm >= 0)
@@ -402,6 +403,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									} else
 										sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
 								} else {
+									cwgt.beforeParentMinFlex_(o);
 									sz += c.offsetWidth;
 									var rm = zkc.sumStyles("r", jq.margins);
 									if (!zk.safari || rm >= 0)
@@ -3195,8 +3197,11 @@ unbind_: function (skipper, after) {
 		//to be overridden, whether ignore child node offset in vflex/hflex calculation
 		return false;
 	},
-	beforeMinFlex_: function () {
-		//to be overridden
+	beforeMinFlex_: function (attr) { //'w' for width or 'h' for height
+		//to be overridden, before calculate my minimum flex
+	},
+	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
+		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	},
 	afterChildrenMinFlex_: function() {
 		//to be overridden

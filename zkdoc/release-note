@@ -23,7 +23,8 @@ ZK 5.0.6
   3136963: doAfterCompose invoke twice when the zul  include by setSrc
   3142509: SelectedIndex fails when listbox(select) contain listhead
   3142583: include dynamic property doesn't work
-   
+  3132167: In IE6, hflex="min" miscalculate the combobox's width
+  
 	--------
 ZK 5.0.5
 November 02, 2010
