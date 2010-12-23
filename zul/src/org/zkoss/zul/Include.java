@@ -397,7 +397,7 @@ implements org.zkoss.zul.api.Include, Includer {
 					getChildren().clear();
 					final int j = _src.indexOf('?');
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
-							this, null);
+							this, _dynams);
 					// TODO: convert query string to arg
 					exec.setAttribute(ATTR_RENDERED, _src);
 				} finally {

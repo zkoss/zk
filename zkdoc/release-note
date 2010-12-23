@@ -22,6 +22,7 @@ ZK 5.0.6
   3136453: H/Vlayout inheritance
   3136963: doAfterCompose invoke twice when the zul  include by setSrc
   3142509: SelectedIndex fails when listbox(select) contain listhead
+  3142583: include dynamic property doesn't work
    
 	--------
 ZK 5.0.5

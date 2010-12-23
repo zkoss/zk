@@ -1,0 +1,20 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<label multiline="true">
+	<attribute name="value">
+		1. this page should has two window
+		2. the window inside "Main Window", it should has title "Included win", if it doesn't have title, this is wrong
+	</attribute>
+</label>
+<window id="mainWin" title="Main Window" border="normal">
+	<include id="include" src="B50-3142583_sub.zul" name="Included win">
+	</include>
+	<label id="msg" style="color:red;"></label>
+	<zscript><![CDATA[
+	Window included = (Window)include.getFellow("includedWin");
+	String title = included.getTitle();
+	if (!"Included win".equals(title))
+		msg.setValue("Error, the window should has title");
+	]]></zscript>
+</window>
+</zk>
