@@ -65,8 +65,10 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			var i = 0, j = 0, w, n = this.$n();
 			this.clearSelection();
 			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
-				if (!w.isVisible())
-					j++;
+				if (w.$instanceof(zul.sel.Option)) {
+    				if (!w.isVisible())
+    					j++;
+				} else i--;			
 			}
 				
 			selectedIndex -= j;
