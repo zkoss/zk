@@ -81,7 +81,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		  	mychart.setModel(model);
 		</zscript>
 	</flashchart>
-	<toolbarbutton label="See More chart..." href="/data/moreflashchart.zul" target="zkdemo"/>
+	<toolbarbutton label="See More chart..." href="/data/moreflashchart.zul" target="zksandbox"/>
 </vbox>
 			]]></attribute>
 						</textbox>

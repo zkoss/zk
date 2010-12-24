@@ -45,6 +45,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		]]></html>
 	</vbox>
 	For more information, see our
-	<toolbarbutton id="target" label="Smalltalk" target="zkdemo"
-		href="http://www.zkoss.org/smalltalks/zuljsf2/" />
+	<toolbarbutton id="target" label="Documentation" target="zksandbox"
+		href="http://books.zkoss.org/wiki/ZK_JSF_Docs" />
 </window>

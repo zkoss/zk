@@ -105,7 +105,7 @@
 	</menupopup>
 	<popup id="title" width="400px">
 		<html>Input the subject of this letter. Problem report :</html>
-		<toolbarbutton label="ZK Forum" target="zkdemo"
+		<toolbarbutton label="ZK Forum" target="zksandbox"
 			href="http://www.zkoss.org/forum" />
 	</popup>
 	<popup id="mail" width="300px">
