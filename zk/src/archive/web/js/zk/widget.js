@@ -750,7 +750,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var wgt = evt.target;
 			return wgt ? wgt.getDrop_(drag.control): null;
 		},
-		/** Ghost the DOM element being dragging
+		/** Ghost the DOM element being dragged.
 		 * @param zk.Draggable drag the draggable controller
 		 * @param Offset ofs the offset of the returned element (left/top)
 		 * @param String msg the message to show inside the returned element
@@ -3264,7 +3264,8 @@ unbind_: function (skipper, after) {
 		return this.$n();
 	},
 	/** Returns the options used to instantiate {@link zk.Draggable}.
-	 * <p>Default, it returns nothing (undefined).
+	 * <p>Default, it does nothing but returns the <code>map</code> parameter,
+	 * i.e., the default options.
 	 * <p>Though rarely used, you can override any option passed to
 	 * {@link zk.Draggable}, such as the start effect, ghosting and so on.
 	 * @param Map map the default implementation 
@@ -3302,6 +3303,7 @@ unbind_: function (skipper, after) {
 		return this.parent ? this.parent.getDrop_(dragged): null;
 	},
 	/** Called to have some visual effect when the user is dragging a widget over this widget and this widget is droppable.
+	 * Notice it is the effect to indicate a widget is droppable.
 	 * <p>Default, it adds the CSS class named 'z-drag-over' if over is true, and remove it if over is false.
 	 * @param boolean over whether the user is dragging over (or out, if false) 
 	 */
@@ -3319,6 +3321,7 @@ unbind_: function (skipper, after) {
 		}
 	},
 	/** Called to fire the onDrop event.
+	 * You could override it to implement some effects to indicate dropping.
 	 * <p>Default, it fires the onDrop event (with {@link #fire}).
 	 * The subclass can override this method to pass more options such as the coordination where a widget is dropped. 
 	 * @param zk.Draggable drag the draggable controller
@@ -3328,7 +3331,8 @@ unbind_: function (skipper, after) {
 		var data = zk.copy({dragged: drag.control}, evt.data);
 		this.fire('onDrop', data, null, 38);
 	},
-	/** Clones this widget to create the visual effect representing what is being dragged.
+	/** Called to create the visual effect representing what is being dragged.
+	 * In other words, it creates the DOM element that will be moved with the mouse pointer when the user is dragging.
 	 * <p>This method is called if {@link #getDragMessage_} returns null.
 	 * If {@link #getDragMessage_} returns a string (empty or not),
 	 * a small popup containing the message is created to represent the widget being dragged.

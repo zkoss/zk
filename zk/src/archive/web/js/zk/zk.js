@@ -675,9 +675,26 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * @param Map backup the map used to store the original members (or properties)
 	 * @param Map src the source map providing the new members
 	 * @return Object the destination object
+	 * @see #override(Function, Function)
 	 * @see #override(Object, String, Object)
 	 */
 	/** Overrides a particular method.
+	 * The old method will be returned, and the caller could store it for
+	 * calling back. For example,
+	 *
+	 * <pre><code>var superopen = zk.override(zul.inp.Combobox.prototype.open,
+	 *  function () {
+	 *    superopen.apply(this, arguments);
+	 *    //do whatever you want
+	 *  });</code></pre>
+	 *
+	 * @param Function oldfunc the old function that will be replaced
+	 * @param Function newfunc the new function that will replace the old function
+	 * @return Function the old function (i.e., oldfunc)
+	 * @since 5.0.6
+	 * @see #override(Object, Map, Map)
+	 */
+	/** Overrides a particular method or data member.
 	 * The old method will be stored in method called $nm (assuming nm is
 	 * the method name to override. For example,
 	 *
@@ -693,15 +710,23 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * to be an instance of {@link Function}.
 	 * @return Object the destination object
 	 * @since 5.0.2
+	 * @see #override(Function, Fucntion)
 	 * @see #override(Object, Map, Map)
 	 */
 	override: function (dst, backup, src) {
-		if (typeof backup == "string") {
+		switch (typeof backup) {
+		case "function":
+			var old = dst;
+			dst = backup;
+			return old;
+		case "string":
 			dst['$' + backup] = dst[backup];
 			dst[backup] = src;
-		} else
-			for (var nm in src)
-				_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
+			//break;
+		}
+
+		for (var nm in src)
+			_overrideSub(dst, nm, backup[nm] = dst[nm], dst[nm] = src[nm]);
 		return dst;
 	},
 

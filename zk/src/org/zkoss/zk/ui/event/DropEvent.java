@@ -68,10 +68,8 @@ public class DropEvent extends MouseEvent {
 	public final Component getDragged() {
 		return _dragged;
 	}
-	/** Not appliable to {@link DropEvent}.
-	 * It always returns null if you drag and drop a component to
-	 * components that partition itself into several areas, such
-	 * as <code>imagemap</code>
+	/** Inheirted from {@link MouseEvent}, but not appliable to {@link DropEvent}.
+	 * It always returns null.
 	 */
 	public String getArea() {
 		return null;
