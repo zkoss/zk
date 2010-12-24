@@ -107,7 +107,9 @@
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>				
+				<xs:restriction base="xs:string">
 					<xs:pattern value="(min [0-9]+)?|(max [0-9]+)?|(min [0-9]+ max [0-9]+)?"/>
+				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
 				<xs:restriction base="annotationType" />
@@ -121,8 +123,10 @@
 					<xs:enumeration value="no empty" />
 				</xs:restriction>
 			</xs:simpleType>
-			<xs:simpleType>				
+			<xs:simpleType>	
+				<xs:restriction base="xs:string">						
 					<xs:pattern value="(min [0-9\.]+)?|(max [0-9\.]+)?|(min [0-9\.]+ max [0-9\.]+)?"/>
+				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
 				<xs:restriction base="annotationType" />
