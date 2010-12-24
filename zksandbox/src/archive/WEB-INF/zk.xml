@@ -293,21 +293,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		where xx could be any name. And, the final URL will be /xx/url-pattern.
 		This demo application maps all richlet to /zk (see web.xml),
 		so the richlet path will be, say, /zk/test/some
-	-->
 	<richlet>
-		<richlet-name>Test</richlet-name>
-		<richlet-class>org.zkoss.zkdemo.test.TestRichlet</richlet-class>
-		<!-- Any number of initial parameters.
+		<richlet-name>Foo</richlet-name>
+		<richlet-class>foo.FooRichlet</richlet-class>
 		<init-param>
 			<param-name>any</param-name>
 			<param-value>any</param-value>
 		</init-param>
-		-->
 	</richlet>
 	<richlet-mapping>
-		<richlet-name>Test</richlet-name>
-		<url-pattern>/test/*</url-pattern>
+		<richlet-name>Foo</richlet-name>
+		<url-pattern>/foo/*</url-pattern>
 	</richlet-mapping>
+	-->
 
 	<!-- Uncomment if you want to embed JavaScript codes and any other
 	tags to be generated inside HTML HEAD.
@@ -342,7 +340,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</desktop-config>
 	-->
 	<desktop-config>
-	  <theme-provider-class>org.zkoss.zkdemo.userguide.CacheableThemeProvider</theme-provider-class>
+	  <theme-provider-class>org.zkoss.zksandbox.CacheableThemeProvider</theme-provider-class>
 	</desktop-config>
 
 	<!-- Uncomment the following if you want to redirect to particular
@@ -548,7 +546,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<listener>
 		<description>ZK Demo properties loader</description>
 		<listener-class>
-			org.zkoss.zkdemo.userguide.DemoWebAppInit
+			org.zkoss.zksandbox.DemoWebAppInit
 		</listener-class>
 	</listener>
 

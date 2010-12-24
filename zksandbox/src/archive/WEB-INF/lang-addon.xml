@@ -36,9 +36,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
  	
 	<!-- a macro component
 	<component>
-		<component-name>hello</component-name>
-		<macro-uri>/hello.zul</macro-uri>
-		<component-class>org.zkoss.zkdemo.test.Hello</component-class>
+		<component-name>whatever</component-name>
+		<macro-uri>/WEB-INF/zul/whatever.zul</macro-uri>
+		<component-class>foo.Whatever</component-class>
 	</component>
 	-->
 </language-addon>

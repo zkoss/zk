@@ -13,7 +13,7 @@ flashchart.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Flash Chart</h4>
 		<p>Displays a set of data graphically. 

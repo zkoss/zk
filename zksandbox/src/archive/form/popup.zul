@@ -18,7 +18,7 @@
 	}}IS_RIGHT
 -->
 <window id="demo"
-	apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	apply="org.zkoss.zksandbox.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Form with Popup</h4>
 		<p>Demonstrate a series of popup components in a form. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>		

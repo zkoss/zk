@@ -25,13 +25,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <?component name="categorybar" extends="div" widgetClass="userguide.Categorybar"?>
 <zk>
 <zscript><![CDATA[
-	boolean isBreeze = org.zkoss.zkdemo.userguide.Themes.isBreeze(execution) && 
-		org.zkoss.zkdemo.userguide.Themes.hasBreezeLib();
-	boolean isSilvergray = org.zkoss.zkdemo.userguide.Themes.isSilvergray(execution) &&
-		org.zkoss.zkdemo.userguide.Themes.hasSilvergrayLib();
+	boolean isBreeze = org.zkoss.zksandbox.Themes.isBreeze(execution) && 
+		org.zkoss.zksandbox.Themes.hasBreezeLib();
+	boolean isSilvergray = org.zkoss.zksandbox.Themes.isSilvergray(execution) &&
+		org.zkoss.zksandbox.Themes.hasSilvergrayLib();
 	String themeSClass = isBreeze? "breeze" : isSilvergray? "silvergray" : "blue";
 ]]></zscript>
-<borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
+<borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zksandbox.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
 			<div sclass="demo-logo pointer">

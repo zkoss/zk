@@ -17,15 +17,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
 	<html><![CDATA[
      	<h4>Live data</h4>
    		<p>Tree supports "load on demend" feature via a TreeModel interface. 
    		This feature will not load data into the tree until it is necessary</p>
    		<p>Try to expand the tree node and observe the values loaded dynamically.</p>
 	]]></html>
-	See the <toolbarbutton id="target" label="org.zkoss.zkdemo.test2.tree.BinaryTreeModel" popup="details"/>
-	and the <toolbarbutton id="target2" label="org.zkoss.zkdemo.userguide.BigList" popup="details2"/> implementation.
+	See the <toolbarbutton id="target" label="org.zkoss.zksandbox.tree.BinaryTreeModel" popup="details"/>
+	and the <toolbarbutton id="target2" label="org.zkoss.zksandbox.BigList" popup="details2"/> implementation.
 	<separator/>
 	<popup id="details" fulfill="target.onClick" width="550px">
 	<div style="border:1px solid #538BA2; background: #FFF; ">
@@ -106,9 +106,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <zk>			                                 
 	<zscript>					
-	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	import org.zkoss.zksandbox.tree.BinaryTreeModel;
 	
-	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(1000)));
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.test2.BigList(1000)));
 	</zscript>
 	<tree id="tree" model="&#36;{btm}"/>
 </zk>

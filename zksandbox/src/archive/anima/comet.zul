@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Comet Server Push</h4>
 	]]></html>
@@ -26,7 +26,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<a href="http://www.zkoss.org/download/zk.dsp" sclass="edition-field" label=" ZK EE."/>
 	</span>
 	<separator/>
-	See the <toolbarbutton id="target" label="org.zkoss.zkdemo.userguide.CometServerPush" popup="details"/> implementation.
+	See the <toolbarbutton id="target" label="org.zkoss.zksandbox.CometServerPush" popup="details"/> implementation.
 	<separator/>
 	<popup id="details" fulfill="target.onClick" width="550px">
 	<div style="border:1px solid #538BA2; background: #FFF;">
@@ -194,8 +194,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	</style>
 	<window> Please press the "Start" button to see the demo "Comet Server Push".
-		<button label="Start" onClick="org.zkoss.zkdemo.userguide.CometServerPush.start(info, listbox)"/>
-		<button label="Stop" onClick="org.zkoss.zkdemo.userguide.CometServerPush.stop()"/>
+		<button label="Start" onClick="org.zkoss.zksandbox.CometServerPush.start(info, listbox)"/>
+		<button label="Stop" onClick="org.zkoss.zksandbox.CometServerPush.stop()"/>
 		<separator/>
 		<hbox>
 		Change Maximum Diameter:
