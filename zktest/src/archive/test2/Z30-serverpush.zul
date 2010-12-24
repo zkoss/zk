@@ -24,18 +24,18 @@ Click "Start Push", and it shall count again (from 1).
 <separator/>
 Note: the server push is enabled and timer disabled at the beginning.
 	<vbox>
-	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info, tb)"/>
-	<button label="Start Polling Push (2sec delay)" onClick="org.zkoss.zkdemo.test2.ServerPush.start(new org.zkoss.zk.ui.impl.PollingServerPush(2000,5000,-1), info, tb)"/>
-	<button label="Stop Push" onClick="org.zkoss.zkdemo.test2.ServerPush.stop()"/>
+	<button label="Start Push" onClick="org.zkoss.zktest.test2.ServerPush.start(info, tb)"/>
+	<button label="Start Polling Push (2sec delay)" onClick="org.zkoss.zktest.test2.ServerPush.start(new org.zkoss.zk.ui.impl.PollingServerPush(2000,5000,-1), info, tb)"/>
+	<button label="Stop Push" onClick="org.zkoss.zktest.test2.ServerPush.stop()"/>
 	<button label="Start Timer" onClick="timer.start()"/>
 	<button Label="Stop Timer" onClick="timer.stop()"/>
 	Key something to see different output (don't turn on timer in this test):
 	<textbox id="tb"/>
 	</vbox>
 	<timer id="timer" running="false" repeats="true" delay="1000"
-		onTimer='org.zkoss.zkdemo.test2.ServerPush.updateInfo(info, tb, "timer")'/>
+		onTimer='org.zkoss.zktest.test2.ServerPush.updateInfo(info, tb, "timer")'/>
 	<div id="info" style="border:1px solid blue"/>
 	<zscript>
-	org.zkoss.zkdemo.test2.ServerPush.start(info, tb);
+	org.zkoss.zktest.test2.ServerPush.start(info, tb);
 	</zscript>
 </window>

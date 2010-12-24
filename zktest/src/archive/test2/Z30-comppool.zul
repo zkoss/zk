@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window id="box" title="Test Desktop Issues">
 	<zscript>
-	import org.zkoss.zkdemo.test2.ComponentPools;
+	import org.zkoss.zktest.test2.ComponentPools;
 	List attached = new LinkedList();
 	</zscript>
 	<vbox>

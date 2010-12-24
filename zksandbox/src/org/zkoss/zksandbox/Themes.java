@@ -118,7 +118,7 @@ public class Themes {
 	 * @return boolean
 	 */
 	public static boolean hasSilvergrayLib() {
-		return "true".equals(Library.getProperty("org.zkoss.zkdemo.theme.silvergray"));
+		return "true".equals(Library.getProperty("org.zkoss.zksandbox.theme.silvergray"));
 	}
 
 	/**

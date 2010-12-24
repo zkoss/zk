@@ -16,9 +16,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 	Please select a treeitem and open/close a treeitem, and then use keyboard Up/Down to navigate the tree, it should be OK.
 	<zscript>					
-	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 	
-	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(1000)));
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(1000)));
 	</zscript>
 	<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}">
 		<attribute name="onCreate">

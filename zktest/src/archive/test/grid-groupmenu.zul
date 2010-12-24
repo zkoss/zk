@@ -1,6 +1,6 @@
 <zk>
 	<zscript>
-	import org.zkoss.zkdemo.userguide.*;
+	import org.zkoss.zktest.util.*;
 	Comparator asc = new RowLabelComparator(true),
 		dsc = new RowLabelComparator(false);
 	</zscript>

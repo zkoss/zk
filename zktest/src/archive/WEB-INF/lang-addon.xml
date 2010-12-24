@@ -38,7 +38,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>hello</component-name>
 		<macro-uri>/hello.zul</macro-uri>
-		<component-class>org.zkoss.zkdemo.test.Hello</component-class>
+		<component-class>org.zkoss.zktest.test.Hello</component-class>
 	</component>
 	-->
 </language-addon>

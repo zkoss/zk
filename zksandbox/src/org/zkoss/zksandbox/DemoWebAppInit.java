@@ -68,7 +68,7 @@ public class DemoWebAppInit implements WebAppInit {
 	 * Sets silvergray library property if there is silvergray.jar 
 	 */
 	private void setThemeProperites () {
-		String prop = Library.getProperty("org.zkoss.zkdemo.theme.silvergray");
+		String prop = Library.getProperty("org.zkoss.zksandbox.theme.silvergray");
 		if (prop == null) {
 			final ClassLocator loc = new ClassLocator();
 			try {
@@ -76,14 +76,14 @@ public class DemoWebAppInit implements WebAppInit {
 				en.hasMoreElements();) {
 					final URL url = (URL)en.nextElement();
 					if (url.toString().lastIndexOf("silvergray.jar") >= 0) {
-						Library.setProperty("org.zkoss.zkdemo.theme.silvergray", "true");
+						Library.setProperty("org.zkoss.zksandbox.theme.silvergray", "true");
 						return;
 					}
 				}
 			} catch (Exception ex) {
 				log.error(ex); //keep running
 			}
-			Library.setProperty("org.zkoss.zkdemo.theme.silvergray", "false");
+			Library.setProperty("org.zkoss.zksandbox.theme.silvergray", "false");
 		}
 	}
 	static Map getCateMap() {

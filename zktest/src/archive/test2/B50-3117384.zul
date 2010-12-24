@@ -22,7 +22,7 @@ If you can see the number inside these components in order(for example, 1, 2, 3,
 	</treecols>
 	<treechildren>
 		<zscript>
-		List items = new org.zkoss.zkdemo.userguide.BigList(50); //a big list of Integer
+		List items = new org.zkoss.zktest.test2.BigList(50); //a big list of Integer
 	</zscript>
 		<treeitem forEach="${items}" renderdefer="${forEachStatus.index * 250}">
 			<treerow renderdefer="200">

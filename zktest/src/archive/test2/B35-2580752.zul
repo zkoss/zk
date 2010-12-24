@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <separator/>
 3.The first page should select nothing. 
 <zscript>
-List items = new org.zkoss.zkdemo.userguide.BigList(100); //a big list of
+List items = new org.zkoss.zktest.test2.BigList(100); //a big list of
 Integer
 </zscript>
 <listbox id="lbx" mold="paging" multiple="true">

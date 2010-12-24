@@ -113,7 +113,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<servlet>
 		<description>Test of test/booksuggest.html</description>
 		<servlet-name>booksuggest</servlet-name>
-		<servlet-class>org.zkoss.zkdemo.test.BookSuggest</servlet-class>
+		<servlet-class>org.zkoss.zktest.test.BookSuggest</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>booksuggest</servlet-name>
@@ -124,7 +124,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<servlet>
 		<description>Test of test/embed.jsp</description>
 		<servlet-name>embed</servlet-name>
-		<servlet-class>org.zkoss.zkdemo.test.Embed</servlet-class>
+		<servlet-class>org.zkoss.zktest.test.Embed</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>embed</servlet-name>

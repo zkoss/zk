@@ -3,7 +3,7 @@
 	<window height="50%" title="Load on Demand">
 	<zscript>
 	
-		import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+		import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 		
 		ArrayList al = new ArrayList();
 		int i=0;

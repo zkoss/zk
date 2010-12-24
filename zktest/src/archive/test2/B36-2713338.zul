@@ -22,10 +22,10 @@ Select any tree item at the tree then click the button,
 
 the button should show "Not Null", if "Null" the it's a BUG.
 	<zscript>	
-import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 
 BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
-org.zkoss.zkdemo.userguide.BigList(1000)));
+org.zkoss.zktest.test2.BigList(1000)));
 </zscript>
 	<tree id="tree" model="&#36;{btm}" />
 	<button label="Test">

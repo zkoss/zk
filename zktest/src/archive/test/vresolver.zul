@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<?variable-resolver class="org.zkoss.zkdemo.test.TestVariableResolver"?>
+<?variable-resolver class="org.zkoss.zktest.test.TestVariableResolver"?>
 <window title="Test of VariableResovler">
 	<listbox>
 		<listitem label="${each}" forEach="${friends}"/>

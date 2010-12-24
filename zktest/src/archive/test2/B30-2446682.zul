@@ -14,7 +14,7 @@
 <window id="win" title="My First Window" border="normal" width="200px">
 <button id="testButton" label="testButton">
 	<attribute name="onClick"><![CDATA[
-		Object composer = new org.zkoss.zkdemo.test2.B2446682();
+		Object composer = new org.zkoss.zktest.test2.B2446682();
 		//Events.addEventListeners(win, composer);
 		Components.addForwards(win, composer);
 	]]></attribute>

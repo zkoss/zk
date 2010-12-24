@@ -8,7 +8,7 @@
 1. Select a value from one of the listboxes. 
 2. If no NullPointerException, it is right.
     <zk:zscript>
-    	import org.zkoss.zkdemo.test.MyBean;
+    	import org.zkoss.zktest.test.MyBean;
     	
     	MyBean mb = new MyBean();
     </zk:zscript>
