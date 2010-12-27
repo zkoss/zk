@@ -525,15 +525,15 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** Sets the client-side action (CSA).
 	 * <p>Default: null (no CSA at all)
 	 * <p>The format: <br>
-	 * <code>action1: action-op1; action2: action-op2</code><br/>
+	 * <code>action1: action-effect1; action2: action-effect2</code><br/>
 	 *
 	 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
 	 * They are called when the widget is becoming visible (show) and invisible (hide).
-	 * <p>The action operator (<code>action-op1</code>) is the name of a method
+	 * <p>The action effect (<code>action-effect1</code>) is the name of a method
 	 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</javadoc>,
 	 * such as
 	 * <code>show: slideDown; hide: slideUp</code>
-	 * <p>You could specify options as follows:<br/>
+	 * <p>You could specify the effects as follows:<br/>
 	 * <code>show: slideDown({duration:1000})</code>
 	 * <p>Security Tips: the action is not encoded and it is OK to embed JavaScript,
 	 * so, if you want to allow users to specify the action, you have to encode it.

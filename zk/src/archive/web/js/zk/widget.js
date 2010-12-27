@@ -1384,10 +1384,14 @@ new zul.wnd.Window{
 		/** Sets the client-side action.
 		 * <p>Default: null (no CSA at all)
 		 * <p>The format: <br>
-		 * action1: action-name1; action2: action-name2
+		 * <code>action1: action-effect1; action2: action-effect2</code><br/>
 		 *
 		 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
 		 * They are called when the widget is becoming visible (show) and invisible (hide).
+		 * <p>The action effect (<code>action-effect1</code>) is the name of a method
+		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</javadoc>,
+		 * such as
+		 * <code>show: slideDown; hide: slideUp</code>
 		 * @param String action the cient-side action
 		 * @since 5.0.6
 		 */
