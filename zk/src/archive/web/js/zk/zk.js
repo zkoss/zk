@@ -710,7 +710,7 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 	 * to be an instance of {@link Function}.
 	 * @return Object the destination object
 	 * @since 5.0.2
-	 * @see #override(Function, Fucntion)
+	 * @see #override(Function, Function)
 	 * @see #override(Object, Map, Map)
 	 */
 	override: function (dst, backup, src) {

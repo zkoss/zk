@@ -102,7 +102,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		framable: _zkf = function () {
-			this.rerender(); //TODO: like Window, use _updateDomOuter
+			this.rerender(); //TODO: like Window, use _updDomOuter
 		},
 		/**
 		 * Sets whether to move the panel to display it inline where it is rendered.
