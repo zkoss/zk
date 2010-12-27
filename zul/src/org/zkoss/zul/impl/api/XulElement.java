@@ -228,12 +228,4 @@ public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 * @see #setTooltip(String)
 	 */
 	public void setTooltip(Popup popup);
-
-	/** @deprecated since 5.0.0, use client-side event listener instead.
-	 */
-	public String getAction();
-
-	/** @deprecated since 5.0.0, use client-side event listener instead.
-	 */
-	public void setAction(String action);
 }

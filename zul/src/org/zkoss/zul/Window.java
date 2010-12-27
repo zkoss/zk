@@ -315,27 +315,13 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return _minwidth;
 	}
 	/**
-	 * @deprecated As release of 5.0.0, replaced with JavaScript overriding.
-	 * Sets the action of window component to show the animating effect by default.
-	 * 
-	 * <p>Default: null. In other words, if the property is null, it will refer to
-	 * the configuration of zk.xml to find the preference with 
-	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. For example,
-	 * <pre>&lt;preference&gt;
-     *   &lt;name&gt;org.zkoss.zul.Window.defaultActionOnShow&lt;/name&gt;
-     *   &lt;value&gt;slideDown&lt;/value&gt;
-	 * &lt;/preference&gt;</pre>
-	 * 
-	 * @param onshow the action to take when showing up a window
-	 * @since 3.0.2
+	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
 	 */
 	public static void setDefaultActionOnShow(String onshow) {
 	}
 	
 	/**
-	 * @deprecated As release of 5.0.0, replaced with JavaScript overriding.
-	 * Returns the animating name of function.
-	 * @since 3.0.2
+	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
 	 */
 	public static String getDefaultActionOnShow() {
 		return null;

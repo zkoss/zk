@@ -1376,7 +1376,47 @@ new zul.wnd.Window{
 		 * all others are renderred).
 		 * @since 5.0.2
 		 */
-		 renderdefer: null
+		 renderdefer: null,
+		/** Returns the client-side action.
+		 * @return String the client-side action
+		 * @since 5.0.6
+		 */
+		/** Sets the client-side action.
+		 * <p>Default: null (no CSA at all)
+		 * <p>The format: <br>
+		 * action1: action-name1; action2: action-name2
+		 *
+		 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
+		 * They are called when the widget is becoming visible (show) and invisible (hide).
+		 * @param String action the cient-side action
+		 * @since 5.0.6
+		 */
+		action: function (v) {
+			this._actions = {};
+			if (v)
+				for (var ps = v.split(';'), j = ps.length; j--;) {
+					var p = ps[j], k = p.indexOf(':');
+					if (k >= 0) {
+						var nm = p.substring(0, k).trim(),
+							val = p.substring(k + 1).trim(),
+							opts, fn, l;
+						if (nm && val) {
+							k = val.indexOf('(');
+							if (k >= 0) {
+								if ((l = val.lastIndexOf(')')) > k)
+									opts = jq.evalJSON(val.substring(k + 1, l));
+								val = val.substring(0, k);
+							}
+							if (fn = zk.eff.Actions[val])
+								this._actions[nm] = [fn, opts];
+							else
+								zk.error("Unknown action: "+val);
+							continue;
+						}
+					}
+					zk.error("Illegal action: "+v+", "+this.className);
+				}
+		}
 	},
 	/** Sets the identifier of a draggable type for this widget.
 	 * <p>Default: null
@@ -1618,7 +1658,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @param zk.Widget child the child widget to add
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}).
-	 * @see #insertBefore(zk.Widget,zk.Widget)
+	 * @see #insertBefore
 	 */
 	/** Append a child widget with more control.
 	 * It is similar to {@link #appendChild(zk.Widget)} except the caller
@@ -1628,7 +1668,7 @@ wgt.$f().main.setTitle("foo");
 	 * @param boolean ignoreDom whether not to generate DOM elements
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}).
 	 * @see #appendChild(zk.Widget)
-	 * @see #insertBefore(zk.Widget,zk.Widget,boolean)
+	 * @see #insertBefore
 	 */
 	appendChild: function (child, ignoreDom) {
 		if (child == this.lastChild)
@@ -2097,8 +2137,13 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 */
 	setDomVisible_: function (n, visible, opts) {
-		if (!opts || opts.display)
-			n.style.display = visible ? '': 'none';
+		if (!opts || opts.display) {
+			var act;
+			if ((act = this._actions) && (act = act[visible ? "show": "hide"]))
+				act[0].call(this, n, act[1]);
+			else
+				n.style.display = visible ? '': 'none';
+		}
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
