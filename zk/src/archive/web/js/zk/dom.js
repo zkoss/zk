@@ -533,7 +533,10 @@ zjq.prototype = {
 	 */
 	isRealVisible: function (strict) {
 		var n = this.jq[0];
-		return n && this.isVisible(strict) && (n.offsetWidth > 0 || n.offsetHeight > 0);
+		return n && this.isVisible(strict) && (n.offsetWidth > 0 || n.offsetHeight > 0
+		|| (!n.firstChild 
+			&& (!(n=n.parentNode) || n==document.body || zk(n).isRealVisible(strict))));
+			//Bug 3141549: look up parent if !firstChild (no check if firstChild for better performance)
 	},
 
 	/** Scrolls the browser window to make the first matched element visible.

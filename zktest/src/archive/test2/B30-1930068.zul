@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 <n:p>It's wrong, if there appears a corpse of Paging on the bottom of Listbox.</n:p>
 <zscript>
-List items = new org.zkoss.zkdemo.userguide.BigList(100); //a big list of Integer
+List items = new org.zkoss.zktest.test2.BigList(100); //a big list of Integer
 </zscript>
 <paging id="pg" >
 </paging>

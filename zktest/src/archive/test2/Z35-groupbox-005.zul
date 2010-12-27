@@ -28,7 +28,7 @@
         </combobox>
         <separator bar="true"/>
 	Auto-complete:
-	<combobox id="combo" autodrop="true" use="org.zkoss.zkdemo.userguide.SimpleAutoComplete"/>
+	<combobox id="combo" autodrop="true" use="org.zkoss.zktest.util.SimpleAutoComplete"/>
         <hbox>
           <checkbox checked="true" onCheck="combo.autodrop = self.checked" label="auto drop popup when typing"/>
           <checkbox checked="true" onCheck="combo.buttonVisible = self.checked" label="button visible"/>

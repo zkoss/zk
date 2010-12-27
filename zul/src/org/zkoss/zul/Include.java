@@ -396,13 +396,16 @@ public class Include extends XulElement implements Includer {
 					getChildren().clear();
 					final int j = _src.indexOf('?');
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
-							this, null);
+							this, _dynams);
 					// TODO: convert query string to arg
 					exec.setAttribute(ATTR_RENDERED, _src);
 				} finally {
 					restoreDynams(exec, old);
 				}
 			}
+		} else {
+			// just in case
+			getChildren().clear();
 		}
 	}
 	private Execution getExecution() {
@@ -457,7 +460,6 @@ public class Include extends XulElement implements Includer {
 			//invalidate is redudant in instant mode, but less memory leak in IE
 
 		if (_instantMode && _afterComposed) {
-			getChildren().clear();
 			afterCompose();
 		}
 

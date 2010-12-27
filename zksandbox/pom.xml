@@ -204,26 +204,4 @@
 			<version>${gmapsz.version}</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<finalName>${project.artifactId}-${zk.version}</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.4</source>
-					<target>1.4</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<warSourceExcludes>${project.basedir}/src/archive</warSourceExcludes>
-					<webappDirectory>${project.basedir}/src/archive</webappDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

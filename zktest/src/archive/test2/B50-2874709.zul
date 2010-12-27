@@ -12,12 +12,12 @@
 ]]>
 </html>                           
 	<zscript>					
-	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 	
-	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(10)));
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(10)));
 
        public void changeData() {
-            btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(20)));
+            btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(20)));
        }
 
 	</zscript>

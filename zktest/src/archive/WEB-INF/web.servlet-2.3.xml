@@ -15,8 +15,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-	<display-name>zkdemo</display-name>
-	<description><![CDATA[ZK Demo]]></description>
+	<display-name>zktest</display-name>
+	<description><![CDATA[ZK Test]]></description>
 	
 	<!-- //// -->
 	<!-- ZK -->
@@ -79,7 +79,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
 	<!-- Uncomment it if you want to use DSP
-	However, it is turned on since zkdemo/userguide uses DSP to generate CSS.
+	However, it is turned on since we also test DSP
 	-->
 	<servlet>
 		<servlet-name>dspLoader</servlet-name>
@@ -111,7 +111,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 
 	<!-- Optional.
-	However, it is turned on since zkdemo/userguide uses DSP to generate CSS.
+	However, it is turned on since we also test DSP
 	-->
 	<servlet-mapping>
 		<servlet-name>dspLoader</servlet-name>

@@ -21,7 +21,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<button label="Start Working Thread">
 		<attribute name="onClick">
 	timer.start();
-	Label label = org.zkoss.zkdemo.test.WorkingThread.asyncCreate(desktop);
+	Label label = org.zkoss.zktest.test.WorkingThread.asyncCreate(desktop);
 	main.appendChild(label);
 	timer.stop()
 		</attribute>

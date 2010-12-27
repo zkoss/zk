@@ -36,10 +36,13 @@ ZK 6.0.0
 =======
 ZK 5.0.6
 * Features
+  3143403: A way to customize the effect of showing/hiding a widget
   3105037: Show the locale format in error messages
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout
+  3138362: Add a Doublespinner comopnent to support double value
+  3139008: Add Vietnamese language
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
@@ -54,7 +57,11 @@ ZK 5.0.6
   3136243: Bug within JQuery 1.4.3, please upgrade to 1.4.4
   3136453: H/Vlayout inheritance
   3136963: doAfterCompose invoke twice when the zul  include by setSrc
-   
+  3142509: SelectedIndex fails when listbox(select) contain listhead
+  3142583: include dynamic property doesn't work
+  3132167: In IE6, hflex="min" miscalculate the combobox's width
+  3141549: Hlayout not handle hflex well (onSize not fired if empty)
+  
 	--------
 ZK 5.0.5
 November 02, 2010

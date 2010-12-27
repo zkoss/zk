@@ -25,10 +25,10 @@ tree.setModel(null);
 </attribute>
 </button>
 <zscript>
-import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 
 BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
-org.zkoss.zkdemo.userguide.BigList(1000)));
+org.zkoss.zktest.test2.BigList(1000)));
 </zscript>
 <tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}">
 <attribute name="onCreate">

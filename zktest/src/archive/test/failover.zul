@@ -23,7 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<button label="Enter" onClick="alert(&quot;Hi, &quot;+who.value)"/>
 	<separator/>
 	<button label="kill desktop but not recoverable"
-	recoverable="false" use="org.zkoss.zkdemo.test.FailoverButton"/>
+	recoverable="false" use="org.zkoss.zktest.test.FailoverButton"/>
 	<button label="kill desktop but recoverable"
-	recoverable="true" use="org.zkoss.zkdemo.test.FailoverButton"/>
+	recoverable="true" use="org.zkoss.zktest.test.FailoverButton"/>
 </window>

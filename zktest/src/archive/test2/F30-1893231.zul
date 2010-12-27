@@ -10,7 +10,7 @@
 	</n:ol>
 	<zscript>
 	
-		import org.zkoss.zkdemo.test2.tree.*;
+		import org.zkoss.zktest.test2.tree.*;
 		HostTreeModel model = new HostTreeModel();
 		HostTreeOpenCtrlRenderer2 renderer = new HostTreeOpenCtrlRenderer2();
 	</zscript>

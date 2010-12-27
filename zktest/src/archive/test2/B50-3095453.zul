@@ -8,7 +8,7 @@
 </ol>
 ]]>
 </html>
-	<window title="test tree" border="normal" apply="org.zkoss.zkdemo.test2.tree.TreeClickComposer">
+	<window title="test tree" border="normal" apply="org.zkoss.zktest.test2.tree.TreeClickComposer">
 		<tree id="tree"></tree>
 		<button label="click to setModel" id="btn2"></button>
 	</window>

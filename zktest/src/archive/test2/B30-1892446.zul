@@ -1,7 +1,7 @@
 <window id="win" title="Dynamically Change by Model">
 	<zscript>
 		
-		import org.zkoss.zkdemo.test2.tree.TreeModelA;
+		import org.zkoss.zktest.test2.tree.TreeModelA;
 		//An ArrayList is created to be the root of tree
 		ArrayList mother = new ArrayList();
 		

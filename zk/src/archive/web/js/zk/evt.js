@@ -28,11 +28,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <ul>
  * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests">AU Requests</a></li>
  * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Responses">AU Responses</a></li>
- * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Client_Activity_Watches">Client Activity Watches</a> - a full list of watches.</li>
- * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Widget_Events_and_DOM_Events">Widget Events and DOM Events</a></li>
+ * <li><a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">Notifications</a></li>
   * </ul>
  * <p>Common Key Codes:
- * <table>
+ * <table cellspacing="0" cellpadding="3" border="1">
  * <tr>
  * <td>BACKSSPACE</td><td>8</td>
  * <td>TAB</td><td>9</td>
@@ -329,7 +328,7 @@ zWatch = (function () {
  *
  * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
  *
- * <p>Here is a full list of <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/System_Utilities/Client_Activity_Watches">Client Activity Watches</a></li>. 
+ * <p>Here is a full list of <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications/Client_Activity_Watches">Client Activity Watches</a></li>. 
 
 <h3>Add a Watch</h3>
 

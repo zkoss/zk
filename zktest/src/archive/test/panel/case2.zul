@@ -43,7 +43,7 @@
 	</toolbar>
 	<panelchildren>
 	<zscript>
-	List items = new org.zkoss.zkdemo.userguide.BigList(100);
+	List items = new org.zkoss.zktest.test2.BigList(100);
 	</zscript>
 	<listbox id="listbox" height="100%" width="100%" style="border:0px;background-color:white;"
 		fixedLayout="true">

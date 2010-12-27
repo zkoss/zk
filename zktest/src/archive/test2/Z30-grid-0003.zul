@@ -25,9 +25,9 @@ See if the sorted result printed in console is same as the data collection displ
 </vbox>
 	<separator/>
 	<zscript>
-		ListModel strset = new org.zkoss.zkdemo.test2.grid.FakeListModel();
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel();
 
-		import org.zkoss.zkdemo.userguide.*;
+		import org.zkoss.zktest.util.*;
 		Comparator asc = new RowLabelComparator(true),
 		dsc = new RowLabelComparator(false);
 	</zscript>

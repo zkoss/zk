@@ -19,7 +19,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
  <head>
 	<title>Native Complete Page</title>
 	<zkhead/>
-	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk.zuml.wpd" charset="UTF-8">
+	<script type="text/javascript" src="/zktest/zkau/web/js/zk.zuml.wpd" charset="UTF-8">
 	</script>
  </head>
  <body>

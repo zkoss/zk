@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext.render;
 
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl},

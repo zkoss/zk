@@ -19,7 +19,6 @@ function (out, skipper) {
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
-		mode = this.getMode(),
 		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
 		noborder = 'normal' != this.getBorder() ? '-noborder' : '';
 		

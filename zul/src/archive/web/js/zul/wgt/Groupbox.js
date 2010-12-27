@@ -58,7 +58,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		 * @param boolean closable
 		 */
 		closable: _zkf = function () {
-			this._updateDomOuter();
+			this._updDomOuter();
 		},
 		/** Returns the CSS style for the content block of the groupbox.
 		 * Used only if {@link #getMold} is not default.
@@ -93,7 +93,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return this._mold == 'default';
 	},
 
-	_updateDomOuter: function () {
+	_updDomOuter: function () {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {

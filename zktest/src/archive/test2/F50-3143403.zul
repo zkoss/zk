@@ -1,0 +1,9 @@
+<zk>
+	<button label="Toggle Visibility" onClick="main.visible = !main.visible"/>
+	<window id="main" action="show: slideDown({duration:1000}); hide: slideUp" title="Main" border="normal">
+		A window with action="show: slideDown; hide: slideUp"
+		<button label="overlap" onClick="self.parent.doOverlapped()"/>
+		<button label="embed" onClick="self.parent.doEmbedded()"/>
+		<datebox/>
+	</window>
+</zk>

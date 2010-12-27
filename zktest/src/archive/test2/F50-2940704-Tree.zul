@@ -27,9 +27,9 @@
 		</attribute>
 	</button>
 	<zscript>					
-	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+	import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 	
-	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(1000)));
+	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(1000)));
 	</zscript>
 	<tree id="tree" autopaging="true" mold="paging" model="&#36;{btm}" vflex="true" width="50%">
 		<attribute name="onCreate">

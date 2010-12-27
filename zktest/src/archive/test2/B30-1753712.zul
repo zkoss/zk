@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window id="reuse"><!-- ID must be called "reuse" -->
 	<vbox>
-	To test, you have to add org.zkoss.zkdemo.test2.DetachDesktopCleanup
+	To test, you have to add org.zkoss.zktest.test2.DetachDesktopCleanup
 	as a listener.
 	Then, at the first visit, you see "n/a" in "Old UUID".
 	Then, open new browser and press F5 to reload this page.
@@ -35,7 +35,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</hbox>
 	</vbox>
 	<zscript>{
-	Component c = org.zkoss.zkdemo.test2.DetachDesktopCleanup.reuse;
+	Component c = org.zkoss.zktest.test2.DetachDesktopCleanup.reuse;
 	la.setValue(c != null ? c.uuid: "n/a");
 	}</zscript>
 </window>

@@ -20,7 +20,7 @@
 
 	<zscript>
 		<![CDATA[
-			import org.zkoss.zkdemo.test2.BizService;
+			import org.zkoss.zktest.test2.BizService;
 			
 			BizService businessService = new BizService();
 			void addNewRepository(){

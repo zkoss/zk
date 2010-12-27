@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?variable-resolver class="org.zkoss.zkdemo.test2.B2227929Resolver"?>
-<?init class="org.zkoss.zkdemo.test2.B2227929Initiator"?>
+<?variable-resolver class="org.zkoss.zktest.test2.B2227929Resolver"?>
+<?init class="org.zkoss.zktest.test2.B2227929Initiator"?>
 <!--
 B30-2227929-inc.zul
 

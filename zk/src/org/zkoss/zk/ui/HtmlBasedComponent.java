@@ -515,6 +515,42 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		initAuxInfo().renderdefer = ms;
 	}
 
+	/** Returns the client-side action (CSA).
+	 * <p>Default: null (no CSA at all)
+	 * @since 5.0.6
+	 */
+	public String getAction() {
+		return _auxinf != null ? _auxinf.action: null;
+	}
+	/** Sets the client-side action (CSA).
+	 * <p>Default: null (no CSA at all)
+	 * <p>The format: <br>
+	 * <code>action1: action-effect1; action2: action-effect2</code><br/>
+	 *
+	 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
+	 * They are called when the widget is becoming visible (show) and invisible (hide).
+	 * <p>The action effect (<code>action-effect1</code>) is the name of a method
+	 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</javadoc>,
+	 * such as
+	 * <code>show: slideDown; hide: slideUp</code>
+	 * <p>You could specify the effects as follows:<br/>
+	 * <code>show: slideDown({duration:1000})</code>
+	 * <p>Security Tips: the action is not encoded and it is OK to embed JavaScript,
+	 * so, if you want to allow users to specify the action, you have to encode it.
+	 * <p>Note for developers upgraded from ZK 3:
+	 * CSA's format is different and limited.
+	 * In additions, it is part of {@link HtmlBasedComponent}.
+	 * @since 5.0.6
+	 */
+	public void setAction(String action) {
+		if (action != null && action.length() == 0)
+			action = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.action: null, action)) {
+			initAuxInfo().action = action;
+			smartUpdate("action", action);
+		}
+	}
+
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
@@ -549,6 +585,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 				render(renderer, "draggable", draggable);
 
 			render(renderer, "droppable", _auxinf.droppable);
+			render(renderer, "action", _auxinf.action);
 		}
 
 		render(renderer, "zclass", _zclass);
@@ -653,6 +690,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		private String draggable;
 		/** The droppable. */
 		private String droppable;
+		private String action;
 		private int zIndex = -1;
 		private int renderdefer = -1;
 

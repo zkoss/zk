@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <body>
 <c:set var="v" value="${123}"/>
 	<h1>Potix Dynamic Script Page</h1>
-	<p>Try: http://localhost/zkdemo/test/test.dsp?some=aaab</p>
+	<p>Try: http://localhost/zktest/test/test.dsp?some=aaab</p>
 	<ul>
 	<li>$\{param.some}: ${param.some}</li>
 	<li>$\{v}: ${v}</li>

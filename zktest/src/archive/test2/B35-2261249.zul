@@ -22,7 +22,7 @@
 	Click the context menu option of grid "Group", "Sort Ascending", and "Sort Descending". if no exception, it is fixed!
 	 
 	<zscript><![CDATA[//@IMPORT
-		import org.zkoss.zkdemo.userguide.*;                  
+		import org.zkoss.zktest.util.*;                  
 	]]>
 	Comparator asc = new RowLabelComparator(true),
 		dsc = new RowLabelComparator(false);

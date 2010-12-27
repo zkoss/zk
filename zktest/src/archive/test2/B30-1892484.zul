@@ -20,7 +20,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <window title="Serialize Live Data" border="normal">
 	<zscript>
 	import java.io.*;
-	import org.zkoss.zkdemo.test2.tree.TreeModelA;
+	import org.zkoss.zktest.test2.tree.TreeModelA;
 
 	int cnt = 0;
 	Object l;

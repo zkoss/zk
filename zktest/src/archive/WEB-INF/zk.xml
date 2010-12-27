@@ -296,7 +296,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 	<richlet>
 		<richlet-name>Test</richlet-name>
-		<richlet-class>org.zkoss.zkdemo.test.TestRichlet</richlet-class>
+		<richlet-class>org.zkoss.zktest.test.TestRichlet</richlet-class>
 		<!-- Any number of initial parameters.
 		<init-param>
 			<param-name>any</param-name>
@@ -342,7 +342,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</desktop-config>
 	-->
 	<desktop-config>
-	  <theme-provider-class>org.zkoss.zkdemo.userguide.CacheableThemeProvider</theme-provider-class>
+	  <theme-provider-class>org.zkoss.zktest.util.CacheableThemeProvider</theme-provider-class>
 	</desktop-config>
 
 	<!-- Uncomment the following if you want to redirect to particular
@@ -544,14 +544,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</listener>
 	 -->
 	 	
-	<!-- ZK Demo properties loader
-	<listener>
-		<description>ZK Demo properties loader</description>
-		<listener-class>
-			org.zkoss.zkdemo.userguide.DemoWebAppInit
-		</listener-class>
-	</listener>
- 	-->
 	<!-- Turn on if you want to debug by copying JavaScript files directly
 		to classpath
 	<desktop-config>

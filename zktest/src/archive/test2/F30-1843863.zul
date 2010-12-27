@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?variable-resolver class="org.zkoss.zkdemo.test.VariableResolverImpl"?>
-<?variable-resolver class="org.zkoss.zkdemo.test.VariableResolverImpl" arg0="abc"?>
+<?variable-resolver class="org.zkoss.zktest.test.VariableResolverImpl"?>
+<?variable-resolver class="org.zkoss.zktest.test.VariableResolverImpl" arg0="abc"?>
 <!--
 F30-1843863.zul
 

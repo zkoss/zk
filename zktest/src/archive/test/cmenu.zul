@@ -1,6 +1,6 @@
 <zk>
 	<zscript>
-		List items = new org.zkoss.zkdemo.userguide.BigList(10); //a big list of Integer
+		List items = new org.zkoss.zktest.test2.BigList(10); //a big list of Integer
 	</zscript>
 	<button label="change menupopup" onClick='cols.setMenupopup("abc")'/>
 	<button label="add Column">

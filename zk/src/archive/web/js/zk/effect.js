@@ -443,6 +443,57 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	}
 });
 
+/** @class zk.eff.Actions
+ * A collection of actions that can be used with {@link zk.Widget#setAction}.
+ * <p>The signature of an action must be as follows:<br>
+ * <code>function ({@link DOMElement} n, {@link Map} opts) {}</code>
+ * <p>Furthermore, the method will be called as a widget's method, i.e.,
+ * <code>this</code> references to the widget.
+ * @since 5.0.6
+ */
+zk.eff.Actions = {
+	/** Slides down to display this widget.
+	 * @param DOMElement n the node to display
+	 * @param Map opts the options. Allowed options:
+	 * <ul>
+	 * <li><code>duration</code>: how many milliseconds to slide down</li>
+	 * </ul>
+	 */
+	slideDown: function (n, opts) {
+		zk(n).slideDown(this, opts);
+	},
+	/** Slides up to hide this widget.
+	 * @param DOMElement n the node to hide
+	 * @param Map opts the options. Allowed options:
+	 * <ul>
+	 * <li><code>duration</code>: how many milliseconds to slide up</li>
+	 * </ul>
+	 */
+	slideUp: function (n, opts) {
+		zk(n).slideUp(this, opts);
+	},
+	/** Slides in to display this widget.
+	 * @param DOMElement n the node to display
+	 * @param Map opts the options. Allowed options:
+	 * <ul>
+	 * <li><code>duration</code>: how many milliseconds to slide in</li>
+	 * </ul>
+	 */
+	slideIn: function (n, opts) {
+		zk(n).slideIn(this, opts);
+	},
+	/** Slides out to hide this widget.
+	 * @param DOMElement n the node to hide
+	 * @param Map opts the options. Allowed options:
+	 * <ul>
+	 * <li><code>duration</code>: how many milliseconds to slide out</li>
+	 * </ul>
+	 */
+	slideOut: function (n, opts) {
+		zk(n).slideOut(this, opts);
+	}
+};
+
 jq(function() {
 	//Handle zk.useStackup
 	var _lastFloat, _autohideCnt = 0, _callback;

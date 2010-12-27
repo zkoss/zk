@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <window title="Test of createComponents in working thread">
 	<button label="create">
 		<attribute name="onClick"><![CDATA[
-		Thread thd = new org.zkoss.zkdemo.test2.F2790411Thread(
+		Thread thd = new org.zkoss.zktest.test2.F2790411Thread(
 			desktop.getWebApp(), "/test2/F36-2790411_sub.zul");
 		thd.start();
 		while (!thd.isDone())

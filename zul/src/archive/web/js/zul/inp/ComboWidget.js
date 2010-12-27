@@ -425,6 +425,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
 	},
+	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
+		if ('w' == attr)
+			this.syncWidth();
+	},
 	doFocus_: function (evt) {
 		var n = this.$n();
 		if (this._inplace)

@@ -31,7 +31,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
     }
 
     private void initializeTree() {
-        tree.setModel(new org.zkoss.zkdemo.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(10))));
+        tree.setModel(new org.zkoss.zktest.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(10))));
     }
 
     class TreeDragDropRender implements TreeitemRenderer {
@@ -69,5 +69,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
     </zscript>
     <tree id="tree" apply="TreeComposer" />
-    <button label="Click me, no error is correct." onClick='tree.setModel(new org.zkoss.zkdemo.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zkdemo.userguide.BigList(10))));'/>
+    <button label="Click me, no error is correct." onClick='tree.setModel(new org.zkoss.zktest.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(10))));'/>
 </zk>
