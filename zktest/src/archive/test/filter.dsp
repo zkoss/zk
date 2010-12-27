@@ -32,11 +32,11 @@
 	<br/>
 	<input type="button" value="Say Hi" zk:onClick="alert(&quot;Hi&quot;)"/>
 
-	<form action="/zkdemo/hello.zul">
+	<form action="/zktest/hello.zul">
 	Replace with another URL
 		<input type="submit" value="Submit" zk:onClick="System.out.println(&quot;Submitted&quot;)"/>
 	</form>
-	<form action="/zkdemo/hello.zul" target="inner">
+	<form action="/zktest/hello.zul" target="inner">
 	Go to iframe
 		<input type="submit" value="Submit"/>
 	</form>
@@ -44,7 +44,7 @@
 	<iframe name="inner">
 	</iframe>
 
-	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
+	<input type="image" src="/zktest/img/coffee.gif"/> <br/>
 	<z:datebox/>
 </body>
 </html>

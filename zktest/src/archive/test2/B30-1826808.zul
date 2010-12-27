@@ -22,7 +22,7 @@ Drag and drop with a large number of droppables using the same droppable
 string seems to be really slow (Mozilla 1.7.12 on Solaris, Firefox 2.0 on
 Solaris and MSIE 6.0 on Win2K).
 
-Try Drag and Drop using this code on http://zkoss.org/zkdemo/userguide/
+Try Drag and Drop using this code on http://zkoss.org/zktest/userguide/
 with 'itemCount = 25' and the app becomes busy, 'itemCount = 100' and the
 browser stucks. With 'itemCount = 1000' there will no response anymore. 
 	<listbox id="src" multiple="true" width="300px">

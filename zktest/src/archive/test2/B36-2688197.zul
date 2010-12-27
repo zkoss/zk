@@ -53,7 +53,7 @@
 	</vbox>
 	<popup id="title">
 		<html>Input the subject of this letter. Problem report :</html>
-		<toolbarbutton label="ZK Forum" target="zkdemo"
+		<toolbarbutton label="ZK Forum" target="zktest"
 			href="http://www.zkoss.org/forum" />
 	</popup>
 

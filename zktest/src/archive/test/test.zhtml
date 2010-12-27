@@ -30,7 +30,7 @@
 	<br/>
 	<input type="button" value="Say Hi" zk:onClick="alert(&quot;Hi&quot;)"/>
 
-	<form id="fm" action="/zkdemo/hello.zul">
+	<form id="fm" action="/zktest/hello.zul">
 	Go to hello.zul
 		<input type="submit" value="Submit by HTML button" zk:onClick="System.out.println(&quot;Submitted&quot;)"/>
 	</form>
@@ -60,7 +60,7 @@
 	<input type="submit" value="Submit but not in form" zk:onClick='l.value="submit clicked"'/>
 	<z:label id="l"/>
 
-	<input type="image" src="/zkdemo/img/inet.png"/> <br/>
+	<input type="image" src="/zktest/img/inet.png"/> <br/>
 	<z:textbox id="tb" focus="true"/>
 	<center>
 	center something

@@ -25,7 +25,7 @@ import org.zkoss.xel.VariableResolver;
 
 /**
  * An implementation of the variable resolver to test whether it works.
- * <p>Test: http://localhost/zkdemo/test/vresolver.zul
+ * <p>Test: http://localhost/zktest/test/vresolver.zul
  *
  * <p>It resolves friends to a list of String instances.
  *

@@ -5,7 +5,7 @@
    <li>You show see a menu item "Test"</li>
    <li>Click to open the submenu. You shall see "href1", and "href2" two menu items.</li>
    <li>Move your mouse to "href1" and see browser's status bar. You shall see "http://www.zkoss.org/". If not, it is a bug.</li>
-   <li>Move your mouse to "href2" and see browser's status bar. You shall see String ends with "/zkdemo/test2/test.zul". If not, it is a bug.</li>
+   <li>Move your mouse to "href2" and see browser's status bar. You shall see String ends with "/zktest/test2/test.zul". If not, it is a bug.</li>
    
    
 </ol>

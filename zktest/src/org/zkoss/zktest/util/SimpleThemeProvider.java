@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
  * A simple theme provider.
- * It provides the theme for zkdemo. This class demostrates a simple use
+ * It provides the theme for zktest. This class demostrates a simple use
  * that manipulates the font size by setting the execution's attribute
  * directly. Thus, it cannot be cached by the client.
  * On the other hand, {@link CacheableThemeProvider} is another example
