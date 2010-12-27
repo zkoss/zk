@@ -44,7 +44,7 @@ public class DemoWebAppInit implements WebAppInit {
 	
 	final static String PATH = "/";
 
-	final static String CONFIG = "zkdemo.properties";
+	final static String CONFIG = "zksandbox.properties";
 
 	final static String CATEGORY_TYPE = "CATEGORY";
 	

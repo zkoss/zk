@@ -4,7 +4,7 @@
 	Purpose:
 		
 	Description:
-		This file is useless for zkdemo but demostrates how to
+		This file is useless for zksandbox but demostrates how to
 		add new components and override definitions of existent components.
 	History:
 		Fri Mar  3 12:54:00     2006, Created by tomyeh
@@ -14,7 +14,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
-	<addon-name>zkdemo</addon-name>
+	<addon-name>zksandbox</addon-name>
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>

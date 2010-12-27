@@ -63,8 +63,8 @@ public class DemoWindowComposer extends GenericForwardComposer {
 			else 
 				Executions.createComponents("/macros/warning.zul", view, null);
 		} catch (RuntimeException e) {
-			if ("true".equalsIgnoreCase(System.getProperty("zkdemo.debug")))
-				System.out.println("\n Error caused by zkdemo at : " + new java.util.Date() + "\n code: " + code);
+			if ("true".equalsIgnoreCase(System.getProperty("zksandbox.debug")))
+				System.out.println("\n Error caused by zksandbox at : " + new java.util.Date() + "\n code: " + code);
 			throw e;
 		}
 	}

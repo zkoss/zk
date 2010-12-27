@@ -76,7 +76,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	private void initKey() {
 		// We have to decide the key of Google Maps since we have a demo using
 		// it.
-		// This key is used by zkdemo/index.zul to generate a proper
+		// This key is used by zksandbox/index.zul to generate a proper
 		// script
 		final Execution exec = Executions.getCurrent();
 		final String sn = exec.getServerName();

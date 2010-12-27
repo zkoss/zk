@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.util.ThemeProvider.Aide;
 
 /**
  * A cacheable theme provider.
- * It provides the theme for zkdemo. This class demostrates how to provide
+ * It provides the theme for zksandbox. This class demostrates how to provide
  * a theme provider that can be cached by the client.
  * <p>The basic algorithm is as follows.
  * <ol>

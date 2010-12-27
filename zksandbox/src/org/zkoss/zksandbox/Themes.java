@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.Execution;
  * @author Dennis Chen / Jumper Chen / Tom Yeh / Sam Chuang
  */
 public class Themes {
-	private final static String COOKIE_FONT_SIZE = "zkdemotfs";
+	private final static String COOKIE_FONT_SIZE = "zksandboxfs";
 	private final static String THEME_COOKIE_KEY = "zktheme";
 	public final static String BREEZE_THEME = "breeze";
 	public final static String CLASSICBLUE_THEME = "classicblue";
