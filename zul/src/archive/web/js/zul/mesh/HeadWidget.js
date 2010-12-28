@@ -80,7 +80,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 	onColSize: function (evt) {
 		var owner = this.parent;
-		if (owner.isSizedByContent()) owner.$class._adjHeadWd(owner);
+		if (owner.isSizedByContent()) owner._adjHeadWd(owner);
 		evt.column._width = evt.width;
 		owner._innerWidth = owner.eheadtbl.width || owner.eheadtbl.style.width;
 		owner.fire('onInnerWidth', owner._innerWidth);

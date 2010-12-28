@@ -26,6 +26,7 @@ ZK 5.0.6
   3142583: include dynamic property doesn't work
   3132167: In IE6, hflex="min" miscalculate the combobox's width
   3141549: Hlayout not handle hflex well (onSize not fired if empty)
+  3109311: listbox sizedByContent cause javascript
   
 	--------
 ZK 5.0.5
