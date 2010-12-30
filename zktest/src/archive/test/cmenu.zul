@@ -9,7 +9,7 @@
 			c.setParent(cols);
 		]]></attribute>
 	</button>
-	<grid id="grid" fixedLayout='true' height="500px">
+	<grid id="grid" height="500px">
 		<columns id="cols" menupopup="auto" sizable="true">
 			<column label="Col 0" sort="client"/>
 			<column label="Col 1"  sort="client(number)"/>

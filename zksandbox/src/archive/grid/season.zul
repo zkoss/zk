@@ -17,7 +17,7 @@ void doAvg(Footer f, boolean isFloat) {
 	f.setLabel(df.format(total));
 }
 ]]></zscript>
-<grid fixedLayout="true" onCreate='self.sclass = color[index]'>
+<grid onCreate='self.sclass = color[index]'>
 	<columns>
 		<column width="40px" />
 		<column width="45px" >

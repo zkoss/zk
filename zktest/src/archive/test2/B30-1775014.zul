@@ -41,7 +41,7 @@ timer every second. This problem does not happen in Firefox 2.
 	<hbox width="100%" widths="20%,80%">
 		<div />
 		<a:bind model="tasks" />
-		<grid id="grid" fixedLayout="true">
+		<grid id="grid">
 			<columns>
 				<column width="35%"/>
 				<column width="65%"/>

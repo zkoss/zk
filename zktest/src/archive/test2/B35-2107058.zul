@@ -33,7 +33,7 @@
 		xmlns:h="http://www.w3.org/1999/xhtml">
 		<timer id="timer" running="true" delay="30000" repeats="true"
 			onTimer="" />
-		<grid fixedLayout="false">
+		<grid sizedByContent="true">
 			<rows>
 				<row>
 					ACC

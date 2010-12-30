@@ -56,7 +56,7 @@
 			</attribute>
 		</button>
 	</vbox>
-	<grid id="g" fixedLayout="true" mold="paging" pageSize="10">
+	<grid id="g" mold="paging" pageSize="10">
         <columns sizable="true" menupopup="auto">
           <column width="40px" label="From"/>
           <column label="Subject"/>

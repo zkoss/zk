@@ -36,7 +36,7 @@ Column set Width doesn't work correctly
 <button label="setColumnWidth2" onClick='col1.setWidth("100px")'/>
 <button label="setColumnWidth3" onClick='col1.setWidth("200px")'/>
 </div>
-<grid id="g1" width="400px" fixedLayout="true">
+<grid id="g1" width="400px">
 <columns id="cols">
 <column label="Type 50px" id="col1" align="center" width="50px"/>
 <column label="Content" id="col2" align="right"/>

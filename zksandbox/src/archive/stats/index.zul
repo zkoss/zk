@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:h="xhtml">
 	<zscript>
 	monitor = desktop.webApp.configuration.monitor;
 	</zscript>

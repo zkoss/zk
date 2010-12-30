@@ -18,7 +18,7 @@ Please see the bottom-right in the window, it should space a padding according t
 <separator/>
 And the footer's alignment should be the same as the content's alignment.
 <window title="grid exploring" border="normal">
-<grid id="griddemo" fixedLayout="true" vflex="false"
+<grid id="griddemo" vflex="false"
 height="108px">
 <columns sizable="false">
 <column align="left" width="25%" label="col1" />

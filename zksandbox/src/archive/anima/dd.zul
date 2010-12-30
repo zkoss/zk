@@ -45,7 +45,7 @@ by dragging list items around.</p>
 	Drag project to other list or same list for reorder
 	<hbox>
 		<listbox id="left" height="250px" width="200px" onDrop="move(event.dragged)" droppable="true"
-			oddRowSclass="non-odd" fixedLayout="true">
+			oddRowSclass="non-odd">
 			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
@@ -67,7 +67,7 @@ by dragging list items around.</p>
 		</listbox>
 		<separator />
 		<listbox id="right" height="250px" width="200px"
-			oddRowSclass="non-odd" fixedLayout="true" onDrop="move(event.dragged)" droppable="true"
+			oddRowSclass="non-odd" onDrop="move(event.dragged)" droppable="true"
 			multiple="true" >
 			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />

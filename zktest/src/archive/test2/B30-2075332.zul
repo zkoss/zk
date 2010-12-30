@@ -27,7 +27,7 @@ Please move the splitter to left, and the each column of the listbox should be r
 <center border="none" flex="true">
 <div>
 <listbox id="listBoxCategorias" height="100px" width="100%"
-fixedLayout="true" mold="paging">
+mold="paging">
 <listhead sizable="true">
 <listheader label="name" sort="auto"/>
 <listheader label="gender" sort="auto"/>

@@ -34,7 +34,7 @@
 		<button label="add panel 1" onClick='addComp("panel1")'/>
 		<button label="invalidate" onClick="gd.invalidate()"/>
 	</div>
-	<grid fixedLayout="true" id="gd" mold="paging" pageSize="3">
+	<grid id="gd" mold="paging" pageSize="3">
         <columns sizable="true">
           <column width="35px" label="open"/>
           <column width="50px" label="Name"/>

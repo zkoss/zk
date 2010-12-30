@@ -46,7 +46,7 @@
 							<attribute name="value"><![CDATA[
 <zk>
 	ZK Mail Composer
-	<grid fixedLayout="true" width="450px">
+	<grid width="450px">
 		<columns>
 			<column label="Option" width="100px" />
 			<column label="Input" />

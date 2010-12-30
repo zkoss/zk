@@ -117,7 +117,7 @@ Rights Reserved.
 			<tablechildren  width="50%">
 				<panel title="Reference" border="normal">
 					<panelchildren>
-						<grid fixedLayout="true" style="border:0;">
+						<grid style="border:0;">
 						<rows>
 							<row><div><toolbarbutton label="Functional Designs"/>(<toolbarbutton label="Releases"/>, <toolbarbutton label="Designs"/>, Product Overview)</div></row>
 							<row><div><toolbarbutton label="Technical Docs"/></div></row>
@@ -136,7 +136,7 @@ Rights Reserved.
 				<panel title="Customer Overview" border="normal"
 						style="margin-bottom:10px">
 					<panelchildren>
-						<grid fixedLayout="true" style="border:0px" height="100%">
+						<grid style="border:0px" height="100%">
 							<columns>
 								<column label="category" />
 								<column label="value" />

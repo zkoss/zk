@@ -2,7 +2,7 @@
 <zscript>
 int season = 3 * (self.getParent().getParent().getChildren().indexOf(self.getParent()));
 </zscript>
-<grid fixedLayout="true" sclass="blue" oddRowSclass="myinner">
+<grid sclass="blue" oddRowSclass="myinner">
 	<columns>
 		<column label="Month"/>
 		<column label="High"  align="center" sort="auto"/>
