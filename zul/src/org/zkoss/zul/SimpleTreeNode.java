@@ -24,7 +24,7 @@ import java.util.List;
  * Note: It assumes the content is immutable
  * 
  * @author Jeff
- * @since ZK 3.0.0
+ * @since 3.0.0
  */
 public class SimpleTreeNode implements java.io.Serializable {
 

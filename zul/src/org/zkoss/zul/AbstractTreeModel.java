@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,10 +31,9 @@ import org.zkoss.zul.event.TreeDataEvent;
  * A skeletal implementation for {@link TreeModel}.
  *
  * @author Jeff Liu
- * @since ZK 3.0.0
+ * @since 3.0.0
  */
 public abstract class AbstractTreeModel implements TreeModel, java.io.Serializable  {
-	
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
@@ -69,7 +68,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	
 	//-TreeModel-//
 	public int[] getPath(Object parent, Object lastNode){
-		List l = new ArrayList();
+		List l = new LinkedList();
 		dfSearch(l, parent, lastNode);
 		Object[] objs = l.toArray();
 		int[] path = new int[objs.length];
@@ -88,20 +87,19 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * @return whether the target is found or not
 	 */
 	private boolean dfSearch(List path, Object node, Object target){
-			if(node.equals(target)){
-				return true;
-			}
-			else{
-				int size = getChildCount(node);
-				for(int i=0; i< size; i++){
-					boolean flag = dfSearch(path,getChild(node,i),target);
-					if(flag){
-						path.add(0,new Integer(i));
-						return true;
-					}
+		if(node.equals(target)){
+			return true;
+		} else{
+			int size = getChildCount(node);
+			for(int i=0; i< size; i++){
+				boolean flag = dfSearch(path,getChild(node,i),target);
+				if(flag){
+					path.add(0,new Integer(i));
+					return true;
 				}
 			}
-			return false;
+		}
+		return false;
 	}
 	
 	//-- TreeModel --//
