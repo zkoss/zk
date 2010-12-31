@@ -47,7 +47,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return this.parent ? this.parent.treerow : null;
 	},
 	/** Returns whether this treechildren is topmost.
-	 * @param boolean
+	 * @return boolean
 	 * @since 5.0.6
 	 */
 	isTopmost: function () {
