@@ -27,18 +27,28 @@ import java.lang.reflect.Array;
  */
 public class ArrayComparator implements Comparator, java.io.Serializable {
 	private final int _index;
-	private final boolean _ascend;
+	private final boolean _ascending;
 	/** The constructor.
 	 * @param index which index of an array to compare
 	 * @param ascending whether to sort as ascending (or descending).
 	 */
 	public ArrayComparator(int index, boolean ascending) {
 		_index = index;
-		_ascend = ascending;
+		_ascending = ascending;
 	}
 	//@Override
 	public int compare(Object o1, Object o2) {
-        int v = ((Comparable)Array.get(o1, _index)).compareTo(Array.get(o2, _index));
-		return _ascend ? v: -v;
+		int v = ((Comparable)Array.get(o1, _index)).compareTo(Array.get(o2, _index));
+		return _ascending ? v: -v;
+	}
+	/** Returns the index of the element.
+	 */
+	public int getIndex() {
+		return _index;
+	}
+	/** Returns whether the sorting is ascending.
+	 */
+	public boolean isAscending() {
+		return _ascending;
 	}
 }

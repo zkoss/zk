@@ -45,8 +45,11 @@ public class FieldComparator implements Comparator, Serializable {
 	private Collection _fieldnames;
 	/** The cached field name string. */
 	private String _orderBy;
+	/** The original orderBy passed to the constructor. */
+	private String _rawOrderBy;
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
+	private boolean _ascending;
 	
 	/** Compares with the fields per the given "ORDER BY" clause.
 	 * <p>Note: It assumes null as minimum value.
@@ -73,6 +76,8 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		_fieldnames = parseFieldNames(orderBy, ascending);
 		_maxnull = nullAsMax;
+		_rawOrderBy = orderBy;
+		_ascending = ascending;
 	}
 	
 	public int compare(Object o1, Object o2) {
@@ -89,7 +94,10 @@ public class FieldComparator implements Comparator, Serializable {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	
+	/** Returns the order-by clause.
+	 * Notice that is the parsed result, such as <code>name=category ASC</code>.
+	 * For the original format, please use {@link #getRawOrderBy}.
+	 */
 	public String getOrderBy() {
 		if (_orderBy == null) {
 			final StringBuffer sb = new StringBuffer(_fieldnames.size() * 16);
@@ -105,7 +113,19 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		return _orderBy;
 	}
-	
+	/** Returns the original order-by claused passed to the constructor, such as <code>category</code>.
+	 * @since 5.0.6
+	 */
+	public String getRawOrderBy() {
+		return _rawOrderBy;
+	}
+	/** Returns whether the sorting is ascending.
+	 * @since 5.0.6
+	 */
+	public boolean isAscending() {
+		return _ascending;
+	}
+
 	private void appendField(StringBuffer sb, FieldInfo fi) {
 		if (fi.func != null) {
 			sb.append(fi.func).append('(').append(fi.fieldname).append(')');
