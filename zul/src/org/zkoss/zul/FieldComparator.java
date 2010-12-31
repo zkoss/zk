@@ -114,6 +114,10 @@ public class FieldComparator implements Comparator, Serializable {
 		return _orderBy;
 	}
 	/** Returns the original order-by claused passed to the constructor.
+	 * It is usually the field's name, such as <code>category</code>,
+	 * or a concatenation of field names, such as <code>category.name</code>.
+	 * <p>Notice that, with the field's name, you could retrieve the value
+	 * by use of {@link Fields#getByCompound}.
 	 * @since 5.0.6
 	 */
 	public String getRawOrderBy() {
