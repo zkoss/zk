@@ -87,6 +87,9 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	}
 	/**
 	 * Constructor with an array of data.
+	 * It is the same as GroupsModelArray(data, cmpr, col, true), i.e.,
+	 * <code>data</code> will be cloned first, so <code>data</code>'s content
+	 * won't be changed.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
@@ -95,10 +98,26 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 * @param col column index associate with cmpr.
 	 */
-	public GroupsModelArray(Object[] data,Comparator cmpr, int col){
+	public GroupsModelArray(Object[] data,Comparator cmpr, int col) {
+		this(data, cmpr, col, true); //clone
+	}
+	/**
+	 * Constructor with an array of data.
+	 * @param data an array data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @param col column index associate with cmpr.
+	 * @param clone whether to clone <code>data</code>. If not cloning,
+	 * data's content will be changed.
+	 * @since 5.0.6
+	 */
+	public GroupsModelArray(Object[] data,Comparator cmpr, int col, boolean clone) {
 		if (data == null || cmpr == null)
 			throw new IllegalArgumentException("null parameter");
-		_nativedata = (Object[])ArraysX.duplicate(data);
+		_nativedata = clone ? (Object[])ArraysX.duplicate(data): data;
 		_comparator = cmpr;
 		group(_comparator,true,col);
 	}
@@ -112,8 +131,8 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	 * @param col column index associate with cmpr.
 	 * @since 5.0.6
 	 */
-	public GroupsModelArray(List data,Comparator cmpr, int col) {
-		this(data.toArray(), cmpr, col);
+	public GroupsModelArray(List data, Comparator cmpr, int col) {
+		this(data.toArray(), cmpr, col, false); //no need to clone
 	}
 	/** Constructor with a list of data.
 	 * @param data a list of data to be grouping.
@@ -124,8 +143,8 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 * @since 5.0.6
 	 */
-	public GroupsModelArray(List data,Comparator cmpr) {
-		this(data,cmpr,0);
+	public GroupsModelArray(List data, Comparator cmpr) {
+		this(data, cmpr, 0);
 	}
 
 	public Object getChild(int groupIndex, int index) {

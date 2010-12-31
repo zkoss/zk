@@ -90,27 +90,12 @@ public class Classes {
 		if (args == null || args.length == 0)
 			return cls.newInstance();
 
-		final Constructor[] cs = cls.getConstructors();
-		for (int j = 0; j < cs.length; ++j) {
-			final Class[] types = cs[j].getParameterTypes();
-			if (types.length == args.length) {
-				for (int k = args.length;;) {
-					if (--k < 0)
-						return cs[j].newInstance(args);
-
-					final Object arg = args[k];
-					final Class type = types[k];
-					if (arg == null)
-						if (type.isPrimitive()) break; //mismatch
-						else continue; //match
-
-					if (type.isInstance(arg)) continue; //match
-					if (!type.isPrimitive()
-					|| !Primitives.toWrapper(type).isInstance(arg))
-						break; //mismatch
-				}
-			}
-		}
+		final Constructor[] cxs = cls.getConstructors();
+		Constructor cx = match(cxs, args, false);
+		if (cx == null)
+			cx = match(cxs, args, true);
+		if (cx != null)
+			return cx.newInstance(args);
 
 		final StringBuffer sb = new StringBuffer(80)
 			.append("No contructor compatible with ");
@@ -119,6 +104,108 @@ public class Classes {
 				.append(args[j] != null ? args[j].getClass().getName(): null);
 		throw new NoSuchMethodException(
 			sb.append("] in ").append(cls.getName()).toString());
+	}
+	/**
+	 * @param loosely whether to match Long with Integer and so on.
+	 */
+	private static
+	Constructor match(Constructor[] cxs, Object[] args, boolean loosely) {
+		for (int j = 0; j < cxs.length; ++j)
+			if (matched(cxs[j].getParameterTypes(), args, loosely))
+				return cxs[j];
+		return null;
+	}
+	/**
+	 * @param loosely whether to match Long with Integer and so on.
+	 */
+	private static
+	Method match(Class cls, String name, Object[] args, boolean loosely) {
+		final Method[] ms = cls.getMethods();
+		for (int j = 0; j < ms.length; ++j) {
+			if (!ms[j].getName().equals(name)
+			|| !matched(ms[j].getParameterTypes(), args, loosely))
+				continue; //not found; next
+
+			if (Modifier.isPublic(ms[j].getDeclaringClass().getModifiers()))
+				return ms[j]; //found
+			try {
+				return getMethodInPublic(
+					cls, ms[j].getName(), ms[j].getParameterTypes());
+			} catch (NoSuchMethodException ex) { //not found; next
+			}
+		}
+		return null;
+	}
+	private static boolean matched(Class[] types, Object[] args, boolean loosely) {
+		if (types.length == args.length) {
+			final Object[] argcvt = new Object[args.length];
+			boolean cvted = false;
+			for (int k = args.length;;) {
+				if (--k < 0) {
+					if (cvted)
+						System.arraycopy(argcvt, 0, args, 0, args.length);
+						//copy converted only if all matched
+					return true;
+				}
+
+				final Object arg = argcvt[k] = args[k];
+				final Class type = types[k];
+				if (arg == null)
+					if (type.isPrimitive()) break; //mismatch
+					else continue; //matched
+
+				if (type.isInstance(arg) || (type.isPrimitive()
+				&& Primitives.toWrapper(type).isInstance(arg)))
+					continue; //matched
+
+				if (loosely) {
+					argcvt[k] = looselyCast(type, arg);
+					if (argcvt[k] != null) {
+						cvted = true;
+						continue; //matched
+					}
+				}
+				break; //mismatch
+			}
+		}
+		return false;
+	}
+	private static Object looselyCast(Class type, Object arg) {
+		if (type == Integer.class || type == int.class) {
+			if (arg instanceof Long)
+				return new Integer(((Long)arg).intValue());
+			if (arg instanceof Short)
+				return new Integer(((Short)arg).shortValue());
+		} else if (type == Long.class || type == long.class) {
+			if (arg instanceof Integer)
+				return new Long(((Integer)arg).intValue());
+			if (arg instanceof Short)
+				return new Long(((Short)arg).shortValue());
+		} else if (type == Double.class || type == double.class) {
+			if (arg instanceof Integer)
+				return new Double(((Integer)arg).intValue());
+			if (arg instanceof Float)
+				return new Double(((Float)arg).floatValue());
+			if (arg instanceof Long)
+				return new Double(((Long)arg).longValue());
+			if (arg instanceof Short)
+				return new Double(((Short)arg).shortValue());
+		} else if (type == Short.class || type == short.class) {
+			if (arg instanceof Integer)
+				return new Short(((Integer)arg).shortValue());
+			if (arg instanceof Long)
+				return new Short(((Long)arg).shortValue());
+		} else if (type == Float.class || type == float.class) {
+			if (arg instanceof Integer)
+				return new Float(((Integer)arg).intValue());
+			if (arg instanceof Double)
+				return new Float(((Double)arg).floatValue());
+			if (arg instanceof Long)
+				return new Float(((Long)arg).longValue());
+			if (arg instanceof Short)
+				return new Float(((Short)arg).shortValue());
+		}
+		return null; //not castable
 	}
 
 	/**
@@ -627,16 +714,19 @@ public class Classes {
 	/** Gets one of the close method by specifying the arguments, rather
 	 * than the argument types. It actually calls {@link #getCloseMethod}.
 	 */
-	public static final Method
-	getMethodByObject(Class cls, String name, Object[] args)
+	public static final
+	Method getMethodByObject(Class cls, String name, Object[] args)
 	throws NoSuchMethodException {
 		if (args == null)
 			return getMethodInPublic(cls, name, null);
 
-		final Class[] argTypes = new Class[args.length];
-		for (int j = 0; j < args.length; ++j)
-			argTypes[j] = args[j] != null ? args[j].getClass(): null;
-		return getCloseMethod(cls, name, argTypes);
+		Method mtd = match(cls, name, args, false);
+		if (mtd == null) {
+			mtd = match(cls, name, args, true);
+			if (mtd == null)
+				throw new NoSuchMethodException(cls + ": " + name + " with " + Objects.toString(args));
+		}
+		return mtd;
 	}
 	/**
 	 * Gets one of the close methods -- a close method is a method

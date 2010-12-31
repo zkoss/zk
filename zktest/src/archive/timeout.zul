@@ -19,6 +19,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window width="80%" title="Session Timeout" border="normal">
 You didn't access the demo for a long time. Would you like to
-continue cruising <a href="userguide" label="ZK Demo"/>
+continue <a href="test2" label="test2"/>
 or to visit <a href="http://www.zkoss.org" label="ZK Home"/>?
 </window>
