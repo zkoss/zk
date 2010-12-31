@@ -1388,33 +1388,36 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <p>Author: jeffliu
 	 * @since 3.0.0
 	 */
-	protected Component getChildByNode(Object node){
-		int[] path = _model.getPath(_model.getRoot(), node);
-
-		//If path is null or empty, return root(Tree)
-		if(path == null || path.length == 0)
+	protected Component getChildByNode(Object node) {
+		final Object root = _model.getRoot();
+		if (root.equals(node))
 			return this;
-		else{
+		return getChildByNode0(_model, _treechildren, root, node);
+	}
+	private static Component
+	getChildByNode0(TreeModel model, Treechildren tc, Object parent, Object node) {
+		if (tc == null)
+			return null; //if not rendered, return null
 
-			Treeitem ti = null;
-			List children =null;
-			for(int i=0; i<path.length; i++){
-				if(i==0){
-					children = this.getTreechildren().getChildren();
-				}else{
-					children = ti.getTreechildren().getChildren();
-				}
-				/*
-				 * If the children are not rendered yet, return null
-				 */
-				if(children.size()>path[i]&&0<=path[i]){
-					ti = (Treeitem) children.get(path[i]);
-				}else{
-					return null;
-				}
+		try {
+			int j = model.getIndexOfChild(parent, node);
+			if (j >= 0) {
+				final List cs = tc.getChildren();
+				return j < cs.size() ? (Component)cs.get(j): null; //null if not rendered
 			}
-			return ti;
+		} catch (AbstractMethodError ex) { //5.0.5 or prior (no getIndexOfChild)
+			return null; //TODO
 		}
+
+		Treeitem ti = (Treeitem)tc.getFirstChild();
+		for (int len = model.getChildCount(parent), j = 0; j < len && ti != null; ++j) {
+			Component c = getChildByNode0(
+				model, ti.getTreechildren(), model.getChild(parent, j), node);
+			if (c != null)
+				return c;
+			ti = (Treeitem)ti.getNextSibling();
+		}
+		return null;
 	}
 
 	/*

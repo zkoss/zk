@@ -27,9 +27,7 @@ import java.util.List;
  * @since 3.0.0
  */
 public class SimpleTreeNode implements java.io.Serializable {
-
 	private Object _data;
-	
 	private List _children;
 	
 	/**
@@ -90,5 +88,12 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 */
 	public int getChildCount(){
 		return _children.size();
+	}
+	/** Returns the index of the given child, or -1 if the child does not belong
+	 * to this.
+	 * @since 5.0.6
+	 */
+	public int getIndex(Object child) {
+		return _children.indexOf(child);
 	}
 }
