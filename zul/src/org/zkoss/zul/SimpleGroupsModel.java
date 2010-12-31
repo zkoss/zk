@@ -23,9 +23,12 @@ import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * A simple implementation of {@link GroupsModel}.
- * This implementation assumes the content is immutable.
+ * This implementation assumes the data is grouped, and the grouping structure
+ * is immutable.
  * If you allow the user to re-group the content, use {@link GroupsModelArray}
  * instead.
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  * @author Dennis.Chen
  * @since 3.5.0
  * @see GroupsModel

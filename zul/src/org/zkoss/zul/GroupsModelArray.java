@@ -20,19 +20,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.lang.reflect.Array;
 
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * An array implementation of {@link GroupsModel}.
- * This implementation supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
+ * This implementation takes a list of elements that are not grouped yet,
+ * and a comparator that will be used to group them.
+ * The c supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
  * For immutable content (no re-grouping allowed), please use {@link SimpleGroupsModel} instead.
+ *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  * 
  * @author Dennis.Chen
  * @since 5.0.5
  * @see GroupsModel
  * @see SimpleGroupsModel
+ * @see GroupComparator
  */
 public class GroupsModelArray extends AbstractGroupsModel implements GroupsModelExt{
 	
@@ -250,7 +257,9 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	 * @param col column to group
 	 */
 	protected Object createGroupHead(Object[] groupdata,int index,int col) {
-		return groupdata[0];
+		final Object o = groupdata[0];
+		return o != null && o.getClass().isArray() && col < Array.getLength(o) ?
+			Array.get(o, col): o;
 	}
 
 	/**

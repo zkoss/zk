@@ -1,0 +1,58 @@
+<zk>
+    <zscript><![CDATA[
+Object[][] foods = new Object[][] {
+    new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+    new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+    new Object[] { "Vegetables", "Bell peppers", "Vitamin C", 291, 24},
+    new Object[] { "Vegetables", "Cauliflower", "Vitamin C", 92, 28},
+    new Object[] { "Vegetables", "Eggplant", "Dietary Fiber", 10, 27},
+    new Object[] { "Vegetables", "Onions", "Chromium", 21, 60},
+    new Object[] { "Vegetables", "Potatoes", "Vitamin C", 26, 132},
+    new Object[] { "Vegetables", "Spinach", "Vitamin K", 1110, 41},
+    new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37},
+    new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+    new Object[] { "Seafood", "Shrimp", "Tryptophan", 103, 112},
+    new Object[] { "Seafood", "Scallops", "Tryptophan", 81, 151},
+    new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119},
+    new Object[] { "Fruits", "Apples", "Manganese", 33, 61},
+    new Object[] { "Fruits", "Cantaloupe", "Vitamin C", 112, 56},
+    new Object[] { "Fruits", "Grapes", "Manganese", 33, 61},
+    new Object[] { "Fruits", "Pineapple", "Manganese", 128, 75},
+    new Object[] { "Fruits", "Strawberries", "Vitamin C", 24, 48},
+    new Object[] { "Fruits", "Watermelon", "Vitamin C", 24, 48},
+    new Object[] { "Poultry & Lean Meats", "Beef, lean organic", "Tryptophan", 112, 240},
+    new Object[] { "Poultry & Lean Meats", "Lamb", "Tryptophan", 109, 229},
+    new Object[] { "Poultry & Lean Meats", "Chicken", "Tryptophan", 121, 223},
+    new Object[] { "Poultry & Lean Meats", "Venison ", "Protein", 69, 179},
+    new Object[] { "Grains", "Corn ", "Vatamin B1", 24, 177},
+    new Object[] { "Grains", "Oats ", "Manganese", 69, 147},
+    new Object[] { "Grains", "Barley ", "Dietary Fiber", 54, 270}
+};
+
+public class FoodGroupRenderer implements RowRenderer {
+    public void render(Row row, java.lang.Object obj) {
+        if (row instanceof Group) {
+            row.appendChild(new Label(obj.toString()));
+        } else {
+            Object[] data = (Object[]) obj;
+            row.appendChild(new Label(data[0].toString()));
+            row.appendChild(new Label(data[1].toString()));
+            row.appendChild(new Label(data[2].toString()));
+            row.appendChild(new Label(data[3].toString()));
+            row.appendChild(new Label(data[4].toString()));
+        }
+    }
+};
+RowRenderer renderer = new FoodGroupRenderer();
+GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+    ]]></zscript>
+    <grid model="${model}" rowRenderer="${renderer}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)"/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Top Nutrients" sort="auto(2)"/>
+            <column label="% of Daily" sort="auto(3)"/>
+            <column label="Calories" sort="auto(4)"/>
+        </columns>
+    </grid>
+</zk>

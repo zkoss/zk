@@ -29,6 +29,9 @@ import org.zkoss.zul.ext.Selectable;
  * <p>If the model also provides the selection, it could implement
  * {@link Selectable}.
  *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
+ *
  * @author tomyeh
  * @see Grid
  * @see Listbox

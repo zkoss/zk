@@ -35,6 +35,9 @@ import java.util.SortedSet;
  * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.
  * Add or remove the contents of this model as a List would cause the associated Listbox to change accordingly.</p> 
  *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
+ *
  * @author Henri Chen
  * @see ListModel
  * @see ListModelList

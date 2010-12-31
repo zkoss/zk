@@ -131,7 +131,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 
 	/** Sets the type of the sorter.
-	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3) or "none".
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3),
+	 * "auto(<i>number</i>)" (since 5.0.6) or "none".
 	 *
 	 * <p>If "client" or "client(number)" is specified,
 	 * the sort functionality will be done by Javascript at client without notifying
@@ -155,7 +156,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.
-
+	 *
+	 * <p>If "auto(<i>number</i>)" is specified, 
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ArrayComparator}. Notice that the data must
+	 * be an array and the number-th element must be comparable ({@link Comparable}).
+	 *
 	 * <p>If "none" is specified, both {@link #setSortAscending} and
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
@@ -178,11 +184,22 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String fieldnames = type.substring(j+1, k);
+				final String name = type.substring(j+1, k);
+				char cc;
+				int index = -1;
+				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
+					if ((index = Integer.parseInt(name)) < 0)
+						throw new IllegalArgumentException("Nonnegative number is required: "+name);
 				if (getSortAscending() == null)
-					setSortAscending(new FieldComparator(fieldnames, true));
+					if (index < 0)
+						setSortAscending(new FieldComparator(name, true));
+					else
+						setSortAscending(new ArrayComparator(index, true));
 				if (getSortDescending() == null)
-					setSortDescending(new FieldComparator(fieldnames, false));
+					if (index < 0)
+						setSortDescending(new FieldComparator(name, false));
+					else
+						setSortDescending(new ArrayComparator(index, false));
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
