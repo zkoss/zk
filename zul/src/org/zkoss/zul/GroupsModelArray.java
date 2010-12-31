@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +74,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	protected boolean[] _closes;
 	
 	/**
-	 * Constructor
+	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
@@ -86,7 +86,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 		this(data,cmpr,0);
 	}
 	/**
-	 * 
+	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
@@ -101,6 +101,31 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 		_nativedata = (Object[])ArraysX.duplicate(data);
 		_comparator = cmpr;
 		group(_comparator,true,col);
+	}
+	/** Constructor with a list of data.
+	 * @param data a list of data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @param col column index associate with cmpr.
+	 * @since 5.0.6
+	 */
+	public GroupsModelArray(List data,Comparator cmpr, int col) {
+		this(data.toArray(), cmpr, col);
+	}
+	/** Constructor with a list of data.
+	 * @param data a list of data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @since 5.0.6
+	 */
+	public GroupsModelArray(List data,Comparator cmpr) {
+		this(data,cmpr,0);
 	}
 
 	public Object getChild(int groupIndex, int index) {
@@ -210,7 +235,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	 * @param col column index
 	 */
 	protected void organizeGroup(Comparator cmpr, int col) {
-		List group = new ArrayList();
+		List group = new LinkedList();
 		List gdata = null;
 		Object last = null;
 		Object curr = null;
@@ -222,7 +247,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 			boolean hita = false;
 			if(last==null || cmpr.compare(last,curr)!=0){
 				hitn = true;
-				gdata = new ArrayList();
+				gdata = new LinkedList();
 				group.add(gdata);
 			}
 			gdata.add(curr);
@@ -230,8 +255,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 		}
 		
 		//prepare data,head & foot
-		List[] gd = new List[group.size()];
-		group.toArray(gd);
+		List[] gd = (List[])group.toArray(new List[group.size()]);
 		
 		_data = new Object[gd.length][];
 		_foots = new Object[_data.length];
@@ -240,8 +264,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 		
 		for(int i=0;i<gd.length;i++){
 			gdata = (List)gd[i];
-			_data[i] = new Object[gdata.size()];
-			gdata.toArray(_data[i]);
+			_data[i] = gdata.toArray(new Object[gdata.size()]);
 			_heads[i] = createGroupHead(_data[i],i,col);
 			_foots[i] = createGroupFoot(_data[i],i,col);
 			_closes[i] = createGroupClose(_data[i],i,col);
