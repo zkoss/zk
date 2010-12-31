@@ -44,7 +44,7 @@ public class FieldComparator implements Comparator, Serializable {
 	/** The field names collection. */
 	private Collection _fieldnames;
 	/** The cached field name string. */
-	private String _orderBy;
+	private transient String _orderBy;
 	/** The original orderBy passed to the constructor. */
 	private String _rawOrderBy;
 	/** Whether to treat null as the maximum value. */
@@ -113,7 +113,7 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		return _orderBy;
 	}
-	/** Returns the original order-by claused passed to the constructor, such as <code>category</code>.
+	/** Returns the original order-by claused passed to the constructor.
 	 * @since 5.0.6
 	 */
 	public String getRawOrderBy() {
