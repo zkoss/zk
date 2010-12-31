@@ -138,7 +138,7 @@ public class Classes {
 	}
 	private static boolean matched(Class[] types, Object[] args, boolean loosely) {
 		if (types.length == args.length) {
-			final Object[] argcvt = new Object[args.length];
+			final Object[] argcvt = loosely ? new Object[args.length]: args;
 			boolean cvted = false;
 			for (int k = args.length;;) {
 				if (--k < 0) {
