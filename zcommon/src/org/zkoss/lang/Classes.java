@@ -172,38 +172,23 @@ public class Classes {
 	}
 	private static Object looselyCast(Class type, Object arg) {
 		if (type == Integer.class || type == int.class) {
-			if (arg instanceof Long)
-				return new Integer(((Long)arg).intValue());
-			if (arg instanceof Short)
-				return new Integer(((Short)arg).shortValue());
+			if (arg instanceof Number)
+				return new Integer(((Number)arg).intValue());
 		} else if (type == Long.class || type == long.class) {
-			if (arg instanceof Integer)
-				return new Long(((Integer)arg).intValue());
-			if (arg instanceof Short)
-				return new Long(((Short)arg).shortValue());
+			if (arg instanceof Number)
+				return new Long(((Number)arg).longValue());
 		} else if (type == Double.class || type == double.class) {
-			if (arg instanceof Integer)
-				return new Double(((Integer)arg).intValue());
-			if (arg instanceof Float)
-				return new Double(((Float)arg).floatValue());
-			if (arg instanceof Long)
-				return new Double(((Long)arg).longValue());
-			if (arg instanceof Short)
-				return new Double(((Short)arg).shortValue());
+			if (arg instanceof Number)
+				return new Double(((Number)arg).doubleValue());
 		} else if (type == Short.class || type == short.class) {
-			if (arg instanceof Integer)
-				return new Short(((Integer)arg).shortValue());
-			if (arg instanceof Long)
-				return new Short(((Long)arg).shortValue());
+			if (arg instanceof Number)
+				return new Short(((Number)arg).shortValue());
 		} else if (type == Float.class || type == float.class) {
-			if (arg instanceof Integer)
-				return new Float(((Integer)arg).intValue());
-			if (arg instanceof Double)
-				return new Float(((Double)arg).floatValue());
-			if (arg instanceof Long)
-				return new Float(((Long)arg).longValue());
-			if (arg instanceof Short)
-				return new Float(((Short)arg).shortValue());
+			if (arg instanceof Number)
+				return new Float(((Number)arg).floatValue());
+		} else if (type == Byte.class || type == byte.class) {
+			if (arg instanceof Number)
+				return new Byte(((Number)arg).byteValue());
 		}
 		return null; //not castable
 	}
