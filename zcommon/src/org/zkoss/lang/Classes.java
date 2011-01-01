@@ -97,13 +97,7 @@ public class Classes {
 		if (cx != null)
 			return cx.newInstance(args);
 
-		final StringBuffer sb = new StringBuffer(80)
-			.append("No contructor compatible with ");
-		for (int j = 0; j < args.length; ++j)
-			sb.append(j != 0 ? ", ": "[")
-				.append(args[j] != null ? args[j].getClass().getName(): null);
-		throw new NoSuchMethodException(
-			sb.append("] in ").append(cls.getName()).toString());
+		throw new NoSuchMethodException(cls.getName()+": no constructor for "+Objects.toString(args));
 	}
 	/**
 	 * @param loosely whether to match Long with Integer and so on.
@@ -693,7 +687,11 @@ public class Classes {
 			} catch (NoSuchMethodException ex) { //ignore it
 			}
 
-		throw new NoSuchMethodException(cls+": "+name+" "+Objects.toString(argTypes));
+		throw newNoSuchMethodException(cls, name, argTypes);
+	}
+	private static NoSuchMethodException newNoSuchMethodException(Class cls,
+	String name, Object[] args) {
+		return new NoSuchMethodException(cls.getName()+": no method called "+name+" for "+Objects.toString(args));
 	}
 
 	/** Gets one of the close method by specifying the arguments, rather
@@ -709,7 +707,7 @@ public class Classes {
 		if (mtd == null) {
 			mtd = match(cls, name, args, true);
 			if (mtd == null)
-				throw new NoSuchMethodException(cls + ": " + name + " with " + Objects.toString(args));
+				throw newNoSuchMethodException(cls, name, args);
 		}
 		return mtd;
 	}
@@ -781,8 +779,8 @@ public class Classes {
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
 		4*60*60*1000);
-	private static final Method
-	myGetCloseMethod(final Class cls, final String name,
+	private static final
+	Method myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
 	throws NoSuchMethodException {
 		assert D.OFF || argTypes != null: "Caller shall handle null";
@@ -832,7 +830,7 @@ public class Classes {
 					break; //not match
 			}
 		}
-		throw new NoSuchMethodException(cls+": "+name+" argTypes: "+Objects.toString(argTypes));
+		throw newNoSuchMethodException(cls, name, argTypes);
 	}
 
 	/** Returns all close methods that match the specified condition, or
@@ -1026,7 +1024,7 @@ public class Classes {
 		}
 
 		if (argTypes != null && argTypes.length > 1)
-			throw new NoSuchMethodException(cls+": "+name+" "+Objects.toString(argTypes));
+			throw newNoSuchMethodException(cls, name, argTypes);
 
 		try {
 			//try public field
@@ -1040,7 +1038,7 @@ public class Classes {
 			//try any field
 			return getAnyField(cls, name);
 		} catch (NoSuchFieldException ex) { //ignore
-			throw new NoSuchMethodException(cls+": name="+name+" args="+Objects.toString(argTypes));
+			throw newNoSuchMethodException(cls, name, argTypes);
 		}
 	}
 	/** The infomation of the access object. */
