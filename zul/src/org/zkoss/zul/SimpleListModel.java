@@ -23,6 +23,7 @@ import java.util.Comparator;
 
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * A simple implementation of {@link ListModel}.
@@ -42,7 +43,7 @@ import org.zkoss.zul.event.ListDataEvent;
  * @see ListSubModel (since 3.0.2)
  */
 public class SimpleListModel<E> extends AbstractListModel<E>
-implements ListModelExt<E>, ListSubModel<E>, java.io.Serializable {
+implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
     private static final long serialVersionUID = 20060707L;
 
 	private final Object[] _data;
@@ -91,7 +92,7 @@ implements ListModelExt<E>, ListSubModel<E>, java.io.Serializable {
 		return (E)_data[j];
 	}
 
-	//-- ListModelExt --//
+	//-- Sortable --//
 	/** Sorts the data.
 	 *
 	 * @param cmpr the comparator.

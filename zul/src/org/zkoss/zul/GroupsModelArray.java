@@ -16,24 +16,30 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.lang.reflect.Array;
 
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * An array implementation of {@link GroupsModel}.
- * This implementation supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
+ * This implementation takes a list of elements that are not grouped yet,
+ * and a comparator that will be used to group them.
+ * The c supports regroup array to groups depends on {@link Comparator} and {@link GroupComparator}.
  * For immutable content (no re-grouping allowed), please use {@link SimpleGroupsModel} instead.
+ *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  * 
  * @author Dennis.Chen
  * @since 5.0.5
  * @see GroupsModel
  * @see SimpleGroupsModel
+ * @see GroupComparator
  */
 public class GroupsModelArray<D, H, F> extends AbstractGroupsModel<D, H, F>
 implements GroupsModelExt<D> {
@@ -69,7 +75,7 @@ implements GroupsModelExt<D> {
 	protected boolean[] _closes;
 	
 	/**
-	 * Constructor
+	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
@@ -81,7 +87,10 @@ implements GroupsModelExt<D> {
 		this(data,cmpr,0);
 	}
 	/**
-	 * 
+	 * Constructor with an array of data.
+	 * It is the same as GroupsModelArray(data, cmpr, col, true), i.e.,
+	 * <code>data</code> will be cloned first, so <code>data</code>'s content
+	 * won't be changed.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
 	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
@@ -90,12 +99,54 @@ implements GroupsModelExt<D> {
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 * @param col column index associate with cmpr.
 	 */
-	public GroupsModelArray(D[] data, Comparator<D> cmpr, int col){
+	public GroupsModelArray(D[] data, Comparator<D> cmpr, int col) {
+		this(data, cmpr, col, true); //clone
+	}
+	/**
+	 * Constructor with an array of data.
+	 * @param data an array data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @param col column index associate with cmpr.
+	 * @param clone whether to clone <code>data</code>. If not cloning,
+	 * data's content will be changed.
+	 * @since 5.0.6
+	 */
+	public GroupsModelArray(D[] data, Comparator<D> cmpr, int col, boolean clone) {
 		if (data == null || cmpr == null)
 			throw new IllegalArgumentException("null parameter");
-		_nativedata = ArraysX.duplicate(data);
+		_nativedata = clone ? (D[])ArraysX.duplicate(data): data;
 		_comparator = cmpr;
 		group(_comparator,true,col);
+	}
+	/** Constructor with a list of data.
+	 * @param data a list of data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @param col column index associate with cmpr.
+	 * @since 5.0.6
+	 */
+	@SuppressWarnings("unchecked")
+	public GroupsModelArray(List<D> data, Comparator cmpr, int col) {
+		this((D[])data.toArray(), cmpr, col, false); //no need to clone
+	}
+	/** Constructor with a list of data.
+	 * @param data a list of data to be grouping.
+	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
+	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
+	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
+	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
+	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
+	 * @since 5.0.6
+	 */
+	public GroupsModelArray(List<D> data, Comparator cmpr) {
+		this(data, cmpr, 0);
 	}
 
 	public D getChild(int groupIndex, int index) {
@@ -205,7 +256,7 @@ implements GroupsModelExt<D> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected void organizeGroup(Comparator<D> cmpr, int col) {
-		List<List<D>> group = new ArrayList<List<D>>();
+		List<List<D>> group = new LinkedList<List<D>>();
 		List<D> gdata = null;
 		D last = null;
 		D curr = null;
@@ -217,7 +268,7 @@ implements GroupsModelExt<D> {
 			boolean hita = false;
 			if(last==null || cmpr.compare(last,curr)!=0){
 				hitn = true;
-				gdata = new ArrayList<D>();
+				gdata = new LinkedList<D>();
 				group.add(gdata);
 			}
 			gdata.add(curr);
@@ -227,7 +278,7 @@ implements GroupsModelExt<D> {
 		//prepare data,head & foot
 		List<D>[] gd = new List[group.size()];
 		group.toArray(gd);
-		
+
 		_data = (D[][])Array.newInstance(_nativedata.getClass().getComponentType(), gd.length); //new D[gd.length][];
 		_foots = new Object[gd.length];
 		_heads = new Object[gd.length];
@@ -253,8 +304,10 @@ implements GroupsModelExt<D> {
 	 * @param col column to group
 	 */
 	@SuppressWarnings("unchecked")
-	protected H createGroupHead(D[] groupdata,int index,int col) {
-		return (H)groupdata[0];
+	protected H createGroupHead(D[] groupdata, int index, int col) {
+		final D o = groupdata[0];
+		return o != null && o.getClass().isArray() && col < Array.getLength(o) ?
+			(H)Array.get(o, col): (H)o;
 	}
 
 	/**

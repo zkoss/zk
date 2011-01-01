@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zk.ui.UiException;
 
 import java.util.LinkedHashSet;
@@ -35,13 +36,16 @@ import java.util.SortedSet;
  * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.
  * Add or remove the contents of this model as a List would cause the associated Listbox to change accordingly.</p> 
  *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
+ *
  * @author Henri Chen
  * @see ListModel
  * @see ListModelList
  * @see ListModelMap
  */
 public class ListModelList<E> extends AbstractListModel<E>
-implements ListModelExt<E>, List<E>, java.io.Serializable {
+implements Sortable<E>, List<E>, java.io.Serializable {
 	protected List<E> _list;
 
 	/**
@@ -377,7 +381,7 @@ implements ListModelExt<E>, List<E>, java.io.Serializable {
 		return _list.toArray(a);
 	}
 
-	//-- ListModelExt --//
+	//-- Sortable --//
 	/** Sorts the data.
 	 *
 	 * @param cmpr the comparator.

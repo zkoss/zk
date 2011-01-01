@@ -63,7 +63,7 @@ import org.zkoss.zksandbox.*;
 Comparator asc = new RowDetailComparator(true),
 	dsc = new RowDetailComparator(false);
 </zscript>
-<grid fixedLayout="true" width="600px">
+<grid width="600px">
 	<columns>
 		<column width="40px" />
 		<column sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}" label="Product Name"/>

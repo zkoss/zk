@@ -469,6 +469,7 @@
 		<xs:attribute name="renderdefer" type="intType" use="optional" />
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
+		<xs:attribute name="action" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="xulElementAttrGroup">
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />

@@ -74,15 +74,18 @@ zul.db.Renderer = {
 	 * @return boolean
 	 */
 	disabled: function (cal, y, m, v, today) {
-		var d = new Date(y, m, v, 0, 0, 0, 0);
-		switch (cal._constraint) {
-		case 'no today':
-			return today - d == 0;
-		case 'no past':
-			return (d - today) / 86400000 < 0;
-		case 'no future':
-			return (today - d)/ 86400000 < 0;
+		var d = new Date(y, m, v, 0, 0, 0, 0),
+			constraint;
+		
+		if ((constraint = cal._constraint)) {
+			
+			// Bug ID: 3106676
+			if ((constraint.indexOf("no past") > -1 && (d - today) / 86400000 < 0) ||
+			    (constraint.indexOf("no future") > -1 && (today - d) / 86400000 < 0) ||
+			    (constraint.indexOf("no today") > -1 && today - d == 0))
+					return true;
 		}
+		
 		var result = false;
 		if (cal._beg && (result = (d - cal._beg) / 86400000 < 0))
 			return result;

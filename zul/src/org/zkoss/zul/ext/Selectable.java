@@ -23,7 +23,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  */
 
 /**
- * Indicate a selectable collection or component. Generally used with {@link ListModel}
+ * Indicate a data model that supports selection.
+ * It is typically used with {@link ListModel}
  * and {@link Listbox}.
  * @author henrichen
  * @see ListModel

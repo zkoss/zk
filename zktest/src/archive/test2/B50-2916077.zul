@@ -2,7 +2,7 @@
 <zk>
 You should see a checkmark before the label "Group" and "Foot", rather than an
 open/close sign.
-<listbox id="box" fixedLayout="true" multiple="true" checkmark="true">
+<listbox id="box" multiple="true" checkmark="true">
 	<listhead>
 		<listheader label="Name"/>
 		<listheader label="Gender"/>

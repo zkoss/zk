@@ -29,7 +29,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 };
 ]]>
 </zscript>
-	<grid fixedLayout="true">
+	<grid>
 		<columns sizable="true">
 			<column width="35px" label="open" />
 			<column width="200px" label="From" />

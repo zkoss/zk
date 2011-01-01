@@ -1,5 +1,5 @@
 <window title="tree demo" border="normal">
-	<tree id="tree" width="90%" mold="paging" pageSize="10" fixedLayout="true">
+	<tree id="tree" width="90%" mold="paging" pageSize="10">
 		<treecols sizable="true">
 			<treecol label="Name"/>
 			<treecol label="Description"/>

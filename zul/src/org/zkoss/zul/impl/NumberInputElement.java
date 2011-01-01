@@ -31,8 +31,7 @@ import org.zkoss.math.RoundingModes;
  *
  * @author tomyeh
  */
-abstract public class NumberInputElement extends FormatInputElement
-implements org.zkoss.zul.impl.api.NumberInputElement {
+abstract public class NumberInputElement extends FormatInputElement {
 	/** The rounding mode. */
 	private int _rounding = BigDecimal.ROUND_HALF_EVEN;
 

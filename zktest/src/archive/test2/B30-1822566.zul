@@ -27,7 +27,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	</zscript>
              1. Click set button to set Cloumn Width 
              <separator/>
-	If Column set Width doesn't work correctly  try click <button label="fixedLayout=&quot;true&quot;" onClick="g1.fixedLayout=true"/> then run 1 again
+	If Column set Width doesn't work correctly  try click <button label="sizedByContent=&quot;false&quot;" onClick="g1.sizedByContent=false"/> then run 1 again
              <separator/>
 
 

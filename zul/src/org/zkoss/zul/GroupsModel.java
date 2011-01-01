@@ -29,6 +29,9 @@ import org.zkoss.zul.event.GroupsDataListener;
  * <p>If the data model is used with sortable listbox or grid,
  * the developer must also implement {@link GroupsModelExt}.
  *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
+ *
  * @author tomyeh
  * @since 3.5.0
  * @see GroupsModelExt
@@ -55,7 +58,8 @@ public interface GroupsModel<D, G, F> {
 	 */
 	public int getChildCount(int groupIndex);
 
-	/** Returns the foot value of the specified group.
+	/** Returns the foot value of the specified group, or null if the specified group
+	 * does not have any foot.
 	 * It is used to render {@link Groupfoot} and {@link Listgroupfoot}.
 	 *
 	 * <p>Note: it is ignored if {@link #hasGroupfoot} returns false.

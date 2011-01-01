@@ -147,5 +147,11 @@ public class TreeModelA extends AbstractTreeModel{
 		fireEvent(parent,indexFrom,indexTo,TreeDataEvent.INTERVAL_ADDED);
 		
 	}
+
+
+	public int getIndexOfChild(Object parent, Object child) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 

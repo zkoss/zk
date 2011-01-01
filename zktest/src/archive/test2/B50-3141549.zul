@@ -1,0 +1,7 @@
+<zk>
+You shall see a blue (at left) and a yellow block (at right) below, and the size is 1:2
+<hlayout hflex="1" vflex="1">
+<div style="background: blue" hflex="1" vflex="1"/>
+<div style="background: yellow" hflex="2" vflex="1"/>
+</hlayout>
+</zk>

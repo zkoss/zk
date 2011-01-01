@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -44,7 +45,7 @@ import java.lang.reflect.Method;
  * @see ListModelMap
  */
 public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
-implements ListModelExt<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
+implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	protected Map<K, V> _map;
 	
 	/**
@@ -305,7 +306,7 @@ implements ListModelExt<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		return new Values(_map.values());
 	}
 
-	//-- ListModelExt --//
+	//-- Sortable --//
 	/** Sorts the data.
 	 *
 	 * @param cmpr the comparator.

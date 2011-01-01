@@ -38,8 +38,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author jumperchen
  * @since 5.0.6
  */
-public class Doublespinner extends NumberInputElement implements
-		org.zkoss.zul.api.Doublespinner {
+public class Doublespinner extends NumberInputElement {
 	private double _step = 1.0;
 	private boolean _btnVisible = true;
 	

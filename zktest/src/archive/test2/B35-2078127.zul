@@ -81,7 +81,7 @@ f1.detach();
 		<button label="1.updateGroup 1" onClick="updateGroup(g1)" />
 		<button label="2.updateFoot 1" onClick="updateFoot(f1)" />		
 	</div>
-	<listbox fixedLayout="true" id="gd">
+	<listbox id="gd">
 		<listhead sizable="true">
 			<listheader width="150px" label="From" sort="auto" />
 			<listheader label="Subject" sort="auto" />

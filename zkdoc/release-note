@@ -37,11 +37,13 @@ ZK 6.0.0
 ZK 5.0.6
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
+  3138362: Add a Doublespinner comopnent to support double value
+  3148425: GroupsModelArray shall handle tabular data better
   3105037: Show the locale format in error messages
+  3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout
-  3138362: Add a Doublespinner comopnent to support double value
   3139008: Add Vietnamese language
 
 * Bugs
@@ -61,7 +63,15 @@ ZK 5.0.6
   3142583: include dynamic property doesn't work
   3132167: In IE6, hflex="min" miscalculate the combobox's width
   3141549: Hlayout not handle hflex well (onSize not fired if empty)
+  3109311: listbox sizedByContent cause javascript
+  3106676: Datebox allows selection of past days when no empty, no past
   
+* Upgrade Notes
+  + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild
+    is added (the same as javax.swing.tree.TreeModel).
+    Notice it is backward compatible if you don't re-compile, or extend from
+    AbstractTreeModel
+
 	--------
 ZK 5.0.5
 November 02, 2010

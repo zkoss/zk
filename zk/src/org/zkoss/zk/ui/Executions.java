@@ -299,6 +299,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param pagedef the page definition to use. It cannot be null.
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
@@ -329,6 +332,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
@@ -361,6 +367,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if
@@ -402,6 +411,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param content the raw content in DOM.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if
@@ -445,6 +457,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param reader the reader to retrieve the raw content in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if
@@ -480,6 +495,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param uri the URI of the page file.
 	 *
 	 * @see #getPageDefinitionDirectly(WebApp, String, String)
@@ -503,6 +521,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param content the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if
@@ -532,6 +553,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param content the raw content of the page in DOM.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if
@@ -562,6 +586,9 @@ public class Executions {
 	 *
 	 * @param wapp the Web application. It is optional and used only if
 	 * no current execution (e.g., in a working thread).
+	 * The instance of {@link WebApp} can be retrieved by use of {@link org.zkoss.zk.ui.http.WebManager#getWebApp},
+	 * while the instance of {@link org.zkoss.zk.ui.http.WebManager} can be retrieved
+	 * by {@link org.zkoss.zk.ui.http.WebManager#getWebManager}
 	 * @param reader used to input the raw content of the page. It must be in ZUML.
 	 * @param extension the default extension if the content doesn't specify
 	 * an language. In other words, if

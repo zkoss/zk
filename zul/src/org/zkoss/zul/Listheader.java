@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * The list header which defines the attributes and header of a column
@@ -140,7 +141,8 @@ public class Listheader extends HeaderElement {
 	}
 
 	/** Sets the type of the sorter.
-	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3) or "none".
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3),
+	 * "auto(<i>number</i>)" (since 5.0.6) or "none".
 	 * 
 	 * <p>If "client" or "client(number)" is specified,
 	 * the sort functionality will be done by Javascript at client without notifying
@@ -164,7 +166,12 @@ public class Listheader extends HeaderElement {
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.
-
+	 *
+	 * <p>If "auto(<i>number</i>)" is specified, 
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ArrayComparator}. Notice that the data must
+	 * be an array and the number-th element must be comparable ({@link Comparable}).
+	 *
 	 * <p>If "none" is specified, both {@link #setSortAscending} and
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
@@ -187,11 +194,22 @@ public class Listheader extends HeaderElement {
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String fieldnames = type.substring(j+1, k);
+				final String name = type.substring(j+1, k);
+				char cc;
+				int index = -1;
+				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
+					if ((index = Integer.parseInt(name)) < 0)
+						throw new IllegalArgumentException("Nonnegative number is required: "+name);
 				if (getSortAscending() == null)
-					setSortAscending(new FieldComparator(fieldnames, true));
+					if (index < 0)
+						setSortAscending(new FieldComparator(name, true));
+					else
+						setSortAscending(new ArrayComparator(index, true));
 				if (getSortDescending() == null)
-					setSortDescending(new FieldComparator(fieldnames, false));
+					if (index < 0)
+						setSortDescending(new FieldComparator(name, false));
+					else
+						setSortDescending(new ArrayComparator(index, false));
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
@@ -343,17 +361,17 @@ public class Listheader extends HeaderElement {
 	 * <p>It sorts the listitem by use of {@link Components#sort}
 	 * data (i.e., {@link Grid#getModel} is null).
 	 *
-	 * <p>On the other hand, it invokes {@link ListModelExt#sort} to sort
+	 * <p>On the other hand, it invokes {@link Sortable#sort} to sort
 	 * the list item, if live data (i.e., {@link Listbox#getModel} is not null).
 	 * In other words, if you use the live data, you have to implement
-	 * {@link ListModelExt} to sort the live data explicitly.
+	 * {@link Sortable} to sort the live data explicitly.
 	 *
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * @return whether the list items are sorted.
 	 * @exception UiException if {@link Listbox#getModel} is not
-	 * null but {@link ListModelExt} is not implemented.
+	 * null but {@link Sortable} is not implemented.
 	 */
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
@@ -379,9 +397,9 @@ public class Listheader extends HeaderElement {
 				if (model instanceof GroupsModelExt) {
 					sortGroupsModel(box, (GroupsModelExt)model, cmpr, ascending);
 				} else {
-					if (!(model instanceof ListModelExt))
-						throw new UiException("ListModelExt must be implemented in "+model.getClass().getName());
-					sortListModel((ListModelExt)model, cmpr, ascending);
+					if (!(model instanceof Sortable))
+						throw new UiException("Sortable must be implemented in "+model.getClass().getName());
+					sortListModel((Sortable)model, cmpr, ascending);
 				}
 			} else { //not live data
 				sort0(box, cmpr);
@@ -413,7 +431,7 @@ public class Listheader extends HeaderElement {
 		model.sort(cmpr, ascending, box.getListhead().getChildren().indexOf(this));
 	}
 	@SuppressWarnings("unchecked")
-	private void sortListModel(ListModelExt model, Comparator cmpr, boolean ascending) {
+	private void sortListModel(Sortable model, Comparator cmpr, boolean ascending) {
 		model.sort(cmpr, ascending);
 	}
 	/** Sorts the items. If with group, each group is sorted independently.

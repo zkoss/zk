@@ -69,7 +69,7 @@ alert("Exception:"+x.getClass()+":"+x.getMessage());
 		<button label="1.add group " onClick="addNewGroup()"/>
 		<button label="2.add foot" onClick="addFoot()"/>
 	</hbox>
-	<grid fixedLayout="true">
+	<grid>
         <columns sizable="true">
           <column width="200px" label="From"/>
           <column label="Subject"/>

@@ -25,7 +25,7 @@ padding:0px;
 overflow:hidden;
 }
 </style>
-<listbox vflex="true" height="100%" width="100%" fixedLayout="true">
+<listbox vflex="true" height="100%" width="100%">
 <listhead sizable="true">
 <listheader sort="auto">Header 1</listheader>
 <listheader sort="auto">Header 2</listheader>

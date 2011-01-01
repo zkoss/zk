@@ -43,7 +43,7 @@ rows.appendChild(row);
 ]]>
 </zscript>
 
-<grid id="grid1" fixedLayout="true" width="300px" height="400px" >
+<grid id="grid1" width="300px" height="400px" >
 <columns>
 <column width="25px" />
 <column label="Attribut"/>

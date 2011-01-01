@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Wnen you scoll the horizontal scrollbar, the head and body should be scolled correctly.
-<listbox fixedLayout="true">
+<listbox>
 <listhead sizable="true">
 <listheader label="Subject" width="20em" sort="auto" />
 <listheader label="Subt34" width="20em" sort="auto" />

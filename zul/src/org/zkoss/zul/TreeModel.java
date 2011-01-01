@@ -28,11 +28,10 @@ import org.zkoss.zul.event.TreeDataEvent;
  * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
  *
  * @author Jeff Liu
- * @since ZK 3.0.0
+ * @since 3.0.0
  *
  */
 public interface TreeModel<E> {
-	
 	/**
 	 * Returns true if node is a leaf.
 	 * @param node a node in the tree, obtained from this data source
@@ -53,7 +52,17 @@ public interface TreeModel<E> {
 	 * @return the number of children of the node parent
 	 */
 	public int getChildCount(E parent);
-	
+
+	/**
+	 * Returns the index of child in parent.
+	 * If either parent or child is null, returns -1. If either parent or child don't belong to this tree model, returns -1. 
+	 * @param parent a node in the tree, obtained from this data source
+     * @param child the node we are interested in 
+	 * @return the index of the child in the parent, or -1 if either child or parent are null or don't belong to this tree model
+	 * @since 5.0.6
+	 */
+	public int getIndexOfChild(E parent, E child);
+
 	/**
 	 * Returns the root of the tree.
 	 * @return the root of Tree.
@@ -71,21 +80,4 @@ public interface TreeModel<E> {
 	 * @param l the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
-	
-	/**
-	 * Returns an integer array to represent the path from parent(exclusive) to lastNode(inclusive).
-	 * <br>notice:<br>
-	 * The path has to be in "parent" to "lastNode" order<br>
-	 * Ex: {1,0,2}<br>
-	 * 	1. Go to the parent's child at index(1);<br>
-	 *  2. Go to the index(1)'s child at index(0);<br>
-	 *  3. Go to the index(0)'s child at idnex(2) -- the lastNode;<br>
-	 * If parent is the same as lastNode, return null or empty array. 
-	 * 
-	 * @param parent the origin of Path
-	 * @param lastNode the destination of Path
-	 * @return an integer array to represent the path from parent to lastNode.
-	 */
-	public int[] getPath(E parent, E lastNode);
-	
 }

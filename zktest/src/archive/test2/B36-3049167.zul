@@ -7,7 +7,7 @@
 	</html>
 	<hbox>
 		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="listitem"
-			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			oddRowSclass="non-odd" mold="paging" pageSize="5">
 			<listitem draggable="listitem" droppable="listitem" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
@@ -34,7 +34,7 @@
 			</listitem>
 		</listbox>
 		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="grid" 
-			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			oddRowSclass="non-odd" mold="paging" pageSize="5">
 			<rows>
 			<row draggable="grid" droppable="grid" onDrop="move(event.dragged)">
 				<label value="ZK Forge" />

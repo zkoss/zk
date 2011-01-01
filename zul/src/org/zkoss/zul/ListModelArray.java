@@ -17,6 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.lang.Objects;
@@ -40,7 +41,7 @@ import java.util.List;
  * @see ListModelMap
  */
 public class ListModelArray<E> extends AbstractListModel<E>
-implements ListModelExt<E>, java.io.Serializable {
+implements Sortable<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected final Object[] _array;
@@ -134,7 +135,7 @@ implements ListModelExt<E>, java.io.Serializable {
 		return (E)_array[j];
 	}
 	
-	//-- ListModelExt --//
+	//-- Sortable --//
 	/** Sorts the data.
 	 *
 	 * @param cmpr the comparator.
