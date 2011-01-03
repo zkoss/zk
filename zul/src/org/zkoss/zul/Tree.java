@@ -1294,11 +1294,7 @@ public class Tree extends XulElement implements Paginated {
 		if (Objects.equals(root, node))
 			return this;
 
-		try {
-			return getChildByNode0(_model, _treechildren, root, node);
-		} catch (AbstractMethodError ex) { //5.0.5 or prior (no getIndexOfChild)
-			return OldTreeModels.getChildByNode(_model, this, root, node);
-		}
+		return getChildByNode0(_model, _treechildren, root, node);
 	}
 	private static Component
 	getChildByNode0(TreeModel<Object> model, Treechildren tc, Object parent, Object node) {
