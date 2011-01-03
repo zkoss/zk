@@ -30,6 +30,7 @@ ZK 5.0.6
   3141549: Hlayout not handle hflex well (onSize not fired if empty)
   3109311: listbox sizedByContent cause javascript
   3106676: Datebox allows selection of past days when no empty, no past
+  3126388: Flahschart could not work with type stackcolumn
   
 * Upgrade Notes
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild

@@ -248,26 +248,37 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 					jData.put(_yAxis, tempModel.getY(series, 0));
 					list.add(jData);
 				}
-				for(int j = 0; j < 2; j++){
-					JSONObject json = new JSONObject();
-					String tempType = _type.split(":")[1];
-					if(j == 0){
-						json.put("type", tempType.split(",")[0]);
-						json.put("displayName", _yAxis);
-						json.put("yField", _yAxis);
-					} else {
-						json.put("type", tempType.split(",")[1]);
-						json.put("displayName", _xAxis);
-						json.put("yField", _xAxis);
-					}
-					_seriesList.add(json);
+				
+				JSONObject[] json = new JSONObject[] {new JSONObject(), new JSONObject()};
+				
+				// Bug ID: 3126338
+				String tempType = getType();
+				String tempType_yAxis = "";
+				String tempType_xAxis = "";
+				
+				if (tempType != null) {
+					tempType = getType().indexOf(":") > -1 ? _type.split(":")[1] : getType();
+					tempType_yAxis = tempType.indexOf(",") > -1 ? tempType.split(",")[0] : "";
+					tempType_xAxis = tempType.indexOf(",") > -1 ? tempType.split(",")[1] : "";
 				}
+				
+				json[0].put("type", tempType_yAxis);
+				json[0].put("displayName", _yAxis);
+				json[0].put("yField", _yAxis);
+				_seriesList.add(json[0]);
+				json[1].put("type", tempType_xAxis);
+				json[1].put("displayName", _xAxis);
+				json[1].put("yField", _xAxis);
+				_seriesList.add(json[1]);
 			}
 		};
 		return list;
 	}
 		
 	private String getJSONResponse(List list) {
+		// list may be null.
+		if (list == null) return "";
+		
 	    final StringBuffer sb = new StringBuffer().append('[');
 	    for (Iterator it = list.iterator(); it.hasNext();) {
 	    	String s = String.valueOf(it.next());
