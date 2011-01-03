@@ -7,7 +7,7 @@
 	History:
 		Sun Jan 17 11:48:04 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 package org.zkoss.zkplus.liferay;
