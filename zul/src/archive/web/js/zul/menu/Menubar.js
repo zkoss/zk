@@ -83,9 +83,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
-		if (this.desktop) {
-			this.onSize();
-		}
+		this._checkScrolling();
 	},
 	
 	getZclass: function () {
