@@ -7,7 +7,7 @@
 	History:
 		Fri Dec 31 10:44:45 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 package org.zkoss.zul;

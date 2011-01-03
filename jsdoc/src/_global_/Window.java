@@ -7,7 +7,7 @@
 	History:
 		Thu Jul  8 11:18:35 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 package _global_;

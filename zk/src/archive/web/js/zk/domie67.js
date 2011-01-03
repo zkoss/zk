@@ -7,7 +7,7 @@
 	History:
 		Fri Oct 29 15:49:08 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 //IE: use query string if possible to avoid incomplete-request problem

@@ -7,7 +7,7 @@
 	History:
 		Tue Sep 28 19:09:15 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 zk.copy(zjq.prototype, {
