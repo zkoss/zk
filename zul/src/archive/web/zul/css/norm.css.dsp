@@ -334,6 +334,7 @@ div.z-drop-cnt {
 	height:1px !important;
 	-moz-outline:0 none; outline:0 none;
 	-moz-user-select:text; -khtml-user-select:text;
+	overflow:hidden;
 }
 
 <%-- upload button --%>
