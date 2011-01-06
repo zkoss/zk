@@ -24,6 +24,10 @@ package org.zkoss.zul;
  * <p>{@link DefaultTreeModel} depends on {@link TreeNode} only.
  * It does not depend on {@link DefaultTreeNode}. However, {@link DefaultTreeNode}
  * depends on {@link DefaultTreeModel}.
+ *
+ * <p>For introduction, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer's_Reference/MVC/Model/Tree_Model">ZK Developer's Reference: Tree Model</a>.
+ *
  * @author tomyeh
  * @since 5.0.6
  */

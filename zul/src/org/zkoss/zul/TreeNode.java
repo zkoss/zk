@@ -12,8 +12,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
-
 /**
  * Defines the requirements for a tree node object that can change --
  * by adding or removing child nodes, or by changing the contents of
