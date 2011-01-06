@@ -35,6 +35,7 @@ ZK 5.0.6
   3118324: Possible bug in Grid with Frozen + Footer + horizontal scroll
   3150160: listheader hflex="min" give 0 column width
   3118444: IE 6  Menu popup have wired point 
+  3152311: The between constraint of datebox cause infinite loop
   
 * Upgrade Notes
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild

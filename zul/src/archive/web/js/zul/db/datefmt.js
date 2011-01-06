@@ -80,7 +80,7 @@ zk.fmt.Date = {
 				}
 			} else if (ary.length) {
 				if (txt.charAt(k-1).match(/\d/))
-					while (f == fmt.charAt(i-1)) {
+					while (f == fmt.charAt(i-1) && f) {
 						i++;
 						f = fmt.charAt(i);
 					}
