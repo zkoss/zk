@@ -42,7 +42,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	private transient List _listeners = new LinkedList();
 	
 	/**
-	 * Constructor.
+	 * Creates a {@link AbstractTreeModel}.
 	 * @param root root of tree
 	 */
 	public AbstractTreeModel(Object root){
@@ -60,7 +60,7 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
-	protected void fireEvent(Object node, int indexFrom, int indexTo, int evtType){
+	public void fireEvent(Object node, int indexFrom, int indexTo, int evtType){
 		final TreeDataEvent evt = new TreeDataEvent(this,evtType, node, indexFrom,indexTo);
 		for (Iterator it = _listeners.iterator(); it.hasNext();)
 			((TreeDataListener)it.next()).onChange(evt);

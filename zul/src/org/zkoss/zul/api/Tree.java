@@ -534,8 +534,8 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * opened ({@link Treeitem#setOpen}). If you want to visit the rendered item
 	 * in paging mold, please invoke {@link #setActivePageApi(Treeitem)}.
 	 * 
-	 * @param path
-	 *            - an int[] path, see {@link TreeModel#getPath}
+	 * @param path - an index path. The first element is the index at the first level
+	 * of the tree structure.
 	 * @return the treeitem from tree by given path
 	 */
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path);

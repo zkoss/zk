@@ -1380,12 +1380,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 
 	/**
-	 * Return the Tree or Treeitem component by a given associated node in model.<br>
-	 * This implmentation calls {@link TreeModel#getPath} method to locate assoicated
-	 * Treeitem (or Tree) via path. You can override this method to speed up
-	 * performance if possible.
-	 * Return null, if the Tree or Treeitem is not yet rendered.
-	 * <p>Author: jeffliu
+	 * Return the Tree or Treeitem component by a given associated node in model.
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node) {
@@ -1827,8 +1822,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 	/**
 	 * Get the node from tree by given path
-	 * @param path
-	 * @param root
 	 * @return the node from tree by given path
 	 * @since 3.0.0
 	 */
@@ -1846,7 +1839,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
-	 * @param path - an int[] path, see {@link TreeModel#getPath}
+	 * @param path - an index path. The first element is the index at the first level
+	 * of the tree structure.
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
 	 */
@@ -1884,7 +1878,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
-	 * @param path - an int[] path, see {@link TreeModel#getPath}
+	 * @param path - an index path. The first element is the index at the first level
+	 * of the tree structure.
 	 * @return the treeitem from tree by given path
 	 * @since 3.5.2
 	 */

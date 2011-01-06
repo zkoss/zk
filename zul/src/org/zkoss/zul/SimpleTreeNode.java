@@ -20,6 +20,9 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 
 /**
+ * @deprecated As of release 5.0.6, replaced with {@link DefaultTreeNode},
+ * which is mutable.
+ *
  * A simple implementation of {@link TreeNode} to be used with
  * {@link SimpleTreeModel}.
  * Note: It assumes the content is immutable.

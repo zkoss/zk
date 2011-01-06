@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
+ * @deprecated As of release 5.0.6, replaced with {@link DefaultTreeModel}.
  * A simple implementation of {@link TreeModel}.
  * Note: It assumes the content is immutable.
  *
@@ -25,6 +26,7 @@ package org.zkoss.zul;
  */
 public class SimpleTreeModel extends AbstractTreeModel {
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link DefaultTreeModel}.
 	 * Constructor
 	 * @param root - the root of tree 
 	 */
