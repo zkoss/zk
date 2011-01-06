@@ -56,12 +56,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ftfaker = wgt.eftfaker,
 			head = wgt.head,
 			headn = head ? head.$n() : null,
+			fakerflex = head ? head.$n('bdfakerflex') : null, 
 			wds = [],
 			width = 0,
 			w = head ? head = head.lastChild : null,
 			headWgt = wgt.getHeadWidget();
 
-		for (var i = bdfaker.cells.length; i--;) {
+		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 			var wd = bdwd = bdfaker.cells[i].offsetWidth,
 				$cv = zk(w.$n('cave')),
 				hdwd = w ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
@@ -95,7 +96,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
 	_prehgh: -1,
-	
+	_minWd: null,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.heads = [];
@@ -804,6 +805,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	beforeMinFlex_: function (orient) {
 		if (this._hflexsz === undefined && this.isSizedByContent() && orient == 'w' && this.width === undefined)
 			this._calcSize();
+		return null;
+	},
+	_calcMinWds: function () {
+		return _calcMinWd(this);
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,
@@ -837,8 +842,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (total == this.ebody.offsetWidth && 
 			this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
 			total = tblwd;
-			
-		var xwds = _calcMinWd(this),
+		this._minWd = _calcMinWd(this);
+		var xwds = this._minWd,
 			wds = xwds.wds,
 			width = xwds.width,
 			isSpan = !this.getHflex() && this.isSpan(),

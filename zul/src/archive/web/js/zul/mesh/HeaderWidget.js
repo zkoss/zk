@@ -265,6 +265,20 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	ignoreChildNodeOffset_: function(attr) {
 		return true;
 	},
+	//@Override to find the minimum width of listheader
+	beforeMinFlex_: function(o) {
+		if (o == 'w') {
+			var wgt = this.getMeshWidget();
+			if (wgt && !wgt._minWd)
+				wgt._minWd = wgt._calcMinWds();
+			if (wgt && wgt._minWd) {
+				for (var cwgt = this.parent.firstChild, j = 0; cwgt; cwgt = cwgt.nextSibling, ++j)
+					if (cwgt == this)
+						return wgt._minWd.wds[j];
+			}
+		}
+		return null;
+	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;
 	},

@@ -1,0 +1,20 @@
+<?page title="Bug ID: 3126338" contentType="text/html;charset=UTF-8"?>
+<zk>
+<label value="If you can see stackcolumn chart, it is correct." />
+<flashchart id="stackcolumn" width="400" height="300"
+		type="stackcolumn" />
+	<zscript><![CDATA[
+	import org.zkoss.zul.*;
+	SimpleXYZModel model = new SimpleXYZModel();
+	model.addValue("2001", new Integer(20), new Integer(120), new Integer(120));
+	model.addValue("2001", new Integer(40), new Integer(135), new Integer(120));
+	model.addValue("2001", new Integer(60), new Integer(140), new Integer(120));
+	model.addValue("2001", new Integer(80), new Integer(160), new Integer(120));
+
+	model.addValue("2002", new Integer(30), new Integer(120), new Integer(120));
+	model.addValue("2002", new Integer(50), new Integer(135), new Integer(120));
+	model.addValue("2002", new Integer(70), new Integer(140), new Integer(120));
+	model.addValue("2002", new Integer(90), new Integer(160), new Integer(120));
+	stackcolumn.setModel(model);
+]]></zscript>
+</zk>

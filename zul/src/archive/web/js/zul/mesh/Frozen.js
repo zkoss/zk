@@ -190,10 +190,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if (n.style.width.indexOf('px') == -1) {
 					var sw = n.style.width = jq.px0(n.offsetWidth),
 						wgt = zk.Widget.$(n);
-					if ((faker = wgt.$n('bdfaker')))
-						faker.style.width = sw;
-					if ((faker = wgt.$n('ftfaker')))
-						faker.style.width = sw;
+					if (!wgt.$instanceof(zul.mesh.HeadWidget)) {
+						if ((faker = wgt.$n('bdfaker')))
+							faker.style.width = sw;
+						if ((faker = wgt.$n('ftfaker')))
+							faker.style.width = sw;
+					}
 				}
 			}
 			var colhead = mesh.head.getChildAt(this._columns).$n();
@@ -208,13 +210,26 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						faker.style.display = display;
 					if ((faker = jq('#' + n.id + '-bdfaker')[0]))
 						faker.style.display = display;
-					if ((faker = jq('#' + n.id + '-fdfaker')[0]))
+					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
 						faker.style.display = display;
 
 					//body
 					for (var i = 0, rl = rows.length, cells;
 					i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
 						cells[ofs].style.display = display;
+						
+					// foot
+					if (mesh.foot) {
+						var eFootTbl = mesh.efoottbl;
+						
+						if (eFootTbl) {
+							var tBodies = eFootTbl.tBodies;
+							
+							if (tBodies) {
+								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.display = display;
+							}
+						}
+					}
 				}
 			}
 

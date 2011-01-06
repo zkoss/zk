@@ -80,6 +80,12 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		 */
 		autodrop: null
 	},
+	
+	setWidth: function () {
+		this.$supers('setWidth', arguments);
+		this._checkScrolling();
+	},
+	
 	getZclass: function () {
 		return this._zclass == null ? "z-menubar" +
 				("vertical" == this.getOrient() ? "-ver" : "-hor") : this._zclass;
@@ -140,6 +146,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			this._checkScrolling();
 		this._syncChdWidth(); //Merge breeze
 	},
+	
 	_checkScrolling: function () {
 		if (!this.checkScrollable()) return;
 		

@@ -41,7 +41,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, java.io.Seri
 	private transient List<TreeDataListener> _listeners = new LinkedList<TreeDataListener>();
 	
 	/**
-	 * Constructor.
+	 * Creates a {@link AbstractTreeModel}.
 	 * @param root root of tree
 	 */
 	public AbstractTreeModel(E root){
@@ -59,7 +59,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, java.io.Seri
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
-	protected void fireEvent(E node, int indexFrom, int indexTo, int evtType){
+	public void fireEvent(E node, int indexFrom, int indexTo, int evtType){
 		final TreeDataEvent<E> evt = new TreeDataEvent<E>(this,evtType, node, indexFrom,indexTo);
 		for (TreeDataListener l: _listeners)
 			l.onChange(evt);

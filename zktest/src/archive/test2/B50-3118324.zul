@@ -1,0 +1,64 @@
+<?page title="Bug ID: 3118324" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<style>
+		.z-label, .z-radio { display:block; } tr.z-row td.z-row-inner {
+		padding: 2px 5px; } .z-row-cnt, .z-column-cnt { text-align:
+		center; } .category-center .z-auxheader-cnt { text-align:
+		center; } .footer_right { text-align:right; }
+		.footer_right_black { text-align:right; background-color:
+		#000000; color:#ffffff; }
+	</style>
+	<label value="Scroll the grid. If footer cannot be scrolled, it is a bug." />
+	<grid id="demoGrid" width="700px">
+		<auxhead sclass="category-center">
+			<auxheader label="Healthy Food List" colspan="6"
+				rowspan="1" />
+		</auxhead>
+		<auxhead sclass="category-center">
+			<auxheader label="Category Select" colspan="1" rowspan="1" />
+			<auxheader colspan="5" rowspan="1">
+				<radiogroup>
+					<hlayout>
+						<radio label="All Food" checked="true"
+							width="100px" />
+						<radio label="Vegetables" width="100px" />
+						<radio label="Seafood" width="100px" />
+						<radio label="Fruits" width="100px" />
+						<radio label="Poultry and Lean Meats"
+							width="100px" />
+					</hlayout>
+				</radiogroup>
+			</auxheader>
+		</auxhead>
+		<frozen style="background: #DFDED8" columns="1">
+			<div style="padding: 0 10px;" />
+		</frozen>
+		<columns>
+			<column width="150px">Category</column>
+			<column width="150px">Name</column>
+			<column width="150px">Top Nutrients</column>
+			<column width="150px">% of Daily</column>
+			<column width="150px">Calories</column>
+			<column width="150px">Quantity</column>
+		</columns>
+		<rows>
+			<row>
+				<cell>aaa</cell>
+				<cell>Q1</cell>
+				<cell>Jan</cell>
+				<cell>Nison</cell>
+				<cell>Timothy</cell>
+				<cell>Kelly</cell>
+			</row>
+		</rows>
+		<foot>
+			<footer id="footer_category" class="footer_right_black" label="A Total of 1 Food Items" />
+			<footer id="footer_name" class="footer_right" />
+			<footer id="footer_top_nutrients"
+				class="footer_right_black" />
+			<footer id="footer_percent_daily" class="footer_right" />
+			<footer id="footer_calories" class="footer_right_black" />
+			<footer id="footer_quantity" class="footer_right" label="Qty 1" />
+		</foot>
+	</grid>
+</zk>

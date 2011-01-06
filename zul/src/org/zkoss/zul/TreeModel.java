@@ -34,8 +34,10 @@ import org.zkoss.zul.event.TreeDataEvent;
 public interface TreeModel<E> {
 	/**
 	 * Returns true if node is a leaf.
+	 * Notice that not all non-leaf nodes have children.
+	 * In file-system terminology, a leaf node is a file, while a non-leaf node is a folder.
 	 * @param node a node in the tree, obtained from this data source
-	 * @return true if node is a leafs
+	 * @return true if node is a leaf.
 	 */
 	public boolean isLeaf(E node);
 
