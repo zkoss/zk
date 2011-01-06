@@ -41,6 +41,9 @@ ZK 5.0.6
     is added (the same as javax.swing.tree.TreeModel).
     Notice it is backward compatible if you don't re-compile, or extend from
     AbstractTreeModel
+  + org.zkoss.zul.Tree's getTreeitemRenderer and setTreeitemRender are deprecated
+    and replaced with getItemRenderer and setItemRenderer
+    (so the naming is consistent with Listbox and others)
 
 	--------
 ZK 5.0.5
