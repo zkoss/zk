@@ -24,7 +24,8 @@ function (out) {
 		y = val.getFullYear(),
 		ydelta = new zk.fmt.Calendar(val).getYear() - y, 
 		yofs = y - (y % 10 + 1),
-		ydec = zk.parseInt(y/100);
+		ydec = zk.parseInt(y/100),
+		tags = zk.ie || zk.gecko ? "a" : "button";
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
 			'<tr><td class="', zcls, '-tdl"><div  class="', zcls, '-left"><div id="', uuid, '-ly" class="', zcls, '-left-icon');
 
@@ -74,27 +75,24 @@ function (out) {
 					out.push ('<td class="', (k == sun || k == sat) ? zcls + '-wkend ' : zcls + '-wkday ', '"></td>');
 				out.push('</tr>');
 			}
-		out.push('</table></td></tr>');
 		break;
 	case "month" :
 		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'"><a href="javascript:;">', zk.SMON[j] + '</a></td>');
+			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', zk.SMON[j] + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
-		out.push('</table></td></tr>');
 		break;
 	case "year" :
 		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
 
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" ><a href="javascript:;">', yofs + ydelta, '</a></td>');
+			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" >', yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
-		out.push('</table></td></tr>');
 		break;
 	case "decade" :
 		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
@@ -109,11 +107,12 @@ function (out) {
 			}
 			
 			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
-					' ><a href="javascript:;">', temp + ydelta, '-<br />', temp + ydelta + 9, '</a></td>');
+					' >', temp + ydelta, '-<br />', temp + ydelta + 9, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
-		out.push('</tr></table></td></tr>');
 		break;
 	}
-	out.push('</table></div>');
+	out.push('</table><', tags, ' id="', uuid,
+			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
+			' class="z-focus-a"></td></tr></table></div>');
 }

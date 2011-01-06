@@ -44,7 +44,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.db.Renderer = {
 	/** Returns the HTML fragment representing a day cell.
 	 * By overriding this method, you could customize the look of a day cell.
-	 * <p>Default: <code>&lt;a href="javascript"&gt;day&lt;/a&gt;</code>
+	 * <p>Default: day
 	 * @param zul.db.Calendar cal the calendar
 	 * @param int y the year
 	 * @param int m the month (between 0 to 11)
@@ -54,7 +54,7 @@ zul.db.Renderer = {
 	 * @since 5.0.3
 	 */
 	cellHTML: function (cal, y, m, day, monthofs) {
-		return '<a href="javascript:;">' + day + '</a>';
+		return day;
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
 	 * <p>Default: does nothing
@@ -278,9 +278,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this._view != 'decade') 
 			this._markCal({timeout: timeout});
 		else {
-			var anc = jq(this.$n()).find('.' + this.getZclass() + '-seld')[0];
-			if (anc)
-				_doFocus(anc.firstChild, true);
+			var anc;
+			if (anc = this.$n('a'))
+				_doFocus(anc, true);
 		}
 		return true;
 	},
@@ -416,6 +416,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				continue; //skip
 			}
 		this._chooseDate(target, val);
+		var anc;
+		if (anc = this.$n('a'))
+			_doFocus(anc, true);
+
 		evt.stop();
 	},
 	_chooseDate: function (target, val) {
@@ -501,7 +505,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
-			today = zUtl.today();
+			today = zUtl.today(),
+			anc = this.$n('a');
 
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
@@ -513,7 +518,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					jq(mon).addClass(zcls+"-seld");
 					jq(mon).removeClass(zcls+"-over");
 					if (!opts || !opts.silent)
-						_doFocus(mon.firstChild, opts && opts.timeout);
+						_doFocus(anc, opts && opts.timeout);
 				} else
 					jq(mon).removeClass(zcls+"-seld");
 			}
@@ -522,7 +527,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					jq(year).addClass(zcls+"-seld");
 					jq(year).removeClass(zcls+"-over");
 					if (!opts || !opts.silent)
-						_doFocus(year.firstChild, opts && opts.timeout);
+						_doFocus(anc, opts && opts.timeout);
 				} else
 					jq(year).removeClass(zcls+"-seld");
 			}
@@ -563,7 +568,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).removeClass(zcls+"-disd");
 						jq(cell).html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
 						if (bSel && (!opts || !opts.silent))
-							_doFocus(cell.firstChild, opts && opts.timeout );
+							_doFocus(anc, opts && opts.timeout );
 					}
 				}
 			}
