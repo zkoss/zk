@@ -143,6 +143,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				if ((rstatus = req.status) == 200) { //correct
 					if (sid && sid != seqId) {
 						_errCode = "ZK-SID " + (sid ? "mismatch": "required");
+						afterResponse(); //continue the pending request if any
 						return;
 					} //if sid null, always process (usually for error msg)
 
@@ -224,6 +225,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		}
 
+		afterResponse();
+	}
+	function afterResponse() { 
+		zAu._doCmds();
+
 		//handle pending ajax send
 		if (sendPending && !ajaxReq && !pendingReqInf) {
 			sendPending = false;
@@ -231,8 +237,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			for (var dtid in dts)
 				ajaxSend2(dts[dtid], 0);
 		}
-
-		zAu._doCmds();
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
@@ -601,7 +605,7 @@ zAu = {
 		var cmds = [];
 		cmds.dt = zk.Desktop.$(dtid);
 		pushCmds(cmds, rs);
-		this._doCmds();
+		zAu._doCmds();
 	},
 	_doCmds: function () { //called by mount.js, too
 		for (var fn; fn = doCmdFns.shift();)
