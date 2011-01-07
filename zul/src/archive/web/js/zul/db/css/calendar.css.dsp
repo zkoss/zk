@@ -104,15 +104,13 @@
 .z-calendar-calyear td,
 .z-calendar-calmon td {
 	padding: 12px 3px;
-	text-align: center;
-	cursor: pointer;
 }
 .z-calendar-calday {
 	table-layout: fixed;
 }
-.z-calendar-caldayrow td,
-.z-calendar td a,
-.z-calendar td a:visited {
+.z-calendar-calyear td,
+.z-calendar-calmon td,
+.z-calendar-caldayrow td {
 	font-size: ${fontSizeS}; 
 	color: #35254F; 
 	text-align: center;
@@ -121,10 +119,8 @@
 	-moz-user-select: none;
 }
 
-.z-calendar-calyear td a,
-.z-calendar-calyear td a:visited,
-.z-calendar-calmon td a,
-.z-calendar-calmon td a:visited {
+.z-calendar-calyear td,
+.z-calendar-calmon td {
 	font-size: ${fontSizeM};
 }
 .z-calendar-calday td {
@@ -157,7 +153,7 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
-.z-calendar td.z-calendar-over-seld a {
+.z-calendar td.z-calendar-over-seld {
 	color: white;
 }
 .z-calendar-caldow td {
@@ -172,13 +168,13 @@
 .z-calendar .z-weekend {
 	color: red;
 }
-.z-calendar .z-outside a {
+.z-calendar .z-outside {
 	color: #888;
 }
 
 <c:if test="${c:isExplorer()}">
 .z-datebox-rounded-calyear td,
 .z-calendar-calyear td, .z-datebox-calyear td {
-	color: black; <%-- 1735084 --%>
+	color: #35254F; <%-- 1735084 --%>
 }
 </c:if>

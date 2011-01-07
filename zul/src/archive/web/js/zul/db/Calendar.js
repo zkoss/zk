@@ -515,8 +515,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				yy = y % 10 + 1;
 			if (mon) {
 				if (m == j) {
-					jq(mon).addClass(zcls+"-seld");
-					jq(mon).removeClass(zcls+"-over");
+					jq(mon).addClass(zcls+"-seld")
+							.removeClass(zcls+"-over");
 					if (!opts || !opts.silent)
 						_doFocus(anc, opts && opts.timeout);
 				} else
@@ -524,8 +524,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 			if (year) {
 				if (yy == j) {
-					jq(year).addClass(zcls+"-seld");
-					jq(year).removeClass(zcls+"-over");
+					jq(year).addClass(zcls+"-seld").
+								removeClass(zcls+"-over");
 					if (!opts || !opts.silent)
 						_doFocus(anc, opts && opts.timeout);
 				} else
@@ -550,12 +550,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						cell._monofs = monofs;
 
 						//hightlight day
-						jq(cell).removeClass(zcls+"-over")
-							.removeClass(zcls+"-over-seld");
-						if (bSel)
+						jq(cell).removeClass(zcls+"-seld");
+						if (bSel) {
 							jq(cell).addClass(zcls+"-seld");
-						else
+							if (jq(cell).hasClass(zcls + "-over"))
+								jq(cell).addClass(zcls + "-over-seld");;
+						} else
 							jq(cell).removeClass(zcls+"-seld");
+							
 						//not same month
 						if (monofs)
 							jq(cell).addClass("z-outside");
