@@ -2299,7 +2299,7 @@ public class UiEngineImpl implements UiEngine {
 	private static void afterInvoke(Composer composer, boolean bRoot, boolean old) {
 		if (!bRoot && composer instanceof MultiComposer)
 			((MultiComposer)composer).setFullComposerOnly(old);
-		}
+	}
 	/*package*/ void doAfterCompose(Component comp, boolean bRoot)
 	throws Exception {
 		if (_composers != null)
