@@ -146,27 +146,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this._end = d;
 				}
 				
-				this._beg.setHours(0);
-				this._beg.setMinutes(0);
-				this._beg.setSeconds(0);
-				this._beg.setMilliseconds(0);
-				
-				this._end.setHours(0);
-				this._end.setMinutes(0);
-				this._end.setSeconds(0);
-				this._end.setMilliseconds(0);
+				this._beg.setHours(0, 0, 0, 0);
+				this._end.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith("before")) {
 				this._end = new zk.fmt.Calendar().parseDate(constraint.substring(6), 'yyyyMMdd');
-				this._end.setHours(0);
-				this._end.setMinutes(0);
-				this._end.setSeconds(0);
-				this._end.setMilliseconds(0);
+				this._end.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith("after")) {
 				this._beg = new zk.fmt.Calendar().parseDate(constraint.substring(5), 'yyyyMMdd');
-				this._beg.setHours(0);
-				this._beg.setMinutes(0);
-				this._beg.setSeconds(0);
-				this._beg.setMilliseconds(0);
+				this._beg.setHours(0, 0, 0, 0);
 			}
 		},
 		/** Sets the name of this component.
@@ -294,10 +281,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			zcls = this.getZclass();
 		jq(title).hover(
 			function () {
-				$(this).toggleClass(zcls + "-title-over");
+				jq(this).toggleClass(zcls + "-title-over");
 			},
 			function () {
-				$(this).toggleClass(zcls + "-title-over");
+				jq(this).toggleClass(zcls + "-title-over");
 			}
 		);
 		if (this._view != 'decade') 
@@ -333,8 +320,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			var s = this.$n().style,
 				w = s.width,
-				h = s.height;
-			var result = this.$supers('rerender', arguments);
+				h = s.height,
+				result = this.$supers('rerender', arguments);
 			s = this.$n().style;
 			s.width = w;
 			s.height = h;
@@ -376,17 +363,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	_doMouseEffect: function (evt) {
-		var node = jq.nodeName(evt.domTarget, "td") ? evt.domTarget : evt.domTarget.parentNode,
+		var $node = jq(evt.domTarget),
 			zcls = this.getZclass();
 			
-		if (jq(node).hasClass(zcls + '-disd'))
+		if ($node.hasClass(zcls + '-disd'))
 			return;
 			
-		if (jq(node).is("."+zcls+"-seld")) {
-			jq(node).removeClass(zcls + "-over");
-			jq(node).toggleClass(zcls + "-over-seld");
+		if ($node.is("."+zcls+"-seld")) {
+			$node.removeClass(zcls + "-over")
+				.toggleClass(zcls + "-over-seld");
 		}else {
-			jq(node).toggleClass(zcls + "-over");
+			$node.toggleClass(zcls + "-over");
 		}
 	},
 	/** Returns the Date that is assigned to this component.
@@ -500,81 +487,62 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var	zcls = this.getZclass(),
 		 	seldate = this.getTime(),
 		 	m = seldate.getMonth(),
-			d = seldate.getDate(),
-			y = seldate.getFullYear(),
-			last = new Date(y, m + 1, 0).getDate(), //last date of this month
-			prev = new Date(y, m, 0).getDate(), //last date of previous month
-			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
-			today = zUtl.today(),
-			anc = this.$n('a');
+			y = seldate.getFullYear();
 
-		//hightlight month & year
-		for (var j = 0; j < 12; ++j) {
-			var mon = this.$n("m" + j),
-				year = this.$n("y" + j),
-				yy = y % 10 + 1;
-			if (mon) {
-				if (m == j) {
-					jq(mon).addClass(zcls+"-seld")
-							.removeClass(zcls+"-over");
-					if (!opts || !opts.silent)
-						_doFocus(anc, opts && opts.timeout);
-				} else
-					jq(mon).removeClass(zcls+"-seld");
-			}
-			if (year) {
-				if (yy == j) {
-					jq(year).addClass(zcls+"-seld").
-								removeClass(zcls+"-over");
-					if (!opts || !opts.silent)
-						_doFocus(anc, opts && opts.timeout);
-				} else
-					jq(year).removeClass(zcls+"-seld");
-			}
-		}
-
-		if (v < 0) v += 7;
-		for (var j = 0, cur = -v + 1; j < 6; ++j) {
-			var week = this.$n("w" + j);
-			if ( week != null) {
-				for (var k = 0; k < 7; ++k, ++cur) {
-					v = cur <= 0 ? prev + cur: cur <= last ? cur: cur - last;
-					if (k == 0 && cur > last)
-						week.style.display = "none";
-					else {
-						if (k == 0) week.style.display = "";
-						var cell = week.cells[k],
-							monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
-							bSel = cur == d;
-						cell.style.textDecoration = "";
-						cell._monofs = monofs;
-
-						//hightlight day
-						jq(cell).removeClass(zcls+"-seld");
-						if (bSel) {
-							jq(cell).addClass(zcls+"-seld");
-							if (jq(cell).hasClass(zcls + "-over"))
-								jq(cell).addClass(zcls + "-over-seld");;
-						} else
-							jq(cell).removeClass(zcls+"-seld");
-							
-						//not same month
-						if (monofs)
-							jq(cell).addClass("z-outside");
-						else
-							jq(cell).removeClass("z-outside");
-							
-						if (zul.db.Renderer.disabled(this, y, m + monofs, v, today)) {
-							jq(cell).addClass(zcls+"-disd");
-						} else
-							jq(cell).removeClass(zcls+"-disd");
-						jq(cell).html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).attr('_dt', v);
-						if (bSel && (!opts || !opts.silent))
-							_doFocus(anc, opts && opts.timeout );
+		if (this._view == 'day') {
+			var d = seldate.getDate(),
+				v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
+				last = new Date(y, m + 1, 0).getDate(), //last date of this month
+				prev = new Date(y, m, 0).getDate(), //last date of previous month
+				today = zUtl.today();
+			if (v < 0) v += 7;
+			for (var j = 0, cur = -v + 1; j < 6; ++j) {
+				var week = this.$n("w" + j);
+				if (week != null) {
+					for (var k = 0; k < 7; ++k, ++cur) {
+						v = cur <= 0 ? prev + cur: cur <= last ? cur: cur - last;
+						if (k == 0 && cur > last)
+							week.style.display = "none";
+						else {
+							if (k == 0) week.style.display = "";
+							var $cell = jq(week.cells[k]),
+								monofs = cur <= 0 ? -1: cur <= last ? 0: 1,
+								bSel = cur == d;
+								
+							$cell[0]._monofs = monofs;
+							$cell.css('textDecoration', '').
+								removeClass(zcls+"-seld");
+								
+							if (bSel) {
+								$cell.addClass(zcls+"-seld");
+								if ($cell.hasClass(zcls + "-over"))
+									$cell.addClass(zcls + "-over-seld");;
+							} else
+								$cell.removeClass(zcls+"-seld");
+								
+							//not same month
+							$cell[monofs ? 'addClass': 'removeClass']("z-outside")
+								[zul.db.Renderer.disabled(this, y, m + monofs, v, today) ? 
+								'addClass': 'removeClass'](zcls+"-disd").
+								html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).
+								attr('_dt', v);
+						}
 					}
 				}
 			}
+		} else {
+			var isMon = this._view == 'month',
+				field = isMon ? 'm': 'y',
+				index = isMon? m: y % 10 + 1,
+				node;
+				
+			for (var j = 0; j < 12; ++j)
+				if (node = this.$n(field + j))
+					jq(node)[index == j ? 'addClass': 'removeClass'](zcls+"-seld");
 		}
+		var anc;
+		if ((anc = this.$n('a')) && (!opts || !opts.silent))
+			_doFocus(anc, opts && opts.timeout );
 	}
 });
 })();
