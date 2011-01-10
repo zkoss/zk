@@ -36,6 +36,7 @@ ZK 5.0.6
   3150160: listheader hflex="min" give 0 column width
   3118444: IE 6  Menu popup have wired point 
   3152311: The between constraint of datebox cause infinite loop
+  3154189: The file upload cause NoSuchMethodError with JDK 1.4
   
 * Upgrade Notes
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild

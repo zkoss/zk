@@ -105,14 +105,14 @@ public class AuUploader implements AuExtension {
 					final String key = uuid + '_' + sid;
 					Object sinfo = size.get(key);
 					if (sinfo instanceof String) {
-						response.getWriter().append("error:" + sinfo);
+						response.getWriter().write("error:" + sinfo);
 						size.remove(key);
 						precent.remove(key);
 						return;
 					}
 					final Integer p = (Integer)precent.get(key);
 					final Long cb = (Long)sinfo;
-					response.getWriter().append((p != null ? p.intValue(): -1)+ ","
+					response.getWriter().write((p != null ? p.intValue(): -1)+ ","
 								+(cb != null ? cb.longValue(): -1));
 					return;
 				} else 
