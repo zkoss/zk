@@ -30,26 +30,25 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Chart;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Panel;
-import org.zkoss.zul.SimpleTreeModel;
-import org.zkoss.zul.SimpleTreeNode;
+import org.zkoss.zul.DefaultTreeModel;
+import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Window;
 
-public class TreeClickComposer extends GenericForwardComposer
-{
+public class TreeClickComposer extends GenericForwardComposer {
 	private Tree tree;
 	private Button btn2;
 	
-	SimpleTreeModel stm;
-	SimpleTreeModel stm2;
+	DefaultTreeModel stm;
+	DefaultTreeModel stm2;
 	
 	private void initModel(){
 		ListModelList lm = new ListModelList(Arrays.asList(new String[]{"David", "Thomas","Steven"}));
-		stm = new SimpleTreeModel(new SimpleTreeNode("ROOT",
-				Arrays.asList(new SimpleTreeNode[]{
-						new SimpleTreeNode("David",new ArrayList()), 
-						new SimpleTreeNode("Thomas",new ArrayList()),
-						new SimpleTreeNode("Steven",new ArrayList())})));
+		stm = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+				new DefaultTreeNode[]{
+						new DefaultTreeNode("David"), 
+						new DefaultTreeNode("Thomas"),
+						new DefaultTreeNode("Steven")}));
 		
 		
 		ArrayList list = new ArrayList();
@@ -57,13 +56,13 @@ public class TreeClickComposer extends GenericForwardComposer
 		int len = 10;
 		for(int i = 0; i < len; i++) {
 			list.add("item " + i);
-			list2.add(new SimpleTreeNode("item " + i,new ArrayList()));
+			list2.add(new DefaultTreeNode("item " + i));
 		}
 		ListModelList lm2 = new ListModelList(list);
 		
-		stm2 = new SimpleTreeModel(
-				new SimpleTreeNode("ROOT", 
-						Arrays.asList(new SimpleTreeNode[]{new SimpleTreeNode("root",list2)})));			
+		stm2 = new DefaultTreeModel(
+				new DefaultTreeNode("ROOT", 
+						Arrays.asList(new DefaultTreeNode[]{new DefaultTreeNode("root",list2)})));			
 	}
 	
 	public void doAfterCompose(Component comp) throws Exception{
