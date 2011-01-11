@@ -374,32 +374,36 @@ function zkmprops(uuid, props) {
 	zkx: function (wi, extra, aucmds, js) { //extra is either delay (BL) or [stub, filter] (AU)
 		zk.mounting = true;
 
-		if (js) jq.globalEval(js);
-		doAuCmds(aucmds);
+		try {
+			if (js) jq.globalEval(js);
+			doAuCmds(aucmds);
 
-		var delay, mount = mtAU, owner;
-		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
-			delay = extra;
-			extra = null;
-			mount = mtBL;
-		}
-
-		if (wi) {
-			if (wi[0] === 0) { //page
-				var props = wi[2];
-				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
-					._pguid = wi[1];
-				if (owner = zk.cut(props, "ow"))
-					owner = Widget.$(owner);
+			var delay, mount = mtAU, owner;
+			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+				delay = extra;
+				extra = null;
+				mount = mtBL;
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+			if (wi) {
+				if (wi[0] === 0) { //page
+					var props = wi[2];
+					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
+						._pguid = wi[1];
+					if (owner = zk.cut(props, "ow"))
+						owner = Widget.$(owner);
+				}
 
-			mountpkg();
+				_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+				mountpkg();
+			}
+
+			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+			else run(mount);
+		} catch (e) {
+			zk.mounting = false;
+			zk.error("Failed to mount: "+e.message);
 		}
-
-		if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-		else run(mount);
 	},
 	//widget creation called by au.js
 	zkx_: function (args, stub, filter) {
@@ -439,7 +443,6 @@ function zkmprops(uuid, props) {
 
 	//begin of mounting
 	zkmb: function (bindOnly) {
-		zk.mounting = true;
 		_mntctx.bindOnly = bindOnly;
 		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
 		zk.startProcessing(t > 0 ? t: 0);

@@ -169,34 +169,35 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					var eru = _errURIs['' + rstatus];
 					if (typeof eru == "string") {
 						zUtl.go(eru, {reload: true});
-					} else {
+						return;
+					}
+
 					//handle MSIE's buggy HTTP status codes
 					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-						switch (rstatus) { //auto-retry for certain case
-						default:
-							if (!ajaxReqTries) break;
-							//fall thru
-						case 12002: //server timeout
-						case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-						case 12031:
-						case 12152: // Connection closed by server.
-						case 12159:
-						case 13030:
-						case 503: //service unavailable
-							if (!ajaxReqTries) ajaxReqTries = 3; //two more try
-							if (--ajaxReqTries) {
-								ajaxReqResend(reqInf, 200);
-								return;
-							}
+					switch (rstatus) { //auto-retry for certain case
+					default:
+						if (!ajaxReqTries) break;
+						//fall thru
+					case 12002: //server timeout
+					case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+					case 12031:
+					case 12152: // Connection closed by server.
+					case 12159:
+					case 13030:
+					case 503: //service unavailable
+						if (!ajaxReqTries) ajaxReqTries = 3; //two more try
+						if (--ajaxReqTries) {
+							ajaxReqResend(reqInf, 200);
+							return;
 						}
+					}
 
-						if (!reqInf.ignorable && !zk.unloading) {
-							var msg = req.statusText;
-							if (zAu.confirmRetry("FAILED_TO_RESPONSE", rstatus+(msg?": "+msg:""))) {
-								ajaxReqTries = 2; //one more try
-								ajaxReqResend(reqInf);
-								return;
-							}
+					if (!reqInf.ignorable && !zk.unloading) {
+						var msg = req.statusText;
+						if (zAu.confirmRetry("FAILED_TO_RESPONSE", rstatus+(msg?": "+msg:""))) {
+							ajaxReqTries = 2; //one more try
+							ajaxReqResend(reqInf);
+							return;
 						}
 					}
 				}
@@ -228,7 +229,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		afterResponse();
 	}
 	function afterResponse() { 
-		zAu._doCmds();
+		zAu._doCmds(); //invokes checkProgressing
 
 		//handle pending ajax send
 		if (sendPending && !ajaxReq && !pendingReqInf) {
