@@ -373,8 +373,8 @@ String scroll; //DOM Element's ID</code></pre>
 			stackup.className = "z-dd-stackup";
 			zk(stackup).disableSelection();
 			var st = (this.stackup = stackup).style;
-			st.width = jq.px0(jq.pageWidth());
-			st.height = jq.px0(jq.pageHeight());
+			st.width = jq.px0(jq(document).width());
+			st.height = jq.px0(jq(document).height());
 		}
 		zk.dragging = this.dragging = true;
 
