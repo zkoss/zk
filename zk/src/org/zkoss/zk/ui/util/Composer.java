@@ -61,10 +61,10 @@ import org.zkoss.zk.ui.Component;
  * @see FullComposer
  * @see Initiator
  */
-public interface Composer {
+public interface Composer<T extends Component> {
 	/** Invokes after ZK loader creates this component,
 	 * initializes it and composes all its children, if any.
 	 * @param comp the component has been composed
 	 */
-	public void doAfterCompose(Component comp) throws Exception;
+	public void doAfterCompose(T comp) throws Exception;
 }

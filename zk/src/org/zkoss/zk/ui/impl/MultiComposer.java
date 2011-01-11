@@ -30,8 +30,8 @@ import org.zkoss.zk.ui.util.FullComposer;
  * @author tomyeh
  * @since 5.0.1
  */
-public class MultiComposer implements Composer {
-	private final Composer[] _cs;
+public class MultiComposer<T extends Component> implements Composer<T> {
+	private final Composer<T>[] _cs;
 	private boolean _fullOnly;
 
 	/** Returns an instance of composer to represent the specified
@@ -43,6 +43,7 @@ public class MultiComposer implements Composer {
 	 * or the class that implements {@link Composer}.
 	 * @return a composer to represent cs, or null if cs is null or empty.
 	 */
+	@SuppressWarnings("unchecked")
 	public static Composer getComposer(Page page, Object[] ary)
 	throws Exception {
 		if (ary == null || ary.length == 0)
@@ -109,10 +110,10 @@ public class MultiComposer implements Composer {
 	 *
 	 * @param cs the array of composer instances.
 	 */
-	protected MultiComposer(Composer[] cs) throws Exception {
+	protected MultiComposer(Composer<T>[] cs) throws Exception {
 		_cs = cs;
 	}
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(T comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (shallInvoke(_cs[j]))
 				_cs[j].doAfterCompose(comp);
@@ -146,18 +147,21 @@ public class MultiComposer implements Composer {
 				((ComposerExt)_cs[j]).doFinally();
 	}
 }
-/*package*/ class MultiComposerExt extends MultiComposer implements ComposerExt {
-	/*package*/ MultiComposerExt(Composer[] cs) throws Exception {
+/*package*/ class MultiComposerExt<T extends Component>
+extends MultiComposer<T> implements ComposerExt {
+	/*package*/ MultiComposerExt(Composer<T>[] cs) throws Exception {
 		super(cs);
 	}
 }
-/*package*/ class MultiFullComposer extends MultiComposer implements FullComposer {
-	/*package*/ MultiFullComposer(Composer[] cs) throws Exception {
+/*package*/ class MultiFullComposer<T extends Component>
+extends MultiComposer<T> implements FullComposer {
+	/*package*/ MultiFullComposer(Composer<T>[] cs) throws Exception {
 		super(cs);
 	}
 }
-/*package*/ class MultiFullComposerExt extends MultiFullComposer implements ComposerExt {
-	/*package*/ MultiFullComposerExt(Composer[] cs) throws Exception {
+/*package*/ class MultiFullComposerExt<T extends Component>
+extends MultiFullComposer<T> implements ComposerExt {
+	/*package*/ MultiFullComposerExt(Composer<T>[] cs) throws Exception {
 		super(cs);
 	}
 }

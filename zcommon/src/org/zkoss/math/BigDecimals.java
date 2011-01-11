@@ -140,4 +140,11 @@ public class BigDecimals {
 	public static final BigDecimal toBigDecimal(Byte v) {
 		return toBigDecimal(v.byteValue());
 	}
+
+	/** @deprecated As of release 6.0.0, use BigDecimal.toPlainString() directly
+	 * (since we don't support JDK 1.4) anymore.
+	 */
+	public static final String toPlainString(BigDecimal bd) {
+		return bd.toPlainString();
+	}
 }

@@ -68,7 +68,8 @@ import org.zkoss.zk.ui.Components;
  * @since 3.0.7
  * @see org.zkoss.zk.ui.Components#addForwards
  */
-abstract public class GenericForwardComposer extends GenericAutowireComposer {
+abstract public class GenericForwardComposer<T extends Component>
+extends GenericAutowireComposer<T> {
 	private static final long serialVersionUID = 20091006115726L;
 
 	/** Constructor.
@@ -121,7 +122,7 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 	 * override this method should remember to call super.doAfterCompose(comp) 
 	 * or it will not work.
 	 */
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
 		
 		//add forward condtions to the components as defined in this composer

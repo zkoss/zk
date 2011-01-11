@@ -407,8 +407,7 @@ public class UiEngineImpl implements UiEngine {
 
 					for (Component root = page.getFirstRoot(); root != null;
 					root = root.getNextSibling()) {
-						if (composer != null)
-							composer.doAfterCompose(root);
+						doAfterCompose(composer, root);
 						afterCreate(new Component[] {root});
 							//root's next sibling might be changed
 					}
@@ -493,6 +492,12 @@ public class UiEngineImpl implements UiEngine {
 			if (pfmeter != null)
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
+	}
+	@SuppressWarnings("unchecked")
+	private static final void doAfterCompose(Composer composer, Component comp)
+	throws Exception {
+		if (composer != null)
+			composer.doAfterCompose(comp);
 	}
 	public void recycleDesktop(Execution exec, Page page, Writer out)
 	throws IOException {
@@ -725,8 +730,7 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
 
-			if (composer != null)
-				composer.doAfterCompose(child);
+			doAfterCompose(composer, child);
 			ci.doAfterCompose(child, bRoot);
 
 			ComponentsCtrl.applyForward(child, childInfo.getForward());
@@ -2301,7 +2305,8 @@ public class UiEngineImpl implements UiEngine {
 	private static void afterInvoke(Composer composer, boolean bRoot, boolean old) {
 		if (!bRoot && composer instanceof MultiComposer)
 			((MultiComposer)composer).setFullComposerOnly(old);
-		}
+	}
+	@SuppressWarnings("unchecked")
 	/*package*/ void doAfterCompose(Component comp, boolean bRoot)
 	throws Exception {
 		if (_composers != null)

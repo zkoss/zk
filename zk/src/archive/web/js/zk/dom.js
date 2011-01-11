@@ -1553,34 +1553,19 @@ zk.copy(jq, {
 			|| document.documentElement.scrollTop
 			|| document.body.scrollTop || 0;
 	},
-	/** Returns the height of the visible part of the browser window. 
+	/** Returns the height of the viewport (visible part) of the browser window. 
+	 * It is the same as jq(window).width().
 	 * @return int
 	 */
 	innerWidth: function () {
-		return document.compatMode ? document.compatMode == "CSS1Compat" ?
-				document.documentElement.clientWidth: document.body.clientWidth : window.innerWidth;
+		return jq(window).width();
 	},
-	/** Returns the width of the visible part of the browser window. 
+	/** Returns the width of the viewport (visible part) of the browser window. 
+	 * It is the same as jq(window).height().
 	 * @return int
 	 */
 	innerHeight: function () {
-		return typeof window.innerHeight == "number" ? window.innerHeight:
-			document.compatMode == "CSS1Compat" ?
-					document.documentElement.clientHeight: document.body.clientHeight;
-	},
-	/** Returns the pae total width.
-	 * @return int
-	 */
-	pageWidth: function () {
-		var a = document.body.scrollWidth, b = document.body.offsetWidth;
-		return a > b ? a: b;
-	},
-	/** Returns the pae total height. 
-	 * @return int
-	 */
-	pageHeight: function () {
-		var a = document.body.scrollHeight, b = document.body.offsetHeight;
-		return a > b ? a: b;
+		return jq(window).height();
 	},
 
 	/** A map of the margin style names: {l: 'margin-left', t: 'margin-top'...}. 

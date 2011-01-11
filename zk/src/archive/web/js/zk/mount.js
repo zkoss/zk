@@ -91,7 +91,8 @@ function zkmprops(uuid, props) {
 }
 
 (function () {
-	var _wgt$ = zk.Widget.$, //the original zk.Widget.$
+	var Widget = zk.Widget,
+		_wgt_$ = Widget.$, //the original zk.Widget.$
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
@@ -254,25 +255,25 @@ function zkmprops(uuid, props) {
 			return;
 		}
 
-		var inf = _createInf0.shift();
-		if (inf) {
-			var stub = inf[4][0], filter = inf[4][1],
-				Widget = zk.Widget, wgt;
-
-			if (filter)
-				Widget.$ = function (n, opts) {return filter(_wgt$(n, opts));}
-			try {
-				wgt = create(null, inf[1]);
-			} finally {
-				if (filter) Widget.$ = _wgt$;
+		try {
+			var inf = _createInf0.shift(),
+				filter, wgt;
+			if (inf) {
+				if (filter = inf[4][1])
+					Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
+				try {
+					wgt = create(null, inf[1]);
+				} finally {
+					if (filter) Widget.$ = _wgt_$;
+				}
+				inf[4][0](wgt);
 			}
-
-			stub(wgt);
+		} finally {
 			if (_createInf0.length)
-				return run(mtAU); //loop back to check if loading
+				run(mtAU); //loop back to check if loading
+			else
+				mtAU0();
 		}
-
-		mtAU0();
 	}
 	function mtAU0() {
 		zk.mounting = false;
@@ -312,10 +313,10 @@ function zkmprops(uuid, props) {
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			if (type == "#stub") { //not possible if zkuery
-				if (!(wgt = _wgt$(uuid) //use the original one since filter() might applied
+				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknow stub "+uuid;
-				var w = new zk.Widget();
+				var w = new Widget();
 				zk._wgtutl.replace(wgt, w);
 				wgt.unbind(); //reuse it as new widget
 			} else {
@@ -373,32 +374,36 @@ function zkmprops(uuid, props) {
 	zkx: function (wi, extra, aucmds, js) { //extra is either delay (BL) or [stub, filter] (AU)
 		zk.mounting = true;
 
-		if (js) jq.globalEval(js);
-		doAuCmds(aucmds);
+		try {
+			if (js) jq.globalEval(js);
+			doAuCmds(aucmds);
 
-		var delay, mount = mtAU, owner;
-		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
-			delay = extra;
-			extra = null;
-			mount = mtBL;
-		}
-
-		if (wi) {
-			if (wi[0] === 0) { //page
-				var props = wi[2];
-				zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
-					._pguid = wi[1];
-				if (owner = zk.cut(props, "ow"))
-					owner = zk.Widget.$(owner);
+			var delay, mount = mtAU, owner;
+			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+				delay = extra;
+				extra = null;
+				mount = mtBL;
 			}
 
-			_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+			if (wi) {
+				if (wi[0] === 0) { //page
+					var props = wi[2];
+					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
+						._pguid = wi[1];
+					if (owner = zk.cut(props, "ow"))
+						owner = Widget.$(owner);
+				}
 
-			mountpkg();
+				_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+				mountpkg();
+			}
+
+			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+			else run(mount);
+		} catch (e) {
+			zk.mounting = false;
+			zk.error("Failed to mount: "+e.message);
 		}
-
-		if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-		else run(mount);
 	},
 	//widget creation called by au.js
 	zkx_: function (args, stub, filter) {
@@ -438,7 +443,6 @@ function zkmprops(uuid, props) {
 
 	//begin of mounting
 	zkmb: function (bindOnly) {
-		zk.mounting = true;
 		_mntctx.bindOnly = bindOnly;
 		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
 		zk.startProcessing(t > 0 ? t: 0);
@@ -454,7 +458,8 @@ function zkmprops(uuid, props) {
 
 //Event Handler//
 jq(function() {
-	var _bfUploads = [],
+	var Widget = zk.Widget,
+		_bfUploads = [],
 		_reszInf = {},
 		_oldBfUnload,
 		_subevts = { //additonal invocation
@@ -510,7 +515,7 @@ jq(function() {
 			old = zk.currentFocus;
 		if ((target != body && target != body.parentNode) ||
 				(evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
-			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
+			Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 			
 		_doEvt(evt);
 		
@@ -555,7 +560,7 @@ jq(function() {
 
 	jq(document)
 	.keydown(function (evt) {
-		var wgt = zk.Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			_doEvt(wevt);
@@ -573,16 +578,16 @@ jq(function() {
 	.keyup(function (evt) {
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
-		else wgt = zk.Widget.$(evt, {child:true});
+		else wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	})
 	.keypress(function (evt) {
 		var wgt = zk.keyCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
+		if (!wgt) wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
 	.mousedown(function (evt) {
-		var wgt = zk.Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
@@ -603,7 +608,7 @@ jq(function() {
 
 		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
-		else wgt = zk.Widget.$(evt, {child:true});
+		else wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
 	.mousemove(function (evt) {
@@ -611,17 +616,17 @@ jq(function() {
 		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
+		if (!wgt) wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
-		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), {ignorable:1}, evt));
+		_doEvt(new zk.Event(Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.mouseout(function (evt) {
-		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), {ignorable:1}, evt));
+		_doEvt(new zk.Event(Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), {ignorable:1}, evt));
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
@@ -629,14 +634,14 @@ jq(function() {
 		zjq._fixClick(evt);
 
 		if (evt.which == 1)
-			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
+			_doEvt(new zk.Event(Widget.$(evt, {child:true}),
 				'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
 	.dblclick(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
-		var wgt = zk.Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
 			_doEvt(wevt);
@@ -648,7 +653,7 @@ jq(function() {
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
 
-		var wgt = zk.Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
 			if (zk.ie)
 				evt.which = 3;

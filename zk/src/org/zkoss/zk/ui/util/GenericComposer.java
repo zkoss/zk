@@ -61,8 +61,8 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @author robbiecheng
  * @since 3.0.1
  */
-abstract public class GenericComposer extends GenericEventListener
-implements Composer, ComposerExt, java.io.Serializable {
+abstract public class GenericComposer<T extends Component> extends GenericEventListener
+implements Composer<T>, ComposerExt, java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	protected String _applied; //uuid of the applied component (for serialization back)
 	
@@ -71,7 +71,7 @@ implements Composer, ComposerExt, java.io.Serializable {
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 
 	 * work.
 	 */
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(T comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
 		_applied = comp.getUuid();
 		bindComponent(comp);

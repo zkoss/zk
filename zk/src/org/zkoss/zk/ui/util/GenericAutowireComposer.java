@@ -105,8 +105,8 @@ import org.zkoss.zk.xel.Evaluator;
  * @since 3.0.6
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
-abstract public class GenericAutowireComposer extends GenericComposer
-implements ComponentCloneListener {
+abstract public class GenericAutowireComposer<T extends Component>
+extends GenericComposer<T> implements ComponentCloneListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
@@ -244,7 +244,7 @@ implements ComponentCloneListener {
 	 * override this method should remember to call super.doAfterCompose(comp) 
 	 * or it will not work.
 	 */
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
 		
 		//wire variables to reference fields (include implicit objects) ASAP
@@ -312,6 +312,7 @@ implements ComponentCloneListener {
 	
 	//doAfterCompose, called once after clone
 	private static class CloneDoAfterCompose implements EventListener {
+		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = (Component) event.getTarget();
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 

@@ -27,6 +27,9 @@ import org.zkoss.zul.event.TreeDataEvent;
  * If you want it to re-render, you could assign the same model again 
  * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
  *
+ * <p>For introduction, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer's_Reference/MVC/Model/Tree_Model">ZK Developer's Reference: Tree Model</a>.
+ *
  * @author Jeff Liu
  * @since 3.0.0
  *
