@@ -49,7 +49,7 @@ public class Doublespinner extends NumberInputElement implements
 
 	public Doublespinner(double value) throws WrongValueException {
 		this();
-		setValue(Double.valueOf(value));
+		setValue(new Double(value));
 	}
 	
 	/** Returns the value (in Double), might be null unless
