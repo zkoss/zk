@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3156026.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 12 12:34:51 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+		 <li>Click the "test" button. it shall not cause browser busy</li>
+		 <li>Select to different tab then click the "test" button. it shall not cause browser busy</li>
+		</ol>
+	]]></html>
+	<window id="mainWindow" border="none" width="100%" height="100%">
+		<borderlayout height="100%">
+			<north border="none" height="90px">
+				<borderlayout height="100%">
+					<west width="282px" border="none">
+						<div />
+					</west>
+					<center border="none">
+						<div>
+							<borderlayout height="87px">
+								<north border="none" height="30px">
+									<borderlayout height="30px">
+										<west border="none"
+											width="30%">
+											<div align="left">
+												<hlayout>
+												</hlayout>
+											</div>
+										</west>
+										<east border="none"
+											width="70%">
+											<div align="right" />
+										</east>
+									</borderlayout>
+								</north>
+								<center border="none">
+									<div align="center">
+										<hlayout id="statusMsgZone">
+											<button id="btnFroze"
+												label="test"
+												onClick="btnFroze.setVisible(true)" />
+										</hlayout>
+									</div>
+								</center>
+							</borderlayout>
+						</div>
+					</center>
+				</borderlayout>
+			</north>
+			<center border="none" vflex="min">
+				<div id="divModulePlaceHolder">
+					<tabbox height="800px">
+						<tabs>
+							<tab label="Module 1" />
+							<tab label="Module 2" />
+						</tabs>
+						<tabpanels>
+							<tabpanel height="800px" forEach="1,1">
+								<tabbox height="800px">
+									<tabs>
+										<tab label="Document 1" />
+										<tab label="Document 2" />
+									</tabs>
+									<tabpanels>
+										<tabpanel height="800px"
+											forEach="1,1">
+											<tabbox orient="vertical"
+												height="800px">
+												<tabs>
+													<tab label="menu 1" />
+													<tab label="menu 2" />
+													<tab label="menu 3" />
+													<tab label="menu 4" />
+												</tabs>
+												<tabpanels>
+													<tabpanel
+														forEach="1,1,1" height="800px">
+														<panel
+															title="test" width="100%">
+															<panelchildren>
+																<vlayout>
+																	<div>
+																		<columnlayout
+																			forEach="1,1">
+																			<columnchildren
+																				forEach="1,1,1,1" width="25%">
+																				<panel>
+																					<panelchildren>
+																						<vlayout>
+																							<label
+																								value="aaa" />
+																							<label
+																								value="" pre="true" />
+																						</vlayout>
+																					</panelchildren>
+																				</panel>
+																			</columnchildren>
+																		</columnlayout>
+																	</div>
+																</vlayout>
+															</panelchildren>
+														</panel>
+
+														<panel
+															forEach="1,1" title="test" width="100%">
+															<panelchildren>
+																<vlayout>
+																	<div
+																		forEach="1,1">
+																		<vlayout>
+																			<label
+																				value="aaa" />
+																			<label
+																				value="aaa" />
+																			<columnlayout>
+																				<columnchildren
+																					forEach="1,1" width="120px">
+																					<panel>
+																						<panelchildren>
+																							<vlayout>
+																								<hlayout
+																									forEach="1,1,1,1,1,1,1">
+																									<checkbox
+																										label="aaa" />
+																									<timebox />
+																									<space />
+																									to
+																								</hlayout>
+																							</vlayout>
+																						</panelchildren>
+																					</panel>
+																				</columnchildren>
+																			</columnlayout>
+																		</vlayout>
+																	</div>
+																</vlayout>
+															</panelchildren>
+														</panel>
+													</tabpanel>
+												</tabpanels>
+											</tabbox>
+										</tabpanel>
+									</tabpanels>
+								</tabbox>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</div>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

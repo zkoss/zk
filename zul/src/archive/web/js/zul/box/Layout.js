@@ -12,6 +12,23 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	
+	function _fireOnSize(wgt) {
+		if (wgt.desktop && wgt._shallSize) {
+			zWatch.fire('onSize', wgt);
+			wgt._shallSize = false;
+		}
+	}
+	
+	function _syncSize(wgt) {
+		if (wgt.desktop) {
+			wgt._shallSize = true;
+			if (!wgt.inServer)
+				_fireOnSize(wgt);
+		}
+	}
+	
 /**
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
@@ -60,23 +77,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		this.$supers(zul.box.Layout, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallSize) {
-			zWatch.fire('onSize', this);
-			this._shallSize = false;
-		}
-	},
-	_syncSize: function () {
-		this._shallSize = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
+		_fireOnSize(this);
 	},
 	onChildAdded_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		this._syncSize();
+		_syncSize(this);
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		this._syncSize();
+		_syncSize(this);
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
@@ -310,3 +319,4 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}
 	}
 });
+})();

@@ -39,6 +39,7 @@ ZK 5.0.6
   3154189: The file upload cause NoSuchMethodError with JDK 1.4
   3153941: Decimalbox didn't compatible with jre / jdk 1.4.x
   3154168: Doublespinner didn't compatible with jre / jdk 1.4.x
+  3156026: H/Vlayout sync size busy
   
 * Upgrade Notes
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild
