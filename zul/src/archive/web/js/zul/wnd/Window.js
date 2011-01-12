@@ -170,7 +170,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		_makeFloat(wgt);
 	}
-	/** Must be called before calling makeVParent. */
+	/* Must be called before calling makeVParent. */
 	function _posByParent(wgt) {
 		var n = wgt.$n(),
 			ofs = zk(zk(n).vparentNode(true)).revisedOffset();
