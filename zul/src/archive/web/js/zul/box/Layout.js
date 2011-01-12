@@ -15,12 +15,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	
 	function _fireOnSize(wgt) {
-		if (wgt.desktop && wgt._shallSize) {
-			zWatch.fire('onSize', wgt);
+		if (wgt._shallSize) {
 			wgt._shallSize = false;
+			if (wgt.desktop)
+				zWatch.fire('onSize', wgt);
 		}
 	}
-	
 	function _syncSize(wgt) {
 		if (wgt.desktop) {
 			wgt._shallSize = true;
