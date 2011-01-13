@@ -719,7 +719,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 
 		/**
 		 * Returns the thickness of the line (in pixels).
-		 * @return
+		 * @return Integer
 		 */
 		public Integer getLineThickness() {
 			return _lineThickness;

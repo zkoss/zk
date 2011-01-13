@@ -63,7 +63,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 	/**
 	 * A Task in an operation series; a helper class used in
-	 * {@FusionchartGanttModel}.
+	 * {@link FusionchartGanttModel}.
 	 * 
 	 * @author jimmyshiau
 	 * @see FusionchartGanttModel
