@@ -522,6 +522,15 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>fusionchart</component-name>
+		<component-class>org.zkoss.zul.Fusionchart</component-class>
+		<widget-class>zul.fchart.Fusionchart</widget-class>
+		<mold>
+            <mold-name>default</mold-name>
+            <mold-uri>mold/fusionchart.js</mold-uri>
+        </mold>
+	</component>
+	<component>
 		<component-name>foot</component-name>
 		<component-class>org.zkoss.zul.Foot</component-class>
 		<widget-class>zul.grid.Foot</widget-class>
