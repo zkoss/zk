@@ -291,8 +291,11 @@ zWatch = (function () {
 				wts.sort(_cmpLevel);
 		}
 	}
+	function _bindLevel(a) {
+		return (a = a.bindLevel) == null || isNaN(a) ? -1: a;
+	}
 	function _cmpLevel(a, b) {
-		return a[0].bindLevel - b[0].bindLevel;
+		return _bindLevel(a[0]) - _bindLevel(b[0]);
 	}
 	function _zsync(name, org) {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
