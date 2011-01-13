@@ -27,6 +27,13 @@
 	</properties>
 	<version>${zk.version}</version>
 	<packaging>war</packaging>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<scm>
 		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zksandbox</url>
 	</scm>

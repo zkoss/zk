@@ -1495,7 +1495,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 *
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
-	 * @since 3.0.0
+	 * @since 5.0.6
 	 */
 	public void setItemRenderer(TreeitemRenderer renderer){
 		if (_renderer != renderer) {
@@ -1508,7 +1508,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	/** Returns the renderer to render each item, or null if the default
 	 * renderer is used.
 	 * @return the renderer to render each item, or null if the default
-	 * @since 3.0.0
+	 * @since 5.0.6
 	 */
 	public TreeitemRenderer getItemRenderer(){
 		return _renderer;
