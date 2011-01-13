@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import org.zkoss.web.Attributes;
  */
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
+	private final HttpServletRequest _hreq;
 	private String _enc = "UTF-8";
 	private final Map _attrs = new HashMap(9);
 
@@ -48,6 +50,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		if (req == null)
 			throw new IllegalArgumentException("null");
 		_req = req;
+		_hreq = getHttpServletRequest(req);
 
 		String ctxpath = req.getContextPath();
 		if (ctxpath == null) ctxpath = "";
@@ -56,6 +59,23 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		_attrs.put(Attributes.INCLUDE_PATH_INFO, "");
 		_attrs.put(Attributes.INCLUDE_QUERY_STRING, "");
 		_attrs.put(Attributes.INCLUDE_REQUEST_URI, ctxpath);
+	}
+	/** Returns the HTTP servlet rquest associated with the render request,
+	 * or null if not found.
+	 * @since 5.0.6
+	 */
+	protected HttpServletRequest getHttpServletRequest(RenderRequest req) {
+		try {
+			Method m;
+			try {
+				m = req.getClass().getMethod("getHttpServletRequest", null);
+			} catch (NoSuchMethodException ex) {
+				m = req.getClass().getMethod("getRequest", null);
+			}
+			return (HttpServletRequest)m.invoke(req, null);
+		} catch (Throwable ex) {
+			return null;
+		}		
 	}
 
 	//-- ServletRequest --//
@@ -201,7 +221,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return -1; //not available
 	}
 	public String getHeader(String name) {
-		return null;
+		return _hreq != null ? _hreq.getHeader(name) : null;
 	}
 	public java.util.Enumeration getHeaderNames() {
 		return CollectionsX.EMPTY_ENUMERATION;
@@ -219,7 +239,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return (String)_attrs.get(Attributes.INCLUDE_PATH_INFO);
 	}
 	public String getPathTranslated() {
-		return null;
+		return _hreq != null ? _hreq.getPathTranslated(): null;
 	}
 	public String getQueryString() {
 		return (String)_attrs.get(Attributes.INCLUDE_QUERY_STRING);
