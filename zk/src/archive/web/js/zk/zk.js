@@ -86,9 +86,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				else msg.push(jq.nodeName(ar), '#', ar.id);
 			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
-				for (var v in ar) 
+				for (var v in ar)
 					s.push(v, ':', ar[v], ',\n');
-				if (s[s.length - 1] == ',\n') 
+				if (s[s.length - 1] == ',\n')
 					s.pop();
 				s.push('\n}');
 				msg.push(s.join(''));
@@ -148,18 +148,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 zk.copy(zk, {
-	/** The delay before showing the processing prompt (unit: milliseconds). 
+	/** The delay before showing the processing prompt (unit: milliseconds).
 	 * <p>Default: 900 (depending on the server's configuration)
 	 * @type int
 	 */
 	procDelay: 900,
 	/** The delay before showing a tooltip (unit: milliseconds).
-	 * Default: 800 (depending on the server's configuration) 
+	 * Default: 800 (depending on the server's configuration)
 	 * @type int
 	 */
 	tipDelay: 800,
 	/** The delay before resending the AU request, i.e., assuming the last AU request fails (unit: milliseconds). A negative value means not to resend at all.
-	 * Default: -1 (depending on the server's configuration). 	
+	 * Default: -1 (depending on the server's configuration).
 	 * @type int
 	 */
 	resendDelay: -1,
@@ -171,11 +171,11 @@ zk.copy(zk, {
 	 * @type Offset
 	 */
 	currentPointer: [0, 0],
-	/** The widget that gains the focus now, or null if no one gains focus now. 
+	/** The widget that gains the focus now, or null if no one gains focus now.
 	 * @type Widget
 	 */
 	//currentFocus: null,
-	/** The topmost modal window, or null if no modal window at all. 
+	/** The topmost modal window, or null if no modal window at all.
 	 * @type zul.wnd.Window
 	 */
 	//currentModal: null,
@@ -184,7 +184,7 @@ zk.copy(zk, {
 	 * (and not yet complete).
 	 * <p>When the JavaScript files of widgets are loading, you shall not create
 	 * any widget. Rather, you can use {@link #afterLoad} to execute the creation
-	 * and other tasks after all required JavaScript files are loaded. 
+	 * and other tasks after all required JavaScript files are loaded.
 	 * @see #load
 	 * @see #afterLoad
 	 * @see #processing
@@ -205,7 +205,7 @@ zk.copy(zk, {
 	//mounting: false,
 	/** Whether Client Engine is processing something, such as processing
 	 * an AU response. This flag is set when {@link #startProcessing}
-	 * is called, and cleaned when {@link #endProcessing} is called. 
+	 * is called, and cleaned when {@link #endProcessing} is called.
 	 * @see #startProcessing
 	 * @see #loading
 	 * @see #mounting
@@ -213,14 +213,14 @@ zk.copy(zk, {
 	 */
 	//processing: false,
 	/** Indicates whether ZK Client Engine has been booted and created the initial widgets.
-	 * It is useful to know if it is caused by an asynchronous update (i.e., zk.booted is true). 
+	 * It is useful to know if it is caused by an asynchronous update (i.e., zk.booted is true).
 	 * @see #mounting
 	 * @see #unloading
 	 * @type boolean
 	 */
 	//booted: false,
 	/** Indicates whether the browser is unloading this document.
-	 * Note: when the function registered with {@link #beforeUnload} is called, this flag is not set yet. 
+	 * Note: when the function registered with {@link #beforeUnload} is called, this flag is not set yet.
 	 * @see #loading
 	 * @see #booted
 	 * @type boolean
@@ -353,7 +353,7 @@ doKeyDown_: function () {
  this.$supers('doKeyDown_', arguments);
 }
 </code></pre>
-	 * <p>Notice that the key capture is reset automatically after processing onKeyUp_. 
+	 * <p>Notice that the key capture is reset automatically after processing onKeyUp_.
 	 * @see #mouseCapture
 	 * @type Widget
 	 */
@@ -366,14 +366,14 @@ doMouseDown_: function () {
  this.$supers('doMouseDown_', arguments);
 }
 </code></pre>
-	 * <p>Notice that the mouse capture is reset automatically after processing onMouseUp_. 
+	 * <p>Notice that the mouse capture is reset automatically after processing onMouseUp_.
 	 * @see #keyCapture
 	 * @type Widget
 	 */
 	//mouseCapture: null,
 
 	/** Copies a map of properties (or options) from one object to another.
-	 * Example: extending Array 
+	 * Example: extending Array
 <pre><code>
 zk.copy(Array.prototoype, {
  $addAll: function (o) {
@@ -442,7 +442,7 @@ try {
 	 *
 	 * <p>Example:
 	 * <pre><code>var foo = zk.$package('com.foo');
-	 *foo.Cool = zk.$extends(zk.Object);</code></pre> 
+	 *foo.Cool = zk.$extends(zk.Object);</code></pre>
 	 *
 	 * @param String name the name of the package.
 	 * @return Package
@@ -467,14 +467,14 @@ try {
 		}
 	},
 	/** Imports a class or a package. It returns null if the package or class is not defined yet.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 var foo = zk.$import('com.foo');
 var cool = new foo.Cool();
 var Cool = zk.$import('com.foo.Cooler');
 var cooler = new Cooler();
 </code></pre>
-	 * @param String name The name of the package or the class. 
+	 * @param String name The name of the package or the class.
 	 * @return Object a package ({@link Package}) or a class ({@link Class})
 	 * @see #$package
 	 * @see #load
@@ -483,7 +483,7 @@ var cooler = new Cooler();
 	/** Imports a package or class, and load it if <code>fn</code> is specified.
 	 * It returns null if the package or class is not defined yet and
 	 * <code>fn</code> is null.
-	 * <p>If an additional function, <code>fn</code> is specified, 
+	 * <p>If an additional function, <code>fn</code> is specified,
 	 * this method assumes <code>name</code>
 	 * is a class and it will load the package of the class first.
 	 * If not found. Then, invoke the function after the class is loaded.
@@ -492,10 +492,10 @@ var cooler = new Cooler();
 <pre><code>
 zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 </code></pre>
-	 * @param String name The name of the package or the class. 
+	 * @param String name The name of the package or the class.
 	 * @param Function fn The function to call after the class is loaded.
 	 * If specified, it assumes <code>name</code> is a class, and it will
-	 * load the package of the class automatically. 
+	 * load the package of the class automatically.
 	 * In additions, the function is called with the class as the argument.
 	 * @return Object a package ({@link Package}) or a class ({@link Class})
 	 * @see #$package
@@ -521,7 +521,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 	},
 
 	/** Defines a class. It returns the class being defined.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 zul.Label = zk.$extends(zk.Widget, {
  _value: '',
@@ -624,7 +624,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 	},
 
 	/** Provides the default values for the specified options.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 process: function (opts, defaultOptions) {
  opts = zk.$default(opts, defaultOptions);
@@ -830,14 +830,14 @@ wgt.setSomething(somevalue, {force:true});
 	},
 
 	/** A does-nothing function.
-	 */ 
+	 */
 	$void: function () {},
 
 	/** Parses a string to an integer.
 	 * <p>It is the same as the built-in parseInt method except it never return
-	 * NaN (rather, it returns 0). 
+	 * NaN (rather, it returns 0).
 	 * @param String v the text to parse
-	 * @param int b represent the base of the number in the string. 10 is assumed if omitted. 
+	 * @param int b represent the base of the number in the string. 10 is assumed if omitted.
 	 * @return int the integer
 	 */
 	parseInt: function (v, b) {
@@ -845,7 +845,7 @@ wgt.setSomething(somevalue, {force:true});
 	},
 	/** Parses a string to a floating number.
 	 * <p>It is the same as the built-in parseFloat method except it never return
-	 * NaN (rather, it returns 0). 
+	 * NaN (rather, it returns 0).
 	 * @param String v the text to parse
 	 * @return double the floating number
 	 * @since 5.0.2
@@ -858,7 +858,7 @@ wgt.setSomething(somevalue, {force:true});
 	 * <p>For example, <code>zk.set(obj, "x", 123)</code>:<br/>
 	 * If setX is defined in obj, obj.setX(123) is called.
 	 * If not defined, obj.x = 123 is called.
-	 * <p>Anotehr example: 
+	 * <p>Anotehr example:
 <pre><code>
 zk.set(o, 'value', true); //set a single property
 </code></pre>
@@ -915,7 +915,7 @@ zk.set(dst, src, ["foo", "mike"]);
 	 * <p>For example, <code>zk.get(obj, "x")</code>:<br/>
 	 * If getX or isX is defined in obj, obj.isX() or obj.getX() is returned.
 	 * If not defined, obj.x is returned.
-	 * <p>Another example: 
+	 * <p>Another example:
 <pre><code>
 zk.get(o, 'value');
 </code></pre>
@@ -934,13 +934,13 @@ zk.get(o, 'value');
 
 	//Processing//
 	/** Set a flag, {@link #processing}, to indicate that it starts a processing. It also shows a message to indicate "processing" after the specified timeout.
-	 * <p>Example: 
+	 * <p>Example:
 <pre></code>
 zk.startProcessing(1000);
 //do the lengthy operation
 zk.endProcessing();
 </code></pre>
-	 * @param int timeout the delay before showing a message to indicate "processing". 
+	 * @param int timeout the delay before showing a message to indicate "processing".
 	 * @see #processing
 	 * @see #endProcessing
 	 */
@@ -949,7 +949,7 @@ zk.endProcessing();
 		setTimeout(jq.isReady ? showprgb: showprgbInit, timeout > 0 ? timeout: 0);
 	},
 	/** Clears a flag, {@link #processing}, to indicate that it the processing has done. It also removes a message, if any, that indicates "processing".
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 zk.startProcessing(1000);
 //do the lengthy operation
@@ -962,7 +962,7 @@ zk.endProcessing();
 		zUtl.destroyProgressbox("zk_proc");
 	},
 
-	/** Disable the default behavior of ESC. In other words, after called, the user cannot abort the loading from the server. 
+	/** Disable the default behavior of ESC. In other words, after called, the user cannot abort the loading from the server.
 	 * <p>To enable ESC, you have to invoke {@link #enableESC} and the number
 	 * of invocations shall be the same.
 	 * @see #enableESC
@@ -970,7 +970,7 @@ zk.endProcessing();
 	disableESC: function () {
 		++zk._noESC;
 	},
-	/** Enables the default behavior of ESC (i.e., stop loading from the server). 
+	/** Enables the default behavior of ESC (i.e., stop loading from the server).
 	 * @see #disableESC
 	 */
 	enableESC: function () {
@@ -979,8 +979,8 @@ zk.endProcessing();
 	_noESC: 0, //# of disableESC being called (also used by mount.js)
 
 	//DEBUG//
-	/** Display an error message to indicate an error. 
-	 *  Example: 
+	/** Display an error message to indicate an error.
+	 *  Example:
 <pre><code>zk.error('Oops! Something wrong:(');</code></pre>
 	 * @param String msg the error message
 	 * @see #errorDismiss
@@ -988,18 +988,22 @@ zk.endProcessing();
 	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
-		new _zErb(msg);
+		if (jq('#zk_err')[0] == null) {
+			new _zErb(msg);
+		} else {
+			_zErb.push(msg);
+		}
 	},
 	/** Closes all error messages shown by {@link #error}.
-   	 * Example: 
+   	 * Example:
 <pre><code>zk.errorDismiss();</code></pre>
 	 * @see #error
 	 */
 	errorDismiss: function () {
-		_zErb.closeAll();
+		_zErb.remove();
 	},
 	/** Logs an message for debugging purpose.
-	 * Example: 
+	 * Example:
 <pre><code>
 zk.log('reach here');
 zk.log('value is", value);
@@ -1053,7 +1057,7 @@ zk.log('value is", value);
 	/** Encodes and returns the URI to communicate with the server.
 	 * Example:
 <pre><code>document.createElement("script").src = zk.ajaxURI('/web/js/com/foo/mine.js',{au:true});</code></pre>
-	 * @param String uri - the URI related to the AU engine. If null, the base URI is returned. 
+	 * @param String uri - the URI related to the AU engine. If null, the base URI is returned.
 	 * @param Map opts [optinal] the options. Allowed values:<br/>
 	 * <ul>
 	 * <li>au - whether to generate an URI for accessing the ZK update engine. If not specified, it is used to generate an URL to access any servlet</li>
@@ -1213,12 +1217,12 @@ zk.Object.prototype = {
 	 */
 	//$oid: 0,
 	/** Determines if this object is an instance of the class represented by the specified Class parameter.
-	 * Example: 
+	 * Example:
 <pre><code>
 if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 }
 </code></pre>
-	 * @param Class klass the Class object to be checked. 
+	 * @param Class klass the Class object to be checked.
 	 * Any number of arguments can be specified.
 	 * @return boolean true if this object is an instance of the class
 	 */
@@ -1235,7 +1239,7 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 multiply: function (n) {
  return this.$super('multiply', n + 2);
@@ -1251,7 +1255,7 @@ multiply: function (n) {
 	 * <p>It is similar to {@link #$super(String, Object...)}, but
 	 * this method works even if the superclass calls back the same member method.
 	 * In short, it is tedious but safer.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 foo.MyClass = zk.$extends(foo.MySuper, {
   multiply: function (n) {
@@ -1275,7 +1279,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		return bCls ? this.$supers(arg0, arg1, args): this.$supers(arg0, args);
 	},
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 multiply: function () {
  return this.$supers('multiply', arguments);
@@ -1291,7 +1295,7 @@ multiply: function () {
 	 * <p>It is similar to {@link #$supers(String, Array)}, but
 	 * this method works even if the superclass calls back the same member method.
 	 * In short, it is tedious but safer.
-	 * <p>Example: 
+	 * <p>Example:
 <pre><code>
 foo.MyClass = zk.$extends(foo.MySuper, {
   multiply: function () {
@@ -1357,7 +1361,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * It sounds a bit strange at beginning but useful when passing a member
 	 * of an object that will be executed as a global function.
 	 *
-	 * <p>Example: Let us say if you want a member function to be called periodically, you can do as follows. 
+	 * <p>Example: Let us say if you want a member function to be called periodically, you can do as follows.
 <pre><code>
 setInterval(wgt.proxy(wgt.doIt), 1000); //assume doIt is a member function of wgt
 </code></pre>
@@ -1388,7 +1392,7 @@ _zkf = {
 	//note we cannot generate javadoc for this because Java cannot have both static and non-static of the same name
 	$class: zk.Class,
 	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
-	 * Example: 
+	 * Example:
 <pre><code>
 if (klass.isInstance(obj)) {
 }
@@ -1400,7 +1404,7 @@ if (klass.isInstance(obj)) {
 		return o && o.$instanceof && o.$instanceof(this);
 	},
 	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
-	 * Example: 
+	 * Example:
 <pre><code>
 if (klass1.isAssignableFrom(klass2)) {
 }
@@ -1420,27 +1424,22 @@ zk.copy(zk.Class, _zkf);
 zk.copy(zk.Object, _zkf);
 
 //error box//
-var _errs = [], _errcnt = 0;
+var _erbx, _errcnt = 0;
 
 _zErb = zk.$extends(zk.Object, {
 	$init: function (msg) {
-		var id = "zk_err" + _errcnt++,
-			$id = '#' + id;
-			x = (_errcnt * 5) % 50, y = (_errcnt * 5) % 50,
-			html =
-	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
-	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
-	+'<td align="right"><div id="'+id+'-p">';
-	if (!zk.zkuery)
-		html += '<span class="btn" onclick="_zErb._redraw()">redraw</span>&nbsp;';
-	html += '<span class="btn" onclick="_zErb._close(\''+id+'\')">close</span></div></td></tr>'
-	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
-	+'</td></tr></table></div>';
+		var id = "zk_err",
+			$id = "#" + id,
+			// Use zUtl.encodeXML -- Bug 1463668: security
+ 			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
+ 					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
+ 					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >';
+		if (!zk.zkuery)
+			html += '<div class="btn redraw" onclick="_zErb._redraw()"></div>';
+		html += '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
 		jq(document.body).append(html);
-
+		_erbx = this;
 		this.id = id;
-		_errs.push(this);
-
 		try {
 			var n;
 			this.dg = new zk.Draggable(null, n = jq($id)[0], {
@@ -1449,9 +1448,11 @@ _zErb = zk.$extends(zk.Object, {
 				endeffect: zk.$void});
 		} catch (e) {
 		}
+		jq("#" + id).slideDown(1000);
 	},
 	destroy: function () {
-		_errs.$remove(this);
+		_erbx = null;
+		_errcnt = 0;
 		if (this.dg) this.dg.destroy();
 		jq('#' + this.id).remove();
 	}
@@ -1460,20 +1461,14 @@ _zErb = zk.$extends(zk.Object, {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	},
-	_close: function (id) {
-		for (var j = _errs.length; j--;) {
-			var e = _errs[j];
-			if (e.id == id) {
-				_errs.splice(j, 1);
-				e.destroy();
-				return;
-			}
-		}
+	push: function (msg) {
+		jq("#" + _erbx.id + " .errnum").html(++_errcnt + " Errors");
+		jq("#" + _erbx.id + " .newmsg").removeClass("newmsg").addClass("msg");
+		jq("#" + _erbx.id + " .msgs").prepend('<div class="newmsg">' + msg + "</hr></div>");
+		jq("#" + _erbx.id + " .newmsg").slideDown(600)
 	},
-	closeAll: function () {
-		for (var j = _errs.length; j--;)
-			_errs[j].destroy();
-		_errs = [];
+	remove: function () {
+		_erbx.destroy();
 	}
 });
 
