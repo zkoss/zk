@@ -1,10 +1,33 @@
+/* FusionchartGanttModel.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jan 13, 2011 5:48:47 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under LGPL Version 3.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+ */
 package org.zkoss.zul;
 
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
-
+/**
+ * A Category data model implementation of {@link CategoryModel}. A Category
+ * model is an N series of (category, value) data objects.
+ * 
+ * @author jimmyshiau
+ * @see CategoryModel
+ * @see Fusionchart
+ */
 public class FusionchartGanttModel extends GanttModel {
 
 	private static final long serialVersionUID = 20110104121601L;
@@ -206,7 +229,7 @@ public class FusionchartGanttModel extends GanttModel {
 		/**
 		 * Sets whether to show the name of this tasks over the task bar.
 		 * <p>Default: true.
-		 * @return boolean
+		 * @param showName
 		 */
 		public void setShowName(boolean showName) {
 			if (showName != _showName) {
@@ -411,7 +434,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the id of the task.
-		 * @return
+		 * @return int
 		 */
 		public int getId() {
 			return _id;

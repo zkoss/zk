@@ -168,14 +168,10 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 	 *            the value
 	 * @param color
 	 *            the color
-	 * @param hoverText
-	 *            the hoverText
-	 * @param alpha
-	 *            the alpha
 	 * @param link
 	 *            the link
-	 * @param showName
-	 *            the showName
+	 * @param alpha
+	 *            the alpha
 	 */
 	public void setValue(Comparable series, Comparable category, Number value,
 			String color, String link, int alpha) {
@@ -324,7 +320,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		 * chart.
 		 * <p>
 		 * Default: true.
-		 * @return
+		 * @return boolean
 		 */
 		public boolean isShowName() {
 			return _showName;
@@ -866,7 +862,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		/**
 		 * Returns the suffix to all the numbers for this dataset.
 		 * 
-		 * @return
+		 * @return String
 		 */
 		public String getNumberSuffix() {
 			return _numberSuffix;
