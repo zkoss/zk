@@ -988,11 +988,7 @@ zk.endProcessing();
 	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
-		if (jq('#zk_err')[0] == null) {
-			new _zErb(msg);
-		} else {
-			_zErb.push(msg);
-		}
+		_zErb.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example:
@@ -1435,7 +1431,7 @@ _zErb = zk.$extends(zk.Object, {
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
  					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >';
 		if (!zk.zkuery)
-			html += '<div class="btn redraw" onclick="_zErb._redraw()"></div>';
+			html += '<div class="btn redraw" onclick="_zErb.redraw()"></div>';
 		html += '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
 		jq(document.body).append(html);
 		_erbx = this;
@@ -1457,18 +1453,22 @@ _zErb = zk.$extends(zk.Object, {
 		jq('#' + this.id).remove();
 	}
 },{
-	_redraw: function () {
+	redraw: function () {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	},
 	push: function (msg) {
-		jq("#" + _erbx.id + " .errnum").html(++_errcnt + " Errors");
-		jq("#" + _erbx.id + " .newmsg").removeClass("newmsg").addClass("msg");
-		jq("#" + _erbx.id + " .msgs").prepend('<div class="newmsg">' + msg + "</hr></div>");
-		jq("#" + _erbx.id + " .newmsg").slideDown(600)
+		if (!_erbx)
+			return new _zErb(msg);
+
+		var id = _erbx.id;
+		jq("#" + id + " .errnum").html(++_errcnt + " Errors");
+		jq("#" + id + " .msgs").prepend('<div class="newmsg">' + msg + "</hr></div>");
+		jq("#" + id + " .newmsg")
+			.removeClass("newmsg").addClass("msg").slideDown(600)
 	},
 	remove: function () {
-		_erbx.destroy();
+		if (_erbx) _erbx.destroy();
 	}
 });
 

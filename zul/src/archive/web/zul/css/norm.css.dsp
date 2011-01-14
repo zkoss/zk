@@ -56,12 +56,12 @@ div.z-error {
 	height: 90px;
 	width: 450px;
 	padding: 3px;
-    border-width: 1px;
-    border-style: solid;
+	border-width: 1px;
+	border-style: solid;
 	border-color: #BC6464 #940000 #940000 #BC6464;
 	-moz-box-shadow: 0px 0px 6px gray; 
-    -webkit-box-shadow: 0px 0px 6px gray;
-    box-shadow: 0px 0px 6px gray; 
+	-webkit-box-shadow: 0px 0px 6px gray;
+	box-shadow: 0px 0px 6px gray; 
 	background-color: #FFEDED;
 }
 div.z-error .msgcnt {
@@ -97,13 +97,14 @@ div.z-error .btn {
 div.z-error #zk_err-p {
 	cursor: move;
 }
-.ie7 div.z-error .btn {
-	display: inline;
-}
 div.z-error .errnum {
 	padding-left: 20px;
 	color: #C60303;
 	font-weight: bold;	
+}
+<c:if test="${!c:browser('ie6-')}">
+.ie7 div.z-error .btn {
+	display: inline;
 }
 div.z-error .errnum {
 	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -33px 2px transparent;
@@ -114,6 +115,7 @@ div.z-error .redraw {
 div.z-error .close {
 	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 2px transparent;
 }
+</c:if>
 <%-- IE6 --%>
 <c:if test="${c:browser('ie6-')}">
 div.z-error .btn {
