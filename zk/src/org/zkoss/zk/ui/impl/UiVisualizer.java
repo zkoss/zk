@@ -200,7 +200,7 @@ import org.zkoss.zk.au.out.*;
 			return; //nothing to do
 
 		if (_pgInvalid == null)
-			_pgInvalid = new LinkedHashSet(7);
+			_pgInvalid = new LinkedHashSet(8);
 		_pgInvalid.add(page);
 	}
 	/** Adds an invalidated component. Once invalidated, all invocations
@@ -894,7 +894,7 @@ import org.zkoss.zk.au.out.*;
 		//process _smartUpdated
 		for (Iterator it = _smartUpdated.keySet().iterator(); it.hasNext();) {
 			Component p = (Component)it.next();
-			boolean removed = false;
+			boolean removed = false, first = true;
 			for (; p != null; p = p.getParent()) { //check p in _smartUpdated
 				if (outs.contains(p)) //checked
 					break;
@@ -904,7 +904,8 @@ import org.zkoss.zk.au.out.*;
 					removed = true;
 					break;
 				}
-				ancs.add(p);
+				if (first) first = false; //No need to add 1st p
+				else ancs.add(p);
 			}
 			if (removed) ins.addAll(ancs);
 			else outs.addAll(ancs);
