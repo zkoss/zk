@@ -49,14 +49,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		rt = jq.evalJSON(rt);
-		var	rs = rt.rs,
-			rid = rt.rid;
+		var	rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
 
-		pushCmds(cmds, rs);
+		pushCmds(cmds, rt.rs);
 		return true;
 	}
 	function pushCmds(cmds, rs) {
