@@ -882,30 +882,28 @@ public class Fusionchart extends HtmlBasedComponent {
 
 		protected void renderSeriesSet(Comparable series, Comparable category, CategoryModel model) {
 			sb.append("<set value='").append(model.getValue(series, category)).append("'");
-			boolean hasListen = false;
 			
 			int seriIndex = ((List)model.getSeries()).indexOf(series);
 			int cateIndex = ((List)model.getCategories()).indexOf(category);
 			
-			if (model instanceof FusionchartCategoryModel) {
-				FusionchartData data = ((FusionchartCategoryModel) model).getFusionchartData(series, category);
-				sb.append(toFusionchartAttr("color", toFusionchartColor(data.getColor())));
-					
-				if (isListenedonClick()) {
-					sb.append(" link='JavaScript:zk.Widget.$(\"").append(getUuid()).append("\").clickChart(\"")
-						.append(seriIndex)
-						.append("\",\"").append(cateIndex).append("\");'");
-					hasListen = true;
-				} else 
-					sb.append(toFusionchartAttr("link", data.getLink()));
-				
-				if (!isUseChartFgAlpha())
-					sb.append(" alpha='").append(toFusionchartAlpha(data.getAlpha())).append("'");
-			}
-			
-			if (isListenedonClick() && !hasListen)
+			if (isListenedonClick())
 				sb.append(" link='JavaScript:zk.Widget.$(\"").append(getUuid()).append("\").clickChart(\"")
 						.append(seriIndex).append("\",\"").append(cateIndex).append("\");'");
+			
+			if (model instanceof FusionchartCategoryModel) {
+				FusionchartData data = ((FusionchartCategoryModel) model).getFusionchartData(series, category);
+				
+				if (data != null) {
+					sb.append(toFusionchartAttr("color", toFusionchartColor(data.getColor())));
+					
+					if (!isListenedonClick())
+						sb.append(toFusionchartAttr("link", data.getLink()));
+					
+					if (!isUseChartFgAlpha())
+						sb.append(" alpha='").append(toFusionchartAlpha(data.getAlpha())).append("'");
+				}
+			}
+			
 			sb.append("/>");
 		}
 		
