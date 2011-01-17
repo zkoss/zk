@@ -130,7 +130,6 @@
 	cursor: pointer; 
 	text-decoration: none;
 	-moz-user-select: none;
-	outline: 0;
 }
 
 .z-calendar-calyear td,
