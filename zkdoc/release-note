@@ -11,6 +11,7 @@ ZK 5.0.6
   3118161: When desktop destroyed, better to force cleanup if timeout
   3139008: Add Vietnamese language
   3158054: Optimize UiVisualizer for hug number of updates
+  3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
