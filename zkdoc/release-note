@@ -41,6 +41,7 @@ ZK 5.0.6
   3153941: Decimalbox didn't compatible with jre / jdk 1.4.x
   3154168: Doublespinner didn't compatible with jre / jdk 1.4.x
   3156026: H/Vlayout sync size busy
+  3159604: The font of the button in the caption become smaller
   
 * Upgrade Notes
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild

@@ -1,5 +1,6 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-.z-button {
+.z-button,
+.z-button tr td {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; color: black;
 	cursor: pointer; white-space: nowrap;
