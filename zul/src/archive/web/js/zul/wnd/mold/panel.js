@@ -19,7 +19,7 @@ function (out, skipper) {
 		caption = this.caption,
 		isFrameRequired = zul.wnd.PanelRenderer.isFrameRequired(this),
 		framable = this.isFramable(),
-		noborder = this.getBorder() != 'normal',
+		noborder = this.getBorder() != 'normal', //Ulike window, panel does not support other kind of borders
 		noheader = !caption && !title;
 		
 	out.push('<div', this.domAttrs_(), '>');
