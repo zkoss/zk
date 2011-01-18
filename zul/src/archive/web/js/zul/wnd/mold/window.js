@@ -20,8 +20,11 @@ function (out, skipper) {
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		withFrame = zul.wnd.WindowRenderer.shallCheckBorder(this),
-		noborder = 'normal' != this.getBorder() ? '-noborder' : '';
-		
+		bordercls = this._border;
+
+	bordercls = "normal" == bordercls ? "":
+		"none" == bordercls ? "-noborder" : '-' + bordercls;
+
 	out.push('<div', this.domAttrs_(), '>');
 
 	if (caption || title) {
@@ -47,17 +50,17 @@ function (out, skipper) {
 		}
 		out.push('</div></div></div></div>');
 	} else if (withFrame)
-		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder, '"></div></div>');
+		out.push('<div class="', zcls, '-tl', bordercls,
+				'"><div class="', zcls, '-tr', bordercls, '"></div></div>');
 
 	if (withFrame)
-		out.push('<div class="', zcls, '-cl', noborder,
-			'"><div class="', zcls, '-cr', noborder,
-			'"><div class="', zcls, '-cm', noborder, '">');
+		out.push('<div class="', zcls, '-cl', bordercls,
+			'"><div class="', zcls, '-cr', bordercls,
+			'"><div class="', zcls, '-cm', bordercls, '">');
 
 	out.push('<div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
-	out.push(zcls, '-cnt', noborder, '"');
+	out.push(zcls, '-cnt', bordercls, '"');
 	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
@@ -69,8 +72,8 @@ function (out, skipper) {
 	out.push('</div>');
 
 	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl', noborder,
-			'"><div class="', zcls, '-br', noborder, '"></div></div>');
+		out.push('</div></div></div><div class="', zcls, '-bl', bordercls,
+			'"><div class="', zcls, '-br', bordercls, '"></div></div>');
 
 	out.push('</div>');
 }
