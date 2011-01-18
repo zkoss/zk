@@ -81,6 +81,7 @@ public class Fusionchart extends HtmlBasedComponent {
 				"org.zkoss.zul.FusionchartCategoryModel");
 		DEFAULT_MODEL.put(Chart.STACKED_AREA,
 				"org.zkoss.zul.FusionchartCategoryModel");
+		DEFAULT_MODEL.put(Fusionchart.COMBINATION, "org.zkoss.zul.FusionchartCategoryModel");
 		DEFAULT_MODEL.put(Chart.GANTT, "org.zkoss.zul.FusionchartGanttModel");
 	}
 
