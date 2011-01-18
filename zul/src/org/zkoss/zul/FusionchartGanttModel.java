@@ -16,10 +16,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
+import java.awt.Font;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zul.FusionchartCategoryModel.FusionchartSeries;
 import org.zkoss.zul.event.ChartDataEvent;
+
 /**
  * A Category data model implementation of {@link CategoryModel}. A Category
  * model is an N series of (category, value) data objects.
@@ -38,11 +41,11 @@ public class FusionchartGanttModel extends GanttModel {
 			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 			ftask.setSeries(series);
 			ftask.setOwner(this);
-			if (series instanceof FusionchartGanttProcess) {
-				FusionchartGanttProcess process = (FusionchartGanttProcess) series;
-				ftask.setProcessId(process.getId());
-				process.setSeries(series);
-				process.setOwner(this);
+			if (series instanceof FusionchartGanttSeries) {
+				FusionchartGanttSeries fseries = (FusionchartGanttSeries) series;
+				ftask.setProcessId(fseries.getId());
+				fseries.setCategory(task);
+				fseries.setOwner(this);
 			}
 		}
 	}
@@ -53,10 +56,10 @@ public class FusionchartGanttModel extends GanttModel {
 			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 			ftask.setSeries(null);
 			ftask.setOwner(null);
-			if (series instanceof FusionchartGanttProcess) {
-				FusionchartGanttProcess process = (FusionchartGanttProcess) series;
-				process.setSeries(null);
-				process.setOwner(null);
+			if (series instanceof FusionchartGanttSeries) {
+				FusionchartGanttSeries fseries = (FusionchartGanttSeries) series;
+				fseries.setCategory(null);
+				fseries.setOwner(null);
 			}
 		}
 	}
@@ -82,7 +85,7 @@ public class FusionchartGanttModel extends GanttModel {
 		private boolean _showEndDate = true;
 		private int _height;
 		private int _topPadding;
-		private int _taskDatePadding;
+		private Integer _taskDatePadding;
 		private String _color;
 		private int _alpha = 255;
 		private Font _font;
@@ -124,7 +127,7 @@ public class FusionchartGanttModel extends GanttModel {
 				double percent, String hoverText, String link,
 				boolean animation, boolean showName, boolean showStartDate,
 				boolean showEndDate, int height, int topPadding,
-				int taskDatePadding, String color, int alpha, Font font,
+				Integer taskDatePadding, String color, int alpha, Font font,
 				Border border) {
 			super(description, start, end, percent);
 			this._hoverText = hoverText;
@@ -157,6 +160,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the hover text of this task bar.
+		 * 
 		 * @return String
 		 */
 		public String getHoverText() {
@@ -165,6 +169,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Sets the hover text of this task bar.
+		 * 
 		 * @param hoverText
 		 */
 		public void setHoverText(String hoverText) {
@@ -177,6 +182,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Return the hyper link of this task bar.
+		 * 
 		 * @return String
 		 */
 		public String getLink() {
@@ -184,7 +190,8 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets  the hyper link of this task bar.
+		 * Sets the hyper link of this task bar.
+		 * 
 		 * @param link
 		 */
 		public void setLink(String link) {
@@ -197,7 +204,9 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns whether this particular task bar would animate or not.
-		 * <p>Default: false.
+		 * <p>
+		 * Default: false.
+		 * 
 		 * @return boolean
 		 */
 		public boolean isAnimation() {
@@ -206,7 +215,9 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Sets whether this particular task bar would animate or not.
-		 * <p>Default: false.
+		 * <p>
+		 * Default: false.
+		 * 
 		 * @param animation
 		 */
 		public void setAnimation(boolean animation) {
@@ -219,7 +230,9 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns whether to show the name of this tasks over the task bar.
-		 * <p>Default: true.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @return boolean
 		 */
 		public boolean isShowName() {
@@ -228,7 +241,9 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Sets whether to show the name of this tasks over the task bar.
-		 * <p>Default: true.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @param showName
 		 */
 		public void setShowName(boolean showName) {
@@ -240,8 +255,11 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Returns whether to show the start date of this task on the left of task bar.
-		 * <p>Default: true.
+		 * Returns whether to show the start date of this task on the left of
+		 * task bar.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @return boolean
 		 */
 		public boolean isShowStartDate() {
@@ -249,8 +267,11 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets whether to show the start date of this task on the left of task bar.
-		 * <p>Default: true.
+		 * Sets whether to show the start date of this task on the left of task
+		 * bar.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @param showStartDate
 		 */
 		public void setShowStartDate(boolean showStartDate) {
@@ -262,8 +283,11 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Returns whether to show the end date of this task on the right side of the task bar.
-		 * <p>Default: true.
+		 * Returns whether to show the end date of this task on the right side
+		 * of the task bar.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @return boolean
 		 */
 		public boolean isShowEndDate() {
@@ -271,8 +295,11 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Returns whether to show the end date of this task on the right side of the task bar.
-		 * <p>Default: true.
+		 * Returns whether to show the end date of this task on the right side
+		 * of the task bar.
+		 * <p>
+		 * Default: true.
+		 * 
 		 * @param showEndDate
 		 */
 		public void setShowEndDate(boolean showEndDate) {
@@ -285,6 +312,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the height for the task bar.
+		 * 
 		 * @return int
 		 */
 		public int getHeight() {
@@ -292,8 +320,9 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets the height for the task bar, if null
-		 * FusionCharts automatically calculates the best possible value.
+		 * Sets the height for the task bar, if null FusionCharts automatically
+		 * calculates the best possible value.
+		 * 
 		 * @param height
 		 */
 		public void setHeight(int height) {
@@ -306,6 +335,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the top padding for the task bar.
+		 * 
 		 * @return int
 		 */
 		public int getTopPadding() {
@@ -313,8 +343,9 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets the top padding for the task bar, if null
-		 * FusionCharts automatically calculates the best possible value.
+		 * Sets the top padding for the task bar, if null FusionCharts
+		 * automatically calculates the best possible value.
+		 * 
 		 * @param topPadding
 		 */
 		public void setTopPadding(int topPadding) {
@@ -327,18 +358,20 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the distance between task bar and date textbox.
+		 * 
 		 * @return int
 		 */
-		public int getTaskDatePadding() {
+		public Integer getTaskDatePadding() {
 			return _taskDatePadding;
 		}
 
 		/**
 		 * Sets the distance between task bar and date textbox, if null
 		 * FusionCharts automatically calculates the best possible value.
+		 * 
 		 * @param taskDatePadding
 		 */
-		public void setTaskDatePadding(int taskDatePadding) {
+		public void setTaskDatePadding(Integer taskDatePadding) {
 			if (taskDatePadding != _taskDatePadding) {
 				this._taskDatePadding = taskDatePadding;
 				if (_owner != null)
@@ -348,6 +381,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the background color for the task bar.
+		 * 
 		 * @return String
 		 */
 		public String getColor() {
@@ -355,9 +389,10 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets  the background color for the task bar.
-		 * If you need to show a gradiented background, 
-		 * just specify the list of colors here using a comma.
+		 * Sets the background color for the task bar. If you need to show a
+		 * gradiented background, just specify the list of colors here using a
+		 * comma.
+		 * 
 		 * @param color
 		 */
 		public void setColor(String color) {
@@ -372,6 +407,7 @@ public class FusionchartGanttModel extends GanttModel {
 		 * Returns the transparency of the task bar.
 		 * <p>
 		 * Default: 255.
+		 * 
 		 * @return int
 		 */
 		public int getAlpha() {
@@ -382,6 +418,7 @@ public class FusionchartGanttModel extends GanttModel {
 		 * Sets the transparency of the task bar.
 		 * <p>
 		 * Default: 255.
+		 * 
 		 * @param alpha
 		 */
 		public void setAlpha(int alpha) {
@@ -394,6 +431,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the font in which text will be rendered.
+		 * 
 		 * @return Font
 		 */
 		public Font getFont() {
@@ -402,6 +440,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Sets the font in which text will be rendered.
+		 * 
 		 * @param font
 		 */
 		public void setFont(Font font) {
@@ -414,6 +453,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the border would appear around the task bar.
+		 * 
 		 * @return Border
 		 */
 		public Border getBorder() {
@@ -421,7 +461,8 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets  the border would appear around the task bar.
+		 * Sets the border would appear around the task bar.
+		 * 
 		 * @param border
 		 */
 		public void setBorder(Border border) {
@@ -434,6 +475,7 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Returns the id of the task.
+		 * 
 		 * @return int
 		 */
 		public int getId() {
@@ -446,11 +488,11 @@ public class FusionchartGanttModel extends GanttModel {
 				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 				ftask.setSeries(_series);
 				ftask.setOwner(_owner);
-				if (_series instanceof FusionchartGanttProcess) {
-					FusionchartGanttProcess process = (FusionchartGanttProcess) _series;
-					ftask.setProcessId(process.getId());
-					process.setSeries(_series);
-					process.setOwner(_owner);
+				if (_series instanceof FusionchartGanttSeries) {
+					FusionchartGanttSeries fseries = (FusionchartGanttSeries) _series;
+					ftask.setProcessId(fseries.getId());
+					fseries.setCategory(_series);
+					fseries.setOwner(_owner);
 				}
 			}
 		}
@@ -461,10 +503,10 @@ public class FusionchartGanttModel extends GanttModel {
 				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 				ftask.setSeries(null);
 				ftask.setOwner(null);
-				if (_series instanceof FusionchartGanttProcess) {
-					FusionchartGanttProcess process = (FusionchartGanttProcess) _series;
-					process.setSeries(null);
-					process.setOwner(null);
+				if (_series instanceof FusionchartGanttSeries) {
+					FusionchartGanttSeries fseries = (FusionchartGanttSeries) _series;
+					fseries.setCategory(null);
+					fseries.setOwner(null);
 				}
 			}
 		}
@@ -485,76 +527,47 @@ public class FusionchartGanttModel extends GanttModel {
 	 * @author jimmyshiau
 	 * @see FusionchartGanttModel
 	 */
-	public static class FusionchartGanttProcess implements Comparable, java.io.Serializable {
+	public static class FusionchartGanttSeries extends FusionchartSeries {
 		private static final long serialVersionUID = 20110104121702L;
 		private static int count = 0;
 		private int _id = count++;
-		private String _name;
 		private String _link;
-		private Font _font;
-		private boolean _bold = false;
-		private boolean _underLine = false;
-		private int _verticalPadding;
+		private Integer _verticalPadding;
 		private String _align;
 		private String _vAlign;
+
+		public FusionchartGanttSeries(String seriesName) {
+			super(seriesName);
+		}
+
+		public FusionchartGanttSeries(String seriesName, String color) {
+			super(seriesName, color);
+		}
+
+		public FusionchartGanttSeries(String seriesName, int alpha) {
+			super(seriesName, alpha);
+		}
+
+		public FusionchartGanttSeries(String seriesName, String color,
+				int alpha) {
+			super(seriesName, color, alpha);
+		}
+
+		public FusionchartGanttSeries(String seriesName, String color,
+				int alpha, boolean showValues) {
+			super(seriesName, color, alpha, showValues);
+		}
+
 		
-		private GanttModel _owner;
-		private Comparable _series;
-
-		public FusionchartGanttProcess(String name) {
-			super();
-			this._name = name;
-		}
-
-		public FusionchartGanttProcess(String name, Font font, boolean bold,
-				boolean underLine) {
-			super();
-			this._name = name;
-			this._font = font;
-			this._bold = bold;
-			this._underLine = underLine;
-		}
-
-		public FusionchartGanttProcess(String name, String link, Font font,
-				boolean bold, boolean underLine, int verticalPadding,
-				String align, String vAlign) {
-			super();
-			this._name = name;
-			this._link = link;
-			this._font = font;
-			this._bold = bold;
-			this._underLine = underLine;
-			this._verticalPadding = verticalPadding;
-			this._align = align;
-			this._vAlign = vAlign;
-		}
-
+		
 		private int getId() {
 			return _id;
 		}
 
 		/**
-		 * Returns the name of the process, which will be displayed on the chart.
-		 * @return String
-		 */
-		public String getName() {
-			return _name;
-		}
-
-		/**
-		 * Sets the name of the process, which will be displayed on the chart.
-		 * @param name the name of the process
-		 */
-		public void setName(String name) {
-			if (!Objects.equals(name, _name)) {
-				this._name = name;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
-		 * Returns the link of the process, it will be a hyperlink to the process name.
+		 * Returns the link of the process, it will be a hyperlink to the
+		 * process name.
+		 * 
 		 * @return String
 		 */
 		public String getLink() {
@@ -562,103 +575,43 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets the link of the process, it will be a hyperlink to the process name.
-		 * @param link the link of the process
+		 * Sets the link of the process, it will be a hyperlink to the process
+		 * name.
+		 * 
+		 * @param link
+		 *            the link of the process
 		 */
 		public void setLink(String link) {
 			if (!Objects.equals(link, _link)) {
 				this._link = link;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
-		 * Returns the font in which text will be rendered.
-		 * @return Font
-		 */
-		public Font getFont() {
-			return _font;
-		}
-
-		/**
-		 * Sets the font in which text will be rendered.
-		 * @param font the font in which text
-		 */
-		public void setFont(Font font) {
-			if (!Objects.equals(font, _font)) {
-				this._font = font;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
-		 * Returns whether the text will be shown as bold or not.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		public boolean isBold() {
-			return _bold;
-		}
-
-		/**
-		 * Sets whether the text will be shown as bold or not.
-		 * <p>Default: false.
-		 * @param bold
-		 */
-		public void setBold(boolean bold) {
-			if (this._bold != bold) {
-				this._bold = bold;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
-		 * Returns whether the text will be shown as underline.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		public boolean isUnderLine() {
-			return _underLine;
-		}
-
-		/**
-		 * Sets whether the text will be shown as underline.
-		 * <p>Default: false.
-		 * @param underLine
-		 */
-		public void setUnderLine(boolean underLine) {
-			if (this._underLine != underLine) {
-				this._underLine = underLine;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
 		/**
 		 * Returns the top margin.
+		 * 
 		 * @return int
 		 */
-		public int getVerticalPadding() {
+		public Integer getVerticalPadding() {
 			return _verticalPadding;
 		}
 
 		/**
 		 * Sets the top margin.
+		 * 
 		 * @param verticalPadding
 		 */
-		public void setVerticalPadding(int verticalPadding) {
+		public void setVerticalPadding(Integer verticalPadding) {
 			if (this._verticalPadding != verticalPadding) {
 				this._verticalPadding = verticalPadding;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
 		/**
 		 * Returns the horizontal alignment of text.
+		 * 
 		 * @return String
 		 */
 		public String getAlign() {
@@ -667,19 +620,21 @@ public class FusionchartGanttModel extends GanttModel {
 
 		/**
 		 * Sets the horizontal alignment of text.
-		 * <p>Allowed values: left, center, right. 
+		 * <p>
+		 * Allowed values: left, center, right.
+		 * 
 		 * @param align
 		 */
 		public void setAlign(String align) {
 			if (!Objects.equals(align, _align)) {
 				this._align = align;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
 		/**
 		 * Returns the vertical alignment of text.
+		 * 
 		 * @return String
 		 */
 		public String getvAlign() {
@@ -687,123 +642,17 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Sets  the vertical alignment of text.
-		 * <p>Allowed values: left, center, right.
+		 * Sets the vertical alignment of text.
+		 * <p>
+		 * Allowed values: left, center, right.
+		 * 
 		 * @param vAlign
 		 */
 		public void setvAlign(String vAlign) {
 			if (!Objects.equals(vAlign, _vAlign)) {
 				this._vAlign = vAlign;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
-		}
-
-		private void setSeries(Comparable series) {
-			_series = series;
-		}
-
-		private void setOwner(GanttModel owner) {
-			_owner = owner;
-		}
-		
-		public int compareTo(Object obj) {
-			boolean isString = obj instanceof String;
-			if (!(obj instanceof FusionchartGanttProcess || isString))
-				throw new ClassCastException(
-						"series shall be a String or a FusionchartGanttProcess");
-			if (isString)
-				return _name.compareTo(obj);
-
-			FusionchartGanttProcess process = (FusionchartGanttProcess) obj;
-			int res = new Integer(_id).compareTo(new Integer(process._id));
-			if (res != 0)
-				return res;
-
-			return _name.compareTo(process.getName());
-		}
-	}
-
-	/**
-	 * A Font class for store all of font attributes.
-	 * @author jimmyshiau
-	 */
-	public static class Font implements java.io.Serializable {
-		private static final long serialVersionUID = 20110104121703L;
-		private String font;
-		private int fontSize;
-		private String fontColor;
-
-		public Font(String font, int fontSize, String fontColor) {
-			super();
-			this.font = font;
-			this.fontSize = fontSize;
-			this.fontColor = fontColor;
-		}
-
-		/**
-		 * Returns the font of the text.
-		 * 
-		 * @return String
-		 */
-		public String getFont() {
-			return font;
-		}
-
-		/**
-		 * Returns the font size of the text.
-		 * 
-		 * @return int
-		 */
-		public int getFontSize() {
-			return fontSize;
-		}
-
-		/**
-		 * Returns the font color of the text.
-		 * 
-		 * @return String
-		 */
-		public String getFontColor() {
-			return fontColor;
-		}
-
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((font == null) ? 0 : font.hashCode());
-			result = prime * result
-					+ ((fontColor == null) ? 0 : fontColor.hashCode());
-			result = prime * result + fontSize;
-			return result;
-		}
-
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Font other = (Font) obj;
-			if (font == null) {
-				if (other.font != null)
-					return false;
-			} else if (!font.equals(other.font))
-				return false;
-			if (fontColor == null) {
-				if (other.fontColor != null)
-					return false;
-			} else if (!fontColor.equals(other.fontColor))
-				return false;
-			if (fontSize != other.fontSize)
-				return false;
-			return true;
-		}
-
-		public String toString() {
-			return "Font [font=" + font + ", fontSize=" + fontSize
-					+ ", fontColor=" + fontColor + "]";
 		}
 	}
 
@@ -814,8 +663,8 @@ public class FusionchartGanttModel extends GanttModel {
 	 */
 	/**
 	 * @author Jimmy
-	 *
-	 * 2011
+	 * 
+	 *         2011
 	 */
 	public static class Border implements java.io.Serializable {
 		private static final long serialVersionUID = 20110104121704L;

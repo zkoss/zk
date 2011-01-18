@@ -40,6 +40,7 @@
 		var chart = new FusionCharts(_swfPath + _getSwf(wgt), 
 						'Chart_' + wgt.uuid, zk.parseInt(wgt._width), zk.parseInt(wgt._height));
 		chart.setDataXML(fusionChartXML);
+		chart.setTransparent(true);
 		chart.render(wgt.$n());
 		wgt._fusionchart = chart;
 		wgt._shallRedraw = false;

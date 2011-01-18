@@ -380,7 +380,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		private int _alpha = 255;
 
 		private AbstractChartModel _owner;
-		private Comparable _category;
+		private Object _category;
 
 		public FusionchartSeries(String seriesName) {
 			super();
@@ -504,11 +504,11 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 				_owner.fireEvent(ChartDataEvent.CHANGED, this, _category);
 		}
 
-		private void setCategory(Comparable category) {
+		/*package*/ void setCategory(Object category) {
 			_category = category;
 		}
 
-		private void setOwner(AbstractChartModel owner) {
+		/*package*/ void setOwner(AbstractChartModel owner) {
 			_owner = owner;
 		}
 

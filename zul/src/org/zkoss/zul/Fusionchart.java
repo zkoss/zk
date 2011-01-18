@@ -34,10 +34,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MouseEvent;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.FusionchartCategoryModel.*;
 import org.zkoss.zul.FusionchartPieModel.FusionchartPieData;
+import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
 
@@ -111,7 +111,7 @@ public class Fusionchart extends HtmlBasedComponent {
 	private int[] _bgRGB = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
 
-	//Time Series Chart related attributes
+	//only for Gantt chart
 	private TimeZone _tzone;
 	private String _period;
 	private String _dateFormat;
@@ -123,6 +123,10 @@ public class Fusionchart extends HtmlBasedComponent {
 	private Font _categoryFont =  new Font("Tahoma", Font.PLAIN, 12);
 	private Font _baseFont =  new Font("Tahoma", Font.PLAIN, 12);
 	private Font _outCnvBaseFont =  new Font("Tahoma", Font.PLAIN, 12);
+	private Font _xAxisFont =  new Font("Tahoma", Font.PLAIN, 12); //only for Gantt chart
+	private Font _xAxisTickFont =  new Font("Tahoma", Font.PLAIN, 12); //only for Gantt chart
+	private Font _yAxisFont =  new Font("Tahoma", Font.PLAIN, 12); //only for Gantt chart
+	private Font _yAxisTickFont =  new Font("Tahoma", Font.PLAIN, 12);  //only for Gantt chart
 	
 	
 	//FusionChart related attributes
@@ -558,6 +562,122 @@ public class Fusionchart extends HtmlBasedComponent {
 	}
 	
 	/**
+	 * Returns the tick number font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis tick, check whether the default x axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @return the tick number font of x axis of this chart 
+	 */
+	public Font getXAxisTickFont() {
+		return _xAxisTickFont;
+	}
+
+	/**
+	 * Sets the tick number font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis tick, check whether the default x axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @param axisTickFont the tick number font of x axis of this chart 
+	 */
+	public void setXAxisTickFont(Font axisTickFont) {
+		if (!Objects.equals(_xAxisTickFont, axisTickFont)) {
+			_xAxisTickFont = axisTickFont;
+			smartDrawChart();
+		}
+	}
+	
+	/**
+	 * Returns the label font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis label, check whether the default x axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @return the label font of x axis of this chart 
+	 */
+	public Font getXAxisFont() {
+		return _xAxisFont;
+	}
+
+	/**
+	 * Sets the label font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis label, check whether the default x axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @param axisFont the label font of x axis of this chart 
+	 */
+	public void setXAxisFont(Font axisFont) {
+		if (!Objects.equals(_xAxisFont, axisFont)) {
+			_xAxisFont = axisFont;
+			smartDrawChart();
+		}
+	}
+	
+	/**
+	 * Returns the tick number font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis tick, check whether the default y axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @return the tick number font of y axis of this chart 
+	 */
+	public Font getYAxisTickFont() {
+		return _yAxisTickFont;
+	}
+
+	/**
+	 * Sets the tick number font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis tick, check whether the default y axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @param axisTickFont the tick number font of y axis of this chart 
+	 */
+	public void setYAxisTickFont(Font axisTickFont) {
+		if (!Objects.equals(_yAxisTickFont, axisTickFont)) {
+			_yAxisTickFont = axisTickFont;
+			smartDrawChart();
+		}
+	}
+	
+	/**
+	 * Returns the label font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis label, check whether the default y axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @return the label font of y axis of this chart 
+	 */
+	public Font getYAxisFont() {
+		return _yAxisFont;
+	}
+
+	/**
+	 * Sets the label font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis label, check whether the default y axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * <p>
+	 * It is meaningful only for Gantt chart.
+	 * @param axisFont the tick number font of y axis of this chart 
+	 */
+	public void setYAxisFont(Font axisFont) {
+		if (!Objects.equals(_yAxisFont, axisFont)) {
+			_yAxisFont = axisFont;
+			smartDrawChart();
+		}
+	}
+	
+	/**
 	 * Returns which all numbers on the chart would be rounded to.
 	 * <p>
 	 * Default: 100.
@@ -699,14 +819,6 @@ public class Fusionchart extends HtmlBasedComponent {
 			if (threeD)
 				errMsg = type;
 			_chartImpl = new Gantt();
-			final TimeZone tz = getTimeZone();
-			final SimpleDateFormat df = new SimpleDateFormat();
-			df.setTimeZone(tz != null ? tz: TimeZones.getCurrent());
-			if (getDateFormat() == null) {
-				df.applyPattern("MMM d ''yy");
-			} else {
-				df.applyPattern(getDateFormat());
-			}
 		} else 
 			throw new UiException("Unsupported chart type yet: "+type);
 		
@@ -722,39 +834,49 @@ public class Fusionchart extends HtmlBasedComponent {
 	abstract private class ChartImpl {
 		abstract String createChartXML();
 		protected String createChart(String dataset){
-			StringBuffer sb = new StringBuffer("<graph");
-			
-			Font baseFont = getBaseFont();
-			if (baseFont != null)
-				sb.append(" baseFont='").append(baseFont.getFontName())
-					.append("' baseFontSize='").append(baseFont.getSize()).append("'");
-			
-			sb.append(" bgAlpha='").append(toFusionchartAlpha(getPaneAlpha()))
-				.append("' decimalPrecision='").append(getDecimalPrecision()).append("'")
-				.append(toFusionchartAttr("bgColor", toFusionchartColor(getPaneColor())))
-				.append(toFusionchartAttr("caption", getTitle()));
+			String tag = getChartTag();
+			StringBuffer sb = new StringBuffer("<").append(tag);
 			
 			renderProperties(sb);
 			
-			sb.append(">").append(dataset).append("</graph>");
+			sb.append(">").append(dataset).append("</").append(tag).append(">");
 			return sb.toString();
 		}
+		
+		protected String getChartTag() {
+			return "graph";
+		}
+		
 		protected void renderProperties(StringBuffer sb) {
+			sb.append(toFusionchartFont("baseFont", getBaseFont(), false))
+				.append(" bgAlpha='").append(toFusionchartAlpha(getPaneAlpha())).append("'")
+				.append(toFusionchartAttr("bgColor", toFusionchartColor(getPaneColor())))
+				.append(toFusionchartAttr("caption", getTitle()));
 		}
 	}
 	
-	abstract private class AbstractChartImpl extends ChartImpl{
+	abstract private class CanvasChart extends ChartImpl {
 		protected void renderProperties(StringBuffer sb){
-			Font outCnvBaseFont = getOutCnvBaseFont();
-			if (outCnvBaseFont != null)
-				sb.append(" outCnvBaseFont='").append(outCnvBaseFont.getFontName())
-					.append("' outCnvBaseFontSze='").append(outCnvBaseFont.getSize()).append("'");
-			
-			sb.append(" canvasBgAlpha='").append(toFusionchartAlpha(getBgAlpha()))
-				.append("' showLegend='").append(isShowLegend() ? '1': '0').append("'")
-				.append(toFusionchartAttr("canvasBgColor", toFusionchartColor(getBgColor())))
+			super.renderProperties(sb);
+			sb.append(toFusionchartFont("outCnvBaseFont", getOutCnvBaseFont(), false))
+				.append(" canvasBgAlpha='").append(toFusionchartAlpha(getBgAlpha()))
+				.append(toFusionchartAttr("canvasBgColor", toFusionchartColor(getBgColor())));
+		}
+	}
+	
+	abstract private class AxisChart extends CanvasChart {
+		protected void renderProperties(StringBuffer sb){
+			super.renderProperties(sb);
+			sb.append("' showLegend='").append(isShowLegend() ? '1': '0').append("'")
 				.append(toFusionchartAttr("xaxisname", getXAxis()))
 				.append(toFusionchartAttr("yaxisname", getYAxis()));
+		}
+	}
+	
+	abstract private class NumberFormatChart extends AxisChart {
+		protected void renderProperties(StringBuffer sb){
+			super.renderProperties(sb);
+			sb.append(" decimalPrecision='").append(getDecimalPrecision()).append("'");
 		}
 	}
 	
@@ -762,14 +884,8 @@ public class Fusionchart extends HtmlBasedComponent {
 		private StringBuffer sb;
 		private CategoryRender () {
 			sb = new StringBuffer();
-			sb.append("<categories");
-			Font font = getCategoryFont();
-			
-			if (font != null)
-				sb.append(" font='").append(font.getFontName())
-					.append("' fontSize='").append(font.getSize()).append("'");
-			
-			sb.append(">");
+			sb.append("<categories")
+				.append(toFusionchartFont("font", getCategoryFont(), false)).append(">");
 		}
 		
 		private void renderCategory(Object category) {
@@ -1152,26 +1268,91 @@ public class Fusionchart extends HtmlBasedComponent {
 	 * transfer a GanttModel into JFreeChart GanttDataset.
 	 */
 	private String GanttModelToGanttDataset(GanttModel model) {
+		TimeZone tz = getTimeZone();
+		String fdf = getDateFormat();
+		SimpleDateFormat df = new SimpleDateFormat(fdf != null ? fdf: "MMM d ''yy");
+		df.setTimeZone(tz != null ? tz: TimeZones.getCurrent());
+		
+		
+		String start = "", end = "";
+		List monthes = new ArrayList();
+		
 		StringBuffer sb = new StringBuffer();
+		
+		
+		
+		
 		final Comparable[] allseries = model.getAllSeries();
 		final int sz = allseries.length;
 		for (int j = 0; j < sz; ++j) {
 			final Comparable series = allseries[j];
 //			final TaskSeries taskseries = new TaskSeries((String) series);
-//			final GanttTask[] tasks = model.getTasks(series);
-//			final int tsz = tasks.length;
-//			for (int k = 0; k < tsz; ++k) {
-//				final GanttTask task = tasks[k];
+			final GanttTask[] tasks = model.getTasks(series);
+			final int tsz = tasks.length;
+			for (int k = 0; k < tsz; ++k) {
+				final GanttTask task = tasks[k];
 //				final Task jtask = newTask(task);
 //				addSubtask(jtask, task);
 //				taskseries.add(jtask); 
-//			}
+			}
 //			dataset.add(taskseries);
+			
+			
+			
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		StringBuffer cateSb = new StringBuffer();
+		
+		String title = getTitle();
+		if (!Strings.isBlank(title)) {
+			cateSb.append("<categories font='Tahoma' fontSize='16' fontColor='404040' bgColor='EEEEEE' isBold='1'>")
+				.append("<category name='").append(title)
+				.append("' start='").append(start)
+				.append("' end='").append(end).append("'/></categories>");
+		}
+		
+		
+		String yAxis = getYAxis();
+		if (!Strings.isBlank(yAxis)) {
+			cateSb.append("<categories")
+				.append(toFusionchartFont("font", getXAxisFont(), true))
+				.append(" fontColor='404040' bgColor='EEEEEE' isBold='1'>")
+				.append("<category name='").append(yAxis)
+				.append("' start='").append(start)
+				.append("' end='").append(end).append("'/></categories>");
+		}
+		
+		cateSb.append("<categories")
+			.append(toFusionchartFont("font", getXAxisTickFont(), true))
+			.append(" fontColor='404040' bgColor='EEEEEE' isBold='0'>");
+		
+		for (Iterator it = monthes.iterator(); it.hasNext();) {
+			String[] month = (String[]) it.next();
+			cateSb.append("<category name='").append(month[0])
+				.append("' start='").append(month[1])
+				.append("' end='").append(month[2]).append("'/>");
+		}
+		cateSb.append("'</categories>");
+		
 		
 		return sb.toString();
 	}
 	
+	
+
 	/** pie chart */
 	/** pie chart */
 	private class Pie extends ChartImpl {
@@ -1184,13 +1365,15 @@ public class Fusionchart extends HtmlBasedComponent {
 			throw new UiException("The model of pie chart must be a org.zkoss.zul.PieModel or a org.zkoss.zul.CategoryModel");
 		}
 		protected void renderProperties(StringBuffer sb) {
+			super.renderProperties(sb);
 			sb.append(" pieFillAlpha='").append(toFusionchartAlpha(getFgAlpha()))
+				.append("' decimalPrecision='").append(getDecimalPrecision()).append("'")
 				.append("'  shownames='1'");
 		}
 	}
 	
 	/** bar chart */
-	private class Bar extends AbstractChartImpl {
+	private class Bar extends NumberFormatChart {
 		public String createChartXML() {
 			if (_model instanceof CategoryModel)
 				return createChart(CategoryModelToCategoryDataset((CategoryModel)_model));
@@ -1199,13 +1382,10 @@ public class Fusionchart extends HtmlBasedComponent {
 			
 			throw new UiException("The model of bar chart must be a org.zkoss.zul.CategoryModel or a org.zkoss.zul.XYModel");
 		}
-		protected void renderProperties(StringBuffer sb){
-			
-		}
 	}
 	
 	/** area chart */
-	private class AreaImpl extends AbstractChartImpl {
+	private class AreaImpl extends NumberFormatChart {
 		public String createChartXML() {
 			if (_model instanceof CategoryModel)
 				return createChart(CategoryModelToCategoryDataset((CategoryModel)_model));
@@ -1217,7 +1397,7 @@ public class Fusionchart extends HtmlBasedComponent {
 	}
 
 	/** line chart */
-	private class Line extends AbstractChartImpl {
+	private class Line extends NumberFormatChart {
 		public String createChartXML() {
 			if (_model instanceof CategoryModel)
 				return createChart(CategoryModelToCategoryDataset((CategoryModel)_model));
@@ -1229,7 +1409,7 @@ public class Fusionchart extends HtmlBasedComponent {
 	}
 	
 	/** stackedbar chart */
-	private class StackedBar extends AbstractChartImpl {
+	private class StackedBar extends NumberFormatChart {
 		public String createChartXML() {
 			if (_model instanceof CategoryModel)
 				return createChart(CategoryModelToCategoryDataset((CategoryModel)_model));
@@ -1239,7 +1419,7 @@ public class Fusionchart extends HtmlBasedComponent {
 	}
 	
 	/** stackedarea chart */
-	private class StackedArea extends AbstractChartImpl {
+	private class StackedArea extends NumberFormatChart {
 		public String createChartXML() {
 			if (_model instanceof CategoryModel)
 				return createChart(CategoryModelToCategoryDataset((CategoryModel)_model));
@@ -1258,6 +1438,17 @@ public class Fusionchart extends HtmlBasedComponent {
 				return createChart(GanttModelToGanttDataset((GanttModel)_model));
 			
 			throw new UiException("The model of gantt chart must be a org.zkoss.zul.GanttModel");
+		}
+		
+		protected String getChartTag() {
+			return "chart";
+		}
+		
+		protected void renderProperties(StringBuffer sb) {
+			super.renderProperties(sb);
+			sb.append(" pieFillAlpha='").append(toFusionchartAlpha(getFgAlpha()))
+				.append("' decimalPrecision='").append(getDecimalPrecision()).append("'")
+				.append("'  shownames='1'");
 		}
 	}
 	
@@ -1285,6 +1476,21 @@ public class Fusionchart extends HtmlBasedComponent {
 		
 		return "";
 	}
+	
+	private String toFusionchartFont(String attr, Font font, boolean isAppendMoreFontAttr) {
+		if (font != null) {
+			StringBuffer sb = new StringBuffer(" ");
+			sb.append(" ").append(attr).append("='").append(font.getFontName())
+					.append("' ").append(attr).append("Size='").append(font.getSize()).append("'");
+//			if (isAppendMoreFontAttr) {
+//				sb.append(" isBold='").append(font.isBold() ? '1': '0').append("'");
+//			}
+			
+			return sb.toString();
+		}
+		return "";
+	}
+	
 	
 	/**
 	 * mark a draw flag to inform that this Chart needs update.
