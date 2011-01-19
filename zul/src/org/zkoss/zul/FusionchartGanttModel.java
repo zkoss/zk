@@ -73,17 +73,12 @@ public class FusionchartGanttModel extends GanttModel {
 	public static class FusionchartGanttTask extends GanttTask {
 		private static final long serialVersionUID = 20110103102914L;
 
-		private static int count = 0;
-		private int _id = count++;
-		private int _processId;
 		private String _hoverText;
 		private String _link;
 		private boolean _animation = false;
 		private boolean _showName = true;
 		private boolean _showStartDate = true;
 		private boolean _showEndDate = true;
-		private int _height;
-		private int _topPadding;
 		private Integer _taskDatePadding;
 		private String _color;
 		private int _alpha = 255;
@@ -93,68 +88,44 @@ public class FusionchartGanttModel extends GanttModel {
 		private GanttModel _owner;
 		private Comparable _series;
 
-		public FusionchartGanttTask(String description, Date start, Date end,
-				double percent) {
-			super(description, start, end, percent);
+		public FusionchartGanttTask(String description, Date start, Date end) {
+			super(description, start, end, 0);
 		}
 
 		public FusionchartGanttTask(String description, Date start, Date end,
-				double percent, String color) {
-			this(description, start, end, percent);
+				String color) {
+			this(description, start, end);
 			this._color = color;
 		}
-
+		
 		public FusionchartGanttTask(String description, Date start, Date end,
-				double percent, String color, int height, int topPadding) {
-			this(description, start, end, percent);
-			this._color = color;
-			this._height = height;
-			this._topPadding = topPadding;
-		}
-
-		public FusionchartGanttTask(String description, Date start, Date end,
-				double percent, String color, int height, int topPadding,
 				boolean animation) {
-			this(description, start, end, percent);
-			this._color = color;
-			this._height = height;
-			this._topPadding = topPadding;
+			this(description, start, end);
 			this._animation = animation;
 		}
+		
+		public FusionchartGanttTask(String description, Date start, Date end,
+				String color, boolean animation) {
+			this(description, start, end, animation);
+			this._color = color;
+		}
 
 		public FusionchartGanttTask(String description, Date start, Date end,
-				double percent, String hoverText, String link,
-				boolean animation, boolean showName, boolean showStartDate,
-				boolean showEndDate, int height, int topPadding,
-				Integer taskDatePadding, String color, int alpha, Font font,
-				Border border) {
-			super(description, start, end, percent);
+				String color, boolean animation,
+				String hoverText, String link,
+				boolean showName, boolean showStartDate,
+				boolean showEndDate, Integer taskDatePadding,
+				int alpha, Font font, Border border) {
+			this(description, start, end, color, animation);
 			this._hoverText = hoverText;
 			this._link = link;
-			this._animation = animation;
 			this._showName = showName;
 			this._showStartDate = showStartDate;
 			this._showEndDate = showEndDate;
-			this._height = height;
-			this._topPadding = topPadding;
 			this._taskDatePadding = taskDatePadding;
-			this._color = color;
 			this._alpha = alpha;
 			this._font = font;
 			this._border = border;
-		}
-
-		public int getProcessId() {
-			return _processId;
-		}
-
-		private void setProcessId(int processId) {
-			this._processId = processId;
-			if (processId != _processId) {
-				this._processId = processId;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
 		}
 
 		/**
@@ -310,52 +281,6 @@ public class FusionchartGanttModel extends GanttModel {
 		}
 
 		/**
-		 * Returns the height for the task bar.
-		 * 
-		 * @return int
-		 */
-		public int getHeight() {
-			return _height;
-		}
-
-		/**
-		 * Sets the height for the task bar, if null FusionCharts automatically
-		 * calculates the best possible value.
-		 * 
-		 * @param height
-		 */
-		public void setHeight(int height) {
-			if (height != _height) {
-				this._height = height;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
-		 * Returns the top padding for the task bar.
-		 * 
-		 * @return int
-		 */
-		public int getTopPadding() {
-			return _topPadding;
-		}
-
-		/**
-		 * Sets the top padding for the task bar, if null FusionCharts
-		 * automatically calculates the best possible value.
-		 * 
-		 * @param topPadding
-		 */
-		public void setTopPadding(int topPadding) {
-			if (topPadding != _topPadding) {
-				this._topPadding = topPadding;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
-			}
-		}
-
-		/**
 		 * Returns the distance between task bar and date textbox.
 		 * 
 		 * @return int
@@ -472,15 +397,6 @@ public class FusionchartGanttModel extends GanttModel {
 			}
 		}
 
-		/**
-		 * Returns the id of the task.
-		 * 
-		 * @return int
-		 */
-		public int getId() {
-			return _id;
-		}
-
 		public void addSubtask(GanttTask task) {
 			super.addSubtask(task);
 			if (task instanceof FusionchartGanttTask) {
@@ -519,6 +435,116 @@ public class FusionchartGanttModel extends GanttModel {
 	}
 
 	/**
+	 * A FusionchartAreaSeries in an operation series; a helper class used in
+	 * {@link FusionchartCategoryModel}.
+	 * 
+	 * @author jimmyshiau
+	 * @see FusionchartCategoryModel
+	 */
+	public static class FusionchartGanttSeries extends FusionchartSeries {
+
+		private boolean _animation = false;
+		private Font _font;
+		private Border _border;
+		
+		public FusionchartGanttSeries(String seriesName) {
+			super(seriesName);
+		}
+
+		public FusionchartGanttSeries(String seriesName, String color) {
+			super(seriesName, color);
+		}
+
+		public FusionchartGanttSeries(String seriesName, int alpha) {
+			super(seriesName, alpha);
+		}
+
+		public FusionchartGanttSeries(String seriesName, String color, int alpha) {
+			super(seriesName, color, alpha);
+		}
+
+		public FusionchartGanttSeries(String seriesName, boolean _animation) {
+			super(seriesName);
+			this._animation = _animation;
+		}
+
+		public FusionchartGanttSeries(String seriesName, boolean _animation,
+				Font _font, Border _border) {
+			super(seriesName);
+			this._animation = _animation;
+			this._font = _font;
+			this._border = _border;
+		}
+		
+		/**
+		 * Returns whether this particular task bar would animate or not.
+		 * <p>
+		 * Default: false.
+		 * 
+		 * @return boolean
+		 */
+		public boolean isAnimation() {
+			return _animation;
+		}
+
+		/**
+		 * Sets whether this particular task bar would animate or not.
+		 * <p>
+		 * Default: false.
+		 * 
+		 * @param animation
+		 */
+		public void setAnimation(boolean animation) {
+			if (animation != _animation) {
+				this._animation = animation;
+				fireChartChange();
+			}
+		}
+		
+		/**
+		 * Returns the font in which text will be rendered.
+		 * 
+		 * @return Font
+		 */
+		public Font getFont() {
+			return _font;
+		}
+
+		/**
+		 * Sets the font in which text will be rendered.
+		 * 
+		 * @param font
+		 */
+		public void setFont(Font font) {
+			if (!Objects.equals(font, _font)) {
+				this._font = font;
+				fireChartChange();
+			}
+		}
+
+		/**
+		 * Returns the border would appear around the task bar.
+		 * 
+		 * @return Border
+		 */
+		public Border getBorder() {
+			return _border;
+		}
+
+		/**
+		 * Sets the border would appear around the task bar.
+		 * 
+		 * @param border
+		 */
+		public void setBorder(Border border) {
+			if (!Objects.equals(border, _border)) {
+				this._border = border;
+				fireChartChange();
+			}
+		}
+	}
+	
+	/**
 	 * A Border class for store all of border attributes.
 	 * 
 	 * @author jimmyshiau
@@ -531,24 +557,24 @@ public class FusionchartGanttModel extends GanttModel {
 	public static class Border implements java.io.Serializable {
 		private static final long serialVersionUID = 20110104121704L;
 		private boolean showBorder = true;
-		private String borderColor;
-		private int borderThickness;
-		private int borderAlpha;
+		private String color;
+		private int thickness;
+		private int alpha;
 
-		public Border(String borderColor, int borderThickness, int borderAlpha) {
+		public Border(String color, int thickness, int alpha) {
 			super();
-			this.borderColor = borderColor;
-			this.borderThickness = borderThickness;
-			this.borderAlpha = borderAlpha;
+			this.color = color;
+			this.thickness = thickness;
+			this.alpha = alpha;
 		}
 
-		public Border(boolean showBorder, String borderColor,
-				int borderThickness, int borderAlpha) {
+		public Border(boolean showBorder, String color,
+				int thickness, int alpha) {
 			super();
 			this.showBorder = showBorder;
-			this.borderColor = borderColor;
-			this.borderThickness = borderThickness;
-			this.borderAlpha = borderAlpha;
+			this.color = color;
+			this.thickness = thickness;
+			this.alpha = alpha;
 		}
 
 		/**
@@ -565,8 +591,8 @@ public class FusionchartGanttModel extends GanttModel {
 		 * 
 		 * @return String
 		 */
-		public String getBorderColor() {
-			return borderColor;
+		public String getColor() {
+			return color;
 		}
 
 		/**
@@ -574,8 +600,8 @@ public class FusionchartGanttModel extends GanttModel {
 		 * 
 		 * @return int
 		 */
-		public int getBorderThickness() {
-			return borderThickness;
+		public int getThickness() {
+			return thickness;
 		}
 
 		/**
@@ -583,17 +609,17 @@ public class FusionchartGanttModel extends GanttModel {
 		 * 
 		 * @return int
 		 */
-		public int getBorderAlpha() {
-			return borderAlpha;
+		public int getAlpha() {
+			return alpha;
 		}
 
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + borderAlpha;
+			result = prime * result + alpha;
 			result = prime * result
-					+ ((borderColor == null) ? 0 : borderColor.hashCode());
-			result = prime * result + borderThickness;
+					+ ((color == null) ? 0 : color.hashCode());
+			result = prime * result + thickness;
 			result = prime * result + (showBorder ? 1231 : 1237);
 			return result;
 		}
@@ -606,14 +632,14 @@ public class FusionchartGanttModel extends GanttModel {
 			if (getClass() != obj.getClass())
 				return false;
 			Border other = (Border) obj;
-			if (borderAlpha != other.borderAlpha)
+			if (alpha != other.alpha)
 				return false;
-			if (borderColor == null) {
-				if (other.borderColor != null)
+			if (color == null) {
+				if (other.color != null)
 					return false;
-			} else if (!borderColor.equals(other.borderColor))
+			} else if (!color.equals(other.color))
 				return false;
-			if (borderThickness != other.borderThickness)
+			if (thickness != other.thickness)
 				return false;
 			if (showBorder != other.showBorder)
 				return false;
@@ -622,8 +648,8 @@ public class FusionchartGanttModel extends GanttModel {
 
 		public String toString() {
 			return "Border [showBorder=" + showBorder + ", borderColor="
-					+ borderColor + ", borderThickness=" + borderThickness
-					+ ", borderAlpha=" + borderAlpha + "]";
+					+ color + ", borderThickness=" + thickness
+					+ ", borderAlpha=" + alpha + "]";
 		}
 	}
 
