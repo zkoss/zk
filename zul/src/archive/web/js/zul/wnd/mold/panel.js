@@ -18,8 +18,8 @@ function (out, skipper) {
 		title = this.getTitle(),
 		caption = this.caption,
 		isFrameRequired = zul.wnd.PanelRenderer.isFrameRequired(this),
-		framable = this.isFramable(),
-		noborder = this.getBorder() != 'normal', //Ulike window, panel does not support other kind of borders
+		rounded = this._rounded(),
+		noborder = !this._bordered(), //Ulike window, panel does not support other kind of borders
 		noheader = !caption && !title;
 		
 	out.push('<div', this.domAttrs_(), '>');
@@ -29,7 +29,7 @@ function (out, skipper) {
 			out.push('<div class="', zcls, '-hl"><div class="', zcls, '-hr"><div class="', zcls, '-hm">');
 		}
 		out.push('<div id="', uuid, '-cap" class="', zcls, '-header ');
-			if (!framable && noborder) {
+			if (!rounded && noborder) {
 				out.push(zcls, '-header-noborder');		
 			}
 		out.push('">');
@@ -55,7 +55,7 @@ function (out, skipper) {
 		out.push('</div>');
 		
 		if (isFrameRequired) out.push('</div></div></div>');
-	} else if (framable) {
+	} else if (rounded) {
 		out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');		
 	}
 			
@@ -66,7 +66,7 @@ function (out, skipper) {
 	
 	out.push('>');
 	
-	if (framable) {
+	if (rounded) {
 		out.push('<div class="', zcls, '-cl"><div class="', zcls,
 				'-cr"><div class="', zcls, '-cm');
 		if (noheader) {
@@ -104,7 +104,7 @@ function (out, skipper) {
 		out.push('</div>');
 	}
 	
-	if (framable) {
+	if (rounded) {
 		out.push('</div></div></div><div class="', zcls, '-fl');
 		
 		if (!this.fbar) out.push(' ', zcls, '-nobtm2');
@@ -116,6 +116,6 @@ function (out, skipper) {
 		this.fbar.redraw(out);
 		out.push('</div>');
 	}
-	if (framable) out.push('</div></div></div><div class="', zcls ,'-bl"><div class="', zcls ,'-br"></div></div>');
+	if (rounded) out.push('</div></div></div><div class="', zcls ,'-bl"><div class="', zcls ,'-br"></div></div>');
 	out.push('</div></div>');
 }

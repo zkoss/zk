@@ -3,6 +3,7 @@ ZK 5.0.6
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
   3138362: Add a Doublespinner comopnent to support double value
+  3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
   3148425: GroupsModelArray shall handle tabular data better
   3105037: Show the locale format in error messages
   3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
@@ -11,7 +12,7 @@ ZK 5.0.6
   3118161: When desktop destroyed, better to force cleanup if timeout
   3139008: Add Vietnamese language
   3158054: Optimize UiVisualizer for hug number of updates
-  3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
+  3161425: Panel's border and framable shall be merged into one
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
@@ -46,6 +47,9 @@ ZK 5.0.6
   3160695: The x/yAxis label of GanttChart was in wrong position 
   
 * Upgrade Notes
+  + Panel's border supports none, normal, rounded and rounded+, and
+    framable is deprecated.
+    For more info: http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border
   + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild
     is added (the same as javax.swing.tree.TreeModel).
     Notice it is backward compatible if you don't re-compile, or extend from

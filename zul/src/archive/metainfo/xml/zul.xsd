@@ -1781,7 +1781,6 @@
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="collapsible" type="booleanType" use="optional" />
 		<xs:attribute name="floatable" type="booleanType" use="optional" />
-		<xs:attribute name="framable" type="booleanType" use="optional" />
 		<xs:attribute name="maximizable" type="booleanType" use="optional" />
 		<xs:attribute name="maximized" type="booleanType" use="optional" />
 		<xs:attribute name="minimized" type="booleanType" use="optional" />

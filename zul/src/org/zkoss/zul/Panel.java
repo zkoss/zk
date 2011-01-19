@@ -58,11 +58,10 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 
 	private String _border = "none";
 	private String _title = "";
-	private boolean _closable, _collapsible, _floatable, _framable, _movable, 
-		_maximizable, _minimizable, _maximized, _minimized, _sizable;
 	private int _minheight = 100, _minwidth = 200; 
-	private boolean  _open = true;
-	
+	private boolean _closable, _collapsible, _floatable, _movable, 
+		_maximizable, _minimizable, _maximized, _minimized, _sizable,
+		_open = true, _framableBC/*backward compatible*/;
 
 	static {
 		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
@@ -90,22 +89,25 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		}
 	}
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #getBorder}.
 	 * Returns whether to render the panel with custom rounded borders.
 	 * <p>Default: false.
 	 */
 	public boolean isFramable() {
-		return _framable;
+		return _border.startsWith("rounded"); //rounded or rounded+
 	}
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
 	 * Sets whether to render the panel with custom rounded borders.
 	 * 
 	 * <p>Default: false.
 	 */
 	public void setFramable(boolean framable) {
-		if (_framable != framable) {
-			_framable = framable;
-			smartUpdate("framable", _framable);
-		}
+		_framableBC = true;
+		boolean bordered = "normal".equals(_border) || "rounded+".equals(_border);
+		setBorder0(
+			framable ?
+				bordered ? "rounded+": "rounded": bordered ? "normal": "none");
 	}
 	/**
 	 * Sets whether to move the panel to display it inline where it is rendered.
@@ -377,23 +379,39 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		return getCaption();
 	}
 	/** Returns the border.
-	 * The border actually controls via {@link Panelchildren#getSclass()}. 
-	 * In fact, the name of the border (except "normal") is generate as part of 
-	 * the style class used for the content block.
-	 * Refer to {@link Panelchildren#getSclass()} for more details.
 	 *
 	 * <p>Default: "none".
 	 */
 	public String getBorder() {
+		if (_framableBC && _border.startsWith("rounded")) //backward compatible
+			return "rounded".equals(_border) ? "none": "normal";
 		return _border;
 	}
-	/** Sets the border (either none or normal).
-	 *
+	/** Sets the border.
+	 * Allowed values include <code>none</code> (default), <code>normal</code>,
+	 * <code>rounded</code> and <code>rounded+</code>.
+	 * For more information, please refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 	 * @param border the border. If null or "0", "none" is assumed.
 	 */
 	public void setBorder(String border) {
 		if (border == null || "0".equals(border))
 			border = "none";
+		if (_framableBC) {
+			if (border.startsWith("rounded")) {
+				_framableBC = false;
+			} else if ("normal".equals(border)) {
+				if (_border.startsWith("rounded"))
+					border = "rounded+";
+			} else {
+				if (_border.startsWith("rounded"))
+					border = "rounded";
+			}
+		}
+	
+		setBorder0(border);
+	}
+	private void setBorder0(String border) {
 		if (!Objects.equals(_border, border)) {
 			_border = border;
 			smartUpdate("border", _border);
@@ -648,7 +666,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		render(renderer, "closable", _closable);
 		render(renderer, "floatable", _floatable);
 		render(renderer, "collapsible", _collapsible);
-		render(renderer, "framable", _framable);
 		render(renderer, "movable", _movable);
 		render(renderer, "maximizable", _maximizable);
 		render(renderer, "minimizable", _minimizable);

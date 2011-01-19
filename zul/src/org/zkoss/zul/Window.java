@@ -341,10 +341,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 
 	/** Returns the border.
-	 * The border actually controls what the content style class is
-	 * is used. In fact, the name of the border (except "normal")
-	 * is generate as part of the style class used for the content block.
-	 * Refer to {@link #getContentSclass} for more details.
 	 *
 	 * <p>Default: "none".
 	 */

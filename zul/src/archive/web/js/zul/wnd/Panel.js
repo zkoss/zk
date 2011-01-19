@@ -92,19 +92,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 		},
 		/**
-		 * Sets whether to render the panel with custom rounded borders.
-		 * <p>Default: false.
-		 * @param boolean framable
-		 */
-		/**
-		 * Returns whether to render the panel with custom rounded borders.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		framable: _zkf = function () {
-			this.rerender(); //TODO: like Window, use _updDomOuter
-		},
-		/**
 		 * Sets whether to move the panel to display it inline where it is rendered.
 		 * 
 		 * <p>Default: false;
@@ -116,7 +103,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <p>Default: false.
 		 * @return boolean
 		 */
-		movable: _zkf,
+		movable: _zkf = function () {
+			this.rerender(); //TODO: like Window, use _updDomOuter
+		},
 		/**
 		 * Sets whether to float the panel to display it inline where it is rendered.
 		 * 
@@ -198,15 +187,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 */
 		closable: _zkf,
 		/** 
-		 * Sets the border (either none or normal).
+		 * Sets the border.
+		 * Allowed values include <code>none</code> (default), <code>normal</code>,
+		 * <code>rounded</code> and <code>rounded+</code>.
+		 * For more information, please refer to
+		 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
 		/** 
 		 * Returns the border.
-		 * The border actually controls via {@link zul.wnd.Panelchildren#getSclass()}. 
-		 * In fact, the name of the border (except "normal") is generate as part of 
-		 * the style class used for the content block.
-		 * Refer to {@link zul.wnd.Panelchildren#getSclass()} for more details.
 		 *
 		 * <p>Default: "none".
 		 * @return String
@@ -619,9 +608,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
 	},
+	//whether rounded border is required
+	_rounded: _zkf = function () {
+		return this._border.startsWith("rounded"); //rounded
+	},
+	isFramable: _zkf, //backward compatible with 5.0.6
+	//whether inner border is required
+	_bordered: function () {
+		var v;
+		return (v = this._border) != "none" && v != "rounded";
+	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if (this.isFramable()) {
+		if (this._rounded()) {
 			var body = this.panelchildren.$n(),
 				bl = jq(this.$n('body')).find(':last')[0],
 				title = this.$n('cap');
@@ -641,10 +640,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var isFramable = this.isFramable(),
+		var rounded = this._rounded(),
 			cap = this.$n('cap'),
-			top = isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
-		return cap ? (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
+			top = rounded ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
+		return cap ? (rounded ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
 	},
 	onFloatUp: function (ctl) {
 		if (!this.isVisible() || !this.isFloatable())
@@ -895,7 +894,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
-			var added = "normal" == this.getBorder() ? '' : zcls + '-noborder';
+			var added = this._bordered() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ': '') + added;
 			added = this.isOpen() ? '' : zcls + '-colpsd';
 			if (added) scls += (scls ? ' ': '') + added;
@@ -994,11 +993,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
  * @since 5.0.5
  */
 zul.wnd.PanelRenderer = {
-	/** Check the panel whether to render the frame
+	/** Check the panel whether to render the rounded frame.
 	 * 
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	isFrameRequired: function (wgt) {
-		return wgt.isFramable();
+		return wgt._rounded();
 	}
 };
