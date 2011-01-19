@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.FusionchartCategoryModel.*;
+import org.zkoss.zul.FusionchartGanttModel.FusionchartGanttTask;
 import org.zkoss.zul.FusionchartPieModel.FusionchartPieData;
 import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.event.ChartDataEvent;
@@ -1114,23 +1115,23 @@ public class Fusionchart extends HtmlBasedComponent {
 	 */
 	private String CategoryModelToPieDataset(CategoryModel model) {
 		StringBuffer sb = new StringBuffer();
-		Comparable defaultSeries = null;
-		int max = 0;
-		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
-			final List key = (List) it.next();
-			Comparable series = (Comparable) key.get(0);
-			if (defaultSeries == null) {
-				defaultSeries = series;
-				max = model.getCategories().size();
-			}
-			if (!Objects.equals(defaultSeries, series)) {
-				continue;
-			}
-			Comparable category = (Comparable) key.get(1);
-			Number value = (Number) model.getValue(series, category);
+//		Comparable defaultSeries = null;
+//		int max = 0;
+//		for (final Iterator it = model.getKeys().iterator(); it.hasNext();) {
+//			final List key = (List) it.next();
+//			Comparable series = (Comparable) key.get(0);
+//			if (defaultSeries == null) {
+//				defaultSeries = series;
+//				max = model.getCategories().size();
+//			}
+//			if (!Objects.equals(defaultSeries, series)) {
+//				continue;
+//			}
+//			Comparable category = (Comparable) key.get(1);
+//			Number value = (Number) model.getValue(series, category);
 //			dataset.setValue(category, value);
-			if (--max == 0) break; //no more in this series
-		}
+//			if (--max == 0) break; //no more in this series
+//		}
 		return sb.toString();
 	}
 	
@@ -1274,23 +1275,59 @@ public class Fusionchart extends HtmlBasedComponent {
 		df.setTimeZone(tz != null ? tz: TimeZones.getCurrent());
 		
 		
+		
 		String start = "", end = "";
 		List monthes = new ArrayList();
 		
-		StringBuffer sb = new StringBuffer();
+		StringBuffer ySb = new StringBuffer();
+		StringBuffer tasksSb = new StringBuffer();
 		
 		
 		
 		
+		
+		ySb.append("<processes").append(toFusionchartAttr("headerText", getYAxis()))
+			.append(toFusionchartFont("headerFont", getYAxisFont(), true))
+			.append("headerFontColor='404040' fontColor='404040' headerBgColor='EEEEEE' bgColor='EEEEEE'")
+			.append(toFusionchartFont("font", getYAxisTickFont(), true))
+			.append(" headerIsBold='1' isBold='0' headerAlign='right' headerVAlign='center' align='right' vAlign='center'>");
+		
+		tasksSb.append("<tasks ")
+		
+		;
+		boolean isPutTasksDone = false;
 		final Comparable[] allseries = model.getAllSeries();
 		final int sz = allseries.length;
+		int processId = 0;
+		Map processIdMap = new HashMap();
 		for (int j = 0; j < sz; ++j) {
 			final Comparable series = allseries[j];
 //			final TaskSeries taskseries = new TaskSeries((String) series);
 			final GanttTask[] tasks = model.getTasks(series);
 			final int tsz = tasks.length;
 			for (int k = 0; k < tsz; ++k) {
-				final GanttTask task = tasks[k];
+				GanttTask task = tasks[k];
+				FusionchartGanttTask ftask = null;
+				
+				if (task instanceof FusionchartGanttTask)
+					ftask = (FusionchartGanttTask) task;
+					
+				if (!isPutTasksDone) {
+					String desc = task.getDescription();
+					ySb.append("<process").append(toFusionchartAttr("name", desc))
+						.append(" id='").append(++processId).append("'")
+						.append("/>");
+					
+					processIdMap.put(desc, new Integer(processId));
+					
+					
+					
+					
+					
+					
+				}
+				
+				
 //				final Task jtask = newTask(task);
 //				addSubtask(jtask, task);
 //				taskseries.add(jtask); 
@@ -1298,12 +1335,13 @@ public class Fusionchart extends HtmlBasedComponent {
 //			dataset.add(taskseries);
 			
 			
-			
+			isPutTasksDone = true;
 		}
 		
 		
 		
 		
+		ySb.append("</processes>");
 		
 		
 		
@@ -1313,42 +1351,41 @@ public class Fusionchart extends HtmlBasedComponent {
 		
 		
 		
-		
-		StringBuffer cateSb = new StringBuffer();
+		StringBuffer xSb = new StringBuffer();
 		
 		String title = getTitle();
 		if (!Strings.isBlank(title)) {
-			cateSb.append("<categories font='Tahoma' fontSize='16' fontColor='404040' bgColor='EEEEEE' isBold='1'>")
+			xSb.append("<categories font='Tahoma' fontSize='16' fontColor='404040' bgColor='EEEEEE' isBold='1'>")
 				.append("<category name='").append(title)
 				.append("' start='").append(start)
 				.append("' end='").append(end).append("'/></categories>");
 		}
 		
 		
-		String yAxis = getYAxis();
-		if (!Strings.isBlank(yAxis)) {
-			cateSb.append("<categories")
+		String xAxis = getXAxis();
+		if (!Strings.isBlank(xAxis)) {
+			xSb.append("<categories")
 				.append(toFusionchartFont("font", getXAxisFont(), true))
 				.append(" fontColor='404040' bgColor='EEEEEE' isBold='1'>")
-				.append("<category name='").append(yAxis)
+				.append("<category name='").append(xAxis)
 				.append("' start='").append(start)
 				.append("' end='").append(end).append("'/></categories>");
 		}
 		
-		cateSb.append("<categories")
+		xSb.append("<categories")
 			.append(toFusionchartFont("font", getXAxisTickFont(), true))
 			.append(" fontColor='404040' bgColor='EEEEEE' isBold='0'>");
 		
 		for (Iterator it = monthes.iterator(); it.hasNext();) {
 			String[] month = (String[]) it.next();
-			cateSb.append("<category name='").append(month[0])
+			xSb.append("<category name='").append(month[0])
 				.append("' start='").append(month[1])
 				.append("' end='").append(month[2]).append("'/>");
 		}
-		cateSb.append("'</categories>");
+		xSb.append("'</categories>");
 		
 		
-		return sb.toString();
+		return tasksSb.toString();
 	}
 	
 	
@@ -1446,9 +1483,7 @@ public class Fusionchart extends HtmlBasedComponent {
 		
 		protected void renderProperties(StringBuffer sb) {
 			super.renderProperties(sb);
-			sb.append(" pieFillAlpha='").append(toFusionchartAlpha(getFgAlpha()))
-				.append("' decimalPrecision='").append(getDecimalPrecision()).append("'")
-				.append("'  shownames='1'");
+			sb.append(" ganttWidthPercent='70' gridBorderColor='EEEEEE'");
 		}
 	}
 	
@@ -1737,8 +1772,9 @@ public class Fusionchart extends HtmlBasedComponent {
 	 * Colors publically accessible.
 	 */
 	public static class ChartColor extends Color {
+		private static final long serialVersionUID = 20110119173322L;
 
-	    /** A very dark red color. */
+		/** A very dark red color. */
 	    public static final Color VERY_DARK_RED = new Color(0x80, 0x00, 0x00);
 
 	    /** A dark red color. */
@@ -1877,7 +1913,7 @@ public class Fusionchart extends HtmlBasedComponent {
      */
     public String getNextColor() {
         Color result
-            = (Color) DEFAULT_PAINT_SEQUENCE[this._paintIndex++ % this.DEFAULT_PAINT_SEQUENCE.length];
+            = (Color) DEFAULT_PAINT_SEQUENCE[this._paintIndex++ % DEFAULT_PAINT_SEQUENCE.length];
         return Integer.toHexString(result.getRGB()).substring(2).toUpperCase();
         
     }

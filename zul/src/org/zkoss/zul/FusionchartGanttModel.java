@@ -41,9 +41,8 @@ public class FusionchartGanttModel extends GanttModel {
 			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 			ftask.setSeries(series);
 			ftask.setOwner(this);
-			if (series instanceof FusionchartGanttSeries) {
-				FusionchartGanttSeries fseries = (FusionchartGanttSeries) series;
-				ftask.setProcessId(fseries.getId());
+			if (series instanceof FusionchartSeries) {
+				FusionchartSeries fseries = (FusionchartSeries) series;
 				fseries.setCategory(task);
 				fseries.setOwner(this);
 			}
@@ -56,8 +55,8 @@ public class FusionchartGanttModel extends GanttModel {
 			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 			ftask.setSeries(null);
 			ftask.setOwner(null);
-			if (series instanceof FusionchartGanttSeries) {
-				FusionchartGanttSeries fseries = (FusionchartGanttSeries) series;
+			if (series instanceof FusionchartSeries) {
+				FusionchartSeries fseries = (FusionchartSeries) series;
 				fseries.setCategory(null);
 				fseries.setOwner(null);
 			}
@@ -488,9 +487,8 @@ public class FusionchartGanttModel extends GanttModel {
 				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 				ftask.setSeries(_series);
 				ftask.setOwner(_owner);
-				if (_series instanceof FusionchartGanttSeries) {
-					FusionchartGanttSeries fseries = (FusionchartGanttSeries) _series;
-					ftask.setProcessId(fseries.getId());
+				if (_series instanceof FusionchartSeries) {
+					FusionchartSeries fseries = (FusionchartSeries) _series;
 					fseries.setCategory(_series);
 					fseries.setOwner(_owner);
 				}
@@ -503,8 +501,8 @@ public class FusionchartGanttModel extends GanttModel {
 				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
 				ftask.setSeries(null);
 				ftask.setOwner(null);
-				if (_series instanceof FusionchartGanttSeries) {
-					FusionchartGanttSeries fseries = (FusionchartGanttSeries) _series;
+				if (_series instanceof FusionchartSeries) {
+					FusionchartSeries fseries = (FusionchartSeries) _series;
 					fseries.setCategory(null);
 					fseries.setOwner(null);
 				}
@@ -517,142 +515,6 @@ public class FusionchartGanttModel extends GanttModel {
 
 		private void setOwner(GanttModel owner) {
 			_owner = owner;
-		}
-	}
-
-	/**
-	 * A Process in an operation series; a helper class used in
-	 * {@link FusionchartGanttModel}.
-	 * 
-	 * @author jimmyshiau
-	 * @see FusionchartGanttModel
-	 */
-	public static class FusionchartGanttSeries extends FusionchartSeries {
-		private static final long serialVersionUID = 20110104121702L;
-		private static int count = 0;
-		private int _id = count++;
-		private String _link;
-		private Integer _verticalPadding;
-		private String _align;
-		private String _vAlign;
-
-		public FusionchartGanttSeries(String seriesName) {
-			super(seriesName);
-		}
-
-		public FusionchartGanttSeries(String seriesName, String color) {
-			super(seriesName, color);
-		}
-
-		public FusionchartGanttSeries(String seriesName, int alpha) {
-			super(seriesName, alpha);
-		}
-
-		public FusionchartGanttSeries(String seriesName, String color,
-				int alpha) {
-			super(seriesName, color, alpha);
-		}
-
-		public FusionchartGanttSeries(String seriesName, String color,
-				int alpha, boolean showValues) {
-			super(seriesName, color, alpha, showValues);
-		}
-
-		
-		
-		private int getId() {
-			return _id;
-		}
-
-		/**
-		 * Returns the link of the process, it will be a hyperlink to the
-		 * process name.
-		 * 
-		 * @return String
-		 */
-		public String getLink() {
-			return _link;
-		}
-
-		/**
-		 * Sets the link of the process, it will be a hyperlink to the process
-		 * name.
-		 * 
-		 * @param link
-		 *            the link of the process
-		 */
-		public void setLink(String link) {
-			if (!Objects.equals(link, _link)) {
-				this._link = link;
-				fireChartChange();
-			}
-		}
-
-		/**
-		 * Returns the top margin.
-		 * 
-		 * @return int
-		 */
-		public Integer getVerticalPadding() {
-			return _verticalPadding;
-		}
-
-		/**
-		 * Sets the top margin.
-		 * 
-		 * @param verticalPadding
-		 */
-		public void setVerticalPadding(Integer verticalPadding) {
-			if (this._verticalPadding != verticalPadding) {
-				this._verticalPadding = verticalPadding;
-				fireChartChange();
-			}
-		}
-
-		/**
-		 * Returns the horizontal alignment of text.
-		 * 
-		 * @return String
-		 */
-		public String getAlign() {
-			return _align;
-		}
-
-		/**
-		 * Sets the horizontal alignment of text.
-		 * <p>
-		 * Allowed values: left, center, right.
-		 * 
-		 * @param align
-		 */
-		public void setAlign(String align) {
-			if (!Objects.equals(align, _align)) {
-				this._align = align;
-				fireChartChange();
-			}
-		}
-
-		/**
-		 * Returns the vertical alignment of text.
-		 * 
-		 * @return String
-		 */
-		public String getvAlign() {
-			return _vAlign;
-		}
-
-		/**
-		 * Sets the vertical alignment of text.
-		 * <p>
-		 * Allowed values: left, center, right.
-		 * 
-		 * @param vAlign
-		 */
-		public void setvAlign(String vAlign) {
-			if (!Objects.equals(vAlign, _vAlign)) {
-				this._vAlign = vAlign;
-				fireChartChange();
-			}
 		}
 	}
 
