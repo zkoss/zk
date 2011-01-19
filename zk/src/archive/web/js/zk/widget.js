@@ -1896,12 +1896,14 @@ wgt.$f().main.setTitle("foo");
 			zk.currentFocus = null;
 
 		var node = this.$n(),
-			p = this.parent;
+			p = this.parent, shallReplace,
+			dt = newwgt.desktop || this.desktop;
 		if (this.z_rod) {
 			_unbindrod(this);
-			_bindrod(newwgt);
-		} else if (this.desktop) {
-			var dt = newwgt.desktop || this.desktop;
+			if (!(shallReplace = (dt = dt || p.desktop) && (node = jq('#' + this.uuid))))
+				_bindrod(newwgt);
+		}
+		if (shallReplace || this.desktop) {
 			if (node) newwgt.replaceHTML(node, dt, null, true);
 			else {
 				this.unbind();
