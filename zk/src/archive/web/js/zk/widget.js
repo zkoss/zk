@@ -1900,10 +1900,13 @@ wgt.$f().main.setTitle("foo");
 			dt = newwgt.desktop || this.desktop;
 		if (this.z_rod) {
 			_unbindrod(this);
-			if (!(shallReplace = (dt = dt || p.desktop) && (node = jq('#' + this.uuid))))
+			if (!(shallReplace = (dt = dt || (p ? p.desktop: p))
+			&& (node = jq('#' + this.uuid))))
 				_bindrod(newwgt);
-		}
-		if (shallReplace || this.desktop) {
+		} else
+			shallReplace = dt;
+
+		if (shallReplace) {
 			if (node) newwgt.replaceHTML(node, dt, null, true);
 			else {
 				this.unbind();
