@@ -391,7 +391,8 @@ implements org.zkoss.zul.api.Include, Includer {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map old = setupDynams(exec);
-			final String oldSrc  = (String) exec.getAttribute(ATTR_RENDERED);
+			final String attrRenderedKey = ATTR_RENDERED+'$'+getUuid(); 
+			final String oldSrc  = (String) exec.getAttribute(attrRenderedKey);
 			if (!Objects.equals(oldSrc, _src)) {
 				try {
 					getChildren().clear();
@@ -399,7 +400,7 @@ implements org.zkoss.zul.api.Include, Includer {
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
 							this, _dynams);
 					// TODO: convert query string to arg
-					exec.setAttribute(ATTR_RENDERED, _src);
+					exec.setAttribute(attrRenderedKey, _src);
 				} finally {
 					restoreDynams(exec, old);
 				}
