@@ -14,18 +14,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul;
+package org.zkoss.zul.fusionchart;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zul.AbstractChartModel;
-import org.zkoss.zul.PieModel;
-import org.zkoss.zul.Fusionchart.FusionchartData;
+import org.zkoss.zul.*;
+import org.zkoss.zul.fusionchart.Fusionchart.FusionchartData;
+import org.zkoss.zul.fusionchart.FusionchartCategoryModel.FusionchartCategory;
 import org.zkoss.zul.event.ChartDataEvent;
 
 /**
@@ -36,7 +32,7 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see PieModel
  * @see Fusionchart
  */
-public class FusionchartPieModel extends AbstractChartModel implements PieModel {
+public class FusionchartPieModel extends AbstractFusionchartModel implements PieModel {
 
 	private static final long serialVersionUID = 20101230150456L;
 	private List _categoryList = new ArrayList(13);
@@ -79,6 +75,12 @@ public class FusionchartPieModel extends AbstractChartModel implements PieModel 
 				return;
 			}
 		}
+		
+		if (category instanceof FusionchartCategory) {
+			FusionchartCategory fcategory = (FusionchartCategory) category;
+			fcategory.setOwner(this);
+		}
+		
 		_categoryMap.put(category, pieData);
 		fireEvent(ChartDataEvent.CHANGED, null, category);
 	}
@@ -128,6 +130,12 @@ public class FusionchartPieModel extends AbstractChartModel implements PieModel 
 	public void removeValue(Comparable category) {
 		_categoryMap.remove(category);
 		_categoryList.remove(category);
+		
+		if (category instanceof FusionchartCategory) {
+			FusionchartCategory fcategory = (FusionchartCategory) category;
+			fcategory.setOwner(null);
+		}
+		
 		fireEvent(ChartDataEvent.REMOVED, null, category);
 	}
 

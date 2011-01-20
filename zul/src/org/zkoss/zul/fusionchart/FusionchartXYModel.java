@@ -14,15 +14,12 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul;
+package org.zkoss.zul.fusionchart;
 
 import java.util.*;
-
-import org.zkoss.lang.Objects;
-import org.zkoss.zul.AbstractChartModel;
-import org.zkoss.zul.CategoryModel;
-import org.zkoss.zul.Fusionchart.FusionchartData;
-import org.zkoss.zul.SimpleXYModel.XYPair;
+import org.zkoss.zul.*;
+import org.zkoss.zul.fusionchart.Fusionchart.FusionchartData;
+import org.zkoss.zul.fusionchart.FusionchartCategoryModel.FusionchartSeries;
 import org.zkoss.zul.event.ChartDataEvent;
 
 /**
@@ -33,7 +30,7 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see CategoryModel
  * @see Fusionchart
  */
-public class FusionchartXYModel extends AbstractChartModel implements XYModel {
+public class FusionchartXYModel extends AbstractFusionchartModel implements XYModel {
 	private static final long serialVersionUID = 20091008182904L;
 	protected Map _seriesMap = new HashMap(13); // (series, XYPair)
 	protected List _seriesList = new ArrayList(13);
@@ -57,7 +54,7 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 		final List xyPairs = (List) _seriesMap.get(series);
 
 		if (xyPairs != null) {
-			return ((XYPair) xyPairs.get(index)).getX();
+			return ((FusionchartXYPair) xyPairs.get(index)).getX();
 		}
 		return null;
 	}
@@ -66,7 +63,7 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 		final List xyPairs = (List) _seriesMap.get(series);
 
 		if (xyPairs != null) {
-			return ((XYPair) xyPairs.get(index)).getY();
+			return ((FusionchartXYPair) xyPairs.get(index)).getY();
 		}
 		return null;
 	}
@@ -120,6 +117,11 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 			xyPairs.add(index, new FusionchartXYPair(x, data));
 		else
 			xyPairs.add(new FusionchartXYPair(x, data));
+		
+		if (series instanceof FusionchartSeries) {
+			FusionchartSeries fseries = (FusionchartSeries) series;
+			fseries.setOwner(this);
+		}
 	}
 
 	public void setAutoSort(boolean auto) {
@@ -149,6 +151,11 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 			return;
 		}
 		xyPairs.remove(index);
+		
+		if (series instanceof FusionchartSeries) {
+			FusionchartSeries fseries = (FusionchartSeries) series;
+			fseries.setOwner((AbstractFusionchartModel)null);
+		}
 	}
 
 	public void clear() {
@@ -158,12 +165,13 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 	}
 
 	// -- internal class --//
-	protected static class FusionchartXYPair extends XYPair implements java.io.Serializable {
+	protected static class FusionchartXYPair implements java.io.Serializable {
 		private static final long serialVersionUID = 20091008182941L;
+		private Number _x;
 		private FusionchartData _data;
 
 		protected FusionchartXYPair(Number x, FusionchartData data) {
-			super(x, data.getValue());
+			_x = x;
 			_data = data;
 		}
 
@@ -171,7 +179,13 @@ public class FusionchartXYModel extends AbstractChartModel implements XYModel {
 			return _data;
 		}
 		
+		public Number getX() {
+			return _x;
+		}
 		
+		public Number getY() {
+			return _data.getValue();
+		}
 	}
 
 

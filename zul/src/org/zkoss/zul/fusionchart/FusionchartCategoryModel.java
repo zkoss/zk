@@ -14,14 +14,13 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul;
+package org.zkoss.zul.fusionchart;
 
 import java.util.*;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zul.AbstractChartModel;
 import org.zkoss.zul.CategoryModel;
-import org.zkoss.zul.Fusionchart.FusionchartData;
+import org.zkoss.zul.fusionchart.Fusionchart.FusionchartData;
 import org.zkoss.zul.event.ChartDataEvent;
 
 /**
@@ -32,7 +31,7 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see CategoryModel
  * @see Fusionchart
  */
-public class FusionchartCategoryModel extends AbstractChartModel implements
+public class FusionchartCategoryModel extends AbstractFusionchartModel implements
 		CategoryModel {
 
 	private static final long serialVersionUID = 20101230174245L;
@@ -208,7 +207,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		if (series instanceof FusionchartSeries) {
 			FusionchartSeries fseries = (FusionchartSeries) series;
 			fseries.setCategory(null);
-			fseries.setOwner(null);
+			fseries.setOwner((AbstractFusionchartModel)null);
 		}
 
 		if (category instanceof FusionchartCategory) {
@@ -246,7 +245,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		private String _hoverText;
 		private boolean _showName = true;
 
-		private AbstractChartModel _owner;
+		private AbstractFusionchartModel _owner;
 		private Comparable _series;
 
 		public FusionchartCategory(String name, String hoverText) {
@@ -288,8 +287,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		public void setName(String name) {
 			if (!Objects.equals(name, _name)) {
 				this._name = name;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -310,8 +308,7 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		public void setHoverText(String hoverText) {
 			if (!Objects.equals(hoverText, _hoverText)) {
 				this._hoverText = hoverText;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -335,19 +332,23 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		public void setShowName(boolean showName) {
 			if (showName != _showName) {
 				this._showName = showName;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
-		private void setSeries(Comparable series) {
+		/*package*/ void setSeries(Comparable series) {
 			_series = series;
 		}
 
-		private void setOwner(AbstractChartModel owner) {
+		/*package*/ void setOwner(AbstractFusionchartModel owner) {
 			_owner = owner;
 		}
 
+		protected void fireChartChange() {
+			if (_owner != null)
+				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+		}
+		
 		public int compareTo(Object obj) {
 			if (obj instanceof String)
 				return _name.compareTo(obj);
@@ -379,7 +380,10 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 		private boolean _showValues = false;
 		private int _alpha = 255;
 
-		private AbstractChartModel _owner;
+		private AbstractFusionchartModel _owner;
+		private AbstractFusionchartGanttModel _gowner;
+		
+		
 		private Object _category;
 
 		public FusionchartSeries(String seriesName) {
@@ -499,19 +503,26 @@ public class FusionchartCategoryModel extends AbstractChartModel implements
 			}
 		}
 		
-		protected void fireChartChange() {
-			if (_owner != null)
-				_owner.fireEvent(ChartDataEvent.CHANGED, this, _category);
-		}
-
 		/*package*/ void setCategory(Object category) {
 			_category = category;
 		}
 
-		/*package*/ void setOwner(AbstractChartModel owner) {
+		/*package*/ void setOwner(AbstractFusionchartModel owner) {
 			_owner = owner;
 		}
+		
+		/*package*/ void setOwner(AbstractFusionchartGanttModel gowner) {
+			_gowner = gowner;
+		}
 
+		protected void fireChartChange() {
+			if (_owner != null)
+				_owner.fireEvent(ChartDataEvent.CHANGED, this, _category);
+			
+			if (_gowner != null)
+				_gowner.fireEvent(ChartDataEvent.CHANGED, this, _category);
+		}
+		
 		public int compareTo(Object obj) {
 			if (obj instanceof String)
 				return _seriesName.compareTo(obj);

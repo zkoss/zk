@@ -14,14 +14,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul;
+package org.zkoss.zul.fusionchart;
 
 import java.awt.Font;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zul.FusionchartCategoryModel.FusionchartSeries;
-import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.*;
+import org.zkoss.zul.fusionchart.FusionchartCategoryModel.FusionchartSeries;
 
 /**
  * A Category data model implementation of {@link CategoryModel}. A Category
@@ -31,36 +31,30 @@ import org.zkoss.zul.event.ChartDataEvent;
  * @see CategoryModel
  * @see Fusionchart
  */
-public class FusionchartGanttModel extends GanttModel {
+public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 
 	private static final long serialVersionUID = 20110104121601L;
 
 	public void addValue(Comparable series, GanttTask task) {
 		super.addValue(series, task);
-		if (task instanceof FusionchartGanttTask) {
-			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
-			ftask.setSeries(series);
-			ftask.setOwner(this);
-			if (series instanceof FusionchartSeries) {
-				FusionchartSeries fseries = (FusionchartSeries) series;
-				fseries.setCategory(task);
-				fseries.setOwner(this);
-			}
+		if (series instanceof FusionchartSeries) {
+			FusionchartSeries fseries = (FusionchartSeries) series;
+			fseries.setCategory(task);
+			fseries.setOwner(this);
 		}
 	}
 
 	public void removeValue(Comparable series, GanttTask task) {
 		super.removeValue(series, task);
-		if (task instanceof FusionchartGanttTask) {
-			FusionchartGanttTask ftask = (FusionchartGanttTask) task;
-			ftask.setSeries(null);
-			ftask.setOwner(null);
-			if (series instanceof FusionchartSeries) {
-				FusionchartSeries fseries = (FusionchartSeries) series;
-				fseries.setCategory(null);
-				fseries.setOwner(null);
-			}
+		if (series instanceof FusionchartSeries) {
+			FusionchartSeries fseries = (FusionchartSeries) series;
+			fseries.setCategory(null);
+			fseries.setOwner((AbstractFusionchartGanttModel)null);
 		}
+	}
+	
+	protected void fireEvent(int type, Comparable series, Object data) {
+		super.fireEvent(type, series, data);
 	}
 
 	/**
@@ -84,9 +78,6 @@ public class FusionchartGanttModel extends GanttModel {
 		private int _alpha = 255;
 		private Font _font;
 		private Border _border;
-
-		private GanttModel _owner;
-		private Comparable _series;
 
 		public FusionchartGanttTask(String description, Date start, Date end) {
 			super(description, start, end, 0);
@@ -145,8 +136,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setHoverText(String hoverText) {
 			if (!Objects.equals(hoverText, _hoverText)) {
 				this._hoverText = hoverText;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -167,8 +157,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setLink(String link) {
 			if (!Objects.equals(link, _link)) {
 				this._link = link;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -193,8 +182,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setAnimation(boolean animation) {
 			if (animation != _animation) {
 				this._animation = animation;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -219,8 +207,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setShowName(boolean showName) {
 			if (showName != _showName) {
 				this._showName = showName;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -247,8 +234,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setShowStartDate(boolean showStartDate) {
 			if (showStartDate != _showStartDate) {
 				this._showStartDate = showStartDate;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -275,8 +261,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setShowEndDate(boolean showEndDate) {
 			if (showEndDate != _showEndDate) {
 				this._showEndDate = showEndDate;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -298,8 +283,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setTaskDatePadding(Integer taskDatePadding) {
 			if (taskDatePadding != _taskDatePadding) {
 				this._taskDatePadding = taskDatePadding;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -322,8 +306,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setColor(String color) {
 			if (!Objects.equals(color, _color)) {
 				this._color = color;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -348,8 +331,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setAlpha(int alpha) {
 			if (alpha != _alpha) {
 				this._alpha = alpha;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -370,8 +352,7 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setFont(Font font) {
 			if (!Objects.equals(font, _font)) {
 				this._font = font;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -392,46 +373,10 @@ public class FusionchartGanttModel extends GanttModel {
 		public void setBorder(Border border) {
 			if (!Objects.equals(border, _border)) {
 				this._border = border;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
-		public void addSubtask(GanttTask task) {
-			super.addSubtask(task);
-			if (task instanceof FusionchartGanttTask) {
-				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
-				ftask.setSeries(_series);
-				ftask.setOwner(_owner);
-				if (_series instanceof FusionchartSeries) {
-					FusionchartSeries fseries = (FusionchartSeries) _series;
-					fseries.setCategory(_series);
-					fseries.setOwner(_owner);
-				}
-			}
-		}
-
-		public void removeSubtask(GanttTask task) {
-			super.removeSubtask(task);
-			if (task instanceof FusionchartGanttTask) {
-				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
-				ftask.setSeries(null);
-				ftask.setOwner(null);
-				if (_series instanceof FusionchartSeries) {
-					FusionchartSeries fseries = (FusionchartSeries) _series;
-					fseries.setCategory(null);
-					fseries.setOwner(null);
-				}
-			}
-		}
-
-		private void setSeries(Comparable series) {
-			_series = series;
-		}
-
-		private void setOwner(GanttModel owner) {
-			_owner = owner;
-		}
 	}
 
 	/**
@@ -443,6 +388,8 @@ public class FusionchartGanttModel extends GanttModel {
 	 */
 	public static class FusionchartGanttSeries extends FusionchartSeries {
 
+		private static final long serialVersionUID = 20110120122422L;
+		
 		private boolean _animation = false;
 		private Font _font;
 		private Border _border;

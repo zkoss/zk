@@ -110,8 +110,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setStart(Date start) {
 			if (!Objects.equals(start, _start)) {
 				this._start = start;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -122,8 +121,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setEnd(Date end) {
 			if (!Objects.equals(end, _end)) {
 				this._end = end;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -134,8 +132,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setDescription(String description) {
 			if (!Objects.equals(description, _description)) {
 				this._description = description;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -185,6 +182,11 @@ public class GanttModel extends AbstractChartModel {
 		
 		private void setOwner(GanttModel owner) {
 			_owner = owner;
+		}
+		
+		protected void fireChartChange() {
+			if (_owner != null)
+				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
 		}
 	}
 }

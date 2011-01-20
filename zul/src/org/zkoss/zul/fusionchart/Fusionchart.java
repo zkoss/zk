@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul;
+package org.zkoss.zul.fusionchart;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -31,15 +31,15 @@ import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zul.FusionchartCategoryModel.*;
-import org.zkoss.zul.FusionchartGanttModel.Border;
-import org.zkoss.zul.FusionchartGanttModel.FusionchartGanttSeries;
-import org.zkoss.zul.FusionchartGanttModel.FusionchartGanttTask;
-import org.zkoss.zul.FusionchartPieModel.FusionchartPieData;
+import org.zkoss.zul.fusionchart.FusionchartCategoryModel.*;
+import org.zkoss.zul.fusionchart.FusionchartGanttModel.Border;
+import org.zkoss.zul.fusionchart.FusionchartGanttModel.FusionchartGanttSeries;
+import org.zkoss.zul.fusionchart.FusionchartGanttModel.FusionchartGanttTask;
+import org.zkoss.zul.fusionchart.FusionchartPieModel.FusionchartPieData;
+import org.zkoss.zul.*;
 import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
@@ -304,7 +304,7 @@ public class Fusionchart extends HtmlBasedComponent {
 				_paneRGB = null;
 			} else {
 				_paneRGB = new int[3];
-				Chart.decode(_paneColor, _paneRGB);
+				decode(_paneColor, _paneRGB);
 			}
 			smartDrawChart();
 		}
@@ -400,7 +400,7 @@ public class Fusionchart extends HtmlBasedComponent {
 				_bgRGB = null;
 			} else {
 				_bgRGB = new int[3];
-				Chart.decode(_bgColor, _bgRGB);
+				decode(_bgColor, _bgRGB);
 			}
 			smartDrawChart();
 		}
@@ -1571,6 +1571,18 @@ public class Fusionchart extends HtmlBasedComponent {
 		return "";
 	}
 	
+	//-- utilities --//
+	/*package*/ static void decode(String color, int[] rgb) {
+		if (color == null) {
+			return;
+		}
+		if (color.length() != 7 || !color.startsWith("#")) {
+			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
+		}
+		rgb[0] = Integer.parseInt(color.substring(1, 3), 16);
+		rgb[1] = Integer.parseInt(color.substring(3, 5), 16);
+		rgb[2] = Integer.parseInt(color.substring(5, 7), 16);
+	}
 	
 	/**
 	 * mark a draw flag to inform that this Chart needs update.
