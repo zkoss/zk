@@ -64,30 +64,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			css.position = 'relative';
 		return self;
 	}
-	function _defAnimaOpts(self, wgt, opts, prop, mode) {
-		jq.timers.push(function() {
-			if (mode == 'hide')
-				zWatch.fireDown('onHide', wgt);
-			if (opts.beforeAnima)
-				opts.beforeAnima.call(wgt, self);
-		});
-
-		var aftfn = opts.afterAnima;
-		opts.afterAnima = function () {
-			if (mode == 'hide') {
-				self.jq.hide();
-			} else {
-				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
-				zWatch.fireDown('onShow', wgt);
-			}
-			if (prop) _restoreProp(self, prop);
-			if (aftfn) aftfn.call(wgt, self.jq.context);
-			setTimeout(function () {
-				_doAnique(wgt.uuid);
-			});
-		};
-		return self;
-	}
 
 /** @partial zk
  */
@@ -156,7 +132,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop, true)
+			.jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
@@ -209,7 +186,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop)
+			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
@@ -258,7 +236,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop)
+			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
@@ -311,13 +290,53 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop, true)
+			.jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
 	},
-	_updateProp: function(prop) {
+	_updateProp: function(prop) { //used by Bandpopup.js
 		_saveProp(this, prop);
+	},
+	/** Initializes the animation with the default effect, such as
+	 * firing the onSize watch.
+	 * <p>Example:<br/>
+	 * <code>zk(n).defaultAnimaOpts(wgt, opts, prop, true).jq.css(css).show().animate(...);</code>
+	 * @param zk.Widget wgt the widget
+	 * @param Map opts the options. Ignored if not specified.
+	 * It depends on the effect being taken
+	 * @param Array prop an array of properties, such ['top', 'left', 'position'].
+	 * @param boolean visible whether the result of the animation will make
+	 * the DOM element visible
+	 * @return jqzk
+	 * @since 5.0.6
+	 */
+	defaultAnimaOpts: function (wgt, opts, prop, visible) {
+		var self = this;
+		jq.timers.push(function() {
+			if (!visible)
+				zWatch.fireDown('onHide', wgt);
+			if (opts.beforeAnima)
+				opts.beforeAnima.call(wgt, self);
+		});
+
+		var aftfn = opts.afterAnima;
+		opts.afterAnima = function () {
+			if (visible) {
+				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
+				zWatch.fireDown('onShow', wgt);
+			} else {
+				self.jq.hide();
+			}
+			if (prop) _restoreProp(self, prop);
+			if (aftfn) aftfn.call(wgt, self.jq.context);
+			wgt.afterAnima_(visible);
+			setTimeout(function () {
+				_doAnique(wgt.uuid);
+			});
+		};
+		return this;
 	}
 });
 })();

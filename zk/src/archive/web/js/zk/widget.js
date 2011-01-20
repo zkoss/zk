@@ -215,6 +215,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return !evt.stopped;
 	}
 
+	function _rmDom(wgt, n) {
+		//TO IMPROVE: actions_ always called if removeChild is called, while
+		//insertBefore/appendChild don't (it is called only if attached by au)
+		//NOT CONSISTENT! Better to improve in the future
+		var act;
+		if (wgt._visible && (act = wgt.actions_["hide"])) {
+			wgt._rmAftAnm = function () {
+				jq(n).remove();
+			};
+			n.style.visibility = ""; //Window (and maybe other) might turn it off
+			act[0].call(wgt, n, act[1]);
+		} else
+			jq(n).remove();
+	}
+
 	//whether it is controlled by another dragControl
 	//@param invoke whether to invoke dragControl
 	function _dragCtl(wgt, invoke) {
@@ -987,6 +1002,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	widgetName: "widget",
 
+	//a map of actions. Notice: it is initialized as a shared empty map
+	//setAction shall replace it with another map
+	actions_: {},
+
 	_floating: false,
 
 	/** The first child, or null if no child at all (readonly).
@@ -1405,7 +1424,7 @@ new zul.wnd.Window{
 		 * @since 5.0.6
 		 */
 		action: function (v) {
-			this._actions = {};
+			this.actions_ = {}; //reset it since it might be the shared one
 			if (v)
 				for (var ps = v.split(';'), j = ps.length; j--;) {
 					var p = ps[j], k = p.indexOf(':');
@@ -1421,7 +1440,7 @@ new zul.wnd.Window{
 								val = val.substring(0, k);
 							}
 							if (fn = zk.eff.Actions[val])
-								this._actions[nm] = [fn, opts];
+								this.actions_[nm] = [fn, opts];
 							else
 								zk.error("Unknown action: "+val);
 							continue;
@@ -1431,6 +1450,21 @@ new zul.wnd.Window{
 				}
 		}
 	},
+	/** Invoked after an animation (e.g., {@link zkjq#slideDown}) has finished.
+	 * You could override to clean up anything related to animation.
+	 * Notice that, if you override, you have to call back this method.
+	 * @param boolean visible whether the result of the animation will make
+	 * the DOM element visible
+	 * @since 5.0.6
+	 */
+	afterAnima_: function (visible) {
+		var fn;
+		if (fn = this._rmAftAnm) {
+			this._rmAftAnm = null;
+			fn();
+		}
+	},
+
 	/** Sets the identifier of a draggable type for this widget.
 	 * <p>Default: null
 	 * <p>The simplest way to make a widget draggable is to set this property to "true". To disable it, set this to "false" (or null).
@@ -1864,7 +1898,7 @@ wgt.$f().main.setTitle("foo");
 			var n = this.$n();
 			if (n) {
 				this.unbind();
-				jq(n).remove();
+				_rmDom(this, n);
 			}
 		}
 	},
@@ -2157,7 +2191,7 @@ wgt.$f().main.setTitle("foo");
 	setDomVisible_: function (n, visible, opts) {
 		if (!opts || opts.display) {
 			var act;
-			if ((act = this._actions) && (act = act[visible ? "show": "hide"]))
+			if (act = this.actions_[visible ? "show": "hide"])
 				act[0].call(this, n, act[1]);
 			else
 				n.style.display = visible ? '': 'none';
@@ -2933,7 +2967,7 @@ function () {
 	 * child widget's DOM elements are returned.
 	 */
 	removeHTML_: function (n) {
-		jq(n).remove();
+		_rmDom(this, n);
 		this.clearCache();
 	},
 	/**
