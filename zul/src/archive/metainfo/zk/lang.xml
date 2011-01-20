@@ -523,7 +523,7 @@ def alert(m):
 	</component>
 	<component>
 		<component-name>fusionchart</component-name>
-		<component-class>org.zkoss.zul.Fusionchart</component-class>
+		<component-class>org.zkoss.zul.fusionchart.Fusionchart</component-class>
 		<widget-class>zul.fchart.Fusionchart</widget-class>
 		<mold>
             <mold-name>default</mold-name>
