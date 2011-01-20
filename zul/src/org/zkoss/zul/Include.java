@@ -293,8 +293,8 @@ implements org.zkoss.zul.api.Include, Includer {
 	}
 	private void fixMode() {
 		fixModeOnly();
-		if (_instantMode && _afterComposed)
-			afterCompose();
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
 	}
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
@@ -305,7 +305,19 @@ implements org.zkoss.zul.api.Include, Includer {
 		} else
 			_instantMode = "instant".equals(_mode);
 	}
-
+	private void applyChangesToContent(){
+		// FIX: 2011.01.18 Iantsai
+		// in fixModeOnly(), we set _instantMode to false, and which means afterCompose() 
+		// won't be called, but we got no logic to clear the content!
+		// We assumed that the onPageAttached will handle this, 
+		// but if setSrc(null); happened in a button click, this wont work.
+		if (_instantMode && _afterComposed)
+			afterCompose();
+		else if(_src == null && !getChildren().isEmpty())
+			// !getChildren().isEmpty() is for performance.
+			getChildren().clear();
+	}
+	
 	/** Returns whether the source depends on the current Locale.
 	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
 	 * for the proper content, where src is assumed to be xxx.yyy.
@@ -460,11 +472,10 @@ implements org.zkoss.zul.api.Include, Includer {
 	public void invalidate() {
 		super.invalidate();
 			//invalidate is redudant in instant mode, but less memory leak in IE
-
-		if (_instantMode && _afterComposed) {
-			afterCompose();
-		}
-
+		
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
+		
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();
 	}

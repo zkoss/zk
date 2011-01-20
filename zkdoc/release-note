@@ -46,6 +46,7 @@ ZK 5.0.6
   3159604: The font of the button in the caption become smaller
   3160695: The x/yAxis label of GanttChart was in wrong position 
   3152754: Include#setVisible() has issue with invalidate()
+  3162238: Include fails when set source to null dynamically
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
