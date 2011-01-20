@@ -53,10 +53,6 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 		}
 	}
 	
-	protected void fireEvent(int type, Comparable series, Object data) {
-		super.fireEvent(type, series, data);
-	}
-
 	/**
 	 * A Task in an operation series; a helper class used in
 	 * {@link FusionchartGanttModel}.
@@ -70,17 +66,22 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 		private String _hoverText;
 		private String _link;
 		private boolean _animation = false;
-		private boolean _showName = true;
-		private boolean _showStartDate = true;
-		private boolean _showEndDate = true;
+		private boolean _showName = false;
+		private boolean _showStartDate = false;
+		private boolean _showEndDate = false;
 		private Integer _taskDatePadding;
 		private String _color;
 		private int _alpha = 255;
 		private Font _font;
 		private Border _border;
-
+		
 		public FusionchartGanttTask(String description, Date start, Date end) {
 			super(description, start, end, 0);
+		}
+
+		public FusionchartGanttTask(String description, Date start, Date end,
+				double percent) {
+			super(description, start, end, percent);
 		}
 
 		public FusionchartGanttTask(String description, Date start, Date end,
@@ -102,11 +103,31 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 		}
 
 		public FusionchartGanttTask(String description, Date start, Date end,
-				String color, boolean animation,
-				String hoverText, String link,
+				String color, String hoverText) {
+			super(description, start, end, 0);
+			this._color = color;
+			this._hoverText = hoverText;
+		}
+		
+		public FusionchartGanttTask(String description, Date start, Date end,
+				String color, int alpha, String hoverText,
+				String link, boolean animation, Integer taskDatePadding,
+				Font font, Border border) {
+			this(description, start, end, color, animation);
+			this._hoverText = hoverText;
+			this._link = link;
+			this._taskDatePadding = taskDatePadding;
+			this._alpha = alpha;
+			this._font = font;
+			this._border = border;
+		}
+
+		public FusionchartGanttTask(String description, Date start, Date end,
+				String color, int alpha, String hoverText, 
+				String link, boolean animation, Integer taskDatePadding,
+				Font font, Border border,
 				boolean showName, boolean showStartDate,
-				boolean showEndDate, Integer taskDatePadding,
-				int alpha, Font font, Border border) {
+				boolean showEndDate) {
 			this(description, start, end, color, animation);
 			this._hoverText = hoverText;
 			this._link = link;
@@ -415,9 +436,9 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 			this._animation = _animation;
 		}
 
-		public FusionchartGanttSeries(String seriesName, boolean _animation,
-				Font _font, Border _border) {
-			super(seriesName);
+		public FusionchartGanttSeries(String seriesName, String color,
+				int alpha, boolean _animation, Font _font, Border _border) {
+			super(seriesName, color, alpha);
 			this._animation = _animation;
 			this._font = _font;
 			this._border = _border;
@@ -506,7 +527,7 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 		private boolean showBorder = true;
 		private String color;
 		private int thickness;
-		private int alpha;
+		private int alpha = 255;
 
 		public Border(String color, int thickness, int alpha) {
 			super();
@@ -515,13 +536,13 @@ public class FusionchartGanttModel extends AbstractFusionchartGanttModel {
 			this.alpha = alpha;
 		}
 
-		public Border(boolean showBorder, String color,
-				int thickness, int alpha) {
+		public Border(String color,
+				int thickness, int alpha, boolean showBorder) {
 			super();
-			this.showBorder = showBorder;
 			this.color = color;
 			this.thickness = thickness;
 			this.alpha = alpha;
+			this.showBorder = showBorder;
 		}
 
 		/**

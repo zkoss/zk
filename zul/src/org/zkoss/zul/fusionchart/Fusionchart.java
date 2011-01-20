@@ -1077,8 +1077,13 @@ public class Fusionchart extends HtmlBasedComponent {
 		private int padding;
 		private java.util.Calendar cal;
 		private SimpleDateFormat df;
+		private boolean _useChartFgAlpha;
+		private boolean _listenedonClick;
 		
-		private GanttXMLRender (int seriesSize) {
+		private GanttXMLRender (int seriesSize, boolean useChartFgAlpha, boolean listenedonClick) {
+			this._useChartFgAlpha = useChartFgAlpha;
+			this._listenedonClick = listenedonClick;
+			
 			// total height: 35 px, 15px for spaces, 20px for bars.
 			height = 20 / seriesSize;
 			padding = 15 / (seriesSize + 1);
@@ -1092,6 +1097,14 @@ public class Fusionchart extends HtmlBasedComponent {
 					: "MM/dd/yyyy", Locales.getCurrent());
 			df.setTimeZone(tz);
 			cal = java.util.Calendar.getInstance(tz, Locales.getCurrent());
+		}
+		
+		protected boolean isUseChartFgAlpha() {
+			return _useChartFgAlpha;
+		}
+		
+		protected boolean isListenedonClick() {
+			return _listenedonClick;
 		}
 		
 		public void renderXAxisEnd(long start, long end) {
@@ -1189,13 +1202,11 @@ public class Fusionchart extends HtmlBasedComponent {
 			tasksSb.append(">");
 		}
 		
-		public void renderTask(Comparable series, GanttTask task, String color) {
-			int pid = Integer.parseInt(processIdMap.get(task.getDescription())+"");
-			
+		public void renderTask(Comparable series, GanttTask task, String color, int index, int taskIndex) {
 			tasksSb.append("<task name='").append(series)
-				.append("' processId='").append(pid)
 				.append("' start=\"").append(df.format(task.getStart()))
-				.append("\" end=\"").append(df.format(task.getEnd())).append("\"");
+				.append("\" end=\"").append(df.format(task.getEnd())).append("\"")
+				.append(toFusionchartAttr("processId", processIdMap.get(task.getDescription())+""));
 			
 			int alpha = 255;
 			boolean animation = false;
@@ -1204,7 +1215,8 @@ public class Fusionchart extends HtmlBasedComponent {
 			
 			if (series instanceof FusionchartSeries) {
 				FusionchartSeries fseries = (FusionchartSeries) series;
-				color = toFusionchartColor(fseries.getColor());
+				if (fseries.getColor() != null)
+					color = toFusionchartColor(fseries.getColor());
 				alpha = fseries.getAlpha();
 				if (series instanceof FusionchartGanttSeries) {
 					FusionchartGanttSeries gseries = (FusionchartGanttSeries) series;
@@ -1216,24 +1228,27 @@ public class Fusionchart extends HtmlBasedComponent {
 			
 			if (task instanceof FusionchartGanttTask) {
 				FusionchartGanttTask ftask = (FusionchartGanttTask) task;
-				color = toFusionchartColor(ftask.getColor());
+				if (ftask.getColor() != null)
+					color = toFusionchartColor(ftask.getColor());
 				alpha = ftask.getAlpha();
 				animation = animation || ftask.isAnimation();
 				font = ftask.getFont();
 				border = ftask.getBorder();
 				
 				tasksSb.append(toFusionchartAttr("hoverText", ftask.getHoverText()))
-					.append(toFusionchartAttr("link", ftask.getLink()))
 					.append(toFusionchartAttr("taskDatePadding", ftask.getTaskDatePadding()+""))
 					.append(toFusionchartFont("font", font, false))
 					.append(" animation='").append(animation ? '1' : '0')
 					.append("' showName='").append(ftask.isShowName() ? '1' : '0')
 					.append("' showStartDate='").append(ftask.isShowStartDate() ? '1' : '0')
-					.append("' showEndDate='").append(ftask.isShowEndDate() ? '1' : '0').append("'");
+					.append("' showEndDate='").append(ftask.isShowEndDate() ? "1'" : "0'");
+				
+				if (!isListenedonClick())
+					tasksSb.append(toFusionchartAttr("link", ftask.getLink()));
 			}
 			
 			if (border != null) {
-				tasksSb.append(" showBorder='").append(border.isShowBorder() ? '1' : '0')
+				tasksSb.append(" showBorder='").append(border.isShowBorder() ? "1'" : "0'")
 					.append(toFusionchartAttr("borderColor", toFusionchartColor(border.getColor())))
 					.append(toFusionchartAttr("borderThickness", border.getThickness()+""))
 					.append(toFusionchartAttr("borderAlpha", toFusionchartAlpha(border.getAlpha())+""));
@@ -1242,8 +1257,12 @@ public class Fusionchart extends HtmlBasedComponent {
 			if (!isUseChartFgAlpha()) 
 				tasksSb.append(" alpha='").append(toFusionchartAlpha(alpha)).append("'");
 			
+			if (isListenedonClick())
+				tasksSb.append(" link='JavaScript:zk.Widget.$(\"").append(getUuid()).append("\").clickChart(\"")
+						.append(index).append("\",\"").append(taskIndex).append("\");'");
+			
 			tasksSb.append(" height='").append(height)
-				.append("' topPadding='").append((padding + height)* pid - height)
+				.append("' topPadding='").append((padding + height)* (index + 1) - height)
 				.append("' color='").append(color).append("'");
 			
 			tasksSb.append("/>");
@@ -1465,16 +1484,14 @@ public class Fusionchart extends HtmlBasedComponent {
 	 * transfer a GanttModel into JFreeChart GanttDataset.
 	 */
 	private String GanttModelToGanttDataset(GanttModel model) {
-		
-		
-
 		boolean isPutTasksDone = false;
 		Comparable[] allseries = model.getAllSeries();
 		int sz = allseries.length;
 		long start = Long.MAX_VALUE, end = 0;
 		
-		
-		GanttXMLRender ganttXMLRender = new GanttXMLRender(sz);
+		GanttXMLRender ganttXMLRender = 
+			new GanttXMLRender(sz, isUseChartFgAlpha(), 
+					Events.isListened(Fusionchart.this, Events.ON_CLICK, false));
 		Map colorMap = new HashMap();
 		
 		ganttXMLRender.renderYAxisBegin();
@@ -1497,7 +1514,7 @@ public class Fusionchart extends HtmlBasedComponent {
 				start = Math.min(start, task.getStart().getTime());
 				end = Math.max(end, task.getEnd().getTime());
 				
-				ganttXMLRender.renderTask(series, task, (String) colorMap.get(series));
+				ganttXMLRender.renderTask(series, task, (String) colorMap.get(series), j, k);
 			}
 			isPutTasksDone = true;
 		}
@@ -1508,8 +1525,6 @@ public class Fusionchart extends HtmlBasedComponent {
 
 		return ganttXMLRender.toDataXmlString();
 	}
-	
-	
 
 	/** pie chart */
 	private class Pie extends ChartImpl {
@@ -1526,7 +1541,7 @@ public class Fusionchart extends HtmlBasedComponent {
 			if (isUseChartFgAlpha())
 				sb.append(" pieFillAlpha='").append(toFusionchartAlpha(getFgAlpha())).append("'");
 			
-			sb.append(" decimalPrecision='").append(getDecimalPrecision()).append("'")
+			sb.append(" decimalPrecision='").append(getDecimalPrecision())
 				.append("' shownames='1'");
 		}
 	}
@@ -1731,6 +1746,12 @@ public class Fusionchart extends HtmlBasedComponent {
 				data.put("y", xyModel.getY(series, cateIndex));
 				
 			} else if (model instanceof GanttModel) {
+				GanttModel ganttModel = (GanttModel) model;
+				int seriIndex = AuRequests.getInt(data, "series", 0, true);
+				Comparable series = ganttModel.getAllSeries()[seriIndex];
+				
+				data.put("series", series);
+				data.put("task", ganttModel.getTasks(series)[cateIndex]);
 				
 			}
 			Events.postEvent(new Event(cmd, this, data));
