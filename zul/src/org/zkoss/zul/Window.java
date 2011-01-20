@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
@@ -78,7 +79,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 
 	private String _border = "none";
 	private String _title = "";
-	/** One of MODAL, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
+	/** One of MODAL, _MODAL_, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
 	private Mutex _mutex = new Mutex();
@@ -117,6 +118,8 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @see #HIGHLIGHTED
 	 */
 	public static final int MODAL = 1;
+	//Represent a modal when the event thread is disabled (internal)
+	private static final int _MODAL_ = -100;
 	/** Makes the window as overlapped other components.
 	 */
 	public static final int OVERLAPPED = 2;
@@ -390,7 +393,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 	private static String modeToString(int mode) {
 		switch (mode) {
-		case MODAL: return "modal";
+		case MODAL:
+		case _MODAL_:
+			return "modal";
 		case POPUP: return "popup";
 		case OVERLAPPED: return "overlapped";
 		case HIGHLIGHTED: return "highlighted";
@@ -425,9 +430,12 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name))
-			Events.postEvent(Events.ON_MODAL, this, null);
-		else if ("highlighted".equals(name)) doHighlighted();
+		else if ("modal".equals(name)) {
+			if (isEventThreadEnabled(false))
+				Events.postEvent(Events.ON_MODAL, this, null);
+			else
+				doModal();
+		} else if ("highlighted".equals(name)) doHighlighted();
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
 	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
@@ -440,7 +448,10 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		case OVERLAPPED: doOverlapped(); break;
 		case EMBEDDED: doEmbedded(); break;
 		case MODAL:
-			Events.postEvent(Events.ON_MODAL, this, null);
+			if (isEventThreadEnabled(false))
+				Events.postEvent(Events.ON_MODAL, this, null);
+			else
+				doModal();
 			break;
 		case HIGHLIGHTED: doHighlighted(); break;
 		default:
@@ -451,7 +462,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	/** Returns whether this is a modal dialog.
 	 */
 	public boolean inModal() {
-		return _mode == MODAL;
+		return _mode == MODAL || _mode == _MODAL_;
 	}
 	/** Returns whether this is embedded with other components (Default).
 	 * @see #doEmbedded
@@ -501,12 +512,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 */
 	public void doModal()
 	throws InterruptedException, SuspendNotAllowedException {
-		Desktop desktop = getDesktop();
-		if (desktop == null)
-			throw new SuspendNotAllowedException("Not attached, "+this);
-
-		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
-			doHighlighted();
+		if (!isEventThreadEnabled(true)) {
+			checkOverlappable(_MODAL_);
+			setNonModalMode(_MODAL_);
 			return;
 		}
 
@@ -599,12 +607,25 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 
 		Executions.notifyAll(_mutex);
 	}
+	private boolean isEventThreadEnabled(boolean attachedRequired) {
+		Desktop desktop = getDesktop();
+		if (desktop == null) {
+			if (attachedRequired)
+				throw new SuspendNotAllowedException("Not attached, "+this);
+
+			final Execution exec = Executions.getCurrent();
+			if (exec == null || (desktop = exec.getDesktop()) == null)
+				return true; //assume enabled (safer)
+		}
+		return desktop.getWebApp().getConfiguration().isEventThreadEnabled();
+	}
+
 	/** Makes sure it is not draggable. */
 	private void checkOverlappable(int mode) {
 		if (!"false".equals(getDraggable()))
 			throw new UiException("Draggable window cannot be modal, overlapped, popup, or highlighted: "+this);
 
-		if (mode == MODAL || mode == HIGHLIGHTED)
+		if (mode == MODAL)
 			for (Component comp = this; (comp = comp.getParent()) != null;)
 				if (!comp.isVisible())
 					throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal or highlighted");
@@ -827,9 +848,15 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 
 	/** Changes the visibility of the window.
 	 *
-	 * <p>Note: If a modal dialog becomes invisible, the modal state
+	 * <p>Note if you turned on the event thread:<br/>
+	 * If a modal dialog becomes invisible, the modal state
 	 * will be ended automatically. In other words, the mode ({@link #getMode})
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
+	 * In other words, the modal window ({@link #MODAL}) can not be invisible
+	 * (while a window in other modes could be invisible).
+	 * <p>However, if the event thread is not enabled (default), there is no
+	 * such limitation. In other words, it remains the same mode when becoming
+	 * invisible.
 	 */
 	public boolean setVisible(boolean visible) {
 		if (visible == isVisible())
@@ -838,15 +865,11 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return setVisible0(visible);
 	}
 	private boolean setVisible0(boolean visible) {
-		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
-			if (_mode == MODAL) {
-				//Hide first to avoid unpleasant effect
-				super.setVisible(false);
-				leaveModal(OVERLAPPED);
-				return true;
-			}
-			_mode = OVERLAPPED;
-			smartUpdate("mode", modeToString(_mode));
+		if (!visible && _mode == MODAL) {
+			//Hide first to avoid unpleasant effect
+			super.setVisible(false);
+			leaveModal(OVERLAPPED);
+			return true;
 		}
 		return super.setVisible(visible);
 	}
@@ -916,12 +939,8 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			_minimized = evt.isMinimized();
 			if (_minimized) {
 				setVisibleDirectly(false);
-				if (_mode == MODAL) {
+				if (_mode == MODAL)
 					leaveModal(OVERLAPPED);
-				} else if (_mode == HIGHLIGHTED) {
-					_mode = OVERLAPPED; // according to leaveModal()
-					smartUpdate("mode", modeToString(_mode));
-				}
 			}
 			Events.postEvent(evt);
 		} else

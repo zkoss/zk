@@ -258,6 +258,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+	function _isModal(mode) {
+		return mode == 'modal' || mode == 'highlighted';
+	}
+
 var Window =
 /**
  * A window.
@@ -682,6 +686,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.setMode('embedded');
 	},
 
+	//@Override
+	afterAnima_: function (visible) { //mode="highlighted" action="hide:slideDown"
+		this.$supers('afterAnima_', arguments);
+		this.zsync();
+	},
+
 	zsync: function () {
 		this.$supers('zsync', arguments);
 		if (this.desktop) {
@@ -915,6 +925,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 			if (visible)
 				_updDomPos(this, false, true);
+			else
+				this.zsync();
 		}
 	},
 	setHeight: function (height) {
@@ -994,7 +1006,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);
 
-			if (mode == 'modal' || mode == 'highlighted') _doModal(this);
+			if (_isModal(mode)) _doModal(this);
 			else _doOverlapped(this);
 		}
 		
@@ -1150,13 +1162,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenMinFlex_: function (orient) {
 		this.$supers('afterChildrenMinFlex_', arguments);
-		if (this._mode == 'modal') //win hflex="min"
+		if (_isModal(this._mode)) //win hflex="min"
 			_updDomPos(this, true); //force re-position since window width might changed.
 	},
 	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
 	afterChildrenFlex_: function (cwgt) {
 		this.$supers('afterChildrenFlex_', arguments);
-		if (this._mode == 'modal')
+		if (_isModal(this._mode))
 			_updDomPos(this, true); //force re-position since window width might changed.
 	}
 },{ //static
