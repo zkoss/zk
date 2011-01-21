@@ -1,0 +1,25 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<!--
+B50-3151694.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan  21 15:29:39 TST 2011, Created by sam
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+		 <li>Type "25-" in the doublebox</li>
+		 <li>Click tab to focus away, if popup a warning box, it is correct</li>
+		 <li>Click the button to get value, if dialog shows NumberFormatException, it is bug</li>
+		</ol>
+	]]></html>
+	<decimalbox id="decimalbox"/>
+	<button label="Get decimalbox value" onClick="alert(decimalbox.value);"></button>
+</zk>

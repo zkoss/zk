@@ -35,7 +35,8 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		var jdot = -1;
 		for (var j = 0, len = value.length; j < len; ++j) {
 			var cc = value.charAt(j);
-			if ((cc < '0' || cc > '9') && cc != '-' && cc != '+')
+			if (((cc < '0' || cc > '9') && cc != '-' && cc != '+') || 
+				(j && (cc == '-' || cc == '+')))
 				if (jdot < 0 && cc == '.') {
 					jdot = j;
 				} else {

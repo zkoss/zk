@@ -47,6 +47,7 @@ ZK 5.0.6
   3160695: The x/yAxis label of GanttChart was in wrong position 
   3152754: Include#setVisible() has issue with invalidate()
   3162238: Include fails when set source to null dynamically
+  3151694: decimalbox input 25- cause exception
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
