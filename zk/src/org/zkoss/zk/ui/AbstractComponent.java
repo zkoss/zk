@@ -1812,8 +1812,9 @@ w:use="foo.MyWindow"&gt;
 			final int flags = ((Integer)me.getValue()).intValue();
 			if ((flags & CE_IMPORTANT) != 0) {
 				if (shallHandleImportant == null) {
-					Execution exec = Executions.getCurrent();
-					shallHandleImportant = Boolean.valueOf(exec != null && markImportantEvent(exec));
+					final Desktop desktop = getDesktop();
+					shallHandleImportant = Boolean.valueOf(
+						desktop != null && markImportantEvent(desktop));
 				}
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
@@ -1832,13 +1833,13 @@ w:use="foo.MyWindow"&gt;
 				(o instanceof Boolean && ((Boolean)o).booleanValue())
 				|| !"false".equals(o));
 	}
-	/** Adds this widget class to indicate that its important events
-	 * are generated
+	/** Adds this widget class to indicate that its important events are
+	 * generated. They have to be generated once per widget-class per desktop.
 	 */
-	private boolean markImportantEvent(Execution exec) {
-		Set wgtcls = (Set)exec.getAttribute(IMPORTANT_EVENTS);
+	private boolean markImportantEvent(Desktop desktop) {
+		Set wgtcls = (Set)desktop.getAttribute(IMPORTANT_EVENTS);
 		if (wgtcls == null)
-			exec.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(8));
+			desktop.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(32));
 		return wgtcls.add(getWidgetClass());
 	}
 	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";
