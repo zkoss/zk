@@ -734,6 +734,7 @@ public class Fusionchart extends HtmlBasedComponent implements org.zkoss.zul.api
 		try {
 			_paintIndex = 0;
 			response(new AuSetAttribute(this, "fusionChartXML", getChartImpl().createChartXML()));
+			System.out.println(getChartImpl().createChartXML());
 		} finally {
 			_smartDrawChart = false;
 		}
@@ -814,7 +815,7 @@ public class Fusionchart extends HtmlBasedComponent implements org.zkoss.zul.api
 		protected void renderProperties(StringBuffer sb){
 			super.renderProperties(sb);
 			sb.append(toFusionchartFont("outCnvBaseFont", getOutCnvBaseFont(), false))
-				.append(" canvasBgAlpha='").append(toFusionchartAlpha(getBgAlpha()))
+				.append(" canvasBgAlpha='").append(toFusionchartAlpha(getBgAlpha())).append("'")
 				.append(toFusionchartAttr("canvasBgColor", toFusionchartColor(getBgColor())));
 		}
 	}
