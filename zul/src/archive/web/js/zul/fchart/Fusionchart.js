@@ -149,11 +149,39 @@ zul.fchart.Fusionchart = zk.$extends(zk.Widget, {
 	_type: Chart.PIE,
 	_orient: 'vertical',
 	$define: {
+		/**
+		 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
+		 *
+		 * <p>Default: pie.
+		 *
+		 */
+		/**
+		 * Get the chart's type.
+		 */
 	    type: zkf = function () {
 			this._shallRedraw = true;
 		},
+		/**
+		 * Set true to show three dimensional graph (If a type of chart got no 3d peer, this is ignored).
+		 */
+		/**
+		 * Whether a 3d chart.
+		 */
 		threeD: zkf,
+		/**
+		 * Set the chart orientation.
+		 * @param orient vertical or horizontal (default to vertical)
+		 */
+		/**
+		 * Get the chart orientation (vertical or horizontal)
+		 */
 		orient: zkf,
+		/**
+		 * Sets the XML string for render the chart data.
+		 */
+		/**
+		 * Get the XML string of the chart data.
+		 */
 		fusionChartXML: function () {
 			this._shallRedraw = true;
 			this._shallUpdate = true;
