@@ -720,7 +720,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						left: -4, right: 4, top: -2, bottom: 3
 					});
 					
-				if (this._maximized || this._minimized)
+				if (this._maximized || this._minimized || !this._visible) //since action might be applied, we have to check _visible
 					this._hideShadow();
 				else this._shadow.sync();
 			}

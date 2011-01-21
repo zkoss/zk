@@ -200,8 +200,8 @@ if (!zk.css3) {
 }
 
 	//Position a mask to cover the whole browser window.
-	//it must be called as _syncPos.call(this)
-	function _syncPos() {
+	//it must be called as _syncMaskPos.call(this)
+	function _syncMaskPos() {
 		var n = this.mask,
 			st = n.style;
 		if (st.display != "none") {
@@ -260,11 +260,11 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		if (opts.stackup)
 			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
 
-		_syncPos.call(this);
+		_syncMaskPos.call(this);
 
 		var f;
 		jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
-		jq(window).resize(f = this.proxy(_syncPos))
+		jq(window).resize(f = this.proxy(_syncMaskPos))
 			.scroll(f);
 	},
 	/** Removes the full mask. You can not access this object any more.
@@ -273,7 +273,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		var mask = this.mask, f;
 		jq(mask).unbind("click", jq.Event.stop)
 			.remove()
-		jq(window).unbind("resize", f = this.proxy(_syncPos))
+		jq(window).unbind("resize", f = this.proxy(_syncMaskPos))
 			.unbind("scroll", f);
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
@@ -304,6 +304,9 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		var st = this.mask.style;
 		st.display = 'block';
 		st.zIndex = el.style.zIndex;
+
+		_syncMaskPos.call(this, true);
+
 		if (this.stackup) {
 			st = this.stackup.style;
 			st.display = 'block';

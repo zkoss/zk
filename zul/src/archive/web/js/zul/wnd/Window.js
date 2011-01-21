@@ -923,7 +923,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 			this.$supers('setVisible', arguments);
 
-			if (visible)
+			if (_isModal(this._mode))
+				_updDomOuter(this); //no side effect if browser has beeen resized
+			else if (visible)
 				_updDomPos(this, false, true);
 			else
 				this.zsync();
