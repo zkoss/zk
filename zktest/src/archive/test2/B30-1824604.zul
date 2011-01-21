@@ -19,9 +19,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 2.click sort twice, grid shouldn't become empty.
 	<separator/>
 	<zscript>
-		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel();
-
+		import org.zkoss.zul.*;
+		import java.util.*;
 		import org.zkoss.zktest.util.*;
+		
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel();
 		Comparator asc = new RowLabelComparator(true),
 		dsc = new RowLabelComparator(false);
 	</zscript>
