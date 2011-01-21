@@ -303,7 +303,7 @@ zk.copy(zjq.prototype, {
 	 * firing the onSize watch.
 	 * <p>Example:<br/>
 	 * <code>zk(n).defaultAnimaOpts(wgt, opts, prop, true).jq.css(css).show().animate(...);</code>
-	 * @param zk.Widget wgt the widget
+	 * @param Widget wgt the widget
 	 * @param Map opts the options. Ignored if not specified.
 	 * It depends on the effect being taken
 	 * @param Array prop an array of properties, such ['top', 'left', 'position'].
