@@ -36,15 +36,15 @@ function (out, skipper) {
 
 		if (caption) caption.redraw(out);
 		else {
-			if (this.isClosable())
+			if (this._closable)
 				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close"></div>');
-			if (this.isMaximizable()) {
+			if (this._maximizable) {
 				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
-				if (this.isMaximized())
+				if (this._maximized)
 					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
-			if (this.isMinimizable())
+			if (this._minimizable)
 				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min"></div>');
 			out.push(zUtl.encodeXML(title));
 		}

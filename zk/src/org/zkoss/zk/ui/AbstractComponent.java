@@ -1839,7 +1839,7 @@ w:use="foo.MyWindow"&gt;
 	private boolean markImportantEvent(Desktop desktop) {
 		Set wgtcls = (Set)desktop.getAttribute(IMPORTANT_EVENTS);
 		if (wgtcls == null)
-			desktop.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(32));
+			desktop.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(50));
 		return wgtcls.add(getWidgetClass());
 	}
 	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";

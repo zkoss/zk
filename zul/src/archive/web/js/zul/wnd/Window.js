@@ -525,7 +525,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		minimized: function (minimized, fromServer) {
-			if (this.isMaximized())
+			if (this._maximized)
 				this.setMaximized(false);
 
 			var node = this.$n();
@@ -604,7 +604,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		position: function (/*pos*/) {
-			_updDomPos(this, false, this.isVisible());
+			_updDomPos(this, false, this._visible);
 		},
 		/**
 		 * Sets the minimum height in pixels allowed for this window.
@@ -654,7 +654,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	 * @since 5.0.3
 	 */
 	repos: function () {
-		_updDomPos(this, false, this.isVisible());
+		_updDomPos(this, false, this._visible);
 	},
 	/** Makes this window as overlapped with other components.
 	 */
@@ -704,7 +704,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (!this._shadowWgt)
 					this._shadowWgt = new zk.eff.Shadow(this.$n(),
 						{left: -4, right: 4, top: -2, bottom: 3});
-				if (this.isMaximized() || this.isMinimized())
+				if (this._maximized || this._minimized || !this._visible) //since action might be applied, we have to check _visible
 					_hideShadow(this);
 				else
 					this._shadowWgt.sync();
@@ -788,12 +788,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this.isMaximized()&& !this.__maximized) 
+		if (this._maximized && !this.__maximized) 
 			this.$n().style.width="";
 	},
 	onSize: function() {
 		_hideShadow(this);
-		if (this.isMaximized()) {
+		if (this._maximized) {
 			if (!this.__maximized)
 				_syncMaximized(this);
 			this.__maximized = false; // avoid deadloop
@@ -806,7 +806,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.zsync();
 	},
 	onFloatUp: function (ctl) {
-		if (!this.isVisible() || this._mode == 'embedded')
+		if (!this._visible || this._mode == 'embedded')
 			return; //just in case
 
 		var wgt = ctl.origin;
@@ -915,9 +915,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	//super//
 	setVisible: function (visible) {
 		if (this._visible != visible) {
-			if (this.isMaximized()) {
+			if (this._maximized) {
 				this.setMaximized(false);
-			} else if (this.isMinimized()) {
+			} else if (this._minimized) {
 				this.setMinimized(false);
 			}
 
@@ -985,7 +985,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);
-		if ((!no || !no.visible) && this.isMinimized())
+		if ((!no || !no.visible) && this._minimized)
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
 			style = "position:absolute;"+style;
@@ -1013,11 +1013,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizable)
 			_makeSizer(this);
 
-		if (this.isMaximizable() && this.isMaximized()) {
+		if (this._maximizable && this._maximized) {
 			var self = this;
 			after.push(function() {
 				self._maximized = false;
-				self.setMaximized(true, true);				
+				self.setMaximized(true, true);
 			});
 		}
 
@@ -1090,8 +1090,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this._mode == 'embedded' ? false : this.$n('cap'),
 				zcls = this.getZclass();
-			if (!this.isMaximized() && c) {
-				if (this.isMaximized()) return; // unsupported this case.
+			if (!this._maximized && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
 				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
@@ -1114,10 +1113,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.fire('onClose');
 			break;
 		case this.$n('max'):
-			this.setMaximized(!this.isMaximized());
+			this.setMaximized(!this._maximized);
 			break;
 		case this.$n('min'):
-			this.setMinimized(!this.isMinimized());
+			this.setMinimized(!this._minimized);
 			break;
 		default:
 			this.$supers('doClick_', arguments);
@@ -1132,7 +1131,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		case this.$n('max'):
 			var zcls = this.getZclass(),
-				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
+				added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
 			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
 			break;
 		case this.$n('min'):
@@ -1149,7 +1148,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		case this.$n('max'):
 			var zcls = this.getZclass(),
 				$max = jq(this.$n('max'));
-			if (this.isMaximized())
+			if (this._maximized)
 				$max.removeClass(zcls + '-maxd-over');
 			$max.removeClass(zcls + '-max-over');
 			break;
@@ -1226,7 +1225,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		if (wgt.isMaximized()) return true;
+		if (wgt._maximized) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);

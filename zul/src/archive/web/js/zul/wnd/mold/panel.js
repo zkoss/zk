@@ -34,19 +34,19 @@ function (out, skipper) {
 			}
 		out.push('">');
 		if (!caption) {
-			if (this.isClosable())
+			if (this._closable)
 				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ',
 						zcls, '-close"></div>');
-			if (this.isMaximizable()) {
+			if (this._maximizable) {
 				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
-				if (this.isMaximized())
+				if (this._maximized)
 					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
-			if (this.isMinimizable())
+			if (this._minimizable)
 				out.push('<div id="', uuid, '-min" class="', zcls, '-icon ',
 						zcls, '-min"></div>');
-			if (this.isCollapsible())
+			if (this._collapsible)
 				out.push('<div id="', uuid, '-exp" class="', zcls, '-icon ',
 						zcls, '-exp"></div>');
 			out.push(zUtl.encodeXML(title));
@@ -62,7 +62,7 @@ function (out, skipper) {
 	
 	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
 	
-	if (!this.isOpen()) out.push(' style="display:none;"');
+	if (!this._open) out.push(' style="display:none;"');
 	
 	out.push('>');
 	
