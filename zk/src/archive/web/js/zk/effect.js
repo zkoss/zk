@@ -203,16 +203,17 @@ if (!zk.css3) {
 	//it must be called as _syncPos.call(this)
 	function _syncPos() {
 		var n = this.mask,
-			ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY()),
 			st = n.style;
-		st.left = jq.px(ofs[0]);
-		st.top = jq.px(ofs[1]);
-		st.width = jq.px0(jq.innerWidth());
-		st.height = jq.px0(jq.innerHeight());
-		st.display = "block";
+		if (st.display != "none") {
+			var ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY());
+			st.left = jq.px(ofs[0]);
+			st.top = jq.px(ofs[1]);
+			st.width = jq.px0(jq.innerWidth());
+			st.height = jq.px0(jq.innerHeight());
 
-		if (n = this.stackup)
-			zk.set(n.style, st, ["left", "top", "width", "height"]);
+			if (n = this.stackup)
+				zk.set(n.style, st, ["left", "top", "width", "height"]);
+		}
 	}
 
 /** A mask covers the browser window fully.
