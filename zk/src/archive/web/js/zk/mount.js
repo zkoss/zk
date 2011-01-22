@@ -123,7 +123,7 @@ function zkmprops(uuid, props) {
 	zk._apac = function (fn, bCmd) {
 		if (_paci)
 			return _paci[bCmd ? "f0": "f1"].push(fn);
-		fn();
+		zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 	};
 	function _stateless() {
 		var dts = zk.Desktop.all;
