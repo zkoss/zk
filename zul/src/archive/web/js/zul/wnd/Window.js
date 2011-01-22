@@ -128,16 +128,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		$n.makeVParent();
 		wgt.zsync();
-		_updDomPos(wgt, true);
-
-		if (!pos) { //adjust y (to upper location)
-			var top = zk.parseInt(n.style.top), y = jq.innerY();
-			if (y) {
-				var y1 = top - y;
-				if (y1 > 100) n.style.top = jq.px0(top - (y1 - 100));
-			} else if (top > 100)
-				n.style.top = "100px";
-		}
+		_updDomPos(wgt, true, false, true);
 
 		//Note: modal must be visible
 		var realVisible = wgt.isRealVisible();
@@ -153,22 +144,44 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				visible: realVisible
 			});
 		}
-		if (realVisible) {
-			zk.currentModal = wgt;
-			var wnd = _modals[0], fc = zk.currentFocus;
-			if (wnd) wnd._lastfocus = fc;
-			else _lastfocus = fc;
-			_modals.unshift(wgt);
-
-			//au's focus uses wgt.focus(0), so we have to delay a bit
-			//to see if focus has been changed to its decendant (Z30-focus.zul)
-			setTimeout(function () {
-				if (!zUtl.isAncestor(wgt, zk.currentFocus))
-					wgt.focus();
-			}, 0);
-		}
+		if (realVisible)
+			_markModal(wgt);
 
 		_makeFloat(wgt);
+	}
+	function _markModal(wgt) {
+		zk.currentModal = wgt;
+		var wnd = _modals[0], fc = zk.currentFocus;
+		if (wnd) wnd._lastfocus = fc;
+		else _lastfocus = fc;
+		_modals.unshift(wgt);
+
+		//We have to use setTimeout:
+		//1) au's focus uses wgt.focus(0), i.e., 
+		//   focus might have been changed to its decendant (Z30-focus.zul)
+		//2) setVisible might use animation
+		setTimeout(function () {
+			zk.afterAnimate(function () {
+				if (!zUtl.isAncestor(wgt, zk.currentFocus))
+					wgt.focus();
+			}, -1)});
+	}
+	function _unmarkModal(wgt) {
+		_modals.$remove(wgt);
+		if (zk.currentModal == wgt) {
+			var wnd = zk.currentModal = _modals[0],
+				fc = wnd ? wnd._lastfocus: _lastfocus;
+			if (!wnd)
+				_lastfocus = null;
+			if (!fc || !fc.desktop)
+				fc = wnd;
+			if (fc)
+				if (wgt._updDOFocus === false)
+					wgt._updDOFocus = fc; //let _updDomOuter handle it
+				else
+					fc.focus(10); // use timeout for the bug 3057311
+		}
+		wgt._lastfocus = null;
 	}
 	/* Must be called before calling makeVParent. */
 	function _posByParent(wgt) {
@@ -186,7 +199,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			cf.focus(10);
 		delete wgt._updDOFocus;
 	}
-	function _updDomPos(wgt, force, posParent) {
+	//minTop - whether to at most 100px
+	function _updDomPos(wgt, force, posParent, minTop) {
 		if (!wgt.desktop || wgt._mode == 'embedded')
 			return;
 
@@ -216,6 +230,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
 				st.top = jq.px(t - opts.bottom);
 		}
+
+		if (minTop && !pos) { //adjust y (to upper location)
+			var top = zk.parseInt(n.style.top), y = jq.innerY();
+			if (y) {
+				var y1 = top - y;
+				if (y1 > 100) n.style.top = jq.px0(top - (y1 - 100));
+			} else if (top > 100)
+				n.style.top = "100px";
+		}
+
 		wgt.zsync();
 		if (ol != st.left || ot != st.top)
 			wgt._fireOnMove();
@@ -800,9 +824,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this._fixHgh();
 		this._fixWdh();
-		if (this._mode != 'embedded') {
+		if (this._mode != 'embedded')
 			_updDomPos(this);
-		}
 		this.zsync();
 	},
 	onFloatUp: function (ctl) {
@@ -921,13 +944,19 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this.setMinimized(false);
 			}
 
+			var modal = _isModal(this._mode);
+			if (visible) {
+				_updDomPos(this, modal, true, modal);
+				if (modal && (!this.parent || this.parent.isRealVisible())) {
+					this.setTopmost();
+					_markModal(this);
+				}
+			} else if (modal)
+				_unmarkModal(this);
+
 			this.$supers('setVisible', arguments);
 
-			if (_isModal(this._mode))
-				_updDomOuter(this); //no side effect if browser has beeen resized
-			else if (visible)
-				_updDomPos(this, false, true);
-			else
+			if (!visible)
 				this.zsync();
 		}
 	},
@@ -1066,21 +1095,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
 
-		_modals.$remove(this);
-		if (zk.currentModal == this) {
-			var wnd = zk.currentModal = _modals[0],
-				fc = wnd ? wnd._lastfocus: _lastfocus;
-			if (!wnd)
-				_lastfocus = null;
-			if (!fc || !fc.desktop)
-				fc = wnd;
-			if (fc)
-				if (this._updDOFocus === false)
-					this._updDOFocus = fc; //let _updDomOuter handle it
-				else
-					fc.focus(10); // use timeout for the bug 3057311
-		}
-		this._lastfocus = null;
+		_unmarkModal(this);
 
 		this.domUnlisten_(this.$n(), 'onMouseMove');
 		this.domUnlisten_(this.$n(), 'onMouseOut');

@@ -2583,34 +2583,37 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domStyle_: function (no) {
-		var style = '';
-		if (!this.isVisible() && (!no || !no.visible))
+		var style = '', s;
+		if (s = this.z$display) //see au.js
+			style = "display:" + s + ';';
+		else if (!this.isVisible() && (!no || !no.visible))
 			style = 'display:none;';
+
 		if (!no || !no.style) {
-			var s = this.getStyle(); 
+			s = this.getStyle(); 
 			if (s) {
 				style += s;
 				if (s.charAt(s.length - 1) != ';') style += ';';
 			}
 		}
 		if (!no || !no.width) {
-			var s = this.getWidth();
+			s = this.getWidth();
 			if (s) style += 'width:' + s + ';';
 		}
 		if (!no || !no.height) {
-			var s = this.getHeight();
+			s = this.getHeight();
 			if (s) style += 'height:' + s + ';';
 		}
 		if (!no || !no.left) {
-			var s = this.getLeft();
+			s = this.getLeft();
 			if (s) style += 'left:' + s + ';';
 		}
 		if (!no || !no.top) {
-			var s = this.getTop();
+			s = this.getTop();
 			if (s) style += 'top:' + s + ';';
 		}
 		if (!no || !no.zIndex) {
-			var s = this.getZIndex();
+			s = this.getZIndex();
 			if (s >= 0) style += 'z-index:' + s + ';';
 		}
 		return style;

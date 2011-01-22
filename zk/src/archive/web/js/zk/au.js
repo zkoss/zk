@@ -397,17 +397,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _beforeAction(wgt, actnm) {
 		var act;
 		if (wgt._visible && (act = wgt.actions_[actnm])) {
-			var oldrod = wgt.z$rod0; //save it
-			wgt.z$rod0 = false; //don't ROD! (see zkmax/rod.js)
-			wgt._visible = false;
-			return [act, oldrod];
+			wgt.z$display = "none"; //control zk.Widget.domAttrs_
+			return act;
 		}
 	}
 	function _afterAction(wgt, act) {
 		if (act) {
-			wgt.z$rod0 = act[1]; //restore
-			wgt._visible = true;
-			act[0][0].call(wgt, wgt.$n(), act[0][1]);
+			delete wgt.z$display;
+			act[0].call(wgt, wgt.$n(), act[1]);
 			return true;
 		}
 	}
