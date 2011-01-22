@@ -13,6 +13,14 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	var _aftAnims = [], //used zk.afterAnimate
+		_jqstop = jq.fx.stop;
+
+	jq.fx.stop = function () {
+		_jqstop();
+		for (var fn; fn = _aftAnims.shift();)
+			fn();
+	};
 
 	function _addAnique(id, data) {
 		var ary = zk._anique[id];
@@ -69,13 +77,41 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zk.copy(zk, {
 	/** Returns whether there is some animation taking place.
+	 * If you'd like to have a function to be called only when no anitmation
+	 * is taking place (such as waiting for sliding down to be completed),
+	 * you could use {@link #afterMount}.
 	 * @return boolean
+	 * @see #afterAnimate
 	 */
 	animating: function () {
 		return !!jq.timers.length;
 	},
+	/** Executes a function only when no animation is taking place.
+	 * If there is some animation, the specified function will be queued
+	 * and invoked after the animation is done.
+	 * <p>If the delay argument is not specified and no animation is taking place,
+	 * the function is executed with <code>setTimeout(fn, 0)</code>.
+	 * @param Function fn the function to execute
+	 * @param int delay how many milliseconds to wait before execute if
+	 * there is no animation is taking place. If omiited, 0 is assumed.
+	 * If negative, the function is executed immediately.
+	 * @return boolean true if this method has been called before return (delay must
+	 * be negative, and no animation); otherwise, undefined is returned.
+	 * @see #animating
+	 * @since 5.0.6
+	 */
+	afterAnimate: function (fn, delay) {
+		if (zk.animating())
+			_aftAnims.push(fn);
+		else if (delay < 0) {
+			fn();
+			return true;
+		} else
+			setTimeout(fn, delay);
+	},
 	_anique: {}
 });
+
 /** @partial jqzk
  */
 zk.copy(zjq.prototype, {

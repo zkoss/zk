@@ -1450,7 +1450,7 @@ new zul.wnd.Window{
 				}
 		}
 	},
-	/** Invoked after an animation (e.g., {@link zkjq#slideDown}) has finished.
+	/** Invoked after an animation (e.g., {@link jqzk#slideDown}) has finished.
 	 * You could override to clean up anything related to animation.
 	 * Notice that, if you override, you have to call back this method.
 	 * @param boolean visible whether the result of the animation will make

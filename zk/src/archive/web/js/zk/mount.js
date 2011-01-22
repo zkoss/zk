@@ -137,23 +137,33 @@ function zkmprops(uuid, props) {
 	/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
 	 * <p>By mounting we mean the creation of the peer widgets under the
 	 * control of the server. To run after the mounting of the peer widgets,
-	 * <p>The function is executed with <code>setTimeout(fn, 0)</code> if the mounting has been done. 
+	 * <p>If the delay argument is not specified and no mounting is taking place,
+	 * the function is executed with <code>setTimeout(fn, 0)</code>.
 	 * @param Function fn the function to execute after mounted
+	 * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
+	 * there is no mounting is taking place. If omiited, 0 is assumed.
+	 * If negative, the function is executed immediately.
+	 * @return boolean true if this method has been called before return (delay must
+	 * be negative, and no mounting); otherwise, undefined is returned.
 	 * @see #mounting
 	 * @see #afterLoad
+	 * @see #afterAnimate
 	 */
 	//afterMount: function () {}
 //@};
-	zk.afterMount = function (fn) { //part of zk
-		if (fn)  {
+	zk.afterMount = function (fn, delay) { //part of zk
+		if (fn)
 			if (zk.mounting)
-				return _aftMounts.push(fn); //normal
-			if (zk.loading)
-				return zk.afterLoad(fn);
-			if (!jq.isReady)
-				return jq(fn);
-			setTimeout(fn, 0);
-		}
+				_aftMounts.push(fn); //normal
+			else if (zk.loading)
+				zk.afterLoad(fn);
+			else if (!jq.isReady)
+				jq(fn);
+			else if (delay < 0) {
+				fn();
+				return true; //called
+			} else
+				setTimeout(fn, delay);
 	};
 
 	function _curdt() {
