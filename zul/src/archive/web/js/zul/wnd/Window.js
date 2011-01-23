@@ -179,12 +179,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt._updDOFocus === false)
 					wgt._updDOFocus = fc; //let _updDomOuter handle it
 				else
-					_focus(fc);
+					fc.focus(10); // use timeout for the bug 3057311
 		}
 		wgt._lastfocus = null;
-	}
-	function _focus(w) {
-		zk.afterAnimate(function () {w.focus(10);}); // use timeout for the bug 3057311
 	}
 	/* Must be called before calling makeVParent. */
 	function _posByParent(wgt) {
@@ -199,7 +196,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.rerender(wgt._skipper);
 		var cf;
 		if (cf = wgt._updDOFocus) //asked by unbind_
-			_focus(cf);
+			cf.focus(10);
 		delete wgt._updDOFocus;
 	}
 	//minTop - whether to at most 100px
