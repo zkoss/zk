@@ -107,29 +107,31 @@ function zkmprops(uuid, props) {
 	//  (otherwise, /zkdemo/userguide will jump to #f1 causing additional step)
 	//Note: it is better to block zAu but the chance to be wrong is low --
 	//a timer must be started early and its response depends page's AU
-	_paci.i = setInterval(function () {
-		var stateless;
-		if ((zk.booted && !zk.mounting) || (stateless = _stateless()))
-			if (stateless || _paci.s == _paci.e) { //done
-				clearInterval(_paci.i);
-				var fs = _paci.f0.concat(_paci.f1);
-				_paci = null;
-				for (var f; f = fs.shift();)
-					f();
-			} else
-				_paci.e = _paci.s;
-	}, 25);
+	jq(function () {
+		function _stateless() {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				if (dts[dtid].stateless) return true;
+		}
+		_paci.i = setInterval(function () {
+			var stateless;
+			if ((zk.booted && !zk.mounting) || (stateless = _stateless()))
+				if (stateless || _paci.s == _paci.e) { //done
+					clearInterval(_paci.i);
+					var fs = _paci.f0.concat(_paci.f1);
+					_paci = null;
+					for (var f; f = fs.shift();)
+						f();
+				} else
+					_paci.e = _paci.s;
+		}, 25);
+	});
 	//run after page AU cmds
-	zk._apac = function (fn, bCmd) {
+	zk._apac = function (fn, _which_) {
 		if (_paci)
-			return _paci[bCmd ? "f0": "f1"].push(fn);
+			return _paci[_which_ || "f1"].push(fn);
 		zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 	};
-	function _stateless() {
-		var dts = zk.Desktop.all;
-		for (var dtid in dts)
-			if (dts[dtid].stateless) return true;
-	}
 
 /** @partial zk
  */
@@ -307,7 +309,7 @@ function zkmprops(uuid, props) {
 			zk._apac(function () {
 				for (var j = 0; j < cmds.length; j += 2)
 					zAu.process(cmds[j], cmds[j + 1]);
-			}, true);
+			}, "f0");
 	}
 
 	/* create the widget tree. */
