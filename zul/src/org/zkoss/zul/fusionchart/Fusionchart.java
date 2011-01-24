@@ -63,7 +63,7 @@ import org.zkoss.zul.GanttModel.GanttTask;
  * @author jimmyshiau
  * @since 5.0.6
  */
-public class Fusionchart extends HtmlBasedComponent implements org.zkoss.zul.api.Fusionchart {
+public class Fusionchart extends HtmlBasedComponent implements org.zkoss.zul.fusionchart.api.Fusionchart {
 
 	private static final long serialVersionUID = 20110107232220L;
 

@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-package org.zkoss.zul.api;
+package org.zkoss.zul.fusionchart.api;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.CategoryModel;
