@@ -208,9 +208,11 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2]]);
-				//inf[3]: owner passed from zkx
+			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
+				//inf[3]: owner passed from zkx
+				//inf[2]: bindOnly
+				//inf[4]: aucmds
 				//true: don't update DOM
 
 			if (_createInf0.length)
@@ -238,6 +240,8 @@ function zkmprops(uuid, props) {
 				wgt.bind(inf[0]); //bindOnly
 			else
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+
+			doAuCmds(inf[3]); //aucmds
 		}
 
 		mtBL1();
@@ -388,14 +392,13 @@ function zkmprops(uuid, props) {
 
 		try {
 			if (js) jq.globalEval(js);
-			doAuCmds(aucmds);
 
 			var delay, mount = mtAU, owner;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
 				delay = extra;
-				extra = null;
+				extra = aucmds;
 				mount = mtBL;
-			}
+			} //else assert(!aucmds); //no aucmds if AU
 
 			if (wi) {
 				if (wi[0] === 0) { //page
@@ -418,10 +421,10 @@ function zkmprops(uuid, props) {
 		}
 	},
 	//widget creation called by au.js
+	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
-		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-		zkx.apply(window, args);
+		zkx(args[0], [stub, filter]); //assign stub as 2nd argument (see zkx)
 	},
 
 	//queue a function to invoke by zkqx
