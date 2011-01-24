@@ -49,6 +49,7 @@ ZK 5.0.6
   3162238: Include fails when set source to null dynamically
   3151694: decimalbox input 25- cause exception
   3164504: Hflex will not recalculate when the colum without label
+  3164514: Jasperreport does not close JDBC connection after doReport()
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
