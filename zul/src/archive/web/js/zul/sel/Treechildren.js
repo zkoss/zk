@@ -108,7 +108,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 
 		var p;
 		return this.isTopmost()
-			|| ((p = this.parent) && p.isOpen() && p.isVisible() && (p = p.parent) && p.isVisible()); //recursive
+			|| ((p = this.parent) && p.isOpen() && p.isVisible()); //recursive
 	},
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).

@@ -394,7 +394,11 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 		if (dropable != null)
 			throw new UnsupportedOperationException("Use Treerow.setDroppable() instead");
 	}
-
+	
+	public boolean isVisible(){
+		return super.isVisible() && ((Treechildren) getParent()).isVisible();
+	}
+	
 	public boolean setVisible(boolean visible) {
 		if(isVisible() != visible){
 			smartUpdate("visible", visible);

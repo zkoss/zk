@@ -233,6 +233,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var p = this.parent && this.parent.parent ? this.parent.parent : null;
 		return p && p.$instanceof(zul.sel.Treeitem) ? p : null;
 	},
+	isVisible: function () {
+		if(!this.$supers('isVisible', arguments))
+			return false;
+		var p = this.parent;
+		return p && p.isVisible();
+	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);

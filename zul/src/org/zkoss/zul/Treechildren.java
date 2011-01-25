@@ -87,15 +87,9 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
-
 		Component comp = getParent();
-		if (!(comp instanceof Treeitem))
-			return true;
-		if (!((Treeitem)comp).isOpen() || !((Treeitem)comp).isVisible())
-			return false;
-		comp = comp.getParent();
-		return !(comp instanceof Treechildren)
-			|| ((Treechildren)comp).isVisible(); //recursive
+		return !(comp instanceof Treeitem) || 
+			((Treeitem)comp).isOpen() && ((Treeitem)comp).isVisible(); //recursive
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
