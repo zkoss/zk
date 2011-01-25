@@ -1108,7 +1108,7 @@ new zul.wnd.Window{
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
 		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (props.z$is)
+		if (props && props.z$is)
 			this._fellows = {};
 
 		this.afterInit(function () {
