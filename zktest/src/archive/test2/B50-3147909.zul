@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3147909.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 25 16:29:34 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on both listboxes. Their drop down should appear normally.</li>
+			<li>Drag the inner Div. Only the inner Div part should move.</li>
+		</ol>
+	]]></html>
+	<div draggable="true" style="background: #CCCC99" width="200px">
+		<listbox mold="select">
+			<listitem label="A1" />
+			<listitem label="A2" />
+		</listbox>
+		<div draggable="true" style="background: #99CCCC" width="100px">Inner Div</div>
+	</div>
+	<listbox mold="select" draggable="true">
+		<listitem label="B1" />
+		<listitem label="B2" />
+	</listbox>
+</zk>
