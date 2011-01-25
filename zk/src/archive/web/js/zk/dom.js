@@ -1292,6 +1292,12 @@ jq(el).zk.center(); //same as 'center'
 					$agt.remove();
 				} else
 					p.appendChild(el);
+				
+				var cf;
+				if (zk.gecko && (cf = zk._prevFocus) &&
+					zUtl.isAncestor(zk.Widget.$(el), cf) && 
+					cf.$instanceof(zul.inp.InputWidget) )
+					jq(cf.$n()).trigger('blur');
 			}
 		}
 		return this;

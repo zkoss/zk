@@ -58,6 +58,7 @@ ZK 5.0.6
   3147518: Memory leak with IE 7 and dynamic Grid Updates
   3109926: Splitter javascript error in IE8
   3147909: Listbox of select mold fails inside draggable component (Webkit)
+  3165056: Textbox in popup didn't  trigger onblur  with Firefox 3.6.x
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

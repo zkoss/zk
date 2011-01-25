@@ -4448,9 +4448,10 @@ _doFooSelect: function (evt) {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			if (!noFocusChange) {
+				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
-				setTimeout(function(){zk._cfByMD = false;}, 0);
+				setTimeout(function(){zk._cfByMD = false; zk._prevFocus = null;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
 
