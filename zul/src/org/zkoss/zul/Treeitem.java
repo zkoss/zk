@@ -396,7 +396,10 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	public boolean isVisible(){
-		return super.isVisible() && ((Treechildren) getParent()).isVisible();
+		if(!super.isVisible()) 
+			return false;
+		Component comp = getParent();
+		return comp != null && ((Treechildren) comp).isVisible();
 	}
 	
 	public boolean setVisible(boolean visible) {
