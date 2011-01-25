@@ -33,6 +33,7 @@ ZK 3.6.5
   3049167: Totalsize increase when drag & drop in paging Listbox/Grid
   3051305: Active Page not update when drag & drop item to the end
   3091160: WrongValueException not handled if thrown in onCreate listener
+  3147518: Memory leak with IE 7 and dynamic Grid Updates
 
 * Upgrade Notes:
 

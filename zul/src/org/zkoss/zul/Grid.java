@@ -765,6 +765,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private void syncModel(int min, int max) {
 		final int newsz = _model.getSize();
 		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
+		final boolean shallInvalidated = //Bug 3147518: avoid memory leak
+			(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
 
 		int newcnt = newsz - oldsz;
 		int atg = _pgi != null ? getActivePage(): 0;
@@ -784,7 +786,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > 50 && !inPagingMold())
+				if ((shallInvalidated || newcnt > 20) && !inPagingMold())
 					invalidate(); //performance is better
 
 				Component comp = (Component)_rows.getChildren().get(max);
@@ -813,7 +815,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					row = next;
 				}
 
-				if ((addcnt > 50 || addcnt + newcnt > 50) && !inPagingMold())
+				if ((shallInvalidated || addcnt > 20 || addcnt + newcnt > 20) && !inPagingMold())
 					invalidate(); //performance is better
 			}
 		} else {
@@ -995,8 +997,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			cnt = newsz - oldsz;
 			if (cnt <= 0)
 				throw new UiException("Adding causes a smaller list?");
-			if (cnt > 50 && !inPagingMold())
-				invalidate(); //performance is better
+			if ((oldsz <= 0 || cnt > 20) && !inPagingMold())
+				invalidate(); //less memory leak in IE and better performance
 			if (min < 0)
 				if (max < 0) min = 0;
 				else min = max - cnt + 1;
@@ -1016,6 +1018,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			cnt = oldsz - newsz;
 			if (cnt <= 0)
 				throw new UiException("Removal causes a larger list?");
+			if ((newsz <= 0 || cnt > 20) && !inPagingMold())
+				invalidate(); //less memory leak in IE and better performance
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;
