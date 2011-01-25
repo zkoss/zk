@@ -1293,9 +1293,10 @@ jq(el).zk.center(); //same as 'center'
 				} else
 					p.appendChild(el);
 				
-				var cf;
-				if (zk.gecko && (cf = zk._prevFocus) &&
-					zUtl.isAncestor(zk.Widget.$(el), cf) && 
+				var cf, p;
+				zk.log(zk.gecko3$6);
+				if (zk.gecko3$6 && (cf = zk._prevFocus) && 
+					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf) && 
 					cf.$instanceof(zul.inp.InputWidget) )
 					jq(cf.$n()).trigger('blur');
 			}

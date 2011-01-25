@@ -1123,9 +1123,11 @@ zk.log('value is", value);
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
-		var j = agent.indexOf("firefox/");
-		j = zk.parseInt(agent.substring(j + 8));
+		var j = agent.indexOf("firefox/"),
+			version = agent.substring(j + 8);
+		j = zk.parseInt(version);
 		zk.css3 = zk.gecko3 = j >= 3;
+		zk.gecko3$6 =  j > 3 || (j == 3 && zk.parseInt(version.substring(2)) >= 6);
 		zk.gecko2_ = !zk.gecko3;
 		bodycls = 'gecko gecko' + j;
 	} else if (zk.opera) {
