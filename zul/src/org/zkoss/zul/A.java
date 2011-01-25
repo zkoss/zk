@@ -28,7 +28,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author jumperchen
  * @since 5.0.0
  */
-public class A extends LabelImageElement {
+public class A extends LabelImageElement
+implements org.zkoss.zk.ui.ext.Disable {
 	private String _dir = "normal";
 	private String _href, _target;
 	private int _tabindex;

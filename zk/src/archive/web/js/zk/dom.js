@@ -50,12 +50,14 @@ zjq = function (jq) { //ZK extension
 				_zsyncs[j].zsync(org);
 	}
 	function _focus(n) {
-		try {
-			n.focus();
-			var w = zk.Widget.$(n);
-			if (w) zk.currentFocus = w;
-		} catch (e) {
-		}
+		zk.afterAnimate(function () {
+			try {
+				n.focus();
+				var w = zk.Widget.$(n);
+				if (w) zk.currentFocus = w;
+			} catch (e) {
+			}
+		}, -1); //FF cannot change focus to a DOM element being animated
 	}
 	function _select(n) {
 		try {

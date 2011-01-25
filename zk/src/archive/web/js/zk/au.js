@@ -49,14 +49,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		rt = jq.evalJSON(rt);
-		var	rs = rt.rs,
-			rid = rt.rid;
+		var	rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
 
-		pushCmds(cmds, rs);
+		pushCmds(cmds, rt.rs);
 		return true;
 	}
 	function pushCmds(cmds, rs) {
@@ -401,6 +400,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		map[wgt.uuid] = wgt;
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_wgt2map(wgt, map);
+	}
+
+	function _beforeAction(wgt, actnm) {
+		var act;
+		if (wgt._visible && (act = wgt.actions_[actnm])) {
+			wgt.z$display = "none"; //control zk.Widget.domAttrs_
+			return act;
+		}
+	}
+	function _afterAction(wgt, act) {
+		if (act) {
+			delete wgt.z$display;
+			act[0].call(wgt, wgt.$n(), act[1]);
+			return true;
+		}
 	}
 
 /** @class zAu
@@ -1241,7 +1255,9 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	outer: function (wgt, code) {
 		zkx_(code, function (newwgt) {
+			var act = _beforeAction(newwgt, "invalidate");
 			wgt.replaceWidget(newwgt);
+			_afterAction(newwgt, act);
 		}, function (wx) {
 			for (var w = wx; w; w = w.parent)
 				if (w == wgt)
@@ -1273,7 +1289,8 @@ zAu.cmd1 = /*prototype*/ {
 		}
 
 		zkx_(code, function (child) {
-			var p = wgt.parent;
+			var p = wgt.parent,
+				act = _beforeAction(child, "show");
 			if (p) {
 				p.insertBefore(child, wgt.nextSibling);
 				if (p.$instanceof(zk.Desktop))
@@ -1285,7 +1302,7 @@ zAu.cmd1 = /*prototype*/ {
 				else
 					_asBodyChild(child);
 			}
-			if (!child.z_rod) {
+			if (!_afterAction(child, act) && !child.z_rod) {
 				zWatch.fireDown('beforeSize', child);
 				zWatch.fireDown('onSize', child);
 			}
@@ -1298,8 +1315,9 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	addBfr: function (wgt, code) {
 		zkx_(code, function (child) {
+			var act = _beforeAction(child, "show");
 			wgt.parent.insertBefore(child, wgt);
-			if (!child.z_rod) {
+			if (!_afterAction(child, act) && !child.z_rod) {
 				zWatch.fireDown('beforeSize', child);
 				zWatch.fireDown('onSize', child);
 			}
@@ -1312,8 +1330,9 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	addChd: function (wgt, code) {
 		zkx_(code, function (child) {
+			var act = _beforeAction(child, "show");
 			wgt.appendChild(child);
-			if (!child.z_rod) {
+			if (!_afterAction(child, act) && !child.z_rod) {
 				zWatch.fireDown('beforeSize', child);
 				zWatch.fireDown('onSize', child);
 			}

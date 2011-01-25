@@ -27,14 +27,14 @@ function (out) {
 		ydec = zk.parseInt(y/100),
 		tags = zk.ie || zk.gecko ? "a" : "button";
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
-			'<tr><td class="', zcls, '-tdl"><div  class="', zcls, '-left"><div id="', uuid, '-ly" class="', zcls, '-left-icon');
-
+			'<tr><td id="', uuid, '-tdl" class="', zcls, '-tdl');
+	
 	if (view == 'decade' && ydec*100 == 1900)
-		out.push(' ', zcls, '-left-icon-disd');
+		out.push(' ', zcls, '-icon-disd');
 		
-	out.push('"></div></div></td>',
+	out.push('"><div  class="', zcls, '-left"><div id="', uuid, '-ly" class="', zcls, '-left-icon"></div></div></td>',
 				'<td><table class="', zcls, '-calctrl" width="100%" border="0" cellspacing="0" cellpadding="0">',
-				'<tr><td id="', uuid, '-title">');
+				'<tr><td id="', uuid, '-title" class="', zcls, '-title">');
 	switch(view) {
 	case "day" :
 		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
@@ -50,12 +50,12 @@ function (out) {
 		break;
 	}
 	out.push('</td></tr></table></td>',
-		'<td class="', zcls, '-tdr"><div class="', zcls, '-right"><div id="', uuid, '-ry" class="', zcls, '-right-icon');
+		'<td id="', uuid, '-tdr" class="', zcls, '-tdr');
 		
 	if (view == 'decade' && ydec*100 == 2000)
-		out.push(' ', zcls, '-right-icon-disd');
+		out.push(' ', zcls, '-icon-disd');
 	
-	out.push('"></div></div></td></tr>');
+	out.push('"><div class="', zcls, '-right"><div id="', uuid, '-ry" class="', zcls, '-right-icon"></div></div></td></tr>');
 	//year view
 	switch(view) {
 	case "day" :

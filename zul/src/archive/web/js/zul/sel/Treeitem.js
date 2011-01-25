@@ -47,6 +47,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_addSelItemsDown(items, w);
 	}
 
+	function _sizeOnOpen(tree) {
+		var w, wd;
+		if ((w = tree.treecols) && w.nChildren > 1)
+			for (w = w.firstChild; w; w = w.nextSibling)
+				if (!(wd = w._width) || wd == "auto")
+					return tree.onSize();
+	}
+
 /**
  * A treeitem.
  *
@@ -82,14 +90,13 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
 			if (open) zWatch.fireDown('onShow', this);
-			this.getMeshWidget().onSize();
-			if (!fromServer) {
-				var tree = this.getTree(),
-					indemand = tree.inPagingMold() || tree.isModel();
-				this.fire('onOpen', {open: open}, {toServer: indemand});
-			}
-
 			if (tree) {
+				_sizeOnOpen(tree);
+
+				if (!fromServer)
+					this.fire('onOpen', {open: open},
+						{toServer: tree.inPagingMold() || tree.isModel()});
+
 				tree._syncFocus(this);
 				tree.focus();
 

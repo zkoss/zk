@@ -34,7 +34,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-menu-item. (since 3.5.0)
  * @author tomyeh
  */
-public class Menuitem extends LabelImageElement {
+public class Menuitem extends LabelImageElement
+implements org.zkoss.zk.ui.ext.Disable {
 	private String _value = "";
 	private String _href, _target;
 	private boolean _autocheck, _checked;

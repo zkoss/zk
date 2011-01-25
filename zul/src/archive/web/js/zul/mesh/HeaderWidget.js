@@ -279,6 +279,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
+	
+	isWatchable_: function (name) {
+		var n,
+			strict = name!='onShow';
+		return (n=this.$n()) && zk(n).isVisible(strict) && 
+			(n=this.getMeshWidget()) && zk(n).isRealVisible(strict);
+	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;
 	},

@@ -276,8 +276,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var node = this.$n(),
 			title = this.$n("title"),
 			mid = this.$n("mid"),
-			ly = this.$n("ly"),
-			ry = this.$n("ry"),
+			tdl = this.$n("tdl"),
+			tdr = this.$n("tdr"),
 			zcls = this.getZclass();
 		jq(title).hover(
 			function () {
@@ -292,8 +292,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 		this.domListen_(title, "onClick", '_changeView')
 			.domListen_(mid, "onClick", '_clickDate')
-			.domListen_(ly, "onClick", '_clickArrow')
-			.domListen_(ry, "onClick", '_clickArrow')
+			.domListen_(tdl, "onClick", '_clickArrow')
+			.domListen_(tdl, "onMouseOver", '_doMouseEffect')
+			.domListen_(tdl, "onMouseOut", '_doMouseEffect')
+			.domListen_(tdr, "onClick", '_clickArrow')
+			.domListen_(tdr, "onMouseOver", '_doMouseEffect')
+			.domListen_(tdr, "onMouseOut", '_doMouseEffect')
 			.domListen_(mid, "onMouseOver", '_doMouseEffect')
 			.domListen_(mid, "onMouseOut", '_doMouseEffect')
 			.domListen_(node, 'onMousewheel');
@@ -304,12 +308,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var node = this.$n(),
 			title = this.$n("title"),
 			mid = this.$n("mid"),
-			ly = this.$n("ly"),
-			ry = this.$n("ry");
+			tdl = this.$n("tdl"),
+			tdr = this.$n("tdr");
 		this.domUnlisten_(title, "onClick", '_changeView')
 			.domUnlisten_(mid, "onClick", '_clickDate')
-			.domUnlisten_(ly, "onClick", '_clickArrow')
-			.domUnlisten_(ry, "onClick", '_clickArrow')
+			.domListen_(tdl, "onClick", '_clickArrow')			
+			.domListen_(tdl, "onMouseOver", '_doMouseEffect')
+			.domListen_(tdl, "onMouseOut", '_doMouseEffect')
+			.domListen_(tdr, "onClick", '_clickArrow')
+			.domListen_(tdr, "onMouseOver", '_doMouseEffect')
+			.domListen_(tdr, "onMouseOut", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
 			.domUnlisten_(node, 'onMousewheel')
@@ -328,12 +336,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return result;
 		}
 	},
-	_clickArrow: function (evt) {
-		var node = evt.domTarget,
-			ofs = node.id.indexOf("-ly") > 0 ? -1 : 1;
-		if (jq(node).hasClass(this.getZclass() + (ofs == -1 ? '-left-icon-disd' : '-right-icon-disd')))
+	_clickArrow: function (evt) {		
+		var node = evt.domTarget.id.indexOf("-ly") > 0 ? this.$n("tdl") :
+				   evt.domTarget.id.indexOf("-ry") > 0 ?  this.$n("tdr") :
+				   evt.domTarget;
+		if (jq(node).hasClass(this.getZclass() + '-icon-disd'))
 			return;
-		this._shiftView(ofs);
+		this._shiftView(node.id.indexOf("-tdl") > 0 ? -1 : 1);
 	},
 	_shiftView: function (ofs) {
 		switch(this._view) {
@@ -352,27 +361,27 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 		this.rerender();
 	},
-	_doMousewheel: function (evt, intDelta) {
-		var ofs = -intDelta,
-			nm = ofs > 0 ? ["ry", '-right-icon-disd']: ["ly", '-left-icon-disd'];
-		
-		if (jq(this.$n(nm[0])).hasClass(this.getZclass() + nm[1]))
+	_doMousewheel: function (evt, intDelta) {		
+		if (jq(this.$n(-intDelta > 0 ? "tdr": "tdl")).hasClass(this.getZclass() + '-icon-disd'))
 			return;
 		
-		this._shiftView(ofs);
+		this._shiftView(-intDelta);
 		evt.stop();
 	},
 	_doMouseEffect: function (evt) {
-		var $node = jq(evt.domTarget),
+		var	ly = this.$n("ly"),
+			ry = this.$n("ry"), 
+			$node = evt.domTarget == ly ? jq(this.$n("tdl")) :
+					evt.domTarget == ry ? jq(this.$n("tdr")) : jq(evt.domTarget),
 			zcls = this.getZclass();
-			
+		
 		if ($node.hasClass(zcls + '-disd'))
 			return;
 			
 		if ($node.is("."+zcls+"-seld")) {
 			$node.removeClass(zcls + "-over")
 				.toggleClass(zcls + "-over-seld");
-		}else {
+		} else {
 			$node.toggleClass(zcls + "-over");
 		}
 	},
@@ -468,13 +477,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_changeView : function (evt) {
 		var tm = this.$n("tm"),
 			ty = this.$n("ty"),
-			tyd = this.$n("tyd");
+			tyd = this.$n("tyd"),
+			title = this.$n("title");
 		if (evt.domTarget == tm)
 			this._setView("month");
 		else if (evt.domTarget == ty)
 			this._setView("year");
 		else if (evt.domTarget == tyd )
 			this._setView("decade");
+		else if (tm != null && evt.domTarget == title)
+			this._setView("month");
 		evt.stop();
 	},
 	_setView : function (view) {

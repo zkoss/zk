@@ -50,6 +50,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
-	<button label="hide/show" onClick='col1.visible = !col1.visible;' />
+	<button id="mybutton" label="hide/show" onClick='col1.visible = !col1.visible;' />
 </zk>
 

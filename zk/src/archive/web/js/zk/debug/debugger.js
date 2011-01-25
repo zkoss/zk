@@ -162,7 +162,7 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 	},
 	_parseAttribute: function (content, isSingle) {
 		var out = [];
-		for (var odd, start, c, i = 0, j = content.length; i < j; i++) {
+		for (var odd, start, c, cnt, i = 0, j = content.length; i < j; i++) {
 			c = content.charAt(i);
 			switch (c) {
 				case '=':

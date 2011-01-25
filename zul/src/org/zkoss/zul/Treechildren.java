@@ -78,7 +78,7 @@ public class Treechildren extends XulElement {
 		Component comp = getParent();
 		if (!(comp instanceof Treeitem))
 			return true;
-		if (!((Treeitem)comp).isOpen())
+		if (!((Treeitem)comp).isOpen() || !((Treeitem)comp).isVisible())
 			return false;
 		comp = comp.getParent();
 		return !(comp instanceof Treechildren)

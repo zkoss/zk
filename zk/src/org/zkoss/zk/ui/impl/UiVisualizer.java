@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.HashSet;
@@ -554,9 +555,7 @@ import org.zkoss.zk.au.out.*;
 				//since UUID might be reused)
 
 			//1c. remove reduntant
-			removeRedundant(_invalidated);
-			removeRedundant(_attached);
-			removeCrossRedundant();
+			removeRedundant();
 
 			//1d. process Cropper
 			croppingInfos = doCrop();
@@ -826,58 +825,76 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 	}
-	/** Removes redundant components (i.e., an descendant of another).
+	/** Removes redundant components in _invalidated, _smartUpdated and _attached.
 	 */
-	private static void removeRedundant(Set<Component> comps) {
-		rudLoop:
-		for (Iterator<Component> j = comps.iterator(); j.hasNext();) {
-			final Component cj = j.next();
-			for (Iterator<Component> k = comps.iterator(); k.hasNext();) {
-				final Component ck = k.next();
-				if (ck != cj && Components.isAncestor(ck, cj)) {
-					j.remove();
-					continue rudLoop;
-				}
+	private void removeRedundant() {
+		int initsz = (_invalidated.size() + _attached.size()) / 2 + 30;
+		final Set<Component> ins = new HashSet<Component>(initsz), //one of ancestor in _invalidated or _attached
+			outs = new HashSet<Component>(initsz); //none of ancestor in _invalidated nor _attached
+		final List<Component> ancs = new ArrayList<Component>(50);
+		//process _invalidated
+		for (Iterator<Component> it = _invalidated.iterator(); it.hasNext();) {
+			Component p = it.next();
+			if (_attached.contains(p)) { //attached has higher priority
+				it.remove();
+				continue;
 			}
+			boolean removed = false;
+			while ((p = p.getParent()) != null) { //don't check p in _invalidated
+				if (outs.contains(p)) //checked
+					break;
+				if (ins.contains(p) || _invalidated.contains(p)
+				|| _attached.contains(p)) {
+					it.remove();
+					removed = true;
+					break;
+				}
+				ancs.add(p);
+			}
+			if (removed) ins.addAll(ancs);
+			else outs.addAll(ancs);
+			ancs.clear();
 		}
-	}
-	/** Removes redundant components cross _invalidated, _smartUpdated
-	 * and _attached.
-	 */
-	private void removeCrossRedundant() {
-		invLoop:
-		for (Iterator<Component> j = _invalidated.iterator(); j.hasNext();) {
-			final Component cj = j.next();
 
-			for (Iterator<Component> k = _attached.iterator(); k.hasNext();) {
-				final Component ck = k.next();
-				if (Components.isAncestor(ck, cj)) { //includes ck == cj
-					j.remove();
-					continue invLoop;
-				} else if (Components.isAncestor(cj, ck)) {
-					k.remove();
+		//process _attached
+		for (Iterator<Component> it = _attached.iterator(); it.hasNext();) {
+			Component p = it.next();
+			boolean removed = false;
+			while ((p = p.getParent()) != null) { //don't check p in _attached
+				if (outs.contains(p)) //checked
+					break;
+				if (ins.contains(p) || _invalidated.contains(p)
+				|| _attached.contains(p)) {
+					it.remove();
+					removed = true;
+					break;
 				}
+				ancs.add(p);
 			}
+			if (removed) ins.addAll(ancs);
+			else outs.addAll(ancs);
+			ancs.clear();
 		}
-		suLoop:
-		for (Iterator<Component> j = _smartUpdated.keySet().iterator(); j.hasNext();) {
-			final Component cj = j.next();
 
-			for (Iterator<Component> k = _invalidated.iterator(); k.hasNext();) {
-				final Component ck = k.next();
-
-				if (Components.isAncestor(ck, cj)) {
-					j.remove();
-					continue suLoop;
+		//process _smartUpdated
+		for (Iterator<Component> it = _smartUpdated.keySet().iterator(); it.hasNext();) {
+			Component p = it.next();
+			boolean removed = false, first = true;
+			for (; p != null; p = p.getParent()) { //check p in _smartUpdated
+				if (outs.contains(p)) //checked
+					break;
+				if (ins.contains(p) || _invalidated.contains(p)
+				|| _attached.contains(p)) {
+					it.remove();
+					removed = true;
+					break;
 				}
+				if (first) first = false; //No need to add 1st p
+				else ancs.add(p);
 			}
-			for (Iterator<Component> k = _attached.iterator(); k.hasNext();) {
-				final Component ck = k.next();
-				if (Components.isAncestor(ck, cj)) {
-					j.remove();
-					continue suLoop;
-				}
-			}
+			if (removed) ins.addAll(ancs);
+			else outs.addAll(ancs);
+			ancs.clear();
 		}
 	}
 

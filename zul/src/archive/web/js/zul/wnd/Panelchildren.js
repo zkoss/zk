@@ -43,7 +43,7 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 			var added = !this.parent.getTitle() && !this.parent.caption ?
 				zcls + '-noheader' : '';				
 			if (added) scls += (scls ? ' ': '') + added;
-			added = this.parent.getBorder() == 'normal' ? '' : zcls + '-noborder';
+			added = this.parent._bordered() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;

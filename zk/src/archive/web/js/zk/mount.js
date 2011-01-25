@@ -107,29 +107,31 @@ function zkmprops(uuid, props) {
 	//  (otherwise, /zkdemo/userguide will jump to #f1 causing additional step)
 	//Note: it is better to block zAu but the chance to be wrong is low --
 	//a timer must be started early and its response depends page's AU
-	_paci.i = setInterval(function () {
-		var stateless;
-		if ((zk.booted && !zk.mounting) || (stateless = _stateless()))
-			if (stateless || _paci.s == _paci.e) { //done
-				clearInterval(_paci.i);
-				var fs = _paci.f0.concat(_paci.f1);
-				_paci = null;
-				for (var f; f = fs.shift();)
-					f();
-			} else
-				_paci.e = _paci.s;
-	}, 25);
+	jq(function () {
+		function _stateless() {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				if (dts[dtid].stateless) return true;
+		}
+		_paci.i = setInterval(function () {
+			var stateless;
+			if ((zk.booted && !zk.mounting) || (stateless = _stateless()))
+				if (stateless || _paci.s == _paci.e) { //done
+					clearInterval(_paci.i);
+					var fs = _paci.f0.concat(_paci.f1);
+					_paci = null;
+					for (var f; f = fs.shift();)
+						f();
+				} else
+					_paci.e = _paci.s;
+		}, 25);
+	});
 	//run after page AU cmds
-	zk._apac = function (fn, bCmd) {
+	zk._apac = function (fn, _which_) {
 		if (_paci)
-			return _paci[bCmd ? "f0": "f1"].push(fn);
-		fn();
+			return _paci[_which_ || "f1"].push(fn);
+		zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 	};
-	function _stateless() {
-		var dts = zk.Desktop.all;
-		for (var dtid in dts)
-			if (dts[dtid].stateless) return true;
-	}
 
 /** @partial zk
  */
@@ -137,23 +139,33 @@ function zkmprops(uuid, props) {
 	/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
 	 * <p>By mounting we mean the creation of the peer widgets under the
 	 * control of the server. To run after the mounting of the peer widgets,
-	 * <p>The function is executed with <code>setTimeout(fn, 0)</code> if the mounting has been done. 
+	 * <p>If the delay argument is not specified and no mounting is taking place,
+	 * the function is executed with <code>setTimeout(fn, 0)</code>.
 	 * @param Function fn the function to execute after mounted
+	 * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
+	 * there is no mounting is taking place. If omiited, 0 is assumed.
+	 * If negative, the function is executed immediately.
+	 * @return boolean true if this method has been called before return (delay must
+	 * be negative, and no mounting); otherwise, undefined is returned.
 	 * @see #mounting
 	 * @see #afterLoad
+	 * @see #afterAnimate
 	 */
 	//afterMount: function () {}
 //@};
-	zk.afterMount = function (fn) { //part of zk
-		if (fn)  {
+	zk.afterMount = function (fn, delay) { //part of zk
+		if (fn)
 			if (zk.mounting)
-				return _aftMounts.push(fn); //normal
-			if (zk.loading)
-				return zk.afterLoad(fn);
-			if (!jq.isReady)
-				return jq(fn);
-			setTimeout(fn, 0);
-		}
+				_aftMounts.push(fn); //normal
+			else if (zk.loading)
+				zk.afterLoad(fn);
+			else if (!jq.isReady)
+				jq(fn);
+			else if (delay < 0) {
+				fn();
+				return true; //called
+			} else
+				setTimeout(fn, delay);
 	};
 
 	function _curdt() {
@@ -196,9 +208,11 @@ function zkmprops(uuid, props) {
 
 		var inf = _createInf0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2]]);
-				//inf[3]: owner passed from zkx
+			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
+				//inf[3]: owner passed from zkx
+				//inf[2]: bindOnly
+				//inf[4]: aucmds
 				//true: don't update DOM
 
 			if (_createInf0.length)
@@ -226,6 +240,8 @@ function zkmprops(uuid, props) {
 				wgt.bind(inf[0]); //bindOnly
 			else
 				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+
+			doAuCmds(inf[3]); //aucmds
 		}
 
 		mtBL1();
@@ -297,7 +313,7 @@ function zkmprops(uuid, props) {
 			zk._apac(function () {
 				for (var j = 0; j < cmds.length; j += 2)
 					zAu.process(cmds[j], cmds[j + 1]);
-			}, true);
+			}, "f0");
 	}
 
 	/* create the widget tree. */
@@ -321,11 +337,11 @@ function zkmprops(uuid, props) {
 				wgt.unbind(); //reuse it as new widget
 			} else {
 				var cls = zk.$import(type),
-					initOpts = {uuid: uuid},
-					v = wi[4]; //mold
+					initOpts = {uuid: uuid}, v;
 				if (!cls)
 					throw 'Unknown widget: ' + type;
-				if (v) initOpts.mold = v;
+				if (v = wi[4]) initOpts.mold = v;
+				if (v = zk.cut(props, "z$is")) initOpts.z$is = v;
 				(wgt = new cls(initOpts)).inServer = true;
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
@@ -376,14 +392,13 @@ function zkmprops(uuid, props) {
 
 		try {
 			if (js) jq.globalEval(js);
-			doAuCmds(aucmds);
 
 			var delay, mount = mtAU, owner;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
 				delay = extra;
-				extra = null;
+				extra = aucmds;
 				mount = mtBL;
-			}
+			} //else assert(!aucmds); //no aucmds if AU
 
 			if (wi) {
 				if (wi[0] === 0) { //page
@@ -406,10 +421,10 @@ function zkmprops(uuid, props) {
 		}
 	},
 	//widget creation called by au.js
+	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
-		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-		zkx.apply(window, args);
+		zkx(args[0], [stub, filter]); //assign stub as 2nd argument (see zkx)
 	},
 
 	//queue a function to invoke by zkqx

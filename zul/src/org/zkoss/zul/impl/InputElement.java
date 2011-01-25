@@ -701,7 +701,14 @@ abstract public class InputElement extends XulElement {
 			final Map data = request.getData();
 			final Object clientv = data.get("value");
 			final Object oldval = _value;
-			final Object value = unmarshall(clientv);
+			Object value = null;
+			try {
+				value = unmarshall(clientv);
+			} catch (NumberFormatException ex) {
+				initAuxInfo().errmsg = ex.getMessage();
+				throw showCustomError(
+						new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv));
+			}
 			final String valstr = coerceToString(value);
 			try {
 				setValueByClient(value, valstr); //always since it might have func even not change

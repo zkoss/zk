@@ -92,19 +92,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 		},
 		/**
-		 * Sets whether to render the panel with custom rounded borders.
-		 * <p>Default: false.
-		 * @param boolean framable
-		 */
-		/**
-		 * Returns whether to render the panel with custom rounded borders.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		framable: _zkf = function () {
-			this.rerender(); //TODO: like Window, use _updDomOuter
-		},
-		/**
 		 * Sets whether to move the panel to display it inline where it is rendered.
 		 * 
 		 * <p>Default: false;
@@ -116,7 +103,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <p>Default: false.
 		 * @return boolean
 		 */
-		movable: _zkf,
+		movable: _zkf = function () {
+			this.rerender(); //TODO: like Window, use _updDomOuter
+		},
 		/**
 		 * Sets whether to float the panel to display it inline where it is rendered.
 		 * 
@@ -198,15 +187,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 */
 		closable: _zkf,
 		/** 
-		 * Sets the border (either none or normal).
+		 * Sets the border.
+		 * Allowed values include <code>none</code> (default), <code>normal</code>,
+		 * <code>rounded</code> and <code>rounded+</code>.
+		 * For more information, please refer to
+		 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 		 * @param String border the border. If null or "0", "none" is assumed.
 		 */
 		/** 
 		 * Returns the border.
-		 * The border actually controls via {@link zul.wnd.Panelchildren#getSclass()}. 
-		 * In fact, the name of the border (except "normal") is generate as part of 
-		 * the style class used for the content block.
-		 * Refer to {@link zul.wnd.Panelchildren#getSclass()} for more details.
 		 *
 		 * <p>Default: "none".
 		 * @return String
@@ -283,7 +272,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					jq(this.$n('max')).addClass(cls + '-maxd');
 					this._hideShadow();
 	
-					if (this.isCollapsible() && !this.isOpen()) {
+					if (this._collapsible && !this._open) {
 						$n.jq.removeClass(cls + '-colpsd');
 						var body = this.$n('body');
 						if (body) body.style.display = "";
@@ -362,7 +351,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					t = s.top;
 					w = s.width;
 					h = s.height;
-					if (this.isCollapsible() && !this.isOpen()) {
+					if (this._collapsible && !this._open) {
 						jq(node).addClass(cls + "-colpsd");
 						var body = this.$n('body');
 						if (body) body.style.display = "none";
@@ -414,7 +403,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		minimized: function (minimized, fromServer) {
-			if (this.isMaximized())
+			if (this._maximized)
 				this.setMaximized(false);
 				
 			var node = this.$n();
@@ -444,9 +433,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	//super//
 	setVisible: function (visible) {
 		if (this._visible != visible) {
-			if (this.isMaximized()) {
+			if (this._maximized) {
 				this.setMaximized(false);
-			} else if (this.isMinimized()) {
+			} else if (this._minimized) {
 				this.setMinimized(false);
 			}
 			this.$supers('setVisible', arguments);
@@ -557,7 +546,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this.isMaximized() && !this.__maximized)
+		if (this._maximized && !this.__maximized)
 			this.$n().style.width="";
 	},
 	//watch//
@@ -577,7 +566,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				sw = $n.revisedWidth(sw);
 			}
 			s.width = jq.px0(sw);
-			if (wgt.isOpen()) {
+			if (wgt._open) {
 				var sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 				if (!floated) {
 					sh -= $op.zk.paddingHeight();
@@ -588,7 +577,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		return function(ctl) {
 			this._hideShadow();
-			if (this.isMaximized()) {
+			if (this._maximized) {
 				if (!this.__maximized)
 					syncMaximized(this);
 				this.__maximized = false; // avoid deadloop
@@ -619,9 +608,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
 	},
+	//whether rounded border is required
+	_rounded: _zkf = function () {
+		return this._border.startsWith("rounded"); //rounded
+	},
+	isFramable: _zkf, //backward compatible with 5.0.6
+	//whether inner border is required
+	_bordered: function () {
+		var v;
+		return (v = this._border) != "none" && v != "rounded";
+	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - this._titleHeight(n);
-		if (this.isFramable()) {
+		if (this._rounded()) {
 			var body = this.panelchildren.$n(),
 				bl = jq(this.$n('body')).find(':last')[0],
 				title = this.$n('cap');
@@ -641,13 +640,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var isFramable = this.isFramable(),
+		var rounded = this._rounded(),
 			cap = this.$n('cap'),
-			top = isFramable ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
-		return cap ? (isFramable ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
+			top = rounded ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
+		return cap ? (rounded ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
 	},
 	onFloatUp: function (ctl) {
-		if (!this.isVisible() || !this.isFloatable())
+		if (!this._visible || !this.isFloatable())
 			return; //just in case
 
 		for (var wgt = ctl.origin; wgt; wgt = wgt.parent) {
@@ -721,7 +720,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						left: -4, right: 4, top: -2, bottom: 3
 					});
 					
-				if (this.isMaximized() || this.isMinimized())
+				if (this._maximized || this._minimized || !this._visible) //since action might be applied, we have to check _visible
 					this._hideShadow();
 				else this._shadow.sync();
 			}
@@ -755,7 +754,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				jq.onzsync(this); //sync shadow if it is implemented with div
 		}
 		
-		if (this.isMaximizable() && this.isMaximized()) {
+		if (this._maximizable && this._maximized) {
 			var self = this;
 			after.push(function() {
 				self._maximized = false;
@@ -800,7 +799,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this.isMovable() ? this.$n('cap') : false,
 				zcls = this.getZclass();
-			if (!this.isMaximized() && this.isOpen() && c) {
+			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
 				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
@@ -827,19 +826,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.fire('onClose');
 			break;
 		case maxBtn:
-			this.setMaximized(!this.isMaximized());
+			this.setMaximized(!this._maximized);
 			jq(maxBtn).removeClass(zcls + '-max-over');
 			break;
 		case minBtn:
-			this.setMinimized(!this.isMinimized());
+			this.setMinimized(!this._minimized);
 			jq(minBtn).removeClass(zcls + '-min-over');
 			break;
 		case this.$n('exp'):
 			var body = this.$n('body'),
-				open = body ? zk(body).isVisible() : this.isOpen();
+				open = body ? zk(body).isVisible() : this._open;
 				
 			// force to open
-			if (!open == this.isOpen())
+			if (!open == this._open)
 				this._open = open;
 			this.setOpen(!open);
 			break;
@@ -857,7 +856,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			jq(this.$n('close')).addClass(zcls + '-close-over');
 			break;
 		case this.$n('max'):
-			var added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
+			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
 			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
 			break;
 		case this.$n('min'):
@@ -878,7 +877,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			break;
 		case this.$n('max'):
 			var $n = jq(this.$n('max'));
-			if (this.isMaximized())
+			if (this._maximized)
 				$n.removeClass(zcls + '-maxd-over');
 			$n.removeClass(zcls + '-max-over');
 			break;
@@ -895,9 +894,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
-			var added = "normal" == this.getBorder() ? '' : zcls + '-noborder';
+			var added = this._bordered() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ': '') + added;
-			added = this.isOpen() ? '' : zcls + '-colpsd';
+			added = this._open ? '' : zcls + '-colpsd';
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;
@@ -967,7 +966,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		if (wgt.isMaximized() || !wgt.isOpen()) return true;
+		if (wgt._maximized || !wgt._open) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);
@@ -994,11 +993,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
  * @since 5.0.5
  */
 zul.wnd.PanelRenderer = {
-	/** Check the panel whether to render the frame
+	/** Check the panel whether to render the rounded frame.
 	 * 
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	isFrameRequired: function (wgt) {
-		return wgt.isFramable();
+		return wgt._rounded();
 	}
 };

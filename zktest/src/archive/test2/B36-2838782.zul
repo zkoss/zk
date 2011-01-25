@@ -17,6 +17,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	Please select a treeitem and open/close a treeitem, and then use keyboard Up/Down to navigate the tree, it should be OK.
 	<zscript>					
 	import org.zkoss.zktest.test2.tree.BinaryTreeModel;
+	import java.util.*;
 	
 	BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(1000)));
 	</zscript>

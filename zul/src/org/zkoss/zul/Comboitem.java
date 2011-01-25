@@ -34,7 +34,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  * @see Combobox
  */
-public class Comboitem extends LabelImageElement {
+public class Comboitem extends LabelImageElement
+implements org.zkoss.zk.ui.ext.Disable {
 	private String _desc = "";
 	private Object _value;
 	private String _content = "";

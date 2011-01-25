@@ -13,6 +13,14 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	var _aftAnims = [], //used zk.afterAnimate
+		_jqstop = jq.fx.stop;
+
+	jq.fx.stop = function () {
+		_jqstop();
+		for (var fn; fn = _aftAnims.shift();)
+			fn();
+	};
 
 	function _addAnique(id, data) {
 		var ary = zk._anique[id];
@@ -64,42 +72,46 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			css.position = 'relative';
 		return self;
 	}
-	function _defAnimaOpts(self, wgt, opts, prop, mode) {
-		jq.timers.push(function() {
-			if (mode == 'hide')
-				zWatch.fireDown('onHide', wgt);
-			if (opts.beforeAnima)
-				opts.beforeAnima.call(wgt, self);
-		});
-
-		var aftfn = opts.afterAnima;
-		opts.afterAnima = function () {
-			if (mode == 'hide') {
-				self.jq.hide();
-			} else {
-				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
-				zWatch.fireDown('onShow', wgt);
-			}
-			if (prop) _restoreProp(self, prop);
-			if (aftfn) aftfn.call(wgt, self.jq.context);
-			setTimeout(function () {
-				_doAnique(wgt.uuid);
-			});
-		};
-		return self;
-	}
 
 /** @partial zk
  */
 zk.copy(zk, {
 	/** Returns whether there is some animation taking place.
+	 * If you'd like to have a function to be called only when no anitmation
+	 * is taking place (such as waiting for sliding down to be completed),
+	 * you could use {@link #afterMount}.
 	 * @return boolean
+	 * @see #afterAnimate
 	 */
 	animating: function () {
 		return !!jq.timers.length;
 	},
+	/** Executes a function only when no animation is taking place.
+	 * If there is some animation, the specified function will be queued
+	 * and invoked after the animation is done.
+	 * <p>If the delay argument is not specified and no animation is taking place,
+	 * the function is executed with <code>setTimeout(fn, 0)</code>.
+	 * @param Function fn the function to execute
+	 * @param int delay how many milliseconds to wait before execute if
+	 * there is no animation is taking place. If omiited, 0 is assumed.
+	 * If negative, the function is executed immediately.
+	 * @return boolean true if this method has been called before return (delay must
+	 * be negative, and no animation); otherwise, undefined is returned.
+	 * @see #animating
+	 * @since 5.0.6
+	 */
+	afterAnimate: function (fn, delay) {
+		if (zk.animating())
+			_aftAnims.push(fn);
+		else if (delay < 0) {
+			fn();
+			return true;
+		} else
+			setTimeout(fn, delay);
+	},
 	_anique: {}
 });
+
 /** @partial jqzk
  */
 zk.copy(zjq.prototype, {
@@ -156,7 +168,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop, true)
+			.jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
@@ -209,7 +222,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop)
+			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 400,
 			complete: opts.afterAnima
 		});
@@ -258,7 +272,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop, 'hide').jq.css(css).animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop)
+			.jq.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
@@ -311,13 +326,53 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return _defAnimaOpts(this, wgt, opts, prop).jq.css(css).show().animate(anima, {
+		return this.defaultAnimaOpts(wgt, opts, prop, true)
+			.jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
 	},
-	_updateProp: function(prop) {
+	_updateProp: function(prop) { //used by Bandpopup.js
 		_saveProp(this, prop);
+	},
+	/** Initializes the animation with the default effect, such as
+	 * firing the onSize watch.
+	 * <p>Example:<br/>
+	 * <code>zk(n).defaultAnimaOpts(wgt, opts, prop, true).jq.css(css).show().animate(...);</code>
+	 * @param Widget wgt the widget
+	 * @param Map opts the options. Ignored if not specified.
+	 * It depends on the effect being taken
+	 * @param Array prop an array of properties, such ['top', 'left', 'position'].
+	 * @param boolean visible whether the result of the animation will make
+	 * the DOM element visible
+	 * @return jqzk
+	 * @since 5.0.6
+	 */
+	defaultAnimaOpts: function (wgt, opts, prop, visible) {
+		var self = this;
+		jq.timers.push(function() {
+			if (!visible)
+				zWatch.fireDown('onHide', wgt);
+			if (opts.beforeAnima)
+				opts.beforeAnima.call(wgt, self);
+		});
+
+		var aftfn = opts.afterAnima;
+		opts.afterAnima = function () {
+			if (visible) {
+				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
+				zWatch.fireDown('onShow', wgt);
+			} else {
+				self.jq.hide();
+			}
+			if (prop) _restoreProp(self, prop);
+			if (aftfn) aftfn.call(wgt, self.jq.context);
+			wgt.afterAnima_(visible);
+			setTimeout(function () {
+				_doAnique(wgt.uuid);
+			});
+		};
+		return this;
 	}
 });
 })();

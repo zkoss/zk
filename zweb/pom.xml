@@ -15,8 +15,8 @@
 	<description>The ZKoss Web library</description>
 	<licenses>
 		<license>
-			<name>GNU General Public License, Version 2.0</name>
-			<url>http://www.gnu.org/licenses/gpl.html</url>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -30,6 +30,11 @@
 		</repository>
 	</repositories>
 	<pluginRepositories>
+		<pluginRepository>
+			<id>zkmaven</id>
+			<name>ZK Maven Plugin Repository</name>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</pluginRepository>
 		<pluginRepository>
 			<releases>
 				<enabled>false</enabled>

@@ -4,7 +4,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zksandbox</artifactId>
 	<properties>
-		<zk.version>5.0.6.FL.20101231</zk.version>
+		<zk.version>5.0.6.FL.20110121</zk.version>
 		<zkel.version>1.1.0</zkel.version>
 		<commons-lang.version>2.4</commons-lang.version>
 		<bsh.version>2.0b4</bsh.version>
@@ -27,6 +27,13 @@
 	</properties>
 	<version>${zk.version}</version>
 	<packaging>war</packaging>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<scm>
 		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zksandbox</url>
 	</scm>
@@ -45,6 +52,11 @@
 		</repository>		
 	</repositories>
 	<pluginRepositories>
+		<pluginRepository>
+			<id>zkmaven</id>
+			<name>ZK Maven Plugin Repository</name>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</pluginRepository>
 		<pluginRepository>
 			<releases>
 				<enabled>false</enabled>

@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -46,6 +47,8 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.AfterCompose;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -165,7 +168,8 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement implements Includer {
+public class Include extends XulElement
+implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private static final Log log = Log.lookup(Include.class);
 	private static final String ATTR_RENDERED =
 		"org.zkoss.zul.Include.rendered";
@@ -292,8 +296,8 @@ public class Include extends XulElement implements Includer {
 	}
 	private void fixMode() {
 		fixModeOnly();
-		if (_instantMode && _afterComposed)
-			afterCompose();
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
 	}
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
@@ -304,7 +308,19 @@ public class Include extends XulElement implements Includer {
 		} else
 			_instantMode = "instant".equals(_mode);
 	}
-
+	private void applyChangesToContent(){
+		// FIX: 2011.01.18 Iantsai
+		// in fixModeOnly(), we set _instantMode to false, and which means afterCompose() 
+		// won't be called, but we got no logic to clear the content!
+		// We assumed that the onPageAttached will handle this, 
+		// but if setSrc(null); happened in a button click, this wont work.
+		if (_instantMode && _afterComposed)
+			afterCompose();
+		else if(_src == null && !getChildren().isEmpty())
+			// !getChildren().isEmpty() is for performance.
+			getChildren().clear();
+	}
+	
 	/** Returns whether the source depends on the current Locale.
 	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
 	 * for the proper content, where src is assumed to be xxx.yyy.
@@ -390,7 +406,8 @@ public class Include extends XulElement implements Includer {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map<String, Object> old = setupDynams(exec);
-			final String oldSrc  = (String) exec.getAttribute(ATTR_RENDERED);
+			final String attrRenderedKey = ATTR_RENDERED+'$'+getUuid(); 
+			final String oldSrc  = (String) exec.getAttribute(attrRenderedKey);
 			if (!Objects.equals(oldSrc, _src)) {
 				try {
 					getChildren().clear();
@@ -398,7 +415,7 @@ public class Include extends XulElement implements Includer {
 					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
 							this, _dynams);
 					// TODO: convert query string to arg
-					exec.setAttribute(ATTR_RENDERED, _src);
+					exec.setAttribute(attrRenderedKey, _src);
 				} finally {
 					restoreDynams(exec, old);
 				}
@@ -458,11 +475,10 @@ public class Include extends XulElement implements Includer {
 	public void invalidate() {
 		super.invalidate();
 			//invalidate is redudant in instant mode, but less memory leak in IE
-
-		if (_instantMode && _afterComposed) {
-			afterCompose();
-		}
-
+		
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
+		
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();
 	}
@@ -531,6 +547,13 @@ public class Include extends XulElement implements Includer {
 		} finally {
 			ueng.setOwner(old);
 		}
+	}
+	/** Does nothing since the cleint (zul.wgt.Include) always assigns
+	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
+	 * @since 5.0.6
+	 */
+	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();

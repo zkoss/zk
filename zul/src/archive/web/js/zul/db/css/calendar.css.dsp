@@ -20,7 +20,7 @@
 	border: 0;
 }
 .z-calendar-title-over {
-	color: #8FADFF;
+	color: #5FA4FF;
 }
 
 <%-- Calendar and Datebox --%>
@@ -30,6 +30,7 @@
 	width : 10px;
 	padding-bottom: 10px;
 	width: 16px;
+	cursor: pointer;
 }
 .z-calendar-left,
 .z-calendar-right {
@@ -56,11 +57,22 @@
 	border-right: 0;
 	left: 0;
 }
-.z-calendar-right-icon-disd {
-	border-left: 6px solid #D9DADA;
+.z-calendar-over .z-calendar-left-icon {
+	border-right-color: #5fa4ff;
 }
-.z-calendar-left-icon-disd {
+.z-calendar-over .z-calendar-right-icon {
+	border-left-color: #5fa4ff;
+}
+.z-calendar-icon-disd .z-calendar-left-icon {
 	border-right: 6px solid #D9DADA;
+	cursor: auto;
+}
+.z-calendar-icon-disd .z-calendar-right-icon {
+	border-left: 6px solid #D9DADA;
+	cursor: auto;
+}
+.z-calendar-icon-disd {
+	cursor: default;
 }
 .z-calendar-disd {
 	<c:if test="${not c:isGecko3()}">
@@ -98,6 +110,7 @@
 	text-align: center;
 	white-space: nowrap;
 }
+.z-calendar-title,
 .z-calendar-calctrl .z-calendar-ctrler {
 	cursor: pointer;
 }
