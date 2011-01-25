@@ -394,7 +394,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	private static boolean shallSession(ClassWebResource cwr, String pi) {
-		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null;
+		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0) ;
+		//Optimize the access of static resources (for GAE)
 	}
 
 	//-- ASYNC-UPDATE --//
