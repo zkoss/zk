@@ -52,6 +52,7 @@ ZK 5.0.6
   3164514: Jasperreport does not close JDBC connection after doReport()
   3158641: Implementing IdSpace not enough; Client-side shall handle it
   3085855: Children of Treeitem shown when Treeitem is not visible
+  3132161: Datebox getValue returning date+time
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

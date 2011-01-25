@@ -251,6 +251,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 * @return String
 	 */
 	getTimeFormat: function () {
+	//Note: S (milliseconds not supported yet)
 		var fmt = this._format,
 			aa = fmt.indexOf('a'),
 			hh = fmt.indexOf('h'),

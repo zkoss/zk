@@ -38,7 +38,7 @@ zk.fmt.Date = {
 	},
 	parseDate : function (txt, fmt, strict, refval) {
 		if (!fmt) fmt = "yyyy/MM/dd";
-		refval = refval || zUtl.today(true);
+		refval = refval || zUtl.today(fmt);
 		var y = refval.getFullYear(),
 			m = refval.getMonth(),
 			d = refval.getDate(), dFound,
@@ -219,6 +219,12 @@ zk.fmt.Date = {
 					sec = zk.parseInt(token);
 					if (isNaN(sec)) return; //failed
 					break;
+				case 'S':
+					if (nosep)
+						token = this._parseToken(token, ts, --i, len);
+					msec = zk.parseInt(token);
+					if (isNaN(msec)) return; //failed
+					break;
 				case 'a':
 					if (!hasHour1)
 						break;
@@ -326,6 +332,9 @@ zk.fmt.Date = {
 					break;
 				case 's':
 					if (len <= 2) txt += this.digitFixed(val.getSeconds(), len);
+					break;
+				case 'S':
+					if (len <= 3) txt += this.digitFixed(val.getMilliseconds(), len);
 					break;
 				case 'Z':
 					txt += -(val.getTimezoneOffset()/60);

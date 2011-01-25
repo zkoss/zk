@@ -207,7 +207,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if ((error = _checkFormat(this._format)))
 			return {error: error};
 
-		var date = zUtl.today(true),
+		var date = zUtl.today(this._format),
 			hasAM, isAM, hasHour1,
 			fmt = [];
 		date.setSeconds(0);

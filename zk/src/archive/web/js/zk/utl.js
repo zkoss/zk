@@ -230,15 +230,32 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	now: function () {
 		return new Date().getTime();
 	},
-	/** Returns today (at 0:0AM).
-	 * @param boolean full if true, returns the full time, else only returns year, month
-	 * 		, and date
+	/** Returns today.
+	 * @param boolean full if true, returns the full time,
+	 * else only returns year, month, and day.
+	 * If omitted, false is assumed
 	 * @return Date
 	 */
-	today: function (full) {
-		var d = new Date();
-		return full ? d
-			: new Date(d.getFullYear(), d.getMonth(), d.getDate());
+	/** Returns today.
+	 * @param String fmt the time format, such as HH:mm:ss.SSS
+	 * If a time element such as seconds not specified in the format, it will
+	 * be considered as 0. For example, if the format is "HH:mm", then
+	 * the returned object will be today, this hour and this minute, but
+	 * the second and milliseconds will be zero.
+	 * @return Date
+	 * @since 5.0.6
+	 */
+	today: function (fmt) {
+		var d = new Date(), hr = 0, min = 0, sec = 0, msec = 0;
+		if (typeof fmt == "string") {
+			if (fmt.indexOf('H') >= 0) hr = d.getHours();
+			if (fmt.indexOf('m') >= 0) min = d.getMinutes();
+			if (fmt.indexOf('s') >= 0) sec = d.getSeconds();
+			if (fmt.indexOf('S') >= 0) msec = d.getMilliseconds();
+		} else if (fmt)
+			return d;
+		return new Date(d.getFullYear(), d.getMonth(), d.getDate(),
+			hr, min, sec, msec);
 	},
 
 	/** Returns if one is ancestor of the other.

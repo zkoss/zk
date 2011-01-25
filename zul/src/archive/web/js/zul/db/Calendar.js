@@ -390,7 +390,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value || zUtl.today(true);
+		return this._value || zUtl.today(this.getFormat());
 	},
 	_setTime: function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
@@ -506,7 +506,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
 				last = new Date(y, m + 1, 0).getDate(), //last date of this month
 				prev = new Date(y, m, 0).getDate(), //last date of previous month
-				today = zUtl.today();
+				today = zUtl.today(); //no time part
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
 				var week = this.$n("w" + j);
