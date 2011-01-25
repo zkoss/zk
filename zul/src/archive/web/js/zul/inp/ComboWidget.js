@@ -253,8 +253,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	close: function (opts) {
 		if (!this._open) return;
+		var self = this;
 		if (zk.animating()) {
-			var self = this;
 			setTimeout(function() {self.close(opts);}, 50);
 			return;
 		}
@@ -271,17 +271,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.fireDown("onHide", this);
 		this.slideUp_(pp);
 
-		zk(pp).undoVParent();
+		zk.afterAnimate(function() {
+			zk(pp).undoVParent();
+			if (self._shadow) {
+				self._shadow.destroy();
+				self._shadow = null;
+			}
+			var n = self.$n('btn');
+			if (n) jq(n).removeClass(self.getZclass() + '-btn-over');
+	
+			if (opts && opts.sendOnOpen)
+				self.fire('onOpen', {open:false, value: self.getInputNode().value}, {rtags: {onOpen: 1}});
+		}, -1);
 
-		if (this._shadow) {
-			this._shadow.destroy();
-			this._shadow = null;
-		}
-		var n = this.$n('btn');
-		if (n) jq(n).removeClass(this.getZclass() + '-btn-over');
-
-		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getPopupNode_();
