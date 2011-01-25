@@ -88,8 +88,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Adding causes a smaller list?");
 			}
-			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold() && rows != null)
-				rows.invalidate(); //performance is better (outer better than add a lot)
+			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD)
+			&& !inPagingMold() && rows != null)
+				_grid.invalidate();
+					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+					//Also better performance (outer better than remove a lot)
 			if (min < 0)
 				if (max < 0) min = 0;
 				else min = max - cnt + 1;
@@ -112,6 +115,12 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Removal causes a larger list?");
 			}
+			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD)
+			&& !inPagingMold() && rows != null)
+				_grid.invalidate();
+					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+					//Also better performance (outer better than remove a lot)
+
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;
@@ -227,13 +236,15 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public void syncModel(int offset, int limit) {
 		int min = offset;
 		int max = offset + limit - 1;
-		
+
 		final ListModel model = _grid.getModel();
 		Rows rows = _grid.getRows(); 
 		final int newsz = model.getSize();
 		final int oldsz = rows != null ? rows.getChildren().size(): 0;
 		final Paginal pgi = _grid.getPaginal();
 		final boolean inPaging = inPagingMold();
+		final boolean shallInvalidated = //Bug 3147518: avoid memory leak
+			(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
 
 		int newcnt = newsz - oldsz;
 		int atg = pgi != null ? _grid.getActivePage(): 0;
@@ -253,8 +264,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > INVALIDATE_THRESHOLD && !inPaging && rows != null)
-					rows.invalidate(); //performance is better
+				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD)
+				&& !inPaging && rows != null)
+					_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+						//Also better performance (if a lot of elements to change)
 
 				Component comp = (Component)rows.getChildren().get(max);
 				next = comp.getNextSibling();
@@ -282,8 +295,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 					row = next;
 				}
 
-				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPaging && rows != null)
-					rows.invalidate(); //performance is better
+				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
+				&& !inPaging && rows != null)
+					_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+						//Also better performance (if a lot of elements to change)
 			}
 		} else {
 			min = 0;

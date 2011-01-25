@@ -55,6 +55,7 @@ ZK 5.0.6
   3132161: Datebox getValue returning date+time
   3165081: Splitter as first or last child fails when dragged
   3155985: timer doesn't stop and restart
+  3147518: Memory leak with IE 7 and dynamic Grid Updates
   3109926: Splitter javascript error in IE8
   
 * Upgrade Notes
