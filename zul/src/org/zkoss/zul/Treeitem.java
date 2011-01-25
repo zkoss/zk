@@ -41,7 +41,8 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
+public class Treeitem extends XulElement
+implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	private transient Treerow _treerow;
 	private transient Treechildren _treechildren;
 	private Object _value;

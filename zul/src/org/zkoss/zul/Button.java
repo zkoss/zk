@@ -32,7 +32,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
-public class Button extends LabelImageElement implements org.zkoss.zul.api.Button {
+public class Button extends LabelImageElement
+implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 	private AuxInfo _auxinf;
 
 	static {

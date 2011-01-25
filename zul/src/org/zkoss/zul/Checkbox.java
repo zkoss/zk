@@ -36,7 +36,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Checkbox {
+public class Checkbox extends LabelImageElement
+implements org.zkoss.zul.api.Checkbox, org.zkoss.zk.ui.ext.Disable {
 	private String _value = "";
 	/** The name. */
 	private String _name;
