@@ -54,6 +54,7 @@ ZK 5.0.6
   3085855: Children of Treeitem shown when Treeitem is not visible
   3132161: Datebox getValue returning date+time
   3165081: Splitter as first or last child fails when dragged
+  3155985: timer doesn't stop and restart
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

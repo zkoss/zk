@@ -104,7 +104,7 @@ import org.zkoss.zk.au.out.*;
 	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
-	/** The counter used for smartUpdateMultiple. */
+	/** The counter used for smartUpdate(...append). */
 	private int _cntMultSU;
 	/** Whether the first execution is for async-update. */
 	private final boolean _1stau;
