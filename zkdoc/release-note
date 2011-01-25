@@ -51,6 +51,7 @@ ZK 5.0.6
   3164504: Hflex will not recalculate when the colum without label
   3164514: Jasperreport does not close JDBC connection after doReport()
   3158641: Implementing IdSpace not enough; Client-side shall handle it
+  3085855: Children of Treeitem shown when Treeitem is not visible
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
