@@ -50,6 +50,7 @@ ZK 5.0.6
   3151694: decimalbox input 25- cause exception
   3164504: Hflex will not recalculate when the colum without label
   3164514: Jasperreport does not close JDBC connection after doReport()
+  3158641: Implementing IdSpace not enough; Client-side shall handle it
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

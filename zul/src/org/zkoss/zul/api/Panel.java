@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.api;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zk.ui.IdSpace;//for javadoc
 import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 /**
@@ -45,7 +46,7 @@ import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
  * @author jumperchen
  * @since 3.5.2
  */
-public interface Panel extends org.zkoss.zul.impl.api.XulElement {
+public interface Panel extends org.zkoss.zul.impl.api.XulElement, Framable {
 
 	/**
 	 * Returns whether this Panel is open.

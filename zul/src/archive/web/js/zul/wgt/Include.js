@@ -18,6 +18,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.wgt.Include = zk.$extends(zul.Widget, {
 	_content: '',
 
+	$init: function () {
+		this._fellows = {};
+		this.$supers('$init', arguments);
+	},
+
 	$define: {
 		/**
 		 * Returns the html content.

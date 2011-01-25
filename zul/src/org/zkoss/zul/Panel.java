@@ -51,7 +51,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Panel {
+public class Panel extends XulElement implements org.zkoss.zul.api.Panel, Framable {
 	private transient Toolbar _tbar, _bbar, _fbar;
 	private transient Panelchildren _panelchildren;
 	private transient Caption _caption;

@@ -37,6 +37,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
@@ -46,6 +47,8 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.AfterCompose;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -166,7 +169,7 @@ import org.zkoss.zul.mesg.MZul;
  * @see Iframe
  */
 public class Include extends XulElement
-implements org.zkoss.zul.api.Include, Includer {
+implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private static final Log log = Log.lookup(Include.class);
 	private static final String ATTR_RENDERED =
 		"org.zkoss.zul.Include.rendered";
@@ -544,6 +547,13 @@ implements org.zkoss.zul.api.Include, Includer {
 		} finally {
 			ueng.setOwner(old);
 		}
+	}
+	/** Does nothing since the cleint (zul.wgt.Include) always assigns
+	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
+	 * @since 5.0.6
+	 */
+	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();

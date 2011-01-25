@@ -1105,6 +1105,12 @@ new zul.wnd.Window{
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		this.effects_ = {};
 
+		//There are two ways to specify IdSpace at client
+		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
+		//2) Assign this.z$is to true (used by AbstractComponent.java)
+		if (props.z$is)
+			this._fellows = {};
+
 		this.afterInit(function () {
 			if (props) {
 				var mold = props.mold;
@@ -4915,6 +4921,10 @@ zk.Macro = zk.$extends(zk.Widget, {
 	widgetName: "macro",
 	_enclosingTag: "span",
 
+	$init: function () {
+		this._fellows = {};
+		this.$supers('$init', arguments);
+	},
 	$define: {
 		/** Returns the tag name for this macro widget.
 		 * <p>Default: span

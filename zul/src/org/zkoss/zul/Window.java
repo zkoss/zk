@@ -28,11 +28,13 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.event.*;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -71,7 +73,8 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
  * @author tomyeh
  */
-public class Window extends XulElement implements org.zkoss.zul.api.Window {
+public class Window extends XulElement
+implements org.zkoss.zul.api.Window, Framable, IdSpace {
 	private static final Log log = Log.lookup(Window.class);
 	private static final long serialVersionUID = 20100721L;
 
@@ -808,6 +811,13 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			renderer.render("shadow", false);
 		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
 			//render mode as the last property
+	}
+	/** Does nothing since the cleint (zul.wnd.Window) always assigns
+	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
+	 * @since 5.0.6
+	 */
+	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-window-" + getMode() : _zclass;

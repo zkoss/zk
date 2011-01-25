@@ -1801,6 +1801,7 @@ w:use="foo.MyWindow"&gt;
 	protected void renderProperties(ContentRenderer renderer)
 	throws IOException {
 		render(renderer, "id", _id);
+		renderIdSpace(renderer);
 		if (_auxinf != null && !_auxinf.visible) //don't call isVisible since it might be overriden (backward compatible)
 			renderer.render("visible", false);
 
@@ -1833,6 +1834,23 @@ w:use="foo.MyWindow"&gt;
 				(o instanceof Boolean && ((Boolean)o).booleanValue())
 				|| !"false".equals(o));
 	}
+	/** Called by {@link #renderProperties} to render a property indicates
+	 * this component implements {@link IdSpace} (per-instance property).
+	 * <p>It is used if a widget class might or might not support the ID space
+	 * depending on the component being associated.
+	 * If a widget class always supports IdSpace, such as zul.wnd.Window
+	 * and zk.Macro, it is better to override <code>$init</cod> and
+	 * assign <code>this._fellows = {}</code>. Then, it could override this
+	 * method to do nothing, such that the number of bytes being sent to
+	 * the client will be minimized. For more information, please refer to
+	 * {@link HtmlMacroComponent}.
+	 * @since 5.0.6
+	 */
+	protected void renderIdSpace(ContentRenderer renderer) throws IOException {
+		if (this instanceof IdSpace)
+			renderer.render("z$is", true); //see zk.Widget (widget.js)
+	}
+
 	/** Adds this widget class to indicate that its important events are
 	 * generated. They have to be generated once per widget-class per desktop.
 	 */

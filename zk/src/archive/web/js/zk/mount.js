@@ -337,11 +337,11 @@ function zkmprops(uuid, props) {
 				wgt.unbind(); //reuse it as new widget
 			} else {
 				var cls = zk.$import(type),
-					initOpts = {uuid: uuid},
-					v = wi[4]; //mold
+					initOpts = {uuid: uuid}, v;
 				if (!cls)
 					throw 'Unknown widget: ' + type;
-				if (v) initOpts.mold = v;
+				if (v = wi[4]) initOpts.mold = v;
+				if (v = zk.cut(props, "z$is")) initOpts.z$is = v;
 				(wgt = new cls(initOpts)).inServer = true;
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
