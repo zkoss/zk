@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			before = colps == "before",
 			sib = before ? Splitter._prev(nd): Splitter._next(nd),
 			sibwgt = zk.Widget.$(sib),
-			fd = vert ? "height": "width", diff;
+			fd = vert ? "height": "width", 
+			diff = 0;
 		if (sib) {
 			if (!open)
 				zWatch.fireDown('onHide', sibwgt);
