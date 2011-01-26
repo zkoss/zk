@@ -219,28 +219,15 @@
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
-		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
 		<finalName>${project.artifactId}-${zk.version}</finalName>
-		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/archive</directory>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 				<configuration>
-					<webResources>
-						<resource>
-							<!-- this is relative to the pom.xml directory -->
-							<directory>src/archive</directory>
-						</resource>
-					</webResources>
-					<webappDirectory>${project.basedir}/debug/archive</webappDirectory>
+					<warSourceDirectory>${project.basedir}/src/archive/</warSourceDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
