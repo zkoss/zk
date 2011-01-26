@@ -136,7 +136,49 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}
+	
+	function _nextVerSeparator(version, from) {
+		for (var len = version.length; from < len; ++from) {
+			var cc = version.charAt(from);
+			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z')
+			&& (cc < 'A' || cc > 'Z'))
+				break;
+		}
+		return from;
+	}
+	
+	function _parseVersion(version) {
+		var vers = [];
+		for (var j = 0, len = version.length; j < len;) {
+			var k = _nextVerSeparator(version, j);
+			vers.push(zk.parseInt(version.substring(j, k)));
+			j = k + 1;
+		}
 
+		return vers;
+	}
+	
+	function _compareVersion(v1, v2) {
+		for (var j = 0;; ++j) {
+			if (j == v1.length) {
+				for (; j < v2.length; ++j) {
+					if (v2[j] > 0) return -1;
+					if (v2[j] < 0) return 1;
+				}
+				return 0;
+			}
+			if (j == v2.length) {
+				for (; j < v1.length; ++j) {
+					if (v1[j] > 0) return 1;
+					if (v1[j] < 0) return -1;
+				}
+				return 0;
+			}
+			if (v1[j] > v2[j]) return 1;
+			if (v1[j] < v2[j]) return -1;
+		}
+	}
+	
 /** @class zk
  * @import zk.Package
  * @import zk.Class
@@ -1114,34 +1156,28 @@ zk.log('value is", value);
 
 //zk.agent//
 (function () {
-	var agent = zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = agent.indexOf("safari") >= 0;
-	zk.opera = agent.indexOf("opera") >= 0;
-	zk.gecko = agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
-	zk.ios = agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0;
-	zk.android = agent.indexOf('android') >= 0;
+	var browser = jq.browser,
+		agent = zk.agent = navigator.userAgent.toLowerCase();
+	zk.safari = browser.safari && browser.version;
+	zk.opera = browser.opera && browser.version;
+	zk.gecko = browser.mozilla && browser.version;
+	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
+	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
-		var j = agent.indexOf("firefox/"),
-			version = agent.substring(j + 8);
-		j = zk.parseInt(version);
-		zk.css3 = zk.gecko3 = j >= 3;
-		zk.gecko3$6 =  j > 3 || (j == 3 && zk.parseInt(version.substring(2)) >= 6);
+		var version = _parseVersion(zk.gecko);
+		zk.css3 = zk.gecko3 = (_compareVersion(version, [1,9]) >= 0);//3.0 or later
+		zk.gecko3$6 = (_compareVersion(version, [1,9,2]) >= 0);//3.6 or later
 		zk.gecko2_ = !zk.gecko3;
-		bodycls = 'gecko gecko' + j;
+		bodycls = 'gecko gecko' + zk.parseInt(agent.substring(agent.indexOf('firefox/')+8));
 	} else if (zk.opera) {
 		bodycls = 'opera';
-		var j = agent.indexOf("version/"), v;
-		zk.css3 = j >= 0
-			&& ((v = zk.parseInt(agent.substring(j += 8))) > 10
-				|| (v == 10 && (j = agent.indexOf('.', j)) >= 0
-					&& zk.parseInt(agent.substring(j + 1)) >= 5)); //10.5 or later
+		zk.css3 = (_compareVersion(_parseVersion(zk.opera), [10,5]) >= 0); //10.5 or later
 	} else {
-		var j = agent.indexOf("msie "), dm;
-		zk.ie = j >= 0;
+		zk.ie = browser.msie && browser.version;
 		if (zk.ie) {
-			j = zk.parseInt(agent.substring(j + 5));
+			var j = zk.parseInt(zk.ie), dm;
 			zk.ie7 = j >= 7; //ie7 or later
 			zk.ie8c = j >= 8; //ie8 or later (including compatible)
 			zk.ie8 = j >= 8 && (dm=document.documentMode) >= 8; //ie8 or later
@@ -1157,7 +1193,7 @@ zk.log('value is", value);
 		}
 	}
 
-	if (zk.air = agent.indexOf("adobeair") >= 0)
+	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
 		bodycls = (bodycls || '') + ' air';
 
 	if (bodycls)
