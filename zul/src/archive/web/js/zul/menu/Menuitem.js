@@ -12,6 +12,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	
+	function _initUpld(wgt) {
+		zWatch.listen(zk.ie7_ ? {onShow: wgt, onSize: wgt} : {onShow: wgt});
+		var v;
+		if (v = wgt._upload)
+			wgt._uplder = new zul.Upload(wgt, wgt.isTopmost() ? wgt.$n() : wgt.$n('a'), v);
+	}
+	
+	function _cleanUpld(wgt) {
+		var v;
+		if (v = wgt._uplder) {
+			zWatch.unlisten(zk.ie7_ ? {onShow: wgt, onSize: wgt} : {onShow: wgt});
+			wgt._uplder = null;
+			v.destroy();
+		}
+	}
+	
 /**
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
@@ -124,8 +142,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		upload: function (v) {
 			var n = this.$n();
 			if (n) {
-				this._cleanUpld();
-				if (v && v != 'false') this._initUpld();
+				_cleanUpld(this);
+				if (v && v != 'false') _initUpld(this);
 			}
 		}
 	},
@@ -176,12 +194,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this.domListen_(anc, "onFocus", "doFocus_")
 					.domListen_(anc, "onBlur", "doBlur_");
 			}
-			if (this._upload) this._initUpld();
+			if (this._upload) _initUpld(this);
 		}
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
-			if (this._upload) this._cleanUpld();
+			if (this._upload) _cleanUpld(this);
 			if (this.isTopmost()) {
 				var anc = this.$n('a');
 				this.domUnlisten_(anc, "onFocus", "doFocus_")
@@ -190,20 +208,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);
-	},
-	_initUpld: function () {
-		zWatch.listen(zk.ie7_ ? {onShow: this, onSize: this} : {onShow: this});
-		var v;
-		if (v = this._upload)
-			this._uplder = new zul.Upload(this, this.isTopmost() ? this.$n() : this.$n('a'), v);
-	},
-	_cleanUpld: function () {
-		var v;
-		if (v = this._uplder) {
-			zWatch.unlisten(zk.ie7_ ? {onShow: this, onSize: this} : {onShow: this});
-			this._uplder = null;
-			v.destroy();
-		}
 	},
 	onShow: _zkf = function () {
 		if (this._uplder)
@@ -325,3 +329,4 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		jq(n).removeClass(cls);
 	}
 });
+})();
