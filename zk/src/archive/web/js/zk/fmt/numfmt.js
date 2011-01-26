@@ -106,7 +106,7 @@ zk.fmt.Number = {
 	},
 	format: function (fmt, val, rounding) {
 		if (val == null) return '';
-		if (!fmt) return '' + val;
+		if (!fmt) return val + '';
 		
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
@@ -121,11 +121,13 @@ zk.fmt.Number = {
 		var pureFmtStr = efmt.pureFmtStr,
 			ind = efmt.purejdot,
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
-			valStr = (val + '').replace(/[^0123456789.]/g, ''),
+			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring(val < 0 ? 1 : 0),
+			ei = valStr.lastIndexOf('e'),
 			indVal = valStr.indexOf('.'),
-			valFixed = indVal >= 0 ? valStr.length - indVal - 1 : 0,
-			shift = efmt.shift;
+			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
+			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei+1), 10));
 			
+		if(ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
@@ -143,8 +145,24 @@ zk.fmt.Number = {
 				for(var len = shift; len-- > 0;)
 					valStr = valStr + '0';
 			}
+		} else if (shift < 0) {
+			var nind = (indVal < 0 ? varStr.length : indVal) + shift;
+			if(nind > 0) {
+				valStr = valStr.substring(0, nind) + '.' + 
+					(indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar+1));
+				valFixed -= shift;
+				indVal = nind;
+			} else {
+				if(indVal >= 0)
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+				for(; nind++ < 0;)
+					valStr = '0' + valStr;
+				valStr = '0.' + valStr;
+				indVal = 1;
+				valFixed = valStr.length - 2;
+			}
 		}
-			
+		
 		//fix value subpart
 		if (valFixed <= fixed) {
 			if (indVal == -1)
@@ -248,7 +266,9 @@ zk.fmt.Number = {
 			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		return (val < 0 && !useMinsuFmt? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
+		var sftr = '['+zk.PERCENT+'|'+zk.PER_MILL+']?$',
+			shownZero = suf? new RegExp("^0+"+sftr).test(suf) && /^0*$/.test(pre) : new RegExp("^0*"+sftr).test(pre);
+		return (val < 0 && !shownZero && !useMinsuFmt? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
 	},
 	_escapeQuote: function (fmt) {
 		//note we do NOT support mixing of quoted and unquoted percent
