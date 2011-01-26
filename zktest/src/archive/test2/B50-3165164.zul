@@ -1,0 +1,9 @@
+<zk>
+Please close the tab2 and you should see a message alert, otherwise, the bug is there.
+<tabbox onSelect='alert(event.getSelectedItems())'>
+<tabs>
+<tab label="tab1"/>
+<tab label="tab2" selected="true" closable="true"/>
+</tabs>
+</tabbox>
+</zk>

@@ -62,6 +62,7 @@ ZK 5.0.6
   3165056: Textbox in popup didn't  trigger onblur  with Firefox 3.6.x
   3165646: Right-click shouldn't deselect the one that is selected
   3161667: Doublebox formatting/rounding bug for near-zero value
+  3165164: onSelect event is not fired when a tab is closed
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
