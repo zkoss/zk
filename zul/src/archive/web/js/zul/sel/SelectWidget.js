@@ -674,11 +674,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * this method won't be called if the user clicks on, say, a button.
 	 * @param zk.Event evt the event
 	 * @param ItemWidget row the row about to be selected
-	 * @return boolean wether to ignore
+	 * @return int 1 (true): ignore,<br/>
+	 * 0 (false): select if single select, and toggle selection if multiple,<br/>
+	 * and -1: always select (even if multiple)
 	 */
 	shallIgnoreSelect_: function (evt/*, row*/) { //row has to be the second argument for backward compatible
 		//see also _shallIgnore
-		return evt.name == 'onRightClick' && !this.rightSelect;
+		return evt.name == 'onRightClick' ? this.rightSelect ? -1: true: false;
 	},
 	//@param bSel whether it is called by _doItemSelect
 	_shallIgnore: function(evt, bSel) { // move this function in the widget for override
@@ -719,8 +721,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
+		var alwaysSelect;
 		if (zk.dragging || this._shallIgnore(evt, true)
-		|| this.shallIgnoreSelect_(evt, row))
+		|| ((alwaysSelect = this.shallIgnoreSelect_(evt, row))
+			&& !(alwaysSelect = alwaysSelect < 0)))
 			return;
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
@@ -730,9 +734,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			// Bug 2997034
 			this._syncFocus(row);
 
-			if (this._multiple)
-				this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
-			else
+			if (this._multiple) {
+				var seled = row.isSelected();
+				if (!seled || !alwaysSelect)
+					this._toggleSelect(row, !seled, evt, skipFocus);
+			} else
 				this._select(row, evt, skipFocus);
 		} else {
 		//Bug 1650540: double click as select again
