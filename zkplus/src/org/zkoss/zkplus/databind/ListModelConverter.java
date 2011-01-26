@@ -23,6 +23,8 @@ import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.GroupsModel;
+import org.zkoss.zul.impl.GroupsListModel;
 
 /**
  * The {@link TypeConverter} implmentation for converting collection to ListModel and vice versa.
@@ -53,8 +55,10 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 			return new BindingListModelArray((Object[]) val, true, distinct);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
 			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants(), true);
+		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
+			return new BindingGroupsListModel((GroupsModel) val);
 		} else {
-			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, or BindingListModel only. "+val.getClass());
+			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, or BindingListModel only. "+val.getClass());
 		}
 	}
 	
