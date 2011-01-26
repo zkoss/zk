@@ -266,8 +266,8 @@ zk.fmt.Number = {
 			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		var sftr = '['+zk.PERCENT+'|'+zk.PER_MILL+']?$',
-			shownZero = suf? new RegExp("^0+"+sftr).test(suf) && /^0*$/.test(pre) : new RegExp("^0*"+sftr).test(pre);
+		var rexp = new RegExp('^0*['+zk.PERCENT+'|'+zk.PER_MILL+']?$'),
+			shownZero = suf? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
 		return (val < 0 && !shownZero && !useMinsuFmt? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
 	},
 	_escapeQuote: function (fmt) {
