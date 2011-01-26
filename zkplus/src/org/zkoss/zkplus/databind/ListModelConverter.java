@@ -24,7 +24,6 @@ import java.util.Set;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.GroupsModel;
-import org.zkoss.zul.impl.GroupsListModel;
 
 /**
  * The {@link TypeConverter} implmentation for converting collection to ListModel and vice versa.
