@@ -63,6 +63,7 @@ ZK 5.0.6
   3165646: Right-click shouldn't deselect the one that is selected
   3161667: Doublebox formatting/rounding bug for near-zero value
   3165164: onSelect event is not fired when a tab is closed
+  3132199: use hflex="min" in hlayout and div, cause wrong UI
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
