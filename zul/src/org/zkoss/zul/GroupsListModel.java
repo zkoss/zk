@@ -32,7 +32,7 @@ import org.zkoss.zul.event.GroupsDataListener;
  * @author tomyeh
  * @since 3.5.0
  */
-/*package*/ class GroupsListModel extends AbstractListModel {
+public class GroupsListModel extends AbstractListModel {
 	private final GroupsModel _model;
 	private transient int _size;
 	/** An array of the group offset.
@@ -46,7 +46,7 @@ import org.zkoss.zul.event.GroupsDataListener;
 	private transient boolean[] _gpfts;
 	private transient GroupsDataListener _listener;
 
-	/*package*/ GroupsListModel(GroupsModel model) {
+	public GroupsListModel(GroupsModel model) {
 		_model = model;
 		init();
 	}

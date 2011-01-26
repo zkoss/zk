@@ -2,7 +2,8 @@
 ZK 3.6.5
 * Features
   2990932: Allow disable load-on-save mechanism in databinder
-
+  2866506: Data Binding shall support GroupsModel with Listbox/Grid
+  
 * Bugs
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
   2975362: Unable to close Messagebox using ceaseSuspendedThread()
