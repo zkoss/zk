@@ -280,7 +280,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return null;
 	},
 	
-	isWatchable_: function (name) {
+	isWatchable_: function (name) {//Bug 3164504: Hflex will not recalculate when the colum without label
 		var n,
 			strict = name!='onShow';
 		return (n=this.$n()) && zk(n).isVisible(strict) && 
