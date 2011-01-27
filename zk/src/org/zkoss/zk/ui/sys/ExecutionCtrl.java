@@ -178,4 +178,17 @@ public interface ExecutionCtrl {
 	 * @since 5.0.0
 	 */
 	public void setResponses(Collection responses);
+
+	/** Returns the information of the event being served, or null
+	 * if the execution is not under serving an event.
+	 * <p>Unlike most of other methods, this method could be accessed
+	 * by another thread.
+	 * @since 5.0.6
+	 */
+	public ExecutionInfo getExecutionInfo();
+	/** Sets the information of the event being served, or null if not under
+	 * serving an event.
+	 * @since 5.0.6
+	 */
+	public void setExecutionInfo(ExecutionInfo evtinf);
 }
