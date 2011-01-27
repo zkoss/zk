@@ -67,6 +67,7 @@ ZK 5.0.6
   3132199: use hflex="min" in hlayout and div, cause wrong UI
   3105728: Incorrect Datebox formatting with no year input
   3105860: Portallayout fails to set Panel's ZIndex on 2nd maximization
+  3166404: The hidden column  in a frozen grid will appear
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
