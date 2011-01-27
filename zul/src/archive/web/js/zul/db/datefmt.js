@@ -12,8 +12,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.fmt.Date = {
-	checkDate : function (ary, txt) {
+(function () {
+	function _parseToken(token, ts, i, len) {
+		if (len < 2) len = 2;
+		if (token && token.length > len) {
+			ts[i] = token.substring(len);
+			return token.substring(0, len);
+		}
+		return token;
+	}
+	function _parseInt(v) {
+		return parseInt(v, 10);
+	}
+	function _digitFixed(val, digits) {
+		var s = "" + val;
+		for (var j = digits - s.length; --j >= 0;)
+			s = "0" + s;
+		return s;
+	}
+	function _ckDate(ary, txt) {
 		if (txt.length)
 			for (var j = ary.length; j--;) {
 				var k = txt.indexOf(ary[j]);
@@ -21,21 +38,40 @@ zk.fmt.Date = {
 					txt = txt.substring(0, k) + txt.substring(k + ary[j].length);
 			}
 		return txt;
-	},
-	digitFixed : function (val, digits) {
-		var s = "" + val;
-		for (var j = digits - s.length; --j >= 0;)
-			s = "0" + s;
-		return s;
-	},
-	_parseToken: function (token, ts, i, len) {
-		if (len < 2) len = 2;
-		if (token && token.length > len) {
-			ts[i] = token.substring(len);
-			return token.substring(0, len);
-		}
-		return token;
-	},
+	}
+	function _dayInYear(d, ref) {
+		return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate())-ref)/864e5);
+	}
+	// Converts milli-second to day.
+//	function _ms2day(t) {
+//		return Math.round(t / 86400000);
+//	}
+	// Day in year (starting at 1).
+	function dayInYear(d, ref) {
+		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+		return _digitFixed(1 + _dayInYear(d, ref));
+	}
+	//Day in month (starting at 1).
+	function dayInMonth(d) {
+		return d.getDate();
+	}
+	//Week in year (starting at 1).
+	function weekInYear(d, ref) {
+		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+		var wday = ref.getDay();
+		if (wday == 7) wday = 0;
+		return _digitFixed(1 + Math.floor((_dayInYear(d, ref) + wday) / 7));
+	}
+	//Week in month (starting at 1).
+	function weekInMonth(d) {
+		return weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+	}
+	//Day of week in month.
+	 function dayOfWeekInMonth(d) {
+		return _digitFixed(1 + Math.floor(_dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
+	}
+
+zk.fmt.Date = {
 	parseDate : function (txt, fmt, strict, refval) {
 		if (!fmt) fmt = "yyyy/MM/dd";
 		refval = refval || zUtl.today(fmt);
@@ -99,7 +135,7 @@ zk.fmt.Date = {
 					if (fmt.charAt(k) != cc)
 						break;
 
-				var nosep; //no separator
+				var nosep, nv; //no separator
 				if (k < fl) {
 					var c2 = fmt.charAt(k);
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
@@ -114,10 +150,11 @@ zk.fmt.Date = {
 							token = token.substring(0, len);
 						}
 					}
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break; 
-					y = nv;
-					if (y < 100) y += y > 29 ? 1900 : 2000;
+
+					if (!isNaN(nv = _parseInt(token))) {
+						y = nv;
+						if (y < 100) y += y > 29 ? 1900 : 2000;
+					}
 					break;
 				case 'M':
 					var mon = token ? token.toLowerCase() : '';
@@ -132,15 +169,15 @@ zk.fmt.Date = {
 						}
 					if (len == 3 && token) {
 						if (nosep)
-							token = this._parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
+							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						break; // nothing to do.
 					} else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
 							ts[--i] = token.substring(2);
 							token = token.substring(0, 2);
 						}
-						var nv = parseInt(token, 10);
-						if (isNaN(nv)) break; 
+						if (isNaN(nv = _parseInt(token)))
+							break; 
 						m = nv - 1;
 					} else {
 						for (var l = 0;; ++l) {
@@ -163,72 +200,67 @@ zk.fmt.Date = {
 					break;
 				case 'E':
 					if (nosep)
-						this._parseToken(token, ts, --i, len);
+						_parseToken(token, ts, --i, len);
 					break;
 				case 'd':
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break; 
-					d = nv;
-					dFound = true;
-					if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
-						return; //failed
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token))) {
+						d = nv;
+						dFound = true;
+						if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+							return; //failed
+					}
 					break;
 				case 'H':
 					if (hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (!isNaN(nv)) hr = nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						hr = nv;
 					break;
 				case 'h':
 					if (!hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break;
-					hr = (nv == 12) ? 0 : nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						hr = nv == 12 ? 0 : nv;
 					break;
 				case 'K':
 					if (!hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (!isNaN(nv)) hr = nv % 12;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						hr = nv % 12;
 					break;
 				case 'k':
 					if (hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break;
-					hr = (nv == 24) ? 0 : nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						hr = nv == 24 ? 0 : nv;
 					break;
 				case 'm':
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break;
-					min = nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						min = nv;
 					break;
 				case 's':
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break;
-					src = nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						sec = nv;
 					break;
 				case 'S':
 					if (nosep)
-						token = this._parseToken(token, ts, --i, len);
-					var nv = parseInt(token, 10);
-					if (isNaN(nv)) break;
-					msec = nv;
+						token = _parseToken(token, ts, --i, len);
+					if (!isNaN(nv = _parseInt(token)))
+						msec = nv;
 					break;
 				case 'a':
 					if (!hasHour1)
@@ -253,13 +285,13 @@ zk.fmt.Date = {
 				return; //failed
 
 			txt = txt.trim();
-			txt = this.checkDate(zk.FDOW, txt);
-			txt = this.checkDate(zk.SDOW, txt);
-			txt = this.checkDate(zk.S2DOW, txt);
-			txt = this.checkDate(zk.FMON, txt);
-			txt = this.checkDate(zk.SMON, txt);
-			txt = this.checkDate(zk.S2MON, txt);
-			txt = this.checkDate(zk.APM, txt);
+			txt = _ckDate(zk.FDOW, txt);
+			txt = _ckDate(zk.SDOW, txt);
+			txt = _ckDate(zk.S2DOW, txt);
+			txt = _ckDate(zk.FMON, txt);
+			txt = _ckDate(zk.SMON, txt);
+			txt = _ckDate(zk.S2MON, txt);
+			txt = _ckDate(zk.APM, txt);
 			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
 				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
@@ -283,63 +315,63 @@ zk.fmt.Date = {
 
 				switch (cc) {
 				case 'y':
-					if (len <= 3) txt += this.digitFixed(val.getFullYear() % 100, 2);
-					else txt += this.digitFixed(val.getFullYear(), len);
+					if (len <= 3) txt += _digitFixed(val.getFullYear() % 100, 2);
+					else txt += _digitFixed(val.getFullYear(), len);
 					break;
 				case 'M':
-					if (len <= 2) txt += this.digitFixed(val.getMonth()+1, len);
+					if (len <= 2) txt += _digitFixed(val.getMonth()+1, len);
 					else if (len == 3) txt += zk.SMON[val.getMonth()];
 					else txt += zk.FMON[val.getMonth()];
 					break;
 				case 'd':
-					txt += this.digitFixed(this.dayInMonth(val), len);
+					txt += _digitFixed(dayInMonth(val), len);
 					break;
 				case 'E':
 					if (len <= 3) txt += zk.SDOW[(val.getDay() - zk.DOW_1ST + 7) % 7];
 					else txt += zk.FDOW[(val.getDay() - zk.DOW_1ST) % 7];
 					break;
 				case 'D':
-					txt += this.dayInYear(val);
+					txt += dayInYear(val);
 					break;
 				case 'w':
-					txt += this.weekInYear(val);
+					txt += weekInYear(val);
 					break;
 				case 'W':
-					txt += this.weekInMonth(val);
+					txt += weekInMonth(val);
 					break;
 				case 'G':
 					txt += zk.ERA;
 					break;
 				case 'F':
-					txt += this.dayOfWeekInMonth(val);
+					txt += dayOfWeekInMonth(val);
 					break;
 				case 'H':
-					if (len <= 2) txt += this.digitFixed(val.getHours(), len);
+					if (len <= 2) txt += _digitFixed(val.getHours(), len);
 					break;
 				case 'k':
 					var h = val.getHours();
 					if (h == 0)
 						h = '24';
-					if (len <= 2) txt += this.digitFixed(h, len);
+					if (len <= 2) txt += _digitFixed(h, len);
 					break;
 				case 'K':
-					if (len <= 2) txt += this.digitFixed(val.getHours() % 12, len);
+					if (len <= 2) txt += _digitFixed(val.getHours() % 12, len);
 					break;
 				case 'h':
 					var h = val.getHours();
 					h %= 12;
 					if (h == 0)
 						h = '12';
-					if (len <= 2) txt += this.digitFixed(h, len);
+					if (len <= 2) txt += _digitFixed(h, len);
 					break;
 				case 'm':
-					if (len <= 2) txt += this.digitFixed(val.getMinutes(), len);
+					if (len <= 2) txt += _digitFixed(val.getMinutes(), len);
 					break;
 				case 's':
-					if (len <= 2) txt += this.digitFixed(val.getSeconds(), len);
+					if (len <= 2) txt += _digitFixed(val.getSeconds(), len);
 					break;
 				case 'S':
-					if (len <= 3) txt += this.digitFixed(val.getMilliseconds(), len);
+					if (len <= 3) txt += _digitFixed(val.getMilliseconds(), len);
 					break;
 				case 'Z':
 					txt += -(val.getTimezoneOffset()/60);
@@ -358,37 +390,6 @@ zk.fmt.Date = {
 			}
 		}
 		return txt;
-	},
-	/** Converts milli-second to day. */
-	ms2day : function (t) {
-		return Math.round(t / 86400000);
-	},
-	/** Day in year (starting at 1). */
-	dayInYear : function (d, ref) {
-		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
-		return this.digitFixed(1 + this._dayInYear(d, ref));
-	},
-	_dayInYear: function (d, ref) {
-		return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate())-ref)/864e5);
-	},
-	/** Day in month (starting at 1). */
-	dayInMonth : function (d) {
-		return d.getDate();
-	},
-	/** Week in year (starting at 1). */
-	weekInYear : function (d, ref) {
-		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
-		var wday = ref.getDay();
-		if (wday == 7) wday = 0;
-		return this.digitFixed(1 + Math.floor((this._dayInYear(d, ref) + wday) / 7));
-	},
-	/** Week in month (starting at 1). */
-	weekInMonth : function (d) {
-		return this.weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
-	},
-	/** Day of week in month. */
-	dayOfWeekInMonth : function (d) {
-		return this.digitFixed(1 + Math.floor(this._dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
 	}
 };
 /**
@@ -453,3 +454,4 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		return this._date.getFullYear() + this._offset;
 	}
 });
+})();
