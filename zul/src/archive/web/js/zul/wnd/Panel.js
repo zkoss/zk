@@ -304,6 +304,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 								ps.height = jq.px0(sh);
 								oldinfo._pheight = true;
 							}
+							if (zk.ie7_)
+								zk(node).redoCSS();
 						}
 					}
 					var floated = this.isFloatable(),

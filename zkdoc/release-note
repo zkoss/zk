@@ -70,6 +70,7 @@ ZK 5.0.6
   3166404: The hidden column  in a frozen grid will appear
   3166399: Crawlable feature isn't working when the cnt is in include
   3165195: Strange dotted line on Menuitem
+  3166478: Portallayout maximize panel, panel behind will sticking out
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
