@@ -96,6 +96,12 @@
 	padding-left:12px;
 	padding-right:0;
 }
+<c:if test="${c:browser('gecko')}">
+.z-menu-inner-m button.z-menu-btn::-moz-focus-inner,
+.z-menu-item-inner-m button.z-menu-item-btn::-moz-focus-inner {
+	border: 0;
+}
+</c:if>
 <c:if test="${c:isExplorer()}">
 .z-menu-inner-m .z-menu-btn{
 	padding-right:4px;

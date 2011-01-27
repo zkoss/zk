@@ -69,6 +69,7 @@ ZK 5.0.6
   3105860: Portallayout fails to set Panel's ZIndex on 2nd maximization
   3166404: The hidden column  in a frozen grid will appear
   3166399: Crawlable feature isn't working when the cnt is in include
+  3165195: Strange dotted line on Menuitem
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
