@@ -114,8 +114,9 @@ zk.fmt.Date = {
 							token = token.substring(0, len);
 						}
 					}
-					y = zk.parseInt(token);
-					if (isNaN(y)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break; 
+					y = nv;
 					if (y < 100) y += y > 29 ? 1900 : 2000;
 					break;
 				case 'M':
@@ -133,12 +134,14 @@ zk.fmt.Date = {
 						if (nosep)
 							token = this._parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						break; // nothing to do.
-					}else if (len <= 2) {
+					} else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
 							ts[--i] = token.substring(2);
 							token = token.substring(0, 2);
 						}
-						m = zk.parseInt(token) - 1;
+						var nv = parseInt(token, 10);
+						if (isNaN(nv)) break; 
+						m = nv - 1;
 					} else {
 						for (var l = 0;; ++l) {
 							if (l == 12) return; //failed
@@ -155,7 +158,7 @@ zk.fmt.Date = {
 							}
 						}
 					}
-					if (isNaN(m) || m > 11 /*|| m < 0 accept 0 since it is a common-yet-acceptable error*/) //restrict since user might input year for month
+					if (m > 11 /*|| m < 0 accept 0 since it is a common-yet-acceptable error*/) //restrict since user might input year for month
 						return;//failed
 					break;
 				case 'E':
@@ -165,9 +168,11 @@ zk.fmt.Date = {
 				case 'd':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					d = zk.parseInt(token);
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break; 
+					d = nv;
 					dFound = true;
-					if (isNaN(d) || d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+					if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
 						return; //failed
 					break;
 				case 'H':
@@ -175,55 +180,55 @@ zk.fmt.Date = {
 						break;
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					hr = zk.parseInt(token);
-					if (isNaN(hr)) return; //failed
+					var nv = parseInt(token, 10);
+					if (!isNaN(nv)) hr = nv;
 					break;
 				case 'h':
 					if (!hasHour1)
 						break;
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					hr = zk.parseInt(token);
-					if (hr == 12)
-						hr = 0;
-					if (isNaN(hr)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break;
+					hr = (nv == 12) ? 0 : nv;
 					break;
 				case 'K':
 					if (!hasHour1)
 						break;
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					hr = zk.parseInt(token);
-					if (isNaN(hr)) return; //failed
-					hr %= 12;
+					var nv = parseInt(token, 10);
+					if (!isNaN(nv)) hr = nv % 12;
 					break;
 				case 'k':
 					if (hasHour1)
 						break;
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					hr = zk.parseInt(token);
-					if (hr == 24)
-						hr = 0;
-					if (isNaN(hr)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break;
+					hr = (nv == 24) ? 0 : nv;
 					break;
 				case 'm':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					min = zk.parseInt(token);
-					if (isNaN(min)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break;
+					min = nv;
 					break;
 				case 's':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					sec = zk.parseInt(token);
-					if (isNaN(sec)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break;
+					src = nv;
 					break;
 				case 'S':
 					if (nosep)
 						token = this._parseToken(token, ts, --i, len);
-					msec = zk.parseInt(token);
-					if (isNaN(msec)) return; //failed
+					var nv = parseInt(token, 10);
+					if (isNaN(nv)) break;
+					msec = nv;
 					break;
 				case 'a':
 					if (!hasHour1)
