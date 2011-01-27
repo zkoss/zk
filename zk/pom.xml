@@ -55,11 +55,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
-			<artifactId>zcommon</artifactId>
-			<version>${zk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
 			<artifactId>zweb</artifactId>
 			<version>${zk.version}</version>
 		</dependency>
@@ -67,13 +62,31 @@
 			<groupId>javax.portlet</groupId>
 			<artifactId>portlet-api</artifactId>
 			<version>2.0</version>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>1.5.6</version>
 			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant-launcher</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jline</groupId>
+					<artifactId>jline</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jruby</groupId>
@@ -104,7 +117,8 @@
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
 		<finalName>${project.artifactId}-${zk.version}</finalName>
-		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+		<testOutputDirectory>${project.build.directory}/test-classes
+		</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
 		<resources>
 			<resource>
