@@ -137,48 +137,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	function _nextVerSeparator(version, from) {
-		for (var len = version.length; from < len; ++from) {
-			var cc = version.charAt(from);
-			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z')
-			&& (cc < 'A' || cc > 'Z'))
-				break;
-		}
-		return from;
-	}
-	
-	function _parseVersion(version) {
-		var vers = [];
-		for (var j = 0, len = version.length; j < len;) {
-			var k = _nextVerSeparator(version, j);
-			vers.push(zk.parseInt(version.substring(j, k)));
-			j = k + 1;
-		}
-
-		return vers;
-	}
-	
-	function _compareVersion(v1, v2) {
-		for (var j = 0;; ++j) {
-			if (j == v1.length) {
-				for (; j < v2.length; ++j) {
-					if (v2[j] > 0) return -1;
-					if (v2[j] < 0) return 1;
-				}
-				return 0;
-			}
-			if (j == v2.length) {
-				for (; j < v1.length; ++j) {
-					if (v1[j] > 0) return 1;
-					if (v1[j] < 0) return -1;
-				}
-				return 0;
-			}
-			if (v1[j] > v2[j]) return 1;
-			if (v1[j] < v2[j]) return -1;
-		}
-	}
-	
 /** @class zk
  * @import zk.Package
  * @import zk.Class
@@ -291,10 +249,11 @@ zk.copy(zk, {
 	 * @type String
 	 */
 	//agent: '',
-	/** Whether it is Internet Explorer.
+	/** Returns the version as double (only the first two part of the version, such as 8)
+	 * if it is Internet Explorer, or null if not.
 	 * @type boolean
 	 */
-	//ie: false,
+	//ie: null,
 	/** Whether it is Internet Exploer 6 (excluding 7 or others).
 	 * @type boolean
 	 */
@@ -321,28 +280,40 @@ zk.copy(zk, {
 	 * @since 5.0.5
 	 */
 	//ie9: false,
-	/** Whether it is Gecko-based browsers, such as Firefox.
-	 * @type boolean
+	/** Returns the version as double (only the first two part of the version, such as 1.9)if it is Gecko-based browsers,
+	 * such as Firefox. Notice that it is 1.9 (Firefox 3.*) and 2.0 (Firefox 4.*).
+	 * Otherwise, it is null.
+	 * <p>For detailed version, such as 1.9.2 (firefox 3.6), yo could check jq.browser.version
+	 * (which is a string, such as "1.9.2").
+	 * @type Double
 	 */
-	//gecko: false,
+	//gecko: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 2 (excluding 3 or others).
 	 * @type boolean
 	 */
 	//gecko2_: false,
+	/** Returns the version as double (only the first two part of the version, such as 3.6) if it is Firefox,
+	 * such as Firefox. Notice that it is Firefox's version, such as
+	 * 3.5, 3.6 and 4.0.
+	 * If not a firefox, it is null.
+	 * @type Double
+	 * @since 5.0.6
+	 */
+	//ff: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 3 and later.
 	 * @type boolean
 	 */
 	//gecko3: false,
-	/** Whether it is Safari.
-	 * @type boolean
+	/** Returns the version as double (only the first two part of the version, such as 533.1) if it is Safari-based, or null if not.
+	 * @type Double
 	 */
-	//safari: false,
-	/** Whether it is Opera.
-	 * @type boolean
+	//safari: null,
+	/** Returns the version as double (only the first two part of the version, such as 10.1) if it is Opera, or null if not.
+	 * @type Double
 	 */
-	//opera: false,
+	//opera: null,
 	/** Whether it is Adobe AIR.
 	 * @type boolean
 	 */
@@ -1156,43 +1127,44 @@ zk.log('value is", value);
 
 //zk.agent//
 (function () {
+	function _ver(ver) {
+		return parseFloat(ver) || ver;
+	}
 	var browser = jq.browser,
-		agent = zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = browser.safari && browser.version;
-	zk.opera = browser.opera && browser.version;
-	zk.gecko = browser.mozilla && browser.version;
+		agent = zk.agent = navigator.userAgent.toLowerCase(), j;
+	zk.safari = browser.safari && _ver(browser.version);
+	zk.opera = browser.opera && _ver(browser.version);
+	zk.gecko = browser.mozilla && _ver(browser.version);
+	zk.ff = ((j = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(j + 8));
 	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
 	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
-		var version = _parseVersion(zk.gecko);
-		zk.css3 = zk.gecko3 = (_compareVersion(version, [1,9]) >= 0);//3.0 or later
-		zk.gecko3$6 = (_compareVersion(version, [1,9,2]) >= 0);//3.6 or later
+		zk.css3 = zk.gecko3 = zk.ff >= 3 || zk.gecko >= 1.9; //gecko 1.9.* => ff 3
 		zk.gecko2_ = !zk.gecko3;
-		bodycls = 'gecko gecko' + zk.parseInt(agent.substring(agent.indexOf('firefox/')+8));
+		bodycls = 'gecko gecko' + Math.floor(zk.ff);
 	} else if (zk.opera) {
 		bodycls = 'opera';
-		zk.css3 = (_compareVersion(_parseVersion(zk.opera), [10,5]) >= 0); //10.5 or later
+		zk.css3 = zk.opera >= 10.5;
 	} else {
-		zk.ie = browser.msie && browser.version;
+		zk.ie = browser.msie && _ver(browser.version);
 		if (zk.ie) {
-			var j = zk.parseInt(zk.ie), dm;
-			zk.ie7 = j >= 7; //ie7 or later
-			zk.ie8c = j >= 8; //ie8 or later (including compatible)
-			zk.ie8 = j >= 8 && (dm=document.documentMode) >= 8; //ie8 or later
-			zk.css3 = zk.ie9 = j >= 9 && dm >= 9; //ie9 or later
-			zk.ie6_ = !zk.ie7;
-			zk.ie7_ = zk.ie7 && !zk.ie8;
-			zk.ie8_ = zk.ie8 && !zk.ie9;
-			bodycls = 'ie ie' + j;
+			var dm = document.documentMode;
+			zk.ie7 = zk.ie >= 7; //ie7 or later
+			zk.ie8c = zk.ie >= 8; //ie8 or later (including compatible)
+			zk.ie8 = zk.ie >= 8 && dm >= 8; //ie8 or later
+			zk.css3 = zk.ie9 = zk.ie >= 9 && dm >= 9; //ie9 or later
+			zk.ie6_ = !zk.ie7 || dm < 7;
+			zk.ie7_ = (zk.ie7 && !zk.ie8) || dm == 7;
+			zk.ie8_ = (zk.ie8 && !zk.ie9) || dm == 8;
+			bodycls = 'ie ie' + Math.floor(zk.ie);
 		} else {
 			if (zk.safari)
-				bodycls = 'safari';
+				bodycls = 'safari safari' + Math.floor(zk.safari);
 			zk.css3 = true;
 		}
 	}
-
 	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
 		bodycls = (bodycls || '') + ' air';
 
