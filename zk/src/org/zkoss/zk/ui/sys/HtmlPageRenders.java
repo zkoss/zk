@@ -536,11 +536,15 @@ public class HtmlPageRenders {
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
-				out, desktop.getWebApp().getConfiguration().isCrawlable());
+				out, new StringWriter(),
+				desktop.getWebApp().getConfiguration().isCrawlable(), false);
 			setRenderContext(exec, rc);
 		} else if (owner != null) {
 			old = getRenderContext(exec); //store
-			setRenderContext(exec, null);
+			final boolean crawlable = old != null && old.temp != null
+				&& desktop.getWebApp().getConfiguration().isCrawlable();
+			setRenderContext(exec,
+				crawlable ? new RenderContext(old.temp, null, true, true): null);
 		}
 
 		//generate div first
@@ -952,17 +956,24 @@ public class HtmlPageRenders {
 		/** The writer used to generate the content that exists
 		 * even after the widgets have been rendered.
 		 * It is currenlty used only to generate CSS style.
-		 * <p>It is never null.
+		 * <p>It is null if the current page is included by another.
 		 */
 		public final Writer perm;
 		/** Indicates whether to generate crawlable content.
 		 */
 		public final boolean crawlable;
+		/** Indicated whether this page/execution is included.
+		 * If included, the component shall not use "z$ea", since the page's
+		 * rendering might be delayed.
+		 */
+		public final boolean included;
 
-		private RenderContext(Writer temp, boolean crawlable) {
+		private RenderContext(Writer temp, Writer perm, boolean crawlable,
+		boolean included) {
 			this.temp = temp;
-			this.perm = new StringWriter();
+			this.perm = perm;
 			this.crawlable = crawlable;
+			this.included = included;
 		}
 	}
 }

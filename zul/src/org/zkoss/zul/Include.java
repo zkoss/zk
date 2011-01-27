@@ -525,7 +525,7 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 				if (getChildPage() == null) { //only able to handle non-ZUL page
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
-					if (rc != null) {
+					if (rc != null && !rc.included) { //Use z$ea only if not included
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());

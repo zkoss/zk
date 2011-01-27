@@ -1,0 +1,10 @@
+<zk>
+Test for the crawlable function.
+<html><![CDATA[
+&lt;system-config>
+  &lt;crawlable>true&lt;/crawlable>
+&lt;/system-config>
+]]></html>
+
+<include mode="defer" src="B50-3166399-inc.zul"/>
+</zk>

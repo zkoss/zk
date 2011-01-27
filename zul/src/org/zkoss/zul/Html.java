@@ -127,7 +127,8 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 				cwout.write("\" style=\"display:none\">");
 				cwout.write(cnt);
 				cwout.write("</div>\n");
-				cnt = null; //means already generated
+				if (!rc.included) //Use z$ea only if not included (since the included page is rendered a bit late because of zkq)
+					cnt = null; //means already generated
 			}
 			if (cnt == null) renderer.render("z$ea", "content");
 			else render(renderer, "content", cnt);

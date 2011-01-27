@@ -190,7 +190,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		if (cnt != null) {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
-			if (rc != null) {
+			if (rc != null && rc.perm != null) {
 				final Writer out = rc.perm;
 					//don't use rc.temp which will be replaced with widgets later
 				out.write("\n<style id=\"");
