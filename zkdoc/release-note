@@ -65,6 +65,7 @@ ZK 5.0.6
   3165164: onSelect event is not fired when a tab is closed
   3132199: use hflex="min" in hlayout and div, cause wrong UI
   3105728: Incorrect Datebox formatting with no year input
+  3105860: Portallayout fails to set Panel's ZIndex on 2nd maximization
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
