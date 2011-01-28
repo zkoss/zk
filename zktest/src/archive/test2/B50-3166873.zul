@@ -1,0 +1,23 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Try to drag the splitters. If either one can't be moved, it is a bug.</li>
+		</ol>
+	]]></html>
+	<hlayout>
+		<window border="normal" width="250px" height="250px" title="Hbox">
+			<hbox hflex="1" vflex="1">
+				Content
+				<splitter />
+				Content
+			</hbox>
+		</window>
+		<window border="normal" width="250px" height="250px" title="Vbox">
+			<vbox hflex="1" vflex="1">
+				Content
+				<splitter />
+				Content
+			</vbox>
+		</window>
+	</hlayout>
+</zk>
