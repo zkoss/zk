@@ -23,7 +23,7 @@ java.lang.IndexOutOfBoundsException: Index: 16, Size: 4<br/>
 	</zscript>
 	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
 		<listhead>
-			<listheader label="Load on Demend" sort="auto"/>
+			<listheader label="Load on Demand" sort="auto"/>
 		</listhead>
 	</listbox>
 </window>

@@ -1,12 +1,8 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
 <window>
 <html><![CDATA[
-<p>1. if you see a textbox and no any input error message appears ,that means this case works . </p>
-<p>
-      2.when you click the textbox and click outside of textbox ,it will shows the input is not corret.
-<strike><p>1. Don't do anything.</p>
-<p>2. And, you shall not see any error message.</p>
-</strike>
+<p>1. If you see a textbox and no any input error message appears ,that means this case works . </p>
+<p>2. When you click the textbox and click outside of textbox ,it will shows the input is not corret.</p>
 ]]></html>
 <zscript>
 public class MyConstraint extends SimpleConstraint implements CustomConstraint {
@@ -19,6 +15,6 @@ public class MyConstraint extends SimpleConstraint implements CustomConstraint {
 }
 MyConstraint ms = new MyConstraint();
 </zscript>
-<textbox value="@{val}" constraint="${ms}"/>
+<textbox id="txtbox" value="@{val}" constraint="${ms}"/>
 <label id="errlb"/>
 </window> 
