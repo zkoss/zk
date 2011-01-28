@@ -423,7 +423,8 @@ function zkmprops(uuid, props) {
 	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
-		zkx(args[0], [stub, filter]); //assign stub as 2nd argument (see zkx)
+		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
+		zkx.apply(this, args); //args[2] (aucmds) must be null
 	},
 
 	//Run AU commands (used only with ZHTML)
