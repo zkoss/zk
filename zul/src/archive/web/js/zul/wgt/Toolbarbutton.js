@@ -12,7 +12,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-	/**
+(function () {
+	
+	function _initUpld(wgt) {
+		zWatch.listen({onShow: wgt});
+		var v;
+		if (v = wgt._upload)
+			wgt._uplder = new zul.Upload(wgt, null, v);
+	}
+	
+	function _cleanUpld(wgt) {
+		var v;
+		if (v = wgt._uplder) {
+			zWatch.unlisten({onShow: wgt});
+			wgt._uplder = null;
+			v.destroy();
+		}
+	}
+	
+/**
  * A toolbar button.
  *
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
@@ -167,9 +185,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		upload: function (v) {
 			var n = this.$n();
 			if (n) {
-				this._cleanUpld();
+				_cleanUpld(this);
 				if (v && v != 'false' && !this._disabled)
-					this._initUpld();
+					_initUpld(this);
 			}
 		}
 	},
@@ -189,27 +207,15 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			this.domListen_(n, "onFocus", "doFocus_")
 				.domListen_(n, "onBlur", "doBlur_");
 		}
-		if (!this._disabled && this._upload) this._initUpld();
+		if (!this._disabled && this._upload) _initUpld(this);
 	},
 	unbind_: function(){
-		this._cleanUpld();
+		_cleanUpld(this);
 		var n = this.$n();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 
 		this.$supers(zul.wgt.Toolbarbutton, 'unbind_', arguments);
-	},
-	_initUpld: function () {
-		var v;
-		if (v = this._upload)
-			this._uplder = new zul.Upload(this, null, v);
-	},
-	_cleanUpld: function () {
-		var v;
-		if (v = this._uplder) {
-			this._uplder = null;
-			v.destroy();
-		}
 	},
 	domContent_: function(){
 		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();
@@ -235,7 +241,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (v)
 			attr += ' tabIndex="' + v + '"';
 		return attr;
-	},	
+	},
+	onShow: function () {
+		if (this._uplder)
+			this._uplder.sync();
+	},
 	doClick_: function(evt){
 		if (!this._disabled) {
 			zul.wgt.ADBS.autodisable(this);
@@ -262,3 +272,4 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	}
 });
+})();
