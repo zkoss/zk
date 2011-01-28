@@ -78,6 +78,7 @@ ZK 5.0.6
   3166909: Javascript error if put a listhead inside a listbox(select)
   3162596: mesg.TRY_AGAIN not translated in zk.jar
   3167027: Cannot append a treerow in a treeitem
+  3141977: Navigating paging grid with native elem in it causes error (EE only)
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
