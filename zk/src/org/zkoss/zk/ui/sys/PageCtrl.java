@@ -234,10 +234,12 @@ public interface PageCtrl {
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.
 	 * A page is included by a component. We say it is owned by the component.
+	 * <p>Note: the owner, if not null, must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 */
 	public Component getOwner();
 	/** Sets the owner of this page.
-	 * <p>Used only internally.
+	 * <p>Called only internally
+	 * <p>Since 5.0.6, the owner must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 */
 	public void setOwner(Component comp);
 

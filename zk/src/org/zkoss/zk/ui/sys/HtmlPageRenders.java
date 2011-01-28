@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -533,7 +534,9 @@ public class HtmlPageRenders {
 
 		RenderContext rc = null, old = null;
 		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
-		final boolean divRequired = !au || (owner != null && !aupg);
+		final boolean includedAndPart = owner != null && !aupg;
+			//this page is included and rendered with its owner
+		final boolean divRequired = !au || includedAndPart;
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
@@ -559,14 +562,11 @@ public class HtmlPageRenders {
 			outDivTemplateEnd(out); //close it now since no rc.temp
 		}
 
-		//generate JS second
-		if (divRequired) {
+		if (includedAndPart) {
+			out = new StringWriter();
+		} else if (divRequired) {
+			//generate JS second
 			out.write("\n<script type=\"text/javascript\">");
-			if (owner != null) {
-				out.write("zkq('");
-				out.write(owner.getUuid());
-				out.write("',function(){");
-			}
 			out.write(outZkIconJS());
 		}
 
@@ -634,9 +634,9 @@ public class HtmlPageRenders {
 			setRenderContext(exec, old);
 		}
 
-		if (divRequired) {
-			if (owner != null)
-				out.write("});");
+		if (includedAndPart) {
+			((Includer)owner).setRenderingResult(((StringWriter)out).toString());
+		} else if (divRequired) {
 			out.write("</script>\n");
 		}
 	}

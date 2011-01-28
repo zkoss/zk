@@ -78,6 +78,7 @@ public interface UiEngine {
 	 *} finally {
 	 *  ue.setOwner(old);
 	 *}</code></pre>
+	 * <p>Since 5.0.6, the owner must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 * @return the previous owner
 	 * @since 5.0.0
 	 */

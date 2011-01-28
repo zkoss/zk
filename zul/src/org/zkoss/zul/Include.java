@@ -178,6 +178,7 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 	/** The child page. Note: it is recovered by PageImpl. */
 	private transient Page _childpg;
 	private String _mode = getDefaultMode();
+	private String _renderResult;
 	private boolean _localized;
 	private boolean _progressing;
 	private boolean _afterComposed;
@@ -286,7 +287,7 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 			&& !"defer".equals(mode))
 				throw new WrongValueException("Unknown mode: "+mode);
 			if ((_localized || _progressing) && "instant".equals(mode))
-				throw new UnsupportedOperationException("localized/progressing not allowed in instant mold");
+				throw new UnsupportedOperationException("localized/progressing not allowed in the instant mode");
 
 			_mode = mode;
 			fixMode();
@@ -376,9 +377,11 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 	}
 
 	//Includer//
+	//@Override
 	public Page getChildPage() {
 		return _childpg;
 	}
+	//@Override
 	public void setChildPage(Page page) {
 		if (_childpg != null && page == null) {
 			final Desktop desktop = getDesktop();
@@ -386,6 +389,10 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 				((DesktopCtrl)desktop).removePage(_childpg);
 		}
 		_childpg = page;
+	}
+	//@Override
+	public void setRenderingResult(String result) {
+		_renderResult = result;
 	}
 
 	//@Override
@@ -541,10 +548,14 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 						done = true;
 					}
 				}
-				if (!done)
+				if (!done) {
 					renderer.render("content", sw.toString());
+					if (_renderResult != null && _renderResult.length() > 0)
+						renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
+				}
 			}
 		} finally {
+			_renderResult = null;
 			ueng.setOwner(old);
 		}
 	}

@@ -71,7 +71,8 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		if (jq.isArray(ctn = this._content)) //z$ea
 			for (var n = this.$n(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
-		zkqx(this.uuid); //fire the queued fucntion (zkx)
+		if (ctn = this._childjs)
+			ctn();
 	},
 	unbind_: function () {
 		if (jq.isArray(this._content)) //z$ea

@@ -97,7 +97,6 @@ function zkmprops(uuid, props) {
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
-		_qfns = {}, //queued functions (such as dependent pages, owner != null)
 		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
 
 	//Issue of handling page's AU responses
@@ -425,20 +424,6 @@ function zkmprops(uuid, props) {
 	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
 		zkx(args[0], [stub, filter]); //assign stub as 2nd argument (see zkx)
-	},
-
-	//queue a function to invoke by zkqx
-	//@param id unique ID to identify the function, usually, widget's uuid
-	zkq: function (id, fn) {
-		_qfns[id] = fn;
-	},
-	//execute the function queued by zkq
-	zkqx: function (id) {
-		var fn = _qfns[id];
-		if (fn) {
-			delete _qfns[id];
-			fn(id);
-		}	
 	},
 
 	//Run AU commands (used only with ZHTML)
