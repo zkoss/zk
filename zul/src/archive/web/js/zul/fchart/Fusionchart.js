@@ -127,7 +127,6 @@ var Fusionchart =
  * The Fusionchart component. Developers set proper chart type, data model,
  * and the threeD (3D) attribute to draw proper chart.
  *
- * @see ChartModel
  * @author jimmyshiau
  */
 zul.fchart.Fusionchart = zk.$extends(zk.Widget, {
