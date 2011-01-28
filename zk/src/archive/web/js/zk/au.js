@@ -214,7 +214,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
 			if (reqInf && !reqInf.ignorable && !zk.unloading) {
-				var msg = e.message;
+				var msg = e.message||e;
 				_errCode = "[Receive] " + msg;
 				//if (e.fileName) _errCode += ", "+e.fileName;
 				//if (e.lineNumber) _errCode += ", "+e.lineNumber;
@@ -305,7 +305,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 
 			if (!reqInf.ignorable && !zk.unloading) {
-				var msg = e.message;
+				var msg = e.message||e;
 				_errCode = "[Send] " + msg;
 				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
 					ajaxReqResend(reqInf);

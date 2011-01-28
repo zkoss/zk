@@ -416,7 +416,7 @@ function zkmprops(uuid, props) {
 			else run(mount);
 		} catch (e) {
 			zk.mounting = false;
-			zk.error("Failed to mount: "+e.message);
+			zk.error("Failed to mount: "+(e.message||e));
 		}
 	},
 	//widget creation called by au.js
