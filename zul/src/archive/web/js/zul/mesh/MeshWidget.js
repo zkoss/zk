@@ -65,7 +65,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 			var wd = bdwd = bdfaker.cells[i].offsetWidth,
 				$cv = zk(w.$n('cave')),
-				hdwd = w ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
+				hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
 				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
 				header;
 			if ((header = headWgt.getChildAt(i)) && header.getWidth())
