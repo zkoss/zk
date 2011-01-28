@@ -329,11 +329,30 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				w.removeHTML_(cn);
 		}
 	},
+	_renderChildHTML: function (childHTML) {
+		var w = this.previousSibling;
+		for (;w; w = this.previousSibling)
+			if (w.treerow) break;
+		
+		if (w) {
+			jq(w.treerow.$n()).after(childHTML);
+		} else if (w = this.nextSibling) {
+			for (;w; w = this.nextSibling)
+				if (w.treerow) break;
+				
+			if (w)
+				jq(w.treerow.$n()).before(childHTML);
+		} else if (w = this.getParentItem()) {
+			w._renderChildHTML(childHTML);
+		} else if ((w = this.getTree())) {
+			jq(w.$n('rows')).append(childHTML);
+		}
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_(): null)
 			jq(before).before(child.redrawHTML_());
 		else
-			jq(this.getCaveNode()).after(child.redrawHTML_());
+			this._renderChildHTML(child.redrawHTML_());
 				//treechild is a DOM sibling (so use after)
 		child.bind(desktop);
 	},
