@@ -1,0 +1,12 @@
+<div onOK='alert("onOK pressed")'>
+	<html><![CDATA[
+	<ol>
+		<li>Press ENTER, you shall see a message box shown with "onOK pressed"</li>
+		<li>Click the textbox to set focus to it, and then press ENTER, you shall
+		see another message box shown with "inside onOK".</li>
+	<ol>
+	]]></html>
+	<div onOK='alert("inside onOK")'>
+		<textbox/>
+	</div>
+</div>
