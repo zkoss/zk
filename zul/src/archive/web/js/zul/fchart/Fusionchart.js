@@ -127,21 +127,6 @@ var Fusionchart =
  * The Fusionchart component. Developers set proper chart type, data model,
  * and the threeD (3D) attribute to draw proper chart.
  *
- * <p>The model and type must
- * match to each other; or the result is unpredictable. The 3D chart is not supported
- * on all chart type.
- *
- * <table>
- *   <tr><th>type</th><th>model</th><th>3D</th></tr>
- *   <tr><td>area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>No</td></tr>
- *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>Yes</td></tr>
- *   <tr><td>gantt</td><td>{@link GanttModel}</td><td>No</td></tr>
- *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>Yes</td></tr>
- *   <tr><td>pie</td><td>{@link PieModel}</td><td>Yes</td></tr>
- *   <tr><td>stacked_bar</td><td>{@link CategoryModel}</td><td>Yes</td></tr>
- *   <tr><td>stacked_area</td><td>{@link CategoryModel} or {@link XYModel}</td><td>No</td></tr>
- * </table>
- *
  * @see ChartModel
  * @author jimmyshiau
  */
