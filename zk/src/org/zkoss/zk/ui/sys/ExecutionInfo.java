@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
  * The infomation about the event being served by the current execution.
- * @see ExecutionCtrl#getEventInfo
+ * @see ExecutionCtrl#getExecutionInfo
  * @author tomyeh
  * @since 5.0.6
  */
