@@ -532,7 +532,8 @@ public class HtmlPageRenders {
 		}
 
 		RenderContext rc = null, old = null;
-		final boolean divRequired = !au || owner != null;
+		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
+		final boolean divRequired = !au || (owner != null && !aupg);
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
 			rc = new RenderContext(
@@ -559,10 +560,9 @@ public class HtmlPageRenders {
 		}
 
 		//generate JS second
-		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		if (divRequired) {
 			out.write("\n<script type=\"text/javascript\">");
-			if (!aupg && owner != null) {
+			if (owner != null) {
 				out.write("zkq('");
 				out.write(owner.getUuid());
 				out.write("',function(){");
@@ -635,7 +635,7 @@ public class HtmlPageRenders {
 		}
 
 		if (divRequired) {
-			if (!aupg && owner != null)
+			if (owner != null)
 				out.write("});");
 			out.write("</script>\n");
 		}

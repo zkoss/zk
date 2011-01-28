@@ -73,6 +73,7 @@ ZK 5.0.6
   3166478: Portallayout maximize panel, panel behind will sticking out
   3157031: V/Hlayout with h/vflex calculate wrong value
   3081580: Toolbarbutton with upload and disabled not work
+  3166875: Failed to invalidate an included page
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
