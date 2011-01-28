@@ -75,6 +75,7 @@ ZK 5.0.6
   3081580: Toolbarbutton with upload and disabled not work
   3166875: Failed to invalidate an included page
   3166909: Javascript error if put a listhead inside a listbox(select)
+  3162596: mesg.TRY_AGAIN not translated in zk.jar
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
