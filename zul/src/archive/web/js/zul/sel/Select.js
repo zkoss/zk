@@ -75,7 +75,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			if (n)
 				n.selectedIndex = selectedIndex;
 
-			if (selectedIndex > -1 && w) {
+			if (selectedIndex > -1 && w && w.$instanceof(zul.sel.Option)) {
 				w.setSelected(true);
 				this._selItems.push(w);
 			}
