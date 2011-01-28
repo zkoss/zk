@@ -326,7 +326,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			Splitter = zul.box.Splitter;
 		run.prev = Splitter._prev(nd);
 		run.next = Splitter._next(nd);
-		if(run.prev || run.next) return true; // splitter as first or last child
+		if(!run.prev || !run.next) return true; // splitter as first or last child
 		run.prevwgt = wgt.previousSibling;
 		run.nextwgt = wgt.nextSibling;
 		run.z_offset = zk(node).cmOffset();
