@@ -5,6 +5,7 @@ ZK 5.0.6
   3138362: Add a Doublespinner comopnent to support double value
   3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
   3148425: GroupsModelArray shall handle tabular data better
+  3166334: Provide a way to intercept document-level key events
   3105037: Show the locale format in error messages
   3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
   3115054: A way not to use Thread for Event Queue+Server Push

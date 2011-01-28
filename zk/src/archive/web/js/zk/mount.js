@@ -557,19 +557,38 @@ jq(function() {
 			_reszInf.inResize = false;
 		}
 	}
+	//Invoke the first root wiget's afterKeyDown_
+	function _afterKeyDown(wevt) {
+		var dts = zk.Desktop.all, Page = zk.Page;
+		for (var dtid in dts)
+			for (wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
+				if (wgt.$instanceof(Page)) {
+					for (var w = wgt.firstChild; w; w = w.nextSibling)
+						if (_afterKD(w, wevt))
+							return;
+				} else if (_afterKD(wgt, wevt))
+					return; //handled
+	}
+	function _afterKD(wgt, wevt) {
+		if (!wgt.afterKeyDown_)
+			return; //handled
+		wevt.target = wgt; //mimic as keydown directly sent to wgt
+		return wgt.afterKeyDown_(wevt);
+	}
 
 	jq(document)
 	.keydown(function (evt) {
-		var wgt = Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true}),
+			wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			_doEvt(wevt);
 			if (!wevt.stopped && wgt.afterKeyDown_) {
 				wgt.afterKeyDown_(wevt);
-    			if (wevt.domStopped)
-    				wevt.domEvent.stop();
+				if (wevt.domStopped)
+					wevt.domEvent.stop();
 			}
-		}
+		} else
+			_afterKeyDown(wevt);
 
 		if (evt.keyCode == 27
 		&& (zk._noESC > 0 || (!zk.zkuery && zAu.shallIgnoreESC()))) //Bug 1927788: prevent FF from closing connection
