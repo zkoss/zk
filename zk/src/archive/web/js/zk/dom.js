@@ -139,10 +139,9 @@ zjq = function (jq) { //ZK extension
 				//Fix opera bug. If the parent of "input" or "span" is "div"
 				// and the scrollTop of "div" is more than 0, the offsetTop of "input" or "span" always is wrong.
 				if (zk.opera) {
-					var nodenm = jq.nodeName(el);
-					if (operaBug && nodenm == "div" && el.scrollTop != 0)
+					if (operaBug && jq.nodeName(el, 'div') && el.scrollTop != 0)
 						t += el.scrollTop || 0;
-					operaBug = nodenm == "span" || nodenm == "input";
+					operaBug = jq.nodeName(el, 'span', 'input');
 				}
 				t += el.offsetTop || 0;
 				l += el.offsetLeft || 0;
