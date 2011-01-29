@@ -10,6 +10,7 @@
 		<poi.version>3.2-FINAL</poi.version>
 		<jxl.version>2.6</jxl.version>
 		<jasperreports.version>3.7.0</jasperreports.version>
+		<jfreechart.version>1.0.13</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
 		<ckez.version>3.3.2_50</ckez.version>
 		<gmapsz.version>2.0.51</gmapsz.version>
@@ -113,6 +114,17 @@
 				<exclusion>
 					<groupId>bouncycastle</groupId>
 					<artifactId>bcprov-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>${jfreechart.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jfree</groupId>
+					<artifactId>jcommon</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
