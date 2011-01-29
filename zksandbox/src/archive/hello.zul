@@ -1,23 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?page title="Hello"?>
-<!--
-hello.zul
-
-{{IS_NOTE
-	Purpose:
-		
-	Description:
-		
-	History:
-		Thu Mar 23 21:03:20     2006, Created by tomyeh
-}}IS_NOTE
-
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
--->
-<window title="My First window" border="normal" width="200px">
-	Hello, World!
-	<button label="Hi" onClick='alert("Welcome")'/>
-</window>
+<chart baseFont='Tahoma' baseFontSize='12' bgAlpha='100'
+	caption='Gantt Chart' ganttWidthPercent='70'
+	gridBorderColor='EEEEEE'>
+	<categories font='Tahoma' fontSize='16' fontColor='404040'
+		bgColor='EEEEEE' isBold='1'>
+		<category name='Gantt Chart' start='null' end='null' />
+	</categories>
+	<categories font='Tahoma' fontSize='12' fontColor='404040'
+		bgColor='EEEEEE' isBold='0'>
+		'
+	</categories>
+	<processes headerFont='Tahoma' headerFontSize='12'
+		headerFontColor='404040' fontColor='404040' headerBgColor='EEEEEE'
+		bgColor='EEEEEE' font='Tahoma' fontSize='12' headerIsBold='1'
+		isBold='0' headerAlign='right' headerVAlign='center' align='right'
+		vAlign='center'>
+		<process name='Write Proposal' id='1' />
+		<process name='Requirements Analysis' id='2' />
+		<process name='Design Phase' id='3' />
+		<process name='Alpha Implementation' id='4' />
+	</processes>
+	<tasks fontColor='404040' font='Tahoma' fontSize='12' alpha='50'>
+		<task name='Scheduled' processId='1' start='四月 1 ' 08' end='四月 5 ' 08' />
+		<task name='Scheduled' processId='2' start='四月 10 ' 08' end='五月 5 ' 08' />
+		<task name='Scheduled' processId='3' start='五月 6 ' 08' end='五月 30 ' 08' />
+		<task name='Scheduled' processId='4' start='六月 3 ' 08' end='七月 31 ' 08' />
+		<task name='Actual' processId='4' start='四月 1 ' 08' end='四月 3 ' 08' />
+		<task name='Actual' processId='4' start='四月 10 ' 08' end='五月 15 ' 08' />
+		<task name='Actual' processId='4' start='五月 15 ' 08' end='六月 17 ' 08' />
+		<task name='Actual' processId='4' start='七月 1 ' 08' end='九月 12 ' 08' />
+	</tasks>
+</chart>
+<
