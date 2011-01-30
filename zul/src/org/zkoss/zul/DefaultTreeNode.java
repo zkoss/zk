@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.zkoss.util.CollectionsX.ArrayCollection;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  * A general-purpose node in a tree data structure.
@@ -90,7 +91,12 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
 	//@Override
 	public void setData(Object data) {
 		_data = data;
-		//TODO: getModel().fireEvent(...)
+		DefaultTreeModel model = getModel();
+		TreeNode parent = getParent();
+		if (model != null && parent != null) {
+			int index = parent.getIndex(this);
+			model.fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+		}
 	}
 
 	//@Override
@@ -145,7 +151,10 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
 			_children = new ArrayList();
 		_children.add(index, child);
 		((DefaultTreeNode)child).setParent(this);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_ADDED);
 	}
 	//@Override
 	/** Adds a child to this node at the end.
@@ -175,7 +184,10 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
 	public void remove(int index) {
 		DefaultTreeNode child = (DefaultTreeNode)_children.remove(index);
 		child.setParent(null);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
 	}
 	//@Override
 	/**
@@ -185,9 +197,13 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
      * @exception IllegalArgumentException if <code>child</code> is not a child of this node
      */
 	public void remove(TreeNode child) {
+		int index = _children.indexOf(child);
 		if (!_children.remove(child))
 			throw new IllegalArgumentException("not a child");
 		((DefaultTreeNode)child).setParent(null);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
 	}
 }
