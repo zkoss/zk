@@ -19,5 +19,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>Positive intbox can't accept "+123" as value but it should be.</n:p>
-	<intbox constraint="no negative,no zero"/>
+	<intbox id="myIntbox" constraint="no negative,no zero"/>
 </zk>
