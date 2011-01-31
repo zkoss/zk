@@ -32,6 +32,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _calcMinWd(wgt) {
+		var wgtn = wgt.$n(),
+			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
+		if (wgtn)
+			wgtn.style.whiteSpace = 'nowrap';
 		if (wgt.eheadtbl) {
 			wgt.ehead.style.width = '';
 			wgt.eheadtbl.width = '';
@@ -83,7 +87,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.efoottbl.width='100%';
 		if (wgt.ebodytbl)
 			wgt.ebodytbl.width='100%';
-		
+
+		if (wgtn)
+			wgtn.style.whiteSpace = ws;
 		return {width: width, wds: wds};
 	}
 

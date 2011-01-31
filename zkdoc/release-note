@@ -82,6 +82,7 @@ ZK 5.0.6
   3141977: Navigating paging grid with native elem in it causes error (EE only)
   3159848: Closing error box does not update InputElement value (ZK 5 part)
   3168509: Datebox sets wrong date when going from 12/31 to 1/1 next yr
+  3106514: sizedByContent with not visible columns
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
