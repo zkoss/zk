@@ -28,5 +28,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 </li>
 </ul>
 ]]></html>
-	<intbox constraint="no negative,no zero"/>
+	<intbox id="myIntbox" constraint="no negative,no zero"/>
 </zk>
