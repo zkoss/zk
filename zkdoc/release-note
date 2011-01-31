@@ -80,6 +80,7 @@ ZK 5.0.6
   3162596: mesg.TRY_AGAIN not translated in zk.jar
   3167027: Cannot append a treerow in a treeitem
   3141977: Navigating paging grid with native elem in it causes error (EE only)
+  3159848: Closing error box does not update InputElement value (ZK 5 part)
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
