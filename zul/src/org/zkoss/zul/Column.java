@@ -116,7 +116,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * <p>If you use {@link #sort(boolean)} to sort rows ({@link Row}),
 	 * the sort direction is maintained automatically.
 	 * If you want to sort it in customized way, you have to set the
-	 * sort direction manaully.
+	 * sort direction manually.
 	 *
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
