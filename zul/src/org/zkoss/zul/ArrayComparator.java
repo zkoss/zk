@@ -38,8 +38,13 @@ public class ArrayComparator implements Comparator, java.io.Serializable {
 	}
 	//@Override
 	public int compare(Object o1, Object o2) {
-		int v = ((Comparable)Array.get(o1, _index)).compareTo(Array.get(o2, _index));
+		int v = ((Comparable)Array.get(getCompareObject(o1), _index)).compareTo(Array.get(getCompareObject(o2), _index));
 		return _ascending ? v: -v;
+	}
+	private Object getCompareObject(Object o) {
+		if (o instanceof TreeNode)
+			return ((TreeNode) o).getData();
+		return o;
 	}
 	/** Returns the index of the element.
 	 */

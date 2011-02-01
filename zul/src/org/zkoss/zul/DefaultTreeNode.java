@@ -29,7 +29,7 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @author tomyeh
  * @since 5.0.6
  */
-public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
+public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializable  {
 	private DefaultTreeModel _model;
 	private DefaultTreeNode _parent;
 	/** List<DefaultTreeNode> */
@@ -97,6 +97,11 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
 			int index = parent.getIndex(this);
 			model.fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
 		}
+	}
+	
+	//@Override
+	public List getChildren(){
+		return _children;
 	}
 
 	//@Override
@@ -205,5 +210,9 @@ public class DefaultTreeNode implements TreeNode, java.io.Serializable  {
 		DefaultTreeModel model = getModel();
 		if (model != null)
 			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+	}
+	public int compareTo(Object obj) {
+		return ((Comparable)_data).compareTo(((DefaultTreeNode) obj).getData());
+		
 	}
 }

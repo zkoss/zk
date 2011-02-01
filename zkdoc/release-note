@@ -9,6 +9,7 @@ ZK 5.0.6
   3105037: Show the locale format in error messages
   3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
   3152268: TreeModel: provide an implementation that is mutable
+  3169396: Tree supports sorting
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout

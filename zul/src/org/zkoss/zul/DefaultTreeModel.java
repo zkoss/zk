@@ -12,6 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+
+import org.zkoss.zul.event.TreeDataEvent;
+
 /**
  * A simple tree data model that uses {@link TreeNode} to represent a tree.
  * Thus the whole tree of data must be loaded into memory, and each node
@@ -32,7 +38,9 @@ package org.zkoss.zul;
  * @since 5.0.6
  */
 public class DefaultTreeModel extends AbstractTreeModel
-implements java.io.Serializable {
+implements TreeModelExt, java.io.Serializable {
+
+	private static final long serialVersionUID = 20110131094811L;
 
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
@@ -60,5 +68,34 @@ implements java.io.Serializable {
 	//@Override
 	public int getIndexOfChild(Object parent, Object child) {
 		return ((TreeNode)parent).getIndex((TreeNode)child);
+	}
+	
+	//-- TreeModelExt --//
+	/** Sorts the data.
+	 *
+	 * @param cmpr the comparator.
+	 * @param ascending whether to sort in the ascending order.
+	 * It is ignored since this implementation uses cmprt to compare.
+	 */
+	public void sort(Comparator cmpr, final boolean ascending) {
+		TreeNode root = (TreeNode) getRoot();
+		if (root != null) {
+			sort0(root, cmpr);
+			fireEventDown(root);
+		}
+	}
+	
+	private void sort0(TreeNode node, Comparator cmpr) {
+		if (node.getChildren() == null) return;
+		Collections.sort(node.getChildren(), cmpr);
+		for (Iterator it = node.getChildren().iterator(); it.hasNext();)
+			sort0((TreeNode) it.next(), cmpr);
+	}
+	
+	private void fireEventDown(TreeNode node) {
+		if (node.getChildCount() == 0) return;
+		fireEvent(node,  0, node.getChildCount() - 1,TreeDataEvent.CONTENTS_CHANGED);
+		for (Iterator it = node.getChildren().iterator(); it.hasNext();)
+			fireEventDown((TreeNode) it.next());
 	}
 }

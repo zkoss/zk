@@ -82,17 +82,36 @@ div.z-treefooter-cnt, div.z-treecol-cnt{
 	word-wrap: break-word;
 }
 <%-- ZK Treecol's sizing --%>
-.z-tree-header .z-treecol.z-treecol-sizing, .z-tree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
-	cursor: e-resize;
-}
-.z-dottree-header .z-treecol.z-treecol-sizing, .z-dottree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
-	cursor: e-resize;
-}
-.z-filetree-header .z-treecol.z-treecol-sizing, .z-filetree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
-	cursor: e-resize;
-}
+.z-tree-header .z-treecol.z-treecol-sizing, .z-tree-header .z-treecol.z-treecol-sizing .z-treecol-cnt,
+.z-dottree-header .z-treecol.z-treecol-sizing, .z-dottree-header .z-treecol.z-treecol-sizing .z-treecol-cnt,
+.z-filetree-header .z-treecol.z-treecol-sizing, .z-filetree-header .z-treecol.z-treecol-sizing .z-treecol-cnt,
 .z-vfiletree-header .z-treecol.z-treecol-sizing, .z-vfiletree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
 	cursor: e-resize;
+}
+<%-- ZK Treecol's sorting --%>
+div.z-tree-header th.z-treecol-sort div.z-treecol-cnt,
+div.z-dottree-header th.z-treecol-sort div.z-treecol-cnt,
+div.z-filetree-header th.z-treecol-sort div.z-treecol-cnt,
+div.z-vfiletree-header th.z-treecol-sort div.z-treecol-cnt {
+	cursor: pointer; padding-right: 9px;
+	background: transparent no-repeat 99% center;
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
+}
+div.z-tree-header th.z-treecol-sort-asc div.z-treecol-cnt,
+div.z-dottree-header th.z-treecol-sort-asc div.z-treecol-cnt,
+div.z-filetree-header th.z-treecol-sort-asc div.z-treecol-cnt,
+div.z-vfiletree-header th.z-treecol-sort-asc div.z-treecol-cnt {
+	cursor: pointer; padding-right: 9px;
+	background: transparent no-repeat 99% center;
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+}
+div.z-tree-header th.z-treecol-sort-dsc div.z-treecol-cnt,
+div.z-dottree-header th.z-treecol-sort-dsc div.z-treecol-cnt,
+div.z-filetree-header th.z-treecol-sort-dsc div.z-treecol-cnt,
+div.z-vfiletree-header th.z-treecol-sort-dsc div.z-treecol-cnt {
+	cursor: pointer; padding-right: 9px;
+	background: transparent no-repeat 99% center;
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 <%-- Treerow --%>
 tr.z-treerow, tr.z-treerow a, tr.z-treerow a:visited {
