@@ -59,6 +59,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 	 */
 	getTree: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 	/** Returns the mesh body that this belongs to.
+	 * @since 5.0.6
 	 * @return Tree
 	 */
 	getMeshBody: function () {
@@ -67,10 +68,8 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 	},
 	checkClientSort_: function (ascending) {
 		var tree;
-		if (!this.getMeshBody() || !(tree = this.getTree()) || ('paging' == tree._mold)) 
-			return false;
-		
-		return this.$supers('checkClientSort_', arguments);
+		return !(!this.getMeshBody() || !(tree = this.getTree()) || ('paging' == tree._mold))
+				&& this.$supers('checkClientSort_', arguments);
 	},
 	replaceCavedChildrenInOrder_: function (ascending) {
 		var mesh = this.getMeshWidget(),

@@ -36,6 +36,8 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	private ArrayList _children;
 	private Object _data;
 	private final boolean _leaf;
+	/** Whether to treat null as the maximum value. */
+	private boolean _maxnull;
 
 	/** Creates a branch (non-leaf) node.
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
@@ -44,11 +46,21 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
 	public DefaultTreeNode(Object data, Collection children) {
+		this(data, children, false);
+	}
+	/** Creates a branch (non-leaf) node.
+	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
+	 * If null or empty, it means
+	 * no children at all. However, it still allows to add children.
+	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
+	 */
+	public DefaultTreeNode(Object data, Collection children, boolean nullAsMax) {
 		_data = data;
 		_leaf = false;
 		if (children != null)
 			for (Iterator it = children.iterator(); it.hasNext();)
 				add((DefaultTreeNode)it.next());
+		_maxnull = nullAsMax;
 	}
 	/** Creates a branch (non-leaf) node.
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
@@ -62,8 +74,17 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	/** Creates a leaf node, i.e., it won't allow any children.
 	 */
 	public DefaultTreeNode(Object data) {
+		this(data, false);
+	}
+	
+	/** Creates a leaf node, i.e., it won't allow any children.
+	 * @param nullAsMax whether to consider null as the maximum value.
+	 * If false, null is considered as the minimum value.
+	 */
+	public DefaultTreeNode(Object data, boolean nullAsMax) {
 		_data = data;
 		_leaf = true;
+		_maxnull = nullAsMax;
 	}
 
 	/** Removes the receiver from its parent.
@@ -212,7 +233,11 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
 	}
 	public int compareTo(Object obj) {
-		return ((Comparable)_data).compareTo(((DefaultTreeNode) obj).getData());
-		
+		DefaultTreeNode node = (DefaultTreeNode) obj;
+		if (_data == null) 
+			return node == null ? 0: 
+				node.getData() == null? 0: _maxnull ? 1: -1;
+		if (node == null) return _maxnull ? -1: 1;
+		return ((Comparable)_data).compareTo(node.getData());
 	}
 }

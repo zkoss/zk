@@ -142,6 +142,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	/** Check the status whether can be sort in client side.
 	 * @param String ascending
 	 * @return boolean
+	 * @since 5.0.6
 	 * @see {@link #sort(String, jq.Event)}
 	 */
 	checkClientSort_: function (ascending) {
@@ -168,6 +169,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	},
 	/** Replaced the child widgets with the specified order.
 	 * @param String ascending
+	 * @since 5.0.6
 	 * @see {@link #sort(String, jq.Event)}
 	 */
 	replaceCavedChildrenInOrder_: function (ascending) {

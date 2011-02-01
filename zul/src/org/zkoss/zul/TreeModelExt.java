@@ -21,7 +21,7 @@ import java.util.Comparator;
 /**
  * An extra interface that can be implemented with {@link TreeModel}
  * to control the sorting of the data model.
- *
+ * @since 5.0.6
  * @author jimmy
  */
 public interface TreeModelExt {
