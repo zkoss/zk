@@ -143,7 +143,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	 * @param String ascending
 	 * @return boolean
 	 * @since 5.0.6
-	 * @see {@link #sort(String, jq.Event)}
+	 * @see #sort
 	 */
 	checkClientSort_: function (ascending) {
 		var dir = this.getSortDirection();
@@ -170,7 +170,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	/** Replaced the child widgets with the specified order.
 	 * @param String ascending
 	 * @since 5.0.6
-	 * @see {@link #sort(String, jq.Event)}
+	 * @see #sort
 	 */
 	replaceCavedChildrenInOrder_: function (ascending) {
 		var mesh = this.getMeshWidget(),
