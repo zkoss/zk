@@ -79,7 +79,7 @@ public class TreeitemComparator implements Comparator {
 	 * the value implements Comparable.
 	 *
 	 * <p>Note: it compares the returned value of {@link Treecell#getLabel}.
-	 * If you want to compare {@link Treecell#getValue}.,
+	 * If you want to compare {@link Treeitem#getValue}.,
 	 * use {@link #TreeitemComparator(int, boolean, boolean, boolean)}
 	 * instead.
 	 *
@@ -128,7 +128,7 @@ public class TreeitemComparator implements Comparator {
 	 * is used.
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
-	 * @param byValue whether to compare {@link Treecell#getValue}.
+	 * @param byValue whether to compare {@link Treeitem#getValue}.
 	 * If false, it compares {@link Treecell#getLabel}.
 	 * If true, it assumes the value returned by {@link Treeitem#getValue}
 	 * implements Comparable.
