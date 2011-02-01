@@ -534,7 +534,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * If found, it calls {@link #beforeCtrlKeys_} for each widget that were
 	 * searched, and then fire the event.
 	 * @param zk.Event evt the widget event.
-	 * @return true if the event has been processed
+	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
 	afterKeyDown_: function (evt) {
