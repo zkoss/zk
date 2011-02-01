@@ -107,9 +107,9 @@ public class TreeitemComparator implements Comparator {
 	 * is used.
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
-	 * @param byValue whether to compare {@link Treecell#getValue}.
+	 * @param byValue whether to compare {@link Treeitem#getValue}.
 	 * If false, it compares {@link Treecell#getLabel}.
-	 * If true, it assumes the value returned by {@link Treecell#getValue}
+	 * If true, it assumes the value returned by {@link Treeitem#getValue}
 	 * implements Comparable.
 	 * It is ignored if the index is -1.
 	 */
@@ -130,7 +130,7 @@ public class TreeitemComparator implements Comparator {
 	 * @param ignoreCase whether to sort case-insensitive
 	 * @param byValue whether to compare {@link Treecell#getValue}.
 	 * If false, it compares {@link Treecell#getLabel}.
-	 * If true, it assumes the value returned by {@link Treecell#getValue}
+	 * If true, it assumes the value returned by {@link Treeitem#getValue}
 	 * implements Comparable.
 	 * It is ignored if the index is -1.
 	 * @param nullAsMax whether to consider null as the maximum value.
@@ -148,7 +148,7 @@ public class TreeitemComparator implements Comparator {
 	/** Compares with the column which the tree header is at.
 	 *
 	 * <p>Note: it compares the returned value of {@link Treecell#getLabel}.
-	 * If you want to compare {@link Treecell#getValue}.,
+	 * If you want to compare {@link Treeitem#getValue}.,
 	 * use {@link #TreeitemComparator(Treecol, boolean, boolean, boolean)}
 	 * instead.
 	 *
@@ -167,7 +167,7 @@ public class TreeitemComparator implements Comparator {
 	 *
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
-	 * @param byValue whether to compare {@link Treecell#getValue}.
+	 * @param byValue whether to compare {@link Treeitem#getValue}.
 	 * If false, it compares {@link Treecell#getLabel}.
 	 */
 	public TreeitemComparator(Treecol treecol, boolean ascending,
@@ -178,7 +178,7 @@ public class TreeitemComparator implements Comparator {
 	 *
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
-	 * @param byValue whether to compare {@link Treecell#getValue}.
+	 * @param byValue whether to compare {@link Treeitem#getValue}.
 	 * If false, it compares {@link Treecell#getLabel}.
 	 * @param nullAsMax whether to consider null as the maximum value.
 	 * If false, null is considered as the minimum value.
