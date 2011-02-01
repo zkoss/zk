@@ -1,0 +1,24 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on each of the following buttons. If in any case the Panel does not resize to fit the height (you need to see the complete bottom of Panel), it is a bug.</li>
+		</ol>
+	]]></html>
+	<panel title="Panel" border="normal" framable="true" width="300px" height="300px">
+		<toolbar id="tbar1" visible="false">
+			Toolbar 1
+		</toolbar>
+		<panelchildren>
+			Panelchildren Content
+		</panelchildren>
+		<toolbar id="tbar2" visible="false">
+			Toolbar 2
+		</toolbar>
+		<toolbar id="tbar3" visible="false">
+			Toolbar 3
+		</toolbar>
+	</panel>
+	<button label="Show Toolbar 1" onClick="tbar1.visible = true" />
+	<button label="Show Toolbar 2" onClick="tbar2.visible = true" />
+	<button label="Show Toolbar 3" onClick="tbar3.visible = true" />
+</zk>
