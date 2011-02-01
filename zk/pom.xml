@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zk</artifactId>
 	<properties>
-		<zk.version>5.0.6.FL.20110121</zk.version>
+		<zk.version>5.0.6.FL.20110201</zk.version>
 	</properties>
 	<version>${zk.version}</version>
 	<packaging>jar</packaging>
