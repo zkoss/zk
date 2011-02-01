@@ -87,6 +87,7 @@ ZK 5.0.6
   3166874: Clicking on Toolbarbutton in Caption does not blur textbox
   3147199: ZUL schema not allow tablelayout used in div
   3107026: Button can't be clicked if locale is TR in IE8
+  3512678: Panel does not resize when its Toolbar toggles visibility
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

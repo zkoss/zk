@@ -935,6 +935,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.fbar = null;
 		if (!this.childReplacing_)
 			this.rerender();
+	},
+	onChildVisible_: function (child) {
+		this.$supers('onChildVisible_', arguments);
+		if((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
+			this._fixHgh();
 	}
 }, { //static
 	//drag
