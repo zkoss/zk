@@ -88,6 +88,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	}
 
 	/** Returns the sort direction.
+	 * @since 5.0.6
 	 * <p>Default: "natural".
 	 */
 	public String getSortDirection() {
@@ -220,6 +221,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	}
 	/** Sets the ascending sorter with the class name, or null for
 	 * no sorter for the ascending order.
+	 * @since 5.0.6
 	 */
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
@@ -232,6 +234,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	}
 
 	/** Returns the descending sorter, or null if not available.
+	 * @since 5.0.6
 	 */
 	public Comparator getSortDescending() {
 		return _sortDsc;
@@ -240,6 +243,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	 * descending order.
 	 *
 	 * @param sorter the comparator used to sort the ascending order.
+	 * @since 5.0.6
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
@@ -253,6 +257,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	}
 	/** Sets the descending sorter with the class name, or null for
 	 * no sorter for the descending order.
+	 * @since 5.0.6
 	 */
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
@@ -335,6 +340,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	 * @return whether the rows are sorted.
 	 * @exception UiException if {@link Tree#getModel} is not
 	 * null but {@link TreeModelExt} is not implemented.
+	 * @since 5.0.6
 	 */
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
@@ -385,6 +391,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		return true;
 	}
 	/** Sorts the treechildren.
+	 * @since 5.0.6
 	 */
 	private static void sort0(Treechildren treechildren, Comparator cmpr) {
 		if (treechildren == null) return;
@@ -405,6 +412,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	 * direction ({@link #getSortDirection}) is.
 	 * If false, this method is the same as {@link #sort(boolean)}.
 	 * @return whether the treechildren are sorted.
+	 * @since 5.0.6
 	 */
 	public boolean sort(boolean ascending, boolean force) {
 		if (force) setSortDirection("natural");
@@ -414,6 +422,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	//-- event listener --//
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
+	 * @since 5.0.6
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
