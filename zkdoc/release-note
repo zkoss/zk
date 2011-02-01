@@ -83,6 +83,7 @@ ZK 5.0.6
   3159848: Closing error box does not update InputElement value (ZK 5 part)
   3168509: Datebox sets wrong date when going from 12/31 to 1/1 next yr
   3106514: sizedByContent with not visible columns
+  3166874: Clicking on Toolbarbutton in Caption does not blur textbox
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

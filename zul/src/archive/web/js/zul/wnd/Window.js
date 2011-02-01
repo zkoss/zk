@@ -83,13 +83,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _ignoremove(dg, pointer, evt) {
 		var el = dg.node,
-			wgt = dg.control;
-		switch (evt.domTarget) {
+			wgt = dg.control,
+			tar = evt.domTarget, wtar;
+		switch (tar) {
 		case wgt.$n('close'):
 		case wgt.$n('max'):
 		case wgt.$n('min'):
 			return true; //ignore special buttons
 		}
+		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
+			return true; //ignore child widget of caption, Bug B50-3166874
 		if (!wgt.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
 		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
