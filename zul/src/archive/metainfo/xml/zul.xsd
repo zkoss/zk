@@ -583,6 +583,7 @@
 			<xs:element ref="spinner" />
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
+			<xs:element ref="tablelayout" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
@@ -2612,7 +2613,6 @@
 			<xs:element ref="south" />
 			<xs:element ref="tab" />
 			<xs:element ref="tablechildren" />
-			<xs:element ref="tablelayout" />
 			<xs:element ref="tabpanel" />
 			<xs:element ref="tabpanels" />
 			<xs:element ref="tabs" />

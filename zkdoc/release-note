@@ -84,6 +84,7 @@ ZK 5.0.6
   3168509: Datebox sets wrong date when going from 12/31 to 1/1 next yr
   3106514: sizedByContent with not visible columns
   3166874: Clicking on Toolbarbutton in Caption does not blur textbox
+  3147199: ZUL schema not allow tablelayout used in div
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
