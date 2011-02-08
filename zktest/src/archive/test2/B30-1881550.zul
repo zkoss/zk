@@ -20,29 +20,28 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>Error Stripe with Grid and Listbox in Modal Mode</n:p>
 	<window title="Grid Demo" border="normal" width="360px" closable="true">
-	<grid>
-		<rows>
-			<row>
-				<label value="File:"/>
-				<textbox width="99%"/>
-			</row>
-			<row>
-				<label value="Type:"/>
-				<hbox>
-					<listbox rows="1" mold="select">
-						<listitem label="Java Files,(*.java)"/>
-						<listitem label="All Files,(*.*)"/>
-					</listbox>
-					<button label="Browse..."/>
-				</hbox>
-			</row>
-			<row>
-				<label value="Options:"/>
-				<textbox rows="3" width="99%"/>
-			</row>
-		</rows>
-	</grid>
-<button label="doModal" onClick="self.parent.doModal();"/>
-</window>
-			
+		<grid>
+			<rows>
+				<row>
+					<label value="File:"/>
+					<textbox width="99%"/>
+				</row>
+				<row>
+					<label value="Type:"/>
+					<hbox>
+						<listbox rows="1" mold="select">
+							<listitem label="Java Files,(*.java)"/>
+							<listitem label="All Files,(*.*)"/>
+						</listbox>
+						<button label="Browse..."/>
+					</hbox>
+				</row>
+				<row>
+					<label value="Options:"/>
+					<textbox rows="3" width="99%"/>
+				</row>
+			</rows>
+		</grid>
+		<button id="doModal" label="doModal" onClick="self.parent.doModal();"/>
+	</window>	
 </zk>
