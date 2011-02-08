@@ -45,6 +45,6 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 							this._min + " - " + this._max : ">= " + this._min : "<= " + this._max);
 				}	
 		}
-		return msg ? msg : this.$supers('validate',arguments);
+		return msg || this.$supers('validate',arguments);
 	}
 });
