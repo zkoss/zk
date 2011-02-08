@@ -12,6 +12,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<library-property>
+		<name>org.zkoss.zk.ui.WebApp.name</name>
+		<value>ZK Sandbox</value>
+	</library-property>
+
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
 	<client-config>

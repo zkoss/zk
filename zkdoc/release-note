@@ -2,6 +2,7 @@
 ZK 5.0.6
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
+  3175503: A way to specify the application's name in zk.xml
   3138362: Add a Doublespinner comopnent to support double value
   3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
   3148425: GroupsModelArray shall handle tabular data better
