@@ -123,13 +123,31 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-
 	<!--
 		Turn off if you want to disable the auto forward for macro component.
 		Default: false
 	<library-property>
 		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
 		<value>true</value>
+	</library-property>
+	-->
+
+	<!--
+		Turn off if you want to disable the wiring of variables defined in
+		zscript
+		Default: true
+	<library-property>
+		<name>org.zkoss.zk.ui.composer.autowire.zscript</name>
+		<value>false</value>
+	</library-property>
+	-->
+	<!--
+		Turn off if you want to disable the wiring of variables defined in
+		variable resolvers (XEL)
+		Default: true
+	<library-property>
+		<name>org.zkoss.zk.ui.composer.autowire.xel</name>
+		<value>false</value>
 	</library-property>
 	-->
 	

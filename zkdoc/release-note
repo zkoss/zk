@@ -17,6 +17,7 @@ ZK 5.0.6
   3158054: Optimize UiVisualizer for hug number of updates
   3161425: Panel's border and framable shall be merged into one
   2866506: Data Binding shall support GroupsModel with Listbox/Grid
+  3175481: A way to ignore the wiring of zscript and xel globally
   3166312: A way to know detail of a long exec blocking others
 
 * Bugs
