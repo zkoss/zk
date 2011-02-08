@@ -360,8 +360,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						max = totalsz;
 				}
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
-				var pb = 0;
-				while (n && n.nodeName != 'BODY' && n != wgtn) { //bug #3172785.
+				var pb = 0, body = document.body;
+				while (n && n != body && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderHeight();
 					else {
@@ -490,9 +490,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				
 				//n might not be widget's element, add up the pad/border/margin in between
-				var pb = 0;
-					
-				while (n && n.nodeName != 'BODY' && n != wgtn) { //bug #3172785.
+				var pb = 0, body = document.body;
+				while (n && n != body && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderWidth();
 					else {
@@ -884,7 +883,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _topnode(n) {
-		for (var v; n && n != document.body; n = n.parentNode) //no need to check vparentNode
+		for (var v, body = document.body; n && n != body; n = n.parentNode) //no need to check vparentNode
 			if ((v=n.style) && ((v=v.position) == 'absolute' || v == 'relative'))
 				return n;
 	}
