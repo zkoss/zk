@@ -535,7 +535,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
 	},
-	close: function (silent) {
+	close: function (silent, forceUpdate) {
 		var db = this.parent,
 			pp = db.$n("pp");
 
@@ -553,9 +553,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (btn)
 			jq(btn).removeClass(zcls + "-btn-over");
 
-		if (silent)
+		if (silent || forceUpdate)
 			db.updateChange_();
-		else
+		if (!silent)
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
@@ -654,7 +654,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		db.getInputNode().value = db.coerceToString_(date);
 
 		if (this._view == 'day' && evt.data.shallClose !== false) {
-			this.close();
+			this.close(false, true);
 			db._inplaceout = true;
 			
 			// Bug 3122159

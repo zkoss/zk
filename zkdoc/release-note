@@ -19,6 +19,7 @@ ZK 5.0.6
   2866506: Data Binding shall support GroupsModel with Listbox/Grid
   3175481: A way to ignore the wiring of zscript and xel globally
   3166312: A way to know detail of a long exec blocking others
+  3175487: Datebox should fire onChange when select date via Calendar
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
