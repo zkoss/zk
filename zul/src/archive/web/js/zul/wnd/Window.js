@@ -1189,6 +1189,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('afterChildrenFlex_', arguments);
 		if (_isModal(this._mode))
 			_updDomPos(this, true); //force re-position since window width might changed.
+	},
+	//@Override, do not count size of floating window in flex calculation. bug #3172785.
+	ignoreFlexSize_: function (type) {
+		return this._mode != 'embedded';
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

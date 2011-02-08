@@ -277,20 +277,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						vmax = 0;
 					if (cwgt){ //try child widgets
 						for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
-							var c = cwgt.$n();
-							if (c) { //node might not exist if rod on
-								n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
-								zkn = zk(n);
-								var ntop = n.offsetTop,
-									noffParent = n.offsetParent,
-									tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
-									tbp = tp + zkn.sumStyles("t", jq.borders);
-								//bug# 2997862: vflex="min" not working on nested tabpanel
-								var zkc = zk(c),
-									sameOffParent = c.offsetParent == noffParent,
-									sz = 0;
-								if (!cwgt.ignoreFlexSize_('h')) {
-									sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
+							if (!cwgt.ignoreFlexSize_('h')) {
+								var c = cwgt.$n();
+								if (c) { //node might not exist if rod on
+									n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
+									zkn = zk(n);
+									var ntop = n.offsetTop,
+										noffParent = n.offsetParent,
+										tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+										tbp = tp + zkn.sumStyles("t", jq.borders),
+										//bug# 2997862: vflex="min" not working on nested tabpanel
+										zkc = zk(c),
+										sameOffParent = c.offsetParent == noffParent,
+										sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
 									if (cwgt._vflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._vflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
@@ -306,14 +305,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										if (!zk.safari || bm >= 0)
 											sz += bm;
 									}
+									//bug #3006276: East/West bottom cut if East/West higher than Center.
+									if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
+										vmax = sz;
+									else if (cwgt._sumFlexHeight) //@See North/South
+										totalsz += sz;
+									else if (sz > max)
+										max = sz;
 								}
-								//bug #3006276: East/West bottom cut if East/West higher than Center.
-								if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
-									vmax = sz;
-								else if (cwgt._sumFlexHeight) //@See North/South
-									totalsz += sz;
-								else if (sz > max)
-									max = sz;
 							}
 						}
 					} else {
@@ -362,7 +361,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
 				var pb = 0;
-				while (n && n != wgtn) {
+				while (n && n.nodeName != 'BODY' && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderHeight();
 					else {
@@ -413,20 +412,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					var totalsz = 0;
 					if (cwgt) { //try child widgets
 						for (; cwgt; cwgt = cwgt.nextSibling) { //bug#3132199: hflex="min" in hlayout
-							var c = cwgt.$n();
-							if (c) { //node might not exist if rod on
-								n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
-								zkn = zk(n);
-								var	nleft = n.offsetLeft,
-									noffParent = n.offsetParent,
-									lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
-									lbp = lp + zkn.sumStyles("l", jq.borders); 
-								//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
-								var zkc = zk(c),
-									sameOffParent = c.offsetParent == noffParent,
-									sz = 0;
-								if (!cwgt.ignoreFlexSize_('w')) {
-									sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
+							if (!cwgt.ignoreFlexSize_('w')) {
+								var c = cwgt.$n();
+								if (c) { //node might not exist if rod on
+									n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
+									zkn = zk(n);
+									var	nleft = n.offsetLeft,
+										noffParent = n.offsetParent,
+										lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+										lbp = lp + zkn.sumStyles("l", jq.borders), 
+										//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
+										zkc = zk(c),
+										sameOffParent = c.offsetParent == noffParent,
+										sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
 									if (cwgt._hflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._hflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._hflexsz;
@@ -494,7 +492,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//n might not be widget's element, add up the pad/border/margin in between
 				var pb = 0;
 					
-				while (n && n != wgtn) {
+				while (n && n.nodeName != 'BODY' && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderWidth();
 					else {
@@ -554,22 +552,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//normal triggering
 		var r1 = p1 = this,
 			j1 = -1;
-		if (this._hflex == 'min' && this._hflexsz === undefined) {
+		if (this._hflex == 'min' && this._hflexsz === undefined && !this.ignoreFlexSize_('w')) {
 			++j1;
 			while ((p1 = p1.parent) && p1._hflex == 'min') {
 				delete p1._hflexsz;
 				r1 = p1;
 				++j1;
+				if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
+					break;
 			}
 		}
 		var r2 = p2 = this,
 			j2 = -1;
-		if (this._vflex == 'min' && this._vflexsz === undefined) {
+		if (this._vflex == 'min' && this._vflexsz === undefined && !this.ignoreFlexSize_('h')) {
 			++j2;
 			while ((p2 = p2.parent) && p2._vflex == 'min') {
 				delete p2._vflexsz;
 				r2 = p2;
 				++j2;
+				if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
+					break;
 			}
 		}
 		if (j1 > 0 || j2 > 0)
