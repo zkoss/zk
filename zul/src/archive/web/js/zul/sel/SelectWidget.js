@@ -1109,6 +1109,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())
 			this._syncFocus(child);
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		var selItems = this._selItems, len;
+		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && (len = selItems.length))
+			this._syncFocus(selItems[len - 1]);
 	}
 });
 
