@@ -89,6 +89,7 @@ ZK 5.0.6
   3107026: Button can't be clicked if locale is TR in IE8
   3512678: Panel does not resize when its Toolbar toggles visibility
   3169411: Cannot show custom error message in Spinner
+  3172791: trendy button don't pick up style
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
