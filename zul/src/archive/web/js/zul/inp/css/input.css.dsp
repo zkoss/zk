@@ -10,8 +10,16 @@
 	 filter: alpha(opacity=60);
 }
 
-.z-textbox-disd,   .z-decimalbox-disd,   .z-intbox-disd,   .z-longbox-disd,   .z-doublebox-disd,
-.z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
+.z-textbox-disd,
+.z-textbox-disd *, 
+.z-decimalbox-disd, 
+.z-decimalbox-disd *, 
+.z-intbox-disd, 
+.z-intbox-disd *, 
+.z-longbox-disd,
+.z-longbox-disd *, 
+.z-doublebox-disd, 
+.z-doublebox-disd * {
 	color: #AAA !important;
 	cursor: default !important;
 }
@@ -28,11 +36,11 @@
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 }
-.z-textbox-focus, .z-textbox-focus input,
-.z-decimalbox-focus, .z-decimalbox-focus input,
-.z-intbox-focus, .z-intbox-focus input,
-.z-longbox-focus, .z-longbox-focus input,
-.z-doublebox-focus, .z-doublebox-focus input {
+.z-textbox-focus,
+.z-decimalbox-focus,
+.z-intbox-focus,
+.z-longbox-focus,
+.z-doublebox-focus {
 	border: 1px solid #90BCE6;
 }
 .z-textbox-text-invalid,
@@ -79,7 +87,164 @@
 .z-doublebox-inplace {
 	padding: 3px 2px;
 }
+.z-textbox-disd *, 
+.z-decimalbox-disd *, 
+.z-intbox-disd *, 
+.z-longbox-disd *, 
+.z-doublebox-disd * {
+	filter: alpha(opacity=60);
+}
 </c:if>
+
+<%-- rounded --%>
+.z-textbox-rounded,
+.z-decimalbox-rounded,
+.z-intbox-rounded,
+.z-longbox-rounded,
+.z-doublebox-rounded {
+	display: -moz-inline-box;
+	display: inline-block;
+}
+.z-textbox-rounded-inp,
+.z-decimalbox-rounded-inp,
+.z-intbox-rounded-inp,
+.z-longbox-rounded-inp,
+.z-doublebox-rounded-inp {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+	background: transparent repeat-x 0 0;
+	<c:if test="${c:isSafari()}">
+		margin: 0;
+	</c:if>
+	<c:if test="${c:isOpera()}">
+		font-style: normal;
+	</c:if>
+	height: 14px;
+	border: 0;
+	padding: 5px 4px;
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
+}
+.z-textbox-rounded .z-textbox-rounded-right-edge,
+.z-decimalbox-rounded .z-decimalbox-rounded-right-edge,
+.z-intbox-rounded .z-intbox-rounded-right-edge,
+.z-longbox-rounded .z-longbox-rounded-right-edge,
+.z-doublebox-rounded .z-doublebox-rounded-right-edge {
+	background: transparent no-repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});
+	background-position: -19px -120px;
+	vertical-align: top; 
+	overflow: hidden;
+	display: -moz-inline-box; 
+	display: inline-block;
+	border: 0;
+	height: 24px;
+	width: 5px;
+	cursor: default;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
+}
+.z-textbox-rounded-focus .z-textbox-rounded-inp,
+.z-decimalbox-rounded-focus .z-decimalbox-rounded-inp,
+.z-intbox-rounded-focus .z-intbox-rounded-inp,
+.z-longbox-rounded-focus .z-longbox-rounded-inp,
+.z-doublebox-rounded-focus .z-doublebox-rounded-inp {
+	outline: none;
+}
+
+.z-textbox-rounded input.z-textbox-rounded-text-invalid,
+.z-decimalbox-rounded input.z-decimalbox-rounded-text-invalid,
+.z-intbox-rounded input.z-intbox-rounded-text-invalid,
+.z-longbox-rounded input.z-longbox-rounded-text-invalid,
+.z-doublebox-rounded input.z-doublebox-rounded-text-invalid {
+	background: transparent repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+}
+.z-textbox-rounded input.z-textbox-rounded-text-invalid + i.z-textbox-rounded-right-edge,
+.z-decimalbox-rounded input.z-decimalbox-rounded-text-invalid + i.z-decimalbox-rounded-right-edge,
+.z-intbox-rounded input.z-intbox-rounded-text-invalid + i.z-intbox-rounded-right-edge,
+.z-longbox-rounded input.z-longbox-rounded-text-invalid + i.z-longbox-rounded-right-edge,
+.z-doublebox-rounded input.z-doublebox-rounded-text-invalid + i.z-doublebox-rounded-right-edge {
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-position: 0 -24px;
+}
+
+.z-textbox-rounded-disd,
+.z-decimalbox-rounded-disd,
+.z-intbox-rounded-disd,
+.z-longbox-rounded-disd,
+.z-doublebox-rounded-disd {
+	opacity: .6;
+	-moz-opacity: .6;
+	filter: alpha(opacity=60);
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+}
+.z-textbox-rounded-disd, .z-textbox-rounded-disd *,
+.z-decimalbox-rounded-disd, .z-decimalbox-rounded-disd *,
+.z-intbox-rounded-disd, .z-intbox-rounded-disd *,
+.z-longbox-rounded-disd, .z-longbox-rounded-disd *,
+.z-doublebox-rounded-disd, .z-doublebox-rounded-disd * {
+	cursor: default !important;
+	color: #303030 !important;
+}
+
+.z-textbox-rounded-readonly,
+.z-decimalbox-rounded-readonly,
+.z-intbox-rounded-readonly,
+.z-longbox-rounded-readonly,
+.z-doublebox-rounded-readonly {
+	background-position: 0 -72px;
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')});	
+}
+.z-textbox-rounded-real-readonly .z-textbox-rounded-right-edge,
+.z-decimalbox-rounded-real-readonly .z-decimalbox-rounded-right-edge,
+.z-intbox-rounded-real-readonly .z-intbox-rounded-right-edge,
+.z-longbox-rounded-real-readonly .z-longbox-rounded-right-edge,
+.z-doublebox-rounded-real-readonly .z-doublebox-rounded-right-edge {
+	background-position: -19px -192px;
+}
+
+.z-textbox-rounded-focus .z-textbox-rounded-readonly,
+.z-decimalbox-rounded-focus .z-decimalbox-rounded-readonly,
+.z-intbox-rounded-focus .z-intbox-rounded-readonly,
+.z-longbox-rounded-focus .z-longbox-rounded-readonly,
+.z-doublebox-rounded-focus .z-doublebox-rounded-readonly {
+	background-position: 0 -96px;
+}
+.z-textbox-rounded-focus .z-textbox-rounded-right-edge,
+.z-decimalbox-rounded-focus .z-decimalbox-rounded-right-edge,
+.z-intbox-rounded-focus .z-intbox-rounded-right-edge,
+.z-longbox-rounded-focus .z-longbox-rounded-right-edge,
+.z-doublebox-rounded-focus .z-doublebox-rounded-right-edge {
+	background-position: -19px -120px !important;
+}
+.z-textbox-rounded-focus .z-textbox-rounded-readonly + .z-textbox-rounded-right-edge,
+.z-decimalbox-rounded-focus .z-decimalbox-rounded-readonly + .z-decimalbox-rounded-right-edge,
+.z-intbox-rounded-focus .z-intbox-rounded-readonly + .z-intbox-rounded-right-edge,
+.z-longbox-rounded-focus .z-longbox-rounded-readonly + .z-longbox-rounded-right-edge,
+.z-doublebox-rounded-focus .z-doublebox-rounded-readonly + .z-doublebox-rounded-right-edge {
+	background-position: -19px -216px !important;
+}
+
+<%-- rounded inplace --%>
+.z-textbox-rounded-inplace *,
+.z-decimalbox-rounded-inplace *,
+.z-intbox-rounded-inplace *,
+.z-longbox-rounded-inplace *,
+.z-doublebox-rounded-inplace * {
+	background-image: none !important;
+}
+.z-textbox-rounded-focus *,
+.z-decimalbox-rounded-focus *,
+.z-intbox-rounded-focus *,
+.z-longbox-rounded-focus *,
+.z-doublebox-rounded-focus * {
+	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.gif')}) !important;
+}
+
 <%-- error box --%>
 .z-errbox {
 	font-family: ${fontFamilyC};
@@ -145,11 +310,6 @@
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.png')});
 }
 
-<c:if test="${c:isExplorer()}">
-.z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
-	filter: alpha(opacity=60);
-}
-
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 .z-arrow-d {
@@ -190,5 +350,4 @@ div.z-errbox div.z-popup-cl,
 div.z-errbox div.z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
-</c:if>
 </c:if>

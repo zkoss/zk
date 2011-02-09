@@ -21,6 +21,7 @@ ZK 5.0.6
   3175481: A way to ignore the wiring of zscript and xel globally
   3166312: A way to know detail of a long exec blocking others
   3175487: Datebox should fire onChange when select date via Calendar
+  2957665: Round mold for Textbox, Decimalbox, Intbox, Longbox and Doublebox
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
