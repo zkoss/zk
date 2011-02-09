@@ -158,16 +158,16 @@
 .z-intbox-rounded input.z-intbox-rounded-text-invalid,
 .z-longbox-rounded input.z-longbox-rounded-text-invalid,
 .z-doublebox-rounded input.z-doublebox-rounded-text-invalid {
-	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background: transparent repeat-x 0 0 !important;
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) !important;
 }
 .z-textbox-rounded input.z-textbox-rounded-text-invalid + i.z-textbox-rounded-right-edge,
 .z-decimalbox-rounded input.z-decimalbox-rounded-text-invalid + i.z-decimalbox-rounded-right-edge,
 .z-intbox-rounded input.z-intbox-rounded-text-invalid + i.z-intbox-rounded-right-edge,
 .z-longbox-rounded input.z-longbox-rounded-text-invalid + i.z-longbox-rounded-right-edge,
 .z-doublebox-rounded input.z-doublebox-rounded-text-invalid + i.z-doublebox-rounded-right-edge {
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
-	background-position: 0 -24px;
+	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) !important;
+	background-position: 0 -24px !important;
 }
 
 .z-textbox-rounded-disd,
