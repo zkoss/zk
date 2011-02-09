@@ -348,7 +348,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 */
 	//zk: null,
 
-	init: function (sel, ctx) {
+	init: function (sel, ctx, root) {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
 			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
@@ -366,7 +366,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
-		var ret = _jq.init.call(this, sel, ctx);
+		var ret = _jq.init.call(this, sel, ctx, root);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
