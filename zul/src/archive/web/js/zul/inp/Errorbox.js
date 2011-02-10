@@ -46,7 +46,6 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	destroy: function () {
 		if (this.parent) {
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
-			this.parent.updateChange_(); // Bug #3159848
 			delete this.parent.__ebox;
 		}
 		this.close();
@@ -118,9 +117,10 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	doClick_: function (evt) {
 		var p = evt.domTarget;
 		if (p == this.$n('c')) {
-			if ((p = this.parent) && p.clearErrorMessage)
+			if ((p = this.parent) && p.clearErrorMessage) {
 				p.clearErrorMessage(true, true);
-			else
+				p.focus(0); // Bug #3159848
+			} else
 				zAu.wrongValue_(p, false);
 		} else {
 			this.$supers('doClick_', arguments);
