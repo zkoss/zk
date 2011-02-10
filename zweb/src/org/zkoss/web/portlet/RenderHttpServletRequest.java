@@ -212,7 +212,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getAuthType();
 	}
 	public String getContextPath() {
-		return _hreq != null ? _hreq.getContextPath(): (String)_attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
+		return (String)_attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
 	}
 	public javax.servlet.http.Cookie[] getCookies() {
 		return _hreq != null ? _hreq.getCookies(): new javax.servlet.http.Cookie[0];

@@ -98,6 +98,7 @@ ZK 5.0.6
   3166485: Height of listbox sync error
   3175558: Use zkplus JpaUtil can not close default EntityManger
   3170417: Paging in Tree is broken
+  3176990: Liferay fail to work because wrong zk.wpd url link
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
