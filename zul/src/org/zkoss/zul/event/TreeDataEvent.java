@@ -25,6 +25,8 @@ import org.zkoss.zul.TreeModel;
  * @since 3.0.0
  */
 public class TreeDataEvent {
+    /** Identifies the structure of the tree has changed. @since 5.0.6  */
+	public static final int STRUCTURE_CHANGED = -1;
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
     /** Identifies the addition of children to a node. */    

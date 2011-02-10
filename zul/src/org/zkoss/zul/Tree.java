@@ -1311,6 +1311,9 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				for(int i=indexFrom;i<=indexTo;i++)
 					onTreeDataContentChange(parent,node,i);
 				break;
+			case TreeDataEvent.STRUCTURE_CHANGED:
+				renderTree();
+				break;
 			}
 		}
 	}

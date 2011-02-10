@@ -81,7 +81,7 @@ implements TreeModelExt, java.io.Serializable {
 		TreeNode root = (TreeNode) getRoot();
 		if (root != null) {
 			sort0(root, cmpr);
-			fireEventDown(root);
+			fireStructureChangedEvent(root);
 		}
 	}
 	
@@ -92,10 +92,8 @@ implements TreeModelExt, java.io.Serializable {
 			sort0((TreeNode) it.next(), cmpr);
 	}
 	
-	private void fireEventDown(TreeNode node) {
+	private void fireStructureChangedEvent(TreeNode node) {
 		if (node.getChildCount() == 0) return;
-		fireEvent(node,  0, node.getChildCount() - 1,TreeDataEvent.CONTENTS_CHANGED);
-		for (Iterator it = node.getChildren().iterator(); it.hasNext();)
-			fireEventDown((TreeNode) it.next());
+		fireEvent(node,  0, 0,TreeDataEvent.STRUCTURE_CHANGED);
 	}
 }
