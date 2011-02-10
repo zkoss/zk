@@ -171,6 +171,23 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			((Tree)parent).addVisibleItemCount(count);
 		_visibleItemCount += count;
 	}
+	
+	void resyncVisibleItemCount() {
+		// reset first.
+		if (_visibleItemCount != 0) {
+			Component parent = getParent();
+			if (parent instanceof Treeitem) {
+				if (((Treeitem)parent).isOpen())
+					((Treeitem)parent).addVisibleItemCount(-_visibleItemCount, false);
+			} else if (parent instanceof Tree)
+				((Tree)parent).addVisibleItemCount(-_visibleItemCount);
+		}
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			Treeitem ti = (Treeitem)it.next();
+			addVisibleItemCount(ti.getVisibleItemCount());
+		}
+	}
+	
 	//bug #3051305: Active Page not update when drag & drop item to the end
 	public boolean insertBefore(Component newChild, Component refChild) {
 		final Tree tree = getTree();

@@ -101,6 +101,7 @@ ZK 5.0.6
   3176990: Liferay fail to work because wrong zk.wpd url link
   3147926: Auto-fitting bug
   3177013: Grid fail shrink/expand, sizedByContent="true", span="true"
+  3175465: Paging tree doesn't render the close node
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

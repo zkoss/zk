@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3175465.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 10 12:35:23 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please open the treeitem "item" and you should see the treeitem "child item" is appended as its children.
+<tree mold="paging">
+<treechildren>
+<treeitem open="false">
+<treerow>
+<treecell label="item" />
+</treerow>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell label="child item" />
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+</treechildren>
+</tree>
+</zk>

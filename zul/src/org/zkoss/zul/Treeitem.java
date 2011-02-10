@@ -621,9 +621,10 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 
 			_open = evt.isOpen();
 			if (_treechildren != null && isVisible()) {
-				if (_open)
+				if (_open) {
+					_treechildren.resyncVisibleItemCount();
 					addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
-				else {
+				} else {
 					addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
 				}
 			}
