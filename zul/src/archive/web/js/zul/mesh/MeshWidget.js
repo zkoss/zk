@@ -864,8 +864,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		// Bug #1886788 the size of these table must be specified a fixed size.
-		var bdtable = this.ebody.firstChild,
-			total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
+		var bdtable = this.ebody.firstChild;
+		
+		//bug#3177013 Grid fail shrink/expand, sizedByContent="true", span="true"
+		hdtable.style.width = '';
+		bdtable.style.width = '';
+		for (var i = hdfaker.cells.length; i--;) {		
+			if (!zk(hdfaker.cells[i]).isVisible()) continue;
+			hdfaker.cells[i].style.width = '';
+		}
+		var	total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
 			tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
 			
 		if (total == this.ebody.offsetWidth && 
