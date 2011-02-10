@@ -144,6 +144,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
    					//remove -over-seld
 			} else if (self._musin) {
 				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
+				
+				var musout = self.getMeshWidget()._musout;
+				// fixed mouse-over issue for datebox 
+				if (musout && $n[0] != musout.$n()) {
+					jq(musout.$n()).removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
+					musout._musin = false;
+					self.parent._musout = null;
+				}
 			}
 		});
 	},
@@ -219,8 +227,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	doMouseOut_: function(evt) {
 		if (this.isDisabled() || (this._musin &&
 					jq.isAncestor(this.$n(), evt.domEvent.relatedTarget ||
-								evt.domEvent.toElement)))
+								evt.domEvent.toElement))) {
+			// fixed mouse-over issue for datebox 
+			this.getMeshWidget()._musout = this;
 			return;
+		}
 		this._musin = false;
 		this._toggleEffect(true);
 		evt.stop({propagation: true});

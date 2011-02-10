@@ -106,6 +106,7 @@ ZK 5.0.6
   3176345: Splitter's icon doesn't work for mouse-over style on IE6/7/8
   3177128: Chrome Only. Incorrect scrollbar size
   3115825: toolbarbutton onClick not fired using  5.0.5 with Liferay
+  3176297: Row's mouse-over style keeps changing in IE6/8
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
