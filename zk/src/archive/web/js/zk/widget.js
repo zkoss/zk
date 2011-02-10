@@ -394,7 +394,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (sz && sz.height >= 0)
 					this._vflexsz = sz.height + margin;
 				this.afterChildrenMinFlex_('h');
-				this._vflexsz = wgtn.offsetHeight; //sometimes, there will be one pixel different for no reason
+				if (!min)
+					this._vflexsz = wgtn.offsetHeight; //sometimes, there will be one pixel different for no reason
 			}
 			return this._vflexsz;
 			
@@ -528,7 +529,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (sz && sz.width >= 0)
 					this._hflexsz = sz.width + margin;
 				this.afterChildrenMinFlex_('w');
-				this._hflexsz = wgtn.offsetWidth; //sometimes, there will be one pixel different for no reason
+				if (!min)
+					this._hflexsz = wgtn.offsetWidth; //sometimes, there will be one pixel different for no reason
 			}
 			return this._hflexsz;
 		} else

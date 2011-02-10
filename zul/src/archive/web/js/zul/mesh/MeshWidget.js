@@ -402,6 +402,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				_setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
 			++i;
 		}
+		if (this._hflex == 'min') {
+			if (this.eheadtbl) {
+				var eheadtblw = this.eheadtbl.width;
+				this.eheadtbl.width='';
+				this.$n().style.width = jq.px0(this.eheadtbl.offsetWidth);
+				this.eheadtbl.width=eheadtblw;
+			} else if (this.ebodytbl) {
+				var ebodytblw = this.ebodytbl.width;
+				this.ebodytbl.width='';
+				this.$n().style.width = jq.px0(this.ebodytbl.offsetWidth);
+				this.ebodytbl.width=ebodytblw;
+			}
+		}
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
