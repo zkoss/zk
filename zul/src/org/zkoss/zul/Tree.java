@@ -1383,7 +1383,10 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 
 	/**
-	 * Return the Tree or Treeitem component by a given associated node in model.
+	 * Return the Tree or Treeitem component by a given associated node in model,
+	 * or null if the treeitem is not instantiated (i.e., rendered) yet.
+	 * It returns this tree if the given node is the root node
+	 * (i.e., {@link TreeModel#getRoot}).
 	 * @since 3.0.0
 	 */
 	protected Component getChildByNode(Object node) {
@@ -1397,7 +1400,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			return OldTreeModels.getChildByNode(_model, this, root, node);
 		}
 	}
-	private static Component
+	private static Treeitem
 	getChildByNode0(TreeModel model, Treechildren tc, Object parent, Object node) {
 		if (tc == null)
 			return null; //if not rendered, return null
@@ -1405,13 +1408,13 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		int j = model.getIndexOfChild(parent, node);
 		if (j >= 0) {
 			final List cs = tc.getChildren();
-			return j < cs.size() ? (Component)cs.get(j): null; //null if not rendered
+			return j < cs.size() ? (Treeitem)cs.get(j): null; //null if not rendered
 		}
 
 		Treeitem ti = (Treeitem)tc.getFirstChild();
 		j = 0;
 		for (int len = model.getChildCount(parent); j < len && ti != null; ++j) {
-			Component c = getChildByNode0(
+			Treeitem c = getChildByNode0(
 				model, ti.getTreechildren(), model.getChild(parent, j), node);
 			if (c != null)
 				return c;
