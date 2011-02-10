@@ -4414,22 +4414,17 @@ _doFooSelect: function (evt) {
 		if (opts.exact)
 			return _binds[n.id];
 
-		for (var orgId = false; n; n = zk(n).vparentNode(true)) {
+		for (; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
-					var id2 = id.indexOf('-');
-					id2 = id2 >= 0 ? id.substring(0, id2): id;
-					if (orgId && id2 != orgId) //not bound yet
-						break; //not found
-
 					wgt = _binds[id]; //try first (since ZHTML might use -)
 					if (wgt)
 						return wgt;
 
-					if (id != id2) {
-						id = id2;
-						wgt = _binds[id];
+					var j = id.indexOf('-');
+					if (j >= 0) {
+						wgt = _binds[id = id.substring(0, j)];
 						if (wgt) {
 							if (!opts.child)
 								return wgt;
@@ -4437,7 +4432,6 @@ _doFooSelect: function (evt) {
 							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n))
 								return wgt;
-							orgId = ''; //prevent orgId to be checked since it is not a unbound widget
 						}
 					}
 				}
@@ -4445,8 +4439,6 @@ _doFooSelect: function (evt) {
 			}
 			if (opts.strict)
 				break;
-			if (orgId === false)
-				orgId = id;
 		}
 		return null;
 	},
