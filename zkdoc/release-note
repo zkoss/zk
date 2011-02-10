@@ -97,6 +97,7 @@ ZK 5.0.6
   3172785: None-embedded window shall not affect flex size of its parent component
   3166485: Height of listbox sync error
   3175558: Use zkplus JpaUtil can not close default EntityManger
+  3170417: Paging in Tree is broken
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
