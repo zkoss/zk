@@ -103,6 +103,7 @@ ZK 5.0.6
   3177013: Grid fail shrink/expand, sizedByContent="true", span="true"
   3175465: Paging tree doesn't render the close node
   3176345: Splitter's icon doesn't work for mouse-over style on IE6/7/8
+  3177128: Chrome Only. Incorrect scrollbar size
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

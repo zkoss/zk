@@ -627,6 +627,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 				
 			this._calcSize();// Bug #1813722
+			
+			//bug #3177128
+			if (zk.safari && this.ebodytbl) {
+				var oldCSS = this.ebodytbl.style.display;
+				this.ebodytbl.style.display = 'none';
+				var dummy = this.ebodytbl.offsetWidth; //force recalc
+				this.ebodytbl.style.display = oldCSS;
+			}
+			
 			this.fireOnRender(155);
 			this.ebody.scrollTop = this._currentTop;
 			this.ebody.scrollLeft = this._currentLeft;
