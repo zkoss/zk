@@ -77,9 +77,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public String getAppName() {
-		if (_appnm == null)
-			_appnm = Library.getProperty("org.zkoss.zk.ui.WebApp.name", "ZK");
-		return _appnm;
+		return _appnm != null ? _appnm: "ZK";
 	}
 	public void setAppName(String name) {
 		_appnm = name != null ? name: "";
@@ -123,6 +121,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
 
 		_config = config;
+		if (_appnm == null)
+			_appnm = _config.getPreference("org.zkoss.zk.ui.WebApp.name", "ZK");
 		_config.setWebApp(this);
 
 		Class cls = _config.getUiEngineClass();
