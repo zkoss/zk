@@ -235,6 +235,13 @@ zk.copy(zk, {
 	 * @since 5.0.1
 	 */
 	busy: 0,
+	/** The application's name, which will be initialized as server-side's
+	 * <code>WebApp.getAppName()</code>.
+	 * It will be used as title of {@link #alert}.
+	 * @type String
+	 * @since 5.0.6
+	 */
+	appName: "ZK",
 
 	/** The version of ZK, such as '5.0.0'
 	 * @type String

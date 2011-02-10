@@ -73,6 +73,7 @@ import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -1704,9 +1705,13 @@ w:use="foo.MyWindow"&gt;
 		final boolean aupg = isAsyncUpdate();
 		final String extra;
 		try {
-			if (order < 0)
-				out.write(aupg ? "[": "zkx(");
-			else if (order > 0) //not first child
+			if (order < 0) {
+				if (aupg) out.write('[');
+				else {
+					out.write(HtmlPageRenders.outSpecialJS(getDesktop()));
+					out.write("zkx(");
+				}
+			} else if (order > 0) //not first child
 				out.write(',');
 
 			final JsContentRenderer renderer = new JsContentRenderer();

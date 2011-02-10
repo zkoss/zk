@@ -53,7 +53,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var wnd = new zul.wnd.Window({
 				closable: true,
 				width: '250pt',
-				title: opts.title||'ZK',
+				title: opts.title||zk.appName,
 				border: 'normal',
 				children: [
 					new zul.box.Box({

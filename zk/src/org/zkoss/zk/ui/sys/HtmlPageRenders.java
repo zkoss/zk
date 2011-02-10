@@ -567,16 +567,19 @@ public class HtmlPageRenders {
 		} else if (divRequired) {
 			//generate JS second
 			out.write("\n<script type=\"text/javascript\">");
-			out.write(outZkIconJS());
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
 		final int order = ComponentRedraws.beforeRedraw(false);
 		final String extra;
 		try {
-			if (order < 0)
-				out.write(aupg ? "[": divRequired ? "zkmx(": "zkx(");
-			else if (order > 0) //not first child
+			if (order < 0) {
+				if (aupg) out.write('[');
+				else {
+					out.write(outSpecialJS(desktop));
+					out.write(divRequired ? "zkmx(": "zkx(");
+				}
+			} else if (order > 0) //not first child
 				out.write(',');
 			out.write("\n[0,'"); //0: page
 			out.write(page.getUuid());
@@ -702,19 +705,39 @@ public class HtmlPageRenders {
 		if (quote) sb.append('\'');
 	}
 
-	private static final String outZkIconJS() {
+	/** Generates the special JavaScript code, such as the application's name.
+	 * It shall be called, before generating "zkmx(" and "zkx(".
+	 * @since 5.0.6
+	 */
+	public static final String outSpecialJS(Desktop desktop) {
+		final StringBuffer sb = new StringBuffer();
+
+		//output application name
+		String oldnm = (String)desktop.getAttribute(ATTR_APPNM);
+		if (oldnm == null) oldnm = "ZK";
+		final String appnm = desktop.getWebApp().getAppName();
+		if (!oldnm.equals(appnm)) {
+			sb.append("zk.appName='");
+			Strings.escape(sb, appnm, Strings.ESCAPE_JAVASCRIPT)
+				.append("';");
+			desktop.setAttribute(ATTR_APPNM, appnm);
+		}
+
+		//output ZK ICON
 		final Session sess = Sessions.getCurrent();
 		if (sess != null) {
-			final PI pi = (PI)sess.getAttribute("_zk.pi");
+			final PI pi = (PI)sess.getAttribute(ATTR_PI);
 			boolean show = pi == null;
-			if (show) sess.setAttribute("_zk.pi", new PI());
+			if (show) sess.setAttribute(ATTR_PI, new PI());
 			else show = pi.show();
 
 			if (show)
-				return "zk.pi=1;";
+				sb.append("zk.pi=1;");
 		}
-		return "";
+		return sb.toString();
 	}
+	private static final String ATTR_APPNM = "org.zkoss.zk.appnm";
+	private static final String ATTR_PI = "org.zkoss.zk.pi";
 	private static class PI implements java.io.Serializable {
 		long _t;
 		private PI() {
@@ -897,7 +920,7 @@ public class HtmlPageRenders {
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
-				.append("');").append(outZkIconJS())
+				.append("');").append(outSpecialJS(desktop))
 				.append("</script>\n");
 		}
 
