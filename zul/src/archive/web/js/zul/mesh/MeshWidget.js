@@ -36,22 +36,37 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn)
 			wgtn.style.whiteSpace = 'nowrap';
+		var eheadtblw = null,
+			efoottblw = null,
+			ebodytblw = null,
+			eheadtblfix = null,
+			efoottblfix = null,
+			ebodytblfix = null;
 		if (wgt.eheadtbl) {
 			wgt.ehead.style.width = '';
+			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
 			wgt.eheadtbl.style.width = '';
+			eheadtblfix = wgt.eheadtbl.style.tableLayout;
+			wgt.eheadtbl.style.tableLayout = '';
 		}
 		if (wgt.head && wgt.head.$n())
 			wgt.head.$n().style.width = '';
 		if (wgt.efoottbl) {
 			wgt.efoot.style.width = '';
+			efoottblw = wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
 			wgt.efoottbl.style.width = '';
+			efoottblfix = wgt.efoottbl.style.tableLayout;
+			wgt.efoottbl.style.tableLayout = '';
 		}
 		if (wgt.ebodytbl) {
 			wgt.ebody.style.width = '';
+			ebodytblw = wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
 			wgt.ebodytbl.style.width = '';
+			ebodytblfix = wgt.ebodytbl.style.tableLayout;
+			wgt.ebodytbl.style.tableLayout = '';
 		}
 
 		//calculate widths
@@ -81,12 +96,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (w) w = w.previousSibling;
 		}
 
-		if (wgt.eheadtbl)
-			wgt.eheadtbl.width='100%';
-		if (wgt.efoottbl)
-			wgt.efoottbl.width='100%';
-		if (wgt.ebodytbl)
-			wgt.ebodytbl.width='100%';
+		if (wgt.eheadtbl) {
+			wgt.eheadtbl.width=eheadtblw;
+			wgt.eheadtbl.style.tableLayout = eheadtblfix;
+		}
+		if (wgt.efoottbl) {
+			wgt.efoottbl.width=efoottblw;
+			wgt.efoottbl.style.tableLayout = efoottblfix;
+		}
+		if (wgt.ebodytbl) {
+			wgt.ebodytbl.width=ebodytblw;
+			wgt.ebodytbl.style.tableLayout = ebodytblfix;
+		}
 
 		if (wgtn)
 			wgtn.style.whiteSpace = ws;
@@ -102,7 +123,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
 	_prehgh: -1,
-	_minWd: null,
+	_minWd: null, //minimum width for each column
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.heads = [];
@@ -757,7 +778,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
-			if (allwidths && w._width === undefined && w._hflex === undefined) {
+			if (allwidths && w._width === undefined && w._hflex === undefined && w.isVisible()) {
 				allwidths = false;
 				shallCheckSize = false;
 			} else if (shallCheckSize) {
@@ -814,7 +835,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return null;
 	},
 	_calcMinWds: function () {
-		return _calcMinWd(this);
+		if (!this._minWd)
+			this._minWd = _calcMinWd(this); 
+		return this._minWd;
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,
@@ -848,7 +871,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (total == this.ebody.offsetWidth && 
 			this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
 			total = tblwd;
-		this._minWd = _calcMinWd(this);
+		this._calcMinWds(); //i.e. this._minWd = _calcMinWd(this);
 		var xwds = this._minWd,
 			wds = xwds.wds,
 			width = xwds.width,

@@ -99,6 +99,7 @@ ZK 5.0.6
   3175558: Use zkplus JpaUtil can not close default EntityManger
   3170417: Paging in Tree is broken
   3176990: Liferay fail to work because wrong zk.wpd url link
+  3147926: Auto-fitting bug
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

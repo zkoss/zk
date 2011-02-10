@@ -222,16 +222,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				var mesh = this.getMeshWidget(),
 					max = zk(this.$n('cave')).textSize()[0],
 					cIndex = $n.cellIndex();
-				for (var rows = mesh.ebodyrows, len = rows.length; len--;) {
-					var cell = rows[len].cells[cIndex], $c;
-					if (cell && ($c = zk(cell)).isVisible()) {
-						var size = $c.jq.find('div:first-child').zk.textSize();
-						if (max < size[0])
-							max = size[0];
-					}
-				}
-				max += $n.padBorderWidth();
-				this.$class._aftersizing({control: this, _zszofs: max + (this.isSortable_() ? 20 : 0)}, evt);
+				mesh._calcMinWds();
+				var sz = mesh._minWd.wds[cIndex];
+				this.$class._aftersizing({control: this, _zszofs: sz}, evt);
 			} else
 				this.$supers('doDoubleClick_', arguments);
 		} else
@@ -347,11 +340,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (mesh.efoottbl) {
 			mesh.eftfaker.cells[cidx].style.width = wd + "px";
 		}
-		var fixed;
+		var fixed, disp;
 		if (mesh.ebodytbl) {
 			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
-				fixed = "auto";
+				fixed = 'auto';
 				mesh.ebodytbl.style.tableLayout = "fixed";
+			} else if (zk.safari) { //when set header width, chrome/safari calculate wrong scroll width
+				disp = mesh.ebodytbl.style.display;
+				mesh.ebodytbl.style.display = 'none';
 			}
 			mesh.ebdfaker.cells[cidx].style.width = wd + "px";
 		}
@@ -380,6 +376,42 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			meshn.style.display='none';
 			var redrawFix = meshn.offsetHeight;
 			meshn.style.display=olddisp;
+		}
+		
+		//bug#3147926: auto fit. 
+		//check if all width set so we shall adjust hdfakerflex/bdfakerflex
+		var allwidths = true,
+			// IE6/7 bug in F30-1904532.zul
+			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
+		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
+			if (allwidths && !w.$n().style.width && w.isVisible()) {
+				allwidths = false;
+				shallCheckSize = false;
+				break;
+			} else if (shallCheckSize) {
+				var width = w._width;
+				if (width && width.indexOf('px') != -1)
+					totalWidth += zk.parseInt(width);
+				else {
+					shallCheckSize = false;
+					break;
+				}
+			}
+		}
+		if (shallCheckSize) {
+			var w = mesh._width;
+			if (w && w.indexOf('px') != -1)
+				allwidths = zk.parseInt(w) != totalWidth;
+		}
+		if (allwidths) {
+			var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
+				bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
+			hdflex.style.width = ''; 
+			if (bdflex) bdflex.style.width = '';
+		}
+		//chrome/safari calculate wrong scroll left; must flip display to force recalc
+		if (zk.safari && mesh.ebodytbl) {
+			mesh.ebodytbl.style.display = disp;
 		}
 		
 		wgt.parent.fire('onColSize', zk.copy({
