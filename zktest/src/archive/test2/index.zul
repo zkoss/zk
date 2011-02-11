@@ -35,8 +35,11 @@ function newWindow(url){
 											<comboitem label="F30"/>
 											<comboitem label="F35"/>
 											<comboitem label="F36"/>
+											<comboitem label="F50"/>
 											<comboitem label="B30"/>
 											<comboitem label="B35"/>
+											<comboitem label="B36"/>
+											<comboitem label="B50"/>
 											<comboitem label="Z30"/>
 											<comboitem label="Z35"/>
 										</combobox>
