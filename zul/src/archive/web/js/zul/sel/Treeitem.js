@@ -295,19 +295,21 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				this.rerender();
 		}
 	},
-	onChildReplaced_: function (oldc, newc) {
-		this.$supers('onChildReplaced_', arguments);
-		this.onChildRemoved_(oldc, true);
-		this._fixOnAdd(newc, true);
-	},
-	onChildRemoved_: function(child, _noSync) {
+	onChildRemoved_: function(child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) 
 			this.treerow = null;
 		else if (child == this.treechildren) {
 			this.treechildren = null;
-			if (!_noSync) this._syncIcon(); // remove the icon
+			if (!this.childReplacing_) //NOT called by onChildReplaced_
+				this._syncIcon(); // remove the icon
 		}
+	},
+	onChildAdded_: function(child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.childReplacing_) //called by onChildReplaced_
+			this._fixOnAdd(child, true);
+		//else was handled by insertBefore/appendChild
 	},
 	removeHTML_: function (n) {
 		for (var cn, w = this.firstChild; w; w = w.nextSibling) {

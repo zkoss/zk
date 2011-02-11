@@ -123,21 +123,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (!isRows && !_noSync)
 			this._syncSize();  //sync-size required
 	},
-	onChildReplaced_: function (oldc, newc) {
-		this._noOnRm = true; //not to callback since we will handle it later to have better performance
-		try {
-			this.$supers('onChildReplaced_', arguments);
-		} finally {
-			delete this._noOnRm;
-		}
-		if (oldc) this.onChildRemoved_(oldc, true);
-		if (newc) this._fixOnAdd(newc, true); //_syncSize required
-	},
-	onChildRemoved_: function (child, _noSync) {
+	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-
-		if (this._noOnRm) //$supers still need to be called since it might depend on it
-			return;
 
 		var isRows;
 		if (child == this.rows) {
@@ -152,8 +139,14 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		else if (child == this.frozen) 
 			this.frozen = null;
 
-		if (!isRows && !_noSync)
+		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
+	},
+	onChildAdded_: function(child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.childReplacing_) //called by onChildReplaced_
+			this._fixOnAdd(child, true); //_syncSize required
+		//else handled by insertBefore/appendChild
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (child.$instanceof(zul.grid.Rows)) {

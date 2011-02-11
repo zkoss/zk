@@ -28,7 +28,7 @@ icon before Item 2.2. removed.</li>
 </ol>
         ]]>
     </html>
-    <tree id="tree" width="400px" rows="8">
+    <tree id="tree" width="400px" rows="8" checkmark="true" multiple="true">
         <treecols sizable="true">
             <treecol label="Name" />
             <treecol label="Description" />
