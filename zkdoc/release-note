@@ -7,7 +7,6 @@ ZK 5.0.6
   3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
   3148425: GroupsModelArray shall handle tabular data better
   3166334: Provide a way to intercept document-level key events
-  3175529: Upgrade to jQuery 1.5
   2957665: Round mold for Textbox, Decimalbox, Intbox, Longbox and Doublebox
   3105037: Show the locale format in error messages
   3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
