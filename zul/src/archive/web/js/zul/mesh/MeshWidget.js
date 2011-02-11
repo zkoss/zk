@@ -36,12 +36,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn)
 			wgtn.style.whiteSpace = 'nowrap';
-		var eheadtblw = null,
-			efoottblw = null,
-			ebodytblw = null,
-			eheadtblfix = null,
-			efoottblfix = null,
-			ebodytblfix = null,
+		var eheadtblw,
+			efoottblw,
+			ebodytblw,
+			eheadtblfix,
+			efoottblfix,
+			ebodytblfix,
 			hdfaker = wgt.ehdfaker,
 			bdfaker = wgt.ebdfaker,
 			ftfaker = wgt.eftfaker,
@@ -124,8 +124,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		if (wgt.eheadtbl) {
-			wgt.eheadtbl.width=eheadtblw;
-			wgt.eheadtbl.style.tableLayout = eheadtblfix;
+			wgt.eheadtbl.width = eheadtblw||'';
+			wgt.eheadtbl.style.tableLayout = eheadtblfix||'';
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				hdfaker.cells[i].style.width = hdfakerws[i];
 				var headcell = headn.cells[i],
@@ -135,15 +135,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 		if (wgt.efoottbl) {
-			wgt.efoottbl.width=efoottblw;
-			wgt.efoottbl.style.tableLayout = efoottblfix;
+			wgt.efoottbl.width = efoottblw||'';
+			wgt.efoottbl.style.tableLayout = efoottblfix||'';
 			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				ftfaker.cells[i].style.width = ftfakerws[i];
 			}
 		}
 		if (wgt.ebodytbl) {
-			wgt.ebodytbl.width=ebodytblw;
-			wgt.ebodytbl.style.tableLayout = ebodytblfix;
+			wgt.ebodytbl.width = ebodytblw||'';
+			wgt.ebodytbl.style.tableLayout = ebodytblfix||'';
 			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				bdfaker.cells[i].style.width = bdfakerws[i];
 			}
@@ -452,7 +452,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var ebodytblw = this.ebodytbl.width;
 				this.ebodytbl.width='';
 				this.$n().style.width = jq.px0(this.ebodytbl.offsetWidth);
-				this.ebodytbl.width=ebodytblw;
+				this.ebodytbl.width = ebodytblw;
 			}
 		}
 	},
@@ -620,7 +620,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			etbparent = ebodytbl.offsetParent,
 			etbtop = ebodytbl.offsetTop,
 			hgh = 0, 
-			row = null,
+			row,
 			j = 0;
 		for (var it = this.getBodyWidgetIterator(), len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (w.isVisible()) {
@@ -633,7 +633,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hgh = top;
 			}
 		}
-		if (row != null) { //there is row
+		if (row) { //there is row
 			if (top <= max) { //row not exceeds the height, estimate
 				hgh = hgh + row.offsetHeight;
 				j = Math.floor(j * max / hgh);
