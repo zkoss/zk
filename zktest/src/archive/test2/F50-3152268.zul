@@ -13,7 +13,6 @@ F50-3152268.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<?xml version="1.0" encoding="UTF-8"?>
 <zk>
 	<menupopup id="menupopup">
 		<attribute name="onOpen"><![CDATA[
