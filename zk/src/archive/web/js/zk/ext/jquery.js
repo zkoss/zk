@@ -1199,7 +1199,8 @@ return window.jq = jQuery; //used by zk
 		jQuery.support.deleteExpando = false;
 	}
 
-	if ( div.attachEvent && div.fireEvent ) {
+	// Potix: 2011-02-11 fixed for IE9, but this will be fixed on jquery 1.5.1 version
+	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
 		div.attachEvent("onclick", function click() {
 			// Cloning a node shouldn't copy over any
 			// bound event handlers (IE does this)
@@ -5559,6 +5560,7 @@ jQuery.extend({
 
 			// Using Sizzle here is crazy slow, so we use getElementsByTagName
 			// instead
+			//zk.log(elem.getElementsByTagName);
 			srcElements = elem.getElementsByTagName("*");
 			destElements = clone.getElementsByTagName("*");
 
