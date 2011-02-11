@@ -262,12 +262,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	beforeMinFlex_: function(o) {
 		if (o == 'w') {
 			var wgt = this.getMeshWidget();
-			if (wgt && !wgt._minWd)
-				wgt._minWd = wgt._calcMinWds();
-			if (wgt && wgt._minWd) {
-				for (var cwgt = this.parent.firstChild, j = 0; cwgt; cwgt = cwgt.nextSibling, ++j)
-					if (cwgt == this)
-						return wgt._minWd.wds[j];
+			if (wgt) { 
+				wgt._calcMinWds();
+				if (wgt._minWd) {
+					var n = this.$n(), zkn = zk(n),
+						cidx = zkn.cellIndex();
+					return wgt._minWd.wds[cidx];
+				}
 			}
 		}
 		return null;
@@ -335,6 +336,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			rwd = $n.revisedWidth(wd),
 			cidx = $n.cellIndex();
 			
+		//feature#3177275: Listheader should override hflex when sized by end user
+		delete mesh.span; //no span!
+		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
+			w.setHflex(null);
+		}
+		
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
 		if (mesh.efoottbl) {
@@ -345,9 +352,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			if (zk.opera && !mesh.ebodytbl.style.tableLayout) {
 				fixed = 'auto';
 				mesh.ebodytbl.style.tableLayout = "fixed";
-			} else if (zk.safari) { //when set header width, chrome/safari calculate wrong scroll width
-				disp = mesh.ebodytbl.style.display;
-				mesh.ebodytbl.style.display = 'none';
 			}
 			mesh.ebdfaker.cells[cidx].style.width = wd + "px";
 		}
@@ -409,9 +413,22 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			hdflex.style.width = ''; 
 			if (bdflex) bdflex.style.width = '';
 		}
-		//chrome/safari calculate wrong scroll left; must flip display to force recalc
-		if (zk.safari && mesh.ebodytbl) {
-			mesh.ebodytbl.style.display = disp;
+		
+		//feature#3177275: Listheader should override hflex when sized by end user
+		var hdfaker = mesh.ehdfaker;
+		if (hdfaker) {
+			var wds = [],
+				fakerflex = mesh.head.$n('hdfakerflex'),
+				hdfakercells = hdfaker.cells;
+			for (var i = hdfakercells.length - (fakerflex ? 1 : 0); i--;)
+				wds[i] = hdfakercells[i].style.width;
+			for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling)
+				w.setWidth(wds[i++]);
+			wgt.parent.fire('onColsSize', zk.copy({
+				index: cidx, 
+				column: wgt, 
+				widths: wds 
+			}, evt.data), null, 0);
 		}
 		
 		wgt.parent.fire('onColSize', zk.copy({

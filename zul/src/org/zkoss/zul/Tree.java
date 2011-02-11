@@ -49,6 +49,7 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.MeshElement;
 
 
 /**
@@ -66,7 +67,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tree {
+public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tree {
 	private static final Log log = Log.lookup(Tree.class);
 
 	private transient Treecols _treecols;

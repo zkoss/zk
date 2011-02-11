@@ -41,7 +41,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ebodytblw = null,
 			eheadtblfix = null,
 			efoottblfix = null,
-			ebodytblfix = null;
+			ebodytblfix = null,
+			hdfaker = wgt.ehdfaker,
+			bdfaker = wgt.ebdfaker,
+			ftfaker = wgt.eftfaker,
+			head = wgt.head,
+			headn = head ? head.$n() : null,
+			fakerflex = head ? head.$n('hdfakerflex') : null,
+			hdfakerws = [],
+			bdfakerws = [],
+			ftfakerws = [],
+			hdws = [],
+			hdcavews = [];
+			
 		if (wgt.eheadtbl) {
 			wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
@@ -49,6 +61,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.eheadtbl.style.width = '';
 			eheadtblfix = wgt.eheadtbl.style.tableLayout;
 			wgt.eheadtbl.style.tableLayout = '';
+			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				var hdfakercell = hdfaker.cells[i],
+					headcell = headn.cells[i],
+					headcave = headcell.firstChild;
+				hdfakerws[i] = hdfakercell.style.width;
+				hdfakercell.style.width = '';
+				hdws[i] = headcell.style.width;
+				headcell.style.width = '';
+				hdcavews[i] = headcave.style.width;
+				headcave.style.width = '';
+			}
 		}
 		if (wgt.head && wgt.head.$n())
 			wgt.head.$n().style.width = '';
@@ -59,6 +82,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.efoottbl.style.width = '';
 			efoottblfix = wgt.efoottbl.style.tableLayout;
 			wgt.efoottbl.style.tableLayout = '';
+			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				var ftcell = ftfaker.cells[i];
+				ftfakerws[i] = ftcell.style.width;
+				ftcell.style.width = '';
+			}
 		}
 		if (wgt.ebodytbl) {
 			wgt.ebody.style.width = '';
@@ -67,16 +95,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.ebodytbl.style.width = '';
 			ebodytblfix = wgt.ebodytbl.style.tableLayout;
 			wgt.ebodytbl.style.tableLayout = '';
+			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				var bdcell = bdfaker.cells[i];
+				bdfakerws[i] = bdcell.style.width;
+				bdcell.style.width = '';
+			}
 		}
 
 		//calculate widths
-		var hdfaker = wgt.ehdfaker,
-			bdfaker = wgt.ebdfaker,
-			ftfaker = wgt.eftfaker,
-			head = wgt.head,
-			headn = head ? head.$n() : null,
-			fakerflex = head ? head.$n('bdfakerflex') : null, 
-			wds = [],
+		var	wds = [],
 			width = 0,
 			w = head ? head = head.lastChild : null,
 			headWgt = wgt.getHeadWidget();
@@ -99,14 +126,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.eheadtbl) {
 			wgt.eheadtbl.width=eheadtblw;
 			wgt.eheadtbl.style.tableLayout = eheadtblfix;
+			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				hdfaker.cells[i].style.width = hdfakerws[i];
+				var headcell = headn.cells[i],
+					headcave = headcell.firstChild;
+				headcell.style.width = hdws[i];
+				headcave.style.width = hdcavews[i];
+			}
 		}
 		if (wgt.efoottbl) {
 			wgt.efoottbl.width=efoottblw;
 			wgt.efoottbl.style.tableLayout = efoottblfix;
+			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				ftfaker.cells[i].style.width = ftfakerws[i];
+			}
 		}
 		if (wgt.ebodytbl) {
 			wgt.ebodytbl.width=ebodytblw;
 			wgt.ebodytbl.style.tableLayout = ebodytblfix;
+			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				bdfaker.cells[i].style.width = bdfakerws[i];
+			}
 		}
 
 		if (wgtn)

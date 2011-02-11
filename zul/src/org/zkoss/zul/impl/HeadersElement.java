@@ -16,8 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Iterator;
+
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ColSizeEvent;
+import org.zkoss.zul.event.ColsSizeEvent;
 import org.zkoss.zul.event.ZulEvents;
 
 /**
@@ -30,6 +34,7 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 
 	static {
 		addClientEvent(HeadersElement.class, ZulEvents.ON_COL_SIZE, CE_IMPORTANT); //no CE_DUPLICATE_IGNORE (might apply to diff index)
+		addClientEvent(HeadersElement.class, ZulEvents.ON_COLS_SIZE, CE_IMPORTANT); //no CE_DUPLICATE_IGNORE (might apply to diff index)
 	}
 	
 	private boolean _sizable;
@@ -62,7 +67,7 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
-	 * it also handles onColSize.
+	 * it also handles onColSize and onColsSize.
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
@@ -70,6 +75,18 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
 			((HeaderElement)evt.getColumn()).setWidthByClient(evt.getWidth());
+			Events.postEvent(evt);
+		} else if (cmd.equals(ZulEvents.ON_COLS_SIZE)) { //feature#3177275: Listheader should override hflex when sized by end user
+			((MeshElement)this.getParent()).setSpan(false); //clear span
+			ColsSizeEvent evt = ColsSizeEvent.getColsSizeEvent(request);
+			int j = 0;
+			for(Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
+				final HeaderElement header = (HeaderElement) it.next(); 
+				header.setWidthByClient(evt.getWidth(j));
+				if (header.getHflex() != null) {
+					header.setHflexByClient(null);
+				}
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

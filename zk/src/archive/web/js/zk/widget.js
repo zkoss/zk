@@ -1397,17 +1397,8 @@ new zul.wnd.Window{
 		 * @see #setHflex 
 		 */
 		hflex: function(v) {
-			this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
-			if (this._nhflex < 0 && v != 'min')
-				this._nhflex = 0; 
+			this.setHflex_(v);
 			if (_binds[this.uuid] === this) { //if already bind
-				if (!this._nhflex) {
-					this.setFlexSize_({width: ''}); //clear the width
-					delete this._hflexsz;
-					if (!this._nvflex)
-						_unlistenFlex(this);
-				} else
-					_listenFlex(this);
 				zWatch.fireDown('onSize', this.parent);
 			}
 		},
@@ -1478,6 +1469,20 @@ new zul.wnd.Window{
 					}
 					zk.error("Illegal action: "+v+", "+this.className);
 				}
+		}
+	},
+	setHflex_: function (v) {
+		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
+		if (this._nhflex < 0 && v != 'min')
+			this._nhflex = 0; 
+		if (_binds[this.uuid] === this) { //if already bind
+			if (!this._nhflex) {
+				this.setFlexSize_({width: ''}); //clear the width
+				delete this._hflexsz;
+				if (!this._nvflex)
+					_unlistenFlex(this);
+			} else
+				_listenFlex(this);
 		}
 	},
 	/** Invoked after an animation (e.g., {@link jqzk#slideDown}) has finished.
@@ -3335,7 +3340,7 @@ unbind_: function (skipper, after) {
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	},
 	afterChildrenMinFlex_: function() {
-		//to be overridden
+		//to be overridden, after my children fix the minimum flex (both width and height)
 	},
 	getParentSize_: function(p) {
 		//to be overridden

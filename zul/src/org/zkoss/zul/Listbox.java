@@ -60,6 +60,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.MeshElement;
 
 /**
  * A listbox.
@@ -199,7 +200,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends XulElement implements Paginated,
+public class Listbox extends MeshElement implements Paginated,
 		org.zkoss.zul.api.Listbox {
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
@@ -257,7 +258,6 @@ public class Listbox extends XulElement implements Paginated,
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private boolean _sizedByContent;
-	private boolean _span; //since 5.0.5
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -440,30 +440,6 @@ public class Listbox extends XulElement implements Paginated,
 			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
 		} else
 			return "true".equalsIgnoreCase(s);
-	}
-	/**
-	 * Sets whether to span the width of the columns to occupy the whole listbox.
-	 * It is meaningful only if {@link #isSizedByContent} is true, and
-	 * {@link #getHflex} is not speciifed.
-	 * <p>Default: false. It means the width of a column takes only the
-	 * required space based on its content (when {@link #isSizedByContent}
-	 * is specified).
-	 * @param span
-	 * @since 5.0.5
-	 */
-	public void setSpan(boolean span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("span", span);
-		}
-	}
-	/**
-	 * Returns whether span column width when {@link #isSizedByContent} is true.
-	 * <p>Default: false.
-	 * @since 5.0.5
-	 */
-	public boolean isSpan() {
-		return _span;
 	}
 
 	/**
@@ -3221,7 +3197,6 @@ public class Listbox extends XulElement implements Paginated,
 
 			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
-			renderer.render("span", _span);
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());

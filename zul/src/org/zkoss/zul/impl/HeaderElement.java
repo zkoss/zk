@@ -72,6 +72,10 @@ abstract public class HeaderElement extends LabelImageElement implements org.zko
 	void setWidthByClient(String width) {
 		setWidthDirectly(width);
 	}
+	//feature#3177275: Listheader should override hflex when sized by end user
+	void setHflexByClient(String hflex) {
+		setHflexDirectly(hflex);
+	}
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
