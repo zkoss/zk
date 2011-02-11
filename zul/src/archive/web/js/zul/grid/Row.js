@@ -16,6 +16,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
+
+	function _toggleEffect(wgt, undo) {
+		var self = wgt;
+		setTimeout(function () {
+			var $n = jq(self.$n()),
+				zcls = self.getZclass() + '-over';
+			if (undo) {
+   				$n.removeClass(zcls);
+			} else if (self._musin) {
+				$n.addClass(zcls);
+				
+				var musout = self.parent._musout;
+				// fixed mouse-over issue for datebox 
+				if (musout && $n[0] != musout.$n()) {
+					jq(musout.$n()).removeClass(zcls);
+					musout._musin = false;
+					self.parent._musout = null;
+				}
+			}
+		});
+	}
 /**
  * A single row in a {@link Rows} element.
  * Each child of the {@link Row} element is placed in each successive cell
@@ -254,26 +275,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (child == this.detail)
 			this.detail = null;
 	},
-	_toggleEffect: function (undo) {
-		var self = this;
-		setTimeout(function () {
-			var $n = jq(self.$n()),
-				zcls = self.getZclass() + '-over';
-			if (undo) {
-   				$n.removeClass(zcls);
-			} else if (self._musin) {
-				$n.addClass(zcls);
-				
-				var musout = self.parent._musout;
-				// fixed mouse-over issue for datebox 
-				if (musout && $n[0] != musout.$n()) {
-					jq(musout.$n()).removeClass(zcls);
-					musout._musin = false;
-					self.parent._musout = null;
-				}
-			}
-		});
-	},
 	doMouseOver_: function(evt) {
 		if (this._musin) return;
 		this._musin = true;
@@ -283,7 +284,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			n.firstChild.style.MozUserSelect = "none";
 		
 		//Merge breeze
-		this._toggleEffect();
+		_toggleEffect(this);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
@@ -299,7 +300,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			n.firstChild.style.MozUserSelect = "none";
 		
 		//Merge breeze
-		this._toggleEffect(true);
+		_toggleEffect(this, true);
 		this.$supers('doMouseOut_', arguments);
 	},
 	domAttrs_: function (no) {
