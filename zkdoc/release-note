@@ -109,6 +109,7 @@ ZK 5.0.6
   3176297: Row's mouse-over style keeps changing in IE6/8
   3177265: listbox/grid hflex="min" does not work
   3161535: grid column align doesn't work with breeze theme in IE 7
+  3178065: Menuitem onClick is incorrectly blocked in zkmax
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
