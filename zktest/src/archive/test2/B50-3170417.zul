@@ -13,12 +13,15 @@ B50-3170417.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-1. Please open the tree item (Root4) and then the tree item (Root4.0)
-<separator/>
-2. You should see there displays a paging detail like "[1 - 10 / 15]".
-<separator/>
-3. Please press F5 to reload this page, and then do the step 1 and 2 again.
+<zk xmlns:n="native">
+ <n:ol>
+ <n:li>Please open the tree item (Root.4) and then the tree item (Root.4.0). You stould see there displays a paging detail like "[1 - 10 / 15]".</n:li>
+ <n:li>Please close the item (Root.4) and then open it again. You should see the paging detail like "[1 - 10 / 15]"</n:li>
+ <n:li>Please click upon the "visible", you should see the item (Root.4) is disappeared</n:li>
+ <n:li>Please click upon the "open" and then "visible", you should see the item (Root.4) without its children is shown</n:li>
+ <n:li>Please click upon the "visible" and then "open" and then "visible", you should see the item (Root.4) with its children is shown</n:li>
+ </n:ol>
+
 <vlayout id="inf"/>
 <zscript><![CDATA[
 public class JeaseTree extends Tree {
@@ -131,4 +134,14 @@ FooModel model = new FooModel();
 <zscript>
 tree.refresh();
 </zscript>
+<button label="visible">
+<attribute name="onClick">
+tree.treechildren.lastChild.visible = !tree.treechildren.lastChild.visible ; 
+</attribute>
+</button>
+<button label="open">
+<attribute name="onClick">
+tree.treechildren.lastChild.open = !tree.treechildren.lastChild.open ; 
+</attribute>
+</button>
 </zk>

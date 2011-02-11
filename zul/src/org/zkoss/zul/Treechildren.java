@@ -161,31 +161,37 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		super.onChildRemoved(child);
 		addVisibleItemCount(-((Treeitem)child).getVisibleItemCount());
 	}
-	void addVisibleItemCount(int count) {
+	
+	/*package*/ void addVisibleItemCount(int count) {
+		addVisibleItemCount(count, false, false);
+	}
+	
+	private void addVisibleItemCount(int count, boolean force, boolean propagation) {
 		if (count == 0) return;
 		Component parent = getParent();
 		if (parent instanceof Treeitem) {
-			if (((Treeitem)parent).isOpen())
-				((Treeitem)parent).addVisibleItemCount(count, false);
-		} else if (parent instanceof Tree)
+			Treeitem ti = (Treeitem)parent;
+			if (force || ti.isOpen()) {
+				ti.addVisibleItemCount(count, propagation);
+				_visibleItemCount += count;
+			}
+		} else if (parent instanceof Tree) {
 			((Tree)parent).addVisibleItemCount(count);
-		_visibleItemCount += count;
+			_visibleItemCount += count;
+		}
 	}
 	
-	void resyncVisibleItemCount() {
-		// reset first.
+	/*package*/ void resyncVisibleItemCount() {
 		if (_visibleItemCount != 0) {
-			Component parent = getParent();
-			if (parent instanceof Treeitem) {
-				if (((Treeitem)parent).isOpen())
-					((Treeitem)parent).addVisibleItemCount(-_visibleItemCount, false);
-			} else if (parent instanceof Tree)
-				((Tree)parent).addVisibleItemCount(-_visibleItemCount);
+			addVisibleItemCount(-_visibleItemCount, true, true);
+			_visibleItemCount = 0;
 		}
+		int newCount = 0;
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			Treeitem ti = (Treeitem)it.next();
-			addVisibleItemCount(ti.getVisibleItemCount());
+			newCount += ti.getVisibleItemCount();
 		}
+		addVisibleItemCount(newCount, true, false);
 	}
 	
 	//bug #3051305: Active Page not update when drag & drop item to the end

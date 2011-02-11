@@ -230,13 +230,13 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 			
 			//If the item is open, its tree has model and not rendered, render the item
 			if(_open) {
-				if (_treechildren != null) addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
+				if (_treechildren != null) _treechildren.resyncVisibleItemCount();
 				Tree tree = getTree();
 				if(tree != null && tree.getModel() !=null){
 					tree.renderItem(this);
 				}
 			} else if (_treechildren != null)
-				addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
+				_treechildren.resyncVisibleItemCount();
 		}
 	}
 	/** Returns whether this item is selected.
@@ -405,13 +405,13 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	public boolean setVisible(boolean visible) {
 		if(isVisible() != visible){
 			smartUpdate("visible", visible);
-			int count = isOpen() && _treechildren != null ?
-					_treechildren.getVisibleItemCount() + 1: 1;
 					boolean result = super.setVisible(visible);
+					if (_treechildren != null)
+						_treechildren.resyncVisibleItemCount();
 					if (isVisible()) {
-						addVisibleItemCount(count, false);
+						addVisibleItemCount(1, false);
 					} else {
-						addVisibleItemCount(-count, true);
+						addVisibleItemCount(-1, true);
 					}
 					return result;
 		}
@@ -425,7 +425,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	 * @since 3.6.1
 	 */
 	public int getVisibleItemCount() {
-		return isVisible() ? 1 + (_treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
+		return isVisible() ? 1 + (_open && _treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
 	}
 	/**
 	 * adds the number of the visible item to the count of its parent.
@@ -435,8 +435,14 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	 */
 	void addVisibleItemCount(int count, boolean force) {
 		Treechildren tc = (Treechildren) getParent();
-		if (tc != null && (force || isVisible()))
-			tc.addVisibleItemCount(count);
+		if (tc != null && (force || isVisible())) {
+			Component parent = tc.getParent();
+			if (parent instanceof Tree)
+				tc.addVisibleItemCount(count);
+			else if (((Treeitem)parent).isOpen()) {
+				tc.addVisibleItemCount(count);
+			}
+		}
 	}
 	
 	//-- Component --//
@@ -620,15 +626,6 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 
 			_open = evt.isOpen();
-			if (_treechildren != null && isVisible()) {
-				if (_open) {
-					_treechildren.resyncVisibleItemCount();
-					addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
-				} else {
-					addVisibleItemCount(-_treechildren.getVisibleItemCount(), true);
-				}
-			}
-
 			final Tree tree = getTree();
 			if ( _open && !isLoaded() && tree != null && tree.getModel() != null) {
 				tree.renderItem(Treeitem.this);
@@ -637,7 +634,10 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 				if (_treechildren != null && _treechildren.getChildren().size() >= 5)
 					invalidate();
 			}
-
+			
+			if (_treechildren != null && isVisible()) {
+				_treechildren.resyncVisibleItemCount();
+			}
 			// Bug #2838782
 			if (tree != null && tree.inPagingMold())
 				tree.focus();
