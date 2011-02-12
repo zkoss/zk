@@ -1265,6 +1265,11 @@ jq(el).zk.center(); //same as 'center'
 		else p.appendChild(agt);
 
 		el.z_vp = p.id; //might be empty
+		var st = el.style;
+		if (!st.top) st.top = "0";
+			//B3178359: if no top and parent is relative+absolute, the following
+			//line causes browser crazy
+			//Strange: all browsers have the same behavior
 		document.body.appendChild(el);
 		return this;
 	},
