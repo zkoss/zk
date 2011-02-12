@@ -65,10 +65,4 @@ public class BinaryTreeModel extends AbstractTreeModel{
 	public boolean isLeaf(Object node) {
 		return (getChildCount(node) == 0);
 	}
-
-	public int getIndexOfChild(Object parent, Object child) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }
