@@ -1341,11 +1341,10 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		Treechildren tc= treechildrenOf(parent);
 		List siblings = tc.getChildren();
 		//if there is no sibling or new item is inserted at end.
-		if(siblings.size()==0 || index == siblings.size() ){
-			tc.insertBefore(newTi, null);
-		}else{
-			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
-		}
+		tc.insertBefore(newTi, 
+			siblings.isEmpty() || index == siblings.size() ?
+				null: (Treeitem)siblings.get(index));
+				//Note: we don't use index >= size(); reason: it detects bug
 
 		renderChangedItem(newTi,_model.getChild(node,index));
 	}
