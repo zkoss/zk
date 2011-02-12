@@ -182,7 +182,9 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		
 		if (this.firstChild && this.firstChild.treechildren)
 			this.firstChild.treechildren.detach();
-		
+
+		zul.sel.Treeitem._syncSelItems(this, newwgt);
+
 		this.$supers('replaceWidget', arguments);
 	}
 });

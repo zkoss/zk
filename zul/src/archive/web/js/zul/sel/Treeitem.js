@@ -20,14 +20,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				return true;
 	}
 
-	function _syncSelItems(oldwgt, newwgt) {
-		var tree = oldwgt.getTree();
-		if (tree) {
-			var items = tree._selItems;
-			_rmSelItemsDown(items, oldwgt)
-			_addSelItemsDown(items, newwgt);
-		}
-	}
 	function _rmSelItemsDown(items, wgt) {
 		if (wgt.isSelected())
 			items.$remove(wgt);
@@ -320,7 +312,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('removeHTML_', arguments);
 	},
 	replaceWidget: function (newwgt) {
-		_syncSelItems(this, newwgt);
+		zul.sel.Treeitem._syncSelItems(this, newwgt);
 		if (this.treechildren)
 			this.treechildren.detach();
 		this.$supers('replaceWidget', arguments);
@@ -377,6 +369,21 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				for (i = i.firstChild; i; i = i.nextSibling)
 					i._syncIcon();
 		}
+	}
+},{
+	//package utiltiy: sync selected items for replaceWidget
+	_syncSelItems: function (oldwgt, newwgt) {
+		var items;
+		if ((items = oldwgt.getTree()) && (items = items._selItems))
+			if (oldwgt.$instanceof(zul.sel.Treechildren)) {
+				for (var item = oldwgt.firstChild; item; item = item.nextSibling)
+					_rmSelItemsDown(items, item)
+				for (var item = newwgt.firstChild; item; item = item.nextSibling)
+					_addSelItemsDown(items, item);
+			} else { //Treeitem
+				_rmSelItemsDown(items, oldwgt)
+				_addSelItemsDown(items, newwgt);
+			}
 	}
 });
 })();
