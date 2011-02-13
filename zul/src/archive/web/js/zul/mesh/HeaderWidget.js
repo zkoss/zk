@@ -337,7 +337,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			cidx = $n.cellIndex();
 			
 		//feature#3177275: Listheader should override hflex when sized by end user
-		delete mesh.span; //no span!
+		delete mesh._span; //no span!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
 			w.setHflex(null);
 		}
@@ -383,36 +383,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		
 		//bug#3147926: auto fit. 
-		//check if all width set so we shall adjust hdfakerflex/bdfakerflex
-		var allwidths = true,
-			// IE6/7 bug in F30-1904532.zul
-			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
-		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
-			if (allwidths && !w.$n().style.width && w.isVisible()) {
-				allwidths = false;
-				shallCheckSize = false;
-				break;
-			} else if (shallCheckSize) {
-				var width = w._width;
-				if (width && width.indexOf('px') != -1)
-					totalWidth += zk.parseInt(width);
-				else {
-					shallCheckSize = false;
-					break;
-				}
-			}
-		}
-		if (shallCheckSize) {
-			var w = mesh._width;
-			if (w && w.indexOf('px') != -1)
-				allwidths = zk.parseInt(w) != totalWidth;
-		}
-		if (allwidths) {
-			var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-				bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
-			hdflex.style.width = ''; 
-			if (bdflex) bdflex.style.width = '';
-		}
+		//Adjust hdfakerflex/bdfakerflex
+		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
+			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
+		hdflex.style.width = ''; 
+		if (bdflex) bdflex.style.width = '';
 		
 		//feature#3177275: Listheader should override hflex when sized by end user
 		var hdfaker = mesh.ehdfaker;

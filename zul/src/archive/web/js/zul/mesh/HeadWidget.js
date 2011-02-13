@@ -142,8 +142,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
 		var wgt = this.parent;
-		if (wgt && !wgt.isSizedByContent())
+		if (wgt && !wgt.isSizedByContent()) {
 			wgt._adjFlexWd();
+			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space 
+		}
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');

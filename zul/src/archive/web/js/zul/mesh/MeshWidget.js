@@ -817,6 +817,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this._cpCellWd();
 		}
 		
+		//check if need to span width
+		if (this._isAllWidths())
+			this._adjSpanWd();
+
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
@@ -829,6 +833,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (zk.ie8 && this.isModel() && this.inPagingMold())
 			zk(this).redoCSS();
 	},
+	//return if all widths of columns are fixed (directly or indirectly)
+	_isAllWidths: function() {
+		var allwidths = true;
+		for (var w = this.head.firstChild; w; w = w.nextSibling) {
+			if (allwidths && (w._width === undefined || w._width.indexOf('px') <= 0) && (w._hflex != 'min' || w._hflexsz === undefined) && w.isVisible()) {
+				allwidths = false;
+				break;
+			}
+		}
+		return allwidths;
+	},	
 	domFaker_: function (out, fakeId, zcls) { //used by mold
 		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
@@ -900,6 +915,68 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (!this._minWd)
 			this._minWd = _calcMinWd(this); 
 		return this._minWd;
+	},
+	_adjSpanWd: function () {
+		var isSpan = this.isSpan();
+		if (!isSpan)
+			return;
+		var hdfaker = this.ehdfaker,
+			bdfaker = this.ebdfaker,
+			ftfaker = this.eftfaker;
+		if (!hdfaker || !bdfaker || !hdfaker.cells.length
+		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
+		|| !this.getBodyWidgetIterator().hasNext()) return;
+		
+		var head = this.head.$n();
+		if (!head) return; 
+		this._calcMinWds();
+		var hdtable = this.eheadtbl,
+			bdtable = this.ebodytbl,
+			wd,
+			wds = [],
+			width = 0,
+			fakerflex = this.head.$n('hdfakerflex'),
+			_minwds = this._minWd.wds;
+		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
+			if (zk(hdfaker.cells[i]).isVisible()) {
+				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
+				width += wd;
+			}
+			++i;
+		}
+		
+		var	total = bdtable.parentNode.clientWidth; 
+		
+		if (total <= width) //no extra space
+			return;
+		
+		var count = total,
+			visj = -1;
+		for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+			if (!zk(hdfaker.cells[i]).isVisible()) continue;
+			wd = ((wds[i] * total / width) + 0.5) | 0;
+			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
+			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
+			var cpwd = zk(head.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
+			head.cells[i].style.width = cpwd + "px";
+			var cell = head.cells[i].firstChild;
+			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+			count -= wd;
+			visj = i;
+		}
+		
+		//compensate calc error
+		if (count != 0 && visj >= 0) {
+			wd = hdfacker.cells[visj].offsetWidth + count;
+			bdfaker.cells[visj].style.width = zk(bdfaker.cells[visj]).revisedWidth(wd) + "px";
+			hdfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;
+			if (ftfaker) ftfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;
+			var cpwd = zk(head.cells[visj]).revisedWidth(zk.parseInt(hdfaker.cells[visj].style.width));
+			head.cells[visj].style.width = cpwd + "px";
+			var cell = head.cells[visj].firstChild;
+			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+		}
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,

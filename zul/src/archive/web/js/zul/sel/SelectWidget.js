@@ -350,6 +350,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._cpCellWd();
 		}
 
+		//check if need to span width
+		if (this._isAllWidths())
+			this._adjSpanWd();
+
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
