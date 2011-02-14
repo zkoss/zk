@@ -52,19 +52,20 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}, function () {
 			var n = this.$n(),
 				vert = this.isVertical_();
-			if (n) {
-				jq(n).children('div').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing ? this._spacing : '');
-			}
+			if (n)
+				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing || '');
 		}]
 	},
 	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		if (before) {
+		if (before)
 			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
-		} else {
-			jq(this.$n()).append(this.encloseChildHTML_(child));
+		else {
+			var jqn = jq(this.$n());
+			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), this._spacing || '');
+			jqn.append(this.encloseChildHTML_(child));
 		}
 		child.bind(desktop);
 	},
@@ -90,6 +91,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
+		var rmsp = this.lastChild == child;
+		if(this.lastChild == child)
+			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},
 	/** Enclose child with HTML tag such as DIV, 
 	 * and return a HTML code or add HTML fragments in out array.
@@ -101,8 +105,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var oo = [],
 			vert = this.isVertical_();
 		
-		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"',
-				this._spacing ? ' style="padding-' + (vert ? 'bottom:' : 'right:') + this._spacing + '">' : '>');
+		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
+		if(this._spacing && child.nextSibling)
+			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + this._spacing + '"');
+		oo.push('>');
 		child.redraw(oo);
 		oo.push('</div>');
 		if (!out) return oo.join('');
