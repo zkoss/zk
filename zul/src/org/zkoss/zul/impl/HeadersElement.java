@@ -72,7 +72,7 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 		final String cmd = request.getCommand();
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
 			((MeshElement)this.getParent()).setSpan(false); //clear span
-			ColSizeEvent evt = ColSizeEvent.getColSizesEvent(request);
+			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
 			int j = 0;
 			for(Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
 				final HeaderElement header = (HeaderElement) it.next(); 
