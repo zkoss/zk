@@ -38,7 +38,4 @@ public class ZulEvents {
 	 * @since 5.0.4
 	 */
 	public static final String ON_AFTER_RENDER = "onAfterRender";
-	/** The onColsSize event used with {@link ColsSizeEvent}.
-	 */
-	public static final String ON_COLS_SIZE = "onColsSize";
 }

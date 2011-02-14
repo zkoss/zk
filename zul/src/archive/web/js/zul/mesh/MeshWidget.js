@@ -835,6 +835,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
+		if (!this.head)
+			return false;
 		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
 			if (allwidths && (w._width === undefined || w._width.indexOf('px') <= 0) && (w._hflex != 'min' || w._hflexsz === undefined) && w.isVisible()) {
@@ -968,7 +970,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//compensate calc error
 		if (count != 0 && visj >= 0) {
-			wd = hdfacker.cells[visj].offsetWidth + count;
+			wd = hdfaker.cells[visj].offsetWidth + count;
 			bdfaker.cells[visj].style.width = zk(bdfaker.cells[visj]).revisedWidth(wd) + "px";
 			hdfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;
 			if (ftfaker) ftfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;

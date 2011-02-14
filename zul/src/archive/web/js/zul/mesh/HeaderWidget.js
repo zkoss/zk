@@ -391,25 +391,19 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		//feature#3177275: Listheader should override hflex when sized by end user
 		var hdfaker = mesh.ehdfaker;
-		if (hdfaker) {
-			var wds = [],
-				fakerflex = mesh.head.$n('hdfakerflex'),
-				hdfakercells = hdfaker.cells;
-			for (var i = hdfakercells.length - (fakerflex ? 1 : 0); i--;)
-				wds[i] = hdfakercells[i].style.width;
-			for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling)
-				w.setWidth(wds[i++]);
-			wgt.parent.fire('onColsSize', zk.copy({
-				index: cidx, 
-				column: wgt, 
-				widths: wds 
-			}, evt.data), null, 0);
-		}
+		var wds = [],
+			fakerflex = mesh.head.$n('hdfakerflex'),
+			hdfakercells = hdfaker.cells;
+		for (var i = hdfakercells.length - (fakerflex ? 1 : 0); i--;)
+			wds[i] = hdfakercells[i].style.width;
+		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling)
+			w.setWidth(wds[i++]);
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd + "px"
+			width: wd + "px",
+			widths: wds
 		}, evt.data), null, 0);
 		
 		// bug #2799258 in IE, we have to force to recalculate the size.
