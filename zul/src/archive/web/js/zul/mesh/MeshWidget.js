@@ -442,19 +442,31 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				_setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
 			++i;
 		}
+		this._adjMinWd();
+	},
+	_adjMinWd: function () {
 		if (this._hflex == 'min') {
-			if (this.eheadtbl) {
-				var eheadtblw = this.eheadtbl.width;
-				this.eheadtbl.width='';
-				this.$n().style.width = jq.px0(this.eheadtbl.offsetWidth);
-				this.eheadtbl.width=eheadtblw;
-			} else if (this.ebodytbl) {
-				var ebodytblw = this.ebodytbl.width;
-				this.ebodytbl.width='';
-				this.$n().style.width = jq.px0(this.ebodytbl.offsetWidth);
-				this.ebodytbl.width = ebodytblw;
-			}
+			this._hflexsz = this._getMinWd(); //override
+			this.$n().style.width = jq.px0(this._hflexsz);
 		}
+	},
+	_getMinWd: function () {
+		this._calcMinWds();
+		var hdfaker = this.ehdfaker,
+			hdtable = this.eheadtbl,
+			bdtable = this.ebodytbl,
+			wd,
+			wds = [],
+			width = 0,
+			_minwds = this._minWd.wds;
+		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
+			if (zk(hdfaker.cells[i]).isVisible()) {
+				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
+				width += wd;
+			}
+			++i;
+		}
+		return width;
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
@@ -909,8 +921,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {
-		if (this._hflexsz === undefined && this.isSizedByContent() && orient == 'w' && this.width === undefined)
-			this._calcSize();
+		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
+			if (this.isSizedByContent())
+				this._calcSize();
+			if (this.head)
+				for(var w = this.head.firstChild; w; w = w.nextSibling) 
+					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
+						return null;
+			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width 
+		}
 		return null;
 	},
 	_calcMinWds: function () {

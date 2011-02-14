@@ -267,7 +267,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				if (wgt._minWd) {
 					var n = this.$n(), zkn = zk(n),
 						cidx = zkn.cellIndex();
-					return wgt._minWd.wds[cidx];
+					return zkn.revisedWidth(wgt._minWd.wds[cidx]);
 				}
 			}
 		}
@@ -336,12 +336,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			rwd = $n.revisedWidth(wd),
 			cidx = $n.cellIndex();
 			
-		//feature#3177275: Listheader should override hflex when sized by end user
-		delete mesh._span; //no span!
-		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
-			w.setHflex(null);
-		}
-		
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
 		if (mesh.efoottbl) {
@@ -360,6 +354,27 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		n.style.width = rwd + "px";
 		var cell = n.firstChild;
 		cell.style.width = zk(cell).revisedWidth(rwd) + "px";
+		
+		//feature#3177275: Listheader should override hflex when sized by end user
+		var hdfakercells = mesh.ehdfaker.cells,
+			wds = [];
+			i = 0;
+		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
+			w._width = wds[i] = hdfakercells[i].style.width; //bug#3180189. setWidth() has side effect
+			++i;
+		}
+		
+		delete mesh._span; //no span!
+		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
+			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
+		}
+		
+		//bug#3147926: auto fit. 
+		//Adjust hdfakerflex/bdfakerflex
+		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
+			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
+		hdflex.style.width = ''; 
+		if (bdflex) bdflex.style.width = '';
 		
 		//bug 3061765: unexpected horizontal scrollbar when sizing
 /*		table.style.width = total + wd + "px";
@@ -381,23 +396,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var redrawFix = meshn.offsetHeight;
 			meshn.style.display=olddisp;
 		}
-		
-		//bug#3147926: auto fit. 
-		//Adjust hdfakerflex/bdfakerflex
-		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
-		hdflex.style.width = ''; 
-		if (bdflex) bdflex.style.width = '';
-		
-		//feature#3177275: Listheader should override hflex when sized by end user
-		var hdfaker = mesh.ehdfaker;
-		var wds = [],
-			fakerflex = mesh.head.$n('hdfakerflex'),
-			hdfakercells = hdfaker.cells;
-		for (var i = hdfakercells.length - (fakerflex ? 1 : 0); i--;)
-			wds[i] = hdfakercells[i].style.width;
-		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling)
-			w.setWidth(wds[i++]);
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,

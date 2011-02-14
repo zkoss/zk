@@ -113,6 +113,7 @@ ZK 5.0.6
   3178065: Menuitem onClick is incorrectly blocked in zkmax
   3178359: Combobox's popup is positioned wrong in vertical tabbox
   3147382: confirmClose message under timeout scenario
+  3180189: Sizing on Listbox/Grid with hflex="min" causes expanding
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
