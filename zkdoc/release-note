@@ -112,6 +112,7 @@ ZK 5.0.6
   3161535: grid column align doesn't work with breeze theme in IE 7
   3178065: Menuitem onClick is incorrectly blocked in zkmax
   3178359: Combobox's popup is positioned wrong in vertical tabbox
+  3147382: confirmClose message under timeout scenario
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
