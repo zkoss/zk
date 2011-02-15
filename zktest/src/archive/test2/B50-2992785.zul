@@ -2,6 +2,7 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
 Please click each link and the message should only consist of alphanumeric number and underscore (i.e., a-z, A-Z, 0-9 and _).
 <zscript>
+	import java.util.*;
 	public class Link {
 		private String _href;
 		

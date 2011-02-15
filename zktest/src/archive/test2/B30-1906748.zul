@@ -63,8 +63,8 @@ public class Order {
   		<column align="center" width="200px" label="Value"/>
 	</columns>	
   	<rows>
-  		<row>OrderNumber: <label value="@{selected.orderNumber}"/></row>
-  		<row>OrderName: <label  value="@{selected.orderName}"/></row>
+  		<row>OrderNumber: <label id="oNumberLbl" value="@{selected.orderNumber}"/></row>
+  		<row>OrderName: <label id="oNameLbl"  value="@{selected.orderName}"/></row>
   	</rows>
   </grid>
 </window>
