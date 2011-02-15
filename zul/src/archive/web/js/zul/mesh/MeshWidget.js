@@ -549,6 +549,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_doScroll: function () {
+		//see onSize. Chrome/Safari can calc scrollbar size wrong when sizing. 
+		//must display:none then restore to make it recalc, but it also cause scrolling. 
+		//ignore it here to keep the _currentTop/_currentLeft intact!
+		if (zk.safari && this._ignoreDoScroll) 
+			return;
+		
 		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
 			if (this._currentLeft != this.ebody.scrollLeft) { //care about horizontal scrolling only
 				if (this.ehead) {
@@ -695,10 +701,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			
 			//bug #3177128
 			if (zk.safari && this.ebodytbl) {
-				var oldCSS = this.ebodytbl.style.display;
-				this.ebodytbl.style.display = 'none';
-				var dummy = this.ebodytbl.offsetWidth; //force recalc
-				this.ebodytbl.style.display = oldCSS;
+				this._ignoreDoScroll = true; //will cause _doScroll, don't change scrolling position
+				try {
+					var oldCSS = this.ebodytbl.style.display;
+					this.ebodytbl.style.display = 'none';
+					var dummy = this.ebodytbl.offsetWidth; //force recalc
+					this.ebodytbl.style.display = oldCSS;
+				} finally {
+					delete this._ignoreDoScroll;
+				}
 			}
 			
 			this.fireOnRender(155);
