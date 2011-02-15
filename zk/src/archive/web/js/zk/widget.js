@@ -656,12 +656,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						_fixMinFlex.apply(cwgt, [c, 'w']);
-						//might change width in _fixMinFlex(), so regain the value
-						offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
-						offwdh = zkc.offsetWidth();
-						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
-						segRight = Math.max(segRight, marginRight);
+						var minwdh = _fixMinFlex.apply(cwgt, [c, 'w']);
+						if (cwgt._sumWidth)
+							wdh -= minwdh;
+						else {
+							//might change width in _fixMinFlex(), so regain the value
+							offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
+							offwdh = zkc.offsetWidth();
+							marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
+							segRight = Math.max(segRight, marginRight);
+						}
 						prehflex = false;
 					} else {
 						if (pretxt) {
@@ -678,7 +682,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prehflex = true;
 					}
 				} else {
-					segRight = Math.max(segRight, marginRight);
+					if (cwgt && cwgt._sumWidth)
+						wdh -= offwdh;
+					else
+						segRight = Math.max(segRight, marginRight);
 					prehflex = false;
 				}
 				
@@ -687,12 +694,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						_fixMinFlex.apply(cwgt, [c, 'h']);
-						//might change height in _fixMinFlex(), so regain the value
-						offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
-						offhgh = zkc.offsetHeight();
-						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
-						segBottom = Math.max(segBottom, marginBottom);
+						var minhgh = _fixMinFlex.apply(cwgt, [c, 'h']);
+						if (cwgt._sumHeight)
+							hgh -= minhgh;
+						else {
+							//might change height in _fixMinFlex(), so regain the value
+							offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
+							offhgh = minhgh; //zkc.offsetHeight();
+							marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
+							segBottom = Math.max(segBottom, marginBottom);
+						}
 						prevflex = false;
 					} else {
 						if (pretxt) {
@@ -709,7 +720,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prevflex = true;
 					}
 				} else {
-					segBottom = Math.max(segBottom, marginBottom);
+					if (cwgt && cwgt._sumHeight)
+						hgh -= offhgh;
+					else
+						segBottom = Math.max(segBottom, marginBottom);
 					prevflex = false;
 				}
 				pretxt = false;

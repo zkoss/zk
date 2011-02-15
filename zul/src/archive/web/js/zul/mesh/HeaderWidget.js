@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a header.
  */
 zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
+	_sumWidth: true, //indicate shall add this width for MeshWidget. @See _fixFlex in widget.js
 	$define: {
     	/** Returns the horizontal alignment of this column.
     	 * <p>Default: null (system default: left unless CSS specified).
@@ -74,7 +75,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	setFlexSize_: function (sz) {
-		if (sz.width !== undefined && sz.width != 'auto' && sz.width != '') {
+		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == '' 
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
 			this._hflexWidth = sz.width;
@@ -273,7 +274,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
-	
+	//@Override to get width/height of MeshWidget 
+	getParentSize_: function() {
+		//to be overridden
+		var p = this.getMeshWidget().$n(),
+			zkp = p ? zk(p) : null;
+		return zkp ? {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)} : {};
+	},
 	isWatchable_: function (name) {//Bug 3164504: Hflex will not recalculate when the colum without label
 		var n,
 			strict = name!='onShow';
