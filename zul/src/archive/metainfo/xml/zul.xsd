@@ -552,7 +552,6 @@
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
-			<xs:element ref="fusionchart" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -623,7 +622,6 @@
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
-				<xs:element ref="fusionchart" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -1139,30 +1137,6 @@
 		<xs:attribute name="xAxis" type="xs:string" use="optional" />
 		<xs:attribute name="yAxis" type="xs:string" use="optional" />
 		<xs:attribute name="chartStyle" type="xs:string" use="optional" />
-	</xs:complexType>
-	
-	<!-- fusionchart -->
-	<xs:element name="fusionchart" type="fusionchartType" />
-	<xs:complexType name="fusionchartType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="type" type="chartTypeAttrType" use="optional" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="xAxis" type="xs:string" use="optional" />
-		<xs:attribute name="yAxis" type="xs:string" use="optional" />
-		<xs:attribute name="threeD" type="booleanType" use="optional" />
-		<xs:attribute name="showLegend" type="booleanType" use="optional" />
-		<xs:attribute name="paneAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="paneColor" type="xs:string" use="optional" />
-		<xs:attribute name="fgAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="bgAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="bgColor" type="xs:string" use="optional" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
-		<xs:attribute name="period" type="chartPeriodAttrType" use="optional" />
-		<xs:attributeGroup ref="mouseAttrGroup" />
-		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 
     <!-- foot -->

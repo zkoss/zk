@@ -14,6 +14,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <package name="zul.fchart" language="xul/html" depends="zul.med">
 	<widget name="Flashchart"/>
 	<script src="swfobject.js"/>
-	<script src="ext/JSClass/FusionCharts.js"/>
-	<widget name="Fusionchart" />
 </package>
