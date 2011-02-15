@@ -546,6 +546,13 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public void renderItems(Set items);
 
+	/** Load the treeitems by the given node.
+	 * This method must be used with a tree model, and the node is
+	 * one of the value returned by {@link TreeModel#getChild}.
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @since 5.0.6
+	 */
+	public org.zkoss.zul.api.Treeitem renderItemByNodeApi(Object node);
 	/**
 	 * Load treeitems through path <b>path</b> <br>
 	 * Note: By using this method, all treeitems in path will be rendered and

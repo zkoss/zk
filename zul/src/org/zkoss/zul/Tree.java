@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -50,7 +51,6 @@ import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
-
 
 /**
  *  A container which can be used to hold a tabular
@@ -1348,8 +1348,13 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	 * It returns this tree if the given node is the root node
 	 * (i.e., {@link TreeModel#getRoot}).
 	 * @since 3.0.0
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @see #renderItemByNode
 	 */
 	protected Component getChildByNode(Object node) {
+		if (_model == null)
+			throw new IllegalStateException("model required");
+
 		final Object root = _model.getRoot();
 		if (Objects.equals(root, node))
 			return this;
@@ -1822,8 +1827,53 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		return node;
 	}
 
+	/** Load the treeitems by the given node.
+	 * This method must be used with a tree model, and the node is
+	 * one of the value returned by {@link TreeModel#getChild}.
+	 * <p>Notice that this method has to search the model one-by-one.
+	 * The performance might not be good, so use {@link #renderItemByPath}
+	 * if possible.
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @return the treeitem that is associated with the give node, or null
+	 * no treeitem is associated (including the give node is the root).
+	 * @since 5.0.6
+	 * @since #getChildByNode
+	 */
+	public Treeitem renderItemByNode(Object node) {
+		return renderItemByPath(getPath(_model, _model.getRoot(), node));
+	}
+	//@Override
+	public org.zkoss.zul.api.Treeitem renderItemByNodeApi(Object node) {
+		return renderItemByNode(node);
+	}
+	/*package*/ static int[] getPath(TreeModel model, Object parent, Object lastNode){
+		final List l = new LinkedList();
+		dfSearch(model, l, parent, lastNode);
+
+		final Object[] objs = l.toArray();
+		final int[] path = new int[objs.length];
+		for (int i = 0; i < objs.length; i++)
+			path[i] = ((Integer)objs[i]).intValue();
+		return path;
+	}
+	private static
+	boolean dfSearch(TreeModel model, List path, Object node, Object target){
+		if (node.equals(target))
+			return true;
+		if (model.isLeaf(node))
+			return false;
+
+		int size = model.getChildCount(node);
+		for (int i = 0; i< size; i++)
+			if (dfSearch(model, path, model.getChild(node, i), target)){
+				path.add(0, new Integer(i));
+				return true;
+			}
+		return false;
+	}
+
 	/**
-	 * Load treeitems through path <b>path</b>
+	 * Load the treeitems by giveing a path of the treeitems top open.
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
@@ -1861,16 +1911,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		}
 		return ti;
 	}
-	/**
-	 * Load treeitems through path <b>path</b>
-	 * <br>Note: By using this method, all treeitems in path will be rendered
-	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
-	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
-	 * @param path - an index path. The first element is the index at the first level
-	 * of the tree structure.
-	 * @return the treeitem from tree by given path
-	 * @since 3.5.2
-	 */
+	//@Override
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path) {
 		return renderItemByPath(path);
 	}

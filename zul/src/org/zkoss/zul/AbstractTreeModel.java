@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.lang.Objects;
@@ -120,30 +119,6 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	 * This method was implemented to provide backward compatibility.
 	 */
 	public int[] getPath(Object parent, Object lastNode){
-		List l = new LinkedList();
-		dfSearch(l, parent, lastNode);
-		Object[] objs = l.toArray();
-		int[] path = new int[objs.length];
-		for(int i=0;i<objs.length; i++){
-			path[i] = ((Integer)objs[i]).intValue();
-		}
-		return path;
+		return Tree.getPath(this, parent, lastNode);
 	}
-	/**@deprecated*/
-	private boolean dfSearch(List path, Object node, Object target){
-		if(node.equals(target)){
-			return true;
-		} else{
-			int size = getChildCount(node);
-			for(int i=0; i< size; i++){
-				boolean flag = dfSearch(path,getChild(node,i),target);
-				if(flag){
-					path.add(0,new Integer(i));
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 }
