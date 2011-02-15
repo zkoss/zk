@@ -92,7 +92,6 @@ public class ColSizeEvent extends Event {
 	 * @param col the component of the column
 	 * @param width the width of the column that trigger this event.
 	 * @since 5.0.0
-	 * @deprecated use {@link ColSizeEvent(String evtnm, Component target, int icol, Component col, String[] widths, int keys)} instead
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
 	Component col, String width, int keys) {

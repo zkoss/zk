@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 /**
- * The fundamental class for mesh elements such as {@link Grid}, {@link Listbox}, and {@link Tree}.
+ * The fundamental class for mesh elements such as {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}, and {@link org.zkoss.zul.Tree}.
 
  * @author henrichen
  * @since 5.0.6

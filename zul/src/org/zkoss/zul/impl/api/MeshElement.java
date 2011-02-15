@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl.api;
 
 /**
- * Common MeshElement for {@link Grid}, {@link Listbox}, {@Tree}.
+ * Common MeshElement for {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}, {@link org.zkoss.zul.Tree}.
  * @author henrichen
  * @since 5.0.6
  */
