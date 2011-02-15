@@ -847,7 +847,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
-		if (!this.head)
+		if (this.isSizedByContent())
+			return true;
+		else if (!this.head)
 			return false;
 		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
@@ -887,9 +889,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
-		if (!this.isSizedByContent())
-			out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th>'); 
-		out.push('</tr></tbody>');
+		out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
 	},
 
 	//super//
@@ -1002,7 +1002,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
-			ftfaker = this.eftfaker;
+			ftfaker = this.eftfaker,
+			fakerflex = this.head ? this.head.$n('hdfakerflex') : null;
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
 		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
 		|| !this.getBodyWidgetIterator().hasNext()) return;
@@ -1012,7 +1013,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (zk.opera) {
 			if (!hdtable.style.width) {
 				var isFixed = true, tt = this.ehead.offsetWidth;
-				for(var i = hdfaker.cells.length; i--;) {
+				for(var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 					if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
 						isFixed = false; 
 						break;
@@ -1026,13 +1027,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Bug #1886788 the size of these table must be specified a fixed size.
 		var bdtable = this.ebody.firstChild;
 		
-		//bug#3177013 Grid fail shrink/expand, sizedByContent="true", span="true"
-		hdtable.style.width = '';
-		bdtable.style.width = '';
-		for (var i = hdfaker.cells.length; i--;) {		
-			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			hdfaker.cells[i].style.width = '';
-		}
 		var	total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
 			tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
 			
@@ -1042,33 +1036,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._calcMinWds(); //i.e. this._minWd = _calcMinWd(this);
 		var xwds = this._minWd,
 			wds = xwds.wds,
-			width = xwds.width,
-			isSpan = !this.getHflex() && this.isSpan(),
-			extSum = isSpan ? total - width : 0;
-		if (extSum <= 0 && (this.isSizedByContent() || !this.$n().style.width || width > total)) {
-			total = width;
-			head.style.width = total + 'px';
-		}
+			width = xwds.width;
 
-		var count = total;
-		hdtable.style.width = total + "px";	
-		
-		if (bdtable) bdtable.style.width = hdtable.style.width;
-		if (this.efoot) this.efoot.firstChild.style.width = hdtable.style.width;
-		
-		for (var i = bdfaker.cells.length; i--;) {
+		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			var wd,
-				minW = wds[i],
-				extW = 0;
-			if (isSpan && extSum > 0) {
-				var difW = bdfaker.cells[i].offsetWidth - minW;
-				if (difW > 0) {
-					extW = extSum > difW ? difW : extSum;
-					extSum -= extW;
-				}	
-			}
-			wd = i != 0 ? minW + extW : count;
+			var wd = wds[i];
 			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
 			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
@@ -1076,7 +1048,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			head.cells[i].style.width = cpwd + "px";
 			var cell = head.cells[i].firstChild;
 			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
-			count -= wd;
 		}
 		
 		// in some case, the total width of this table may be changed.
@@ -1086,11 +1057,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (total == this.ebody.offsetWidth && 
 				this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
 				total = tblwd;
-				
-			hdtable.style.width = total + "px";	
-			if (bdtable) bdtable.style.width = hdtable.style.width;
-			if (this.efoot) this.efoot.firstChild.style.width = hdtable.style.width;
 		}
+		
+		this._adjMinWd();
 	},
 	_cpCellWd: function () {
 		var dst = this.efoot.firstChild.rows[0],

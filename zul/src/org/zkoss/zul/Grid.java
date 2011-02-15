@@ -202,7 +202,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private boolean _sizedByContent;
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
@@ -332,45 +331,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	 */
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
-	}
-	
-	/**
-	 * Sets whether sizing grid column width by its content.
-	 * <p>Default: false. It means the outline of listbox is dependent on
-	 * the header.
-	 * The performance is better and the user can precisely resize certain
-	 * headers. If you want a column to have the width of the content,
-	 * you can specify hflex="min".
-	 * <p>If set to true, the outline will depend on the content of body.
-	 * In other words, the width specified in the header is only for reference.
-	 * The browser will adjust the width when a column's width is changed, so
-	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 * 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
-	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent 
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent) {
-		if(_sizedByContent != byContent) {
-			_sizedByContent = byContent;
-			smartUpdate("sizedByContent", byContent);
-		}
-	}
-	/**
-	 * Returns whether sizing grid column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
-	 * it's prior to the original value.
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent() {
-		String s = (String) getAttribute("sized-by-content");
-		if (s == null) {
-			s = (String) getAttribute("fixed-layout");
-			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
-		} else
-			return "true".equalsIgnoreCase(s);
 	}
 	
 	/** Returns the rows.

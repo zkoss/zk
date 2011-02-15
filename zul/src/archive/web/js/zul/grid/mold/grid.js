@@ -47,9 +47,7 @@ function (out) {
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="height:', hgh, '"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0);
-	if (!this.isSizedByContent())
-		out.push(' style="table-layout:fixed;', wdStyle,'"');		
+	out.push('><table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
 	
 	if (this.columns)

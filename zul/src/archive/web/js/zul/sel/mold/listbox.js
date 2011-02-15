@@ -49,9 +49,7 @@ function (out) {
 	if (hgh) out.push(' style="overflow:hidden;height:', hgh, '"');
 	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:', this.getRows() * 15, 'px"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"');
-	if (!this.isSizedByContent())
-		out.push(' style="table-layout:fixed;', wdStyle,'"');		
+	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
 	
 	if(this.listhead)

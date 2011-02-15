@@ -365,6 +365,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		
 		delete mesh._span; //no span!
+		delete mesh._sizedByContent; //no sizedByContent!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
 		}

@@ -116,6 +116,7 @@ ZK 5.0.6
   3180189: Sizing on Listbox/Grid with hflex="min" causes expanding
   3094720: Last child of Hlayout/Vlayout should have no right/bottom padding
   3180824: Listbox, mold="select", multiple rows
+  3181881: Listbox/Grid sizedByContent="true" cannot resize column
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
