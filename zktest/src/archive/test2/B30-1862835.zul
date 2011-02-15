@@ -23,7 +23,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:a="http://www.zkoss.org/2005/zk/annotation"
 	xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:h5>Please click the cell "Second" twice or triple, the second grid will recalculate its width every time.</n:h5>
+	<n:h5>Please click the cell "Second" twice or triple, the second grid will recalculate its width as it original has.</n:h5>
 	<zscript>
 		import java.util.ArrayList; 
 		import java.util.HashSet; 

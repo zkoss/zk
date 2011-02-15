@@ -19,11 +19,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
         <n:p>[ 1881190 ] </n:p>
+	<!-- Bug description 
 	<n:p>	Modal window shows 2 or 3 times if doModal takes a long time. In situations where process of showing a modal window is too long, the window shows two (after the first doModal) or three (after the second doModal invocation on the same window) times. </n:p>
+ 	-->
+	<n:p>To reproduce this case you can click on the 'show' button and if you can see the following description that is a bug(please test this for 2~3 times).</n:p>
+	<n:p><n:b>Description:</n:b> the window shows two times at different positions: at left side, then hides and then appears in the middle of page), if the process run for a long time (for example more than 5 seconds.)</n:p>
 
-	<n:p>To reproduce this case you can click on the 'show' button (the window shows two times at different positions: at left side, then hides and then appears in the middle of page), then on 'close' and again on 'show' (appears three times at center, at the left side and at center again)</n:p>
-
-        <n:p>It will run for long time.</n:p>
+        
 	<button label="show">
 		<attribute name="onClick">{ mywin.doModal(); }</attribute>
 	</button>

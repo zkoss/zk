@@ -18,24 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <div>
-	<n:table xmlns:n="http://www.zkoss.org/2005/zk/native">
-		<n:tr>
-			<n:td>Top</n:td>
-		</n:tr>
-<n:tr>
-<n:td>
-We have a screen which was working fine in ZK2.4.1. One of its sections
-is a Grid inside a Groupbox.
-
-With ZK3.0, this section continues to work fine in FF, and in fact looks
-more appealing.
-
-However in IE it is a nightmare: the Grid floats half out of the Groupbox,
-obscuring the caption completely and leaving an ugly empty blue section
-underneath.
-</n:td>
-</n:tr>
-	</n:table>
+Please click the buttons("addRow", "changeHeight(100px)", and "changeHeight(150px)"), and then the display shouldn't look strange. 
 	<grid id="grid" mold="paging" height="60px">
 		<columns>
 			<column label="column1" align="Center" />
