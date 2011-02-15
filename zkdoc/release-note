@@ -115,6 +115,7 @@ ZK 5.0.6
   3147382: confirmClose message under timeout scenario
   3180189: Sizing on Listbox/Grid with hflex="min" causes expanding
   3094720: Last child of Hlayout/Vlayout should have no right/bottom padding
+  3180824: Listbox, mold="select", multiple rows
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

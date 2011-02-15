@@ -1,0 +1,24 @@
+<zk>
+<html><![CDATA[
+<ol>
+ <li>Click "A", and then it shall be selected.</li>
+ <li>Notice that the listbox shall not scroll up.</li>
+</ol>
+]]></html>
+<listbox rows="5" mold="select" multiple="true">
+<listitem label="Inbox"/>
+<listitem label="Received"/>
+<listitem label="Draft"/>
+<listitem label="A"/>
+<listitem label="B"/>
+<listitem label="C"/>
+<listitem label="D"/>
+<listitem label="E"/>
+<listitem label="F"/>
+<listitem label="G"/>
+<listitem label="H"/>
+<listitem label="I"/>
+<listitem label="J"/>
+<listitem label="K"/>
+</listbox>
+</zk>

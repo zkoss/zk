@@ -63,7 +63,6 @@ public class ColSizeEvent extends Event {
 
 	/** Converts an AU request to a size event.
 	 * @since 5.0.0
-	 * @deprecated use {@link getColsSizeEvent} instead
 	 */
 	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
 		final Map data = request.getData();
@@ -81,7 +80,6 @@ public class ColSizeEvent extends Event {
 	/** Constructs an instance of {@link ColSizeEvent}.
 	 *
 	 * @see #ColSizeEvent(String, Component, int, Component, String, int)
-	 * @deprecated use {@link ColSizeEvent(String evtnm, Component target, int icol, Component col, String[] widths, int keys)} instead
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
 	Component col, int keys) {
