@@ -182,7 +182,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt._updDOFocus === false)
 					wgt._updDOFocus = fc; //let _updDomOuter handle it
 				else
-					fc.focus(10); // use timeout for the bug 3057311
+					fc.focus(0); // use timeout for the bug 3057311
+					// use 0 instead of 10, otherwise it will cause this bug 1936366
 		}
 		wgt._lastfocus = null;
 	}
