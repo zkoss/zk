@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-no metter click on checkbox, button or textbox. it should not popup selection message.
-<listbox onSelect='alert("selected")'>
+no metter click on checkbox, button or textbox. it should not show "selected" message below.
+<listbox onSelect='inf.appendChild(new Label("selected"))'>
 	<listhead>
 		<listheader label="Population"/>
 		<listheader label="%"/>
@@ -35,4 +35,5 @@ no metter click on checkbox, button or textbox. it should not popup selection me
 		<listcell><textbox cols="8" value="40%"/></listcell>
 	</listitem>
 </listbox>
+<vlayout id="inf"/>
 </zk>

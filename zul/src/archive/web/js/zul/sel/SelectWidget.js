@@ -55,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _isButton(evt) {
 		return evt.target.$button //for extension, it makes a widget as a button
-			&& (zk.isLoaded('zul.wgt')
+			|| (zk.isLoaded('zul.wgt')
 			&& evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
 	}
 	function _focusable(evt) {
