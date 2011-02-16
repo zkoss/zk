@@ -454,18 +454,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_getMinWd: function () {
 		this._calcMinWds();
-		var hdfaker = this.ehdfaker,
+		var bdfaker = this.ebdfaker,
 			hdtable = this.eheadtbl,
 			bdtable = this.ebodytbl,
 			wd,
 			wds = [],
 			width,
 			_minwds = this._minWd.wds;
-		if (this.head && hdfaker) {
+		if (this.head && bdfaker) {
 			width = 0;
 			for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
-				if (zk(hdfaker.cells[i]).isVisible()) {
-					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
+				if (zk(bdfaker.cells[i]).isVisible()) {
+					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : bdfaker.cells[i].offsetWidth;
 					width += wd;
 				}
 				++i;

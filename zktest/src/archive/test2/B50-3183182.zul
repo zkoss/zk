@@ -1,0 +1,69 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see top and bottom two parts of blocks separate by a horizontal line</li>
+<li>The top part you shall see three rectangles with size fit exactly to its contents</li>
+<li>The bottom part you shall see also three rectangles with the width expand to be as wide as the browser window</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+	<grid hflex="min">
+		<columns>
+			<column hflex="min"/>
+		</columns>
+		<rows>
+			<row>Row Content</row>
+		</rows>
+	</grid>
+	<listbox hflex="min">
+		<listhead>
+			<listheader hflex="min"/>
+		</listhead>
+		<listitem>
+			<listcell>Listitem Content</listcell>
+		</listitem>
+	</listbox>
+	<tree hflex="min">
+		<treecols>
+			<treecol hflex="min"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<separator bar="true" spacing="50px"/>
+	<grid hflex="min">
+		<columns>
+			<column />
+		</columns>
+		<rows>
+			<row>Row Content</row>
+		</rows>
+	</grid>
+	<listbox hflex="min">
+		<listhead>
+			<listheader/>
+		</listhead>
+		<listitem>
+			<listcell>Listitem Content</listcell>
+		</listitem>
+	</listbox>
+	<tree hflex="min">
+		<treecols>
+			<treecol />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

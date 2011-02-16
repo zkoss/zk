@@ -16,7 +16,7 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		innerWidth = this.getInnerWidth(),
-		wdAttr = this.getHflex() == 'min' ? '' : innerWidth == '100%' ? ' width="100%"' : '',
+		wdAttr = innerWidth == '100%' ? ' width="100%"' : '', //bug#3183182
 		wdStyle = innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos;
 

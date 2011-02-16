@@ -269,7 +269,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					max = 0,
 					precalc = false;
-				if (min)
+				if (min !== undefined)
 					max = min;
 				else {
 					this.setFlexSize_({height:'auto'});
@@ -394,7 +394,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (sz && sz.height >= 0)
 					this._vflexsz = sz.height + margin;
 				this.afterChildrenMinFlex_('h');
-				if (!min)
+				if (min === undefined)
 					this._vflexsz = wgtn.offsetHeight; //sometimes, there will be one pixel different for no reason
 			}
 			return this._vflexsz;
@@ -406,7 +406,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					max = 0,
 					precalc = false;
-				if (min)
+				if (min !== undefined)
 					max = min;
 				else {
 					this.setFlexSize_({width:'auto'});
@@ -529,7 +529,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (sz && sz.width >= 0)
 					this._hflexsz = sz.width + margin;
 				this.afterChildrenMinFlex_('w');
-				if (!min)
+				if (min === undefined)
 					this._hflexsz = wgtn.offsetWidth; //sometimes, there will be one pixel different for no reason
 			}
 			return this._hflexsz;
