@@ -16,6 +16,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<ol>
 			<li>Click on both listboxes. Their drop down should appear normally.</li>
 			<li>Drag the inner Div. Only the inner Div part should move.</li>
+			
+			<b>Note. when you drag the inner Div, you shall only drag the light blue area, if also drag brown area, that 's bug </b>
 		</ol>
 	]]></html>
 	<div draggable="true" style="background: #CCCC99" width="200px">
