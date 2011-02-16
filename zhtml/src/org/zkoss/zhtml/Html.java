@@ -39,6 +39,12 @@ public class Html extends AbstractTag {
 	}
 
 	//-- super --//
+	public void invalidate() {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null && exec.isAsyncUpdate(getPage()))
+			throw new UnsupportedOperationException("html.invalidate() now allowed");
+		super.invalidate();
+	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final Execution exec = Executions.getCurrent();
 		final StringWriter bufout = new StringWriter();

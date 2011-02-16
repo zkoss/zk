@@ -127,7 +127,8 @@ public class HtmlPageRenders {
 	 * It is null or &lt;!DOCTYPE ...&gt;.
 	 */
 	public static final String outDocType(Execution exec, Page page) {
-		if (exec.getAttribute(DOCTYPE_GENED) == null) {
+		if (exec.getAttribute(DOCTYPE_GENED) == null
+		&& !exec.isAsyncUpdate(null)) {
 			exec.setAttribute(DOCTYPE_GENED, Boolean.TRUE);
 			final String docType = ((PageCtrl)page).getDocType();
 			return trimAndLF(docType != null ?
@@ -150,20 +151,23 @@ public class HtmlPageRenders {
 	 * @param exec the execution (never null)
 	 */
 	public static String outUnavailable(Execution exec) {
-		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) != null)
-			return ""; //nothing to generate
-		exec.setAttribute(ATTR_UNAVAILABLE_GENED, Boolean.TRUE);
+		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) == null
+		&& !exec.isAsyncUpdate(null)) {
+			exec.setAttribute(ATTR_UNAVAILABLE_GENED, Boolean.TRUE);
 
-		final Device device = exec.getDesktop().getDevice();
-		String s = device.getUnavailableMessage();
-		return s != null ?
-			"<noscript>\n" + s + "\n</noscript>": "";
+			final Device device = exec.getDesktop().getDevice();
+			String s = device.getUnavailableMessage();
+			return s != null ?
+				"<noscript>\n" + s + "\n</noscript>": "";
+		}
+		return ""; //nothing to generate
 	}
 	/** Returns the first line to be generated to the output,
 	 * or null if no special first line.
 	 */
 	public static final String outFirstLine(Execution exec, Page page) {
-		if (exec.getAttribute(FIRST_LINE_GENED) == null) {
+		if (exec.getAttribute(FIRST_LINE_GENED) == null
+		&& !exec.isAsyncUpdate(null)) {
 			exec.setAttribute(FIRST_LINE_GENED, Boolean.TRUE);
 			return trimAndLF(((PageCtrl)page).getFirstLine());
 		}
