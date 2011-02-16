@@ -119,6 +119,7 @@ ZK 5.0.6
   3181881: Listbox/Grid sizedByContent="true" cannot resize column
   3182114: Listbox/Grid columns hflex="1" not correct with hflex="min"
   2987511: Class extends Map can miss calling Getters in DataBinding
+  3183172: hflex="min" on Grid/Listbox/Tree cause js error
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

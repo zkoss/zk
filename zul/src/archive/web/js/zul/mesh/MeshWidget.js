@@ -95,11 +95,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.ebodytbl.style.width = '';
 			ebodytblfix = wgt.ebodytbl.style.tableLayout;
 			wgt.ebodytbl.style.tableLayout = '';
-			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				var bdcell = bdfaker.cells[i];
-				bdfakerws[i] = bdcell.style.width;
-				bdcell.style.width = '';
-			}
+			if (bdfaker)
+				for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+					var bdcell = bdfaker.cells[i];
+					bdfakerws[i] = bdcell.style.width;
+					bdcell.style.width = '';
+				}
 		}
 
 		//calculate widths
@@ -107,21 +108,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0,
 			w = head ? head = head.lastChild : null,
 			headWgt = wgt.getHeadWidget();
-
-		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-			var wd = bdwd = bdfaker.cells[i].offsetWidth,
-				$cv = zk(w.$n('cave')),
-				hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
-				ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
-				header;
-			if ((header = headWgt.getChildAt(i)) && header.getWidth())
-				hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
-			if (hdwd > wd) wd = hdwd;
-			if (ftwd > wd) wd = ftwd;
-			wds[i] = wd;
-			width += wd;
-			if (w) w = w.previousSibling;
-		}
+		if (bdfaker)
+			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				var wd = bdwd = bdfaker.cells[i].offsetWidth,
+					$cv = zk(w.$n('cave')),
+					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
+					ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
+					header;
+				if ((header = headWgt.getChildAt(i)) && header.getWidth())
+					hdwd = Math.max(hdwd, hdfaker.cells[i].offsetWidth);
+				if (hdwd > wd) wd = hdwd;
+				if (ftwd > wd) wd = ftwd;
+				wds[i] = wd;
+				width += wd;
+				if (w) w = w.previousSibling;
+			}
 
 		if (wgt.eheadtbl) {
 			wgt.eheadtbl.width = eheadtblw||'';
@@ -144,9 +145,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.ebodytbl) {
 			wgt.ebodytbl.width = ebodytblw||'';
 			wgt.ebodytbl.style.tableLayout = ebodytblfix||'';
-			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				bdfaker.cells[i].style.width = bdfakerws[i];
-			}
+			if (bdfaker)
+				for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+					bdfaker.cells[i].style.width = bdfakerws[i];
+				}
 		}
 
 		if (wgtn)
@@ -457,14 +459,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			bdtable = this.ebodytbl,
 			wd,
 			wds = [],
-			width = 0,
+			width,
 			_minwds = this._minWd.wds;
-		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
-			if (zk(hdfaker.cells[i]).isVisible()) {
-				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
-				width += wd;
+		if (this.head && hdfaker) {
+			width = 0;
+			for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
+				if (zk(hdfaker.cells[i]).isVisible()) {
+					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
+					width += wd;
+				}
+				++i;
 			}
-			++i;
 		}
 		return width;
 	},
