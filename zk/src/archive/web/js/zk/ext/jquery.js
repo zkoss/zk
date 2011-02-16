@@ -5480,7 +5480,7 @@ jQuery.each(["height", "width"], function( i, name ) {
 
 			if ( computed ) {
 				/* Jumper Chen, Potix, 20110216*/
-				if (extra != 'styleOnly') {
+				if (extra != 'styleonly') {
     				if ( elem.offsetWidth !== 0 ) {
     					val = getWH( elem, name, extra );
     

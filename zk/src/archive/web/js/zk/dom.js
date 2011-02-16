@@ -1972,17 +1972,17 @@ this._syncShadow(); //synchronize shadow
 	 * An override function that provide a way to get the style value where is
 	 * defined in the CSS file or the style object, rather than the computed value.
 	 * <p> Note that the function is only applied to the width or height property,
-	 *  and the third argument must be 'styleOnly'.
+	 *  and the third argument must be 'styleonly'.
 	 * <p> For example,
 <pre><code>
-jq.css(elem, 'height', 'styleOnly');
+jq.css(elem, 'height', 'styleonly');
 or
-jq.css(elem, 'width', 'styleOnly');
+jq.css(elem, 'width', 'styleonly');
 </code></pre>
 	 * @since 5.0.6 
 	 * @param DOMElement elem a Dom element
 	 * @param String name the style name
-	 * @param String extra an option in this case, it must be 'styleOnly'
+	 * @param String extra an option in this case, it must be 'styleonly'
 	 * @return String the style value.
 	 */
 	//css: function () {},
