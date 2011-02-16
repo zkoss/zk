@@ -121,6 +121,7 @@ ZK 5.0.6
   2987511: Class extends Map can miss calling Getters in DataBinding
   3183172: hflex="min" on Grid/Listbox/Tree cause js error
   3183182: Inconsistent behavior on Grid/Listbox/Tree with hflex="min"
+  3183228: Grid/Listbox/Tree has wrong sizing when header sizable=true
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

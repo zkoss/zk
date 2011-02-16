@@ -364,10 +364,16 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		//feature#3177275: Listheader should override hflex when sized by end user
 		var hdfakercells = mesh.ehdfaker.cells,
+			bdfakercells = mesh.ebdfaker.cells,
 			wds = [];
 			i = 0;
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
-			w._width = wds[i] = hdfakercells[i].style.width; //bug#3180189. setWidth() has side effect
+			var stylew = hdfakercells[i].style.width;
+			w._width = wds[i] = stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
+			if (!stylew) { //bug#3183228.
+				hdfakercells[i].style.width = w._width;
+				bdfakercells[i].style.width = w._width;
+			}
 			++i;
 		}
 		
