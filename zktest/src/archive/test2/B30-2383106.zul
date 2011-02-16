@@ -22,10 +22,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <label>Check the checkbox and radiobox</label>
 <checkbox id="cb" />
 <radio />
-<label>Then click the link below, hit the back button and click "Go"
+<label>Then click the link below, and then press the Browser's "Back" button and click Browser's "Go forward"
 again</label>
-<toolbarbutton label="Google" href="http://www.google.com" />
-<label>Safari and Opera will set the checkbox and the radiobox to checked but the "Go" button script
-will fail</label>
+<toolbarbutton label="Here is a link. 'Google'" href="http://www.google.com" />
+<label>The result is that Safari and Opera won't set the checkbox and the radiobox to be checked</label>
 </vbox>
 </window>

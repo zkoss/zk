@@ -19,22 +19,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>Click the "Warning" button, and then close it, and then you should see the focus on the input element.</n:p>
-	You have to turn on the event thread
-	<label multiline="true">
-		<attribute name="value"><![CDATA[
-			<system-config>
-				<disable-event-thread>false</disable-event-thread>
-			</system-config>
-		]]></attribute>
-	</label>
 	<separator/>
 	<window title="Messagebox demo" border="normal">
 	<textbox id="focus" />
 	<button label="Warning" width="100px">
 	<attribute name="onClick">{
 	Messagebox.show("Warning is pressed", "Warning", Messagebox.OK,
-	Messagebox.EXCLAMATION);
-	focus.focus();
+	Messagebox.EXCLAMATION, new EventListener(){
+	public void onEvent(Event event) throws Exception {
+		focus.focus();
+	}
+	});
+	
 	}</attribute>
 	</button>
 	</window>
