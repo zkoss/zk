@@ -1968,7 +1968,24 @@ this._syncShadow(); //synchronize shadow
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
 	}
-
+	/**
+	 * An override function that provide a way to get the style value where is
+	 * defined in the CSS file or the style object, rather than the computed value.
+	 * <p> Note that the function is only applied to the width or height property,
+	 *  and the third argument must be 'styleOnly'.
+	 * <p> For example,
+<pre><code>
+jq.css(elem, 'height', 'styleOnly');
+or
+jq.css(elem, 'width', 'styleOnly');
+</code></pre>
+	 * @since 5.0.6 
+	 * @param DOMElement elem a Dom element
+	 * @param String name the style name
+	 * @param String extra an option in this case, it must be 'styleOnly'
+	 * @return String the style value.
+	 */
+	//css: function () {},
 	/** Decodes a JSON string to a JavaScript object. 
 	 * <p>It is similar to jq.parseJSON (jQuery's default function), except
 	 * 1) it doesn't check if the string is a valid JSON

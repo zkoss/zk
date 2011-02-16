@@ -21,10 +21,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			box.rows[1].style.height = "";
 			box.style.height = !n.style.height || n.style.height == "auto" ? "": "100%";			
 			if (n.style.height && box.offsetHeight) {
-				var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
+				var cellHgh = zk.parseInt(jq.css(box.rows[0].cells[0], 'height', 'styleOnly'));
 				if (cellHgh != box.rows[0].cells[0].offsetHeight) {
 					box.rows[1].style.height = jq.px0(box.offsetHeight -
-						cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
+						cellHgh - zk.parseInt(jq.css(box.rows[2].cells[0], 'height', 'styleOnly')));
 				}
 			}
 		}
