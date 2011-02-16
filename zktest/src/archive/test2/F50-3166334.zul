@@ -1,4 +1,4 @@
-<div onOK='alert("onOK pressed")'>
+<div onOK='alert("onOK pressed")' width="100%" height="100%">
 	<html><![CDATA[
 	<ol>
 		<li>Press ENTER, you shall see a message box shown with "onOK pressed"</li>
