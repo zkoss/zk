@@ -3149,9 +3149,6 @@ public class Listbox extends MeshElement implements Paginated,
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
 
-			if (isSizedByContent())
-				renderer.render("sizedByContent", true);
-
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());
 

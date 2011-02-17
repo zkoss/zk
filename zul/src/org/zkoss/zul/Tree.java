@@ -1937,8 +1937,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());
-		if (isSizedByContent())
-			renderer.render("sizedByContent", true);
 
 		if (_model != null)
 			render(renderer, "model", true);

@@ -11,8 +11,6 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-
-
 package org.zkoss.zul.impl.api;
 
 /**
@@ -22,18 +20,48 @@ package org.zkoss.zul.impl.api;
  */
 public interface MeshElement extends XulElement {
 	/**
-	 * Sets whether to span the width of the columns evenly to occupy the whole grid. It 
-	 * is meaningful only if there are extra space available for columns.
-	 * <p>Default: false. It means the width of a column takes only specified
-	 * space based on its setting even there are extra space.
-	 * @param span whether to span the width of the columns to occupy the whole grid.
+	 * Sets column span hint of this component. 
+	 * <p>String number span indicates how this component distributes remaining empty space to the 
+	 * specified column(1-based). "1" means distribute remaining empty space to the 1st column; "2" means 
+	 * distribute remaining empty space to the 2nd column, etc.. The spanning column will grow to 
+	 * fit the extra remaining space.</p>
+	 * <p>Special span hint with "true" means span ALL columns proportionally per their 
+	 * original widths while null or "false" means NOT spanning any column.</p>
+	 * <p>Default: null. That is, NOT span any column.</p>
+	 * <p>Note span is meaningful only if there is remaining empty space for columns.</p>
+	 * 
+	 * @param span the column span hint.
+	 * @since 5.0.6
+	 * @see #getSpan 
+	 * @see #setSpan(boolean)
+	 */
+	public void setSpan(String span);
+	
+	/**
+	 * Return column span hint of this component.
+	 * <p>Default: null
+	 * @return column span hint of this component.
+	 * @since 5.0.6
+	 * @see #setSpan 
+	 */
+	public String getSpan();
+	/**
+	 * Sets whether distributes remaining empty space of this component to ALL columns proportionally. 
+	 * <p>Default: false. That is, NOT span any column.</p>
+	 * <p>Note span is meaningful only if there is remaining empty space for columns.</p>
+	 * @param span whether to span the width of ALL columns to occupy the whole mesh element(grid/listbox/tree).
+	 * @since 5.0.5
 	 */
 	public void setSpan(boolean span);
 	
 	/**
-	 * Returns whether span column width when there are extra space.
-	 * <p>Default: false.
-	 * @return whether span column width when there are extra space.
+	 * Returns whether distributes remaining empty space of this component to ANY column. 
+	 * <p>Default: false.</p>
+	 * @return whether distributes remaining empty space of this component to ANY column.
+	 * @since 5.0.5
+	 * @see #getSpan
+	 * @see #setSpan(boolean)
+	 * @see #setSpan(String)
 	 */
 	public boolean isSpan();
 	

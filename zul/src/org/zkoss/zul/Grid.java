@@ -1306,9 +1306,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 
 		render(renderer, "oddRowSclass", _scOddRow);
 		
-		if (isSizedByContent())
-			renderer.render("sizedByContent", true);
-		
 		if (_model != null)
 			render(renderer, "model", true);
 

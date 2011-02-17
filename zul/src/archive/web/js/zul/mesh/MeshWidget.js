@@ -210,22 +210,33 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		sizedByContent: _zkf,
 		/**
-		 * Sets whether to span the width of the columns to occupy the whole widget.
-		 * It is meaningful only if {@link #isSizedByContent} is true, and
-		 * {@link #getHflex} is not speciifed.
-		 * <p>Default: false. It means the width of a column takes only the
-		 * required space based on its content (when {@link #isSizedByContent}
-		 * is specified).
-		 * @param boolean span
-		 * @since 5.0.5
+		 * Return column span hint of this widget.
+		 * <p>Default: null
+		 * @return String column span hint of this widget.
+		 * @since 5.0.6
+		 * @see #setSpan 
 		 */
 		/**
-		 * Returns whether span column width when {@link #isSizedByContent} is true.
-		 * <p>Default: false.
-		 * @return boolean
-		 * @since 5.0.5
+		 * Sets column span hint of this mesh widget. 
+		 * <p>The parameter span is a number in String type indicating how this 
+		 * component distributes remaining empty space to the 
+		 * specified column. "1" means distribute remaining empty space to the 1st column; "2" means 
+		 * distribute remaining empty space to the 2nd column, etc.. The spanning column will grow to 
+		 * fit the extra remaining space.</p>
+		 * <p>Special span hint with "true" means span ALL columns proportionally per their 
+		 * original widths while null or "false" means NOT spanning any column.</p>
+		 * <p>Default: null. That is, NOT span any column.</p>
+		 * <p>Note span is meaningful only if there is remaining empty space for columns.</p>
+		 * 
+		 * @param String span the column span hint.
+		 * @since 5.0.6
+		 * @see #getSpan 
+		 * @see #setSpan(boolean)
 		 */
-		span: _zkf,
+		span: function(v) {
+			this._nspan = (true === v || 'true' == v) ? -1 : zk.parseInt(v);
+			this.rerender(); //_zkf
+		},
 		/**
 		 * Returns whether turn on auto-paging facility when mold is
 		 * "paging". If it is set to true, the {@link #setPageSize} is ignored; 
@@ -982,35 +993,53 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			++i;
 		}
 		
-		var	total = bdtable.parentNode.clientWidth; 
-		
-		if (total <= width) //no extra space
-			return;
+		var	total = bdtable.parentNode.clientWidth,
+			extSum = total - width; 
 		
 		var count = total,
 			visj = -1;
-		for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			wd = ((wds[i] * total / width) + 0.5) | 0;
-			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
-			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			var cpwd = zk(head.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
-			head.cells[i].style.width = cpwd + "px";
-			var cell = head.cells[i].firstChild;
-			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
-			count -= wd;
-			visj = i;
-		}
-		
-		//compensate calc error
-		if (count != 0 && visj >= 0) {
-			wd = hdfaker.cells[visj].offsetWidth + count;
-			bdfaker.cells[visj].style.width = zk(bdfaker.cells[visj]).revisedWidth(wd) + "px";
-			hdfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;
-			if (ftfaker) ftfaker.cells[visj].style.width = bdfaker.cells[visj].style.width;
-			var cpwd = zk(head.cells[visj]).revisedWidth(zk.parseInt(hdfaker.cells[visj].style.width));
-			head.cells[visj].style.width = cpwd + "px";
+		if (this._nspan < 0) { //span to all columns
+			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				if (!zk(hdfaker.cells[i]).isVisible()) continue;
+				wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) | 0);
+				var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
+					stylew = jq.px0(rwd);
+				if (bdfaker.cells[visj].style.width == stylew) continue;
+				bdfaker.cells[visj].style.width = stylew; 
+				hdfaker.cells[visj].style.width = stylew;
+				if (ftfaker) ftfaker.cells[visj].style.width = stylew;
+				var cpwd = zk(head.cells[visj]).revisedWidth(rwd);
+				head.cells[visj].style.width = jq.px0(cpwd);
+				var cell = head.cells[visj].firstChild;
+				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+				count -= wd;
+				visj = i;
+			}
+			//compensate calc error
+			if (extSum > 0 && count != 0 && visj >= 0) {
+				wd = hdfaker.cells[visj].offsetWidth + count;
+				var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
+					stylew = jq.px0(rwd);
+				bdfaker.cells[visj].style.width = stylew; 
+				hdfaker.cells[visj].style.width = stylew;
+				if (ftfaker) ftfaker.cells[visj].style.width = stylew;
+				var cpwd = zk(head.cells[visj]).revisedWidth(rwd);
+				head.cells[visj].style.width = jq.px0(cpwd);
+				var cell = head.cells[visj].firstChild;
+				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
+			}
+		} else { //feature#3184415: span to a specific column
+			visj = this._nspan - 1;
+			if (visj < 0  || !zk(hdfaker.cells[visj]).isVisible()) return;
+			wd = extSum > 0 ? (wds[visj] + extSum) : wds[visj];
+			var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
+				stylew = jq.px0(rwd);
+			if (bdfaker.cells[visj].style.width == stylew) return;
+			bdfaker.cells[visj].style.width = stylew; 
+			hdfaker.cells[visj].style.width = stylew;
+			if (ftfaker) ftfaker.cells[visj].style.width = stylew;
+			var cpwd = zk(head.cells[visj]).revisedWidth(rwd);
+			head.cells[visj].style.width = jq.px0(cpwd);
 			var cell = head.cells[visj].firstChild;
 			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 		}
