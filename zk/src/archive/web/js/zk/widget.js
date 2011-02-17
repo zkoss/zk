@@ -269,7 +269,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					max = 0,
 					precalc = false;
-				if (min !== undefined && min != null)
+				if (min != null)
 					max = min;
 				else {
 					this.setFlexSize_({height:'auto'});
@@ -404,7 +404,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zkn = zk(n),
 					max = 0,
 					precalc = false;
-				if (min !== undefined && min != null)
+				if (min != null)
 					max = min;
 				else {
 					this.setFlexSize_({width:'auto'});

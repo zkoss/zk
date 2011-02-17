@@ -857,8 +857,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//check if need to span width
-		if (this._isAllWidths())
-			this._adjSpanWd();
+		this._adjSpanWd();
 
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
@@ -965,6 +964,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return this._minWd;
 	},
 	_adjSpanWd: function () {
+		if (!this._isAllWidths())
+			return;
 		var isSpan = this.isSpan();
 		if (!isSpan)
 			return;
@@ -1002,15 +1003,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				if (!zk(hdfaker.cells[i]).isVisible()) continue;
 				wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) | 0);
-				var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
+				var rwd = zk(bdfaker.cells[i]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
-				if (bdfaker.cells[visj].style.width == stylew) continue;
-				bdfaker.cells[visj].style.width = stylew; 
-				hdfaker.cells[visj].style.width = stylew;
-				if (ftfaker) ftfaker.cells[visj].style.width = stylew;
-				var cpwd = zk(head.cells[visj]).revisedWidth(rwd);
-				head.cells[visj].style.width = jq.px0(cpwd);
-				var cell = head.cells[visj].firstChild;
+				if (bdfaker.cells[i].style.width == stylew) continue;
+				bdfaker.cells[i].style.width = stylew; 
+				hdfaker.cells[i].style.width = stylew;
+				if (ftfaker) ftfaker.cells[i].style.width = stylew;
+				var cpwd = zk(head.cells[i]).revisedWidth(rwd);
+				head.cells[i].style.width = jq.px0(cpwd);
+				var cell = head.cells[i].firstChild;
 				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 				count -= wd;
 				visj = i;
