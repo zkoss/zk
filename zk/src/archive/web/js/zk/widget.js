@@ -489,7 +489,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				
 				//n might not be widget's element, add up the pad/border/margin in between
-				var pb = 0, body = document.body;
+				var pb = 0, body = document.body, oldFloat;
 				while (n && n != body && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderWidth();
@@ -504,7 +504,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb += n.offsetLeft;
 					if (precalc)
 						pb -= pleft;
+					
+					//**Trick to get safari's right margin in style(rather than the computed one)
+					//http://stackoverflow.com/questions/1450129/i-think-i-found-a-bug-in-webkit-or-jquery-can-others-confirm
+					if (zk.safari) { 
+						oldFloat = n.style.float;
+						n.style.float = 'left';
+					}
 					var rm = zkn.sumStyles("r", jq.margins);
+					if (zk.safari)
+						n.style.float = oldFloat;
+					
 					if (!zk.safari || rm >= 0)
 						pb += rm; 
 					n = p;
