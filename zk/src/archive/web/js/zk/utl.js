@@ -248,7 +248,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	today: function (fmt) {
 		var d = new Date(), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == "string") {
-			if (fmt.indexOf('H') >= 0) hr = d.getHours();
+			var fmt0 = fmt.toLowerCase();
+			if (fmt0.indexOf('h') >= 0 || fmt0.indexOf('k') >= 0) hr = d.getHours();
 			if (fmt.indexOf('m') >= 0) min = d.getMinutes();
 			if (fmt.indexOf('s') >= 0) sec = d.getSeconds();
 			if (fmt.indexOf('S') >= 0) msec = d.getMilliseconds();
