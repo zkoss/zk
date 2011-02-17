@@ -999,10 +999,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wds = [],
 			width = 0,
 			fakerflex = this.head.$n('hdfakerflex'),
+			hdfakervisible = zk(hdfaker).isRealVisible(true),
 			_minwds = this._minWd.wds;
 		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
 			if (zk(hdfaker.cells[i]).isVisible()) {
-				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfaker.cells[i].offsetWidth;
+				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfakervisible ? hdfaker.cells[i].offsetWidth : bdfaker.cells[i].offsetWidth;
 				width += wd;
 			}
 			++i;
@@ -1016,10 +1017,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._nspan < 0) { //span to all columns
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				if (!zk(hdfaker.cells[i]).isVisible()) continue;
-				wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) | 0);
+				wds[i] = wd = extSum <= 0 ? wds[i] : (((wds[i] * total / width) + 0.5) | 0);
 				var rwd = zk(bdfaker.cells[i]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
-				if (bdfaker.cells[i].style.width == stylew) continue;
+				count -= wd;
+				visj = i;
+				if (bdfaker.cells[i].style.width == stylew)
+					continue;
 				bdfaker.cells[i].style.width = stylew; 
 				hdfaker.cells[i].style.width = stylew;
 				if (ftfaker) ftfaker.cells[i].style.width = stylew;
@@ -1027,12 +1031,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				head.cells[i].style.width = jq.px0(cpwd);
 				var cell = head.cells[i].firstChild;
 				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
-				count -= wd;
-				visj = i;
 			}
 			//compensate calc error
 			if (extSum > 0 && count != 0 && visj >= 0) {
-				wd = hdfaker.cells[visj].offsetWidth + count;
+				wd = wds[visj] + count;
 				var rwd = zk(bdfaker.cells[visj]).revisedWidth(wd),
 					stylew = jq.px0(rwd);
 				bdfaker.cells[visj].style.width = stylew; 
