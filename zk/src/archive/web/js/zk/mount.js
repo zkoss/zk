@@ -395,7 +395,10 @@ function zkmprops(uuid, props) {
 			var delay, mount = mtAU, owner;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
 				delay = extra;
-				extra = aucmds;
+				if (wi) {
+					extra = aucmds;
+					aucmds = null;
+				}
 				mount = mtBL;
 			} //else assert(!aucmds); //no aucmds if AU
 
@@ -414,6 +417,8 @@ function zkmprops(uuid, props) {
 
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
+
+			doAuCmds(aucmds);
 		} catch (e) {
 			zk.mounting = false;
 			zk.error("Failed to mount: "+(e.message||e));
