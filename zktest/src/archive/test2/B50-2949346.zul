@@ -46,5 +46,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
     <tree id="testTree" model="${model}"/>
     <button label="1.Click to remove one item" onClick="removeItem()"/>
     <button label="2.Click to remove all" onClick="removeAllItems()" />
-    <button label="3.Reload and click to remove all at once" onClick="removeAllAtOnce()" />
+    <button label="3.Reload (Press F5 or click browser reload button) and then click to remove all at once" onClick="removeAllAtOnce()" />
 </zk>
