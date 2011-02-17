@@ -5,6 +5,9 @@
 	<%-- 3.0.4 and later --%>
 .z-separator-hor, .z-separator-hor-bar {
 	height: 7px; overflow: hidden; line-height: 0pt; font-size: 0pt;
+	<c:if test="${c:browser('ie6-')}">
+	width: 0px;
+	</c:if>
 }
 
 .z-separator-ver, .z-separator-ver-bar {

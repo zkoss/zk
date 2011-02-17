@@ -124,6 +124,7 @@ ZK 5.0.6
   3183182: Inconsistent behavior on Grid/Listbox/Tree with hflex="min"
   3183228: Grid/Listbox/Tree has wrong sizing when header sizable=true
   3183691: Send response to client cannot found the widget
+  3184673: Separator in Hlayout on IE6 looks strange
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
