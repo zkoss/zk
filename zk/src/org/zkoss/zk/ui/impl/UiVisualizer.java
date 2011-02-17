@@ -648,8 +648,15 @@ import org.zkoss.zk.au.out.*;
 			tvals.addAll(attrs.values());
 		}
 		if (_responses != null) {
-			for (Iterator it = _responses.values().iterator(); it.hasNext();) {
-				final Map resps = (Map)it.next();
+			for (Iterator it = _responses.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Object depends = me.getKey();
+				if (depends instanceof Component) {
+					final Component cd = (Component)depends;
+					if (cd.getPage() == null || isCUDisabled(cd))
+						continue;
+				}
+				final Map resps = (Map)me.getValue();
 				final List keyless = (List)resps.remove(null); //key == null
 				if (keyless != null) tvals.addAll(keyless);
 				tvals.addAll(resps.values()); //key != null
