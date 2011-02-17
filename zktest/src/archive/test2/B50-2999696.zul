@@ -7,6 +7,10 @@
 ]]>
 </html>
 <grid hflex="min" vflex="min">
+	<columns>
+		<column hflex="min"/>
+		<column hflex="min"/>
+	</columns>
 	<rows>
 		<row>
 			<label value="File:"/>

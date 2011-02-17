@@ -8,6 +8,10 @@
 <borderlayout vflex="min" hflex="min">
     <north vflex="min" hflex="min">
         <grid innerWidth="" hflex="min">
+        	<columns>
+				<column hflex="min"/>
+				<column hflex="min"/>
+			</columns>
             <rows>
                 <row>
                     <label value="File One:"/>
