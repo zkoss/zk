@@ -7,7 +7,7 @@
 3. Done.<br/>
 </p>
 ]]></html>
-<button label="Click Me!">
+<button id="myBtn" label="Click Me!">
 	<attribute name="onClick"><![CDATA[
 		final Window zulUI= (Window) Executions.createComponents(
 				"B30_2024223_1.zul", null, null);
