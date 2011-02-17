@@ -104,9 +104,9 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_FOCUS, 0);
-		addClientEvent(Tree.class, Events.ON_BLUR, 0);
+		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}

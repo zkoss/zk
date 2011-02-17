@@ -266,9 +266,9 @@ public class Listbox extends MeshElement implements Paginated,
 				| CE_IMPORTANT | CE_NON_DEFERRABLE);
 		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT);
-		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Listbox.class, Events.ON_FOCUS, 0);
-		addClientEvent(Listbox.class, Events.ON_BLUR, 0);
+		addClientEvent(Listbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
 		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
 		// 5.0.0

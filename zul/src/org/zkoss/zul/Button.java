@@ -37,8 +37,8 @@ implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 	private AuxInfo _auxinf;
 
 	static {
-		addClientEvent(Button.class, Events.ON_FOCUS, 0);
-		addClientEvent(Button.class, Events.ON_BLUR, 0);
+		addClientEvent(Button.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Button.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 
 	public Button() {
