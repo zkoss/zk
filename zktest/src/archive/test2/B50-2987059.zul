@@ -14,7 +14,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please upload a image, you should not see any Javascript error on IE browser.(you need to reload to retest it 4~5 times)
+	<html><![CDATA[
+	    <b>Note. IE only, you need to reload to retest it 4~5 times</b>
+		<ol>
+			<li>Upload a image</li>
+			<li>After upload image, the button you clicked will disappear, it won't display updated image</li>
+			<li>Shall not have javascript error on IE, if has javascript error, it's bug</li>
+		</ol>
+	]]></html>
 <button label="Upload" onClick="self.detach()" upload="true"/>
 </zk>
 
