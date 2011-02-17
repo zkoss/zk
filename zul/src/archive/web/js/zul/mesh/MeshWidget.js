@@ -704,6 +704,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
 		}
+		
+		// Bug 2896474
+		if (zk.ie6_) {
+			var hgh = this.getHeight();
+			if (!hgh || hgh == "auto" || hgh.indexOf('%') >= 0) {
+				var n = this.$n();
+				
+				n.style.height = '';
+				if (this.ebody)
+					this.ebody.style.height = "0px";
+				n._lastsz = null;
+			}
+		}
+		
 	},
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
