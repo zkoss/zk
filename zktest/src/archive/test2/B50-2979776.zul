@@ -6,6 +6,9 @@
 ]]>
 </html>
 <grid hflex="min">
+  <columns>
+	<column hflex="min"/>
+  </columns>
   <rows>
      <row><textbox /></row>
   </rows>
