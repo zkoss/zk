@@ -987,8 +987,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			bdfaker = this.ebdfaker,
 			ftfaker = this.eftfaker;
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
-		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
-		|| !this.getBodyWidgetIterator().hasNext()) return;
+		|| !bdfaker.cells.length)
+			return;
 		
 		var head = this.head.$n();
 		if (!head) return; 
