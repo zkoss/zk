@@ -26,7 +26,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		_detached = []; //used for resolving #stub in mount.js (it stores detached widgets in this AU)
 
 	// Checks whether to turn off the progress prompt
-	function checkProcessng() {
+	function checkProgressing() {
 		if (!zAu.processing()) {
 			_detached = []; //clean up
 			zk.endProcessing();
@@ -676,7 +676,7 @@ zAu = {
 				}
 			}, 3600);
 		} else
-			checkProcessng();
+			checkProgressing();
 
 		if (ex) throw ex;
 	},
