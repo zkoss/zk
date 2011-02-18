@@ -14,7 +14,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	right click on item, a dialog appear and shall show "512";
+	right click on item, a dialog appear and shall show "512" (in Windows' safari it will show "516");
 	<tree zclass="z-dottree" multiple="true" onSelect="alert(event.getKeys());">
 		<treechildren>
 			<treeitem forEach="1,1,1,1" label="item"/>		
