@@ -239,7 +239,7 @@ public class Listbox extends MeshElement implements Paginated,
 	 * child
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener,
+	private EventListener _pgListener, _pgImpListener,
 			_modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
@@ -1357,7 +1357,7 @@ public class Listbox extends MeshElement implements Paginated,
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent) event;
 					Events.postEvent(new PagingEvent(evt.getName(),
@@ -1368,7 +1368,7 @@ public class Listbox extends MeshElement implements Paginated,
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					if (_model != null && inPagingMold()) {
 						final Paginal pgi = getPaginal();
@@ -2993,7 +2993,7 @@ public class Listbox extends MeshElement implements Paginated,
 		}
 	}
 
-	private class ModelInitListener implements EventListener {
+	private class ModelInitListener implements SerializableEventListener {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Listbox.this.removeEventListener(

@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.event.PagingEvent;
@@ -99,7 +100,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener;
+	private EventListener _pgListener, _pgImpListener;
 	private String _pagingPosition = "bottom";
 
 	static {
@@ -310,7 +311,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
@@ -321,7 +322,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (inPagingMold()) {
 			invalidate();

@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
@@ -196,7 +197,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener, _modelInitListener;
+	private EventListener _pgListener, _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -253,7 +254,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		}
 	}
 	
-	private class ModelInitListener implements EventListener {
+	private class ModelInitListener implements SerializableEventListener {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Grid.this.removeEventListener("onInitModel", _modelInitListener);
@@ -496,7 +497,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
@@ -507,7 +508,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
 		//theorectically, _rows shall not be null if _model is not null when

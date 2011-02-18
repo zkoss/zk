@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zul.impl.CaptchaEngine;
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
 public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Captcha {
 	//control variable
 	private boolean _smartDrawCaptcha; //whether post the smartDraw event already?
-	private transient EventListener _smartDrawCaptchaListener; //the smartDrawListner
+	private EventListener _smartDrawCaptchaListener; //the smartDrawListner
 	
 	private static Random _random = new Random();//random used for various operation
 	private static final String EXCLUDE = "0123456789IOilo"; //default exclude list
@@ -422,7 +423,7 @@ public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Ca
 		}
 		_smartDrawCaptcha = true;
 		if (_smartDrawCaptchaListener == null) {
-			_smartDrawCaptchaListener = new EventListener() {
+			_smartDrawCaptchaListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					if (Strings.isBlank(getWidth()))
 						throw new UiException("captcha must specify width");
