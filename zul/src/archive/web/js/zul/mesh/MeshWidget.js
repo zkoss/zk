@@ -712,7 +712,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var n = this.$n();
 				
 				n.style.height = '';
-				if (this.ebody)
+				// check if this or this.parent has _vflex='min' should ignore for B50-2976912.zul
+				if (this.ebody && this._vflex != 'min' && (!this.parent || this.parent._vflex != 'min'))
 					this.ebody.style.height = "0px";
 				n._lastsz = null;
 			}
