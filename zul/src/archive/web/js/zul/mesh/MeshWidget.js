@@ -706,7 +706,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		// Bug 2896474
-		if (zk.ie6_) {
+		if (zk.ie6_ && this._vflex) {
 			var hgh = this.getHeight();
 			if (!hgh || hgh == "auto" || hgh.indexOf('%') >= 0) {
 				var n = this.$n();
