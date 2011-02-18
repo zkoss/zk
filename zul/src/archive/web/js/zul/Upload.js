@@ -84,8 +84,11 @@ zul.Upload = zk.$extends(zk.Object, {
 			refof = zk(ref).cmOffset(),
 			outerof = jq(outer).css({top: '0', left: '0'}).zk.cmOffset(),
 			diff = inp.offsetWidth - ref.offsetWidth,
-			st = outer.style;
-		st.top = refof[1] - outerof[1] + "px"; //not sure why, but cannot use offsetTop
+			st = outer.style,
+			dy = refof[1] - outerof[1];
+		if (zk.opera && dy >= 0 && dy <= 2) dy = -16;
+			//Bug 3166941: dirty fix: offsetTop is wrong and unable to get correct one
+		st.top = dy + "px";
 		st.left = refof[0] - outerof[0] - diff + "px";
 		inp.style.height = ref.offsetHeight + 'px';
 		inp.style.clip = 'rect(auto,auto,auto,' + diff + 'px)';

@@ -1,0 +1,10 @@
+<zk>
+<html><![CDATA[
+<ul>
+	<li>In Opera, click the following buttons to see if the fileupload dialog is shown up.</li>
+</ul>
+]]></html>
+
+<toolbarbutton label="Upload" upload="true" />
+<button label="Upload" upload="true" />
+</zk>
