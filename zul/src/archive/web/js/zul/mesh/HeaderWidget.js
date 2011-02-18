@@ -370,18 +370,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
 			var stylew = hdfakercells[i].style.width;
 			w._width = wds[i] = stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
-			if (!stylew) { //bug#3183228.
-				hdfakercells[i].style.width = w._width;
-				bdfakercells[i].style.width = w._width;
-			}
+			if (!stylew) //bug#3183228.
+				bdfakercells[i].style.width = hdfakercells[i].style.width = w._width;
 			++i;
 		}
 		
 		delete mesh._span; //no span!
 		delete mesh._sizedByContent; //no sizedByContent!
-		for (var w = mesh.head.firstChild; w; w = w.nextSibling) {
+		for (var w = mesh.head.firstChild; w; w = w.nextSibling)
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
-		}
 		
 		//bug#3147926: auto fit. 
 		//Adjust hdfakerflex/bdfakerflex
