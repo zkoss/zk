@@ -730,6 +730,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (typeof (bSel = this.nonselectableTags) == "string") {
 				if (!bSel)
 					return; //not ignore
+				if (bSel == "*")
+					return true;
 
 				var tn = jq.nodeName(evt.domTarget),
 					bInpBtn = tn == "input" && evt.domTarget.type.toLowerCase() == "button";
@@ -748,16 +750,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//(like Windows does)
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
-		var alwaysSelect;
-		if (zk.dragging || this._shallIgnore(evt, true)
+		var alwaysSelect,
+			cmClicked = this._checkmark && evt.domTarget == row.$n('cm');
+		if (zk.dragging || (!cmClicked && (this._shallIgnore(evt, true)
 		|| ((alwaysSelect = this.shallIgnoreSelect_(evt, row))
-			&& !(alwaysSelect = alwaysSelect < 0)))
+			&& !(alwaysSelect = alwaysSelect < 0)))))
 			return;
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
 		&& !evt.data.shiftKey && !evt.data.ctrlKey
-		&& (!this._cdo || evt.domTarget == row.$n('cm'))) {
+		&& (!this._cdo || cmClicked)) {
 			// Bug 2997034
 			this._syncFocus(row);
 
@@ -1062,7 +1065,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (evt) {
 			edata = evt.data
 			if (this._multiple)
-				keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
+				keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
