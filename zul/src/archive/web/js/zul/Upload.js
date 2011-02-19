@@ -88,6 +88,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			dy = refof[1] - outerof[1];
 		if (zk.opera && dy >= 0 && dy <= 2) dy = -16;
 			//Bug 3166941: dirty fix: offsetTop is wrong and unable to get correct one
+			//Tried: 1) use div, 2) put extra character (neither works)
 		st.top = dy + "px";
 		st.left = refof[0] - outerof[0] - diff + "px";
 		inp.style.height = ref.offsetHeight + 'px';
