@@ -323,6 +323,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (zk.safari)
 			this.$n("a").style.display = '';
 
+		var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
@@ -331,12 +332,21 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (tblwd &&
 					// fixed column's sizing issue in B30-1895907.zul
 					(!this.eheadtbl || !this.ebodytbl || !this.eheadtbl.style.width ||
-					this.eheadtbl.style.width != this.ebodytbl.style.width) &&
+					this.eheadtbl.style.width != this.ebodytbl.style.width
+					|| this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
 					// end of the fixed
 					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0)
 					tblwd = 0;
 				this.ebodytbl.style.width = tblwd + "px";
+			}
+			// bug #2799258 and #1599788
+			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
+				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
+				if (this.ebody.clientWidth && scroll > 11) //v-scrollbar 
+					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight); //extend body height to remove the v-scrollbar
+				// resync
+				tblwd = this.ebody.clientWidth;
 			}
 		}
 		if (this.ehead) {
@@ -351,8 +361,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		//check if need to span width
-		if (this._isAllWidths())
-			this._adjSpanWd();
+		this._adjSpanWd();
 
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
@@ -365,6 +374,20 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		// Bug 279925
 		if (zk.ie8)
 			anchor.style.display = oldCSS;
+
+		// Bug in B36-2841185.zul
+		if (zk.ie8 && this.isModel() && this.inPagingMold())
+			zk(this).redoCSS();
+		
+		//bug#3186596: unwanted v-scrollbar
+		if (zk.ie && !zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
+			var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
+			if (this.ebody.clientWidth && scroll > 11) { //v-scroll, expand body height to remove v-scroll
+				this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
+				if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
+					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
+			}
+		}
 	},
 	_calcHgh: function () {
 		var rows = this.ebodyrows,

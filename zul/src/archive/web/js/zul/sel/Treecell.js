@@ -52,7 +52,9 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return this.parent ? this.parent.getTree() : null;
 	},
 	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments),
+		if (no) no.width = true; //bug#3185657: not span content if given width
+		else no = {width:true};
+		var style = this.$super('domStyle_', no),
 			tc = this.getTreecol();
 			return this.isVisible() && tc && !tc.isVisible() ? style +
 				"display:none;" : style;
