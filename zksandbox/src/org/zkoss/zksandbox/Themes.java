@@ -98,10 +98,13 @@ public class Themes {
 		if(cookies==null) return "";
 		String candidate = null;
 		for(int i=0; i < cookies.length; i++){
-			if(!THEME_COOKIE_KEY.equals(cookies[i].getName())) continue;
-			String theme = cookies[i].getValue();
-			if(theme == null) continue;
-			String path = cookies[i].getPath();
+			Cookie c = cookies[i];
+			if(!THEME_COOKIE_KEY.equals(c.getName())) 
+				continue;
+			String theme = c.getValue();
+			if(theme == null) 
+				continue;
+			String path = c.getPath();
 			if(path != null && path.equals(exe.getContextPath()))
 				return theme;
 			// if no match on path, the first cookie of the same domain is used
