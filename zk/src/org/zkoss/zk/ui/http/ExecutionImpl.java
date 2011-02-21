@@ -220,8 +220,6 @@ public class ExecutionImpl extends AbstractExecution {
 		//However, the performance is not a major issue, so just skip
 		final ClassWebResource cwr =
 			WebManager.getWebManager(_ctx).getClassWebResource();
-		final String attrnm = include ?
-			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
 		if (!isDirectInclude(cwr, page))
 			return false;
 		
@@ -233,6 +231,8 @@ public class ExecutionImpl extends AbstractExecution {
 				//If params=null, use the 'inherited' one (same as Servlets.include)
 		}
 
+		final String attrnm = include ?
+			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
 		_request.setAttribute(attrnm, Boolean.TRUE);
 			//so Servlets.isIncluded returns correctly
 		try {
