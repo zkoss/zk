@@ -22,7 +22,7 @@ public interface MeshElement extends XulElement {
 	/**
 	 * Sets column span hint of this component. 
 	 * <p>String number span indicates how this component distributes remaining empty space to the 
-	 * specified column(1-based). "1" means distribute remaining empty space to the 1st column; "2" means 
+	 * specified column(0-based). "0" means distribute remaining empty space to the 1st column; "1" means 
 	 * distribute remaining empty space to the 2nd column, etc.. The spanning column will grow to 
 	 * fit the extra remaining space.</p>
 	 * <p>Special span hint with "true" means span ALL columns proportionally per their 

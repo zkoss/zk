@@ -228,7 +228,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * Sets column span hint of this mesh widget. 
 		 * <p>The parameter span is a number in String type indicating how this 
 		 * component distributes remaining empty space to the 
-		 * specified column. "1" means distribute remaining empty space to the 1st column; "2" means 
+		 * specified column(0-based). "0" means distribute remaining empty space to the 1st column; "1" means 
 		 * distribute remaining empty space to the 2nd column, etc.. The spanning column will grow to 
 		 * fit the extra remaining space.</p>
 		 * <p>Special span hint with "true" means span ALL columns proportionally per their 
@@ -242,7 +242,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @see #setSpan(boolean)
 		 */
 		span: function(v) {
-			this._nspan = (true === v || 'true' == v) ? -1 : zk.parseInt(v);
+			var x = (true === v || 'true' == v) ? -65500 : (false === v || 'false' == v) ? 0 : (zk.parseInt(v) + 1);
+			this._nspan = x < 0 && x != -65500 ? 0 : x;
 			this.rerender(); //_zkf
 		},
 		/**

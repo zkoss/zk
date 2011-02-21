@@ -22,7 +22,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			<listheader label="D" />
 		</listhead>
 		<listitem>
-			<listcell span="4"
+			<listcell span="3"
 				label="You should see the cell can cross between other cells................................................" />
 		</listitem>
 	</listbox>

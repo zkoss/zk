@@ -26,7 +26,7 @@ String[] msgs = {
 	"The best!",
 };
 </zscript>
-	<listbox id="lbx" span="2">
+	<listbox id="lbx" span="1">
 		<listhead sizable="true">
 			<listheader label="Product" hflex="min"/>
 			<listheader label="Description" hflex="min"/>

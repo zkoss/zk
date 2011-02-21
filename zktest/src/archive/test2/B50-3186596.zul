@@ -25,7 +25,7 @@ String[] msgs = {
 };
 </zscript>
  
-	<listbox id="lbx" span="2">
+	<listbox id="lbx" span="1">
 		<listhead sizable="true">
 			<listheader hflex="min"/>
 			<listheader hflex="min"/>
@@ -44,7 +44,7 @@ String[] msgs = {
 	</listbox>
 	<button label="invalidate above listbox" onClick="lbx.invalidate()"/>
  
-	<grid id="grd" span="2">
+	<grid id="grd" span="1">
 		<columns sizable="true">
 			<column hflex="min"/>
 			<column hflex="min"/>
