@@ -26,6 +26,7 @@ ZK 5.0.6
   3179707: Support hflex="min" + span
   3184415: Grid/Listbox/Tree shall allow to span a specific column
   3186996: Listbox/tree's nonselectableTags supports "*" to disable all
+  3187996: A way to generate custom SEO content
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null

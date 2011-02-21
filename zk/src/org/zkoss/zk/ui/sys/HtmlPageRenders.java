@@ -31,6 +31,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.io.Files;
@@ -563,7 +565,7 @@ public class HtmlPageRenders {
 			//don't call outDivTemplateEnd yet since rc.temp will be generated before it
 			out = new StringWriter();
 		} else if (divRequired) {
-			outDivTemplateEnd(out); //close it now since no rc.temp
+			outDivTemplateEnd(page, out); //close it now since no rc.temp
 		}
 
 		if (includedAndPart) {
@@ -632,7 +634,7 @@ public class HtmlPageRenders {
 			StringBuffer sw = ((StringWriter)out).getBuffer();
 			out = rc.temp;
 			if (divRequired)
-				outDivTemplateEnd(out);
+				outDivTemplateEnd(page, out);
 				//close tag after temp, but before perm (so perm won't be destroyed)
 			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
 
@@ -653,10 +655,36 @@ public class HtmlPageRenders {
 		writeAttr(out, "id", uuid);
 		out.write(" class=\"z-temp\">");
 	}
-	private static void outDivTemplateEnd(Writer out)
+	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
+		if (page != null) {
+			final String attrnm = "org.zkoss.zk.ui.sys.SEORenderer";
+			final WebApp wapp = page.getDesktop().getWebApp();
+			Object seo = wapp.getAttribute(attrnm);
+			if (seo == null) {
+				synchronized (HtmlPageRenders.class) {
+					seo = wapp.getAttribute(attrnm);
+					if (seo == null) {
+						final String clsnm = wapp.getConfiguration()
+							.getPreference("org.zkoss.zk.ui.sys.SEORenderer.class", null);
+						if (clsnm != null)
+							try {
+								seo = (SEORenderer)Classes.newInstanceByThread(clsnm);
+							} catch (Throwable t) {
+								throw new UiException("Failed to instantiate " + clsnm, t);
+							}
+						if (seo == null)
+							seo = "n/a";
+						wapp.setAttribute(attrnm, seo);
+					}
+				}
+			}
+			if (seo instanceof SEORenderer)
+				((SEORenderer)seo).render(page, out);
+		}
 		out.write("</div>");
 	}
+
 	/** Generates end of the function (of zkx).
 	 * It assumes the function name and the first parenthesis has been generated.
 	 * @param aupg whether the current page is caused by AU request
@@ -806,7 +834,7 @@ public class HtmlPageRenders {
 		try {
 			if (comp != null) {
 				outDivTemplateBegin(out, comp.getUuid());
-				outDivTemplateEnd(out);
+				outDivTemplateEnd(comp.getPage(), out);
 			}
 
 			out.write("<script type=\"text/javascript\">\nzkmx(");
