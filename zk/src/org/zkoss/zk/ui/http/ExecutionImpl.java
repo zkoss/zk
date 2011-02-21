@@ -222,27 +222,29 @@ public class ExecutionImpl extends AbstractExecution {
 			WebManager.getWebManager(_ctx).getClassWebResource();
 		final String attrnm = include ?
 			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
-		if (isDirectInclude(cwr, page)) {
-			Object old = null;
-			if (mode == PASS_THRU_ATTR) {
-				old = _request.getAttribute(Attributes.ARG);
-				if (params != null)
-					_request.setAttribute(Attributes.ARG, params);
-					//If params=null, use the 'inherited' one (same as Servlets.include)
-			}
-
-			_request.setAttribute(attrnm, Boolean.TRUE);
-				//so Servlets.isIncluded returns correctly
-			try {
-				cwr.service(_request,
-					HttpBufferedResponse.getInstance(_response, out),
-					page.substring(2));
-			} finally {
-				_request.removeAttribute(attrnm);
-				if (mode == PASS_THRU_ATTR)
-					_request.setAttribute(Attributes.ARG, old);
-			}
+		if (!isDirectInclude(cwr, page))
+			return false;
+		
+		Object old = null;
+		if (mode == PASS_THRU_ATTR) {
+			old = _request.getAttribute(Attributes.ARG);
+			if (params != null)
+				_request.setAttribute(Attributes.ARG, params);
+				//If params=null, use the 'inherited' one (same as Servlets.include)
 		}
+
+		_request.setAttribute(attrnm, Boolean.TRUE);
+			//so Servlets.isIncluded returns correctly
+		try {
+			cwr.service(_request,
+				HttpBufferedResponse.getInstance(_response, out),
+				page.substring(2));
+		} finally {
+			_request.removeAttribute(attrnm);
+			if (mode == PASS_THRU_ATTR)
+				_request.setAttribute(Attributes.ARG, old);
+		}
+		
 		return true;
 	}
 	/** Returns whether the page can be directly included.

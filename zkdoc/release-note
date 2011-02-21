@@ -128,6 +128,7 @@ ZK 5.0.6
   3184673: Separator in Hlayout on IE6 looks strange
   3184756: A window with a scroll menubar render a wrong sibling
   3185508: Internal event listener of tree/grid/... not seralized
+  3187231: include is not work when using  '~.' & defer without params
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
