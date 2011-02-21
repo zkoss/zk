@@ -490,7 +490,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				++i;
 			}
 		}
-		return width;
+		return width + (zk.ie && !zk.ie8 ? 1 : 0);
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
@@ -793,15 +793,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (sz.height == 'auto') {
 				n.style.height = '';
 				if (head) head.style.height = '';
-			} else
+			} else {
+				if (zk.ie && !zk.ie8 && this._vflex == 'min' && this._vflexsz === undefined)
+					sz.height = sz.height + 1;
 				return this.$supers('setFlexSize_', arguments);
+			}
 		}
 		if (sz.width !== undefined) {
 			if (sz.width == 'auto') {
 				if (this._hflex != 'min') n.style.width = '';
 				if (head) head.style.width = '';
-			} else
+			} else {
+				if (zk.ie && !zk.ie8 && this._hflex == 'min' && this._hflexsz === undefined)
+					sz.width = sz.width + 1;
 				return this.$supers('setFlexSize_', arguments);
+			}
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
@@ -812,7 +818,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
 
-			this.ebody.style.height = h + "px";
+			if (!zk.ie || zk.ie8 || this._vflex != "min")
+				this.ebody.style.height = h + "px";
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
 			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
@@ -904,15 +911,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Bug in B36-2841185.zul
 		if (zk.ie8 && this.isModel() && this.inPagingMold())
 			zk(this).redoCSS();
-		
+
 		//bug#3186596: unwanted v-scrollbar
-		if (zk.ie && !zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
-			var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
-			if (this.ebody.clientWidth && scroll > 11) { //v-scroll, expand body height to remove v-scroll
-				this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
-				if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
-			}
+		this._removeScrollbar();
+	},
+	_removeScrollbar: function() { //see HeadWidget#afterChildrenFlex_
+		var hgh = this.getHeight() || this.$n().style.height; // bug in B36-2841185.zul
+		if (zk.ie && !this.isVflex() && (!hgh || hgh == "auto")) {
+			if(!zk.ie8) { 
+				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
+				if (this.ebody.clientWidth && scroll > 11) { //v-scroll, expand body height to remove v-scroll
+					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
+					if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
+						this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
+				}
+			} else if (this.ebodytbl.offsetWidth > this.ebody.offsetWidth) { //IE8 sometimes will fail to show the h-scrollbar; enforce it!
+				var oldCss = this.ebody.style.overflowX;
+				this.ebody.style.overflowX = 'scroll';
+			} else
+				this.ebody.style.overflowX = '';
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)

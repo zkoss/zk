@@ -56,6 +56,7 @@ var Borderlayout =
  * 
  */
 zul.layout.Borderlayout = zk.$extends(zul.Widget, {
+	_ignoreOffsetTop: zk.ie7_ || zk.ie6_,  //borderlayout in IE6/IE7, will give incorrect offsetTop, ignore it!
 	setResize: function () {
 		this.resize();
 	},

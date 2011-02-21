@@ -146,6 +146,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			wgt._adjFlexWd();
 			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space 
 		}
+		//bug#3188023: Unwanted vertical scrollbar 
+		wgt._removeScrollbar();
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');

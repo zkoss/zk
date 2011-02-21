@@ -289,7 +289,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										//bug# 2997862: vflex="min" not working on nested tabpanel
 										zkc = zk(c),
 										sameOffParent = c.offsetParent == noffParent,
-										sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
+										sz = cwgt._ignoreOffsetTop ? tbp : (c.offsetTop - (sameOffParent ? ntop + tbp : tp)); 
 									if (cwgt._vflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._vflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
@@ -624,7 +624,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//ie6 must set parent div to 'relative' or the kid div's offsetTop is not correct
 		var oldPos;
-		if (zk.ie6_ && jq.nodeName(p, 'div')) {
+		if ((zk.ie6_ || zk.ie7_)&& jq.nodeName(p, 'div')) {
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
@@ -738,7 +738,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 		
-		if (zk.ie6_ && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
+		if ((zk.ie6_ || zk.ie7_) && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
 
