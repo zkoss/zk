@@ -68,8 +68,6 @@ public interface MeshElement extends XulElement {
 	/**
 	 * Sets whether sizing grid/listbox/tree column width by its content; it equals set hflex="min" on each column.
 	 * <p>Default: false. 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
-	 * lang-addon.xml directly, it will then take higher priority.
 	 * @param byContent 
 	 * @since 5.0.0
 	 */
@@ -77,8 +75,6 @@ public interface MeshElement extends XulElement {
 	
 	/**
 	 * Returns whether sizing grid/listbox/tree column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
-	 * it's prior to the original value.
 	 * @since 5.0.0
 	 * @see #setSizedByContent
 	 */
