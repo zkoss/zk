@@ -681,6 +681,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						if (!prehflex && segRight > segLeft) {
 							wdh -= segRight - segLeft;
 						}
+						if (zk.ie8_ && c.offsetParent == p && jq.nodeName(p, "td")) //bug#3184369. henrichen: Dirty fix. padding==1 but offset==5. 
+							wdh -= offLeft * 2;
 						segLeft = segRight = marginRight;
 						
 						hflexs.push(cwgt);
