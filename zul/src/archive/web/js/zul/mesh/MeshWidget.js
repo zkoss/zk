@@ -1111,6 +1111,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 			}
 		}
+		//bug 3188738: Opera only. Grid/Listbox/Tree span="x" not working
+		if (zk.opera) {
+			var meshn = this.$n();
+			var olddisp = meshn.style.display; //force redraw
+			meshn.style.display='none';
+			var redrawFix = meshn.offsetHeight;
+			meshn.style.display=olddisp;
+		}
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,
