@@ -244,7 +244,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		span: function(v) {
 			var x = (true === v || 'true' == v) ? -65500 : (false === v || 'false' == v) ? 0 : (zk.parseInt(v) + 1);
 			this._nspan = x < 0 && x != -65500 ? 0 : x;
-			this.rerender(); //_zkf
+			this.rerender();
 		},
 		/**
 		 * Returns whether turn on auto-paging facility when mold is
