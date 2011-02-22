@@ -131,6 +131,7 @@ ZK 5.0.6
   3185508: Internal event listener of tree/grid/... not seralized
   3187231: include is not work when using  '~.' & defer without params
   3184369: Hflex doesn't work with native html table on IE 8
+  1968615: Data binding problem in listfooter inside a nested listbox
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

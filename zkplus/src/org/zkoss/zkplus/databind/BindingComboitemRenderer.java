@@ -51,19 +51,18 @@ import org.zkoss.zul.Comboitem;
 			clone.setAttribute(DataBinder.TEMPLATE, template);
 		}
 		
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
-		//no need to process down since BindingRowRenderer of the under Grid
-		//owner will do its own linkTemplates()
-		//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
-		if (DataBinder.isCollectionOwner(template)) {
-			return;
-		}
-		
 		final Iterator itt = template.getChildren().iterator();
 		final Iterator itc = clone.getChildren().iterator();
 		while (itt.hasNext()) {
 			final Component t = (Component) itt.next();
 			final Component c = (Component) itc.next();
+			//Skip the Comboitem
+			//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+			//no need to process down since BindingRowRenderer of the under collection
+			//item will do its own linkTemplates()
+			if (t instanceof Comboitem) { //bug#1968615.
+				continue;
+			}
 			linkTemplates(c, t, templatemap);	//recursive
 		}
 	}
@@ -74,19 +73,18 @@ import org.zkoss.zul.Comboitem;
 		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
 		clone.setId(null); //init id to null to avoid duplicate id issue
 
-		//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
-		//no need to process down since BindingRowRenderer of the under Grid
-		//owner will do its own setupCloneIds()
-		//bug #1893247: Not unique in the new ID space when Grid in Grid
-		final Component template = DataBinder.getComponent(clone); 
-		if (template != null && DataBinder.isCollectionOwner(template)) {
-			return;
-		}
-		
 		//Feature #3061671: Databinding foreach keep cloned cmp's id when in spaceowner
 		if (!(clone instanceof IdSpace)) { //parent is an IdSpace, so keep the id as is, no need to traverse down
 			for(final Iterator it = clone.getChildren().iterator(); it.hasNext(); ) {
-				setupCloneIds((Component) it.next()); //recursive
+				final Component kid = (Component) it.next();
+				//Skip the Comboitem
+				//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
+				//no need to process down since BindingRowRenderer of the under collection
+				//item will do its own setupCloneIds()
+				if (kid instanceof Comboitem) { //bug#1968615.
+					continue;
+				}
+				setupCloneIds(kid); //recursive
 			}
 		}
 	}
