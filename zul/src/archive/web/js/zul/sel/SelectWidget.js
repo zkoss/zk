@@ -323,7 +323,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (zk.safari)
 			this.$n("a").style.display = '';
 
-		var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
+		var hgh = this.getHeight() || n.style.height || this.getRows(); // bug in B36-2841185.zul
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
