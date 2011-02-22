@@ -132,6 +132,7 @@ ZK 5.0.6
   3187231: include is not work when using  '~.' & defer without params
   3184369: Hflex doesn't work with native html table on IE 8
   1968615: Data binding problem in listfooter inside a nested listbox
+  3189142: Combobox popup width is wrong. IE7 only
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
