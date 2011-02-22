@@ -860,7 +860,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.ebody.clientWidth;
-		var hgh = this.getHeight() || n.style.height || this.getRows(); // bug in B36-2841185.zul
+		var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
 			this.eheadtbl.offsetWidth !=
@@ -916,7 +916,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._removeScrollbar();
 	},
 	_removeScrollbar: function() { //see HeadWidget#afterChildrenFlex_
-		var hgh = this.getHeight() || this.$n().style.height || this.getRows(); // bug in B36-2841185.zul
+		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
 		if (zk.ie && !this.isVflex() && (!hgh || hgh == "auto")) {
 			if(!zk.ie8) { 
 				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
