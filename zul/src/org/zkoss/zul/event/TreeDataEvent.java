@@ -27,10 +27,12 @@ import org.zkoss.zul.TreeModel;
 public class TreeDataEvent<E> {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
-    /** Identifies the addition of children to a node. */    
+	/** Identifies the addition of children to a node. */    
 	public static final int INTERVAL_ADDED = 1;
-    /** Identifies the removal of children to a node. */   
+	/** Identifies the removal of children to a node. */   
 	public static final int INTERVAL_REMOVED = 2;
+	/** Identifies the structure of the tree has changed. @since 5.0.6  */
+	public static final int STRUCTURE_CHANGED = 3;
 
 	private final TreeModel<E> _model;
 	private final int _type;

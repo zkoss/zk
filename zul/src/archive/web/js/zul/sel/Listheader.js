@@ -33,7 +33,11 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	 * @return Listbox
 	 */
 	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
-	
+	checkClientSort_: function (ascending) {
+		var body;
+		return !(!(body = this.getMeshBody()) || body.hasGroup()) && 
+			this.$supers('checkClientSort_', arguments);
+	},
 	$define: {
 		/** Returns the maximal length of each item's label.
 		 * Default: 0 (no limit).

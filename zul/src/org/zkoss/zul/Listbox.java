@@ -61,6 +61,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.MeshElement;
 
 /**
  * A listbox.
@@ -200,7 +201,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends XulElement implements Paginated {
+public class Listbox extends MeshElement implements Paginated {
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
@@ -240,7 +241,7 @@ public class Listbox extends XulElement implements Paginated {
 	 * child
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener,
+	private EventListener _pgListener, _pgImpListener,
 			_modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
@@ -258,8 +259,6 @@ public class Listbox extends XulElement implements Paginated {
 	private boolean _disabled, _checkmark;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
-	private boolean _sizedByContent;
-	private boolean _span; //since 5.0.5
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -269,9 +268,9 @@ public class Listbox extends XulElement implements Paginated {
 				| CE_IMPORTANT | CE_NON_DEFERRABLE);
 		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT);
-		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Listbox.class, Events.ON_FOCUS, 0);
-		addClientEvent(Listbox.class, Events.ON_BLUR, 0);
+		addClientEvent(Listbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
 		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
 		// 5.0.0
@@ -397,75 +396,6 @@ public class Listbox extends XulElement implements Paginated {
 	 */
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
-	}
-
-	/**
-	 * Sets whether sizing listbox column width by its content.
-	 * <p>Default: false. It means the outline of listbox is dependent on
-	 * the header.
-	 * The performance is better and the user can precisely resize certain
-	 * headers. If you want a column to have the width of the content,
-	 * you can specify hflex="min".
-	 * <p>If set to true, the outline will depend on the content of body.
-	 * In other words, the width specified in the header is only for reference.
-	 * The browser will adjust the width when a column's width is changed, so
-	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 *
-	 * <p>
-	 * You can also specify the "sized-by-content" attribute of component in
-	 * lang-addon.xml directly, it will then take higher priority.
-	 *
-	 * @param byContent
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent) {
-		if (_sizedByContent != byContent) {
-			_sizedByContent = byContent;
-			smartUpdate("sizedByContent", byContent);
-		}
-	}
-
-	/**
-	 * Returns whether sizing listbox column width by its content. Default is
-	 * false.
-	 * <p>
-	 * Note: if the "sized-by-content" attribute of component is specified, it's
-	 * prior to the original value.
-	 *
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent() {
-		String s = (String) getAttribute("sized-by-content");
-		if (s == null) {
-			s = (String) getAttribute("fixed-layout");
-			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
-		} else
-			return "true".equalsIgnoreCase(s);
-	}
-	/**
-	 * Sets whether to span the width of the columns to occupy the whole listbox.
-	 * It is meaningful only if {@link #isSizedByContent} is true, and
-	 * {@link #getHflex} is not speciifed.
-	 * <p>Default: false. It means the width of a column takes only the
-	 * required space based on its content (when {@link #isSizedByContent}
-	 * is specified).
-	 * @param span
-	 * @since 5.0.5
-	 */
-	public void setSpan(boolean span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("span", span);
-		}
-	}
-	/**
-	 * Returns whether span column width when {@link #isSizedByContent} is true.
-	 * <p>Default: false.
-	 * @since 5.0.5
-	 */
-	public boolean isSpan() {
-		return _span;
 	}
 
 	/**
@@ -1270,7 +1200,7 @@ public class Listbox extends XulElement implements Paginated {
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent) event;
 					Events.postEvent(new PagingEvent(evt.getName(),
@@ -1281,7 +1211,7 @@ public class Listbox extends XulElement implements Paginated {
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					if (_model != null && inPagingMold()) {
 						final Paginal pgi = getPaginal();
@@ -2857,7 +2787,7 @@ public class Listbox extends XulElement implements Paginated {
 		}
 	}
 
-	private class ModelInitListener implements EventListener {
+	private class ModelInitListener implements SerializableEventListener {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Listbox.this.removeEventListener(
@@ -3011,10 +2941,6 @@ public class Listbox extends XulElement implements Paginated {
 				renderer.render("maxlength", _maxlength);
 		} else {
 			render(renderer, "oddRowSclass", _scOddRow);
-
-			if (isSizedByContent())
-				renderer.render("sizedByContent", true);
-			renderer.render("span", _span);
 
 			render(renderer, "checkmark", isCheckmark());
 			render(renderer, "multiple", isMultiple());

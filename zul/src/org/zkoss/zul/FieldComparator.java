@@ -139,8 +139,8 @@ public class FieldComparator implements Comparator, Serializable {
 	}
 	@SuppressWarnings("unchecked")
 	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException { 
-		final Object f1 = Fields.getByCompound(o1, fieldname);
-		final Object f2 = Fields.getByCompound(o2, fieldname);
+		final Object f1 = Fields.getByCompound(getCompareObject(o1), fieldname);
+		final Object f2 = Fields.getByCompound(getCompareObject(o2), fieldname);
 		final Object v1 = handleFunction(f1, func);
 		final Object v2 = handleFunction(f2, func);
 		
@@ -148,6 +148,12 @@ public class FieldComparator implements Comparator, Serializable {
 		if (v2 == null) return _maxnull  ? -1: 1;
 		final int v = ((Comparable)v1).compareTo(v2);
 		return asc ? v: -v;
+	}
+
+	private Object getCompareObject(Object o) {
+		if (o instanceof TreeNode)
+			return ((TreeNode) o).getData();
+		return o;
 	}
 
 	private Object handleFunction(Object c, String func) {

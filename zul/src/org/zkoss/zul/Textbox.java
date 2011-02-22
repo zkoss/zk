@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.InputElement;
 
@@ -25,7 +24,8 @@ import org.zkoss.zul.impl.InputElement;
  * A textbox.
  *
  * <p>See <a href="package-summary.html">Specification</a>.</p>
- * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)</p>
+ * <p>When multiline is true, only default mold is available.<p>
  * @author tomyeh
  */
 public class Textbox extends InputElement {

@@ -271,8 +271,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.fireDown("onHide", this);
 		this.slideUp_(pp);
 
-		zk(pp).undoVParent();
-
+		zk.afterAnimate(function() {
+			zk(pp).undoVParent();
+		}, -1);
+		
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
@@ -282,6 +284,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
+
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getPopupNode_();

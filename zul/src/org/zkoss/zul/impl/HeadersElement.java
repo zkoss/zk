@@ -16,6 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Iterator;
+
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.event.ZulEvents;
@@ -62,14 +65,23 @@ abstract public class HeadersElement extends XulElement {
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
-	 * it also handles onColSize.
+	 * it also handles onColSize and onColsSize.
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
+			((MeshElement)this.getParent()).setSpan(false); //clear span
+			((MeshElement)this.getParent()).setSizedByContent(false); //clear sizedByContent
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
-			((HeaderElement)evt.getColumn()).setWidthByClient(evt.getWidth());
+			int j = 0;
+			for(Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
+				final HeaderElement header = (HeaderElement) it.next(); 
+				header.setWidthByClient(evt.getWidth(j));
+				if (header.getHflex() != null) {
+					header.setHflexByClient(null);
+				}
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

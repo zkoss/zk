@@ -31,29 +31,16 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				this._end = d;
 			}
 				
-			this._beg.setHours(0);
-			this._beg.setMinutes(0);
-			this._beg.setSeconds(0);
-			this._beg.setMilliseconds(0);
-			
-			this._end.setHours(0);
-			this._end.setMinutes(0);
-			this._end.setSeconds(0);
-			this._end.setMilliseconds(0);
+			this._beg.setHours(0,0,0,0);
+			this._end.setHours(0,0,0,0);
 			return;
 		} else if (constraint.startsWith("before")) {
 			this._end = new zk.fmt.Calendar().parseDate(constraint.substring(6), this.format);
-			this._end.setHours(0);
-			this._end.setMinutes(0);
-			this._end.setSeconds(0);
-			this._end.setMilliseconds(0);
+			this._end.setHours(0,0,0,0);
 			return;
 		} else if (constraint.startsWith("after")) {
 			this._beg = new zk.fmt.Calendar().parseDate(constraint.substring(5), this.format);
-			this._beg.setHours(0);
-			this._beg.setMinutes(0);
-			this._beg.setSeconds(0);
-			this._beg.setMilliseconds(0);
+			this._beg.setHours(0,0,0,0);
 			return;
 		}
 		return this.$supers('parseConstraint_', arguments);

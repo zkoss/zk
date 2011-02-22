@@ -83,13 +83,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _ignoremove(dg, pointer, evt) {
 		var el = dg.node,
-			wgt = dg.control;
-		switch (evt.domTarget) {
+			wgt = dg.control,
+			tar = evt.domTarget, wtar;
+		switch (tar) {
 		case wgt.$n('close'):
 		case wgt.$n('max'):
 		case wgt.$n('min'):
 			return true; //ignore special buttons
 		}
+		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
+			return true; //ignore child widget of caption, Bug B50-3166874
 		if (!wgt.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
 		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
@@ -179,7 +182,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt._updDOFocus === false)
 					wgt._updDOFocus = fc; //let _updDomOuter handle it
 				else
-					fc.focus(10); // use timeout for the bug 3057311
+					fc.focus(0); // use timeout for the bug 3057311
+					// use 0 instead of 10, otherwise it will cause this bug 1936366
 		}
 		wgt._lastfocus = null;
 	}
@@ -1186,6 +1190,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('afterChildrenFlex_', arguments);
 		if (_isModal(this._mode))
 			_updDomPos(this, true); //force re-position since window width might changed.
+	},
+	//@Override, do not count size of floating window in flex calculation. bug #3172785.
+	ignoreFlexSize_: function (type) {
+		return this._mode != 'embedded';
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

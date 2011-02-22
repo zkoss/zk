@@ -101,7 +101,7 @@ public class Timer extends HtmlBasedComponent {
 	public void stop() {
 		if (_running) {
 			_running = false;
-			smartUpdate("running", false);
+			smartUpdate("running", Boolean.FALSE, true); //Bug 3155985: shall allow restore
 		}
 	}
 	/** Starts the timer.
@@ -109,7 +109,7 @@ public class Timer extends HtmlBasedComponent {
 	public void start() {
 		if (!_running) {
 			_running = true;
-			smartUpdate("running", true);
+			smartUpdate("running", Boolean.TRUE, true); //Bug 3155985: shall allow restore
 		}
 	}
 

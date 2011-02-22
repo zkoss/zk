@@ -454,6 +454,11 @@ def alert(m):
 			<mold-uri>mold/input.js</mold-uri>
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>div</component-name>
@@ -471,6 +476,11 @@ def alert(m):
 		<widget-class>zul.inp.Doublebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
@@ -520,15 +530,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/flashchart.js</mold-uri>
 		</mold>
-	</component>
-	<component>
-		<component-name>fusionchart</component-name>
-		<component-class>org.zkoss.zul.fusionchart.Fusionchart</component-class>
-		<widget-class>zul.fchart.Fusionchart</widget-class>
-		<mold>
-            <mold-name>default</mold-name>
-            <mold-uri>mold/fusionchart.js</mold-uri>
-        </mold>
 	</component>
 	<component>
 		<component-name>foot</component-name>
@@ -679,6 +680,11 @@ def alert(m):
 			<mold-uri>mold/input.js</mold-uri>
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>label</component-name>
@@ -778,6 +784,11 @@ def alert(m):
 		<widget-class>zul.inp.Longbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
@@ -1093,6 +1104,11 @@ def alert(m):
 		<widget-class>zul.inp.Textbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>mold/textbox.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
 			<mold-uri>mold/textbox.js</mold-uri>
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>

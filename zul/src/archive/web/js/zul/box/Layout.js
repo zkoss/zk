@@ -52,19 +52,20 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}, function () {
 			var n = this.$n(),
 				vert = this.isVertical_();
-			if (n) {
-				jq(n).children('div').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing ? this._spacing : '');
-			}
+			if (n)
+				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing || '');
 		}]
 	},
 	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		if (before) {
+		if (before)
 			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
-		} else {
-			jq(this.$n()).append(this.encloseChildHTML_(child));
+		else {
+			var jqn = jq(this.$n());
+			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), this._spacing || '');
+			jqn.append(this.encloseChildHTML_(child));
 		}
 		child.bind(desktop);
 	},
@@ -90,6 +91,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
+		var rmsp = this.lastChild == child;
+		if(this.lastChild == child)
+			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},
 	/** Enclose child with HTML tag such as DIV, 
 	 * and return a HTML code or add HTML fragments in out array.
@@ -101,8 +105,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var oo = [],
 			vert = this.isVertical_();
 		
-		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"',
-				this._spacing ? ' style="padding-' + (vert ? 'bottom:' : 'right:') + this._spacing + '">' : '>');
+		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
+		if(this._spacing && child.nextSibling)
+			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + this._spacing + '"');
+		oo.push('>');
 		child.redraw(oo);
 		oo.push('</div>');
 		if (!out) return oo.join('');
@@ -183,10 +189,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			if (zkc.isVisible()) {
 				var j = c.id ? c.id.indexOf('-') : 1,
 					cwgt = j < 0 ? zk.Widget.$(c.id) : null,
-					offhgh = zkc.offsetHeight(),
-					offwdh = zkc.offsetWidth(),
-					cwdh = offwdh + zkc.sumStyles("lr", jq.margins),
-					chgh = offhgh + zkc.sumStyles("tb", jq.margins);
+					zkxc = zk(xc);
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -195,13 +198,17 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
 						xc.style.height = c.style.height;
-						if (vert)
-							hgh -= xc.offsetHeight;
+						if (vert) 
+							hgh -= xc.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 					} else {
 						vflexs.push(cwgt);
-						if (vert) vflexsz += cwgt._nvflex;
+						if (vert) {
+							vflexsz += cwgt._nvflex;
+							hgh = zkxc.revisedHeight(hgh, true); //bug#3157031: remove chdex's padding, border, margin
+						}
 					}
-				} else if (vert) hgh -= chgh;
+				} else if (vert)
+					hgh -= xc.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 				
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
@@ -211,12 +218,16 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt.fixMinFlex_(c, 'w');
 						xc.style.width = c.style.width;
 						if (!vert)
-							wdh -= xc.offsetWidth;
+							wdh -= xc.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 					} else {
 						hflexs.push(cwgt);
-						if (!vert) hflexsz += cwgt._nhflex;
+						if (!vert) {
+							hflexsz += cwgt._nhflex;
+							wdh = zkxc.revisedWidth(wdh, true); //bug#3157031: remove chdex's padding, border, margin
+						}
 					}
-				} else if (!vert) wdh -= cwdh;
+				} else if (!vert)
+					wdh -= xc.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 			}
 		}
 
@@ -232,7 +243,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			cwgt._vflexsz = vsz;
 			
 			var chdex = cwgt.$n('chdex');
-			chdex.style.height = jq.px0(zk(chdex).revisedHeight(vsz, true));
+			chdex.style.height = jq.px0(vsz);
 			if (vert) lastsz -= vsz;
 		}
 		//last one with vflex
@@ -243,9 +254,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;
 			var chdex = cwgt.$n('chdex');
-			chdex.style.height = jq.px0(zk(chdex).revisedHeight(lastsz, true));
+			chdex.style.height = jq.px0(lastsz);
 		}
-		
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh > 0 ? wdh : 0;
@@ -256,7 +266,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			cwgt._hflexsz = hsz;
 		
 			var chdex = cwgt.$n('chdex');
-			chdex.style.width = jq.px0(zk(chdex).revisedWidth(hsz, true));
+			chdex.style.width = jq.px0(hsz);
 			
 			if (!vert) lastsz -= hsz;
 		}
@@ -267,7 +277,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			cwgt._hflexsz = lastsz;
 			
 			var chdex = cwgt.$n('chdex');
-			chdex.style.width = jq.px0(zk(chdex).revisedWidth(lastsz, true));
+			chdex.style.width = jq.px0(lastsz);
 		}
 		
 		//notify all of children with xflex is done.
@@ -283,7 +293,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.height) {
-    					w.style.height = jq.px0(zk(w).revisedHeight(w.firstChild.offsetHeight));
+    					w.style.height = jq.px0(w.firstChild.offsetHeight + zk(w.firstChild).sumStyles("tb", jq.margins));
     				}
     				total += w.offsetHeight;
     			}
@@ -302,7 +312,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			var total = 0;
     			for (var w = n.firstChild; w; w = w.nextSibling) {
     				if (w.firstChild.style.width) {
-    					w.style.width = jq.px0(zk(w).revisedWidth(w.firstChild.offsetWidth));
+    					w.style.width = jq.px0(w.firstChild.offsetWidth + zk(w.firstChild).sumStyles("lr", jq.margins));
     				}
     				total += w.offsetWidth;
     			}
@@ -314,7 +324,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (wd > max)
     					max = wd;
     			}
-    			n.style.height = jq.px0(max);				
+    			n.style.width = jq.px0(max);				
 			}
 		}
 	}

@@ -43,11 +43,7 @@ function (out) {
 	
 		out.push('</table></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', zcls, '-body"><table', width,
-		zUtl.cellps0);
-	
-	if (!this.isSizedByContent())
-		out.push(' style="table-layout:fixed;', wdStyle,'"');
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body"><table', width,	zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'"');
 		
 	out.push('>');
 	

@@ -74,15 +74,9 @@ public class Treechildren extends XulElement {
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
-
 		Component comp = getParent();
-		if (!(comp instanceof Treeitem))
-			return true;
-		if (!((Treeitem)comp).isOpen() || !((Treeitem)comp).isVisible())
-			return false;
-		comp = comp.getParent();
-		return !(comp instanceof Treechildren)
-			|| ((Treechildren)comp).isVisible(); //recursive
+		return !(comp instanceof Treeitem) || 
+			((Treeitem)comp).isOpen() && ((Treeitem)comp).isVisible(); //recursive
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
@@ -154,12 +148,12 @@ public class Treechildren extends XulElement {
 		super.onChildRemoved(child);
 		addVisibleItemCount(-((Treeitem)child).getVisibleItemCount());
 	}
-	void addVisibleItemCount(int count) {
+	/*package*/ void addVisibleItemCount(int count) {
 		if (count == 0) return;
 		Component parent = getParent();
 		if (parent instanceof Treeitem) {
 			if (((Treeitem)parent).isOpen())
-				((Treeitem)parent).addVisibleItemCount(count, false);
+				((Treeitem)parent).addVisibleItemCount(count);
 		} else if (parent instanceof Tree)
 			((Tree)parent).addVisibleItemCount(count);
 		_visibleItemCount += count;

@@ -83,6 +83,7 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-textbox";
+		return zcs != null ? zcs: "z-textbox" + 
+				(this.inRoundedMold() && !this.isMultiline() ? "-rounded": "");
 	}
 });

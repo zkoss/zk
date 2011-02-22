@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A HTML option tag.
  */
 zul.sel.Option = zk.$extends(zul.Widget, {
+	_selected: false,
 	$define: {
     	/**
     	 * Returns whether it is disabled.
@@ -68,6 +69,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	 * @param boolean selected
 	 */
 	setSelected: function (selected) {
+		selected = selected || false;
 		if (this._selected != selected) {
 			if (this.parent)
 				this.parent.toggleItemSelection(this);

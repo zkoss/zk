@@ -16,6 +16,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.feature.pe && zk.isLoaded('zkex.grid');
 	}
+
+	function _toggleEffect(wgt, undo) {
+		var self = wgt;
+		setTimeout(function () {
+			var $n = jq(self.$n()),
+				zcls = self.getZclass() + '-over';
+			if (undo) {
+   				$n.removeClass(zcls);
+			} else if (self._musin) {
+				$n.addClass(zcls);
+				
+				var musout = self.parent._musout;
+				// fixed mouse-over issue for datebox 
+				if (musout && $n[0] != musout.$n()) {
+					jq(musout.$n()).removeClass(zcls);
+					musout._musin = false;
+					self.parent._musout = null;
+				}
+			}
+		});
+	}
 /**
  * A single row in a {@link Rows} element.
  * Each child of the {@link Row} element is placed in each successive cell
@@ -255,36 +276,31 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			this.detail = null;
 	},
 	doMouseOver_: function(evt) {
-		var n = this.$n(), 
-			zcls = this.getZclass() + '-over';
+		if (this._musin) return;
+		this._musin = true;
+		var n = this.$n();
 		if (n && zk.gecko && this._draggable
 		&& !jq.nodeName(evt.domTarget, "input", "textarea"))
 			n.firstChild.style.MozUserSelect = "none";
 		
 		//Merge breeze
-		if (n && !jq(n).hasClass(zcls))
-			jq(n).addClass(zcls);
+		_toggleEffect(this);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		var n = this.$n(),
-			zcls = this.getZclass() + '-over'; // Merge breeze
+		var n = this.$n();
+		if ((this._musin && jq.isAncestor(n,
+				evt.domEvent.relatedTarget || evt.domEvent.toElement))) {
+			// fixed mouse-over issue for datebox 
+			this.parent._musout = this;
+			return;
+		}
+		this._musin = false;
 		if (n && zk.gecko && this._draggable)
 			n.firstChild.style.MozUserSelect = "none";
 		
-		/* Merge breeze
-		 * Calculate widget on page's position, removes CSS class
-		 * when the event's position is out of the range of the widget.
-		 */
-		if (n && jq(n).hasClass(zcls)) {
-			var x = evt.pageX,
-				y = evt.pageY,
-				of = zk(n).revisedOffset(),
-				p = 2;	/* Add extra padding for fault-tolerant */
-			if (x < (of[0] + p) || x > (of[0] + n.clientWidth - p) ||
-				y < (of[1] + p) || y > (of[1] + n.clientHeight - p)	)
-				jq(n).removeClass(zcls);
-		}
+		//Merge breeze
+		_toggleEffect(this, true);
 		this.$supers('doMouseOut_', arguments);
 	},
 	domAttrs_: function (no) {

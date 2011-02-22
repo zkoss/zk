@@ -198,25 +198,27 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			var colhead = mesh.head.getChildAt(this._columns).$n();
+			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible;
 			for (var display, faker, index = this._columns,
 					tail = mesh.head.nChildren - index,
 					n = colhead;
 					n; n = n.nextSibling, index++, tail--) {
+				isVisible = (isVisible = zk.Widget.$(n)) && isVisible.isVisible();
 				display = cnt-- <= 0 ? '' : 'none';
 				if (force || n.style.display != display) {
 					n.style.display = display;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 						faker.style.display = display;
-					if ((faker = jq('#' + n.id + '-bdfaker')[0]))
+					if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
 						faker.style.display = display;
 					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
 						faker.style.display = display;
 
 					//body
-					for (var i = 0, rl = rows.length, cells;
-					i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
-						cells[ofs].style.display = display;
+					if (isVisible)
+						for (var i = 0, rl = rows.length, cells;
+						i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
+							cells[ofs].style.display = display;
 						
 					// foot
 					if (mesh.foot) {

@@ -285,24 +285,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						var layout = this.parent.parent;
 						if (layout.getMaximizedMode() == 'whole') {
 							this._inWholeMode = true;
-							var p = layout.$n();
+							var p = layout.$n(), ps = p.style;
 							sh = zk.ie6_ && p.clientHeight == 0 ? p.offsetHeight - jq(p).zk.borderHeight() : p.clientHeight;
-							node._scrollTop = p.parentNode.scrollTop; 
+							var oldinfo = this._oldNodeInfo = { _scrollTop: p.parentNode.scrollTop };
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
 							
-							node._pos = node.style.position;
-							node._ppos = p.style.position;
-							node._zindex = node.style.zIndex;
-							node.style.position = 'absolute';
+							oldinfo._pos = s.position;
+							oldinfo._ppos = ps.position;
+							oldinfo._zIndex = s.zIndex;
+							
+							s.position = 'absolute';
 							this.setFloating_(true);
 							this.setTopmost();
 							p.appendChild(node);
-							p.style.position = 'relative';
-							if (!p.style.height) {
-								p.style.height = jq.px0(sh);
-								node._pheight = true;
+							ps.position = 'relative';
+							if (!ps.height) {
+								ps.height = jq.px0(sh);
+								oldinfo._pheight = true;
 							}
+							if (zk.ie7_)
+								zk(node).redoCSS();
 						}
 					}
 					var floated = this.isFloatable(),
@@ -362,15 +365,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						
 					if (this._inWholeMode) {
 						$n.undoVParent();
-						node.style.position = node._pos;
-						node.style.zIndex = node._zindex;
+						var oldinfo = this._oldNodeInfo;
+						node.style.position = oldinfo ? oldinfo._pos : "";
+						this.setZIndex((oldinfo ? oldinfo._zIndex : ""), {fire:true});
 						this.setFloating_(false);
 						var p = this.parent.parent.$n();
-						p.style.position = node._ppos;
-						p.parentNode.scrollTop = node._scrollTop;
-						if (node._pheight)
+						p.style.position = oldinfo ? oldinfo._ppos : "";
+						p.parentNode.scrollTop = oldinfo ? oldinfo._scrollTop : 0;
+						if (oldinfo && oldinfo._pheight)
 							p.style.height = "";
-						node._scrollTop = node._ppos = node._zindex = node._pos = node._pheight = null;
+						this._oldNodeInfo = null;
 						this._inWholeMode = false;
 					}
 				}
@@ -931,6 +935,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.fbar = null;
 		if (!this.childReplacing_)
 			this.rerender();
+	},
+	onChildVisible_: function (child) {
+		this.$supers('onChildVisible_', arguments);
+		if((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
+			this._fixHgh();
 	}
 }, { //static
 	//drag

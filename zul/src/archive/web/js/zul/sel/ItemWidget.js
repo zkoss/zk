@@ -12,6 +12,29 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _toggleEffect(wgt, undo) {
+		var self = wgt;
+		setTimeout(function () {
+			var $n = jq(self.$n()),
+				zcls = self.getZclass();
+			if (undo) {
+   				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
+   					//we have to remove both since _setSelectedDirectly doesn't
+   					//remove -over-seld
+			} else if (self._musin) {
+				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
+				
+				var musout = self.getMeshWidget()._musout;
+				// fixed mouse-over issue for datebox 
+				if (musout && $n[0] != musout.$n()) {
+					jq(musout.$n()).removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
+					musout._musin = false;
+					self.parent._musout = null;
+				}
+			}
+		});
+	}
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
@@ -133,19 +156,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 		return scls;
 	},
+	// SelectWidget count on this function
 	_toggleEffect: function (undo) {
-		var self = this;
-		setTimeout(function () {
-			var $n = jq(self.$n()),
-				zcls = self.getZclass();
-			if (undo) {
-   				$n.removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
-   					//we have to remove both since _setSelectedDirectly doesn't
-   					//remove -over-seld
-			} else if (self._musin) {
-				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
-			}
-		});
+		_toggleEffect(this, undo);
 	},
 	focus_: function (timeout) {
 		var mesh = this.getMeshWidget();
@@ -219,8 +232,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	doMouseOut_: function(evt) {
 		if (this.isDisabled() || (this._musin &&
 					jq.isAncestor(this.$n(), evt.domEvent.relatedTarget ||
-								evt.domEvent.toElement)))
+								evt.domEvent.toElement))) {
+			// fixed mouse-over issue for datebox 
+			this.getMeshWidget()._musout = this;
 			return;
+		}
 		this._musin = false;
 		this._toggleEffect(true);
 		evt.stop({propagation: true});
@@ -243,3 +259,4 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
 	}
 });
+})();

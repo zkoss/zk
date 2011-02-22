@@ -21,9 +21,9 @@ function (out) {
 			this.encloseChildHTML_({out: out, child: w, vertical: true});
 		out.push('</table></div>');
 	} else {
-		var zcls = this.getZclass();
+		var zcls = this.getZclass(), scrollable;
 		out.push('<div', this.domAttrs_(), '>')
-		if (this.checkScrollable()) {
+		if (scrollable = this.checkScrollable()) {
 			out.push('<div id="', uuid, '-left" class="', zcls, '-left"></div>',
 					'<div id="', uuid, '-right" class="', zcls, '-right"></div>',
 					'<div id="', uuid, '-body" class="', zcls, '-body">',
@@ -33,9 +33,8 @@ function (out) {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tr></table>');
-		if (this.scrollable) {
+		if (scrollable)
 			out.push('</div></div>');
-		}
 		out.push('</div>');
 	}
 }

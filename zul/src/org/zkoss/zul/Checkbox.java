@@ -47,9 +47,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private boolean _disabled;
 	
 	static {
-		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT);
-		addClientEvent(Checkbox.class, Events.ON_FOCUS, 0);
-		addClientEvent(Checkbox.class, Events.ON_BLUR, 0);
+		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Checkbox() {

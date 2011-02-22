@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
 
 import org.zkoss.zul.impl.XulElement;

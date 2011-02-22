@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			before = colps == "before",
 			sib = before ? Splitter._prev(nd): Splitter._next(nd),
 			sibwgt = zk.Widget.$(sib),
-			fd = vert ? "height": "width", diff;
+			fd = vert ? "height": "width", 
+			diff = 0;
 		if (sib) {
 			if (!open)
 				zWatch.fireDown('onHide', sibwgt);
@@ -310,14 +311,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 },{
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		jq(wgt.button).removeClass(wgt.getZclass() + "-btn-visi");
+		jq(wgt.$n('btn')).removeClass(wgt.getZclass() + "-btn-visi");
 		wgt.setOpen(!wgt._open);
 	},
 
 	//drag
 	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.control;
-		if (!wgt._open || wgt.button == evt.domTarget) return true;
+		if (!wgt._open || wgt.$n('btn') == evt.domTarget) return true;
 
 		var run = draggable.run = {},
 			node = wgt.$n(),
@@ -325,6 +326,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			Splitter = zul.box.Splitter;
 		run.prev = Splitter._prev(nd);
 		run.next = Splitter._next(nd);
+		if(!run.prev || !run.next) return true; // splitter as first or last child
 		run.prevwgt = wgt.previousSibling;
 		run.nextwgt = wgt.nextSibling;
 		run.z_offset = zk(node).cmOffset();
@@ -437,11 +439,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 if (zk.ie) {
 	zul.box.Splitter.onover = function (evt) {
 		var wgt = zk.Widget.$(evt);
-		$(wgt.button).addClass(wgt.getZclass() + '-btn-visi');
+		$(wgt.$n('btn')).addClass(wgt.getZclass() + '-btn-visi');
 	};
 	zul.box.Splitter.onout = function (evt) {
 		var wgt = zk.Widget.$(evt);
-		$(wgt.button).removeClass(wgt.getZclass() + '-btn-visi');
+		$(wgt.$n('btn')).removeClass(wgt.getZclass() + '-btn-visi');
 	};
 }
 /* Use fix table layout */

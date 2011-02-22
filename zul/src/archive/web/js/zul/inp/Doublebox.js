@@ -83,7 +83,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-doublebox";
+		return zcs != null ? zcs: "z-doublebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, _allowKeys))

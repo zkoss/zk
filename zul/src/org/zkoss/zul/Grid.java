@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
@@ -56,6 +57,7 @@ import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.MeshElement;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -169,7 +171,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see RowRenderer
  * @see RowRendererExt
  */
-public class Grid extends XulElement implements Paginated{
+public class Grid extends MeshElement implements Paginated {
 	private static final Log log = Log.lookup(Grid.class);
 	private static final long serialVersionUID = 20091111L;
 
@@ -195,14 +197,12 @@ public class Grid extends XulElement implements Paginated{
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener, _modelInitListener;
+	private EventListener _pgListener, _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private boolean _sizedByContent;
-	private boolean _span; //since 5.0.5
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
@@ -254,7 +254,7 @@ public class Grid extends XulElement implements Paginated{
 		}
 	}
 	
-	private class ModelInitListener implements EventListener {
+	private class ModelInitListener implements SerializableEventListener {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Grid.this.removeEventListener("onInitModel", _modelInitListener);
@@ -332,69 +332,6 @@ public class Grid extends XulElement implements Paginated{
 	 */
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
-	}
-	
-	/**
-	 * Sets whether sizing grid column width by its content.
-	 * <p>Default: false. It means the outline of listbox is dependent on
-	 * the header.
-	 * The performance is better and the user can precisely resize certain
-	 * headers. If you want a column to have the width of the content,
-	 * you can specify hflex="min".
-	 * <p>If set to true, the outline will depend on the content of body.
-	 * In other words, the width specified in the header is only for reference.
-	 * The browser will adjust the width when a column's width is changed, so
-	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 * 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
-	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent 
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent) {
-		if(_sizedByContent != byContent) {
-			_sizedByContent = byContent;
-			smartUpdate("sizedByContent", byContent);
-		}
-	}
-	/**
-	 * Returns whether sizing grid column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
-	 * it's prior to the original value.
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent() {
-		String s = (String) getAttribute("sized-by-content");
-		if (s == null) {
-			s = (String) getAttribute("fixed-layout");
-			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
-		} else
-			return "true".equalsIgnoreCase(s);
-	}
-	/**
-	 * Sets whether to span the width of the columns to occupy the whole grid.
-	 * It is meaningful only if {@link #isSizedByContent} is true, and
-	 * {@link #getHflex} is not speciifed.
-	 * <p>Default: false. It means the width of a column takes only the
-	 * required space based on its content (when {@link #isSizedByContent}
-	 * is specified).
-	 * @param span
-	 * @since 5.0.5
-	 */
-	public void setSpan(boolean span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("span", span);
-		}
-	}
-	/**
-	 * Returns whether span column width when {@link #isSizedByContent} is true.
-	 * <p>Default: false.
-	 * @since 5.0.5
-	 */
-	public boolean isSpan() {
-		return _span;
 	}
 	
 	/** Returns the rows.
@@ -542,7 +479,7 @@ public class Grid extends XulElement implements Paginated{
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
@@ -553,7 +490,7 @@ public class Grid extends XulElement implements Paginated{
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
 		//theorectically, _rows shall not be null if _model is not null when
@@ -1334,10 +1271,6 @@ public class Grid extends XulElement implements Paginated{
 		super.renderProperties(renderer);
 
 		render(renderer, "oddRowSclass", _scOddRow);
-		
-		if (isSizedByContent())
-			renderer.render("sizedByContent", true);
-		renderer.render("span", _span);
 		
 		if (_model != null)
 			render(renderer, "model", true);

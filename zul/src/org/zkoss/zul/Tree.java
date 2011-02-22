@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -40,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.event.PagingEvent;
@@ -49,7 +51,7 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
-
+import org.zkoss.zul.impl.MeshElement;
 
 /**
  *  A container which can be used to hold a tabular
@@ -66,7 +68,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Tree extends XulElement implements Paginated {
+public class Tree extends MeshElement implements Paginated {
 	private static final Log log = Log.lookup(Tree.class);
 
 	private transient Treecols _treecols;
@@ -89,7 +91,6 @@ public class Tree extends XulElement implements Paginated {
 	private TreeModel<Object> _model;
 	private TreeitemRenderer _renderer;
 	private transient TreeDataListener _dataListener;
-	private boolean _sizedByContent;
 
 	private transient Paginal _pgi;
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
@@ -99,14 +100,14 @@ public class Tree extends XulElement implements Paginated {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private transient EventListener _pgListener, _pgImpListener;
+	private EventListener _pgListener, _pgImpListener;
 	private String _pagingPosition = "bottom";
 
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_FOCUS, 0);
-		addClientEvent(Tree.class, Events.ON_BLUR, 0);
+		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}
@@ -309,7 +310,7 @@ public class Tree extends XulElement implements Paginated {
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new EventListener() {
+			_pgListener = new SerializableEventListener() {
 				public void onEvent(Event event) {
 					final PagingEvent evt = (PagingEvent)event;
 					Events.postEvent(
@@ -320,7 +321,7 @@ public class Tree extends XulElement implements Paginated {
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new EventListener() {
+			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (inPagingMold()) {
 			invalidate();
@@ -434,45 +435,6 @@ public class Tree extends XulElement implements Paginated {
 	 */
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
-	}
-
-	/**
-	 * Sets whether sizing tree grid column width by its content.
- 	 * <p>Default: false. It means the outline of listbox is dependent on
-	 * the header.
-	 * The performance is better and the user can precisely resize certain
-	 * headers. If you want a column to have the width of the content,
-	 * you can specify hflex="min".
-	 * <p>If set to true, the outline will depend on the content of body.
-	 * In other words, the width specified in the header is only for reference.
-	 * The browser will adjust the width when a column's width is changed, so
-	 * it might not be easy for user to adjust the column width as precise as he wants.
-	 *
-	 * <p> You can also specify the "sized-by-content" attribute of component in
-	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent) {
-		if(_sizedByContent != byContent) {
-			_sizedByContent = byContent;
-			smartUpdate("sizedByContent", byContent);
-		}
-	}
-	/**
-	 * Returns whether sizing tree grid column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified,
-	 * it's prior to the original value.
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent() {
-		String s = (String) getAttribute("sized-by-content");
-		if (s == null) {
-			s = (String) getAttribute("fixed-layout");
-			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
-		} else
-			return "true".equalsIgnoreCase(s);
 	}
 
 	/** Returns the treecols that this tree owns (might null).
@@ -1212,6 +1174,9 @@ public class Tree extends XulElement implements Paginated {
 				for(int i=indexFrom;i<=indexTo;i++)
 					onTreeDataContentChange(parent,node,i);
 				break;
+			case TreeDataEvent.STRUCTURE_CHANGED:
+				renderTree();
+				break;
 			}
 		}
 	}
@@ -1238,11 +1203,10 @@ public class Tree extends XulElement implements Paginated {
 		Treechildren tc= treechildrenOf(parent);
 		List siblings = tc.getChildren();
 		//if there is no sibling or new item is inserted at end.
-		if(siblings.size()==0 || index == siblings.size() ){
-			tc.insertBefore(newTi, null);
-		}else{
-			tc.insertBefore(newTi, (Treeitem)siblings.get(index));
-		}
+		tc.insertBefore(newTi, 
+			siblings.isEmpty() || index == siblings.size() ?
+				null: (Treeitem)siblings.get(index));
+				//Note: we don't use index >= size(); reason: it detects bug
 
 		renderChangedItem(newTi,_model.getChild(node,index));
 	}
@@ -1281,17 +1245,25 @@ public class Tree extends XulElement implements Paginated {
 	}
 
 	/**
-	 * Return the Tree or Treeitem component by a given associated node in model.
+	 * Return the Tree or Treeitem component by a given associated node in model,
+	 * or null if the treeitem is not instantiated (i.e., rendered) yet.
+	 * It returns this tree if the given node is the root node
+	 * (i.e., {@link TreeModel#getRoot}).
 	 * @since 3.0.0
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @see #renderItemByNode
 	 */
 	protected Component getChildByNode(Object node) {
+		if (_model == null)
+			throw new IllegalStateException("model required");
+
 		final Object root = _model.getRoot();
 		if (Objects.equals(root, node))
 			return this;
 
 		return getChildByNode0(_model, _treechildren, root, node);
 	}
-	private static Component
+	private static Treeitem
 	getChildByNode0(TreeModel<Object> model, Treechildren tc, Object parent, Object node) {
 		if (tc == null)
 			return null; //if not rendered, return null
@@ -1299,13 +1271,13 @@ public class Tree extends XulElement implements Paginated {
 		int j = model.getIndexOfChild(parent, node);
 		if (j >= 0) {
 			final List cs = tc.getChildren();
-			return j < cs.size() ? (Component)cs.get(j): null; //null if not rendered
+			return j < cs.size() ? (Treeitem)cs.get(j): null; //null if not rendered
 		}
 
 		Treeitem ti = (Treeitem)tc.getFirstChild();
 		j = 0;
 		for (int len = model.getChildCount(parent); j < len && ti != null; ++j) {
-			Component c = getChildByNode0(
+			Treeitem c = getChildByNode0(
 				model, ti.getTreechildren(), model.getChild(parent, j), node);
 			if (c != null)
 				return c;
@@ -1727,8 +1699,49 @@ public class Tree extends XulElement implements Paginated {
 		return node;
 	}
 
+	/** Load the treeitems by the given node.
+	 * This method must be used with a tree model, and the node is
+	 * one of the value returned by {@link TreeModel#getChild}.
+	 * <p>Notice that this method has to search the model one-by-one.
+	 * The performance might not be good, so use {@link #renderItemByPath}
+	 * if possible.
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @return the treeitem that is associated with the give node, or null
+	 * no treeitem is associated (including the give node is the root).
+	 * @since 5.0.6
+	 * @since #getChildByNode
+	 */
+	public Treeitem renderItemByNode(Object node) {
+		return renderItemByPath(getPath(_model, _model.getRoot(), node));
+	}
+	/*package*/ static int[] getPath(TreeModel<Object> model, Object parent, Object lastNode){
+		final List<Integer> l = new LinkedList<Integer>();
+		dfSearch(model, l, parent, lastNode);
+
+		final Integer[] objs = l.toArray(new Integer[l.size()]);
+		final int[] path = new int[objs.length];
+		for (int i = 0; i < objs.length; i++)
+			path[i] = objs[i].intValue();
+		return path;
+	}
+	private static
+	boolean dfSearch(TreeModel<Object> model, List<Integer> path, Object node, Object target){
+		if (node.equals(target))
+			return true;
+		if (model.isLeaf(node))
+			return false;
+
+		int size = model.getChildCount(node);
+		for (int i = 0; i< size; i++)
+			if (dfSearch(model, path, model.getChild(node, i), target)){
+				path.add(0, new Integer(i));
+				return true;
+			}
+		return false;
+	}
+
 	/**
-	 * Load treeitems through path <b>path</b>
+	 * Load the treeitems by giveing a path of the treeitems top open.
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
@@ -1788,8 +1801,6 @@ public class Tree extends XulElement implements Paginated {
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());
-		if (isSizedByContent())
-			renderer.render("sizedByContent", true);
 
 		if (_model != null)
 			render(renderer, "model", true);

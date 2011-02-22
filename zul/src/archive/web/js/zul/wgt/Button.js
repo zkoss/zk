@@ -21,10 +21,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			box.rows[1].style.height = "";
 			box.style.height = !n.style.height || n.style.height == "auto" ? "": "100%";			
 			if (n.style.height && box.offsetHeight) {
-				var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
+				var cellHgh = zk.parseInt(jq.css(box.rows[0].cells[0], 'height', 'styleonly'));
 				if (cellHgh != box.rows[0].cells[0].offsetHeight) {
 					box.rows[1].style.height = jq.px0(box.offsetHeight -
-						cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
+						cellHgh - zk.parseInt(jq.css(box.rows[2].cells[0], 'height', 'styleonly')));
 				}
 			}
 		}
@@ -36,6 +36,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}: zk.$void;
 
+	function _initUpld(wgt) {
+		if (!zk.ie && wgt._mold == 'trendy')
+			zWatch.listen({onShow: wgt, onSize: wgt});
+		var v;
+		if (v = wgt._upload)
+			wgt._uplder = new zul.Upload(wgt, null, v);
+	}
+	
+	function _cleanUpld(wgt) {
+		var v;
+		if (v = wgt._uplder) {
+			if (!zk.ie && wgt._mold == 'trendy')
+				zWatch.unlisten({onShow: wgt, onSize: wgt});
+			wgt._uplder = null;
+			v.destroy();
+		}
+	}
+	
 var Button = 
 /**
  * A button.
@@ -213,8 +231,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		upload: function (v) {
 			var n = this.$n();
 			if (n && !this._disabled) {
-				this._cleanUpld();
-				if (v && v != 'false') this._initUpld();
+				_cleanUpld(this);
+				if (v && v != 'false') _initUpld(this);
 			}
 		}
 	},
@@ -268,16 +286,16 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(this.$n('box')).disableSelection();
 
 			n = this.$n('btn');
-			if (this._upload || zk.ie) zWatch.listen({onSize: this, onShow: this});
+			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
 		}
 
 		this.domListen_(n, "onFocus", "doFocus_")
 			.domListen_(n, "onBlur", "doBlur_");
 
-		if (!this._disabled && this._upload) this._initUpld();
+		if (!this._disabled && this._upload) _initUpld(this);
 	},
 	unbind_: function () {
-		this._cleanUpld();
+		_cleanUpld(this);
 
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.$n(): this.$n('btn');
@@ -285,22 +303,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			this.domUnlisten_(n, "onFocus", "doFocus_")
 				.domUnlisten_(n, "onBlur", "doBlur_");
 		}
-		if (this._upload || (zk.ie && trendy))
+		if (zk.ie && trendy)
 			zWatch.unlisten({onSize: this, onShow: this});
 
 		this.$supers(Button, 'unbind_', arguments);
-	},
-	_initUpld: function () {
-		var v;
-		if (v = this._upload)
-			this._uplder = new zul.Upload(this, null, v);
-	},
-	_cleanUpld: function () {
-		var v;
-		if (v = this._uplder) {
-			this._uplder = null;
-			v.destroy();
-		}
 	},
 
 	//@Override

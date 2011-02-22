@@ -312,12 +312,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			tdr = this.$n("tdr");
 		this.domUnlisten_(title, "onClick", '_changeView')
 			.domUnlisten_(mid, "onClick", '_clickDate')
-			.domListen_(tdl, "onClick", '_clickArrow')			
-			.domListen_(tdl, "onMouseOver", '_doMouseEffect')
-			.domListen_(tdl, "onMouseOut", '_doMouseEffect')
-			.domListen_(tdr, "onClick", '_clickArrow')
-			.domListen_(tdr, "onMouseOver", '_doMouseEffect')
-			.domListen_(tdr, "onMouseOut", '_doMouseEffect')
+			.domUnlisten_(tdl, "onClick", '_clickArrow')			
+			.domUnlisten_(tdl, "onMouseOver", '_doMouseEffect')
+			.domUnlisten_(tdl, "onMouseOut", '_doMouseEffect')
+			.domUnlisten_(tdr, "onClick", '_clickArrow')
+			.domUnlisten_(tdr, "onMouseOver", '_doMouseEffect')
+			.domUnlisten_(tdr, "onMouseOut", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
 			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
 			.domUnlisten_(node, 'onMousewheel')
@@ -390,14 +390,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value || zUtl.today(true);
+		return this._value || zUtl.today(this.getFormat());
 	},
 	_setTime: function (y, m, d, hr, mi) {
 		var dateobj = this.getTime(),
 			year = y != null ? y  : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate();
-		this._value = _newDate(year, month, day, true);
+		this._value = _newDate(year, month, day, d == null);
 		this.fire('onChange', {value: this._value});
 	},
 	_clickDate: function (evt) {
@@ -506,7 +506,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
 				last = new Date(y, m + 1, 0).getDate(), //last date of this month
 				prev = new Date(y, m, 0).getDate(), //last date of previous month
-				today = zUtl.today();
+				today = zUtl.today(); //no time part
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
 				var week = this.$n("w" + j);

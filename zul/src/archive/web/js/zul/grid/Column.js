@@ -41,6 +41,11 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		var grid = this.getGrid();
 		return grid ? grid.rows : null;  
 	},
+	checkClientSort_: function (ascending) {
+		var body;
+		return !(!(body = this.getMeshBody()) || body.hasGroup()) &&
+			this.$supers('checkClientSort_', arguments);
+	},
 	/** Groups and sorts the rows ({@link Row}) based on
 	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false

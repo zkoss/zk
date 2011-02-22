@@ -178,6 +178,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	/** The child page. Note: it is recovered by PageImpl. */
 	private transient Page _childpg;
 	private String _mode = getDefaultMode();
+	private String _renderResult;
 	private boolean _localized;
 	private boolean _progressing;
 	private boolean _afterComposed;
@@ -286,7 +287,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			&& !"defer".equals(mode))
 				throw new WrongValueException("Unknown mode: "+mode);
 			if ((_localized || _progressing) && "instant".equals(mode))
-				throw new UnsupportedOperationException("localized/progressing not allowed in instant mold");
+				throw new UnsupportedOperationException("localized/progressing not allowed in the instant mode");
 
 			_mode = mode;
 			fixMode();
@@ -376,9 +377,11 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	}
 
 	//Includer//
+	//@Override
 	public Page getChildPage() {
 		return _childpg;
 	}
+	//@Override
 	public void setChildPage(Page page) {
 		if (_childpg != null && page == null) {
 			final Desktop desktop = getDesktop();
@@ -386,6 +389,10 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				((DesktopCtrl)desktop).removePage(_childpg);
 		}
 		_childpg = page;
+	}
+	//@Override
+	public void setRenderingResult(String result) {
+		_renderResult = result;
 	}
 
 	//@Override
@@ -525,7 +532,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				if (getChildPage() == null) { //only able to handle non-ZUL page
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
-					if (rc != null) {
+					if (rc != null && !rc.included) { //Use z$ea only if not included
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());
@@ -541,10 +548,14 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 						done = true;
 					}
 				}
-				if (!done)
+				if (!done) {
 					renderer.render("content", sw.toString());
+					if (_renderResult != null && _renderResult.length() > 0)
+						renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
+				}
 			}
 		} finally {
+			_renderResult = null;
 			ueng.setOwner(old);
 		}
 	}

@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.lang.Objects;
@@ -111,5 +110,14 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, java.io.Seri
 
 		_listeners = new LinkedList<TreeDataListener>();
 		Serializables.smartRead(s, _listeners);
+	}
+
+	//-TreeModel-//
+	/**
+	 * @deprecated As of release 5.0.6, it was replaced by {@link #getIndexOfChild}.
+	 * This method was implemented to provide backward compatibility.
+	 */
+	public int[] getPath(Object parent, Object lastNode){
+		return Tree.getPath(this, parent, lastNode);
 	}
 }

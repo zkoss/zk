@@ -38,7 +38,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-longbox";
+		return zcs != null ? zcs: "z-longbox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))

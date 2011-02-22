@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.zkoss.util.CollectionsX.ArrayCollection;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  * A general-purpose node in a tree data structure.
@@ -28,13 +29,15 @@ import org.zkoss.util.CollectionsX.ArrayCollection;
  * @author tomyeh
  * @since 5.0.6
  */
-public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
+public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNode<E>>, java.io.Serializable  {
 	private DefaultTreeModel<E> _model;
 	private DefaultTreeNode<E> _parent;
 	/** List<DefaultTreeNode> */
 	private ArrayList<DefaultTreeNode<E>> _children;
 	private E _data;
 	private final boolean _leaf;
+	/** Whether to treat null as the maximum value. */
+	private boolean _maxnull;
 
 	/** Creates a branch (non-leaf) node.
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
@@ -43,11 +46,21 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
 	 * If it is not allowed, please use {@link #DefaultTreeNode(E)} instead.
 	 */
 	public DefaultTreeNode(E data, Collection<DefaultTreeNode<E>> children) {
+		this(data, children, false);
+	}
+	/** Creates a branch (non-leaf) node.
+	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
+	 * If null or empty, it means
+	 * no children at all. However, it still allows to add children.
+	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
+	 */
+	public DefaultTreeNode(E data, Collection<DefaultTreeNode<E>> children, boolean nullAsMax) {
 		_data = data;
 		_leaf = false;
 		if (children != null)
 			for (DefaultTreeNode<E> node: children)
 				add(node);
+		_maxnull = nullAsMax;
 	}
 	/** Creates a branch (non-leaf) node.
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
@@ -61,8 +74,17 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
 	/** Creates a leaf node, i.e., it won't allow any children.
 	 */
 	public DefaultTreeNode(E data) {
+		this(data, false);
+	}
+	
+	/** Creates a leaf node, i.e., it won't allow any children.
+	 * @param nullAsMax whether to consider null as the maximum value.
+	 * If false, null is considered as the minimum value.
+	 */
+	public DefaultTreeNode(E data, boolean nullAsMax) {
 		_data = data;
 		_leaf = true;
+		_maxnull = nullAsMax;
 	}
 
 	/** Removes the receiver from its parent.
@@ -88,9 +110,20 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
 		return _data;
 	}
 	//@Override
+	@SuppressWarnings("unchecked")
 	public void setData(E data) {
 		_data = data;
-		//TODO: getModel().fireEvent(...)
+		DefaultTreeModel model = getModel();
+		TreeNode parent = getParent();
+		if (model != null && parent != null) {
+			int index = parent.getIndex(this);
+			model.fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+		}
+	}
+	
+	//@Override
+	public List getChildren(){
+		return _children;
 	}
 
 	//@Override
@@ -132,6 +165,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
      * @exception IllegalStateException if this node does not allow children
      * @exception NullPointerException if <code>child</code> is null
 	 */
+	@SuppressWarnings("unchecked")
 	public void insert(TreeNode<E> child, int index) {
 		if (isLeaf())
 			throw new IllegalStateException("child not allowed");
@@ -145,7 +179,10 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
 			_children = new ArrayList<DefaultTreeNode<E>>();
 		_children.add(index, (DefaultTreeNode<E>)child);
 		((DefaultTreeNode<E>)child).setParent(this);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_ADDED);
 	}
 	//@Override
 	/** Adds a child to this node at the end.
@@ -174,10 +211,14 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
      * @param index the index in this node's child array of the child to remove
      * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
      */
+	@SuppressWarnings("unchecked")
 	public void remove(int index) {
 		DefaultTreeNode<E> child = _children.remove(index);
 		child.setParent(null);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
 	}
 	//@Override
 	/**
@@ -186,10 +227,23 @@ public class DefaultTreeNode<E> implements TreeNode<E>, java.io.Serializable  {
      * @param child a child of this node to remove
      * @exception IllegalArgumentException if <code>child</code> is not a child of this node
      */
+	@SuppressWarnings("unchecked")
 	public void remove(TreeNode<E> child) {
+		int index = _children.indexOf(child);
 		if (!_children.remove(child))
 			throw new IllegalArgumentException("not a child");
 		((DefaultTreeNode<E>)child).setParent(null);
-		//TODO: getModel().fireEvent(...)
+		
+		DefaultTreeModel model = getModel();
+		if (model != null)
+			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+	}
+	@SuppressWarnings("unchecked")
+	public int compareTo(DefaultTreeNode<E> node) {
+		if (_data == null) 
+			return node == null ? 0: 
+				node.getData() == null? 0: _maxnull ? 1: -1;
+		if (node == null) return _maxnull ? -1: 1;
+		return ((Comparable)_data).compareTo(node.getData());
 	}
 }

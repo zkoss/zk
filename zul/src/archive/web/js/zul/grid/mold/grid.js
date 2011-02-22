@@ -16,7 +16,7 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		innerWidth = this.getInnerWidth(),
-		wdAttr = this.getHflex() == 'min' ? '' : innerWidth == '100%' ? ' width="100%"' : '',
+		wdAttr = innerWidth == '100%' ? ' width="100%"' : '', //bug#3183182
 		wdStyle = innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos;
 
@@ -47,9 +47,7 @@ function (out) {
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="height:', hgh, '"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0);
-	if (!this.isSizedByContent())
-		out.push(' style="table-layout:fixed;', wdStyle,'"');		
+	out.push('><table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
 	
 	if (this.columns)

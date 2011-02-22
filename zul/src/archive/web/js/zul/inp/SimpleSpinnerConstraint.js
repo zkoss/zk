@@ -40,14 +40,11 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		switch (typeof val) {
 			case 'number':
 				if ((this._max && val > this._max) || (this._min && val < this._min)) {
-					var msg = msgzul.OUT_OF_RANGE + ': ';
-					msg += "(" + this._min != null ? this._max != null ?
-							this._min + " ~ " + this._max: ">= " + this._min: "<= " + this._max + ")";
+					var errmsg = this._errmsg,
+						msg = errmsg ? errmsg : msgzul.OUT_OF_RANGE + ': ' + (this._min != null ? this._max != null ?
+							this._min + " - " + this._max : ">= " + this._min : "<= " + this._max);
 				}	
 		}
-		if(msg)
-			return msg;
-		else
-			return this.$supers('validate',arguments);
+		return msg || this.$supers('validate',arguments);
 	}
 });

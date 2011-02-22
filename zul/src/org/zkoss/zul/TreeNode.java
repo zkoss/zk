@@ -12,6 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
+
 /**
  * Defines the requirements for a tree node object that can change --
  * by adding or removing child nodes, or by changing the contents of
@@ -44,6 +46,12 @@ public interface TreeNode<E> {
 	 */
 	public void setData(E data);
 
+	/**
+	 * Return children of the receiver
+	 * @return children of the receiver
+	 */
+	public List getChildren();
+	
 	/**
 	 * Returns the child <code>TreeNode</code> at index 
 	 * <code>childIndex</code>.

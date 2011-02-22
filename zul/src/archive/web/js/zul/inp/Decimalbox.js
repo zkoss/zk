@@ -78,7 +78,7 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-decimalbox";
+		return zcs != null ? zcs: "z-decimalbox" + (this.inRoundedMold() ? "-rounded": "");
 	},
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, _allowKeys))

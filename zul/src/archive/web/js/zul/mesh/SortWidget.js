@@ -130,6 +130,22 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	 * @disable(zkgwt)
 	 */
 	sort: function (ascending, evt) {
+		if (!this.checkClientSort_(ascending))
+			return false;
+		
+		evt.stop();
+		
+		this.replaceCavedChildrenInOrder_(ascending);
+		
+		return true;
+	},
+	/** Check the status whether can be sort in client side.
+	 * @param String ascending
+	 * @return boolean
+	 * @since 5.0.6
+	 * @see #sort
+	 */
+	checkClientSort_: function (ascending) {
 		var dir = this.getSortDirection();
 		if (ascending) {
 			if ("ascending" == dir) return false;
@@ -149,14 +165,20 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		if (!mesh || mesh.isModel()) return false;
 			// if in model, the sort should be done by server
 			
-		var	body = this.getMeshBody();
-		
-		if (!body || body.hasGroup()) return false;
-		
-		var desktop = body.desktop,
+		return true;
+	},
+	/** Replaced the child widgets with the specified order.
+	 * @param String ascending
+	 * @since 5.0.6
+	 * @see #sort
+	 */
+	replaceCavedChildrenInOrder_: function (ascending) {
+		var mesh = this.getMeshWidget(),
+			body = this.getMeshBody(),
+			dir = this.getSortDirection(),
+			sorter = ascending ? this._sortAscending: this._sortDescending,
+			desktop = body.desktop,
 			node = body.$n();
-			
-		evt.stop();
 		try {
 			body.unbind();
 			var d = [], col = this.getChildIndex();
@@ -185,7 +207,6 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		} finally {
 			body.replaceHTML(node, desktop);
 		}
-		return true;
 	},
 	/**
 	 * The default implementation to compare the data.

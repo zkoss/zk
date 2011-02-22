@@ -553,7 +553,6 @@
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
-			<xs:element ref="fusionchart" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -584,6 +583,7 @@
 			<xs:element ref="spinner" />
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
+			<xs:element ref="tablelayout" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
@@ -623,7 +623,6 @@
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
-				<xs:element ref="fusionchart" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -918,6 +917,7 @@
 	<xs:complexType name="columnType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
+		<xs:attribute name="sort" type="sortAttrType" use="optional" />
 		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
 		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
@@ -1139,30 +1139,6 @@
 		<xs:attribute name="yAxis" type="xs:string" use="optional" />
 		<xs:attribute name="chartStyle" type="xs:string" use="optional" />
 	</xs:complexType>
-	
-	<!-- fusionchart -->
-	<xs:element name="fusionchart" type="fusionchartType" />
-	<xs:complexType name="fusionchartType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="type" type="chartTypeAttrType" use="optional" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="xAxis" type="xs:string" use="optional" />
-		<xs:attribute name="yAxis" type="xs:string" use="optional" />
-		<xs:attribute name="threeD" type="booleanType" use="optional" />
-		<xs:attribute name="showLegend" type="booleanType" use="optional" />
-		<xs:attribute name="paneAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="paneColor" type="xs:string" use="optional" />
-		<xs:attribute name="fgAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="bgAlpha" type="xs:string" use="optional" />
-		<xs:attribute name="bgColor" type="xs:string" use="optional" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
-		<xs:attribute name="period" type="chartPeriodAttrType" use="optional" />
-		<xs:attributeGroup ref="mouseAttrGroup" />
-		<xs:attributeGroup ref="rootAttrGroup" />
-	</xs:complexType>
 
     <!-- foot -->
 	<xs:element name="foot" type="footType" />
@@ -1313,7 +1289,10 @@
 		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
+		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
+		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 	</xs:complexType>
 
     <!-- groupbox -->
@@ -1572,12 +1551,13 @@
 		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
-		<xs:attribute name="pagingPosition" type="listboxPagingPositionAttrType" use="optional" />
+		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
+		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 	</xs:complexType>
-	<xs:simpleType name="listboxPagingPositionAttrType">
+	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -2291,14 +2271,22 @@
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="checkmark" type="booleanType" use="optional" />
+		<xs:attribute name="pageSize" type="intType" use="optional" />
+		<xs:attribute name="paginal" type="xs:string" use="optional" />
+		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attribute name="multiple" type="booleanType" use="optional" />
 		<xs:attribute name="vflex" type="booleanType" use="optional" />
+		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
+		<xs:attribute name="preloadSize" type="intType" use="optional" />
+		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
+		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
@@ -2321,7 +2309,12 @@
 	<xs:complexType name="treecolType">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
+		<xs:attribute name="sort" type="sortAttrType" use="optional" />
+		<xs:attribute name="sortDirection" type="sortDirectionAttrType" use="optional" />
+		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
+		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
+		<xs:attribute name="onSort" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treecols -->
 	<xs:element name="treecols" type="treecolsType" />
@@ -2595,7 +2588,6 @@
 			<xs:element ref="south" />
 			<xs:element ref="tab" />
 			<xs:element ref="tablechildren" />
-			<xs:element ref="tablelayout" />
 			<xs:element ref="tabpanel" />
 			<xs:element ref="tabpanels" />
 			<xs:element ref="tabs" />

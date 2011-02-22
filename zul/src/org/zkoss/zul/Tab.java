@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Set;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.zkoss.html.HTMLs;
@@ -101,25 +102,32 @@ public class Tab extends LabelImageElement {
 	 * @since 5.0.0
 	 */
 	public void close() {
-		if (_selected)
-			selectNextTab();
+		if (_selected) {
+			final Tab tab = selectNextTab();
+			if (tab != null) {
+				final Set<Tab> selItems = new HashSet<Tab>(2);
+				selItems.add(tab);
+				Events.postEvent(new SelectEvent<Tab>(Events.ON_SELECT, tab, selItems));
+			}
+		}
 		final Tabpanel panel = getLinkedPanel();
 		if (panel != null)
 			panel.detach();
 		detach();
 	}
 
-	private void selectNextTab() {
+	private Tab selectNextTab() {
 		for (Tab tab = (Tab) getNextSibling(); tab != null; tab = (Tab) tab.getNextSibling())
 			if (!tab.isDisabled()) {
 				tab.setSelected(true);
-				return;
+				return tab;
 			}
 		for (Tab tab = (Tab) getPreviousSibling(); tab != null; tab = (Tab) tab.getPreviousSibling())
 			if (!tab.isDisabled()) {
 				tab.setSelected(true);
-				return;
+				return tab;
 			}
+		return null;
 	}
 	
 	/**
@@ -247,8 +255,8 @@ public class Tab extends LabelImageElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			SelectEvent evt = SelectEvent.getSelectEvent(request);
-			Set selItems = evt.getSelectedItems();
+			final SelectEvent evt = SelectEvent.getSelectEvent(request);
+			final Set selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)
 				throw new UiException("Exactly one selected tab is required: " + selItems); // debug purpose
 			final Tabbox tabbox = getTabbox();

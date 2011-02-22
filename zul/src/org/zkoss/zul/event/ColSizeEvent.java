@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.zk.au.AuRequest;
@@ -43,6 +45,8 @@ public class ColSizeEvent extends Event {
 	private final int _icol, _keys;
 	private final String _width;
 	private final String _oldWd;
+	private final String[] _widths;
+	private final String[] _oldWds;
 
 	/** Indicates whether the Alt key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
@@ -60,28 +64,34 @@ public class ColSizeEvent extends Event {
 	/** Converts an AU request to a size event.
 	 * @since 5.0.0
 	 */
+	@SuppressWarnings("unchecked")
 	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
 		final Map data = request.getData();
-		return new ColSizeEvent(request.getCommand(), request.getComponent(),
+		final List wdlist = (List) data.get("widths");
+		return wdlist == null ? 
+			new ColSizeEvent(request.getCommand(), request.getComponent(),
+					AuRequests.getInt(data, "index", 0),
+					request.getDesktop().getComponentByUuid((String)data.get("column")),
+					(String)data.get("width"), AuRequests.parseKeys(data)) :
+			new ColSizeEvent(request.getCommand(), request.getComponent(), //since 5.0.6, to support fix width of multiple columns
 			AuRequests.getInt(data, "index", 0),
 			request.getDesktop().getComponentByUuid((String)data.get("column")),
-			(String)data.get("width"), AuRequests.parseKeys(data));
+			(String[]) wdlist.toArray(new String[wdlist.size()]), AuRequests.parseKeys(data));
 	}
-	
 	/** Constructs an instance of {@link ColSizeEvent}.
 	 *
 	 * @see #ColSizeEvent(String, Component, int, Component, String, int)
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
 	Component col, int keys) {
-		this(evtnm, target, icol, col, null, keys);
+		this(evtnm, target, icol, col, (String)null, keys);
 	}
 	
 	/**
 	 * Constructs an instance of {@link ColSizeEvent}.
 	 * @param icol the index of the first colum whose width is changed.
 	 * @param col the component of the column
-	 * @param width the width of the column
+	 * @param width the width of the column that trigger this event.
 	 * @since 5.0.0
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
@@ -89,9 +99,35 @@ public class ColSizeEvent extends Event {
 		super(evtnm, target);
 		_icol = icol;
 		_col = col;
+		_keys = keys;
 		_width = width;
 		_oldWd = col instanceof HtmlBasedComponent ?
-			((HtmlBasedComponent)col).getWidth(): null;
+				((HtmlBasedComponent)col).getWidth(): null;
+		_widths = null;
+		_oldWds = null;
+	}
+	/**
+	 * Constructs an instance of {@link ColSizeEvent} that provide width of all columns.
+	 * @param icol the index of the column whose width is changed and trigger this event.
+	 * @param col the component of the column
+	 * @param widths the width of all columns
+	 * @since 5.0.6
+	 */
+	public ColSizeEvent(String evtnm, Component target, int icol,
+	Component col, String[] widths, int keys) {
+		super(evtnm, target);
+		_icol = icol;
+		_col = col;
+		_widths = widths;
+		_oldWds = new String[_widths.length];
+		int j = 0;
+		for(Iterator it = target.getChildren().iterator(); it.hasNext(); ++j) {
+			final Object header = it.next();
+			_oldWds[j] = header instanceof HtmlBasedComponent ?
+					((HtmlBasedComponent)header).getWidth(): null;
+		}
+		_width = _widths[icol];
+		_oldWd = _oldWds[icol];
 		_keys = keys;
 	}
 	/**
@@ -129,5 +165,21 @@ public class ColSizeEvent extends Event {
 	 */
 	public final int getKeys() {
 		return _keys;
+	}
+	/**
+	 * Returns the column width of the specified column index.
+	 * @param col the column index 
+	 * @since 5.0.6
+	 */
+	public String getWidth(int col) {
+		return _widths[col];
+	}
+	/**
+	 * Returns the previous column width of the specified column index.
+	 * @param col the column index
+	 * @since 5.0.6
+	 */
+	public String getPreviousWidth(int col) {
+		return _oldWds[col];
 	}
 }

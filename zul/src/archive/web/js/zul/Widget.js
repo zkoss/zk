@@ -530,11 +530,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
 	 * propagation is not stopped.
 	 * <p>Default: handles the control keys, including onOK and onCancel,
-	 *  by searching up the ancestor chain to see if any one is listening.
-	 *  If found, it calls {@link #beforeCtrlKeys_} for each widget that were
-	 *  searched, and then fire the event.
-	 *  @param zk.Event evt the widget event.
-	 *  @see #setCtrlKeys
+	 * by searching up the ancestor chain to see if any one is listening.
+	 * If found, it calls {@link #beforeCtrlKeys_} for each widget that were
+	 * searched, and then fire the event.
+	 * @param zk.Event evt the widget event.
+	 * @return boolean true if the event has been processed
+	 * @see #setCtrlKeys
 	 */
 	afterKeyDown_: function (evt) {
 		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
@@ -598,6 +599,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			window.onhelp = function () {return false;}
 			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
 		}
+		return true; //handled
 	},
 	/**
 	 * Called before a control key is pressed. A control key includes onOK and

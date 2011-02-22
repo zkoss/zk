@@ -85,4 +85,13 @@ public interface TreeModel<E> {
 	 * @param l the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
+
+	/**
+	 * @deprecated As of release 5.0.6, it was replaced by {@link #getIndexOfChild}.
+	 * You don't have to implement this method if you extends from
+	 * {@link AbstractTreeModel}.
+	 * If you implement {@link TreeModel} from scratch, you could implement
+	 * this method by just returning null, since none of ZK's code depends on it.
+	 */
+	public int[] getPath(Object parent, Object lastNode);
 }

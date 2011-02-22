@@ -86,8 +86,10 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 			cnt = newsz - oldsz;
 			if (cnt <= 0)
 				throw new UiException("Adding causes a smaller list?");
-			if (cnt > INVALIDATE_THRESHOLD && !inPagingMold())
-				_listbox.invalidate(); //performance is better
+			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+				_listbox.invalidate();
+					//Bug 3147518: avoid memory leak
+					//Also better performance (outer better than remove a lot)
 			if (min < 0)
 				if (max < 0) min = 0;
 				else min = max - cnt + 1;
@@ -110,6 +112,11 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
 			if (max > oldsz - 1) max = oldsz - 1;
+
+			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+				_listbox.invalidate();
+					//Bug 3147518: avoid memory leak
+					//Also better performance (outer better than remove a lot)
 
 			//detach from end (due to groopfoot issue)
 			Component comp = _listbox.getItemAtIndex(max);
@@ -223,6 +230,8 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		final int oldsz = _listbox.getItemCount();
 		final Paginal _pgi = _listbox.getPaginal();
 		final boolean inPaging = inPagingMold();
+		final boolean shallInvalidated = //Bug 3147518: avoid memory leak
+			(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
 
 		int newcnt = newsz - oldsz;
 		int atg = _pgi != null ? _listbox.getActivePage(): 0;
@@ -242,8 +251,10 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 			//detach all from end to front since groupfoot
 			//must be detached before group
 				newcnt += cnt; //add affected later
-				if (newcnt > INVALIDATE_THRESHOLD && !inPaging)
-					_listbox.invalidate(); //performance is better
+				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
+					_listbox.invalidate();
+						//Bug 3147518: avoid memory leak
+						//Also better performance (outer better than remove a lot)
 
 				Component comp = _listbox.getItemAtIndex(max);
 				next = comp.getNextSibling();
@@ -271,8 +282,11 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 					item = next;//B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
-				if ((addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD) && !inPagingMold())
-					_listbox.invalidate(); //performance is better
+				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
+				&& !inPagingMold())
+					_listbox.invalidate();
+						//Bug 3147518: avoid memory leak
+						//Also better performance (outer better than remove a lot)
 			}
 		} else {
 			min = 0;
