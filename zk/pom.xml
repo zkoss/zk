@@ -126,7 +126,7 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.zkoss.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin-zk</artifactId>
 				<version>1.1.4</version>
@@ -137,7 +137,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
