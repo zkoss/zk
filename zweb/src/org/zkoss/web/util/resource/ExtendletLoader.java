@@ -75,10 +75,13 @@ abstract public class ExtendletLoader implements Loader {
 
 		try {
 			final URL url = getExtendletContext().getResource((String)src);
-			return url != null ? url.openConnection().getLastModified(): -1;
+			if (url != null) {
+				final long v = url.openConnection().getLastModified();
+				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+			}
 		} catch (Throwable ex) {
-			return -1; //reload
 		}
+		return -1; //reload (might be removed)
 	}
 	public Object load(Object src) throws Exception {
 //		if (D.ON && log.debugable()) log.debug("Parse "+src);
