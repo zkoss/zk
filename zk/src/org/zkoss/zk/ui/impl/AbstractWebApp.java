@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.impl;
 
 import java.io.InputStream;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.Utils;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
@@ -51,7 +52,7 @@ import org.zkoss.zk.au.AuDecoder;
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private static final Log log = Log.lookup(AbstractWebApp.class);
 
-	private String _appnm = "ZK";
+	private String _appnm;
 	private Configuration _config;
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
@@ -76,7 +77,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public String getAppName() {
-		return _appnm;
+		return _appnm != null ? _appnm: "ZK";
 	}
 	public void setAppName(String name) {
 		_appnm = name != null ? name: "";
@@ -120,6 +121,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
 
 		_config = config;
+		if (_appnm == null)
+			_appnm = _config.getPreference("org.zkoss.zk.ui.WebApp.name", "ZK");
 		_config.setWebApp(this);
 
 		Class cls = _config.getUiEngineClass();

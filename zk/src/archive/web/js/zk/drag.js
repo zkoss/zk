@@ -577,7 +577,11 @@ String scroll; //DOM Element's ID</code></pre>
 			if (evt.domStopped) devt.stop();
 			return;
 		}
-
+		// Bug B50-3147909: Safari has issue with select and draggable
+		// Now select element is not draggable in Chrome and Safari
+		if(zk.safari && jq.nodeName(devt.target, 'select'))
+			return;
+		
 		var pos = zk(node).cmOffset();
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);

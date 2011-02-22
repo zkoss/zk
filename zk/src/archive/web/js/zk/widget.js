@@ -265,31 +265,31 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (o == 'h') {
 			if (this._vflexsz === undefined) { //cached?
 				var cwgt = this.firstChild, //bug #2928109
-					cwgtn = cwgt && cwgt.$n(),
-					n = cwgtn ? cwgtn.parentNode : wgtn,
+					n = wgtn,
 					zkn = zk(n),
-					max = 0;
-				if (min)
+					max = 0,
+					precalc = false;
+				if (min != null)
 					max = min;
 				else {
 					this.setFlexSize_({height:'auto'});
-					var c = n.firstChild,
-						ntop = n.offsetTop,
-						noffParent = n.offsetParent,
-						tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
-						tbp = tp + zkn.sumStyles("t", jq.borders),
-						vmax = 0,
-						totalsz = 0;
+					var totalsz = 0,
+						vmax = 0;
 					if (cwgt){ //try child widgets
-						for (; cwgt; cwgt = cwgt.nextSibling) {
-							c = cwgt.$n();
-							if (c) { //node might not exist if rod on
-								//bug# 2997862: vflex="min" not working on nested tabpanel
-								var zkc = zk(c),
-									sameOffParent = c.offsetParent == noffParent,
-									sz = 0;
-								if (!cwgt.ignoreFlexSize_('h')) {
-									sz = c.offsetTop - (sameOffParent ? ntop + tbp : tp); 
+						for (; cwgt; cwgt = cwgt.nextSibling) { //bug 3132199: hflex="min" in hlayout
+							if (!cwgt.ignoreFlexSize_('h')) {
+								var c = cwgt.$n();
+								if (c) { //node might not exist if rod on
+									n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
+									zkn = zk(n);
+									var ntop = n.offsetTop,
+										noffParent = n.offsetParent,
+										tp = zkn.sumStyles("t", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+										tbp = tp + zkn.sumStyles("t", jq.borders),
+										//bug# 2997862: vflex="min" not working on nested tabpanel
+										zkc = zk(c),
+										sameOffParent = c.offsetParent == noffParent,
+										sz = cwgt._ignoreOffsetTop ? tbp : (c.offsetTop - (sameOffParent ? ntop + tbp : tp)); 
 									if (cwgt._vflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._vflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
@@ -305,55 +305,63 @@ it will be useful, but WITHOUT ANY WARRANTY.
 										if (!zk.safari || bm >= 0)
 											sz += bm;
 									}
+									//bug #3006276: East/West bottom cut if East/West higher than Center.
+									if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
+										vmax = sz;
+									else if (cwgt._sumFlexHeight) //@See North/South
+										totalsz += sz;
+									else if (sz > max)
+										max = sz;
 								}
-								//bug #3006276: East/West bottom cut if East/West higher than Center.
-								if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
-									vmax = sz;
-								else if (cwgt._sumFlexHeight) //@See North/South
-									totalsz += sz;
-								else if (sz > max)
+							}
+						}
+					} else {
+						var c = wgtn.firstChild;
+						if (c) { //no child widget, try html element directly
+							//feature 3000339: The hflex of the cloumn will calculate by max width
+							var ignore = this.ignoreChildNodeOffset_('h');
+							for(; c; c = c.nextSibling) {
+								n = c.parentNode;
+								zkn = zk(n);
+								var ntop = n.offsetTop,
+									noffParent = n.offsetParent,
+									tp = zkn.sumStyles("t", jq.paddings),
+									tbp = tp + zkn.sumStyles("t", jq.borders),
+									zkc = zk(c),
+									sz = 0;
+								if (ignore) {
+									var el = c.firstChild;
+									for(; el; el = el.nextSibling) {
+										var txt = el && el.nodeType == 3 ? el.nodeValue : null;
+										if (txt) {
+											var dim = zkc.textSize(txt);
+											sz = dim[1]; //height
+											if (sz > max)
+												max = sz;
+										}
+									}
+								} else {
+									var sameOffParent = c.offsetParent == noffParent;
+									sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
+								}
+								var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
+								
+								if (!zk.safari || bm >= 0)
+									sz += bm;
+								if (sz > max)
 									max = sz;
 							}
-						}
-					} else if (c) { //no child widget, try html element directly
-						//feature 3000339: The hflex of the cloumn will calculate by max width
-						var ignore = this.ignoreChildNodeOffset_('h');
-						for(; c; c = c.nextSibling) {
-							var zkc = zk(c),
-								sz = 0;
-							if (ignore) {
-								var el = c.firstChild;
-								for(; el; el = el.nextSibling) {
-									var txt = el && el.nodeType == 3 ? el.nodeValue : null;
-									if (txt) {
-										var dim = zkc.textSize(txt);
-										sz = dim[1]; //height
-										if (sz > max)
-											max = sz;
-									}
-								}
-							} else {
-								var sameOffParent = c.offsetParent == noffParent;
-								sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
-							}
-							var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-							
-							if (!zk.safari || bm >= 0)
-								sz += bm;
-							if (sz > max)
-								max = sz;
-						}
-					} else //no kids at all, use self
-						max = n.offsetHeight - zkn.padBorderHeight();
+						} else //no kids at all, use self
+							max = n.offsetHeight - zkn.padBorderHeight();
+					}
 					if (vmax)
 						totalsz += vmax;
 					if (totalsz > max)
 						max = totalsz;
 				}
 				//n might not be widget's element, add up the pad/border/margin/offsettop in between
-				var pb = 0,
-					precalc = false;
-				while (n && n != wgtn) {
+				var pb = 0, body = document.body;
+				while (n && n != body && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderHeight();
 					else {
@@ -392,30 +400,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		} else if (o == 'w') {
 			if (this._hflexsz === undefined) { //cached?
 				var cwgt = this.firstChild, //bug #2928109
-					cwgtn = cwgt && cwgt.$n(),
-					n = cwgtn ? cwgtn.parentNode : wgtn,
+					n = wgtn,
 					zkn = zk(n),
-					max = 0;
-				if (min)
+					max = 0,
+					precalc = false;
+				if (min != null)
 					max = min;
 				else {
 					this.setFlexSize_({width:'auto'});
-					var c = n.firstChild,
-						nleft = n.offsetLeft,
-						noffParent = n.offsetParent,
-						lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
-						lbp = lp + zkn.sumStyles("l", jq.borders), 
-						totalsz = 0;
+					var totalsz = 0;
 					if (cwgt) { //try child widgets
-						for (; cwgt; cwgt = cwgt.nextSibling) {
-							c = cwgt.$n();
-							if (c) { //node might not exist if rod on
-								//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
-								var zkc = zk(c),
-									sameOffParent = c.offsetParent == noffParent,
-									sz = 0;
-								if (!cwgt.ignoreFlexSize_('w')) {
-									sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
+						for (; cwgt; cwgt = cwgt.nextSibling) { //bug#3132199: hflex="min" in hlayout
+							if (!cwgt.ignoreFlexSize_('w')) {
+								var c = cwgt.$n();
+								if (c) { //node might not exist if rod on
+									n = c.parentNode; //in hlayout/vlayout, parentNode is different for each cwgt
+									zkn = zk(n);
+									var	nleft = n.offsetLeft,
+										noffParent = n.offsetParent,
+										lp = zkn.sumStyles("l", jq.paddings), //bug #3006718: The  hflex listbox after separator cause wrong width on IE6
+										lbp = lp + zkn.sumStyles("l", jq.borders), 
+										//bug# 2997862: vflex="min" not working on nested tabpanel(shall handle hflex, too
+										zkc = zk(c),
+										sameOffParent = c.offsetParent == noffParent,
+										sz = c.offsetLeft - (sameOffParent ?  nleft + lbp: lp);
 									if (cwgt._hflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._hflexsz === undefined ? _fixMinFlex.apply(cwgt, [c, o]) : cwgt._hflexsz;
@@ -438,43 +446,51 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								}
 							}
 						}
-					} else if (c) { //no child widget, try html element directly
-						//feature 3000339: The hflex of the cloumn will calculate by max width
-						var ignore = this.ignoreChildNodeOffset_('w');
-						for(; c; c = c.nextSibling) {
-							var zkc = zk(c),
-								sz = 0;
-							if (ignore) {
-								var el = c.firstChild;
-								for(; el; el = el.nextSibling) {
-									var txt = el && el.nodeType == 3 ? el.nodeValue : null;
-									if (txt) {
-										var dim = zkc.textSize(txt);
-										sz = dim[0]; //width
-										if (sz > max)
-											max = sz;
+					} else {
+						var c = wgtn.firstChild;
+						if (c) { //no child widget, try html element directly
+							//feature 3000339: The hflex of the cloumn will calculate by max width
+							var ignore = this.ignoreChildNodeOffset_('w');
+							for(; c; c = c.nextSibling) {
+								n = c.parentNode;
+								zkn = zk(n);
+								var	nleft = n.offsetLeft,
+									noffParent = n.offsetParent,
+									lp = zkn.sumStyles("l", jq.paddings),
+									lbp = lp + zkn.sumStyles("l", jq.borders), 
+									zkc = zk(c),
+									sz = 0;
+								if (ignore) {
+									var el = c.firstChild;
+									for(; el; el = el.nextSibling) {
+										var txt = el && el.nodeType == 3 ? el.nodeValue : null;
+										if (txt) {
+											var dim = zkc.textSize(txt);
+											sz = dim[0]; //width
+											if (sz > max)
+												max = sz;
+										}
 									}
+								} else {
+									var	sameOffParent = c.offsetParent == noffParent;
+									sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
 								}
-							} else {
-								var	sameOffParent = c.offsetParent == noffParent;
-								sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
+								var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
+								if (!zk.safari || rm >= 0)
+									sz +=  rm;
+								if (sz > max)
+									max = sz;
 							}
-							var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-							if (!zk.safari || rm >= 0)
-								sz +=  rm;
-							if (sz > max)
-								max = sz;
-						}
-					} else //no kids at all, use self
-						max = n.offsetWidth - zkn.padBorderWidth();
+						} else //no kids at all, use self
+							max = n.offsetWidth - zkn.padBorderWidth();
+					}
 					if (totalsz > max)
 						max = totalsz;
 				}
 				
 				//n might not be widget's element, add up the pad/border/margin in between
-				var pb = 0,
-					precalc = false;
-				while (n && n != wgtn) {
+				var pb = 0, body = document.body, oldFloat;
+				while (n && n != body && n != wgtn) { //bug #3172785.
 					if (!precalc)
 						pb += zkn.padBorderWidth();
 					else {
@@ -488,7 +504,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					pb += n.offsetLeft;
 					if (precalc)
 						pb -= pleft;
+					
+					//**Trick to get safari's right margin in style(rather than the computed one)
+					//http://stackoverflow.com/questions/1450129/i-think-i-found-a-bug-in-webkit-or-jquery-can-others-confirm
+					if (zk.safari) { 
+						oldFloat = n.style.cssFloat;
+						n.style.cssFloat = 'left';
+					}
 					var rm = zkn.sumStyles("r", jq.margins);
+					if (zk.safari)
+						n.style.cssFloat = oldFloat;
+					
 					if (!zk.safari || rm >= 0)
 						pb += rm; 
 					n = p;
@@ -533,22 +559,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//normal triggering
 		var r1 = p1 = this,
 			j1 = -1;
-		if (this._hflex == 'min' && this._hflexsz === undefined) {
+		if (this._hflex == 'min' && this._hflexsz === undefined && !this.ignoreFlexSize_('w')) {
 			++j1;
 			while ((p1 = p1.parent) && p1._hflex == 'min') {
 				delete p1._hflexsz;
 				r1 = p1;
 				++j1;
+				if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
+					break;
 			}
 		}
 		var r2 = p2 = this,
 			j2 = -1;
-		if (this._vflex == 'min' && this._vflexsz === undefined) {
+		if (this._vflex == 'min' && this._vflexsz === undefined && !this.ignoreFlexSize_('h')) {
 			++j2;
 			while ((p2 = p2.parent) && p2._vflex == 'min') {
 				delete p2._vflexsz;
 				r2 = p2;
 				++j2;
+				if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
+					break;
 			}
 		}
 		if (j1 > 0 || j2 > 0)
@@ -594,7 +624,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//ie6 must set parent div to 'relative' or the kid div's offsetTop is not correct
 		var oldPos;
-		if (zk.ie6_ && jq.nodeName(p, 'div')) {
+		if ((zk.ie6_ || zk.ie7_)&& jq.nodeName(p, 'div')) {
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
@@ -632,12 +662,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						_fixMinFlex.apply(cwgt, [c, 'w']);
-						//might change width in _fixMinFlex(), so regain the value
-						offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
-						offwdh = zkc.offsetWidth();
-						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
-						segRight = Math.max(segRight, marginRight);
+						var minwdh = _fixMinFlex.apply(cwgt, [c, 'w']);
+						if (cwgt._sumWidth)
+							wdh -= minwdh;
+						else {
+							//might change width in _fixMinFlex(), so regain the value
+							offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
+							offwdh = zkc.offsetWidth();
+							marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
+							segRight = Math.max(segRight, marginRight);
+						}
 						prehflex = false;
 					} else {
 						if (pretxt) {
@@ -647,6 +681,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						if (!prehflex && segRight > segLeft) {
 							wdh -= segRight - segLeft;
 						}
+						if (zk.ie8_ && c.offsetParent == p && jq.nodeName(p, "td")) //bug#3184369. henrichen: Dirty fix. padding==1 but offset==5. 
+							wdh -= offLeft * 2;
 						segLeft = segRight = marginRight;
 						
 						hflexs.push(cwgt);
@@ -654,7 +690,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prehflex = true;
 					}
 				} else {
-					segRight = Math.max(segRight, marginRight);
+					if (cwgt && cwgt._sumWidth)
+						wdh -= offwdh;
+					else
+						segRight = Math.max(segRight, marginRight);
 					prehflex = false;
 				}
 				
@@ -663,12 +702,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						_fixMinFlex.apply(cwgt, [c, 'h']);
-						//might change height in _fixMinFlex(), so regain the value
-						offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
-						offhgh = zkc.offsetHeight();
-						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
-						segBottom = Math.max(segBottom, marginBottom);
+						var minhgh = _fixMinFlex.apply(cwgt, [c, 'h']);
+						if (cwgt._sumHeight)
+							hgh -= minhgh;
+						else {
+							//might change height in _fixMinFlex(), so regain the value
+							offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
+							offhgh = minhgh; //zkc.offsetHeight();
+							marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
+							segBottom = Math.max(segBottom, marginBottom);
+						}
 						prevflex = false;
 					} else {
 						if (pretxt) {
@@ -685,14 +728,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prevflex = true;
 					}
 				} else {
-					segBottom = Math.max(segBottom, marginBottom);
+					if (cwgt && cwgt._sumHeight)
+						hgh -= offhgh;
+					else
+						segBottom = Math.max(segBottom, marginBottom);
 					prevflex = false;
 				}
 				pretxt = false;
 			}
 		}
 		
-		if (zk.ie6_ && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
+		if ((zk.ie6_ || zk.ie7_) && jq.nodeName(p, 'div')) { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
 
@@ -861,7 +907,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _topnode(n) {
-		for (var v; n && n != document.body; n = n.parentNode) //no need to check vparentNode
+		for (var v, body = document.body; n && n != body; n = n.parentNode) //no need to check vparentNode
 			if ((v=n.style) && ((v=v.position) == 'absolute' || v == 'relative'))
 				return n;
 	}
@@ -1383,17 +1429,8 @@ new zul.wnd.Window{
 		 * @see #setHflex 
 		 */
 		hflex: function(v) {
-			this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
-			if (this._nhflex < 0 && v != 'min')
-				this._nhflex = 0; 
+			this.setHflex_(v);
 			if (_binds[this.uuid] === this) { //if already bind
-				if (!this._nhflex) {
-					this.setFlexSize_({width: ''}); //clear the width
-					delete this._hflexsz;
-					if (!this._nvflex)
-						_unlistenFlex(this);
-				} else
-					_listenFlex(this);
 				zWatch.fireDown('onSize', this.parent);
 			}
 		},
@@ -1464,6 +1501,20 @@ new zul.wnd.Window{
 					}
 					zk.error("Illegal action: "+v+", "+this.className);
 				}
+		}
+	},
+	setHflex_: function (v) {
+		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
+		if (this._nhflex < 0 && v != 'min')
+			this._nhflex = 0; 
+		if (_binds[this.uuid] === this) { //if already bind
+			if (!this._nhflex) {
+				this.setFlexSize_({width: ''}); //clear the width
+				delete this._hflexsz;
+				if (!this._nvflex)
+					_unlistenFlex(this);
+			} else
+				_listenFlex(this);
 		}
 	},
 	/** Invoked after an animation (e.g., {@link jqzk#slideDown}) has finished.
@@ -3321,7 +3372,7 @@ unbind_: function (skipper, after) {
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	},
 	afterChildrenMinFlex_: function() {
-		//to be overridden
+		//to be overridden, after my children fix the minimum flex (both width and height)
 	},
 	getParentSize_: function(p) {
 		//to be overridden
@@ -4402,22 +4453,17 @@ _doFooSelect: function (evt) {
 		if (opts.exact)
 			return _binds[n.id];
 
-		for (var orgId = false; n; n = zk(n).vparentNode(true)) {
+		for (; n; n = zk(n).vparentNode(true)) {
 			try {
 				id = n.id || (n.getAttribute ? n.getAttribute("id") : '');
 				if (id && typeof id == "string") {
-					var id2 = id.indexOf('-');
-					id2 = id2 >= 0 ? id.substring(0, id2): id;
-					if (orgId && id2 != orgId) //not bound yet
-						break; //not found
-
 					wgt = _binds[id]; //try first (since ZHTML might use -)
 					if (wgt)
 						return wgt;
 
-					if (id != id2) {
-						id = id2;
-						wgt = _binds[id];
+					var j = id.indexOf('-');
+					if (j >= 0) {
+						wgt = _binds[id = id.substring(0, j)];
 						if (wgt) {
 							if (!opts.child)
 								return wgt;
@@ -4425,7 +4471,6 @@ _doFooSelect: function (evt) {
 							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n))
 								return wgt;
-							orgId = ''; //prevent orgId to be checked since it is not a unbound widget
 						}
 					}
 				}
@@ -4433,8 +4478,6 @@ _doFooSelect: function (evt) {
 			}
 			if (opts.strict)
 				break;
-			if (orgId === false)
-				orgId = id;
 		}
 		return null;
 	},
@@ -4458,9 +4501,10 @@ _doFooSelect: function (evt) {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			if (!noFocusChange) {
+				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
-				setTimeout(function(){zk._cfByMD = false;}, 0);
+				setTimeout(function(){zk._cfByMD = false; zk._prevFocus = null;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
 

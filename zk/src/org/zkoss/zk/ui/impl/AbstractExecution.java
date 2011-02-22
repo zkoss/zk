@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.ExecutionInfo;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -67,6 +68,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private String _reqId;
 	/** A collection of the AU responses that shall be generated to client */
 	private Collection<AuResponse> _resps;
+	/** The information of the event being served, or null if not under event processing. */
+	private ExecutionInfo _execinf;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -341,6 +344,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void setResponses(Collection<AuResponse> responses) {
 		_resps = responses;
+	}
+
+	public ExecutionInfo getExecutionInfo() {
+		return _execinf;
+	}
+	public void setExecutionInfo(ExecutionInfo execinf) {
+		_execinf = execinf;
 	}
 
 	//Object//

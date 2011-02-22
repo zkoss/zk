@@ -194,4 +194,23 @@ public class Attributes {
 	 * @since 5.0.4
 	 */
 	public static final String PAGE_RENDERING = "org.zkoss.zk.ui.page.rendering";
+
+	/** A component attribute used to indicate whether to enable the stubing of
+	 * the native components.
+	 * <p>By default, the native component will be stub-ized, i.e., replaced
+	 * with a stateless component called {@link org.zkoss.zk.ui.StubComponent},
+	 * such that the memory footprint will be minimized.
+	 * To stub-ize non-native, please use {@link org.zkoss.zk.ui.Component#setStubonly}.
+	 * <p>Default: true. Though rarely, you could disable the stubing by
+	 * setting this attribute to false. For example, if you have a component that
+	 * has native childs, and you'd like to detach it and re-attach later.
+	 * Since the server does not maintain the states, it cannot be restored when
+	 * attached back.
+	 * <p>It shall be set to a component's attribute, and it affects
+	 * all descendant components unless it was set explicitly.
+	 * <p>Default: true
+	 * <p>Avaialbe in ZK EE only.
+	 * @since 5.0.6
+	 */
+	public static final String STUB_NATIVE = "org.zkoss.zk.ui.stub.native";
 }

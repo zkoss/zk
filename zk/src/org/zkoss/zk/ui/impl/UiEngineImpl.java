@@ -1244,7 +1244,7 @@ public class UiEngineImpl implements UiEngine {
 			|| ex instanceof org.zkoss.zk.ui.metainfo.PropertyNotFoundException)
 				log.error(Exceptions.getMessage(ex));
 			else
-				log.realCauseBriefly(ex);
+				log.realCause(ex);//Briefly(ex);
 		} else {
 			ex = t;
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));

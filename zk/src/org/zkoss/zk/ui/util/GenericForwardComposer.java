@@ -72,31 +72,55 @@ abstract public class GenericForwardComposer<T extends Component>
 extends GenericAutowireComposer<T> {
 	private static final long serialVersionUID = 20091006115726L;
 
-	/** Constructor.
-	 * It is a shortcut of <code>GenericForwardComposer('$', true, true)</code>,
-	 * i.e., ignore variables defined in ZSCRIPT and XEL.
-	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	/** The default constructor.
+	 * It is a shortcut of <code>GenericForwardComposer('$',
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "false")),
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "false")))</code>.
+	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
+	 * Furthermore, if not specified, their values are default to false, i.e., 
+	 * they shall <i>NOT</i> be wired (i.e., shall be ignored)
+	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
+	 * explicitly, you could use
 	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
 	 *
 	 * <h2>Version Difference</h2>
-	 * <p>ZK 5.0 and earlier, this constructor is the same as
-	 * <code>GenericAutowireComposer('$', false, false)</code>
+	 * <p>ZK 5.0 and earlier, the default is <i>not</i> to ignore</code>
 	 */	
+	/** The default constructor.
+	 * It is a shortcut of <code>GenericForwardComposer('$',
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "true")),
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "true")))</code>.
+	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
+	 * Furthermore, if not specified, their values are default to true, i.e., 
+	 * they shall be wired (i.e., <i>NOT</i> to ignore)
+	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
+	 * explicitly, you could use
+	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
+	 */
 	protected GenericForwardComposer() {
 	}
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
 	 * By default, it is '$'. For Grooy and other environment that '$'
 	 * is not applicable, you can specify '_'.
-	 *
-	 * <p>It is a shortcut of <code>GenericForwardComposer(separator, true, true)</code>,
-	 * i.e., ignore variables defined in ZSCRIPT and XEL.
-	 * If you want to resolve ZSCRIPT's or XEL's variable, use
-	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
+	 * <p>It is a shortcut of <code>GenericForwardComposer(separator,
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "false")),
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "false")))</code>.
+	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
+	 * Furthermore, if not specified, their values are default to false, i.e., 
+	 * they shall be ignored (i.e., <i>NOT</i> to wire)
+	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
+	 * explicitly, you could use
 	 *
 	 * <h2>Version Difference</h2>
-	 * <p>ZK 5.0 and earlier, this constructor is the same as
-	 * <code>GenericAutowireComposer('$', false, false)</code>
+	 * <p>ZK 5.0 and earlier, the default is <i>not</i> to ignore</code>
+	 * {@link #GenericForwardComposer(char,boolean,boolean)} instead.
 	 * @since 3.6.0
 	 */
 	protected GenericForwardComposer(char separator) {
@@ -107,7 +131,7 @@ extends GenericAutowireComposer<T> {
 	 * Refer to {@link #_separator} for details.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
 	 * a member.
-	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * @param ignoreXel whether to ignore variables defined in variable resolver
 	 * ({@link org.zkoss.zk.ui.Page#addVariableResolver}) when wiring a member.
 	 * @since 5.0.3
 	 */

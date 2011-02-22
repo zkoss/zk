@@ -74,6 +74,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.RequestOutOfSequenceException;
+import org.zkoss.zk.au.out.AuConfirmClose;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
@@ -467,7 +468,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	private static boolean shallSession(ClassWebResource cwr, String pi) {
-		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null;
+		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0) ;
+		//Optimize the access of static resources (for GAE)
 	}
 
 	//-- ASYNC-UPDATE --//
@@ -605,6 +607,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			URIInfo ui = wapp != null ? (URIInfo)wapp.getConfiguration()
 				.getTimeoutURI(deviceType): null;
 			String uri = ui != null ? ui.uri: null;
+			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
 			final AuResponse resp;
 			if (uri != null) {
 				if (uri.length() != 0)

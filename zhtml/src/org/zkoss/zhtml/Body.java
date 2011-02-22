@@ -38,6 +38,12 @@ public class Body extends AbstractTag {
 	}
 
 	//--Component-//
+	public void invalidate() {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null && exec.isAsyncUpdate(getPage()))
+			throw new UnsupportedOperationException("body.invalidate() now allowed");
+		super.invalidate();
+	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);

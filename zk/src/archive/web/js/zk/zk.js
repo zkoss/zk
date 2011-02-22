@@ -69,7 +69,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function wgt2s(w) {
 		var s = w.widgetName;
-		return w.id ? s + '$' + w.id: s + '#' + w.uuid;
+		return w.id ? s + '$' + w.id: s + '#' + w.uuid + '$' + w.$oid;
 	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];
@@ -82,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
 				var w = zk.Widget.$(ar);
-				if (w) msg.push(jq.nodeName(ar), ':', wgt2s(w));
+				if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#'+ar.id+'.'+ar.className:''), ':', wgt2s(w));
 				else msg.push(jq.nodeName(ar), '#', ar.id);
 			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
@@ -136,7 +136,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}
-
+	
 /** @class zk
  * @import zk.Package
  * @import zk.Class
@@ -235,6 +235,13 @@ zk.copy(zk, {
 	 * @since 5.0.1
 	 */
 	busy: 0,
+	/** The application's name, which will be initialized as server-side's
+	 * <code>WebApp.getAppName()</code>.
+	 * It will be used as title of {@link jq#alert}.
+	 * @type String
+	 * @since 5.0.6
+	 */
+	appName: "ZK",
 
 	/** The version of ZK, such as '5.0.0'
 	 * @type String
@@ -249,10 +256,11 @@ zk.copy(zk, {
 	 * @type String
 	 */
 	//agent: '',
-	/** Whether it is Internet Explorer.
+	/** Returns the version as double (only the first two part of the version, such as 8)
+	 * if it is Internet Explorer, or null if not.
 	 * @type boolean
 	 */
-	//ie: false,
+	//ie: null,
 	/** Whether it is Internet Exploer 6 (excluding 7 or others).
 	 * @type boolean
 	 */
@@ -279,28 +287,40 @@ zk.copy(zk, {
 	 * @since 5.0.5
 	 */
 	//ie9: false,
-	/** Whether it is Gecko-based browsers, such as Firefox.
-	 * @type boolean
+	/** Returns the version as double (only the first two part of the version, such as 1.9)if it is Gecko-based browsers,
+	 * such as Firefox. Notice that it is 1.9 (Firefox 3.*) and 2.0 (Firefox 4.*).
+	 * Otherwise, it is null.
+	 * <p>For detailed version, such as 1.9.2 (firefox 3.6), yo could check jq.browser.version
+	 * (which is a string, such as "1.9.2").
+	 * @type Double
 	 */
-	//gecko: false,
+	//gecko: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 2 (excluding 3 or others).
 	 * @type boolean
 	 */
 	//gecko2_: false,
+	/** Returns the version as double (only the first two part of the version, such as 3.6) if it is Firefox,
+	 * such as Firefox. Notice that it is Firefox's version, such as
+	 * 3.5, 3.6 and 4.0.
+	 * If not a firefox, it is null.
+	 * @type Double
+	 * @since 5.0.6
+	 */
+	//ff: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 3 and later.
 	 * @type boolean
 	 */
 	//gecko3: false,
-	/** Whether it is Safari.
-	 * @type boolean
+	/** Returns the version as double (only the first two part of the version, such as 533.1) if it is Safari-based, or null if not.
+	 * @type Double
 	 */
-	//safari: false,
-	/** Whether it is Opera.
-	 * @type boolean
+	//safari: null,
+	/** Returns the version as double (only the first two part of the version, such as 10.1) if it is Opera, or null if not.
+	 * @type Double
 	 */
-	//opera: false,
+	//opera: null,
 	/** Whether it is Adobe AIR.
 	 * @type boolean
 	 */
@@ -1115,48 +1135,45 @@ zk.log('value is", value);
 
 //zk.agent//
 (function () {
-	var agent = zk.agent = navigator.userAgent.toLowerCase();
-	zk.safari = agent.indexOf("safari") >= 0;
-	zk.opera = agent.indexOf("opera") >= 0;
-	zk.gecko = agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
-	zk.ios = agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0;
-	zk.android = agent.indexOf('android') >= 0;
+	function _ver(ver) {
+		return parseFloat(ver) || ver;
+	}
+	var browser = jq.browser,
+		agent = zk.agent = navigator.userAgent.toLowerCase(), j;
+	zk.safari = browser.safari && _ver(browser.version);
+	zk.opera = browser.opera && _ver(browser.version);
+	zk.gecko = browser.mozilla && _ver(browser.version);
+	zk.ff = ((j = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(j + 8));
+	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
+	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
-		var j = agent.indexOf("firefox/");
-		j = zk.parseInt(agent.substring(j + 8));
-		zk.css3 = zk.gecko3 = j >= 3;
+		zk.css3 = zk.gecko3 = zk.ff >= 3 || zk.gecko >= 1.9; //gecko 1.9.* => ff 3
 		zk.gecko2_ = !zk.gecko3;
-		bodycls = 'gecko gecko' + j;
+		bodycls = 'gecko gecko' + Math.floor(zk.ff);
 	} else if (zk.opera) {
 		bodycls = 'opera';
-		var j = agent.indexOf("version/"), v;
-		zk.css3 = j >= 0
-			&& ((v = zk.parseInt(agent.substring(j += 8))) > 10
-				|| (v == 10 && (j = agent.indexOf('.', j)) >= 0
-					&& zk.parseInt(agent.substring(j + 1)) >= 5)); //10.5 or later
+		zk.css3 = zk.opera >= 10.5;
 	} else {
-		var j = agent.indexOf("msie "), dm;
-		zk.ie = j >= 0;
+		zk.ie = browser.msie && _ver(browser.version);
 		if (zk.ie) {
-			j = zk.parseInt(agent.substring(j + 5));
-			zk.ie7 = j >= 7; //ie7 or later
-			zk.ie8c = j >= 8; //ie8 or later (including compatible)
-			zk.ie8 = j >= 8 && (dm=document.documentMode) >= 8; //ie8 or later
-			zk.css3 = zk.ie9 = j >= 9 && dm >= 9; //ie9 or later
-			zk.ie6_ = !zk.ie7;
-			zk.ie7_ = zk.ie7 && !zk.ie8;
-			zk.ie8_ = zk.ie8 && !zk.ie9;
-			bodycls = 'ie ie' + j;
+			var dm = document.documentMode;
+			zk.ie7 = zk.ie >= 7; //ie7 or later
+			zk.ie8c = zk.ie >= 8; //ie8 or later (including compatible)
+			zk.ie8 = zk.ie >= 8 && dm >= 8; //ie8 or later
+			zk.css3 = zk.ie9 = zk.ie >= 9 && dm >= 9; //ie9 or later
+			zk.ie6_ = !zk.ie7 || dm < 7;
+			zk.ie7_ = (zk.ie7 && !zk.ie8) || dm == 7;
+			zk.ie8_ = (zk.ie8 && !zk.ie9) || dm == 8;
+			bodycls = 'ie ie' + Math.floor(zk.ie);
 		} else {
 			if (zk.safari)
-				bodycls = 'safari';
+				bodycls = 'safari safari' + Math.floor(zk.safari);
 			zk.css3 = true;
 		}
 	}
-
-	if (zk.air = agent.indexOf("adobeair") >= 0)
+	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
 		bodycls = (bodycls || '') + ' air';
 
 	if (bodycls)

@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -105,7 +106,7 @@ import org.zkoss.zk.au.out.*;
 	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
-	/** The counter used for smartUpdateMultiple. */
+	/** The counter used for smartUpdate(...append). */
 	private int _cntMultSU;
 	/** Whether the first execution is for async-update. */
 	private final boolean _1stau;
@@ -638,7 +639,14 @@ import org.zkoss.zk.au.out.*;
 			tvals.addAll(attrs.values());
 		}
 		if (_responses != null) {
-			for (ResponseInfo ri: _responses.values()) {
+			for (Map.Entry<Object, ResponseInfo> me: _responses.entrySet()) {
+				final Object depends = me.getKey();
+				if (depends instanceof Component) {
+					final Component cd = (Component)depends;
+					if (cd.getPage() == null || isCUDisabled(cd))
+						continue;
+				}
+				ResponseInfo ri = me.getValue();
 				tvals.addAll(ri.keyless);
 				tvals.addAll(ri.values.values());
 			}
@@ -914,17 +922,21 @@ import org.zkoss.zk.au.out.*;
 
 	/** Called before a component redraws itself if the component might
 	 * include another page.
+	 * <p>Since 5.0.6, the owner must implement {@link Includer}.
 	 * @return the previous owner
 	 * @since 5.0.0
 	 */
 	public Component setOwner(Component comp) {
 		Component old = _owner;
+		if (comp != null && !(comp instanceof Includer))
+			throw new IllegalArgumentException(comp.getClass() + " must implement " + Includer.class.getName());
 		_owner = comp;
 		return old;
 	}
 	/** Returns the owner component for this execution, or null if
 	 * this execution is not owned by any component.
 	 * The owner is the top of the stack pushed by {@link #setOwner}.
+	 * <p>Note: the owner, if not null, must implement {@link Includer}.
 	 */
 	public Component getOwner() {
 		return _owner;

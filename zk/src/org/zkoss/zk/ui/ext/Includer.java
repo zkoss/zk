@@ -34,10 +34,25 @@ public interface Includer {
 	 */
 	public Page getChildPage();
 	/** Sets the child page.
-	 * Used only internally.
+	 * <p>Used only for implementing an includer component (such as
+	 * {@link org.zkoss.zul.Include}).
 	 * <P>Note: the child page is actually maintained by
 	 * the included page, so the implementation of this method
 	 * needs only to store the page in a transient member.
+	 * <p>Notice that, like {@link #setRenderingResult}, it is called only if
+	 * the included page is a ZUML document.
 	 */
 	public void setChildPage(Page page);
+
+	/** Sets the rendering result
+	 * It is called when the child page ({@link #getChildPage}) has
+	 * been rendered. The includer can then generate it to the output
+	 * in the way it'd like.
+	 * <p>Used only for implementing an includer component (such as
+	 * {@link org.zkoss.zul.Include}).
+	 * <p>Notice that, like {@link #setChildPage}, it is called only if
+	 * the included page is a ZUML document.
+	 * @since 5.0.6
+	 */
+	public void setRenderingResult(String result);
 }

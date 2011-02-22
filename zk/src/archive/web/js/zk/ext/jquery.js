@@ -5479,15 +5479,19 @@ jQuery.each(["height", "width"], function( i, name ) {
 			var val;
 
 			if ( computed ) {
-				if ( elem.offsetWidth !== 0 ) {
-					val = getWH( elem, name, extra );
-
+				/* Jumper Chen, Potix, 20110216*/
+				if (extra != 'styleonly') {
+    				if ( elem.offsetWidth !== 0 ) {
+    					val = getWH( elem, name, extra );
+    
+    				} else {
+    					jQuery.swap( elem, cssShow, function() {
+    						val = getWH( elem, name, extra );
+    					});
+    				}
 				} else {
-					jQuery.swap( elem, cssShow, function() {
-						val = getWH( elem, name, extra );
-					});
+					val = '';
 				}
-
 				if ( val <= 0 ) {
 					val = curCSS( elem, name, name );
 

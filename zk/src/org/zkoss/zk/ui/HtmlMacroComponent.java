@@ -33,7 +33,8 @@ import org.zkoss.zk.ui.sys.Attributes;
  * If a developer wants to create it manually, it has to instantiate from
  * the correct class, and then invoke {@link #afterCompose}.
  *
- * <p>[Since 5.0.4] By default, invoking {@link #afterCompose} supports auto
+ * <p>[Since 5.0.4] By default, invoking {@link #compose} (and {@link #afterCompose})
+ * supports auto
  * forward events and wire accessible variables to this component.
  *  
  * <p>You can turn on/off auto wire mechanism by specifying the Library
@@ -107,18 +108,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
 	 *
-	 * <p>The second invocation is ignored. If you want to recreate
-	 * child components, use {@link #recreate} instead.
-	 *
 	 * <p>If a macro component is created by ZK loader, this method is invoked
-	 * automatically. Developers need to invoke this method only if they create
-	 * a macro component manually.
+	 * automatically. Developers rarely need to invoke this method.
 	 *
-	 * <p>If this is an line macro, this method is invoked automatically
-	 * if {@link #setParent} or {@link #setPage} called
-	 * 
-	 * <p>[Since 5.0.4] By default, supports auto forward events and wire accessible
-	 * variables to this component.
+	 * <p>Default: it invokes {@link #compose} to compose the macro component.
 	 */
 	public void afterCompose() {
 		compose();
@@ -126,9 +119,12 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	/** Composes the macro component.
 	 * It is called by {@link #afterCompose} and others
 	 * to do the rendering based on {@link #getMacroURI}.
-	 * <p>Notice this method shall not compose the macro component again
-	 * if it was called. It is {@link #recreate}'s job to clean up and
-	 * call this method again.
+	 * <p>The second invocation is ignored. If you want to recreate
+	 * child components, use {@link #recreate} instead.
+	 * <p>If this is an line macro, this method is invoked automatically
+	 * if {@link #setParent} or {@link #setPage} called
+	 * <p>[Since 5.0.4] By default, supports auto forward events and wire accessible
+	 * variables to this component.
 	 * @since 5.0.5
 	 */
 	protected void compose() {
@@ -168,6 +164,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 				recreate();
 		}
 	}
+	/** Detaches all child components and then recreate them by use of
+	 * {@link #compose}.
+	 */
 	public void recreate() {
 		if (_inlines != null) {
 			for (int j = 0; j < _inlines.length; ++j)
@@ -192,7 +191,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * from the macro URI.
 	 * In other word, an inline macro behaves like a controller of
 	 * the components it created. It doesn't belong to any page or parent.
-	 * Moreover, {@link #afterCompose} is called automatically if
+	 * Moreover, {@link #compose} is called automatically if
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setParent(Component parent) {
@@ -228,7 +227,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * from the macro URI.
 	 * In other word, an inline macro behaves like a controller of
 	 * the components it created. It doesn't belong to any page or parent.
-	 * Moreover, {@link #afterCompose} is called automatically if
+	 * Moreover, {@link #compose} is called automatically if
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setPage(Page page) {

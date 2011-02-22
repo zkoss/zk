@@ -139,10 +139,9 @@ zjq = function (jq) { //ZK extension
 				//Fix opera bug. If the parent of "input" or "span" is "div"
 				// and the scrollTop of "div" is more than 0, the offsetTop of "input" or "span" always is wrong.
 				if (zk.opera) {
-					var nodenm = jq.nodeName(el);
-					if (operaBug && nodenm == "div" && el.scrollTop != 0)
+					if (operaBug && jq.nodeName(el, 'div') && el.scrollTop != 0)
 						t += el.scrollTop || 0;
-					operaBug = nodenm == "span" || nodenm == "input";
+					operaBug = jq.nodeName(el, 'span', 'input');
 				}
 				t += el.offsetTop || 0;
 				l += el.offsetLeft || 0;
@@ -1194,7 +1193,8 @@ jq(el).zk.center(); //same as 'center'
 
 	/** Forces the browser to redo (re-apply) CSS of all matched elements. 
 	 * <p>Notice that calling this method might introduce some performance penality.
-	 * @param int timeout number of milliseconds to wait before really re-applying CSS
+	 * @param int timeout number of milliseconds to wait before really re-applying CSS.
+	 * 100 is assumed if not specified or negative.
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout) {
@@ -1265,6 +1265,11 @@ jq(el).zk.center(); //same as 'center'
 		else p.appendChild(agt);
 
 		el.z_vp = p.id; //might be empty
+		var st = el.style;
+		if (!st.top) st.top = "0";
+			//B3178359: if no top and parent is relative+absolute, the following
+			//line causes browser crazy
+			//Strange: all browsers have the same behavior
 		document.body.appendChild(el);
 		return this;
 	},
@@ -1292,6 +1297,12 @@ jq(el).zk.center(); //same as 'center'
 					$agt.remove();
 				} else
 					p.appendChild(el);
+				
+				var cf, p;
+				if (zk.ff == 3.6 && (cf = zk._prevFocus) && 
+					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf) && 
+					cf.getInputNode)
+					jq(cf.getInputNode()).trigger('blur');
 			}
 		}
 		return this;
@@ -1941,7 +1952,24 @@ this._syncShadow(); //synchronize shadow
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
 	}
-
+	/**
+	 * An override function that provide a way to get the style value where is
+	 * defined in the CSS file or the style object, rather than the computed value.
+	 * <p> Note that the function is only applied to the width or height property,
+	 *  and the third argument must be 'styleonly'.
+	 * <p> For example,
+<pre><code>
+jq.css(elem, 'height', 'styleonly');
+or
+jq.css(elem, 'width', 'styleonly');
+</code></pre>
+	 * @since 5.0.6 
+	 * @param DOMElement elem a Dom element
+	 * @param String name the style name
+	 * @param String extra an option in this case, it must be 'styleonly'
+	 * @return String the style value.
+	 */
+	//css: function () {},
 	/** Decodes a JSON string to a JavaScript object. 
 	 * <p>It is similar to jq.parseJSON (jQuery's default function), except
 	 * 1) it doesn't check if the string is a valid JSON

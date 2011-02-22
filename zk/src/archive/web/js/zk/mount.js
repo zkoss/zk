@@ -97,7 +97,6 @@ function zkmprops(uuid, props) {
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
-		_qfns = {}, //queued functions (such as dependent pages, owner != null)
 		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
 
 	//Issue of handling page's AU responses
@@ -396,7 +395,10 @@ function zkmprops(uuid, props) {
 			var delay, mount = mtAU, owner;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
 				delay = extra;
-				extra = aucmds;
+				if (wi) {
+					extra = aucmds;
+					aucmds = null;
+				}
 				mount = mtBL;
 			} //else assert(!aucmds); //no aucmds if AU
 
@@ -415,30 +417,19 @@ function zkmprops(uuid, props) {
 
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
 			else run(mount);
+
+			doAuCmds(aucmds);
 		} catch (e) {
 			zk.mounting = false;
-			zk.error("Failed to mount: "+e.message);
+			zk.error("Failed to mount: "+(e.message||e));
 		}
 	},
 	//widget creation called by au.js
 	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
 		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
-		zkx(args[0], [stub, filter]); //assign stub as 2nd argument (see zkx)
-	},
-
-	//queue a function to invoke by zkqx
-	//@param id unique ID to identify the function, usually, widget's uuid
-	zkq: function (id, fn) {
-		_qfns[id] = fn;
-	},
-	//execute the function queued by zkq
-	zkqx: function (id) {
-		var fn = _qfns[id];
-		if (fn) {
-			delete _qfns[id];
-			fn(id);
-		}	
+		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
+		zkx.apply(this, args); //args[2] (aucmds) must be null
 	},
 
 	//Run AU commands (used only with ZHTML)
@@ -572,19 +563,38 @@ jq(function() {
 			_reszInf.inResize = false;
 		}
 	}
+	//Invoke the first root wiget's afterKeyDown_
+	function _afterKeyDown(wevt) {
+		var dts = zk.Desktop.all, Page = zk.Page;
+		for (var dtid in dts)
+			for (wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
+				if (wgt.$instanceof(Page)) {
+					for (var w = wgt.firstChild; w; w = w.nextSibling)
+						if (_afterKD(w, wevt))
+							return;
+				} else if (_afterKD(wgt, wevt))
+					return; //handled
+	}
+	function _afterKD(wgt, wevt) {
+		if (!wgt.afterKeyDown_)
+			return; //handled
+		wevt.target = wgt; //mimic as keydown directly sent to wgt
+		return wgt.afterKeyDown_(wevt);
+	}
 
 	jq(document)
 	.keydown(function (evt) {
-		var wgt = Widget.$(evt, {child:true});
+		var wgt = Widget.$(evt, {child:true}),
+			wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			_doEvt(wevt);
 			if (!wevt.stopped && wgt.afterKeyDown_) {
 				wgt.afterKeyDown_(wevt);
-    			if (wevt.domStopped)
-    				wevt.domEvent.stop();
+				if (wevt.domStopped)
+					wevt.domEvent.stop();
 			}
-		}
+		} else
+			_afterKeyDown(wevt);
 
 		if (evt.keyCode == 27
 		&& (zk._noESC > 0 || (!zk.zkuery && zAu.shallIgnoreESC()))) //Bug 1927788: prevent FF from closing connection

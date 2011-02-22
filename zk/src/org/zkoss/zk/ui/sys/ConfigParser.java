@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.HashMap;
 import java.net.URL;
 
 import org.zkoss.lang.Library;
@@ -65,8 +66,10 @@ public class ConfigParser {
 	 */
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static int[] _zkver;
-	private static boolean _syscfgLoaded;
 	private static List<org.zkoss.zk.ui.util.ConfigParser> _parsers;
+	// Map<int, boolean>: whether an instance of Configuration
+	private static final Map _syscfgLoadedConfigs = new HashMap(4);
+	private static boolean _syscfgLoaded;
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 * It is the same as checkVersion(url, doc, false).
@@ -140,9 +143,16 @@ public class ConfigParser {
 	 */
 	public void parseConfigXml(Configuration config) {
 		boolean syscfgLoaded;
+		boolean syscfgLoadedConfig;
 		synchronized (ConfigParser.class) {
 			syscfgLoaded = _syscfgLoaded;
 			_syscfgLoaded = true;
+			syscfgLoadedConfig = config != null ?
+				_syscfgLoadedConfigs.put(
+					new Integer(System.identityHashCode(config)),
+						//chance of two instances with same code is almost zero
+					Boolean.TRUE) != null:
+				syscfgLoaded;
 		}
 		if (!syscfgLoaded)
 			log.info("Loading system default");
@@ -164,8 +174,12 @@ public class ConfigParser {
 						if (!syscfgLoaded) {
 							parseSubZScriptConfig(el);
 							parseSubDeviceConfig(el);
+						}
+						if (!syscfgLoadedConfig) {
 							parseSubSystemConfig(config, el);
 							parseSubClientConfig(config, el);
+						}
+						if (!syscfgLoaded) {
 							parseProperties(el);
 						}
 

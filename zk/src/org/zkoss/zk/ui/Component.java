@@ -509,7 +509,12 @@ w:use="foo.MyWindow"&gt;
 	/** Returns whether this component is stub-only.
 	 * By stub-only, we mean we don't need to maintain the states of
 	 * the component at the server side.
-	 * <p>There are three possible values: "true", "false" and "inherit".
+	 * <p>There are three possible values: "true", "false", and "inherit",
+	 * and "ignore-native".
+	 * <p>Notice that the native components will be stub-ized, no matter
+	 * this property is set. Though rarely required, you could control
+	 * whether to stub-ize the native components with
+	 * a component attribute called {@link org.zkoss.zk.ui.sys.Attributes#STUB_NATIVE}.
 	 * @since 5.0.4
 	 */
 	public String getStubonly();

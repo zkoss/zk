@@ -346,8 +346,10 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
+		boolean ie = userAgent.indexOf("MSIE ") >= 0;
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
+		return !ie && userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
 			&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0
 			&& userAgent.indexOf("zk") < 0 && userAgent.indexOf("rmil") < 0;
 	}
@@ -369,8 +371,10 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
+		boolean ie = userAgent.indexOf("MSIE ") >= 0;
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("msie ") >= 0 && userAgent.indexOf("opera") < 0;
+		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
 	 */
@@ -402,8 +406,11 @@ public class Servlets {
  * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0)
  * 
  */
+		int j = userAgent.indexOf("MSIE ");
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		int j = userAgent.indexOf("msie ");
+		if (j < 0)
+			j = userAgent.indexOf("msie ");
 		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
 
 		return parseVer(userAgent, j + 5)[0];

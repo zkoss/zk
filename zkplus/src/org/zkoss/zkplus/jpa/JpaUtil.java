@@ -229,11 +229,11 @@ public class JpaUtil {
 			em = getEmMap().get(puName);
 			if (em == null) {
 				em = createEntityManager(puName, null);
-				getEmMap().put(puName, em);
+				getEmMap().put(getPersistenceUnitName(puName), em);
 			}
 		} else {
 			em = createEntityManager(puName, properties);
-			getEmMap().put(puName, em);
+			getEmMap().put(getPersistenceUnitName(puName), em);
 		}
 		return em;
 	}

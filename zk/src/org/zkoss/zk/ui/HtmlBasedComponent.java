@@ -209,7 +209,13 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	protected void setZIndexDirectly(int zIndex) {
 		initAuxInfo().zIndex = zIndex;
 	}
-
+	/** Sets the hflex directly without sending back the result
+	 * (smart update) to the client
+	 * @since 5.0.6
+	 */
+	protected void setHflexDirectly(String hflex) {
+		initAuxInfo().hflex = hflex;
+	}
 	/** Returns the text as the tooltip.
 	 * <p>Default: null.
 	 */

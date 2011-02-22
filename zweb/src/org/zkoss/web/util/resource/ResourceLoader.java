@@ -62,20 +62,17 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	}
 	public long getLastModified(ResourceInfo src) {
 		if (src.url != null) {
-		//Due to round-trip, we don't retrieve last-modified
-			final String protocol = src.url.getProtocol().toLowerCase();
-			if (!"http".equals(protocol) && !"https".equals(protocol)
-			&& !"ftp".equals(protocol)) {
-				try {
-					return src.url.openConnection().getLastModified();
-				} catch (Throwable ex) {
-					return -1; //reload
-				}
+			try {
+				final long v = src.url.openConnection().getLastModified();
+				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+			} catch (Throwable ex) {
+				return -1; //reload (might be removed)
 			}
-			return -1; //reload
 		}
 
-		return src.file.lastModified();
+		final long v = src.file.lastModified();
+		return v == -1 ? 0: //not to reload if unknown (5.0.6 for better performance)
+			v == 0 ? -1: v; //0 means nonexistent so reload
 	}
 	public V load(ResourceInfo src) throws Exception {
 		if (src.url != null)

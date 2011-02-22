@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.idom.Document;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
@@ -185,41 +186,58 @@ extends GenericComposer<T> implements ComponentCloneListener {
 	 * a member.
 	 * <p>Default: true (ignore).
 	 */
-	private boolean _ignoreZScript = true;
+	private boolean _ignoreZScript;
 	/** Indicates whether to ignore variables defined in varible resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 * <p>Default: true (ignore).
 	 */
-	private boolean _ignoreXel = true;
+	private boolean _ignoreXel;
 
 	/** The default constructor.
-	 * It is a shortcut of <code>GenericAutowireComposer('$', true, true)</code>,
-	 * i.e., ignore variables defined in ZSCRIPT and XEL.
-	 * If you want to resolve ZSCRIPT's or XEL's variable, use
-	 * {@link #GenericAutowireComposer(char,boolean,boolean)} instead.
+	 * It is a shortcut of <code>GenericAutowireComposer('$',
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "false")),
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "false")))</code>.
+	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
+	 * Furthermore, if not specified, their values are default to false, i.e., 
+	 * they shall be ignored (i.e., <i>NOT</i> to wire)
+	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
+	 * explicitly, you could use
 	 *
 	 * <h2>Version Difference</h2>
-	 * <p>ZK 5.0 and earlier, this constructor is the same as
-	 * <code>GenericAutowireComposer('$', false, false)</code>
+	 * <p>ZK 5.0 and earlier, the default is <i>not</i> to ignore</code>
+	 * {@link #GenericAutowireComposer(char,boolean,boolean)} instead.
 	 */
 	protected GenericAutowireComposer() {
 		_separator = '$';
+		initIgnores();
 	}
 	/** Constructor with a custom separator.
-	 * It is a shortcut of <code>GenericAutowireComposer(separator, true, true)</code>,
-	 * i.e., ignore variables defined in ZSCRIPT and XEL.
-	 * If you want to resolve ZSCRIPT's or XEL's variable, use
+	 * The separator is used to separate the component ID and event name.
+	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * is not applicable, you can specify '_'.
+	 * <p>It is a shortcut of <code>GenericAutowireComposer(separator,
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "false")),
+	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "false")))</code>.
+	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
+	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
+	 * Furthermore, if not specified, their values are default to false, i.e., 
+	 * they shall be ignored (i.e., <i>NOT</i> to wire)
+	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
+	 * explicitly, you could use
 	 * {@link #GenericAutowireComposer(char,boolean,boolean)} instead.
 	 *
 	 * <h2>Version Difference</h2>
-	 * <p>ZK 5.0 and earlier, this constructor is the same as
-	 * <code>GenericAutowireComposer('$', false, false)</code>
+	 * <p>ZK 5.0 and earlier, the default is <i>not</i> to ignore</code>
 	 * @param separator the separator used to separate the component ID and event name.
 	 * Refer to {@link #_separator} for details.
 	 * @since 3.6.0
 	 */
 	protected GenericAutowireComposer(char separator) {
 		_separator = separator;
+		initIgnores();
 	}
 	/** Constructors with full control, including separator, whether to
 	 * search zscript and xel variables
@@ -233,10 +251,22 @@ extends GenericComposer<T> implements ComponentCloneListener {
 	 */
 	protected GenericAutowireComposer(char separator, boolean ignoreZScript,
 	boolean ignoreXel) {
-		this(separator);
+		_separator = separator;
 		_ignoreZScript = ignoreZScript;
 		_ignoreXel = ignoreXel;
 	}
+	private void initIgnores() {
+		if (!_sIgnoreChecked) {
+			_sIgnoreZScript = !"true".equals(Library.getProperty(
+				"org.zkoss.zk.ui.composer.autowire.zscript", "true"));
+			_sIgnoreXel = !"true".equals(Library.getProperty(
+				"org.zkoss.zk.ui.composer.autowire.xel", "true"));
+			_sIgnoreChecked = true;
+		}
+		_ignoreZScript = _sIgnoreZScript;
+		_ignoreXel = _sIgnoreXel;
+	}
+	private static boolean _sIgnoreChecked, _sIgnoreZScript, _sIgnoreXel;
 
 	/**
 	 * Auto wire accessible variables of the specified component into a 

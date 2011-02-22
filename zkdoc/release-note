@@ -39,17 +39,31 @@ ZK 6.0.0
 ZK 5.0.6
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
+  3175503: A way to specify the application's name in zk.xml
   3138362: Add a Doublespinner comopnent to support double value
   3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
   3148425: GroupsModelArray shall handle tabular data better
+  3166334: Provide a way to intercept document-level key events
+  2957665: Round mold for Textbox, Decimalbox, Intbox, Longbox and Doublebox
   3105037: Show the locale format in error messages
   3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
+  3152268: TreeModel: provide an implementation that is mutable
+  3169396: Tree supports sorting
   3115054: A way not to use Thread for Event Queue+Server Push
   3116100: Progressmeter has animation effect
   3118161: When desktop destroyed, better to force cleanup if timeout
   3139008: Add Vietnamese language
   3158054: Optimize UiVisualizer for hug number of updates
   3161425: Panel's border and framable shall be merged into one
+  2866506: Data Binding shall support GroupsModel with Listbox/Grid
+  3175481: A way to ignore the wiring of zscript and xel globally
+  3166312: A way to know detail of a long exec blocking others
+  3175487: Datebox should fire onChange when select date via Calendar
+  3177275: Listheader should override hflex when sized by end user
+  3179707: Support hflex="min" + span
+  3184415: Grid/Listbox/Tree shall allow to span a specific column
+  3186996: Listbox/tree's nonselectableTags supports "*" to disable all
+  3187996: A way to generate custom SEO content
 
 * Bugs
   3102812: Using databinding with onCreate event, target is null
@@ -81,7 +95,7 @@ ZK 5.0.6
   3154168: Doublespinner didn't compatible with jre / jdk 1.4.x
   3156026: H/Vlayout sync size busy
   3159604: The font of the button in the caption become smaller
-  3160695: The x/yAxis label of GanttChart was in wrong position 
+  3160695: The x/y Axis label of GanttChart was in wrong position 
   3152754: Include#setVisible() has issue with invalidate()
   3162238: Include fails when set source to null dynamically
   3151694: decimalbox input 25- cause exception
@@ -89,6 +103,72 @@ ZK 5.0.6
   3164514: Jasperreport does not close JDBC connection after doReport()
   3158641: Implementing IdSpace not enough; Client-side shall handle it
   3085855: Children of Treeitem shown when Treeitem is not visible
+  3132161: Datebox getValue returning date+time
+  3165081: Splitter as first or last child fails when dragged
+  3155985: timer doesn't stop and restart
+  3147518: Memory leak with IE 7 and dynamic Grid Updates
+  3109926: Splitter javascript error in IE8
+  3147909: Listbox of select mold fails inside draggable component (Webkit)
+  3165056: Textbox in popup didn't  trigger onblur  with Firefox 3.6.x
+  3165646: Right-click shouldn't deselect the one that is selected
+  3161667: Doublebox formatting/rounding bug for near-zero value
+  3165164: onSelect event is not fired when a tab is closed
+  3132199: use hflex="min" in hlayout and div, cause wrong UI
+  3105728: Incorrect Datebox formatting with no year input
+  3105860: Portallayout fails to set Panel's ZIndex on 2nd maximization
+  3166404: The hidden column  in a frozen grid will appear
+  3166399: Crawlable feature isn't working when the cnt is in include
+  3165195: Strange dotted line on Menuitem
+  3166478: Portallayout maximize panel, panel behind will sticking out
+  3157031: V/Hlayout with h/vflex calculate wrong value
+  3081580: Toolbarbutton with upload and disabled not work
+  3166875: Failed to invalidate an included page
+  3166909: Javascript error if put a listhead inside a listbox(select)
+  3162596: mesg.TRY_AGAIN not translated in zk.jar
+  3167027: Cannot append a treerow in a treeitem
+  3141977: Navigating paging grid with native elem in it causes error (EE only)
+  3159848: Closing error box does not update InputElement value (ZK 5 part)
+  3168509: Datebox sets wrong date when going from 12/31 to 1/1 next yr
+  3106514: sizedByContent with not visible columns
+  3166874: Clicking on Toolbarbutton in Caption does not blur textbox
+  3147199: ZUL schema not allow tablelayout used in div
+  3107026: Button can't be clicked if locale is TR in IE8
+  3512678: Panel does not resize when its Toolbar toggles visibility
+  3169411: Cannot show custom error message in Spinner
+  3172791: trendy button don't pick up style
+  3172785: None-embedded window shall not affect flex size of its parent component
+  3166485: Height of listbox sync error
+  3175558: Use zkplus JpaUtil can not close default EntityManger
+  3170417: Paging in Tree is broken
+  3176990: Liferay fail to work because wrong zk.wpd url link
+  3147926: Auto-fitting bug
+  3177013: Grid fail shrink/expand, sizedByContent="true", span="true"
+  3175465: Paging tree doesn't render the close node
+  3176345: Splitter's icon doesn't work for mouse-over style on IE6/7/8
+  3177128: Chrome Only. Incorrect scrollbar size
+  3115825: toolbarbutton onClick not fired using  5.0.5 with Liferay
+  3176297: Row's mouse-over style keeps changing in IE6/8
+  3177265: listbox/grid hflex="min" does not work
+  3161535: grid column align doesn't work with breeze theme in IE 7
+  3178065: Menuitem onClick is incorrectly blocked in zkmax
+  3178359: Combobox's popup is positioned wrong in vertical tabbox
+  3147382: confirmClose message under timeout scenario
+  3180189: Sizing on Listbox/Grid with hflex="min" causes expanding
+  3094720: Last child of Hlayout/Vlayout should have no right/bottom padding
+  3180824: Listbox, mold="select", multiple rows
+  3181881: Listbox/Grid sizedByContent="true" cannot resize column
+  3182114: Listbox/Grid columns hflex="1" not correct with hflex="min"
+  2987511: Class extends Map can miss calling Getters in DataBinding
+  3183172: hflex="min" on Grid/Listbox/Tree cause js error
+  3183182: Inconsistent behavior on Grid/Listbox/Tree with hflex="min"
+  3183228: Grid/Listbox/Tree has wrong sizing when header sizable=true
+  3183691: Send response to client cannot found the widget
+  3184673: Separator in Hlayout on IE6 looks strange
+  3184756: A window with a scroll menubar render a wrong sibling
+  3185508: Internal event listener of tree/grid/... not seralized
+  3187231: include is not work when using  '~.' & defer without params
+  3184369: Hflex doesn't work with native html table on IE 8
+  1968615: Data binding problem in listfooter inside a nested listbox
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and
