@@ -239,7 +239,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @param String span the column span hint.
 		 * @since 5.0.6
 		 * @see #getSpan 
-		 * @see #setSpan(boolean)
 		 */
 		span: function(v) {
 			var x = (true === v || 'true' == v) ? -65500 : (false === v || 'false' == v) ? 0 : (zk.parseInt(v) + 1);

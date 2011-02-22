@@ -237,7 +237,7 @@ zk.copy(zk, {
 	busy: 0,
 	/** The application's name, which will be initialized as server-side's
 	 * <code>WebApp.getAppName()</code>.
-	 * It will be used as title of {@link #alert}.
+	 * It will be used as title of {@link jq#alert}.
 	 * @type String
 	 * @since 5.0.6
 	 */
