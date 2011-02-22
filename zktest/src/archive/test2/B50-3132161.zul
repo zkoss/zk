@@ -1,0 +1,9 @@
+<zk>
+	Select a date and you shall see minute/seconds are both zero
+	<separator/>
+	<datebox id="db" width="150px"
+	onChange='i.value = "" + self.value'
+	format="MM/dd/yyyy HH"/>
+	<separator bar="true"/>
+	<label id="i"/>
+</zk>

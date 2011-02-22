@@ -1,0 +1,11 @@
+<zk>
+You should see this content is in browser's source(This's "right-click" to view page source) surrounded with a Div tag.
+<separator/>
+Otherwise, this is a bug. (you have to make sure the following setting is turned on on zk.xml)
+<separator/>
+<html><![CDATA[
+&lt;system-config>
+  &lt;crawlable>true&lt;/crawlable>
+&lt;/system-config>
+]]></html>
+</zk>

@@ -18,8 +18,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>Press LEFT and RIGHT key to see if we can change the position,
+	<n:p>Press LEFT and RIGHT key into the textbox to see if we can change the position of the cursor,
 	also press HOME, END, DEL... to see if work (in intbox).
 	Test: Opera and Safari</n:p>
-	<intbox id="intbox" />
+	<intbox value="12345" id="intbox" />
 </zk>

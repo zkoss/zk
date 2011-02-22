@@ -34,7 +34,7 @@ Persons persons = new Persons();
 Object[] manypersons = new Object[3];
 ]]></zscript>
 
-    <textbox rows="1" cols="25" sclass="reg"
+    <textbox id="cateTxtbox" rows="1" cols="25" sclass="reg"
 value="@{persons.category}"/>
     <grid id="commodityItemsGrid" height="200px" model="@{manypersons}">
         <rows>

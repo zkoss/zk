@@ -4,6 +4,8 @@
 The bug is that the first column of data disappear when i press the
 header to sort by a column.
     <zscript><![CDATA[
+		import java.util.*;
+                      
 		List names = new ArrayList(3);
 		names.add("Tom");
 		names.add("John");
@@ -20,6 +22,8 @@ header to sort by a column.
 	</listbox>
 	
 <zscript>
+		import org.zkoss.zkplus.databind.*;
+		
 		AnnotateDataBinder binder = new AnnotateDataBinder(win);
 		binder.loadAll();
 </zscript>

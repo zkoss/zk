@@ -18,8 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-Press OK and you will see a messagebox is shown.
-Press ESC and you will see a messagebox is shown.
+Press 'Enter' key and you will see a messagebox is shown.
+Press 'ESC' key and you will see a messagebox is shown.
 <separator/>
 <timebox onOK='alert("OK:"+self.value)' onCancel='alert("ESC:"+self.value)' focus="true"/>
 <separator/>

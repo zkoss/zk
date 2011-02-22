@@ -10,6 +10,10 @@
 	<borderlayout hflex="min" vflex="min">
 		<west hflex="min" vflex="min">
 			<grid hflex="min" vflex="min">
+			<columns>
+				<column hflex="min"/>
+				<column hflex="min"/>
+			</columns>
 			<rows>
 			<row>
 				<label value="File:"/>
@@ -34,6 +38,10 @@
 		</west>
 		<east hflex="min" vflex="min">
 			<grid hflex="min" vflex="min">
+				<columns>
+					<column hflex="min"/>
+					<column hflex="min"/>
+				</columns>
 			 	<rows>
 					<row>
 						<label value="Top East"/>

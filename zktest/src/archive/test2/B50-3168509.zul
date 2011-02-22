@@ -1,0 +1,10 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on the datebox button to open the Calendar.</li>
+			<li>Select 1/1/2001. If you see a date value other than 01/01/2001, it's a bug.</li>
+			<li>Refresh the page and select 1/2/2001. You should see 01/02/2001. Otherwise it's a bug.</li>
+		</ol>
+	]]></html>
+	<datebox format="MM/dd/yyyy" text="12/31/2000" />
+</zk>

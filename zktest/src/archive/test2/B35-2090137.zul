@@ -17,15 +17,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window width="550px" title="abc" border="normal" contentStyle="position:relative;">
+<zk>
+<style dynamic="true">
+.ie6 .z-window-embedded-cnt {
+	width: 478px;
+	overflow:hidden;
+}
+</style>
+<window width="500px" title="abc" border="normal" contentStyle="position:relative;">
 The width of grid should not exceed the width of window, if any, that is wrong.
-<separator/>
-In IE6, please specify the following CSS to the window.
-<separator/>
-For example, 
-<![CDATA[  <window width="200px" title="abc"
-contentStyle="width:200px;overflow:hidden;">]]>
-<grid width="450px">
+
+<grid width="550px">
 <columns>
 <column label="Name" />
 <column label="Description" />
@@ -43,3 +45,4 @@ contentStyle="width:200px;overflow:hidden;">]]>
 </grid>
 
 </window>
+</zk>

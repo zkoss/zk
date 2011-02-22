@@ -6,7 +6,7 @@
 		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
 	-->
 <window title="Menu Demo" border="normal">
-	<label value='When user click the menu item "Dynamically Attribute" the window should not scroll top automatically'/>
+	<label value='Please scroll down to click the menu item "Dynamically Attribute" the window should not scroll top automatically'/>
 	<div height="1000px"> 123</div>
 	<window>
 		<menubar>

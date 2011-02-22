@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>You can scroll down the listbox to end, and then click the listheader to sort the live data.</n:p>
-	<n:p>Then you'll see that the content of listbox is wrong.</n:p>
+	<n:p>Then you should't see that the content containing some empty content.</n:p>
 <window title="Live Data Demo" border="normal">
 <zscript>
 List items = new org.zkoss.zktest.test2.BigList(100);

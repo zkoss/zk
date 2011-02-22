@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
+If you can't the loading progress bar to keep alive, the bug is fixed.
 <panel title="table1" border="normal"  collapsible="true">
 <panelchildren>
 <tablelayout>

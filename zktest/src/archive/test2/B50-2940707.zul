@@ -24,11 +24,15 @@ removed.</li>
 <li>Reload this test case.</li>
 <li>Press button 4. You shall see Item 2.2.1 removed and the "triangle"
 icon before Item 2.2. removed.</li>
+<li>Select 2.1, 2.1.1 and 2.1.2</li>
+<li>Press button 2. You shall see the selection remains the same, i.e., all these three items being selected</li>
+<li>Unselect 2.1.1</li>
+<li>Press button 2 again. You shall see selection remains the same, i.e., 2.1 and 2.1.2 are both selected</li> 
 <li>Otherwise, it is a bug!</li>
 </ol>
         ]]>
     </html>
-    <tree id="tree" width="400px" rows="8">
+    <tree id="tree" width="400px" rows="8" checkmark="true" multiple="true">
         <treecols sizable="true">
             <treecol label="Name" />
             <treecol label="Description" />

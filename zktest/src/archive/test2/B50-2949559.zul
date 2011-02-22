@@ -16,7 +16,13 @@
 <?page zscriptLanguage="Groovy"?>
 
 <zk>
-
+	<html><![CDATA[
+	    <b>IE 6 only</b>
+		<ol>
+			<li>The window shall have scrollbar, drag scrollbar to bottom, the combobox shall be disappear</li>
+			<li>If you can still see combobox, this is bug</li>
+		</ol>
+	]]></html>
 	<window title="test" border="normal" height="200px"
 		contentStyle="overflow:auto">
 		<combobox />

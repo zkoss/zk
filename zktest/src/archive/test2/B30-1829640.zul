@@ -18,10 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window xmlns:h="http://www.w3.org/1999/xhtml">
-Notice : <separator />
-Drag and drop Does not work in FF 2.0.0.9 but work in 2.0.0.13
-<separator />
-light bar only show in IE
+Please drag the item (Line 1) and drop it upon the item (Line 4).
+<separator/>
+And then you should see the items in order(Line 2, Line 3, Line 4, Line 1, and so on.)
 <separator />
     <vbox id="parent" width="80%">
         <html/>

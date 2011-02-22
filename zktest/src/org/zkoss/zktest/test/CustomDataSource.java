@@ -1,4 +1,4 @@
-package org.zkoss.zktest.util;
+package org.zkoss.zktest.test;
 
 
 import net.sf.jasperreports.engine.JRDataSource;

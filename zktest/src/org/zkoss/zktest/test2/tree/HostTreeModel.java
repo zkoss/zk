@@ -208,6 +208,9 @@ public class HostTreeModel extends AbstractTreeModel{
 		public void addProcess(int j, FakeProcess fp){
 			processes.add(j, fp);
 		}
+		public String toString() {
+			return "(name: "+name+", id: "+id+", hostindex:"+hostindex+", count: "+count+")";
+		}
 	}
 	
 	static public class FakeProcess  implements TreeNode{
@@ -243,10 +246,4 @@ public class HostTreeModel extends AbstractTreeModel{
 			return true;
 		}
 	}
-
-	public int getIndexOfChild(Object parent, Object child) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

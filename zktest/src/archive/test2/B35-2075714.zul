@@ -6,8 +6,8 @@
   Tabbox accordion-lite Test
 <groupbox>
 <vbox>
-1.You shouldnt see an error saying  js/zul/tabs.js not found
-<label value="2.Close and reopen tab1, tab width in tab1 shouldn't change."/>
+1.You shouldn't see an error saying  js/zul/tabs.js not found
+<label value="2.Click upon the Tab2 and click upon the Tab1, the tab width in tab1 shouldn't change."/>
 
 </vbox>
 </groupbox>

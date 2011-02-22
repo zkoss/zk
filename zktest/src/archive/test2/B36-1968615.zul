@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see three rows. 1st row and 2nd row has two column. 3rd row has only one spanned column</li>
+<li>2nd column of the 1st row and 2nd row are also a Grid of 3 rows.</li>
+<li>You shall see on 1st column of the 1st row: [AAA, AAB]</li>
+<li>You shall see on 2nd column of the 1st row: AAA, AAB, and [AAA, AAB]</li>
+<li>You shall see on 1st column of the 2nd row: [BAA, BAB]</li>
+<li>You shall see on 2nd column of the 2nd row: BAA, BAB, and [BAA, BAB]</li>
+<li>You shall see on 3rd row: [[AAA, AAB],[BAA,BAB]].</li>
+<li>If everything as specified, it is OK.</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+<window title="My First Window" border="normal" width="200px">
+<zscript>
+	Vector a = new Vector();
+	
+	Vector aa = new Vector();
+	aa.add("AAA");
+	aa.add("AAB");
+	
+	Vector ba = new Vector();
+	ba.add("BAA");
+	ba.add("BAB");
+	
+	a.add(aa);
+	a.add(ba);
+</zscript>
+<listbox model="@{a}">
+	<listitem self="@{each=r}" value="@{r}">
+		<listcell label="@{r}"/>
+		<listcell>
+			<listbox model="@{r}">
+				<listitem self="@{each=rr}" value="@{rr}" label="@{rr}"/>
+				<listfoot>
+					<listfooter label="@{r}"/>
+				</listfoot>
+			</listbox>
+		</listcell>
+	</listitem>
+	<listfoot>
+		<listfooter label="@{a}"/>
+	</listfoot>
+</listbox>
+</window>
+</zk>

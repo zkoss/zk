@@ -1,0 +1,46 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Chrome/Safari Only</li>
+<li>Make browser window to about 300px width
+<li>Now drag the border between 2nd column and 3rd column to right to exceed the browser window right border</li>
+<li>Shall see the horizontal scrollbar appear</li>
+<li>Maximize the browser window. Horizontal scrollbar disappear now. Remember the current thumb handle size of the scrollbar.</li>
+<li>Restore the browser window. Horizontal scrollbar reappear.</li>
+<li>The size of the thumb handle of the scrollbar shall be the same as it was</li>
+<li>Drag the scrollbar thumb handle to the right, the column header and contents shall align well</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+<zscript>
+String[] msgs = {
+	"ZK Ajax Framework",
+	"Server + Client Fusion is a good approach Server + Client Fusion is a good approach",
+	"I Love it!",
+	"Great Job",
+	"ZK Spreadsheet",
+	"The Only Solution of Java Web Excel",
+	"Awesome!",
+	"The best!",
+};
+</zscript>
+	<listbox id="lbx">
+		<listhead sizable="true">
+			<listheader label="Product" width="100px"/>
+			<listheader label="Description" width="100px"/>
+			<listheader label="Comment"/>
+		</listhead>
+		<listitem>
+			<listcell ><label value="${msgs[0]}"></label></listcell>
+			<listcell ><label value="${msgs[1]}"></label></listcell>
+			<listcell ><label value="${msgs[2]}"></label></listcell>
+		</listitem>
+		<listitem>
+			<listcell ><label value="${msgs[4]}"></label></listcell>
+			<listcell ><label value="${msgs[5]}"></label></listcell>
+			<listcell ><label value="${msgs[6]}"></label></listcell>
+		</listitem>
+	</listbox>
+</zk>

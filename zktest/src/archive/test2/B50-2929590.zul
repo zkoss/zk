@@ -12,7 +12,7 @@
    <attribute name="onClick">
  {
   final Window win = (Window) Executions.createComponents(
-    "/userguide/layout/hello-template.zul", null, null);
+    "/test2/hello-template.zul", null, null);
   win.setMaximizable(true);
   win.doModal();
  }

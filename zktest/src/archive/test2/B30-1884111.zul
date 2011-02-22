@@ -330,7 +330,7 @@ If the modal window disappears in 7 seconds, it is correct
 		</tabpanels>
 	</tabbox>
 	<!-- Embedded windows -->
-	<button
+	<button id="myBtn"
 		onClick='alert("If you close the dialog, the background shall appear soon (IE7 only)")'
 		label="Please Click Me" />
 </window>

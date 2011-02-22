@@ -9,11 +9,19 @@ public class MyWin extends org.zkoss.zul.Window {
 ]]>
 </zscript>
 <html><![CDATA[
+<b>disable-event-thread=false behavior</b>
 <ol>
 <li>Press the button "button".</li>
 <li>You shall see pop up window say "Hi! w1.".</li>
 <li>Press "OK" button of the pop up window. You shall see pop up window say "Hi! w2.".</li>
 <li>done</li>
+</ol>
+
+<b style="color:red">Current default behavior</b>
+<ol>
+<li>Press the button "button".</li>
+<li>You shall see pop up window say "Hi! w2.".</li>
+<li>Press "OK" to close it, You shall see the popup window say "Hi! w1."</li>
 </ol>
 ]]>
 </html>

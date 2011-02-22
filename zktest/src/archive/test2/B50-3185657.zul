@@ -1,0 +1,54 @@
+<zk>
+	<style>
+		.z-treecell-cnt {
+			background-color: #999999;
+		}
+	</style>
+	<html><![CDATA[
+		<ol>
+			<li>IE 6/7 only</li>
+			<li>You shall see the GRAY background of data content in the 1st column occupy the whole cell.<li>
+			<li>If not, it is a bug.</li>
+		</ol>
+	]]></html>
+	<tree span="true">
+		<treecols>
+			<treecol label="100px" width="100px" />
+			<treecol label="min" hflex="min" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content (Longer)</treecell>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content (Longer)</treecell>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<tree width="500px" span="true">
+		<treecols>
+			<treecol label="100px" width="100px" />
+			<treecol label="min" hflex="min" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content (Longer)</treecell>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content (Longer)</treecell>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

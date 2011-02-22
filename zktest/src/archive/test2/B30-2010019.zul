@@ -54,7 +54,7 @@
 			</listbox>
 			<div>
 				Cause Error:
-				<button label="New" onClick="addNewRepository();refreshFields();" />
+				<button id="myBtn" label="New" onClick="addNewRepository();refreshFields();" />
 			</div>
 		</hbox>
 		<div>Driver</div>

@@ -35,13 +35,16 @@ When you click the "Add/Remove Child" button, and then the treeitem's icon shoul
 </tree>
 <button onClick="addRemove()" label="Add/Remove Child"/>
 <zscript>
-addRemove()
-{
+addRemove() {
 tc2=new Treechildren();
 tc2.parent=ti;
-alert("Added...");
+Messagebox.show("Added..., and you should see the arrow icon on the treeitem.", null, Messagebox.OK, Messagebox.INFORMATION, 0, new EventListener() {
+public void onEvent(Event event) throws Exception {
 tc2.detach();
-alert("Removed...");
+alert("Removed..., and you shouldn't see the arrow icon");
+}
+});
+
 }
 </zscript>
 </window>

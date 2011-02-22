@@ -16,6 +16,8 @@
 </html>
 		<zscript>
 		<![CDATA[
+			import java.util.*;
+			
 			class Foo{
 				String bar,item;
 				
@@ -75,7 +77,7 @@
 				</listitem>
 		</listbox>
 		<textbox id="textboxDesc" value="@{selectedFoo.bar,save-when='saveButton.onClick'}"/>
-		<listbox model="@{itemsList}" selectedItem="@{selectedFoo.item,save-when='saveButton.onClick'}" mold="select">
+		<listbox id="currentListbox" model="@{itemsList}" selectedItem="@{selectedFoo.item,save-when='saveButton.onClick'}" mold="select">
 			<listitem self="@{each=is}" value="@{is}" label="@{is}"></listitem>
 		</listbox>
 		<button id="saveButton" label="save"></button>

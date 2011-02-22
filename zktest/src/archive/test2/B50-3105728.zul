@@ -1,0 +1,9 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Enter "1/1" in the datebox and click outside of the datebox.</li>
+			<li>You should see the date become Jan 1st of the CURRENT year. If not, there is a bug.</li>
+		</ol>
+	]]></html>
+	<datebox width="300px" format="MM/dd/yyyy, HH:mm:ss.SSS" />
+</zk>

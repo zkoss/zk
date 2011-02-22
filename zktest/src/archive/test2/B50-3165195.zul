@@ -1,0 +1,15 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Menu and Menuitem, if you see dotted rectangle on either one, it is a bug.</li>
+		</ol>
+	]]></html>
+	<menubar>
+		<menu image="/resource/image/search.png">
+			<menupopup>
+				<menuitem label="Menuitem" />
+			</menupopup>
+		</menu>
+		<menuitem image="/resource/image/search.png" />
+	</menubar>
+</zk>

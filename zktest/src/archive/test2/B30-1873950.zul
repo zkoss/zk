@@ -19,12 +19,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 It is wrong, when modals are nested, the inner one is positioned to the left of the screen center.(IE only)
-	<button label="go" onClick="win1.doModal()" />
+	<button id="win1Btn" label="go" onClick="win1.doModal()" />
 	<window id="win1" width="300px" height="200px" visible="false"
-		title="1" style="overflow:visible">
-		<button label="go" onClick="win2.doModal()" />
+		title="1" style="overflow:visible" closable="true">
+		<button id="win2Btn" label="go" onClick="win2.doModal()" />
 		<window id="win2" width="300px" height="200px" visible="false"
-			title="2">
+			title="2" closable="true">
 			<button label="go" disabled="true" />
 		</window>
 	</window>

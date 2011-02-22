@@ -1,0 +1,67 @@
+<zk>
+<div>
+<html>
+<![CDATA[
+<ol>
+<li>IE6/IE7 only.
+<li>You shall see a Listbox and a Grid with 3 columns. The 1st and 3rd column width fit the content exactly. The 2nd column width is expanded.</li>
+<li>Drag browser window to shrink window width. The 2nd column shall shrink accordingly.</li>
+<li>If you saw vertical scrollbar appear and stay, it is a bug</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+</div>
+<zscript>
+String[] msgs = {
+	"ZK Ajax",
+	"Server + Client Fusion is a good approach Server + Client Fusion is a good approach",
+	"I Love it!",
+	"Great Job",
+	"ZK Spreadsheet",
+	"The Only Solution of Java Web Excel",
+	"Awesome!",
+	"The best!",
+};
+</zscript>
+ 
+	<listbox id="lbx" span="1">
+		<listhead sizable="true">
+			<listheader hflex="min"/>
+			<listheader hflex="min"/>
+			<listheader hflex="min"/>
+		</listhead>
+		<listitem>
+			<listcell ><label value="${msgs[0]}"></label></listcell>
+			<listcell ><label value="${msgs[1]}"></label></listcell>
+			<listcell ><label value="${msgs[2]}"></label></listcell>
+		</listitem>
+		<listitem>
+			<listcell ><label value="${msgs[4]}"></label></listcell>
+			<listcell ><label value="${msgs[5]}"></label></listcell>
+			<listcell ><label value="${msgs[6]}"></label></listcell>
+		</listitem>
+	</listbox>
+	<button label="invalidate above listbox" onClick="lbx.invalidate()"/>
+ 
+	<grid id="grd" span="1">
+		<columns sizable="true">
+			<column hflex="min"/>
+			<column hflex="min"/>
+			<column hflex="min"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="${msgs[0]}"></label>
+				<label value="${msgs[1]}"></label>
+				<label value="${msgs[2]}"></label>
+			</row>
+			<row>
+				<label value="${msgs[4]}"></label>
+				<label value="${msgs[5]}"></label>
+				<label value="${msgs[6]}"></label>
+			</row>
+		</rows>
+	</grid>
+	<button label="invalidate above Grid" onClick="grd.invalidate()"/>
+</zk>

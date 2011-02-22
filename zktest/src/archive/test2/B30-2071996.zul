@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	Press next page twice to go to the last page
-	Then, check if all listitem are selected (by moving mouse over them)
+	Then, check if all listitem can be selected (by moving mouse over them and click upon it).
 	<zscript>
 	String[] data = new String[] {
 		"Albert", "Bob", "Candy", "Elva", "Elva2", "Gaby", "Gavin", "Jason",

@@ -30,6 +30,6 @@ and then type a wrong value, it refuses to reset.</n:p>
 	cb1.appendItem("aaa").value = "111";
 	cb1.appendItem("ccc").value = "333";
 	</zscript>
-	<button label="reset" onClick="cb1.value = null;"/>
+	<button id="reset" label="reset" onClick="cb1.value = null;"/>
 	</vbox>
 </zk>

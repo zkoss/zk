@@ -12,6 +12,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<!-- Defines the application's name -->
+	<preference>
+		<name>org.zkoss.zk.ui.WebApp.name</name>
+		<value>ZK Test</value>
+	</preference>
+
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
 	<client-config>

@@ -14,6 +14,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click page button</li>
+			<li>Check the number <b>inside dialog</b>, the left hand side number shall equal to the right hand side number</li>
+		</ol>
+	]]></html>
 Please check the paging number to see the result that the both number should be the same.
 <paging mold="os" pageSize="10" totalSize="100" onPaging='alert(event.getActivePage() + " : " + self.getActivePage());'/>
 </zk>

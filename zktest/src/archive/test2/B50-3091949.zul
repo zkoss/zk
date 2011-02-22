@@ -47,7 +47,7 @@
 	</window>
 	<jasperreport id="report" height="360px" autohide="true" />
 	<zscript>
-	import org.zkoss.zktest.util.CustomDataSource;
+	import org.zkoss.zktest.test2.jasperreport.CustomDataSource;
 	void showReport() {
 		//Preparing parameters
 		Map parameters = new HashMap();

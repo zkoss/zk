@@ -24,7 +24,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<n:li>You should see the current window is shown at correct position.</n:li>
 	</n:ol>
 	<vbox>
-		<button onClick="wnd1.doModal();wnd2.doModal();"
+		<button onClick="wnd1.doModal();"
 			label="show window1" />
 	</vbox>
 
@@ -34,7 +34,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<button label="make higher"
 				onClick="spacer.visible = true;" />
 			<separator spacing="1500px" id="spacer" visible="false" />
-			<button onClick="spaceOwner.visible = false" label="close" />
+			<button onClick="spaceOwner.visible = false;wnd2.doModal();" label="close" />
 			<separator spacing="10px" />
 		</vbox>
 	</window>
