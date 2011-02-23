@@ -42,6 +42,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			n.style.width = db.getWidth() || '';
 		}
 	}
+	function _equalDate(d1, d2) {
+		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
+	}
 
 var Datebox =
 /**
@@ -659,13 +662,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			
 			// Bug 3122159
 			evt.data.value = db._value = date;
-			if(!this._equalDate(date, oldDate))
+			if(!_equalDate(date, oldDate))
 				db.fire(evt.name, evt.data);
 		}
 		evt.stop();
-	},
-	_equalDate: function(d1, d2) {
-		return (d1 == d2) || (d1 && d2 && d1.valueOf && d2.valueOf && d1.valueOf() == d2.valueOf());
 	},
 	onFloatUp: function (ctl) {
 		var db = this.parent;
