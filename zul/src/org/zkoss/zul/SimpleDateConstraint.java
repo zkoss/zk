@@ -161,7 +161,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	public void validate(Component comp, Object value)
 	throws WrongValueException {
 		if (value instanceof Date) {
-			final Date d = (Date)value;
+			final Date d =  Dates.beginOfDate((Date)value, TimeZones.getCurrent());
 			if (_beg != null && _beg.compareTo(d) > 0)
 				throw outOfRangeValue(comp);
 			if (_end != null && _end.compareTo(d) < 0)
