@@ -33,7 +33,7 @@ import org.zkoss.io.RepeatableReader;
  *
  * @author tomyeh
  */
-public class AMedia implements Media {
+public class AMedia implements Media, java.io.Serializable {
 	/** Used if you want to implement a meida whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AMedia(String,String,String,InputStream)
