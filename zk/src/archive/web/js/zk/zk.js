@@ -27,7 +27,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _oid = 0,
 		_statelesscnt = 0,
 		_logmsg,
-		_stamps = [];
+		_stamps = [],
+		_t0 = jq.now();
 
 	function newClass() {
 		return function () {
@@ -1059,14 +1060,14 @@ zk.log('value is", value);
 		if (nm) {
 			if (!noAutoLog && !_stamps.length)
 				setTimeout(_stampout, 0);
-			_stamps.push({n: nm, t: zUtl.now()});
+			_stamps.push({n: nm, t: jq.now()});
 		} else if (_stamps.length) {
-			var t0 = zk._t0;
+			var t0 = _t0;
 			for (var inf; (inf = _stamps.shift());) {
-				zk.log(inf.n + ': ' + (inf.t - zk._t0));
-				zk._t0 = inf.t;
+				zk.log(inf.n + ': ' + (inf.t - _t0));
+				_t0 = inf.t;
 			}
-			zk.log("total: " + (zk._t0 - t0));
+			zk.log("total: " + (_t0 - t0));
 		}
 	},
 
@@ -1488,5 +1489,4 @@ _zErb = zk.$extends(zk.Object, {
 		if (_erbx) _erbx.destroy();
 	}
 });
-
 })();

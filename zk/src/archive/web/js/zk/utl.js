@@ -226,10 +226,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
  
  	/** Returns a long value representing the current time (unit: miliseconds).
  	 * @return long
+ 	 * @deprecated As of release 5.0.6, replaced with jq.now().
  	 */
-	now: function () {
-		return new Date().getTime();
-	},
+	now: jq.now,
 	/** Returns today.
 	 * @param boolean full if true, returns the full time,
 	 * else only returns year, month, and day.
@@ -526,6 +525,4 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return val || force ? ' ' + nm + '="' + val + '"': "";
 	}
 };
-
-zk._t0 = zk._t1 = zUtl.now(); //_t0 used by zk.js and _t1 by mount.js
 })();

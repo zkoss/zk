@@ -65,6 +65,15 @@ public class Datebox extends FormatInputElement implements
 		setCols(11);
 	}
 
+	/** Constructor with a given date.
+	 * @param date the date to be assigned to this datebox initially.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
+	 */
 	public Datebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
@@ -180,6 +189,13 @@ public class Datebox extends FormatInputElement implements
 	 * 
 	 * @exception WrongValueException
 	 *                if value is wrong
+	 * @param date the date to be assigned to this datebox.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
 	 */
 	public void setValue(Date value) throws WrongValueException {
 		validate(value);

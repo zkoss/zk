@@ -138,7 +138,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},	
 	setStyle: function (style) {
 		if (this._style != style) {
-			if (!zk._rowTime) zk._rowTime = zUtl.now();
+			if (!zk._rowTime) zk._rowTime = jq.now();
 			this._style = style;
 			this.rerender();
 		}

@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
-		_syncdt = zUtl.now() + 60000, //when zk.Desktop.sync() shall be called
+		_syncdt = jq.now() + 60000, //when zk.Desktop.sync() shall be called
 		_rdque = [], _rdtid, //async rerender's queue and timeout ID
 		_ignCanActivate; //whether canActivate always returns true
 
@@ -4697,7 +4697,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
-		var Desktop = zk.Desktop, dts = Desktop.all, dt = zUtl.now();
+		var Desktop = zk.Desktop, dts = Desktop.all, dt = jq.now();
 		if (dt > _syncdt) { //Liferay+IE: widgets are created later so don't sync at beginning
 			_syncdt = dt + 60000;
 			Desktop.sync();

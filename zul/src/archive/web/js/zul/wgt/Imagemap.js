@@ -100,7 +100,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	_toofast: function () {
 		if (zk.gecko) { //bug 1510374
 			var Imagemap = zul.wgt.Imagemap,
-				now = zUtl.now();
+				now = jq.now();
 			if (Imagemap._stamp && now - Imagemap._stamp < 800)
 				return true;
 			Imagemap._stamp = now;
