@@ -452,50 +452,6 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	},
 	getYear: function () {
 		return this._date.getFullYear() + this._offset;
-	},
-	add: function (field, amount) {
-		var d,
-			Calendar = zk.fmt.Calendar;
-		if ((d = this._date) && (typeof amount == 'number')) {
-			switch (field) {
-				case Calendar.YEAR:
-					d.setFullYear(d.getFullYear() + amount);
-					break;
-				case Calendar.MONTH:
-					d.setMonth(d.getMonth() + amount);
-					break;
-				case Calendar.DATE:
-					d.setDate(d.getDate() + amount);
-					break;
-				case Calendar.HOUR:
-					d.setHours(d.getHours() + amount);
-					break;
-				case Calendar.MINUTE:
-					d.setMinutes(d.getMinutes() + amount);
-					break;
-				case Calendar.SECOND:
-					d.setSeconds(d.getSeconds() + amount);
-					break;
-				case Calendar.MILLISECOND:
-					d.setMilliseconds(d.getMilliseconds() + amount);
-			}			
-		}
 	}
-},{ //static
-	YEAR: 1,
-	MONTH: 2,
-//	WEEK_OF_YEAR: 3,
-//	WEEK_OF_MONTH: 4,
-	DATE: 5,
-//	DAY_OF_MONTH: 5,
-//	DAY_OF_YEAR: 6,
-//	DAY_OF_WEEK: 7,
-//	DAY_OF_WEEK_IN_MONTH: 8,
-//	AM_PM: 9,
-	HOUR: 10,
-//	HOUR_OF_DAY: 11,
-	MINUTE: 12,
-	SECOND: 13,
-	MILLISECOND: 14
 });
 })();
