@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3190542.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 24 12:54:43 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click Maximize icon. the panel will become lagger.</li>
+			<li>Click restore icon. that shall not error happen.</li>
+		</ol>
+	]]></html>
+	<portallayout maximizedMode="whole">
+		<portalchildren >
+			<panel height="150px" title="panel" border="normal" 
+				maximizable="true" onMaximize="">
+				<panelchildren>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

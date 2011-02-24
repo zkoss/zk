@@ -2432,8 +2432,8 @@ wgt.$f().main.setTitle("foo");
 			this._zIndex = zIndex;
 			var n = this.$n();
 			if (n) {
-				n.style.zIndex = zIndex = zIndex >= 0 ? zIndex: '';
-				if (opts && opts.fire) this.fire('onZIndex', zIndex, {ignorable: true});
+				n.style.zIndex = zIndex >= 0 ? zIndex: '';
+				if (opts && opts.fire) this.fire('onZIndex', (zIndex > 0 || zIndex === 0) ? zIndex: -1, {ignorable: true});
 			}
 		}
 		return this;
