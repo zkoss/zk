@@ -189,7 +189,7 @@ public class Datebox extends FormatInputElement implements
 	 * 
 	 * @exception WrongValueException
 	 *                if value is wrong
-	 * @param date the date to be assigned to this datebox.<br/>
+	 * @param value the date to be assigned to this datebox.<br/>
 	 * Notice that, if this datebox does not allow users to select the time
 	 * (i.e., the format limited to year, month and day), the date specified here
 	 * is better to set hour, minutes, seconds and milliseconds to zero
