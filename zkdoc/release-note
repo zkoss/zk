@@ -1,5 +1,14 @@
 	--------
+ZK 5.0.7
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+	--------
 ZK 5.0.6
+February 24, 2010
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
   3175503: A way to specify the application's name in zk.xml
