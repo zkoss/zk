@@ -36,7 +36,7 @@ public class ZIndexEvent  extends Event {
 	public static final ZIndexEvent getZIndexEvent(AuRequest request) {
 		final java.util.Map data = request.getData();
 		return new ZIndexEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getInt(data, "", 0));
+			AuRequests.getInt(data, "", -1));
 	}
 	/** Constructs a mouse relevant event.
 	 */

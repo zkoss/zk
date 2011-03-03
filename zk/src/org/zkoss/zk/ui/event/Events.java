@@ -174,6 +174,7 @@ public class Events {
 	public static final String ON_CREATE = "onCreate";
 	/** The onModal event (used with {@link Event}) to notify a component
 	 * shall become modal. Currently, only ZUL's window components support it.
+	 * <p>Notice that it is not fired if the event thread is disabled (default).
 	 */
 	public static final String ON_MODAL = "onModal";
 	/** The onPiggyback event (used with {@link Event}) used to notify
