@@ -6,10 +6,7 @@
 	<groupId>org.zkoss.common</groupId>
 	<artifactId>zweb</artifactId>
 	<packaging>jar</packaging>
-	<properties>
-		<zk.version>5.0.6</zk.version>
-	</properties>
-	<version>${zk.version}</version>
+	<version>5.0.7.FL.20110303</version>
 	<name>The ZKoss Web Library</name>
 	<url>http://www.zkoss.org/web</url>
 	<description>The ZKoss Web library</description>
@@ -21,7 +18,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zweb</url>
+		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zweb</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -74,13 +71,13 @@
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zcommon</artifactId>
-			<version>${zk.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
-		<finalName>${project.artifactId}-${zk.version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
 		<resources>

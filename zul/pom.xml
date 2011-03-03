@@ -6,10 +6,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zul</artifactId>
 	<packaging>jar</packaging>
-	<properties>
-		<zk.version>5.0.6</zk.version>
-	</properties>
-	<version>${zk.version}</version>
+	<version>5.0.7.FL.20110303</version>
 	<name>ZK XUL Components</name>
 	<url>http://www.zkoss.org/zul</url>
 	<description>ZK XUL components (XML user interface markup language)</description>
@@ -21,7 +18,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zul</url>
+		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zul</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -56,13 +53,13 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zk</artifactId>
-			<version>${zk.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
-		<finalName>${project.artifactId}-${zk.version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
 		<resources>

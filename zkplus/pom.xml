@@ -7,10 +7,9 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<zk.version>5.0.6</zk.version>
 		<org.springframework.version>2.0.6</org.springframework.version>
 	</properties>
-	<version>${zk.version}</version>
+	<version>5.0.7.FL.20110303</version>
 	<name>ZK Plus Utilities</name>
 	<url>http://www.zkoss.org/zkplus</url>
 	<description>ZK plus utilities</description>
@@ -22,7 +21,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${zk.version}/zkplus</url>
+		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zkplus</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -65,7 +64,7 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
-			<version>${zk.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -198,7 +197,7 @@
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
-		<finalName>${project.artifactId}-${zk.version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
 		<resources>
