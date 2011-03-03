@@ -9,7 +9,7 @@
         Fri Dec 17 15:56:48     2010, Created by thuocthai at gmail dot com
 }}IS_NOTE
   
-Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
   
 {{IS_RIGHT
     This program is distributed under GPL Version 3.0 in the hope that
@@ -17,7 +17,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "Khong xac ??nh lo?i thanh ph?n: ";
-msgzul.DATE_REQUIRED = "B?n ph?i ch? ??nh ngay. ??nh d?ng: ";
-msgzul.OUT_OF_RANGE = "Ngoai ph?m vi cho phep";
-msgzul.NO_AUDIO_SUPPORT = "Trinh duy?t c?a b?n khong ???c h? tr? am thanh ??ng";
+msgzul.UNKNOWN_TYPE = "Không xác định loại thành phần: ";
+msgzul.DATE_REQUIRED = "Bạn phải chỉ định ngày. Định dạng: ";
+msgzul.OUT_OF_RANGE = "Ngoài phạm vi cho phép";
+msgzul.NO_AUDIO_SUPPORT = "Trình duyệt của bạn không được hỗ trợ âm thanh động";
