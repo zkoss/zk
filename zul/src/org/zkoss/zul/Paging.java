@@ -220,7 +220,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		if (name.equals(ZulEvents.ON_PAGING)) {
 			PagingEvent evt = PagingEvent.getPagingEvent(request);
 			setActivePage(evt.getActivePage());
-			Events.postEvent(PagingEvent.getPagingEvent(request));
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
