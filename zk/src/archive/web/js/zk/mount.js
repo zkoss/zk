@@ -735,7 +735,7 @@ jq(function() {
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 						}
-					}, zAu.ajaxSettings));
+					}, zAu.ajaxSettings), true/**fixed IE memory issue for jQuery 1.4.x*/);
 				}
 			} catch (e) { //silent
 			}
