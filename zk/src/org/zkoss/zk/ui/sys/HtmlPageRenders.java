@@ -715,7 +715,7 @@ public class HtmlPageRenders {
 		} else {
 			if (extra.length() > 0 || ac.length() > 0) {
 				out.write(',');
-				out.write(extra.length() > 0 ? '1': '0');
+				out.write(extra.length() > 0 ? '9': '0');
 					//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
 
 				if (ac.length() > 0) {

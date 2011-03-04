@@ -64,16 +64,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</center>
 </borderlayout>
 
-<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}'>
+<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}'><![CDATA[
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script if='${execution.serverName == "www.zkoss.org" or execution.serverName == "www.potix.com"}'><![CDATA[
-try {
-var pageTracker = _gat._getTracker("UA-121377-3");
-pageTracker._setDomainName("zkoss.org");
-pageTracker._initData();
-pageTracker._trackPageview();
+
+var gafn = function () {
+if (window._gat) {
+	gafn = null;
+	try {
+		var pageTracker = _gat._getTracker("UA-121377-3");
+		pageTracker._setDomainName("zkoss.org");
+		pageTracker._initData();
+		pageTracker._trackPageview();
 
 zk.override(zAu, "beforeSend", function (uri, req) {
 	try {
@@ -87,8 +89,12 @@ zk.override(zAu, "beforeSend", function (uri, req) {
 	}
 	return zAu.$beforeSend(uri, req);
 });
-}catch(e){
-}
+	} catch (e) {
+	}
+} else
+	setTimeout(gafn, 1000);
+};
+gafn();
 ]]></script>
 
 </zk>

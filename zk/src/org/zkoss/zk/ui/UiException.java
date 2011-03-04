@@ -21,7 +21,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 
 /**
- * Represents an UI-relevant runtime exception.
+ * Represents a UI-relevant runtime exception.
  * 
  * @author tomyeh
  */
