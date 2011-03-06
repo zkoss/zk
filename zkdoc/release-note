@@ -4,6 +4,7 @@ ZK 5.0.7
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
+  3190987: Dyanmic tab,tabpanel are disorder
   
 * Upgrade Notes
 

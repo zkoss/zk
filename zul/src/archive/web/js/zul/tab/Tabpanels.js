@@ -14,6 +14,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+
+(function () {
+	function _syncSeletPanel (wgt) {
+		var tbx, sel, oldSel;
+		if ((tbx = wgt.getTabbox()) && (oldSel = tbx._selPnl) 
+			&& (sel = tbx._selTab) && (sel = sel.getLinkedPanel())
+			&& (oldSel != sel)) {
+			sel._sel(true, true);
+			oldSel._sel(false, true);
+			tbx._selPnl = sel;
+		}
+	}
 /**
  * A collection of tab panels.
  *
@@ -113,5 +125,14 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	beforeSize: function () {
 		this.$n().style.width = this.__width || '';
+	},
+	onChildRemoved_: function (child) {
+		this.$supers("onChildRemoved_", arguments);
+		_syncSeletPanel(this);
+	},
+	onChildAdded_: function (child) {
+		this.$supers("onChildAdded_", arguments);
+		_syncSeletPanel(this);
 	}
 });
+})();
