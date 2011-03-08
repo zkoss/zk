@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.common</groupId>
 	<artifactId>zweb</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.7.FL.20110303</version>
+	<version>5.0.7.FL.20110304</version>
 	<name>The ZKoss Web Library</name>
 	<url>http://www.zkoss.org/web</url>
 	<description>The ZKoss Web library</description>

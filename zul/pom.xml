@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zul</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.7.FL.20110303</version>
+	<version>5.0.7.FL.20110304</version>
 	<name>ZK XUL Components</name>
 	<url>http://www.zkoss.org/zul</url>
 	<description>ZK XUL components (XML user interface markup language)</description>

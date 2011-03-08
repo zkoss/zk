@@ -17,7 +17,7 @@
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<zuljsp.version>1.4.1</zuljsp.version>
 	</properties>
-	<version>5.0.7.FL.20110303</version>
+	<version>5.0.7.FL.20110304</version>
 	<packaging>war</packaging>
 	<licenses>
 		<license>
