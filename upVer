@@ -35,7 +35,7 @@ function upVer {
 		mv -f $maindir/tmp $maindir/$1
 		sed -e "s/UID = \"$newVersion-FL\"/UID = \"$newVersion\"/g" $maindir/$1 > $maindir/tmp
 	elif  [ "$2" == ".FL.$stamp" ] ; then
-		sed -e "1,/repositories/ s/version>.*<\/version/version>$newVersion$2<\/version/g" $maindir/$1 > $maindir/tmp
+		sed -e "1,/version>.*<\/version/s/version>.*<\/version/version>$newVersion$2<\/version/g" $maindir/$1 > $maindir/tmp
 	else
 		sed -e "s/$oldVersion/$newVersion$2/g" $maindir/$1 > $maindir/tmp
 	fi
