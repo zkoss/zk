@@ -15,8 +15,8 @@
 #{{IS_RIGHT
 #}}IS_RIGHT
 #
-cd ..
 maindir="$(pwd)"
+maindir="${maindir%/cmldoc}"
 cd $maindir
 echo "Working directory $maindir"
 stamp=$(date +%Y%m%d)
