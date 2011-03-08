@@ -132,10 +132,10 @@ public class WebManager {
 		}
 
 		//load metainfo/zk/zk.xml
+		String XML = "metainfo/zk/zk.xml";
 		try {
 			final ClassLocator loc = new ClassLocator();
-			for (Enumeration en = loc.getResources("metainfo/zk/zk.xml");
-			en.hasMoreElements();) {
+			for (Enumeration en = loc.getResources(XML); en.hasMoreElements();) {
 				final URL cfgUrl = (URL)en.nextElement();
 				try {
 					parser.parse(cfgUrl, config, loc);
@@ -144,16 +144,17 @@ public class WebManager {
 				}
 			}
 		} catch (Throwable ex) {
-			log.error("Unable to load metainfo/zk/zk.xml", ex);
+			log.error("Unable to load " + XML, ex);
 		}
 
 		//load /WEB-INF/zk.xml
+		XML = "/WEB-INF/zk.xml";
 		try {
-			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
+			final URL cfgUrl = _ctx.getResource(XML);
 			if (cfgUrl != null)
 				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx));
 		} catch (Throwable ex) {
-			log.error("Unable to load /WEB-INF/zk.xml", ex);
+			log.error("Unable to load " + XML, ex);
 		}
 
 		//after zk.xml is loaded since it depends on the configuration

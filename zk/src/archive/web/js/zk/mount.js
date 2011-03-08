@@ -468,7 +468,6 @@ jq(function() {
 	var Widget = zk.Widget,
 		_bfUploads = [],
 		_reszInf = {},
-		_oldBfUnload,
 		_subevts = { //additonal invocation
 			onClick: 'doSelect_',
 			onRightClick: 'doSelect_',
@@ -742,7 +741,7 @@ jq(function() {
 		}
 	});
 
-	_oldBfUnload = window.onbeforeunload;
+	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function () {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose)
