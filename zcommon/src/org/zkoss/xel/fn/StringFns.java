@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel.fn;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -54,19 +55,21 @@ public class StringFns {
 		return cat(cat(cat(cat(s1, s2), s3), s4), s5);
 	}
 
-	/** Converts to the lower case.
+	/** Converts all of the characters in this String to upper case using the rules of the current Locale.
+	 * @see Locales#getCurrent
 	 * @since 5.0.7
 	 */
 	public static String toLowerCase(String s) {
-		return s != null ? s.toLowerCase(): null;
+		return s != null ? s.toLowerCase(Locales.getCurrent()): null;
 	}
-	/** Converts to the upper case.
+	/** Converts all of the characters in this String to upper case using the rules of the current Locale.
+	 * @see Locales#getCurrent
 	 * @since 5.0.7
 	 */
 	public static String toUpperCase(String s) {
-		return s != null ? s.toUpperCase(): null;
+		return s != null ? s.toUpperCase(Locales.getCurrent()): null;
 	}
-	/** Trim the whitespaces.
+	/** Returns a copy of the string, with leading and trailing whitespace omitted.
 	 * @since 5.0.7
 	 */
 	public static String trim(String s) {
@@ -92,19 +95,19 @@ public class StringFns {
 		}
 		return ss.toString();
 	}
-	/** Returns whether s1 starts with s2.
+	/** Tests if this string starts with the specified prefix.
 	 * @since 5.0.7
 	 */
 	public static boolean startsWith(String s1, String s2) {
 		return s1 != null && s2 != null && s1.startsWith(s2);
 	}
-	/** Returns whether s1 starts with s2.
+	/** Tests if this string ends with the specified suffix.
 	 * @since 5.0.7
 	 */
 	public static boolean endsWith(String s1, String s2) {
 		return s1 != null && s2 != null && s1.endsWith(s2);
 	}
-	/** Returns the substring of the specified indeces.
+	/** Returns a new string that is a substring of this string.
 	 * @since 5.0.7
 	 */
 	public static String substring(String s, int from, int to) {
