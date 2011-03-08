@@ -303,6 +303,107 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Replaces all occurenances of the second argument with the third argument.
 		</description>
 	</function>
+	<function>
+		<name>toLowerCase</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String toLowerCase(java.lang.String)
+		</function-signature>
+		<description>
+	Converts to the lower case.
+		</description>
+	</function>
+	<function>
+		<name>toUpperCase</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String toUpperCase(java.lang.String)
+		</function-signature>
+		<description>
+	Converts to the upper case.
+		</description>
+	</function>
+	<function>
+		<name>trim</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String trim(java.lang.String)
+		</function-signature>
+		<description>
+	Trims the whitespaces.
+		</description>
+	</function>
+	<function>
+		<name>split</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String[] split(java.lang.String, java.lang.String)
+		</function-signature>
+		<description>
+	Splits a string into an array of strings based on the given separator.
+		</description>
+	</function>
+	<function>
+		<name>join</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String join(java.lang.Object[], java.lang.String)
+		</function-signature>
+		<description>
+	Joins an array of strings into a single string based on the given separator.
+		</description>
+	</function>
+	<function>
+		<name>startsWith</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	boolean startsWith(java.lang.String, java.lang.String)
+		</function-signature>
+		<description>
+	Returns whether a string starts with another.
+		</description>
+	</function>
+	<function>
+		<name>endsWith</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	boolean endsWith(java.lang.String, java.lang.String)
+		</function-signature>
+		<description>
+	Returns whether a string starts with another.
+		</description>
+	</function>
+	<function>
+		<name>endsWith</name>
+		<function-class>org.zkoss.xel.fn.StringFns</function-class>
+		<function-signature>
+	java.lang.String substring(java.lang.String, int from, int to)
+		</function-signature>
+		<description>
+	Returns the substring.
+		</description>
+	</function>
+
+	<function>
+		<name>indexOf</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>
+	int indexOf(java.lang.Object, java.lang.Object)
+		</function-signature>
+		<description>
+	Returns the index of the given element.
+		</description>
+	</function>
+	<function>
+		<name>lastIndexOf</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>
+	int lastIndexOf(java.lang.Object, java.lang.Object)
+		</function-signature>
+		<description>
+	Returns the index of the given element.
+		</description>
+	</function>
 
 	<function>
 		<name>l</name>

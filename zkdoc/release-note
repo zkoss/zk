@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.7
 * Features
+  3202692: Support more EL utilties: toUpperCase, toLowerCase...
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
