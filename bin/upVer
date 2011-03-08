@@ -15,6 +15,7 @@
 #{{IS_RIGHT
 #}}IS_RIGHT
 #
+cd ..
 maindir="$(pwd)"
 cd $maindir
 echo "Working directory $maindir"
