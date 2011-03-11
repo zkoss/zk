@@ -229,7 +229,7 @@ function zkmprops(uuid, props) {
 			if (zk.loading)
 				return zk.afterLoad(mtBL0);
 
-			if (!jq.isReady && zk.ie && !zk.ie8) //3055849: ie6/ie7 has to wait until isReady
+			if (zk.ie && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
 				return jq(mtBL0);
 
 			var inf = _createInf1.shift();
