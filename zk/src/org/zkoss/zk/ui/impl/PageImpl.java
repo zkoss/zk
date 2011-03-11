@@ -853,7 +853,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _ns;
 	}
 	public void interpret(String zslang, String script, Scope scope) {
-		getInterpreter(zslang).interpret(script, scope);
+		if (script != null && script.length() > 0) //optimize for better performance
+			getInterpreter(zslang).interpret(script, scope);
 	}
 	/** @deprecated As of release 5.0.0, replaced with
 	 * {@link #interpret(String,String,Scope)}.
