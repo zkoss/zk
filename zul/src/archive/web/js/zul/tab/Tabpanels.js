@@ -16,16 +16,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 
 (function () {
-	function _syncSeletPanel (wgt) {
-		var tbx, sel, oldSel;
-		if ((tbx = wgt.getTabbox()) && (oldSel = tbx._selPnl) 
-			&& (sel = tbx._selTab) && (sel = sel.getLinkedPanel())
-			&& (oldSel != sel)) {
-			sel._sel(true, true);
-			oldSel._sel(false, true);
-			tbx._selPnl = sel;
+	function _syncSelectedPanels(panels) {
+		//Note: _selTab is in tabbox, while _selPnl is in tabpanels
+		var box;
+		if (panels.desktop && (box = panels.getTabbox())) {
+			var oldSel = panels._selPnl,
+				sel = box._selTab;
+			if (oldSel != (sel = sel.getLinkedPanel())) {
+				if (oldSel) oldSel._sel(false, true);
+				if (sel) sel._sel(true, true);
+				panels._selPnl = sel;
+			}
 		}
 	}
+
 /**
  * A collection of tab panels.
  *
@@ -128,11 +132,11 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers("onChildRemoved_", arguments);
-		_syncSeletPanel(this);
+		_syncSelectedPanels(this);
 	},
 	onChildAdded_: function (child) {
 		this.$supers("onChildAdded_", arguments);
-		_syncSeletPanel(this);
+		_syncSelectedPanels(this);
 	}
 });
 })();
