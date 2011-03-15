@@ -86,7 +86,7 @@ public class Themes {
 		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
 		// if path is empty, cookie path will be request path, which causes problems
-		if(cp.isEmpty())
+		if(cp.length() == 0)
 			cp = "/";
 		cookie.setPath(cp);
 		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
@@ -103,11 +103,11 @@ public class Themes {
 			return "";
 		for(int i=0; i < cookies.length; i++){
 			Cookie c = cookies[i];
-			if(!THEME_COOKIE_KEY.equals(c.getName())) 
-				continue;
-			String theme = c.getValue();
-			if(theme != null) 
-				return theme;
+			if(THEME_COOKIE_KEY.equals(c.getName())) {
+				String theme = c.getValue();
+				if(theme != null) 
+					return theme;
+			}
 		}
 		return "";
 	}
