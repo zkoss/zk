@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Enumeration;
+import java.util.Collections;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
@@ -56,8 +57,13 @@ import org.zkoss.xel.util.SimpleXelContext;
 public class LabelLoader {
 	private static final Log log = Log.lookup(LabelLoader.class);
 
-	/** A map of (Locale l, Map(String key, String label)). */
-	private final Map _labels = new HashMap(8);
+	/** A map of (Locale l, Map(String key, String label)).
+	 * We use two maps to speed up the access of labels.
+	 * _labels allows concurrent access without synchronization
+	 * _syncLabels requires synchronization and used for update
+	 */
+	private Map _labels = Collections.EMPTY_MAP;
+	private final Map _syncLabels = new HashMap(8);
 	/** A set of LabelLocator or LabelLocator2. */
 	private final Set _locators = new LinkedHashSet(4); //order is important
 	/** The XEL context. */
@@ -121,8 +127,9 @@ public class LabelLoader {
 	 * will cause re-loading the Locale-dependent labels.
 	 */
 	public void reset() {
-		synchronized (_labels) {
-			_labels.clear();
+		synchronized (_syncLabels) {
+			_syncLabels.clear();
+			_labels = Collections.EMPTY_MAP;
 		}
 	}
 
@@ -157,13 +164,19 @@ public class LabelLoader {
 	//-- private utilities --//
 	/** Returns Map(String key, String label) of the specified locale. */
 	private final Map getLabels(Locale locale) {
+		final Map map = (Map)_labels.get(locale);
+		if (map != null)
+			return map;
+		return getSyncLabels(locale);
+	}
+	private final Map getSyncLabels(Locale locale) {
 		WaitLock lock = null;
 		for (;;) {
 			final Object o;
-			synchronized (_labels) {	
-				o = _labels.get(locale);
+			synchronized (_syncLabels) {	
+				o = _syncLabels.get(locale);
 				if (o == null)
-					_labels.put(locale, lock = new WaitLock()); //lock it
+					_syncLabels.put(locale, lock = new WaitLock()); //lock it
 			}
 
 			if (o instanceof Map)
@@ -222,20 +235,34 @@ public class LabelLoader {
 			}
 
 			//add to map
-			synchronized (_labels) {
-				_labels.put(locale, labels);
+			synchronized (_syncLabels) {
+				_syncLabels.put(locale, labels);
+				cloneLables();
 			}
 
 			return labels;
 		} catch (Throwable ex) {
-			synchronized (_labels) {
-				_labels.remove(locale);
+			synchronized (_syncLabels) {
+				_syncLabels.remove(locale);
+				cloneLables();
 			}
 			throw SystemException.Aide.wrap(ex);
 		} finally {
 			lock.unlock(); //unlock (always unlock to avoid deadlock)
 		}
 	}
+	//Copy _syncLabels to _labels. It must be called in synchronized(_syncLabels)
+	private void cloneLables() {
+		final Map labels = new HashMap();
+		for (Iterator it = _syncLabels.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final Object value = me.getValue();
+			if (value instanceof Map)
+				labels.put(me.getKey(), value);
+		}
+		_labels = labels;
+	}
+
 	/** Loads all labels from the specified URL. */
 	private static final void load(Map labels, URL url, String charset)
 	throws IOException {

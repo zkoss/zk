@@ -2,6 +2,7 @@
 ZK 5.0.7
 * Features
   3202692: Support more EL utilties: toUpperCase, toLowerCase...
+  3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
