@@ -207,6 +207,7 @@ public class Listbox extends MeshElement implements Paginated,
 
 	private static final Log log = Log.lookup(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
+	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = "org.zkoss.zul.onPagingInitPosted";
 	private static final int INIT_LIMIT = 100;
 
 	private transient DataLoader _dataLoader;
@@ -1377,7 +1378,7 @@ public class Listbox extends MeshElement implements Paginated,
 						if (_rod) {
 							getDataLoader().syncModel(ofs, pgsz);
 						}
-						postOnInitRender();
+						postOnPagingInitRender();
 					}
 					invalidate();
 				}
@@ -2605,7 +2606,21 @@ public class Listbox extends MeshElement implements Paginated,
 	 */
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		doInitRenderer();
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
+	}
 
+	/**
+	 * Handles a private event, onPagingInitRender. It is used only for
+	 * implementation, and you rarely need to invoke it explicitly.
+	 */
+	public void onPagingInitRender() {
+		removeAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED);
+		doInitRenderer();
+	}
+	
+	private void doInitRenderer() {
+	
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
@@ -2625,7 +2640,7 @@ public class Listbox extends MeshElement implements Paginated,
 				if (ofs < 0)
 					ofs = 0;
 			}
-
+	
 			int j = 0;
 			int realOfs = ofs - getDataLoader().getOffset();
 			if (realOfs < 0)
@@ -2642,21 +2657,26 @@ public class Listbox extends MeshElement implements Paginated,
 				if (item instanceof Listgroup)
 					open = ((Listgroup) item).isOpen();
 			}
-
+	
 			getDataLoader().updateModelInfo();
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
 	}
-
 	private void postOnInitRender() {
 		// 20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
+		}
+	}
+	
+	private void postOnPagingInitRender() {
+		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null) {
+			setAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED, Boolean.TRUE);
+			Events.postEvent("onPagingInitRender", this, null);
 		}
 	}
 
