@@ -394,9 +394,6 @@ public class SimpleSession implements Session, SessionCtrl {
 		_cache = cache;
 	}
 	public void recover(Object nativeSession) {
-		if (_invalidated)
-			log.info("Recover an invalidated session, "+this);
-
 		_invalidated = _invalid = false;
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
