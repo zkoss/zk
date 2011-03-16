@@ -9,6 +9,7 @@ ZK 5.0.7
   3190987: Dyanmic tab,tabpanel are disorder
   3214829: c:l() causes ConcurrentModificationException if registered dynamically
   3203966: Flash.setSrc not working
+  3215556: Close miximal panel will cause js error with IE8
   
 * Upgrade Notes
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3215556.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 16 15:42:51 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+	       <ol>
+	       		<li>IE only</li>
+	      	 	<li>Click maximal icon of the panel.</li>
+				<li>Click close icon of the panel.</li>
+				<li>It shall not js error happen.</li>
+			</ol>
+	]]></html>
+	<portallayout maximizedMode="whole">
+		<portalchildren>
+			<panel maximizable="true" closable="true">
+				<caption>aaa</caption>
+				<panelchildren>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
