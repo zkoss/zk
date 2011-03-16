@@ -2607,7 +2607,6 @@ public class Listbox extends MeshElement implements Paginated,
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		doInitRenderer();
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
 	}
 
 	/**
@@ -2664,6 +2663,7 @@ public class Listbox extends MeshElement implements Paginated,
 		} finally {
 			renderer.doFinally();
 		}
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
 	}
 	private void postOnInitRender() {
 		// 20080724, Henri Chen: optimize to avoid postOnInitRender twice
