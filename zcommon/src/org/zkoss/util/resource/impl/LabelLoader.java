@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Enumeration;
 import java.net.URL;
@@ -55,9 +57,9 @@ public class LabelLoader {
 	private static final Log log = Log.lookup(LabelLoader.class);
 
 	/** A map of (Locale l, Map(String key, String label)). */
-	private final Map _labels = new HashMap(6);
-	/** A list of LabelLocator or LabelLocator2. */
-	private final List _locators = new LinkedList();
+	private final Map _labels = new HashMap(8);
+	/** A set of LabelLocator or LabelLocator2. */
+	private final Set _locators = new LinkedHashSet(4); //order is important
 	/** The XEL context. */
 	private XelContext _xelc;
 	private String _jarcharset, _warcharset;
@@ -109,13 +111,8 @@ public class LabelLoader {
 			throw new NullPointerException("locator");
 
 		synchronized (_locators) {
-			//no need to use hashset because # of locators are few
-			for (Iterator it = _locators.iterator(); it.hasNext();)
-				if (it.next().equals(locator)) {
-					log.warning("Ignored because of replication: "+locator);
-					return; //replicated
-				}
-			_locators.add(locator);
+			if (!_locators.add(locator))
+				log.warning("Replace the old one, because it is replicated: "+locator);
 		}
 
 		reset(); //Labels might be loaded before, so...
@@ -204,7 +201,11 @@ public class LabelLoader {
 			}
 
 			//2. load from extra resource
-			for (Iterator it = _locators.iterator(); it.hasNext();) {
+			final List locators;
+			synchronized (_locators) {
+				locators = new LinkedList(_locators);
+			}
+			for (Iterator it = locators.iterator(); it.hasNext();) {
 				Object o = it.next();
 				if (o instanceof LabelLocator) {
 					final URL url = ((LabelLocator)o).locate(locale);
