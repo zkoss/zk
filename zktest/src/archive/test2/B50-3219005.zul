@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3219005.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 17 18:24:21 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click the "delete item5" and the last one should be "item 11" not "item 12".(ZK CE and PE version only)
+<zscript>
+<![CDATA[
+import java.util.*;
+
+List datas = new ArrayList();
+for(int i=1;i<=15;i++){
+datas.add("item "+i);
+}
+ListModel model = new ListModelList(datas,true);
+]]>
+</zscript>
+<grid model="${model}" mold="paging" pageSize="10"/>
+<button label="delete item5">
+<attribute name="onClick">
+<![CDATA[
+Collection m = (Collection)model;
+m.remove(model.getElementAt(5));
+]]>
+</attribute>
+</button>
+</zk>
