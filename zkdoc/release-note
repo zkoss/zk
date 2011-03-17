@@ -13,6 +13,7 @@ ZK 5.0.7
   3201804: ZK CE only. Paging not working when Listbox selected
   3218078: Frozen fail after change paging size
   3196813: Give Spinner a Constraint will cause ZK client error
+  3214754: Problem of constraint
   
 * Upgrade Notes
 

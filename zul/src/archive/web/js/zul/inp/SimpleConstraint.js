@@ -55,7 +55,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						if (cc == '/') break; //ending / found
 						if (cc == '\\') ++k; //skip one
 					}
-					this._regex = new RegExp(k >= 0 ? cst.substring(j, k): cst.substring(j));
+					this._regex = new RegExp(k >= 0 ? cst.substring(j, k): cst.substring(j), 'g');
 					continue l_out;
 				}
 				if (cc == ':') {
@@ -154,8 +154,12 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			if (f.NO_EMPTY && (!val || !val.trim()))
 				return msg || msgzul.EMPTY_NOT_ALLOWED;
 			var regex = this._regex;
-			if (regex && !regex.test(val))
-				return msg || msgzul.ILLEGAL_VALUE;
+			if (regex) {
+				// Bug 3214754
+				var val2 = val.match(regex);
+				if (!val2 || val2.join('') != val)
+					return msg || msgzul.ILLEGAL_VALUE;
+			}
 			if (f.STRICT && val && wgt.validateStrict) {
 				msg = wgt.validateStrict(val);
 				if (msg) return msg;
