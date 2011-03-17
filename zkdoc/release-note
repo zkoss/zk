@@ -12,6 +12,7 @@ ZK 5.0.7
   3215556: Close miximal panel will cause js error with IE8
   3201804: ZK CE only. Paging not working when Listbox selected
   3218078: Frozen fail after change paging size
+  3196813: Give Spinner a Constraint will cause ZK client error
   
 * Upgrade Notes
 
