@@ -461,7 +461,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel, Framab
 			if (_fbar != null)
 				throw new UiException("Only one foot toolbar child is allowed: "+this);
 		} else {
-			throw new UiException("Uknown toolbar: "+name);
+			throw new UiException("Unknown toolbar: "+name);
 		}
 
 		if (super.insertBefore(toolbar, refChild)) {
