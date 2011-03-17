@@ -525,7 +525,13 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 			postOnPagingInitRender();
 		}
 		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
-		else if (_rows != null) _rows.invalidate();
+		else if (_rows != null) {
+			_rows.invalidate();
+			
+			// Bug 3218078
+			if (_frozen != null)
+				_frozen.invalidate();
+		}
 	}
 			};
 		pgi.addEventListener("onPagingImpl", _pgImpListener);

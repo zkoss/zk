@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3218078.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 17 11:06:36 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click the button of "Change pageSize", and then you should see the horizontal scrollbar inside the grid should be avalible as well.
+
+<button label="Change pageSize" onClick='d.height="100px"; grid.pageSize = 3;'/>
+<div id="d" style="overflow:auto;">
+<grid id="grid" mold="paging" pageSize="1">
+<frozen columns="1"/>
+<columns>
+<column label="Index" />
+<column label="Head 1" />
+<column label="Head 2" />
+<column label="Head 3"/>
+</columns>
+<rows>
+<row forEach="1,1,1">
+<label forEach="1,2,3,4" value="item ${each}"/>
+</row>
+</rows>
+</grid>
+</div>
+</zk>
