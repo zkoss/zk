@@ -368,7 +368,9 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		if (child.getParent() == this)
 			beforeRemove(child);
 		
-		int index = hasGroup() || hasModelButNotROD() ? ((Row)child).getIndex() : -1;
+		final boolean hasGroup = hasGroup();
+		final boolean hasModelButNotROD = hasModelButNotROD();
+		int index = hasGroup || hasModelButNotROD ? ((Row)child).getIndex() : -1;
 		if(super.removeChild(child)) {
 			if (child instanceof Group) {
 				int[] prev = null, remove = null;
@@ -393,7 +395,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 							removeChild((Component) getChildren().get(realIndex));
 					}
 				}
-			} else if (hasGroup()) {
+			} else if (hasGroup) {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]--;
@@ -407,7 +409,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 						g1[2] = -1;
 					}
 				}
-			} else if (hasModelButNotROD()) {
+			} else if (hasModelButNotROD) {
 				fixRowIndices(index, -1);
 			}
 			
