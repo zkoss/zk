@@ -243,8 +243,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (date) {
 		if (!this._changed && !date && arguments.length) return '';
 		var out = [];
-		for (var i = 0, j = this._fmthdler.length; i < j; i++)
-			out.push(this._fmthdler[i].format(date));
+		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++)
+			out.push(f[i].format(date));
 		return out.join('');
 	},
 	coerceFromString_: function (val) {
