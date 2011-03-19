@@ -256,16 +256,27 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		var date = zUtl.today(this._format),
 			hasAM, isAM, hasHour1,
-			fmt = [];
+			fmt = [], emptyCount = 0;
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
-		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
-			if (this._fmthdler[i].type == AM_PM_FIELD) {
+		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
+			if (f[i].type == AM_PM_FIELD) {
 				hasAM = true;
-				isAM = this._fmthdler[i].unformat(date, val);
-			} else if (this._fmthdler[i].type)
-				fmt.push(this._fmthdler[i]);
+				isAM = f[i].unformat(date, val);
+				if (!f[i].getText(val).trim().length)
+					emptyCount++;
+			} else if (f[i].type) {
+				fmt.push(f[i]);
+				if (!f[i].getText(val).trim().length)
+					emptyCount++;
+			}
+		}
+		
+		if (fmt.length == 
+			(hasAM ? --emptyCount: emptyCount)) {
+			this._changed = false;//for return empty string
+			return;
 		}
 
 		if (hasAM) {
@@ -279,12 +290,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		if (hasHour1) {
 			for (var i = 0, j = fmt.length; i < j; i++) {
-				if (fmt[i] != HOUR0_FIELD && fmt[i] != HOUR1_FIELD)
+				if (fmt[i].type != HOUR0_FIELD && fmt[i].type != HOUR1_FIELD)
 					date = fmt[i].unformat(date, val, isAM);
 			}
 		} else {
 			for (var i = 0, j = fmt.length; i < j; i++) {
-				if (fmt[i] != HOUR2_FIELD && fmt[i].type != HOUR3_FIELD)
+				if (fmt[i].type != HOUR2_FIELD && fmt[i].type != HOUR3_FIELD)
 					date = fmt[i].unformat(date, val);
 			}
 		}
@@ -914,7 +925,9 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		return zk.APM[h < 12 ? 0 : 1];
 	},
 	unformat: function (date, val) {
-		return zk.APM[0] == this.getText(val);
+		var text = this.getText(val).trim();
+		return (text.length && text.length == zk.APM[0].length) ? 
+			zk.APM[0] == text : true;
 	},
 	addTime: function (wgt, num) {
 		var inp = wgt.getInputNode(),
