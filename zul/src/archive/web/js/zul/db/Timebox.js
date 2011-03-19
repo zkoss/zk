@@ -926,7 +926,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 	},
 	unformat: function (date, val) {
 		var text = this.getText(val).trim();
-		return (text.length && text.length == zk.APM[0].length) ? 
+		return (text.length == zk.APM[0].length) ? 
 			zk.APM[0] == text : true;
 	},
 	addTime: function (wgt, num) {
