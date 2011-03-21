@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _checkFormat(fmt) {
 		var error, out = [];
-		for (var i = 0, j = fmt.length; i < j; i++) {
+		for (var i = 0, l = fmt.length; i < l; i++) {
 			var c = fmt.charAt(i);
 			switch (c) {
 			case 'K':
@@ -69,7 +69,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		HOUR3_FIELD = 7;
 	function _updFormat(wgt, fmt) {
 		var index = [];
-		for (var i = 0, j = fmt.length; i < j; i++) {
+		for (var i = 0, l = fmt.length; i < l; i++) {
 			var c = fmt.charAt(i);
 			switch (c) {
 			case 'a':
@@ -111,7 +111,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					start = i,
 					end = i;
 
-				while ((ary.push(c)) && ++end < j) {
+				while ((ary.push(c)) && ++end < l) {
 					c = fmt.charAt(end);
 					if (LEGAL_CHARS.indexOf(c) != -1) {
 						end--;
@@ -126,7 +126,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				i = end;
 			}
 		}
-		for (var shift, i = 0, j = index.length; i < j; i++) {
+		for (var shift, i = 0, l = index.length; i < l; i++) {
 			if (index[i].type == AM_PM_FIELD) {
 				shift = index[i].index[1] - index[i].index[0];
 				if (!shift) break; // no need to shift.
@@ -180,7 +180,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var f = wgt._fmthdler,
 			date = wgt.getValue(),
 			len = 0;
-		for (var i = 0, j = f.length; i < j; i++)
+		for (var i = 0, l = f.length; i < l; i++)
 			len += f[i].format(date).length;
 		return len;
 	}
@@ -243,7 +243,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function (date) {
 		if (!this._changed && !date && arguments.length) return '';
 		var out = [];
-		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++)
+		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++)
 			out.push(f[i].format(date));
 		return out.join('');
 	},
@@ -260,7 +260,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
-		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
+		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (f[i].type == AM_PM_FIELD) {
 				hasAM = true;
 				isAM = f[i].unformat(date, val);
@@ -280,7 +280,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		if (hasAM) {
-			for (var i = 0, j = fmt.length; i < j; i++) {
+			for (var i = 0, l = fmt.length; i < l; i++) {
 				if (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD) {
 					hasHour1 = true;
 					break;
@@ -289,12 +289,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		if (hasHour1) {
-			for (var i = 0, j = fmt.length; i < j; i++) {
+			for (var i = 0, l = fmt.length; i < l; i++) {
 				if (fmt[i].type != HOUR0_FIELD && fmt[i].type != HOUR1_FIELD)
 					date = fmt[i].unformat(date, val, isAM);
 			}
 		} else {
-			for (var i = 0, j = fmt.length; i < j; i++) {
+			for (var i = 0, l = fmt.length; i < l; i++) {
 				if (fmt[i].type != HOUR2_FIELD && fmt[i].type != HOUR3_FIELD)
 					date = fmt[i].unformat(date, val);
 			}
@@ -510,7 +510,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	getTimeHandler: function () {
 		var pos = zk(this.getInputNode()).getSelectionRange()[0];
-		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
+		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
 			if (f[i].index[0] <= pos && f[i].index[1] + 1 >= pos)
 				return f[i];
