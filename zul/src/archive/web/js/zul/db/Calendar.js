@@ -77,7 +77,7 @@ zul.db.Renderer = {
 		var d = new Date(y, m, v, 0, 0, 0, 0),
 			constraint;
 		
-		if ((constraint = cal._constraint)) {
+		if ((constraint = cal._constraint)&& typeof constraint == 'string') {
 			
 			// Bug ID: 3106676
 			if ((constraint.indexOf("no past") > -1 && (d - today) / 86400000 < 0) ||
