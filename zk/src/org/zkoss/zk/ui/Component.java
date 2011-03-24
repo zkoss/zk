@@ -892,7 +892,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public org.zkoss.zk.scripting.Namespace getNamespace();
 
-	/** Initializes the properties (aka. members) and custom-attributes
+	/** Initializes the properties (aka. members) 
 	 * based on what are defined in the component definition.
 	 *
 	 * <p>This method is invoked automatically if a component is created
@@ -902,9 +902,13 @@ w:use="foo.MyWindow"&gt;
 	 * <p>On the other hand, if it is created manually (by program),
 	 * developer might choose to invoke this method or not,
 	 * depending whether he wants to
-	 * initializes the component with the properties and custom-attributes
+	 * initializes the component with the properties
 	 * defined in the ZUML page ({@link org.zkoss.zk.ui.metainfo.PageDefinition})
 	 * and the language definition ({@link org.zkoss.zk.ui.metainfo.LanguageDefinition}).
+	 *
+	 * <p>Notice that, since 5.0.7, custom-attributes are applied automatically
+	 * in the constructor of {@link AbstractComponent}, so they are always
+	 * available no mather this method is called or not.
 	 */
 	public void applyProperties();
 

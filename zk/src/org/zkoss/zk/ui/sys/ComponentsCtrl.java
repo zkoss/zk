@@ -506,6 +506,8 @@ public class ComponentsCtrl {
 		}
 		public void applyProperties(Component comp) {
 		}
+		public void applyAttributes(Component comp) {
+		}
 		public Map evalProperties(Map propmap, Page owner, Component parent) {
 			return propmap != null ? propmap: new HashMap(3);
 		}

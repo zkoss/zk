@@ -160,6 +160,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace)
 			initAuxInfo().spaceInfo = new SpaceInfo();
 
+		_def.applyAttributes(this);
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
 	/** Constructs a stub component.
