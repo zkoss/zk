@@ -164,6 +164,7 @@ if="deploy.jboss.required">
 	
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
@@ -173,6 +174,7 @@ if="deploy.jboss.required">
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
 	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
