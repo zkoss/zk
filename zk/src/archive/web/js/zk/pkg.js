@@ -42,11 +42,8 @@ zk.copy(zk, (function() {
 
 		markLoading(pkg);
 
-		var modver = pkg.indexOf('.');
-		if (modver) modver = zk.getVersion(pkg.substring(0, modver));
-		if (!modver) modver = zk.build;
-
-		var e = document.createElement("script"),
+		var modver = zk.getVersion(pkg) || zk.build,
+			e = document.createElement("script"),
 			uri = pkg + ".wpd",
 			host = zk.getHost(pkg, true);
 		e.type = "text/javascript";
@@ -209,12 +206,14 @@ zk.load('zul.utl', function () {
 		return this;
 	},
 
-	/** Returns the version of the specified package.
+	/** Returns the version of the specified package, or null if not available.
 	 * @param String pkg the package name
 	 * @return String the version
 	 */
 	getVersion: function (pkg) {
-		return _pkgver[pkg];
+		for (var ver; pkg; pkg = pkg.substring(0, pkg.lastIndexOf('.')))
+			if (ver = _pkgver[pkg])
+				return ver;
 	},
 	/** Sets the version of the specified package.
 	 * @param String pkg the package name
