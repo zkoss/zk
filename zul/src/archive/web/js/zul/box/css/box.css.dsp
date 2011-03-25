@@ -73,6 +73,9 @@ tr.z-vbox-sep {
 .z-splitter-os-hor-ns,
 .z-splitter-os-hor-outer {
 	max-width: 8px; width: 8px;
+	<c:if test="${c:browser('ie8')}">
+		padding:0px;;
+	</c:if>
 }
 .z-splitter-ver {
 	background: transparent no-repeat top center;
