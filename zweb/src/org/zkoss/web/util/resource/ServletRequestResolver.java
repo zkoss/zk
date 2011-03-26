@@ -1,22 +1,17 @@
-/* ServletLabelResovler.java
+/* ServletRequestResolver.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Jun 12 13:58:56     2006, Created by tomyeh
-}}IS_NOTE
+		Sun Mar 27 01:58:07 TST 2011, Created by tomyeh
 
-Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-}}IS_RIGHT
 */
 package org.zkoss.web.util.resource;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
@@ -24,21 +19,21 @@ import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
 
 /**
- * @deprecated As of release 5.0.7, {@link org.zkoss.util.resource.Labels}
- * resolves the labels automatically.
+ * Used to resolve the variables defined in the request
+ * (such as DSP context and ZK's execution).
+ * It is designed to work {@link org.zkoss.util.resource.Labels},
+ * such that XEL expressions specified in labels could reference
+ * to the variables defined in the request.
  *
  * @author tomyeh
+ * @since 5.0.7
  */
-public class ServletLabelResovler implements VariableResolver {
-	public ServletLabelResovler() {
+public class ServletRequestResolver implements VariableResolver {
+	public ServletRequestResolver() {
 	}
 
 	//VariableResolver//
 	public Object resolveVariable(String name) throws XelException {
-		final Object o = Labels.getLabel(name);
-		if (o != null)
-			return o;
-
 		final RequestContext jc = RequestContexts.getCurrent();
 		if (jc != null) {
 			final VariableResolver parent = jc.getVariableResolver();

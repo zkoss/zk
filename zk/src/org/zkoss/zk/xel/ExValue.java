@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
- * A string value that might carries an expression.
+ * Used to represent a string value that might contain an expression.
  * It is serializable and the expression is parsed by demand.
  *
  * @author tomyeh

@@ -24,7 +24,7 @@ import javax.servlet.ServletContext;
 //import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.util.resource.ServletLabelLocator;
-import org.zkoss.web.util.resource.ServletLabelResovler;
+import org.zkoss.web.util.resource.ServletRequestResolver;
 
 /**
  * Used to hook a label locator to locate resources from the servlet context.
@@ -54,6 +54,6 @@ public class LabelLocatorHook implements ServletContextListener {
 		//if (log.debugable()) log.debug("Hook label locator for "+ctx);
 
 		Labels.register(new ServletLabelLocator(ctx));
-		Labels.setVariableResolver(new ServletLabelResovler());
+		Labels.setVariableResolver(new ServletRequestResolver());
 	}
 }

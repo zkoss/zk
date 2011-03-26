@@ -42,7 +42,7 @@ import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
-import org.zkoss.web.util.resource.ServletLabelResovler;
+import org.zkoss.web.util.resource.ServletRequestResolver;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.Execution;
@@ -167,7 +167,7 @@ public class WebManager {
 		}
 
 		Labels.register(new ServletLabelLocator(_ctx));
-		Labels.setVariableResolver(new ServletLabelResovler());
+		Labels.setVariableResolver(new ServletRequestResolver());
 
 		//create a WebApp instance
 		final Class cls = config.getWebAppClass();

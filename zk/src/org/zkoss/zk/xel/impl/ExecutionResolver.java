@@ -18,6 +18,7 @@ package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
@@ -100,6 +101,8 @@ public class ExecutionResolver implements VariableResolverX {
 			return _exec.getDesktop();
 		if ("execution".equals(name))
 			return _exec;
+		if ("labels".equals(name))
+			return Labels.getSegmentedLabels();
 		if ("pageScope".equals(name)) {
 			if (_self instanceof Component)
 				return ((Component)_self).getAttributes(Component.PAGE_SCOPE);
