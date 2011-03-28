@@ -376,7 +376,8 @@ public class LabelLoader {
 		private Expression _expr;
 		private String _val;
 		public ExValue(String val) {
-			if (val.indexOf("${") >= 0) {
+			int j;
+			if ((j = val.indexOf("${")) >= 0 && val.indexOf('}', j + 2) >= 0) {
 				try {
 					_expr = _expf.parseExpression(_xelc, val, String.class);
 					return;

@@ -108,7 +108,8 @@ public class Configuration {
 	/** List of objects. */
 	private final FastReadArray
 		_uriIntcps = new FastReadArray(URIInterceptor.class),
-		_reqIntcps = new FastReadArray(RequestInterceptor.class);
+		_reqIntcps = new FastReadArray(RequestInterceptor.class),
+		_labellocs = new FastReadArray(String.class);
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
@@ -921,6 +922,25 @@ public class Configuration {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+	}
+
+	/** Adds the location of a properties file for i18n labels.
+	 * <p>Default: none (/WEB-INF/i3-label.properties are assumed).
+	 * <p>Notice that this method has no effect after the web server has been
+	 * started. Thus, it is suggested to use the label-location element in zk.xml instead.
+	 * @since 5.0.7
+	 */
+	public void addLabelLocation(String location) {
+		if (location == null || location.length() == 0)
+			throw new IllegalArgumentException();
+		_labellocs.add(location);
+	}
+	/** Returns an array of the locations of properties files registered
+	 * by {@link #addLabelLocation}.
+	 * @since 5.0.7
+	 */
+	public String[] getLabelLocations() {
+		return (String[])_labellocs.toArray();
 	}
 
 	/** Returns the system-level composer or null if none is registered.

@@ -494,12 +494,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- Uncommet to control whether the label propeties files are located.
+	<!-- Uncommet to control where the label propeties file is located.
+		If you have multiple properties files, specify them one-by-one. 
 		Default: /WEB-INF/i3-label.properties
-	<library-property>
-		<name>org.zkoss.util.label.web.location</name>
-		<value>/WEB-INF/i3-label.properties</value>
-	</library-property>
+	<system-config>
+		<label-location>/WEB-INF/label/foo.properties</label-location>
+	</system-config>
 	-->
 	<!-- Uncommet to control the encoding of the labe properties files
 		Default: UTF-8

@@ -166,7 +166,12 @@ public class WebManager {
 			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s));
 		}
 
-		Labels.register(new ServletLabelLocator(_ctx));
+		String[] labellocs = config.getLabelLocations();
+		if (labellocs.length == 0)
+			Labels.register(new ServletLabelLocator(_ctx));
+		else
+			for (int j = 0; j < labellocs.length; ++j)
+				Labels.register(new ServletLabelLocator(_ctx, labellocs[j]));
 		Labels.setVariableResolver(new ServletRequestResolver());
 
 		//create a WebApp instance
