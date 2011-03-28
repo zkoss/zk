@@ -155,8 +155,8 @@ public class LabelLoader {
 	 */
 	public VariableResolver setVariableResolver(VariableResolver resolv) {
 		final Resolver resolver = (Resolver)_xelc.getVariableResolver();
-		final VariableResolver old = resolver.parent;
-		resolver.parent = resolv;
+		final VariableResolver old = resolver.custom;
+		resolver.custom = resolv;
 		return old;
 	}
 	/** Registers a locator which is used to load the Locale-dependent labels
@@ -392,10 +392,10 @@ public class LabelLoader {
 		}
 	}
 	private class Resolver implements VariableResolver {
-		private VariableResolver parent;
+		private VariableResolver custom;
 		public Object resolveVariable(String name) {
-			if (parent != null) {
-				final Object o = parent.resolveVariable(name);
+			if (custom != null) {
+				final Object o = custom.resolveVariable(name);
 				if (o != null)
 					return o;
 			}

@@ -101,8 +101,6 @@ public class ExecutionResolver implements VariableResolverX {
 			return _exec.getDesktop();
 		if ("execution".equals(name))
 			return _exec;
-		if ("labels".equals(name))
-			return Labels.getSegmentedLabels();
 		if ("pageScope".equals(name)) {
 			if (_self instanceof Component)
 				return ((Component)_self).getAttributes(Component.PAGE_SCOPE);
@@ -200,7 +198,15 @@ public class ExecutionResolver implements VariableResolverX {
 			}
 		}
 
-		return Evaluators.resolveVariable(_parent, name);
+		Object o = Evaluators.resolveVariable(_parent, name);
+		if (o != null)
+			return o;
+
+		//lower priority (i.e., user could override it)
+		//Reason: they were introduced later, and have to maintain backward comparibility
+		if ("labels".equals(name))
+			return Labels.getSegmentedLabels();
+		return null;
 	}
 	private static Page getPage(Component comp) {
 		Page page = comp.getPage();
