@@ -523,21 +523,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	appendAttr: function (nm, val, force)  {
 		return val || force ? ' ' + nm + '="' + val + '"': "";
-	},
-	/**
-	 * Converts ios tauch event to dom mouse event.
-	 * @param String type
-	 * @param int key code
-	 * @param Object changedTouch
-	 * @return boolean
-	 * @since 5.0.7
-	 */
-	simulatedMouseEvent: function (type, button, changedTouch){
-		var simulatedEvent = document.createEvent("MouseEvent");
-		simulatedEvent.initMouseEvent(type, true, true, window, button, 
-			changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
-			false, false, false, false, 0, null);
-		return changedTouch.target.dispatchEvent(simulatedEvent);					
 	}
 };
 })();

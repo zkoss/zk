@@ -689,42 +689,7 @@ jq(function() {
 		}
 		return !zk.ie || evt.returnValue;
 	});
-	if (zk.ios) {//double tap
-		var lastTap = null,		// Holds last tapped element (so we can compare for double tap)
-			tapValid = false,	// Are we still in the .6 second window where a double tap can occur
-			tapTimeout = null;	// The timeout reference
 
-		function cancelTap() {
-			tapValid = false;
-		}
-
-		jq(document).bind("touchstart", function(evt){
-			var touchEvt = evt.originalEvent;
-			if (touchEvt.touches.length > 1) return;
-				
-			var	changedTouch = touchEvt.changedTouches[0],
-				node = changedTouch.target;
-			
-			if (!tapValid) {
-				lastTap = node;
-				tapValid = true;
-				tapTimeout = setTimeout(cancelTap, 600);
-			} else {
-				clearTimeout(tapTimeout);
-				if (node == lastTap) {
-					lastTap = null;
-					tapValid = false;
-					
-					if (!zUtl.simulatedMouseEvent('dblclick', 0, changedTouch))
-						touchEvt.preventDefault();	
-				} else {
-					lastTap = node;
-					tapValid = true;
-					tapTimeout = setTimeout(cancelTap, 600);
-				}
-			}
-		});
-	}
 	jq(window).resize(function () {
 		if (zk.mounting || zk.skipResize)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
