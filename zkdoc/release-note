@@ -24,6 +24,7 @@ ZK 5.0.7
   3242925: Splitter become smaller after drag with IE8  
   3255116: Hflex with min and number, the hor. scrollbar is redundant
   3251279: zk.ajaxURI not respecting ignoreSession
+  3247017: SSL/IE6 iframe combination produces warnings
   
 * Upgrade Notes
 

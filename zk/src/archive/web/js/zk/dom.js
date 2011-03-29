@@ -213,7 +213,8 @@ zk.copy(zjq, {
 	_fixIframe: zk.$void,
 	_useQS: zk.$void, //overriden in domie67.js (used in zAU)
 
-	_src0: "" //an empty src; overriden in domie.js
+	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
+	src0: "" //an empty src; overriden in domie.js
 });
 
 /** @class jq
@@ -1211,7 +1212,7 @@ jq(el).zk.center(); //same as 'center'
 		for (var j = this.jq.length; j--;) {
 			var el = this.jq[j],
 				src = el.src;
-			el.src = zjq._src0;
+			el.src = zjq.src0;
 			el.src = src;
 		}
 		return this;
@@ -1746,7 +1747,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @return DOMElement
 	 */
 	newFrame: function (id, src, style) {
-		if (!src) src = zjq._src0;
+		if (!src) src = zjq.src0;
 			//IE: prevent secure/nonsecure warning with HTTPS
 
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
@@ -1779,7 +1780,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
-		ifr.src = zjq._src0;
+		ifr.src = zjq.src0;
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";
