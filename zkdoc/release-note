@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.7
 * Features
+  3256604: Support double click event with ipad
   3202692: Support more EL utilties: toUpperCase, toLowerCase...
   3243015: Easier way to access I18N labels in EL
   3252169: Easier way to specify multiple properties files for i18n labels
