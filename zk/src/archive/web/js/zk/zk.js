@@ -1087,12 +1087,13 @@ zk.log('value is", value);
 		var ctx = zk.Desktop.$(opts?opts.desktop:null),
 			au = opts && opts.au;
 		ctx = (ctx ? ctx: zk)[au ? 'updateURI': 'contextURI'];
-		if (!uri) return ctx;
+		uri = uri || '';
 
 		var abs = uri.charAt(0) == '/';
 		if (au && !abs) {
 			abs = true;
-			uri = '/' + uri; //non-au supports relative path
+			if (uri)
+				uri = '/' + uri; //non-au supports relative path
 		}
 
 		var j = ctx.lastIndexOf(';'), k = ctx.lastIndexOf('?');

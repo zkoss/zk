@@ -22,6 +22,7 @@ ZK 5.0.7
   3219005: Problem when remove data from model of grid(CE&PE only)
   3242925: Splitter become smaller after drag with IE8  
   3255116: Hflex with min and number, the hor. scrollbar is redundant
+  3251279: zk.ajaxURI not respecting ignoreSession
   
 * Upgrade Notes
 
