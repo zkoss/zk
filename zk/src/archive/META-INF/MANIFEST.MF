@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Specification-Title: Potix Direct RIA Framework
+Specification-Title: ZK Framework
 Specification-Version: 6.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zk
-Implementation-URL: http://www.zkoss.org/
+Implementation-URL: http://www.zkoss.org/prj/zk
 Implementation-Version: 6.0.0
 Implementation-Vendor: Potix Corporation

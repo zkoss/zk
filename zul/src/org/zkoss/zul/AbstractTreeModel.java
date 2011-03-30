@@ -117,7 +117,8 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, java.io.Seri
 	 * @deprecated As of release 5.0.6, it was replaced by {@link #getIndexOfChild}.
 	 * This method was implemented to provide backward compatibility.
 	 */
+	@SuppressWarnings("unchecked")
 	public int[] getPath(Object parent, Object lastNode){
-		return Tree.getPath(this, parent, lastNode);
+		return Tree.getPath((TreeModel)this, parent, lastNode);
 	}
 }

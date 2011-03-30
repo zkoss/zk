@@ -42,6 +42,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			n.style.width = db.getWidth() || '';
 		}
 	}
+	function _equalDate(d1, d2) {
+		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
+	}
 
 var Datebox =
 /**
@@ -535,7 +538,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
 	},
-	close: function (silent, forceUpdate) {
+	close: function (silent) {
 		var db = this.parent,
 			pp = db.$n("pp");
 
@@ -553,9 +556,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (btn)
 			jq(btn).removeClass(zcls + "-btn-over");
 
-		if (silent || forceUpdate)
+		if (silent)
 			db.updateChange_();
-		if (!silent)
+		else
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
@@ -654,12 +657,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		db.getInputNode().value = db.coerceToString_(date);
 
 		if (this._view == 'day' && evt.data.shallClose !== false) {
-			this.close(false, true);
+			this.close();
 			db._inplaceout = true;
 			
 			// Bug 3122159
 			evt.data.value = db._value = date;
-			this.parent.fire(evt.name, evt.data);
+			if(!_equalDate(date, oldDate))
+				db.fire(evt.name, evt.data);
 		}
 		evt.stop();
 	},

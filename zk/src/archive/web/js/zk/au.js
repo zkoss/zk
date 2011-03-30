@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		cmdsQue = [], //response commands in XML
 		ajaxReq, ajaxReqInf, pendingReqInf, ajaxReqTries,
 		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
-		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
+		seqId = (jq.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
@@ -30,7 +30,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!zAu.processing()) {
 			_detached = []; //clean up
 			zk.endProcessing();
-			zAu.doneTime = zUtl.now();
+			zAu.doneTime = jq.now();
 		}
 	}
 	function pushReqCmds(reqInf, req) {
@@ -255,7 +255,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			&& ajaxReqInf.ctlc == aureq.cmd)
 				return;
 
-			var t = zUtl.now();
+			var t = jq.now();
 			if (ctlUuid == aureq.uuid && ctlCmd == aureq.cmd //Bug 1797140
 			&& t - ctlTime < clkfd)
 				return; //to prevent key stroke are pressed twice (quickly)
@@ -283,7 +283,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		var setting = zAu.ajaxSettings,
 			req = setting.xhr(),
 			uri = zjq._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
-		zAu.sentTime = zUtl.now(); //used by server-push (cpsp)
+		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
 			req.onreadystatechange = onResponseReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);
@@ -380,7 +380,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function pfAddIds(dt, prop, pfIds) {
 		if (pfIds && (pfIds = pfIds.trim())) {
-			var s = pfIds + "=" + Math.round(zUtl.now());
+			var s = pfIds + "=" + Math.round(jq.now());
 			if (dt[prop]) dt[prop] += ',' + s;
 			else dt[prop] = s;
 		}
@@ -886,7 +886,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	_pfsend: function (dt, req, completeOnly) {
 		if (!completeOnly)
 			req.setRequestHeader("ZK-Client-Start",
-				dt.id + "-" + pfIndex++ + "=" + Math.round(zUtl.now()));
+				dt.id + "-" + pfIndex++ + "=" + Math.round(jq.now()));
 
 		var ids;
 		if (ids = dt._pfRecvIds) {

@@ -3,6 +3,6 @@ Specification-Title: ZK XHTML Components
 Specification-Version: 6.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zhtml
-Implementation-URL: http://www.zkoss.org/zhtml
+Implementation-URL: http://www.zkoss.org/prj/zhtml
 Implementation-Version: 6.0.0
 Implementation-Vendor: Potix Corporation

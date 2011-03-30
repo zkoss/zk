@@ -469,6 +469,8 @@ public class ComponentsCtrl {
 		}
 		public void applyProperties(Component comp) {
 		}
+		public void applyAttributes(Component comp) {
+		}
 		public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent) {
 			return propmap != null ? propmap: new HashMap<String, Object>(2);
 		}

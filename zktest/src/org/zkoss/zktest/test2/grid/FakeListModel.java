@@ -42,7 +42,6 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 
 	// ListModelExt
 	public void sort(Comparator cmpr, boolean asc) {
-//		System.out.println("==================SORT DATA================");
 		_asc = asc;
 		invalidate();
 	}

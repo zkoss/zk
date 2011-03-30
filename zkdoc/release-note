@@ -36,7 +36,38 @@ ZK 6.0.0
   + The id-to-uuid-prefix configuration is removed
 
 	--------
+ZK 5.0.7
+* Features
+  3256604: Support double click event with ipad
+  3202692: Support more EL utilties: toUpperCase, toLowerCase...
+  3243015: Easier way to access I18N labels in EL
+  3252169: Easier way to specify multiple properties files for i18n labels
+  3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
+  3226332: Timebox supports selection all and delete
+  3163700: Client: zk.getVersion() shall handle sub-packages
+  3239819: AbstractComponent shall apply custom attr defined in lang.xml
+
+* Bugs
+  3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
+  3190987: Dyanmic tab,tabpanel are disorder
+  3214829: c:l() causes ConcurrentModificationException if registered dynamically
+  3203966: Flash.setSrc not working
+  3215556: Close miximal panel will cause js error with IE8
+  3201804: ZK CE only. Paging not working when Listbox selected
+  3218078: Frozen fail after change paging size
+  3196813: Give Spinner a Constraint will cause ZK client error
+  3214754: Problem of constraint
+  3219005: Problem when remove data from model of grid(CE&PE only)
+  3242925: Splitter become smaller after drag with IE8  
+  3255116: Hflex with min and number, the hor. scrollbar is redundant
+  3251279: zk.ajaxURI not respecting ignoreSession
+  3247017: SSL/IE6 iframe combination produces warnings
+  
+* Upgrade Notes
+
+	--------
 ZK 5.0.6
+February 24, 2011
 * Features
   3143403: A way to customize the effect of showing/hiding a widget
   3175503: A way to specify the application's name in zk.xml
@@ -169,6 +200,9 @@ ZK 5.0.6
   3187231: include is not work when using  '~.' & defer without params
   3184369: Hflex doesn't work with native html table on IE 8
   1968615: Data binding problem in listfooter inside a nested listbox
+  3189142: Combobox popup width is wrong. IE7 only
+  3189758: Date constraint parsing gives wrong result with end of today  
+  3190542: ClassCastException in un-maximize of panel
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

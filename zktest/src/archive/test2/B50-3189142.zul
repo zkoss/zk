@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3189142.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 22 22:06:34     2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk> 
+Please type a word into the textbox, you shouldn't see the width of the popup is wrong. (IE7 only)
+<combobox autodrop="true" onOpen=""> 
+<comboitem label="1"/> 
+<comboitem label="2"/> 
+<comboitem label="3"/> 
+</combobox> 
+</zk>

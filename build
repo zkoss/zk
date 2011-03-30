@@ -485,7 +485,7 @@ if [ "$javadocAll" = "true" ] ; then
 	touch javadoctmp/tmp
 	for target in $targetList ; do
 		echo "copy $target"
-		if [ "$target" != "zkdemo" ] ; then
+		if [ "$target" != "zksandbox" ] && [ "$target" != "zktest" ] ; then
 			if [ -d $target/src/org ] ; then
 				cp -rp $target/src/org* javadoctmp/src
 			fi

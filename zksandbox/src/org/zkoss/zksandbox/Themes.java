@@ -85,6 +85,9 @@ public class Themes {
 		Cookie cookie = new Cookie(THEME_COOKIE_KEY, theme);
 		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
+		// if path is empty, cookie path will be request path, which causes problems
+		if(cp.length() == 0)
+			cp = "/";
 		cookie.setPath(cp);
 		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
 	}
@@ -94,26 +97,21 @@ public class Themes {
 	 * @return the name of the theme or "" for default theme.
 	 */
 	public static String getThemeStyle (Execution exe) {
-		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
-		if(cookies==null) return "";
-		String candidate = null;
+		Cookie[] cookies = 
+			((HttpServletRequest)exe.getNativeRequest()).getCookies();
+		if(cookies == null) 
+			return "";
 		for(int i=0; i < cookies.length; i++){
 			Cookie c = cookies[i];
-			if(!THEME_COOKIE_KEY.equals(c.getName())) 
-				continue;
-			String theme = c.getValue();
-			if(theme == null) 
-				continue;
-			String path = c.getPath();
-			if(path != null && path.equals(exe.getContextPath()))
-				return theme;
-			// if no match on path, the first cookie of the same domain is used
-			if(candidate == null)
-				candidate = theme; 
+			if(THEME_COOKIE_KEY.equals(c.getName())) {
+				String theme = c.getValue();
+				if(theme != null) 
+					return theme;
+			}
 		}
-		return candidate == null? "" : candidate;
+		return "";
 	}
-
+	
 	/**
 	 * Returns whether has breeze library or not
 	 * @return boolean
@@ -134,7 +132,8 @@ public class Themes {
 	 * Return true if current theme is Breeze
 	 */
 	public static boolean isBreeze(Execution exe){
-		return BREEZE_THEME.equals(getThemeStyle(exe));
+		String themekey = getThemeStyle(exe);
+		return BREEZE_THEME.equals(themekey) || themekey.length() == 0;
 	}
 	
 	/**

@@ -1714,7 +1714,7 @@ public class Tree extends MeshElement implements Paginated {
 	public Treeitem renderItemByNode(Object node) {
 		return renderItemByPath(getPath(_model, _model.getRoot(), node));
 	}
-	/*package*/ static int[] getPath(TreeModel<Object> model, Object parent, Object lastNode){
+	/*package*/ static <Node> int[] getPath(TreeModel<Node> model, Node parent, Node lastNode){
 		final List<Integer> l = new LinkedList<Integer>();
 		dfSearch(model, l, parent, lastNode);
 
@@ -1724,8 +1724,8 @@ public class Tree extends MeshElement implements Paginated {
 			path[i] = objs[i].intValue();
 		return path;
 	}
-	private static
-	boolean dfSearch(TreeModel<Object> model, List<Integer> path, Object node, Object target){
+	private static <Node>
+	boolean dfSearch(TreeModel<Node> model, List<Integer> path, Node node, Node target){
 		if (node.equals(target))
 			return true;
 		if (model.isLeaf(node))

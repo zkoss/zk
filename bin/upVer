@@ -1,0 +1,89 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Tue Mar 3 11:11:09     2011, Created by Jimmy
+#}}IS_NOTE
+#
+#Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+maindir="${maindir%/cmldoc}"
+cd $maindir
+echo "Working directory $maindir"
+stamp=$(date +%Y%m%d)
+oldVersion=$1
+newVersion=$2
+
+if [ "$oldVersion" == "" ] || [ "$newVersion" == "" ] ; then
+	echo "Usage: upVer [ oldVersion ] [ newVersion ]"
+	exit 1
+fi
+
+function upVer {
+	if [ "$2" == "-FL" ] ; then
+		sed -e "s/$oldVersion-FL/$oldVersion/g" $maindir/$1 > $maindir/tmp
+		mv -f $maindir/tmp $maindir/$1
+		sed -e "s/$oldVersion/$newVersion$2/g" $maindir/$1 > $maindir/tmp
+		mv -f $maindir/tmp $maindir/$1
+		sed -e "s/UID = \"$newVersion-FL\"/UID = \"$newVersion\"/g" $maindir/$1 > $maindir/tmp
+	elif  [ "$2" == ".FL.$stamp" ] ; then
+		sed -e "1,/version>.*<\/version/s/version>.*<\/version/version>$newVersion$2<\/version/g" $maindir/$1 > $maindir/tmp
+	else
+		sed -e "s/$oldVersion/$newVersion$2/g" $maindir/$1 > $maindir/tmp
+	fi
+	mv -f $maindir/tmp $maindir/$1
+}
+upVer build.setting "-FL"
+upVer zk/src/org/zkoss/zk/Version.java "-FL"
+upVer zk/version
+upVer zksandbox/pom.xml ".FL.$stamp"
+upVer zksandbox/src/archive/META-INF/MANIFEST.MF
+upVer zksandbox/version
+upVer zksandboxs/src/archive/META-INF/MANIFEST.MF
+upVer zksandboxs/version
+upVer zktest/pom.xml ".FL.$stamp"
+upVer zktest/src/archive/META-INF/MANIFEST.MF
+upVer zktest/version
+upVer zkplus/pom.xml ".FL.$stamp"
+upVer zkplus/src/archive/META-INF/MANIFEST.MF
+upVer zkplus/src/archive/metainfo/zk/lang-addon.xml
+upVer zkplus/src/org/zkoss/zkplus/Version.java
+upVer zkplus/version
+upVer zul/pom.xml ".FL.$stamp"
+upVer zul/src/archive/META-INF/MANIFEST.MF
+upVer zul/src/archive/metainfo/zk/lang.xml
+upVer zul/src/org/zkoss/zul/Version.java
+upVer zul/version
+upVer zweb/pom.xml ".FL.$stamp"
+upVer zweb/src/archive/META-INF/MANIFEST.MF
+upVer zweb/src/archive/metainfo/tld/config.xml
+upVer zweb/src/org/zkoss/web/Version.java
+upVer zweb/version
+upVer zkex/pom.xml ".FL.$stamp"
+upVer zkex/src/archive/META-INF/MANIFEST.MF
+upVer zkex/src/archive/metainfo/zk/config.xml
+upVer zkex/src/archive/metainfo/zk/lang-addon.xml
+upVer zkex/src/org/zkoss/zkex/Version.java
+upVer zkex/version
+upVer zkmax/pom.xml ".FL.$stamp"
+upVer zkmax/src/archive/META-INF/MANIFEST.MF
+upVer zkmax/src/archive/metainfo/xel/config.xml
+upVer zkmax/src/archive/metainfo/zk/config.xml
+upVer zkmax/src/archive/metainfo/zk/lang-addon.xml
+upVer zkmax/src/org/zkoss/zkmax/Version.java
+upVer zkmax/version
+upVer zml/pom.xml ".FL.$stamp"
+upVer zml/src/archive/META-INF/MANIFEST.MF
+upVer zml/src/archive/metainfo/zk/config.xml
+upVer zml/src/archive/metainfo/zk/lang.xml
+upVer zml/src/org/zkoss/zml/Version.java
+upVer zml/version 

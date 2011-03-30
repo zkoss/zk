@@ -66,7 +66,7 @@ zk.override(zjq, _zjq, {
 	}
 });
 zk.copy(zjq, {
-	_src0: "javascript:false;",
+	src0: "javascript:false;",
 		//IE: prevent secure/nonsecure warning with HTTPS
 
 	_fixIframe: function (el) { //used in widget.js (Bug 2900274)

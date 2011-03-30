@@ -50,7 +50,7 @@ public interface TreeNode<E> {
 	 * Return children of the receiver
 	 * @return children of the receiver
 	 */
-	public List getChildren();
+	public List<? extends TreeNode<E>> getChildren();
 	
 	/**
 	 * Returns the child <code>TreeNode</code> at index 

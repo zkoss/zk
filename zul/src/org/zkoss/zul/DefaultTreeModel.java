@@ -38,7 +38,7 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements TreeModelExt, java.io.Serializable {
+implements TreeModelExt<TreeNode<E>>, java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
 
@@ -78,22 +78,22 @@ implements TreeModelExt, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	public void sort(Comparator cmpr, final boolean ascending) {
-		TreeNode root = (TreeNode) getRoot();
+	public void sort(Comparator<TreeNode<E>> cmpr, final boolean ascending) {
+		TreeNode<E> root = getRoot();
 		if (root != null) {
 			sort0(root, cmpr);
 			fireStructureChangedEvent(root);
 		}
 	}
 	
-	private void sort0(TreeNode node, Comparator cmpr) {
+	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
 		if (node.getChildren() == null) return;
 		Collections.sort(node.getChildren(), cmpr);
-		for (Iterator it = node.getChildren().iterator(); it.hasNext();)
-			sort0((TreeNode) it.next(), cmpr);
+		for (TreeNode<E> child: node.getChildren())
+			sort0(child, cmpr);
 	}
 	
-	private void fireStructureChangedEvent(TreeNode node) {
+	private void fireStructureChangedEvent(TreeNode<E> node) {
 		if (node.getChildCount() == 0) return;
 		fireEvent(node,  0, 0,TreeDataEvent.STRUCTURE_CHANGED);
 	}

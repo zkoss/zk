@@ -24,7 +24,7 @@ import java.util.Comparator;
  * @since 5.0.6
  * @author jimmy
  */
-public interface TreeModelExt {
+public interface TreeModelExt<Node> {
 	/** It called when {@link TreeModel} or {@link Tree} has to sort
 	 * the content.
 	 *
@@ -53,5 +53,5 @@ public interface TreeModelExt {
 	 * provide additional information. To sort the data correctly, you could
 	 * count on the cmpr parameter only.
 	 */
-	public void sort(Comparator cmpr, boolean ascending);
+	public void sort(Comparator<Node> cmpr, boolean ascending);
 }

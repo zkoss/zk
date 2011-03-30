@@ -402,17 +402,20 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public void applyProperties(Component comp) {
 		//Note: it doesn't apply annotations since it is done
-		//by AbstractComponent's initial with getAnnotationMap()
+		//by AbstractComponent's constructor
+		//AbstractComponent's constructor also invokes applyAttributes automatically
 
+		if (_props != null) {
+			for (Property prop: _props) {
+				prop.assign(comp);
+			}
+		}
+	}
+	public void applyAttributes(Component comp) {
 		if (_custAttrs != null) {
 			for (Map.Entry<String, ExValue> me: _custAttrs.entrySet()) {
 				comp.setAttribute(me.getKey(),
 					me.getValue().getValue(_evalr, comp));
-			}
-		}
-		if (_props != null) {
-			for (Property prop: _props) {
-				prop.assign(comp);
 			}
 		}
 	}

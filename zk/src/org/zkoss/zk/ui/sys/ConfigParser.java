@@ -579,6 +579,10 @@ public class ConfigParser {
 		s = el.getElementValue("crawlable", true);
 		if (s != null) config.setCrawlable(!"false".equals(s));
 
+		s = el.getElementValue("label-location", true);
+		if (s != null && s.length() != 0)
+			config.addLabelLocation(s);
+
 		Class cls = parseClass(el, "upload-charset-finder-class",
 			CharsetFinder.class);
 		if (cls != null)

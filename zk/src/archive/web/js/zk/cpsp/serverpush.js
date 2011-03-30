@@ -35,7 +35,7 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 					min = this.min;
 				if (delay > max) delay = max;
 				else if (isNaN(delay) || delay < min) delay = min;
-				doNow = zUtl.now() > zAu.doneTime + delay;
+				doNow = jq.now() > zAu.doneTime + delay;
 			}
 
 			if (doNow)

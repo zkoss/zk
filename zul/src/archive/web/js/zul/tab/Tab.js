@@ -134,8 +134,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (tab.isSelected() == toSel && notify)
 			return;
 
-		if (toSel)
+		if (toSel) {
 			tabbox._selTab = tab; //avoid loopback
+			var ps;
+			if (ps = tabbox.tabpanels)
+				ps._selPnl = panel; //stored in tabpanels
+		}
 		tab._selected = toSel;
 		
 		if (!bound) return;

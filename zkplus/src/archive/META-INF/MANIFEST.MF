@@ -3,6 +3,6 @@ Specification-Title: The ZK Plus Utilities
 Specification-Version: 6.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zkplus
-Implementation-URL: http://www.zkoss.org/
+Implementation-URL: http://www.zkoss.org/prj/zkplus
 Implementation-Version: 6.0.0
 Implementation-Vendor: Potix Corporation

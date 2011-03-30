@@ -5850,7 +5850,7 @@ jQuery.extend({
 		}
 	},
 
-	ajax: function( origSettings ) {
+	ajax: function( origSettings, isUnload/*Potix fixed IE memory issue*/ ) {
 		var s = jQuery.extend(true, {}, jQuery.ajaxSettings, origSettings),
 			jsonp, status, data, type = s.type.toUpperCase(), noContent = rnoContent.test(type);
 
@@ -6048,7 +6048,7 @@ jQuery.extend({
 		}
 
 		// Wait for a response to come back
-		var onreadystatechange = xhr.onreadystatechange = function( isTimeout ) {
+		var onreadystatechange = /**Potix fixed IE issue: xhr.onreadystatechange = */function( isTimeout ) {
 			// The request was aborted
 			if ( !xhr || xhr.readyState === 0 || isTimeout === "abort" ) {
 				// Opera doesn't call onreadystatechange before this point
@@ -6113,6 +6113,10 @@ jQuery.extend({
 				}
 			}
 		};
+		
+		// Potix fixed IE memroy issue
+		if (!isUnload)
+			xhr.onreadystatechange = onreadystatechange;
 
 		// Override the abort handler, if we can (IE 6 doesn't allow it, but that's OK)
 		// Opera doesn't fire onreadystatechange at all on abort

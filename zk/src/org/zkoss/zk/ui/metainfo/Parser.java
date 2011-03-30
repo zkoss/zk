@@ -570,7 +570,7 @@ public class Parser {
 			throw new UiException("Method not found: "+sig+" in "+clsnm+", "+pi.getLocator());
 		}
 		if ((mtd.getModifiers() & Modifier.STATIC) == 0)
-			throw new UiException("Not a static method: "+mtd);
+			throw new UiException("Not a static method: "+mtd+", "+pi.getLocator());
 
 		pgdef.addXelMethod(prefix, nm, new MethodFunction(mtd));
 	}

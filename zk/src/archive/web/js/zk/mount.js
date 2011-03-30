@@ -97,7 +97,8 @@ function zkmprops(uuid, props) {
 		_createInf1 = [], //create info
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
-		_paci = {s: 0, e: -1, f0: [], f1: []}; //for handling page's AU responses
+		_paci = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
+		_t0 = jq.now();
 
 	//Issue of handling page's AU responses
 	//1. page's AU must be processed after all zkx(), while they might be added
@@ -228,7 +229,7 @@ function zkmprops(uuid, props) {
 			if (zk.loading)
 				return zk.afterLoad(mtBL0);
 
-			if (!jq.isReady && zk.ie && !zk.ie8) //3055849: ie6/ie7 has to wait until isReady
+			if (zk.ie && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
 				return jq(mtBL0);
 
 			var inf = _createInf1.shift();
@@ -359,9 +360,9 @@ function zkmprops(uuid, props) {
 
 	/* run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
-		var t = zUtl.now(), dt = t - zk._t1;
+		var t = jq.now(), dt = t - _t0;
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
-			zk._t1 = t;
+			_t0 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
 				//IE optimize the display if delay is too short
@@ -427,7 +428,7 @@ function zkmprops(uuid, props) {
 	//widget creation called by au.js
 	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
-		zk._t1 = zUtl.now(); //so run() won't do unncessary delay
+		_t0 = jq.now(); //so run() won't do unncessary delay
 		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
 		zkx.apply(this, args); //args[2] (aucmds) must be null
 	},
@@ -450,7 +451,7 @@ function zkmprops(uuid, props) {
 	//begin of mounting
 	zkmb: function (bindOnly) {
 		_mntctx.bindOnly = bindOnly;
-		var t = 390 - (zUtl.now() - zk._t1); //zk._t1 defined in util.js
+		var t = 390 - (jq.now() - _t0);
 		zk.startProcessing(t > 0 ? t: 0);
 	},
 	//end of mounting
@@ -467,7 +468,6 @@ jq(function() {
 	var Widget = zk.Widget,
 		_bfUploads = [],
 		_reszInf = {},
-		_oldBfUnload,
 		_subevts = { //additonal invocation
 			onClick: 'doSelect_',
 			onRightClick: 'doSelect_',
@@ -542,7 +542,7 @@ jq(function() {
 	function _docResize() {
 		if (!_reszInf.time) return; //already handled
 
-		var now = zUtl.now();
+		var now = jq.now();
 		if (zk.mounting || zk.loading || now < _reszInf.time || zk.animating()) {
 			setTimeout(_docResize, 10);
 			return;
@@ -558,7 +558,7 @@ jq(function() {
 		try {
 			zWatch.fire('beforeSize'); //notify all
 			zWatch.fire('onSize'); //notify all
-			_reszInf.lastTime = zUtl.now() + 8;
+			_reszInf.lastTime = jq.now() + 8;
 		} finally {
 			_reszInf.inResize = false;
 		}
@@ -703,7 +703,7 @@ jq(function() {
 	//2. IE keeps sending onresize when dragging the browser's border,
 	//so we have to filter (most of) them out
 
-		var now = zUtl.now();
+		var now = jq.now();
 		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
@@ -734,14 +734,14 @@ jq(function() {
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 						}
-					}, zAu.ajaxSettings));
+					}, zAu.ajaxSettings), true/**fixed IE memory issue for jQuery 1.4.x*/);
 				}
 			} catch (e) { //silent
 			}
 		}
 	});
 
-	_oldBfUnload = window.onbeforeunload;
+	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function () {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose)

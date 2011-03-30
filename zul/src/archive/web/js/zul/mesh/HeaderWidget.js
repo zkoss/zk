@@ -83,22 +83,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		} else
 			return this.$supers('setFlexSize_', arguments);
 	},
-	getParentSize_: function (p) {
-		var wgt = this.getMeshWidget();
-		if (zk(wgt.ehead).isVisible()) {
-			//bug# 3033010
-			//ie's header width shrink, so must get the one from hdfaker
-			var sz = this.$supers('getParentSize_', arguments);
-			if (zk.ie) {
-				var hdfaker = wgt.ehdfaker;
-				sz.width = zk(hdfaker).revisedWidth(hdfaker.offsetWidth);
-			}
-			return sz;
-		} else {
-			var xp = wgt.$n();
-			return {height: 0, width: zk(xp).revisedWidth(xp.offsetWidth)};
-		}
-	},
 	domStyle_: function (no) {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
@@ -277,9 +261,36 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	//@Override to get width/height of MeshWidget 
 	getParentSize_: function() {
 		//to be overridden
-		var p = this.getMeshWidget().$n(),
+		var mw = this.getMeshWidget(),
+			p = mw.$n(),
 			zkp = p ? zk(p) : null;
-		return zkp ? {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)} : {};
+		if (zkp) {
+			var w = zkp.revisedWidth(p.offsetWidth);
+			// Bug #3255116
+			if (mw.ebody) {
+				var scroll = mw.ebody.offsetWidth - mw.ebody.clientWidth;
+				if (scroll > 11) {
+					w -= scroll;
+					
+					// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
+					if (zk.ie) {
+						var hdflex = jq(mw.ehead).find('table>tbody>tr>th:last-child')[0];
+						hdflex.style.width = '';
+						if (mw.ebodytbl)
+							mw.ebodytbl.width = "";
+					}
+				} else if (zk.ie && mw.ebodytbl) {
+					// reset the width for IE
+					if (mw.ebodytbl && !mw.ebodytbl.width)
+						mw.ebodytbl.width = "100%";
+				}
+			}
+			return {
+				height: zkp.revisedHeight(p.offsetHeight),
+				width: w
+			}
+		}
+		return {};
 	},
 	isWatchable_: function (name) {//Bug 3164504: Hflex will not recalculate when the colum without label
 		var n,

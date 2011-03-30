@@ -268,14 +268,25 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param value the value. It might contain expressions (${}).
 	 */
 	public void addProperty(String name, String value);
-	/** Applies the properties and custom attributes defined in
+	/** Applies the properties defined in
 	 * this definition to the specified component.
 	 *
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
-	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
+	 * <p>Also notice that, since 5.0.7, custom-attributes are applied automatically
+	 * in the constructor of {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}
+	 * (by invoking {@link applyAttributes},
+	 * so they are always available no mather this method is called or not.
 	 */
 	public void applyProperties(Component comp);
+	/** Applies the custom attributes defined in this definition
+	 * to the specified component.
+	 * <p>It is called automatically in 
+	 * {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}, so
+	 * you rarely need to invoke this method.
+	 * @since 5.0.7
+	 */
+	public void applyAttributes(Component comp);
 	/** Evaluates and retrieves properties to the specified map.
 	 *
 	 * @param propmap the map to store the retrieved properties.

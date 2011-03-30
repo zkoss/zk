@@ -792,7 +792,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static Boolean _ie7compat;
 
 	public void interpret(String zslang, String script, Scope scope) {
-		getInterpreter(zslang).interpret(script, scope);
+		if (script != null && script.length() > 0) //optimize for better performance
+			getInterpreter(zslang).interpret(script, scope);
 	}
 
 	public Interpreter getInterpreter(String zslang) {

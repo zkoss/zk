@@ -44,7 +44,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		 */
 		src: function (v) {
 			var n = this._embedNode();
-			if (n) n.movie = v || '';
+			if (n) n.movie = n.src = v || '';
 		},
 		/** Returns the Window mode property of the Flash movie 
 		 * <p>Default: "transparent".

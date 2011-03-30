@@ -87,12 +87,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		return this.$supers('getValue', arguments);
 	},
 	setConstraint: function (constr){
-		if(constr != null){
+		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleSpinnerConstraint(constr);
 			this._min = constraint._min;
 			this._max = constraint._max;
 			this.$supers('setConstraint', [constraint]);
-		}else
+		} else
 			this.$supers('setConstraint', arguments);
 	},
 	coerceFromString_: function (value) {//copy from intbox

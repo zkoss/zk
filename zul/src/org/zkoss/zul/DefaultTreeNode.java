@@ -33,7 +33,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	private DefaultTreeModel<E> _model;
 	private DefaultTreeNode<E> _parent;
 	/** List<DefaultTreeNode> */
-	private ArrayList<DefaultTreeNode<E>> _children;
+	private List<DefaultTreeNode<E>> _children;
 	private E _data;
 	private final boolean _leaf;
 	/** Whether to treat null as the maximum value. */
@@ -122,7 +122,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	}
 	
 	//@Override
-	public List getChildren(){
+	public List<? extends TreeNode<E>> getChildren(){
 		return _children;
 	}
 

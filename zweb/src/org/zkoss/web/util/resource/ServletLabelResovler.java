@@ -24,7 +24,8 @@ import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
 
 /**
- * Used with {@link Labels} to resolve XEL expressions in labels.
+ * @deprecated As of release 5.0.7, {@link org.zkoss.util.resource.Labels}
+ * resolves the labels automatically.
  *
  * @author tomyeh
  */

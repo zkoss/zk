@@ -16,6 +16,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
+import java.util.Map;
+
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.impl.LabelLoader;
 import org.zkoss.text.MessageFormats;
@@ -36,6 +38,7 @@ public class Labels {
 	 * on the current Locale, or null if no found.
 	 *
 	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 * @see #getSegmentedLabels
 	 */
 	public static final String getLabel(String key) {
 		return _loader.getLabel(key);
@@ -79,6 +82,29 @@ public class Labels {
 	public static final String getLabel(String key, String defValue, Object[] args) {
 		final String s = getLabel(key, defValue);
 		return s != null ? MessageFormats.format(s, args, null): null;
+	}
+
+	/** Returns the label or a map of labels associated with the key.
+	 * Unlike {@link #getLabel}, if a key of the label contains dot, it will
+	 * be splitted into multiple keys and then grouped into map.
+	 * For example, the following property file will parsed into a couple of maps,
+	 * and <code>getSegmentedLabels()</code> returns a map containing
+	 * a single entry. The entry's key is <code>"a"</code> and the value
+	 * is another map with two entries <code>"b"</code> and <code>"c"</code>.
+	 * And, the value for <code>"b"</code> is another two-entries map (containing
+	 * <code>"c"</code> and <code>"d"</code>).
+	 * <pre><code>
+	 * a.b.c=1
+	 * a.b.d=2
+	 * a.e=3</pre></code>
+	 * <p>This method is designed to make labels easier to be accessed in
+	 * EL expressions.
+	 * <p>On the other hand, {@link #getLabel} does not split them, and
+	 * you could access them by, say, <code>getLabel("a.b.d")</code>.
+	 * @since 5.0.7
+	 */
+	public static final Map<String, Object> getSegmentedLabels() {
+		return _loader.getSegmentedLabels();
 	}
 
 	/** Returns the label of the specified key based on the current locale.

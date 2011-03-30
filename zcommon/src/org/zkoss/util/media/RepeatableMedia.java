@@ -37,7 +37,7 @@ import org.zkoss.io.RepeatableReader;
  * @author tomyeh
  * @since 3.0.4
  */
-public class RepeatableMedia implements Media {
+public class RepeatableMedia implements Media, java.io.Serializable {
 	private final Media _media;
 	private InputStream _isdata;
 	private Reader _rddata;

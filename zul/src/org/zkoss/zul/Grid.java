@@ -177,6 +177,9 @@ public class Grid extends MeshElement implements Paginated {
 
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Grid.onInitLaterPosted";
+	private static final String ATTR_ON_PAGING_INIT_RENDER_POSTED = 
+		"org.zkoss.zul.Grid.onPagingInitLaterPosted";
+
 	private static final int INIT_LIMIT = 100;
 
 	private transient DataLoader _dataLoader;
@@ -501,10 +504,16 @@ public class Grid extends MeshElement implements Paginated {
 			if (_rod) {
 				getDataLoader().syncModel(ofs, pgsz);
 			}
-			postOnInitRender();
+			postOnPagingInitRender();
 		}
 		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
-		else if (_rows != null) _rows.invalidate();
+		else if (_rows != null) {
+			_rows.invalidate();
+			
+			// Bug 3218078
+			if (_frozen != null)
+				_frozen.invalidate();
+		}
 	}
 			};
 		pgi.addEventListener("onPagingImpl", _pgImpListener);
@@ -827,7 +836,19 @@ public class Grid extends MeshElement implements Paginated {
 	 */
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		doInitRenderer();
+	}
 
+	/**
+	 * Handles a private event, onPagingInitRender. It is used only for
+	 * implementation, and you rarely need to invoke it explicitly.
+	 */
+	public void onPagingInitRender() {
+		removeAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED);
+		doInitRenderer();
+	}
+
+	private void doInitRenderer() {
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
@@ -866,13 +887,21 @@ public class Grid extends MeshElement implements Paginated {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 		
 	}
+	
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
+		}
+	}
+
+	private void postOnPagingInitRender() {
+		if (getAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED) == null) {
+			setAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED, Boolean.TRUE);
+			Events.postEvent("onPagingInitRender", this, null);
 		}
 	}
 

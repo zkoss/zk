@@ -3,6 +3,6 @@ Specification-Title: Potix Web Library
 Specification-Version: 6.0.0
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.web
-Implementation-URL: http://www.zkoss.org/
+Implementation-URL: http://www.zkoss.org/prj/zweb
 Implementation-Version: 6.0.0
 Implementation-Vendor: Potix Corporation

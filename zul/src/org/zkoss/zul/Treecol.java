@@ -337,6 +337,7 @@ public class Treecol extends HeaderElement {
 	 * null but {@link TreeModelExt} is not implemented.
 	 * @since 5.0.6
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
 		if (ascending) {

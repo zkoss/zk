@@ -768,14 +768,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		if (this._inWholeMode) {
-			var node = this.$n();
+			var node = this.$n(),
+				oldinfo;
 			zk(node).undoVParent();
 			var p = this.parent;
-			if (p && (p = p.parent) && (p = p.$n())) {
-				p.style.position = node._ppos;
-				p.parentNode.scrollTop = node._scrollTop;
+			if (p && (p = p.parent) && (p = p.$n()) && (oldinfo = this._oldNodeInfo)) {
+				p.style.position = oldinfo._ppos;
+				p.parentNode.scrollTop = oldinfo._scrollTop;
 			}
-			node._scrollTop = node._ppos = node._zindex = node._pos = null;
 			this._inWholeMode = false;
 		}
 		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});

@@ -105,8 +105,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				pz = this.getPopupSize_(pp);
 			pp.style.height = pz[1];
 			
-			// Bug 2941343
-			if (!zk.ie6_)
+			// Bug 2941343, 2936095, and 3189142
+			if (zk.ie8)
 				pp.style.width = pz[0];
 			this._fixsz(pz);
 		}

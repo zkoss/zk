@@ -49,6 +49,34 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			k = ke;
 		}
 	}
+	// Bug 3218078
+	function _onSizeLater(wgt) {		
+		var parent = wgt.parent,
+			bdfaker = parent.ebdfaker;
+		if (!bdfaker) {
+			bdfaker = parent.ebodyrows[0];
+			if (bdfaker)
+				bdfaker = bdfaker.$n();
+		}
+		if (bdfaker) {
+			var leftWidth = 0;
+			for (var i = wgt._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
+				leftWidth += n.offsetWidth;
+
+			wgt.$n('cave').style.width = jq.px0(leftWidth);
+			var scroll = wgt.$n('scrollX'),
+				width = parent.$n('body').offsetWidth;
+			
+			width -= leftWidth;
+			scroll.style.width = jq.px0(width);
+			
+			var scrollScale = bdfaker.childNodes.length - wgt._columns -
+					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
+			
+			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
+			wgt.syncScorll();
+		}
+	}
 
 /**
  * A frozen component to represent a frozen column or row in grid, like MS Excel. 
@@ -104,30 +132,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf = function () {
 		if (!this._columns) return;
-		var parent = this.parent,
-			bdfaker = parent.ebdfaker;
-		if (!bdfaker) {
-			bdfaker = parent.ebodyrows[0];
-			if (bdfaker)
-				bdfaker = bdfaker.$n();
-		}
-		if (bdfaker) {
-			var leftWidth = 0;
-			for (var i = this._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
-				leftWidth += n.offsetWidth;
-
-			this.$n('cave').style.width = jq.px0(leftWidth);
-			var scroll = this.$n('scrollX'),
-				width = parent.$n('body').offsetWidth;
-				width -= leftWidth;
-			scroll.style.width = jq.px0(width);
-			
-			var scrollScale = bdfaker.childNodes.length - this._columns -
-					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
-			
-			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
-			this.syncScorll();
-		}
+		var self = this;
+		// Bug 3218078, to do the sizing after the 'setAttr' command
+		setTimeout(function () {
+			_onSizeLater(self);
+		});
 	},
 	onSize: _zkf,
 	_onScroll: function (evt) {

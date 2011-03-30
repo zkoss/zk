@@ -18,6 +18,7 @@ package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
@@ -197,7 +198,15 @@ public class ExecutionResolver implements VariableResolverX {
 			}
 		}
 
-		return Evaluators.resolveVariable(_parent, name);
+		Object o = Evaluators.resolveVariable(_parent, name);
+		if (o != null)
+			return o;
+
+		//lower priority (i.e., user could override it)
+		//Reason: they were introduced later, and have to maintain backward comparibility
+		if ("labels".equals(name))
+			return Labels.getSegmentedLabels();
+		return null;
 	}
 	private static Page getPage(Component comp) {
 		Page page = comp.getPage();
