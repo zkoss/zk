@@ -321,8 +321,9 @@ public class Servlets {
 		if ("hil".equals(type)) return isHilDevice(userAgent);
 
 		if ("robot".equals(type)) return isRobot(userAgent);
+		
 		if ("ios".equals(type)) return isSafari(userAgent) &&
-			(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0);
+			(userAgent.toLowerCase().indexOf("iphone") >= 0 || userAgent.toLowerCase().indexOf("ipad") >= 0);
 		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
