@@ -271,7 +271,7 @@ public class Servlets {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
-	 * "hil",.<br/>
+	 * "hil", "ios".<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
@@ -286,7 +286,7 @@ public class Servlets {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie9",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
-	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
+	 * "hil", "ios". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @param userAgent represents a client.
@@ -321,6 +321,8 @@ public class Servlets {
 		if ("hil".equals(type)) return isHilDevice(userAgent);
 
 		if ("robot".equals(type)) return isRobot(userAgent);
+		if ("ios".equals(type)) return isSafari(userAgent) &&
+			(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0);
 		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).

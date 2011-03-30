@@ -385,7 +385,7 @@ implements SerializableAware, HierachicalAware {
 
 			//Tom M Yeh: 20060606:
 			//We cannot override getVariable because BeanShell use
-			//getVariableImpl to resolve a variable recusrivly
+			//getVariableImpl to resolve a variable recursively
 			//
 			//setVariable will callback this method,
 			//so use _inGet to prevent dead loop
@@ -394,7 +394,7 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = true;
 				Object v = getFromScope(name);
 				if (v != UNDEFINED) {
-			//Variable has no public/protected contructor, so we have to
+			//Variable has no public/protected constructor, so we have to
 			//store the value back (with setVariable) and retrieve again
 					_inGet = true;
 					try {
