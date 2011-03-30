@@ -30,7 +30,7 @@ import org.zkoss.lang.Objects;
  *
  * <p>Typical use:
  * <pre><code>Object[] ary = fra.toArray();
- *for (int j = 0; j < ary.length; ++J)
+ *for (int j = 0; j < ary.length; ++j)
  *  <i>whatever</i>;</code></pre>
  *
  * @author tomyeh
