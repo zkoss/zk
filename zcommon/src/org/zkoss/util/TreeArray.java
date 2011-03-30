@@ -22,7 +22,7 @@ import java.util.*;
  * Red-black tree based array implementation of List interface.
  * Unlike LinkedList, the random access by index is as fast as log(n).
  * Unlike ArrayList, the insertion is as fast as log(n). It is
- * a great compromise between randown and sequential access.
+ * a great compromise between random and sequential access.
  *
  * <p>In additions, it extends the features by also implementing
  * ListX.
@@ -32,7 +32,7 @@ import java.util.*;
  * override delete(RbEntry) for removing element; clear() for
  * clearing the whole list.
  *
- * <p>Also, RbEntry.setElement might be overrided if the deriving class
+ * <p>Also, RbEntry.setElement might be overridden if the deriving class
  * wants to do something when the set method is called.
  *
  * <p>The iterator method is designed such that next() will proceed correctly
