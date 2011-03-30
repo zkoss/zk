@@ -438,7 +438,8 @@ implements SerializableAware, HierachicalAware {
 			super(null, classManager, name);
 		}
 		protected Object getFromScope(String name) {
-			if (getCurrent() == null) //no scope allowed
+			final Scope curr = getCurrent();
+			if (curr == null) //no scope allowed
 				return getImplicit(name);
 
 			if (_firstGet) {
@@ -448,6 +449,15 @@ implements SerializableAware, HierachicalAware {
 					Object val = exec.getAttribute(name);
 					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
 						return val;
+				}
+
+				//page is the IdSpace, so it might not be curr
+				if (curr instanceof Component) {
+					for (Component c = (Component)curr; c != null; c = c.getParent()) {
+						Object val = c.getAttribute(name);
+						if (val != null || c.hasAttribute(name))
+							return val;
+					}
 				}
 			}
 
@@ -477,7 +487,7 @@ implements SerializableAware, HierachicalAware {
 		protected Object getFromScope(String name) {
 			final BSHInterpreter ip = getInterpreter(_scope);
 			final Scope curr = ip != null ? ip.getCurrent(): null;
-			if (curr== null)
+			if (curr == null)
 				return getImplicit(name); //ignore scope
 
 			if (_firstGet) {

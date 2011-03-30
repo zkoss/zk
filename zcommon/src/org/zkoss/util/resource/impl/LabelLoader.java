@@ -61,13 +61,13 @@ import org.zkoss.xel.util.SimpleXelContext;
 public class LabelLoader {
 	private static final Log log = Log.lookup(LabelLoader.class);
 
-	/** A map of (Locale l, Map(String key, String label)).
+	/** A map of (Locale l, Map(String key, ExValue label)).
 	 * We use two maps to speed up the access of labels.
 	 * _labels allows concurrent access without synchronization.
 	 * _syncLabels requires synchronization and used for update.
 	 */
 	private Map _labels = Collections.EMPTY_MAP;
-	/** A map of (Locale 1, Map<String key1, Map<String key2...> or String label>)
+	/** A map of (Locale 1, Map<String key1, Map<String key2...> or ExValue label>)
 	 * It is used by variable resolver and allows ${labels.key1.key2}.
 	 * _segLabels allows concurrent access without synchronization.
 	 * See also {@link #getSegmentedLabels}.
