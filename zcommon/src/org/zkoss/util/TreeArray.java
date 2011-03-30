@@ -115,7 +115,7 @@ implements ListX, Cloneable, java.io.Serializable {
 					return p;
 		}
 		/**
-		 * Gets the rihtmost leaf of the specified subtree.
+		 * Gets the rightmost leaf of the specified subtree.
 		 * It is the entry with highest index in the subtree.
 		 */
 		protected final RbEntry rightMost() {
@@ -137,7 +137,7 @@ implements ListX, Cloneable, java.io.Serializable {
 		/**
 		 * Gets the first parent at the right of the specified entry.
 		 * "At the right" we mean the returned ancesor's right is the entry
-		 * or its ancestor. It is also the first parent with higer index.
+		 * or its ancestor. It is also the first parent with higher index.
 		 */
 		protected final RbEntry firstRightAncestor() {
 			for (RbEntry p=this; p.parent != null; p = p.parent)
