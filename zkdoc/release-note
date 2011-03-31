@@ -13,6 +13,9 @@ ZK 6.0.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
+  + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]) was added,
+    while doAfterComposer(Page), doCatch(Throwable) and doFinally() were removed.
+    And, doCatch(Throwable) and doFinally() are moved to InitiatorExt
   + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
     are removed.
   + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
@@ -44,8 +47,9 @@ ZK 5.0.7
   3252169: Easier way to specify multiple properties files for i18n labels
   3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
   3226332: Timebox supports selection all and delete
+  3259969: Support system-level initiator
   3163700: Client: zk.getVersion() shall handle sub-packages
-  3239819: AbstractComponent shall apply custom attr defined in lang.xml
+  3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
@@ -62,6 +66,8 @@ ZK 5.0.7
   3255116: Hflex with min and number, the hor. scrollbar is redundant
   3251279: zk.ajaxURI not respecting ignoreSession
   3247017: SSL/IE6 iframe combination produces warnings
+  3259479: Cannot retrieve the forEach element in zscript
+  3261959: Tree with hflex=min won't appear the hor. scrollbar
   
 * Upgrade Notes
 

@@ -1,0 +1,19 @@
+<zk>
+	<html><![CDATA[
+	<ul>
+		<li>You shall see HelloZK below.</li>
+	</ul>
+	]]></html>
+	<zscript>
+	List list = new ArrayList();
+	list.add("Hello");
+	list.add("ZK");
+	</zscript>
+	<div>
+		<label forEach="${list}">
+			<zscript>
+			self.setValue(each);
+			</zscript>
+		</label>
+	</div>
+</zk>

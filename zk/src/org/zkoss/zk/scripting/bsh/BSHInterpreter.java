@@ -385,7 +385,7 @@ implements SerializableAware, HierachicalAware {
 
 			//Tom M Yeh: 20060606:
 			//We cannot override getVariable because BeanShell use
-			//getVariableImpl to resolve a variable recusrivly
+			//getVariableImpl to resolve a variable recursively
 			//
 			//setVariable will callback this method,
 			//so use _inGet to prevent dead loop
@@ -394,7 +394,7 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = true;
 				Object v = getFromScope(name);
 				if (v != UNDEFINED) {
-			//Variable has no public/protected contructor, so we have to
+			//Variable has no public/protected constructor, so we have to
 			//store the value back (with setVariable) and retrieve again
 					_inGet = true;
 					try {
@@ -438,7 +438,8 @@ implements SerializableAware, HierachicalAware {
 			super(null, classManager, name);
 		}
 		protected Object getFromScope(String name) {
-			if (getCurrent() == null) //no scope allowed
+			final Scope curr = getCurrent();
+			if (curr == null) //no scope allowed
 				return getImplicit(name);
 
 			if (_firstGet) {
@@ -448,6 +449,15 @@ implements SerializableAware, HierachicalAware {
 					Object val = exec.getAttribute(name);
 					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
 						return val;
+				}
+
+				//page is the IdSpace, so it might not be curr
+				if (curr instanceof Component) {
+					for (Component c = (Component)curr; c != null; c = c.getParent()) {
+						Object val = c.getAttribute(name);
+						if (val != null || c.hasAttribute(name))
+							return val;
+					}
 				}
 			}
 
@@ -477,7 +487,7 @@ implements SerializableAware, HierachicalAware {
 		protected Object getFromScope(String name) {
 			final BSHInterpreter ip = getInterpreter(_scope);
 			final Scope curr = ip != null ? ip.getCurrent(): null;
-			if (curr== null)
+			if (curr == null)
 				return getImplicit(name); //ignore scope
 
 			if (_firstGet) {

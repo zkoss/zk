@@ -211,7 +211,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			_sesscache.destroy(this);
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
-		} catch (AbstractMethodError ex) { //backward compatible
 		}
 		_factory.stop(this);
 		_provider.stop(this);
@@ -220,7 +219,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			try {
 				_failover.stop(this);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
-			} catch (AbstractMethodError ex) { //backward compatible
 			}
 			_failover = null;
 		}

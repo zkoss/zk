@@ -34,6 +34,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="domgecko.js" browser="gecko"/>
 	<script src="domsafari.js" browser="safari"/>
 	<script src="domopera.js" browser="opera"/>
+	<script src="domios.js" browser="ios"/>
 
 	<script src="evt.js" jsdoc="true"/>
 	<script src="anima.js" jsdoc="true"/>

@@ -64,13 +64,6 @@ public class Attributes {
 	 */
 	public static final String ALERT_TYPE = "px_alert_type";
 
-	/** @deprecated As of release 5.0.0, useless
-	 */
-	public static final String J_DOMAIN = "j_domain";
-	/** @deprecated As of release 5.0.0, useless
-	 */
-	public static final String J_REMEMBER_ME = "j_remember_me";
-
 	/** The attribute used to pass parameters from the caller that invokes
 	 * Servlets.include() or Servlets.forward()
 	 * with {@link org.zkoss.web.servlet.Servlets#PASS_THRU_ATTR}.

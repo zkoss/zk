@@ -73,7 +73,7 @@ public class ServletFns {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-".<br/>
+	 * "mil", "hil", "mil-", "ios".<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1

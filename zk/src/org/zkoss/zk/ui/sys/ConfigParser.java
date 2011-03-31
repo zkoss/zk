@@ -68,7 +68,7 @@ public class ConfigParser {
 	private static int[] _zkver;
 	private static List<org.zkoss.zk.ui.util.ConfigParser> _parsers;
 	// Map<int, boolean>: whether an instance of Configuration
-	private static final Map _syscfgLoadedConfigs = new HashMap(4);
+	private static final Map<Integer, Boolean> _syscfgLoadedConfigs = new HashMap<Integer, Boolean>(4);
 	private static boolean _syscfgLoaded;
 
 	/** Checks and returns whether the loaded document's version is correct.

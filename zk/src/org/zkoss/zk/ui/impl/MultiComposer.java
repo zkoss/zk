@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.FullComposer;
 
 /**
- * To proxy a collection of composer
+ * To proxy a collection of composers.
  * @author tomyeh
  * @since 5.0.1
  */

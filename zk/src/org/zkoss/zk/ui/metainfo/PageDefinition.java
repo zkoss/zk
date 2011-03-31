@@ -345,13 +345,13 @@ public class PageDefinition extends NodeInfo {
 			return Collections.emptyList();
 
 		final List<Initiator> inits = new LinkedList<Initiator>();
-		for (InitiatorInfo ii: _initdefs) {
-			try {
+		try {
+			for (InitiatorInfo ii: _initdefs) {
 				final Initiator init = ii.newInitiator(getEvaluator(), page);
 				if (init != null) inits.add(init);
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
 			}
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
 		}
 		return inits;
 	}
