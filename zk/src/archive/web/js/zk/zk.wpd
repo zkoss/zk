@@ -34,7 +34,6 @@ window.$eval=function(s){return eval(s);};
 	<script src="domgecko.js" browser="gecko"/>
 	<script src="domsafari.js" browser="safari"/>
 	<script src="domopera.js" browser="opera"/>
-	<script src="domios.js" browser="ios"/>
 
 	<script src="evt.js" jsdoc="true"/>
 	<script src="anima.js" jsdoc="true"/>
@@ -45,6 +44,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="widget.js" jsdoc="true"/>
 	<script src="pkg.js" jsdoc="true"/>
 	<script src="mount.js" jsdoc="true"/>
+	<script src="domios.js" browser="ios"/>
 	<script src="bookmark.js"/>
 	<script src="au.js" jsdoc="true"/>
 

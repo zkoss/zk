@@ -855,7 +855,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			drag._lastDropTo = null;
 		}
 	}
-	function DD_pointer(evt) {
+	function DD_pointer(evt, height) {
+		if (zk.ios)
+			return [evt.pageX - 50, evt.pageY - height - 30];
 		return [evt.pageX + 7, evt.pageY + 5];
 	}
 	function DD_enddrag(drag, evt) {
@@ -893,14 +895,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
 	}
 	function DD_ghosting(drag, ofs, evt) {
-		return drag.control.cloneDrag_(drag, DD_pointer(evt));
+		return drag.control.cloneDrag_(drag, DD_pointer(evt, jq(drag.node).height()));
 	}
 	function DD_endghosting(drag, origin) {
 		drag.control.uncloneDrag_(drag);
 		drag._dragImg = null;
 	}
 	function DD_constraint(drag, pt, evt) {
-		return DD_pointer(evt);
+		return DD_pointer(evt, jq(drag.node).height());
 	}
 	function DD_ignoredrag(drag, pt, evt) {
 		return drag.control.ignoreDrag_(pt);
