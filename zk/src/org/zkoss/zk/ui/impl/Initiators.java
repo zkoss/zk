@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -43,11 +44,25 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 	/** Invokes {@link Initiator#doInit}, if any, and returns
 	 * an instance of{@link Initiators}.
+	 * @param sysinits the system-level initiators
 	 */
-	public static final Initiators doInit(PageDefinition pagedef, Page page) {
+	public static final Initiators doInit(PageDefinition pagedef, Page page,
+	Initiator[] sysinits) {
+		if (sysinits == null) {
+			sysinits = new Initiator[0];
+		} else {
+			try {
+				for (int j = 0; j < sysinits.length; ++j)
+					sysinits[j].doInit(page, Collections.EMPTY_MAP);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+
 		final List inits = pagedef.doInit(page);
-		if (inits.isEmpty()) return new Initiators();
-		return new RealInits(inits);
+		if (sysinits.length == 0 && inits.isEmpty())
+			return new Initiators();
+		return new RealInits(sysinits, inits);
 	}
 	protected Initiators() {
 	}
@@ -61,13 +76,14 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 }
 /*package*/ class RealInits extends Initiators {
+	private final Initiator[] _sysinits;
 	private final List _inits;
 	/**
 	 * @param inits a collection of {@link Initiator}.
 	 */
-	/*package*/ RealInits(List inits) {
+	/*package*/ RealInits(Initiator[] sysinits, List inits) {
+		_sysinits = sysinits;
 		_inits = inits;
-		
 	}
 	/**
 	 * Invokes {@link Initiator#doAfterCompose}.
@@ -75,6 +91,15 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * @throws Exception
 	 */
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
+		for (int j = 0; j < _sysinits.length; ++j) {
+			final Initiator init = _sysinits[j];
+			if (init instanceof InitiatorExt) {
+				if (comps == null) comps = new Component[0];
+				((InitiatorExt)init).doAfterCompose(page, comps);
+			} else {
+				init.doAfterCompose(page);
+			}
+		}
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			final Object init = it.next();
 			if (init instanceof InitiatorExt) {
@@ -90,18 +115,20 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * Caller has to re-throw the exception.
 	 */
 	public boolean doCatch(Throwable t) {
+		for (int j = 0; j < _sysinits.length; ++j) {
+			final Initiator init = _sysinits[j];
+			try {
+				if (init.doCatch(t))
+					return true;
+			} catch (Throwable ex) {
+				Initiators.log.error(ex);
+			}
+		}
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			final Initiator init = (Initiator)it.next();
 			try {
-				try {
-					if (init.doCatch(t))
-						return true; //ignore and skip all other initiators
-				} catch (AbstractMethodError ex) { //backward compatible prior to 3.0
-					final Method m = init.getClass().getMethod(
-							"doCatch", new Class[] {Throwable.class});
-					Fields.setAccessible(m, true);
-					m.invoke(init, new Object[] {t});
-				}
+				if (init.doCatch(t))
+					return true; //ignore and skip all other initiators
 			} catch (Throwable ex) {
 				Initiators.log.error(ex);
 			}
@@ -112,6 +139,15 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 */
 	public void doFinally() {
 		Throwable t = null;
+		for (int j = 0; j < _sysinits.length; ++j) {
+			final Initiator init = _sysinits[j];
+			try {
+				init.doFinally();
+			} catch (Throwable ex) {
+				Initiators.log.error(ex);
+				if (t == null) t = ex;
+			}
+		}
 		for (Iterator it = _inits.iterator(); it.hasNext();) {
 			final Initiator init = (Initiator)it.next();
 			try {

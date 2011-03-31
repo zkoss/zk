@@ -369,8 +369,9 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).preInit();
 				pagedef.initXelContext(page);
 
-				final Initiators inits = Initiators.doInit(pagedef, page);
-					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
+				final Initiators inits = Initiators.doInit(pagedef, page,
+					config.getInitiators());
+					//F1472813: sendRedirect in init; test: redirectNow.zul
 				try {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 
@@ -902,6 +903,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		final Desktop desktop = exec.getDesktop();
+		final WebApp wapp = desktop.getWebApp();
 		final Page prevpg = execCtrl.getCurrentPage();
 		if (page != null && page != prevpg)
 			execCtrl.setCurrentPage(page);
@@ -917,7 +919,8 @@ public class UiEngineImpl implements UiEngine {
 
 		//Note: the forward directives are ignore in this case
 
-		final Initiators inits = Initiators.doInit(pagedef, page);
+		final Initiators inits = Initiators.doInit(pagedef, page,
+			wapp.getConfiguration().getInitiators());
 		final IdSpace prevIS = fakeIS ?
 			ExecutionsCtrl.setVirtualIdSpace(
 				fakepg ? (IdSpace)page: new SimpleIdSpace()): null;
@@ -925,8 +928,7 @@ public class UiEngineImpl implements UiEngine {
 			if (fakepg) pagedef.init(page, false);
 
 			final Component[] comps = execCreate(
-				new CreateInfo(
-					((WebAppCtrl)desktop.getWebApp()).getUiFactory(),
+				new CreateInfo(((WebAppCtrl)wapp).getUiFactory(),
 					exec, page, null), //technically sys composer can be used but we don't (to make it simple)
 				pagedef, parent);
 			inits.doAfterCompose(page, comps);

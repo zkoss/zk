@@ -103,6 +103,7 @@ public class Configuration {
 		_execCleans = new FastReadArray(Class.class),
 		_uiCycles = new FastReadArray(UiLifeCycle.class),
 		_composers = new FastReadArray(Class.class),
+		_initiators = new FastReadArray(Class.class),
 		_resolvers = new FastReadArray(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
@@ -195,7 +196,7 @@ public class Configuration {
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link Composer}, {@link VariableResolver},
+	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
 	 * and/or {@link EventInterceptor} interfaces.
@@ -280,6 +281,10 @@ public class Configuration {
 			_composers.add(klass); //not instance
 			added = true;
 		}
+		if (Initiator.class.isAssignableFrom(klass)) {
+			_initiators.add(klass); //not instance
+			added = true;
+		}
 		if (VariableResolver.class.isAssignableFrom(klass)) {
 			_resolvers.add(klass); //not instance
 			added = true;
@@ -355,6 +360,7 @@ public class Configuration {
 		_execCleans.remove(klass);
 
 		_composers.remove(klass);
+		_initiators.remove(klass);
 		_resolvers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
@@ -944,7 +950,7 @@ public class Configuration {
 	}
 
 	/** Returns the system-level composer or null if none is registered.
-	 * To register a system-levelcomposer, use {@link #addListener}
+	 * To register a system-levelcomposer, use {@link #addListener}.
 	 * <p>Notice that any number of composers can be registered,
 	 * and a single composer is returned to represent them all.
 	 * @since 5.0.1
@@ -953,6 +959,28 @@ public class Configuration {
 		return MultiComposer.getComposer(page, (Class[])_composers.toArray());
 	}
 
+	/** Returns a readonly list of the system-level initiators.
+	 * It is empty if none is registered.
+	 * To register a system-level initiator, use {@link #addListener}.
+	 * @since 5.0.7
+	 */
+	public Initiator[] getInitiators() {
+		final Class[] initclses = (Class[])_initiators.toArray();
+		if (initclses.length == 0)
+			return new Initiator[0];
+
+		final List inits = new LinkedList();
+		for (int j = 0; j < initclses.length; ++j) {
+			final Initiator init;
+			try {
+				inits.add((Initiator)initclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + initclses[j]);
+			}
+		}
+		return (Initiator[])inits.toArray(new Initiator[inits.size()]);
+	}
+	
 	/** Initializes the given page with the variable resolvers registered
 	 * by {@link #addListener}.
 	 * It must be called before accessing a page (actually in {@link org.zkoss.zk.ui.sys.PageCtrl#preInit}).

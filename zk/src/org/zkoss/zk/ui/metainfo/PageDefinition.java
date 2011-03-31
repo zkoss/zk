@@ -348,14 +348,14 @@ public class PageDefinition extends NodeInfo {
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
-		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-			final InitiatorInfo def = (InitiatorInfo)it.next();
-			try {
-				final Initiator init = def.newInitiator(getEvaluator(), page);
-				if (init != null) inits.add(init);
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
+		try {
+			for (Iterator it = _initdefs.iterator(); it.hasNext();) {
+				final InitiatorInfo def = (InitiatorInfo)it.next();
+					final Initiator init = def.newInitiator(getEvaluator(), page);
+					if (init != null) inits.add(init);
 			}
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
 		}
 		return inits;
 	}
