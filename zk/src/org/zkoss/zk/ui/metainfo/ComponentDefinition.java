@@ -285,7 +285,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * is created. So, this method doesn't and need not to copy them.
 	 * <p>Also notice that, since 5.0.7, custom-attributes are applied automatically
 	 * in the constructor of {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}
-	 * (by invoking {@link applyAttributes},
+	 * (by invoking {@link #applyAttributes},
 	 * so they are always available no mather this method is called or not.
 	 */
 	public void applyProperties(Component comp);
