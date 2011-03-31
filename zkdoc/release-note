@@ -13,8 +13,8 @@ ZK 6.0.0
   2973303: listbox mold select and selectedIndex -1
 
 * Upgrade Notes
-  + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]) was added,
-    while doAfterComposer(Page), doCatch(Throwable) and doFinally() were removed.
+  + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
+    doCatch(Throwable) and doFinally() were removed.
     And, doCatch(Throwable) and doFinally() are moved to InitiatorExt
   + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
     are removed.

@@ -59,9 +59,23 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		}
 
 		final List<Initiator> inits = pagedef.doInit(page);
-		if (sysinits.length == 0 && inits.isEmpty())
+		boolean sysinitEx = false;
+		for (int j = 0; j < _sysinits.length; ++j)
+			if (_sysinits[j] instanceof InitiatorExt) {
+				sysinitEx = true;
+				break;
+			}
+
+		boolean initEx = false;
+		for (Initiator init: _inits)
+			if (init instanceof InitiatorExt) {
+				initEx = true;
+				break;
+			}
+
+		if (!sysinitEx && !initEx)
 			return new Initiators();
-		return new RealInits(sysinits, inits);
+		return new RealInits(sysinits, inits, sysinitEx, initEx);
 	}
 	protected Initiators() {
 	}
@@ -77,12 +91,19 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 /*package*/ class RealInits extends Initiators {
 	private final Initiator[] _sysinits;
 	private final List<Initiator> _inits;
+	private boolean _sysinitEx, _initEx;
+
 	/**
 	 * @param inits a collection of {@link Initiator}.
+	 * @param sysinitEx whether any of sysinits implements InitiatorExt
+	 * @param initEx whether any of inits implements InitiatorExt
 	 */
-	/*package*/ RealInits(Initiator[] sysinits, List<Initiator> inits) {
+	/*package*/ RealInits(Initiator[] sysinits, List<Initiator> inits,
+	boolean sysinitEx, boolean initEx) {
 		_sysinits = sysinits;
 		_inits = inits;
+		_sysinitEx = sysinitEx;
+		_initEx = initEx;
 	}
 	/**
 	 * Invokes {@link Initiator#doAfterCompose}.
@@ -90,69 +111,79 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	 * @throws Exception
 	 */
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
-		for (int j = 0; j < _sysinits.length; ++j) {
-			final Initiator init = _sysinits[j];
-			if (init instanceof InitiatorExt) {
-				if (comps == null) comps = new Component[0];
-				((InitiatorExt)init).doAfterCompose(page, comps);
-			} else {
-				init.doAfterCompose(page);
+		if (_sysinitEx)
+			for (int j = 0; j < _sysinits.length; ++j) {
+				final Initiator init = _sysinits[j];
+				if (init instanceof InitiatorExt) {
+					if (comps == null) comps = new Component[0];
+					((InitiatorExt)init).doAfterCompose(page, comps);
+				}
 			}
-		}
-		for (Initiator init: _inits) {
-			if (init instanceof InitiatorExt) {
-				if (comps == null) comps = new Component[0];
-				((InitiatorExt)init).doAfterCompose(page, comps);
-			} else {
-				init.doAfterCompose(page);
+		if (_initEx)
+			for (Initiator init: _inits) {
+				if (init instanceof InitiatorExt) {
+					if (comps == null) comps = new Component[0];
+					((InitiatorExt)init).doAfterCompose(page, comps);
+				}
 			}
-		}
 	}
 	/** Invokes {@link Initiator#doCatch}.
 	 * It eats all exception without throwing one (but logging).
 	 * Caller has to re-throw the exception.
 	 */
 	public boolean doCatch(Throwable t) {
-		for (int j = 0; j < _sysinits.length; ++j) {
-			final Initiator init = _sysinits[j];
-			try {
-				if (init.doCatch(t))
-					return true;
-			} catch (Throwable ex) {
-				Initiators.log.error(ex);
+		if (_sysinitEx)
+			for (int j = 0; j < _sysinits.length; ++j) {
+				final Initiator init = _sysinits[j];
+				if (init instanceof InitiatorExt) {
+					try {
+						if (((InitiatorExt)init).doCatch(t))
+							return true;
+					} catch (Throwable ex) {
+						Initiators.log.error(ex);
+					}
+				}
 			}
-		}
-		for (Initiator init: _inits) {
-			try {
-				if (init.doCatch(t))
-					return true; //ignore and skip all other initiators
-			} catch (Throwable ex) {
-				Initiators.log.error(ex);
+		if (_initEx)
+			for (Initiator init: _inits) {
+				if (init instanceof InitiatorExt) {
+					try {
+						if (((InitiatorExt)init).doCatch(t))
+							return true; //ignore and skip all other initiators
+					} catch (Throwable ex) {
+						Initiators.log.error(ex);
+					}
+				}
 			}
-		}
 		return false;
 	}
 	/** Invokes {@link Initiator#doFinally}.
 	 */
 	public void doFinally() {
 		Throwable t = null;
-		for (int j = 0; j < _sysinits.length; ++j) {
-			final Initiator init = _sysinits[j];
-			try {
-				init.doFinally();
-			} catch (Throwable ex) {
-				Initiators.log.error(ex);
-				if (t == null) t = ex;
+		if (_sysinitEx)
+			for (int j = 0; j < _sysinits.length; ++j) {
+				final Initiator init = _sysinits[j];
+				if (init instanceof InitiatorExt) {
+					try {
+						((InitiatorExt)init).doFinally();
+					} catch (Throwable ex) {
+						Initiators.log.error(ex);
+						if (t == null) t = ex;
+					}
+				}
 			}
-		}
-		for (Initiator init: _inits) {
-			try {
-				init.doFinally();
-			} catch (Throwable ex) {
-				Initiators.log.error(ex);
-				if (t == null) t = ex;
+		if (_initEx)
+			for (Initiator init: _inits) {
+				if (init instanceof InitiatorExt) {
+					try {
+						((InitiatorExt)init).doFinally();
+					} catch (Throwable ex) {
+						Initiators.log.error(ex);
+						if (t == null) t = ex;
+					}
+				}
 			}
-		}
 		if (t != null) throw UiException.Aide.wrap(t);
 	}
 }

@@ -79,10 +79,6 @@ public class Composition implements Initiator, InitiatorExt {
 	private static final String RESOLVE_COMPOSITION = "zk.ui.util.RESOLVE_COMPOSITION";
 	public static final String PARENT = "zk.ui.util.PARENT";
 	
-	public void doAfterCompose(Page page) throws Exception {
-		//never called here
-	}
-
 	public boolean doCatch(Throwable ex) throws Exception {
 		// do nothing
 		return false;

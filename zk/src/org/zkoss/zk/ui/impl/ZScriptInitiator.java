@@ -48,11 +48,4 @@ public class ZScriptInitiator implements Initiator {
 			Scopes.afterInterpret();
 		}
 	}
-	public void doAfterCompose(Page page) throws Exception {
-	}
-	public boolean doCatch(Throwable ex) {
-		return false; //re-throw
-	}
-	public void doFinally() {
-	}
 }

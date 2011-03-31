@@ -15,6 +15,7 @@ package org.zkoss.zktest.test2;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zul.Label;
@@ -23,10 +24,10 @@ import org.zkoss.zul.Label;
  * Test of system-level initiator
  * @author tomyeh
  */
-public class F3259969 implements Initiator {
+public class F3259969 implements Initiator, InitiatorExt {
 	public void doInit(Page page, Map args) throws Exception {
 	}
-	public void doAfterCompose(Page page) throws Exception {
+	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		new Label("system initiator called").setPage(page);
 	}
 	public boolean doCatch(Throwable ex) throws Exception {

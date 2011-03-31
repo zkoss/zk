@@ -32,12 +32,4 @@ public class B2199361 implements Initiator {
 		page.setId("abc"); //Bug 2525344
 		new Label("Hello, Initiator").setPage(page);
 	}
-	public void doAfterCompose(Page page) throws Exception {
-	}
-
-	public boolean doCatch(Throwable ex) throws Exception {
-		return false;
-	}
-	public void doFinally() throws Exception {
-	}
 }
