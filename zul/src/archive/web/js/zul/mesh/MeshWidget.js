@@ -444,7 +444,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var old = this.ehead.style.display; 
 			this.ehead.style.display = empty ? 'none' : '';
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
-			if (empty && flex) 
+			if (empty && flex && this.isRealVisible()) 
 				for (var w = this.head.firstChild; w; w = w.nextSibling)
 					if (w._nhflex) w.fixFlex_();
 			return old != this.ehead.style.display;
