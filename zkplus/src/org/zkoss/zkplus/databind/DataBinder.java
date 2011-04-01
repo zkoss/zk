@@ -1028,7 +1028,7 @@ public class DataBinder implements java.io.Serializable {
 		if (bean != null) {
 			//feature#1766905 Binding to Map
 			//bug# 2630168, check Map case first and avoid throw unnecessary exception
-			if (bean instanceof Map && ((Map)bean).containsKey(nodeid)) { //bug#2987511
+			if (bean instanceof Map) { //regret the change for bug#2987511(follow the EL spec)
 				bean = ((Map)bean).get(nodeid);
 			} else {
 				try {
