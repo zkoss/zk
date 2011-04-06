@@ -31,6 +31,10 @@ import org.zkoss.io.RepeatableReader;
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
+ * <p>AMedia is serializable, but, if you are using InputStream or Reader,
+ * you have to extend this class, and provide the implementation to
+ * serlialize and deserialize {@link #_isdata} or {@link #_rddata}
+ * (they are both transient).
  * @author tomyeh
  */
 public class AMedia implements Media, java.io.Serializable {
@@ -50,9 +54,9 @@ public class AMedia implements Media, java.io.Serializable {
 	/** The text data, {@link #getStringData}. */
 	private String _strdata;
 	/** The input stream, {@link #getStreamData} */
-	private InputStream _isdata;
+	protected transient InputStream _isdata;
 	/** The input stream, {@link #getReaderData} */
-	private Reader _rddata;
+	protected transient Reader _rddata;
 	/** The content type. */
 	private String _ctype;
 	/** The format (e.g., pdf). */
