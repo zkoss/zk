@@ -36,7 +36,6 @@ function upVer {
 	find $maindir/$1/src -name lang.xml -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
 	find $maindir/$1/src -name lang-addon.xml -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
 	find $maindir/$1/src -name Version.java -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
-	sed -i "s/$oldVersion/$newVersion/g" $maindir/$1/version	
 }
 
 sed -i "s/$oldVersion-FL/$oldVersion/g" $maindir/build.setting
