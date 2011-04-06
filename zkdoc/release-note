@@ -30,6 +30,7 @@ ZK 5.0.7
   3259479: Cannot retrieve the forEach element in zscript
   3261959: Tree with hflex=min won't appear the hor. scrollbar
   3201748: Data-Binding and non-existing Map keys  
+  3210356: DateFormat.getTimeInstance cause Timebox error
   
 * Upgrade Notes
 
