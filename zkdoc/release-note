@@ -32,6 +32,7 @@ ZK 5.0.7
   3201748: Data-Binding and non-existing Map keys  
   3210356: DateFormat.getTimeInstance cause Timebox error
   3275778: AMedia: java.io.NotSerializableException: FileInputStream
+  3278524: Included HTML page might fail to call zk.afterMount
   
 * Upgrade Notes
 

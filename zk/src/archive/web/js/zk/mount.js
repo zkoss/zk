@@ -155,12 +155,12 @@ function zkmprops(uuid, props) {
 //@};
 	zk.afterMount = function (fn, delay) { //part of zk
 		if (fn)
-			if (zk.mounting)
+			if (!jq.isReady)
+				jq(function () {zk.afterMount(fn);}); //B3278524
+			else if (zk.mounting)
 				_aftMounts.push(fn); //normal
 			else if (zk.loading)
 				zk.afterLoad(fn);
-			else if (!jq.isReady)
-				jq(fn);
 			else if (delay < 0) {
 				fn();
 				return true; //called
