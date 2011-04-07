@@ -9,8 +9,9 @@ ZK 5.0.7
   3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
   3226332: Timebox supports selection all and delete
   3259969: Support system-level initiator
-  3163700: Client: zk.getVersion() shall handle sub-packages
+  3278536: Include shall allow the included page to be rendered later
   3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
+  3163700: Client: zk.getVersion() shall handle sub-packages
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)

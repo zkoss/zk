@@ -51,6 +51,7 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.AfterCompose;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -94,6 +95,14 @@ import org.zkoss.zul.mesg.MZul;
  * <p>If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
  * is created and added to the current desktop.
  * You can access them only via inter-page API (see{@link org.zkoss.zk.ui.Path}).
+ *
+ * <p>Notice that if a non-ZUML page, such as HTML fragment, is included,
+ * the content might be evaluated before ZK widgets are instantiated and
+ * rendered (so-called mounted). Thus, the embedded JavaScript code might be
+ * evaluated early. If you prefer to run them later, you could either use
+ * <code>zk.afterMount(function(){...})</code> to defer the execute, or
+ * specify the custom attribute called <code>org.zkoss.zul.include.html.defer</code>
+ * to true.
  *
  * <h3>The auto mode (default)</h3>
  *
@@ -165,6 +174,12 @@ import org.zkoss.zul.mesg.MZul;
  * attribute as follows:
  * <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;
  *
+ * <h3>Custom Attribute</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.include.html.defer</dt>
+ * <dd>Whether to defer the rendering of non-ZUML page until all widgets are
+ * instantiated and rendered at client (so-called mounted).</dd>
+ * </dl>
  * @author tomyeh
  * @see Iframe
  */
@@ -529,7 +544,8 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 				//first (since it is part of rc.temp)
 
 				boolean done = false;
-				if (getChildPage() == null) { //only able to handle non-ZUL page
+				if (getChildPage() == null //only able to handle non-ZUL page
+				&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
 					if (rc != null && !rc.included) { //Use z$ea only if not included
