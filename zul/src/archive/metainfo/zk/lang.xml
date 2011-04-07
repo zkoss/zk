@@ -1078,6 +1078,7 @@ def alert(m):
 			<mold-uri>mold/tab.js</mold-uri>
 		</mold>
 		<preserve-blank/>
+		<text-as>label</text-as>
 	</component>
 	<component>
 		<component-name>tabpanels</component-name>
