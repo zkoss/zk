@@ -52,6 +52,7 @@ import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  *  A container which can be used to hold a tabular
@@ -66,6 +67,14 @@ import org.zkoss.zul.impl.MeshElement;
  *
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
  *
+ * <p>Custom Attributes:
+ * <dl>
+ * <dt>org.zkoss.zul.tree.rightSelect</dt>
+ * <dd>Specifies whether the selection shall be toggled when user right clicks on
+ * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
  * @author tomyeh
  */
 public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tree {
@@ -1956,12 +1965,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	/** Returns whether to toggle a list item selection on right click
 	 */
 	private boolean isRightSelect() {
-		if (_rightSelect == null) //ok to race
-			_rightSelect = Boolean.valueOf(
-				!"false".equals(Library.getProperty("org.zkoss.zul.tree.rightSelect")));
-		return _rightSelect.booleanValue();
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.rightSelect", true, true);
 	}
-	private static Boolean _rightSelect;
 
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.

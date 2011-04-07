@@ -61,6 +61,7 @@ import org.zkoss.zul.impl.ListboxDataLoader;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A listbox.
@@ -194,6 +195,19 @@ import org.zkoss.zul.impl.MeshElement;
  * later. Basically, you shall operate on the item of the {@link ListModel}
  * rather than on the {@link Listitem} of the {@link Listbox} if you use the
  * {@link ListModel} and ROD.</p>
+ *
+ * <h3>Custom Attributes</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.listbox.rightSelect</dt>
+ * <dd>Specifies whether the selection shall be toggled when user right clicks on
+ * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.listbox.rod</dt>
+ * <dd>Specifies whether to enable ROD (render-on-demand).</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
  *
  * @author tomyeh
  * @see ListModel
@@ -2970,13 +2984,7 @@ public class Listbox extends MeshElement implements Paginated,
 	}
 
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.listbox.rod", "false");
-		//bug# 3039948: Unable to turn on rod for Listbox if defined in its parent
-		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod", true); //might be String or Boolean
-		if (rod2 == null) {
-			rod2 = rod1;
-		}
-		return rod2 instanceof Boolean ? ((Boolean)rod2).booleanValue() : "true".equals(rod2);
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rod", false, true);
 	}
 
 	/* package */DataLoader getDataLoader() {
@@ -3204,12 +3212,8 @@ public class Listbox extends MeshElement implements Paginated,
 	/** Returns whether to toggle a list item selection on right click
 	 */
 	private boolean isRightSelect() {
-		if (_rightSelect == null) //ok to race
-			_rightSelect = Boolean.valueOf(
-				!"false".equals(Library.getProperty("org.zkoss.zul.listbox.rightSelect")));
-		return _rightSelect.booleanValue();
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rightSelect", true, true);
 	}
-	private static Boolean _rightSelect;
 
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.

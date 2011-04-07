@@ -58,6 +58,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -166,6 +167,13 @@ import org.zkoss.zul.impl.MeshElement;
  * Basically, you shall operate on the item of the ListModel rather than on the 
  * {@link Row} if you use the ListModel and ROD.</p>
  * 
+ * <h3>Custom Attributes</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.grid.rod</dt>
+ * <dd>Specifies whether to enable ROD (render-on-demand).</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -1224,12 +1232,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	}
 	
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "false");
-		Object rod2 = getAttribute("org.zkoss.zul.grid.rod", true); //might be String or Boolean
-		if (rod2 == null) {
-			rod2 = rod1;
-		}
-		return rod2 instanceof Boolean ? ((Boolean)rod2).booleanValue() : "true".equals(rod2);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true);
 	}
 	
 	/*package*/ DataLoader getDataLoader() {
