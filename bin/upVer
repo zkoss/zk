@@ -24,24 +24,71 @@ oldVersion=$1
 newVersion=$2
 
 if [ "$oldVersion" == "" ] || [ "$newVersion" == "" ] ; then
-	echo "Usage: upVer [ oldVersion ] [ newVersion ]"
+	echo "Usage: upVer [ oldVersion ] [ newVersion ] [options]"
+	echo "Available options: FL."
 	exit 1
 fi
 
 function upVer {
-	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$newVersion<\/version/" $maindir/$1/pom.xml
-	sed -i "s/$oldVersion/$newVersion/g" $maindir/$1/version
-	find $maindir/$1/src -name MANIFEST.MF -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
-	find $maindir/$1/src -name config.xml -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
-	find $maindir/$1/src -name lang.xml -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
-	find $maindir/$1/src -name lang-addon.xml -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
-	find $maindir/$1/src -name Version.java -exec sed -i "s/$oldVersion/$newVersion/g" {} \;
+	sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion<\//" $maindir/$1/pom.xml
+	echo "$1 pom.xml"
+	grep -n --color=auto $newVersion $maindir/$1/pom.xml
+	
+	sed -i "s/$oldVersion.*/$newVersion/g" $maindir/$1/version
+	echo "$1 version"
+	grep -n --color=auto $newVersion $maindir/$1/version
+	
+	echo "$1 MANIFEST.MF"
+	find $maindir/$1/src -name MANIFEST.MF -exec sed -i "s/$oldVersion.*/$newVersion/g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+	
+	echo "$1 config.xml"
+	find $maindir/$1/src -name config.xml -exec sed -i "
+	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+	
+	echo "$1 lang.xml"
+	find $maindir/$1/src -name lang.xml -exec sed -i "
+	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+	
+	echo "$1 lang-addon.xml"
+	find $maindir/$1/src -name lang-addon.xml -exec sed -i "
+	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+	
+	echo "$1 Version.java"
+	find $maindir/$1/src -name Version.java -exec sed -i "
+	s/UID = \"$oldVersion.*\";/UID = \"$newVersion\";/g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
 }
 
-sed -i "s/$oldVersion-FL/$oldVersion/g" $maindir/build.setting
-sed -i "s/$oldVersion/$newVersion-FL/g" $maindir/build.setting
+if [ "$3" == "FL" ] ; then
+	sed -i "s/$oldVersion.*/$newVersion-FL/g" $maindir/build.setting
+	echo "build.setting"
+	grep -n --color=auto $newVersion"-FL" $maindir/build.setting
+	
+	echo "zk Version.java"
+	find $maindir/zk/src -name Version.java -exec sed -i "
+	s/RELEASE = \"$oldVersion.*\";/RELEASE = \"$newVersion-FL\";/g
+	" {} \; -exec grep -n --color=auto $newVersion"-FL" {} \;
+else
+	sed -i "s/$oldVersion.*/$newVersion/g" $maindir/build.setting
+	echo "build.setting"
+	grep -n --color=auto $newVersion $maindir/build.setting
+	
+	echo "zk Version.java"
+	find $maindir/zk/src -name Version.java -exec sed -i "
+	s/RELEASE = \"$oldVersion.*\";/RELEASE = \"$newVersion\";/g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+fi
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/deploy/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/jsdoc/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/src/archive/META-INF/MANIFEST.MF
+upVer zcommon
+upVer zhtml
 upVer zk
-find $maindir/zk/src -name Version.java -exec sed -i "s/$newVersion/$newVersion/g" {} \;
 upVer zksandbox
 upVer zktest
 upVer zkplus
