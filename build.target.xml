@@ -27,22 +27,26 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ======= -->
 <!-- COMPILE -->
 <!-- ======= -->
-<target name="compile0" depends="codegen.mesg" if="src.dir.exist">
+<target name="compile0" depends="codegen.mesg" if="srcpv.dir.exist">
+	<mkdir dir="${out.dir}"/>
+	<javac srcdir="${srcpv.dir}" destdir="${out.dir}"
+	 debug="false" optimize="true" encoding="UTF-8"
+	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
+</target>
+<target name="compile1" depends="codegen.mesg,compile0" if="src.dir.exist">
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>
-	<available file="srcpv" property="srcpv.dir" value="srcpv"/>
-	<property name="srcpv.dir" value=""/>
-	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
+	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>
-<target name="compile5" depends="codegen.mesg, compile0" if="src5.dir.exist">
-	<javac srcdir="${src5.dir}:${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
+<target name="compile5" depends="codegen.mesg, compile1" if="src5.dir.exist">
+	<javac srcdir="${src5.dir}:${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="1.5" deprecation="${deprecation}" source="1.5"/>
 </target>
-<target name="compile" depends="compile0,compile5" if="compile.required">
+<target name="compile" depends="compile0,compile1,compile5" if="compile.required">
 </target>
 
 <!-- ====== -->
@@ -162,9 +166,11 @@ if="deploy.jboss.required">
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
 	</exec>
 	
+	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
+	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
-		<fileset dir="${srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
@@ -174,7 +180,7 @@ if="deploy.jboss.required">
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
 	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
-		<fileset dir="${srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
