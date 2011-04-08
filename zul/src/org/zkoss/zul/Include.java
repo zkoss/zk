@@ -177,7 +177,7 @@ import org.zkoss.zul.mesg.MZul;
  * <h3>Custom Attribute</h3>
  * <dl>
  * <dt>org.zkoss.zul.include.html.defer</dt>
- * <dd>Whether to defer the rendering of non-ZUML page until all widgets are
+ * <dd>[default: false] Whether to defer the rendering of non-ZUML page until all widgets are
  * instantiated and rendered at client (so-called mounted).</dd>
  * </dl>
  * @author tomyeh
