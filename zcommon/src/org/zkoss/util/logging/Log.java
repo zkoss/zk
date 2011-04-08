@@ -217,6 +217,12 @@ public class Log {
 	}
 
 	/**
+	 * Tests whether the {@link #ERROR} level is loggable.
+	 */
+	public final boolean errorable() {
+		return getClosestLogger().isLoggable(ERROR);
+	}
+	/**
 	 * Tests whether the {@link #WARNING} level is loggable.
 	 */
 	public final boolean warningable() {
@@ -329,8 +335,7 @@ public class Log {
 	/**
 	 * Logs an error message and a throwable object.
 	 *
-	 * <p>Since error messages hardly happens and are rarely disabled,
-	 * there is no method like infoable or debuggable.
+	 * @see #errorable
 	 */
 	public final void error(String msg, Throwable t) {
 		log(ERROR, msg, t);
@@ -405,8 +410,7 @@ public class Log {
 	/**
 	 * Logs a warning message and a throwable object.
 	 *
-	 * <p>Since warning messages are rarely disabled,
-	 * there is no method like infoable or debuggable.
+	 * @see #warningable
 	 */
 	public final void warning(String msg, Throwable t) {
 		log(WARNING, msg, t);
@@ -481,8 +485,7 @@ public class Log {
 	/**
 	 * Logs an info message and a throwable object.
 	 *
-	 * <p>Since info messages are rarely disabled,
-	 * there is no method like infoable or debuggable.
+	 * @see #infoable
 	 */
 	public final void info(String msg, Throwable t) {
 		log(INFO, msg, t);
@@ -558,8 +561,7 @@ public class Log {
 	/**
 	 * Logs a debug message and a throwable object.
 	 *
-	 * <p>Since debug messages are rarely disabled,
-	 * there is no method like infoable or debuggable.
+	 * @since #debugable
 	 */
 	public final void debug(String msg, Throwable t) {
 		log(DEBUG, msg, t);
