@@ -35,6 +35,7 @@ ZK 5.0.7
   3275778: AMedia: java.io.NotSerializableException: FileInputStream
   3278524: Included HTML page might fail to call zk.afterMount
   3283943: Row#getGroup() inconsistent between server and client
+  3283951: Select item in multiSel tree via API can't retrieve selitem
   
 * Upgrade Notes
 
