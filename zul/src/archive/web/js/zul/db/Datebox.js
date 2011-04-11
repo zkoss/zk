@@ -365,7 +365,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doClick_: function (evt) {
 		if (this._disabled) return;
-		if (this._readonly && this._buttonVisible && this._pop)
+		if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen())
 			this._pop.open();
 		this.$supers('doClick_', arguments);
 	},
