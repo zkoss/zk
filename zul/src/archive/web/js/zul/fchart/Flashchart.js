@@ -3,7 +3,7 @@
 	Purpose:
 
 	Description:
-
+		charts.swf version is 2.7.0 for YUI 2.8.2 version.
 	History:
 		Nov 26, 2009 11:58:42 AM , Created by joy
 
@@ -15,8 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /** The flashchart widgets.
  */
-//zk.$package('zul.fchart');
-
 (function () {
 	var _src = zk.ajaxURI('/web/js/zul/fchart/charts.swf', {au: true}),
 		_expressInstall = zk.ajaxURI('/web/js/zul/fchart/expressinstall.swf', {au: true}),
