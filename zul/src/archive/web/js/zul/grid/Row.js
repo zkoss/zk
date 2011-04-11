@@ -131,7 +131,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	getGroup: function () {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w = this.previousSibling; w; w = w.previousSibling)
+			for (var w = this; w; w = w.previousSibling)
 				if (w.$instanceof(zkex.grid.Group)) return w;
 				
 		return null;

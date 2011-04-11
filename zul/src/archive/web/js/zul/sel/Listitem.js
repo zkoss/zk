@@ -34,7 +34,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	getListgroup: function () {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w = this.previousSibling; w; w = w.previousSibling)
+			for (var w = this; w; w = w.previousSibling)
 				if (w.$instanceof(zkex.sel.Listgroup)) return w;
 				
 		return null;
