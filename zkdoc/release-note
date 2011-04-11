@@ -37,6 +37,7 @@ ZK 5.0.7
   3283943: Row#getGroup() inconsistent between server and client
   3283951: Select item in multiSel tree via API can't retrieve selitem
   3284149: Click timebox in a readonly datebox will increase time 
+  3284216: Upgrade the version of chart.swf for Security risk
   
 * Upgrade Notes
 
