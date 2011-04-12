@@ -29,6 +29,7 @@ ZK 5.0.7
   3251279: zk.ajaxURI not respecting ignoreSession
   3247017: SSL/IE6 iframe combination produces warnings
   3259479: Cannot retrieve the forEach element in zscript
+  3259998: Close the tab cause js error
   3261959: Tree with hflex=min won't appear the hor. scrollbar
   3201748: Data-Binding and non-existing Map keys  
   3210356: DateFormat.getTimeInstance cause Timebox error
