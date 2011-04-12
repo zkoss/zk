@@ -17,6 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl.api;
 
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Readonly;
+import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zul.ext.Constrainted;
 
 /**
@@ -27,7 +29,7 @@ import org.zkoss.zul.ext.Constrainted;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface InputElement extends XulElement, Constrainted {
+public interface InputElement extends XulElement, Constrainted, Readonly, Disable {
 	/**
 	 * Returns whether it is disabled.
 	 * <p>

@@ -29,6 +29,8 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.ext.Disable;
+import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuRequests;
@@ -51,7 +53,7 @@ import org.zkoss.zul.ext.Constrainted;
  * @author tomyeh
  */
 abstract public class InputElement extends XulElement
-implements Constrainted, org.zkoss.zul.impl.api.InputElement {
+implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement {
 	private static final Log log = Log.lookup(InputElement.class);
 
 	static {
