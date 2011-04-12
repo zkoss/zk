@@ -828,7 +828,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			if (!_multiple) {
 				selectItem(item);
 			} else {
-				_sel = item;
+				if(_sel == null)
+					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				smartUpdateSelection();
