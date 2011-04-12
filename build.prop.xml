@@ -80,3 +80,11 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 <property name="exclude.list" value="tmp/**, temp/**, ${xar.name}, conf/*.properties"/>
 
+<property name="version.text.freshly" value="${zk.version}-FL$"/>
+<property name="version.text" value="${zk.version}$"/>
+<property name="version.tag.version" value="version&gt;${zk.version}&lt;/version"/>
+<property name="version.tag.zk-version" value="zk-version&gt;${zk.version}&lt;/zk-version"/>
+<property name="version.tag.uid" value="version-uid&gt;${zk.version}&lt;/version-uid"/>
+<property name="version.java.uid" value='UID = &quot;${zk.version}&quot;;$'/>
+<property name="version.java.release" value='RELEASE = &quot;${zk.version}&quot;;'/>
+<property name="version.java.release.freshly" value='RELEASE = &quot;${zk.version}-FL&quot;;'/>
