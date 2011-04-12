@@ -48,7 +48,7 @@ public class Frozen extends XulElement implements org.zkoss.zul.api.Frozen {
 	 * Returns the start position of the scrollbar.
 	 * <p>Default: 0
 	 */
-	public int getStrat() {
+	public int getStart() {
 		return _start;
 	}
 	/**

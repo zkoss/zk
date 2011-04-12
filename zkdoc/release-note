@@ -39,6 +39,7 @@ ZK 5.0.7
   3283951: Select item in multiSel tree via API can't retrieve selitem
   3284149: Click timebox in a readonly datebox will increase time 
   3284216: Upgrade the version of chart.swf for Security risk
+  3285023: Frozen.getStrat() should be getStart()
   
 * Upgrade Notes
 
