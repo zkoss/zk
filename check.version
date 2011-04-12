@@ -1,5 +1,0 @@
-if [ "$1" == "official" ] ; then
-	ant -Dzk.version="$(head -1 zk/version)" check.version
-else
-	ant -Dzk.version="$(head -1 zk/version)" -Dfreshly=true check.version
-fi
