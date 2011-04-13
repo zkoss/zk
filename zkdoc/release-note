@@ -40,6 +40,7 @@ ZK 5.0.7
   3284149: Click timebox in a readonly datebox will increase time 
   3284216: Upgrade the version of chart.swf for Security risk
   3285023: Frozen.getStrat() should be getStart()
+  3285594: InaccessibleWidgetBlockService shall block updates of readonly components
   
 * Upgrade Notes
 
