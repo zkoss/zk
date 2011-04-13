@@ -113,9 +113,18 @@ tr.z-listitem td.z-listitem-focus {
 	background-repeat: no-repeat;
 }
 <%-- Listgroup --%>
-tr.z-listgroup{
+tr.z-listgroup {
 	background: #E9F2FB repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/group_bg.gif')});
+}
+tr.z-listgroup-over {
+	background-image: url(${c:encodeURL('~./zul/img/grid/group-bg-over.png')});
+}
+tr.z-listgroup-seld {
+	background-image: url(${c:encodeURL('~./zul/img/grid/group-bg-seld.png')});
+}
+tr.z-listgroup-over-seld {
+	background-image: url(${c:encodeURL('~./zul/img/grid/group-bg-over-seld.png')});
 }
 td.z-listgroup-inner {
 	padding-top: 2px;
@@ -222,6 +231,7 @@ tr.z-listitem td.z-listitem-focus {
 .z-listitem-img,
 .z-listheader-img,
 .z-listgroup-img-checkbox,
+.z-listgroup-img-radio,
 .z-listgroupfoot-img {
 	background:transparent no-repeat scroll center center;
 	border:0;
@@ -240,32 +250,43 @@ tr.z-listitem td.z-listitem-focus {
 .z-listitem-img-checkbox,
 .z-listitem-img-radio,
 .z-listgroup-img-checkbox,
+.z-listgroup-img-radio,
 .z-listgroupfoot-img {
 	background-image:url(${c:encodeURL('~./zul/img/common/check-sprite.gif')});
 	background-position: 0 0;
 }
-.z-listitem-img-radio {
+.z-listitem-img-radio,
+.z-listgroup-img-radio {
 	background-position: 0 -13px;
 }
-.z-listitem-over .z-listitem-img-radio {
+.z-listitem-over .z-listitem-img-radio,
+.z-listgroup-over .z-listgroup-img-radio {
 	background-position: -13px -13px;
 }
-.z-listitem-seld .z-listitem-img-radio {
+.z-listitem-seld .z-listitem-img-radio,
+.z-listgroup-seld .z-listgroup-img-radio {
 	background-position: -26px -13px;
 }
-.z-listitem-over-seld .z-listitem-img-radio {
+.z-listitem-over-seld .z-listitem-img-radio,
+.z-listgroup-over-seld .z-listgroup-img-radio {
 	background-position: -39px -13px;
 }
 .z-listheader-img-over,
-.z-listitem-over .z-listitem-img-checkbox, .z-listgroup-over .z-listgroup-img-checkbox, .z-listgroupfoot-over .z-listgroupfoot-img-checkbox {
+.z-listitem-over .z-listitem-img-checkbox, 
+.z-listgroup-over .z-listgroup-img-checkbox, 
+.z-listgroupfoot-over .z-listgroupfoot-img-checkbox {
 	background-position: -13px 0;
 }
 .z-listheader-img-seld,
-.z-listitem-seld .z-listitem-img-checkbox, .z-listgroup-seld .z-listgroup-img-checkbox, .z-listgroupfoot-seld .z-listgroupfoot-img-checkbox {
+.z-listitem-seld .z-listitem-img-checkbox, 
+.z-listgroup-seld .z-listgroup-img-checkbox, 
+.z-listgroupfoot-seld .z-listgroupfoot-img-checkbox {
 	background-position: -26px 0;
 }
 .z-listheader-img-over-seld,
-.z-listitem-over-seld .z-listitem-img-checkbox, .z-listgroup-over-seld .z-listgroup-img-checkbox, .z-listgroupfoot-over-seld .z-listgroupfoot-img-checkbox {
+.z-listitem-over-seld .z-listitem-img-checkbox, 
+.z-listgroup-over-seld .z-listgroup-img-checkbox, 
+.z-listgroupfoot-over-seld .z-listgroupfoot-img-checkbox {
 	background-position: -39px 0;
 }
 .z-listitem-img-disd {

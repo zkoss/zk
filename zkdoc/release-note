@@ -12,6 +12,7 @@ ZK 5.0.7
   3278536: Include shall allow the included page to be rendered later
   3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
   3163700: Client: zk.getVersion() shall handle sub-packages
+  3196789: Listbox supports Listgroup selection
 
 * Bugs
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)

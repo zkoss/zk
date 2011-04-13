@@ -208,6 +208,10 @@ import org.zkoss.zul.impl.Utils;
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
+ * <dt>org.zkoss.zul.listbox.listgroupSelectable</dt>
+ * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
+ * you could specify this attribute in any of its ancestor's attributes. It will 
+ * be inherited. Default value is false.</dd>
  *
  * @author tomyeh
  * @see ListModel
@@ -3207,6 +3211,8 @@ public class Listbox extends MeshElement implements Paginated,
 				renderer.render("_cdo", true);
 			if (!isRightSelect())
 				renderer.render("rightSelect", false);
+			if (isListgroupSelectable())
+				renderer.render("listgroupSelectable", true);
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click
@@ -3225,7 +3231,14 @@ public class Listbox extends MeshElement implements Paginated,
 		return _ckDeselectOther.booleanValue();
 	}
 	private static Boolean _ckDeselectOther;
-
+	
+	/**
+	 * Returns whether Listgroup is selectable.
+	 */
+	private boolean isListgroupSelectable() {
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.listgroupSelectable", false, true);
+	}
+	
 	/**
 	 * Processes an AU request.
 	 *

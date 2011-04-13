@@ -42,6 +42,13 @@ var Listbox =
  */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_nrows: 0,
+	/** 
+	 * Whether to allow Listgroup to be selected
+	 * <p>Default: false
+	 * @since 5.0.7
+	 * @type boolean
+	 */
+	listgroupSelectable: false,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
