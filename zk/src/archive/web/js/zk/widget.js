@@ -1462,7 +1462,7 @@ new zul.wnd.Window{
 		 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
 		 * They are called when the widget is becoming visible (show) and invisible (hide).
 		 * <p>The action effect (<code>action-effect1</code>) is the name of a method
-		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</javadoc>,
+		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</a>,
 		 * such as
 		 * <code>show: slideDown; hide: slideUp</code>
 		 * @param String action the cient-side action
