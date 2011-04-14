@@ -536,7 +536,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
 	 * They are called when the widget is becoming visible (show) and invisible (hide).
 	 * <p>The action effect (<code>action-effect1</code>) is the name of a method
-	 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</a>,
+	 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.eff.Actions</a>,
 	 * such as
 	 * <code>show: slideDown; hide: slideUp</code>
 	 * <p>You could specify the effects as follows:<br/>

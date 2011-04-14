@@ -533,14 +533,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	private String nextUuid(Desktop desktop) {
-		String uuid;
-		Set checkList = new HashSet(1000);
-		do {
-			uuid = ((DesktopCtrl)desktop).getNextUuid(this);
-			if (!checkList.add(uuid))
-				throw new UiException("The UUID is generated in an infinite loop: "+uuid);
-		} while (desktop.getComponentByUuidIfAny(uuid) != null);
-		return uuid;
+		Set gened = null;
+		for (;;) {
+			String uuid = ((DesktopCtrl)desktop).getNextUuid(this);
+			if (desktop.getComponentByUuidIfAny(uuid) == null)
+				return uuid;
+
+			if (gened == null)
+				gened = new HashSet();
+			if (!gened.add(uuid))
+				throw new UiException("UUID, "+uuid+", was generated repeatedly (cycle: "+gened.size()
+					+"), and still replicates with existent components. Please have a better ID generator.");
+		}
 	}
 	public String getId() {
 		return _id;
