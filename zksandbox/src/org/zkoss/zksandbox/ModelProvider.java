@@ -297,7 +297,7 @@ public class ModelProvider {
 						Object[] obj = (Object[]) data; // prepared by
 						// createGroupHead()
 						row.appendChild(new Label(
-								getGroupHead(row, (SampleBean) obj[0], (Integer) obj[1])));
+								getGroupHead(row, (SampleBean) obj[0], ((Integer) obj[1]).intValue())));
 					} else {
 						SampleBean b = (SampleBean) data;
 						row.appendChild(new Label(b.getName()));
@@ -364,7 +364,7 @@ public class ModelProvider {
 						Object[] obj = (Object[]) data; // prepared by
 						// createGroupHead()
 						item.appendChild(new Listcell(
-								getGroupHead(item, (SampleBean) obj[0], (Integer) obj[1])));
+								getGroupHead(item, (SampleBean) obj[0], ((Integer) obj[1]).intValue())));
 					} else {
 						SampleBean b = (SampleBean) data;
 						item.appendChild(new Listcell(b.getName()));
