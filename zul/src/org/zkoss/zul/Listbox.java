@@ -31,7 +31,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -208,7 +207,7 @@ import org.zkoss.zul.impl.Utils;
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
- * <dt>org.zkoss.zul.listbox.listgroupSelectable</dt>
+ * <dt>org.zkoss.zul.listbox.groupSelect</dt>
  * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
@@ -3212,7 +3211,7 @@ public class Listbox extends MeshElement implements Paginated,
 			if (!isRightSelect())
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
-				renderer.render("listgroupSelectable", true);
+				renderer.render("groupSelect", true);
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click
@@ -3236,7 +3235,7 @@ public class Listbox extends MeshElement implements Paginated,
 	 * Returns whether Listgroup is selectable.
 	 */
 	private boolean isListgroupSelectable() {
-		return Utils.testAttribute(this, "org.zkoss.zul.listbox.listgroupSelectable", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
 	}
 	
 	/**
