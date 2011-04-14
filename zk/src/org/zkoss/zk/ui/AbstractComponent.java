@@ -534,10 +534,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	private String nextUuid(Desktop desktop) {
 		String uuid;
-		int i = 0;
+		Set checkList = new HashSet(1000);
 		do {
 			uuid = ((DesktopCtrl)desktop).getNextUuid(this);
-			if (i++ > 9)
+			if (!checkList.add(uuid))
 				throw new UiException("The UUID is generated in an infinite loop: "+uuid);
 		} while (desktop.getComponentByUuidIfAny(uuid) != null);
 		return uuid;
