@@ -47,5 +47,11 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 			w.redraw(out);
 	
 		out.push('</div>');
+	},
+	//@Override
+	open: function (opts) {
+		if (!this.getPopupNode_().firstChild) // ignore when <bandpopup> is absent
+			return;
+		this.$supers('open', arguments);
 	}
 });
