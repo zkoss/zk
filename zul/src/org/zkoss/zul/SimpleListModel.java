@@ -101,7 +101,7 @@ implements ListModelExt, ListSubModel, java.io.Serializable {
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
 		Arrays.sort(_data, cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 	
 	/**

@@ -59,6 +59,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	private String _sortDscNm = "none";
 	private Object _value;
 	private int _maxlength;
+	private boolean _ignoreSort = false;
 
 	static {
 		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -126,7 +127,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the list is sorted.
+	 * as an indicator as to how the list is sorted. (unless the listbox has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort list items,
 	 * the sort direction is maintained automatically.
@@ -141,6 +142,12 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Listbox listbox = getListbox();
+				if (listbox != null && listbox.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
 			smartUpdate("sortDirection", _sortDir); //don't use null because sel.js assumes it
 		}
 	}
@@ -385,7 +392,9 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
-
+		return doSort(ascending);
+	}
+	/**/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -418,6 +427,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			Scopes.afterInterpret();
 		}
 
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = box.getListhead().getChildren().iterator();
 		it.hasNext();) {
@@ -425,6 +435,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
 
 		// sometimes the items at client side are out of date
 		box.invalidate();

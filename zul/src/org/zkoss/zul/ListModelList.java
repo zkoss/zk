@@ -389,6 +389,6 @@ implements ListModelExt, List, java.io.Serializable {
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 }

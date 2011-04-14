@@ -177,7 +177,7 @@ public class GroupsModelArray extends AbstractGroupsModel implements GroupsModel
 	public void sort(Comparator cmpr, boolean ascending, int col) {
 		sortAllGroupData(cmpr,ascending,col);
 
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
 	}
 
 	public void group(final Comparator cmpr, boolean ascending, int col) {

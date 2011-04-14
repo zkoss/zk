@@ -12,6 +12,7 @@ ZK 5.0.7
   3278536: Include shall allow the included page to be rendered later
   3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
   3163700: Client: zk.getVersion() shall handle sub-packages
+  3195870: Listbox and others shall sort model based on current state
   3196789: Listbox supports Listgroup selection
   3285074: Add no-cache for the zkau request for security concern
   3285723: Throws an exception when creates too much duplicated uuid

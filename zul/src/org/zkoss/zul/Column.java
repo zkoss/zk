@@ -61,6 +61,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortAscNm = "none";
 	private String _sortDscNm = "none";
 	private Object _value;
+	private boolean _ignoreSort = false;
 
 	static {
 		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -111,7 +112,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the grid is sorted.
+	 * as an indicator as to how the grid is sorted. (unless the grid has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort rows ({@link Row}),
 	 * the sort direction is maintained automatically.
@@ -126,6 +127,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Grid grid = getGrid();
+				if (grid != null && grid.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
 			smartUpdate("sortDirection", _sortDir);
 		}
 	}
@@ -334,13 +341,16 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * null but {@link ListModelExt} is not implemented.
 	 */
 	public boolean sort(boolean ascending) {
-		final String dir = getSortDirection();		
+		final String dir = getSortDirection();
 		if (ascending) {
 			if ("ascending".equals(dir)) return false;
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
 
+		return doSort(ascending);
+	}
+	/*package*/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -395,6 +405,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 	
 	private void fixDirection(Grid grid, boolean ascending) {
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = grid.getColumns().getChildren().iterator();
 		it.hasNext();) {
@@ -402,6 +413,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
 	}
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}.

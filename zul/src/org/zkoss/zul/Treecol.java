@@ -45,6 +45,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	private String _sortAscNm = "none";
 	private String _sortDscNm = "none";
 	private int _maxlength;
+	private boolean _ignoreSort = false;
 
 	static {
 		addClientEvent(Treecol.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -95,7 +96,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the tree is sorted.
+	 * as an indicator as to how the tree is sorted. (unless the tree has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort treechildren ({@link Treeitem}),
 	 * the sort direction is maintained automatically.
@@ -110,6 +111,12 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Tree tree = getTree();
+				if (tree != null && tree.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
 			smartUpdate("sortDirection", _sortDir);
 		}
 	}
@@ -349,7 +356,10 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
-
+		return doSort(ascending);
+	}
+	
+	/*package*/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -376,7 +386,8 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		} finally {
 			Scopes.afterInterpret();
 		}
-
+		
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = tree.getTreecols().getChildren().iterator();
 		it.hasNext();) {
@@ -384,6 +395,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 			col.setSortDirection(
 				col != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
 
 		// sometimes the items at client side are out of date
 		tree.invalidate();

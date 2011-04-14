@@ -327,7 +327,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			Entry entry = (Entry) it.next();
 			_map.put(entry.getKey(), entry.getValue());
 		}
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
 	private boolean removePartial(Collection master, Collection c, boolean isRemove, boolean byKey, boolean byValue) {

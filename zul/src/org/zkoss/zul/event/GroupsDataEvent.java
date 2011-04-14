@@ -47,6 +47,8 @@ public class GroupsDataEvent {
 	 * <p>Note: {@link #getGroupIndex} must be non-negative.
      */   
 	public static final int INTERVAL_REMOVED = 2;
+	/** Identifies the structure of the lists has changed. @since 5.0.7*/
+	public static final int STRUCTURE_CHANGED = 3;
 	/** Identifies one or more changes in the groups contents.
 	 * The indices ({@link #getIndex0} and {@link #getIndex1} ) are
 	 * the indices of groups.
@@ -94,7 +96,7 @@ public class GroupsDataEvent {
 	int groupIndex, int index0, int index1) {
 		if (model == null)
 			throw new IllegalArgumentException();
-		if (type < GROUPS_CHANGED && groupIndex < 0)
+		if (type < STRUCTURE_CHANGED && groupIndex < 0)
 			throw new IllegalArgumentException("groupIndex required for type "+type);
 		_model = model;
 		_type = type;

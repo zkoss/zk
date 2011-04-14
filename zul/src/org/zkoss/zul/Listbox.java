@@ -206,6 +206,17 @@ import org.zkoss.zul.impl.Utils;
  * <dd>Specifies whether to enable ROD (render-on-demand).</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.listbox.autoSort</dt>.(since 5.0.7) 
+ * <dd>Specifies whether to sort the model when the following cases:</br>
+ * <ol>
+ * <li>{@link #setModel} is called and {@link Listheader#setSortDirection} is set.</li>
+ * <li>{@link Listheader#setSortDirection} is called.</li>
+ * <li>Model receives {@link ListDataEvent} and {@link Listheader#setSortDirection} is set.</li>
+ * </ol>
+ * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * you can specifies the value as "ignore.change".</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
  * </dl>
  * <dt>org.zkoss.zul.listbox.groupSelect</dt>
  * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
@@ -2483,7 +2494,8 @@ public class Listbox extends MeshElement implements Paginated,
 				final Paginal pgi = getPaginal();
 				pgi.setTotalSize(getDataLoader().getTotalSize());
 			}
-			postOnInitRender();
+			if (!doSort(this))
+				postOnInitRender();
 			// Since user might setModel and setItemRender separately or
 			// repeatedly,
 			// we don't handle it right now until the event processing phase
@@ -2499,6 +2511,21 @@ public class Listbox extends MeshElement implements Paginated,
 				smartUpdate("model", false);
 			getDataLoader().updateModelInfo();
 		}
+	}
+	
+	private static boolean doSort(Listbox listbox) {
+		Listhead hds = listbox.getListhead();
+		if (!listbox.isAutosort() || hds == null) return false;
+		for (Iterator it = hds.getChildren().iterator();
+		it.hasNext();) {
+			final Listheader hd = (Listheader)it.next();
+			String dir = hd.getSortDirection();
+			if (!"natural".equals(dir)) {
+				hd.doSort("ascending".equals(dir));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -2701,8 +2728,16 @@ public class Listbox extends MeshElement implements Paginated,
 	 * Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
-		getDataLoader().doListDataChange(event);
-		postOnInitRender(); // to improve performance
+		//sort when add
+		int type = event.getType();
+		if ((type == ListDataEvent.INTERVAL_ADDED || 
+				type == ListDataEvent.CONTENTS_CHANGED) && 
+				!isIgnoreSortWhenChanged()) {
+			doSort(this);
+		} else {
+			getDataLoader().doListDataChange(event);
+			postOnInitRender(); // to improve performance
+		}
 	}
 
 	/** Used to render listitem if _model is specified. */
@@ -3218,6 +3253,29 @@ public class Listbox extends MeshElement implements Paginated,
 	 */
 	private boolean isRightSelect() {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rightSelect", true, true);
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	/*package*/ boolean isAutosort() {
+		String attr = "org.zkoss.zul.listbox.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	private boolean isIgnoreSortWhenChanged() {
+		String attr = "org.zkoss.zul.listbox.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val == null ? true: "ignore.change".equals(val);
 	}
 
 	/** Returns whether to toggle the selection if clicking on a list item

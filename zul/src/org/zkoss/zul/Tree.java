@@ -74,6 +74,17 @@ import org.zkoss.zul.impl.Utils;
  * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.tree.autoSort</dt>.(since 5.0.7) 
+ * <dd>Specifies whether to sort the model when the following cases:</br>
+ * <ol>
+ * <li>{@link #setModel} is called and {@link Treecol#setSortDirection} is set.</li>
+ * <li>{@link Treecol#setSortDirection} is called.</li>
+ * <li>Model receives {@link ListDataEvent} and {@link Treecol#setSortDirection} is set.</li>
+ * </ol>
+ * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * you can specifies the value as "ignore.change".</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
  * </dl>
  * @author tomyeh
  */
@@ -1271,7 +1282,13 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		if(parent != null){
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
-			switch (event.getType()) {
+			int type = event.getType();
+			if ((type == TreeDataEvent.INTERVAL_ADDED || 
+					type == TreeDataEvent.CONTENTS_CHANGED) && 
+					!isIgnoreSortWhenChanged()) {
+				doSort(this);
+			}
+			switch (type) {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for(int i=indexFrom;i<=indexTo;i++)
 					onTreeDataInsert(parent,node,i);
@@ -1441,6 +1458,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				_model = model;
 				initDataListener();
 			}
+			doSort(this);
 			syncModel();
 		} else if (_model != null) {
 			_model.removeTreeDataListener(_dataListener);
@@ -1462,6 +1480,21 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		return _model;
 	}
 
+	private static boolean doSort(Tree tree) {
+		Treecols cols = tree.getTreecols();
+		if (!tree.isAutosort() || cols == null) return false;
+		for (Iterator it = cols.getChildren().iterator();
+		it.hasNext();) {
+			final Treecol hd = (Treecol)it.next();
+			String dir = hd.getSortDirection();
+			if (!"natural".equals(dir)) {
+				hd.doSort("ascending".equals(dir));
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/** Synchronizes the tree to be consistent with the specified model.
 	 * <p>Author: jeffliu
 	 */
@@ -1969,7 +2002,28 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	private boolean isRightSelect() {
 		return Utils.testAttribute(this, "org.zkoss.zul.tree.rightSelect", true, true);
 	}
-
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	/*package*/ boolean isAutosort() {
+		String attr = "org.zkoss.zul.tree.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	private boolean isIgnoreSortWhenChanged() {
+		String attr = "org.zkoss.zul.tree.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val == null ? true: "ignore.change".equals(val);
+	}
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
 	 */
