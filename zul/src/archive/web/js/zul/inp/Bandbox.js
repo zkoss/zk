@@ -50,8 +50,12 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	//@Override
 	open: function (opts) {
-		if (!this.getPopupNode_().firstChild) // ignore when <bandpopup> is absent
+		if (!this.getPopupNode_().firstChild) { 
+			// ignore when <bandpopup> is absent, but event is still fired
+			if (opts && opts.sendOnOpen)
+				this.fire('onOpen', {open:true, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
 			return;
+		}
 		this.$supers('open', arguments);
 	}
 });
