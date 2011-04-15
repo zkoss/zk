@@ -50,6 +50,9 @@
 .z-doublespinner-rounded-inp {
 	border:0;	
 	padding: 5px 4px;
+	<c:if test="${c:browser('ios')}">
+		margin-right:-1px;
+	</c:if>
 }
 .z-combobox-rounded-inp {
 	background-image: url(${c:encodeURL('~./zul/img/button/combobox-rounded.gif')});
