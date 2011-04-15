@@ -149,3 +149,19 @@ zk.override(jq.event, zjq._evt = {}, {
 		return evt;
 	}
 });
+
+//IE: use query string if possible to avoid incomplete-request problem
+if (!zk.ie8) //including ie6, ie7, ie7 compatible mode (under ie8/9)
+	zjq._useQS = function (reqInf) {
+		var s = reqInf.content, j = s.length, prev, cc;
+		if (j + reqInf.uri.length < 2000) {
+			while (j--) {
+				cc = s.charAt(j);
+				if (cc == '%' && prev >= '8') //%8x, %9x...
+					return false;
+				prev = cc;
+			}
+			return true;
+		}
+		return false;
+	};

@@ -211,7 +211,7 @@ zk.copy(zjq, {
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
 	_fixIframe: zk.$void,
-	_useQS: zk.$void, //overriden in domie67.js (used in zAU)
+	_useQS: zk.$void, //overriden in domie.js (used in zAU)
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
 	src0: "" //an empty src; overriden in domie.js

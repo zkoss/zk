@@ -29,8 +29,6 @@ window.$eval=function(s){return eval(s);};
 	<script src="dom.js" jsdoc="true"/>
 	<script src="domie.js" browser="ie"/>
 	<script src="domie6.js" browser="ie6-"/>
-	<script src="domie67.js" browser="ie6-"/>
-	<script src="domie67.js" browser="ie7-"/>
 	<script src="domgecko.js" browser="gecko"/>
 	<script src="domsafari.js" browser="safari"/>
 	<script src="domopera.js" browser="opera"/>
