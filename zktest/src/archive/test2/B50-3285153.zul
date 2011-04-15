@@ -1,0 +1,12 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click the button and adjust size of columns. You should be able to see the gray vertical bar when you drag it around. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<button label="Show Modal">
+		<attribute name="onClick"><![CDATA[
+			Executions.createComponents("grid-modal-content.zul", null, null).doModal();
+		]]></attribute>
+	</button>
+</zk>
