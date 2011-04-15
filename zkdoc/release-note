@@ -47,6 +47,7 @@ ZK 5.0.7
   3285594: InaccessibleWidgetBlockService shall block updates of readonly components
   3285153: Column resize ghost bar does not appear in model window
   3285158: Columns with sizable and menupopup has confusing dragging
+  3245960: Textarea content should not be interpret as span
   
 * Upgrade Notes
 
