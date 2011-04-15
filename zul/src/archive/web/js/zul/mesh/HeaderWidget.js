@@ -155,7 +155,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				endghosting: $Header._endghostsizing,
 				snap: $Header._snapsizing,
 				ignoredrag: $Header._ignoresizing,
-				zIndex: 1000,
+				zIndex: 99999, // Bug: B50-3285153
 				endeffect: $Header._aftersizing
 			});
 		}
