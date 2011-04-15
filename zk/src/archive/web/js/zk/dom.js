@@ -906,10 +906,12 @@ jq(el).zk.center(); //same as 'center'
 			wd = this.dimension(), hgh = wd.height; //only width and height
 		wd = wd.width;
 		
+		/*Fixed since ios safari 5.0.2(webkit 533.17.9)
 		if (zk.ios) { // Bug 3042165(iphone/ipad)
 			x -= jq.innerX();
 			y -= jq.innerY();
 		}
+		*/
 		switch(where) {
 		case "before_start":
 			y -= hgh;
@@ -2047,6 +2049,8 @@ zk.copy(jq.Event.prototype, {
 	stop: function () {
 		this.preventDefault();
 		this.stopPropagation();
+		if (zk.ios && this.touchEvent)
+			this.touchEvent.preventDefault();
 	},
 	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information 
 	 * @return Map a map of data.

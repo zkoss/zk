@@ -99,16 +99,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return false; //accept if not sizable or not on border
 		return true;
 	}
-	function _ignoretouchmove(dg, evt){
-		var node = evt.changedTouches[0].target,
-			wgt = dg.control;
-			
-		if (node == wgt.$n('cap') || 
-			zk.Widget.$(node) == wgt.caption) {
-			return false;
-		}
-		return true;
-	}
 	function _aftermove(dg, evt) {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
@@ -277,7 +267,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ghosting: Window._ghostsizing,
 				endghosting: Window._endghostsizing,
 				ignoredrag: Window._ignoresizing,
-				ignoretouchdrag: Window._ignoretouchsizing,
 				endeffect: Window._aftersizing});
 		}
 	}
@@ -293,7 +282,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ghosting: _ghostmove,
 				endghosting: _endghostmove,
 				ignoredrag: _ignoremove,
-				ignoretouchdrag: _ignoretouchmove,
 				endeffect: _aftermove,
 				zIndex: 99999 //Bug 2929590
 			});
@@ -1277,15 +1265,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				minWidth: zk.parseInt(wgt.getMinwidth())
 			};
 			dg.z_orgzi = el.style.zIndex;
-			return false;
-		}
-		return true;
-	},
-	_ignoretouchsizing: function (dg, evt) {
-		var node = evt.changedTouches[0].target,
-			wgt = dg.control;
-		if (zk.Widget.$(node) == wgt && 
-			(node != wgt.$n('cap') && node != wgt.$n('cave'))) {
 			return false;
 		}
 		return true;

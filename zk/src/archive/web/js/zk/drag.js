@@ -99,28 +99,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	//ios
-	function _touchmove (evt) {
-		if(!_activedg || _activedg.dead) return;
-		var touchEvt = evt.originalEvent;
-		if (touchEvt.touches.length > 1) return;
-			
-		var changedTouch = touchEvt.changedTouches[0];
-		zjq._simulatedMouseEvent('mousemove', 0, changedTouch,
-			document.elementFromPoint(changedTouch.clientX, changedTouch.clientY));	
-		touchEvt.preventDefault();
-	}
-	
-	function _touchend (evt) {
-		if(!_activedg) return;
-		var touchEvt = evt.originalEvent;
-		if (touchEvt.touches.length > 1) return;
-		
-		var changedTouch = touchEvt.changedTouches[0];
-		zjq._simulatedMouseEvent('mouseup', 0, changedTouch,
-			document.elementFromPoint(changedTouch.clientX, changedTouch.clientY));	
-	}
-
 /** A draggable object used to make a DOM element draggable. 
  * @disable(zkgwt)
  */
@@ -351,37 +329,25 @@ String scroll; //DOM Element's ID</code></pre>
 		this.dragging = false;   
 
 		jq(this.handle).mousedown(this.proxy(this._mousedown));
-		if (zk.ios)
-			jq(this.handle).bind("touchstart", this.proxy(this._touchstart))
+
 		//register
-		if(_drags.length == 0) {
+		if(_drags.length == 0)
 			jq(document).mouseup(_docmouseup)
 				.mousemove(_docmousemove)
 				.keypress(_dockeypress);
-			if (zk.ios) {
-				jq(document).bind("touchmove", _touchmove)
-					.bind("touchend", _touchend);
-			}			
-		}
 		_drags.push(this);
 	},
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy: function () {
 		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
-		if (zk.ios)
-			jq(this.handle).unbind("touchstart", this.proxy(this._touchstart))
+
 		//unregister
 		_drags.$remove(this);
-		if(_drags.length == 0) {
+		if(_drags.length == 0)
 			jq(document).unbind("mouseup", _docmouseup)
 				.unbind("mousemove", _docmousemove)
 				.unbind("keypress", _dockeypress);
-			if (zk.ios) {
-				jq(document).unbind("touchmove", _touchmove, false)
-					.unbind("touchend", _touchend, false);
-			}	
-		}
 		if (_activedg == this) //just in case
 			_activedg = null;
 
@@ -596,7 +562,7 @@ String scroll; //DOM Element's ID</code></pre>
 		setTimeout(function(){
 			zk.dragging=false;
 			zWatch.fire("onEndDrag", self, evt);
-		}, 0);
+		}, zk.ios ? 500: 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
@@ -631,22 +597,6 @@ String scroll; //DOM Element's ID</code></pre>
 
 			_dnEvt = jq.Event.zk(devt, this.control);
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
-		}
-	},
-	_touchstart: function (event) {
-		var touchEvt = event.originalEvent;
-		if (touchEvt.touches.length > 1) return;
-		
-		var changedTouch = touchEvt.changedTouches[0],
-			node = changedTouch.target;
-		if (this.opts.ignoretouchdrag && 
-			this.opts.ignoretouchdrag(this, touchEvt)) {
-			return;
-		}
-		
-		if (!jq(node).is("select")) {
-			zjq._simulatedMouseEvent('mousedown', 1, changedTouch);
-			touchEvt.preventDefault();
 		}
 	},
 	_keypress: function (devt) {
