@@ -226,7 +226,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	Object[][] list2 = getRandomArray(11, 11);
 	
 	]]></zscript>
-	
+	<html>
+	<![CDATA[
+	<ol>
+	<li>Click each headers of tree.</li>
+	<li>All of tree shell be sorted correctly.</li>
+	</ol>
+	]]>
+	</html>
 	<tabbox>
 		<tabs>
 			<tab label="model auto(attr)" />
