@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3185445.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Apr 17 14:50:29     2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.util.*;
+		import org.zkoss.zul.*;
+		
+		TreeModel model = ModelProvider.TreeModelFactory.getBeanDefaultTreeModel(5,5,5);
+		TreeitemRenderer render = ModelProvider.TreeRendererFactory.getBeanTreeitemRenderer();
+	]]></zscript>
+	<html>
+	<![CDATA[
+	<ol>
+	<li>Select or open some tree node.</li>
+	<li>Sort treeitem by click tree header.</li>
+	<li>The open and selected status shell be the same with before sorted.</li>
+	</ol>
+	]]>
+	</html>
+	<tree model="${model}" itemRenderer="${render}">
+		<treecols>
+			<treecol label="name" sort="auto(name)"/>
+			<treecol label="number" sort="auto(number)"/>
+			<treecol label="date" sort="auto(date)"/>
+		</treecols>
+	</tree>
+</zk>

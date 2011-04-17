@@ -16,16 +16,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.ext.Openable;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A skeletal implementation for {@link TreeModel}.
@@ -36,13 +41,16 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @author Jeff Liu
  * @since 3.0.0
  */
-public abstract class AbstractTreeModel implements TreeModel, java.io.Serializable  {
+public abstract class AbstractTreeModel 
+implements TreeModel, Selectable, Openable, java.io.Serializable  {
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
 	private Object _root;
 	
 	private transient List _listeners = new LinkedList();
+	private Set _selection = new HashSet();
+	private Set _openSet = new HashSet();
 	
 	/**
 	 * Creates a {@link AbstractTreeModel}.
@@ -96,6 +104,47 @@ public abstract class AbstractTreeModel implements TreeModel, java.io.Serializab
 	//-- TreeModel --//
 	public void removeTreeDataListener(TreeDataListener l){
 		_listeners.remove(l);
+	}
+	
+	//Selectable
+	public Set getSelection() {
+		return Collections.unmodifiableSet(_selection);
+	}
+	
+	public void addSelection(Object obj) {
+		_selection.add(obj);
+	}
+	
+	public void removeSelection(Object obj) {
+		_selection.remove(obj);
+	}
+	
+	public void clearSelection() {
+		_selection.clear();
+	}
+	
+	protected void removeAllSelection(Collection c) {
+		_selection.removeAll(c);
+	}
+	
+	protected void retainAllSelection(Collection c) {
+		_selection.retainAll(c);
+	}
+	
+	//Openable
+	public void open(Object obj, boolean open) {
+		if (open)
+			_openSet.add(obj);
+		else
+			_openSet.remove(obj);
+	}
+	
+	public boolean isOpen(Object obj) {
+		return _openSet.contains(obj);
+	}
+	
+	public void clearOpen() {
+		_openSet.clear();
 	}
 	
 	//Serializable//

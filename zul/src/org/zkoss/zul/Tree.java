@@ -48,8 +48,10 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
@@ -811,6 +813,9 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				_sel = item;
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
+				
+				if (_model instanceof Selectable)
+					((Selectable) _model).addSelection(item.getTreeNode());
 
 				smartUpdate("selectedItem", item.getUuid());
 			}
@@ -841,6 +846,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
+				if (_model instanceof Selectable)
+					((Selectable) _model).addSelection(item.getTreeNode());
 				if(_sel == null)
 					_sel = (Treeitem)_selItems.iterator().next();
 				smartUpdateSelection();
@@ -930,6 +937,9 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			_sel = null;
 			smartUpdate("selectedItem", "");
 		}
+		if (_model instanceof Selectable) {
+			((Selectable) _model).clearSelection();
+		}
 	}
 	/** Selects all items.
 	 */
@@ -945,6 +955,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
 				changed = true;
+				if (_model instanceof Selectable)
+					((Selectable) _model).addSelection(item.getTreeNode());
 			}
 			if (first) {
 				_sel = item;
@@ -1105,6 +1117,9 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
+				if (_model instanceof Selectable)
+					((Selectable) _model).addSelection(item.getTreeNode());
+
 			}
 		}
 	}
@@ -1245,6 +1260,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				if (ti.isSelected()) {
 					if (_sel == null) _sel = ti;
 					_selItems.add(ti);
+					if (_model instanceof Selectable)
+						((Selectable) _model).addSelection(ti.getTreeNode());
 					if (--cntSel == 0) break;
 				}
 			}
@@ -1639,8 +1656,24 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				_ctrled = true;
 			}
 
+			if (node instanceof TreeNode) {
+				TreeNode treeNode = (TreeNode) node;
+				item.setTreeNode(treeNode);
+				if (_model instanceof Selectable) {
+					final Object value = 
+						_model.getChild(treeNode.getParent(), item.indexOf());
+					if (((Selectable) _model).getSelection().contains(value)) {
+						addItemToSelection(item);
+					}
+				}
+			}
+			
 			try {
 				_renderer.render(item, node);
+				if (_model instanceof Openable) {
+					if (!item.isOpen() && ((Openable)_model).isOpen(node))
+						item.setOpen(true);
+				}
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));

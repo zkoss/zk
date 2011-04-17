@@ -208,12 +208,16 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
      */
 	public void remove(int index) {
-		DefaultTreeNode child = (DefaultTreeNode)_children.remove(index);
-		child.setParent(null);
+		Object child = _children.remove(index);
+		if (child instanceof DefaultTreeNode)
+			((DefaultTreeNode)child).setParent(null);
 		
 		DefaultTreeModel model = getModel();
-		if (model != null)
+		if (model != null) {
 			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+			model.removeSelection(child);
+			model.open(child, false);
+		}
 	}
 	//@Override
 	/**
@@ -224,13 +228,9 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      */
 	public void remove(TreeNode child) {
 		int index = _children.indexOf(child);
-		if (!_children.remove(child))
+		if (index < 0)
 			throw new IllegalArgumentException("not a child");
-		((DefaultTreeNode)child).setParent(null);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null)
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+		remove(index);
 	}
 	public int compareTo(Object obj) {
 		DefaultTreeNode node = (DefaultTreeNode) obj;
