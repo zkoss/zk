@@ -191,6 +191,7 @@ February 24, 2011
   3189142: Combobox popup width is wrong. IE7 only
   3189758: Date constraint parsing gives wrong result with end of today  
   3190542: ClassCastException in un-maximize of panel
+  3287633: Label hflex property with min set
   
 * Upgrade Notes
   + Panel's border supports none, normal, rounded and rounded+, and

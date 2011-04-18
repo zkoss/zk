@@ -344,10 +344,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									var sameOffParent = c.offsetParent == noffParent;
 									sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
 								}
-								var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-								
-								if (!zk.safari || bm >= 0)
-									sz += bm;
+								if(c.nodeType != 3) {
+									var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
+									if (!zk.safari || bm >= 0)
+										sz += bm;
+								}
 								if (sz > max)
 									max = sz;
 							}
@@ -475,9 +476,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									var	sameOffParent = c.offsetParent == noffParent;
 									sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
 								}
-								var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-								if (!zk.safari || rm >= 0)
-									sz +=  rm;
+								if(c.nodeType != 3) {
+									var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
+									if (!zk.safari || rm >= 0)
+										sz +=  rm;
+								}
 								if (sz > max)
 									max = sz;
 							}
