@@ -58,7 +58,7 @@ function _listen($elem, type, fn, data) {
 }
 
 function _unlisten($elem, type, fn) {
-	var elem = $elem[0];
+	var elem = $elem[0],
 		eventFuncs = jq.data(elem, 'zk_eventFuncs'),
 		funcs;
 	
