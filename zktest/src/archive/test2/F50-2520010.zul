@@ -1,0 +1,154 @@
+<zk>
+	<window title="test grid">
+		<grid>
+			<columns sizable="true">
+				<column label="Type" width="520px" />
+				<column label="Content" hflex="min" />
+				<column label="Content" hflex="1" />
+			</columns>
+		</grid>
+		<grid id="test1" emptyMessage="No items match your search">
+			<columns sizable="true">
+				<column label="Type" width="520px" />
+				<column label="Content" hflex="min" />
+				<column label="Content" hflex="1" />
+			</columns>
+		</grid>
+		<button label="test update message">
+			<attribute name="onClick"><![CDATA[
+	test1.setEmptyMessage("hello");
+]]></attribute>
+		</button>
+
+		<grid id="test3" emptyMessage="No items match your search">
+			<columns id="test3Cols" sizable="true">
+				<column label="Type" width="520px" />
+				<column label="Content" />
+				<column label="Content" />
+			</columns>
+		</grid>
+		<hlayout>
+			<button label="test set model (Add row)">
+				<attribute name="onClick"><![CDATA[
+	ArrayList list = new ArrayList();
+	list.add("test");
+	list.add("test3");
+	test3.setModel(new ListModelList(list));
+]]></attribute>
+			</button>
+			<button label="test remove one row">
+				<attribute name="onClick"><![CDATA[
+	test3.getModel().remove(0);
+]]></attribute>
+			</button>
+		</hlayout>
+
+
+		<grid id="test4" emptyMessage="No items match your search">
+			<columns sizable="true">
+				<column label="Type" width="520px" />
+				<column label="Content" hflex="min" />
+				<column label="Content" hflex="1" />
+			</columns>
+		</grid>
+		<zscript><![CDATA[
+	ArrayList list = new ArrayList();
+	list.add("test");
+	list.add("test3");
+	test4.setModel(new ListModelList(list));
+]]></zscript>
+		<hlayout>
+			<button label="test set model (Add row)">
+				<attribute name="onClick"><![CDATA[
+	ArrayList list = new ArrayList();
+	list.add("test");
+	list.add("test3");
+	test4.setModel(new ListModelList(list));
+]]></attribute>
+			</button>
+			<button label="test remove one row">
+				<attribute name="onClick"><![CDATA[
+	test4.getModel().remove(0);
+]]></attribute>
+			</button>
+		</hlayout>
+	</window>
+	<window title="test listbox">
+	<zk>
+	<window>
+
+		<listbox id="test1" emptyMessage="No items match your search">
+		
+			<listhead sizable="true">
+				<listheader label="Type" width="520px" />
+				<listheader label="Content" hflex="min" />
+				<listheader label="Content" hflex="1" />
+			</listhead>
+		</listbox>
+		<button label="test update message">
+			<attribute name="onClick"><![CDATA[
+		test1.setEmptyMessage("hello");
+	]]></attribute>
+		</button>
+	</window>
+	
+
+	<window>
+		<listbox id="test4" emptyMessage="No items match your search">
+			<listhead sizable="true">
+				<listheader label="Type" width="520px" />
+				<listheader label="Content" hflex="min" />
+				<listheader label="Content" hflex="1" />
+			</listhead>
+		</listbox>
+		<hlayout>
+			<button label="test set model (Add items)">
+				<attribute name="onClick"><![CDATA[
+			ArrayList list = new ArrayList();
+			list.add("test");
+			list.add("test3");
+			test4.setModel(new ListModelList(list));
+		]]></attribute>
+			</button>
+			<button label="test remove one item">
+				<attribute name="onClick"><![CDATA[
+			test4.getModel().remove(0);
+		]]></attribute>
+			</button>
+		</hlayout>
+	</window>
+	<window>
+	
+		<listbox id="test" emptyMessage="No items match your search">
+			<listhead sizable="true">
+				<listheader label="Type" width="520px" />
+				<listheader label="Content" hflex="min" />
+				<listheader label="Content" hflex="1" />
+			</listhead>
+		</listbox>
+		<zscript><![CDATA[
+   			ArrayList list = new ArrayList();
+   			list.add("test");
+   			list.add("test3");
+   			test.setModel(new ListModelList(list));
+		]]></zscript>
+		<hlayout>
+			<button label="test set model (Add items)">
+				<attribute name="onClick"><![CDATA[
+			ArrayList list = new ArrayList();
+			list.add("test");
+			list.add("test3");
+			test.setModel(new ListModelList(list));
+		]]></attribute>
+			</button>
+			<button label="test remove one item">
+				<attribute name="onClick"><![CDATA[
+			test.getModel().remove(0);
+		]]></attribute>
+			</button>
+		</hlayout>
+	</window>
+</zk>
+	
+	</window>
+</zk>
