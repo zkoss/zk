@@ -187,13 +187,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 
 	//-- super --//
 	getFocusCell: function (el) {
-		var tbody = this.getCaveNode(),
-			tds = jq(el).parents('td'), td, p;
+		var tbody = this.getCaveNode();
 		if (jq.isAncestor(tbody, el)) {
+			var tds = jq(el).parents('td'), td;
 			for (var i = 0, j = tds.length; i < j; i++) {
 				td = tds[i];
-				if ((p = td.parentNode) && 
-					(p = p.parentNode) && (p == tbody)) {
+				if (td.parentNode.parentNode == tbody) {
 					return td;
 				}
 			}

@@ -94,13 +94,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	//-- super --//
 	getFocusCell: function (el) {
-		var tbody = this.rows.$n(),
-			tds = jq(el).parents('td'), td, p;
+		var tbody = this.rows.$n();
 		if (jq.isAncestor(tbody, el)) {
+			var tds = jq(el).parents('td'), td;
 			for (var i = 0, j = tds.length; i < j; i++) {
 				td = tds[i];
-				if ((p = td.parentNode) && 
-					(p = p.parentNode) && (p == tbody)) {
+				if (td.parentNode.parentNode == tbody) {
 					return td;
 				}
 			}
