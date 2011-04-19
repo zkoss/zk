@@ -57,5 +57,10 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 			return;
 		}
 		this.$supers('open', arguments);
+	},
+	enterPressed_: function (evt) {
+		//bug 3280506: do not close when children press enter.
+		if(evt.domTarget == this.getInputNode())
+			this.$supers('enterPressed_', arguments);
 	}
 });
