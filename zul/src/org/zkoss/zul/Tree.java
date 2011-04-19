@@ -81,9 +81,9 @@ import org.zkoss.zul.impl.Utils;
  * <ol>
  * <li>{@link #setModel} is called and {@link Treecol#setSortDirection} is set.</li>
  * <li>{@link Treecol#setSortDirection} is called.</li>
- * <li>Model receives {@link ListDataEvent} and {@link Treecol#setSortDirection} is set.</li>
+ * <li>Model receives {@link TreeDataEvent} and {@link Treecol#setSortDirection} is set.</li>
  * </ol>
- * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * If you want to ignore sort when receiving {@link TreeDataEvent}, 
  * you can specifies the value as "ignore.change".</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
