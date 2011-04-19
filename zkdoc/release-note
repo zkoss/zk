@@ -52,6 +52,7 @@ ZK 5.0.7
   3284976: Longbox parsing is to lenient
   3287633: Label hflex property with min set
   3205292: Vflex does not work in Groupbox with default mold
+  3210336: Vflex on panel is not working with portallayout
   
 * Upgrade Notes
 
