@@ -148,7 +148,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this._fixHgh();
 		if (!this.isLegend())
 			setTimeout(this.proxy(this._fixShadow), 500);
-			//shadow raraly needs to fix so OK to delay for better performance
+			//shadow rarely needs to fix so OK to delay for better performance
 	},
 	onShow: _zkf,
 	_fixShadow: function () {
@@ -177,13 +177,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
-
-		if (!this.isLegend())
-			zWatch.listen({onSize: this, onShow: this});
+		// Bug: B50-3205292: vflex with legend Groupbox
+		//if (!this.isLegend())
+		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
-		if (!this.isLegend())
-			zWatch.unlisten({onSize: this, onShow: this});
+		// Bug: B50-3205292: vflex with legend Groupbox
+		//if (!this.isLegend())
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {
