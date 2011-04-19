@@ -65,6 +65,15 @@ div.z-grid-pgi-t {
 div.z-grid-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
+
+tbody.z-grid-empty-body td{
+   	font-family: arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color:#BFBFBF;
+    text-align:center;
+}
+
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
@@ -257,3 +266,4 @@ div.z-grid {
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
 </c:if>
+

@@ -53,6 +53,13 @@ div.z-listbox-body .z-listgroupfoot-inner,
 div.z-listbox-body .z-listgroup-inner {
 	cursor: default;
 }
+tbody.z-listbox-empty-body td{
+   	font-family: arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color:#BFBFBF;
+    text-align:center;
+}
 div.z-listbox-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }

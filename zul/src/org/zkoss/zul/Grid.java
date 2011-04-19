@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -41,8 +40,8 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
@@ -55,10 +54,10 @@ import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
-import org.zkoss.zul.impl.Padding;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -229,6 +228,9 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
 	private boolean _renderAll; //since 5.0.0
+	
+	
+	private transient String _emptyMessage;
 	
 	private transient boolean _rod;
 	
@@ -1363,6 +1365,19 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		}
 	}
 
+	
+	
+	public String getEmptyMessage() {
+		return _emptyMessage;
+	}
+	
+	public void setEmptyMessage(String emptyMessage) {
+		if(!Objects.equals(emptyMessage, _emptyMessage)){
+			this._emptyMessage = emptyMessage;
+			smartUpdate("emptyMessage",this._emptyMessage);
+		}
+	}
+	
 	//Serializable//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
@@ -1414,6 +1429,9 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 			renderer.render("_currentLeft", _currentLeft);
 
 		renderer.render("_topPad", _topPad);
+		
+		renderer.render("emptyMessage", _emptyMessage);
+		
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
 		

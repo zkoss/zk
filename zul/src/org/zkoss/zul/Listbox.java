@@ -36,6 +36,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -43,9 +44,12 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -57,10 +61,10 @@ import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
-import org.zkoss.zul.impl.Padding;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Padding;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A listbox.
@@ -289,6 +293,7 @@ public class Listbox extends MeshElement implements Paginated,
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
+	private String _emptyMessage;
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE
@@ -2943,7 +2948,18 @@ public class Listbox extends MeshElement implements Paginated,
 			}
 		}
 	}
-
+	
+	public String getEmptyMessage() {
+		return _emptyMessage;
+	}
+	
+	public void setEmptyMessage(String emptyMessage) {
+		if(!Objects.equals(emptyMessage, _emptyMessage)){
+			this._emptyMessage = emptyMessage;
+			smartUpdate("emptyMessage",this._emptyMessage);
+		}
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-listbox" : _zclass;
 	}
@@ -3204,6 +3220,8 @@ public class Listbox extends MeshElement implements Paginated,
 			renderer.render("rows", getRows());
 
 		render(renderer, "name", _name);
+		
+		render(renderer, "emptyMessage", _emptyMessage);
 
 		if (inSelectMold()) {
 			render(renderer, "multiple", isMultiple());

@@ -120,6 +120,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
+		if(this.getGrid() && this.getGrid().fixForRowAdd_) 
+			this.getGrid().fixForRowAdd_();			
 		this._syncStripe();
 		if (this.desktop)
 			_syncFrozen(this);
@@ -130,6 +132,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
+		if(this.getGrid() && this.getGrid().fixForRowRemove_) 
+			this.getGrid().fixForRowRemove_();
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tbody', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tbody>');

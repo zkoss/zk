@@ -45,6 +45,11 @@ zul.grid.Renderer = {
  * 
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
+	$define:{
+		emptyMessage:function(msg){
+			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+		}
+	},
 	/** Returns the specified cell, or null if not available.
 	 * @param int row which row to fetch (starting at 0).
 	 * @param int col which column to fetch (starting at 0).
@@ -154,6 +159,30 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
+	},
+	_isEmpty:function(){
+		return this.rows ? this.rows.nChildren : false; 
+	},
+	redrawEmpty_:function(out){
+		var cols = this.columns ? this.columns.nChildren : 1 ;
+			uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
+		( this._isEmpty() ? ' style="display:none">' : '' ),
+			'<tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+	},
+	_fixForEmpty:function(){
+		if (this.desktop) {
+			if(this._isEmpty())
+				jq(this.$n("empty")).hide();
+			else
+				jq(this.$n("empty")).show();
+		}
+	},	
+	fixForRowAdd_:function(){
+		this._fixForEmpty();
+	},	
+	fixForRowRemove_:function(){
+		this._fixForEmpty();
 	},
 	onChildAdded_: function(child) {
 		this.$supers('onChildAdded_', arguments);

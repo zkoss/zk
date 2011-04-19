@@ -1292,6 +1292,7 @@
 		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
+		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 	</xs:complexType>
 
     <!-- groupbox -->
@@ -1555,6 +1556,7 @@
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
+		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>

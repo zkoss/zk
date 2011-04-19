@@ -49,6 +49,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @type boolean
 	 */
 	groupSelect: false,
+	$define:{
+		emptyMessage:function(msg){
+			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+		}
+	},	
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
@@ -245,7 +250,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		} else if (child.$instanceof(zul.mesh.Frozen)) {
 			this.frozen = child;
 		}
-
+		
+		this._fixForEmpty();
+		
 		if (!ignoreAll) {
 			if (!ignoreDom && !noRerender)
 				return this.rerender();
@@ -294,10 +301,25 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._selItems.$remove(child);
 			stripe = true;
 		}
-
+		this._fixForEmpty();
 		if (!ignoreDom) { //unlike _fixOnAdd, it ignores strip too (historical reason; might be able to be better)
 			if (stripe) this._syncStripe();
 			this._syncSize();
+		}
+	},
+	redrawEmpty_:function(out){
+		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
+			uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
+		(this._nrows ? ' style="display:none">' : '' ),
+			'<tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+	},
+	_fixForEmpty:function(){
+		if (this.desktop) {
+			if(this._nrows)
+				jq(this.$n("empty")).hide();
+			else
+				jq(this.$n("empty")).show();
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {
