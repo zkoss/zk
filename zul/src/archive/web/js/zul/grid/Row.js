@@ -275,6 +275,23 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (child == this.detail)
 			this.detail = null;
 	},
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		//sync frozen
+		var grid, frozen, tbody, td, tds;
+		if ((grid = this.getGrid()) && grid.efrozen && 
+			(frozen = zk.Widget.$(grid.efrozen.firstChild)) &&
+			grid.rows && (tbody = grid.rows.$n())) {
+			tds = jq(evt.domTarget).parents('td')
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if (td.parentNode.parentNode == tbody) {
+					grid._moveToHidingFocusCell(td);
+					break;
+				}
+			}
+		}
+	},
 	doMouseOver_: function(evt) {
 		if (this._musin) return;
 		this._musin = true;

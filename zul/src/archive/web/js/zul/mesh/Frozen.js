@@ -17,9 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var v = zk.Widget.$(c)._colspan;
 		return v ? v: 1;
 	}
-	function _resetColspan(c) {
-		c.colSpan = _colspan(c);
-	}
 	function _fixaux(cells, from, to) {
 		for (var j = 0, k = 0, cl = cells.length; j < cl; ++j) {
 			var ke = k + _colspan( zk.Widget.$(cells[j]));
@@ -30,19 +27,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						v = from - k, v2 = ke - to;
 					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
 					if (v) {
-						cell.colSpan = v;
-						cell.style.display = "";
+						cell.style.width = "";
 					} else {
-						_resetColspan(cell);
-						cell.style.display = "none";
+						cell.style.width = "0px";
 					}
 				}
 				for (; j < cl; ++j) {
 					var cell = cells[j];
-					_resetColspan(cell);
-					if (cell.style.display != "none")
+					if (cell.style.width != "0px")
 						break; //done
-					cell.style.display = "";
+					cell.style.width = "";
 				}
 				return;
 			}
@@ -140,9 +134,22 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	_onScroll: function (evt) {
-		if (!evt.data) return;
-		this.setStart(this._start + 2);
-		this.parent.ebody.scrollLeft = 0;
+		if (!evt.data || !zk.currentFocus) return;
+		var p, index, td, frozen = this, 
+			fn = function () {
+				if (zk.currentFocus &&
+					(td = p.getFocusCell(zk.currentFocus.$n())) && 
+						(index = td.cellIndex - frozen._columns) >= 0) {
+					frozen.setStart(index);
+					p.ebody.scrollLeft = 0;
+				}
+			};
+			
+		if (p = this.parent) {
+			if (zk.ie)
+				setTimeout(fn, 0);
+			else fn();
+		}
 		evt.stop();
 	},
 	bind_: function () {
@@ -207,27 +214,37 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible;
+			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible, hdWgt;
 			for (var display, faker, index = this._columns,
 					tail = mesh.head.nChildren - index,
 					n = colhead;
 					n; n = n.nextSibling, index++, tail--) {
-				isVisible = (isVisible = zk.Widget.$(n)) && isVisible.isVisible();
-				display = cnt-- <= 0 ? '' : 'none';
-				if (force || n.style.display != display) {
-					n.style.display = display;
+				
+				isVisible = (hdWgt = zk.Widget.$(n)) && hdWgt.isVisible();
+
+				cellWidth = cnt-- <= 0 ? jq(n).width() : '0px';
+				if (cellWidth == '0px') {
+					if (!hdWgt._origWd)
+						hdWgt._origWd = jq(hdWgt.$n('hdfaker')).width();
+				} else if (hdWgt._origWd) {
+					cellWidth = jq.px0(hdWgt._origWd);
+					hdWgt._origWd = null;
+				}
+				
+				if (force || n.style.width != cellWidth) {
+					n.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 
 					//body
 					if (isVisible)
 						for (var i = 0, rl = rows.length, cells;
 						i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
-							cells[ofs].style.display = display;
+							cells[ofs].style.width = cellWidth;
 						
 					// foot
 					if (mesh.foot) {
@@ -237,7 +254,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							var tBodies = eFootTbl.tBodies;
 							
 							if (tBodies) {
-								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.display = display;
+								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.width = cellWidth;
 							}
 						}
 					}
@@ -282,6 +299,20 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh.ebodytbl.style.width = width;
 		if (mesh.efoottbl)
 			mesh.efoottbl.style.width = width;
+
+		mesh._restoreFocus();
+		if (zk.safari) {
+			var table,oldCSS;
+			if (table = mesh.eheadtbl) {
+				oldCSS = table.style.display;
+				if (oldCSS != 'none') {
+					table.style.display = 'none';
+					setTimeout(function () {
+						table.style.display = oldCSS;
+					}, 0);
+				}
+			}
+		}
 	}
 });
 

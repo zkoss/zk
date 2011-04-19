@@ -20,6 +20,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.mesh');
 
 (function () {
+	var _shellFocusBack;
+	
 	function _setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn) {
 		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
 		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
@@ -376,6 +378,30 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 */
 	getHeadWidget: function () {
 		return this.head;
+	},
+	/**
+	 * Returns the index of the cell including the child got focus.
+	 * @param DOMElement el the element got focus.
+	 * @return int the cell index.
+	 * @since 5.0.7
+	 */
+	getFocusCell: function (el) {
+	},
+	_moveToHidingFocusCell: function (td) {
+		//B50-3178977 navigating the input in hiddin column.
+		var index, frozen;
+		if (td.style.width == '0px' && 
+			(frozen = zk.Widget.$(this.efrozen.firstChild)) &&
+			(index = td.cellIndex - frozen.getColumns()) >= 0) {
+			frozen.setStart(index);
+			_shellFocusBack = true;
+		}
+	},
+	_restoreFocus: function () {
+		if (_shellFocusBack && zk.currentFocus) {
+			_shellFocusBack = false;
+			zk.currentFocus.focus();
+		}
 	},
 
 	bind_: function () {

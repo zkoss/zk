@@ -181,6 +181,19 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 
 	//-- super --//
+	getFocusCell: function (el) {
+		var tbody = this.getCaveNode(),
+			tds = jq(el).parents('td'), td, p;
+		if (jq.isAncestor(tbody, el)) {
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if ((p = td.parentNode) && 
+					(p = p.parentNode) && (p == tbody)) {
+					return td;
+				}
+			}
+		}
+	},
 	getCaveNode: function () {
 		return this.$n('rows') || this.$n('cave');
 	},	

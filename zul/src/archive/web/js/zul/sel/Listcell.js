@@ -150,6 +150,17 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		}
 		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? "&nbsp;": '';
 	},
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		
+		//sync frozen
+		var box, frozen, tbody, td, tds, node;
+		if ((box = this.getListbox()) && box.efrozen && 
+			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
+			(node = this.$n()))) {
+			box._moveToHidingFocusCell(node);
+		}
+	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)
 		&& !jq.nodeName(evt.domTarget, "input", "textarea")) {

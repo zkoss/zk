@@ -25,6 +25,7 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	white-space: nowrap;
 	padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
+	position: relative;
 }
 div.z-grid-header .z-column-sort div.z-column-cnt {
 	cursor: pointer;

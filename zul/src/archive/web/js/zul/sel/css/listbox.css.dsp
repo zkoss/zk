@@ -19,6 +19,7 @@ div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
+	position: relative;
 }
 div.z-listbox-header th.z-listheader-sort div.z-listheader-cnt {
 	cursor: pointer; padding-right: 9px;

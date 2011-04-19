@@ -22,6 +22,6 @@ function (out) {
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++)
 		w.redraw(out);
 		
-	out.push('</div><div id="', uuid, '-scrollX" class="', zcls, '-inner"><div></div></div>',
+	out.push('</div><div id="', uuid, '-scrollX" class="', zcls, '-inner" tabindex="-1"><div></div></div>',
 			'<div class="z-clear"></div></div>');
 }

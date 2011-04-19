@@ -88,6 +88,19 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return this;
 	},
 	//-- super --//
+	getFocusCell: function (el) {
+		var tbody = this.rows.$n(),
+			tds = jq(el).parents('td'), td, p;
+		if (jq.isAncestor(tbody, el)) {
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if ((p = td.parentNode) && 
+					(p = p.parentNode) && (p == tbody)) {
+					return td;
+				}
+			}
+		}
+	},
 	getZclass: function () {
 		return this._zclass == null ? "z-grid" : this._zclass;
 	},

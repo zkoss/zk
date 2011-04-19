@@ -19,6 +19,7 @@ ZK 5.0.7
   3285723: Throws an exception when creates too much duplicated uuid
 
 * Bugs
+  3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
   3190987: Dyanmic tab,tabpanel are disorder
   3214829: c:l() causes ConcurrentModificationException if registered dynamically
