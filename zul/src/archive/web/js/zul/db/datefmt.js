@@ -152,7 +152,7 @@ zk.fmt.Date = {
 					}
 
 					if (!isNaN(nv = _parseInt(token))) {
-						y = nv;
+						y = Math.min(nv, 200000); // Bug B50-3288904: js year limit
 						if (y < 100) y += y > 29 ? 1900 : 2000;
 					}
 					break;
