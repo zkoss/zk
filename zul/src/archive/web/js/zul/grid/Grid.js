@@ -169,7 +169,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	/**
 	 * a redraw method for the empty message , if you want to customize all the mssage ,
 	 * you could overwrite this.
-	 * @param {Object} out
+	 * @param Object out
 	 */
 	redrawEmpty_: function (out) {
 		var cols = this.columns ? this.columns.nChildren : 1 ;
