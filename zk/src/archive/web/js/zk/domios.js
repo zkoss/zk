@@ -98,20 +98,20 @@ function _toMobileEventType(type){
 function _toMouseEvent(event, changedTouch) {
 	switch (event.type) {
 	case 'touchstart':
-		return _createJQEvent(changedTouch.target, 'mousedown', 1, changedTouch);
+		return _createJQEvent(changedTouch.target, 'mousedown', 0, changedTouch);
 	case 'touchend':
 		return _createJQEvent(
 			document.elementFromPoint(
 				changedTouch.clientX, 
 				changedTouch.clientY), 
-				'mouseup', 1, changedTouch);
+				'mouseup', 0, changedTouch);
 		break;
 	case 'touchmove':
 		return _createJQEvent(
 			document.elementFromPoint(
 				changedTouch.clientX, 
 				changedTouch.clientY),
-			'mousemove', 1, changedTouch);
+			'mousemove', 0, changedTouch);
 		break;
 	}
 	return event;
