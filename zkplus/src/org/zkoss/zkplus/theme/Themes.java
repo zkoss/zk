@@ -36,7 +36,7 @@ public class Themes {
 	private final static String THEME_COOKIE_KEY = "zktheme";
 	private final static String THEME_PREFERRED_KEY = "org.zkoss.theme.preferred";
 	private final static String THEME_NAMES_KEY = "org.zkoss.theme.names";
-	private final static String THEME_DEFAULT_KEY = "org.zkoss.theme.default.name";
+	private final static String THEME_DEFAULT_KEY = "org.zkoss.theme.default";
 	private final static String THEME_PRIORITY_PREFIX = "org.zkoss.theme.priority.";
 	private final static String THEME_DISPLAY_NAME_PREFIX = "org.zkoss.theme.display.";
 	
