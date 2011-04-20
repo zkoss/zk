@@ -121,7 +121,7 @@ public class Themes {
 		if (Strings.isEmpty(themes))
 			Library.setProperty(THEME_NAMES_KEY, theme);
 		else if (!contains(themes, theme))
-			Library.setProperty(THEME_NAMES_KEY, ";" + themes + theme);
+			Library.setProperty(THEME_NAMES_KEY, themes + ";" + theme);
 	}
 	
 	/**
@@ -176,9 +176,7 @@ public class Themes {
 	}
 	
 	private static boolean contains(String themes, String target) {
-		if(Strings.isEmpty(target))
-			return false;
-		return (";" + themes + ";").contains(";" + target + ";");
+		return !Strings.isEmpty(target) && (";" + themes + ";").contains(";" + target + ";");
 	}
 	
 	private static String capitalize(String str) {
