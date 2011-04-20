@@ -167,9 +167,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return this.rows ? this.rows.nChildren : false; 
 	},
 	/**
-	 * a redraw method for the empty message , if you want to customize all the mssage ,
+	 * a redraw method for the empty message , if you want to customize the message ,
 	 * you could overwrite this.
-	 * @param Object out
+	 * @param Array out A array that contains html structure ,
+	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
 		var cols = this.columns ? this.columns.nChildren : 1 ;

@@ -310,9 +310,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 	},
 	/**
-	 * Redrawer for empty message.
-	 * if you want to customize the empty message, you could overwrite this method.
-	 * @param Object out
+	 * A redraw method for the empty message , if you want to customize the message ,
+	 * you could overwrite this.
+	 * @param Array out A array that contains html structure ,
+	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
 		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
