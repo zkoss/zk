@@ -230,7 +230,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	private boolean _renderAll; //since 5.0.0
 	
 	
-	private transient String _emptyMessage;
+	private String _emptyMessage;
 	
 	private transient boolean _rod;
 	
@@ -1373,8 +1373,8 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	
 	public void setEmptyMessage(String emptyMessage) {
 		if(!Objects.equals(emptyMessage, _emptyMessage)){
-			this._emptyMessage = emptyMessage;
-			smartUpdate("emptyMessage",this._emptyMessage);
+			_emptyMessage = emptyMessage;
+			smartUpdate("emptyMessage",_emptyMessage);
 		}
 	}
 	

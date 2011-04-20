@@ -151,10 +151,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop && this._shallStripe) {
-			this.stripe();
-			if (this._shallSize)
-				this.$supers('onResponse', arguments);
+		if (this.desktop) {
+			if (this._shallStripe) {
+				this.stripe();
+				if (this._shallSize) this.$supers('onResponse', arguments);
+			}
+			if (this._shallFixEmpty) 
+				this._fixForEmpty();
 		}
 	},
 	_syncStripe: function () {
@@ -250,7 +253,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.frozen = child;
 		}
 		
-		this._fixForEmpty();
+		this._syncEmpty();
 		
 		if (!ignoreAll) {
 			if (!ignoreDom && !noRerender)
@@ -300,20 +303,30 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._selItems.$remove(child);
 			stripe = true;
 		}
-		this._fixForEmpty();
+		this._syncEmpty();
 		if (!ignoreDom) { //unlike _fixOnAdd, it ignores strip too (historical reason; might be able to be better)
 			if (stripe) this._syncStripe();
 			this._syncSize();
 		}
 	},
-	redrawEmpty_:function(out){
+	/**
+	 * Redrawer for empty message.
+	 * if you want to customize the empty message, you could overwrite this method.
+	 * @param {Object} out
+	 */
+	redrawEmpty_: function (out) {
 		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
 			uuid = this.uuid, zcls = this.getZclass();
 		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
 		(this._nrows ? ' style="display:none">' : '' ),
 			'<tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
 	},
-	_fixForEmpty:function(){
+	_syncEmpty: function () {
+		this._shallFixEmpty = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
+	},
+	_fixForEmpty: function () {
 		if (this.desktop) {
 			if(this._nrows)
 				jq(this.$n("empty")).hide();

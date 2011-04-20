@@ -159,17 +159,29 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
 	},
-	_isEmpty:function(){
+	/**
+	 * empty means no any row .
+	 * @return boolean
+	 */
+	_isEmpty: function () {
 		return this.rows ? this.rows.nChildren : false; 
 	},
-	redrawEmpty_:function(out){
+	/**
+	 * a redraw method for the empty message , if you want to customize all the mssage ,
+	 * you could overwrite this.
+	 * @param {Object} out
+	 */
+	redrawEmpty_: function (out) {
 		var cols = this.columns ? this.columns.nChildren : 1 ;
 			uuid = this.uuid, zcls = this.getZclass();
 		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
 		( this._isEmpty() ? ' style="display:none">' : '' ),
 			'<tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
 	},
-	_fixForEmpty:function(){
+	/**
+	 * Fix for the empty message shows up or now. 
+	 */
+	fixForEmpty_: function () {
 		if (this.desktop) {
 			if(this._isEmpty())
 				jq(this.$n("empty")).hide();
@@ -177,12 +189,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 				jq(this.$n("empty")).show();
 		}
 	},	
-	fixForRowAdd_:function(){
-		this._fixForEmpty();
-	},	
-	fixForRowRemove_:function(){
-		this._fixForEmpty();
-	},
 	onChildAdded_: function(child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_

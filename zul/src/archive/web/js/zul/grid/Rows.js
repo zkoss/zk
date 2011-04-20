@@ -84,13 +84,22 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers(Rows, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop && this._shallStripe) { //since bind_(...after)
-			this.stripe();
-			this.getGrid().onSize();
+		if (this.desktop){
+			if (this._shallStripe) { //since bind_(...after)
+				this.stripe();
+				this.getGrid().onSize();
+			}
+			if(this._shallFixEmpty)
+				this.getGrid().fixForEmpty_();			
 		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
+	},
+	_syncEmptyState: function () {
+		this._shallFixEmpty = true;
 		if (!this.inServer && this.desktop)
 			this.onResponse();
 	},
@@ -122,7 +131,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.push(child);
 		if(this.getGrid() && this.getGrid().fixForRowAdd_) 
 			this.getGrid().fixForRowAdd_();			
-		this._syncStripe();
+		this._syncEmptyState();
 		if (this.desktop)
 			_syncFrozen(this);
 	},
@@ -132,8 +141,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
-		if(this.getGrid() && this.getGrid().fixForRowRemove_) 
-			this.getGrid().fixForRowRemove_();
+		this._syncEmptyState();
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tbody', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tbody>');
