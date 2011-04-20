@@ -21,14 +21,16 @@ import org.zkoss.zk.ui.Page;
  * A plugin that an application could add to generate application-specific
  * SEO content. The generated content won't be visible to the end users,
  * but that will be used by the spider of search engines.
- * <p>You could specify the class of an implementation of the SEO renderer in
- * a preference called <code>org.zkoss.zk.ui.sys.SEORenderer.class</code>.
- * <p>For example, in WEB-INF/zk.xml, you could specify
+ * <p>You could specify the class of an implementation of the SEO renderer
+ * as a listener in WEB-INF/zk.xml. For example,
  * <pre><code>
-&lt;preference>
-	&lt;name>org.zkoss.zk.ui.sys.SEORenderer.class&lt;/name>
-	&lt;value>com.foo.MySEORenderer&lt;/value>
-&lt;/preference></code></pre>
+&lt;listener>
+	&lt;listener-class>com.foo.MySEORenderer&lt;/listener-class>
+&lt;/listener></code></pre>
+ *
+ * <p>Also notice that you could generate JavaScript snippet too, since it will
+ * be interpreted by the browser. For example, if you'd like to inject some JavaScript
+ * code to every page, you could implement this class and register it as a listener.
  *
  * <p>Notice that the SEO render, if specified, is always called, even if
  * <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_crawlable_Element">the crawlable option</a> is not enabled.

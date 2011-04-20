@@ -20,6 +20,7 @@ ZK 5.0.7
   3285074: Add no-cache for the zkau request for security concern
   3285723: Throws an exception when creates too much duplicated uuid
   2520010: new 'emptyMessage' attribute for Grid/Listbox
+  3290092: Allow SEORenderer to be a application-level listener
  
 * Bugs
   3178977: Frozen Grid cannot navigating to the textbox in hiddin col 

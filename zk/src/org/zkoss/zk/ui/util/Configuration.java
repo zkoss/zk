@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
@@ -104,6 +105,7 @@ public class Configuration {
 		_uiCycles = new FastReadArray(UiLifeCycle.class),
 		_composers = new FastReadArray(Class.class),
 		_initiators = new FastReadArray(Class.class),
+		_seoRends = new FastReadArray(Class.class),
 		_resolvers = new FastReadArray(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
@@ -196,7 +198,8 @@ public class Configuration {
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link VariableResolver},
+	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link SEORenderer} (since 5.0.7)
+	 * {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
 	 * and/or {@link EventInterceptor} interfaces.
@@ -285,6 +288,10 @@ public class Configuration {
 			_initiators.add(klass); //not instance
 			added = true;
 		}
+		if (SEORenderer.class.isAssignableFrom(klass)) {
+			_seoRends.add(klass);
+			added = true;
+		}
 		if (VariableResolver.class.isAssignableFrom(klass)) {
 			_resolvers.add(klass); //not instance
 			added = true;
@@ -361,6 +368,7 @@ public class Configuration {
 
 		_composers.remove(klass);
 		_initiators.remove(klass);
+		_seoRends.remove(klass);
 		_resolvers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
@@ -979,6 +987,27 @@ public class Configuration {
 			}
 		}
 		return (Initiator[])inits.toArray(new Initiator[inits.size()]);
+	}
+	/** Returns a readonly list of the system-level initiators.
+	 * It is empty if none is registered.
+	 * To register a system-level initiator, use {@link #addListener}.
+	 * @since 5.0.7
+	 */
+	public SEORenderer[] getSEORenderers() {
+		final Class[] sdclses = (Class[])_seoRends.toArray();
+		if (sdclses.length == 0)
+			return new SEORenderer[0];
+
+		final List sds = new LinkedList();
+		for (int j = 0; j < sdclses.length; ++j) {
+			final SEORenderer sd;
+			try {
+				sds.add((SEORenderer)sdclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + sdclses[j]);
+			}
+		}
+		return (SEORenderer[])sds.toArray(new SEORenderer[sds.size()]);
 	}
 	
 	/** Initializes the given page with the variable resolvers registered
