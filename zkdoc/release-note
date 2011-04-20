@@ -6,6 +6,8 @@ ZK 5.0.7
   3202692: Support more EL utilties: toUpperCase, toLowerCase...
   3243015: Easier way to access I18N labels in EL
   3252169: Easier way to specify multiple properties files for i18n labels
+  3287163: Allow user to pick up format regardless the locale
+  3290020: Datebox/timebox allows user to specify locale
   3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
   3226332: Timebox supports selection all and delete
   3259969: Support system-level initiator

@@ -1002,6 +1002,7 @@
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="displayedTimeZones" type="xs:string" use="optional" />
 		<xs:attribute name="timeZonesReadonly" type="booleanType" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- decimalbox -->
@@ -2115,6 +2116,7 @@
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- toolbar -->

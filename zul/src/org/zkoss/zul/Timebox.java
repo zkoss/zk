@@ -23,10 +23,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Locale;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.FormatInputElement;
@@ -38,8 +40,6 @@ import org.zkoss.zul.mesg.MZul;
  * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
  * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
- *
- * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
  * <p>timebox supports below key events.
  * <lu>
@@ -58,12 +58,15 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.0
  */
 public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Timebox {
+	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
 	private TimeZone _tzone;
+	/** The locale assoicated with this timebox. */
+	private Locale _locale;
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
 		setCols(5);
-		setFormat("HH:mm");
+		setFormat(getDefaultFormat());
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();
@@ -73,7 +76,30 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 
 
 	/** Sets the date format.
-<p>The following pattern letters are defined:
+<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
+Since 5.0.7, you could specify one of the following reserved words,
+and {@link DateFormats#getTimeFormat}
+will be used to retrieve the real format.
+<table border=0 cellspacing=3 cellpadding=0>
+<tr>
+<td>short</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#SHORT}</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#MEDIUM}</td>
+</tr>
+<tr>
+<td>long</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#LONG}</td>
+</tr>
+<tr>
+<td>full</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#FULL}</td>
+</tr>
+</table>
+
+<p>In additions, the format could be a combination of the following pattern letters:
 <table border=0 cellspacing=3 cellpadding=0>
 
      <tr bgcolor="#ccccff">
@@ -121,8 +147,13 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
  	@since 5.0.0
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		if (format == null || format.length() == 0)
-			format = "HH:mm";
+		if (format == null || format.length() == 0) {
+			format = getDefaultFormat();
+		} else {
+			int ts = Datebox.toStyle(format);
+			if (ts != -111)
+				format = DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT);
+		}
 		super.setFormat(format);
 	}
 	
@@ -176,7 +207,47 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 			smartUpdate("_value", marshall(_value));
 		}
 	}
-	
+
+	/** Returns the locale associated with this timebox,
+	 * or null if {@link Locales#getCurrent} is preferred.
+	 * @since 5.0.7
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+	/** Sets the locale used to indetify the format of this timebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(Locale locale) {
+		_locale = locale;
+	}
+	/** Sets the locale used to indetify the format of this timebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(String locale) {
+		setLocale(locale != null && locale.length() > 0 ?
+			Locales.getLocale(locale): null);
+	}
+
+	/**
+	 * Returns the default format, which is used when constructing a timebox.
+	 * <p>Default: DateFormats.getTimeFormat(DEFAULT, null, "HH:mm")
+	 * (see {@link DateFormats#getTimeFormat}).
+	 * 
+	 * <p>Though you might override this method to provide your own default format,
+	 * it is suggested to specify the format for the current thread
+	 * with {@link DateFormats#setTimeFormatLocal}.
+	 * @since 5.0.7
+	 */
+	protected String getDefaultFormat() {
+		return DateFormats.getTimeFormat(DateFormat.DEFAULT, _locale, "HH:mm");
+			//We use HH:mm for backward compatibility
+	}
+
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;
 		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
@@ -212,7 +283,8 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 	 * <p>Default: it uses SimpleDateFormat to format the date.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
-		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
+		final DateFormat df = new SimpleDateFormat(fmt,
+			_locale != null ? _locale: Locales.getCurrent());
 		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;

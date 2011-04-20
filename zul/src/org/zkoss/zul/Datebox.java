@@ -24,10 +24,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.Locale;
 
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+import org.zkoss.text.DateFormats;
+
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
@@ -40,11 +43,9 @@ import org.zkoss.zul.mesg.MZul;
  * An edit box for holding a date.
  * 
  * <p>
- * The default format ({@link #getFormat}) depends on JVM's setting and the
- * current user's locale. That is,
- * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
- * You might override {@link #getDefaultFormat} to provide your own default
- * format.
+ * The default format ({@link #getFormat}) depends on {@link DateFormats#getDateFormat}
+ * and the current user's locale (unless {@link #setLocale} is assigned.
+ * Please refer to {@link #setFormat} for more details.
  * <p>
  * Default {@link #getZclass}: z-datebox.(since 3.5.0)
  * 
@@ -52,8 +53,12 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
+	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
+
 	private TimeZone _tzone;
 	private List _dtzones;
+	/** The locale associated with this datebox. */
+	private Locale _locale;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 	
 	static {
@@ -80,24 +85,18 @@ public class Datebox extends FormatInputElement implements
 	}
 
 	/**
-	 * Returns the default format, which is used when constructing a datebox.
-	 * <p>
-	 * The default format ({@link #getFormat}) depends on JVM's setting and the
-	 * current user's locale. That is,
-	 * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
+	 * Returns the default format, which is used when constructing a datebox,
+	 * or when {@link #setFormat} is called with null or empty.
+	 * <p>Default: DateFormats.getDateFormat(DEFAULT, null, "yyyy/MM/dd")
+	 * (see {@link DateFormats#getDateFormat}).
 	 * 
-	 * <p>
-	 * You might override this method to provide your own default format.
+	 * <p>Though you might override this method to provide your own default format,
+	 * it is suggested to specify the format for the current thread
+	 * with {@link DateFormats#setDateFormatLocal}.
 	 */
 	protected String getDefaultFormat() {
-		final DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT,
-				Locales.getCurrent());
-		if (df instanceof SimpleDateFormat) {
-			final String fmt = ((SimpleDateFormat) df).toPattern();
-			if (fmt != null && !"M/d/yy h:mm a".equals(fmt))
-				return fmt; // note: JVM use "M/d/yy h:mm a" if not found!
-		}
-		return "yyyy/MM/dd";
+		return DateFormats.getDateFormat(DateFormat.DEFAULT, _locale, DEFAULT_FORMAT);
+			//We use yyyy/MM/dd for backward compatibility
 	}
 	
 	/**
@@ -109,7 +108,8 @@ public class Datebox extends FormatInputElement implements
 		String format = getFormat();
 		if (format == null)
 			format = getDefaultFormat();
-		return new SimpleDateFormat(format, Locales.getCurrent()).toLocalizedPattern();
+		return new SimpleDateFormat(format,
+			_locale != null ? _locale: Locales.getCurrent()).toLocalizedPattern();
 	}
 	
 	/**
@@ -203,7 +203,35 @@ public class Datebox extends FormatInputElement implements
 	}
 
 /** Sets the date format.
-<p>The following pattern letters are defined:
+<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
+Since 5.0.7, you could specify one of the following reserved words,
+and {@link DateFormats#getDateFormat} or {@link DateFormats#getDateTimeFormat}
+will be used to retrieve the real format.
+<table border=0 cellspacing=3 cellpadding=0>
+<tr>
+<td>short</td>
+<td>{@link DateFormats#getDateFormat} with {@link DateFormat#SHORT}</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>{@link DateFormats#getDateFormat} with {@link DateFormat#MEDIUM}</td>
+</tr>
+<tr>
+<td>long</td>
+<td>{@link DateFormats#getDateFormat} with {@link DateFormat#LONG}</td>
+</tr>
+<tr>
+<td>full</td>
+<td>{@link DateFormats#getDateFormat} with {@link DateFormat#FULL}</td>
+</tr>
+</table>
+
+<p>To specify a date/time format, you could specify two reserved words, separated
+by a plus. For example, "medium+short" means 
+{@link DateFormats#getDateTimeFormat} with the medium date styling and
+the short time styling.
+
+<p>In additions, the format could be a cominbation of the following pattern letters:
 <table border=0 cellspacing=3 cellpadding=0>
 
      <tr bgcolor="#ccccff">
@@ -265,12 +293,44 @@ public class Datebox extends FormatInputElement implements
  </table>
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		if (format == null || format.length() == 0)
-			format = getDefaultFormat();
-		else
-			getDateFormat(format); // make sure the format is correct
+		if (format == null || format.length() == 0) {
+			format = getDefaultFormat(); //backward compatible
+		} else {
+			boolean bCustom = true;
+			int ds = format.indexOf('+');
+			if (ds > 0) {
+				int ts = toStyle(format.substring(ds + 1));
+				if (ts != -111) {
+					ds = toStyle(format.substring(0, ds));
+					if (ds != -111) {
+						bCustom = false;
+						format = DateFormats.getDateTimeFormat(ds, ts, _locale, DEFAULT_FORMAT + " " + Timebox.DEFAULT_FORMAT);
+					}
+				}
+			} else {
+				ds = toStyle(format);
+				if (ds != -111) {
+					bCustom = false;
+					format = DateFormats.getDateFormat(ds, _locale, DEFAULT_FORMAT);
+				}
+			}
+			if (bCustom)
+				getDateFormat(format); // make sure the format is correct
+		}
 		super.setFormat(format);
 		smartUpdate("localizedFormat", getLocalizedFormat());
+	}
+	/** Returns the styling index, or -111 if not matched. */
+	/*package*/static int toStyle(String format) {
+		if ("short".equals(format = format.trim().toLowerCase()))
+			return DateFormat.SHORT;
+		if ("medium".equals(format))
+			return DateFormat.MEDIUM;
+		if ("long".equals(format))
+			return DateFormat.LONG;
+		if ("full".equals(format))
+			return DateFormat.FULL;
+		return -111; //not found
 	}
 
 	/**
@@ -392,6 +452,31 @@ public class Datebox extends FormatInputElement implements
 		}
 	}
 
+	/** Returns the locale associated with this datebox,
+	 * or null if {@link Locales#getCurrent} is preferred.
+	 * @since 5.0.7
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+	/** Sets the locale used to indetify the format of this datebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(Locale locale) {
+		_locale = locale;
+	}
+	/** Sets the locale used to indetify the format of this datebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(String locale) {
+		setLocale(locale != null && locale.length() > 0 ?
+			Locales.getLocale(locale): null);
+	}
+
 	/**
 	 * Drops down or closes the calendar to select a date.
 	 * 
@@ -488,7 +573,8 @@ public class Datebox extends FormatInputElement implements
 	 *            the pattern.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
-		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
+		final DateFormat df = new SimpleDateFormat(fmt,
+			_locale != null ? _locale: Locales.getCurrent());
 		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
