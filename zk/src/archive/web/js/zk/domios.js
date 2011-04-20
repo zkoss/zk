@@ -1,22 +1,22 @@
 function _simulatedMouseEvent (type, button, changedTouch, target) {
 	return (target ? target: changedTouch.target)
-		.dispatchEvent(_toMouseEvent(type, button, changedTouch));
+		.dispatchEvent(_createMouseEvent(type, button, changedTouch));
 }
 
-function _toMouseEvent (type, button, changedTouch) {
+function _createMouseEvent (type, button, changedTouch) {
 	var simulatedEvent = document.createEvent("MouseEvent");
-	simulatedEvent.initMouseEvent(type, true, true, window, button, 
+	simulatedEvent.initMouseEvent(type, true, true, window, 1, 
 		changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
-		false, false, false, false, 0, null);
+		false, false, false, false, button, null);
 	return simulatedEvent;		
 }
 
-function _toJQEvent (target, type, button, changedTouch) {
+function _createJQEvent (target, type, button, changedTouch) {
 	//do not allow text
 	if (target.nodeType === 3 || target.nodeType === 8)
 		target = target.parentNode;
 	
-	var originalEvent = _toMouseEvent(type, button, changedTouch),
+	var originalEvent = _createMouseEvent(type, button, changedTouch),
 		props = jQuery.event.props,
 		event = jQuery.Event(originalEvent);
 
@@ -98,16 +98,16 @@ function _toMobileEventType(type){
 function _toMouseEvent(event, changedTouch) {
 	switch (event.type) {
 	case 'touchstart':
-		return _toJQEvent(changedTouch.target, 'mousedown', 1, changedTouch);
+		return _createJQEvent(changedTouch.target, 'mousedown', 1, changedTouch);
 	case 'touchend':
-		return _toJQEvent(
+		return _createJQEvent(
 			document.elementFromPoint(
 				changedTouch.clientX, 
 				changedTouch.clientY), 
 				'mouseup', 1, changedTouch);
 		break;
 	case 'touchmove':
-		return _toJQEvent(
+		return _createJQEvent(
 			document.elementFromPoint(
 				changedTouch.clientX, 
 				changedTouch.clientY),
