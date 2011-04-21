@@ -240,12 +240,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
 						faker.style.width = cellWidth;
 
-					//body
-					if (isVisible)
-						for (var i = 0, rl = rows.length, cells;
-						i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
-							cells[ofs].style.width = cellWidth;
-						
 					// foot
 					if (mesh.foot) {
 						var eFootTbl = mesh.efoottbl;
