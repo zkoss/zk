@@ -328,25 +328,25 @@ String scroll; //DOM Element's ID</code></pre>
 		this.opts = opts;
 		this.dragging = false;   
 
-		jq(this.handle).mousedown(this.proxy(this._mousedown));
+		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown));
 
 		//register
 		if(_drags.length == 0)
-			jq(document).mouseup(_docmouseup)
-				.mousemove(_docmousemove)
+			jq(document).bind('zmouseup', _docmouseup)
+				.bind('zmousemove', _docmousemove)
 				.keypress(_dockeypress);
 		_drags.push(this);
 	},
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy: function () {
-		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
+		jq(this.handle).unbind("zmousedown", this.proxy(this._mousedown));
 
 		//unregister
 		_drags.$remove(this);
 		if(_drags.length == 0)
-			jq(document).unbind("mouseup", _docmouseup)
-				.unbind("mousemove", _docmousemove)
+			jq(document).unbind("zmouseup", _docmouseup)
+				.unbind("zmousemove", _docmousemove)
 				.unbind("keypress", _dockeypress);
 		if (_activedg == this) //just in case
 			_activedg = null;

@@ -214,9 +214,24 @@ zk.copy(zjq, {
 	_useQS: zk.$void, //overriden in domie.js (used in zAU)
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
-	src0: "" //an empty src; overriden in domie.js
+	src0: "", //an empty src; overriden in domie.js
+	getZEventType: function (type) {
+		switch (type) {
+		case 'zmousedown':
+			return 'mousedown';
+		case 'zmouseup':
+			return 'mouseup';
+		case 'zmousemove':
+			return 'mousemove';
+		case 'zdblclick':
+			return 'dblclick';
+		case 'zcontextmenu':
+			return 'contextmenu';
+		}
+	}
 });
-
+jq.fn.zbind = jq.fn.bind;
+jq.fn.zunbind = jq.fn.unbind;
 /** @class jq
  * @import jq.Event
  * @import zk.Widget
@@ -386,8 +401,13 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
+	},
+	bind: function(type, data, fn) {
+		return this.zbind(zjq.getZEventType(type) || type, data, fn);
+	},
+	unbind: function(type, fn){
+		return this.zunbind(zjq.getZEventType(type) || type, fn);
 	}
-
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
 	 * it does nothing if nothing is matched.
@@ -2074,8 +2094,6 @@ zk.copy(jq.Event.prototype, {
 	stop: function () {
 		this.preventDefault();
 		this.stopPropagation();
-		if (zk.ios && this.touchEvent)
-			this.touchEvent.preventDefault();
 	},
 	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information 
 	 * @return Map a map of data.

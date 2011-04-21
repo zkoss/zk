@@ -255,10 +255,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _makeSizer(wgt) {
 		if (!wgt._sizer) {
-			if (!zk.ios) {
-				wgt.domListen_(wgt.$n(), 'onMouseMove');
-				wgt.domListen_(wgt.$n(), 'onMouseOut');
-			}
+			wgt.domListen_(wgt.$n(), 'onMouseMove');
+			wgt.domListen_(wgt.$n(), 'onMouseOut');
 			var Window = wgt.$class;
 			wgt._sizer = new zk.Draggable(wgt, null, {
 				stackup: true, draw: Window._drawsizing,

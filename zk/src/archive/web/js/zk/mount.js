@@ -611,13 +611,31 @@ jq(function() {
 		if (!wgt) wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
-	.mousedown(function (evt) {
+	.bind('zcontextmenu', function (evt) {
+		//ios: zcontextmenu shall be listened first,
+		//due to need stop other event (ex: click, mouseup) 
+		
+		zk.clickPointer[0] = evt.pageX;
+		zk.clickPointer[1] = evt.pageY;
+
+		var wgt = Widget.$(evt, {child:true});
+		if (wgt) {
+			if (zk.ie)
+				evt.which = 3;
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
+			_doEvt(wevt);
+			if (wevt.domStopped)
+				return false;
+		}
+		return !zk.ie || evt.returnValue;
+	})
+	.bind('zmousedown', function(evt){
 		var wgt = Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	})
-	.mouseup(function (evt) {
+	.bind('zmouseup', function(evt){
 		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
 			return; //ingore
@@ -636,7 +654,7 @@ jq(function() {
 		else wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
-	.mousemove(function (evt) {
+	.bind('zmousemove', function(evt){
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -664,7 +682,7 @@ jq(function() {
 				'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
-	.dblclick(function (evt) {
+	.bind('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
 		var wgt = Widget.$(evt, {child:true});
@@ -674,21 +692,6 @@ jq(function() {
 			if (wevt.domStopped)
 				return false;
 		}
-	})
-	.bind("contextmenu", function (evt) {
-		zk.clickPointer[0] = evt.pageX;
-		zk.clickPointer[1] = evt.pageY;
-
-		var wgt = Widget.$(evt, {child:true});
-		if (wgt) {
-			if (zk.ie)
-				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-		return !zk.ie || evt.returnValue;
 	});
 
 	jq(window).resize(function () {

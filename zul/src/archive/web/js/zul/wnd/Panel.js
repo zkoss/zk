@@ -793,8 +793,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		this.domListen_(this.$n(), 'onMouseMove');
-		this.domListen_(this.$n(), 'onMouseOut');
+		this.domUnlisten_(this.$n(), 'onMouseMove');
+		this.domUnlisten_(this.$n(), 'onMouseOut');
 		this.$supers(zul.wnd.Panel, 'unbind_', arguments);
 	},
 	_doMouseMove: function (evt) {

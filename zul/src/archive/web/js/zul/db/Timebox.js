@@ -374,7 +374,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
 			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
 		}
-		this.domUnlisten_(document.body, "onMouseup", "_dodropbtnup");
+		this.domUnlisten_(document.body, "onZMouseup", "_dodropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) {
@@ -390,7 +390,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._currentbtn)
 			this._dodropbtnup(evt);
 		jq(btn).addClass(zcls + "-btn-clk");
-		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
+		this.domListen_(document.body, "onZMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
 
 		if (!inp.value)
@@ -616,8 +616,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(inp).addClass(this.getInplaceCSS());
 
 		if (btn) {
-			this.domListen_(btn, "onMouseDown", "_btnDown")
-				.domListen_(btn, "onMouseUp", "_btnUp")
+			this.domListen_(btn, "onZMouseDown", "_btnDown")
+				.domListen_(btn, "onZMouseUp", "_btnUp")
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 		}
@@ -631,8 +631,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
 		if (btn) {
-			this.domUnlisten_(btn, "onMouseDown", "_btnDown")
-				.domUnlisten_(btn, "onMouseUp", "_btnUp")
+			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")
+				.domUnlisten_(btn, "onZMouseUp", "_btnUp")
 				.domUnlisten_(btn, "onMouseOut", "_btnOut")
 				.domUnlisten_(btn, "onMouseOver", "_btnOver");
 		}

@@ -175,12 +175,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		zul.inp.Slider.down_btn = null;
 		if (widget)
-			jq(document).unbind("mouseup", widget.onup_);
+			jq(document).unbind("zmouseup", widget.onup_);
 	},
 	doMouseDown_: function(evt) {
 		var btn = this.$n("btn");
 		jq(btn).addClass(this.getZclass() + "-btn-drag");
-		jq(document).mouseup(this.onup_);
+		jq(document).bind('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = btn;
 		this.$supers('doMouseDown_', arguments);
 	},
