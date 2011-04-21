@@ -59,6 +59,7 @@ ZK 5.0.7
   3287633: Label hflex property with min set
   3205292: Vflex does not work in Groupbox with default mold
   3210336: Vflex on panel is not working with portallayout
+  3212613: Problem with live data and frozen
   3280506: Listbox issue on ZK5
   3263841: Timer constructor allows negative delay time
   3288904: Date failed to convert when year value is too large
