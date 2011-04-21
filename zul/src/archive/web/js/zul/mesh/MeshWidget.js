@@ -562,7 +562,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_syncbodyrows: function() {
 		var bds = this.ebodytbl.tBodies;
-		this.ebodyrows = this.ebodytbl.tBodies[bds.length > 2 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;
+		this.ebodyrows = this.ebodytbl.tBodies[bds.length > 3 ? this.ehead ? 2 : 1 : this.ehead ? 1 : 0].rows;
 		//Note: bodyrows is null in FF if no rows, so no err msg
 	},
 	replaceHTML: function() { //tree outer
