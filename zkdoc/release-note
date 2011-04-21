@@ -61,7 +61,7 @@ ZK 5.0.7
   3280506: Listbox issue on ZK5
   3263841: Timer constructor allows negative delay time
   3288904: Date failed to convert when year value is too large
-  
+  3285052: tabpanel error
 * Upgrade Notes
 
 	--------
