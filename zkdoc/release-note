@@ -64,6 +64,7 @@ ZK 5.0.7
   3251564: Position of constraint message (error box)
   3285635: Style issue on slider in vertical
   3289412: Vertical slider set height not work
+  3285610: Inplace editor doesn't remove the border when focus out
   
 * Upgrade Notes
 
