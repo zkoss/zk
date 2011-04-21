@@ -62,6 +62,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDscNm = "none";
 	private Object _value;
 	private boolean _ignoreSort = false;
+	private boolean _isCustomAscComparator = false;
+	private boolean _isCustomDscComparator = false;
 
 	static {
 		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -197,16 +199,20 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
 					if ((index = Integer.parseInt(name)) < 0)
 						throw new IllegalArgumentException("Nonnegative number is required: "+name);
-				if (getSortAscending() == null)
+				if (getSortAscending() == null || !_isCustomAscComparator) {
 					if (index < 0)
 						setSortAscending(new FieldComparator(name, true));
 					else
 						setSortAscending(new ArrayComparator(index, true));
-				if (getSortDescending() == null)
+					_isCustomAscComparator = false;
+				}
+				if (getSortDescending() == null || !_isCustomDscComparator) {
 					if (index < 0)
 						setSortDescending(new FieldComparator(name, false));
 					else
 						setSortDescending(new ArrayComparator(index, false));
+					_isCustomDscComparator = false;
+				}
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
@@ -237,7 +243,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
-			String nm = _sortAsc == null ? "none" : "fromServer";
+			_isCustomAscComparator = _sortAsc != null;
+			String nm = _isCustomAscComparator ? "fromServer": "none";
 			if (!_sortAscNm.equals(nm)) {
 				_sortAscNm = nm;
 				smartUpdate("sortAscending", _sortAscNm);
@@ -278,7 +285,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
-			String nm = _sortDsc == null ? "none" : "fromServer";
+			_isCustomDscComparator = _sortDsc != null;
+			String nm = _isCustomDscComparator ? "fromServer": "none";
 			if (!_sortDscNm.equals(nm)) {
 				_sortDscNm = nm;
 				smartUpdate("sortDescending", _sortDscNm);
