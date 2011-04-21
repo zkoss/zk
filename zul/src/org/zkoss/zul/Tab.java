@@ -109,7 +109,10 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 				Events.postEvent(new SelectEvent(Events.ON_SELECT, tab, selItems));
 			}
 		}
+		
+		//Cache panel before detach , or we couldn't get it after tab is detached.
 		final Tabpanel panel = getLinkedPanel();
+		
 		detach();
 		if (panel != null)
 			panel.detach();		
