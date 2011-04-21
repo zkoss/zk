@@ -177,6 +177,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkmax.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
 	</listener>
 	-->
+	<listener>
+        <description>For Zul Testing Language</description>
+        <listener-class>org.zkoss.zktest.test2.DesktopInit</listener-class>
+	</listener>
 	<!-- [ZK EE]
 		Turn on if you use InaccessibleWidgetBlockService (IWBS) and
 		want to block only particular events.
