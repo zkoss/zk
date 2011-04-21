@@ -638,7 +638,7 @@ jq(function() {
 	.bind('zmouseup', function(evt){
 		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
-			return; //ingore
+			return; //ignore
 
 		if (e != null) {
 			_docMouseDown(e, null, true); //simulate mousedown
