@@ -66,7 +66,7 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 	
 	public Timebox() {
 		setCols(5);
-		setFormat(getDefaultFormat());
+		setFormat("");
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();
@@ -147,16 +147,26 @@ will be used to retrieve the real format.
  	@since 5.0.0
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		if (format == null || format.length() == 0) {
-			format = getDefaultFormat();
-		} else {
-			int ts = Datebox.toStyle(format);
-			if (ts != -111)
-				format = DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT);
-		}
-		super.setFormat(format);
+		super.setFormat(format != null ? format: "");
 	}
 	
+	/** Returns the real format, i.e., the combination of the format patterns,
+	 * such as hh:mm.
+	 * <p>As described in {@link #setFormat}, a developer could specify
+	 * an abstract name, such as short, or an empty string as the format,
+	 * and this method will convert it to a real time format.
+	 * @since 5.0.7
+	 */
+	public String getRealFormat() {
+		final String format = getFormat();
+		if (format == null || format.length() == 0)
+			return getDefaultFormat();
+
+		int ts = Datebox.toStyle(format);
+		return ts != -111 ?
+			DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT): format;
+	}
+
 	/** Returns the value (in Date), might be null unless
 	 *  a constraint stops it. And, only Hour and Mintue field is effective.
 	 * @exception WrongValueException if user entered a wrong value
@@ -221,7 +231,10 @@ will be used to retrieve the real format.
 	 * @since 5.0.7
 	 */
 	public void setLocale(Locale locale) {
-		_locale = locale;
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			smartUpdate("format", getRealFormat());
+		}
 	}
 	/** Sets the locale used to indetify the format of this timebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
@@ -261,7 +274,7 @@ will be used to retrieve the real format.
 		if (value == null || value.length() == 0){
 			return null;
 		}
-		final String fmt = getFormat();
+		final String fmt = getRealFormat();
 		final DateFormat df = getDateFormat(fmt);
 		final Date date;
 		try {
@@ -274,7 +287,7 @@ will be used to retrieve the real format.
 		return date;
 	}
 	protected String coerceToString(Object value) {
-		final DateFormat df = getDateFormat(getFormat());
+		final DateFormat df = getDateFormat(getRealFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
 	

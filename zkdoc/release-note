@@ -69,6 +69,8 @@ ZK 5.0.7
   3222965: java.io.NotSerializableException: org.zkoss.io.RepeatableFileInputStream
   
 * Upgrade Notes
+  + The default format of datebox and timebox becomes an empty string.
+    To retrieve the real format, please use Datebox/Timebox's getRealFomrat() instead.
 
 	--------
 ZK 5.0.6

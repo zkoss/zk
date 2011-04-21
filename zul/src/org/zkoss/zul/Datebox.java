@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
@@ -66,7 +67,7 @@ public class Datebox extends FormatInputElement implements
 	}
 
 	public Datebox() {
-		setFormat(getDefaultFormat());
+		setFormat("");
 		setCols(11);
 	}
 
@@ -98,17 +99,14 @@ public class Datebox extends FormatInputElement implements
 		return DateFormats.getDateFormat(DateFormat.DEFAULT, _locale, DEFAULT_FORMAT);
 			//We use yyyy/MM/dd for backward compatibility
 	}
-	
+
 	/**
 	 * Returns the localized format, which is used when constructing a datebox.
 	 * <p>
 	 * You might override this method to provide your own localized format.
 	 */
 	protected String getLocalizedFormat() {
-		String format = getFormat();
-		if (format == null)
-			format = getDefaultFormat();
-		return new SimpleDateFormat(format,
+		return new SimpleDateFormat(getRealFormat(),
 			_locale != null ? _locale: Locales.getCurrent()).toLocalizedPattern();
 	}
 	
@@ -293,26 +291,16 @@ the short time styling.
  </table>
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		if (format == null || format.length() == 0) {
-			format = getDefaultFormat(); //backward compatible
-		} else {
-			boolean bCustom = true;
-			int ds = format.indexOf('+');
-			if (ds > 0) {
-				int ts = toStyle(format.substring(ds + 1));
-				if (ts != -111) {
-					ds = toStyle(format.substring(0, ds));
-					if (ds != -111) {
-						bCustom = false;
-						format = DateFormats.getDateTimeFormat(ds, ts, _locale, DEFAULT_FORMAT + " " + Timebox.DEFAULT_FORMAT);
-					}
-				}
+		if (format == null) {
+			format =  "";
+		} else if (format.length() != 0) {
+			boolean bCustom;
+			int j = format.indexOf('+');
+			if (j > 0) {
+				bCustom = toStyle(format.substring(j + 1)) == -111
+					|| toStyle(format.substring(0, j)) == -111;
 			} else {
-				ds = toStyle(format);
-				if (ds != -111) {
-					bCustom = false;
-					format = DateFormats.getDateFormat(ds, _locale, DEFAULT_FORMAT);
-				}
+				bCustom = toStyle(format) == -111;
 			}
 			if (bCustom)
 				getDateFormat(format); // make sure the format is correct
@@ -331,6 +319,34 @@ the short time styling.
 		if ("full".equals(format))
 			return DateFormat.FULL;
 		return -111; //not found
+	}
+
+	/** Returns the real format, i.e., the combination of the format patterns,
+	 * such as yyyy-MM-dd.
+	 * <p>As described in {@link #setFormat}, a developer could specify
+	 * an abstract name, such as short, or an empty string as the format,
+	 * and this method will convert it to a real date/time format.
+	 * @since 5.0.7
+	 */
+	public String getRealFormat() {
+		final String format = getFormat();
+		if (format == null || format.length() == 0)
+			return getDefaultFormat(); //backward compatible
+
+		int ds = format.indexOf('+');
+		if (ds > 0) {
+			int ts = toStyle(format.substring(ds + 1));
+			if (ts != -111) {
+				ds = toStyle(format.substring(0, ds));
+				if (ds != -111)
+					return DateFormats.getDateTimeFormat(ds, ts, _locale, DEFAULT_FORMAT + " " + Timebox.DEFAULT_FORMAT);
+			}
+		} else {
+			ds = toStyle(format);
+			if (ds != -111)
+				return DateFormats.getDateFormat(ds, _locale, DEFAULT_FORMAT);
+		}
+		return format;
 	}
 
 	/**
@@ -465,7 +481,11 @@ the short time styling.
 	 * @since 5.0.7
 	 */
 	public void setLocale(Locale locale) {
-		_locale = locale;
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			smartUpdate("format", getRealFormat());
+			smartUpdate("localizedFormat", getLocalizedFormat());
+		}
 	}
 	/** Sets the locale used to indetify the format of this datebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
@@ -545,7 +565,7 @@ the short time styling.
 		if (value == null || value.length() == 0)
 			return null;
 
-		final String fmt = getFormat();
+		final String fmt = getRealFormat();
 		final DateFormat df = getDateFormat(fmt);
 		df.setLenient(_lenient);
 		final Date date;
@@ -559,7 +579,7 @@ the short time styling.
 	}
 
 	protected String coerceToString(Object value) {
-		final DateFormat df = getDateFormat(getFormat());
+		final DateFormat df = getDateFormat(getRealFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
 

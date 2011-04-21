@@ -40,9 +40,8 @@ implements org.zkoss.zul.impl.api.FormatInputElement {
 	 */
 	public void setFormat(String format) throws WrongValueException {
 		if (!Objects.equals(_format, format)) {
-			final String old = _format;
 			_format = format;
-			smartUpdate("format", _format);
+			smartUpdate("format", getRealFormat());
 			smartUpdate("_value", marshall(_value));
 				//Technically, it shall be indepedent of format, but it is
 				//safer to send again (since some implementation might not good)
@@ -51,7 +50,17 @@ implements org.zkoss.zul.impl.api.FormatInputElement {
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
-		render(renderer, "format", _format);//value might depend on format (though it shall not)
+		render(renderer, "format", getRealFormat());//value might depend on format (though it shall not)
 		super.renderProperties(renderer);
+	}
+	/** Returns the real format.
+	 * <p>Default: return {@link #getFormat}.
+	 * It is designed to allow the deriving class to provide another layer of
+	 * abstraction. For example, {@link org.zkoss.zul.Datebox#setFormat}
+	 * accepts short to denote the short format.
+	 * @since 5.0.7
+	 */
+	protected String getRealFormat() {
+		return _format;
 	}
 }
