@@ -67,6 +67,7 @@ ZK 5.0.7
   3289412: Vertical slider set height not work
   3285610: Inplace editor doesn't remove the border when focus out
   3222965: java.io.NotSerializableException: org.zkoss.io.RepeatableFileInputStream
+  3185686: hflex does not take vertical scrollbar width into account
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

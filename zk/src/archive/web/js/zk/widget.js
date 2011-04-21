@@ -620,7 +620,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			psz = this.getParentSize_(p),
 			hgh = psz.height,
 			wdh = psz.width,
-			c = p.firstChild;
+			c = p.firstChild,
+			scrWdh = jq.scrollbarWidth();
+		
+		// Bug 3185686
+		// has vertical scrollbar
+		if(wdh - p.clientWidth > 11)
+			wdh -= scrWdh;
+		// has horizontal scrollbar
+		if(hgh - p.clientHeight > 11)
+			hgh -= scrWdh;
 		
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
