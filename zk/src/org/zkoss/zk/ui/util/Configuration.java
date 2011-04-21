@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.sys.Attributes;
@@ -102,7 +103,6 @@ public class Configuration {
 		_dtCleans = new FastReadArray(Class.class),
 		_execInits = new FastReadArray(Class.class),
 		_execCleans = new FastReadArray(Class.class),
-		_uiCycles = new FastReadArray(UiLifeCycle.class),
 		_composers = new FastReadArray(Class.class),
 		_initiators = new FastReadArray(Class.class),
 		_seoRends = new FastReadArray(Class.class),
@@ -112,6 +112,8 @@ public class Configuration {
 	private final FastReadArray
 		_uriIntcps = new FastReadArray(URIInterceptor.class),
 		_reqIntcps = new FastReadArray(RequestInterceptor.class),
+		_uiCycles = new FastReadArray(UiLifeCycle.class),
+		_propRends = new FastReadArray(PropertiesRenderer.class),
 		_labellocs = new FastReadArray(String.class);
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
@@ -192,13 +194,24 @@ public class Configuration {
 	 * to richlets. In additions, an independent
 	 * composer is instantiated for each page so there is synchronization required.
 	 *
+	 * <p>By default, a listener is instantiated when required, and dropped
+	 * after invoked. In other words, a new instance will be instantiated in
+	 * the next invocation. It means you don't have to worry the threading,
+	 * <p>However, for better performance, the following listeners will be instantiated
+	 * in {@link #addListener}, and then used repeatedly. It means it has
+	 * to be thread safe. These listeners include
+	 * {@link URIInterceptor}, {@link RequestInterceptor},
+	 * {@link EventInterceptor}, {@link UiLifeCycle},
+	 * and {@link PropertiesRenderer}.
+	 *
 	 * @param klass the listener class must implement at least one of
 	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
 	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link SEORenderer} (since 5.0.7)
+	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link SEORenderer} (since 5.0.7),
+	 * {@link PropertiesRenderer} (since 5.0.7),
 	 * {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
@@ -297,6 +310,9 @@ public class Configuration {
 			added = true;
 		}
 
+		//for better performance, the following listeners are instantiated
+		//here and shared in the whole application
+
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
 				_uriIntcps.add(listener = getInstance(klass, listener));
@@ -325,6 +341,14 @@ public class Configuration {
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
 				_uiCycles.add(listener = getInstance(klass, listener));
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
+		if (PropertiesRenderer.class.isAssignableFrom(klass)) {
+			try {
+				_propRends.add(listener = getInstance(klass, listener));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
 			}
@@ -375,6 +399,7 @@ public class Configuration {
 		_uriIntcps.removeBy(sc, true);
 		_reqIntcps.removeBy(sc, true);
 		_uiCycles.removeBy(sc, true);
+		_propRends.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
 	}
@@ -988,9 +1013,11 @@ public class Configuration {
 		}
 		return (Initiator[])inits.toArray(new Initiator[inits.size()]);
 	}
-	/** Returns a readonly list of the system-level initiators.
+	/** Returns a readonly list of the system-level SEO renderer.
 	 * It is empty if none is registered.
-	 * To register a system-level initiator, use {@link #addListener}.
+	 * To register a system-level SEO renderers, use {@link #addListener}.
+	 * <p>Notice that, once registered, an instance is instantiated before
+	 * invoking {@link SEORenderer#render}.
 	 * @since 5.0.7
 	 */
 	public SEORenderer[] getSEORenderers() {
@@ -1026,6 +1053,16 @@ public class Configuration {
 		}
 	}
 
+	/** Returns a readonly list of the system-level properties renders.
+	 * It is empty if none is registered.
+	 * To register a system-level properties renders, use {@link #addListener}.
+	 * <p>Notice that, once registered, it is instantiated immeidately,
+	 * and the same instance is shared for rendering the properties of every component.
+	 * @since 5.0.7
+	 */
+	public PropertiesRenderer[] getPropertiesRenderers() {
+		return (PropertiesRenderer[])_propRends.toArray();
+	}
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
 	 * when a component is attached to a page.
 	 * @since 3.0.6

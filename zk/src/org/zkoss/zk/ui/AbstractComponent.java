@@ -88,6 +88,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
@@ -1724,6 +1725,12 @@ w:use="foo.MyWindow"&gt;
 
 			final JsContentRenderer renderer = new JsContentRenderer();
 			renderProperties(renderer);
+			if (_page != null) {
+				PropertiesRenderer[] prs = _page.getDesktop().getWebApp()
+					.getConfiguration().getPropertiesRenderers();
+				for (int j = 0; j < prs.length; j++)
+					prs[j].renderProperties(this, renderer);
+			}
 
 			final String wgtcls = getWidgetClass();
 			if (wgtcls == null)
