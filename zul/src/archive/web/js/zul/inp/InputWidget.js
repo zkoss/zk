@@ -392,9 +392,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, "end_before", {
-							overflow: true
-						});
+						self._errbox.open(self, null, "end_before", {dodgeRef: true}); // Bug 3251564
 				});
 			}
 		}

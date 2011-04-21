@@ -62,6 +62,8 @@ ZK 5.0.7
   3263841: Timer constructor allows negative delay time
   3288904: Date failed to convert when year value is too large
   3285052: tabpanel error
+  3251564: Position of constraint message (error box)
+  
 * Upgrade Notes
 
 	--------

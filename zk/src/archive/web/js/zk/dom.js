@@ -964,17 +964,42 @@ jq(el).zk.center(); //same as 'center'
 		default: // overlap is assumed
 			// nothing to do.
 		}
-
+		
 		if (!opts || !opts.overflow) {
 			var scX = jq.innerX(),
 				scY = jq.innerY(),
 				scMaxX = scX + jq.innerWidth(),
 				scMaxY = scY + jq.innerHeight();
-
+			
 			if (x + wd > scMaxX) x = scMaxX - wd;
 			if (x < scX) x = scX;
 			if (y + hgh > scMaxY) y = scMaxY - hgh;
 			if (y < scY) y = scY;
+		}
+		
+		// Bug 3251564
+		// dodge reference element (i.e. not to cover the reference textbox, etc)
+		if (opts && opts.dodgeRef) {
+			var dl = dim.left, dt = dim.top,
+				dr = dl + dim.width, db = dt + dim.height;
+			// overlap test
+			if (x + wd > dl && x < dr && y + hgh > dt && y < db) {
+				if (opts.overflow) {
+					// overflow allowed: try to dodge to the right
+					x = dr;
+				} else {
+					var scX = jq.innerX(),
+						scMaxX = scX + jq.innerWidth(),
+						spr = scMaxX - dr,
+						spl = dl - scX;
+					// no overflow: dodge to the larger space
+					// try right side first
+					if (spr >= wd || spr >= spl)
+						x = Math.min(dr, scMaxX - wd);
+					else
+						x = Math.max(dl - wd, scX);
+				}
+			}
 		}
 
 		var el = this.jq[0],
