@@ -383,7 +383,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
-				if (this._inplaceout === undefined)
+				if (!this._inplaceout)
 					this._inplaceout = true;
 			}
 			
