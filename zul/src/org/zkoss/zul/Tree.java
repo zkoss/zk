@@ -1215,7 +1215,10 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 
 		final Tree clone = (Tree)super.clone();
 		clone.init();
-
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		int cnt = 0;
 		if (_treecols != null) ++cnt;
 		if (_treefoot != null) ++cnt;
@@ -1245,8 +1248,9 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				} else if (child instanceof Treechildren) {
 					_treechildren = (Treechildren)child;
 					if (--cnt == 0) break;
-				}else if (child instanceof Paging) {
+				} else if (child instanceof Paging) {
 					_pgi = _paging = (Paging)child;
+					addPagingListener(_pgi);
 					if (--cnt == 0) break;
 				}
 			}

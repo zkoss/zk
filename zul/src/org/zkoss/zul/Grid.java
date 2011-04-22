@@ -1319,7 +1319,10 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	public Object clone() {
 		final Grid clone = (Grid)super.clone();
 		clone.init();
-
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		//recreate the DataLoader 
 		final int offset = clone.getDataLoader().getOffset(); 
 		final int limit = clone.getDataLoader().getLimit();
@@ -1333,7 +1336,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		if (clone._frozen != null) ++cnt;
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
-
+		
 		if (clone._model != null) {
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
@@ -1354,6 +1357,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 				if (--cnt == 0) break;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
+				addPagingListener(_pgi);
 				if (--cnt == 0) break;
 			} else if (child instanceof Frozen) {
 				_frozen = (Frozen)child;

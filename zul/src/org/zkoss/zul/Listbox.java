@@ -3121,6 +3121,10 @@ public class Listbox extends MeshElement implements Paginated,
 	public Object clone() {
 		final Listbox clone = (Listbox) super.clone();
 		clone.init();
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		clone.afterUnmarshal();
 		if (clone._model != null) {
 			// we use the same data model but we have to create a new listener
@@ -3160,6 +3164,7 @@ public class Listbox extends MeshElement implements Paginated,
 				_frozen = (Frozen) child;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging) child;
+				addPagingListener(_pgi);
 			}
 		}
 	}
