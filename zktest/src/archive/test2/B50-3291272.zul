@@ -1,4 +1,9 @@
 <zk>
+	<html><![CDATA[
+		<ol>
+			<li>All the pagings should work in the following components. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
 	<div id="divA">
 		<grid id="grid1" mold="paging" pageSize="4">
 			<rows>
