@@ -469,6 +469,8 @@
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
 		<xs:attribute name="action" type="xs:string" use="optional" />
+		<xs:attribute name="hflex" type="xs:string" use="optional" />
+		<xs:attribute name="vflex" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="xulElementAttrGroup">
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
@@ -536,6 +538,7 @@
 			<xs:element ref="box" />
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
+			<xs:element ref="calendars" />
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
@@ -606,6 +609,7 @@
 				<xs:element ref="box" />
 				<xs:element ref="button" />
 				<xs:element ref="calendar" />
+				<xs:element ref="calendars" />
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="checkbox" />
@@ -828,6 +832,31 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+    <!-- calendars -->
+	<xs:element name="calendars" type="calendarsType" />
+	<xs:complexType name="calendarsType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="toolbar" minOccurs="0"/>
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="days" type="intType" use="optional" />
+		<xs:attribute name="beginTime" type="intType" use="optional" />
+		<xs:attribute name="endTime" type="intType" use="optional" />
+		<xs:attribute name="timeslots" type="intType" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="firstDayOfWeek" type="xs:string" use="optional" />
+		<xs:attribute name="weekOfYear" type="xs:string" use="optional" />
+		<xs:attribute name="dateFormatter" type="xs:string" use="optional" />
+		<xs:attribute name="readonly" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="xs:string" use="optional" />
+		<xs:attribute name="onEventCreate" type="xs:string" use="optional" />
+		<xs:attribute name="onEventEdit" type="xs:string" use="optional" />
+		<xs:attribute name="onEventUpdate" type="xs:string" use="optional" />
+		<xs:attribute name="onDayClick" type="xs:string" use="optional" />
+		<xs:attribute name="onWeekClick" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- caption -->
@@ -1093,6 +1122,7 @@
 		<xs:attribute name="label" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="imageContent" type="mediaType" use="optional" />
+		<xs:attribute name="onClick" type="xs:string" use="optional" />
 	</xs:complexType>
     
     <!-- fisheyebar -->
@@ -1753,8 +1783,8 @@
 	<xs:element name="panel" type="panelType" />
 	<xs:complexType name="panelType">
 		<xs:sequence minOccurs="0" maxOccurs="1">
-			<xs:element ref="caption" />
-			<xs:element ref="toolbar" />
+			<xs:element ref="caption" minOccurs="0" />
+			<xs:element ref="toolbar" minOccurs="0" />
 			<xs:element ref="panelchildren" />
 			<xs:element ref="toolbar" minOccurs="0" maxOccurs="2" />
 		</xs:sequence>
@@ -2024,8 +2054,9 @@
 	<xs:complexType name="tabboxType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup" />
-			<xs:element ref="tabs" />
-			<xs:element ref="tabpanels" />
+			<xs:element ref="tabs"/>
+			<xs:element ref="tabpanels"/>
+			<xs:element ref="toolbar" minOccurs="0"/>
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="tabscroll" type="booleanType" use="optional" />
@@ -2071,6 +2102,8 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="panel" />
 		</xs:choice>
+		<xs:attribute name="colspan" type="intType" use="optional" />
+		<xs:attribute name="rowspan" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
     
@@ -2081,6 +2114,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="tablechildren" />
 		</xs:choice>
+		<xs:attribute name="columns" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
     <!-- textbox -->
