@@ -13,10 +13,17 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var uuid = this.uuid,
-		zcls = this.getZclass();
+	var uuid = this.uuid, zcls = this.getZclass(), content = this.domContent_();
 	out.push('<span', this.domAttrs_(), '>', '<input type="checkbox" id="', uuid,
-			'-real"', this.contentAttrs_(), '/><label for="', uuid, '-real"',
-			this.domTextStyleAttr_(), ' class="', zcls, '-cnt">', this.domContent_(),
-			'</label></span>');	
+			'-real"', this.contentAttrs_(), '/><label ');
+		
+	//Fix bug 3290873 ,for ie6/7 if label is empty , ignore the "for" attribute 
+	//on label to prevent the bug . We left the label here ,so it won't break 
+	//user's style customization if exist.
+	if(jq.trim(content) || !(zk.ie7_ || zk.ie6_))  
+		out.push('for="', uuid, '-real"');
+	
+	out.push(this.domTextStyleAttr_(), 
+			' class="', zcls, '-cnt">', this.domContent_(),	'</label></span>');
+			
 }
