@@ -739,8 +739,8 @@ jq(function() {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 						},
 						//2011/04/22 feature 3291332
-						//Use sync request for chrome and safari 
-						async: !jq.browser.webkit
+						//Use sync request for chrome and safari.
+						async: !zk.safari
 					}, zAu.ajaxSettings), true/**fixed IE memory issue for jQuery 1.4.x*/);
 				}
 			} catch (e) { //silent
