@@ -22,6 +22,7 @@ ZK 5.0.7
   2520010: new 'emptyMessage' attribute for Grid/Listbox
   3290172: A plugin to generate custom properties for particular widget
   3290092: Allow SEORenderer to be a application-level listener
+  3291332: adding unload desktop support for Chrome/Safari
  
 * Bugs
   3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
