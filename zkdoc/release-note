@@ -20,6 +20,7 @@ ZK 5.0.7
   3285074: Add no-cache for the zkau request for security concern
   3285723: Throws an exception when creates too much duplicated uuid
   2520010: new 'emptyMessage' attribute for Grid/Listbox
+  3287024: Able to load extra zk.xml specified in a library property
   3290172: A plugin to generate custom properties for particular widget
   3290092: Allow SEORenderer to be a application-level listener
   3291332: adding unload desktop support for Chrome/Safari

@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.net.URL;
+import java.io.InputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
@@ -272,6 +273,17 @@ public class ConfigParser {
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
 		parse(new SAXBuilder(true, false, true).build(url).getRootElement(),
+			config, locator);
+	}
+	/** Parses zk.xml from an input stream into the configuration.
+	 * @param is the input stream of zk.xml
+	 * @since 5.0.7
+	 */
+	public void parse(InputStream is, Configuration config, Locator locator)
+	throws Exception {
+		if (is == null || config == null)
+			throw new IllegalArgumentException("null");
+		parse(new SAXBuilder(true, false, true).build(is).getRootElement(),
 			config, locator);
 	}
 	/** Parses zk.xml, specified by the root element.

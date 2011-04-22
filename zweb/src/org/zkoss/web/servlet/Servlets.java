@@ -14,6 +14,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
+import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -820,18 +823,49 @@ public class Servlets {
 	/** Returns the resource of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file:/, http://, https:// and ftp:// are supported.
 	 */
 	public static final URL getResource(ServletContext ctx, String uri)
 	throws MalformedURLException {
+		File file = toFile(uri);
+		if (file != null)
+			return file.toURI().toURL();
+		URL url = toURL(uri);
+		if (url != null)
+			return url;
 		return new ParsedURI(ctx, uri).getResource();
 	}
 	/** Returns the resource stream of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file:/, http:/, https:/ and ftp:/ are supported.
 	 */
 	public static final InputStream getResourceAsStream(
-	ServletContext ctx, String uri) {
+	ServletContext ctx, String uri)
+	throws IOException {
+		File file = toFile(uri);
+		if (file != null)
+			return new BufferedInputStream (new FileInputStream(file));
+		URL url = toURL(uri);
+		if (url != null)
+			return url.openStream();
 		return new ParsedURI(ctx, uri).getResourceAsStream();
+	}
+	/** Converts URI to a file if it starts with file:/, or null if not. */
+	private static File toFile(String uri) {
+		if (uri != null && uri.toLowerCase().startsWith("file:/"))
+			return new File(
+				uri.substring(uri.length() > 8 && uri.charAt(7) == ':' ? 6: 5));
+		return null;
+	}
+	/** Converts URI to URL if starts with http:/, https:/ or ftp:/ */
+	private static URL toURL(String uri)
+	throws MalformedURLException {
+		String s;
+		if (uri != null && ((s = uri.toLowerCase()).startsWith("http://")
+		|| s.startsWith("https://") || s.startsWith("ftp://")))
+			return new URL(uri);
+		return null;
 	}
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {

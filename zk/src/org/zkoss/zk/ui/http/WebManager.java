@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.net.URL;
+import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -152,9 +153,29 @@ public class WebManager {
 		try {
 			final URL cfgUrl = _ctx.getResource(XML);
 			if (cfgUrl != null)
-				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx));
+				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx, true));
+					//accept URL, so zk.xml could contain URL
 		} catch (Throwable ex) {
-			log.error("Unable to load " + XML, ex);
+			log.realCauseBriefly("Unable to load " + XML, ex);
+		}
+
+		//load additional configuration file
+		XML = Library.getProperty("org.zkoss.zk.config.path");
+		if (XML != null && XML.length() > 0) {
+			log.info("Parsing "+XML);
+			InputStream is = null;
+			try {
+				is = Servlets.getResourceAsStream(_ctx, XML);
+				if (is != null)
+					parser.parse(is, config, new ServletContextLocator(_ctx, true));
+				else
+					log.error("File not found: " + XML);
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Unable to load " + XML, ex);
+			} finally {
+				if (is != null)
+					try {is.close();} catch (Throwable t) {}
+			}
 		}
 
 		//after zk.xml is loaded since it depends on the configuration
@@ -163,7 +184,7 @@ public class WebManager {
 		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
 		if (s != null && s.length() > 0) {
 			if (s.charAt(0) != '/') s = '/' + s;
-			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s));
+			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s)); //for safety, not accept URL
 		}
 
 		String[] labellocs = config.getLabelLocations();
