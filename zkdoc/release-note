@@ -70,7 +70,8 @@ ZK 5.0.7
   3222965: java.io.NotSerializableException: org.zkoss.io.RepeatableFileInputStream
   3185686: hflex does not take vertical scrollbar width into account
   3288779: Column cannot set a new sort rule 
-  
+  3290873: Checkbox didn't show up focus effect when label is empty
+    
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
     To retrieve the real format, please use Datebox/Timebox's getRealFomrat() instead.

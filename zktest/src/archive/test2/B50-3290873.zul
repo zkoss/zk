@@ -1,0 +1,14 @@
+<zk>
+	<h:pre xmlns:h="xhtml">
+		For IE6 and IE7 , when we got a focus on checkbox , it doesn't show up any effect to let user know if's focusing.
+	
+		The reason is that it focus on the label for the checkbox ,
+		but when the label is empty , it means no any effect on the screen.
+		
+		The expect behavior is like ie8 / firefox or chrome, which in ticket attachment.
+		
+		https://sourceforge.net/tracker/?func=detail&aid=3290873&group_id=152762&atid=785191
+	</h:pre>
+	<textbox />
+	<checkbox />
+</zk>
