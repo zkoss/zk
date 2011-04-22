@@ -72,6 +72,7 @@ ZK 5.0.7
   3288779: Column cannot set a new sort rule 
   3290873: Checkbox didn't show up focus effect when label is empty
   3291272: Cloning Grid/Listbox/Tree in paging mold
+  3290858: combobox with autodrop and setModel in onChanging
     
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
