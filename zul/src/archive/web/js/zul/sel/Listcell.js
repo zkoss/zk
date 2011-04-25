@@ -158,7 +158,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if ((box = this.getListbox()) && box.efrozen && 
 			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
 			(node = this.$n()))) {
-			box._moveToHidingFocusCell(node);
+			box._moveToHidingFocusCell(node.cellIndex);
 		}
 	},
 	doMouseOver_: function(evt) {

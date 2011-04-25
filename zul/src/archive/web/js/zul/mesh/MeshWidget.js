@@ -387,12 +387,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 */
 	getFocusCell: function (el) {
 	},
-	_moveToHidingFocusCell: function (td) {
+	_moveToHidingFocusCell: function (index) {
 		//B50-3178977 navigating the input in hiddin column.
-		var index, frozen;
-		if (td.style.width == '0px' && 
+		var td, frozen;
+		if (this.head && (td = this.head.getChildAt(index).$n()) && td.style.width == '0px' && 
 			(frozen = zk.Widget.$(this.efrozen.firstChild)) &&
-			(index = td.cellIndex - frozen.getColumns()) >= 0) {
+			(index = index - frozen.getColumns()) >= 0) {
 			frozen.setStart(index);
 			_shellFocusBack = true;
 		}

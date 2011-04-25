@@ -286,7 +286,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			for (var i = 0, j = tds.length; i < j; i++) {
 				td = tds[i];
 				if (td.parentNode.parentNode == tbody) {
-					grid._moveToHidingFocusCell(td);
+					grid._moveToHidingFocusCell(td.cellIndex);
 					break;
 				}
 			}
