@@ -23,6 +23,8 @@ import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.net.URL;
 
+import org.zkoss.lang.SystemException;
+import org.zkoss.io.Files;
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
 import org.zkoss.io.RepeatableInputStream;
@@ -284,12 +286,31 @@ public class AMedia implements Media, java.io.Serializable {
 		return _bindata != null || _strdata != null;
 	}
 	public byte[] getByteData() {
-		if (_bindata == null) throw newIllegalStateException();
-		return _bindata;
+		if (_bindata != null) return _bindata;
+		if (_isdata != null) {
+			try {
+				byte[] bs = Files.readAll(_isdata);
+				_isdata.close();
+				return bs;
+			} catch (java.io.IOException ex) {
+				throw SystemException.Aide.wrap(ex);
+			}
+		}
+		throw newIllegalStateException();
 	}
 	public String getStringData() {
-		if (_strdata == null) throw newIllegalStateException();
-		return _strdata;
+		if (_strdata != null) return _strdata;
+		if (_rddata != null) {
+			try {
+				String ct = Files.readAll(_rddata).toString();
+				_rddata.close();
+				return ct;
+			} catch (java.io.IOException ex) {
+				throw SystemException.Aide.wrap(ex);
+			}
+		}
+		throw newIllegalStateException();
+		
 	}
 	/** Returns the input stream of this media.
 	 *

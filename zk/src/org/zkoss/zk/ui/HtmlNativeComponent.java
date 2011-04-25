@@ -92,6 +92,9 @@ implements DynamicTag, Native {
 
 	/** Contructs a {@link HtmlNativeComponent} component with the specified
 	 * prolog and epilog.
+	 * @param tag the tag name. If null or empty, plain text is assumed.
+	 * @param prolog the content right before the children, if any.
+	 * @param epilog the content right after the children, if any.
 	 */
 	public HtmlNativeComponent(String tag, String prolog, String epilog) {
 		this(tag);

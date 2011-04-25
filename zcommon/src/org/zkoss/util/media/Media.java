@@ -30,13 +30,10 @@ import java.io.InputStream;
  */
 public interface Media {
 	/** Returns whether the format of tis content is binary or text-based.
-	 * If true, use {@link #getByteData} or {@link #getStreamData}, depending on
-	 * {@link #inMemory}, to retrieve its content.
-	 * If false, use {@link #getStringData} or {@link #getReaderData}, depending on
-	 * {@link #inMemory}, to retrieve its content.
-	 *
-	 * <p>To decide which API to use, you need to examine
-	 * both {@link #isBinary} and {@link #inMemory}.
+	 * If true, use {@link #getByteData} or {@link #getStreamData}
+	 * to retrieve its content.
+	 * If false, use {@link #getStringData} or {@link #getReaderData}
+	 * to retrieve its content.
 	 *
 	 * @see #getStringData
 	 * @see #getByteData
@@ -46,13 +43,6 @@ public interface Media {
 	public boolean isBinary();
 	/** Returns whether the data is cached in memory (in form of
 	 * byte[] or String).
-	 * If true, use {@link #getByteData} or {@link #getStringData}, depending on
-	 * {@link #isBinary}, to retrieve its content.
-	 * If false, use {@link #getStreamData} or {@link #getReaderData}, depending on
-	 * {@link #isBinary}, to retrieve its content.
-	 *
-	 * <p>To decide which API to use, you need to examine
-	 * both {@link #isBinary} and {@link #inMemory}.
 	 *
 	 * @see #getStringData
 	 * @see #getByteData
@@ -66,22 +56,28 @@ public interface Media {
 	 * <p>It might <i>not</i> be a copy, so don't modify
 	 * it directly unless you know what you are doing.
 	 *
-	 * @exception IllegalStateException if {@link #isBinary} returns false,
-	 * or {@link #inMemory} returns false.
+	 * <p>If the data is not cached in memory ({@link #isMemory} return false),
+	 * the data will be read from {@link #getStreamData}. Furthermore, it
+	 * also implies you can not invoke this method again.
+	 *
+	 * @exception IllegalStateException if {@link #isBinary} returns false
 	 * @see #getStringData
 	 */
 	public byte[] getByteData();
 	/** Returns the raw data in string.
 	 *
-	 * @exception IllegalStateException if {@link #isBinary} returns false,
-	 * or {@link #inMemory} returns false.
+	 * <p>If the data is not cached in memory ({@link #isMemory} return false),
+	 * the data will be read from {@link #getReaderData}. Furthermore, it
+	 * also implies you can not invoke this method again.
+	 *
+	 * @exception IllegalStateException if {@link #isBinary} returns false
 	 * @see #getByteData
 	 */
 	public String getStringData();
 	/** Returns the raw data in InputStream.
 	 *
 	 * <p>Note: it wraps {@link #getByteData} with ByteArrayInputStream
-	 * if it is in memory ({@link #inMemory} returns true.
+	 * if it is in memory ({@link #inMemory} returns true).
 	 *
 	 * @exception IllegalStateException if {@link #isBinary} returns false.
 	 * @see #getReaderData
@@ -90,7 +86,7 @@ public interface Media {
 	/** Returns the raw data in Reader.
 	 *
 	 * <p>Note: it wraps {@link #getStringData} with StringReader,
-	 * if it is in memory ({@link #inMemory} returns true.
+	 * if it is in memory ({@link #inMemory} returns true).
 	 *
 	 * @exception IllegalStateException if {@link #isBinary} returns true.
 	 * @see #getStreamData
