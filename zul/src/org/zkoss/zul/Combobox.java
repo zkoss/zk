@@ -522,6 +522,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 				}
 			}
 			_lastCkVal = getValue();
+			syncSelectionToModel();
 		}
 	}
 	/**  Deselects the currently selected items and selects the given item.
@@ -569,6 +570,15 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
 	}
 
+	private void syncSelectionToModel() {
+		if (_model instanceof Selectable) {
+			Selectable model = (Selectable) _model;
+			model.clearSelection();
+			
+			if (_selItem != null)
+				model.addSelection(_model.getElementAt(getChildren().indexOf(_selItem)));
+		}
+	}
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
@@ -599,6 +609,8 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
 			_lastCkVal = getValue(); //onChange is sent before onSelect
+			
+			syncSelectionToModel();
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
@@ -610,12 +622,11 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
-	private void fixSelectOnRender(Component comp) {
-		if (comp instanceof Comboitem && _model instanceof Selectable) {
+	private void fixSelectOnRender(Comboitem item) {
+		if (_model instanceof Selectable) {
 			Iterator it = ((Selectable) _model).getSelection().iterator();
 			if (!it.hasNext()) return;
 			
-			final Comboitem item = (Comboitem) comp;
 			if (it.next().equals(
 					_model.getElementAt(getItems().indexOf(item)))) {
 				setSelectedItem(item);
@@ -650,6 +661,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 					break;
 				}					
 			}
+			syncSelectionToModel();
 		}
 	}
 	/*package*/ void reIndexRequired() {

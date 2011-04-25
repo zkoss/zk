@@ -78,6 +78,7 @@ ZK 5.0.7
   3236331: Flex issues in Vlayout/Hlayout
   3212409: Some issues on zul.xsd
   3284663: Radio always sends onCheck event
+  3192194: Combobox does't propagate selection to Selectable Models
     
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
