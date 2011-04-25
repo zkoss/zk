@@ -190,11 +190,21 @@ public class I18Ns {
 		return (TimeZone)tz;
 	}
 	private static DateFormatInfo checkDateFormatInfo(Object o) {
-		if (o != null && !(o instanceof DateFormatInfo)) {
-			log.warning(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. DateFormatInfo required, not "+o.getClass());
+		if (o == null || (o instanceof DateFormatInfo))
+			return (DateFormatInfo)o;
+
+		try {
+			if (o instanceof String)
+				o = Classes.forNameByThread((String)o);
+			if (o instanceof Class)
+				return (DateFormatInfo)((Class)o).newInstance();
+		} catch (Throwable ex) {
+			log.warningBriefly(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. Failed to instantiate "+o, ex);
 			return null;
 		}
-		return (DateFormatInfo)o;
+
+		log.warning(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. DateFormatInfo required, not "+o.getClass());
+		return null;
 	}
 
 	/* Cleans up the inernationalization attributes.
