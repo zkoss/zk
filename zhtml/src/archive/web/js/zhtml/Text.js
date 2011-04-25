@@ -32,14 +32,10 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 	},
 	redraw: function (out) {
 		var attrs = this.domAttrs_({id:1}),
-			span = attrs || (!zk.Widget.isAutoId(this.uuid) && !this._ignoreSpan());
+			span = attrs || this.idRequired;
+			// Bug 3245960: enclosed text was wrapped with <span>
 		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
 		out.push(this._value); //don't encode (bug 2871080)
 		if (span) out.push('</span>');
-	},
-	_ignoreSpan: function () {
-		// Bug B50-3245960: enclosed text was wrapped with <span>
-		var p = this.parent;
-		return p.$instanceof(zhtml.Widget) && p.epilog == '</textarea>';
 	}
 });

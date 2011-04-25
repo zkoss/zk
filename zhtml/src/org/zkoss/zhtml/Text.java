@@ -133,6 +133,7 @@ public class Text extends AbstractComponent implements RawId {
 		super.renderProperties(renderer);
 
 		render(renderer, "value", _value);
+		render(renderer, "idRequired", isIdRequired());
 	}
 	protected boolean isChildable() {
 		return false;

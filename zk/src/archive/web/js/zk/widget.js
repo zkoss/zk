@@ -4574,12 +4574,12 @@ _doFooSelect: function (evt) {
 		return '_z_' + _nextUuid++;
 	},
 
-	/** Tests if UUID is generated automatically. 
+	/** @deprecated we cannot really detect at the client if UUID is generated automatically.
 	 * @param String uuid the UUID to test
 	 * @return boolean
 	 */
 	isAutoId: function (id) {
-		return !id || id.startsWith('_z_') || id.startsWith('z_');
+		return !id;
 	},
 
 	/** Registers a widget class.
