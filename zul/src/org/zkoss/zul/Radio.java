@@ -239,7 +239,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 			// Bug: B50-3284663: Radio always sends onCheck event
 			final Radiogroup rg = getRadiogroup();
 			if (rg != null)
-				Events.sendEvent(rg, evt);
+				Events.postEvent(Events.ON_CHECK, rg, evt.getData());
 		} else
 			super.service(request, everError);
 	}
