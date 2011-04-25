@@ -45,6 +45,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Checksums;
 import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
@@ -60,7 +61,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
  * @see org.zkoss.web.servlet.Charsets
  */
 public class Servlets {
-//	private static final Log log = Log.lookup(Servlets.class);
+	private static final Log log = Log.lookup(Servlets.class);
 
 	private static BrowserIdentifier _bwid;
 
@@ -829,10 +830,11 @@ public class Servlets {
 	throws MalformedURLException {
 		File file = toFile(uri);
 		if (file != null)
-			return file.toURI().toURL();
+			return file.exists() ? file.toURI().toURL(): null;
+				//spec: return null if not found
 		URL url = toURL(uri);
 		if (url != null)
-			return url;
+			return url; //unfortunately, we cannot detect if it exists
 		return new ParsedURI(ctx, uri).getResource();
 	}
 	/** Returns the resource stream of the specified uri.
@@ -843,12 +845,21 @@ public class Servlets {
 	public static final InputStream getResourceAsStream(
 	ServletContext ctx, String uri)
 	throws IOException {
-		File file = toFile(uri);
-		if (file != null)
-			return new BufferedInputStream (new FileInputStream(file));
-		URL url = toURL(uri);
-		if (url != null)
-			return url.openStream();
+		try {
+			File file = toFile(uri);
+			if (file != null)
+				return file.exists() ?
+					new BufferedInputStream (new FileInputStream(file)): null;
+					//spec: return null if not found
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url.openStream();
+		} catch (Throwable ex) {
+			if (log.debugable())
+				log.debug("Failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
 		return new ParsedURI(ctx, uri).getResourceAsStream();
 	}
 	/** Converts URI to a file if it starts with file:/, or null if not. */

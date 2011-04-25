@@ -24,6 +24,8 @@ import javax.servlet.ServletContext;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.LabelLocator;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.Servlets;
 
 /**
  * Used by Lables to load labels from a servlet context.
@@ -31,6 +33,8 @@ import org.zkoss.util.resource.LabelLocator;
  * @author tomyeh
  */
 public class ServletLabelLocator implements LabelLocator {
+	private static final Log log = Log.lookup(ServletLabelLocator.class);
+
 	private final ServletContext _ctx;
 	private final String _path;
 
@@ -42,7 +46,8 @@ public class ServletLabelLocator implements LabelLocator {
 		this(ctx, null);
 	}
 	/** Constructs a locator for the given path.
-	 * @param path the path of the properties file
+	 * @param path the path of the properties file<br/>
+	 * Notice that <code>file:/path</code> is supported (but not http://).
 	 * @since 5.0.7
 	 */
 	public ServletLabelLocator(ServletContext ctx, String path) {
@@ -54,14 +59,19 @@ public class ServletLabelLocator implements LabelLocator {
 
 	//-- LabelLocator --//
 	public URL locate(Locale locale) throws IOException {
-		final String path = _path != null ? _path:
+		String path = _path != null ? _path:
 			Library.getProperty("org.zkoss.util.label.web.location", 
 				"/WEB-INF/i3-label.properties");
 		final int j = path.lastIndexOf('.');
 		final String prefix = j >= 0 ? path.substring(0, j): path;
 		final String suffix = j >= 0 ? path.substring(j): "";
-		return _ctx.getResource(
-			locale == null ? prefix + suffix: prefix + '_' + locale + suffix);
+		path = locale == null ? prefix + suffix: prefix + '_' + locale + suffix;
+		final URL url = path.toLowerCase().startsWith("file:/") ?
+			Servlets.getResource(_ctx, path): _ctx.getResource(path);
+			//we don't accept http:// since we cannot detect if it exists
+		if (url == null && _path != null && _path.equals(path))
+			log.error("File not found: " + path);
+		return url;
 	}
 
 	//-- Object --//
@@ -72,5 +82,8 @@ public class ServletLabelLocator implements LabelLocator {
 		return o instanceof ServletLabelLocator
 			&& ((ServletLabelLocator)o)._ctx.equals(_ctx)
 			&& Objects.equals(((ServletLabelLocator)o)._path, _path);
+	}
+	public String toString() {
+		return "ServletLabelLocator" + (_path != null ? ": " + _path: "");
 	}
 }
