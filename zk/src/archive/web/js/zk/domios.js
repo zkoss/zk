@@ -1,3 +1,18 @@
+/* domios.js
+
+	Purpose:
+		Enhance/fix ios dom event
+	Description:
+		
+	History:
+		Wedi Mar 30 15:14:49     2011, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under LGPL Version 3.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+*/
+(function () {
 function _createMouseEvent (type, button, changedTouch, ofs) {
 	if (!ofs)
 		ofs = {sx: 0,sy: 0,cx: 0,cy: 0};
@@ -142,17 +157,17 @@ function doRightClick() {
 	rightClickPending = false;
 	var evt = rightClickEvent,
 		changedTouch = evt.originalEvent.changedTouches[0];
-		
-	
-//	simulatedMouseEvent('mouseup', 0, changedTouch);// We need to mouse up (as we were down)
-//	simulatedMouseEvent('mousedown', 2, changedTouch);// emulate a right click
 
-//	simulatedEvent.initMouseEvent("contextmenu", true, true, window, 1, 
-//		changedTouch.screenX + 20, changedTouch.screenY - 20, 
-//		changedTouch.clientX + 20, changedTouch.clientY - 20,
-//      	false, false, false, false, 2, null);
-//	changedTouch.target.dispatchEvent(simulatedEvent);// Show a context menu
-	
+/* orignal implement	
+ 	simulatedMouseEvent('mouseup', 0, changedTouch);// We need to mouse up (as we were down)
+	simulatedMouseEvent('mousedown', 2, changedTouch);// emulate a right click
+
+	simulatedEvent.initMouseEvent("contextmenu", true, true, window, 1, 
+		changedTouch.screenX + 20, changedTouch.screenY - 20, 
+		changedTouch.clientX + 20, changedTouch.clientY - 20,
+      	false, false, false, false, 2, null);
+	changedTouch.target.dispatchEvent(simulatedEvent);// Show a context menu
+*/
 	_doEvt('iosHold', evt, 
 		_createJQEvent(changedTouch.target, 
 			'contextmenu', 0, changedTouch, {sx: 20,sy: -20,cx: 20,cy: -20}));
@@ -310,3 +325,4 @@ zk.override(jq.Event.prototype, _jqEvent, {
 		}
 	}
 });
+})();
