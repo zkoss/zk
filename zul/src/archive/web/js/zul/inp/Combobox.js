@@ -69,10 +69,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				this._typeahead(this._bDel, ofs);
 				this._bDel = null;
 				
-				
 				//Fixed bug 3290858: combobox with autodrop and setModel in onChanging
 				var pp = this.getPopupNode_();
-				if (pp) pp.style.width = jq.px(jq(this.$n("cave")).width());
+				//will update it later in onResponse with _fixsz
+				if(pp) pp.style.width = "auto";
+				
 			}
 			this._repos = false;
 		}
