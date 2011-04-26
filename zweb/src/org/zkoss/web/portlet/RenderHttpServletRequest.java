@@ -113,6 +113,9 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 			}
 		};
    }
+	public RenderRequest getRenderRequest() {
+		return _req;
+	}
 	public String getCharacterEncoding() {
 		return _enc;
 	}
