@@ -279,7 +279,8 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_increase: function (is_add){
 		var inp = this.inp,
-			value = parseFloat(inp.value, 10);
+			value = this.coerceFromString_(inp.value),
+			result;
 		if (is_add)
 			result = value + this._step;
 		else
@@ -292,7 +293,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		if (this._max!=null && result > this._max) result = this._max;
 		else if (this._min!=null && result < this._min) result = this._min;
 
-		inp.value = result;
+		inp.value = this.coerceToString_(result);
 		
 		this._onChanging();
 		
