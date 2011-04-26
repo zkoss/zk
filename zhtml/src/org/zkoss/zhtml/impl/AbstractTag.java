@@ -256,9 +256,28 @@ implements DynamicPropertied, RawId {
 			rc = PageRenderer.getTagRenderContext(exec);
 		}
 
-		out.write(getPrologHalf());
+		out.write(getPrologHalf(false));
 		rc.renderBegin(this, getClientEvents(), false);
 
+		redrawChildrenDirectly(rc, exec, out);
+
+		out.write(getEpilogHalf());
+		rc.renderEnd(this);
+
+		if (rcRequired) {
+			out.write(rc.complete());
+			PageRenderer.afterRenderTag(exec, ret);
+		}
+	}
+	/** Renders the children directly to the given output.
+	 * Notice it is called only if {@link #redraw} is going to render
+	 * the content directly (such as generating <input>; rather than
+	 * generating JavaScript). If it is about to generate the JavaScript code
+	 * {@link #redrawChildren} will be called instead.
+	 * @since 5.0.7
+	 */
+	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
+	java.io.Writer out) throws java.io.IOException {
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
 			if (((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
@@ -272,26 +291,21 @@ implements DynamicPropertied, RawId {
 			}
 			child = next;
 		}
-
-		out.write(getEpilogHalf());
-		rc.renderEnd(this);
-
-		if (rcRequired) {
-			out.write(rc.complete());
-			PageRenderer.afterRenderTag(exec, ret);
-		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		render(renderer, "prolog", getPrologHalf());
+		render(renderer, "prolog", getPrologHalf(false));
 		render(renderer, "epilog", getEpilogHalf());
 	}
-	private String getPrologHalf() {
+	/**
+	 * @param hideUuidIfNoId whether not to generate UUID if possible
+	 */
+	/*package*/ String getPrologHalf(boolean hideUuidIfNoId) {
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_tagnm);
 
-		if (!shallHideId() || getId().length() > 0)
+		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
 			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
@@ -308,7 +322,7 @@ implements DynamicPropertied, RawId {
 
 		return sb.append('>').toString();
 	}
-	private String getEpilogHalf() {
+	/*package*/ String getEpilogHalf() {
 		return isChildable() ? "</" + _tagnm + '>': "";
 	}
 	protected boolean isChildable() {

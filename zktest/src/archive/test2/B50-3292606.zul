@@ -1,0 +1,24 @@
+<div>
+<zscript>
+void show(String msg, Object val) {
+	inf.appendChild(new Label(msg + "=" + val));
+}
+</zscript>
+<html><![CDATA[
+	<ol>
+		<li>You shall see &lt;div>abc&lt;/div>&lt;span id="aa">what&lt;/span> in
+		the following text area</li>
+		<li>Click the check button, and you shall see the content is shown at the end</li>
+		<li>Change the textarea's content and press TAB. You shall see the content is shown at the end</li>
+	</ol>
+]]></html>
+
+<textarea zk:onChange='show("value", self.value)' xmlns="xhtml" xmlns:zk="zk">
+	<div>abc</div><span id="aa">what</span>
+</textarea>
+<button label="check" onClick='show("check", self.previousSibling.value)'/>
+<separator/>
+<input type="text" value="xyz" zk:onChange='show("value", self.value)' xmlns="xhtml" xmlns:zk="zk"/>
+<button label="check" onClick='show("check", self.previousSibling.value)'/>
+<vlayout id="inf"/>
+</div>

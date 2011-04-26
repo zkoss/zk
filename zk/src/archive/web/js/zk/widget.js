@@ -4960,7 +4960,11 @@ zk.Native = zk.$extends(zk.Widget, {
 
 	redraw: function (out) {
 		var s = this.prolog;
-		if (s) out.push(s);
+		if (s) {
+			out.push(s);
+			if (this.value && s.startsWith("<textarea"))
+				out.push(this.value);
+		}
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

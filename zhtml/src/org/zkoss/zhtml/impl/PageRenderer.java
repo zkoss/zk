@@ -23,11 +23,14 @@ import java.io.IOException;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zhtml.Text;
 
 /**
  * The page render for ZHTML pages.
@@ -168,6 +171,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 * Furthermore, the return value of this method shall be passed as
 	 * the <code>param</code> argument of {@link #afterRenderTag}.
 	 *
+	 * @return the result of this invocation. It shall be passed to
+	 * the <code>param</code> argument of {@link #afterRenderTag}.
 	 * @see #afterRenderTag
 	 */
 	public static Object beforeRenderTag(Execution exec) {
@@ -185,5 +190,40 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	public static void afterRenderTag(Execution exec, Object param) {
 		if (param != null)
 			exec.setAttribute(ATTR_RENDER_CONTEXT, null);
+	}
+
+	/** Converts the children of the give component into a string-typed content,
+	 * or null if no children at all.
+	 * @exception UiException if some of the children is not ZHTML tags
+	 * (i.e., not {@link AbstractTag}).
+	 * @since 5.0.7
+	 */
+	public static String childrenToContent(Component comp) {
+		Component c;
+		if ((c = comp.getFirstChild()) != null) {
+			final StringBuffer sb = new StringBuffer();
+			for (; c != null; c = c.getNextSibling())
+				childrenToContent(comp, c, sb);
+			comp.getChildren().clear();
+			return sb.toString();
+		}
+		return null;
+	}
+	private static final
+	void childrenToContent(Component owner, Component comp, StringBuffer sb) {
+		if (comp instanceof Text) {
+			sb.append(((Text)comp).getValue());
+			return;
+		}
+		if (!(comp instanceof AbstractTag))
+			throw new UiException("Non-ZHTML components are not allowed, "+comp+", for "+owner);
+
+		final AbstractTag tag = (AbstractTag)comp;
+		sb.append(tag.getPrologHalf(true)); //don't generate UUID if possible
+
+		for (Component c = tag.getFirstChild(); c != null; c = c.getNextSibling())
+			childrenToContent(owner, c, sb);
+
+		sb.append(tag.getEpilogHalf());
 	}
 }
