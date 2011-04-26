@@ -80,6 +80,7 @@ ZK 5.0.7
   3284663: Radio always sends onCheck event
   3192194: Combobox does't propagate selection to Selectable Models
   3287366: Databinding Grid inside a Row template doesn't work
+  3183438: Access to bean shall be consistent
     
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
