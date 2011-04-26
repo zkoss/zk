@@ -319,8 +319,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
 			uuid = this.uuid, zcls = this.getZclass();
 		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
-		(this._nrows ? ' style="display:none">' : '' ),
-			'<tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+		(this._nrows ? ' style="display:none"' : '' ),
+			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
 	},
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
