@@ -224,13 +224,16 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 				cellWidth = cnt-- <= 0 ? jq(n).width() : '0px';
 				if (cellWidth == '0px') {
-					if (!hdWgt._origWd)
-						hdWgt._origWd = jq(hdWgt.$n('hdfaker')).width();
+					if (!hdWgt._origWd) {
+						faker = hdWgt.$n('hdfaker');			
+						hdWgt._origWd = faker.style.width ? 
+							zk.parseInt(faker.style.width): 
+							jq(hdWgt.$n('hdfaker')).width();
+					}
 				} else if (hdWgt._origWd) {
 					cellWidth = jq.px0(hdWgt._origWd);
 					hdWgt._origWd = null;
 				}
-				
 				if (force || n.style.width != cellWidth) {
 					n.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
