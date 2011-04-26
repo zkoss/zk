@@ -155,7 +155,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
 	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
+		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys+zk.DECIMAL))
 			this.$supers('doKeyPress_', arguments);
 	},
 	doKeyDown_: function(evt){
