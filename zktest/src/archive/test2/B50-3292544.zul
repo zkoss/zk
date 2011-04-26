@@ -1,0 +1,8 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type 0.5 in the Doublespinner and click on somewhere else. If you can't type in the decimal sign ".", it is a bug.</li>
+		</ol>
+	]]></html>
+	<doublespinner step="0.5" />
+</zk>
