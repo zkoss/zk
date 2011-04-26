@@ -265,8 +265,7 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 	 */
 	public void setText(String value) throws WrongValueException {
 		if (_auxinf != null && _auxinf.maxlength > 0 && value != null && value.length() > _auxinf.maxlength)
-			throw showCustomError(
-				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
 
 		final Object val = coerceFromString(value);
 		final boolean same = Objects.equals(_value, val);
@@ -330,10 +329,6 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 						log.realCauseBriefly(ex);
 					}
 				}
-			} catch (WrongValueException ex) {
-				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint))
-					((CustomConstraint)constr).showCustomError(this, ex);
-				throw ex;
 			} finally {
 				Scopes.afterInterpret();
 			}
@@ -635,7 +630,7 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 	 */
 	protected void checkUserError() throws WrongValueException {
 		if (_auxinf != null && _auxinf.errmsg != null)
-			throw showCustomError(new WrongValueException(this, _auxinf.errmsg));
+			throw new WrongValueException(this, _auxinf.errmsg);
 				//Note: we still throw exception to abort the exec flow
 				//It's client's job NOT to show the error box!
 				//(client checks z.srvald to decide whether to open error box)
@@ -677,8 +672,7 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 	}
 	private void setValueByClient(Object value, String valstr) {
 		if (_auxinf != null && _auxinf.maxlength > 0 && valstr != null && valstr.length() > _auxinf.maxlength)
-			throw showCustomError(
-				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
 
 		final boolean same = Objects.equals(_value, value);
 		boolean errFound = false;
@@ -713,8 +707,7 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 				value = unmarshall(clientv);
 			} catch (NumberFormatException ex) {
 				initAuxInfo().errmsg = ex.getMessage();
-				throw showCustomError(
-						new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv));
+				throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
 			}
 			final String valstr = coerceToString(value);
 			try {
