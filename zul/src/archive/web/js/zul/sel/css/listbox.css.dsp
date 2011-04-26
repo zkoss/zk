@@ -57,7 +57,8 @@ tbody.z-listbox-empty-body td{
    	font-family: ${fontFamilyC};
     font-size: ${fontSizeM};
     font-weight: normal;
-    color:#BFBFBF;
+    color:#7d7d7d;
+    font-style:italic;
     text-align:center;
 }
 div.z-listbox-footer {
