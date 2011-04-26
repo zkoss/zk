@@ -84,6 +84,7 @@ ZK 5.0.7
   3204554: doublespinner and italian locale
   3292544: Can't type "." into Doublespinner
   3196910: Cell in grid group doesn't display a expected look
+  3201879: window.doModal opens a non-functioning popup
     
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

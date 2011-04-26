@@ -3603,6 +3603,12 @@ focus_: function (timeout) {
 
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
+			var wgt = this.getTopWidget();
+			
+			// Bug #3201879
+			if (wgt && wgt != modal && wgt.getZIndex() > modal.getZIndex())
+				return true;
+			
 			if (!opts || !opts.checkOnly) {
 				var cf = zk.currentFocus;
 				//Note: browser might change focus later, so delay a bit
