@@ -769,10 +769,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (zk.safari && this.ebodytbl) {
 				this._ignoreDoScroll = true; //will cause _doScroll, don't change scrolling position
 				try {
-					var oldCSS = this.ebodytbl.style.display;
+					var oldCSS = this.ebodytbl.style.display,
+						bd = jq('body'),
+						st = bd.scrollTop();
 					this.ebodytbl.style.display = 'none';
 					var dummy = this.ebodytbl.offsetWidth; //force recalc
 					this.ebodytbl.style.display = oldCSS;
+					// Bug: B50-3291371: Listbox scroll to top when page changes
+					// have to set scroll top back
+					bd.scrollTop(st);
 					//bug #3185647: extra space on top of body content
 					oldCss = this.ebody.style.height;
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
