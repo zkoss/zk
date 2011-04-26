@@ -787,6 +787,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.fireOnRender(155);
 			this.ebody.scrollTop = this._currentTop;
 			this.ebody.scrollLeft = this._currentLeft;
+			if (this.ehead)
+				this.ehead.scrollLeft = this._currentLeft;
+			if (this.efoot) 
+				this.efoot.scrollLeft = this._currentLeft;
 			this._shallSize = false;
 		}
 	},
