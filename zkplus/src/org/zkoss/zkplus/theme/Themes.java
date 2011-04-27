@@ -176,7 +176,7 @@ public class Themes {
 	}
 	
 	private static boolean contains(String themes, String target) {
-		return !Strings.isEmpty(target) && (";" + themes + ";").contains(";" + target + ";");
+		return !Strings.isEmpty(target) && (";" + themes + ";").indexOf(";" + target + ";") != -1;
 	}
 	
 	private static String capitalize(String str) {
