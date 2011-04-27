@@ -344,7 +344,44 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			jq(this.$n('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
+	_fixMousedownForClick: (zk.safari || zk.ff) ?
+		function(){
+			this._clickFlag = "down";
+		} 
+	: zk.$void,
+	_fixMouseupForClick: (zk.safari || zk.ff) ?
+		function(evt){
+			//3276814:fix click then padding change issue for FF3 and Chrome/Safari
+			if ( this._clickFlag == "down" ) {
+				if (jq.contains(this.$n(), evt.domTarget)) {
+					this._clickFlag = "up";
+					var w = this;
+					if(this._fxTimer) clearTimeout(this._fxTimer);
+					this._fxTimer = setTimeout(function() {
+						if (w._clickFlag == "up") {
+							w.doClick_(new zk.Event(w, 'onClick', {}));
+							w._clickFlag = null;
+						}
+					}, 100);
+				}else this._clickFlag = null;
+			}
+		} 
+	: zk.$void,  
+	_fixMousedownForClick: (zk.safari || zk.ff) ?
+		function(){
+			this._clickFlag = "down";
+		} 
+	: zk.$void,	
+	_fixClick: (zk.safari || zk.ff) ?
+		function(){
+			if(this._fxTimer) clearTimeout(this._fxTimer);
+			this._clickFlag = null;
+		} 
+	: zk.$void,		
 	doClick_: function (evt) {
+		
+		this._fixClick(evt);
+		
 		if (!this._disabled) {
 			zul.wgt.ADBS.autodisable(this);
 			if (this._type != "button") {
@@ -380,6 +417,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
+		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
+		//set it down to prevent the case for down in other place but up on this widget,
+		//and down in this widget and up for other place
+		
+		this._fixMousedownForClick();
+		
 		if (!this._disabled) {
 			var zcls = this.getZclass();
 			jq(this.$n('box')).addClass(zcls + "-clk")
@@ -387,12 +430,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (!zk.ie || !this._uplder) zk(this.$n('btn')).focus(30);
 				//change focus will disable upload in IE
 		}
-
 		zk.mouseCapture = this; //capture mouse up
 		this.$supers('doMouseDown_', arguments);
 	},
-	doMouseUp_: function () {
+	doMouseUp_: function (evt) {
 		if (!this._disabled) {
+			this._fixMouseupForClick(evt);
+			
 			var zcls = this.getZclass();
 			jq(this.$n('box')).removeClass(zcls + "-clk")
 				.removeClass(zcls + "-over");
