@@ -612,9 +612,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
 
-		if (this._inplace)
-			jq(inp).addClass(this.getInplaceCSS());
-
 		if (btn) {
 			this.domListen_(btn, "onZMouseDown", "_btnDown")
 				.domListen_(btn, "onZMouseUp", "_btnUp")
