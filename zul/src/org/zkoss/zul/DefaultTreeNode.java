@@ -216,7 +216,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 		if (model != null) {
 			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
 			model.removeSelection(child);
-			model.open(child, false);
+			model.setOpen(child, false);
 		}
 	}
 	//@Override

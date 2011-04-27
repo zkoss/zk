@@ -38,7 +38,7 @@ public interface Openable {
 	 * @param obj the object to be as open.
 	 * @param open whether be opened
 	 */
-	public void open(Object obj, boolean open);
+	public void setOpen(Object obj, boolean open);
 	/**
 	 * Returns whether the specified object be opened.
 	 * @param obj

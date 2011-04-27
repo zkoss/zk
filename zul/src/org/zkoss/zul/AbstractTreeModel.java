@@ -132,7 +132,7 @@ implements TreeModel, Selectable, Openable, java.io.Serializable  {
 	}
 	
 	//Openable
-	public void open(Object obj, boolean open) {
+	public void setOpen(Object obj, boolean open) {
 		if (open)
 			_openSet.add(obj);
 		else

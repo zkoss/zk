@@ -256,7 +256,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 					tree.renderItem(this);
 				TreeModel model = tree.getModel();
 				if (model instanceof Openable)
-					((Openable)model).open(_treeNode, open);
+					((Openable)model).setOpen(_treeNode, open);
 			}
 		}
 	}
@@ -654,7 +654,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 				}
 				TreeModel model = tree.getModel();
 				if (model instanceof Openable)
-					((Openable)model).open(_treeNode, open);
+					((Openable)model).setOpen(_treeNode, open);
 			}
 			
 			if (_treechildren != null && super.isVisible()) {
