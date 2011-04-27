@@ -465,10 +465,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function (){
 		this.$supers(Datebox, 'bind_', arguments);
-		var btn = this.$n('btn'),
-			inp = this.getInputNode();
+		var btn, inp = this.getInputNode();
 
-		if (btn) {
+		if (this._inplace)
+			jq(inp).addClass(this.getInplaceCSS());
+
+		if (btn = this.$n('btn')) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}

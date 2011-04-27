@@ -608,11 +608,13 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.db.Timebox, 'bind_', arguments);
-		var inp = this.getInputNode(),
-			btn = this.$n("btn");
+		var inp = this.getInputNode(), btn;
 		zWatch.listen({onSize: this, onShow: this});
-
-		if (btn) {
+	
+		if (this._inplace)
+			jq(inp).addClass(this.getInplaceCSS());
+		
+		if (btn = this.$n('btn')) {
 			this.domListen_(btn, "onZMouseDown", "_btnDown")
 				.domListen_(btn, "onZMouseUp", "_btnUp")
 				.domListen_(btn, "onMouseOut", "_btnOut")

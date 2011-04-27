@@ -357,11 +357,13 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
 		this.timeId = null;
-		var inp = this.inp = this.$n("real"),
-			btn = this.$n("btn");
+		var inp = this.inp = this.$n("real"), btn;
 		zWatch.listen({onSize: this, onShow: this});
 		
-		if(btn)
+		if (this._inplace)
+			jq(inp).addClass(this.getInplaceCSS());
+		
+		if(btn = this.$n("btn"))
 			this.domListen_(btn, "onZMouseDown", "_btnDown")
 				.domListen_(btn, "onZMouseUp", "_btnUp")
 				.domListen_(btn, "onMouseOut", "_btnOut")
