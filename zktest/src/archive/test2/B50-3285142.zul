@@ -1,0 +1,21 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on the button.</li>
+			<li>In 5 seconds, drag the Div and do not drop until "Done" is shown.</li>
+			<li>Drop (release mousedown) when "Done" is shown.</li>
+			<li>If the dragged Div does not disappear, it is a bug.</li>
+		</ol>
+	]]></html>
+	<button label="Go">
+		<attribute name="onClick"><![CDATA[
+			Thread.sleep(5000);
+			div.detach();
+			lb.value = "Done!";
+		]]></attribute>
+	</button>
+	<label id="lb" />
+	<div id="div" draggable="true" style="border: 1px solid green">
+		Drag Me
+	</div>
+</zk>

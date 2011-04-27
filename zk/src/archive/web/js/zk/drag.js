@@ -61,10 +61,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if(!_activedg) return;
 
 		_lastPt = null;
-		var evt;
+		var evt,
+			adg = _activedg;
 		_activedg._endDrag(evt = jq.Event.zk(devt));
 		_activedg = null;
 		if (evt.domStopped) devt.stop();
+		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
+		if(adg._suicide) {
+			adg._suicide = false;
+			adg.destroy();
+		}
 	}
 	function _dockeypress(devt) {
 		if(_activedg) _activedg._keypress(devt);
@@ -340,6 +346,12 @@ String scroll; //DOM Element's ID</code></pre>
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy: function () {
+		if(this.dragging) {
+			// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
+			// destroy later
+			this._suicide = true;
+			return;
+		}
 		jq(this.handle).unbind("zmousedown", this.proxy(this._mousedown));
 
 		//unregister
