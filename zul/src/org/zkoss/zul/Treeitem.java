@@ -244,11 +244,8 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 			//initialized before creating child components (for ZK pages)
 			smartUpdate("open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
-			if(_open)
-				if (_treechildren != null) addVisibleItemCount(_treechildren.getVisibleItemCount());
-			else 
-				if (_treechildren != null) addVisibleItemCount(-_treechildren.getVisibleItemCount());
-			
+			if (_treechildren != null) 
+				addVisibleItemCount((_open ? 1: -1) * _treechildren.getVisibleItemCount());
 			
 			Tree tree = getTree();
 			if(tree != null && tree.getModel() !=null){
