@@ -164,14 +164,30 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.parent.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 		this.domListen_(scroll, 'onScroll');
 
-		if (gbody)
+		if (gbody) {
 			gbody.style.overflowX = 'hidden';
+			if (zk.ie6_ || zk.ie7_) {
+				jq(this.parent.ebodyrows).each(function () {
+					jq(this).children().css('white-space','nowrap');
+				});
+			} else {
+				gbody.style.whiteSpace = 'nowrap';
+			}
+		}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this, onSize: this});
 		var p;
-		if ((p = this.parent) && (p = p.$n('body')))
+		if ((p = this.parent) && (p = p.$n('body'))) {
 			p.style.overflowX = '';
+			if (zk.ie6_ || zk.ie7_) {
+				jq(this.parent.ebodyrows).each(function () {
+					jq(this).children().css('white-space','');
+				});
+			} else {
+				p.style.whiteSpace = '';
+			}
+		}
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
 	},
 	_doScroll: function (evt) {
