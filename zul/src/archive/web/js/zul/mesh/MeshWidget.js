@@ -417,17 +417,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
-			if (this.efrozen) {
-				this.ebody.style.overflowX = 'hidden'; // keep to hide
-				 // keep non line break
-				if (zk.ie6_ || zk.ie7_) {
-					jq(this.ebodyrows).each(function () {
-						jq(this).children().css('white-space','nowrap');
-					});
-				} else {
-					this.ebody.style.whiteSpace = 'nowrap';
-				}
-			}
+			if (this.efrozen)
+				jq(this.ebody).addClass('z-word-nowrap').css('overflow-x', 'hidden');// keep non line break
 		}
 		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 		var paging;
