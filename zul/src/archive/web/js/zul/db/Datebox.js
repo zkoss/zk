@@ -264,21 +264,37 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			mm = fmt.indexOf('m'),
 			ss = fmt.indexOf('s'),
 			hasAM = aa > -1,
-			hasHour1 = hasAM ? hh > -1 || KK > -1 : false;
+			//bug 3284144: The databox format parse a wrong result with hh:mm:ss 
+			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false;
 
+		var hv , mv = mm > -1 ? 'mm' : '' , sv = ss > -1 ? 'ss' : '';
+		
 		if (hasHour1) {
-			if ((hh != -1 && aa < hh) || (kk != -1 && aa < kk)) {
-				var f = hh < KK ? 'a KK' : 'a hh';
-				return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-			} else {
-				var f = hh < KK ? 'KK' : 'hh';
-				f = f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-				return f + ' a';
-			}
-		} else {
-			var f = HH < kk ? 'kk' : HH > -1 ? 'HH' : '';
-			return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-		}
+			var time = this._prepareTimeFormat( hh < KK ? "KK" : "hh", mv, sv);
+			if (aa == -1) 
+				return time;
+			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
+				return 'a ' + time
+			else 
+				return time + ' a';
+			
+		} else 
+			return this._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
+		
+	},
+	/**
+	 * given h,m,s , return h:m:s or m:s or h:s or m:s  
+	 * return 
+	 * @param String h
+	 * @param String m
+	 * @param String s
+	 */
+	_prepareTimeFormat : function(h,m,s){
+		var o =[] ;
+		if(h) o.push(h);
+		if(m) o.push(m);
+		if(s) o.push(s);
+		return o.join(":") ;
 	},
 	/** Returns the Date format of the specified format
 	 * @return String
@@ -613,6 +629,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			//we should use UTC date instead of Locale date to our value.
 			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)).toUTCDate()
 				|| (inp.value ? db._value: zUtl.today(fmt));
+		
 		if (value)
 			this.setValue(value);
 		if (fmt) {

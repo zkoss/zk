@@ -94,6 +94,7 @@ ZK 5.0.7
   3276814: Trendy button onClick not fired on specific area
   3226830: zul Window dohighlight failed with IE7 simulate meta
   3293422: Window sizable has incorrect moving constraint
+  3284144: The databox format parse a wrong result with hh:mm:ss 
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

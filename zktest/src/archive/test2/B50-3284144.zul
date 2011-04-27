@@ -1,0 +1,42 @@
+<zk>
+	
+	
+	<vbox>
+		<div>
+			<label value="yyyy-MM-dd ss" />
+			<datebox format="yyyy-MM-dd ss" width="300px" />
+		</div>
+		
+		<div>
+			<label value="yyyy-MM-dd hh:mm:ss" />
+			<datebox format="yyyy-MM-dd hh:mm:ss" width="300px" />
+		</div>
+
+		<div>
+			<label value="yyyy-MM-dd KK:mm:ss" />
+			<datebox format="yyyy-MM-dd KK:mm:ss" width="300px" />
+		</div>
+		
+		<div>
+			<label value="yyyy-MM-dd hh:mm:ss aa" />
+			<datebox format="yyyy-MM-dd hh:mm:ss aa" width="300px" />
+		</div>
+		
+		<div>
+			<label value="yyyy-MM-dd KK:mm:ss" />
+			<datebox format="yyyy-MM-dd KK:mm:ss " width="300px" />
+		</div>
+
+		<div>
+			<label value="yyyy-MM-dd HH:mm:ss" />
+			<datebox format="yyyy-MM-dd HH:mm:ss" width="300px" />
+		</div>		
+
+		<div>
+			<label value="yyyy-MM-dd kk:mm:ss aa" />
+			<datebox format="yyyy-MM-dd kk:mm:ss" width="300px" />
+		</div>		
+		
+		
+	</vbox>
+</zk>
