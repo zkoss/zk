@@ -430,6 +430,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					snap: LR._snap,
 					zIndex: 12000,
 					overlay: true,
+					initSensitivity: 0,
 					ignoredrag: LR._ignoredrag,
 					endeffect: LR._endeffect
 				});
