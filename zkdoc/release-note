@@ -89,6 +89,7 @@ ZK 5.0.7
   3292606: ZHTML Textarea onChange not work (an extra onchange fired)
   3291371: Listbox scroll to top when page changes
   3195768: showCustomError is called twice
+  3285148: Vertical scroll bar wrongly appears with autopaging
     
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

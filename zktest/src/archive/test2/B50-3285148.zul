@@ -1,0 +1,34 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>If vertical scroll bar appears in the Grid, it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		rows = new String[50];
+	]]></zscript>
+	<grid height="420px" width="300px" autopaging="true" mold="paging">
+		<columns>
+			<column label="Head 1" width="60px" />
+			<column label="Head 2" width="60px" />
+			<column label="Head 3" width="60px" />
+			<column label="Head 4" width="60px" />
+			<column label="Head 5" width="60px" />
+			<column label="Head 6" width="60px" />
+			<column label="Head 7" width="60px" />
+			<column label="Head 8" width="60px" />
+		</columns>
+		<rows>
+			<row forEach="${rows}">
+				<label value="${forEachStatus.index}" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+				<label value="Here is lots of text" />
+			</row>
+		</rows>
+	</grid>
+</zk>

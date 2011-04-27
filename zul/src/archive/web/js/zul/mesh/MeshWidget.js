@@ -682,6 +682,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var ebody = this.ebody;
 		if (!ebody) return; //not ready yet
 		var max = ebody.offsetHeight;
+		if (max - ebody.clientHeight > 11)
+			max -= jq.scrollbarWidth();
 		if (max == this._prehgh) return false; //same height, avoid fixing page size
 		this._prehgh = max;
 		var ebodytbl = this.ebodytbl,
