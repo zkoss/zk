@@ -19,7 +19,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<li>Click "model1 button".</li>
 			<li>Click header twice.</li>
 			<li>The Grid shall be sorted well.</li>
-			<li>Click "model1 button".</li>
+			<li>Click "model2 button".</li>
 			<li>Click header twice.</li>
 			<li>It shall not appear any error, and the Grid shall be sorted well.</li>
 		</ol>
