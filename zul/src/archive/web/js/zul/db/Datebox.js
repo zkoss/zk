@@ -338,7 +338,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
     		$inp.removeClass(inc);
 		}
 		if (zk.ie6_)			
-			inp.style.width = jq.px(0);
+			inp.style.width = '0px';
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn');

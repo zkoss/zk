@@ -410,7 +410,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			$inp.addClass(inc);
 		}
 		if (zk.ie6_ && node.style.width)
-			inp.style.width = jq.px(0);
+			inp.style.width = '0px';
 		
 		var extraWidth = this.inRoundedMold() && shallClean;
 		
