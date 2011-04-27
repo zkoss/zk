@@ -92,6 +92,7 @@ ZK 5.0.7
   3285148: Vertical scroll bar wrongly appears with autopaging
   3285142: Drag fails to clear up ghost when widget is detached
   3276814: Trendy button onClick not fired on specific area
+  3226830: zul Window dohighlight failed with IE7 simulate meta
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
