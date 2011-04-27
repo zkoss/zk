@@ -630,23 +630,25 @@ String scroll; //DOM Element's ID</code></pre>
 	_draw: function (point, evt) {
 		var node = this.node,
 			$node = zk(node),
-			pos = $node.cmOffset();
-		if(this.opts.ghosting) {
+			pos = $node.cmOffset(),
+			opts = this.opts;
+		if(opts.ghosting) {
 			var r = $node.scrollOffset();
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
 
-		var d = this._currentDelta();
+		var d = this._currentDelta(),
+			scroll = opts.scroll;
 		pos[0] -= d[0]; pos[1] -= d[1];
 
-		if(this.opts.scroll && (this.opts.scroll != window && this._isScrollChild)) {
-			pos[0] -= this.opts.scroll.scrollLeft-this.orgScrlLeft;
-			pos[1] -= this.opts.scroll.scrollTop-this.orgScrlTop;
+		if(scroll && (scroll != window && this._isScrollChild)) {
+			pos[0] -= scroll.scrollLeft-this.orgScrlLeft;
+			pos[1] -= scroll.scrollTop-this.orgScrlTop;
 		}
 
 		var p = [point[0]-pos[0]-this.offset[0],
 			point[1]-pos[1]-this.offset[1]],
-			snap = this.opts.snap;
+			snap = opts.snap;
 
 		if(snap)
 			if(typeof snap == 'function') {
@@ -667,19 +669,19 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		var style = node.style;
-		if (typeof this.opts.draw == 'function') {
-			this.opts.draw(this, this.snap_(p), evt);
-		} else if (typeof this.opts.constraint == 'function') {
-			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
+		if (typeof opts.draw == 'function') {
+			opts.draw(this, this.snap_(p, opts), evt);
+		} else if (typeof opts.constraint == 'function') {
+			var np = opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
-			p = this.snap_(p);
+			p = this.snap_(p, opts);
 			style.left = jq.px(p[0]);
 			style.top  = jq.px(p[1]);
 		} else {
-			p = this.snap_(p);
-			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
+			p = this.snap_(p, opts);
+			if((!opts.constraint) || (opts.constraint=='horizontal'))
 				style.left = jq.px(p[0]);
-			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
+			if((!opts.constraint) || (opts.constraint=='vertical'))
 				style.top  = jq.px(p[1]);
 		}
 
@@ -773,7 +775,9 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @param Offset ofs the offset of the dragging position
 	 * @return Offset the offset after snapped
 	 */
-	snap_: function (pos) {
+	snap_: function (pos, opts) {
+		if (opts.snap)
+			return pos;
 		if (pos[1] < 0)
 			pos[1] = 0;
 		return pos;
