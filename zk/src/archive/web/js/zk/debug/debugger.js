@@ -31,54 +31,76 @@ function _dumpWgt(out, wgt, nLevel, inf) {
 	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 		_dumpWgt(out, wgt, nLevel, inf);
 }
+// ignore the default attribute
 var _defaultIgnore = {draggable: 'false', droppable: 'false', mold: 'default', colspan: 1,
 		scrollTop: 0, scrollLeft: 0, innerWidth: '100%', cols: 0, model: true,
 		sortDirection: 'natural', sortAscending: 'none', sortDescending: 'none',
-		columnshide: true, columnsgroup: true};
-var _specialIgnore = {
-	treecell: {width: 1},
-	rows: {visibleItemCount: 1},
-	columns: {menupopup: 1},
-	treeitem: {image: 1, label: 1, zclass: 1},
-	listitem: {label: 1, zclass: 1},
-	include: {content: 1},
-	center: {maxsize: 1, minsize: 1, cmargins: 1, margins: 1, open: 1},
-	paging: {pageCount: 1}
-};
+		columnshide: true, columnsgroup: true},
+	// ignore special attribute for specific component
+	_specialIgnore = {
+		treecell: {width: 1},
+		rows: {visibleItemCount: 1},
+		columns: {menupopup: 1},
+		treeitem: {image: 1, label: 1, zclass: 1},
+		listitem: {label: 1, zclass: 1},
+		include: {content: 1},
+		center: {maxsize: 1, minsize: 1, cmargins: 1, margins: 1, open: 1},
+		paging: {pageCount: 1}
+	},
+	// no childable component
+	_noChildable = {
+		datebox: 1
+	},
+	// put these attributes in the end of the tag.
+	attrsLater = {
+		getText: 1
+	};
 
-function _dumpAttrs(wgt) {
-	var out = [];
-	for (var nm in wgt) {
-		if (nm.startsWith('get') && nm.length > 3 && !nm.endsWith('_')) {
-			var setting = 's' + nm.substring(1);
-			if (typeof wgt[setting] == 'function') {
-    			var key = nm.charAt(3).toLowerCase() + nm.substring(4);
-    			try {
-    				if (_specialIgnore[wgt.widgetName] && _specialIgnore[wgt.widgetName][key])
-    					continue;
-    				
-    				var value = wgt[nm]();
-    				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
-    					if (_defaultIgnore[key] === undefined) {
-    						if (key != 'zclass' || value != 'z-' + wgt.widgetName) {
-    							if (key == "selectedIndex")
-    								out.push(' onCreate="self.selectedIndex = ', value, '"');
-    							else
-    								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
-    						}
-    					} else if (_defaultIgnore[key] !== value)
-    						out.push(' ', key, '="', value, '"');
-    				}
-    					
-    			} catch (e) {}
-			}
+function _dumpAttrs0(out, nm, wgt) {
+	if (nm.startsWith('get') && nm.length > 3 && !nm.endsWith('_')) {
+		var setting = 's' + nm.substring(1),
+			widgetName = wgt.widgetName;
+		if (typeof wgt[setting] == 'function') {
+			var key = nm.charAt(3).toLowerCase() + nm.substring(4);
+			try {
+				if (_specialIgnore[widgetName] && _specialIgnore[widgetName][key])
+					return;
+				
+				var value = wgt[nm]();
+				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
+					if (_defaultIgnore[key] === undefined) {
+						if (key != 'zclass' || value != 'z-' + widgetName) {
+							if (key == "selectedIndex")
+								out.push(' onCreate="self.selectedIndex = ', value, '"');
+							else
+								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
+						}
+					} else if (_defaultIgnore[key] !== value)
+						out.push(' ', key, '="', value, '"');
+				}
+					
+			} catch (e) {}
 		}
 	}
+}
+function _dumpAttrs(wgt) {
+	var out = [],
+		later = [];
+		
+	for (var nm in wgt) {
+		if (attrsLater[nm]) {
+			later.push(nm);
+			continue;
+		}
+		_dumpAttrs0(out, nm, wgt);
+	}
+	for (var i = 0, j = later.length; i < j; i++)		
+		_dumpAttrs0(out, later[i], wgt);
 	return out.join('');
 }
 function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 	inf.cnt++;
-	var nm = wgt.widgetName;
+	var nm = wgt.widgetName, noChildable;
 	
 	if (nm == 'native') {
 		nm = wgt.$n() ? 'h:' + wgt.$n().tagName : wgt.epilog ? 'h:' + (wgt.epilog.match(/<\/?(.+)>/)[1]) : wgt.widgetName;
@@ -106,16 +128,20 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 		} else
 			out.push('/&gt;<br/>');
 		return;
-	} else if (nm == 'include')
-		out.push('&lt;!--');
+	} else if (nm == 'calendar' || nm == 'timebox') {
+		var pnm = wgt.parent ? wgt.parent.widgetName : '';
+		noChildable = _noChildable[pnm];
+	}
 	
+	var prefix = noChildable || (nm == 'include' || nm == 'page') ? '&lt;!--' : '';
 	
-	out.push(_space(nLevel++), '&lt;', nm, _dumpAttrs(wgt));
+	out.push(_space(nLevel++), prefix + '&lt;', nm, _dumpAttrs(wgt));
 	
+		
 	if (wgt.firstChild) {
 		out.push('&gt;');
-		var isPage = nm == 'page' && wgt.parent.$instanceof(zul.wgt.Include)
-				|| wgt.firstChild.widgetName != 'page' && wgt.$instanceof(zul.wgt.Include);
+		var isPage = nm == 'page' || wgt.$instanceof(zul.wgt.Include),
+			isNoChildable = _noChildable[nm];
 		
 		if (isPage)
 			out.push('--&gt;');
@@ -125,20 +151,20 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			_dumpWgt4Zul(out, wgt, nLevel, inf);
 		
-		if (isPage) {
-			out.push('&lt;!--');
-		}
-		out.push(_space(--nLevel), '&lt;/', nm, '&gt;<br/>');
-		if (nm == 'include') {
+		prefix = isPage ? '&lt;!--' : '';
+		
+		out.push(_space(--nLevel), prefix + '&lt;/', nm, '&gt;');
+		if (noChildable || nm == 'include' || nm == 'page')
 			out.push('--&gt;');
-		}
+		
+		out.push('<br/>');
 	} else {
-		out.push('/&gt;<br/>');
-		if (nm == 'include')
+		if (noChildable)
+			out.push('/&gt;--&gt;<br/>');
+		else
+			out.push('/&gt;<br/>');
+		if (nm == 'include' || nm == 'page')
 			out.push('--&gt;');
-		else if (nm == 'page' && wgt.parent.$instanceof(zul.wgt.Include)) {
-			out.push('--&gt;');
-		}
 	}
 }
 function _parseHTML(text, handler) {
@@ -237,7 +263,7 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	},
 	// don't change the function name, otherwise, zkjet will break.
 	dumpWidgetTree4Zul: function (wgt) {
-		var out = ['&lt;zk xmlns:h="native"&gt;'], inf = {cnt: 0};
+		var out = ['&lt;zk xmlns:h="native"&gt;<br/>'], inf = {cnt: 0};
 		_dumpWgt4Zul(out, wgt, 0, inf);
 		out.push('&lt;/zk&gt;');
 		this._dump("Total: "+inf.cnt, out.join(''));
