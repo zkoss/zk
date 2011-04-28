@@ -120,7 +120,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			 * So we add on a new config to clear the widget source .
 			 * @see bug 2898413
 			 */
-			String resourceCache = Library.getProperty("org.zkoss.web.classWebResource.ZKJScache");
+			String resourceCache = Library.getProperty("org.zkoss.zk.WPD.cache");
 			if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
 				_cache.clear();
 			
