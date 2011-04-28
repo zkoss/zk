@@ -18,6 +18,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
+	onSize: function(){
+		var width = this.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			this.getInputNode().style.width = '';
+		this.syncWidth();
+	},
+	onShow: _zkf,
+	/** Synchronizes the input element's width of this component
+	 */
+	syncWidth: function () {
+		zul.inp.RoundInputUtil.syncWidth(this, this.$n('right-edge'));
+	},
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
@@ -49,5 +61,15 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	doKeyPress_: function(evt){
 		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
 			this.$supers('doKeyPress_', arguments);
+	},	
+	bind_: function(){
+		this.$supers(zul.inp.Intbox, 'bind_', arguments);
+		if (this.inRoundedMold())
+			zWatch.listen({onSize: this, onShow: this});
+	},	
+	unbind_: function(){
+		if (this.inRoundedMold())
+			zWatch.unlisten({onSize: this, onShow: this});
+		this.$supers(zul.inp.Intbox, 'unbind_', arguments);
 	}
 });

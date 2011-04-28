@@ -319,43 +319,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		var node = this.$n();
-		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
-			return;
-		
-		var inp = this.getInputNode(),
-    		$n = jq(node),
-    		$inp = jq(inp),
-    		inc = this.getInplaceCSS(),
-    		shallClean = !node.style.width && this._inplace;
-		if (this._buttonVisible && shallClean) {
-			$n.removeClass(inc);
-			$inp.removeClass(inc);
-			
-			if (zk.opera)
-				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
-			else
-				node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
-			$n.addClass(inc);
-			$inp.addClass(inc);
-		}
-		var extraWidth = this.inRoundedMold() && shallClean;
-		
-		if (extraWidth) {
-    		$n.removeClass(inc);
-    		$inp.removeClass(inc);
-		}
-		if (zk.ie6_)			
-			inp.style.width = '0px';
-		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
-							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn');
-		
-		if (extraWidth) {
-    		$n.addClass(inc);
-    		$inp.addClass(inc);
-		}
-		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+		zul.inp.RoundInputUtil.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
 		var n = this.$n();
@@ -391,10 +355,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
-		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
+		this.$supers(zul.inp.Doublespinner, 'bind_', arguments); 
 		this.timeId = null;
 		var inp = this.inp = this.$n("real"), btn;
-		zWatch.listen({onSize: this, onShow: this});
 		
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
@@ -405,7 +368,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 
-		this.syncWidth();
+		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
@@ -420,7 +383,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 				.domUnlisten_(btn, "onMouseOut", "_btnOut")
 				.domUnlisten_(btn, "onMouseOver", "_btnOver");
 
-		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
+		this.$supers(zul.inp.Doublespinner, 'unbind_', arguments);
 	}
 	
 });

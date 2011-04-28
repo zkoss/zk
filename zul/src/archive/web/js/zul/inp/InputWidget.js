@@ -62,7 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 /** @class zul.inp.Renderer
  * The renderer used to render a inputWidget.
- * It is designed to be overriden
+ * It is designed to be overridden.
  */
 zul.inp.Renderer = {
 	/** render the spinner's(timebox) button
@@ -71,6 +71,53 @@ zul.inp.Renderer = {
 	*/
 	renderSpinnerButton: function (out, wgt) {
 	}
+};
+/** @class zul.inp.RoundInputUtil
+ * The RoundInputUtil used to adjust the display of the rounded input.
+ */
+zul.inp.RoundInputUtil = {
+	/** Synchronizes the input element's width of this component
+	*/
+	syncWidth: function (wgt, rightElem) {
+		var node = wgt.$n();
+		if (!zk(node).isRealVisible() || (!wgt._inplace && !node.style.width))
+			return;
+
+		var inp = wgt.getInputNode();
+		
+		if (!node.style.width && wgt._inplace && 
+			(wgt._buttonVisible == undefined
+				|| wgt._buttonVisible)) {
+			node.style.width = jq.px0(this.getOuterWidth(wgt, true));
+		}
+		
+		if (zk.ie6_ && node.style.width)
+			inp.style.width = '0px';
+	
+		var	width = this.getOuterWidth(wgt, wgt.inRoundedMold());
+		
+		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (rightElem ? rightElem.offsetWidth : 0)));
+	},
+	getOuterWidth: function(wgt, rmInplace) {
+		var node = wgt.$n(),
+			$n = jq(node),
+			$inp = jq(wgt.getInputNode()),
+			shallClean = !node.style.width && wgt._inplace;
+		
+		if (rmInplace && shallClean) {
+    		$n.removeClass(inc);
+    		$inp.removeClass(inc);
+		}
+		var	width = zk(node).revisedWidth(
+				node[zk.opera ? 'clientWidth': 'offsetWidth']) 
+				+ (zk.opera ? zk(node).borderWidth(): 0);
+		if (rmInplace && shallClean) {
+    		$n.addClass(inc);
+    		$inp.addClass(inc);
+		}
+		return width;
+	}
+	
 };
 var InputWidget =
 /**
