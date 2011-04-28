@@ -3351,6 +3351,8 @@ public class Listbox extends MeshElement implements Paginated,
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
+				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
+				Events.postEvent(new Event(cmd, request.getComponent(), data));
 			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();
