@@ -785,18 +785,20 @@ import org.zkoss.zk.au.out.*;
 			Component nxt, prv;
 			if ((nxt = last.getNextSibling()) == null
 			|| (sibs != null && !sibs.contains(nxt))) { //nextsib not available at client
-				if (!(parent instanceof Native) && !(parent instanceof StubComponent)) {
-					responses.add(
-						parent != null ?
-							new AuAppendChild(parent, contents):
-							new AuAppendChild(page, contents));
+				if (parent != null //since page might not available, we try AuInsertAfter first if parent is null
+				&& !(parent instanceof Native) && !(parent instanceof StubComponent)) { //parent valid
+					responses.add(new AuAppendChild(parent, contents));
 				} else {
 					final Component first = (Component)group.get(0);
-					if ((prv = first.getPreviousSibling()) == null
-					|| (sibs != null && !sibs.contains(prv))) //prv is not available
-						throw new UiException("Adding child to a native component not allowed: "+parent);
-					//AuInsertAfter prv
-					responses.add(new AuInsertAfter(prv, contents));
+					if ((prv = first.getPreviousSibling()) != null
+					&& (sibs == null || sibs.contains(prv)) //prv is available
+					&& !(prv instanceof Native) && !(prv instanceof StubComponent)) { //prv valid
+						responses.add(new AuInsertAfter(prv, contents));
+					} else {
+						if (parent != null)
+							throw new UiException("Adding child to a native component not allowed: "+parent);
+						responses.add(new AuAppendChild(page, contents));
+					}
 				}
 			} else if (nxt instanceof Native || nxt instanceof StubComponent) { //native
 				final Component first = (Component)group.get(0);
