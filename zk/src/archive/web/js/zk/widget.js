@@ -2954,7 +2954,7 @@ function () {
 	 * @see #getCaveNode 
 	 */
 	insertChildHTML_: function (child, before, desktop) {
-		var ben;
+		var ben, html = child.redrawHTML_();
 		if (before) {
 			if (before.$instanceof(zk.Native)) { //native.$n() is usually null
 				ben = before.previousSibling;
@@ -2962,7 +2962,7 @@ function () {
 					if (ben == child) //always true (since link ready), but to be safe
 						ben = ben.previousSibling;
 					if (ben && (ben = ben.$n())) {
-						jq(ben).after(child.redrawHTML_());
+						jq(ben).after(html);
 						child.bind(desktop);
 						return;
 					}
@@ -2989,9 +2989,9 @@ function () {
 		if (before) {
 			var sib = before.previousSibling;
 			if (_isProlog(sib)) before = sib;
-			jq(before).before(child.redrawHTML_());
+			jq(before).before(html);
 		} else
-			jq(ben).append(child.redrawHTML_());
+			jq(ben).append(html);
 		child.bind(desktop);
 	},
 	/** Called by {@link #insertChildHTML_} to to find the location to place the DOM element of the child.
