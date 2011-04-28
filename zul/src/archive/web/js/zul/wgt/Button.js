@@ -54,6 +54,39 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
+	function _fixMouseupForClick(evt){
+		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
+		/**
+		 * Here we have these states :
+		 * 1.down for mouse down in the widget  (down)
+		 * 2.mouse up in the widget but click not fired (up in timeout)
+		 * 3.mouse up in the wiget and click event fired (null in timeout)
+		 * 4.mouse up not in the widget (null)
+		 */
+		if ( this._clickFlag == "down" ) {
+			if (jq.contains(this.$n(), evt.domTarget)) {
+				this._clickFlag = "up";
+				var w = this;
+				if(this._fxTimer) clearTimeout(this._fxTimer);
+				this._fxTimer = setTimeout(function() {
+					if (w._clickFlag == "up") {
+						w.doClick_(new zk.Event(w, 'onClick', {}));
+						w._clickFlag = null;
+					}
+				}, 100);
+			}else this._clickFlag = null;
+		}
+	} 	
+	
+	function _fixMousedownForClick(evt) {
+		this._clickFlag = "down";
+	}
+	
+	function _fixClick(){
+		if(this._fxTimer) clearTimeout(this._fxTimer);
+		this._clickFlag = null;
+	} 
+	
 var Button = 
 /**
  * A button.
@@ -344,40 +377,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			jq(this.$n('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
-	_fixMousedownForClick: (zk.safari || zk.ff) ?
-		function(){
-			this._clickFlag = "down";
-		} 
-	: zk.$void,
-	_fixMouseupForClick: (zk.safari || zk.ff) ?
-		function(evt){
-			//3276814:fix click then padding change issue for FF3 and Chrome/Safari
-			if ( this._clickFlag == "down" ) {
-				if (jq.contains(this.$n(), evt.domTarget)) {
-					this._clickFlag = "up";
-					var w = this;
-					if(this._fxTimer) clearTimeout(this._fxTimer);
-					this._fxTimer = setTimeout(function() {
-						if (w._clickFlag == "up") {
-							w.doClick_(new zk.Event(w, 'onClick', {}));
-							w._clickFlag = null;
-						}
-					}, 100);
-				}else this._clickFlag = null;
-			}
-		} 
-	: zk.$void,  
-	_fixMousedownForClick: (zk.safari || zk.ff) ?
-		function(){
-			this._clickFlag = "down";
-		} 
-	: zk.$void,	
-	_fixClick: (zk.safari || zk.ff) ?
-		function(){
-			if(this._fxTimer) clearTimeout(this._fxTimer);
-			this._clickFlag = null;
-		} 
-	: zk.$void,		
+	_fixMousedownForClick: (zk.safari || zk.ff) ? _fixMousedownForClick : zk.$void,
+	_fixMouseupForClick: (zk.safari || zk.ff) ? _fixMouseupForClick : zk.$void,  
+	_fixClick: (zk.safari || zk.ff) ? _fixClick	: zk.$void,		
 	doClick_: function (evt) {
 		
 		this._fixClick(evt);
