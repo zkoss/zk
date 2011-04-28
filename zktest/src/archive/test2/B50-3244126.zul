@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3244126.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 28 19:23:21 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>IE only</li>
+			<li>Click the space of scroll bar(not scroll bar arrow).</li>
+			<li>The scroll bar shall move to right well.</li>
+		</ol>
+	]]></html>
+	<grid width="400px">
+		<columns>
+			<column label="column ${each}" forEach="1,2,3,4,5,6,7,8,9" width="200px"/>
+		</columns>
+		<frozen columns="1"/>
+		<rows>
+			<row forEach="1,2,3,4,5">
+				<label value="item ${each}" forEach="1,2,3,4,5,6,7,8,9"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

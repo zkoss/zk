@@ -101,6 +101,7 @@ ZK 5.0.7
   3292545: InputElement in rounded mold doesn't support the width
   3293492: doublespinner  rounded mold not support width
   3204965: onChangePageSize is not fired in autopaging scenario
+  3244126: Horizontal scrollbar malfunction with Grid on IE
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
