@@ -163,7 +163,12 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
-			super.setVisible(evt.isOpen()); // Bug B50-3178065
+			disableClientUpdate(true);
+			try {
+				super.setVisible(evt.isOpen()); // Bug B50-3178065
+			} finally {
+				disableClientUpdate(false);
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
