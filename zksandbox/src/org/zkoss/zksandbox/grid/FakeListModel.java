@@ -42,7 +42,6 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 
 	// ListModelExt
 	public void sort(Comparator cmpr, boolean asc) {
-//		System.out.println("==================SORT DATA================");
 		_asc = asc;
 		invalidate();
 	}
@@ -53,7 +52,6 @@ public class FakeListModel extends AbstractListModel implements ListModelExt {
 	//AbstractListModel
 	public Object getElementAt(int v) {
 		String value = "Option "+(_asc ? v: _size - v - 1);
-//		System.out.println(value);
 		return value;
 	}
 	
