@@ -288,8 +288,6 @@ public class Listbox extends MeshElement implements Paginated,
 	private boolean _autopaging;
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
@@ -1646,12 +1644,6 @@ public class Listbox extends MeshElement implements Paginated,
 	 */
 	public boolean hasGroup() {
 		return !_groupsInfo.isEmpty();
-	}
-
-	// -- Component --//
-	protected void smartUpdate(String attr, Object value) {
-		if (!_noSmartUpdate)
-			super.smartUpdate(attr, value);
 	}
 
 	/* package */void fixGroupIndex(int j, int to, boolean infront) {
@@ -3365,7 +3357,7 @@ public class Listbox extends MeshElement implements Paginated,
 				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
-			_noSmartUpdate = true;
+			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
@@ -3402,7 +3394,7 @@ public class Listbox extends MeshElement implements Paginated,
 					}
 				}
 			} finally {
-				_noSmartUpdate = false;
+				disableClientUpdate(false);
 			}
 
 			Events.postEvent(evt);

@@ -106,8 +106,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	private String _name;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
-	/** disable smartUpdate; usually caused by the client. */
-	private transient boolean _noSmartUpdate;
 	private String _innerWidth = "100%";
 
 	private TreeModel _model;
@@ -1026,9 +1024,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-tree" : _zclass;
-	}
-	protected void smartUpdate(String attr, Object value) {
-		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Treecols) {
@@ -2083,7 +2078,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
-			_noSmartUpdate = true;
+			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
@@ -2121,7 +2116,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 					}
 				}
 			} finally {
-				_noSmartUpdate = false;
+				disableClientUpdate(false);
 			}
 
 			Events.postEvent(evt);
