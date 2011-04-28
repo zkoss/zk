@@ -92,6 +92,13 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	_getBoxAttrs: function () {
 		return this.parent._childInnerAttrs(this);
 	},
+	_colHtmlPre: function () {
+		var s = '',
+			p = this.parent;
+		if(zk.isLoaded('zkex.grid') && p.$instanceof(zkex.grid.Group) && this == p.firstChild)
+			s += p.domContent_();
+		return s;
+	},
 	//super//
 	domAttrs_: function (no) {
 		var s = this.$supers('domAttrs_', arguments), v;	

@@ -1,7 +1,7 @@
 <zk>
 	<html><![CDATA[
 		<ol>
-			<li>In the first row (which is a Group) of the Grid, you should only see the Button under the first column. Otherwise it is a bug.</li>
+			<li>In the first row (which is a Group) of the Grid, you should see a triangle icon and a Button under the first column. Otherwise it is a bug.</li>
 		</ol>
 	]]></html>
 	<grid width="300px">
