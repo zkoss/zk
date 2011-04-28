@@ -1,0 +1,19 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Drag the scroll to the middle. You should see row numbers are around 5,000. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		rows = new String[10000];
+		for(int i = 0; i < 10000; i++)
+			rows[i] = "Row " + i;
+	]]></zscript>
+	<grid width="200px" height="300px">
+		<rows>
+			<row forEach="${rows}">
+				<label value="${each}" />
+			</row>
+		</rows>
+	</grid>
+</zk>
