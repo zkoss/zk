@@ -45,7 +45,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _equalDate(d1, d2) {
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
 	}
-
+	function _prepareTimeFormat(h, m, s) {
+		var o =[];
+		if (h) o.push(h);
+		if (m) o.push(m);
+		if (s) o.push(s);
+		return o.join(":");
+	}
+	
 var Datebox =
 /**
  * An edit box for holding a date.
@@ -265,36 +272,22 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			ss = fmt.indexOf('s'),
 			hasAM = aa > -1,
 			//bug 3284144: The databox format parse a wrong result with hh:mm:ss 
-			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false;
-
-		var hv , mv = mm > -1 ? 'mm' : '' , sv = ss > -1 ? 'ss' : '';
+			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false,
+			hv,
+			mv = mm > -1 ? 'mm' : '',
+			sv = ss > -1 ? 'ss' : '';
 		
 		if (hasHour1) {
-			var time = this._prepareTimeFormat( hh < KK ? "KK" : "hh", mv, sv);
+			var time = _prepareTimeFormat(hh < KK ? "KK" : "hh", mv, sv);
 			if (aa == -1) 
 				return time;
 			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
 				return 'a ' + time
-			else 
+			else
 				return time + ' a';
-			
-		} else 
-			return this._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
+		} else
+			return _prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
 		
-	},
-	/**
-	 * given h,m,s , return h:m:s or m:s or h:s or m:s  
-	 * return 
-	 * @param String h
-	 * @param String m
-	 * @param String s
-	 */
-	_prepareTimeFormat : function(h,m,s){
-		var o =[] ;
-		if(h) o.push(h);
-		if(m) o.push(m);
-		if(s) o.push(s);
-		return o.join(":") ;
 	},
 	/** Returns the Date format of the specified format
 	 * @return String
