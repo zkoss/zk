@@ -70,13 +70,14 @@ function _dumpAttrs0(out, nm, wgt) {
 				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
 					if (_defaultIgnore[key] === undefined) {
 						if (key != 'zclass' || value != 'z-' + widgetName) {
-							if (key == "selectedIndex")
+							if (key == "selectedIndex") 
 								out.push(' onCreate="self.selectedIndex = ', value, '"');
-							else
+							else 
 								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
 						}
-					} else if (_defaultIgnore[key] !== value)
+					} else if (_defaultIgnore[key] !== value && value != 'fromServer') {
 						out.push(' ', key, '="', value, '"');
+					}
 				}
 					
 			} catch (e) {}
@@ -159,7 +160,11 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 		
 		out.push('<br/>');
 	} else {
-		if (noChildable)
+		if (nm == 'style') {
+			var n = wgt.$n('css');
+			if (n)
+				out.push('&gt;<br/>', n.innerHTML, _space(--nLevel), '&lt;/', nm, '&gt;<br/>');
+		} else if (noChildable)
 			out.push('/&gt;--&gt;<br/>');
 		else
 			out.push('/&gt;<br/>');
