@@ -1470,7 +1470,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	implements Padding {
 		//-- Padding --//
 		public int getHeight() {
-			// TODO Auto-generated method stub
 			return _topPad;
 		}
 
