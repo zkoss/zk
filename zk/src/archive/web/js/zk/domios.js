@@ -78,19 +78,12 @@ function delegateEventFunc (event) {
 	_doEvt(event.type, event, _toMouseEvent(event, touchEvt.changedTouches[0]));
 }
 zk.copy(zjq, {
-	getZEventType: function (type) {
-		switch (type) {
-		case 'zmousedown':
-			return 'touchstart';
-		case 'zmouseup':
-			return 'touchend';
-		case 'zmousemove':
-			return 'touchmove';
-		case 'zdblclick':
-			return 'doubletap';
-		case 'zcontextmenu':
-			return 'iosHold';
-		}
+	eventTypes: {
+		zmousedown: 'touchstart',
+		zmouseup: 'touchend',
+		zmousemove: 'touchmove',
+		zdblclick: 'doubletap',
+		zcontextmenu: 'iosHold'
 	}
 });
 function _storeEventFunction(elem, type, data, fn) {
@@ -264,7 +257,7 @@ var _jq = {},
 zk.override(jq.fn, _jq, {
 	bind: function(type, data, fn) {
 		var evtType;
-		if (evtType = zjq.getZEventType(type)) {
+		if (evtType = zjq.eventTypes[type]) {
 			// refer to jquery bind function for reassign args
 			if ( jq.isFunction(data) || data === false ) {
 				fn = data;
@@ -293,7 +286,7 @@ zk.override(jq.fn, _jq, {
 	},
 	unbind: function(type, fn){
 		var evtType;
-		if (evtType = zjq.getZEventType(type)) {
+		if (evtType = zjq.eventTypes[type]) {
 			if (_removeEventFunction(this[0], evtType, fn)) {
 				switch (evtType) {
 				case 'doubletap':

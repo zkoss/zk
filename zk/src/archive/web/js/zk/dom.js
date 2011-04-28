@@ -215,19 +215,12 @@ zk.copy(zjq, {
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
 	src0: "", //an empty src; overriden in domie.js
-	getZEventType: function (type) {
-		switch (type) {
-		case 'zmousedown':
-			return 'mousedown';
-		case 'zmouseup':
-			return 'mouseup';
-		case 'zmousemove':
-			return 'mousemove';
-		case 'zdblclick':
-			return 'dblclick';
-		case 'zcontextmenu':
-			return 'contextmenu';
-		}
+	eventTypes: {
+		zmousedown: 'mousedown',
+		zmouseup: 'mouseup',
+		zmousemove: 'mousemove',
+		zdblclick: 'dblclick',
+		zcontextmenu: 'contextmenu'
 	}
 });
 jq.fn.zbind = jq.fn.bind;
@@ -403,10 +396,10 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		return this;
 	},
 	bind: function(type, data, fn) {
-		return this.zbind(zjq.getZEventType(type) || type, data, fn);
+		return this.zbind(zjq.eventTypes[type] || type, data, fn);
 	},
 	unbind: function(type, fn){
-		return this.zunbind(zjq.getZEventType(type) || type, fn);
+		return this.zunbind(zjq.eventTypes[type] || type, fn);
 	}
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
