@@ -2955,8 +2955,22 @@ function () {
 	 */
 	insertChildHTML_: function (child, before, desktop) {
 		var ben;
-		if (before)
+		if (before) {
+			if (before.$instanceof(zk.Native)) { //native.$n() is usually null
+				ben = before.previousSibling;
+				if (ben) {
+					if (ben == child) //always true (since link ready), but to be safe
+						ben = ben.previousSibling;
+					if (ben && (ben = ben.$n())) {
+						jq(ben).after(child.redrawHTML_());
+						child.bind(desktop);
+						return;
+					}
+				}
+				//FUTURE: it is not correct to go here, but no better choice yet
+			}
 			before = before.getFirstNode_();
+		}
 		if (!before)
 			for (var w = this;;) {
 				ben = w.getCaveNode();

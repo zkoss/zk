@@ -43,7 +43,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.Visualizer;
@@ -768,86 +770,70 @@ import org.zkoss.zk.au.out.*;
 			parent = comp.getParent();
 			page = comp.getPage();
 		}
-		Collection sibs;
-		if (parent != null) {
-			sibs = getAvailableAtClient(parent, croppingInfos);
-			if (sibs == null) //no cropping
-				sibs = parent.getChildren();
-			else if (sibs.size() > 1 && !(sibs instanceof LinkedHashSet)) {
-//				log.warning("Use LinkedHashSet instead of "+sibs.getClass());
-				final Set s = new LinkedHashSet(sibs.size() * 2);
-				for (Iterator it = parent.getChildren().iterator(); it.hasNext();) {
-					final Object o = it.next();
-					if (sibs.remove(o)) {
-						s.add(o);
-						if (sibs.isEmpty())
-							break;
-					}
-				}
-				sibs = s;
-			}
-		} else {
-			sibs = page.getRoots();
-		}
+		Collection sibs = parent != null ?
+			getAvailableAtClient(parent, croppingInfos): null;
 //		if (D.ON && log.finerable()) log.finer("All sibs: "+sibs+" newsibs: "+newsibs);
 
-		/* Algorithm:
-	1. Locate a sibling, say <a>, that already exists.
-	2. Then, use AuInsertBefore for all sibling before <a>,
-		and AuInsertAfter for all after anchor.
-	3. If anchor is not found, use AuAppendChild for the first
-		and INSERT_AFTER for the rest
+		/* Algorithm: 5.0.7
+	1. Groups newsibs
+	2. For each group, see if it is better to use AuAppendChild/AuInsertBefore/AuInsertAfter
+	(Note: newsibs might not be ordered correctly, so we have to go through nextGroupedSiblings)
 		*/
-		final List before = new LinkedList();
-		Component anchor = null;
-		final ComponentCtrl parentCtrl = (ComponentCtrl)parent;
-		final Object parentxc =
-			parentCtrl != null ? parentCtrl.getExtraCtrl(): null;
-		for (Iterator it = sibs.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			if (anchor != null) {
-				if (newsibs.remove(comp)) {
-					responses.add(new AuInsertAfter(anchor, redraw(comp)));
-					if (newsibs.isEmpty())
-						return; //done (all newsibs are processed)
-					anchor = comp;
+		for (List group; (group = nextGroupedSiblings(newsibs)) != null;) {
+			final Collection contents = redrawComponents(group);
+			final Component last = (Component)group.get(group.size() - 1);
+			Component nxt, prv;
+			if ((nxt = last.getNextSibling()) == null
+			|| (sibs != null && !sibs.contains(nxt))) { //nextsib not available at client
+				if (!(parent instanceof Native) && !(parent instanceof StubComponent)) {
+					responses.add(
+						parent != null ?
+							new AuAppendChild(parent, contents):
+							new AuAppendChild(page, contents));
 				} else {
-					anchor = comp;
+					final Component first = (Component)group.get(0);
+					if ((prv = first.getPreviousSibling()) == null
+					|| (sibs != null && !sibs.contains(prv))) //prv is not available
+						throw new UiException("Adding child to a native component not allowed: "+parent);
+					//AuInsertAfter prv
+					responses.add(new AuInsertAfter(prv, contents));
 				}
-			} else if (newsibs.remove(comp)) {
-				before.add(comp);	
+			} else if (nxt instanceof Native || nxt instanceof StubComponent) { //native
+				final Component first = (Component)group.get(0);
+				if ((prv = first.getPreviousSibling()) == null
+				|| (sibs != null && !sibs.contains(prv))) //prv is not available
+					throw new UiException("Inserting a component before a native one not allowed: "+nxt);
+
+				//prv is avaiable, so use AuInsertAfter prv instead
+				responses.add(new AuInsertAfter(prv, contents));
 			} else {
-				//Generate before in the reverse order and INSERT_BEFORE
-				anchor = comp;
-				for (ListIterator i2 = before.listIterator(before.size());
-				i2.hasPrevious();) {
-					final Component c = (Component)i2.previous();
-					responses.add(new AuInsertBefore(anchor, redraw(c)));
-					anchor = c;
-				}
-				if (newsibs.isEmpty())
-					return; //done (all newsibs are processed)
-				anchor = comp;
-			}
-		}
-		assert D.OFF || (anchor == null && newsibs.isEmpty()): "anchor="+anchor+" newsibs="+newsibs+" sibs="+sibs;
-
-		//all siblings are changed (and none of them is processed)
-		final Iterator it = before.iterator();
-		if (it.hasNext()) {
-			anchor = (Component)it.next();
-			responses.add(
-				parent != null ?
-					new AuAppendChild(parent, redraw(anchor)):
-					new AuAppendChild(page, redraw(anchor)));
-
-			while (it.hasNext()) {
-				final Component comp = (Component)it.next();
-				responses.add(new AuInsertAfter(anchor, redraw(comp)));
-				anchor = comp;
+				//use AuInsertBefore nxt
+				responses.add(new AuInsertBefore(nxt, contents));
 			}
 		}
 	}
+	private static List nextGroupedSiblings(Set newsibs) {
+		if (newsibs.isEmpty())
+			return null;
+
+		final List group = new LinkedList();
+		final Component first;
+		{
+			final Iterator it = newsibs.iterator();
+			first = (Component)it.next();
+			it.remove();
+		}
+		group.add(first);
+
+		for (Component c = first; (c = c.getNextSibling()) != null
+		&& newsibs.remove(c);) //next is also new
+			group.add(c);
+		for (Component c = first; (c = c.getPreviousSibling()) != null
+		&& newsibs.remove(c);) //prev is also new
+			group.add(0, c);
+		return group;
+	}
+
 	/** Removes redundant components in _invalidated, _smartUpdated and _attached.
 	 */
 	private void removeRedundant() {
@@ -933,6 +919,12 @@ import org.zkoss.zk.au.out.*;
 		final StringWriter out = new StringWriter(1024*8);
 		((PageCtrl)page).redraw(out);
 		return out.toString();
+	}
+	private static List redrawComponents(Collection comps) throws IOException {
+		final List list = new LinkedList();
+		for (Iterator it = comps.iterator(); it.hasNext();)
+			list.add(redraw((Component)it.next()));
+		return list;
 	}
 
 	/** Called before a component redraws itself if the component might

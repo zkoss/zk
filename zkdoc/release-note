@@ -26,6 +26,7 @@ ZK 5.0.7
   3291332: adding unload desktop support for Chrome/Safari
  
 * Bugs
+  3286462: native component cause issue in fulfill
   3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
   3190987: Dyanmic tab,tabpanel are disorder

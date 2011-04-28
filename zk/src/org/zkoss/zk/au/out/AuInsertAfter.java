@@ -16,12 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.LinkedList;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -37,10 +40,22 @@ import org.zkoss.zk.au.AuResponse;
 public class AuInsertAfter extends AuResponse {
 	/**
 	 * @param anchor the reference where the component will be added after.
+	 * @param contents a collection of contents (in String objects).
+	 * Each content is the output of a component.
+	 * @since 5.0.7
 	 */
-	public AuInsertAfter(Component anchor, String content) {
-		super("addAft", anchor,
-			new Object[] {anchor.getUuid(), new JavaScriptValue(content), getRefId(anchor)});
+	public AuInsertAfter(Component anchor, Collection contents) {
+		super("addAft", anchor, toArray(anchor, contents));
+	}
+	private static Object[] toArray(Component anchor, Collection contents) {
+		if (anchor instanceof Native || anchor instanceof StubComponent)
+			throw new UiException("Adding a component before a native one not allowed: "+anchor);
+
+		final List list = new LinkedList();
+		list.add(anchor.getUuid());
+		list.add(getRefId(anchor));
+		AuAppendChild.stringToJS(contents, list);
+		return list.toArray(new Object[list.size()]);
 	}
 	private static String getRefId(Component anchor) {
 		//Bug 1939059: This is a dirty fix. We only handle roots
