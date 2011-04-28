@@ -54,7 +54,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	function _fixMouseupForClick(evt){
+	var _fixMouseupForClick = zk.safari || zk.ff ? function (wgt, evt){
 		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
 		/**
 		 * Here we have these states :
@@ -63,29 +63,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * 3.mouse up in the wiget and click event fired (null in timeout)
 		 * 4.mouse up not in the widget (null)
 		 */
-		if ( this._clickFlag == "down" ) {
-			if (jq.contains(this.$n(), evt.domTarget)) {
-				this._clickFlag = "up";
-				var w = this;
-				if(this._fxTimer) clearTimeout(this._fxTimer);
-				this._fxTimer = setTimeout(function() {
-					if (w._clickFlag == "up") {
-						w.doClick_(new zk.Event(w, 'onClick', {}));
-						w._clickFlag = null;
+		if ( wgt._fxcfg == 1 ) {
+			if (jq.contains(wgt.$n(), evt.domTarget)) {
+				wgt._fxcfg = 2;
+				if(wgt._fxctm) clearTimeout(wgt._fxctm);
+				wgt._fxctm = setTimeout(function() {
+					if (wgt._fxcfg == 2) {
+						wgt.doClick_(new zk.Event(wgt, 'onClick', {}));
+						wgt._fxctm = wgt._fxcfg = null;
 					}
 				}, 100);
-			}else this._clickFlag = null;
+			} else
+				wgt._fxcfg = null;
 		}
-	} 	
-	
-	function _fixMousedownForClick(evt) {
-		this._clickFlag = "down";
-	}
-	
-	function _fixClick(){
-		if(this._fxTimer) clearTimeout(this._fxTimer);
-		this._clickFlag = null;
-	} 
+	}: zk.$void,
+
+	_fixMousedownForClick = zk.safari || zk.ff ?  function (wgt) {
+		wgt._fxcfg = 1;
+	}: zk.$void,
+
+	_fixClick = zk.safari || zk.ff  ? function (wgt) {
+		if(wgt._fxctm) clearTimeout(wgt._fxctm);
+		wgt._fxctm = wgt._fxcfg = null;
+	}: zk.$void; 
 	
 var Button = 
 /**
@@ -377,12 +377,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			jq(this.$n('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
-	_fixMousedownForClick: (zk.safari || zk.ff) ? _fixMousedownForClick : zk.$void,
-	_fixMouseupForClick: (zk.safari || zk.ff) ? _fixMouseupForClick : zk.$void,  
-	_fixClick: (zk.safari || zk.ff) ? _fixClick	: zk.$void,		
 	doClick_: function (evt) {
-		
-		this._fixClick(evt);
+		_fixClick(this);
 		
 		if (!this._disabled) {
 			zul.wgt.ADBS.autodisable(this);
@@ -423,7 +419,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		//set it down to prevent the case for down in other place but up on this widget,
 		//and down in this widget and up for other place
 		
-		this._fixMousedownForClick();
+		_fixMousedownForClick(this);
 		
 		if (!this._disabled) {
 			var zcls = this.getZclass();
@@ -437,7 +433,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseUp_: function (evt) {
 		if (!this._disabled) {
-			this._fixMouseupForClick(evt);
+			_fixMouseupForClick(this, evt);
 			
 			var zcls = this.getZclass();
 			jq(this.$n('box')).removeClass(zcls + "-clk")
