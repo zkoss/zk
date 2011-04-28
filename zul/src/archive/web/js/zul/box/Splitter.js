@@ -181,9 +181,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this._fixbtn();
 
 		this._drag = new zk.Draggable(this, node, {
-			constraint: this.getOrient(), ignoredrag: Splitter._ignoresizing,
-			ghosting: Splitter._ghostsizing, overlay: true, zIndex: 12000,
-			snap: Splitter._snap, endeffect: Splitter._endDrag});
+			constraint: this.getOrient(), 
+			ignoredrag: Splitter._ignoresizing,
+			ghosting: Splitter._ghostsizing, 
+			overlay: true, 
+			zIndex: 12000,
+			initSensitivity: 0,
+			snap: Splitter._snap, 
+			endeffect: Splitter._endDrag});
 
 		this._shallClose = !this._open;
 			//3086452: we have to close it after onSize
