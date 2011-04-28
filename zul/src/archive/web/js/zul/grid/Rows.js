@@ -130,7 +130,8 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
 		if(this.getGrid() && this.getGrid().fixForRowAdd_) 
-			this.getGrid().fixForRowAdd_();			
+			this.getGrid().fixForRowAdd_();
+		this._syncStripe();
 		this._syncEmptyState();
 		if (this.desktop)
 			_syncFrozen(this);
