@@ -124,7 +124,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
 			}
 			try {
-				$eval(expr + end);
+				eval(expr + end); //don't use $eval since this function shall not be compressed
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: "+expr+'\n'+e.message);
 			}
