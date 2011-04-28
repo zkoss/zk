@@ -27,12 +27,16 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
+import org.zkoss.util.logging.Log;
+
 /**
  * Utilities to handle java.io.Serializable.
  *
  * @author tomyeh
  */
 public class Serializables {
+	private static final Log log = Log.lookup(Serializables.class);
+
 	private Serializables() {}
 
 	/** Writes only serializable entries of the specified map.
@@ -41,14 +45,22 @@ public class Serializables {
 	public static void smartWrite(ObjectOutputStream s, Map map)
 	throws IOException {
 		if (map != null) {
+			final boolean debug = log.debugable();
 			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				final Object nm = me.getKey();
 				final Object val = me.getValue();
 				if (((nm instanceof Serializable) || (nm instanceof Externalizable))
 				&& (val == null || (val instanceof Serializable) || (val instanceof Externalizable))) {
-					s.writeObject(nm);
-					s.writeObject(val);
+					try {
+						s.writeObject(nm);
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						log.error("Unable to serialize entry: "+nm+'='+val);
+						throw ex;
+					}
+				} else if (debug) {
+					log.debug("Skip not-serializable entry: "+nm+'='+val);
 				}
 			}
 		}
@@ -76,11 +88,19 @@ public class Serializables {
 	public static void smartWrite(ObjectOutputStream s, Collection col)
 	throws IOException {
 		if (col != null) {
+			final boolean debug = log.debugable();
 			for (Iterator it = col.iterator(); it.hasNext();) {
 				final Object val = it.next();
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
-					s.writeObject(val);
+					try {
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						log.error("Unable to serialize item: "+val);
+						throw ex;
+					}
+				} else if (debug) {
+					log.debug("Skip not-serializable item: "+val);
 				}
 			}
 		}
@@ -111,11 +131,19 @@ public class Serializables {
 	public static void smartWrite(ObjectOutputStream s, Object[] ary)
 	throws IOException {
 		if (ary != null) {
+			final boolean debug = log.debugable();
 			for (int j = 0; j < ary.length; ++j) {
 				final Object val = ary[j];
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
-					s.writeObject(val);
+					try {
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						log.error("Unable to serialize item: "+val);
+						throw ex;
+					}
+				} else if (debug) {
+					log.debug("Skip not-serializable item: "+val);
 				}
 			}
 		}
