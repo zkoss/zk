@@ -61,7 +61,7 @@ public class AuAppendChild extends AuResponse {
 		return list.toArray(new Object[list.size()]);
 	}
 	/** Converts the contents (a collection of strings) to an arry of JavaScriptValue. */
-	/*package*/ static void stringToJS(Collection contents, Collection result) {
+	private static void stringToJS(Collection contents, Collection result) {
 		for (Iterator it = contents.iterator(); it.hasNext();)
 			result.add(new JavaScriptValue((String)it.next()));
 	}

@@ -17,8 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.LinkedList;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -49,26 +47,8 @@ public class AuInsertAfter extends AuResponse {
 	}
 	private static Object[] toArray(Component anchor, Collection contents) {
 		if (anchor instanceof Native || anchor instanceof StubComponent)
-			throw new UiException("Adding a component before a native one not allowed: "+anchor);
+			throw new UiException("Adding a component after a native one not allowed: "+anchor);
 
-		final List list = new LinkedList();
-		list.add(anchor.getUuid());
-		list.add(getRefId(anchor));
-		AuAppendChild.stringToJS(contents, list);
-		return list.toArray(new Object[list.size()]);
-	}
-	private static String getRefId(Component anchor) {
-		//Bug 1939059: This is a dirty fix. We only handle roots
-		//and assume it must be the last one
-		if (anchor.getParent() != null) {
-			if (anchor instanceof Native || anchor instanceof StubComponent)
-				throw new UiException("Adding a component after a native one not allowed: "+anchor);
-
-			//Bug 2686585: if ZK JSP used, we have no info so no exception
-			return "";
-		}
-
-		final Page page = anchor.getPage();
-		return page != null ? /*just in case*/page.getUuid(): "";
+		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}
 }
