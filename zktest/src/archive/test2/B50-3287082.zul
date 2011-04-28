@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3287082.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 28 18:16:16 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Open the bandbox.</li>
+			<li>Focus in the input of the paging.</li>
+			<li>Remove "1", then type "2".</li>
+			<li>"no fire" shall not become to "fire".</li>
+		</ol>
+	]]></html>
+	<bandbox onChanging='msg.value = fire'>
+		<bandpopup width="300px">
+			<grid mold="paging" pageSize="3">
+				<rows>
+					<row forEach="1,1,1,1,1">
+						<label value="item" />
+					</row>
+				</rows>
+			</grid>
+		</bandpopup>
+	</bandbox>
+	<label id="msg" value="no fire"/>
+</zk>
