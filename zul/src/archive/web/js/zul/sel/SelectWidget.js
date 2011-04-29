@@ -280,6 +280,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (this.desktop) this.onSize();
 	},
 	_getEbodyWd: function () {
+		var anchor = this.$n('a');
 		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
 		if (zk.safari)
 			anchor.style.display = 'none';
