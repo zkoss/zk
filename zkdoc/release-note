@@ -108,6 +108,7 @@ ZK 5.0.7
   3280125: Frozen grid has horizontal scroll bar with IE
   3293724: treeitem.setVisible() not work normally
   3291394: Menu text overlapped by split line
+  3196064: Clients.ScrollIntoView in FF2 error
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

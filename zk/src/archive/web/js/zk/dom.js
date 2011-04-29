@@ -117,7 +117,7 @@ zjq = function (jq) { //ZK extension
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			var p = el.parentNode;
-			while (p && p != document.body) {
+			while (p && p != document.body && p.nodeType === 1) {
 				var $p = jq(p),
 					style = $p.css("position");
 				if (style == "relative" || style == "absolute") {
