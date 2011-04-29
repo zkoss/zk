@@ -1235,7 +1235,7 @@ jq(el).zk.center(); //same as 'center'
 	/** Forces the browser to redo (re-apply) CSS of all matched elements. 
 	 * <p>Notice that calling this method might introduce some performance penality.
 	 * @param int timeout number of milliseconds to wait before really re-applying CSS.
-	 * 100 is assumed if not specified ㄐㄟ, -1 means re-applying css right now.
+	 * 100 is assumed if not specified , -1 means re-applying css right now.
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout) {
