@@ -47,6 +47,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					return tree.onSize();
 	}
 
+	function _showChildren(wgt, visible) {
+		var chld = wgt.treechildren;
+		if(!chld)
+			return;
+		for (var w = chld.firstChild; w; w = w.nextSibling) {
+			var wvis = w.isVisible();
+			w.$n().style.display = wvis && visible ? "" : "none";
+			if(w._visible) 
+				_showChildren(w, visible);
+		}
+	}
+	
 /**
  * A treeitem.
  *
@@ -107,7 +119,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_showKids: function (open) {
 		if (this.treechildren)
 			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
-				w.$n().style.display = open ? '' : 'none';
+				w.$n().style.display = w._visible && open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
@@ -233,6 +245,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
 			if (this.treerow) this.treerow.setVisible(visible);
+			// Bug: B50-3293724
+			_showChildren(this, visible);
 		}
 		return this;
 	},

@@ -105,6 +105,7 @@ ZK 5.0.7
   3244126: Horizontal scrollbar malfunction with Grid on IE
   3201762: Borderlayout flex has issue with listbox hflex in IE 6 
   3280125: Frozen grid has horizontal scroll bar with IE
+  3293724: treeitem.setVisible() not work normally
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
