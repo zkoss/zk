@@ -112,6 +112,11 @@ ZK 5.0.7
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
     To retrieve the real format, please use Datebox/Timebox's getRealFomrat() instead.
+  + zk.Widget.smartUpdate() is disabled by default. If your client-side application
+    depends on it, you have to turn on the libary property called
+    org.zkoss.zk.ui.updateByClient.allowed.
+    If your component depends on it, you have to override AbstractComponent.updateByClient
+    to handle it explicity (rather than calling back the superclass)
 
 	--------
 ZK 5.0.6
