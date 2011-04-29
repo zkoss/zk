@@ -104,6 +104,7 @@ ZK 5.0.7
   3204965: onChangePageSize is not fired in autopaging scenario
   3244126: Horizontal scrollbar malfunction with Grid on IE
   3201762: Borderlayout flex has issue with listbox hflex in IE 6 
+  3280125: Frozen grid has horizontal scroll bar with IE
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

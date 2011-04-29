@@ -970,11 +970,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
 						this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
 				}
-			} else if (this.ebodytbl.offsetWidth > this.ebody.offsetWidth) { //IE8 sometimes will fail to show the h-scrollbar; enforce it!
-				var oldCss = this.ebody.style.overflowX;
-				this.ebody.style.overflowX = 'scroll';
-			} else
-				this.ebody.style.overflowX = '';
+			} else if (!this.efrozen) {
+				//IE8 sometimes will fail to show the h-scrollbar; enforce it!
+				this.ebody.style.overflowX = 
+					this.ebodytbl.offsetWidth > this.ebody.offsetWidth ?
+					'scroll': '';
+			}
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
