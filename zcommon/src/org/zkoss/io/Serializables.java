@@ -64,7 +64,7 @@ public class Serializables {
 						logio.error("Unable to serialize entry: "+nm+'='+val);
 						throw ex;
 					}
-				} else if (debug) {
+				} else if (nm != null && debug) {
 					logio.debug("Skip not-serializable entry: "+nm+'='+val);
 				}
 			}
@@ -104,7 +104,7 @@ public class Serializables {
 						logio.error("Unable to serialize item: "+val);
 						throw ex;
 					}
-				} else if (debug) {
+				} else if (val != null && debug) {
 					logio.debug("Skip not-serializable item: "+val);
 				}
 			}
@@ -147,7 +147,7 @@ public class Serializables {
 						logio.error("Unable to serialize item: "+val);
 						throw ex;
 					}
-				} else if (debug) {
+				} else if (val != null && debug) {
 					logio.debug("Skip not-serializable item: "+val);
 				}
 			}
