@@ -229,7 +229,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						shallUpdate = true;
 					}
 				} else if (n.style.width != '0px') {//hide
-					hdWgt._origWd = n.style.width || jq.px0(jq(n).outerWidth());
+					faker = jq('#' + n.id + '-hdfaker')[0];
+					hdWgt._origWd = faker.style.width || jq.px0(jq(faker).outerWidth());
 					cellWidth = '0px';
 					shallUpdate = true;
 				}
