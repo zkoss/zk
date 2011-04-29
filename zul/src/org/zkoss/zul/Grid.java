@@ -30,6 +30,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
@@ -1389,9 +1390,9 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		s.defaultWriteObject();
 
 		willSerialize(_model);
-		s.writeObject(_model instanceof java.io.Serializable || _model instanceof java.io.Externalizable ? _model: null);
+		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
-		s.writeObject(_renderer instanceof java.io.Serializable || _renderer instanceof java.io.Externalizable ? _renderer: null);
+		Serializables.smartWrite(s, _renderer);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {

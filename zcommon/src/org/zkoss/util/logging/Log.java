@@ -130,9 +130,11 @@ public class Log {
 	}
 	/**
 	 * Gets the logger based on the giving name.
+	 * <p>Since 5.0.7, this constructor, unlike others, ignores
+	 * {@link #isHierarchy} and always assumes the hierachy name.
 	 */
 	public static final Log lookup(String name) {
-		return new Log(name);
+		return new HierLog(name);
 	}
 	/** Gets the logger based on the package.
 	 */
@@ -159,14 +161,14 @@ public class Log {
 	 * <p>If not found, it created a new one.
 	 */
 	private final Logger getLogger() {
-		return Logger.getLogger(_hierarchy ? _name: DEFAULT_NAME);
+		return Logger.getLogger(useHierarchy() ? _name: DEFAULT_NAME);
 			//NOTE: we don't cache getLogger because Tomcat use one
 			//LogManager per Web app
 	}
 	/** Returns the closest logger that has been created (never null).
 	 */
 	private final Logger getClosestLogger() {
-		if (!_hierarchy)
+		if (!useHierarchy())
 			return Logger.getLogger(DEFAULT_NAME);
 
 		final LogManager logman = LogManager.getLogManager();
@@ -183,7 +185,7 @@ public class Log {
 	 */
 	private final Logger getLoggerIfAny() {
 		return LogManager.getLogManager()
-			.getLogger(_hierarchy ? _name: DEFAULT_NAME);
+			.getLogger(useHierarchy() ? _name: DEFAULT_NAME);
 	}
 
 	/**
@@ -198,6 +200,16 @@ public class Log {
 	 */
 	public final void setLevel(Level level) {
 		getLogger().setLevel(level);
+	}
+	/**
+	 * Sets the logging level.
+	 * @since 5.0.7
+	 */
+	public final void setLevel(String level) {
+		Level l = getLevel(level);
+		if (l == null)
+			throw new IllegalArgumentException("Unknown level: "+level);
+		setLevel(l);
 	}
 
 	/** Return the logging level of the specified string.
@@ -796,6 +808,13 @@ Objects.BAR1_STRING
 		eat(null, ex);
 	}
 
+	/** Returns whether to use hierarchy.
+	 * <p>Default: {@link #isHierarchy}.
+	 */
+	/*package*/ boolean useHierarchy() {
+		return _hierarchy;
+	}
+
 	public int hashCode() {
 		return _name.hashCode();
 	}
@@ -804,5 +823,13 @@ Objects.BAR1_STRING
 	}
 	public String toString() {
 		return _name;
+	}
+}
+/*package*/ class HierLog extends Log {
+	/*package*/ HierLog(String name) {
+		super(name);
+	}
+	/*package*/ boolean useHierarchy() {
+		return true;
 	}
 }

@@ -34,6 +34,7 @@ import java.util.Set;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
@@ -108,8 +109,8 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	private boolean _vflex;
 	private String _innerWidth = "100%";
 
-	private TreeModel _model;
-	private TreeitemRenderer _renderer;
+	private transient TreeModel _model;
+	private transient TreeitemRenderer _renderer;
 	private transient TreeDataListener _dataListener;
 
 	private transient Paginal _pgi;
@@ -1272,12 +1273,25 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	}
 
 	//-- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		willSerialize(_model);
+		Serializables.smartWrite(s, _model);
+		willSerialize(_renderer);
+		Serializables.smartWrite(s, _renderer);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init();
+		_model = (TreeModel)s.readObject();
+		didDeserialize(_model);
+		_renderer = (TreeitemRenderer)s.readObject();
+		didDeserialize(_renderer);
 
+		init();
 		afterUnmarshal(-1, -1);
 
 		if (_model != null) initDataListener();

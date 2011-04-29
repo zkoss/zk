@@ -1682,6 +1682,7 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 
+	//@override
 	public boolean disableClientUpdate(boolean disable) {
 		final UiEngine uieng =
 			_page != null ? getAttachedUiEngine(): getCurrentUiEngine();
@@ -2865,11 +2866,9 @@ w:use="foo.MyWindow"&gt;
 		s.writeObject(null);
 
 		willSerialize(_auxinf.ausvc);
-		s.writeObject(_auxinf.ausvc != null
-			&& (_auxinf.ausvc instanceof java.io.Serializable
-			|| _auxinf.ausvc instanceof java.io.Externalizable) ?
-				_auxinf.ausvc: null);
+		Serializables.smartWrite(s, _auxinf.ausvc);
 	}
+
 	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
 	 * for each object in the collection.
 	 * @param c a collection of objects. Ignored if null.

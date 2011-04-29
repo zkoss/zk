@@ -72,7 +72,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						wgt.doClick_(new zk.Event(wgt, 'onClick', {}));
 						wgt._fxctm = wgt._fxcfg = null;
 					}
-				}, 100);
+				}, 50);
 			} else
 				wgt._fxcfg = null;
 		}
