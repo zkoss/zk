@@ -299,18 +299,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh.efoottbl.style.width = width;
 
 		mesh._restoreFocus();
-		if (zk.safari) {
-			var table,oldCSS;
-			if (table = mesh.eheadtbl) {
-				oldCSS = table.style.display;
-				if (oldCSS != 'none') {
-					table.style.display = 'none';
-					setTimeout(function () {
-						table.style.display = oldCSS;
-					}, 0);
-				}
-			}
-		}
 	}
 });
 
