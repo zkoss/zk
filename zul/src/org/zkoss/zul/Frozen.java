@@ -16,6 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -89,12 +90,21 @@ public class Frozen extends XulElement implements org.zkoss.zul.api.Frozen {
 		return 0;
 	}
 
-	//super//
+	//@Override
 	public String getZclass() {
 		return _zclass == null ? "z-frozen" : _zclass;
 	}
 		
-	// super
+	//@Override
+	protected void updateByClient(String name, Object value) {
+		if ("start".equals(name))
+			setStart(value instanceof Number ? ((Number)value).intValue():
+				Integer.parseInt(Objects.toString(value)));
+		else
+			super.updateByClient(name, value);
+	}
+
+	//@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);

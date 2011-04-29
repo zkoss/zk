@@ -57,6 +57,7 @@ implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 		return _auxinf != null && _auxinf.disabled;
 	}
 	/** Sets whether it is disabled.
+	 * @see #setAutodisable
 	 */
 	public void setDisabled(boolean disabled) {
 		if ((_auxinf != null && _auxinf.disabled) != disabled) {
@@ -338,6 +339,15 @@ implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 		public Object getValue() {
 			return getEncodedHref();
 		}
+	}
+
+	//@Override
+	protected void updateByClient(String name, Object value) {
+		if ("disabled".equals(name))
+			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
+				"true".equals(Objects.toString(value)));
+		else
+			super.updateByClient(name, value);
 	}
 
 	private AuxInfo initAuxInfo() {

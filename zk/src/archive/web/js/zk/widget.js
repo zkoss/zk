@@ -3638,6 +3638,17 @@ focus_: function (timeout) {
 	/** Smart-updates a property of the peer component associated with this widget, running at the server, with the specified value.
 	 * <p>It is actually fired an AU requst named <code>setAttr</code>, and
 	 * it is handled by the <code>updateByClient</code> method in <code>org.zkoss.zk.ui.AbstractComponent</code> (at the server).
+	 * <p>By default, it is controlled by a library property called <code>org.zkoss.zk.ui.updateByClient.allowed</code>.
+	 * Thus, the component developer has to override <code>updateByClient</code> at
+	 * the server (in Java) and then update it rather than calling back superclass.
+	 * For example,
+	 * <pre><code>protected void updateByClient(String name, Object value) {
+	if ("disabled".equals(name))
+		setDisabled(value instanceof Boolean && ((Boolean)value).booleanValue());
+	else
+		super.updateByClient(name, value);
+}</code></pre>
+	 *
 	 * @param String name the property name
      * @param Object value the property value
      * @param int timeout the delay before sending out the AU request. It is optional. If omitted, -1 is assumed (i.e., it will be sent with next non-deferrable request). 

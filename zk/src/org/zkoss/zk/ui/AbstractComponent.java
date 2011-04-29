@@ -2556,6 +2556,11 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	protected void updateByClient(String name, Object value) {
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.updateByClient.allowed"))) {
+			log.warning("Ignore update of "+name+"="+value+" from client for "+this.getClass());
+			return; //ignored
+		}
+
 		Method m;
 		final String mtdnm = Classes.toMethodName(name, "set");
 		Object[] args = new Object[] {value};

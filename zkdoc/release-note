@@ -25,6 +25,7 @@ ZK 5.0.7
   3290092: Allow SEORenderer to be a application-level listener
   3291332: adding unload desktop support for Chrome/Safari
   3294710: Log not-serializable and ignored objects
+  3294843: Disable update-by-client by default and an option to enable
  
 * Bugs
   3286462: native component cause issue in fulfill
