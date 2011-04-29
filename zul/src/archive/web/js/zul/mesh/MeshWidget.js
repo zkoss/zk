@@ -871,15 +871,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	/** Calculates the size. */
 	_calcSize: function () {
-		var n = this.$n();
-		this._setHgh(n.style.height);
-		
+		this._beforeCalcSize();
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
 		//IE: element's width will be extended to fit body
 		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
 		//note: we don't solve this bug for paging yet
-		var wd = n.style.width;
+		var n = this.$n(),
+			wd = n.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			wd = zk(n).revisedWidth(n.offsetWidth);
 			if (wd < 0) 
@@ -896,7 +895,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this.ebody.clientWidth;
+		var tblwd = this._getEbodyWd();
 		var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl &&
@@ -945,6 +944,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		
+		this._afterCalcSize();
+	},
+	_getEbodyWd: function () {
+		return this.ebody.clientWidth;
+	},
+	_beforeCalcSize: function () {
+		this._setHgh(this.$n().style.height);
+	},
+	_afterCalcSize: function () {
 		// Bug in B36-2841185.zul
 		if (zk.ie8 && this.isModel() && this.inPagingMold())
 			zk(this).redoCSS();
