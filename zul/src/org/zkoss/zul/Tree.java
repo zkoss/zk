@@ -771,6 +771,10 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		return count;
 	}
 
+	// used by Treechildren
+	public void smartUpdate(String attr, Object value) {
+		super.smartUpdate(attr, value);
+	}
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
 	 *
