@@ -774,9 +774,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					var oldCSS = this.ebodytbl.style.display,
 						bd = jq('body'),
 						st = bd.scrollTop();
-					this.ebodytbl.style.display = 'none';
-					var dummy = this.ebodytbl.offsetWidth; //force recalc
-					this.ebodytbl.style.display = oldCSS;
+					zk(this.ebodytbl).redoCSS(-1); //for chrome/safari
 					// Bug: B50-3291371: Listbox scroll to top when page changes
 					// have to set scroll top back
 					bd.scrollTop(st);
@@ -1157,13 +1155,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		//bug 3188738: Opera only. Grid/Listbox/Tree span="x" not working
-		if (zk.opera) {
-			var meshn = this.$n();
-			var olddisp = meshn.style.display; //force redraw
-			meshn.style.display='none';
-			var redrawFix = meshn.offsetHeight;
-			meshn.style.display=olddisp;
-		}
+		if (zk.opera) 
+			zk(this.$n()).redoCSS();
+		
 	},
 	_adjHeadWd: function () {
 		var hdfaker = this.ehdfaker,

@@ -199,7 +199,7 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
-	_fixCSS: function (el) { //overriden in domie.js
+	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)
 			;
@@ -1235,10 +1235,17 @@ jq(el).zk.center(); //same as 'center'
 	/** Forces the browser to redo (re-apply) CSS of all matched elements. 
 	 * <p>Notice that calling this method might introduce some performance penality.
 	 * @param int timeout number of milliseconds to wait before really re-applying CSS.
-	 * 100 is assumed if not specified or negative.
+	 * 100 is assumed if not specified ㄐㄟ, -1 means re-applying css right now.
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout) {
+		
+		if (timeout == -1){ //timeout -1 means immediately
+			for (var j = this.jq.length; j--;)
+				zjq._fixCSS(this.jq[j]);	
+			return this;
+		}
+		
 		for (var j = this.jq.length; j--;)
 			_rdcss.push(this.jq[j]);
 		setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
