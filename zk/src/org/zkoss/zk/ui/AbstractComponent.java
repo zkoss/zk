@@ -2545,9 +2545,22 @@ w:use="foo.MyWindow"&gt;
 	/** Called when the widget running at the client asks the server
 	 * to update a value (with an AU request named <code>setAttr</code>).
 	 *
-	 * <p>By default, it uses reflection to find out the setter to update
-	 * the value. Nothing happens if the method is not found.
-	 * You can override it if necessary.
+	 * <p>By default, it does nothing but log a warning message, since
+	 * it is not safe to allow the client to update any field.
+	 * <p>However, if you'd like to allow the update for a particular component
+	 * you could do one of the following
+	 * <ol>
+	 * <li>For component developers: override this method to update the field
+	 * directly. For example,<br/>
+<pre><code>protected void updateByClient(String name, Object value) {
+	if ("disabled".equals(name))
+		setDisabled(name, ((Boolean)value).booleanValue());
+	else
+		super.updateByClient(name, value);</code></pre></li>
+	 * <li>For application developers: set an attribute called
+	 * <code>org.zkoss.zk.ui.updateByClient</code> to be true.
+	 * Then, this method will use reflection to find out the setter to update
+	 * the value. Nothing happens if the method is not found.</li>
 	 *
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
 	 * disable any update to the client, when calling the setter
@@ -2556,7 +2569,9 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	protected void updateByClient(String name, Object value) {
-		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.updateByClient.allowed"))) {
+		Object o = getAttribute("org.zkoss.zk.ui.updateByClient");
+		if (!(o instanceof Boolean && ((Boolean)o).booleanValue())
+		&& !(o instanceof String && "true".equals(o))) {
 			log.warning("Ignore update of "+name+"="+value+" from client for "+this.getClass());
 			return; //ignored
 		}
