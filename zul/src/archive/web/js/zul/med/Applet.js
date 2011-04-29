@@ -210,7 +210,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	domAttrs_: function(no){
 		return this.$supers('domAttrs_', arguments)
 				+ ' code="' + (this._code || '') + '"'
-				+ ' codebase="' + (this._codebase || '') + '"'
+				+ zUtl.appendAttr("codebase", this._codebase)
 				+ zUtl.appendAttr("archive", this._archive)
 				+ zUtl.appendAttr("align", this._align)
 				+ zUtl.appendAttr("hspace", this._hspace)
