@@ -541,7 +541,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ebody) {
 			//ie7 will auto generate an empty <tbody> which confuse the if statements 
 			var bds = this.ebodytbl.tBodies,
-				ie7special = zk.ie7 && bds && bds.length == 1 && !this.ehead && !bds[0].id;
+				ie7special = zk.ie7_ && bds && bds.length == 1 && !this.ehead && !bds[0].id;
 			if (!bds || !bds.length || (this.ehead && bds.length < 2 || ie7special)) {
 				if (ie7special) //remove the empty tbody
 					jq(bds[0]).remove();

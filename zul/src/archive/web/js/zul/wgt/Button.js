@@ -54,7 +54,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	var _fixMouseupForClick = zk.safari || zk.ff ? function (wgt, evt){
+	var _fixMouseupForClick = zk.safari || zk.gecko ? function (wgt, evt){
 		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
 		/**
 		 * Here we have these states :
@@ -78,11 +78,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}: zk.$void,
 
-	_fixMousedownForClick = zk.safari || zk.ff ?  function (wgt) {
+	_fixMousedownForClick = zk.safari || zk.gecko ?  function (wgt) {
 		wgt._fxcfg = 1;
 	}: zk.$void,
 
-	_fixClick = zk.safari || zk.ff  ? function (wgt) {
+	_fixClick = zk.safari || zk.gecko  ? function (wgt) {
 		if(wgt._fxctm) clearTimeout(wgt._fxctm);
 		wgt._fxctm = wgt._fxcfg = null;
 	}: zk.$void; 

@@ -257,34 +257,45 @@ zk.copy(zk, {
 	 * @type String
 	 */
 	//agent: '',
-	/** Returns the version as double (only the first two part of the version, such as 8)
-	 * if it is Internet Explorer, or null if not.
-	 * @type boolean
+	/** Returns the DOM API's version
+	 * if the browser is Internet Explorer, or null if not.
+	 * <p>Note: it is DOM API's version, not the browser version.
+	 * In other words, it depends on if the browser is running in a compatible mode.
+	 * FOr the browser's version, please use {@link #iex} instead.
+	 * @type Double
 	 */
 	//ie: null,
+	/** Returns the browser's version as double (only the first two part of the version, such as 8)
+	 * if the browser is Internet Explorer, or null if not.
+	 * <p>Notice that this is the browser's version, which might not be the
+	 * version of DOM API. For DOM API's version, please use {@link #ie} instead.
+	 * @type Double
+	 * @since 5.0.7
+	 */
+	//iex, null,
 	/** Whether it is Internet Exploer 6 (excluding 7 or others).
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//ie6_: false,
 	/** Whether it is Internet Exploer 7 or later.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//ie7: false,
 	/** Whether it is Internet Exploer 7 (excluding 8 or others).
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//ie7_: false,
 	/** Whether it is Internet Exploer 8 or later.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//ie8: false,
 	/** Whether it is Internet Exploer 8 or later, and running in
 	 * Internet Explorer 7 compatible mode.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//ie8c: false,
 	/** Whether it is Internet Exploer 9 or later.
-	 * @type boolean
+	 * @type Boolean
 	 * @since 5.0.5
 	 */
 	//ie9: false,
@@ -298,7 +309,7 @@ zk.copy(zk, {
 	//gecko: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 2 (excluding 3 or others).
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//gecko2_: false,
 	/** Returns the version as double (only the first two part of the version, such as 3.6) if it is Firefox,
@@ -311,7 +322,7 @@ zk.copy(zk, {
 	//ff: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 3 and later.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//gecko3: false,
 	/** Returns the version as double (only the first two part of the version, such as 533.1) if it is Safari-based, or null if not.
@@ -323,11 +334,11 @@ zk.copy(zk, {
 	 */
 	//opera: null,
 	/** Whether it is Adobe AIR.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//air: false,
 	/** Whether it supports CSS3.
-	 * @type boolean
+	 * @type Boolean
 	 */
 	//css3: false,
 
@@ -1157,16 +1168,16 @@ zk.log('value is", value);
 		bodycls = 'opera';
 		zk.css3 = zk.opera >= 10.5;
 	} else {
-		zk.ie = browser.msie && _ver(browser.version);
-		if (zk.ie) {
-			var dm = document.documentMode;
+		zk.iex = browser.msie && _ver(browser.version); //browser version
+		if (zk.iex) {
+			zk.ie = document.documentMode||6; //dom/js version
+			if (zk.ie < 6) zk.ie = 6; //quirk mode
 			zk.ie7 = zk.ie >= 7; //ie7 or later
-			zk.ie8c = zk.ie >= 8; //ie8 or later (including compatible)
-			zk.ie8 = zk.ie >= 8 && dm >= 8; //ie8 or later
-			zk.css3 = zk.ie9 = zk.ie >= 9 && dm >= 9; //ie9 or later
-			zk.ie6_ = !zk.ie7 || dm < 7;
-			zk.ie7_ = (zk.ie7 && !zk.ie8) || dm == 7;
-			zk.ie8_ = (zk.ie8 && !zk.ie9) || dm == 8;
+			zk.ie8 = zk.ie >= 8; //ie8 or later
+			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
+			zk.ie6_ = zk.ie < 7;
+			zk.ie7_ = zk.ie == 7;
+			zk.ie8_ = zk.ie == 8;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
 		} else {
 			if (zk.safari)
