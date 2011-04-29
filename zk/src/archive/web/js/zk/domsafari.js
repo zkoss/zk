@@ -24,7 +24,6 @@ zk.copy(zjq, {
 	_fixCSS: function (el) { 
 		var olddisp = el.style.display; //force redraw
 		el.style.display='none';
-		zk.log("hi");
 		var dummy = el.offsetWidth; //force recalc
 		el.style.display=olddisp;
 	}
