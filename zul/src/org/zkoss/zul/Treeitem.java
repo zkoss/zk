@@ -421,7 +421,8 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) {
+		// 
+		if (super.isVisible() != visible) {
 			smartUpdate("visible", visible);
 			int count = isOpen() && _treechildren != null ? _treechildren
 					.getVisibleItemCount() + 1 : 1;

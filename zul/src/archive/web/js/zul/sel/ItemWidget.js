@@ -139,7 +139,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	//super//
 	setVisible: function (visible) {
-		if (this.isVisible() != visible) {
+		if (this._visible != visible) { // not to use isVisible()
 			this.$supers('setVisible', arguments);
 			if (this.isStripeable_()) {
 				var p = this.getMeshWidget();

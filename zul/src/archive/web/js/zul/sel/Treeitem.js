@@ -119,7 +119,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_showKids: function (open) {
 		if (this.treechildren)
 			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
-				w.$n().style.display = w._visible && open ? '' : 'none';
+				w.$n().style.display = w.isVisible() && open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
@@ -242,7 +242,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return this.$supers('isVisible', arguments) && (p = this.parent) && p.isVisible();
 	},
 	setVisible: function (visible) {
-		if (this._visible != visible) {
+		if (this._visible != visible) { // not to use isVisible()
 			this.$supers('setVisible', arguments);
 			if (this.treerow) this.treerow.setVisible(visible);
 			// Bug: B50-3293724
