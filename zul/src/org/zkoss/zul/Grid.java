@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
@@ -241,7 +242,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
 		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
-		addClientEvent(Grid.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 	
 	public Grid() {
@@ -1489,7 +1490,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, getPreloadSize()));
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) {
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) {
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -1501,8 +1502,8 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
-				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
-				Events.postEvent(new Event(cmd, request.getComponent(), data));
+				// Bug: B50-3204965: onPageSize is not fired in autopaging scenario
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();

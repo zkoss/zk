@@ -711,7 +711,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			//enforce pageSize change
 			if (j == 0) j = 1; //at least one per page
 			if (j != this.getPageSize()) {
-				this.fire('onChangePageSize', {size: j});
+				this.fire('onPageSize', {size: j});
 				return true;
 			}
 		}

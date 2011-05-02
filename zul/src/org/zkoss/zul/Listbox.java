@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
@@ -307,7 +308,7 @@ public class Listbox extends MeshElement implements Paginated,
 		// 5.0.0
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
-		addClientEvent(Listbox.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Listbox.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 
 	public Listbox() {
@@ -3326,7 +3327,7 @@ public class Listbox extends MeshElement implements Paginated,
 			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -3342,7 +3343,7 @@ public class Listbox extends MeshElement implements Paginated,
 				setPageSize(size);
 				setActivePage(newpg);
 				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
-				Events.postEvent(new Event(cmd, request.getComponent(), data));
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();

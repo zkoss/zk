@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
@@ -129,7 +130,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
-		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}
 
@@ -2138,7 +2139,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			}
 
 			Events.postEvent(evt);
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -2155,7 +2156,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 				setPageSize(size);
 				setActivePage(newpg);
 				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
-				Events.postEvent(new Event(cmd, request.getComponent(), data));
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
