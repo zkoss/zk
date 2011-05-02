@@ -27,7 +27,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		zul.inp.RoundInputUtil.syncWidth(this, this.$n('right-edge'));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
 	},
 	//bug #2997037, cannot enter large long integer into longbox
 	coerceFromString_: function (value) {

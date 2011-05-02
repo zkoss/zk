@@ -28,7 +28,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		zul.inp.RoundInputUtil.syncWidth(this, this.$n('right-edge'));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
 	},
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int

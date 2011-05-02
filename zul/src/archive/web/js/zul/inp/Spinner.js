@@ -283,7 +283,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		zul.inp.RoundInputUtil.syncWidth(this, this.$n('btn'));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
 		var n = this.$n();

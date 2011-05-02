@@ -83,7 +83,7 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		zul.inp.RoundInputUtil.syncWidth(this, this.$n('right-edge'));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
 	},
 	//super//
 	textAttrs_: function () {

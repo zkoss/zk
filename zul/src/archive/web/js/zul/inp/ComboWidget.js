@@ -389,7 +389,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		zul.inp.RoundInputUtil.syncWidth(this, this.$n('btn'));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
 		if ('w' == attr)

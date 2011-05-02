@@ -72,10 +72,11 @@ zul.inp.Renderer = {
 	renderSpinnerButton: function (out, wgt) {
 	}
 };
-/** @class zul.inp.RoundInputUtil
- * The RoundInputUtil used to adjust the display of the rounded input.
+/** @class zul.inp.RoundUtl
+ * The RoundUtl used to adjust the display of the rounded input.
+ * @since 5.0.7
  */
-zul.inp.RoundInputUtil = {
+zul.inp.RoundUtl = {
 	/** Synchronizes the input element's width of this component
 	*/
 	syncWidth: function (wgt, rightElem) {
