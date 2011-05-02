@@ -49,7 +49,11 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	/** A list of external radio ({@link Radio}) components. */
 	private List _externs;
 	private int _jsel = -1;
-
+	
+	static {
+		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
+	}
+	
 	public Radiogroup() {
 		_name = genGroupName();
 	}

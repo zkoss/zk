@@ -133,5 +133,21 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				newParent._fixOnAdd(this); 
 		}
 		this.$supers("beforeParentChanged_", arguments);
+	},
+	doClick_: function (evt) {
+		if (this.isListen('onCheck')) {
+			this.$supers('doClick_', arguments);
+			return;
+		}
+		var group = this.getRadiogroup();
+		if (group.isListen('onCheck')) {
+			var real = this.$n('real'),
+				checked = real.checked;
+			if (checked != this._checked) //changed
+				this.setChecked(checked)
+					.fire('onCheck', checked, { toServer: true });
+			if (zk.safari) zk(real).focus();
+			this.$supers('doClick_', arguments);
+		}
 	}
 });
