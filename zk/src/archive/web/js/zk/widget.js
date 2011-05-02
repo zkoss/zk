@@ -3404,11 +3404,7 @@ unbind_: function (skipper, after) {
 		return _fixMinFlex.apply(this, arguments);
 	},
 	resetSize_: function(orient) {
-		var n = this.$n();
-		if (orient == 'w')
-			n.style.width = '';
-		else if (orient == 'h')
-			n.style.height = '';
+		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
 	},
 	beforeSize: function () {
 		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
