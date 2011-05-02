@@ -223,12 +223,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				isVisible = (hdWgt = zk.Widget.$(n)) && hdWgt.isVisible();
 				shallUpdate = false;
 				if (cnt-- <= 0) {// show
-					if (n.style.width == '0px') {
+					if (parseInt(n.style.width) == 0) {
 						cellWidth = hdWgt._origWd;
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
-				} else if (n.style.width != '0px') {//hide
+				} else if (parseInt(n.style.width) != 0) {//hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					hdWgt._origWd = faker.style.width || jq.px0(jq(faker).outerWidth());
 					cellWidth = '0px';
