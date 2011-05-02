@@ -431,6 +431,33 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					});
 				}
 			}
+		},
+		//server use only
+		tbar: function (val) {
+			this.tbar = zk.Widget.$(val);
+			if (this.bbar == this.tbar)
+				this.bbar = null;
+			if (this.fbar == this.tbar)
+				this.fbar = null;
+			this.rerender();
+		},
+		//server use only
+		bbar: function (val) {
+			this.bbar = zk.Widget.$(val);
+			if (this.tbar == this.bbar)
+				this.tbar = null;
+			if (this.fbar == this.bbar)
+				this.fbar = null;
+			this.rerender();
+		},
+		//server use only
+		fbar: function(val) {
+			this.fbar = zk.Widget.$(val);
+			if (this.tbar == this.fbar)
+				this.tbar = null;
+			if (this.bbar == this.fbar)
+				this.bbar = null;
+			this.rerender();
 		}
 	},
 

@@ -110,6 +110,7 @@ ZK 5.0.7
   3291394: Menu text overlapped by split line
   3196064: Clients.ScrollIntoView in FF2 error
   3242714: <applet> tag causes entire browser to hang
+  3218576: Panel#addToolBar() may result in wrong position
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
