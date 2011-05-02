@@ -48,14 +48,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _showChildren(wgt, visible) {
-		var chld = wgt.treechildren;
-		if(!chld)
-			return;
-		for (var w = chld.firstChild; w; w = w.nextSibling) {
-			var wvis = w.isVisible();
-			w.$n().style.display = wvis && visible ? "" : "none";
-			if(w._visible) 
-				_showChildren(w, visible);
+		var chld;
+		if (chld = wgt.treechildren) {
+			for (var w = chld.firstChild; w; w = w.nextSibling) {
+				w.$n().style.display = w.isVisible() && visible ? "" : "none";
+				if (w._visible) 
+					_showChildren(w, visible);
+			}
 		}
 	}
 	
