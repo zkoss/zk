@@ -219,8 +219,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6 
 			if ((zk.ie6_ || zk.ie7_) && fchild) {
 				// In IE 6/7 setting height to cave is still required
-				var cv = wgt.$n('cave');
-				if (cv)
+				var cv;
+				if (cv = wgt.$n('cave'))
 					cv.style.height = jq.px0(ambit.h);
 			}
 			ambit.h = zk(bodyEl).revisedHeight(ambit.h);
