@@ -753,6 +753,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.$supers(InputWidget, 'unbind_', arguments);
 	},
+	resetSize_: function(orient) {
+		var n;
+		if (this.$n() != (n = this.getInputNode()))
+			n.style[orient == 'w' ? 'width': 'height'] = '';
+		this.$supers('resetSize_', arguments);
+	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
 		if (this._readonly && keyCode == 8 && evt.target == this) {

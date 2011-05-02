@@ -65,10 +65,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.onSize();
 		}
 	},
-	resetSize_: function(orient) {
-		(this.getInputNode()).style[orient == 'w' ? 'width': 'height'] = '';
-		this.$supers('resetSize_', arguments);
-	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
