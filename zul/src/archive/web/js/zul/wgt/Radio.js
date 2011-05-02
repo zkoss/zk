@@ -140,7 +140,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			return;
 		}
 		var group = this.getRadiogroup();
-		if (group.isListen('onCheck')) {
+		if (group && group.isListen('onCheck')) {
 			var real = this.$n('real'),
 				checked = real.checked;
 			if (checked != this._checked) //changed
