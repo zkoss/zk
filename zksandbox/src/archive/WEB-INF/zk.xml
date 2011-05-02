@@ -34,10 +34,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.web.classWebResource.cache</name>
 		<value>false</value>
 	</library-property>
-	<library-property>
-		<name>org.zkoss.zk.WPD.cache</name>
-		<value>false</value>
-	</library-property>	
 	-->
 	
 	<!-- Turn on if you want to cache by etag for dynamic resource.
