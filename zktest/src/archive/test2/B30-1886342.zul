@@ -18,18 +18,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>Popup window containing a Listbox shouldn't closes as soon as you try to drag a
-listitem. No request is made to close the popup, in fact the listbox is the
-wanted drop target.</n:p>
+	<html><![CDATA[
+		<ol>
+			<li>Click on "Popup Window", a Popup should appear.</li>
+			<li>Drag item 1 and drop it on item 5. The Popup should NOT be closed. Otherwise it is a bug.</li>
+			<li>Click outside the Popup. The Popup should be closed.</li>
+		</ol>
+	]]></html>
 	<window>
-
 		<menubar autodrop="true">
-			<menuitem
-				label="Popup Window"
-				popup="popup" />
+			<menuitem label="Popup Window" popup="popup" />
 		</menubar>
 
-		<popup id="popup" >
+		<popup id="popup">
 		    <label value="Drag an item in the listbox:" />
 			<listbox rows="6">
 				<listhead>
