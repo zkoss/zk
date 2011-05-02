@@ -134,21 +134,9 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		}
 		this.$supers("beforeParentChanged_", arguments);
 	},
-	doClick_: function (evt) {
-		if (this.isListen('onCheck')) {
-			this.$supers('doClick_', arguments);
-			return;
-		}
+	fireOnCheck_: function (checked) {
+		// if Radiogroup listens to onCheck, we shall fire the event too.
 		var group = this.getRadiogroup();
-		if (group && group.isListen('onCheck')) {
-			// if Radiogroup listens to onCheck, we shall fire the event too.
-			var real = this.$n('real'),
-				checked = real.checked;
-			if (checked != this._checked) //changed
-				this.setChecked(checked)
-					.fire('onCheck', checked, { toServer: true });
-			if (zk.safari) zk(real).focus();
-			this.$supers('doClick_', arguments);
-		}
+		this.fire('onCheck', checked, {toServer: group && group.isListen('onCheck')} );
 	}
 });
