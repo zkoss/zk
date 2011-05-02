@@ -278,7 +278,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			sv = ss > -1 ? 'ss' : '';
 		
 		if (hasHour1) {
-			var time = this._prepareTimeFormat(hh < KK ? "KK" : "hh", mv, sv);
+			var time = _prepareTimeFormat(hh < KK ? "KK" : "hh", mv, sv);
 			if (aa == -1) 
 				return time;
 			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
@@ -286,10 +286,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			else
 				return time + ' a';
 		} else
-			return this._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
+			return _prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
 		
 	},
-	_prepareTimeFormat:_prepareTimeFormat,
 	/** Returns the Date format of the specified format
 	 * @return String
 	 */
