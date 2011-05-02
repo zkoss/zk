@@ -2543,10 +2543,11 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	/** Called when the widget running at the client asks the server
-	 * to update a value (with an AU request named <code>setAttr</code>).
+	 * to update a value. The update is caused by an AU request named <code>setAttr</code>
+	 * (by invoking zk.Widget's smartUpdate at client).
 	 *
 	 * <p>By default, it does nothing but log a warning message, since
-	 * it is not safe to allow the client to update any field.
+	 * it is not safe to allow the client to update a field arbitary.
 	 * <p>However, if you'd like to allow the update for a particular component
 	 * you could do one of the following
 	 * <ol>

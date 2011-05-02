@@ -1239,16 +1239,14 @@ jq(el).zk.center(); //same as 'center'
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout) {
-		
 		if (timeout == -1){ //timeout -1 means immediately
 			for (var j = this.jq.length; j--;)
 				zjq._fixCSS(this.jq[j]);	
-			return this;
+		} else {
+			for (var j = this.jq.length; j--;)
+				_rdcss.push(this.jq[j]);
+			setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
 		}
-		
-		for (var j = this.jq.length; j--;)
-			_rdcss.push(this.jq[j]);
-		setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
 		return this;
 	},
 	/** Forces the browser to re-load the resource specified in the <code>src</code>
