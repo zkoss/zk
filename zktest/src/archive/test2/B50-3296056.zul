@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3296056.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May  3 11:05:06 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<tablelayout hflex="1">
+<tablechildren hflex="1">
+<panel>
+<panelchildren>
+<vlayout>
+<label value="Please resize browser's width, the textbox should resize as well."/>
+<textbox value="test" hflex="1"/>
+</vlayout>
+</panelchildren>
+</panel>
+</tablechildren>
+</tablelayout>
+</zk>

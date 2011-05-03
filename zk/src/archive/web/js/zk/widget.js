@@ -3392,6 +3392,9 @@ unbind_: function (skipper, after) {
 	afterChildrenMinFlex_: function() {
 		//to be overridden, after my children fix the minimum flex (both width and height)
 	},
+	afterResetChildSize_: function() {
+		//to be overridden, after my children reset the size of (both width and height)
+	},
 	getParentSize_: function(p) {
 		//to be overridden
 		var zkp = zk(p);
@@ -3409,10 +3412,14 @@ unbind_: function (skipper, after) {
 	beforeSize: function () {
 		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
 		if (this.isRealVisible()) {
-			if (this._hflex && this._hflex != 'min')
+			if (this._hflex && this._hflex != 'min') {
 				this.resetSize_('w');
-			if (this._vflex && this._vflex != 'min')
+				this.parent.afterResetChildSize_('w');
+			}
+			if (this._vflex && this._vflex != 'min') {
 				this.resetSize_('h');
+				this.parent.afterResetChildSize_('h');
+			}
 		}
 	},
 	/** Initializes the widget to make it draggable.

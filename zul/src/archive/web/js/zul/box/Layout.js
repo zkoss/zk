@@ -146,6 +146,18 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
 		return zkp ? {height: hgh, width: wdh} : {};
 	},
+	//bug#3296056
+	afterResetChildSize_: function(orient) {
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {				
+			var chdex = kid.$n('chdex');
+			if (chdex) {
+				if (orient == 'h')
+					chdex.style.height = '';
+				if (orient == 'w')
+					chdex.style.width = '';
+			}
+		}
+	},
 	//bug#3042306
 	resetSize_: function (orient) { ////@Overrid zk.Widget#resetSize_, called when beforeSize
 		this.$supers(zul.box.Layout, 'resetSize_', arguments);
