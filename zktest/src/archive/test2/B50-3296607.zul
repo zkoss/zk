@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3296607.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 3, 2011 12:38:48 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<html><![CDATA[
+		<ol>
+			<li>Click "test 1" button, then datebox shell show a errorbox.</li>
+			<li>Click "test 2" button, then datebox shell show a errorbox.</li>
+		</ol>
+	]]></html>
+	<script type="text/javascript">
+		function setText(txt) {
+			var db = zk.Widget.$('$db'),
+				inp = db.getInputNode();
+			inp.value = txt;
+			jq(inp).blur();
+		}
+	</script>
+	<button label="test 1" w:onClick="setText('123')"/>
+	<button label="test 2" w:onClick="setText('16-02-1998')"/>
+	<separator/>
+	<datebox id="db" format="dd-MMM-yyyy" width="100px" onChange=""/>
+</zk>

@@ -140,6 +140,9 @@ zk.fmt.Date = {
 					var c2 = fmt.charAt(k);
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
+				
+				if (isNumber && !nosep) return; //failed
+				
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
@@ -154,7 +157,7 @@ zk.fmt.Date = {
 					if (!isNaN(nv = _parseInt(token))) {
 						y = Math.min(nv, 200000); // Bug B50-3288904: js year limit
 						if (y < 100) y += y > 29 ? 1900 : 2000;
-					}
+					} else return; //failed
 					break;
 				case 'M':
 					var mon = token ? token.toLowerCase() : '';
@@ -168,8 +171,12 @@ zk.fmt.Date = {
 							}
 						}
 					if (len == 3 && token) {
+						//Bug 3296607: if len == 3 (case: MMM), token shell not be number;
+						if (!isNaN(token))
+							 return; //failed
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
+						
 						break; // nothing to do.
 					} else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
