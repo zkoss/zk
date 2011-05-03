@@ -18,8 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-        <n:p>1.Click the button </n:p>
-	<n:p>2.Overlapped window shall NOT disappears when invalidate() is invoked</n:p>
+    <n:p>1.Click the button</n:p>
+	<n:p>2.Overlapped window shall NOT disappears</n:p>
 	<window id="win" title="I am here" border="normal" width="200px" mode="overlapped">
             never gone
 	<button label="Please Click Me" onClick='win.invalidate()'/>
