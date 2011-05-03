@@ -179,7 +179,7 @@ zk.fmt.Date = {
 						}
 					if (len == 3 && token) {
 						//Bug 3296607: if len == 3 (case: MMM), token shall not be number;
-						if (!isNumber0)
+						if (isNumber0)
 							 return; //failed
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
