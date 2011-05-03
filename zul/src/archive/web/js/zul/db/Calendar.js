@@ -39,7 +39,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
- * It is designed to be overriden
+ * It is designed to be overridden
  */
 zul.db.Renderer = {
 	/** Returns the HTML fragment representing a day cell.
