@@ -615,7 +615,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (diff) { //use the hdfakerflex to compensate
 						hdflex.style.width = (hdflex.offsetWidth + diff) + 'px';
 						this.ehead.scrollLeft = this.ebody.scrollLeft;
-					} else if (hdflex.style.width != '0px' && this.ebody.scrollLeft == 0) {
+					} else if (parseInt(hdflex.style.width) != 0 && this.ebody.scrollLeft == 0) {
 						hdflex.style.width = '';
 					}
 				}

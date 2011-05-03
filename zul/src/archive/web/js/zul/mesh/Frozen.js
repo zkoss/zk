@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				for (; j < cl; ++j) {
 					var cell = cells[j];
-					if (cell.style.width != "0px")
+					if (parseInt(cell.style.width) != 0)
 						break; //done
 					cell.style.width = "";
 				}
