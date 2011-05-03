@@ -13,6 +13,47 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	function _parseTextToArray(txt, fmt) {
+		var ts = [], mindex = fmt.indexOf("MMM"), eindex = fmt.indexOf("EE"),
+			fmtlen = fmt.length, ary = [],
+			//mmindex = mindex + 3,
+			aa = fmt.indexOf('a'),
+			tlen = txt.replace(/[^.]/g, '').length,
+			flen = fmt.replace(/[^.]/g, '').length;
+			
+			
+		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
+			var c = txt.charAt(k),
+				f = fmtlen > i ? fmt.charAt(i) : "";
+			if (c.match(/\d/)) {
+				ary.push(c);
+			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
+				if (c.match(/\w/)) {
+					ary.push(c);
+				} else {
+					if (c.charCodeAt(0) < 128 && (c.charCodeAt(0) != 46 ||
+								tlen == flen || f.charCodeAt(0) == 46)) {
+						if (ary.length) {
+							ts.push(ary.join(""));
+							ary = [];
+						}
+					} else
+						ary.push(c);
+				}
+			} else if (ary.length) {
+				if (txt.charAt(k-1).match(/\d/))
+					while (f == fmt.charAt(i-1) && f) {
+						f = fmt.charAt(++i);
+					}
+				ts.push(ary.join(""));
+				ary = [];
+			} else if (c.match(/\w/))
+				return; //failed
+		}
+		if (ary.length) ts.push(ary.join(""));
+		return ts;
+	}
 	function _parseToken(token, ts, i, len) {
 		if (len < 2) len = 2;
 		if (token && token.length > len) {
@@ -67,9 +108,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
 	}
 	//Day of week in month.
-	 function dayOfWeekInMonth(d) {
+	function dayOfWeekInMonth(d) {
 		return _digitFixed(1 + Math.floor(_dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
 	}
+	
+	
 
 zk.fmt.Date = {
 	parseDate : function (txt, fmt, strict, refval) {
@@ -83,50 +126,13 @@ zk.fmt.Date = {
 			sec = refval.getSeconds(),
 			msec = refval.getMilliseconds(),
 			aa = fmt.indexOf('a'),
-			hh = fmt.indexOf('h'),
-			KK = fmt.indexOf('K'),
 			hasAM = aa > -1,
-			hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
-			isAM;
+			hasHour1 = hasAM && (fmt.indexOf('h') > -1 || fmt.indexOf('K') > -1),
+			isAM,
+			ts = _parseTextToArray(txt, fmt),
+			isNumber = !isNaN(txt);
 
-		var ts = [], mindex = fmt.indexOf("MMM"), eindex = fmt.indexOf("EE"),
-			fmtlen = fmt.length, ary = [],
-			//mmindex = mindex + 3,
-			isNumber = !isNaN(txt),
-			tlen = txt.replace(/[^.]/g, '').length,
-			flen = fmt.replace(/[^.]/g, '').length;
-		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
-			var c = txt.charAt(k),
-				f = fmtlen > i ? fmt.charAt(i) : "";
-			if (c.match(/\d/)) {
-				ary.push(c);
-			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
-			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
-				if (c.match(/\w/)) {
-					ary.push(c);
-				} else {
-					if (c.charCodeAt(0) < 128 && (c.charCodeAt(0) != 46 ||
-								tlen == flen || f.charCodeAt(0) == 46)) {
-						if (ary.length) {
-							ts.push(ary.join(""));
-							ary = [];
-						}
-					} else
-						ary.push(c);
-				}
-			} else if (ary.length) {
-				if (txt.charAt(k-1).match(/\d/))
-					while (f == fmt.charAt(i-1) && f) {
-						i++;
-						f = fmt.charAt(i);
-					}
-				ts.push(ary.join(""));
-				ary = [];
-			} else if (c.match(/\w/))
-				return; //failed
-		}
-		if (ary.length) ts.push(ary.join(""));
-		if (!ts.length) return;
+		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
@@ -141,7 +147,7 @@ zk.fmt.Date = {
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
 				
-				if (isNumber && !nosep) return; //failed
+				if (isNumber && !nosep) return; //failed Bug 3296607
 				
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
@@ -160,8 +166,9 @@ zk.fmt.Date = {
 					} else return; //failed
 					break;
 				case 'M':
-					var mon = token ? token.toLowerCase() : '';
-					if (token)
+					var mon = token ? token.toLowerCase() : '',
+						isNumber0 = !isNaN(token);
+					if (!isNumber0 && token)
 						for (var index = zk.SMON.length; --index >= 0;) {
 							var smon = zk.SMON[index].toLowerCase();
 							if (mon.startsWith(smon)) {
@@ -172,7 +179,7 @@ zk.fmt.Date = {
 						}
 					if (len == 3 && token) {
 						//Bug 3296607: if len == 3 (case: MMM), token shell not be number;
-						if (!isNaN(token))
+						if (!isNumber0)
 							 return; //failed
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
@@ -220,54 +227,27 @@ zk.fmt.Date = {
 					}
 					break;
 				case 'H':
-					if (hasHour1)
-						break;
-					if (nosep)
-						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						hr = nv;
-					break;
 				case 'h':
-					if (!hasHour1)
-						break;
-					if (nosep)
-						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						hr = nv == 12 ? 0 : nv;
-					break;
 				case 'K':
-					if (!hasHour1)
-						break;
-					if (nosep)
-						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						hr = nv % 12;
-					break;
 				case 'k':
 					if (hasHour1)
 						break;
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 					if (!isNaN(nv = _parseInt(token)))
-						hr = nv == 24 ? 0 : nv;
+						hr = (cc == 'h' && nv == 12) || (cc == 'k' && nv == 24) ? 
+							0 : cc == 'K' ? nv % 12 : nv;
 					break;
 				case 'm':
-					if (nosep)
-						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						min = nv;
-					break;
 				case 's':
-					if (nosep)
-						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						sec = nv;
-					break;
 				case 'S':
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
-					if (!isNaN(nv = _parseInt(token)))
-						msec = nv;
+					if (!isNaN(nv = _parseInt(token))) {
+						if (cc == 'm') min = nv;
+						else if (cc == 's') sec = nv;
+						else msec = nv;
+					}
 					break;
 				case 'a':
 					if (!hasHour1)
