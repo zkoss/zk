@@ -47,15 +47,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					return tree.onSize();
 	}
 
-	function _showChildren(wgt, visible) {
+	function _showDOM(wgt, visible) {
+		wgt.$n().style.display = visible ? "" : "none";
 		var chld;
-		if (chld = wgt.treechildren) {
-			for (var w = chld.firstChild; w; w = w.nextSibling) {
-				w.$n().style.display = w.isVisible() && visible ? "" : "none";
-				if (w._visible) 
-					_showChildren(w, visible);
-			}
-		}
+		if (chld = wgt.treechildren)
+			for (var w = chld.firstChild; w; w = w.nextSibling)
+				if (w._visible && w._open) // optimized, need to recurse only if open and visible
+					_showDOM(w, visible);
 	}
 	
 /**
@@ -245,7 +243,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this.$supers('setVisible', arguments);
 			if (this.treerow) this.treerow.setVisible(visible);
 			// Bug: B50-3293724
-			_showChildren(this, visible);
+			_showDOM(this, this.isVisible());
 		}
 		return this;
 	},
