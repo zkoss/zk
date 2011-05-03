@@ -178,7 +178,7 @@ zk.fmt.Date = {
 							}
 						}
 					if (len == 3 && token) {
-						//Bug 3296607: if len == 3 (case: MMM), token shell not be number;
+						//Bug 3296607: if len == 3 (case: MMM), token shall not be number;
 						if (!isNumber0)
 							 return; //failed
 						if (nosep)
@@ -186,7 +186,7 @@ zk.fmt.Date = {
 						
 						break; // nothing to do.
 					} else if (len <= 2) {
-						if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
+						if (nosep && token && token.length > 2) {//Bug 2560497 : if no separator, token must be assigned.
 							ts[--i] = token.substring(2);
 							token = token.substring(0, 2);
 						}
