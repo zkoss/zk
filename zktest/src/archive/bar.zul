@@ -18,9 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <div>
-	<combobox mold="rounded" use="org.zkoss.zktest.test.ThemeSelector"></combobox>
+	<combobox mold="rounded" use="org.zkoss.zktest.util.ThemeSelector"></combobox>
 	<hlayout>
-		<image sclass="pointer" src="/img/Centigrade-Widget-Icons/small.png" use="org.zkoss.zktest.test.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/normal.png" use="org.zkoss.zktest.test.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/large.png" use="org.zkoss.zktest.test.ThemeImage"/>
+		<image sclass="pointer" src="/img/Centigrade-Widget-Icons/small.png" use="org.zkoss.zktest.util.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/normal.png" use="org.zkoss.zktest.util.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/large.png" use="org.zkoss.zktest.util.ThemeImage"/>
 	</hlayout>
 </div>
 </zk>
