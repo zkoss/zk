@@ -18,24 +18,38 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window>
-  <tabbox width="400px" height="200px"> 
-    <tabs> 
-      <tab label="Tab 1"/> 
-      <tab label="Tab 2"/> 
-    </tabs> 
-    <tabpanels> 
-      <tabpanel> 
-	<borderlayout height="100%"> 
-	  <west size="30%"><label value="test tab1" /></west> 
-	  <center><label value="test tab2" /></center> 
-	</borderlayout> 
-      </tabpanel> 
-      <tabpanel> 
-	<borderlayout height="100%"> 
-	  <west size="30%"><label value="test tab2"/></west> 
-	  <center><label value="test tab2" /></center> 
-	</borderlayout> 
-      </tabpanel> 
-    </tabpanels> 
-  </tabbox>
+	<html><![CDATA[
+		<ol> 
+		<li>Select to "Tab 2".</li>
+		<li>The left part of the content shall be changed from "test tab1" to "test tab2".</li>
+		</ol> 
+	]]></html>
+	<tabbox width="400px" height="200px">
+		<tabs>
+			<tab label="Tab 1" />
+			<tab label="Tab 2" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<borderlayout height="100%">
+					<west size="30%">
+						<label value="test tab1" />
+					</west>
+					<center>
+						<label value="test tab2" />
+					</center>
+				</borderlayout>
+			</tabpanel>
+			<tabpanel>
+				<borderlayout height="100%">
+					<west size="30%">
+						<label value="test tab2" />
+					</west>
+					<center>
+						<label value="test tab2" />
+					</center>
+				</borderlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
 </window>
