@@ -103,6 +103,7 @@ zul.inp.RoundUtl = {
 		var node = wgt.$n(),
 			$n = jq(node),
 			$inp = jq(wgt.getInputNode()),
+			inc = wgt.getInplaceCSS(),
 			shallClean = !node.style.width && wgt._inplace;
 		
 		if (rmInplace && shallClean) {
