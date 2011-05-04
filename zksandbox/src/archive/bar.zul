@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-<div>
-	<combobox mold="rounded" use="org.zkoss.zksandbox.ThemeSelector"></combobox>
+<div apply="org.zkoss.zksandbox.ThemeSelectionCtrl">
+	<listbox id="themeSelectListbox" mold="select" />
 	<hlayout>
 		<image sclass="pointer" src="/img/Centigrade-Widget-Icons/small.png" use="org.zkoss.zksandbox.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/normal.png" use="org.zkoss.zksandbox.ThemeImage"/><image sclass="pointer" src="/img/Centigrade-Widget-Icons/large.png" use="org.zkoss.zksandbox.ThemeImage"/>
 	</hlayout>

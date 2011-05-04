@@ -29,7 +29,7 @@ public class ThemeImage extends Image {
 	
 	
 	public void onCreate(){
-		if (Themes.hasBreezeLib() && Themes.isBreeze(Executions.getCurrent()))
+		if (!Themes2.isClassicBlue())
 			setVisible(false);
 
 		final String src = getSrc();
