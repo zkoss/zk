@@ -36,17 +36,11 @@ public class DesktopInit implements org.zkoss.zk.ui.util.DesktopInit {
 			public boolean service(AuRequest request, boolean everError) {
 				final String cmd = request.getCommand();
 				if (cmd.equals("onZTLService")) {
-
-					//for ZTL testing , need to remove the textbox first.
-					Component comp = desktop.getFirstPage().getFellowIfAny("__zkjetHelper");
-					if(comp !=null) comp.detach();
-					
-					
 					String zscript = (String) request.getData().get("");
 					Component cmp = Executions.createComponentsDirectly(
 							zscript, "zul", null, null);
 					if (cmp != null)
-						cmp.setPage((Page) desktop.getFirstPage());
+						cmp.setPage((Page) desktop.getPages().iterator().next());
 					return true;
 				} else return false;
 			}
