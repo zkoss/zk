@@ -351,9 +351,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<theme-uri>/b**.css</theme-uri>
 	</desktop-config>
 	-->
-	<desktop-config>
-	  <theme-provider-class>org.zkoss.zktest.util.CacheableThemeProvider</theme-provider-class>
-	</desktop-config>
 
 	<!-- Uncomment the following if you want to redirect to particular
 		page when ZK Client receives an error code.
