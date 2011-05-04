@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+dateFormat.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 4, 2011 12:00:19 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<window>
+		<script type="text/javascript">
+			function setText(txt, wgt) { 
+				var inp = wgt.getInputNode(); 
+				inp.value = txt; 
+				jq(inp).blur(); 
+			}
+			function setText2(txt, id) {
+				var db = zk.Widget.$(id),
+					inp = db.getInputNode();
+				inp.value = txt;
+				jq(inp).blur();
+				var index = id.charAt(4),
+					res = (index == '4' || index == '5') ? db.getErrorMesssage() ? 'O': 'X': db.getErrorMesssage() ? 'X' : 'O';
+				jq(db.previousSibling).html(res).css('background-color', res == 'O' ? 'blue': 'red').css('color',  'white');
+			}
+		</script>
+		<button label="restore locale" onClick='page.getDesktop().getWebApp().removeAttribute("px_preferred_locale");desktop.bookmark = "tab1";execution.sendRedirect("");'/>
+	    <zscript><![CDATA[
+	    
+		    page.addEventListener("onBookmarkChange",
+		         new EventListener() {
+		             public void onEvent(Event event) throws UiException {
+		                 try {
+		                     tbox.getFellow(desktop.bookmark).setSelected(true);
+		                 } catch (ComponentNotFoundException ex) {
+		                     tab1.setSelected(true);
+		                 }
+		             }
+		         });
+		     
+		     public void doChangeLan(String lan) {
+		    	 if ("tab1".equals(lan)) {
+		    		 page.getDesktop().getWebApp().removeAttribute("px_preferred_locale");
+		    	 } else {
+			    	 page.getDesktop().getWebApp().setAttribute("px_preferred_locale", new Locale(lan));
+		    	 }
+		    	 execution.sendRedirect("");
+		     }
+	     ]]></zscript>
+	 
+	    <tabbox id="tbox" width="100%" onSelect="desktop.bookmark = self.selectedTab.id; doChangeLan(self.selectedTab.id);">
+	        <tabs>
+	            <tab label="default" id="tab1"/>
+	            <tab label="en" id="en"/>
+	            <tab label="th" id="th"/>
+	            <tab label="fr" id="fr"/>
+	            <tab label="es" id="es"/>
+	            <tab label="zh" id="zh"/>
+	        </tabs>
+	        <tabpanels>
+	            <tabpanel>
+					<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row forEach="16-02-1998,16-Mar-1998,16-09-1998,189,1890,18999,18">
+								<cell if="${forEachStatus.index == 0}" rowspan="7">dd-MMM-yyyy</cell>
+								<cell>
+									<span/>
+									<datebox id="db_${forEachStatus.index}" format="dd-MMM-yyyy" />
+								</cell>
+								<cell if="${forEachStatus.index == 0}" rowspan="7">
+									<button label="click me, then check wether pass.">
+										<attribute w:name="onClick"><![CDATA[
+											setText2('16-02-1998', '$db_0');
+											setText2('16-Mar-1998', '$db_1');
+											setText2('16-09-1998', '$db_2');
+											setText2('189', '$db_3');
+											setText2('1890', '$db_4');
+											setText2('18999', '$db_5');
+											setText2('18', '$db_6');
+										]]></attribute>
+									</button>
+								</cell>
+							</row>
+							<row>
+								<cell>MM/dd/yyyy</cell>
+								<cell>
+									<datebox id="db2" format="MMM/dd/yyyy" />
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('May/02/2008', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>M/d/yy KK:mm:ss a</cell>
+								<cell>
+									<datebox format="M/d/yy KK:mm:ss a" displayedTimeZones="GMT+12,GMT+8" timeZone="GMT+8" />
+								</cell>
+								<cell>
+									You can click the icon to choose a date, and change its timezone from the bottom of the popup diagram.
+									<separator/>
+									For example, "10/01/09 06:00:00 PM" in GMT+8, and in GMT+12 it should be "10/01/09 10:00:00 PM"
+								</cell>
+							</row>
+							<row>
+								<cell>d-MMM-yyyy</cell>
+								<cell>
+									<datebox format="d-MMM-yyyy"/>
+								</cell>
+								<cell>
+									Please select a date, and then select another month, and then it should be changed correctly.
+								</cell>
+							</row>
+							<row>
+								<cell>dd.MM.yyyy</cell>
+								<cell>
+									<datebox format="dd.MM.yyyy" />
+								</cell>
+								<cell>
+									Choice date at the datebox, it should be ok (the year should not always 1999). 
+								</cell>
+							</row>
+							<row>
+								<cell>dd.MM.yyyy lenient="false"</cell>
+								<cell>
+									<datebox format="dd.MM.yyyy" lenient="false" />
+								</cell>
+								<cell>
+									Choice date at the datebox, it should not show any error.
+								</cell>
+							</row>
+							<row>
+								<cell>MM.dd.yy lenient="false"</cell>
+								<cell>
+									<datebox id="d" format="MM.dd.yy" lenient="false" />
+								</cell>
+								<cell rowspan="3">
+									Type 12-13-98 in the first datebox
+									<separator/>
+									Type TAB to move focus away
+									<separator/>
+									Then, an error message shall show up. However, no error message in the second one.
+									<separator/>
+									<a label="tracker" href="https://sourceforge.net/tracker/?func=detail&amp;aid=1877111&amp;group_id=152762&amp;atid=785191"/>
+								</cell>
+							</row>
+							<row>
+								<cell>MM.dd.yy lenient="true"</cell>
+								<cell>
+									<datebox id="d2" format="MM.dd.yy" lenient="true" />
+								</cell>
+							</row>
+							<row>
+								<cell>MMM d, yyyy lenient="false"</cell>
+								<cell>
+									<datebox id="d3" format="MMM d, yyyy" lenient="false" />
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy/MM/dd HH:mm</cell>
+								<cell>
+									<datebox format="yyyy/MM/dd HH:mm" onCreate="self.value = new Date()" width="120px"/>
+								</cell>
+								<cell>
+									1. Click the datebox button to open the Calendar
+									<separator/>
+									2. the textbox inside the Calendar popup should be the current hour and min (same with the datebox above). If not, it's error.
+								</cell>
+							</row>
+							<row>
+								<cell>MMM d, yyyy HH:mm:ss</cell>
+								<cell>
+									<datebox width="150px" format="MMM d, yyyy HH:mm:ss" 
+										onChange='Clients.evalJavaScript("zk.log(\"onChange\",\""+self.value+"\");");'
+										onCreate="self.value = new Date()"/>
+								</cell>
+								<cell>
+									Case 1: Drop down and change the time in the timebox (of the popup).
+									<separator/>
+									Then, click anywhere other than the datebox and popup to cause onChange
+									<separator/>
+									Then, you shall see some message appended to the end of this page saying onChange:...
+									<separator/>
+									<button label='Click me, if show "onChange, null" ,the bug fixed.' w:onClick="setText('', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>MM/dd/yyyy, HH:mm:ss.SSS</cell>
+								<cell>
+									<datebox width="200px" format="MM/dd/yyyy, HH:mm:ss.SSS" />
+								</cell>
+								<cell>
+									<button label='Click me, You should see the date become Jan 1st of the CURRENT year. If not, there is a bug.' w:onClick="setText('1/1', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>MM/dd/yyyy</cell>
+								<cell>
+									<datebox format="MM/dd/yyyy" text="12/31/2000" />
+								</cell>
+								<cell>
+									Click on the datebox button to open the Calendar.
+									<separator/>
+									Select 1/1/2001. If you see a date value other than 01/01/2001, it's a bug.
+									<separator/>
+									Refresh the page and select 1/2/2001. You should see 01/02/2001. Otherwise it's a bug.
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy-MM-dd ss</cell>
+								<cell>
+									<datebox format="yyyy-MM-dd ss" onCreate="self.value = new Date(110,3,27,18,20,30);"/>
+								</cell>
+								<cell rowspan="8">
+									Click each datebox's button , and check if the timebox shows like the format.
+									<separator/>
+									The timebox means the textbox below the Calendar , 
+									<separator/>
+									check the value in timebox.
+								</cell>
+							</row>
+							<row forEach="yyyy-MM-dd hh:mm:ss,yyyy-MM-dd KK:mm:ss,yyyy-MM-dd hh:mm:ss aa,yyyy-MM-dd aa hh:mm:ss,yyyy-MM-dd KK:mm:ss,yyyy-MM-dd HH:mm:ss,yyyy-MM-dd kk:mm:ss">
+								<cell>${each}</cell>
+								<cell>
+									<datebox format="${each}" onCreate="self.value = new Date(110,3,27,18,20,30);" width="200px"/>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+	            <tabpanel>
+					<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<cell>yyyy MMMMM dd</cell>
+								<cell>
+									<datebox format="yyyy MMMMM dd" lenient="false"/>
+								</cell>
+								<cell>
+									1. Set browser's locale to en-US
+									<separator/>
+									2. Choose a date, you should not see any error.
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+	            <tabpanel>
+					<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<cell>dd/MMM/yyyy</cell>
+								<cell>
+								    <datebox format="dd/MMM/yyyy"/>
+								</cell>
+								<cell>
+									1.Please set the browser's language with Thai(TH),
+								    <separator/>
+								    2. Choose a date and the year shouldn't reset to 2000.
+								</cell>
+							</row>
+							<row>
+								<cell>dd/MM/yyyy</cell>
+								<cell>
+								    <datebox format="dd/MM/yyyy" onCreate='self.value = new java.text.SimpleDateFormat("dd/MM/yyyy").parse("24/02/2010");'/>
+								</cell>
+								<cell>
+									Please click the icon to see the calendar is at Wednesday in Thai language(if not, please reload again)
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+	            <tabpanel>
+	            	<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<cell>dd/MMM .yyyy</cell>
+								<cell>
+									<datebox format="dd/MMM .yyyy" />
+								</cell>
+								<cell rowspan="2">
+									Change Locale to fr 
+									<separator/>
+									Select December
+									<separator/>
+									Should not show error
+								</cell>
+							</row>
+							<row>
+								<cell>dd MMMM yyyy</cell>
+								<cell>
+									<datebox format="dd MMMM yyyy" />
+								</cell>
+							</row>
+							<row>
+								<cell>none</cell>
+								<cell>
+									<datebox/>
+								</cell>
+								<cell>
+									1. Please change browser language to French(fr), and reload the page again.
+									<separator/>
+									2. Choose a month(avr. or nov.), and the date should be selected.
+								</cell>
+							</row>
+							<row>
+								<cell>MMM/dd/yyyy</cell>
+								<cell>
+									<datebox format="MMM/dd/yyyy"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('sept./02/2008', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy/MM/dd</cell>
+								<cell>
+									<datebox format="yyyy/MM/dd"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('2008/05/02', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>MM-dd-yy</cell>
+								<cell>
+									<datebox format="MM-dd-yy"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('09-02-2008', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy/MMM/dd</cell>
+								<cell>
+									<datebox format="yyyy/MMM/dd"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('2008/sept./02', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+				<tabpanel>
+					<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<cell>dd-MMM-yyyy</cell>
+								<cell>
+									<datebox format="dd-MMM-yyyy"/>
+								</cell>
+								<cell>
+									1. First of all, set your browser language with Spanish [es].
+									<separator/>
+									2. Click the datebox popup to choose April month.
+									<separator/>
+									3. You should see the "xx-Apr-xxxx" in the input element like("01-Apr-2008" not "01-Oct-2008")
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+				<tabpanel>
+					<grid>
+						<columns>
+							<column width="150px" />
+							<column hflex="min"/>
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<cell>MMM/dd/yyyy</cell>
+								<cell>
+									<datebox format="MMM/dd/yyyy"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('五月/02/2008', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy/MM/dd</cell>
+								<cell>
+									<datebox format="yyyy/MM/dd"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('2008/05/02', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>MM-dd-yy</cell>
+								<cell>
+									<datebox format="MM-dd-yy"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('05-02-2008', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+							<row>
+								<cell>yyyy/MMM/dd</cell>
+								<cell>
+									<datebox format="yyyy/MMM/dd"/>
+								</cell>
+								<cell>
+									<button label="Click me, if no error ,the bug fixed." w:onClick="setText('2008/五月/02', this.parent.previousSibling.firstChild);" />
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+	        </tabpanels>
+	    </tabbox>
+	</window>
+</zk>
