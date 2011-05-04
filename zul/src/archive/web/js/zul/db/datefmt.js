@@ -227,7 +227,7 @@ zk.fmt.Date = {
 				case 'h':
 				case 'K':
 				case 'k':
-					if (hasHour1)
+					if (hasHour1 ? (cc == 'H' || cc == 'k'): (cc == 'h' || cc == 'K'))
 						break;
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
