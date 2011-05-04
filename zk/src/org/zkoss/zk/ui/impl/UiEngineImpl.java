@@ -1384,7 +1384,14 @@ public class UiEngineImpl implements UiEngine {
 	private void process(Desktop desktop, Event event) {
 //		if (log.finable()) log.finer("Processing event: "+event);
 
-		final Component comp = event.getTarget();
+		final Component comp;
+		if (event instanceof ProxyEvent) {
+			final ProxyEvent pe = (ProxyEvent)event;
+			comp = pe.getRealTarget();
+			event = pe.getProxiedEvent();
+		} else {
+			comp = event.getTarget();
+		}
 		if (comp != null) {
 			processEvent(desktop, comp, event);
 		} else {

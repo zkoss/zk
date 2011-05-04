@@ -382,6 +382,32 @@ public class Events {
 	public static final void postEvent(int priority, Event event) {
 		Executions.getCurrent().postEvent(priority, event);
 	}
+	/** Queues the give event for the specified target to this execution.
+	 * The target could be different from {@link Event#getTarget}.
+	 * @param priority the priority of the event. The default priority is 0
+	 * and the higher value means higher priority.
+	 * @param realTarget the target component that will receive the event.
+	 * If null, it means broadcast, i.e., all root components will receive
+	 * this event.
+	 * <br/>Notice that postEvent(n, event) is the same as postEvent(n, event.getTarget(), event),
+	 * but different from postEvent(n, 0, event).
+	 * @since 5.0.7
+	 */
+	public static final void postEvent(int priority, Component realTarget, Event event) {
+		Executions.getCurrent().postEvent(priority, realTarget, event);
+	}
+	/** Queues the give event for the specified target to this execution.
+	 * The target could be different from {@link Event#getTarget}.
+	 * @param realTarget the target component that will receive the event.
+	 * If null, it means broadcast, i.e., all root components will receive
+	 * this event.
+	 * <br/>Notice that postEvent(n, event) is the same as postEvent(n, event.getTarget(), event),
+	 * but different from postEvent(n, 0, event).
+	 * @since 5.0.7
+	 */
+	public static final void postEvent(Component realTarget, Event event) {
+		Executions.getCurrent().postEvent(0, realTarget, event);
+	}
 	/** Posts an instance of {@link Event} to the current execution
 	 * with the specified priority.
 	 *

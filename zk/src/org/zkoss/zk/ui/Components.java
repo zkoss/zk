@@ -1523,6 +1523,10 @@ public class Components {
 			exec().postEvent(priority, evt);
 		}
 
+		public void postEvent(int priority, Component realTarget, Event evt) {
+			exec().postEvent(priority, realTarget, evt);
+		}
+
 		public void pushArg(Map arg) {
 			exec().pushArg(arg);
 		}

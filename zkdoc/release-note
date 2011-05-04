@@ -26,6 +26,7 @@ ZK 5.0.7
   3291332: adding unload desktop support for Chrome/Safari
   3294710: Log not-serializable and ignored objects
   3294843: Disable update-by-client by default and an option to enable
+  3297288: A way to post an event to a speicif component; not getTarget
   3296607: Datebox do not show the error
  
 * Bugs

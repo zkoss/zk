@@ -123,6 +123,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			}
 		}	
 	}
+	public void postEvent(int priority, Component realTarget, Event evt) {
+		postEvent(priority,
+			realTarget != evt.getTarget() ? new ProxyEvent(realTarget, evt): evt);
+	}
 
 	//-- ExecutionCtrl --//
 	public Object getAttribute(String name, boolean recurse) {
