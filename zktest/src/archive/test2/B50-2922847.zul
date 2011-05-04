@@ -15,6 +15,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Please cleck the toolbarbutton label to see the font should be bold
-<toolbarbutton label="click me" style="font-weight:bold" 
+<toolbarbutton label="click me" style="font-weight:normal" 
 		onClick='self.style = self.style != "font-weight:bold;" ? "font-weight:bold;":"font-weight:normal;"'/>
 </zk>
