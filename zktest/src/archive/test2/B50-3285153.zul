@@ -6,7 +6,7 @@
 	]]></html>
 	<button label="Show Modal">
 		<attribute name="onClick"><![CDATA[
-			Executions.createComponents("grid-modal-content.zul", null, null).doModal();
+			Executions.createComponents("B50-3285153-cnt.zul", null, null).doModal();
 		]]></attribute>
 	</button>
 </zk>
