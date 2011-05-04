@@ -24,7 +24,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	]]></html>
 	<bandbox>
 		<bandpopup>
-			<textbox id="tb" />
+			Textbox: <textbox id="tb" />
 		</bandpopup>
 	</bandbox>
 	<button label="show values" onClick='alert(tb.value)' />
