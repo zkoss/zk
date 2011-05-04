@@ -147,8 +147,6 @@ zk.fmt.Date = {
 					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 				}
 				
-				if (isNumber && !nosep) return; //failed Bug 3296607
-				
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
@@ -163,11 +161,12 @@ zk.fmt.Date = {
 					if (!isNaN(nv = _parseInt(token))) {
 						y = Math.min(nv, 200000); // Bug B50-3288904: js year limit
 						if (y < 100) y += y > 29 ? 1900 : 2000;
-					} else return; //failed
+					}
 					break;
 				case 'M':
 					var mon = token ? token.toLowerCase() : '',
 						isNumber0 = !isNaN(token);
+					if (!mon) break; 
 					if (!isNumber0 && token)
 						for (var index = zk.SMON.length; --index >= 0;) {
 							var smon = zk.SMON[index].toLowerCase();
@@ -178,13 +177,11 @@ zk.fmt.Date = {
 							}
 						}
 					if (len == 3 && token) {
-						//Bug 3296607: if len == 3 (case: MMM), token shall not be number;
-						if (isNumber0)
-							 return; //failed
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
-						
-						break; // nothing to do.
+						if (isNaN(nv = _parseInt(token)))
+							break;
+						m = nv - 1;
 					} else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no separator, token must be assigned.
 							ts[--i] = token.substring(2);
