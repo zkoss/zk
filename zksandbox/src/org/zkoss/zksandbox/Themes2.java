@@ -108,6 +108,10 @@ public class Themes2 {
 		return !Strings.isEmpty(target) && (";" + themes + ";").contains(";" + target + ";");
 	}
 
+	public static boolean isBlueTheme () {
+		return isClassicBlue() || isSapphire(Executions.getCurrent());
+	}
+	
 	public static boolean isClassicBlue(){
 		return getCurrentTheme().contains(getProperty("CLASSICBLUE_THEME"));
 	}
