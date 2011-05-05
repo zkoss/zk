@@ -18,8 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
- Grid support vflex like Listbox and Tree
- <window height="500px">
+ Grid should occupy the whole height
+ <window title="Window" height="500px" border="normal">
 	<grid vflex="true">
 		<columns sizable="true">
 			<column label="Type"/>
