@@ -254,8 +254,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if ( result > Math.pow(2,31)-1 )	result = Math.pow(2,31)-1;
 		else if ( result < -Math.pow(2,31) ) result = -Math.pow(2,31);
 
-		if (this._max!=null && result > this._max) result = this._max;
-		else if (this._min!=null && result < this._min) result = this._min;
+		//over bound shall restore value
+		if (this._max!=null && result > this._max) result = value;
+		else if (this._min!=null && result < this._min) result = value;
 
 		inp.value = result;
 		
