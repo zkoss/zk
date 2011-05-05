@@ -832,7 +832,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head) head.style.height = '';
 			} else {
 				if (zk.ie && !zk.ie8 && this._vflex == 'min' && this._vflexsz === undefined)
-					sz.height = sz.height + 1;
+					sz.height += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
@@ -842,7 +842,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head) head.style.width = '';
 			} else {
 				if (zk.ie && !zk.ie8 && this._hflex == 'min' && this._hflexsz === undefined)
-					sz.width = sz.width + 1;
+					sz.width += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
