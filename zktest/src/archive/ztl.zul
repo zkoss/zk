@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK ${desktop.webApp.version}"?>
+
+<!--
+ztl.zul
+
+{{IS_NOTE
+	Purpose:
+		Testing ZUL used by ZTL
+	Description:
+		
+	History:
+		Wed Apr 5 10:24:27     2011, Created by Tonyq
+}}IS_NOTE
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+
+</zk>
