@@ -33,6 +33,10 @@
 
     <south vflex="min" hflex="min">
         <grid hflex="min">
+        	<columns>
+				<column hflex="min"/>
+				<column hflex="min"/>
+			</columns>
             <rows>
                 <row>
                     <label value="File Two:"/>
