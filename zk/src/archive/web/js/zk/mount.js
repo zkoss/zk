@@ -567,7 +567,7 @@ jq(function() {
 	function _afterKeyDown(wevt) {
 		var dts = zk.Desktop.all, Page = zk.Page;
 		for (var dtid in dts)
-			for (wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
+			for (var wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
 				if (wgt.$instanceof(Page)) {
 					for (var w = wgt.firstChild; w; w = w.nextSibling)
 						if (_afterKD(w, wevt))
