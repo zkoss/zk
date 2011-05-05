@@ -214,7 +214,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible, hdWgt, shallUpdate;
+			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible, hdWgt, shallUpdate, cellWidth;
 			for (var display, faker, index = this._columns,
 					tail = mesh.head.nChildren - index,
 					n = colhead;
@@ -223,14 +223,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				isVisible = (hdWgt = zk.Widget.$(n)) && hdWgt.isVisible();
 				shallUpdate = false;
 				if (cnt-- <= 0) {// show
-					if (parseInt(n.style.width) == 0) {
+					if (force || parseInt(n.style.width) == 0) {
 						cellWidth = hdWgt._origWd;
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
-				} else if (parseInt(n.style.width) != 0) {//hide
+				} else if (force || parseInt(n.style.width) != 0) {//hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
-					hdWgt._origWd = faker.style.width || jq.px0(jq(faker).outerWidth());
+					hdWgt._origWd = hdWgt._origWd || faker.style.width || jq.px0(jq(faker).outerWidth());
 					cellWidth = '0px';
 					shallUpdate = true;
 				}
