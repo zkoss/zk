@@ -224,7 +224,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				shallUpdate = false;
 				if (cnt-- <= 0) {// show
 					if (force || parseInt(n.style.width) == 0) {
-						cellWidth = hdWgt._origWd;
+						cellWidth = hdWgt._origWd || n.style.width;
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
