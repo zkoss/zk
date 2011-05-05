@@ -180,7 +180,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		final ServletContext svlctx = (ServletContext)wapp.getNativeContext();
 
 		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
-		Desktop desktop = dtrc != null ? Utils.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
+		Desktop desktop = dtrc != null ?
+			DesktopRecycles.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
 
 		try {
 			if (desktop != null) { //recycle
@@ -238,7 +239,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					patch.patchRender(ri, page, out, response.getWriter());
 			}
 		} finally {
-			if (dtrc != null) Utils.afterService(dtrc, desktop);
+			if (dtrc != null)
+				DesktopRecycles.afterService(dtrc, desktop);
 		}
 		return true; //success
 	}

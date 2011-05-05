@@ -86,10 +86,11 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.impl.SimpleScope;
+import org.zkoss.zk.ui.impl.Utils;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -1836,7 +1837,7 @@ w:use="foo.MyWindow"&gt;
 				if (shallHandleImportant == null) {
 					final Desktop desktop = getDesktop();
 					shallHandleImportant = Boolean.valueOf(
-						desktop != null && markImportantEvent(desktop));
+						desktop != null && Utils.shallGenerateImportantEvents(desktop, getWidgetClass()));
 				}
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
@@ -1872,16 +1873,6 @@ w:use="foo.MyWindow"&gt;
 			renderer.render("z$is", true); //see zk.Widget (widget.js)
 	}
 
-	/** Adds this widget class to indicate that its important events are
-	 * generated. They have to be generated once per widget-class per desktop.
-	 */
-	private boolean markImportantEvent(Desktop desktop) {
-		Set wgtcls = (Set)desktop.getAttribute(IMPORTANT_EVENTS);
-		if (wgtcls == null)
-			desktop.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(50));
-		return wgtcls.add(getWidgetClass());
-	}
-	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
 	 * It ignores if value is null or empty.

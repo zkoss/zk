@@ -48,10 +48,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.ext.Includer;
 
@@ -167,46 +164,6 @@ public class Utils {
 			if (comp instanceof Includer)
 				((Includer)comp).setChildPage(null);
 		}
-	}
-
-	/** Handles DesktopRecyle. */
-	/*package*/ static Desktop beforeService(
-	DesktopRecycle dtrc, ServletContext ctx, Session sess,
-	HttpServletRequest request, HttpServletResponse response, String path) {
-		if (dtrc != null) {
-			final Execution olde = Executions.getCurrent();
-			final Object olds = SessionsCtrl.getRawCurrent();
-			final Execution exec = new TemporaryExecution(ctx, request, response, null);
-			SessionsCtrl.setCurrent(sess);
-			ExecutionsCtrl.setCurrent(exec);
-			try {
-				return dtrc.beforeService(exec, getURI(path, request.getQueryString()));
-			} catch (Throwable ex) {
-				log.error(ex);
-			} finally {
-				ExecutionsCtrl.setCurrent(olde);
-				SessionsCtrl.setRawCurrent(olds);
-			}
-		}
-		return null;
-	}
-
-	/*package*/ static void afterService(DesktopRecycle dtrc, Desktop desktop) {
-		if (dtrc != null) {
-			try {
-				dtrc.afterService(desktop);
-			} catch (Throwable ex) {
-				log.error(ex);
-			}
-		}
-	}
-
-	/** Returns the request URI of the desktop.
-	 * The request URI is a combination of {@link Desktop#getRequestPath}
-	 * and {@link Desktop#getQueryURI}.
-	 */
-	/*package*/ static String getURI(String path, String qs) {
-		return qs != null ? path + '?' + qs: path;
 	}
 
 	/** Returns the main page of the desktop.

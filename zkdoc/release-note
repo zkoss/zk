@@ -114,6 +114,7 @@ ZK 5.0.7
   3242714: <applet> tag causes entire browser to hang
   3218576: Panel#addToolBar() may result in wrong position
   3296056: Tablelayout with hflex won't resize its width after resizing
+  3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

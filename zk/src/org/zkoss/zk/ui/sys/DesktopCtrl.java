@@ -134,6 +134,12 @@ public interface DesktopCtrl {
 	/** Called when the desktop is about to be destroyed.
 	 */
 	public void destroy();
+	/** Called when the desktop has been recycled.
+	 * More precisely, it is called when the desktop is no longer used
+	 * and ready to be re-used later.
+	 * @since 5.0.7
+	 */
+	public void recycle();
 
 	/** Returns a collection of suspended event processing threads, or empty
 	 * if no suspended thread at all.

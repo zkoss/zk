@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
@@ -178,6 +179,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient ReqResult _lastRes;
 	private transient List _piggyRes;
+	/** A set of widget classes whose important events are generated. */
+	private transient Set _importantEventGened;
 
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -809,6 +812,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void recoverDidFail(Throwable ex) {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
+	}
+
+	public void recycle() {
+		_importantEventGened = null; //re-gen is required
+	}
+	/** Returns whether to generate the information of the important events of the given widget class.
+	 */
+	/*package*/ boolean shallGenerateImportantEvents(String wgtcls) {
+		if (_importantEventGened == null)
+			_importantEventGened= new HashSet(32);
+		return _importantEventGened.add(wgtcls);
 	}
 
 	public boolean isAlive() {

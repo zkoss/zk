@@ -179,7 +179,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
 		final DesktopRecycle dtrc = bInclude ? null: config.getDesktopRecycle();
 		Desktop desktop = dtrc != null ?
-			Utils.beforeService(dtrc, _ctx, sess, request, response, path): null;
+			DesktopRecycles.beforeService(dtrc, _ctx, sess, request, response, path): null;
 
 		try {
 			if (desktop != null) { //recycle
@@ -247,7 +247,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				}
 			}
 		} finally {
-			if (dtrc != null) Utils.afterService(dtrc, desktop);
+			if (dtrc != null)
+				DesktopRecycles.afterService(dtrc, desktop);
 		}
 		return true; //success
 	}
