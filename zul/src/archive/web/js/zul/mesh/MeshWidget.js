@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdws = [],
 			hdcavews = [];
 			
-		if (wgt.eheadtbl) {
+		if (wgt.eheadtbl) {//clear and backup headers widthes
 			wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
@@ -77,7 +77,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (wgt.head && wgt.head.$n())
 			wgt.head.$n().style.width = '';
-		if (wgt.efoottbl) {
+		if (wgt.efoottbl) {//clear and backup footers widthes
 			wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
@@ -90,7 +90,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ftcell.style.width = '';
 			}
 		}
-		if (wgt.ebodytbl) {
+		if (wgt.ebodytbl) {//clear and backup body fackers widthes
 			wgt.ebody.style.width = '';
 			ebodytblw = wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
@@ -123,18 +123,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (hdwd > wd) wd = hdwd;
 				if (ftwd > wd) wd = ftwd;
 				wds[i] = wd;
-				if (zk.ie && !zk.ie8 && max < wd) {
+				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
+				} else if (zk.ff == 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
+					++wds[i];
 				}
 				width += wd;
 				if (w) w = w.previousSibling;
 			}
-			if (zk.ie && !zk.ie8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
+			if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
 				--wds[maxj];
 		}
 
-		if (wgt.eheadtbl) {
+		if (wgt.eheadtbl) {//restore headers widthes
 			wgt.eheadtbl.width = eheadtblw||'';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix||'';
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
@@ -145,14 +147,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				headcave.style.width = hdcavews[i];
 			}
 		}
-		if (wgt.efoottbl) {
+		if (wgt.efoottbl) {//restore footers widthes
 			wgt.efoottbl.width = efoottblw||'';
 			wgt.efoottbl.style.tableLayout = efoottblfix||'';
 			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				ftfaker.cells[i].style.width = ftfakerws[i];
 			}
 		}
-		if (wgt.ebodytbl) {
+		if (wgt.ebodytbl) {//restore body fackers widthes
 			wgt.ebodytbl.width = ebodytblw||'';
 			wgt.ebodytbl.style.tableLayout = ebodytblfix||'';
 			if (bdfaker)
