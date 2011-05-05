@@ -29,7 +29,7 @@ public class ThemeImage extends Image {
 	
 	
 	public void onCreate(){
-		if (!Themes2.isClassicBlue())
+		if (!Themes.isClassicBlue() && !Themes.isSilvergray())
 			setVisible(false);
 
 		final String src = getSrc();

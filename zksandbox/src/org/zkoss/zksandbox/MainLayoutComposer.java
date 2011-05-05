@@ -70,7 +70,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 
 	private Map getCategoryMap() {
-		return DemoWebAppInit2.getCateMap();
+		return DemoWebAppInit.getCateMap();
 	}
 
 	private void initKey() {

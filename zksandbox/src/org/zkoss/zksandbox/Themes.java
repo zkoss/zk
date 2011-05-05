@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * Utilities to manipulate the cooke for theme preferences.
@@ -36,6 +38,10 @@ public class Themes {
 	public final static String DEFAULT_WCS_URI = "~./zul/css/zk.wcs";
 	public final static String DEFAULT_SILVERGRAY_URI = "~./silvergray";
 	
+	private final static String SAPPHIRE_THEME = "sapphire";
+	public final static String PREFERRED_THEME = "org.zkoss.theme.preferred";
+	public final static String THEME_NAMES = "org.zkoss.theme.names";
+	public final static String THEME_DEFAULT = "org.zkoss.theme.default";
 
 	/**
 	 * Returns the font size specified in cookies
@@ -125,7 +131,7 @@ public class Themes {
 	 * @return boolean
 	 */
 	public static boolean hasSilvergrayLib() {
-		return "true".equals(Library.getProperty("org.zkoss.zksandbox.theme.silvergray"));
+		return "true".equals(Library.getProperty(DemoWebAppInit.KEY_SILVERGREY_PROPERTY));
 	}
 
 	/**
@@ -139,7 +145,48 @@ public class Themes {
 	/**
 	 * Return true if current theme is Silvergray
 	 */
-	public static boolean isSilvergray(Execution exe){
-		return SILVERGRAY_THEME.equals(getThemeStyle(exe));
+	public static boolean isSilvergray(){
+		return SILVERGRAY_THEME.equals(getCurrentTheme());
+	}
+	
+	/**
+	 * Returns the current theme
+	 * @return
+	 */
+	public static String getCurrentTheme() {
+		// Priority
+		//	1. cookie's key
+		//	2. library property
+		//	3. theme's first priority
+		String names = Library.getProperty(THEME_NAMES);
+		
+		String name = getThemeStyle(Executions.getCurrent());
+		if (!Strings.isEmpty(name) && containTheme(names, name)) {
+			return name;
+		}
+		
+		name = Library.getProperty(PREFERRED_THEME);
+		if (!Strings.isEmpty(name) && containTheme(names, name)) {
+			return name;
+		}
+		return Library.getProperty(THEME_DEFAULT);
+	}
+
+	/**
+	 * Returns whether themes contains target theme or not
+	 * @param themes
+	 * @param targetTheme
+	 * @return
+	 */
+	public static boolean containTheme(String themes, String target) {
+		return !Strings.isEmpty(target) && (";" + themes + ";").contains(";" + target + ";");
+	}
+
+	public static boolean isBlueTheme () {
+		return isClassicBlue() || SAPPHIRE_THEME.equals(getCurrentTheme());
+	}
+
+	public static boolean isClassicBlue(){
+		return CLASSICBLUE_THEME.equals(getCurrentTheme());
 	}
 }
