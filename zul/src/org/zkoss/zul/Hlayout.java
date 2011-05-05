@@ -28,11 +28,11 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  */
 public class Hlayout extends HtmlBasedComponent implements org.zkoss.zul.api.Hlayout {
 
-	private String _spacing = "0.3em";
+	private String _spacing = "3px";
 	
 	/** Returns the spacing between adjacent children, or null if the default
 	 * spacing is used.
-	 * <p>Default: 0.3em (means to use the default spacing).
+	 * <p>Default: 3px (means to use the default spacing).
 	 */
 	public String getSpacing() {
 		return _spacing;
@@ -43,7 +43,7 @@ public class Hlayout extends HtmlBasedComponent implements org.zkoss.zul.api.Hla
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {
-		if (spacing == null || spacing.length() == 0) spacing = "0.3em";
+		if (spacing == null || spacing.length() == 0) spacing = "3px";
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			smartUpdate("spacing", _spacing);
@@ -58,7 +58,7 @@ public class Hlayout extends HtmlBasedComponent implements org.zkoss.zul.api.Hla
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		if (!"0.3em".equals(_spacing))
+		if (!"3px".equals(_spacing))
 			render(renderer, "spacing", _spacing);
 	}
 }

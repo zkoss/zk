@@ -607,7 +607,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	sumStyles: function (areas, styles) {
 		var val = 0;
 		for (var i = 0, len = areas.length, $jq = this.jq; i < len; i++){
-			 var w = zk.parseInt($jq.css(styles[areas.charAt(i)]));
+			 var w = Math.round(zk.parseFloat($jq.css(styles[areas.charAt(i)])));
 			 if (!isNaN(w)) val += w;
 		}
 		return val;
