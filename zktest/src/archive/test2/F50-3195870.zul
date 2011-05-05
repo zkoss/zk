@@ -14,6 +14,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "auto sort".</li>
+			<li>Click "model 1" and "bean model".</li>
+			<li>Click "ascending".</li>
+			<li>click all of test button, they shall be in sorted</li>
+		</ol>
+	]]></html>
 	<zscript><![CDATA[
 		import java.util.*;
 		import org.zkoss.zul.*;
