@@ -64,9 +64,18 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param String clsnm the CSS class name of the fileupload
 	 */
 	$init: function(wgt, parent, clsnm) {
-		this.maxsize = _parseMaxSize(clsnm);
-		this.isNative = clsnm.indexOf('native') != -1;
-		this._clsnm = (this.maxsize || this.isNative) ? clsnm.split(',')[0] : clsnm;
+		var cls;
+		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
+			if (attrs[i].startsWith('maxsize='))
+				this.maxsize = attrs[i].match(new RegExp(/maxsize=([^,]*)/))[1];
+			else if (attrs[i] == 'native')
+				this.isNative = true;
+			else if (attrs[i] != 'true')
+				cls = attrs[i];
+		}
+		
+		this._clsnm = cls || '';
+		
 		this._wgt = wgt;
 		this._parent = parent;
 		
@@ -254,7 +263,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this._wgt = upload._wgt;
 		
 		var viewer, self = this;
-		if (upload._clsnm.startsWith('true')) viewer = new zul.UploadViewer(this, flnm);
+		if (!upload._clsnm) viewer = new zul.UploadViewer(this, flnm);
 		else
 			zk.$import(upload._clsnm, function (cls) {
 				viewer = new cls(self, flnm);

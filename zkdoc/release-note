@@ -119,6 +119,7 @@ ZK 5.0.7
   3297378: autodisable shall not enable a button that was originally disabled
   3298164: vflex issue in nested container
   3297864: type ",01" doesn't got "0,01" (de locale)
+  3297287: fileupload issue if the properties used without in order
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.
