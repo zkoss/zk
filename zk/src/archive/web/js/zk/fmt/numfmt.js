@@ -394,10 +394,10 @@ zk.fmt.Number = {
 				if (k === undefined)
 					k = j;
 			} else if (k !== undefined) {
-				if (cc == zkDecimal && j > ++k)
+				if (cc == '.' && j > ++k)
 					sb = sb.substring(0, k) + sb.substring(j);
 				break;
-			} else if (cc == zkDecimal) { //.xxx or .
+			} else if (cc == '.') { //.xxx or . // B50-3297864
 				break;
 			}
 		}

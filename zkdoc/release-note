@@ -118,6 +118,7 @@ ZK 5.0.7
   3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
   3297378: autodisable shall not enable a button that was originally disabled
   3298164: vflex issue in nested container
+  3297864: type ",01" doesn't got "0,01" (de locale)
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

@@ -1,0 +1,24 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "Change Locale" Button to change your browser's locale to German. (Page will refresh.)</li>
+			<li>type ",01" in the Decimalbox.</li>
+			<li>Click on somewhere outside of the Decimalbox.</li>
+			<li>You should see the text in Decimalbox become "0,01". Otherwise it is a bug.</li>
+			<li>(If you need to change the locale back, you can click on the "Resume Locale" Button.)</li> 
+		</ol>
+	]]></html>
+	<decimalbox id="a4" />
+	<button id="btn" label="Change Locale" onClick="changeLocale()" />
+	<button id="btn1" label="Resume Locale" onClick="resume()" />
+	<zscript><![CDATA[
+		void changeLocale(){
+			session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, new Locale("de"));
+			execution.sendRedirect("");
+		}
+		void resume(){
+			session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, null);
+			execution.sendRedirect("");
+		}
+	]]></zscript>
+</zk>
