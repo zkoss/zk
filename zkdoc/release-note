@@ -120,6 +120,7 @@ ZK 5.0.7
   3298164: vflex issue in nested container
   3297864: type ",01" doesn't got "0,01" (de locale)
   3297287: fileupload issue if the properties used without in order
+  3297746: opera bug for listbox rendering
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

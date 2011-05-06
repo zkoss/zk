@@ -1171,20 +1171,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		|| !this.getBodyWidgetIterator().hasNext()) return;
 		
 		var hdtable = this.ehead.firstChild, head = this.head.$n();
-		if (!head) return; 
-		if (zk.opera) {
-			if (!hdtable.style.width) {
-				var isFixed = true, tt = this.ehead.offsetWidth;
-				for(var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-					if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
-						isFixed = false; 
-						break;
-					}
-					tt -= zk.parseInt(hdfaker.cells[i].style.width);
-				}
-				if (!isFixed || tt >= 0) hdtable.style.tableLayout = "auto";
-			}
-		}
+		if (!head) return;
 		
 		// Bug #1886788 the size of these table must be specified a fixed size.
 		var bdtable = this.ebody.firstChild;
