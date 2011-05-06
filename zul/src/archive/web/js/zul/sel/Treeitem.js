@@ -48,7 +48,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _showDOM(wgt, visible) {
-		wgt.$n().style.display = visible ? "" : "none";
+		var n = wgt.$n();
+		if (n)
+			n.style.display = visible ? "" : "none";
 		var chld;
 		if (chld = wgt.treechildren)
 			for (var w = chld.firstChild; w; w = w.nextSibling)
