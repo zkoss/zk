@@ -174,12 +174,13 @@ public class ConfigParser {
 							parseSubZScriptConfig(el);
 							parseSubDeviceConfig(el);
 						}
-						if (!syscfgLoadedConfig) {
+						if (!syscfgLoadedConfig) { //config not null
 							parseSubSystemConfig(config, el);
 							parseSubClientConfig(config, el);
 						}
 						if (!syscfgLoaded) {
 							parseProperties(el);
+							parseLangConfigs(locator, el);
 						}
 
 						if (config != null) {
@@ -387,7 +388,7 @@ public class ConfigParser {
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri
-				parseLangAddon(locator, el);
+				parseLangConfig(locator, el);
 			} else if ("language-mapping".equals(elnm)) {
 			//language-mapping
 			//	language-name/extension
@@ -689,8 +690,15 @@ public class ConfigParser {
 		}
 	}
 
+	/** Parse language-config */
+	private static void parseLangConfigs(Locator locator, Element root) {
+		for (Iterator it = root.getElements("language-config").iterator();
+		it.hasNext();) {
+			parseLangConfig(locator, (Element)it.next());
+		}
+	}
 	/** Parse language-config/addon-uri. */
-	private static void parseLangAddon(Locator locator, Element conf) {
+	private static void parseLangConfig(Locator locator, Element conf) {
 		for (Iterator it = conf.getElements("addon-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -701,6 +709,17 @@ public class ConfigParser {
 				log.error("File not found: "+path+", at "+el.getLocator());
 			else
 				DefinitionLoaders.addAddon(locator, url);
+		}
+		for (Iterator it = conf.getElements("language-uri").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String path = el.getText(true);
+
+			final URL url = locator.getResource(path);
+			if (url == null)
+				log.error("File not found: "+path+", at "+el.getLocator());
+			else
+				DefinitionLoaders.addLanguage(locator, url);
 		}
 	}
 	/** Parse a class, if specified, whether it implements cls.
