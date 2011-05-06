@@ -27,7 +27,6 @@ ZK 5.0.7
   3294710: Log not-serializable and ignored objects
   3294843: Disable update-by-client by default and an option to enable
   3297288: A way to post an event to a speicif component; not getTarget
-  3296607: Datebox do not show the error
  
 * Bugs
   3286462: native component cause issue in fulfill
@@ -114,6 +113,7 @@ ZK 5.0.7
   3242714: <applet> tag causes entire browser to hang
   3218576: Panel#addToolBar() may result in wrong position
   3296056: Tablelayout with hflex won't resize its width after resizing
+  3296607: Datebox do not show the error
   3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
   
 * Upgrade Notes
