@@ -46,12 +46,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	// Bug 3218078
 	function _onSizeLater(wgt) {		
 		var parent = wgt.parent,
-			bdfaker = parent.ebdfaker;
-		if (!bdfaker) {
-			bdfaker = parent.ebodyrows[0];
-			if (bdfaker)
+			bdfaker;
+		if (!(bdfaker = parent.ebdfaker) && 
+			(bdfaker = parent.ebodyrows[0]))
 				bdfaker = bdfaker.$n();
-		}
+
 		if (bdfaker) {
 			var leftWidth = 0;
 			for (var i = wgt._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
