@@ -116,6 +116,7 @@ ZK 5.0.7
   3296056: Tablelayout with hflex won't resize its width after resizing
   3296607: Datebox do not show the error
   3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
+  3297378: autodisable shall not enable a button that was originally disabled
   3298164: vflex issue in nested container
   
 * Upgrade Notes

@@ -490,7 +490,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					if (perm = ad.charAt(0) == '+')
 						ad = ad.substring(1);
 					ad = "self" == ad ? wgt: wgt.$f(ad);
-					if (ad) {
+					if (ad && !ad._disabled) {
 						ad.setDisabled(true);
 						if (wgt.inServer)
 							if (perm)
