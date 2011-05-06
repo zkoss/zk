@@ -64,7 +64,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			scroll.style.width = jq.px0(width);
 			
 			var scrollScale = bdfaker.childNodes.length - wgt._columns -
-					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
+					2;/* fixed a bug related to the feature #3025419*/
 			
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			wgt.syncScorll();
