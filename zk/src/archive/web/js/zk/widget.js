@@ -649,7 +649,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			segTop = 0,
 			segLeft = 0,
 			segBottom = segTop,
-			segRight = segLeft;
+			segRight = segLeft,
+			zkpOffsets = zk(p).revisedOffset();
 
 		for (; c; c = c.nextSibling) {
 			var zkc = zk(c);
@@ -662,9 +663,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					sameOffParent = c.offsetParent === p.offsetParent, 
-					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
-					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
+					zkcOffsets = zkc.revisedOffset(),
+					offTop = zkcOffsets[1] - zkpOffsets[1],
+					offLeft = zkcOffsets[0] - zkpOffsets[0],
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins),
 					cwgt = _binds[c.id];
@@ -679,7 +680,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							wdh -= minwdh;
 						else {
 							//might change width in _fixMinFlex(), so regain the value
-							offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
+							offLeft = zkc.revisedOffset()[0] - zkpOffsets[0];
 							offwdh = zkc.offsetWidth();
 							marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 							segRight = Math.max(segRight, marginRight);
@@ -719,7 +720,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							hgh -= minhgh;
 						else {
 							//might change height in _fixMinFlex(), so regain the value
-							offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
+							offTop = zkc.revisedOffset()[1] - zkpOffsets[1];
 							offhgh = minhgh; //zkc.offsetHeight();
 							marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 							segBottom = Math.max(segBottom, marginBottom);
