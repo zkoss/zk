@@ -20,37 +20,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		import java.util.*;
 		import java.text.SimpleDateFormat;
 		
-		void setDate(Date d, int i) {
-			if (rg.getSelectedItem().getLabel().equals("between 20110220 and 20110226")) return;
-			Label lb = (Label)rg.getSelectedItem().getNextSibling();
-			if (i == 2)
-				lb = lb.getNextSibling();
-			try {
-				db.setValue(d);
-				lb.setValue("O");
-				lb.setSclass("positive");
-			} catch (Exception ex) {
-				lb.setValue("X");
-				lb.setSclass("negative");
-			}
-		}
-		void setDate2(Date d, int i, int j) {
-			if (!rg.getSelectedItem().getLabel().equals("between 20110220 and 20110226")) return;
-			Label lb = (Label)rg.getSelectedItem().getNextSibling().getFirstChild();
-			if (i == 2)
-				lb = (Label)rg.getSelectedItem().getNextSibling().getNextSibling().getFirstChild();
-			if (j == 2)
-				lb = lb.getNextSibling();
-			try {
-				db.setValue(d);
-				lb.setValue("O");
-				lb.setSclass("positive");
-			} catch (Exception ex) {
-				lb.setValue("X");
-				lb.setSclass("negative");
-			}
-		}
-		
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		String date = df.format(new Date());
 		
@@ -62,6 +31,83 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		
 		String bdate = df.format(beg);
 		String edate = df.format(end);
+		
+		
+		
+		void test(String constraint, int index, Date d, Date d2) {
+			db.constraint = constraint;
+			
+			Label lb = (Label)((Row)rows.getChildren().get(index)).getChildren().get(1);
+			try {
+				db.setValue(d);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+			
+			lb = lb.getNextSibling();
+			try {
+				db.setValue(d2);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+		}
+		
+		void test2() {
+			db.constraint = "between "+bdate+" and "+edate;
+			
+			Label lb2 = (Label)((Row)rows.getChildren().get(3)).getFirstChild();
+			Label lb = (Label)lb2.getNextSibling().getFirstChild();
+			
+			Date d = Dates.beginOfDate(beg, TimeZones.getCurrent());
+			try {
+				db.setValue(d);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+			
+			d = Dates.endOfDate(beg, TimeZones.getCurrent());
+			lb = (Label)lb.getNextSibling();
+			try {
+				db.setValue(d);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+			
+			
+			d = Dates.beginOfDate(end, TimeZones.getCurrent());
+			lb = (Label)lb2.getNextSibling().getNextSibling().getFirstChild();
+			try {
+				db.setValue(d);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+			
+			d = Dates.endOfDate(end, TimeZones.getCurrent());
+			lb = (Label)lb.getNextSibling();
+			try {
+				db.setValue(d);
+				lb.setValue("O");
+				lb.setSclass("positive");
+			} catch (Exception ex) {
+				lb.setValue("X");
+				lb.setSclass("negative");
+			}
+		}
 	]]></zscript>
 	<style>
 		.positive{ 
@@ -71,125 +117,85 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			color:red; 
 		}
 	</style>
-	<radiogroup id="rg" onCheck="db.constraint = self.selectedItem.label;"
-		orient="vertical">
-		<grid hflex="min">
-			<auxhead>
-				<auxheader colspan="3"/>
-				<auxheader colspan="2" label="answer"/>
-			</auxhead>
-			<columns>
-				<column label="constraint"  hflex="min"/>
-				<column label="begin"  hflex="min"/>
-				<column label="end"  hflex="min"/>
-				<column label="begin"  hflex="min"/>
-				<column label="end"  hflex="min"/>
-			</columns>
-			<rows>
-				<row>
-					<radio label="no future" selected="true"/>
-					<label/>
-					<label/>
-					<label value="O" sclass="positive" />
-					<label value="O" sclass="positive" />
-				</row>
-				<row>
-					<radio label="no past" />
-					<label/>
-					<label/>
-					<label value="O" sclass="positive" />
-					<label value="O" sclass="positive" />
-				</row>
-				<row>
-					<radio label="no today" />
-					<label/>
-					<label/>
-					<label value="X" sclass="negative" />
-					<label value="X" sclass="negative" />
-				</row>
-				<row>
-					<radio label="between ${bdate} and ${edate}" />
-					<hlayout>
-						<label/>
-						<label/>
-					</hlayout>
-					<hlayout>
-						<label/>
-						<label/>
-					</hlayout>
-					<hlayout>
-						<label value="O" sclass="positive" />
-						<label value="O" sclass="positive" />
-					</hlayout>
-					<hlayout>
-						<label value="O" sclass="positive" />
-						<label value="O" sclass="positive" />
-					</hlayout>
-				</row>
-				<row>
-					<radio label="before ${date}" />
-					<label/>
-					<label/>
-					<label value="O" sclass="positive" />
-					<label value="O" sclass="positive" />
-				</row>
-				<row>
-					<radio label="after ${date}" />
-					<label/>
-					<label/>
-					<label value="O" sclass="positive" />
-					<label value="O" sclass="positive" />
-				</row>
-			</rows>
-		</grid>
-	</radiogroup>
-	<button label="begin today">
+	<button label="Click me, the result shall the same with answer.">
 		<attribute name="onClick"><![CDATA[
-			Date d = Dates.today();
-			msg.setValue(d.toString());
-			setDate(d, 1);
+			test("no future", 0, Dates.today(),Dates.endOfDate(new Date(), TimeZones.getCurrent()));
+			test("no past", 1, Dates.today(),Dates.endOfDate(new Date(), TimeZones.getCurrent()));
+			test("no today", 2, Dates.today(),Dates.endOfDate(new Date(), TimeZones.getCurrent()));
+			test("before " + date, 4, Dates.today(),Dates.endOfDate(new Date(), TimeZones.getCurrent()));
+			test("after " + date, 5, Dates.today(),Dates.endOfDate(new Date(), TimeZones.getCurrent()));
+			test2();
 		]]></attribute>
 	</button>
-	<button label="end today">
-		<attribute name="onClick"><![CDATA[
-			Date d = Dates.endOfDate(new Date(), TimeZones.getCurrent());
-			Label lb = (Label)rg.getSelectedItem().getNextSibling().getNextSibling();
-			msg.setValue(d.toString());
-			setDate(d, 2);
-		]]></attribute>
-	</button>
-	<button label="begin ${bdate}">
-		<attribute name="onClick"><![CDATA[
-			java.util.Calendar cal = java.util.Calendar.getInstance();
-			cal.setTime(beg);
-			Date d = Dates.beginOfDate(beg, TimeZones.getCurrent());
-			msg.setValue(d.toString());
-			setDate2(d,1,1);
-		]]></attribute>
-	</button>
-	<button label="end ${bdate}">
-		<attribute name="onClick"><![CDATA[
-			Date d = Dates.endOfDate(beg, TimeZones.getCurrent());
-			msg.setValue(d.toString());
-			setDate2(d,1,2);
-		]]></attribute>
-	</button>
-	<button label="begin ${edate}">
-		<attribute name="onClick"><![CDATA[
-			Date d = Dates.beginOfDate(end, TimeZones.getCurrent());
-			msg.setValue(d.toString());
-			setDate2(d,2,1);
-		]]></attribute>
-	</button>
-	<button label="end ${edate}">
-		<attribute name="onClick"><![CDATA[
-			Date d = Dates.endOfDate(end, TimeZones.getCurrent());
-			msg.setValue(d.toString());
-			setDate2(d,2,2);
-		]]></attribute>
-	</button>
+	<grid hflex="min">
+		<auxhead>
+			<auxheader colspan="3"/>
+			<auxheader colspan="2" label="answer"/>
+		</auxhead>
+		<columns>
+			<column label="constraint"  hflex="min"/>
+			<column label="begin"  hflex="min"/>
+			<column label="end"  hflex="min"/>
+			<column label="begin"  hflex="min"/>
+			<column label="end"  hflex="min"/>
+		</columns>
+		<rows id="rows">
+			<row>
+				<label value="no future"/>
+				<label/>
+				<label/>
+				<label value="O" sclass="positive" />
+				<label value="O" sclass="positive" />
+			</row>
+			<row>
+				<label value="no past" />
+				<label/>
+				<label/>
+				<label value="O" sclass="positive" />
+				<label value="O" sclass="positive" />
+			</row>
+			<row>
+				<label value="no today" />
+				<label/>
+				<label/>
+				<label value="X" sclass="negative" />
+				<label value="X" sclass="negative" />
+			</row>
+			<row>
+				<label value="between ${bdate} and ${edate}" />
+				<hlayout>
+					<label/>
+					<label/>
+				</hlayout>
+				<hlayout>
+					<label/>
+					<label/>
+				</hlayout>
+				<hlayout>
+					<label value="O" sclass="positive" />
+					<label value="O" sclass="positive" />
+				</hlayout>
+				<hlayout>
+					<label value="O" sclass="positive" />
+					<label value="O" sclass="positive" />
+				</hlayout>
+			</row>
+			<row>
+				<label value="before ${date}" />
+				<label/>
+				<label/>
+				<label value="O" sclass="positive" />
+				<label value="O" sclass="positive" />
+			</row>
+			<row>
+				<label value="after ${date}" />
+				<label/>
+				<label/>
+				<label value="O" sclass="positive" />
+				<label value="O" sclass="positive" />
+			</row>
+		</rows>
+	</grid>
 	<separator />
-	
 	<datebox id="db" constraint="no future"/>
-	<label id="msg"/>
 </zk>
