@@ -21,9 +21,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			uplder.destroy(finish);
 		delete o.uploaders[key];
 	}
-	function _parseMaxSize(val) {
-		return val.indexOf("maxsize=") >= 0 ? val.match(new RegExp(/maxsize=([^,]*)/))[1] : '';
-	}
 	function _start(o, form, val) { //start upload		
 		var key = o.getKey(o.sid),
 			uplder = new zul.Uploader(o, key, form, val);
