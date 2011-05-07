@@ -2655,40 +2655,28 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domStyle_: function (no) {
-		var style = '', s;
+		var out = [], s;
 		if (s = this.z$display) //see au.js
-			style = "display:" + s + ';';
+			out.push("display:", s, ';');
 		else if (!this.isVisible() && (!no || !no.visible))
-			style = 'display:none;';
+			out.push("display:none;");
 
-		if (!no || !no.style) {
-			s = this.getStyle(); 
-			if (s) {
-				style += s;
-				if (s.charAt(s.length - 1) != ';') style += ';';
-			}
+		if ((!no || !no.style) && (s = this.getStyle())) {
+			out.push(s);
+			if (s.charAt(s.length - 1) != ';')
+				out.push(';');
 		}
-		if (!no || !no.width) {
-			s = this.getWidth();
-			if (s) style += 'width:' + s + ';';
-		}
-		if (!no || !no.height) {
-			s = this.getHeight();
-			if (s) style += 'height:' + s + ';';
-		}
-		if (!no || !no.left) {
-			s = this.getLeft();
-			if (s) style += 'left:' + s + ';';
-		}
-		if (!no || !no.top) {
-			s = this.getTop();
-			if (s) style += 'top:' + s + ';';
-		}
-		if (!no || !no.zIndex) {
-			s = this.getZIndex();
-			if (s >= 0) style += 'z-index:' + s + ';';
-		}
-		return style;
+		if ((!no || !no.width) && (s = this.getWidth()))
+			out.push('width:', s, ';');
+		if ((!no || !no.height) && (s = this.getHeight()))
+			out.push('height:', s, ';');
+		if ((!no || !no.left) && (s = this.getLeft()))
+			out.push('left:', s, ';');
+		if ((!no || !no.top) && (s = this.getTop()))
+			out.push('top:', s, ';');
+		if ((!no || !no.zIndex) && (s = this.getZIndex()) >= 0)
+			out.push('z-index:', s, ';');
+		return out.join('');
 	},
 	/** Returns the class name(s) used for the DOM element of this widget.
 	 * <p>Default: a concatenation of {@link #getZclass} and {@link #getSclass}. 
@@ -2707,16 +2695,12 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domClass_: function (no) {
-		var scls = '';
-		if (!no || !no.sclass) {
-			var s = this.getSclass();
-			if (s) scls = s;
-		}
-		if (!no || !no.zclass) {
-			var s = this.getZclass();
-			if (s) scls += (scls ? ' ': '') + s;
-		}
-		return scls;
+		var s, z;
+		if (!no || !no.sclass)
+			s = this.getSclass();
+		if (!no || !no.zclass)
+			z = this.getZclass();
+		return s ? z ? s + ' ' + z: s: z||'';
 	},
 	/** Returns the HTML attributes that is used to generate DOM element of this widget.
 	 * It is usually used to implement a mold ({@link #redraw}):
@@ -2742,18 +2726,18 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var html = "", attrs;
-		if (!no || !no.id)
-			html += zUtl.appendAttr("id", this.uuid);
-		if (!no || !no.domStyle)
-			html += zUtl.appendAttr("style", this.domStyle_(no));
-		if (!no || !no.domClass)
-			html += zUtl.appendAttr("class", this.domClass_());
-		if (!no || !no.tooltiptext)
-			html += zUtl.appendAttr("title", this.domTooltiptext_());
+		var out = [], attrs, s;
+		if ((!no || !no.id) && (s = this.uuid))
+			out.push(' id="', s, '"')
+		if ((!no || !no.domStyle) && (s = this.domStyle_(no)))
+			out.push(' style="', s, '"');
+		if ((!no || !no.domClass) && (s = this.domClass_(no)))
+			out.push(' class="', s, '"');
+		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
+			out.push(' title="', s, '"');
 		for (var nm in (attrs = this.domExtraAttrs))
-			html += zUtl.appendAttr(nm, attrs[nm]);
-		return html;
+			out.push(' ', nm, '="', attrs[nm]||'', '"'); //generate even if val is empty
+		return out.join('');
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
 	 * <p>Default: return {@link #getTooltiptext}.

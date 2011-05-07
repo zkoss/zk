@@ -309,6 +309,8 @@ zk.copy(zk, {
 	//gecko: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 2 (excluding 3 or others).
+	 * <p>Though a bit confusion (backward compatibility), it is the same
+	 * as <code>zk.ff == 2</code>.
 	 * @type Boolean
 	 */
 	//gecko2_: false,
@@ -322,6 +324,8 @@ zk.copy(zk, {
 	//ff: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 3 and later.
+	 * <p>Though a bit confusion (backward compatibility), it is the same
+	 * as <code>zk.ff >= 3</code>.
 	 * @type Boolean
 	 */
 	//gecko3: false,

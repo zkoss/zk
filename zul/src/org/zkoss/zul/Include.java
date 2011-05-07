@@ -536,8 +536,12 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
-				final StringWriter sw = new StringWriter();
-				include(sw);
+				final StringBuffer incsb;
+				{
+					final StringWriter sw = new StringWriter();
+					include(sw);
+					incsb = sw.getBuffer();
+				}
 
 				//Don't output sw directly if getChildPage() is not null
 				//Otherwise, script of the included zul page will be evaluated
@@ -555,7 +559,7 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 						cwout.write("\" style=\"display:none\">");
 						if (_comment)
 							cwout.write("\n<!--\n");
-						Files.write(cwout, sw.getBuffer());
+						Files.write(cwout, incsb);
 						if (_comment)
 							cwout.write("\n-->\n");
 						cwout.write("</div>");
@@ -565,7 +569,7 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 					}
 				}
 				if (!done) {
-					renderer.render("content", sw.toString());
+					renderer.render("content", incsb.toString());
 					if (_renderResult != null && _renderResult.length() > 0)
 						renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
 				}
