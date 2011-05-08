@@ -1679,7 +1679,7 @@ wgt.$f().main.setTitle("foo");
 	 */
 	set: function (name, value, extra) {
 		var cc;
-		if (name.charAt(0) == '$') {
+		if ((cc = name.charAt(0)) == '$') {
 			if (name.startsWith('$$on')) {
 				var cls = this.$class,
 					ime = cls._importantEvts;
@@ -1700,8 +1700,8 @@ wgt.$f().main.setTitle("foo");
 				});
 				return this;
 			}
-		} else if (((cc = name.charAt(2)) <= 'Z' && cc >= 'A')
-		&& name.startsWith('on')) {
+		} else if (cc == 'o' && name.charAt(1) == 'n'
+			&& ((cc = name.charAt(2)) <= 'Z' && cc >= 'A')) {
 			this.setListener(name, value);
 			return this;
 		}
