@@ -67,8 +67,8 @@ function zkamn(pkg, fn) {
 //@since 5.0.2
 function zkmprops(uuid, props) {
 	//z$ea: value embedded as element's child nodes
-	var v = zk.cut(props, "z$ea");
-	if (v) {
+	var v;
+	if (v = zk.cut(props, "z$ea")) {
 		var embed = jq(uuid, zk)[0];
 		if (embed) {
 			var val = [], n;
@@ -81,13 +81,11 @@ function zkmprops(uuid, props) {
 	}
 
 	//z$al: afterLoad
-	v = zk.cut(props, "z$al");
-	if (v) {
+	if (v = zk.cut(props, "z$al"))
 		zk.afterLoad(function () {
 			for (var p in v)
 				props[p] = v[p](); //must be func
 		});
-	}
 }
 
 (function () {

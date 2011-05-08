@@ -43,16 +43,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		};
 	}
-	function def(nm, before, after) {
+	function defGet(nm) {
+		return new Function('return this.' + nm + ';');
+	}
+	function defSet00(nm) {
+		return function (v) {
+			this[nm] = v;
+			return this;
+		};
+	}
+	function defSet01(nm, after) {
 		return function (v, opts) {
-			if (before) v = before.apply(this, arguments);
 			var o = this[nm];
 			this[nm] = v;
-			if (after && (o !== v || (opts && opts.force)))
+			if (o !== v || (opts && opts.force))
 				after.apply(this, arguments);
 			return this;
 		};
 	}
+	function defSet10(nm, before) {
+		return function (/*v, opts*/) {
+			this[nm] = before.apply(this, arguments);
+			return this;
+		};
+	}
+	function defSet11(nm, before, after) {
+		return function (v, opts) {
+			var o = this[nm];
+			this[nm] = v = before.apply(this, arguments);;
+			if (o !== v || (opts && opts.force))
+				after.apply(this, arguments);
+			return this;
+		};
+	}
+
 	function showprgbInit() {
 		//don't use jq() since it will be queued after others
 		if (jq.isReady||zk.Page.contained.length)
@@ -858,9 +882,10 @@ wgt.setSomething(somevalue, {force:true});
 				before = after.length ? after[0]: null;
 				after = after.length > 1 ? after[1]: null;
 			}
-			pt['set' + nm2] = def(nm1, before, after);
-			pt['get' + nm2] = pt['is' + nm2] =
-				new Function('return this.' + nm1 + ';');
+			pt['set' + nm2] = before ?
+				after ? defSet11(nm1, before, after): defSet10(nm1, before):
+				after ? defSet01(nm1, after): defSet00(nm1);
+			pt['get' + nm2] = pt['is' + nm2] = defGet(nm1);
 		}
 		return klass;
 	},

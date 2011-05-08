@@ -1652,13 +1652,13 @@ wgt.$f().main.setTitle("foo");
 	 * back to the server. In additions, the value is assumed to
 	 * be a boolean indicating if the server registers a listener.
 	 *
-	 * <h3>u$xxx</h3>
-	 * <p>If the name starts with <code>u$</code>, it indicates
+	 * <h3>$u$xxx</h3>
+	 * <p>If the name starts with <code>$u$</code>, it indicates
 	 * the value is UUID of a widget, and it will be resolved to a widget
 	 * before calling the real method.
 	 * <p>However, since we cannot resolve a widget by its UUID until
 	 * the widget is bound (to DOM). Thus, ZK sets property after mounted.
-	 * For example, <code>wgt.set("u$radiogroup", uuid)</code> is equivalent
+	 * For example, <code>wgt.set("$u$radiogroup", uuid)</code> is equivalent
 	 * to the following.
 	 * <pre><code>zk.afterMount(function () {
 	 wgt.set("radiogroup", zk.Widget.$(uuid))
@@ -1679,32 +1679,37 @@ wgt.$f().main.setTitle("foo");
 	 */
 	set: function (name, value, extra) {
 		var cc;
-		if (name.length > 4 && name.startsWith('$$on')) {
-			var cls = this.$class,
-				ime = cls._importantEvts;
-			(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
-		} else if (name.length > 3 && name.startsWith('$on'))
-			this._asaps[name.substring(1)] = value;
-		else if (name.length > 2 && name.startsWith('on')
-		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
-			this.setListener(name, value);
-		else {
-			var useExtra = arguments.length >= 3;
-			if (name.startsWith("u$")) {
+		if (name.charAt(0) == '$') {
+			if (name.startsWith('$$on')) {
+				var cls = this.$class,
+					ime = cls._importantEvts;
+				(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
+				return this;
+			} else if (name.startsWith('$on')) {
+				this._asaps[name.substring(1)] = value;
+				return this;
+			} else if (name.startsWith('$u$')) { //value is UUID
+				name = name.substring(3);
 				var self = this;
 				zk.afterMount(function () {
-					name = name.substring(2);
 					value = zk.Widget.$(value);
-					if (useExtra)
+					if (arguments.length >= 3)
 						zk.set(self, name, value, extra);
 					else
 						zk.set(self, name, value);
 				});
-			} else if (useExtra)
-				zk.set(this, name, value, extra);
-			else
-				zk.set(this, name, value);
+				return this;
+			}
+		} else if (((cc = name.charAt(2)) <= 'Z' && cc >= 'A')
+		&& name.startsWith('on')) {
+			this.setListener(name, value);
+			return this;
 		}
+
+		if (arguments.length >= 3)
+			zk.set(this, name, value, extra);
+		else
+			zk.set(this, name, value);
 		return this;
 	},
 	/** Retrieves a value from the specified property.
