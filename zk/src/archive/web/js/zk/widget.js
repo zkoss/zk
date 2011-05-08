@@ -1689,14 +1689,9 @@ wgt.$f().main.setTitle("foo");
 				this._asaps[name.substring(1)] = value;
 				return this;
 			} else if (name.startsWith('$u$')) { //value is UUID
-				name = name.substring(3);
 				var self = this;
 				zk.afterMount(function () {
-					value = zk.Widget.$(value);
-					if (arguments.length >= 3)
-						zk.set(self, name, value, extra);
-					else
-						zk.set(self, name, value);
+					zk._set(self, name.substring(3), zk.Widget.$(value), extra);
 				});
 				return this;
 			}
@@ -1706,10 +1701,7 @@ wgt.$f().main.setTitle("foo");
 			return this;
 		}
 
-		if (arguments.length >= 3)
-			zk.set(this, name, value, extra);
-		else
-			zk.set(this, name, value);
+		zk._set(this, name, value, extra);
 		return this;
 	},
 	/** Retrieves a value from the specified property.

@@ -956,21 +956,26 @@ zk.set(dst, src, ["foo", "mike"]);
 	 */
 	set: function (o, name, value, extra) {
 		if (typeof name == "string") {
-			var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
-			if (!m) o[name] = value;
-			else if (arguments.length >= 4)
-				m.call(o, value, extra);
-			else
-				m.call(o, value);
+			zk._set(o, name, value, extra);
 		} else //o: dst, name: src, value: props
 			for (var j = 0, len = value.length, m, n, v; j < len;) {
 				n = value[j++];
 				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
-				if (extra && !m && name[n] === undefined)
+				if (extra && !m && name[n] === undefined) //extra: ignoreUndefined in this case
 					continue;
-				zk.set(o, n, m ? m.call(name): name[n]);
+				zk._set(o, n, m ? m.call(name): name[n]);
 			}
 		return o;
+	},
+	_set: function (o, name, value, extra) { //called by widget.js (better performance)
+		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
+		if (m) {
+			if (extra !== undefined)
+				m.call(o, value, extra);
+			else
+				m.call(o, value);
+		} else
+			o[name] = value;
 	},
 	/** Retrieves a value from the specified property.
 	 * <p>For example, <code>zk.get(obj, "x")</code>:<br/>
