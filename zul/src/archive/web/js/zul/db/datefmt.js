@@ -136,8 +136,8 @@ zk.fmt.Date = {
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
-				var len = 1;
-				for (var k = j; ++k < fl; ++len)
+				var len = 1, k;
+				for (k = j; ++k < fl; ++len)
 					if (fmt.charAt(k) != cc)
 						break;
 
@@ -292,8 +292,8 @@ zk.fmt.Date = {
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
-				var len = 1;
-				for (var k = j; ++k < fl; ++len)
+				var len = 1, k;
+				for (k = j; ++k < fl; ++len)
 					if (fmt.charAt(k) != cc)
 						break;
 

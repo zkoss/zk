@@ -560,7 +560,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		
 		//normal triggering
-		var r1 = p1 = this,
+		var r1 = this, p1 = r1,
 			j1 = -1;
 		if (this._hflex == 'min' && this._hflexsz === undefined && !this.ignoreFlexSize_('w')) {
 			++j1;
@@ -572,7 +572,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					break;
 			}
 		}
-		var r2 = p2 = this,
+		var r2 = this, p2 = r2,
 			j2 = -1;
 		if (this._vflex == 'min' && this._vflexsz === undefined && !this.ignoreFlexSize_('h')) {
 			++j2;

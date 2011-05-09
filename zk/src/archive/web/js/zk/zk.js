@@ -961,9 +961,8 @@ zk.set(dst, src, ["foo", "mike"]);
 			for (var j = 0, len = value.length, m, n, v; j < len;) {
 				n = value[j++];
 				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
-				if (extra && !m && name[n] === undefined) //extra: ignoreUndefined in this case
-					continue;
-				zk._set(o, n, m ? m.call(name): name[n]);
+				if (!extra || m || name[n] !== undefined) //extra: ignoreUndefined in this case
+					zk._set(o, n, m ? m.call(name): name[n]);
 			}
 		return o;
 	},

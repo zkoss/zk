@@ -173,7 +173,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var cols = this.columns ? this.columns.nChildren : 1 ;
+		var cols = this.columns ? this.columns.nChildren : 1,
 			uuid = this.uuid, zcls = this.getZclass();
 		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
 		( this._isEmpty() ? ' style="display:none"' : '' ),
