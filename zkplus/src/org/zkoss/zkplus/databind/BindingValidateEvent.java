@@ -51,9 +51,11 @@ public class BindingValidateEvent extends Event {
 		return _refs;
 	}
 	
-	/** Gets the list of the associate bindings of this event.
-	 * <p>Note: the binding instance is used for system-level developer, rarely
-	 * for application developer.
+	/** Gets the list of the associate bindings of this event ({@link Binding}).
+	 * The property that causes the binding can be found by use of
+	 * {@link Binding#getExpression}.
+	 * Furthermore, the bean can be retrieved by use of 
+	 * {@link Binding#getBean}.
 	 */
 	public List getBindings() {
 		return _bindings;
