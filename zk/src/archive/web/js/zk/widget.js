@@ -1814,7 +1814,7 @@ wgt.$f().main.setTitle("foo");
 		}
 		++this.nChildren;
 
-		if (child.id || child.firstChild) //optimize for mount.is's create()
+		if (child.id || child.firstChild) //optimize for mount.js's create()
 			_addIdSpaceDown(child);
 
 		if (!ignoreDom)
