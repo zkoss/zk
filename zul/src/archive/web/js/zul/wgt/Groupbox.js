@@ -127,12 +127,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
-			var n = this.$n('cave');
-			if (n) {
+			var n;
+			if (n = this.$n('cave')) {
 				if (zk.ie6_) n.style.height = "";
-				var fix = function() {
-					n.style.height =
-						zk(n).revisedHeight(zk(n).vflexHeight(), true)
+				var wgt = this,
+					$n = zk(n),
+					fix = function() {
+					n.style.height = wgt.isLegend()? hgh:
+						$n.revisedHeight($n.vflexHeight(), true)
 						+ "px";
 				};
 				fix();
