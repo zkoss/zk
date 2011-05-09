@@ -171,16 +171,23 @@ function zkmprops(uuid, props) {
 	}
 	//Load all required packages
 	function mountpkg() {
+		var types = {};
 		for (var j = _createInf0.length; j--;) {
 			var inf = _createInf0[j];
 			if (!inf.pked) { //mountpkg might be called multiple times before mount()
 				inf.pked = true;
-				pkgLoad(inf[0], inf[1]);
+				getTypes(types, inf[0], inf[1]);
 			}
+		}
+
+		for (var type in types) {
+			var j = type.lastIndexOf('.');
+			if (j >= 0)
+				zk._load(type.substring(0, j), types[type]); //use _load for better performance
 		}
 	}
 	//Loads package of a widget tree. Also handle z$pk
-	function pkgLoad(dt, wi) {
+	function getTypes(types, dt, wi) {
 		//z$pk: packages to load
 		var v = zk.cut(wi[2], "z$pk");
 		if (v) zk.load(v);
@@ -190,14 +197,11 @@ function zkmprops(uuid, props) {
 			type = wi[2].wc;
 		else if (type === 1) //1: zhtml.Widget
 			wi[0] = type = "zhtml.Widget";
-		if (type) {
-			var j = type.lastIndexOf('.');
-			if (j >= 0)
-				zk.load(type.substring(0, j), dt);
-		}
+		if (type)
+			types[type] = dt;
 
 		for (var children = wi[3], j = children.length; j--;)
-			pkgLoad(dt, children[j]);
+			getTypes(types, dt, children[j]);
 	}
 	//mount for browser loading
 	function mtBL() {
