@@ -1814,7 +1814,8 @@ wgt.$f().main.setTitle("foo");
 		}
 		++this.nChildren;
 
-		_addIdSpaceDown(child);
+		if (child.id || child.firstChild) //optimize for mount.is's create()
+			_addIdSpaceDown(child);
 
 		if (!ignoreDom)
 			if (this.shallChildROD_(child))
