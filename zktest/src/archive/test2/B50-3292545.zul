@@ -13,34 +13,45 @@ B50-3292545.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk xmlns:w="client">
 	<html><![CDATA[
 		<ol>
-			<li>Check all of width of input are the same.</li>
+			<li>Check all of number are the same.</li>
+			<li>Except latest five elements, they will less 2px.</li>
 		</ol>
 	]]></html>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		void doInit(Component comp) {
+			Div div = new Div();
+			div.setHflex("1");
+			div.appendChild(new Label("0"));
+			div.setWidgetListener("onBind", "this.firstChild.setValue(jq(this).width());");
+			comp.appendChild(div);
+		}
+	]]></zscript>
 	<vlayout>
-		<combobox mold="rounded" width="300px"/>
-		<bandbox width="300px" mold="rounded"/>
-		<datebox width="300px" mold="rounded"/>
-		<spinner width="300px" mold="rounded"/>
-		<timebox width="300px" mold="rounded"/>
-		<doublespinner  mold="rounded" width="300px"/>
-		<textbox width="300px" mold="rounded"/>
-		<decimalbox width="300px" mold="rounded"/>
-		<intbox width="300px" mold="rounded"/>
-		<doublebox width="300px" mold="rounded"/>
-		<longbox width="300px" mold="rounded"/>
-		<combobox width="300px"/>
-		<bandbox width="300px"/>
-		<datebox width="300px"/>
-		<spinner width="300px"/>
-		<timebox width="300px"/>
-		<doublespinner  width="300px"/>
-		<textbox width="300px"/>
-		<decimalbox width="300px"/>
-		<intbox width="300px"/>
-		<doublebox width="300px"/>
-		<longbox width="300px"/>
+		<hlayout onCreate="doInit(self);"><combobox mold="rounded" width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><bandbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><datebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><spinner width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><timebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublespinner  mold="rounded" width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><textbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><decimalbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><intbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><longbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><combobox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><bandbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><datebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><spinner width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><timebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublespinner  width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><textbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><decimalbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><intbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><longbox width="300px"/></hlayout>
 	</vlayout>
 </zk>
