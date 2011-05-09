@@ -337,6 +337,23 @@ public class Binding implements java.io.Serializable {
 		myLoadAttribute(comp, bean);
 	}
 
+	/** Returns the associated bean of this binding; e.g., for a binding to the bean "a.b.c", this will return the bean associated to "a.b" 
+	 * (and c is the property name).
+	 * <p>Note if the expression is associated to a single variable; e.g. "a" only, this method returns null. 
+	 * @param comp
+	 * @return the associated bean of this binding.
+	 * @since 5.0.7
+	 */
+	public Object getBean(Component comp) {
+		if (_expression != null) {
+			int j = _expression.lastIndexOf('.');
+			if (j >= 0) {
+				return _binder.getBeanWithExpression(comp, _expression.substring(0, j));
+			}
+		}
+		return null;
+	}
+	
 	/** load bean value into the attribute of the specified component.
 	 * @param comp the component.
 	 * @param bean the bean value.

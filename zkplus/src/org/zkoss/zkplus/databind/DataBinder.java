@@ -989,7 +989,7 @@ public class DataBinder implements java.io.Serializable {
 		return myGetBeanWithExpression(comp, path, true);
 	}
 	
-	private Object getBeanWithExpression(Component comp, String path) {
+	/* package */ Object getBeanWithExpression(Component comp, String path) {
 		return myGetBeanWithExpression(comp, path, false);
 	}
 	
