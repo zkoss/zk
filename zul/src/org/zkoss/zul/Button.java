@@ -257,7 +257,11 @@ implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 	 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
 	 * image, audio or text files.</li>
 	 *  </ul>
-	 *  
+	 * 
+	 * <p> Note: if the options of the <code>false</code> or the customized handler
+	 * (like <code>foo.Upload</code>) are not specified, the option of <code>true</code>
+	 * is implicit by default.
+	 * 
 	 * @param upload a JavaScript class to handle the file upload
 	 * at the client, or "true" if the default class is used,
 	 * or null or "false" to disable the file download (and then
