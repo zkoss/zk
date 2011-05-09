@@ -28,6 +28,7 @@ ZK 5.0.7
   3294843: Disable update-by-client by default and an option to enable
   3297288: A way to post an event to a speicif component; not getTarget
   3298165: Allow multiple lang.xml or lang-addon.xml in a jar file
+  3299209: Menuitem support autodisable
  
 * Bugs
   3286462: native component cause issue in fulfill

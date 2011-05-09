@@ -126,6 +126,39 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				anc.target = this._target;
 			}
 		},
+		/** Returns a list of component IDs that shall be disabled when the user
+		 * clicks this menuitem.
+		 *
+		 * <p>To represent the menuitem itself, the developer can specify <code>self</code>.
+		 * For example, <code>&lt;menuitem id="ok" autodisable="self,cancel"/></code>
+		 * is the same as <code>&lt;menuitem id="ok" autodisable="ok,cancel"/></code>
+		 * that will disable
+		 * both the ok and cancel menuitem when an user clicks it.
+		 *
+		 * <p>The menuitem being disabled will be enabled automatically
+		 * once the client receives a response from the server.
+		 * In other words, the server doesn't notice if a menuitem is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <code>&lt;menuitem id="ok" autodisable="+self,+cancel"/></code>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @since 5.0.7
+		 * @return String
+		 */
+		/** Sets whether to disable the button after the user clicks it.
+		 * @since 5.0.7
+		 * @param String autodisable
+		 */
+		autodisable: null,
 		/** Returns non-null if this button is used for file upload, or null otherwise.
 		 * Refer to {@link #setUpload} for more details.
 		 * @return String
@@ -219,6 +252,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		else {
 			if (!this._canActivate(evt)) return;
+			zul.wgt.ADBS.autodisable(this);
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
