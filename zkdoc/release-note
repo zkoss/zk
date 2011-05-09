@@ -29,6 +29,7 @@ ZK 5.0.7
   3297288: A way to post an event to a speicif component; not getTarget
   3298165: Allow multiple lang.xml or lang-addon.xml in a jar file
   3299209: Menuitem support autodisable
+  3299234: A way to get the list of data from onBindingValidate evt
  
 * Bugs
   3286462: native component cause issue in fulfill

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -697,6 +698,9 @@ public class Binding implements java.io.Serializable {
 			final Component target = event.getTarget();
 			final String triggerEventName = event.getName();
 			final List tmplist = new ArrayList(_dataTargets.size());
+			final List values = new LinkedList();
+			final List refs = new LinkedList();
+			final List bindings = new LinkedList();
 			
 			//fire onSave for each binding
 			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
@@ -713,6 +717,9 @@ public class Binding implements java.io.Serializable {
 					final Object[] vals = binding.getAttributeValues(dataTarget);
 					if (vals != null) {
 						tmplist.add(new BindingInfo(binding, dataTarget, vals));
+						values.add(vals[0]);
+						refs.add(dataTarget);
+						bindings.add(binding);
 						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
 					}
 				} else {
@@ -724,6 +731,9 @@ public class Binding implements java.io.Serializable {
 						final Object[] vals = binding.getAttributeValues(dataTarget1);
 						if (vals != null) {
 							tmplist.add(new BindingInfo(binding, dataTarget1, vals));
+							values.add(vals[0]);
+							refs.add(dataTarget1);
+							bindings.add(binding);
 							Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
 						}
 					}
@@ -732,7 +742,7 @@ public class Binding implements java.io.Serializable {
 			}
 			
 			//fire onValidate for target component
-			Events.sendEvent(new Event("onBindingValidate", target));
+			Events.sendEvent(new BindingValidateEvent("onBindingValidate", target, refs, bindings, values));
 			
 			//saveAttribute for each binding
 			Component loadOnSaveProxy = null;
