@@ -301,8 +301,7 @@ implements org.zkoss.zul.api.Button, org.zkoss.zk.ui.ext.Disable {
 		if (!HORIZONTAL.equals(s = getOrient())) render(renderer, "orient", s);
 		if (!BUTTON.equals(s = getType())) render(renderer, "type", s);
 
-		if (isDisabled())
-			render(renderer, "disabled", true);
+		render(renderer, "disabled", isDisabled());
 		render(renderer, "autodisable", getAutodisable());
 		final String href;
 		render(renderer, "href", href = getEncodedHref());

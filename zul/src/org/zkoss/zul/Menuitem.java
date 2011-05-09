@@ -135,14 +135,14 @@ implements org.zkoss.zul.api.Menuitem, org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: "".
 	 */
 	public String getValue() {
-		return _auxinf != null ? _auxinf.value: VALUE;
+		return _auxinf != null ? _auxinf.value: "";
 	}
 	/** Sets the value.
 	 */
 	public void setValue(String value) {
 		if (value == null)
 			value = "";
-		if (!Objects.equals(_auxinf != null ? _auxinf.value: VALUE, value)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.value: "", value)) {
 			initAuxInfo().value = value;
 			smartUpdate("value", getValue());
 		}
@@ -294,6 +294,13 @@ implements org.zkoss.zul.api.Menuitem, org.zkoss.zk.ui.ext.Disable {
 			throw new UiException("Unsupported parent for menuitem: "+parent);
 		super.beforeParentChanged(parent);
 	}
+	//Cloneable//
+	public Object clone() {
+		final Menuitem clone = (Menuitem)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
@@ -303,18 +310,14 @@ implements org.zkoss.zul.api.Menuitem, org.zkoss.zk.ui.ext.Disable {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		if (isCheckmark())
-			render(renderer, "checkmark", true);
-		if (isDisabled())
-			render(renderer, "disabled", true);
-		if (isChecked())
-			render(renderer, "checked", true);
-		if (isAutocheck())
-			render(renderer, "autocheck", true);
+		render(renderer, "checkmark", isCheckmark());
+		render(renderer, "disabled", isDisabled());
+		render(renderer, "checked", isChecked());
+		render(renderer, "autocheck", isAutocheck());
 		render(renderer, "autodisable", getAutodisable());
-		String href = null;
-		if (getHref() != null) render(renderer, "href", href = getEncodedHref()); //Bug #2871082
-		if (getTarget() != null) render(renderer, "target", getTarget());
+		final String href;
+		render(renderer, "href", href = getEncodedHref()); //Bug #2871082
+		render(renderer, "target", getTarget());
 		render(renderer, "upload", getUpload());
 		render(renderer, "value", getValue());
 
@@ -363,7 +366,6 @@ implements org.zkoss.zul.api.Menuitem, org.zkoss.zk.ui.ext.Disable {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static final String VALUE = "";
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String value = "";
 		private String href, target;
