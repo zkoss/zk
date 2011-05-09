@@ -1060,6 +1060,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
 	},
+	_ignoreHghExt: function () {
+		return this._rows > 0;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())

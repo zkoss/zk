@@ -869,6 +869,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.$n().style.height = hgh;
 		}
 	},
+	_ignoreHghExt: function () {
+		return false;
+	},
 	/** Calculates the size. */
 	_calcSize: function () {
 		this._beforeCalcSize();
@@ -914,7 +917,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ebodytbl.style.width = tblwd + "px";
 			}
 			// bug #2799258 and #1599788
-			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
+			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto") && !this._ignoreHghExt()) {
 				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (this.ebody.clientWidth && scroll > 11) //v-scrollbar 
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight); //extend body height to remove the v-scrollbar
