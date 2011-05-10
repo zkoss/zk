@@ -1681,7 +1681,7 @@ wgt.$f().main.setTitle("foo");
 		var cc;
 		if (cc = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
 		//to optimize the performance we check the method first (most common)
-			zk._set(this, name, value, extra, cc);
+			zk._set2(this, cc, null, value, extra);
 			return this;
 		}
 
@@ -1707,7 +1707,7 @@ wgt.$f().main.setTitle("foo");
 			return this;
 		}
 
-		zk._set(this, name, value, extra);
+		zk._set2(this, null, name, value, extra);
 		return this;
 	},
 	/** Retrieves a value from the specified property.

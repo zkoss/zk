@@ -966,12 +966,17 @@ zk.set(dst, src, ["foo", "mike"]);
 			}
 		return o;
 	},
-	_set: function (o, name, value, extra, m) { //called by widget.js (better performance)
-		if ( m = m || o['set' + name.charAt(0).toUpperCase() + name.substring(1)] ) {
+	_set: function (o, name, value, extra) { //called by widget.js (better performance)
+		zk._set2(o,
+			o['set' + name.charAt(0).toUpperCase() + name.substring(1)],
+			name, value, extra);
+	},
+	_set2: function (o, mtd, name, value, extra) { //called by widget.js (better performance)
+		if (mtd) {
 			if (extra !== undefined)
-				m.call(o, value, extra);
+				mtd.call(o, value, extra);
 			else
-				m.call(o, value);
+				mtd.call(o, value);
 		} else
 			o[name] = value;
 	},
